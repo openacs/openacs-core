@@ -10,13 +10,15 @@
   <link rel="stylesheet" type="text/css" href="../../../popups/popup.css" />
 
   <style type="text/css">
-	#outputNode,#inputText {
+	/* <![CDATA[ */
+	#outputNode,#inputText,#mathml {
 		padding:5px;
 		background-color:white;
-		width:230px;
+		width:98%;
 		height:200px;
 		font-size:1.3em;
 		border: 1px solid darkgrey;
+		overflow:auto;
 	}
 	#clickInput {
 		width:100%;
@@ -33,11 +35,14 @@
 	h3 {
 		font-size:1.6em;
 	}
+	/* ]]> */
   </style>
   <script type="text/javascript">
+ // <![CDATA[
    window.resizeTo(500, 300);
 var showasciiformulaonhover = false;
-Xinha = window.opener.Xinha;
+if (typeof Xinha == "undefined")
+	Xinha = window.opener.Xinha;
 
 function i18n(str) {
   return (Xinha._lc(str, 'Equation'));
@@ -78,7 +83,8 @@ function Init() {
 	
 	if (param["editedNode"] && param["editedNode"].tagName.toLowerCase() == 'span')
 	{
-		var formula = param["editedNode"].getAttribute("title").replace(/^`*(.*?)`*$/m,"$1");;
+		var formula = param["editedNode"].getAttribute("title").replace(/^`*(.*?)`*$/m,"$1");
+		if (!formula) formula = param["editedNode"].innerHTML.replace(/^`*(.*?)`*$/m,"$1"); 
 		inputField.value = formula;
 		preview();
 	}
@@ -111,6 +117,49 @@ function translate() {
   }
 }
 window.onload = Init;
+
+function AMnode2string(inNode,indent) {
+// thanks to James Frazer for contributing an initial version of this function
+   var i, str = "";
+   if(inNode.nodeType == 1) {
+       var name = inNode.nodeName.toLowerCase(); // (IE fix)
+       str = "\r" + indent + "<" + name;
+       for(i=0; i < inNode.attributes.length; i++)
+           if (inNode.attributes[i].nodeValue!="italic" &&
+               inNode.attributes[i].nodeValue!="" &&  //stop junk attributes
+               inNode.attributes[i].nodeValue!="inherit" && // (mostly IE)
+               inNode.attributes[i].nodeValue!=undefined &&
+               inNode.attributes[i].nodeName[0] != '-'
+               )
+               str += " "+inNode.attributes[i].nodeName+"="+
+                     "\""+inNode.attributes[i].nodeValue+"\"";
+       if (name == "math") 
+           str += " xmlns=\"http://www.w3.org/1998/Math/MathML\"";
+       str += ">";
+       for(i=0; i<inNode.childNodes.length; i++)
+           str += AMnode2string(inNode.childNodes[i], indent+"  ");
+       if (name != "mo" && name != "mi" && name != "mn") str += "\r"+indent;
+       str += "</" + name + ">";
+   }
+   else if(inNode.nodeType == 3) {
+       var st = inNode.nodeValue;
+       for (i=0; i<st.length; i++)
+           if (st.charCodeAt(i)<32 || st.charCodeAt(i)>126)
+               str += "&#"+st.charCodeAt(i)+";";
+           else if (st.charAt(i)=="<" && indent != "  ") str += "&lt;";
+           else if (st.charAt(i)==">" && indent != "  ") str += "&gt;";
+           else if (st.charAt(i)=="&" && indent != "  ") str += "&amp;";
+           else str += st.charAt(i);
+   }
+   return str;
+} 
+function showMathML()
+{
+	var math = document.getElementById("outputNode").getElementsByTagName("math")[0];
+	if (math)
+		math.parentNode.innerHTML = '<pre>'+Xinha.htmlEncode(AMnode2string(math,''))+'</pre>';
+}
+// ]]>
 </script>
 
 </head>
@@ -152,9 +201,9 @@ Original Author - Bernhard Pfeifer novocaine@gmx.net
 <td class="character" title="sum" onclick="set('sum')">`sum`</td>
 <td class="character" title="prod" onclick="set('prod')">`prod`</td>
 <td class="character" title="^^" onclick="set('^^')">`^^`</td>
-<td class="character" title="^^^" onclick="set('^^^')"><font size="+1">`&and;`</font></td>
+<td class="character" title="^^^" onclick="set('^^^')"><span style="font-size:larger">`&and;`</span></td>
 <td class="character" title="vv" onclick="set('vv')">`vv`</td>
-<td class="character" title="vvv" onclick="set('vvv')"><font size="+1">`&or;`</font></td>
+<td class="character" title="vvv" onclick="set('vvv')"><span style="font-size:larger">`&or;`</span></td>
 </tr><tr>
 <td class="character" title="!=" onclick="set('!=')">`!=`</td>
 <td class="character" title="&lt;=" onclick="set('&lt;=')">`&lt;=`</td>
@@ -169,9 +218,9 @@ Original Author - Bernhard Pfeifer novocaine@gmx.net
 <td class="character" title="supe" onclick="set('supe')">`supe`</td>
 <td class="character" title="O/" onclick="set('O/')">`O/`</td>
 <td class="character" title="nn" onclick="set('nn')">`nn`</td>
-<td class="character" title="nnn" onclick="set('nnn')"><font size="+1">`&cap;`</font></td>
+<td class="character" title="nnn" onclick="set('nnn')"><span style="font-size:larger">`&cap;`</span></td>
 <td class="character" title="uu" onclick="set('uu')">`uu`</td>
-<td class="character" title="uuu" onclick="set('uuu')"><font size="+1">`&cup;`</font></td>
+<td class="character" title="uuu" onclick="set('uuu')"><span style="font-size:larger">`&cup;`</span></td>
 </tr><tr>
 <td class="character" title="and" onclick="set('and')">`and`</td>
 <td class="character" title="or" onclick="set('or')">`or`</td>
@@ -276,7 +325,7 @@ Original Author - Bernhard Pfeifer novocaine@gmx.net
 <form action="javascript:void(0);">
 <table style="width: 100%;border:none">
   <tr>
-    <td>Input</td><td>Preview</td>
+    <td style="width:50%">Input</td><td style="width:50%"><input type="button" onclick="showMathML()" style="float:right;font-size:10px" value="Show MathML" /><span>Preview</span></td>
   </tr>
   <tr>
     <td>
@@ -284,16 +333,22 @@ Original Author - Bernhard Pfeifer novocaine@gmx.net
     </td>
     <td>
     <div id="outputNode"></div>
+    <textarea id="mathml" style="display:none"></textarea>
     </td>
   </tr>
   <tr><td colspan="2">
-  <span>Based on ASCIIMathML by </span><a href="http://www.chapman.edu/~jipsen" target="new">Peter Jipsen</a>, 
-<a href="http://www.chapman.edu" target="new">Chapman University</a><br />
+  <span>Based on ASCIIMathML by </span><a href="http://www.chapman.edu/~jipsen" onclick="window.open(this.href,'_blank','');return false;">Peter Jipsen</a>, 
+<a href="http://www.chapman.edu" onclick="window.open(this.href,'_blank','');return false;">Chapman University</a><br />
   <span>For more information on AsciiMathML visit this page: </span><a href="http://www1.chapman.edu/~jipsen/mathml/asciimath.html" onclick="window.open(this.href,'_blank','');return false;">http://www1.chapman.edu/~jipsen/mathml/asciimath.html</a></td></tr>
 </table>
 
 <div id="buttons">
-<span style="color:red">Attention: Editing the formula in the editor is not possible, please use this dialog!</span>
+<script type="text/javascript">
+// <![CDATA[
+if (Xinha.is_ie)
+ document.write('<span style="color:red;float:left">'+i18n('Attention Internet Explorer users: Please note that there is no WYSIWYG representation of the formula in the editor!<br />You might wish to use <a href="http://www.mozilla.com" target="_blank">Mozilla Firefox</a> instead.')+'</span>');
+// ]]>
+</script>
   <button type="submit" name="ok" onclick="return onOK();">OK</button>
   <button type="button" name="cancel" onclick="return onCancel();">Cancel</button>
 </div>

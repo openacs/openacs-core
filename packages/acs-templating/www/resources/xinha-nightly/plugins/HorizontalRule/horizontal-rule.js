@@ -1,3 +1,4 @@
+/* This compressed file is part of Xinha. For uncomressed sources, forum, and bug reports, go to xinha.org */
 HorizontalRule._pluginInfo={name:"HorizontalRule",version:"1.0",developer:"Nelson Bright",developer_url:"http://www.brightworkweb.com/",c_owner:"Nelson Bright",sponsor:"BrightWork, Inc.",sponsor_url:"http://www.brightworkweb.com/",license:"htmlArea"};
 function HorizontalRule(_1){
 this.editor=_1;

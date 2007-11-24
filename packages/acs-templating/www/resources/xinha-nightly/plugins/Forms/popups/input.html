@@ -10,10 +10,10 @@ var fields = null;
 var type;
 function Init() {
   __dlg_translate("Forms");
-	__dlg_init();
-	var param = window.dialogArguments;
+  __dlg_init();
+  var param = window.dialogArguments;
   type = param.f_type;
-  document.getElementById("f_type").innerHTML = HTMLArea._lc('Form Element: INPUT', "Forms") + '(' + type + ')';
+  document.getElementById("f_type").innerHTML = Xinha._lc('Form Element: INPUT', "Forms") + '(' + type + ')';
   document.getElementById("txt").style.display = "none";
   document.getElementById("chk").style.display = "none";
   document.getElementById("btn").style.display = "none";
@@ -26,22 +26,22 @@ function Init() {
       document.getElementById("txt").style.display = "block";
       break;
     case "checkbox":
-		case "radio": 
+    case "radio":
       fields = ["f_name", "f_value", "f_checked", "f_disabled", "f_tabindex", "f_accesskey"];
       document.getElementById("chk").style.display = "block";
       height = 280;
       break;
-		case "button": 
+    case "button":
       fields = ["f_name", "f_value", "f_disabled", "f_onclick", "f_tabindex", "f_accesskey"];
       document.getElementById("btn").style.display = "block";
       height = 300;
-	    break;
-		case "file":
+      break;
+    case "file":
       fields = ["f_name", "f_disabled", "f_tabindex", "f_accesskey"];
       document.getElementById("f_value").disabled = true;
       height = 280;
       break;
-    case "image": 
+    case "image":
       fields = ["f_name", "f_disabled", "f_tabindex", "f_accesskey", "f_src"];
       document.getElementById("img").style.display = "block";
       document.getElementById("f_value").disabled = true;
@@ -61,8 +61,8 @@ function Init() {
       break;
   }
   for (var i in fields) {
-    switch (fields[i]) { 
-    case "f_readOnly": 
+    switch (fields[i]) {
+    case "f_readOnly":
     case "f_disabled":
     case "f_checked":
       document.getElementById(fields[i]).checked = (param[fields[i]]==fields[i].substring(2,20)) || (param[fields[i]] == true); break;
@@ -71,16 +71,16 @@ function Init() {
     }
   }
   window.resizeTo(320,height);
-	document.getElementById("f_name").focus();
+  document.getElementById("f_name").focus();
 }
 
 function onOK() {
-	var el = document.getElementById("f_name");
-	if (!el.value) {
-		alert(HTMLArea._lc("You must enter a Name","Forms"));
-		el.focus();
-	  return false;
-	}
+  var el = document.getElementById("f_name");
+  if (!el.value) {
+    alert(Xinha._lc("You must enter a Name","Forms"));
+    el.focus();
+    return false;
+  }
   // pass data back to the calling window
   var param = new Object();
   for (var i in fields) {
@@ -88,7 +88,7 @@ function onOK() {
     case "f_readOnly":
     case "f_disabled":
     case "f_checked":
-      if(HTMLArea.is_ie)
+      if(Xinha.is_ie)
         param[fields[i]] = (document.getElementById(fields[i]).checked)?true:"";
       else
         param[fields[i]] = (document.getElementById(fields[i]).checked)?fields[i].substring(2,20):"";
@@ -102,8 +102,8 @@ function onOK() {
 }
 
 function onCancel() {
-	__dlg_close(null);
-	return false;
+  __dlg_close(null);
+  return false;
 }
 </script>
 
@@ -121,13 +121,13 @@ function onCancel() {
     <div class="fr">Disabled</div>
     <input type="checkbox" name="disabled" id="f_disabled" value="disabled" />
     <p />
-    
+
   <div id="chk">
     <div class="fr">Checked</div>
       <input name="checked" id="f_checked" type="checkbox" />
     <p />
-	</div>
-	  
+  </div>
+
     <div class="fr">Tab Index:</div>
     <input type="text" name="tabindex" id="f_tabindex" />
     <p />
@@ -139,9 +139,9 @@ function onCancel() {
     <div class="fr">Read Only</div>
     <input type="checkbox" name="readOnly" id="f_readOnly" value="readOnly" />
     <p />
-    
-	  <fieldset>
-  	<legend>Dimensions</legend>
+
+    <fieldset>
+    <legend>Dimensions</legend>
       <div class="space"></div>
       <div class="fr">Size:</div>
       <input type="text" name="size" id="f_size" size="5" title="Size of text box in characters" />
@@ -149,30 +149,30 @@ function onCancel() {
       <div class="fr">Max length:</div>
       <input type="text" name="maxLength" id="f_maxLength" size="5"	title="Maximum number of characters accepted" />
       <div class="space"></div>
-	  </fieldset>
+    </fieldset>
   </div>
   <div id="btn">
-	  <fieldset>
-	  <legend> Button Script</legend>
-	    <div class="space"></div>
+    <fieldset>
+    <legend> Button Script</legend>
+      <div class="space"></div>
       <div class="fr">'onClick'=</div>
       <input type="text" name="onClick" id="f_onclick" title="Javascript for button click" />
       <div class="space"></div>
-	  </fieldset>
+    </fieldset>
   </div>
-	<div id="img">
-	  <fieldset>
-	  <legend>Image source</legend>
-	    <div class="space"></div>
+  <div id="img">
+    <fieldset>
+    <legend>Image source</legend>
+      <div class="space"></div>
       <div class="fr">Image URL:</div>
       <input type="text" name="src" id="f_src" title="URL of image" />
       <div class="space"></div>
-	  </fieldset>
+    </fieldset>
   </div>
   <div id="buttons">
     <button type="button" name="ok" onclick="return onOK();">OK</button>
     <button type="button" name="cancel" onclick="return onCancel();">Cancel</button>
-  </div>  
+  </div>
 </form>
 
 </body>

@@ -1,3 +1,4 @@
+/* This compressed file is part of Xinha. For uncomressed sources, forum, and bug reports, go to xinha.org */
 function i18n(_1){
 return Xinha._lc(_1,"ExtendedFileManager");
 }

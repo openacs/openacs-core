@@ -1,3 +1,4 @@
+/* This compressed file is part of Xinha. For uncomressed sources, forum, and bug reports, go to xinha.org */
 function ExtendedFileManager(_1){
 this.editor=_1;
 var _2=_1.config;
@@ -12,6 +13,7 @@ _2.addToolbarElement("linkfile","createlink",1);
 }
 ExtendedFileManager._pluginInfo={name:"ExtendedFileManager",version:"1.1.1",developer:"Afru, Krzysztof Kotowicz",developer_url:"http://www.afrusoft.com/htmlarea/",license:"htmlArea"};
 Xinha.Config.prototype.ExtendedFileManager={"use_linker":true,"backend":_editor_url+"plugins/ExtendedFileManager/backend.php?__plugin=ExtendedFileManager&","backend_data":null,"backend_config":null,"backend_config_hash":null,"backend_config_secret_key_location":"Xinha:ImageManager"};
+if(typeof ImageManager=="undefined"){
 Xinha.prototype._insertImage=function(_6){
 var _7=this;
 var _8={"editor":this,param:null};
@@ -103,10 +105,14 @@ case "f_align":
 _c.align=_f;
 break;
 case "f_width":
-_c.width=parseInt(_f||"0");
+if(parseInt(_f)>0){
+_c.width=parseInt(_f);
+}
 break;
 case "f_height":
-_c.height=parseInt(_f||"0");
+if(parseInt(_f)>0){
+_c.height=parseInt(_f);
+}
 break;
 case "f_padding":
 _c.style.padding=/[^0-9]/.test(_f)?_f:(_f!="")?(parseInt(_f)+"px"):"";
@@ -118,6 +124,7 @@ break;
 }
 },_8);
 };
+}
 Xinha.prototype._linkFile=function(_10){
 var _11=this;
 var _12={"editor":this,param:null};

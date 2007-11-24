@@ -7,25 +7,24 @@
 
 <script type="text/javascript">
 function Init() {
-	window.resizeTo(350,320);
   __dlg_translate("Forms");
-	__dlg_init();
-	var param = window.dialogArguments;
+  __dlg_init(null,{width:260, height:150});
+  var param = window.dialogArguments;
   document.getElementById("f_text").value = param["f_text"];
   document.getElementById("f_text").focus();
 }
 
 function onOK() {
-	// pass data back to the calling window
+  // pass data back to the calling window
   var param = new Object();
   param["f_text"] = document.getElementById("f_text").value;
-	__dlg_close(param);
+  __dlg_close(param);
   return false;
 }
 
 function onCancel() {
-	__dlg_close(null);
-	return false;
+  __dlg_close(null);
+  return false;
 }
 
 </script>
@@ -40,7 +39,7 @@ function onCancel() {
     <div id="buttons">
       <button type="button" name="ok" onclick="return onOK();">OK</button>
       <button type="button" name="cancel" onclick="return onCancel();">Cancel</button>
-    </div>      
+    </div>
   </form>
 </body>
 </html>

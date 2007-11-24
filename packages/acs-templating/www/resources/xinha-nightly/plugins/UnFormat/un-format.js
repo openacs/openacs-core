@@ -1,4 +1,4 @@
-// Unormat plugin for HTMLArea
+// Unormat plugin for Xinha
 
 
 function UnFormat(editor) {
@@ -27,7 +27,7 @@ UnFormat._pluginInfo = {
 
 
 UnFormat.prototype._lc = function(string) {
-  return HTMLArea._lc(string, 'UnFormat');
+  return Xinha._lc(string, 'UnFormat');
 };
 
 UnFormat.prototype.buttonPress = function(editor){

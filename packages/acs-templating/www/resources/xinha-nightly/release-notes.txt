@@ -5,6 +5,54 @@ http://xinha.org
 
 Release History
 
+Xinha 0.94
+ * Ticket #1093 [InsertSmiley] remove smiley gifs from trunk
+ * fixed Ticket #1019 Cusor not jumping to editable part of window when clicked in IE
+ * [TableOperations] Add config option to not dispaly toolbar buttons
+ * fixed Ticket #1021  Prevent ExtendedFileManager from masking ImageManager
+ * fixed Ticket #1023 [ImageManager] Add config item to allow the advanced image options to be hidden from the user
+ * fixed Ticket #1026 fix problems with loading skins
+ * fixed Tickets #1030 & #1031: slow loading large pages in IE
+ * fixed Ticket #1034 [ExtendedFileManager] Color pickers shown when use_color_pickers is false
+ * fixed Ticket #1035 [TransformInnerHTML] tags corruptedunder certain circumstances
+ * fixed Ticket #1036 [ExtendedFileManager] window is only resized after all thumbnails have benn loaded, which can take quite some time
+ * fixed Ticket #1039 Firefox full page adds multiple paragraphs after view source
+ * fixed Ticket #1019 Cusor not jumping to editable part of window when clicked in IE7
+ * fixed Ticket #1046 Error in IE 6 when switching from text to wysiwyg
+ * [DOMwalk] linebreaks inserted before <br />s
+ * catch error in IE when trying to restore selection on non-displayed area
+ * fixed Ticket #973 Error switching wysiwyg/html including javascript file on the code
+ * fixed Ticket #1028  - [Linker] automatically (attempt to) work around an issue with mod_security being triggered because of the charset on our POST requests
+ * fixed Ticket #1055 [Stylist] Inappropriate styles (for other tags) are shown
+ * added Dutch language files
+ * added new hook 'onBeforeSubmit' for firePluginEvent()
+ * added new hook 'onBeforeUnload' for firePluginEvent()
+ * fixed Ticket #1048 Full Screen plugin doesn't load if many editors on page
+ * fixed Ticket #1053 ListType plugin doesn't work in panel config with multiple editors
+ * fixed Ticket #1026 Skins referenced with <link>-tags don't work anymore
+ * fixed Ticket #1059 [Equation] loosing formula onsubmit
+ * fixed Ticket #1060 [Equation] various updates
+ * [Equation] preserve formula on reload in Mozilla
+ * [Equation] updated ASCIIMathML.js
+ * [Skin:silva] padding and border on textarea make the textmode too wide 
+ * fixed Ticket#1001 Editor loads a bunch of null urls in ie
+ * fixed Ticket #1068 [TranformInnerHTML] newlines added after </script>
+ * fixed Ticket#1069 Editor document URL prefixed to any href that only consists of URL parameters
+ * added Thai translation for core
+ * added complete Portuguese Brazilian translation
+ * updated lc_parse script
+ * fixed Ticket #1071 [ExtendedFileManager] external image URL image inserted with width/height 0, amking it invisible
+ * fixed Ticket #1074 [SuperClean] throws warnings in PHP 5
+ * fixed Ticket #1079 [DynamicCSS] lists Xinha internal CSS
+ * fixed Ticket #1080 Some plugins leave behind stylesheet links in fullpage mode
+ * fixed Ticket #1083 Convert URLs to links - Error
+ * fixed Ticket #1084 URL auto-linking (Gecko): URLs with user:password@domain.tld falsely recognized as email address
+ * fixed Ticket #1085 URL auto-linking (Gecko): IP numbers don't work
+ * fixed Ticket #1081 Control character is not being removed inside SCRIPT tags or HEAD when switching from textmode to htmlmode
+ * fixed Ticket #1078 [InsertImage] spacing attributes: inconsistent behaviour when editing image
+ * fixed Ticket #1089 [Color Picker] Localize OK Label
+ * fixed Ticket #1091 [SaveSubmit] does not correctly submit value of checkboxes and radio buttons
+
 Xinha 0.93
  - fixed Ticket #967 Font Color Picker stops working after using one of ImageManager, ExtendedFileManager, FullPage, or HorizontalRule
  - fixed Ticket #965 When switching between Xinhas in the same page, in textmode toolbar stays disabled

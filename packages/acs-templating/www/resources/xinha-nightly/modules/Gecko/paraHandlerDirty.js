@@ -1,3 +1,4 @@
+/* This compressed file is part of Xinha. For uncomressed sources, forum, and bug reports, go to xinha.org */
 EnterParagraphs._pluginInfo={name:"EnterParagraphs",origin:"Xinha Core",version:"$LastChangedRevision: 688 $".replace(/^[^:]*: (.*) \$$/,"$1"),developer:"The Xinha Core Developer Team",developer_url:"$HeadURL: http://svn.xinha.python-hosting.com/trunk/modules/Gecko/paraHandlerDirty.js $".replace(/^[^:]*: (.*) \$$/,"$1"),sponsor:"",sponsor_url:"",license:"htmlArea"};
 function EnterParagraphs(_1){
 this.editor=_1;

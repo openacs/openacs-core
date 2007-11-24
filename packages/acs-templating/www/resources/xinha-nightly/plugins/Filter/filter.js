@@ -1,4 +1,4 @@
-// Filter plugin for HTMLArea
+// Filter plugin for Xinha
 // Implementation by Udo Schmal & Schaffrath NeueMedien
 // Original Author - Udo Schmal
 //
@@ -11,13 +11,13 @@ function Filter(editor) {
   var self = this;
   // register the toolbar buttons provided by this plugin
   cfg.registerButton({
-  id: "filter",
-  tooltip  : this._lc("Filter"),
-  image    : editor.imgURL("ed_filter.gif", "Filter"),
-  textMode : false,
-  action   : function(editor) {
-               self.buttonPress(editor);
-             }
+    id: "filter",
+    tooltip  : this._lc("Filter"),
+    image    : editor.imgURL("ed_filter.gif", "Filter"),
+    textMode : false,
+    action   : function(editor) {
+                 self.buttonPress(editor);
+               }
   });
   if (!cfg.Filters)
     cfg.Filters = ["Paragraph","Word"];
@@ -43,12 +43,12 @@ Filter.prototype.add = function(filterName) {
   if(eval('typeof ' + filterName) == 'undefined') {
     var filter = _editor_url + "plugins/filter/filters/" + filterName + ".js";
     var head = document.getElementsByTagName("head")[0];
-    var evt = HTMLArea.is_ie ? "onreadystatechange" : "onload";
+    var evt = Xinha.is_ie ? "onreadystatechange" : "onload";
     var script = document.createElement("script");
     script.type = "text/javascript";
     script.src = filter;
     script[evt] = function() {
-      if(HTMLArea.is_ie && !/loaded|complete/.test(window.event.srcElement.readyState))  return;
+      if(Xinha.is_ie && !/loaded|complete/.test(window.event.srcElement.readyState))  return;
     }
     head.appendChild(script);
     //document.write("<script type='text/javascript' src='" + plugin_file + "'></script>");
@@ -56,7 +56,7 @@ Filter.prototype.add = function(filterName) {
 };
 
 Filter.prototype._lc = function(string) {
-    return HTMLArea._lc(string, 'Filter');
+    return Xinha._lc(string, 'Filter');
 };
 
 Filter.prototype.buttonPress = function(editor) {

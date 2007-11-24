@@ -1,4 +1,5 @@
-Gecko._pluginInfo={name:"Gecko",origin:"Xinha Core",version:"$LastChangedRevision: 808 $".replace(/^[^:]*: (.*) \$$/,"$1"),developer:"The Xinha Core Developer Team",developer_url:"$HeadURL: http://svn.xinha.python-hosting.com/trunk/modules/Gecko/Gecko.js $".replace(/^[^:]*: (.*) \$$/,"$1"),sponsor:"",sponsor_url:"",license:"htmlArea"};
+/* This compressed file is part of Xinha. For uncomressed sources, forum, and bug reports, go to xinha.org */
+Gecko._pluginInfo={name:"Gecko",origin:"Xinha Core",version:"$LastChangedRevision: 901 $".replace(/^[^:]*: (.*) \$$/,"$1"),developer:"The Xinha Core Developer Team",developer_url:"$HeadURL: http://svn.xinha.webfactional.com/trunk/modules/Gecko/Gecko.js $".replace(/^[^:]*: (.*) \$$/,"$1"),sponsor:"",sponsor_url:"",license:"htmlArea"};
 function Gecko(_1){
 this.editor=_1;
 _1.Gecko=this;
@@ -77,9 +78,7 @@ RE_ip=/(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[
 var _11=_c.match(Xinha.RE_url);
 if(_11){
 if(RE_date.test(_c)){
-if(!RE_ip.test(_c)){
 break;
-}
 }
 var _12=s.anchorNode;
 var _13=_12.splitText(s.anchorOffset);
@@ -121,7 +120,7 @@ a._updateAnchTimeout=setTimeout(_17,1000);
 break;
 }
 var m=s.anchorNode.data.match(Xinha.RE_url);
-if(m&&a.href.match(s.anchorNode.data.trim())){
+if(m&&a.href.match(new RegExp("http(s)?://"+Xinha.escapeStringForRegExp(s.anchorNode.data.trim())))){
 var _19=s.anchorNode;
 var _1a=function(){
 m=_19.data.match(Xinha.RE_url);
@@ -346,39 +345,42 @@ return (new XMLSerializer()).serializeToString(_4a);
 };
 Xinha.prototype.cc=String.fromCharCode(173);
 Xinha.prototype.setCC=function(_4b){
+var cc=this.cc;
 try{
 if(_4b=="textarea"){
 var ta=this._textArea;
-var _4d=ta.selectionStart;
-var _4e=ta.value.substring(0,_4d);
-var _4f=ta.value.substring(_4d,ta.value.length);
-if(_4f.match(/^[^<]*>/)){
-var _50=_4f.indexOf(">")+1;
-ta.value=_4e+_4f.substring(0,_50)+this.cc+_4f.substring(_50,_4f.length);
+var _4e=ta.selectionStart;
+var _4f=ta.value.substring(0,_4e);
+var _50=ta.value.substring(_4e,ta.value.length);
+if(_50.match(/^[^<]*>/)){
+var _51=_50.indexOf(">")+1;
+ta.value=_4f+_50.substring(0,_51)+cc+_50.substring(_51,_50.length);
 }else{
-ta.value=_4e+this.cc+_4f;
+ta.value=_4f+cc+_50;
 }
+ta.value=ta.value.replace(new RegExp("(<script[^>]*>[^"+cc+"]*?)("+cc+")([^"+cc+"]*?</script>)"),"$1$3$2");
+ta.value=ta.value.replace(new RegExp("^([^"+cc+"]*)("+cc+")([^"+cc+"]*<body[^>]*>)(.*?)"),"$1$3$2$4");
 }else{
 var sel=this.getSelection();
-sel.getRangeAt(0).insertNode(document.createTextNode(this.cc));
+sel.getRangeAt(0).insertNode(document.createTextNode(cc));
 }
 }
 catch(e){
 }
 };
-Xinha.prototype.findCC=function(_52){
+Xinha.prototype.findCC=function(_53){
 try{
-var _53=(_52=="textarea")?window:this._iframe.contentWindow;
-if(_53.find(this.cc)){
-if(_52=="textarea"){
+var _54=(_53=="textarea")?window:this._iframe.contentWindow;
+if(_54.find(this.cc)){
+if(_53=="textarea"){
 var ta=this._textArea;
-var _55=pos=ta.selectionStart;
+var _56=pos=ta.selectionStart;
 var end=ta.selectionEnd;
-var _57=ta.scrollTop;
-ta.value=ta.value.substring(0,_55)+ta.value.substring(end,ta.value.length);
+var _58=ta.scrollTop;
+ta.value=ta.value.substring(0,_56)+ta.value.substring(end,ta.value.length);
 ta.selectionStart=pos;
 ta.selectionEnd=pos;
-ta.scrollTop=_57;
+ta.scrollTop=_58;
 ta.focus();
 }else{
 var sel=this.getSelection();
@@ -392,13 +394,13 @@ catch(e){
 };
 Xinha.prototype._standardToggleBorders=Xinha.prototype._toggleBorders;
 Xinha.prototype._toggleBorders=function(){
-var _59=this._standardToggleBorders();
-var _5a=this._doc.getElementsByTagName("TABLE");
-for(var i=0;i<_5a.length;i++){
-_5a[i].style.display="none";
-_5a[i].style.display="table";
+var _5a=this._standardToggleBorders();
+var _5b=this._doc.getElementsByTagName("TABLE");
+for(var i=0;i<_5b.length;i++){
+_5b[i].style.display="none";
+_5b[i].style.display="table";
 }
-return _59;
+return _5a;
 };
 Xinha.getDoctype=function(doc){
 var d="";

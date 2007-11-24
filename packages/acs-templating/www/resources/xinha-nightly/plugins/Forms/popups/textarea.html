@@ -10,12 +10,11 @@
 var fields = ["f_name", "f_text", "f_cols", "f_rows", "f_wrap", "f_tabindex", "f_accesskey", "f_readOnly", "f_disabled"];
 
 function Init() {
-  window.resizeTo(280,260);
   __dlg_translate("Forms");
-	__dlg_init();
-	var param = window.dialogArguments;
+  __dlg_init(null,{width:260, height:380});
+  var param = window.dialogArguments;
   for (var i in fields) {
-    switch (fields[i]) { 
+    switch (fields[i]) {
     case "f_readOnly":
     case "f_disabled":
       document.getElementById(fields[i]).checked = (param[fields[i]]==fields[i].substring(2,20)) || (param[fields[i]] == true);  break;
@@ -27,19 +26,19 @@ function Init() {
 }
 
 function onOK() {
-	var el = document.getElementById("f_name");
-	if (!el.value) {
-		alert(HTMLArea._lc("You must enter a Name","Forms"));
-		el.focus();
-	  return false;
-	}
+  var el = document.getElementById("f_name");
+  if (!el.value) {
+    alert(Xinha._lc("You must enter a Name","Forms"));
+    el.focus();
+    return false;
+  }
   // pass data back to the calling window
   var param = new Object();
   for (var i in fields) {
-    switch (fields[i]) { 
+    switch (fields[i]) {
     case "f_readOnly":
     case "f_disabled":
-      if(HTMLArea.is_ie)
+      if(Xinha.is_ie)
         param[fields[i]] = (document.getElementById(fields[i]).checked)?true:"";
       else
         param[fields[i]] = (document.getElementById(fields[i]).checked)?fields[i].substring(2,20):"";
@@ -53,8 +52,8 @@ function onOK() {
 }
 
 function onCancel() {
-	__dlg_close(null);
-	return false;
+  __dlg_close(null);
+  return false;
 }
 </script>
 </head>
@@ -66,14 +65,14 @@ function onCancel() {
   <input type="text" name="name" id="f_name" title="name of the textarea" />
   <p />
   <fieldset>
-	<legend>Dimensions</legend>
+  <legend>Dimensions</legend>
     <div class="fr">Columns:</div>
     <input type="text" name="cols" id="f_cols" size="5" title="Width in number of characters" />
     <p />
     <div class="fr">Rows:</div>
-		<input type="text" name="rows" id="f_rows" size="5" title="Height in number of rows" />
+    <input type="text" name="rows" id="f_rows" size="5" title="Height in number of rows" />
     <p />
-	</fieldset>
+  </fieldset>
   <div class="space"></div>
   <div class="fr">Wrap Mode:</div>
   <select name="wrap" id="f_wrap">
@@ -85,7 +84,7 @@ function onCancel() {
     <option value="virtual">Virtual</option>
     <option value="normal">normal</option>
     <option value="nowrap">nowrap</option>
-    <option value="pre">pre</option>    
+    <option value="pre">pre</option>
   </select>
   <p />
   <div class="fr">Read Only</div>
@@ -100,13 +99,13 @@ function onCancel() {
   <div class="fr">Access Key:</div>
   <input type="text" name="accesskey" id="f_accesskey" />
   <p />
-  
+
   <div class="fr">Initial Text:</div>
   <input type="text" name="text" id="f_text" title="Default text (optional)" />
   <div id="buttons">
     <button type="button" name="ok" onclick="return onOK();">OK</button>
     <button type="button" name="cancel" onclick="return onCancel();">Cancel</button>
-  </div>  
+  </div>
 </form>
 
 </body>

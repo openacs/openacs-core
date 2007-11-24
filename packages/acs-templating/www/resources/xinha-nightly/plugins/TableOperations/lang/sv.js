@@ -71,9 +71,9 @@
   "Unset color": "Obestämd färg",
   "Vertical align": "Vertikal justering",
   "Width": "Bredd",
-  "HTMLArea cowardly refuses to delete the last cell in row.": "Xinha nekar att radera sista cellen i tabellen.",
-  "HTMLArea cowardly refuses to delete the last column in table.": "Xinha nekar att radera sista kolumnen i tabellen.",
-  "HTMLArea cowardly refuses to delete the last row in table.": "Xinha nekar att radera sista raden i tabellen.",
+  "Xinha cowardly refuses to delete the last cell in row.": "Xinha nekar att radera sista cellen i tabellen.",
+  "Xinha cowardly refuses to delete the last column in table.": "Xinha nekar att radera sista kolumnen i tabellen.",
+  "Xinha cowardly refuses to delete the last row in table.": "Xinha nekar att radera sista raden i tabellen.",
   "percent": "procent",
   "pixels": "bildpunkter"
 };

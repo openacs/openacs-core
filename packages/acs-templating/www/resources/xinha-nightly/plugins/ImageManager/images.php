@@ -209,7 +209,7 @@ _backend_url = "<?php print $IMConfig['backend_url']; ?>";
 /*<![CDATA[*/
 
 	if(window.top)
-		HTMLArea = window.top.HTMLArea;
+    HTMLArea = Xinha    = window.top.Xinha;
 
 	function hideMessage()
 	{
@@ -274,6 +274,7 @@ _backend_url = "<?php print $IMConfig['backend_url']; ?>";
 /*]]>*/
 </script>
 <script type="text/javascript" src="<?php print $IMConfig['base_url'];?>assets/images.js"></script>
+<script type="text/javascript" src="../../popups/popup.js"></script>
 <script type="text/javascript" src="assets/popup.js"></script>
 </head>
 

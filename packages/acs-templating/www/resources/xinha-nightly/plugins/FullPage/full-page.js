@@ -1,3 +1,4 @@
+/* This compressed file is part of Xinha. For uncomressed sources, forum, and bug reports, go to xinha.org */
 function FullPage(_1){
 this.editor=_1;
 var _2=_1.config;
@@ -10,7 +11,7 @@ _2.addToolbarElement(["separator","FP-docprop"],"separator",-1);
 }
 FullPage._pluginInfo={name:"FullPage",version:"1.0",developer:"Mihai Bazon",developer_url:"http://dynarch.com/mishoo/",c_owner:"Mihai Bazon",sponsor:"Thycotic Software Ltd.",sponsor_url:"http://thycotic.com",license:"htmlArea"};
 FullPage.prototype._lc=function(_6){
-return HTMLArea._lc(_6,"FullPage");
+return Xinha._lc(_6,"FullPage");
 };
 FullPage.prototype.buttonPress=function(_7,id){
 var _9=this;
@@ -51,7 +52,7 @@ _f=_14.content;
 }
 var _15=_a.getElementsByTagName("title")[0];
 _15=_15?_15.innerHTML:"";
-var _16={f_doctype:_7.doctype,f_title:_15,f_body_bgcolor:HTMLArea._colorToRgb(_a.body.style.backgroundColor),f_body_fgcolor:HTMLArea._colorToRgb(_a.body.style.color),f_base_style:_c,f_alt_style:_d,f_charset:_10,f_keywords:_e,f_description:_f,editor:_7};
+var _16={f_doctype:_7.doctype,f_title:_15,f_body_bgcolor:Xinha._colorToRgb(_a.body.style.backgroundColor),f_body_fgcolor:Xinha._colorToRgb(_a.body.style.color),f_base_style:_c,f_alt_style:_d,f_charset:_10,f_keywords:_e,f_description:_f,editor:_7};
 _7._popupDialog("plugin://FullPage/docprop",function(_17){
 _9.setDocProp(_17);
 },_16);
@@ -179,7 +180,7 @@ while(node=_2e.lastChild){
 _2e.removeChild(node);
 }
 }
-if(!HTMLArea.is_ie){
+if(!Xinha.is_ie){
 _2e.appendChild(doc.createTextNode(val));
 }else{
 doc.title=val;

@@ -1,3 +1,4 @@
+/* This compressed file is part of Xinha. For uncomressed sources, forum, and bug reports, go to xinha.org */
 Linker._pluginInfo={name:"Linker",version:"1.0",developer:"James Sleeman",developer_url:"http://www.gogo.co.nz/",c_owner:"Gogo Internet Services",license:"htmlArea",sponsor:"Gogo Internet Services",sponsor_url:"http://www.gogo.co.nz/"};
 Xinha.loadStyle("dTree/dtree.css","Linker");
 Xinha.Config.prototype.Linker={"treeCaption":document.location.host,"backend":_editor_url+"plugins/Linker/scan.php","backend_data":null,"files":null};

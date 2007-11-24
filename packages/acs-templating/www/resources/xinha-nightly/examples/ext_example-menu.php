@@ -1,4 +1,4 @@
-<?PHP
+﻿<?php
   $LocalPluginPath = dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'plugins';
   $LocalSkinPath = dirname(dirname(__File__)).DIRECTORY_SEPARATOR.'skins';
 ?>
@@ -10,10 +10,10 @@
     --  frame to provide a menu for generating example editors using
     --  full_example-body.html, and full_example.js.
     --
-    --  $HeadURL: http://svn.xinha.python-hosting.com/trunk/examples/ext_example-menu.php $
-    --  $LastChangedDate: 2007-02-07 20:12:42 +0100 (Mi, 07 Feb 2007) $
-    --  $LastChangedRevision: 715 $
-    --  $LastChangedBy: htanaka $
+    --  $HeadURL: http://svn.xinha.webfactional.com/trunk/examples/ext_example-menu.php $
+    --  $LastChangedDate: 2007-10-12 12:00:47 +0200 (Fr, 12 Okt 2007) $
+    --  $LastChangedRevision: 901 $
+    --  $LastChangedBy: ray $
     --------------------------------------------------------------------------->
 
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -30,16 +30,26 @@
     width: "auto",
     height: "auto",
     sizeIncludesBars: true,
+    sizeIncludesPanels: true,
     statusBar: true,
+    htmlareaPaste: false,
     mozParaHandler: "best",
+    getHtmlMethod: "DOMwalk",
     undoSteps: 20,
+    undoTimeout: 500,
+    changeJustifyWithDirection: false,
+    fullPage: false,
+    pageStyle: "",
     baseHref: null,
+    expandRelativeUrl: true,
     stripBaseHref: true,
     stripSelfNamedAnchors: true,
     only7BitPrintablesInURLs: true,
     sevenBitClean: false,
     killWordOnPaste: true,
+    makeLinkShowsTarget: true,
     flowToolbars: true,
+    stripScripts: false,
     CharacterMapMode: "popup",
     ListTypeMode: "toolbar",
     showLoading: false,
@@ -100,25 +110,25 @@
   }
 
 function Dialog(url, action, init) {
-	if (typeof init == "undefined") {
-		init = window;	// pass this window object by default
-	}
-	Dialog._geckoOpenModal(url, action, init);
+  if (typeof init == "undefined") {
+    init = window;	// pass this window object by default
+  }
+  Dialog._geckoOpenModal(url, action, init);
 };
 
 Dialog._parentEvent = function(ev) {
-	setTimeout( function() { if (Dialog._modal && !Dialog._modal.closed) { Dialog._modal.focus() } }, 50);
-	if (Dialog._modal && !Dialog._modal.closed) {
-		agt = navigator.userAgent.toLowerCase();
-		is_ie = ((agt.indexOf("msie") != -1) && (agt.indexOf("opera") == -1));
-		if (is_ie) {
-		 	ev.cancelBubble = true;
-			ev.returnValue = false;
-		} else {
-			ev.preventDefault();
-			ev.stopPropagation();
-		}
-	}
+  setTimeout( function() { if (Dialog._modal && !Dialog._modal.closed) { Dialog._modal.focus() } }, 50);
+  if (Dialog._modal && !Dialog._modal.closed) {
+    agt = navigator.userAgent.toLowerCase();
+    is_ie = ((agt.indexOf("msie") != -1) && (agt.indexOf("opera") == -1));
+    if (is_ie) {
+      ev.cancelBubble = true;
+      ev.returnValue = false;
+    } else {
+      ev.preventDefault();
+      ev.stopPropagation();
+    }
+  }
 };
 
 
@@ -132,37 +142,37 @@ Dialog._modal = null;
 Dialog._arguments = null;
 
 Dialog._geckoOpenModal = function(url, action, init) {
-	var dlg = window.open(url, "hadialog",
-			      "toolbar=no,menubar=no,personalbar=no,width=10,height=10," +
-			      "scrollbars=no,resizable=yes,modal=yes,dependable=yes");
-	Dialog._modal = dlg;
-	Dialog._arguments = init;
+  var dlg = window.open(url, "hadialog",
+            "toolbar=no,menubar=no,personalbar=no,width=10,height=10," +
+            "scrollbars=no,resizable=yes,modal=yes,dependable=yes");
+  Dialog._modal = dlg;
+  Dialog._arguments = init;
 
-	// capture some window's events
-	function capwin(w) {
+  // capture some window's events
+  function capwin(w) {
 //		Xinha._addEvent(w, "click", Dialog._parentEvent);
 //		Xinha._addEvent(w, "mousedown", Dialog._parentEvent);
 //		Xinha._addEvent(w, "focus", Dialog._parentEvent);
-	};
-	// release the captured events
-	function relwin(w) {
+  };
+  // release the captured events
+  function relwin(w) {
 //		Xinha._removeEvent(w, "click", Dialog._parentEvent);
 //		Xinha._removeEvent(w, "mousedown", Dialog._parentEvent);
 //		Xinha._removeEvent(w, "focus", Dialog._parentEvent);
-	};
-	capwin(window);
-	// capture other frames
-	for (var i = 0; i < window.frames.length; capwin(window.frames[i++]));
-	// make up a function to be called when the Dialog ends.
-	Dialog._return = function (val) {
-		if (val && action) {
-			action(val);
-		}
-		relwin(window);
-		// capture other frames
-		for (var i = 0; i < window.frames.length; relwin(window.frames[i++]));
-		Dialog._modal = null;
-	};
+  };
+  capwin(window);
+  // capture other frames
+  for (var i = 0; i < window.frames.length; capwin(window.frames[i++]));
+  // make up a function to be called when the Dialog ends.
+  Dialog._return = function (val) {
+    if (val && action) {
+      action(val);
+    }
+    relwin(window);
+    // capture other frames
+    for (var i = 0; i < window.frames.length; relwin(window.frames[i++]));
+    Dialog._modal = null;
+  };
 };
 
   function fExtended () {
@@ -171,16 +181,26 @@ Dialog._geckoOpenModal = function(url, action, init) {
         settings.width = param["width"];
         settings.height = param["height"];
         settings.sizeIncludesBars = (param["sizeIncludesBars"]=="true");
+        settings.sizeIncludesPanels = (param["sizeIncludesPanels"]=="true");
         settings.statusBar = (param["statusBar"]=="true");
+        settings.htmlareaPaste = (param["htmlareaPaste"]=="true");
         settings.mozParaHandler = param["mozParaHandler"];
+        settings.getHtmlMethod = param["getHtmlMethod"];
         settings.undoSteps = param["undoSteps"];
+        settings.undoTimeout = param["undoTimeout"];
+        settings.changeJustifyWithDirection = (param["changeJustifyWithDirection"]=="true");
+        settings.fullPage = (param["fullPage"]=="true");
+        settings.pageStyle = param["pageStyle"];
         settings.baseHref = param["baseHref"];
+        settings.expandRelativeUrl = (param["expandRelativeUrl"]=="true");
         settings.stripBaseHref = (param["stripBaseHref"]=="true");
         settings.stripSelfNamedAnchors = (param["stripSelfNamedAnchors"]=="true");
         settings.only7BitPrintablesInURLs = (param["only7BitPrintablesInURLs"]=="true");
         settings.sevenBitClean = (param["sevenBitClean"]=="true");
         settings.killWordOnPaste = (param["killWordOnPaste"]=="true");
+        settings.makeLinkShowsTarget = (param["makeLinkShowsTarget"]=="true");
         settings.flowToolbars = (param["flowToolbars"]=="true");
+        settings.stripScripts = (param["stripScripts"]=="true");
         settings.CharacterMapMode = param["CharacterMapMode"];
         settings.ListTypeMode = param["ListTypeMode"];
         settings.showLoading = (param["showLoading"]=="true");
@@ -242,13 +262,13 @@ Dialog._geckoOpenModal = function(url, action, init) {
           <select name="skin" id="skin">
           <option value="">-- no skin --</option>
 <?php
-	$d = @dir($LocalSkinPath);
-	while (false !== ($entry = $d->read()))  //not a dot file or directory
-	{	if(substr($entry,0,1) != '.')
-		{ echo '<option value="' . $entry . '"> ' . $entry . '</option>'."\n";
-		}
-	}
-	$d->close();
+  $d = @dir($LocalSkinPath);
+  while (false !== ($entry = $d->read()))  //not a dot file or directory
+  { if(substr($entry,0,1) != '.')
+    { echo '<option value="' . $entry . '"> ' . $entry . '</option>'."\n";
+    }
+  }
+  $d->close();
 ?>
           </select>
         </label>
@@ -259,20 +279,18 @@ Dialog._geckoOpenModal = function(url, action, init) {
       <legend>Plugins</legend>
       <div id="div_plugins" style="width:100%; overflow:auto">
 <?php
-	$d = @dir($LocalPluginPath);
-	$dir_array = array();
-	while (false !== ($entry = $d->read()))  //not a dot file or directory
-	{	if(substr($entry,0,1) != '.')
-		{
-			$dir_array[] = $entry;
-		}
-	}
-	$d->close();
-	sort($dir_array);
-	foreach ($dir_array as $entry)
-	{
-		echo '<label><input type="checkbox" name="plugins" id="plugins" value="' . $entry . '"> ' . $entry . '</label>'."\n";
-	}
+  $d = @dir($LocalPluginPath);
+  $dir_array = array();
+  while (false !== ($entry = $d->read()))  //not a dot file or directory
+  { if(substr($entry,0,1) != '.')
+    { $dir_array[] = $entry;
+    }
+  }
+  $d->close();
+  sort($dir_array);
+  foreach ($dir_array as $entry)
+  { echo '<label><input type="checkbox" name="plugins" id="plugins" value="' . $entry . '"> ' . $entry . '</label>'."\n";
+  }
 
 ?>
       </div>

@@ -800,7 +800,7 @@ class ExtendedFileManager
 				$src = Files::makeFile($this->getImagesDir(), $_GET['srcdir'].$_GET['file']);
 				$file = $_GET['file'];
 				$dest = Files::makeFile($this->getImagesDir(), $_GET['dir']);
-				return  Files::copyFile($src,$dest,$file);
+				return Files::copyFile($src,$dest,$file);
 			break;
 			case 'copyDir':
 				$basePath = $this->getImagesDir();

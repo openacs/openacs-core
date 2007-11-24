@@ -26,7 +26,7 @@
   "Insert Table": "插入表格",
   "Toggle HTML Source": "切換HTML原始碼",
   "Enlarge Editor": "伸出編輯系統",
-  "About this editor": "關於 HTMLArea",
+  "About this editor": "關於 Xinha",
   "Help using editor": "說明",
   "Current style": "字體例子",
   "Undoes your last action": "回原",

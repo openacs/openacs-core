@@ -1,3 +1,4 @@
+/* This compressed file is part of Xinha. For uncomressed sources, forum, and bug reports, go to xinha.org */
 function Node(id,_2,_3,_4,_5,_6,_7,_8,_9){
 this.id=id;
 this.pid=_2;

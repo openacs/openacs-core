@@ -1,4 +1,4 @@
-<html>
+﻿<html>
 
 <head>
   <title>Settings</title>
@@ -6,13 +6,13 @@
   <script type="text/javascript">
 
 function getAbsolutePos(el) {
-	var r = { x: el.offsetLeft, y: el.offsetTop };
-	if (el.offsetParent) {
-		var tmp = getAbsolutePos(el.offsetParent);
-		r.x += tmp.x;
-		r.y += tmp.y;
-	}
-	return r;
+  var r = { x: el.offsetLeft, y: el.offsetTop };
+  if (el.offsetParent) {
+    var tmp = getAbsolutePos(el.offsetParent);
+    r.x += tmp.x;
+    r.y += tmp.y;
+  }
+  return r;
 };
 
 function getSelectedValue(el) {
@@ -66,63 +66,63 @@ function setCheckedValue(el, val) {
 }
 
 function __dlg_onclose() {
-	opener.Dialog._return(null);
+  opener.Dialog._return(null);
 };
 
 // closes the dialog and passes the return info upper.
 function __dlg_close(val) {
-	opener.Dialog._return(val);
-	window.close();
+  opener.Dialog._return(val);
+  window.close();
 };
 
 function __dlg_close_on_esc(ev) {
-	ev || (ev = window.event);
-	if (ev.keyCode == 27) {
-		window.close();
-		return false;
-	}
-	return true;
+  ev || (ev = window.event);
+  if (ev.keyCode == 27) {
+    window.close();
+    return false;
+  }
+  return true;
 };
 
 function __dlg_init(bottom) {
   var body = document.body;
-	var body_height = 0;
-	if (typeof bottom == "undefined") {
-		var div = document.createElement("div");
-		body.appendChild(div);
-		var pos = getAbsolutePos(div);
-		body_height = pos.y;
-	} else {
-		var pos = getAbsolutePos(bottom);
-		body_height = pos.y + bottom.offsetHeight;
-	}
-	window.dialogArguments = opener.Dialog._arguments;
-	if (!document.all) {
-		window.sizeToContent();
-		window.sizeToContent();	// for reasons beyond understanding,
-					// only if we call it twice we get the
-					// correct size.
-		window.addEventListener("unload", __dlg_onclose, true);
-		window.innerWidth = body.offsetWidth + 5;
-		window.innerHeight = body_height + 2;
-		// center on parent
-		var x = opener.screenX + (opener.outerWidth - window.outerWidth) / 2;
-		var y = opener.screenY + (opener.outerHeight - window.outerHeight) / 2;
-		window.moveTo(x, y);
-	} else {
-		// window.dialogHeight = body.offsetHeight + 50 + "px";
-		// window.dialogWidth = body.offsetWidth + "px";
-		window.resizeTo(body.offsetWidth, body_height);
-		var ch = body.clientHeight;
-		var cw = body.clientWidth;
-		window.resizeBy(body.offsetWidth - cw, body_height - ch);
-		var W = body.offsetWidth;
-		var H = 2 * body_height - ch;
-		var x = (screen.availWidth - W) / 2;
-		var y = (screen.availHeight - H) / 2;
-		window.moveTo(x, y);
-	}
-	document.body.onkeypress = __dlg_close_on_esc;
+  var body_height = 0;
+  if (typeof bottom == "undefined") {
+    var div = document.createElement("div");
+    body.appendChild(div);
+    var pos = getAbsolutePos(div);
+    body_height = pos.y;
+  } else {
+    var pos = getAbsolutePos(bottom);
+    body_height = pos.y + bottom.offsetHeight;
+  }
+  window.dialogArguments = opener.Dialog._arguments;
+  if (!document.all) {
+    window.sizeToContent();
+    window.sizeToContent();  // for reasons beyond understanding,
+          // only if we call it twice we get the
+          // correct size.
+    window.addEventListener("unload", __dlg_onclose, true);
+    window.innerWidth = body.offsetWidth + 5;
+    window.innerHeight = body_height + 2;
+    // center on parent
+    var x = opener.screenX + (opener.outerWidth - window.outerWidth) / 2;
+    var y = opener.screenY + (opener.outerHeight - window.outerHeight) / 2;
+    window.moveTo(x, y);
+  } else {
+    // window.dialogHeight = body.offsetHeight + 50 + "px";
+    // window.dialogWidth = body.offsetWidth + "px";
+    window.resizeTo(body.offsetWidth, body_height);
+    var ch = body.clientHeight;
+    var cw = body.clientWidth;
+    window.resizeBy(body.offsetWidth - cw, body_height - ch);
+    var W = body.offsetWidth;
+    var H = 2 * body_height - ch;
+    var x = (screen.availWidth - W) / 2;
+    var y = (screen.availHeight - H) / 2;
+    window.moveTo(x, y);
+  }
+  document.body.onkeypress = __dlg_close_on_esc;
 };
 
 function placeFocus() {
@@ -207,88 +207,103 @@ function onCancel() {
 </script>
 
 <style type="text/css">
-	.fr { width: 16em; float: left; padding: 2px 5px; text-align: right; }
+  label { width: 16em; float: left; padding: 2px 5px; text-align: right; }
+  br { clear: both; }
 </style>
 
 </head>
 
-<body class="dialog" onload="Init(); window.resizeTo(360, 590);">
+<body class="dialog" onload="Init(); window.resizeTo(420, 820);">
 <div class="title">Settings</div>
   <form action="" method="get">
-    <div class="fr">Editor width:</div>
-      <input type="text" name="width" id="width" title="" />
-    <p />
-    <div class="fr">Editor height:</div>
-      <input type="text" name="height" id="height" title="" />
-    <p />
-    <div class="fr">Size includes bars</div>
-      <input type="checkbox" name="sizeIncludesBars" id="sizeIncludesBars" value="true" />
-    <p />
-    <div class="fr">Status Bar</div>
-      <input type="checkbox" name="statusBar" id="statusBar" value="true" />
-    <p />
-    <div class="fr">Mozilla Parameter Handler:</div>
-    <select name="mozParaHandler" id="mozParaHandler">
-      <option value="built-in">built-in</option>
-      <option value="dirty">dirty</option>
-      <option value="best">best</option>
+  <fieldset>
+    <legend>Xinha options</legend>
+    <label for="width">Editor width:</label>
+    <input type="text" name="width" id="width" title="Allowed values are 'auto', 'toolbar' or a numeric value followed by 'px'." /><br />
+    <label for="height">Editor height:</label>
+    <input type="text" name="height" id="height" title="Allowed values are 'auto' or a numeric value followed by 'px'." /><br />
+    <label for="sizeIncludesBars">Size includes bars</label>
+    <input type="checkbox" name="sizeIncludesBars" id="sizeIncludesBars" value="true" title="Specifies whether the toolbar should be included in the size, or are extra to it." /><br />
+    <label for="sizeIncludesPanels">Size includes panels</label>
+    <input type="checkbox" name="sizeIncludesPanels" id="sizeIncludesPanels" value="true" title="Specifies whether the panels should be included in the size, or are extra to it." /><br />
+    <label for="statusBar">Status Bar</label>
+    <input type="checkbox" name="statusBar" id="statusBar" value="true" title="Enable creation of the status bar?" /><br />
+    <label for="htmlareaPaste">Htmlarea Paste</label>
+    <input type="checkbox" name="htmlareaPaste" id="htmlareaPaste" value="true" title="Intercept ^V and use the Xinha paste command" /><br />
+    <label for="mozParaHandler">Mozilla Parameter Handler:</label>
+    <select name="mozParaHandler" id="mozParaHandler" title="Gecko only: Let the built-in routine for handling the return key decide if to enter br or p tags or use a custom implementation.">
+    <option value="built-in">built-in</option>
+    <option value="dirty">dirty</option>
+    <option value="best">best</option>
+    </select><br />
+    <label for="getHtmlMethod">GetHtml Method:</label>
+    <select name="getHtmlMethod" id="getHtmlMethod" title="This determines the method how the HTML output is generated.">
+    <option value="DOMwalk">DOMwalk</option>
+    <option value="TransformInnerHTML">TransformInnerHTML</option>
+    </select><br />
+    <label for="undoSteps">Undo steps:</label>
+    <input type="text" name="undoSteps" id="undoSteps" title="Maximum size of the undo queue."  /><br />
+    <label for="undoTimeout">Undo Timeout:</label>
+    <input type="text" name="undoTimeout" id="undoTimeout" title="The time interval at which undo samples are taken, default: 500 (1/2 sec)."  /><br />
+    <label for="changeJustifyWithDirection">change justify with direction</label>
+    <input type="checkbox" name="changeJustifyWithDirection" id="changeJustifyWithDirection" value="true" title="Set this to true if you want to explicitly right-justify when setting the text direction to right-to-left" /><br />
+    <label for="fullPage">full Page</label>
+    <input type="checkbox" name="fullPage" id="fullPage" value="true" title="If true then Xinha will retrieve the full HTML, starting with the HTML-tag." /><br />
+    <label for="pageStyle">Page style:</label>
+    <textarea name="pageStyle" id="pageStyle" title="Raw style definitions included in the edited document"></textarea>
+<!--    pageStyleSheets -->
+    <label for="baseHref">Base href:</label>
+    <input type="text" name="baseHref" id="baseHref" title="specify a base href for relative links" /><br />
+    <label for="expandRelativeUrl">expand relative Url</label>
+    <input type="checkbox" name="expandRelativeUrl" id="expandRelativeUrl" value="true" title="If true, relative URLs (../) will be made absolute"/><br />
+    <label for="stripBaseHref">Strip base href</label>
+    <input type="checkbox" name="stripBaseHref" id="stripBaseHref" value="true" title="We can strip the server part out of URL to make/leave them semi-absolute" /><br />
+    <label for="stripSelfNamedAnchors">Strip self named anchors</label>
+    <input type="checkbox" name="stripSelfNamedAnchors" id="stripSelfNamedAnchors" value="true" title="We can strip the url of the editor page from named links" /><br />
+    <label for="only7BitPrintablesInURLs">only 7bit printables in URLs</label>
+    <input type="checkbox" name="only7BitPrintablesInURLs" id="only7BitPrintablesInURLs" value="true" title="In URLs all characters above ASCII value 127 have to be encoded using % codes" /><br />
+    <label for="sevenBitClean">7bit Clean</label>
+    <input type="checkbox" name="sevenBitClean" id="sevenBitClean" value="true" title="If you are putting the HTML written in Xinha into an email you might want it to be 7-bit characters only." /><br />
+    <label for="killWordOnPaste">kill Word on paste</label>
+    <input type="checkbox" name="killWordOnPaste" id="killWordOnPaste" value="true" title="Set to true if you want Word code to be cleaned upon Paste." /><br />
+    <label for="makeLinkShowsTarget">make Link Shows Target</label>
+    <input type="checkbox" name="makeLinkShowsTarget" id="makeLinkShowsTarget" value="true" title="Enable the 'Target' field in the Make Link dialog." /><br />
+    <label for="flowToolbars">flow toolbars</label>
+    <input type="checkbox" name="flowToolbars" id="flowToolbars" value="true" /><br />
+    <label for="stripScripts">strip Scripts</label>
+    <input type="checkbox" name="stripScripts" id="stripScripts" value="true" title="Set to false if you want to allow JavaScript in the content" /><br />
+    <label for="showLoading">show loading</label>
+    <input type="checkbox" name="showLoading" id="showLoading" value="true" /><br />
+  </fieldset>
+
+  <fieldset id="CharacterMapOptions" class="options">
+    <legend>CharacterMap options</legend>
+    <label for="CharacterMapMode">Mode :</label>
+    <select id="CharacterMapMode" name="CharacterMapMode">
+    <option value="popup">popup</option>
+    <option value="panel">panel</option>
     </select>
-    <div class="space"></div>
-    <div class="fr">Undo steps:</div>
-      <input type="text" name="undoSteps" id="undoSteps" title="" />
-    <p />
-    <div class="fr">Base href:</div>
-      <input type="text" name="baseHref" id="baseHref" title="" />
-    <p />
-    <div class="fr">Strip base href</div>
-      <input type="checkbox" name="stripBaseHref" id="stripBaseHref" value="true" />
-    <p />
-    <div class="fr">Strip self named anchors</div>
-      <input type="checkbox" name="stripSelfNamedAnchors" id="stripSelfNamedAnchors" value="true" />
-    <p />
-    <div class="fr">only 7bit printables in URLs</div>
-      <input type="checkbox" name="only7BitPrintablesInURLs" id="only7BitPrintablesInURLs" value="true" />
-    <p />
-    <div class="fr">7bit Clean</div>
-      <input type="checkbox" name="sevenBitClean" id="sevenBitClean" value="true" />
-    <p />
-    <div class="fr">kill Word on paste</div>
-      <input type="checkbox" name="killWordOnPaste" id="killWordOnPaste" value="true" />
-    <p />
-    <div class="fr">flow toolbars</div>
-      <input type="checkbox" name="flowToolbars" id="flowToolbars" value="true" />
-    <p />
-    <div class="fr">show loading</div>
-      <input type="checkbox" name="showLoading" id="showLoading" value="true" />
-    <p />
+  </fieldset>
 
-    <div id="CharacterMapOptions" class="options">
-    <hr size="0.5">
-    <div class="fr">CharacterMap mode :</div>
-      <select id="CharacterMapMode" name="CharacterMapMode">
-        <option value="popup">popup</option>
-        <option value="panel">panel</option>
-      </select>
-    </div>
-    <p />
+  <fieldset id="ListTypeOptions" class="options">
+    <legend>ListType options</legend>
+    <label class="ListTypeMode">Mode :</label>
+    <select id="ListTypeMode" name="ListTypeMode">
+    <option value="toolbar">toolbar</option>
+    <option value="panel">panel</option>
+    </select>
+  </fieldset>
 
-    <div id="ListTypeOptions" class="options">
-    <hr size="0.5">
-    <div class="fr">ListType mode :</div>
-      <select id="ListTypeMode" name="ListTypeMode">
-        <option value="toolbar">toolbar</option>
-        <option value="panel">panel</option>
-      </select>
-    </div>
-    <p />
-
-    <div id="CharCounterOptions" class="options">
-    <hr size="0.5">
-    <div class="fr">CharCounter (showChar) :</div><input type="checkbox" name="showChar" id="showChar" value="true" /><br />
-    <div class="fr">CharCounter (showWord) :</div><input type="checkbox" name="showWord" id="showWord" value="true" /><br />
-    <div class="fr">CharCounter (showHtml) :</div><input type="checkbox" name="showHtml" id="showHtml" value="true" />
-    </div>
-    <p />
+  <fieldset id="CharCounterOptions" class="options">
+    <legend>CharCounter options</legend>
+    <label for="showChar">show Char :</label>
+    <input type="checkbox" name="showChar" id="showChar" value="true" /><br />
+    <label for="showWord">show Word :</label>
+    <input type="checkbox" name="showWord" id="showWord" value="true" /><br />
+    <label for="showHtml">show Html :</label>
+    <input type="checkbox" name="showHtml" id="showHtml" value="true" /><br />
+  </fieldset>
+  <br />
 
   <div id="buttons">
     <button type="submit" name="ok" onclick="return onOK();">OK</button>

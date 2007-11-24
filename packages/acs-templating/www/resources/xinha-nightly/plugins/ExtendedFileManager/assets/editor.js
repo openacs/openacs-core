@@ -1,3 +1,4 @@
+/* This compressed file is part of Xinha. For uncomressed sources, forum, and bug reports, go to xinha.org */
 var current_action=null;
 var actions=["crop","scale","rotate","measure","save"];
 var orginal_width=null,orginal_height=null;

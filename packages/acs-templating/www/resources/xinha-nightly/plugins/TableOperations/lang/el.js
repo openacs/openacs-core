@@ -71,9 +71,9 @@
   "Unset color": "Αναίρεση χρώματος",
   "Vertical align": "Κατακόρυφη στοίχηση",
   "Width": "Πλάτος",
-  "HTMLArea cowardly refuses to delete the last cell in row.": "Δεν μπορεί να διαγραφεί το τελευταίο κελί σε μια γραμμή.",
-  "HTMLArea cowardly refuses to delete the last column in table.": "Δεν μπορεί να διαγραφεί η τελευταία στήλη σε ένα πίνακα.",
-  "HTMLArea cowardly refuses to delete the last row in table.": "Δεν μπορεί να διαγραφεί η τελευταία γραμμή σε ένα πίνακα.",
+  "Xinha cowardly refuses to delete the last cell in row.": "Δεν μπορεί να διαγραφεί το τελευταίο κελί σε μια γραμμή.",
+  "Xinha cowardly refuses to delete the last column in table.": "Δεν μπορεί να διαγραφεί η τελευταία στήλη σε ένα πίνακα.",
+  "Xinha cowardly refuses to delete the last row in table.": "Δεν μπορεί να διαγραφεί η τελευταία γραμμή σε ένα πίνακα.",
   "percent": "τοις εκατόν",
   "pixels": "pixels"
 };

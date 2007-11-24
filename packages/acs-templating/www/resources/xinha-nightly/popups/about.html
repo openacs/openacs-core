@@ -13,13 +13,13 @@ Distributed as part of HTMLArea 3.0
 
 -->
 
-<html style="height: 100%">
+<html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>About Xinha</title>
 <script type="text/javascript" src="popup.js"></script>
 <script type="text/javascript">
-window.resizeTo(450, 250);
+window.resizeTo(450, 365);
 var TABS = [];
 var CURRENT_TAB = 0;
 var CONTENT_HEIGHT_DIFF = 0;
@@ -76,7 +76,7 @@ function initDocument() {
     plugins.innerHTML = "<p>No plugins have been loaded</p>";
   }
 
-  plugins.innerHTML += "<p>User agent reports:<br>" + navigator.userAgent + "</p>";
+  plugins.innerHTML += "<p>User agent reports:<br/>" + navigator.userAgent + "</p>";
 
   var content = document.getElementById("content");
   if (window.innerHeight) {
@@ -117,6 +117,7 @@ window.onresize = function() {
 }
 </script>
 <style>
+  html, body { height: 100%}
   html,body,textarea,table
   { font-family: helvetica,arial,sans-serif;
     font-size: 11px; padding: 0px; margin: 0px;
@@ -197,13 +198,17 @@ window.onresize = function() {
   <p>
    Use of Xinha is granted by the terms of the htmlArea License (based on BSD license)
   </p>
+ <pre>
+Copyright (c) 2005-2007 Xinha Developer Team and contributors
+	</pre>
   <p>
     Xinha was originally based on work by Mihai Bazon which is:
   </p>
-  <blockquote><pre>Copyright (c) 2003-2004 dynarch.com.
-    Copyright (c) 2002-2003 interactivetools.com, inc.
-    This copyright notice MUST stay intact for use.</pre></blockquote>
-
+  <pre>
+Copyright (c) 2003-2004 dynarch.com.
+Copyright (c) 2002-2003 interactivetools.com, inc.
+This copyright notice MUST stay intact for use.
+  </pre>
 </div>
 
 <div id="tab-area-1">

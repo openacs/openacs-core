@@ -1,3 +1,4 @@
+/* This compressed file is part of Xinha. For uncomressed sources, forum, and bug reports, go to xinha.org */
 EnterParagraphs._pluginInfo={name:"EnterParagraphs",version:"1.0",developer:"Adam Wright",developer_url:"http://www.hipikat.org/",sponsor:"The University of Western Australia",sponsor_url:"http://www.uwa.edu.au/",license:"htmlArea"};
 EnterParagraphs.prototype._whiteSpace=/^\s*$/;
 EnterParagraphs.prototype._pExclusions=/^(address|blockquote|body|dd|div|dl|dt|fieldset|form|h1|h2|h3|h4|h5|h6|hr|li|noscript|ol|p|pre|table|ul)$/i;

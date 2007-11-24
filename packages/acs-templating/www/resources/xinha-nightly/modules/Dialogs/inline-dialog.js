@@ -1,3 +1,4 @@
+/* This compressed file is part of Xinha. For uncomressed sources, forum, and bug reports, go to xinha.org */
 Xinha.Dialog=function(_1,_2,_3){
 this.id={};
 this.r_id={};

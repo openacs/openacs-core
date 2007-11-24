@@ -1,3 +1,4 @@
+/* This compressed file is part of Xinha. For uncomressed sources, forum, and bug reports, go to xinha.org */
 var num=1;
 if(window.parent&&window.parent!=window){
 var f=window.parent.menu.document.forms[0];
@@ -21,7 +22,7 @@ var ta="myTextarea"+x;
 xinha_editors.push(ta);
 }
 xinha_config=function(){
-var _1=new HTMLArea.Config();
+var _1=new Xinha.Config();
 if(typeof CSS!="undefined"){
 _1.pageStyle="@import url(custom.css);";
 }

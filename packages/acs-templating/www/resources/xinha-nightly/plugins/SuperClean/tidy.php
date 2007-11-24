@@ -60,7 +60,7 @@
 
 
 //  Open the connection to the host
-    $socket = fsockopen($Host, 80, &$errno, &$errstr);
+    $socket = fsockopen($Host, 80, $errno, $errstr);
     if (!$socket) {
       $result = "($errno) $errstr";
       return $Result;
@@ -95,7 +95,7 @@
   }
 
   // Any errors would screq up our javascript
-  error_reporting(E_NONE);
+  error_reporting(0);
   ini_set('display_errors', false);
 
   if(trim(@$_REQUEST['content']))

@@ -301,6 +301,9 @@ function asc2hex ($temp)
 				case 102 :
 					$pasteStatus = 'Could not create destination folder.';
 				break;
+				case 103 :
+					$pasteStatus = 'File pasted OK.';
+				break;
 				case 104 :
 					$pasteStatus = 'Destination file/folder already exists.';
 				break;

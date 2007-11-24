@@ -1,3 +1,4 @@
+/* This compressed file is part of Xinha. For uncomressed sources, forum, and bug reports, go to xinha.org */
 function NoteServer(_1){
 this.editor=_1;
 var _2=_1.config;
@@ -9,7 +10,7 @@ _2.addToolbarElement("insertscore","insertimage",1);
 }
 NoteServer._pluginInfo={name:"NoteServer",version:"1.1",developer:"Richard Christophe",developer_url:"http://piano-go.chez.tiscali.fr/guido.html",c_owner:"Richard Christophe",sponsor:"",sponsor_url:"",license:"htmlArea"};
 NoteServer.prototype._lc=function(_5){
-return HTMLArea._lc(_5,"NoteServer");
+return Xinha._lc(_5,"NoteServer");
 };
 NoteServer.prototype.buttonPress=function(_6){
 _6._popupDialog("plugin://NoteServer/codenote",function(_7){
@@ -71,10 +72,10 @@ var _19=GetAPPLETURL(_12["f_code"],_12["f_zoom"]);
 _15=_15+_19+"<br>";
 }
 if(_12["f_affcode"]){
-_15=_15+HTMLArea._lc("GUIDO Code","NoteServer")+" : "+_12["f_code"]+"<br>";
+_15=_15+Xinha._lc("GUIDO Code","NoteServer")+" : "+_12["f_code"]+"<br>";
 }
 if(_12["f_midi"]){
-_15=_15+"<a href="+_14+">"+HTMLArea._lc("MIDI File","NoteServer")+"</a> <br>";
+_15=_15+"<a href="+_14+">"+Xinha._lc("MIDI File","NoteServer")+"</a> <br>";
 }
 _11.focusEditor();
 _11.insertHTML(_15);

@@ -1,4 +1,4 @@
-// InsertPagebreak plugin for HTMLArea
+// InsertPagebreak plugin for HTMLArea/Xinha
 // Implementation by Udo Schmal & Schaffrath NeueMedien
 // Original Author - Udo Schmal
 //
@@ -35,7 +35,7 @@ InsertPagebreak._pluginInfo = {
 };
 
 InsertPagebreak.prototype._lc = function(string) {
-    return HTMLArea._lc(string, 'InsertPagebreak');
+    return Xinha._lc(string, 'InsertPagebreak');
 };
 
 InsertPagebreak.prototype.buttonPress = function(editor, context, updatecontextclass) {

@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 die("this script is disabled for security");
 
 /**
@@ -22,8 +22,7 @@ error_reporting(E_ALL);
 
 $ret = array();
 $files = getFiles("../", "js$");
-foreach($files as $file)
-{
+foreach($files as $file) {
     $fp = fopen($file, "r");
     $data = "";
     while(!feof($fp)) {
@@ -79,8 +78,7 @@ $langData['HTMLArea'] = $ret;
 
 
 $plugins = getFiles("../plugins/");
-foreach($plugins as $pluginDir)
-{
+foreach($plugins as $pluginDir) {
     $plugin = substr($pluginDir, 12);
     if($plugin=="ibrowser") continue;
     $ret = array();
@@ -144,15 +142,53 @@ foreach($plugins as $pluginDir)
     $langData[$plugin] = $ret;
 }
 
-foreach($langData as $plugin=>$strings)
-{
+$plugins = getFiles("../modules/");
+foreach($plugins as $pluginDir) {
+    $plugin = substr($pluginDir, 12);
+    $ret = array();
+    $files = getFiles("$pluginDir/", "js$");
+    foreach($files as $file)
+    {
+        $fp = fopen($file, "r");
+        $data = "";
+        if($fp) {
+            echo "$file open...<br>";
+            while(!feof($fp)) {
+              $data .= fread($fp, 1024);
+            }
+            preg_match_all('#_lc\("([^"]+)"|_lc\(\'([^\']+)\'#', $data, $m);
+            foreach($m[1] as $i) {
+                if(trim(strip_tags($i))=="") continue;
+                $ret[] = $i;
+            }
+            foreach($m[2] as $i) {
+                if(trim(strip_tags($i))=="") continue;
+                $ret[] = $i;
+            }
+        }
+    }
+    $ret = array_unique($ret);
+    $langData[$plugin] = $ret;
+}
+
+
+foreach($langData as $plugin=>$strings) {
     if(sizeof($strings)==0) continue;
     
 
     $data = "// I18N constants\n";
     $data .= "//\n";
-    $data .= "//LANG: \"base\", ENCODING: UTF-8\n";
-    $data .= "//Author: Translator-Name, <email@example.com>\n";
+    $data .= "// LANG: \"base\", ENCODING: UTF-8\n";
+    $data .= "// Author: Translator-Name, <email@example.com>\n";
+    $data .= "//\n";   
+    $data .= "// Last revision: 06 september 2007\n";
+    $data .= "// Please don´t remove this information\n";
+    $data .= "// If you modify any source, please insert a comment with your name and e-mail\n";
+    $data .= "//\n";
+    $data .= "// Distributed under the same terms as HTMLArea itself.\n";
+    $data .= "// This notice MUST stay intact for use (see license.txt).\n";
+    $data .= "//\n";
+    $data .= "// (Please, remove information below)\n";   
     $data .= "// FOR TRANSLATORS:\n";
     $data .= "//\n";
     $data .= "//   1. PLEASE PUT YOUR CONTACT INFO IN THE ABOVE LINE\n";
@@ -172,16 +208,41 @@ foreach($langData as $plugin=>$strings)
     $data .= "\n";
     $data .= "}\n";
 
-    if($plugin=="HTMLArea")
-        $file = "../lang/base.js";
-    else
-        $file = "../plugins/$plugin/lang/base.js";
-    
-    $fp = fopen($file, "w");
-    if(!$fp) continue;
-    fwrite($fp, $data);
-    fclose($fp);
-    echo "$file written...<br>";
+    if($plugin=="HTMLArea") {
+       $file = "../lang/base.js";
+    			$fp = fopen($file, "w");
+    		  if(!$fp) continue;
+    			fwrite($fp, $data);
+    			fclose($fp);
+    			echo "$file written...<br>";
+		}	elseif (($plugin=="InternetExplorer")||($plugin=="InsertTable")||($plugin=="InsertImage")||($plugin=="GetHtml")||($plugin=="Gecko")||($plugin=="Dialogs")||($plugin=="CreateLink")||($plugin=="ColorPicker")) {
+        $file = "../modules/$plugin/lang/base.js";	
+    			$fp = fopen($file, "w");
+    		  if(!$fp) continue;
+    			fwrite($fp, $data);
+    			fclose($fp);
+    			echo "$file written...<br>";
+		} elseif ($plugin=="FullScreen") {
+        $file = "../modules/$plugin/lang/base.js";
+    			$fp = fopen($file, "w");
+    		  if(!$fp) continue;
+    			fwrite($fp, $data);
+    			fclose($fp);
+    			echo "$file written...<br>";
+				$file = "../plugins/$plugin/lang/base.js";		
+    			$fp = fopen($file, "w");
+    		  if(!$fp) continue;
+    			fwrite($fp, $data);
+    			fclose($fp);
+    			echo "$file written...<br>";
+		} else {
+        $file = "../plugins/$plugin/lang/base.js";		
+    			$fp = fopen($file, "w");
+    		  if(!$fp) continue;
+    			fwrite($fp, $data);
+    			fclose($fp);
+    			echo "$file written...<br>";
+		}       
 }
 
 

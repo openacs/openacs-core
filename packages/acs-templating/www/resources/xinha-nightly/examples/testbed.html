@@ -13,9 +13,9 @@
     --  of the file to remove the auto-example-generating code and allow for the
     --  use of the file as a boilerplate.
     --
-    --  $HeadURL: http://svn.xinha.python-hosting.com/trunk/examples/testbed.html $
-    --  $LastChangedDate: 2007-01-19 23:24:36 +0100 (Fr, 19 Jan 2007) $
-    --  $LastChangedRevision: 677 $
+    --  $HeadURL: http://svn.xinha.webfactional.com/trunk/examples/testbed.html $
+    --  $LastChangedDate: 2007-10-10 19:36:21 +0200 (Mi, 10 Okt 2007) $
+    --  $LastChangedRevision: 897 $
     --  $LastChangedBy: ray $
     --------------------------------------------------------------------------->
 
@@ -35,7 +35,7 @@
   </script>
 
   <!-- Load up the actual editor core -->
-  <script type="text/javascript" src="../htmlarea.js"></script>
+  <script type="text/javascript" src="../XinhaCore.js"></script>
 
   <script type="text/javascript">
     xinha_editors = null;
@@ -107,7 +107,7 @@
        * if you want all the editor objects to use the same set of plugins, OR;
        *
        *   xinha_editors = Xinha.makeEditors(xinha_editors, xinha_config);
-       *   xinha_editors['myTextArea'].registerPlugins(['Stylist','FullScreen']);
+       *   xinha_editors['myTextArea'].registerPlugins(['Stylist']);
        *   xinha_editors['anotherOne'].registerPlugins(['CSS','SuperClean']);
        *
        * if you want to use a different set of plugins for one or more of the
@@ -137,14 +137,14 @@
     }
 
     window.onload   = xinha_init;
-    // window.onunload = Xinha.collectGarbageForIE;
   </script>
 </head>
 
 <body>
 
-  <form action="javascript:var x = document.getElementById('editors_here');alert(x.myTextArea.value);" id="editors_here" onsubmit="alert(this.myTextArea.value);">
-    <textarea id="myTextArea" name="myTextArea" style="width:100%;height:320px;">
+  <form action="javascript:void(0);" id="editors_here" onsubmit="alert(this.myTextArea.value);">
+ <div>
+     <textarea id="myTextArea" name="myTextArea" style="width:100%;height:320px;">
       &lt;html&gt;
       &lt;head&gt;
         &lt;title&gt;Hello&lt;/title&gt;
@@ -181,11 +181,15 @@
     </textarea>
 
     <input type="submit" /> <input type="reset" />
+</div>
   </form>
-  <script language="javascript">
+  <script type="text/javascript">
     document.write(document.compatMode);
   </script>
+<div>
   <a href="#" onclick="xinha_editors.myTextArea.hidePanels();">Hide</a>
   <a href="#" onclick="xinha_editors.myTextArea.showPanels();">Show</a>
+</div>
+
 </body>
 </html>

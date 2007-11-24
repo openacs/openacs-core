@@ -36,7 +36,7 @@
   "Toggle HTML Source": "HTML broncode",
   "Enlarge Editor": "Vergroot Editor",
   "About this editor": "Over deze editor",
-  "Help using editor": "HTMLArea help",
+  "Help using editor": "Xinha help",
   "Current style": "Huidige stijl",
   "Undoes your last action": "Ongedaan maken",
   "Redoes your last action": "Herhalen",

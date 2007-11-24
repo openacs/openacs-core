@@ -1,3 +1,4 @@
+/* This compressed file is part of Xinha. For uncomressed sources, forum, and bug reports, go to xinha.org */
 var topDoc=window.top.document;
 var t_cx=topDoc.getElementById("cx");
 var t_cy=topDoc.getElementById("cy");

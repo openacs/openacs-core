@@ -3,7 +3,7 @@
 // Implementation by Udo Schmal
 // based on TinyMCE (http://tinymce.moxiecode.com/) Distributed under LGPL by Moxiecode Systems AB
 //
-// Distributed under the same terms as HTMLArea itself.
+// Distributed under the same terms as Xinha itself.
 // This notice MUST stay intact for use (see license.txt).
 
 function BackgroundImage(editor) {
@@ -34,14 +34,14 @@ BackgroundImage._pluginInfo = {
 };
 
 BackgroundImage.prototype._lc = function(string) {
-    return HTMLArea._lc(string, 'BackgroundImage');
+    return Xinha._lc(string, 'BackgroundImage');
 };
 
 BackgroundImage.prototype.buttonPress = function(editor) {
 		//var doc = this.editor._doc;
     editor._popupDialog( "plugin://BackgroundImage/bgimage", function( bgImage ) {
         if(bgImage) {
-					if(HTMLArea.is_ie) editor.focusEditor();
+					if(Xinha.is_ie) editor.focusEditor();
 					if(bgImage=="*") {
 						editor._doc.body.background = "";
 					} else {

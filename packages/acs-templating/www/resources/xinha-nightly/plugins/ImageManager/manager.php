@@ -41,6 +41,16 @@
 /*]]>*/
 </script>
 <script type="text/javascript" src="<?php print $IMConfig['base_url'];?>assets/manager.js"></script>
+<?php
+  if(!$IMConfig['show_full_options'])
+  {
+    ?>
+    <style type="text/css">
+      .fullOptions { visibility:hidden; }
+    </style>
+    <?php
+  }
+?>
 </head>
 <body>
 
@@ -126,8 +136,8 @@
         <img src="<?php print $IMConfig['base_url']; ?>img/locked.gif" id="imgLock" width="25" height="32" alt="Constrained Proportions" valign="middle" /><input type="checkbox" id="constrain_prop" checked="checked" onclick="javascript:toggleConstrains(this);" style="position:absolute;top:8px;left:0px;" />
       </div>
     </td>
-    <th align="left">Margin:</th>
-    <td colspan="3">
+    <th align="left" class="fullOptions">Margin:</th>
+    <td colspan="3" class="fullOptions">
       <input name="f_margin" type="text" id="f_margin" size="3" />
       px </td>
   </tr>
@@ -137,19 +147,19 @@
     <td>
       <input name="f_height" type="text" id="f_height" size="4" />
     </td>
-    <th align="left">Padding:</th>
-    <td>
+    <th align="left"  class="fullOptions">Padding:</th>
+    <td  class="fullOptions">
       <input name="f_padding" type="text" id="f_padding" size="3" />
       px </td>
-    <th align="left">Color:</th>
-    <td>
+    <th align="left"  class="fullOptions">Color:</th>
+    <td  class="fullOptions">
       <input name="f_backgroundColor" type="text" id="f_backgroundColor" size="7" />
      
     </td>
   </tr>
 
 
-  <tr>
+  <tr class="fullOptions">
     <th align="left">Alignment:</th>
     <td colspan="2">
       <select size="1" id="f_align"  title="Positioning of this image">

@@ -91,19 +91,20 @@
   "Cannot upload $extension Files. Permission denied.": "Nie można było wgrać pliku.\n\nNiedozwolone rozszerzenie pliku [$extension].",
   "Unable to upload File. \nEither Maximum file size [$max_size KB] exceeded or\nFolder doesn\'t have write permission.":"Wgrywanie nie powiodło się.\n\nPrzekroczono maksymalny rozmiar pliku [$max_size KB] lub nie ma ustawionych praw zapisu do folderu.",
   "Total Size : $max_foldersize_mb MB, Free Space: $free_space": "Dostępny limit: $max_foldersize_mb MB, Wolne: $free_space",
-  "Please enter new name for this folder...":"Please enter new name for this folder...",
+  "Please enter new name for this folder...":"Podaj nową nazwę dla tego folderu...",
 
-  "Cut":"Cut",
-  "Copy":"Copy",
-  "Paste":"Paste",
+  "Cut":"Wytnij",
+  "Copy":"Kopiuj",
+  "Paste":"Wklej",
   
-  'Copy "$file" from "$dir" here': 'Copy "$file" from "$dir" here',
-  'Copy folder "$file" from "$dir" here' : 'Copy folder "$file" from "$dir" here',
-  'Move "$file" from "$dir" here':'Move "$file" from "$dir" here',
-  'Move folder "$file" from "$dir" here':'Move folder "$file" from "$dir" here',
+  'Copy "$file" from "$dir" here': 'Skopiuj "$file" z "$dir" tutaj',
+  'Copy folder "$file" from "$dir" here' : 'Skopiuj folder "$file" z "$dir" tutaj',
+  'Move "$file" from "$dir" here':'Przenieś "$file" z "$dir" tutaj',
+  'Move folder "$file" from "$dir" here':'Przenieś folder "$file" z "$dir" tutaj',
   
-  "Source file/folder not found.":"Source file/folder not found.",
-  "Paste failed.\nMaybe folder doesn't have write permission.": "Paste failed.\nMaybe folder doesn't have write permission.",
-  "Could not create destination folder.":"Could not create destination folder.",
-  "Destination file/folder already exists.":"Destination file/folder already exists."
+  "Source file/folder not found.":"Nie znaleziono pliku/folderu źródłowego.",
+  "Paste failed.\nMaybe folder doesn't have write permission.": "Wklejenie nie powiodło się.\nPrawdopodobnie nie masz praw zapisu w tym folderze.",
+  "Could not create destination folder.":"Nie można było utworzyć folderu docelowego.",
+  "Destination file/folder already exists.":"Plik/folder docelowy już istnieje.",
+  "File pasted OK.": "Wklejono plik."
 };

@@ -1,3 +1,4 @@
+/* This compressed file is part of Xinha. For uncomressed sources, forum, and bug reports, go to xinha.org */
 function SuperClean(_1,_2){
 this.editor=_1;
 var _3=this;

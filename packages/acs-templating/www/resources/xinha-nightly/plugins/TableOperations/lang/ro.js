@@ -71,9 +71,9 @@
   "Unset color": "Dezactivează culoarea",
   "Vertical align": "Aliniere pe verticală",
   "Width": "Lăţime",
-  "HTMLArea cowardly refuses to delete the last cell in row.": "HTMLArea refuză cu laşitate să şteargă ultima celulă din rând.",
-  "HTMLArea cowardly refuses to delete the last column in table.": "HTMLArea refuză cu laşitate să şteargă ultima coloamă din tabela.",
-  "HTMLArea cowardly refuses to delete the last row in table.": "HTMLArea refuză cu laşitate să şteargă ultimul rând din tabela.",
+  "Xinha cowardly refuses to delete the last cell in row.": "Xinha refuză cu laşitate să şteargă ultima celulă din rând.",
+  "Xinha cowardly refuses to delete the last column in table.": "Xinha refuză cu laşitate să şteargă ultima coloamă din tabela.",
+  "Xinha cowardly refuses to delete the last row in table.": "Xinha refuză cu laşitate să şteargă ultimul rând din tabela.",
   "percent": "procente",
   "pixels": "pixeli"
 };

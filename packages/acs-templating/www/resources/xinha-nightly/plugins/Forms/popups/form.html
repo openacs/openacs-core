@@ -10,14 +10,13 @@
 var fields = ["f_name", "f_action", "f_method", "f_enctype", "f_target"];
 
 function Init() {
-  window.resizeTo(400, 170);
   __dlg_translate("Forms");
-	__dlg_init();
+  __dlg_init(null,{width:360, height:280});
   var param = window.dialogArguments;
   for (var i in fields) {
     document.getElementById(fields[i]).value = param[fields[i]];
   }
- 	document.getElementById("f_name").focus();
+  document.getElementById("f_name").focus();
 }
 
 function onOK() {
@@ -25,12 +24,12 @@ function onOK() {
     "f_name": "You must enter the form name"
   };
   for (var i in required) {
-	  var el = document.getElementById(i);
-	  if (!el.value) {
-		alert(HTMLArea._lc(required[i],"Forms"));
-		el.focus();
-		return false;
-	  }
+    var el = document.getElementById(i);
+    if (!el.value) {
+      alert(Xinha._lc(required[i],"Forms"));
+      el.focus();
+      return false;
+    }
   }
   // pass data back to the calling window
   var param = new Object();
@@ -77,7 +76,7 @@ function onCancel() {
   <p />
   <div class="fr">Target Frame:</div>
   <input name="target" id="f_target" type="text" size="30">
-  <p />  
+  <p />
   </fieldset>
 
 <div id="buttons">

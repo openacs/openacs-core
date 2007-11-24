@@ -1,3 +1,4 @@
+/* This compressed file is part of Xinha. For uncomressed sources, forum, and bug reports, go to xinha.org */
 function Dialog(_1,_2,_3){
 if(typeof _3=="undefined"){
 _3=window;
