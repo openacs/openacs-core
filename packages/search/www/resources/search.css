@@ -34,6 +34,13 @@
 #search-results li
 { 
   margin-bottom:15px;
+  display:block;
+}
+
+#search-results li:before
+{ 
+  content: counter(item) ". "; 
+  counter-increment: item;
 }
 
 #search-results a.result-title
@@ -41,8 +48,14 @@
   font-size:110%;
 }
 
+#search-results .result-text
+{ 
+  padding-left: 14px;
+}
+
 #search-results .result-url
 { 
+  padding-left: 14px;
   color: #008000;
 }
 

@@ -201,7 +201,6 @@ if { $num > 0 } {
     append url_previous "&num=$num"
     append url_next "&num=$num"
 }
-set ol_start [expr {$offset + 1}]
 
 template::multirow create results_paginator item link
 for { set __i $from_result_page } { $__i <= $to_result_page} { incr __i } {
@@ -221,13 +220,6 @@ if {[llength $search_the_web]} {
 }
 
 # header stuffs
-if {![template::multirow exists link]} {
-    template::multirow create link rel type href title lang media
-}
-template::multirow append link \
-    stylesheet \
-    "text/css" \
-    "/resources/search/search.css" \
-    "" \
-    "" \
-    "all"
+template::head::add_css \
+    -href "/resources/search/search.css" \
+    -media "all"
