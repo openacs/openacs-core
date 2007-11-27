@@ -1,9 +1,5 @@
 <master>
-<property name="header_stuff">
-  <link href="/resources/search/search.css" rel="stylesheet" type="text/css">
-</property>
 <property name="context">Results</property>
-<if @link:rowcount@ not nil><property name="&link">link</property></if>
 
 <if @empty_p@ true>
     <p class="hint">#search.lt_You_must_specify_some#</p>
@@ -49,17 +45,15 @@
           </p>
         </div>
         <div id="search-results">
-          <ol start="@ol_start@">
+          <ol style="counter-reset:item @offset@">
             <multiple name="searchresult">
               <li>
-                <div>
                   <a href="@searchresult.url_one@" class="result-title">
                     <if @searchresult.title_summary@ nil>#search.Untitled#</if>	
                     <else>@searchresult.title_summary;noquote@</else>
                   </a>
-                </div>
                 <if @searchresult.txt_summary@ not nil>	
-                  <div>@searchresult.txt_summary;noquote@</div>
+                  <div class="result-text">@searchresult.txt_summary;noquote@</div>
                 </if>
                 <div class="result-url">@searchresult.url_one@</div>
               </li>
@@ -94,11 +88,12 @@
       </if>
 
 <if @count@ gt 0>
-  <center>
-    <div>
+    <div style="text-align:center">
       <form method="get" action="search">
-        <input type="text" name="q" size="60" maxlength="256" value="@query@" />
-        <input type="submit" value="#search.Search#" />
+        <div>
+        <input type="text" name="q" size="60" maxlength="256" value="@query@">
+        <input type="submit" value="#search.Search#">
+        </div>
       </form>
       <if @t@ eq "Search">
         <i>#search.lt_Tip_In_most_browsers_#</i>
@@ -106,9 +101,8 @@
     </div>
 
     <if @stw@ not nil>
-      <p><font size=-1>#search.lt_Try_your_query_on_stw#</font></p>
+      <p style="text-align:center;font-size=-1">#search.lt_Try_your_query_on_stw#</p>
     </if>
-  </center>
 </if>
 </else>
 
