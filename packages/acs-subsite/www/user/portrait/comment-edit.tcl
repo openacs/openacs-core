@@ -36,8 +36,28 @@ if {![db_0or1row portrait_info {}]} {
     return
 }
 
-db_release_unused_handles
-
 set context [list [list "./" [_ acs-subsite.Your_Portrait]] [_ acs-subsite.edit_comment]]
-set export_vars [export_form_vars user_id return_url]
 
+if { $return_url eq "" } {
+    set return_url [ad_pvt_home]
+}
+
+ad_form -name comment_edit -export {user_id return_url} -form {
+    {description:text(textarea),optional
+        {label "#acs-subsite.Story_behind_photo#"}
+        {value $description}
+        {html {rows "6" cols "50"}}
+    }
+} -on_submit {
+
+    if { [string length $description] > 4000 } {
+        ad_return_complaint 1 "Your portrait comment can only be 4000 characters long."
+        return
+    }
+
+    db_dml comment_update {}
+
+    ad_returnredirect $return_url
+}
+
+ad_return_template
