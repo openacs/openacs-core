@@ -40,12 +40,134 @@ if {![db_0or1row get_name {}]} {
     return
 }
 
+if { $return_url eq "" } {
+    set return_url [ad_pvt_home]
+}
+
 if {$admin_p} {
     set context [list [list "./?[export_vars user_id]" [_ acs-subsite.User_Portrait]] [_ acs-subsite.Upload_Portrait]]
 } else {
     set context [list [list "./?[export_vars return_url]" [_ acs-subsite.Your_Portrait]] [_ acs-subsite.Upload_Portrait]]
 }
 
-set export_vars [export_form_vars user_id return_url]
+set help_text [_ acs-subsite.lt_Use_the_Browse_button]
+
+ad_form -name "portrait_upload" -html {enctype "multipart/form-data"} -export {user_id return_url} -form {
+    {upload_file:text(file)
+        {label "#acs-subsite.Filename#"}
+        {help_text $help_text}
+    }
+}
+
+if { $portrait_p } {
+    set description [db_string getstory {}]
+    ad_form -extend -name "portrait_upload" -form {
+        {portrait_comment:text(textarea),optional
+            {label "#acs-subsite.Story_Behind_Photo#"}
+            {value $description}
+            {html {rows 6 cols 50}}
+        }
+    }
+} else {
+    ad_form -extend -name "portrait_upload" -form {
+        {portrait_comment:text(textarea),optional
+            {label "#acs-subsite.Story_Behind_Photo#"}
+            {html {rows 6 cols 50}}
+        }
+    }
+}
+
+set mime_types [ad_parameter AcceptablePortraitMIMETypes "user-info"]
+set max_bytes [ad_parameter MaxPortraitBytes "user-info"]
+
+ad_form -extend -name "portrait_upload" -validate {
+
+    # check to see if this is one of the favored MIME types,
+    # e.g., image/gif or image/jpeg
+
+    # DRB: the code actually depends on our having either gif or jpeg and this was true
+    # before I switched this routine to use cr_import_content (i.e. don't believe the
+    # generality implicit in the following if statement)
+
+    {upload_file
+        
+        { [empty_string_p $mime_types] || [lsearch $mime_types [ns_guesstype $upload_file]] > -1 }
+        {Your image wasn't one of the acceptable MIME types: $mime_types}
+    }
+    {upload_file
+
+        { [empty_string_p $max_bytes] || [file size [ns_queryget upload_file.tmpfile]] <= $max_bytes } 
+        {Your file is too large.  The publisher of [ad_system_name] has chosen to limit portraits to [util_commify_number $max_bytes] bytes.  You can use PhotoShop or the GIMP (free) to shrink your image}
+    }
+
+} -on_submit {
+
+    # this stuff only makes sense to do if we know the file exists
+    set tmp_filename [ns_queryget upload_file.tmpfile]
+
+    set file_extension [string tolower [file extension $upload_file]]
+
+    # remove the first . from the file extension
+    regsub "\." $file_extension "" file_extension
+
+    set guessed_file_type [ns_guesstype $upload_file]
+
+    set n_bytes [file size $tmp_filename]
+
+    # strip off the C:\directories... crud and just get the file name
+    if {![regexp {([^/\\]+)$} $upload_file match client_filename]} {
+        # couldn't find a match
+        set client_filename $upload_file
+    }
+
+    # Wrap the whole creation along with the relationship in a big transaction
+    # Just to make sure it really worked.
+    
+    db_transaction {
+        set item_id [content::item::get_id_by_name -name "portrait-of-user-$user_id" -parent_id $user_id]
+        if { $item_id eq ""} { 
+            # The user doesn't have a portrait relation yet
+            set item_id [content::item::new -name "portrait-of-user-$user_id" -parent_id $user_id -content_type image]
+            set resized_item_id ""
+        } else {
+            set resized_item_id [image::get_resized_item_id -item_id $item_id -size_name "thumbnail"]
+        }
+
+        # Load the file into the revision
+        set revision_id [cr_import_content \
+                             -item_id $item_id \
+                             -image_only \
+                             -storage_type file \
+                             -creation_user [ad_conn user_id] \
+                             -creation_ip [ad_conn peeraddr] \
+                             -description $portrait_comment \
+                             $user_id \
+                             $tmp_filename \
+                             $n_bytes \
+                             $guessed_file_type \
+                             "portrait-of-user-$user_id"]
+
+        content::item::set_live_revision -revision_id $revision_id
+        
+        if {$resized_item_id ne ""} {
+            # Delete the item
+            content::item::delete -item_id $resized_item_id
+
+            # Resize the item
+            image::resize -item_id $item_id -size_name "thumbnail"
+        }
+
+        # Only create the new relationship if there does not exist one already
+        set user_portrait_rel_id [relation::get_id -object_id_one $user_id -object_id_two $item_id -rel_type "user_portrait_rel"]
+        if {$user_portrait_rel_id eq ""} {
+            db_exec_plsql create_rel {}
+        }
+    }
+
+    # Flush the portrait cache
+    util_memoize_flush [list acs_user::get_portrait_id_not_cached -user_id $user_id]
+
+    ad_returnredirect $return_url
+}
 
 ad_return_template

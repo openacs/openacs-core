@@ -7,39 +7,12 @@
 
 <p>#acs-subsite.lt_Upload_your_favorite#</p>
 
+<if @portrait_p@>
 <div>
-<form enctype="multipart/form-data" method=POST action="upload-2">
-<div>@export_vars;noquote@</div>
-<table>
-<if @portrait_p@ eq 1>
-<tr>
-<td colspan=2 align="center">
 <img src="/shared/portrait-bits.tcl?user_id=@current_user_id@" alt="#acs-subsite.Your_Portrait#">
 <br>
 (<a href="erase?return_url=@return_url;noquote@">#acs-subsite.Erase_Portrait#</a>)
-</td>
-</tr>
-</if>
-<tr>
-<td valign=top align=right>#acs-subsite.Filename#: </td>
-<td>
-<input type=file name=upload_file size=20><br>
-#acs-subsite.lt_Use_the_Browse_button#
-</td>
-</tr>
-<tr>
-<td valign=top align=right>#acs-subsite.Story_Behind_Photo#
-<br>
-#acs-subsite.optional#
-</td>
-<td><textarea rows=6 cols=50 name="portrait_comment">
-</textarea>
-</td>
-</tr>
-
-</table>
-<p style="text-align:center">
-<input type=submit value="#acs-subsite.upload#">
-</p>
-</form>
 </div>
+</if>
+
+<formtemplate id="portrait_upload"></formtemplate>
