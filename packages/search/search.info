@@ -7,7 +7,7 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.3.2" url="http://openacs.org/repository/download/apm/search-5.3.2.apm">
+    <version name="5.4.0d1" url="http://openacs.org/repository/download/apm/search-5.4.0d1.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <release-date>2007-07-18</release-date>
         <maturity>3</maturity>
@@ -17,7 +17,7 @@
         <license url="http://www.gnu.org/copyleft/gpl.html">GPL version 2</license>
         <description format="text/html">Site wide search implemented with service contracts, currently supports postgres via the tsearch2 driver (OpenFTS still support but deprecated).</description>
 
-        <provides url="search" version="5.3.2"/>
+        <provides url="search" version="5.4.0d1"/>
         <requires url="acs-service-contract" version="5.3.2"/>
 
         <callbacks>
@@ -30,7 +30,6 @@
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="Symbol2Interval"  default="m3 {3 month ago} m6 {6 month ago} y1 {1 year ago}" description="Translate symbol to date interval."/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="SubsiteSearchP"  default="0" description="If mounted in a subsite should the search be restricted to items in the subsite by default.  Requires that package_id in acs_objects be properly populated."/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="Syndicate"  default="0" description="Should syndication data be stored when indexing for search."/>
-            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="application/msword"  default="/usr/local/bin/catdoc" Description="What is the converter for the MIME type text/doc?"/>
         </parameters>
 
     </version>
