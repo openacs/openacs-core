@@ -29,4 +29,16 @@
     </querytext>
   </fullquery>
 
+  <fullquery name="comment_update">
+    <querytext>
+      update cr_revisions
+      set description=:description
+      where revision_id = (select live_revision
+        from acs_rels a, cr_items c
+        where a.object_id_two = c.item_id
+          and a.object_id_one = :user_id
+          and a.rel_type = 'user_portrait_rel')
+    </querytext>
+  </fullquery>
+
 </queryset>
