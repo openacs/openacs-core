@@ -19,9 +19,6 @@ set current_user_id [ad_conn user_id]
 
 if {$user_id eq ""} {
     set user_id $current_user_id
-    set admin_p 0
-} else {
-    set admin_p 1
 }
 
 ad_require_permission $user_id "write"
