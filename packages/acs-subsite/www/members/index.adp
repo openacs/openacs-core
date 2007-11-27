@@ -5,7 +5,7 @@
 <if @show_member_list_p@ true>
   <table cellpadding="3" cellspacing="3">
     <tr>
-      <td class="list-filter-pane" valign="top" width="200">
+      <td class="list-filter-pane" valign="top" style="width:200px">
         <listfilters name="members"></listfilters>
       </td>
       <td class="list-list-pane" valign="top">
