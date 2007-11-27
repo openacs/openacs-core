@@ -4,8 +4,9 @@
   <property name="displayed_object_id">@user_id;noquote@</property>
 
 <if @inline_portrait_state@ eq "inline">
-  <a href="portrait?@portrait_export_vars@"><img src="portrait-bits?@portrait_export_vars@"
-  align="right" width="@width@" height="@height@" alt="Portrait of @first_names@ @last_name@"></a>
+      <div style="float:right">
+        <a href="portrait?@portrait_export_vars@"><img src="portrait-bits?@portrait_export_vars@" width="@width@" height="@height@" alt="Portrait of @first_names@ @last_name@"></a>
+      </div>
 </if>
 <else>
   <if @inline_portrait_state@ eq "link">
