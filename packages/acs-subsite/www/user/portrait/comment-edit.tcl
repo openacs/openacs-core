@@ -26,28 +26,18 @@ if {$user_id eq ""} {
 
 ad_require_permission $user_id "write"
 
-if {![db_0or1row user_info "select 
-  first_names, 
-  last_name
-from persons
-where person_id = :user_id"]} {
+if {![db_0or1row user_info {}]} {
     ad_return_error "Account Unavailable" "We can't find you (user #$user_id) in the users table.  Probably your account was deleted for some reason."
     return
 }
 
-if {![db_0or1row portrait_info "
-select description
-from cr_revisions
-where revision_id = (select live_revision
-                     from cr_items c, acs_rels a
-                     where c.item_id = a.object_id_two
-                     and a.object_id_one = :user_id
-                     and a.rel_type = 'user_portrait_rel')"]} {
+if {![db_0or1row portrait_info {}]} {
     ad_return_complaint 1 "<li>You shouldn't have gotten here; we don't have a portrait on file for you."
     return
 }
 
 db_release_unused_handles
 
-set context [list [list "./" "Your Portrait"] "Edit comment"]
+set context [list [list "./" [_ acs-subsite.Your_Portrait]] [_ acs-subsite.edit_comment]]
 set export_vars [export_form_vars user_id return_url]
+
