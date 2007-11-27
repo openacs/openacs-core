@@ -156,6 +156,7 @@ Please visit the following link to change your password now:
   <msg key="email_subject_Registration_password">Welcome to %system_name%</msg>
   <msg key="Enabled">Enabled</msg>
   <msg key="Enter_your_username_to">Enter your username to begin password recovery.</msg>
+  <msg key="Erase">Erase</msg>
   <msg key="Erase_Portrait">Erase Portrait</msg>
   <msg key="erase_portrait">erase portrait</msg>
   <msg key="Error">Error</msg>

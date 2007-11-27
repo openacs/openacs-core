@@ -9,11 +9,4 @@
   <p>#acs-subsite.lt_Sure_erase_user_por#</p>
 </else>
 
-<div>
-<form method="get" action="erase-2">
-<div>@export_vars;noquote@</div>
-<p style="text-align:center">
-<input type="submit" value="#acs-subsite.Yes_I_am_sure#">
-</p>
-</form>
-</div>
+<formtemplate id="portrait_erase"></formtemplate>
