@@ -14,9 +14,9 @@
 <if @portrait_p@ eq 1>
 <tr>
 <td colspan=2 align="center">
-<img src="/shared/portrait-bits.tcl?user_id=@current_user_id@" alt="Your portrait">
+<img src="/shared/portrait-bits.tcl?user_id=@current_user_id@" alt="#acs-subsite.Your_Portrait#">
 <br>
-(<a href="erase?return_url=@return_url;noquote@">Delete Portrait</a>)
+(<a href="erase?return_url=@return_url;noquote@">#acs-subsite.Erase_Portrait#</a>)
 </td>
 </tr>
 </if>
@@ -39,7 +39,7 @@
 
 </table>
 <p style="text-align:center">
-<input type=submit value="Upload">
+<input type=submit value="#acs-subsite.upload#">
 </p>
 </form>
 </div>
