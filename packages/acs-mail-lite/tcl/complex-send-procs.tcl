@@ -730,7 +730,7 @@ namespace eval acs_mail_lite {
     	    append cmd_string " -header {$header}"
     	}
     	append cmd_string " -servers $smtp -ports $smtpport -username $smtpuser -password $smtppassword"
-    	ds_comment $cmd_string
+    	ns_log Debug "complex-send cmd_string: $cmd_string"
         eval $cmd_string
     	
     }
