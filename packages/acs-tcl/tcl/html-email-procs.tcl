@@ -147,3 +147,54 @@ ad_proc parse_incoming_email {
     mime::finalize $mime -subordinates all
     return $body
 }
+
+ad_proc build_subject {
+    subject
+    {charset "UTF-8"}
+} {
+    Encode the subject of an email message and trim long lines.
+
+    This proc is based on mime::word_encode which we don't use
+    directly since it doesn't split correctly long lines and 
+    doesn't wrap the resulting lines correctly either in the version
+    provided by tcllib 1.8
+} {
+
+    set encoding [ns_encodingforcharset $charset]
+    set subject [encoding convertto $encoding "$subject "]
+
+    # encode subject with quoted-printable
+    set qp_subject [mime::qp_encode $subject 1 1]
+
+    # maxlen for each line
+    # 69 = 76 - 7 where 7 is for "=?"+"?Q?+"?="
+    set maxlen [expr {69 - [string length $charset]}]
+
+    # Based on mime::qp_encode to trim long lines
+    set result ""
+    if { [string length $qp_subject] > $maxlen } {
+
+        while { [string length $qp_subject] > $maxlen } {
+            set chunk [string range $qp_subject 0 $maxlen]
+            if {[regexp -- {(_[^_]*)$} $chunk dummy end]} {
+                
+                # Don't break in the middle of a word
+                set len [expr {$maxlen - [string length $end]}]
+                set chunk [string range $qp_subject 0 $len]
+                incr len
+                set qp_subject [string range $qp_subject $len end]
+            } else {
+                set qp_subject [string range $qp_subject [expr {$maxlen + 1}] end]
+            }
+            append result "=?$charset?Q?$chunk?=\n "
+        }
+        # Trim off last "\n ", since the above code has the side-effect
+        # of adding an extra "\n " to the encoded string.
+        set result [string range $result 0 end-2]
+
+    } else {
+        set result "=?$charset?Q?$qp_subject?="
+    }
+
+    return $result
+}
