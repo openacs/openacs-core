@@ -8,6 +8,9 @@ ad_library {
     @cvs-id $Id$
 }
 
+# switched to using tcllib, its required for openacs >= 5.3
+package require mime
+
 ad_proc build_mime_message {
     text_body
     html_body
@@ -21,9 +24,6 @@ ad_proc build_mime_message {
     the World Bank.
 
 } {
-    # switched to using tcllib, its required for openacs >= 5.3
-    package require mime
-
     # convert text to charset
     set encoding [ns_encodingforcharset $charset]
     if {[lsearch [encoding names] $encoding] != -1} {
