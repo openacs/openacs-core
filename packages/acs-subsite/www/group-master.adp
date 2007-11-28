@@ -165,6 +165,7 @@
       </else>
       </ul>
     </div>
+    </div>
   </div> <!-- /footer -->
 
 </div> <!-- /wrapper -->
