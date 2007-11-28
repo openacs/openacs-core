@@ -47,7 +47,7 @@ set user_id [ad_conn user_id]
 
 db_foreach path_select {} {
     if {$node_id != $root_id && $admin_p eq "t"} {
-	append head "<a href=.?[export_url_vars expand:multiple root_id=$node_id]>"
+        append head "<a href=\".?[export_url_vars expand:multiple root_id=$node_id]\">"
     }
     if {$name eq ""} {
 	append head "$obj_name:"
@@ -80,14 +80,15 @@ template::list::create \
     -key node_id \
     -elements {
 	 name_instance {
+         label "#acs-subsite.Name#"
             html "align left"
 	    display_template {
 		<a name="@nodes.node_id@">@nodes.tree_indent;noquote@</a>
 	        <if @nodes.instance@ eq "">
-		<a href=@nodes.instance_url@>@nodes.name;noquote@</a>
+		<a href="@nodes.instance_url@">@nodes.name;noquote@</a>
 		</if>
 		<else>
-		    <a href=@nodes.instance_url@>@nodes.instance;noquote@</a>   
+		    <a href="@nodes.instance_url@">@nodes.instance;noquote@</a>   
 		</else>
 		<if @nodes.expand_mode@ eq 1>
 		&nbsp;<a href="?@nodes.expand_url@#@nodes.node_id@"><img border=0 src=/resources/down.gif></a>
@@ -107,6 +108,7 @@ template::list::create \
 		</if>
 	    }
         } instance_url {
+            label "#acs-subsite.URL#"
             html "align left"
 	    display_template {
 		<if @nodes.action_type@ eq "new_app">
@@ -126,7 +128,7 @@ template::list::create \
 		</form>
 		</if>
 		<else>
-		<font size=2>(@nodes.instance_url;noquote@)</font>
+		(@nodes.instance_url;noquote@)
 		</else>
 	    }
         }

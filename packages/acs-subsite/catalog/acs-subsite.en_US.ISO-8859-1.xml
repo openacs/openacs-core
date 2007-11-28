@@ -452,6 +452,7 @@ You can always change your password by doing the following:
   <msg key="upload_a_portrait">upload a portrait</msg>
   <msg key="upload_a_replacement_por">upload a replacement portrait</msg>
   <msg key="Upload_Portrait">Upload Portrait</msg>
+  <msg key="URL">URL</msg>
   <msg key="User_name">User name</msg>
   <msg key="User_Portrait">User Portrait</msg>
   <msg key="User_Portraits">User Portraits</msg>
