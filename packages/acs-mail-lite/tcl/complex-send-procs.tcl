@@ -232,6 +232,9 @@ namespace eval acs_mail_lite {
         @param alternative_part_p Boolean whether or not the code generates a multipart/alternative mail (text/html)
     } {
 
+	# Send all emails as text/plain per default
+	set multi_token_type $mime_type
+
         set mail_package_id [apm_package_id_from_key "acs-mail-lite"]
         if {$package_id eq ""} {
             set package_id $mail_package_id
@@ -294,6 +297,8 @@ namespace eval acs_mail_lite {
                                    -encoding "quoted-printable" \
                                    -string "$body"]
         } else {
+	    set multi_token_type "multipart/alternative"
+
             # build multipart/alternative
             if { $mime_type eq "text/plain" } {
                 set message_text_part [mime::initialize -canonical "text/plain" \
@@ -328,6 +333,7 @@ namespace eval acs_mail_lite {
 
         if {[exists_and_not_null file_ids]} {
 
+	    set multi_token_type "multipart/mixed"
             # Check if we are dealing with revisions or items.
             foreach file_id $file_ids {
                 set item_id [content::revision::item_id -revision_id $file_id]
@@ -349,6 +355,7 @@ namespace eval acs_mail_lite {
 
         # Append files from the filesystem
         if {$files ne ""} {
+	    set multi_token_type "multipart/mixed"
             foreach file $files {
                 lappend tokens [mime::initialize -param [list name "[ad_quotehtml [lindex $file 0]]"] -canonical [lindex $file 1] -file "[lindex $file 2]"]
             }
@@ -363,6 +370,7 @@ namespace eval acs_mail_lite {
                     where r.revision_id = i.latest_revision and i.parent_id = :folder_id} {
                         lappend tokens [mime::initialize -param [list name "[ad_quotehtml $title]"] -canonical $mime_type -file "[cr_fs_path]$filename"]
                         lappend item_ids $item_id
+			set multi_token_type "multipart/mixed"
                     }
             } 
         }
@@ -370,7 +378,7 @@ namespace eval acs_mail_lite {
 
         #### Now we start with composing the mail message ####
 
-        set multi_token [mime::initialize -canonical multipart/mixed -parts "$tokens"]
+        set multi_token [mime::initialize -canonical $multi_token_type -parts "$tokens"]
 
         # Set the message_id
         set message_id "[mime::uniqueID]"
