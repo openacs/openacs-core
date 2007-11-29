@@ -27,10 +27,10 @@ ad_proc build_mime_message {
     # convert text to charset
     set encoding [ns_encodingforcharset $charset]
     if {[lsearch [encoding names] $encoding] != -1} {
-	set html_body [encoding convertto $encoding $html_body]
-	set text_body [encoding convertto $encoding $text_body]
+        set html_body [encoding convertto $encoding $html_body]
+        set text_body [encoding convertto $encoding $text_body]
     } else {
-	ns_log error "ad_html_sendmail: unknown charset passed in ($charset)"
+        ns_log error "ad_html_sendmail: unknown charset passed in ($charset)"
     }
 
     # build body
@@ -152,49 +152,97 @@ ad_proc build_subject {
     subject
     {charset "UTF-8"}
 } {
-    Encode the subject of an email message and trim long lines.
+    Encode the subject, using quoted-printable, of an email message 
+    and trim long lines.
 
-    This proc is based on mime::word_encode which we don't use
-    directly since it doesn't split correctly long lines and 
-    doesn't wrap the resulting lines correctly either in the version
-    provided by tcllib 1.8
+    Depending on the available mime package version, it uses either
+    the mime::word_encode proc to do it or local code (word_encode is
+    buggy in mime < 1.5.2 )
+
 } {
 
-    set encoding [ns_encodingforcharset $charset]
-    set subject [encoding convertto $encoding "$subject "]
+    set charset [string toupper $charset]
+    set charset_code [ns_encodingforcharset $charset]
+    set subject [encoding convertto $charset_code "$subject"]
 
-    # encode subject with quoted-printable
-    set qp_subject [mime::qp_encode $subject 1 1]
+    if { [catch {package require mime 1.5.2}] } {
 
-    # maxlen for each line
-    # 69 = 76 - 7 where 7 is for "=?"+"?Q?+"?="
-    set maxlen [expr {69 - [string length $charset]}]
+        # encode subject with quoted-printable
+        set qp_subject [mime::qp_encode "$subject\n" 1 1]
 
-    # Based on mime::qp_encode to trim long lines
-    set result ""
-    if { [string length $qp_subject] > $maxlen } {
-
-        while { [string length $qp_subject] > $maxlen } {
-            set chunk [string range $qp_subject 0 $maxlen]
-            if {[regexp -- {(_[^_]*)$} $chunk dummy end]} {
-                
-                # Don't break in the middle of a word
-                set len [expr {$maxlen - [string length $end]}]
-                set chunk [string range $qp_subject 0 $len]
-                incr len
-                set qp_subject [string range $qp_subject $len end]
-            } else {
-                set qp_subject [string range $qp_subject [expr {$maxlen + 1}] end]
+        # maxlen for each line
+        # 69 = 76 - 7 where 7 is for "=?"+"?Q?+"?="
+        set maxlen [expr {69 - [string length $charset]}]
+        
+        # Based on mime::qp_encode to trim long lines
+        set result ""
+        foreach line [split $qp_subject \n] {
+            while {[string length $line] > $maxlen} {
+                set chunk [string range $line 0 $maxlen]
+                if {[regexp -- {(_[^_]*)$} $chunk dummy end]} {
+                    
+                    # Don't break in the middle of a word
+                    set len [expr {$maxlen - [string length $end]}]
+                    set chunk [string range $line 0 $len]
+                    incr len
+                    set line [string range $line $len end]
+                } else {
+                    set line [string range $line [expr {$maxlen + 1}] end]
+                }
+                append result "=?$charset?Q?$chunk?=\n "
             }
-            append result "=?$charset?Q?$chunk?=\n "
+            append result "=?$charset?Q?$line?=\n "
         }
         # Trim off last "\n ", since the above code has the side-effect
         # of adding an extra "\n " to the encoded string.
         set result [string range $result 0 end-2]
-
     } else {
-        set result "=?$charset?Q?$qp_subject?="
+        set result [mime::word_encode $charset_code "quoted-printable" $subject]
     }
 
     return $result
+}
+
+ad_proc build_date {
+    {date ""}
+} {
+    Depending on the available mime package version, it uses either
+    the mime::parsedatetime to do it or local code (parsedatetime is
+    buggy in mime < 1.5.2 )
+
+    @param date   A 822-style date-time specification "YYYYMMDD HH:MI:SS"
+
+} {
+
+    if { $date eq "" } {
+        set clock [clock seconds]
+        set date [clock format $clock -format "%Y-%m-%d %H:%M:%S"]
+    } else {
+        set clock [clock scan $date]
+    }
+
+    if { [catch {package require mime 1.5.2}] } {
+   
+        set gmt [clock format $clock -format "%Y-%m-%d %H:%M:%S" -gmt true]
+        if {[set diff [expr {($clock-[clock scan $gmt])/60}]] < 0} {
+            set s -
+            set diff [expr {-($diff)}]
+        } else {
+            set s +
+        }
+        set zone [format %s%02d%02d $s [expr {$diff/60}] [expr {$diff%60}]]
+
+        set wdays_short [list Sun Mon Tue Wed Thu Fri Sat]
+        set months_short [list Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec]
+
+        set wday [lindex $wdays_short [clock format $clock -format %w]]
+        set mon [lindex $months_short [expr {[clock format $clock -format %m] - 1}]]
+
+        set result [clock format $clock -format "$wday, %d $mon %Y %H:%M:%S $zone"]
+    } else {
+        set result [mime::parsedatetime $date proper]
+    }
+
+    return $result
+
 }
