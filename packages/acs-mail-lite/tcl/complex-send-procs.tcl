@@ -170,8 +170,8 @@ namespace eval acs_mail_lite {
         {-folder_ids ""}
         {-mime_type "text/plain"}
         {-object_id ""}
-        {-single_email_p ""}
-        {-no_callback_p ""}
+        {-single_email_p "1"}
+        {-no_callback_p "0"}
         {-extraheaders ""}
         {-alternative_part_p ""}
         {-use_sender_p "0"}
@@ -223,14 +223,11 @@ namespace eval acs_mail_lite {
 
         @param extraheaders List of keywords and their values passed in for headers. Interesting ones are: "Precedence: list" to disable autoreplies and mark this as a list message. This is as list of lists !!
 
-        @param single_email Boolean that indicates that only one mail will be send (in contrast to one e-mail per recipient). 
+        @param single_email_p Indicates that only one mail will be send (in contrast to one e-mail per recipient). Defaults to 1
 
-        @param no_callback Boolean that indicates if callback should be executed or not. If you don't provide it it will execute callbacks	
-        @param single_email_p Boolean that indicates that only one mail will be send (in contrast to one e-mail per recipient). Used so we can set a variable in the callers environment to call complex_send.
+        @param no_callback_p Indicates if callback should be executed or not. If you don't provide it it will execute callbacks.
 
-        @param no_callback_p Boolean that indicates if callback should be executed or not. If you don't provide it it will execute callbacks. Used so we can set a variable in the callers environment to call complex_send.
-
-        @param use_sender Boolean indicating that from_addr should be used regardless of fixed-sender parameter
+        @param use_sender_p Boolean indicating that from_addr should be used regardless of fixed-sender parameter
 
         @param alternative_part_p Boolean whether or not the code generates a multipart/alternative mail (text/html)
     } {
