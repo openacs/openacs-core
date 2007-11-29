@@ -284,19 +284,40 @@ namespace eval acs_mail_lite {
 
         
         # decision between normal or multipart/alternative body
+
+        # Encode the body with UTF-8 charset
+        set charset "UTF-8"
+        set encoding [ns_encodingforcharset $charset]
+        set body [encoding convertto $encoding $body]
+
         if { $alternative_part_p eq "0"} {
             # Set the message token
-            set message_token [mime::initialize -canonical "$mime_type" -string "$body"]
+            set message_token [mime::initialize -canonical "$mime_type" \
+                                   -param [list charset $charset] \
+                                   -encoding "quoted-printable" \
+                                   -string "$body"]
         } else {
             # build multipart/alternative
             if { $mime_type eq "text/plain" } {
-                set message_text_part [mime::initialize -canonical "text/plain" -string "$body"]
+                set message_text_part [mime::initialize -canonical "text/plain" \
+                                           -param [list charset $charset] \
+                                           -encoding "quoted-printable" \
+                                           -string "$body"]
                 set converted [ad_text_to_html "$body"]
-                set message_html_part [mime::initialize -canonical "text/html" -string "$converted"]
+                set message_html_part [mime::initialize -canonical "text/html" \
+                                           -param [list charset $charset] \
+                                           -encoding "quoted-printable" \
+                                           -string "$converted"]
             } else {
-                set message_html_part [mime::initialize -canonical "text/html" -string "$body"]
+                set message_html_part [mime::initialize -canonical "text/html" \
+                                           -param [list charset $charset] \
+                                           -encoding "quoted-printable" \
+                                           -string "$body"]
                 set converted [ad_html_to_text "$body"]
-                set message_text_part [mime::initialize -canonical "text/plain" -string "$converted"]
+                set message_text_part [mime::initialize -canonical "text/plain" \
+                                           -param [list charset $charset] \
+                                           -encoding "quoted-printable" \
+                                           -string "$converted"]
             }   
             set message_token [mime::initialize -canonical multipart/alternative -parts [list $message_text_part $message_html_part]]
             # see RFC 2046, 5.1.4.  Alternative Subtype, for further information/reference (especially order of parts)  
@@ -359,16 +380,10 @@ namespace eval acs_mail_lite {
         mime::setheader $multi_token "message-id" "[mime::uniqueID]"
         
         # Set the date
-        mime::setheader $multi_token date "[mime::parsedatetime -now proper]"
+        mime::setheader $multi_token date [build_date]
 
-        # 2006/09/25 nfl/cognovis
-        # subject: convert 8-bit characters into MIME encoded words
-        # see http://tools.ietf.org/html/rfc2047
-        
-        #set subject_encoded [mime::word_encode "iso8859-1" base64 $subject]
-        #regsub -all {\n} $subject_encoded {} subject_encoded
-        #mime::setheader $multi_token Subject "$subject_encoded"
-        mime::setheader $multi_token Subject "$subject"
+        # Set the subject
+        mime::setheader $multi_token Subject [build_subject $subject]
 
         foreach header $extraheaders {
             mime::setheader $multi_token "[lindex $header 0]" "[lindex $header 1]"
