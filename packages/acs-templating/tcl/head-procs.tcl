@@ -160,6 +160,35 @@ ad_proc -public template::head::add_meta {
     ]
 }
 
+ad_proc -public template::head::add_style {
+    {-style:required}
+    {-title ""}
+    {-lang ""}
+    {-media ""}
+    {-type "text/css"}
+} {
+
+    Add an embedded css style declaration
+    
+    @author Dave Bauer (dave@thedesignexperience.org)
+    @creation-date 2007-11-30
+    
+    @param style CSS content to be included in the style tag
+    @param type    the type attribute of the link tag, eg. 'text/css'
+    @param media   the media attribute of the link tag describing which display
+                   media this link is relevant to.  This may be a comma 
+                   separated list of values, eg. 'screen,print,braille'
+    @param title   the title attribute of the link tag describing the target of
+                   this link 
+    @param lang    the lang attribute of the link tag specifying the language 
+                   of its attributes if they differ from the document language
+} {
+    variable ::template::head::styles
+
+    lappend styles(anonymous) $type $media $title $lang $style
+ 
+}
+
 ad_proc -public template::head::add_javascript {
     {-defer:boolean}
     {-src ""}

@@ -85,3 +85,6 @@ if { $user_id_two_items ne "" } {
     set user_id_two_items_html ""
 }
 
+template::head::add_css \
+    -href "/resources/acs-admin/um-more-info.css" \
+    -media all

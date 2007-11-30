@@ -107,5 +107,23 @@ set return_url [export_vars -base . { { view_by testcase } quiet { by_package_ke
 
 set quiet_url "[export_vars -base testcase -entire_form -exclude {quiet}]&quiet=1"
 set verbose_url "[export_vars -base testcase -entire_form -exclude {quiet}]&quiet=0"
+template::head::add_style \
+    -style "
+.description h2 { 1.5em; }
+.fail {
+      font-weight: bold;
+      color: red;
+}
+.ok {
+      font-weight: bold;
+      color: green;
+}
+dt {
+      font-weight: bold
+}
+th {
+      background: #c0c0c0;
+}
+"
 
 ad_return_template
