@@ -1,25 +1,6 @@
 <master>
   <property name="title">@title;noquote@ (@package_key@)</property>
   <property name="context">@context;noquote@</property>
-  <property name="header_stuff">
-    <style type="text/css">
-.description h2 { 1.5em; }
-.fail {
-      font-weight: bold;
-      color: red;
-}
-.ok {
-      font-weight: bold;
-      color: green;
-}
-dt {
-      font-weight: bold
-}
-th {
-      background: #c0c0c0;
-}
-</style>
-</property>
 
   <div class="description">
     <dl>

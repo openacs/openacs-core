@@ -14,3 +14,4 @@ set login_template [parameter::get -parameter "LoginTemplate" -package_id $subsi
 if {$login_template eq ""} {
     set login_template "/packages/acs-subsite/lib/login"
 }
+

@@ -1,9 +1,7 @@
   <master>
     <property name="title">Merge account system</property>
     <property name="context">@context;noquote@</property>
-    <property name="header_stuff">
-      <link rel="stylesheet" type="text/css" href="/resources/acs-admin/um-more-info.css" media="all">
-    </property>
+
     <h2>User Account Merge</h2>
     
     This is the user acccount merge wizard. You selected these accounts to merge:
