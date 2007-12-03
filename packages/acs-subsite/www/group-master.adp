@@ -1,12 +1,9 @@
 <master src="/www/site-master">
-<if @meta:rowcount@ not nil><property name="&meta">meta</property></if>
-<if @link:rowcount@ not nil><property name="&link">link</property></if>
-<if @script:rowcount@ not nil><property name="&script">script</property></if>
 <if @doc@ defined><property name="&doc">doc</property></if>
 <if @body@ defined><property name="&body">body</property></if>
 <if @head@ not nil><property name="head">@head;noquote@</property></if>
 <if @focus@ not nil><property name="focus">@focus;noquote@</property></if>
-<property name="skip_link">#content-wrapper</property>
+<property name="skip_link">@skip_link;noquote@</property>
 
 <div id="wrapper">
   <div id="system-name">

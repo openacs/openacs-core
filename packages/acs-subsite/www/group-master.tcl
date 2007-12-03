@@ -1,9 +1,13 @@
 # Expects properties:
-#   title
+#   doc(title)
 #   focus
-#   header_stuff
+#   head
 #   section
 #   subnavbar_link
+#
+#  Allowed properties
+#  skip_link, href of link to skip to. Should be of format #skip_link
+#  defaults to #content-wrapper
 
 # DRB: This is a TEMPORARY kludge to get 5.3.2 out.  This should really set the navigation
 # tab info then "master" to the site default-master, not site-master.  However, Lee's first
@@ -151,4 +155,8 @@ set subsite_name $subsite_sitenode(instance_name)
 
 if {[ad_conn url] eq $subsite_url} {
     set subsite_url {}
+}
+
+if {![info exists skip_link]} {
+    set skip_link "#content-wrapper"
 }
