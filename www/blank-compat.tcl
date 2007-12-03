@@ -32,15 +32,6 @@ foreach {from to} $translations {
     }
 }
 
-if { ![template::util::is_nil focus] } {
-    ns_log warning "blank-compat: property focus is deprecated in blank-master - focus should be handled in site-master."
-
-    # Handle elements where the name contains a dot
-    if { [regexp {^([^.]*)\.(.*)$} $focus match form_name element_name] } {
-        lappend body(onload) "acs_Focus('${form_name}', '${element_name}');"
-    }
-}
-
 if {[exists_and_not_null body_attributes]} {
     foreach body_attribute $body_attributes {
         if {[lsearch {

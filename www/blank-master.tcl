@@ -170,6 +170,16 @@ if {[info exists body_scripts]} {
   unset body_scripts
 }
 
+if {[info exists focus] && $focus ne ""} {
+    # Handle elements where the name contains a dot
+    if { [regexp {^([^.]*)\.(.*)$} $focus match form_name element_name] } {
+        template::head::add_body_handler \
+            -event onload \
+            -script "acs_Focus('${form_name}', '${element_name}');"
+            -identifier "focus"
+    }
+}
+
 # Concatenate the javascript event handlers for the body tag
 variable ::template::body_handlers
 if {[array exists body_handlers]} {
