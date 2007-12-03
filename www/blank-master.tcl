@@ -121,6 +121,23 @@ if {[array exists links]} {
   unset links
 }
 
+# Generate the <style /> tag multirow 
+variable ::template::head::styles
+template::multirow create ___style type title lang media style
+if {[array exists styles]} {
+    foreach name [array names styles] {
+        foreach {type media title lang style} $styles($name) {
+            template::multirow append ___style \
+                $type \
+                $title \
+                $lang \
+                $media \
+                $style
+        }
+    }
+  unset styles
+}
+
 # Generate the head <script /> tag multirow
 variable ::template::head::scripts
 template::multirow create headscript type src charset defer content
@@ -137,7 +154,6 @@ if {[array exists scripts]} {
     }
   unset scripts
 }
-
 
 # Generate the body <script /> tag multirow
 variable ::template::body_scripts
