@@ -1,6 +1,13 @@
 ad_page_contract {
   This is the highest level site specific master template.
 
+  Properties allowed
+  doc(title) HTML title
+  head code to be entered into head of document
+  body 
+  focus HTML id of form element to focus
+  skip_link href of link to skip to. Should be of format #skip_link
+
   @author Lee Denison (lee@xarg.co.uk)
 
   $Id$
@@ -20,10 +27,6 @@ if {[ad_conn url] eq "/"} {
 if {[template::util::is_nil title]} {
     # TODO: decide how best to set the lang attribute for the title
     set title [ad_conn instance_name]
-}
-
-if {![template::multirow exists link]} {
-    template::multirow create link rel type href title lang media
 }
 
 #
@@ -172,3 +175,6 @@ set curriculum_bar_p [expr {
     [site_node::get_package_url -package_key curriculum] ne ""
 }]
 
+if {![info exists skip_link]} {
+    set skip_link "#content-wrapper"
+}

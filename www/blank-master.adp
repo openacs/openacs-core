@@ -8,6 +8,10 @@
 <multiple name="link">    <link rel="@link.rel;noquote@" href="@link.href;noquote@"<if @link.lang@ not nil and @link.lang@ ne @doc.lang@> lang="@link.lang;noquote@"</if><if @link.title@ not nil> title="@link.title;noquote@"</if><if @link.type@ not nil> type="@link.type;noquote@"</if><if @link.media@ not nil> media="@link.media@"</if>>
 </multiple>
 
+<multiple name="___style"> <style type="@___style.type;noquote@" <if @___style.lang@ not nil and @___style.lang@ ne @doc.lang@> lang="@___style.lang;noquote@"</if><if @___style.title@ not nil> title="@___style.title;noquote@"</if><if @___style.type@ not nil> type="@___style.type;noquote@"</if><if @___style.media@ not nil> media="@___style.media@"</if>>@___style.style;noquote@
+</style>
+</multiple>
+
 <comment>
    These two variables have to be set before the XinhaCore.js is loaded. To 
    enforce the order, it is put here.
