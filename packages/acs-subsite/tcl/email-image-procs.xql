@@ -5,8 +5,8 @@
       <querytext>
       
 	  select email	
-          from cc_users		
-          where user_id = :user_id
+          from parties
+          where party_id = :user_id
     
       </querytext>
 </fullquery>
