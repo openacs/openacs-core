@@ -302,7 +302,10 @@ ad_proc -public template::add_body_handler {
     if {$identifier eq "anonymous"} {
         lappend body_handlers($event,anonymous) $script
     } else {
-        set body_handers($event,$identifier) $script
+        # Even a one event handler needs to be added in a list
+        # since all handlers, anonymous and specific are treated as a
+        # list in blank-master.tcl
+       set body_handlers($event,$identifier) [list $script]
     }
 }
 
