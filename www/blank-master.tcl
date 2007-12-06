@@ -175,7 +175,9 @@ if {[info exists focus] && $focus ne ""} {
     if { [regexp {^([^.]*)\.(.*)$} $focus match form_name element_name] } {
         template::add_body_handler \
             -event onload \
-            -script "acs_Focus('${form_name}', '${element_name}');"
+            -script "acs_Focus('${form_name}', '${element_name}');" \
+            -identifier "focus"
+        
     }
 }
 
@@ -186,9 +188,10 @@ if {[array exists body_handlers]} {
 
     foreach name $names {
         set event [lindex [split $name ","] 0]
-
+ns_log notice "event $event name $name JS !!!$body_handlers($name)!!!"
         foreach javascript $body_handlers($name) {
             lappend body_handlers($event) "[string trimright $javascript "; "];"
+            ns_log notice "adding [string trimright $javascript "; "];"
         }
 
         unset body_handlers($name)
