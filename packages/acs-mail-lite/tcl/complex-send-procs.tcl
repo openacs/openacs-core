@@ -376,7 +376,7 @@ namespace eval acs_mail_lite {
 	set tokens [concat $tokens $attachment_tokens]
 
 	# We have at least one attachment so change the type to multipart/mixed
-	if {[llenght $attachment_tokens] > 0} {
+	if {[llength $attachment_tokens] > 0} {
 	    set multi_token_type "multipart/mixed"
 	}
 
