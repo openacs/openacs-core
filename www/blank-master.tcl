@@ -175,8 +175,7 @@ if {[info exists focus] && $focus ne ""} {
     if { [regexp {^([^.]*)\.(.*)$} $focus match form_name element_name] } {
         template::add_body_handler \
             -event onload \
-            -script "acs_Focus('${form_name}', '${element_name}');" \
-            -identifier "focus"
+            -script "acs_Focus('${form_name}', '${element_name}');"
     }
 }
 
