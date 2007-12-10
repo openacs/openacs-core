@@ -417,14 +417,14 @@ namespace eval acs_mail_lite {
 	###################
 
 	
-	if {$single_email_p} {
-	    
-	    #############################
-	    # 
-	    # One mail to all
-	    # 
-	    #############################
-	    
+        if { $single_email_p } {
+
+            #############################
+            # 
+            # One mail to all
+            # 
+            #############################
+
 	    # Resolve the various types into two lists
 	    # so we have the emails in one and the 
 	    # party_ids in the other (needed for the callback)
@@ -444,8 +444,8 @@ namespace eval acs_mail_lite {
 	    # Send out the E-Mail
 	    acs_mail_lite::complex_smtp -multi_token $multi_token \
 		-headers [list [list From "$from_string"] [list Reply-To "$reply_to_string"] \
-			      [list To "$to_addr_string ","]"] [list CC "[join $cc_addr_string ","]"] \
-			      [list BCC "[join $bcc_addr_string ","]"]]
+                      [list To "[join $to_addr_string ","]"] [list CC "[join $cc_addr_string ","]"] \
+                      [list BCC "[join $bcc_addr_string ","]"]]
 	    
 	    #Close all mime tokens
 	    mime::finalize $multi_token -subordinates all
