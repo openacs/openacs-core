@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="notifications" package_version="5.3.0d1" locale="nn_NO" charset="ISO-8859-1">
+<message_catalog package_key="notifications" locale="nn_NO" charset="ISO-8859-1">
 
   <msg key="Action">Oppgåve</msg>
   <msg key="Change">Endre</msg>
@@ -13,7 +13,6 @@
   <msg key="lt_system_name_-_Batched">[%system_name% - Oppsamla varsel] </msg>
   <msg key="lt_You_have_no_notificat">Du har ingen e-postvarsel aktive.</msg>
   <msg key="lt_You_have_requested_no">Du har bedd om varsel for %pretty_name%. Du kan &lt;a href=&quot;%sub_url%&quot;&gt;melde deg av&lt;/a&gt;.</msg>
-  <msg key="lt_You_may_a_hrefsub_url">Du kan &lt;a href=&quot;%sub_url%&quot;&gt;be om varsel&lt;/a&gt; for %pretty_name%.</msg>
   <msg key="Manage_Notifications">Administrer e-postvarsel</msg>
   <msg key="Notification_type">Varslingstype</msg>
   <msg key="Request_Notification">Be om varsel</msg>

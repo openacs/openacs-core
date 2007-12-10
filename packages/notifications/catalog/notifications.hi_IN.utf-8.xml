@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="notifications" package_version="5.2.0" locale="hi_IN" charset="utf-8">
+<message_catalog package_key="notifications" locale="hi_IN" charset="utf-8">
 
   <msg key="Action">कार्यवाई</msg>
   <msg key="Change">परिवर्तन </msg>
@@ -13,7 +13,6 @@
   <msg key="lt_system_name_-_Batched">[%system_name% - सामुहिक अधिसुचना]</msg>
   <msg key="lt_You_have_no_notificat">आपके पास कोई अधिसूचना नही है</msg>
   <msg key="lt_You_have_requested_no">आपने अधिसूचना %pretty_name% के लिये निवेदन किया है. आप निवेदन वापिस ले सकते है &amp;lt;a href=&amp;quot;%sub_url%&amp;quot;&amp;gt; &amp;lt;/a&amp;gt;.</msg>
-  <msg key="lt_You_may_a_hrefsub_url">आप निवेदित अधिसूचना %pretty_name% के लिये &amp;lt;a href=&amp;quot;%sub_url% से प्राप्त कर सकते है</msg>
   <msg key="Manage_Notifications">अधिसूचना वयवस्थित करे</msg>
   <msg key="Notification_type">अधिसूचना के प्रकार</msg>
   <msg key="Request_Notification">निवेदित अधिसूचना</msg>

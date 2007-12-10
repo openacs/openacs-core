@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="search" package_version="5.3.1" locale="nl_NL" charset="ISO-8859-1">
+<message_catalog package_key="search" locale="nl_NL" charset="ISO-8859-1">
 
   <msg key="Advanced_Search">Geavanceerd zoeken</msg>
   <msg key="anytime">eender wanneer</msg>

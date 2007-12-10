@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="notifications" package_version="5.3.0d1" locale="pt_PT" charset="ISO-8859-1">
+<message_catalog package_key="notifications" locale="pt_PT" charset="ISO-8859-1">
 
   <msg key="Action">Acção</msg>
   <msg key="Change">Mudar</msg>
@@ -12,7 +12,6 @@
   <msg key="lt_system_name_-_Batched">[%system_name% - Notificações Agrupadas] </msg>
   <msg key="lt_You_have_no_notificat">Não tem notificações.</msg>
   <msg key="lt_You_have_requested_no">Pediu notificação para %pretty_name%. Pode &lt;a href=&quot;%sub_url%&quot;&gt;anular a subscrição&lt;/a&gt;. </msg>
-  <msg key="lt_You_may_a_hrefsub_url">Pode &lt;a href=&quot;%sub_url%&quot;&gt;pedir notificação&lt;/a&gt; para %pretty_name%.</msg>
   <msg key="Manage_Notifications">Gerir Notificações</msg>
   <msg key="Notification_type">Tipo de notificação</msg>
   <msg key="Request_Notification">Pedir Notificação</msg>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="notifications" package_version="5.3.0d1" locale="ca_ES" charset="ISO-8859-1">
+<message_catalog package_key="notifications" locale="ca_ES" charset="ISO-8859-1">
 
   <msg key="Action">Acció </msg>
   <msg key="Change">Canviar </msg>
@@ -13,7 +13,6 @@
   <msg key="lt_system_name_-_Batched">[%system_name% - Llista de notificacions] </msg>
   <msg key="lt_You_have_no_notificat">No teniu avisos. </msg>
   <msg key="lt_You_have_requested_no">Heu demanat notificació per a %pretty_name%. Podeu &lt;a href=&quot;%sub_url%&quot;&gt;donar-vos-hi de baixa&lt;/a&gt;. </msg>
-  <msg key="lt_You_may_a_hrefsub_url">Podeu &lt;a href=&quot;%sub_url%&quot;&gt;demanar un avís&lt;/a&gt; per a %pretty_name%. </msg>
   <msg key="Manage_Notifications">Administrar notificacions </msg>
   <msg key="Notification_type">Tipus d'avís </msg>
   <msg key="Request_Notification">Demanar notificació </msg>

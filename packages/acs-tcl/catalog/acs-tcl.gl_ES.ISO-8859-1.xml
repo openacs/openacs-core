@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-tcl" package_version="5.3.1" locale="gl_ES" charset="ISO-8859-1">
+<message_catalog package_key="acs-tcl" locale="gl_ES" charset="ISO-8859-1">
 
   <msg key="a_problem">un problema</msg>
   <msg key="approve">aprobar</msg>

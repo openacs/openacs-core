@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="notifications" package_version="5.3.0d1" locale="pl_PL" charset="utf-8">
+<message_catalog package_key="notifications" locale="pl_PL" charset="utf-8">
 
   <msg key="Action">Czynność</msg>
   <msg key="Change">Zmień</msg>
@@ -12,7 +12,6 @@
   <msg key="lt_system_name_-_Batched">[%system_name% - Zawiadomienia Hurtowe]</msg>
   <msg key="lt_You_have_no_notificat">Nie ustawiono żadnych zawiadmonień dla Ciebie.</msg>
   <msg key="lt_You_have_requested_no">Ustwiono zawiadomienia o %pretty_name%. Możesz &lt;a href=&quot;%sub_url%&quot;&gt;je usunąć&lt;/a&gt;.</msg>
-  <msg key="lt_You_may_a_hrefsub_url">Możesz &lt;a href=&quot;%sub_url%&quot;&gt;ustawić zawiadomienia&lt;/a&gt; o %pretty_name%.</msg>
   <msg key="Manage_Notifications">Zarządzaj Zawiadomieniami</msg>
   <msg key="Notification_type">Typ Zawiadomienia</msg>
   <msg key="Request_Notification">Ustaw Zawiadomienie</msg>

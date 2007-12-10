@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-lang" package_version="5.3.1" locale="it_IT" charset="ISO-8859-1">
+<message_catalog package_key="acs-lang" locale="it_IT" charset="ISO-8859-1">
 
   <msg key="available-in-this-language">Disponibile in Italiano</msg>
   <msg key="change-locale">Cambia localizzazione</msg>

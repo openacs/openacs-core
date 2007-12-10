@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="acs-kernel" package_version="5.3.1" locale="ja_JP" charset="utf-8">
+<message_catalog package_key="acs-kernel" locale="ja_JP" charset="utf-8">
 
   <msg key="common_cancel">キャンセル</msg>
   <msg key="common_close">閉じる</msg>
@@ -11,8 +11,8 @@
   <msg key="common_help">ヘルプ</msg>
   <msg key="common_login">ログイン</msg>
   <msg key="common_next">次へ</msg>
-  <msg key="common_no">いいえ</msg>
   <msg key="common_No">いいえ</msg>
+  <msg key="common_no">いいえ</msg>
   <msg key="common_previous">戻る</msg>
   <msg key="common_reset">リセット</msg>
   <msg key="common_save">の保存</msg>

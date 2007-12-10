@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="notifications" package_version="5.3.0d1" locale="ms_MY" charset="utf-8">
+<message_catalog package_key="notifications" locale="ms_MY" charset="utf-8">
 
   <msg key="Action">Aksi</msg>
   <msg key="Change">Ubah</msg>
@@ -13,7 +13,6 @@
   <msg key="lt_system_name_-_Batched">[%system_name% - Notifikasi Berkelompok]</msg>
   <msg key="lt_You_have_no_notificat">Anda tidak mempunyai sebarang notifikasi.</msg>
   <msg key="lt_You_have_requested_no">Anda telah memohon notifikasi untuk %pretty_name%. Anda boleh,a href=&quot;%sub_url%&quot;&gt;unsubscribe&lt;/a&gt;.</msg>
-  <msg key="lt_You_may_a_hrefsub_url">Anda boleh &lt;a href=&quot;%sub_url%&quot;&gt;memohon notifikasi&lt;/a&gt; untuk %pretty_name%.</msg>
   <msg key="Manage_Notifications">Urus Notifikasi-notifikasi</msg>
   <msg key="Notification_type">Jenis notifikasi</msg>
   <msg key="Request_Notification">Memohon Notifikasi</msg>
