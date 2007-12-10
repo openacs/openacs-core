@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="notifications" package_version="5.3.0d1" locale="nl_NL" charset="ISO-8859-1">
+<message_catalog package_key="notifications" locale="nl_NL" charset="ISO-8859-1">
 
   <msg key="Action">Acties</msg>
   <msg key="Change">Veranderen</msg>
@@ -20,7 +20,6 @@
   <msg key="lt_system_name_-_Batched">[%system_name% - Mailing kennisgeving]</msg>
   <msg key="lt_You_have_no_notificat">Er zijn geen berichten voor u.</msg>
   <msg key="lt_You_have_requested_no">U heeft voor %pretty_name% de kennisgevingsfunctie geactiveerd. Afmelden kan &lt;a href=&quot;%sub_url%&quot;&gt;hier&lt;/a&gt;.</msg>
-  <msg key="lt_You_may_a_hrefsub_url">U kunt voor %pretty_name% de &lt;a href=&quot;%sub_url%&quot;&gt;kennisgevingsfunctie activeren&lt;/a&gt;.</msg>
   <msg key="Manage_Notifications">Kennisgevingen beheren</msg>
   <msg key="Notification">Kennisgeving</msg>
   <msg key="Notification_Replies">Kennisgevingsantwoorden</msg>

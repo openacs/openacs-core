@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="notifications" package_version="5.3.0d1" locale="fi_FI" charset="utf-8">
+<message_catalog package_key="notifications" locale="fi_FI" charset="utf-8">
 
   <msg key="Action">Ilmoitustapa</msg>
   <msg key="Change">Muokkaa</msg>
@@ -12,7 +12,6 @@
   <msg key="lt_system_name_-_Batched">[%system_name% - Erä uusia viestejä] </msg>
   <msg key="lt_You_have_no_notificat">Sinulla ei ole käytössä yhtään ilmoituspalvelua.</msg>
   <msg key="lt_You_have_requested_no">Olet pyytänyt saada ilmoituksen uusista viesteistä ryhmässä %pretty_name%. Halutessasi voit &lt;a href=&quot;%sub_url%&quot;&gt;peruuttaa ilmoituspalvelun&lt;/a&gt;.</msg>
-  <msg key="lt_You_may_a_hrefsub_url">Voit &lt;a href=&quot;%sub_url%&quot;&gt;tilata ilmoituksen uudesta sisällöstä&lt;/a&gt; %pretty_name% -sivulla.                </msg>
   <msg key="Manage_Notifications">Muokkaa ilmoituksia</msg>
   <msg key="Notification_type">Ilmoituksen tyyppi</msg>
   <msg key="Request_Notification">Tilaa ilmoitus</msg>

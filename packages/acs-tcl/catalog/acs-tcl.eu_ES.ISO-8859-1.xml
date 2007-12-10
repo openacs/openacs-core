@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="acs-tcl" package_version="5.3.1" locale="eu_ES" charset="ISO-8859-1">
+<message_catalog package_key="acs-tcl" locale="eu_ES" charset="ISO-8859-1">
 
   <msg key="approve">onartu</msg>
   <msg key="approve_email">posta onartu</msg>
