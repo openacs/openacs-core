@@ -1048,7 +1048,7 @@ ad_proc -public template::widget::date { element_reference tag_attributes } {
     regexp -nocase $template::util::date::token_exp $word \
           match token type
 
-    append tbody_content "<td nowrap=\"nowrap\">"
+    append tbody_content "<td>"
     
     lappend tokens $token
 
