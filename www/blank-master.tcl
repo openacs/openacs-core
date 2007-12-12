@@ -184,25 +184,23 @@ if {[info exists focus] && $focus ne ""} {
 # Concatenate the javascript event handlers for the body tag
 variable ::template::body_handlers
 if {[array exists body_handlers]} {
-    set names [array names body_handlers]
 
-    foreach name $names {
+    foreach name [array names body_handlers] {
         set event [lindex [split $name ","] 0]
-ns_log notice "event $event name $name JS !!!$body_handlers($name)!!!"
+        # ns_log notice "event $event name $name JS !!!$body_handlers($name)!!!"
         foreach javascript $body_handlers($name) {
-            lappend body_handlers($event) "[string trimright $javascript "; "];"
-            ns_log notice "adding [string trimright $javascript "; "];"
+            lappend body_handlers($event) "[string trimright $javascript {; }];"
         }
-
         unset body_handlers($name)
      }
+
+    # Now create the event handlers string
+    foreach {event script} [array get body_handlers] {
+        append event_handlers " " $event = \" [join $script { }] \"
+    }
+    unset body_handlers
 }
 
-# Now create the event handlers string
-foreach {event script} [array get body_handlers] {
-    append event_handlers " ${event}=\"$script\""
-}
- 
 # Generate the body headers
 variable ::template::headers
 set header ""
