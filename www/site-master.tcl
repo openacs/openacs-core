@@ -88,19 +88,20 @@ if {[info exists ::acs_blank_master(xinha)]} {
               \[$xinha_plugins\];
 
             // THIS BIT OF JAVASCRIPT LOADS THE PLUGINS, NO TOUCHING  
-            if(!HTMLArea.loadPlugins(xinha_plugins, xinha_init)) return;
+            if(!Xinha.loadPlugins(xinha_plugins, xinha_init)) return;
 
             xinha_editors = xinha_editors ? xinha_editors :\[ $htmlarea_ids \];
-            xinha_config = xinha_config ? xinha_config() : new HTMLArea.Config();
+            xinha_config = xinha_config ? xinha_config() : new Xinha.Config();
             $xinha_params
             $xinha_options
             xinha_editors = 
-                 HTMLArea.makeEditors(xinha_editors, xinha_config, xinha_plugins);
-            HTMLArea.startEditors(xinha_editors);
+                 Xinha.makeEditors(xinha_editors, xinha_config, xinha_plugins);
+            Xinha.startEditors(xinha_editors);
          }
-         window.onload = xinha_init;
+         //window.onload = xinha_init;
       "
 
+  template::add_body_handler -event onload -script "xinha_init();"
   template::head::add_javascript -src ${::xinha_dir}XinhaCore.js
 }
 
