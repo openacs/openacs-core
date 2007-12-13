@@ -461,7 +461,7 @@ ul.action-links li {
 
 #breadcrumbs {
   clear: right;
-  padding-left: 100px;
+  padding-left: 0.4em;
 }
 
 /* END CONTEXT BAR ---- */ 
