@@ -62,7 +62,7 @@ ad_proc -public notification::display::request_widget {
          return ""
     }
 
-    return "<a href=\"$sub_url\" title=\"$title\"><img src=\"$icon\" alt=\"$icon_alt\"> $sub_chunk</a>"
+    return "<a href=\"$sub_url\" title=\"$title\"><img src=\"$icon\" alt=\"$icon_alt\" style=\"border:0\"> $sub_chunk</a>"
 }
 
 ad_proc -public notification::display::subscribe_url {
