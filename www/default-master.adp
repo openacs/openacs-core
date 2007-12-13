@@ -39,7 +39,7 @@
         <ul class="compact">
           <multiple name="context">
           <if @context.url@ not nil>
-            <li><a href="@context.url@">@context.label@</a> :</li>
+            <li><a href="@context.url@">@context.label@</a> @separator@</li>
           </if>
           <else>
             <li>@context.label@</li>

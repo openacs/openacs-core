@@ -11,7 +11,7 @@ ad_library {
 #    hierarchy)
 
 ad_proc -public ad_context_bar_html {
-    {-separator " : "}
+    -separator
     context
 } { 
     Generate the an html fragement for a context bar.
@@ -31,9 +31,16 @@ ad_proc -public ad_context_bar_html {
 
     @see ad_context_bar
 } { 
+    
+    # Get the separator from subsite parameter
+    if { ![info exists separator] } {
+        set subsite_id [ad_conn subsite_id]
+        set separator [parameter::get -package_id $subsite_id -parameter ContextBarSeparator -default ":"]
+    }
+
     set out {}
     foreach element [lrange $context 0 [expr {[llength $context] - 2}]] { 
-        append out "<a href=\"[lindex $element 0]\">[lindex $element 1]</a>$separator"
+        append out "<a href=\"[lindex $element 0]\">[lindex $element 1]</a> $separator "
     }
     append out [lindex $context end]
 
