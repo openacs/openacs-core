@@ -166,6 +166,10 @@ if {[info exists context]} {
 
 ad_context_bar_multirow -- $context_tmp
 
+# Context bar separator
+set subsite_id [ad_conn subsite_id]
+set separator [parameter::get -package_id $subsite_id -parameter ContextBarSeparator -default ":"]
+
 #
 # Curriculum specific bar
 #   TODO: remove this and add a more systematic / package independent way 

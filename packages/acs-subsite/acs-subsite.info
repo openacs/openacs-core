@@ -7,7 +7,7 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>f</singleton-p>
     
-    <version name="5.4.0d7" url="http://openacs.org/repository/download/apm/acs-subsite-5.4.0d7.apm">
+    <version name="5.4.0d8" url="http://openacs.org/repository/download/apm/acs-subsite-5.4.0d8.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Subsite</summary>
         <release-date>2007-07-18</release-date>
@@ -16,7 +16,7 @@
         <license>GPL</license>
         <maturity>3</maturity>
 
-        <provides url="acs-subsite" version="5.4.0d7"/>
+        <provides url="acs-subsite" version="5.4.0d8"/>
         <requires url="acs-authentication" version="5.3.2"/>
         <requires url="acs-content-repository" version="5.3.2"/>
         <requires url="acs-kernel" version="5.3.2"/>
@@ -66,6 +66,7 @@
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="RestrictToSSL"  default="admin/*" description="URLs we want restricted to SSL. Note that this only takes effect if you have an SSL listener configured on your AOLserver and kernel parameter RegisterRestrictToSSLFilters is set to 1 (its default)."/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="ScreenNameP"  default="0" description="Set this to 1 if you want to show screen names instead of real names." section_name="user-info"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="ShowContextBarP"  default="1" description="Should context bars appear on pages?"/>
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="ContextBarSeparator"  default=":" description="Default character to use as separator in context bar"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="ShowMembersListTo"  default="1" description="Who can see the subsite members list. 0 = Everyone; 1 = Members; 2 = Only administrators."/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="SolicitPortraitP"  default="1" description="Set this to 1 if you want users to be asked to submit a portrait." section_name="user-info"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="SomeAmericanReadersP"  default="1" description="is it even worth bothering asking for state and zip code?"/>
