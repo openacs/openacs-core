@@ -283,46 +283,5 @@ namespace eval party {
     } {
 	return [db_string party_p {} -default 0]
     }
-
-    ad_proc -private resolve_members {
-	-party_ids
-	{-single_p "1"}
-    } {
-	Get's a list of party_ids and resolves the groups to
-	individual parties. This should probably be written in 
-	a recursive manner
-
-	@author Malte Sussdorff
-
-	@param party_ids Party_ids that need to be resolved
-	@param single_p Should the party only show up once even if it is in multiple groups
-
-	@return list of party_ids where none of them is a group
-    } {
-	# Run through the party_ids and check if a group is in there.
-        set new_party_ids [list]
-        foreach party_id $party_ids {
-            if {[group::group_p -group_id $party_id]} {
-		foreach member_id [group::get_members -group_id $group_id] {
-		    if {[group::group_p -group_id $member_id]} {
-			# This is a group, resolve it
-			acs_mail_lite::resolve_member -party_ids $member_id -single_p $single_p
-		    } else {
-			lappend new_party_ids $member_id
-		    }
-		}
-            } else {
-		lappend new_party_ids $party_id
-	    }
-        }
-
-	# If we only want to have the items of the list show up once
-	# We need to weed out duplicates
-	if {$single_p} {
-	    return [lsort -unique $new_party_ids]
-	} else {
-	    return $new_party_ids
-	} 
-    }
     
 }
