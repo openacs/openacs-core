@@ -223,7 +223,7 @@ ad_proc -public template::head::add_javascript {
 ad_proc -public template::head::add_css {
     {-alternate:boolean}
     {-href:required}
-    {-media ""}
+    {-media "all"}
     {-title ""}
     {-lang ""}
 } {
