@@ -18,7 +18,7 @@
   </ul>
 </if>
 
-<if @too_many_subsites_p gt 0>
+<if @too_many_subsites_p@ gt 0>
   <h3>Subsite Administration</h3>
 Too many subsites to display: @subsite_number@
 <p />
