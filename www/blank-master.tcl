@@ -81,6 +81,21 @@ set doc(lang) [ad_conn language]
 # AG: Markup in <title> tags doesn't render well.
 set doc(title) [ns_striphtml $doc(title)]
 
+# Determine if developer support is installed and enabled
+#
+set developer_support_p [expr {
+    [llength [info procs ::ds_show_p]] == 1 && [ds_show_p]
+}]
+
+if {$developer_support_p} {
+    template::head::add_css \
+        -href "/resources/acs-developer-support/acs-developer-support.css" \
+        -media "all"
+ 
+    template::add_header -src "/packages/acs-developer-support/lib/toolbar"
+    template::add_footer -src "/packages/acs-developer-support/lib/footer"
+}
+
 # Generate the <meta /> tag multirow
 variable ::template::head::metas
 template::multirow create meta name content http_equiv scheme lang

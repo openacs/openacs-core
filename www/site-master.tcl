@@ -124,20 +124,3 @@ if {[lang::util::translator_mode_p]} {
     template::add_footer -src "/packages/acs-lang/lib/messages-to-translate"
 }
 
-# DRB: Devsup and dotlrn toolbars moved here temporarily until we rewrite 
-#  things so packages can push tool bars up to the blank master.
-#
-# Determine if developer support is installed and enabled
-#
-set developer_support_p [expr {
-    [llength [info procs ::ds_show_p]] == 1 && [ds_show_p]
-}]
-
-if {$developer_support_p} {
-    template::head::add_css \
-        -href "/resources/acs-developer-support/acs-developer-support.css" \
-        -media "all"
- 
-    template::add_header -src "/packages/acs-developer-support/lib/toolbar"
-    template::add_footer -src "/packages/acs-developer-support/lib/footer"
-}
