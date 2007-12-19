@@ -124,21 +124,6 @@ if {[lang::util::translator_mode_p]} {
     template::add_footer -src "/packages/acs-lang/lib/messages-to-translate"
 }
 
-#
-# Determine if we should be displaying the dotLRN toolbar
-#
-set dotlrn_toolbar_p [expr {
-    [llength [namespace eval :: info procs dotlrn_toolbar::show_p]] == 1
-}]
-
-if {$dotlrn_toolbar_p} {
-    template::head::add_css \
-        -href "/resources/dotlrn/dotlrn-toolbar.css" \
-        -media "all"
-
-    template::add_header -src "/packages/dotlrn/lib/toolbar"
-}
- 
 # DRB: Devsup and dotlrn toolbars moved here temporarily until we rewrite 
 #  things so packages can push tool bars up to the blank master.
 #
