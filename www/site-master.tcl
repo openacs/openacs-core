@@ -17,93 +17,12 @@ ad_page_contract {
   $Id$
 }
 
-if {![info exists doc(title)] || $doc(title) eq ""} {
-    set doc(title) [ad_conn instance_name]
-
-    # There is no way to determine the language of instance_name so we guess
-    # that it is the same as the site wide locale setting - if not this must
-    # be overridden
-    set doc(title_lang) [lindex [split [lang::system::site_wide_locale] _] 0]
-}
-
-
 #
-# Add standard meta tags
-#
-template::head::add_meta \
-    -name generator \
-    -lang en \
-    -content "OpenACS version [ad_acs_version]"
-    
-#
-# Add standard css
+# Add Site-Wide CSS
 #
 template::head::add_css \
     -href "/resources/acs-subsite/site-master.css" \
     -media "all"
-
-template::head::add_css \
-    -href "/resources/acs-templating/lists.css" \
-    -media "all"
-
-template::head::add_css \
-    -href "/resources/acs-templating/forms.css" \
-    -media "all"
-
-# Add standard javascript
-#
-template::head::add_javascript -src "/resources/acs-subsite/core.js"
-
-#
-# Temporary (?) fix to get xinha working
-#
-if {[info exists ::acs_blank_master(xinha)]} {
-  set ::xinha_dir /resources/acs-templating/xinha-nightly/
-  set ::xinha_lang [lang::conn::language]
-  #
-  # Xinha localization covers 33 languages, removing
-  # the following restriction should be fine.
-  #
-  #if {$::xinha_lang ne "en" && $::xinha_lang ne "de"} {
-  #  set ::xinha_lang en
-  #}
-
-  # We could add site wide Xinha configurations (.js code) into xinha_params
-  set xinha_params ""
-
-  # Per call configuration
-  set xinha_plugins $::acs_blank_master(xinha.plugins)
-  set xinha_options $::acs_blank_master(xinha.options)
-  
-  # HTML ids of the textareas used for Xinha
-  set htmlarea_ids '[join $::acs_blank_master__htmlareas "','"]'
-  
-  template::head::add_script -type text/javascript -script "
-         xinha_editors = null;
-         xinha_init = null;
-         xinha_config = null;
-         xinha_plugins = null;
-         xinha_init = xinha_init ? xinha_init : function() {
-            xinha_plugins = xinha_plugins ? xinha_plugins : 
-              \[$xinha_plugins\];
-
-            // THIS BIT OF JAVASCRIPT LOADS THE PLUGINS, NO TOUCHING  
-            if(!Xinha.loadPlugins(xinha_plugins, xinha_init)) return;
-
-            xinha_editors = xinha_editors ? xinha_editors :\[ $htmlarea_ids \];
-            xinha_config = xinha_config ? xinha_config() : new Xinha.Config();
-            $xinha_params
-            $xinha_options
-            xinha_editors = 
-                 Xinha.makeEditors(xinha_editors, xinha_config, xinha_plugins);
-            Xinha.startEditors(xinha_editors);
-         }
-         //window.onload = xinha_init;
-      "
-
-  template::add_body_handler -event onload -script "xinha_init();"
-  template::head::add_javascript -src ${::xinha_dir}XinhaCore.js
-}
 
 #
 # Fire subsite callbacks to get header content
@@ -118,9 +37,4 @@ foreach onload_handler $onload_handlers {
    template::add_body_handler -event onload -script $onload_handler
 }
 
-# Determine if we should be displaying the translation UI
-#
-if {[lang::util::translator_mode_p]} {
-    template::add_footer -src "/packages/acs-lang/lib/messages-to-translate"
-}
 

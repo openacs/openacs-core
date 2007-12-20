@@ -63,10 +63,91 @@ if {[template::util::is_nil doc(type)]} {
     set doc(type) {<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">}
 }
 
+#
+# Add standard meta tags
+#
+template::head::add_meta \
+    -name generator \
+    -lang en \
+    -content "OpenACS version [ad_acs_version]"
+    
+# Add standard javascript
+#
+template::head::add_javascript -src "/resources/acs-subsite/core.js"
+
+# The following (forms, list and xinha) should
+# be done in acs-templating.
+
+#
+# Add standard css
+#
+template::head::add_css \
+    -href "/resources/acs-templating/lists.css" \
+    -media "all"
+
+template::head::add_css \
+    -href "/resources/acs-templating/forms.css" \
+    -media "all"
+
+#
+# Temporary (?) fix to get xinha working
+#
+if {[info exists ::acs_blank_master(xinha)]} {
+  set ::xinha_dir /resources/acs-templating/xinha-nightly/
+  set ::xinha_lang [lang::conn::language]
+  #
+  # Xinha localization covers 33 languages, removing
+  # the following restriction should be fine.
+  #
+  #if {$::xinha_lang ne "en" && $::xinha_lang ne "de"} {
+  #  set ::xinha_lang en
+  #}
+
+  # We could add site wide Xinha configurations (.js code) into xinha_params
+  set xinha_params ""
+
+  # Per call configuration
+  set xinha_plugins $::acs_blank_master(xinha.plugins)
+  set xinha_options $::acs_blank_master(xinha.options)
+  
+  # HTML ids of the textareas used for Xinha
+  set htmlarea_ids '[join $::acs_blank_master__htmlareas "','"]'
+  
+  template::head::add_script -type text/javascript -script "
+         xinha_editors = null;
+         xinha_init = null;
+         xinha_config = null;
+         xinha_plugins = null;
+         xinha_init = xinha_init ? xinha_init : function() {
+            xinha_plugins = xinha_plugins ? xinha_plugins : 
+              \[$xinha_plugins\];
+
+            // THIS BIT OF JAVASCRIPT LOADS THE PLUGINS, NO TOUCHING  
+            if(!Xinha.loadPlugins(xinha_plugins, xinha_init)) return;
+
+            xinha_editors = xinha_editors ? xinha_editors :\[ $htmlarea_ids \];
+            xinha_config = xinha_config ? xinha_config() : new Xinha.Config();
+            $xinha_params
+            $xinha_options
+            xinha_editors = 
+                 Xinha.makeEditors(xinha_editors, xinha_config, xinha_plugins);
+            Xinha.startEditors(xinha_editors);
+         }
+         //window.onload = xinha_init;
+      "
+
+  template::add_body_handler -event onload -script "xinha_init();"
+  template::head::add_javascript -src ${::xinha_dir}XinhaCore.js
+}
+
+
 if {![info exists doc(title)]} {
     set doc(title) "[ad_conn instance_name]"
     ns_log warning "[ad_conn url] has no doc(title) set."
 }
+# AG: Markup in <title> tags doesn't render well.
+set doc(title) [ns_striphtml $doc(title)]
+
 if {[template::util::is_nil doc(charset)]} {
     set doc(charset) [ns_config ns/parameters OutputCharset [ad_conn charset]]
 }
@@ -78,8 +159,11 @@ if {[template::util::is_nil doc(charset)]} {
 # of the page.  Otherwise we are lying to the browser.
 set doc(lang) [ad_conn language]
 
-# AG: Markup in <title> tags doesn't render well.
-set doc(title) [ns_striphtml $doc(title)]
+# Determine if we should be displaying the translation UI
+#
+if {[lang::util::translator_mode_p]} {
+    template::add_footer -src "/packages/acs-lang/lib/messages-to-translate"
+}
 
 # Determine if developer support is installed and enabled
 #
@@ -221,16 +305,16 @@ variable ::template::headers
 set header ""
 if {[info exists headers]} {
     foreach header_list $headers {
-	set type [lindex $header_list 0]
-	set src [lindex $header_list 1]
-	set params [lindex $header_list 2]
+    set type [lindex $header_list 0]
+    set src [lindex $header_list 1]
+    set params [lindex $header_list 2]
         if {$type eq "literal"} {
             append header $src
         } elseif {$type eq "include"} {
-	    set adp_html  [template::adp_include $src $params]
-	    if {$adp_html ne ""} {
-		append header $adp_html
-	    }
+            set adp_html  [template::adp_include $src $params]
+            if {$adp_html ne ""} {
+                append header $adp_html
+            }
         }
     }
   unset headers
@@ -241,16 +325,16 @@ variable ::template::footers
 set footer ""
 if {[info exists footers]} {
     foreach footer_list $footers {
-	set type [lindex $footer_list 0]
-	set src [lindex $footer_list 1]
-	set params [lindex $footer_list 2]
+    set type [lindex $footer_list 0]
+    set src [lindex $footer_list 1]
+    set params [lindex $footer_list 2]
         if {$type eq "literal"} {
             append footer $src
         } else {
-	    set adp_html  [template::adp_include $src $params]
-	    if {$adp_html ne ""} {
-		lappend footer
-	    }
+            set adp_html  [template::adp_include $src $params]
+            if {$adp_html ne ""} {
+                append footer $adp_html
+            }
         }
     }
   unset footers
