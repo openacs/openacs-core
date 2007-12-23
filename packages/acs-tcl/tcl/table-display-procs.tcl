@@ -60,7 +60,7 @@ proc_doc ad_dimensional {option_list {url {}} {options_set ""} {optionstype url}
     append html "<table border=\"0\" cellspacing=\"0\" cellpadding=\"3\" width=\"100%\">\n<tr>\n"
 
     foreach option $option_list { 
-        append html " <th bgcolor=\"#ECECEC\">[lindex $option 1]</th>\n"
+        append html " <th style=\"background-color: #ECECEC\">[lindex $option 1]</th>\n"
     }
     append html "</tr>\n"
 
