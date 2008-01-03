@@ -27,7 +27,7 @@ lappend elements grantee_name {
           @permissions.grantee_name@
         </if>
         <else>
-          <font color="gray">@permissions.grantee_name@</font>
+          <span style="color: gray">@permissions.grantee_name@</span>
         </else>
     }
 }
