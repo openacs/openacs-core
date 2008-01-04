@@ -151,7 +151,7 @@ ad_proc -public template::head::add_meta {
         error "You must supply either -http_equiv or -name."
     }
 
-    set scripts($http_equiv,$name) [list \
+    set metas($http_equiv,$name) [list \
         $http_equiv \
         $name \
         $scheme \
@@ -432,5 +432,168 @@ ad_proc -public template::add_footer {
       }
     } else {
       set footers [list $values]
+    }
+}
+
+ad_proc template::head::prepare_multirows {} {
+    Generate multirows for meta, css, scripts
+    Called only from blank-master.tcl
+} {
+
+    # Generate the <meta /> tag multirow
+    variable ::template::head::metas
+    template::multirow create meta name content http_equiv scheme lang
+    if {[array exists metas]} {
+        foreach name [array names metas] {
+            foreach {http_equiv name scheme content lang} $metas($name) {
+                template::multirow append meta \
+                    $name \
+                    $content \
+                    $http_equiv \
+                    $scheme \
+                    $lang
+            }
+        }
+        unset metas
+    }
+
+    # Generate the <link /> tag multirow
+    variable ::template::head::links
+    template::multirow create link rel type href title lang media
+    if {[array exists links]} {
+        foreach name [array names links] {
+            foreach {rel href type media title lang} $links($name) {
+                template::multirow append link \
+                    $rel \
+                    $type \
+                    $href \
+                    $title \
+                    $lang \
+                    $media
+            }
+        }
+        unset links
+    }
+
+    # Generate the <style /> tag multirow 
+    variable ::template::head::styles
+    template::multirow create ___style type title lang media style
+    if {[array exists styles]} {
+        foreach name [array names styles] {
+            foreach {type media title lang style} $styles($name) {
+                template::multirow append ___style \
+                    $type \
+                    $title \
+                    $lang \
+                    $media \
+                    $style
+            }
+        }
+        unset styles
+    }
+
+    # Generate the head <script /> tag multirow
+    variable ::template::head::scripts
+    template::multirow create headscript type src charset defer content
+    if {[array exists scripts]} {
+        foreach name [array names scripts] {
+            foreach {type src charset defer content order} $scripts($name) {
+                template::multirow append headscript \
+                    $type \
+                    $src \
+                    $charset \
+                    $defer \
+                    $content
+            }
+        }
+        unset scripts
+    }
+
+    # Generate the body <script /> tag multirow
+    variable ::template::body_scripts
+    template::multirow create body_script type src charset defer content
+    if {[info exists body_scripts]} {
+        foreach {type src charset script defer} $body_scripts {
+            template::multirow append body_script \
+                $type \
+                $src \
+                $charset \
+                $defer \
+                $content
+        }
+        unset body_scripts
+    }
+
+    # Concatenate the javascript event handlers for the body tag
+    variable ::template::body_handlers
+    if {[array exists body_handlers]} {
+
+        foreach name [array names body_handlers] {
+            set event [lindex [split $name ","] 0]
+            # ns_log notice "event $event name $name JS !!!$body_handlers($name)!!!"
+            foreach javascript $body_handlers($name) {
+                lappend body_handlers($event) "[string trimright $javascript {; }];"
+            }
+            unset body_handlers($name)
+        }
+
+        # Now create the event handlers string
+        foreach {event script} [array get body_handlers] {
+            append event_handlers " " $event = \" [join $script { }] \"
+        }
+        unset body_handlers
+    }
+}
+
+ad_proc template::head::get_header_html {
+} {
+    Get headers as a chunk of html suitable for insertion into blank-master.adp
+    Called only from blank-master.tcl
+} {
+    # Generate the body headers
+    variable ::template::headers
+    set header ""
+    if {[info exists headers]} {
+        foreach header_list $headers {
+            set type [lindex $header_list 0]
+            set src [lindex $header_list 1]
+            set params [lindex $header_list 2]
+            if {$type eq "literal"} {
+                append header $src
+            } elseif {$type eq "include"} {
+                set adp_html  [template::adp_include $src $params]
+                if {$adp_html ne ""} {
+                    append header $adp_html
+                }
+            }
+        }
+        unset headers
+    }
+    return $header
+}
+
+ad_proc template::head::get_footer_html {
+} {
+    Get footers as a chunk of html suitable for insertion into blank-master.adp
+    Called only from blank-master.tcl
+} {
+    # Generate the body footers
+    variable ::template::footers
+    set footer ""
+    if {[info exists footers]} {
+        foreach footer_list $footers {
+            set type [lindex $footer_list 0]
+            set src [lindex $footer_list 1]
+            set params [lindex $footer_list 2]
+            if {$type eq "literal"} {
+                append footer $src
+            } else {
+                set adp_html  [template::adp_include $src $params]
+                if {$adp_html ne ""} {
+                    append footer $adp_html
+                }
+            }
+        }
+        unset footers
     }
 }
