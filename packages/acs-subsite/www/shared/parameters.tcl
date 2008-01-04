@@ -51,7 +51,7 @@ if {$section ne ""} {
 array set sections {}
 
 db_foreach select_params {} {
-    if { $section_name ne "" } {
+    if { $section_name eq "" } {
         set section_name "main"
 		set section_pretty "Main"
     } else {
