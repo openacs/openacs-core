@@ -152,6 +152,10 @@ if {[template::util::is_nil doc(charset)]} {
     set doc(charset) [ns_config ns/parameters OutputCharset [ad_conn charset]]
 }
 
+template::head::add_meta \
+    -content "text/html; charset=$doc(charset)" \
+    -http_equiv "content-type"
+
 # The document language is always set from [ad_conn lang] which by default 
 # returns the language setting for the current user.  This is probably
 # not a bad guess, but the rest of OpenACS must override this setting when
@@ -180,95 +184,6 @@ if {$developer_support_p} {
     template::add_footer -src "/packages/acs-developer-support/lib/footer"
 }
 
-# Generate the <meta /> tag multirow
-variable ::template::head::metas
-template::multirow create meta name content http_equiv scheme lang
-template::multirow append meta \
-    "" \
-    "text/html; charset=$doc(charset)" \
-    "content-type"
-
-if {[array exists metas]} {
-    foreach name [array names metas] {
-        foreach {http_equiv name scheme content lang} $metas($name) {
-            template::multirow append meta \
-                $name \
-                $content \
-                $http_equiv \
-                $scheme \
-                $lang
-        }
-    }
-  unset metas
-}
-
-# Generate the <link /> tag multirow
-variable ::template::head::links
-template::multirow create link rel type href title lang media
-if {[array exists links]} {
-    foreach name [array names links] {
-        foreach {rel href type media title lang} $links($name) {
-            template::multirow append link \
-                $rel \
-                $type \
-                $href \
-                $title \
-                $lang \
-                $media
-        }
-    }
-  unset links
-}
-
-# Generate the <style /> tag multirow 
-variable ::template::head::styles
-template::multirow create ___style type title lang media style
-if {[array exists styles]} {
-    foreach name [array names styles] {
-        foreach {type media title lang style} $styles($name) {
-            template::multirow append ___style \
-                $type \
-                $title \
-                $lang \
-                $media \
-                $style
-        }
-    }
-  unset styles
-}
-
-# Generate the head <script /> tag multirow
-variable ::template::head::scripts
-template::multirow create headscript type src charset defer content
-if {[array exists scripts]} {
-    foreach name [array names scripts] {
-        foreach {type src charset defer content order} $scripts($name) {
-            template::multirow append headscript \
-                $type \
-                $src \
-                $charset \
-                $defer \
-                $content
-        }
-    }
-  unset scripts
-}
-
-# Generate the body <script /> tag multirow
-variable ::template::body_scripts
-template::multirow create body_script type src charset defer content
-if {[info exists body_scripts]} {
-    foreach {type src charset script defer} $body_scripts {
-        template::multirow append body_script \
-            $type \
-            $src \
-            $charset \
-            $defer \
-            $content
-    }
-  unset body_scripts
-}
-
 if {[info exists focus] && $focus ne ""} {
     # Handle elements where the name contains a dot
     if { [regexp {^([^.]*)\.(.*)$} $focus match form_name element_name] } {
@@ -280,62 +195,6 @@ if {[info exists focus] && $focus ne ""} {
     }
 }
 
-# Concatenate the javascript event handlers for the body tag
-variable ::template::body_handlers
-if {[array exists body_handlers]} {
-
-    foreach name [array names body_handlers] {
-        set event [lindex [split $name ","] 0]
-        # ns_log notice "event $event name $name JS !!!$body_handlers($name)!!!"
-        foreach javascript $body_handlers($name) {
-            lappend body_handlers($event) "[string trimright $javascript {; }];"
-        }
-        unset body_handlers($name)
-     }
-
-    # Now create the event handlers string
-    foreach {event script} [array get body_handlers] {
-        append event_handlers " " $event = \" [join $script { }] \"
-    }
-    unset body_handlers
-}
-
-# Generate the body headers
-variable ::template::headers
-set header ""
-if {[info exists headers]} {
-    foreach header_list $headers {
-    set type [lindex $header_list 0]
-    set src [lindex $header_list 1]
-    set params [lindex $header_list 2]
-        if {$type eq "literal"} {
-            append header $src
-        } elseif {$type eq "include"} {
-            set adp_html  [template::adp_include $src $params]
-            if {$adp_html ne ""} {
-                append header $adp_html
-            }
-        }
-    }
-  unset headers
-}
-
-# Generate the body footers
-variable ::template::footers
-set footer ""
-if {[info exists footers]} {
-    foreach footer_list $footers {
-    set type [lindex $footer_list 0]
-    set src [lindex $footer_list 1]
-    set params [lindex $footer_list 2]
-        if {$type eq "literal"} {
-            append footer $src
-        } else {
-            set adp_html  [template::adp_include $src $params]
-            if {$adp_html ne ""} {
-                append footer $adp_html
-            }
-        }
-    }
-  unset footers
-}
+template::head::prepare_multirows
+set header [template::head::get_header_html]
+set footer [template::head::get_footer_html]
