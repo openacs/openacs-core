@@ -560,11 +560,8 @@ ad_proc template::head::get_header_html {
             set params [lindex $header_list 2]
             if {$type eq "literal"} {
                 append header $src
-            } elseif {$type eq "include"} {
-                set adp_html  [template::adp_include $src $params]
-                if {$adp_html ne ""} {
-                    append header $adp_html
-                }
+            } else {
+                set header [template::adp_include $src $params]
             }
         }
         unset headers
@@ -588,12 +585,10 @@ ad_proc template::head::get_footer_html {
             if {$type eq "literal"} {
                 append footer $src
             } else {
-                set adp_html  [template::adp_include $src $params]
-                if {$adp_html ne ""} {
-                    append footer $adp_html
-                }
+                append footer [template::adp_include $src $params]
             }
         }
         unset footers
     }
 }
+
