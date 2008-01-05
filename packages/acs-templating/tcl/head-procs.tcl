@@ -561,7 +561,7 @@ ad_proc template::head::get_header_html {
             if {$type eq "literal"} {
                 append header $src
             } else {
-                set header [template::adp_include $src $params]
+                append header [template::adp_include $src $params]
             }
         }
         unset headers
