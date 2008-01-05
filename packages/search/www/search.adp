@@ -62,62 +62,41 @@
         </div>
   </else>
 
-
-        <if @results_paginator:rowcount@ gt 1>
-          <div id="results-pages" class="list-paginator-bottom">
-
-          <ul class="compact list-paginator">
-            <li>#search.Result_page#</li>
-            <if @from_result_page@ lt @current_result_page@>
-              <li><a href="@url_previous@">#search.Previous#</a></li>
-            </if>
-
-            <multiple name="results_paginator">
-              <if @current_result_page@ eq @results_paginator.item@>
-                <li class="current">@results_paginator.item@</li>
-              </if>
-              <else>
-                <li><a href="@results_paginator.link@">@results_paginator.item@</a></li>
-              </else>
-            </multiple>
-            <if @current_result_page@ lt @to_result_page@>
-              <li><a href="@url_next@">#search.Next#</a></li>
-            </if>
-          </ul>
-        </div>
-      </if>
+  <include src="/packages/search/lib/navbar" &="urlencoded_query"
+    paginator_class="list-paginator-bottom" count="@result.count@" &="low" &="high"
+    &="offset" &="num" &="search_package_id">
 
 <if @count@ gt 0>
-    <div style="text-align:center">
-      <form method="get" action="search">
-        <div>
-        <input type="text" name="q" size="60" maxlength="256" value="@query@">
-        <input type="submit" value="#search.Search#">
-        </div>
-      </form>
-      <if @t@ eq "Search">
-        <i>#search.lt_Tip_In_most_browsers_#</i>
-      </if>
-    </div>
+<div style="text-align:center">
+<form method="get" action="search">
+<div>
+<input type="text" name="q" size="60" maxlength="256" value="@query@">
+<input type="submit" value="#search.Search#">
+</div>
+</form>
+<if @t@ eq "Search">
+<i>#search.lt_Tip_In_most_browsers_#</i>
+</if>
+</div>
 
-    <if @stw@ not nil>
-      <p style="text-align:center;font-size=-1">#search.lt_Try_your_query_on_stw#</p>
-    </if>
+<if @stw@ not nil>
+<p style="text-align:center;font-size=-1">#search.lt_Try_your_query_on_stw#</p>
+</if>
 </if>
 </else>
 
-    <if @and_queries_notice_p@ eq 1>
-      <p class="hint">#search.and_not_needed# [<a href="help/basics#and">#search.details#</a>]</p>
-    </if>
-    <if @nstopwords@ eq 1>
-      <p class="hint">#search.lt_bstopwordsb_is_a_very# [<a href="help/basics#stopwords">#search.details#</a>]</p>
-    </if>
-    <if @nstopwords@ gt 1>
-      <p class="hint">#search.lt_The_following_words_a# [<a href="help/basics#stopwords">#search.details#</a>]</p>
-    </if>
-    
-    <if @debug_p@>
-      <p>#search.Searched_for_query#</p>
-      <p>#search.Results_count#</p>
-    </if>
+<if @and_queries_notice_p@ eq 1>
+<p class="hint">#search.and_not_needed# [<a href="help/basics#and">#search.details#</a>]</p>
+</if>
+<if @nstopwords@ eq 1>
+<p class="hint">#search.lt_bstopwordsb_is_a_very# [<a href="help/basics#stopwords">#search.details#</a>]</p>
+</if>
+<if @nstopwords@ gt 1>
+<p class="hint">#search.lt_The_following_words_a# [<a href="help/basics#stopwords">#search.details#</a>]</p>
+</if>
+
+<if @debug_p@>
+<p>#search.Searched_for_query#</p>
+<p>#search.Results_count#</p>
+</if>
 
