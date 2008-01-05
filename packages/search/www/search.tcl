@@ -182,35 +182,6 @@ for { set __i 0 } { $__i < [expr {$high - $low +1}] } { incr __i } {
     template::multirow append searchresult $title_summary $txt_summary $url_one
 }
 
-
-set from_result_page 1
-set current_result_page [expr ($low / $limit) + 1]
-set to_result_page [expr {ceil(double($result(count)) / double($limit))}]
-
-set url_previous ""
-set url_next ""
-append url_previous "search?q=${urlencoded_query}&search_package_id=$search_package_id"
-append url_next "search?q=${urlencoded_query}&search_package_id=$search_package_id"
-if { [expr {$current_result_page - 1}] > $from_result_page } { 
-    append url_previous "&offset=[expr ($current_result_page - 2) * $limit]"
-}
-if { $current_result_page < $to_result_page } { 
-    append url_next "&offset=[expr {$current_result_page * $limit}]"
-}
-if { $num > 0 } {
-    append url_previous "&num=$num"
-    append url_next "&num=$num"
-}
-
-template::multirow create results_paginator item link
-for { set __i $from_result_page } { $__i <= $to_result_page} { incr __i } {
-    set link "search?q=${urlencoded_query}&search_package_id=$search_package_id"
-    if { $__i > 1 } { append link "&offset=[expr ($__i - 1) * $limit]" }
-    if { $num > 0 } { append link "&num=$num" }
-
-    template::multirow append results_paginator $__i $link
-}
-
 set search_the_web [ad_parameter -package_id $package_id SearchTheWeb]
 if {[llength $search_the_web]} {
     set stw ""
