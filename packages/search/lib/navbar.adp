@@ -1,4 +1,4 @@
-<if @results_paginator:rowcount@ gt 1>
+<if @results_paginator:rowcount@ gt 0>
   <div id="results-pages" class="@paginator_class@">
     <ul class="compact list-paginator">
       <if @url_previous_group@ nil>
