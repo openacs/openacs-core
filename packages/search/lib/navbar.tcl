@@ -43,8 +43,7 @@ if { $current_result_page < $last_result_page } {
 template::multirow create results_paginator item link current_p
 for { set __i $from_result_page } { $__i <= $to_result_page} { incr __i } {
     set link "search?q=${urlencoded_query}&search_package_id=$search_package_id"
-    if { $__i > 1 } { append link "&offset=[expr {$__i * $limit}]" }
-    if { $num > 0 } { append link "&num=$num" }
-
+    append link "&offset=[expr {$__i * $limit}]"
+    append link "&num=$num"
     template::multirow append results_paginator [expr {$__i + 1}] $link [expr {$__i == $current_result_page}]
 }
