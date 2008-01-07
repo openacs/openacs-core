@@ -461,10 +461,10 @@ ad_proc template::head::prepare_multirows {} {
     variable ::template::head::links
     template::multirow create link rel type href title lang media
     if {[array exists links]} {
-        # first media = "screen"
+        # first media = "all"
         foreach name [array names links] {
             foreach {rel href type media title lang} $links($name) {
-                if {$media eq "screen" && $rel ne "alternate stylesheet"} {
+                if {$media eq "all" && $rel ne "alternate stylesheet"} {
                     template::multirow append link \
                         $rel \
                         $type \
@@ -476,7 +476,7 @@ ad_proc template::head::prepare_multirows {} {
                 }
             }
         }
-        # then media != "screen"
+        # then media != "all"
         foreach name [array names links] {
             foreach {rel href type media title lang} $links($name) {
                 if {$rel ne "alternate stylesheet" && $links($name) ne ""} {
@@ -494,7 +494,7 @@ ad_proc template::head::prepare_multirows {} {
         # now alternate stylesheet, prioritize media = "screen"
         foreach name [array names links] {
             foreach {rel href type media title lang} $links($name) {
-                if {$media eq "screen" && $links($name) ne ""} {
+                if {$media eq "all" && $links($name) ne ""} {
                     template::multirow append link \
                         $rel \
                         $type \
