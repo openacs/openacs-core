@@ -461,15 +461,64 @@ ad_proc template::head::prepare_multirows {} {
     variable ::template::head::links
     template::multirow create link rel type href title lang media
     if {[array exists links]} {
+        # first media = "screen"
         foreach name [array names links] {
             foreach {rel href type media title lang} $links($name) {
-                template::multirow append link \
-                    $rel \
-                    $type \
-                    $href \
-                    $title \
-                    $lang \
-                    $media
+                if {$media eq "screen" && $rel ne "alternate stylesheet"} {
+                    template::multirow append link \
+                        $rel \
+                        $type \
+                        $href \
+                        $title \
+                        $lang \
+                        $media
+                    set links($name) ""
+                }
+            }
+        }
+        # then media != "screen"
+        foreach name [array names links] {
+            foreach {rel href type media title lang} $links($name) {
+                if {$rel ne "alternate stylesheet" && $links($name) ne ""} {
+                    template::multirow append link \
+                        $rel \
+                        $type \
+                        $href \
+                        $title \
+                        $lang \
+                        $media
+                    set links($name) ""
+                }
+            }
+        }
+        # now alternate stylesheet, prioritize media = "screen"
+        foreach name [array names links] {
+            foreach {rel href type media title lang} $links($name) {
+                if {$media eq "screen" && $links($name) ne ""} {
+                    template::multirow append link \
+                        $rel \
+                        $type \
+                        $href \
+                        $title \
+                        $lang \
+                        $media
+                    set links($name) ""
+                }
+            }
+        }
+        # now alternate stylesheets, media other than screen
+        # plus any other links
+        foreach name [array names links] {
+            foreach {rel href type media title lang} $links($name) {
+                if {$links($name) ne ""} {
+                    template::multirow append link \
+                        $rel \
+                        $type \
+                        $href \
+                        $title \
+                        $lang \
+                        $media
+                }
             }
         }
         unset links
