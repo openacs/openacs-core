@@ -642,3 +642,28 @@ ad_proc template::get_footer_html {
     return $footer
 }
 
+ad_proc template::get_body_event_handlers {
+} {
+    Get body event handlers specified with template::add_body_handler
+} {
+    # Concatenate the javascript event handlers for the body tag
+    variable ::template::body_handlers
+    if {[array exists body_handlers]} {
+        
+        foreach name [array names body_handlers] {
+            set event [lindex [split $name ","] 0]
+            # ns_log notice "event $event name $name JS !!!$body_handlers($name)!!!"
+            foreach javascript $body_handlers($name) {
+                lappend body_handlers($event) "[string trimright $javascript {; }];"
+            }
+            unset body_handlers($name)
+        }
+        
+        # Now create the event handlers string
+        foreach {event script} [array get body_handlers] {
+            append event_handlers " " $event = \" [join $script { }] \"
+        }
+        unset body_handlers
+    }
+    return $event_handlers
+}
