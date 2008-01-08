@@ -594,7 +594,7 @@ ad_proc template::head::prepare_multirows {} {
     }
 }
 
-ad_proc template::head::get_header_html {
+ad_proc template::get_header_html {
 } {
     Get headers as a chunk of html suitable for insertion into blank-master.adp
     Called only from blank-master.tcl
@@ -618,7 +618,7 @@ ad_proc template::head::get_header_html {
     return $header
 }
 
-ad_proc template::head::get_footer_html {
+ad_proc template::get_footer_html {
 } {
     Get footers as a chunk of html suitable for insertion into blank-master.adp
     Called only from blank-master.tcl
@@ -639,5 +639,6 @@ ad_proc template::head::get_footer_html {
         }
         unset footers
     }
+    return $footer
 }
 
