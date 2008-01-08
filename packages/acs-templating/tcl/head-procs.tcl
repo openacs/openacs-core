@@ -573,25 +573,6 @@ ad_proc template::head::prepare_multirows {} {
         unset body_scripts
     }
 
-    # Concatenate the javascript event handlers for the body tag
-    variable ::template::body_handlers
-    if {[array exists body_handlers]} {
-
-        foreach name [array names body_handlers] {
-            set event [lindex [split $name ","] 0]
-            # ns_log notice "event $event name $name JS !!!$body_handlers($name)!!!"
-            foreach javascript $body_handlers($name) {
-                lappend body_handlers($event) "[string trimright $javascript {; }];"
-            }
-            unset body_handlers($name)
-        }
-
-        # Now create the event handlers string
-        foreach {event script} [array get body_handlers] {
-            append event_handlers " " $event = \" [join $script { }] \"
-        }
-        unset body_handlers
-    }
 }
 
 ad_proc template::get_header_html {
@@ -648,6 +629,7 @@ ad_proc template::get_body_event_handlers {
 } {
     # Concatenate the javascript event handlers for the body tag
     variable ::template::body_handlers
+    set event_handlers ""
     if {[array exists body_handlers]} {
         
         foreach name [array names body_handlers] {
@@ -665,5 +647,6 @@ ad_proc template::get_body_event_handlers {
         }
         unset body_handlers
     }
+
     return $event_handlers
 }
