@@ -217,5 +217,5 @@ if {[array exists body_handlers]} {
 
 # Retrieve headers and footers
 template::head::prepare_multirows
-set header [template::head::get_header_html]
-set footer [template::head::get_footer_html]
+set header [template::get_header_html]
+set footer [template::get_footer_html]
