@@ -386,10 +386,10 @@ namespace eval acs_mail_lite {
         mime::setheader $multi_token "message-id" "[mime::uniqueID]"
         
         # Set the date
-        mime::setheader $multi_token date [build_date]
+        mime::setheader $multi_token date [acs_mail_lite::utils::build_date]
 
         # Set the subject
-        mime::setheader $multi_token Subject [build_subject $subject]
+        mime::setheader $multi_token Subject [acs_mail_lite::utils::build_subject $subject]
 
         foreach header $extraheaders {
             mime::setheader $multi_token "[lindex $header 0]" "[lindex $header 1]"
