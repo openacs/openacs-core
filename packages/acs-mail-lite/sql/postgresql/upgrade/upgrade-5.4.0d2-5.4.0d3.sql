@@ -17,6 +17,7 @@ alter table acs_mail_lite_queue
 
 -- Renamed columns
 alter table acs_mail_lite_queue rename column bcc to bcc_addr;
+alter table acs_mail_lite_queue rename column extra_headers to extraheaders;
 
 -- Column datatype changes
 alter table acs_mail_lite_queue 
