@@ -594,7 +594,7 @@ namespace eval acs_mail_lite {
                     set message_id [mime::uniqueID]
 
 
-                    if {[acs_mail_lite::valid_email_p $email]} {
+                    if {[acs_mail_lite::utils::valid_email_p $email]} {
                         acs_mail_lite::complex_smtp -multi_token $multi_token \
                             -headers [list [list From "$from_string"] [list Reply-To "$reply_to_string"] [list To "$email"]]
                         if { !$no_callback_p } {
@@ -619,7 +619,7 @@ namespace eval acs_mail_lite {
                 foreach party $recipient_list {
                     set message_id [mime::uniqueID]
                     set email [party::email_not_cached -party_id $party]
-                    if {[acs_mail_lite::valid_email_p -email $email]} {
+                    if {[acs_mail_lite::utils::valid_email_p -email $email]} {
                         set email "\"[party::name -party_id $party]\" <$email>"
                         
                         acs_mail_lite::complex_smtp -multi_token $multi_token \
@@ -756,21 +756,4 @@ namespace eval acs_mail_lite {
     	
     }
 
-    ad_proc -public valid_email_p {
-        {-email ""}
-    } {
-        Checks if the email is valid. Returns 1 if it is. Uses mime::parsemail to determine this
-    } {
-        array set test [lindex [mime::parseaddress "$email"] 0]
-        if {$email ne $test(proper)} {
-            regsub "\"" $test(proper) "" proper
-            if {$email ne $proper} {
-                return 0
-            } else {
-                return 1
-            }
-        } else {
-            return 1
-        }
-    }
 }
