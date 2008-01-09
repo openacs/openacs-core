@@ -228,7 +228,7 @@ namespace eval acs_mail_lite {
         array set rcpts $sendlist
         if {[info exists rcpts(email)]} {
             foreach rcpt $rcpts(email) rcpt_id $rcpts(user_id) rcpt_name $rcpts(name) {
-                if { $valid_email_p || ([acs_mail_lite::valid_email_p -email $rcpt] && ![bouncing_email_p -email $rcpt]) } {
+                if { $valid_email_p || ([acs_mail_lite::utils::valid_email_p -email $rcpt] && ![bouncing_email_p -email $rcpt]) } {
                     with_finally -code {
                         set sendmail [list [bounce_sendmail] "-f[bounce_address -user_id $rcpt_id -package_id $package_id -message_id $message_id]" "-t" "-i"]
                         
@@ -263,113 +263,46 @@ namespace eval acs_mail_lite {
 
     #---------------------------------------
     ad_proc -private smtp {
-        -from_addr:required
-        -sendlist:required
-        -msg:required
-        {-valid_email_p 0}
-        -message_id:required
-        -package_id:required
+        -multi_token:required
+        -headers:required
     } {
-        Sending mail through smtp.
-        @option from_addr mail sender
-        @option sendlist list of mail recipients
-        @option msg mail to be sent (subject, header, body)
-        @option valid_email_p flag if email needs to be checked if it's bouncing or
-        if calling code already made sure that the receiving email addresses
-        are not bouncing (this increases performance if mails are send in a batch process)
-        @option message_id message-id of the mail
-        @option package_id package_id of the sending package
-        (needed to call package-specific code to deal with bounces)
-    } { 
-        set smtp [ns_config ns/parameters smtphost]
-        if {$smtp eq ""} {
-            set smtp [ns_config ns/parameters mailhost]
-        }
+        Send messages via SMTP
+        
+        @param multi_token Multi Token generated which is passed directly to smtp::sendmessage
+        @param headers List of list of header key-value pairs like {{from malte@cognovis.de} {to malte@cognovis.de}}
+    } {
+
+        set mail_package_id [apm_package_id_from_key "acs-mail-lite"]
+
+        # Get the SMTP Parameters
+        set smtp [parameter::get -parameter "SMTPHost" \
+                      -package_id $mail_package_id -default [ns_config ns/parameters mailhost]]
         if {$smtp eq ""} {
             set smtp localhost
         }
-        set timeout [ns_config ns/parameters smtptimeout]
+
+        set timeout [parameter::get -parameter "SMTPTimeout" \
+                         -package_id $mail_package_id -default  [ns_config ns/parameters smtptimeout]]
         if {$timeout eq ""} {
             set timeout 60
         }
-        set smtpport [ns_config ns/parameters smtpport]
-        if {$smtpport eq ""} {
-            set smtpport 25
+
+        set smtpport [parameter::get -parameter "SMTPPort" \
+                          -package_id $mail_package_id -default 25]
+
+        set smtpuser [parameter::get -parameter "SMTPUser" \
+                          -package_id $mail_package_id]
+
+        set smtppassword [parameter::get -parameter "SMTPPassword" \
+                              -package_id $mail_package_id]
+        
+        set cmd_string "smtp::sendmessage $multi_token"     
+        foreach header $headers {
+            append cmd_string " -header {$header}"
         }
-        array set rcpts $sendlist
-        foreach rcpt $rcpts(email) rcpt_id $rcpts(user_id) rcpt_name $rcpts(name) {
-            if { $valid_email_p || ![bouncing_email_p -email $rcpt]} {
-                if {[acs_mail_lite::valid_email_p -email $rcpt]} {		   
-                    # add username if it exists
-                    if {$rcpt_name ne ""} {
-                        set pretty_to "$rcpt_name <$rcpt>"
-                    } else {
-                        set pretty_to $rcpt
-                    }
-                    
-                    set msg "From: $from_addr\r\nTo: $pretty_to\r\n$msg"
-                    set mail_from [bounce_address -user_id $rcpt_id -package_id $package_id -message_id $message_id]
-                    
-                    ## Open the connection
-                    set sock [ns_sockopen $smtp $smtpport]
-                    set rfp [lindex $sock 0]
-                    set wfp [lindex $sock 1]
-                    
-                    ## Perform the SMTP conversation
-                    with_finally -code {
-                        _ns_smtp_recv $rfp 220 $timeout
-                        _ns_smtp_send $wfp "HELO [ns_info hostname]" $timeout
-                        _ns_smtp_recv $rfp 250 $timeout
-                        _ns_smtp_send $wfp "MAIL FROM:<$mail_from>" $timeout
-                        _ns_smtp_recv $rfp 250 $timeout
-                        
-                        # By now we are sure that the server connection works, otherwise
-                        # we would have gotten an error already
-                        
-                        if {[catch {
-                            _ns_smtp_send $wfp "RCPT TO:<$rcpt>" $timeout
-                            _ns_smtp_recv $rfp 250 $timeout
-                        } errmsg]} {
-                            
-                            # This user has a problem with retrieving the email
-                            # Record this fact as a bounce e-mail
-                            if { $rcpt_id ne "" && ![bouncing_user_p -user_id $rcpt_id] } {
-                                ns_log Notice "acs-mail-lite: Bouncing email from user $rcpt_id due to $errmsg"
-                                # record the bounce in the database
-                                db_dml record_bounce {}
-                                
-                                if {![db_resultrows]} {
-                                    db_dml insert_bounce {}
-                                }
-                                
-                            }
-                            
-                            return
-                        }
-                        
-                        _ns_smtp_send $wfp DATA $timeout
-                        _ns_smtp_recv $rfp 354 $timeout
-                        _ns_smtp_send $wfp $msg $timeout
-                        _ns_smtp_recv $rfp 250 $timeout
-                        _ns_smtp_send $wfp QUIT $timeout
-                        _ns_smtp_recv $rfp 221 $timeout
-                        
-                    } -finally {
-                        ## Close the connection
-                        close $rfp
-                        close $wfp
-                    }
-                } else {
-                    # email is invalid
-                    ns_log Debug "Invalid E-Mail $rcpt"
-                    acs_mail_lite::record_bounce -email $rcpt
-                }
-            } else {
-                ns_log Debug "acs-mail-lite: Email bouncing from $rcpt, mail not sent and deleted from queue"
-            }
-            # log mail sending time
-            if {$rcpt_id ne ""} { log_mail_sending -user_id $rcpt_id }
-        }
+        append cmd_string " -servers $smtp -ports $smtpport -username $smtpuser -password $smtppassword"
+        ns_log Debug "send cmd_string: $cmd_string"
+        eval $cmd_string
     }
 
     #---------------------------------------
@@ -426,94 +359,76 @@ namespace eval acs_mail_lite {
         -from_addr:required
         {-subject ""}
         -body:required
-        {-extraheaders ""}
-        {-bcc ""}
+        {-mime_type "text/plain"}
+        {-cc_addr ""}
+        {-bcc_addr ""}
+        {-reply_to ""}
         {-package_id ""}
-        -no_callback:boolean
-    } {
-        Reliably send an email message.
-
-        @option send_immediately Switch that lets the mail send directly without adding it to the mail queue first.
-        @option valid_email Switch that avoids checking if the email to be mailed is not bouncing
-        @option to_addr List of mail-addresses or array of email,name,user_id containing lists of users to be mailed
-        @option from_addr mail sender
-        @option subject mail subject
-        @option body mail body
-        @option extraheaders extra mail headers in an ns_set
-        @option bcc see to_addr
-        @option package_id To be used for calling a package-specific proc when mail has bounced
-        @option no_callback_p Boolean that indicates if callback should be executed or not. If you don't provide it it will execute callbacks
-        @returns the Message-Id of the mail or an empty string if e-mail was discarded
+        -no_callback:boolean 
+        {-file_ids ""}
+        {-extraheaders ""}
+        -use_sender:boolean
     } {
 
-        ## Extract "from" email address
-        set from_addr [parse_email_address -email $from_addr]
+        Prepare an email to be send with the option to pass in a list
+        of file_ids as well as specify an html_body and a mime_type. It 
+        also supports multiple "TO" recipients as well as CC
+        and BCC recipients. Runs entirely off MIME and SMTP to achieve this. 
 
-        set from_party_id [party::get_by_email -email $from_addr] 
-        set to_party_id [party::get_by_email -email $to_addr] 
-        
-        ## Get address-array with email, name and user_id
-        set to_addr [get_address_array -addresses [string map {\n "" \r ""} $to_addr]]
-        if {$bcc ne ""} {
-            set bcc [get_address_array -addresses [string map {\n "" \r ""} $bcc]]
-        }
+        @param send_immediately The email is send immediately and not stored in the acs_mail_lite_queue
+        @param to_addr List of e-mail addresses to send this mail to.
 
-        if {$extraheaders ne ""} {
-            set eh_list [util_ns_set_to_list -set $extraheaders]
-        } else {
-            set eh_list ""
-        }
+        @param from_addr E-Mail address of the sender.
 
-        # Subject cannot contain newlines -- replace with spaces
-        regsub -all {\n} $subject { } subject
+        @param subject of the email
 
-        set message_id [generate_message_id]
-        lappend eh_list "Message-Id" $message_id
+        @param body Text body of the email
 
-        if {$package_id eq ""} {
-            if {[ad_conn -connected_p]} {
-                set package_id [ad_conn package_id]
-            } else {
-                set package_id ""
-            }
-        }
+        @param cc_addr List of CC Users e-mail addresses to send this mail to. 
 
-        # Subject can not be longer than 200 characters
-        if { [string length $subject] > 200 } {
-            set subject "[string range $subject 0 196]..."
-        }
+        @param bcc_addr List of CC Users e-mail addresses to send this mail to. 
+
+        @param package_id Package ID of the sending package
+
+        @param file_ids List of file ids (items or revisions) to be send as attachments. This will only work with files stored in the file system.
+
+        @param mime_type MIME Type of the mail to send out. Can be "text/plain", "text/html".
+
+        @param extraheaders List of keywords and their values passed in for headers. Interesting ones are: "Precedence: list" to disable autoreplies and mark this as a list message. This is as list of lists !!
+
+        @param no_callback Boolean that indicates if callback should be executed or not. If you don't provide it it will execute callbacks  
+
+        @param use_sender Boolean indicating that from_addr should be used regardless of fixed-sender parameter
+
+    } {
 
         # check, if send_immediately is set
         # if not, take global parameter
-        if {$send_immediately_p} {
-            set send_p $send_immediately_p
-        } else {
-            # if parameter is not set, get the global setting
-            set send_p [parameter::get_from_package_key -package_key "acs-mail-lite" -parameter "send_immediately" -default 0]
+        if { !$send_immediately_p } {
+            set send_immediately_p [parameter::get -package_id [get_package_id] -parameter "send_immediately" -default 0]
         }
 
-        if {$to_addr ne ""} {
-            # if send_p true, then start acs_mail_lite::send_immediately, so mail is not stored in the db before delivery
-            if { $send_p } {
-                acs_mail_lite::send_immediately -to_addr $to_addr -from_addr $from_addr -subject $subject -body $body -extraheaders $eh_list -bcc $bcc -valid_email_p $valid_email_p -package_id $package_id
-            } else {
-                # else, store it in the db and let the sweeper deliver the mail
-                db_dml create_queue_entry {}
-            }
-            
-            if { !$no_callback_p } {
-                callback acs_mail_lite::send \
-                    -package_id $package_id \
-                    -from_party_id $from_party_id \
-                    -to_party_id $to_party_id \
-                    -body $body \
-                    -message_id $message_id \
-                    -subject $subject
-            }
-            
-            return $message_id
+        # if send_immediately_p true, then start acs_mail_lite::send_immediately, so mail is not stored in the db before delivery
+        if { $send_immediately_p } {
+            acs_mail_lite::send_immediately \
+                -to_addr $to_addr \
+                -cc_addr $cc_addr \
+                -bcc_addr $bcc_addr \
+                -from_addr $from_addr \
+                -reply_to $reply_to \
+                -subject $subject \
+                -body $body \
+                -package_id $package_id \
+                -file_ids $file_ids \
+                -mime_type $mime_type \
+                -no_callback_p $no_callback_p \
+                -extraheaders $extraheaders \
+                -use_sender_p $use_sender_p
         } else {
-            return ""
+            # else, store it in the db and let the sweeper deliver the mail
+            set creation_date [clock format [clock seconds] -format "%Y.%m.%d %H:%M:%S"]
+            set locking_server ""
+            db_dml create_queue_entry {}
         }
     }
 
@@ -530,13 +445,38 @@ namespace eval acs_mail_lite {
 
         with_finally -code {
             db_foreach get_queued_messages {} {
-                if { [catch {deliver_mail -to_addr $to_addr -from_addr $from_addr \
-                                 -subject $subject -body $body -extraheaders $extra_headers \
-                                 -bcc $bcc -valid_email_p $valid_email_p \
-                                 -package_id $package_id} errmsg] } {
-                    ns_log Error "acs_mail_lite::sweeper error sending to $to_addr:\n $errmsg\n"
-                } else {
-                    db_dml delete_queue_entry {}
+                # check if record is already there and free to use
+                set return_id [db_string get_queued_message {} -default -1]
+                if {$return_id == $id} {
+                    # lock this record for exclusive use
+                    set locking_server [ad_url]
+                    db_dml lock_queued_message {}
+                    # send the mail
+                    set err [catch {
+                        acs_mail_lite::send_immediately \
+                            -to_addr $to_addr \
+                            -cc_addr $cc_addr \
+                            -bcc_addr $bcc_addr \
+                            -from_addr $from_addr \
+                            -reply_to $reply_to \
+                            -subject $subject \
+                            -body $body \
+                            -package_id $package_id \
+                            -file_ids $file_ids \
+                            -mime_type $mime_type \
+                            -no_callback_p $no_callback_p \
+                            -extraheaders $extraheaders \
+                            -use_sender_p $use_sender_p        
+                    } errMsg]
+                    if {$err} {
+                        ns_log Error "Error while sending queued mail: $errMsg"
+                        # release the lock
+                        set locking_server ""
+                        db_dml lock_queued_message {}    
+                    } else {
+                        # mail was sent, delete the queue entry
+                        db_dml delete_queue_entry {}
+                    }
                 }
             }
         } -finally {
@@ -546,35 +486,162 @@ namespace eval acs_mail_lite {
 
     #---------------------------------------
     ad_proc -private send_immediately {
+        {-valid_email_p "0"}
         -to_addr:required
+        {-cc_addr ""}
+        {-bcc_addr ""}
         -from_addr:required
+        {-reply_to ""}
         {-subject ""}
         -body:required
+        {-package_id ""}
+        {-file_ids ""}
+        {-mime_type "text/plain"}
+        {-no_callback_p "0"}
         {-extraheaders ""}
-        {-bcc ""}
-        {-valid_email_p 0}
-        -package_id:required
+        {-use_sender_p "0"}
     } {
-        Procedure to send mails immediately without queuing the mail in the database for performance reasons.
-        If ns_sendmail fails, the mail will be written in the db so the sweeper can send them out later.
-        @option to_addr List of mail-addresses or array of email,name,user_id containing lists of users to be mailed
-        @option from_addr mail sender
-        @option subject mail subject
-        @option body mail body
-        @option extraheaders extra mail headers
-        @option bcc see to_addr
-        @option valid_email_p Switch that avoids checking if the email to be mailed is not bouncing
-        @option package_id To be used for calling a package-specific proc when mail has bounced
+
+        Prepare an email to be send immediately with the option to pass in a list
+        of file_ids as well as specify an html_body and a mime_type. It also supports 
+        multiple "TO" recipients as well as CC
+        and BCC recipients. Runs entirely off MIME and SMTP to achieve this. 
+
+        
+        @param to_addr List of e-mail addresses to send this mail to. 
+
+        @param from_addr E-Mail address of the sender.
+
+        @param reply_to E-Mail address to which replies should go. Defaults to from_addr
+
+        @param subject of the email
+
+        @param body Text body of the email
+
+        @param cc_addr List of CC Users e-mail addresses to send this mail to.
+
+        @param bcc_addr List of CC Users e-mail addresses to send this mail to.
+
+        @param package_id Package ID of the sending package
+
+        @param file_ids List of file ids (items or revisions) to be send as attachments. This will only work with files stored in the file system.
+
+        @param mime_type MIME Type of the mail to send out. Can be "text/plain", "text/html".
+
+        @param extraheaders List of keywords and their values passed in for headers. Interesting ones are: "Precedence: list" to disable autoreplies and mark this as a list message. This is as list of lists !!
+
+        @param no_callback_p Indicates if callback should be executed or not. If you don't provide it it will execute callbacks.
+
+        @param use_sender_p Boolean indicating that from_addr should be used regardless of fixed-sender parameter
     } {
-        if {[catch {
-            deliver_mail -to_addr $to_addr -from_addr $from_addr -subject $subject -body $body -extraheaders $extraheaders -bcc $bcc -valid_email_p $valid_email_p -package_id $package_id
-        } errmsg]} {
-            ns_log Error "acs_mail_lite::deliver_mail failed: $errmsg"
-            ns_log "Notice" "Mail info will be written in the db"
-            db_dml create_queue_entry {}
-        } else {
-            ns_log "Debug" "acs_mail_lite::deliver_mail successful"
+
+        # Package_id required by the callback (emmar: no idea what for)
+        set mail_package_id [apm_package_id_from_key "acs-mail-lite"]
+        if {$package_id eq ""} {
+            set package_id $mail_package_id
         }
+
+        # Decide which sender to use
+        set fixed_sender [parameter::get -parameter "FixedSenderEmail" \
+                              -package_id $mail_package_id]
+
+        
+        if { $fixed_sender ne "" && !$use_sender_p} {
+            set sender_addr $fixed_sender
+        } else {
+            set sender_addr $from_addr
+        }
+
+        # Set the Reply-To
+        if {$reply_to eq ""} {
+            set reply_to $sender_addr
+        }
+
+        # Build the message body
+        set tokens [acs_mail_lite::utils::build_body -mime_type $mime_type $body]
+
+        # Add attachments if any
+        if {[exists_and_not_null file_ids]} {
+            set item_ids [list]
+            
+            # Check if we are dealing with revisions or items.
+            foreach file_id $file_ids {
+                set item_id [content::revision::item_id -revision_id $file_id]
+                if {$item_id eq ""} {
+                    lappend item_ids $file_id
+                } else {
+                    lappend item_ids $item_id
+                }
+            }
+
+            db_foreach get_file_info {} {
+                lappend tokens [mime::initialize \
+                                    -param [list name "[ad_quotehtml $title]"] \
+                                    -header [list "Content-Disposition" "attachment; filename=\"$name\""] \
+                                    -header [list Content-Description $title] \
+                                    -canonical $mime_type \
+                                    -file "[cr_fs_path]$filename"]
+            }
+            set tokens [mime::initialize -canonical "multipart/mixed" -parts "$tokens"]
+        }
+
+        # Set the message_id
+        set message_id "[mime::uniqueID]"
+        mime::setheader $tokens "message-id" $message_id
+        
+        # Set the date
+        mime::setheader $tokens date [acs_mail_lite::utils::build_date]
+
+        # Set the subject
+        mime::setheader $tokens Subject [acs_mail_lite::utils::build_subject $subject]
+
+        # Add extra headers
+        foreach header $extraheaders {
+            mime::setheader $tokens "[lindex $header 0]" "[lindex $header 1]"
+        }
+
+        set packaged [mime::buildmessage $tokens]
+
+        # Rollout support: TO BE RE-DONE
+        set delivery_mode [ns_config ns/server/[ns_info server]/acs/acs-rollout-support EmailDeliveryMode] 
+        if { $delivery_mode ne "" && $delivery_mode ne "default" } {
+            set eh [util_list_to_ns_set $extraheaders]
+            ns_sendmail $to_addr $sender_addr $subject $packaged $eh [join $bcc_addr ","]
+            #Close all mime tokens
+            mime::finalize $tokens -subordinates all
+        } else {
+
+            # Prepare the header list
+            set headers_list [list [list From "$sender_addr"] \
+                                  [list Reply-To "$reply_to"] \
+                                  [list To [join $to_addr ","]]]
+
+            if { $cc_addr ne "" } {
+                lappend headers_list [list CC [join $cc_addr ","]]
+            }
+            if { $bcc_addr ne ""} {
+                lappend headers_list [list BCC [join $bcc_addr ","]]    
+            }
+            
+            acs_mail_lite::smtp -multi_token $tokens -headers $headers_list
+            
+            #Close all mime tokens
+            mime::finalize $tokens -subordinates all
+            
+            if { !$no_callback_p } {
+                callback acs_mail_lite::send \
+                    -package_id $package_id \
+                    -message_id $message_id \
+                    -from_addr $sender_addr \
+                    -to_addr $to_addr \
+                    -body $body \
+                    -mime_type $mime_type \
+                    -subject $subject \
+                    -cc_addr $cc_addr \
+                    -bcc_addr $bcc_addr \
+                    -file_ids $file_ids
+            }
+        }       
     }
 
     #---------------------------------------

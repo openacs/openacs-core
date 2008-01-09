@@ -30,42 +30,71 @@ ad_proc -public -callback acs_mail_lite::complex_send {
     Callback for executing code after an email has been send using the complex send mechanism.
     
     @param from_party_id Who is sending the email
-	
-	@param to_party_ids list of ids to whom did we send this email
+    
+    @param to_party_ids list of ids to whom did we send this email
 
-	@param cc_party_ids list of ids to whom did we send this email in "CC"
+    @param cc_party_ids list of ids to whom did we send this email in "CC"
 
-	@param bcc_party_ids list of ids to whom did we send this email in "BCC"
+    @param bcc_party_ids list of ids to whom did we send this email in "BCC"
 
-	@param to_addr string of emails seperated by "," to whom did we send this email
+    @param to_addr string of emails seperated by "," to whom did we send this email
 
-	@param cc_addr string of emails seperated by "," to whom did we send this email in CC
+    @param cc_addr string of emails seperated by "," to whom did we send this email in CC
 
-	@param bcc_addr string of emails seperated by "," to whom did we send this email in BCC
+    @param bcc_addr string of emails seperated by "," to whom did we send this email in BCC
 
-	@param subject of the email
-	
-	@param body Text body of the email
-	
-	@param package_id Package ID of the sending package
-	
-	@param file_ids List of file ids to be send as attachments. This will only work with files stored in the file system. The list is actually a string with the ids concated with a ",". 
+    @param subject of the email
+    
+    @param body Text body of the email
 
-	@param object_id The ID of the object that is responsible for sending the mail in the first place
 
-	@param message_id the generated message_id for this mail
+    
+    @param package_id Package ID of the sending package
+    
+    @param file_ids List of file ids to be send as attachments. This will only work with files stored in the file system. The list is actually a string with the ids concated with a ",". 
+
+    @param object_id The ID of the object that is responsible for sending the mail in the first place
+
+    @param message_id the generated message_id for this mail
 
 } -
 
 ad_proc -public -callback acs_mail_lite::send {
-    {-package_id:required}
-    {-from_party_id:required}
-    {-to_party_id:required}
-    {-body}
-    {-message_id:required}
+    -package_id:required
+    -message_id:required
+    -from_addr:required
+    -to_addr:required
+    -body:required
+    {-mime_type "text/plain"}
     {-subject}
+    {-cc_addr}
+    {-bcc_addr}
+    {-file_ids}
 } {
-}
+
+    Callback for executing code after an email has been send using the complex send mechanism.
+    
+	@param package_id Package ID of the sending package
+	
+	@param message_id the generated message_id for this mail
+
+	@param from_addr email of the sender
+
+	@param to_addr list of emails to whom did we send this email
+
+	@param body Text body of the email
+
+    @param mime_type Mime type of the email body
+	
+	@param subject of the email
+	
+	@param cc_addr list of emails to whom did we send this email in CC
+
+	@param bcc_addr list of emails to whom did we send this email in BCC
+
+	@param file_ids List of file ids sent as attachments.
+
+} -
 
 ad_proc -public -callback acs_mail_lite::incoming_email {
     -array:required
