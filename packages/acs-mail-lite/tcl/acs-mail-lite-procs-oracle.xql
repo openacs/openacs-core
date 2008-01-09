@@ -6,8 +6,8 @@
     <fullquery name="acs_mail_lite::send.create_queue_entry">
         <querytext>
             insert into acs_mail_lite_queue
-                  (id,
-		   creation_date,
+                  (message_id,
+                   creation_date,
                    locking_server,
                    to_addr,
                    cc_addr,
@@ -25,7 +25,7 @@
                   )
             values
                   (acs_mail_lite_id_seq.nextval,
-		   :creation_date,
+                   :creation_date,
                    :locking_server,
                    :to_addr,
                    :cc_addr,
@@ -66,7 +66,7 @@
     <fullquery name="acs_mail_lite::sweeper.get_queued_messages">
         <querytext>
             select
-                   id,
+                   message_id as id,
                    creation_date,
                    locking_server,
                    to_addr,

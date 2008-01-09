@@ -17,9 +17,9 @@
 
     <fullquery name="acs_mail_lite::sweeper.get_queued_message">
         <querytext>
-            select id
+            select message_id as id
             from acs_mail_lite_queue
-            where id=:id and (locking_server = '' or locking_server is NULL)
+            where message_id=:id and (locking_server = '' or locking_server is NULL)
         </querytext>
     </fullquery>
 
@@ -27,7 +27,7 @@
         <querytext>
             update acs_mail_lite_queue
                set locking_server = :locking_server
-            where id=:id
+            where message_id=:id
         </querytext>
     </fullquery> 
 
@@ -35,7 +35,7 @@
     <fullquery name="acs_mail_lite::sweeper.delete_queue_entry">
         <querytext>
             delete from acs_mail_lite_queue
-            where id=:id
+            where message_id=:id
         </querytext>
     </fullquery>
 
