@@ -41,12 +41,6 @@ namespace eval acs_mail_lite {
         return $domain
     }
     
-    ad_proc -private bounce_sendmail {} {
-        @returns path to the sendmail executable
-    } {
-        return [get_parameter -name "SendmailBin"]
-    }
-    
     ad_proc -private bounce_prefix {} {
         @returns bounce prefix for x-envelope-from
     } {
@@ -176,91 +170,25 @@ namespace eval acs_mail_lite {
             ns_sendmail $to_address $from_addr $subject $body $eh $bcc
         } else {
 
-            if {[bounce_sendmail] eq "SMTP"} {
-                ## Terminate body with a solitary period
-                foreach line [split $msg "\n"] { 
-                    if {"." eq [string trim $line]} {
-                        append data .
-                    }
-                    #AG: ensure no \r\r\n terminations.
-                    set trimmed_line [string trimright $line \r]
-                    append data "$trimmed_line\r\n"
+            ## Terminate body with a solitary period
+            foreach line [split $msg "\n"] { 
+                if {"." eq [string trim $line]} {
+                    append data .
                 }
-                append data .
-                
-                smtp -from_addr $from_addr -sendlist $to_addr -msg $data -valid_email_p $valid_email_p -message_id $message_id -package_id $package_id
-                if {$bcc ne ""} {
-                    smtp -from_addr $from_addr -sendlist $bcc -msg $data -valid_email_p $valid_email_p -message_id $message_id -package_id $package_id
-                }
-                
-            } else {
-                sendmail -from_addr $from_addr -sendlist $to_addr -msg $msg -valid_email_p $valid_email_p -message_id $message_id -package_id $package_id
-                if {$bcc ne ""} {
-                    sendmail -from_addr $from_addr -sendlist $bcc -msg $msg -valid_email_p $valid_email_p -message_id $message_id -package_id $package_id
-                }
+                #AG: ensure no \r\r\n terminations.
+                set trimmed_line [string trimright $line \r]
+                append data "$trimmed_line\r\n"
             }
+            append data .
             
+            smtp -from_addr $from_addr -sendlist $to_addr -msg $data -valid_email_p $valid_email_p -message_id $message_id -package_id $package_id
+            if {$bcc ne ""} {
+                smtp -from_addr $from_addr -sendlist $bcc -msg $data -valid_email_p $valid_email_p -message_id $message_id -package_id $package_id
+            }
             
         }
     }
     
-    #---------------------------------------
-    ad_proc -private sendmail {
-        -from_addr:required
-        -sendlist:required
-        -msg:required
-        {-valid_email_p 0}
-        {-cc ""}
-        -message_id:required
-        -package_id:required
-    } {
-        Sending mail through sendmail.
-        @option from_addr mail sender
-        @option sendlist list of mail recipients
-        @option msg mail to be sent (subject, header, body)
-        @option valid_email_p flag if email needs to be checked if it's bouncing or
-        if calling code already made sure that the receiving email addresses
-        are not bouncing (this increases performance if mails are send in a batch process)
-        @option message_id message-id of the mail
-        @option package_id package_id of the sending package
-        (needed to call package-specific code to deal with bounces)
-    } {
-        array set rcpts $sendlist
-        if {[info exists rcpts(email)]} {
-            foreach rcpt $rcpts(email) rcpt_id $rcpts(user_id) rcpt_name $rcpts(name) {
-                if { $valid_email_p || ([acs_mail_lite::utils::valid_email_p -email $rcpt] && ![bouncing_email_p -email $rcpt]) } {
-                    with_finally -code {
-                        set sendmail [list [bounce_sendmail] "-f[bounce_address -user_id $rcpt_id -package_id $package_id -message_id $message_id]" "-t" "-i"]
-                        
-                        # add username if it exists
-                        if {$rcpt_name ne ""} {
-                            set pretty_to "$rcpt_name <$rcpt>"
-                        } else {
-                            set pretty_to $rcpt
-                        }
-                        
-                        # substitute all "\r\n" with "\n", because piped text should only contain "\n"
-                        regsub -all "\r\n" $msg "\n" msg
-                        
-                        if {[catch {
-                            set err1 {}
-                            set f [open "|$sendmail" "w"]
-                            puts $f "From: $from_addr\nTo: $pretty_to\nCC: $cc\n$msg"
-                            set err1 [close $f]
-                        } err2]} {
-                            ns_log Error "Attempt to send From: $from_addr\nTo: $pretty_to\n$msg failed.\nError $err1 : $err2"
-                        }
-                    } -finally {
-                    }
-                } else {
-                    ns_log Debug "acs-mail-lite: Email bouncing from $rcpt, mail not sent and deleted from queue"
-                }
-                # log mail sending time
-                if {$rcpt_id ne ""} { log_mail_sending -user_id $rcpt_id }
-            }
-        }
-    }
-
     #---------------------------------------
     ad_proc -private smtp {
         -multi_token:required

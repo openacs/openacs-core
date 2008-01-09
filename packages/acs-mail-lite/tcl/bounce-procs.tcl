@@ -14,13 +14,6 @@ package require base64 2.3.1
 namespace eval acs_mail_lite {
 
     #---------------------------------------
-    ad_proc -private bounce_sendmail {} {
-        @returns path to the sendmail executable
-    } {
-        return [parameter::get_from_package_key -package_key "acs-mail-lite" -parameter "SendmailBin"]
-    }
-    
-    #---------------------------------------
     ad_proc -private bounce_prefix {} {
         @returns bounce prefix for x-envelope-from
     } {
