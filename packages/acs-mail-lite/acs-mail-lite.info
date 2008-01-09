@@ -39,7 +39,6 @@
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="NotificationInterval"  default="7" description="Number of days the users with bouncing email will be notified again on how to reenable the email again" section_name="email"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="NotificationSender"  description="Sender of the notification email" section_name="email"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="send_immediately"  default="0" description="Boolean value to say whether new mails should be send out immediately or stored in the db before send out." section_name="email"/>
-            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="SendmailBin"  default="/usr/sbin/sendmail" description="Location of sendmail binary on your system (Set to SMTP to use SMTP server)" section_name="email"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="SMTPHost"  default="localhost" description="SMTP Host to be used for sending emails" section_name="SMTP"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="SMTPPassword"  description="SMTP Password to be used for sending emails" section_name="SMTP"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="SMTPPort"  default="25" description="SMTP Port to be used for sending emails" section_name="SMTP"/>
