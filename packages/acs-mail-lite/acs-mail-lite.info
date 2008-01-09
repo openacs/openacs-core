@@ -7,7 +7,7 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.4.0d2" url="http://openacs.org/repository/download/apm/acs-mail-lite-5.4.0d2.apm">
+    <version name="5.4.0d3" url="http://openacs.org/repository/download/apm/acs-mail-lite-5.4.0d3.apm">
 
         <owner url="mailto:malte.sussdorff@cognovis.de">Malte Sussdorff</owner>
         <owner url="mailto:timo@studio-k4.de">Timo Hentschel</owner>
@@ -15,12 +15,12 @@
         <release-date>2007-07-18</release-date>
         <vendor url="http://www.openacs.org">OpenACS</vendor>
         <description format="text/html">This package provides a simple ns_sendmail-like interface for sending messages, but queues messages in the database to ensure reliable sending and make sending a message 'transactional'. Prefered over acs-messaging or acs-mail.</description>
-        <maturity>2</maturity>
+        <maturity>1</maturity>
 
-        <provides url="acs-mail-lite" version="5.4.0d2"/>
-	<requires url="acs-tcl" version="5.4.0d2"/>
-	<requires url="acs-kernel" version="5.3.2"/>
-	<requires url="acs-service-contract" version="5.3.2"/>
+        <provides url="acs-mail-lite" version="5.4.0d3"/>
+	    <requires url="acs-tcl" version="5.4.0d2"/>
+	    <requires url="acs-kernel" version="5.3.2"/>
+	    <requires url="acs-service-contract" version="5.3.2"/>
 
         <callbacks>
         </callbacks>

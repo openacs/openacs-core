@@ -155,3 +155,21 @@ ad_proc acs_mail_lite::utils::build_body {
 
     return [list $message_token]
 }
+
+ad_proc -public acs_mail_lite::utils::valid_email_p {
+    email
+} {
+    Checks if the email is valid. Returns 1 if it is. Uses mime::parsemail to determine this
+} {
+    array set test [lindex [mime::parseaddress "$email"] 0]
+    if {$email ne $test(proper)} {
+        regsub "\"" $test(proper) "" proper
+        if {$email ne $proper} {
+            return 0
+        } else {
+            return 1
+        }
+    } else {
+        return 1
+    }
+}

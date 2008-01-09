@@ -5,14 +5,42 @@
 
     <fullquery name="acs_mail_lite::send.create_queue_entry">
         <querytext>
-            insert into acs_mail_lite_queue 
-            (message_id, to_addr, from_addr, subject, 
-             package_id, valid_email_p,
-	     body, extra_headers, bcc)
+            insert into acs_mail_lite_queue
+                  (id,
+		   creation_date,
+                   locking_server,
+                   to_addr,
+                   cc_addr,
+                   bcc_addr,
+                   from_addr,
+                   reply_to,
+                   subject,
+                   body,
+                   package_id,
+                   file_ids,
+                   mime_type,
+                   no_callback_p,
+                   extraheaders,
+                   use_sender_p     
+                  )
             values
-            (acs_mail_lite_id_seq.nextval, :to_addr, :from_addr, :subject,
-	     :package_id, decode(:valid_email_p,'1','t','f'),
- 	     :body, :eh_list, :bcc)
+                  (acs_mail_lite_id_seq.nextval,
+		   :creation_date,
+                   :locking_server,
+                   :to_addr,
+                   :cc_addr,
+                   :bcc_addr,
+                   :from_addr,
+                   :reply_to,
+                   :subject,
+                   :body,
+                   :package_id,
+                   :file_ids,
+                   :mime_type,
+                   decode(:no_callback_p,'1','t','f'),
+                   :extraheaders,
+                   decode(:use_sender_p,'1','t','f')
+                  )
         </querytext>
     </fullquery>
 
@@ -35,32 +63,26 @@
      </querytext>
    </fullquery>
 
-
     <fullquery name="acs_mail_lite::sweeper.get_queued_messages">
         <querytext>
-            select message_id,
+            select
+                   id,
+                   creation_date,
+                   locking_server,
                    to_addr,
+                   cc_addr,
+                   bcc_addr,
                    from_addr,
                    subject,
                    body,
-                   extra_headers,
-                   bcc,
                    package_id,
-                   decode(valid_email_p,'t',1,0) as valid_email_p
+                   file_ids,
+                   mime_type,
+                   decode(no_callback_p,'t',1,0) as no_callback_p,
+                   extraheaders,
+                   decode(use_sender_p,'t',1,0) as use_sender_p
             from acs_mail_lite_queue
-        </querytext>
-    </fullquery>
-
-    <fullquery name="acs_mail_lite::send_immediately.create_queue_entry">
-        <querytext>
-            insert into acs_mail_lite_queue 
-            (message_id, to_addr, from_addr, subject,
-             package_id, valid_email_p,
-             body, extra_headers, bcc)
-            values
-            (acs_mail_lite_id_seq.nextval, :to_addr, :from_addr, :subject,
-             :package_id, decode(:valid_email_p,'1','t','f'),
- 	     :body,:extraheaders, :bcc )
+            where locking_server = '' or locking_server is NULL
         </querytext>
     </fullquery>
 
