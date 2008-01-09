@@ -7,20 +7,28 @@
 
 create sequence acs_mail_lite_id_seq;
 
-create table acs_mail_lite_queue (
-    message_id                  integer
-                                constraint acs_mail_lite_queue_pk
-                                primary key,
-    to_addr                     text,
-    from_addr                   varchar(200),
-    subject                     varchar(200),
-    body                        text,
-    extra_headers               text,
-    bcc                         text,
-    package_id			integer
-    				constraint acs_mail_lite_queue_pck_fk
-				references apm_packages,
-    valid_email_p		boolean
+CREATE TABLE acs_mail_lite_queue (
+    message_id          integer
+                        constraint acs_mail_lite_queue_pk
+                        primary key,
+    creation_date       text,
+    locking_server      text,
+    to_addr             text,
+    cc_addr             text,
+    bcc_addr            text,
+    from_addr           text,
+    reply_to            text,
+    subject             text,
+    body                text,
+    package_id          integer
+                        constraint amlq_package_id_fk
+                        references apm_packages,
+    file_ids            text,
+    mime_type           text,
+    object_id           integer,
+    no_callback_p       boolean,
+    extraheaders        text,
+    use_sender_p        boolean
 );
 
 create table acs_mail_lite_mail_log (
