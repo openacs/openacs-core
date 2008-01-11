@@ -553,7 +553,7 @@ namespace eval acs_mail_lite {
                 }
 
                 
-                acs_mail_lite::complex_smtp -multi_token $multi_token \
+                acs_mail_lite::smtp -multi_token $multi_token \
                     -headers [list [list From "$from_string"] [list Reply-To "$reply_to_string"] \
                                   [list To "[join $to_list ","]"] [list CC "[join $cc_list ","]"]]    
                 
@@ -595,7 +595,7 @@ namespace eval acs_mail_lite {
 
 
                     if {[acs_mail_lite::utils::valid_email_p $email]} {
-                        acs_mail_lite::complex_smtp -multi_token $multi_token \
+                        acs_mail_lite::smtp -multi_token $multi_token \
                             -headers [list [list From "$from_string"] [list Reply-To "$reply_to_string"] [list To "$email"]]
                         if { !$no_callback_p } {
                             callback acs_mail_lite::complex_send \
@@ -622,7 +622,7 @@ namespace eval acs_mail_lite {
                     if {[acs_mail_lite::utils::valid_email_p -email $email]} {
                         set email "\"[party::name -party_id $party]\" <$email>"
                         
-                        acs_mail_lite::complex_smtp -multi_token $multi_token \
+                        acs_mail_lite::smtp -multi_token $multi_token \
                             -headers [list [list From "$from_string"] [list Reply-To "$reply_to_string"] [list To "$email"]]
                         
                         if { !$no_callback_p } {
@@ -712,48 +712,4 @@ namespace eval acs_mail_lite {
         }
     }      
     
-    ad_proc -private complex_smtp {
-        -multi_token:required
-        -headers:required
-    } {
-        Send messages via SMTP
-        
-        @param multi_token Multi Token generated which is passed directly to smtp::sendmessage
-        @param headers List of list of header key-value pairs like {{from malte@cognovis.de} {to malte@cognovis.de}}
-    } {
-
-        set mail_package_id [apm_package_id_from_key "acs-mail-lite"]
-
-        # Get the SMTP Parameters
-    	set smtp [parameter::get -parameter "SMTPHost" \
-                      -package_id $mail_package_id -default [ns_config ns/parameters mailhost]]
-    	if {$smtp eq ""} {
-    	    set smtp localhost
-    	}
-
-    	set timeout [parameter::get -parameter "SMTPTimeout" \
-                         -package_id $mail_package_id -default  [ns_config ns/parameters smtptimeout]]
-    	if {$timeout eq ""} {
-    	    set timeout 60
-    	}
-
-    	set smtpport [parameter::get -parameter "SMTPPort" \
-                          -package_id $mail_package_id -default 25]
-
-    	set smtpuser [parameter::get -parameter "SMTPUser" \
-                          -package_id $mail_package_id]
-
-    	set smtppassword [parameter::get -parameter "SMTPPassword" \
-                              -package_id $mail_package_id]
-    	
-    	set cmd_string "smtp::sendmessage $multi_token"     
-    	foreach header $headers {
-    	    append cmd_string " -header {$header}"
-    	}
-    	append cmd_string " -servers $smtp -ports $smtpport -username $smtpuser -password $smtppassword"
-    	ns_log Debug "complex-send cmd_string: $cmd_string"
-        eval $cmd_string
-    	
-    }
-
 }

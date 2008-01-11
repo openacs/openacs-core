@@ -13,6 +13,25 @@ package require smtp 1.4
 package require base64 2.3.1
 namespace eval acs_mail_lite {
 
+    #---------------------------------------
+    ad_proc -deprecated deliver_mail {} {
+
+        Deprecated (11-jan-2008). 
+        Use acs_mail_lite::send instead
+
+    } {
+        ns_log Warning "acs_mail_lite::deliver_mail is deprecated. Use acs_mail_lite::send instead"
+    }
+    
+    ad_proc -private -deprecated sendmail {} {
+
+        Deprecated (11-jan-2008). 
+        Use acs_mail_lite::smtp instead
+
+    } {
+        ns_log Warning "acs_mail_lite::sendmail is deprecated. Use acs_mail_lite::smtp instead"
+    }
+    
     ad_proc -public get_package_id {} {
         @returns package_id of this package
     } {
@@ -112,83 +131,6 @@ namespace eval acs_mail_lite {
         return 1
     }
 
-    #---------------------------------------
-    ad_proc -public deliver_mail {
-        -to_addr:required
-        -from_addr:required
-        -subject:required
-        -body:required
-        {-extraheaders ""}
-        {-bcc ""}
-        {-valid_email_p 0}
-        -package_id:required
-    } {
-        Bounce Manager send 
-        @option to_addr list of mail recipients
-        @option from_addr mail sender
-        @option subject mail subject
-        @option body mail body
-        @option extraheaders extra mail header
-        @option bcc list of recipients of a mail copy
-        @option valid_email_p flag if email needs to be checked if it's bouncing or
-        if calling code already made sure that the receiving email addresses
-        are not bouncing (this increases performance if mails are send in a batch process)
-        @option package_id package_id of the sending package
-        (needed to call package-specific code to deal with bounces)
-    } {
-        set msg "Subject: $subject\nDate: [ns_httptime [ns_time]]"
-        
-        array set headers $extraheaders
-        set message_id $headers(Message-Id)
-
-        foreach {key value} $extraheaders {
-            append msg "\n$key\: $value"
-        }
-
-        ## Blank line between headers and body
-        append msg "\n\n$body\n"
-
-        # ----------------------------------------------------
-        # Rollout support
-        # ----------------------------------------------------
-        # if set in etc/config.tcl, then
-        # packages/acs-tcl/tcl/rollout-email-procs.tcl will rename a
-        # proc to ns_sendmail. So we simply call ns_sendmail instead
-        # of the sendmail bin if the EmailDeliveryMode parameter is
-        # set to anything other than default - JFR
-        #-----------------------------------------------------
-        set delivery_mode [ns_config ns/server/[ns_info server]/acs/acs-rollout-support EmailDeliveryMode] 
-
-        if {$delivery_mode ne ""
-            && $delivery_mode ne "default" 
-        } {
-            # The to_addr has been put in an array, and returned. Now
-            # it is of the form: email email_address name namefromdb
-            # user_id user_id_if_present_or_empty_string
-            set to_address "[lindex $to_addr 1] ([lindex $to_addr 3])"
-            set eh [util_list_to_ns_set $extraheaders]
-            ns_sendmail $to_address $from_addr $subject $body $eh $bcc
-        } else {
-
-            ## Terminate body with a solitary period
-            foreach line [split $msg "\n"] { 
-                if {"." eq [string trim $line]} {
-                    append data .
-                }
-                #AG: ensure no \r\r\n terminations.
-                set trimmed_line [string trimright $line \r]
-                append data "$trimmed_line\r\n"
-            }
-            append data .
-            
-            smtp -from_addr $from_addr -sendlist $to_addr -msg $data -valid_email_p $valid_email_p -message_id $message_id -package_id $package_id
-            if {$bcc ne ""} {
-                smtp -from_addr $from_addr -sendlist $bcc -msg $data -valid_email_p $valid_email_p -message_id $message_id -package_id $package_id
-            }
-            
-        }
-    }
-    
     #---------------------------------------
     ad_proc -private smtp {
         -multi_token:required
