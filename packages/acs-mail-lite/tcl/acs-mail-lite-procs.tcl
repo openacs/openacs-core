@@ -490,7 +490,7 @@ namespace eval acs_mail_lite {
                 lappend headers_list [list CC [join $cc_addr ","]]
             }
             if { $bcc_addr ne ""} {
-                lappend headers_list [list BCC [join $bcc_addr ","]]    
+                lappend headers_list [list DCC [join $bcc_addr ","]]    
             }
             
             acs_mail_lite::smtp -multi_token $tokens -headers $headers_list
