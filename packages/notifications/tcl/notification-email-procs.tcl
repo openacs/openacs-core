@@ -59,12 +59,6 @@ namespace eval notification::email {
         {-object_id:required}
         {-type_id:required}
     } {
-        # DAVEB allow creation user to be the reply address
-        set creation_user [db_string get_creation_user "select creation_user from acs_objects where object_id=:object_id" -default ""]
-        if {![string equal "" $creation_user]} {
-            acs_user::get -user_id $creation_user -array user
-            return "$user(name) <${user(email)}>"
-        }
         if {[empty_string_p $object_id] || [empty_string_p $type_id]} {
             return "\"[address_domain] mailer\" <[reply_address_prefix]@[address_domain]>"
         } else {
