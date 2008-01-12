@@ -12,25 +12,6 @@ package require mime 1.4
 package require smtp 1.4
 package require base64 2.3.1
 namespace eval acs_mail_lite {
-
-    #---------------------------------------
-    ad_proc -deprecated deliver_mail {} {
-
-        Deprecated (11-jan-2008). 
-        Use acs_mail_lite::send instead
-
-    } {
-        ns_log Warning "acs_mail_lite::deliver_mail is deprecated. Use acs_mail_lite::send instead"
-    }
-    
-    ad_proc -private -deprecated sendmail {} {
-
-        Deprecated (11-jan-2008). 
-        Use acs_mail_lite::smtp instead
-
-    } {
-        ns_log Warning "acs_mail_lite::sendmail is deprecated. Use acs_mail_lite::smtp instead"
-    }
     
     ad_proc -public get_package_id {} {
         @returns package_id of this package
