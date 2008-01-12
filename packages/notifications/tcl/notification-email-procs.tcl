@@ -147,8 +147,8 @@ namespace eval notification::email {
            lappend $eh_list_of_lists [list $key $value]
        }
 
-       acs_mail_lite::complex_send \
-           -to_party_ids $to_user_id \
+       acs_mail_lite::send \
+           -to_party_ids $email \
            -from_addr $from_email \
            -mime_type $mime_type \
            -subject $subject \
