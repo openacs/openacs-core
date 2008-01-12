@@ -109,13 +109,11 @@ namespace eval notification::email {
        # Variable used in the content
        set manage_notifications_url [manage_notifications_url]
 
-       append content_text "\n[_ notifications.lt_Getting_too_much_emai]"
        if { [string length $content_html] == 0 } {
-           set text_only_p 1
            set mime_type "text/plain"
+           append content_text "\n[_ notifications.lt_Getting_too_much_emai]"
 	   set content $content_text
        } else {
-           set text_only_p 0
            set mime_type "text/html"
            append content_html "<p>[_ notifications.lt_Getting_too_much_emai]"
 	   set content $content_html
@@ -127,14 +125,13 @@ namespace eval notification::email {
         # This should disable most auto-replies.
         ns_set put $extra_headers Precedence list
         
-        set reply_to [reply_address -object_id $reply_object_id -type_id $notification_type_id]
+       set reply_to [reply_address -object_id $reply_object_id -type_id $notification_type_id]
 
        if { ![empty_string_p $from_user_id] && $from_user_id != 0 && [db_0or1row get_person {}]} {
 	   set from_email [cc_email_from_party $from_user_id]
 	   
-	   # Set the Reply-To and Mail-Followup-To addresses to the
+	   # Set the Mail-Followup-To address to the
 	   # address of the notifications handler.
-	   ns_set put $extra_headers Reply-To $reply_to
 	   ns_set put $extra_headers Mail-Followup-To $reply_to
        } else {
 	   set from_email $reply_to
@@ -148,8 +145,9 @@ namespace eval notification::email {
        }
 
        acs_mail_lite::send \
-           -to_party_ids $email \
+           -to_addr $email \
            -from_addr $from_email \
+           -reply_to $reply_to \
            -mime_type $mime_type \
            -subject $subject \
            -body $content \
