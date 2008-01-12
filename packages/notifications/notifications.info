@@ -17,9 +17,9 @@
         <maturity>0</maturity>
         <package_instance_name>#notifications.Notifications#</package_instance_name>
 
-        <provides url="notifications" version="5.4.0d4"/>
+        <provides url="notifications" version="5.4.0d5"/>
         <requires url="acs-kernel" version="5.3.1a1"/>
-        <requires url="acs-mail-lite" version="5.4.0d1"/>
+        <requires url="acs-mail-lite" version="5.4.0d3"/>
 
         <callbacks>
             <callback type="after-install"  proc="notification::apm::after_install"/>
