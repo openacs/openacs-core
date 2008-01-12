@@ -43,7 +43,7 @@ db_multirow -extend {subscriber_url subscriber_name } notifications select_notif
         and nr.dynamic_p = 'f'
       order by lower(p.last_name), lower(p.first_names)
 } {
-    set subscriber_name [contact::name -party_id $user_id]
+    set subscriber_name [person::name -person_id $user_id]
     if { [string is true $package_admin_p] } {
 	set subscriber_url [export_vars -base "manage" -url {user_id}]
     } else {
