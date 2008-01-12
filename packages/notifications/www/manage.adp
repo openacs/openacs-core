@@ -5,6 +5,6 @@
 <h2>@notice;noquote@</h2>
 </if>
 
-#notifications.Manage_Notifications_Help#
+#notifications.Manage_Notifications#
 
 <listtemplate name="notifications"></listtemplate>
