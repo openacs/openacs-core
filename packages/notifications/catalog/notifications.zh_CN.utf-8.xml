@@ -12,7 +12,12 @@
   <msg key="lt_Request_Notification_">给%pretty_name%申请通知</msg>
   <msg key="lt_system_name_-_Batched">[%system_name% - 批处理通知] </msg>
   <msg key="lt_You_have_no_notificat">您没有通知。</msg>
+<<<<<<< notifications.zh_CN.utf-8.xml
   <msg key="lt_You_have_requested_no">已订阅了%pretty_name%的通知，可以&lt;a href=&quot;%sub_url%&quot;&gt;取消订阅&lt;/a&gt;。 </msg>
+=======
+  <msg key="lt_You_have_requested_no">已订阅了%pretty_name%的通知，可以&lt;a href=&quot;%sub_url%&quot;&gt;取消订阅&lt;/a&gt;。 </msg>
+  <msg key="lt_You_may_a_hrefsub_url">可到&lt;a href=&quot;%sub_url%&quot;&gt;为%pretty_name%申请通知&lt;/a&gt;。</msg>
+>>>>>>> 1.3.2.1.4.1
   <msg key="Manage_Notifications">管理通知</msg>
   <msg key="Notification_type">通知类型</msg>
   <msg key="Request_Notification">申请通知</msg>
