@@ -8,7 +8,7 @@
     <singleton-p>t</singleton-p>
     <auto-mount>notifications</auto-mount>
 
-    <version name="5.4.0d4" url="http://openacs.org/repository/download/apm/notifications-5.4.0d4.apm">
+    <version name="5.4.0d5" url="http://openacs.org/repository/download/apm/notifications-5.4.0d5.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Email notifications management</summary>
         <release-date>2007-06-27</release-date>
