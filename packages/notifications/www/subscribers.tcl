@@ -1,9 +1,12 @@
 ad_page_contract {
 
-    Manage notifications for one user
+    List notification subscribers to an object
 
-    @author Tracy Adams (teadams@alum.mit.edu)
-    @creation-date 2002-07-22
+    Malte actually wrote this but I had to rewrite it due to his calling the contacts
+    package and using inline, PG-specific queries.
+
+    @author dhogaza@pacifier.com
+    @creation-date 2008-01-13
     @cvs-id $Id$
 } {
     object_id:notnull
@@ -12,7 +15,7 @@ ad_page_contract {
 permission::require_permission -object_id $object_id -privilege "admin"
 
 # first we verify that this object receives notifications
-if { ![db_0or1row select_name { select acs_object__name(object_id) as name, type_id from notification_requests where dynamic_p = 'f' and object_id = :object_id order by type_id limit 1 }] } {
+if { ![db_0or1row select_name {}] } {
     # there are no notifications for this object
     ad_return_error "No Notifications" "This object does have anybody subscribed via notifications"
 }
@@ -28,21 +31,7 @@ set notice "<a href=\"[export_vars -base object-goto -url {object_id type_id}]\"
 set return_url [ad_conn url]
 set package_admin_p [permission::permission_p -object_id [ad_conn package_id] -privilege "admin"]
 
-db_multirow -extend {subscriber_url subscriber_name } notifications select_notifications {
-     select nr.user_id,
-            ni.name as interval,
-            nt.pretty_name as type
-       from notification_requests nr,
-            notification_intervals ni,
-            notification_types nt,
-            persons p
-      where nr.object_id = :object_id
-        and nr.interval_id = ni.interval_id
-        and nr.type_id = nt.type_id
-        and nr.user_id = p.person_id 
-        and nr.dynamic_p = 'f'
-      order by lower(p.last_name), lower(p.first_names)
-} {
+db_multirow -extend {subscriber_url subscriber_name } notifications select_notifications {} {
     set subscriber_name [person::name -person_id $user_id]
     if { [string is true $package_admin_p] } {
 	set subscriber_url [export_vars -base "manage" -url {user_id}]
@@ -50,8 +39,6 @@ db_multirow -extend {subscriber_url subscriber_name } notifications select_notif
 	set subscriber_url [acs_community_member_url -user_id $user_id]
     }
 }
-
-
 
 template::list::create \
     -name notifications \
