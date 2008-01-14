@@ -17,9 +17,8 @@ set httpsport                 8443
 
 # The hostname and address should be set to actual values.
 # setting the address to 0.0.0.0 means aolserver listens on all interfaces
-set hostname                  [ns_info hostname]
-#set address                   [ns_info address]
-set address                   0.0.0.0
+set hostname                  localhost
+set address                   127.0.0.1
 
 # Note: If port is privileged (usually < 1024), OpenACS must be
 # started by root, and, in AOLserver 4, the run script have a 
@@ -28,7 +27,7 @@ set address                   0.0.0.0
 set server                    "service0" 
 set servername                "New OpenACS Installation - Development"
 
-set serverroot                "/var/lib/aolserver/${server}"
+set serverroot                "/var/www/${server}"
 
 #---------------------------------------------------------------------
 # which database do you want? postgres or oracle
@@ -48,8 +47,8 @@ if { $database eq "oracle" } {
 # if debug is false, all debugging will be turned off
 set debug false
 
-set homedir                   /usr/local/aolserver
-set bindir                    [file dirname [ns_info nsd]] 
+set homedir                   /usr/lib/aolserver4
+set bindir                    ${homedir}/bin
 
 
 set max_file_upload_mb        20
