@@ -9,7 +9,7 @@
 # see http://openacs.org/forums/message-view?message_id=176100
 sleep 4
 
-exec /usr/local/aolserver/bin/nsd-postgres -it /var/lib/aolserver/service0/etc/config.tcl -u service0 -g web
+exec /usr/lib/aolserver4/bin/nsd -it /var/www/service0/etc/config.tcl -u service0 -g web
 
 # For AOLserver 4 using privileged ports (usually < 1024), add the flag
 # -b youraddress:yourport to the nsd command
