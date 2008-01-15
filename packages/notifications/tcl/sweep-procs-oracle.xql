@@ -19,7 +19,7 @@
             where nnr.notification_id = notification_user_map.notification_id(+)
               and nnr.user_id = notification_user_map.user_id(+)
 	      and notification_user_map.sent_date is null
-	      and notifications.notif_date < sysdate()
+	      and notifications.notif_date < sysdate
         </querytext>
     </fullquery>
 
@@ -46,7 +46,7 @@
             where nnr.notification_id = notification_user_map.notification_id(+)
               and nnr.user_id = notification_user_map.user_id(+)
               and notification_user_map.sent_date is null
-              and nnr.notif_date < sysdate()
+              and nnr.notif_date < sysdate
               and acs_objects.object_id = nnr.request_id
               and acs_objects.creation_date <= nnr.notif_date
             order by nnr.user_id, nnr.type_id, nnr.notif_date
