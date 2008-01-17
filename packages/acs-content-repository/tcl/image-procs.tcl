@@ -227,7 +227,7 @@ ad_proc -public image::identify_binary {
     return [parameter::get \
 		-parameter ImageMagickIdentifyBinary \
 		-package_id [apm_package_id_from_key acs-content-repository] \
-		-default "/usr/local/bin/identify"]
+		-default "/usr/bin/identify"]
 }
 
 ad_proc -public image::convert_binary {
@@ -241,7 +241,7 @@ ad_proc -public image::convert_binary {
     return [parameter::get \
 		-parameter ImageMagickConvertBinary \
 		-package_id [apm_package_id_from_key acs-content-repository] \
-		-default "/usr/local/bin/convert"]
+		-default "/usr/bin/convert"]
 }
 
 ad_proc -public image::ns_size {
