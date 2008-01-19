@@ -113,13 +113,13 @@ ad_proc -public -callback acs_mail_lite::incoming_object_email {
 ad_proc -public -callback acs_mail_lite::email_form_elements {
     -varname:required
 } {
-}
+} -
 
 ad_proc -public -callback acs_mail_lite::files {
     -varname:required
     -recipient_ids:required
 } {
-}
+} -
 
 ad_proc -public -callback acs_mail_lite::incoming_email -impl acs-mail-lite {
     -array:required
