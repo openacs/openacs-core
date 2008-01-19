@@ -301,7 +301,7 @@ ad_proc -public -deprecated template::widget::richtext_htmlarea { element_refere
 ad_proc -public template::widget::richtext { element_reference tag_attributes } {
   Implements the richtext widget, which offers rich text editing options.
 
-  This version supports the rte and xinha editor.
+  This version supports the xinha editor.
 
   If the acs-templating.UseHtmlAreaForRichtextP parameter is set to true (1), 
   this will use the htmlArea WYSIWYG editor widget.
@@ -429,25 +429,12 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
 				$options(editor) : [parameter::get \
 							-package_id $package_id_templating \
 							-parameter "RichTextEditor" \
-							-default "rte"]}]
+							-default "xinha"]}]
       # Tell the blank-master to include the special stuff 
       # for the richtext widget in the page header
       set ::acs_blank_master($richtextEditor) 1
 
-      if {$richtextEditor eq "rte"} {
-	lappend ::acs_blank_master__htmlareas $element(form_id)
-	# quote contents for javascript.
-	set contents [string map {\n \\n \r {} "'" "&\#39"} $contents]
-
-	# What we are generating here is the call to write the richtext widget 
-	# but we also need to pass what to generate in for browsers for 
-	# which the richtext widget won't work but which do have js enabled 
-	# should output since we need the format widget (this for Safari among 
-	# some others)
-          set noscript_output "$output <br>[_ acs-templating.Format]: $format_menu\n"
-
-	set output "<script type='text/javascript'><!--\nwriteRichText('$element(id)','$contents',500,200,true,false,'<input name=\"$element(id).format\" value=\"text/html\" type=\"hidden\">','[string map {\n \\n \r {} "'" "&\#39"} $output]'); //--></script><noscript id=\"rte-noscr-$element(id)\">$noscript_output</noscript>"
-      } elseif {$richtextEditor eq "xinha"} {
+      if {$richtextEditor eq "xinha"} {
 	append output "<script type='text/javascript'>document.write(\"<input name='$element(id).format' value='text/html' type='hidden'>\");</script>\n"
           append output "<noscript><br/>[_ acs-templating.Format]: $format_menu</noscript>\n"
 	
