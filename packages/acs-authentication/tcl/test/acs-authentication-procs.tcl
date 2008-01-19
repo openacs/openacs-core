@@ -122,6 +122,10 @@ aa_register_case \
                     aa_equals "account_status for '$closed_state' user" $auth_info(account_status) "closed"
                 }
             }
+
+            if { $user_id ne "" } {
+                acs_user::delete -user_id $user_id
+            }
     
             # Error handling    
             # TODO or too hard?
@@ -169,7 +173,31 @@ aa_register_case \
             if { [info exists user_info(user_id)] } {         
                 aa_true "returns integer user_id ([array get user_info])" [regexp {[1-9][0-9]*} $user_info(user_id)]
             }
+
+            # Duplicate email and username
+            array unset user_info
+            array set user_info [auth::create_user \
+                                     -username "auth_create_user1" \
+                                     -email "auth_create_user1@test_user.com" \
+                                     -first_names "Test3" \
+                                     -last_name "User" \
+                                     -password "changeme" \
+                                     -secret_question "no_question" \
+                                     -secret_answer "no_answer"]
+
+            aa_equals "creation_status for duplicate email and username" $user_info(creation_status) "data_error"
             
+            aa_true "element_messages exists" [exists_and_not_null user_info(element_messages)]
+            if { [exists_and_not_null user_info(element_messages)] } {
+                array unset elm_msgs
+                array set elm_msgs $user_info(element_messages)
+                aa_true "element_message for username exists" [exists_and_not_null elm_msgs(username)]
+                aa_true "element_message for email exists" [exists_and_not_null elm_msgs(email)]
+            }
+            set user_id [acs_user::get_by_username -username auth_create_user1]
+            if { $user_id ne "" } {
+                acs_user::delete -user_id $user_id
+            }
             
             # Missing first_names, last_name, email
             array unset user_info
@@ -198,6 +226,10 @@ aa_register_case \
                 if { [aa_true "element_message(last_name) exists" [exists_and_not_null elm_msgs(last_name)]] } {
                     aa_log "element_message(last_name) = $elm_msgs(last_name)"
                 }
+            }
+            set user_id [acs_user::get_by_username -username auth_create_user2]
+            if { $user_id ne "" } {
+                acs_user::delete -user_id $user_id
             }
             
             # Malformed email
@@ -228,27 +260,6 @@ aa_register_case \
                     aa_log "element_message(last_name) = $elm_msgs(last_name)"
                 }
             }
-
-            # Duplicate email and username
-            array unset user_info
-            array set user_info [auth::create_user \
-                                     -username "auth_create_user1" \
-                                     -email "auth_create_user1@test_user.com" \
-                                     -first_names "Test3" \
-                                     -last_name "User" \
-                                     -password "changeme" \
-                                     -secret_question "no_question" \
-                                     -secret_answer "no_answer"]
-
-            aa_equals "creation_status for duplicate email and username" $user_info(creation_status) "data_error"
-            
-            aa_true "element_messages exists" [exists_and_not_null user_info(element_messages)]
-            if { [exists_and_not_null user_info(element_messages)] } {
-                array unset elm_msgs
-                array set elm_msgs $user_info(element_messages)
-                aa_true "element_message for username exists" [exists_and_not_null elm_msgs(username)]
-                aa_true "element_message for email exists" [exists_and_not_null elm_msgs(email)]
-            }
             
         } 
 }
@@ -271,6 +282,7 @@ aa_register_case \
             auth::set_email_verified -user_id $user_id
             
             aa_equals "email should be verified" [acs_user::get_element -user_id $user_id -element email_verified_p] "t"
+            acs_user::flush_cache -user_id $user_id
         }
 }
 
@@ -386,6 +398,9 @@ aa_register_case  \
                 "1"
 
             ad_parameter_cache -delete [ad_acs_kernel_id] EmailAccountOwnerOnPasswordChangeP
+            if { $user_id ne "" } {
+                acs_user::delete -user_id $user_id
+            }
         }
 }
 
@@ -507,6 +522,10 @@ aa_register_case  \
                                            -authority_id [auth::authority::local] \
                                            -password $test_user(password)]
                 aa_false "cannot authenticate with old password" [string equal $auth_result(auth_status) "ok"]
+            }
+            set user_id [acs_user::get_by_username -username $test_user(username)]
+            if { $user_id ne "" } {
+                acs_user::delete -user_id $user_id
             }
         }
 }
