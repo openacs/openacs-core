@@ -17,9 +17,13 @@ ad_library {
 # evaluation of exprs.  I only mention this in case someone sees the clever (but wrong)
 # code and decides they want to replace my fix with the clever (but wrong) version ...
 
-if { ![catch {exec which aspell}] } {
+# DRB: And to top it off, OS/X (all BSD?) "which" doesn't return an error, just an
+# error string, if the file doesn't exist, making the check even more fun to run.
+
+expr { ![catch {exec which aspell}] && ![string match "*no aspell*" [exec which aspell]] }
+if { ![catch {exec which aspell}] && ![string match "*no aspell*" [exec which aspell]] } {
     set bin [exec which aspell]
-} elseif { ![catch {exec which ispell}] } {
+} elseif { ![catch {exec which ispell}] && ![string match "*no ispell*" [exec which ispell]] } {
     set bin [exec which ispell]
 } else {
     set bin ""
