@@ -329,7 +329,7 @@ as
 	v_content	cr_files_to_delete.path%TYPE default null;
   begin
     -- You need to delete the image from the table
-    delete from images where image_id = image.delete_revision.revision_id
+    delete from images where image_id = image.delete_revision.revision_id;
     content_revision.del (
       revision_id => revision_id
     );
