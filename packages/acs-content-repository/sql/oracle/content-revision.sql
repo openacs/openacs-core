@@ -10,7 +10,7 @@
 -- License.  Full text of the license is available from the GNU Project:
 -- http://www.fsf.org/copyleft/gpl.html
 
-create or replace package content_revision
+create or replace package body content_revision
 as
 
 function new (
@@ -355,6 +355,63 @@ begin
   return v_text;
 
 end revision_name;
+
+procedure index_attributes(
+  revision_id IN cr_revisions.revision_id%TYPE
+) is
+
+  clob_loc clob;
+  v_revision_id cr_revisions.revision_id%TYPE;
+
+begin
+
+  insert into cr_revision_attributes (
+    revision_id, attributes
+  ) values (
+    revision_id, empty_clob()
+  ) returning attributes into clob_loc;
+
+  v_revision_id := write_xml(revision_id, clob_loc);  
+
+end index_attributes;
+
+function import_xml (
+  item_id IN cr_items.item_id%TYPE,
+  revision_id IN cr_revisions.revision_id%TYPE,
+  doc_id IN number
+) return cr_revisions.revision_id%TYPE is
+
+  clob_loc clob;
+  v_revision_id cr_revisions.revision_id%TYPE;
+
+begin
+
+  select doc into clob_loc from cr_xml_docs where doc_id = import_xml.doc_id;
+  v_revision_id := read_xml(item_id, revision_id, clob_loc);  
+
+  return v_revision_id;
+
+end import_xml;
+
+function export_xml (
+  revision_id IN cr_revisions.revision_id%TYPE
+) return cr_xml_docs.doc_id%TYPE is
+
+  clob_loc clob;
+  v_doc_id cr_xml_docs.doc_id%TYPE;
+  v_revision_id cr_revisions.revision_id%TYPE;
+
+begin
+
+  insert into cr_xml_docs (doc_id, doc) 
+    values (cr_xml_doc_seq.nextval, empty_clob())
+    returning doc_id, doc into v_doc_id, clob_loc;
+
+  v_revision_id := write_xml(revision_id, clob_loc);  
+
+  return v_doc_id;
+
+end export_xml;
 
 procedure to_html (
   revision_id IN cr_revisions.revision_id%TYPE
