@@ -54,7 +54,7 @@
 	    where n.object_id = p.package_id(+)
 	    and t.package_key (+) = p.package_key
 	    and (n.node_id = :node_id or n.parent_id = :node_id)
-	    order by n.nodes_rownum
+	    order by n.node_id
         </querytext>
     </fullquery>
 
