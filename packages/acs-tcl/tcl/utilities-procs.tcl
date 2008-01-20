@@ -4404,3 +4404,30 @@ ad_proc -public util::string_check_urlsafe {
 } {
 	return [regexp {[<>:\"|/@\#%&+\\ ]} $s1]
 }
+
+ad_proc -public util::which {prog} {
+
+  @author Gustaf Neumann
+
+  Use environment variable PATH to search for the specified executable
+  program. Replacement for UNIX command "which", avoiding exec.
+
+    exec which:    3368.445 microseconds per iteration
+    ::util::which:  282.372 microseconds per iteration
+  
+  In addition of being more than 10 time faster than the 
+  version via exec, this version is less platform dependent.
+
+  @param prog   name of the program to be located on the search path
+  @return fully qualified name including path, when specified program is found, 
+                or otherwise empty string
+
+} {
+  foreach p [split $::env(PATH) :] {
+    set fullname [file join $p $prog]
+    if {[file executable $fullname]} {
+      return $fullname
+    }
+  }
+  return ""
+}
