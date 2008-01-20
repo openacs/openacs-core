@@ -546,6 +546,7 @@ ad_proc -public acs_user::flush_cache {
         acs_user::get -user_id $user_id -array user
     }] } {
         util_memoize_flush [list acs_user::get_from_username_not_cached $user(username) $user(authority_id)]
+	util_memoize_flush [list acs_user::get_by_username_not_cached -authority_id $user(authority_id) -username $user(username)]
     }
 }
 
