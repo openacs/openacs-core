@@ -58,7 +58,7 @@ aa_register_case -cats {
     set ref_list [list [list "/doc/doc0.html" "href0"] [list "/doc/doc1.html" "href1"] [list "/doc/doc2.html" "href2"]]
     set c {}
     set ref_list_print [foreach element $ref_list { append c [lindex $element 0] "  " [lindex $element 1]\n}]
-    set separator " - "
+    set separator "-"
     aa_log "List with three references:\n\n$c\nseparator= \" - \" "
 
     aa_equals "" [ad_context_bar_html -separator $separator $ref_list] "<a href=\"[lindex [lindex $ref_list 0] 0]\">[lindex [lindex $ref_list 0] 1]</a> - <a href=\"[lindex [lindex $ref_list 1] 0]\">[lindex [lindex $ref_list 1] 1]</a> - [lindex [lindex $ref_list 2] 0] [lindex [lindex $ref_list 2] 1]"
@@ -117,7 +117,7 @@ ad_context_bar
 		append context_barp "\">"
 		append context_barp [lindex $value 1]
 		append context_barp "</a>"
-		append context_barp $separator
+		append context_barp " $separator "
 	}
 	append context_barp "$leave_node"
 	set context_bar [ad_context_bar -node_id $idr_1 -separator $separator $leave_node]
@@ -137,7 +137,7 @@ ad_context_bar
                 append context_barp "\">"
 	    append context_barp [lindex $value 1]
                 append context_barp "</a>"
-                append context_barp $separator
+                append context_barp " $separator "
         }
         append context_barp "$leave_node"
         set context_bar [ad_context_bar -node_id $idr_2 -separator $separator $leave_node]
@@ -156,7 +156,7 @@ ad_context_bar
                 append context_barp "\">"
 	    append context_barp [lindex $value 1]
                 append context_barp "</a>"
-                append context_barp $separator
+                append context_barp " $separator "
         }
         append context_barp "$leave_node"
 	set context_bar [ad_context_bar -from_node $idr_1 -node_id $idr_2 -separator $separator $leave_node]	

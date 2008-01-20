@@ -44,25 +44,13 @@ aa_register_case -cats {
 	aa_equals "Verify url /doc4 for node1" [site_node::get_url -node_id $node1_node_id] "/$doc4_name/"
 	aa_equals "Verify url /doc4/doc3 for node3" [site_node::get_url -node_id $node3_node_id] "/$doc4_name/$doc3_name/"
 	aa_equals "Verify url /doc2 for node2" [site_node::get_url -node_id $node2_node_id] "/$doc2_name/"
-	# 3) rename /node4 => doc5 without updating children in the cache: Test /doc5 /doc4/doc3 /doc2
+	# 3) init_cache: Test /doc5 /doc5/doc3 /doc2
 	set doc5_name [ad_generate_random_string]
 	db_dml rename_node1 {
 	    update site_nodes
 	    set name = :doc5_name
 	    where node_id = :node1_node_id
 	}
-	site_node::update_cache -node_id $node1_node_id
-	aa_equals "Check url /doc5" [site_node::get_node_id -url "/$doc5_name"] $node1_node_id
-	aa_equals "Check url /doc4/doc3" [site_node::get_node_id -url "/$doc4_name/$doc3_name"] $node3_node_id
-	aa_equals "Check url /doc2" [site_node::get_node_id -url "/$doc2_name"] $node2_node_id
-	aa_equals "Make sure old url /doc1 now matches /" [site_node::get_node_id -url "/$doc1_name/"] $root_node_id
-	aa_equals "Make sure old url /doc1/doc3 now matches /" [site_node::get_node_id -url "/$doc1_name/$doc3_name/"] $root_node_id
-	aa_equals "Make sure old url /doc4 now matches /" [site_node::get_node_id -url "/$doc4_name/"] $root_node_id
-	aa_equals "Make sure url /doc5/doc3 now matches /doc5" [site_node::get_node_id -url "/$doc5_name/$doc3_name/"] $node1_node_id
-	aa_equals "Verify url /doc5 for node1" [site_node::get_url -node_id $node1_node_id] "/$doc5_name/"
-	aa_equals "Verify url /doc4/doc3 for node3" [site_node::get_url -node_id $node3_node_id] "/$doc4_name/$doc3_name/"
-	aa_equals "Verify url /doc2 for node2" [site_node::get_url -node_id $node2_node_id] "/$doc2_name/"
-	# 4) init_cache: Test /doc5 /doc5/doc3 /doc2
 	site_node::init_cache
 	aa_equals "Check url /doc5" [site_node::get_node_id -url "/$doc5_name"] $node1_node_id
 	aa_equals "Check url /doc5/doc3" [site_node::get_node_id -url "/$doc5_name/$doc3_name"] $node3_node_id
@@ -74,7 +62,7 @@ aa_register_case -cats {
 	aa_equals "Verify url /doc5 for node1" [site_node::get_url -node_id $node1_node_id] "/$doc5_name/"
 	aa_equals "Verify url /doc5/doc3 for node3" [site_node::get_url -node_id $node3_node_id] "/$doc5_name/$doc3_name/"
 	aa_equals "Verify url /doc2 for node2" [site_node::get_url -node_id $node2_node_id] "/$doc2_name/"
-	# 5) delete doc3: Test /doc5 /doc2, nonexisting /doc5/doc3
+	# 4) delete doc3: Test /doc5 /doc2, nonexisting /doc5/doc3
 	site_node::unmount -node_id $node3_node_id
 	site_node::delete -node_id $node3_node_id
 	aa_equals "Check url /doc5" [site_node::get_node_id -url "/$doc5_name"] $node1_node_id
