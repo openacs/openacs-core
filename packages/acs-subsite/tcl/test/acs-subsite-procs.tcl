@@ -71,6 +71,7 @@ aa_register_case acs_subsite_expose_bug_1144 {
                 where email = :email
             }]
             aa_equals "New user occurs only once in registered_users" $registered_users_count 1
+            acs_user::delete -user_id $creation_info(user_id)
         }
 }
 
