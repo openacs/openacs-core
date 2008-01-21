@@ -4423,10 +4423,36 @@ ad_proc -public util::which {prog} {
                 or otherwise empty string
 
 } {
-  foreach p [split $::env(PATH) :] {
-    set fullname [file join $p $prog]
-    if {[file executable $fullname]} {
-      return $fullname
+  switch $::tcl_platform(platform) {
+    windows {
+      #
+      # Notice: Windows has an alternative search environment 
+      #         via registry. Maybe it is necessary in the future
+      #         to locate the program via registry (sketch below)
+      #
+      # package require registry
+      # set key {HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths}
+      # set entries [registry keys $key $prog.*]
+      # if {[llength $entries]>0} {
+      #   set fullkey "$key\\[lindex $entries 0]"
+      #   return [registry get $fullkey ""]
+      # }
+      # return ""
+      #
+      set searchdirs [split $::env(PATH) \;] 
+      set exts       [list .exe .dll .com .bat]
+    }
+    default { 
+      set searchdirs [split $::env(PATH) :] 
+      set exts       [list ""]
+    }
+  }
+  foreach dir $searchdirs {
+    set fullname [file join $dir $prog]
+    foreach ext $exts {
+      if {[file executable $fullname$ext]} {
+        return $fullname$ext
+      }
     }
   }
   return ""

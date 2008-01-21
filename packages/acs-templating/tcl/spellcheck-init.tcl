@@ -26,7 +26,10 @@ set dialects_p [parameter::get_from_package_key \
 # aspell or ispell?
 set dicts ""
 set default_lang ""
-if { [string match "*aspell" $bin] } {
+#
+# GN: note, that under windows, the binary will be called aspell.exe
+#
+if { [string match "*aspell*" $bin] } {
     # aspell
     with_catch errmsg {
         set dicts [exec $bin dump dicts]
@@ -41,7 +44,7 @@ if { [string match "*aspell" $bin] } {
         ns_log Warning "Gettings dicts and default_lang for aspell failed with error message: \"$errmsg\""
 	ns_log Notice "You might want to upgrade to a more recent version of Aspell ... http://aspell.sourceforge.net/"
     }
-} elseif { [string match "*ispell" $bin] } {
+} elseif { [string match "*ispell*" $bin] } {
     # ispell - if someone knows how to get the available dictionaries and the
     # default language from ispell, please add it here :-)
     set dicts ""
