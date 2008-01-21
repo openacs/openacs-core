@@ -464,6 +464,7 @@ You can always change your password by doing the following:
   <msg key="UserSiteMap">User's Site Map</msg>
   <msg key="Vacation_Info_Updated">Vacation Information Updated</msg>
   <msg key="Vacation_information_updated">Your vacation information at %site_link% has been updated.</msg>
+  <msg key="view_all_online_members">View all online members.</msg>
   <msg key="Welcome_user">Welcome, %user_name%</msg>
   <msg key="When_leaving_checkbox_empty">When you leave a checkbox empty here then that privilege will be revoked from the party you choose in case it has been granted to that party before.</msg>
   <msg key="Whos_Online_link_label">Users currently online</msg>
