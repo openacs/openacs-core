@@ -7,10 +7,10 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.4.0d1" url="http://openacs.org/repository/download/apm/acs-service-contract-5.4.0d1.apm">
+    <version name="5.4.0b1" url="http://openacs.org/repository/download/apm/acs-service-contract-5.4.0b1.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>API and UI for service contracts</summary>
-        <release-date>2007-07-18</release-date>
+        <release-date>2008-01-23</release-date>
         <maturity>3</maturity>
         <vendor url="http://openacs.org">OpenACS</vendor>
         <description format="text/html">Service contracts defines an API for the creation of interfaces and discovery of interface implementations.
@@ -19,8 +19,8 @@
         <license>GPL version 2</license>
         <maturity>3</maturity>
 
-        <provides url="acs-service-contract" version="5.4.0d1"/>
-        <requires url="acs-kernel" version="5.3.2"/>
+        <provides url="acs-service-contract" version="5.4.0b1"/>
+        <requires url="acs-kernel" version="5.4.0b1"/>
 
         <callbacks>
         </callbacks>

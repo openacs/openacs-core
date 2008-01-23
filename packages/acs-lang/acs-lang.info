@@ -7,10 +7,10 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.4.0d2" url="http://openacs.org/repository/download/apm/acs-lang-5.4.0d2.apm">
+    <version name="5.4.0b1" url="http://openacs.org/repository/download/apm/acs-lang-5.4.0b1.apm">
         <owner url="mailto:peter@collaboraid.biz">Peter Marklund</owner>
         <summary>OpenACS Internationalization Support.</summary>
-        <release-date>2007-07-18</release-date>
+        <release-date>2008-01-23</release-date>
         <maturity>3</maturity>
         <vendor url="http://www.collaboraid.biz">Collaboraid</vendor>
 	<license url="http://www.gnu.org/copyleft/gpl.html">GPL</license>
@@ -23,10 +23,10 @@ Also fixed message::register, so that no messages with wrong package key can be 
 Added the possibility to unregister messages.
 </description>
 
-        <provides url="acs-lang" version="5.4.0d2"/>
-        <requires url="acs-kernel" version="5.3.2"/>
-        <requires url="acs-translations" version="5.3.2"/>
-        <requires url="ref-timezones" version="5.3.2"/>
+        <provides url="acs-lang" version="5.4.0b1"/>
+        <requires url="acs-kernel" version="5.4.0b1"/>
+        <requires url="acs-translations" version="5.4.0b1"/>
+        <requires url="ref-timezones" version="5.4.0b1"/>
 
         <callbacks>
         </callbacks>
