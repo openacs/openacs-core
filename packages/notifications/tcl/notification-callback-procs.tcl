@@ -134,4 +134,4 @@ ad_proc -public -callback acs_mail_lite::incoming_email -impl notifications {
 ad_proc -public -callback notifications::incoming_email {
     -array:required
 } {
-}
+}-
