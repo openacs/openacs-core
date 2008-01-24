@@ -558,7 +558,7 @@ ad_proc -private template::form::render { id tag_attributes } {
     set properties(action) [ns_conn url]
   }
   
-  set output "<form name=\"$id\" method=\"$properties(method)\" 
+  set output "<form id=\"$id\" name=\"$id\" method=\"$properties(method)\" 
                     action=\"$properties(action)\""
 
   ### 2/17/2007
