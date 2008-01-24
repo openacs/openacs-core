@@ -11,9 +11,10 @@
         <owner url="mailto:dave@thedesignexperience.org">Dave Bauer</owner>
         <summary>Full text search support for Search via Tsearch2.</summary>
         <description format="text/html">Provides an implementation for the search packages service contract for searching on postgresql.</description>
-        <maturity>0</maturity>
+        <maturity>3</maturity>
 
         <provides url="tsearch2-driver" version="5.4.0b1"/>
+        <requires url="search" version="5.4.0b1"/>
 
         <callbacks>
             <callback type="before-install" proc="tsearch2_driver::install::preinstall_checks"/>

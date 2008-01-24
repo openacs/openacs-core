@@ -14,7 +14,7 @@
         <release-date>2008-01-23</release-date>
         <vendor url="http://www.openacs.org">OpenACS</vendor>
         <description format="text/html">This package provides a simple ns_sendmail-like interface for sending messages, but queues messages in the database to ensure reliable sending and make sending a message 'transactional'. Prefered over acs-messaging or acs-mail.</description>
-        <maturity>1</maturity>
+        <maturity>2</maturity>
 
         <provides url="acs-mail-lite" version="5.4.0b1"/>
         <requires url="acs-kernel" version="5.4.0b1"/>

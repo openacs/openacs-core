@@ -11,7 +11,6 @@
         <owner url="mailto:peter@collaboraid.biz">Peter Marklund</owner>
         <summary>OpenACS Internationalization Support.</summary>
         <release-date>2008-01-23</release-date>
-        <maturity>3</maturity>
         <vendor url="http://www.collaboraid.biz">Collaboraid</vendor>
 	<license url="http://www.gnu.org/copyleft/gpl.html">GPL</license>
 	<maturity>3</maturity>

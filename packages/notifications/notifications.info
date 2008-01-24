@@ -14,7 +14,7 @@
         <release-date>2007-06-27</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
         <description format="text/html">Provides an API for packages to provide subscription based email notifications and handle replies.  Used by forums, bug-tracker, etc.  The currently prefered package for email notifications.</description>
-        <maturity>3</maturity>
+        <maturity>2</maturity>
         <package_instance_name>#notifications.Notifications#</package_instance_name>
 
         <provides url="notifications" version="5.4.0b1"/>
