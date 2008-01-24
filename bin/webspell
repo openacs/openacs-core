@@ -17,4 +17,8 @@
 HOME=$1
 export HOME
 
+# set default language, in case, no language was given
+LANG=en_US.UTF-8
+export LANG
+
 exec $2 $3 -a -p $4 < $5
