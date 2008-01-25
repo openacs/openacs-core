@@ -476,9 +476,48 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
 	}
 	set ::acs_blank_master(xinha.options) $xinha_options
 	lappend ::acs_blank_master__htmlareas $attributes(id)
-      } 
-
-    } else {
+      } elseif {$richtextEditor eq "tinymce"} {
+          append output "<script>document.write(\"<input name='$element(id).format' value='text/html' type='hidden'/>\");</script>\n"
+          append output "<noscript><br/>Format: $format_menu</noscript>\n"
+          lappend ::acs_blank_master__htmlareas $attributes(id)
+          
+          # get default configs
+          set tinymce_default_config {
+              {mode "exact" } 
+              {relative_urls "false"}
+              {height "450px" }
+              {width "100%"}
+              {plugins "oacsimage,oacslink,style,layer,table,save,iespell,preview,zoom,media,searchreplace,print,contextmenu,paste,fullscreen,noneditable,visualchars,xhtmlxtras" }        
+              {browsers "msie,gecko,safari,opera" }
+              {apply_source_formatting "true" }
+              {paste_auto_cleanup_on_paste true}
+              {paste_convert_headers_to_strong true}
+              {fix_list_elements true}
+              {fix_table_elements true}
+              {theme_openacs_toolbar_location "top" }
+              {theme_openacs_toolbar_align "left" }
+              {theme_openacs_statusbar_location "bottom" }
+              {theme_openacs_resizing true}
+              {theme_openacs_disable "styleselect"}
+              {theme_openacs_buttons1_add_before "save,separator"} 
+              {theme_openacs_buttons2_add "oacslink,separator,preview,separator,forecolor,backcolor"} 
+              {theme_openacs_buttons2_add_before "cut,copy,paste,pastetext,pasteword,separator,search,replace,separator"} 
+              {theme_openacs_buttons3_add_before "tablecontrols,separator"} 
+              {theme_openacs_buttons3_add "iespell,media,separator,print,separator,fullscreen"} 
+              {extended_valid_elements "img[class|src|border=0|alt|title|hspace|vspace|width|height|align|onmouseover|onmouseout|name],hr[class|width|size|noshade],font[face|size|color|style],span[class|align|style]"}}
+          set tinymce_configs_list [parameter::get \
+                                        -package_id [apm_package_id_from_key "acs-templating"] \
+                                        -parameter "XinhaDefaultPlugins" \
+                                        -default $tinymce_default_config]
+          set pairslist [list]
+          foreach config_pair $tinymce_configs_list {
+              lappend pairslist "[lindex $config_pair 0]:\"[lindex $config_pair 1]\""
+          }
+          lappend pairslist "elements : \"[join $tinymce_elements ","]\""
+          set tinymce_configs_js [join $pairslist ","]
+          set ::acs_blank_master(tinymce.config) $timymce_configs_js
+      }
+  } else {
         # Display mode
         if { $element(mode) eq "display" && [info exists element(value)] } {
             append output [template::util::richtext::get_property html_value $element(value)]
