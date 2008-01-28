@@ -4457,3 +4457,89 @@ ad_proc -public util::which {prog} {
   }
   return ""
 }
+
+ad_proc util::catch_exec {command result_var} {
+    Catch a call to Tcl exec. Handle shell return codes
+    consistently. Works like catch. The result of the exec is put into
+    the variable named in result_var. Inspired by
+    http://wiki.tcl.tk/1039
+
+    @param command A list of arguments to pass to exec
+    @param result_var Variable name in caller's scope to set the result in
+
+    @return 0 or 1. 0 if no error, 1 if an error occured. If an error occured
+    the error message will be put into result_var in the caller's scope.
+
+    @author Dave Bauer
+    @creation-date 2008-01-28
+    
+} {
+    
+    upvar result_var result
+    set status [catch [concat exec $command] result]
+    if { $status == 0 } {
+        
+        # The command succeeded, and wrote nothing to stderr.                   
+        # $result contains what it wrote to stdout, unless you                  
+        # redirected it
+        ns_log notice "Status == 0 $result"
+        
+    } elseif { [string equal $::errorCode NONE] } {
+
+        # The command exited with a normal status, but wrote something          
+        # to stderr, which is included in $result.                              
+        ns_log "Normatl Status $result"
+        
+    } else {
+
+        switch -exact -- [lindex $::errorCode 0] {
+
+            CHILDKILLED {
+                foreach { - pid sigName msg } $::errorCode break
+
+                # A child process, whose process ID was $pid,                   
+                # died on a signal named $sigName.  A human-                    
+                # readable message appears in $msg.
+                ns_log notice "childkilled $pid $sigName $msg $result"
+                set result "process $pid died with signal $sigName \"$msg\""
+                return 1
+            }
+
+            CHILDSTATUS {
+
+                foreach { - pid code } $::errorCode break
+
+                # A child process, whose process ID was $pid,                   
+                # exited with a non-zero exit status, $code.
+                ns_log notice "Childstatus $pid $code $result"
+            }
+
+            CHILDSUSP {
+
+                foreach { - pid sigName msg } $::errorCode break
+
+                # A child process, whose process ID was $pid,                   
+                # has been suspended because of a signal named                  
+                # $sigName.  A human-readable description of the                
+                # signal appears in $msg.                                       
+                ns_log notice "Child susp $pid $sigName $msg $result"
+                set result "process $pid was suspended with signal $sigName \"$msg\""
+                return 1
+            }
+
+            POSIX {
+
+                foreach { - errName msg } $::errorCode break
+
+                # One of the kernel calls to launch the command                 
+                # failed.  The error code is in $errName, and a                 
+                # human-readable message is in $msg.                            
+                ns_log notice "posix $errName $msg $result"
+                set result "an error occured $errName \"$msg\""
+                return 1
+            }
+
+        }
+    }
+    return 0
+}
