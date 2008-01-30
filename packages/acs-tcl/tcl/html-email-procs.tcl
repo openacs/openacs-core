@@ -138,10 +138,10 @@ ad_proc parse_incoming_email {
         }
     }
 
-    if { [info exists html] } {
-        set body [ad_html_to_text -- $html]
-    } elseif { [info exists plain] } {
+    if { [info exists plain] } {
         set body $plain
+    } elseif { [info exists html] } {
+        set body [ad_html_to_text -- $html]
     } else {
         set body $message
     }
