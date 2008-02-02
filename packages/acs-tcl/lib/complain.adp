@@ -10,10 +10,7 @@
 
 <ul>
   <multiple name="complaints">
-    <if @complaints:rowcount@ gt 1>
-      <li>
-    </if>
-    @complaints.text;noquote@
+    <li>@complaints.text;noquote@</li>
   </multiple>
 </ul>
 
