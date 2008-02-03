@@ -46,6 +46,12 @@ entire &majorversion;.&minorversion; release sequence <xref linkend="changelog">
               /packages/acs-templating/tcl/head-procs.tcl or visit the template::head procs
               in the API browser for details.
               </para>
+        <para>Templates have been modified to comply with HTML strict</para>
+        <para>The Search package's results page has been improved</para>
+        <para>TinyMCE WYSIWYG support has been added, RTE and HTMLArea support dropped</para>
+        <para>acs-mail-lite's send has been cleaned up to properly encode content, to handle
+              file attachements, etc.  "complex-send" has been deprecated and will disappear
+              from acs-core in the future.</para>
       </listitem>
     </itemizedlist>
    </sect2>
