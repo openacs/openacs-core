@@ -7,10 +7,10 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.4.0b1" url="http://openacs.org/repository/download/apm/acs-templating-5.4.0b1.apm">
+    <version name="5.4.0" url="http://openacs.org/repository/download/apm/acs-templating-5.4.0.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Templating library.</summary>
-        <release-date>2008-01-23</release-date>
+        <release-date>2008-02-03</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
         <description format="text/html">The templating system provides the tag library and support routines
 that allow developers and graphic designers to work
@@ -25,8 +25,8 @@ layout of a site can be more easily administered.
         <license>GPL version 2</license>
         <maturity>3</maturity>
 
-        <provides url="acs-templating" version="5.4.0b1"/>
-        <requires url="acs-kernel" version="5.4.0b1"/>
+        <provides url="acs-templating" version="5.4.0"/>
+        <requires url="acs-kernel" version="5.4.0"/>
 
         <callbacks>
             <callback type="before-upgrade"  proc="template::apm::before_upgrade"/>
