@@ -19,15 +19,15 @@ BEGINNING OF TEMPLATE
   </authorblurb>
     
     <para>
-	This is a final release of OpenACS X.X.X.  To upgrade from a
-	previous version, see <xref linkend="upgrade-detail"/>.
+        This is a final release of OpenACS X.X.X.  To upgrade from a
+        previous version, see <xref linkend="upgrade-detail"/>.
   </para>
     
     <para>
-	Please report bugs using our
-	<ulink url="http://openacs.org/bugtracker/openacs/">
-	  Bug Tracker</ulink> at the <ulink
-	  url="http://openacs.org/">OpenACS website</ulink>.
+        Please report bugs using our
+        <ulink url="http://openacs.org/bugtracker/openacs/">
+          Bug Tracker</ulink> at the <ulink
+          url="http://openacs.org/">OpenACS website</ulink>.
   </para>
     
   </sect2>
@@ -37,17 +37,15 @@ END OF TEMPLATE -->
 linkend="changelog-latest"></xref>) since the last release and in the
 entire &majorversion;.&minorversion; release sequence <xref linkend="changelog"></xref>.</para>
 
-  <sect2 id="release-notes-5-3-2">
-    <title>Release 5.3.2</title>
+  <sect2 id="release-notes-5-4-0">
+    <title>Release 5.4.0</title>
     <itemizedlist>
       <listitem>
-        <para>Bug fixes.</para>
-        <para>New TIPs implemented.</para>
-	<para>All Core Automated Tests for Postgres pass.  One for Oracle fails (error in test)</para>
-	<para>New Site and Blank master templates and CSS compatible with the .LRN Zen
-	      work.  Compatibility master templates are provided for existing sites.  
-              In 5.3.1, the tabbed master (group-master.*) didn't work correctly, this has been
-              fixed in 5.3.2</para>
+        <para>New Templating API added to add scripts, css, etc to the HTML HEAD and BODY 
+              sections of the generated HTML document.  Please see 
+              /packages/acs-templating/tcl/head-procs.tcl or visit the template::head procs
+              in the API browser for details.
+              </para>
       </listitem>
     </itemizedlist>
    </sect2>
@@ -63,9 +61,9 @@ entire &majorversion;.&minorversion; release sequence <xref linkend="changelog">
       <listitem>
         <para>Bug fixes.</para>
         <para>New TIPs implemented.</para>
-	<para>All Core Automated Tests for Postgres pass.</para>
-	<para>New Site and Blank master templates and CSS compatible with the .LRN Zen
-	      work.  Compatibility master templates are provided for existing sites.</para>
+        <para>All Core Automated Tests for Postgres pass.</para>
+        <para>New Site and Blank master templates and CSS compatible with the .LRN Zen
+              work.  Compatibility master templates are provided for existing sites.</para>
       </listitem>
     </itemizedlist>
    </sect2>
@@ -81,7 +79,7 @@ entire &majorversion;.&minorversion; release sequence <xref linkend="changelog">
       <listitem>
         <para>Bug fixes.</para>
         <para>New TIPs implemented.</para>
-	<para>All Core Automated Tests for Postgres pass.</para>
+        <para>All Core Automated Tests for Postgres pass.</para>
       </listitem>
     </itemizedlist>
    </sect2>
@@ -244,28 +242,28 @@ entire &majorversion;.&minorversion; release sequence <xref linkend="changelog">
     <title>Release 5.0.0</title>
 
     <para>
-	This is OpenACS 5.0.0.  This version contains no known security, data loss, or crashing bugs, nor any bugs judged release blockers.  This version has received manual testing.  It has passed current automated testing, which is not comprehensive.  This release contains work done on the translation server http://translate.openacs.org through 7 Nov 2003.  
+        This is OpenACS 5.0.0.  This version contains no known security, data loss, or crashing bugs, nor any bugs judged release blockers.  This version has received manual testing.  It has passed current automated testing, which is not comprehensive.  This release contains work done on the translation server http://translate.openacs.org through 7 Nov 2003.  
   </para>
     
     <para>
-	Please report bugs using our
-	<ulink url="http://openacs.org/bugtracker/openacs/">
-	  Bug Tracker</ulink> at the <ulink
-	  url="http://openacs.org/">OpenACS website</ulink>.
+        Please report bugs using our
+        <ulink url="http://openacs.org/bugtracker/openacs/">
+          Bug Tracker</ulink> at the <ulink
+          url="http://openacs.org/">OpenACS website</ulink>.
   </para>
     
   <para>
-	You may want to begin by reading our installation documentation for
-	<xref linkend="unix-install"/>.  Note that the Windows documentation is
-	not current for OpenACS &version;, but an alternative is to use John
-	Sequeira's <ulink
-	url="http://www.pobox.com/~johnseq/projects/oasisvm/">Oasis VM
-	project</ulink>.
+        You may want to begin by reading our installation documentation for
+        <xref linkend="unix-install"/>.  Note that the Windows documentation is
+        not current for OpenACS &version;, but an alternative is to use John
+        Sequeira's <ulink
+        url="http://www.pobox.com/~johnseq/projects/oasisvm/">Oasis VM
+        project</ulink>.
   </para>
     
   <para>
-	After installation, the full documentation set can be found by visiting
-	<filename>http://yourserver/doc</filename>.
+        After installation, the full documentation set can be found by visiting
+        <filename>http://yourserver/doc</filename>.
   </para>
 
   <para>
@@ -382,25 +380,25 @@ entire &majorversion;.&minorversion; release sequence <xref linkend="changelog">
           With the release of OpenACS 5, PostgreSQL 7.2 is no longer supported.
           Upgrades are supported from OpenACS 4.6.3 under Oracle or 
           PostgreSQL 7.3.
-	</para>
-      </listitem>
-
-      <listitem>
-        <para>
-	   The undocumented special handling of ~ and +variable+ in
-	   formtemplates, found in <filename>packages/acs-templating/resources/*</filename>,
-	   has been removed in favor of using &lt;noparse&gt; and
-	   \@variable\@ (the standard templating mechanisms).  Locally
-	   provided formtemplate styles still using these mechanisms
-	   will break.
         </para>
       </listitem>
 
       <listitem>
         <para>
-	   Serving backup files and files from the CVS directories is turned off by default via the acs-kernel parameter
-     	   ExcludedFiles in section request-processor (The variable provides a string match glob list of files and is defaulted to "*/CVS/* *~")
-	</para>
+           The undocumented special handling of ~ and +variable+ in
+           formtemplates, found in <filename>packages/acs-templating/resources/*</filename>,
+           has been removed in favor of using &lt;noparse&gt; and
+           \@variable\@ (the standard templating mechanisms).  Locally
+           provided formtemplate styles still using these mechanisms
+           will break.
+        </para>
+      </listitem>
+
+      <listitem>
+        <para>
+           Serving backup files and files from the CVS directories is turned off by default via the acs-kernel parameter
+                ExcludedFiles in section request-processor (The variable provides a string match glob list of files and is defaulted to "*/CVS/* *~")
+        </para>
       </listitem>
 
   </itemizedlist>
