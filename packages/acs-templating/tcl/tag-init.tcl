@@ -901,3 +901,19 @@ template_tag default { chunk params } {
 template_tag contract { chunk params } {}
 
 template_tag comment { chunk params } {}
+
+template_tag box { chunk params } {
+    set class [ns_set iget $params class]
+    set title [ns_set iget $params title]
+
+    template::adp_append_code "append __adp_output \"                           
+<div class=\\\"portlet-wrapper\\\">                                             
+<div class=\\\"portlet-header\\\">                                              
+<div class=\\\"portlet-title-no-controls\\\">                                   
+<h1>$title</h1>                                                                 
+</div>                                                                          
+</div>                                                                          
+<div class=\\\"portlet\\\">\""
+    template::adp_compile_chunk $chunk
+    template::adp_append_code "append __adp_output {</div></div>}"
+}
