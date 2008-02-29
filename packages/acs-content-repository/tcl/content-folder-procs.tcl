@@ -15,7 +15,7 @@ namespace eval ::content::folder {}
 ad_proc -public ::content::folder::new {
     -name:required
     {-folder_id ""}
-    {-parent_id "-4"}
+    {-parent_id ""}
     {-content_type "content_folder"}
     {-label ""}
     {-description ""}
