@@ -38,5 +38,6 @@ aa_register_case -cats {smoke} -error_level warning server_error_log {
             append entry $line \n
         }
     }
+    close $fd
 }
 

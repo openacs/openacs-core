@@ -75,6 +75,8 @@ ad_proc -public oacs_util::process_objects_csv {
         }
     }
 
+    close $csv_stream
+
     # Return the list of objects
     return $list_of_object_ids
 }
@@ -132,6 +134,10 @@ ad_proc -public oacs_util::csv_foreach {
 
         # Now we are ready to process the code block
         set errno [catch { uplevel 1 $code_block } error]
+
+	if {$errno > 0} {
+	  close $csv_stream
+	}
 
         # handle error, return, break, continue
 	# (source: http://wiki.tcl.tk/unless last case)
