@@ -15,13 +15,13 @@ namespace eval ::content::folder {}
 ad_proc -public ::content::folder::new {
     -name:required
     {-folder_id ""}
-    {-parent_id "-4"}
+    {-parent_id ""}
     {-content_type "content_folder"}
     {-label ""}
     {-description ""}
     {-creation_user ""}
     {-creation_ip ""}
-    {-creation_date ""}
+    -creation_date
     {-context_id ""}
     {-package_id ""}
 } {
@@ -56,31 +56,18 @@ ad_proc -public ::content::folder::new {
     
     @error 
 } {
-    # FIXME or should this use package instantiate object which is a
-    # little smarter
-    
-    if {$parent_id != "-4" && [content::folder::is_registered -folder_id $parent_id -content_type "content_folder"] eq "f"} {
-	ns_log Error  "-20000: This folder does not allow subfolders to be created"
+    set var_list [list]
+    foreach var [list folder_id name label description parent_id context_id package_id] {
+	lappend var_list [list $var [set $var]]
     }
-	
-    set folder_id [content::item::new -item_id $folder_id -name $name -parent_id $parent_id -content_type "content_folder" -item_subtype "content_folder" -package_id $package_id -context_id $context_id -creation_user $creation_user -creation_ip $creation_ip -creation_date $creation_date]
-
-    # Insert the folder into cr_folders
-    db_dml insert_cr_folders ""
-    
-    # Update the object to have the label. This is done to prevent content::item::new from generating a revision
-    db_dml update_object_title ""
-
-    # inherit the attributes of the parent folder
-    
-    if {$parent_id ne "" } {
-	
-	db_dml inherit_folder_type ""
-
-	# update the child flag on the parent   
-	db_dml update_parent_folder ""
+    if {[exists_and_not_null creation_date]} {
+        lappend var_list [list creation_date $creation_date]
     }
-
+    set folder_id [package_instantiate_object \
+		     -creation_user $creation_user \
+		     -creation_ip $creation_ip \
+		     -var_list $var_list \
+		     $content_type]
     return $folder_id
 }
 
