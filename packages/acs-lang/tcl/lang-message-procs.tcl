@@ -693,7 +693,7 @@ ad_proc -public lang::message::lookup {
     @param default            Text to return if there is no message in the message catalog for
                               the given locale. This argument is optional. If this argument is
                               not provided or is the empty string then the text returned will
-                              be TRANSLATION MISSING - $key.
+                              be TRANSLATION MISSING - $key. 
 
     @param substitution_list  A list of values to substitute into the message. This argument should
                               only be given for certain messages that contain place holders (on the syntax
@@ -722,6 +722,12 @@ ad_proc -public lang::message::lookup {
     # Make sure messages are in the cache
     cache
 
+    # Make sure that a default of "" is transformed into Translation Missing
+    # As per discussion on IRC on 2008-03-06
+    if { $default eq ""} {
+	set default "TRANSLATION MISSING"
+    }
+    
     if { $locale eq "" } {
         # No locale provided
 
