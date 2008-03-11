@@ -178,7 +178,7 @@ proc_doc ad_dimensional_set_variables {option_list {options_set ""}} {
     }
 }
 
-ad_proc ad_table { 
+ad_proc -deprecated ad_table { 
     {
         -Torder_target_url {}
         -Torderby {}
@@ -206,6 +206,9 @@ ad_proc ad_table {
     }
     statement_name sql_qry Tdatadef
 } {
+
+    DRB: New code should use the listbuilder.
+
     Note: all the variables in this function are named Tblah since we could potentially 
     have namespace collisions
     <p>
