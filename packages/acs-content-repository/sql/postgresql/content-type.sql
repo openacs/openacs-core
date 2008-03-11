@@ -1052,7 +1052,7 @@ begin
 end;' language 'plpgsql';
 
 
-select define_function_args('content_type__is_content_type','content_type'); 
+select define_function_args('content_type__is_content_type','object_type'); 
 
 create or replace function content_type__is_content_type (varchar)
 returns boolean as '
