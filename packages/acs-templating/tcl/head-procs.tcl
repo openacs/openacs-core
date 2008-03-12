@@ -96,6 +96,7 @@ ad_proc -public template::head::add_link {
     {-media ""}
     {-title ""}
     {-lang ""}
+    {-order "0"}
 } {
     Add a link tag to the head section of the document to be returned to the
     users client.  A given target document may only be added once for a 
@@ -117,7 +118,7 @@ ad_proc -public template::head::add_link {
 } {
     variable ::template::head::links
 
-    set links($rel,$href) [list $rel $href $type $media $title $lang]
+    set links($rel,$href) [list $rel $href $type $media $title $lang $order]
 }
 
 ad_proc -public template::head::add_meta {
@@ -226,6 +227,7 @@ ad_proc -public template::head::add_css {
     {-media "all"}
     {-title ""}
     {-lang ""}
+    {-order "0"}
 } {
     Add a link tag with relation type 'stylesheet' or 'alternate stylesheet',
     and type 'text/css' to the head section of the document to be returned to 
@@ -259,7 +261,8 @@ ad_proc -public template::head::add_css {
         -href $href \
         -media $media \
         -title $title \
-        -lang $lang
+        -lang $lang \
+        -order $order
 }
 
 ad_proc -public template::add_body_handler {
@@ -459,57 +462,29 @@ ad_proc template::head::prepare_multirows {} {
 
     # Generate the <link /> tag multirow
     variable ::template::head::links
-    template::multirow create link rel type href title lang media
+    template::multirow create link rel type href title lang media order
     if {[array exists links]} {
-        # first media = "all"
+        # first non alternate stylesheet
         foreach name [array names links] {
-            foreach {rel href type media title lang} $links($name) {
-                if {$media eq "all" && $rel ne "alternate stylesheet"} {
+            foreach {rel href type media title lang order} $links($name) {
+                if {$rel ne "alternate stylesheet"} {
                     template::multirow append link \
                         $rel \
                         $type \
                         $href \
                         $title \
                         $lang \
-                        $media
+                        $media \
+                        $order
                     set links($name) ""
                 }
             }
         }
-        # then media != "all"
+        # order the stylesheets before adding alternate ones
+        template::multirow sort link order
+        # now alternate stylesheet
         foreach name [array names links] {
-            foreach {rel href type media title lang} $links($name) {
-                if {$rel ne "alternate stylesheet" && $links($name) ne ""} {
-                    template::multirow append link \
-                        $rel \
-                        $type \
-                        $href \
-                        $title \
-                        $lang \
-                        $media
-                    set links($name) ""
-                }
-            }
-        }
-        # now alternate stylesheet, prioritize media = "screen"
-        foreach name [array names links] {
-            foreach {rel href type media title lang} $links($name) {
-                if {$media eq "all" && $links($name) ne ""} {
-                    template::multirow append link \
-                        $rel \
-                        $type \
-                        $href \
-                        $title \
-                        $lang \
-                        $media
-                    set links($name) ""
-                }
-            }
-        }
-        # now alternate stylesheets, media other than screen
-        # plus any other links
-        foreach name [array names links] {
-            foreach {rel href type media title lang} $links($name) {
+            foreach {rel href type media title lang order} $links($name) {
                 if {$links($name) ne ""} {
                     template::multirow append link \
                         $rel \
@@ -517,7 +492,9 @@ ad_proc template::head::prepare_multirows {} {
                         $href \
                         $title \
                         $lang \
-                        $media
+                        $media \
+                        $order
+                    set links($name) ""
                 }
             }
         }
@@ -553,7 +530,7 @@ ad_proc template::head::prepare_multirows {} {
                     $charset \
                     $defer \
                     $content \
-	            $order
+                    $order
             }
         }
         template::multirow sort headscript order
