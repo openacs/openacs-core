@@ -129,7 +129,7 @@ ad_proc -private search::indexer {} {
                 # Don't bother reindexing if we've already inserted/updated this object in this run
                 if {![info exists seen($object_id)]} {
                     set object_type [acs_object_type $object_id]
-                    ns_log notice "\n-----DB-----\n SEARCH INDEX object type = '${object_type}' \n------------\n "
+                    ns_log debug "\n-----DB-----\n SEARCH INDEX object type = '${object_type}' \n------------\n "
                     if {[callback::impl_exists -callback search::datasource -impl $object_type] \
                             || [acs_sc_binding_exists_p FtsContentProvider $object_type]} {
                         array set datasource {mime {} storage_type {} keywords {}}
