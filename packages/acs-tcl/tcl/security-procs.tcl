@@ -654,7 +654,7 @@ ad_proc -public ad_restrict_entire_server_to_registered_users {
     unregistered, except the site index page and stuff underneath
     [subsite]/register. Use permissions on the site node map to control access.
 } {
-    if {"/favicon.ico" ne [ad_conn url] && "/index.tcl" ne [ad_conn url] && "/" ne [ad_conn url] && ![string match "*/register/*" [ad_conn url]] && ![string match "*/SYSTEM/*" [ad_conn url]] && ![string match "*/user_please_login.tcl" [ad_conn url]]} {
+    if {"/favicon.ico" ne [ad_conn url] && "/index.tcl" ne [ad_conn url] && "/" ne [ad_conn url] && ![string match "/global/*" [ad_conn url]] && ![string match "*/register/*" [ad_conn url]] && ![string match "*/SYSTEM/*" [ad_conn url]] && ![string match "*/user_please_login.tcl" [ad_conn url]]} {
 	# not one of the magic acceptable URLs
 	set user_id [ad_conn user_id]
 	if {$user_id == 0} {
