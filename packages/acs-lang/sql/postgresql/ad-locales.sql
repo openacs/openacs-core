@@ -319,12 +319,12 @@ insert into ad_locales
 insert into ad_locales
        (locale, label, language, country, nls_language, nls_territory,
         nls_charset, mime_charset, default_p, enabled_p)
- values ('en_CA', 'English (CA)', 'ca', 'EN', 'English (Canada)', 'Canada', 'WE8DEC', 'ISO-8859-1', 'f', 'f');
+ values ('en_CA', 'English (CA)', 'en', 'CA', 'English (Canada)', 'Canada', 'WE8DEC', 'ISO-8859-1', 'f', 'f');
 
 insert into ad_locales
        (locale, label, language, country, nls_language, nls_territory,
         nls_charset, mime_charset, default_p, enabled_p)
- values ('fr_CA', 'French (CA)', 'ca', 'FR', 'French (Canada)', 'Canada', 'WE8DEC', 'ISO-8859-1', 'f', 'f');
+ values ('fr_CA', 'French (CA)', 'fr', 'CA', 'French (Canada)', 'Canada', 'WE8DEC', 'ISO-8859-1', 'f', 'f');
 
 insert into ad_locales
        (locale, label, language, country, nls_language, nls_territory,
