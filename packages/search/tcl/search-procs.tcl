@@ -200,10 +200,13 @@ ad_proc -private search::indexer {} {
                     unset seen($object_id)
                 }
             }
-            default {
-                search::dequeue -object_id $object_id -event_date $event_date -event $event
-            }
         }
+
+        # Don't put that dequeue in a default block of the swith above
+        # otherwise objects with insert/update and delete operations in the same
+        # run would crash and never get dequeued
+
+        search::dequeue -object_id $object_id -event_date $event_date -event $event
     }
 
 }
