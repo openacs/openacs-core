@@ -654,7 +654,7 @@ ad_proc -public acs_user::registered_user_p {
 
     @author Malte Sussdorff (malte.sussdorff@cognovis.de)
 } {
-    if { [empty_string_p $user_id]} {
+    if { $user_id eq ""} {
         set user_id [ad_conn user_id]
     }
 

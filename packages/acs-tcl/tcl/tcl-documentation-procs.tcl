@@ -1872,7 +1872,7 @@ ad_page_contract_filter negative_float { name value } {
     }
     # trim leading zeros, so as not to confuse Tcl
     set value [string trimleft $value "0"]
-    if { [empty_string_p $value] } {
+    if { $value eq "" } {
 			# but not all of the zeros
 			set value "0"
     }

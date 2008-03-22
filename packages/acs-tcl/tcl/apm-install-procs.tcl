@@ -2189,7 +2189,7 @@ ad_proc -private apm::package_version::attributes::get_instance_name { package_k
     set parameter "package_instance_name"
     set version_id [apm_version_id_from_package_key $package_key]
 
-    if {![empty_string_p $version_id]} {
+    if {$version_id ne ""} {
         apm::package_version::attributes::get -version_id $version_id -array packages_names
 	# it was added this catch for those packages that does not
 	# have the attribute package instance name, in this case

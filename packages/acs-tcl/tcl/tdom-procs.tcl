@@ -45,7 +45,7 @@ ad_proc -public tdom::get_node_object {
     set node_object ""
     foreach node_name $args {
 	catch {set node_object [$parent_node_object getElementsByTagName "$node_name"]}
-	if {![string equal $node_object ""]} {
+	if {$node_object ne "" } {
 	    return $node_object
 	}
     }
@@ -85,7 +85,7 @@ ad_proc -public tdom::get_tag_value {
 
     foreach tag_name $args {
 	catch {set tag_value [[$node_object getElementsByTagName "$tag_name"] text]} errormsg
-	if {![string equal [string trim $tag_value] ""]} {
+	if {[string trim $tag_value] ne "" } {
 	    return $tag_value
 	}
     }

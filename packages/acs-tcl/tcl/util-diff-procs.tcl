@@ -60,14 +60,14 @@ ad_proc -public util::diff {
                 lappend output [string trim $item]
             }
             lappend output </a>
-            incr i [expr $old_index2 - $old_index1 + 1]
+            incr i [expr {$old_index2 - $old_index1 + 1}]
         } elseif { $action eq "deleted" } {
             lappend output <d>
             foreach item [lrange $old $old_index1 $old_index2] {
                 lappend output [string trim $item]
             }
             lappend output </d>
-            incr i [expr $old_index2 - $old_index1 + 1]
+            incr i [expr {$old_index2 - $old_index1 + 1}]
         } elseif { $action eq "added" } {
             while {$i < $old_index2} {
                 lappend output [lindex $old $i]
@@ -218,14 +218,14 @@ ad_proc -public util::html_diff {
             }
 	    ns_log notice "adding </a>"
 	    lappend output </a>
-            incr i [expr $old_index2 - $old_index1 + 1]
+            incr i [expr {$old_index2 - $old_index1 + 1}]
         } elseif { $action eq "deleted" } {
             lappend output <d>
             foreach item [lrange $old_list $old_index1 $old_index2] {
                 lappend output [string trim $item]
             }
             lappend output </d>
-            incr i [expr $old_index2 - $old_index1 + 1]
+            incr i [expr {$old_index2 - $old_index1 + 1}]
         } elseif { $action eq "added" } {
             while {$i < $old_index2} {
 		ns_log notice "unchanged $item"

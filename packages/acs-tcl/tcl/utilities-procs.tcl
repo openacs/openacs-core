@@ -4484,7 +4484,7 @@ ad_proc util::catch_exec {command result_var} {
         # redirected it
         ns_log notice "Status == 0 $result"
         
-    } elseif { [string equal $::errorCode NONE] } {
+    } elseif {$::errorCode eq "NONE"} {
 
         # The command exited with a normal status, but wrote something          
         # to stderr, which is included in $result.                              
