@@ -91,12 +91,12 @@ ad_form -extend -name "portrait_upload" -validate {
 
     {upload_file
         
-        { [empty_string_p $mime_types] || [lsearch $mime_types [ns_guesstype $upload_file]] > -1 }
+        { $mime_types eq "" || [lsearch $mime_types [ns_guesstype $upload_file]] > -1 }
         {Your image wasn't one of the acceptable MIME types: $mime_types}
     }
     {upload_file
 
-        { [empty_string_p $max_bytes] || [file size [ns_queryget upload_file.tmpfile]] <= $max_bytes } 
+        { $max_bytes eq "" || [file size [ns_queryget upload_file.tmpfile]] <= $max_bytes } 
         {Your file is too large.  The publisher of [ad_system_name] has chosen to limit portraits to [util_commify_number $max_bytes] bytes.  You can use PhotoShop or the GIMP (free) to shrink your image}
     }
 

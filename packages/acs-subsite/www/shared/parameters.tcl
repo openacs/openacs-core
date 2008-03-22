@@ -89,7 +89,7 @@ db_foreach select_params {} {
     if { $file_val ne "" } { 
         set display_warning_p 1 
         lappend elm [list after_html "<br><span style=\"color: red; font-weight: bold;\">$file_val (*)</span>"]
-    } 
+    }
     
     ad_form -extend -name parameters -form [list $elm]
 
