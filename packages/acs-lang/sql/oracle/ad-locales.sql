@@ -68,6 +68,16 @@ create table ad_locale_user_prefs (
                         references ad_locales (locale) on delete cascade
 );
 
+
+-- alter user_preferences to add the locale column
+
+alter table user_preferences add (
+  locale                varchar2(30)
+                        constraint user_preferences_locale_fk
+                        references ad_locales(locale)
+);
+
+
 --
 --
 -- And now for some default locales

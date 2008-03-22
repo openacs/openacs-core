@@ -529,7 +529,6 @@ create table user_preferences (
 	language_preference	char(2) default 'en',
 	dont_spam_me_p		boolean default 'f',
 	email_type		varchar(64),
-        locale                  varchar(30),
         timezone                varchar(100)
 );
 
