@@ -19,7 +19,7 @@
 # But for now - kludge city.
 
 set system_name [ad_system_name]
-if { [string equal [ad_conn url] "/"] } {
+if {[ad_conn url] eq "/"} {
     set system_url ""
 } else {
     set system_url [ad_url]
@@ -79,7 +79,7 @@ util_get_user_messages -multirow user_messages
 set acs_lang_url [apm_package_url_from_key "acs-lang"]
 set num_of_locales [llength [lang::system::get_locales]]
 
-if {[empty_string_p $acs_lang_url]} {
+if {$acs_lang_url eq ""} {
     set lang_admin_p 0
 } else {
     set lang_admin_p [permission::permission_p \
