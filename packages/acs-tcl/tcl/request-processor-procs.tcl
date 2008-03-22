@@ -1493,7 +1493,7 @@ ad_proc root_of_host {host} {
     # Other hostnames map to subsites.
     set node_id [util_memoize [list rp_lookup_node_from_host $host]]
 
-    if {[empty_string_p $node_id]} {
+    if {$node_id eq ""} {
         set host [regsub "www\." $host ""]
         set node_id [rp_lookup_node_from_host $host]
     }
