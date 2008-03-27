@@ -221,11 +221,15 @@ function processList(ul) {
 //These cookie functions are by AG
 
 function rememberCookieP(node) {
-    if (node.getAttribute("id") && node.getAttribute("remember") && node.getAttribute("remember") == 1) {
-        return true;
+
+    var treeId = node.getAttribute("id");
+
+    if ( treeId ) {
+        return ( document.getElementById(treeId) != null );
     } else {
         return false;
     }
+
 }
 
 
