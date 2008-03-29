@@ -51,6 +51,10 @@ if (typeof mktree_registered == 'undefined') {
   var mktree_registered = 1;
 }
 
+if (typeof mktree_remember == 'undefined') {
+    var mktree_remember = false;
+}
+
 // Utility function to add an event listener
 function addEvent(o,e,f){
 	if (o.addEventListener){ o.addEventListener(e,f,true); return true; }
@@ -137,7 +141,7 @@ function expandCollapseList(ul,cName,itemId) {
 // Search the document for UL elements with the correct CLASS name, then process them
 function convertTrees() {
   // this is a check in opera to avoid multiple renderings
-        if (typeof window.treeClass != 'undefined') {
+    if (typeof window.treeClass != 'undefined') {
 	  return;
 	}
 	setDefault("treeClass","mktree");
@@ -224,7 +228,7 @@ function rememberCookieP(node) {
 
     var treeId = node.getAttribute("id");
 
-    if ( treeId ) {
+    if ( treeId && mktree_remember ) {
         return ( document.getElementById(treeId) != null );
     } else {
         return false;
