@@ -9,6 +9,7 @@
         select nls_language
         from   ad_locales 
         where  lower(trim(language)) = lower(:language)
+          and  enabled_p = 't'
         limit  1
     
       </querytext>
