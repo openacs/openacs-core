@@ -2,6 +2,21 @@
   <property name="title">@page_title@</property>
   <property name="context">@context;noquote@</property>
 
+    <div style="float: right;">
+      <formtemplate id="locale_form">
+        @form_vars;noquote@
+        <table cellspacing="2" cellpadding="2" border="0">
+          <tr class="form-element">
+            <td class="form-label">Language</td>
+            <td class="form-widget"><formwidget id="locale"></td>
+          </tr>
+          <tr class="form-element">
+            <td align="right" colspan="2"><formwidget id="formbutton:ok"></td>
+          </tr>
+        </table>
+      </formtemplate>
+    </div>
+
 <p>
   Show: 
   <multiple name="show_opts">
@@ -14,22 +29,22 @@
 <include src="/packages/acs-lang/lib/conflict-link" locale="@current_locale@" package_key="@package_key@"/>
 
 <ul class="action-links">
-    <p /><br />
   <if @create_p@ true>
     <li><a href="@new_message_url@">Create new message</a></li>
   </if>
 
   <if @messages:rowcount@ eq 0>
-    <i>No messages</i>
-    <p /><br />
+    <li><i>No messages</i></li>
   </if>
   <else>
     <li><a href="@batch_edit_url@">Batch edit these messages</a></li>
     <if @site_wide_admin_p@>
       <li>
         <if @import_messages_special_url@>
-          Import messages for this package and locale from catalog files: <a href="@import_messages_url@">@import_messages_normal_text@</a>
-          &nbsp;&nbsp;<small>|&nbsp;&nbsp;[<a href="@import_messages_special_url@">@import_messages_special_text@</a>]</small>
+          Import messages for this package and locale from catalog files: 
+          <a href="@import_messages_url@">@import_messages_normal_text@</a>
+          &nbsp;|&nbsp;
+          <a href="@import_messages_special_url@">@import_messages_special_text@</a>
         </if>
         <else>
           <a href="@import_messages_url@">Import messages for this package and locale from catalog files</a>
@@ -43,7 +58,7 @@
     <li><a href="@package_list_url@">List all Packages in locale:</a> @locale@</li>
   </if>
 </ul>
-<br />
+<br>
 <if @messages:rowcount@ gt 0>
   <table cellpadding="0" cellspacing="0" border="0">
     <tr>
