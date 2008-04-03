@@ -1,7 +1,7 @@
 <multiple name=elements>
 	<if @elements.section@ not nil>
 		<fieldset id="@elements.form_id@:@elements.section@" @elements.sec_fieldset;noquote@><!-- section fieldset -->
-        <legend @elements.sec_legend;noquote@>@elements.sec_legendtext@</legend>
+        <legend @elements.sec_legend;noquote@><span>@elements.sec_legendtext@</span></legend>
 	</if>
 	
 	<group column="section">
@@ -24,7 +24,7 @@
                       <if @elements.legendtext@ defined>
 						<fieldset @elements.fieldset;noquote@>
                           <!-- radio button groups and checkbox groups get their own fieldsets -->
-				          <legend @elements.legend;noquote@>@elements.legendtext@</legend>
+				          <legend @elements.legend;noquote@><span>@elements.legendtext@</span></legend>
                       </if>
 				    </if>
 					<if @elements.label@ not nil>
@@ -64,17 +64,17 @@
 						<if \@formerror.@elements.id@\@ not nil>
 							<div class="form-error">
 						</if>
-						<else>
-							<div class="form-label">
-						</else>
 						</noparse>
 						<if @elements.optional@ nil and @elements.mode@ ne "display" and @elements.widget@ ne "inform">
 							<div class="form-required-mark">
 								#acs-templating.required#
 							</div>
 						</if>
-
-								</div><!-- /form-label or /form-error -->
+                        <noparse>
+						<if \@formerror.@elements.id@\@ not nil>
+							</div><!-- /form-label or /form-error -->
+                        </if>
+                        </noparse>
 					</else>
 
 					<noparse>
@@ -90,9 +90,9 @@
 					<if @elements.widget@ in radio checkbox>
 						<noparse>
 							<formgroup id="@elements.id@">			
-									\@formgroup.widget;noquote@
 								<label for="@elements.form_id@:elements:@elements.id@:\@formgroup.option@">
-										\@formgroup.label;noquote@
+									\@formgroup.widget;noquote@
+									\@formgroup.label;noquote@
 								</label><br>
 							</formgroup>
 						</noparse>
