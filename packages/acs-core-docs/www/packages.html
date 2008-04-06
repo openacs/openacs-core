@@ -13,7 +13,7 @@
     </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="server-file-layout"></a>Server file layout</h3></div></div><div></div></div><p>
       Here is how an OpenACS 5 server is laid out
       starting from the Server root (ROOT):
-    </p><div class="figure"><a name="id3016637"></a><p class="title"><b>Figure 11.1. Server file layout diagram</b></p><pre class="programlisting">
+    </p><div class="figure"><a name="id3023652"></a><p class="title"><b>Figure 11.1. Server file layout diagram</b></p><pre class="programlisting">
 ROOT/
     bin/
         Various executables and scripts for server maintanence.
@@ -51,7 +51,7 @@ ROOT/
       <a class="indexterm" name="baby"></a>
       To illustrate the general structure of a package, let's see what the
       package for the &quot;notes&quot; application should look like.
-    </p><div class="figure"><a name="id3016732"></a><p class="title"><b>Figure 11.2. Package file layout diagram</b></p><pre class="programlisting">
+    </p><div class="figure"><a name="id3023747"></a><p class="title"><b>Figure 11.2. Package file layout diagram</b></p><pre class="programlisting">
 ROOT/
   +-- packages/    APM Root
         |
@@ -124,7 +124,7 @@ ROOT/
       directories.  This makes it suitable for storing icons, css
       files, javascript, and other static content which can be treated
       this way.
-    </p><div class="table"><a name="id2929000"></a><p class="title"><b>Table 11.1. Package files</b></p><table summary="Package files" cellspacing="0" border="1"><colgroup><col><col><col></colgroup><thead><tr><th>File Type</th><th>Its Use</th><th>Naming Convention</th></tr></thead><tbody><tr><td>Package Specification File</td><td>The package specification file is an XML file generated and
+    </p><div class="table"><a name="id2894262"></a><p class="title"><b>Table 11.1. Package files</b></p><table summary="Package files" cellspacing="0" border="1"><colgroup><col><col><col></colgroup><thead><tr><th>File Type</th><th>Its Use</th><th>Naming Convention</th></tr></thead><tbody><tr><td>Package Specification File</td><td>The package specification file is an XML file generated and
           maintained by the OpenACS Package Manager (APM).  It specifies
           information about the package including its parameters and its
           files.</td><td><tt class="computeroutput">notes.info</tt></td></tr><tr><td>Data Model Creation Script</td><td>
@@ -333,7 +333,7 @@ ROOT/
       this point, you should add your package files to your CVS repository.
       I'll assume that you have set up your development repository according
       to the standards described in 
-      <a href="">this appendix</a>. If so, then you just do this:
+      <a href="cvs-tips.html#cvs-service-import">this appendix</a>. If so, then you just do this:
     </p><pre class="programlisting">% cd ROOT/packages
 % cvs add notes
 % cd notes
