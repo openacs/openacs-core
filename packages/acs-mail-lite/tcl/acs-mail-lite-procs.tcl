@@ -149,10 +149,22 @@ namespace eval acs_mail_lite {
         
         set cmd_string "smtp::sendmessage $multi_token"     
         foreach header $headers {
-            append cmd_string " -header {$header}"
+	    if {[lindex $header 1] ne ""} {
+		append cmd_string " -header {$header}"
+	    }
         }
-        append cmd_string " -servers $smtp -ports $smtpport -username $smtpuser -password $smtppassword"
-        ns_log Debug "send cmd_string: $cmd_string"
+
+        append cmd_string " -servers $smtp -ports $smtpport"
+
+	if {$smtpuser ne ""} {
+	    append cmd_string "-username $smtpuser"
+	}
+
+	if {$smtppassword ne ""} {
+	    append cmd_string "-password $smtppassword"
+	}
+
+        ns_log Notice "send cmd_string: $cmd_string"
         eval $cmd_string
     }
 
