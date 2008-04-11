@@ -398,15 +398,19 @@ namespace eval acs_mail_lite {
 
         
         if { $fixed_sender ne "" && !$use_sender_p} {
-            set sender_addr $fixed_sender
-        } else {
-            set sender_addr $from_addr
+            set from_addr $fixed_sender
         }
 
         # Set the Reply-To
         if {$reply_to eq ""} {
-            set reply_to $sender_addr
+            set reply_to $from_addr
         }
+
+        # Set the message_id
+        set message_id "[mime::uniqueID]"
+
+        # Set the date
+        set message_date [acs_mail_lite::utils::build_date]
 
         # Build the message body
         set tokens [acs_mail_lite::utils::build_body -mime_type $mime_type $body]
@@ -436,34 +440,40 @@ namespace eval acs_mail_lite {
             set tokens [mime::initialize -canonical "multipart/mixed" -parts "$tokens"]
         }
 
-        # Set the message_id
-        set message_id "[mime::uniqueID]"
-        mime::setheader $tokens "message-id" $message_id
-        
-        # Set the date
-        mime::setheader $tokens date [acs_mail_lite::utils::build_date]
-
-        # Set the subject
-        mime::setheader $tokens Subject [acs_mail_lite::utils::build_subject $subject]
-
-        # Add extra headers
-        foreach header $extraheaders {
-            mime::setheader $tokens "[lindex $header 0]" "[lindex $header 1]"
-        }
-
-        set packaged [mime::buildmessage $tokens]
-
         # Rollout support: TO BE RE-DONE
         set delivery_mode [ns_config ns/server/[ns_info server]/acs/acs-rollout-support EmailDeliveryMode] 
+
         if { $delivery_mode ne "" && $delivery_mode ne "default" } {
-            set eh [util_list_to_ns_set $extraheaders]
-            ns_sendmail $to_addr $sender_addr $subject $packaged $eh [join $bcc_addr ","]
+
+            # Build the complete message as a string
+            set packaged [mime::buildmessage $tokens]
+
             #Close all mime tokens
             mime::finalize $tokens -subordinates all
+
+            set eh [util_list_to_ns_set $extraheaders]
+            ns_sendmail $to_addr $sender_addr $subject $packaged $eh [join $bcc_addr ","]
+
         } else {
 
+            ### Add the headers
+
+            mime::setheader $tokens "message-id" $message_id
+            mime::setheader $tokens date $message_date
+
+            # Set the subject
+            if { $subject ne "" } {
+                set subject [acs_mail_lite::utils::build_subject $subject]
+                mime::setheader $tokens Subject $subject
+            }
+
+            # Add extra headers
+            foreach header $extraheaders {
+                mime::setheader $tokens "[lindex $header 0]" "[lindex $header 1]"
+            }
+
             # Prepare the header list
-            set headers_list [list [list From "$sender_addr"] \
+            set headers_list [list [list From "$from_addr"] \
                                   [list Reply-To "$reply_to"] \
                                   [list To [join $to_addr ","]]]
 
@@ -471,9 +481,10 @@ namespace eval acs_mail_lite {
                 lappend headers_list [list CC [join $cc_addr ","]]
             }
             if { $bcc_addr ne ""} {
-                lappend headers_list [list DCC [join $bcc_addr ","]]    
+                lappend headers_list [list DCC [join $bcc_addr ","]]
             }
             
+
             acs_mail_lite::smtp -multi_token $tokens -headers $headers_list
             
             #Close all mime tokens
@@ -483,7 +494,7 @@ namespace eval acs_mail_lite {
                 callback acs_mail_lite::send \
                     -package_id $package_id \
                     -message_id $message_id \
-                    -from_addr $sender_addr \
+                    -from_addr $from_addr \
                     -to_addr $to_addr \
                     -body $body \
                     -mime_type $mime_type \
