@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="acs-authentication" locale="ru_RU" charset="utf-8">
-
-  <msg key="Invalid_username_or_password">Неправильное имя пользователя или пароль</msg>
-</message_catalog>
