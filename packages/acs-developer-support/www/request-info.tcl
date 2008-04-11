@@ -264,7 +264,8 @@ if { ![info exists property(db)] } {
 
     }
 
-    # TODO: Sort by duration, so you can see slowest queries at top
+    multirow sort dbreqs -integer -decreasing duration_ms
+
     template::list::create \
         -name dbreqs \
         -sub_class narrow \
