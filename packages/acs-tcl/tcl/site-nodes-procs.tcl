@@ -49,7 +49,7 @@ ad_proc -public site_node::new {
     with_finally -code {
         set url [site_node::get_url -node_id $parent_id]
         append url $name
-        if { $directory_p eq "t" } { append url "/" }
+        if { $directory_p == "t" } { append url "/" }
             nsv_set site_node_url_by_node_id $node_id $url
             nsv_set site_nodes $url \
                 [list url $url node_id $node_id parent_id $parent_id name $name \
@@ -60,7 +60,7 @@ ad_proc -public site_node::new {
     } -finally {
         ns_mutex unlock [nsv_get site_nodes_mutex mutex]
     }
- 
+
     return $node_id
 }
 
@@ -112,7 +112,7 @@ ad_proc -public site_node::mount {
                  instance_name $instance_name package_type $package_type]
     
         set url_by_object_id [list $node(url)]
-        if { [nsv_exists site_node_url_by_object_id $object_id] && $url_by_object_id ne [nsv_get site_node_url_by_object_id $object_id] } {
+        if { [nsv_exists site_node_url_by_object_id $object_id] } {
             set url_by_object_id [concat [nsv_get site_node_url_by_object_id $object_id] $url_by_object_id]
             set url_by_object_id [lsort \
                                       -decreasing \
@@ -121,7 +121,7 @@ ad_proc -public site_node::mount {
         }
         nsv_set site_node_url_by_object_id $object_id $url_by_object_id
     
-        if { $package_key ne "" } {
+        if { ![empty_string_p $package_key] } {
             set url_by_package_key [list $node(url)]
             if { [nsv_exists site_node_url_by_package_key $package_key] } {
                 set url_by_package_key [concat [nsv_get site_node_url_by_package_key $package_key] $url_by_package_key]
@@ -159,7 +159,7 @@ ad_proc -public site_node::rename {
     db_dml rename_node {}
     db_dml update_object_title {}
 
-    update_cache -node_id $node_id
+    update_cache -sync_children -node_id $node_id
 }
 
 ad_proc -public site_node::instantiate_and_mount {
@@ -189,14 +189,14 @@ ad_proc -public site_node::instantiate_and_mount {
     @author Peter Marklund
 } {
     # Create a new node if none was provided and none exists
-    if { $node_id eq "" } {
+    if { [empty_string_p $node_id] } {
         # Default parent node to the main site
-        if { $parent_node_id eq "" } {
+        if { [empty_string_p $parent_node_id ] } {
             set parent_node_id [site_node::get_node_id -url "/"]
         }
 
         # Default node_name to package_key
-        if { $node_name eq "" } {
+        if { [empty_string_p $node_name] } {
             set node_name $package_key
         }
 
@@ -219,7 +219,7 @@ ad_proc -public site_node::instantiate_and_mount {
     }
 
     # Default context id to the closest ancestor package_id
-    if { $context_id eq "" } {
+    if { [empty_string_p $context_id] } {
         set context_id [site_node::closest_ancestor_package -node_id $node_id]
     }
 
@@ -257,47 +257,23 @@ ad_proc -private site_node::init_cache {} {
     nsv_array reset site_node_url_by_object_id [list]
     nsv_array reset site_node_url_by_package_key [list]
 
-    set root_node_id [site_node::get_root_node_id]
-    if { $root_node_id ne "" } {
-        site_node::update_cache -node_id $root_node_id
+    set root_node_id [db_string get_root_node_id {} -default {}]
+    if { ![empty_string_p $root_node_id] } {
+        site_node::update_cache -sync_children -node_id $root_node_id
     }
-
-    # Update the cache for the mounted packages except acs-subsite
-    db_foreach acs_nodes {select node_id from site_nodes s, apm_packages where parent_id = :root_node_id and s.object_id = package_id and package_key != 'acs-subsite'} {
-	    site_node::update_cache -node_id $node_id -sync_children
-    }
-}
-
-ad_proc -public site_node::get_root_node_id {
-} {
-    Returns the root node id of the site
-} {
-    util_memoize [list site_node::get_root_node_id_not_cached]
-}
-
-ad_proc -public site_node::get_root_node_id_not_cached {
-} {
-    Returns the root node id of the site
-} {
-    return [db_string get_root_node_id {} -default {}]
 }
 
 ad_proc -private site_node::update_cache {
     {-sync_children:boolean}
     {-node_id:required}
-    {-sync_direct_children:boolean}
-    {-no_mutex:boolean}
 } {
     Brings the in memory copy of the site nodes hierarchy in sync with the
     database version. Only updates the given node and its children.
 } {
-    if {$no_mutex_p eq 0} {
-	# don't let any other thread try to do a concurrent update
-	# until cache is fully updated
-	ns_mutex lock [nsv_get site_nodes_mutex mutex]
-    }
+    # don't let any other thread try to do a concurrent update
+    # until cache is fully updated
+    ns_mutex lock [nsv_get site_nodes_mutex mutex]
 
-    ns_log Debug "Updating URL:: $node_id :: $sync_children_p :: $sync_direct_children_p"
     with_finally -code {
 
         array set nodes [nsv_array get site_nodes]
@@ -323,7 +299,7 @@ ad_proc -private site_node::update_cache {
 
                 # Find the object_id previously mounted there
                 set cur_object_id $cur_node(object_id)
-                if { $cur_object_id ne "" } {
+                if { ![empty_string_p $cur_object_id] } {
                     # Remove the URL from the url_by_object_id entry for that object_id
                     set cur_idx [lsearch -exact $url_by_object_id($cur_object_id) $cur_node_url]
                     if { $cur_idx != -1 } {
@@ -334,7 +310,7 @@ ad_proc -private site_node::update_cache {
                 
                 # Find the package_key previously mounted there
                 set cur_package_key $cur_node(package_key)
-                if { $cur_package_key ne "" } {
+                if { ![empty_string_p $cur_package_key] } {
                     # Remove the URL from the url_by_package_key entry for that package_key
                     set cur_idx [lsearch -exact $url_by_package_key($cur_package_key) $cur_node_url]
                     if { $cur_idx != -1 } {
@@ -353,92 +329,42 @@ ad_proc -private site_node::update_cache {
 
         if { $sync_children_p } {
             set query_name select_child_site_nodes
-            set mounted_children all
-        } elseif { $sync_direct_children_p} {
-            set query_name select_direct_child_site_nodes
-            set mounted_children one
         } else {
             set query_name select_site_node
-            set mounted_children none
         }
         
-        set orig_node_id $node_id
-
-        # Because you can run out of db pools if this proc
-        # is called for too many parent nodes this needs to
-        # be run through a foreach tcl loop and cannot
-        # use db_foreach
-        foreach item [db_list_of_lists $query_name {}] {
-            util_unlist $item node_id parent_id name directory_p pattern_p object_id package_key package_id instance_name package_type num_children
-
-            if {$parent_id eq ""} {
+        db_foreach $query_name {} {
+            if {[empty_string_p $parent_id]} {
                 # url of root node
                 set url "/"
             } else {
                 # append directory to url of parent node
-		# Check that the parent is in the cache
-		if {![exists_and_not_null url_by_node_id($parent_id)]} {
-		    site_node::update_cache -node_id $parent_id -no_mutex
-		    array set url_by_node_id [nsv_array get site_node_url_by_node_id]
-		}
                 set url $url_by_node_id($parent_id)
                 append url $name
-                if { $directory_p eq "t" } { append url "/" }
+                if { $directory_p == "t" } { append url "/" }
             }
             # save new url
             set url_by_node_id($node_id) $url
-            if { $object_id ne "" } {
-		if {[info exists url_by_object_id($object_id)]} {
-		    if {[lsearch $url_by_object_id($object_id) $url] < 0} {
-			lappend url_by_object_id($object_id) $url
-		    }
-		} else {
-		    set url_by_object_id($object_id) $url
-		}
+            if { ![empty_string_p $object_id] } {
+                lappend url_by_object_id($object_id) $url
             }
-            if { $package_key ne "" } {
+            if { ![empty_string_p $package_key] } {
                 lappend url_by_package_key($package_key) $url
             }
 
-            if { $package_id eq "" } {
+            if { [empty_string_p $package_id] } {
                 set object_type ""
             } else {
                 set object_type "apm_package"
             }
 
-            switch $mounted_children {
-                all { set mounted_children_p 1 }
-                one {
-                    # Only set mounted_children for the node, as we only node it's children
-                    if {$orig_node_id == $node_id} {
-                        set mounted_children_p 1
-                    } else {
-                        set mounted_children_p 0
-                    }
-                }
-                default {
-                    set mounted_children_p 0
-                }
-            }
-
-            if { $num_children eq 0 } {
-                set has_children_p 0
-                # It has no children, so we can save that all children are mounted
-                set mounted_children_p 1
-            } else {
-                set has_children_p 1
-            }
-
-            
-            ns_log Debug "Update cache:: $url :: node_id: $node_id :: $orig_node_id :: $has_children_p :: $mounted_children_p :: $mounted_children"
             # save new node
             set nodes($url) \
                 [list url $url node_id $node_id parent_id $parent_id name $name \
                      directory_p $directory_p pattern_p $pattern_p \
                      object_id $object_id object_type $object_type \
                      package_key $package_key package_id $package_id \
-                     instance_name $instance_name package_type $package_type \
-		             has_children_p $has_children_p mounted_children_p $mounted_children_p]
+                     instance_name $instance_name package_type $package_type]
         }
 
         # AG: This lsort used to live in the db_foreach loop above.  I moved it here
@@ -475,16 +401,16 @@ ad_proc -public site_node::get {
     The array elements are: package_id, package_key, object_type, directory_p, 
     instance_name, pattern_p, parent_id, node_id, object_id, url.
 } {
-    if {$url eq "" && $node_id eq ""} {
+    if {[empty_string_p $url] && [empty_string_p $node_id]} {
         error "site_node::get \"must pass in either url or node_id\""
     }
 
-    if {$node_id ne ""} {
-        return [site_node::get_from_node_id -node_id $node_id]
+    if {![empty_string_p $node_id]} {
+        return [get_from_node_id -node_id $node_id]
     }
 
-    if {$url ne ""} {
-        return [site_node::get_from_url -url $url]
+    if {![empty_string_p $url]} {
+        return [get_from_url -url $url]
     }
 
 }
@@ -529,12 +455,7 @@ ad_proc -public site_node::get_from_url {
     first match found by successively removing the trailing $url path component.<p>
 
     @see site_node::get
-    
-    @param url URL to retrieve the site node from
-    @param exact Switch which will prevent us from trying to find the parent site_node
-    @param retry Notes that the procedure is being called by itself. This is to prevent a loop.
 } {
-    set orig_url $url
     # attempt an exact match
     if {[nsv_exists site_nodes $url]} {
         return [nsv_get site_nodes $url]
@@ -542,91 +463,30 @@ ad_proc -public site_node::get_from_url {
 
     # attempt adding a / to the end of the url if it doesn't already have
     # one
-    if {[string index $url end] ne "/" } {
+    if {![string equal [string index $url end] "/"]} {
         append url "/"
         if {[nsv_exists site_nodes $url]} {
-	        return  [nsv_get site_nodes $url]
+            return [nsv_get site_nodes $url]
         }
     }
 
-    set url_list [split [string trim "$orig_url" "/"] "/"]
-    set url_list_length [llength $url_list]
+    # chomp off part of the url and re-attempt
+    if {!$exact_p} {
+        while {![empty_string_p $url]} {
+        set url [string trimright $url /]
+        set url [string range $url 0 [string last / $url]]
 
-    # We could not find it directly, so we have to go from top to bottom, trying to load the side node cache
-    # Obviously try to do this only once
-    set new_url ""
-    set parent_id [site_node::get_root_node_id]
+        if {[nsv_exists site_nodes $url]} {
+            array set node [nsv_get site_nodes $url]
 
-    # Skip this for all subsite urls of the root node
-    set subsite_list [list resources file image x o shared register images]
-    set root_url [lindex $url_list 0]
-    
-    if {[lsearch -exact $subsite_list $root_url] > -1} {
-        # This is a root URL for acs-subsite
-        return [nsv_get site_nodes /]
+            if {[string equal $node(pattern_p) t] && ![empty_string_p $node(object_id)]} {
+                return [array get node]
+            }
+        }
+        }
     }
-    
-    # Set a counter to figure out if we are at the last element
-    # We need the last element because, if it is the last element, then the check down below is different
-    set counter 0
-    
-    foreach name $url_list {
-	incr counter
-	set node_id ""
-	if {$name ne ""} {
-            # Append the current name to the url to test
-            set test_url "${new_url}/$name"
-	    
-            # If the site node is in the cache, continue
-            if {[nsv_exists site_nodes $test_url] || [nsv_exists site_nodes "${test_url}/"]} {
-		# It is already in the cache, just continue
-		# Set the new_url to the test_url and update the parent_id
-		set new_url $test_url
-		set parent_id [site_node::get_node_id -url $new_url]
-	    } else {
-		
-		# Try loading it from the database
-		# Do this only if we have children marked with the parent
-		# Exclude all parents who have been marked with having already all children mounted.
-		
-		array set new_node [nsv_get site_nodes "${new_url}/"]
-		# Check if the site_node has children in the first place
-		if {![exists_and_not_null new_node(has_children_p)]} {
-		    set new_node(has_children_p) 1
-		    set new_node(mounted_children_p) 0
-		}
 
-		if {$new_node(has_children_p) && !$new_node(mounted_children_p)} {
-		    if {[lsearch -exact $subsite_list $name] > -1} {
-			set node_id $parent_id
-		    } else {
-			set node_id [db_string node_id "select node_id from site_nodes where parent_id = :parent_id and name=:name" -default ""]
-			ns_log Debug "Loading from the database $test_url $name $parent_id"
-		    }
-		} else {
-                    set node_id ""
-		}
-		
-		
-		if {$node_id ne ""} {
-		    site_node::update_cache -node_id $node_id -sync_direct_children
-		    if {$counter eq $url_list_length} {
-			# This is the last element, return the site_node
-			return  [nsv_get site_nodes "${test_url}/"]
-                    } else {
-                        set parent_id $node_id
-                        set new_url $test_url
-                    }
-		} else {
-		    # Okay, it is not in the database, but maybe the new_url itself is in the cache
-		    # So we can just return it.
-		    if {[nsv_exists site_nodes "${new_url}/"]} {
-			return [nsv_get site_nodes "${new_url}/"]
-		    }
-                }
-	    }
-	}
-    }
+    error "site node not found at url \"$url\""
 }
 
 ad_proc -public site_node::exists_p {
@@ -637,7 +497,6 @@ ad_proc -public site_node::exists_p {
     @author Peter Marklund
 } {
     set url_no_trailing [string trimright $url "/"]
-    
     return [nsv_exists site_nodes "$url_no_trailing/"]
 }        
 
@@ -679,19 +538,12 @@ ad_proc -public site_node::get_url {
     set url ""
     if {[nsv_exists site_node_url_by_node_id $node_id]} {
         set url [nsv_get site_node_url_by_node_id $node_id]
-    } else {
-	# The node was not found, update the cache with the node to be on the save side
-	site_node::update_cache -node_id $node_id
-	if {[nsv_exists site_node_url_by_node_id $node_id]} {
-	    # And try again
-	    set url [nsv_get site_node_url_by_node_id $node_id]
-	}
     }
     
     if { $notrailing_p } {
         set url [string trimright $url "/"]
     }
-    
+
     return $url
 }
 
@@ -707,15 +559,7 @@ ad_proc -public site_node::get_url_from_object_id {
     if { [nsv_exists site_node_url_by_object_id $object_id] } {
         return [nsv_get site_node_url_by_object_id $object_id]
     } else {
-	# Try to load it from the database
-	set node_id [db_string get_node_id {} -default ""]
-        if {$node_id ne ""} {
-            # Update the cache and return the result
-            site_node::update_cache -node_id $node_id	    
-            return [nsv_get site_node_url_by_object_id $object_id]
-        } else {
-            return [list]
-        }
+        return [list]
     }
 }
 
@@ -724,7 +568,7 @@ ad_proc -public site_node::get_node_id {
 } {
     return the node_id for this url
 } {
-    array set node [site_node::get_from_url -url $url]
+    array set node [get -url $url]
     return $node(node_id)
 }
 
@@ -734,7 +578,7 @@ ad_proc -public site_node::get_node_id_from_object_id {
     return the site node id associated with the given object_id
 } {
     set url  [lindex [get_url_from_object_id -object_id $object_id] 0]
-    if { $url ne "" } {
+    if { ![empty_string_p $url] } {
         return [get_node_id -url $url]
     } else {
         return {}
@@ -768,7 +612,7 @@ ad_proc -public site_node::get_ancestors {
     set result [list]
     set array_result_p [string equal $element ""]
 
-    while {$node_id ne "" } {
+    while {![string equal $node_id ""]} {
         array set node [get -node_id $node_id]
        
         if {$array_result_p} {
@@ -830,38 +674,19 @@ ad_proc -public site_node::get_children {
     
     @author Lars Pind (lars@collaboraid.biz)
 } {
-    if { $package_type ne "" && $package_key ne "" } {
+    if { ![empty_string_p $package_type] && ![empty_string_p $package_key] } {
         error "You may specify either package_type, package_key, or filter_element, but not more than one."
     }
 
-    if { $package_type ne "" } {
+    if { ![empty_string_p $package_type] } {
         lappend filters package_type $package_type
-    } elseif { $package_key ne "" } {
+    } elseif { ![empty_string_p $package_key] } {
         lappend filters package_key $package_key
     }
 
-    # Check if the node_id is already in the cache
-    array set node [site_node::get -node_id $node_id]
+    set node_url [site_node::get_url -node_id $node_id]
 
-    # Check if the site_node has children in the first place
-    if {![exists_and_not_null node(has_children_p)]} {
-	site_node::update_cache -node_id $node_id
-	array set node [site_node::get -node_id $node_id]
-    }
-
-    if {!$node(has_children_p)} {
-        return ""
-    } 
-    
-    set node_url $node(url)
-    
     if { !$all_p } { 
-
-        if {!$node(mounted_children_p)} {
-            # The site_node was not mounted with all it's children
-            site_node::update_cache -node_id $node_id -sync_direct_children
-        }
-
         set child_urls [list]
         set s [string length "$node_url"]
         # find all child_urls who have only one path element below node_id
@@ -873,13 +698,6 @@ ad_proc -public site_node::get_children {
             }
         }
     } else {
-
-        if {!$node(mounted_children_p)} {
-	        # Update the site_node cache as we do not know if all children are already in the cache
-	        # Once we have a children_p flag in the nsv_array, this might get easier to accomplish
-	        site_node::update_cache -node_id $node_id -sync_children
-	    }
-	    set node_url [site_node::get_url -node_id $node_id]
         set child_urls [nsv_array names site_nodes "${node_url}?*"]
     }
 
@@ -892,13 +710,13 @@ ad_proc -public site_node::get_children {
 
                 set passed_p 1
                 foreach { elm val } $filters {
-                    if { $site_node($elm) ne $val } {
+                    if { ![string equal $site_node($elm) $val] } {
                         set passed_p 0
                         break
                     }
                 }
                 if { $passed_p } {
-                    if { $element ne "" } {
+                    if { ![empty_string_p $element] } {
                         lappend return_val $site_node($element)
                     } else {
                         lappend return_val $child_url
@@ -906,7 +724,7 @@ ad_proc -public site_node::get_children {
                 }
             }
         }
-    } elseif { $element ne "" } {
+    } elseif { ![empty_string_p $element] } {
         set return_val [list]
         foreach child_url $child_urls {
             array unset site_node
@@ -918,7 +736,7 @@ ad_proc -public site_node::get_children {
 
     # if we had filters or were getting a particular element then we 
     # have our results in return_val otherwise it's just urls
-    if { $element ne ""
+    if { ![empty_string_p $element]
          || [llength $filters] > 0} {
         return $return_val
     } else {
@@ -958,8 +776,8 @@ ad_proc -public site_node::closest_ancestor_package {
     @author Peter Marklund
 } {
     # Make sure we have a url to work with
-    if { $url eq "" } {
-          if { $node_id eq "" } {
+    if { [empty_string_p $url] } {
+          if { [empty_string_p $node_id] } {
               set url "/"
           } else {
               set url [site_node::get_url -node_id $node_id]
@@ -967,7 +785,7 @@ ad_proc -public site_node::closest_ancestor_package {
     }
 
     # should we return the package at the passed-in node/url?
-    if { $include_self_p && $package_key ne ""} {
+    if { $include_self_p && ![empty_string_p $package_key]} {
         array set node_array [site_node::get -url $url]
 
         if { [lsearch -exact $package_key $node_array(package_key)] != -1 } {
@@ -976,7 +794,7 @@ ad_proc -public site_node::closest_ancestor_package {
     }
 
     set elm_value {}
-    while { $elm_value eq "" && $url ne "/"} {
+    while { [empty_string_p $elm_value] && $url != "/"} {
         # move up a level
         set url [string trimright $url /]
         set url [string range $url 0 [string last / $url]]
@@ -984,7 +802,7 @@ ad_proc -public site_node::closest_ancestor_package {
         array set node_array [site_node::get -url $url]
 
         # are we looking for a specific package_key?
-        if { $package_key eq "" || \
+        if { [empty_string_p $package_key] || \
                  [lsearch -exact $package_key $node_array(package_key)] != -1 } {
             set elm_value $node_array($element)
         }       
@@ -1028,7 +846,7 @@ ad_proc -public site_node::verify_folder_name {
     set existing_urls [site_node::get_children -node_id $parent_node_id -element name]
     
     array set parent_node [site_node::get -node_id $parent_node_id]
-    if { $parent_node(package_key) ne "" } {
+    if { ![empty_string_p $parent_node(package_key)] } {
         # Find all the page or directory names under this package
         foreach path [glob -nocomplain -types d "[acs_package_root_dir $parent_node(package_key)]/www/*"] {
             lappend existing_urls [lindex [file split $path] end]
@@ -1044,10 +862,10 @@ ad_proc -public site_node::verify_folder_name {
         }
     } 
 
-    if { $folder ne "" } {
+    if { ![empty_string_p $folder] } {
         if { [lsearch $existing_urls $folder] != -1 } {
             # The folder is on the list
-            if { $current_node_id eq "" } {
+            if { [empty_string_p $current_node_id] } {
                 # New node: Complain
                 return {}
             } else {
@@ -1062,7 +880,7 @@ ad_proc -public site_node::verify_folder_name {
         }
     } else {
         # Autogenerate folder name
-        if { $instance_name eq "" } {
+        if { [empty_string_p $instance_name] } {
             error "Instance name must be supplied when folder name is empty."
         }
 
@@ -1116,7 +934,7 @@ ad_proc -public site_map_unmount_application {
     db_transaction {
         site_node::unmount -node_id $node_id
 
-        if {$delete_p eq "t"} {
+        if {[string equal $delete_p t]} {
             site_node::delete -node_id $node_id
         }
     }
@@ -1177,7 +995,7 @@ ad_proc -deprecated -warn site_node_closest_ancestor_package {
 
     @see site_node::closest_ancestor_package
 } {
-    if {$url eq ""} {
+    if {[empty_string_p $url]} {
         set url [ad_conn url]
     }
 
@@ -1190,7 +1008,7 @@ ad_proc -deprecated -warn site_node_closest_ancestor_package {
     }
     
     # Add a trailing slash and try again.
-    if {[string index $url end] ne "/"} {
+    if {[string index $url end] != "/"} {
           append url "/"
           if {[catch {nsv_get site_nodes $url} result] == 0} {
               array set node $result
@@ -1201,14 +1019,14 @@ ad_proc -deprecated -warn site_node_closest_ancestor_package {
     }
     
     # Try successively shorter prefixes.
-    while {$url ne ""} {
+    while {$url != ""} {
           # Chop off last component and try again.
           set url [string trimright $url /]
           set url [string range $url 0 [string last / $url]]
         
           if {[catch {nsv_get site_nodes $url} result] == 0} {
               array set node $result
-              if {$node(pattern_p) eq "t" && $node(object_id) ne "" && [lsearch -exact $package_keys $node(package_key)] != -1 } {
+              if {$node(pattern_p) == "t" && $node(object_id) != "" && [lsearch -exact $package_keys $node(package_key)] != -1 } {
                     return $node(package_id)
               }
           }
@@ -1233,7 +1051,7 @@ ad_proc -deprecated -public site_node_closest_ancestor_package_url {
 
     @see site::node::closest_ancestor_package
 } {
-    if {$package_key eq ""} {
+    if {[empty_string_p $package_key]} {
         set package_key [subsite::package_keys]
     }
 
@@ -1242,7 +1060,7 @@ ad_proc -deprecated -public site_node_closest_ancestor_package_url {
                             -package_key $package_key \
                             -url [ad_conn url] ]
 
-    if {$subsite_pkg_id eq ""} {
+    if {[empty_string_p $subsite_pkg_id]} {
         # No package was found... return the default
         return $default
     }

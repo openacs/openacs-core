@@ -58,19 +58,11 @@
         </querytext>
     </fullquery>
 
-    <fullquery name="site_node::get_root_node_id_not_cached.get_root_node_id">
+    <fullquery name="site_node::init_cache.get_root_node_id">
         <querytext>
             select node_id
             from site_nodes
             where parent_id is null
-        </querytext>
-    </fullquery>
-
-    <fullquery name="site_node::get_url_from_object_id.get_node_id">
-        <querytext>
-            select node_id
-            from site_nodes
-            where object_id = :object_id
         </querytext>
     </fullquery>
 
