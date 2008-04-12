@@ -452,7 +452,7 @@ namespace eval acs_mail_lite {
             mime::finalize $tokens -subordinates all
 
             set eh [util_list_to_ns_set $extraheaders]
-            ns_sendmail $to_addr $sender_addr $subject $packaged $eh [join $bcc_addr ","]
+            ns_sendmail $to_addr $from_addr $subject $packaged $eh [join $bcc_addr ","]
 
         } else {
 
