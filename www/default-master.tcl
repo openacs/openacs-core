@@ -56,14 +56,6 @@ for {set i 1} {$i <= [template::multirow size navigation]} {incr i} {
     }
 }
 
-for {set i 1} {$i <= [template::multirow size navigation]} {incr i} {
-    template::multirow get navigation $i
-
-    if {[lsearch $navigation_groups $navigation(group)] < 0} {
-        lappend navigation_groups $navigation(group)
-    }
-}
-
 #
 # Add standard css
 #
