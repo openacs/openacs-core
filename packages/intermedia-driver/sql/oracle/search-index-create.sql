@@ -28,7 +28,8 @@ begin
   ctx_ddl.create_section_group('swsgroup', 'basic_section_group');
   ctx_ddl.add_field_section('swsgroup', 'oneline', 'oneline', TRUE);
 end;
-/  create index swi_index on site_wide_index (indexed_content)
+/
+create index swi_index on site_wide_index (indexed_content)
 indextype is ctxsys.context parameters ('datastore ctxsys.default_datastore memory 250M');
 
 
