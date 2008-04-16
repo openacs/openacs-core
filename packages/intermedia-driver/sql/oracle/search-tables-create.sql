@@ -54,15 +54,6 @@ create table site_wide_index (
         relevant_date           date
 );
 
-create table search_observer_queue (
-    object_id                       integer,
-    event_date                      date
-                                    default sysdate,
-    event                           varchar(6)
-                                    constraint search_observer_queue_event_ck
-                                    check (event in ('INSERT','DELETE','UPDATE'))  
-);
-
 -- Intermedia sometimes is painful to debug, so I added a logging
 -- mechanism which relies on Oracle's autonomous transactions: DML
 -- statements are committed immediately so you can access this data
