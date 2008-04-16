@@ -31,13 +31,3 @@ create table search_observer_queue (
                                     constraint search_observer_queue_event_ck
                                     check (event in ('INSERT','DELETE','UPDATE'))  
 );
-
--- Intermedia sometimes is painful to debug, so I added a logging
--- mechanism which relies on Oracle's autonomous transactions: DML
--- statements are committed immediately so you can access this data
--- from a different session right away.
-
-create table sws_log_messages (
-  logmessage varchar2(4000),
-  logtime    date default sysdate);
-
