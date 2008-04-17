@@ -4482,13 +4482,13 @@ ad_proc util::catch_exec {command result_var} {
         # The command succeeded, and wrote nothing to stderr.                   
         # $result contains what it wrote to stdout, unless you                  
         # redirected it
-        ns_log notice "Status == 0 $result"
+        ns_log debug "Status == 0 $result"
         
     } elseif {$::errorCode eq "NONE"} {
 
         # The command exited with a normal status, but wrote something          
         # to stderr, which is included in $result.                              
-        ns_log "Normatl Status $result"
+        ns_log debug "Normal Status $result"
         
     } else {
 
