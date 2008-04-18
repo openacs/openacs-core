@@ -231,135 +231,85 @@ ad_proc -public lc_monetary_currency {
 ad_proc -private lc_monetary {
     { -label_p 0 }
     { -style local }
-    { -truncate_p "t"}
     num 
     locale 
     {forced_frac_digits ""} 
     {forced_currency_symbol ""}
 } { 
-    Returns the monetary amount formatted with (optional) currency symbol, decimal character and group separator. 
-    Accepts as input a number num and the user's locale. Returns the number formatted as money with (optional) currency 
-    symbol, decimal character and group separator based on the locale. It uses message keys to control these symbols - 
-    the message keys are stored in the acs-lang catalog files. We should call lc_monetary with label_p set to "t", as we 
-    want to display the currency symbol. We can override the locale's currency symbol by setting forced_currency_symbol 
-    to whatever symbol we want to display (but should rarely need to do this). 
-    
-    By default, lc_monetary will truncate (round down) to the number of decimal places given by the 
-    acs-lang.localization-trunc_decimal_places message key for the locale. This truncating behaviour can be changed to 
-    instead round up by passing in to lc_monetary the value "f" for truncate_p. The lc_monetary proc will then round up 
-    to the value of the acs-lang frac_digits message key for the locale (the value of which in turn can be over-ridden by 
-    passing forced_frac_digits to lc_monetary). If truncate_p is true, forced_frac_digits will be ignored.
-    
-    
-    @param label_p     Specify this switch if you want to specify the label used for the currency.
+    Formats a monetary amount.
+
+    @param label       Specify this switch if you want to specify the label used for the currency.
     @param style       Set to int to display the ISO code as the currency label. Otherwise displays
                        an HTML entity for the currency. The label parameter must be specified for this
                        flag to take effect.
     @param num         Number to format as a monetary amount. If this number could be negative
                        you should put &quot;--&quot; in your call before it.
-    @param locale      Locale used for formatting the number - this uses the acs-lang message keys.
-    @param forced_frac_digits      Pass this in to override the acs-lang frac_digits or int_frac_digits. If truncate_p is true, forced_frac_digits will be ignored.
-    @param forced_currency_symbol  Pass this in to override the acs-lang int_curr_symbol or currency_symbol.
-    @param truncate_p  Pass this in if you want to to truncate (round down) to a number of decimal places. The number of 
-    decimal places is determined by the acs-lang.localization-trunc_decimal_places message key, and should be a positive integer. For AIMS
-    we default this to true.
+    @param currency    ISO currency code.
+    @param locale      Locale used for formatting the number.
     @return            Formatted monetary amount
 } { 
 
-    if {$num eq ""} {
-      #if they enter empty string, return empty string
-      #pages like payments end up getting 0.00 in empty cells otherwise
-      return $num
+    if {$forced_frac_digits ne "" && [string is integer $forced_frac_digits]} {
+	set dig $forced_frac_digits
     } else {
-		#first escape the locale's decimal character (dec) if it's in the list of chars that need to be escaped in regular expressions
-		set dec [lc_get -locale $locale "mon_decimal_point"]
-		set esc_dec $dec
-		set special_chars {[\^$.|?*+()}
-		if {[regexp $dec $special_chars]} {set esc_dec "\\$dec"}  
-	  #need to strip all non-numerics except the locale's decimal character
-  		if {![regexp {^\-?[0-9]+$} $num]} {
-    		regexp {^(\-?)(.*)} $num "" negg numm
-    		regsub -all "\[^0-9$esc_dec\]" $numm "" numm
-    		set num ""
-    		append num $negg $numm
-  		}
- 		#replace the locale's decimal character with the database's decimal character (assuming for now that it's ".")
-		regsub -all "$esc_dec"  $num "." num
-
-		if {![empty_string_p $forced_frac_digits] && [string is integer $forced_frac_digits]} {
-		  set dig $forced_frac_digits
-		} else {
-		  # look up the digits
-		  if {[string compare $style int] == 0} { 
-			  set dig [lc_get -locale $locale "int_frac_digits"]
-		  } else { 
-			  set dig [lc_get -locale $locale "frac_digits"]
-		  }
-		}
-
-		# figure out if negative 
-		if {$num < 0} { 
-			set num [expr abs($num)]
-			set neg 1
-		} else { 
-			set neg 0
-		}
-
-		# generate formatted number
-		# Check if we are truncating
-		if {$truncate_p} {
-		  set trunc_decimal_places [lc_get -locale $locale "trunc_decimal_places"]
-		  set truncated_num [expr [expr floor([expr $num * pow(10,$trunc_decimal_places)])]/pow(10,$trunc_decimal_places)]
-		  set out [format "%.${trunc_decimal_places}f" $truncated_num]
-		} else {
-		  set out [format "%.${dig}f" $num]    
-		}
-
-
-		# look up the label if needed 
-		if {[empty_string_p $forced_currency_symbol]} {
-		  if {$label_p} {
-			if {[string compare $style int] == 0} { 
-			  set sym [lc_get -locale $locale "int_curr_symbol"]
-			} else { 
-			  set sym [lc_get -locale $locale "currency_symbol"]
-			}
-		  } else { 
-			  set sym {}
-		  }
-		} else {
-		  set sym $forced_currency_symbol
-		}
-
-		# signorama
-		if {$neg} { 
-			set cs_precedes [lc_get -locale $locale "n_cs_precedes"]
-			set sep_by_space [lc_get -locale $locale "n_sep_by_space"]
-			set sign_pos [lc_get -locale $locale "n_sign_posn"]
-			set sign [lc_get -locale $locale "negative_sign"]
-		} else {
-			set cs_precedes [lc_get -locale $locale "p_cs_precedes"]
-			set sep_by_space [lc_get -locale $locale "p_sep_by_space"]
-			set sign_pos [lc_get -locale $locale "p_sign_posn"]
-			set sign [lc_get -locale $locale "positive_sign"]
-		} 
-
-		# change decimal seperator back from dot to locales version
-		regsub {\.} $out $dec out
-
-		# commify
-		set sep [lc_get -locale $locale "mon_thousands_sep"]
-		if {[ad_var_type_check_number_p $sep]} {
-		    # The separator is a number. This is bad as it will bring bogus results and crash the server
-		    set sep ","
-		}
-		
-		set grouping [lc_get -locale $locale "mon_grouping"]
-		set num [lc_sepfmt $out $grouping $sep]
-
-		return [subst [nsv_get locale "money:$cs_precedes$sign_pos$sep_by_space"]]
+	# look up the digits
+	if {$style eq "int" } { 
+	    set dig [lc_get -locale $locale "int_frac_digits"]
+	} else { 
+	    set dig [lc_get -locale $locale "frac_digits"]
 	}
-}
+    }
+
+    # figure out if negative 
+    if {$num < 0} { 
+        set num [expr {abs($num)}]
+        set neg 1
+    } else { 
+        set neg 0
+    }
+    
+    # generate formatted number
+    set out [format "%.${dig}f" $num]
+
+    # look up the label if needed 
+    if {$forced_currency_symbol eq ""} {
+	if {$label_p} {
+	    if {$style eq "int" } { 
+		set sym [lc_get -locale $locale "int_curr_symbol"]
+	    } else { 
+		set sym [lc_get -locale $locale "currency_symbol"]
+	    }
+	} else { 
+	    set sym {}
+	}
+    } else {
+	set sym $forced_currency_symbol
+    }
+
+    # signorama
+    if {$neg} { 
+        set cs_precedes [lc_get -locale $locale "n_cs_precedes"]
+        set sep_by_space [lc_get -locale $locale "n_sep_by_space"]
+        set sign_pos [lc_get -locale $locale "n_sign_posn"]
+        set sign [lc_get -locale $locale "negative_sign"]
+    } else {
+        set cs_precedes [lc_get -locale $locale "p_cs_precedes"]
+        set sep_by_space [lc_get -locale $locale "p_sep_by_space"]
+        set sign_pos [lc_get -locale $locale "p_sign_posn"]
+        set sign [lc_get -locale $locale "positive_sign"]
+    } 
+    
+    # decimal seperator
+    set dec [lc_get -locale $locale "mon_decimal_point"]
+    regsub {\.} $out $dec out
+
+    # commify
+    set sep [lc_get -locale $locale "mon_thousands_sep"]
+    set grouping [lc_get -locale $locale "mon_grouping"]
+    set num [lc_sepfmt $out $grouping $sep]
+    
+    return [subst [nsv_get locale "money:$cs_precedes$sign_pos$sep_by_space"]]
+}    
 
 ad_proc -public clock_to_ansi {
     seconds
