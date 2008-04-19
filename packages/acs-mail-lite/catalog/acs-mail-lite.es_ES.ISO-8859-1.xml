@@ -2,6 +2,7 @@
 <message_catalog package_key="acs-mail-lite" locale="es_ES" charset="ISO-8859-1">
 
   <msg key="Associated_files">Archivos asociados:</msg>
+  <msg key="BCC">CCO</msg>
   <msg key="CC">CC</msg>
   <msg key="cc_help">Enviar copia a varias direcciones separadas por &quot;;&quot;</msg>
   <msg key="check_uncheck">Seleccionar/deseleccionar</msg>
@@ -9,6 +10,7 @@
   <msg key="Message">Mensaje</msg>
   <msg key="Recipients">Destinatarios</msg>
   <msg key="Send">Enviar</msg>
+  <msg key="Sender">Remitente</msg>
   <msg key="Subject">Asunto</msg>
   <msg key="Untitled">Sin título</msg>
   <msg key="Upload_file">Subir Archivo</msg>

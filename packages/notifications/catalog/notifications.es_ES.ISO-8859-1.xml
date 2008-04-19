@@ -18,8 +18,6 @@
   <msg key="lt_Notification_Delivery">Modo de Entrega de Notificaciones</msg>
   <msg key="lt_Notification_Delivery_1">Modos de Entrega de Notificaciones</msg>
   <msg key="lt_Notification_Interval">Intervalo de notificación</msg>
-  <msg key="lt_Notification_Interval_1">Intervalos de Notificación</msg>
-  <msg key="lt_Notification_Requests">Solicitudes de Notificación</msg>
   <msg key="lt_Notifications_Interval">Intervalo de notificación</msg>
   <msg key="lt_Request_Notification_">Pedir notificación para %pretty_name%</msg>
   <msg key="lt_system_name_-_Batched">[%system_name% - Notificación en Batch]</msg>
@@ -42,6 +40,8 @@
   <msg key="Subscribe_notification">Subscribir notificación</msg>
   <msg key="Subscribe_to_notification">Subscribir a notificación:</msg>
   <msg key="Subscribed_User_ID">Usuario subscrito</msg>
+  <msg key="Subscriber">Subscriptor</msg>
+  <msg key="Subscribers">Subscriptores</msg>
   <msg key="there_are_no_users">Ningún usuario está subscrito para recibir notificaciones de ese tipo para ese objeto.</msg>
   <msg key="Unsubscribe">Darse de baja</msg>
   <msg key="Unsubscribe_from_object_name">Dar de baja la suscripción a %notications.object_name%</msg>

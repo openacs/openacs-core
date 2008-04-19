@@ -17,8 +17,6 @@
   <msg key="lt_Notification_Delivery">Μέθοδος αποστολής ειδοποίησης</msg>
   <msg key="lt_Notification_Delivery_1">Μέθοδοι αποστολής ειδοποίησης</msg>
   <msg key="lt_Notification_Interval">Περίοδος χρόνου μεταξύ των ειδοποιήσεων</msg>
-  <msg key="lt_Notification_Interval_1">Χρονική περίοδος μεταξύ των ειδοποιήσεων</msg>
-  <msg key="lt_Notification_Requests">Αιτήσεις ειδοποίησης</msg>
   <msg key="lt_Request_Notification_">Επιλέξτε να λαμβάνετε ειδοποίηση με Email όποτε κάτι προστίθεται στο %pretty_name%</msg>
   <msg key="lt_system_name_-_Batched">[%system_name% - Ομάδα Ειδοποιήσεων] </msg>
   <msg key="lt_Ubsubscribe_Notification_">Διακόψτε την εγγραφή σας από %pretty_name% email ειδοποιήσεων</msg>

@@ -14,8 +14,6 @@
   <msg key="lt_Notification_Delivery">Aflevermethode voor kennisgewing</msg>
   <msg key="lt_Notification_Delivery_1">Aflevermethoden voor kennisgewing</msg>
   <msg key="lt_Notification_Interval">Kennisgevingsinterval</msg>
-  <msg key="lt_Notification_Interval_1">Kennisgevingsintervals</msg>
-  <msg key="lt_Notification_Requests">Kenningsgevingsverzoeken</msg>
   <msg key="lt_Request_Notification_">Kennisgevingsfunctie voor %pretty_name%  </msg>
   <msg key="lt_system_name_-_Batched">[%system_name% - Mailing kennisgeving]</msg>
   <msg key="lt_You_have_no_notificat">Er zijn geen berichten voor u.</msg>
