@@ -14,6 +14,8 @@
   <msg key="lt_Notification_Delivery">Método de Notificação de Entrega</msg>
   <msg key="lt_Notification_Delivery_1">Métodos de Notificação de Entrega</msg>
   <msg key="lt_Notification_Interval">Intervalo de Notificação</msg>
+  <msg key="lt_Notification_Interval_1">Intervalos de Notificação</msg>
+  <msg key="lt_Notification_Requests">Requisições de Notificação</msg>
   <msg key="lt_Request_Notification_">Solicitar Notificação para %pretty_name%</msg>
   <msg key="lt_system_name_-_Batched">[%system_name% - Notificações Agrupadas]</msg>
   <msg key="lt_You_have_no_notificat">Você não tem nenhuma notificação.</msg>
