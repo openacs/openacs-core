@@ -50,10 +50,22 @@ db_multirow -extend {check} binding binding {
 } {
     if {$impl_pl eq "TCL"} {
         regsub {^::} $impl_alias {} impl_alias
-        if {[empty_string_p [info proc ::$impl_alias]]} {
-            append impl_alias {</b> - <b style="color: red">NOT FOUND!</b>}
-        } else {
+        if {[info proc ::$impl_alias] ne ""} {
             append impl_alias "</b> {[info args ::$impl_alias]}"
+        } elseif {[llength $impl_alias]>1 
+		  && [info command ::xotcl::Object] ne "" 
+		  && [::xotcl::Object isobject [lindex $impl_alias 0]]
+		  && [[lindex $impl_alias 0] info methods [lindex $impl_alias 1]] ne ""} {
+	    # - it looks like a method, 
+	    # - we have XOTcl installed, 
+	    # - the first word is an object, 
+	    # - the second word is a method for the object, 
+	    # ... so provide a link to the XOTcl api browser
+	    set href "/xotcl/show-object?object=[lindex $impl_alias 0]&show_methods=2"
+	    append impl_alias "<a href='$href'>" \
+		"<img border='0' src='/resources/acs-subsite/ZoomIn16.gif'></a>"
+	} else {
+            append impl_alias {</b> - <b style="color: red">NOT FOUND!</b>}
         }
         set impl_alias "<b>$impl_alias"
     }
