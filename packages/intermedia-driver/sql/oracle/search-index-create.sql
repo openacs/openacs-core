@@ -40,14 +40,5 @@ begin
 end;
 /
 
---create index swi_ctx_index on site_wide_index (datastore)
---indextype is ctxsys.context parameters ('datastore sws_user_datastore memory 250M section group swsgroup');
-
-
---create index swi_ctx_index on site_wide_index (datastore)
---indextype is ctxsys.context parameters ('datastore ctxsys.default_datastore memory 250M');
-
-create index swi_index on site_wide_index (indexed_content)
-indextype is ctxsys.context parameters ('datastore ctxsys.default_datastore memory 250M');
 
 exit;

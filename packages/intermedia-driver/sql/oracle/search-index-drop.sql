@@ -27,6 +27,6 @@ begin
 end;
 /  
 
-drop index swi_ctx_index;
+drop index swi_index;
 
 exit;
