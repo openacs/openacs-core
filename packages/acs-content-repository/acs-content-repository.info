@@ -20,8 +20,8 @@
         <license>GPL</license>
         <maturity>3</maturity>
 
-        <provides url="acs-content-repository" version="5.4.1"/>
-        <requires url="acs-kernel" version="5.4.2d2"/>
+        <provides url="acs-content-repository" version="5.4.2d2"/>
+        <requires url="acs-kernel" version="5.4.1"/>
         <requires url="acs-service-contract" version="5.4.1"/>
         <requires url="search" version="5.4.1"/>
 
