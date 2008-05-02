@@ -468,7 +468,7 @@ insert into cr_scheduled_release_job values (NULL, sysdate);
 
 create table cr_folders (
   folder_id	    integer
-		    constraint cr_folder_id_fk references
+		    constraint cr_folders_folder_id_fk references
 		    cr_items on delete cascade
 		    constraint cr_folders_pk 
                     primary key,
