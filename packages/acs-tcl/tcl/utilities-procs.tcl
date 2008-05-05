@@ -4114,6 +4114,16 @@ ad_proc -public util::randomize_list {
     return $result
 }
 
+ad_proc -public util::random_list_element {
+    list
+} {
+    Returns a random element from the list.
+} {
+    set len [llength $list]
+    set idx [expr {int(rand() * $len)}]
+    return [lindex $list $idx]
+}
+
 ad_proc -public util::age_pretty {
     -timestamp_ansi:required
     -sysdate_ansi:required
