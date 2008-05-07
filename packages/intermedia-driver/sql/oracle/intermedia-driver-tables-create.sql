@@ -37,16 +37,6 @@ create table site_wide_index (
 			        constraint swi_package_id_fk
                                 references apm_packages
                                 on delete cascade,
-        -- Dirk Gomez: This is a .LRNism. It looks like .LRN has not
-        -- only object-granular permiissions, but also
-        -- community-granular ones. In search we need not only check
-        -- whether a user has the right to view this object, but also
-        -- its community.  In pure OpenACS this should always be a
-        -- null column and it should have no referential integrity.
-	community_id		integer
-			        constraint swi_community_id_fk
-                                references dotlrn_communities_all
-                                on delete cascade,
         -- Dirk Gomez: That's the place to put an object's relevant
         -- date which is part of the ranking function. In calendar
         -- this is the item date, in forum it could be the last reply
