@@ -18,7 +18,7 @@ ad_proc openacs_default_theme::install::after_install {} {
                   {/resources/acs-templating/lists.css all}" \
             -form_template /packages/acs-templating/resources/forms/standard \
             -list_template /packages/acs-templating/resources/lists/table \
-            -list_filter_template /packages/acs-templating/resources/lists/filters \
+            -list_filter_template /packages/acs-templating/resources/lists/filters 
 
         subsite::new_subsite_theme \
             -key default_tabbed \
@@ -29,7 +29,7 @@ ad_proc openacs_default_theme::install::after_install {} {
                   {/resources/acs-templating/lists.css all}" \
             -form_template /packages/acs-templating/resources/forms/standard \
             -list_template /packages/acs-templating/resources/lists/table \
-            -list_filter_template /packages/acs-templating/resources/lists/filters \
+            -list_filter_template /packages/acs-templating/resources/lists/filters 
     }
 
     # Set the default value of the master template parameter, so all subsites will
