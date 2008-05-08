@@ -79,15 +79,22 @@ template::head::add_javascript -src "/resources/acs-subsite/core.js"
 # be done in acs-templating.
 
 #
-# Add standard css
-#
-template::head::add_css \
-    -href "/resources/acs-templating/lists.css" \
-    -media "all"
+# Add css for the current subsite, defaulting to the old list/form css which was
+# hard-wired in previous versions of OpenACS.
 
-template::head::add_css \
-    -href "/resources/acs-templating/forms.css" \
-    -media "all"
+set css [parameter::get -package_id [ad_conn subsite_id] -parameter ThemeCSS -default ""]
+if { $css ne "" } {
+    foreach css $css {
+        template::head::add_css -href [lindex $css 0] -media [lindex $css 1]
+    }
+} else {
+    template::head::add_css \
+        -href "/resources/acs-templating/lists.css" \
+        -media "all"
+    template::head::add_css \
+        -href "/resources/acs-templating/forms.css" \
+        -media "all"
+}
 
 #
 # Temporary (?) fix to get xinha working

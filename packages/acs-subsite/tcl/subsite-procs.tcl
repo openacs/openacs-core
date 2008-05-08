@@ -787,25 +787,63 @@ ad_proc -public subsite::main_site_id {} {
     return $main_node(object_id)
 }
 
-
-ad_proc -public subsite::get_template_options {} {
-    Gets options for subsite master template for use with a form builder select widget.
+ad_proc -public subsite::get_theme_options {} {
+    Gets options for subsite themes for use with a form builder select widget.
 } {
-    set master_template_options [list]
-    lappend master_template_options [list "Plain" "/www/default-master"]
-    lappend master_template_options [list "Tabbed" "/packages/acs-subsite/www/group-master"]
-    set current_master [parameter::get -parameter DefaultMaster -package_id [ad_conn subsite_id]]
-    set found_p 0
-    foreach elm $master_template_options {
-        if {$current_master eq [lindex $elm 1]} {
-            set found_p 1
-            break
-        }
+    db_foreach get_subsite_themes {} {
+        lappend master_theme_options [list [lang::util::localize $name] $key]
     }
-    if { !$found_p } {
-        lappend master_template_options [list $current_master $current_master]
+
+    return $master_theme_options
+}
+
+ad_proc -public subsite::set_theme {
+    -subsite_id
+    {-theme:required}
+} {
+    Set the theme for the given subsite.  This will change the subsite's ThemeKey,
+    DefaultMaster, and ThemeCSS parameters.
+} {
+    if { ![info exists subsite_id] } {
+        set subsite_id [ad_conn subsite_id]
     }
-    return $master_template_options
+
+    db_1row get_theme_paths {}
+
+    parameter::set_value -parameter ThemeKey -package_id $subsite_id \
+        -value $theme
+    parameter::set_value -parameter DefaultMaster -package_id $subsite_id \
+        -value $template
+    parameter::set_value -parameter ThemeCSS -package_id $subsite_id \
+        -value $css
+    parameter::set_value -parameter DefaultFormStyle -package_id $subsite_id \
+        -value $form_template
+    parameter::set_value -parameter DefaultListStyle -package_id $subsite_id \
+        -value $list_template
+    parameter::set_value -parameter DefaultListFilterStyle -package_id $subsite_id \
+        -value $list_filter_template
+}
+
+ad_proc -public subsite::new_subsite_theme {
+    -key:required
+    -name:required
+    -template:required
+    {-css ""}
+    {-form_template ""}
+    {-list_template ""}
+    {-list_filter_template ""}
+} {
+    Add a new subsite theme, making it available to the theme configuration code.
+} {
+    db_dml insert_subsite_theme {}
+}
+
+ad_proc -public subsite::delete_subsite_theme {
+    -key:required
+} {
+    Delete a subsite theme, making it unavailable to the theme configuration code.    
+} {
+    db_dml delete_subsite_theme {}
 }
 
 ad_proc -public subsite::get_application_options {} {

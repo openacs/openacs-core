@@ -7,10 +7,6 @@
   <msg key="About_You">About you</msg>
   <msg key="Account_at_system_closed">Your account at %system_name% has been closed.</msg>
   <msg key="Account_close_confirm_no_label">No, take me back to %pvt_home_name%</msg>
-  <description key="Account_close_confirm_no_label">Description please - does this refer to 'Close account' on the 'Your(/My) Account' page? Where ist the user taken if he doesn't confirm? On the 'MySpace' page? (pvt=private?)
-
---Anja Wicht</description>
-
   <msg key="Account_close_confirm_yes_label">Yes, please close my account</msg>
   <msg key="Account_closed">
     &lt;p&gt;Your account is currently closed.&lt;/p&gt;
@@ -37,8 +33,10 @@
   <msg key="Add_users">Add users</msg>
   <msg key="Admin">Control Panel</msg>
   <msg key="admin">Admin</msg>
+  <msg key="Administration">Administration</msg>
   <msg key="Administer_subsite">Administer %subsite_name%</msg>
   <msg key="Administrative_options">Administrative options for this user</msg>
+  <msg key="Advanced">Advanced</msg>
   <msg key="Alert_Type">Alert Type</msg>
   <msg key="another_picture">another picture.</msg>
   <msg key="Answer">Answer</msg>
@@ -86,6 +84,7 @@ logging in again. &lt;/p&gt;
   <msg key="Communities">Communities</msg>
   <msg key="communities">communities</msg>
   <msg key="community">community</msg>
+  <msg key="Configuration">Configuration</msg>
   <msg key="Confirm">Confirm</msg>
   <msg key="confirmation_password_changed">You have successfully chosen a new password.</msg>
   <msg key="Continue">Continue</msg>
@@ -326,6 +325,7 @@ account was deleted for some reason.</msg>
   <msg key="Name">Name</msg>
   <msg key="new_application">new application</msg>
   <msg key="New_Password">New Password</msg>
+  <msg key="New_Subsite">New Subsite</msg>
   <msg key="No_applications">No applications</msg>
   <msg key="no_assessment">No assessment available</msg>
   <msg key="No_ISO_Codes">No ISO Codes</msg>
@@ -428,6 +428,7 @@ You can always change your password by doing the following:
   <msg key="subcommunities">subcommunities</msg>
   <msg key="subcommunity">subcommunity</msg>
   <msg key="subsite">subsite</msg>
+  <msg key="Subsite_Home">%subsite_name% Home</msg>
   <msg key="Subsites">Subsites</msg>
   <msg key="subsites">subsites</msg>
   <msg key="Success_but_no_account_yet">You have successfully authenticated, but you do not have an account on %system_name% yet.</msg>

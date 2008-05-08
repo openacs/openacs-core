@@ -83,5 +83,36 @@
         and host = :search_vhost
         </querytext>
     </partialquery>
+
+  <fullquery name="subsite::get_theme_options.get_subsite_themes">
+    <querytext>
+      select name, key
+      from subsite_themes
+    </querytext>
+  </fullquery>
+  
+  <fullquery name="subsite::new_subsite_theme.insert_subsite_theme">
+    <querytext>
+      insert into subsite_themes
+        (key, name, template, css, form_template, list_template, list_filter_template)
+      values
+        (:key, :name, :template, :css, :form_template, :list_template, :list_filter_template)
+    </querytext>
+  </fullquery>
+  
+  <fullquery name="subsite::delete_subsite_theme.delete_subsite_theme">
+    <querytext>
+      delete from subsite_themes
+      where key = :key
+    </querytext>
+  </fullquery>
+
+  <fullquery name="subsite::set_theme.get_theme_paths">
+    <querytext>
+      select *
+      from subsite_themes
+      where key = :theme
+    </querytext>
+  </fullquery>
  
 </queryset>

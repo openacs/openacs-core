@@ -21,6 +21,7 @@
 @@ host-node-map-create
 @@ user-sc-create
 @@ site-node-selection
+@@ themes-create
 
 -- This view lets us avoid using acs_object.name to get party_names.
 -- 
