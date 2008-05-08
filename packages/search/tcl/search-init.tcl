@@ -1,1 +1,0 @@
-ad_schedule_proc 30 search_indexer
