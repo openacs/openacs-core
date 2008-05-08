@@ -27,10 +27,10 @@ ad_form -name subsite -cancel_url . -form {
         {help_text "This should be a short string, all lowercase, with hyphens instead of spaces, whicn will be used in the URL of the new application. If you leave this blank, we will generate one for you from name of the application."}
         {html {size 30}}
     }
-    {master_template:text(select)
-        {label "Template"}
-        {help_text "Choose the layout and navigation you want for your subsite."}
-        {options [subsite::get_template_options]}
+    {theme:text(select)
+        {label "Theme"}
+        {help_text "Choose the layout and navigation theme you want for your subsite."}
+        {options [subsite::get_theme_options]}
     }
     {visibility:text(select)
         {label "Visible to"}
@@ -61,7 +61,7 @@ ad_form -name subsite -cancel_url . -form {
                                 -package_key acs-subsite]
         
         # Set template
-        parameter::set_value -parameter DefaultMaster -package_id $new_package_id -value $master_template
+        subsite::set_theme -subsite_id $new_package_id -theme $theme
 
         # Set join policy
         set group(join_policy) $join_policy
