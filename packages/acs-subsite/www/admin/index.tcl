@@ -17,7 +17,7 @@ ad_page_contract {
 }
 
 array set this_node [site_node::get -url [ad_conn url]]
-set subsite_name $this_node(instance_name)
+set title "$this_node(instance_name) Administration"
 
 set acs_admin_url [apm_package_url_from_key "acs-admin"]
 array set acs_admin_node [site_node::get -url $acs_admin_url]
