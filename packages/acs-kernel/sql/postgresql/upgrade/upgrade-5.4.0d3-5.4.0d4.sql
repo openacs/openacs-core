@@ -1,3 +1,4 @@
+select acs_privilege__create_privilege('annotate', null, null);
 select acs_privilege__add_child('admin', 'annotate');
 
 -- adding missing cascade part
