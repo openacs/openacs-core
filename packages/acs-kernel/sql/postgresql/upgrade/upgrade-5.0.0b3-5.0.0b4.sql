@@ -531,7 +531,7 @@ returns integer as '
 declare
   drop_type__rel_type               alias for $1;  
   drop_type__cascade_p              alias for $2;  -- default ''f''  
-  v_cascade                         boolean;
+  v_cascade_p                       boolean;
 begin
     -- XXX do cascade_p.
     -- JCD: cascade_p seems to be ignored in acs_o_type__drop_type anyway...
@@ -555,15 +555,17 @@ create or replace function apm__unregister_package (varchar,boolean)
 returns integer as '
 declare
   package_key            alias for $1;  
-  cascade_p              alias for $2;  -- default ''t''  
+  cascade_p              alias for $2;  -- default ''t''
+  v_cascade_p            boolean;
 begin
+   v_cascade_p := cascade_p;
    if cascade_p is null then 
-	cascade_p := ''t'';
+	v_cascade_p := ''t'';
    end if;
 
    PERFORM apm_package_type__drop_type(
 	package_key,
-	cascade_p
+	v_cascade_p
    );
 
    return 0; 
@@ -574,15 +576,17 @@ create or replace function apm__unregister_service (varchar,boolean)
 returns integer as '
 declare
   package_key            alias for $1;  
-  cascade_p              alias for $2;  -- default ''f''  
+  cascade_p              alias for $2;  -- default ''f''
+  v_cascade_p            boolean;  
 begin
+   v_cascade_p := cascade_p;
    if cascade_p is null then 
-	cascade_p := ''f'';
+	v_cascade_p := ''f'';
    end if;
 
    PERFORM apm__unregister_package (
 	package_key,
-	cascade_p
+	v_cascade_p
    );
 
    return 0; 
