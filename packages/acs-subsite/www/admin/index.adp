@@ -1,6 +1,7 @@
 <master>
+<property name="title">@title;noquote@</property>
 
-<h2>@subsite_name@ Administration</h2>
+<h2>@title;noquote@</h2>
 <ul>
   <li><a href="applications/">Applications</a>
   <li><a href="configure">Configure</a>
