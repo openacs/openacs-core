@@ -15,7 +15,7 @@ function Init() {
   __dlg_init();
   param = window.dialogArguments;
   editor = param['editor'];
-  var smileyList = Xinha._geturlcontent(_editor_url + 'plugins/InsertSmiley/smileys.txt');
+  var smileyList = Xinha._geturlcontent(Xinha.getPluginDir("InsertSmiley") + '/smileys.txt');
   smileyList = smileyList.match(/^.+$/mg);
   var smileyURL = editor.config.InsertSmiley.smileyURL;
   var tbody = document.getElementById("smileytable");
@@ -49,7 +49,7 @@ function onOK(smileyfile) {
   <body class="dialog" onload="Init()">
 <form action="" method="get">
   <div class="title" style="width: 360px;">Insert Smiley</div>
-  <div style="height: 175px; overflow:auto;" align="center">
+  <div style="height: 175px; overflow:auto; text-align: center;">
   <table style="border: 0; width: 370px;" id="smileytable">
   </table>
   </div>

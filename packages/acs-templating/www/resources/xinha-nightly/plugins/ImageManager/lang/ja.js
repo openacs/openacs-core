@@ -66,5 +66,5 @@
   
   "Upload": "アップロード",
   "Upload:": "アップロード:",
-  "Description:": "説明:",
+  "Description:": "説明:"
 };

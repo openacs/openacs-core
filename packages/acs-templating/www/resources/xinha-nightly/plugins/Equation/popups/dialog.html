@@ -79,6 +79,7 @@ function Init() {
 	mathcolor = cfg.Equation.mathcolor;
 	mathfontfamily = cfg.Equation.mathfontfamily;
 	
+	translate();
 	var inputField = document.getElementById("inputText"); 
 	
 	if (param["editedNode"] && param["editedNode"].tagName.toLowerCase() == 'span')
@@ -346,7 +347,7 @@ Original Author - Bernhard Pfeifer novocaine@gmx.net
 <script type="text/javascript">
 // <![CDATA[
 if (Xinha.is_ie)
- document.write('<span style="color:red;float:left">'+i18n('Attention Internet Explorer users: Please note that there is no WYSIWYG representation of the formula in the editor!<br />You might wish to use <a href="http://www.mozilla.com" target="_blank">Mozilla Firefox</a> instead.')+'</span>');
+ document.write('<span style="color:red;float:left">'+i18n('Attention Internet Explorer users: Please note that there is no WYSIWYG representation of the formula in the editor!<br />You might wish to use <a href="http://www.mozilla.com" onclick="window.open(this.href,\'_blank\');return false;">Mozilla Firefox</a> instead.')+'</span>');
 // ]]>
 </script>
   <button type="submit" name="ok" onclick="return onOK();">OK</button>

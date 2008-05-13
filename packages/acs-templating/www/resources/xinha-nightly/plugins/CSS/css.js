@@ -1,4 +1,6 @@
-/* This compressed file is part of Xinha. For uncomressed sources, forum, and bug reports, go to xinha.org */
+/* This compressed file is part of Xinha. For uncompressed sources, forum, and bug reports, go to xinha.org */
+/* This file is part of version 0.95 released Mon, 12 May 2008 17:33:15 +0200 */
+/* The URL of the most recent version of this file is http://svn.xinha.webfactional.com/trunk/plugins/CSS/css.js */
 Xinha.Config.prototype.cssPluginConfig={combos:[{label:"Syntax",options:{"None":"","Code":"code","String":"string","Comment":"comment","Variable name":"variable-name","Type":"type","Reference":"reference","Preprocessor":"preprocessor","Keyword":"keyword","Function name":"function-name","Html tag":"html-tag","Html italic":"html-helper-italic","Warning":"warning","Html bold":"html-helper-bold"},context:"pre"},{label:"Info",options:{"None":"","Quote":"quote","Highlight":"highlight","Deprecated":"deprecated"}}]};
 function CSS(_1,_2){
 this.editor=_1;

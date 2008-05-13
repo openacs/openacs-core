@@ -1,5 +1,7 @@
-/* This compressed file is part of Xinha. For uncomressed sources, forum, and bug reports, go to xinha.org */
-InternetExplorer._pluginInfo={name:"Internet Explorer",origin:"Xinha Core",version:"$LastChangedRevision: 901 $".replace(/^[^:]*: (.*) \$$/,"$1"),developer:"The Xinha Core Developer Team",developer_url:"$HeadURL: http://svn.xinha.webfactional.com/trunk/modules/InternetExplorer/InternetExplorer.js $".replace(/^[^:]*: (.*) \$$/,"$1"),sponsor:"",sponsor_url:"",license:"htmlArea"};
+/* This compressed file is part of Xinha. For uncompressed sources, forum, and bug reports, go to xinha.org */
+/* This file is part of version 0.95 released Mon, 12 May 2008 17:33:15 +0200 */
+/* The URL of the most recent version of this file is http://svn.xinha.webfactional.com/trunk/modules/InternetExplorer/InternetExplorer.js */
+InternetExplorer._pluginInfo={name:"Internet Explorer",origin:"Xinha Core",version:"$LastChangedRevision:980 $".replace(/^[^:]*:\s*(.*)\s*\$$/,"$1"),developer:"The Xinha Core Developer Team",developer_url:"$HeadURL:http://svn.xinha.webfactional.com/trunk/modules/InternetExplorer/InternetExplorer.js $".replace(/^[^:]*:\s*(.*)\s*\$$/,"$1"),sponsor:"",sponsor_url:"",license:"htmlArea"};
 function InternetExplorer(_1){
 this.editor=_1;
 _1.InternetExplorer=this;
@@ -64,33 +66,136 @@ InternetExplorer.prototype.outwardHtml=function(_a){
 _a=_a.replace(/&nbsp;(\s*)(<script|<!--)/i,"$1$2");
 return _a;
 };
-Xinha.prototype.insertNodeAtSelection=function(_b){
-this.insertHTML(_b.outerHTML);
+InternetExplorer.prototype.onExecCommand=function(_b,UI,_d){
+switch(_b){
+case "saveas":
+var _e=null;
+var _f=this.editor;
+var _10=document.createElement("iframe");
+_10.src="about:blank";
+_10.style.display="none";
+document.body.appendChild(_10);
+try{
+if(_10.contentDocument){
+_e=_10.contentDocument;
+}else{
+_e=_10.contentWindow.document;
+}
+}
+catch(ex){
+}
+_e.open("text/html","replace");
+var _11="";
+if(_f.config.browserQuirksMode===false){
+var _12="<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">";
+}else{
+if(_f.config.browserQuirksMode===true){
+var _12="";
+}else{
+var _12=Xinha.getDoctype(document);
+}
+}
+if(!_f.config.fullPage){
+_11+=_12+"\n";
+_11+="<html>\n";
+_11+="<head>\n";
+_11+="<meta http-equiv=\"Content-Type\" content=\"text/html; charset="+_f.config.charSet+"\">\n";
+if(typeof _f.config.baseHref!="undefined"&&_f.config.baseHref!==null){
+_11+="<base href=\""+_f.config.baseHref+"\"/>\n";
+}
+if(typeof _f.config.pageStyleSheets!=="undefined"){
+for(var i=0;i<_f.config.pageStyleSheets.length;i++){
+if(_f.config.pageStyleSheets[i].length>0){
+_11+="<link rel=\"stylesheet\" type=\"text/css\" href=\""+_f.config.pageStyleSheets[i]+"\">";
+}
+}
+}
+if(_f.config.pageStyle){
+_11+="<style type=\"text/css\">\n"+_f.config.pageStyle+"\n</style>";
+}
+_11+="</head>\n";
+_11+="<body>\n";
+_11+=_f.getEditorContent();
+_11+="</body>\n";
+_11+="</html>";
+}else{
+_11=_f.getEditorContent();
+if(_11.match(Xinha.RE_doctype)){
+_f.setDoctype(RegExp.$1);
+}
+}
+_e.write(_11);
+_e.close();
+_e.execCommand(_b,UI,_d);
+document.body.removeChild(_10);
+return true;
+break;
+case "removeformat":
+var _f=this.editor;
+var sel=_f.getSelection();
+var _15=_f.saveSelection(sel);
+var i,el,els;
+function clean(el){
+if(el.nodeType!=1){
+return;
+}
+el.removeAttribute("style");
+for(var j=0;j<el.childNodes.length;j++){
+clean(el.childNodes[j]);
+}
+if((el.tagName.toLowerCase()=="span"&&!el.attributes.length)||el.tagName.toLowerCase()=="font"){
+el.outerHTML=el.innerHTML;
+}
+}
+if(_f.selectionEmpty(sel)){
+els=_f._doc.body.childNodes;
+for(i=0;i<els.length;i++){
+el=els[i];
+if(el.nodeType!=1){
+continue;
+}
+if(el.tagName.toLowerCase()=="span"){
+newNode=_f.convertNode(el,"div");
+el.parentNode.replaceChild(newNode,el);
+el=newNode;
+}
+clean(el);
+}
+}
+_f._doc.execCommand(_b,UI,_d);
+_f.restoreSelection(_15);
+return true;
+break;
+}
+return false;
 };
-Xinha.prototype.getParentElement=function(_c){
-if(typeof _c=="undefined"){
-_c=this.getSelection();
+Xinha.prototype.insertNodeAtSelection=function(_18){
+this.insertHTML(_18.outerHTML);
+};
+Xinha.prototype.getParentElement=function(sel){
+if(typeof sel=="undefined"){
+sel=this.getSelection();
 }
-var _d=this.createRange(_c);
-switch(_c.type){
+var _1a=this.createRange(sel);
+switch(sel.type){
 case "Text":
-var _e=_d.parentElement();
+var _1b=_1a.parentElement();
 while(true){
-var _f=_d.duplicate();
-_f.moveToElementText(_e);
-if(_f.inRange(_d)){
+var _1c=_1a.duplicate();
+_1c.moveToElementText(_1b);
+if(_1c.inRange(_1a)){
 break;
 }
-if((_e.nodeType!=1)||(_e.tagName.toLowerCase()=="body")){
+if((_1b.nodeType!=1)||(_1b.tagName.toLowerCase()=="body")){
 break;
 }
-_e=_e.parentElement;
+_1b=_1b.parentElement;
 }
-return _e;
+return _1b;
 case "None":
-return _d.parentElement();
+return _1a.parentElement();
 case "Control":
-return _d.item(0);
+return _1a.item(0);
 default:
 return this._doc.body;
 }
@@ -102,10 +207,10 @@ return null;
 if(sel.type.toLowerCase()=="control"){
 return sel.createRange().item(0);
 }else{
-var _11=sel.createRange();
-var _12=this.getParentElement(sel);
-if(_12.innerHTML==_11.htmlText){
-return _12;
+var _1e=sel.createRange();
+var _1f=this.getParentElement(sel);
+if(_1f.innerHTML==_1e.htmlText){
+return _1f;
 }
 return null;
 }
@@ -117,43 +222,46 @@ return true;
 return this.createRange(sel).htmlText==="";
 };
 Xinha.prototype.saveSelection=function(){
-return this.createRange(this._getSelection());
+return this.createRange(this.getSelection());
 };
-Xinha.prototype.restoreSelection=function(_14){
+Xinha.prototype.restoreSelection=function(_21){
 try{
-_14.select();
+_21.select();
 }
 catch(e){
 }
 };
-Xinha.prototype.selectNodeContents=function(_15,pos){
+Xinha.prototype.selectNodeContents=function(_22,pos){
 this.focusEditor();
 this.forceRedraw();
-var _17;
-var _18=typeof pos=="undefined"?true:false;
-if(_18&&_15.tagName&&_15.tagName.toLowerCase().match(/table|img|input|select|textarea/)){
-_17=this._doc.body.createControlRange();
-_17.add(_15);
+var _24;
+var _25=typeof pos=="undefined"?true:false;
+if(_25&&_22.tagName&&_22.tagName.toLowerCase().match(/table|img|input|select|textarea/)){
+_24=this._doc.body.createControlRange();
+_24.add(_22);
 }else{
-_17=this._doc.body.createTextRange();
-_17.moveToElementText(_15);
+_24=this._doc.body.createTextRange();
+_24.moveToElementText(_22);
 }
-_17.select();
+_24.select();
 };
-Xinha.prototype.insertHTML=function(_19){
+Xinha.prototype.insertHTML=function(_26){
 this.focusEditor();
 var sel=this.getSelection();
-var _1b=this.createRange(sel);
-_1b.pasteHTML(_19);
+var _28=this.createRange(sel);
+_28.pasteHTML(_26);
 };
 Xinha.prototype.getSelectedHTML=function(){
 var sel=this.getSelection();
-var _1d=this.createRange(sel);
-if(_1d.htmlText){
-return _1d.htmlText;
+if(this.selectionEmpty(sel)){
+return "";
+}
+var _2a=this.createRange(sel);
+if(_2a.htmlText){
+return _2a.htmlText;
 }else{
-if(_1d.length>=1){
-return _1d.item(0).outerHTML;
+if(_2a.length>=1){
+return _2a.item(0).outerHTML;
 }
 }
 return "";
@@ -162,51 +270,55 @@ Xinha.prototype.getSelection=function(){
 return this._doc.selection;
 };
 Xinha.prototype.createRange=function(sel){
+if(!sel){
+sel=this.getSelection();
+}
 return sel.createRange();
 };
-Xinha.prototype.isKeyEvent=function(_1f){
-return _1f.type=="keydown";
+Xinha.prototype.isKeyEvent=function(_2c){
+return _2c.type=="keydown";
 };
-Xinha.prototype.getKey=function(_20){
-return String.fromCharCode(_20.keyCode);
+Xinha.prototype.getKey=function(_2d){
+return String.fromCharCode(_2d.keyCode);
 };
-Xinha.getOuterHTML=function(_21){
-return _21.outerHTML;
+Xinha.getOuterHTML=function(_2e){
+return _2e.outerHTML;
 };
 Xinha.prototype.cc=String.fromCharCode(8201);
-Xinha.prototype.setCC=function(_22){
+Xinha.prototype.setCC=function(_2f){
 var cc=this.cc;
-if(_22=="textarea"){
+if(_2f=="textarea"){
 var ta=this._textArea;
 var pos=document.selection.createRange();
 pos.collapse();
 pos.text=cc;
-var _26=ta.value.indexOf(cc);
-var _27=ta.value.substring(0,_26);
-var _28=ta.value.substring(_26+cc.length,ta.value.length);
-if(_28.match(/^[^<]*>/)){
-var _29=_28.indexOf(">")+1;
-ta.value=_27+_28.substring(0,_29)+cc+_28.substring(_29,_28.length);
+var _33=ta.value.indexOf(cc);
+var _34=ta.value.substring(0,_33);
+var _35=ta.value.substring(_33+cc.length,ta.value.length);
+if(_35.match(/^[^<]*>/)){
+var _36=_35.indexOf(">")+1;
+ta.value=_34+_35.substring(0,_36)+cc+_35.substring(_36,_35.length);
 }else{
-ta.value=_27+cc+_28;
+ta.value=_34+cc+_35;
 }
+ta.value=ta.value.replace(new RegExp("(&[^"+cc+"]*?)("+cc+")([^"+cc+"]*?;)"),"$1$3$2");
 ta.value=ta.value.replace(new RegExp("(<script[^>]*>[^"+cc+"]*?)("+cc+")([^"+cc+"]*?</script>)"),"$1$3$2");
 ta.value=ta.value.replace(new RegExp("^([^"+cc+"]*)("+cc+")([^"+cc+"]*<body[^>]*>)(.*?)"),"$1$3$2$4");
 }else{
 var sel=this.getSelection();
 var r=sel.createRange();
 if(sel.type=="Control"){
-var _2c=r.item(0);
-_2c.outerHTML+=cc;
+var _39=r.item(0);
+_39.outerHTML+=cc;
 }else{
 r.collapse();
 r.text=cc;
 }
 }
 };
-Xinha.prototype.findCC=function(_2d){
-var _2e=(_2d=="textarea")?this._textArea:this._doc.body;
-range=_2e.createTextRange();
+Xinha.prototype.findCC=function(_3a){
+var _3b=(_3a=="textarea")?this._textArea:this._doc.body;
+range=_3b.createTextRange();
 if(range.findText(escape(this.cc))){
 range.select();
 range.text="";
@@ -215,11 +327,11 @@ if(range.findText(this.cc)){
 range.select();
 range.text="";
 }
-if(_2d=="textarea"){
+if(_3a=="textarea"){
 this._textArea.focus();
 }
 };
 Xinha.getDoctype=function(doc){
-return (doc.compatMode=="CSS1Compat")?"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">":"";
+return (doc.compatMode=="CSS1Compat"&&Xinha.ie_version<8)?"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">":"";
 };
 

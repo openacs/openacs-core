@@ -23,7 +23,7 @@
    * 
    */
       
-  function xinha_pass_to_php_backend($Data, $KeyLocation = 'Xinha:BackendKey')
+  function xinha_pass_to_php_backend($Data, $KeyLocation = 'Xinha:BackendKey', $ReturnPHP = FALSE)
   {
    
     $bk = array();
@@ -57,8 +57,14 @@
     // wouldn't have worked.
     $backend_data[session_name()] = session_id();
     
-    echo 'backend_data = ' . xinha_to_js($backend_data) . "; \n";
-    
+    if($ReturnPHP)
+    {      
+      return array('backend_data' => $backend_data);      
+    }
+    else
+    {      
+      echo 'backend_data = ' . xinha_to_js($backend_data) . "; \n";  
+    }                
   }  
    
   /** Convert PHP data structure to Javascript */

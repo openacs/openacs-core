@@ -1,5 +1,7 @@
-/* This compressed file is part of Xinha. For uncomressed sources, forum, and bug reports, go to xinha.org */
-InsertImage._pluginInfo={name:"InsertImage",origin:"Xinha Core",version:"$LastChangedRevision: 900 $".replace(/^[^:]*: (.*) \$$/,"$1"),developer:"The Xinha Core Developer Team",developer_url:"$HeadURL: http://svn.xinha.webfactional.com/trunk/modules/InsertImage/insert_image.js $".replace(/^[^:]*: (.*) \$$/,"$1"),sponsor:"",sponsor_url:"",license:"htmlArea"};
+/* This compressed file is part of Xinha. For uncompressed sources, forum, and bug reports, go to xinha.org */
+/* This file is part of version 0.95 released Mon, 12 May 2008 17:33:15 +0200 */
+/* The URL of the most recent version of this file is http://svn.xinha.webfactional.com/trunk/modules/InsertImage/insert_image.js */
+InsertImage._pluginInfo={name:"InsertImage",origin:"Xinha Core",version:"$LastChangedRevision:992 $".replace(/^[^:]*:\s*(.*)\s*\$$/,"$1"),developer:"The Xinha Core Developer Team",developer_url:"$HeadURL:http://svn.xinha.webfactional.com/trunk/modules/InsertImage/insert_image.js $".replace(/^[^:]*:\s*(.*)\s*\$$/,"$1"),sponsor:"",sponsor_url:"",license:"htmlArea"};
 function InsertImage(_1){
 }
 Xinha.prototype._insertImage=function(_2){
@@ -29,7 +31,7 @@ return a[i].value;
 }
 return "";
 }
-_4={f_base:_5,f_url:_2.getAttribute("src",2),f_alt:_2.alt,f_border:_2.border,f_align:_2.align,f_vert:getSpecifiedAttribute(_2,"vspace"),f_horiz:getSpecifiedAttribute(_2,"hspace"),f_width:_2.width,f_height:_2.height};
+_4={f_base:_5,f_url:this.stripBaseURL(_2.getAttribute("src",2)),f_alt:_2.alt,f_border:_2.border,f_align:_2.align,f_vert:getSpecifiedAttribute(_2,"vspace"),f_horiz:getSpecifiedAttribute(_2,"hspace"),f_width:_2.width,f_height:_2.height};
 }else{
 _4={f_base:_5,f_url:""};
 }

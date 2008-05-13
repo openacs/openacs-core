@@ -1,5 +1,7 @@
-/* This compressed file is part of Xinha. For uncomressed sources, forum, and bug reports, go to xinha.org */
-Xinha.Config.prototype.FormOperations={"multiple_field_format":"php","allow_edit_form":false,"default_form_action":_editor_url+"plugins/FormOperations/formmail.php","default_form_html":Xinha._geturlcontent(_editor_url+"plugins/FormOperations/default_form.html")};
+/* This compressed file is part of Xinha. For uncompressed sources, forum, and bug reports, go to xinha.org */
+/* This file is part of version 0.95 released Mon, 12 May 2008 17:33:15 +0200 */
+/* The URL of the most recent version of this file is http://svn.xinha.webfactional.com/trunk/plugins/FormOperations/form-operations.js */
+Xinha.Config.prototype.FormOperations={"multiple_field_format":"php","allow_edit_form":false,"default_form_action":Xinha.getPluginDir("FormOperations")+"/formmail.php","default_form_html":Xinha._geturlcontent(Xinha.getPluginDir("FormOperations")+"/default_form.html")};
 FormOperations._pluginInfo={name:"FormOperations",version:"1.0",developer:"James Sleeman",developer_url:"http://www.gogo.co.nz/",c_owner:"Gogo Internet Services",license:"htmlArea",sponsor:"Gogo Internet Services",sponsor_url:"http://www.gogo.co.nz/"};
 function FormOperations(_1){
 this.editor=_1;
@@ -8,7 +10,7 @@ this.html=false;
 this.ready=false;
 this.activeElement=null;
 this._preparePanel();
-_1.config.pageStyleSheets.push(_editor_url+"plugins/FormOperations/iframe.css");
+_1.config.pageStyleSheets.push(Xinha.getPluginDir("FormOperations")+"/iframe.css");
 var _2=["separator","insert_form","insert_text_field","insert_textarea_field","insert_select_field","insert_cb_field","insert_rb_field","insert_button"];
 this.editor.config.toolbar.push(_2);
 function pasteAndSelect(_3){
@@ -67,7 +69,7 @@ return _9._editorEvent(_b);
 FormOperations.prototype._preparePanel=function(){
 var fo=this;
 if(this.html==false){
-Xinha._getback(_editor_url+"plugins/FormOperations/panel.html",function(_d){
+Xinha._getback(Xinha.getPluginDir("FormOperations")+"/panel.html",function(_d){
 fo.html=_d;
 fo._preparePanel();
 });

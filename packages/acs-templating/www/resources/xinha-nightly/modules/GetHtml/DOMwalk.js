@@ -1,16 +1,12 @@
-/* This compressed file is part of Xinha. For uncomressed sources, forum, and bug reports, go to xinha.org */
+/* This compressed file is part of Xinha. For uncompressed sources, forum, and bug reports, go to xinha.org */
+/* This file is part of version 0.95 released Mon, 12 May 2008 17:33:15 +0200 */
+/* The URL of the most recent version of this file is http://svn.xinha.webfactional.com/trunk/modules/GetHtml/DOMwalk.js */
 function GetHtmlImplementation(_1){
 this.editor=_1;
 }
-GetHtmlImplementation._pluginInfo={name:"GetHtmlImplementation DOMwalk",origin:"Xinha Core",version:"$LastChangedRevision: 871 $".replace(/^[^:]*: (.*) \$$/,"$1"),developer:"The Xinha Core Developer Team",developer_url:"$HeadURL: http://svn.xinha.webfactional.com/trunk/modules/GetHtml/DOMwalk.js $".replace(/^[^:]*: (.*) \$$/,"$1"),sponsor:"",sponsor_url:"",license:"htmlArea"};
+GetHtmlImplementation._pluginInfo={name:"GetHtmlImplementation DOMwalk",origin:"Xinha Core",version:"$LastChangedRevision:961 $".replace(/^[^:]*:\s*(.*)\s*\$$/,"$1"),developer:"The Xinha Core Developer Team",developer_url:"$HeadURL:http://svn.xinha.webfactional.com/trunk/modules/GetHtml/DOMwalk.js $".replace(/^[^:]*:\s*(.*)\s*\$$/,"$1"),sponsor:"",sponsor_url:"",license:"htmlArea"};
 Xinha.getHTML=function(_2,_3,_4){
-try{
 return Xinha.getHTMLWrapper(_2,_3,_4);
-}
-catch(ex){
-alert(Xinha._lc("Your Document is not well formed. Check JavaScript console for details."));
-return _4._iframe.contentWindow.document.body.innerHTML;
-}
 };
 Xinha.emptyAttributes=" checked disabled ismap readonly nowrap compact declare selected defer multiple noresize noshade ";
 Xinha.getHTMLWrapper=function(_5,_6,_7,_8){
@@ -78,7 +74,7 @@ if(!a.specified&&!(_5.tagName.toLowerCase().match(/input|option/)&&a.nodeName=="
 continue;
 }
 var _14=a.nodeName.toLowerCase();
-if(/_moz_editor_bogus_node/.test(_14)){
+if(/_moz_editor_bogus_node/.test(_14)||(_14=="class"&&a.nodeValue=="webkit-block-placeholder")){
 _9="";
 break;
 }
@@ -94,6 +90,12 @@ if(typeof _5[a.nodeName]!="undefined"&&_14!="href"&&_14!="src"&&!(/^on/.test(_14
 _15=_5[a.nodeName];
 }else{
 _15=a.nodeValue;
+if(_14=="class"){
+_15=_15.replace(/Apple-style-span/,"");
+if(!_15){
+continue;
+}
+}
 if(Xinha.is_ie&&(_14=="href"||_14=="src")){
 _15=_7.stripBaseURL(_15);
 }

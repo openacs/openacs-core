@@ -4,7 +4,8 @@
  * Authors: Wei Zhuo, Afru, Krzysztof Kotowicz
  * Version: Updated on 08-01-2005 by Afru
  * Version: Updated on 21-06-2006 by Krzysztof Kotowicz
- * Package: ExtendedFileManager (EFM 1.1.1)
+ * Version: Updated on 20-01-2008 by Raimund Meyer
+ * Package: ExtendedFileManager (EFM 1.4)
  * http://www.afrusoft.com/htmlarea
  */
 if(isset($_REQUEST['mode'])) $insertMode=$_REQUEST['mode'];
@@ -37,8 +38,9 @@ $imageInfo = $editor->processImage();
     }
 
 	var mode = "<?php echo $editor->getAction(); ?>" //crop, scale, measure
-
-var currentImageFile = "<?php if(count($imageInfo)>0) echo rawurlencode($imageInfo['file']); ?>";
+	var currentImageFile = "<?php if(count($imageInfo)>0) echo rawurlencode($imageInfo['file']); ?>";
+	var fileSize = "<?php echo (round($imageInfo['filesize'] / 1024,1)).' KB' ?>";
+	
 
 <?php if ($editor->isFileSaved() == 1) { ?>
 	alert(i18n('File saved.'));

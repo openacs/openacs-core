@@ -10,7 +10,6 @@ function Init() {
 	
   __dlg_translate("BackgroundImage");
   __dlg_init();
-
 }
 
 function onCancel() {
@@ -19,7 +18,7 @@ function onCancel() {
 }
 
 function insertbg(image) {
-	__dlg_close(window.opener._editor_url + "/plugins/BackgroundImage/backgrounds/" + image);
+	__dlg_close(window.opener.Xinha.getPluginDir('BackgroundImage') + "/backgrounds/" + image);
 	return false;
 }
 
@@ -32,8 +31,8 @@ function onDelete() {
 <body class="dialog" onload="Init()">
 <form action="" method="get">
   <div class="title">Set Page Background Image</div>
-<table align="center" border="0" cellspacing="0" cellpadding="6">
-<tr align="center" valign="top">
+<table style="text-align: center;" border="0" cellspacing="0" cellpadding="6">
+<tr style="text-align: center; vertical-align: top;">
 <td><img onclick="insertbg('blufur.jpg')" border="1" src="../backgrounds/thumbnails/blufur.jpg" width="50" height="50"></td>
 <td><img onclick="insertbg('palecnvs.jpg')" border="1" src="../backgrounds/thumbnails/palecnvs.jpg" width="50" height="50"></td>
 <td><img onclick="insertbg('ppplcnvs.jpg')" border="1" src="../backgrounds/thumbnails/ppplcnvs.jpg" width="50" height="50"></td>

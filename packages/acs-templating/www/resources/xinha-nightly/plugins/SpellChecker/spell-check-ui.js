@@ -1,4 +1,6 @@
-/* This compressed file is part of Xinha. For uncomressed sources, forum, and bug reports, go to xinha.org */
+/* This compressed file is part of Xinha. For uncompressed sources, forum, and bug reports, go to xinha.org */
+/* This file is part of version 0.95 released Mon, 12 May 2008 17:33:15 +0200 */
+/* The URL of the most recent version of this file is http://svn.xinha.webfactional.com/trunk/plugins/SpellChecker/spell-check-ui.js */
 var SpellChecker=window.opener.SpellChecker;
 var Xinha=window.opener.Xinha;
 var _editor_url=window.opener._editor_url;
@@ -50,7 +52,7 @@ for(var i=0;i<to_r_list.length;i++){
 _7["to_r_list["+i+"][0]"]=to_r_list[i][0];
 _7["to_r_list["+i+"][1]"]=to_r_list[i][1];
 }
-window.opener.Xinha._postback(_editor_url+"/plugins/SpellChecker/spell-check-savedicts.php",_7);
+window.opener.Xinha._postback(Xinha.getPluginDir("SpellChecker")+"/spell-check-savedicts.php",_7);
 window.close();
 }else{
 window.close();
@@ -170,7 +172,7 @@ _1b.value=editor.config.SpellChecker.defaultDictionary;
 _1b.value="en_GB";
 }
 if(editor.config.SpellChecker.backend=="php"){
-_1a.form.action=_editor_url+"/plugins/SpellChecker/spell-check-logic.php";
+_1a.form.action=Xinha.getPluginDir("SpellChecker")+"/spell-check-logic.php";
 }
 if(editor.config.SpellChecker.utf8_to_entities){
 document.getElementById("utf8_to_entities").value=1;
@@ -317,7 +319,7 @@ wrongWords=null;
 allWords={};
 fixedWords=[];
 suggested_words=frame.contentWindow.suggested_words;
-document.getElementById("status").innerHTML="Xinha Spell Checker (<a href='readme-tech.html' target='_blank' title='Technical information'>info</a>)";
+document.getElementById("status").innerHTML="Xinha Spell Checker (<a href=\"readme-tech.html\" onclick=\"window.open(this.href,'_blank');return false;\" title=\"Technical information\">info</a>)";
 var doc=frame.contentWindow.document;
 var _30=doc.getElementsByTagName("span");
 var sps=[];

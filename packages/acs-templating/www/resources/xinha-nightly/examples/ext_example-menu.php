@@ -11,8 +11,8 @@
     --  full_example-body.html, and full_example.js.
     --
     --  $HeadURL: http://svn.xinha.webfactional.com/trunk/examples/ext_example-menu.php $
-    --  $LastChangedDate: 2007-10-12 12:00:47 +0200 (Fr, 12 Okt 2007) $
-    --  $LastChangedRevision: 901 $
+    --  $LastChangedDate: 2008-01-10 10:10:59 +1300 (Thu, 10 Jan 2008) $
+    --  $LastChangedRevision: 929 $
     --  $LastChangedBy: ray $
     --------------------------------------------------------------------------->
 
@@ -110,10 +110,18 @@
   }
 
 function Dialog(url, action, init) {
-  if (typeof init == "undefined") {
-    init = window;	// pass this window object by default
-  }
-  Dialog._geckoOpenModal(url, action, init);
+	if (typeof init == "undefined") {
+		init = window;	// pass this window object by default
+	}
+	if (typeof window.showModalDialog == 'function')
+	{
+		Dialog._return = action;
+		var r = window.showModalDialog(url, init, "dialogheight=10;dialogheight=10;scroll=no;resizable=yes");
+	}
+	else
+	{
+		Dialog._geckoOpenModal(url, action, init);
+	}
 };
 
 Dialog._parentEvent = function(ev) {

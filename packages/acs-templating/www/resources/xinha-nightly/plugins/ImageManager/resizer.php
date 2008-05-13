@@ -1,5 +1,5 @@
 <?php
-header('Content-Type: text/javascript');
+header('Content-Type: text/javascript; charset=UTF-8');
 
 /**
  * Resize images to a given size, and saving in a new file.
