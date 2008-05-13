@@ -96,7 +96,10 @@ function __dlg_init(bottom) {
     var pos = getAbsolutePos(bottom);
     body_height = pos.y + bottom.offsetHeight;
   }
-  window.dialogArguments = opener.Dialog._arguments;
+  if (!window.dialogArguments && opener.Dialog._arguments)
+  {
+    window.dialogArguments = opener.Dialog._arguments;
+  }
   if (!document.all) {
     window.sizeToContent();
     window.sizeToContent();  // for reasons beyond understanding,

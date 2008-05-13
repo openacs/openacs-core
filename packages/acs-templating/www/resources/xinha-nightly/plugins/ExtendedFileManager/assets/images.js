@@ -1,4 +1,6 @@
-/* This compressed file is part of Xinha. For uncomressed sources, forum, and bug reports, go to xinha.org */
+/* This compressed file is part of Xinha. For uncompressed sources, forum, and bug reports, go to xinha.org */
+/* This file is part of version 0.95 released Mon, 12 May 2008 17:33:15 +0200 */
+/* The URL of the most recent version of this file is http://svn.xinha.webfactional.com/trunk/plugins/ExtendedFileManager/assets/images.js */
 function i18n(_1){
 return Xinha._lc(_1,"ExtendedFileManager");
 }
@@ -237,7 +239,7 @@ return true;
 return false;
 }
 function showPreview(_4e){
-window.parent.document.getElementById("f_preview").src=_4e?window.parent._backend_url+"__function=thumbs&img="+_4e:window.parent.opener._editor_url+"plugins/ExtendedFileManager/img/1x1_transparent.gif";
+window.parent.document.getElementById("f_preview").src=_4e?window.parent._backend_url+"__function=thumbs&img="+_4e:window.parent.opener.Xinha.getPluginDir("ExtendedFileManager")+"/img/1x1_transparent.gif";
 }
 addEvent(window,"load",init);
 

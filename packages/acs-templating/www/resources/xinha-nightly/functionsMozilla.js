@@ -336,7 +336,7 @@ Gecko.prototype.handleBackspace = function()
  * 5. Reinsert it just after the block element
  *       <p>The quick </p><p>brown fox jumped over the lazy dog.</p>
  *
- * Along the way, allow inserting blank paragraphs, which will look like <p><br></p>
+ * Along the way, allow inserting blank paragraphs, which will look like <p><br/></p>
  */
 
 Gecko.prototype.dom_checkInsertP = function()
@@ -516,7 +516,7 @@ Gecko.prototype.dom_checkInsertP = function()
 
   // Select the range (to set the insertion)
   // collapse to the start of the new block
-  //  (remember the block might be <p><br></p>, so if we collapsed to the end the <br> would be noticable)
+  //  (remember the block might be <p><br/></p>, so if we collapsed to the end the <br/> would be noticable)
 
   //range.selectNode(newblock.firstChild);
   //range.collapse(true);

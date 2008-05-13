@@ -1,9 +1,12 @@
-/* This compressed file is part of Xinha. For uncomressed sources, forum, and bug reports, go to xinha.org */
+/* This compressed file is part of Xinha. For uncompressed sources, forum, and bug reports, go to xinha.org */
+/* This file is part of version 0.95 released Mon, 12 May 2008 17:33:15 +0200 */
+/* The URL of the most recent version of this file is http://svn.xinha.webfactional.com/trunk/plugins/ContextMenu/context-menu.js */
 Xinha.loadStyle("menu.css","ContextMenu");
 function ContextMenu(_1){
 this.editor=_1;
 }
 ContextMenu._pluginInfo={name:"ContextMenu",version:"1.0",developer:"Mihai Bazon",developer_url:"http://dynarch.com/mishoo/",c_owner:"dynarch.com",sponsor:"American Bible Society",sponsor_url:"http://www.americanbible.org",license:"htmlArea"};
+Xinha.Config.prototype.ContextMenu={disableMozillaSpellCheck:false};
 ContextMenu.prototype.onGenerate=function(){
 var _2=this;
 var _3=this.editordoc=this.editor._iframe.contentWindow.document;
@@ -11,6 +14,9 @@ Xinha._addEvents(_3,["contextmenu"],function(_4){
 return _2.popupMenu(Xinha.is_ie?_2.editor._iframe.contentWindow.event:_4);
 });
 this.currentMenu=null;
+if(this.editor.config.ContextMenu.disableMozillaSpellCheck){
+this.editordoc.body.spellcheck=false;
+}
 };
 ContextMenu.prototype.getContextMenu=function(_5){
 var _6=this;
@@ -258,7 +264,7 @@ doc=document;
 var _31=this.iePopup=window.createPopup();
 doc=_31.document;
 doc.open();
-doc.write("<html><head><style type='text/css'>@import url("+_editor_url+"plugins/ContextMenu/menu.css); html, body { padding: 0px; margin: 0px; overflow: hidden; border: 0px; }</style></head><body unselectable='yes'></body></html>");
+doc.write("<html><head><style type='text/css'>@import url("+Xinha.getPluginDir("ContextMenu")+"/menu.css); html, body { padding: 0px; margin: 0px; overflow: hidden; border: 0px; }</style></head><body unselectable='yes'></body></html>");
 doc.close();
 }
 div=doc.createElement("div");

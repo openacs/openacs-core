@@ -25,8 +25,8 @@
  *	Getting the mode for further differentiation
  */
 
-if(empty($insertMode))
-    $insertMode="image";
+if(isset($_REQUEST['mode'])) $insertMode=$_REQUEST['mode'];
+	if(!isset($insertMode)) $insertMode="image";
 
 /**
 * Default backend URL
@@ -64,15 +64,17 @@ $IMConfig['images_dir'] = 'demo_images';
 
 /*
  The URL to the above path, the web browser needs to be able to see it.
- It can be protected via .htaccess on apache or directory permissions on IIS,
- check you web server documentation for futher information on directory protection
- If this directory needs to be publicly accessiable, remove scripting capabilities
- for this directory (i.e. disable PHP, Perl, CGI). We only want to store assets
- in this directory and its subdirectories.
+ Please remove scripting capabilities in this directory
+ for this directory (i.e. disable PHP, Perl, CGI; see .htaccess file in demo_images folder).
 */
 $IMConfig['images_url'] = str_replace( array("backend.php","manager.php"), "", $_SERVER["PHP_SELF"] ) . $IMConfig['images_dir'];
 //$IMConfig['files_url'] = 'url/to/files_dir';
 
+/*
+  Format of the Date Modified in list view.
+  It has to be a string understood by the PHP date() function (for possible values see http://http://php.net/manual/en/function.date.php)
+*/
+$IMConfig['date_format'] = "d.m.y H:i";
 /*
   Possible values: true, false
 
@@ -122,7 +124,8 @@ define('IMAGE_CLASS', 'GD');
  your server and PHP must be able to execute them (i.e. safe mode is OFF).
  GD does not require the following definition.
 */
-define('IMAGE_TRANSFORM_LIB_PATH', 'C:/"Program Files"/ImageMagick-5.5.7-Q16/');
+define('IMAGE_TRANSFORM_LIB_PATH', '/usr/bin/');
+//define('IMAGE_TRANSFORM_LIB_PATH', 'C:/"Program Files"/ImageMagick-5.5.7-Q16/');
 
 
 /*
@@ -287,7 +290,7 @@ $IMConfig['allow_upload'] = true;
 
   "max"  - the maximum allowed by the server (the value is retrieved from the server configuration).
 */
-$IMConfig['max_filesize_kb_image'] = 2000000;
+$IMConfig['max_filesize_kb_image'] = 200;
 
 $IMConfig['max_filesize_kb_link'] = 5000;
 

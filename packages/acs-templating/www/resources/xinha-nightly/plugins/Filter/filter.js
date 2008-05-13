@@ -1,68 +1,46 @@
-// Filter plugin for Xinha
-// Implementation by Udo Schmal & Schaffrath NeueMedien
-// Original Author - Udo Schmal
-//
-// (c) Udo Schmal & Schaffrath NeueMedien 2004
-// Distributed under the same terms as HTMLArea itself.
-// This notice MUST stay intact for use (see license.txt).
-function Filter(editor) {
-  this.editor = editor;
-  var cfg = editor.config;
-  var self = this;
-  // register the toolbar buttons provided by this plugin
-  cfg.registerButton({
-    id: "filter",
-    tooltip  : this._lc("Filter"),
-    image    : editor.imgURL("ed_filter.gif", "Filter"),
-    textMode : false,
-    action   : function(editor) {
-                 self.buttonPress(editor);
-               }
-  });
-  if (!cfg.Filters)
-    cfg.Filters = ["Paragraph","Word"];
-  for (var i = 0; i < editor.config.Filters.length; i++) {
-    self.add(editor.config.Filters[i]);
-  }
-  cfg.addToolbarElement("filter", "removeformat", 1);
+/* This compressed file is part of Xinha. For uncompressed sources, forum, and bug reports, go to xinha.org */
+/* This file is part of version 0.95 released Mon, 12 May 2008 17:33:15 +0200 */
+/* The URL of the most recent version of this file is http://svn.xinha.webfactional.com/trunk/plugins/Filter/filter.js */
+function Filter(_1){
+this.editor=_1;
+var _2=_1.config;
+var _3=this;
+_2.registerButton({id:"filter",tooltip:this._lc("Filter"),image:_1.imgURL("ed_filter.gif","Filter"),textMode:false,action:function(_4){
+_3.buttonPress(_4);
+}});
+if(!_2.Filters){
+_2.Filters=["Paragraph","Word"];
 }
-
-Filter._pluginInfo =
-{
-  name          : "Filter",
-  version       : "1.0",
-  developer     : "Udo Schmal (gocher)",
-  developer_url : "",
-  sponsor       : "L.N.Schaffrath NeueMedien",
-  sponsor_url   : "http://www.schaffrath-neuemedien.de/",
-  c_owner       : "Udo Schmal & Schaffrath-NeueMedien",
-  license       : "htmlArea"
+for(var i=0;i<_1.config.Filters.length;i++){
+_3.add(_1.config.Filters[i]);
+}
+_2.addToolbarElement("filter","removeformat",1);
+}
+Filter._pluginInfo={name:"Filter",version:"1.0",developer:"Udo Schmal (gocher)",developer_url:"",sponsor:"L.N.Schaffrath NeueMedien",sponsor_url:"http://www.schaffrath-neuemedien.de/",c_owner:"Udo Schmal & Schaffrath-NeueMedien",license:"htmlArea"};
+Filter.prototype.add=function(_6){
+if(eval("typeof "+_6)=="undefined"){
+var _7=Xinha.getPluginDir("Filter")+"/filters/"+_6+".js";
+var _8=document.getElementsByTagName("head")[0];
+var _9=Xinha.is_ie?"onreadystatechange":"onload";
+var _a=document.createElement("script");
+_a.type="text/javascript";
+_a.src=_7;
+_a[_9]=function(){
+if(Xinha.is_ie&&!/loaded|complete/.test(window.event.srcElement.readyState)){
+return;
+}
+};
+_8.appendChild(_a);
+}
+};
+Filter.prototype._lc=function(_b){
+return Xinha._lc(_b,"Filter");
+};
+Filter.prototype.buttonPress=function(_c){
+var _d=_c.getInnerHTML();
+for(var i=0;i<_c.config.Filters.length;i++){
+_d=eval(_c.config.Filters[i])(_d);
+}
+_c.setHTML(_d);
 };
 
-Filter.prototype.add = function(filterName) {
-  if(eval('typeof ' + filterName) == 'undefined') {
-    var filter = _editor_url + "plugins/filter/filters/" + filterName + ".js";
-    var head = document.getElementsByTagName("head")[0];
-    var evt = Xinha.is_ie ? "onreadystatechange" : "onload";
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    script.src = filter;
-    script[evt] = function() {
-      if(Xinha.is_ie && !/loaded|complete/.test(window.event.srcElement.readyState))  return;
-    }
-    head.appendChild(script);
-    //document.write("<script type='text/javascript' src='" + plugin_file + "'></script>");
-  }
-};
-
-Filter.prototype._lc = function(string) {
-    return Xinha._lc(string, 'Filter');
-};
-
-Filter.prototype.buttonPress = function(editor) {
-  var html = editor.getInnerHTML();
-  for (var i = 0; i < editor.config.Filters.length; i++) {
-    html = eval(editor.config.Filters[i])(html);
-  }
-  editor.setHTML(html);
-};

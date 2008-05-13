@@ -1,4 +1,6 @@
-/* This compressed file is part of Xinha. For uncomressed sources, forum, and bug reports, go to xinha.org */
+/* This compressed file is part of Xinha. For uncompressed sources, forum, and bug reports, go to xinha.org */
+/* This file is part of version 0.95 released Mon, 12 May 2008 17:33:15 +0200 */
+/* The URL of the most recent version of this file is http://svn.xinha.webfactional.com/trunk/plugins/Stylist/stylist.js */
 Xinha.Config.prototype.css_style={};
 Xinha.Config.prototype.stylistLoadStylesheet=function(_1,_2){
 if(!_2){
@@ -92,6 +94,11 @@ var _11=(this._ancestorsWithClasses(_a,_d,_e).length>0?true:false);
 var _12=this._ancestorsWithClasses(_a,_d,_e);
 if(_f){
 var _13=document.createElement("a");
+if(Xinha.is_real_gecko){
+_13.onfocus=function(){
+this.blur();
+};
+}
 _13._stylist_className=_e.trim();
 _13._stylist_applied=_11;
 _13._stylist_appliedTo=_12;

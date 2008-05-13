@@ -1,4 +1,6 @@
-/* This compressed file is part of Xinha. For uncomressed sources, forum, and bug reports, go to xinha.org */
+/* This compressed file is part of Xinha. For uncompressed sources, forum, and bug reports, go to xinha.org */
+/* This file is part of version 0.95 released Mon, 12 May 2008 17:33:15 +0200 */
+/* The URL of the most recent version of this file is http://svn.xinha.webfactional.com/trunk/modules/FullScreen/full-screen.js */
 function FullScreen(_1,_2){
 this.editor=_1;
 _1._superclean_on=false;
@@ -112,7 +114,7 @@ this._htmlArea.style.position="absolute";
 this._htmlArea.style.zIndex=999;
 this._htmlArea.style.left=e.config.fullScreenMargins[3]+"px";
 this._htmlArea.style.top=e.config.fullScreenMargins[0]+"px";
-if(!Xinha.is_ie){
+if(!Xinha.is_ie&&!Xinha.is_webkit){
 this._htmlArea.style.border="none";
 }
 this._isFullScreen=true;

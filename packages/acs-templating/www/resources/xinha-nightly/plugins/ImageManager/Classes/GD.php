@@ -82,9 +82,15 @@ Class Image_Transform_Driver_GD extends Image_Transform
         $this->image = $image;
         $this->_get_image_details($image);
         $functionName = 'ImageCreateFrom' . $this->type;
+		
 		if(function_exists($functionName))
 		{
 			$this->imageHandle = $functionName($this->image);
+			if ( $this->type == 'png')
+			{
+				imageAlphaBlending($this->imageHandle, false);
+				imageSaveAlpha($this->imageHandle, true);
+			}
 		}
     } // End load
 
@@ -157,14 +163,14 @@ Class Image_Transform_Driver_GD extends Image_Transform
     function rotate($angle, $options=null)
     {
         if(function_exists('imagerotate')) {
-            $white = imagecolorallocate ($this->imageHandle, 255, 255, 255);
+            $white = imagecolorallocatealpha ($this->imageHandle, 255, 255, 255, 127);
 			$this->imageHandle = imagerotate($this->imageHandle, $angle, $white);
             return true;
         }
 
         if ( $options==null ){
             $autoresize = true;
-            $color_mask = array(255,255,0);
+            $color_mask = array(105,255,255);
         } else {
             extract( $options );
         }
@@ -239,7 +245,7 @@ Class Image_Transform_Driver_GD extends Image_Transform
             $max_y2     = $height2;
         }
 
-        $img2   = @imagecreate($width2,$height2);
+        $img2   = @$this->newImgPreserveAlpha( imagecreateTrueColor($width2,$height2) );
 
         if ( !is_resource($img2) ){
             return false;/*PEAR::raiseError('Cannot create buffer for the rotataion.',
@@ -252,8 +258,7 @@ Class Image_Transform_Driver_GD extends Image_Transform
 
         imagepalettecopy($img2,$img);
 
-        $mask   = imagecolorresolve($img2,$color_mask[0],$color_mask[1],$color_mask[2]);
-
+       $mask = imagecolorallocatealpha ($img2,$color_mask[0],$color_mask[1],$color_mask[2],127);
         // use simple lines copy for axes angles
         switch((int)($angle)){
             case 0:
@@ -343,15 +348,17 @@ Class Image_Transform_Driver_GD extends Image_Transform
             return false; /*PEAR::raiseError('You have already resized the image without saving it.  Your previous resizing will be overwritten', null, PEAR_ERROR_TRIGGER, E_USER_NOTICE);*/
         }
         if(function_exists('ImageCreateTrueColor')){
-            $new_img =ImageCreateTrueColor($new_x,$new_y);
+           $new_img = $this->newImgPreserveAlpha( ImageCreateTrueColor($new_x,$new_y) );
         } else {
             $new_img =ImageCreate($new_x,$new_y);
         }
+
         if(function_exists('ImageCopyResampled')){
             ImageCopyResampled($new_img, $this->imageHandle, 0, 0, 0, 0, $new_x, $new_y, $this->img_x, $this->img_y);
         } else {
             ImageCopyResized($new_img, $this->imageHandle, 0, 0, 0, 0, $new_x, $new_y, $this->img_x, $this->img_y);
         }
+
         $this->old_image = $this->imageHandle;
         $this->imageHandle = $new_img;
         $this->resized = true;
@@ -372,7 +379,7 @@ Class Image_Transform_Driver_GD extends Image_Transform
     function crop($new_x, $new_y, $new_width, $new_height) 
     {
         if(function_exists('ImageCreateTrueColor')){
-            $new_img =ImageCreateTrueColor($new_width,$new_height);
+            $new_img =  $this->newImgPreserveAlpha(ImageCreateTrueColor($new_width,$new_height));
         } else {
             $new_img =ImageCreate($new_width,$new_height);
         }
@@ -433,6 +440,93 @@ Class Image_Transform_Driver_GD extends Image_Transform
     function gamma($outputgamma=1.0) {
         ImageGammaCorrect($this->imageHandle, 1.0, $outputgamma);
     }
+	function paletteToTrueColorWithTransparency()
+	{
+		$oldImg = $this->imageHandle;
+		$newImg = $this->newImgPreserveAlpha( imagecreatetruecolor($this->img_x,$this->img_y) );
+		imagecopy($newImg,$oldImg,0,0,0,0,$this->img_x,$this->img_y);
+
+		$this->imageHandle = $newImg;
+	}
+	
+	function newImgPreserveAlpha($newImg)
+	{
+		if ( $this->type == 'jpeg') return $newImg;
+		
+		// Turn off transparency blending (temporarily)
+		imagealphablending($newImg, false);
+		
+		// Create a new transparent color for image
+		if ( $transparent = imagecolortransparent($this->imageHandle) >= 0 )
+		{
+			if (imageistruecolor($this->imageHandle))
+			{
+				$red = ($transparent & 0xFF0000) >> 16;
+				$green = ($transparent & 0x00FF00) >> 8;
+				$blue = ($transparent & 0x0000FF);
+				$color_values = array('red' => $red, 'green' => $green, 'blue' => $blue);
+			}
+			else
+			{
+				$color_values = imagecolorsforindex($this->imageHandle,$transparent);
+
+			}
+			$color_values = imagecolorsforindex($this->imageHandle,$transparent);
+			$color = imagecolorallocatealpha($newImg, $color_values['red'],$color_values['green'],$color_values['blue'], 127);
+			$colort = imagecolorallocate($newImg, $color_values['red'],$color_values['green'],$color_values['blue']);
+		}
+		else
+		{
+			$color = imagecolorallocatealpha($newImg, 252, 2, 252, 127);
+			$colort = imagecolorallocate($newImg, 252, 2, 252);
+		}
+		imagecolortransparent($newImg,$colort);
+		
+		// Completely fill the background of the new image with allocated color.
+		imagefill($newImg, 0, 0, $color);
+		
+		// Restore transparency blending
+		imagesavealpha($newImg, true);
+		
+		return $newImg;
+	}
+	
+	function preserveTransparencyForPalette()
+	{
+		$new_img = imagecreatetruecolor($this->img_x,$this->img_y);
+		$truecolor = imageistruecolor($this->imageHandle);
+		$transparent = imagecolorallocate($new_img, 252,2,252); // nasty pinkish purple that hopefully doesn't exist in the image
+
+		imagecolortransparent($new_img, $transparent);
+		for ($i=0;$i<$this->img_y;$i++)
+		{
+			for ($j=0;$j<$this->img_x;$j++)
+			{
+				$c = imagecolorat($this->imageHandle,$j, $i);
+				if ($truecolor)
+				{
+					$a = ($c >> 24) & 0xFF;
+					$r = ($c >> 16) & 0xFF;
+					$g = ($c >> 8) & 0xFF;
+					$b = $c & 0xFF;
+					$color_values = array('red' => $r, 'green' => $g, 'blue' => $b, 'alpha' => $a);
+				}
+				else
+				{
+					$color_values = imagecolorsforindex($this->imageHandle,$c);
+				}
+				if ($color_values['alpha'] >= 126)
+				{
+					imagesetpixel($new_img, $j, $i, $transparent);
+				}
+				else
+				{
+					imagesetpixel($new_img, $j, $i, $c);
+				}
+			}
+		}
+		$this->imageHandle = $new_img;
+	}
 
     /**
      * Save the image file

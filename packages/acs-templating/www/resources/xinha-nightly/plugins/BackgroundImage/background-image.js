@@ -1,52 +1,31 @@
-// BackgroundImage plugin for Xinha
-// Sponsored by http://www.schaffrath-neuemedien.de
-// Implementation by Udo Schmal
-// based on TinyMCE (http://tinymce.moxiecode.com/) Distributed under LGPL by Moxiecode Systems AB
-//
-// Distributed under the same terms as Xinha itself.
-// This notice MUST stay intact for use (see license.txt).
-
-function BackgroundImage(editor) {
-  this.editor = editor;
-	var cfg = editor.config;
-	var self = this;
-  cfg.registerButton({
-                id       : "bgImage",
-                tooltip  : this._lc("Set page background image"),
-                image    : editor.imgURL("ed_bgimage.gif", "BackgroundImage"),
-                textMode : false,
-                action   : function(editor) {
-                                self.buttonPress(editor);
-                           }
-            })
-	cfg.addToolbarElement("bgImage", "inserthorizontalrule", 1);
+/* This compressed file is part of Xinha. For uncompressed sources, forum, and bug reports, go to xinha.org */
+/* This file is part of version 0.95 released Mon, 12 May 2008 17:33:15 +0200 */
+/* The URL of the most recent version of this file is http://svn.xinha.webfactional.com/trunk/plugins/BackgroundImage/background-image.js */
+function BackgroundImage(_1){
+this.editor=_1;
+var _2=_1.config;
+var _3=this;
+_2.registerButton({id:"bgImage",tooltip:this._lc("Set page background image"),image:_1.imgURL("ed_bgimage.gif","BackgroundImage"),textMode:false,action:function(_4){
+_3.buttonPress(_4);
+}});
+_2.addToolbarElement("bgImage","inserthorizontalrule",1);
 }
-
-BackgroundImage._pluginInfo = {
-	name          : "BackgroundImage",
-	version       : "1.0",
-	developer     : "Udo Schmal",
-	developer_url : "http://www.schaffrath-neuemedien.de/",
-	c_owner       : "Udo Schmal & Schaffrath NeueMedien",
-	sponsor       : "L.N.Schaffrath NeueMedien",
-	sponsor_url   : "http://www.schaffrath-neuemedien.de.de/",
-	license       : "htmlArea"
+BackgroundImage._pluginInfo={name:"BackgroundImage",version:"1.0",developer:"Udo Schmal",developer_url:"http://www.schaffrath-neuemedien.de/",c_owner:"Udo Schmal & Schaffrath NeueMedien",sponsor:"L.N.Schaffrath NeueMedien",sponsor_url:"http://www.schaffrath-neuemedien.de.de/",license:"htmlArea"};
+BackgroundImage.prototype._lc=function(_5){
+return Xinha._lc(_5,"BackgroundImage");
+};
+BackgroundImage.prototype.buttonPress=function(_6){
+_6._popupDialog("plugin://BackgroundImage/bgimage",function(_7){
+if(_7){
+if(Xinha.is_ie){
+_6.focusEditor();
+}
+if(_7=="*"){
+_6._doc.body.background="";
+}else{
+_6._doc.body.background=_7;
+}
+}
+},null);
 };
 
-BackgroundImage.prototype._lc = function(string) {
-    return Xinha._lc(string, 'BackgroundImage');
-};
-
-BackgroundImage.prototype.buttonPress = function(editor) {
-		//var doc = this.editor._doc;
-    editor._popupDialog( "plugin://BackgroundImage/bgimage", function( bgImage ) {
-        if(bgImage) {
-					if(Xinha.is_ie) editor.focusEditor();
-					if(bgImage=="*") {
-						editor._doc.body.background = "";
-					} else {
-					  editor._doc.body.background = bgImage;
-					}
-				}	
-    }, null);
-};

@@ -1,3 +1,4 @@
+You can use the compress.php to batch-convert the current Xinha snapshot. 
 You can use the compress.bat to compress JavaScript files by drag&drop in Windows.
 
 Please be aware that the language files cannot be compressed.

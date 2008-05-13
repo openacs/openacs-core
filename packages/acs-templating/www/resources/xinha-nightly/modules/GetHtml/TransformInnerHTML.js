@@ -1,16 +1,23 @@
-/* This compressed file is part of Xinha. For uncomressed sources, forum, and bug reports, go to xinha.org */
+/* This compressed file is part of Xinha. For uncompressed sources, forum, and bug reports, go to xinha.org */
+/* This file is part of version 0.95 released Mon, 12 May 2008 17:33:15 +0200 */
+/* The URL of the most recent version of this file is http://svn.xinha.webfactional.com/trunk/modules/GetHtml/TransformInnerHTML.js */
 function GetHtmlImplementation(_1){
 this.editor=_1;
 }
 GetHtmlImplementation._pluginInfo={name:"GetHtmlImplementation TransformInnerHTML",version:"1.0",developer:"Nelson Bright",developer_url:"http://www.brightworkweb.com/",sponsor:"",sponsor_url:"",license:"htmlArea"};
-Xinha.RegExpCache=[new RegExp().compile(/<\s*\/?([^\s\/>]+)[\s*\/>]/gi),new RegExp().compile(/(\s+)_moz[^=>]*=[^\s>]*/gi),new RegExp().compile(/\s*=\s*(([^'"][^>\s]*)([>\s])|"([^"]+)"|'([^']+)')/g),new RegExp().compile(/\/>/g),new RegExp().compile(/<(br|hr|img|input|link|meta|param|embed|area)((\s*\S*="[^"]*")*)>/g),new RegExp().compile(/(<\w+\s+(\w*="[^"]*"\s+)*)(checked|compact|declare|defer|disabled|ismap|multiple|no(href|resize|shade|wrap)|readonly|selected)([\s>])/gi),new RegExp().compile(/(="[^']*)'([^'"]*")/),new RegExp().compile(/&(?=[^<]*>)/g),new RegExp().compile(/<\s+/g),new RegExp().compile(/\s+(\/)?>/g),new RegExp().compile(/\s{2,}/g),new RegExp().compile(/\s+([^=\s]+)((="[^"]+")|([\s>]))/g),new RegExp().compile(/\s+contenteditable(=[^>\s\/]*)?/gi),new RegExp().compile(/((href|src)=")([^\s]*)"/g),new RegExp().compile(/<\/?(div|p|h[1-6]|table|tr|td|th|ul|ol|li|blockquote|object|br|hr|img|embed|param|pre|script|html|head|body|meta|link|title|area|input|form|textarea|select|option)[^>]*>/g),new RegExp().compile(/<\/(div|p|h[1-6]|table|tr|ul|ol|blockquote|object|html|head|body|script|form|select)( [^>]*)?>/g),new RegExp().compile(/<(div|p|h[1-6]|table|tr|ul|ol|blockquote|object|html|head|body|script|form|select)( [^>]*)?>/g),new RegExp().compile(/<(td|th|li|option|br|hr|embed|param|pre|meta|link|title|area|input|textarea)[^>]*>/g),new RegExp().compile(/(^|<\/(pre|script)>)(\s|[^\s])*?(<(pre|script)[^>]*>|$)/g),new RegExp().compile(/(<pre[^>]*>)([\s\S])*?(<\/pre>)/g),new RegExp().compile(/(^|<!--[\s\S]*?-->)([\s\S]*?)(?=<!--[\s\S]*?-->|$)/g),new RegExp().compile(/\S*=""/g),new RegExp().compile(/<!--[\s\S]*?-->|<\?[\s\S]*?\?>|<\/?\w[^>]*>/g),new RegExp().compile(/(^|<\/script>)[\s\S]*?(<script[^>]*>|$)/g)];
+Xinha.RegExpCache=[/<\s*\/?([^\s\/>]+)[\s*\/>]/gi,/(\s+)_moz[^=>]*=[^\s>]*/gi,/\s*=\s*(([^'"][^>\s]*)([>\s])|"([^"]+)"|'([^']+)')/g,/\/>/g,/<(br|hr|img|input|link|meta|param|embed|area)((\s*\S*="[^"]*")*)>/g,/(<\w+\s+(\w*="[^"]*"\s+)*)(checked|compact|declare|defer|disabled|ismap|multiple|no(href|resize|shade|wrap)|readonly|selected)([\s>])/gi,/(="[^']*)'([^'"]*")/,/&(?=(?!(#[0-9]{2,5};|[a-zA-Z0-9]{2,6};|#x[0-9a-fA-F]{2,4};))[^<]*>)/g,/<\s+/g,/\s+(\/)?>/g,/\s{2,}/g,/\s+([^=\s]+)((="[^"]+")|([\s>]))/g,/\s+contenteditable(=[^>\s\/]*)?/gi,/((href|src)=")([^\s]*)"/g,/<\/?(div|p|h[1-6]|table|tr|td|th|ul|ol|li|blockquote|object|br|hr|img|embed|param|pre|script|html|head|body|meta|link|title|area|input|form|textarea|select|option)[^>]*>/g,/<\/(div|p|h[1-6]|table|tr|ul|ol|blockquote|object|html|head|body|script|form|select)( [^>]*)?>/g,/<(div|p|h[1-6]|table|tr|ul|ol|blockquote|object|html|head|body|script|form|select)( [^>]*)?>/g,/<(td|th|li|option|br|hr|embed|param|pre|meta|link|title|area|input|textarea)[^>]*>/g,/(^|<\/(pre|script)>)(\s|[^\s])*?(<(pre|script)[^>]*>|$)/g,/(<pre[^>]*>)([\s\S])*?(<\/pre>)/g,/(^|<!--[\s\S]*?-->)([\s\S]*?)(?=<!--[\s\S]*?-->|$)/g,/\S*=""/g,/<!--[\s\S]*?-->|<\?[\s\S]*?\?>|<\/?\w[^>]*>/g,/(^|<\/script>)[\s\S]*?(<script[^>]*>|$)/g];
+if(typeof RegExp.prototype.compile=="function"){
+for(var i=0;i<Xinha.RegExpCache.length;i++){
+Xinha.RegExpCache[i]=new RegExp().compile(Xinha.RegExpCache[i]);
+}
+}
 Xinha.prototype.cleanHTML=function(_2){
 var c=Xinha.RegExpCache;
 _2=_2.replace(c[0],function(_4){
 return _4.toLowerCase();
 }).replace(c[1]," ").replace(c[12]," ").replace(c[2],"=\"$2$4$5\"$3").replace(c[21]," ").replace(c[11],function(_5,p1,p2){
 return " "+p1.toLowerCase()+p2;
-}).replace(c[3],">").replace(c[9],"$1>").replace(c[5],"$1$3=\"$3\"$4").replace(c[4],"<$1$2 />").replace(c[6],"$1$2").replace(c[8],"<").replace(c[10]," ");
+}).replace(c[3],">").replace(c[9],"$1>").replace(c[5],"$1$3=\"$3\"$5").replace(c[4],"<$1$2 />").replace(c[6],"$1$2").replace(c[7],"&amp;").replace(c[8],"<").replace(c[10]," ");
 if(Xinha.is_ie&&c[13].test(_2)){
 _2=_2.replace(c[13],"$1"+this.stripBaseURL(RegExp.$3)+"\"");
 }
