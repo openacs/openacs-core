@@ -34,22 +34,6 @@ begin
   and
     child_privilege = 'cm_item_workflow';
 
-  if not table_exists('cr_doc_filter') then
-
-    dbms_output.put_line('Creating CR_DOC_FILTER table for converting
-                          documents to HTML');
-
-    execute immediate 'create global temporary table cr_doc_filter (
-      revision_id        integer primary key,
-      content            BLOB
-    ) on commit delete rows';
-
-    execute immediate 'create index cr_doc_filter_index 
-      on cr_doc_filter ( content ) indextype is ctxsys.context
-      parameters (''FILTER content_filter_pref'' )';
-
-  end if;
-
   if not table_exists('cr_content_text') then
 
     dbms_output.put_line('Creating CR_CONTENT_TEXT table');
