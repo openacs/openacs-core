@@ -29,6 +29,7 @@ body { margin: 0; padding: 0;}
   text-align:center;
   padding:5px;
   text-decoration:none;
+  overflow:hidden;
 }
 
 .thumb_holder a.thumb img
@@ -41,14 +42,14 @@ body { margin: 0; padding: 0;}
   border:none;
 }
 
-.listview { width:100% }
+.listview { width:100%; }
 .listview td, .listview th { text-align:left; font-size:small; }
-.listview td.actions { text-align: right; }
+.listview td.actions { text-align: right;width:111px }
 .listview td.actions img { border:0; }
 
-.listview thead th {background-color: ButtonFace; border: 1px solid threedface; border-color: ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight; padding-top:2px; padding-bottom:2px; padding-left: 5px; padding-right: 5px; font-size: 9pt; font-family: "MS Sans Serif", Geneva, sans-serif;}
-.listview tbody td, .listview tbody th {padding-top:2px; padding-left: 3px; font-size: 9pt; font-family: "MS Sans Serif", Geneva, sans-serif;}
+.listview thead th {background-color: ButtonFace; border: 1px solid threedface; border-color: ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight; padding-top:2px; padding-bottom:2px; padding-left: 5px; padding-right: 5px; font-size: 9pt; font-family: "MS Sans Serif", "Bitstream Vera Sans", Geneva, Sans, sans-serif;font-weight:normal}
+.listview tbody td, .listview tbody th {overflow:hidden; padding-top:2px; padding-left: 3px; font-size: 9pt;  font-family: "MS Sans Serif", "Bitstream Vera Sans", Geneva, Sans, sans-serif;}
 .listview tbody a, listview tbody a:visited { font-weight: normal; text-decoration: none; color: #000; border:0px; padding:2px;}
 .listview tbody a:hover { background-color:#0B256B; color:#fff;}
 
-.listview tbody tr:hover {background-color: rgb(221,221,255);
+.listview tbody tr:hover {background-color: rgb(221,221,255)};

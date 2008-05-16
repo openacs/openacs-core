@@ -82,7 +82,7 @@ function drawFiles($list, &$manager)
             <tr>
               <th><a href="#" class="thumb" style="cursor: pointer;" onclick="selectImage('<?php echo $file['relative'];?>', '<?php echo $entry; ?>', <?php echo $file['image'][0];?>, <?php echo $file['image'][1]; ?>);return false;" title="<?php echo $entry; ?> - <?php echo Files::formatSize($file['stat']['size']); ?>" onmouseover="showPreview('<?php echo $file['relative'];?>')" onmouseout="showPreview(window.parent.document.getElementById('f_url').value)" ><?php echo $entry ?></a></th>
               <td><?php echo Files::formatSize($file['stat']['size']); ?></td>
-              <td><?php if($file['image']){ echo $file['image'][0].'x'.$file['image'][1]; } ?>
+              <td><?php if($file['image']){ echo $file['image'][0].'x'.$file['image'][1]; } ?></td>
               <td class="actions">
                 <a href="<?php print $IMConfig['backend_url']; ?>__function=images&dir=<?php echo $relative; ?>&amp;delf=<?php echo rawurlencode($file['relative']);?>" title="Trash" onclick="return confirmDeleteFile('<?php echo $entry; ?>');"><img src="<?php print $IMConfig['base_url'];?>img/edit_trash.gif" height="15" width="15" alt="Trash" border="0"  /></a>
         

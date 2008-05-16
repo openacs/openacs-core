@@ -4,7 +4,73 @@ For bug reports, forum, and updates go to
 http://xinha.org
 
 Release History
+Xinha 0.95
+Bugs Fixed
+ * fixed #1040 htmlRemoveTags doesn't work in IE 
+ * fixed #645 IE Save as function only saves the original html 
+ * fixed #1136 FF3 Linux select boxes in toolbar are too small 
+ * fixed #1100 Extended File Manager - Error after opening window
+ * fixed #1103 [TransformInnerHTML] IE breaks singlet attributes starting with "no"
+ * fixed #1086 Repeated javascript insertion in onclick attributes
+ * fixed #1094 IE throws error in Xinha.loadStyle function
+ * fixed  #1117 IE returns javascript error -1072896658
+ * fixed #993 PageStyle to override styles in PageStylesheets
+ * #1112 switching between modes leaves strange characters in source 
+ * fixed #1128 loading fails when Fullscreen tried to load as plugin
+ * fixed #1126 Percent (%) in URL prevent stripSelfNamedAnchors from working  
+ * fixed #1120 HTML select overlaps color picker in IE6
+ * #1115 + #1127 fixed compatibility issues with Firefox 3
+ * #961 +  #1130 changed behaviour of xinha_config.baseHref
+ * fixed #645 Save as function only saves the original html
+ * fixed #1040 htmlRemoveTags doesn't work in IE
+ * fixed #1015 Mozilla shows scrollbars on click in Stylist 
+ * #918 removed mozParaHandler dirty as it had been broken for a long time
+ * fixed #1015 Mozilla shows scrollbars on click in Stylist 
+ * fixed #1148 HTML entities break when cursor is inside when switching from HTML to WYSIWYG 
+ * fixed #1151 form action always made absolute
+ * fixed #1155 InsertAnchor broken in IE 7
+ * fixed #1158 [ImageManager] in Japanese environment, an error occurs by reading of lang/ja.js in IE6/7 
+ * fixed #1152 Plugins using surroundHTML (EditTag, LangMarks) no longer work in IE7
+ * fixed #1161 permission error from ColorPicker.js
+ * fixed #1181 [TableOperations] Table Options dialog first entry for border style faulty
+ * fixed #1185 [TableOperations] IE: style float broken
+ * fixed #1197 [Linker] IE shows bug in line 262
+ * fixed #1200 [Linker] Dialog does not show if scanned folder empty
+ 
+Enhancements
+ * #1143 add Safari support
+ * #938  add Opera support
+ * #1138 added API functions Xinha.getEditor(), Xinha.prototype.getPluginInstance(), Xinha.addOnloadHandler() 
+ * #1137 [Equation] FF3 fixes & improved way of avoiding formula changes in editor
+ * #1150 synchronize "Remove Format" between browsers
+ * added plugin PreserveScripts for enhanced editing of pages containing PHP and/or JavaScript ()
+ * Loading message facelift
+ * added XinhaLoader.js for enhanced user experience through early loading message
+ * made Xinha.makeEditors accept a DOM reference to the textarea instead of the id as part of xinha_editors array (#1105)
+ * #1123 Allow return of PHP array from xinha_pass_to_php_backend
+ * [Linker] scan.php: Allow specification of base url to use (so that a subdirectory can be used as $dir and return appropriate urls to the files (prefixing the url
+ * [ExtendedFileManager] new Version
+ * #961 +  #1130 changed behaviour of xinha_config.baseHref
+ * #1137 [Equation] improved way of avoiding formula changes in editor
+ * #442 removed alert "Your Document is not well formed..."
+ * #1119 disabled Firefox 2 spell check when ContextMenu is enabled 
+ * added a plugin "GenericPlugin" as a democase for plugin event handlers
+ * #1171 [SmartReplace] now also replaces three dots with an ellipsis
+ * #1119 [ContextMenu] optionally switch of Firefox Spell check
+ * #1172 [LangMarks] make available languages configurable
+ * enhanced behaviour when xinha_config.baseHref is set to another server
+ * #1195 Allow to specify an external url to load a plugin from
+ * #1201 Add inwardHtml/outwardHtml functions to Config object
+ 
+I18n
+ * #1109 Spanish language extended
+ * #1116 [ExtendedFileManager] added French translation
+ * #853 updated Translation for farsi
+ * fixed wrong encoding in Spanish language file 
+ * fixed no bold/italic/underline button images in Spanish
+ *  #1194 [ExtendedFileManager] updated French translation
 
+ 
 Xinha 0.94
  * Ticket #1093 [InsertSmiley] remove smiley gifs from trunk
  * fixed Ticket #1019 Cusor not jumping to editable part of window when clicked in IE

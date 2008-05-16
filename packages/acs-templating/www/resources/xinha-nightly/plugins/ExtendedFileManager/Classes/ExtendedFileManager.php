@@ -809,8 +809,8 @@ class ExtendedFileManager
 				return Files::copyDir($basePath,$src,$dest);
 			break;
 			case 'moveFile':
-				$src = Files::makePath($this->getImagesDir(), $_GET['srcdir'].$_GET['file']);
-				$dest = Files::makePath($this->getImagesDir(), $_GET['dir'].$_GET['file']);
+				$src = Files::makeFile($this->getImagesDir(), $_GET['srcdir'].$_GET['file']);
+				$dest = Files::makeFile($this->getImagesDir(), $_GET['dir'].$_GET['file']);
 				return Files::rename($src,$dest);
 			break;
 			case 'moveDir':

@@ -94,6 +94,7 @@ class ImageEditor
 			$image['dimensions'] = $imgInfo[3];
 			$image['file'] = $relative;
 			$image['fullpath'] = $fullpath;
+			$image['filesize'] = @filesize($fullpath);
 		}
 
 		Return $image;
@@ -118,12 +119,16 @@ class ImageEditor
 		if(isset($_GET['params']))
 			$params = $_GET['params'];
 
-		$values =  explode(',',$params,4);
+		$values =  explode(',',$params);
 		$saveFile = $this->getSaveFileName($values[0]);
 
 		$img = Image_Transform::factory(IMAGE_CLASS);
 		$img->load($fullpath);
-
+		
+		if ( is_callable( array($img,'paletteToTrueColorWithTransparency')) && !imageistruecolor($img->imageHandle))
+		{
+			$img->paletteToTrueColorWithTransparency();
+		}
 		switch ($action) 
 		{
 			case 'crop':
@@ -153,14 +158,53 @@ class ImageEditor
 					//get unique filename just returns the filename, so
 					//we need to make the relative path once more.
 					$newSaveFile = $this->makeRelative($relative, $newSaveFile);
-          $image['saveFile'] = $newSaveFile;
+          			$image['saveFile'] = $newSaveFile;
 					$newSaveFullpath = $this->manager->getFullPath($newSaveFile);
+					if ( $values[0] == 'gif' && is_callable(array($img, 'preserveTransparencyForPalette')))
+					{
+						$img->preserveTransparencyForPalette();
+					}
 					$img->save($newSaveFullpath, $values[0], $quality);
 					if(is_file($newSaveFullpath))
 						$this->filesaved = 1;
 					else
 						$this->filesaved = -1;
 				}
+				break;
+				case 'preview':
+					$quality = intval($values[1]);
+					
+					
+					$image['file'] = $relative;
+					$image['fullpath'] = $fullpath;
+					
+					//create the tmp image file
+					$filename = $this->createUnique($fullpath);
+					$newRelative = $this->makeRelative($relative, $filename);
+					$newFullpath = $this->manager->getFullPath($newRelative);
+					$newURL = $this->manager->getFileURL($newRelative);
+					
+					
+					if ( $values[0] == 'gif' && is_callable(array($img, 'preserveTransparencyForPalette')))
+					{
+						$img->preserveTransparencyForPalette();
+					}
+					$img->save($newFullpath, $values[0] );
+					$img->free();
+			
+					//get the image information
+					$imgInfo = @getimagesize($newFullpath);
+				
+					$image['src'] = $newURL;
+			    	$image['width'] = $imgInfo[0];
+			   		$image['height'] = $imgInfo[1];
+					$image['dimensions'] = $imgInfo[3];
+					$image['file'] = $relative;
+					$image['fullpath'] = $fullpath;
+					$image['filesize'] = @filesize($newFullpath);
+
+					Return $image;
+	
 				break;
 		}
 		
@@ -169,21 +213,23 @@ class ImageEditor
 		$newRelative = $this->makeRelative($relative, $filename);
 		$newFullpath = $this->manager->getFullPath($newRelative);
 		$newURL = $this->manager->getFileURL($newRelative);
-		
+
 		//save the file.
-		$img->save($newFullpath);
+		$img->save($newFullpath, 'png' );
 		$img->free();
 
 		//get the image information
 		$imgInfo = @getimagesize($newFullpath);
 
 		$image['src'] = $newURL;
-    $image['width'] = $imgInfo[0];
-    $image['height'] = $imgInfo[1];
+    	$image['width'] = $imgInfo[0];
+   		$image['height'] = $imgInfo[1];
 		$image['dimensions'] = $imgInfo[3];
 		$image['file'] = $newRelative;
 		$image['fullpath'] = $newFullpath;
-
+		$image['filesize'] = @filesize($newFullpath);
+		$image['type'] = image_type_to_mime_type($imgInfo[2]);
+		
 		Return $image;
 	
 	}
@@ -417,13 +463,13 @@ class ImageEditor
 			Return 0;
 
 		$fullpath = $this->manager->getFullPath($relative);
-
+ 
 		$type = $this->getImageType($fullpath);
 		if($type != 'gif')
 			Return 0;
 
-		if(function_exists('ImageCreateFrom'+$type)
-			&& function_exists('image'+$type))
+		if(function_exists('ImageCreateFrom'.$type)
+			&& function_exists('image'.$type))
 			Return 1;
 		else
 			Return -1;

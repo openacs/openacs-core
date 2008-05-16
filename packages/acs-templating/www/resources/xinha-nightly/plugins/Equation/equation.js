@@ -1,4 +1,6 @@
-/* This compressed file is part of Xinha. For uncomressed sources, forum, and bug reports, go to xinha.org */
+/* This compressed file is part of Xinha. For uncompressed sources, forum, and bug reports, go to xinha.org */
+/* This file is part of version 0.95 released Mon, 12 May 2008 17:33:15 +0200 */
+/* The URL of the most recent version of this file is http://svn.xinha.webfactional.com/trunk/plugins/Equation/equation.js */
 function Equation(_1){
 this.editor=_1;
 var _2=_1.config;
@@ -9,121 +11,135 @@ _3.buttonPress(_4,id);
 _2.addToolbarElement("equation","inserthorizontalrule",-1);
 mathcolor=_2.Equation.mathcolor;
 mathfontfamily=_2.Equation.mathfontfamily;
-if(!Xinha.is_ie){
-_1.notifyOn("modechange",function(e,_7){
-_3.onModeChange(_7);
-});
+this.enabled=!Xinha.is_ie;
+if(this.enabled){
 this.onBeforeSubmit=this.onBeforeUnload=function(){
 _3.unParse();
 };
 }
 if(typeof AMprocessNode!="function"){
-Xinha._loadback(_editor_url+"plugins/Equation/ASCIIMathML.js",function(){
+Xinha._loadback(Xinha.getPluginDir("Equation")+"/ASCIIMathML.js",function(){
 translate();
 });
 }
 }
 Xinha.Config.prototype.Equation={"mathcolor":"black","mathfontfamily":"serif"};
-Equation._pluginInfo={name:"ASCIIMathML Formula Editor",version:"2.2 (2007-08-17)",developer:"Raimund Meyer",developer_url:"http://rheinaufCMS.de",c_owner:"",sponsor:"Rheinauf",sponsor_url:"http://rheinaufCMS.de",license:"GNU/LGPL"};
-Equation.prototype._lc=function(_8){
-return Xinha._lc(_8,"Equation");
+Equation._pluginInfo={name:"ASCIIMathML Formula Editor",version:"2.3 (2008-01-26)",developer:"Raimund Meyer",developer_url:"http://xinha.raimundmeyer.de",c_owner:"",sponsor:"",sponsor_url:"",license:"GNU/LGPL"};
+Equation.prototype._lc=function(_6){
+return Xinha._lc(_6,"Equation");
 };
 Equation.prototype.onGenerate=function(){
 this.parse();
 };
-Equation.prototype.onUpdateToolbar=function(){
-var e=this.editor;
-if(!Xinha.is_ie&&this.reParse){
-AMprocessNode(e._doc.body,false);
-this.reParse=false;
+Equation.prototype.onKeyPress=function(ev){
+if(this.enabled){
+e=this.editor;
+var _8=e._getFirstAncestor(e.getSelection(),["span"]);
+if(_8&&_8.className=="AM"){
+if(ev.keyCode==8||ev.keyCode==46||ev.charCode){
+Xinha._stopEvent(ev);
+return true;
 }
-if(!Xinha.is_ie){
-var _a=e._getFirstAncestor(e.getSelection(),["span"]);
-if(_a&&_a.className=="AM"){
-e.selectNodeContents(_a);
 }
+}
+return false;
+};
+Equation.prototype.onBeforeMode=function(_9){
+if(this.enabled&&_9=="textmode"){
+this.unParse();
 }
 };
-Equation.prototype.onModeChange=function(_b){
-var _c=this.editor._doc;
-switch(_b.mode){
-case "text":
-this.unParse();
-break;
-case "wysiwyg":
+Equation.prototype.onMode=function(_a){
+if(this.enabled&&_a=="wysiwyg"){
 this.parse();
-break;
 }
 };
 Equation.prototype.parse=function(){
-if(!Xinha.is_ie){
-var _d=this.editor._doc;
-var _e=_d.getElementsByTagName("span");
-for(var i=0;i<_e.length;i++){
-var _10=_e[i];
-if(_10.className!="AM"){
+if(this.enabled){
+var _b=this.editor._doc;
+var _c=_b.getElementsByTagName("span");
+for(var i=0;i<_c.length;i++){
+var _e=_c[i];
+if(_e.className!="AM"){
 continue;
 }
-_10.title=_10.innerHTML;
-AMprocessNode(_10,false);
+if(_e.innerHTML.indexOf(this.editor.cc)!=-1){
+_e.innerHTML=_e.innerHTML.replace(this.editor.cc,"");
+_e.parentNode.insertBefore(_b.createTextNode(this.editor.cc),_e);
+}
+_e.title=_e.innerHTML;
+var _f=_e.cloneNode(true);
+try{
+document.adoptNode(_f);
+}
+catch(e){
+}
+AMprocessNode(_f,false);
+try{
+_b.adoptNode(_f);
+}
+catch(e){
+}
+_e.parentNode.replaceChild(_f,_e);
+_f.parentNode.insertBefore(_b.createTextNode(String.fromCharCode(32)),_f);
+_f.parentNode.insertBefore(_b.createTextNode(String.fromCharCode(32)),_f.nextSibling);
 }
 }
 };
 Equation.prototype.unParse=function(){
 var doc=this.editor._doc;
-var _12=doc.getElementsByTagName("span");
-for(var i=0;i<_12.length;i++){
-var _14=_12[i];
-if(_14.className.indexOf("AM")==-1||_14.getElementsByTagName("math").length==0){
+var _11=doc.getElementsByTagName("span");
+for(var i=0;i<_11.length;i++){
+var _13=_11[i];
+if(_13.className.indexOf("AM")==-1||_13.getElementsByTagName("math").length==0){
 continue;
 }
-var _15=_14.getAttribute("title");
-_14.innerHTML=_15;
-_14.setAttribute("title",null);
-this.editor.setHTML(this.editor.getHTML());
+var _14=_13.getAttribute("title");
+_13.innerHTML=_14;
+_13.setAttribute("title",null);
 }
 };
 Equation.prototype.buttonPress=function(){
-var _16=this;
-var _17=this.editor;
-var _18={};
-_18["editor"]=_17;
-var _19=_17._getFirstAncestor(_17.getSelection(),["span"]);
-if(_19){
-_18["editedNode"]=_19;
+var _15=this;
+var _16=this.editor;
+var _17={};
+_17["editor"]=_16;
+var _18=_16._getFirstAncestor(_16.getSelection(),["span"]);
+if(_18){
+_17["editedNode"]=_18;
 }
-_17._popupDialog("plugin://Equation/dialog",function(_1a){
-_16.insert(_1a);
-},_18);
+Dialog(Xinha.getPluginDir("Equation")+"/popups/dialog.html",function(_19){
+_15.insert(_19);
+},_17);
 };
-Equation.prototype.insert=function(_1b){
-if(typeof _1b["formula"]!="undefined"){
-var _1c=(_1b["formula"]!="")?_1b["formula"].replace(/^`?(.*)`?$/m,"`$1`"):"";
-if(_1b["editedNode"]&&(_1b["editedNode"].tagName.toLowerCase()=="span")){
-var _1d=_1b["editedNode"];
-if(_1c!=""){
-_1d.innerHTML=_1c;
-if(!Xinha.is_ie){
-_1d.title=_1c;
+Equation.prototype.insert=function(_1a){
+if(typeof _1a["formula"]!="undefined"){
+var _1b=(_1a["formula"]!="")?_1a["formula"].replace(/^`?(.*)`?$/m,"`$1`"):"";
+if(_1a["editedNode"]&&(_1a["editedNode"].tagName.toLowerCase()=="span")){
+var _1c=_1a["editedNode"];
+if(_1b!=""){
+_1c.innerHTML=_1b;
+if(this.enabled){
+_1c.title=_1b;
 }
 }else{
-_1d.parentNode.removeChild(_1d);
+_1c.parentNode.removeChild(_1c);
 }
 }else{
-if(!_1b["editedNode"]&&_1c!=""){
-if(!Xinha.is_ie){
-var _1d=document.createElement("span");
-_1d.className="AM";
-this.editor.insertNodeAtSelection(_1d);
-_1d.innerHTML=_1c;
-_1d.title=_1c;
+if(!_1a["editedNode"]&&_1b!=""){
+if(this.enabled){
+var _1c=document.createElement("span");
+_1c.className="AM";
+this.editor.insertNodeAtSelection(_1c);
+_1c.innerHTML=_1b;
+_1c.title=_1b;
 }else{
-this.editor.insertHTML("<span class=\"AM\">"+_1c+"</span>");
+this.editor.insertHTML("<span class=\"AM\">"+_1b+"</span>");
 }
 }
 }
-if(!Xinha.is_ie){
-AMprocessNode(this.editor._doc.body,false);
+if(this.enabled){
+this.parse();
 }
 }
 };

@@ -1,4 +1,6 @@
-/* This compressed file is part of Xinha. For uncomressed sources, forum, and bug reports, go to xinha.org */
+/* This compressed file is part of Xinha. For uncompressed sources, forum, and bug reports, go to xinha.org */
+/* This file is part of version 0.95 released Mon, 12 May 2008 17:33:15 +0200 */
+/* The URL of the most recent version of this file is http://svn.xinha.webfactional.com/trunk/plugins/SuperClean/super-clean.js */
 function SuperClean(_1,_2){
 this.editor=_1;
 var _3=this;
@@ -68,7 +70,7 @@ SuperClean.filterFunctions.tidy(_14,_13);
 }
 }
 };
-Xinha.Config.prototype.SuperClean={"tidy_handler":_editor_url+"plugins/SuperClean/tidy.php","filters":{"tidy":Xinha._lc("General tidy up and correction of some problems.","SuperClean"),"word_clean":Xinha._lc("Clean bad HTML from Microsoft Word","SuperClean"),"remove_faces":Xinha._lc("Remove custom typefaces (font \"styles\").","SuperClean"),"remove_sizes":Xinha._lc("Remove custom font sizes.","SuperClean"),"remove_colors":Xinha._lc("Remove custom text colors.","SuperClean"),"remove_lang":Xinha._lc("Remove lang attributes.","SuperClean"),"remove_fancy_quotes":{label:Xinha._lc("Replace directional quote marks with non-directional quote marks.","SuperClean"),checked:false}},"show_dialog":true};
+Xinha.Config.prototype.SuperClean={"tidy_handler":Xinha.getPluginDir("SuperClean")+"/tidy.php","filters":{"tidy":Xinha._lc("General tidy up and correction of some problems.","SuperClean"),"word_clean":Xinha._lc("Clean bad HTML from Microsoft Word","SuperClean"),"remove_faces":Xinha._lc("Remove custom typefaces (font \"styles\").","SuperClean"),"remove_sizes":Xinha._lc("Remove custom font sizes.","SuperClean"),"remove_colors":Xinha._lc("Remove custom text colors.","SuperClean"),"remove_lang":Xinha._lc("Remove lang attributes.","SuperClean"),"remove_fancy_quotes":{label:Xinha._lc("Replace directional quote marks with non-directional quote marks.","SuperClean"),checked:false}},"show_dialog":true};
 SuperClean.filterFunctions={};
 SuperClean.filterFunctions.remove_colors=function(D){
 D=D.replace(/color="?[^" >]*"?/gi,"");
@@ -128,7 +130,7 @@ var _22=this.editor.config.SuperClean.filters[_21];
 if(typeof _22.filterFunction!="undefined"){
 SuperClean.filterFunctions[_21]=filterFunction;
 }else{
-Xinha._getback(_editor_url+"plugins/SuperClean/filters/"+_21+".js",function(_23){
+Xinha._getback(Xinha.getPluginDir("SuperClean")+"/filters/"+_21+".js",function(_23){
 eval("SuperClean.filterFunctions."+_21+"="+_23+";");
 sc.onGenerate();
 });
@@ -152,7 +154,7 @@ SuperClean.Dialog.prototype._prepareDialog=function(){
 var _26=this;
 var _27=this.SuperClean;
 if(this.html==false){
-Xinha._getback(_editor_url+"plugins/SuperClean/dialog.html",function(txt){
+Xinha._getback(Xinha.getPluginDir("SuperClean")+"/dialog.html",function(txt){
 _26.html=txt;
 _26._prepareDialog();
 });
