@@ -661,58 +661,6 @@ ul.compact li, .action-list ul li {
   padding: 6px 8px 6px 8px;
 }
 
-/**********************************************************************
-/* acs-developer-support Toolbar
-/**********************************************************************/
-/* LARS: This ought to go in the developer-support package, somehow */
-
-#developer-toolbar {
-  background-color: #616093;
-  color: white;
-  font-family: tahoma, verdana;
-  font-size: 80%;
-  padding-left: 8px;
-  padding-right: 8px;
-  padding-top: 2px;
-  padding-bottom: 2px;
-}
-#developer-toolbar td a { 
-  border: solid 1px #616093;
-  text-align: center; 
-  color: white;
-  text-decoration: none;
-}
-#developer-toolbar td a:hover { 
-  text-decoration: none;
-  background-color: #999999;
-  border: solid 1px #cccccc;
-}
-#developer-toolbar #search {
-  font: 80% tahoma;
-  color: white;
-}
-#developer-toolbar #search input {
-  font: 100% tahoma;
-}
-#developer-toolbar td a.on {
-  background-color: #888888;
-  border: solid 1px #cccccc;
-}
-#developer-toolbar td a:hover.on {
-  background-color: #666666;
-  border: solid 1px #999999;
-}
-
-/* Developer-support footer */
-
-.developer-support-footer {
-  float: left;
-  padding: 6px;
-  border: solid 1px gray;
-  background-color: #e1e1e1;
-  margin-top: 4px;
-}
-
 
 /**********************************************************************
 /* DEPRECATED CLASSES
