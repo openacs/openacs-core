@@ -4,7 +4,7 @@
 
       <div class="portlet">
         <div class="portlet-title">
-          <h2>#acs-subsite.Edit_Options#</h2>
+          #acs-subsite.Edit_Options#
         </div>
         <div class="portlet-body">
           <ul>
@@ -28,7 +28,7 @@
 
       <div class="portlet">
         <div class="portlet-title">
-          <h2>#acs-subsite.Privacy#</h2>
+          #acs-subsite.Privacy#
         </div>
         <div class="portlet-body">
           <ul>
@@ -57,7 +57,7 @@
 
       <div class="portlet">
         <div class="portlet-title">
-          <h2> #acs-subsite.My_Account# </h2>
+          #acs-subsite.My_Account#
         </div>
         <div class="portlet-body">
           <include src="@user_info_template@" />
@@ -70,7 +70,7 @@
       <if @portrait_state@ eq upload>
         <div class="portlet">
           <div class="portlet-title">
-            <h2>#acs-subsite.Your_Portrait#</h2>
+            #acs-subsite.Your_Portrait#
           </div>
           <div class="portlet-body">
             <p>
@@ -84,7 +84,7 @@
       <if @portrait_state@ eq show>
         <div class="portlet">  
           <div class="portlet-title">
-            <h2>#acs-subsite.Your_Portrait#</h2>
+            #acs-subsite.Your_Portrait#
           </div>
           <div class="portlet-body">
             <p>
@@ -107,7 +107,7 @@
 
       <div class="portlet">
         <div class="portlet-title">
-          <h2>#acs-subsite.Groups#</h2>
+          #acs-subsite.Groups#
         </div>
         <div class="portlet-body">
           <list name="fragments">
