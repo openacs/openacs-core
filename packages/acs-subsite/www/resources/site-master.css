@@ -489,7 +489,7 @@ ul.compact li, .action-list ul li {
 }
 
 .portlet {
-  margin: 4px 0px 4px 0px;
+  margin: 4px 4px 4px 4px;
 }
 
 .portlet .portlet-title h2 {
