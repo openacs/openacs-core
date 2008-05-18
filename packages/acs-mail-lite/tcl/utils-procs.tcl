@@ -31,41 +31,40 @@ ad_proc acs_mail_lite::utils::build_subject {
     set charset [string toupper $charset]
     set charset_code [ns_encodingforcharset $charset]
 
-    if { [catch {package require mime 1.5.2}] } {
-
-        # maxlen for each line
-        # 69 = 76 - 7 where 7 is for "=?"+"?Q?+"?="
-        set maxlen [expr {69 - [string length $charset]}]
+    # maxlen for each line
+    # 69 = 76 - 7 where 7 is for "=?"+"?Q?+"?="
+    set maxlen [expr {69 - [string length $charset]}]
         
-        set result ""
-        set line ""
-        set i 0
+    set result ""
+    set line ""
+    set i 0
 
-        set subject_length [string length $subject]
-        while { $i < $subject_length } {
-            set chunk [string index $subject $i]
+    set subject_length [string length $subject]
+    while { $i < $subject_length } {
+        set chunk [string index $subject $i]
             
-            # encode that chunk
-            set chunk [encoding convertto $charset_code "$chunk"]
-            set chunk [mime::qp_encode "$chunk\n" 1 1]
-
-            set newline $line
-            append newline $chunk
-
-            if { [string length $newline] <= $maxlen } {
-                append line $chunk
-            } else {
-                append result "=?$charset?Q?$line?=\n "
-                set line $chunk
-            }
-            incr i
+        # encode that chunk
+        set chunk [encoding convertto $charset_code "$chunk"]
+        if { $chunk eq "\x3F" } {
+            # ER: workaround (kludge!) for tcllib error
+            set chunk "=3F"
+        } else {
+            set chunk [mime::qp_encode "$chunk" 1 0]
         }
-        if { $line ne "" } {
-            append result "=?$charset?Q?$line?="
+
+        set newline $line
+        append newline $chunk
+
+        if { [string length $newline] <= $maxlen } {
+            append line $chunk
+        } else {
+            append result "=?$charset?Q?$line?=\n "
+            set line $chunk
         }
-    } else {
-        set subject [encoding convertto $charset_code "$subject"]
-        set result [mime::word_encode $charset_code "quoted-printable" $subject]
+        incr i
+    }
+    if { $line ne "" } {
+        append result "=?$charset?Q?$line?="
     }
 
     return $result
