@@ -661,66 +661,6 @@ ul.compact li, .action-list ul li {
   padding: 6px 8px 6px 8px;
 }
 
-/* Generally Available Tabs */
-
-#tabs-div {
-  border-bottom: 1px solid #666;
-}
-#tabs-container {
-  height: 15px;
-  position: relative;
-}
-#tabs { 
-  position: absolute;
-  height: 21px;
-  margin: 0px;
-  padding: 0px 0px 0px 0px;
-  left: 10px;
-  bottom: -2px;
-  margin-top: 10px;
-  font-family: Arial, sans-serif;
-  font-size: 80%;
-  font-weight: bold;
-}
-html>body #tabs { bottom: 0px }
-
-#tabs .tab { 
-  height: 16px;
-  float: left; 
-  background-color: #cccccc;
-  border: 1px solid #666;
-  padding: 2px 5px 2px 5px;
-  margin: 0px 2px 0px 2px;
-}
-#tabs .disabled { 
-  color: #999999;
-}
-#tabs a {
-  text-decoration: none;
-  color: black;
-}
-#tabs a:hover {
-  text-decoration: underline;
-}
-#tabs #tabs-here { 
-  border-bottom-color: #f6f6f6;
-  background-color: #f6f6f6;
-}
-#tabs #tabs-here a {
-  color: black;
-}
-
-#tabs-body { 
-  border-bottom: 1px solid #016799;
-  background-color: #f6f6f6;
-  clear: both;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 4px;
-  padding-right: 4px;
-}
-
-
 /**********************************************************************
 /* acs-developer-support Toolbar
 /**********************************************************************/
