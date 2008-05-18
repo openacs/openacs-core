@@ -484,23 +484,18 @@ ul.compact li, .action-list ul li {
 
 /* Portlets */
 
-.portlet h2 {
-  background: #dddddd; 
-  padding: 2px 8px 2px 8px; 
-  margin: 0;
-}
-
-.portlet-header {
-  background: #dddddd; 
-}
-
-.portlet-header h2 {
-  padding: 2px 8px 2px 8px; 
-  margin: 0;
-}
-
 .portlet-sidebar {
   width: 30%;
+}
+
+.portlet {
+  margin: 4px 0px 4px 0px;
+}
+
+.portlet .portlet-title h2 {
+  background: #dddddd; 
+  padding: 2px 8px 2px 8px; 
+  margin: 0;
 }
 
 .portlet .portlet-body {
