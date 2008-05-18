@@ -172,6 +172,7 @@ Please visit the following link to change your password now:
   <msg key="Go_back">Go back</msg>
   <msg key="go_upload_the_users_por">go upload the user's portrait</msg>
   <msg key="go_upload_your_portrait">go upload your portrait</msg>
+  <msg key="Groups">Groups</msg>
   <msg key="Grant">Grant</msg>
   <msg key="Grant_Permission">Grant Permission</msg>
   <msg key="Have_group_mail">We already have a group with this email</msg>
