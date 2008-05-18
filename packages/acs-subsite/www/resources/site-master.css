@@ -492,7 +492,7 @@ ul.compact li, .action-list ul li {
   margin: 4px 4px 4px 4px;
 }
 
-.portlet .portlet-title h2 {
+.portlet .portlet-title {
   background: #dddddd; 
   padding: 2px 8px 2px 8px; 
   margin: 0;

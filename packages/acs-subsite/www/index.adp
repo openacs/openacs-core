@@ -8,7 +8,7 @@
     <td valign="top">
       <div class="portlet">
         <div class="portlet-title">
-          <h2>#acs-subsite.Applications#</h2>
+          #acs-subsite.Applications#
         </div>
         <div class="portlet-body">
           <include src="/packages/acs-subsite/lib/applications">
@@ -18,7 +18,7 @@
     <td valign="top">
       <div class="portlet">
         <div class="portlet-title">
-          <h2>#acs-subsite.Subsites#</h2>
+          #acs-subsite.Subsites#
         </div>
         <div class="portlet-body">
           <include src="/packages/acs-subsite/lib/subsites">
