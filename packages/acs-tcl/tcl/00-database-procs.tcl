@@ -334,7 +334,6 @@ ad_proc -public db_boolean { bool } {
     }
 }
 
-
 ad_proc -public db_nextval {{ -dbn "" } sequence } {
 
     Example:
@@ -413,10 +412,8 @@ ad_proc -public db_nextval {{ -dbn "" } sequence } {
             }
           }
           if {[info exists ::db::sequences(t_$sequence)]} {
-            #ns_log notice "-- found t_$sequence"
             set nextval [db_string -dbn $dbn "nextval" "select nextval('t_$sequence')"]
           } elseif {[info exists ::db::sequences($sequence)]} {
-            #ns_log notice "-- found $sequence"
             set nextval [db_string -dbn $dbn "nextval" "select nextval('$sequence')"]
           } elseif { [db_0or1row -dbn $dbn nextval_sequence "
                  select nextval('${sequence}') as nextval
@@ -447,11 +444,7 @@ ad_proc -public db_nextval {{ -dbn "" } sequence } {
             return [db_string -dbn $dbn "nextval" "select $sequence.nextval from dual"]
         }
     }
-
-
-
 }
-
 
 ad_proc -public db_nth_pool_name {{ -dbn "" } n } { 
     @return the name of the pool used for the nth-nested selection (0-relative). 
@@ -1655,7 +1648,7 @@ ad_proc -public db_multirow {
 
     <p>
 
-    You can not simultaneously append to and cache a multirow.
+    You can not simultaneously append to and cache a non-empty multirow.
 
     <p>
 
@@ -1751,12 +1744,13 @@ ad_proc -public db_multirow {
         return -code error "Expected 1 or 3 arguments after switches"
     }
 
-    if { [info exists cache_key] && $append_p } {
-        return -code error "Can't append and cache a multirow datasource simultaneously"
-    }
-
     upvar $level_up "$var_name:rowcount" counter
     upvar $level_up "$var_name:columns" columns
+
+    if { [info exists cache_key] && $append_p &&
+         [info exists counter] && $counter > 0 } {
+        return -code error "Can't append and cache a non-empty multirow datasource simultaneously"
+    }
 
     if { [info exists cache_key] } {
 
@@ -2580,7 +2574,6 @@ ad_proc -public db_source_sql_file {{
             }
 
             cd [file dirname $file]
-
             if { $tcl_platform(platform) eq "windows" } {
                 set fp [open "|[file join [db_get_pgbin] psql] $pghost $pgport $pguser -f $file_name [db_get_database] $pgpass" "r"]
             } else {
