@@ -360,27 +360,22 @@ ad_proc -public db_nextval {{ -dbn "" } sequence } {
     switch $driverkey {
 
         postgresql {
-             # the following query will return a nextval if the sequnce
-             # is of relkind = 'S' (a sequnce).  if it is not of relkind = 'S'
-             # we will try querying it as a view:
+#             # the following query will return a nextval if the sequnce
+#             # is of relkind = 'S' (a sequnce).  if it is not of relkind = 'S'
+#             # we will try querying it as a view:
 
-             if { [db_0or1row -dbn $dbn nextval_sequence "
-                 select nextval('${sequence}') as nextval
-                 where (select relkind 
-                        from pg_class 
-                        where relname = '${sequence}') = 'S'
-             "]} {
-                 return $nextval
-             } else {
-                 ns_log debug "db_nextval: sequence($sequence) is not a real sequence.  perhaps it uses the view hack."
-                 db_0or1row -dbn $dbn nextval_view "select nextval from ${sequence}"
-                 return $nextval
-             }
-          # DRB: I've restored the above code because Gustaf's "improved" version
-          # does not work in all cases, as documented by him below.  This is not
-          # acceptable.  It breaks any call to db_nextval by an initial install
-          # script or a package apm install callback.  No!  You don't get to do that!
-          #
+#             if { [db_0or1row -dbn $dbn nextval_sequence "
+#                 select nextval('${sequence}') as nextval
+#                 where (select relkind 
+#                        from pg_class 
+#                        where relname = '${sequence}') = 'S'
+#             "]} {
+#                 return $nextval
+#             } else {
+#                 ns_log debug "db_nextval: sequence($sequence) is not a real sequence.  perhaps it uses the view hack."
+#                 db_0or1row -dbn $dbn nextval_view "select nextval from ${sequence}"
+#                 return $nextval
+#             }
           #
           # The code above is just for documentation, how it worked
           # before the change below. We keep now a per-thread table of
@@ -389,33 +384,62 @@ ad_proc -public db_nextval {{ -dbn "" } sequence } {
           # view. This change makes this function more than a factor
           # of 2 faster than before. 
           #
-          # Disadvantage: If a new sequence is created, it is not immediately
-          # picked up (restart the server, or terminate thread).
+          # Note, that solely the per-thread information won't work for
+          # freshly created sequences. Therefore, we keep the old
+          # code for checking at runtime in the database for such
+          # occurrences.
           #
-          # The best solution would certainly be to fix all views on sequences
-          # and to call db_nextval only with real sequence names.
+          # Note, that the sequence handling in OpenACS is quite a
+          # mess.  Some sequences are named t_SEQUENCE (10 in dotlrn),
+          # others are are called just SEQUENCE (18 in dotlrn), for
+          # some sequences, additional views are defined with an
+          # attribute 'nextval', and on top of this, db_nextval is
+          # called sometimes with the view name and sometimes with the
+          # sequence name. Checking this at runtime is unnecessary
+          # complex and costly.
           #
-          # - gustaf neumann (17.9.2007)
+          # The best solution would certainly be to call db_nextval
+          # only with real sequence names. In that case, the whole
+          # function would for postgres would collapse to a single
+          # line, without any need for sequence name caching.
           #
-#          if {![info exists ::db::sequences]} {
-#            ns_log notice "-- creating per thread sequence table"
-#            namespace eval ::db {}
-#            foreach s [db_list -dbn $dbn relnames "select relname, relkind  from pg_class where relkind = 'S'"] {
-#              set ::db::sequences($s) 1
-#            }
-#          }
-#          if {[info exists ::db::sequences(t_$sequence)]} {
-#            #ns_log notice "-- found t_$sequence"
-#            set nextval [db_string -dbn $dbn "nextval" "select nextval('t_$sequence')"]
-#          } elseif {[info exists ::db::sequences($sequence)]} {
-#            #ns_log notice "-- found $sequence"
-#            set nextval [db_string -dbn $dbn "nextval" "select nextval('$sequence')"]
-#          } else {
-#            #ns_log notice "-- use view"
-#            set nextval [db_string -dbn $dbn "nextval" "select nextval from $sequence"]
-#          }
-#          return $nextval
-#        }
+          # - gustaf neumann (18.5.2008)
+          #
+          if {![info exists ::db::sequences]} {
+            ns_log notice "-- creating per thread sequence table"
+            namespace eval ::db {}
+            foreach s [db_list -dbn $dbn relnames "select relname, relkind  from pg_class where relkind = 'S'"] {
+              set ::db::sequences($s) 1
+            }
+          }
+          if {[info exists ::db::sequences(t_$sequence)]} {
+            #ns_log notice "-- found t_$sequence"
+            set nextval [db_string -dbn $dbn "nextval" "select nextval('t_$sequence')"]
+          } elseif {[info exists ::db::sequences($sequence)]} {
+            #ns_log notice "-- found $sequence"
+            set nextval [db_string -dbn $dbn "nextval" "select nextval('$sequence')"]
+          } elseif { [db_0or1row -dbn $dbn nextval_sequence "
+                 select nextval('${sequence}') as nextval
+                 where (select relkind 
+                        from pg_class 
+                        where relname = '${sequence}') = 'S'
+             "]} {
+            #
+            # We do not have an according sequence-table. Use the system catalog to check
+            # for the sequence
+            #
+            # ... the query sets nextval if it succeeds
+            #
+          } else {
+            #
+            # finally, there might be a view with a nextval
+            #
+            ns_log debug "db_nextval: sequence($sequence) is not a real sequence.  perhaps it uses the view hack."
+            set nextval [db_string -dbn $dbn "nextval" "select nextval from $sequence"]
+          }
+
+          return $nextval
+        }
 
         oracle -
         nsodbc -
