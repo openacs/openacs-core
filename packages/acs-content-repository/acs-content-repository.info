@@ -10,7 +10,7 @@
     <version name="5.4.2b2" url="http://openacs.org/repository/download/apm/acs-content-repository-5.4.2b2.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>The canonical repository for OpenACS content.</summary>
-        <release-date>2008-05-02</release-date>
+        <release-date>2008-05-24</release-date>
         <maturity>3</maturity>
         <vendor url="http://openacs.org">OpenACS</vendor>
         <description format="text/html">Provides the API for creating and managing user generated content including 
@@ -21,9 +21,9 @@
         <maturity>3</maturity>
 
         <provides url="acs-content-repository" version="5.4.2b2"/>
-        <requires url="acs-kernel" version="5.4.2b1"/>
-        <requires url="acs-service-contract" version="5.4.2b1"/>
-        <requires url="search" version="5.4.2b1"/>
+        <requires url="acs-kernel" version="5.4.2b2"/>
+        <requires url="acs-service-contract" version="5.4.2b2"/>
+        <requires url="search" version="5.4.2b2"/>
 
         <callbacks>
         </callbacks>
