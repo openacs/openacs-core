@@ -638,29 +638,61 @@ ul.compact li, .action-list ul li {
 
 /* END OF LISTS */
 
-
-/* Portlets */
+/* PORTLETS */
 
 .portlet-sidebar {
   width: 30%;
 }
 
-.portlet {
+.portlet-wrapper {
   margin: 4px 4px 4px 4px;
 }
 
-.portlet .portlet-title {
-  background: #dddddd; 
-  padding: 2px 8px 2px 8px; 
-  margin: 0;
+.portlet-header {
+    padding: 2px 8px 2px 8px; 
+    border-top: 1px solid #fff;
+    background: #ddd; 
+    height: 21px;
 }
 
-.portlet .portlet-body {
+.portlet-title {
+    float: left; /* comment out if portlet-controls display:none */
+    display: inline;
+}
+
+.portlet-title h1 {
+    margin: 0px;
+    font-size: 1em;
+    font-weight:bold;
+    color:#000;
+}
+    
+.portlet-controls {
+    display: block; /* future development */
+    padding-top: 2px;
+    text-align: right;    
+}
+
+.portlet-controls img {
+    border: 0px;
+}
+
+.portlet-controls a:link {
+    color: #fff;
+}
+
+.portlet-controls a:hover {
+    color: #000;
+}
+
+.portlet {
   border: 1px dotted #999; 
-  border-top: 0px; 
+  border-top: 0px;
   padding: 6px 8px 6px 8px;
+  clear:left;
 }
 
+/* END OF PORTLETS */
 
 /**********************************************************************
 /* DEPRECATED CLASSES

@@ -907,10 +907,9 @@ template_tag box { chunk params } {
     set title [ns_set iget $params title]
 
     template::adp_append_code "append __adp_output \"                           
-<div class=\\\"portlet-wrapper\\\">                                             
-<div class=\\\"portlet-header\\\">                                              
-<div class=\\\"portlet-title-no-controls\\\">                                   
-<h1>$title</h1>                                                                 
+<div class=\\\"portlet\\\">                                             
+<div class=\\\"portlet-title\\\">                                              
+$title                                                                 
 </div>                                                                          
 </div>                                                                          
 <div class=\\\"portlet\\\">\""
