@@ -1,12 +1,13 @@
 <table>
   <tr valign="top"> 
     <td style="width:35%">
-
-      <div class="portlet">
-        <div class="portlet-title">
-          #acs-subsite.Edit_Options#
+      <div class="portlet-wrapper">
+        <div class="portlet-header">
+          <div class="portlet-title">
+            <h1>#acs-subsite.Edit_Options#</h1>
+          </div>
         </div>
-        <div class="portlet-body">
+        <div class="portlet">
           <ul>
             <li><a href="../user/password-update">#acs-subsite.Change_my_Password#</a></li>
 
@@ -21,16 +22,17 @@
             <if @account_status@ ne "closed">
               <li><a href="unsubscribe">#acs-subsite.Close_your_account#</a></li>
             </if>
-
           </ul>
         </div>
       </div>
 
-      <div class="portlet">
-        <div class="portlet-title">
-          #acs-subsite.Privacy#
+      <div class="portlet-wrapper">
+        <div class="portlet-header">
+          <div class="portlet-title">
+            <h1>#acs-subsite.Privacy#</h1>
+          </div>
         </div>
-        <div class="portlet-body">
+        <div class="portlet">
           <ul>
             <li><a href="@community_member_url@">#acs-subsite.lt_What_other_people_see#</a></li>
             <li><a href="@whos_online_url@">#acs-subsite.Whos_Online_link_label#</a></li>
@@ -55,61 +57,66 @@
     </td>
     <td>
 
-      <div class="portlet">
-        <div class="portlet-title">
-          #acs-subsite.My_Account#
+      <div class="portlet-wrapper">
+        <div class="portlet-header">
+          <div class="portlet-title">
+            <h1>#acs-subsite.My_Account#</h1>
+          </div>
         </div>
-        <div class="portlet-body">
+        <div class="portlet">
           <include src="@user_info_template@" />
           <if @account_status@ eq "closed">
             #acs-subsite.Account_closed_workspace_msg#
-          </if>
+           </if>
         </div>
       </div>
 
       <if @portrait_state@ eq upload>
-        <div class="portlet">
-          <div class="portlet-title">
-            #acs-subsite.Your_Portrait#
+        <div class="portlet-wrapper">
+          <div class="portlet-header">
+            <div class="portlet-title">
+              <h1>#acs-subsite.Your_Portrait#</h1>
+            </div>
           </div>
-          <div class="portlet-body">
+          <div class="portlet">
             <p>
-              #acs-subsite.lt_Show_everyone_else_at#
-              <a href="@portrait_upload_url@">#acs-subsite.upload_a_portrait#</a>
+              #acs-subsite.lt_Show_everyone_else_at#  <a href="@portrait_upload_url@">#acs-subsite.upload_a_portrait#</a>
             </p>
           </div>
         </div>
       </if>
 
       <if @portrait_state@ eq show>
-        <div class="portlet">  
-          <div class="portlet-title">
-            #acs-subsite.Your_Portrait#
+        <div class="portlet-wrapper">  
+          <div class="portlet-header">
+            <div class="portlet-title">
+              <h1>#acs-subsite.Your_Portrait#</h1>
+            </div>
           </div>
-          <div class="portlet-body">
-            <p>
-              #acs-subsite.lt_On_portrait_publish_d#.
-            </p>
+          <div class="portlet">
+            <p>#acs-subsite.lt_On_portrait_publish_d#.</p>
             <table>
               <tr valign="top">
                 <td>
                   <img height=100 src="/shared/portrait-bits.tcl?user_id=@user_id@" alt="Portrait">
-                  <p>
-                    <a href="/user/portrait/?return_url=/pvt/home">#acs-subsite.Edit#</a>
-                  </p>
+                  <p><a href="/user/portrait/?return_url=/pvt/home">#acs-subsite.Edit#</a></p>
                 </td>
-                <td>@portrait_description@</td>
+                <td>
+                  @portrait_description@
+                </td>
               </tr>
             </table>
           </div>
         </div>
       </if>
 
-      <div class="portlet">
-        <div class="portlet-title">
-          #acs-subsite.Groups#
+      <div class="portlet-wrapper">
+        <div class="portlet-header">
+          <div class="portlet-title">
+            <h1>#acs-subsite.Groups#</h1>
+          </div>
         </div>
-        <div class="portlet-body">
+        <div class="portlet">
           <list name="fragments">
             @fragments:item;noquote@
           </list>
