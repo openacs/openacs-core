@@ -1782,11 +1782,20 @@ end new;
     cursor all_site_nodes is
     	select node_id from site_nodes
 	where object_id = apm_package.del.package_id;
+    cursor all_folders is
+	select folder_id from cr_folders
+	where package_id = apm_package.del.package_id;
+
   begin
     -- Delete all parameters.
     for cur_val in all_values loop
     	apm_parameter_value.del(value_id => cur_val.value_id);
-    end loop;    
+    end loop;
+    -- Delete all folders.
+    for cur_val in all_folders loop
+        content_folder.del(cur_val.folder_id,'t');
+    end loop;
+
     delete from apm_applications where application_id = apm_package.del.package_id;
     delete from apm_services where service_id = apm_package.del.package_id;
     delete from apm_packages where package_id = apm_package.del.package_id;

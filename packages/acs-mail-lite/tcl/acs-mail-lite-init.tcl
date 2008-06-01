@@ -13,10 +13,7 @@ ad_schedule_proc -thread t 60 acs_mail_lite::sweeper
 
 set queue_dir [parameter::get_from_package_key -parameter "BounceMailDir" -package_key "acs-mail-lite"]
 
-if {$queue_dir ne ""} {
-    # if BounceMailDir is set then handle incoming mail
-    ad_schedule_proc -thread t 120 acs_mail_lite::load_mails -queue_dir $queue_dir
-}
+# ad_schedule_proc -thread t 120 acs_mail_lite::load_mails -queue_dir $queue_dir
 
 # check every few minutes for bounces
 #ad_schedule_proc -thread t [acs_mail_lite::get_parameter -name BounceScanQueue -default 120] acs_mail_lite::scan_replies

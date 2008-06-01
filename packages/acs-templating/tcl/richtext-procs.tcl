@@ -400,27 +400,18 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
     set format {}
   }
 
-  array set options [expr {[info exists element(options)] ? $element(options) : ""}]
+  array set options [expr {[info exists element(options)] ? 
+			   $element(options) : ""}]
 
   if { $element(mode) eq "edit" } {
     set attributes(id) $element(id)
     set package_id_templating [apm_package_id_from_key "acs-templating"]
 
     set user_agent [string tolower [ns_set get [ns_conn headers] User-Agent]]
-
-    if {[string first "safari" $user_agent] != -1} {
-      regexp {version/([0-9]+)[.]} $user_agent _ user_agent_version
-      if {$user_agent_version < 3} {
-	set element(htmlarea_p) false
-      }
-    } elseif {[string first "opera" $user_agent] != -1} {
-      regexp {^[^/]+/([0-9]+)[.]} $user_agent _ user_agent_version
-      if {$user_agent_version < 9} {
-	set element(htmlarea_p) false
-      }
-    }
-
-    if { [exists_and_not_null element(htmlarea_p)] } {
+    if { [string first "safari" $user_agent] != -1 ||
+	 [string first "opera"  $user_agent] != -1 } { 
+      set htmlarea_p 0
+    } elseif { [exists_and_not_null element(htmlarea_p)] } {
       set htmlarea_p [template::util::is_true $element(htmlarea_p)]
     } else {
       set htmlarea_p [parameter::get \
