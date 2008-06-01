@@ -80,13 +80,18 @@
        </div>
      </if>
 
-      <div id="main">
-        <div id="main-content">
-          <div class="main-content-padding">
-            <slave />
-          </div>
-        </div>
-      </div>
+     <if @main_content_p@>
+       <div id="main">
+         <div id="main-content">
+           <div class="main-content-padding">
+             <slave />
+           </div>
+         </div>
+       </div>
+     </if>
+     <else>
+       <slave />
+     </else>
 
     </div>
   </div> <!-- /content-wrapper -->
