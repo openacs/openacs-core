@@ -7,10 +7,17 @@ ad_page_contract {
   body 
   focus HTML id of form element to focus
   skip_link href of link to skip to. Should be of format #skip_link
+  main_content_p if true wrap in the main content divs (if false, provide your own
+    page structure, for instance two or three columns of content per page)
 
   @author Lee Denison (lee@xarg.co.uk)
+  @author Don Baccus (dhogaza@pacifier.com)
 
   $Id$
+}
+
+if { ![info exists main_content_p] } {
+    set main_content_p 1
 }
 
 #
