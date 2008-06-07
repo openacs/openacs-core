@@ -619,7 +619,7 @@ namespace eval acs_mail_lite {
                 foreach party $recipient_list {
                     set message_id [mime::uniqueID]
                     set email [party::email_not_cached -party_id $party]
-                    if {[acs_mail_lite::utils::valid_email_p -email $email]} {
+                    if {[acs_mail_lite::utils::valid_email_p $email]} {
                         set email "\"[party::name -party_id $party]\" <$email>"
                         
                         acs_mail_lite::smtp -multi_token $multi_token \

@@ -9,7 +9,7 @@
   <msg key="localization-abday">{Вс} {Пн} {Вт} {Ср} {Чт} {Пт} {Сб}</msg>
   <msg key="localization-abmon">{янв} {фев} {мар} {апр} {май} {июн} {июл} {авг} {сен} {окт} {ноя} {дек}</msg>
   <msg key="localization-am_str">ДП</msg>
-  <msg key="localization-currency_symbol">?.</msg>
+  <msg key="localization-currency_symbol">р.</msg>
   <msg key="localization-d_fmt">%d.%m.%y</msg>
   <msg key="localization-d_t_fmt">%a %d %B %Y ?., %H:%M %Z</msg>
   <msg key="localization-day">{Воскресенье} {Понедельник} {Вторник} {Среда} {Четверг} {Пятница} {Суббота}</msg>
@@ -37,7 +37,7 @@
   <msg key="localization-pm_str">ПП</msg>
   <msg key="localization-positive_sign">+</msg>
   <msg key="localization-t_fmt">%H:%M</msg>
-  <msg key="localization-thousands_sep">,</msg>
+  <msg key="localization-thousands_sep"></msg>
   <msg key="Spanish">Испанский</msg>
-  <msg key="this-language">английский</msg>
+  <msg key="this-language">Русский</msg>
 </message_catalog>

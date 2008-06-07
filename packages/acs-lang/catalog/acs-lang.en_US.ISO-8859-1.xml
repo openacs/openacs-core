@@ -6,6 +6,7 @@
 
   <msg key="change-locale">Change locale</msg>
   <msg key="English">English</msg>
+  <msg key="Error_changing_locale">Error changing locale</msg>
   <msg key="French">French</msg>
   <msg key="German">German</msg>
   <msg key="Locale">Locale</msg>
@@ -59,6 +60,7 @@
   <description key="this-language">The label of the locale, in the locale's language.  This should be different for each locale.  This should not be English unless the locale is &quot;en&quot;.</description>
 
   <msg key="Translated_messages_on_this_page">Translated messages on this page (%locale%)</msg>
+  <msg key="User_locale_not_set">Your locale %user_locale% couldn't be set, probably because it's not available.</msg>
   <msg key="Your_locale_for_package">Your locale setting for %package_name%. If set, this will override the site-wide setting in this particular application.</msg>
   <msg key="Your_locale_site_wide">Your locale setting for the whole site</msg>
   <msg key="Your_Preferred_Locale">Your Preferred Locale</msg>

@@ -10,7 +10,7 @@
     <version name="5.5.0d3" url="http://openacs.org/repository/download/apm/acs-subsite-5.5.0d3.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Subsite</summary>
-        <release-date>2008-02-03</release-date>
+        <release-date>2008-05-31</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
         <description format="text/html">Provides for creating subsites within the OpenACS Community System.  Aware of parties, groups, users, portraits.  Can be themed via a per subsite master template.</description>
         <license>GPL</license>

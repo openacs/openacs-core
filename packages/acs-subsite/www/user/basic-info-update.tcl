@@ -26,6 +26,6 @@ set subsite_id [ad_conn subsite_id]
 set user_info_template [parameter::get -parameter "UserInfoTemplate" -package_id $subsite_id]
 ns_log Notice "user:: $user_info_template"
 if {$user_info_template eq ""} {
-    set user_info_template "/packages/acs-subsite/lib/user_info"
+    set user_info_template "/packages/acs-subsite/lib/user-info"
 }
 

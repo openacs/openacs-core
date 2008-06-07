@@ -1,4 +1,5 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>PL/SQL Standards</title><meta name="generator" content="DocBook XSL Stylesheets V1.70.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="eng-standards.html" title="Chapter 12. Engineering Standards"><link rel="previous" href="eng-standards-filenaming.html" title="ACS File Naming and Formatting Standards"><link rel="next" href="variables.html" title="Variables"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="eng-standards-filenaming.html">Prev</a> </td><th width="60%" align="center">Chapter 12. Engineering Standards</th><td width="20%" align="right"> <a accesskey="n" href="variables.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="eng-standards-plsql"></a>PL/SQL Standards</h2></div></div></div><div class="authorblurb"><p>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>PL/SQL Standards</title><meta name="generator" content="DocBook XSL Stylesheets V1.60.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="eng-standards.html" title="Chapter 11. Engineering Standards"><link rel="previous" href="eng-standards-filenaming.html" title="ACS File Naming and Formatting Standards"><link rel="next" href="variables.html" title="Variables"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="eng-standards-filenaming.html">Prev</a> </td><th width="60%" align="center">Chapter 11. Engineering Standards</th><td width="20%" align="right"> <a accesskey="n" href="variables.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="eng-standards-plsql"></a>PL/SQL Standards</h2></div></div><div></div></div><div class="authorblurb"><p>
 By Richard Li and Yon Feldman
 </p>
           OpenACS docs are written by the named authors, and may be edited
@@ -10,19 +11,19 @@ By Richard Li and Yon Feldman
   our product will be useful long after the current people building and
   maintaining it are around. Following are some standards and guidelines
   that will help us achieve this goal:
-</p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="eng-standards-plsql-general"></a>General</h3></div></div></div><div class="orderedlist"><ol type="1"><li><p>
+</p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="eng-standards-plsql-general"></a>General</h3></div></div><div></div></div><div class="orderedlist"><ol type="1"><li><p>
     All PL/SQL code must be well documented. We must write code that
     is maintainable by others, this is especially true in our case
     because we are building an open source toolkit than anyone can
     download and browse the source code. So document like you are
-    trying to impress your "Introduction to Programming" professor or
+    trying to impress your &quot;Introduction to Programming&quot; professor or
     TA.
    </p></li><li><p>
     It is important to be consistent throughout an application as much
     as is possible given the nature of team development. This means
     carrying style and other conventions suchs as naming within an
     application, not just within one file.
-   </p></li></ol></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="eng-standards-plsql-code"></a>Code</h3></div></div></div><div class="orderedlist"><ol type="1"><li><p>
+   </p></li></ol></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="eng-standards-plsql-code"></a>Code</h3></div></div><div></div></div><div class="orderedlist"><ol type="1"><li><p>
     Encapsulation of related fuctionality is key to maintainability
     and upgradeability of our software. Try to bundle your code into
     <a href="http://oradoc.photo.net/ora816/appdev.816/a77069/08_packs.htm#4376" target="_top">packages</a>
@@ -53,16 +54,16 @@ By Richard Li and Yon Feldman
         show errors
      
 </pre></li><li><p>
-    Always use <code class="computeroutput">create or replace procedure|function
-    &lt;proc_or_func_name&gt;</code>. It makes reloading packages much
+    Always use <tt class="computeroutput">create or replace procedure|function
+    &lt;proc_or_func_name&gt;</tt>. It makes reloading packages much
     easier and painless to someone who is upgrading or fixing a bug.
    </p></li><li><p>
-    Always qualify <code class="computeroutput">end</code> statements, i.e., the
-    <code class="computeroutput">end</code> statement for a package should be <code class="computeroutput">end
-    &lt;package_name&gt;;</code>, not just <code class="computeroutput">end;</code>; same
+    Always qualify <tt class="computeroutput">end</tt> statements, i.e., the
+    <tt class="computeroutput">end</tt> statement for a package should be <tt class="computeroutput">end
+    &lt;package_name&gt;;</tt>, not just <tt class="computeroutput">end;</tt>; same
     goes for procedures, functions, package bodies, and triggers.
    </p></li><li><p>
-    Always use the "show errors" SQL*Plus command after each PL/SQL
+    Always use the &quot;show errors&quot; SQL*Plus command after each PL/SQL
     block. It will help you debug when there are compilation errors in
     your PL/SQL code.
    </p></li><li><p>
@@ -71,13 +72,13 @@ By Richard Li and Yon Feldman
     the v_* and *_in syntax in favor of named parameters notation:
     </p><pre class="programlisting">
 
-      <code class="computeroutput">
+      <tt class="computeroutput">
         acs_user.create(first_names =&gt; 'Jane', last_name =&gt; 'Doe', etc.)
-      </code>
+      </tt>
         instead of
-      <code class="computeroutput">
+      <tt class="computeroutput">
         acs_user.create(first_names_in =&gt; 'Jane', last_name_in =&gt; 'Doe', etc.)
-      </code>
+      </tt>
      
 </pre><p>
     To achieve this we must fully qualify arguements passed into
@@ -107,7 +108,7 @@ By Richard Li and Yon Feldman
         show errors
      
 </pre></li><li><p>
-    Explicitly designate each parameter as "in," "out," or "inout."
+    Explicitly designate each parameter as &quot;in,&quot; &quot;out,&quot; or &quot;inout.&quot;
    </p></li><li><p>
     Each parameter should be on its own line, with a tab after the
     parameter name, then in/out/inout, then a space, and finally the
@@ -115,14 +116,14 @@ By Richard Li and Yon Feldman
    </p></li><li><p>
     Use %TYPE and %ROWTYPE whenever possible.
    </p></li><li><p>
-    Use 't' and 'f' for booleans, not the PL/SQL "boolean" datatype
+    Use 't' and 'f' for booleans, not the PL/SQL &quot;boolean&quot; datatype
     because it can't be used in SQL queries.
    </p></li><li><p>
-    All <code class="computeroutput">new</code> functions (e.g., <code class="computeroutput">acs_object.new,
-    party.new,</code> etc.) should optionally accept an ID:
+    All <tt class="computeroutput">new</tt> functions (e.g., <tt class="computeroutput">acs_object.new,
+    party.new,</tt> etc.) should optionally accept an ID:
     </p><pre class="programlisting">
 
-      <code class="computeroutput">
+      <tt class="computeroutput">
         create or replace package acs_object
         as
             function new (
@@ -133,15 +134,15 @@ By Richard Li and Yon Feldman
                 creation_ip     in acs_objects.creation_ip%TYPE default null,
                 context_id      in acs_objects.context_id%TYPE default null
            ) return acs_objects.object_id%TYPE;
-     </code>
+     </tt>
     
 </pre><p>
-   takes the optional argument <code class="computeroutput">object_id</code>. Do this to
+   takes the optional argument <tt class="computeroutput">object_id</tt>. Do this to
    allow people to use the same API call when they are doing double
    click protection, that is, tehy have already gotten an
-   <code class="computeroutput">object_id</code> and now they want to create the object with
-   that <code class="computeroutput">object_id</code>.
-   </p></li></ol></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="eng-standards-style"></a>Style</h3></div></div></div><p>
+   <tt class="computeroutput">object_id</tt> and now they want to create the object with
+   that <tt class="computeroutput">object_id</tt>.
+   </p></li></ol></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="eng-standards-style"></a>Style</h3></div></div><div></div></div><p>
   Some general style guidelines to follow for the purpose of
   consistency across applications.
 </p><div class="orderedlist"><ol type="1"><li><p>

@@ -1,44 +1,16 @@
-/*form fieldset{
-	border: 0px solid #F00;
-}
 
-form .form-required-mark {
-    color: #ff0000;
-    display: inline;
-}
-
-form .form-item-wrapper {
-	clear: both;
-	padding: 5px;
-}
-
-form .form-item-wrapper .form-label {
-	float: left;
-	text-align: right;
-	display: block;
-	width: 12em;
-}
-
-form .form-item-wrapper .form-widget, form .form-button, form .form-help-text {
-	display: block;
-	margin-left: 13em;
-}
-
-form .form-item-wrapper .form-error {
-	display: block;
-	margin-left: 13em;
-	color: #ff0000;
-}
-*/
-
-.form-label-error, .form-widget-error, .form-required-mark, .form-error {
+.form-widget-error, .form-required-mark, .form-error {
 	color: #c30000;
+}
+
+.form-label-error {
+	font-weight: bold;
 }
 
 /* form layout for forms with divs*/
 
 .form-fieldset {
-	border: 0px solid #FFFFFF;
+	border: 0px solid #000;
 }
 
 .margin-form .form-required-mark {
@@ -54,19 +26,26 @@ form .form-item-wrapper .form-error {
 	float: left;
 	text-align: right;
 	display: block;
-	width: 15em;
+	width: 16em;
 }
 
 .margin-form .form-item-wrapper .form-widget, .margin-form .form-button, .margin-form div.form-help-text {
 	display: block;
-	margin-left: 16em;
+	margin-left: 17em;
+}
+
+.margin-form .form-button {
+	margin-top: 1em;
 }
 
 .margin-form .form-item-wrapper .form-error, .margin-form .form-item-wrapper .form-widget-error {
 	display: block;
-	margin-left: 16em;
+	margin-left: 17em;
 }
 
+.margin-form legend span { 
+    display: block;
+}
 
 .vertical-form .form-required-mark {
     display: inline;

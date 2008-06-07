@@ -1329,6 +1329,21 @@ ad_proc wrap_string {input {threshold 80}} {
 #
 ####################
 
+ad_proc -public ad_html_text_convertable_p {
+    -from
+    -to
+} {
+    Returns true of ad_html_text_convert can handle the given from and to mime types.
+} {
+    set valid_froms { text/enhanced text/plain text/fixed-width text/html text/xml }
+    set valid_tos { text/plain text/html }
+    # Validate procedure input
+    set from [ad_decode $from "html" "text/html" "text" "text/plain" "plain" "text/plain" $from]
+    set to [ad_decode $to "html" "text/html" "text" "text/plain" "plain" "text/plain" $to]
+    return [expr {[lsearch $valid_froms $from] != -1 &&
+                  [lsearch $valid_tos $to] != -1}]
+}
+
 ad_proc -public ad_html_text_convert {
     {-from text/plain}
     {-to text/html}
@@ -1401,19 +1416,9 @@ ad_proc -public ad_html_text_convert {
     if { $text eq "" } {
         return ""
     }
-
-    set valid_froms { text/enhanced text/plain text/fixed-width text/html text/xml }
-    set valid_tos { text/plain text/html }
     
-    # Validate procedure input
-    set from [ad_decode $from "html" "text/html" "text" "text/plain" "plain" "text/plain" $from]
-    if { [lsearch $valid_froms $from] == -1 } {
-        error "Unknown text input format, '$from'. Valid formats are $valid_froms."
-    }
-    
-    set to [ad_decode $to "html" "text/html" "text" "text/plain" "plain" "text/plain" $to]
-    if { [lsearch $valid_tos $to] == -1 } {
-        error "Unknown text input format, '$to'. Valid formats are $valid_tos."
+    if { ![ad_html_text_convertable_p -from $from -to $to] } {
+        error "Illegal mime types for conversion - from: $from to: $to"
     }
     
     # Do the conversion

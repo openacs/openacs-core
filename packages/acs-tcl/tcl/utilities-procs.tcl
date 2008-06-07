@@ -1119,7 +1119,7 @@ ad_proc export_ns_set_vars {{format "url"} {exclusion_list ""} {setid ""}} {
     if {$format eq "url"} {
         return [join $return_list "&"]
     } else {
-        return "<input type=\"hidden\" [join $return_list " />\n <input type=\"hidden\" "] >"
+        return "<div><input type=\"hidden\" [join $return_list " ></div>\n <div><input type=\"hidden\" "] ></div>"
     }
 }
 

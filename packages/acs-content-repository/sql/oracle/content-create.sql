@@ -468,7 +468,7 @@ insert into cr_scheduled_release_job values (NULL, sysdate);
 
 create table cr_folders (
   folder_id	    integer
-		    constraint cr_folder_id_fk references
+		    constraint cr_folders_folder_id_fk references
 		    cr_items on delete cascade
 		    constraint cr_folders_pk 
                     primary key,
@@ -753,12 +753,6 @@ show errors
 -- DOCUMENT SUBMISSION WITH CONVERSION TO HTML
 --------------------------------------------------------------
 
-create global temporary table cr_doc_filter (
-    revision_id        integer primary key,
-    content            BLOB
-) on commit delete rows;
-
-
 -- Source PL/SQL Definitions.
 
 @@ content-util
@@ -775,16 +769,6 @@ prompt *** Creating object types...
 
 prompt *** Preparing search indices...
 @@ content-search
-
--- this index requires prefs created in content-search
-create index cr_doc_filter_index on cr_doc_filter ( content )
-  indextype is ctxsys.context
-  parameters ('FILTER content_filter_pref' );
-
-comment on table cr_doc_filter is '
-  A temporary table for holding binary documents that are to be converted
-  into HTML (or plain text) prior to insertion into the repository.
-';
 
 -- (DanW - OpenACS) Added cleanup trigger to log file items that need 
 -- to be cleaned up from the CR.

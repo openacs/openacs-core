@@ -335,7 +335,7 @@ ad_proc -public install::xml::action::create-package { node } {
         set ::install::xml::ids($id) $package_id
     }
 
-    return $package_id
+    return ""
 }
 
 ad_proc -public install::xml::action::set-parameter { node } {
@@ -365,6 +365,7 @@ ad_proc -public install::xml::action::set-parameter { node } {
             -value $ids($value)
       }
     }
+    return ""
 }
 
 ad_proc -public install::xml::action::set-parameter-default { node } {
@@ -414,6 +415,7 @@ ad_proc -public install::xml::action::set-permission { node } {
             }
         }
     }
+    return ""
 }
 
 ad_proc -public install::xml::action::unset-permission { node } {
@@ -445,6 +447,7 @@ ad_proc -public install::xml::action::unset-permission { node } {
             }
         }
     }
+    return ""
 }
 
 ad_proc -public install::xml::action::set-join-policy { node } {
@@ -461,6 +464,7 @@ ad_proc -public install::xml::action::set-join-policy { node } {
         set group(join_policy) $join_policy
         group::update -group_id $group_id -array group
     }
+    return ""
 }
 
 ad_proc -public install::xml::action::create-user { node } {
