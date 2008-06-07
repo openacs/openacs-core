@@ -10,7 +10,7 @@
 
 create table subsite_themes (
     key           varchar(100) 
-                  constraint subsite_theme_key_pk
+                  constraint subsite_themes_key_pk
                   primary key,
     name          varchar(100) 
                   constraint subsite_theme_name_nn
