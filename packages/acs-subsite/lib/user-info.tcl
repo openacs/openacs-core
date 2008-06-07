@@ -40,14 +40,7 @@ if { ![acs_user::site_wide_admin_p] } {
 foreach elm $read_only_elements {
     set elm_mode($elm) {display}
 }
-set first_element {}
-foreach elm $form_elms {
-    if { $elm_mode($elm) eq "" && ($elm ne "username" && [auth::UseEmailForLoginP]) } {
-        set first_element $elm
-        break
-    }
-}
-set focus "user_info.$first_element"
+
 set edit_mode_p [expr ![empty_string_p [form::get_action user_info]]]
 
 set form_mode display
@@ -69,7 +62,10 @@ if { [llength [auth::authority::get_authority_options]] > 1 } {
             {options {[auth::authority::get_authority_options]}}
         }
     }
+} else {
+    lappend read_only_elements authority_id
 }
+
 if { $user(authority_id) != [auth::authority::local] || ![auth::UseEmailForLoginP] || \
      ([acs_user::site_wide_admin_p] && [llength [auth::authority::get_authority_options]] > 1) } {
     ad_form -extend -name user_info -form {
@@ -78,7 +74,18 @@ if { $user(authority_id) != [auth::authority::local] || ![auth::UseEmailForLogin
             {mode $elm_mode(username)}
         }
     }
+} else {
+    lappend read_only_elements username
 }
+
+set first_element {}
+foreach elm $form_elms {
+    if { $elm_mode($elm) eq "" && ( [lsearch $read_only_elements $elm] eq -1) } {
+        set first_element $elm
+        break
+    }
+}
+set focus "user_info.$first_element"
 
 # TODO: Use get_registration_form_elements, or auto-generate the form somehow? Deferred.
 

@@ -30,41 +30,41 @@ ad_proc acs_mail_lite::utils::build_subject {
 
     set charset [string toupper $charset]
     set charset_code [ns_encodingforcharset $charset]
-    set subject [encoding convertto $charset_code "$subject"]
 
-    if { [catch {package require mime 1.5.2}] } {
-
-        # encode subject with quoted-printable
-        set qp_subject [mime::qp_encode "$subject\n" 1 1]
-
-        # maxlen for each line
-        # 69 = 76 - 7 where 7 is for "=?"+"?Q?+"?="
-        set maxlen [expr {69 - [string length $charset]}]
+    # maxlen for each line
+    # 69 = 76 - 7 where 7 is for "=?"+"?Q?+"?="
+    set maxlen [expr {69 - [string length $charset]}]
         
-        # Based on mime::qp_encode to trim long lines
-        set result ""
-        foreach line [split $qp_subject \n] {
-            while {[string length $line] > $maxlen} {
-                set chunk [string range $line 0 $maxlen]
-                if {[regexp -- {(_[^_]*)$} $chunk dummy end]} {
-                    
-                    # Don't break in the middle of a word
-                    set len [expr {$maxlen - [string length $end]}]
-                    set chunk [string range $line 0 $len]
-                    incr len
-                    set line [string range $line $len end]
-                } else {
-                    set line [string range $line [expr {$maxlen + 1}] end]
-                }
-                append result "=?$charset?Q?$chunk?=\n "
-            }
-            append result "=?$charset?Q?$line?=\n "
+    set result ""
+    set line ""
+    set i 0
+
+    set subject_length [string length $subject]
+    while { $i < $subject_length } {
+        set chunk [string index $subject $i]
+            
+        # encode that chunk
+        set chunk [encoding convertto $charset_code "$chunk"]
+        if { $chunk eq "\x3F" } {
+            # ER: workaround (kludge!) for tcllib error
+            set chunk "=3F"
+        } else {
+            set chunk [mime::qp_encode "$chunk" 1 0]
         }
-        # Trim off last "\n ", since the above code has the side-effect
-        # of adding an extra "\n " to the encoded string.
-        set result [string range $result 0 end-2]
-    } else {
-        set result [mime::word_encode $charset_code "quoted-printable" $subject]
+
+        set newline $line
+        append newline $chunk
+
+        if { [string length $newline] <= $maxlen } {
+            append line $chunk
+        } else {
+            append result "=?$charset?Q?$line?=\n "
+            set line $chunk
+        }
+        incr i
+    }
+    if { $line ne "" } {
+        append result "=?$charset?Q?$line?="
     }
 
     return $result

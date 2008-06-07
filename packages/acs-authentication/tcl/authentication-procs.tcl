@@ -875,9 +875,9 @@ ad_proc -public auth::create_local_account {
     }
 
     # Admin approval
+    set system_name [ad_system_name]
     if { [parameter::get -parameter RegistrationRequiresApprovalP -default 0] } {
         set member_state "needs approval"
-        set system_name [ad_system_name]
         set result(account_status) "closed"
         set result(account_message) [_ acs-subsite.Registration_Approval_Notice]
     } else {
@@ -1412,7 +1412,7 @@ ad_proc -private auth::send_email_verification_email {
 
     ns_sendmail \
         $user(email) \
-        [parameter::get -parameter NewRegistrationEmailAddress -default [ad_system_owner]] \
+        "\"$system_name\" <[parameter::get -parameter NewRegistrationEmailAddress -default [ad_system_owner]]>" \
         [_ acs-subsite.lt_Welcome_to_system_nam] \
         [_ acs-subsite.lt_To_confirm_your_regis]
 }

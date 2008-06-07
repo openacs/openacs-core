@@ -1,175 +1,4 @@
-2007-02-27 16:05 -8 (pdt)  jiml
-	* etc/config.tcl:
-	  correct a recent change in config file that had name of server
-	  hardwired
-
-2004-07-02 04:40  jeffd
-
-	* www/default-master.adp: Remove h1 tag. Should be set at
-	  application pages level
-
-2007-07-18 06:44  emmar
-
-	* www/: default-master.tcl, site-master.tcl: Unset titles for
-	  default and site master CSS. They weren't applied when
-	  alternative stylesheets were available (e.g. forums)
-
-2007-07-15 21:02  gustafn
-
-	* packages/acs-tcl/tcl/text-html-procs.tcl: Fix a bug in
-	  ad_html_to_text: This function breaks, when it encounters a
-	  (valid) entity like &0038; The problem was, that the old code
-	  interpreted the numeric value of the entity as an octal value
-	  because it starts with leading zeros.
-
-2007-07-14 12:43  gustafn
-
-	* www/: site-master.adp, site-master.tcl: Fix for multiple xinhas
-	  on one page.	Applied fix from cvs head to oacs-5-3:
-	  http://xarg.net/tools/cvs/change-set-details?key=27744
-
-2007-07-14 08:34  donb
-
-	* packages/acs-core-docs/www/: acs-admin.html,
-	  acs-package-dev.html, acs-plat-dev.html, analog-install.html,
-	  analog-setup.html, aolserver.html, aolserver4.html,
-	  apm-design.html, apm-requirements.html, automated-backup.html,
-	  automated-testing-best-practices.html, backup-recovery.html,
-	  backups-with-cvs.html, bootstrap-acs.html, complete-install.html,
-	  configuring-configuring-packages.html,
-	  configuring-configuring-permissions.html,
-	  configuring-install-packages.html,
-	  configuring-mounting-packages.html, configuring-new-site.html,
-	  credits.html, cvs-guidelines.html, cvs-tips.html,
-	  database-management.html, db-api-detailed.html, db-api.html,
-	  dev-guide.html, doc-standards.html, docbook-primer.html,
-	  eng-standards-constraint-naming.html,
-	  eng-standards-filenaming.html, eng-standards-plsql.html,
-	  eng-standards-versioning.html, eng-standards.html,
-	  ext-auth-requirements.html, filename.html, for-everyone.html,
-	  form-builder.html, general-documents.html, groups-design.html,
-	  groups-requirements.html, high-avail.html, how-do-I.html,
-	  i18n-convert.html, i18n-design.html, i18n-introduction.html,
-	  i18n-overview.html, i18n-requirements.html,
-	  i18n-translators.html, i18n.html, index.html,
-	  individual-programs.html, install-cvs.html,
-	  install-daemontools.html, install-full-text-search-openfts.html,
-	  install-full-text-search-tsearch2.html, install-ldap-radius.html,
-	  install-more-software.html, install-next-add-server.html,
-	  install-next-backups.html, install-next-nightly-vacuum.html,
-	  install-nsopenssl.html, install-nspam.html,
-	  install-openacs-delete-tablespace.html,
-	  install-openacs-inittab.html, install-openacs-keepalive.html,
-	  install-origins.html, install-overview.html,
-	  install-pam-radius.html, install-php.html, install-qmail.html,
-	  install-redhat.html, install-resources.html,
-	  install-squirrelmail.html, install-ssl.html, install-steps.html,
-	  install-tclwebtest.html, ix01.html, kernel-doc.html,
-	  kernel-overview.html, mac-installation.html,
-	  maint-performance.html, maintenance-deploy.html,
-	  maintenance-web.html, nxml-mode.html, object-identity.html,
-	  object-system-design.html, object-system-requirements.html,
-	  objects.html, openacs-overview.html, openacs-unpack.html,
-	  openacs.html, oracle.html, os-install.html, os-security.html,
-	  packages.html, parties.html, permissions-design.html,
-	  permissions-requirements.html,
-	  permissions-tediously-explained.html, permissions.html,
-	  postgres.html, profile-code.html,
-	  programming-with-aolserver.html, psgml-for-emacs.html,
-	  psgml-mode.html, release-notes.html, releasing-openacs-core.html,
-	  releasing-openacs.html, releasing-package.html,
-	  remote-postgres.html, request-processor.html,
-	  requirements-template.html, rp-design.html, rp-requirements.html,
-	  security-design.html, security-notes.html,
-	  security-requirements.html, snapshot-backup.html,
-	  style-guide.html, subsites-design.html,
-	  subsites-requirements.html, subsites.html, tcl-doc.html,
-	  templates.html, tutorial-admin-pages.html,
-	  tutorial-advanced.html, tutorial-caching.html,
-	  tutorial-categories.html, tutorial-comments.html,
-	  tutorial-css-layout.html, tutorial-cvs.html,
-	  tutorial-database.html, tutorial-debug.html,
-	  tutorial-distribute.html, tutorial-etp-templates.html,
-	  tutorial-future-topics.html, tutorial-hierarchical.html,
-	  tutorial-html-email.html, tutorial-newpackage.html,
-	  tutorial-notifications.html, tutorial-pages.html,
-	  tutorial-parameters.html, tutorial-schedule-procs.html,
-	  tutorial-second-database.html, tutorial-specs.html,
-	  tutorial-upgrade-scripts.html, tutorial-upgrades.html,
-	  tutorial-vuh.html, tutorial-wysiwyg-editor.html, tutorial.html,
-	  unix-installation.html, update-repository.html,
-	  update-translations.html, upgrade-4.5-to-4.6.html,
-	  upgrade-4.6.3-to-5.html, upgrade-5-0-dot.html,
-	  upgrade-openacs-files.html, upgrade-overview.html,
-	  upgrade-supporting.html, upgrade.html, uptime.html,
-	  variables.html, win2k-installation.html: documentation for 5.3.2
-
-2007-07-14 07:20  donb
-
-	* packages/acs-core-docs/www/xml/for-everyone/release-notes.xml:
-	  Updated this for 5.3.2
-
-2007-07-14 07:20  donb
-
-	* packages/acs-core-docs/www/xml/variables.ent: Updated this
-
-2007-07-14 07:04  donb
-
-	* ChangeLog, packages/acs-admin/acs-admin.info,
-	  packages/acs-api-browser/acs-api-browser.info,
-	  packages/acs-authentication/acs-authentication.info,
-	  packages/acs-automated-testing/acs-automated-testing.info,
-	  packages/acs-bootstrap-installer/acs-bootstrap-installer.info,
-	  packages/acs-content-repository/acs-content-repository.info,
-	  packages/acs-core-docs/acs-core-docs.info,
-	  packages/acs-kernel/acs-kernel.info,
-	  packages/acs-lang/acs-lang.info,
-	  packages/acs-mail-lite/acs-mail-lite.info,
-	  packages/acs-messaging/acs-messaging.info,
-	  packages/acs-reference/acs-reference.info,
-	  packages/acs-service-contract/acs-service-contract.info,
-	  packages/acs-subsite/acs-subsite.info,
-	  packages/acs-tcl/acs-tcl.info,
-	  packages/acs-templating/acs-templating.info,
-	  packages/acs-translations/acs-translations.info,
-	  packages/ref-timezones/ref-timezones.info,
-	  packages/search/search.info: Created changelog, bumped version
-	  numbers
-
-2007-07-13 06:30  donb
-
-	* packages/search/search.info: Made search depend on service
-	  contract package
-
-2007-07-13 05:53  donb
-
-	* packages/acs-subsite/www/: group-master.adp, group-master.tcl:
-	  Hacked this to work with the new master template scheme.  This is
-	  only a temporary solution (see my comments in the code for
-	  details)
-
-2007-07-13 05:31  emmar
-
-	* packages/acs-lang/: tcl/lang-widget-procs.tcl,
-	  www/change-locale-include.tcl: Mark as Selected the current
-	  locale in the select_locale widget
-
-2007-07-10 11:38  carlb
-
-	* packages/acs-subsite/www/shared/whos-online.tcl: Added missing
-	  internationalization
-
-2007-07-10 11:36  carlb
-
-	* packages/acs-subsite/catalog/acs-subsite.en_US.ISO-8859-1.xml:
-	  Made messages more consistent and added missing keys
-
-2007-06-26 04:29  emmar
-
-	* packages/search/search.info: Make search a singleton since it can
-	  be mounted only once. Description updated too.
-
-2007-06-23 18:51  donb
+2008-04-06 15:39  donb
 
 	* packages/: acs-admin/acs-admin.info,
 	  acs-api-browser/acs-api-browser.info,
@@ -185,1343 +14,224 @@
 	  acs-subsite/acs-subsite.info, acs-tcl/acs-tcl.info,
 	  acs-templating/acs-templating.info,
 	  acs-translations/acs-translations.info,
-	  ref-timezones/ref-timezones.info, search/search.info: Bump
-	  version numbers to 5.3.2b1
+	  intermedia-driver/intermedia-driver.info,
+	  notifications/notifications.info,
+	  ref-timezones/ref-timezones.info, search/search.info,
+	  tsearch2-driver/tsearch2-driver.info: Bumped version numbers ...
 
-2007-06-15 09:48  daveb
+2008-04-03 12:14  emmar
 
-	* packages/acs-templating/tcl/list-procs.tcl: Don't reset filters
-	  if page is changed.
+	* packages/acs-subsite/tcl/email-image-procs.tcl: Added return_url
+	  in calls to email_image::get_user_email
 
-2007-06-14 21:50  daveb
+2008-04-03 04:27  emmar
 
-	* packages/acs-templating/tcl/list-procs.tcl: Don't show page in
-	  list of available filters in form
+	* packages/acs-lang/www/admin/message-list.adp: Reintroduced the
+	  form to switch between locales that has been removed by Malte in
+	  previous commits
 
-2007-06-14 10:25  emmar
+2008-04-03 03:58  emmar
 
-	* packages/acs-mail-lite/tcl/acs-mail-lite-procs.tcl: Remove
-	  duplicated proc with_finally (also exists in
-	  acs-tcl/tcl/utilities-procs.tcl) and remove unnecessary
-	  with_finally block in the sweeper procs
+	* packages/acs-authentication/tcl/authentication-procs.tcl: Added
+	  system name in the from of the verification email sent to the
+	  user
 
-2007-06-14 08:24  emmar
+2008-04-03 03:35  emmar
 
-	* packages/acs-mail-lite/tcl/acs-mail-lite-procs.tcl: Catch errors
-	  when sweeping the mail queue to avoid notifications to remain
-	  unsent until the bad message has been manually removed. With the
-	  catch, the bad message remains in the queue and an error message
-	  sent to the log, and the sweeper proceeds with the next ones.
+	* packages/acs-subsite/www/shared/send-email.tcl: Export return_url
+	  in the send-email form
 
-2007-06-14 05:12  emmar
+2008-04-03 03:07  emmar
 
-	* packages/acs-templating/www/doc/demo/: list5/add-edit.tcl,
-	  list6/add-edit.tcl, list7/add-edit.tcl, list8/add-edit.tcl,
-	  list9/add-edit.tcl: Remove obsolete wrap attribute (textarea)
+	* packages/acs-subsite/www/admin/site-map/site-map.tcl: HTML Strict
+	  cleanup
 
-2007-06-14 04:52  emmar
+2008-04-03 01:38  emmar
 
-	* packages/acs-templating/tcl/richtext-procs.tcl: Fix richtext HTML
-	  to pass 4.01 transitional validation
+	* packages/acs-templating/resources/forms/standard.adp: Enclosed
+	  legend text in span so a style can be applied to it if needed.
+	  Applied implicit association for checkbox/radio by wrapping the
+	  formfield with the label tag. Don't generate empty div blocks
+	  (e.g. when label is empty)
 
-2007-06-07 06:15  emmar
+2008-04-02 07:47  emmar
 
-	* packages/acs-templating/: tcl/element-procs.tcl,
-	  tcl/form-procs.tcl, www/resources/forms.css: Zen: set a default
-	  class for fieldset. Customized styles for fieldset and legend
-	  tags now will be correctly applied.
+	* packages/acs-lang/tcl/: lang-util-procs-oracle.xql,
+	  lang-util-procs-postgresql.xql: Fixed for spellcheck. We want to
+	  match only the enabled languages.
 
-2007-06-06 14:35  emmar
+2008-03-29 09:16  emmar
 
-	* packages/acs-templating/: resources/forms/standard.adp,
-	  tcl/element-procs.tcl, tcl/form-procs.tcl, tcl/tag-init.tcl: Zen:
-	  fieldset/legend tags are not generated anymore if the legend tag
-	  has no text
+	* packages/acs-subsite/: lib/user-info.adp, lib/user-info.tcl,
+	  www/user/basic-info-update.tcl: Set focus for user-info form
 
-2007-06-06 08:47  daveb
+2008-03-29 04:18  emmar
 
-	* packages/acs-kernel/: acs-kernel.info,
-	  sql/oracle/upgrade/upgrade-5.3.2d1-5.3.2d2.sql,
-	  sql/postgresql/upgrade/upgrade-5.3.2d1-5.3.2d2.sql: Fix upgrade
-	  to parameter datatype check constraint to work with either
-	  variation of the constraint name. Bump version in info file so
-	  upgrade will run.
+	* packages/acs-templating/www/resources/mktree.js: Added the
+	  mktree_remember global variable so scripts that use mktree can
+	  decide if they want to keep the state of tree or not
+	  (mktree_remember defaults to false)
 
-2007-06-05 11:30  emmar
+2008-03-27 14:37  emmar
 
-	* packages/search/www/search.tcl: Return a complain when no
-	  keywords to search for have been entered
+	* packages/acs-templating/www/resources/mktree.js: Replaced the use
+	  of the non valid attribute 'remember' by checking if the node has
+	  children to create/update a cookie that keeps its state
 
-2007-06-03 05:47  maltes
+2008-03-22 16:46  donb
 
-	* packages/acs-authentication/tcl/local-procs.tcl: The username is
-	  not always an email. So, lets use the email instead for sending
-	  the mail
+	* packages/: acs-admin/acs-admin.info,
+	  acs-api-browser/acs-api-browser.info,
+	  acs-authentication/acs-authentication.info,
+	  acs-automated-testing/acs-automated-testing.info,
+	  acs-bootstrap-installer/acs-bootstrap-installer.info,
+	  acs-content-repository/acs-content-repository.info,
+	  acs-core-docs/acs-core-docs.info, acs-kernel/acs-kernel.info,
+	  acs-lang/acs-lang.info, acs-mail-lite/acs-mail-lite.info,
+	  acs-messaging/acs-messaging.info,
+	  acs-reference/acs-reference.info,
+	  acs-service-contract/acs-service-contract.info,
+	  acs-subsite/acs-subsite.info, acs-tcl/acs-tcl.info,
+	  acs-templating/acs-templating.info,
+	  acs-translations/acs-translations.info,
+	  intermedia-driver/intermedia-driver.info,
+	  notifications/notifications.info,
+	  ref-timezones/ref-timezones.info, search/search.info,
+	  tsearch2-driver/tsearch2-driver.info: Bumped info files, which I
+	  forgot to do before putting up the beta tarball.
 
-2007-06-01 13:47  emmar
+2008-03-22 14:25  emmar
 
-	* packages/: acs-tcl/tcl/navigation-procs.tcl,
-	  search/tcl/search-procs.tcl: Removing unused-deprecated
-	  ad_choice_bar (only used in contrib/obsolete-packages/library)
-	  and search::choice_bar (not used) procs
-
-2007-06-01 06:56  emmar
-
-	* packages/search/: search.info, www/search.adp, www/search.tcl,
-	  www/resources/search.css: last shot (for now) of html cleanup.
-	  choice_bar replaced by a multirow to be able to apply styles at
-	  template level and produce valid HTML
-
-2007-05-30 13:21  emmar
-
-	* packages/acs-templating/resources/forms/standard.adp: Added
-	  form_id to section_id to build fieldset ID (was conflicting in
-	  some case with others IDs)
-
-2007-05-28 11:13  maltes
-
-	* packages/acs-templating/resources/forms/standard.adp: Revert
-
-2007-05-28 05:10  maltes
-
-	* packages/acs-templating/resources/forms/standard.adp: Added form
-	  legend div so the sections can remotely look as before...
-
-2007-05-26 08:19  daveb
-
-	* packages/acs-subsite/www/shared/: parameters-oracle.xql,
-	  parameters-postgresql.xql: Get the parameter datatype so we know
-	  what type of form widget to use
-
-2007-05-24 12:19  emmar
-
-	* packages/search/: catalog/search.en_US.ISO-8859-1.xml,
-	  www/search.adp, www/search.tcl, www/resources/search.css: Created
-	  styles for search results page and applied them to the results
-	  list
-
-2007-05-24 09:37  emmar
-
-	* packages/search/www/: search.adp, search.tcl: Removed references
-	  to (non-existent) dotlrn template
-
-2007-05-24 08:16  daveb
-
-	* packages/: acs-subsite/www/shared/parameters.tcl,
-	  acs-admin/www/apm/parameter-add-2.tcl,
-	  acs-admin/www/apm/parameter-add.tcl,
-	  acs-admin/www/apm/parameter-edit-2.tcl,
-	  acs-admin/www/apm/parameter-edit.tcl,
-	  acs-kernel/sql/oracle/apm-create.sql,
-	  acs-kernel/sql/oracle/upgrade/upgrade-5.3.2d1-5.3.2d2.sql,
-	  acs-kernel/sql/postgresql/apm-create.sql,
-	  acs-kernel/sql/postgresql/upgrade/upgrade-5.3.2d1-5.3.2d2.sql:
-	  Allow a new parameter type "text" to show a textarea on the
-	  parmeter form for parmaeter values that don't fit well within a
-	  textbox.
-
-2007-05-24 07:55  daveb
-
-	* packages/acs-tcl/tcl/utilities-procs.tcl: Use meta-refrsh or
-	  javascript to redirect when switching frm HTTPS to HTTP to avoid
-	  security warining in IE
-
-2007-05-24 06:30  emmar
-
-	* packages/search/www/search.adp: First shot of HTML cleanup
-
-2007-05-24 06:12  emmar
-
-	* www/site-master.tcl: Added content-type
-
-2007-05-24 06:10  emmar
-
-	* www/blank-master.adp: Added missing @ for meta.http_equiv
-
-2007-05-24 06:04  emmar
-
-	* www/default-master.tcl: Edited to avoid empty UL when main and
-	  sub navigations are empty (thanks to Lee who provides the code)
-
-2007-05-19 15:55  maltes
-
-	*
-	  packages/acs-content-repository/sql/postgresql/upgrade/upgrade-5.2.1d1-5.2.1d2.sql:
-	  This old version of the view update is superseeded by
-	  upgrade-5.3.0d1, apart from the fact that on none of my sites
-	  moving from pre 5.2 it has been working on an upgrade (usually
-	  fails due to image content type)
-
-2007-05-17 13:52  avni
-
-	* www/default-master.adp: bug fix on 5-3 branch; emma fixed on
-	  HEAD; master had a relative src. making absolute
-
-2007-05-11 20:39  donb
-
-	* packages/acs-tcl/tcl/00-database-procs.tcl: Fixed a caching bug
-	  ...
-
-2007-05-09 06:20  emmar
-
-	* packages/acs-lang/www/admin/set-system-timezone.tcl: Apply new
-	  format from timeanddate.com to retrieve UTC time
-
-2007-05-07 08:52  maltes
-
-	* packages/acs-kernel/acs-kernel.info: I think kernel is mature. At
-	  least this is my hope :-)
-
-2007-04-25 06:27  leed
-
-	* www/: blank-compat.adp, blank-compat.tcl: Added xinha/rte
-	  processing into blank-compat to unbreak .LRN.
-
-2007-04-23 07:10  leed
-
-	* www/: blank-master.adp, blank-master.tcl, site-master.adp,
-	  site-master.tcl: Fixed typo in declared script type which
-	  prevented xinha from loading.
-
-2007-04-23 01:54  victorg
-
-	* packages/:
-	  acs-authentication/catalog/acs-authentication.ar_LB.utf-8.xml,
-	  acs-authentication/catalog/acs-authentication.ca_ES.ISO-8859-1.xml,
-	  acs-authentication/catalog/acs-authentication.da_DK.ISO-8859-1.xml,
-	  acs-authentication/catalog/acs-authentication.de_DE.ISO-8859-1.xml,
-	  acs-authentication/catalog/acs-authentication.el_GR.utf-8.xml,
-	  acs-authentication/catalog/acs-authentication.en_US.ISO-8859-1.xml,
-	  acs-authentication/catalog/acs-authentication.es_CO.ISO-8859-1.xml,
-	  acs-authentication/catalog/acs-authentication.es_ES.ISO-8859-1.xml,
-	  acs-authentication/catalog/acs-authentication.es_GT.ISO-8859-1.xml,
-	  acs-authentication/catalog/acs-authentication.eu_ES.ISO-8859-1.xml,
-	  acs-authentication/catalog/acs-authentication.fa_IR.utf-8.xml,
-	  acs-authentication/catalog/acs-authentication.fr_FR.ISO-8859-1.xml,
-	  acs-authentication/catalog/acs-authentication.gl_ES.ISO-8859-1.xml,
-	  acs-authentication/catalog/acs-authentication.hi_IN.utf-8.xml,
-	  acs-authentication/catalog/acs-authentication.hu_HU.utf-8.xml,
-	  acs-authentication/catalog/acs-authentication.ind_ID.utf-8.xml,
-	  acs-authentication/catalog/acs-authentication.it_IT.ISO-8859-1.xml,
-	  acs-authentication/catalog/acs-authentication.ms_MY.utf-8.xml,
-	  acs-authentication/catalog/acs-authentication.nl_NL.ISO-8859-1.xml,
-	  acs-authentication/catalog/acs-authentication.nn_NO.ISO-8859-1.xml,
-	  acs-authentication/catalog/acs-authentication.no_NO.ISO-8859-1.xml,
-	  acs-authentication/catalog/acs-authentication.pa_IN.utf-8.xml,
-	  acs-authentication/catalog/acs-authentication.pl_PL.utf-8.xml,
-	  acs-authentication/catalog/acs-authentication.pt_BR.ISO-8859-1.xml,
-	  acs-authentication/catalog/acs-authentication.ro_RO.utf-8.xml,
-	  acs-authentication/catalog/acs-authentication.ru_RU.utf-8.xml,
-	  acs-authentication/catalog/acs-authentication.th_TH.utf-8.xml,
-	  acs-authentication/catalog/acs-authentication.tr_TR.utf-8.xml,
-	  acs-authentication/catalog/acs-authentication.zh_CN.utf-8.xml,
-	  acs-authentication/catalog/acs-authentication.zh_TW.utf-8.xml,
-	  acs-kernel/catalog/acs-kernel.ar_EG.utf-8.xml,
-	  acs-kernel/catalog/acs-kernel.ar_LB.utf-8.xml,
-	  acs-kernel/catalog/acs-kernel.ast_ES.ISO-8859-1.xml,
-	  acs-kernel/catalog/acs-kernel.ca_ES.ISO-8859-1.xml,
-	  acs-kernel/catalog/acs-kernel.da_DK.ISO-8859-1.xml,
-	  acs-kernel/catalog/acs-kernel.de_DE.ISO-8859-1.xml,
-	  acs-kernel/catalog/acs-kernel.el_GR.utf-8.xml,
-	  acs-kernel/catalog/acs-kernel.en_US.ISO-8859-1.xml,
-	  acs-kernel/catalog/acs-kernel.es_CO.ISO-8859-1.xml,
-	  acs-kernel/catalog/acs-kernel.es_ES.ISO-8859-1.xml,
-	  acs-kernel/catalog/acs-kernel.es_GT.ISO-8859-1.xml,
-	  acs-kernel/catalog/acs-kernel.eu_ES.ISO-8859-1.xml,
-	  acs-kernel/catalog/acs-kernel.fi_FI.utf-8.xml,
-	  acs-kernel/catalog/acs-kernel.fr_FR.ISO-8859-1.xml,
-	  acs-kernel/catalog/acs-kernel.gl_ES.ISO-8859-1.xml,
-	  acs-kernel/catalog/acs-kernel.hi_IN.utf-8.xml,
-	  acs-kernel/catalog/acs-kernel.hu_HU.utf-8.xml,
-	  acs-kernel/catalog/acs-kernel.it_IT.ISO-8859-1.xml,
-	  acs-kernel/catalog/acs-kernel.ja_JP.utf-8.xml,
-	  acs-kernel/catalog/acs-kernel.ko_KR.utf-8.xml,
-	  acs-kernel/catalog/acs-kernel.ms_MY.utf-8.xml,
-	  acs-kernel/catalog/acs-kernel.nl_NL.ISO-8859-1.xml,
-	  acs-kernel/catalog/acs-kernel.nn_NO.ISO-8859-1.xml,
-	  acs-kernel/catalog/acs-kernel.no_NO.ISO-8859-1.xml,
-	  acs-kernel/catalog/acs-kernel.pa_IN.utf-8.xml,
-	  acs-kernel/catalog/acs-kernel.pl_PL.utf-8.xml,
-	  acs-kernel/catalog/acs-kernel.pt_BR.ISO-8859-1.xml,
-	  acs-kernel/catalog/acs-kernel.pt_PT.ISO-8859-1.xml,
-	  acs-kernel/catalog/acs-kernel.ro_RO.utf-8.xml,
-	  acs-kernel/catalog/acs-kernel.ru_RU.utf-8.xml,
-	  acs-kernel/catalog/acs-kernel.sv_SE.ISO-8859-1.xml,
-	  acs-kernel/catalog/acs-kernel.tr_TR.utf-8.xml,
-	  acs-kernel/catalog/acs-kernel.zh_CN.utf-8.xml,
-	  acs-kernel/catalog/acs-kernel.zh_TW.utf-8.xml,
-	  acs-lang/catalog/acs-lang.ar_EG.utf-8.xml,
-	  acs-lang/catalog/acs-lang.ar_LB.utf-8.xml,
-	  acs-lang/catalog/acs-lang.ast_ES.ISO-8859-1.xml,
-	  acs-lang/catalog/acs-lang.ca_ES.ISO-8859-1.xml,
-	  acs-lang/catalog/acs-lang.da_DK.ISO-8859-1.xml,
-	  acs-lang/catalog/acs-lang.de_DE.ISO-8859-1.xml,
-	  acs-lang/catalog/acs-lang.el_GR.utf-8.xml,
-	  acs-lang/catalog/acs-lang.en_GB.ISO-8859-1.xml,
+	* packages/: acs-kernel/sql/oracle/community-core-create.sql,
+	  acs-kernel/sql/postgresql/community-core-create.sql,
+	  acs-lang/acs-lang.info,
 	  acs-lang/catalog/acs-lang.en_US.ISO-8859-1.xml,
-	  acs-lang/catalog/acs-lang.es_CO.ISO-8859-1.xml,
-	  acs-lang/catalog/acs-lang.es_ES.ISO-8859-1.xml,
-	  acs-lang/catalog/acs-lang.es_GT.ISO-8859-1.xml,
-	  acs-lang/catalog/acs-lang.eu_ES.ISO-8859-1.xml,
-	  acs-lang/catalog/acs-lang.fa_IR.utf-8.xml,
-	  acs-lang/catalog/acs-lang.fi_FI.utf-8.xml,
-	  acs-lang/catalog/acs-lang.fr_FR.ISO-8859-1.xml,
-	  acs-lang/catalog/acs-lang.gl_ES.ISO-8859-1.xml,
-	  acs-lang/catalog/acs-lang.hi_IN.utf-8.xml,
-	  acs-lang/catalog/acs-lang.hu_HU.utf-8.xml,
-	  acs-lang/catalog/acs-lang.it_IT.ISO-8859-1.xml,
-	  acs-lang/catalog/acs-lang.ja_JP.utf-8.xml,
-	  acs-lang/catalog/acs-lang.ko_KR.utf-8.xml,
-	  acs-lang/catalog/acs-lang.ms_MY.utf-8.xml,
-	  acs-lang/catalog/acs-lang.nl_NL.ISO-8859-1.xml,
-	  acs-lang/catalog/acs-lang.nn_NO.ISO-8859-1.xml,
-	  acs-lang/catalog/acs-lang.no_NO.ISO-8859-1.xml,
-	  acs-lang/catalog/acs-lang.pa_IN.utf-8.xml,
-	  acs-lang/catalog/acs-lang.pl_PL.utf-8.xml,
-	  acs-lang/catalog/acs-lang.pt_BR.ISO-8859-1.xml,
-	  acs-lang/catalog/acs-lang.pt_PT.ISO-8859-1.xml,
-	  acs-lang/catalog/acs-lang.ro_RO.utf-8.xml,
-	  acs-lang/catalog/acs-lang.ru_RU.utf-8.xml,
-	  acs-lang/catalog/acs-lang.sh_HR.utf-8.xml,
-	  acs-lang/catalog/acs-lang.sv_SE.ISO-8859-1.xml,
-	  acs-lang/catalog/acs-lang.th_TH.utf-8.xml,
-	  acs-lang/catalog/acs-lang.tr_TR.utf-8.xml,
-	  acs-lang/catalog/acs-lang.zh_CN.utf-8.xml,
-	  acs-lang/catalog/acs-lang.zh_TW.utf-8.xml,
 	  acs-lang/sql/oracle/ad-locales.sql,
+	  acs-lang/sql/oracle/upgrade/upgrade-5.4.1d2-5.4.1d3.sql,
 	  acs-lang/sql/postgresql/ad-locales.sql,
-	  acs-mail-lite/catalog/acs-mail-lite.ca_ES.ISO-8859-1.xml,
-	  acs-mail-lite/catalog/acs-mail-lite.de_DE.ISO-8859-1.xml,
-	  acs-mail-lite/catalog/acs-mail-lite.en_US.ISO-8859-1.xml,
-	  acs-mail-lite/catalog/acs-mail-lite.es_ES.ISO-8859-1.xml,
-	  acs-mail-lite/catalog/acs-mail-lite.gl_ES.ISO-8859-1.xml,
-	  acs-mail-lite/catalog/acs-mail-lite.nl_NL.ISO-8859-1.xml,
-	  acs-mail-lite/catalog/acs-mail-lite.pl_PL.utf-8.xml,
-	  acs-mail-lite/catalog/acs-mail-lite.pt_BR.ISO-8859-1.xml,
-	  acs-subsite/catalog/acs-subsite.ar_EG.utf-8.xml,
-	  acs-subsite/catalog/acs-subsite.ar_LB.utf-8.xml,
-	  acs-subsite/catalog/acs-subsite.ast_ES.ISO-8859-1.xml,
-	  acs-subsite/catalog/acs-subsite.ca_ES.ISO-8859-1.xml,
-	  acs-subsite/catalog/acs-subsite.da_DK.ISO-8859-1.xml,
-	  acs-subsite/catalog/acs-subsite.de_DE.ISO-8859-1.xml,
-	  acs-subsite/catalog/acs-subsite.el_GR.utf-8.xml,
-	  acs-subsite/catalog/acs-subsite.en_GB.ISO-8859-1.xml,
-	  acs-subsite/catalog/acs-subsite.en_US.ISO-8859-1.xml,
-	  acs-subsite/catalog/acs-subsite.es_CO.ISO-8859-1.xml,
-	  acs-subsite/catalog/acs-subsite.es_ES.ISO-8859-1.xml,
-	  acs-subsite/catalog/acs-subsite.es_GT.ISO-8859-1.xml,
-	  acs-subsite/catalog/acs-subsite.eu_ES.ISO-8859-1.xml,
-	  acs-subsite/catalog/acs-subsite.fi_FI.utf-8.xml,
-	  acs-subsite/catalog/acs-subsite.fr_FR.ISO-8859-1.xml,
-	  acs-subsite/catalog/acs-subsite.gl_ES.ISO-8859-1.xml,
-	  acs-subsite/catalog/acs-subsite.hi_IN.utf-8.xml,
-	  acs-subsite/catalog/acs-subsite.hu_HU.utf-8.xml,
-	  acs-subsite/catalog/acs-subsite.it_IT.ISO-8859-1.xml,
-	  acs-subsite/catalog/acs-subsite.ja_JP.utf-8.xml,
-	  acs-subsite/catalog/acs-subsite.ko_KR.utf-8.xml,
-	  acs-subsite/catalog/acs-subsite.ms_MY.utf-8.xml,
-	  acs-subsite/catalog/acs-subsite.nl_NL.ISO-8859-1.xml,
-	  acs-subsite/catalog/acs-subsite.nn_NO.ISO-8859-1.xml,
-	  acs-subsite/catalog/acs-subsite.no_NO.ISO-8859-1.xml,
-	  acs-subsite/catalog/acs-subsite.pa_IN.utf-8.xml,
-	  acs-subsite/catalog/acs-subsite.pl_PL.utf-8.xml,
-	  acs-subsite/catalog/acs-subsite.pt_BR.ISO-8859-1.xml,
-	  acs-subsite/catalog/acs-subsite.pt_PT.ISO-8859-1.xml,
-	  acs-subsite/catalog/acs-subsite.ro_RO.utf-8.xml,
-	  acs-subsite/catalog/acs-subsite.ru_RU.utf-8.xml,
-	  acs-subsite/catalog/acs-subsite.sh_HR.utf-8.xml,
-	  acs-subsite/catalog/acs-subsite.sv_SE.ISO-8859-1.xml,
-	  acs-subsite/catalog/acs-subsite.th_TH.utf-8.xml,
-	  acs-subsite/catalog/acs-subsite.tr_TR.utf-8.xml,
-	  acs-subsite/catalog/acs-subsite.zh_CN.utf-8.xml,
-	  acs-subsite/catalog/acs-subsite.zh_TW.utf-8.xml,
-	  acs-tcl/catalog/acs-tcl.ar_EG.utf-8.xml,
-	  acs-tcl/catalog/acs-tcl.ar_LB.utf-8.xml,
-	  acs-tcl/catalog/acs-tcl.ast_ES.ISO-8859-1.xml,
-	  acs-tcl/catalog/acs-tcl.ca_ES.ISO-8859-1.xml,
-	  acs-tcl/catalog/acs-tcl.da_DK.ISO-8859-1.xml,
-	  acs-tcl/catalog/acs-tcl.de_DE.ISO-8859-1.xml,
-	  acs-tcl/catalog/acs-tcl.en_US.ISO-8859-1.xml,
-	  acs-tcl/catalog/acs-tcl.es_CO.ISO-8859-1.xml,
-	  acs-tcl/catalog/acs-tcl.es_ES.ISO-8859-1.xml,
-	  acs-tcl/catalog/acs-tcl.es_GT.ISO-8859-1.xml,
-	  acs-tcl/catalog/acs-tcl.eu_ES.ISO-8859-1.xml,
-	  acs-tcl/catalog/acs-tcl.fa_IR.utf-8.xml,
-	  acs-tcl/catalog/acs-tcl.fi_FI.utf-8.xml,
-	  acs-tcl/catalog/acs-tcl.fr_FR.ISO-8859-1.xml,
-	  acs-tcl/catalog/acs-tcl.gl_ES.ISO-8859-1.xml,
-	  acs-tcl/catalog/acs-tcl.hi_IN.utf-8.xml,
-	  acs-tcl/catalog/acs-tcl.hu_HU.utf-8.xml,
-	  acs-tcl/catalog/acs-tcl.ind_ID.utf-8.xml,
-	  acs-tcl/catalog/acs-tcl.it_IT.ISO-8859-1.xml,
-	  acs-tcl/catalog/acs-tcl.ja_JP.utf-8.xml,
-	  acs-tcl/catalog/acs-tcl.ko_KR.utf-8.xml,
-	  acs-tcl/catalog/acs-tcl.ms_MY.utf-8.xml,
-	  acs-tcl/catalog/acs-tcl.nl_NL.ISO-8859-1.xml,
-	  acs-tcl/catalog/acs-tcl.nn_NO.ISO-8859-1.xml,
-	  acs-tcl/catalog/acs-tcl.no_NO.ISO-8859-1.xml,
-	  acs-tcl/catalog/acs-tcl.pl_PL.utf-8.xml,
-	  acs-tcl/catalog/acs-tcl.pt_BR.ISO-8859-1.xml,
-	  acs-tcl/catalog/acs-tcl.pt_PT.ISO-8859-1.xml,
-	  acs-tcl/catalog/acs-tcl.ro_RO.utf-8.xml,
-	  acs-tcl/catalog/acs-tcl.ru_RU.utf-8.xml,
-	  acs-tcl/catalog/acs-tcl.sh_HR.utf-8.xml,
-	  acs-tcl/catalog/acs-tcl.sv_SE.ISO-8859-1.xml,
-	  acs-tcl/catalog/acs-tcl.tr_TR.utf-8.xml,
-	  acs-tcl/catalog/acs-tcl.zh_CN.utf-8.xml,
-	  acs-tcl/catalog/acs-tcl.zh_TW.utf-8.xml,
-	  acs-templating/catalog/acs-templating.ar_LB.utf-8.xml,
-	  acs-templating/catalog/acs-templating.ca_ES.ISO-8859-1.xml,
-	  acs-templating/catalog/acs-templating.da_DK.ISO-8859-1.xml,
-	  acs-templating/catalog/acs-templating.de_DE.ISO-8859-1.xml,
-	  acs-templating/catalog/acs-templating.el_GR.utf-8.xml,
-	  acs-templating/catalog/acs-templating.en_US.ISO-8859-1.xml,
-	  acs-templating/catalog/acs-templating.es_CO.ISO-8859-1.xml,
-	  acs-templating/catalog/acs-templating.es_ES.ISO-8859-1.xml,
-	  acs-templating/catalog/acs-templating.es_GT.ISO-8859-1.xml,
-	  acs-templating/catalog/acs-templating.eu_ES.ISO-8859-1.xml,
-	  acs-templating/catalog/acs-templating.fi_FI.utf-8.xml,
-	  acs-templating/catalog/acs-templating.fr_FR.ISO-8859-1.xml,
-	  acs-templating/catalog/acs-templating.gl_ES.ISO-8859-1.xml,
-	  acs-templating/catalog/acs-templating.hi_IN.utf-8.xml,
-	  acs-templating/catalog/acs-templating.hu_HU.utf-8.xml,
-	  acs-templating/catalog/acs-templating.it_IT.ISO-8859-1.xml,
-	  acs-templating/catalog/acs-templating.ko_KR.utf-8.xml,
-	  acs-templating/catalog/acs-templating.ms_MY.utf-8.xml,
-	  acs-templating/catalog/acs-templating.nl_NL.ISO-8859-1.xml,
-	  acs-templating/catalog/acs-templating.nn_NO.ISO-8859-1.xml,
-	  acs-templating/catalog/acs-templating.no_NO.ISO-8859-1.xml,
-	  acs-templating/catalog/acs-templating.pa_IN.utf-8.xml,
-	  acs-templating/catalog/acs-templating.pt_BR.ISO-8859-1.xml,
-	  acs-templating/catalog/acs-templating.pt_PT.ISO-8859-1.xml,
-	  acs-templating/catalog/acs-templating.ro_RO.utf-8.xml,
-	  acs-templating/catalog/acs-templating.ru_RU.utf-8.xml,
-	  acs-templating/catalog/acs-templating.sh_HR.utf-8.xml,
-	  acs-templating/catalog/acs-templating.sv_SE.ISO-8859-1.xml,
-	  acs-templating/catalog/acs-templating.tr_TR.utf-8.xml,
-	  acs-templating/catalog/acs-templating.zh_CN.utf-8.xml,
-	  acs-templating/catalog/acs-templating.zh_TW.utf-8.xml,
-	  search/catalog/search.de_DE.ISO-8859-1.xml,
-	  search/catalog/search.en_US.ISO-8859-1.xml,
-	  search/catalog/search.es_ES.ISO-8859-1.xml,
-	  search/catalog/search.nl_NL.ISO-8859-1.xml,
-	  search/catalog/search.pl_PL.utf-8.xml,
-	  search/catalog/search.pt_BR.ISO-8859-1.xml: Importing catalog
-	  files from traslate.openacs.org for Openacs Core Packages (5.3.1)
-	  and .LRN Packages (2.3.0).
-
-2007-04-22 06:21  donb
-
-	* packages/acs-core-docs/www/: acs-admin.html, aolserver.html,
-	  aolserver4.html, automated-testing-best-practices.html,
-	  backup-recovery.html, bootstrap-acs.html, complete-install.html,
-	  configuring-configuring-packages.html,
-	  configuring-configuring-permissions.html,
-	  configuring-install-packages.html,
-	  configuring-mounting-packages.html, credits.html,
-	  cvs-guidelines.html, cvs-tips.html, db-api-detailed.html,
-	  db-api.html, docbook-primer.html,
-	  eng-standards-constraint-naming.html,
-	  eng-standards-filenaming.html, eng-standards-plsql.html,
-	  eng-standards-versioning.html, ext-auth-requirements.html,
-	  filename.html, form-builder.html, high-avail.html, how-do-I.html,
-	  i18n-convert.html, index.html, individual-programs.html,
-	  install-cvs.html, install-daemontools.html,
-	  install-full-text-search-openfts.html,
-	  install-full-text-search-tsearch2.html,
-	  install-next-add-server.html, install-next-nightly-vacuum.html,
-	  install-openacs-keepalive.html, install-qmail.html,
-	  install-redhat.html, install-steps.html, ix01.html,
-	  mac-installation.html, maint-performance.html,
-	  maintenance-deploy.html, object-identity.html, objects.html,
-	  openacs-unpack.html, openacs.html, oracle.html, packages.html,
-	  parties.html, permissions-tediously-explained.html,
-	  permissions.html, postgres.html, programming-with-aolserver.html,
-	  psgml-for-emacs.html, psgml-mode.html, release-notes.html,
-	  releasing-openacs-core.html, request-processor.html,
-	  requirements-template.html, security-notes.html,
-	  style-guide.html, subsites.html, tcl-doc.html, templates.html,
-	  tutorial-css-layout.html, tutorial-cvs.html,
-	  tutorial-database.html, tutorial-debug.html,
-	  tutorial-distribute.html, tutorial-etp-templates.html,
-	  tutorial-newpackage.html, tutorial-pages.html,
-	  unix-installation.html, upgrade-4.5-to-4.6.html,
-	  upgrade-openacs-files.html, upgrade-overview.html,
-	  variables.html, win2k-installation.html, xml/variables.ent,
-	  xml/for-everyone/release-notes.xml: Generated documentation for
-	  5.3.1 final
-
-2007-04-22 05:15  donb
-
-	* packages/acs-core-docs/www/xml/for-everyone/release-notes.xml:
-	  Release notes for 5.3.1 final
-
-2007-04-22 04:57  donb
-
-	* packages/: acs-admin/acs-admin.info,
-	  acs-api-browser/acs-api-browser.info,
-	  acs-authentication/acs-authentication.info,
-	  acs-automated-testing/acs-automated-testing.info,
-	  acs-bootstrap-installer/acs-bootstrap-installer.info,
-	  acs-content-repository/acs-content-repository.info,
-	  acs-core-docs/acs-core-docs.info, acs-kernel/acs-kernel.info,
-	  acs-lang/acs-lang.info, acs-mail-lite/acs-mail-lite.info,
-	  acs-messaging/acs-messaging.info,
-	  acs-reference/acs-reference.info,
-	  acs-service-contract/acs-service-contract.info,
-	  acs-subsite/acs-subsite.info, acs-tcl/acs-tcl.info,
-	  acs-templating/acs-templating.info,
-	  acs-translations/acs-translations.info,
-	  ref-timezones/ref-timezones.info, search/search.info: Bumped
-	  versio number
-
-2007-04-19 06:15  gustafn
-
-	* packages/acs-kernel/: acs-kernel.info,
-	  sql/oracle/acs-permissions-create.sql,
-	  sql/oracle/upgrade/upgrade-5.3.1b1-5.3.1b2.sql,
-	  sql/postgresql/acs-permissions-create.sql,
-	  sql/postgresql/upgrade/upgrade-5.3.1b1-5.3.1b2.sql: bumping
-	  version numbers and create an additional index to speed up
-	  permission checking
-
-2007-04-17 17:41  daveb
-
-	* packages/acs-tcl/: catalog/acs-tcl.es_ES.ISO-8859-1.xml,
-	  lib/static-progress-bar.adp,
-	  catalog/acs-tcl.en_US.ISO-8859-1.xml: Remove references to
-	  assessment and put the message keys where they belong for
-	  progress bar
-
-2007-04-15 18:33  daveb
-
-	*
-	  packages/acs-content-repository/tcl/test/content-search-procs.tcl:
-	  Fix tests to pass in Oracle (actually bypass the test b/c the
-	  search triggers don't exist in oracle.)
-
-2007-04-15 16:22  daveb
-
-	*
-	  packages/acs-content-repository/tcl/test/content-search-procs.tcl:
-	  Do date calculation in tcl so the query will work in Oracle.
-
-2007-04-15 16:18  daveb
-
-	* packages/acs-tcl/tcl/test/application-data-link-procs.tcl: Fix
-	  test for scanning content for links.
-
-2007-04-15 11:06  donb
-
-	* packages/: acs-admin/acs-admin.info,
-	  acs-api-browser/acs-api-browser.info,
-	  acs-authentication/acs-authentication.info,
-	  acs-automated-testing/acs-automated-testing.info,
-	  acs-bootstrap-installer/acs-bootstrap-installer.info,
-	  acs-content-repository/acs-content-repository.info,
-	  acs-core-docs/acs-core-docs.info, acs-kernel/acs-kernel.info,
-	  acs-lang/acs-lang.info, acs-mail-lite/acs-mail-lite.info,
-	  acs-messaging/acs-messaging.info,
-	  acs-reference/acs-reference.info,
-	  acs-service-contract/acs-service-contract.info,
-	  acs-subsite/acs-subsite.info, acs-tcl/acs-tcl.info,
-	  acs-templating/acs-templating.info,
-	  acs-translations/acs-translations.info,
-	  ref-timezones/ref-timezones.info, search/search.info: Bumped
-	  version numbers to 5.3.1 beta 1
-
-2007-04-15 10:11  emmar
-
-	* packages/:
-	  acs-authentication/catalog/acs-authentication.el_GR.utf-8.xml,
-	  acs-kernel/catalog/acs-kernel.el_GR.utf-8.xml,
-	  acs-lang/catalog/acs-lang.el_GR.utf-8.xml,
-	  acs-subsite/catalog/acs-subsite.el_GR.utf-8.xml,
-	  acs-templating/catalog/acs-templating.el_GR.utf-8.xml: Greek
-	  translation
-
-2007-04-13 16:02  gustafn
-
-	* packages/acs-subsite/tcl/group-procs.tcl: Fix for bug #2998; this
-	  fixes as well a bug, when the regression test is run more than
-	  once without restarting the server.
-
-2007-04-06 13:10  daveb
-
-	* packages/acs-templating/resources/lists/courses.adp: Remove extra
-	  course group label
-
-2007-04-06 13:02  daveb
-
-	* packages/acs-subsite/www/: file.vuh, image.vuh: Fix bugs for file
-	  and image .vuh handlers to properly parse the object_id.
-
-2007-04-06 13:00  daveb
-
-	* packages/acs-subsite/tcl/email-image-procs.tcl: WOrkaround to
-	  avoid a server error when convert is not in the path. This should
-	  be rewritten to use the imagemagick wrappers in
-	  acs-contnet-repository
-
-2007-04-06 12:56  daveb
-
-	* packages/acs-subsite/lib/user-info.tcl: Don't fail is email_image
-	  proc doesn't work
-
-2007-04-06 12:31  daveb
-
-	* packages/acs-automated-testing/tcl/tclwebtest-procs.tcl: Fix
-	  login procs to work with external authorities and username
-	  logins.
-
-2007-04-05 16:13  daveb
-
-	* packages/acs-templating/resources/lists/list.adp: Adding missing
-	  noparse closing tag! This could never have worked.
-
-2007-04-04 03:42  avni
-
-	* packages/acs-admin/catalog/acs-admin.en_US.ISO-8859-1.xml:
-	  undoing last commit as recommended by Emma because we don't know
-	  who made them
-
-2007-04-04 02:25  avni
-
-	* packages/acs-admin/catalog/acs-admin.en_US.ISO-8859-1.xml: Zen:
-	  Committing last catalog file on zen dev server that was not
-	  committed last week; Should be reviewed by someone though (maybe
-	  emma?) as there are a lot of changes and I'm not sure who did
-	  them.
-
-2007-04-02 22:16  avni
-
-	* packages/acs-subsite/www/resources/site-master.css: formatting of
-	  system name
-
-2007-04-02 22:07  avni
-
-	* packages/acs-subsite/www/resources/site-master.css: color and
-	  alignment changes to be more zen like
-
-2007-04-02 02:50  maltes
-
-	* etc/config.tcl: Added more parameters as they were posted on the
-	  AOLserver list.
-
-2007-04-01 01:58  avni
-
-	* packages/acs-subsite/www/resources/site-master.css: adding 0.4em
-	  padding-left for system name
-
-2007-04-01 01:54  avni
-
-	* www/default-master.adp: improving layout of header
-
-2007-04-01 01:53  avni
-
-	* packages/acs-subsite/www/resources/site-master.css: Cleaning up
-	  css; changing colors; trying to make it more zen
-
-2007-03-30 20:42  donb
-
-	* www/: blank-master.adp, blank-master.tcl: Reluctantly moved the
-	  dotlrn toolbar here so it will work with existing sites.
-
-2007-03-30 07:37  emmar
-
-	* packages/acs-tcl/tcl/table-display-procs.tcl: Zen: HTML cleanup
-
-2007-03-29 20:20  victorg
-
-	* packages/acs-api-browser/lib/search.tcl: Typo in var name (
-	  db_doc_serch_query_name )
-
-2007-03-29 10:55  emmar
-
-	* packages/acs-subsite/www/: shared/whos-online.adp,
-	  user/portrait/comment-edit.adp, user/portrait/upload.adp: Zen:
-	  HTML cleanup
-
-2007-03-27 05:02  emmar
-
-	* packages/acs-subsite/www/resources/: default-master.css,
-	  site-master.css: Move general styles definition to
-	  site-master.css. default-master.css now contains only styles for
-	  the calendar widget
-
-2007-03-27 03:34  gustafn
-
-	* packages/acs-admin/www/install/index.adp: fix: add needed ending
-	  slash in link pointing to http://openacs.org/repository/
-
-2007-03-26 13:49  donb
-
-	* www/site-master.tcl: Removed more link to css titles because the
-	  javascript switcher screws up
-
-2007-03-26 13:45  donb
-
-	* www/blank-master.tcl: Removed title from dev sup css link because
-	  the javascript style switcher is really stupid.
-
-2007-03-25 08:25  emmar
-
-	* packages/acs-templating/www/resources/lists.css: Remove extra
-	  chars causing silly warning
-
-2007-03-24 21:21  donb
-
-	* packages/: acs-admin/acs-admin.info,
-	  acs-api-browser/acs-api-browser.info,
-	  acs-authentication/acs-authentication.info,
-	  acs-automated-testing/acs-automated-testing.info,
-	  acs-bootstrap-installer/acs-bootstrap-installer.info,
-	  acs-content-repository/acs-content-repository.info,
-	  acs-core-docs/acs-core-docs.info, acs-kernel/acs-kernel.info,
-	  acs-lang/acs-lang.info, acs-mail-lite/acs-mail-lite.info,
-	  acs-messaging/acs-messaging.info,
-	  acs-reference/acs-reference.info,
-	  acs-service-contract/acs-service-contract.info,
-	  acs-subsite/acs-subsite.info, acs-tcl/acs-tcl.info,
-	  acs-templating/acs-templating.info,
-	  acs-translations/acs-translations.info,
-	  ref-timezones/ref-timezones.info, search/search.info: Bumped to
-	  5.3.1a1.  I hope.  I never get this right!
-
-2007-03-24 17:50  donb
-
-	* www/: blank-master.adp, site-master.adp, site-master.tcl: Moved
-	  some stuff to blank master from site master.
-
-2007-03-22 14:14  emmar
-
-	* packages/acs-subsite/tcl/email-image-procs.tcl: Forgot to escape
-	  quotes in my previous commit
-
-2007-03-22 14:01  emmar
-
-	* packages/acs-subsite/tcl/email-image-procs.tcl: Zen: class portal
-	  HTML cleanup
-
-2007-03-22 13:37  donb
-
-	* www/: blank-master.adp, blank-master.tcl: Moved devsup here, it's
-	  css must be clashing with something else because the formating is
-	  non-existent.
-
-2007-03-22 13:21  emmar
-
-	* packages/acs-templating/resources/lists/table.adp: Zen: headers
-	  should refer to existing IDs
-
-2007-03-22 12:03  emmar
-
-	* packages/acs-templating/resources/forms/standard.adp: Zen: don't
-	  generate label tag if the form mode is 'display'
-
-2007-03-22 07:53  emmar
-
-	* packages/acs-templating/:
-	  catalog/acs-templating.en_US.ISO-8859-1.xml,
-	  catalog/acs-templating.es_ES.ISO-8859-1.xml,
-	  tcl/richtext-procs.tcl: i18n
-
-2007-03-22 06:13  emmar
-
-	* packages/: acs-admin/catalog/acs-admin.es_ES.ISO-8859-1.xml,
-	  acs-authentication/catalog/acs-authentication.es_ES.ISO-8859-1.xml,
-	  acs-kernel/catalog/acs-kernel.es_ES.ISO-8859-1.xml,
-	  acs-lang/catalog/acs-lang.es_ES.ISO-8859-1.xml,
-	  acs-mail-lite/catalog/acs-mail-lite.es_ES.ISO-8859-1.xml,
-	  acs-subsite/catalog/acs-subsite.es_ES.ISO-8859-1.xml,
-	  acs-tcl/catalog/acs-tcl.es_ES.ISO-8859-1.xml,
-	  acs-templating/catalog/acs-templating.es_ES.ISO-8859-1.xml,
-	  search/catalog/search.es_ES.ISO-8859-1.xml: Spanish translation
-
-2007-03-21 09:48  emmar
-
-	* packages/acs-templating/resources/lists/table.adp: Zen: add
-	  mandatory ACTION attribute to form tag
-
-2007-03-21 08:27  emmar
-
-	* packages/acs-subsite/www/resources/core.js: Commas are not valid
-	  char for element identifier. Replaced with a dot in list builder
-	  and acs_ListCheckAll edited to parse correctly the IDs
-
-2007-03-21 08:17  emmar
-
-	* packages/acs-templating/tcl/list-procs.tcl: Fix typo in checkbox
-	  identifiers
-
-2007-03-21 06:01  avni
-
-	* packages/search/catalog/search.en_US.ISO-8859-1.xml: Zen: version
-	  bump
-
-2007-03-21 05:45  avni
-
-	* packages/acs-tcl/catalog/acs-tcl.en_US.ISO-8859-1.xml: Zen:
-	  version change
-
-2007-03-21 05:45  avni
-
-	* packages/acs-subsite/catalog/acs-subsite.en_US.ISO-8859-1.xml:
-	  Zen: Adding new footer message key (carl)
-
-2007-03-21 05:42  avni
-
-	* packages/:
-	  acs-authentication/catalog/acs-authentication.en_US.ISO-8859-1.xml,
-	  acs-kernel/catalog/acs-kernel.en_US.ISO-8859-1.xml,
-	  acs-lang/catalog/acs-lang.en_US.ISO-8859-1.xml,
-	  acs-mail-lite/catalog/acs-mail-lite.en_US.ISO-8859-1.xml: Zen:
-	  version change
-
-2007-03-20 08:52  emmar
-
-	* www/blank-master.tcl: Call to initRTE was missing
-
-2007-03-20 07:08  emmar
-
-	* www/blank-master.tcl: Add missing quotes that caused xinha not to
-	  render properly
-
-2007-03-19 21:39  donb
-
-	* www/: blank-master.adp, blank-master.tcl: got this stuff to load
-	  xinha stuff correctly however it's not rendering...
-
-2007-03-19 20:47  donb
-
-	* www/blank-master.tcl: First cut at putting in RTE/Xinha js
-	  (incomplete)
-
-2007-03-19 11:26  emmar
-
-	* packages/acs-templating/tcl/richtext-procs.tcl: Remove duplicated
-	  NOSCRIPT tags for RTE widget
-
-2007-03-18 19:39  avni
-
-	* packages/acs-templating/tcl/widget-procs.tcl: Zen: adding ID
-	  attributes for input button and file types.
-
-2007-03-18 19:19  avni
-
-	* packages/acs-templating/resources/forms/standard.adp: Zen:
-	  removing label from inform widget type
-
-2007-03-18 18:32  avni
-
-	* packages/acs-templating/tcl/widget-procs.tcl: Zen:
-	  template::widget::block bug fix - there was a th that was closed
-	  with a /td instead of a /th
-
-2007-03-17 19:31  carlb
-
-	* packages/acs-subsite/catalog/acs-subsite.en_US.ISO-8859-1.xml:
-	  Zen: alt tag and message keys for envelope icons in notfications
-
-2007-03-16 08:41  emmar
-
-	* packages/acs-templating/resources/forms/standard.adp: Zen: label
-	  should not be used for element widgets that group several form
-	  elements (radio, checkbox, date)
-
-2007-03-14 10:34  daveb
-
-	*
-	  packages/acs-templating/www/resources/xinha-nightly/plugins/OacsAttach/oacs-attach.js:
-	  Pass selected text as title to insert link popup
-
-2007-03-13 13:50  donb
-
-	* www/blank-master.tcl: Added core.js ...
-
-2007-03-13 12:05  donb
-
-	* www/blank-compat.tcl: Changed blank-compat to always link
-	  forms.css and lists.css as was true in earlier versions.  Decided
-	  it doesn't really belong in blank-master because custom form/list
-	  template authers should be able to specify other css files
-	  (rather than be forced to edit our default ones directly) but
-	  making this happen is something for a future release.  Therefore
-	  ... blank-compat for now.
-
-2007-03-13 11:50  donb
-
-	* www/blank-master.adp: Removed more xml stuff
-
-2007-03-13 11:44  donb
-
-	* www/: blank-master.adp, blank-master.tcl: More stuff related to
-	  using html transitional rather than xhtml
-
-2007-03-13 11:29  donb
-
-	* www/blank-master.adp: Removed extraneous meta tag, and trailing
-	  "/" chars
-
-2007-03-12 16:52  donb
-
-	* www/: blank-master.adp, blank-master.tcl, default-master.adp:
-	  Removed some xhtml-specific stuff as requested by emma, shouldn't
-	  be there now and when we do xhtml we'll need more than that
-	  minimal stuff so - gone for now.
-
-2007-03-12 16:16  donb
-
-	* www/blank-compat.tcl: Fixed one area of backwards incompatibility
-	  with this backwards compatibility master template :)
-
-2007-03-12 10:58  maltes
-
-	* etc/config.tcl: Ups. no cognovis should be there...
-
-2007-03-10 20:45  avni
-
-	* packages/acs-templating/tcl/list-procs.tcl: Zen: fixing bug so
-	  that summary tag only shows up for tables
-
-2007-03-09 05:08  emmar
-
-	* packages/acs-tcl/lib/progress-bar.adp: Add missing closing > for
-	  title tag
-
-2007-03-06 22:12  daveb
-
-	* packages/acs-tcl/lib/: static-progress-bar.adp,
-	  static-progress-bar.tcl: Adding graphic progress bar for LORSM
-	  progress bar delviery and Assessment. It can be used for any	1
-	  of X pages situation.
-
-2007-03-06 15:31  emmar
-
-	* packages/acs-templating/: resources/forms/standard.adp,
-	  tcl/element-procs.tcl, tcl/form-procs.tcl: Zen: legend tag is
-	  mandatory so we add it even if it's empty
-
-2007-03-06 11:48  emmar
-
-	* packages/acs-templating/: resources/forms/standard.adp,
-	  tcl/element-procs.tcl: Remove unecessary comment in standard.adp.
-	  Set default class to widget name for radio/checkbox fieldset
-
-2007-03-06 02:45  avni
-
-	* packages/acs-tcl/tcl/: form-processing-procs.tcl,
-	  table-display-procs.tcl, utilities-procs.tcl, widgets-procs.tcl:
-	  Zen: removing trailing input tag / to pass html transitional
-
-2007-03-06 02:41  avni
-
-	* packages/acs-templating/tcl/: date-procs.tcl, form-procs.tcl,
-	  richtext-procs.tcl, spellcheck-procs.tcl, widget-procs.tcl: Zen:
-	  removing trailing input tag / to pass html transitional
-
-2007-03-06 02:38  avni
-
-	* packages/acs-templating/tcl/currency-procs.tcl: removing trailing
-	  / in input tags
-
-2007-03-05 06:58  emmar
-
-	* packages/: acs-lang/www/admin/batch-editor.tcl,
-	  acs-mail-lite/lib/email.tcl: Replace section element property
-	  with new form section element
-
-2007-03-04 15:41  carlb
-
-	* packages/acs-subsite/www/resources/: email.gif, email_add.gif,
-	  email_delete.gif, email_open.gif, feed.gif: new icons for
-	  notifications and feeds from famfamfam silk set
-
-2007-03-04 14:56  nimam
-
-	* packages/acs-admin/catalog/acs-admin.en_US.ISO-8859-1.xml:
-	  i18nized some lists
-
-2007-03-04 14:46  nimam
-
-	* packages/acs-admin/: lib/service-parameters.tcl,
-	  www/apm/version-callbacks.tcl, www/apm/version-i18n.tcl,
-	  www/auth/authority.tcl, www/auth/batch-job.tcl,
-	  www/auth/index.tcl: i18nized some lists
-
-2007-03-04 11:47  gustafn
-
-	* www/default-master.tcl: fixing and simplifying passing of
-	  package_id in export_vars
-
-2007-03-04 11:41  donb
-
-	* packages/acs-subsite/www/resources/core.js: Added emma's
-	  acs_KeypressGoto function to core.js so calendar and other
-	  packages using will work outside .LRN.
-
-2007-03-04 11:26  leed
-
-	* www/blank-master.adp: Fixed a couple of stupid bugs in the
-	  blank-master.adp
-
-2007-03-04 05:30  maltes
-
-	* etc/config.tcl: Added check for aolserver 4.5
-
-2007-03-03 15:35  avni
-
-	* packages/acs-templating/tcl/date-procs.tcl: Zen: Adding a small
-	  center css class for the tfoot row
-
-2007-03-03 15:26  avni
-
-	* packages/acs-templating/www/resources/forms.css: Zen: Mark
-	  Wylie's changes: adding div for form-help-text
-
-2007-03-03 14:56  avni
-
-	* packages/acs-templating/tcl/date-procs.tcl: Zen: switching tbody
-	  and tfoot
-
-2007-03-03 13:44  emmar
-
-	* packages/acs-templating/tcl/element-procs.tcl: Update doc for
-	  element::create regarding sections
-
-2007-03-03 09:00  emmar
-
-	* packages/acs-subsite/www/shared/parameters.tcl: Change to use the
-	  new -section in form for parameters sections instead of the
-	  section element property
-
-2007-03-03 02:33  avni
-
-	* packages/acs-templating/tcl/date-procs.tcl: Project Zen:
-	  zenifying date widget
-
-2007-03-02 19:19  emmar
-
-	* packages/acs-templating/: resources/forms/standard.adp,
-	  tcl/element-procs.tcl, tcl/form-procs.tcl: Zen: Add fieldset and
-	  legend for form sections
-
-2007-03-02 14:06  donb
-
-	* packages/acs-tcl/tcl/form-processing-procs.tcl: Support for
-	  fieldset and legend stuff in sections (actual support awaits a
-	  commit to acs-templating by emma_r, after testing)
-
-2007-03-02 11:12  leed
-
-	* packages/acs-subsite/www/resources/site-master.css,
-	  www/blank-compat.adp, www/blank-compat.tcl, www/blank-master.adp,
-	  www/blank-master.tcl, www/default-master.adp,
-	  www/default-master.tcl, www/site-compat.adp, www/site-compat.tcl,
-	  www/site-master.adp, www/site-master.tcl: Committed Zen /
-	  Accessibility changes to master templates.
-
-2007-03-02 01:05  avni
+	  acs-lang/sql/postgresql/upgrade/upgrade-5.4.1d2-5.4.1d3.sql,
+	  acs-lang/www/change-locale.tcl, acs-lang/www/locale-set.tcl: Add
+	  foreign key constraint on user_preferences.locale to force
+	  referencial integrity. This column is now added by acs-lang at
+	  creation time, to create the constraint at the same moment.
+
+2008-03-22 10:31  gustafn
+
+	* packages/acs-tcl/tcl/: apm-install-procs.tcl,
+	  community-core-procs.tcl, request-processor-procs.tcl,
+	  tcl-documentation-procs.tcl, tdom-procs.tcl,
+	  test/html-email-procs.tcl: normalize some more expressions
+
+2008-03-22 10:16  gustafn
+
+	* packages/acs-subsite/: tcl/email-image-procs.tcl,
+	  www/group-master.tcl, www/user/portrait/upload.tcl: normalize
+	  some more string expressions
+
+2008-03-19 10:59  emmar
+
+	* packages/search/tcl/search-procs.tcl: Roll back my previous
+	  commit that put the last dequeue call into a default block of the
+	  switch. Objects that have insert/update and delete operations in
+	  the same run would never be dequeued otherwise.
+
+2008-03-19 10:44  emmar
+
+	* packages/acs-lang/: acs-lang.info, sql/oracle/ad-locales.sql,
+	  sql/oracle/upgrade/upgrade-5.4.1d1-5.4.1d2.sql,
+	  sql/postgresql/ad-locales.sql,
+	  sql/postgresql/upgrade/upgrade-5.4.1d1-5.4.1d2.sql: Fixed for
+	  en_CA and fr_CA locale definitions
+
+2008-03-13 08:41  donb
+
+	* packages/acs-tcl/tcl/request-processor-procs.tcl: Tracked down
+	  obscure problem that has cropped up occasionally since the
+	  beginning.  If AOLserver his hit with a domain name that's not
+	  bound to the IP it is listening on, it tries to serve
+	  /global/file-not-found but does not call registered preauth
+	  filters first.  It does call registered procs, though.  This
+	  results in rp_handler being called, but not rp_filter, and
+	  rp_handler dies because it expects rp_filter to have set up
+	  ad_conn.  My solution is to simply redirect to the URL AOLserver
+	  substitutes, without the bogus domain name, which causes the file
+	  not found page to be delivered to the user.  The calls I saw were
+	  GET http://www.google.com to my server's IP - probably a security
+	  exploit for IIS or Apache sometime in the deep past.
+
+2008-03-13 08:35  donb
+
+	* packages/acs-tcl/tcl/security-procs.tcl: Allow files like "file
+	  not found" or "server busy" to be displayed when the entire
+	  server is restricted to registered users.
+
+2008-03-12 14:26  emmar
+
+	* packages/search/tcl/search-procs.tcl: Changed log notice to debug
+
+2008-03-12 01:09  maltes
 
 	*
 	  packages/acs-templating/catalog/acs-templating.en_US.ISO-8859-1.xml:
-	  Project Zen: adding DefaultSummary variable
+	  Missing message keys, transformed as I guess they are meant.
 
-2007-03-02 01:04  avni
+2008-03-11 07:50  emmar
 
-	* packages/acs-templating/resources/lists/table.adp: Project Zen:
-	  closing caption tag properly
+	* packages/acs-tcl/tcl/table-display-procs.tcl: HTML Strict cleanup
 
-2007-03-02 01:03  avni
+2008-03-07 15:34  emmar
 
-	* packages/acs-templating/tcl/list-procs.tcl: Project Zen: adding
-	  translation variable for table summary
+	* packages/acs-content-repository/tcl/filter-procs.tcl: Added --
+	  after switches in call to ad_html_text_convert to avoid errors
+	  when the text to convert contains hyphens
 
-2007-02-28 09:55  leed
+2008-03-07 00:25  maltes
 
-	* packages/acs-templating/tcl/parse-procs.tcl: Return the correct
-	  code from template::adp_parse.
+	* packages/acs-lang/tcl/lang-message-procs.tcl: Made sure you can
+	  pass an empty string as default and it translates into
+	  translation missing. Thanks To Emma for noticing this
 
-2007-02-28 06:12  leed
+2008-03-05 22:57  maltes
 
-	* packages/acs-templating/tcl/parse-procs.tcl: Fixed adp_parse to
-	  pop the parse_level from the adp_level stack regardless of how
-	  template::adp_parse exits.  This makes debugging some problems
-	  with include tags much easier when multirows are in use or
-	  variables are being passed by reference.
+	* packages/acs-lang/tcl/lang-message-procs.tcl: Fix Bug #3126.
+	  lang::message::lookup was not adhering to a given default value
+	  but just returned the message key missing string, even if there
+	  was a default
 
-2007-02-27 12:04  avni
+2008-03-05 14:09  donb
 
-	* packages/acs-templating/tcl/list-procs.tcl: removing default for
-	  caption because caption is optional
+	* packages/acs-tcl/tcl/security-procs.tcl: Added /favicon.ico to
+	  the magic list of URLs allowed when you restrict an entire site
+	  to registered users.
 
-2007-02-27 04:18  avni
+2008-03-05 12:13  donb
 
-	* packages/acs-templating/www/resources/mktree.css: Mark Wylie's
-	  changes: modified css
+	* packages/acs-content-repository/tcl/: content-folder-procs.tcl,
+	  content-folder-procs.xql: Removed Malte's "fix" to content-folder
+	  new, and emmanuelle's fix to that fix (which was fine), by
+	  rolling back to the 5.3 version (which wasn't broken in the first
+	  place, PG 8.1 was)
 
-2007-02-27 04:17  avni
+2008-03-04 13:24  donb
 
-	* packages/acs-templating/resources/forms/standard.adp: Mark
-	  Wylie's changes: adding form-label-error class; parens around
-	  required text; adding form-widget-error class
+	* packages/acs-tcl/tcl/install-procs.tcl: Cleaned up the
+	  install.xml stuff so it no longer puts random crap out in the log
+	  written to the http socket.
 
-2007-02-27 04:11  avni
+2008-03-01 13:40  emmar
 
-	* packages/acs-templating/www/resources/forms.css: Mark Wylie's
-	  work: class for form-label errors; class to replace inline
-	  template
+	* packages/acs-templating/tcl/head-procs.tcl: Added column to links
+	  multirow to be able to order stylesheets
 
-2007-02-27 03:51  avni
+2008-02-29 07:04  emmar
 
-	* packages/acs-templating/tcl/widget-procs.tcl: reverting
-	  accidental commit
+	* packages/acs-content-repository/tcl/content-folder-procs.tcl:
+	  default value of parent_id has to be the empty string in
+	  content::folder::new
 
-2007-02-27 03:39  avni
+2008-02-13 10:31  emmar
 
-	* packages/acs-templating/resources/lists/table.adp: adding caption
-	  tag
-
-2007-02-27 03:32  avni
-
-	* packages/acs-templating/tcl/: list-procs.tcl, widget-procs.tcl:
-	  adding caption property to list_properties
-
-2007-02-26 13:22  emmar
-
-	* packages/acs-templating/: resources/forms/standard.adp,
-	  tcl/element-procs.tcl: Add fieldset and legend properties for
-	  checkbox and radio widgets
-
-2007-02-25 15:19  victorg
-
-	* packages/acs-tcl/tcl/00-database-procs.tcl: db_string was totally
-	  ignoring the -dbn swith!!
-
-2007-02-22 04:41  avni
-
-	* packages/acs-templating/tcl/list-procs.tcl: Project Zen: removed
-	  element_index as a parameter. emma thought of an easier way to do
-	  this. undoing previous work.
-
-2007-02-22 04:39  avni
-
-	* packages/acs-templating/resources/lists/table.adp: Project Zen:
-	  using strings instead of counters for id and headers
-
-2007-02-21 21:19  donb
-
-	* packages/acs-subsite/www/permissions/perm-include.tcl: The
-	  default perm list didn't include the top-level perm "delete"
-	  (which is useful when this is called from file-storage, for
-	  instance!)
-
-2007-02-21 13:03  emmar
-
-	* packages/acs-templating/:
-	  catalog/acs-templating.en_US.ISO-8859-1.xml, tcl/list-procs.tcl:
-	  Zen: localize orderby_html_title (list builder)
-
-2007-02-21 05:08  avni
-
-	* packages/acs-templating/www/resources/lists.css: Project Zen:
-	  Mark Wylie's changes
-
-2007-02-21 04:52  avni
-
-	* packages/acs-templating/tcl/list-procs.tcl: adding element_index
-	  parameter to template::list::element::create and making the var
-	  available to list builder templates
-
-2007-02-21 04:50  avni
-
-	* packages/acs-templating/resources/lists/: filters.adp, table.adp:
-	  Project Zen: mark wylie's accessibility changes and my headers
-	  and id additions
-
-2007-02-20 19:00  donb
-
-	* packages/: acs-lang/tcl/lang-util-procs.tcl,
-	  acs-lang/www/admin/locale-edit.tcl,
-	  acs-tcl/tcl/request-processor-procs.tcl: Nima's commit overwrote
-	  a bunch of my changes, and other peoples too!  Apparently he
-	  didn't merge, but overwrote! NO!
-
-2007-02-20 12:01  donb
-
-	* packages/: acs-bootstrap-installer/installer.tcl,
-	  acs-tcl/tcl/database-init.tcl: Fixed install issue caused by my
-	  charset work
-
-2007-02-20 11:57  nimam
-
-	* packages/: acs-lang/tcl/lang-util-procs.tcl,
-	  acs-lang/www/admin/locale-edit.tcl,
-	  acs-tcl/tcl/request-processor-procs.tcl: Local changes at
-	  Mannheim. Mostly merging catalog files
-
-2007-02-19 19:41  donb
-
-	* packages/: acs-lang/tcl/lang-util-procs.tcl,
-	  acs-lang/www/admin/locale-edit.tcl,
-	  acs-tcl/tcl/request-processor-procs.tcl: Set the charset from the
-	  locale for the content-type meta information.  This wasn't being
-	  tracked in ad_conn, nor cached by acs-lang, nor used by
-	  lrn-master.  It's now tracked in ad_conn, cached by acs-lang, and
-	  used properly by lrn-master.
-
-2007-02-19 18:44  donb
-
-	* www/: blank-master.adp, blank-master.tcl: Added attributes for
-	  the HEAD attribute, by default language stuff.
-
-2007-02-18 20:09  victorg
-
-	* packages/acs-lang/catalog/acs-lang.ca_ES.ISO-8859-1.xml: Merging
-	  catalog files to oacs-5-3 from oacs-5-2 for acs-lang
-
-2007-02-18 20:06  victorg
-
-	* packages/acs-kernel/catalog/acs-kernel.ca_ES.ISO-8859-1.xml:
-	  Merging catalog files to acs-5-3 from oacs-5-2 for acs-kernel
-
-2007-02-18 20:02  victorg
-
-	*
-	  packages/acs-mail-lite/catalog/acs-mail-lite.ca_ES.ISO-8859-1.xml:
-	  Merging catalog files from oacs-5-2 to oacs-5-3 for acs-mail-lite
-
-2007-02-18 19:59  victorg
-
-	* packages/acs-tcl/catalog/acs-tcl.es_ES.ISO-8859-1.xml: Merging
-	  catalog files to oacs-5-3 from oacs-5-2 for acs-tcl
-
-2007-02-18 18:54  avni
-
-	* packages/acs-templating/www/resources/lists.css: Mark Wylie's
-	  changes: modified css to add div classes
-
-2007-02-18 18:52  avni
-
-	* packages/acs-templating/resources/lists/table.adp: Mark Wylie's
-	  changes: moved pagination and list-button-bars out of the table
-	  into divs
-
-2007-02-18 18:50  avni
-
-	* packages/acs-templating/tcl/list-procs.tcl: Mark Wylie's changes:
-	  changed the default class that list tables are assigned from
-	  'list' to 'list-table'
-
-2007-02-17 18:28  avni
-
-	* packages/acs-templating/tcl/form-procs.tcl: adding a default
-	  class for forms if one does not exist
-
-2007-02-17 17:03  gustafn
-
-	* packages/search/tcl/search-procs.tcl: call search::action
-	  callback such that syndication works
-
-2007-02-17 11:46  gustafn
-
-	* packages/search/www/search.tcl: fix for bog #3061
-
-2007-02-16 07:44  donb
-
-	* packages/acs-mail-lite/tcl/acs-mail-lite-callback-procs.tcl: When
-	  i added documentation blocks to these callbacks, the call back
-	  def code started complaining that the body {\n} is not empty.
-	  Replaced this with the "-" empty body marker.  Interestingly:
-
-	  ad_proc -callback {	  params } { }
-
-	  apparenly does not trigger the "non-empty body" error.
-	  Apparently the callback def only checks if there's a docblock
-	  passsed to ad_proc ... a "gotcha".
-
-2007-02-16 06:21  emmar
-
-	* packages/acs-templating/resources/forms/standard.adp: fix problem
-	  with radio and checkbox. formwidget was used instead of
-	  formgroup.widget.
-
-2007-02-13 04:45  emmar
-
-	* packages/acs-templating/tcl/: date-procs.tcl, widget-procs.tcl:
-	  Zen project: Add ID attribute to date and select widgets
-
-2007-02-13 04:43  emmar
-
-	* packages/acs-templating/resources/forms/accessible-forms.adp: Zen
-	  project: Add fieldset tag for form sections
-
-2007-02-13 04:40  emmar
-
-	* packages/acs-lang/tcl/lang-widget-procs.tcl: Zen project: add ID
-	  attribute for select_locales widget
-
-2007-02-13 03:36  avnik
-
-	* packages/acs-templating/www/resources/forms.css: project zen:
-	  Mark Wylie's CSS for tableless forms
-
-2007-02-13 03:34  avnik
-
-	* packages/acs-templating/resources/forms/standard.adp:
-	  implementing mark wylie's tableless design for forms
-
-2007-02-13 03:24  avnik
-
-	* packages/acs-templating/tcl/tag-init.tcl: project zen: modified
-	  template_tag formtemplate to output the closing fieldset tag
-
-2007-02-13 03:23  avnik
-
-	* packages/acs-templating/tcl/form-procs.tcl: project zen: modified
-	  template::form::render to output the opening form fieldset tag
-	  and the optional opening and closing legend tag if it was passed
-	  into ad_form
-
-2007-02-13 03:19  avnik
-
-	* packages/acs-tcl/tcl/form-processing-procs.tcl: project zen:
-	  adding fieldset parameter to ad_form
-
-2007-02-10 08:50  daveb
-
-	* packages/acs-subsite/lib/user-info.tcl: Remove more magic
-	  category mapping code.
-
-2007-02-05 11:44  daveb
-
-	* packages/acs-tcl/tcl/: application-data-link-procs.tcl,
-	  application-data-link-procs.xql,
-	  test/application-data-link-procs.tcl: Confirm URLs and object_ids
-	  when scanning for links. Update test.
-
-2007-02-05 11:30  daveb
-
-	* packages/acs-tcl/tcl/: application-data-link-procs.tcl,
-	  test/application-data-link-procs.tcl: Don't capture URLs outside
-	  the current site as object URLs
-
-2007-02-01 03:25  carlb
-
-	* packages/acs-subsite/www/pvt/home.adp: closing open h2
-
-2007-01-31 12:25  daveb
-
-	* packages/acs-templating/www/resources/xinha-nightly/htmlarea.js:
-	  Fix for back button! It actually works now.
-	  http://xinha.python-hosting.com/ticket/842
-
-2007-01-30 09:03  maltes
-
-	* packages/search/tcl/search-procs.tcl: Why .LRN again, and more
-	  importantly, why doesn't it work on 2.3
-
-2007-01-30 09:03  maltes
-
-	* packages/search/search.info: Two defaults are not good
+	* packages/search/tcl/search-procs.tcl: Don't dequeue twice. Added
+	  a default switch in search indexer for operation that does not
+	  match update/insert nor delete
 

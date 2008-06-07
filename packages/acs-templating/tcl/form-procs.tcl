@@ -636,8 +636,7 @@ ad_proc -private template::form::check_elements { id } {
       # If the element is hidden, render it
       if {$element(widget) eq "hidden"} {
 
-        append output [template::element render $id $element(id) {} ]
-        append output "\n"
+        append output "<div>[template::element render $id $element(id) {} ]</div>\n"
         set element(is_rendered) t
 
       } else {

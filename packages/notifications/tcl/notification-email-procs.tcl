@@ -11,6 +11,9 @@ ad_library {
 namespace eval notification::email {
 
     ad_proc -public get_package_id {} {
+        Get the package id for notifications (depends on this being a singular
+        package)
+    } {
         return [apm_package_id_from_key notifications]
     }
 
@@ -18,10 +21,15 @@ namespace eval notification::email {
         {-name:required}
         {-default ""}
     } {
+        Shorthand proc to return a given notifications package parameter.
+    } {
         return [parameter::get -package_id [get_package_id] -parameter $name -default $default]
     }
 
     ad_proc -public address_domain {} {
+        Get the domain name to use for e-mail.  The package parameter "EmailDomain" is
+        preferred, but if it doesn't exist, we build one using the system URL.
+    } {
         set domain [get_parameter -name "EmailDomain"]
         if { [empty_string_p $domain] } {
             # No domain set up, let's use the default from the system info
@@ -36,18 +44,26 @@ namespace eval notification::email {
     }
 
     ad_proc -public manage_notifications_url {} {
+        Build a url to the "manage notifications" script.
+    } {
         return "[ad_url][apm_package_url_from_key [notification::package_key]]manage"
     }
 
     ad_proc -public reply_address_prefix {} {
+        Shorthand proc to return the email reply address prefix parameter value.
+    } {
         return [get_parameter -name "EmailReplyAddressPrefix"]
     }
 
     ad_proc -private qmail_mail_queue_dir {} {
+        Shorthand proc to return the email qmail-style mail queue (i.e. a Maildir directory)
+    } {
         return [get_parameter -name "EmailQmailQueue"]
     }
 
     ad_proc -private parse_email_address {email} {
+        Strip out the user's name (in angle brackets) from an e-mail address if it exists.
+    } {
         if {![regexp {<([^>]*)>} $email all clean_email]} {
             return $email
         } else {
@@ -58,6 +74,8 @@ namespace eval notification::email {
     ad_proc -public reply_address {
         {-object_id:required}
         {-type_id:required}
+    } {
+        Build an object/type-specific e-mail address that the user can reply to.
     } {
         if {[empty_string_p $object_id] || [empty_string_p $type_id]} {
             return "\"[address_domain] mailer\" <[reply_address_prefix]@[address_domain]>"

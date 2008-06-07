@@ -18,7 +18,9 @@
   <msg key="lt_Notification_Delivery">Notification Delivery Method</msg>
   <msg key="lt_Notification_Delivery_1">Notification Delivery Methods</msg>
   <msg key="lt_Notification_Interval">Notification Interval</msg>
+  <msg key="lt_Notification_Interval_1">Notification Intervals</msg>
   <msg key="lt_Notifications_Interval">Notifications Interval</msg>
+  <msg key="lt_Notification_Requests">Notification Requests</msg>
   <msg key="lt_Request_Notification_">Request Notification for %pretty_name%</msg>
   <msg key="lt_system_name_-_Batched">[%system_name% - Batched Notification]</msg>
   <msg key="lt_Ubsubscribe_Notification_">Unsubscribe from %pretty_name% Email Notifications</msg>

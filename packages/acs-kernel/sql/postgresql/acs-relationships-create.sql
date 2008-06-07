@@ -485,9 +485,6 @@ declare
   creation_ip            alias for $7;  -- default null
   v_rel_id               acs_rels.rel_id%TYPE;
 begin
-    -- XXX This should check that object_id_one and object_id_two are
-    -- of the appropriate types.
-
     v_rel_id := acs_object__new (
       new__rel_id,
       new__rel_type,

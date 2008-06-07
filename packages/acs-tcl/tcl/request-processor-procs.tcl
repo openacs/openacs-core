@@ -812,6 +812,20 @@ ad_proc -private rp_handler {} {
   the server.
 
 } {
+
+  # DRB: Fix obscure case where we are served a request like GET http://www.google.com.
+  # In this case AOLserver 4.0.10 (at least) doesn't run the preauth filter "rp_filter",
+  # but rather tries to serve /global/file-not-found directly.  rp_handler dies a horrible
+  # death if it's called without ad_conn being set up.  My fix is to simply redirect
+  # to the url AOLserver substitutes if ad_conn does not exist (rp_filter begins with
+  # ad_conn -reset) ...
+
+  global ad_conn
+  if { ![info exists ad_conn] } {
+      ad_returnredirect [ns_conn url]
+      return
+  }
+
   # JCD: keep track of rp_handler call count to prevent dev support from recording 
   # information twice when for example we get a 404 internal redirect. We should probably 
   set recursion_count [ad_conn recursion_count] 

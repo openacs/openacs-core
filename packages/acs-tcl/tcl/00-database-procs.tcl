@@ -359,22 +359,26 @@ ad_proc -public db_nextval {{ -dbn "" } sequence } {
     switch $driverkey {
 
         postgresql {
-#             # the following query will return a nextval if the sequnce
-#             # is of relkind = 'S' (a sequnce).  if it is not of relkind = 'S'
-#             # we will try querying it as a view:
+             # the following query will return a nextval if the sequnce
+             # is of relkind = 'S' (a sequnce).  if it is not of relkind = 'S'
+             # we will try querying it as a view:
 
-#             if { [db_0or1row -dbn $dbn nextval_sequence "
-#                 select nextval('${sequence}') as nextval
-#                 where (select relkind 
-#                        from pg_class 
-#                        where relname = '${sequence}') = 'S'
-#             "]} {
-#                 return $nextval
-#             } else {
-#                 ns_log debug "db_nextval: sequence($sequence) is not a real sequence.  perhaps it uses the view hack."
-#                 db_0or1row -dbn $dbn nextval_view "select nextval from ${sequence}"
-#                 return $nextval
-#             }
+             if { [db_0or1row -dbn $dbn nextval_sequence "
+                 select nextval('${sequence}') as nextval
+                 where (select relkind 
+                        from pg_class 
+                        where relname = '${sequence}') = 'S'
+             "]} {
+                 return $nextval
+             } else {
+                 ns_log debug "db_nextval: sequence($sequence) is not a real sequence.  perhaps it uses the view hack."
+                 db_0or1row -dbn $dbn nextval_view "select nextval from ${sequence}"
+                 return $nextval
+             }
+          # DRB: I've restored the above code because Gustaf's "improved" version
+          # does not work in all cases, as documented by him below.  This is not
+          # acceptable.  It breaks any call to db_nextval by an initial install
+          # script or a package apm install callback.  No!  You don't get to do that!
           #
           # The code above is just for documentation, how it worked
           # before the change below. We keep now a per-thread table of
