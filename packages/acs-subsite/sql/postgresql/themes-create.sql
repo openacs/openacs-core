@@ -10,7 +10,7 @@
 
 create table subsite_themes (
     key           text
-                  constraint subsite_theme_key_pk
+                  constraint subsite_themes_key_pk
                   primary key,
     name          text
                   constraint subsite_theme_name_nn
