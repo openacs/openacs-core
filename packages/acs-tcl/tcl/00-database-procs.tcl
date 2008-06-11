@@ -359,26 +359,22 @@ ad_proc -public db_nextval {{ -dbn "" } sequence } {
     switch $driverkey {
 
         postgresql {
-             # the following query will return a nextval if the sequnce
-             # is of relkind = 'S' (a sequnce).  if it is not of relkind = 'S'
-             # we will try querying it as a view:
+#             # the following query will return a nextval if the sequnce
+#             # is of relkind = 'S' (a sequnce).  if it is not of relkind = 'S'
+#             # we will try querying it as a view:
 
-             if { [db_0or1row -dbn $dbn nextval_sequence "
-                 select nextval('${sequence}') as nextval
-                 where (select relkind 
-                        from pg_class 
-                        where relname = '${sequence}') = 'S'
-             "]} {
-                 return $nextval
-             } else {
-                 ns_log debug "db_nextval: sequence($sequence) is not a real sequence.  perhaps it uses the view hack."
-                 db_0or1row -dbn $dbn nextval_view "select nextval from ${sequence}"
-                 return $nextval
-             }
-          # DRB: I've restored the above code because Gustaf's "improved" version
-          # does not work in all cases, as documented by him below.  This is not
-          # acceptable.  It breaks any call to db_nextval by an initial install
-          # script or a package apm install callback.  No!  You don't get to do that!
+#             if { [db_0or1row -dbn $dbn nextval_sequence "
+#                 select nextval('${sequence}') as nextval
+#                 where (select relkind 
+#                        from pg_class 
+#                        where relname = '${sequence}') = 'S'
+#             "]} {
+#                 return $nextval
+#             } else {
+#                 ns_log debug "db_nextval: sequence($sequence) is not a real sequence.  perhaps it uses the view hack."
+#                 db_0or1row -dbn $dbn nextval_view "select nextval from ${sequence}"
+#                 return $nextval
+#             }
           #
           # The code above is just for documentation, how it worked
           # before the change below. We keep now a per-thread table of
@@ -416,8 +412,10 @@ ad_proc -public db_nextval {{ -dbn "" } sequence } {
             }
           }
           if {[info exists ::db::sequences(t_$sequence)]} {
+            #ns_log notice "-- found t_$sequence"
             set nextval [db_string -dbn $dbn "nextval" "select nextval('t_$sequence')"]
           } elseif {[info exists ::db::sequences($sequence)]} {
+            #ns_log notice "-- found $sequence"
             set nextval [db_string -dbn $dbn "nextval" "select nextval('$sequence')"]
           } elseif { [db_0or1row -dbn $dbn nextval_sequence "
                  select nextval('${sequence}') as nextval
@@ -2578,6 +2576,7 @@ ad_proc -public db_source_sql_file {{
             }
 
             cd [file dirname $file]
+            ns_log notice "\n DAVEB pghost = '${pghost}' pgport = '${pgport}' pguser = '${pguser}' \n"
             if { $tcl_platform(platform) eq "windows" } {
                 set fp [open "|[file join [db_get_pgbin] psql] $pghost $pgport $pguser -f $file_name [db_get_database] $pgpass" "r"]
             } else {
