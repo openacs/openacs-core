@@ -1257,7 +1257,6 @@ begin
   --     PERFORM workflow_case__delete(v_wf_cases_val.case_id);
   --   end loop;
 
-  raise NOTICE ''Deleting symlinks...'';
   -- 2) delete all symlinks to this item
   for v_symlink_val in select 
                          symlink_id
@@ -1269,14 +1268,11 @@ begin
     PERFORM content_symlink__delete(v_symlink_val.symlink_id);
   end loop;
 
-  raise NOTICE ''Unscheduling item...'';
   delete from cr_release_periods
     where item_id = delete__item_id;
 
-  raise NOTICE ''Unsetting live and latest revisions...'';
   update cr_items set live_revision = null, latest_revision = null where item_id = delete__item_id;
 
-  raise NOTICE ''Deleting associated revisions...'';
   -- 3) delete all revisions of this item
   delete from cr_item_publish_audit
     where item_id = delete__item_id;
@@ -1291,12 +1287,10 @@ begin
     PERFORM acs_object__delete(v_revision_val.revision_id);
   end loop;
   
-  raise NOTICE ''Deleting associated item templates...'';
   -- 4) unregister all templates to this item
   delete from cr_item_template_map
     where item_id = delete__item_id; 
 
-  raise NOTICE ''Deleting item relationships...'';
   -- Delete all relations on this item
   for v_rel_val in select
                      rel_id
@@ -1310,7 +1304,6 @@ begin
     PERFORM acs_rel__delete(v_rel_val.rel_id);
   end loop;  
 
-  raise NOTICE ''Deleting child relationships...'';
   for v_rel_val in select
                      rel_id
                    from
@@ -1321,7 +1314,6 @@ begin
     PERFORM acs_rel__delete(v_rel_val.rel_id);
   end loop;  
 
-  raise NOTICE ''Deleting parent relationships...'';
   for v_rel_val in select
                      rel_id, child_id
                    from
@@ -1333,27 +1325,22 @@ begin
     PERFORM content_item__delete(v_rel_val.child_id);
   end loop;  
 
-  raise NOTICE ''Deleting associated permissions...'';
   -- 5) delete associated permissions
   delete from acs_permissions
     where object_id = delete__item_id;
 
-  raise NOTICE ''Deleting keyword associations...'';
   -- 6) delete keyword associations
   delete from cr_item_keyword_map
     where item_id = delete__item_id;
 
-  raise NOTICE ''Deleting associated comments...'';
   -- 7) delete associated comments
   PERFORM journal_entry__delete_for_object(delete__item_id);
 
   -- context_id debugging loop
   --for v_error_val in c_error_cur loop
-  --  raise NOTICE ''ID='' || v_error_val.object_id || '' TYPE='' 
   --    || v_error_val.object_type);
   --end loop;
 
-  raise NOTICE ''Deleting content item...'';
   PERFORM acs_object__delete(delete__item_id);
 
   return 0; 
