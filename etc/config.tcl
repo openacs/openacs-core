@@ -659,9 +659,7 @@ ns_section ns/server/${server}/modules
     }
 
     # nsthread library which should become standard in 5.3
-    if {[file exists ${homedir}/lib/thread2.6.4/libthread2.6.4[info sharedlibextension]]} {
-        ns_param libthread ${homedir}/lib/thread2.6.4/libthread2.6.4[info sharedlibextension]
-    }
+    ns_param libthread  [lindex [glob ${homedir}/lib/thread*/libthread*[info sharedlibextension]] 0]
 
     if {[ns_info version] >= 4.5} {
         ns_limits set default -maxupload [ns_config ns/server/${server}/module/nssock maxinput]
