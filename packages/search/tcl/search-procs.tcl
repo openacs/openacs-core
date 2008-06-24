@@ -352,6 +352,13 @@ ad_proc -callback search::driver_info {
     This callback returns information about the search engine implementation
 } -
 
+ad_proc -public search::driver_name {
+} {
+    Return the name of the current search driver.
+} {
+    return [parameter::get -package_id [apm_package_id_from_key search] -parameter FtsEngineDriver]
+}
+
 # dotlrn specific procs
 
 namespace eval search::dotlrn {}
