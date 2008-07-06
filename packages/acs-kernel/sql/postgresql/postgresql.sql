@@ -132,7 +132,7 @@ begin
                             else '','' || typname 
                           end into v_one_type 
                 from pg_type 
-               where oid = v_one_arg;
+               where oid = v_one_arg::integer;
               v_funcdef := v_funcdef || v_one_type;            
         end loop;
         v_funcdef := v_funcdef || '')'';
