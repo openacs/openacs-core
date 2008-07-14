@@ -314,8 +314,8 @@ ns_section ns/server/${server}/module/nsjava
 # 
 #---------------------------------------------------------------------
 #ns_section "ns/server/${server}/module/nscgi" 
-#       ns_param   map "GET  /cgi-bin/ ${serverroot}/cgi-bin"
-#       ns_param   map "POST /cgi-bin/ ${serverroot}/cgi-bin" 
+#       ns_param   map "GET  /cgi-bin ${serverroot}/cgi-bin"
+#       ns_param   map "POST /cgi-bin ${serverroot}/cgi-bin" 
 #       ns_param   Interps CGIinterps
 
 #ns_section "ns/interps/CGIinterps" 
