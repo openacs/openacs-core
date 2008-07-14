@@ -694,6 +694,12 @@ ul.compact li, .action-list ul li {
 
 /* END OF PORTLETS */
 
+.portal-page {
+  border: 1px solid #888;
+  padding: 6px 8px 6px 8px;
+  clear:left;
+}
+
 /**********************************************************************
 /* DEPRECATED CLASSES
 /**********************************************************************/
