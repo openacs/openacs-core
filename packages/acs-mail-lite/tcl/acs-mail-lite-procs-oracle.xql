@@ -10,36 +10,36 @@
                    creation_date,
                    locking_server,
                    to_addr,
-                   cc_addr,
-                   bcc_addr,
                    from_addr,
                    reply_to,
                    subject,
-                   body,
                    package_id,
                    file_ids,
                    mime_type,
                    no_callback_p,
-                   extraheaders,
-                   use_sender_p     
+                   use_sender_p,
+                   cc_addr,
+                   bcc_addr,
+                   body,
+                   extraheaders
                   )
             values
                   (acs_mail_lite_id_seq.nextval,
                    :creation_date,
                    :locking_server,
                    :to_addr,
-                   :cc_addr,
-                   :bcc_addr,
                    :from_addr,
                    :reply_to,
                    :subject,
-                   :body,
                    :package_id,
                    :file_ids,
                    :mime_type,
                    decode(:no_callback_p,'1','t','f'),
-                   :extraheaders,
-                   decode(:use_sender_p,'1','t','f')
+                   decode(:use_sender_p,'1','t','f'),
+                   :cc_addr,
+                   :bcc_addr,
+                   :body,
+                   :extraheaders
                   )
         </querytext>
     </fullquery>
