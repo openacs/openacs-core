@@ -8,10 +8,10 @@
 
   <p>
   <FORM METHOD=get ACTION=search>
-    <input type="hidden" name="target" value="one" />
-    <input type="hidden" name="only_authorized_p" value="0" />
-    <li>Quick search: <input type="text" size="15" name="keyword" />
-                  <input type="submit" value="Find User" />
+    <input type="hidden" name="target" value="one">
+    <input type="hidden" name="only_authorized_p" value="0">
+    <li>Quick search: <input type="text" size="15" name="keyword">
+                  <input type="submit" value="Find User">
   </FORM>
         </p>
   <li><a href="complex-search?target=one&only_authorized_p=0&only_needs_approval_p=1">Find all users needing approval</a></li>

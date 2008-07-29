@@ -7,24 +7,29 @@
      <tr>
       <td valign="top">
        <h4>OpenACS Tcl API Search</h4>
-       <input type="text" name="query_string" value="@query_string@"/><br>
-       <input type="submit" value="All matches" name="search_type" />
-       <input type="submit" value="Only best match" name="search_type" />
+       <input type="text" name="query_string" value="@query_string@"><br>
+       <input type="submit" value="All matches" name="search_type">
+       <input type="submit" value="Only best match" name="search_type">
        <p><a href="@openacs_browse_url@">Browse OpenACS Tcl API</a></p>
       </td>
       <td>       
        <table cellspacing="0" cellpadding="0">
          <tr><td align="right">Name contains:</td>
-           <td><input type="radio" name="name_weight" value="5" checked="checked" /> </td></tr>
+           <td><input type="radio" name="name_weight" value="5" checked="checked"> </td>
+         </tr>
          <tr><td align="right">Exact name:</td>
-           <td><input type="radio" name="name_weight" value="exact" /></td></tr>
+           <td><input type="radio" name="name_weight" value="exact"></td>
+         </tr>
          <tr><td align="right">&nbsp;</td><td>&nbsp;</td></tr>
          <tr><td align="right">Parameters:</td>
-           <td><input type="checkbox" name="param_weight" value="3" checked="checked" /></td></tr>
+           <td><input type="checkbox" name="param_weight" value="3" checked="checked"></td>
+         </tr>
          <tr><td align="right">Documentation:</td>
-           <td><input type="checkbox" name="doc_weight" value="2" checked="checked" /></td></tr>
+           <td><input type="checkbox" name="doc_weight" value="2" checked="checked"></td>
+         </tr>
          <tr><td align="right">Source:</td>
-           <td><input type="checkbox" name="source_weight" value="1" /></td></tr>
+           <td><input type="checkbox" name="source_weight" value="1"></td>
+         </tr>
        </table>
       </td>
      </tr>
@@ -44,8 +49,8 @@
   <tr bgcolor="#DDDDDD">
    <td colspan="2">
     <h4>AOLserver Tcl API Search</h4>
-    <input type="text" name="tcl_proc" />
-    <input type="submit" value="Go" /><br>
+    <input type="text" name="tcl_proc">
+    <input type="submit" value="Go"><br>
     (enter <em>exact</em> procedure name)<br>
     <a href="@aolserver_tcl_api_root@">Browse AOLserver Tcl API</a>
    </td>
@@ -56,8 +61,8 @@
   <tr bgcolor="#DDDDDD">
    <td colspan="2">
     <h4>Tcl Documentation Search</h4>
-    <input type="text" name="tcl_proc" />
-    <input type="submit" value="Go" /><br>
+    <input type="text" name="tcl_proc">
+    <input type="submit" value="Go"><br>
     (enter <em>exact</em> procedure name)<br>
     <a href="@tcl_docs_root@">Browse the Tcl documentation</a>
    </td>
@@ -72,8 +77,8 @@
     <td colspan="2">
      <if @db_doc_search_url@ not nil>
        <h4>@db_pretty@ Search</h4>
-       <input type="text" name="@db_doc_search_query_name@" />
-       <input type="submit" value="Go" /><br>
+       <input type="text" name="@db_doc_search_query_name@">
+       <input type="submit" value="Go"><br>
      </if>
      <else>
        <h4>@db_pretty@ Documentation</h4>

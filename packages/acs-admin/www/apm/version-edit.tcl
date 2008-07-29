@@ -78,7 +78,7 @@ function checkMailto(element) {
 
 <tr>
   <th align=right nowrap>Auto-mount:</th>
-  <td><input name=auto_mount size=30 value=\"$auto_mount\" /></td>
+  <td><input name=auto_mount size=30 value=\"$auto_mount\"></td>
 </tr>
 
 <tr>

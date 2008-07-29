@@ -30,10 +30,8 @@ Thank you,
 </textarea>
 
 <center>
-<input type="submit" value="Send Email" />
+<input type="submit" value="Send Email">
 </center>
 
 </form>
 </p>
-
-

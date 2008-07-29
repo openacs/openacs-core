@@ -55,12 +55,12 @@
 <h2>Index particular objects</h2>
 <p>
 <form action="reindex-one-item" method="GET">
-  <input type="text" name="object_id" />
-  <input type="button" value="Reindex the item with this object_id" />
+  <input type="text" name="object_id">
+  <input type="button" value="Reindex the item with this object_id">
 </form>
 
 <p>
 <form action="index-one-item" method="GET">
-  <input type="text" name="object_id" />
-  <input type="button" value="Index the item with this object_id" />
+  <input type="text" name="object_id">
+  <input type="button" value="Index the item with this object_id">
 </form>

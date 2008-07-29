@@ -486,7 +486,7 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
 	set ::acs_blank_master(xinha.options) $xinha_options
 	lappend ::acs_blank_master__htmlareas $attributes(id)
       } elseif {$richtextEditor eq "tinymce"} {
-          append output "<script>document.write(\"<input name='$element(id).format' value='text/html' type='hidden'/>\");</script>\n"
+          append output "<script>document.write(\"<input name='$element(id).format' value='text/html' type='hidden'>\");</script>\n"
           append output "<noscript><br>Format: $format_menu</noscript>\n"
           lappend ::acs_blank_master__htmlareas $attributes(id)
           

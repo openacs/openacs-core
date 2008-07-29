@@ -91,10 +91,10 @@ template::list::create \
 		    <a href="@nodes.instance_url@">@nodes.instance;noquote@</a>   
 		</else>
 		<if @nodes.expand_mode@ eq 1>
-		&nbsp;<a href="?@nodes.expand_url@#@nodes.node_id@"><img border=0 src=/resources/down.gif></a>
+		&nbsp;<a href="?@nodes.expand_url@#@nodes.node_id@"><img style="border:0" src="/resources/down.gif"></a>
 		</if>
 		<if @nodes.expand_mode@ eq 2>
-                &nbsp;<a href="?@nodes.expand_url@#@nodes.node_id@"><img border=0 src=/resources/up.gif></a>
+                &nbsp;<a href="?@nodes.expand_url@#@nodes.node_id@"><img style="border:0" src="/resources/up.gif"></a>
                 </if>
 
 		<if @nodes.action_type@ eq "new_folder">
@@ -252,7 +252,7 @@ db_foreach nodes_select {} {
 
 }
 
-#set new_app_form_part_1 "<p align=\"top\"><form name=new_application action=package-new><input type=hidden name=node_id value=$node(node_id) /><input type=hidden name=root_id value=$node(node_id) /><input type=hidden name=new_node_p value=t />[export_form_vars expand:multiple]<input name=node_name type=text size=8></p>"
+#set new_app_form_part_1 "<p align=\"top\"><form name=new_application action=package-new><input type=hidden name=node_id value=$node(node_id)><input type=hidden name=root_id value=$node(node_id)><input type=hidden name=new_node_p value=t>[export_form_vars expand:multiple]<input name=node_name type=text size=8></p>"
 
 #set new_app_form_part_2 "<p align=\"top\">[apm_application_new_checkbox]</p>"
 #set new_app_form_part_3 "<p align=\"top\"><input type=submit value=\"Mount Package\"></form></p>"

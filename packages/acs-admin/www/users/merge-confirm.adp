@@ -14,7 +14,7 @@
       These accounts will be merged and the <u>good and final account</u> will be: 
 
     <p/>
-    <img border=2 width="80" height="80" src="@to_img_src@" alt="Portrait of @to_user_id@" />		  
+    <img style="border:2" width="80" height="80" src="@to_img_src@" alt="Portrait of @to_user_id@">
 		    <br>
     <span style="font-size:14pt;">@to_first_names@ @to_last_name@ (@to_email@)</span>	      
     <p/>
@@ -27,7 +27,7 @@
       <table>
 	<tr>
 	  <td>
-	    <input type=radio name=merge_p value=1 />
+	    <input type=radio name=merge_p value=1>
 	  </td>
 	  <td> 
 	    Yes, I'm sure that I don't need the account @from_email@ anymore!.

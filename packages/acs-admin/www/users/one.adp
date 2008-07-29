@@ -79,12 +79,12 @@ above.
 
 <li>Merge this user with:
    <form method=get action=search>
-    <input type="hidden" name="target" value="merge" />
-    <input type="hidden" name="limit_to_user_id" value="@user_id@" />
-    <input type="hidden" name="from_user_id" value="@user_id@" />
-    <input type="hidden" name="only_authorized_p" value="0" />
-    <input type="text" size="15" name="keyword" />
-    <input type="submit" value="Find User" />
+    <input type="hidden" name="target" value="merge">
+    <input type="hidden" name="limit_to_user_id" value="@user_id@">
+    <input type="hidden" name="from_user_id" value="@user_id@">
+    <input type="hidden" name="only_authorized_p" value="0">
+    <input type="text" size="15" name="keyword">
+    <input type="submit" value="Find User">
   </form>
  </li>
 
