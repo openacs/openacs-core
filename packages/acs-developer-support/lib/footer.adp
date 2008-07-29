@@ -7,7 +7,7 @@
       <multiple name="comments">
         <b>Comment:</b> <pre style="display: inline;">@comments.text@</pre><br>
       </multiple>
-      <hr />
+      <hr>
     </if>
     <if @user_switching_p@ true>
       <form action="@set_user_url@">
@@ -26,7 +26,7 @@
         </select></if><else><input type="text" name="keyword"><input type="hidden" name="target" value="@target@"></else>
         <input type="submit" value="Go">
       </form>
-      <hr />
+      <hr>
     </if>
     <if @profiling:rowcount@ gt 0>
       <h3>Profiling Information</h3>
