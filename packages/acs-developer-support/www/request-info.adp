@@ -5,9 +5,9 @@
   <if @page_fragment_cache_p@ true>
     <p>
       <form name="searchfrags" action="/ds/search">
-        <input type="hidden" name="request" value="@request@"/>
-        <input type="text" name="expression" value="" />
-        <input type="submit" name="search" value="Search"/>
+        <input type="hidden" name="request" value="@request@">
+        <input type="text" name="expression" value="">
+        <input type="submit" name="search" value="Search">
       </form>
     </p></if>
 
