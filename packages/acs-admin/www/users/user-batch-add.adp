@@ -4,14 +4,14 @@
 
 <form method="post" action="user-batch-add-2">
 <p>Add these users to @system_name@, one user per line.</p>
-<br /><textarea name=userlist rows=15 cols=50>
+<br><textarea name=userlist rows=15 cols=50>
 email, first name, last name
 </textarea>
 <p>Each user will get this email:
-<br />From: <input name="from" value="@admin_email@">
-<br />Subject: <input name=subject value="You have been added as a user to @system_name@ at @system_url@" size=50>
+<br>From: <input name="from" value="@admin_email@">
+<br>Subject: <input name=subject value="You have been added as a user to @system_name@ at @system_url@" size=50>
 <p>Message:
-<br /><textarea name="message" rows=10 cols=70 wrap=hard>
+<br><textarea name="message" rows=10 cols=70>
 Dear &lt;first_names&gt; &lt;last_name&gt;,
 
 You have been added as a user to @system_name@

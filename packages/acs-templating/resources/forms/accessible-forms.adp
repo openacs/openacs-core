@@ -78,7 +78,7 @@
   
 	  <noparse>
 	    <formerror id="@elements.id@">
-	      <br />
+	      <br>
 		  \@formerror.@elements.id@;noquote\@
 	    </formerror>
 	  </noparse>

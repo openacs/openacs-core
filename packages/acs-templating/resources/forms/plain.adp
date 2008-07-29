@@ -29,8 +29,8 @@
         <if @elements.label@ not nil>
 	<td><span style="font-weight: bold">@elements.label;noquote@</span>&nbsp;&nbsp;
           <if @elements.help_text@ not nil>
-            <br />&nbsp;&nbsp;
-            <span style="font-size: 90%"><noparse><formhelp id=@elements.id@></noparse></span><br />
+            <br>&nbsp;&nbsp;
+            <span style="font-size: 90%"><noparse><formhelp id=@elements.id@></noparse></span><br>
           </if>
 	  </td>
         </if>
@@ -61,7 +61,7 @@
               <if @elements.label@ nil><td nowrap="nowrap" colspan="2"></if>
                 <else><td nowrap="nowrap"></else>
 		<noparse><formwidget id=@elements.id@>
-		<formerror id=@elements.id@><br />
+		<formerror id=@elements.id@><br>
                  <span style="font-weight: bold; color: red">\@formerror.@elements.id@;noquote\@</span>
                 </formerror></noparse>
 	      </td>

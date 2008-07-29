@@ -195,7 +195,7 @@ ad_proc -deprecated ad_table {
         -Tmax_rows 0
         -Ttable_extra_html {cellpadding=3 cellspacing=0 class="table-display"}
         -Theader_row_extra {style="background-color:#f8f8f8" class="table-header"}
-        -Ttable_break_html "<br /><br />"
+        -Ttable_break_html "<br><br>"
         -Tpre_row_code {}
         -Trow_code {[subst $Trow_default]}
         -Tpost_data_ns_sets {}

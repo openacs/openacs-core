@@ -445,7 +445,7 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
 
       if {$richtextEditor eq "xinha"} {
 	append output "<script type='text/javascript'>document.write(\"<input name='$element(id).format' value='text/html' type='hidden'>\");</script>\n"
-          append output "<noscript><br/>[_ acs-templating.Format]: $format_menu</noscript>\n"
+          append output "<noscript><br>[_ acs-templating.Format]: $format_menu</noscript>\n"
 	
 	# we have a xinha richtext widget, specified by "options {editor xinha}"
 	# The following options are supported: 
@@ -487,7 +487,7 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
 	lappend ::acs_blank_master__htmlareas $attributes(id)
       } elseif {$richtextEditor eq "tinymce"} {
           append output "<script>document.write(\"<input name='$element(id).format' value='text/html' type='hidden'/>\");</script>\n"
-          append output "<noscript><br/>Format: $format_menu</noscript>\n"
+          append output "<noscript><br>Format: $format_menu</noscript>\n"
           lappend ::acs_blank_master__htmlareas $attributes(id)
           
           # get default configs

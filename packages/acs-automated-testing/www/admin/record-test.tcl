@@ -50,7 +50,7 @@ ad_form -name new_test -method post -export {package_key return_url} \
 	{ search_str:text,optional
 	    {label "Search String"}
 	    {html {size 50}}
-	    {help_text "Sometimes, you might need this string to check if the test is successfull or no (i.e. testing Warning messages) <br/> If you want to check more than one string, use a comma to separate the different strings"}
+	    {help_text "Sometimes, you might need this string to check if the test is successfull or no (i.e. testing Warning messages) <br> If you want to check more than one string, use a comma to separate the different strings"}
 	}
 	{ login_type:integer(select)
 	    {label "Login Type"}

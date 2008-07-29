@@ -170,7 +170,7 @@ ad_proc -public util_convert_line_breaks_to_html {
         }
     }
 
-    regsub -all {\n} $text "<br />\n" text
+    regsub -all {\n} $text "<br>\n" text
 
     # Add line breaks to P tags
     regsub -all {</p>} $text "</p>\n" text

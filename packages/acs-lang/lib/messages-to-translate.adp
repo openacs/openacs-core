@@ -1,8 +1,8 @@
 <if @display_p@>
-  <hr />
+  <hr>
 
   <h3>#acs-lang.Translated_messages_on_this_page#</h3>
 
-  <p><listtemplate name="messages"></listtemplate></p>
+  <listtemplate name="messages"></listtemplate>
 </if>
 

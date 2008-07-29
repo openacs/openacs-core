@@ -979,7 +979,7 @@ ad_proc -private apm_package_delete {
             and   apm_packages.package_key = :package_key
         } {
             set url [site_node::get_url -node_id $node_id]
-            apm_callback_and_log $callback "Unmounting package instance at url $url <br />"
+            apm_callback_and_log $callback "Unmounting package instance at url $url <br>"
             site_node::unmount -node_id $node_id
         }    
 
@@ -990,7 +990,7 @@ ad_proc -private apm_package_delete {
             from apm_packages
             where package_key = :package_key
         } {
-            apm_callback_and_log $callback "Deleting package instance $package_id <br />"
+            apm_callback_and_log $callback "Deleting package instance $package_id <br>"
             apm_package_instance_delete $package_id
         }
 
