@@ -71,18 +71,18 @@ if { $replace_text_p } {
     set text_replacement_list [lindex $adp_text_result_list 0]
     set text_untouched_list [lindex $adp_text_result_list 1]
 
-    append processing_html_result "<b>Replaced [llength $text_replacement_list] texts</b>: <br />"
+    append processing_html_result "<b>Replaced [llength $text_replacement_list] texts</b>: <br>"
     foreach text_replacement $text_replacement_list {
-        append processing_html_result "replaced text \"[lindex $text_replacement 1]\" using key [lindex $text_replacement 0] <br />"
+        append processing_html_result "replaced text \"[lindex $text_replacement 1]\" using key [lindex $text_replacement 0] <br>"
     }
 
     if { [llength $text_untouched_list] > 0 } {
-        append processing_html_result "<br /> [llength $text_untouched_list] pieces of text were left untouched. Please take note of these texts and do any necessary translations by manually inserting <#message_key text#> tags in the adp file (the message keys should contain only letters and underscores). At a later stage you can then run the action \"Replace tags with text and insert into catalog\" on the file. The texts to consider for translation are: <br />"
+        append processing_html_result "<br> [llength $text_untouched_list] pieces of text were left untouched. Please take note of these texts and do any necessary translations by manually inserting <#message_key text#> tags in the adp file (the message keys should contain only letters and underscores). At a later stage you can then run the action \"Replace tags with text and insert into catalog\" on the file. The texts to consider for translation are: <br>"
     } else {
-        append processing_html_result "<br /> [llength $text_untouched_list] pieces of text were left untouched."
+        append processing_html_result "<br> [llength $text_untouched_list] pieces of text were left untouched."
     }
     foreach untouched_text $text_untouched_list {
-        append processing_html_result "\"$untouched_text\" <br />"
+        append processing_html_result "\"$untouched_text\" <br>"
     }
 }
 

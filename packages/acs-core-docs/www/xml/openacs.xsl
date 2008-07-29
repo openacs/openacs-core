@@ -74,7 +74,7 @@
             </td>
           </tr>
         </table>
-        <hr/>
+        <hr>
       </div>
     </xsl:if>
   </xsl:template>
@@ -89,7 +89,7 @@
     
     <xsl:if test="$suppress.navigation = '0'">
       <div class="navfooter">
-        <hr/>
+        <hr>
         <table width="100%" summary="Navigation footer">
           <tr>
             <td width="40%" align="left">
@@ -161,7 +161,7 @@
             </td>
           </tr>
         </table>
-        <hr/>
+        <hr>
         <address>
           <a>
             <xsl:attribute name="href">

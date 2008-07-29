@@ -33,7 +33,7 @@ The following packages depend on package <code>$package_key</code> that you are 
 
 <p>
 <code> 
-  [join $dependent_packages_list "<br />"]
+  [join $dependent_packages_list "<br>"]
 </code>
 </p>
 "

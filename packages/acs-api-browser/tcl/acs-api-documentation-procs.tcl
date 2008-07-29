@@ -84,7 +84,7 @@ ad_proc -public api_read_script_documentation {
 ad_proc -private api_format_see_list { sees } { 
     Generate an HTML list of referenced procs and pages.
 } { 
-    append out "<br /><strong>See Also:</strong>\n<ul>"
+    append out "<br><strong>See Also:</strong>\n<ul>"
     foreach see $sees { 
 	append out "<li>[api_format_see $see]\n"
     }

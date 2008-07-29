@@ -778,7 +778,7 @@ ad_proc -public template::util::date::validate { date error_ref } {
       lappend error_msg [_ acs-templating.Seconds_must_be_between_0_and_59]
   } 
   if { [llength $error_msg] > 0 } {
-      set error_msg "[join $error_msg {<br />}]"
+      set error_msg "[join $error_msg {<br>}]"
       return 0
   } else {
       return 1
@@ -1314,7 +1314,7 @@ ad_proc -public template::data::validate::textdate {
 	}
     }
     if { [llength $error_msg] > 0 } {
-	set message "[join $error_msg {<br />}]"
+	set message "[join $error_msg {<br>}]"
         return 0
     } else {
         return 1
