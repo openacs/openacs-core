@@ -35,10 +35,8 @@ Thank you,
 </textarea>
 </p>
 <center>
-<input type="submit" value="Import List and Send Emails" />
+<input type="submit" value="Import List and Send Emails">
 </center>
 
 </form>
 </p>
-
-

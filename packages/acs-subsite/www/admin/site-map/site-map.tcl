@@ -280,7 +280,7 @@ db_foreach nodes_select {} {
 
 }
 
-#set new_app_form_part_1 "<p align=\"top\"><form name=new_application action=package-new><input type=hidden name=node_id value=$node(node_id) /><input type=hidden name=root_id value=$node(node_id) /><input type=hidden name=new_node_p value=t />[export_form_vars expand:multiple]<input name=node_name type=text size=8></p>"
+#set new_app_form_part_1 "<p align=\"top\"><form name=new_application action=package-new><input type=hidden name=node_id value=$node(node_id)><input type=hidden name=root_id value=$node(node_id) /><input type=hidden name=new_node_p value=t>[export_form_vars expand:multiple]<input name=node_name type=text size=8></p>"
 
 #set new_app_form_part_2 "<p align=\"top\">[apm_application_new_checkbox]</p>"
 #set new_app_form_part_3 "<p align=\"top\"><input type=submit value=\"Mount Package\"></form></p>"

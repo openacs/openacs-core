@@ -235,7 +235,7 @@ ad_proc ad_db_select_widget {
 	    }
 	} if_no_rows {
 	    if {$default ne ""} { 
-		return "<input type=\"hidden\" value=\"[philg_quote_double_quotes $default]\" name=\"$name\" />\n"
+		return "<input type=\"hidden\" value=\"[philg_quote_double_quotes $default]\" name=\"$name\">\n"
 	    } else { 
 		return {}            
 	    }
@@ -243,7 +243,7 @@ ad_proc ad_db_select_widget {
     }
 
     if { $count == 1 || ($dbcount == 1 && $hidden_if_one_db) } {
-        return "$item<input type=\"hidden\" value=\"[philg_quote_double_quotes $value]\" name=\"$name\" >\n"
+        return "$item<input type=\"hidden\" value=\"[philg_quote_double_quotes $value]\" name=\"$name\">\n"
     } elseif {!$count && !$dbcount && $blank_if_no_db} {
 	return {}
     } else { 
@@ -404,7 +404,7 @@ proc_doc ad_color_widget { name default { use_js 0 } } "Returns a color selectio
 	    set c2 255
 	    set c3 255
 	}
-	append out "</td><td>&nbsp; <img name=\"color_$name\" src=\"/shared/1pixel.tcl?r=$c1&g=$c2&b=$c3\" width=\"26\" height=\"26\" border=\"1\">"
+	append out "</td><td>&nbsp; <img name=\"color_$name\" src=\"/shared/1pixel.tcl?r=$c1&g=$c2&b=$c3\" width=\"26\" height=\"26\" style=\"border:1\">"
     }
     append out "</td></tr></table>\n"
     return $out

@@ -18,7 +18,7 @@
 			<center>
 			<b>ACCOUNT ONE</b>
 			  <p/>
-			  <img border="2" width="80" height="80" src="@one_img_src@" alt="Portrait of @user_id@" />
+			  <img style="border:2" width="80" height="80" src="@one_img_src@" alt="Portrait of @user_id@">
 			    <h3>General Information of user one (<b>@one_email@</b>):</h3>
 			</center>
 			<ul>
@@ -111,25 +111,25 @@
 		    <center>		  
 		      <b>Which is the good account?</b>
 		      <p/>
-			<input type="radio" name="merge_action" value="0" />
-			  <img src="/resources/acs-admin/left.gif" alt="left one" />
+			<input type="radio" name="merge_action" value="0">
+			  <img src="/resources/acs-admin/left.gif" alt="left one">
 		    </center>
 		  </td>
 		</tr>
 		<tr>
 		  <td>
 		    <center>
-		      <input type="radio" name="merge_action" value="1" />
+		      <input type="radio" name="merge_action" value="1">
 			<img src="/resources/acs-admin/right.gif" alt="right one">
 		    </center>
 		  </td>
 		</tr>
 		<tr>
 		  <td>
-		    <input type="hidden" name="from_user_id" value="@user_id@" />
-                    <input type="hidden" name="to_user_id" value="@user_id_from_search@" />
+		    <input type="hidden" name="from_user_id" value="@user_id@">
+                    <input type="hidden" name="to_user_id" value="@user_id_from_search@">
                     <center>
-		      <input type="submit" value="Continue"/>
+		      <input type="submit" value="Continue">
                     </center>
                   </td>
 	        </tr>
@@ -147,7 +147,7 @@
 			<center>
 			  <b>ACCOUNT TWO</b>
 			  <p/>
-			    <img border="2" width="80" height="80" src="@two_img_src@" alt="Portrait of @user_id_from_search@" />
+			    <img style="border:2" width="80" height="80" src="@two_img_src@" alt="Portrait of @user_id_from_search@">
 			    <h3>General Information of user two (<b>@two_email@</b>):</h3>
 			</center>
 			<ul>

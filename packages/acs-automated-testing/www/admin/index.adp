@@ -23,7 +23,7 @@
         </else>
       </multiple> ]
  <div class="form-help-text">
-                  <img src="/shared/images/info.gif" width="12" height="9" alt="[i]" title="Help text" border="0">
+                  <img src="/shared/images/info.gif" width="12" height="9" alt="[i]" title="Help text" style="border:0">
                   View and run only tests in this category.  Tests can
       have more than one category.  (<a
       href="/api-doc/proc-view?proc=aa%5fregister%5fcase">more info</a>)
@@ -31,12 +31,12 @@
 
 <p><if @stress@ eq 1>                
       <a href="index?stress=0&security_risk=@security_risk@&by_package_key=@by_package_key@&view_by=@view_by@&by_category=@by_category@&quiet=0" style="padding-top: 2px; padding-bottom: -2px;">
-        <img src="/resources/acs-subsite/checkboxchecked.gif" border="0" height="13" width="13"/>
+        <img src="/resources/acs-subsite/checkboxchecked.gif" style="border:0" height="13" width="13">
       </a>
     </if>
     <else>
       <a href="index?stress=1&security_risk=@security_risk@&by_package_key=@by_package_key@&view_by=@view_by@&by_category=@by_category@&quiet=0" style="padding: 0px;">
-        <img src="/resources/acs-subsite/checkbox.gif" border="0" height="13" width="13"/>
+        <img src="/resources/acs-subsite/checkbox.gif" style="border:0" height="13" width="13">
       </a>
       </button>
     </else>
@@ -44,12 +44,12 @@
 </p>
 <p><if @security_risk@ eq 1>                
       <a href="index?stress=@stress@&security_risk=0&by_package_key=@by_package_key@&view_by=@view_by@&by_category=@by_category@&quiet=0" style="padding-top: 2px; padding-bottom: -2px;">
-        <img src="/resources/acs-subsite/checkboxchecked.gif" border="0" height="13" width="13"/>
+        <img src="/resources/acs-subsite/checkboxchecked.gif" style="border:0" height="13" width="13">
       </a>
     </if>
     <else>
       <a href="index?stress=@stress@&security_risk=1&by_package_key=@by_package_key@&view_by=@view_by@&by_category=@by_category@&quiet=0" style="padding: 0px;">
-        <img src="/resources/acs-subsite/checkbox.gif" border="0" height="13" width="13"/>
+        <img src="/resources/acs-subsite/checkbox.gif" style="border:0" height="13" width="13">
       </a>
       </button>
     </else>
@@ -66,7 +66,7 @@
          | <strong> verbose </strong>
       </else>  ]
  <div class="form-help-text">
-                  <img src="/shared/images/info.gif" width="12" height="9" alt="[i]" title="Help text" border="0">
+                  <img src="/shared/images/info.gif" width="12" height="9" alt="[i]" title="Help text" style="border:0">
                   Quiet mode shows only test failures.
                 </div>
     </td>

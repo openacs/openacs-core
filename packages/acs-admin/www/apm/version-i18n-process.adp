@@ -10,7 +10,7 @@
 
 <form action="version-i18n-process-2">
   @hidden_form_vars;noquote@
-  <input type="hidden" name="number_of_keys" value="@replacements:rowcount@" />
+  <input type="hidden" name="number_of_keys" value="@replacements:rowcount@">
 
   <table  border="1">
     <tr>
@@ -23,14 +23,14 @@
     <tr>
       <td>@replacements.text;noquote@</td>
       <td><input type="checkbox" name="replace_p.@replacements.rownum@" value="1" checked="1"> Yes</td>
-      <td><input type="text" name="message_keys.@replacements.rownum@" value="@replacements.key@" /></td>
+      <td><input type="text" name="message_keys.@replacements.rownum@" value="@replacements.key@"></td>
     </tr>
   </multiple>    
   </table>
 
   <p>
-  <input type="submit" name="process_button" value="Process ADP" />
-  <input type="submit" name="skip_button" value="Skip ADP" />
+  <input type="submit" name="process_button" value="Process ADP">
+  <input type="submit" name="skip_button" value="Skip ADP">
   </p>
 </form>
 

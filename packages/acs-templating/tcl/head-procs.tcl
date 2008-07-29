@@ -443,7 +443,7 @@ ad_proc template::head::prepare_multirows {} {
     Called only from blank-master.tcl
 } {
 
-    # Generate the <meta /> tag multirow
+    # Generate the <meta> tag multirow
     variable ::template::head::metas
     template::multirow create meta name content http_equiv scheme lang
     if {[array exists metas]} {
@@ -460,7 +460,7 @@ ad_proc template::head::prepare_multirows {} {
         unset metas
     }
 
-    # Generate the <link /> tag multirow
+    # Generate the <link> tag multirow
     variable ::template::head::links
     template::multirow create link rel type href title lang media order
     if {[array exists links]} {
