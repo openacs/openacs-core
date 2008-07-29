@@ -189,7 +189,7 @@
 
          set ds_url [ds_support_url]
          if {![empty_string_p $ds_url]} {
-             append out "<a href=\"${ds_url}\">Developer Support Home</a> - <a href=\"${ds_url}request-info?request=$ad_conn(request)\">Request Information</a><br />"
+             append out "<a href=\"${ds_url}\">Developer Support Home</a> - <a href=\"${ds_url}request-info?request=$ad_conn(request)\">Request Information</a><br>"
          } else {
              ns_log Error "ACS-Developer-Support: Unable to offer link to Developer Support \
                      because it is not mounted anywhere."
@@ -205,31 +205,31 @@
                  }
              }
              if { $counter > 0 } {
-                 append out "$counter database command[ad_decode $counter 1 " taking" "s totalling"] [format "%.f" [expr { $total }]] ms<br />"
+                 append out "$counter database command[ad_decode $counter 1 " taking" "s totalling"] [format "%.f" [expr { $total }]] ms<br>"
              }
          }
 
          if { [nsv_exists ds_request "$ad_conn(request).conn"] } {
              array set conn [nsv_get ds_request "$ad_conn(request).conn"]
              if { [info exists conn(startclicks)] } {
-                 append out "Page served in [format "%.f" [expr { ([clock clicks -milliseconds] - $conn(startclicks)) }]] ms<br />\n"
+                 append out "Page served in [format "%.f" [expr { ([clock clicks -milliseconds] - $conn(startclicks)) }]] ms<br>\n"
              }
          }
 
          if { [ad_parameter -package_id [ds_instance_id] ShowCommentsInlineP acs-developer-support 0] } {
-             append out "Comments: <b>On</b> | <a href=\"[export_vars -base "${ds_url}comments-toggle" { { return_url [ad_return_url] } }]\">Off</a><br />"
+             append out "Comments: <b>On</b> | <a href=\"[export_vars -base "${ds_url}comments-toggle" { { return_url [ad_return_url] } }]\">Off</a><br>"
              if { [nsv_exists ds_request "$ad_conn(request).comment"] } {
                  foreach comment [nsv_get ds_request "$ad_conn(request).comment"] {
-                     append out "<b>Comment:</b> $comment<br />\n"
+                     append out "<b>Comment:</b> $comment<br>\n"
                  }
              }
          } else {
-             append out "Comments: <a href=\"[export_vars -base "${ds_url}comments-toggle" { { return_url [ad_return_url] } }]\">On</a> | <b>Off</b><br />"
+             append out "Comments: <a href=\"[export_vars -base "${ds_url}comments-toggle" { { return_url [ad_return_url] } }]\">On</a> | <b>Off</b><br>"
          }
      }
 
      if { [ds_user_switching_enabled_p] } {
-         append out "[ds_user_select_widget]<br />"
+         append out "[ds_user_select_widget]<br>"
      }
 
      return $out
@@ -438,8 +438,8 @@
 
      if { $user_id == 0 } {
          set selected " selected"
-         set you_are "<small>You are currently <strong>not logged in</strong></small><br />"
-         set you_are_really "<small>You are really <strong>not logged in</strong></small><br />"
+         set you_are "<small>You are currently <strong>not logged in</strong></small><br>"
+         set you_are_really "<small>You are really <strong>not logged in</strong></small><br>"
      } else {
          set selected {}
      }
@@ -456,12 +456,12 @@
      } {
          if { $user_id == $user_id_from_db } {
              set selected " selected"
-             set you_are "<small>You are testing as <strong>$name ($email)</strong></small><br />"
+             set you_are "<small>You are testing as <strong>$name ($email)</strong></small><br>"
          } else {
              set selected {}
          }
          if { $real_user_id == $user_id_from_db } {
-             set you_are_really "<small>You are really <strong>$name ($email)</strong></small><br />"
+             set you_are_really "<small>You are really <strong>$name ($email)</strong></small><br>"
          }
          append options "<option value=\"$user_id_from_db\"$selected>$name ($email)</option>"
      }
