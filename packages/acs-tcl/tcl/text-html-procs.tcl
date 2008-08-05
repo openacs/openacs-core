@@ -107,7 +107,7 @@ ad_proc -public ad_text_to_html {
 
     # Convert line breaks
     if { !$no_lines_p } {
-        set text [util_convert_line_breaks_to_html -includes_html=$includes_html_p -- $text]
+        set text [util_convert_line_breaks_to_html -includes_html $includes_html_p -- $text]
     }
 
     if { !$no_quote_p } {
