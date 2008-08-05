@@ -8,6 +8,7 @@ ad_library {
 }
 
 namespace eval tsearch2 {}
+ns_log Notice "Huh?   db_version:[db_version]"
 
 ad_proc -public tsearch2::index {
     object_id
