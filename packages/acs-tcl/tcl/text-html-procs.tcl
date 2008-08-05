@@ -1415,6 +1415,10 @@ ad_proc -public ad_html_text_convert {
         return ""
     }
     
+    # For backwards compatibility
+    set from [ad_decode $from "html" "text/html" "text" "text/plain" "plain" "text/plain" $from]
+    set to [ad_decode $to "html" "text/html" "text" "text/plain" "plain" "text/plain" $to]
+
     if { ![ad_html_text_convertable_p -from $from -to $to] } {
         error "Illegal mime types for conversion - from: $from to: $to"
     }
@@ -1524,11 +1528,11 @@ ad_proc -public ad_convert_to_html {
     @creation-date 19 July 2000
 } {
     if {$html_p eq "t"} {
-        set from html
+        set from "text/html"
     } else {
-        set from text
+        set from "text/plain"
     }
-    return [ad_html_text_convert -from $from -to html -- $text]
+    return [ad_html_text_convert -from $from -to "text/html" -- $text]
 }
 
 ad_proc -public ad_convert_to_text {
@@ -1545,11 +1549,11 @@ ad_proc -public ad_convert_to_text {
     @creation-date 19 July 2000
 } {
     if {$html_p eq "t"} {
-        set from html
+        set from "text/html"
     } else {
-        set from text
+        set from "text/plain"
     }
-    return [ad_html_text_convert -from $from -to text -- $text]
+    return [ad_html_text_convert -from $from -to "text/plain" -- $text]
 }
 
 
