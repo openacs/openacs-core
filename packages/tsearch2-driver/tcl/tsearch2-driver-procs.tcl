@@ -33,14 +33,9 @@ ad_proc -public tsearch2::index {
       if {$max_size_to_index > 0} {
         set txt [string range $txt 0 $max_size_to_index]
       }
-	db_dml index "
-            insert into txt (object_id,fti)
-            values ( :object_id,
-                     setweight(to_tsvector('default',coalesce(:title,'')),'A')
-                   ||setweight(to_tsvector('default',coalesce(:keywords,'')),'B')
-                   ||to_tsvector('default',coalesce(:txt,'')))"
+      db_dml index {}
     } else {
-	tsearch2::update_index $object_id $txt $title $keywords
+        tsearch2::update_index $object_id $txt $title $keywords
     }
 }
 
@@ -79,13 +74,13 @@ ad_proc -public tsearch2::update_index {
 } {
     set index_exists_p [db_0or1row object_exists "select 1 from txt where object_id=:object_id"]
     if {!$index_exists_p} {
-	tsearch2::index $object_id $txt $title $keywords
+        tsearch2::index $object_id $txt $title $keywords
     } else {
       set max_size_to_index [db_string get_max_size_to_index "select min(default_value) from apm_parameters where package_key = 'tsearch2-driver' and parameter_name = 'max_size_to_index'" -default "0"]
       if {$max_size_to_index > 0} {
         set txt [string range $txt 0 $max_size_to_index]
       }
-	db_dml update_index "
+        db_dml update_index "
             update txt set fti =
                      setweight(to_tsvector('default',coalesce(:title,'')),'A')
                    ||setweight(to_tsvector('default',coalesce(:keywords,'')),'B')
@@ -137,20 +132,14 @@ ad_proc -public tsearch2::search {
     set limit_clause ""
     set offset_clause ""
     if {[string is integer -strict $limit]} {
-	set limit_clause " limit $limit "
+        set limit_clause " limit $limit "
     }
     if {[string is integer -strict $offset]} {
-	set offset_clause " offset $offset "
+        set offset_clause " offset $offset "
     }
 
     set need_acs_objects 0
-    set base_query {
-        where fti @@ to_tsquery('default',:query)
-        and exists (select 1
-                    from acs_object_party_privilege_map m
-                    where m.object_id = txt.object_id
-                      and m.party_id = :user_id
-                      and m.privilege = 'read')}
+    set base_query [db_map base_query]
     if {$df ne ""} {
         set need_acs_objects 1
         append base_query " and o.creation_date > :df"
@@ -177,10 +166,7 @@ ad_proc -public tsearch2::search {
         set base_query "from txt $base_query"
     }
 
-    set results_ids [db_list search \
-                         "select txt.object_id $base_query
-   order by rank(fti,to_tsquery('default',:query)) desc
-   $limit_clause $offset_clause"]
+    set results_ids [db_list search {}]
 
     set count [db_string count "select count(*) $base_query"]
 
@@ -209,7 +195,7 @@ ad_proc -public tsearch2::summary {
     @error
 } {
     set query [tsearch2::build_query -query $query]
-   return [db_string summary "select headline('default',:txt,to_tsquery('default',:query))"]
+   return [db_string summary {}]
 }
 
 ad_proc -public tsearch2::driver_info {
@@ -242,15 +228,15 @@ ad_proc tsearch2::build_query { -query } {
     # match parens, if they don't match just throw them away
     set p 0
     for {set i 0} {$i < [string length $query]} {incr i} {
-	if {[string index $query $i] eq "("} {
-	    incr p
-	}
-	if {[string index $query $i] eq ")"} {
-	    incr p -1
-	}
+        if {[string index $query $i] eq "("} {
+            incr p
+        }
+        if {[string index $query $i] eq ")"} {
+            incr p -1
+        }
     }
     if {$p != 0} {
-	regsub -all {\(|\)} $query {} query
+        regsub -all {\(|\)} $query {} query
     }
 
     # remove or at beginning of query 
@@ -274,7 +260,7 @@ ad_proc tsearch2::build_query { -query } {
     regsub {(\))([\(\w])} $query {\1\ & \2} query
     regsub {([\)\w])(\()} $query {\1\ & \2} query
     if {[regsub {!|\||\&} $query {}] eq ""} {
-	set query ""
+        set query ""
     }
     return $query
 }
@@ -300,7 +286,7 @@ ad_proc -public tsearch2::seperate_query_and_operators {
     set quote_count [regexp -all {\"} $query]
     # if quotes don't match, just remove all of them
     if {[expr {$quote_count % 2}] == 1} {
-	regsub -all {\"} $query {} query
+        regsub -all {\"} $query {} query
     }
 
     set main_query ""
@@ -316,65 +302,65 @@ DB DAVE debugging procedure tsearch2::seperate_query_and_operators
 DB --------------------------------------------------------------------------------
 DB e = '${e}'
 DB --------------------------------------------------------------------------------"
-	if {[regexp {(^\w*):} $e discard operator] \
-		&& [lsearch -exact $valid_operators $operator] != -1} {
-	    # query element contains an operator, split operator from
-	    # query fragment
-	    set e [split $e ":"]
-	    set e [list $operator [lindex $e 1]]
-	}
-	# count quotes to see if this element
-	# is part of a phrase
-	if {$start_q ne 1} {
-	    set start_q [regexp {^\"} $e]
-	}
-	set end_q [regexp {\"$} $e]
+        if {[regexp {(^\w*):} $e discard operator] \
+                && [lsearch -exact $valid_operators $operator] != -1} {
+            # query element contains an operator, split operator from
+            # query fragment
+            set e [split $e ":"]
+            set e [list $operator [lindex $e 1]]
+        }
+        # count quotes to see if this element
+        # is part of a phrase
+        if {$start_q ne 1} {
+            set start_q [regexp {^\"} $e]
+        }
+        set end_q [regexp {\"$} $e]
 
-	if {$start_q} {
-	    set sq {"}
-	} else {
-	    set sq {}
-	}			
-	if {$end_q} {
-	    set start_q 0
-	    set eq {"}
-	} else {
-	    set eq {}
-	} 
+        if {$start_q} {
+            set sq {"}
+        } else {
+            set sq {}
+        }                        
+        if {$end_q} {
+            set start_q 0
+            set eq {"}
+        } else {
+            set eq {}
+        } 
 
         # now that we know if its parts of a phrase, get rid of the
-	# quotes
+        # quotes
         regsub -all {\"} $e {} e
-	
-	if {[llength $e] > 1} {
-	    # query element contains a valid operator
-	    set last_operator [lindex $e 0]
-	    set e [lindex $e 1]
-	} else {
+        
+        if {[llength $e] > 1} {
+            # query element contains a valid operator
+            set last_operator [lindex $e 0]
+            set e [lindex $e 1]
+        } else {
             set last_operator ""
         }
-	# regular search term
-	ns_log debug "operator(e)='${e}' start_q=$start_q end_q=$end_q"
-	if {$last_operator ne ""} {
-	    # FIXME need introspection for operator phrase support
-	    if {($last_operator eq "title:" || $last_operator eq "description:") && ($start_q || $end_q)} {
-		lappend ${last_operator}_phrase [regsub -all {\"} $e {}]
-	    } else {
-		lappend $last_operator [regsub -all {\"} ${e} {}]
-	    }
-	} else {
-	    if {$start_q || $end_q} {
-		lappend phrase $e
-	    } else {
-		lappend main_query $e
-	    }
-	}
+        # regular search term
+        ns_log debug "operator(e)='${e}' start_q=$start_q end_q=$end_q"
+        if {$last_operator ne ""} {
+            # FIXME need introspection for operator phrase support
+            if {($last_operator eq "title:" || $last_operator eq "description:") && ($start_q || $end_q)} {
+                lappend ${last_operator}_phrase [regsub -all {\"} $e {}]
+            } else {
+                lappend $last_operator [regsub -all {\"} ${e} {}]
+            }
+        } else {
+            if {$start_q || $end_q} {
+                lappend phrase $e
+            } else {
+                lappend main_query $e
+            }
+        }
     }
 
     foreach op $valid_operators {
-	if {[exists_and_not_null $op]} {
-	    lappend operators $op $title
-	}
+        if {[exists_and_not_null $op]} {
+            lappend operators $op $title
+        }
     }
     lappend result $main_query
     if {$operators ne ""} {
