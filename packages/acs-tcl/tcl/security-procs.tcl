@@ -285,7 +285,7 @@ ad_proc -public sec_get_user_auth_token {
 ad_proc -public sec_change_user_auth_token {
     user_id
 } {
-    Change the user's auth_token, which invalidates all existing login cookies.
+    Change the user's auth_token, which invalidates all existing login cookies, ie. forces user logout at the server.
 } {
     set auth_token [ad_generate_random_string]
 
