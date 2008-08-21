@@ -107,7 +107,11 @@ ad_proc -public ad_text_to_html {
 
     # Convert line breaks
     if { !$no_lines_p } {
-        set text [util_convert_line_breaks_to_html -includes_html $includes_html_p -- $text]
+        if { $includes_html_p } {
+            set text [util_convert_line_breaks_to_html -includes_html -- $text]
+        } else {
+            set text [util_convert_line_breaks_to_html -- $text]
+        }
     }
 
     if { !$no_quote_p } {
@@ -156,7 +160,7 @@ ad_proc -public util_convert_line_breaks_to_html {
     regsub -all {[ \t]*\n} $text "\n" text
     
     # Wrap P's around paragraphs
-    regsub -all {([^\n\s])\n\n([^\n\s])} $text {\1</p><p>\2} text
+    regsub -all {([^\n\s])\n\n([^\n\s])} $text {\1<p>\2} text
 
     # Convert _single_ CRLF's to <br>'s to preserve line breaks
     # Lars: This must be done after we've made P tags, because otherwise the line
@@ -174,12 +178,6 @@ ad_proc -public util_convert_line_breaks_to_html {
 
     # Add line breaks to P tags
     regsub -all {</p>} $text "</p>\n" text
-
-    # Last <p> tag
-    set idx [string last "<p>" [string tolower $text]]
-    if { $idx != -1 } {
-        set text "[string range $text 0 [expr {$idx-1}]]<p style=\"margin-bottom: 0px;\">[string range $text [expr {$idx+3}] end]"
-    }
 
     return $text
 }
