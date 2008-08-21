@@ -753,8 +753,7 @@ ad_proc -public template::list::write_csv {
             lappend __csv_cols [csv_quote $__element_name]
         }
     }
-    append __output "\"[join $__cols "\",\""]\"\n"
-
+    append __output "\"[join $__csv_cols "\",\""]\"\n"
 
     # Output rows
     template::multirow foreach $list_properties(multirow) {
