@@ -103,7 +103,7 @@ ad_proc acs_mail_lite::utils::build_date {
         set months_short [list Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec]
 
         set wday [lindex $wdays_short [clock format $clock -format %w]]
-        set mon [lindex $months_short [expr {[clock format $clock -format %m] - 1}]]
+        set mon [lindex $months_short [expr {[string trimleft [clock format $clock -format %m] 0] - 1}]]
 
         set result [clock format $clock -format "$wday, %d $mon %Y %H:%M:%S $zone"]
     } else {
