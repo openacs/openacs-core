@@ -10,7 +10,7 @@ if (url != null) {
 function init() {
 	tinyMCEPopup.resizeToInnerSize();
 
-	document.getElementById('hrefbrowsercontainer').innerHTML = getBrowserHTML('hrefbrowser','href','file','theme_hub_link');
+	document.getElementById('hrefbrowsercontainer').innerHTML = getBrowserHTML('hrefbrowser','href','file','theme_openacs_link');
 
 	// Handle file browser
 	if (isVisible('hrefbrowser'))
@@ -29,7 +29,7 @@ function init() {
 	document.forms[0].linktitle.value = tinyMCE.getWindowArg('title');
 	document.forms[0].insert.value = tinyMCE.getLang('lang_' + tinyMCE.getWindowArg('action'), 'Insert', true); 
 
-	addClassesToList('styleSelect', 'theme_hub_link_styles');
+	addClassesToList('styleSelect', 'theme_openacs_link_styles');
 	selectByValue(formObj, 'styleSelect', tinyMCE.getWindowArg('className'), true);
 
 	// Hide css select row if no CSS classes
@@ -61,6 +61,6 @@ function insertLink() {
 		target = '';
 
 	tinyMCEPopup.restoreSelection();
-	tinyMCE.themes['hub']._insertLink(href, target, title, dummy, style_class);
+	tinyMCE.themes['openacs']._insertLink(href, target, title, dummy, style_class);
 	tinyMCEPopup.close();
 }
