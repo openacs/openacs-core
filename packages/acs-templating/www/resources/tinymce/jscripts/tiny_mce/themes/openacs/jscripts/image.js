@@ -18,14 +18,14 @@ function insertImage() {
 	var align = document.forms[0].align.options[document.forms[0].align.selectedIndex].value;
 
 	tinyMCEPopup.restoreSelection();
-	tinyMCE.themes['hub']._insertImage(src, alt, border, hspace, vspace, width, height, align);
+	tinyMCE.themes['openacs']._insertImage(src, alt, border, hspace, vspace, width, height, align);
 	tinyMCEPopup.close();
 }
 
 function init() {
 	tinyMCEPopup.resizeToInnerSize();
 
-	document.getElementById('srcbrowsercontainer').innerHTML = getBrowserHTML('srcbrowser','src','image','theme_hub_image');
+	document.getElementById('srcbrowsercontainer').innerHTML = getBrowserHTML('srcbrowser','src','image','theme_openacs_image');
 
 	var formObj = document.forms[0];
 

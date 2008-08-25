@@ -14,7 +14,7 @@ function onLoadInit() {
 
 	resizeInputs();
 
-	if (tinyMCE.getParam("theme_hub_source_editor_wrap", true)) {
+	if (tinyMCE.getParam("theme_openacs_source_editor_wrap", true)) {
 		setWrap('soft');
 		document.getElementById('wraped').checked = true;
 	}
