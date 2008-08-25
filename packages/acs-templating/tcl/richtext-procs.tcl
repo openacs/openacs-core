@@ -485,7 +485,9 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
                 }
                 set ::acs_blank_master(xinha.options) $xinha_options
                 lappend ::acs_blank_master__htmlareas $attributes(id)
+
             } elseif {$richtextEditor eq "tinymce"} {
+
                 append output "<script>document.write(\"<input name='$element(id).format' value='text/html' type='hidden'>\");</script>\n"
                 append output "<noscript><br>Format: $format_menu</noscript>\n"
                 lappend ::acs_blank_master__htmlareas $attributes(id)
@@ -513,7 +515,7 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
                     {theme_openacs_buttons2_add_before "cut,copy,paste,pastetext,pasteword,separator,search,replace,separator"} 
                     {theme_openacs_buttons3_add_before "tablecontrols,separator"} 
                     {theme_openacs_buttons3_add "iespell,media,separator,print,separator,fullscreen"} 
-                    {extended_valid_elements "img[class|src|border=0|alt|title|hspace|vspace|width|height|align|onmouseover|onmouseout|name],hr[class|width|size|noshade],font[face|size|color|style],span[class|align|style]"}}
+                    {extended_valid_elements "img[class|src|alt|title|hspace|vspace|width|height|align|onmouseover|onmouseout|name],hr[class|width|size|noshade],font[face|size|color|style],span[class|align|style]"}}
                 set tinymce_configs_list [parameter::get \
                                               -package_id [apm_package_id_from_key "acs-templating"] \
                                               -parameter "XinhaDefaultPlugins" \
@@ -522,9 +524,9 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
                 foreach config_pair $tinymce_configs_list {
                     lappend pairslist "[lindex $config_pair 0]:\"[lindex $config_pair 1]\""
                 }
-                lappend pairslist "elements : \"[join $tinymce_elements ","]\""
+                lappend pairslist "elements : \"[join $::acs_blank_master__htmlareas ","]\""
                 set tinymce_configs_js [join $pairslist ","]
-                set ::acs_blank_master(tinymce.config) $timymce_configs_js
+                set ::acs_blank_master(tinymce.config) $tinymce_configs_js
             }
         } else {
             # Display mode
