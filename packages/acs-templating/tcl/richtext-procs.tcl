@@ -488,8 +488,8 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
 
             } elseif {$richtextEditor eq "tinymce"} {
 
-                append output "<script>document.write(\"<input name='$element(id).format' value='text/html' type='hidden'>\");</script>\n"
-                append output "<noscript><br>Format: $format_menu</noscript>\n"
+                append output "<script type=\"text/javascript\">document.write(\"<input name='$element(id).format' value='text/html' type='hidden'>\");</script>\n"
+                append output "<noscript><p>Format: $format_menu</p></noscript>\n"
                 lappend ::acs_blank_master__htmlareas $attributes(id)
                 
                 # get default configs
