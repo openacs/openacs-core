@@ -505,6 +505,7 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
                     {paste_convert_headers_to_strong true}
                     {fix_list_elements true}
                     {fix_table_elements true}
+                    {theme "openacs"}
                     {theme_openacs_toolbar_location "top" }
                     {theme_openacs_toolbar_align "left" }
                     {theme_openacs_statusbar_location "bottom" }
