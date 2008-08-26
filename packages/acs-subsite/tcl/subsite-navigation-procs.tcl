@@ -15,6 +15,7 @@ namespace eval subsite_navigation {
 
 ad_proc -public subsite_navigation::define_pageflow {
     {-show_applications_p 1}
+    {-no_tab_application_list ""}
     {-initial_pageflow ""}
     {-navigation_multirow navigation}
     {-group main}
@@ -31,6 +32,8 @@ ad_proc -public subsite_navigation::define_pageflow {
 
     @param show_applications_p If true, autogenerate tabs for applications (not declared
            boolean because the tabbed master takes this from a package parameter)
+    @param no_tab_application_list A list of application package keys to ignore when
+           autogenerating tabs for applications
     @param initial_pageflow Add these subsections before computing the rest of the page flow
     @param navigation_multirow The name of the multirow used to build the nav bars
     @param group Group name for the primary section
@@ -38,7 +41,8 @@ ad_proc -public subsite_navigation::define_pageflow {
 
 } {
     set pageflow [get_pageflow_struct -initial_pageflow $initial_pageflow \
-                     -show_applications_p $show_applications_p]
+                     -show_applications_p $show_applications_p \
+                     -no_tab_application_list $no_tab_application_list]
     set base_url [subsite::get_element -element url]
 
     if { ![template::multirow exists $navigation_multirow] } {
@@ -182,8 +186,15 @@ ad_proc -public subsite_navigation::get_section_info {
 ad_proc -public subsite_navigation::get_pageflow_struct {
     {-initial_pageflow ""}
     {-show_applications_p 1}
+    {-no_tab_application_list ""}
 } {
     Defines the page flow structure.
+
+    @param initial_pageflow Add these subsections before computing the rest of the page flow
+    @param show_applications_p If true, autogenerate tabs for applications (not declared
+           boolean because the tabbed master takes this from a package parameter)
+    @param no_tab_application_list A list of application package keys to ignore when
+           autogenerating tabs for applications
 } {
     set pageflow $initial_pageflow
 
@@ -209,12 +220,17 @@ ad_proc -public subsite_navigation::get_pageflow_struct {
     }
 
     set index_redirect_url [parameter::get -parameter "IndexRedirectUrl" -package_id $subsite_id]
+    set index_internal_redirect_url [parameter::get -parameter "IndexInternalRedirectUrl" -package_id $subsite_id]
+    regsub {(.*)/packages} $index_internal_redirect_url "" index_internal_redirect_url
+    regexp {(/[-[:alnum:]]+/)(.*)$} $index_internal_redirect_url dummy index_internal_redirect_url
     set child_urls [lsort -ascii [site_node::get_children -node_id $subsite_node_id -package_type apm_application]]
 
     if { $show_applications_p } {
         foreach child_url $child_urls {
-            if { $child_url ne $index_redirect_url } {
-                array set child_node [site_node::get_from_url -exact -url $child_url]
+            array set child_node [site_node::get_from_url -exact -url $child_url]
+            if { $child_url ne $index_redirect_url  &&
+                 $child_url ne $index_internal_redirect_url &&
+                 [lsearch -exact $no_tab_application_list $child_node(package_key)] == -1 } {
                 lappend pageflow $child_node(name) [list \
                                                         label $child_node(instance_name) \
                                                         folder $child_node(name) \
