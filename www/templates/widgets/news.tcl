@@ -8,7 +8,7 @@ ad_page_contract {
     news_items:multirow
 }
 
-set n_news_items 6
+set n_news_items 4
 set news_limit [expr $n_news_items + 1]
 
 set max_post_age_days 60
@@ -16,7 +16,9 @@ set max_post_age_days 60
 db_multirow news_items news_items_select "
 select item_id,
        publish_title,
-       pretty_publish_date
+       pretty_publish_date,
+	   publish_body,
+	   html_p
 from   news_items_approved
 --where  package_id = 43787
 --where  package_id = 3147
@@ -26,7 +28,13 @@ order  by publish_date desc, item_id desc
 limit $news_limit
 " {
     regsub -all {/} $publish_title { / } publish_title
+
+	if { !$html_p } {
+		set publish_body [ad_convert_to_html $publish_body]
+	}
+
 }
+
 
 #etp::get_page_attributes
 #etp::get_content_items -where $where -orderby $orderby \

@@ -11,6 +11,7 @@ ad_page_contract {
 set n_posts 10
 set forum_limit [expr $n_posts + 1]
 set max_post_age_days 7
+if {![info exists boxclass]} {set boxclass box}
 
 db_multirow forum_posts messages_select "
 select * from (

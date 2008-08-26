@@ -1,27 +1,26 @@
-<master src="../box-master">
-<property name="title"><a href="/forums/">@title@</a></property>
+<h2>@title@</h2>
 
-<multiple name=forum_posts>
-  <if @forum_posts.rownum@ le @n_posts@>
-    <div class="forum"> 
-      <p class="title">
-        <a href="/forums/forum-view?forum_id=@forum_posts.forum_id@">@forum_posts.forum_name@</a>
-      </p>
-      <group column="forum_id"> 
-        <p class="item">
-        
-	<a href="/forums/message-view?message_id=@forum_posts.message_id@">@forum_posts.subject@</a>
-        </p>
-      </group> 
+  <multiple name=forum_posts>
+	<if @forum_posts.rownum@ le @n_posts@>
+	  <div class="forum"> 
+		<h3 class="forum-title">
+		  <a href="/forums/forum-view?forum_id=@forum_posts.forum_id@">@forum_posts.forum_name@</a>
+		</h3>
+		<ul class="forum-content">
+		  <group column="forum_id"> 
+			<li>
+			  <a href="/forums/message-view?message_id=@forum_posts.message_id@">@forum_posts.subject@</a>
+			</li>
+		  </group> 
+		</ul>
+	  </div>
+	</if>
+  </multiple>
 
-    </div>
+  <if @forum_posts:rowcount@ eq 0>
+	<p>There are no posts.</p>
   </if>
-</multiple>
 
-<if @forum_posts:rowcount@ eq 0>
- There are no posts.
-</if>
-
-<if @forum_posts:rowcount@ gt @n_posts@>
-  <span class="more"><a href="/forums">more posts</a>...</span>
-</if>
+  <if @forum_posts:rowcount@ gt @n_posts@>
+	<div class="more"><a href="/forums">More posts...</a></div>
+  </if>

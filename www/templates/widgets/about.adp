@@ -1,10 +1,9 @@
 <master src="../box-master">
-<property name="title"><a href="/about/">@title@</a></property>
+<property name="title">What is OpenACS</property>
 
-<multiple name=about>
-  <p class="item"><a href="about/@about.url@">@about.title;noquote@</a>
-  <if @about.description@ not nil>
-  <span class="description"> - @about.description;noquote@</span>
-  </if>
+<p class="item">
+  <abbr title="Open Architecture Community System">OpenACS</abbr> is a toolkit for building scalable, community-oriented web applications. OpenACS is the foundation for many <a href="/community/sites/">products and websites</a>, including the <a href="http://www.dotlrn.org/">.LRN</a> (pronounced "dot learn") e-learning platform.
 </p>
-</multiple>
+<p class="item">
+  OpenACS is open source and is available under the <a href="http://www.gnu.org/licenses/gpl.html">GNU General Public License</a>.
+</p>
