@@ -1,17 +1,29 @@
 body			{
 			background-color: white;
-			font-family: sans-serif;
-			margin-top: 3px;
-		        
+  margin:5px 10px 0px 10px; 
+  padding:0;
+  font: 0.9em Tahoma, "Lucida Grande", sans-serif;
+  voice-family: "\"}\""; voice-family:inherit;
 }
 
-
-a			{
-			color: #336699;			
+a:link {
+  color: #235c96;
+  text-decoration:none;
+}
+  
+a:visited {
+  color: #235c96;
+  text-decoration:none;
+}
+  
+a:hover {
+  color: #235c96;
+  text-decoration:underline;
+  background-color: #f3f1e9;
 }
 
-a:visited		{
-			color: purple;
+h1, h2, h3, h4, h5, h6 {
+  color: #222222;
 }
 
 #description 		{
@@ -20,18 +32,6 @@ a:visited		{
 
 .more			{
 			float: right;
-			margin-right: 8px;
-}
-
-.forum			{
-			margin-top: 0px;
-			margin-bottom:7px;
-}
-
-.title			{
-			margin-bottom:2px;
-			margin-top: 5px;
-			font-weight: bold;
 }
 
 .page-title		{
@@ -41,9 +41,9 @@ a:visited		{
 }
 
 .item 			{
-	                padding-bottom: 0px;	
-			margin-bottom: 8px;
-		        margin-top: 0px;
+      padding-bottom: 0px;	
+      margin-bottom: 8px;
+      margin-top: 0px;
 		
 }
 
@@ -55,17 +55,23 @@ span.chosen		{
 			color: #ccc;
 }
 
-span.navigation td		{
-			font-weight: bold;
+div.navigation td		{
+			font-weight: normal;
 			color: white;
 }
 
-span.navigation a		{
-			font-weight: bold;
+div.navigation a:link		{
+			font-weight: normal;
 			color: white;
 }
 
-span.navigation a:visited	{
+div.navigation a:hover		{
+			font-weight: normal;
+			color: white;
+            background: inherit;
+}
+
+div.navigation a:visited	{
 			color: white;
 }
 
@@ -85,16 +91,23 @@ div.box			{
 			margin-bottom: 15px;
 }
 
-span.box-title a	{
+h1.box-title, h2.box-title	{
 			color: white;	
-			font-weight: bold;
+            font-family: Verdana, "Lucida Grande", sans-serif;
+			font-weight: normal;
+            font-size: 1em;
 			padding-left: 2px;
 			padding-right: 2px;
-			padding-bottom: 5px;
+			padding-bottom: 1px;
+            margin: 0 0 0 0;
 }
 
-span.box-title a:visited	{
+.box-title a:link, .box-title a:visited	{
 			color: white;
+}
+
+.box-title a:hover { 
+            background: inherit;
 }
 
 div.box-content		{
@@ -122,27 +135,7 @@ div.box-full-content a:visited	{
 
 div.left-panel		{
 			float: left;
-			width: 20%;			
-}
-
-div.login td		{
-				
-}
-
-div.news		{
-			
-}
-
-div.postings		{
-
-}
-
-div.postings span.forum	{
-
-}
-
-div.postings span.post	{
-			text-indent: 10px;
+			width: 25%;			
 }
 
 div.download		{
@@ -154,13 +147,9 @@ div.right-panel		{
 			width: 20%;
 }
 
-div.features		{
-
-}
-
 div.main-content	{
-			float: left;
-			width: 50%;
+			float: right;
+			width: 69%;
 			margin-left: 3%;
 			margin-right: 3%;
 }
@@ -191,10 +180,6 @@ div.container-right	{
 			width: 59%;
 }
 
-div.forums		{
-			clear: both;
-}
-
 div.jobs		{
 			clear: both;
 }
@@ -211,15 +196,45 @@ div.hosting		{
 			clear: both;
 }
 
-div.forum-post		{
-			margin-left: 30px;
-			margin-right: 30px;
-}
-
-
 dl.faq dt { margin-bottom: 5px; 
 	    font-weight: bold; 
 	    background-color: #eee;
 	    padding: 2px; }
 
 dl.faq dd { margin-bottom: 20px; }
+
+div.news .rss-feed {
+    float: right;
+    top: 6px;
+}
+
+div.news h2, div.postings h2 {
+  color: #545D51; 
+}
+
+div.postings .forum, div.news .news-item {
+    margin-left: 1em;
+}
+
+div.item-content, p.item-content, ul.forum-content {
+    background-color: #f8f8f8;
+    padding: 6px;
+    margin-top: 1px;
+}
+
+ul.forum-content li {
+    list-style-type: none;
+}
+
+h3.item-title, h3.forum-title {
+    margin-bottom: 1px;
+    font-weight: normal;
+    font-size: 1em;
+}
+h3.item-title a, h3.forum-title a {
+   font-weight: bold;
+}
+h3.item-title a:hover, h3.forum-title a:hover, p.item-content a:hover, ul.forum-content a:hover {
+    background-color: inherit;
+}
+
