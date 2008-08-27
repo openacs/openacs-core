@@ -1,9 +1,24 @@
 <master>
-<property name="title">@pa.title@</property>
+<property name="title">OpenACS Home</property>
+
+
+<h1 style="display:none">OpenACS</h1>
 
 <!-- START LEFT PANEL -->
 
 <div class="left-panel">
+  <include src="widgets/about">
+  <include src="widgets/download">
+  <include src="widgets/resources">
+  <include src="widgets/sponsors">
+</div>
+
+<!-- END LEFT PANEL -->
+
+
+<!-- START MAIN CONTENT -->
+
+<div class="main-content">
 
 <!-- START NEWS -->
 <div class="news">
@@ -19,32 +34,6 @@
 
 </div>
 
-<!-- END LEFT PANEL -->
-
-
-<!-- START MAIN CONTENT -->
-
-<div class="main-content">
-@pa.content;noquote@
-</div>
-
 <!-- END MAIN CONTENT -->
-
-
-<!-- START RIGHT PANEL -->
-<div class="right-panel">
-
-<!-- START DOWNLOAD -->
-<div class="download">
-<center>
-<a href="/projects/openacs/download/"><img src="/templates/slices/unleash.gif" width="118" height="53"  border="0" alt="Download OpenACS"></a>
-</center>
-</div>
-<!-- END DOWNLOAD -->
-<include src="widgets/about" title="About OpenACS">
-<include src="widgets/features" title="Features Articles">
-</div>
-<!-- END RIGHT PANEL -->
-
 
 
