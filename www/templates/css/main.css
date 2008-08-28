@@ -220,6 +220,8 @@ div.item-content, p.item-content, ul.forum-content {
     background-color: #f8f8f8;
     padding: 6px;
     margin-top: 1px;
+    font-size: small;
+    font-family: Verdana, "Lucida Grande", sans-serif;
 }
 
 ul.forum-content li {
