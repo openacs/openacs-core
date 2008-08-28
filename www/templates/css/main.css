@@ -209,7 +209,8 @@ div.news .rss-feed {
 }
 
 div.news h2, div.postings h2 {
-  color: #545D51; 
+  color: #444;
+  background-color: #f8f8f8; 
 }
 
 div.postings .forum, div.news .news-item {
@@ -217,7 +218,6 @@ div.postings .forum, div.news .news-item {
 }
 
 div.item-content, p.item-content, ul.forum-content {
-    background-color: #f8f8f8;
     padding: 6px;
     margin-top: 1px;
     font-size: small;
@@ -232,9 +232,12 @@ h3.item-title, h3.forum-title {
     margin-bottom: 1px;
     font-weight: normal;
     font-size: 1em;
+    border-bottom: thin dotted #666;
 }
+
 h3.item-title a, h3.forum-title a {
    font-weight: bold;
+   color: #960;
 }
 h3.item-title a:hover, h3.forum-title a:hover, p.item-content a:hover, ul.forum-content a:hover {
     background-color: inherit;
