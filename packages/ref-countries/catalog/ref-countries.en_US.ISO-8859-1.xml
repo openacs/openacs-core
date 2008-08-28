@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="ref-countries" package_version="0.1d" locale="en_US" charset="ISO-8859-1">
+<message_catalog package_key="ref-countries" locale="en_US" charset="ISO-8859-1">
 
   <msg key="AD">Andorra</msg>
   <msg key="AE">United Arab Emirates</msg>
