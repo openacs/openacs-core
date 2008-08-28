@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<message_catalog package_key="search" package_version="5.2.3" locale="nl_ZA" charset="ISO-8859-1">
+<message_catalog package_key="search" locale="nl_ZA" charset="ISO-8859-1">
 
   <msg key="Advanced_Search">Gevorderde soektog</msg>
   <msg key="and_not_needed">&quot;&lt;b&gt;AND&lt;/b&gt;&quot;-operator is onnodig -- ons gebruik standaard alle soekterme.</msg>
