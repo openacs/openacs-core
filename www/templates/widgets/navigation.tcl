@@ -12,6 +12,7 @@ px_multirow_nav {
     {/about/ "About" 0}
     {/projects/openacs/download/ "Download" 0}
     {/doc/ "Documentation" 0}
+    {/xowiki/ "Wiki" 0}
     {/contribute/ "Contribute" 0}
     {/community/ "Community" 0}
     {/community/companies/ "Support" 0}
