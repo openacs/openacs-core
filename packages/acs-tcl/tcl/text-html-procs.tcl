@@ -806,17 +806,33 @@ ad_proc -public ad_html_to_text {
         #     - alpha or
         #     - a slash, and then alpha
         # Otherwise, it's probably just a lone < character
-        if { $i >= [expr {$length-1}] || \
-                 (![string is alpha [string index $html [expr {$i + 1}]]] && \
-                      (![string equal "/" [string index $html [expr {$i + 1}]]] || \
-                           ![string is alpha [string index $html [expr {$i + 2}]]])) } {
+        if { $i >= [expr $length-1] || \
+                 (![string is alpha [string index $html [expr $i + 1]]] && \
+		      [string index $html [expr {$i + 1}]] ne "!" && \
+                      (![string equal "/" [string index $html [expr $i + 1]]] || \
+                           ![string is alpha [string index $html [expr $i + 2]]])) } {
             # Output the < and continue with next character
             ad_html_to_text_put_text output "<"
             set last_tag_end [incr i]
             continue
-        }
-    
-        # we're inside a tag now. Find the end of it
+        } elseif {[string match "!--*" [string range $html [expr {$i + 1}] end]]} {
+	    # handle HTML comments, I can't beleive noone noticed this before.
+	    # this code maybe not be elegant but it works
+	    
+	    # find the closing comment tag.
+	    set comment_idx [string first "-->" $html $i]
+	    if {$comment_idx == -1} {
+		# no comment close, escape
+		set last_tag_end $i
+		set i $comment_idx
+		break
+	    }
+	    set i [expr {$comment_idx + 3}]
+	    set last_tag_end $i
+	    
+	    continue
+	}
+	# we're inside a tag now. Find the end of it
 
         # make i point to the char after the <
         incr i

@@ -251,3 +251,49 @@ aa_register_case -cats {api smoke} -procs {ad_parse_html_attributes} ad_parse_ht
     set result [ad_parse_html_attributes $html $pos]
     aa_equals "Attributes - $result" $result {{foo bar} {greeting {welcome home}} {ja blah}}
 }
+
+aa_register_case -cats {api smoke} -procs {ad_html_text_convert} ad_text_html_convert_outlook_word_comments {
+    Test is MS Word HTML Comments are stripped or not
+} {
+
+    set html {<!-- standard comments -->}
+    set result [ad_html_text_convert -from text/html -to text/plain $html]
+    
+    aa_equals "Standard HTML Comments cleaned $result" $result ""
+    set html {<!--[if !mso]> v\:* {behavior:url(MESSAGE KEY MISSING: 'default'VML);} o\:*
+	{behavior:url(MESSAGE KEY MISSING: 'default'VML);} w\:* {behavior:url(MESSAGE KEY MISSING: 'default'VML);}
+	.shape {behavior:url(MESSAGE KEY MISSING: 'default'VML);} <![endif]--> <!-- /* Font
+	Definitions */ @font-face {font-family:Wingdings; panose-1:5 0 0 0 0 0
+	    0 0 0 0;} @font-face {font-family:Tahoma; panose-1:2 11 6 4 3 5 4 4 2
+		4;} /* Style Definitions */ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0in; margin-bottom:.0001pt; font-size:12.0pt;
+	    font-family:"Times New Roman";} a:link, span.MsoHyperlink {color:blue;
+		text-decoration:underline;} a:visited, span.MsoHyperlinkFollowed
+	{color:blue; text-decoration:underline;} p {mso-margin-top-alt:auto;
+	    margin-right:0in; mso-margin-bottom-alt:auto; margin-left:0in;
+	    font-size:12.0pt; font-family:"Times New Roman";} span.EmailStyle18
+	{mso-style-type:personal-reply; font-family:Arial; color:navy;} @page
+	Section1 {size:8.5in 11.0in; margin:1.0in 1.25in 1.0in 1.25in;}
+	div.Section1 {page:Section1;} /* List Definitions */ @list l0
+	{mso-list-id:669450480; mso-list-template-ids:145939189
+	    6;} @list
+	l0:level1 {mso-level-number-format:bullet; mso-level-text:\F0B7;
+	    mso-level-tab-stop:.5in; mso-level-number-position:left;
+	    text-indent:-.25in; mso-ansi-font-size:10.0pt; font-family:Symbol;}
+	@list l1 {mso-list-id:1015379521; mso-list-template-ids:-1243462522;}
+	ol {margin-bottom:0in;} ul {margin-bottom:0in;} --> }
+
+    set result [ad_html_text_convert -from text/html -to text/plain $html]
+    
+    aa_equals "MS Word Comments cleaned $result" $result ""
+
+    set html {Regular Text<!-- Unclosed comment with very long content}
+    set result [ad_html_text_convert -from text/html -to text/plain $html]
+    aa_equals "Unclosed comment OK" $result $html
+
+    set html {<b>Bold</b> <i>Italic</i><!-- comment -->}
+    set result [ad_html_text_convert -from text/html -to text/plain $html]
+    aa_equals "Some HTML with Comment ok" $result "*Bold* _Italic_"
+
+
+}
