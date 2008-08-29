@@ -69,7 +69,9 @@ set subsite_url [subsite::get_element -element url]
 set system_name [ad_system_name]
 
 if { [exists_and_not_null return_url] } {
-    if {[util_complete_url_p $return_url]} {
+    if {[util_complete_url_p $return_url] 
+	&& ![string match "[string trimright [subsite::get_url -absolute_p 1 -protocol http] /]/*" $return_url] 
+	&& ![string match "[string trimright [subsite::get_url -absolute_p 1 -protocol https] /]/*" $return_url]} {
       ad_returnredirect -message "only urls without a host name are permitted" "."
       ad_script_abort
     }
