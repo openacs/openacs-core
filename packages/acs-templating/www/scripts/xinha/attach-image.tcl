@@ -7,8 +7,8 @@ ad_page_contract {
     @creation-date 13.07.2004
     @cvs-id $Id$
 } {
-    {parent_id:integer}
-    {package_id:integer}
+    {parent_id:integer,optional}
+    {package_id ""}
     {selector_type "image"}
 }
 
@@ -17,15 +17,27 @@ set js_source [ah::js_sources]
 
 set f_url ""
 
-set user_id [ad_conn user_id]
+set user_id [auth::require_login]
 
 # if user has write permission, create image upload form, 
 
-set write_p [permission::permission_p \
-		 -party_id $user_id \
-		 -object_id $parent_id \
-		 -privilege "write"]
+if {![info exists parent_id]} {
+    set parent_id $user_id
+    set write_p 1
+} else {
+
+    set write_p [permission::permission_p \
+		     -party_id $user_id \
+		     -object_id $parent_id \
+		     -privilege "write"]
+}
+
 if {!$write_p} {
+    # if parent_id does not exist yet, let's use the pacakage_id
+    if { ![db_0or1row "check_parent" "select object_id from acs_objects where object_id=:parent_id"] } {
+        set parent_id $package_id
+    }
+
     # item might not exist!
     set write_p [permission::permission_p \
 		     -party_id $user_id \
@@ -37,21 +49,21 @@ set recent_images_options [list]
 
 if {$write_p} {
     # set recent images
-    db_multirow -unclobber recent_images recent_images \
-	{
-	    select ci.item_id, ci.name
-	    from cr_items ci, cr_revisionsx cr, cr_child_rels ccr
-	    where ci.live_revision=cr.revision_id
-	    and ci.content_type='image'
-	    and cr.creation_user=:user_id
-	    and ccr.parent_id=ci.item_id
-	    and ccr.relation_tag='image-thumbnail'
-	    order by creation_date desc
-	    limit 6
-	} {
-	    set name [regsub "${item_id}_" $name ""] 	    
-	    lappend recent_images_options [list $name $item_id]
-	}
+    # db_multirow -unclobber recent_images recent_images \
+	# {
+	    # select ci.item_id, ci.name
+	    # from cr_items ci, cr_revisionsx cr, cr_child_rels ccr
+	    # where ci.live_revision=cr.revision_id
+	    # and ci.content_type='image'
+	    # and cr.creation_user=:user_id
+	    # and ccr.parent_id=ci.item_id
+	    # and ccr.relation_tag='image-thumbnail'
+	    # order by creation_date desc
+	    # limit 6
+	# } {
+	    # set name [regsub "${item_id}_" $name ""] 	    
+	    # lappend recent_images_options [list $name $item_id]
+	# }
     
 
 
@@ -61,14 +73,14 @@ if {$write_p} {
         -name upload_form \
         -mode edit \
         -export {selector_type file_types parent_id} \
-        -html { enctype multipart/form-data } \
+        -html { enctype multipart/form-data  } \
         -form {
             item_id:key
-            {package_id:text(hidden)}
-	    {choose_file:text(radio),optional {options $recent_images_options}}
+            {package_id:text(hidden),optional}
+	    	{choose_file:text(radio),optional {options $recent_images_options}}
             {upload_file:file(file),optional {html {size 30}} }
             {share:text(radio),optional {label "[_ acs-templating.This_image_can_be_reused_by]"} {options $share_options} {help_text "[_ acs-templating.This_image_can_be_reused_help]"}}
-	    {select_btn:text(submit) {label "[_ acs-templating.Add_the_selected_image]"}}
+	    	{select_btn:text(submit) {label "[_ acs-templating.Add_the_selected_image]"}}
             {upload_btn:text(submit) {label "[_ acs-templating.HTMLArea_SelectUploadBtn]"}
             }
         } \
@@ -171,6 +183,11 @@ if {$write_p} {
 } else {
     set write_p 0
 }
+# default to xinha but tinymce will work too. no plugins for rte
+set richtextEditor [parameter::get \
+			-package_id [ad_conn package_id] \
+			-parameter "RichTextEditor" \
+			-default "xinha"]
 
 set HTML_Preview "Preview"
 set HTML_UploadTitle ""
