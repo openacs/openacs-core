@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="acs-tcl" package_version="5.1.0" locale="ch_zh" charset="utf-8">
+<message_catalog package_key="acs-tcl" locale="ch_zh" charset="utf-8">
 
   <msg key="approve">批准</msg>
   <msg key="approve_email">批准email</msg>
