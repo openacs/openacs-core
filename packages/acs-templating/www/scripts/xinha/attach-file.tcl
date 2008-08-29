@@ -1,5 +1,5 @@
 ad_page_contract {
-    Simple image upload, attach image to object_id passed in, if no
+    Simple file upload, attach image to object_id passed in, if no
     object_id, use the current package_id
     @author Guenter Ernst guenter.ernst@wu-wien.ac.at, 
     @author Gustaf Neumann neumann@wu-wien.ac.at
@@ -7,7 +7,8 @@ ad_page_contract {
     @creation-date 13.07.2004
     @cvs-id $Id$
 } {
-    {parent_id:integer}
+    {parent_id:integer,optional}
+    {package_id ""}
     {selector_type "file"}
     {f_href ""}
 }
@@ -15,22 +16,23 @@ ad_page_contract {
 #HAM : ajax sources
 set js_source [ah::js_sources]
 
-set package_id [ad_conn package_id]
+set f_url ""
 
-set user_id [ad_conn user_id]
+set user_id [auth::require_login]
+
 # if user has write permission, create image upload form, 
-set write_p [permission::permission_p \
-		 -party_id $user_id \
-		 -object_id $parent_id \
-		 -privilege "write"]
-if {!$write_p} {
-    # item might not exist!
+
+if {![info exists parent_id]} {
+    set parent_id $user_id
+    set write_p 1
+} else {
+
     set write_p [permission::permission_p \
 		     -party_id $user_id \
-		     -object_id $package_id \
+		     -object_id $parent_id \
 		     -privilege "write"]
 }
-#ns_log notice "HAM : permission write_p : $write_p ************"
+
 if {$write_p} {
     # set recent files
     set recent_files_options [list]
@@ -61,7 +63,7 @@ if {$write_p} {
         -html { enctype multipart/form-data } \
         -form {
 	    item_id:key
-	    {package_id:text(hidden)}
+	    {package_id:text(hidden),optional}
 	    {f_href:text(hidden),optional {html {id f_href}}}
 	    {f_title:text,optional {label "[_ acs-templating.Link_Title]"} {html {size 50 id f_title} } }
 	    {f_url:url,optional {label "[_ acs-templating.Link_Url]"} {html {size 50 id f_url } } }
@@ -88,24 +90,27 @@ if {$write_p} {
 	    if { ![exists_and_not_null f_title] && [exists_and_not_null url_ok_btn] } {
 		template::form::set_error upload_form f_title "Specify a [_ acs-templating.Link_Title]"
 	    }
+	    set error_p 0
             # check file name
-            if {$choose_file eq "" && $upload_file eq "" && $f_url eq ""} {
-		if { [info exists f_url] && $url_ok_btn ne ""} {
+		if { [info exists f_url] && $f_url eq "" && $url_ok_btn ne ""} {
 		    template::form::set_error upload_form f_url "Specify a [_ acs-templating.Link_Url]"
+		    set error_p 1
 		} 
-		if {[info exists ok_btn] && $ok_btn ne ""} {
+		if {[info exists ok_btn] && $ok_btn ne "" && $upload_file eq ""} {
 		    template::form::set_error upload_form upload_file \
 			[_ acs-templating.HTMLArea_SpecifyUploadFilename]
+		    set error_p 1
 		}
-		if {[info exists select_btn]} {
+		if {[info exists select_btn] && $select_btn ne "" && $choose_file eq ""} {
 		    template::form::set_error upload_form choose_file \
 			[_ acs-templating.Attach_File_Choose_a_file]
+		    set error_p 1
 		}
 		set share site
-		set f_title ""
-		set f_href ""
+#		set f_title ""
+#		set f_href ""
 		
-            } else {
+            if { !$error_p } {
 		if {$upload_file ne ""} {
 		    # check quota
 		    # FIXME quota is a good idea, set per-user upload quota??
@@ -191,7 +196,7 @@ if {$write_p} {
 		    }
 		} 
 
-		if {$f_title eq ""} {
+		if {$f_title eq "" && [info exists file_name]} {
 		    element set_value upload_form f_title $file_name
 		}            
 		
@@ -217,5 +222,11 @@ if {$write_p} {
 } else {
     set write_p 0
 }
+
+# default to xinha but tinymce will work too. no plugins for rte
+set richtextEditor [parameter::get \
+			-package_id $package_id \
+			-parameter "RichTextEditor" \
+			-default "xinha"]
 
 set HTML_UploadTitle ""

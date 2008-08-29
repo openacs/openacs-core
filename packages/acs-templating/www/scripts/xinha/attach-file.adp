@@ -2,6 +2,7 @@
 <head>
   <title>#acs-templating.HTMLArea_InsertLink#</title>
 
+<if @richtextEditor@ eq "xinha">
   <script type="text/javascript" 
 	  src="/resources/acs-templating/xinha-nightly/popups/popup.js">
   </script>
@@ -9,7 +10,7 @@
 
 <script type="text/javascript">
 	var selector_window;
-	window.resizeTo(450, 300);
+	// window.resizeTo(450, 300);
 
 	function Init() {
 	  __dlg_init();
@@ -64,6 +65,39 @@
 	};
 
 </script>
+</if>
+<if @richtextEditor@ eq "tinymce">
+
+<script language="javascript" type="text/javascript" src="/resources/acs-templating/tinymce/jscripts/tiny_mce/tiny_mce_popup.js"></script>
+<script language="javascript" type="text/javascript" src="/resources/acs-templating/tinymce/jscripts/tiny_mce/utils/mctabs.js"></script>
+<script language="javascript" type="text/javascript" src="/resources/acs-templating/tinymce/jscripts/tiny_mce/utils/form_utils.js"></script>
+<script language="javascript" type="text/javascript" src="/resources/acs-templating/tinymce/jscripts/tiny_mce/utils/validate.js"></script>
+<script language="javascript" type="text/javascript" src="/resources/acs-templating/tinymce/jscripts/tiny_mce/plugins/oacslink/jscripts/functions.js">\
+</script>
+        <base target="_self" />
+
+<script>
+        function Init() {
+
+          var param = window.dialogArguments;
+          // document.getElementById("f_href").focus();
+          var f_href = document.getElementById("f_href");
+          var url = f_href.value;
+          // alert ('url:' + url+ ' f_href:' + f_href.value);
+          if (url) {
+                 // alert ('url is set calling insertAction');
+                 insertAction();
+          }
+
+	  tinyMCEPopup.executeOnLoad('init();');
+
+        }
+	function onCancel() {
+	    tinyMCEPopup.close();
+        }
+</script>
+
+</if>
 
 <style type="text/css">
 	html, body {
@@ -114,32 +148,25 @@
 		    		<td class="form-widget">
 				</else> 	
 					<fieldset>
-						<legend>#acs-templating.Link_Title#</legend>
+						<legend>#acs-templating.Title#</legend>
 						<formwidget id="f_title">
 		    				<formerror id="f_title">
 		      				<div class="form-error">@formerror.f_title@</div>
 		    			</formerror>
 					</fieldset>
-					You can link to the above text to a URL or a file. Select one of the options below.<br /><br />
-					<fieldset>
-						<legend>Link to a URL</legend>
-						<formwidget id="f_url">
-		    				<formerror id="f_url">
-		      				<div class="form-error">@formerror.f_url@</div>
-		    			</formerror>
-		    			<br /><formwidget id="url_ok_btn">&nbsp;<button type="button" name="cancel" onclick="return onCancel();">#acs-templating.HTMLArea_action_cancel#</button>
-					</fieldset>
+					You can link to the above text to a file. Select one of the options below.<br /><br />
+
 					<if @recent_files_options@ ne "">
 					<fieldset>
 	        			<legend>#acs-templating.Choose_File#</legend>
 						<formgroup id="choose_file">
 							<if @formgroup.rownum@ odd and @formgroup.rownum@ gt 1><br /></if>
-								@formgroup.widget;noquote@ @formgroup.label;noquote@
+								@formgroup.widget;noquote@ 								<label for="upload_form:elements:choose_file:@formgroup.option@">@formgroup.label;noquote@</label>
 							</formgroup>
 		    				<formerror id="choose_file">
 		      					<div class="form-error">@formerror.choose_file@</div>
 		    				</formerror>
-						<br /><formwidget id="select_btn">&nbsp;<button type="button" name="cancel" onclick="return onCancel();">#acs-templating.HTMLArea_action_cancel#</button>
+						<br /><formwidget id="select_btn">&nbsp;<input type="button" value="#acs-templating.HTMLArea_action_cancel#" name="cancel" onclick="javascript:onCancel();"></input>
 					</fieldset>
 					</if>
 					</td>
