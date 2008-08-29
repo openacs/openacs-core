@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="acs-subsite" package_version="5.1.0" locale="ch_zh" charset="utf-8">
+<message_catalog package_key="acs-subsite" locale="ch_zh" charset="utf-8">
 
   <msg key="_or">，否则</msg>
   <msg key="A_member_of_the_system">%system_name%团体的会员</msg>
