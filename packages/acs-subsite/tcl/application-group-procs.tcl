@@ -248,3 +248,64 @@ ad_proc -public application_group::delete {
 
 }
 
+ad_proc -public application_group::closest_ancestor_application_group_site_node {
+    {-url ""}
+    {-node_id ""}
+} {
+    Starting with the node at with given id, or at given url,
+    climb up the site map and return the group_id of the first 
+    non null application group
+
+    Will ignore itself and only return true ancestors
+
+    @param url          The url of the node to start from. You must provide 
+                        either url or node_id. An empty url is taken to mean 
+                        the main site.
+    @param node_id      The id of the node to start from. Takes precedence 
+                        over any provided url.
+
+    @return The id of the application group
+
+    @author Peter Marklund, Dave Bauer
+} {
+    # Make sure we have a url to work with
+    if { [empty_string_p $url] } {
+          if { [empty_string_p $node_id] } {
+              set url "/"
+          } else {
+              set url [site_node::get_url -node_id $node_id]
+          }
+    }
+
+    set group_id ""
+    while {$group_id eq "" && $url != "/"} {
+        # move up a level
+        set url [string trimright $url /]
+        set url [string range $url 0 [string last / $url]]
+        
+        array set node_array [site_node::get -url $url]
+        set group_id [application_group::group_id_from_package_id -package_id $node_array(package_id) -no_complain]
+    }
+    if {$group_id eq ""} {
+	array unset -no_complain node_array 
+    }
+    set node_array(application_group_id) $group_id
+
+    return [array get node_array]
+}
+    
+ad_proc -public application_group::child_application_groups {
+    -node_id:required
+    {-package_key ""}
+} {
+
+} {
+    set group_list [list]
+    set child_packages [site_node::get_children -package_key $package_key -node_id $node_id -element package_id]
+    foreach package_id $child_packages {
+	if {[set group_id [application_group::group_id_from_package_id -package_id ${package_id} -no_complain]] ne ""} {
+	    lappend group_list $group_id
+	}
+    }
+    return $group_list
+}
