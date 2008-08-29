@@ -386,3 +386,18 @@ ad_proc -public image::get_resized_item_id {
 } {
     return [db_string get_resized_item_id "" -default ""]
 }
+
+ad_proc -private image::resize_existing_images {
+} {
+    Generate thumbnails for images already in the CR
+} {
+    foreach {size_name dimensions} [image::get_convert_to_sizes] {
+
+        foreach item_id [db_list get_items "select item_id from cr_items where \content_type='image' and latest_revision is not null"] {
+        image::resize \
+            -item_id $item_id \
+            -size_name $size_name
+        }
+    }
+}
+
