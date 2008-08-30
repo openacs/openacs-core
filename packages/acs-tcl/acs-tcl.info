@@ -7,7 +7,7 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.5.0d1" url="http://openacs.org/repository/download/apm/acs-tcl-5.5.0d1.apm">
+    <version name="5.5.0d2" url="http://openacs.org/repository/download/apm/acs-tcl-5.5.0d2.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>The Kernel Tcl API library.</summary>
         <release-date>2008-05-31</release-date>
@@ -18,9 +18,9 @@
         <license>GPL version 2</license>
         <maturity>3</maturity>
 
-        <provides url="acs-tcl" version="5.5.0d1"/>
-        <requires url="acs-bootstrap-installer" version="5.5.0d1"/>
-        <requires url="acs-kernel" version="5.5.0d1"/>
+        <provides url="acs-tcl" version="5.5.0d2"/>
+        <requires url="acs-bootstrap-installer" version="5.5.0d2"/>
+        <requires url="acs-kernel" version="5.5.0d2"/>
 
         <callbacks>
         </callbacks>
@@ -28,6 +28,7 @@
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="HtmlDocBin"  default="/usr/bin/htmldoc" description="path to the executable of htmldoc"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="ReturnComplaint"  default="/packages/acs-tcl/lib/ad-return-complaint" description="Template to use for the complaint page."/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="ReturnError"  default="/packages/acs-tcl/lib/ad-return-error" description="Template to use for the complaint page."/>
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="SuppressHttpPort"  default="0" description="Set to 1 to suppress the server's configured port --useful for example, when server is behind a proxy and: connection is switching from https to http or kernel's parameter ForceHostP is set to 1."/>
         </parameters>
 
     </version>
