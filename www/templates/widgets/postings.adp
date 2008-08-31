@@ -9,7 +9,7 @@
 		<ul class="forum-content">
 		  <group column="forum_id"> 
 			<li>
-			  <a href="/forums/message-view?message_id=@forum_posts.message_id@">@forum_posts.subject@</a>
+			  <a href="/forums/message-view?message_id=@forum_posts.message_id@">@forum_posts.subject;noquote@</a>
 			</li>
 		  </group> 
 		</ul>
