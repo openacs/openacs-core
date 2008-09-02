@@ -34,7 +34,7 @@
               left outer join notification_user_map using (notification_id, user_id)
             where sent_date is null
               and creation_date <= notif_date
-              and notif_date < current_timestamp
+              and (notif_date is null or notif_date < current_timestamp)
               and interval_id = :interval_id
           order by user_id, type_id, notif_date
         </querytext>
