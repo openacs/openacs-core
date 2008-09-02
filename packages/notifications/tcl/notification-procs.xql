@@ -55,10 +55,13 @@
 
     <fullquery name="notification::new.select_notification_requests">
         <querytext>
-            select user_id, interval_id, delivery_method_id, format
-            from   notification_requests
+            select cc.user_id, interval_id, delivery_method_id, format
+            from   notification_requests nr, cc_users cc
             where  type_id = :type_id
-            and    object_id = :object_id
+            and    nr.object_id = :object_id
+            and    nr.user_id = cc.user_id
+            and    cc.member_state = 'approved'
+
         </querytext>
     </fullquery>
 
