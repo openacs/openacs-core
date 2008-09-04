@@ -7,7 +7,7 @@
   <span class="item"><a href="/xowiki/en/openacs-system-install">Install documentation</a></span>
 </p>
 <p>
-  <span class="item"><a href="/xowiki/debian">Ubuntu packages</a></span>
+  <span class="item"><a href="/xowiki/ubuntu">Ubuntu packages</a></span>
   <br>
   <span class="item"><a href="/xowiki/debian">Debian packages</a></span>
   <br>
