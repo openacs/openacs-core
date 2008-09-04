@@ -116,6 +116,7 @@ namespace eval acs_mail_lite {
     ad_proc -private smtp {
         -multi_token:required
         -headers:required
+        -originator:required
     } {
         Send messages via SMTP
         
@@ -127,19 +128,23 @@ namespace eval acs_mail_lite {
 
         # Get the SMTP Parameters
         set smtp [parameter::get -parameter "SMTPHost" \
-                      -package_id $mail_package_id -default [ns_config ns/parameters mailhost]]
+                      -package_id $mail_package_id \
+                      -default [ns_config ns/parameters mailhost]]
         if {$smtp eq ""} {
             set smtp localhost
         }
 
         set timeout [parameter::get -parameter "SMTPTimeout" \
-                         -package_id $mail_package_id -default  [ns_config ns/parameters smtptimeout]]
+                         -package_id $mail_package_id \
+                         -default  [ns_config ns/parameters smtptimeout]]
+
         if {$timeout eq ""} {
             set timeout 60
         }
 
         set smtpport [parameter::get -parameter "SMTPPort" \
-                          -package_id $mail_package_id -default 25]
+                          -package_id $mail_package_id \
+                          -default 25]
 
         set smtpuser [parameter::get -parameter "SMTPUser" \
                           -package_id $mail_package_id]
@@ -147,7 +152,7 @@ namespace eval acs_mail_lite {
         set smtppassword [parameter::get -parameter "SMTPPassword" \
                               -package_id $mail_package_id]
         
-        set cmd_string "smtp::sendmessage $multi_token"     
+        set cmd_string "smtp::sendmessage $multi_token -originator $originator"     
         foreach header $headers {
             append cmd_string " -header {$header}"
         }
@@ -484,8 +489,20 @@ namespace eval acs_mail_lite {
                 lappend headers_list [list DCC [join $bcc_addr ","]]
             }
             
+            # Build the originator address
+            set rcpt_id 0
+            if { [llength $to_addr] eq 1 } {
+                set rcpt_id [party::get_by_email -email $to_addr]
+            }
+            set rcpt_id [ad_decode $rcpt_id "" 0 $rcpt_id]
 
-            acs_mail_lite::smtp -multi_token $tokens -headers $headers_list
+            set originator [bounce_address -user_id $rcpt_id \
+                                -package_id $package_id \
+                                -message_id $message_id]
+
+            acs_mail_lite::smtp -multi_token $tokens \
+                -headers $headers_list \
+                -originator $originator
             
             #Close all mime tokens
             mime::finalize $tokens -subordinates all
