@@ -409,11 +409,14 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
         set user_agent [string tolower [ns_set get [ns_conn headers] User-Agent]]
 
         if {[string first "safari" $user_agent] != -1} {
-            regexp {version/([0-9]+)[.]} $user_agent _ user_agent_version
-            # vguerra: checking if versions appears on the user agent;
-            # if not.. the user agent might be Chrome.
-            if {[info exists user_agent_version] && $user_agent_version < 3} {
-                set element(htmlarea_p) false
+            if {[regexp {version/([0-9]+)[.]} $user_agent _ user_agent_version]} {
+                if {$user_agent_version < 3} {
+                    set element(htmlarea_p) false
+                } 
+            } elseif {[string first "chrome" $user_agent] != -1} {
+                # vguerra: google chrome browser
+                # needs more testing in order to check if chrome fully
+                # supports xinha.
             }
         } elseif {[string first "opera" $user_agent] != -1} {
             regexp {^[^/]+/([0-9]+)[.]} $user_agent _ user_agent_version
