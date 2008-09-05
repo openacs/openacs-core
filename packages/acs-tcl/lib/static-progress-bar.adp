@@ -13,7 +13,7 @@
           <td style="background-color:white; width:100%"> </td>
         </if>
         <else>
-          <td colspan="2">&nbsp;<span style="font-weight: bold; color: @fontcolor@;">0 %</span></td>
+          <td style="background-color:white" colspan="2">&nbsp;<span style="font-weight: bold;">0 %</span></td>
         </else>
         </tr>
       </table>
