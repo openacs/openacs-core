@@ -1542,3 +1542,82 @@ ad_proc -private security::get_insecure_location {} {
     return $insecure_location
 }
 
+ad_proc -public security::locations {} {
+    @returns insecure location and secure location as a list.
+
+    The location consists of protocol://domain:port for website. This proc is ported from ec_insecure_location and ec_secure_location for reliably getting locations
+} {
+
+    # following from ec_preferred_drivers
+    set driver ""
+    set sdriver ""
+    if {[ns_conn isconnected]} {
+        set hdrs [ns_conn headers]
+        set host [ns_set iget $hdrs host]
+        if {[string equal "" $host]} {
+            set driver nssock
+        } 
+    }
+    #   Determine nssock or nsunix
+    if {[string equal "" $driver]} {
+        # decide if we're using nssock or nsunix
+        set nssock [ns_config ns/server/[ns_info server]/modules nssock]
+        set nsunix [ns_config ns/server/[ns_info server]/modules nsunix]
+        if {![empty_string_p $nssock] && ![empty_string_p $nsunix]} {
+            set driver [ad_parameter -package_id [ec_id] httpModule ecommerce nsunix]
+        } elseif {[empty_string_p $nssock]} {
+            set driver nsunix
+        } else {
+            set driver nssock
+        }
+    }
+   
+    # decide if we are using nsssl or nsopenssl, favor nsopenssl
+    set nsssl [ns_config ns/server/[ns_info server]/modules nsssl]
+    set nsopenssl [ns_config ns/server/[ns_info server]/modules nsopenssl]
+    if {![empty_string_p $nsssl] && ![empty_string_p $nsopenssl]} {
+        set sdriver [ad_parameter -package_id [ec_id] httpsModule ecommerce nsopenssl]
+    } elseif {[empty_string_p $nsssl]} {
+        set sdriver nsopenssl
+    } else {
+        set sdriver nsssl
+    }
+    
+    # set the driver results
+    array set drivers [list driver $driver sdriver $sdriver]
+    set driver $drivers(driver)
+
+    # following from ec_insecure_location
+    set insecure_port [ns_config -int "ns/server/[ns_info server]/module/$driver" Port 80]
+    set insecure_location "http://[ns_config ns/server/[ns_info server]/module/$driver Hostname]"
+    if {![empty_string_p $insecure_port] && ($insecure_port != 80)}  {
+        append insecure_location ":$insecure_port"
+    }
+    
+    # ec_secure_location
+    set secure_port [ns_config -int "ns/server/[ns_info server]/module/$sdriver" Port]
+	# nsopenssl 2.0 has different names for the secure port
+	if { [empty_string_p $secure_port] } {
+	    set secure_port [ns_config -int "ns/server/[ns_info server]/module/$sdriver" ServerPort 443]
+	}
+    # nsopenssl 3 has variable locations for the secure port
+    if { [empty_string_p $secure_port] || [string match $secure_port 443] } {
+        set secure_port [ns_config -int "ns/server/[ns_info server]/module/$sdriver/ssldriver/users" port 443]
+    }
+    set secure_location "https://[ns_config ns/server/[ns_info server]/module/$sdriver Hostname]"
+	### nsopenssl 2.0 uses ServerHostname instead of Hostname
+    if { [string match $secure_location "https://"] } {
+	    set secure_location "https://[ns_config ns/server/[ns_info server]/module/$sdriver ServerHostname]"
+	}
+    # nsopenssl 3 uses Hostname and custom driver name
+    # made need to make users/inboundssl (custom driver name) another parameter value
+    if { [string match $secure_location "https://"] } {
+	    set secure_location "https://[ns_config ns/server/[ns_info server]/module/$sdriver/ssldriver/users hostname]"
+	}
+    
+    if {![empty_string_p $secure_port] && ($secure_port != 443)}  {
+        append secure_location ":$secure_port"
+    }
+    set locations [list $insecure_location $secure_location]
+    return  $locations
+}
