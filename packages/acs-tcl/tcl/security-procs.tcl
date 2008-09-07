@@ -1543,9 +1543,9 @@ ad_proc -private security::get_insecure_location {} {
 }
 
 ad_proc -public security::locations {} {
-    @returns insecure location and secure location as a list.
+    @returns insecure location and secure location (followed possibly by an alternate insecure location)  as a list.
 
-    The location consists of protocol://domain:port for website. This proc is ported from ec_insecure_location and ec_secure_location for reliably getting locations
+    The location consists of protocol://domain:port for website. This proc is ported from ec_insecure_location and ec_secure_location for reliably getting locations.  If acs-tcl's SuppressHttpPort parameter is true, then the alternate ec_insecure_location without port is appended to the list, since it is a valid alternate.
 } {
 
     # following from ec_preferred_drivers
@@ -1591,6 +1591,7 @@ ad_proc -public security::locations {} {
     set insecure_port [ns_config -int "ns/server/[ns_info server]/module/$driver" Port 80]
     set insecure_location "http://[ns_config ns/server/[ns_info server]/module/$driver Hostname]"
     if {![empty_string_p $insecure_port] && ($insecure_port != 80)}  {
+        set alt_insecure_location $insecure_location
         append insecure_location ":$insecure_port"
     }
     
@@ -1618,6 +1619,10 @@ ad_proc -public security::locations {} {
     if {![empty_string_p $secure_port] && ($secure_port != 443)}  {
         append secure_location ":$secure_port"
     }
+
     set locations [list $insecure_location $secure_location]
+    if { [info exists alt_insecure_location] && [parameter::get -parameter SuppressHttpPort -package_id [apm_package_id_from_key acs-tcl]] } {
+        lappend $alt_insecure_location
+    }
     return  $locations
 }

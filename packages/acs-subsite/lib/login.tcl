@@ -67,14 +67,15 @@ if { $allow_persistent_login_p } {
 
 set subsite_url [subsite::get_element -element url]
 set system_name [ad_system_name]
-ns_log Notice "acs_subsite/lib/login.tcl [subsite::get_url -absolute_p 1 -protocol http] [subsite::get_url -absolute_p 1 -protocol https]"
-ns_log Notice "acs_subsite/lib/login.tcl [security::get_secure_location] [security::get_insecure_location]"
-ns_log Notice "acs_subsite/lib/login.tcl [security::get_secure_qualified_url $return_url] [security::get_insecure_qualified_url $return_url]"
-ns_log Notice "acs_subsite/lib/login.tcl [lindex [security::locations] 0] [lindex [security::locations] 1]"
+
 if { [exists_and_not_null return_url] } {
-    if {[util_complete_url_p $return_url] 
-        && ![string match "[lindex [security::locations] 0]/*" $return_url] 
-	&& ![string match "[lindex [security::locations] 1]/*" $return_url]} {
+    set locations_list [security::locations]
+    # there may be as many as 3 valid full urls
+    set external_url [util_complete_url_p $return_url]
+    foreach location $locations_list {
+        set external_url [expr { $external_url && ![string match "$location/*" $return_url] } ] 
+    }
+    if { $external_url } {
       ad_returnredirect -message "only urls without a host name are permitted" "."
       ad_script_abort
     }
