@@ -164,8 +164,13 @@ if { [info exists ::acs_blank_master(tinymce)] } {
 }
 
 if {![info exists doc(title)]} {
-    set doc(title) "[ad_conn instance_name]"
-    ns_log warning "[ad_conn url] has no doc(title) set."
+    if {[info exists title ]} {
+        set doc(title) $title
+        ns_log warning "[ad_conn url] has no doc(title) set, using the old title value."
+    } else {
+        set doc(title) "[ad_conn instance_name]"
+        ns_log warning "[ad_conn url] has no doc(title) set."
+    }
 }
 # AG: Markup in <title> tags doesn't render well.
 set doc(title) [ns_striphtml $doc(title)]
