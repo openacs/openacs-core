@@ -166,6 +166,8 @@ ad_proc -public auth::authenticate {
     {-password:required}
     {-persistent:boolean}
     {-no_cookie:boolean}
+    {-first_names ""}
+    {-last_name ""}
 } {
     Try to authenticate and login the user forever by validating the username/password combination, 
     and return authentication and account status codes.    
@@ -312,8 +314,10 @@ ad_proc -public auth::authenticate {
     array set result [auth::get_local_account \
                           -return_url $return_url \
                           -username $username \
-                          -authority_id $authority_id]
-
+                          -authority_id $authority_id \
+			  -email $email \
+                          -first_names $first_names \
+			  -last_name $last_name]
     # Returns: 
     #   result(account_status)
     #   result(account_message)  
@@ -1200,6 +1204,9 @@ ad_proc -private auth::get_local_account {
     {-return_url ""}
     {-username:required}
     {-authority_id ""}
+    {-email ""}
+    {-first_names ""}
+    {-last_name ""}
 } {
     Get the user_id of the local account for the given 
     username and domain combination.
@@ -1236,6 +1243,19 @@ ad_proc -private auth::get_local_account {
         if {$info_result(info_status) eq "ok"} {
 
             array set user $info_result(user_info)
+	    
+	    if {$email ne "" \
+		    && (![info exists user(email)] || $user(email) eq "")} {
+		set user(email) $email
+	    }
+	    if {$first_names ne "" \
+		    && (![info exists user(first_names)] || $user(first_names) eq "")} {
+		set user(first_names) $first_names
+	    }
+	    if {$last_name ne "" \
+		    && (![info exists user(last_name)] || $user(last_name) eq "")} {
+		set user(last_name) $last_name
+	    }
             array set creation_info [auth::create_local_account \
                                    -authority_id $authority_id \
                                    -username $username \
@@ -1249,6 +1269,7 @@ ad_proc -private auth::get_local_account {
 		auth::authority::get -authority_id $authority_id -array authority
 		set system_name [ad_system_name]
 		set auth_info(account_message) "You have successfully authenticated, but we were unable to create an account for you on $system_name. "
+		set auth_info(element_messages) $creation_info(element_messages)
 		append auth_info(account_message) "The error was: $creation_info(element_messages). Please contact the system administrator." 
 		
 		if { $authority(help_contact_text) ne "" } {
