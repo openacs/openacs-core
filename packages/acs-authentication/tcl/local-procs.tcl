@@ -11,8 +11,8 @@ namespace eval auth::local {}
 namespace eval auth::local::authentication {}
 namespace eval auth::local::password {}
 namespace eval auth::local::registration {}
-
-
+namespace eval auth::local::user_info {}
+namespace eval auth::local::search {}
 
 #####
 #
@@ -29,7 +29,9 @@ ad_proc -private auth::local::install {} {
         set row(auth_impl_id) [auth::local::authentication::register_impl]
         set row(pwd_impl_id) [auth::local::password::register_impl]
         set row(register_impl_id) [auth::local::registration::register_impl]
-        
+	set row(search_impl_id) [auth::local::search::register_impl]
+	set row(user_info_impl_id) [auth::local::user_info::register_impl]
+
         # Set the authority pretty-name to be the system name
         set row(pretty_name) [ad_system_name]
         
@@ -548,6 +550,114 @@ ad_proc -private auth::local::registration::Register {
 
 ad_proc -private auth::local::registration::GetParameters {} {
     Implements the GetParameters operation of the auth_registration
+    service contract for the local account implementation.
+} {
+    # No parameters
+    return [list]
+}
+
+#####
+#
+# The 'auth_user_info' service contract implementation
+#
+
+ad_proc -private auth::local::user_info::register_impl {} {
+    Register the 'local' implementation of the 'auth_user_info' service contract. 
+    
+    @return impl_id of the newly created implementation.
+} {
+    set spec {
+        contract_name "auth_user_info"
+        owner "acs-authentication"
+        name "local"
+        pretty_name "Local"
+        aliases {
+            GetUserInfo auth::local::user_info::GetUserInfo
+            GetParameters auth::local::user_info::GetParameters
+        }
+    }
+    return [acs_sc::impl::new_from_spec -spec $spec]
+}
+
+ad_proc -private auth::local::user_info::unregister_impl {} {
+    Unregister the 'local' implementation of the 'auth_user_info' service contract.
+} {
+    acs_sc::impl::delete -contract_name "auth_user_info" -impl_name "local"
+}
+
+ad_proc -private auth::local::user_info::GetUserInfo {
+    user_id
+    {parameters ""}
+} {
+    Implements the GetUserInfo operation of the auth_user_info
+    service contract for the local account implementation.
+} {
+
+    set result(info_status) [auth::get_local_account_status -user_id $user_id]
+    set result(info_message) ""
+    db_1row get_user_info {} -column_array user_info
+    set result(user_info) [array get user_info]
+
+    return [array get result]
+}
+
+ad_proc -private auth::local::user_info::GetParameters {} {
+    Implements the GetParameters operation of the auth_user_info
+    service contract for the local account implementation.
+} {
+    # No parameters
+    return [list]
+}
+
+#####
+#
+# The 'auth_search' service contract implementation
+#
+
+ad_proc -private auth::local::search::register_impl {} {
+    Register the 'local' implementation of the 'auth_search' service contract. Returns
+    a list of user_ids suitable for user with the 'local' 'user_info' implementation.
+    
+    @return impl_id of the newly created implementation.
+} {
+    set spec {
+        contract_name "auth_search"
+        owner "acs-authentication"
+        name "local"
+        pretty_name "Local"
+        aliases {
+            Search auth::local::search::Search
+            GetParameters auth::local::search::GetParameters
+        }
+    }
+    return [acs_sc::impl::new_from_spec -spec $spec]
+}
+
+ad_proc -private auth::local::search::unregister_impl {} {
+    Unregister the 'local' implementation of the 'auth_search' service contract.
+} {
+    acs_sc::impl::delete -contract_name "auth_search" -impl_name "local"
+}
+
+ad_proc -private auth::local::search::Search {
+    search_text
+    {parameters ""}
+} {
+    Implements the Search operation of the auth_search
+    service contract for the local account implementation.
+} {
+
+    set results [list]
+    db_foreach user_search {} {
+	lappend results $user_id
+    }
+
+    return $results
+
+}
+
+ad_proc -private auth::local::search::GetParameters {} {
+    Implements the GetParameters operation of the auth_search
     service contract for the local account implementation.
 } {
     # No parameters

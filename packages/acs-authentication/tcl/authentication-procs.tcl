@@ -861,7 +861,7 @@ ad_proc -public auth::create_local_account {
             set user_info($elm) {}
         }
     }
-
+    
     # Validate data
     auth::validate_account_info \
         -authority_id $authority_id \
@@ -1225,14 +1225,13 @@ ad_proc -private auth::get_local_account {
     if { $authority_id eq "" } {
         set authority_id [auth::authority::local]
     }
-
+    ns_log notice "auth::get_local_account authority_id = '${authority_id}' local = [auth::authority::local]"
     with_catch errmsg {
         acs_user::get -authority_id $authority_id -username $username -array user
         set account_found_p 1
     } {
         set account_found_p 0
     }
-
     if { !$account_found_p } {
 
         # Try for an on-demand sync
@@ -1460,6 +1459,7 @@ ad_proc -private auth::validate_account_info {
     if { !$update_p } {
         set required_elms [concat $required_elms { first_names last_name email }]
     }
+    
     foreach elm $required_elms {
         if { ![exists_and_not_null user($elm)] } {
             set element_messages($elm) "Required"
@@ -1467,12 +1467,13 @@ ad_proc -private auth::validate_account_info {
     }
 
     if { [info exists user(email)] } {
-        set user(email) [string trim $user(email)]
+	set user(email) [string trim $user(email)]
     }
+    
     if { [info exists user(username)] } {
-        set user(username) [string trim $user(username)]
+	set user(username) [string trim $user(username)]
     }
-
+    
     if { $update_p } {
         set user(user_id) [acs_user::get_by_username \
                                -authority_id $authority_id \

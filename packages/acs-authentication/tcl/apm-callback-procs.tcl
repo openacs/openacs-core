@@ -13,7 +13,7 @@ namespace eval auth::registration {}
 namespace eval auth::get_doc {}
 namespace eval auth::process_doc {}
 namespace eval auth::user_info {}
-
+namespace eval auth::search {}
 
 ad_proc -private auth::package_install {} {} {
 
@@ -25,6 +25,7 @@ ad_proc -private auth::package_install {} {} {
         auth::get_doc::create_contract
         auth::process_doc::create_contract
         auth::user_info::create_contract
+        auth::search::create_contract
 
         # Register local authentication implementations and update the local authority
         auth::local::install
@@ -63,6 +64,7 @@ ad_proc -private auth::package_uninstall {} {} {
         auth::get_doc::delete_contract
         auth::process_doc::delete_contract
         auth::user_info::delete_contract
+        auth::search::delete_contract
     }
 }
 
@@ -607,3 +609,56 @@ ad_proc -private auth::user_info::delete_contract {} {
 }
 
 
+#####
+#
+# auth_search service contract
+#
+#####
+
+ad_proc -private auth::search::create_contract {} {
+    Create service contract for authority searches.
+} {
+    set spec {
+        name "auth_search"
+        description "Search users in given authority"
+        operations {
+            Search {
+                description {
+                    Search authority using "search" string. Returns array-list of usernames.
+                }
+                input {
+                    search:string
+                    parameters:string,multiple
+                }
+                output {
+                    usernames:string,multiple
+                }
+            }
+            GetParameters {
+                description {
+                    Get an array-list of the parameters required by this service contract implementation.
+                }
+                output {
+                    parameters:string,multiple
+                }
+            }
+	    FormInclude {
+		description {
+		    File location of an includable search form
+		} 
+		output {
+		    form_include:string
+		}
+	    }
+        }
+    }
+
+    acs_sc::contract::new_from_spec -spec $spec
+}
+
+
+ad_proc -private auth::search::delete_contract {} {
+    Delete service contract for authority search.
+} {
+    acs_sc::contract::delete -name "auth_search"
+}
