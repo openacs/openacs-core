@@ -59,6 +59,12 @@ create table auth_authorities (
     batch_sync_enabled_p     boolean default 'f'
                              constraint auth_authorities_bsenabled_p_nn
                              not null
+    allow_user_entered_info_p boolean default 'f'
+                             constraint auth_authority_allow_user_i_p_nn
+                             not null,
+    search_impl_id           integer
+                             constraint auth_authorities_search_impl_id_fk
+                             references acs_objects(object_id)
 );
 
 comment on column auth_authorities.help_contact_text is '

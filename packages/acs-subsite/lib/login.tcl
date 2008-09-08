@@ -197,11 +197,18 @@ ad_form -extend -name login -on_request {
     if { ![exists_and_not_null persistent_p] } {
         set persistent_p "f"
     }
+    if {![element exists login email]} {
+	set email [ns_queryget email ""]
+    }
+    set first_names [ns_queryget first_names ""]
+    set last_name [ns_queryget last_name ""]
     
     array set auth_info [auth::authenticate \
                              -return_url $return_url \
                              -authority_id $authority_id \
                              -email [string trim $email] \
+                             -first_names $first_names \
+                             -last_name $last_name \
                              -username [string trim $username] \
                              -password $password \
                              -persistent=[expr {$allow_persistent_login_p && [template::util::is_true $persistent_p]}]]
@@ -232,9 +239,44 @@ ad_form -extend -name login -on_request {
             # Continue below
         }
         default {
-            # Display the message on a separate page
-            ad_returnredirect [export_vars -base "[subsite::get_element -element url]register/account-closed" { { message $auth_info(account_message) } }]
-            ad_script_abort
+	    # if element_messages exists we try to get the element info
+	    if {[info exists auth_info(element_messages)]
+		&& [auth::authority::get_element \
+			-authority_id $authority_id \
+			-element allow_user_entered_info_p]} {
+		foreach message [lsort $auth_info(element_messages)] {
+		    ns_log notice "LOGIN $message"
+		    switch -glob -- $message {
+			*email* {
+ 			    if {[element exists login email]} {
+ 				set operation set_properties
+ 			    } else {
+ 				set operation create
+ 			    }
+			    element $operation login email -widget $username_widget -datatype text -label [_ acs-subsite.Email]
+			    if {[element error_p login email]} {
+				template::form::set_error login email [_ acs-subsite.Email_not_provided_by_authority]
+			    }
+			}
+			*first* {
+			    element create login first_names -widget text -datatype text -label [_ acs-subsite.First_names]
+			    template::form::set_error login email [_ acs-subsite.First_names_not_provided_by_authority]
+			}
+			*last* {
+			    element create login last_name -widget text -datatype text -label [_ acs-subsite.Last_name]
+			    template::form::set_error login last_name [_ acs-subsite.Last_name_not_provided_by_authority]
+			}
+		    }
+		}
+		set auth_info(account_message) ""
+		    
+		ad_return_template
+		
+	    } else {
+		# Display the message on a separate page
+		ad_returnredirect [export_vars -base "[subsite::get_element -element url]register/account-closed" { { message $auth_info(account_message) } }]
+		ad_script_abort
+	    }
         }
     }
 } -after_submit {
@@ -246,8 +288,10 @@ ad_form -extend -name login -on_request {
         ad_returnredirect [export_vars -base "[subsite::get_element -element url]register/account-message" { { message $auth_info(account_message) } return_url }]
         ad_script_abort
     } else {
-        # No message
-        ad_returnredirect $return_url
-        ad_script_abort
-   }
+	if {![info exists auth_info(element_messages)]} {
+	    # No message
+	    ad_returnredirect $return_url
+	    ad_script_abort
+	}
+    }
 }
