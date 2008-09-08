@@ -45,6 +45,9 @@ ad_proc -public template::widget {} {
     @see template::widget::textarea
     @see template::widget::block
     @see template::element::create
+    @see template::widget::select_text
+    @see template::wdiget::radio_text
+    @see template::widget::checkbox_text
 } -
 
 
@@ -939,7 +942,366 @@ ad_proc -public template::widget::block {
     return "<table>$output</table>"
 }
 
+###############################################################################
+# radio/select/checkbox widgets with a textbox associated for other
+###############################################################################
+
+namespace eval template::util::select_text {}
+namespace eval template::util::radio_text {}
+namespace eval template::util::checkbox_text {}
+
+ad_proc -public template::data::validate::select_text {
+    value_ref
+    message_ref
+} {
+    validate a select_text datatype
+} {
+    # FIXME do something?
+    return 1
+}
+
+ad_proc -public template::data::transform::select_text {
+    element_ref
+} {
+    @author Dave Bauer (dave@thedesignexperience.org)
+    @creation-date 2004-07-18
+
+    @param element_ref
+    @return 
+    @error 
+} {
+    upvar $element_ref element
+    set element_id $element(id)
+    set text_value [ns_queryget $element_id.text]
+    set select_value [ns_queryget $element_id]
+    return [list [list $select_value $text_value]]
+}
+
+ad_proc -public template::util::select_text::get_property {
+    what
+    select_text_list
+} {
+    @author Dave Bauer (dave@thedesignexperience.org)
+    @creation-date 2004-07-18
+    
+    @param what
+    @param select_text_list
+    @return 
+    @error 
+} {
+    switch $what {
+        select_value - select {
+            return [lindex $select_text_list 0]
+        }
+        text_value - text {
+            return [lindex $select_text_list 1]
+        }
+        default {
+            error "Parameter supplied to util::select_text::get_property 'what' must be one of: select_value, text_value. You specified: '$what'."
+        }
+    }
+}
+
+ad_proc -public template::widget::select_text {
+    element_reference
+    tag_attributes
+} {
+    Implements the complex widget select_text which combines
+    a select widget with a text widget 
+    @author Dave Bauer (dave@thedesignexperience.org)
+    @creation-date 2004-07-18
+
+    @param element_reference
+    @param tag_attributes
+    @return 
+    @error 
+} {
+
+    upvar $element_reference element
+    if { [info exists element(html)] } {
+	array set attributes $element(html)
+    }
+    
+    array set attributes $tag_attributes
+    
+    if { [info exists element(value)] } {
+	set select [template::util::select_text::get_property select_value $element(value)]
+	set text   [template::util::select_text::get_property text_value $element(value)]
+    } else {
+	set select {}
+	set text {}
+    }
+
+    set output {}
+    if { [string equal $element(mode) "edit"] } {
+	# edit mode
+	set element(value) $select
+	append output [template::widget::menu $element(name) $element(options) $select attributes $element(mode)]
+
+	if {![info exists element(other_label)]} {
+	    set element(other_label) "[_ acs-templating.Other]"
+	}
+	append output " $element(other_label): "
+	set element(value) $text
+	set element(name) $element(name)\.text
+	append output [template::widget::input text element $tag_attributes]
+    } else {
+	# display mode
+	if { [info exists element(value)] } {
+	    append output [template::util::select_text::get_property select_value $element(value)]
+	    append output "&nbsp;"
+	    append output [template::util::select_text::get_property text_value $element(value)]          
+	    append output "<input type=\"hidden\" name=\"$element(id).text\" value=\"[ad_quotehtml $text]\">"
+	    append output "<input type=\"hidden\" name=\"$element(id)\" value=\"[ad_quotehtml $select]\">"
+	}
+    }
+    
+    return $output
+}
 
 
+##########################
 
 
+ad_proc -public template::data::validate::radio_text {
+    value_ref
+    message_ref
+} {
+    validate a radio_other datatype
+} {
+    return 1
+}
+
+ad_proc -public template::data::transform::radio_text {
+    element_ref
+} {
+    @author Timo Hentschel (timo@timohentschel.de)
+    @creation-date 2004-10-17
+
+    @param element_ref
+    @return 
+    @error 
+} {
+    upvar $element_ref element
+    set element_id $element(id)
+    set text_value [ns_queryget $element_id\.text]
+    set radio_value [ns_queryget $element_id]
+    return [list [list $radio_value $text_value]]
+}
+
+ad_proc -public template::util::radio_text::get_property {
+    what
+    radio_list
+} {
+    @author Timo Hentschel (timo@timohentschel.de)
+    @creation-date 2004-10-17
+    
+    @param what
+    @param radio_list
+    @return 
+    @error 
+} {
+    switch $what {
+        radio_value - radio {
+            return [lindex $radio_list 0]
+        }
+        text_value - text {
+            return [lindex $radio_list 1]
+        }
+        default {
+            error "Parameter supplied to util::radio_text::get_property 'what' must be one of: radio_value, text_value. You specified: '$what'."
+        }
+    }
+}
+
+ad_proc -public template::widget::radio_text {
+    element_reference
+    tag_attributes
+} {
+    Implements the complex widget radio_text which combines
+    a radio widget with a text widget 
+
+    @author Timo Hentschel (timo@timohentschel.de)
+    @creation-date 2004-10-17
+
+    @param element_reference
+    @param tag_attributes
+    @return 
+    @error 
+} {
+    upvar $element_reference element
+    if { [info exists element(html)] } {
+	array set attributes $element(html)
+    }
+    
+    array set attributes $tag_attributes
+    
+    if { [info exists element(value)] } {
+	set radio [template::util::radio_text::get_property radio_value $element(value)]
+	set text  [template::util::radio_text::get_property text_value $element(value)]
+    } else {
+	set radio {}
+	set text {}
+    }
+    set output {}
+
+    # edit mode
+    set radio_text "<input type=radio name=$element(name)"
+
+    foreach name [array names attributes] {
+        if { [string equal $attributes($name) {}] } {
+            append radio_text " $name"
+        } else {
+            append radio_text " $name=\"$attributes($name)\""
+        }
+    }
+
+    # Create an array for easier testing of selected values
+    template::util::list_to_lookup $radio values 
+    set output ""
+    foreach option $element(options) {
+        set label [lindex $option 0]
+        set value [lindex $option 1]
+
+        append output "$radio_text value=\"$value\""
+        if { [info exists values($value)] } {
+            append output " checked=\"checked\""
+        }
+        if {$element(mode) ne "edit"} {
+            append output " disabled"
+        }
+        append output ">$label<br>"
+    }
+    if {![info exists element(other_label)]} {
+        set element(other_label) "[_ acs-templating.Other]"
+    }
+    append output "$element(other_label): "
+    set element(value) $text
+    set element(name) $element(name)\.text
+    append output [template::widget::input text element $tag_attributes]
+
+    return $output
+}
+
+
+##########################
+
+
+ad_proc -public template::data::validate::checkbox_text {
+    value_ref
+    message_ref
+} {
+    validate a checkbox_other datatype
+} {
+    # FIXME do something?
+    return 1
+}
+
+ad_proc -public template::data::transform::checkbox_text {
+    element_ref
+} {
+    @author Timo Hentschel (timo@timohentschel.de)
+    @creation-date 2004-10-17
+
+    @param element_ref
+    @return 
+    @error 
+} {
+    upvar $element_ref element
+    set element_id $element(id)
+    set text_value [ns_queryget $element_id\.text]
+    set checkbox_value [ns_queryget $element_id]
+    return [list [list $checkbox_value $text_value]]
+}
+
+ad_proc -public template::util::checkbox_text::get_property {
+    what
+    checkbox_list
+} {
+    @author Timo Hentschel (timo@timohentschel.de)
+    @creation-date 2004-10-17
+    
+    @param what
+    @param checkbox_list
+    @return 
+    @error 
+} {
+    switch $what {
+        checkbox_value - checkbox {
+            return [lindex $checkbox_list 0]
+        }
+        text_value - text {
+            return [lindex $checkbox_list 1]
+        }
+        default {
+            error "Parameter supplied to util::checkbox_text::get_property 'what' must be one of: checkbox_value, text_value. You specified: '$what'."
+        }
+    }
+}
+
+ad_proc -public template::widget::checkbox_text {
+    element_reference
+    tag_attributes
+} {
+    Implements the complex widget checkbox_other which combines
+    a checkbox widget with a text widget 
+
+    @author Timo Hentschel (timo@timohentschel.de)
+    @creation-date 2004-10-17
+
+    @param element_reference
+    @param tag_attributes
+    @return 
+    @error 
+} {
+    upvar $element_reference element
+    if { [info exists element(html)] } {
+	array set attributes $element(html)
+    }
+    
+    array set attributes $tag_attributes
+    
+    if { [info exists element(values)] } {
+	set checkbox [template::util::checkbox_text::get_property checkbox_value $element(values)]
+	set text     [template::util::checkbox_text::get_property text_value $element(values)]
+    } else {
+	set checkbox {}
+	set text {}
+    }
+
+    set output {}
+    
+    # edit mode
+    set checkbox_text "<input type=checkbox name=$element(name)"
+
+    foreach name [array names attributes] {
+	if { [string equal $attributes($name) {}] } {
+	    append checkbox_text " $name"
+	} else {
+	    append checkbox_text " $name=\"$attributes($name)\""
+	}
+    }
+    
+    # Create an array for easier testing of selected values
+    template::util::list_to_lookup $checkbox values 
+    
+    foreach option $element(options) {
+	set label [lindex $option 0]
+	set value [lindex $option 1]
+	
+	append output "$checkbox_text value=\"$value\""
+	if { [info exists values($value)] } {
+	    append output " checked=\"checked\""
+	}
+	append output ">$label<br>"
+    }
+    if {![info exists element(other_label)]} {
+	set element(other_label) "[_ acs-templating.Other]"
+    }
+    append output "$element(other_label): "
+    set element(value) $text
+    set element(name) $element(name)\.text
+    append output [template::widget::input text element $tag_attributes]
+    
+    return $output
+}
