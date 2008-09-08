@@ -21,7 +21,8 @@
                    cc_addr,
                    bcc_addr,
                    body,
-                   extraheaders
+                   extraheaders,
+                   object_id
                   )
             values
                   (acs_mail_lite_id_seq.nextval,
@@ -39,7 +40,8 @@
                    :cc_addr,
                    :bcc_addr,
                    :body,
-                   :extraheaders
+                   :extraheaders,
+                   :object_id
                   )
         </querytext>
     </fullquery>
@@ -81,7 +83,8 @@
                    mime_type,
                    decode(no_callback_p,'t',1,0) as no_callback_p,
                    extraheaders,
-                   decode(use_sender_p,'t',1,0) as use_sender_p
+                   decode(use_sender_p,'t',1,0) as use_sender_p,
+                   object_id
             from acs_mail_lite_queue
             where locking_server = '' or locking_server is NULL
         </querytext>
