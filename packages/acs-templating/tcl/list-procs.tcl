@@ -277,6 +277,10 @@ ad_proc -public template::list::create {
         filters_export {}
         filter_refs {}
         filter_where_clauses {}
+	from_clauses {}
+	filter_select_clauses {}
+	element_select_clauses {}
+	element_where_clauses {}
         dynamic_cols_p 0
         aggregates_p 0
         groupby {}
@@ -456,10 +460,6 @@ ad_proc -public template::list::create {
             -spec [list label "[_ acs-templating.Page]" default_value 1 hide_p t]
     }
 
-    # generate filter form
-    if {$filter_form eq 1} {
-	filter_form -name $name
-    }
     # Done, prepare the list. This has to be done while we still have access to the caller's scope
     prepare \
         -name $name \
@@ -487,6 +487,11 @@ ad_proc -public template::list::prepare {
     }
 
     # This sets urls, selected_p, etc., for filters, plus sets the (filter,name) var in list_properties
+    upvar filter_form filter_form
+    if {$filter_form} {
+        prepare_filter_form -name $name
+    }
+
     prepare_filters \
         -name $name
     
@@ -654,7 +659,107 @@ ad_proc -private template::list::get_url {
 }
 
 
- ad_proc -public template::list::filter_where_clauses {
+ad_proc -public template::list::filter_from_clauses {
+    -name:required
+    -comma:boolean
+} {
+    @param  and     Set this flag if you want the result to start with an ',' if the list of from clauses returned is non-empty.
+} {
+    # Get an upvar'd reference to list_properties
+    get_reference -name $name
+
+    if { [llength $list_properties(filter_from_clauses)] == 0 } {
+        return {}
+    }
+    
+    set result {}
+    if { $comma_p } {
+        append result ", "
+    }
+    append result [join $list_properties(filter_from_clauses) "\n , "]
+    
+    return $result
+}
+
+ ad_proc -public template::list::filter_select_clauses {
+    -name:required
+    -comma:boolean
+} {
+    @param  and     Set this flag if you want the result to start with a ',' if the list of select clauses returned is non-empty.
+} {
+    # Get an upvar'd reference to list_properties
+    get_reference -name $name
+
+    if { [llength $list_properties(filter_select_clauses)] == 0 } {
+        return {}
+    }
+    
+    set result {}
+    if { $comma_p } {
+        append result ", "
+    }
+    append result [join $list_properties(filter_select_clauses) "\n , "]
+    
+    return $result
+}
+
+ad_proc -public template::list::from_clauses {
+    -name:required
+    -comma:boolean
+} {
+    @param  and     Set this flag if you want the result to start with an ',' if the list of from clauses returned is non-empty.
+} {
+    # Get an upvar'd reference to list_properties
+    get_reference -name $name
+
+    if { [llength $list_properties(from_clauses)] == 0 } {
+        return {}
+    }
+    set trimmed_from_clauses [list]
+
+    set result {}
+
+    if { [string trim "[lindex $list_properties(from_clauses) 0]"] ne "" && $comma_p && ![string match "left*" [string trim [lindex $list_properties(from_clauses) 0]]]} {
+        append result ", "
+    }
+    set i 0
+    foreach elm $list_properties(from_clauses) {
+
+	if {([string trim $elm] ne "" && ![string match "left*" [string trim $elm]]) \
+		&& ($comma_p || $i > 0)} {
+	    append results ","
+	}
+	append result " $elm"
+	incr i
+    }
+#    append result [join $list_properties(from_clauses) "\n , "]
+    
+    return $result
+}
+
+ ad_proc -public template::list::element_select_clauses {
+    -name:required
+    -comma:boolean
+} {
+    @param  and     Set this flag if you want the result to start with a ',' if the list of select clauses returned is non-empty.
+} {
+    # Get an upvar'd reference to list_properties
+    get_reference -name $name
+
+    if { [llength $list_properties(element_select_clauses)] == 0 } {
+        return {}
+    }
+    
+    set result {}
+    if { $comma_p } {
+        append result ", "
+    }
+    append result [join $list_properties(element_select_clauses) "\n , "]
+    
+    return $result
+}
+
+ad_proc -public template::list::filter_where_clauses {
     -name:required
     -and:boolean
 } {
@@ -672,6 +777,27 @@ ad_proc -private template::list::get_url {
         append result "and "
     }
     append result [join $list_properties(filter_where_clauses) "\n and "]
+    return $result
+}
+
+ad_proc -public template::list::element_where_clauses {
+    -name:required
+    -and:boolean
+} {
+    @param  and     Set this flag if you want the result to start with an 'and' if the list of where clauses returned is non-empty.
+} {
+    # Get an upvar'd reference to list_properties
+    get_reference -name $name
+
+    if { [llength $list_properties(element_where_clauses)] == 0 } {
+        return {}
+    }
+    
+    set result {}
+    if { $and_p } {
+        append result "and "
+    }
+    append result [join $list_properties(element_where_clauses) "\n and "]
     
     return $result
 }
@@ -1342,6 +1468,35 @@ ad_proc -private template::list::prepare_elements {
                 set element_properties(orderby_html_title) [_ acs-templating.sort_the_list_by_label [list label $element_properties(label)]]
             }
         }
+
+	# support dynamic coluumns
+	if {!$element_properties(hide_p)} {
+	    if {$element_properties(from_clause_eval) ne ""} {
+		set evaluated_from_clause [uplevel $list_properties(ulevel) $element_properties($property)]
+                if {[lseach $list_properties(from_clauses) $evaluated_from_clause] < 0} {
+                    lappend list_properties(from_clauses) $evaluated_from_clause
+                }
+	    } elseif {$element_properties(from_clause) ne "" \
+                          && [lsearch $list_properties(from_clauses) $element_properties(from_clause)] < 0} {
+		lappend list_properties(from_clauses) $element_properties(from_clause)
+	    }
+	    # get the select clause
+	    if {$element_properties(select_clause_eval) ne "" \
+		    && [lsearch $list_properties(element_select_clauses) [string trim  [uplevel $list_properties(ulevel) $element_properties(select_clause_eval)]]] < 0} {
+		lappend list_properties(element_select_clauses) [uplevel $list_properties(ulevel) $element_properties(select_clause_eval)]
+	    } elseif {$element_properties(select_clause) ne "" \
+			  && [lsearch $list_properties(element_select_clauses) [string trim $element_properties(select_clause)]] < 0} {
+		lappend list_properties(element_select_clauses) $element_properties(select_clause)
+	    }
+	    # get the where clause
+	    if {$element_properties(where_clause_eval) ne "" \
+		    && [lsearch $list_properties(element_where_clauses) [string trim [uplevel $list_properties(ulevel) $element_properties(where_clause_eval)]]] < 0} {
+		lappend list_properties(element_where_clauses) [uplevel $list_properties(ulevel) $element_properties(where_clause_eval)]
+	    } elseif {$element_properties(where_clause) ne "" \
+			  && [lsearch $list_properties(element_where_clauses) [string trim $element_properties(where_clause)]] < 0} {
+		lappend list_properties(element_where_clauses) $element_properties(where_clause)
+	    }
+	}
     }
  }
 
@@ -1771,6 +1926,12 @@ ad_proc -public template::list::element::create {
         orderby_asc {}
         orderby_desc {}
         default_direction {}
+	select_clause {}
+	select_clause_eval {}
+	from_clause {}
+	from_clause_eval {}
+	where_clause {}
+	where_clause_eval {}
     }
 
     # These attributes are internal listbuilder attributes
@@ -2124,6 +2285,10 @@ ad_proc -public template::list::filter::create {
         where_clause_eval {}
         null_where_clause {}
         null_where_clause_eval {}
+	from_clause {}
+	from_clause_eval {}
+	select_clause {}
+	select_clause_eval {}
         other_label {}
         null_label {}
     }
@@ -2807,6 +2972,48 @@ ad_proc -private template::list::render_form_filters {
     {-style ""}
 } {
     
+    set level [template::adp_level]
+    
+    # Provide a reference to the list properties for use by the list template
+    # Get an upvar'd reference to list_properties
+    get_reference -name $name
+
+    #
+    # Create 'filters' multirow
+    #
+
+    # Manually construct a multirow by setting the relevant variables
+    set filters:rowcount 0
+    template::multirow -local create filters \
+        filter_name \
+        filter_label \
+        filter_clear_url \
+        selected_p \
+	clear_one_url \
+        widget
+    
+    foreach filter_ref $list_properties(filter_refs) {
+        upvar #$level $filter_ref filter_properties
+        if { ![template::util::is_true $filter_properties(hide_p)] } {
+            foreach elm $filter_properties(values) url $filter_properties(urls) selected_p $filter_properties(selected_p) add_url $filter_properties(add_urls) {
+	if {![info exists filter_properties(clear_one_url)]} {
+	    set filter_properties(clear_one_url) ""
+	}
+                if {[string is true $selected_p]} {
+		template::multirow -local append filters \
+		    $filter_properties(name) \
+		    $filter_properties(label) \
+                    $filter_properties(clear_url) \
+		    $selected_p \
+		    $filter_properties(clear_one_url) \
+                    [expr {[info exists filter_properties(widget)] ? $filter_properties(widget) : ""}]
+                }
+            }
+        }
+    }
+
+    ############################################################
+    ############################################################
     if {$style eq {}} { 
         set style [parameter::get \
                        -package_id [apm_package_id_from_key "acs-templating"] \
@@ -2828,8 +3035,9 @@ ad_proc -private template::list::render_form_filters {
     return $__adp_output
 }
 
-ad_proc -private template::list::filter_form {
+ad_proc -private template::list::prepare_filter_form {
     -name
+    {-filter_exclude_from_key_extra {}}
 } {
     Documentation goes here
 } {
@@ -2842,8 +3050,11 @@ ad_proc -private template::list::filter_form {
     set filter_names_options [list]
     set filter_hidden_filters [list]
     set filter_key_filters [list]
+    set filter_exclude_from_key [list orderby groupby format page __list_view]
+    if {[llength $filter_exclude_from_key_extra]} {
+        set filter_exclude_from_key [concat $filter_exclude_from_key $filter_exclude_from_key_extra]
+    }
     set filter_hidden_filters_url_vars [list]
-    set filter_exclude_from_key [list orderby groupby page]
     # loop through all the filters in this list
     foreach filter_ref $list_properties(filter_refs) {
         upvar #$level $filter_ref filter_properties
@@ -2851,7 +3062,7 @@ ad_proc -private template::list::filter_form {
 	    # filters with a label will be added to the form for the user
 	    # to choose from
 	    lappend filter_names_options_tmp [list $filter_properties(label) $filter_properties(name)]
-	} else {
+	}
 
 	    # filters without a label are added as hidden elements
 	    # to the form so that quer params for the list
@@ -2860,23 +3071,23 @@ ad_proc -private template::list::filter_form {
 
 	    # grab the current value of the filter out of the list if
 	    # it exists
-	    upvar $list_properties(ulevel) $filter_properties(name) current_filter_value
-	    if {[info exists current_filter_value] && $current_filter_value ne ""} {
-		lappend filter_hidden_filters $filter_properties(name)
-
-		if {[lsearch $filter_exclude_from_key $filter_properties(name)] < 0} {
-		    lappend filter_key_filters $filter_properties(name) $current_filter_value
-		}
-	    }
+        upvar $list_properties(ulevel) $filter_properties(name) current_filter_value
+        if {[info exists current_filter_value] && $current_filter_value ne ""} {
+            
+            if {[lsearch $filter_exclude_from_key $filter_properties(name)] > -1} {
+                lappend filter_hidden_filters $filter_properties(name)
+            } else {
+                lappend filter_key_filters $filter_properties(name) $current_filter_value
+            }
 	}
     }
-
     upvar #[template::adp_level] __list_filter_form_client_property_key list_filter_form_client_property_key 
     # we only get 50 characters
     # to save our clienty property name, we can encode it into an
     # ns_sha1 hash to make it fit. we don't extract the data from the
     # property name so this should work fine
-    set list_filter_form_client_property_key [ns_sha1 [list [ad_conn url] $name $filter_key_filters]]
+#    set list_filter_form_client_property_key [ns_sha1 [list [ad_conn url] $name $filter_key_filters]]
+    set list_filter_form_client_property_key [ns_sha1 [list [ad_conn url] $name]]
     upvar \#[template::adp_level] __client_property_filters client_property_filters
     set client_property_filters [ad_get_client_property acs-templating $list_filter_form_client_property_key]
     # take out filters we already applied...
@@ -2960,6 +3171,9 @@ ad_proc -private template::list::filter_form {
 	ad_form -extend -name $filters_form_name -form {
 	    {$fhf:text(hidden),optional}
 	}
+        upvar \#[template::adp_level] $name:filter:${fhf}:properties filter_properties
+        set filter_properties(widget) hidden
+        set filter_properties(selected_p) t
     }
 
     # we need to extract the values of the hidden filters out of the
@@ -2970,17 +3184,22 @@ ad_proc -private template::list::filter_form {
     foreach fhf $filter_hidden_filters {
 	lappend filter_hidden_filters_url_vars [list $fhf [template::element::get_value $add_filter_form_name $fhf]]
     }
-
+    set visible_filters_p 0
     # add a select box for filters with a list of valid values
     # otherwise add a regular text box
     foreach {f_ref f_value} $client_property_filters {
 	upvar \#[template::adp_level] $f_ref filter_properties
+        if {$filter_properties(label) ne "" \
+                && $filter_properties(hide_p) eq 0 \
+                && [lsearch $filter_exclude_from_key $filter_properties(name)] < 0} {
+            incr visible_filters_p
+        }
 	if {![template::element::exists $filters_form_name $filter_properties(name)]} {
 	    # extract options 
 	    set options [list]
 
 	    foreach elm $filter_properties(values) url $filter_properties(urls) selected_p $filter_properties(selected_p) add_url $filter_properties(add_urls) {
-		# Loop over 'values' and 'url' simuAltaneously		
+		# Loop over 'values' and 'url' simultaneously		
 		# 'label' is the first element, 'value' the second
 		# We do an lrange here, otherwise values would be set wrong 
 		# in case someone accidentally supplies a list with too many elements, 
@@ -2993,18 +3212,38 @@ ad_proc -private template::list::filter_form {
 		lappend  options [list $label $value]
 	    }
 	    set clear_url_vars [concat [list [list clear_one $filter_properties(name)]] $filter_hidden_filters_url_vars]
-	    set clear_url [export_vars -base [ad_conn url] $clear_url_vars]
-	    if {[llength $options]} {
-		ad_form -extend -name $filters_form_name -form {
-		    {$filter_properties(name):text(select),optional {label "$filter_properties(label) \\[<a title=\"remove filter\" href=\"$clear_url\">x</a>\\]"} {options $options}}
-		}
-	    } else {
-		ad_form -extend -name $filters_form_name -form {
-		    {$filter_properties(name):text,optional {label "$filter_properties(label) \\[<a title=\"remove filter\" href=\"$clear_url\">x</a>\\]"} {help_text {[_ acs-templating.Enter_your_search_text]}} }
-		}
+	    set filter_properties(clear_one_url) [export_vars -base [ad_conn url] $clear_url_vars]
+
+            set form_element(element_name) $filter_properties(name)
+            set form_element(widget) text
+            set form_element(datatype) text
+            if {[llength $options]} {
+                set form_element(widget) select
+                set form_element(options) $options
+            }
+            set form_element(label) "$filter_properties(label)"
+            if {[info exists filter_properties(form_element_properties)]} {
+                foreach {var value} $filter_properties(form_element_properties) {
+                    set form_element($var) $value
+                }
+            }
+            set ad_form_element [list ${form_element(element_name)}:${form_element(datatype)}(${form_element(widget)}),optional]
+	    if {$filter_properties(type) eq "multival"} {
+		set ad_form_element [list "[lindex $ad_form_element 0],multiple"]
 	    }
+            foreach {var value} [array get form_element] {
+                if {[lsearch {name widget datatype} $var] < 0} {
+                    lappend ad_form_element [list $var $value]
+                }
+            }
+
+            ad_form -extend -name $filters_form_name -form [list $ad_form_element]
+            
+            set filter_properties(widget) $form_element(widget) 
+            set filter_properties(selected_p) t
+	    array unset form_element
 	}
-    }
+	}
     
     ad_form -extend -name $filters_form_name -on_request {
 	foreach {f_ref f_value} $__client_property_filters {
@@ -3021,13 +3260,20 @@ ad_proc -private template::list::filter_form {
 	    upvar \#[template::adp_level] $f_ref filter_properties
 	    set filter_properties(value) [set $filter_properties(name)]
 	    lappend templist $f_ref $filter_properties(value)
+	    # hack in elements??
+	    if {[lsearch [template::multirow columns $list_properties(multirow)] $filter_properties(name)] > -1} {
+		# FIXME Don't do this where, don't allow filters for
+		# matching elmenet/filter names if element does not exist
+		# check if its a dynamic element...(has select_clause)
+		list::element::create -list_name $name -element_name $filter_properties(name) -spec [list label $filter_properties(label)]
+	    }
 	}
 	set __client_property_filters $templist
 	ad_set_client_property acs-templating $__list_filter_form_client_property_key $__client_property_filters
     }
     # only show the submit button for the apply filters form if
     # there are filters selected by the user
-    if {[llength $client_property_filters]} {
+    if {$visible_filters_p} {
 	ad_form -extend -name $filters_form_name -form {
 	    {submit:text(submit) {label "Apply Filters"}}
 	}
