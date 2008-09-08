@@ -285,7 +285,7 @@
 		<ul class="compact">
         <multiple name="bulk_actions">
           <li><a href="#" title="@bulk_actions.title@" class="button"
-          onclick="acs_ListBulkActionClick('@list_properties.name@', '@bulk_actions.url@'); return false;" onkeypress="acs_ListBulkActionClick('@list_properties.name@', '@bulk_actions.url@'); return false;">@bulk_actions.label@</a></li>
+          onclick="@list_properties.bulk_action_click_function@('@list_properties.name@', '@bulk_actions.url@'); return false;" onkeypress="acs_ListBulkActionClick('@list_properties.name@', '@bulk_actions.url@'); return false;">@bulk_actions.label@</a></li>
         </multiple>
 		</ul>
     </div>
