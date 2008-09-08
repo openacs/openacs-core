@@ -1228,9 +1228,9 @@ ad_proc -private template::list::prepare_for_rendering {
                 if { [exists_and_not_null __element_properties(aggregate)] } {
                     # Update totals
                     incr __agg_counter($__element_properties(name))
-                    if { $__element_properties(aggregate) ne "count" } {
+                    if {$__element_properties(aggregate) eq "sum" } {
                         set __agg_sum($__element_properties(name)) \
-                            [expr {$__agg_sum($__element_properties(name)) + [set $__element_properties(name)]}]
+                            [expr {$__agg_sum($__element_properties(name)) + ([set $__element_properties(name)] ne "" ? [set $__element_properties(name)] : 0)} ]
                     }
 
                     # Check if the value of the groupby column has changed
