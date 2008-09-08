@@ -53,6 +53,7 @@ ad_proc -public template::list::create {
     {-orderby ""}
     {-formats ""}
     {-filter_form 0}
+    {-bulk_action_click_function "acs_ListBulkActionClick"}
 } {
     Defines a list to be diplayed in a template. The list works in conjunction with a multirow, which contains the data for the list.
     The list is output using the &lt;listtemplate&gt; and &lt;listfilters&gt; templating tags, with the help of &lt;listelement&gt; and &lt;listrow&gt;.
@@ -232,7 +233,8 @@ ad_proc -public template::list::create {
                            See <a href="/api-doc/proc-view?proc=template::list::format::create">template::list::format::create</a> for details.
 
     @param filter_form     Whether or not we create the form data structure for the listfilters-form tag to dynamically generate a form to specify filter criteria. Default 0 will not generate form. Set to 1 to generate form to use listfilters-form tag.
-
+    @param bulk_action_click_functon Javascript function name to call when bulk action buttons are clicked. 
+    
     @see template::list::element::create
     @see template::list::filter::create
     @see template::list::orderby::create
@@ -263,6 +265,7 @@ ad_proc -public template::list::create {
         bulk_actions {}
         bulk_action_export_vars {}
         orderby_name {orderby}
+	bulk_action_click_function {} 
     }
 
     # These are defauls for internally maintained properties
@@ -319,6 +322,7 @@ ad_proc -public template::list::create {
         page_query_name
         page_flush_p
         orderby_name
+	bulk_action_click_function
     } {
         set list_properties($elm) [set $elm]
     }
