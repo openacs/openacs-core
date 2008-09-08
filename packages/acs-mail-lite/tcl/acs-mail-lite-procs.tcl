@@ -224,6 +224,7 @@ namespace eval acs_mail_lite {
         {-file_ids ""}
         {-extraheaders ""}
         -use_sender:boolean
+        {-object_id ""}
     } {
 
         Prepare an email to be send with the option to pass in a list
@@ -279,7 +280,8 @@ namespace eval acs_mail_lite {
                 -mime_type $mime_type \
                 -no_callback_p $no_callback_p \
                 -extraheaders $extraheaders \
-                -use_sender_p $use_sender_p
+                -use_sender_p $use_sender_p \
+                -object_id $object_id
         } else {
             # else, store it in the db and let the sweeper deliver the mail
             set creation_date [clock format [clock seconds] -format "%Y.%m.%d %H:%M:%S"]
@@ -356,6 +358,7 @@ namespace eval acs_mail_lite {
         {-no_callback_p "0"}
         {-extraheaders ""}
         {-use_sender_p "0"}
+        {-object_id ""}
     } {
 
         Prepare an email to be send immediately with the option to pass in a list
@@ -389,6 +392,7 @@ namespace eval acs_mail_lite {
         @param no_callback_p Indicates if callback should be executed or not. If you don't provide it it will execute callbacks.
 
         @param use_sender_p Boolean indicating that from_addr should be used regardless of fixed-sender parameter
+        @param object_id Object id that caused this email to be sent
     } {
 
         # Package_id required by the callback (emmar: no idea what for)
@@ -518,7 +522,8 @@ namespace eval acs_mail_lite {
                     -subject $subject \
                     -cc_addr $cc_addr \
                     -bcc_addr $bcc_addr \
-                    -file_ids $file_ids
+                    -file_ids $file_ids \
+                    -object_id $object_id
             }
         }       
     }

@@ -21,7 +21,8 @@
                    mime_type,
                    no_callback_p,
                    extraheaders,
-                   use_sender_p     
+                   use_sender_p,
+                   object_id
                   )
             values
                   (nextval('acs_mail_lite_id_seq'),
@@ -39,7 +40,8 @@
                    :mime_type,
                    (case when :no_callback_p = '1' then TRUE else FALSE end),
                    :extraheaders,
-                   (case when :use_sender_p = '1' then TRUE else FALSE end)          
+                   (case when :use_sender_p = '1' then TRUE else FALSE end),
+                   :object_id
                   )
         </querytext>
     </fullquery>
@@ -82,7 +84,8 @@
                    mime_type,
                    (case when no_callback_p = TRUE then 1 else 0 end) as no_callback_p,
                    extraheaders,
-                   (case when use_sender_p = TRUE then 1 else 0 end) as use_sender_p
+                   (case when use_sender_p = TRUE then 1 else 0 end) as use_sender_p,
+                   object_id
             from acs_mail_lite_queue
             where locking_server = '' or locking_server is NULL
         </querytext>

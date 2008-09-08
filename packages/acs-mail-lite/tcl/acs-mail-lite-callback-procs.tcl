@@ -70,6 +70,7 @@ ad_proc -public -callback acs_mail_lite::send {
     {-cc_addr}
     {-bcc_addr}
     {-file_ids}
+    {-object_id}
 } {
 
     Callback for executing code after an email has been send using the complex send mechanism.
@@ -93,6 +94,8 @@ ad_proc -public -callback acs_mail_lite::send {
 	@param bcc_addr list of emails to whom did we send this email in BCC
 
 	@param file_ids List of file ids sent as attachments.
+
+    @param object_id The ID of the object that is responsible for sending the mail in the first place
 
 } -
 
