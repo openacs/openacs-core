@@ -159,7 +159,8 @@ create table groups (
 			constraint groups_join_policy_nn not null
                         constraint groups_join_policy_ck
                         check (join_policy in 
-                               ('open', 'needs approval', 'closed'))
+                               ('open', 'needs approval', 'closed')),
+        description     varchar2(4000)
 );
 
 
