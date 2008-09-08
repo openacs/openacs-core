@@ -1439,13 +1439,16 @@ ad_proc -private template::list::render_row {
 ad_proc -private template::list::prepare_elements {
     {-name:required}
     {-ulevel 1}
+    {-elements}
 } {
     Builds urls, selected_p, etc., for filters
 } {
     # Get an upvar'd reference to list_properties
     get_reference -name $name
-
-    foreach element_name $list_properties(elements) {
+    if {![info exists elements]} {
+        set elements $list_properties(elements)
+    }
+    foreach element_name $elements {
         template::list::element::get_reference -list_name $name -element_name $element_name
 
         if { $element_properties(default_direction) ne "" } {
@@ -1503,6 +1506,7 @@ ad_proc -private template::list::prepare_elements {
 
 ad_proc -private template::list::prepare_filters {
     {-name:required}
+    {-filter_names}
 } {
     Builds urls, selected_p, etc., for filters
 } {
@@ -1510,7 +1514,16 @@ ad_proc -private template::list::prepare_filters {
     
     # Get an upvar'd reference to list_properties
     get_reference -name $name
-
+    
+    if {[info exists filter_names]} {
+        set filter_refs [list]
+        foreach filter_name $filter_names {
+            llapend filter_refs ${name}:filter:${filter_name}:properties
+        }
+        
+    } {
+        set filter_refs $list_properties(filter_refs)
+    }
     # Construct URLs for the filters now, while we still have access to the caller's namespace
     foreach filter_ref $list_properties(filter_refs) {
         upvar #$level $filter_ref filter_properties
@@ -1547,18 +1560,16 @@ ad_proc -private template::list::prepare_filters {
                     break
                 }
             }
-
-            # Get the clear_url
-            if { ![template::util::is_true $filter_properties(has_default_p)] } {
-                set filter_properties(clear_url) [get_url \
-                                                      -name $name \
-                                                      -exclude [list $filter_properties(name)]]
-            }
-
-            # Remember the filter value
-            set list_properties(filter,$filter_properties(name)) $current_filter_value
-        }
-
+	    # get the select clause
+	    if {$filter_properties(select_clause_eval) ne "" \
+		    && [lsearch $list_properties(element_select_clauses) $filter_properties(select_clause_eval)] < 0} {
+		lappend list_properties(filter_select_clauses) [uplevel $list_properties(ulevel) $filter_properties(select_clause_eval)]
+	    } elseif {$filter_properties(select_clause) ne "" \
+			  && [lsearch $list_properties(element_select_clauses) $filter_properties(select_clause)] < 0} {
+		lappend list_properties(filter_select_clauses) $filter_properties(select_clause)
+	    }
+	}
+	
         # If none were found, we may need to provide an 'other' entry below
         set found_selected_p 0
         
@@ -1606,6 +1617,16 @@ ad_proc -private template::list::prepare_filters {
                     }
                 }
             }
+            # DAVEB Make multivar actually DO someting
+            # set the other vars according to the settings
+             if {$selected_p && $filter_properties(type) eq "multivar"} {
+                 foreach elm $value {
+                     foreach { elm_key elm_value } [lrange $elm 0 1] {}
+                     if {$elm_key ne $filter_properties(name)} {
+                         set list_properties(filter,$elm_key) $elm_value
+                     }
+                 }
+             }
 
             lappend filter_properties(selected_p) $selected_p
             set found_selected_p [expr {$found_selected_p || $selected_p}]
@@ -1636,18 +1657,19 @@ ad_proc -private template::list::prepare_filters {
                 set __filter_value $value
                 lappend filter_properties(add_urls) [uplevel $list_properties(ulevel) subst $filter_properties(add_url_eval)]
             }
-        }
+	    
 
-        # Handle 'other_label'
-        if { [exists_and_not_null current_filter_value] && \
-                 !$found_selected_p && \
-                 $filter_properties(other_label) ne "" } {
-
-            # Add filter entry with the 'other_label'.
-            lappend filter_properties(values) [list $filter_properties(other_label) {}]
-            lappend filter_properties(urls) {}
-            lappend filter_properties(selected_p) 1
-        }
+	    # Handle 'other_label'
+	    if { [exists_and_not_null current_filter_value] && \
+		     !$found_selected_p && \
+		     $filter_properties(other_label) ne "" } {
+		
+		# Add filter entry with the 'other_label'.
+		lappend filter_properties(values) [list $filter_properties(other_label) {}]
+		lappend filter_properties(urls) {}
+		lappend filter_properties(selected_p) 1
+	    }
+	}
     }
 }
 
@@ -2239,6 +2261,9 @@ ad_proc -public template::list::filter::create {
         'other' value when some other value is selected for this filter. You specify here what label should
         be used for that element.
       </li>
+      <li>
+        <b>form_element_properties</b>: If you are using filter form, additional properties to override the form element declaration. Any valid form properties can be passed using the same names are template::element::create. A list of name value pairs.
+      </li>
     </ul>
 
     <p>
@@ -2291,6 +2316,7 @@ ad_proc -public template::list::filter::create {
 	select_clause_eval {}
         other_label {}
         null_label {}
+	form_element_properties {}
     }
 
     # Prepopulate some automatically generated values
@@ -3277,6 +3303,36 @@ ad_proc -private template::list::prepare_filter_form {
 	ad_form -extend -name $filters_form_name -form {
 	    {submit:text(submit) {label "Apply Filters"}}
 	}
+    } else {
+        # hard to figure out how to conditionally handle this in the
+        #
+        ad_form -extend -name $filters_form_name -form {
+            {submit:text(hidden),optional
+            }
+        }
+    }
+}
+
+ad_proc template::list::set_elements_property {
+    {-list_name:required}
+    {-element_names:required}
+    {-property:required}
+    {-value:required}
+} {
+    Sets a property on multiple list elements
+    
+    @param list_name Name of the list
+    @param element_names List of element names
+    @param property Which property to set
+    @param value Value to set, all elements in element_names get this value
+
+} {
+    foreach name $element_names {
+	template::list::element::set_property \
+	    -list_name $list_name \
+	    -element_name $name \
+	    -property $property \
+	    -value $value
     }
 }
 
