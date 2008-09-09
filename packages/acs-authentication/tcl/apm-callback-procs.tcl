@@ -166,6 +166,9 @@ ad_proc -private auth::after_upgrade {
 
 		}
 	    }
+            5.5.0d1-5.5.0d2 {
+                auth::search::create_contract
+            }
 
 	}
 }
