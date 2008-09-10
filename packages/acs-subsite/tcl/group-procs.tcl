@@ -203,7 +203,7 @@ ad_proc -public group::get {
 } {
     upvar 1 $array row
     db_1row group_info {
-        select group_name, title, join_policy
+        select group_name, title, join_policy, description
         from   groups g, acs_objects o
         where  group_id = :group_id
 	and object_id = :group_id
@@ -362,6 +362,19 @@ ad_proc -public group::join_policy {
     }]
 }
 
+ad_proc -public group::description {
+    {-group_id:required}
+} {
+    Returns a group's description
+
+    @creation-date 09/2008
+
+} {
+    return [db_string select_description {
+        select description from groups where group_id = :group_id
+    }]
+}
+
 ad_proc -public group::update {
     {-group_id:required}
     {-array:required}
@@ -378,7 +391,7 @@ ad_proc -public group::update {
     upvar $array row
     
     # Construct clauses for the update statement
-    set columns { group_name join_policy }
+    set columns { group_name join_policy description }
     set set_clauses [list]
     foreach name [array names row] {
         if { [lsearch -exact $columns $name] == -1 } {
