@@ -1521,7 +1521,7 @@ ad_proc -private template::list::prepare_filters {
             llapend filter_refs ${name}:filter:${filter_name}:properties
         }
         
-    } {
+    } else {
         set filter_refs $list_properties(filter_refs)
     }
     # Construct URLs for the filters now, while we still have access to the caller's namespace
@@ -1558,6 +1558,27 @@ ad_proc -private template::list::prepare_filters {
                         lappend list_properties(filter_where_clauses) $filter_properties($property)
                     }
                     break
+                }
+            }
+            # Get the clear_url
+            if { ![template::util::is_true $filter_properties(has_default_p)] }\
+                {
+                    set filter_properties(clear_url) [get_url \
+                                                          -name $name \
+                                                          -exclude [list $filter_properties(name)]]
+                }
+            # Remember the filter value
+            set list_properties(filter,$filter_properties(name)) $current_filter_value
+            # get the from clause
+            # check if there is a dynamic column
+            # see if we have an element with the same name
+            if {[lsearch $list_properties(elements) $filter_properties(name)] > -1} {
+                template::list::element::get_reference -list_name $name -element_name $filter_properties(name)
+
+                if {[info exists element_properties(from_clause_eval)] && $element_properties(from_clause_eval) ne "" && [lsearch $list_properties [string trim [uplevel $list_properties(ulevel) $filter_properties($property)]]] < 0} {
+                    lappend list_properties(from_clauses) [uplevel $list_properties(ulevel) $filter_properties($property)]
+                } elseif {[info exists element_properties(from_clause)] && $element_properties(from_clause) ne "" && [lsearch $list_properties(from_clauses) [string trim $element_properties(from_clause)]] < 0} {
+                    lappend list_properties(from_clauses) [string trim $filter_properties(from_clause)]
                 }
             }
 	    # get the select clause
