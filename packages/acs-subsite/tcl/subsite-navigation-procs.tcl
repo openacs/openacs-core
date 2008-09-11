@@ -14,6 +14,7 @@ namespace eval subsite_navigation {
 }
 
 ad_proc -public subsite_navigation::define_pageflow {
+    {-subsite_id ""}
     {-show_applications_p 1}
     {-no_tab_application_list ""}
     {-initial_pageflow ""}
@@ -30,6 +31,7 @@ ad_proc -public subsite_navigation::define_pageflow {
 
     If the navigation multirow doesn't exist, we create it.
 
+    @param subsite_id The package id of the subsite we're interested in (defaults to current)
     @param show_applications_p If true, autogenerate tabs for applications (not declared
            boolean because the tabbed master takes this from a package parameter)
     @param no_tab_application_list A list of application package keys to ignore when
@@ -40,10 +42,16 @@ ad_proc -public subsite_navigation::define_pageflow {
     @param subgroup Group name for the subsection (opened under a selected tab)
 
 } {
-    set pageflow [get_pageflow_struct -initial_pageflow $initial_pageflow \
+    if { $subsite_id eq "" } {
+        set subsite_id [ad_conn subsite_id]
+    }
+
+    set pageflow [subsite_navigation::get_pageflow_struct \
+                     -subsite_id $subsite_id \
+                     -initial_pageflow $initial_pageflow \
                      -show_applications_p $show_applications_p \
                      -no_tab_application_list $no_tab_application_list]
-    set base_url [subsite::get_element -element url]
+    set base_url [subsite::get_element -subsite_id $subsite_id -element url]
 
     if { ![template::multirow exists $navigation_multirow] } {
         template::multirow create $navigation_multirow group label href target \
@@ -65,6 +73,7 @@ ad_proc -public subsite_navigation::define_pageflow {
         set section_a(name) $section_name
 
         set selected_p [add_section_row \
+                            -subsite_id $subsite_id \
                             -array section_a \
                             -base_url $base_url \
                             -group $group \
@@ -85,6 +94,7 @@ ad_proc -public subsite_navigation::define_pageflow {
                 set subsection_a(folder) [file join $section_a(folder) $subsection_a(folder)]
 
                 add_section_row \
+                    -subsite_id $subsite_id \
                     -array subsection_a \
                     -base_url $base_url \
                     -group $subgroup \
@@ -96,6 +106,7 @@ ad_proc -public subsite_navigation::define_pageflow {
 
 
 ad_proc -public subsite_navigation::add_section_row {
+    {-subsite_id ""}
     {-array:required}
     {-base_url:required}
     {-multirow:required}
@@ -115,6 +126,7 @@ ad_proc -public subsite_navigation::add_section_row {
     
     if { [ad_conn node_id] == 
          [site_node::closest_ancestor_package -include_self \
+            -node_id [site_node::get_node_id_from_object_id -object_id $subsite_id] \
             -package_key [subsite::package_keys] \
             -url [ad_conn url]] } {
         set current_url [ad_conn extra_url]
@@ -184,12 +196,14 @@ ad_proc -public subsite_navigation::get_section_info {
 }
 
 ad_proc -public subsite_navigation::get_pageflow_struct {
+    {-subsite_id ""}
     {-initial_pageflow ""}
     {-show_applications_p 1}
     {-no_tab_application_list ""}
 } {
     Defines the page flow structure.
 
+    @param subsite_id The package id of the subsite we're interested in (defaults to current)
     @param initial_pageflow Add these subsections before computing the rest of the page flow
     @param show_applications_p If true, autogenerate tabs for applications (not declared
            boolean because the tabbed master takes this from a package parameter)
@@ -197,16 +211,13 @@ ad_proc -public subsite_navigation::get_pageflow_struct {
            autogenerating tabs for applications
 } {
     set pageflow $initial_pageflow
-
-    set subsite_url [subsite::get_element -element url]
-
-    set subsite_id [ad_conn subsite_id]
-    array set subsite_sitenode [site_node::get -url $subsite_url]
-    set subsite_node_id $subsite_sitenode(node_id)
+    set subsite_node_id [site_node::get_node_id_from_object_id -object_id $subsite_id]
+    set subsite_url [site_node::get_element -node_id $subsite_node_id -element url]
 
     set user_id [ad_conn user_id]
     set admin_p [permission::permission_p \
                      -object_id [site_node::closest_ancestor_package -include_self \
+                                     -node_id $subsite_node_id \
                                      -package_key [subsite::package_keys] \
                                      -url [ad_conn url]] \
                      -privilege admin \
