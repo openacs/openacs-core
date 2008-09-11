@@ -30,7 +30,7 @@ ad_form -name name -cancel_url [ad_conn url] -mode display -form {
         {label "Join policy"}
         {options [group::get_join_policy_options]}
     }
-    {description:text(textarea)
+    {description:text(textarea),optional
         {label "Description"}
 	{html { rows 6 cols 80 }}
     }
