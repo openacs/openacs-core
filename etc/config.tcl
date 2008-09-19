@@ -556,7 +556,7 @@ ns_section ns/db/pools
 ns_section ns/db/pool/pool1
     ns_param   maxidle            0
     ns_param   maxopen            0
-    ns_param   connections        5
+    ns_param   connections        15
     ns_param   verbose            $debug
     ns_param   extendedtableinfo  true
     ns_param   logsqlerrors       $debug
@@ -611,7 +611,7 @@ ns_section ns/db/pool/pool3
     } 
 
 ns_section ns/server/${server}/db
-    ns_param   pools              "*" 
+    ns_param   pools              pool1,pool2,pool3
     ns_param   defaultpool        pool1
 
 
