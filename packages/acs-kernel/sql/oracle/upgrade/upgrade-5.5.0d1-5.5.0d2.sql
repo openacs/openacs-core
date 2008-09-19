@@ -4,4 +4,5 @@ alter table auth_authorities add constraint auth_authority_allow_user_i_p_nn (al
 alter table auth_authorities add constraint auth_authority_allow_user_i_ck
                              check (allow_user_entered_info_p in ('t','f'))
 alter table auth_authorities alter allow_user_entered_info_p set default 'f';
-alter table auth_authorities add search_impl_id integer constraint auth_authorities_search_impl_id_fk references acs_objects(object_id);
+alter table auth_authorities add search_impl_id integer;
+alter table auth_authorities add constraint foreign key auth_authorities_search_impl_id_fk (auth_authorities_search_impl_id) references acs_objects(object_id);
