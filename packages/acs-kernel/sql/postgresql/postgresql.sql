@@ -135,7 +135,7 @@ begin
                where oid = v_one_arg::integer;
               v_funcdef := v_funcdef || v_one_type;            
         end loop;
-        v_funcdef := v_funcdef || '')'';
+        v_funcdef := v_funcdef || '') CASCADE'';
 
         return v_funcdef;
 
