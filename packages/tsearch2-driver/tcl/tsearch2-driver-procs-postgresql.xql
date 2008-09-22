@@ -55,9 +55,9 @@
     <querytext>
       insert into txt (object_id,fti)
       values (:object_id,
-              setweight(to_tsvector(coalesce(:title,'')),'A')
-              ||setweight(to_tsvector(coalesce(:keywords,'')),'B')
-              ||to_tsvector(coalesce(:txt,'')))
+              setweight(to_tsvector('default',coalesce(:title,'')),'A')
+              ||setweight(to_tsvector('default',coalesce(:keywords,'')),'B')
+              ||to_tsvector('default',coalesce(:txt,'')))
     </querytext>
   </fullquery>
 
