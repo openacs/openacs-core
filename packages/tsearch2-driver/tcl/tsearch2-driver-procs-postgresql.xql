@@ -64,7 +64,7 @@
   <fullquery name="tsearch2::search.base_query">
   <rdbms><type>postgresql</type><version>8.0</version></rdbms>
     <querytext>
-      where fti @@ to_tsquery(:query)
+      where fti @@ to_tsquery('default',:query)
         and exists (select 1
                     from acs_object_party_privilege_map m
                     where m.object_id = txt.object_id
@@ -77,7 +77,7 @@
   <rdbms><type>postgresql</type><version>8.0</version></rdbms>
     <querytext>
       select txt.object_id $base_query
-      order by rank(fti,to_tsquery(:query)) desc
+      order by rank(fti,to_tsquery('default',:query)) desc
       $limit_clause $offset_clause
     </querytext>
   </fullquery>
@@ -85,7 +85,7 @@
   <fullquery name="tsearch2::summary.summary">
   <rdbms><type>postgresql</type><version>8.0</version></rdbms>
     <querytext>
-      select headline(:txt,to_tsquery(:query))
+      select headline(:txt,to_tsquery('default',:query))
     </querytext>
   </fullquery>
 
