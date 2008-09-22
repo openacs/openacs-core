@@ -80,13 +80,7 @@ ad_proc -public tsearch2::update_index {
       if {$max_size_to_index > 0} {
         set txt [string range $txt 0 $max_size_to_index]
       }
-        db_dml update_index "
-            update txt set fti =
-                     setweight(to_tsvector('default',coalesce(:title,'')),'A')
-                   ||setweight(to_tsvector('default',coalesce(:keywords,'')),'B')
-                   ||to_tsvector('default',coalesce(:txt,''))
-            where object_id=:object_id
-        "
+        db_dml update_index ""
     }
 }
 
