@@ -1621,7 +1621,7 @@ ad_proc -public security::locations {} {
     }
 
     set locations [list $insecure_location $secure_location]
-    if { [info exists alt_insecure_location] && [parameter::get -parameter SuppressHttpPort -package_id [apm_package_id_from_key acs-tcl]] } {
+    if { [info exists alt_insecure_location] && [parameter::get -parameter SuppressHttpPort -package_id [apm_package_id_from_key acs-tcl] -default 0] } {
         lappend $alt_insecure_location
     }
     return  $locations
