@@ -15,7 +15,7 @@ email, first name, last name
 Dear &lt;first_names&gt; &lt;last_name&gt;,
 
 You have been added as a user to @system_name@
-at @system_url@
+at @system_url@.
 
 Login information:
 Email: &lt;email&gt;

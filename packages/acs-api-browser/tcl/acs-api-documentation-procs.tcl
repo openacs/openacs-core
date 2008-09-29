@@ -621,7 +621,10 @@ ad_proc -public api_proc_documentation {
 	append out [api_format_common_elements doc_elements]
 	
 	if { $source_p } {
-		if {[ad_parameter FancySourceFormattingP "" 1]} {
+		if {[parameter::get_from_package_key \
+                         -package_key acs-api-browser \
+                         -parameter FancySourceFormattingP \
+                         -default 1]} {
 			append out "<dt><b>Source code:</b></dt><dd>
 <pre>[api_tcl_to_html $proc_name]<pre>
 </dd><p>\n"

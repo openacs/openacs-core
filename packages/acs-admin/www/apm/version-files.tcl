@@ -81,8 +81,8 @@ foreach path [apm_get_package_files -package_key $package_key] {
 			    # This procs file is already being watched.
 			    append body "<td>&nbsp;being watched&nbsp;</td>"
 			} else {
-			    if {![ad_parameter -package_id [ad_acs_kernel_id] \
-				    PerformanceModeP request-processor 1]} {
+			    if {![parameter::get -package_id [ad_acs_kernel_id] \
+                                      -parameter PerformanceModeP -default 1]} {
 				# Provide a link to watch the procs file.
 				append body "<td>&nbsp;<a href=\"file-watch?[export_vars -url {version_id {paths $path} return_url}]\">watch</a>&nbsp;</td>"
 			    } else {

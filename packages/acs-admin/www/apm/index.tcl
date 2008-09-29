@@ -53,7 +53,7 @@ set missing_text "<strong>No packages match criteria.</strong>"
 
 append body "<center><table><tr><td>[ad_dimensional $dimensional_list]</td></tr></table></center>"
 
-set use_watches_p [expr ! [ad_parameter -package_id [ad_acs_kernel_id] PerformanceModeP request-processor 1]]
+set use_watches_p [expr {![parameter::get -package_id [ad_acs_kernel_id] -parameter PerformanceModeP -default 1]}]
 
 set table_def {
     { package_key "Key" "" "<td><a href=\"[export_vars -base version-view { version_id }]\">$package_key</a></td>" }
@@ -83,7 +83,7 @@ set table_def {
             lappend file_link_list "<a href=\"version-files?version_id=$version_id\">view files</a>"
 
 	    if { $installed_p eq "t" && $enabled_p eq "t" } {
-	        if { ! [ad_parameter -package_id [ad_acs_kernel_id] PerformanceModeP request-processor 1] } {
+	        if {![parameter::get -package_id [ad_acs_kernel_id] -parameter PerformanceModeP -default 1]} {
                     lappend file_link_list "<a href=\"package-watch?package_key=$package_key\">watch all files</a>"
                 } 
 

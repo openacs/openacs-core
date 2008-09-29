@@ -10,7 +10,7 @@ ad_page_contract {
 }
 
 db_1row apm_package_by_version_id {
-    select package_name, version_name, package_id 
+    select pretty_name, version_name
     from apm_package_version_info where version_id = :version_id
 }
 
@@ -36,14 +36,13 @@ set version_tag [apm_package_version_release_tag $package_key $version_name]
 
 # Path to the CVS executable
 
-set cvs [ad_parameter CvsPath vc]
+set cvs [parameter::get  -package_id [ad_acs_kernel_id] -parameter CvsPath]
 
-doc_body_append "[apm_header [list "version-view?version_id=$version_id" "$package_name $version_name"] [list "version-files?version_id=$version_id" "Files"] "Tag"]
-
-<p> We're going to write the CVS tag <code>$version_tag</code> into
+doc_body_append [apm_header [list "version-view?version_id=$version_id" "$pretty_name $version_name"] [list "version-files?version_id=$version_id" "Files"] "Tag"] \
+"<p> We're going to write the CVS tag <code>$version_tag</code> into
 the repository for each file in this package.  This will let you
 retrieve the exact set of revisions that make up
-$package_name $version_name in the future.  You can repeat
+$pretty_name $version_name in the future.  You can repeat
 this operation as often as you want, to tag new files for example.
 
 <p>Here goes:
