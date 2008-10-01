@@ -472,7 +472,7 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
                 set ::acs_blank_master(xinha.plugins) [join $quoted ", "]
 
                 set xinha_options ""
-                foreach e {width height folder_id fs_package_id file_types attach_parent_id} {
+                foreach e {width height folder_id fs_package_id script_dir file_types attach_parent_id} {
                     if {[info exists options($e)]} {
                         append xinha_options "xinha_config.$e = '$options($e)';\n"
                     }
