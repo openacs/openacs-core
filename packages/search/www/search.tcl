@@ -123,7 +123,7 @@ if {[callback::impl_exists -impl $driver -callback search::search]} {
 }
 set tend [clock clicks -milliseconds]
 
-if { $t eq "Feeling Lucky" && $result(count) > 0} {
+if { $t eq [_ search.Feeling_Lucky] && $result(count) > 0} {
     set object_id [lindex $result(ids) 0]
     set object_type [acs_object_type $object_id]
     if {[callback::impl_exists -impl $object_type -callback search::url]} {
@@ -136,8 +136,8 @@ if { $t eq "Feeling Lucky" && $result(count) > 0} {
 }
 
 set elapsed [format "%.02f" [expr {double(abs($tend - $t0)) / 1000.0}]]
-if { $offset >= $result(count) } { set offset [expr ($result(count) / $limit) * $limit] }
-set low [expr {$offset + 1}]
+if { $offset >= $result(count) } { set offset [expr {($result(count) / $limit) * $limit}] }
+set low  [expr {$offset + 1}]
 set high [expr {$offset + $limit}]
 if { $high > $result(count) } { set high $result(count) }
 if { $info(automatic_and_queries_p) && ([lsearch -exact $q and] > 0) } {
@@ -147,8 +147,8 @@ if { $info(automatic_and_queries_p) && ([lsearch -exact $q and] > 0) } {
 }
 
 set url_advanced_search ""
-append url_advanced_search "advanced-search?q=${urlencoded_query}"
-if { $num > 0 } { append url_advanced_search "&num=${num}" }
+append url_advanced_search "advanced-search?q=$urlencoded_query"
+if { $num > 0 } { append url_advanced_search "&num=$num" }
 
 
 set query $q
@@ -167,7 +167,7 @@ for { set __i 0 } { $__i < [expr {$high - $low +1}] } { incr __i } {
 	array set datasource [lindex [callback -impl $object_type search::datasource -object_id $object_id] 0]
 	set url_one [lindex [callback -impl $object_type search::url -object_id $object_id] 0]
     } else {
-	ns_log notice "SEARCH search/www/search.tcl callback::datasource::${object_type} not found"
+	ns_log notice "SEARCH search/www/search.tcl callback::datasource::$object_type not found"
 	array set datasource [acs_sc_call FtsContentProvider datasource [list $object_id] $object_type]
 	set url_one [acs_sc_call FtsContentProvider url [list $object_id] $object_type]
     }
