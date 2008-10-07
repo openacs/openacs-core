@@ -760,7 +760,18 @@ ad_proc -public template::multirow {
       set column [lindex $args 1]
       # Set an array reference if no column is specified
       if {$column eq {}} {
-        uplevel "upvar $multirow_level_up $name:$index $name"
+
+        # If -local was specified, the upvar is done with a relative stack frame
+        # index, and we must take into account the fact that the uplevel moves up
+        # the frame one level.  If -local was not specified, the an absolute stack
+        # frame is passed to upvar, which of course needs no adjustment.
+
+        if { $local_p } {
+            uplevel "upvar [expr { $multirow_level_up - 1 }] $name:$index $name"
+        } else {
+            uplevel "upvar $multirow_level_up $name:$index $name"
+        }
+
       } else {
         # If a column is specified, just return the value for it
         upvar $multirow_level_up $name:$index arr
