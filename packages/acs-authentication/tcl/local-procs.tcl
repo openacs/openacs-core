@@ -304,11 +304,12 @@ ad_proc -private auth::local::password::ChangePassword {
 	    set subject [_ acs-subsite.Password_changed_subject]
 	    set body [_ acs-subsite.Password_changed_body]
 	    
-	    ns_sendmail \
-		$user(email) \
-		[ad_outgoing_sender] \
-		$subject \
-		$body
+	    acs_mail_lite::send \
+            -send_immediately \
+            -to_addr $user(email) \
+            -from_addr [ad_outgoing_sender] \
+            -subject $subject \
+            -body $body
 	} {
             global errorInfo
             ns_log Error "Error sending out password changed notification to account owner with user_id $user(user_id), email $user(email): $errmsg\n$errorInfo"
@@ -335,11 +336,12 @@ ad_proc -private auth::local::password::RetrievePassword {
     set subject "[ad_system_name]: [_ acs-subsite.change_password_email_subject] $username"
     set body "[_ acs-subsite.change_password_email_body_0]\n\n[export_vars -base "[ad_url]/user/password-reset" {user_id password_hash}]\n\n[_ acs-subsite.change_password_email_body_1]"
 
-    ns_sendmail \
-	$email \
-	[ad_outgoing_sender] \
-	$subject \
-	$body
+    acs_mail_lite::send \
+        -send_immediately \
+        -to_addr $email \
+        -from_addr [ad_outgoing_sender] \
+        -subject $subject \
+        -body $body
 
     return [array get result]
 }
@@ -523,25 +525,31 @@ ad_proc -private auth::local::registration::Register {
     # LARS TODO: Move this out of the local driver and into the auth framework
     # Notify admin on new registration
     if { [parameter::get -parameter  NotifyAdminOfNewRegistrationsP -default 0] } {
-	with_catch errmsg {
-	    set admin_email [parameter::get \
-				 -parameter NewRegistrationEmailAddress \
-				 -package_id [ad_conn subsite_id] \
-				 -default [ad_system_owner]]
+        with_catch errmsg {
+            set admin_email [parameter::get \
+                                 -parameter NewRegistrationEmailAddress \
+                                 -package_id [ad_conn subsite_id] \
+                                 -default [ad_system_owner]]
+            set admin_id [party::get_by_email -email $admin_email]
+            if { $admin_id eq "" } {
+                set admin_locale [lang::system::site_wide_locale]
+            } else {
+                set admin_locale [lang::user::locale -user_id $admin_id]
+            }
 
-	    set admin_locale [lang::user::locale -user_id [party::get_by_email -email $admin_email]]
-	    set system_url [ad_url]
+            set system_url [ad_url]
 
-            ns_sendmail \
-		$admin_email \
-                $email \
-		[lang::message::lookup $admin_locale acs-subsite.lt_New_registration_at_s] \
-		[lang::message::lookup $admin_locale acs-subsite.lt_first_names_last_name]
-	} {
+            acs_mail_lite::send \
+                -send_immediately \
+                -to_addr $admin_email \
+                -from_addr [ad_outgoing_sender] \
+                -subject [lang::message::lookup $admin_locale acs-subsite.lt_New_registration_at_s] \
+                -body [lang::message::lookup $admin_locale acs-subsite.lt_first_names_last_name]
+        } {
             # We don't fail hard here, just log an error
             global errorInfo
-	    ns_log Error "Error sending admin notification to $admin_email.\n$errorInfo"
-	}
+            ns_log Error "Error sending admin notification to $admin_email.\n$errorInfo"
+        }
     }
 
     return [array get result]
