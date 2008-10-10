@@ -6,4 +6,4 @@
 
 
 # Create a mutex for the installer
-nsv_set acs_installer mutex [ns_mutex create]
+nsv_set acs_installer mutex [ns_mutex create oacs:installer]

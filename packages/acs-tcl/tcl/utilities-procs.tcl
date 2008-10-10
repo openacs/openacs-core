@@ -1996,7 +1996,7 @@ ad_proc -private ad_run_scheduled_proc { proc_info } {
 
 # Initialize NSVs for ad_schedule_proc.
 if { [apm_first_time_loading_p] } {
-    nsv_set ad_procs mutex [ns_mutex create]
+    nsv_set ad_procs mutex [ns_mutex create oacs:sched_procs]
     nsv_set ad_procs . ""
 }
 
