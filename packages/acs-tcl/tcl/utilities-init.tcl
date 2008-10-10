@@ -11,7 +11,7 @@ ad_library {
 randomInit [ns_time]
 
 # Create mutex for util_background_exec
-nsv_set util_background_exec_mutex . [ns_mutex create]
+nsv_set util_background_exec_mutex . [ns_mutex create oacs:bg_exec]
 
 # if maxbackup in config is missing or zero, don't run auto-logrolling
 set maxbackup [ns_config -int "ns/parameters" maxbackup 0]
