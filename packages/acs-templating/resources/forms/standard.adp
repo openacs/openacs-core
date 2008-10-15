@@ -22,9 +22,9 @@
 	     <div class="form-item-wrapper">
            <noparse>
 			 <formerror id="@elements.id@">
-			   <div class="form-error">
+			   <span class="form-error">
 				 \@formerror.@elements.id@;noquote\@
-			   </div> <!-- /form-error -->
+			   </span> <!-- /form-error -->
 			 </formerror>
 		   </noparse>
 
@@ -35,69 +35,68 @@
 				 <legend @elements.legend;noquote@><span>@elements.legendtext@</span></legend>
              </if>
 		   </if>
-           <div class="form-label">
+
              <if @elements.label@ not nil>
 			   <noparse>
                  <if @form_properties.mode@ eq display or @elements.widget@ in radio checkbox date inform>
-                   <if \@formerror.@elements.id@\@ not nil>
-				     <span class="form-label-error">@elements.label;noquote@</span>
-                   </if>
-                   <else>@elements.label;noquote@</else>
+                   <!-- no label tag -->
                  </if>
                  <else>
 				   <label for="@elements.id@">
-                     <if \@formerror.@elements.id@\@ not nil>
-                       <span class="form-label-error">@elements.label;noquote@</span>
-                     </if>
-                     <else>@elements.label;noquote@</else>
                  </else>
-			   </noparse>
 
-			   <if @form_properties.show_required_p@ true>
-			     <if @elements.optional@ nil and @elements.mode@ ne "display" and @elements.widget@ ne "inform">
-				   <span class="form-required-mark">
-				     (#acs-templating.required#)
-				   </span>
-				 </if>
-			   </if>
+                 <if \@formerror.@elements.id@\@ not nil>
+                   <span class="form-label form-label-error">
+                 </if>
+                 <else>
+                   <span class="form-label">
+                 </else>
+               </noparse>
 
-               <if @form_properties.mode@ eq display or @elements.widget@ in radio checkbox date inform><!-- dummy --></if>
-               <else></label></else>
+               @elements.label;noquote@
+
+               <if @form_properties.show_required_p@ true>
+                 <if @elements.optional@ nil and @elements.mode@ ne "display" and @elements.widget@ ne "inform">
+                   <span class="form-required-mark">(#acs-templating.required#)</span>
+                 </if>
+               </if>
+               </span><!-- form-label -->
 		     </if>
 		     <else>
 		       <if @elements.optional@ nil and @elements.mode@ ne "display" and @elements.widget@ ne "inform">
-			     <div class="form-required-mark">
+			     <span class="form-label form-required-mark">
 			       #acs-templating.required#
-			     </div>
+			     </span>
 			   </if>
 		     </else>
-           </div> <!-- /form-label -->
 
-           <div class="form-widget">
-	
 		     <if @elements.widget@ in radio checkbox>
 			   <noparse>
-			     <formgroup id="@elements.id@">			
+                 <span class="form-widget">
+                 <formgroup id="@elements.id@">			
 				   <label for="@elements.form_id@:elements:@elements.id@:\@formgroup.option@">
 				     \@formgroup.widget;noquote@
 					 \@formgroup.label;noquote@
 				   </label><br>
 				 </formgroup>
+                 </span>
 			   </noparse>
              </if>
 			 <else>
 			   <noparse>
-			     <formwidget id="@elements.id@">
+                 <span class="form-widget">
+                   <formwidget id="@elements.id@">
+                 </span>
 			   </noparse>
+               <if @form_properties.mode@ eq display or @elements.widget@ in radio checkbox date inform><!-- no label tag --></if>
+               <else></label></else>
              </else>							
 							
-		   </div> <!-- /form-widget -->
-						
            <if @elements.help_text@ not nil>
-             <div class="form-help-text">
+             <span class="form-help-text">
                <img src="/shared/images/info.gif" width="12" height="9" alt="Help" title="Help text" style="border:0">
                  <noparse><formhelp id="@elements.id@"></noparse>
-             </div> <!-- /form-help-text -->
+             </span> <!-- /form-help-text -->
            </if>
 
 		   <if @elements.widget@ in radio checkbox> 
@@ -106,7 +105,7 @@
 			   </fieldset>
              </if>
 		   </if>
-		 </div>
+		 </div> <!-- form-item-wrapper -->
        </else>
 	</else>
   </group>
