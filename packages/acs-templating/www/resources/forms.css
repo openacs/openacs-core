@@ -29,7 +29,7 @@
 	width: 16em;
 }
 
-.margin-form .form-item-wrapper .form-widget, .margin-form .form-button, .margin-form div.form-help-text {
+.margin-form .form-item-wrapper .form-widget, .margin-form .form-button, .margin-form .form-help-text {
 	display: block;
 	margin-left: 17em;
 }
