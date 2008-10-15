@@ -7,7 +7,7 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.4.4b1" url="http://openacs.org/repository/download/apm/search-5.4.4b1.apm">
+    <version name="5.4.3" url="http://openacs.org/repository/download/apm/search-5.4.3.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <release-date>2008-10-03</release-date>
         <maturity>3</maturity>
@@ -17,7 +17,7 @@
         <license url="http://www.gnu.org/copyleft/gpl.html">GPL version 2</license>
         <description format="text/html">Site wide search implemented with service contracts, currently supports postgres via the tsearch2 driver (OpenFTS still support but deprecated).</description>
 
-        <provides url="search" version="5.4.4b1"/>
+        <provides url="search" version="5.4.3"/>
         <requires url="acs-service-contract" version="5.4.3"/>
 
         <callbacks>
