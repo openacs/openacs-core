@@ -39,7 +39,7 @@
     </querytext>
   </fullquery>
 
-  <fullquery name="tseach2::update_index.update_index">
+  <fullquery name="tsearch2::update_index.update_index">
   <rdbms><type>postgresql</type><version>8.3</version></rdbms>
     <querytext>
        update txt set fti =
@@ -89,7 +89,7 @@
     </querytext>
   </fullquery>
 
-  <fullquery name="tseach2::update_index.update_index">
+  <fullquery name="tsearch2::update_index.update_index">
   <rdbms><type>postgresql</type><version>8.0</version></rdbms>
     <querytext>
        update txt set fti =
