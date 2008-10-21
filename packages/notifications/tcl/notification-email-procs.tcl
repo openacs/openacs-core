@@ -131,29 +131,22 @@ namespace eval notification::email {
 	   set content $content_html
        }
 
-        # Use this to build up extra mail headers        
-        set extra_headers [ns_set new]
+       # Use this to build up extra mail headers        
+       set extra_headers [list]
 
-        # This should disable most auto-replies.
-        ns_set put $extra_headers Precedence list
+       # This should disable most auto-replies.
+       lappend extra_headers [list "Precedence" "list"]
         
        set reply_to [reply_address -object_id $reply_object_id -type_id $notification_type_id]
 
        if { ![empty_string_p $from_user_id] && $from_user_id != 0 && [db_0or1row get_person {}]} {
-	   set from_email [cc_email_from_party $from_user_id]
+           set from_email [cc_email_from_party $from_user_id]
 	   
-	   # Set the Mail-Followup-To address to the
-	   # address of the notifications handler.
-	   ns_set put $extra_headers Mail-Followup-To $reply_to
+           # Set the Mail-Followup-To address to the
+           # address of the notifications handler.
+           lappend extra_headers [list "Mail-Followup-To" $reply_to]
        } else {
-	   set from_email $reply_to
-       }
-
-       # FIXME REWRITE ACS MAIL LITE TO USE EXTRA HEADERS
-       # SANELY!!! DAVEB 2006-12-26
-       set eh_list_of_lists [list]
-       foreach {key value} [util_ns_set_to_list -set $extra_headers] {
-           lappend $eh_list_of_lists [list $key $value]
+           set from_email $reply_to
        }
 
        acs_mail_lite::send \
@@ -165,7 +158,7 @@ namespace eval notification::email {
            -body $content \
            -file_ids $file_ids \
            -use_sender \
-           -extraheaders $eh_list_of_lists
+           -extraheaders $extra_headers
     }
 
     ad_proc -public bounce_mail_message {
