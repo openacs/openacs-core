@@ -1,4 +1,6 @@
-/* This compressed file is part of Xinha. For uncomressed sources, forum, and bug reports, go to xinha.org */
+/* This compressed file is part of Xinha. For uncompressed sources, forum, and bug reports, go to xinha.org */
+/* This file is part of version 0.95 released Mon, 12 May 2008 17:33:15 +0200 */
+/* The URL of the most recent version of this file is http://svn.xinha.webfactional.com/trunk/plugins/TableOperations/table-operations.js */
 Xinha.Config.prototype.TableOperations={"showButtons":true};
 function TableOperations(_1){
 this.editor=_1;
@@ -562,7 +564,11 @@ _81.verticalAlign=val;
 }
 break;
 case "f_st_float":
+if(Xinha.is_ie){
+_81.styleFloat=val;
+}else{
 _81.cssFloat=val;
+}
 break;
 }
 }
@@ -661,7 +667,11 @@ var val=options[i].toLowerCase();
 option=doc.createElement("option");
 option.innerHTML=Xinha._lc(Val,"TableOperations");
 option.value=val;
+if(Xinha.is_ie){
+option.selected=((""+el.style.styleFloat).toLowerCase()==val);
+}else{
 option.selected=((""+el.style.cssFloat).toLowerCase()==val);
+}
 select.appendChild(option);
 }
 }
@@ -835,16 +845,17 @@ td.appendChild(select);
 select.name="f_st_borderStyle";
 options=["none","dotted","dashed","solid","double","groove","ridge","inset","outset"];
 var _a8=el.style.borderStyle;
-(_a8.match(/([^\s]*)\s/))&&(_a8=RegExp.$1);
-for(var i in options){
-if(typeof options[i]=="function"){
-continue;
+if(_a8.match(/([^\s]*)\s/)){
+_a8=RegExp.$1;
 }
+for(var i=0;i<options.length;i++){
 var val=options[i];
 option=doc.createElement("option");
 option.value=val;
 option.innerHTML=val;
-(val==_a8)&&(option.selected=true);
+if(val==_a8){
+option.selected=true;
+}
 select.appendChild(option);
 }
 select.style.marginRight="0.5em";

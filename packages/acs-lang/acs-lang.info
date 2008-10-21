@@ -7,31 +7,25 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.4.0d2" url="http://openacs.org/repository/download/apm/acs-lang-5.4.0d2.apm">
+    <version name="5.4.3" url="http://openacs.org/repository/download/apm/acs-lang-5.4.3.apm">
         <owner url="mailto:peter@collaboraid.biz">Peter Marklund</owner>
         <summary>OpenACS Internationalization Support.</summary>
-        <release-date>2007-07-18</release-date>
-        <maturity>3</maturity>
+        <release-date>2008-10-03</release-date>
         <vendor url="http://www.collaboraid.biz">Collaboraid</vendor>
 	<license url="http://www.gnu.org/copyleft/gpl.html">GPL</license>
 	<maturity>3</maturity>
         <description format="text/plain">Internationalization and localization support routines and admin UI for manipulating Locales,
 request processor hooks, templating, accessing and managing the message catalog, and
-locale-specific formatting functions for localizing dates, times, monetary amounts etc.
-package changed by Quest so that messages in database are not overwritten by default.
-Also fixed message::register, so that no messages with wrong package key can be added.
-Added the possibility to unregister messages.
-</description>
+locale-specific formatting functions for localizing dates, times, monetary amounts etc.</description>
 
-        <provides url="acs-lang" version="5.4.0d2"/>
-        <requires url="acs-kernel" version="5.3.2"/>
-        <requires url="acs-translations" version="5.3.2"/>
-        <requires url="ref-timezones" version="5.3.2"/>
+        <provides url="acs-lang" version="5.4.3"/>
+        <requires url="acs-kernel" version="5.4.3"/>
+        <requires url="acs-translations" version="5.4.3"/>
+        <requires url="ref-timezones" version="5.4.3"/>
 
         <callbacks>
         </callbacks>
         <parameters>
-	        <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="KeepLocalTranslations"  default="0" description="General behaviour is that with loading an .xml catalog file the content of the file has precedance over the DB, causing entries to be modified or deleted, which have been changed since the last import.Setting this parameter will not overwrite any changed param in the DB nor delete entries not present in the file." />
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="SiteWideLocale"  default="en_US" description="The site-wide default locale"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="SystemTimezone"  default="UTC" description="The timezone that Oracle is set to use. Use a name from the acs-reference package, e.g., America/Los_Angeles or Asia/Tokyo"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="UsePackageLevelLocalesP"  default="0" description="Specify whether you want to allow different system/user locales per package, or only one site-wide locale system setting/user preference."/>

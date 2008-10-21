@@ -1,6 +1,10 @@
 <?php
-    // /home/username/foo/public_html/
+    // /home/username/foo/public_html/bar
     $dir          = dirname(__FILE__)."/../..";
+    
+    // http://example.com/bar (or relative url, or semi absolute)
+    $url       = '';
+    
     $include      = '/\.(php|shtml|html|htm|shtm|cgi|txt|doc|pdf|rtf|xls|csv)$/';
     $exclude      = '';
     $dirinclude   = '';
@@ -45,7 +49,10 @@
     }
     //------------------------------------------------------------------------
 
-
+    // Neither dir nor url should have trailing slash
+    $dir = preg_replace('/\/$/', '', $dir);
+    $url = preg_replace('/\/$/', '', $url);
+    
     function scan($dir, $durl = '')
     {
       global $include, $exclude, $dirinclude, $direxclude;
@@ -97,10 +104,11 @@
 
     function dircomp($a, $b)
     {
-      if(is_array($a)) $a = array_shift($a);
-      if(is_array($b)) $b = array_shift($b);
-      return strcmp(strtolower($a), strtolower($b));
+      if(isset($a['children']) && !isset($b['children'])) return -1;
+      if(isset($b['children']) && !isset($a['children'])) return 1;
+      
+      return strcmp(strtolower($a['url']), strtolower($b['url']));
     }
    
-    echo xinha_to_js(scan($dir));
+    echo xinha_to_js(scan($dir,$url));
 ?>

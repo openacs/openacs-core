@@ -1,4 +1,5 @@
 <master>
+<property name="title">@subsite_name@ Administration</property>
 
 <h2>@subsite_name@ Administration</h2>
 <ul>

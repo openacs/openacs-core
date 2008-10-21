@@ -1,7 +1,9 @@
-/* This compressed file is part of Xinha. For uncomressed sources, forum, and bug reports, go to xinha.org */
+/* This compressed file is part of Xinha. For uncompressed sources, forum, and bug reports, go to xinha.org */
+/* This file is part of version 0.95 released Mon, 12 May 2008 17:33:15 +0200 */
+/* The URL of the most recent version of this file is http://svn.xinha.webfactional.com/trunk/plugins/Linker/linker.js */
 Linker._pluginInfo={name:"Linker",version:"1.0",developer:"James Sleeman",developer_url:"http://www.gogo.co.nz/",c_owner:"Gogo Internet Services",license:"htmlArea",sponsor:"Gogo Internet Services",sponsor_url:"http://www.gogo.co.nz/"};
 Xinha.loadStyle("dTree/dtree.css","Linker");
-Xinha.Config.prototype.Linker={"treeCaption":document.location.host,"backend":_editor_url+"plugins/Linker/scan.php","backend_data":null,"files":null};
+Xinha.Config.prototype.Linker={"treeCaption":document.location.host,"backend":Xinha.getPluginDir("Linker")+"/scan.php","backend_data":null,"files":null};
 function Linker(_1,_2){
 this.editor=_1;
 this.lConfig=_1.config.Linker;
@@ -184,12 +186,12 @@ Linker.Dialog.prototype._prepareDialog=function(){
 var _24=this;
 var _25=this.linker;
 if(typeof dTree=="undefined"){
-Xinha._loadback(_editor_url+"plugins/Linker/dTree/dtree.js",function(){
+Xinha._loadback(Xinha.getPluginDir("Linker")+"/dTree/dtree.js",function(){
 _24._prepareDialog();
 });
 return;
 }
-if(this.files==false){
+if(this.files===false){
 if(_25.lConfig.backend){
 Xinha._postback(_25.lConfig.backend,_25.lConfig.backend_data,function(txt){
 try{
@@ -210,7 +212,7 @@ return;
 }
 var _27=this.files;
 if(this.html==false){
-Xinha._getback(_editor_url+"plugins/Linker/dialog.html",function(txt){
+Xinha._getback(Xinha.getPluginDir("Linker")+"/dialog.html",function(txt){
 _24.html=txt;
 _24._prepareDialog();
 });
@@ -219,7 +221,7 @@ return;
 var _29=this.html;
 var _2a=this.dialog=new Xinha.Dialog(_25.editor,this.html,"Linker");
 var _2b=Xinha.uniq("dTree_");
-this.dTree=new dTree(_2b,_editor_url+"plugins/Linker/dTree/");
+this.dTree=new dTree(_2b,Xinha.getPluginDir("Linker")+"/dTree/");
 eval(_2b+" = this.dTree");
 this.dTree.add(this.Dialog_nxtid++,-1,_25.lConfig.treeCaption,null,_25.lConfig.treeCaption);
 this.makeNodes(_27,0);
@@ -257,7 +259,7 @@ for(var i=0;i<_30.length;i++){
 if(typeof _30[i]=="string"){
 this.dTree.add(Linker.nxtid++,_31,_30[i].replace(/^.*\//,""),"javascript:document.getElementsByName('"+this.dialog.id.href+"')[0].value=decodeURIComponent('"+encodeURIComponent(_30[i])+"');document.getElementsByName('"+this.dialog.id.type+"')[0].click();document.getElementsByName('"+this.dialog.id.href+"')[0].focus();void(0);",_30[i]);
 }else{
-if(_30[i].length){
+if(typeof _30[i]=="object"&&_30[i]&&typeof _30[i].length==="number"){
 var id=this.Dialog_nxtid++;
 this.dTree.add(id,_31,_30[i][0].replace(/^.*\//,""),null,_30[i][0]);
 this.makeNodes(_30[i][1],id);

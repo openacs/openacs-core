@@ -123,10 +123,10 @@ if {[callback::impl_exists -impl $driver -callback search::search]} {
 }
 set tend [clock clicks -milliseconds]
 
-if { $t eq "Feeling Lucky" && $result(count) > 0} {
+if { $t eq [_ search.Feeling_Lucky] && $result(count) > 0} {
     set object_id [lindex $result(ids) 0]
     set object_type [acs_object_type $object_id]
-    if {[callback::impl_exists -impl -callback search::url]} {
+    if {[callback::impl_exists -impl $object_type -callback search::url]} {
 	set url [callback -impl $object_type search::url -object_id $object_id]
     } else {
 	set url [acs_sc_call FtsContentProvider url [list $object_id] $object_type]

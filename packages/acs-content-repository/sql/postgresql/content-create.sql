@@ -764,12 +764,8 @@ insert into cr_scheduled_release_job values (NULL, now());
 
 create table cr_folders (
   folder_id	    integer
-  -- removed due to postgresql RI bug which causes deletion failures.
-  -- replace with user triggers
-  -- DanW (dcwickstrom@earthlink.net)
-
-  --		    constraint cr_folder_id_fk references
-  --		    cr_items on delete cascade
+		    constraint cr_folders_folder_id_fk references
+		    cr_items on delete cascade
 		    constraint cr_folders_folder_id_pk 
                     primary key,
   label		    varchar(1000),
@@ -788,46 +784,6 @@ comment on table cr_folders is '
 
 --RI Indexes
 create index cr_folders_package_id_idx ON cr_folders(package_id);
-
-create function cr_folder_ins_up_ri_trg() returns opaque as '
-declare
-        dummy           integer;
-        v_latest        integer;
-        v_live          integer;
-begin
-        select 1 into dummy
-        from 
-          cr_items         
-        where 
-          item_id = new.folder_id;
-        
-        if NOT FOUND then
-          raise EXCEPTION ''Referential Integrity: folder_id does not exist in cr_items: %'', new.folder_id;
-        end if;
-
-        return new;
-end;' language 'plpgsql';
-
-create function cr_folder_del_ri_trg() returns opaque as '
-declare
-        dummy           integer;
-begin
-        delete from cr_folders where folder_id = old.item_id;          
-        return old;
-end;' language 'plpgsql';
-
--- reimplementation of RI triggers. (DanW dcwickstrom@earthlink.net)
-
-create trigger cr_folder_ins_up_ri_trg 
-before insert or update on cr_folders
-for each row execute procedure cr_folder_ins_up_ri_trg();
-
-create trigger cr_folder_del_ri_trg 
-before delete on cr_items
-for each row execute procedure cr_folder_del_ri_trg();
-
-
-
 
 create table cr_folder_type_map (
   folder_id	integer

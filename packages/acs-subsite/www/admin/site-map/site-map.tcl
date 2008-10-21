@@ -120,10 +120,10 @@ template::list::create \
 		</else>
 
 		<if @nodes.expand_mode@ eq 1>
-		    <a href="?@nodes.expand_url@#@nodes.node_id@"><img border=0 src=/resources/down.gif></a>
+		    <a href="?@nodes.expand_url@#@nodes.node_id@"><img style="border:0" src="/resources/down.gif" alt="#acs-kernel.common_Open#"></a>
 		</if>
 		<if @nodes.expand_mode@ eq 2>
-                    <a href="?@nodes.expand_url@#@nodes.node_id@"><img border=0 src=/resources/up.gif></a>
+                    <a href="?@nodes.expand_url@#@nodes.node_id@"><img style="border:0" src="/resources/up.gif" alt="#acs-kernel.common_Close#"></a>
                 </if>
 		<if @nodes.action_type@ eq "new_folder">
 		<a name="add" />

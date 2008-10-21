@@ -1,6 +1,10 @@
 .htmlarea { background: #fff; }
 .htmlarea td { margin:0;padding:0; }
 
+.htmlarea .toolbarRow {
+  width:1px;
+}
+
 .htmlarea .toolbar {
   cursor: default;
   background: ButtonFace;
@@ -70,10 +74,10 @@
 .htmlarea .toolbar select,
 .htmlarea .toolbar select:hover,
 .htmlarea .toolbar select:active { 
-  margin-top: 2px;
-  margin-bottom: 1px;
+  position:relative;
+  top:-2px;
+  margin-bottom:-2px;
   color: ButtonText;
-  height: 17px;
 }
 
 .htmlarea iframe.xinha_iframe, .htmlarea textarea.xinha_textarea
@@ -245,19 +249,25 @@ form { margin: 0px; border: none; }
 
 .loading
 {
-  background-color:#666;
+  font-family:sans-serif;
   position:absolute;
   z-index:998;
+  text-align:center;
+  width:212px;
+  padding: 55px 0 5px 0;
+  border:2px solid #ccc;
+  /* border-color: ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight;*/
+  background: url(images/xinha_logo.gif) no-repeat #fff center 5px;
 }
 .loading_main
 {
-  font-size:1.6em;
-  color:#ff6;
-  text-align:center;
+  font-size:11px;
+  color:#000;
+ 
 }
 .loading_sub
 {
-  font-size:1.0em;
-  color:#fff;
+  font-size:9px;
+  color:#666;
   text-align:center;
 }

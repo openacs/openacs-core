@@ -26,7 +26,8 @@
   "Resize": "Größe ändern",
   "Rotate": "Drehen",
   "Measure": "Maße",
-  "Marker": "Marker",
+  "Marker": "Rahmen",
+  "Toggle marker color" : "Farbe der Markierung umschalten",
   "Save": "Speichern",
   "Filename:": "Dateiname:",
   "Image Format": "Bildformat:",
@@ -112,5 +113,7 @@
   "Paste failed.\nMaybe folder doesn't have write permission.": "Einfügen fehlgeschlagen.\nMöglicherweise hat der Ordner keine Schreibberechtigung.",
   "Could not create destination folder.":"Konnte Zielordner nicht erstellen.",
   "Destination file/folder already exists.":"Zieldatei/-ordner existiert bereits",
-  "File pasted OK.": "File pasted OK."
+  "File pasted OK.": "File pasted OK.",
+  
+  "Filesize:" : "Dateigröße:"
 };

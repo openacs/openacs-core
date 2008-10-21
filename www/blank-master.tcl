@@ -140,21 +140,6 @@ if {[info exists ::acs_blank_master(xinha)]} {
   template::head::add_javascript -src ${::xinha_dir}XinhaCore.js
 }
 
-if { [info exists ::acs_blank_master(tinymce)] } {
-    # we are using TinyMCE
-    template::head::add_javascript -src "/resources/acs-templating/tinymce/jscripts/tiny_mce/tiny_mce_src.js" -order tinymce0
-    # get the textareas where we apply tinymce
-    set tinymce_elements [list]
-    foreach htmlarea_id [lsort -unique $::acs_blank_master__htmlareas] {
-        lappend tinymce_elements $htmlarea_id
-    }			
-  set tinymce_config $::acs_blank_master(tinymce.config)    
-
-    # TODO : each element should have it's own init
-    template::head::add_javascript -script "
-	    tinyMCE.init(\{$tinymce_config\});
-	" -order tinymceZ
-}
 
 if {![info exists doc(title)]} {
     set doc(title) "[ad_conn instance_name]"

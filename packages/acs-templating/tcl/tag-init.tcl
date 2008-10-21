@@ -488,7 +488,7 @@ template_tag formgroup-widget { chunk params } {
 
     set row [template::get_attribute formgroup-widget $params row]
     # get any additional HTML attributes specified by the designer
-    set tag_attributes [template::util::set_to_list $params id]
+    set tag_attributes [template::util::set_to_list $params id row]
 
     # generate a list of options and option labels as a data source
 

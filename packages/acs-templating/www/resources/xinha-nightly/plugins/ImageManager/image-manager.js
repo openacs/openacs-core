@@ -1,8 +1,10 @@
-/* This compressed file is part of Xinha. For uncomressed sources, forum, and bug reports, go to xinha.org */
+/* This compressed file is part of Xinha. For uncompressed sources, forum, and bug reports, go to xinha.org */
+/* This file is part of version 0.95 released Mon, 12 May 2008 17:33:15 +0200 */
+/* The URL of the most recent version of this file is http://svn.xinha.webfactional.com/trunk/plugins/ImageManager/image-manager.js */
 function ImageManager(_1){
 }
 ImageManager._pluginInfo={name:"ImageManager",version:"1.0",developer:"Xiang Wei Zhuo",developer_url:"http://www.zhuo.org/htmlarea/",license:"htmlArea"};
-Xinha.Config.prototype.ImageManager={"backend":_editor_url+"plugins/ImageManager/backend.php?__plugin=ImageManager&","backend_data":null,"backend_config":null,"backend_config_hash":null,"backend_config_secret_key_location":"Xinha:ImageManager"};
+Xinha.Config.prototype.ImageManager={"backend":Xinha.getPluginDir("ImageManager")+"/backend.php?__plugin=ImageManager&","backend_data":null,"backend_config":null,"backend_config_hash":null,"backend_config_secret_key_location":"Xinha:ImageManager"};
 Xinha.prototype._insertImage=function(_2){
 var _3=this;
 var _4=null;

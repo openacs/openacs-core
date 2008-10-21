@@ -7,13 +7,13 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
 
-    <version name="5.3.2" url="http://openacs.org/repository/download/apm/acs-translations-5.3.2.apm">
+    <version name="5.4.3" url="http://openacs.org/repository/download/apm/acs-translations-5.4.3.apm">
         <owner url="mailto:sussdorff@sussdorff.de">Malte Sussdorff</owner>
         <summary>Package for storing dynamic translations</summary>
         <description format="text/html">Package for storing dynamic translations</description>
         <maturity>3</maturity>
 
-        <provides url="acs-translations" version="5.3.2"/>
+        <provides url="acs-translations" version="5.4.3"/>
 
         <callbacks>
         </callbacks>

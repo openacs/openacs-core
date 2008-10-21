@@ -112,12 +112,14 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="email_dont_show">No mostrar mi correo electrónico</msg>
   <msg key="email_dont_show_admin">No mostrar el correo electrónico</msg>
   <msg key="email_not_available">No disponible</msg>
+  <msg key="Email_not_provided_by_authority">No consta ninguna dirección de correo electrónico en su cuenta. Por favor, introduzca su dirección de correo electrónico.</msg>
   <msg key="Email_not_Requested">Correo electrónico no solicitado</msg>
   <msg key="Email_required">Email requerido</msg>
   <msg key="email_subject_Forgotten_password">Recordatorio de su contraseña en %system_name%</msg>
   <msg key="email_subject_Registration_password">Bienvenido a %system_name%</msg>
   <msg key="Enabled">Activado</msg>
   <msg key="Enter_your_username_to">Introduzca su nombre de usuario para poder recuperar su contraseña.</msg>
+  <msg key="Erase">Eliminar</msg>
   <msg key="Erase_Portrait">Borrar foto</msg>
   <msg key="erase_portrait">borrar foto</msg>
   <msg key="Error">Error</msg>
@@ -128,6 +130,7 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="Expires">Caduca</msg>
   <msg key="Filename">Archivo</msg>
   <msg key="First_names">Nombre</msg>
+  <msg key="First_names_not_provided_by_authority">La autoridad de autenticación no nos ha proporcionado su nombre. Por favor, introduzca su nombre.</msg>
   <msg key="Forgot_your_password">¿Ha olvidado su contraseña?</msg>
   <msg key="Frequency">Frecuencia</msg>
   <msg key="Go_back">Regresar</msg>
@@ -141,6 +144,7 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="Help_information">&amp;lt;p&amp;gt;&amp;lt;h3&amp;gt;Información de ayuda&amp;lt;/h3&amp;gt;</msg>
   <msg key="Hide">Oculto</msg>
   <msg key="Home_page">Página web</msg>
+  <msg key="icon_of_envelope">Icono de sobre</msg>
   <msg key="If_you_were_to">si fuera a</msg>
   <msg key="Information_Updated">Información Actualizada</msg>
   <msg key="Install_locales">Instalar Idiomas</msg>
@@ -156,6 +160,7 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="Join_this_subsite">Unirse a este subsitio</msg>
   <msg key="Keyword">Palabra clave</msg>
   <msg key="Last_name">Apellidos</msg>
+  <msg key="Last_name_not_provided_by_authority">La entidad de autenticación no nos ha proporcionado su apellido. Por favor, introduzca su apellido.</msg>
   <msg key="later">después.</msg>
   <msg key="Leave_community">Salir de la comunidad</msg>
   <msg key="Leave_subsite">Salir del subsitio</msg>
@@ -275,6 +280,7 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="Notice">Aviso:</msg>
   <msg key="on_name_to">en %name% a</msg>
   <msg key="Online">Conectado</msg>
+  <msg key="Online_time">Tiempo online</msg>
   <msg key="optional">(opcional)</msg>
   <msg key="Options">Opciones</msg>
   <msg key="Or_add_a_new_user">O añadir un nuevo/a usuario/a</msg>
@@ -360,6 +366,8 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="upload_a_portrait">subir una foto</msg>
   <msg key="upload_a_replacement_por">Subir nueva foto</msg>
   <msg key="Upload_Portrait">Subir una foto</msg>
+  <msg key="URL">URL</msg>
+  <msg key="User_name">Nombre de usuario</msg>
   <msg key="User_Portrait">Fotografía del usuario</msg>
   <msg key="User_Portraits">Fotografías de usuario</msg>
   <msg key="User_Profile">Perfil de usuario</msg>

@@ -198,7 +198,7 @@ function openFile() {
       </form>
 
     </td>
-    <td valign="center" width="200" height="230">
+    <td style="vertical-align: middle;" width="200" height="230">
     <span>Image Preview:</span>
     <a href="#" onClick="javascript:openFile();"title=" Open file in new window"><img src="img/btn_open.gif"  width="18" height="18" border="0" title="Open file in new window" /></a><br />
     <iframe name="ipreview" id="ipreview" frameborder="0" style="border : 1px solid gray;" height="200" width="200" src=""></iframe>

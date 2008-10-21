@@ -9,6 +9,7 @@ create table site_node_object_mappings (
     object_id                       integer
                                     constraint snom_object_id_fk
                                     references acs_objects (object_id)
+                                    on update cascade on delete cascade
                                     constraint snom_object_id_nn
                                     not null
                                     constraint site_node_object_mappings_pk
@@ -16,6 +17,7 @@ create table site_node_object_mappings (
     node_id                         integer
                                     constraint snom_node_id_fk
                                     references site_nodes (node_id)
+                                    on update cascade on delete cascade
                                     constraint snom_node_id_nn
                                     not null
 );

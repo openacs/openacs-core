@@ -177,11 +177,11 @@ function swapOptions(obj,i,j) {
     <legend>Options</legend>
       <table border="0" cellspacing="0">
       <tr>
-      <td align="right">
+      <td style="text-align: right;">
         <select name="select" id="f_select" Size="6" onchange="getValues();"  style="width:16em">
         </select>
       </td>
-      <td align="center">
+      <td style="text-align: center;">
         <input type="button" name="up" value="Move Up" style="width:6em" onClick="moveOptionUp()"><br />
         <input type="button" name="down" value="Move Down" style="width:6em" onClick="moveOptionDown()"><br />
         <input type="button" name="delete" value="Delete" style="width:6em" onClick="deleteItem();">
@@ -191,9 +191,9 @@ function swapOptions(obj,i,j) {
       <div class="space"></div>
       <table border="0" cellspacing="0">
       <tr>
-        <td align="right">Label:</td>
+        <td style="text-align: right;">Label:</td>
         <td><input type="text" id="f_optiontext" name="optionText" value="" size="15"></td>
-        <td align="right">Value:</td>
+        <td style="text-align: right;">Value:</td>
         <td><input name="optionValue" id="f_optionvalue" type="text" value="" size="15"></td>
         <td><input type="button" name="update" id="f_update" value="Add" onclick="addItem(document.forms[0])"></td>
       </tr>

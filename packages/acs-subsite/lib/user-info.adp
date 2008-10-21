@@ -1,3 +1,4 @@
+<property name="focus">@focus;noquote@</property>
 <formtemplate id="user_info"></formtemplate>
 
 <if @edit_mode_p@ true and @read_only_notice_p@ true>

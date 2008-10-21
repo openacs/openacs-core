@@ -8,8 +8,9 @@
       
         select nls_language
         from   ad_locales 
-	where  lower(trim(language)) = lower(:language)
-        and    rownum = 1
+        where  lower(trim(language)) = lower(:language)
+          and  enabled_p = 't'
+          and  rownum = 1
     
       </querytext>
    </fullquery>

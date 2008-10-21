@@ -189,12 +189,12 @@ ad_proc ad_table {
         -Tcolumns {}
         -Taudit {}
         -Trows_per_band 1
-        -Tband_colors {{} {"#ececec"}}
+        -Tband_colors {{} "#ececec"}
         -Tband_classes {{even} {odd}}
         -Trows_per_page 0
         -Tmax_rows 0
         -Ttable_extra_html {cellpadding=3 cellspacing=0 class="table-display"}
-        -Theader_row_extra {bgcolor="#f8f8f8" class="table-header"}
+        -Theader_row_extra {style="background-color:#f8f8f8" class="table-header"}
         -Ttable_break_html "<br /><br />"
         -Tpre_row_code {}
         -Trow_code {[subst $Trow_default]}
@@ -439,7 +439,7 @@ ad_proc ad_table {
             # do this check since we would like the ability to band with
             # page background as well
             if {$Tn_bands && ![empty_string_p [lindex $Tband_colors $Tband_color]]} {
-                append Trow_default " bgcolor=[lindex $Tband_colors $Tband_color]"
+                append Trow_default " style=\"background-color:[lindex $Tband_colors $Tband_color]\""
             }
             if {$Tn_band_classes && ![empty_string_p [lindex $Tband_classes $Tband_class]]} {
                 append Trow_default " class=\"[lindex $Tband_classes $Tband_class]\""

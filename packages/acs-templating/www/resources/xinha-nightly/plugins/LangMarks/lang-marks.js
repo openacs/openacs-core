@@ -10,11 +10,12 @@ function LangMarks(editor, args) {
   var cfg = editor.config;
   var self = this;
   var options = {};
-  options[this._lc("&mdash; language &mdash;")] = "";
-  options[this._lc("Greek")] = "el";
-  options[this._lc("English")] = "en";
-  options[this._lc("French")] = "fr";
-  options[this._lc("Latin")] = "la";
+  options[this._lc("&mdash; language &mdash;")] = '';
+	for (var i in cfg.LangMarks)
+	{
+		if (typeof i != 'string') continue;
+		options[this._lc(i)] = cfg.LangMarks[i];
+	}
 
   cfg.registerDropdown({
     id	: "langmarks",
@@ -37,26 +38,25 @@ LangMarks._pluginInfo = {
   license       : "htmlArea"
 };
 
+Xinha.Config.prototype.LangMarks = {
+  "Greek" : "el",
+  "English" : "en",
+  "French" : "fr",
+  "Latin" : "la"
+};
+
 LangMarks.prototype._lc = function(string) {
   return Xinha._lc(string, 'LangMarks');
 };
 
 LangMarks.prototype.onGenerate = function() {
-  var style_id = "LM-style"
-  var style = this.editor._doc.getElementById(style_id);
-  if (style == null) {
-    style = this.editor._doc.createElement("link");
-    style.id = style_id;
-    style.rel = 'stylesheet';
-    style.href = _editor_url + 'plugins/LangMarks/lang-marks.css';
-    this.editor._doc.getElementsByTagName("HEAD")[0].appendChild(style);
-  }
+	 this.editor.addEditorStylesheet(Xinha.getPluginDir("LangMarks") + '/lang-marks.css');
 };
 
 LangMarks.prototype.onSelect = function(editor, obj, context, updatecontextclass) {
   var tbobj = editor._toolbarObjects[obj.id];
   var index = tbobj.element.selectedIndex;
-  var className = tbobj.element.value;
+  var language = tbobj.element.value;
 
   // retrieve parent element of the selection
   var parent = editor.getParentElement();
@@ -66,8 +66,8 @@ LangMarks.prototype.onSelect = function(editor, obj, context, updatecontextclass
   var update_parent = (context && updatecontextclass && parent && parent.tagName.toLowerCase() == context);
 
   if (update_parent) {
-    parent.className = className;
-    parent.lang = className;
+    parent.className = "haslang";
+    parent.lang = language;
     editor.updateToolbar();
     return;
   }
@@ -84,8 +84,8 @@ LangMarks.prototype.onSelect = function(editor, obj, context, updatecontextclass
   if (is_span) {
     // maybe we could simply change the class of the parent node?
     if (parent.childNodes.length == 1) {
-      parent.className = className;
-      parent.lang = className;
+      parent.className = "haslang";
+      parent.lang = language;
       surround = false;
       // in this case we should handle the toolbar updation
       // ourselves.
@@ -99,16 +99,21 @@ LangMarks.prototype.onSelect = function(editor, obj, context, updatecontextclass
     // shit happens ;-) most of the time.  this method works, but
     // it's dangerous when selection spans multiple block-level
     // elements.
-    editor.surroundHTML('<span lang="' + className + '" class="' + className + '">', '</span>');
+    editor.surroundHTML('<span lang="' + language + '" class="haslang">', '</span>');
   }
 };
 
 LangMarks.prototype.updateValue = function(editor, obj) {
   var select = editor._toolbarObjects[obj.id].element;
-  var parent = editor.getParentElement();
-  if (typeof parent.className != "undefined" && /\S/.test(parent.className)) {
+  var parents = editor.getAllAncestors();
+  var parent;
+	for (var i=0;i<parents.length;i++)
+	{
+		if (parents[i].lang) parent = parents[i];
+	}
+	if (parent) {
     var options = select.options;
-    var value = parent.className;
+    var value = parent.lang;
     for (var i = options.length; --i >= 0;) {
       var option = options[i];
       if (value == option.value) {
@@ -117,5 +122,6 @@ LangMarks.prototype.updateValue = function(editor, obj) {
       }
     }
   }
-  select.selectedIndex = 0;
+  else select.selectedIndex = 0;
+
 };

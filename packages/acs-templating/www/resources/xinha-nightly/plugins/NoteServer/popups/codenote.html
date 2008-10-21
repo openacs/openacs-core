@@ -136,12 +136,12 @@ else if (f_zoom.value == "1.5" || f_zoom.value == "150%") z = 1.5;
 
 <table width="100%" style="margin-bottom: 0.2em">
  <tr>
-  <td valign="bottom">
+  <td style="vertical-align: bottom;">
     <span>Image Preview</span>:<br />
     <iframe name="ipreview" id="ipreview" frameborder="0" style="border : 1px solid gray;" height="200" width="350" src=""></iframe>
   </td>
 
-  <td valign="bottom" style="text-align: right">
+  <td style="vertical-align: bottom;" style="text-align: right">
     <button type="button" name="preview" onclick="return onPreview();"
       title="Preview the image in a new window">Preview</button><br>
     <button type="button" name="ok" onclick="return onOK();"><span>OK</span></button><br>
@@ -151,10 +151,10 @@ else if (f_zoom.value == "1.5" || f_zoom.value == "150%") z = 1.5;
  <tr>
   <td colspan="2">
    <p>Sample Guido Codes:</p>
-   <p><a href="http://piano-go.chez.tiscali.fr/rachmaninoff.gmn" target="_blank">Code Sample 1</a> or type [ do re mi fa sol la si ] | <a href="http://www.informatik.tu-darmstadt.de/AFS/SALIERI/guido/demos.html" target="_blank">Code Sample 2</a></p>
+   <p><a href="http://piano-go.chez.tiscali.fr/rachmaninoff.gmn" onclick="window.open(this.href,'_blank');return false;">Code Sample 1</a> or type [ do re mi fa sol la si ] | <a href="http://www.informatik.tu-darmstadt.de/AFS/SALIERI/guido/demos.html" onclick="window.open(this.href,'_blank');return false;">Code Sample 2</a></p>
    <p>Resources: </p>
-   <p>The Guido Specification (<a href="http://piano-go.chez.tiscali.fr/GUIDO-Music%20Notation%20Format.pdf" target="_blank">PDF)</a> | <a href="http://www.salieri.org/guido/doc.html" target="_blank">(HTML)</a></p>
-   <p><a href="http://www.salieri.org/guido/" target="_blank">GUIDO Music Notation Format Site</a> | <a href="http://www.noteserver.org/" target="_blank">Guido Note Server</a> | <a href="http://sourceforge.net/projects/guidolib/" target="_blank">SourceForge Homepage</a></p>
+   <p>The Guido Specification (<a href="http://piano-go.chez.tiscali.fr/GUIDO-Music%20Notation%20Format.pdf" onclick="window.open(this.href,'_blank');return false;">PDF)</a> | <a href="http://www.salieri.org/guido/doc.html" onclick="window.open(this.href,'_blank');return false;">(HTML)</a></p>
+   <p><a href="http://www.salieri.org/guido/" onclick="window.open(this.href,'_blank');return false;">GUIDO Music Notation Format Site</a> | <a href="http://www.noteserver.org/" onclick="window.open(this.href,'_blank');return false;">Guido Note Server</a> | <a href="http://sourceforge.net/projects/guidolib/" onclick="window.open(this.href,'_blank');return false;">SourceForge Homepage</a></p>
   </td>
  </tr>
 </table>

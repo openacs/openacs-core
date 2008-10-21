@@ -34,7 +34,7 @@
 <script type="text/javascript">
 /*<![CDATA[*/
 	if(window.opener)
-		HTMLArea = window.opener.HTMLArea;
+		Xinha = HTMLArea = window.opener.Xinha;
 
 	var thumbdir = "<?php echo $IMConfig['thumbnail_dir']; ?>";
 	var base_url = "<?php echo $manager->getImagesURL(); ?>";
@@ -56,8 +56,8 @@
 
 <form action="<?php print $IMConfig['backend_url'] ?>" id="uploadForm" method="post" enctype="multipart/form-data">
 
-<input type="hidden" name="__plugin" value="ImageManager">
-<input type="hidden" name="__function" value="images">
+<input type="hidden" name="__plugin" value="ImageManager" />
+<input type="hidden" name="__function" value="images" />
 
 <fieldset>
   <legend>Image Manager</legend>
@@ -95,7 +95,7 @@
       {
         ?>
         <tr>
-          <th align="left">Upload:</th>
+          <th style="text-align: left;">Upload:</th>
           <td colspan="2">
             <input type="file" name="upload" id="upload" />
             <input name="Upload" type="submit" id="Upload" value="Upload" onclick="doUpload();" />
@@ -107,7 +107,7 @@
 
   </table>
 
-  <div id="messages" style="display: none;"><span id="message"></span><img SRC="<?php print $IMConfig['base_url']; ?>img/dots.gif" width="22" height="12" alt="..." /></div>
+  <div id="messages" style="display: none;"><span id="message"></span><img src="<?php print $IMConfig['base_url']; ?>img/dots.gif" width="22" height="12" alt="..." /></div>
 
   <iframe src="<?php print $IMConfig['backend_url']; ?>__function=images" name="imgManager" id="imgManager" class="imageFrame" scrolling="auto" title="Image Selection" frameborder="0"></iframe>
 
@@ -117,41 +117,41 @@
 
 <table  border="0" cellspacing="0" cellpadding="0" width="100%">
   <tr>
-    <th align="left">Description:</th>
+    <th style="text-align: left;">Description:</th>
     <td colspan="6">
       <input type="text" id="f_alt" style="width:95%"/>
     </td>
-    <td rowspan="4" width="100" height="100" valign="middle" style="padding:4px;background-color:#CCC;border:1px inset;">
+    <td rowspan="4" width="100" height="100" style="vertical-align: middle;" style="padding:4px;background-color:#CCC;border:1px inset;">
       <img src="" id="f_preview" />
     </td>
   </tr>
 
   <tr>
-    <th align="left">Width:</th>
+    <th style="text-align: left;">Width:</th>
     <td >
       <input id="f_width" type="text" name="f_width" size="4" onchange="javascript:checkConstrains('width');" />
     </td>
     <td rowspan="2">
       <div  style="position:relative">
-        <img src="<?php print $IMConfig['base_url']; ?>img/locked.gif" id="imgLock" width="25" height="32" alt="Constrained Proportions" valign="middle" /><input type="checkbox" id="constrain_prop" checked="checked" onclick="javascript:toggleConstrains(this);" style="position:absolute;top:8px;left:0px;" />
+        <img src="<?php print $IMConfig['base_url']; ?>img/locked.gif" id="imgLock" width="25" height="32" alt="Constrained Proportions" style="vertical-align: middle;" /><input type="checkbox" id="constrain_prop" checked="checked" onclick="javascript:toggleConstrains(this);" style="position:absolute;top:8px;left:0px;" />
       </div>
     </td>
-    <th align="left" class="fullOptions">Margin:</th>
+    <th style="text-align: left;" class="fullOptions">Margin:</th>
     <td colspan="3" class="fullOptions">
       <input name="f_margin" type="text" id="f_margin" size="3" />
       px </td>
   </tr>
 
   <tr>
-    <th align="left">Height:</th>
+    <th style="text-align: left;">Height:</th>
     <td>
       <input name="f_height" type="text" id="f_height" size="4" />
     </td>
-    <th align="left"  class="fullOptions">Padding:</th>
+    <th style="text-align: left;" class="fullOptions">Padding:</th>
     <td  class="fullOptions">
       <input name="f_padding" type="text" id="f_padding" size="3" />
       px </td>
-    <th align="left"  class="fullOptions">Color:</th>
+    <th style="text-align: left;" class="fullOptions">Color:</th>
     <td  class="fullOptions">
       <input name="f_backgroundColor" type="text" id="f_backgroundColor" size="7" />
      
@@ -160,9 +160,9 @@
 
 
   <tr class="fullOptions">
-    <th align="left">Alignment:</th>
+    <th style="text-align: left;">Alignment:</th>
     <td colspan="2">
-      <select size="1" id="f_align"  title="Positioning of this image">
+      <select size="1" id="f_align" title="Positioning of this image">
         <option value=""                             >Not set</option>
         <option value="left"                         >Left</option>
         <option value="right"                        >Right</option>
@@ -175,11 +175,11 @@
         <option value="top"                          >Top</option>
       </select>
     </td>
-    <th align="left">Border:</th>
+    <th style="text-align: left;">Border:</th>
     <td>
       <input name="f_border" type="text" id="f_border" size="3" />
       px </td>
-    <th align="left">Color:</th>
+    <th style="text-align: left;">Color:</th>
     <td>
       <input name="f_borderColor" type="text" id="f_borderColor" size="7" />
       

@@ -109,8 +109,8 @@ ns_section ns/mimetypes
     #  Note: AOLserver already has an exhaustive list of MIME types:
     #  see: /usr/local/src/aolserver-4.{version}/aolserver/nsd/mimetypes.c
     #  but in case something is missing you can add it here. 
-    ns_param   Default            text/plain
-    ns_param   NoExtension        text/plain
+    ns_param   Default            */*
+    ns_param   NoExtension        */*
     ns_param   .pcd               image/x-photo-cd
     ns_param   .prc               application/x-pilot
     ns_param   .xls               application/vnd.ms-excel

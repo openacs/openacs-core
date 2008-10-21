@@ -30,8 +30,8 @@ if { $show_p } {
 
         if { $fake_user_id == 0 } {
             set selected " selected"
-            set you_are "<small>You are currently <strong>not logged in</strong></small><br />"
-            set you_are_really "<small>You are really <strong>not logged in</strong></small><br />"
+            set you_are "<small>You are currently <strong>not logged in</strong></small><br>"
+            set you_are_really "<small>You are really <strong>not logged in</strong></small><br>"
         } else {
             set selected {}
         }

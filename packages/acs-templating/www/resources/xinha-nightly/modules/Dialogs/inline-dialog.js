@@ -1,4 +1,6 @@
-/* This compressed file is part of Xinha. For uncomressed sources, forum, and bug reports, go to xinha.org */
+/* This compressed file is part of Xinha. For uncompressed sources, forum, and bug reports, go to xinha.org */
+/* This file is part of version 0.95 released Mon, 12 May 2008 17:33:15 +0200 */
+/* The URL of the most recent version of this file is http://svn.xinha.webfactional.com/trunk/modules/Dialogs/inline-dialog.js */
 Xinha.Dialog=function(_1,_2,_3){
 this.id={};
 this.r_id={};

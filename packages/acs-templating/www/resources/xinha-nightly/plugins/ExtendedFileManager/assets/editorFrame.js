@@ -1,4 +1,6 @@
-/* This compressed file is part of Xinha. For uncomressed sources, forum, and bug reports, go to xinha.org */
+/* This compressed file is part of Xinha. For uncompressed sources, forum, and bug reports, go to xinha.org */
+/* This file is part of version 0.95 released Mon, 12 May 2008 17:33:15 +0200 */
+/* The URL of the most recent version of this file is http://svn.xinha.webfactional.com/trunk/plugins/ExtendedFileManager/assets/editorFrame.js */
 var topDoc=window.top.document;
 var t_cx=topDoc.getElementById("cx");
 var t_cy=topDoc.getElementById("cy");
@@ -24,9 +26,9 @@ var _2=_backend_url+"__function=editorFrame&img="+currentImageFile+"&action=scal
 location.href=_2;
 }else{
 if(_1=="rotate"){
-var _3=topDoc.getElementById("flip");
-if(_3.value=="hoz"||_3.value=="ver"){
-location.href=_backend_url+"__function=editorFrame&img="+currentImageFile+"&action=flip&params="+_3.value;
+var _3=topDoc.getElementById("rotate_sub_action");
+if(_3.value=="flip"){
+location.href=_backend_url+"__function=editorFrame&img="+currentImageFile+"&action=flip&params="+topDoc.getElementById("flip").value;
 }else{
 if(isNaN(parseFloat(r_ra.value))==false){
 location.href=_backend_url+"__function=editorFrame&img="+currentImageFile+"&action=rotate&params="+parseFloat(r_ra.value);
@@ -43,7 +45,17 @@ alert(i18n("Please enter a filename to save."));
 }else{
 var _8=encodeURI(_4.value);
 var _9=parseInt(_6.value);
+var _7=_5.value.split(",");
 var _2=_backend_url+"__function=editorFrame&img="+currentImageFile+"&action=save&params="+_7[0]+","+_9+"&file="+_8;
+location.href=_2;
+}
+}else{
+if(_1=="preview"){
+var _5=topDoc.getElementById("save_format");
+var _6=topDoc.getElementById("quality");
+var _9=parseInt(_6.value);
+var _7=_5.value.split(",");
+var _2=_backend_url+"__function=editorFrame&img="+currentImageFile+"&action=preview&params="+_7[0]+","+_9+"&file="+_8;
 location.href=_2;
 }
 }
@@ -69,6 +81,11 @@ init=function(){
 jg_doc=new jsGraphics("imgCanvas");
 jg_doc.setColor("#000000");
 initEditor();
+if(window.parent.document.getElementById("zoom").value!="100"){
+window.parent.zoom();
+}
+reset();
+window.parent.document.getElementById("filesize").innerHTML=fileSize;
 };
 addEvent(window,"load",init);
 

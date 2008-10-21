@@ -71,6 +71,13 @@ create table ad_locale_user_prefs (
                         references ad_locales (locale) on delete cascade
 );
 
+-- alter user_preferences to add the locale column
+
+alter table user_preferences add
+  locale                varchar(30)
+                        constraint user_preferences_locale_fk
+                        references ad_locales(locale);
+
 --
 --
 -- And now for some default locales
@@ -319,12 +326,12 @@ insert into ad_locales
 insert into ad_locales
        (locale, label, language, country, nls_language, nls_territory,
         nls_charset, mime_charset, default_p, enabled_p)
- values ('en_CA', 'English (CA)', 'ca', 'EN', 'English (Canada)', 'Canada', 'WE8DEC', 'ISO-8859-1', 'f', 'f');
+ values ('en_CA', 'English (CA)', 'en', 'CA', 'English (Canada)', 'Canada', 'WE8DEC', 'ISO-8859-1', 'f', 'f');
 
 insert into ad_locales
        (locale, label, language, country, nls_language, nls_territory,
         nls_charset, mime_charset, default_p, enabled_p)
- values ('fr_CA', 'French (CA)', 'ca', 'FR', 'French (Canada)', 'Canada', 'WE8DEC', 'ISO-8859-1', 'f', 'f');
+ values ('fr_CA', 'French (CA)', 'fr', 'CA', 'French (Canada)', 'Canada', 'WE8DEC', 'ISO-8859-1', 'f', 'f');
 
 insert into ad_locales
        (locale, label, language, country, nls_language, nls_territory,
