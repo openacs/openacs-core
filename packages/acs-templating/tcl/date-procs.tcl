@@ -1014,7 +1014,6 @@ ad_proc -public template::widget::date { element_reference tag_attributes } {
   # the user to enter a freeform format
   append output "<input type=\"hidden\" name=\"$element(name).format\" "
   append output "value=\"$element(format)\" >\n"
-  append output "<table border=\"0\" cellpadding=\"0\" cellspacing=\"2\">\n"
 
   # Prepare the value to set defaults on the form
   if { [info exists element(value)] && 
@@ -1038,7 +1037,6 @@ ad_proc -public template::widget::date { element_reference tag_attributes } {
        set id_attr_name $attributes(id)
   }
 
-  set tbody_content "<tbody><tr>"
   while { $format_string ne {} } {
 
     # Snip off the next token
@@ -1048,8 +1046,6 @@ ad_proc -public template::widget::date { element_reference tag_attributes } {
     regexp -nocase $template::util::date::token_exp $word \
           match token type
 
-    append tbody_content "<td>"
-    
     lappend tokens $token
 
     # Output the widget
@@ -1057,10 +1053,10 @@ ad_proc -public template::widget::date { element_reference tag_attributes } {
     set fragment [lindex $fragment_def 1]
 
     if {[exists_and_not_null id_attr_name]} {
-	set attributes(id) "${id_attr_name}.${fragment}"
+	  set attributes(id) "${id_attr_name}.${fragment}"
     }
 
-    append tbody_content [template::widget::[lindex $fragment_def 0] \
+    set widget [template::widget::[lindex $fragment_def 0] \
                      element \
                      $fragment \
                      [lindex $fragment_def 2] \
@@ -1069,33 +1065,20 @@ ad_proc -public template::widget::date { element_reference tag_attributes } {
                      $element(mode) \
                      [array get attributes]]
 
+    if { [info exists element(help)] } {
+        append output "<label for=\"$element(id).${fragment}\">[lindex $fragment_def 3] $widget</label>"
+    } else {
+        append output $widget
+    }
+
     # Output the separator
     if {$sep eq " "} {
-      append tbody_content "&nbsp;"
+      append output "&nbsp;"
     } else {
-      append tbody_content "$sep"
+      append output "$sep"
     }
 
-    append tbody_content "</td>\n"
   }
-
-  append tbody_content "</tr></tbody>\n"
-
-  # Append help text under each widget, if neccessary
-  set tfoot_content ""
-  if { [info exists element(help)] } {
-      
-    append tfoot_content "<tfoot><tr class=\"form-help-text small center\">\n" 
-    foreach token $tokens {
-	set fragment_def $template::util::date::fragment_widgets([string toupper $token])
-	set fragment [lindex $fragment_def 1]
-	append tfoot_content "<td><label for=\"$element(name).$fragment\">[lindex $fragment_def 3]</label></td>\n"
-    }
-    append tfoot_content "</tr></tfoot>\n"
-  } 
-
-  append output "$tfoot_content$tbody_content"
-  append output "</table>\n"
 
   append output "<!-- date $element(name) end -->\n"
   
