@@ -89,7 +89,9 @@
                  </span>
 			   </noparse>
                <if @form_properties.mode@ eq display or @elements.widget@ in radio checkbox date inform><!-- no label tag --></if>
-               <else></label></else>
+               <else>
+                 <if @elements.label@ not nil></label></if>
+               </else>
              </else>							
 							
            <if @elements.help_text@ not nil>
