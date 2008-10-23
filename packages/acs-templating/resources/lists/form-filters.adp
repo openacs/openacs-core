@@ -6,7 +6,7 @@
          <p>
          @filters.filter_label@
          [ <a href="@filters.clear_one_url@">x</a> ]
-         <br />
+         <br>
     </if>
     <formwidget id="@filters.filter_name@">
     <if @filters.widget@ not nil and @filters.widget@ ne "hidden">

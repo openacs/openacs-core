@@ -1518,7 +1518,7 @@ ad_proc -private template::list::prepare_filters {
     if {[info exists filter_names]} {
         set filter_refs [list]
         foreach filter_name $filter_names {
-            llapend filter_refs ${name}:filter:${filter_name}:properties
+            lappend filter_refs ${name}:filter:${filter_name}:properties
         }
         
     } else {
