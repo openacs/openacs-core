@@ -546,6 +546,11 @@ declare
   v_folder_contents_val        record;
 begin
 
+  if copy__folder_id = content_item__get_root_folder(null) 
+     or copy__folder_id = content_template__get_root_folder() then
+     raise EXCEPTION ''-20000: content_folder.copy - Not allowed to copy root folder'';
+  end if;
+
   select 
     count(*)
   into 
@@ -557,36 +562,39 @@ begin
   or 
     folder_id = copy__folder_id;
 
-  select
-    parent_id
-  into
-    v_current_folder_id
-  from
-    cr_items
-  where
-    item_id = copy__folder_id;  
-
-  if copy__folder_id = content_item__get_root_folder(null) 
-     or copy__folder_id = content_template__get_root_folder() 
-     or copy__target_folder_id = copy__folder_id then
-    v_valid_folders_p := 0;
+  if v_valid_folders_p != 2 then 
+    raise EXCEPTION ''-20000: content_folder.copy - Invalid folder(s)'';
   end if;
 
-    -- get the source folder info
-    select
-      name, label, description
-    into
-      v_name, v_label, v_description
-    from 
-      cr_items i, cr_folders f
-    where
-      f.folder_id = i.item_id
-    and
-      f.folder_id = copy__folder_id;
+  if copy__target_folder_id = copy__folder_id then 
+    raise EXCEPTION ''-20000: content_folder.copy - Cannot copy folder to itself'';
+  end if;
+  
+  if content_folder__is_sub_folder(copy__folder_id, copy__target_folder_id) = ''t'' then
+    raise EXCEPTION ''-20000: content_folder.copy - Destination folder is subfolder'';
+  end if;
 
-  if v_valid_folders_p = 2 then 
+  if content_folder__is_registered(copy__target_folder_id,''content_folder'',''f'') != ''t'' then
+    raise EXCEPTION ''-20000: content_folder.copy - Destination folder does not allow subfolders'';
+  end if;
 
-    if content_folder__is_sub_folder(copy__folder_id, copy__target_folder_id) != ''t'' or v_current_folder_id != copy__target_folder_id or (v_name != copy__name and copy__name is not null) then 
+  -- get the source folder info
+  select
+    name, label, description, parent_id
+  into
+    v_name, v_label, v_description, v_current_folder_id
+  from 
+    cr_items i, cr_folders f
+  where
+    f.folder_id = i.item_id
+  and
+    f.folder_id = copy__folder_id;
+
+  -- would be better to check if the copy__name alredy exists in the destination folder.
+
+  if v_current_folder_id = copy__target_folder_id and v_name = copy__name then
+    raise EXCEPTION ''-20000: content_folder.copy - Destination folder is parent folder and folder alredy exists'';
+  end if;
 
       -- create the new folder
       v_new_folder_id := content_folder__new(
@@ -635,8 +643,6 @@ begin
 	);
 
       end loop;
-    end if;
-  end if;
 
   return 0; 
 end;' language 'plpgsql';

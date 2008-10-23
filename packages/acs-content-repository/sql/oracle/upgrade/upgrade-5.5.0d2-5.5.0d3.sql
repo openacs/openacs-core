@@ -1,14 +1,10 @@
--- Data model to support content repository of the ArsDigita Community
--- System
-
--- Copyright (C) 1999-2000 ArsDigita Corporation
--- Author: Karl Goldstein (karlg@arsdigita.com)
-
--- $Id$
-
--- This is free software distributed under the terms of the GNU Public
--- License.  Full text of the license is available from the GNU Project:
--- http://www.fsf.org/copyleft/gpl.html
+-- 
+-- 
+-- 
+-- @author Victor Guerra (vguerra@wu-wien.ac.at)
+-- @creation-date 2008-10-21
+-- @cvs-id $Id$
+--
 
 create or replace package body content_folder
 as
@@ -279,7 +275,6 @@ end move;
 -- * creates new folder in the target folder with the same attributes
 --   as the old one
 -- * copies all contents of folder to the new one
-procedure copy (
   folder_id		in cr_folders.folder_id%TYPE,
   target_folder_id	in cr_folders.folder_id%TYPE,
   creation_user		in acs_objects.creation_user%TYPE,
