@@ -275,6 +275,7 @@ end move;
 -- * creates new folder in the target folder with the same attributes
 --   as the old one
 -- * copies all contents of folder to the new one
+procedure copy (
   folder_id		in cr_folders.folder_id%TYPE,
   target_folder_id	in cr_folders.folder_id%TYPE,
   creation_user		in acs_objects.creation_user%TYPE,
@@ -350,7 +351,7 @@ begin
   and
     f.folder_id = copy.folder_id;
 
-  if v_current_folder_id = copy__target_folder_id and v_name = copy.name then
+  if v_current_folder_id = copy__target_folder_id and (v_name = copy.name or copy.name is null) then
     raise EXCEPTION ''-20000: content_folder.copy - Destination folder is parent folder'';
   end if;
 

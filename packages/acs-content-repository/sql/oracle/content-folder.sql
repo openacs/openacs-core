@@ -355,7 +355,7 @@ begin
   and
     f.folder_id = copy.folder_id;
 
-  if v_current_folder_id = copy__target_folder_id and v_name = copy.name then
+  if v_current_folder_id = copy__target_folder_id and (v_name = copy.name or copy.name is null) then
     raise EXCEPTION ''-20000: content_folder.copy - Destination folder is parent folder'';
   end if;
 
