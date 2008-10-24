@@ -592,7 +592,7 @@ begin
 
   -- would be better to check if the copy__name alredy exists in the destination folder.
 
-  if v_current_folder_id = copy__target_folder_id and v_name = copy__name then
+  if v_current_folder_id = copy__target_folder_id and (v_name = copy__name or copy__name is null) then
     raise EXCEPTION ''-20000: content_folder.copy - Destination folder is parent folder and folder alredy exists'';
   end if;
 
