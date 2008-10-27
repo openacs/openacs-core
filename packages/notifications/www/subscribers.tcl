@@ -18,6 +18,7 @@ permission::require_permission -object_id $object_id -privilege "admin"
 if { ![db_0or1row select_name {}] } {
     # there are no notifications for this object
     ad_return_error "No Notifications" "This object does have anybody subscribed via notifications"
+    ad_script_abort
 }
 
 # the link to the object picks up the first type_id it gets
