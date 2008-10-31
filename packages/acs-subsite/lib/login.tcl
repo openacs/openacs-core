@@ -69,13 +69,7 @@ set subsite_url [subsite::get_element -element url]
 set system_name [ad_system_name]
 
 if { [exists_and_not_null return_url] } {
-    set locations_list [security::locations]
-    # there may be as many as 3 valid full urls
-    set external_url [util_complete_url_p $return_url]
-    foreach location $locations_list {
-        set external_url [expr { $external_url && ![string match "$location/*" $return_url] } ] 
-    }
-    if { $external_url } {
+    if { [util::external_url_p $return_url] } {
       ad_returnredirect -message "only urls without a host name are permitted" "."
       ad_script_abort
     }
