@@ -126,7 +126,7 @@ ad_proc -public util::html_diff {
             set frag {}	    
 	}
 	if {$pretag ne ""} {
-	    set pretag [string map {\n ""} $pretag]
+	    set pretag [string map {\n " "} $pretag]
 	    set pretag2 [list]
 	    foreach element [split $pretag " "] {
 		if {[string trim $element] ne ""} {
@@ -152,7 +152,7 @@ ad_proc -public util::html_diff {
             set frag {}	    
 	}
 	if {$pretag ne ""} {
-	    set pretag [string map {\n ""} $pretag]
+	    set pretag [string map {\n " "} $pretag]
 	    set pretag2 [list]
 	    foreach element [split $pretag " "] {
 		if {[string trim $element] ne ""} {
@@ -190,8 +190,8 @@ ad_proc -public util::html_diff {
         }
         if { $action eq "changed" } {
 	    if {$show_old_p} {
-		ns_log notice "adding <d>"
-		lappend output <d>
+		ns_log notice "adding <@d@>"
+		lappend output <@d@>
 		foreach item [lrange $old_list $old_index1 $old_index2] {
 		    if {![string match "<*>" [string trim $item]]} {
 		    ns_log notice "deleting item '${item}'"
@@ -202,44 +202,44 @@ ad_proc -public util::html_diff {
 		    }
 
 		}
-		ns_log notice "adding </d>"
-		lappend output </d>
+		ns_log notice "adding </@d@>"
+		lappend output </@d@>
 	    }
-	    ns_log notice "adding <a>"
-	    lappend output <a>
+	    ns_log notice "adding <@a@>"
+	    lappend output <@a@>
             foreach item [lrange $new_list $new_index1 $new_index2] {
 	        if {![string match "<*>" [string trim $item]]} {
 		    ns_log notice "adding item '${item}'"
 		    lappend output [string trim $item]
 		} else {
-		    lappend output </a>${item}<a>
-		    ns_log notice "adding</a>${item}<a>"
+		    lappend output </@a@>${item}<@a@>
+		    ns_log notice "adding</@a@>${item}<@a@>"
 		}
             }
-	    ns_log notice "adding </a>"
-	    lappend output </a>
+	    ns_log notice "adding </@a@>"
+	    lappend output </@a@>
             incr i [expr {$old_index2 - $old_index1 + 1}]
         } elseif { $action eq "deleted" } {
-            lappend output <d>
+            lappend output <@d@>
             foreach item [lrange $old_list $old_index1 $old_index2] {
                 lappend output [string trim $item]
             }
-            lappend output </d>
+            lappend output </@d@>
             incr i [expr {$old_index2 - $old_index1 + 1}]
         } elseif { $action eq "added" } {
             while {$i < $old_index2} {
-		ns_log notice "unchanged $item"
+		ns_log notice "unchanged item"
 		    lappend output [lindex $old_list $i]
                 incr i
             }
-            lappend output <a>
+            lappend output <@a@>
             foreach item [lrange $new_list $new_index1 $new_index2] {
 	        if {![string match "<*>" [string trim $item]]} {
 		    ns_log notice "adding item"
 		    lappend output [string trim $item]
 		}
             }
-            lappend output </a>
+            lappend output </@a@>
         }
     }
     
@@ -250,10 +250,10 @@ ad_proc -public util::html_diff {
     }
 
     set output [join $output " "]
-    set output [string map {"<d>" {<span class="diff-deleted">}
-        "</d>" </span>
-        "<a>" {<span class="diff-added">}
-        "</a>" </span>} $output]
+    set output [string map {"<@d@>" {<span class="diff-deleted">}
+        "</@d@>" </span>
+        "<@a@>" {<span class="diff-added">}
+        "</@a@>" </span>} $output]
 
     return "$output"
 }
