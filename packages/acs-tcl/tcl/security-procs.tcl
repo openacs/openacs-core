@@ -1559,67 +1559,64 @@ ad_proc -public security::locations {} {
         } 
     }
     #   Determine nssock or nsunix
-    if {[string equal "" $driver]} {
+    if {$driver eq ""} {
         # decide if we're using nssock or nsunix
         set nssock [ns_config ns/server/[ns_info server]/modules nssock]
         set nsunix [ns_config ns/server/[ns_info server]/modules nsunix]
-        if {![empty_string_p $nssock] && ![empty_string_p $nsunix]} {
-            set driver [ad_parameter -package_id [ec_id] httpModule ecommerce nsunix]
-        } elseif {[empty_string_p $nssock]} {
+        if {$nsunix ne ""} {
             set driver nsunix
         } else {
             set driver nssock
         }
     }
-   
+    
     # decide if we are using nsssl or nsopenssl, favor nsopenssl
     set nsssl [ns_config ns/server/[ns_info server]/modules nsssl]
     set nsopenssl [ns_config ns/server/[ns_info server]/modules nsopenssl]
-    if {![empty_string_p $nsssl] && ![empty_string_p $nsopenssl]} {
-        set sdriver [ad_parameter -package_id [ec_id] httpsModule ecommerce nsopenssl]
-    } elseif {[empty_string_p $nsssl]} {
-        set sdriver nsopenssl
-    } else {
+    if {$nsssl ne ""} {
         set sdriver nsssl
+    } else {
+        set sdriver nsopenssl
     }
-    
+
     # set the driver results
     array set drivers [list driver $driver sdriver $sdriver]
     set driver $drivers(driver)
 
+    # check if port number is included here, we'll reattach it after
+    # the request if its a non-standard port. Since we build the
+    # secure url from this host name we need to replace the port with
+    # the secure port
+    set host_post ""
+    if {![regexp {(http://|https://)(.*?):(.*?)/?} [util_current_location] discard host_protocol host_name host_port]} {
+        [regexp {(http://|https://)(.*?)/?} [util_current_location] discard host_protocol host_name]
+    }
     # following from ec_insecure_location
-    set insecure_port [ns_config -int "ns/server/[ns_info server]/module/$driver" Port 80]
-    set insecure_location "http://[ns_config ns/server/[ns_info server]/module/$driver Hostname]"
-    if {![empty_string_p $insecure_port] && ($insecure_port != 80)}  {
+    set insecure_port [ns_config -int "ns/server/[ns_info server]/module/$driver" port 80]
+
+    set insecure_location "http://${host_name}"
+    if {$insecure_port ne "" && $insecure_port ne 80}  {
         set alt_insecure_location $insecure_location
         append insecure_location ":$insecure_port"
     }
-    
+
     # ec_secure_location
-    set secure_port [ns_config -int "ns/server/[ns_info server]/module/$sdriver" Port]
-	# nsopenssl 2.0 has different names for the secure port
-	if { [empty_string_p $secure_port] } {
-	    set secure_port [ns_config -int "ns/server/[ns_info server]/module/$sdriver" ServerPort 443]
-	}
+    set secure_port [ns_config -int "ns/server/[ns_info server]/module/$sdriver" port]
+    # nsopenssl 2.0 has different names for the secure port
+    if {$secure_port eq ""} {
+        set secure_port [ns_config -int "ns/server/[ns_info server]/module/$sdriver" ServerPort 443]
+    }
     # nsopenssl 3 has variable locations for the secure port
-    if { [empty_string_p $secure_port] || [string match $secure_port 443] } {
+    if {$secure_port eq "" || $secure_port eq "443"} {
         set secure_port [ns_config -int "ns/server/[ns_info server]/module/$sdriver/ssldriver/users" port 443]
     }
-    set secure_location "https://[ns_config ns/server/[ns_info server]/module/$sdriver Hostname]"
-	### nsopenssl 2.0 uses ServerHostname instead of Hostname
-    if { [string match $secure_location "https://"] } {
-	    set secure_location "https://[ns_config ns/server/[ns_info server]/module/$sdriver ServerHostname]"
-	}
-    # nsopenssl 3 uses Hostname and custom driver name
-    # made need to make users/inboundssl (custom driver name) another parameter value
-    if { [string match $secure_location "https://"] } {
-	    set secure_location "https://[ns_config ns/server/[ns_info server]/module/$sdriver/ssldriver/users hostname]"
-	}
+
+    set secure_location "https://${host_name}"
     
-    if {![empty_string_p $secure_port] && ($secure_port != 443)}  {
+    if {$secure_port ne "" && $secure_port ne "443"}  {
         append secure_location ":$secure_port"
     }
-
+    
     set locations [list $insecure_location $secure_location]
     if { [info exists alt_insecure_location] && [parameter::get -parameter SuppressHttpPort -package_id [apm_package_id_from_key acs-tcl] -default 0] } {
         lappend $alt_insecure_location

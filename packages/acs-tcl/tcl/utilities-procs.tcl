@@ -2152,6 +2152,7 @@ ad_proc -public ad_cache_returnredirect { url { persistent "f" } { excluded_vars
 ad_proc -public ad_returnredirect {
     {-message {}}
     {-html:boolean}
+    {-allow_complete_url:boolean}
     target_url
 } {
     Write the HTTP response required to get the browser to redirect to a different page, 
@@ -2176,6 +2177,7 @@ ad_proc -public ad_returnredirect {
     @param message A message to display to the user. See util_user_message.
     @param html Set this flag if your message contains HTML. If specified, you're responsible for proper quoting 
     of everything in your message. Otherwise, we quote it for you.
+    @param allow_complete_url By default we disallow redirecting to urls outside the current host. This is based on the currently set host header or the host name in the config file if there is no host header. Set allow_complete_url if you are redirecting to a known safe external web site. This prevents redirecting to a site by URL query hacking.
     
     @see util_user_message
     @see ad_script_abort
@@ -2188,6 +2190,10 @@ ad_proc -public ad_returnredirect {
 
     if { [util_complete_url_p $target_url] } {
         # http://myserver.com/foo/bar.tcl style - just pass to ns_returnredirect
+        # check if the hostname matches the current host
+        if {[util::external_url_p $target_url] && !$allow_complete_url_p} {
+            error "Redirction to external hosts is not allowed."
+        }
         set url $target_url
     } elseif { [util_absolute_path_p $target_url] } {
         # /foo/bar.tcl style - prepend the current location:
@@ -4560,4 +4566,20 @@ ad_proc util::catch_exec {command result_var} {
         }
     }
     return 0
+}
+
+ad_proc util::external_url_p { url } {
+    check if this URL is external to the current host or a valid alternative
+    valid alternatives include
+    HTTPS or HTTP protocol change
+    HTTP or HTTPS port number added or removed from current host name    
+} {
+    set locations_list [security::locations]
+    # there may be as many as 3 valid full urls
+    set external_url_p [util_complete_url_p $url]
+    foreach location $locations_list {
+        ns_log notice "location \"$location/*\" url $url match [string match "$location/*" $url]"
+        set external_url_p [expr { $external_url_p && ![string match "$location/*" $url] } ] 
+    }
+    return $external_url_p
 }
