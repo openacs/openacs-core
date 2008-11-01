@@ -2,8 +2,6 @@
 <property name="title">OpenACS Home</property>
 
 
-<h1 style="display:none">OpenACS</h1>
-
 <!-- START LEFT PANEL -->
 
 <div class="left-panel">

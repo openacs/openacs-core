@@ -7,7 +7,7 @@
   </tr>
   <tr bgcolor="#006699">
     <td><img src="/templates/slices/spacer.gif" width="1" height="1" border="0" alt=""></td>
-    <td><h2 class="box-title">@title;noquote@</h2></td>
+    <td><h1 class="box-title">@title;noquote@</h1></td>
     <td><img src="/templates/slices/spacer.gif" width="1" height="1" border="0" alt="">
   </tr>
   <tr>
