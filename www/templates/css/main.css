@@ -208,7 +208,7 @@ div.news .rss-feed {
     top: 6px;
 }
 
-div.news h2, div.postings h2 {
+div.news h1, div.postings h1 {
   color: #444;
   background-color: #f8f8f8; 
 }
@@ -228,18 +228,18 @@ ul.forum-content li {
     list-style-type: none;
 }
 
-h3.item-title, h3.forum-title {
+h2.item-title, h2.forum-title {
     margin-bottom: 1px;
     font-weight: normal;
     font-size: 1em;
     border-bottom: thin dotted #666;
 }
 
-h3.item-title a, h3.forum-title a {
+h2.item-title a, h2.forum-title a {
    font-weight: bold;
    color: #960;
 }
-h3.item-title a:hover, h3.forum-title a:hover, p.item-content a:hover, ul.forum-content a:hover {
+h2.item-title a:hover, h2.forum-title a:hover, p.item-content a:hover, ul.forum-content a:hover {
     background-color: inherit;
 }
 

@@ -1,11 +1,11 @@
-<h2>@title@</h2>
+<h1>@title@</h1>
 
   <multiple name=forum_posts>
 	<if @forum_posts.rownum@ le @n_posts@>
 	  <div class="forum"> 
-		<h3 class="forum-title">
+		<h2 class="forum-title">
 		  <a href="/forums/forum-view?forum_id=@forum_posts.forum_id@">@forum_posts.forum_name@</a>
-		</h3>
+		</h2>
 		<ul class="forum-content">
 		  <group column="forum_id"> 
 			<li>
