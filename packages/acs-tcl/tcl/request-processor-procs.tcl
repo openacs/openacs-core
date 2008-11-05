@@ -1256,15 +1256,15 @@ ad_proc -public ad_conn {args} {
                         return 0
                     }
         	    peeraddr {
-        		# We need for NGINX to make use of the X-Forwarded-For address
-        		set headers [ns_conn headers]
+        		# Get the address provided by a reverse proxy such as NGINX via 
+                        # X-Forwarded-For, if available
         		set headers [ns_conn headers]
         		set i [ns_set find $headers "X-Forwarded-For"]
         		if {$i < 0 } {
         		    # Use ns_conn
         		    return [ns_conn $var]
         		} else {
-        		    return "[ns_set value $headers $i]"
+        		    return [ns_set value $headers $i]
         		}
         	    }
                     default {
