@@ -152,11 +152,7 @@ ad_proc -public -callback acs_mail_lite::incoming_email -impl acs-mail-lite {
     
     # If no user_id found or signature invalid, ignore message
     if {$user_id eq ""} {
-        if {$user_id eq ""} {
-            ns_log Debug "acs_mail_lite::incoming_email impl acs-mail-lite: No equivalent user found for $to"
-        } else {
-            ns_log Debug "acs_mail_lite::incoming_email impl acs-mail-lite: Invalid mail signature $signature"
-        }
+      ns_log Debug "acs_mail_lite::incoming_email impl acs-mail-lite: No equivalent user found for $to"
     } else {
         ns_log Debug "acs_mail_lite::incoming_email impl acs-mail-lite: Bounce checking $to, $user_id"
         acs_mail_lite::record_bounce -user_id $user_id
