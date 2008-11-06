@@ -159,7 +159,7 @@ ad_proc -public -callback acs_mail_lite::incoming_email -impl acs-mail-lite {
         }
     } else {
         ns_log Debug "acs_mail_lite::incoming_email impl acs-mail-lite: Bounce checking $to, $user_id"
-        acs_mail_lite::record_bounce -user $user_id
+        acs_mail_lite::record_bounce -user_id $user_id
     }
 }
 
