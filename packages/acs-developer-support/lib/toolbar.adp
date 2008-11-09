@@ -46,10 +46,10 @@
 
       <td align="right" id="developer-search">
         <form action="@base_url@/api-doc/proc-search">
-          <input type="hidden" name="search_type" value="All+matches"/>
-          <input type="hidden" name="name_weight" value="5"/>
-          <input type="hidden" name="param_weight" value="3"/>
-          <input type="hidden" name="doc_weight" value="2"/>
+          <input type="hidden" name="search_type" value="All+matches">
+          <input type="hidden" name="name_weight" value="5">
+          <input type="hidden" name="param_weight" value="3">
+          <input type="hidden" name="doc_weight" value="2">
           <input name="query_string" onfocus="if(this.value=='Search API')this.value='';" onblur="if(this.value=='')this.value='Search API';" value="Search API">
           <input type="submit" value="Go">
         </form>

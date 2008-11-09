@@ -77,7 +77,7 @@ if { $show_p } {
 
 
 # Retrieve all CSS files loaded on this page
-# Generate the <link /> tag multirow
+# Generate the <link > tag multirow
 variable ::template::head::links
 
 set css_list [list]

@@ -2,7 +2,13 @@
   <property name="title">Search</property>
   <property name="context">@context;noquote@</property>
 
-  <p><form name="searchfrags" action="search"><input type="hidden" name="request" value="@request@"/><input type="text" name="expression" value="@expression@" /><input type="submit" name="search" value="Search"/></form></p>
+  <p>
+      <form name="searchfrags" action="search">
+        <input type="hidden" name="request" value="@request@">
+        <input type="text" name="expression" value="@expression@">
+        <input type="submit" name="search" value="Search">
+      </form>
+    </p>
 
   <if @gone_p@ false> 
     <if @matches:rowcount@ gt 0>
