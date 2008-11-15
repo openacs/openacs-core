@@ -93,60 +93,39 @@ ad_proc -public install::xml::action::install { node } {
     set package_key [apm_required_attribute_value $node package]
     set package_info_path "[acs_root_dir]/packages/${package_key}/*.info"
 
-    set install_spec_files [list]
-    foreach install_spec_file [glob -nocomplain $package_info_path] {
-        if { [catch { 
-            array set package [apm_read_package_info_file $install_spec_file]
-        } errmsg] } {
-            # Unable to parse specification file.
-            error "install: $install_spec_file could not be parsed correctly.  The error: $errmsg"
-            return
-        }
+    # XML installation files only support installation of local packages, as they're meant
+    # to provide a means for installing tarball releases.
 
-        if { [apm_package_supports_rdbms_p -package_key $package(package.key)]
-             && ![apm_package_installed_p $package(package.key)] } {
-            lappend install_spec_files $install_spec_file
-        }
-    }
+    apm_get_package_repository -array local_packages
+    array set result [apm_dependency_check_new \
+                      -repository_array local_packages \
+                      -package_keys $package_key]
 
-    set pkg_info_list [list]
-    foreach spec_file [glob -nocomplain "[acs_root_dir]/packages/*/*.info"] {
-        # Get package info, and find out if this is a package we should install
-        if { [catch { 
-            array set package [apm_read_package_info_file $spec_file] 
-        } errmsg] } {
-            # Unable to parse specification file.
-            error "install: $spec_file could not be parsed correctly.  The error: $errmsg"
-        }
-
-        if { [apm_package_supports_rdbms_p -package_key $package(package.key)]
-             && ![apm_package_installed_p $package(package.key)] } {
-            # Save the package info, we may need it for dependency 
-            # satisfaction later
+    if { $result(status) eq "ok" } {
+        set pkg_info_list [list]
+        foreach package_key $result(install) {
+            set spec_file [acs_root_dir]/packages/$package_key/${package_key}.info
+            if { [catch { 
+                array set package [apm_read_package_info_file $spec_file] 
+            } errmsg] } {
+                # Unable to parse specification file.
+                error "install: $spec_file could not be parsed correctly.  The error: $errmsg"
+            }
             lappend pkg_info_list [pkg_info_new $package(package.key) \
                 $spec_file \
+                $package(extends) \
                 $package(provides) \
-                $package(requires) \
-                ""]
+                $package(requires)]
         }
-    }
-
-    if { [llength $install_spec_files] > 0 } {
-        set dependency_results [apm_dependency_check \
-            -pkg_info_all $pkg_info_list \
-            $install_spec_files]
-
-        if { [lindex $dependency_results 0] == 1 } {
-            apm_packages_full_install -callback apm_ns_write_callback \
-                [lindex $dependency_results 1]
-        } else {
-            foreach package_spec [lindex $dependency_results 1] {
-                if {[string is false [pkg_info_dependency_p $package_spec]]} {
-                    append err_out "install: package \"[pkg_info_key $package_spec]\"[join [pkg_info_comment $package_spec] ","]\n"
-                }
-            }
-            error $err_out
+        apm_packages_full_install -callback apm_ns_write_callback $pkg_info_list
+    } else {
+        array set failed $result(failed)
+        foreach elm $failed($package_key) {
+            lappend comments "[lindex $elm 0] [lindex $elm 1]"
         }
+        set comment "Requires [join $comments "; "]"
+        error "Couldn't install package \"$package_key\" due to the following 
+errors:\n$comment"
     }
 
     return {}
