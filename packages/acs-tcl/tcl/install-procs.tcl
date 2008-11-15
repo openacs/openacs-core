@@ -96,6 +96,11 @@ ad_proc -public install::xml::action::install { node } {
     # XML installation files only support installation of local packages, as they're meant
     # to provide a means for installing tarball releases.
 
+    apm_get_installed_versions -array installed_versions
+    if { [info exists installed_versions($package_key)] } {
+        return
+    }
+
     apm_get_package_repository -array local_packages
     array set result [apm_dependency_check_new \
                       -repository_array local_packages \
