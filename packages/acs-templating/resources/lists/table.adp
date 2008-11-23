@@ -113,6 +113,37 @@
 	</thead>
   </multiple>
 
+<!-- START TFOOT for Aggregate func -->
+  <noparse>
+    <multiple name="@list_properties.multirow@">
+  </noparse>
+      
+  <if @list_properties.aggregates_p@ true>
+    <noparse><if \@@list_properties.multirow@.rownum@ eq \@@list_properties.multirow@:rowcount@></noparse>
+      <multiple name="elements">
+        <tfoot>
+        <tr class="list-subheader last">
+          <group column="subrownum">
+            <td class="@elements.class@"@elements.cell_attributes;noquote@>
+              <if @elements.aggregate_label@ not nil>
+                @elements.aggregate_label@
+              </if>
+              <if @elements.aggregate@ not nil>
+                \@@list_properties.multirow@.@elements.aggregate_col@@
+              </if>
+            </td>
+          </group>
+        </tr>
+        </tfoot>
+      </multiple>
+    <noparse></if></noparse>
+  </if>
+
+  <noparse>
+    </multiple>
+  </noparse>
+<!-- END of TFOOT -->
+
 <noparse>
   <if \@@list_properties.multirow@:rowcount@ eq 0>
     <tbody>
@@ -192,25 +223,6 @@
        <noparse>
         </group>
       </noparse>
-  </if>
-
-  <if @list_properties.aggregates_p@ true>
-    <noparse><if \@@list_properties.multirow@.rownum@ eq \@@list_properties.multirow@:rowcount@></noparse>
-      <multiple name="elements">
-        <tr class="list-subheader last">
-          <group column="subrownum">
-            <td class="@elements.class@"@elements.cell_attributes;noquote@>
-              <if @elements.aggregate_label@ not nil>
-                @elements.aggregate_label@
-              </if>
-              <if @elements.aggregate@ not nil>
-                \@@list_properties.multirow@.@elements.aggregate_col@@
-              </if>
-            </td>
-          </group>
-        </tr>
-      </multiple>
-    <noparse></if></noparse>
   </if>
 
   <noparse>
