@@ -14,11 +14,11 @@
 
 OacsFs._pluginInfo = {
     name          : "OacsFs",
-    version       : "0.2",
-    developer     : "Guenter Ernst",
+    version       : "0.4",
+    developer     : "Guenter Ernst, Gustaf Neumann",
     developer_url : "http://learn.wu-wien.ac.at",
     c_owner       : "Guenter Ernst",
-    sponsor       : "Wirtschaftsuniversität Wien",
+    sponsor       : "Wirtschaftsuniversitaet Wien",
     sponsor_url   : "http://www.wu-wien.ac.at",
     license       : "htmlArea"
 };
@@ -29,14 +29,21 @@ function OacsFs(editor) {
     var ArgsString = args[1].toString();
     var additionalArgs = ArgsString.split(",");
     OacsFs.fs_package_id = this.editor.config.fs_package_id;
+    OacsFs.package_id    = this.editor.config.package_id;
     OacsFs.folder_id     = this.editor.config.folder_id;
     OacsFs.file_types    = this.editor.config.file_types;
     OacsFs.script_dir    = this.editor.config.script_dir;
+    OacsFs.wiki_p        = this.editor.config.wiki_p;
     OacsFs.fullscreen_mode = additionalArgs[1]; 
 
     if (typeof OacsFs.script_dir == "undefined") {
-      // if nothing is specified, use xowiki as a fallback
+      // if no script dir is specified, use xowiki as a fallback
       OacsFs.script_dir = "/xowiki";
+    }
+
+    if (OacsFs.wiki_p) {
+      // if wiki_p is specified, add inser-wlink to the list of icon buttons
+      OacsFs.btnList.push(["insert-wlink", "Insert Wiki Link"]);
     }
 
     var cfg = editor.config;
@@ -65,6 +72,9 @@ function OacsFs(editor) {
 	case "LW-insert-image":
 	    cfg.addToolbarElement(id, "insertimage", +1);
 	    break;
+        case "LW-insert-wlink":
+            cfg.addToolbarElement(id, "createlink", +1);
+            break;
 	}
     }
 
@@ -87,6 +97,9 @@ OacsFs.prototype.buttonPress = function(editor, id) {
     case "LW-insert-image":
 	this.insertImage();
 	break;
+    case "LW-insert-wlink":
+        this.insertWlink();
+        break;
     case "LW-close":
 	window.close();
 	break;
@@ -304,3 +317,33 @@ OacsFs.prototype.insertImage = function(image) {
 	       }
 	   }, outparam);
 };
+
+// Called when the user clicks on "InserWikiLink" button.
+OacsFs.prototype.insertWlink = function(link) {
+    var editor = OacsFs.editor;     // for nested functions
+    var PopupUrl = OacsFs.script_dir + "/xinha/insert-wlink?";
+
+    // Check, if we have a package_id. Without a package_id, we do not
+    // know from which directory we should list the wiki links.
+
+    if (typeof OacsFs.package_id == "undefined" || !OacsFs.wiki_p) {
+         alert("One can only insert Wiki links from inside a Wiki");
+    } else {
+         PopupUrl = PopupUrl + "&package_id=" + OacsFs.package_id;
+         Dialog(PopupUrl, function(page) {
+             if (!page) {   // user must have pressed Cancel
+               return false;
+             }
+
+             // If there is a selection, use the selection as label,
+             // otherwise use the title of the wiki page.
+             var selection = editor._getSelection();
+             var label = selection != "" ? selection : page.label;
+
+             // Insert the page name and the label in wiki syntax
+             editor.insertHTML("[[" + page.name 
+                               + ((label != "") ? ("|" + label) : "") 
+                               + "]]");
+           },null);
+    }
+}

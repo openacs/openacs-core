@@ -3,17 +3,13 @@
 
   <msg key="12-Hour">12-Hour</msg>
   <msg key="24-Hour">24-Hour</msg>
-  <msg key="add">Add</msg>
-  <msg key="Add_Column">Add Column</msg>
-  <msg key="add_item">add item</msg>
   <msg key="Add_the_selected_file">Add the selected file</msg>
   <msg key="Add_the_selected_image">Add the selected image</msg>
   <msg key="Anyone_on_the_internet">Anyone on the Internet</msg>
   <msg key="Anyone_on_this_system">Anyone on this system</msg>
   <msg key="ascending_order">ascending order</msg>
   <msg key="Attach_File_Choose_a_file">Please choose a file to attach.</msg>
-  <msg key="Choose_File">Link to an existing file</msg>
-  <msg key="Click_to_save_view">Click to save view</msg>
+  <msg key="Choose_File">Choose File</msg>
   <msg key="Choose_Image">Choose Image</msg>
   <msg key="CSV">CSV</msg>
   <msg key="data">data</msg>
@@ -52,10 +48,9 @@
   <msg key="HTMLArea_ImageSpacingVerticalToolTip">Vertical Spacing</msg>
   <msg key="HTMLArea_ImageURL">URL</msg>
   <msg key="HTMLArea_ImageURLToolTip">Image URL</msg>
-  <msg key="HTMLArea_InsertFileTitle">Insert File</msg>
   <msg key="HTMLArea_InsertImageTitle">Insert Image</msg>
-  <msg key="HTMLArea_InsertLink">Insert Link</msg>
   <msg key="HTMLArea_InsertModifyLink">Insert/Modify Link</msg>
+  <msg key="HTMLArea_InsertWikiLink">Insert Wiki Link</msg>
   <msg key="HTMLArea_NoAltText">No alternate text specified. Please add one to increase accessability.</msg>
   <msg key="HTMLArea_NoURL">No URL for Image specified.</msg>
   <msg key="HTMLArea_OpenFileStorage">Open Folder</msg>
@@ -69,7 +64,7 @@
   <msg key="HTMLArea_SelectImageUploadNoImage">Select Image or Upload File</msg>
   <msg key="HTMLArea_SelectImageUploadTitle">Upload Image</msg>
   <msg key="HTMLArea_SelectUploadBtn">Upload</msg>
-  <msg key="HTMLArea_SpecifyUploadFilename">Specify a File for Upload or select an image.</msg>
+  <msg key="HTMLArea_SpecifyUploadFilename">Specify a File for Upload</msg>
   <msg key="Invalid_choice">Invalid choice</msg>
   <msg key="Invalid_currency">Invalid currency</msg>
   <msg key="Invalid_decimal_number">Invalid decimal number</msg>
@@ -80,24 +75,12 @@
   <msg key="Invalid_natural_number">Invalid natural number </msg>
   <msg key="Invalid_url">Invalid url</msg>
   <msg key="Link_Title">Link Title</msg>
-  <msg key="Link_Url">Link Url</msg>
-  <msg key="Link_Url_Btn">Link to this url</msg>
-  <msg key="List_View_Deleted">View Deleted</msg>
   <msg key="lt_Checkuncheck_all_rows">Check/uncheck all rows</msg>
   <msg key="lt_Checkuncheck_this_row">Check/uncheck this row, and select an action to perform below</msg>
   <msg key="lt_Dates_must_be_formatted_">Dates must be formatted as: %format%</msg>
   <msg key="lt_day_between_for_month_pretty">The day must be between 1 and %maxdays% for the month of %month_pretty%</msg>
-  <msg key="lt_Filter_Help_Page">A filter applies a condition to a column. The data set is modified to only include the rows that satisfy the filter condition. Multiple filters can be applied to a data set. Applying a filter to a column and hiding that column in the data view will still limit the data set to the rows that satisfy the condition of the hidden column. 
-&lt;br/&gt;&lt;br/&gt;
-For example, consider a data set of the planets in the solar system. The columns are planet name, mass, diameter, orbit radius, distance from the sun, and number of moons. The mass, diameter and number of moons columns have filters so that you can apply conditions to the data set. You can add a filter to the diameter column to limit the planets to those with diameters greater than or equal to 7000 km. You can then add a filter to the number of moons column to further limit the planets to those with two or more moons. If you modify the view after applying the filters so that the planet name, mass and diameter columns display, the number of moons filter still applies so that data is also limited to the planets with two or more moons.</msg>
   <msg key="lt_No_value_supplied_for_-field_pretty-">No value supplied for %field_pretty%</msg>
   <msg key="lt_The_-field_pretty-_must_be_non_negative">The %field_pretty% must be a non-negative integer</msg>
-  <msg key="lt_View_Help_page">A view is a customized display of a data set. You can configure the display to include or hide columns, order the columns, sort the rows, and apply conditions (filters) to the columns. You can save new views and modify existing views.
-
-&lt;br /&gt;
-&lt;br /&gt;
-
-For example, consider a data set of the planets in the solar system. The columns are planet name, mass, diameter, orbit radius, distance from the sun, and number of moons. You can create a view that displays only the planet name, mass and diameter by hiding the orbit radius, distance from the sun and number of moons columns. You can also sort the rows alphabetically by planet name and then reorder the columns so that the mass of the planet is displayed in the first column. You can also apply filters to the diameter and number of moons columns so that only the planets with diameter greater than or equal to 7000 km and two or more moons display.</msg>
   <msg key="lt_When_specifying_a_non">When specifying a non-zero page_size, you must also provide either page_query or page_query_name</msg>
   <msg key="Meridian">Meridian</msg>
   <msg key="Minutes">Minutes</msg>
@@ -110,16 +93,12 @@ For example, consider a data set of the planets in the solar system. The columns
   <msg key="No_row_pretty_plural">No %row_pretty_plural%.</msg>
   <msg key="not_ordered">not ordered</msg>
   <msg key="Only_myself">Only myself</msg>
-  <msg key="Other">Other</msg>
   <msg key="Page">Page</msg>
   <msg key="Page_Size">Page Size</msg>
   <msg key="Plain_Text">Plain Text</msg>
   <msg key="Previous_with_arrow">&lt;&lt; Previous</msg>
-  <msg key="remove">x</msg>
   <msg key="required">required</msg>
   <msg key="reverse_sort_order_of_label">Reverse the sort order of %label%</msg>
-  <msg key="Save_View">Save View</msg>
-  <msg key="save_view">save view</msg>
   <msg key="Seconds">Seconds</msg>
   <msg key="seconds">seconds</msg>
   <msg key="Seconds_must_be_between_0_and_59">Seconds must be between 0 and 59</msg>
@@ -129,14 +108,12 @@ For example, consider a data set of the planets in the solar system. The columns
   <msg key="Table">Table</msg>
   <msg key="Tag_handler_invalid_number_of_args">Invalid number of arguments to tag handler.</msg>
   <msg key="Template_parser_error_in_parameter_list">Error in parameter list</msg>
-  <msg key="There_was_a_problem_with_your_submission">There was a problem with your submission. Please correct the highlighted portions below.</msg>
   <msg key="This_file_can_be_reused_by">This file can be reused by</msg>
-  <msg key="This_file_can_be_reused_help">This allows your file to be used in other contexts </msg>
+  <msg key="This_file_can_be_reused_help">This allows the file to be used in other contexts</msg>
   <msg key="This_Group">This group</msg>
   <msg key="This_image_can_be_reused_by">This image can be reused by</msg>
   <msg key="This_image_can_be_reused_help">This allows your image to be used in other contexts</msg>
-  <msg key="Title">Title</msg>
-  <msg key="Upload_a_New_File">Upload a file to link to</msg>
+  <msg key="Upload_a_New_File">Upload a New File</msg>
   <msg key="Upload_a_New_Image">Upload a New Image</msg>
   <msg key="Year">Year</msg>
   <msg key="year">year</msg>
