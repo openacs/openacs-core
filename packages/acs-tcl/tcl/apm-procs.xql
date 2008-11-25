@@ -1,6 +1,69 @@
 <?xml version="1.0"?>
 <queryset>
 
+  <fullquery name="apm_one_package_descendents.get_descendents">
+    <querytext>
+      select apv.package_key
+      from apm_package_versions apv, apm_package_dependencies apd
+      where apd.version_id = apv.version_id
+        and apv.enabled_p = 't'
+        and apd.dependency_type = 'extends'
+        and apd.service_uri = :package_key
+    </querytext>
+  </fullquery>
+
+  <fullquery name="apm_build_subsite_packages_list.get_subsites">
+    <querytext>
+      select package_key
+      from apm_package_types
+      where implements_subsite_p = 't'
+    </querytext>
+  </fullquery>
+
+  <fullquery name="apm_package_list_search_order.get_inherit_templates_p">
+    <querytext>
+      select inherit_templates_p
+      from apm_package_types
+      where package_key = :package_key
+    </querytext>
+  </fullquery>
+
+  <fullquery name="apm_package_list_search_order.get_dependencies">
+    <querytext>
+      select apd.service_uri
+      from apm_package_versions apv, apm_package_dependencies apd
+      where apv.package_key = :package_key
+        and apv.installed_p = 't'
+        and apd.version_id = apv.version_id
+        and apd.dependency_type = 'extends'
+      order by apd.dependency_id
+    </querytext>
+  </fullquery>
+
+  <fullquery name="apm_one_package_inherit_order.get_dependencies">
+    <querytext>
+      select apd.service_uri
+      from apm_package_versions apv, apm_package_dependencies apd
+      where apv.package_key = :package_key
+        and apv.installed_p = 't'
+        and apd.version_id = apv.version_id
+        and apd.dependency_type = 'extends'
+      order by apd.dependency_id desc
+    </querytext>
+  </fullquery>
+
+  <fullquery name="apm_one_package_load_libraries_dependencies.get_dependencies">
+    <querytext>
+      select apd.service_uri
+      from apm_package_versions apv, apm_package_dependencies apd
+      where apv.package_key = :package_key
+        and apv.installed_p = 't'
+        and apd.version_id = apv.version_id
+        and apd.dependency_type in ('requires', 'extends')
+      order by apd.dependency_id desc
+    </querytext>
+  </fullquery>
+
   <fullquery name="apm_package_version_enabled_p.apm_package_version_enabled_p">
     <querytext>
       select case when count(*) = 0 then 0 else 1 end from apm_package_versions

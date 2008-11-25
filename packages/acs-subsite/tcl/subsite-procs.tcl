@@ -281,23 +281,14 @@ ad_proc -public subsite::auto_mount_application {
 
 
 ad_proc -public subsite::package_keys {
-    {-no_cache:boolean}
 } {
-    Get the list of packages which can be subsites.
-
-    We return acs-subsite, and catch the query since when upgrading an existing 
-    site we still need to know acs-subsite is a subsite.
+    Get the list of packages which can be subsites.  This is built during the
+    bootstrap process.  If you install a new subsite-implementing package and don't
+    accept the installers invitation to reboot openacs, tough luck.
 
     @return the packages keys of all installed packages acting as subsites.
 } {
-    if {$no_cache_p} {
-        #if {[catch {set keys [db_list get_keys {}]} errMsg] || $keys eq ""} {
-        return {acs-subsite}
-        # }
-        return $keys
-    } else {
-        return [util_memoize "subsite::package_keys -no_cache"]
-    }
+    return [nsv_get apm_subsite_packages_list package_keys]
 }
 
 ad_proc -public subsite::get {
@@ -849,6 +840,7 @@ ad_proc -public subsite::delete_subsite_theme {
 ad_proc -public subsite::get_application_options {} {
     Gets options list for applications to install
 } {
+    set subsite_package_keys [join '[subsite::package_keys]' ","]
     return [db_list_of_lists package_types {}]
 }
 
@@ -1070,3 +1062,76 @@ ad_proc -public subsite::util::packages {
     return [util_memoize [list subsite::util::packages_no_mem -node_id $subsite_node_id] 1200]
 }
 
+ad_proc -public subsite::util::get_package_options {
+} {
+    Get a list of pretty name, package key pairs for all packages which identify
+    themselves as implementing subsite semantics.
+
+    @return a list of pretty name, package key pairs suitable for use in a template
+            select widget.
+} {
+    return [db_list_of_lists get {}]
+}
+
+ad_proc -public subsite::util::get_package_descendent_options {
+    package_key
+} {
+    Get a list of pretty name, package key pairs for all subsite packages which are descendents
+    of the given package key.
+
+    @param package_key The parent package's key.
+    @return a list of pretty name, package key pairs suitable for use in a template
+            select widget.
+} {
+    set in_clause '[join [apm_package_descendents $package_key] ',']'
+    return [db_list_of_lists get {}]
+}
+
+ad_proc -public subsite::util::convert_type {
+    -subsite_id
+    -old_package_key
+    -new_package_key:required
+} {
+    Convert a subsite to a new type, doing the proper instantiate and mount callbacks and
+    parameter creation.
+
+    @param subsite_id The package id of the subsite to convert (default current subsite)
+    @param old_package_key The package key we're converting from (default current package key)
+    @param new_package_key The new subsite type we're converting to (required)
+
+} {
+    if { ![info exists subsite_id] } {
+        set subsite_id [ad_conn subsite_id]
+    }
+
+    if { ![info exists old_package_key] } {
+        set old_package_key [ad_conn package_key]
+    }
+
+    set node_id [site_node::get_node_id_from_object_id -object_id $subsite_id]
+
+    db_dml update_package_key {}
+    site_node::update_cache -node_id $node_id
+
+    db_foreach get_params {} {
+        db_1row get_new_parameter_id {}
+        db_dml update_param {}
+    }
+    db_list copy_new_params {}
+    apm_parameter_sync $new_package_key $subsite_id
+    
+    foreach inherited_package_key [apm_package_inherit_order $new_package_key] {
+        if { [lsearch -exact [apm_package_inherit_order $old_package_key] $inherited_package_key]
+             == -1 } {
+            apm_invoke_callback_proc \
+                -package_key $inherited_package_key \
+                -type after-instantiate \
+                -arg_list [list package_id $subsite_id]
+            apm_invoke_callback_proc \
+                -package_key $inherited_package_key \
+                -type after-mount \
+                -arg_list [list node_id $node_id package_id $subsite_id]
+        }
+    }
+
+}

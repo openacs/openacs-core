@@ -37,7 +37,13 @@ create table apm_package_types (
 				check (initial_install_p in ('t', 'f')),
     singleton_p			char(1) default 'f' not null
 				constraint apm_packages_site_avail_p_ck
-				check (singleton_p in ('t', 'f'))
+				check (singleton_p in ('t', 'f')),
+    implements_subsite_p        char(1) default 'f' not null
+				constraint apm_packages_impl_subsite_p_ck
+				check (singleton_p in ('t', 'f')),
+    inherit_templates_p         char(1) default 't' not null
+				constraint apm_packages_inherit_t_p_ck
+				check (inherit_templates_p in ('t', 'f'))
 );
 
 comment on table apm_package_types is '
@@ -75,6 +81,18 @@ comment on column apm_package_types.singleton_p is '
 comment on column apm_package_types.initial_install_p is '
  Indicates if the package should be installed during initial installation,
  in other words whether or not this package is part of the OpenACS core.
+';
+
+comment on column apm_package_types.implements_subsite_p is '
+  If true, this package implements subsite semantics, typically by extending the
+  acs-subsite package.  Used by the admin "mount subsite" UI, the request processor (for
+  setting ad_conn''s subsite_* attributes), etc.
+';
+
+comment on column apm_package_types.inherit_templates_p is '
+  If true, inherit templates from packages this package extends.  If false, only
+  templates in this package''s www subdirectory tree will be mapped to URLs by the
+  request processor.
 ';
 
 begin
@@ -505,8 +523,10 @@ comment on column apm_package_callbacks.type is '
 create or replace view apm_package_version_info as
     select v.package_key, t.package_uri, t.pretty_name, t.singleton_p, t.initial_install_p,
            v.version_id, v.version_name,
+           t.inherit_templates_p, t.implements_subsite_p,
            v.version_uri, v.summary, v.description_format, v.description, v.release_date,
-           v.vendor, v.vendor_uri, v.auto_mount, v.enabled_p, v.installed_p, v.tagged_p, v.imported_p, v.data_model_loaded_p,
+           v.vendor, v.vendor_uri, v.auto_mount, v.enabled_p, v.installed_p, v.tagged_p,
+           v.imported_p, v.data_model_loaded_p,
            v.activation_date, v.deactivation_date,
            nvl(v.content_length,0) as tarball_length,
            distribution_uri, distribution_date
@@ -743,7 +763,8 @@ create table apm_package_dependencies (
                        constraint apm_package_deps_version_id_nn not null,
     dependency_type    varchar2(20)
                        constraint apm_package_deps_type_nn not null
-                       constraint apm_package_deps_type_ck check(dependency_type in ('provides','requires')),
+                       constraint apm_package_deps_type_ck
+                       check(dependency_type in ('extends', 'provides','requires')),
     service_uri        varchar2(1500)
                        constraint apm_package_deps_uri_nn not null,
     service_version    varchar2(100)
@@ -828,6 +849,10 @@ as
 				default 'f',    
     singleton_p			in apm_package_types.singleton_p%TYPE 
 				default 'f',    
+    implements_subsite_p        in apm_package_types.implements_subsite_p%TYPE 
+				default 'f',    
+    inherit_templates_p         in apm_package_types.inherit_templates_p%TYPE 
+				default 't',    
     spec_file_path		in apm_package_types.spec_file_path%TYPE 
 				default null,
     spec_file_mtime		in apm_package_types.spec_file_mtime%TYPE 
@@ -848,6 +873,10 @@ as
     	    	    	    	default null,    
     singleton_p			in apm_package_types.singleton_p%TYPE 
     	    	    	    	default null,    
+    implements_subsite_p        in apm_package_types.implements_subsite_p%TYPE 
+				default null,    
+    inherit_templates_p         in apm_package_types.inherit_templates_p%TYPE 
+				default null,    
     spec_file_path		in apm_package_types.spec_file_path%TYPE 
     	    	    	    	default null,
     spec_file_mtime		in apm_package_types.spec_file_mtime%TYPE 
@@ -873,6 +902,10 @@ as
 				default 'f',    
     singleton_p			in apm_package_types.singleton_p%TYPE 
 				default 'f',    
+    implements_subsite_p        in apm_package_types.implements_subsite_p%TYPE 
+				default 'f',    
+    inherit_templates_p         in apm_package_types.inherit_templates_p%TYPE 
+				default 't',    
     spec_file_path		in apm_package_types.spec_file_path%TYPE 
 				default null,
     spec_file_mtime		in apm_package_types.spec_file_mtime%TYPE 
@@ -895,6 +928,10 @@ as
 				default 'f',    
     singleton_p			in apm_package_types.singleton_p%TYPE 
 				default 'f',    
+    implements_subsite_p        in apm_package_types.implements_subsite_p%TYPE 
+				default 'f',    
+    inherit_templates_p         in apm_package_types.inherit_templates_p%TYPE 
+				default 't',    
     spec_file_path		in apm_package_types.spec_file_path%TYPE 
 				default null,
     spec_file_mtime		in apm_package_types.spec_file_mtime%TYPE 
@@ -1169,6 +1206,8 @@ as
     package_type		in apm_package_types.package_type%TYPE,
     initial_install_p		in apm_package_types.initial_install_p%TYPE,
     singleton_p			in apm_package_types.singleton_p%TYPE,
+    implements_subsite_p        in apm_package_types.implements_subsite_p%TYPE,
+    inherit_templates_p         in apm_package_types.inherit_templates_p%TYPE,
     spec_file_path		in apm_package_types.spec_file_path%TYPE default null,
     spec_file_mtime		in apm_package_types.spec_file_mtime%TYPE default null
   );
@@ -1187,6 +1226,10 @@ as
     	    	    	    	default null,
     singleton_p			in apm_package_types.singleton_p%TYPE
     	    	    	    	default null,
+    implements_subsite_p        in apm_package_types.implements_subsite_p%TYPE 
+				default null    
+    inherit_templates_p         in apm_package_types.inherit_templates_p%TYPE 
+				default null,    
     spec_file_path		in apm_package_types.spec_file_path%TYPE 
     	    	    	    	default null,
     spec_file_mtime		in apm_package_types.spec_file_mtime%TYPE
@@ -1285,6 +1328,10 @@ as
 				default 'f',    
     singleton_p			in apm_package_types.singleton_p%TYPE 
 				default 'f',    
+    implements_subsite_p        in apm_package_types.implements_subsite_p%TYPE 
+				default 'f',    
+    inherit_templates_p         in apm_package_types.inherit_templates_p%TYPE 
+				default 't',    
     spec_file_path		in apm_package_types.spec_file_path%TYPE 
 				default null,
     spec_file_mtime		in apm_package_types.spec_file_mtime%TYPE 
@@ -1300,6 +1347,8 @@ as
 	package_type => register_package.package_type,
 	initial_install_p => register_package.initial_install_p,
 	singleton_p => register_package.singleton_p,
+	implements_subsite_p => register_package.implements_subsite_p,
+	inherit_templates_p => register_package.inherit_templates_p,
 	spec_file_path => register_package.spec_file_path,
 	spec_file_mtime => spec_file_mtime
     );
@@ -1319,6 +1368,10 @@ as
     	    	    	    	default null,    
     singleton_p			in apm_package_types.singleton_p%TYPE 
     	    	    	    	default null,    
+    implements_subsite_p        in apm_package_types.implements_subsite_p%TYPE 
+				default null    
+    inherit_templates_p         in apm_package_types.inherit_templates_p%TYPE 
+				default null,    
     spec_file_path		in apm_package_types.spec_file_path%TYPE 
     	    	    	    	default null,
     spec_file_mtime		in apm_package_types.spec_file_mtime%TYPE 
@@ -1335,6 +1388,8 @@ as
 	package_type => update_package.package_type,
 	initial_install_p => update_package.initial_install_p,
 	singleton_p => update_package.singleton_p,
+	implements_subsite_p => update_package.implements_subsite_p,
+	inherit_templates_p => update_package.inherit_templates_p,
 	spec_file_path => update_package.spec_file_path,
 	spec_file_mtime => update_package.spec_file_mtime
     );
@@ -1374,6 +1429,10 @@ as
 				default 'f',    
     singleton_p			in apm_package_types.singleton_p%TYPE 
 				default 'f',    
+    implements_subsite_p        in apm_package_types.implements_subsite_p%TYPE 
+				default 'f',    
+    inherit_templates_p         in apm_package_types.inherit_templates_p%TYPE 
+				default 't',    
     spec_file_path		in apm_package_types.spec_file_path%TYPE 
 				default null,
     spec_file_mtime		in apm_package_types.spec_file_mtime%TYPE 
@@ -1389,6 +1448,8 @@ as
 	package_type => 'apm_application',
 	initial_install_p => register_application.initial_install_p,
 	singleton_p => register_application.singleton_p,
+	implements_subsite_p => register_application.implements_subsite_p,
+	inherit_templates_p => register_application.inherit_templates_p,
 	spec_file_path => register_application.spec_file_path,
 	spec_file_mtime => register_application.spec_file_mtime
    ); 
@@ -1415,6 +1476,10 @@ as
 				default 'f',    
     singleton_p			in apm_package_types.singleton_p%TYPE 
 				default 'f',    
+    implements_subsite_p        in apm_package_types.implements_subsite_p%TYPE 
+				default 'f',    
+    inherit_templates_p         in apm_package_types.inherit_templates_p%TYPE 
+				default 't',    
     spec_file_path		in apm_package_types.spec_file_path%TYPE 
 				default null,
     spec_file_mtime		in apm_package_types.spec_file_mtime%TYPE 
@@ -1430,6 +1495,8 @@ as
 	package_type => 'apm_service',
 	initial_install_p => register_service.initial_install_p,
 	singleton_p => register_service.singleton_p,
+	implements_subsite_p => register_service.implements_subsite_p,
+	inherit_templates_p => register_service.inherit_templates_p,
 	spec_file_path => register_service.spec_file_path,
 	spec_file_mtime => register_service.spec_file_mtime
    );   
@@ -2358,6 +2425,8 @@ as
     package_type		in apm_package_types.package_type%TYPE,
     initial_install_p		in apm_package_types.initial_install_p%TYPE,
     singleton_p			in apm_package_types.singleton_p%TYPE,
+    implements_subsite_p        in apm_package_types.implements_subsite_p%TYPE,
+    inherit_templates_p         in apm_package_types.inherit_templates_p%TYPE,
     spec_file_path		in apm_package_types.spec_file_path%TYPE default null,
     spec_file_mtime		in apm_package_types.spec_file_mtime%TYPE default null
   ) 
@@ -2365,11 +2434,13 @@ as
   begin
    insert into apm_package_types
     (package_key, pretty_name, pretty_plural, package_uri, package_type,
-    spec_file_path, spec_file_mtime, initial_install_p, singleton_p)
+    spec_file_path, spec_file_mtime, initial_install_p, singleton_p,
+    implements_subsite_p, inherit_templates_p)
    values
     (create_type.package_key, create_type.pretty_name, create_type.pretty_plural,
      create_type.package_uri, create_type.package_type, create_type.spec_file_path, 
-     create_type.spec_file_mtime, create_type.initial_install_p, create_type.singleton_p);
+     create_type.spec_file_mtime, create_type.initial_install_p, create_type.singleton_p,
+     create_type.implements_subsite_p, create_type.inherit_templates_p);
   end create_type;
 
   function update_type(    
@@ -2386,6 +2457,10 @@ as
     	    	    	    	default null,
     singleton_p			in apm_package_types.singleton_p%TYPE
     	    	    	    	default null,
+    implements_subsite_p        in apm_package_types.implements_subsite_p%TYPE 
+				default null    
+    inherit_templates_p         in apm_package_types.inherit_templates_p%TYPE 
+				default null,    
     spec_file_path		in apm_package_types.spec_file_path%TYPE 
     	    	    	    	default null,
     spec_file_mtime		in apm_package_types.spec_file_mtime%TYPE
@@ -2401,7 +2476,9 @@ as
     	spec_file_path = nvl(update_type.spec_file_path, spec_file_path),
     	spec_file_mtime = nvl(update_type.spec_file_mtime, spec_file_mtime),
     	initial_install_p = nvl(update_type.initial_install_p, initial_install_p),
-    	singleton_p = nvl(update_type.singleton_p, singleton_p)
+    	singleton_p = nvl(update_type.singleton_p, singleton_p),
+        implements_subsite_p = nvl(update_type.implements_subsite_p, implements_subsite_p),
+        inherits_subsite_p = nvl(update_type.implements_subsite_p, implements_subsite_p)
       where package_key = update_type.package_key;
       return update_type.package_key;
   end update_type;

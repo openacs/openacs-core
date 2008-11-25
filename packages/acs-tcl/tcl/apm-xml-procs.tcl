@@ -72,6 +72,8 @@ ad_proc -private apm_generate_package_spec { version_id } {
     <pretty-plural>[ad_quotehtml $pretty_plural]</pretty-plural>
     <initial-install-p>$initial_install_p</initial-install-p>
     <singleton-p>$singleton_p</singleton-p>
+    <implements-subsite-p>$implements_subsite_p</implements-subsite-p>
+    <inherit-templates-p>$inherit_templates_p</inherit-templates-p>
     ${auto_mount_tag}
     <version name=\"$version_name\" url=\"[ad_quotehtml $version_uri]\">\n"
 
@@ -167,8 +169,9 @@ ad_proc -public apm_read_package_info_file { path } {
     <ul>
     <li><code>path</code>: a path to the file read
     <li><code>mtime</code>: the mtime of the file read
-    <li><code>provides</code> and <code>requires</code>: lists of dependency
-    information, containing elements of the form <code>[list $url $version]</code>
+    <li><code>provides</code>, <code>extends</code>, and <code>requires</code>:
+      lists of dependency information, containing elements of the form
+      <code>[list $url $version]</code>
     <li><code>owners</code>: a list of owners containing elements of the form
     <code>[list $url $name]</code>
     <li><code>files</code>: a list of files in the package,
@@ -255,8 +258,10 @@ ad_proc -public apm_read_package_info_file { path } {
     set properties(package.type) [apm_attribute_value -default "apm_application" $package type]
     set properties(package-name) [apm_tag_value $package package-name]
     set properties(initial-install-p) [apm_tag_value -default "f" $package initial-install-p]
-    set properties(singleton-p) [apm_tag_value -default "f" $package singleton-p]
     set properties(auto-mount) [apm_tag_value -default "" $package auto-mount]
+    set properties(singleton-p) [apm_tag_value -default "f" $package singleton-p]
+    set properties(implements-subsite-p) [apm_tag_value -default "f" $package implements-subsite-p]
+    set properties(inherit-templates-p) [apm_tag_value -default "t" $package inherit-templates-p]
     set properties(pretty-plural) [apm_tag_value -default "$properties(package-name)s" $package pretty-plural]
 
 
@@ -306,8 +311,9 @@ ad_proc -public apm_read_package_info_file { path } {
 
     set properties(provides) [list]
     set properties(requires) [list]
+    set properties(extends) [list]
 
-    foreach dependency_type { provides requires } {
+    foreach dependency_type { provides requires extends } {
 	set dependency_types [xml_node_get_children_by_name $version $dependency_type]
 
 	foreach node $dependency_types {

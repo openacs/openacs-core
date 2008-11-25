@@ -48,7 +48,6 @@
     
       </querytext>
 </fullquery>
-
  
 <fullquery name="subsite::util::object_type_pretty_name.select_pretty_name">      
       <querytext>
@@ -115,4 +114,57 @@
     </querytext>
   </fullquery>
  
+<fullquery name="subsite::util::get_package_options.get">      
+  <querytext>
+    select pretty_name, package_key
+    from apm_package_types
+    where implements_subsite_p = 't'
+    order by pretty_name
+  </querytext>
+</fullquery>
+
+<fullquery name="subsite::util::get_package_descendent_options.get">      
+  <querytext>
+    select pretty_name, package_key
+    from apm_package_types
+    where implements_subsite_p = 't'
+      and package_key in ($in_clause)
+    order by pretty_name
+  </querytext>
+</fullquery>  
+
+<fullquery name="subsite::util::convert_type.update_package_key">      
+  <querytext>
+    update apm_packages
+    set package_key = :new_package_key
+    where package_id = :subsite_id
+  </querytext>
+</fullquery>  
+
+<fullquery name="subsite::util::convert_type.get_params">      
+  <querytext>
+    select parameter_name, parameter_id
+    from apm_parameters
+    where package_key = :old_package_key
+  </querytext>
+</fullquery>  
+
+<fullquery name="subsite::util::convert_type.get_new_parameter_id">      
+  <querytext>
+    select parameter_id as new_parameter_id
+    from apm_parameters
+    where package_key = :new_package_key
+      and parameter_name = :parameter_name
+  </querytext>
+</fullquery>  
+
+<fullquery name="subsite::util::convert_type.update_param">      
+  <querytext>
+    update apm_parameter_values
+    set parameter_id = :new_parameter_id
+    where parameter_id = :parameter_id
+      and package_id = :subsite_id
+  </querytext>
+</fullquery>  
+
 </queryset>

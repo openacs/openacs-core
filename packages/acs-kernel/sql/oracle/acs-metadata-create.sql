@@ -260,6 +260,11 @@ begin
  values
   ('email', null);
 
+ insert into acs_datatypes
+  (datatype, max_n_values)
+ values
+  ('file', 1);
+
  commit;
 end;
 /

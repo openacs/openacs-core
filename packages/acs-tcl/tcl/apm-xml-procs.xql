@@ -11,6 +11,8 @@
                t.package_type,
 	       t.initial_install_p, 
                t.singleton_p, 
+               t.implements_subsite_p,
+               t.inherit_templates_p,
                v.*
         from   apm_package_versions v, 
                apm_package_types t
