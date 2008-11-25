@@ -66,7 +66,7 @@
     from   apm_package_types
     where  not (apm_package.singleton_p(package_key) = 1 and
                 apm_package.num_instances(package_key) >= 1)
-    and    package_key != 'acs-subsite'
+    and    implements_subsite_p = 'f'
     order  by upper(pretty_name)
 
         </querytext>
@@ -84,5 +84,20 @@
         and rownum < 2
         </querytext>
     </partialquery>
+
+  <fullquery name="subsite::util::convert_type.copy_new_params">
+    <querytext>
+      select apm_parameter_value.new(
+               package_id => :subsite_id,
+               parameter_id => ap.parameter_id,
+               value => ap.default_value)
+      from apm_parameters ap
+      where ap.package_key = :new_package_key
+        and not exists (select 1
+                        from apm_parameters ap2
+                        where ap2.package_key = :old_package_key
+                          and ap2.parameter_name = ap.parameter_name)
+    </querytext>
+  </fullquery>
  
 </queryset>

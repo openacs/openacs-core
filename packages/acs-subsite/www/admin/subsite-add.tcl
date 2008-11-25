@@ -14,9 +14,28 @@ set subsite_pretty_name "Subsite name"
 
 set context [list $page_title]
 
-
 ad_form -name subsite -cancel_url . -form {
-    {node_id:key}
+    {node_id:key}}
+
+set subsite_package_options [subsite::util::get_package_options]
+
+if { [llength $subsite_package_options] == 1 } {
+    ad_form -extend -name subsite -form {
+        {package_key:text(hidden)
+            {value "[lindex [lindex $subsite_package_options 0] 1]"}
+        }
+    }
+} else {
+    ad_form -extend -name subsite -form {
+        {package_key:text(select)
+            {label "Subsite Package"}
+            {help_text "Choose the subsite package you'd like to mount"}
+            {options $subsite_package_options}
+        }
+    }
+}
+
+ad_form -extend -name subsite -form {
     {instance_name:text
         {label $subsite_pretty_name}
         {help_text "The name of the new subsite you're setting up."}
@@ -58,7 +77,7 @@ ad_form -name subsite -cancel_url . -form {
                                 -parent_node_id [ad_conn node_id] \
                                 -node_name $folder \
                                 -package_name $instance_name \
-                                -package_key acs-subsite]
+                                -package_key $package_key]
         
         # Set template
         subsite::set_theme -subsite_id $new_package_id -theme $theme

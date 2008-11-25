@@ -851,7 +851,9 @@ ad_proc -private rp_handler {} {
     set roots [ns_info pageroot][string trimright [ad_conn package_url] /]
 
     if { [ad_conn package_key] ne "" } {
-        lappend roots [acs_root_dir]/packages/[ad_conn package_key]/www
+        foreach package_key [apm_package_search_order [ad_conn package_key]] {
+            lappend roots [acs_root_dir]/packages/$package_key/www
+        }
     }
 
     foreach root $roots {

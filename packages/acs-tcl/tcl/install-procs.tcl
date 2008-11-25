@@ -118,6 +118,7 @@ ad_proc -public install::xml::action::install { node } {
             }
             lappend pkg_info_list [pkg_info_new $package(package.key) \
                 $spec_file \
+                $package(extends) \
                 $package(provides) \
                 $package(requires)]
         }

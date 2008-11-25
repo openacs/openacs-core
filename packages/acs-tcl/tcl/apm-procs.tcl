@@ -138,6 +138,165 @@ ad_proc apm_callback_and_log { { -severity Notice } callback message } {
     ns_log $severity $message
 }   
 
+ad_proc apm_one_package_descendents {
+    package_key
+} {
+    global apm_visited_package_keys
+    global apm_package_descendents
+
+    foreach descendent [db_list get_descendents {}] {
+        if { [info exists apm_visited_package_keys($descendent)] } {
+            continue
+        }
+        set apm_visited_package_keys($descendent) 1
+        lappend apm_package_descendents $descendent
+        apm_one_package_descendents $descendent
+    }
+
+}
+
+ad_proc apm_build_subsite_packages_list {} {
+
+    nsv_set apm_subsite_packages_list package_keys {}
+
+    # Make sure old versions work ...
+    catch { nsv_set apm_subsite_packages_list package_keys [db_list get_subsites {}] }
+    if { [lsearch -exact [nsv_get apm_subsite_packages_list package_keys] acs-subsite] == -1 } {
+        nsv_lappend apm_subsite_packages_list package_keys acs-subsite
+    }
+
+}
+
+ad_proc apm_package_list_search_order {
+    package_list
+} {
+    Left-right, breadth-first traverse of the inheritance DAG.
+} {
+    global apm_visited_package_keys
+    global apm_package_search_order
+
+    foreach package_key $package_list {
+        if { [info exists apm_visited_package_keys($package_key)] } {
+            continue
+        }
+        lappend apm_package_search_order $package_key
+        set apm_visited_package_keys($package_key) 1
+    }
+
+    # Make sure old versions work ...
+    foreach package_key $package_list {
+        set inherit_templates_p 1
+        catch { db_1row get_inherit_templates_p {} }
+        if { [string is true $inherit_templates_p] } {
+            apm_package_list_search_order [db_list get_dependencies {}]
+        }
+    }
+}
+
+ad_proc apm_one_package_inherit_order {
+    package_key
+} {
+    global apm_visited_package_keys
+    global apm_package_inherit_order
+
+    if { [info exists apm_visited_package_keys($package_key)] } {
+        return
+    }
+    set apm_visited_package_keys($package_key) 1
+
+    foreach dependency [db_list get_dependencies {}] {
+        apm_one_package_inherit_order $dependency
+    }
+
+    lappend apm_package_inherit_order $package_key
+}
+
+ad_proc apm_one_package_load_libraries_dependencies {
+    package_key
+} {
+    global apm_visited_package_keys
+    global apm_package_load_libraries_order
+
+    if { [info exists apm_visited_package_keys($package_key)] } {
+        return
+    }
+    set apm_visited_package_keys($package_key) 1
+    set package_key_list ""
+
+    foreach dependency [db_list get_dependencies {}] {
+        apm_one_package_load_libraries_dependencies $dependency
+    }
+    lappend apm_package_load_libraries_order $package_key
+}
+
+ad_proc apm_build_one_package_relationships {
+    package_key
+} {
+
+    Builds the nsv dependency structures for a single package.
+
+} {
+    global apm_visited_package_keys
+    global apm_package_search_order
+    global apm_package_inherit_order
+    global apm_package_load_libraries_order
+    global apm_package_descendents
+
+    array unset apm_visited_package_keys
+    set apm_package_search_order [list]
+    apm_package_list_search_order $package_key
+    nsv_set apm_package_search_order $package_key $apm_package_search_order
+
+    array unset apm_visited_package_keys
+    set apm_package_inherit_order [list]
+    apm_one_package_inherit_order $package_key
+    nsv_set apm_package_inherit_order $package_key $apm_package_inherit_order
+
+    array unset apm_visited_package_keys
+    set apm_package_load_libraries_order [list]
+    apm_one_package_load_libraries_dependencies $package_key
+    nsv_set apm_package_load_libraries_order $package_key $apm_package_load_libraries_order
+
+    array unset apm_visited_package_keys
+    set apm_package_descendents [list]
+    apm_one_package_descendents $package_key
+    nsv_set apm_package_descendents $package_key $apm_package_descendents
+
+}
+
+ad_proc apm_build_package_relationships {} {
+
+    Builds the nsv dependency and ancestor structures.
+
+} {
+    foreach package_key [apm_enabled_packages] {
+        apm_build_one_package_relationships $package_key
+    }
+}
+
+ad_proc apm_package_descendents {
+    package_key
+} {
+    return [nsv_get apm_package_descendents $package_key]
+}
+
+ad_proc apm_package_inherit_order {
+    package_key
+} {
+    return [nsv_get apm_package_inherit_order $package_key]
+}
+
+ad_proc apm_package_search_order {
+    package_key
+} {
+    return [nsv_get apm_package_search_order $package_key]
+}
+
+ad_proc apm_package_load_libraries_order {
+    package_key
+} {
+    return [nsv_get apm_package_load_libraries_order $package_key]
+}
 
 ad_proc -public apm_version_loaded_p { version_id } {
 
@@ -852,7 +1011,7 @@ ad_proc -public apm_dependency_add {
     {
 	-callback apm_dummy_callback
 	-dependency_id ""
-    } version_id dependency_uri dependency_version
+    } dependency_type version_id dependency_uri dependency_version
 } {
     
     Add a dependency to a version.
@@ -863,17 +1022,7 @@ ad_proc -public apm_dependency_add {
 	set dependency_id [db_null]
     }
     
-    return [db_exec_plsql dependency_add {
-	begin
-	:1 := apm_package_version.add_dependency(
-            dependency_id => :dependency_id,
-	    version_id => :version_id,
-	    dependency_uri => :dependency_uri,
-	    dependency_version => :dependency_version
-        );					 
-	end;
-    }]
-}
+    return [db_exec_plsql dependency_add {}] }
 
 ad_proc -public apm_dependency_remove {dependency_id} {
     
@@ -1536,7 +1685,12 @@ ad_proc -public apm_package_instance_new {
    
     apm_parameter_sync $package_key $package_id
 
-    apm_invoke_callback_proc -package_key $package_key -type "after-instantiate" -arg_list [list package_id $package_id]
+    foreach inherited_package_key [nsv_get apm_package_inherit_order $package_key] {
+        apm_invoke_callback_proc \
+            -package_key $inherited_package_key \
+            -type after-instantiate \
+            -arg_list [list package_id $package_id]
+    }
 
     return $package_id
 }
@@ -1568,9 +1722,14 @@ ad_proc -public apm_package_instance_delete {
 } {
     Deletes an instance of a package
 } {    
-    apm_invoke_callback_proc -package_key [apm_package_key_from_id $package_id] \
-                            -type before-uninstantiate \
-                            -arg_list [list package_id $package_id]
+
+    set package_key [apm_package_key_from_id $package_id]
+    foreach inherited_package_key [nsv_get apm_package_inherit_order $package_key] {
+        apm_invoke_callback_proc \
+            -package_key $inherited_package_key \
+            -type before-uninstantiate \
+            -arg_list [list package_id $package_id]
+    }
 
     db_exec_plsql apm_package_instance_delete {}
 }

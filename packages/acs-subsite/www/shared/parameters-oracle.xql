@@ -17,7 +17,7 @@
             from apm_parameter_values v
             where v.package_id = :package_id
            ) v
-    where  p.package_key = (select package_key from apm_packages where package_id = :package_id)
+    where  p.package_key = :package_key
     and    p.parameter_id = v.parameter_id
     $section_where_clause
     order  by section_name, parameter_name
@@ -35,7 +35,7 @@
                 from apm_parameter_values v
                 where v.package_id = :package_id
                ) v
-        where  p.package_key = (select package_key from apm_packages where package_id = :package_id)
+        where  p.package_key = :package_key
         and    p.parameter_id = v.parameter_id
     $section_where_clause
       </querytext>

@@ -77,6 +77,8 @@
 			:package_uri,
 			:initial_install_p,
 			:singleton_p,
+                        :implements_subsite_p,
+                        :inherit_templates_p,
 			:spec_file_path,
 			:spec_file_mtime
           		);
@@ -95,6 +97,8 @@
 			:package_uri,
 			:initial_install_p,
 			:singleton_p,
+                        :implements_subsite_p,
+                        :inherit_templates_p,
 			:spec_file_path,
 			:spec_file_mtime
 			);
@@ -183,6 +187,34 @@
       <querytext>
         select apm_package_version__version_name_greater(:provided_version, :dependency_version)
       </querytext>
+</fullquery>
+
+<fullquery name="apm_package_install.copy_descendent_params">      
+  <querytext>
+    select apm__register_parameter(null, :descendent_package_key, ap.parameter_name,
+                                   ap.description, ap.datatype, ap.default_value,
+                                   ap.section_name, ap.min_n_values, ap.max_n_values)
+    from apm_parameters ap
+    where package_key = :package_key
+      and not exists (select 1
+                      from apm_parameters ap2
+                      where ap2.parameter_name = ap.parameter_name
+                        and ap2.package_key = :descendent_package_key)
+  </querytext>
+</fullquery>
+
+<fullquery name="apm_package_install.copy_inherited_params">      
+  <querytext>
+    select apm__register_parameter(null, :package_key, ap.parameter_name, ap.description,
+                                   ap.datatype, ap.default_value, ap.section_name,
+                                   ap.min_n_values, ap.max_n_values)
+    from apm_parameters ap
+    where package_key = :inherited_package_key
+      and not exists (select 1
+                      from apm_parameters ap2
+                      where ap2.parameter_name = ap.parameter_name
+                        and ap2.package_key = :package_key)
+  </querytext>
 </fullquery>
 
 <fullquery name="apm_package_install.version_exists_p">      

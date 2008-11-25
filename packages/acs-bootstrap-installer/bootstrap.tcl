@@ -149,6 +149,12 @@ set errno [catch {
        apm_bootstrap_load_libraries -init xotcl-core
     }
 
+    # Build the list of subsite packages
+    apm_build_subsite_packages_list
+
+    # Build the nsv dependency and descendent structures
+    apm_build_package_relationships
+
     # Load libraries, queries etc. for remaining packages
     apm_load_packages
 

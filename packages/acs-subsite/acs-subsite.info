@@ -6,8 +6,9 @@
     <pretty-plural>Subsite Services</pretty-plural>
     <initial-install-p>t</initial-install-p>
     <singleton-p>f</singleton-p>
+    <implements-subsite-p>t</implements-subsite-p>
     
-    <version name="5.5.0d4" url="http://openacs.org/repository/download/apm/acs-subsite-5.5.0d4.apm">
+    <version name="5.5.0d5" url="http://openacs.org/repository/download/apm/acs-subsite-5.5.0d5.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Subsite</summary>
         <release-date>2008-05-31</release-date>
@@ -16,7 +17,7 @@
         <license>GPL</license>
         <maturity>3</maturity>
 
-        <provides url="acs-subsite" version="5.5.0d4"/>
+        <provides url="acs-subsite" version="5.5.0d5"/>
         <requires url="acs-authentication" version="5.3.2"/>
         <requires url="acs-content-repository" version="5.3.2"/>
         <requires url="acs-kernel" version="5.5.0d3"/>

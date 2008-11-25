@@ -80,6 +80,7 @@
       
 	begin
 	:1 := apm_package_version.add_dependency(
+            dependency_type => :dependency_type,
             dependency_id => :dependency_id,
 	    version_id => :version_id,
 	    dependency_uri => :dependency_uri,

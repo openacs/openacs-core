@@ -59,6 +59,7 @@
       <querytext>
 
 	select apm_package_version__add_dependency(
+            :dependency_type,
             :dependency_id,
 	    :version_id,
 	    :dependency_uri,
