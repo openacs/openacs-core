@@ -15,6 +15,7 @@ ad_page_contract {
 
   $Id$
 }
+ns_log Notice "Huh? here I am!"
 
 if { ![info exists main_content_p] } {
     set main_content_p 1
@@ -42,10 +43,12 @@ if {[template::util::is_nil title]} {
 # horizontal tabs by default)
 #
 if { [template::multirow exists navigation] } {
+    if { ![info exists navigation_groups] } {
+        set navigation_groups [list]
+    }
     for {set i 1} {$i <= [template::multirow size navigation]} {incr i} {
         template::multirow get navigation $i
-        if {![info exists navigation_groups] ||
-             [lsearch -exact $navigation_groups $navigation(group)] < 0} {
+        if { [lsearch -exact $navigation_groups $navigation(group)] < 0} {
             lappend navigation_groups $navigation(group)
         }
     }
