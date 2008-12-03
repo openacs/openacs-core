@@ -49,7 +49,7 @@ ad_proc -private ::install::xml::action::source { node } {
     set params [xml_node_get_children [lindex $node 0]]
 
     foreach param $params {
-        if {[xml_node_get_name $param] ne "param" } {
+        if {[xml_node_get_name $param] ne "param"} {
             error "Unknown xml element \"[xml_node_get_name $param]\""
         }
 
@@ -57,7 +57,7 @@ ad_proc -private ::install::xml::action::source { node } {
         set id [apm_attribute_value -default {} $param id]
         set value [apm_attribute_value -default {} $param value]
 
-        if {$id ne "" } {
+        if {$id ne ""} {
             set value [install::xml::util::get_id $id]
         }
 
@@ -91,49 +91,10 @@ ad_proc -public install::xml::action::install { node } {
     <p>&lt;install package=&quot;<em>package-key</em> /&gt;</p>
 } {
     set package_key [apm_required_attribute_value $node package]
-    set package_info_path "[acs_root_dir]/packages/${package_key}/*.info"
 
-    # XML installation files only support installation of local packages, as they're meant
-    # to provide a means for installing tarball releases.
+    apm_simple_package_install $package_key
 
-    apm_get_installed_versions -array installed_versions
-    if { [info exists installed_versions($package_key)] } {
-        return
-    }
-
-    apm_get_package_repository -array local_packages
-    array set result [apm_dependency_check_new \
-                      -repository_array local_packages \
-                      -package_keys $package_key]
-
-    if { $result(status) eq "ok" } {
-        set pkg_info_list [list]
-        foreach package_key $result(install) {
-            set spec_file [acs_root_dir]/packages/$package_key/${package_key}.info
-            if { [catch { 
-                array set package [apm_read_package_info_file $spec_file] 
-            } errmsg] } {
-                # Unable to parse specification file.
-                error "install: $spec_file could not be parsed correctly.  The error: $errmsg"
-            }
-            lappend pkg_info_list [pkg_info_new $package(package.key) \
-                $spec_file \
-                $package(extends) \
-                $package(provides) \
-                $package(requires)]
-        }
-        apm_packages_full_install -callback apm_ns_write_callback $pkg_info_list
-    } else {
-        array set failed $result(failed)
-        foreach elm $failed($package_key) {
-            lappend comments "[lindex $elm 0] [lindex $elm 1]"
-        }
-        set comment "Requires [join $comments "; "]"
-        error "Couldn't install package \"$package_key\" due to the following 
-errors:\n$comment"
-    }
-
-    return {}
+    return
 }
 
 ad_proc -public install::xml::action::mount { node } {
@@ -152,15 +113,14 @@ ad_proc -public install::xml::action::mount { node } {
 
     # Remove double slashes
     regsub -all {//} $mount_point "/" mount_point
-    set mount_point [string trimright $mount_point " /"]
+    set mount_point [string trim $mount_point " /"]
 
-    if {[string is space $mount_point] ||
-        [string equal $mount_point "/"]} {
+    if {[string is space $mount_point] || $mount_point eq "/"} {
         array set site_node [site_node::get -url "/"]
 
-        if { $site_node(object_id) ne "" } {
-            ns_log Error "A package is already mounted at \"$mount_point\""
-            ns_write "<br>mount: A package is already mounted at \"$mount_point\", ignoring mount command."
+        if {$site_node(object_id) ne ""} {
+            ns_log Error "A package is already mounted at '$mount_point', ignoring mount command"
+            lappend out "A package is already mounted at '$mount_point', ignoring mount command"
             set node_id ""
         }
 
@@ -170,40 +130,40 @@ ad_proc -public install::xml::action::mount { node } {
 
         set context_id [install::xml::util::get_id $context_id]
     } else {
-        regexp {(.*)/([^/]*)$} $mount_point match parent_url mount_point
+        set leaf_url $mount_point
+        set parent_url ""
+        regexp {(.*)/([^/]*)$} $mount_point match parent_url leaf_url
 
-        if {$parent_url eq ""} { 
-            set parent_url /
+        set parent_id [site_node::get_node_id -url "/$parent_url"]
+
+        # technically this isn't safe - between us checking that the node exists
+        # and using it it may have been deleted. 
+        # We could "select for update" but since it's in a memory cache anyway,
+        # it won't help us very much!
+        # Instead we just press on and if there's an error handle it at the top level.
+       
+        # create the node and reget iff it doesn't exist
+        if { [catch { array set site_node [site_node::get_from_url -exact -url "/$mount_point"] } error] } {
+            set node_id [site_node::new -name $leaf_url -parent_id $parent_id]
+            array set site_node [site_node::get_from_url -exact -url "/$mount_point"]
         }
 
-        set parent_id [site_node::get_node_id -url $parent_url]
-
-        if { [catch {
-            db_transaction {
-                set node_id [site_node::new -name $mount_point \
-                    -parent_id $parent_id]
-            }
-        } error] } {
-            # There is already a node with that path, check if there is a 
-            # package mounted there
-            array set site_node [site_node::get -url "/$mount_point"]
-            if { $site_node(object_id) eq "" } {
-                # There is no package mounted there so go ahead and mount the 
-                # new package
-                set node_id $site_node(node_id)
-            } else {
-                ns_log Error "A package is already mounted at \"$mount_point\""
-                ns_write "<br>mount: A package is already mounted at \"$mount_point\", ignoring mount command."
-                set node_id ""
-            }
+        # There now definitely a node with that path
+        if {$site_node(object_id) eq ""} {
+            # no package mounted - good!
+            set node_id $site_node(node_id)
+        } else {
+            ns_log Error "A package is already mounted at '$mount_point', ignoring mount command"
+            lappend out "A package is already mounted at '$mount_point', ignoring mount command"
+            set node_id ""
         }
 
-        if {$context_id ne "" } {
+        if {$context_id eq ""} {
             set context_id [install::xml::util::get_id $context_id]
         }
     }
 
-    if { $node_id ne "" } {
+    if {$node_id ne ""} {
         lappend out "Mounting new instance of package $package_key at /$mount_point"
         set package_id [site_node::instantiate_and_mount \
             -node_id $node_id \
@@ -216,7 +176,7 @@ ad_proc -public install::xml::action::mount { node } {
             permission::set_not_inherit -object_id $package_id
         }
 
-        if {$id ne "" } {
+        if {$id ne ""} {
             set ::install::xml::ids($id) $package_id
         }
     }
@@ -237,52 +197,52 @@ ad_proc -public install::xml::action::mount-existing { node } {
 
     # Remove double slashes
     regsub -all {//} $mount_point "/" mount_point
+    set mount_point [string trim $mount_point " /"]
 
-    if {[string is space $mount_point] ||
-        [string equal $mount_point "/"]} {
+    if {[string is space $mount_point] || $mount_point eq "/"} {
         array set site_node [site_node::get -url "/"]
 
-        if { $site_node(object_id) ne "" } {
-            ns_log Error "A package is already mounted at \"$mount_point\""
-            ns_write "<br>mount: A package is already mounted at \"$mount_point\", ignoring mount command."
+        if {$site_node(object_id) ne ""} {
+            ns_log Error "A package is already mounted at '$mount_point', ignoring mount command"
+            lappend out "A package is already mounted at '$mount_point', ignoring mount command"
             set node_id ""
         }
     } else {
-        regexp {(.*)/([^/]*)$} $mount_point match parent_url mount_point
+        set leaf_url $mount_point
+        set parent_url ""
+        regexp {(.*)/([^/]*)$} $mount_point match parent_url leaf_url
 
-        if {$parent_url eq ""} { 
-            set parent_url /
+        set parent_id [site_node::get_node_id -url "/$parent_url"]
+
+        # technically this isn't safe - between us checking that the node exists
+        # and using it it may have been deleted. 
+        # We could "select for update" but since it's in a memory cache anyway,
+        # it won't help us very much!
+        # Instead we just press on and if there's an error handle it at the top level.
+        
+        # create the node and reget iff it doesn't exist
+        if { [catch { array set site_node [site_node::get_from_url -exact -url "/$mount_point"] } error] } {
+            set node_id [site_node::new -name $leaf_url -parent_id $parent_id]
+            array set site_node [site_node::get_from_url -exact -url "/$mount_point"]
         }
-
-        set parent_id [site_node::get_node_id -url $parent_url]
-
-        if { [catch {
-            db_transaction {
-                set node_id [site_node::new -name $mount_point \
-                    -parent_id $parent_id]
-            }
-        } error] } {
-            # There is already a node with that path, check if there is a 
-            # package mounted there
-            array set site_node [site_node::get -url "/$mount_point"]
-            if { $site_node(object_id) eq "" } {
-                # There is no package mounted there so go ahead and mount the 
-                # new package
-                set node_id $site_node(node_id)
-            } else {
-                ns_log Error "A package is already mounted at \"$mount_point\""
-                ns_write "<br>mount: A package is already mounted at \"$mount_point\", ignoring mount command."
-                set node_id ""
-            }
+    
+        # There now definitely a node with that path
+        if {$site_node(object_id) eq ""} {
+            # no package mounted - good!
+            set node_id $site_node(node_id)
+        } else {
+            ns_log Error "A package is already mounted at '$mount_point', ignoring mount command"
+            lappend out "A package is already mounted at '$mount_point', ignoring mount command"
+            set node_id ""
         }
     }
 
-    if { $node_id ne "" } {
+    if {$node_id ne ""} {
         lappend out "Mounting existing package $package_id at /$mount_point"
 
-        if { $package_id ne "" } {
+        if {$package_id ne ""} {
             set package_id [install::xml::util::get_id $package_id]
-        } elseif { $package_key ne "" } {
+        } elseif {$package_key ne ""} {
             set package_id [apm_package_id_from_key $package_key]
         } 
 
@@ -303,6 +263,7 @@ ad_proc -public install::xml::action::create-package { node } {
     set package_key [apm_required_attribute_value $node package-key]
     set instance_name [apm_attribute_value -default "" $node name]
     set context_id [apm_attribute_value -default "" $node context-id]
+    set security_inherit_p [apm_attribute_value -default "t" $node security-inherit-p]
 
     if {$context_id eq ""} {
         set context_id [db_null]
@@ -315,11 +276,59 @@ ad_proc -public install::xml::action::create-package { node } {
         -package_key $package_key \
         -context_id $context_id]
 
+    if {![template::util::is_true $security_inherit_p]} {
+         permission::set_not_inherit -object_id $package_id
+    }
+
     if {![string is space $id]} {
         set ::install::xml::ids($id) $package_id
     }
 
-    return ""
+    return
+}
+
+ad_proc -public install::xml::action::register-parameter { node } {
+    Registers a package parameter.
+
+    <p>&lt;register-parameter name=&quot;<em>parameter</em>&quot; description=&quot;<em>description</em>&quot; package-key=&quot;<em>package-key</em>&quot; default-value=&quot;<em>default-value</em>&quot; datatype=&quot;<em>datatype</em>&quot; [ [ [ section=&quot;<em>section</em>&quot; ] min-n-values=&quot;<em>min-n-values</em>&quot; ] max-n-values=&quot;<em>max-n-values</em>&quot; ] [ callback=&quot;<em>callback</em>&quot; ] [ parameter-id=&quot;<em>parameter-id</em>&quot; ]</p>
+} { 
+    set name [apm_required_attribute_value $node name]
+    set desc [apm_required_attribute_value $node description]
+    set package_key [apm_required_attribute_value $node package-key]
+    set default_value [apm_required_attribute_value $node default-value]
+    set datatype [apm_required_attribute_value $node datatype]
+    set min_n_values [apm_attribute_value -default {} $node min-n-values]
+    set max_n_values [apm_attribute_value -default {} $node max-n-values]
+    set section [apm_attribute_value -default {} $node section]
+    set callback [apm_attribute_value -default {} $node callback]
+    set parameter_id [apm_attribute_value -default {} $node parameter-id]
+
+    set command "apm_parameter_register"
+
+    if {$callback ne ""} {
+        append command " -callback $callback"
+    }
+
+    if {$parameter_id ne ""} {
+        append command " -parameter_id $parameter_id"
+    }
+
+    append command " $name \"$desc\" $package_key $default_value $datatype"
+
+    if {$section ne ""} {
+        append command " $section"
+
+        if {$min_n_values ne ""} {
+            append command " $min_n_values"
+
+            if {$max_n_values ne ""} {
+                append command " $max_n_values"
+            }
+        }
+    }
+
+    eval $command
+    return
 }
 
 ad_proc -public install::xml::action::set-parameter { node } {
@@ -349,7 +358,7 @@ ad_proc -public install::xml::action::set-parameter { node } {
             -value $ids($value)
       }
     }
-    return ""
+    return
 }
 
 ad_proc -public install::xml::action::set-parameter-default { node } {
@@ -365,9 +374,7 @@ ad_proc -public install::xml::action::set-parameter-default { node } {
         -package_key $package_key \
         -parameter $name \
         -value $value
-
-    return ""
-
+    return
 }
 
 ad_proc -public install::xml::action::set-permission { node } {
@@ -399,7 +406,7 @@ ad_proc -public install::xml::action::set-permission { node } {
             }
         }
     }
-    return ""
+    return
 }
 
 ad_proc -public install::xml::action::unset-permission { node } {
@@ -431,7 +438,7 @@ ad_proc -public install::xml::action::unset-permission { node } {
             }
         }
     }
-    return ""
+    return
 }
 
 ad_proc -public install::xml::action::set-join-policy { node } {
@@ -448,7 +455,7 @@ ad_proc -public install::xml::action::set-join-policy { node } {
         set group(join_policy) $join_policy
         group::update -group_id $group_id -array group
     }
-    return ""
+    return
 }
 
 ad_proc -public install::xml::action::create-user { node } {
@@ -463,15 +470,22 @@ ad_proc -public install::xml::action::create-user { node } {
     set first_names [apm_required_attribute_value $node first-names]
     set last_name [apm_required_attribute_value $node last-name]
     set password [apm_required_attribute_value $node password]
+    set salt [apm_attribute_value -default "" $node salt]
     set username [apm_attribute_value -default "" $node username]
     set screen_name [apm_attribute_value -default "" $node screen-name]
     set url [apm_attribute_value -default "" $node url]
     set secret_question [apm_attribute_value -default "" $node secret-question]
     set secret_answer [apm_attribute_value -default "" $node secret-answer]
     set id [apm_attribute_value -default "" $node id]
+    set site_wide_admin_p [apm_attribute_value -default "" $node site-wide-admin]
     set local_p [apm_attribute_value -default 0 $node local-p]
 
     set local_p [template::util::is_true $local_p]
+
+    if {$salt ne ""} {
+      set salt_password $password
+      set password dummy
+    }
 
     if {$local_p} {
         foreach elm [auth::get_all_registration_elements] {
@@ -520,13 +534,30 @@ ad_proc -public install::xml::action::create-user { node } {
     }
 
     if {$result(creation_status) eq "ok"} {
-        if {$id ne "" } {
+        if {[template::util::is_true $site_wide_admin_p]} {
+            permission::grant -object_id [acs_magic_object "security_context_root"] \
+                              -party_id $result(user_id) -privilege "admin"
+        }
+
+        if {$salt ne ""} {
+            set user_id $result(user_id)
+
+            db_dml set_real_passsword {
+                UPDATE users
+                   SET salt = :salt,
+                       password = :salt_password
+                 WHERE user_id = :user_id
+            }
+        }
+              
+        if {$id ne ""} {
             set ::install::xml::ids($id) $result(user_id)
         }
 
         return [list $result(creation_message)]
     } else {
         ns_log error "create-user: $result(creation_status): $result(creation_message)"
+        return
     }
 }
 
@@ -540,7 +571,7 @@ ad_proc -public install::xml::action::add-subsite-member { node } {
     set user_nodes [xml_node_get_children [lindex $node 0]]
 
     foreach node $user_nodes {
-        if {[xml_node_get_name $node] ne "user" } {
+        if {[xml_node_get_name $node] ne "user"} {
             error "Unknown xml element \"[xml_node_get_name $node]\""
         }
 
@@ -548,10 +579,38 @@ ad_proc -public install::xml::action::add-subsite-member { node } {
 
         group::add_member -user_id $user_id \
             -group_id $group_id \
-            -member_state $member_state
+            -member_state $member_state \
+            -no_perm_check
     }
 
-    return {}
+    return
+}
+
+ad_proc -public install::xml::action::add-subsite-admin { node } {
+    Add a member to a subsite's admins group.
+} {
+    set member_state [apm_attribute_value -default "" $node member-state]
+
+    # group id is registered using the package id
+    set package_id [install::xml::object_id::package $node]
+    set group_id [subsite::get_admin_group -package_id $package_id]
+
+    set user_nodes [xml_node_get_children [lindex $node 0]]
+
+    foreach node $user_nodes {
+        if {[xml_node_get_name $node] ne "user"} {
+            error "Unknown xml element \"[xml_node_get_name $node]\""
+        }
+
+        set user_id [::install::xml::object_id::object $node]
+
+        group::add_member -user_id $user_id \
+            -group_id $group_id \
+            -member_state $member_state \
+            -no_perm_check
+    }
+
+    return
 }
 
 ad_proc -public install::xml::action::relation-type { node } {
@@ -577,7 +636,267 @@ ad_proc -public install::xml::action::relation-type { node } {
         $min_n_rels_two \
         $max_n_rels_two
 
-    return {}
+    return
+}
+
+ad_proc -public install::xml::action::relation-add { node } {
+    Create a relation.
+} {
+    set rel_type [apm_required_attribute_value $node rel-type]
+    set object_one [apm_required_attribute_value $node object-one]
+    set object_two [apm_required_attribute_value $node object-two]
+
+    relation_add $rel_type $object_one $object_two
+
+    return
+}
+
+ad_proc -public install::xml::action::ats-page { node } {
+    Creates an ATS Page.
+} {
+    set id [apm_attribute_value -default "" $node id]
+    set package [apm_attribute_value -default "" $node package]
+    set context [apm_attribute_value -default "" $node context]
+    set path [apm_attribute_value $node path]
+
+    if {$context ne ""} {
+        set context [install::xml::util::get_id $context]
+    }
+
+    if {$package ne ""} {
+        set package [install::xml::util::get_id $package]
+    }
+
+    set extension "*"
+    regexp {(.*)\.(.*)} $path match path extension
+
+    set result [db_string get_type_select {
+                              select page_id
+                                from ats_pages
+                              where path = :path} -default ""]
+    if {$result eq ""} {
+        set result [location::ats::create_template -path $path \
+            -extension $extension \
+            -package_id $package \
+            -context_id $context]
+    } 
+
+    if {$id ne ""} {
+        set ::install::xml::ids($id) $result
+    }
+    return
+}
+
+ad_proc -public install::xml::action::location { node } {
+    Creates a url location object.
+} {
+    set id [apm_attribute_value -default "" $node id]
+    set parent [apm_attribute_value -default "" $node parent]
+    set name [apm_attribute_value -default "" $node name]
+    set package [apm_attribute_value -default "" $node package]
+    set context [apm_attribute_value -default "" $node context]
+    set model [apm_attribute_value -default "" $node model]
+    set view [apm_attribute_value -default "" $node view]
+    set controller [apm_attribute_value -default "" $node controller]
+    set path_arg [apm_attribute_value -default "" $node path-arg]
+    set child_arg [apm_attribute_value -default "" $node child-arg]
+    set directory_p [apm_attribute_value -default "t" $node directory-p]
+    set title [apm_attribute_value -default "" $node title]
+
+    if {$parent ne ""} {
+        set parent [install::xml::util::get_id $parent]
+    }
+
+    if {$context ne ""} {
+        set context [install::xml::util::get_id $context]
+    }
+
+    if {$package ne ""} {
+        set package [install::xml::util::get_id $package]
+    }
+
+    if {$model ne ""} {
+        set model [install::xml::util::get_id $model]
+    }
+
+    if {$view ne ""} {
+        set view [install::xml::util::get_id $view]
+    }
+
+    set directory_p [template::util::is_true $directory_p]
+
+    set location_id [location::create -parent_id $parent \
+        -name $name \
+        -title $title \
+        -model_id $model \
+        -view_id $view \
+        -controller $controller \
+        -path_arg $path_arg \
+        -package_id $package \
+        -context_id $context \
+        -directory_p $directory_p]
+
+    set children [xml_node_get_children [lindex $node 0]]
+
+    foreach child $children {
+        switch -exact -- [xml_node_get_name $child] {
+            param {
+                set name [apm_required_attribute_value $child name]
+                set value [apm_attribute_value -default "" $child value]
+                set type [apm_attribute_value -default literal $child type]
+                set subtree_p [apm_attribute_value -default f $child subtree-p]
+                
+                set subtree_p [template::util::is_true $subtree_p]
+
+                if {$type eq "id"} {
+                    set value [install::xml::util::get_id $value]
+                }
+
+                location::parameter::create -location_id $location_id \
+                    -name $name \
+                    -value $value \
+                    -subtree_p $subtree_p
+            }
+            forward {
+                set name [apm_required_attribute_value $child name]
+                set url [apm_required_attribute_value $child url]
+                set exports [apm_attribute_value -default "" $child exports]
+                set subtree_p [apm_attribute_value -default f $child subtree-p]
+                
+                set subtree_p [template::util::is_true $subtree_p]
+
+                location::parameter::create -location_id $location_id \
+                    -name "forward::$name" \
+                    -value $url \
+                    -subtree_p $subtree_p
+
+                if {$exports ne ""} {
+                    location::parameter::create -location_id $location_id \
+                        -name "forward::${name}::exports" \
+                        -value $exports \
+                        -subtree_p $subtree_p
+                }
+            }
+            location {
+                xml_node_set_attribute $child parent $location_id
+
+                if {$child_arg ne ""} {
+                    xml_node_set_attribute $child path-arg $child_arg
+                }
+
+                if {$package ne "" 
+                    && ![xml_node_has_attribute $child package-id]} {
+                    xml_node_set_attribute $child package-id $package
+                }
+
+                if {$context ne "" 
+                    && ![xml_node_has_attribute $child context-id]} {
+                    xml_node_set_attribute $child context-id $parent_id
+                }
+
+                apm_invoke_install_proc -node $child
+            }
+            default {
+                error "Unknown xml element \"[xml_node_get_name $child]\""
+            }
+        }
+    }
+
+    if {$id ne ""} {
+        set ::install::xml::ids($id) $location_id
+    }
+
+    return $location_id
+}
+
+ad_proc -public install::xml::action::wizard { node } {
+    Creates a wizard using the subtags for each step.
+} {
+    set id [apm_attribute_value -default "" $node id]
+    set name [apm_attribute_value -default "" $node name]
+    set package [apm_attribute_value -default "" $node package]
+    set context [apm_attribute_value -default "" $node context]
+    set title [apm_attribute_value -default "" $node title]
+    set child_arg [apm_attribute_value -default "" $node child-arg]
+    set process [apm_attribute_value -default "" $node process]
+    
+    if {$context ne ""} {
+        set context [install::xml::util::get_id $context]
+    }
+
+    if {$package ne ""} {
+        set package [install::xml::util::get_id $package]
+    }
+
+    set parent_id [location::create -parent_id "" \
+        -name $name \
+        -title $title \
+        -model_id "" \
+        -view_id "" \
+        -controller "" \
+        -path_arg "" \
+        -package_id $package \
+        -context_id $context]
+    
+    if {$process ne ""} {
+        location::parameter::create -location_id $parent_id \
+            -name "wizard::process" \
+            -subtree_p t \
+            -value $process
+    }
+    
+    set steps [xml_node_get_children [lindex $node 0]]
+
+    foreach step $steps {
+        if {[xml_node_get_name $step] ne "step"} {
+            error "Unknown xml element \"[xml_node_get_name $step]\""
+        }
+
+        set step_export [apm_attribute_value -default "" $step exports]
+        set step_export_proc [apm_attribute_value -default "" $step exports-proc]
+
+        xml_node_set_attribute $step parent $parent_id
+
+        if {$child_arg ne ""} {
+            xml_node_set_attribute $step path-arg $child_arg
+        }
+
+        if {$package ne "" 
+            && ![xml_node_has_attribute $step package-id]} {
+            xml_node_set_attribute $step package-id $package
+        }
+
+        if {$context ne "" 
+            && ![xml_node_has_attribute $step context-id]} {
+            xml_node_set_attribute $step context-id $parent_id
+        }
+
+        set directory_p [apm_attribute_value -default f $step directory-p]
+        xml_node_set_attribute $step directory-p \
+            [template::util::is_true $directory_p]
+
+        set step_id [::install::xml::action::location $step]
+
+        if {$step_export ne ""} {
+            location::parameter::create -location_id $step_id \
+                -name "wizard::exports" \
+                -subtree_p t \
+                -value $step_export
+        }
+
+        if {$step_export_proc ne ""} {
+            location::parameter::create -location_id $step_id \
+                -name "wizard::exports::proc" \
+                -subtree_p t \
+                -value $step_export_proc
+        }
+    }
+
+    if {$id ne ""} {
+        set ::install::xml::ids($id) $parent_id
+    }
+
+    return $parent_id
 }
 
 ad_proc -public install::xml::object_id::package { node } {
@@ -638,7 +957,7 @@ ad_proc -public install::xml::object_id::group { node } {
 
     if {$group_type eq "group"} {
         return $group_id
-    } elseif {$group_type eq "rel_segment"} {
+    } elseif {$group_type ne "rel_segment"} {
         return [group::get_rel_segment -group_id $group_id -type $relation_type]
     }
 }
@@ -647,7 +966,7 @@ ad_proc -public install::xml::object_id::application-group { node } {
     Returns an object_id for an application group or relational segment of
     a given package.
 
-    The node name is ignored so any node which provides the correct 
+    The node name is ignored so any node which provides the correct
     attributes may be used.
 
 } {
@@ -657,13 +976,25 @@ ad_proc -public install::xml::object_id::application-group { node } {
     set package_id [::install::xml::object_id::package $node]
 
     set group_id [application_group::group_id_from_package_id \
-        -package_id $package_id] 
+        -package_id $package_id]
 
     if {$group_type eq "group"} {
         return $group_id
     } elseif {$group_type eq "rel_segment"} {
         return [group::get_rel_segment -group_id $group_id -type $relation_type]
     }
+}
+
+ad_proc -public install::xml::object_id::member-group { node } {
+} {
+    set package_id [::install::xml::object_id::package $node]
+    return [subsite::get_member_group -package_id $package_id]
+}
+
+ad_proc -public install::xml::object_id::admin-group { node } {
+} {
+    set package_id [::install::xml::object_id::package $node]
+    return [subsite::get_admin_group -package_id $package_id]
 }
 
 ad_proc -public install::xml::object_id::object { node } {
@@ -680,6 +1011,16 @@ ad_proc -public install::xml::object_id::object { node } {
     }
 }
 
+ad_proc -public ::install::xml::action::set-id { node } {
+    set a name/id pair for use in other install xml things
+} {
+    set name  [apm_required_attribute_value $node name]
+    set value [apm_required_attribute_value $node value]
+
+    variable ::install::xml::ids
+    set ids($name) $value
+}
+    
 ad_proc -public install::xml::util::get_id { id } {
     Returns an id from the global ids variable if it exists and attempts to
     find an acs_magic_object if not.
@@ -687,13 +1028,15 @@ ad_proc -public install::xml::util::get_id { id } {
     variable ::install::xml::ids
 
     if {[catch {
-        if {[info exists ids($id)]} {
+        if {[string is integer $id]} {
+            set result $id
+        } elseif {[info exists ids($id)]} {
             set result $ids($id)
         } else {
             set result [acs_magic_object $id]
         }
     } err]} {
-        error "$id is not defined in this install.xml and is not an acs_magic_object"
+        error "$id is not an integer, is not defined in this install.xml, and is not an acs_magic_object"
     }
     
     return $result
