@@ -254,7 +254,12 @@ ad_proc -private apm_dependency_check {
 	    array set package [apm_read_package_info_file $spec_file]
 	    if { ([string equal $package(initial-install-p) "t"] || !$initial_install_p) && \
                     [apm_package_supports_rdbms_p -package_key $package(package.key)] } {
-                lappend install_pend [pkg_info_new $package(package.key) $spec_file $package(extends) $package(provides) $package(requires) ""]
+                lappend install_pend [pkg_info_new \
+                                         $package(package.key) \
+                                         $spec_file $package(extends) \
+                                         $package(provides) \
+                                         $package(requires) \
+                                         ""]
             }
 
             # Remove this package from the pkg_info_all list ...
@@ -310,9 +315,14 @@ ad_proc -private apm_dependency_check {
                 }
                 if { $satisfied_p } {
                     # At least one more package was added to the list that can be installed, so repeat.
-                    lappend install_in [pkg_info_new [pkg_info_key $pkg_info] [pkg_info_spec $pkg_info] \
-                            [pkg_info_extends $pkg_info] [pkg_info_provides $pkg_info] [pkg_info_requires $pkg_info] \
-                            "t" "Package satisfies dependencies."]
+                    lappend install_in [pkg_info_new \
+                                           [pkg_info_key $pkg_info] \
+                                           [pkg_info_spec $pkg_info] \
+                                           [pkg_info_extends $pkg_info] \
+                                           [pkg_info_provides $pkg_info] \
+                                           [pkg_info_requires $pkg_info] \
+                                           "t" \
+                                           "Package satisfies dependencies."]
                     set updated_p 1
                 }
             }
@@ -643,6 +653,72 @@ ad_proc -private apm_load_catalog_files {
 }
 
 namespace eval apm {}
+
+ad_proc -public apm_simple_package_install {
+    package_key
+} {
+    Simple basic package install function.  Wraps up
+    basically what the old install xml action did.
+} {
+    set package_info_path "[acs_root_dir]/packages/${package_key}/*.info"
+
+    set install_spec_files [list]
+    foreach install_spec_file [glob -nocomplain $package_info_path] {
+        if { [catch { 
+            array set package [apm_read_package_info_file $install_spec_file]
+        } errmsg] } {
+            # Unable to parse specification file.
+            error "install: $install_spec_file could not be parsed correctly.  The error: $errmsg"
+            return
+        }
+
+        if { [apm_package_supports_rdbms_p -package_key $package(package.key)]
+             && ![apm_package_installed_p $package(package.key)] } {
+            lappend install_spec_files $install_spec_file
+        }
+    }
+
+    set pkg_info_list [list]
+    foreach spec_file [glob -nocomplain "[acs_root_dir]/packages/*/*.info"] {
+        # Get package info, and find out if this is a package we should install
+        if { [catch { 
+            array set package [apm_read_package_info_file $spec_file] 
+        } errmsg] } {
+            # Unable to parse specification file.
+            error "install: $spec_file could not be parsed correctly.  The error: $errmsg"
+        }
+
+        if { [apm_package_supports_rdbms_p -package_key $package(package.key)]
+             && ![apm_package_installed_p $package(package.key)] } {
+            # Save the package info, we may need it for dependency 
+            # satisfaction later
+            lappend pkg_info_list [pkg_info_new $package(package.key) \
+                $spec_file \
+                $package(extends) \
+                $package(provides) \
+                $package(requires) \
+                ""]
+        }
+    }
+
+    if { [llength $install_spec_files] > 0 } {
+        set dependency_results [apm_dependency_check \
+            -pkg_info_all $pkg_info_list \
+            $install_spec_files]
+
+        if { [lindex $dependency_results 0] == 1 } {
+            apm_packages_full_install -callback apm_ns_write_callback \
+                [lindex $dependency_results 1]
+        } else {
+            foreach package_spec [lindex $dependency_results 1] {
+                if {[string is false [pkg_info_dependency_p $package_spec]]} {
+                    append err_out "install: package \"[pkg_info_key $package_spec]\"[join [pkg_info_comment $package_spec] ","]\n"
+                }
+            }
+            error $err_out
+        }
+    }
+}
 
 ad_proc -private apm_package_install { 
     {-enable:boolean}
@@ -2048,34 +2124,6 @@ ad_proc -private apm_load_install_xml {filename binds} {
     set root_node [xml_doc_get_first_node [xml_parse -persist ${__the_body__}]]
     return $root_node
 }
-
-ad_proc -private ::install::xml::action::community-new { node } {
-    Include another install file to create a community.
-
-    see cop-base/lib/install.xml for an example.
-
-    @author Jeff Davis davis@xarg.net
-    @creation-date 2004-07-28
-
-} {
-    set src [apm_required_attribute_value $node src]
-
-    set base_url [apm_required_attribute_value $node base_url]
-    set name [apm_required_attribute_value $node name]
-    set Description [apm_attribute_value -default {} $node Description]
-    set DescriptionFormat [apm_attribute_value -default "text/plain" $node DescriptionFormat]
-
-    set binds [list \
-                   base_url $base_url \
-                   name $name \
-                   Description $Description \
-                   DescriptionFormat $DescriptionFormat \
-                   ]
-
-    set out [apm::process_install_xml -nested $src $binds]
-    return $out 
-}
-
 
 ad_proc -public apm::process_install_xml {
     -nested:boolean
