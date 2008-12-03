@@ -58,14 +58,6 @@
       </querytext>
 </fullquery>
 
-    <fullquery name="subsite::package_keys.get_keys">
-        <querytext>
-
-        select package_key from apm_package_versions where subsite_p = 't' and enabled_p = 't'
-
-        </querytext>
-    </fullquery>
-
     <fullquery name="subsite::get_url.get_vhost">
         <querytext>
 
