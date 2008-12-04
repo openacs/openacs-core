@@ -340,7 +340,7 @@ ad_proc -private apm_dependency_check {
 
             foreach pkg_info $install_pend {
                 set satisfied_p 1
-                foreach req [pkg_info_requires $pkg_info] {
+                foreach req [concat [pkg_info_extends $pkg_info] [pkg_info_requires $pkg_info]] {
                     set counter 0
                     foreach pkg_info_add $pkg_info_all {
                         # Will this package do anything to change whether this requirement has been satisfied?
