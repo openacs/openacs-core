@@ -899,6 +899,105 @@ ad_proc -public install::xml::action::wizard { node } {
     return $parent_id
 }
 
+ad_proc -private ::install::xml::action::call-tcl-proc { node } {
+
+    Call an arbitrary Tcl library procedure.
+
+    Parameters which have a name are called using the "-param" syntax. If there's
+    no name given, the value is passed directly as a positional parameter.  It is the
+    user's responsibility to list all named parameters before any positional parameter
+    (as is necessary if the proc is declared using ad_proc).
+
+    If a named parameter has an XML attribute declaring its type to be boolean, and the
+    value is blank, the switch is passed without a value.  Otherwise, the boolparam=value
+    syntax is used.
+
+    You can cheat and use this to execute arbitrary Tcl code if you dare, since Tcl
+    commands are just procs ...
+
+    @author Don Baccus donb@pacifier.com
+    @creation-date 2008-12-04
+
+} {
+    set cmd [list [apm_required_attribute_value $node name]]
+
+    set params [xml_node_get_children [lindex $node 0]]
+    foreach param $params {
+        if {[xml_node_get_name $param] ne "param"} {
+            error "Unknown xml element \"[xml_node_get_name $param]\""
+        }
+
+        set name [apm_attribute_value -default {} $param name]
+        set id [apm_attribute_value -default {} $param id]
+        set value [apm_attribute_value -default {} $param value]
+        set type [apm_attribute_value -default {} $param type]
+
+        if {$id ne ""} {
+            set value [install::xml::util::get_id $id]
+        }
+
+        if { $name ne "" && $type eq "boolean" } {
+            if { $value ne "" } {
+                lappend cmd -${name}=$value
+            } else {
+                lappend cmd -$name
+            }
+        } else {
+            if { $name ne "" } {
+                lappend cmd -$name
+            }
+            lappend cmd $value
+        }
+    }
+
+    set result [eval $cmd]
+    set id [apm_attribute_value -default "" $node id]
+    if {$id ne ""} {
+        set ::install::xml::ids($id) $result
+    }
+    return
+}
+
+
+ad_proc -private ::install::xml::action::instantiate-object { node } {
+
+    Instantiate an object using package_instantiate_object.  This will work
+    for both PostgreSQL and Oracle if the proper object package and new()
+    function have been defined.
+    
+    @author Don Baccus donb@pacifier.com
+    @creation-date 2008-12-04
+
+} {
+    set type [apm_required_attribute_value $node type]
+
+    set params [xml_node_get_children [lindex $node 0]]
+    set var_list {}
+    foreach param $params {
+        if {[xml_node_get_name $param] ne "param"} {
+            error "Unknown xml element \"[xml_node_get_name $param]\""
+        }
+
+        set name [apm_required_attribute_value $param name]
+        set id [apm_attribute_value -default {} $param id]
+        set value [apm_attribute_value -default {} $param value]
+
+        if {$id ne ""} {
+            set value [install::xml::util::get_id $id]
+        }
+
+        lappend var_list [list $name $value]
+    }
+
+    set object_id [package_instantiate_object -var_list $var_list $type]
+
+    set id [apm_attribute_value -default "" $node id]
+    if {$id ne ""} {
+        set ::install::xml::ids($id) $object_id
+    }
+    return
+}
+
 ad_proc -public install::xml::object_id::package { node } {
     Returns an object_id for a package specified in node.
 
