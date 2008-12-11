@@ -32,31 +32,50 @@ ad_proc -public template::widget::select_locales {
     }
     array set attributes $tag_attributes
 
-    append output "<select name=\"$element(name)\" id=\"$element(name)\" "
+    if { $element(mode) ne "edit" } {
+        set selected_list [list]
 
-    foreach name [array names attributes] {
-        if {$attributes($name) eq {}} {
-            append output " $name=\"$name\""
-        } else {
-            append output " $name=\"$attributes($name)\""
-        }
-    }
-    append output ">\n"
+        foreach option $element(options) {
 
-    foreach option $element(options) {
+            set label [lindex $option 0]
+            set value [lindex $option 1]
 
-        set label [lindex $option 0]
-        set value [lindex $option 1]
-
-        set value [template::util::quote_html $value]
-        append output " <option lang=\"[string range $value 0 1]\" value=\"$value\""
-        if { [info exists values($value)] } {
-            append output " selected=\"selected\""
+            if { [info exists values($value)] } {
+                lappend selected_list $label
+                append output "<input type=\"hidden\" name=\"$element(name)\" value=\"[ad_quotehtml $value]\">"
+            }
         }
 
-        append output ">$label</option>\n"
+        append output [join $selected_list ", "]
+
+    } else {
+
+        append output "<select name=\"$element(name)\" id=\"$element(name)\" "
+
+        foreach name [array names attributes] {
+            if {$attributes($name) eq {}} {
+                append output " $name=\"$name\""
+            } else {
+                append output " $name=\"$attributes($name)\""
+            }
+        }
+        append output ">\n"
+
+        foreach option $element(options) {
+
+            set label [lindex $option 0]
+            set value [lindex $option 1]
+
+            set value [template::util::quote_html $value]
+            append output " <option lang=\"[string range $value 0 1]\" value=\"$value\""
+            if { [info exists values($value)] } {
+                append output " selected=\"selected\""
+            }
+
+            append output ">$label</option>\n"
+        }
+        append output "</select>"
     }
-    append output "</select>"
 
     return $output
 
