@@ -1420,16 +1420,34 @@ ad_proc -private security::get_https_port {} {
 
     @author Peter Marklund
 } {
-    set ssl_port ""
-    if { [ns_config ns/server/[ns_info server]/modules nsssl] != "" } {
-        set ssl_port [ns_config -int "ns/server/[ns_info server]/module/nsssl" Port 443]
-    } elseif { [ns_config ns/server/[ns_info server]/modules nsopenssl] != "" } {
-	set ssl_port [ns_config -int "ns/server/[ns_info server]/module/nsopenssl" ServerPort 443]
-    } elseif { [ns_config ns/server/[ns_info server]/modules nsssle] != "" } {
-        set ssl_port [ns_config -int "ns/server/[ns_info server]/module/nsssle" Port 443]
+    set secure_port ""
+
+   # decide if we are using nsssl or nsopenssl or nsssle, favor nsopenssl
+    set nsssl [ns_config ns/server/[ns_info server]/modules nsssl]
+    set nsopenssl [ns_config ns/server/[ns_info server]/modules nsopenssl]
+    set nsssle [ns_config ns/server/[ns_info server]/modules nsssle]
+    if { $nsssl ne "" && $nsopenssl ne "" } {
+        set sdriver [parameter::get_from_package_key -package_key ecommerce -parameter httpsModule -default nsopenssl]
+    } elseif { $nsopenssl ne "" } {
+        set sdriver nsopenssl
+    } elseif { $nsssl ne "" } {
+        set sdriver nsssl
+    } else {
+        set sdriver nsssle
+    }
+     # ec_secure_location
+    # nsopenssl 3 has variable locations for the secure port, openacs standardized at:
+    set secure_port [ns_config -int "ns/server/[ns_info server]/module/$sdriver/ssldriver/users" port 443]
+    # nsssl, nsssle etc
+    if {$secure_port eq ""} {
+        set secure_port [ns_config -int "ns/server/[ns_info server]/module/$sdriver" port]
+    }
+    # checking nsopenssl 2.0 which has different names for the secure port etc, and is not supported with this version of OpenACS
+    if {$secure_port eq "" || $secure_port eq "443"} {
+        set secure_port [ns_config -int "ns/server/[ns_info server]/module/$sdriver" ServerPort 443]
     }
 
-    return $ssl_port
+    return $secure_port
 }
 
 ad_proc -private security::get_secure_qualified_url { url } {
@@ -1573,10 +1591,16 @@ ad_proc -public security::locations {} {
     # decide if we are using nsssl or nsopenssl, favor nsopenssl
     set nsssl [ns_config ns/server/[ns_info server]/modules nsssl]
     set nsopenssl [ns_config ns/server/[ns_info server]/modules nsopenssl]
-    if {$nsssl ne ""} {
+    set nsssle [ns_config ns/server/[ns_info server]/modules nsssle]
+    if { $nsssl ne "" && $nsopenssl ne ""} {
+        # ecommerce has a long standing special case with a parameter, so must be considered here.
+        set sdriver [parameter::get_from_package_key -package_key ecommerce -parameter httpsModule -default nsopenssl]
+    } elseif { $nsopenssl ne ""} {
+        set sdriver nsopenssl
+    } elseif { $nsssl ne ""} {
         set sdriver nsssl
     } else {
-        set sdriver nsopenssl
+        set sdriver nsssle
     }
 
     # set the driver results
@@ -1588,27 +1612,35 @@ ad_proc -public security::locations {} {
     # secure url from this host name we need to replace the port with
     # the secure port
     set host_post ""
+
+    # set host_name
     if {![regexp {(http://|https://)(.*?):(.*?)/?} [util_current_location] discard host_protocol host_name host_port]} {
-        [regexp {(http://|https://)(.*?)/?} [util_current_location] discard host_protocol host_name]
+        regexp {(http://|https://)(.*?)/?} [util_current_location] discard host_protocol host_name
     }
-    # following from ec_insecure_location
+    # let's give a warning if util_current_location returns host_name not same as from config.tcl, may help with proxy issues etc
+    if {[ns_config ns/server/[ns_info server]/module/$driver Hostname] ne $host_name } {
+        ns_log Warning "security::locations host_name from config.tcl does not match from util_current_location: $host_name"
+    }
+
+    # insecure locations
     set insecure_port [ns_config -int "ns/server/[ns_info server]/module/$driver" port 80]
 
     set insecure_location "http://${host_name}"
-    if {$insecure_port ne "" && $insecure_port ne 80}  {
+    if { $insecure_port ne "" && $insecure_port ne 80 } {
         set alt_insecure_location $insecure_location
         append insecure_location ":$insecure_port"
     }
 
-    # ec_secure_location
-    set secure_port [ns_config -int "ns/server/[ns_info server]/module/$sdriver" port]
-    # nsopenssl 2.0 has different names for the secure port
+    # secure location, favoring nsopenssl
+    # nsopenssl 3 has variable locations for the secure port, openacs standardized at:
+    set secure_port [ns_config -int "ns/server/[ns_info server]/module/$sdriver/ssldriver/users" port 443]
+    # nsssl, nsssle etc
     if {$secure_port eq ""} {
-        set secure_port [ns_config -int "ns/server/[ns_info server]/module/$sdriver" ServerPort 443]
+        set secure_port [ns_config -int "ns/server/[ns_info server]/module/$sdriver" port]
     }
-    # nsopenssl 3 has variable locations for the secure port
+    # checking nsopenssl 2.0 which has different names for the secure port etc, and is not supported with this version of OpenACS
     if {$secure_port eq "" || $secure_port eq "443"} {
-        set secure_port [ns_config -int "ns/server/[ns_info server]/module/$sdriver/ssldriver/users" port 443]
+        set secure_port [ns_config -int "ns/server/[ns_info server]/module/$sdriver" ServerPort 443]
     }
 
     set secure_location "https://${host_name}"
