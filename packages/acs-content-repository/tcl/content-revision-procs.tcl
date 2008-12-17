@@ -136,7 +136,11 @@ ad_proc -public ::content::revision::new {
                     (revision_id, object_type, creation_user, creation_date, creation_ip, title, description, item_id, object_package_id, mime_type $attribute_names)
             values (:revision_id, :content_type, :creation_user, :creation_date, :creation_ip, :title, :description, :item_id, :package_id, :mime_type $attribute_values)"
     db_transaction {
-        db_dml lock_objects "LOCK TABLE acs_objects IN SHARE ROW EXCLUSIVE MODE"
+        # An explict lock was necessary for PostgreSQL between 8.0 and
+        # 8.2; left the following statement here for documentary purposes
+        #
+        # db_dml lock_objects "LOCK TABLE acs_objects IN SHARE ROW EXCLUSIVE MODE"
+
         if {$revision_id eq ""} {
 	    set revision_id [db_nextval "acs_object_id_seq"]
 	}
