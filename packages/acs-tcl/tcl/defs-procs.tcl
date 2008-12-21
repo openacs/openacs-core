@@ -43,20 +43,20 @@ ad_proc -public ad_host_administrator {} {
 
     @return The e-mail address of a technical person who can fix problems
 } {
-    return [ad_parameter -package_id [ad_acs_kernel_id]  HostAdministrator]
+    return [parameter::get -package_id [ad_acs_kernel_id] -parameter HostAdministrator]
 }
 
 ad_proc -public ad_outgoing_sender {} {
     @return The email address that will sign outgoing alerts
 } {
-    return [ad_parameter -package_id [ad_acs_kernel_id] OutgoingSender]
+    return [parameter::get -package_id [ad_acs_kernel_id] -parameter OutgoingSender]
 }
 
 ad_proc -public ad_system_name {} {
     This is the main name of the Web service that you're offering
     on top of the OpenACS Web Publishing System.
 } {
-    return [ad_parameter -package_id [ad_acs_kernel_id] SystemName]
+    return [parameter::get -package_id [ad_acs_kernel_id] -parameter SystemName]
 }
 
 
@@ -64,7 +64,7 @@ ad_proc -public ad_pvt_home {} {
     This is the URL of a user's private workspace on the system, usually
     [subsite]/pvt/home.tcl
 } {
-    return "[subsite::get_element -element url -notrailing][ad_parameter -package_id [ad_acs_kernel_id] HomeURL]"
+    return "[subsite::get_element -element url -notrailing][parameter::get -package_id [ad_acs_kernel_id] -parameter HomeURL]"
 }
 
 ad_proc -public ad_admin_home {} {
@@ -85,7 +85,7 @@ ad_proc -public ad_pvt_home_name {} {
     This is the name that will be used for the user's workspace (usually "Your Workspace").
     @return the name especified for the user's workspace in the HomeName kernel parameter.
 } {
-    return [lang::util::localize [ad_parameter -package_id [ad_acs_kernel_id] HomeName]]
+    return [lang::util::localize [parameter::get -package_id [ad_acs_kernel_id] -parameter HomeName]]
 }
 
 ad_proc -public ad_pvt_home_link {} {
@@ -109,7 +109,7 @@ ad_proc -public ad_system_owner {} {
     Person who owns the service 
     this person would be interested in user feedback, etc.
 } {
-    return [ad_parameter -package_id [ad_acs_kernel_id]  SystemOwner]
+    return [parameter::get -package_id [ad_acs_kernel_id] -parameter SystemOwner]
 }
 
 
@@ -117,21 +117,21 @@ ad_proc -public ad_publisher_name {} {
     A human-readable name of the publisher, suitable for
     legal blather.
 } {
-    return [ad_parameter -package_id [ad_acs_kernel_id]  PublisherName]
+    return [parameter::get -package_id [ad_acs_kernel_id] -parameter PublisherName]
 }
 
 ad_proc -public ad_url {} {
     This will be called by email alerts. Do not use ad_conn location
     @return the system url as defined in the kernel parameter SystemURL.
 } {
-    return [ad_parameter -package_id [ad_acs_kernel_id] SystemURL]
+    return [parameter::get -package_id [ad_acs_kernel_id] -parameter SystemURL]
 }
 
 ad_proc -public acs_community_member_page {} {
     @return the url for the community member page
 } {
-    return "[subsite::get_element -element url -notrailing][ad_parameter \
-	    -package_id [ad_acs_kernel_id] CommunityMemberURL]"
+    return "[subsite::get_element -element url -notrailing][parameter::get \
+	    -package_id [ad_acs_kernel_id] -parameter CommunityMemberURL]"
 }
 
 ad_proc -public acs_community_member_url {
@@ -256,8 +256,8 @@ $extra_stuff_for_document_head
 
     array set attrs [list]
 
-    set attrs(bgcolor) [ad_parameter -package_id [ad_acs_kernel_id]  bgcolor "" "white"]
-    set attrs(text) [ad_parameter -package_id [ad_acs_kernel_id]  textcolor "" "black"]
+    set attrs(bgcolor) [parameter::get -package_id [ad_acs_kernel_id] -parameter bgcolor -default "white"]
+    set attrs(text)    [parameter::get -package_id [ad_acs_kernel_id] -parameter textcolor -default "black"]
 
     if { $focus ne "" } {
 	set attrs(onLoad) "javascript:document.${focus}.focus()"
@@ -294,7 +294,7 @@ ad_proc -deprecated ad_footer {
     } else {
 	set extra_br ""
     }
-    if { [ad_parameter -package_id [ad_acs_kernel_id]  EnabledP curriculum 0] && [ad_parameter -package_id [ad_acs_kernel_id]  StickInFooterP curriculum 0] && !$suppress_curriculum_bar_p} {
+    if { [parameter::get -package_id [ad_acs_kernel_id] -parameter EnabledP -default 0] && [parameter::get -package_id [ad_acs_kernel_id] -parameter StickInFooterP -default 0] && !$suppress_curriculum_bar_p} {
 	set curriculum_bar "<center>[curriculum_bar]</center>"
     } else {
 	set curriculum_bar ""
@@ -325,7 +325,7 @@ $ds_link
 ad_proc -public ad_admin_owner {} {
     @return E-mail address of the Administrator of this site.
 } {
-    return [ad_parameter -package_id [ad_acs_kernel_id]  AdminOwner]
+    return [parameter::get -package_id [ad_acs_kernel_id] -parameter AdminOwner]
 }
 
 ad_proc -deprecated ad_admin_header {
@@ -745,7 +745,7 @@ ad_proc -public ad_parameter_all_values_as_list {
     Returns multiple values for a parameter as a list.
 
 } {  
-    return [join [ad_parameter -package_id $package_id $name $subsection] " "]
+    return [join [parameter::get -package_id $package_id -parameter $name ] " "]
 }
 
 ad_proc doc_return {args} {
