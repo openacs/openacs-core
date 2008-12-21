@@ -577,7 +577,7 @@ ad_proc -private rp_filter { why } {
 
     set acs_kernel_id [util_memoize ad_acs_kernel_id]
     if { $root eq "" 
-         && [ad_parameter -package_id $acs_kernel_id ForceHostP request-processor 0] } { 
+         && [parameter::get -package_id $acs_kernel_id -parameter ForceHostP -default 0] } { 
         set host_header [ns_set iget [ns_conn headers] "Host"]
         regexp {^([^:]*)} $host_header "" host_no_port
         regexp {^https?://([^:]+)} [ns_conn location] "" desired_host_no_port
@@ -711,12 +711,12 @@ ad_proc -private rp_debug { { -debug f } { -ns_log_level notice } string } {
     timestamp. 
 
 } {
-    if { [ad_parameter -package_id [ad_acs_kernel_id] DebugP request-processor 0] } { 
+    if { [parameter::get -package_id [ad_acs_kernel_id] -parameter DebugP -default 0] } { 
         global ad_conn
         set clicks [clock clicks -milliseconds]
         ds_add rp [list debug $string $clicks $clicks]
     }
-    if { [ad_parameter -package_id [ad_acs_kernel_id] LogDebugP request-processor 0]
+    if { [parameter::get -package_id [ad_acs_kernel_id] -parameter LogDebugP -default 0]
          || $debug eq "t" 
          || $debug eq "1"
      } {
@@ -762,7 +762,7 @@ ad_proc rp_report_error {
     #Serve the stacktrace
     set params [list [list stacktrace $message] [list user_id $user_id] [list error_file $error_file] [list prev_url $prev_url] [list feedback_id $feedback_id] [list error_url $error_url] [list bug_package_id $bug_package_id] [list vars_to_export $vars_to_export]]
     
-    if {![ad_parameter -package_id [ad_acs_kernel_id] "RestrictErrorsToAdminsP" dummy 0] || \
+    if {![parameter::get -package_id [ad_acs_kernel_id] -parameter RestrictErrorsToAdminsP -default 0] || \
             [permission::permission_p -object_id [ad_conn package_id] -privilege admin] } {
     }
     
@@ -1069,7 +1069,7 @@ ad_proc -private rp_concrete_file {
   set files [glob -nocomplain "$path_glob$extension_pattern"]
 
   # Search for files in the order specified in ExtensionPrecedence.
-  set precedence [ad_parameter -package_id [ad_acs_kernel_id] "ExtensionPrecedence" "request-processor" "tcl"]
+  set precedence [parameter::get -package_id [ad_acs_kernel_id] -parameter ExtensionPrecedence -default tcl]
   foreach extension [split [string trim $precedence] ","] {
     if { [lsearch -glob $files "*.$extension"] != -1 } {
       return "$path.$extension"
