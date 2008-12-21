@@ -12,11 +12,11 @@
 
 set pkg_id [apm_package_id_from_key acs-templating]
 
-if { [ad_parameter -package_id $pkg_id ShowCompiledTemplatesP dummy 0] } {
+if { [parameter::get -package_id $pkg_id -parameter ShowCompiledTemplatesP -default 0] } {
   ad_register_filter postauth GET *.cmp cmp_page_filter
 }
 
-if { [ad_parameter -package_id $pkg_id ShowDataDictionariesP  dummy 0] } {
+if { [parameter::get -package_id $pkg_id -parameter ShowDataDictionariesP -default 0] } {
   ad_register_filter postauth GET *.dat dat_page_filter
   ad_register_filter postauth GET *.frm frm_page_filter
 }

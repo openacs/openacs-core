@@ -60,8 +60,8 @@ template_tag master { params } {
 
   # default to the site-wide master
   if {$src eq ""} {
-    set src "\[ad_parameter -package_id \[ad_conn subsite_id\]\
-             DefaultMaster dummy \"/www/default-master\"\]"
+    set src "\[parameter::get -package_id \[ad_conn subsite_id\]\
+             -parameter DefaultMaster -default \"/www/default-master\"\]"
   }
   
   template::adp_append_code "
