@@ -7,14 +7,14 @@
 # Make sure we do the setup only once
 if { ![nsv_exists ds_properties enabled_p] } {
     ad_register_filter -critical t -priority 999999 trace * /* ds_trace_filter
-    ad_schedule_proc [ad_parameter -package_id [ds_instance_id] DataSweepInterval acs-developer-support 900] ds_sweep_data
+    ad_schedule_proc [parameter::get -package_id [ds_instance_id] -parameter DataSweepInterval -default 900] ds_sweep_data
     nsv_array set ds_request [list]
 
-    nsv_set ds_properties enabled_p [ad_parameter -package_id [ds_instance_id] EnabledOnStartupP acs-developer-support 0]
+    nsv_set ds_properties enabled_p [parameter::get -package_id [ds_instance_id] -parameter EnabledOnStartupP -default 0]
 
     # Take the IP list (space or comma seperated) and turn it into a tcl list.
     set IPs [list]
-    foreach ip [lsort -unique [split [ad_parameter -package_id [ds_instance_id] EnabledIPs acs-developer-support *] { ,}]] { 
+    foreach ip [lsort -unique [split [parameter::get -package_id [ds_instance_id] -parameter EnabledIPs -default *] { ,}]] { 
         if {[string equal $ip "*"]} {
             # a star means anything will match so just use the * instead
             set IPs "*"
@@ -26,13 +26,13 @@ if { ![nsv_exists ds_properties enabled_p] } {
     nsv_set ds_properties enabled_ips $IPs
 
 
-    nsv_set ds_properties database_enabled_p [ad_parameter -package_id [ds_instance_id] DatabaseEnabledP developer-support 0]
+    nsv_set ds_properties database_enabled_p [parameter::get -package_id [ds_instance_id] -parameter DatabaseEnabledP -default 0]
 
-    nsv_set ds_properties adp_reveal_enabled_p [ad_parameter -package_id [ds_instance_id] AdpRevealEnabledP developer-support 0]
+    nsv_set ds_properties adp_reveal_enabled_p [parameter::get -package_id [ds_instance_id] -parameter AdpRevealEnabledP -default 0]
 
-    nsv_set ds_properties page_fragment_cache_p [ad_parameter -package_id [ds_instance_id] PageFragmentCacheP developer-support 0]
+    nsv_set ds_properties page_fragment_cache_p [parameter::get -package_id [ds_instance_id] -parameter PageFragmentCacheP -default 0]
 
-    ds_set_user_switching_enabled [ad_parameter -package_id [ds_instance_id] UserSwitchingEnabledP acs-developer-support 0]
+    ds_set_user_switching_enabled [parameter::get -package_id [ds_instance_id] -parameter UserSwitchingEnabledP -default 0]
 
     # JCD: used to cache rendered page bits.  cap at 10mb for now.
     ns_cache create ds_page_bits -size 10000000

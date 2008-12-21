@@ -58,8 +58,8 @@ set requests [nsv_array names ds_request]
 append body "
 </ul>
 
-<li>Information is being swept every [ad_parameter DataSweepInterval "developer-support" 900] sec
-and has a lifetime of [ad_parameter DataLifetime "developer-support" 900] sec
+<li>Information is being swept every [parameter::get -parameter DataSweepInterval -default 900] sec
+and has a lifetime of [parameter::get -parameter DataLifetime -default 900] sec
 
 <li><a href=\"/shared/parameters?[export_vars { package_id { return_url {[ad_return_url]} } }]\">Set package parameters</a>
 

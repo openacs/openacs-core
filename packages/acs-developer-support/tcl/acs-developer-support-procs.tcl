@@ -216,7 +216,7 @@
              }
          }
 
-         if { [ad_parameter -package_id [ds_instance_id] ShowCommentsInlineP acs-developer-support 0] } {
+         if { [parameter::get -package_id [ds_instance_id] -parameter ShowCommentsInlineP -default 0] } {
              append out "Comments: <b>On</b> | <a href=\"[export_vars -base "${ds_url}comments-toggle" { { return_url [ad_return_url] } }]\">Off</a><br>"
              if { [nsv_exists ds_request "$ad_conn(request).comment"] } {
                  foreach comment [nsv_get ds_request "$ad_conn(request).comment"] {
@@ -373,7 +373,7 @@
 
  ad_proc -private ds_sweep_data {} {
      set now [ns_time]
-     set lifetime [ad_parameter -package_id [ds_instance_id] DataLifetime acs-developer-support 900]
+     set lifetime [parameter::get -package_id [ds_instance_id] -parameter DataLifetime -default 900]
 
      # Find the last request before the DataLifetime cutoff
 
