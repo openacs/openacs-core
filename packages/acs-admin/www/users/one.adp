@@ -27,7 +27,8 @@
         Deleting or banning this user may mean you will be unable to administrate the site.
       </p>
   </if>
-  <p>Member state: <b>@user_info.member_state@</b> - change member state: @user_finite_state_links;noquote@</p>
+  <p>Member state: <b>@user_info.member_state@</b> - change member state: @user_finite_state_links;noquote@<br>
+  Delete user: <a href="@delete_user_url@">temporarily</a>, <a href="@delete_user_permanent_url@">permanently</a></p>
 </if>
 <else>
   <p>Member state: <b>@user_info.member_state@</b> <i>(cannot change state for yourself)</i></p>
