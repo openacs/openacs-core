@@ -59,7 +59,7 @@ ad_proc -private sec_session_lifetime {} {
     Returns the maximum lifetime, in seconds, for sessions.
 } {
     # default value is 7 days ( 7 * 24 * 60 * 60 )
-    return [ad_parameter -package_id [ad_acs_kernel_id] SessionLifetime security 604800]
+    return [parameter::get -package_id [ad_acs_kernel_id] -parameter SessionLifetime -default 604800]
 }
 
 ad_proc -private sec_sweep_sessions {} {
@@ -1040,7 +1040,7 @@ ad_proc -private populate_secret_tokens_cache {} {
 
 } {
 
-    set num_tokens [ad_parameter -package_id [ad_acs_kernel_id] NumberOfCachedSecretTokens security 100]
+    set num_tokens [parameter::get -package_id [ad_acs_kernel_id] -parameter NumberOfCachedSecretTokens -default 100]
 
     # this is called directly from security-init.tcl,
     # so it runs during the install before the data model has been loaded
@@ -1065,7 +1065,7 @@ ad_proc -private populate_secret_tokens_db {} {
 
 } {
 
-    set num_tokens [ad_parameter -package_id [ad_acs_kernel_id] NumberOfCachedSecretTokens security 100]
+    set num_tokens [parameter::get -package_id [ad_acs_kernel_id] -parameter NumberOfCachedSecretTokens -default 100]
     # we assume sample size of 10%.
     set num_tokens [expr {$num_tokens * 10}]
     set counter 0
@@ -1617,9 +1617,10 @@ ad_proc -public security::locations {} {
     if {![regexp {(http://|https://)(.*?):(.*?)/?} [util_current_location] discard host_protocol host_name host_port]} {
         regexp {(http://|https://)(.*?)/?} [util_current_location] discard host_protocol host_name
     }
-    # let's give a warning if util_current_location returns host_name not same as from config.tcl, may help with proxy issues etc
+    # let's give a warning if util_current_location returns host_name
+    # not same as from config.tcl, may help with proxy issues etc
     if {[ns_config ns/server/[ns_info server]/module/$driver Hostname] ne $host_name } {
-        ns_log Warning "security::locations host_name from config.tcl does not match from util_current_location: $host_name"
+        ns_log Warning "security::locations hostname '[ns_config ns/server/[ns_info server]/module/$driver Hostname]' from config.tcl does not match from util_current_location: $host_name"
     }
 
     # insecure locations

@@ -27,7 +27,8 @@ ad_proc -public ad_restrict_to_https {conn args why} {
 ad_proc -public ad_approval_system_inuse_p {} {
     Returns 1 if the system is configured to use and approval system.
 } {
-    if {[ad_parameter RegistrationRequiresEmailVerification] && [ad_parameter RegistrationRequiresApprovalP] } {
+    if {[parameter::get -parameter RegistrationRequiresEmailVerification] && 
+	[parameter::get -parameter RegistrationRequiresApprovalP] } {
 	return 1
     } else {
 	return 0
@@ -89,7 +90,7 @@ ad_proc -private ad_user_class_description { set_id } {
 		    lappend clauses "have an email address starting with $email_starts_with"
 		}	
 		"expensive" {
-		    lappend clauses "have accumulated unpaid charges of more than [ad_parameter ExpensiveThreshold "member-value"]"
+		    lappend clauses "have accumulated unpaid charges of more than [parameter::get -parameter ExpensiveThreshold]"
 		}
 		"user_state" {
 		    lappend clauses "have user state of $user_state"
@@ -273,7 +274,7 @@ ad_proc -private ad_user_class_query { set_id  } {
 		}
 		"expensive" {
 		    if { [info exists count_only_p] && $count_only_p } {
-			lappend where_clauses "[ad_parameter ExpensiveThreshold "member-value"] < (select sum(amount) from users_charges where users_charges.user_id = users.user_id)"
+			lappend where_clauses "[parameter::get -parameter ExpensiveThreshold] < (select sum(amount) from users_charges where users_charges.user_id = users.user_id)"
 		    } else {
 			if {[lsearch $tables "user_charges"] == -1 } {
 			    lappend tables "users_charges"
@@ -282,7 +283,7 @@ ad_proc -private ad_user_class_query { set_id  } {
 
 			set group_clauses [concat $group_clauses $user_columns]
 
-			lappend having_clauses "sum(users_charges.amount) > [ad_parameter ExpensiveThreshold "member-value"]"
+			lappend having_clauses "sum(users_charges.amount) > [parameter::get -parameter ExpensiveThreshold]"
 			# only the ones where they haven't paid
 			lappend where_clauses "users_charges.order_id is null"
 		    }

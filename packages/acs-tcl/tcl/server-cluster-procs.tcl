@@ -7,14 +7,14 @@ ad_library {
 }    
 
 proc_doc server_cluster_enabled_p {} { Returns true if clustering is enabled. } {
-    return [ad_parameter -package_id [ad_acs_kernel_id] ClusterEnabledP server-cluster 0]
+    return [parameter::get -package_id [ad_acs_kernel_id] -parameter ClusterEnabledP -default 0]
 }
 
 proc_doc server_cluster_all_hosts {} { Returns a list of all hosts, possibly including this host, in the server cluster. } {
     if { ![server_cluster_enabled_p] } {
 	return [list]
     }
-    return [ad_parameter -package_id [ad_acs_kernel_id] ClusterPeerIP server-cluster]
+    return [parameter::get -package_id [ad_acs_kernel_id] -parameter ClusterPeerIP]
 }
 
 proc_doc server_cluster_peer_hosts {} { Returns a list of all hosts, excluding this host, in the server cluster. } {
@@ -44,7 +44,7 @@ proc_doc server_cluster_authorized_p { ip } { Can a request coming from $ip be a
 	return 1
     }
     # lsearch -glob appears to crash AOLserver 2. Oh well.
-    foreach glob [ad_parameter -package_id [ad_acs_kernel_id] ClusterAuthorizedIP server-cluster] {
+    foreach glob [parameter::get -package_id [ad_acs_kernel_id] -parameter ClusterAuthorizedIP] {
 	if { [string match $glob $ip] } {
 	    return 1
 	}
@@ -64,7 +64,7 @@ proc server_cluster_do_httpget { url timeout } {
 }
 
 ad_proc -private server_cluster_logging_p {} { Returns true if we're logging cluster requests. } {
-    return [ad_parameter -package_id [ad_acs_kernel_id] EnableLoggingP server-cluster 0]
+    return [parameter::get -package_id [ad_acs_kernel_id] -parameter EnableLoggingP -default 0]
 }
 
 ad_proc -private server_cluster_httpget_from_peers {
@@ -90,7 +90,7 @@ ad_proc -private ad_canonical_server_p {} {
     aolserver (for instance, if we have the aolservers sitting behind a
     load balancer).
 } {
-    set canonical_server [ad_parameter -package_id [ad_acs_kernel_id] CanonicalServer server-cluster]
+    set canonical_server [parameter::get -package_id [ad_acs_kernel_id] -parameter CanonicalServer]
     if { $canonical_server eq "" } {
 	ns_log Error "Your configuration is not correct for server clustering. Please ensure that you have the CanonicalServer parameter set correctly."
 	return 1

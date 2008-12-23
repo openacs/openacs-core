@@ -11,7 +11,7 @@ ad_library {
 }
 
 # Schedule a procedure to sweep for sessions.
-ad_schedule_proc -thread f [ad_parameter SessionSweepInterval security 7200] sec_sweep_sessions
+ad_schedule_proc -thread f [parameter::get -parameter SessionSweepInterval -default 7200] sec_sweep_sessions
 
 # Verify that the secret_tokens table is populated
 set secret_tokens_exists [db_string secret_tokens_exists "select decode(count(*),0,0,1) from secret_tokens"]
@@ -25,17 +25,17 @@ ns_cache create secret_tokens -size 32768
 ns_log Notice "security-init.tcl: Populating secret_tokens ns_cache..."
 populate_secret_tokens_cache
 
-# These procedures are dynamically defined so that ad_parameter
+# These procedures are dynamically defined so that parameter::get
 # does not need to be called directly in the RP. 
 proc sec_session_timeout {} "
-    return \"[ad_parameter -package_id [ad_acs_kernel_id] SessionTimeout security 1200]\"
+    return \"[parameter::get -package_id [ad_acs_kernel_id] -parameter SessionTimeout -default 1200]\"
 "
 
 proc sec_session_renew {} "
-    return \"[expr {[sec_session_timeout] - [ad_parameter -package_id [ad_acs_kernel_id] SessionRenew security 300]}]\"
+    return \"[expr {[sec_session_timeout] - [parameter::get -package_id [ad_acs_kernel_id] -parameter SessionRenew -default 300]}]\"
 "
 
 proc sec_login_timeout {} "
-    return \"[ad_parameter -package_id [ad_acs_kernel_id] LoginTimeout security 28800]\"
+    return \"[parameter::get -package_id [ad_acs_kernel_id] -parameter LoginTimeout -default 28800]\"
 "
 

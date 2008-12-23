@@ -16,13 +16,13 @@ namespace eval acs_privacy {
         was in no way regulated.
     } {
         # If no parameter set, then we assume privacy control is DISABLED
-        return [ad_parameter -package_id [ad_acs_kernel_id] PrivacyControlEnabledP 0]
+        return [parameter::get -package_id [ad_acs_kernel_id] -parameter PrivacyControlEnabledP -default 0]
     }
 
     ad_proc -public privacy_control_set {val} {
         set the privacy control
     } {
-        ad_parameter -set $val -package_id [ad_acs_kernel_id] PrivacyControlEnabledP
+        return [parameter::get -set $val -package_id [ad_acs_kernel_id] -parameter PrivacyControlEnabledP]
     }
 
     ad_proc -public user_can_read_private_data_p {
