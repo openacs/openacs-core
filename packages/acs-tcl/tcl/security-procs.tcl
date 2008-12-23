@@ -1426,9 +1426,7 @@ ad_proc -private security::get_https_port {} {
     set nsssl [ns_config ns/server/[ns_info server]/modules nsssl]
     set nsopenssl [ns_config ns/server/[ns_info server]/modules nsopenssl]
     set nsssle [ns_config ns/server/[ns_info server]/modules nsssle]
-    if { $nsssl ne "" && $nsopenssl ne "" } {
-        set sdriver [parameter::get_from_package_key -package_key ecommerce -parameter httpsModule -default nsopenssl]
-    } elseif { $nsopenssl ne "" } {
+    if { $nsopenssl ne "" } {
         set sdriver nsopenssl
     } elseif { $nsssl ne "" } {
         set sdriver nsssl
@@ -1592,10 +1590,7 @@ ad_proc -public security::locations {} {
     set nsssl [ns_config ns/server/[ns_info server]/modules nsssl]
     set nsopenssl [ns_config ns/server/[ns_info server]/modules nsopenssl]
     set nsssle [ns_config ns/server/[ns_info server]/modules nsssle]
-    if { $nsssl ne "" && $nsopenssl ne ""} {
-        # ecommerce has a long standing special case with a parameter, so must be considered here.
-        set sdriver [parameter::get_from_package_key -package_key ecommerce -parameter httpsModule -default nsopenssl]
-    } elseif { $nsopenssl ne ""} {
+    if { $nsopenssl ne ""} {
         set sdriver nsopenssl
     } elseif { $nsssl ne ""} {
         set sdriver nsssl
