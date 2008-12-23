@@ -1430,8 +1430,10 @@ ad_proc -private security::get_https_port {} {
         set sdriver nsopenssl
     } elseif { $nsssl ne "" } {
         set sdriver nsssl
-    } else {
+    } elseif { $nsssle ne "" } {
         set sdriver nsssle
+    } else {
+        return ""
     }
      # ec_secure_location
     # nsopenssl 3 has variable locations for the secure port, openacs standardized at:
@@ -1594,8 +1596,10 @@ ad_proc -public security::locations {} {
         set sdriver nsopenssl
     } elseif { $nsssl ne ""} {
         set sdriver nsssl
-    } else {
+    } elseif { $nsssle ne "" } {
         set sdriver nsssle
+    } else {
+        set sdriver ""
     }
 
     # set the driver results
@@ -1629,25 +1633,31 @@ ad_proc -public security::locations {} {
 
     # secure location, favoring nsopenssl
     # nsopenssl 3 has variable locations for the secure port, openacs standardized at:
-    set secure_port [ns_config -int "ns/server/[ns_info server]/module/$sdriver/ssldriver/users" port 443]
-    # nsssl, nsssle etc
-    if {$secure_port eq ""} {
+    if { $sdriver eq "nsopenssl" } {
+        set secure_port [ns_config -int "ns/server/[ns_info server]/module/$sdriver/ssldriver/users" port 443]
+    } elseif { $sdriver ne "" } {
+        # get secure port for all other cases of nsssl, nsssle etc
         set secure_port [ns_config -int "ns/server/[ns_info server]/module/$sdriver" port]
-    }
-    # checking nsopenssl 2.0 which has different names for the secure port etc, and is not supported with this version of OpenACS
-    if {$secure_port eq "" || $secure_port eq "443"} {
-        set secure_port [ns_config -int "ns/server/[ns_info server]/module/$sdriver" ServerPort 443]
+        # checking nsopenssl 2.0 which has different names for the secure port etc, and deprecated with this version of OpenACS
+        if {$secure_port eq "" || $secure_port eq "443" } {
+            set secure_port [ns_config -int "ns/server/[ns_info server]/module/$sdriver" ServerPort 443]
+        }
+    } else {
+        set secure_port ""
     }
 
-    set secure_location "https://${host_name}"
-    
-    if {$secure_port ne "" && $secure_port ne "443"}  {
-        append secure_location ":$secure_port"
+    set locations [list $insecure_location]
+    # if we have a secure location, add it
+    if { $sdriver ne "" } {
+        set secure_location "https://${host_name}"
+        if {$secure_port ne "" && $secure_port ne "443"}  {
+            append secure_location ":$secure_port"
+        }
+        lappend locations $secure_location
     }
-    
-    set locations [list $insecure_location $secure_location]
+    # consider if we are behind a proxy and don't want to publish the proxy's backend port
     if { [info exists alt_insecure_location] && [parameter::get -parameter SuppressHttpPort -package_id [apm_package_id_from_key acs-tcl] -default 0] } {
-        lappend $alt_insecure_location
+        lappend locations $alt_insecure_location
     }
     return  $locations
 }
