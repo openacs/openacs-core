@@ -22,6 +22,9 @@ set user_info(by_ip_url) [export_vars -base "complex-search" { { target one } { 
 
 set return_url [ad_return_url]
 
+set delete_user_url [export_vars -base delete-user { user_id return_url {permanent f}}]
+set delete_user_permanent_url [export_vars -base delete-user { user_id return_url {permanent t}}]
+
 #
 # RBM: Check if the requested user is a site-wide admin and warn the 
 # viewer in that case (so that a ban/deletion can be avoided).
@@ -86,11 +89,11 @@ db_multirow all_group_membership all_group_membership "
   order by lower(groups.group_name)"
 
 if { [auth::password::can_reset_p -authority_id $user_info(authority_id)] } {
-    set password_reset_url [export_vars -base "password-reset" { user_id { return_url [ad_return_url] } }]
-    set password_update_url [export_vars -base "password-update" { user_id { return_url [ad_return_url] } }]
+    set password_reset_url [export_vars -base "password-reset" { user_id return_url }]
+    set password_update_url [export_vars -base "password-update" { user_id return_url }]
 }
 
-set portrait_manage_url [export_vars -base /user/portrait/ { user_id { return_url [ad_return_url] } }]
+set portrait_manage_url [export_vars -base /user/portrait/ { user_id return_url }]
 
 
 ad_return_template
