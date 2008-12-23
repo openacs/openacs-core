@@ -10,7 +10,7 @@ ad_library {
 # These procedures are dynamically defined at startup to alleviate
 # lock contention. Thanks to davis@xarg.net.
 
-if { [ad_parameter -package_id [ad_acs_kernel_id] PerformanceModeP request-processor 0] } {
+if { [parameter::get -package_id [ad_acs_kernel_id] -parameter PerformanceModeP -default 0] } {
   ad_proc -private rp_performance_mode {} {
     Returns 1 if the request processor is in performance mode, 0 otherwise.
   } {

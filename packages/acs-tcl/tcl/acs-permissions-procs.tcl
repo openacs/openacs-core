@@ -19,7 +19,7 @@ ad_proc -private permission::cache_p {} {
     returns 0 or 1 depending if permission_p caching is enabled or disabled.
     by default caching is disabled.
 } {
-    set cache_p [ad_parameter -package_id [ad_acs_kernel_id] PermissionCacheP permissions 0]
+    set cache_p [parameter::get -package_id [ad_acs_kernel_id] -parameter PermissionCacheP -default 0]
     namespace eval ::permission [list proc cache_p {} "return $cache_p"]
     return $cache_p
 }

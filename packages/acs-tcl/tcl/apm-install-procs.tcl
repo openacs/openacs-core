@@ -1415,7 +1415,7 @@ ad_proc -private apm_package_install_spec { version_id } {
     if { ![file exists $root] } {
 	file mkdir $root
 # doesn't work under windows.  its not very useful anyway.
-#	file attributes $root -permissions [ad_parameter "InfoFilePermissionsMode" "apm" 0755]
+#	file attributes $root -permissions [parameter::get -parameter InfoFilePermissionsMode -default 0755]
     }
 
     db_transaction {

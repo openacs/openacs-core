@@ -611,7 +611,7 @@ proc ad_menu_footer {{section ""}} {
     append return_string "
     <TABLE border=0 cellpadding=0 cellspacing=0 height=24 width=\"100%\">
        <TR bgcolor=\"#000066\"><TD align=left valign=bottom><A href=#top onMouseOver=\"hiLite('back_to_top')\" onMouseOut=\"unhiLite('back_to_top')\"><img name=\"back_to_top\" src=\"/graphics/24_back_to_top.gif\" border=0 width=200 height=24 alt=\"top\"></A></TD>
-         <TD align=right valign=bottom><A href=\"[ad_parameter GlobalURLStub "" "/global"]/rules\" onMouseOver=\"hiLite('rules')\" onMouseOut=\"unhiLite('rules')\"><img name=\"rules\" src=\"/graphics/rules.gif\" border=0 width=96 height=24 valign=bottom alt=\"rules\"></A><A href=\"[ad_help_link $section]\" onMouseOver=\"hiLite('help')\" onMouseOut=\"unhiLite('help')\"><img name=\"help\" src=\"/graphics/help.gif\" border=0 width=30 height=24 align=bottom alt=\"help\"></A></TD></TR>
+         <TD align=right valign=bottom><A href=\"[parameter::get -parameter GlobalURLStub -default /global]/rules\" onMouseOver=\"hiLite('rules')\" onMouseOut=\"unhiLite('rules')\"><img name=\"rules\" src=\"/graphics/rules.gif\" border=0 width=96 height=24 valign=bottom alt=\"rules\"></A><A href=\"[ad_help_link $section]\" onMouseOver=\"hiLite('help')\" onMouseOut=\"unhiLite('help')\"><img name=\"help\" src=\"/graphics/help.gif\" border=0 width=30 height=24 align=bottom alt=\"help\"></A></TD></TR>
     </TABLE>"
     return $return_string
 }

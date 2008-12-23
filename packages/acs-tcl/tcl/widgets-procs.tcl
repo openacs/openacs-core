@@ -28,7 +28,7 @@ proc_doc country_widget { {default ""} {select_name "country_code"} {size_subtag
 
     set widget_value "<select name=\"$select_name\" $size_subtag>\n"
     if { $default eq "" } {
-        if { [ad_parameter SomeAmericanReadersP] } {
+        if { [parameter::get -parameter SomeAmericanReadersP] } {
 	    append widget_value "<option value=\"\">Choose a Country</option>
 <option value=\"us\" selected=\"selected\">United States</option>\n"
 	} else {
@@ -262,7 +262,7 @@ proc_doc currency_widget {{default ""} {select_name "currency_code"} {size_subta
 
     set widget_value "<select name=\"$select_name\" $size_subtag>\n"
     if { $default eq "" } {
-        if { [ad_parameter SomeAmericanReadersP] } {
+        if { [parameter::get -parameter SomeAmericanReadersP] } {
 	    append widget_value "<option value=\"\">Currency</option>
 <option value=\"USD\" selected=\"selected\">United States Dollar</option>\n"
 	} else {

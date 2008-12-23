@@ -82,7 +82,7 @@ $body
     } {
 	set targets [ns_config ns/server/[ns_info server]/acs/acs-rollout-support EmailRedirectTo]
 	if { $targets ne "" } {
-	    set body "The following email would have been sent from \"[ad_parameter SystemName]\", but
+	    set body "The following email would have been sent from \"[parameter::get -parameter SystemName]\", but
 was instead redirected to you.
 
 [subst [ro::email::get_template]]
