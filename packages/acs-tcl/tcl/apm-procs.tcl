@@ -518,7 +518,10 @@ ad_proc -public apm_load_packages {
                           files should be loaded. Defaults to true.
     @param load_queries   Switch to indicate if xql query files should be loaded. Default true.
     @param packages     A list of package_keys for packages to be loaded. Defaults to 
-                        all enabled packages
+                        all enabled packages.  These packages, along with the packages
+                        they depend on, will be loaded in dependency-order using the
+                        information provided in the packages' "provides" and "requires"
+                        attributes.
 
     @see apm_mark_version_for_reload
 
@@ -528,23 +531,32 @@ ad_proc -public apm_load_packages {
         set packages [apm_enabled_packages]
     }
 
+    set packages_to_load [list]
+    foreach package_key $packages {
+        foreach package_to_load [apm_package_load_libraries_order $package_key] {
+            if { [lsearch -exact $packages_to_load $package_to_load] == -1 } {
+                lappend packages_to_load $package_to_load
+            }
+        }
+    }
+
     # Should acs-automated-testing tests be loaded?
     set load_tests_p [apm_load_tests_p]
 
     # Load *-procs.tcl files
     if { $load_libraries_p } {
-        apm_load_libraries -force_reload=$force_reload_p -packages $packages -procs
+        apm_load_libraries -force_reload=$force_reload_p -packages $packages_to_load -procs
     }
     
     # Load up the Queries (OpenACS, ben@mit.edu)
     if { $load_queries_p } {
-        apm_load_queries -packages $packages
+        apm_load_queries -packages $packages_to_load
     }
 
     # Load up the Automated Tests and associated Queries if necessary
     if {$load_tests_p} {
       apm_load_libraries -force_reload=$force_reload_p -packages $packages -test_procs
-      apm_load_queries -packages $packages -test_queries
+      apm_load_queries -packages $packages_to_load -test_queries
     }
 
     if { $load_libraries_p } {
@@ -552,12 +564,12 @@ ad_proc -public apm_load_packages {
         # because there are packages whose *-init.tcl files depend on it.
         apm_load_libraries -force_reload=$force_reload_p -init -packages acs-lang
 
-        apm_load_libraries -force_reload=$force_reload_p -init -packages $packages
+        apm_load_libraries -force_reload=$force_reload_p -init -packages $packages_to_load
     }
 
     # Load up the Automated Tests initialisation scripts if necessary
     if {$load_tests_p} {
-      apm_load_libraries -force_reload=$force_reload_p -packages $packages -test_init
+      apm_load_libraries -force_reload=$force_reload_p -packages $packages_to_load -test_init
     }
 }
 
