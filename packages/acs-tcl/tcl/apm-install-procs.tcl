@@ -756,7 +756,8 @@ ad_proc -private apm_package_install {
         }
 
         # Move the package into the packages dir        
-        exec "mv" "$package_path" "[acs_root_dir]/packages"
+        #exec "mv" "$package_path" "[acs_root_dir]/packages"
+	file rename $package_path [acs_root_dir]/packages
 
         # We moved the spec file, so update its path
         set package_path $old_package_path
@@ -1983,7 +1984,7 @@ ad_proc -private apm_get_package_repository {
 
         if { $manifest eq "" } {
             # Nope, get it now
-            array set result [ad_httpget -url $manifest_url]
+            array set result [ad_httpget -timeout 120 -url $manifest_url]
         
             if { $result(status) ne "200" } {
                 error "Couldn't get the package list. Please try again later."

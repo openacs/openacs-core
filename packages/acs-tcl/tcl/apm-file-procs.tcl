@@ -149,9 +149,10 @@ ad_proc -private apm_extract_tarball { version_id dir } {
                  } $apm_file
 
     file mkdir $dir
-    # cd, gunzip, and untar all in the same subprocess (to avoid having to
-    # chdir first).
-    exec sh -c "cd $dir ; [apm_gunzip_cmd] -q -c $apm_file | [apm_tar_cmd] xf -" 2>/dev/null
+    # avoid chdir 
+    #ns_log notice "exec sh -c 'cd $dir ; [apm_gzip_cmd] -d -q -c $apm_file | [apm_tar_cmd] xf - 2>/dev/null'"
+    exec [apm_gzip_cmd] -d -q -c -S .apm $apm_file | [apm_tar_cmd] -xf - -C $dir 2> [apm_dev_null]
+
     file delete $apm_file
 }
 
@@ -182,7 +183,7 @@ ad_proc -private apm_generate_tarball { version_id } {
     # file; we need this to ensure that the tarballs are relative to the
     # package root directory ([acs_root_dir]/packages).
 
-    set cmd [list exec [apm_tar_cmd] cf -  2>/dev/null]
+    set cmd [list exec [apm_tar_cmd] cf - 2> [apm_dev_null]]
     foreach file $files {
 	lappend cmd -C "[acs_root_dir]/packages"
 	lappend cmd "$package_key/$file"
@@ -455,13 +456,14 @@ ad_proc -private apm_system_paths {} {
     }
 }
 
-ad_proc -private apm_gunzip_cmd {} {
+ad_proc -private apm_gzip_cmd {} {
 
-    @return A valid pointer to gunzip, 0 otherwise.
+    @return A valid pointer to gzip, 0 otherwise.
  
 } {
-    return gunzip
+    return gzip
 }
+
 
 ad_proc -private apm_tar_cmd {} {
 
@@ -472,12 +474,69 @@ ad_proc -private apm_tar_cmd {} {
 }
 
 
-ad_proc -private apm_gzip_cmd {} {
-    
-    @return A valid pointer to gzip, 0 otherwise.
+ad_proc -private apm_dev_null {} {
 
+    @return null device
+ 
 } {
-    return gzip
+  if {$::tcl_platform(platform) ne "windows"} {
+    return /dev/null
+  } else {
+    return nul
+  }
+}
+
+ad_proc -private apm_transfer_file {
+  {-url}
+  {-output_file_name}
+} {
+  #
+  # The original solution using ns_httpopen + file_copy does not work
+  # reliably under windows, for unknown reasons the downloaded file is
+  # truncated.
+  #
+  # Therefore, we check first if the optional xotcl-core components
+  # are available...
+  #
+  if {[info command ::xo::HttpRequest] ne ""} {
+    # 
+    # ... use xo::HttpRequest...
+    #
+    #ns_log notice "Transfer $url based to $output_file_name on ::xo::HttpRequest"
+    #
+    set r [::xo::HttpRequest new -url $url]
+    set fileChan [open $output_file_name w 0640]
+    fconfigure $fileChan -translation binary -encoding binary
+    puts -nonewline $fileChan [$r set data]
+    close $fileChan
+
+  } elseif {[set wget [::util::which wget]] ne ""} {
+    #
+    # ... if we have no ::xo::* and we have "wget" installed, we use
+    # it.
+    #
+    ns_log notice "Transfer $url based on wget"
+    catch {exec $wget -O $output_file_name $url}
+
+  } else {
+    #
+    # Everything else failed, fall back to the original solution.
+    #
+    ns_log notice "Transfer $url based on ns_httpopen"
+    # Open a destination file.
+    set fileChan [open  $output_file_name w 0640]
+    # Open the channel to the server.
+    set httpChan [lindex [ns_httpopen GET $url] 0]
+    ns_log Debug "APM: Copying data from $url"
+    fconfigure $httpChan -encoding binary
+    fconfigure $fileChan -encoding binary
+    # Copy the data
+    fcopy $httpChan $fileChan
+    # Clean up.
+    ns_log Debug "APM: Done copying data."
+    close $httpChan
+    close $fileChan
+  }
 }
 
 ad_proc -private apm_load_apm_file {
@@ -496,23 +555,9 @@ ad_proc -private apm_load_apm_file {
 } {    
     # First download the apm file if a URL is provided
     if { $url ne "" } {
+        set file_path [ns_tmpnam].apm
         apm_callback_and_log $callback "<li>Downloading $url..."
-        if { [catch {
-            # Open a destination file.
-            set file_path [ns_tmpnam].apm
-            set fileChan [open $file_path w 0640]
-            # Open the channel to the server.
-            set httpChan [lindex [ns_httpopen GET $url] 0]
-            ns_log Debug "APM: Copying data from $url"
-            fconfigure $httpChan -encoding binary
-            fconfigure $fileChan -encoding binary
-            # Copy the data
-            fcopy $httpChan $fileChan
-            # Clean up.
-            ns_log Debug "APM: Done copying data."
-            close $httpChan
-            close $fileChan
-        } errmsg] } {
+        if { [catch {apm_transfer_file -url $url -output_file_name $file_path} errmsg] } {
             apm_callback_and_log $callback "Unable to download. Please check your URL.</ul>.
             The following error was returned: <blockquote><pre>[ad_quotehtml $errmsg]
             </pre></blockquote>[ad_footer]"
@@ -528,10 +573,11 @@ ad_proc -private apm_load_apm_file {
         }
     }
 
+    #ns_log notice "*** try to exec [apm_gzip_cmd] -d -q -c -S .apm $file_path | [apm_tar_cmd] tf - 2> [apm_dev_null]"
     if { [catch {
 	set files [split [string trim \
-		[exec [apm_gunzip_cmd] -q -c $file_path | [apm_tar_cmd] tf - 2>/dev/null]] "\n"]
-	apm_callback_and_log $callback  "<li>Done. Archive is [format "%.1f" [expr { [file size $file_path] / 1024.0 }]]KB, with [llength $files] files.<li>"
+		[exec [apm_gzip_cmd] -d -q -c -S .apm $file_path | [apm_tar_cmd] tf - 2> [apm_dev_null]]] "\n"]
+	apm_callback_and_log $callback  "<li>Done. Archive is [format %.1f [expr { [file size $file_path] / 1024.0 }]]KB, with [llength $files] files.<li>"
     } errmsg] } {
 	apm_callback_and_log $callback "The follow error occured during the uncompression process:
 	<blockquote><pre>[ad_quotehtml $errmsg]</pre></blockquote><br>
@@ -581,7 +627,9 @@ ad_proc -private apm_load_apm_file {
     apm_callback_and_log $callback  "Extracting the .info file (<tt>$info_file</tt>)..."
     set tmpdir [ns_tmpnam]
     file mkdir $tmpdir
-    exec sh -c "cd $tmpdir ; [apm_gunzip_cmd] -q -c $file_path | [apm_tar_cmd] xf - $info_file" 2>/dev/null
+    exec [apm_gzip_cmd] -d -q -c -S .apm $file_path | [apm_tar_cmd] -xf - -C $tmpdir $info_file 2> [apm_dev_null]
+
+    #exec sh -c "cd $tmpdir ; [apm_gzip_cmd] -d -q -c -S .apm $file_path | [apm_tar_cmd] xf - $info_file" 2> [apm_dev_null]
     
     if { [catch {
 	array set package [apm_read_package_info_file [file join $tmpdir $info_file]]
@@ -617,13 +665,8 @@ ad_proc -private apm_load_apm_file {
 	apm_callback_and_log $callback  "<li>Extracting files into the filesytem."
 	apm_callback_and_log $callback  "<li>$pretty_name $version_name ready for installation."
 
-        # LARS: This looks odd -- package_key is not a directory
-	# Remove the directory if it exists.
-	#if {[file exists $package_key]} {
-	#    file delete -force $package_key
-	#}
-        
-	exec sh -c "cd $install_path ; [apm_gunzip_cmd] -q -c $file_path | [apm_tar_cmd] xf -" 2>/dev/null
+	#ns_log notice "exec sh -c 'cd $install_path ; [apm_gzip_cmd] -d -q -c $file_path | [apm_tar_cmd] xf -' 2>/dev/null"
+	exec [apm_gzip_cmd] -d -q -c -S .apm $file_path | [apm_tar_cmd] -xf - -C $install_path 2> [apm_dev_null]
 
         return "${install_path}/${package_key}/${package_key}.info"
     }
