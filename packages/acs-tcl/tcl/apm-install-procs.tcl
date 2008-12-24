@@ -2014,7 +2014,7 @@ ad_proc -private apm_get_package_repository {
                 -parent_node $package_node \
                 -array version            
             
-            foreach dependency_type { provides requires } {
+            foreach dependency_type { provides requires extends } {
                 set version($dependency_type) {}
                 foreach dependency_node [xml_node_get_children_by_name $package_node "$dependency_type"] {
                     lappend version($dependency_type) \
