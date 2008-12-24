@@ -4061,7 +4061,8 @@ ad_proc -public util::backup_file {
         incr backup_counter
     }
 
-    exec "mv" "$file_path" "$backup_path"
+    #exec "mv" "$file_path" "$backup_path"
+    file rename $file_path $backup_path
 }
 
 
