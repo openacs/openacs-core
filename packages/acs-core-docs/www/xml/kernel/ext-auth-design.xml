@@ -365,7 +365,7 @@ ad_form -name user_add -form {
     {email:text}
     {password}
 } -on_submit {
-    if { [ad_parameter UsernameIsEmail] == 't' } {
+    if { [parameter::get -parameter UsernameIsEmail] == 't' } {
        set email $username
     }
     array set auth_info [auth::authenticate \
@@ -1082,7 +1082,7 @@ ad_proc -private auth::local::authentication::Authenticate {
     if { [ad_check_password $user_id $password] } {
         set auth_info(auth_status) "ok"
     } else {
-       if { [ad_parameter EmailForgottenPasswordP] == 't' } {
+       if { [parameter::get -parameter EmailForgottenPasswordP] == 't' } {
             set auth_info(auth_status) "bad_password"
             ... display link...
        } else {
@@ -1270,7 +1270,7 @@ ad_proc -private auth::local::registration::Register {
         }
     }
     # Notify admin on new registration
-    if {[ad_parameter NotifyAdminOfNewRegistrationsP "security" 0]} {
+    if {[parameter::get -parameter NotifyAdminOfNewRegistrationsP -default 0]} {
         with_catch errmsg {
             ns_sendmail \
                 $notification_address \
