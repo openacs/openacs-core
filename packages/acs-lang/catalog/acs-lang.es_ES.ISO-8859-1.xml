@@ -4,6 +4,7 @@
   <msg key="available-in-this-language">Disponible en español</msg>
   <msg key="change-locale">Cambiar idioma</msg>
   <msg key="English">Inglés</msg>
+  <msg key="Error_changing_locale">Error al cambiar de idioma</msg>
   <msg key="French">Francés</msg>
   <msg key="German">Alemán</msg>
   <msg key="Locale">Idioma</msg>
@@ -44,6 +45,7 @@
   <msg key="Spanish">Español</msg>
   <msg key="this-language">Español (ES)</msg>
   <msg key="Translated_messages_on_this_page">Mensajes traducidos en esta página (%locale%)</msg>
+  <msg key="User_locale_not_set">Su idioma %user_locale% no ha podido ser cambiado, probablemente porque no está disponible.</msg>
   <msg key="Your_locale_for_package">Su selección de idioma para %package_name%. Si está activado, sobreescribirá la selección general en esta aplicación en particular.</msg>
   <msg key="Your_locale_site_wide">Su selección de idioma para todo el sitio</msg>
   <msg key="Your_Preferred_Locale">Su idioma</msg>
