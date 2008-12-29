@@ -85,17 +85,17 @@ if {[permission::permission_p -party_id $user_id -object_id $folder_id \
 	  break
 	}
 
-	# check quota
-	set maximum_folder_size [ad_parameter "MaximumFolderSize"]
-	
-	if { $maximum_folder_size ne "" } {
-	  set max [ad_parameter "MaximumFolderSize"]
-	  if { $folder_size+[file size ${upload_file.tmpfile}] > $max } {
-	    template::form::set_error upload_form upload_file \
-		[_ file-storage.out_of_space]
-	    break
-	  }
-	}	 
+        if {[info exists folder_size]} {
+          # check quota
+          set maximum_folder_size [parameter::get -parameter "MaximumFolderSize"]
+          if { $maximum_folder_size ne "" } {
+            if { $folder_size + [file size ${upload_file.tmpfile}] > $maximum_folder_size } {
+              template::form::set_error upload_form upload_file \
+                  [_ file-storage.out_of_space]
+              break
+            }
+          }
+        }	 
 	
 	set file_name [template::util::file::get_property filename $upload_file]
 	set upload_tmpfile [template::util::file::get_property tmp_filename $upload_file]
