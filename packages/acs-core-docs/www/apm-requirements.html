@@ -4,7 +4,7 @@
           by OpenACS documentation staff.
         </div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="apm-requirements-intro"></a>Introduction</h3></div></div><div></div></div><p>The following is a requirements document for the OpenACS Package Manager
 (APM), version 4.0 (APM4). APM4 offers a superset of APM v3.3 functionality
-with the following specific enhancements:</p><div class="itemizedlist"><ul type="disc"><li><p>A public procedural API. (v 3.3 only has web-based UI)</p></li><li><p>Support for dependency checking.</p></li><li><p>Support for compound packages (to support installation chaining).</p></li><li><p>Support for on-line parameter setting.</p></li><li><p>Support for sub-site level configuration (requires revised ad_parameter
+with the following specific enhancements:</p><div class="itemizedlist"><ul type="disc"><li><p>A public procedural API. (v 3.3 only has web-based UI)</p></li><li><p>Support for dependency checking.</p></li><li><p>Support for compound packages (to support installation chaining).</p></li><li><p>Support for on-line parameter setting.</p></li><li><p>Support for sub-site level configuration (requires revised parameter
 and /admin pages at sub-site level; deprecation of site-wide parameter
 file).</p></li></ul></div><p>To differentiate these new requirements from the requirements of version
 3.3, all requirements new in v4 are prefaced with the number
@@ -36,7 +36,7 @@ integrated with file system-based version control
 
 </p></li><li><p><span class="strong">Web-based tools for package development:</span> </p><div class="itemizedlist"><ul type="circle"><li><p>Creating new packages locally</p></li><li><p>Releasing new versions of locally-created packages</p></li><li><p>Uploading packages to a global package repository on the web</p></li><li><p>Use of these tools should be safe, i.e. installing or removing a package
 should never break an OpenACS installation</p></li></ul></div></li><li><p><span class="strong">Web-based tools for package configuration:</span> </p><div class="itemizedlist"><ul type="circle"><li><p>The ability to change package parameter values on-line through a simple
-web interface.</p></li><li><p>A new ad_parameter which does not require a monolithic site-wide
+web interface.</p></li><li><p>A new parameter::get which does not require a monolithic site-wide
 parameter's file or server restarts for changes to take effect.</p></li><li><p>The ability to manage multiple package instances at the sub-site
 level.</p></li></ul></div></li></ul></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="apm-requirements-use-cases"></a>Use-cases and User-scenarios</h3></div></div><div></div></div><p>
 The APM is intended for the following classes of users, which may or may not

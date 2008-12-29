@@ -28,7 +28,7 @@ with the following specific enhancements:</para>
 
 <listitem><para>Support for on-line parameter setting.</para></listitem>
 
-<listitem><para>Support for sub-site level configuration (requires revised ad_parameter
+<listitem><para>Support for sub-site level configuration (requires revised parameter
 and /admin pages at sub-site level; deprecation of site-wide parameter
 file).</para></listitem>
 </itemizedlist>
