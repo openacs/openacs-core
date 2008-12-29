@@ -162,7 +162,7 @@ ad_proc -private acs_messaging_process_queue {
         # Need to process content to do CRLF conversions?
         set headers [ns_set create]
 		
-        ns_set put $headers Sender [ad_parameter "OutgoingSender" "acs-kernel"]
+        ns_set put $headers Sender [parameter::get -parameter OutgoingSender]
 	if {$in_reply_to ne "" } {
 	    ns_set put $headers In-Reply-To "<$in_reply_to>"
 	}
