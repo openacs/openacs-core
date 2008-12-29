@@ -175,7 +175,7 @@ ad_proc -public image::imagmagick_identify {
     @author Dave Bauer (dave@solutiongrove.com)
     @creation-date 2006-08-27
 } {
-    if { [ catch {set out [exec [ad_parameter ImageMagickPath]/identify -format "%w %h %m %k %q %#" $file]} errMsg]} { 
+    if { [ catch {set out [exec [parameter::get -parameter ImageMagickPath]/identify -format "%w %h %m %k %q %#" $file]} errMsg]} { 
         return -code error $errMsg
     }            
     foreach {width height type} [split $out { }] {}
