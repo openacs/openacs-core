@@ -726,7 +726,7 @@ create index apm_parameters_package_idx on apm_parameters (package_key);
 comment on table apm_parameters is '
   This table stores information about parameters on packages.  Every package parameter
 is specific to a particular package instance and is queryable with the Tcl call 
-ad_parameter.
+parameter::get.
 ';
 
 comment on column apm_parameters.parameter_name is '
@@ -754,7 +754,7 @@ comment on column apm_parameters.min_n_values is '
   that the default is always enforced (but is somewhat pointless).  One value means that
   it can only be set to one value.  Increasing this number beyond one enables associating 
   a list of values with a parameter.  
-  XXX (bquinn): More than one value is not supported by ad_parameter call at this time.
+  XXX (bquinn): More than one value is not supported by parameter::get call at this time.
 ';
 
 comment on column apm_parameters.max_n_values is '
