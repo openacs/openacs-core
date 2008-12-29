@@ -121,7 +121,7 @@ makes it accessible via the <tt><b>ad_locale</b></tt> function:
 
 It has not yet been decided how the user's preferred locale will be
 initialized.  For now, there is a site wide default package parameter
-<tt>[ad_parameter DefaultLocale acs-lang "en_US"]</tt>, and an API for setting
+<tt>[parameter::get -parameter DefaultLocale -default "en_US"]</tt>, and an API for setting
 the locale with the preference stored in a session variable:
 
 The <tt>ad_locale_set</tt> function is used to set the user's preferred locale
