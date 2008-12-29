@@ -24,7 +24,9 @@
   <msg key="Admin">Panel de control</msg>
   <msg key="admin">Admin</msg>
   <msg key="Administer_subsite">Administrar %subsite_name%</msg>
+  <msg key="Administration">Administración</msg>
   <msg key="Administrative_options">Opciones de administración para este usuario</msg>
+  <msg key="Advanced">Avanzado</msg>
   <msg key="Alert_Type">Tipo de aviso</msg>
   <msg key="another_picture">otra imagen.</msg>
   <msg key="Answer">Respuesta:</msg>
@@ -63,6 +65,7 @@
   <msg key="Communities">Comunidades</msg>
   <msg key="communities">comunidades</msg>
   <msg key="community">comunidad</msg>
+  <msg key="Configuration">Configuración</msg>
   <msg key="Confirm">Confirmar:</msg>
   <msg key="confirmation_password_changed">Usted ha seleccionado una nueva contraseña con éxito</msg>
   <msg key="Continue">Continuar</msg>
@@ -138,6 +141,7 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="go_upload_your_portrait">subir su foto</msg>
   <msg key="Grant">Otorgar</msg>
   <msg key="Grant_Permission">Autorizar</msg>
+  <msg key="Groups">Grupos</msg>
   <msg key="Have_group_mail">Ya tenemos un grupo con este correo electrónico</msg>
   <msg key="Have_user_mail">Ya tenemos un usuario con este correo electrónico.</msg>
   <msg key="Have_user_name">Ya tenemos un usuario con este nombre de usuario.</msg>
@@ -265,6 +269,7 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="Name">Nombre y apellidos:</msg>
   <msg key="new_application">nueva aplicación</msg>
   <msg key="New_Password">Nueva contraseña:</msg>
+  <msg key="New_Subsite">Nuevo subsite</msg>
   <msg key="No_applications">No hay aplicaciones</msg>
   <msg key="no_assessment">No hay tareas disponibles</msg>
   <msg key="No_ISO_Codes">No hay códigos ISO</msg>
@@ -345,6 +350,7 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="subcommunities">subcomunidades</msg>
   <msg key="subcommunity">subcomunidad</msg>
   <msg key="subsite">subsitio</msg>
+  <msg key="Subsite_Home">Inico %subsite_name%</msg>
   <msg key="Subsites">Subsitios</msg>
   <msg key="subsites">subsitios</msg>
   <msg key="Success_but_no_account_yet">Se ha autentificado correctamente, pero no tiene una cuenta todavía en %system_name%.</msg>
@@ -378,6 +384,7 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="UserSiteMap">Mapa del sitio del usuario</msg>
   <msg key="Vacation_Info_Updated">Información de Vacaciones Actualizada </msg>
   <msg key="Vacation_information_updated">La información de sus vacaciones en %site_link% ha sido actualizada.</msg>
+  <msg key="view_all_online_members">Ver todos los miembros online</msg>
   <msg key="Welcome_user">Bienvenido/a, %user_name%</msg>
   <msg key="When_leaving_checkbox_empty">Si deja de selecionar un privilegio, eleminará dicho privilegio al grupo que que excogió si este grupo tenía anteriormete el privilegio.</msg>
   <msg key="Whos_Online_link_label">Usuarios conectados en este momento</msg>
