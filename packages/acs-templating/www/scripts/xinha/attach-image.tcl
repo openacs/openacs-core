@@ -98,18 +98,18 @@ if {$write_p} {
             }
 	    if {$upload_file ne "" } {
 
-		# check quota
-		# FIXME quota is a good idea, set per-user upload quota??
-		#            set maximum_folder_size [ad_parameter "MaximumFolderSize"]
-		
-		#            if { $maximum_folder_size ne "" } {
-		#                set max [ad_parameter "MaximumFolderSize"]
-		#                if { $folder_size+[file size ${upload_file.tmpfile}] > $max } {
-		#                    template::form::set_error upload_form upload_file \
-					  #					  [_ file-storage.out_of_space]
-		#                   break
-		#               }
-		#           }	 
+              if {[info exists folder_size]} {
+                  # check per folder quota 
+                  set maximum_folder_size [parameter::get -parameter "MaximumFolderSize"]
+        
+                  if { $maximum_folder_size ne "" } {
+                    if { $folder_size+[file size ${upload_file.tmpfile}] > $maximum_folder_size } {
+                      template::form::set_error upload_form upload_file \
+                          [_ file-storage.out_of_space]
+                      break
+                    }
+                  }
+                }
 		
 		set file_name [template::util::file::get_property filename $upload_file]
 		set upload_tmpfile [template::util::file::get_property tmp_filename $upload_file]
