@@ -34,14 +34,14 @@ ad_proc -public content::get_template_root {} {
     # Look for package-defined root
     set package_id [ad_conn package_id]
     set template_root \
-        [ad_parameter -package_id $package_id TemplateRoot dummy ""]
+        [parameter::get -package_id $package_id -parameter TemplateRoot -default ""]
 
     if { $template_root eq "" } {
         # Look for template root defined in the CR
         set package_id [apm_package_id_from_key "acs-content-repository"]
 
-        set template_root [ad_parameter -package_id $package_id \
-                               TemplateRoot dummy "templates"]
+        set template_root [parameter::get -package_id $package_id \
+                               -parameter TemplateRoot -default "templates"]
     }
 
     if { [string index $template_root 0] ne "/" } {
