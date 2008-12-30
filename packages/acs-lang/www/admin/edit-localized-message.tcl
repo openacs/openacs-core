@@ -117,12 +117,12 @@ ad_form -extend -name message -form {
         and    cu.user_id = lm.creation_user
     }]
 
-    set original_message [ad_quotehtml $original_message]
     if { [exists_and_not_null message] } {
         set message $message
     } else {
-	set message $original_message
+        set message $original_message
     }
+    set original_message [ad_quotehtml $original_message]
 
     if { $description eq "" } {
         set description [subst {(<a href="$description_edit_url">add description</a>)}]
