@@ -152,12 +152,12 @@ proc_doc ad_dateentrywidget {column { value 0 } } {
     }
 
     set output "<select name=\"$column.month\">\n"
-    append output "<option>\n"
+
     # take care of cases like 09 for month
     regsub "^0" $month "" month
     for {set i 0} {$i < 12} {incr i} {
 	if { $month ne "" && $i == [expr {$month - 1}] } {
-	    append output "<option selected=\"selected\"> [lindex $NS(months) $i]</option>\n"
+	    append output "<option selected=\"selected\">[lindex $NS(months) $i]</option>\n"
 	} else {
 	    append output "<option>[lindex $NS(months) $i]</option>\n"
 	}
