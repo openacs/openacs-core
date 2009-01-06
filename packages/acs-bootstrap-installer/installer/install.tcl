@@ -149,15 +149,15 @@ foreach { var param } {
     host_administrator HostAdministrator
     outgoing_sender OutgoingSender
 } {
-    ad_parameter -set [set $var] -package_id $kernel_id $param
+    parameter::set_value -parameter $param -value [set $var] -package_id $kernel_id
 }
 
 # set the Main Site RestrictToSSL parameter
 
 set main_site_id [subsite::main_site_id]
 
-ad_parameter -set "acs-admin/*" -package_id $main_site_id RestrictToSSL
-ad_parameter -set $new_registrations -package_id $main_site_id NewRegistrationEmailAddress
+parameter::set_value -parameter RestrictToSSL -package_id  $main_site_id -value "acs-admin/*" 
+parameter::set_value -parameter NewRegistrationEmailAddress -package_id $main_site_id -value $new_registrations 
 
 # We're done - kill the server (will restart if server is setup properly)
 ad_schedule_proc -thread t -once t 1 ns_shutdown
