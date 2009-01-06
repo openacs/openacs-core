@@ -53,7 +53,7 @@ if { [llength [lang::system::get_locales]] > 1 } {
 
 
 
-if {[ad_parameter SolicitPortraitP "user-info" 0]} {
+if {[parameter::get -parameter SolicitPortraitP -default 0]} {
     # we have portraits for some users 
     if {![db_0or1row get_portrait_info "
     select cr.publish_date, nvl(cr.title,'your portrait') as portrait_title,

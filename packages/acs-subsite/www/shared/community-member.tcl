@@ -28,7 +28,7 @@ ad_page_contract {
 set subsite_url [subsite::get_element -element url]
 
 #See if this page has been overrided by a parameter in kernel 
-set community_member_url [ad_parameter -package_id [ad_acs_kernel_id] CommunityMemberURL "/shared/community-member"]
+set community_member_url [parameter::get -package_id [ad_acs_kernel_id] -parameter CommunityMemberURL -default "/shared/community-member"]
 if { $community_member_url ne "/shared/community-member" } {
     ad_returnredirect "$community_member_url?user_id=$user_id"
     ad_script_abort

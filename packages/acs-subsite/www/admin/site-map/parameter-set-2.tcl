@@ -19,7 +19,7 @@ ad_require_permission $package_id admin
 if { [catch {
     db_foreach apm_parameters_set {} {
 	if {[info exists params($parameter_id)]} {
-	    ad_parameter -set $params($parameter_id) -package_id $package_id $parameter_name $package_key 
+	    parameter::set_value -value $params($parameter_id) -package_id $package_id -parameter $parameter_name 
 	}
     }
 } errmsg] } {

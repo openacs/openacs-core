@@ -77,8 +77,8 @@ if { $portrait_p } {
     }
 }
 
-set mime_types [ad_parameter AcceptablePortraitMIMETypes "user-info"]
-set max_bytes [ad_parameter MaxPortraitBytes "user-info"]
+set mime_types [parameter::get -parameter AcceptablePortraitMIMETypes -default ""]
+set max_bytes [parameter::get -parameter MaxPortraitBytes -default ""]
 
 ad_form -extend -name "portrait_upload" -validate {
 

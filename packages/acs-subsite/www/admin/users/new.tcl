@@ -135,7 +135,7 @@ template::element create add_user password \
 
 
 # Get whether they requre some sort of approval
-if {[ad_parameter RegistrationRequiresApprovalP "security" 0]} {
+if {[parameter::get -parameter RegistrationRequiresApprovalP -default 0]} {
     set member_state ""
 } else {
     set member_state "approved"
@@ -154,7 +154,7 @@ if { [template::form is_valid add_user] } {
 	set add_to_group_id [application_group::group_id_from_package_id]
     }
 
-    if {[ad_parameter RegistrationRequiresEmailVerificationP "security" 0]} {
+    if {[parameter::get -parameter RegistrationRequiresEmailVerificationP -default 0]} {
 	set email_verified_p "f"
     } else {
 	set email_verified_p "t"
@@ -219,9 +219,9 @@ if { [template::form is_valid add_user] } {
 
     if {!$double_click_p} {
 
-	set notification_address [ad_parameter NewRegistrationEmailAddress "security" [ad_system_owner]]
+	set notification_address [parameter::get -parameter NewRegistrationEmailAddress -default [ad_system_owner]]
 
-	if {[ad_parameter NotifyAdminOfNewRegistrationsP "security" 0]} {
+	if {[parameter::get -parameter NotifyAdminOfNewRegistrationsP -default 0]} {
 
 	    set creation_user [ad_conn user_id]
 	    set creation_name [db_string creation_name_query {
@@ -250,7 +250,7 @@ The user was added by $creation_name from [ad_conn url].
 	    ns_sendmail [template::element::get_value add_user email] \
 		    $notification_address \
 		    "Welcome to [ad_system_name]" \
-		    "To confirm your registration, please go to [ad_parameter -package_id [ad_acs_kernel_id] SystemURL]/register/email-confirm?[export_url_vars row_id]
+		    "To confirm your registration, please go to [parameter::get -package_id [ad_acs_kernel_id] -parameter SystemURL]/register/email-confirm?[export_url_vars row_id]
 
 After confirming your email, here's how you can log in at [ad_url]:
 
