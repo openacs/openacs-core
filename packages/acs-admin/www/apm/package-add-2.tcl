@@ -25,6 +25,8 @@ ad_page_contract {
     { vendor [db_null] } 
     { vendor_uri [db_null] }
     { install_p 0 }
+    {implements_subsite_p "f"}
+    {inherit_templates_p "f"}
 } -validate {
     package_key_format -requires {package_key} {
 	if { [regexp {[^a-z0-9-]} $package_key] } {
@@ -101,7 +103,7 @@ set attributes(maturity) 0
 db_transaction {
     # Register the package.
     apm_package_register $package_key $pretty_name $pretty_plural $package_uri \
-	    $package_type $initial_install_p $singleton_p
+	    $package_type $initial_install_p $singleton_p $implements_subsite_p $inherit_templates_p
     # Insert the version
     set version_id [apm_package_install_version \
                         -callback apm_dummy_callback \
