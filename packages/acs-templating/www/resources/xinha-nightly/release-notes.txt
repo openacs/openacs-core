@@ -4,6 +4,72 @@ For bug reports, forum, and updates go to
 http://xinha.org
 
 Release History
+Xinha 0.96beta
+Bugs Fixed
+ * #314 Status bar should wrap
+ * #741 ContextMenu should not overflow window boundaries
+ * #961 baseHref not correctly treated when stripping
+ * #1160 Safari puts selected HTML near bottom if edited
+ * #1166 TableOperations dialogs do not resize properly in Safari 3
+ * #1173 IE8 beta toolbars broken
+ * #1174 IE8 beta no text cursor in wysiwyg
+ * #1187 ExtendedFileManager "imgManager.changeDir is not a function" error
+ * #1193 Stylist bug when formatting selected text
+ * #1213 Would be nice to protect unsaved changes from accidental loss when navigating away
+ * #1221 Selecting heading normal on nothing throws exception alert
+ * #1224 sevenbitclean? / ghost cursor error with html mode toggle (Firefox)
+ * #1227 No CSS rules load when using @import in external stylesheet
+ * #1230 CSS width attribute breaks select display in IE
+ * #1240 Linker: trim spaces from URL
+ * #1247 CharCounter problems with Silva skin
+ * #1257 Error if url query string included '/'
+ * #1258 Event object is not handed over to event handlers installed on textarea
+ * #1261 Dutch translation for Fullscreen module
+ * #1280 restoreSelection doesn't always work in internet explorer
+ * #1281 selectNodeContents is borken in IE when the node is a text node
+ * #1284 _editor_url is still used in a couple of plugins.
+ * #1286 use callbacks as criteria for getFirstAncestor
+ * #1288 [DefinitionList] list items restricted to small width and one line by CSS
+ * #1290 Improved support for pasting from Microsoft Word
+ * #1291 Xinha.removeFromParent() does not return correct reference
+ * #1292 change naming scheme of plugin files
+ * #1293 [Gecko] Window scrolls to top of editing area when switching from text to WYSIWYG
+ * #1294 Editor higher in HTML mode
+ * #1295 Textarea not aligned under toolbar
+ * #1298 CSS styling gets inserted into table cell after viewing source (Safari only)
+ * #1300 create namespace for plugins within Xinha namespace
+ * #1301 loading should not fail if plugin omits _pluginInfo
+ * #1302 add Array.prototype.forEach for Browser that doesn't support it
+ * #1303 add getElementsByClassName()
+ * #1306 Toolbar actions need access to the click event
+ * #1309 Xinha chokes on anchors
+ * #1315 Xinha's _addEvent uses event capturing
+ * #1316 In InternetExplorer, the cursor is lost when switching into source mode
+ * #1317 Xinha's postback and getback should allow for failure handlers
+ * #1319 make event hooks like onKeyPress accesible from the config object
+ * #1320 make it possible to use png images as icons in IE6
+ * #1321 [SaveSubmit] icon is in "changed" state initially
+ * #1322 [SaveSubmit] error when form action is empty
+ * #1332 Panel classes are very generic, and risk conflict with users embedding it in their site
+ * #1337 GetHTML truncates hyperlinks
+ * #1346 statusbar shows b, i, strike instead of strong, em, and del
+ * #1357 safari form submit has empty form field names in POST data, causes failure with perl CGI
+
+ 
+Enhancements
+ * #1176 Completely revamped dialog system, which uses inline lightbox-style dialogs instead of separate popup windows 
+ * #326 Added support for customizable icon sets
+ * #1318 Added icon set from the Tango Project
+ * #1287 New InsertNote plugin for handling footnotes, with automatic note numbering and ordering, linking, and support for repeated references
+ * #1289 New InsertSnippet2 plugin, with categorization of snippets, search by name, and an XML data format
+ * #58 Additional settings for Linker plugin (link types and targets can be configured)
+ * #1219 Configuration option to autofocus editor
+ * #1285 Configuration option to set document body class
+ * #1323 Allow skins to have meta information (author, etc.)
+ * #1338 _editor_url is now automatically detected
+ * #1345 Add a static function that saves the contents of all Xinhas to their respective textareas
+
+
 Xinha 0.95
 Bugs Fixed
  * fixed #1040 htmlRemoveTags doesn't work in IE 
