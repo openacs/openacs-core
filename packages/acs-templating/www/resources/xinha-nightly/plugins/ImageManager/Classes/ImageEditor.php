@@ -259,6 +259,13 @@ class ImageEditor
 		if($type=='gif' && $ext != 'gif')
 			Return $base.'.gif';
 
+    // Ensure type is in acceptable image types
+    $valid_extensions = $this->manager->config['allowed_image_extensions'];    
+    if(!in_array($ext, $valid_extensions))
+		{
+      return $base . ".".strtolower($type ? $type : 'jpg');
+		}
+    
 		Return $filename;
 	}
 

@@ -456,6 +456,14 @@ class ImageManager
 				Return false;
 			}
 		}
+    
+    $valid_extensions = $this->config['allowed_image_extensions'];
+    $afruext = strtolower(substr(strrchr($file['name'], "."), 1));
+    if(!in_array($afruext, $valid_extensions))
+		{
+			Files::delFile($file['tmp_name']);
+			Return 'Cannot upload $extension='.$afruext.'$ Files. Permission denied.';
+		}
 
 		//now copy the file
 		$path = Files::makePath($this->getImagesDir(),$relative);

@@ -228,7 +228,7 @@ $IMConfig['allow_new_dir'] = true;
 * DEFAULT: for demo purposes we turn this off.
 */
 
-$IMConfig['allow_upload'] = true;
+$IMConfig['allow_upload'] = false;
 
 // -------------------------------------------------------------------------
 
@@ -247,6 +247,8 @@ $IMConfig['allow_upload'] = true;
 */
 
 $IMConfig['validate_images'] = true;
+
+$IMConfig['allowed_image_extensions'] = array("jpg","gif","png","jpeg");
 
 // -------------------------------------------------------------------------
 

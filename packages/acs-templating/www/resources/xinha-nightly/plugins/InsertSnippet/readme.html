@@ -20,10 +20,10 @@
 </p>
 <h2>Usage</h2>
 <p>
-In order to use your own snippets you have to al least one parameter to your xinha_config:
+In order to use your own snippets you have to add at least one parameter to your xinha_config:
 </p>
 <pre>
-xinha_config.InsertSnippet.snippets = _editor_url+"plugins/InsertSnippet/snippets.php";
+xinha_config.InsertSnippet.snippets = Xinha.getPluginDir('InsertSnippet') + "/snippets.php";
 </pre>
 <p>
 The path above indicates the use of the provided backend. This parses a file that contains the snippets and 

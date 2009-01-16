@@ -1,32 +1,40 @@
-/* This compressed file is part of Xinha. For uncompressed sources, forum, and bug reports, go to xinha.org */
-/* This file is part of version 0.95 released Mon, 12 May 2008 17:33:15 +0200 */
-/* The URL of the most recent version of this file is http://svn.xinha.webfactional.com/trunk/plugins/ImageManager/assets/popup.js */
-function __dlg_translate(_1){
-var _2=["span","option","td","th","button","div","label","a","img","legend"];
-for(var _3=0;_3<_2.length;++_3){
-var _4=document.getElementsByTagName(_2[_3]);
-for(var i=_4.length;--i>=0;){
-var _6=_4[i];
-if(_6.firstChild&&_6.firstChild.data){
-var _7=Xinha._lc(_6.firstChild.data,_1);
-if(_7){
-_6.firstChild.data=_7;
-}
-}
-if(_6.title){
-var _7=Xinha._lc(_6.title,_1);
-if(_7){
-_6.title=_7;
-}
-}
-if(_6.alt){
-var _7=Xinha._lc(_6.alt,_1);
-if(_7){
-_6.alt=_7;
-}
-}
-}
-}
-document.title=Xinha._lc(document.title,_1);
-}
+// htmlArea v3.0 - Copyright (c) 2002, 2003 interactivetools.com, inc.
+// This copyright notice MUST stay intact for use (see license.txt).
+//
+// Portions (c) dynarch.com, 2003
+//
+// A free WYSIWYG editor replacement for <textarea> fields.
+// For full source code and docs, visit http://www.interactivetools.com/
+//
+// Version 3.0 developed by Mihai Bazon.
+//   http://dynarch.com/mishoo
+//
+// $Id$
 
+// Override the ordinary popup.js translation to add translation for a few other HTML elements.
+
+function __dlg_translate(context) {
+    var types = ["span", "option", "td", "th", "button", "div", "label", "a","img", "legend"];
+    for (var type = 0; type < types.length; ++type) {
+        var spans = document.getElementsByTagName(types[type]);
+        for (var i = spans.length; --i >= 0;) {
+            var span = spans[i];
+            if (span.firstChild && span.firstChild.data) {
+                var txt = Xinha._lc(span.firstChild.data, context);
+                if (txt)
+                    span.firstChild.data = txt;
+            }
+            if (span.title) {
+                var txt = Xinha._lc(span.title, context);
+                if (txt)
+                    span.title = txt;
+            }
+            if (span.alt) {
+                var txt = Xinha._lc(span.alt, context);
+                if (txt)
+                    span.alt = txt;
+            }
+        }
+    }
+    document.title = Xinha._lc(document.title, context);
+}
