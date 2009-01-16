@@ -280,7 +280,7 @@ $IMConfig['link_enable_target'] = true;
 
   FALSE - No uploading allowed.
 */
-$IMConfig['allow_upload'] = true;
+$IMConfig['allow_upload'] = false;
 
 /* Maximum upload file size
 

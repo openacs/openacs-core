@@ -94,6 +94,8 @@
     var _backend_url = "<?php print $IMConfig['backend_url']; ?>";
     var _resized_prefix = "<?php echo $IMConfig['resized_prefix']; ?>";
   	var _resized_dir = "<?php echo $IMConfig['resized_dir']; ?>";
+    var manager_show_target = <?php echo ($insertMode == 'link' && $IMConfig['link_enable_target'] ? 'true'  : 'false') ?>;
+
 	<?php
 	if(isset($_REQUEST['mode']))
 	{

@@ -4,5 +4,5 @@
 {
   "definition list": "definitie lijst",
   "definition term": "definitie term",
-  "definition description": "definitie omschrijving
+  "definition description": "definitie omschrijving"
 }
