@@ -104,7 +104,7 @@ if { [nsv_exists acs_properties database_problem] } {
 installation is to configure your RDBMS, correctly install a database driver,
 and configure AOLserver to use it.  You can download 
 and install the latest version of the AOLserver Oracle and PostgreSQL drivers
-from the <a href='http://openacs.org/software.adp'>OpenACS.org Software Page</a>.
+from the <a href='http://openacs.org/software'>OpenACS.org Software Page</a>.
 
 <p>
 Once you're sure everything is installed and configured correctly, restart AOLserver.</b></p>
