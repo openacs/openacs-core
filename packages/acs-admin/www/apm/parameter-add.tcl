@@ -10,10 +10,11 @@ ad_page_contract {
 
 set user_id [ad_get_user_id]
 
+set parameter_id [db_nextval acs_object_id_seq]
 db_1row apm_get_name { 
-    select package_key, pretty_name, version_name, acs_object_id_seq.nextval as parameter_id
-      from apm_package_version_info
-     where version_id = :version_id
+  select package_key, pretty_name, version_name
+  from apm_package_version_info
+  where version_id = :version_id
 }
 db_release_unused_handles
 
