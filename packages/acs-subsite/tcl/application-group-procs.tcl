@@ -253,7 +253,7 @@ ad_proc -public application_group::closest_ancestor_application_group_site_node 
     {-node_id ""}
 } {
     Starting with the node at with given id, or at given url,
-    climb up the site map and return the group_id of the first 
+    climb up the site map and return the node of the first 
     non null application group
 
     Will ignore itself and only return true ancestors
@@ -264,7 +264,7 @@ ad_proc -public application_group::closest_ancestor_application_group_site_node 
     @param node_id      The id of the node to start from. Takes precedence 
                         over any provided url.
 
-    @return The id of the application group
+    @return The node of the first non-null application group in array get format.
 
     @author Peter Marklund, Dave Bauer
 } {
