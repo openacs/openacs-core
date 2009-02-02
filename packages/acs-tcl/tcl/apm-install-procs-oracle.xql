@@ -290,9 +290,6 @@
       </querytext>
 </fullquery>
 
-  </querytext>
-</fullquery>
-
 <fullquery name="apm_package_install.version_exists_p">      
       <querytext>
       
