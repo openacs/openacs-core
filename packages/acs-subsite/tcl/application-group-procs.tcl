@@ -293,6 +293,26 @@ ad_proc -public application_group::closest_ancestor_application_group_site_node 
 
     return [array get node_array]
 }
+
+ad_proc -public application_group::closest_ancestor_application_group_id {
+    {-url ""}
+    {-node_id ""}
+} {
+    Application group id of the closest ancestor package that has an application
+    group
+
+    @param url url of the node to start searching from.
+    @param node_id node_id of the node to start searching from (only one of node_id and url
+           can be specified).
+
+    @return group_id of the closest ancestor package that has an application group, if any.
+} {
+    array set site_node \
+        [application_group::closest_ancestor_application_group_site_node \
+            -url $url \
+            -node_id $node_id]
+    return [application_group::group_id_from_package_id -package_id $site_node(object_id)]
+}
     
 ad_proc -public application_group::child_application_groups {
     -node_id:required
