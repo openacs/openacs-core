@@ -36,11 +36,11 @@ create table apm_package_types (
 				constraint apm_packages_init_install_p_ck
 				check (initial_install_p in ('t', 'f')),
     singleton_p			char(1) default 'f' not null
-				constraint apm_packages_site_avail_p_ck
+				constraint apm_packages_singleton_p_ck
 				check (singleton_p in ('t', 'f')),
     implements_subsite_p        char(1) default 'f' not null
 				constraint apm_packages_impl_subsite_p_ck
-				check (singleton_p in ('t', 'f')),
+				check (implements_subsite_p in ('t', 'f')),
     inherit_templates_p         char(1) default 't' not null
 				constraint apm_packages_inherit_t_p_ck
 				check (inherit_templates_p in ('t', 'f'))
@@ -1154,6 +1154,7 @@ as
   function add_dependency(
     dependency_id		in apm_package_dependencies.dependency_id%TYPE
 			        default null,
+    dependency_type             in apm_package_dependencies.dependency_type%TYPE,
     version_id			in apm_package_versions.version_id%TYPE,
     dependency_uri		in apm_package_dependencies.service_uri%TYPE,
     dependency_version		in apm_package_dependencies.service_version%TYPE
@@ -1227,7 +1228,7 @@ as
     singleton_p			in apm_package_types.singleton_p%TYPE
     	    	    	    	default null,
     implements_subsite_p        in apm_package_types.implements_subsite_p%TYPE 
-				default null    
+				default null,
     inherit_templates_p         in apm_package_types.inherit_templates_p%TYPE 
 				default null,    
     spec_file_path		in apm_package_types.spec_file_path%TYPE 
@@ -1369,7 +1370,7 @@ as
     singleton_p			in apm_package_types.singleton_p%TYPE 
     	    	    	    	default null,    
     implements_subsite_p        in apm_package_types.implements_subsite_p%TYPE 
-				default null    
+				default null,
     inherit_templates_p         in apm_package_types.inherit_templates_p%TYPE 
 				default null,    
     spec_file_path		in apm_package_types.spec_file_path%TYPE 
@@ -2214,6 +2215,7 @@ as
   function add_dependency(
     dependency_id		in apm_package_dependencies.dependency_id%TYPE
 			        default null,
+    dependency_type             in apm_package_dependencies.dependency_type%TYPE,
     version_id			in apm_package_versions.version_id%TYPE,
     dependency_uri		in apm_package_dependencies.service_uri%TYPE,
     dependency_version		in apm_package_dependencies.service_version%TYPE
@@ -2230,8 +2232,8 @@ as
       insert into apm_package_dependencies
       (dependency_id, version_id, dependency_type, service_uri, service_version)
       values
-      (v_dep_id, add_dependency.version_id, 'requires', add_dependency.dependency_uri,
-	add_dependency.dependency_version);
+      (v_dep_id, add_dependency.version_id, add_dependency.dependency_type,
+       add_dependency.dependency_uri, add_dependency.dependency_version);
       return v_dep_id;
   end add_dependency;
 
@@ -2458,7 +2460,7 @@ as
     singleton_p			in apm_package_types.singleton_p%TYPE
     	    	    	    	default null,
     implements_subsite_p        in apm_package_types.implements_subsite_p%TYPE 
-				default null    
+				default null,
     inherit_templates_p         in apm_package_types.inherit_templates_p%TYPE 
 				default null,    
     spec_file_path		in apm_package_types.spec_file_path%TYPE 
@@ -2478,7 +2480,7 @@ as
     	initial_install_p = nvl(update_type.initial_install_p, initial_install_p),
     	singleton_p = nvl(update_type.singleton_p, singleton_p),
         implements_subsite_p = nvl(update_type.implements_subsite_p, implements_subsite_p),
-        inherits_subsite_p = nvl(update_type.implements_subsite_p, implements_subsite_p)
+        inherit_templates_p = nvl(update_type.inherit_templates_p, inherit_templates_p)
       where package_key = update_type.package_key;
       return update_type.package_key;
   end update_type;
