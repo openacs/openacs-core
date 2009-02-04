@@ -1,6 +1,6 @@
 select define_function_args('application_group__new','group_id,object_type;application_group,creation_date;now(),creation_user,creation_ip,email,url,group_name,package_id,join_policy,context_id');
 
-create function application_group__new(integer,varchar,timestamptz,integer,varchar,varchar,varchar,varchar,integer,varchar,integer)
+create or replace function application_group__new(integer,varchar,timestamptz,integer,varchar,varchar,varchar,varchar,integer,varchar,integer)
 returns integer as '
 declare
   new__group_id              alias for $1;
