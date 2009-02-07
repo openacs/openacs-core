@@ -859,6 +859,28 @@ ad_proc -private api_tcl_to_html {proc_name} {
 
 } {
 
+    if {[info command ::xotcl::api] ne ""} {
+      set scope [::xotcl::api scope_from_proc_index $proc_name]
+    } else {
+      set scope ""
+    }
+
+    set proc_namespace ""
+    regexp {^(::)?(.*)::[^:]+$} $proc_name match colons proc_namespace
+
+    return [api_tclcode_to_html -scope $scope -proc_namespace $proc_namespace [api_get_body $proc_name]]
+}
+
+ad_proc -private api_tclcode_to_html {{-scope ""} {-proc_namespace ""} script} {
+
+    Given a script, this proc formats it as HTML, including highlighting syntax in
+    various colors and creating hyperlinks to other proc definitions.<BR>
+    The inspiration for this proc was the tcl2html script created by Jeff Hobbs.
+
+    @param script script to be formated in HTML
+
+} {
+
     # Returns length of a variable name
     proc length_var {data} {
         if {[regexp -indices {^\$\{[^\}]+\}} $data found]} {
@@ -970,15 +992,13 @@ ad_proc -private api_tcl_to_html {proc_name} {
         {gets puts socket tell format scan} \
         ]
 
-    if {"" ne [info command ::xotcl::api] } {
+    if {[info command ::xotcl::api] ne ""} {
       set XOTCL_KEYWORDS [list self my next]
       # only command names are highlighted, otherwise we could add xotcl method
       # names by [lsort -unique [concat [list self my next] ..
       # [::xotcl::Object info methods] [::xotcl::Class info methods] ]]
-      set scope [::xotcl::api scope_from_proc_index $proc_name]
     } else {
       set XOTCL_KEYWORDS {}
-      set scope ""
     }
 
     # Returns a list of the commands from all namespaces.
@@ -991,15 +1011,7 @@ ad_proc -private api_tcl_to_html {proc_name} {
     }
     set COMMANDS [list_all_procs]
 
-
-    set proc_namespace ""
-    regexp {^(::)?(.*)::[^:]+$} $proc_name match colons proc_namespace
-
-    set data \n[api_get_body $proc_name]
-
-    regsub -all {&} $data {\&amp;} data
-    regsub -all {<} $data {\&lt;} data
-    regsub -all {>} $data {\&gt;} data
+    set data [string map [list & "&amp;" < "&lt;" > "&gt;"] \n$script]
 
     set in_comment 0
     set in_quotes 0
@@ -1149,6 +1161,7 @@ ad_proc -private api_tcl_to_html {proc_name} {
     # We added a linefeed at the beginning to simplify processing
     return [string range $html 1 end]
 }
+
 
 
 ####################
