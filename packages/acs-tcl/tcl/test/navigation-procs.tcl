@@ -168,7 +168,7 @@ aa_register_case -cats {
     api 
     smoke 
     web
-} -procs {
+} -libraries tclwebtest -procs {
 
     ad_context_bar_multirow
     
