@@ -7,7 +7,7 @@ ad_library {
 
 aa_register_case -cats {
     smoke production_safe web
-} -procs {
+} -libraries tclwebtest -procs {
     whos_online::num_users
     whos_online::set_invisible
     whos_online::all_invisible_user_ids
