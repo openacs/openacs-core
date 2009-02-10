@@ -105,7 +105,7 @@ declare
     begin
         -- generate a message id now so we can get an rfc822 message-id
         if p_message_id is null then
-            select acs_object_id_seq.nextval into v_message_id;
+            select nextval(''t_acs_object_id_seq'') into v_message_id;
         else
             v_message_id := p_message_id;
         end if;

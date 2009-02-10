@@ -450,9 +450,9 @@ for each row  execute procedure  composition_rels_in_tr();
 insert into group_type_rels 
 (group_rel_type_id, rel_type, group_type)
 values
-(acs_object_id_seq.nextval, 'membership_rel', 'group');
+(nextval('t_acs_object_id_seq'), 'membership_rel', 'group');
 
 insert into group_type_rels 
 (group_rel_type_id, rel_type, group_type)
 values
-(acs_object_id_seq.nextval, 'composition_rel', 'group');
+(nextval('t_acs_object_id_seq'), 'composition_rel', 'group');

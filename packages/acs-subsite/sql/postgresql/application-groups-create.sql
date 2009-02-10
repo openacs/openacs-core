@@ -117,17 +117,17 @@ end;' language 'plpgsql' stable;
 insert into group_type_rels
 (group_rel_type_id, group_type, rel_type)
 values
-(acs_object_id_seq.nextval, 'application_group', 'composition_rel');
+(nextval('t_acs_object_id_seq'), 'application_group', 'composition_rel');
 
 insert into group_type_rels
 (group_rel_type_id, group_type, rel_type)
 values
-(acs_object_id_seq.nextval, 'application_group', 'membership_rel');
+(nextval('t_acs_object_id_seq'), 'application_group', 'membership_rel');
 
 insert into group_type_rels
 (group_rel_type_id, group_type, rel_type)
 values
-(acs_object_id_seq.nextval, 'application_group', 'admin_rel');
+(nextval('t_acs_object_id_seq'), 'application_group', 'admin_rel');
 
 -----------
 -- Views --

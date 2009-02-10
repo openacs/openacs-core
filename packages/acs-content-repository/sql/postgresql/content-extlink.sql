@@ -38,7 +38,7 @@ begin
   end if;
 
   if new__name is null then
-    select acs_object_id_seq.nextval into v_extlink_id from dual;
+    select nextval(''t_acs_object_id_seq'') into v_extlink_id from dual;
     v_name := ''link'' || v_extlink_id;
   else
     v_name := new__name;

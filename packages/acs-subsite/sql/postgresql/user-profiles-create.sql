@@ -194,7 +194,7 @@ end;' language 'plpgsql';
 insert into group_type_rels
 (group_rel_type_id, group_type, rel_type)
 values
-(acs_object_id_seq.nextval, 'application_group', 'user_profile');
+(nextval('t_acs_object_id_seq', 'application_group', 'user_profile');
 
 
 -- This view is extremely fast, but for some reason its not so blaxing fast
