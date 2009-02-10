@@ -351,9 +351,11 @@ aa_register_case  \
     auth_password_change {
     Test the auth::password::change proc.
 } {
-    aa_stub ns_sendmail {
+    aa_stub acs_mail_lite::send {
+	acs_mail_lite::send__arg_parser
+
         global ns_sendmail_to
-        set ns_sendmail_to $to
+        set ns_sendmail_to $to_addr
     }
 
     aa_run_with_teardown \
