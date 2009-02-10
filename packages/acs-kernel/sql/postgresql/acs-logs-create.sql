@@ -61,7 +61,7 @@ begin
     insert into acs_logs
      (log_id, log_level, log_key, message)
     values
-     (acs_log_id_seq.nextval, ''notice'', notice__log_key, notice__message);
+     (nextval(''t_acs_log_id_seq''), ''notice'', notice__log_key, notice__message);
 
     return 0; 
 end;' language 'plpgsql';
@@ -77,7 +77,7 @@ begin
     insert into acs_logs
      (log_id, log_level, log_key, message)
     values
-     (acs_log_id_seq.nextval, ''warn'', warn__log_key, warn__message);
+     (nextval(''t_acs_log_id_seq''), ''warn'', warn__log_key, warn__message);
 
     return 0; 
 end;' language 'plpgsql';
@@ -93,7 +93,7 @@ begin
     insert into acs_logs
      (log_id, log_level, log_key, message)
     values
-     (acs_log_id_seq.nextval, ''error'', error__log_key, error__message);
+     (nextval(''t_acs_log_id_seq''), ''error'', error__log_key, error__message);
 
     return 0; 
 end;' language 'plpgsql';
@@ -109,7 +109,7 @@ begin
     insert into acs_logs
      (log_id, log_level, log_key, message)
     values
-     (acs_log_id_seq.nextval, ''debug'', debug__log_key, debug__message);
+     (nextval(''t_acs_log_id_seq''), ''debug'', debug__log_key, debug__message);
 
     return 0; 
 end;' language 'plpgsql';

@@ -177,7 +177,7 @@ declare
 begin
 
     if new__callback_id is null then
-       select acs_object_id_seq.nextval into v_callback_id;
+       select nextval(''t_acs_object_id_seq'') into v_callback_id;
     else
        v_callback_id := new__callback_id;
     end if;

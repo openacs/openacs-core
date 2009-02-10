@@ -367,7 +367,7 @@ begin
   -- use the copy_id or generate a new copy_id if none is specified
   --   the copy_id is a revision_id
   if copy__copy_id is null then
-    select acs_object_id_seq.nextval into v_copy_id from dual;
+    select nextval(''t_acs_object_id_seq'') into v_copy_id from dual;
   else
     v_copy_id := copy__copy_id;
   end if;

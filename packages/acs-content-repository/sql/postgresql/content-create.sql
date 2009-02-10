@@ -1284,7 +1284,7 @@ declare
   v_revision_id integer;
 begin
 
-  select acs_object_id_seq.nextval into v_item_id;
+  select nextval(''t_acs_object_id_seq'') into v_item_id;
 
   PERFORM content_template__new(
                 ''default_template'',
