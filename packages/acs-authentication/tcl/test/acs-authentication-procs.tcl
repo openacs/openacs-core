@@ -371,7 +371,7 @@ aa_register_case  \
             set user_id $user_info(user_id)
 
             global ns_sendmail_to
-            set ns_sendmail_to {}
+            set ns_sendmail_to {ns_sendmail_UNCALLED}
 
             parameter::set_value -parameter EmailAccountOwnerOnPasswordChangeP  -package_id [ad_acs_kernel_id] -value 1
             aa_true "Send email" [parameter::get -parameter EmailAccountOwnerOnPasswordChangeP -package_id [ad_acs_kernel_id] -default 1]
@@ -772,7 +772,7 @@ aa_register_case  \
             
             # Check that we get email
             aa_equals "Email sent to user" $ns_sendmail_to $email
-            set ns_sendmail_to {}
+            set ns_sendmail_to {ns_sendmail_UNCALLED}
 
             # Set parameter to false
             parameter::set_value -parameter EmailAccountOwnerOnPasswordChangeP -package_id [ad_acs_kernel_id] -value 0
@@ -787,7 +787,7 @@ aa_register_case  \
             aa_equals "Password change OK" $result(password_status) "ok"
             
             # Check that we do not get an email
-            aa_equals "Email NOT sent to user" $ns_sendmail_to {}
+            aa_equals "Email NOT sent to user" $ns_sendmail_to {ns_sendmail_UNCALLED}
 
             ad_parameter_cache -delete [ad_acs_kernel_id] EmailAccountOwnerOnPasswordChangeP
         }
