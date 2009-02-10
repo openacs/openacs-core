@@ -726,9 +726,11 @@ aa_register_case  \
     auth_email_on_password_change {
     Test acs-kernel.EmailAccountOwnerOnPasswordChangeP parameter
 } {
-    aa_stub ns_sendmail {
+    aa_stub acs_mail_lite::send {
+	acs_mail_lite::send__arg_parser
+
         global ns_sendmail_to
-        set ns_sendmail_to $to
+        set ns_sendmail_to $to_addr
     }
 
     aa_run_with_teardown \
