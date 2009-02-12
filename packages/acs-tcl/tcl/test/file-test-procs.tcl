@@ -235,7 +235,7 @@ aa_register_case -cats {smoke} files__check_xql_files {
         if {![file exists ${base}.tcl] && ![file exists ${base}.vuh]} {
             # the file did not exist so we must have a -db extension...
             regexp {(.*?)(-)?([A-Za-z_]*)[.]xql$} $file match base dummy db
-            ns_log debug "JCD: acs_tcl__check_xql_files: $db $base from $file"
+
             if { $db ne "" 
                  && $dummy ne ""
                  && ![string match $db oracle]
