@@ -5,7 +5,7 @@ ad_library {
 
     @creation-date 27 Feb 2000
     @author Jon Salz [jsalz@arsdigita.com]
-    @cvs-id aolserver-3-procs.tcl,v 1.2 2001/04/24 22:38:12 donb Exp
+    @cvs-id $Id$
 }
 
 # -1 = Not there or value was ""

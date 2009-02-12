@@ -5,7 +5,7 @@ ad_library {
     @author Various [acs@arsdigita.com]
     @author Rob Mayoff <mayoff@arsdigita.com>
     @creation-date 2000-10-19
-    @cvs-id memoize-procs.tcl,v 1.4.2.1 2003/03/05 14:40:42 lars Exp
+    @cvs-id $Id$
 }
 
 # Use shiny new ns_cache-based util_memoize.

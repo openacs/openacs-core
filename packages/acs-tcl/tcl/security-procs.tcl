@@ -7,7 +7,7 @@ ad_library {
     @author Jon Salz (jsalz@arsdigita.com)
     @author Richard Li (richardl@arsdigita.com)
     @author Archit Shah (ashah@arsdigita.com)
-    @cvs-id security-procs.tcl,v 1.13.2.5 2003/06/06 08:48:50 lars Exp
+    @cvs-id $Id$
 }
 
 namespace eval security {}
