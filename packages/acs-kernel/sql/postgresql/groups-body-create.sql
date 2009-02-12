@@ -866,10 +866,24 @@ begin
 
   insert into group_rels
   (group_rel_id, group_id, rel_type)
-  select nextval(''t_acs_object_id_seq''), v_group_id, g.rel_type
-    from group_type_rels g
-   where g.group_type = new__object_type;
-
+  select nextval(''t_acs_object_id_seq''), v_group_id, rels.rel_type
+    from
+    ( select distinct g.rel_type
+      from group_type_rels g,
+      ( select parent.object_type as parent_type
+        from acs_object_types child, acs_object_types parent
+        where child.object_type <> parent.object_type
+        and child.tree_sortkey between parent.tree_sortkey
+        and tree_right(parent.tree_sortkey)
+        and child.object_type = new__object_type
+        order by parent.tree_sortkey desc) types
+     where g.group_type = types.parent_type
+     and not exists
+     ( select 1 from group_rels
+       where group_rels.group_id = v_group_id
+       and group_rels.rel_type = g.rel_type)
+  ) rels;
+  
   return v_group_id;
   
 end;' language 'plpgsql';
