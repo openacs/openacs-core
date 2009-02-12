@@ -1,7 +1,7 @@
 ad_library {
     This is the table, dimensional bar and sort tools.
     an example of their use can be found in /acs-examples
-    @cvs-id table-display-procs.tcl,v 1.9 2002/09/20 22:18:16 jeffd Exp
+    @cvs-id $Id$
 }
     
 # Dimensional selection bars.

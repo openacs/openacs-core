@@ -21,7 +21,7 @@ ad_library {
     @author Mark Dettinger (mdettinger@arsdigita.com)
     @creation-date March 29, 2000
     @last-updated July 25, 2000
-    @cvs-id ad-functional.tcl,v 3.4.2.5 2000/07/29 05:34:45 mdetting Exp
+    @cvs-id $Id$
 
     This was part of ACS 3
     Added to OpenACS by bdolicki on 11 Feb 2004

@@ -4,7 +4,7 @@ ad_library {
 
     @creation-date 30 May 2000
     @author Jon Salz [jsalz@arsdigita.com]
-    @cvs-id request-processor-init.tcl,v 1.3 2002/09/20 21:46:34 jeffd Exp
+    @cvs-id $Id$
 }
 
 # These procedures are dynamically defined at startup to alleviate

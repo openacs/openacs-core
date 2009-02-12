@@ -5,7 +5,7 @@ ad_library {
 
     @author Various (acs@arsdigita.com)
     @creation-date 13 April 2000
-    @cvs-id utilities-procs.tcl,v 1.19.2.18 2003/06/06 21:40:37 donb Exp
+    @cvs-id $Id$
 }
 
 namespace eval util {}

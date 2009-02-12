@@ -1,7 +1,7 @@
 ad_library {
     UI widgets for use in forms, etc.
 
-    @cvs-id widgets-procs.tcl,v 1.4.2.1 2003/04/28 23:48:00 jong Exp
+    @cvs-id $Id$
 }
 
 proc_doc state_widget { {default ""} {select_name "usps_abbrev"}} "Returns a state selection box" {
