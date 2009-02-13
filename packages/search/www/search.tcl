@@ -34,7 +34,7 @@ set context_base_url $package_url
 set debug_p 0
 
 set user_id [ad_conn user_id]
-set driver [ad_parameter -package_id $package_id FtsEngineDriver]
+set driver [parameter::get -package_id $package_id -parameter FtsEngineDriver]
 if {[callback::impl_exists -impl $driver -callback search::driver_info]} {
     array set info [lindex [callback -impl $driver search::driver_info] 0]
 #    array set info [list package_key intermedia-driver version 1 automatic_and_queries_p 1  stopwords_p 1]
@@ -62,7 +62,7 @@ if {[string trim $q] eq ""} {
 
 
 if { $num <= 0} {
-    set limit [ad_parameter -package_id $package_id LimitDefault]
+    set limit [parameter::get -package_id $package_id -parameter LimitDefault]
 } else {
     set limit $num
 }
@@ -78,7 +78,7 @@ if { $dfs eq "all" } {
     set dfs ""
 }
 
-array set symbol2interval [ad_parameter -package_id $package_id Symbol2Interval]
+array set symbol2interval [parameter::get -package_id $package_id -parameter Symbol2Interval]
 if { $dfs ne "" } {
     set df [db_exec_plsql get_df "select now() + '$symbol2interval($dfs)'::interval"]
 }
@@ -91,7 +91,7 @@ set urlencoded_query [ad_urlencode $q]
 
 if { $offset < 0 } { set offset 0 }
 set params [list $q $offset $limit $user_id $df]
-if {$search_package_id eq "" && [ad_parameter -package_id $package_id SubsiteSearchP -default 1]
+if {$search_package_id eq "" && [parameter::get -package_id $package_id -parameter SubsiteSearchP -default 1]
     && [subsite::main_site_id] != [ad_conn subsite_id]} {
     # We are in a subsite and SubsiteSearchP is true
     lappend params [concat [ad_conn subsite_id] [subsite::util::packages -node_id [ad_conn node_id]]]
@@ -182,7 +182,7 @@ for { set __i 0 } { $__i < [expr {$high - $low +1}] } { incr __i } {
     template::multirow append searchresult $title_summary $txt_summary $url_one
 }
 
-set search_the_web [ad_parameter -package_id $package_id SearchTheWeb]
+set search_the_web [parameter::get -package_id $package_id -parameter SearchTheWeb]
 if {[llength $search_the_web]} {
     set stw ""
     foreach {url site} $search_the_web {

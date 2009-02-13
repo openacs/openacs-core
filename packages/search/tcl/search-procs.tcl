@@ -98,7 +98,7 @@ ad_proc -private search::indexer {} {
     @author Jeff Davis (davis@xarg.net)
 } {
 
-    set driver [ad_parameter -package_id [apm_package_id_from_key search] FtsEngineDriver]
+    set driver [parameter::get -package_id [apm_package_id_from_key search] -parameter FtsEngineDriver]
 
     if { $driver eq ""
          || (![callback::impl_exists -callback search::index -impl $driver] && ! [acs_sc_binding_exists_p FtsEngineDriver $driver])} {
