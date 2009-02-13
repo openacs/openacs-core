@@ -106,7 +106,7 @@ ad_proc -public item::get_revision_content { revision_id args } {
     set item_id [::content::revision::item_id -revision_id $revision_id]
 
     if { [template::util::is_nil item_id] } {
-      ns_log warning "item::get_revision_content: No such revision: $reivision_id"
+      ns_log warning "item::get_revision_content: No such revision: $revision_id"
       return 0
     }  
   } else {
