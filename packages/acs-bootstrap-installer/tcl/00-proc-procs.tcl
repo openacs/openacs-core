@@ -44,6 +44,14 @@ proc ad_make_relative_path { path } {
     error "$path is not under the path root ([acs_root_dir])"
 }
 
+proc ad_get_tcl_call_stack { { level -2 }} {
+    set stack ""
+    for { set x [expr {[info level] + $level}] } { $x > 0 } { incr x -1 } {
+	append stack "    called from [info level $x]\n"
+    }
+    return $stack
+}
+
 proc ad_parse_documentation_string { doc_string elements_var } {
     upvar $elements_var elements
     if { [info exists elements] } {
@@ -421,7 +429,7 @@ proc ad_proc args {
 
     set log_code ""
     if { $warn_p } {
-        set log_code "ns_log Debug \"Deprecated proc $proc_name used\"\n"
+        set log_code "ns_log Debug \"Deprecated proc $proc_name used:\\n\[ad_get_tcl_call_stack\]\"\n"
     }
 
     if { $callback ne "" && $impl ne "" } {
