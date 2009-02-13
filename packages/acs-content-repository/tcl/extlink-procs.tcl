@@ -60,7 +60,7 @@ ad_proc -deprecated content_extlink::edit {
     @label Label for the extlink (defaults to the URL)
     @description An extended description of the link (defaults to NULL)
 
-    @see update-directly
+    @see content::extlink::edit
 } {
 
     set modifying_user [ad_conn user_id]
