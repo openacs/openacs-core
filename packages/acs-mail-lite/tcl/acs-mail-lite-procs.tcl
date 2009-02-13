@@ -31,22 +31,6 @@ namespace eval acs_mail_lite {
         return [parameter::get -package_id [get_package_id] -parameter $name -default $default]
     }
     
-    ad_proc -public address_domain {} {
-        @returns domain address to which bounces are directed to
-    } {
-        set domain [get_parameter -name "BounceDomain"]
-        if { [empty_string_p $domain] } {
-            regsub {http://} [ns_config ns/server/[ns_info server]/module/nssock hostname] {} domain
-        }
-        return $domain
-    }
-    
-    ad_proc -private bounce_prefix {} {
-        @returns bounce prefix for x-envelope-from
-    } {
-        return [get_parameter -name "EnvelopePrefix"]
-    }
-    
     ad_proc -private mail_dir {} {
         @returns incoming mail directory to be scanned for bounces
     } {
