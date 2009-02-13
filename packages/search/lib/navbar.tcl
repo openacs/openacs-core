@@ -1,7 +1,7 @@
 set package_id [ad_conn package_id]
 
-set limit [ad_parameter -package_id $package_id LimitDefault]
-set pages_per_group [ad_parameter -package_id $package_id PagesPerGroup]
+set limit [parameter::get -package_id $package_id -parameter LimitDefault]
+set pages_per_group [parameter::get -package_id $package_id -parameter PagesPerGroup]
 
 set current_result_page [expr {$low / $limit}]
 set from_result_page [expr {($current_result_page / $pages_per_group) * $pages_per_group}]
