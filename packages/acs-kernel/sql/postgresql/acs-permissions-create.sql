@@ -71,6 +71,13 @@ create table acs_privilege_descendant_map (
 
 create index acs_priv_desc_map_idx on acs_privilege_descendant_map(descendant);
 
+-- Gustaf (Jan 2009): interesting enough, the index above is never
+-- used on openacs.org and can be most likely dropped. The index below
+-- (together with acs_obj_ctx_idx_object_id_idx) makes real-world
+-- applications more than a factor of 10 faster (openacs/download and
+-- openacs/download/one-revision?revision_id=2089636)
+create index acs_priv_desc_map_privilege_idx on acs_privilege_descendant_map (privilege);
+
 -- This trigger is used to create a pseudo-tree hierarchy that
 -- can be used to emulate tree queries on the acs_privilege_hierarchy table.
 -- The acs_privilege_hierarchy table maintains the permissions structure, but 
