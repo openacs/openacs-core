@@ -6,18 +6,18 @@ ad_library {
     @creation-date 7 Mar 2000
 }    
 
-proc_doc server_cluster_enabled_p {} { Returns true if clustering is enabled. } {
+ad_proc server_cluster_enabled_p {} { Returns true if clustering is enabled. } {
     return [parameter::get -package_id [ad_acs_kernel_id] -parameter ClusterEnabledP -default 0]
 }
 
-proc_doc server_cluster_all_hosts {} { Returns a list of all hosts, possibly including this host, in the server cluster. } {
+ad_proc server_cluster_all_hosts {} { Returns a list of all hosts, possibly including this host, in the server cluster. } {
     if { ![server_cluster_enabled_p] } {
 	return [list]
     }
     return [parameter::get -package_id [ad_acs_kernel_id] -parameter ClusterPeerIP]
 }
 
-proc_doc server_cluster_peer_hosts {} { Returns a list of all hosts, excluding this host, in the server cluster. } {
+ad_proc server_cluster_peer_hosts {} { Returns a list of all hosts, excluding this host, in the server cluster. } {
     set peer_hosts [list]
     set my_ip [ns_config ns/server/[ns_info server]/module/nssock Address]
 
@@ -35,7 +35,7 @@ proc_doc server_cluster_peer_hosts {} { Returns a list of all hosts, excluding t
     return $peer_hosts
 }
 
-proc_doc server_cluster_authorized_p { ip } { Can a request coming from $ip be a valid cluster request, i.e., matches some value in ClusterIPMask or is 127.0.0.1? } {
+ad_proc server_cluster_authorized_p { ip } { Can a request coming from $ip be a valid cluster request, i.e., matches some value in ClusterIPMask or is 127.0.0.1? } {
     if { ![server_cluster_enabled_p] } {
 	return 0
     }

@@ -4,7 +4,7 @@ ad_library {
     @cvs-id $Id$
 }
 
-proc_doc state_widget { {default ""} {select_name "usps_abbrev"}} "Returns a state selection box" {
+ad_proc state_widget { {default ""} {select_name "usps_abbrev"}} "Returns a state selection box" {
 
     set widget_value "<select name=\"$select_name\">\n"
     if { $default eq "" } {
@@ -24,7 +24,7 @@ proc_doc state_widget { {default ""} {select_name "usps_abbrev"}} "Returns a sta
     return $widget_value
 }
 
-proc_doc country_widget { {default ""} {select_name "country_code"} {size_subtag "size=4"}} "Returns a country selection box" {
+ad_proc country_widget { {default ""} {select_name "country_code"} {size_subtag "size=4"}} "Returns a country selection box" {
 
     set widget_value "<select name=\"$select_name\" $size_subtag>\n"
     if { $default eq "" } {
@@ -51,7 +51,7 @@ proc_doc country_widget { {default ""} {select_name "country_code"} {size_subtag
 # teadams - It is usually more approprate to use html_select_options or
 # html_select_value_options. 
 
-proc_doc ad_generic_optionlist {items values {default ""}} "Use this to build select form fragments.  Given a list of items and a list of values, will return the option tags with default highlighted as appropriate." {
+ad_proc ad_generic_optionlist {items values {default ""}} "Use this to build select form fragments.  Given a list of items and a list of values, will return the option tags with default highlighted as appropriate." {
 
     # items is a list of the items you would like the user to select from
     # values is a list of corresponding option values
@@ -74,11 +74,11 @@ proc day_list {} {
     return  {1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31}
 }
 
-proc_doc month_list {} "Returns list of month abbreviations" {
+ad_proc month_list {} "Returns list of month abbreviations" {
     return  {Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec}
 }
 
-proc_doc long_month_list {} "Returns list of months" {
+ad_proc long_month_list {} "Returns list of months" {
     return  {January February March April May Jun July August September October November December}
 }
 
@@ -87,7 +87,7 @@ proc month_value_list {} {
     return {1 2 3 4 5 6 7 8 9 10 11 12}
 } 
 
-proc_doc future_years_list {{num_year 10}} "Returns a list containing the next num_year years in the future." {
+ad_proc future_years_list {{num_year 10}} "Returns a list containing the next num_year years in the future." {
     set year [ns_fmttime [ns_time] %Y] 
     set counter  0
     while {$counter < $num_year } {
@@ -103,7 +103,7 @@ proc_doc future_years_list {{num_year 10}} "Returns a list containing the next n
 # if pad_to_two_p is 1, the option values will be 
 # padded to 2 digites with a leading 0
 
-proc_doc ad_integer_optionlist {start_value end_value {default ""} { pad_to_two_p 0} } "Produces an optionlist for a range of integers from start_value to end_value. If default matches one of the options, it is selection. If pad_to_two_p is 1, the option values will be padded to 2 digites with a leading 0." {
+ad_proc ad_integer_optionlist {start_value end_value {default ""} { pad_to_two_p 0} } "Produces an optionlist for a range of integers from start_value to end_value. If default matches one of the options, it is selection. If pad_to_two_p is 1, the option values will be padded to 2 digites with a leading 0." {
     # items is a list of the items you would like the user to select from
     # values is a list of corresponding option values
     # default is the value of the item to be selected
@@ -128,7 +128,7 @@ proc_doc ad_integer_optionlist {start_value end_value {default ""} { pad_to_two_
     return $return_string
 }   
 
-proc_doc ad_dateentrywidget {column { value 0 } } {
+ad_proc ad_dateentrywidget {column { value 0 } } {
     Returns form pieces for a date entry widget. A null date may be selected.
 } {
     ns_share NS
@@ -258,7 +258,7 @@ ad_proc ad_db_select_widget {
     }
 }
 
-proc_doc currency_widget {{default ""} {select_name "currency_code"} {size_subtag "size=\"4\""}} "Returns a currency selection box" {
+ad_proc currency_widget {{default ""} {select_name "currency_code"} {size_subtag "size=\"4\""}} "Returns a currency selection box" {
 
     set widget_value "<select name=\"$select_name\" $size_subtag>\n"
     if { $default eq "" } {
@@ -286,7 +286,7 @@ proc_doc currency_widget {{default ""} {select_name "currency_code"} {size_subta
     return $widget_value
 }
 
-proc_doc ad_html_colors {} "Returns an array of HTML colors and names." {
+ad_proc ad_html_colors {} "Returns an array of HTML colors and names." {
     return {
 	{ Black 0 0 0 }
 	{ Silver 192 192 192 }
@@ -307,7 +307,7 @@ proc_doc ad_html_colors {} "Returns an array of HTML colors and names." {
     }
 }
 
-proc_doc ad_color_widget_js {} "Returns JavaScript code necessary to use color widgets." {
+ad_proc ad_color_widget_js {} "Returns JavaScript code necessary to use color widgets." {
     return {
 
 var adHexTupletValues = '0123456789ABCDEF';
@@ -367,7 +367,7 @@ function adUpdateColorList(field) {
     }
 } 
 
-proc_doc ad_color_widget { name default { use_js 0 } } "Returns a color selection widget, optionally using JavaScript. Default is a string of the form '0,192,255'." {
+ad_proc ad_color_widget { name default { use_js 0 } } "Returns a color selection widget, optionally using JavaScript. Default is a string of the form '0,192,255'." {
     set out "<table cellspacing=0 cellpadding=0><tr><td><select name=$name.list"
     if { $use_js != 0 } {
 	append out " onChange=\"adUpdateColorText('$name')\""
@@ -410,7 +410,7 @@ proc_doc ad_color_widget { name default { use_js 0 } } "Returns a color selectio
     return $out
 }
 
-proc_doc ad_process_color_widgets args { Sets variables corresponding to the color widgets named in $args. } {
+ad_proc ad_process_color_widgets args { Sets variables corresponding to the color widgets named in $args. } {
     foreach field $args {
 	upvar $field var
 	set var [ns_queryget "$field.list"]
@@ -423,7 +423,7 @@ proc_doc ad_process_color_widgets args { Sets variables corresponding to the col
     }
 }
 
-proc_doc ad_color_to_hex { triplet } { Converts a string of the form 0,192,255 to a string of the form #00C0FF. } {
+ad_proc ad_color_to_hex { triplet } { Converts a string of the form 0,192,255 to a string of the form #00C0FF. } {
     if { [regexp {^([0-9]+),([0-9]+),([0-9]+)$} $triplet all r g b] } {
 	return "#[format "%02x%02x%02x" $r $g $b]"
     } else {
