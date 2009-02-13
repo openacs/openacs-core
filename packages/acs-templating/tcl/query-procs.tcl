@@ -680,6 +680,10 @@ ad_proc -public template::multirow {
     set multirow_level_up $ulevel
   } else {
     set multirow_level_up \#[adp_level]
+    if { $multirow_level_up eq "\#" } {
+      # in event adp_level not defined we are calling either at install so up 1.
+      set multirow_level_up 1
+    }
   }
   
   switch -exact $command {
@@ -813,7 +817,6 @@ ad_proc -public template::multirow {
     
     foreach {
       set code_block [lindex $args 0]
-      
       upvar $multirow_level_up $name:rowcount rowcount $name:columns columns
 
       if {![info exists rowcount] || ![info exists columns]} { 

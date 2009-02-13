@@ -80,13 +80,13 @@ for {set i 1} {$i <= ${friends:rowcount}} {incr i} {
 
 set friends:1(extra_column) "${friends:1(first_names)} is da bomb totally"
 
-template::util::multirow_foreach friends {
+template::multirow foreach friends {
     set friends.extra_column "@friends.first_names@ is a good person"
 }
 
 template::multirow extend friends another_column
 
-template::util::multirow_foreach friends {
+template::multirow foreach friends {
   if {[info exists friends.extra_column]} {
     set friends.another_column "there is stuff in dere"
   } else {
