@@ -233,7 +233,7 @@ ad_proc -private lang::catalog::messages_in_db {
     set message_list [list]
 
     all_messages_for_package_and_locale $package_key $locale
-    template::util::multirow_foreach all_messages {
+    template::multirow foreach all_messages {
         lappend message_list @all_messages.message_key@ @all_messages.message@
     }
 
@@ -404,7 +404,7 @@ ad_proc -public lang::catalog::export {
 		set messages_list [list]
 		set descriptions_list [list]
 		all_messages_for_package_and_locale $package_key $locale
-		template::util::multirow_foreach all_messages {
+		template::multirow foreach all_messages {
 		    lappend messages_list @all_messages.message_key@ @all_messages.message@
 		    lappend descriptions_list @all_messages.message_key@ @all_messages.description@
 		}
