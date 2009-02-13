@@ -151,8 +151,8 @@ create table acs_objects (
 	unique (context_id, object_id) disable
 );
 
-create index acs_objects_context_object_idx on
-       acs_objects (context_id, object_id);
+create index acs_objects_context_object_idx on acs_objects (context_id, object_id);
+create index acs_obj_ctx_idx_object_id_idx on acs_object_context_index (object_id);
 
 alter table acs_objects modify constraint acs_objects_context_object_un enable;
 

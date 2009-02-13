@@ -411,6 +411,7 @@ create table acs_object_context_index (
 );
 
 create index acs_obj_ctx_idx_ancestor_idx on acs_object_context_index (ancestor_id);
+create index acs_obj_ctx_idx_object_id_idx on acs_object_context_index (object_id);
 
 create view acs_object_paths
 as select object_id, ancestor_id, n_generations
