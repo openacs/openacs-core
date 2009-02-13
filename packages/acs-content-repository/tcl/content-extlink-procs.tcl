@@ -56,6 +56,34 @@ ad_proc -public content::extlink::new {
 }
 
 
+ad_proc -public content::extlink::edit {
+    -extlink_id:required
+    -url:required
+    -label:required
+    -description:required
+} {
+
+    Edit an existing external link.  The parameters are required because it
+    is assumed that the caller will be pulling the existing values out of
+    the database before editing them.
+
+    @extlink_id Optional pre-assigned object_id for the link
+    @url The URL of the external resource
+    @label Label for the extlink (defaults to the URL)
+    @description An extended description of the link (defaults to NULL)
+} {
+
+    set modifying_user [ad_conn user_id]
+    set modifying_ip [ad_conn peeraddr]
+
+    db_transaction {
+        db_dml extlink_update_object {}
+        db_dml extlink_update_extlink {}
+    }
+}
+
+
+
 ad_proc -public content::extlink::delete {
     -extlink_id:required
 } {
