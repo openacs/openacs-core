@@ -19,7 +19,7 @@ nsv_array set apm_reload_watch [list]
 nsv_array set apm_package_info [list]
 nsv_set apm_properties reload_level 0
 
-proc_doc apm_first_time_loading_p {} { 
+ad_proc apm_first_time_loading_p {} { 
     Returns 1 if this is a -procs.tcl file's first time loading, or 0 otherwise. 
 } {
     global apm_first_time_loading_p

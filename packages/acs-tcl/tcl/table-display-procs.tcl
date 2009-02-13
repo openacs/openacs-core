@@ -6,7 +6,7 @@ ad_library {
     
 # Dimensional selection bars.
 #
-proc_doc ad_dimensional {option_list {url {}} {options_set ""} {optionstype url}} {
+ad_proc ad_dimensional {option_list {url {}} {options_set ""} {optionstype url}} {
     Generate an option bar as in the ticket system; 
     <ul>
       <li> option_list -- the structure with the option data provided 
@@ -100,7 +100,7 @@ proc_doc ad_dimensional {option_list {url {}} {options_set ""} {optionstype url}
     append html "</tr>\n</table>\n"
 }
 
-proc_doc ad_dimensional_sql {option_list {what "where"} {joiner "and"} {options_set ""}} {
+ad_proc ad_dimensional_sql {option_list {what "where"} {joiner "and"} {options_set ""}} {
     see ad_dimensional for the format of option_list
     <p>
     Given what clause we are asking for and the joiner this returns 
@@ -146,7 +146,7 @@ proc_doc ad_dimensional_sql {option_list {what "where"} {joiner "and"} {options_
     return $out
 }
 
-proc_doc ad_dimensional_set_variables {option_list {options_set ""}} {
+ad_proc ad_dimensional_set_variables {option_list {options_set ""}} {
     set the variables defined in option_list from the form provided 
     (form defaults to ad_conn form) or to default value from option_list if 
     not in the form data.
@@ -547,7 +547,7 @@ ad_proc ad_table_column_list {
     return $column_list
 }
 
-proc_doc ad_sort_primary_key orderby {
+ad_proc ad_sort_primary_key orderby {
     return the primary (first) key of an order spec
     used by 
 } {
@@ -557,7 +557,7 @@ proc_doc ad_sort_primary_key orderby {
     return $orderby
 }
 
-proc_doc ad_table_same varname {
+ad_proc ad_table_same varname {
     Called from inside ad_table.
 
     returns true if the variable has same value as
@@ -572,14 +572,14 @@ proc_doc ad_table_same varname {
     }
 }
         
-proc_doc ad_table_span {str {td_html "align=\"left\""}} {
+ad_proc ad_table_span {str {td_html "align=\"left\""}} {
     given string the function generates a row which spans the 
     whole table.
 } {
     return "<tr><td colspan=\"[uplevel llength \$Tcolumn_list]\" $td_html>$str</td></tr>"
 }
 
-proc_doc ad_table_form {datadef {type select} {return_url {}} {item_group {}} {item {}} {columns {}} {allowed {}}} {
+ad_proc ad_table_form {datadef {type select} {return_url {}} {item_group {}} {item {}} {columns {}} {allowed {}}} {
     builds a form for chosing the columns to display 
     <p>
     columns is a list of the currently selected columns.
@@ -681,7 +681,7 @@ proc_doc ad_table_form {datadef {type select} {return_url {}} {item_group {}} {i
     return $html
 }
 
-proc_doc ad_table_sort_form {datadef {type select} {return_url {}} {item_group {}} {item {}} {sort_spec {}} {allowed {}}} {
+ad_proc ad_table_sort_form {datadef {type select} {return_url {}} {item_group {}} {item {}} {sort_spec {}} {allowed {}}} {
     builds a form for setting up custom sorts.
     <p>
     <ul>
@@ -792,7 +792,7 @@ proc_doc ad_table_sort_form {datadef {type select} {return_url {}} {item_group {
     return $html
 }
 
-proc_doc ad_order_by_from_sort_spec {sort_by tabledef} {
+ad_proc ad_order_by_from_sort_spec {sort_by tabledef} {
     Takes a sort_by spec, and translates it into into an "order by" clause
     with each sort_by key dictated by the sort info in tabledef
 } {
@@ -829,7 +829,7 @@ proc_doc ad_order_by_from_sort_spec {sort_by tabledef} {
     return $order_by_clause
 }
 
-proc_doc ad_new_sort_by {key keys} {
+ad_proc ad_new_sort_by {key keys} {
     Makes a new sort_by string, sorting by "key".
 
     If the key is followed by "*", that indicates the ordering should
@@ -860,7 +860,7 @@ proc_doc ad_new_sort_by {key keys} {
     }
 }
 
-proc_doc ad_same_page_link {variable value text {form ""}} {
+ad_proc ad_same_page_link {variable value text {form ""}} {
     Makes a link to this page, with a new value for "variable".
 } {
     if { $form eq "" } {
@@ -870,7 +870,7 @@ proc_doc ad_same_page_link {variable value text {form ""}} {
     return "<a href=\"[ad_conn url]?$variable=[ns_urlencode $value]$url_vars\">$text</a>"
 }
 
-proc_doc ad_reverse order { 
+ad_proc ad_reverse order { 
     returns the opposite sort order from the
     one it is given.  Mostly for columns whose natural 
     sort order is not the default.
@@ -882,7 +882,7 @@ proc_doc ad_reverse order {
     return $order
 }
 
-proc_doc ad_custom_load {user_id item_group item item_type} {
+ad_proc ad_custom_load {user_id item_group item item_type} {
     load a persisted user customization as saved by 
     for example table-custom.tcl.
 } { 
@@ -902,7 +902,7 @@ proc_doc ad_custom_load {user_id item_group item item_type} {
     return $value
 }
     
-proc_doc ad_custom_list {user_id item_group item_set item_type target_url custom_url {new_string "new view"}} {
+ad_proc ad_custom_list {user_id item_group item_set item_type target_url custom_url {new_string "new view"}} {
     Generates the html fragment for choosing, editing and creating
     user customized data
 } {
@@ -929,7 +929,7 @@ proc_doc ad_custom_list {user_id item_group item_set item_type target_url custom
 }
     
 
-proc_doc ad_custom_page_defaults defaults { 
+ad_proc ad_custom_page_defaults defaults { 
     set the page defaults. If the form is 
     empty do a returnredirect with the defaults set
 } {
@@ -957,7 +957,7 @@ proc_doc ad_custom_page_defaults defaults {
     }
 }
 
-proc_doc ad_custom_form {return_url item_group item} { 
+ad_proc ad_custom_form {return_url item_group item} { 
     sets up the head of a form to feed to /tools/form-custom.tcl
 } {
     append html "<form method=\"get\" action=\"/tools/form-custom\">\n" 
@@ -972,7 +972,7 @@ proc_doc ad_custom_form {return_url item_group item} {
     append html "<input type=\"submit\" value=\"Save settings\">"
 }
 
-proc_doc ad_dimensional_settings {define current} {
+ad_proc ad_dimensional_settings {define current} {
     given a dimensional slider definition this routine returns a form to set the 
     defaults for the given slider.
 
@@ -1000,7 +1000,7 @@ proc_doc ad_dimensional_settings {define current} {
     return $html
 }
 
-proc_doc ad_table_orderby_sql {datadef orderby order} {
+ad_proc ad_table_orderby_sql {datadef orderby order} {
     create the order by clause consistent with the orderby and order variables
     and the datadef which built the table
 } {

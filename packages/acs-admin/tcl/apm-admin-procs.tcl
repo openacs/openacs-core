@@ -74,7 +74,7 @@ ad_proc apm_header { { -form "" } args } {
     "
 }
 
-proc_doc apm_shell_wrap { cmd } { Returns a command string, wrapped it shell-style (with backslashes) in case lines get too long. } {
+ad_proc apm_shell_wrap { cmd } { Returns a command string, wrapped it shell-style (with backslashes) in case lines get too long. } {
     set out ""
     set line_length 0
     foreach element $cmd {

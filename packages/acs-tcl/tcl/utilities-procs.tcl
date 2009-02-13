@@ -24,7 +24,7 @@ proc proc_source_file_full_path {proc_name} {
     }
 }
 
-proc_doc util_report_library_entry {{extra_message ""}} "Should be called at beginning of private Tcl library files so that it is easy to see in the error log whether or not private Tcl library files contain errors." {
+ad_proc util_report_library_entry {{extra_message ""}} "Should be called at beginning of private Tcl library files so that it is easy to see in the error log whether or not private Tcl library files contain errors." {
     set tentative_path [info script]
     regsub -all {/\./} $tentative_path {/} scrubbed_path
     if { $extra_message eq ""  } {
@@ -35,7 +35,7 @@ proc_doc util_report_library_entry {{extra_message ""}} "Should be called at beg
     ns_log Notice $message
 }
 
-proc_doc check_for_form_variable_naughtiness { 
+ad_proc check_for_form_variable_naughtiness { 
     name 
     value 
 } {
@@ -352,7 +352,7 @@ proc util_PrettyBoolean {t_or_f { default  "default" } } {
     }
 }
 
-proc_doc util_PrettyTclBoolean {zero_or_one} "Turns a 1 (or anything else that makes a Tcl IF happy) into Yes; anything else into No" {
+ad_proc util_PrettyTclBoolean {zero_or_one} "Turns a 1 (or anything else that makes a Tcl IF happy) into Yes; anything else into No" {
   if {$zero_or_one} {
 	return "Yes"
     } else {
@@ -1606,7 +1606,7 @@ ad_proc -public util_httpget {
 # some procs to make it easier to deal with CSV files (reading and writing)
 # added by philg@mit.edu on October 30, 1999
 
-proc_doc util_escape_quotes_for_csv {string} "Returns its argument with double quote replaced by backslash double quote" {
+ad_proc util_escape_quotes_for_csv {string} "Returns its argument with double quote replaced by backslash double quote" {
     regsub -all \" $string {\"}  result
 
     return $result
@@ -3871,7 +3871,7 @@ proc ad_set_typed_form_variables {conn args why} {
 # check_for_form_variable_naughtiness. Read the documentation
 # for ad_set_typed_form_variable_filter for more details.
 
-proc_doc ad_var_type_check_integer_p {value} {
+ad_proc ad_var_type_check_integer_p {value} {
     <pre>
     #
     # return 1 if $value is an integer, 0 otherwise.
@@ -3886,7 +3886,7 @@ proc_doc ad_var_type_check_integer_p {value} {
     }
 }
 
-proc_doc ad_var_type_check_safefilename_p {value} {
+ad_proc ad_var_type_check_safefilename_p {value} {
     <pre>
     #
     # return 0 if the file contains ".."
@@ -3901,7 +3901,7 @@ proc_doc ad_var_type_check_safefilename_p {value} {
     }
 }
 
-proc_doc ad_var_type_check_dirname_p {value} {
+ad_proc ad_var_type_check_dirname_p {value} {
     <pre>
     #
     # return 0 if $value contains a / or \, 1 otherwise.
@@ -3916,7 +3916,7 @@ proc_doc ad_var_type_check_dirname_p {value} {
     }
 }
 
-proc_doc ad_var_type_check_number_p {value} {
+ad_proc ad_var_type_check_number_p {value} {
     <pre>
     #
     # return 1 if $value is a valid number
@@ -3930,7 +3930,7 @@ proc_doc ad_var_type_check_number_p {value} {
     }
 }
 
-proc_doc ad_var_type_check_word_p {value} {
+ad_proc ad_var_type_check_word_p {value} {
     <pre>
     #
     # return 1 if $value contains only letters, numbers, dashes, 
@@ -3946,7 +3946,7 @@ proc_doc ad_var_type_check_word_p {value} {
     }
 }
 
-proc_doc ad_var_type_check_nocheck_p {{value ""}} {
+ad_proc ad_var_type_check_nocheck_p {{value ""}} {
     <pre>
     #
     # return 1 regardless of the value. This useful if you want to 
@@ -3962,7 +3962,7 @@ proc_doc ad_var_type_check_nocheck_p {{value ""}} {
     return 1
 }
 
-proc_doc ad_var_type_check_noquote_p {value} {
+ad_proc ad_var_type_check_noquote_p {value} {
     <pre>
     #
     # return 1 if $value contains any single-quotes
@@ -3977,7 +3977,7 @@ proc_doc ad_var_type_check_noquote_p {value} {
     }
 }
 
-proc_doc ad_var_type_check_integerlist_p {value} {
+ad_proc ad_var_type_check_integerlist_p {value} {
     <pre>
     #
     # return 1 if list contains only numbers, spaces, and commas.
@@ -3996,7 +3996,7 @@ proc_doc ad_var_type_check_integerlist_p {value} {
     }
 }
 
-proc_doc ad_var_type_check_fail_p {value} {
+ad_proc ad_var_type_check_fail_p {value} {
     <pre>
     #
     # A check that always returns 0. Useful if you want to disable all access
@@ -4007,7 +4007,7 @@ proc_doc ad_var_type_check_fail_p {value} {
     return 0
 }
 
-proc_doc ad_var_type_check_third_urlv_integer_p {{args ""}} {
+ad_proc ad_var_type_check_third_urlv_integer_p {{args ""}} {
     <pre>
     #
     # Returns 1 if the third path element in the URL is integer.

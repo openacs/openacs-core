@@ -1451,7 +1451,7 @@ ad_proc -private apm_package_install_spec { version_id } {
 
 
 
-proc_doc -public apm_version_enable { {-callback apm_dummy_callback} version_id } {
+ad_proc -public apm_version_enable { {-callback apm_dummy_callback} version_id } {
 
     Enables a version of a package (disabling any other version of the package).
     @param version_id The id of the version to be enabled.
@@ -1466,7 +1466,7 @@ proc_doc -public apm_version_enable { {-callback apm_dummy_callback} version_id 
     apm_callback_and_log $callback  "<p>Package enabled."
 }
 
-proc_doc -public apm_version_disable { {-callback apm_dummy_callback} version_id } {
+ad_proc -public apm_version_disable { {-callback apm_dummy_callback} version_id } {
 
     Disables a version of a package.
 
