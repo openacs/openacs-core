@@ -2455,7 +2455,7 @@ ad_proc -public ad_get_tcl_call_stack { {level -2} } {
     @author Lars Pind (lars@pinds.com)
 
     @see ad_print_stack_trace
- } {
+} {
     set stack ""
     for { set x [expr {[info level] + $level}] } { $x > 0 } { incr x -1 } {
 	append stack "    called from [info level $x]\n"
