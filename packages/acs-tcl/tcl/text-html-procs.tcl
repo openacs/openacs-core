@@ -257,6 +257,54 @@ ad_proc -private util_close_html_tags {
 } {
     set frag $html_fragment 
 
+    # 
+    # The code in this function had an exponential behavior based on
+    # the size.  On the current OpenACS.org site (Jan 2009), the
+    # function took on certain forums entries 6 to 9 hours
+    # (e.g. /forums/message-view?message_id=357753). This is in
+    # particular a problem, since bots like googlebot will timeout on
+    # these entries (while OpenACS is still computing the content) and
+    # retry after some time until they get the result (which never
+    # happened). So, often multiple computation ran at the same
+    # time. Since OpenACS.org is configured with only a few connection
+    # threads, this is essentially a "bot DOS attack".
+    #
+    # Therefore, the tdom-based code in the next paragraph is used to
+    # speedup the process significantly (most entries are anyway
+    # correct).  The forum processing query from above takes now 7.3
+    # seconds instead of 9h. The tdom-based code was developed as an
+    # emergency measure.
+    #
+    # The code below the mentioned paragraph could be certainly as
+    # well made faster, but this will require some more detailed
+    # analysis.
+    #
+    # The best solution for forums would be to check the fragment not
+    # at rendering time, but at creation time.
+    #
+    # -gustaf neumann    (Jan 2009)
+
+    set frag [string map [list &# "&amp;#"] $html_fragment]
+    if {[catch {dom parse -html <body>$frag doc} errorMsg]} {
+      # we got an error, so do normal processing
+      ns_log notice "tdom can't parse the provided HTML, error=$errorMsg,\n\
+	checking fragment without tdom"
+    } else {
+      $doc documentElement root
+      set html ""
+      # discared forms
+      foreach node [$root selectNodes //form] {$node delete}
+      # output wellformed html
+      set b [$root selectNodes {//body[1]}]
+      foreach n [$b childNodes] {
+       append html [$n asHTML]
+      }
+      return $html
+    }
+    set frag $html_fragment 
+   
+    # original code continues
+
     set syn(A) nobr
     set syn(ADDRESS) nobr
     set syn(NOBR) nobr
