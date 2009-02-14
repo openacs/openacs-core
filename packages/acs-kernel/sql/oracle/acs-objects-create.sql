@@ -152,7 +152,6 @@ create table acs_objects (
 );
 
 create index acs_objects_context_object_idx on acs_objects (context_id, object_id);
-create index acs_obj_ctx_idx_object_id_idx on acs_object_context_index (object_id);
 
 alter table acs_objects modify constraint acs_objects_context_object_un enable;
 
@@ -242,6 +241,7 @@ create table acs_object_context_index (
 ) organization index;
 
 create index acs_obj_ctx_idx_ancestor_idx on acs_object_context_index (ancestor_id);
+create index acs_obj_ctx_idx_object_id_idx on acs_object_context_index (object_id);
 
 create or replace view acs_object_paths
 as select object_id, ancestor_id, n_generations
