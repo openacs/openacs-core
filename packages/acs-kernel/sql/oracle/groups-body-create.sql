@@ -792,14 +792,14 @@ is
   -- setup the permissible relationship types for this group
   insert into group_rels
   (group_rel_id, group_id, rel_type)
-  select t_acs_object_id_seq.nextval, v_group_id, rels.rel_type
+  select acs_object_id_seq.nextval, v_group_id, rels.rel_type
     from
     ( select distinct g.rel_type
       from group_type_rels g,
       ( select object_type as parent_type
         from acs_object_types
-        start with new.object_type
-        connect by object_type = prior.supertype
+        start with new.object_type = object_type
+        connect by prior supertype = object_type
         ) types
      where g.group_type = types.parent_type
      and not exists
