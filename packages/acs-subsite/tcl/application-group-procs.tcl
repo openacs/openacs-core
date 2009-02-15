@@ -251,18 +251,18 @@ ad_proc -public application_group::delete {
 ad_proc -public application_group::closest_ancestor_application_group_site_node {
     {-url ""}
     {-node_id ""}
+    {-include_self:boolean}
 } {
     Starting with the node at with given id, or at given url,
     climb up the site map and return the node of the first 
     non null application group
-
-    Will ignore itself and only return true ancestors
 
     @param url          The url of the node to start from. You must provide 
                         either url or node_id. An empty url is taken to mean 
                         the main site.
     @param node_id      The id of the node to start from. Takes precedence 
                         over any provided url.
+    @param include_self If true, include the current package in the search
 
     @return The node of the first non-null application group in array get format.
 
@@ -278,13 +278,20 @@ ad_proc -public application_group::closest_ancestor_application_group_site_node 
     }
 
     set group_id ""
-    while {$group_id eq "" && $url != "/"} {
+    while {$group_id eq "" && $url ne ""} {
+        
+        if { $include_self_p } {
+            array set node_array [site_node::get -url $url]
+            set group_id [application_group::group_id_from_package_id \
+                             -package_id $node_array(package_id) \
+                             -no_complain]
+        }
+
+        set include_self_p 1
+
         # move up a level
         set url [string trimright $url /]
         set url [string range $url 0 [string last / $url]]
-        
-        array set node_array [site_node::get -url $url]
-        set group_id [application_group::group_id_from_package_id -package_id $node_array(package_id) -no_complain]
     }
     if {$group_id eq ""} {
 	array unset -no_complain node_array 
@@ -294,9 +301,34 @@ ad_proc -public application_group::closest_ancestor_application_group_site_node 
     return [array get node_array]
 }
 
+ad_proc -public application_group::closest_ancestor_element {
+    {-node_id ""}
+    {-url ""}
+    {-element:required}
+    {-include_self:boolean}
+} {
+    Return one element of the site node for the closest ancestor package that has an
+    application group.
+
+    @param url url of the node to start searching from.
+    @param node_id node_id of the node to start searching from (only one of node_id and url
+           can be specified).
+    @param include_self If true, include the current package in the search
+
+    @return element The desired element of the appropriate site node.
+} {
+    array set site_node \
+        [application_group::closest_ancestor_application_group_site_node \
+            -include_self=$include_self_p \
+            -url $url \
+            -node_id $node_id]
+    return $site_node($element)
+}
+
 ad_proc -public application_group::closest_ancestor_application_group_id {
     {-url ""}
     {-node_id ""}
+    {-include_self:boolean}
 } {
     Application group id of the closest ancestor package that has an application
     group
@@ -304,14 +336,15 @@ ad_proc -public application_group::closest_ancestor_application_group_id {
     @param url url of the node to start searching from.
     @param node_id node_id of the node to start searching from (only one of node_id and url
            can be specified).
+    @param include_self If true, include the current package in the search
 
     @return group_id of the closest ancestor package that has an application group, if any.
 } {
-    array set site_node \
-        [application_group::closest_ancestor_application_group_site_node \
-            -url $url \
-            -node_id $node_id]
-    return [application_group::group_id_from_package_id -package_id $site_node(object_id)]
+    return [application_group::closest_ancestor_element \
+               -include_self=$include_self_p \
+               -url $url \
+               -node_id $node_id \
+               -element application_group_id]
 }
     
 ad_proc -public application_group::child_application_groups {
