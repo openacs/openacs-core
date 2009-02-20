@@ -30,7 +30,7 @@ limit $news_limit
     regsub -all {/} $publish_title { / } publish_title
 
 	if { !$html_p } {
-		set publish_body [ad_convert_to_html $publish_body]
+		set publish_body [ad_text_to_html $publish_body]
 	}
 
 }
