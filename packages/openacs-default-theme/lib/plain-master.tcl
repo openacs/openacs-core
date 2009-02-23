@@ -15,7 +15,6 @@ ad_page_contract {
 
   $Id$
 }
-ns_log Notice "Huh? here I am!"
 
 if { ![info exists main_content_p] } {
     set main_content_p 1
