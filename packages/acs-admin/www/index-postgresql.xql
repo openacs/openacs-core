@@ -8,9 +8,10 @@
     select s.node_id,
            site_node__url(node_id) as node_url,
            instance_name
-    from   site_nodes s, apm_packages p
+    from   site_nodes s, apm_packages p, apm_package_types t
     where  s.object_id = p.package_id
-    and    p.package_key = 'acs-subsite'
+    and    p.package_key = t.package_key
+    and    t.implements_subsite_p is true
 
       </querytext>
 </fullquery>
