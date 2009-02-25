@@ -344,7 +344,7 @@ ad_proc -public template::list::create {
     # Set up automatic 'checkbox' element as the first element
     if { !$has_checkboxes_p && [llength $bulk_actions] > 0 } {
 	if { $key eq "" } {
-	    error "You cannot have bulk_actions without providing a key"
+	    error "You cannot have bulk_actions without providing a key for list '$name'"
 	}
         # Create the checkbox element
         # We only ulevel 1 here, because we want the subst to be done in this namespace
@@ -375,7 +375,7 @@ ad_proc -public template::list::create {
     # Handle filters
     foreach { dim_name dim_spec } $filters {
         if { [lsearch $reserved_filter_names $dim_name] != -1 } {
-            error "The name '$dim_name' is a reserved filter name. Reserved names are [join $reserved_filter_names ", "]."
+            error "The name '$dim_name' is a reserved filter name, list '$name'. Reserved names are [join $reserved_filter_names ", "]."
         }
         template::list::filter::create \
             -list_name $name \
@@ -624,6 +624,9 @@ ad_proc -public template::list::get_reference {
            list.
 
 } {
+    if {$name eq ""} {
+	error "Attempt to get reference to an empty name."
+    } 
     set refname [get_refname -name $name]
     
     if { !$create_p && ![uplevel \#[template::adp_level] [list info exists $refname]] } {
@@ -2127,7 +2130,7 @@ ad_proc -public template::list::element::set_property {
         default {
             # We require all properties to be initialized to the empty string in the array, otherwise they're illegal.
             if { ![info exists element_properties($property)] } {
-                error "Unknown element property '$property'. Allowed properties are [join [array names element_properties] ", "]."
+                error "Unknown element property '$property' for element '$element_name' in list '$list_name'. Allowed properties are [join [array names element_properties] ", "]."
             }
 
             # All other vars, do an uplevel subst on the value now
@@ -2310,6 +2313,9 @@ ad_proc -public template::list::filter::create {
     lappend list_properties(filters) $filter_name
 
     # Properties are going to be stored in an array named 'list-name:filter:filter-name:properties'
+    if {$filter_name eq ""} { 
+	error "Invalid filter name for list '$list_name', spec: $spec"
+    }
     set filter_ref "$list_name:filter:$filter_name:properties"
 
     # We also store the full filter array name, so its easy to find <
@@ -2434,7 +2440,7 @@ ad_proc -public template::list::filter::set_property {
         default {
             # We require all properties to be initialized to the empty string in the array, otherwise they're illegal.
             if { ![info exists filter_properties($property)] } {
-                error "Unknown filter property '$property'. Allowed properties are [join [array names filter_properties] ", "]."
+                error "Unknown filter property '$property'  for filter '$filter_name' in list '$list_name'. Allowed properties are [join [array names filter_properties] ", "]."
             }
 
             # All other vars, do an uplevel subst on the value now
@@ -2652,7 +2658,7 @@ ad_proc -public template::list::format::create {
             default {
                 # We require all properties to be initialized to the empty string in the array, otherwise they're illegal.
                 if { ![info exists format_properties($key)] } {
-                    error "Unknown format property '$key'. Allowed properties are [join [array names format_properties] ", "]."
+                    error "Unknown format property '$key' for element '$format_name' in list '$list_name'. Allowed properties are [join [array names format_properties] ", "]."
                 }
 
                 # All other vars, do an uplevel subst on the value now
@@ -2776,6 +2782,9 @@ ad_proc -public template::list::orderby::create {
     lappend list_properties(orderby_refs) [get_refname -list_name $list_name -orderby_name $orderby_name]
 
     # Create the orderby properties array
+    if {$orderby_name eq ""} {
+	error "Invalid orderby field or spec for list '$list_name', spec: $spec"
+    }
     get_reference -create -list_name $list_name -orderby_name $orderby_name
 
     # Setup element defaults
