@@ -2919,7 +2919,7 @@ ad_proc -public template::list::orderby::set_property {
         default {
             # We require all properties to be initialized to the empty string in the array, otherwise they're illegal.
             if { ![info exists orderby_properties($property)] } {
-                error "Unknown orderby property '$property'. Allowed properties are [join [array names orderby_properties] ", "]."
+                error "Unknown orderby property '$property' for column '$orderby_name' in list '$list_name'. Allowed properties are [join [array names orderby_properties] ", "]."
             }
 
             # All other vars, do an uplevel subst on the value now
