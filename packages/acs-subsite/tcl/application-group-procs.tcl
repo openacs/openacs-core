@@ -181,7 +181,7 @@ ad_proc -public application_group::group_id_from_package_id {
 ad_proc -public application_group::package_id_from_group_id {
     -group_id:required
 } {
-    return [db_string get {}]
+    return [db_string -cache_key application_group_pid_from_gid_${group_id} get {}]
 }
 
 ad_proc -public application_group::new {
@@ -251,6 +251,8 @@ ad_proc -public application_group::delete {
     db_dml delete_perms {}
 
     db_exec_plsql delete {}
+
+    db_flush -cache_key_pattern application_group_*
 
 }
 
