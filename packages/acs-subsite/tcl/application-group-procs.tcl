@@ -178,6 +178,12 @@ ad_proc -public application_group::group_id_from_package_id {
     return $group_id
 }
 
+ad_proc -public application_group::package_id_from_group_id {
+    -group_id:required
+} {
+    return [db_string get {}]
+}
+
 ad_proc -public application_group::new {
     { -group_id "" } 
     { -group_type "application_group"}

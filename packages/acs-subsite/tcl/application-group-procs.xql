@@ -1,6 +1,14 @@
 <?xml version="1.0"?>
 <queryset>
 
+<fullquery name="application_group::package_id_from_group_id.get">      
+  <querytext>
+    select package_id
+    from application_groups
+    where group_id = :group_id
+  </querytext>
+</fullquery>
+
 <fullquery name="application_group::new.group_name_query">      
       <querytext>
       
