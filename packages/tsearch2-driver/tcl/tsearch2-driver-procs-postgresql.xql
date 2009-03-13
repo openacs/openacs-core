@@ -11,7 +11,7 @@
     </querytext>
   </fullquery>
 
-  <fullquery name="tsearch2::search.base_query">
+  <fullquery name="callback::search::search::impl::tsearch2-driver.base_query"> 
   <rdbms><type>postgresql</type><version>8.3</version></rdbms>
     <querytext>
       where fti @@ to_tsquery(:query)
@@ -23,10 +23,15 @@
     </querytext>
   </fullquery>
 
-  <fullquery name="tsearch2::search.search">
+  <fullquery name="callback::search::search::impl::tsearch2-driver.search">
   <rdbms><type>postgresql</type><version>8.3</version></rdbms>
     <querytext>
-      select txt.object_id $base_query
+      select txt.object_id
+      from
+      [join $from_clauses ","]
+      $base_query
+      [expr {[llength $where_clauses] > 0 ? " and " : ""}]
+      [join $where_clauses " and "]
       order by ts_rank(fti,to_tsquery(:query)) desc
       $limit_clause $offset_clause
     </querytext>
@@ -61,7 +66,7 @@
     </querytext>
   </fullquery>
 
-  <fullquery name="tsearch2::search.base_query">
+  <fullquery name="callback::search::search::impl::tsearch2-driver.base_query">
   <rdbms><type>postgresql</type><version>8.0</version></rdbms>
     <querytext>
       where fti @@ to_tsquery('default',:query)
@@ -73,10 +78,15 @@
     </querytext>
   </fullquery>
 
-  <fullquery name="tsearch2::search.search">
+  <fullquery name="callback::search::search::impl::tsearch2-driver.search">
   <rdbms><type>postgresql</type><version>8.0</version></rdbms>
     <querytext>
-      select txt.object_id $base_query
+      select txt.object_id
+      from
+      [join $from_clauses ","]
+      $base_query
+      [expr {[llength $where_clauses] > 0 ? " and " : ""}]
+      [join $where_clauses " and "]
       order by rank(fti,to_tsquery('default',:query)) desc
       $limit_clause $offset_clause
     </querytext>
@@ -85,7 +95,7 @@
   <fullquery name="tsearch2::summary.summary">
   <rdbms><type>postgresql</type><version>8.0</version></rdbms>
     <querytext>
-      select headline(:txt,to_tsquery('default',:query))
+      select headline('default',:txt,to_tsquery('default',:query))
     </querytext>
   </fullquery>
 

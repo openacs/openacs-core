@@ -84,13 +84,13 @@ ad_proc -public tsearch2::update_index {
     }
 }
 
-ad_proc -public tsearch2::search {
+ad_proc -callback search::search -impl tsearch2-driver {
+    {-extra_args {}}
     query
     offset
     limit
     user_id
     df
-    packages
 } {
     ftsenginedriver search operation implementation for tsearch2
 
@@ -113,11 +113,14 @@ ad_proc -public tsearch2::search {
 
     @error
 } {
+    set packages {}
     # JCD: I have done something horrible.  I took out dt and 
     # made it packages.  when you search there is no way to specify a date range just
     # last six months, last year etc.  I hijack what was the old dt param and make it 
     # the package_id list and just empty string for dt.
     set dt {}
+
+    set orig_query $query
 
     # clean up query for tsearch2
     set query [tsearch2::build_query -query $query]
@@ -136,13 +139,26 @@ ad_proc -public tsearch2::search {
     set base_query [db_map base_query]
     if {$df ne ""} {
         set need_acs_objects 1
-        append base_query " and o.creation_date > :df"
+        lappend where_clauses " and o.creation_date > :df"
     }
     if {$dt ne ""} {
         set need_acs_objects 1
-        append base_query " and o.creation_date < :dt"
+        lappend where_clauses " and o.creation_date < :dt"
     }
 
+    foreach {arg value} $extra_args {
+	array set arg_clauses [lindex [callback -impl $arg search::extra_arg -value $value -object_table_alias "o"] 0]
+	if {[info exists arg_clauses(from_clause)] && $arg_clauses(from_clause) ne ""} {
+	    lappend from_clauses $arg_clauses(from_clause)
+	}
+	if {[info exists arg_clauses(where_clause)] && $arg_clauses(where_clause) ne ""} {
+	    lappend where_clauses "$arg_clauses(where_clause)"
+	}
+    }
+    if {[llength $extra_args]} {
+        # extra_args can assume a join on acs_objects
+        set need_acs_objects 1
+    }
     # generate the package id restriction.
     set ids {}
     foreach id $packages {
@@ -152,17 +168,18 @@ ad_proc -public tsearch2::search {
     }
     if {$ids ne ""} {
         set need_acs_objects 1
-        append base_query " and o.package_id in ([join $ids ,])"
+        lappend where_clauses "o.package_id in ([join $ids ,])"
     }
     if {$need_acs_objects} {
-        set base_query "from txt, acs_objects o $base_query and o.object_id = txt.object_id"
+        lappend from_clauses "txt" "acs_objects o"
+        lappend where_clauses "o.object_id = txt.object_id"
     } else {
-        set base_query "from txt $base_query"
+        lappend from_clauses "txt"
     }
-
+    
     set results_ids [db_list search {}]
 
-    set count [db_string count "select count(*) $base_query"]
+    set count [db_string count "select count(*) from txt $base_query"]
 
     set stop_words [list]
 
@@ -189,7 +206,14 @@ ad_proc -public tsearch2::summary {
     @error
 } {
     set query [tsearch2::build_query -query $query]
-   return [db_string summary {}]
+    return [db_string summary {}]
+}
+
+ad_proc -callback search::driver_info -impl tsearch2-driver {
+} {
+    Search driver info callback
+} {
+    return [tsearch2::driver_info]
 }
 
 ad_proc -public tsearch2::driver_info {
@@ -290,12 +314,6 @@ ad_proc -public tsearch2::seperate_query_and_operators {
     set end_q 0
     set valid_operators [tsearch2_driver::valid_operators]
     foreach e [split $query] {
-        ns_log notice "
-DB --------------------------------------------------------------------------------
-DB DAVE debugging procedure tsearch2::seperate_query_and_operators
-DB --------------------------------------------------------------------------------
-DB e = '${e}'
-DB --------------------------------------------------------------------------------"
         if {[regexp {(^\w*):} $e discard operator] \
                 && [lsearch -exact $valid_operators $operator] != -1} {
             # query element contains an operator, split operator from
