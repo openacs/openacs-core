@@ -11,7 +11,7 @@ ad_page_contract {
     {dts:trim ""}
     {search_package_id ""}
     {scope ""}
-    {object_type "all"}
+    {object_type ""}
 } -validate {
     keywords_p {
         if {![exists_and_not_null q]} {
@@ -117,7 +117,7 @@ if {[callback::impl_exists -impl $driver -callback search::search]} {
     # FIXME do this in the intermedia driver!
 #    set final_query_string [db_string final_query_select "select site_wide_search.im_convert(:q) from dual"]
 
-    array set result [lindex [callback -impl $driver search::search -query $q -offset $offset -limit $limit -user_id $user_id -df $df -package_ids $search_package_id -object_type $object_type] 0]
+    array set result [lindex [callback -impl $driver search::search -query $q -offset $offset -limit $limit -user_id $user_id -df $df -extra_args [list package_ids $search_package_id object_type $object_type]] 0]
 } else {
     array set result [acs_sc_call FtsEngineDriver search $params $driver]
 }
@@ -160,14 +160,17 @@ set count $result(count)
 template::multirow create searchresult title_summary txt_summary url_one object_id
 
 for { set __i 0 } { $__i < [expr {$high - $low +1}] } { incr __i } {
-
     set object_id [lindex $result(ids) $__i]
+    if {$object_id eq ""} {
+        ns_log warning "Search object_id is empty, this should never happen query was '${q}'"
+        continue
+    }
     set object_type [acs_object_type $object_id]
     if {[callback::impl_exists -impl $object_type -callback search::datasource]} {
 	array set datasource [lindex [callback -impl $object_type search::datasource -object_id $object_id] 0]
 	set url_one [lindex [callback -impl $object_type search::url -object_id $object_id] 0]
     } else {
-	ns_log notice "SEARCH search/www/search.tcl callback::datasource::$object_type not found"
+        ns_log warning "SEARCH search/www/search.tcl callback::datasource::$object_type not found"
 	array set datasource [acs_sc_call FtsContentProvider datasource [list $object_id] $object_type]
 	set url_one [acs_sc_call FtsContentProvider url [list $object_id] $object_type]
     }

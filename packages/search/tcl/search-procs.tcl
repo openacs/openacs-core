@@ -285,6 +285,7 @@ ad_proc -callback search::search {
     {-dt ""}
     {-package_ids ""}
     {-object_type ""}
+    {-extra_args {}}
 } {
     This callback is invoked when a search is to be performed. Query
     will be a list of lists. The first list is required and will be a
@@ -380,3 +381,63 @@ ad_proc -public search::dotlrn::get_community_id {
     } 
     return ""
 }
+
+ad_proc -callback search::extra_arg {
+    -value
+    {-object_table_alias {}}
+} {
+    Generate a query fragment for search filtering by extra argument
+    Argument name will be the implementation name called
+
+    Search driver should call this for every extra argument and then build the search query using the query fragments returned
+
+    @param value value of the argument
+    @param object_table_alias SQL alias of table that contains the object_id to join against
+    
+    @return list in array format of {from_clause {} where_clause {}}
+} -
+
+ad_proc search::extra_args_names {
+} {
+    List of names of extra args implemented
+} {
+    set names [list]
+    foreach procname [info procs ::callback::search::extra_arg::impl::*] {
+	lappend names [namespace tail $procname]
+    }
+    return $names
+}
+
+ad_proc search::extra_args_page_contract {
+} {
+    Generate ad_page_contract fragment for extra_args options
+
+    Get all the callback impls for extra_args and add
+     a page contract declaration
+
+    @return string containing the ad_page_contract query delcarations
+            for the extra_args that are implemented
+} {
+    set contract ""
+    foreach name [extra_args_names] {
+	append contract "\{$name \{\}\}\n"
+    }
+    return $contract
+}
+
+ad_proc search::extra_args {
+} {
+    List of extra_args to pass to search::search callback
+} {
+    set extra_args [list]
+    foreach name [extra_args_names] {
+	upvar $name local_$name
+	ns_log debug "extra_args name = '${name}' exists [info exists local_${name}]"
+	if {[info exists local_$name]} {
+	    lappend extra_args $name [set local_$name]
+	}
+    }
+    return $extra_args
+}
+
+
