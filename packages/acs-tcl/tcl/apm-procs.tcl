@@ -1982,3 +1982,62 @@ ad_proc -private apm::metrics_internal {
     return [array get metrics]
 }
 
+ad_proc -public apm::get_package_descendent_options {
+    package_key
+} {
+    Get a list of pretty name, package key pairs for all packages which are descendents
+    of the given package key.
+
+    @param package_key The parent package's key.
+    @return a list of pretty name, package key pairs suitable for use in a template
+            select widget.
+} {
+    set in_clause '[join [apm_package_descendents $package_key] ',']'
+    return [db_list_of_lists get {}]
+}
+
+
+ad_proc -public apm::convert_type {
+    -package_id:required
+    -old_package_key:required
+    -new_package_key:required
+} {
+    Convert a package instance to a new type, doing the proper instantiate and mount callbacks and
+    parameter creation.
+
+    @param package_id The package instance to convert.
+    @param old_package_key The package key we're converting from.
+    @param new_package_key The new subsite type we're converting to.
+
+} {
+    db_dml update_package_key {}
+
+    set node_id [site_node::get_node_id_from_object_id -object_id $package_id]
+    if { $node_id ne "" } {
+        site_node::update_cache -node_id $node_id
+    }
+
+    db_foreach get_params {} {
+        db_1row get_new_parameter_id {}
+        db_dml update_param {}
+    }
+    db_list copy_new_params {}
+    apm_parameter_sync $new_package_key $package_id
+    
+    foreach inherited_package_key [apm_package_inherit_order $new_package_key] {
+        if { [lsearch -exact [apm_package_inherit_order $old_package_key] $inherited_package_key]
+             == -1 } {
+            apm_invoke_callback_proc \
+                -package_key $inherited_package_key \
+                -type after-instantiate \
+                -arg_list [list package_id $package_id]
+            if { $node_id ne "" } {
+                apm_invoke_callback_proc \
+                    -package_key $inherited_package_key \
+                    -type after-mount \
+                    -arg_list [list node_id $node_id package_id $package_id]
+            }
+        }
+    }
+
+}

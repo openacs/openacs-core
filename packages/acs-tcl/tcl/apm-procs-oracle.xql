@@ -200,5 +200,19 @@
       </querytext>
 </fullquery>
 
+  <fullquery name="apm::convert_type.copy_new_params">
+    <querytext>
+      select apm_parameter_value.new(
+               package_id => :package_id,
+               parameter_id => ap.parameter_id,
+               value => ap.default_value)
+      from apm_parameters ap
+      where ap.package_key = :new_package_key
+        and not exists (select 1
+                        from apm_parameters ap2
+                        where ap2.package_key = :old_package_key
+                          and ap2.parameter_name = ap.parameter_name)
+    </querytext>
+  </fullquery>
  
 </queryset>

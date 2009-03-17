@@ -11,7 +11,7 @@ set page_title "Convert Subsite To Descendent Type"
 
 set context [list $page_title]
 
-set subsite_package_options [subsite::util::get_package_descendent_options [ad_conn package_key]]
+set subsite_package_options [apm::get_package_descendent_options [ad_conn package_key]]
 
 if { [llength $subsite_package_options] == 0 } {
     return .
@@ -26,7 +26,10 @@ ad_form -name subsite -cancel_url . -form {
     }
 } -on_submit {
     if { $package_key ne [ad_conn package_key] } {
-        subsite::util::convert_type -new_package_key $package_key
+        apm::convert_type \
+            -package_id [ad_conn package_id] \
+            -old_package_key [ad_conn package_key] \
+            -new_package_key $package_key
     }
     ad_returnredirect .
     ad_script_abort
