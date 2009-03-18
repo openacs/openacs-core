@@ -68,5 +68,3 @@ create table acs_mail_lite_bounce_notif (
     notification_count		integer default 0
 );
 
-
-@@ complex-create
