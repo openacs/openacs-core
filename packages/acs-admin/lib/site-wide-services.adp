@@ -8,4 +8,3 @@
   <li><a href="@acs_core_docs_url@">Documentation</a>
   <li><a href="@acs_admin_url@monitor">Active connections</a>
 </ul>
-<p>

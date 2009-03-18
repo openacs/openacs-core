@@ -5,12 +5,12 @@
   <a href="developer" class="button">Developer's Admin</a>
 </div>
 
-<h3>Core Administration</h3>
+<h1>Core Administration</h1>
 
 <include src="/packages/acs-admin/lib/site-wide-services">
 
 <if @packages:rowcount@ gt 0>
-  <h3>Site-Wide Package Administration</h3>
+  <h1>Site-Wide Package Administration</h1>
   <ul>
     <multiple name="packages">
       <li><a href="@packages.admin_url@/\">@packages.pretty_name@</a></li>
@@ -19,14 +19,13 @@
 </if>
 
 <if @too_many_subsites_p@ gt 0>
-  <h3>Subsite Administration</h3>
-Too many subsites to display: @subsite_number@
-<p />
+  <h1>Subsite Administration</h1>
+  <p>Too many subsites to display: @subsite_number@</p>
 </if>
 <else>
 
 <if @subsites:rowcount@ gt 0>
-  <h3>Subsite Administration</h3>
+  <h1>Subsite Administration</h1>
   <ul>
     <multiple name="subsites">
       <li><a href="@subsites.admin_url@">@subsites.path_pretty@</a></li>
@@ -34,7 +33,6 @@ Too many subsites to display: @subsite_number@
   </ul>
 </if>
 </else>
-<h3>Service Administration</h3>
 
+<h1>Service Administration</h1>
 <include src="/packages/acs-admin/lib/service-parameters">
-

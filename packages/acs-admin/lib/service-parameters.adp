@@ -1,1 +1,1 @@
-<p><listtemplate name="packages"></listtemplate></p>
+<listtemplate name="packages"></listtemplate>
