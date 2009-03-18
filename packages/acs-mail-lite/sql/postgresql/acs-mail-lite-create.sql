@@ -63,5 +63,3 @@ create table acs_mail_lite_bounce_notif (
     notification_time		timestamptz default current_timestamp,
     notification_count		integer default 0
 );
-
-\i complex-create.sql
