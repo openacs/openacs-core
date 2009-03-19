@@ -11,6 +11,7 @@ ad_library {
 package require mime 1.4
 package require smtp 1.4
 package require base64 2.3.1
+
 namespace eval acs_mail_lite {
     
     ad_proc -public get_package_id {} {
@@ -433,83 +434,128 @@ namespace eval acs_mail_lite {
             set tokens [mime::initialize -canonical "multipart/mixed" -parts "$tokens"]
         }
 
-        # Rollout support: TO BE RE-DONE
-        set delivery_mode [ns_config ns/server/[ns_info server]/acs/acs-rollout-support EmailDeliveryMode] 
+        ### Add the headers
 
-        if { $delivery_mode ne "" && $delivery_mode ne "default" } {
+        mime::setheader $tokens "message-id" $message_id
+        mime::setheader $tokens date $message_date
 
-            # Build the complete message as a string
-            set packaged [mime::buildmessage $tokens]
+        # Set the subject
+        if { $subject ne "" } {
+            set subject [acs_mail_lite::utils::build_subject $subject]
+            mime::setheader $tokens Subject $subject
+        }
 
-            #Close all mime tokens
-            mime::finalize $tokens -subordinates all
+        # Add extra headers
+        foreach header $extraheaders {
+            mime::setheader $tokens "[lindex $header 0]" "[lindex $header 1]"
+        }
 
-            set eh [util_list_to_ns_set $extraheaders]
-            ns_sendmail $to_addr $from_addr $subject $packaged $eh [join $bcc_addr ","]
+        # Rollout support
+        set delivery_mode [ns_config ns/server/[ns_info server]/acs/acs-rollout-support EmailDeliveryMode]
 
-        } else {
-
-            ### Add the headers
-
-            mime::setheader $tokens "message-id" $message_id
-            mime::setheader $tokens date $message_date
-
-            # Set the subject
-            if { $subject ne "" } {
-                set subject [acs_mail_lite::utils::build_subject $subject]
-                mime::setheader $tokens Subject $subject
+        switch $delivery_mode {
+            log {
+                set send_mode "log"
+                set notice "logging email instead of sending"
             }
+            filter {
+                set send_mode "smtp"
+                set allowed_addr [split [ns_config ns/server/[ns_info server]/acs/acs-rollout-support EmailAllow] ","]
 
-            # Add extra headers
-            foreach header $extraheaders {
+                foreach recipient [concat $to_addr $cc_addr $bcc_addr] {
+                    
+                    # if any of the recipient is not in the allowed list
+                    # email message has to be sent to the log instead
+
+                    if { [lsearch -exact $allowed_addr $recipient] eq -1 } {
+                        set send_mode "log"
+                        set notice "logging email because one of the recipient ($recipient) is not in the EmailAllow list"
+                        break
+                    }
+                }
+                
+            }
+            redirect {
+
+                set send_mode "smtp"
+
+                # Since we have to redirect to a list of addresses
+                # we need to remove the CC and BCC ones
+
+                set to_addr [split [ns_config ns/server/[ns_info server]/acs/acs-rollout-support EmailRedirectTo] ","]
+                set cc_addr ""
+                set bcc_addr ""
+            }
+            default {
+                set send_mode "smtp"
+            }
+        }
+
+        # Prepare the headers list of recipients
+        set headers_list [list [list From "$from_addr"] \
+                              [list Reply-To "$reply_to"] \
+                              [list To [join $to_addr ","]]]
+
+        if { $cc_addr ne "" } {
+            lappend headers_list [list CC [join $cc_addr ","]]
+        }
+        if { $bcc_addr ne ""} {
+            lappend headers_list [list DCC [join $bcc_addr ","]]
+        }
+
+        # Build the originator address to be used as enveloppe sender
+        set rcpt_id 0
+        if { [llength $to_addr] eq 1 } {
+            set rcpt_id [party::get_by_email -email $to_addr]
+        }
+        set rcpt_id [ad_decode $rcpt_id "" 0 $rcpt_id]
+
+        set originator [bounce_address -user_id $rcpt_id \
+                            -package_id $package_id \
+                            -message_id $message_id]
+
+
+        if { $send_mode eq "log" } {
+
+            # Add recipients to headers
+            foreach header $headers_list {
                 mime::setheader $tokens "[lindex $header 0]" "[lindex $header 1]"
             }
 
-            # Prepare the header list
-            set headers_list [list [list From "$from_addr"] \
-                                  [list Reply-To "$reply_to"] \
-                                  [list To [join $to_addr ","]]]
+            # Retrieve the email message as a string
+            set packaged [mime::buildmessage $tokens]
 
-            if { $cc_addr ne "" } {
-                lappend headers_list [list CC [join $cc_addr ","]]
-            }
-            if { $bcc_addr ne ""} {
-                lappend headers_list [list DCC [join $bcc_addr ","]]
-            }
-            
-            # Build the originator address
-            set rcpt_id 0
-            if { [llength $to_addr] eq 1 } {
-                set rcpt_id [party::get_by_email -email $to_addr]
-            }
-            set rcpt_id [ad_decode $rcpt_id "" 0 $rcpt_id]
+            # Close all mime tokens
+            mime::finalize $tokens -subordinates all
 
-            set originator [bounce_address -user_id $rcpt_id \
-                                -package_id $package_id \
-                                -message_id $message_id]
+            # Send the email message to the log
+            ns_log Notice "acs-mail-lite::send: $notice\n\n**********\nEnveloppe sender: $originator\n\n$packaged\n**********"
+
+        } else {
 
             acs_mail_lite::smtp -multi_token $tokens \
                 -headers $headers_list \
                 -originator $originator
             
-            #Close all mime tokens
+            # Close all mime tokens
             mime::finalize $tokens -subordinates all
             
-            if { !$no_callback_p } {
-                callback acs_mail_lite::send \
-                    -package_id $package_id \
-                    -message_id $message_id \
-                    -from_addr $from_addr \
-                    -to_addr $to_addr \
-                    -body $body \
-                    -mime_type $mime_type \
-                    -subject $subject \
-                    -cc_addr $cc_addr \
-                    -bcc_addr $bcc_addr \
-                    -file_ids $file_ids \
-                    -object_id $object_id
-            }
         }       
+
+        if { !$no_callback_p } {
+            callback acs_mail_lite::send \
+                -package_id $package_id \
+                -message_id $message_id \
+                -from_addr $from_addr \
+                -to_addr $to_addr \
+                -body $body \
+                -mime_type $mime_type \
+                -subject $subject \
+                -cc_addr $cc_addr \
+                -bcc_addr $bcc_addr \
+                -file_ids $file_ids \
+                -object_id $object_id
+        }
     }
 
     #---------------------------------------
