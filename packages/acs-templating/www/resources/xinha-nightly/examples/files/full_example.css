@@ -46,3 +46,33 @@
     margin:10px;
   }
   label {font-size: 11px;}
+  .navi_links {
+	width: 177px;
+	margin: 0;
+	padding: 0px;
+	list-style:none;
+	border: none;
+}
+
+.navi_links li {
+	margin:0 0 3px 0;
+}
+
+.navi_links li a {
+	font-size: 13px;
+	line-height: 16px;
+	height: 16px;
+	display:block;
+	color:#000;
+	text-decoration: none;
+	font-weight: bold;
+	background-color: #fff;
+	cursor: pointer;
+	border: 2px solid white;
+	
+}
+
+.Link1 {
+background-color: #DF1D1F !important;
+
+}

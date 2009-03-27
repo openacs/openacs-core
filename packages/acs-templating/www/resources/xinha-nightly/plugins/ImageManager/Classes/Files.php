@@ -35,7 +35,7 @@ class Files
 	 */
 	function copyFile($source, $destination_dir, $destination_file, $unique=true) 
 	{
-		if(!(file_exists($source) && is_file($source))) 
+		if(!is_uploaded_file($source) && !(file_exists($source) && is_file($source))) 
 			return FILE_ERROR_NO_SOURCE;
 
 		$destination_dir = Files::fixPath($destination_dir);

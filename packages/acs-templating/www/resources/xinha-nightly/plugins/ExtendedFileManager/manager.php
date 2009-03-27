@@ -220,7 +220,7 @@ else if($IMConfig['allow_upload']) { ?>
 			<td rowspan="2"><?php if($insertMode=='image') { ?><img src="<?php print $IMConfig['base_url'];?>img/locked.gif" id="imgLock" width="25" height="32" alt="Constrained Proportions" />
 				<input type="hidden" id="orginal_width" />
 				<input type="hidden" id="orginal_height" />
-            <input type="checkbox" id="constrain_prop" checked="checked" onclick="javascript:toggleConstrains(this);" /><br />
+            <input type="checkbox" id="constrain_prop" checked="checked" onclick="javascript:toggleConstrains(this);" value="on" /><br />
             <label for="constrain_prop">Constrain Proportions</label><?php }?>
             </td>
 

@@ -31,7 +31,7 @@ PreserveScripts.prototype.inwardHtml = function(html)
 	var c = s.editor.config.PreserveScripts;
 	this.storage = {}; //empty the cache
 	var i = 1;
-	html = html.replace(/\n?<\?php(\s|[^\s])*?\?>\n?/ig,
+	html = html.replace(/\n?<\?(php)?(\s|[^\s])*?\?>\n?/ig,
 		function(m)
 		{
 			if ( c.preservePHP ) // if config set to false wipe out php completely, otherwise ugly fragments may remain

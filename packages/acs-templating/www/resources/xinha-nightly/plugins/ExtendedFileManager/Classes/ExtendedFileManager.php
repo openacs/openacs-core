@@ -454,11 +454,6 @@ class ExtendedFileManager
 			Return false;
 		}
 
-		if(!is_file($file['tmp_name']))
-		{
-			Return false;
-		}
-
 		if(!is_uploaded_file($file['tmp_name']))
 		{
 			Files::delFile($file['tmp_name']);

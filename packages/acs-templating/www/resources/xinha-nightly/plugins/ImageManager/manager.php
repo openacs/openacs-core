@@ -133,7 +133,7 @@
     </td>
     <td rowspan="2">
       <div  style="position:relative">
-        <img src="<?php print $IMConfig['base_url']; ?>img/locked.gif" id="imgLock" width="25" height="32" alt="Constrained Proportions" style="vertical-align: middle;" /><input type="checkbox" id="constrain_prop" checked="checked" onclick="javascript:toggleConstrains(this);" style="position:absolute;top:8px;left:0px;" />
+        <img src="<?php print $IMConfig['base_url']; ?>img/locked.gif" id="imgLock" width="25" height="32" alt="Constrained Proportions" style="vertical-align: middle;" /><input type="checkbox" id="constrain_prop" checked="checked" onclick="javascript:toggleConstrains(this);" style="position:absolute;top:8px;left:0px;" value="on" />
       </div>
     </td>
     <th style="text-align: left;" class="fullOptions">Margin:</th>
