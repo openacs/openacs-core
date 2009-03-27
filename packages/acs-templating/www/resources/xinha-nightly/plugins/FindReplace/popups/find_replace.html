@@ -124,11 +124,11 @@ letter-spacing: 2px;
               <td width="78%" style="padding: 2px">
               <FIELDSET style="width:90%; padding: 5px">
                 <LEGEND><span>Options</span></LEGEND>
-                  <input id="fr_words" type="checkbox" checked onClick="clearDoc();">
+                  <input id="fr_words" type="checkbox" checked onClick="clearDoc();" value="on">
                 <span onClick="e = document.getElementById('fr_words'); 
                 e.click(); e.focus();" style="cursor:default"> 
                   <span>Whole words only</span></span><br />
-                  <input id="fr_matchcase" type="checkbox" onClick="clearDoc();">
+                  <input id="fr_matchcase" type="checkbox" onClick="clearDoc();" value="on">
                 <span onClick="e = document.getElementById('fr_matchcase'); 
                 e.click(); e.focus();" style="cursor:default"> 
                   <span>Case sensitive search</span></span><br />
@@ -137,7 +137,7 @@ letter-spacing: 2px;
                   alert(_lc('Inform a replacement word'));
                   return false;
                   }
-                  clearDoc();">
+                  clearDoc();" value="on">
                 <span onClick="e = document.getElementById('fr_replaceall'); 
                 e.click(); e.focus();" style="cursor:default"> 
                   <span>Substitute all occurrences</span></span>

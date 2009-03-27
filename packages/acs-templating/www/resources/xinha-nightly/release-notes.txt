@@ -4,6 +4,27 @@ For bug reports, forum, and updates go to
 http://xinha.org
 
 Release History
+
+Xinha 0.96beta2
+Bugs Fixed
+ * #1376 [IE6 & IE7 Quirksmode] Dialogs are invisible
+ * #1381 [IE] QuirksMode dialog background rendered in wrong position when panel is detached
+ * #1383 [IE7] Secure and Nonsecure Warning
+ * #1382 [IE] QuirksMode dialog background falsely non-grey with modal dialogs, grey when dragging modeless dialogs
+ * #1389 [IE6] selection lost when clicking toolbar button
+ * #1386 [Safari] Setting default checkbox settings in dialogs does not work
+ * #1394 fullpage puts metas/ title all on the same line
+ * #1390 PreserveScripts shorthand php tags
+ * #1392 too much recursion when setting HTML in fullPage mode using onGenerate/onGenerateOnce
+ * #1407 [IE8] window resize causes infinite loop
+ * #1408 PHP5 IIS file upload problem
+ * #1374 [IE8] Table insert not work
+ * #1379 [Firefox] no longer corrupts image data from broken images
+
+Translation
+ * [SmartReplace] Added French translation
+ * #1406 [FullScreen] Added Spanish translation
+
 Xinha 0.96beta
 Bugs Fixed
  * #314 Status bar should wrap
