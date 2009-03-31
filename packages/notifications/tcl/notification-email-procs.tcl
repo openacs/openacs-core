@@ -115,21 +115,27 @@ namespace eval notification::email {
         @param from_user_id The user_id of the user that the email should be sent as. Leave empty for the standard mailer from address.
     } {
 
-       # Get email
+       # Get user data
        set email [cc_email_from_party $to_user_id]
-        
+       set user_locale [lang::user::site_wide_locale -user_id $to_user_id]
+       if { $user_locale eq "" } {
+           set user_locale lang::system::site_wide_locale
+       }
+
        # Variable used in the content
        set manage_notifications_url [manage_notifications_url]
 
        if { [string length $content_html] == 0 } {
            set mime_type "text/plain"
-           append content_text "\n[_ notifications.lt_Getting_too_much_emai]"
-	   set content $content_text
+           append content_text "\n#notifications.lt_Getting_too_much_emai#"
+           set content $content_text
        } else {
            set mime_type "text/html"
-           append content_html "<p>[_ notifications.lt_Getting_too_much_emai]"
-	   set content $content_html
+           append content_html "<p>#notifications.lt_Getting_too_much_emai#</p>"
+           set content $content_html
        }
+       append content_text "\n#notifications.lt_Getting_too_much_emai#"
+       append content_html "<p>[ad_text_to_html -- [lang::message::lookup $user_locale notifications.lt_Getting_too_much_emai]]</p>"
 
        # Use this to build up extra mail headers        
        set extra_headers [list]
@@ -154,8 +160,8 @@ namespace eval notification::email {
            -from_addr $from_email \
            -reply_to $reply_to \
            -mime_type $mime_type \
-           -subject $subject \
-           -body $content \
+           -subject [lang::util::localize $subject $user_locale] \
+           -body [lang::util::localize $content $user_locale] \
            -file_ids $file_ids \
            -use_sender \
            -extraheaders $extra_headers
