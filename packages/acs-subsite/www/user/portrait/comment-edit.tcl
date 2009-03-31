@@ -33,7 +33,11 @@ if {![db_0or1row portrait_info {}]} {
     return
 }
 
-set context [list [list "./" [_ acs-subsite.Your_Portrait]] [_ acs-subsite.edit_comment]]
+set doc(title) [_ acs-subsite.Edit_caption]
+set context [list \
+                 [list [ad_pvt_home] [ad_pvt_home_name]] \
+                 [list "./" [_ acs-subsite.Your_Portrait]] \
+                 $doc(title)]
 
 if { $return_url eq "" } {
     set return_url [ad_pvt_home]
@@ -41,7 +45,7 @@ if { $return_url eq "" } {
 
 ad_form -name comment_edit -export {user_id return_url} -form {
     {description:text(textarea),optional
-        {label "#acs-subsite.Story_behind_photo#"}
+        {label "#acs-subsite.Caption#"}
         {value $description}
         {html {rows "6" cols "50"}}
     }

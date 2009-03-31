@@ -17,11 +17,12 @@ set current_user_id [ad_conn user_id]
 
 set portrait_p [db_0or1row "checkportrait" {}]
 
-
 if { $portrait_p } {
-	set story [db_string "getstory" {}]
+    set doc(title) [_ acs-subsite.upload_a_replacement_por]
+	set description [db_string "getstory" {}]
 } else {
-	set story ""
+    set doc(title) [_ acs-subsite.Upload_Portrait]
+	set description ""
 	set revision_id ""
 }
 
@@ -45,9 +46,14 @@ if { $return_url eq "" } {
 }
 
 if {$admin_p} {
-    set context [list [list "./?[export_vars user_id]" [_ acs-subsite.User_Portrait]] [_ acs-subsite.Upload_Portrait]]
+    set context [list \
+                     [list "./?[export_vars user_id]" [_ acs-subsite.User_Portrait]] \
+                     $doc(title)]
 } else {
-    set context [list [list "./?[export_vars return_url]" [_ acs-subsite.Your_Portrait]] [_ acs-subsite.Upload_Portrait]]
+    set context [list \
+                     [list [ad_pvt_home] [ad_pvt_home_name]] \
+                     [list "./?[export_vars return_url]" [_ acs-subsite.Your_Portrait]] \
+                     $doc(title)]
 }
 
 set help_text [_ acs-subsite.lt_Use_the_Browse_button]
@@ -60,10 +66,9 @@ ad_form -name "portrait_upload" -html {enctype "multipart/form-data"} -export {u
 }
 
 if { $portrait_p } {
-    set description [db_string getstory {}]
     ad_form -extend -name "portrait_upload" -form {
         {portrait_comment:text(textarea),optional
-            {label "#acs-subsite.Story_Behind_Photo#"}
+            {label "#acs-subsite.Caption#"}
             {value $description}
             {html {rows 6 cols 50}}
         }
@@ -71,7 +76,7 @@ if { $portrait_p } {
 } else {
     ad_form -extend -name "portrait_upload" -form {
         {portrait_comment:text(textarea),optional
-            {label "#acs-subsite.Story_Behind_Photo#"}
+            {label "#acs-subsite.Caption#"}
             {html {rows 6 cols 50}}
         }
     }
@@ -114,6 +119,10 @@ ad_form -extend -name "portrait_upload" -validate {
 
     set n_bytes [file size $tmp_filename]
 
+    # Sizes we want for the portrait
+    set sizename_list {avatar thumbnail}
+    array set resized_portrait [list]
+
     # strip off the C:\directories... crud and just get the file name
     if {![regexp {([^/\\]+)$} $upload_file match client_filename]} {
         # couldn't find a match
@@ -128,9 +137,12 @@ ad_form -extend -name "portrait_upload" -validate {
         if { $item_id eq ""} { 
             # The user doesn't have a portrait relation yet
             set item_id [content::item::new -name "portrait-of-user-$user_id" -parent_id $user_id -content_type image]
-            set resized_item_id ""
         } else {
-            set resized_item_id [image::get_resized_item_id -item_id $item_id -size_name "thumbnail"]
+            foreach sizename $sizename_list {
+                set resized_portrait($sizename) [image::get_resized_item_id \
+                                                     -item_id $item_id \
+                                                     -size_name $sizename]
+            }
         }
 
         # Load the file into the revision
@@ -149,12 +161,14 @@ ad_form -extend -name "portrait_upload" -validate {
 
         content::item::set_live_revision -revision_id $revision_id
         
-        if {$resized_item_id ne ""} {
-            # Delete the item
-            content::item::delete -item_id $resized_item_id
+        foreach sizename $sizename_list {
+            if { $resized_portrait($sizename) ne "" } {
+                # Delete the item
+                content::item::delete -item_id $resized_portrait($sizename)
 
-            # Resize the item
-            image::resize -item_id $item_id -size_name "thumbnail"
+                # Resize the item
+                image::resize -item_id $item_id -size_name $sizename
+            }
         }
 
         # Only create the new relationship if there does not exist one already

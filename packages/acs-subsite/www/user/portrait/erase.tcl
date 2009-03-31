@@ -13,7 +13,7 @@ ad_page_contract {
 
 set current_user_id [ad_conn user_id]
 
-if {$user_id eq ""} {
+if {$user_id eq "" || $user_id eq $current_user_id} {
     set user_id $current_user_id
     set admin_p 0
 } else {
@@ -22,10 +22,17 @@ if {$user_id eq ""} {
 
 ad_require_permission $user_id "write"
 
+set doc(title) [_ acs-subsite.Erase]
 if {$admin_p} {
-    set context [list [list "./?[export_vars user_id]" [_ acs-subsite.User_Portrait]] [_ acs-subsite.Erase]]
+    set context [list \
+                     [list [ad_pvt_home] [ad_pvt_home_name]] \
+                     [list "./?[export_vars user_id]" [_ acs-subsite.User_Portrait]] \
+                     $doc(title)]
 } else {
-    set context [list [list "./" [_ acs-subsite.Your_Portrait]] [_ acs-subsite.Erase]]
+    set context [list \
+                     [list [ad_pvt_home] [ad_pvt_home_name]] \
+                     [list "./" [_ acs-subsite.Your_Portrait]] \
+                     $doc(title)]
 }
 
 if { $return_url eq "" } {
