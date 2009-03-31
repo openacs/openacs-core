@@ -7,7 +7,7 @@ set user_id [auth::get_user_id -account_status closed]
 
 set system_name [ad_system_name]
 
-set page_title "Confirm Closing Your Account"
+set page_title [_ acs-subsite.Close_your_account]
 set context [list [list [ad_pvt_home] [ad_pvt_home_name]] $page_title]
 
 set pvt_home [ad_pvt_home]
