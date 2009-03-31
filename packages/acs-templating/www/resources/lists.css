@@ -2,10 +2,10 @@ div.list-button-bar-top {
 	padding-top: 5px;
 	padding-bottom: 10px;
 }
+
 div.list-button-bar-bottom {
 	padding-top: 10px;
 }
-
 
 table.list-table {
 	border-collapse: collapse;
@@ -19,6 +19,7 @@ table.list-tiny {
 
 .list-table tr.list-header {
 	background-color: #ffffff;
+	color: inherit;
 }
 
 th.list-table, th.list-table-narrow, .list-table th {
@@ -28,10 +29,12 @@ th.list-table, th.list-table-narrow, .list-table th {
 
 .list-table tr.even, .list-tiny tr.even {
 	background-color: #ffffff;
+	color: inherit;
 }
 
 .list-table tr.odd, .list-tiny tr.odd {
-	background-color: #F0EFF0;
+	background-color: #f0eff0;
+	color: inherit;
 }
 
 td.list-table, td.list-table-narrow, .list-table td {
@@ -63,19 +66,22 @@ div.list-paginator-bottom {
 
 .list-paginator li {
 	border: 1px solid #f00;
-	background-color: white;
+	background-color: #fff;
 	padding: 2px 4px;
 	font-weight: bold;
-	border: 1px solid #FFF;
+	border: 1px solid #fff;
+	color: inherit;
 }
 
 .list-paginator li a:hover {
 	background-color: #e5e5e5;
+	color: inherit;
 }
 
 .list-paginator li.current {
 	background-color: #e5e5e5;
 	border: 1px solid #999;
+	color: inherit;
 }
 
 /* end pagination ------------------------------------------ */
@@ -86,7 +92,8 @@ td.list-filter-pane {
 	background-color: #eee;
 	vertical-align: top;
 	border: 1px solid #ccc;
-	font-size: .9em;	
+	font-size: .9em;
+	color: inherit;
 }
 
 .list-filter-header {
@@ -99,13 +106,16 @@ td.list-filter-pane {
 	font-size: x-small;	
   padding-left:10px;
 }
-tr.list-filter-selected { 
-  background-color: #bbbbbb;
+
+tr.list-filter-selected {
+	background-color: #bbb;
+	color: inherit;
 }
 
 span.list-filter-selected { 
 	font-weight: bold;
 }
+
 .list-filter-section { 
   font-size: x-small; 
   font-weight: bold; 
@@ -120,11 +130,14 @@ span.list-filter-selected {
 div.list-inline-filter { 
   font-size: x-small; 
 }
+
 span.list-inline-filter { 
 }
+
 span.list-inline-filter-selected { 
   font-weight: bold;
 }
+
 a.list-inline-filter { 
 }
 
