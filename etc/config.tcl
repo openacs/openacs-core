@@ -624,7 +624,7 @@ ns_section ns/server/${server}/modules
     ns_param   nssha1             ${bindir}/nssha1.so 
     # since aolserver version 4.5.1 built-in ns_cache, so we dont
     # need to load the nscache module. 
-    if {[ns_info version] < 4.5.1} {
+    if {[ns_info version] < 4.5 || [ns_info patchlevel] eq "4.5.0"} {
           ns_param   nscache            ${bindir}/nscache.so 
     }
     # openacs versions earlier than 5.x requires nsxml
