@@ -6,7 +6,7 @@
 # @creation-date 2006-08-01
 # @cvs-id $Id$
 set url [ad_conn path_info]
-if {![regexp {^/([0-9]{1,8})(/(|thumbnail|info))?(/(private)/([0-9]{1,8}))?(/(.*))?$} $url match object_id extra_arg_slash extra_arg private_slash private private_parent_id filename_slash filename anchor]} {
+if {![regexp {^/([0-9]{1,8})(/(|thumbnail|avatar|info))?(/(private)/([0-9]{1,8}))?(/(.*))?$} $url match object_id extra_arg_slash extra_arg private_slash private private_parent_id filename_slash filename anchor]} {
     ad_return_warning "Invalid object id" [subst {
         The identifier given for this object (${object_id}) is invalid.  Please check your url 
         or contact the webmaster if you think it should work.
@@ -52,13 +52,15 @@ if {$private eq "private"} {
 }
 # find a cr_item and serve it
 
-if {$extra_arg eq "thumbnail"} {
+if { $extra_arg eq "thumbnail" || $extra_arg eq "avatar" } {
     #find the thumbnail object_id
-    set new_object_id [image::get_resized_item_id -item_id $object_id -size_name thumbnail]
+    set new_object_id [image::get_resized_item_id -item_id $object_id -size_name $extra_arg]
     if {$new_object_id eq ""} {
-	# We need to resize the image it seems
-	set object_id [image::resize -item_id $object_id]
+        # We need to resize the image it seems
+        set new_object_id [image::resize -item_id $object_id -size_name $extra_arg]
     }
+    set object_id $new_object_id
+
 }
 
 if {$extra_arg eq "info"} {
