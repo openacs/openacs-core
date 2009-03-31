@@ -10,16 +10,20 @@ ad_proc content_search__datasource {
                case i.storage_type
                     when 'lob' then r.lob::text
                     when 'file' then '[cr_fs_path]' || r.content
-                    when 'text' then r.content
                     else r.content
                end as content,
 	       r.mime_type as mime,
-	       '' as keywords,
+           '' as keywords,
 	       i.storage_type
 	from cr_revisions r, cr_items i
 	where revision_id = :object_id
         and i.item_id = r.item_id
     " -column_array datasource
+
+    if { $datasource(storage_type) ne "lob" } {
+        set datasource(storage_type) "text"
+        set datasource(content) [cr_write_content -string -revision_id $object_id ]
+    }
 
     return [array get datasource]
 }
@@ -35,14 +39,14 @@ ad_proc content_search__url {
     set package_id [apm_package_id_from_key acs-content-repository]
     db_1row get_url_stub "
         select site_node__url(node_id) as root_url,
-               (select content_item__get_path(item_id,null) 
+               (select content_item__get_path(item_id,content_item__get_root_folder(null)) 
                   from cr_revisions
                  where revision_id = :object_id) as url
           from site_nodes n
          where n.object_id = :package_id        
     "
     
-    return "[string trimright $root_url /]$url?revision_id=$object_id"
+    return "[ad_url]$root_url$url?revision_id=$object_id"
 }
 
 ad_proc image_search__datasource {
@@ -57,7 +61,7 @@ ad_proc image_search__datasource {
 	       r.description as content,
 	       r.mime_type as mime,
 	       '' as keywords,
-	       'text' as storage_type
+           'text' as storage_type
 	from cr_revisions r
 	where revision_id = :object_id
 
@@ -84,7 +88,7 @@ ad_proc image_search__url {
          where n.object_id = :package_id        
     "
     
-    return "[string trimright $root_url /]$url?revision_id=$object_id"
+    return "[ad_url][string trimright $root_url /]$url?revision_id=$object_id"
 }
 
 
@@ -132,7 +136,7 @@ ad_proc template_search__url {
          where n.object_id = :package_id        
     "
     
-    return "[string trimright $root_url /]$url?revision_id=$object_id"
+    return "[ad_url][string trimright $root_url /]$url?revision_id=$object_id"
 }
 
 
