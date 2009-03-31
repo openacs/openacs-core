@@ -2,7 +2,7 @@
   <property name="title">@page_title@</property>
   <property name="context">@context;noquote@</property>
 
-<h2>#acs-subsite.Basic_Information#</h2>
+<h1>#acs-subsite.Your_Account#</h1>
 
 <if @message@ not nil>
   <div class="general-message">@message@</div>

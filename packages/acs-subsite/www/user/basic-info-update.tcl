@@ -12,7 +12,7 @@ ad_page_contract {
     {message ""}
 }
 
-set page_title [_ acs-subsite._Update_Basic_Information]
+set page_title [_ acs-subsite.Your_Account]
 
 if { $user_id eq "" || ($user_id == [ad_conn untrusted_user_id]) } {
     set context [list [list [ad_pvt_home] [ad_pvt_home_name]] $page_title]
@@ -24,7 +24,7 @@ set focus {}
 
 set subsite_id [ad_conn subsite_id]
 set user_info_template [parameter::get -parameter "UserInfoTemplate" -package_id $subsite_id]
-ns_log Notice "user:: $user_info_template"
+ns_log Debug "user:: $user_info_template"
 if {$user_info_template eq ""} {
     set user_info_template "/packages/acs-subsite/lib/user-info"
 }
