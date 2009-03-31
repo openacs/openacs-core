@@ -4,16 +4,21 @@ ad_page_contract {
     @author Miguel Marin (miguelmarin@viaro.net) Viaro Networks (www.viaro.net)
 } {
     {user_id ""}
+    {return_url ""}
 }
 
-set page_title  "\"#acs-subsite.Change_my_email_P\#\""
-set context [list [list [ad_pvt_home] [ad_pvt_home_name]] $page_title]
+if { $return_url eq "" } {
+    set return_url [ad_pvt_home]
+}
+
+set doc(title) [_ acs-subsite.Change_my_email_P]
+set context [list [list [ad_pvt_home] [ad_pvt_home_name]] $doc(title)]
 
 if {$user_id eq ""} {
     set user_id [auth::require_login -account_status closed]
 }
 
-ad_form -name private-email -form {
+ad_form -name private-email -export return_url -form {
     {level:integer(select)
 	{label "\#acs-subsite.Change_my_email_P\#:"}
 	{options {{"[_ acs-subsite.email_as_text]" 4} {"[_ acs-subsite.email_as_image]" 3} \
@@ -24,5 +29,5 @@ ad_form -name private-email -form {
 } -on_submit {
     email_image::update_private_p -user_id $user_id -level $level
 } -after_submit {
-    ad_returnredirect [ad_pvt_home]
+    ad_returnredirect $return_url
 }
