@@ -51,16 +51,14 @@ set context [list [list [ad_pvt_home] [ad_pvt_home_name]] $page_title]
 set system_name [ad_system_name]
 set site_link [ad_site_home_link]
 
-
-
 acs_user::get -user_id $user_id -array user
 
 ad_form -name update -edit_buttons [list [list [_ acs-kernel.common_update] "ok"]] -form {
-    {user_id:integer(hidden)}
-    {return_url:text(hidden),optional}
-    {old_password:text(hidden),optional}
-    {message:text(hidden),optional}
-}
+        {user_id:integer(hidden)}
+        {return_url:text(hidden),optional}
+        {old_password:text(hidden),optional}
+        {message:text(hidden),optional}
+    }
 
 if { [exists_and_not_null old_password] } {
     set focus "update.password_1"
@@ -169,13 +167,9 @@ ad_form -extend -name update -form {
 } -after_submit {
     if { $return_url eq "" } {
         set return_url [ad_pvt_home]
-        set pvt_home_name [ad_pvt_home_name]
-        set continue_label [_ acs-subsite.Continue_to_your_account]
-    } else {
-        set continue_label [_ acs-subsite.Continue]
     }
     set message [_ acs-subsite.confirmation_password_changed]
-    set continue_url $return_url
 
-    ad_return_template /packages/acs-subsite/www/register/display-message
+    ad_returnredirect -message $message -- $return_url
+    ad_script_abort
 }
