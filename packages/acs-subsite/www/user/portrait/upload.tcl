@@ -161,13 +161,13 @@ ad_form -extend -name "portrait_upload" -validate {
 
         content::item::set_live_revision -revision_id $revision_id
         
-        foreach sizename $sizename_list {
-            if { $resized_portrait($sizename) ne "" } {
+        foreach name [array names resized_portrait] {
+            if { $resized_portrait($name) ne "" } {
                 # Delete the item
-                content::item::delete -item_id $resized_portrait($sizename)
+                content::item::delete -item_id $resized_portrait($name)
 
                 # Resize the item
-                image::resize -item_id $item_id -size_name $sizename
+                image::resize -item_id $item_id -size_name $name
             }
         }
 
