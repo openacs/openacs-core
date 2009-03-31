@@ -33,8 +33,8 @@
   <msg key="Add_users">Add users</msg>
   <msg key="Admin">Control Panel</msg>
   <msg key="admin">Admin</msg>
-  <msg key="Administration">Administration</msg>
   <msg key="Administer_subsite">Administer %subsite_name%</msg>
+  <msg key="Administration">Administration</msg>
   <msg key="Administrative_options">Administrative options for this user</msg>
   <msg key="Advanced">Advanced</msg>
   <msg key="Alert_Type">Alert Type</msg>
@@ -55,6 +55,7 @@
   <msg key="Biography_Mime_Types">Biography Mime Types</msg>
   <msg key="cannot_retrieve_password">Retrieving password from local authority is not supported.</msg>
   <msg key="Cannot_see_memb_list">Cannot see the members list</msg>
+  <msg key="Caption">Caption</msg>
   <msg key="Change_locale_label">Change language</msg>
   <msg key="Change_my_email_P">Change your email privacy level</msg>
   <msg key="Change_my_Password">Change your password</msg>
@@ -113,6 +114,7 @@ logging in again. &lt;/p&gt;
   <msg key="E_mail">E-mail</msg>
   <msg key="Edit">Edit</msg>
   <msg key="edit_asm">Edit Selected Questionnaire</msg>
+  <msg key="Edit_caption">Edit Caption</msg>
   <msg key="edit_comment">edit comment</msg>
   <msg key="Edit_Options">Edit Options</msg>
   <msg key="Elements_not_editable">Certain elements are not editable, because they are managed by %authority_name%.</msg>
@@ -172,9 +174,9 @@ Please visit the following link to change your password now:
   <msg key="Go_back">Go back</msg>
   <msg key="go_upload_the_users_por">go upload the user's portrait</msg>
   <msg key="go_upload_your_portrait">go upload your portrait</msg>
-  <msg key="Groups">Groups</msg>
   <msg key="Grant">Grant</msg>
   <msg key="Grant_Permission">Grant Permission</msg>
+  <msg key="Groups">Groups</msg>
   <msg key="Have_group_mail">We already have a group with this email</msg>
   <msg key="Have_user_mail">We already have a user with this email.</msg>
   <msg key="Have_user_name">We already have a user with this username.</msg>
@@ -344,6 +346,8 @@ account was deleted for some reason.</msg>
   <msg key="Notice">Notice:</msg>
   <msg key="on_name_to">on %name% to:</msg>
   <msg key="Online">Online</msg>
+  <msg key="Online_status_set_invisible">Your status has been set to invisible</msg>
+  <msg key="Online_status_set_visible">Your status has been set to visible</msg>
   <msg key="Online_time">Online time</msg>
   <msg key="optional">(optional)</msg>
   <msg key="Options">Options</msg>
