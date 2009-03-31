@@ -1,5 +1,5 @@
 <master>
-<property name="title">#acs-subsite.lt_Portrait_of_first_last#</property>
+<property name="&doc">doc</property>
 <property name="context">@context;noquote@</property>
 
 <switch @return_code@>
@@ -10,12 +10,12 @@
 </if>
 
 <div style="text-align:center">
-<img @widthheight@ src="@subsite_url@shared/portrait-bits.tcl?@export_vars@" alt="Portrait of @first_names@ @last_name@">
+<img @widthheight@ src="@subsite_url@shared/portrait-bits.tcl?@export_vars@" alt="@doc.title@">
 </div>
 
 <ul>
 <li>#acs-subsite.lt_Uploaded_pretty_date#</li>
-<li>#acs-subsite.Comment#: 
+<li>#acs-subsite.Caption#: 
 <p>@description@</p>
 </li>
 </ul>
@@ -24,10 +24,10 @@
 #acs-subsite.Options#:
 
 <ul>
-<li><a href="comment-edit?@export_edit_vars@">#acs-subsite.edit_comment#</a></li>
+<li><a href="comment-edit?@export_edit_vars@">#acs-subsite.Edit_caption#</a></li>
 <li><a href="upload?return_url=@return_url@">#acs-subsite.upload_a_replacement_por#</a></li>
 
-<li><a href="erase?@export_edit_vars@">#acs-subsite.erase_portrait#</a></li>
+<li><a href="erase?@export_edit_vars@">#acs-subsite.Erase_Portrait#</a></li>
 
 </ul>
 </if>
@@ -58,9 +58,3 @@
 </case>
  
 </switch>
-
-
-
-
-
-

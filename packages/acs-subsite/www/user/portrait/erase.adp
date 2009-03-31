@@ -1,5 +1,5 @@
 <master>
-<property name="title">#acs-subsite.Erase_Portrait#</property>
+<property name="&doc">doc</property>
 <property name="context">@context;noquote@</property>
 
 <if @admin_p@ eq 0>

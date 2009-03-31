@@ -71,14 +71,14 @@ and a.rel_type = 'user_portrait_rel'"] || $revision_id eq ""} {
     set portrait_p 1
 }
     
-if {$portrait_p} {
-     if {$admin_p} {
-	 set context [list [list [ad_pvt_home] "Your Account"] "Your Portrait"]
-     } else {
-	 set context [list [list [ad_pvt_home] "User's Account"] "User's Portrait"]
-     }
+if { $admin_p } {
+    set doc(title) [_ acs-subsite.Your_Portrait]
 } else {
-    set context [list "No Portrait"]
+    set doc(title) [_ acs-subsite.lt_Portrait_of_first_last]
+}
+set context [list [list [ad_pvt_home] [ad_pvt_home_name]] $doc(title)]
+
+if {! $portrait_p } {
     set return_code "no_portrait"
     ad_return_template
     return
