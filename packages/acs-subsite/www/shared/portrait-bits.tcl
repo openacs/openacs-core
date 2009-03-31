@@ -20,10 +20,8 @@ if {$item_id eq ""} {
     }
 }    
 
-if {$size eq ""} {
+if { $size eq "" } {
     cr_write_content -item_id $item_id
 } else {	
-    ad_returnredirect "/image/${item_id}/thumbnail"
-    
+    ad_returnredirect "/image/${item_id}/${size}"
 }
-
