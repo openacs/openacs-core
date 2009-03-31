@@ -123,12 +123,12 @@ ad_proc -public ad_context_bar_multirow {
     if { [llength $context] == 0 } { 
         # fix last element to just be literal string
         template::multirow set $multirow [template::multirow size $multirow] url {}
+    } else {
+        foreach elm [lrange $context 0 end-1] {
+            template::multirow append $multirow [lindex $elm 0] [lindex $elm 1]
+        }
+        template::multirow append $multirow {} [lindex $context end]
     }
-    
-    foreach elm [lrange $context 0 end-1] {
-        template::multirow append $multirow [lindex $elm 0] [lindex $elm 1]
-    }
-    template::multirow append $multirow {} [lindex $context end]
 }
 
 ad_proc -public ad_context_bar { 
