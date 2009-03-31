@@ -25,7 +25,7 @@
   <msg key="lt_system_name_-_Batched">[%system_name% - Notificación en Batch]</msg>
   <msg key="lt_Ubsubscribe_Notification_">Anular notificaciones para %pretty_name%</msg>
   <msg key="lt_You_have_no_notificat">No tiene avisos.</msg>
-  <msg key="lt_You_have_requested_no">Desuscribirse</msg>
+  <msg key="lt_You_have_requested_no">Darse de baja</msg>
   <msg key="lt_You_may_a_hrefsub_url">Solicitar notificaciones</msg>
   <msg key="Manage_Notifications">Administrar Notificaciones</msg>
   <msg key="Notification">Notificaciones</msg>
@@ -46,7 +46,7 @@
   <msg key="Subscribers">Subscriptores</msg>
   <msg key="there_are_no_users">Ningún usuario está subscrito para recibir notificaciones de ese tipo para ese objeto.</msg>
   <msg key="Unsubscribe">Darse de baja</msg>
-  <msg key="Unsubscribe_from_object_name">Dar de baja la suscripción a %notications.object_name%</msg>
+  <msg key="Unsubscribe_from_object_name">Dar de baja la suscripción a %notifications.object_name%</msg>
   <msg key="Unsubscribe_Notifications">Desubscribir notificaciones</msg>
   <msg key="Unsubscribe_of_notification">Desubscribir de notificación: </msg>
   <msg key="unsubscribe_user">Desuscribir Usuarios seleccionados </msg>
