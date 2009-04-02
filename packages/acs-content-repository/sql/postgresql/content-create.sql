@@ -470,7 +470,8 @@ create table cr_revisions (
   -- lob_id if storage_type = lob.
   lob             integer
                   constraint cr_revisions_lob_fk
-                  references lobs,
+                  references lobs
+                  on delete set null,
   -- content holds the file name if storage type = file
   -- otherwise it holds the text data if storage_type = text.
   content	  text,
