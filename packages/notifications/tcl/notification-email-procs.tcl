@@ -134,8 +134,6 @@ namespace eval notification::email {
            append content_html "<p>#notifications.lt_Getting_too_much_emai#</p>"
            set content $content_html
        }
-       append content_text "\n#notifications.lt_Getting_too_much_emai#"
-       append content_html "<p>[ad_text_to_html -- [lang::message::lookup $user_locale notifications.lt_Getting_too_much_emai]]</p>"
 
        # Use this to build up extra mail headers        
        set extra_headers [list]
