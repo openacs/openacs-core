@@ -316,6 +316,7 @@ account was deleted for some reason.</msg>
   <msg key="Make_member">Make member</msg>
   <msg key="Make_yourself_invisible_label">Make yourself invisible</msg>
   <msg key="Make_yourself_visible_label">Make yourself visible</msg>
+  <msg key="Manage_Portrait">Manage portrait</msg>
   <msg key="manage_users_email">Manage users E-mail privacy</msg>
   <msg key="Manage_your_notifications">Manage your notifications</msg>
   <msg key="Mem_list_not_allowed">Sorry, but you are not allowed to view the members list.</msg>
@@ -416,6 +417,7 @@ You can always change your password by doing the following:
   <msg key="Screen_name_already_taken">This screen name is already taken.</msg>
   <msg key="Search_For_Exist_User">Search For An Existing User</msg>
   <msg key="Security_context_root">Security context root</msg>
+  <msg key="See_full_size">See full size</msg>
   <msg key="Select_an_Object_by_Id">Select an Object by Id:</msg>
   <msg key="Send_email_to_this_user">Send email to this user</msg>
   <msg key="Send_me_a_copy">Send me a copy:</msg>

@@ -45,6 +45,7 @@
   <msg key="Biography_Mime_Types">Tipos Mime de Biografía</msg>
   <msg key="cannot_retrieve_password">No se soporta la obtención de contraseñas de una autoridad local.</msg>
   <msg key="Cannot_see_memb_list">No puede ver la lista de miembros</msg>
+  <msg key="Caption">Leyenda</msg>
   <msg key="Change_locale_label">Seleccionar idioma</msg>
   <msg key="Change_my_email_P">Cambiar el nivel de privacidad de mi email</msg>
   <msg key="Change_my_Password">Cambiar mi contraseña</msg>
@@ -92,6 +93,7 @@
   <msg key="E_mail">Email</msg>
   <msg key="Edit">Editar</msg>
   <msg key="edit_asm">Editar el Cuestionario Seleccionado</msg>
+  <msg key="Edit_caption">Editar Leyenda</msg>
   <msg key="edit_comment">editar comentario</msg>
   <msg key="Edit_Options">Opciones</msg>
   <msg key="Elements_not_editable">Algunos elementos no pueden ser editados ya que están siendo administrados por %authority_name%.</msg>
@@ -257,6 +259,7 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="Make_member">Crear un miembro</msg>
   <msg key="Make_yourself_invisible_label">Volverse invisible</msg>
   <msg key="Make_yourself_visible_label">Volverse visible</msg>
+  <msg key="Manage_Portrait">Administrar foto</msg>
   <msg key="manage_users_email">Administrar la privacidad del correo electrónico de los usuarios</msg>
   <msg key="Manage_your_notifications">Administrar notificaciones</msg>
   <msg key="Mem_list_not_allowed">No esta autorizado para ver la lista de miembros.</msg>
@@ -285,6 +288,8 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="Notice">Aviso:</msg>
   <msg key="on_name_to">en %name% a</msg>
   <msg key="Online">Conectado</msg>
+  <msg key="Online_status_set_invisible">Su estado ha sido cambiado a invisible</msg>
+  <msg key="Online_status_set_visible">Su estado ha sido cambiado a visible</msg>
   <msg key="Online_time">Tiempo online</msg>
   <msg key="optional">(opcional)</msg>
   <msg key="Options">Opciones</msg>
@@ -333,6 +338,7 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="Screen_name_already_taken">Este apodo ya está cogido</msg>
   <msg key="Search_For_Exist_User">Buscar un usuario existente</msg>
   <msg key="Security_context_root">Contexto de seguridad de root</msg>
+  <msg key="See_full_size">Ver a tamaño completo</msg>
   <msg key="Select_an_Object_by_Id">Seleccionar un objeto por Id </msg>
   <msg key="Send_email_to_this_user">Enviar email a este usuario</msg>
   <msg key="Send_me_a_copy">Envienme una copia:</msg>
