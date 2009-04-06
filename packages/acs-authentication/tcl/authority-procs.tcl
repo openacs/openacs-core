@@ -434,7 +434,7 @@ ad_proc -private auth::authority::get_column_defaults {} {
 
     @author Peter Marklund
 } {
-    return { 
+    set columns { 
         authority_id ""
         short_name ""
         pretty_name ""
@@ -449,12 +449,14 @@ ad_proc -private auth::authority::get_column_defaults {} {
         register_impl_id ""
         register_url ""
         user_info_impl_id ""
-        search_impl_id ""
         get_doc_impl_id ""
         process_doc_impl_id ""
         batch_sync_enabled_p "f"
-        allow_user_entered_info_p "f"
     }
+    if {[apm_version_names_compare [ad_acs_version] 5.5.0] > -1} {
+        lappend columns allow_user_entered_info_p "f" search_impl_id ""
+    }
+    return $columns
 }
 
 ad_proc -private auth::authority::get_required_columns {} {
@@ -475,7 +477,12 @@ ad_proc -private auth::authority::get_sc_impl_columns {} {
 
     @author Peter Marklund 
 } {
-    return {auth_impl_id pwd_impl_id register_impl_id user_info_impl_id search_impl_id get_doc_impl_id process_doc_impl_id}
+    # DAVEB
+    set columns {auth_impl_id pwd_impl_id register_impl_id user_info_impl_id get_doc_impl_id process_doc_impl_id}
+    if {[apm_version_names_compare [ad_acs_version] 5.5.0] > -1} {
+        lappend columns search_impl_id
+    }
+    return $columns
 }
 
 ad_proc -private auth::authority::get_select_columns {} {
@@ -483,7 +490,11 @@ ad_proc -private auth::authority::get_select_columns {} {
     
     @author Lars Pind (lars@collaboraid.biz)
 } {
-    return [concat [get_columns] auth_impl_name pwd_impl_name register_impl_name user_info_impl_name get_search_impl_name get_doc_impl_name process_doc_impl_name]
+    set columns [concat [get_columns] auth_impl_name pwd_impl_name register_impl_name user_info_impl_name get_doc_impl_name process_doc_impl_name]
+    if {[apm_version_names_compare [ad_acs_version] 5.5.0] > -1} {
+        lappend columns get_search_impl_name
+    }
+    return $columns
 }
 
 
@@ -514,7 +525,9 @@ ad_proc -private auth::authority::get_not_cached {
     lappend columns "(select impl_pretty_name from acs_sc_impls where impl_id = pwd_impl_id) as pwd_impl_name"
     lappend columns "(select impl_pretty_name from acs_sc_impls where impl_id = register_impl_id) as register_impl_name"
     lappend columns "(select impl_pretty_name from acs_sc_impls where impl_id = user_info_impl_id) as user_info_impl_name"
-    lappend columns "(select impl_pretty_name from acs_sc_impls where impl_id = search_impl_id) as search_impl_name"
+    if {[apm_version_names_compare [ad_acs_version] 5.5.0] > -1} {
+        lappend columns "(select impl_pretty_name from acs_sc_impls where impl_id = search_impl_id) as search_impl_name"
+    }
     lappend columns "(select impl_pretty_name from acs_sc_impls where impl_id = get_doc_impl_id) as get_doc_impl_name"
     lappend columns "(select impl_pretty_name from acs_sc_impls where impl_id = process_doc_impl_id) as process_doc_impl_name"
 
