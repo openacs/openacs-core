@@ -11,6 +11,8 @@ ad_page_contract {
     { package_type "apm_application"}
     { initial_install_p "f" }
     { singleton_p "f" }
+    { implements_subsite_p f }
+    { inherit_templates_p t }
     { auto_mount "" }
     package_uri
     version_name
@@ -103,7 +105,8 @@ set attributes(maturity) 0
 db_transaction {
     # Register the package.
     apm_package_register $package_key $pretty_name $pretty_plural $package_uri \
-	    $package_type $initial_install_p $singleton_p $implements_subsite_p $inherit_templates_p
+	    $package_type $initial_install_p $singleton_p $implements_subsite_p \
+            $inherit_templates_p
     # Insert the version
     set version_id [apm_package_install_version \
                         -callback apm_dummy_callback \

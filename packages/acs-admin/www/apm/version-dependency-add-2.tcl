@@ -13,8 +13,9 @@ ad_page_contract {
 
 db_transaction {
     switch $dependency_type {
-	require {
-	    apm_dependency_add -dependency_id $dependency_id requires $version_id $service_uri $service_version
+	require -
+        extend {
+	    apm_dependency_add -dependency_id $dependency_id ${dependency_type}s $version_id $service_uri $service_version
 	}
 
 	provide {

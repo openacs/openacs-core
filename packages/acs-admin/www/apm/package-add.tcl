@@ -107,6 +107,14 @@ created instance.  Singleton packages are appropriate for services that should n
 such as the ACS Kernel.
 </tr>
 <tr>
+  <th align=right nowrap>Implements Subsite?</th>
+  <td><input type=checkbox name=implements_subsite_p value=t> Does your package implement subsite semantics?  Your package may do so by extending acs-subsite or by providing the means to mount applications, generate navigation tools, specify master templates, and manage community-oriented features such as user groups and roles.
+</tr>
+<tr>
+  <th align=right nowrap>Inherit Templates?</th>
+  <td><input type=checkbox name=inherit_templates_p value=t> Do you want your package to inherit templates from packages it extends?  If true, the request processor will first try to map a URL corresponding to a mounted instance of your package to one of its templates, and if no match is found, will search extended packages.  If false, only templates in your package will be mapped to URLs.
+</tr>
+<tr>
   <th align=right nowrap>Auto-mount URI</th>
   <td><input name=auto_mount size=30></td>
 </tr>
