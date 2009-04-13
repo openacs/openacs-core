@@ -68,12 +68,22 @@ function checkMailto(element) {
 
 <tr>
   <th align=right nowrap>OpenACS Core:</th>
-  <td>$initial_install_p</td>
+  <td>[ad_decode $initial_install_p t Yes No]</td>
 </tr>
 
 <tr>
   <th align=right nowrap>Singleton:</th>
-  <td>$singleton_p</td>
+  <td>[ad_decode $singleton_p t Yes No]</td>
+</tr>
+
+<tr>
+  <th align=right nowrap>Implements Subsite:</th>
+  <td>[ad_decode $implements_subsite_p t Yes No]</td>
+</tr>
+
+<tr>
+  <th align=right nowrap>Inherit Templates:</th>
+  <td>[ad_decode $inherit_templates_p t Yes No]</td>
 </tr>
 
 <tr>

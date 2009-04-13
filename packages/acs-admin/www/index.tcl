@@ -6,7 +6,8 @@ ad_page_contract {
 }
 
 set page_title [ad_conn instance_name]
-set subsite_number [db_string count_subsites "select count(*) from apm_packages where package_key = 'acs-subsite'"]
+set package_keys '[join [subsite::package_keys] ',']'
+set subsite_number [db_string count_subsites {}]
 if {$subsite_number > 100} {
     set too_many_subsites_p 1
 } else {

@@ -130,6 +130,8 @@ $prompt_text
 <tr valign=baseline><th align=left>Version:</th><td>$version_name</td></tr>
 <tr valign=baseline><th align=left>OpenACS Core:</th><td>[ad_decode $initial_install_p "t" "Yes" "No"]</td></tr>
 <tr valign=baseline><th align=left>Singleton:</th><td>[ad_decode $singleton_p "t" "Yes" "No"]</td></tr>
+<tr valign=baseline><th align=left>Implements Subsite:</th><td>[ad_decode $implements_subsite_p t Yes No]</td></tr>
+<tr valign=baseline><th align=left>Inherit Templates:</th><td>[ad_decode $inherit_templates_p t Yes No]</td></tr>
 <tr valign=baseline><th align=left>Auto-mount:</th><td>$auto_mount</td></tr>
 <tr valign=baseline><th align=left>Status:</th><td>$status</td></tr>
 <tr valign=baseline><th align=left>Data Model:</th><td>$data_model_status</td></th></tr>
