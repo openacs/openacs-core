@@ -20,11 +20,11 @@
   <p> Please click the link below to begin installation. </p>
 </else>
 
-<p><listtemplate name="install"></listtemplate></p>
+<listtemplate name="install"></listtemplate>
 
 <if @continue_url@ not nil>
   <p>
-    <b>&raquo;</b> <a href="@continue_url@">Install above <if @install:rowcount@ eq 1>package</if><else>packages</else></a>
+    &raquo; <a href="@continue_url@">Install above <if @install:rowcount@ eq 1>package</if><else>packages</else></a>
   </p>
 </if>
 <if @problems_p@ true>

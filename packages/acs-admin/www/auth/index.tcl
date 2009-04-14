@@ -17,7 +17,7 @@ list::create \
         edit {
             label ""
             display_template {
-                <img src="/shared/images/Edit16.gif" height="16" width="16" alt="Edit" border="0">
+                <img src="/shared/images/Edit16.gif" height="16" width="16" alt="Edit" style="border: 0">
             }
             link_url_eval {[export_vars -base authority { authority_id {ad_form_mode edit}}]}
             link_html {title "Edit this authority"}
@@ -32,10 +32,10 @@ list::create \
             html { align center }
             display_template {
                 <if @authorities.enabled_p@ true>
-                  <a href="@authorities.enabled_p_url@" title="\#acs-admin.Disable_this_authority\#"><img src="/shared/images/checkboxchecked" height="13" width="13" border="0" style="background-color: white;"></a>
+                <a href="@authorities.enabled_p_url@" title="\#acs-admin.Disable_this_authority\#"><img src="/shared/images/checkboxchecked" alt="enabled" height="13" width="13" style="background-color: white; border: 0;"></a>
                 </if>
                 <else>
-                  <a href="@authorities.enabled_p_url@" title="\#acs-admin.Enable_this_authority\#"><img src="/shared/images/checkbox" height="13" width="13" border="0" style="background-color: white;"></a>
+                <a href="@authorities.enabled_p_url@" title="\#acs-admin.Enable_this_authority\#"><img src="/shared/images/checkbox" height="13" width="13" style="background-color: white; border: 0;" alt="disabled"></a>
                 </else>
             }
         }
@@ -44,13 +44,13 @@ list::create \
             html { align center }
             display_template {
                 <if @authorities.sort_order@ ne @authorities.highest_sort_order@>
-                  <a href="@authorities.sort_order_url_up@" title="\#acs-admin.Move_this_authority_up\#"><img src="/resources/acs-subsite/arrow-up.gif" border="0" width="15" height="15"></a>
+                  <a href="@authorities.sort_order_url_up@" title="\#acs-admin.Move_this_authority_up\#"><img src="/resources/acs-subsite/arrow-up.gif" style="border: 0" width="15" height="15" alt="up"></a>
                 </if>
-                <else><img src="/resources/acs-subsite/spacer.gif" width="15" height="15"></else>
+                <else><img src="/resources/acs-subsite/spacer.gif" width="15" height="15" alt=""></else>
                 <if @authorities.sort_order@ ne  @authorities.lowest_sort_order@>
-                  <a href="@authorities.sort_order_url_down@" title="\#acs-admin.Move_this_authority_down\#"><img src="/resources/acs-subsite/arrow-down.gif" border="0" width="15" height="15"></a>
+                  <a href="@authorities.sort_order_url_down@" title="\#acs-admin.Move_this_authority_down\#"><img src="/resources/acs-subsite/arrow-down.gif" style="border: 0" width="15" height="15" alt="down"></a>
                 </if>
-                <else><img src="/resources/acs-subsite/spacer.gif" width="15" height="15"></else>
+                <else><img src="/resources/acs-subsite/spacer.gif" width="15" height="15" alt=""></else>
           }
         }
         registration {
@@ -59,13 +59,13 @@ list::create \
             display_template {
                 <switch @authorities.registration_status@>
                   <case value="selected">
-                    <img src="/resources/acs-subsite/radiochecked.gif" height="13" width="13" border="0">
+                    <img src="/resources/acs-subsite/radiochecked.gif" height="13" width="13" style="border: 0" alt="checked">
                   </case>
                   <case value="can_select">
                     <a href="@authorities.registration_url@" 
                        title="\#acs-admin.Make_this_the_authority_for_registering_new_users\#"
                        onclick="return confirm('\#acs-admin.You_are_changing_all_user_registrations_to_be_in_authority_authorities_pretty_name\#');">
-                      <img src="/resources/acs-subsite/radio.gif" height="13" width="13" border="0" style="background-color: white;">
+                <img src="/resources/acs-subsite/radio.gif" height="13" width="13" style="background-color: white; border: 0;" alt="unchecked">
                     </a> 
                   </case>
                   <case value="cannot_select">
@@ -90,7 +90,7 @@ list::create \
                   <a href="@authorities.delete_url@"
                      title="Delete this authority"
                      onclick="return confirm('\#acs-admin.Are_you_sure_you_want_to_delete_authority_authorities_pretty_name\#');">
-                    <img src="/shared/images/Delete16.gif" height="16" width="16" alt="\#acs-admin.Delete\#" border="0">
+                    <img src="/shared/images/Delete16.gif" height="16" width="16" alt="\#acs-admin.Delete\#" style="border:0">
                   </a>
                 </if>
             }
