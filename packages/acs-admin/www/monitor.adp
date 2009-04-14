@@ -13,9 +13,10 @@
 <p>
   Here's what uptime has to say about the box:
 </p>
-<pre>@uptime_output@</pre>
 
-<h3>Connections</h3>
+<code>@uptime_output@</code>
 
-<p><listtemplate name="connections"></listtemplate></p>
+<h2>Connections</h2>
+
+<listtemplate name="connections"></listtemplate>
 
