@@ -3,7 +3,7 @@
   <noparse>
     <if \@paginator.page_count@ gt 1 or \@list_properties.page_size_variable_p@ eq 1>
       <div class="list-paginator-top">
-		<ul class="compact list-paginator">
+        <ul class="compact list-paginator">
           <if \@paginator.page_count@ gt 1>
             <if \@paginator.group_count@ gt 1 and \@paginator.groupsize@ gt 1>
               <if \@paginator.previous_group_url@ not nil>
@@ -19,7 +19,7 @@
             <else>
                <li>&lt;</li>
             </else>
-	
+    
             <multiple name="paginator_pages">
               <if \@paginator.current_page@ ne \@paginator_pages.page@>
                 <li><a href="\@paginator_pages.url@" title="\@paginator_pages.context@">\@paginator_pages.page@</a></li>
@@ -56,7 +56,7 @@
               </select>
             </form>
           </if>
-		</ul>
+        </ul>
       </div>
     </if>
   </noparse>
@@ -78,11 +78,11 @@
 <if @actions:rowcount@ gt 0>
 <!-- list-button-bar-top div -->
   <div class="list-button-bar-top">
-	<ul class="compact">
+    <ul class="compact">
       <multiple name="actions">
         <li><a href="@actions.url@" title="@actions.title@" class="button">@actions.label@</a></li>
       </multiple>
-	</ul>
+    </ul>
   </div>
 <!-- end of list-button-bar-top div -->
 </if>
@@ -110,7 +110,7 @@
         </th>
       </group>
     </tr>
-	</thead>
+    </thead>
   </multiple>
 
 <!-- START TFOOT for Aggregate func -->
@@ -147,16 +147,16 @@
 <noparse>
   <if \@@list_properties.multirow@:rowcount@ eq 0>
     <tbody>
-	<tr class="list-odd last">
+    <tr class="list-odd last">
         <td colspan="@elements:rowcount@">
         @list_properties.no_data@
       </td>
     </tr>
-	</tbody>
+    </tbody>
   </if>
   <else>
 
-	<tbody>
+    <tbody>
     <multiple name="@list_properties.multirow@">
 </noparse>
       
@@ -174,7 +174,7 @@
   </if>
 
         <multiple name="elements">
-		
+        
   <noparse>
           <if \@@list_properties.multirow@.rownum@ lt \@@list_properties.multirow@:rowcount@>
             <if \@@list_properties.multirow@.rownum@ odd>
@@ -240,7 +240,7 @@
   <noparse>
     <if \@paginator.page_count@ gt 1>
       <div class="list-paginator-bottom">
-		<ul class="compact list-paginator">
+        <ul class="compact list-paginator">
           <if \@paginator.group_count@ gt 1 and \@paginator.groupsize@ gt 1>
             <if \@paginator.previous_group_url@ not nil>
               <li><a href="\@paginator.previous_group_url@" title="\@paginator.previous_group_context@">&lt;&lt;</a></li>
@@ -279,8 +279,8 @@
               <li>&gt;&gt;</li>
             </else>
           </if>
-		</ul>
-	  </div>
+        </ul>
+      </div>
     </if>
   </noparse>
 <!-- end of bottom pagination -->
@@ -292,16 +292,16 @@
 
 <noparse><if \@@list_properties.multirow@:rowcount@ gt 0></noparse>
   <if @bulk_actions:rowcount@ gt 0>
-	<!-- list-button-bar-bottom div -->
+    <!-- list-button-bar-bottom div -->
     <div class="list-button-bar-bottom">
-		<ul class="compact">
+        <ul class="compact">
         <multiple name="bulk_actions">
           <li><a href="#" title="@bulk_actions.title@" class="button"
           onclick="@list_properties.bulk_action_click_function@('@list_properties.name@', '@bulk_actions.url@'); return false;" onkeypress="acs_ListBulkActionClick('@list_properties.name@', '@bulk_actions.url@'); return false;">@bulk_actions.label@</a></li>
         </multiple>
-		</ul>
+        </ul>
     </div>
-	<!-- end of list-button-bar-bottom div -->
+    <!-- end of list-button-bar-bottom div -->
   </if>
 <noparse></if></noparse>
 
