@@ -380,7 +380,7 @@ ad_proc -public -deprecated item::get_title { item_id } {
   @see content::item::get_title
 
 } {
-    return [::content::item::get_title -item_id item_id]
+    return [::content::item::get_title -item_id $item_id]
 }
 
 ad_proc -public -deprecated item::get_publish_status { item_id } {
