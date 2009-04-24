@@ -406,7 +406,7 @@ ad_proc -public -deprecated item::get_publish_status { item_id } {
 
 } {
 
-  return [::content::item::get_publish_status -item_id item_id]
+  return [::content::item::get_publish_status -item_id $item_id]
 }
 
 ad_proc -public -deprecated item::is_publishable { item_id } {
