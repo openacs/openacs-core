@@ -125,7 +125,7 @@ ad_form -extend -name user_info -form {
         {mode $elm_mode(url)}
     }
     {bio:text(textarea),optional
-        {label "[_ acs-subsite.About_You]"}
+        {label "[_ acs-subsite.Biography]"}
         {html {rows 8 cols 60}}
         {mode $elm_mode(bio)}
         {display_value {[ad_text_to_html -- $user(bio)]}}
