@@ -408,16 +408,17 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
 
         set user_agent [string tolower [ns_set get [ns_conn headers] User-Agent]]
 
-        if {[string first "safari" $user_agent] != -1} {
-            if {[regexp {version/([0-9]+)[.]} $user_agent _ user_agent_version]} {
-                if {$user_agent_version < 3} {
+	if {[string first "chrome" $user_agent] != -1} {
+            # vguerra: google chrome browser
+            # needs more testing in order to check if chrome fully
+            # supports xinha
+            # roc: this check has to go first since safari use applewebkit, so the agent always contain safari word
+            # once xinha officially support chrome (already supports safari), we can remove this if and add the check at the next if.
+	} elseif {[string first "safari" $user_agent] != -1} {
+            regexp {version/([0-9]+)[.]} $user_agent _ user_agent_version
+	    if {$user_agent_version < 3} {
                     set element(htmlarea_p) false
-                } 
-            } elseif {[string first "chrome" $user_agent] != -1} {
-                # vguerra: google chrome browser
-                # needs more testing in order to check if chrome fully
-                # supports xinha.
-            }
+	    }
         } elseif {[string first "opera" $user_agent] != -1} {
             regexp {^[^/]+/([0-9]+)[.]} $user_agent _ user_agent_version
             if {$user_agent_version < 9} {
