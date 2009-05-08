@@ -525,7 +525,7 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
                     {extended_valid_elements "img[class|src|alt|title|hspace|vspace|width|height|align|onmouseover|onmouseout|name],hr[class|width|size|noshade],font[face|size|color|style],span[class|align|style]"}}
                 set tinymce_configs_list [parameter::get \
                                               -package_id [apm_package_id_from_key "acs-templating"] \
-                                              -parameter "XinhaDefaultPlugins" \
+                                              -parameter "TinyMCEDefaultConfig" \
                                               -default $tinymce_default_config]
                 set pairslist [list]
                 foreach config_pair $tinymce_configs_list {
