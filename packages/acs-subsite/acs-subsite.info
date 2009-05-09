@@ -8,7 +8,7 @@
     <singleton-p>f</singleton-p>
     <implements-subsite-p>t</implements-subsite-p>
     
-    <version name="5.5.0d7" url="http://openacs.org/repository/download/apm/acs-subsite-5.5.0d7.apm">
+    <version name="5.5.0d8" url="http://openacs.org/repository/download/apm/acs-subsite-5.5.0d8.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Subsite</summary>
         <release-date>2008-05-31</release-date>
@@ -17,7 +17,7 @@
         <license>GPL</license>
         <maturity>3</maturity>
 
-        <provides url="acs-subsite" version="5.5.0d7"/>
+        <provides url="acs-subsite" version="5.5.0d8"/>
         <requires url="acs-authentication" version="5.3.2"/>
         <requires url="acs-content-repository" version="5.3.2"/>
         <requires url="acs-kernel" version="5.5.0d3"/>

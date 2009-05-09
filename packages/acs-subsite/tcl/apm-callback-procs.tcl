@@ -90,5 +90,27 @@ ad_proc -private subsite::after_upgrade {
 		    }
 		}
 	    }
+	    5.5.0d7 5.5.0d8 {
+                db_transaction {
+                    set package_keys ([join '[subsite::package_keys]' ,])
+                    foreach subsite_id [db_list get_subsite_ids {}] {
+                        set new_css [list]
+                        set css [parameter::get \
+                                    -package_id $subsite_id \
+                                    -parameter ThemeCSS \
+                                    -default ""]
+                        if { $css ne "" } {
+                            foreach css $css {
+                                lappend new_css [list [list href [lindex $css 0]] \
+                                                      [list media [lindex $css 1]]]
+                            }
+                            parameter::set_value \
+                                -package_id $subsite_id \
+                                -parameter ThemeCSS \
+                                -value $new_css
+                        }
+                    }
+                }
+            }
 	}
 }

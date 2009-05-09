@@ -84,9 +84,24 @@ template::head::add_javascript -src "/resources/acs-subsite/core.js"
 
 set css [parameter::get -package_id [ad_conn subsite_id] -parameter ThemeCSS -default ""]
 if { $css ne "" } {
+    set params [list]
+
+    # DRB: Need to handle two cases, the lame first attempt and the more complete current
+    # attempt which allows you to specify all of the parameters to template::head::add_css
+    # (sigh, remove this kludge for 5.5.1).  We need to handle the old case so upgrades
+    # to 5.5 for mgh and various of my sites work correctly.
+
     foreach css $css {
-        template::head::add_css -href [lindex $css 0] -media [lindex $css 1]
+        if { [llength $css] == 2 && [llength [lindex $css 0]] == 1 } {
+            template::head::add_css -href [lindex $css 0] -media [lindex $css 1]
+        } else {
+            foreach param $css {
+                lappend params -[lindex $param 0] [lindex $param 1]
+            }
+            eval [concat template::head::add_css $params]
+        }
     }
+
 } else {
     template::head::add_css \
         -href "/resources/acs-templating/lists.css" \
