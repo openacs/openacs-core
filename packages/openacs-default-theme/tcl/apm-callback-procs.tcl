@@ -13,9 +13,9 @@ ad_proc openacs_default_theme::install::after_install {} {
             -key default_plain \
             -name #openacs-default-theme.plain# \
             -template /packages/openacs-default-theme/lib/plain-master \
-            -css "{/resources/openacs-default-theme/styles/default-master.css all}
-                  {/resources/acs-templating/forms.css all}
-                  {/resources/acs-templating/lists.css all}" \
+            -css {{{href /resources/openacs-default-theme/styles/default-master.css} {media all}}
+                  {{href /resources/acs-templating/forms.css} {media all}}
+                  {{href /resources/acs-templating/lists.css} {media all}}} \
             -form_template /packages/acs-templating/resources/forms/standard \
             -list_template /packages/acs-templating/resources/lists/table \
             -list_filter_template /packages/acs-templating/resources/lists/filters 
@@ -24,9 +24,9 @@ ad_proc openacs_default_theme::install::after_install {} {
             -key default_tabbed \
             -name #openacs-default-theme.tabbed# \
             -template /packages/openacs-default-theme/lib/tabbed-master \
-            -css "{/resources/openacs-default-theme/styles/default-master.css all}
-                  {/resources/acs-templating/forms.css all}
-                  {/resources/acs-templating/lists.css all}" \
+            -css {{{href /resources/openacs-default-theme/styles/default-master.css} {media all}}
+                  {{href /resources/acs-templating/forms.css} {media all}}
+                  {{href /resources/acs-templating/lists.css} {media all}}} \
             -form_template /packages/acs-templating/resources/forms/standard \
             -list_template /packages/acs-templating/resources/lists/table \
             -list_filter_template /packages/acs-templating/resources/lists/filters 
@@ -48,9 +48,9 @@ ad_proc openacs_default_theme::install::after_install {} {
         -value /packages/openacs-default-theme/lib/plain-master
 
     parameter::set_default -package_key acs-subsite -parameter ThemeCSS \
-        -value "{/resources/openacs-default-theme/styles/default-master.css all}
-                {/resources/acs-templating/forms.css all}
-                {/resources/acs-templating/lists.css all}"
+       -value {{{href /resources/openacs-default-theme/styles/default-master.css} {media all}}
+               {{href /resources/acs-templating/forms.css} {media all}}
+               {{href /resources/acs-templating/lists.css} {media all}}}
 
     parameter::set_default -package_key acs-subsite -parameter ThemeKey -value default_plain
 }
