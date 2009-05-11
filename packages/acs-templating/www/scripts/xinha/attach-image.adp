@@ -1,6 +1,5 @@
 <master src="/www/blank-master">
 
-<body onload="Init()">
 <div id="insert_image_upload">
 
 	<table border="0" style="margin: 0 auto; text-align: left;padding: 0px;" width="100%">
