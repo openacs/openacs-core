@@ -197,7 +197,9 @@ if {$ajaxhelper_p} {
 }
 
 if {$richtextEditor eq "xinha"} {
-  
+template::head::add_javascript \
+    -order "Z0" \
+    -src "/resources/acs-templating/xinha-nightly/popups/popup.js"
 template::head::add_javascript \
     -order "Z1" \
     -script "
@@ -208,12 +210,12 @@ template::head::add_javascript \
 	  __dlg_init();
 	  var param = window.dialogArguments;
 	  if (param) {
-	      document.getElementById('f_url').value = param['f_url'];
-	      document.getElementById('f_alt').value = param['f_alt'];
-	      document.getElementById('f_border').value = param['f_border'];
-	      document.getElementById('f_align').value = param['f_align'];
-	      document.getElementById('f_vert').value = param['f_vert'];
-	      document.getElementById('f_horiz').value = param['f_horiz'];
+	      document.getElementById('f_url').value = param\['f_url'\];
+	      document.getElementById('f_alt').value = param\['f_alt'\];
+	      document.getElementById('f_border').value = param\['f_border'\];
+	      document.getElementById('f_align').value = param\['f_align'\];
+	      document.getElementById('f_vert').value = param\['f_vert'\];
+	      document.getElementById('f_horiz').value = param\['f_horiz'\];
 
 	      window.ipreview.location.replace(param.f_url);
 	  }
@@ -233,7 +235,7 @@ template::head::add_javascript \
 	  for (var i in required) {
 	    var el = document.getElementById(i);
 	    if (!el.value) {
-	      alert(required[i]);
+	      alert(required\[i\]);
 	      el.focus();
 	      return false;
 	    }
@@ -241,14 +243,14 @@ template::head::add_javascript \
 	  // pass data back to the calling window
 	  var param = new Object();
 	  /* 
-	  var fields = ['f_url'];
+	  var fields = \['f_url'\];
 	  for (var i in fields) {
-	    var id = fields[i];
+	    var id = fields\[i\];
 	    var el = document.getElementById(id);
-	    param[id] = el.value;
+	    param\[id\] = el.value;
 	  } 
 	  */
-	  param['f_url'] = document.getElementById('f_url').value;
+	  param\['f_url'\] = document.getElementById('f_url').value;
 	  if (selector_window) {
 	    selector_window.close();
 	  }
@@ -472,9 +474,9 @@ function onCancel() {
 }
 
 "
-
-}
-
 template::add_body_handler \
     -event onload \
     -script "attachImageInit()"
+
+}
+
