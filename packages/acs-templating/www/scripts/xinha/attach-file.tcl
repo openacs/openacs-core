@@ -14,7 +14,7 @@ ad_page_contract {
 }
 
 #HAM : ajax sources
-set js_source [ah::js_sources]
+#ah::requires -sources "prototype,scriptaculous"
 
 set f_url ""
 
@@ -82,6 +82,7 @@ if {$write_p} {
 	    }
         } \
         -on_submit {
+            ns_log notice "ATTACH FILE ON SUBMIT"
 	    if {$f_href eq ""} {
 		set f_href $f_url
 		element set_value upload_form f_href $f_href
@@ -219,6 +220,7 @@ if {$write_p} {
 		    }
 		}
 	    }
+            ns_log notice "F_HREF= $f_href"
 	    element set_value upload_form f_href $f_href
         }
 
@@ -233,3 +235,138 @@ set richtextEditor [parameter::get \
 			-default "xinha"]
 
 set HTML_UploadTitle ""
+
+
+if {$richtextEditor eq "xinha"} {
+    template::head::add_javascript \
+        -src "/resources/acs-templating/xinha-nightly/popups/popup.js"
+    template::head::add_javascript \
+        -script "
+        var selector_window;
+	// window.resizeTo(450, 300);
+
+	function Init() {
+	  __dlg_init();
+
+	  var f_href = document.getElementById('f_href');
+	  var url = f_href.value;
+	  if (url) {
+      		onOK();
+	      	__dlg_close(null);
+	  }
+
+	  var param = window.dialogArguments;
+	  if (param) {
+ 	     if ( typeof param['f_href'] != 'undefined' ) {
+	        document.getElementById('f_href').value = param['f_href'];
+	        document.getElementById('f_url').value = param['f_href'];
+	        document.getElementById('f_title').value = param['f_title'];
+	     }          
+          }	  
+	};
+	
+	function onOK() {
+	  var required = {
+	    'f_href': '#acs-templating.HTMLArea_NoURL#'
+	  };
+	  for (var i in required) {
+	    var el = document.getElementById(i);
+	    if (!el.value) {
+	      alert(required[i]);
+	      el.focus();
+	      return false;
+	    }
+	  }
+	  // pass data back to the calling window
+	  var fields = ['f_href','f_title', 'f_target'];
+	  var param = new Object();
+	  for (var i in fields) {
+	    var id = fields[i];
+	    var el = document.getElementById(id);
+	    param[id] = el.value;
+	  }
+	  __dlg_close(param);
+	  return false;
+	};
+	
+	function onCancel() {
+	  if (selector_window) {
+	    selector_window.close();
+	  }
+	  __dlg_close(null);
+	  return false;
+	};
+"
+}
+
+if {$richtextEditor eq "tinymce"} {
+    template::head::add_javascript \
+        -src "/resources/acs-templating/tinymce/jscripts/tiny_mce/tiny_mce_popup.js" \
+        -order "Z1"
+    
+    template::head::add_javascript \
+        -src "/resources/acs-templating/tinymce/jscripts/tiny_mce/utils/mctabs.js" \
+        -order "Z2"
+    template::head::add_javascript \
+        -src "/resources/acs-templating/tinymce/jscripts/tiny_mce/utils/form_utils.js" \
+        -order "Z3"
+    template::head::add_javascript \
+        -src "/resources/acs-templating/tinymce/jscripts/tiny_mce/utils/validate.js" \
+        -order "Z4"
+    template::head::add_javascript \
+        -src "/resources/acs-templating/tinymce/jscripts/tiny_mce/plugins/oacslink/js/link.js" \
+        -order "Z5"
+    template::head::add_javascript \
+        -order "Z6" \
+        -script "
+        function attachFileInit() {
+
+          var param = window.dialogArguments;
+          // document.getElementById('f_href').focus();
+          var f_href = document.getElementById('f_href');
+          var url = f_href.value;
+          if (url !='') {
+                 insertAction();
+          }
+
+	  tinyMCEPopup.executeOnLoad('init();');
+
+        }
+	function onCancel() {
+	    tinyMCEPopup.close();
+        }
+"
+    template::head::add_style \
+        -style "
+	html, body {
+	  background: ButtonFace;
+	  color: ButtonText;
+	  font: 11px Tahoma,Verdana,sans-serif;
+	  margin: 0px;
+	  padding: 0px;
+	}
+	body { padding: 5px; }
+	table {
+	  font: 11px Tahoma,Verdana,sans-serif;
+	}
+	form p {
+	  margin-top: 5px;
+	  margin-bottom: 5px;
+	}
+	.fl { width: 9em; float: left; padding: 2px 5px; text-align: right; }
+	.fr { width: 6em; float: left; padding: 2px 5px; text-align: right; }
+	fieldset { padding: 0px 10px 5px 5px; }
+	select, input, button { font: 11px Tahoma,Verdana,sans-serif; }
+	.space { padding: 2px; }
+	
+	.title { background: #ddf; color: #000; font-weight: bold; font-size: 120%; padding: 3px 10px; margin-bottom: 10px;
+	border-bottom: 1px solid black; letter-spacing: 2px;
+	}
+	form { padding: 0px; margin: 0px; }
+	.form-error { color : red}
+"
+
+    template::add_body_handler \
+        -event onload \
+        -script "attachFileInit()"
+}
