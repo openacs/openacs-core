@@ -37,6 +37,60 @@ END OF TEMPLATE -->
 linkend="changelog-latest"></xref>) since the last release and in the
 entire &majorversion;.&minorversion; release sequence <xref linkend="changelog"></xref>.</para>
 
+  <sect2 id="release-notes-5-5-0">
+    <title>Release 5.5.0</title>
+    <itemizedlist>
+      <listitem>
+        <para>PostgreSQL 8.3 is now fully supported, including the use of the built-in
+          standard version of tsearch2.
+        </para>
+        <para>TinyMCE has been upgraded to 3.1.1 with language pack support.
+        </para>
+        <para>acs-mail-lite now correctly implements rollout support.
+        </para>
+        <para>
+          Added new package dependency type, "extends".  Implements a weak form of
+          package inheritance (parameters and, optionally, templates).  Multiple inheritance
+          is supported.  For instance, the non-core "layout-managed-subsite" extends the
+          "acs-subsite" and "layout-manager" packages, resulting in a package that
+          combines the semantics of both.
+        <para>
+           Added new package attribute "implements-subsite-p" (default "f").  If true,
+           this package may be mounted as a subsite and is expected to implement subsite
+           semantics.  Typically used by packages which extend acs-subsite.
+        </para>
+        <para>
+          Added new package attribute "inherit-templates-p" (default "t").  If true,
+          the package inherits templates defined in the packages it extends.  This means
+          that the package only needs to specify templates where the UI of an extended
+          package is modified or extended.  This greatly reduces the need to fork base
+          packages when one needs to customize it.  Rather than modify the package directly,
+          use "extends" rather than "requires" then rewrite those templates you need to
+          customize.
+        </para>
+        <para>
+          Added a simple mechanism for defining subsite themes, removing the hard-wired
+          choices implemented in earlier versions of OpenACS.  The default theme has been
+          moved into a new package, "openacs-default-theme".  Simplifies the customization
+          of the look and feel of OpenACS sites and subsites.
+        </para>
+        <para>
+          The install xml facility has been enhanced to allow the calling of arbitrary Tcl
+          procedures and includes various other enhancements written by Xarg.  Packages can
+          extend the facility, too.  As an example of what can be done, the configuration of
+          .LRN communities could be moved from a set of interacting parameters to a cleaner
+          XML description of how to build classes and clubs, etc.
+        </para>
+        <para>
+          Notifications now calls lang::util::localize on the message subject and body
+          before sending the message out, using the recipient locale if set, the
+          site-wide one if not.  This will cause message keys (entered as #....# strings)
+          to be replaced with the language text for the chosen locale.
+        </para>
+      </listitem>
+    </itemizedlist>
+   </sect2>
+
   <sect2 id="release-notes-5-4-2">
     <title>Release 5.4.2</title>
     <itemizedlist>
