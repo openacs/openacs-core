@@ -141,6 +141,11 @@ ad_proc apm_callback_and_log { { -severity Notice } callback message } {
 ad_proc apm_one_package_descendents {
     package_key
 } {
+
+    Returns a list of package keys of all packages that inherit from the given
+    package
+
+} {
     global apm_visited_package_keys
     global apm_package_descendents
 
@@ -157,6 +162,11 @@ ad_proc apm_one_package_descendents {
 
 ad_proc apm_build_subsite_packages_list {} {
 
+    Build the nsv_set cache of all packages which claim to implement subsite
+    semantics.  The kludge to add acs-subsite if it's not declared with the subsite
+    attribute set true is needed during the upgrade process ...
+
+} {
     nsv_set apm_subsite_packages_list package_keys {}
 
     # Make sure old versions work ...
@@ -196,6 +206,10 @@ ad_proc apm_package_list_search_order {
 ad_proc apm_one_package_inherit_order {
     package_key
 } {
+
+    Returns a list of package keys in package inheritance order.
+
+} {
     global apm_visited_package_keys
     global apm_package_inherit_order
 
@@ -213,6 +227,10 @@ ad_proc apm_one_package_inherit_order {
 
 ad_proc apm_one_package_load_libraries_dependencies {
     package_key
+} {
+
+    Generate a list of package keys in library load dependency order.
+
 } {
     global apm_visited_package_keys
     global apm_package_load_libraries_order
@@ -277,11 +295,19 @@ ad_proc apm_build_package_relationships {} {
 ad_proc apm_package_descendents {
     package_key
 } {
+
+    Wrapper that returns the cached package descendents list.
+
+} {
     return [nsv_get apm_package_descendents $package_key]
 }
 
 ad_proc apm_package_inherit_order {
     package_key
+} {
+
+    Wrapper that returns the cached package inheritance order list.
+
 } {
     return [nsv_get apm_package_inherit_order $package_key]
 }
@@ -289,11 +315,19 @@ ad_proc apm_package_inherit_order {
 ad_proc apm_package_search_order {
     package_key
 } {
+
+    Wrapper that returns the cached package search order list.
+
+} {
     return [nsv_get apm_package_search_order $package_key]
 }
 
 ad_proc apm_package_load_libraries_order {
     package_key
+} {
+
+    Wrapper that returns the cached package library load order list.
+
 } {
     return [nsv_get apm_package_load_libraries_order $package_key]
 }
