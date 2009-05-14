@@ -5,7 +5,9 @@ ad_library {
 aa_register_case -cats api data_links_scan_links {
     Test scanning content for object URLs
 } {
-    set text {Some random text <img src="/o/0"> <a href="/file/0"> <img src="/image/0"> <img src="/image/4/"> <img src="/image/0/thumbnail"> <img src="/image/0/info"> <a href="http://example.com/o/9">
+    # get a new object_id from the sequence, this object will not exist
+    set nonexistant_object_id [db_nextval "acs_object_id_seq"]
+    set text {Some random text <img src="/o/0"> <a href="/file/0"> <img src="/image/0"> <img src="/image/${nonexistant_object_id}/"> <img src="/image/0/thumbnail"> <img src="/image/0/info"> <a href="http://example.com/o/9">
               Some More Random Text <a href="/o/junk"> <a href="/file/junk"> <a href="/image/junk"> /o/10 /file/11 /image/12
 	/o/[junk] /file/[junk] /image/[junk]
         /o/" /file/" /image/"
