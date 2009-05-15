@@ -21,8 +21,9 @@
         prefered packages for delivering this functionality and it is anticipated that this package will ultimately be deprecated.</description>
 
         <provides url="acs-messaging" version="5.5.0a1"/>
-        <requires url="acs-content-repository" version="5.5.0a1"/>
         <requires url="acs-kernel" version="5.5.0a1"/>
+        <requires url="acs-content-repository" version="5.5.0a1"/>
+        <requires url="acs-mail-lite" version="5.5.0a1"/>
 
         <callbacks>
         </callbacks>
