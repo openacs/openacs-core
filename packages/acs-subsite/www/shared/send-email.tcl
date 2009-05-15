@@ -23,42 +23,26 @@ set from [email_image::get_email -user_id $user_id]
 
 ad_form -name send-email -export {sendto return_url} -form {
     {from:text(text),optional
-	{label "From:"}
-	{html {{disabled ""} {size 40}}}
-	{value $from}
+        {label "From:"}
+        {html {{disabled ""} {size 40}}}
+        {value $from}
     }
     {subject:text(text)
-	{label "Subject:"}
-	{html {size 70}}
+        {label "Subject:"}
+        {html {size 70}}
     }
     {body:text(textarea),nospell
-	{label "Body:"}
-	{html {rows 10 cols 55}}
-	{value ""}
-    }
-    {copy:text(checkbox),optional
-	{label "\#acs-subsite.Send_me_a_copy\#"}
-	{options {{"" 1 }}}
+        {label "Body:"}
+        {html {rows 10 cols 55}}
+        {value ""}
     }
 } -on_submit {
+
     set to [email_image::get_email -user_id $sendto]
-    if {[catch {ns_sendmail "$to" "$from" "$subject" "$body"} errmsg]} {
-    ad_return_error "Mail Failed" "The system was unable to send email.  Please notify the user personally. \
-                    This problem is probably caused by a misconfiguration of your email system.  Here is the error:
-                    <blockquote><pre>
-                        [ad_quotehtml $errmsg]
-                    </pre></blockquote>"
-	return
-    }
-    if {$copy eq "1"} {
-	if {[catch {ns_sendmail "$from" "$from" "$subject" "$body"} errmsg]} {
-	    ad_return_error "Mail Failed" "The system was unable to send email.  Please notify the user personally. \
-                            This problem is probably caused by a misconfiguration of your email system.  Here is the error:
-                            <blockquote><pre>
-                                [ad_quotehtml $errmsg]
-                            </pre></blockquote>"
-	    return
-	}
+
+    if {[catch {acs_mail_lite::send -send_immediately -to_addr $to -from_addr $from -subject $subject -body $body} errmsg]} {
+        ad_return_error "Mail Failed" "<p>The system was unable to send email.  Please notify the user personally. This problem is probably caused by a misconfiguration of your email system.  Here is the error:</p>
+                    <div><code> [ad_quotehtml $errmsg] </code></div>"
     }
     
 } -after_submit {
