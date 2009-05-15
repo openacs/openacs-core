@@ -285,21 +285,26 @@ ad_proc -private util_close_html_tags {
     # -gustaf neumann    (Jan 2009)
 
     set frag [string map [list &# "&amp;#"] $html_fragment]
-    if {[catch {dom parse -html <body>$frag doc} errorMsg]} {
-      # we got an error, so do normal processing
-      ns_log notice "tdom can't parse the provided HTML, error=$errorMsg,\n\
+    if {$break_soft == 0 && $break_hard == 0} {
+      #
+      # Only tag-closing functionality is required
+      #
+      if {[catch {dom parse -html <body>$frag doc} errorMsg]} {
+        # we got an error, so do normal processing
+        ns_log notice "tdom can't parse the provided HTML, error=$errorMsg,\n\
 	checking fragment without tdom"
-    } else {
-      $doc documentElement root
-      set html ""
-      # discared forms
-      foreach node [$root selectNodes //form] {$node delete}
-      # output wellformed html
-      set b [$root selectNodes {//body[1]}]
-      foreach n [$b childNodes] {
-       append html [$n asHTML]
+      } else {
+        $doc documentElement root
+        set html ""
+        # discard forms
+        foreach node [$root selectNodes //form] {$node delete}
+        # output wellformed html
+        set b [$root selectNodes {//body[1]}]
+        foreach n [$b childNodes] {
+          append html [$n asHTML]
+        }
+        return $html
       }
-      return $html
     }
     set frag $html_fragment 
    
