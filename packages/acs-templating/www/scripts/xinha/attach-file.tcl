@@ -257,10 +257,10 @@ if {$richtextEditor eq "xinha"} {
 
 	  var param = window.dialogArguments;
 	  if (param) {
- 	     if ( typeof param['f_href'] != 'undefined' ) {
-	        document.getElementById('f_href').value = param['f_href'];
-	        document.getElementById('f_url').value = param['f_href'];
-	        document.getElementById('f_title').value = param['f_title'];
+ 	     if ( typeof param\['f_href'\] != 'undefined' ) {
+	        document.getElementById('f_href').value = param\['f_href'\];
+	        document.getElementById('f_url').value = param\['f_href'\];
+	        document.getElementById('f_title').value = param\['f_title'\];
 	     }          
           }	  
 	};
@@ -272,18 +272,18 @@ if {$richtextEditor eq "xinha"} {
 	  for (var i in required) {
 	    var el = document.getElementById(i);
 	    if (!el.value) {
-	      alert(required[i]);
+	      alert(required\[i\]);
 	      el.focus();
 	      return false;
 	    }
 	  }
 	  // pass data back to the calling window
-	  var fields = ['f_href','f_title', 'f_target'];
+	  var fields = \['f_href','f_title', 'f_target'\];
 	  var param = new Object();
 	  for (var i in fields) {
-	    var id = fields[i];
+	    var id = fields\[i\];
 	    var el = document.getElementById(id);
-	    param[id] = el.value;
+	    param\[id\] = el.value;
 	  }
 	  __dlg_close(param);
 	  return false;
