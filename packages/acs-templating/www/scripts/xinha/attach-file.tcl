@@ -22,7 +22,7 @@ set user_id [auth::require_login]
 
 # if user has write permission, create image upload form, 
 
-if {![info exists parent_id]} {
+if {![info exists parent_id] || $parent_id eq ""} {
     set parent_id $user_id
     set write_p 1
 } else {
@@ -30,6 +30,19 @@ if {![info exists parent_id]} {
     set write_p [permission::permission_p \
 		     -party_id $user_id \
 		     -object_id $parent_id \
+		     -privilege "write"]
+}
+
+if {!$write_p} {
+    # if parent_id does not exist yet, let's use the pacakage_id
+    if { ![db_0or1row "check_parent" "select object_id from acs_objects where object_id=:parent_id"] } {
+        set parent_id $package_id
+    }
+
+    # item might not exist!
+    set write_p [permission::permission_p \
+		     -party_id $user_id \
+		     -object_id $package_id \
 		     -privilege "write"]
 }
 
@@ -257,10 +270,10 @@ if {$richtextEditor eq "xinha"} {
 
 	  var param = window.dialogArguments;
 	  if (param) {
- 	     if ( typeof param['f_href'] != 'undefined' ) {
-	        document.getElementById('f_href').value = param['f_href'];
-	        document.getElementById('f_url').value = param['f_href'];
-	        document.getElementById('f_title').value = param['f_title'];
+ 	     if ( typeof param\['f_href'\] != 'undefined' ) {
+	        document.getElementById('f_href').value = param\['f_href'\];
+	        document.getElementById('f_url').value = param\['f_href'\];
+	        document.getElementById('f_title').value = param\['f_title'\];
 	     }          
           }	  
 	};
@@ -272,18 +285,18 @@ if {$richtextEditor eq "xinha"} {
 	  for (var i in required) {
 	    var el = document.getElementById(i);
 	    if (!el.value) {
-	      alert(required[i]);
+	      alert(required\[i\]);
 	      el.focus();
 	      return false;
 	    }
 	  }
 	  // pass data back to the calling window
-	  var fields = ['f_href','f_title', 'f_target'];
+	  var fields = \['f_href','f_title', 'f_target'\];
 	  var param = new Object();
 	  for (var i in fields) {
-	    var id = fields[i];
+	    var id = fields\[i\];
 	    var el = document.getElementById(id);
-	    param[id] = el.value;
+	    param\[id\] = el.value;
 	  }
 	  __dlg_close(param);
 	  return false;

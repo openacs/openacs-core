@@ -504,7 +504,7 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
                     {relative_urls "false"}
                     {height "450px" }
                     {width "100%"}
-                    {plugins "oacsimage,oacslink,style,layer,table,save,iespell,preview,zoom,media,searchreplace,print,contextmenu,paste,fullscreen,noneditable,visualchars,xhtmlxtras" }        
+                    {plugins "oacsimage,oacslink,style,layer,table,save,iespell,preview,media,searchreplace,print,contextmenu,paste,fullscreen,noneditable,visualchars,xhtmlxtras" }        
                     {browsers "msie,gecko,safari,opera" }
                     {apply_source_formatting "true" }
                     {paste_auto_cleanup_on_paste true}
