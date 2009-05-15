@@ -20,6 +20,7 @@
         <provides url="acs-authentication" version="5.5.0a1"/>
         <requires url="acs-kernel" version="5.5.0a1"/>
         <requires url="acs-service-contract" version="5.5.0a1"/>
+        <requires url="acs-mail-lite" version="5.5.0a1"/>
 
         <callbacks>
             <callback type="after-install"  proc="auth::package_install"/>
