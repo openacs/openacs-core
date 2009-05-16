@@ -1351,6 +1351,8 @@ db_multirow \
     <authorblurb>
       <para>Based on <ulink url="http://openacs.org/forums/message-view?message_id=157448">a post by Dave Bauer</ulink>.</para>
     </authorblurb>
+    <para>Caching using the database API is described in the database API tutorial.</para>
+    <para>Caching using util_memoize</para>
     <orderedlist>
       <listitem>
         <para>Implement your proc as <computeroutput>my_proc_not_cached</computeroutput></para>
