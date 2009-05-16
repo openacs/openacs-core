@@ -59,7 +59,7 @@ aa_register_case -cats {api smoke} ad_html_security_check_href_allowed {
 aa_register_case -cats {api smoke} util_close_html_tags {
     Tests closing HTML tags.
 } {
-    aa_equals "" [util_close_html_tags "<b>Foobar"] "<b>Foobar</B>"
+    aa_equals "" [util_close_html_tags "<b>Foobar"] "<b>Foobar</b>"
 
     aa_equals "" [util_close_html_tags "<b>Foobar</b>"] "<b>Foobar</b>"
 

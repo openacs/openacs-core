@@ -308,56 +308,56 @@ ad_proc -private util_close_html_tags {
    
     # original code continues
 
-    set syn(A) nobr
-    set syn(ADDRESS) nobr
-    set syn(NOBR) nobr
+    set syn(a) nobr
+    set syn(address) nobr
+    set syn(nobr) nobr
     #
-    set syn(FORM) discard
+    set syn(form) discard
     #
-    set syn(BLINK) remove 
+    set syn(blink) remove 
     #
-    set syn(TABLE) close
-    set syn(FONT) close
-    set syn(B) close
-    set syn(BIG) close
-    set syn(I) close
-    set syn(S) close
-    set syn(SMALL) close
-    set syn(STRIKE) close
-    set syn(SUB) close
-    set syn(SUP) close
-    set syn(TT) close
-    set syn(U) close
-    set syn(ABBR) close
-    set syn(ACRONYM) close
-    set syn(CITE) close
-    set syn(CODE) close
-    set syn(DEL) close
-    set syn(DFN) close
-    set syn(EM) close
-    set syn(INS) close
-    set syn(KBD) close
-    set syn(SAMP) close
-    set syn(STRONG) close
-    set syn(VAR) close
-    set syn(DIR) close
-    set syn(DL) close
-    set syn(MENU) close
-    set syn(OL) close
-    set syn(UL) close
-    set syn(H1) close
-    set syn(H2) close
-    set syn(H3) close
-    set syn(H4) close
-    set syn(H5) close
-    set syn(H6) close
-    set syn(BDO) close
-    set syn(BLOCKQUOTE) close
-    set syn(CENTER) close
-    set syn(DIV) close
-    set syn(PRE) close
-    set syn(Q) close
-    set syn(SPAN) close
+    set syn(table) close
+    set syn(font) close
+    set syn(b) close
+    set syn(big) close
+    set syn(i) close
+    set syn(s) close
+    set syn(small) close
+    set syn(strike) close
+    set syn(sub) close
+    set syn(sup) close
+    set syn(tt) close
+    set syn(u) close
+    set syn(abbr) close
+    set syn(acronym) close
+    set syn(cite) close
+    set syn(code) close
+    set syn(del) close
+    set syn(dfn) close
+    set syn(em) close
+    set syn(ins) close
+    set syn(kbo) close
+    set syn(samp) close
+    set syn(strong) close
+    set syn(var) close
+    set syn(dir) close
+    set syn(dl) close
+    set syn(menu) close
+    set syn(ol) close
+    set syn(ul) close
+    set syn(h1) close
+    set syn(h2) close
+    set syn(h3) close
+    set syn(h4) close
+    set syn(h5) close
+    set syn(h6) close
+    set syn(bdo) close
+    set syn(blockquote) close
+    set syn(center) close
+    set syn(div) close
+    set syn(pre) close
+    set syn(q) close
+    set syn(span) close
 
     set out {} 
     set out_len 0
@@ -442,7 +442,7 @@ ad_proc -private util_close_html_tags {
                     set frag {}
                 }
             } else {
-                set tag [string toupper $tag]            
+                set tag [string tolower $tag]            
                 if { ![info exists syn($tag)]} {
                     # if we don't have an entry in our syntax table just tack it on 
                     # and hope for the best.
