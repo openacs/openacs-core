@@ -10,7 +10,7 @@
     <version name="5.5.0a1" url="http://openacs.org/repository/download/apm/acs-reference-5.5.0a1.apm">
         <owner url="mailto:jon@jongriffin.com">Jon Griffin</owner>
         <summary>Tools and API for managing refrence data.</summary>
-        <release-date>2008-05-31</release-date>
+        <release-date>2009-05-15</release-date>
         <maturity>3</maturity>
         <vendor url="http://www.mayuli.com">Mayuli Enterprises, LLC</vendor>
 	<license url="http://www.gnu.org/copyleft/gpl.html">GPL</license>

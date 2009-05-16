@@ -12,7 +12,7 @@
         <owner url="mailto:prevost@maya.com">John Prevost</owner>
         <owner url="mailto:vinod@kurup.com">Vinod Kurup</owner>
         <summary>General messaging for bboard and general comments.</summary>
-        <release-date>2008-05-31</release-date>
+        <release-date>2009-05-15</release-date>
         <maturity>3</maturity>
         <vendor url="http://openacs.org">OpenACS</vendor>
 	<license url="http://www.gnu.org/copyleft/gpl.html">GPL</license>
