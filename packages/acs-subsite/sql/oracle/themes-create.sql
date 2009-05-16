@@ -9,19 +9,19 @@
 --  for these.
 
 create table subsite_themes (
-    key           varchar(100) 
+    key           varchar(4000) 
                   constraint subsite_themes_key_pk
                   primary key,
-    name          varchar(100) 
+    name          varchar(4000) 
                   constraint subsite_theme_name_nn
                   not null,
-    template      varchar(200)
+    template      varchar(4000)
                   constraint subsite_theme_template_nn
                   not null,
-    css           varchar(200),
-    form_template varchar(200),
-    list_template varchar(200),
-    list_filter_template varchar(200)
+    css           varchar(4000),
+    form_template varchar(4000),
+    list_template varchar(4000),
+    list_filter_template varchar(4000)
 );
 
 -- Insert the old themes that were hard-wired into earlier versions of acs-subsite.
