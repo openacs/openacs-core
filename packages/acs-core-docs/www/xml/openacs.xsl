@@ -18,12 +18,14 @@
 
 <!-- emmar: will produce valid HTML (won't close IMG, BR and HR tags) -->
   <xsl:output method="html" 
-              version="4.01"
-              encoding="UTF-8" />
+              version="4.01" />
 
-<!-- emmar: set variable to output the DTD declaration -->
-  <xsl:variable name="chunker.output.doctype-public">-//W3C//DTD HTML 4.01 Transitional//EN</xsl:variable>
-  <xsl:variable name="chunker.output.doctype-system">http://www.w3.org/TR/html4/loose.dtd"</xsl:variable>
+<!-- emmar: set params for output -->
+  <xsl:param name="chunker.output.doctype-public">-//W3C//DTD HTML 4.01 Transitional//EN</xsl:param>
+  <xsl:param name="chunker.output.doctype-system">http://www.w3.org/TR/html4/loose.dtd"</xsl:param>
+  <xsl:param name="chunker.output.encoding">UTF-8</xsl:param>
+  <xsl:param name="html.stylesheet">openacs.css</xsl:param>
+
 
   <xsl:variable name="generate.index">1</xsl:variable>
 
@@ -280,9 +282,6 @@
           </xsl:attribute>
         </link>
       </xsl:if>
-
-      <link rel="stylesheet" href="openacs.css" type="text/css">
-      </link>
 
     </head>
   </xsl:template>
