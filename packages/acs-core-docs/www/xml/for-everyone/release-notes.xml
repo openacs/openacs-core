@@ -54,6 +54,7 @@ entire &majorversion;.&minorversion; release sequence <xref linkend="changelog">
           is supported.  For instance, the non-core "layout-managed-subsite" extends the
           "acs-subsite" and "layout-manager" packages, resulting in a package that
           combines the semantics of both.
+        </para>
         <para>
            Added new package attribute "implements-subsite-p" (default "f").  If true,
            this package may be mounted as a subsite and is expected to implement subsite
