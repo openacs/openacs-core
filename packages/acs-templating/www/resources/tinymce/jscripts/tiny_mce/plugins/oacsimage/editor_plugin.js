@@ -1,146 +1,83 @@
-
 /**
  * $Id$
  *
  * @author Moxiecode
- * @copyright Copyright © 2004-2007, Moxiecode Systems AB, All rights reserved.
+ * @copyright Copyright © 2004-2008, Moxiecode Systems AB, All rights reserved.
  */
 
-/* Import plugin specific language pack */
-// tinyMCE.importPluginLanguagePack('advimage');
+(function() {
+	// Load plugin specific language pack
+	tinymce.PluginManager.requireLangPack('oacsimage');
 
-var TinyMCE_OacsImagePlugin = {
-	getInfo : function() {
-		return {
-			longname : 'Oacs image',
+	tinymce.create('tinymce.plugins.OacsImage', {
+		/**
+		 * Initializes the plugin, this will be executed after the plugin has been created.
+		 * This call is done before the editor instance has finished it's initialization so use the onInit event
+		 * of the editor instance to intercept that event.
+		 *
+		 * @param {tinymce.Editor} ed Editor instance that the plugin is initialized in.
+		 * @param {string} url Absolute URL to where the plugin is located.
+		 */
+		init : function(ed, url) {
+			// Register the command so that it can be invoked by using tinyMCE.activeEditor.execCommand('mceExample');
+			ed.addCommand('mceOacsImage', function() {
+			    var elm = tinyMCE.activeEditor.selection.getNode();
+			    if (elm != null && ed.dom.getAttrib(elm, 'class').indexOf('mceItem') != -1)
+                                return true;
+
+			    ed.windowManager.open({
+                                url:'/acs-templating/scripts/xinha/attach-image',
+                                width: 380,
+                                height: 450,
+                                movable: true,
+                                inline: true});
+
+			    return true;
+
+                            });
+
+			// Register example button
+			ed.addButton('image', {
+				title : 'OacsImage.desc',
+				cmd : 'mceOacsImage'
+			});
+
+			// Add a node change handler, selects the button in the UI when a image is selected
+			ed.onNodeChange.add(function(ed, cm, n) {
+			    cm.setActive('_advimage',n.nameName == "IMG");
+                                            });
+                },
+		/**
+		 * Creates control instances based in the incomming name. This method is normally not
+		 * needed since the addButton method of the tinymce.Editor class is a more easy way of adding buttons
+		 * but you sometimes need to create more complex controls like listboxes, split buttons etc then this
+		 * method can be used to create those.
+		 *
+		 * @param {String} n Name of the control to create.
+		 * @param {tinymce.ControlManager} cm Control manager to use inorder to create new control.
+		 * @return {tinymce.ui.Control} New control instance or null if no control was created.
+		 */
+		createControl : function(n, cm) {
+			return null;
+		},
+
+		/**
+		 * Returns information about the plugin as a name/value array.
+		 * The current keys are longname, author, authorurl, infourl and version.
+		 *
+		 * @return {Object} Name/value array containing information about the plugin.
+		 */
+		getInfo : function() {
+		    return {
+                        longname : 'Oacs image',
 			author : 'SolutionGrove, Moxiecde Systems AB',
 			authorurl : 'http://tinymce.moxiecode.com',
 			infourl : 'http://tinymce.moxiecode.com/tinymce/docs/plugin_oacsimage.html',
 			version : tinyMCE.majorVersion + "." + tinyMCE.minorVersion
-		};
-	},
-
-	getControlHTML : function(cn) {
-		switch (cn) {
-			case "image":
-				return tinyMCE.getButtonHTML(cn, 'lang_image_desc', '{$themeurl}/images/image.gif', 'mceOacsImage');
+		    };
 		}
+	});
 
-		return "";
-	},
-
-	execCommand : function(editor_id, element, command, user_interface, value) {
-		switch (command) {
-			case "mceOacsImage":
-				var template = new Array();
-
-				template['file']   = '/acs-templating/scripts/xinha/attach-image';
-				template['width']  = 500;
-				template['height'] = 400;
-
-
-				var inst = tinyMCE.getInstanceById(editor_id);
-				var elm = inst.getFocusElement();
-
-				if (elm != null && tinyMCE.getAttrib(elm, 'class').indexOf('mceItem') != -1)
-					return true;
-
-				tinyMCE.openWindow(template, {editor_id : editor_id, inline : "yes"});
-
-				return true;
-		}
-
-		return false;
-	},
-
-	cleanup : function(type, content) {
-		switch (type) {
-			case "insert_to_editor_dom":
-				var imgs = content.getElementsByTagName("img"), src, i;
-				for (i=0; i<imgs.length; i++) {
-					var onmouseover = tinyMCE.cleanupEventStr(tinyMCE.getAttrib(imgs[i], 'onmouseover'));
-					var onmouseout = tinyMCE.cleanupEventStr(tinyMCE.getAttrib(imgs[i], 'onmouseout'));
-
-					if ((src = this._getImageSrc(onmouseover)) != "") {
-						if (tinyMCE.getParam('convert_urls'))
-							src = tinyMCE.convertRelativeToAbsoluteURL(tinyMCE.settings['base_href'], src);
-
-						imgs[i].setAttribute('onmouseover', "this.src='" + src + "';");
-					}
-
-					if ((src = this._getImageSrc(onmouseout)) != "") {
-						if (tinyMCE.getParam('convert_urls'))
-							src = tinyMCE.convertRelativeToAbsoluteURL(tinyMCE.settings['base_href'], src);
-
-						imgs[i].setAttribute('onmouseout', "this.src='" + src + "';");
-					}
-				}
-				break;
-
-			case "get_from_editor_dom":
-				var imgs = content.getElementsByTagName("img");
-				for (var i=0; i<imgs.length; i++) {
-					var onmouseover = tinyMCE.cleanupEventStr(tinyMCE.getAttrib(imgs[i], 'onmouseover'));
-					var onmouseout = tinyMCE.cleanupEventStr(tinyMCE.getAttrib(imgs[i], 'onmouseout'));
-
-					if ((src = this._getImageSrc(onmouseover)) != "") {
-						if (tinyMCE.getParam('convert_urls'))
-							src = eval(tinyMCE.settings['urlconverter_callback'] + "(src, null, true);");
-
-						imgs[i].setAttribute('onmouseover', "this.src='" + src + "';");
-					}
-
-					if ((src = this._getImageSrc(onmouseout)) != "") {
-						if (tinyMCE.getParam('convert_urls'))
-							src = eval(tinyMCE.settings['urlconverter_callback'] + "(src, null, true);");
-
-						imgs[i].setAttribute('onmouseout', "this.src='" + src + "';");
-					}
-				}
-				break;
-		}
-
-		return content;
-	},
-
-	handleNodeChange : function(editor_id, node, undo_index, undo_levels, visual_aid, any_selection) {
-		if (node == null)
-			return;
-
-		do {
-			if (node.nodeName == "IMG" && tinyMCE.getAttrib(node, 'class').indexOf('mceItem') == -1) {
-				tinyMCE.switchClass(editor_id + '_advimage', 'mceButtonSelected');
-				return true;
-			}
-		} while ((node = node.parentNode));
-
-		tinyMCE.switchClass(editor_id + '_advimage', 'mceButtonNormal');
-
-		return true;
-	},
-
-	/**
-	 * Returns the image src from a scripted mouse over image str.
-	 *
-	 * @param {string} s String to get real src from.
-	 * @return Image src from a scripted mouse over image str.
-	 * @type string
-	 */
-	_getImageSrc : function(s) {
-		var sr, p = -1;
-
-		if (!s)
-			return "";
-
-		if ((p = s.indexOf('this.src=')) != -1) {
-			sr = s.substring(p + 10);
-			sr = sr.substring(0, sr.indexOf('\''));
-
-			return sr;
-		}
-
-		return "";
-	}
-};
-
-tinyMCE.addPlugin("oacsimage", TinyMCE_OacsImagePlugin);
+	// Register plugin
+	tinymce.PluginManager.add('oacsimage', tinymce.plugins.OacsImage);
+})();
