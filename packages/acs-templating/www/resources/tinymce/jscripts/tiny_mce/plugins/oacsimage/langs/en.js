@@ -1,4 +1,5 @@
 tinyMCE.addI18n('en.oacsimage_dlg',{
+desc:"Insert Image",
 tab_general:"General",
 tab_appearance:"Appearance",
 tab_advanced:"Advanced",

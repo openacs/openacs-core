@@ -90,10 +90,10 @@ var LinkDialog = {
 	},
 
 	checkPrefix : function(n) {
-		if (n.value && Validator.isEmail(n) && !/^\s*mailto:/i.test(n.value) && confirm(tinyMCEPopup.getLang('advanced_dlg.link_is_email')))
+		if (n.value && Validator.isEmail(n) && !/^\s*mailto:/i.test(n.value) && confirm(tinyMCEPopup.getLang('openacs_dlg.link_is_email')))
 			n.value = 'mailto:' + n.value;
 
-		if (/^\s*www\./i.test(n.value) && confirm(tinyMCEPopup.getLang('advanced_dlg.link_is_external')))
+		if (/^\s*www\./i.test(n.value) && confirm(tinyMCEPopup.getLang('openacs_dlg.link_is_external')))
 			n.value = 'http://' + n.value;
 	},
 
@@ -140,8 +140,8 @@ var LinkDialog = {
 		var dom = tinyMCEPopup.dom, lst = dom.get(id), v;
 
 		lst.options[lst.options.length] = new Option(tinyMCEPopup.getLang('not_set'), '');
-		lst.options[lst.options.length] = new Option(tinyMCEPopup.getLang('advanced_dlg.link_target_same'), '_self');
-		lst.options[lst.options.length] = new Option(tinyMCEPopup.getLang('advanced_dlg.link_target_blank'), '_blank');
+		lst.options[lst.options.length] = new Option(tinyMCEPopup.getLang('openacs_dlg.link_target_same'), '_self');
+		lst.options[lst.options.length] = new Option(tinyMCEPopup.getLang('openacs_dlg.link_target_blank'), '_blank');
 
 		if (v = tinyMCEPopup.getParam('theme_advanced_link_targets')) {
 			tinymce.each(v.split(','), function(v) {

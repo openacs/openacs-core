@@ -1,6 +1,6 @@
 // UK lang variables
 
-tinyMCE.addToLang('oacslink',{
+tinyMCE.addI18n('oacslink',{
 desc : 'Insert/edit attachment',
 general_tab : 'General',
 popup_tab : 'Popup',
