@@ -258,7 +258,7 @@ if {$richtextEditor eq "xinha"} {
         var selector_window;
 	// window.resizeTo(450, 300);
 
-	function Init() {
+	function attachFileInit() {
 	  __dlg_init();
 
 	  var f_href = document.getElementById('f_href');
@@ -379,7 +379,7 @@ if {$richtextEditor eq "tinymce"} {
 	.form-error { color : red}
 "
 
-    template::add_body_handler \
-        -event onload \
-        -script "attachFileInit()"
 }
+template::add_body_handler \
+    -event onload \
+    -script "attachFileInit()"
