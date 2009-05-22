@@ -115,6 +115,7 @@ ns_section ns/mimetypes
     ns_param   .prc               application/x-pilot
     ns_param   .xls               application/vnd.ms-excel
     ns_param   .doc               application/vnd.ms-word
+    ns_param   .xml               "text/xml; charset=utf-8"
 
 
 #---------------------------------------------------------------------
