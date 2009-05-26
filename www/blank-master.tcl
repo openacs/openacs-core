@@ -170,11 +170,25 @@ if { [info exists ::acs_blank_master(tinymce)] } {
     foreach htmlarea_id [lsort -unique $::acs_blank_master__htmlareas] {
         lappend tinymce_elements $htmlarea_id
     }			
-  set tinymce_config $::acs_blank_master(tinymce.config)    
+    set tinymce_config $::acs_blank_master(tinymce.config)    
+
+    # Figure out the language to use
+    # 1st is the user language, if not available then the system one,
+    # fallback to english which is provided by default
+
+    set tinymce_relpath "packages/acs-templating/www/resources/tinymce/jscripts/tiny_mce"
+    set lang_list [list [lang::user::language] [lang::system::language]]
+    set tinymce_lang "en"
+    foreach elm $lang_list {
+        if { [file exists [acs_root_dir]/${tinymce_relpath}/langs/${elm}.js] } {
+            set tinymce_lang $elm
+            break
+        }
+    }
 
     # TODO : each element should have it's own init
     template::head::add_javascript -script "
-	    tinyMCE.init(\{$tinymce_config\});
+        tinyMCE.init(\{language: \"$tinymce_lang\", $tinymce_config\});
 	" -order tinymceZ
 }
 
