@@ -521,8 +521,9 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
                     {theme_openacs_buttons2_add "oacslink,separator,preview,separator,forecolor,backcolor"} 
                     {theme_openacs_buttons2_add_before "cut,copy,paste,pastetext,pasteword,separator,search,replace,separator"} 
                     {theme_openacs_buttons3_add_before "tablecontrols,separator"} 
-                    {theme_openacs_buttons3_add "iespell,media,separator,print,separator,fullscreen"} 
-                    {extended_valid_elements "img[class|src|alt|title|hspace|vspace|width|height|align|onmouseover|onmouseout|name],hr[class|width|size|noshade],font[face|size|color|style],span[class|align|style]"}}
+                    {theme_openacs_buttons3_add "iespell,media,separator,print,separator,fullscreen"}
+                    {extended_valid_elements "img[id|class|style|title|lang|onmouseover|onmouseout|src|alt|name|width|height],hr[id|class|style|title],span[id|class|style|title|lang]"}
+                    {element_format "html"}}
                 set tinymce_configs_list [parameter::get \
                                               -package_id [apm_package_id_from_key "acs-templating"] \
                                               -parameter "TinyMCEDefaultConfig" \

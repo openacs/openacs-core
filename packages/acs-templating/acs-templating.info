@@ -66,7 +66,8 @@ layout of a site can be more easily administered.
 {theme_openacs_buttons2_add_before &quot;cut,copy,paste,pastetext,pasteword,separator,search,replace,separator&quot;} 
 {theme_openacs_buttons3_add_before &quot;tablecontrols,separator&quot;} 
 {theme_openacs_buttons3_add &quot;iespell,media,separator,print,separator,fullscreen&quot;} 
-{extended_valid_elements &quot;img[class|src|alt|title|hspace|vspace|width|height|align|onmouseover|onmouseout|name],hr[class|width|size|noshade],font[face|size|color|style],span[class|align|style]&quot;}" description="This is a tcl list of default tinymce config options as found in http://wiki.moxiecode.com/index.php/TinyMCE:Configuration "/>
+{extended_valid_elements &quot;img[id|class|style|title|lang|onmouseover|onmouseout|src|alt|name|width|height],hr[id|class|style|title],span[id|class|style|title|lang]&quot;}
+{element_format &quot;html&quot;}" description="This is a tcl list of default tinymce config options as found in http://wiki.moxiecode.com/index.php/TinyMCE:Configuration "/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="UseHtmlAreaForRichtextP"  default="0" description="Should the richtext widget use the htmlArea widget for richtext editing. 1 = yes, 0 = no. We will also check the browser's User-Agent header to find out if htmlArea works with the given browser."/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="XinhaDefaultPlugins"  default="GetHtml CharacterMap ContextMenu ListType TableOperations EditTag LangMarks Abbreviation" description="When xinha is specified as richtext editor (see parameter RichTextEditor) then use the following xinha plugins per default."/>
         </parameters>
