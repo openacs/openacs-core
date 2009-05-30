@@ -250,77 +250,56 @@ ad_proc -public person::update {
     name_flush -person_id $person_id
 }
 
-ad_proc -public person::get_bio {
-    {-person_id {}}
+# DRB: Though I've moved the bio field to type specific rather than generic storage, I've
+# maintained the API semantics exactly as they were before (other than changing person to user),
+# mostly in order to make upgrade possible.  In the future, the number of database hits can
+# be diminished by getting rid of the seperate queries for bio stuff. However, I have removed
+# bio_mime_type because it's unused and unsupported in the existing code.
+
+ad_proc -public acs_user::get_bio {
+    {-user_id {}}
     {-exists_var {}}
 } {
     Get the value of the user's bio(graphy) field.
 
-    @option person_id    The person_id of the person to get the bio for. Leave blank for currently logged in user.
+    @option user_id    The user_id of the person to get the bio for. Leave blank for
+       currently logged in user.
     
     @option exists_var The name of a variable in the caller's namespace, which will be set to 1 
-                       if a bio was found, or 0 if no bio was found. Leave blank if you're not
+                       if the bio column is not null.  Leave blank if you're not
                        interested in this information.
     
     @return The bio of the user as a text string.
 
     @author Lars Pind (lars@collaboraid.biz)
 } {
-    if { $person_id eq "" } {
-        set person_id [ad_conn user_id]
+    if { $user_id eq "" } {
+        set user_id [ad_conn user_id]
     }
 
     if { $exists_var ne "" } {
         upvar $exists_var exists_p
     }
 
-    set exists_p [db_0or1row select_bio {}]
+    db_1row select_bio {}
     
-    if { !$exists_p } {
-        set bio {}
-    }
+    set exists_p [expr {$bio ne ""}]
     
     return $bio
 }
 
-ad_proc -public person::update_bio {
-    {-person_id:required}
+ad_proc -public acs_user::update_bio {
+    {-user_id:required}
     {-bio:required}
 } {
     Update the bio for a person.
 
-    @param person_id The ID of the person to edit bio for
+    @param user_id The ID of the person to edit bio for
     @param bio       The new bio for the person
 
     @author Lars Pind (lars@collaboraid.biz)
 } {
-    # This will set exists_p to whether or not a row for the bio existed
-    set bio_old [get_bio -person_id $person_id -exists_var exists_p]
-
-    # bio_change_to = 0 -> insert
-    # bio_change_to = 1 -> don't change
-    # bio_change_to = 2 -> update
-
-    if { !$exists_p } {
-        # There is no bio yet.
-        # If new bio is empty, that's a don't change (1)
-        # If new bio is non-empty, that's an insert (0)
-        set bio_change_to [expr {$bio eq ""}]
-    } else {
-        if {$bio eq $bio_old} {
-            set bio_change_to 1
-        } else {
-            set bio_change_to 2
-        }
-    }
-    
-    if { $bio_change_to == 0 } {
-	# perform the insert
-	db_dml insert_bio {}
-    } elseif { $bio_change_to == 2 } {
-	# perform the update
-	db_dml update_bio {}
-    }
+    db_dml update_bio {}
 }
 
 
@@ -497,7 +476,7 @@ ad_proc -public acs_user::get {
     }
 
     if { $include_bio_p } {
-        set row(bio) [person::get_bio -person_id $user_id]
+        set row(bio) [acs_user::get_bio -user_id $user_id]
     }
 }
 
