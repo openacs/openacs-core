@@ -533,6 +533,7 @@ create table users (
     	screen_name		varchar2(100)
 				constraint users_screen_name_un
 				unique,
+ bio varchar2(4000),
 	priv_name		integer default 0 not null,
 	priv_email		integer default 5 not null,
 	email_verified_p	char(1) default 't'
