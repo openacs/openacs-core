@@ -1,42 +1,88 @@
-alter table users add bio text;
+alter table users add bio varchar2(4000);
 
-create function inline_0 ()
-returns integer as '
+-- DRB: effing oracle
+
+-- ******************************************************************
+-- * Community Core API
+-- ******************************************************************
+
+create or replace view registered_users
+as
+  select p.email, p.url, pe.first_names, pe.last_name,
+  u.user_id,u.authority_id,u.username,u.password,u.salt,u.screen_name,u.priv_name,u.priv_email,u.email_verified_p,u.email_bouncing_p,u.no_alerts_until,u.last_visit,u.second_to_last_visit,u.n_sessions,u.password_question,u.password_answer,u.password_changed_date,
+  mr.member_state
+  from parties p, persons pe, users u, group_member_map m, membership_rels mr
+  where party_id = person_id
+  and person_id = user_id
+  and u.user_id = m.member_id
+  and m.rel_id = mr.rel_id
+  and m.group_id = (select acs.magic_object_id('registered_users') from dual)
+  and m.container_id = m.group_id
+  and m.rel_type = 'membership_rel'
+  and mr.member_state = 'approved'
+  and u.email_verified_p = 't';
+
+
+-- faster simpler view
+-- does not check for registered user/banned etc
+create or replace view acs_users_all
+as
+select pa.*, pe.*, u.*
+from  parties pa, persons pe, users u
+where  pa.party_id = pe.person_id
+and pe.person_id = u.user_id;
+
+
+create or replace view cc_users
+as
+select
+o.object_id,o.object_type,o.context_id,o.security_inherit_p,o.creation_user,o.creation_date,o.creation_ip,o.last_modified,o.modifying_user,o.modifying_ip,
+pa.party_id, pa.email, pa.url, 
+pe.person_id, pe.first_names, pe.last_name, 
+u.user_id,u.authority_id,username,u.password,u.salt,u.screen_name,u.priv_name,u.priv_email,u.email_verified_p,u.email_bouncing_p,u.no_alerts_until,u.last_visit,u.second_to_last_visit,u.n_sessions,u.password_question,u.password_answer,password_changed_date,
+mr.member_state, mr.rel_id
+from acs_objects o, parties pa, persons pe, users u, group_member_map m, membership_rels mr
+where o.object_id = pa.party_id
+and pa.party_id = pe.person_id
+and pe.person_id = u.user_id
+and u.user_id = m.member_id
+and m.group_id = (select acs.magic_object_id('registered_users') from dual)
+and m.rel_id = mr.rel_id
+and m.container_id = m.group_id
+and m.rel_type = 'membership_rel';
+
+
 declare
-  one_user_id integer;
   bio_id integer;
+  exists_count integer;
 begin
 
-  bio_id := attribute_id
-            from acs_attributes
-            where object_type = ''person''
-            and attribute_name = ''bio'';
+  select attribute_id into bio_id
+  from acs_attributes
+  where object_type = 'person' and attribute_name = 'bio';
 
-  for one_user_id in select user_id from users loop
-    if exists(select attr_value
-              from acs_attribute_values
-              where object_id = one_user_id
-              and attribute_id = bio_id) then
+  for user in (select user_id from users) loop
+    select count(*) into exists_count
+    from acs_attribute_values
+    where object_id = user.user_id
+      and attribute_id = bio_id;
+
+    if exists_count > 0 then
       update users
       set bio = (select attr_value
                  from acs_attribute_values
-                 where object_id = one_user_id
+                 where object_id = user.user_id
                  and attribute_id = bio_id)
-      where user_id = one_user_id;
+      where user_id = user.user_id;
     end if;
   end loop;
 
   delete from acs_attribute_values
   where attribute_id = bio_id;
 
-  perform acs_attribute__drop_attribute (''person'',''bio'');
-  perform acs_attribute__drop_attribute (''person'',''bio_mime_type'');
+  acs_attribute.drop_attribute ('person','bio');
+  acs_attribute.drop_attribute ('person','bio_mime_type');
 
-  return 0;
-
-end;' language 'plpgsql';
-
-select inline_0 ();
-
-drop function inline_0 ();
-
+end;
+/
+show errors;
