@@ -69,12 +69,12 @@ begin
       and attribute_id = bio_id;
 
     if exists_count > 0 then
-      update users
+      update persons
       set bio = (select attr_value
                  from acs_attribute_values
                  where object_id = user.user_id
                  and attribute_id = bio_id)
-      where user_id = user.user_id;
+      where person_id = user.user_id;
     end if;
   end loop;
 
