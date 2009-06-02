@@ -251,12 +251,12 @@ ad_proc -public person::update {
 }
 
 # DRB: Though I've moved the bio field to type specific rather than generic storage, I've
-# maintained the API semantics exactly as they were before (other than changing person to user),
-# mostly in order to make upgrade possible.  In the future, the number of database hits can
-# be diminished by getting rid of the seperate queries for bio stuff. However, I have removed
-# bio_mime_type because it's unused and unsupported in the existing code.
+# maintained the API semantics exactly as they were before mostly in order to make upgrade
+# possible.  In the future, the number of database hits can be diminished by getting rid of
+# the seperate queries for bio stuff. However, I have removed bio_mime_type because it's
+# unused and unsupported in the existing code.
 
-ad_proc -public acs_user::get_bio {
+ad_proc -public person::get_bio {
     {-user_id {}}
     {-exists_var {}}
 } {
@@ -288,7 +288,7 @@ ad_proc -public acs_user::get_bio {
     return $bio
 }
 
-ad_proc -public acs_user::update_bio {
+ad_proc -public person::update_bio {
     {-user_id:required}
     {-bio:required}
 } {
@@ -476,7 +476,7 @@ ad_proc -public acs_user::get {
     }
 
     if { $include_bio_p } {
-        set row(bio) [acs_user::get_bio -user_id $user_id]
+        set row(bio) [person::get_bio -user_id $user_id]
     }
 }
 

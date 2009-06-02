@@ -263,7 +263,7 @@ begin
       );
 
  attr_id := acs_attribute__create_attribute (
-        ''user'',
+        ''person'',
         ''bio'',
         ''string'',
         ''#acs-kernel.Bio#'',
@@ -277,9 +277,6 @@ begin
         ''type_specific'',
         ''f''
       );
-
-
-
 
   return 0;
 end;' language 'plpgsql';
@@ -394,7 +391,8 @@ create table persons (
 			references parties (party_id)
 			constraint persons_person_id_pk primary key,
 	first_names	varchar(100) not null,
-	last_name	varchar(100) not null
+	last_name	varchar(100) not null,
+        bio             text
 );
 
 comment on table persons is '
@@ -545,7 +543,6 @@ create table users (
         screen_name             varchar(100)
                                 constraint users_screen_name_un
                                 unique,
-        bio                     text,
         priv_name               integer default 0 not null,
         priv_email              integer default 5 not null,
         email_verified_p        boolean default 't',

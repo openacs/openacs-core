@@ -1,4 +1,4 @@
-alter table users add bio varchar2(4000);
+alter table persons add bio varchar2(4000);
 
 -- DRB: effing oracle
 
@@ -55,6 +55,7 @@ and m.rel_type = 'membership_rel';
 declare
   bio_id integer;
   exists_count integer;
+  attr_id integer;
 begin
 
   select attribute_id into bio_id
@@ -82,6 +83,16 @@ begin
 
   acs_attribute.drop_attribute ('person','bio');
   acs_attribute.drop_attribute ('person','bio_mime_type');
+
+  attr_id := acs_attribute.create_attribute (
+        object_type => 'person',
+        attribute_name => 'bio',
+        datatype => 'string',
+        pretty_name => '#acs-kernel.Bio#',
+        pretty_plural => '#acs-kernel.Bios#',
+	min_n_values => 0,
+	max_n_values => 1
+      );
 
 end;
 /

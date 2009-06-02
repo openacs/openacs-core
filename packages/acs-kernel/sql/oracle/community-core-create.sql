@@ -185,6 +185,16 @@ begin
 	max_n_values => 1
       );
 
+ attr_id := acs_attribute.create_attribute (
+        object_type => 'person',
+        attribute_name => 'bio',
+        datatype => 'string',
+        pretty_name => '#acs-kernel.Bio#',
+        pretty_plural => '#acs-kernel.Bios#',
+	min_n_values => 0,
+	max_n_values => 1
+      );
+
  --
  -- User: people who have registered in the system
  --
@@ -197,16 +207,6 @@ begin
    id_column => 'user_id',
    package_name => 'acs_user'
  );
-
- attr_id := acs_attribute.create_attribute (
-        object_type => 'user',
-        attribute_name => 'bio',
-        datatype => 'string',
-        pretty_name => '#acs-kernel.Bio#',
-        pretty_plural => '#acs-kernel.Bios#',
-	min_n_values => 0,
-	max_n_values => 1
-      );
 
  attr_id := acs_attribute.create_attribute (
         object_type => 'user',
@@ -399,7 +399,8 @@ create table persons (
 	first_names	varchar2(100) 
 			constraint persons_first_names_nn not null,
 	last_name	varchar2(100) 
-			constraint persons_last_name_nn not null
+			constraint persons_last_name_nn not null,
+        bio             varchar2(4000)
 );
 
 comment on table persons is '
@@ -563,7 +564,6 @@ create table users (
     	screen_name		varchar2(100)
 				constraint users_screen_name_un
 				unique,
- bio varchar2(4000),
 	priv_name		integer default 0 not null,
 	priv_email		integer default 5 not null,
 	email_verified_p	char(1) default 't'
