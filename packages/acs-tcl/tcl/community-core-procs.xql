@@ -88,19 +88,19 @@
       </querytext>
 </fullquery>
 
-<fullquery name="acs_user::get_bio.select_bio">      
+<fullquery name="person::get_bio.select_bio">      
       <querytext>
           select bio
-          from users
-          where user_id = :user_id
+          from persons
+          where person_id = :user_id
       </querytext>
 </fullquery>
 
-<fullquery name="acs_user::update_bio.update_bio">      
+<fullquery name="person::update_bio.update_bio">      
       <querytext>
-        update users
+        update persons
 	set bio = :bio
-	where user_id = :user_id
+	where person_id = :user_id
       </querytext>
 </fullquery>
 
