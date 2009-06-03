@@ -92,7 +92,7 @@
       <querytext>
           select bio
           from persons
-          where person_id = :user_id
+          where person_id = :person_id
       </querytext>
 </fullquery>
 

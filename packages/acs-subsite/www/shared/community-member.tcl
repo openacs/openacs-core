@@ -69,7 +69,7 @@ if { $url ne "" && ![string match -nocase "http://*" $url] } {
     set url "http://$url"
 }
 
-set bio [ad_text_to_html -- [person::get_bio -user_id $user_id]]
+set bio [ad_text_to_html -- [person::get_bio -person_id $user_id]]
 
 # Do we show the portrait?
 set inline_portrait_state "none"

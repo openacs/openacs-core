@@ -84,9 +84,9 @@ aa_register_case \
 		aa_true "name changed" [string match [person::name -person_id $prs_id] "hh$first_names hh$last_name"]
 		
 		set bio "bio :: [ad_generate_random_string] :: bio"
-		person::update_bio -user_id $prs_id -bio $bio
+		person::update_bio -person_id $prs_id -bio $bio
 		
-		aa_true "bio(graphy) ok" [string match $bio [person::get_bio -user_id $prs_id -exists_var bio_p]]
+		aa_true "bio(graphy) ok" [string match $bio [person::get_bio -person_id $prs_id -exists_var bio_p]]
 		
 		person::delete -person_id $prs_id
                 aa_true "person deleted" ![person::person_p -party_id $prs_id]
