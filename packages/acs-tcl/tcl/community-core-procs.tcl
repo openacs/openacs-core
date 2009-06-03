@@ -257,12 +257,12 @@ ad_proc -public person::update {
 # unused and unsupported in the existing code.
 
 ad_proc -public person::get_bio {
-    {-user_id {}}
+    {-person_id {}}
     {-exists_var {}}
 } {
     Get the value of the user's bio(graphy) field.
 
-    @option user_id    The user_id of the person to get the bio for. Leave blank for
+    @option person_id    The person_id of the person to get the bio for. Leave blank for
        currently logged in user.
     
     @option exists_var The name of a variable in the caller's namespace, which will be set to 1 
@@ -273,8 +273,8 @@ ad_proc -public person::get_bio {
 
     @author Lars Pind (lars@collaboraid.biz)
 } {
-    if { $user_id eq "" } {
-        set user_id [ad_conn user_id]
+    if { $person_id eq "" } {
+        set person_id [ad_conn user_id]
     }
 
     if { $exists_var ne "" } {
@@ -289,12 +289,12 @@ ad_proc -public person::get_bio {
 }
 
 ad_proc -public person::update_bio {
-    {-user_id:required}
+    {-person_id:required}
     {-bio:required}
 } {
     Update the bio for a person.
 
-    @param user_id The ID of the person to edit bio for
+    @param person_id The ID of the person to edit bio for
     @param bio       The new bio for the person
 
     @author Lars Pind (lars@collaboraid.biz)
@@ -476,7 +476,7 @@ ad_proc -public acs_user::get {
     }
 
     if { $include_bio_p } {
-        set row(bio) [person::get_bio -user_id $user_id]
+        set row(bio) [person::get_bio -person_id $user_id]
     }
 }
 

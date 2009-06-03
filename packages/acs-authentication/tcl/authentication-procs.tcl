@@ -954,7 +954,7 @@ ad_proc -public auth::create_local_account {
         # Update person.bio
         if { [info exists user_info(bio)] } {
             person::update_bio \
-                -user_id $user_id \
+                -person_id $user_id \
                 -bio $user_info(bio)
         }
     } {
@@ -1068,7 +1068,7 @@ ad_proc -public auth::update_local_account {
             # Update person.bio
             if { [info exists user_info(bio)] } {
                 person::update_bio \
-                    -user_id $user_id \
+                    -person_id $user_id \
                     -bio $user_info(bio)
             }
             
