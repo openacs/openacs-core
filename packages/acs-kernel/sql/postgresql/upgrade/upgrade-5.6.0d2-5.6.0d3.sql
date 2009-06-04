@@ -34,22 +34,6 @@ begin
         ''f''
       );
 
-  perform acs_attribute__create_attribute (
-          ''user'',
-          ''bio'',
-          ''string'',
-          ''#acs-kernel.Bio#'',
-          ''#acs-kernel.Bios#'',
-          null,
-          null,
-          null,
-  	0,
-  	1,
-          null,
-          ''type_specific'',
-          ''f''
-        );
-
   return 0;
 
 end;' language 'plpgsql';
