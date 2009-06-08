@@ -529,8 +529,25 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
                                               -parameter "TinyMCEDefaultConfig" \
                                               -default $tinymce_default_config]
                 set pairslist [list]
+                ns_log notice "options [array get options]"
                 foreach config_pair $tinymce_configs_list {
-                    lappend pairslist "[lindex $config_pair 0]:\"[lindex $config_pair 1]\""
+                    set config_key [lindex $config_pair 0]
+                    if {[info exists options($config_key)]} {
+                        # override default values with individual
+                        # widget specification
+                        set config_value $options($config_key)
+                        unset options($config_key)
+                    } else {
+                        set config_value [lindex $config_pair 1]
+                    }
+                    ns_log notice "key $config_key value $config_value"
+                    lappend pairslist "${config_key}:\"${config_value}\""
+                }
+                foreach name [array names options] {
+                    ns_log notice "NAME $name"
+                    # add any additional options not specified in the
+                    # default config
+                    lappend pairslist "${name}:\"$options($name)\""
                 }
                 lappend pairslist "elements : \"[join $::acs_blank_master__htmlareas ","]\""
                 set tinymce_configs_js [join $pairslist ","]
