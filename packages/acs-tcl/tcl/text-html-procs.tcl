@@ -299,7 +299,7 @@ ad_proc -private util_close_html_tags {
         # discard forms
         foreach node [$root selectNodes //form] {$node delete}
         # output wellformed html
-        set b [$root selectNodes {//body[1]}]
+        set b [lindex [$root selectNodes {//body}] 0]
         foreach n [$b childNodes] {
           append html [$n asHTML]
         }
