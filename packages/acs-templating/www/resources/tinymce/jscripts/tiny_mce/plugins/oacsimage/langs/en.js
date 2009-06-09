@@ -1,6 +1,7 @@
 // UK lang variables
 
 tinyMCE.addI18n('en.oacsimage',{
+desc : 'Insert/upload an image',
 tab_general : 'General',
 tab_appearance : 'Appearance',
 tab_advanced : 'Advanced',
