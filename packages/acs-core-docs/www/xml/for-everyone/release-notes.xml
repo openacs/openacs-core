@@ -44,7 +44,7 @@ entire &majorversion;.&minorversion; release sequence <xref linkend="changelog">
         <para>PostgreSQL 8.3 is now fully supported, including the use of the built-in
           standard version of tsearch2.
         </para>
-        <para>TinyMCE has been upgraded to 3.1.1 with language pack support.
+        <para>TinyMCE has been upgraded to 3.2.4.1 with language pack support.
         </para>
         <para>acs-mail-lite now correctly implements rollout support.
         </para>
