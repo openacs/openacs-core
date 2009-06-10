@@ -1,0 +1,249 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Contributing code back to OpenACS</title><meta name="generator" content="DocBook XSL Stylesheets V1.60.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="cvs-guidelines.html" title="Chapter 14. 
+    CVS Guidelines
+  "><link rel="previous" href="openacs-cvs-concepts.html" title="OpenACS CVS Concepts"><link rel="next" href="cvs-resources.html" title="Additional Resources for CVS"><link rel="stylesheet" href="openacs.css" type="text/css"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" border="0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="openacs-cvs-concepts.html">Prev</a> </td><th width="60%" align="center">Chapter 14. 
+    CVS Guidelines
+  </th><td width="20%" align="right"> <a accesskey="n" href="cvs-resources.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="contributing-code"></a>Contributing code back to OpenACS</h2></div></div><div></div></div><p>There are three main ways to contribute code to OpenACS:</p><div class="orderedlist"><ol type="1"><li><p>To contribute a small fix, if you do not have a developer account, submit a <a href="http://openacs.org/bugtracker/openacs/patch-submission-instructions.htm" target="_top">patch</a>.</p></li><li><p>If you are making many changes, or would like to become a direct contributor, send mail to <a href="mailto:oct@openacs.org" target="_top">the Core Team</a> asking for commit rights.  You can then commit code directly to the repository:</p><div class="orderedlist"><ol type="a"><li><p>Use one of the checkout methods described above to get files to your system.  This takes the place of steps 1 and 2 in <a href="openacs.html#install-from-tarball" title="Installation Option 2: Install from tarball">Section , &#8220;Installation Option 2: Install from tarball&#8221;</a>.  Continue setting up the site as described there.</p></li><li><p>Fix bugs and add features.</p></li><li><p>
+            Commit that file (or files): </p><pre class="screen"><span class="action"><span class="action">cvs commit -m &quot;what I did and why&quot; filename</span></span></pre><p>
+            Because this occurs in your personal checkout and not an anonymous
+            one, this commit automagically moves back upstream to the Mother
+            Ship repository at cvs.openacs.org.  The names of the changed files, and your comments, are sent to a mailing list for OpenACS developers.  A Core Team developer may review or roll back your changes if necessary.
+          </p></li><li><p>
+                  Confirm via the <a href="http://cvs.openacs.org/cvs/openacs-4/" target="_top">
+                    OpenACS CVS browser </a>
+                  that your changes are where you intended them to be.
+                </p></li></ol></div></li><li><p>Add a new package.  Contact the <a href="mailto:oct@openacs.org" target="_top">Core Team</a> to get approval and to get a module alias created.</p><div class="orderedlist"><ol type="a"><li><p>
+                Check out acs-core on the HEAD branch.  (Weird things happen if you add files to a branch but not to HEAD):</p><pre class="screen"><span class="action"><span class="action">cd /tmp
+cvs -d:ext:cvs.openacs.org:/cvsroot checkout acs-core</span></span></pre><p>Copy your package directory from your working directory to this directory.  Make sure not to copy any CVS directories.</p><pre class="screen"><span class="action"><span class="action">cp -r /var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/packages/<span class="replaceable"><span class="replaceable">newpackage</span></span> /tmp/openacs-4/packages</span></span></pre><p>Import the package into the cvs.openacs.org cvs repository:</p><pre class="screen"><span class="action"><span class="action">cd /tmp/openacs-4/packages/<span class="replaceable"><span class="replaceable">newpackage</span></span>
+cvs import -m &quot;Initial import of <span class="replaceable"><span class="replaceable">newpackage</span></span>&quot; openacs-4/packages/newpackage <span class="replaceable"><span class="replaceable">myname</span></span> <span class="replaceable"><span class="replaceable">newpackage-0-1d</span></span></span></span></pre></li><li><p>Add the new package to the modules file. (An administrator has to do this step.)  On any machine, in a temporary directory:</p><pre class="screen"><span class="action"><span class="action">cvs -d :ext:cvs.openacs.org:/cvsroot co CVSROOT
+cd CVSROOT
+emacs modules</span></span></pre><p>Add a line of the form:</p><pre class="programlisting"><span class="replaceable"><span class="replaceable">photo-album-portlet</span></span> openacs-4/packages/<span class="replaceable"><span class="replaceable">photo-album-portlet</span></span></pre><p>Commit the change:</p><pre class="screen"><span class="action"><span class="action">cvs commit -m &quot;added alias for package <span class="replaceable"><span class="replaceable">newpackage</span></span>&quot; modules</span></span></pre><p>This should print something like:</p><div class="literallayout"><p>cvs commit: Examining .<br>
+**** Access allowed: Personal Karma exceeds Environmental Karma.<br>
+Checking in modules;<br>
+/cvsroot/CVSROOT/modules,v  &lt;--  modules<br>
+new revision: 1.94; previous revision: 1.93<br>
+done<br>
+cvs commit: Rebuilding administrative file database</p></div></li><li><p>Although you should add your package on HEAD, you should do package development on the latest release branch that your code is compatible with.  So, after completing the import, you may want to branch your package:</p><pre class="programlisting">cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/packages/<span class="replaceable"><span class="replaceable">newpackage</span></span>
+cvs tag -b <span class="replaceable"><span class="replaceable">oacs-5-1</span></span></pre></li><li><p>See <a href="releasing-package.html" title="How to package and release an OpenACS Package">Section , &#8220;How to package and release an OpenACS Package&#8221;</a></p></li></ol></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>Some packages are already in cvs at <tt class="computeroutput">openacs-4/contrib/packages</tt>.  Starting with OpenACS 5.1, we have a Maturity mechanism in the APM which makes the <tt class="computeroutput">contrib</tt> directory un-necessary.  If you are working on a <tt class="computeroutput">contrib</tt> package, you should move it to <tt class="computeroutput">/packages</tt>.  This must be done by an OpenACS administrator.  On cvs.openacs.org:</p><div class="orderedlist"><ol type="a"><li><pre class="programlisting">cp -r /cvsroot/openacs-4/contrib/packages/<span class="replaceable"><span class="replaceable">package0</span></span> /cvsroot/openacs-4/packages</pre></li><li><p>Update the modules file as described above.</p></li><li><p>Remove the directory from cvs in the old location using <tt class="computeroutput">cvs rm</tt>.  One approach <tt class="computeroutput">for file in `find | grep -v CVS`; do rm $file; cvs remove $file; done</tt></p></li></ol></div></div></li></ol></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="Commit_Rules"></a>
+      Rules for Committing Code to the OpenACS repository
+    </h3></div></div><div></div></div><p>
+      CVS commit procedures are governed by 
+      <a href="http://openacs.org/forums/message-view?message_id=185506" target="_top">
+        TIP (Technical Improvement Proposal) #61: Guidelines for CVS committers
+      </a>
+    </p><div class="orderedlist"><ol type="1"><li><p>
+          Which branch?
+        </p><div class="orderedlist"><ol type="1"><li><p>
+              For core packages, new features should always be
+              committed on HEAD, not to release branches.
+            </p></li><li><p>
+              For core packages, bug fixes should be committed on the
+              current release branch whenever applicable.
+            </p></li><li><p>
+              For non-core packages, developers should work on a
+              checkout of the release branch of the lastest release. For example,
+              if OpenACS 5.1.0 is released, developers should work on the
+              oacs-5-1 branch. When oacs-5-2 is branched, developers should
+              continue working on oacs-5-1 until OpenACS 5.2.0 is actually
+              released.
+            </p></li><li><p>
+              The current release branch is merged back to HEAD after
+              each dot release.
+            </p></li></ol></div></li><li><p>
+          New packages should be created in the 
+          <tt class="computeroutput">
+            /packages
+          </tt>
+          directory
+          and the maturity flag in the .info file should be zero. This is a change from
+          previous policy, where new packages went to /contrib/packages)
+        </p></li><li><p>
+          Code
+        </p><div class="orderedlist"><ol type="1"><li><p>
+              Only GPL code and material should be committed to the
+              OpenACS CVS repository (cvs.openacs.org)
+            </p></li><li><p>
+              Code should only be reformatted when functionality is
+              changed, e.g. when you change control flow and reindent to reflect
+              it.
+            </p></li><li><p>
+              Database upgrade scripts should only span one release
+              increment, and should follow
+              <a href="http://openacs.org/doc/current/eng-standards-versioning.html#naming-upgrade-scripts" target="_top">
+                Naming Database Upgrade Scripts
+              </a>
+              .
+            </p></li><li><p>
+              Database upgrade scripts should never go to the release
+              version, e.g., should always have a letter suffix such as d1 or
+              b1.
+            </p></li><li><p>
+              CVS commit messages should be intelligible in the context
+              of Changelogs. They should not refer to the files or
+              versions.
+            </p></li><li><p>
+              CVS commit messages and code comments should refer to
+              bug, tip, or patch number if appropriate, in the format &quot;resolves
+              bug 11&quot;, &quot;resolves bugs 11, resolves bug 22&quot;. &quot;implements tip 42&quot;,
+              &quot;implements tip 42, implements tip 50&quot;, &quot;applies patch 456 by User
+              Name&quot;, &quot;applies patch 456 by User Name, applies patch 523 by
+              ...&quot;.
+            </p></li></ol></div></li><li><p>
+          When to TIP
+        </p><div class="orderedlist"><ol type="1"><li><p>
+              A TIP is a Techical Improvement Proposal (
+              <a href="http://openacs.org/forums/message-view?message_id=115576" target="_top">
+                more information
+              </a>
+              ).  A proposed change must be approved by TIP if:
+            </p><div class="orderedlist"><ol type="1"><li><p>
+              It changes the core data model, or
+            </p></li><li><p>
+              It will change the behavior of any core package in a way
+              that affects existing code (typically, by changing public API), or
+            </p></li><li><p>
+              It is a non-backwards-compatible change to any core or
+              standard package.
+            </p></li></ol></div></li><li><p>
+          A proposed change need not be TIPped if:
+        </p><div class="orderedlist"><ol type="1"><li><p>
+              it adds a new function to a core package in a way that:
+            </p><div class="orderedlist"><ol type="1"><li><p>
+                  does not change the backwards-compatibility of public API
+                  functions.
+                </p></li><li><p>
+                  does not change the data model
+                </p></li><li><p>
+                  has no negative impact on performance
+                </p></li></ol></div></li><li><p>
+              it changes private API, or
+            </p></li><li><p>
+              it is a change to a non-core, non-standard package
+            </p></li></ol></div></li></ol></div></li><li><p>
+          Tags
+        </p><div class="orderedlist"><ol type="1"><li><p>
+              When a package is released in final form, the developer
+              shall tag it &quot;packagename-x-y-z-final&quot; and &quot;openacs-x-y-compat&quot;. x-y
+              should correspond to the current branch. If the package is
+              compatible with several different core versions, several compat
+              tags should be applied.
+            </p></li><li><p>
+              When OpenACS core is released, the openacs-x-y-z-final
+              tag shall be applied to all compat packages.
+            </p></li></ol></div><p>
+          For example, adding a new API function wouldn't require a
+          TIP. Changing an existing API function by adding an optional new
+          flag which defaults to no-effect wouldn't require a TIP. Added a
+          new mandatory flag to an existing function would require a
+          TIP.
+        </p></li></ol></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2874031"></a>
+        Reasons
+      </h4></div></div><div></div></div><p>
+        We don't currently have clear standards for committing
+        code.
+      </p><p>
+        Rule 1.3: First, this ensures that developers are working
+        against stable core code. Second, it ensures that new package
+        releases are available to OpenACS users immediately.
+      </p><p>
+        Rule 3.4: If an upgrade script ends with the final release
+        number, then if a problem is found in a release candidate it cannot
+        be addressed with another upgrade script. E.g., the last planned
+        upgrade script for a package previously in dev 1 would be
+        upgrade-2.0.0d1-2.0.0b1.sql, not upgrade-2.0.0d1-2.0.0.sql. Note
+        that using rc1 instead of b1 would be nice, because that's the
+        convention with release codes in cvs, but the package manager
+        doesn't support rc tags.
+      </p><p>
+        Rule 5.1: Reason 1: The packagename tag is a permanent,
+        static tag that allows for future comparison. The compat tag is a
+        floating tag which is used by the repository generator to determine
+        the most recent released version of each package for each core
+        version. This allows package developers to publish their releases
+        to all users of automatic upgrade without any intervention from the
+        OpenACS release team.Reason 2: The compat tags allows CVS users to
+        identify packages which have been released since the last core
+        release.Reason 3: The compat tag or something similar is required
+        to make Rule 6 possible.
+      </p><p>
+        Rule 5.2: This allows OpenACS developers who are creating
+        extensively customized sites to branch from a tag which is stable,
+        corresponds to released code instead of development code, and
+        applies to all packages. This tag can be used to fork packages as
+        needed, and provides a common ancestor between the fork and the
+        OpenACS code so that patches can be generated.
+      </p></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2874099"></a>
+      Informal Guidelines
+    </h3></div></div><div></div></div><p>
+      Informal guidelines which may be obsolete in places and should be reviewed:
+    </p><div class="itemizedlist"><ul type="disc"><li><p>
+          Before committing to cvs you must submit a bug report and
+          patch to the 
+          <a href="http://openacs.org/bugtracker/openacs" target="_top">
+            OpenACS
+            bug tracker
+          </a>
+          . The only exceptions to this rule are
+          for 
+          <a href="/projects/openacs/4.7/package_inventory" target="_top">
+            package
+            maintainers
+          </a>
+          committing in a package they are
+          maintaining and for members of the core team.
+        </p></li><li><p>
+          If you are committing a bug fix you need to coordinate
+          with the package maintainer. If you are a maintainer then
+          coordinate with any fellow maintainers.
+        </p></li><li><p>
+          If you are to commit a new feature, an architecture
+          change, or a refactoring, you must coordinate with the OpenACS core
+          team first. Also, such changes should have a discussion in the
+          forums to allow for feedback from the whole community.
+        </p></li><li><p>
+          If you are changing the data model you *must* provide an
+          upgrade script and bump up the version number of the
+          package.
+        </p></li><li><p>
+          Consider any upgradability ramifications of your change.
+          Avoid changing the contract and behaviour of Tcl procedures. If you
+          want to build a new and clean API consider deprecating the old proc
+          and making it invoke the new one.
+        </p></li><li><p>
+          Never rush to commit something. Before committing double
+          check with cvs diff what exactly you are committing.
+        </p></li><li><p>
+          Always accompany a commit with a brief but informative
+          comment. If your commit is related to bug number N and/or patch
+          number P, indicate this in the commit comment by including &quot;bug N&quot;
+          and/or &quot;patch P&quot;. This allows us to link bugs and patches in the
+          Bug Tracker with changes to the source code. For example suppose
+          you are committing a patch that closes a missing HTML tag, then an
+          appropriate comment could be &quot;Fixing bug 321 by applying patch 134.
+          Added missing h3 HTML close tag&quot;.
+        </p></li><li><p>
+          Commit one cohesive bug fix or feature change at a time.
+          Don't put a bunch of unrelated changes into one commit.
+        </p></li><li><p>
+          Before you throw out or change a piece of code that you
+          don't fully understand, use cvs annotate and cvs log on the file to
+          see who wrote the code and why. Consider contacting the
+          author.
+        </p></li><li><p>
+          Test your change before committing. Use the OpenACS
+          package acs-automated-testing to test Tcl procedures and the tool
+          
+          <a href="http://tclwebtest.sourceforge.net" target="_top">
+            Tclwebtest
+          </a>
+
+          to test pages
+        </p></li><li><p>
+          Keep code simple, adhere to conventions, and use comments
+          liberally.
+        </p></li><li><p>
+          In general, treat the code with respect, at the same
+          time, never stop questioning what you see. The code can always be
+          improved, just make sure you change the code in a careful and
+          systematic fashion.
+        </p></li></ul></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="openacs-cvs-concepts.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="cvs-resources.html">Next</a></td></tr><tr><td width="40%" align="left">OpenACS CVS Concepts </td><td width="20%" align="center"><a accesskey="u" href="cvs-guidelines.html">Up</a></td><td width="40%" align="right"> Additional Resources for CVS</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/current/contributing-code.html#comments">View comments on this page at openacs.org</a></center></body></html>
