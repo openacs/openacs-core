@@ -7,11 +7,11 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.5.0a1" url="http://openacs.org/repository/download/apm/acs-admin-5.5.0a1.apm">
+    <version name="5.5.0b1" url="http://openacs.org/repository/download/apm/acs-admin-5.5.0b1.apm">
         <owner url="mailto:dhogaza@pacifier.com">Don Baccus</owner>
         <summary>An interface for Site-wide administration of an OpenACS Installation.</summary>
         <maturity>3</maturity>
-        <release-date>2009-05-15</release-date>
+        <release-date>2009-06-09</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
 	<license url="http://www.gnu.org/copyleft/gpl.html">GPL</license>
 	<maturity>3</maturity>
@@ -19,9 +19,9 @@
           (including package installation, cache, authentication, and user accounts) for an OpenACS system.
         </description>
 
-        <provides url="acs-admin" version="5.5.0a1"/>
-        <requires url="acs-kernel" version="5.5.0a1"/>
-        <requires url="acs-mail-lite" version="5.5.0a1"/>
+        <provides url="acs-admin" version="5.5.0b1"/>
+        <requires url="acs-kernel" version="5.5.0b1"/>
+        <requires url="acs-mail-lite" version="5.5.0b1"/>
 
         <callbacks>
         </callbacks>
