@@ -18,8 +18,8 @@
 				var se = ed.selection;
 
 				// No selection and not in link
-				if (se.isCollapsed() && !ed.dom.getParent(se.getNode(), 'A'))
-					return;
+				// if (se.isCollapsed() && !ed.dom.getParent(se.getNode(), 'A'))
+				//	return;
 
 				ed.windowManager.open({
 					file : '/acs-templating/scripts/xinha/attach-file',
