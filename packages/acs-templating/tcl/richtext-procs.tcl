@@ -535,7 +535,7 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
                     {relative_urls "false"}
                     {height "450px" }
                     {width "100%"}
-                    {plugins "oacsimage,oacslink,style,layer,table,save,iespell,preview,media,searchreplace,print,contextmenu,paste,fullscreen,noneditable,visualchars,xhtmlxtras" }        
+                    {plugins "style,layer,table,save,iespell,preview,media,searchreplace,print,contextmenu,paste,fullscreen,noneditable,visualchars,xhtmlxtras" }        
                     {browsers "msie,gecko,safari,opera" }
                     {apply_source_formatting "true" }
                     {paste_auto_cleanup_on_paste true}
@@ -549,7 +549,7 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
                     {theme_openacs_resizing true}
                     {theme_openacs_disable "styleselect"}
                     {theme_openacs_buttons1_add_before "save,separator"} 
-                    {theme_openacs_buttons2_add "oacslink,separator,preview,separator,forecolor,backcolor"} 
+                    {theme_openacs_buttons2_add "separator,preview,separator,forecolor,backcolor"} 
                     {theme_openacs_buttons2_add_before "cut,copy,paste,pastetext,pasteword,separator,search,replace,separator"} 
                     {theme_openacs_buttons3_add_before "tablecontrols,separator"} 
                     {theme_openacs_buttons3_add "iespell,media,separator,print,separator,fullscreen"}
