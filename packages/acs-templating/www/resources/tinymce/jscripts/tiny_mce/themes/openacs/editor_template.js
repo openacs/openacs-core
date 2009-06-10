@@ -68,7 +68,7 @@
 				theme_openacs_path : true,
 				theme_openacs_toolbar_location : 'bottom',
 				theme_openacs_buttons1 : "bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,styleselect,formatselect",
-				theme_openacs_buttons2 : "bullist,numlist,|,outdent,indent,|,undo,redo,|,link,unlink,anchor,image,cleanup,help,code",
+				theme_openacs_buttons2 : "bullist,numlist,|,outdent,indent,|,undo,redo,|,link,unlink,anchor,cleanup,help,code",
 				theme_openacs_buttons3 : "hr,removeformat,visualaid,|,sub,sup,|,charmap",
 				theme_openacs_blockformats : "p,address,pre,h1,h2,h3,h4,h5,h6",
 				theme_openacs_toolbar_align : "center",
