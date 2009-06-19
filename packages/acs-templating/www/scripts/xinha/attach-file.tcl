@@ -338,7 +338,6 @@ if {$richtextEditor eq "tinymce"} {
           // document.getElementById('f_href').focus();
           var f_href = document.getElementById('f_href');
           var url = f_href.value;
-          alert('title='+document.getElementById('f_title').value);
           if (url !='') {
 
                  insertAction();
