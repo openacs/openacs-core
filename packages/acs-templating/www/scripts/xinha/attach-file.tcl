@@ -95,7 +95,6 @@ if {$write_p} {
 	    }
         } \
         -on_submit {
-            ns_log notice "ATTACH FILE ON SUBMIT"
 	    if {$f_href eq ""} {
 		set f_href $f_url
 		element set_value upload_form f_href $f_href
@@ -212,7 +211,7 @@ if {$write_p} {
 			set file_name [regsub -all {<.*?>} $file_name {}]
 		    }
 		} 
-
+                set file_name [string trim $file_name]
 		if {$f_title eq "" && [info exists file_name]} {
 		    element set_value upload_form f_title $file_name
 		}            
@@ -232,9 +231,10 @@ if {$write_p} {
 			set f_href "/file/${item_id}/${file_name}"
 		    }
 		}
+                element set_value upload_form f_href $f_href
+                element set_value upload_form f_title $f_title             
 	    }
-            ns_log notice "F_HREF= $f_href"
-	    element set_value upload_form f_href $f_href
+
         }
 
 } else {
@@ -338,7 +338,9 @@ if {$richtextEditor eq "tinymce"} {
           // document.getElementById('f_href').focus();
           var f_href = document.getElementById('f_href');
           var url = f_href.value;
+          alert('title='+document.getElementById('f_title').value);
           if (url !='') {
+
                  insertAction();
           }
 

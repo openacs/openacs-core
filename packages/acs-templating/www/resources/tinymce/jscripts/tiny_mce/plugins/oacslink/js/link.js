@@ -42,11 +42,14 @@ function init() {
 
             // Setup form data
 //	    setFormValue('f_href', href);
-//     	    setFormValue('f_title', linkText);
+     	    setFormValue('f_title', linkText);
         }
         if (action == 'insert') {
 //		setFormValue('f_href', href);
-//     		setFormValue('f_title', linkText);
+            if (linkText == '') {
+                linkText = inst.selection.getContent();
+                setFormValue('f_title', linkText);
+            }
         }
 
     window.focus();
@@ -307,8 +310,10 @@ function insertAction() {
 		elementArray = tinymce.grep(inst.dom.select("a"), function(n) {return inst.dom.getAttrib(n, 'href') == '#mce_temp_url#';});
             for (i=0; i<elementArray.length; i++)
 		setAllAttribs(elm = elementArray[i]);
-	} else
-		setAllAttribs(elm);
+	} else {
+	    setAllAttribs(elm);
+        }
+
 
 	// Don't move caret if selection was image
 	if (elm != null && (elm.childNodes.length != 1 || elm.firstChild.nodeName != 'IMG')) {
@@ -323,11 +328,12 @@ function insertAction() {
 }
 
 function setAllAttribs(elm) {
-    var formObj = document.forms[0];
-	var href = formObj.f_href.value;
-	setAttrib(elm, 'href', href);
-	setAttrib(elm, 'title');
-
+        var formObj = document.forms[0];
+        var href = formObj.f_href.value;
+        var title = formObj.f_title.value;
+        setAttrib(elm, 'href', href);
+        setAttrib(elm, 'title',title);
+        elm.innerHTML = title;
 	// Refresh in old MSIE
 	if (tinyMCE.isMSIE5)
 		elm.outerHTML = elm.outerHTML;
