@@ -60,7 +60,7 @@ newdocument:"Oled sa kindel, et tahad kustutada k\u00F5ik sisud?",
 toolbar_focus:"H\u00FCppa t\u00F6\u00F6riista nuppudele - Alt+Q, H\u00FCppa redigeerijale - Alt-Z, H\u00FCppa elemendi teele - Alt-X",
 more_colors:"Rohkem v\u00E4rve"
 });
-tinyMCE.addI18n('et.openacs',{
+tinyMCE.addI18n('et.advanced',{
 cut_desc:"L\u00F5ika",
 copy_desc:"Kopeeri",
 paste_desc:"Kleebi",
