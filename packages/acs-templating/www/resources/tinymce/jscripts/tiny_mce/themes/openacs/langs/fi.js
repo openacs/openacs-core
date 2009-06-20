@@ -60,3 +60,11 @@ newdocument:"Haluatko varmasti tyhjent\u00E4\u00E4 kaiken sis\u00E4ll\u00F6n?",
 toolbar_focus:"Siirry ty\u00F6kaluihin - Alt+Q, Siirry tekstieditoriin - Alt-Z, Siirry elementin polkuun - Alt-X",
 more_colors:"Enemm\u00E4n v\u00E4rej\u00E4"
 });
+tinyMCE.addI18n('fi.advanced',{
+cut_desc:"Leikkaa",
+copy_desc:"Kopioi",
+paste_desc:"Liit\u00E4",
+link_desc:"Lis\u00E4\u00E4/muuta linkki",
+unlink_desc:"Poista linkki",
+image_desc:"Lis\u00E4\u00E4/muuta kuva"
+});

@@ -60,3 +60,11 @@ newdocument:"Ertu viss um a\u00F0 \u00FE\u00FA viljir hreinsa allt?",
 toolbar_focus:"Hoppa \u00ED t\u00F3lastiku - Alt+Q, Hoppa \u00ED ritil - Alt-Z, Hoppa \u00ED sl\u00F3\u00F0 - Alt-X",
 more_colors:"Fleiri litir"
 });
+tinyMCE.addI18n('is.advanced',{
+cut_desc:"Klippa",
+copy_desc:"Afrita",
+paste_desc:"L\u00EDma",
+link_desc:"Setja inn/breyta hlekk",
+unlink_desc:"Afhlekkja",
+image_desc:"Setja inn/breyta mynd"
+});

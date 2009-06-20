@@ -60,3 +60,11 @@ newdocument:"Vai J\u016Bs esat p\u0101rliecin\u0101ti, ka v\u0113laties izdz\u01
 toolbar_focus:"Iet uz r\u012Bkpog\u0101m - Alt+Q, Iet uz redaktoru - Alt-Z, Iet uz elementa atra\u0161an\u0101s vietu - Alt-X",
 more_colors:"Vair\u0101k kr\u0101su"
 });
+tinyMCE.addI18n('lv.advanced',{
+cut_desc:"Izgriezt",
+copy_desc:"Kop\u0113t",
+paste_desc:"Iekop\u0113t",
+link_desc:"Ievietot/Redi\u0123\u0113t saiti",
+unlink_desc:"Atsait\u0113t",
+image_desc:"Ievietot/Redi\u0123\u0113t att\u0113lu"
+});

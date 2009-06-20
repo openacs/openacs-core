@@ -60,3 +60,11 @@ newdocument:"Czy jeste\u015B pewnien, ze chcesz wyczy\u015Bci\u0107 ca\u0142\u01
 toolbar_focus:"Przeskocz do przycisk\u00F3w narz\u0119dzi - Alt+Q, Przeskocz do edytora - Alt-Z, Przeskocz do elementu \u015Bcie\u017Cki - Alt-X",
 more_colors:"Wi\u0119cej kolor\u00F3w"
 });
+tinyMCE.addI18n('pl.advanced',{
+cut_desc:"Wytnij",
+copy_desc:"Kopiuj",
+paste_desc:"Wklej",
+link_desc:"Wstaw/edytuj link",
+unlink_desc:"Usu\u0144 link",
+image_desc:"Wstaw/edytuj obraz"
+});

@@ -60,3 +60,11 @@ newdocument:"\uD3B8\uC9D1\uC911\uC758 \uB370\uC774\uD130\uB97C \uBAA8\uB450 \uC7
 toolbar_focus:"\uBC84\uD2BC\uC73C\uB85C \uC810\uD504 - Alt+Q, \uC5D0\uB514\uD130\uB85C \uC810\uD504 - Alt-Z, Jump to element path - Alt-X",
 more_colors:"\uADF8 \uC678\uC758 \uC0C9"
 });
+tinyMCE.addI18n('ko.advanced',{
+cut_desc:"\uC798\uB77C\uB0B4\uAE30",
+copy_desc:"\uBCF5\uC0AC",
+paste_desc:"\uBD99\uC774\uAE30",
+link_desc:"\uB9C1\uD06C\uC758 \uC0BD\uC785/\uD3B8\uC9D1",
+unlink_desc:"\uB9C1\uD06C \uC0AD\uC81C",
+image_desc:"\uC774\uBBF8\uC9C0 \uC0BD\uC785/\uD3B8\uC9D1"
+});

@@ -61,3 +61,11 @@ toolbar_focus:"Zur Werkzeugleiste springen: Alt+Q; Zum Editor springen: Alt-Z; Z
 more_colors:"Weitere Farben",
 anchor_delta_width:"13"
 });
+tinyMCE.addI18n('de.advanced',{
+cut_desc:"Ausschneiden",
+copy_desc:"Kopieren",
+paste_desc:"Einf\u00FCgen",
+link_desc:"Link einf\u00FCgen/ver\u00E4ndern",
+unlink_desc:"Link entfernen",
+image_desc:"Bild einf\u00FCgen/ver\u00E4ndern"
+});

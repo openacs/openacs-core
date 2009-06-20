@@ -60,3 +60,11 @@ newdocument:"Sigur dori\u0163i s\u0103 \u015Fterge\u0163i tot?",
 toolbar_focus:"S\u0103ri\u0163i la instrumente - Alt+Q, S\u0103ri\u0163i la editor - Alt-Z, S\u0103ri\u0163i la cale - Alt-X",
 more_colors:"Mai multe culori"
 });
+tinyMCE.addI18n('ro.advanced',{
+cut_desc:"Taie",
+copy_desc:"Copiaz\u0103",
+paste_desc:"Lipe\u015Fte",
+link_desc:"Inserare/editare leg\u0103tur\u0103",
+unlink_desc:"\u015Eterge leg\u0103tura",
+image_desc:"Inserare/editare imagine"
+});

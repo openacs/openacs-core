@@ -60,3 +60,11 @@ newdocument:"\u0E04\u0E38\u0E13\u0E41\u0E19\u0E48\u0E43\u0E08\u0E2B\u0E23\u0E37\
 toolbar_focus:"Jump to tool buttons - Alt+Q, Jump to editor - Alt-Z, Jump to element path - Alt-X",
 more_colors:"\u0E2A\u0E35\u0E2D\u0E37\u0E48\u0E19\u0E46"
 });
+tinyMCE.addI18n('th.advanced',{
+cut_desc:"\u0E15\u0E31\u0E14",
+copy_desc:"\u0E04\u0E31\u0E14\u0E25\u0E2D\u0E01",
+paste_desc:"\u0E27\u0E32\u0E07",
+link_desc:"\u0E40\u0E1E\u0E34\u0E48\u0E21/\u0E41\u0E01\u0E49\u0E44\u0E02 \u0E25\u0E34\u0E49\u0E07\u0E04\u0E4C",
+unlink_desc:"\u0E22\u0E01\u0E40\u0E25\u0E34\u0E01\u0E25\u0E34\u0E49\u0E07\u0E04\u0E4C",
+image_desc:"\u0E40\u0E1E\u0E34\u0E48\u0E21/\u0E41\u0E01\u0E49\u0E44\u0E02 \u0E23\u0E39\u0E1B"
+});

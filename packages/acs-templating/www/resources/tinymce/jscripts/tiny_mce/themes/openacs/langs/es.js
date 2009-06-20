@@ -60,3 +60,11 @@ newdocument:" \u00BFEst\u00E1 seguro que desea limpiar todo el contenido?",
 toolbar_focus:"Ir a los botones de herramientas - Alt+Q, Ir al editor - Alt-Z, Ir a la ruta del elemento - Alt-X",
 more_colors:"M\u00E1s colores"
 });
+tinyMCE.addI18n('es.advanced',{
+cut_desc:"Cortar",
+copy_desc:"Copiar",
+paste_desc:"Pegar",
+link_desc:"Insertar/editar hiperv\u00EDnculo",
+unlink_desc:"Quitar hiperv\u00EDnculo",
+image_desc:"Insertar/editar imagen"
+});

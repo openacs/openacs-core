@@ -60,3 +60,11 @@ newdocument:"\u60A8\u786E\u8BA4\u8981\u6E05\u9664\u6240\u6709\u5185\u5BB9\u5417\
 toolbar_focus:"\u5DE5\u5177\u6309\u94AE- Alt+Q,\u7F16\u8F91\u5668- Alt-Z,\u7EC4\u4EF6\u4F4D\u7F6E- Alt-X",
 more_colors:"\u66F4\u591A\u989C\u8272"
 });
+tinyMCE.addI18n('zh.advanced',{
+cut_desc:"\u526A\u5207",
+copy_desc:"\u590D\u5236",
+paste_desc:"\u7C98\u8D34",
+link_desc:"\u63D2\u5165/\u7F16\u8F91\u8D85\u94FE\u63A5",
+unlink_desc:"\u53D6\u6D88\u8D85\u94FE\u63A5",
+image_desc:"\u63D2\u5165/\u7F16\u8F91\u56FE\u50CF"
+});

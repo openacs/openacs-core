@@ -60,3 +60,11 @@ newdocument:"Biztosan t\u00F6rli az eddigi tartalmat?",
 toolbar_focus:"Eszk\u00F6zgombokra ugr\u00E1s - Alt+Q, Szerkeszt\u0151h\u00F6z ugr\u00E1s - Alt-Z, Elem\u00FAtvonalhoz ugr\u00E1s - Alt-X",
 more_colors:"T\u00F6bb sz\u00EDn"
 });
+tinyMCE.addI18n('hu.advanced',{
+cut_desc:"Kiv\u00E1g\u00E1s",
+copy_desc:"M\u00E1sol\u00E1s",
+paste_desc:"Besz\u00FAr\u00E1s",
+link_desc:"Link besz\u00FAr\u00E1sa/szerkeszt\u00E9se",
+unlink_desc:"Link megsz\u00FCntet\u00E9se",
+image_desc:"K\u00E9p besz\u00FAr\u00E1sa/szerkeszt\u00E9se"
+});

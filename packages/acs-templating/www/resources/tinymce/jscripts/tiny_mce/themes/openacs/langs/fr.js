@@ -60,3 +60,11 @@ newdocument:"\u00CAtes-vous s\u00FBr de vouloir effacer l'enti\u00E8ret\u00E9 du
 toolbar_focus:"Aller aux boutons de l'\u00E9diteur - Alt+Q, Aller \u00E0 l'\u00E9diteur - Alt-Z, Aller au chemin de l'\u00E9l\u00E9ment - Alt-X",
 more_colors:"Plus de couleurs"
 });
+tinyMCE.addI18n('fr.advanced',{
+cut_desc:"Couper",
+copy_desc:"Copier",
+paste_desc:"Coller",
+link_desc:"Ins\u00E9rer/\u00C9diter le lien",
+unlink_desc:"D\u00E9lier",
+image_desc:"Ins\u00E9rer/\u00C9diter l'image"
+});

@@ -60,3 +60,11 @@ newdocument:"Hapus semua kandungan?",
 toolbar_focus:"Lompat ke butang alatan - Alt+Q, Lompat ke editor - Alt-Z, Lompat ke unsur laluan - Alt-X",
 more_colors:"Warna lain"
 });
+tinyMCE.addI18n('ms.advanced',{
+cut_desc:"Potong",
+copy_desc:"Salin",
+paste_desc:"Tempel",
+link_desc:"Sisip/sunting pautan",
+unlink_desc:"Tiada pautan",
+image_desc:"Sisip/sunting imej"
+});

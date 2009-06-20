@@ -61,3 +61,11 @@ toolbar_focus:"Per\u0161okimas prie \u012Franki\u0173 juostos mygtuk\u0173 - Alt
 more_colors:"Daugiau spalv\u0173",
 link_delta_width:"70"
 });
+tinyMCE.addI18n('lt.advanced',{
+cut_desc:"I\u0161kirpti",
+copy_desc:"Kopijuoti",
+paste_desc:"\u012Eklijuoti",
+link_desc:"\u012Eterpti/redaguoti nuorod\u0105",
+unlink_desc:"Pa\u0161alinti nuorod\u0105",
+image_desc:"\u012Eterpti/redaguoti paveiksl\u0117l\u012F"
+});

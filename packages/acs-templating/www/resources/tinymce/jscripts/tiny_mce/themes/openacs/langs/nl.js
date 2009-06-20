@@ -60,3 +60,11 @@ newdocument:"Weet u zeker dat u alle inhoud wilt wissen?",
 toolbar_focus:"Spring naar werkbalk - Alt+Q, Spring naar tekst - Alt-Z, Spring naar elementpad - Alt-X",
 more_colors:"Meer kleuren"
 });
+tinyMCE.addI18n('nl.advanced',{
+cut_desc:"Knippen",
+copy_desc:"Kopi\u00EBren",
+paste_desc:"Plakken",
+link_desc:"Link invoegen/bewerken",
+unlink_desc:"Link verwijderen",
+image_desc:"Afbeelding invoegen/bewerken"
+});

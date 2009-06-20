@@ -60,3 +60,11 @@ newdocument:"Tem a certeza que deseja apagar tudo?",
 toolbar_focus:"Ir para as ferramentas - Alt+Q, Ir para o editor - Alt-Z, Ir para o endere\u00E7o do elemento - Alt-X",
 more_colors:"Mais cores"
 });
+tinyMCE.addI18n('pt.advanced',{
+cut_desc:"Cortar",
+copy_desc:"Copiar",
+paste_desc:"Colar",
+link_desc:"Inserir/editar hyperlink",
+unlink_desc:"Remover hyperlink",
+image_desc:"Inserir/editar imagem"
+});

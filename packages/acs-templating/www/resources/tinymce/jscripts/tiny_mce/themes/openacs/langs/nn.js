@@ -60,3 +60,11 @@ newdocument:"Er du sikker p\u00E5 at du vil slette alt innhald?",
 toolbar_focus:"Skift til verktyknappar - Alt+Q, Skift til editor - Alt-Z, Skift til elementsti - Alt-",
 more_colors:"Fleire fargar"
 });
+tinyMCE.addI18n('nn.advanced',{
+cut_desc:"Klipp ut",
+copy_desc:"Kopier",
+paste_desc:"Lim inn",
+link_desc:"Set inn / endre lenkje",
+unlink_desc:"Fjern lenkje",
+image_desc:"Set inn / endre bilete"
+});

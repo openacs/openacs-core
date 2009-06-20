@@ -60,3 +60,11 @@ newdocument:"Sei sicuro di voler cancellare tutti i contenuti?",
 toolbar_focus:"Vai ai pulsanti strumento - Alt+Q, Vai all'editor - Alt-Z, Vai al percorso dell'elemento - Alt-X",
 more_colors:"Colori aggiuntivi"
 });
+tinyMCE.addI18n('it.advanced',{
+cut_desc:"Taglia",
+copy_desc:"Copia",
+paste_desc:"Incolla",
+link_desc:"Inserisci/modifica collegamento",
+unlink_desc:"Togli collegamento",
+image_desc:"Inserisci/modifica immagine"
+});

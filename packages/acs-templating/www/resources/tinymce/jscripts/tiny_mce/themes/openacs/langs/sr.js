@@ -60,3 +60,11 @@ newdocument:"Jeste li sigurni da \u017Eelite izbrisati celi sadr\u017Eaj?",
 toolbar_focus:"Pre\u0111i na alatnu traku - Alt+Q, pre\u0111i na ure\u0111iva\u010D - Alt-Z, pre\u0111i na element path - Alt-X",
 more_colors:"Vi\u0161e boja"
 });
+tinyMCE.addI18n('sr.advanced',{
+cut_desc:"Izre\u017Ei",
+copy_desc:"Kopiraj",
+paste_desc:"Zalepi",
+link_desc:"Umetni/uredi poveznicu",
+unlink_desc:"Poni\u0161ti poveznicu",
+image_desc:"Umetni/uredi sliku"
+});

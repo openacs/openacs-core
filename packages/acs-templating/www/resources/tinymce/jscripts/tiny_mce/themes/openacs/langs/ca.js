@@ -60,3 +60,11 @@ newdocument:"Segur que vols esborrar tot el contingut?",
 toolbar_focus:"Salta als botons d'eines - Alt+Q, Salta a l'editor - Alt-Z, Salta al cam\u00ED de l'element - Alt-X",
 more_colors:"M\u00E9s colors"
 });
+tinyMCE.addI18n('ca.advanced',{
+cut_desc:"Retalla",
+copy_desc:"Copia",
+paste_desc:"Enganxa",
+link_desc:"Insereix/edita enlla\u00E7",
+unlink_desc:"Desenlla\u00E7a",
+image_desc:"Insereix/edita imatge"
+});

@@ -58,3 +58,11 @@ path:"Element",
 newdocument:"\u00C4r du s\u00E4ker p\u00E5 att du vill radera allt inneh\u00E5ll?",
 toolbar_focus:"Hoppa till verktygsf\u00E4ltet - Alt+Q, Hoppa till redigeraren - Alt-Z, Hoppa till elementlistan - Alt-X"
 });
+tinyMCE.addI18n('sv.advanced',{
+cut_desc:"Klipp ut",
+copy_desc:"Kopiera",
+paste_desc:"Klistra in",
+link_desc:"Infoga/redigera l\u00E4nk",
+unlink_desc:"Ta bort l\u00E4nk",
+image_desc:"Infoga/redigera bild"
+});

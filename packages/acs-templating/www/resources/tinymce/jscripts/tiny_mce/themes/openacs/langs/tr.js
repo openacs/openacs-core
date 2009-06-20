@@ -60,3 +60,11 @@ newdocument:"T\u00FCm i\u00E7eri\u011Fi bo\u015Faltmak istedinizden emin misiniz
 toolbar_focus:"Ara\u00E7 d\u00FC\u011Fmelerine atla - Alt+Q, Edit\u00F6re atla - Alt-Z, Eleman yoluna atla - Alt-X",
 more_colors:"Daha fazla renk"
 });
+tinyMCE.addI18n('tr.advanced',{
+cut_desc:"Kes",
+copy_desc:"Kopyala",
+paste_desc:"Yap\u0131\u015Ft\u0131r",
+link_desc:"Ba\u011Flant\u0131 ekle/d\u00FCzenle",
+unlink_desc:"Ba\u011Flant\u0131y\u0131 sil",
+image_desc:"Resim ekle/d\u00FCzenle"
+});
