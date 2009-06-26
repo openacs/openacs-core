@@ -516,7 +516,7 @@ where attr.object_type = all_types.ancestor_type;
 -----------------------
 -- METADATA PACKAGES --
 -----------------------
-select define_function_args('acs_object_type__create_type','object_type,pretty_name,pretty_plural,supertype,table_name;null,id_column;null,package_name;null,abstract_p;f,type_extension_table;null,name_method;null');
+select define_function_args('acs_object_type__create_type','object_type,pretty_name,pretty_plural,supertype,table_name,id_column,package_name,abstract_p;f,type_extension_table,name_method');
 -- DRB: null table_name change
 create function acs_object_type__create_type (varchar,varchar,varchar,varchar,varchar,varchar,varchar,boolean,varchar,varchar)
 returns integer as '
@@ -654,7 +654,7 @@ end;' language 'plpgsql' stable;
 -- show errors
 
 
-select define_function_args('acs_attribute__create_attribute','object_type,attribute_name,datatype,pretty_name,pretty_plural;null,table_name;null,column_name;null,default_value;null,min_n_values;1,max_n_values;1,sort_order;null,storage;type_specific,static_p;f');
+select define_function_args('acs_attribute__create_attribute','object_type,attribute_name,datatype,pretty_name,pretty_plural,table_name,column_name,default_value,min_n_values;1,max_n_values;1,sort_order,storage;type_specific,static_p;f');
 
 -- create or replace package body acs_attribute
 -- function create_attribute
