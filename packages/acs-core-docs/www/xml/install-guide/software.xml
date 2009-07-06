@@ -31,6 +31,9 @@
       <colspec colname="5.0"/>
       <colspec colname="5.1"/>
       <colspec colname="5.2"/>
+      <colspec colname="5.3"/>
+      <colspec colname="5.4"/>
+      <colspec colname="5.5"/>
       <thead>
         <row>
           <entry align="center" namest="c1" nameend="c2">OpenACS Version</entry>
@@ -43,102 +46,144 @@
           <entry colname="5.0">5.0</entry>
           <entry colname="5.1">5.1</entry>
           <entry colname="5.2">5.2</entry>
+          <entry colname="5.3">5.3</entry>
+          <entry colname="5.4">5.4</entry>
+          <entry colname="5.5">5.5</entry>
         </row>
       </thead>
       <tbody>
         <row>
-          <entry morerows="6">AOLserver</entry>
+          <entry morerows="7">AOLserver</entry>
           <entry>3</entry>
           <entry namest="3.2.5" nameend="3.2.5" align="center" ><?dbhtml bgcolor="lightgreen" ?><?dbfo bgcolor="lightgreen" ?>Yes</entry>
-          <entry namest="4.5" nameend="5.2" align="center"><?dbhtml bgcolor="red" ?><?dbfo bgcolor="red" ?>No</entry>
+          <entry namest="4.5" nameend="5.5" align="center"><?dbhtml bgcolor="red" ?><?dbfo bgcolor="red" ?>No</entry>
         </row>
         <row>
           <entry>3.3+ad13</entry>
           <entry namest="3.2.5" nameend="3.2.5" align="center"><?dbhtml bgcolor="yellow" ?><?dbfo bgcolor="yellow" ?>Maybe</entry>
           <entry namest="4.5" nameend="5.1" align="center"><?dbhtml bgcolor="lightgreen" ?><?dbfo bgcolor="lightgreen" ?>Yes</entry>
-          <entry namest="5.2" nameend="5.2" align="center"><?dbhtml bgcolor="red" ?><?dbfo bgcolor="red" ?>No</entry>
+          <entry namest="5.2" nameend="5.5" align="center"><?dbhtml bgcolor="red" ?><?dbfo bgcolor="red" ?>No</entry>
         </row>
         <row>
           <entry>3.3oacs1</entry>
           <entry namest="3.2.5" nameend="3.2.5" align="center"><?dbhtml bgcolor="yellow" ?><?dbfo bgcolor="yellow" ?>Maybe</entry>
           <entry namest="4.5" nameend="5.1" align="center"><?dbhtml bgcolor="lightgreen" ?><?dbfo bgcolor="lightgreen" ?>Yes</entry>
-          <entry namest="5.2" nameend="5.2" align="center"><?dbhtml bgcolor="red" ?><?dbfo bgcolor="red" ?>No</entry>
+          <entry namest="5.2" nameend="5.5" align="center"><?dbhtml bgcolor="red" ?><?dbfo bgcolor="red" ?>No</entry>
         </row>
         <row>
           <entry>3.4.4</entry>
-          <entry namest="3.2.5" nameend="5.2" align="center"><?dbhtml bgcolor="red" ?><?dbfo bgcolor="red" ?>No</entry>
+          <entry namest="3.2.5" nameend="5.5" align="center"><?dbhtml bgcolor="red" ?><?dbfo bgcolor="red" ?>No</entry>
         </row>
         <row>
           <entry>3.4.4oacs1</entry>
           <entry namest="3.2.5" nameend="4.6.1" align="center"><?dbhtml bgcolor="yellow" ?><?dbfo bgcolor="yellow" ?>Maybe</entry>
           <entry namest="4.6.2" nameend="4.6.3" align="center"><?dbhtml bgcolor="lightgreen" ?><?dbfo bgcolor="lightgreen" ?>Yes</entry>
-          <entry namest="5.0" nameend="5.2" align="center"><?dbhtml bgcolor="red" ?><?dbfo bgcolor="red" ?>No</entry>
+          <entry namest="5.0" nameend="5.5" align="center"><?dbhtml bgcolor="red" ?><?dbfo bgcolor="red" ?>No</entry>
         </row>
         <row>
           <entry>3.5.5</entry>
           <entry namest="3.2.5" nameend="4.6.1" align="center"><?dbhtml bgcolor="yellow" ?><?dbfo bgcolor="yellow" ?>Maybe</entry>
           <entry namest="4.6.2" nameend="4.6.3" align="center"><?dbhtml bgcolor="lightgreen" ?><?dbfo bgcolor="lightgreen" ?>Yes</entry>
-          <entry namest="5.0" nameend="5.2" align="center"><?dbhtml bgcolor="red" ?><?dbfo bgcolor="red" ?>No</entry>
+          <entry namest="5.0" nameend="5.5" align="center"><?dbhtml bgcolor="red" ?><?dbfo bgcolor="red" ?>No</entry>
         </row>
         <row>
           <entry>4.0</entry>
           <entry namest="3.2.5" nameend="4.6.1" align="center"><?dbhtml bgcolor="yellow" ?><?dbfo bgcolor="yellow" ?>Maybe</entry>
-          <entry namest="4.6.2" nameend="5.2" align="center"><?dbhtml bgcolor="lightgreen" ?><?dbfo bgcolor="lightgreen" ?>Yes</entry>
+          <entry namest="4.6.2" nameend="5.5" align="center"><?dbhtml bgcolor="lightgreen" ?><?dbfo bgcolor="lightgreen" ?>Yes</entry>
         </row>
         <row>
-          <entry morerows="4">PostgreSQL</entry>
+          <entry>4.5</entry>
+          <entry namest="3.2.5" nameend="5.1" align="center"><?dbhtml bgcolor="red" ?><?dbfo bgcolor="red" ?>No</entry>
+          <entry namest="5.2" nameend="5.5" align="center"><?dbhtml bgcolor="lightgreen" ?><?dbfo bgcolor="lightgreen" ?>Yes</entry>
+        </row>
+        <row>
+          <entry morerows="1">Tcl</entry>
+          <entry>8.4</entry>
+          <entry namest="3.2.5" nameend="5.5" align="center" ><?dbhtml bgcolor="lightgreen" ?><?dbfo bgcolor="lightgreen" ?>Yes</entry>
+        </row>
+        <row>
+          <entry>8.5</entry>
+          <entry namest="3.2.5" nameend="5.5" align="center"><?dbhtml bgcolor="yellow" ?><?dbfo bgcolor="yellow" ?>Maybe</entry>
+        </row>
+        <row>
+          <entry morerows="7">PostgreSQL</entry>
           <entry>7.0</entry>
           <entry namest="3.2.5" nameend="3.2.5" align="center"><?dbhtml bgcolor="lightgreen" ?><?dbfo bgcolor="lightgreen" ?>Yes</entry>
-          <entry namest="4.5" nameend="5.2" align="center"><?dbhtml bgcolor="red" ?><?dbfo bgcolor="red" ?>No</entry>
+          <entry namest="4.5" nameend="5.5" align="center"><?dbhtml bgcolor="red" ?><?dbfo bgcolor="red" ?>No</entry>
         </row>
         <row>
           <entry>7.2</entry>
           <entry namest="3.2.5" nameend="3.2.5" align="center"><?dbhtml bgcolor="yellow" ?><?dbfo bgcolor="yellow" ?>Maybe</entry>
           <entry namest="4.5" nameend="4.6.3" align="center"><?dbhtml bgcolor="lightgreen" ?><?dbfo bgcolor="lightgreen" ?>Yes</entry>
-          <entry namest="5.0" nameend="5.2" align="center"><?dbhtml bgcolor="red" ?><?dbfo bgcolor="red" ?>No</entry>
+          <entry namest="5.0" nameend="5.5" align="center"><?dbhtml bgcolor="red" ?><?dbfo bgcolor="red" ?>No</entry>
         </row>
         <row>
           <entry>7.3.2 - 7.3.x</entry>
           <entry namest="3.2.5" nameend="4.6.2" align="center"><?dbhtml bgcolor="red" ?><?dbfo bgcolor="red" ?>No</entry>
           <entry namest="4.6.3" nameend="5.2" align="center"><?dbhtml bgcolor="lightgreen" ?><?dbfo bgcolor="lightgreen" ?>Yes</entry>
+          <entry namest="5.3" nameend="5.5" align="center"><?dbhtml bgcolor="red" ?><?dbfo bgcolor="red" ?>No</entry>
         </row>
         <row>
           <entry>7.4</entry>
           <entry namest="3.2.5" nameend="4.6.3" align="center"><?dbhtml bgcolor="red" ?><?dbfo bgcolor="red" ?>No</entry>
           <entry namest="5.0" nameend="5.2" align="center"><?dbhtml bgcolor="lightgreen" ?><?dbfo bgcolor="lightgreen" ?>Yes</entry>
+          <entry namest="5.3" nameend="5.5" align="center"><?dbhtml bgcolor="red" ?><?dbfo bgcolor="red" ?>No</entry>
         </row>
         <row>
           <entry>8.0</entry>
           <entry namest="3.2.5" nameend="5.0" align="center"><?dbhtml bgcolor="red" ?><?dbfo bgcolor="red" ?>No</entry>
           <entry namest="5.1" nameend="5.1" align="center"><?dbhtml bgcolor="yellow" ?><?dbfo bgcolor="yellow" ?>Maybe</entry>
-          <entry namest="5.2" nameend="5.2" align="center"><?dbhtml bgcolor="lightgreen" ?><?dbfo bgcolor="lightgreen" ?>Yes</entry>
+          <entry namest="5.2" nameend="5.5" align="center"><?dbhtml bgcolor="lightgreen" ?><?dbfo bgcolor="lightgreen" ?>Yes</entry>
         </row>
         <row>
-          <entry morerows="2">Oracle</entry>
+          <entry>8.1</entry>
+          <entry namest="3.2.5" nameend="5.1" align="center"><?dbhtml bgcolor="red" ?><?dbfo bgcolor="red" ?>No</entry>
+          <entry namest="5.2" nameend="5.5" align="center"><?dbhtml bgcolor="lightgreen" ?><?dbfo bgcolor="lightgreen" ?>Yes</entry>
+        </row>
+        <row>
+          <entry>8.2</entry>
+          <entry namest="3.2.5" nameend="5.1" align="center"><?dbhtml bgcolor="red" ?><?dbfo bgcolor="red" ?>No</entry>
+          <entry namest="5.2" nameend="5.2" align="center"><?dbhtml bgcolor="yellow" ?><?dbfo bgcolor="yellow" ?>CVS version only</entry>
+          <entry namest="5.3" nameend="5.5" align="center"><?dbhtml bgcolor="lightgreen" ?><?dbfo bgcolor="lightgreen" ?>Yes</entry>
+        </row>
+        <row>
+          <entry>8.3</entry>
+          <entry namest="3.2.5" nameend="5.4" align="center"><?dbhtml bgcolor="red" ?><?dbfo bgcolor="red" ?>No</entry>
+          <entry namest="5.5" nameend="5.5" align="center"><?dbhtml bgcolor="lightgreen" ?><?dbfo bgcolor="lightgreen" ?>Yes</entry>
+        </row>
+        <row>
+          <entry morerows="4">Oracle</entry>
           <entry>8.1.6</entry>
           <entry namest="3.2.5" nameend="3.2.5" align="center"><?dbhtml bgcolor="yellow" ?><?dbfo bgcolor="yellow" ?>Maybe</entry>
           <entry namest="4.5" nameend="5.2" align="center"><?dbhtml bgcolor="lightgreen" ?><?dbfo bgcolor="lightgreen" ?>Yes</entry>
+          <entry namest="5.3" nameend="5.5" align="center"><?dbhtml bgcolor="yellow" ?><?dbfo bgcolor="yellow" ?>Maybe</entry>
         </row>
         <row>
           <entry>8.1.7</entry>
           <entry namest="3.2.5" nameend="3.2.5" align="center"><?dbhtml bgcolor="yellow" ?><?dbfo bgcolor="yellow" ?>Maybe</entry>
           <entry namest="4.5" nameend="5.2" align="center"><?dbhtml bgcolor="lightgreen" ?><?dbfo bgcolor="lightgreen" ?>Yes</entry>
+          <entry namest="5.3" nameend="5.5" align="center"><?dbhtml bgcolor="yellow" ?><?dbfo bgcolor="yellow" ?>Maybe</entry>
         </row>
         <row>
           <entry>9i</entry>
           <entry namest="3.2.5" nameend="4.6.3" align="center"><?dbhtml bgcolor="red" ?><?dbfo bgcolor="red" ?>No</entry>
-          <entry namest="5.0" nameend="5.2" align="center"><?dbhtml bgcolor="lightgreen" ?><?dbfo bgcolor="lightgreen" ?>Yes</entry>
+          <entry namest="5.0" nameend="5.5" align="center"><?dbhtml bgcolor="lightgreen" ?><?dbfo bgcolor="lightgreen" ?>Yes</entry>
         </row>
         <row>
           <entry>10g</entry>
           <entry namest="3.2.5" nameend="5.1" align="center"><?dbhtml bgcolor="red" ?><?dbfo bgcolor="red" ?>No</entry>
-          <entry namest="5.2" nameend="5.2" align="center"><?dbhtml bgcolor="yellow" ?><?dbfo bgcolor="yellow" ?>Maybe</entry>
+          <entry namest="5.2" nameend="5.5" align="center"><?dbhtml bgcolor="lightgreen" ?><?dbfo bgcolor="lightgreen" ?>Yes</entry>
+        </row>
+        <row>
+          <entry>11g</entry>
+          <entry namest="3.2.5" nameend="5.4" align="center"><?dbhtml bgcolor="red" ?><?dbfo bgcolor="red" ?>No</entry>
+          <entry namest="5.5" nameend="5.5" align="center"><?dbhtml bgcolor="yellow" ?><?dbfo bgcolor="yellow" ?>Maybe</entry>
         </row>
       </tbody>
     </tgroup>
   </table>
   <para>The OpenACS installation instructions assume the operating system and build environment are installed.
-    The instructions explain installation of TCL, tDOM, tclwebtest, a Web Server, a Database, a Process Controller, and 
+    The instructions explain installation of TCL, Tcllib, tDOM, tclwebtest, a Web Server, a Database, a Process Controller, and 
     Source Control software. The following external links are for reference only.  
   </para>
   <itemizedlist>
@@ -252,6 +297,15 @@
           </formalpara>
         </listitem>
       </itemizedlist>
+    </listitem>
+
+    <listitem id="source-tcllib">
+      <formalpara>
+        <title><ulink url="http://tcllib.sourceforge.net/">Tcllib</ulink>, REQUIRED</title>
+        <para>
+          OpenACS &version; uses those Tcl extensions to send e-mail out, among others. 
+        </para>
+      </formalpara>
     </listitem>
 
     <listitem id="source-tdom">
