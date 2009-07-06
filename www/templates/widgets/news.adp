@@ -1,5 +1,5 @@
   <div class="rss-feed">
-	<a href="/news/rss/rss.xml" title="Subscrive via RSS"><img src="/resources/rss-support/xml.gif" alt="Subscribe via RSS" style="border:0"> Syndication Feed</a>
+	<a href="/news/rss/rss.xml" title="Subscribe to news via RSS"><img src="/resources/rss-support/xml.gif" alt="Subscribe via RSS" style="border:0"> Syndication Feed</a>
   </div>
 
   <h1>@title@</h1>

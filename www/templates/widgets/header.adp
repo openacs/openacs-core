@@ -45,7 +45,8 @@
                 <img src="/templates/slices/spacer.gif" width="5" height="1" border="0" alt="">
               </td>   
               <td width="5%" NOWRAP>
-                <input type="image" src="/templates/images/search.gif" width="47" height="19" border="0">
+                <input type="image" src="/templates/images/search.gif"> 
+                <!-- <input type="image" src="/templates/images/search.gif" width="47" height="19" border="0"> -->
               </td>  
             </tr>
           </table>    
