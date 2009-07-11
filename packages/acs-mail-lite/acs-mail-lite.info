@@ -11,7 +11,7 @@
         <owner url="mailto:malte.sussdorff@cognovis.de">Malte Sussdorff</owner>
         <owner url="mailto:timo@studio-k4.de">Timo Hentschel</owner>
         <summary>Simplified reliable email transmission with bounce management.</summary>
-        <release-date>2008-05-31</release-date>
+        <release-date>2009-06-19</release-date>
         <vendor url="http://www.openacs.org">OpenACS</vendor>
         <description format="text/html">This package provides a service for sending messages, queueing messages in the database to ensure reliable sending and make sending a message 'transactional'. Replacement for acs-mail.</description>
         <maturity>2</maturity>
