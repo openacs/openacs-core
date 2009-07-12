@@ -1,4 +1,4 @@
-# /packages/subsite/www/admin/parties/new.tcl
+# /packages/subsite/www/admin/users/new.tcl
 
 ad_page_contract {
 
@@ -232,15 +232,16 @@ if { [template::form is_valid add_user] } {
 	    }]
 
 	    # we're supposed to notify the administrator when someone new registers
-	    ns_sendmail $notification_address \
-		    [template::element::get_value add_user email] \
-		    "New registration at [ad_url]" "
-	[template::element::get_value add_user first_names] [template::element::get_value add_user last_name] ([template::element::get_value add_user email]) was added as a registered as a user of 
+	    acs_mail_lite::send -send_immediately \
+            -to_addr ns_sendmail $notification_address \
+		    -from_addr [template::element::get_value add_user email] \
+            -subject "New registration at [ad_url]" \
+            -body "[template::element::get_value add_user first_names] [template::element::get_value add_user last_name] ([template::element::get_value add_user email]) was added as a registered as a user of 
 [ad_url]
 
-The user was added by $creation_name from [ad_conn url].
-	"
-        }
+The user was added by $creation_name from [ad_conn url]."
+
+    }
 
 	if { $email_verified_p eq "f" } {
 	

@@ -686,47 +686,44 @@ Japanese).  <remark>Since 5.0.0, this is covered in the database
 install instructions for both PostgreSQL and Oracle.</remark></para>
 </blockquote>
 
-</sect2><sect2 id="VI.I_Email_and_Messaging"><title>Email and
-Messaging</title>
+</sect2>
 
-<para>When sending an email message, just as when delivering the
-content in web page over an HTTP connection, it is necessary to be
-able to specify what character set encoding to use.
-</para>
+  <sect2 id="VI.I_Email_and_Messaging">
 
-<blockquote>
-<para><emphasis>110.10</emphasis> The email message sending API
-will allow for a character set encoding to be specified.</para>
+    <title>Email and Messaging</title>
 
-<para><emphasis>110.20</emphasis> The email accepting API will
-allow for character set to be parsed correctly (hopefully a well
-formatted message will have a MIME character set content type header) </para>
-</blockquote>
+    <para>When sending an email message, just as when delivering the
+      content in web page over an HTTP connection, it is necessary to be
+      able to specify what character set encoding to use, defaulting to UTF-8.</para>
 
-    <para>Mail is not internationalized.  The following issues
-must be addressed.</para>
+    <blockquote>
+      <para><emphasis>110.10</emphasis> The email message sending API
+        will allow for a character set encoding to be specified.</para>
+
+      <para><emphasis>110.20</emphasis> The email accepting API 
+        allows for character set to be parsed correctly (the message has a MIME 
+        character set content type header) </para>
+    </blockquote>
+
+    <para>Mail is not internationalized.  The following issues must be addressed.</para>
     <itemizedlist>
-      <listitem><para>
-        Six different functions currently call ns_sendmail.  This
-        means that there are six different end points for sending
-        mail.  This should be brought down to no more than two (one
-        for acs_mail and one for acs_mail_lite), and ideally just
-        one.  Functions that currently call ns_sendmail directly
-        should instead call acs_mail_lite.
-</para>      </listitem>
-      <listitem><para>
-        Outgoing email functions (acs_mail and acs_mail_lite) must do
-        the following: 1) Determine the appropriate language or
-        languages to use for the message subject and message body.  2)
-        Encode the subject and body appropriately and set message
-        headers, in accordance with RFC 3282
-        (http://www.ietf.org/rfc/rfc3282.txt) and other RFCs.
-</para>
+      <listitem>
+        <para>
+          Many functions still call ns_sendmail.  This
+          means that there are different end points for sending
+          mail. This should be changed to use the acs-mail-lite API instead.
+        </para>      
       </listitem>
       <listitem>
-        <para>Extreme Use case: Web site has a default language of Danish.  A forum is set up for Swedes, so the forum has a package_id and a language setting of Swedish.  A poster posts to the forum in Russian (is this possible?).  A user is subscribed to the forum and has a language preference of Chinese.  What should be in the message body and message subject?
-INCOMPLETE - The mail functions in acs_mail and acs_mail_lite
-are not internationalized.</para>
+        <para>
+          Consumers of email services must do
+          the following: Determine the appropriate language or
+          languages to use for the message subject and message body
+          and localize them (as in notifications).
+        </para>
+      </listitem>
+      <listitem>
+        <para>Extreme Use case: Web site has a default language of Danish.  A forum is set up for Swedes, so the forum has a package_id and a language setting of Swedish.  A poster posts to the forum in Russian (is this possible?).  A user is subscribed to the forum and has a language preference of Chinese.  What should be in the message body and message subject?</para>
       </listitem>
       <listitem><para>Incoming mail should be localized.</para>
       </listitem>

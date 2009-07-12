@@ -8,7 +8,6 @@ ad_library {
 
 }
 
-# Schedule every 15 minutes.  Its own thread. since ns_sendmail does
-# network activity.
+# Schedule every 15 minutes
 ad_schedule_proc -thread t 900 acs_messaging_process_queue
 

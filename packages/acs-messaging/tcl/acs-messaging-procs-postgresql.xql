@@ -50,7 +50,6 @@
             where o.message_id = m.message_id
                 and p.party_id = m.sender
                 and wait_until <= current_timestamp
-    
       </querytext>
 </fullquery>
 

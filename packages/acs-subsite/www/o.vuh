@@ -73,10 +73,8 @@ if {![empty_string_p $page_url]} {
     ad_returnredirect $page_url$anchor
 } else {
     ad_return_warning "Invalid object ID" [subst {
-        The object ID $object_id is a $object_type but getting 
-        it's real url failed.
-        <p>We are sorry for this inconvenience.
+        <p>The object ID $object_id is a $object_type but getting 
+        it's real url failed.</p>
+        <p>We are sorry for this inconvenience.</p>
     }]
 }
-
-

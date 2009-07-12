@@ -181,6 +181,10 @@ ad_proc -public application_group::group_id_from_package_id {
 ad_proc -public application_group::package_id_from_group_id {
     -group_id:required
 } {
+
+    Returns the package_id of a given application group.
+
+} {
     return [db_string -cache_key application_group_pid_from_gid_${group_id} get {}]
 }
 

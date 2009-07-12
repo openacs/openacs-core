@@ -179,11 +179,11 @@ ad_proc -public auth::sync::job::end {
         # Only send out email if not an interactive job
 
         with_catch errmsg {
-            ns_sendmail \
-                [ad_system_owner] \
-                [ad_system_owner] \
-                "Batch user synchronization for $job(authority_pretty_name) complete" \
-                "Batch user synchronization for $job(authority_pretty_name) is complete.
+            acs_mail_lite::send -send_immediately \
+                -to_addr [ad_system_owner] \
+                -from_addr [ad_system_owner] \
+                -subject "Batch user synchronization for $job(authority_pretty_name) complete" \
+                -body "Batch user synchronization for $job(authority_pretty_name) is complete.
 
 Authority         : $job(authority_pretty_name)
 Running time      : $job(run_time_seconds) seconds

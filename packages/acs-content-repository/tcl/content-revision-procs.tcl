@@ -196,13 +196,11 @@ ad_proc -public ::content::revision::update_content {
      switch $storage_type {
 	file {
 	    if {$tmp_filename eq ""} {
-		set tmp_filename [ns_mktemp /tmp/XXXXXX]
-		set fd [open $tmp_filename w]
-		puts $fd $content
-		close $fd
-	    }
-	    set tmp_size [file size $tmp_filename]
-	    set filename [cr_create_content_file $item_id $revision_id $tmp_filename]
+                set filename [cr_create_content_file_from_string $item_id $revision_id $content]
+	    } else {
+                set filename [cr_create_content_file $item_id $revision_id $tmp_filename]
+            }
+	    set tmp_size [file size [cr_fs_path]$filename]            
 	    db_dml set_file_content ""
 	}
 	lob {
