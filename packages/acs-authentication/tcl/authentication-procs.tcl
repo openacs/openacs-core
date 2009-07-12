@@ -1430,11 +1430,11 @@ ad_proc -private auth::send_email_verification_email {
     set confirmation_url [export_vars -base "[ad_url]/register/email-confirm" { token user_id }]
     set system_name [ad_system_name]    
 
-    ns_sendmail \
-        $user(email) \
-        "\"$system_name\" <[parameter::get -parameter NewRegistrationEmailAddress -default [ad_system_owner]]>" \
-        [_ acs-subsite.lt_Welcome_to_system_nam] \
-        [_ acs-subsite.lt_To_confirm_your_regis]
+    acs_mail_lite::send -send_immediately \
+        -to_addr $user(email) \
+        -from_addr "\"$system_name\" <[parameter::get -parameter NewRegistrationEmailAddress -default [ad_system_owner]]>" \
+        -subject [_ acs-subsite.lt_Welcome_to_system_nam] \
+        -body [_ acs-subsite.lt_To_confirm_your_regis]
 }
 
 ad_proc -private auth::validate_account_info {

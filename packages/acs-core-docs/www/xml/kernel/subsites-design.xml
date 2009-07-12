@@ -295,6 +295,8 @@ the package to serve content appropriate to the package instance.</para>
 <computeroutput>[ad_conn node_id]
 [ad_conn package_id]
 [ad_conn package_url]
+[ad_conn subsite_id]
+[ad_conn subsite_url]
 </computeroutput>
 
 </programlisting>

@@ -140,49 +140,18 @@ ad_proc -private acs_messaging_process_queue {
 } {
     Process the message queue, sending any reasonable messages.
 } {
-     db_foreach acs_message_send {
-        select o.message_id as sending_message_id,
-               o.to_address as recip_email,
-               p.email as sender_email,
-               to_char(m.sent_date, 'Dy, DD Mon YYYY HH24:MI:SS') as sent_date,
-               m.rfc822_id,
-               m.title,
-               m.mime_type,
-               m.content,
-               m2.rfc822_id as in_reply_to
-            from acs_messages_outgoing o,
-                 acs_messages_all m,
-                 acs_messages_all m2,
-                 parties p
-            where o.message_id = m.message_id
-                and m2.message_id(+) = m.reply_to
-                and p.party_id = m.sender
-                and wait_until <= sysdate
-    } {
-        # Need to process content to do CRLF conversions?
-        set headers [ns_set create]
-		
-        ns_set put $headers Sender [parameter::get -parameter OutgoingSender]
-	if {$in_reply_to ne "" } {
-	    ns_set put $headers In-Reply-To "<$in_reply_to>"
-	}
-        ns_set put $headers Message-ID "<$rfc822_id>"
-        ns_set put $headers Date "$sent_date [acs_messaging_timezone_offset]"
-        ns_set put $headers MIME-Version "1.0"
-        ns_set put $headers Content-Type $mime_type
-        ns_log "Notice" "About to send"
+    db_foreach acs_message_send {} {
         if {![catch {
-             ns_sendmail $recip_email $sender_email $title $content $headers
+            acs_mail_lite::send -send_immediately \
+                -to_addr $recip_email \
+                -from_addr $sender_email \
+                -subject $title \
+                -body $content
         } errMsg]} {
-            ns_log "Notice" "Sending"
             # everything went well, dequeue
-            db_dml acs_message_remove_from_queue {
-                delete from acs_messages_outgoing
-                    where message_id = :sending_message_id
-                        and to_address = :recip_email
-            }
+            db_dml acs_message_remove_from_queue {}
         } else {
-            ns_log "Notice" "Not sending: $errMsg"
+            ns_log "Error" "acs-messaging: Error processing queue: $errMsg"
         }
     }
 }

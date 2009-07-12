@@ -37,13 +37,13 @@ set error_desc_email "
  --------------------------------------------------------<br>
                    [_ acs-tcl.Error_Report]<br>
  --------------------------------------------------------<br>
-<b>[_ acs-tcl.Previus]</b> $return_url<br>
-<b>[_ acs-tcl.Page]</b> $error_url<br>
-<b>[_ acs-tcl.File]</b> $error_file<br>
-<b>[_ acs-tcl.User_Name]</b> $user_name<br>
-<b>[_ acs-tcl.lt_User_Id_of_the_user_t]</b> $user_id<br>
-<b>IP:</b> [ns_conn peeraddr]<br>
-<b>[_ acs-tcl.Browser_of_the_user]</b> [ad_quotehtml [ns_set get [ns_conn headers] User-Agent]]<br>
+<strong>[_ acs-tcl.Previus]</strong> $return_url<br>
+<strong>[_ acs-tcl.Page]</strong> $error_url<br>
+<strong>[_ acs-tcl.File]</strong> $error_file<br>
+<strong>[_ acs-tcl.User_Name]</strong> $user_name<br>
+<strong>[_ acs-tcl.lt_User_Id_of_the_user_t]</strong> $user_id<br>
+<strong>IP:</strong> [ns_conn peeraddr]<br>
+<strong>[_ acs-tcl.Browser_of_the_user]</strong> [ad_quotehtml [ns_set get [ns_conn headers] User-Agent]]<br>
 <br>
 -----------------------------<br>
 [_ acs-tcl.Error_details]<br>
@@ -56,7 +56,7 @@ set error_desc_email "
 [_ acs-tcl.lt_NB_This_error_was_sub]"
 
 if { $bug_number eq "" && $send_email_p} {
-    ns_sendmail "$send_to" $public_userm_email $subject $error_desc_email
+    acs_mail_lite::send -send_immediately -to_addr $send_to -from_addr $public_userm_email -subject $subject -body $error_desc_email
 }
 set bt_instance [parameter::get -package_id [ad_acs_kernel_id] \
 		     -parameter BugTrackerInstance -default ""]
@@ -128,7 +128,7 @@ if {$auto_submit_p && $user_id > 0} {
 		bug_tracker::bug::edit \
 		    -bug_id $bug_id \
 		    -enabled_action_id $available_enabled_action_id \
-		    -description "<b> [_ acs-tcl.reopened_auto ] </b>" \
+		    -description "<strong> [_ acs-tcl.reopened_auto ] </strong>" \
 		    -desc_format text/html \
 		    -array row \
 		    -entry_id $bug(entry_id)
@@ -175,15 +175,15 @@ if {$auto_submit_p && $user_id > 0} {
 	}
 	{summary:text(text)
 	    {label "[_ bug-tracker.Summary]"}
-	    {before_html "<b>"}
-	    {after_html "</b>"}
+	    {before_html "<strong>"}
+	    {after_html "</strong>"}
 	    {mode display}
 	    {html {size 50}}
 	}
 	{pretty_state:text(inform)
 	    {label "[_ bug-tracker.Status]"}
-	    {before_html "<b>"}
-	    {after_html  "</b>"}
+	    {before_html "<strong>"}
+	    {after_html  "</strong>"}
 	    {mode display}
 	}
 	{resolution:text(select),optional
@@ -270,13 +270,13 @@ if {$auto_submit_p && $user_id > 0} {
  -------------------------------------------------------- <br>
                    [_ acs-tcl.Error_Report] <br>
  -------------------------------------------------------- <br>
-<br><b>[_ acs-tcl.Previus]</b> $prev_url
-<br><b>[_ acs-tcl.Page]</b> $error_url
-<br><b>[_ acs-tcl.File]</b> $error_file
-<br><b>[_ acs-tcl.User_Name]</b> $user_name
-<br><b>[_ acs-tcl.lt_User_Id_of_the_user_t]</b> $user_id
-<br>[_ acs-tcl.Browser_of_the_user]</b> [ad_quotehtml [ns_set get [ns_conn headers] User-Agent]]
-<br><br><b>[_ acs-tcl.User_comments]</b>  
+<br><strong>[_ acs-tcl.Previus]</strong> $prev_url
+<br><strong>[_ acs-tcl.Page]</strong> $error_url
+<br><strong>[_ acs-tcl.File]</strong> $error_file
+<br><strong>[_ acs-tcl.User_Name]</strong> $user_name
+<br><strong>[_ acs-tcl.lt_User_Id_of_the_user_t]</strong> $user_id
+<br>[_ acs-tcl.Browser_of_the_user]</strong> [ad_quotehtml [ns_set get [ns_conn headers] User-Agent]]
+<br><br><strong>[_ acs-tcl.User_comments]</strong>  
 <br>
 [template::util::richtext::get_property contents $description] <br>
 <br>"

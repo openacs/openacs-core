@@ -14,7 +14,18 @@
   <xsl:variable name="html.cellspacing">0</xsl:variable>
 
 <!-- vinodk: Not sure if this is needed                   -->
-  <xsl:output media-type="text/html" encoding="ISO-8859-1"/>
+  <xsl:output media-type="text/html" encoding="UTF-8"/>
+
+<!-- emmar: will produce valid HTML (won't close IMG, BR and HR tags) -->
+  <xsl:output method="html" 
+              version="4.01" />
+
+<!-- emmar: set params for output -->
+  <xsl:param name="chunker.output.doctype-public">-//W3C//DTD HTML 4.01 Transitional//EN</xsl:param>
+  <xsl:param name="chunker.output.doctype-system">http://www.w3.org/TR/html4/loose.dtd"</xsl:param>
+  <xsl:param name="chunker.output.encoding">UTF-8</xsl:param>
+  <xsl:param name="html.stylesheet">openacs.css</xsl:param>
+
 
   <xsl:variable name="generate.index">1</xsl:variable>
 
@@ -35,7 +46,7 @@
 
     <xsl:if test="$suppress.navigation = '0'">
       <div class="navheader">
-        <a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a>
+        <a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"/></a>
         <table width="100%" summary="Navigation header" border="0">
           <tr>
             <td width="20%" align="left">
@@ -74,7 +85,7 @@
             </td>
           </tr>
         </table>
-        <hr>
+        <hr/>
       </div>
     </xsl:if>
   </xsl:template>
@@ -89,7 +100,7 @@
     
     <xsl:if test="$suppress.navigation = '0'">
       <div class="navfooter">
-        <hr>
+        <hr/>
         <table width="100%" summary="Navigation footer">
           <tr>
             <td width="40%" align="left">
@@ -161,7 +172,7 @@
             </td>
           </tr>
         </table>
-        <hr>
+        <hr/>
         <address>
           <a>
             <xsl:attribute name="href">
@@ -271,9 +282,6 @@
           </xsl:attribute>
         </link>
       </xsl:if>
-
-      <link rel="stylesheet" href="openacs.css" type="text/css">
-      </link>
 
     </head>
   </xsl:template>

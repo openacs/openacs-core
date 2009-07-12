@@ -23,9 +23,9 @@ ad_page_contract {
     return_url:onevalue
 }
 
-if {[catch {ns_sendmail $email $email_from $subject $message} errmsg]} {
-    ad_return_error $error_subject "$error_message:
-    <blockquote><pre>[ad_quotehtml $errmsg]</pre></blockquote>"
+if {[catch {acs_mail_lite::send -send_immediately -to_addr $email -from_addr $email_from -subject $subject -body $message} errmsg]} {
+    ad_return_error $error_subject "<p>$error_message</p>
+    <div><code>[ad_quotehtml $errmsg]</code></div>"
     ad_script_abort
 }
 

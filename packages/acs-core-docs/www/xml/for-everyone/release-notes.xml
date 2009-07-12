@@ -44,7 +44,7 @@ entire &majorversion;.&minorversion; release sequence <xref linkend="changelog">
         <para>PostgreSQL 8.3 is now fully supported, including the use of the built-in
           standard version of tsearch2.
         </para>
-        <para>TinyMCE has been upgraded to 3.1.1 with language pack support.
+        <para>TinyMCE has been upgraded to 3.2.4.1 with language pack support.
         </para>
         <para>acs-mail-lite now correctly implements rollout support.
         </para>
@@ -54,6 +54,7 @@ entire &majorversion;.&minorversion; release sequence <xref linkend="changelog">
           is supported.  For instance, the non-core "layout-managed-subsite" extends the
           "acs-subsite" and "layout-manager" packages, resulting in a package that
           combines the semantics of both.
+        </para>
         <para>
            Added new package attribute "implements-subsite-p" (default "f").  If true,
            this package may be mounted as a subsite and is expected to implement subsite

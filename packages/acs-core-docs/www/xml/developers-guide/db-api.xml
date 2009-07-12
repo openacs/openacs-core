@@ -1073,5 +1073,47 @@ db_dml foo_insert &quot;insert into foo(baz) values(:1)&quot; {[db_nullify_empty
     </para>
 
   </sect2>
+  <sect2 id="db-api-caching"><title>Caching Database API Results</title>
+
+    <para>The database API allows for direct caching of query results.  Repeated calls will
+      return the cached value until it is either explicitly flushed using db_flush_cache, 
+      times out (configured the ns_cache is called to create the cache), or another cached
+      query fills the cache, causing older entries to be flushed.
+    </para>
+
+    <para>Values returned by a query are cached if you pass the "-cache_key" switch
+      to the database procedure.  The switch value will be used as the key in the
+      ns_cache eval call used to execute the query and processing code.  The
+      db_flush proc should be called to flush the cache when appropriate.  The
+      "-cache_pool" parameter can be used to specify the cache pool to be used,
+      and defaults to db_cache_pool.  The size of the default cache is governed
+      by the kernel parameter "DBCacheSize" in the "caching" section.
+    </para>
+    <para>
+      Currently db_string, db_list, db_list_of_lists, db_1row, db_0or1row, and db_multirow support
+      caching.
+    </para>
+    <para>For caching to be effective, one must carefully design a cache_pool and cache_key
+      strategy that uniquely identifies a query within the system, including the relevant
+      objects being referenced by the query.  Typically a cache_key should include one or 
+      more object_ids and a name that identifies the operation being done.
+    </para>
+    <para>Here is an example from the layout-manager package:</para>
+    <programlisting>
+
+# Query to return the elements of a page as a list. The prefix "page_" is used to denote
+# that this is a page-related query, page_id is used to uniquely identify the query
+# by object, and the suffix uniquely defines the operation being performed on the
+# page object.
+
+db_list -cache_key page_${page_id}_get_elements get_elements {}
+
+# When the contents of a page are changed, we flush all page-related queries for the given
+# page object using db_flush_cache.
+
+db_flush_cache -cache_key_pattern page_${page_id}_*
+
+    </programlisting>
+  </sect2>
 
 </sect1>

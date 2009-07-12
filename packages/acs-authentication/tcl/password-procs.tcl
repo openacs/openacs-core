@@ -577,7 +577,11 @@ ad_proc -private auth::password::email_password {
       }
 
     # Send email
-    ns_sendmail $user(email) $system_owner $subject $body
+    acs_mail_lite::send -send_immediately \
+        -to_addr $user(email) \
+        -from_addr $system_owner \
+        -subject $subject \
+        -body $body
 }
 
 ad_proc -private auth::password::CanChangePassword {
