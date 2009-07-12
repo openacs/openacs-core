@@ -38,13 +38,13 @@
 
 			// Register example button
 			ed.addButton('image', {
-				title : 'OacsImage.desc',
+				title : 'oacsimage.desc',
 				cmd : 'mceOacsImage'
 			});
 
 			// Add a node change handler, selects the button in the UI when a image is selected
 			ed.onNodeChange.add(function(ed, cm, n) {
-			    cm.setActive('_advimage',n.nameName == "IMG");
+			    cm.setActive('image',n.nameName == "IMG");
                                             });
                 },
 		/**

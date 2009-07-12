@@ -28,6 +28,13 @@ function init() {
 	var action = "insert";
 	var html;
 
+	document.getElementById('hrefbrowsercontainer').innerHTML = getBrowserHTML('hrefbrowser','href','file','advlink');
+	document.getElementById('popupurlbrowsercontainer').innerHTML = getBrowserHTML('popupurlbrowser','popupurl','file','advlink');
+	document.getElementById('linklisthrefcontainer').innerHTML = getLinkListHTML('linklisthref','href');
+	document.getElementById('anchorlistcontainer').innerHTML = getAnchorListHTML('anchorlist','href');
+	document.getElementById('targetlistcontainer').innerHTML = getTargetListHTML('targetlist','target');
+
+	// Link list
 	html = getLinkListHTML('linklisthref','href');
 	if (html == "")
 		document.getElementById("linklisthrefrow").style.display = 'none';
@@ -45,7 +52,7 @@ function init() {
 	if (elm != null && elm.nodeName == "A")
 		action = "update";
 
-	formObj.insert.value = tinyMCEPopup.getLang(action, 'Insert', true);
+	formObj.insert.value = tinyMCEPopup.getLang(action, 'Insert', true); 
 
 	setPopupControlsDisabled(true);
 

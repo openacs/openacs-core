@@ -59,15 +59,15 @@ aa_register_case -cats {api smoke} ad_html_security_check_href_allowed {
 aa_register_case -cats {api smoke} util_close_html_tags {
     Tests closing HTML tags.
 } {
-    aa_equals "" [util_close_html_tags "<b>Foobar"] "<b>Foobar</B>"
+    aa_equals "" [util_close_html_tags "<b>Foobar"] "<b>Foobar</b>"
 
     aa_equals "" [util_close_html_tags "<b>Foobar</b>"] "<b>Foobar</b>"
 
     aa_equals "" [util_close_html_tags "<b>Foobar</b> is <i>a very long word</i>"] "<b>Foobar</b> is <i>a very long word</i>"
 
-    aa_equals "" [util_close_html_tags "<b>Foobar</b> is <i>a very long word</i>" 15] "<b>Foobar</b> is <i>a</I>"
+    aa_equals "" [util_close_html_tags "<b>Foobar</b> is <i>a very long word</i>" 15] "<b>Foobar</b> is <i>a</i>"
 
-    aa_equals "" [util_close_html_tags "<b>Foobar</b> is <i>a very long word</i>" 0 20 "..."] "<b>Foobar</b> is <i>a very</I>..."
+    aa_equals "" [util_close_html_tags "<b>Foobar</b> is <i>a very long word</i>" 0 20 "..."] "<b>Foobar</b> is <i>a very</i>..."
 }
 
 
@@ -81,7 +81,7 @@ aa_register_case -cats {api smoke} ad_html_text_convert {
     set string "What?\n<i>Never mind, buddy</i>"
     
     aa_equals "" [ad_html_text_convert -from "text/enhanced" -to "text/html" -truncate_len 14 -- $string] \
-        [ad_enhanced_text_to_html "What?\n<i>Never</I>..."]
+        [ad_enhanced_text_to_html "What?\n<i>Never</i>..."]
 
     # The string is longer in plaintext, because the "_" symbol to denote italics is counted as well.
     aa_equals "" [ad_html_text_convert -from "text/enhanced" -to "text/plain" -truncate_len 15 -- $string] "What?\n_Never..."
@@ -105,7 +105,7 @@ aa_register_case -cats {api smoke} ad_html_text_convert {
     set string "What?\nNever mind, buddy"
     
     aa_equals "" [ad_html_text_convert -from "text/fixed-width" -to "text/html" -truncate_len 14 -- $string] \
-        "<pre>What?\nNever</PRE>..."
+        "<pre>What?\nNever</pre>..."
     
     aa_equals "" [ad_html_text_convert -from "text/fixed-width" -to "text/plain" -truncate_len 14 -- $string] \
         "What?\nNever..."
@@ -118,7 +118,7 @@ aa_register_case -cats {api smoke} ad_html_text_convert {
     set string "What?<br><i>Never mind, buddy</i>"
     
     aa_equals "" [ad_html_text_convert -from "text/html" -to "text/html" -truncate_len 14 -- $string] \
-        "What?<br><i>Never</I>..."
+        "What?<br><i>Never</i>..."
     
     aa_equals "" [ad_html_text_convert -from "text/html" -to "text/plain" -truncate_len 15 -- $string] \
         "What?\n_Never..."
