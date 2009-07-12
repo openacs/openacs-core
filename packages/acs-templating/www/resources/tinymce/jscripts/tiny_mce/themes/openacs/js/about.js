@@ -16,9 +16,9 @@ function init() {
 	html += '<table id="plugintable">';
 	html += '<thead>';
 	html += '<tr>';
-	html += '<td>' + ed.getLang('advanced_dlg.about_plugin') + '</td>';
-	html += '<td>' + ed.getLang('advanced_dlg.about_author') + '</td>';
-	html += '<td>' + ed.getLang('advanced_dlg.about_version') + '</td>';
+	html += '<td>' + ed.getLang('openacs_dlg.about_plugin') + '</td>';
+	html += '<td>' + ed.getLang('openacs_dlg.about_author') + '</td>';
+	html += '<td>' + ed.getLang('openacs_dlg.about_version') + '</td>';
 	html += '</tr>';
 	html += '</thead>';
 	html += '<tbody>';

@@ -22,7 +22,7 @@ set user_id [auth::require_login]
 
 # if user has write permission, create image upload form, 
 
-if {![info exists parent_id]} {
+if {![info exists parent_id] || $parent_id eq ""} {
     set parent_id $user_id
     set write_p 1
 } else {
@@ -30,6 +30,19 @@ if {![info exists parent_id]} {
     set write_p [permission::permission_p \
 		     -party_id $user_id \
 		     -object_id $parent_id \
+		     -privilege "write"]
+}
+
+if {!$write_p} {
+    # if parent_id does not exist yet, let's use the pacakage_id
+    if { ![db_0or1row "check_parent" "select object_id from acs_objects where object_id=:parent_id"] } {
+        set parent_id $package_id
+    }
+
+    # item might not exist!
+    set write_p [permission::permission_p \
+		     -party_id $user_id \
+		     -object_id $package_id \
 		     -privilege "write"]
 }
 
@@ -82,7 +95,6 @@ if {$write_p} {
 	    }
         } \
         -on_submit {
-            ns_log notice "ATTACH FILE ON SUBMIT"
 	    if {$f_href eq ""} {
 		set f_href $f_url
 		element set_value upload_form f_href $f_href
@@ -199,7 +211,7 @@ if {$write_p} {
 			set file_name [regsub -all {<.*?>} $file_name {}]
 		    }
 		} 
-
+                set file_name [string trim $file_name]
 		if {$f_title eq "" && [info exists file_name]} {
 		    element set_value upload_form f_title $file_name
 		}            
@@ -219,9 +231,10 @@ if {$write_p} {
 			set f_href "/file/${item_id}/${file_name}"
 		    }
 		}
+                element set_value upload_form f_href $f_href
+                element set_value upload_form f_title $f_title             
 	    }
-            ns_log notice "F_HREF= $f_href"
-	    element set_value upload_form f_href $f_href
+
         }
 
 } else {
@@ -245,7 +258,7 @@ if {$richtextEditor eq "xinha"} {
         var selector_window;
 	// window.resizeTo(450, 300);
 
-	function Init() {
+	function attachFileInit() {
 	  __dlg_init();
 
 	  var f_href = document.getElementById('f_href');
@@ -326,6 +339,7 @@ if {$richtextEditor eq "tinymce"} {
           var f_href = document.getElementById('f_href');
           var url = f_href.value;
           if (url !='') {
+
                  insertAction();
           }
 
@@ -366,7 +380,7 @@ if {$richtextEditor eq "tinymce"} {
 	.form-error { color : red}
 "
 
-    template::add_body_handler \
-        -event onload \
-        -script "attachFileInit()"
 }
+template::add_body_handler \
+    -event onload \
+    -script "attachFileInit()"

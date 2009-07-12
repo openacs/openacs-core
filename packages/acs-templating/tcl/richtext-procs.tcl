@@ -299,14 +299,20 @@ ad_proc -public -deprecated template::widget::richtext_htmlarea { element_refere
 
 
 ad_proc -public template::widget::richtext { element_reference tag_attributes } {
+
+    <p>
     Implements the richtext widget, which offers rich text editing options.
 
-    This version supports the xinha editor.
+    This version supports the <strong>xinha</strong> and <strong>tinymce</strong>
+    editors.
 
     If the acs-templating.UseHtmlAreaForRichtextP parameter is set to true (1), 
-    this will use the htmlArea WYSIWYG editor widget.
+    this will use the WYSIWYG editor widget set in the acs-templating.RichTextEditor 
+    parameter.
     Otherwise, it will use a normal textarea, with a drop-down to select a format. 
     The available formats are:
+    </p>
+
     <ul>
     <li>Enhanced text = Allows HTML, but automatically inserts line and paragraph breaks.
     <li>Plain text = Automatically inserts line and paragraph breaks, and quotes 
@@ -315,12 +321,14 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
     for tabular data.
     <li>HTML = normal HTML.
     </ul>
+
+    <p>
     You can also parameterize the richtext widget with a 'htmlarea_p' attribute, 
     which can be true or false, and which will override the parameter setting.
     <p>
-    The default editor in wysigwig mode is rte. In oder to use xinha, one
-    has to use 'editor xinha' in the options of the form field. The following
-    options for xinha may be specified:
+    The available editors in wysigwig mode are xinha and tinymce. In order to 
+    use xinha, one has to use 'editor xinha' in the options of the form field. 
+    The following options for xinha may be specified:
     <ul>
     <li> <em>editor</em>: xinha
     <li> <em>height</em>: height of the xinha widget (e.g. 350px)
@@ -328,10 +336,11 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
     <li> <em>plugins</em>: tcl list of plugins to be used in xinha. There
     is an a special plugin for the oacs file selector available, called OacsFs. 
     If no options are specified, the following plugins will be loaded:
-    <pre>
+    <code>
     GetHtml CharacterMap ContextMenu FullScreen
     ListType TableOperations EditTag LangMarks Abbreviation
-    </pre>
+    </code>
+    </ul>
     <p>
     These options are used by the OacsFs plugin
     <ul>
@@ -348,10 +357,13 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
     type of the field. E.g. a value of %text/% allows any kind of text
     files to be selected, while %pdf% could be used for pdf-files. If
     nothing is specified, all file-types are presented.
-    </ul>
     <li> <em>javascript</em>: provide javascript code to configure 
-    the xinha widget and its plugins. The configure object is called <tt>xinha_config</tt>.
+    the xinha widget and its plugins. The configure object is called <code>xinha_config</code>.
+    </ul>
+
+    <p>
     Example to use xinha with only a few controls:
+
     <pre>
     {options {editor xinha plugins {OacsFs} height 350px javascript {
         xinha_config.toolbar = [
@@ -359,9 +371,9 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
                                 ['killword','removeformat'] ];
     }}}
     </pre>
-    </ul>
-    
-    Example for the use of the xinha widget with options: 
+
+    <p>
+    Example for the use of the <strong>xinha</strong> widget with options: 
     <pre>
     text:richtext(richtext),nospell,optional 
     {label #xowiki.content#} 
@@ -369,18 +381,37 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
     {html {rows 15 cols 50 style {width: 100%}}}
     </pre>
 
+    <p>
     Caveat: the three adp-files needed for the OpenACS file selector 
     (insert-image, insert-ilink and file-selector)
     are currently part of the xowiki package, since acs-templating
     is per default not mounted. This is hopefully only a temporal situation
     and we find a better place.
+
     <p>
-    Note that the rich-rext editor interacts with <tt>blank-master.tcl</tt> and 
-    <tt>blank-master.adp</tt>.
+    Example for the use of the <strong>tinymce</strong> widget with options: 
+    <pre>
+    text:richtext(richtext),nospell,optional 
+    {label #acs-subsite.Biography#} 
+    {options {theme simple plugins "oacsimage,oacslink,style"}}
+    {html {rows 15 cols 50 style {width: 100%}}}
+    </pre>
+    <p>
+    See <a href="http://wiki.moxiecode.com/index.php/TinyMCE:Configuration">TinyMCE 
+    documentation</a> for a full list of available options
+    <p>
+    Caveat: the scripts needed for the oacsimage and oacslink plugins require 
+    acs-templating to be mounted. This is a temporary situation until we find 
+    a better way to handle plugins.
+
+    <p>
+    Note that the richtext editors interact with <code>blank-master.tcl</code> and 
+    <code>blank-master.adp</code>.
     <p>
     Derived from the htmlarea richtext widget for htmlarea by lars@pinds.com<br>
     modified for RTE http://www.kevinroth.com/ by davis@xarg.net<br>
-    xinha support by gustaf.neumann@wu-wien.ac.at
+    xinha support by gustaf.neumann@wu-wien.ac.at<br>
+    tinymce support by oct@openacs.org
 } {
 
     upvar $element_reference element
@@ -504,7 +535,7 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
                     {relative_urls "false"}
                     {height "450px" }
                     {width "100%"}
-                    {plugins "oacsimage,oacslink,style,layer,table,save,iespell,preview,zoom,media,searchreplace,print,contextmenu,paste,fullscreen,noneditable,visualchars,xhtmlxtras" }        
+                    {plugins "style,layer,table,save,iespell,preview,media,searchreplace,print,contextmenu,paste,fullscreen,noneditable,visualchars,xhtmlxtras" }        
                     {browsers "msie,gecko,safari,opera" }
                     {apply_source_formatting "true" }
                     {paste_auto_cleanup_on_paste true}
@@ -518,18 +549,36 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
                     {theme_openacs_resizing true}
                     {theme_openacs_disable "styleselect"}
                     {theme_openacs_buttons1_add_before "save,separator"} 
-                    {theme_openacs_buttons2_add "oacslink,separator,preview,separator,forecolor,backcolor"} 
+                    {theme_openacs_buttons2_add "separator,preview,separator,forecolor,backcolor"} 
                     {theme_openacs_buttons2_add_before "cut,copy,paste,pastetext,pasteword,separator,search,replace,separator"} 
                     {theme_openacs_buttons3_add_before "tablecontrols,separator"} 
-                    {theme_openacs_buttons3_add "iespell,media,separator,print,separator,fullscreen"} 
-                    {extended_valid_elements "img[class|src|alt|title|hspace|vspace|width|height|align|onmouseover|onmouseout|name],hr[class|width|size|noshade],font[face|size|color|style],span[class|align|style]"}}
+                    {theme_openacs_buttons3_add "iespell,media,separator,print,separator,fullscreen"}
+                    {extended_valid_elements "img[id|class|style|title|lang|onmouseover|onmouseout|src|alt|name|width|height],hr[id|class|style|title],span[id|class|style|title|lang]"}
+                    {element_format "html"}}
                 set tinymce_configs_list [parameter::get \
                                               -package_id [apm_package_id_from_key "acs-templating"] \
                                               -parameter "TinyMCEDefaultConfig" \
                                               -default $tinymce_default_config]
                 set pairslist [list]
+                ns_log notice "options [array get options]"
                 foreach config_pair $tinymce_configs_list {
-                    lappend pairslist "[lindex $config_pair 0]:\"[lindex $config_pair 1]\""
+                    set config_key [lindex $config_pair 0]
+                    if {[info exists options($config_key)]} {
+                        # override default values with individual
+                        # widget specification
+                        set config_value $options($config_key)
+                        unset options($config_key)
+                    } else {
+                        set config_value [lindex $config_pair 1]
+                    }
+                    ns_log notice "key $config_key value $config_value"
+                    lappend pairslist "${config_key}:\"${config_value}\""
+                }
+                foreach name [array names options] {
+                    ns_log notice "NAME $name"
+                    # add any additional options not specified in the
+                    # default config
+                    lappend pairslist "${name}:\"$options($name)\""
                 }
                 lappend pairslist "elements : \"[join $::acs_blank_master__htmlareas ","]\""
                 set tinymce_configs_js [join $pairslist ","]

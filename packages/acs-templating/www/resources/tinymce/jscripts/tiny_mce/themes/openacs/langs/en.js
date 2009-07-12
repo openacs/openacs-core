@@ -60,3 +60,11 @@ newdocument:"Are you sure you want clear all contents?",
 toolbar_focus:"Jump to tool buttons - Alt+Q, Jump to editor - Alt-Z, Jump to element path - Alt-X",
 more_colors:"More colors"
 });
+tinyMCE.addI18n('en.advanced',{
+cut_desc:"Cut",
+copy_desc:"Copy",
+paste_desc:"Paste",
+link_desc:"Insert/edit link",
+unlink_desc:"Unlink",
+image_desc:"Insert image"
+});

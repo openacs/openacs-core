@@ -6,7 +6,10 @@
  */
 
 (function() {
-	tinymce.create('tinymce.plugins.OacsLinkPlugin', {
+     // Load plugin specific language pack
+     tinymce.PluginManager.requireLangPack('oacslink');
+
+     tinymce.create('tinymce.plugins.OacsLinkPlugin', {
 		init : function(ed, url) {
 			this.editor = ed;
 
@@ -15,8 +18,8 @@
 				var se = ed.selection;
 
 				// No selection and not in link
-				if (se.isCollapsed() && !ed.dom.getParent(se.getNode(), 'A'))
-					return;
+				// if (se.isCollapsed() && !ed.dom.getParent(se.getNode(), 'A'))
+				//	return;
 
 				ed.windowManager.open({
 					file : '/acs-templating/scripts/xinha/attach-file',
