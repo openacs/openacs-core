@@ -16,15 +16,16 @@ set user_id [ad_conn user_id]
 
 db_1row select_notification_request {}
 
-set page_title "Edit Frequency of $object_name Notification"
-set context [list "Edit Frequency"]
+set doc(title) [_ notifications.Change_frequency]
+set context [list $doc(title)]
 
-set intervals [notification::get_intervals -type_id $type_id]
+set intervals [notification::get_intervals -localized -type_id $type_id]
 
 ad_form -name change_frequency -export {request_id return_url} -form {
-    {interval_id:integer(select)   {label "Notification Interval"}
-                                   {options $intervals}
-                                   {value $interval_id}}
+    {interval_id:integer(select)   
+        {label "[_ notifications.Frequency]"}
+        {options $intervals}
+        {value $interval_id}}
 } -on_submit {
 
     db_dml update_notification_frequency {}

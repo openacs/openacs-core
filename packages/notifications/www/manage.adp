@@ -1,10 +1,10 @@
 <master>
-<property name="title">#notifications.Manage_Notifications#</property>
+<property name="&doc">doc</property>
+
+<h1>#notifications.Manage_Notifications#</h1>
 
 <if @notice@ not nil>
-<h2>@notice;noquote@</h2>
+<p>@notice;noquote@</p>
 </if>
-
-#notifications.Manage_Notifications#
 
 <listtemplate name="notifications"></listtemplate>
