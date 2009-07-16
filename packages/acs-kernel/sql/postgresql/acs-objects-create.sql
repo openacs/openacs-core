@@ -119,6 +119,22 @@ begin
    );
 
  attr_id := acs_attribute__create_attribute (
+   ''acs_object'',
+   ''modifying_user'',
+   ''integer'',
+   ''Modifying User'',
+   null,
+   null,
+   null,
+   null,
+   1,
+   1,
+   null,
+   ''type_specific'',
+   ''f''
+   );
+
+ attr_id := acs_attribute__create_attribute (
 	''acs_object'',
 	''creation_user'',
 	''integer'',

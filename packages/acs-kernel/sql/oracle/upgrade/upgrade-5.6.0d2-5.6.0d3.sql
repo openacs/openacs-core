@@ -4,6 +4,13 @@ declare
 begin
 
  attr_id := acs_attribute.create_attribute (
+   object_type => 'acs_object',
+   attribute_name => 'modifying_user',
+   datatype => 'integer',
+   pretty_name => 'Modifying User'
+ );
+
+ attr_id := acs_attribute.create_attribute (
         object_type => 'user',
         attribute_name => 'bio',
         datatype => 'string',

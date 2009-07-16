@@ -2,6 +2,22 @@ create function inline_0 ()
 returns integer as '
 begin
 
+ perform acs_attribute__create_attribute (
+   ''acs_object'',
+   ''modifying_user'',
+   ''integer'',
+   ''Modifying User'',
+   null,
+   null,
+   null,
+   null,
+   1,
+   1,
+   null,
+   ''type_specific'',
+   ''f''
+   );
+
   perform acs_attribute__create_attribute (
         ''user'',
         ''username'',
