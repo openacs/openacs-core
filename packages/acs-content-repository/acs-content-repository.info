@@ -7,7 +7,7 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
 
-    <version name="5.5.1d1" url="http://openacs.org/repository/download/apm/acs-content-repository-5.5.1d1.apm">
+    <version name="5.5.1d2" url="http://openacs.org/repository/download/apm/acs-content-repository-5.5.1d2.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>The canonical repository for OpenACS content.</summary>
         <release-date>2009-06-19</release-date>
@@ -20,13 +20,15 @@
         <license>GPL</license>
         <maturity>3</maturity>
 
-        <provides url="acs-content-repository" version="5.5.1d1"/>
+        <provides url="acs-content-repository" version="5.5.1d2"/>
         <requires url="acs-kernel" version="5.5.1d1"/>
         <requires url="acs-service-contract" version="5.5.1d1"/>
         <requires url="search" version="5.5.1d1"/>
 
         <callbacks>
+          <callback type="after-upgrade"  proc="content::apm::after_upgrade"/>
         </callbacks>
+
         <parameters>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="CRFileLocationRoot"  default="content-repository-content-files" description="The directory to which files are published and from where they are retrieved when a files is served. It is taken to be relative to [acs_root_dir] unless FileLocationRelativeP is set to 1" section_name="files"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="FileLocationRelativeP"  default="1" description="Defaults to 1 which means the FileLocation parameter is relative to the web servers root folder. If set to 0, the FileLocation parameter is an absolute path and so can contain a drive letter for example. Important note: if you change this parameter to 0, remember the system will attempt to retrieve existing files from the new location. You will also need to bounce the server after changing this or the FileLocation value." section_name="files"/>
