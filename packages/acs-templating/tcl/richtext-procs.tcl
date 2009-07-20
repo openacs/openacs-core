@@ -439,17 +439,19 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
 
         set user_agent [string tolower [ns_set get [ns_conn headers] User-Agent]]
 
-	if {[string first "chrome" $user_agent] != -1} {
+        if {[string first "chrome" $user_agent] != -1} {
             # vguerra: google chrome browser
             # needs more testing in order to check if chrome fully
             # supports xinha
-            # roc: this check has to go first since safari use applewebkit, so the agent always contain safari word
-            # once xinha officially support chrome (already supports safari), we can remove this if and add the check at the next if.
-	} elseif {[string first "safari" $user_agent] != -1} {
+            # roc: this check has to go first since safari use applewebkit, 
+            # so the agent always contain safari word
+            # once xinha officially support chrome (already supports safari), we 
+            # can remove this if and add the check at the next if.
+        } elseif {[string first "safari" $user_agent] != -1} {
             regexp {version/([0-9]+)[.]} $user_agent _ user_agent_version
-	    if {$user_agent_version < 3} {
-                    set element(htmlarea_p) false
-	    }
+            if {$user_agent_version < 3} {
+                set element(htmlarea_p) false
+            }
         } elseif {[string first "opera" $user_agent] != -1} {
             regexp {^[^/]+/([0-9]+)[.]} $user_agent _ user_agent_version
             if {$user_agent_version < 9} {
@@ -469,6 +471,10 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
         set format_menu [menu $element(id).format [template::util::richtext::format_options] $format {}]
         set output [textarea_internal $element(id) attributes $contents]
 
+        # Spell-checker
+        array set spellcheck [template::util::spellcheck::spellcheck_properties \
+                                  -element_ref element]
+
         if { $htmlarea_p } {
             # figure out, which rich text editor to use
             set richtextEditor [expr {[info exists options(editor)] ?
@@ -481,8 +487,6 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
             set ::acs_blank_master($richtextEditor) 1
 
             if {$richtextEditor eq "xinha"} {
-                append output "<script type='text/javascript'>document.write(\"<input name='$element(id).format' value='text/html' type='hidden'>\");</script>\n"
-                append output "<noscript><br>[_ acs-templating.Format]: $format_menu</noscript>\n"
                 
                 # we have a xinha richtext widget, specified by "options {editor xinha}"
                 # The following options are supported: 
@@ -525,10 +529,8 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
 
             } elseif {$richtextEditor eq "tinymce"} {
 
-                append output "<script type=\"text/javascript\">document.write(\"<input name='$element(id).format' value='text/html' type='hidden'>\");</script>\n"
-                append output "<noscript><p>Format: $format_menu</p></noscript>\n"
                 lappend ::acs_blank_master__htmlareas $attributes(id)
-                
+
                 # get default configs
                 set tinymce_default_config {
                     {mode "exact" } 
@@ -560,7 +562,8 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
                                               -parameter "TinyMCEDefaultConfig" \
                                               -default $tinymce_default_config]
                 set pairslist [list]
-                ns_log notice "options [array get options]"
+                ns_log debug "tinymce: options [array get options]"
+
                 foreach config_pair $tinymce_configs_list {
                     set config_key [lindex $config_pair 0]
                     if {[info exists options($config_key)]} {
@@ -571,39 +574,44 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
                     } else {
                         set config_value [lindex $config_pair 1]
                     }
-                    ns_log notice "key $config_key value $config_value"
+                    ns_log debug "tinymce: key $config_key value $config_value"
                     lappend pairslist "${config_key}:\"${config_value}\""
                 }
+
                 foreach name [array names options] {
-                    ns_log notice "NAME $name"
+                    ns_log debug "tinymce: NAME $name"
                     # add any additional options not specified in the
                     # default config
                     lappend pairslist "${name}:\"$options($name)\""
                 }
+
                 lappend pairslist "elements : \"[join $::acs_blank_master__htmlareas ","]\""
                 set tinymce_configs_js [join $pairslist ","]
                 set ::acs_blank_master(tinymce.config) $tinymce_configs_js
             }
-        } else {
-            # Display mode
-            if { $element(mode) eq "display" && [info exists element(value)] } {
-                append output [template::util::richtext::get_property html_value $element(value)]
-                append output "<input type=\"hidden\" name=\"$element(id)\" value=\"[ad_quotehtml $contents]\">"
-                append output "<input type=\"hidden\" name=\"$element(id).format\" value=\"[ad_quotehtml $format]\">"
-            } else {
-                append output ""
+
+            append output "</span></label>\n<script type='text/javascript'>document.write(\"<input name='$element(id).format' value='text/html' type='hidden'>\");</script>\n"
+            append output "<noscript><div><label for=\"$element(id).format\"><span class=\"form-widget\">[_ acs-templating.Format]: $format_menu</span></label></div></noscript>"
+
+            if { $spellcheck(render_p) } {
+                append output "<label for=\"$element(id).spellcheck\"><span class=\"form-widget\">[_  acs-templating.Spellcheck]: " \
+                    [menu "$element(id).spellcheck" [nsv_get spellchecker lang_options] \
+                         $spellcheck(selected_option) {}]
             }
-            append output "<br>[_ acs-templating.Format]: $format_menu"
+
+        } else {
+            # htmlarea_p is false
+
+            append output "</span></label>\n<label for=\"$element(id).format\"><span class=\"form-widget\">[_ acs-templating.Format]: $format_menu"
+
+            if { $spellcheck(render_p) } {
+                append output "</span></label>\n<label for=\"$element(id).spellcheck\"><span class=\"form-widget\">[_  acs-templating.Spellcheck]: " \
+                    [menu "$element(id).spellcheck" [nsv_get spellchecker lang_options] \
+                         $spellcheck(selected_option) {}]
+            }
+
         }
 
-        # Spell-checker
-        array set spellcheck [template::util::spellcheck::spellcheck_properties \
-                                  -element_ref element]
-        if { $spellcheck(render_p) } {
-            append output " [_  acs-templating.Spellcheck]: " \
-                [menu "$element(id).spellcheck" [nsv_get spellchecker lang_options] \
-                     $spellcheck(selected_option) {}]
-        }
     } else {
         # Display mode
         if { $element(mode) eq "display" && [info exists element(value)] } {
