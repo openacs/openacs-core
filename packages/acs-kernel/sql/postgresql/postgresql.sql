@@ -191,12 +191,12 @@ begin
             exit when v_pos = 0;
 
             if v_cnt != 0 then
-              v_ret := v_ret || rpad(v_cnt,10) || substr(v_tmp,1,v_pos);
+              v_ret := v_ret || to_char(v_cnt,''9999'') || '':'' || substr(v_tmp,1,v_pos);
             end if;
             v_tmp := substr(v_tmp,v_pos + 1);
         end LOOP;
 
-        return v_ret || rpad(v_cnt,10) || v_tmp;
+        return v_ret || to_char(v_cnt,''9999'') || '':'' || v_tmp;
 
 end;' language 'plpgsql' immutable strict;
 
@@ -215,7 +215,7 @@ declare
         v_rettype       varchar;
 begin
         select proargtypes, pronargs, number_src(prosrc), 
-               (select typname from pg_type where oid = p.prorettype)
+               (select typname from pg_type where oid = p.prorettype::integer)
           into v_args, v_nargs, v_src, v_rettype
           from pg_proc p 
          where proname = fname::name
@@ -241,7 +241,7 @@ create or replace function '' || fname || ''('';
                            else '','' || typname 
                          end into v_one_type 
                from pg_type 
-              where oid = v_one_arg;
+              where oid = v_one_arg::integer;
              v_funcdef := v_funcdef || v_one_type;
          end loop;
          v_funcdef := v_funcdef || '') returns '' || v_rettype || '' as \\\'\\n'' || v_src || ''\\\' language \\\'plpgsql\\\';'';
