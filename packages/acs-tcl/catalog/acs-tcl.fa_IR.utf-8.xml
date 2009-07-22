@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="acs-tcl" locale="fa_IR" charset="utf-8">
-
-  <msg key="approve">تائيد</msg>
-  <msg key="approve_email">تائيد پست الکترونيک</msg>
-  <msg key="delete">حذف</msg>
-  <msg key="reject">رد کردن</msg>
-</message_catalog>

@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="acs-authentication" locale="el_GR" charset="utf-8">
-
-  <msg key="Invalid_username_or_password">Το όνομα του χρήστη ή ο κωδικός δεν είναι αποδεκτά</msg>
-</message_catalog>
