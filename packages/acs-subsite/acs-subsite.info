@@ -24,6 +24,7 @@
         <requires url="acs-tcl" version="5.5.1d1"/>
         <requires url="acs-lang" version="5.5.1d1"/>
         <requires url="acs-mail-lite" version="5.5.1d1"/>
+        <requires url="acs-admin" version="5.5.1d1"/>
 
         <callbacks>
             <callback type="after-install"  proc="subsite::package_install"/>
