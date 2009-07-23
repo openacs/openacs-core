@@ -58,6 +58,17 @@
           where revision_id = :revision_id
       </querytext>
   </fullquery>
+
+  <fullquery name="content::revision::get_cr_file_path.get_storage_key_and_path">
+    <querytext>	
+      select storage_area_key, 
+          filename
+      from cr_items ci, 
+          cr_revisions cr 
+      where cr.item_id=ci.item_id 
+          and cr.revision_id=:revision_id
+    </querytext>
+  </fullquery>
   
 </queryset>
 
