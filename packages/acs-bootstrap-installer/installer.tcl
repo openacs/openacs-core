@@ -481,3 +481,9 @@ ad_proc -private install_do_packages_install {} {
 ns_register_filter preauth GET * install_handler
 ns_register_filter preauth POST * install_handler
 ns_register_filter preauth HEAD * install_handler
+
+if {[ns_info name] eq "NaviServer"} {
+    rename install_handler install_handler_conn
+    proc install_handler {why} { install_handler_conn _ _ $why }
+}
+
