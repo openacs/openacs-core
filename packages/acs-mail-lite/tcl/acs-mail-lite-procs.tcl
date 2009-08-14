@@ -500,7 +500,7 @@ namespace eval acs_mail_lite {
             lappend headers_list [list CC [join $cc_addr ","]]
         }
         if { $bcc_addr ne ""} {
-            lappend headers_list [list DCC [join $bcc_addr ","]]
+            lappend headers_list [list BCC [join $bcc_addr ","]]
         }
 
         # Build the originator address to be used as enveloppe sender
