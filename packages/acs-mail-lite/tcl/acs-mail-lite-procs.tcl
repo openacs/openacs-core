@@ -499,7 +499,15 @@ namespace eval acs_mail_lite {
         if { $cc_addr ne "" } {
             lappend headers_list [list CC [join $cc_addr ","]]
         }
+
         if { $bcc_addr ne ""} {
+
+            # BCC implementation in tcllib 1.8 to 1.11 is awkward. It
+            # sends the blind copy as an attachment, changes the From
+            # header replacing it with the originator, etc. So we use
+            # DCC instead which behaves as one would expect Bcc to
+            # behave.
+
             lappend headers_list [list DCC [join $bcc_addr ","]]
         }
 
