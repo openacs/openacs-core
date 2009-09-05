@@ -17,6 +17,8 @@ ad_proc -public content::apm::after_upgrade {
     {-from_version_name:required}
     {-to_version_name:required}
 } {
+    APM callback executed on package upgrade.
+} {
     apm_upgrade_logic \
         -from_version_name $from_version_name \
         -to_version_name $to_version_name \
