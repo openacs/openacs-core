@@ -275,13 +275,12 @@ select 1;
 <fullquery name="package_exec_plsql.exec_func_plsql">      
       <querytext>
 
-	select ${package_name}__${object_name}([plpgsql_utility::generate_attribute_parameter_call \
+	select ${__package_name}__${__object_name}([plpgsql_utility::generate_attribute_parameter_call \
 		-prepend ":" \
-		${package_name}__${object_name} \
+		${__package_name}__${__object_name} \
 		$pieces])
 
       </querytext>
 </fullquery>
 
- 
 </queryset>

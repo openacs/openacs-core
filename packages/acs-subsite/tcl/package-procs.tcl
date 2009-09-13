@@ -941,7 +941,12 @@ ad_proc -public package_exec_plsql {
 
     </pre>
 } {
-    foreach arg [util_memoize [list package_plsql_args -object_name $object_name $package_name]] {
+    # Ugly hack for the case where a proc has params named "package_name" or "object_name".
+
+    set __package_name $package_name
+    set __object_name $object_name
+
+    foreach arg [util_memoize [list package_plsql_args -object_name $__object_name $__package_name]] {
 	set real_params([string toupper $arg]) 1
     }
 
@@ -959,7 +964,7 @@ ad_proc -public package_exec_plsql {
 	if { ![info exists real_params([string toupper $__key])] } {
 	    # The parameter is not accepted as a parameter to the
 	    # pl/sql function. Ignore it.
-            ns_log Warning "package_exec_plsql: skipping $__key not found in params for $package_name $object_name"
+            ns_log Warning "package_exec_plsql: skipping $__key not found in params for $__package_name $__object_name"
 	    continue;
 	} 
 	lappend pieces [list $__key]
@@ -968,7 +973,7 @@ ad_proc -public package_exec_plsql {
 	set $__key $__value
     }
 
-    if { [util_memoize [list package_function_p -object_name $object_name $package_name]] } {
+    if { [util_memoize [list package_function_p -object_name $__object_name $__package_name]] } {
         return [db_exec_plsql exec_func_plsql {}]
     } else {
         db_exec_plsql exec_proc_plsql {}

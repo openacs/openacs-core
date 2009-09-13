@@ -533,10 +533,12 @@ ad_proc -private rp_filter { why } {
             }
             if { [security::secure_conn_p] } {
                 # it's a secure connection.
-                ad_returnredirect https://[ad_host][ad_port]$url
+                ad_returnredirect \
+                    -allow_complete_url https://[ad_host][ad_port]$url
                 return "filter_return"
             } else {
-                ad_returnredirect http://[ad_host][ad_port]$url
+                ad_returnredirect \
+                    -allow_complete_url http://[ad_host][ad_port]$url
                 return "filter_return"
             }
         }
@@ -586,7 +588,7 @@ ad_proc -private rp_filter { why } {
             if { $query ne "" } {
         	set query "?[export_entire_form_as_url_vars]"
             }
-            ad_returnredirect "[ns_conn location][ns_conn url]$query"
+            ad_returnredirect -allow_complete_url "[ns_conn location][ns_conn url]$query"
             return "filter_return"
         }
     }

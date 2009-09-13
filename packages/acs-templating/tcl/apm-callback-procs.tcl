@@ -54,6 +54,20 @@ ad_proc -private template::apm::before_upgrade {
                     }
                 }
             }
+            5.5.1d1 5.5.1d2 {
+                # Removing invalid plugins for the new version of Xinha
+                set package_id_templating [apm_package_id_from_key "acs-templating"]
+                set plugins [parameter::get \
+                                 -package_id $package_id_templating \
+                                 -parameter "XinhaDefaultPlugins" \
+                                 -default ""]
+                set del_pos [lsearch $plugins FullScreen]
+                set plugins [lreplace $plugins $del_pos $del_pos]
+                parameter::set_value \
+                    -package_id $package_id_templating \
+                    -parameter "XinhaDefaultPlugins" \
+                    -value $plugins 
+            }
         }
 }
 
