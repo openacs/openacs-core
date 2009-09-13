@@ -991,7 +991,7 @@ ad_proc -public template::widget::date { element_reference tag_attributes } {
   set output "<!-- date $element(name) begin -->\n"
 
   if { ! [info exists element(format)] } { 
-    set element(format) "DD MONTH YYYY" 
+    set element(format) [_ acs-lang.localization-formbuilder_date_format]
   }
 
   # Choose a pre-selected format, if any

@@ -9,6 +9,7 @@ ad_page_contract {
 }
 
 auth::require_login
+set doc(title) [_ notifications.Manage_Notifications]
 if { $user_id ne "" && $user_id ne [ad_conn user_id] } {
     # we need to verify that they are an admin
     permission::require_permission -object_id [ad_conn package_id] -privilege "admin"
@@ -34,7 +35,7 @@ if { $user_id ne "" && $user_id ne [ad_conn user_id] } {
         object_name {
             label {[_ notifications.Item]}
             link_url_eval {[export_vars -base object-goto { object_id type_id }]}
-	    link_html {title "\#notifications.goto_object_name\#"}
+            link_html {title "\#notifications.goto_object_name\#"}
         }
         interval {
             label {[_ notifications.Frequency]}
@@ -47,7 +48,7 @@ if { $user_id ne "" && $user_id ne [ad_conn user_id] } {
             label {[_ notifications.Action]}
             display_template {\#notifications.Unsubscribe\#}
             link_url_eval {[export_vars -base request-delete { request_id {return_url [ad_return_url]} }]}
-	    link_html {title "\#notifications.Unsubscribe_from_object_name\#"}
+            link_html {title "\#notifications.Unsubscribe_from_object_name\#"}
         }
     }
 }
@@ -56,6 +57,7 @@ set return_url [ad_conn url]
 
 db_multirow -extend { interval_url } notifications select_notifications {} {
     set interval_url [export_vars -base request-change-frequency { request_id {return_url [ad_return_url]} }]
+    set interval [_ notifications.${interval}]
 }
 
 

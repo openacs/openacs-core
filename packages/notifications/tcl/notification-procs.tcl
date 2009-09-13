@@ -50,13 +50,27 @@ namespace eval notification {
     }
     
     ad_proc -public get_intervals {
+        {-localized:boolean}
         {-type_id:required}
     } {
-	return a list of intervals that are associated with a given notification type
-	(not all intervals are available to all notification types).
-	The fields for each interval is: name, interval_id, n_seconds.
+        return a list of intervals that are associated with a given notification type
+        (not all intervals are available to all notification types).
+        The fields for each interval is: name, interval_id, n_seconds.
+        If the localized flag is set, then the name of the interval will be localized.
     } {
-        return [db_list_of_lists select_intervals {}]
+        set intervals [db_list_of_lists select_intervals {}]
+        if { $localized_p } {
+            # build pretty names for intervals
+            set intervals_pretty [list]
+            foreach elm $intervals {
+                set elm_name [lindex $elm 0]
+                set elm_id [lindex $elm 1]
+                lappend intervals_pretty [list [_ notifications.${elm_name}] $elm_id]
+            }
+            return $intervals_pretty
+        } else {
+            return $intervals
+        }
     }
 
     ad_proc -public get_delivery_methods {

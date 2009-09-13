@@ -281,6 +281,7 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="No_pretty_plural">No tiene %pretty_plural%</msg>
   <msg key="No_services">No hay servicios</msg>
   <msg key="No_user_with_this_username">No se encontró ningún usuario con este nombre de usuario</msg>
+  <msg key="Nobody_is_online">No hay nadie conectado.</msg>
   <msg key="none">ninguno</msg>
   <msg key="Not_logged_in">No registrado</msg>
   <msg key="Not_valid_email_addr">Esta no es una dirección de correo válida</msg>

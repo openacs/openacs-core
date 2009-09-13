@@ -4,6 +4,8 @@
   <msg key="Action">Acción</msg>
   <msg key="Administer_Notifications">Administrar notificaciones</msg>
   <msg key="Change">Cambiar</msg>
+  <msg key="Change_frequency">Cambiar frecuencia</msg>
+  <msg key="Change_frequency_of_object_name">Cambiar la frecuencia de las notificaciones para %object_name%</msg>
   <msg key="change_interval_object_name">Cambiar el intervalo de notificación para %notifications.object_name%</msg>
   <msg key="Contents">Contenido:</msg>
   <msg key="daily">diaria</msg>
