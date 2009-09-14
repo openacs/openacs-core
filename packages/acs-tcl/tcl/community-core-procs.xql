@@ -100,7 +100,7 @@
       <querytext>
         update persons
 	set bio = :bio
-	where person_id = :user_id
+	where person_id = :person_id
       </querytext>
 </fullquery>
 
