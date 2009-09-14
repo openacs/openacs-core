@@ -1,0 +1,84 @@
+<?xml version='1.0' ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+               "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" [
+<!ENTITY % myvars SYSTEM "../variables.ent">
+%myvars;
+]>
+<chapter id="compatibility">
+  <title>Compatibility for required software</title>
+  <authorblurb>
+    by <ulink url="mailto:joel@aufrecht.org">Joel Aufrecht</ulink>
+  </authorblurb>
+  <para>For more information see <ulink
+  url="http://openacs.org/forums/message-view?message_id=99610">this thread</ulink></para>
+  <figure>
+    <title>Software version compatibility matrix</title>
+    <informaltable>
+      <tgroup cols="8">
+        <colspec colname="c1"/>
+        <colspec colname="c3"/>
+        <colspec colname="3.2.5"/>
+        <colspec colname="4.5"/>
+        <colspec colname="4.6"/>
+        <colspec colname="4.6.1"/>
+        <colspec colname="4.6.2"/>
+        <colspec colname="4.6.3"/>
+        <spanspec align="center" colsep="0" rowsep="0" spanname="version" namest="c1" nameend="c2"/>
+        <tbody>
+          <row>
+            <entry spanname="version">OpenACS Version</entry>
+            <entry colname="3.2.5">3.2.5</entry>
+            <entry colname="4.5">4.5</entry>
+            <entry colname="4.6">4.6</entry>
+            <entry colname="4.6.1">4.6.1</entry>
+            <entry colname="4.6.2">4.6.2</entry>
+            <entry colname="4.6.3">4.6.3</entry>
+          </row>
+          <row>
+            <entry morerows="5">AolServer</entry>
+            <entry>3</entry>
+            <entry namest="3.2.5" nameend="3.2.5" align="center">Verified</entry>
+          </row>
+          <row>
+            <entry>3.3+ad13</entry>
+            <entry namest="4.5" nameend="4.6.3" align="center">Verified</entry>
+          </row>
+          <row>
+            <entry>3.3oacs1</entry>
+            <entry namest="4.6.2" nameend="4.6.3" align="center">Verified</entry>
+          </row>  
+          <row>
+            <entry>3.4.4oacs1</entry>
+            <entry namest="4.6.2" align="center">Verified</entry>
+          </row>  
+          <row>
+            <entry>3.5.5</entry>
+            <entry namest="4.6.2" align="center">Verified</entry>
+          </row>  
+          <row>
+            <entry>4</entry>
+            <entry namest="3.2.5" nameend="4.6.3" align="center">No</entry>
+          </row>
+          <row>
+            <entry morerows="2">PostGreSQL</entry>
+            <entry>7.0</entry>
+            <entry namest="3.2.5" nameend="3.2.5" align="center">Verified</entry>
+          </row>
+          <row>
+            <entry>7.2.x</entry>
+            <entry namest="4.5" nameend="4.6.3" align="center">Verified</entry>
+          </row>
+          <row>
+            <entry>7.3.2 - 7.3.4</entry>
+            <entry namest="3.2.5" nameend="4.6.2" align="center">Incompatible</entry>
+            <entry namest="4.6.3" nameend="4.6.3"
+            align="center">Mostly compatible (news is broken)</entry>
+          </row>
+
+        </tbody>
+      </tgroup>
+    </informaltable>
+  </figure>
+  <para><phrase role="cvstag">($Id$)</phrase></para>
+
+</chapter>
