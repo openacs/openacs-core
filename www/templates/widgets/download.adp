@@ -2,7 +2,7 @@
 <property name="title">Download Now!</property>
 
 <p>
-  <span class="item"><a href="/projects/openacs/download/download/openacs-5.5.0.tgz?revision_id=2814189">Version 5.5.0</a> (openacs-5.5.0.tgz)</span>
+  <span class="item"><a href="/projects/openacs/download/download/openacs-5.5.1.tgz?revision_id=2967507">Version 5.5.1</a> (openacs-5.5.1.tgz)</span>
   <br>
   <span class="item"><a href="/xowiki/en/openacs-system-install">Install documentation</a></span>
 </p>
