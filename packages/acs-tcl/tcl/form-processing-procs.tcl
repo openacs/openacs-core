@@ -1227,7 +1227,8 @@ ad_proc -public ad_set_form_values {
             upvar $arg value
             ad_set_element_value -element $arg -- $value
         } else {
-            ad_set_element_value -element [lindex $arg 0] -- [lindex $arg 1]
+            set value [uplevel subst \{[lindex $arg 1]\}]
+            ad_set_element_value -element [lindex $arg 0] -- $value
         }
     }
 }
