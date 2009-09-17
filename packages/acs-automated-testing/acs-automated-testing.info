@@ -32,6 +32,9 @@
 "/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="XMLReportDir"  description="The full path to the directory where the xml report of system tests are stored. This is also the directory where the install and test xml reports of other servers should be stored if this server is to function as a master test server.
 "/>
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="SeleniumRcBrowsers"  default="*firefox" description="Browsers to test with. Default *firefox"/>
+            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="SeleniumRcServer"  description="Hostname of the Selenium RC Server. If this is blank the Selenium RC tests will not be run."/>
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="SeleniumRcPort"  default="4444" description="Port the Selenium RC server is listening on. Default 4444."/>            
         </parameters>
 
     </version>
