@@ -256,7 +256,7 @@ ad_proc -public application_group::delete {
 
     db_exec_plsql delete {}
 
-    db_flush -cache_key_pattern application_group_*
+    db_flush_cache -cache_key_pattern application_group_*
 
 }
 
