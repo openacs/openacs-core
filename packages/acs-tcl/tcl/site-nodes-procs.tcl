@@ -671,7 +671,7 @@ ad_proc -public site_node::get_children {
     
     @param package_key   If specified, this will limit the returned nodes to those with a
                          package of the specified package key mounted. Conflicts with the
-                         -package_type option.
+                         -package_type option. Can take one or more packges keys as a Tcl list.
 
     @param filters       Takes a list of { element value element value ... } for filtering 
                          the result list. Only nodes where element is value for each of the 
@@ -723,7 +723,13 @@ ad_proc -public site_node::get_children {
 
                 set passed_p 1
                 foreach { elm val } $filters {
-                    if { ![string equal $site_node($elm) $val] } {
+                    # package_key supports one or more package keys
+                    # since we can filter on the site node pretty name
+                    # we can't just treat all filter values as a list
+                    if {$elm eq "package_key" && [llength $val] > 1 && [lsearch $val $site_node($elm)] < 0} {
+                        set passed_p 0
+                        break
+                    } elseif {($elm ne "package_key" || [llength $val] == 1) && ![string equal $site_node($elm) $val]} {
                         set passed_p 0
                         break
                     }
