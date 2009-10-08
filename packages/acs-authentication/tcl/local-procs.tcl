@@ -616,3 +616,27 @@ ad_proc -private auth::local::user_info::GetParameters {} {
     return [list]
 }
 
+ad_proc -private auth::local::search::Search {
+    search_text
+    {parameters ""}
+} {
+    Implements the Search operation of the auth_search
+    service contract for the local account implementation.
+} {
+
+    set results [list]
+    db_foreach user_search {} {
+	lappend results $user_id
+    }
+
+    return $results
+
+}
+
+ad_proc -private auth::local::search::GetParameters {} {
+    Implements the GetParameters operation of the auth_search
+    service contract for the local account implementation.
+} {
+    # No parameters
+    return [list]
+}
