@@ -80,7 +80,7 @@ ns_log debug "MEMBER SEARCH TCL level='[template::adp_level]' [uplevel \#[templa
     -multirow users \
     -key userkey \
     -has_checkboxes \
-    -bulk_action_export_vars { authority_id return_url object_id } \
+    -bulk_action_export_vars { authority_id return_url object_id group_id } \
     -filters {search_text {} authority_id {} object_id {}} \
     -elements [list \
      checkbox {
