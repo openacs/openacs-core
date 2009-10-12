@@ -658,7 +658,9 @@ begin
   -- get the table name for the content type (determines view name)
   raise NOTICE ''refresh trigger for % '', refresh_trigger__content_type;
 
-  select table_name 
+    -- Since we allow null table name use object type if table name is null so
+  -- we still can have a view.
+  select coalesce(table_name,object_type)
     into v_table_name
     from acs_object_types 
    where object_type = refresh_trigger__content_type;
@@ -699,6 +701,7 @@ begin
                     and ot2.object_type <> ''content_revision''
                     and ot1.object_type = refresh_trigger__content_type
                     and ot1.tree_sortkey between ot2.tree_sortkey and tree_right(ot2.tree_sortkey)
+                    and ot1.table_name is not null
                   order by level asc
   LOOP
     function_text := function_text || '' '' || content_type__trigger_insert_statement(type_rec.object_type) || '';
@@ -770,7 +773,9 @@ begin
     end if;
   end loop;
 
-  select table_name into v_table_name from acs_object_types
+  -- Since we allow null table name use object type if table name is null so
+  -- we still can have a view.
+  select coalesce(table_name,object_type) into v_table_name from acs_object_types
     where object_type = refresh_view__content_type;
 
   if length(v_table_name) > 57 then
