@@ -213,7 +213,7 @@ if {$write_p} {
 		} 
                 set file_name [string trim $file_name]
 		if {$f_title eq "" && [info exists file_name]} {
-		    element set_value upload_form f_title $file_name
+                    set f_title $file_name
 		}            
 		
 		if {$share eq "private" && [string match "image/*" $mime_type]} {
