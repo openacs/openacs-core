@@ -202,7 +202,7 @@ ad_proc -public auth::password::recover_password {
                            -username $username]
 
     if { $forgotten_url ne "" } {
-        ad_returnredirect $forgotten_url
+        ad_returnredirect -allow_complete_url $forgotten_url
         ad_script_abort
     }
 
