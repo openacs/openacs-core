@@ -13,10 +13,6 @@ ad_page_contract {
 set page_title [_ acs-subsite.Reset_Password]
 set context [list $page_title]
 
-if { ![exists_and_not_null authority_id] } {
-    set authority_id [auth::authority::local]
-}
-
 # display error if the subsite doesn't allow recovery of passwords
 set subsite_id [subsite::get_element -element object_id]
 
@@ -33,6 +29,10 @@ if {[string is false $email_forgotten_password_p]} {
 
 # Display form to collect username and authority
 set authority_options [auth::authority::get_authority_options]
+
+if { ![exists_and_not_null authority_id] } {
+    set authority_id [lindex [lindex $authority_options 0] 1]
+}
 
 ad_form -name recover -edit_buttons [list [list [_ acs-kernel.common_continue] ok]] -form { {dummy:text(hidden),optional} }
     
