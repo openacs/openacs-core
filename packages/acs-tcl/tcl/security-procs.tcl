@@ -581,6 +581,52 @@ ad_proc -public ad_get_login_url {
         set url /
     }
 
+    set UseHostnameDomainforReg [parameter::get -package_id [apm_package_id_from_key acs-tcl] -parameter UseHostnameDomainforReg -default 0]
+    if { $UseHostnameDomainforReg } {
+
+        # get config.tcl's hostname
+        set nssock [ns_config ns/server/[ns_info server]/modules nssock]
+        set nsunix [ns_config ns/server/[ns_info server]/modules nsunix]
+        if {$nsunix ne ""} {
+            set driver nsunix
+        } else {
+            set driver nssock
+        }
+        set config_hostname [ns_config ns/server/[ns_info server]/module/$driver Hostname]
+        set current_location [util_current_location]
+        # if current domain and hostdomain are different (and UseHostnameDomain), revise url
+        if { ![string match -nocase "*${config_hostname}*" $current_location] } {
+
+            if { [string range $url 0 0] eq "/" } {
+                # Make the url fully qualified
+                if { [security::secure_conn_p] } {
+                    set url_decoded [security::get_secure_qualified_url $url]
+                } else {
+                    set url_decoded [security::get_insecure_qualified_url $url]
+                }
+            } else {
+                set url_decoded $url
+            }
+
+            # revise url to use hostname's domain
+            # if url points to a non / host_node, redirect to main hostname
+            set host_node_map_hosts_list [db_list -cache_key security-locations-host-names get_node_host_names "select host from host_node_map"]
+            if { [llength $host_node_map_hosts_list] > 0 } {
+                foreach hostname $host_node_map_hosts_list {
+                    if { [string match -nocase "http://${hostname}*" $url_decoded] || [string match -nocase "https://${hostname}*" $url_decoded] } {
+                        db_1row get_node_id_from_host_name "select node_id as host_node_id from host_node_map where host = :hostname"
+                        # site node already in url, so just switching domain.
+                        if { ![regsub -- "${hostname}" $url_decoded "${config_hostname}" url_decoded] } {
+                            ns_log Warning "ad_get_login_url(ref619): regsub was unable to modify url to hostname's domain. User may not appear to be logged-in after login. url_decoded: ${url_decoded} url: ${url}"
+                        } 
+                    }
+                }
+            }
+            set url $url_decoded
+        }
+    }
+
+
     append url "register/"
 
     set export_vars [list]
@@ -601,6 +647,39 @@ ad_proc -public ad_get_login_url {
         } else {
             set return_url [ad_return_url -qualified]
         }
+
+        if { $UseHostnameDomainforReg } {
+            # if current domain and hostdomain are different (and UseHostnameDomainforReg), revise return_url
+            if { ![string match -nocase "*${config_hostname}*" $current_location] } {
+                
+                if { [string range $return_url 0 0] eq "/" } {
+                    # Make the return_url fully qualified
+                    if { [security::secure_conn_p] } {
+                        set return_url_decoded [security::get_secure_qualified_url $return_url]
+                    } else {
+                        set return_url_decoded [security::get_insecure_qualified_url $return_url]
+                    }
+                } else {
+                    set return_url_decoded $return_url
+                }
+                # revise return_url to use hostname's domain
+                # if return_url points to a non / host_node, redirect to main hostname
+                set host_node_map_hosts_list [db_list -cache_key security-locations-host-names get_node_host_names "select host from host_node_map"]
+                if { [llength $host_node_map_hosts_list] > 0 } {
+                    foreach hostname $host_node_map_hosts_list {
+                        if { [string match -nocase "http://${hostname}*" $return_url_decoded] || [string match -nocase "https://${hostname}*" $return_url_decoded] } {
+                            db_1row get_node_id_from_host_name "select node_id as host_node_id from host_node_map where host = :hostname"
+                            if { ![regsub -- "${hostname}" $return_url_decoded "${config_hostname}[site_node::get_url -node_id ${host_node_id} -notrailing]" return_url_decoded] } {
+                                ns_log Warning "ad_get_login_url(ref672): regsub was unable to modify return_url to hostname's domain. User may not appear to be logged-in after login. return_url_decoded: ${return_url_decoded} return_url: ${return_url}"
+                            } 
+                        }
+                    }
+                }
+                set return_url $return_url_decoded
+            }
+        }
+
+
         lappend export_vars { return_url }
     }
 
@@ -1561,11 +1640,11 @@ ad_proc -private security::get_insecure_location {} {
 }
 
 ad_proc -public security::locations {} {
-    @returns insecure location and secure location (followed possibly by an alternate insecure location)  as a list.
+    @returns insecure location and secure location followed possibly by alternate insecure location(s)  as a list.
 
-    The location consists of protocol://domain:port for website. This proc is ported from ec_insecure_location and ec_secure_location for reliably getting locations.  If acs-tcl's SuppressHttpPort parameter is true, then the alternate ec_insecure_location without port is appended to the list, since it is a valid alternate.
+    The location consists of protocol://domain:port for website. This proc is ported from ec_insecure_location and ec_secure_location for reliably getting locations.  If acs-tcl's SuppressHttpPort parameter is true, then the alternate ec_insecure_location without port is appended to the list, since it is a valid alternate.  This proc also assumes hostnames from host_node_map table are accurate and legit.
 } {
-
+    set locations [list]
     # following from ec_preferred_drivers
     set driver ""
     set sdriver ""
@@ -1618,7 +1697,8 @@ ad_proc -public security::locations {} {
     }
     # let's give a warning if util_current_location returns host_name
     # not same as from config.tcl, may help with proxy issues etc
-    if {[ns_config ns/server/[ns_info server]/module/$driver Hostname] ne $host_name } {
+    set config_hostname [ns_config ns/server/[ns_info server]/module/$driver Hostname]
+    if { $config_hostname ne $host_name } {
         ns_log Warning "security::locations hostname '[ns_config ns/server/[ns_info server]/module/$driver Hostname]' from config.tcl does not match from util_current_location: $host_name"
     }
 
@@ -1626,9 +1706,11 @@ ad_proc -public security::locations {} {
     set insecure_port [ns_config -int "ns/server/[ns_info server]/module/$driver" port 80]
 
     set insecure_location "http://${host_name}"
+    set host_map_http_port ""
     if { $insecure_port ne "" && $insecure_port ne 80 } {
         set alt_insecure_location $insecure_location
         append insecure_location ":$insecure_port"
+        set host_map_http_port ":$insecure_port"
     }
 
     # secure location, favoring nsopenssl
@@ -1646,18 +1728,42 @@ ad_proc -public security::locations {} {
         set secure_port ""
     }
 
-    set locations [list $insecure_location]
+    lappend locations $insecure_location
     # if we have a secure location, add it
     if { $sdriver ne "" } {
+        set host_map_https_port ""
         set secure_location "https://${host_name}"
         if {$secure_port ne "" && $secure_port ne "443"}  {
             append secure_location ":$secure_port"
+            set host_map_https_port ":$secure_port"
         }
         lappend locations $secure_location
     }
     # consider if we are behind a proxy and don't want to publish the proxy's backend port
-    if { [info exists alt_insecure_location] && [parameter::get -parameter SuppressHttpPort -package_id [apm_package_id_from_key acs-tcl] -default 0] } {
+    set suppress_http_port [parameter::get -parameter SuppressHttpPort -package_id [apm_package_id_from_key acs-tcl] -default 0]
+    if { [info exists alt_insecure_location] && $suppress_http_port } {
         lappend locations $alt_insecure_location
+    }
+
+    # add locations from host_node_map 
+    set host_node_map_hosts_list [db_list -cache_key security-locations-host-names get_node_host_names "select host from host_node_map"]
+    # fastest place for handling this special case:
+    if { $config_hostname ne $host_name } {
+        ns_log Notice "security::locations adding $config_hostname since utl_current_location different than config.tcl."
+        lappend host_node_map_hosts_list $config_hostname
+    }
+    if { [llength $host_node_map_hosts_list] > 0 } {
+        if { $suppress_http_port } {
+            foreach hostname $host_node_map_hosts_list {
+                lappend locations "http://${hostname}"
+                lappend locations "https://${hostname}${host_map_https_port}"
+            }
+        } else {
+            foreach hostname $host_node_map_hosts_list {
+                lappend locations "http://${hostname}${host_map_http_port}"
+                lappend locations "https://${hostname}${host_map_https_port}"
+            }
+        }
     }
     return  $locations
 }
