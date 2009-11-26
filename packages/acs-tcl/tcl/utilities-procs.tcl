@@ -2192,7 +2192,7 @@ ad_proc -public ad_returnredirect {
         # http://myserver.com/foo/bar.tcl style - just pass to ns_returnredirect
         # check if the hostname matches the current host
         if {[util::external_url_p $target_url] && !$allow_complete_url_p} {
-            error "Redirction to external hosts is not allowed."
+            error "Redirection to external hosts is not allowed."
         }
         set url $target_url
     } elseif { [util_absolute_path_p $target_url] } {
@@ -4507,13 +4507,13 @@ ad_proc util::catch_exec {command result_var} {
         # The command succeeded, and wrote nothing to stderr.                   
         # $result contains what it wrote to stdout, unless you                  
         # redirected it
-        ns_log debug "Status == 0 $result"
+        ns_log debug "util::catch_exec: Status == 0 $result"
         
     } elseif {$::errorCode eq "NONE"} {
 
         # The command exited with a normal status, but wrote something          
         # to stderr, which is included in $result.                              
-        ns_log debug "Normal Status $result"
+        ns_log debug "util::catch_exec: Normal Status $result"
         
     } else {
 
@@ -4525,7 +4525,7 @@ ad_proc util::catch_exec {command result_var} {
                 # A child process, whose process ID was $pid,                   
                 # died on a signal named $sigName.  A human-                    
                 # readable message appears in $msg.
-                ns_log notice "childkilled $pid $sigName $msg $result"
+                ns_log notice "util::catch_exec: childkilled $pid $sigName $msg $result"
                 set result "process $pid died with signal $sigName \"$msg\""
                 return 1
             }
@@ -4536,7 +4536,7 @@ ad_proc util::catch_exec {command result_var} {
 
                 # A child process, whose process ID was $pid,                   
                 # exited with a non-zero exit status, $code.
-                ns_log notice "Childstatus $pid $code $result"
+                ns_log notice "util::catch_exec: Childstatus $pid $code $result"
             }
 
             CHILDSUSP {
@@ -4547,7 +4547,7 @@ ad_proc util::catch_exec {command result_var} {
                 # has been suspended because of a signal named                  
                 # $sigName.  A human-readable description of the                
                 # signal appears in $msg.                                       
-                ns_log notice "Child susp $pid $sigName $msg $result"
+                ns_log notice "util::catch_exec: Child susp $pid $sigName $msg $result"
                 set result "process $pid was suspended with signal $sigName \"$msg\""
                 return 1
             }
@@ -4559,7 +4559,7 @@ ad_proc util::catch_exec {command result_var} {
                 # One of the kernel calls to launch the command                 
                 # failed.  The error code is in $errName, and a                 
                 # human-readable message is in $msg.                            
-                ns_log notice "posix $errName $msg $result"
+                ns_log notice "util::catch_exec: posix $errName $msg $result"
                 set result "an error occured $errName \"$msg\""
                 return 1
             }
@@ -4574,13 +4574,18 @@ ad_proc util::external_url_p { url } {
     valid alternatives include
     HTTPS or HTTP protocol change
     HTTP or HTTPS port number added or removed from current host name    
+   or another hostname that the host responds to (from host_node_map)
 } {
     set locations_list [security::locations]
-    # there may be as many as 3 valid full urls
+    # there may be as many as 3 valid full urls from one hostname
     set external_url_p [util_complete_url_p $url]
+
+    # more valid url pairs with host_node_map
     foreach location $locations_list {
-        ns_log notice "location \"$location/*\" url $url match [string match "$location/*" $url]"
+        set encoded_location [ns_urlencode $location]
+ #       ns_log Notice "util::external_url_p location \"$location/*\" url $url match [string match "${encoded_location}/*" $url]"
         set external_url_p [expr { $external_url_p && ![string match "$location/*" $url] } ] 
+        set external_url_p [expr { $external_url_p && ![string match "${encoded_location}/*" $url] } ] 
     }
     return $external_url_p
 }
