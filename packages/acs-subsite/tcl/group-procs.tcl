@@ -713,9 +713,6 @@ ad_proc -public group::remove_member {
     
     db_transaction {
         foreach rel_id $rel_id_list {
-	    # Remove it from the group_element_index
-	    db_dml delete "delete from group_element_index where rel_id = :rel_id"
-	    db_dml delete2 "delete from membership_rels where rel_id = :rel_id"
             relation_remove $rel_id
         }
     }
