@@ -485,7 +485,7 @@ procedure refresh_trigger (
       object_type ^= 'acs_object'                       
     and                                                 
       object_type ^= 'content_revision'
-    and table name is not null
+    and table_name is not null
     connect by                                          
       prior supertype = object_type                     
     start with                                          
