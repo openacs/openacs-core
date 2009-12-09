@@ -92,7 +92,7 @@ ns_log debug "MEMBER SEARCH TCL level='[template::adp_level]' [uplevel \#[templa
      auth_status {
  	label "Status"
      } \
-		   actions [list label "Actions" display_template "<if @users.first@ not nil and @users.last@ not nil and @users.email@ not nil and @users.group_member_p@ false><a href=\"${add_user_url}&userkey=@users.username@+@users.authority_id@&authority_id=${authority_id}&return_url=[ad_urlencode ${return_url}]\" class=button>$add_user_label</a></if>"] \
+		   actions [list label "Actions" display_template "<if @users.first@ not nil and @users.last@ not nil and @users.email@ not nil and @users.group_member_p@ false><a href=\"${add_user_url}&userkey=@users.username@+@users.authority_id@&authority_id=${authority_id}&return_url=[ad_urlencode ${return_url}]&group_id=$group_id\" class=button>$add_user_label</a></if>"] \
      extra_attributes {label "Extra Attributes"} \
 		   user_id [list hide_p [expr {!$admin_p}] label "" display_template "<if @users.user_id@ not nil><a href=\"$member_admin_url?user_id=@users.user_id@\">User Admin Page</a></if>"] \
 	       ] -bulk_actions $bulk_actions \
