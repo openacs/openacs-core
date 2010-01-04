@@ -1730,8 +1730,8 @@ ad_proc -public security::locations {} {
 
     lappend locations $insecure_location
     # if we have a secure location, add it
+    set host_map_https_port ""
     if { $sdriver ne "" } {
-        set host_map_https_port ""
         set secure_location "https://${host_name}"
         if {$secure_port ne "" && $secure_port ne "443"}  {
             append secure_location ":$secure_port"
