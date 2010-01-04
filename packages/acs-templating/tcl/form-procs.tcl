@@ -423,9 +423,6 @@ ad_proc -public template::form::section {
 	# fieldset attributes
 	set properties(sec_fieldset) ""
 	array set fs_attributes $fieldset
-    if {![info exists fs_attributes(class)]} {
-        append properties(sec_fieldset) " class=\"form-fieldset\""
-    }
 	foreach name [array names fs_attributes] {
 		if {$fs_attributes($name) eq {}} {
 			append properties(sec_fieldset) " $name"
@@ -438,6 +435,9 @@ ad_proc -public template::form::section {
 	set properties(sec_legend) ""
 	if { $legendtext ne "" } {
 		array set lg_attributes $legend
+        if {![info exists lg_attributes(class)]} {
+            append properties(sec_legend) " class=\"bold\""
+        }
 		foreach name [array names lg_attributes] {
 			if {$lg_attributes($name) eq {}} {
 				append properties(sec_legend) " $name"
