@@ -101,6 +101,8 @@ db_foreach select_params {} {
 set focus "parameters.$focus_elm"
 
 if { $counter > 0 } {
+    # Close last section
+    ad_form -extend -name parameters -form [list "-section"]
     ad_form -extend -name parameters -on_request {
         foreach name [array names param] {
             set $name $param($name)
