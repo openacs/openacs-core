@@ -3,15 +3,15 @@
 
 <fullquery name="application_data_link::new_from.create_forward_link">
     <querytext>
-	    insert into acs_data_links (rel_id, object_id_one, object_id_two)
-	    values (:forward_rel_id, :object_id, :to_object_id)
+	    insert into acs_data_links (rel_id, object_id_one, object_id_two, relation_tag)
+	    values (:forward_rel_id, :object_id, :to_object_id, :relation_tag)
     </querytext>
 </fullquery>
 
 <fullquery name="application_data_link::new_to.create_backward_link">
     <querytext>
-	    insert into acs_data_links (rel_id, object_id_one, object_id_two)
-	    values (:backward_rel_id, :from_object_id, :object_id)
+	    insert into acs_data_links (rel_id, object_id_one, object_id_two, relation_tag)
+	    values (:backward_rel_id, :from_object_id, :object_id, :relation_tag)
     </querytext>
 </fullquery>
 
@@ -21,6 +21,7 @@
 	    from acs_data_links
 	    where (object_id_one = :object_id
 		 or object_id_two = :object_id)
+         [application_data_link::relation_tag_where_clause -relation_tag $relation_tag]
     </querytext>
 </fullquery>
 
@@ -36,6 +37,7 @@
 	select object_id_two
 	from acs_data_links
 	where object_id_one = :object_id
+      [application_data_link::relation_tag_where_clause -relation_tag $relation_tag]
 	order by object_id_two
     </querytext>
 </fullquery>
@@ -45,7 +47,10 @@
     	select o.object_id
 	from acs_objects o
 	where o.object_type = :to_object_type
-	and o.object_id in (select object_id_two from acs_data_links where object_id_one = :from_object_id)
+	and o.object_id in (select object_id_two 
+                          from acs_data_links 
+                         where object_id_one = :from_object_id
+                         [application_data_link::relation_tag_where_clause -relation_tag $relation_tag])
 	order by o.object_id
     </querytext>
 </fullquery>
@@ -55,7 +60,10 @@
 	select i.item_id
 	from cr_items i
 	where i.content_type = :to_content_type
-	and i.item_id in (select object_id_two from acs_data_links where object_id_one = :from_object_id)
+	and i.item_id in (select object_id_two 
+                        from acs_data_links 
+                       where object_id_one = :from_object_id
+                       [application_data_link::relation_tag_where_clause -relation_tag $relation_tag])
 	order by i.item_id
     </querytext>
 </fullquery>
@@ -68,6 +76,7 @@
 	$content_type_from_clause
         where object_id_one = :object_id
 	and object_id = object_id_two
+    [application_data_link::relation_tag_where_clause -relation_tag $relation_tag]
 	$to_type_where_clause
     </querytext>
 </fullquery>
@@ -95,6 +104,7 @@
   	delete from acs_data_links where object_id_one=:object_id
         and object_id_two in 
           ([template::util::tcl_to_sql_list $link_object_id_list])
+        [application_data_link::relation_tag_where_clause -relation_tag $relation_tag]
     </querytext>
 </fullquery>
 
@@ -103,6 +113,7 @@
 	select 1 from acs_data_links
 	where object_id_one = :from_object_id
 	and object_id_two = :to_object_id
+    [application_data_link::relation_tag_where_clause -relation_tag $relation_tag]
     </querytext>
 </fullquery>
 
@@ -111,4 +122,10 @@
 	select object_id from acs_objects where object_id in ([template::util::tcl_to_sql_list $refs])
     </querytext>
 </fullquery>	
+
+<partialquery name="application_data_link::relation_tag_where_clause.where_clause">
+    <querytext>
+    and relation_tag = :relation_tag
+    </querytext>
+</partialquery>
 </queryset>
