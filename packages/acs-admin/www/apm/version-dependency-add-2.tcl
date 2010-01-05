@@ -7,26 +7,32 @@ ad_page_contract {
     {dependency_id:naturalnum}
     {version_id:integer}
     dependency_type
-    service_uri
-    service_version
+    service:notnull
+    our_package_key:notnull
 }
 
+set service [split $service ";"]
+set package_key [lindex $service 0]
+set version_name [lindex $service 1]
+
 db_transaction {
+    apm_package_install_spec $version_id
     switch $dependency_type {
-	require -
-        extend {
-	    apm_dependency_add -dependency_id $dependency_id ${dependency_type}s $version_id $service_uri $service_version
+	require {
+	    apm_dependency_add -dependency_id $dependency_id ${dependency_type}s $version_id $package_key $version_name
+            apm_build_one_package_relationships $our_package_key
 	}
 
-	provide {
-	    apm_interface_add -interface_id $dependency_id $version_id $service_uri $service_version
+        extend {
+	    apm_dependency_add -dependency_id $dependency_id ${dependency_type}s $version_id $package_key $version_name
+            apm_build_one_package_relationships $our_package_key
+            apm_copy_inherited_params $our_package_key
 	}
 
 	default {
 	    ad_return_complaint 1 "Entry error: Depenendencies are either provided or required."
 	}
     }
-    apm_package_install_spec $version_id
 } on_error {
     if { ![db_string apm_dependency_doubleclick_check {
 	select count(*) from apm_package_dependencies
