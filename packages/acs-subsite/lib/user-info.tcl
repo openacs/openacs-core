@@ -54,30 +54,93 @@ ad_form -name user_info -cancel_url $return_url -action $action_url -mode $form_
     {message:text(hidden),optional}
 }
 
+# Fill the form elements list
+set elms_list [list]
+
 if { [llength [auth::authority::get_authority_options]] > 1 } {
-    ad_form -extend -name user_info -form {
-        {authority_id:text(select)
-            {mode $elm_mode(authority_id)}
-            {label "[_ acs-subsite.Authority]"}
-            {options {[auth::authority::get_authority_options]}}
-        }
+    lappend elms_list {
+        authority_id:text(select)
+        {mode $elm_mode(authority_id)}
+        {label "[_ acs-subsite.Authority]"}
+        {options {[auth::authority::get_authority_options]}}
     }
 } else {
     lappend read_only_elements authority_id
 }
 
 if { $user(authority_id) != [auth::authority::local] || ![auth::UseEmailForLoginP] || \
-     ([acs_user::site_wide_admin_p] && [llength [auth::authority::get_authority_options]] > 1) } {
-    ad_form -extend -name user_info -form {
-        {username:text(text)
-            {label "[_ acs-subsite.Username]"}
-            {mode $elm_mode(username)}
-        }
+         ([acs_user::site_wide_admin_p] && [llength [auth::authority::get_authority_options]] > 1) } {
+    lappend elms_list {
+        username:text(text)
+        {label "[_ acs-subsite.Username]"}
+        {mode $elm_mode(username)}
     }
 } else {
     lappend read_only_elements username
 }
 
+# TODO: Use get_registration_form_elements, or auto-generate the form somehow? Deferred.
+
+lappend elms_list {
+    first_names:text
+    {label "[_ acs-subsite.First_names]"}
+    {html {size 50}}
+    {mode $elm_mode(first_names)}
+} {
+    last_name:text
+    {label "[_ acs-subsite.Last_name]"}
+    {html {size 50}}
+    {mode $elm_mode(last_name)}
+} {
+    email:text
+    {label "[_ acs-subsite.Email]"}
+    {html {size 50}}
+    {mode $elm_mode(email)}
+}
+
+if { [acs_user::ScreenName] ne "none" } {
+    lappend elms_list [list screen_name:text[ad_decode [acs_user::ScreenName] "solicit" ",optional" ""] \
+                           {label "[_ acs-subsite.Screen_name]"} \
+                           {html {size 50}} \
+                           {mode $elm_mode(screen_name)} \
+                          ]
+}
+
+lappend elms_list {
+    url:text,optional
+    {label "[_ acs-subsite.Home_page]"}
+    {html {size 50}}
+    {mode $elm_mode(url)}
+} {
+    bio:text(textarea),optional
+    {label "[_ acs-subsite.Biography]"}
+    {html {rows 8 cols 60}}
+    {mode $elm_mode(bio)}
+    {display_value {[ad_text_to_html -- $user(bio)]}}
+}
+
+set locale_options [list]
+db_foreach get_locales {} {
+    if { [lang::message::message_exists_p $locale acs-lang.this-language] } {
+        set label "[lang::message::lookup $locale  acs-lang.this-language]"
+    }
+    lappend locale_options [list ${label} $locale]
+}
+
+if { [llength $locale_options] > 1 } {
+    lappend elms_list {
+        site_wide_locale:text(select_locales),optional
+        {label "[_ acs-lang.Your_Preferred_Locale]"}
+        {options $locale_options}
+    }
+}
+
+lappend elms_list [list \
+                       timezone:text(select),optional \
+                       {label "[_ acs-lang.Your_timezone]"} \
+                       [list options [db_list_of_lists get_timezones {}]]]
+
+# Setting focus on the first editable element of the form
 set first_element {}
 foreach elm $form_elms {
     if { $elm_mode($elm) eq "" && ( [lsearch $read_only_elements $elm] eq -1) } {
@@ -87,53 +150,19 @@ foreach elm $form_elms {
 }
 set focus "user_info.$first_element"
 
-# TODO: Use get_registration_form_elements, or auto-generate the form somehow? Deferred.
-
-
-ad_form -extend -name user_info -form {
-    {first_names:text
-        {label "[_ acs-subsite.First_names]"}
-        {html {size 50}}
-        {mode $elm_mode(first_names)}
-    }
-    {last_name:text
-        {label "[_ acs-subsite.Last_name]"}
-        {html {size 50}}
-        {mode $elm_mode(last_name)}
-    }
-    {email:text
-        {label "[_ acs-subsite.Email]"}
-        {html {size 50}}
-        {mode $elm_mode(email)}
-    }
-}
-
-if { [acs_user::ScreenName] ne "none" } {
-    ad_form -extend -name user_info -form \
-        [list \
-             [list screen_name:text[ad_decode [acs_user::ScreenName] "solicit" ",optional" ""] \
-                  {label "[_ acs-subsite.Screen_name]"} \
-                  {html {size 50}} \
-                  {mode $elm_mode(screen_name)} \
-                 ]]
-}
-
-ad_form -extend -name user_info -form {
-    {url:text,optional
-        {label "[_ acs-subsite.Home_page]"}
-        {html {size 50}}
-        {mode $elm_mode(url)}
-    }
-    {bio:text(textarea),optional
-        {label "[_ acs-subsite.Biography]"}
-        {html {rows 8 cols 60}}
-        {mode $elm_mode(bio)}
-        {display_value {[ad_text_to_html -- $user(bio)]}}
-    }
-} -on_request {
+# 
+ad_form -extend -name user_info -form $elms_list -on_request {
     foreach var { authority_id first_names last_name email username screen_name url bio } {
         set $var $user($var)
     }
+
+    set site_wide_locale [ad_conn locale]
+
+    set timezone [lang::user::timezone]
+    if { $timezone eq "" } {
+        set timezone [lang::system::timezone]
+    }
+
 } -on_submit {
 
     # Makes the email an image or text according to the level of privacy
@@ -156,7 +185,11 @@ ad_form -extend -name user_info -form {
     # Handle authentication problems
     switch $result(update_status) {
         ok {
-            # Continue below
+            # Updating locale/tz data
+            if { [info exists site_wide_locale] } {
+                lang::user::set_locale $site_wide_locale
+            }
+            lang::user::set_timezone $timezone
         }
         default {
             # Adding the error to the first element, but only if there are no element messages
