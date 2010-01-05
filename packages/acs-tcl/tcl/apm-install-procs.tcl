@@ -884,13 +884,9 @@ ad_proc -private apm_package_install {
         apm_build_one_package_relationships $package_key
 
         if { $upgrade_p } {
-            foreach descendent_package_key [nsv_get apm_package_descendents $package_key] {
-                db_list copy_descendent_params {}
-            }
+            apm_copy_descendent_params $package_key
         } else {
-            foreach inherited_package_key [nsv_get apm_package_inherit_order $package_key] {
-                db_list copy_inherited_params {}
-            }
+            apm_copy_inherited_params $package_key
         }
 
 	apm_callback_and_log $callback "<p>Installed $version(package-name), version $version(name).</p>"
@@ -977,6 +973,23 @@ ad_proc -private apm_package_install {
     util_memoize_flush [list apm_package_installed_p_not_cached $package_key]
 
     return $version_id
+}
+
+ad_proc apm_copy_descendent_params { package_key } {
+    Copy new parameters in the package to its descendents.  Called when a package is
+    upgraded.
+} {
+    foreach descendent_package_key [nsv_get apm_package_descendents $package_key] {
+        db_list copy_descendent_params {}
+    }
+}
+
+ad_proc apm_copy_inherited_params { package_key } {
+    Copy parameters from a packages ancestors.  Called for an "extends" dependency.
+} {
+    foreach inherited_package_key [nsv_get apm_package_inherit_order $package_key] {
+        db_list copy_inherited_params {}
+    }
 }
 
 ad_proc -private apm_package_install_version {

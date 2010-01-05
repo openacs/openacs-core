@@ -248,7 +248,18 @@
       </querytext>
 </fullquery>
 
-<fullquery name="apm_package_install.copy_descendent_params">      
+<fullquery name="apm_package_install.version_exists_p">      
+      <querytext>
+      
+	    select version_id 
+	    from apm_package_versions 
+	    where package_key = :package_key
+	    and version_id = apm_package.highest_version(:package_key)
+	
+      </querytext>
+</fullquery>
+
+<fullquery name="apm_copy_descendent_params.copy_descendent_params">      
   <querytext>
 
       select apm.register_parameter(
@@ -271,7 +282,7 @@
       </querytext>
 </fullquery>
 
-<fullquery name="apm_package_install.copy_inherited_params">      
+<fullquery name="apm_copy_inherited_params.copy_inherited_params">      
   <querytext>
       select apm.register_parameter(
                null,
@@ -289,17 +300,6 @@
                         from apm_parameters ap2
                         where ap2.parameter_name = ap.parameter_name
                           and ap2.package_key = :package_key)
-	
-      </querytext>
-</fullquery>
-
-<fullquery name="apm_package_install.version_exists_p">      
-      <querytext>
-      
-	    select version_id 
-	    from apm_package_versions 
-	    where package_key = :package_key
-	    and version_id = apm_package.highest_version(:package_key)
 	
       </querytext>
 </fullquery>
