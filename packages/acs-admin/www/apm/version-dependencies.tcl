@@ -7,11 +7,7 @@ ad_page_contract {
     {version_id:integer}
 }
 
-db_1row  apm_package_info_by_version_id {
-    select package_key, pretty_name, version_name, installed_p 
-    from apm_package_version_info 
-    where version_id = :version_id
-}
+db_1row  apm_package_info_by_version_id {}
 
 doc_body_append "[apm_header [list "version-view?version_id=$version_id" "$pretty_name $version_name"] "Dependencies"]
 
@@ -28,7 +24,11 @@ foreach dependency_type { provide extend require } {
     doc_body_append "<h3>Services [string totitle $dependency_type_prep_2]</h3><ul>\n"
 
     db_foreach apm_all_dependencies {} {
-	doc_body_append "<li>[string totitle $dependency_type_prep] service $service_uri, version $service_version (<a href=\"version-dependency-remove?[export_url_vars dependency_id version_id dependency_type]\">remove</a>)\n"
+	doc_body_append "<li>[string totitle $dependency_type_prep] service $service_uri, version $service_version"
+
+        if { $dependency_type ne "provide" } {
+            doc_body_append "(<a href=\"version-dependency-remove?[export_url_vars dependency_id version_id dependency_type]\">remove</a>)\n"
+        }
 	
 	# If this package provides a service, show a list of all packages that require it,
 	# or vice versa. If this package provides a service, show other packages requiring
@@ -57,7 +57,7 @@ foreach dependency_type { provide extend require } {
     } else {
 	doc_body_append "<li>This package does not $dependency_type any services.\n"
     }
-    if { $installed_p eq "t" } {
+    if { $installed_p eq "t" && $dependency_type ne "provide"} {
 	doc_body_append "<li><a href=\"version-dependency-add?[export_url_vars version_id dependency_type]\">Add a service $dependency_type_prep_2 by this package</a>\n"
     }
     doc_body_append "</ul>\n"
