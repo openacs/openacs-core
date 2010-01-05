@@ -378,14 +378,16 @@ create table acs_data_links (
                         constraint acs_data_links_obj_two_fk
                         references acs_objects (object_id)
                         on delete cascade,
-        relation_tag    varchar(100),
-        constraint acs_data_links_un unique
-        (object_id_one, object_id_two, relation_tag)
+        relation_tag    varchar(100)
 );
 
 create index acs_data_links_id_one_idx on acs_data_links (object_id_one);
 create index acs_data_links_id_two_idx on acs_data_links (object_id_two);
 create index acs_data_links_rel_tag_idx on acs_data_links (relation_tag);
+
+create unique index acs_data_links_un on acs_data_links (
+  object_id_one, object_id_two, relation_tag
+);
 
 --------------
 -- TRIGGERS --
