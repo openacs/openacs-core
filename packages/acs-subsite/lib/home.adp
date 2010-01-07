@@ -11,10 +11,6 @@
           <ul>
             <li><a href="../user/password-update">#acs-subsite.Change_my_Password#</a></li>
 
-            <if @change_locale_url@ not nil>
-              <li><a href="@change_locale_url@">#acs-subsite.Change_locale_label#</a></li>
-            </if>
-
             <if @notifications_url@ not nil>
               <li><a href="@notifications_url@">#acs-subsite.Manage_your_notifications#</a></li>
             </if>
