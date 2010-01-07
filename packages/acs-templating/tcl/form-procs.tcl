@@ -436,7 +436,7 @@ ad_proc -public template::form::section {
 	if { $legendtext ne "" } {
 		array set lg_attributes $legend
         if {![info exists lg_attributes(class)]} {
-            append properties(sec_legend) " class=\"bold\""
+            append properties(sec_legend) " class=\"form-legend\""
         }
 		foreach name [array names lg_attributes] {
 			if {$lg_attributes($name) eq {}} {
