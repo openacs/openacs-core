@@ -41,4 +41,44 @@
       </querytext>
    </fullquery>
 
+  <fullquery name="lang::util::iso6392_from_language.get_iso2_code_from_iso1">      
+    <querytext>
+      
+      select iso_639_2
+      from   language_codes
+      where  iso_639_1 = :language
+    
+    </querytext>
+  </fullquery>
+ 
+  <fullquery name="lang::util::iso6392_from_language.get_iso2_code_from_iso2">      
+    <querytext>
+      
+      select iso_639_2
+      from   language_codes
+      where  iso_639_2 = :language
+    
+    </querytext>
+  </fullquery>
+ 
+  <fullquery name="lang::util::language_label.get_label_from_iso1">      
+    <querytext>
+      
+      select label
+      from   language_codes
+      where  iso_639_1 = :language
+    
+    </querytext>
+  </fullquery>
+ 
+  <fullquery name="lang::util::language_label.get_label_from_iso2">      
+    <querytext>
+      
+      select label
+      from   language_codes
+      where  iso_639_2 = :language
+    
+    </querytext>
+  </fullquery>
+ 
 </queryset>

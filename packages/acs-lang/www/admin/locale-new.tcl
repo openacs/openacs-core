@@ -42,13 +42,19 @@ catch {
     }
 }
 
-element create locale_creation country -label "Country (2 digit ISO 3166 code)" \
-    -datatype text -widget text -html { maxLength 2 size 2 }
+set countries_list [db_list_of_lists select_countries {}]
+element create locale_creation country \
+    -label "Country" \
+    -datatype text \
+    -widget select \
+    -options $countries_list
 
-element create locale_creation language -label "Language (2 digit ISO 639-1 code, or 3 digit ISO 639-2 code)" \
-    -datatype text -widget text -html { maxLength 3 size 3 }
-
-element create locale_creation label -label "Label" -datatype text
+set languages_list [db_list_of_lists select_languages {}]
+element create locale_creation language \
+    -label "Language" \
+    -datatype text \
+    -widget select \
+    -options $languages_list
 
 if { [info exists list_nls_language] } {
 
@@ -74,7 +80,7 @@ if { [info exists list_nls_language] } {
 }
     
 element create locale_creation mime_charset \
-    -label "MIME Charset" -datatype text
+    -label "MIME Charset" -datatype text -value "UTF8"
 
 if { [form is_request locale_creation] } {
 
@@ -96,6 +102,8 @@ if { [form is_valid locale_creation] } {
     # We are receiving a valid submission
     form get_values locale_creation
 
+    # label is built from language and country
+    set label "[lang::util::language_label -language $language] ($country)"
     append locale $language "_" $country
 
     db_transaction {
@@ -105,19 +113,13 @@ if { [form is_valid locale_creation] } {
         set default_p "f"
 
         # We first make sure that there is no default for this language
-        set is_default_p [db_string select_default "select count(*) from
-            ad_locales where language = :language and default_p = 't'"]
+        set is_default_p [db_string select_default {}]
         if { $is_default_p == "0" } {
             # There is a no default for this language
             set default_p "t"
         }
 
-        db_dml insert_locale "insert into ad_locales (
-            locale, language, country, variant, label, nls_language,
-            nls_territory, nls_charset, mime_charset, default_p, enabled_p) values (
-            :locale, :language, :country, NULL, :label, :nls_language,
-            :nls_territory, :nls_charset, :mime_charset, :default_p, 'f')"
-
+        db_dml insert_locale {}
     }
     forward "index?tab=locales"
 
