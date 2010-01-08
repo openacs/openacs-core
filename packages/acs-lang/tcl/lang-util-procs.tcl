@@ -834,3 +834,75 @@ ad_proc -public lang::util::edit_lang_key_url {
      }
      return $edit_url
  }
+
+ad_proc -public lang::util::iso6392_from_language { 
+    -language:required
+} {
+
+    Returns the ISO-639-2 code for a language.
+
+    @param language  Language, using ISO-639 code (2 or 3 chars)
+    @return          The ISO-639-2 terminology code for the language
+
+} {
+
+    set iso6392_code ""
+    set lang_len [string length $language]
+    if { $lang_len eq 2 } {
+        # input is iso-639-1 language code
+
+        set iso6392_code [db_string get_iso2_code_from_iso1 {} -default ""]
+
+    } elseif { $lang_len eq 3 } {
+        # input is iso-639-2 language code
+        # we check in the table in case the language code is wrong
+        
+        set iso6392_code [db_string get_iso2_code_from_iso2 {} -default ""]
+    }
+
+    return $iso6392_code
+}
+
+ad_proc -public lang::util::iso6392_from_locale { 
+    -locale:required
+} {
+
+    Returns the ISO-639-2 code for a locale.
+
+    @param locale    Locale to get the language ISO-639-2 code for
+    @return          The ISO-639-2 language code for the locale
+
+} {
+
+    # Don't use string range since 3 digits languages may be used
+    set language [lindex [split $locale "_"] 0]
+    return [lang::util::iso6392_from_language -language $language]
+}
+
+ad_proc -public lang::util::language_label { 
+    -language:required
+} {
+
+    Returns the ISO-639 label for a language code.
+
+    @param language  Language, using ISO-639 code (2 or 3 chars)
+    @return          The ISO-639 label for the language
+
+} {
+
+    set lang_label ""
+    set lang_len [string length $language]
+    if { $lang_len eq 2 } {
+        # input is iso-639-1 language code
+
+        set lang_label [db_string get_label_from_iso1 {} -default ""]
+
+    } elseif { $lang_len eq 3 } {
+        # input is iso-639-2 language code
+        # we check in the table in case the language code is wrong
+        
+        set lang_label [db_string get_label_from_iso2 {} -default ""]
+    }
+
+    return $lang_label
+}

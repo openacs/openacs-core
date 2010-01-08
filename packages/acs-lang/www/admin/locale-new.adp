@@ -4,6 +4,6 @@
   <property name="focus">locale_creation.country</property>
 
 <p>Please fill in the fields to create a new locale.</p>
-<p />
+
 <formtemplate id="locale_creation"></formtemplate>
 

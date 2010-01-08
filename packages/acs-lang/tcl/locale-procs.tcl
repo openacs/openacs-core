@@ -127,13 +127,25 @@ ad_proc -public lang::system::set_locale {
 ad_proc -public lang::system::language {
     {-package_id ""}
     {-site_wide:boolean}
+    {-iso6392:boolean}
 } {
     Get system language setting for a given package instance.
     
     @param package_id The package for which you want to get the language setting.
     @param site_wide Set this if you want to get the site-wide language setting.
+    @param iso6392   Set this if you want to force iso-639-2 code (3 digits)
+
+    @return 3 chars language code if iso6392 is set, left part of locale otherwise
+
 } {
-    return [string range [locale -package_id $package_id -site_wide=$site_wide_p] 0 1]
+    set locale [locale -package_id $package_id -site_wide=$site_wide_p]
+    set sys_lang [lindex [split $locale "_"] 0]
+
+    if { $iso6392_p } {
+        return [lang::util::iso6392_from_language -language $sys_lang]
+    } else {
+        return $sys_lang
+    }
 }
 
 ad_proc -public lang::system::timezone {} {
@@ -314,6 +326,7 @@ ad_proc -private lang::user::site_wide_locale_not_cached {
     if { $locale eq "" } {
         set locale $system_locale
     }
+
     return $locale
 }
 
@@ -404,14 +417,27 @@ ad_proc -public lang::user::set_locale {
 ad_proc -public lang::user::language {
     {-package_id ""}
     {-site_wide:boolean}
+    {-iso6392:boolean}
 } {
     Get user language preference for a given package instance.
     This preliminary implementation only has one site-wide setting, though.
     
     @param package_id The package for which you want to get the language setting.
     @param site_wide Set this if you want to get the site-wide language setting.
+    @param iso6392   Set this if you want to force iso-639-2 code (3 digits)
+
+    @return 3 chars language code if iso6392 is set, left part of locale otherwise
+
 } {
-    return [string range [locale -package_id $package_id -site_wide=$site_wide_p] 0 1]
+
+    set locale [locale -package_id $package_id -site_wide=$site_wide_p]
+    set user_lang [lindex [split $locale "_"] 0]
+
+    if { $iso6392_p } {
+        return [lang::util::iso6392_from_language -language $user_lang]
+    } else {
+        return $user_lang
+    }
 }
 
 
@@ -613,13 +639,25 @@ ad_proc -private lang::conn::get_accept_language_header {} {
 ad_proc -public lang::conn::language {
     {-package_id ""}
     {-site_wide:boolean}
+    {-iso6392:boolean}
 } {
     Get the language for this request, perhaps for a given package instance.
     
     @param package_id The package for which you want to get the language.
     @param site_wide Set this if you want to get the site-wide language.
+    @param iso6392   Set this if you want to force the iso-639-2 code
+
+    @return 3 chars language code if iso6392 is set, left part of locale otherwise
 } {
-    return [string range [locale -package_id $package_id -site_wide=$site_wide_p] 0 1]
+
+    set locale [locale -package_id $package_id -site_wide=$site_wide_p]
+    set conn_lang [lindex [split $locale "_"] 0]
+
+    if { $iso6392_p } {
+        return [lang::util::iso6392_from_language -language $conn_lang]
+    } else {
+        return $conn_lang
+    }
 }
 
 ad_proc -public lang::conn::charset { 
