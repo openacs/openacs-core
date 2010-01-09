@@ -412,11 +412,11 @@ ad_proc -private template::adp_init { type file_stub } {
       # Here we add profiling calls if developer support exists on the 
       # system.
       if {[llength [info procs ::ds_enabled_p]]} { 
-        proc ::template::code::${type}::$file_stub {} "if {\[::ds_enabled_p\] && \[::ds_collection_enabled_p\]} { ds_profile start $file_stub.$type }
+        proc ::template::code::${type}::$file_stub {} "if {\[::ds_enabled_p\] && \[::ds_collection_enabled_p\] && \[::ds_profiling_enabled_p\]} { ds_profile start $file_stub.$type }
 uplevel {
 $code
 }
-if {\[::ds_enabled_p\] && \[::ds_collection_enabled_p\]} { ds_profile stop $file_stub.$type }\n"
+if {\[::ds_enabled_p\] && \[::ds_collection_enabled_p\] &&\[::ds_profiling_enabled_p\]} { ds_profile stop $file_stub.$type }\n"
       } else { 
         proc ::template::code::${type}::$file_stub {} "
     	uplevel {

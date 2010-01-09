@@ -16,12 +16,7 @@ ds_require_permission [ad_conn package_id] "admin"
 set page_title "Request Information"
 set context [list $page_title]
 
-if { [ns_cache get ds_page_bits $request dummy] } { 
-    set page_fragment_cache_p 1
-} else { 
-    set page_fragment_cache_p 0
-}
-
+set page_fragment_cache_p [ds_page_fragment_cache_enabled_p]
 
 foreach name [nsv_array names ds_request] {
     ns_log Debug "DS: Checking request $request, $name."
@@ -299,4 +294,56 @@ if { ![info exists property(db)] } {
         }
             
 }
-    
+
+# Profiling information
+global ds_profile__total_ms ds_profile__iterations
+
+template::list::create -name profiling -multirow profiling -elements {
+	file_links {
+	    label "Ops"
+	    display_template {
+		@profiling.file_links;noquote@
+	    }
+	}
+	tag {
+	    label "Template"
+	}
+	total_ms {
+	    label "Total time"
+	}
+	size {
+	    label "Size"
+	}
+}
+
+multirow create profiling tag total_ms file_links size
+
+if { [info exists property(prof)] } {
+    foreach {tag time} $property(prof) {
+        if {[file exists $tag]} {
+            set file_links "<a href=\"send?fname=[ns_urlencode $tag]\" title=\"edit\">e</a>"
+            append file_links " <a href=\"send?code=[ns_urlencode $tag]\" title=\"compiled code\">c</a>"
+        } else {
+            set file_links {}
+        }
+
+        if { $page_fragment_cache_p } {
+            if { [string match *.adp $tag]} {
+                append file_links " <a href=\"send?output=$request:[ns_urlencode $tag]\" title=\"output\">o</a>"
+                if {[ns_cache get ds_page_bits "$request:$tag" dummy]} {
+                    set size [string length $dummy]
+                } else {
+                    set size {?}
+                }
+            } else {
+                append file_links " x"
+                set size -
+            }
+        } else { 
+            set size {}
+        }
+
+        set total_ms [lc_numeric $time]
+        multirow append profiling $tag $total_ms $file_links $size
+    }
+}

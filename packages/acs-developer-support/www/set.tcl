@@ -23,6 +23,9 @@ switch -- $field {
     db {
         ds_set_database_enabled $enabled_p
     }
+    prof {
+        ds_set_profiling_enabled $enabled_p
+    }
     ds {
         nsv_set ds_properties enabled_p $enabled_p
     }

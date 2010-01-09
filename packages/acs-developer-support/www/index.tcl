@@ -13,6 +13,7 @@ ds_require_permission [ad_conn package_id] "admin"
 set enabled_p [nsv_get ds_properties enabled_p]
 set user_switching_enabled_p [nsv_get ds_properties user_switching_enabled_p]
 set database_enabled_p [nsv_get ds_properties database_enabled_p]
+set profiling_enabled_p [nsv_get ds_properties profiling_enabled_p]
 set adp_reveal_enabled_p [nsv_get ds_properties adp_reveal_enabled_p]
 
 set package_id [ad_conn package_id]
@@ -74,6 +75,11 @@ and has a lifetime of [parameter::get -parameter DataLifetime -default 900] sec
 [ad_decode $database_enabled_p 1 \
      "on (<a href=\"set?field=db&amp;enabled_p=0\">turn it off</a>)" \
      "off (<a href=\"set?field=db&amp;enabled_p=1\">turn it on</a>)"]
+
+<li>Template profiling is currently
+[ad_decode $profiling_enabled_p 1 \
+     "on (<a href=\"set?field=prof&amp;enabled_p=0\">turn it off</a>)" \
+     "off (<a href=\"set?field=prof&amp;enabled_p=1\">turn it on</a>)"]
 
 <li>ADP reveal is currently
 [ad_decode $adp_reveal_enabled_p 1 \

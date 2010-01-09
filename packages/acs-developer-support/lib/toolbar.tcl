@@ -28,6 +28,11 @@ if { $show_p } {
         [export_vars -base "${ds_url}set" { {field db} {enabled_p {[expr ![ds_database_enabled_p]]}} {return_url [ad_return_url]} }] \
         [ad_decode [ds_database_enabled_p] 1 "on" "off"]
 
+    multirow append ds_buttons PRO \
+        "Toggle template profiling" \
+        [export_vars -base "${ds_url}set" { {field prof} {enabled_p {[expr ![ds_profiling_enabled_p]]}} {return_url [ad_return_url]} }] \
+        [ad_decode [ds_profiling_enabled_p] 1 "on" "off"]
+
     multirow append ds_buttons FRG \
         "Toggle caching page fragments" \
         [export_vars -base "${ds_url}set" { {field frag} {enabled_p {[expr ![ds_page_fragment_cache_enabled_p]]}} {return_url [ad_return_url]} }] \

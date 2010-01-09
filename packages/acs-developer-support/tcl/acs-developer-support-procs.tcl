@@ -94,6 +94,12 @@
      return [nsv_get ds_properties database_enabled_p]
  }
 
+ ad_proc -public ds_profiling_enabled_p {} { 
+     Returns true if developer-support template profiling facilities are enabled. 
+ } {
+     return [nsv_get ds_properties profiling_enabled_p]
+ }
+
  ad_proc -public ds_page_fragment_cache_enabled_p {} { o
      Are we populating the page fragment cache?
  } {
@@ -347,7 +353,6 @@
 
  ad_proc -private ds_add { name args } { 
      Sets a developer-support property for the current request. 
-     Should never be used except by elements of the request processor (e.g., security filters or abstract URLs). 
  } {
 
      if { [ds_enabled_p] && [ds_collection_enabled_p] } { 
@@ -532,6 +537,16 @@ ad_proc -public ds_set_user_switching_enabled { enabled_p } {
     nsv_set ds_properties user_switching_enabled_p $enabled_p
 }
 
+ad_proc -public ds_set_profiling_enabled { enabled_p } {
+    Enables/disables profiling statistics in a safe manner.
+
+    @author Lars Pind (lars@pinds.com)
+    @creation-date 31 August 2000
+} {
+    ns_log Notice "Developer-support profiling stats [ad_decode $enabled_p 1 "enabled" "disabled"]"
+    nsv_set ds_properties profiling_enabled_p $enabled_p
+}
+
 ad_proc -public ds_set_database_enabled { enabled_p } {
     Enables/disables database statistics in a safe manner.
 
@@ -630,67 +645,40 @@ ad_proc -public ds_get_comments {} {
 }
 
 ad_proc -public ds_profile { command {tag {}} } {
-    Helper proc for performance profiling. 
-    This will count the number of invocations of the given tag, the total time spent within all invocations
-    (between the corresponding 'ds_profile start' and 'ds_profile stop' invocations).
-    The results will be output at the bottom of the page, and include the average time spent per invocation.
+    Helper proc for performance profiling of templates. 
 
-    @param command 
+    This will record the total time spent within an invocation of a template (computed as
+    time between the 'ds_profile start' and 'ds_profile stop' invocations inserted by the
+    template engine).
+
+    @param command Must be "start" or "stop".
+    @param tag In practice, the path to the template being profiled.
     
     <ul>
       <li><b>start</b> marks the beginning of a block.
       <li><b>stop</b> marks the end of a block. Start and stops must match.
-      <li><b>log</b> output profiling information to the server error log at level Notice.
     </ul>
     
-    @param tag The name of the operation you're timing. Could be the name of a procedure, or some other unique identifier.
 } {
     if {![ds_enabled_p]} { 
         error "DS not enabled"
     }
-    global ds_profile__total_ms ds_profile__iterations ds_profile__start_clock
+    global ds_profile__start_clock
     switch $command {
         start {
             if { [empty_string_p $tag] } {
                 error "Tag parameter is required"
             }
             set ds_profile__start_clock($tag) [clock clicks -milliseconds]
-            set ds_profile__iterations($tag) 0
         }
         stop {
             if { [info exists ds_profile__start_clock($tag)] 
                  && ![empty_string_p $ds_profile__start_clock($tag)] } {
-                set num_ms [expr [clock clicks -milliseconds] - $ds_profile__start_clock($tag)]
+                ds_add prof $tag \
+                    [expr [clock clicks -milliseconds] - $ds_profile__start_clock($tag)]
                 unset ds_profile__start_clock($tag)
-                
-                if { ![info exists ds_profile__total_ms($tag)] } {
-                    set ds_profile__total_ms($tag) 0
-                }
-                
-                set ds_profile__total_ms($tag) [expr [set ds_profile__total_ms($tag)] + $num_ms]
-                incr ds_profile__iterations($tag)
             } else {
-                ns_log Error "ds_profile stop called without a corresponding call to ds_profile start, with tag $tag"
-            }
-        }
-        log {
-            if { ![empty_string_p $tag] } {
-                set tags [list $tag]
-            } else {
-                set tags [list]
-                if { [info exists ds_profile__total_ms] } {
-                    set tags [lsort [array names ds_profile__total_ms]]
-                }
-            }
-            foreach tag $tags {
-                set total_ms [lc_numeric [set ds_profile__total_ms($tag)]]
-                set iterations [set ds_profile__iterations($tag)]
-                if { $iterations > 0 } {
-                    set average_ms [lc_numeric [expr $total_ms / $iterations]]
-                } else {
-                    set average_ms {}
-                }
-                ns_log Notice "Developer Support Profiling: Tag '$tag' | Total time: $total_ms ms | \# iterations: $iterations | Time per iteration: $average_ms ms"
+                ns_log Warning "ds_profile stop called without a corresponding call to ds_profile start, with tag $tag"
             }
         }
         default {

@@ -25,6 +25,7 @@ if { ![nsv_exists ds_properties enabled_p] } {
     }
     nsv_set ds_properties enabled_ips $IPs
 
+    nsv_set ds_properties profiling_enabled_p [parameter::get -package_id [ds_instance_id] -parameter ProfilingEnabledP -default 0]
 
     nsv_set ds_properties database_enabled_p [parameter::get -package_id [ds_instance_id] -parameter DatabaseEnabledP -default 0]
 
