@@ -1,14 +1,15 @@
-set show_p [ds_show_p]
-
 # TODO: Go through request-processor to see what other information should be exposed to developer-support
 
 # TODO: Always show comments inline by default?
 set request [ad_conn request]
 
-if { $show_p } {
+if { [ds_show_p] } {
+
+    set show_p 0
 
     if {[ns_cache get ds_page_bits "$request:error" errors]} {
         set errcount [llength $errors]
+        set show_p 1
     } else {
         set errcount 0
     }
@@ -25,12 +26,14 @@ if { $show_p } {
     if { $comments_p } {
         foreach comment [ds_get_comments] {
             multirow append comments $comment
+            set show_p 1
         }
     }
 
     set user_switching_p [ds_user_switching_enabled_p]
     if { $user_switching_p } {
 
+        set show_p 1
         set fake_user_id [ad_get_user_id]
         set real_user_id [ds_get_real_user_id]
 
