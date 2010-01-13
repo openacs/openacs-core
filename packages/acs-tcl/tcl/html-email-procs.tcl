@@ -77,7 +77,7 @@ ad_proc build_mime_message {
     ns_set put $message_data Content-Type $content_type
 
     # the rest of the lines form the message body.  We strip off the last
-    # line, which is the last boundary, because ns_sendmail seems to be
+    # line, which is the last boundary, because acs_mail_lite::send seems to be
     # adding another one on for us.
 
     ## JCD: not anymore.  maybe an aolserver 3.3 bug?  removing the clipping.
