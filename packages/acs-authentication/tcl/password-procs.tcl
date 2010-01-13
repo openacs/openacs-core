@@ -528,7 +528,7 @@ ad_proc -private auth::password::email_password {
 
     @param body_msg_key     The message key you wish to use for the email body.
 
-    @return Does not return anything. Any errors caused by ns_sendmail are propagated
+    @return Does not return anything. Any errors caused by acs_mail_lite::send are propagated
 
     @author Peter Marklund
 } {
