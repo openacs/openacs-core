@@ -117,7 +117,7 @@ ad_proc -public ad_context_bar_multirow {
     }
     
     if { [string match "admin/*" [ad_conn extra_url]] } {
-        template::multirow append $multirow "[ad_conn package_url]admin/" "Administration"
+        template::multirow append $multirow "[ad_conn package_url]admin/" "[_ acs-tcl.Administration]"
     }
     
     if { [llength $context] == 0 } { 
@@ -160,7 +160,7 @@ ad_proc -public ad_context_bar {
 
     if { [string match "admin/*" [ad_conn extra_url]] } {
         lappend context [list "[ad_conn package_url]admin/" \
-                             "Administration"]
+                             "[_ acs-tcl.Administration]"]
     }
 
     if {[llength $args] == 0} { 
