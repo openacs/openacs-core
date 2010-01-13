@@ -233,7 +233,7 @@ if { [template::form is_valid add_user] } {
 
 	    # we're supposed to notify the administrator when someone new registers
 	    acs_mail_lite::send -send_immediately \
-            -to_addr ns_sendmail $notification_address \
+            -to_addr $notification_address \
 		    -from_addr [template::element::get_value add_user email] \
             -subject "New registration at [ad_url]" \
             -body "[template::element::get_value add_user first_names] [template::element::get_value add_user last_name] ([template::element::get_value add_user email]) was added as a registered as a user of 
