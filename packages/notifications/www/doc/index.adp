@@ -22,7 +22,7 @@ Every web-based application attempts to expand until it can <strong>send</strong
 needs to send email to your users. The usual way to do this is to:</p>
 
 <ul>
-<li> add a bunch of <code>ns_sendmail</code> calls to your code</li>
+<li> add a bunch of <code>acs_mail_lite::send</code> calls to your code</li>
 <li> suddenly realize that the users are getting too much email: find a way to
 batch up the emails using a sweeper proc</li>
 <li> suddenly note that different alerts have different priorities:
@@ -60,7 +60,7 @@ Design Forum").</li>
 
 <p>
 <strong>Success for this package will be gauged by how many packages choose
-to use it instead of going the <code>ns_sendmail/iteration</code> route</strong>.
+to use it instead of going the <code>acs_mail_lite::send/iteration</code> route</strong>.
 
 <h3>Web Application End-User</h3>
 
