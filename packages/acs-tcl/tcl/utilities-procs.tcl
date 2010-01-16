@@ -4030,6 +4030,16 @@ ad_proc ad_var_type_check_third_urlv_integer_p {{args ""}} {
 #
 ####################
 
+ad_proc util::name_to_path {
+    -name:required
+} {
+    Transforms a pretty name to a reasonable path name.
+} {
+    regsub -all -nocase { } [string trim [string tolower $name]] {-} name
+    regsub -all {[^[:alnum:]\-]} $name {} name
+    return $name
+}
+
 ad_proc -public util::backup_file {
     {-file_path:required}
     {-backup_suffix ".bak"}
