@@ -271,7 +271,7 @@
                :default_value,
                :section_name,
                :min_n_values,
-               :max_n_values)
+               :max_n_values);
     end;
   </querytext>
 </fullquery>
@@ -288,7 +288,7 @@
                :default_value,
                :section_name,
                :min_n_values,
-               :max_n_values)
+               :max_n_values);
     end;
   </querytext>
 </fullquery>
