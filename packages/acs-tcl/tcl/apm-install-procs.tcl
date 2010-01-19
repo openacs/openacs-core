@@ -975,20 +975,24 @@ ad_proc -private apm_package_install {
     return $version_id
 }
 
-ad_proc apm_copy_descendent_params { package_key } {
+ad_proc apm_copy_descendent_params { new_package_key } {
     Copy new parameters in the package to its descendents.  Called when a package is
     upgraded.
 } {
-    foreach descendent_package_key [nsv_get apm_package_descendents $package_key] {
-        db_list copy_descendent_params {}
+    foreach descendent_package_key [nsv_get apm_package_descendents $new_package_key] {
+        db_foreach descendent_params {} {
+            db_exec_plsql copy_descendent_param {}
+        }
     }
 }
 
-ad_proc apm_copy_inherited_params { package_key } {
+ad_proc apm_copy_inherited_params { new_package_key } {
     Copy parameters from a packages ancestors.  Called for an "extends" dependency.
 } {
-    foreach inherited_package_key [nsv_get apm_package_inherit_order $package_key] {
-        db_list copy_inherited_params {}
+    foreach inherited_package_key [nsv_get apm_package_inherit_order $new_package_key] {
+        db_foreach inherited_params {} {
+            db_exec_plsql copy_inherited_param {}
+        }
     }
 }
 
