@@ -1044,6 +1044,11 @@ function new (
 			default null
   ) return apm_packages.package_id%TYPE;
 
+function is_child(
+  parent_package_key in apm_package_dependencies.service_uri%TYPE,
+  child_package_key in apm_package_dependencies.service_uri%TYPE
+) return integer;
+
   procedure del (
    package_id		in apm_packages.package_id%TYPE
   );
@@ -1839,7 +1844,36 @@ as
 
   end if;
 end new;
-  
+
+function is_child(
+  parent_package_key in apm_package_dependencies.service_uri%TYPE,
+  child_package_key in apm_package_dependencies.service_uri%TYPE
+) return integer
+is 
+  cursor dependencies is
+  select apd.service_uri
+  from apm_package_versions apv, apm_package_dependencies apd
+  where apd.version_id = apv.version_id
+    and apv.enabled_p = 't'
+    and apd.dependency_type = 'extends'
+    and apv.package_key = child_package_key;
+begin
+
+  if parent_package_key = child_package_key then
+    return 1;
+  end if;
+
+  for dependency in dependencies loop
+    if dependency.service_uri = parent_package_key or
+      apm_package.is_child(parent_package_key, dependency.service_uri) = 1 then
+      return 1;
+    end if;
+  end loop;
+      
+  return 0;
+
+end;
+
   procedure del (
    package_id		in apm_packages.package_id%TYPE
   )
