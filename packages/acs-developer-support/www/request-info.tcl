@@ -250,7 +250,7 @@ if { ![info exists property(db)] } {
                 set sql $new_sql
             }
 
-	    append value "$command $handle<pre>[ns_quotehtml $sql]</pre>"
+	    append value "$command $statement_pool $handle<pre>[ns_quotehtml $sql]</pre>"
 	}
 
         if { ![string equal $command "getrow"] || [template::util::is_true $getrow_p] } {
