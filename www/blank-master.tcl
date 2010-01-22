@@ -30,16 +30,34 @@ if { ![info exists header_stuff] } {
 # Attributes
 
 multirow create attribute key value
-
 set onload {}
 
-# Handle htmlArea widget, which needs special javascript and css in the page header
-global acs_blank_master__htmlareas
-if { [info exists acs_blank_master__htmlareas] } {
-    foreach htmlarea_id $acs_blank_master__htmlareas {
-        append header_stuff "<script type=\"text/javascript\">var editor_var_${htmlarea_id} = new HTMLArea(\"${htmlarea_id}\");</script>"
-        lappend onload "acs_initHtmlArea(editor_var_${htmlarea_id}, '${htmlarea_id}');"
+# Handle richtext widgets, which needs special javascript and css 
+# in the page header
+
+multirow create htmlarea_support id 
+global acs_blank_master__htmlareas acs_blank_master
+
+if {[info exists acs_blank_master__htmlareas] } {
+
+  if {[info exists acs_blank_master(rte)]} {
+    foreach htmlarea_id [lsort -unique $acs_blank_master__htmlareas] {
+      lappend onload "acs_rteInit('${htmlarea_id}');"
+    }}
+
+  if {[info exists acs_blank_master(xinha)]} {
+    set xinha_dir /resources/acs-templating/xinha-nightly/
+    set xinha_plugins $acs_blank_master(xinha.plugins)
+    set xinha_params "xinha_config.height = '350px';"
+    set xinha_options $acs_blank_master(xinha.options)
+    # setting language
+    set lang [lang::conn::language]
+    # if there are problems with the language definitions, set lang to "en"
+    if {$lang ne "en" && $lang ne "de"} {set lang en} 
+    foreach element_id $acs_blank_master__htmlareas {
+      multirow append htmlarea_support $element_id
     }
+  }
 }
 
 if { ![template::util::is_nil focus] } {
@@ -49,7 +67,9 @@ if { ![template::util::is_nil focus] } {
     }
 }
 
-multirow append attribute onload [join $onload " "]
+if {![empty_string_p $onload]} { 
+    multirow append attribute onload [join $onload " "]
+}
 
 # Additional Body Attributes
 
@@ -69,10 +89,21 @@ multirow append header_links "stylesheet" "text/css" "/resources/acs-subsite/def
 
 # Developer-support: We include that here, so that master template authors don't have to worry about it
 
-if { [llength [namespace eval :: info procs ds_show_p]] == 1 } {
+if { [llength [info procs ::ds_show_p]] == 1 
+     && [ds_show_p]
+ } {
     set developer_support_p 1
 } else {
     set developer_support_p 0
+}
+
+# dotlrn toolbar : We include that here, so that master template authors don't have to worry about it
+
+if { [llength [namespace eval :: info procs dotlrn_toolbar::show_p]] == 1 } {
+    multirow append header_links "stylesheet" "text/css" "/resources/dotlrn/dotlrn-toolbar.css" "all"
+    set dotlrn_toolbar_p 1
+} else {
+    set dotlrn_toolbar_p 0
 }
 
 set translator_mode_p [lang::util::translator_mode_p]
