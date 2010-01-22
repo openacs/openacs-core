@@ -204,14 +204,15 @@ ad_proc -public template::util::spellcheck::get_element_formtext {
 
     # the --lang switch only works with aspell and if it is not present
     # aspell's (or ispell's) default language will have to do.
+    set lang_and_enc "--encoding=utf-8"
     if { $language ne "" } {
-	set language "--lang=$language"
+        append lang_and_enc " --lang=$language"
     }
 
     # Caveat: The "open" arg must be a list (not a string) to allow the wrapper args to be the empty string
     # (which $language will be when ispell is used, for instance)
 
-    if { [catch { set ispell_proc [open [list |$spelling_wrapper [ns_info home] $spellchecker_path $language $dictionaryfile $tmpfile] r] } errmsg] } {
+    if { [catch { set ispell_proc [open [list |$spelling_wrapper [ns_info home] $spellchecker_path $lang_and_enc $dictionaryfile $tmpfile] r] } errmsg] } {
 	ad_return_error "Webspell could not be executed" "Spell-checking is enabled but the spell-check wrapper ([acs_root_dir]/bin/webspell) could not be executed. Check that the wrapper exists, and that its permissions are correct. <p>Here is the error message: <pre>$errmsg</pre>"
 	ad_script_abort
     }
