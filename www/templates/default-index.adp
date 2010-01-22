@@ -6,19 +6,18 @@
 @pa.content;noquote@
 </if>
 
-<blockquote><p>
+<if @content_items:rowcount@ gt 0>
+<ul>
 <multiple name="content_items">
-<b><a href="@content_items.url@">@content_items.title;noquote@</a></b>
+<li>
+<a href="@content_items.url@">@content_items.title;noquote@</a>
 <if @content_items.description@ not nil>
  - @content_items.description;noquote@
 </if>
-<br><br>
+</li>
 </multiple>
-</p>
-</blockquote>
-</p>
-
-
+</ul>
+</if>
 
 <if @comments_link@ not nil>
   @comments;noquote@
