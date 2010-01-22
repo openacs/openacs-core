@@ -14,10 +14,5 @@
 	  <li><a href="http://translate.openacs.org">Translation server</a></li>
 	  <li><a href="/xowiki/en/Official+test+servers">Test servers</a></li>
           <li><a href="/bugtracker/openacs">Bug tracker</a></li>
-	  <li>Browse the CVS:
-		<ul>
-		  <li><a href="http://cvs.openacs.org/cvs/openacs-4/">Using ViewVC</a></li>
-		  <li><a href="http://fisheye.openacs.org">Using fisheye</a></li>
-		</ul>
-	  </li>
+	  <li><a href="http://cvs.openacs.org">CVS browser</a></li>
 	</ul>
