@@ -11,5 +11,5 @@
   <br>
   <span class="item"><a href="/xowiki/debian">Debian packages</a></span>
   <br>
-  <span class="item"><a href="http://www.friendlybits.com/en/inf_tec_en/win32openacs_en/">Windows Installer</a></span>
+  <span class="item"><a href="http://www.spazioit.com/pages_en/sol_inf_en/win32-openacs_en/">Windows Installer</a></span>
 </p>
