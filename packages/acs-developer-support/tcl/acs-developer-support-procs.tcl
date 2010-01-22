@@ -324,7 +324,7 @@
          # making bugs much harder to track down 
          if { ($errno == 0 || $errno == 2) && [string equal [db_type] "postgresql"] } {
              upvar bind bind
-             set errno [catch {
+             set _errno [catch {
                  if { [info exists bind] && [llength $bind] != 0 } {
                      if { [llength $bind] == 1 } {
                          set bind_vars [list]
@@ -340,9 +340,9 @@
                  } else {
                      set bound_sql [uplevel 3 [list db_bind_var_substitution $sql]]
                  }
-             } error]
-             if { $errno } {
-                 ns_log Warning "ds_collect_db_call: $error\nStatement: $statement_name\nSQL: $sql"
+             } _error]
+             if { $_errno } {
+                 ns_log Warning "ds_collect_db_call: $_error\nStatement: $statement_name\nSQL: $sql"
                  set bound_sql $sql
              }
          }
