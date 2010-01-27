@@ -313,8 +313,8 @@ begin
       execute ''drop rule '' || v_table_name || ''_r '' || ''on '' || v_table_name || ''i'';
     end if;
 
-    execute ''drop view '' || v_table_name || ''x'';
-    execute ''drop view '' || v_table_name || ''i'';
+    execute ''drop view '' || v_table_name || ''x cascade'';
+    execute ''drop view '' || v_table_name || ''i cascade'';
 
     execute ''drop table '' || v_table_name;
   end if;
@@ -817,7 +817,7 @@ begin
   -- create the output view (excludes content columns to enable SELECT *)
 
   if table_exists(v_table_name || ''x'') then
-     execute ''drop view '' || v_table_name || ''x'';
+     execute ''drop view '' || v_table_name || ''x cascade'';
   end if;
 
   execute ''create view '' || v_table_name ||
