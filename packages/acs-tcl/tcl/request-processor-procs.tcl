@@ -132,6 +132,17 @@ ad_proc rp_form_put { name value } {
     return $form
 }
 
+ad_proc rp_form_update { name value } {
+
+    Identical to rp_form_put, but uses ns_set update instead.
+
+    @return the form ns_set, in case you're interested. Mostly you will want to discard the result.
+
+ } {
+    set form [rp_getform]
+    ns_set update $form $name $value
+    return $form
+}
 
 ad_proc ad_return { args } {
 
