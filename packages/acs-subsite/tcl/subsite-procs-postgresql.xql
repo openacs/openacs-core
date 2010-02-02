@@ -69,6 +69,7 @@
     where  not (apm_package__singleton_p(package_key) = 1 and
                 apm_package__num_instances(package_key) >= 1)
     and    not implements_subsite_p
+    and    package_type = 'apm_application'
     order  by upper(pretty_name)
 
         </querytext>
