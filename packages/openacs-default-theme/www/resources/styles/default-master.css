@@ -691,6 +691,7 @@ ul.compact li, .action-list ul li {
   border-top: 0px;
   padding: 6px 8px 6px 8px;
   clear:left;
+  overflow: auto;
 }
 
 /* END OF PORTLETS */
