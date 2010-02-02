@@ -4,6 +4,8 @@
   <msg key="Administrator">Administrador</msg>
   <msg key="Administrators">Administradores</msg>
   <msg key="authentication_authority">Autoridad</msg>
+  <msg key="Bio">Biografía</msg>
+  <msg key="Bios">Biografías</msg>
   <msg key="common_Actions">Acciones</msg>
   <msg key="common_actions">acciones</msg>
   <msg key="common_Add">Añadir</msg>
@@ -128,11 +130,15 @@
   <msg key="Person">Persona</msg>
   <msg key="Registered_Users">Usuarios Registrados</msg>
   <msg key="registered_users">usuarios registrados</msg>
+  <msg key="Screen_Name">Alias</msg>
+  <msg key="Screen_Names">Alias</msg>
   <msg key="The_Public">Público</msg>
   <msg key="the_public">público</msg>
   <msg key="Unregistered">No Registrado</msg>
   <msg key="Unregistered_Visitor">Visitante No Registrado</msg>
   <msg key="URL">URL</msg>
   <msg key="User">Usuario</msg>
+  <msg key="Username">Nombre de usuario</msg>
+  <msg key="Usernames">Nombres de usuario</msg>
   <msg key="Visitor">Visitante</msg>
 </message_catalog>

@@ -2,6 +2,7 @@
 <message_catalog package_key="acs-tcl" locale="es_ES" charset="ISO-8859-1">
 
   <msg key="a_problem">un problema</msg>
+  <msg key="Administration">Administración</msg>
   <msg key="approve">aprobar</msg>
   <msg key="approve_email">aprobar correo</msg>
   <msg key="ban">expulsar</msg>
