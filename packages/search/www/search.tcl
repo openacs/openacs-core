@@ -160,29 +160,34 @@ set count $result(count)
 template::multirow create searchresult title_summary txt_summary url_one object_id
 
 for { set __i 0 } { $__i < [expr {$high - $low +1}] } { incr __i } {
-    set object_id [lindex $result(ids) $__i]
-    if {$object_id eq ""} {
-        ns_log warning "Search object_id is empty, this should never happen query was '${q}'"
-        continue
-    }
-    set object_type [acs_object_type $object_id]
-    if {[callback::impl_exists -impl $object_type -callback search::datasource]} {
-	array set datasource [lindex [callback -impl $object_type search::datasource -object_id $object_id] 0]
-	set url_one [lindex [callback -impl $object_type search::url -object_id $object_id] 0]
+    if {[catch {
+        set object_id [lindex $result(ids) $__i]
+        if {$object_id eq ""} {
+            ns_log warning "Search object_id is empty, this should never happen query was '${q}'"
+            continue
+        }
+        set object_type [acs_object_type $object_id]
+        if {[callback::impl_exists -impl $object_type -callback search::datasource]} {
+            array set datasource [lindex [callback -impl $object_type search::datasource -object_id $object_id] 0]
+            set url_one [lindex [callback -impl $object_type search::url -object_id $object_id] 0]
+        } else {
+            ns_log warning "SEARCH search/www/search.tcl callback::datasource::$object_type not found"
+            array set datasource [acs_sc_call FtsContentProvider datasource [list $object_id] $object_type]
+            set url_one [acs_sc_call FtsContentProvider url [list $object_id] $object_type]
+        }
+        search::content_get txt $datasource(content) $datasource(mime) $datasource(storage_type) $object_id
+        if {[callback::impl_exists -impl $driver -callback search::summary]} {
+            set title_summary [lindex [callback -impl $driver search::summary -query $q -text $datasource(title)] 0]
+            set txt_summary [lindex [callback -impl $driver search::summary -query $q -text $txt] 0]
+        } else {
+            set title_summary [acs_sc_call FtsEngineDriver summary [list $q $datasource(title)] $driver]
+            set txt_summary [acs_sc_call FtsEngineDriver summary [list $q $txt] $driver]
+        }
+    } errmsg]} {
+        ns_log error "search.tcl object_id $object_id object_type $object_type error $errmsg"
     } else {
-        ns_log warning "SEARCH search/www/search.tcl callback::datasource::$object_type not found"
-	array set datasource [acs_sc_call FtsContentProvider datasource [list $object_id] $object_type]
-	set url_one [acs_sc_call FtsContentProvider url [list $object_id] $object_type]
+        template::multirow append searchresult $title_summary $txt_summary $url_one
     }
-    search::content_get txt $datasource(content) $datasource(mime) $datasource(storage_type) $object_id
-    if {[callback::impl_exists -impl $driver -callback search::summary]} {
-	set title_summary [lindex [callback -impl $driver search::summary -query $q -text $datasource(title)] 0]
-	set txt_summary [lindex [callback -impl $driver search::summary -query $q -text $txt] 0]
-    } else {
-	set title_summary [acs_sc_call FtsEngineDriver summary [list $q $datasource(title)] $driver]
-	set txt_summary [acs_sc_call FtsEngineDriver summary [list $q $txt] $driver]
-    }
-    template::multirow append searchresult $title_summary $txt_summary $url_one
 }
 
 set search_the_web [parameter::get -package_id $package_id -parameter SearchTheWeb]
