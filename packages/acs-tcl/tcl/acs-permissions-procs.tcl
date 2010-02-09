@@ -162,9 +162,7 @@ ad_proc -public permission::require_permission {
             ns_log notice "permission::require_permission: $party_id doesn't have $privilege on object $object_id"
             ad_return_forbidden \
                 "Permission Denied" \
-                "<blockquote>
-  You don't have permission to $privilege [db_string name {}].
-</blockquote>"
+                "You don't have permission to $privilege [db_string name {}]."
         }
 
         ad_script_abort
@@ -254,9 +252,7 @@ ad_proc -public permission::require_write_permission {
     @see permission::write_permission_p
 } {
     if { ![permission::write_permission_p -object_id $object_id -party_id $party_id] } {
-        ad_return_forbidden  "Permission Denied"  "<blockquote>
-    You don't have permission to $action this object.
-    </blockquote>"
+        ad_return_forbidden  "Permission Denied"  "You don't have permission to $action this object."
         ad_script_abort
     } 
 }
