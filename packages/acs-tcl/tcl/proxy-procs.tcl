@@ -10,7 +10,9 @@ ad_library {
 }
 
 # First check that ns_proxy is configured
-if {![catch {ns_proxy get exec_proxy}]} {
+if {![catch {set handler [ns_proxy get exec_proxy]}]} {
+    ns_proxy release $handler
+    
     namespace eval proxy {}
     
     ad_proc -public proxy::exec {
