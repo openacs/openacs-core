@@ -15,8 +15,9 @@ set service [split $service ";"]
 set package_key [lindex $service 0]
 set version_name [lindex $service 1]
 
+apm_package_install_spec $version_id
+
 db_transaction {
-    apm_package_install_spec $version_id
     switch $dependency_type {
 	require {
 	    apm_dependency_add -dependency_id $dependency_id ${dependency_type}s $version_id $package_key $version_name
