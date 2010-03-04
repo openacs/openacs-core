@@ -541,7 +541,7 @@ ad_proc template::head::prepare_multirows {} {
     variable ::template::body_scripts
     template::multirow create body_script type src charset defer content
     if {[info exists body_scripts]} {
-        foreach {type src charset script defer} $body_scripts {
+        foreach {type src charset defer content} $body_scripts {
             template::multirow append body_script \
                 $type \
                 $src \
