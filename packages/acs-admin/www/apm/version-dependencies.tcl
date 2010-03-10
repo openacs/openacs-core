@@ -13,7 +13,7 @@ doc_body_append "[apm_header [list "version-view?version_id=$version_id" "$prett
 
 "
 
-foreach dependency_type { provide extend require } {
+foreach dependency_type { provide require extend embed } {
 
     set dependency_type_prep "${dependency_type}s"
     if { [string index $dependency_type end] eq "e" } {
@@ -38,7 +38,7 @@ foreach dependency_type { provide extend require } {
 	set sign [ad_decode $dependency_type "provide" "<=" ">="]
 
 	set counter 0
-        set other_dependency_in [ad_decode $dependency_type "provide" "'requires','extends'" "'provides'"]
+        set other_dependency_in [ad_decode $dependency_type "provide" "'requires','extends','embeds'" "'provides'"]
 	db_foreach apm_specific_version_dependencies {} {
             incr counter
 	    if { $counter == 1 } {
@@ -48,6 +48,7 @@ foreach dependency_type { provide extend require } {
                 provides { set dep_d provided }
                 requires { set dep_d required }
                 extends { set dep_d extended }
+                embeds { set dep_d embeds }
             } 
 	    doc_body_append "<li>[string totitle $dep_d] by <a href=\"version-view?version_id=$dep_version_id\">$dep_pretty_name, version $dep_version_name</a>\n"
 	}

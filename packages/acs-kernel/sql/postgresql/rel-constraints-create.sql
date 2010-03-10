@@ -496,7 +496,7 @@ create table rc_segment_required_seg_map (
 create index rc_segment_required_seg_idx on 
 rc_segment_required_seg_map(required_rel_segment);
 
-create function rel_constraints_ins_tr () returns opaque as '
+create function rel_constraints_ins_tr () returns trigger as '
 declare
         v_rec   record;
 begin
@@ -539,7 +539,7 @@ create trigger rel_constraints_ins_tr after insert
 on rel_constraints for each row 
 execute procedure rel_constraints_ins_tr ();
 
-create function rel_constraints_del_tr () returns opaque as '
+create function rel_constraints_del_tr () returns trigger as '
 declare
         v_rec   record;
 begin

@@ -118,7 +118,7 @@ create index acs_priv_desc_map_privilege_idx on acs_privilege_descendant_map (pr
 -- This would be better, since the same query could be used for both oracle
 -- and postgresql.
 
-create or replace function acs_priv_hier_ins_del_tr () returns opaque as '
+create or replace function acs_priv_hier_ins_del_tr () returns trigger as '
 declare
         new_value       integer;
         new_key         varbit default null;
@@ -190,7 +190,7 @@ create trigger acs_priv_hier_ins_del_tr after insert or delete
 on acs_privilege_hierarchy for each row
 execute procedure acs_priv_hier_ins_del_tr ();
 
-create or replace function acs_priv_del_tr () returns opaque as '
+create or replace function acs_priv_del_tr () returns trigger as '
 begin
 
   delete from acs_privilege_descendant_map
@@ -418,7 +418,7 @@ create table acs_permissions_lock (
        lck  integer
 );
 
-create function acs_permissions_lock_tr () returns opaque as '
+create function acs_permissions_lock_tr () returns trigger as '
 begin
         raise EXCEPTION ''FOR LOCKING ONLY, NO DML STATEMENTS ALLOWED'';
         return null;

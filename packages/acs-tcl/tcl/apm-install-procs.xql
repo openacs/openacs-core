@@ -94,10 +94,6 @@
     select ap.*
     from apm_parameters ap
     where package_key = :new_package_key
-      and not exists (select 1
-                      from apm_parameters ap2
-                      where ap2.parameter_name = ap.parameter_name
-                        and ap2.package_key = :descendent_package_key)
   </querytext>
 </fullquery>
 
@@ -106,10 +102,6 @@
     select ap.*
     from apm_parameters ap
     where package_key = :inherited_package_key
-      and not exists (select 1
-                      from apm_parameters ap2
-                      where ap2.parameter_name = ap.parameter_name
-                        and ap2.package_key = :new_package_key)
    </querytext>
 </fullquery>
  

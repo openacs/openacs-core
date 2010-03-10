@@ -177,29 +177,41 @@ ad_proc apm_build_subsite_packages_list {} {
 
 }
 
-ad_proc apm_package_list_search_order {
+ad_proc apm_package_list_url_resolution {
     package_list
 } {
-    Left-right, breadth-first traverse of the inheritance DAG.
+    Use a left-right, breadth-first traverse of the inheritance DAG to build a
+    structure to be used by the request processor to resolve URLs based on a
+    package's "extends" and "embeds" dependencies.
 } {
     global apm_visited_package_keys
-    global apm_package_search_order
+    global apm_package_url_resolution
 
-    foreach package_key $package_list {
+    foreach package $package_list {
+        foreach {package_key dependency_type} $package {}
         if { [info exists apm_visited_package_keys($package_key)] } {
             continue
         }
-        lappend apm_package_search_order $package_key
+        switch $dependency_type {
+            extends -
+            "" { lappend apm_package_url_resolution [acs_root_dir]/packages/$package_key/www }
+            embeds { lappend apm_package_url_resolution \
+                          [list [acs_root_dir]/packages/$package_key/embed $package_key]
+                    }
+            default {
+                error "apm_package_list_url_resolution: dependency type is $dependency_type"
+            }
+        }
         set apm_visited_package_keys($package_key) 1
     }
 
     # Make sure old versions work ...
-    foreach package_key $package_list {
-        set inherit_templates_p 1
+    foreach package $package_list {
+        foreach {package_key dependency_type} $package {}
+        set inherit_templates_p t
+#fix!
         catch { db_1row get_inherit_templates_p {} }
-        if { [string is true $inherit_templates_p] } {
-            apm_package_list_search_order [db_list get_dependencies {}]
-        }
+        apm_package_list_url_resolution [db_list_of_lists get_dependencies {}]
     }
 }
 
@@ -255,15 +267,15 @@ ad_proc apm_build_one_package_relationships {
 
 } {
     global apm_visited_package_keys
-    global apm_package_search_order
+    global apm_package_url_resolution
     global apm_package_inherit_order
     global apm_package_load_libraries_order
     global apm_package_descendents
 
     array unset apm_visited_package_keys
-    set apm_package_search_order [list]
-    apm_package_list_search_order $package_key
-    nsv_set apm_package_search_order $package_key $apm_package_search_order
+    set apm_package_url_resolution [list]
+    apm_package_list_url_resolution $package_key
+    nsv_set apm_package_url_resolution $package_key $apm_package_url_resolution
 
     array unset apm_visited_package_keys
     set apm_package_inherit_order [list]
@@ -295,9 +307,7 @@ ad_proc apm_build_package_relationships {} {
 ad_proc apm_package_descendents {
     package_key
 } {
-
     Wrapper that returns the cached package descendents list.
-
 } {
     return [nsv_get apm_package_descendents $package_key]
 }
@@ -305,29 +315,24 @@ ad_proc apm_package_descendents {
 ad_proc apm_package_inherit_order {
     package_key
 } {
-
     Wrapper that returns the cached package inheritance order list.
-
 } {
     return [nsv_get apm_package_inherit_order $package_key]
 }
 
-ad_proc apm_package_search_order {
+ad_proc apm_package_url_resolution {
     package_key
 } {
-
     Wrapper that returns the cached package search order list.
-
 } {
-    return [nsv_get apm_package_search_order $package_key]
+    return [nsv_get apm_package_url_resolution $package_key]
 }
+
 
 ad_proc apm_package_load_libraries_order {
     package_key
 } {
-
     Wrapper that returns the cached package library load order list.
-
 } {
     return [nsv_get apm_package_load_libraries_order $package_key]
 }
@@ -2051,6 +2056,7 @@ ad_proc -public apm::convert_type {
         site_node::update_cache -node_id $node_id
     }
 
+# DRB: parameter fix!
     db_foreach get_params {} {
         db_1row get_new_parameter_id {}
         db_dml update_param {}

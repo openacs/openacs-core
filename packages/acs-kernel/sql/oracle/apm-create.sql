@@ -562,6 +562,10 @@ create table apm_parameters (
 			        references apm_package_types (package_key),
 	parameter_name		varchar2(100) 
 				constraint apm_pack_params_name_nn not null,
+        scope                   varchar2(20) default 'instance'
+                                constraint apm_parameters_scope_ck
+                                check (scope in ('global','instance'))
+                                constraint apm_parameters_scope_nn not null,
         description		varchar2(2000),
 	section_name		varchar2(200),
 	datatype	        varchar2(100) 
@@ -593,6 +597,11 @@ parameter::get.
 
 comment on column apm_parameters.parameter_name is '
   This is the name of the parameter, for example "DebugP."
+';
+
+comment on column apm_parameters.scope is '
+  If the scope is "global", only one value of the parameter exists for the entire site.
+  If "instance", each package instance has its own value.
 ';
 
 comment on column apm_parameters.description is '
@@ -764,7 +773,7 @@ create table apm_package_dependencies (
     dependency_type    varchar2(20)
                        constraint apm_package_deps_type_nn not null
                        constraint apm_package_deps_type_ck
-                       check(dependency_type in ('extends', 'provides','requires')),
+                       check(dependency_type in ('embeds', 'extends', 'provides','requires')),
     service_uri        varchar2(1500)
                        constraint apm_package_deps_uri_nn not null,
     service_version    varchar2(100)
@@ -1043,11 +1052,6 @@ function new (
   context_id		in acs_objects.context_id%TYPE 
 			default null
   ) return apm_packages.package_id%TYPE;
-
-function is_child(
-  parent_package_key in apm_package_dependencies.service_uri%TYPE,
-  child_package_key in apm_package_dependencies.service_uri%TYPE
-) return integer;
 
   procedure del (
    package_id		in apm_packages.package_id%TYPE
@@ -1844,36 +1848,7 @@ as
 
   end if;
 end new;
-
-function is_child(
-  parent_package_key in apm_package_dependencies.service_uri%TYPE,
-  child_package_key in apm_package_dependencies.service_uri%TYPE
-) return integer
-is 
-  cursor dependencies is
-  select apd.service_uri
-  from apm_package_versions apv, apm_package_dependencies apd
-  where apd.version_id = apv.version_id
-    and apv.enabled_p = 't'
-    and apd.dependency_type = 'extends'
-    and apv.package_key = child_package_key;
-begin
-
-  if parent_package_key = child_package_key then
-    return 1;
-  end if;
-
-  for dependency in dependencies loop
-    if dependency.service_uri = parent_package_key or
-      apm_package.is_child(parent_package_key, dependency.service_uri) = 1 then
-      return 1;
-    end if;
-  end loop;
-      
-  return 0;
-
-end;
-
+  
   procedure del (
    package_id		in apm_packages.package_id%TYPE
   )

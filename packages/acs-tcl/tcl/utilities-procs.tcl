@@ -1506,6 +1506,16 @@ ad_proc -public exists_and_not_null { varname } {
     return [expr { [info exists var] && $var ne "" }] 
 } 
 
+ad_proc -public exists_or_null { varname } {
+    Returns the contents of the variable if it exists, otherwise returns empty string
+} {
+    upvar 1 $varname var
+    if {[info exists var]} {
+        return $var
+    }
+    return ""
+}
+
 ad_proc -public exists_and_equal { varname value } {
     Returns 1 if the variable name exists in the caller's envirnoment
     and is equal to the given value.

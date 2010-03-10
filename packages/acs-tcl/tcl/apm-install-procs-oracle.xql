@@ -259,6 +259,16 @@
       </querytext>
 </fullquery>
 
+<fullquery name="apm_copy_descendent_params.param_exists">      
+  <querytext>
+    begin
+      :1 := apm.parameter_p(
+               :descendent_package_key,
+               :parameter_name);
+    end;
+  </querytext>
+</fullquery>
+
 <fullquery name="apm_copy_descendent_params.copy_descendent_param">      
   <querytext>
     begin
@@ -272,6 +282,16 @@
                :section_name,
                :min_n_values,
                :max_n_values);
+    end;
+  </querytext>
+</fullquery>
+
+<fullquery name="apm_copy_inherited_params.param_exists">      
+  <querytext>
+    begin
+      :1 := apm.parameter_p(
+               :new_package_key,
+               :parameter_name);
     end;
   </querytext>
 </fullquery>

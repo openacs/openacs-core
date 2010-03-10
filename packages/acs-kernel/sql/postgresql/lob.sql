@@ -24,7 +24,7 @@ create table lobs (
 	refcount		integer not null default 0
 );
 
-create or replace function on_lobs_delete() returns opaque as '
+create or replace function on_lobs_delete() returns trigger as '
 begin
 	delete from lob_data where lob_id = old.lob_id;
 	return old;
@@ -51,7 +51,7 @@ create index lob_data_index on lob_data(lob_id);
 -- and PG 7.0.  The ACS doesn't share LOBs between tables
 -- or rows within a table anyway, I don't think/hope.
 
-create or replace function on_lob_ref() returns opaque as '
+create or replace function on_lob_ref() returns trigger as '
 begin
 	if TG_OP = ''UPDATE'' then
 		if new.lob = old.lob then
