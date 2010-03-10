@@ -276,7 +276,7 @@ end;' language 'plpgsql';
 -- destroyed.  These don't call the above helper functions because we're just
 -- creating the identity row for the party.
 
-create or replace function parties_in_tr () returns opaque as '
+create or replace function parties_in_tr () returns trigger as '
 begin
 
   insert into party_approved_member_map
@@ -291,7 +291,7 @@ end;' language 'plpgsql';
 create trigger parties_in_tr after insert on parties
 for each row execute procedure parties_in_tr ();
 
-create or replace function parties_del_tr () returns opaque as '
+create or replace function parties_del_tr () returns trigger as '
 begin
 
   delete from party_approved_member_map
@@ -311,7 +311,7 @@ for each row execute procedure parties_del_tr ();
 -- group with that rel_type.  This was intentional on the part of the aD folks
 -- who added relational segments to ACS 4.2.
 
-create or replace function rel_segments_in_tr () returns opaque as '
+create or replace function rel_segments_in_tr () returns trigger as '
 begin
 
   insert into party_approved_member_map
@@ -328,7 +328,7 @@ end;' language 'plpgsql';
 create trigger rel_segments_in_tr before insert on rel_segments
 for each row execute procedure rel_segments_in_tr ();
 
-create or replace function rel_segments_del_tr () returns opaque as '
+create or replace function rel_segments_del_tr () returns trigger as '
 begin
 
   delete from party_approved_member_map

@@ -26,12 +26,93 @@ ad_proc -public parameter::set_default {
     db_dml set {}
 }
 
+ad_proc -public parameter::set_global_value {
+    {-package_key:required}
+    {-parameter:required}
+    {-value:required}
+} {
+    Set a global package parameter.
+
+    Do not confuse this with the proc "set_from_package_key", which was previously
+    used to emulate global parameters declared for singleton packages.
+
+    @param package_key identifies the package to which the global param belongs
+    @param parameter which parameter's value to set
+    @param value what value to set said parameter to
+} {
+
+    db_exec_plsql set_parameter_value {}
+
+    return [ad_parameter_cache -set $value $package_id $parameter]
+}
+
+ad_proc -public parameter::get_global_value {
+    -localize:boolean
+    -boolean:boolean
+    {-package_key:required}
+    {-parameter:required}
+    {-default ""}
+} {
+    Get the value of a global package parameter.
+
+    @param localize should we attempt to localize the parameter 
+    @param boolean insure boolean parameters are normalized to 0 or 1
+    @param package_key identifies the package to which the global param belongs
+    @param parameter which parameter's value to get
+    @param default what to return if we don't find a value. Defaults to returning the empty string.
+
+    @return The string trimmed (leading and trailing spaces removed) parameter value
+} {
+
+    # Is there a parameter by this name in the parameter file?  If so, it takes precedence.
+    # Note that this makes *far* more sense for global parameters than for package instance
+    # parameters.
+
+    # 1. use the parameter file
+    set value [ad_parameter_from_file $parameter $package_key]
+
+    # 2. check the parameter cache
+    if {$value eq ""} {
+        set value [ad_parameter_cache $package_id $parameter]
+    }
+    # 3. use the default value
+    if {$value eq ""} {
+        set value $default
+    }
+
+    if { $localize_p } {
+        # Replace message keys in hash marks with localized texts
+        set value [lang::util::localize $value]
+    }
+
+    # Trimming the value as people may have accidentally put in trailing spaces
+    set value [string trim $value]
+
+    # Special parsing for boolean parameters, true and false can be written
+    # in many different ways
+    if { $boolean_p } {
+        if { [catch { 
+            if { [template::util::is_true $value] } {
+                set value 1
+            } else {
+                set value 0
+            }
+        } errmsg] } {
+            global errorInfo
+            ns_log Error "Parameter $parameter not a boolean:\n$errorInfo"
+            set value $default
+        }
+    }
+
+    return $value
+}
+
 ad_proc -public parameter::set_value {
     {-package_id ""}
     {-parameter:required}
     {-value:required}
 } {
-    set a parameter
+    Set the value of a package instance parameter
 
     @param package_id what package to set the parameter in. defaults to
     [ad_conn package_id]
@@ -54,7 +135,7 @@ ad_proc -public parameter::get {
     {-parameter:required}
     {-default ""}
 } {
-    Get the value of a package parameter.
+    Get the value of a package instance parameter.
 
     @param localize should we attempt to localize the parameter 
     @param boolean insure boolean parameters are normalized to 0 or 1
@@ -131,9 +212,12 @@ ad_proc -public parameter::set_from_package_key {
     {-parameter:required}
     {-value:required}
 } {
-    sets a parameter for the package corresponding to package_key
-    note that this makes the assumption that the package is a singleton
-    and does not set the value for all packages corresponding to package_key
+    sets an instance parameter for the package corresponding to package_key.
+    
+    Note that this makes the assumption that the package is a singleton
+    and does not set the value for all packages corresponding to package_key.
+
+    New packages should use global parameters instead.
 
 } {
     parameter::set_value \
@@ -149,7 +233,11 @@ ad_proc -public parameter::get_from_package_key {
     {-parameter:required}
     {-default ""}
 } {
-    get a parameter
+    Gets an instance parameter for the package corresponding to package_key.
+    
+    Note that this makes the assumption that the package is a singleton.
+
+    New packages should use global parameters instead.
 
     @param package_key what package to get the parameter from. we will try
     to get the package_id from the package_key. this

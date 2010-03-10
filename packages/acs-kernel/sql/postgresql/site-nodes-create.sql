@@ -69,7 +69,7 @@ begin
   return tree_sortkey from site_nodes where node_id = p_node_id;
 end;' language 'plpgsql' stable strict;
 
-create or replace function site_node_insert_tr () returns opaque as '
+create or replace function site_node_insert_tr () returns trigger as '
 declare
         v_parent_sk     varbit default null;
         v_max_value     integer;
@@ -98,7 +98,7 @@ create trigger site_node_insert_tr before insert
 on site_nodes for each row 
 execute procedure site_node_insert_tr ();
 
-create or replace function site_node_update_tr () returns opaque as '
+create or replace function site_node_update_tr () returns trigger as '
 declare
         v_parent_sk     varbit default null;
         v_max_value     integer;

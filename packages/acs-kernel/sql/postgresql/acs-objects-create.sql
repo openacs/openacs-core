@@ -258,7 +258,7 @@ create index acs_objects_title_idx on acs_objects(title);
 
 create index acs_objects_object_type_idx on acs_objects (object_type);
 
-create function acs_objects_mod_ip_insert_tr () returns opaque as '
+create function acs_objects_mod_ip_insert_tr () returns trigger as '
 begin
   new.modifying_ip := new.creation_ip;
 
@@ -271,7 +271,7 @@ for each row execute procedure acs_objects_mod_ip_insert_tr ();
 
 -- show errors
 
-create function acs_objects_last_mod_update_tr () returns opaque as '
+create function acs_objects_last_mod_update_tr () returns trigger as '
 begin
   if new.last_modified is null then
      new.last_modified := old.last_modified;
@@ -293,7 +293,7 @@ begin
   return tree_sortkey from acs_objects where object_id = p_object_id;
 end;' language 'plpgsql' stable strict;
 
-create function acs_objects_insert_tr() returns opaque as '
+create function acs_objects_insert_tr() returns trigger as '
 declare
         v_parent_sk    		varbit default null;
         v_max_child_sortkey	varbit;
@@ -323,7 +323,7 @@ on acs_objects for each row
 execute procedure acs_objects_insert_tr ();
 
 
-create function acs_objects_update_tr () returns opaque as '
+create function acs_objects_update_tr () returns trigger as '
 declare
         v_parent_sk     varbit default null;
         v_max_child_sortkey	varbit;
@@ -438,7 +438,7 @@ as select object_id, ancestor_id, n_generations
    from acs_object_context_index
    where object_id != ancestor_id;
 
-create or replace function acs_objects_context_id_in_tr () returns opaque as '
+create or replace function acs_objects_context_id_in_tr () returns trigger as '
 declare
         security_context_root integer;
 begin
@@ -472,7 +472,7 @@ end;' language 'plpgsql';
 create trigger acs_objects_context_id_in_tr after insert on acs_objects
 for each row execute procedure acs_objects_context_id_in_tr ();
 
-create or replace function acs_objects_context_id_up_tr () returns opaque as '
+create or replace function acs_objects_context_id_up_tr () returns trigger as '
 declare
         pair    record;
         outer record;
@@ -544,7 +544,7 @@ end;' language 'plpgsql';
 create trigger acs_objects_context_id_up_tr after update on acs_objects
 for each row execute procedure acs_objects_context_id_up_tr ();
 
-create function acs_objects_context_id_del_tr () returns opaque as '
+create function acs_objects_context_id_del_tr () returns trigger as '
 begin
   delete from acs_object_context_index
   where object_id = old.object_id;

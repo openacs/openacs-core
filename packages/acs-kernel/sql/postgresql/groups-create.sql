@@ -412,7 +412,7 @@ end;' language 'plpgsql' stable;
 -- sourced. That file will replace these triggers with triggers
 -- that actually do useful work
 
-create function membership_rels_in_tr () returns opaque as '
+create function membership_rels_in_tr () returns trigger as '
 declare
 begin
   raise EXCEPTION ''-20000: Insert to membership rels not yet supported'';
@@ -427,7 +427,7 @@ for each row  execute procedure membership_rels_in_tr ();
 -- show errors
 
 
-create function composition_rels_in_tr () returns opaque as '
+create function composition_rels_in_tr () returns trigger as '
 declare
 begin
   raise EXCEPTION ''-20000: Insert to composition rels not yet supported'';

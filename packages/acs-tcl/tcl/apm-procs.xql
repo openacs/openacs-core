@@ -7,7 +7,7 @@
       from apm_package_versions apv, apm_package_dependencies apd
       where apd.version_id = apv.version_id
         and apv.enabled_p = 't'
-        and apd.dependency_type = 'extends'
+        and apd.dependency_type in ('extends', 'embeds')
         and apd.service_uri = :package_key
     </querytext>
   </fullquery>
@@ -20,14 +20,6 @@
     </querytext>
   </fullquery>
 
-  <fullquery name="apm_package_list_search_order.get_inherit_templates_p">
-    <querytext>
-      select inherit_templates_p
-      from apm_package_types
-      where package_key = :package_key
-    </querytext>
-  </fullquery>
-
   <fullquery name="apm_package_list_search_order.get_dependencies">
     <querytext>
       select apd.service_uri
@@ -35,7 +27,28 @@
       where apv.package_key = :package_key
         and apv.installed_p = 't'
         and apd.version_id = apv.version_id
-        and apd.dependency_type = 'extends'
+        and apd.dependency_type in ('extends', 'embeds')
+      order by apd.dependency_id
+    </querytext>
+  </fullquery>
+
+  <fullquery name="apm_package_list_url_resolution.get_inherit_templates_p">
+    <querytext>
+      select inherit_templates_p
+      from apm_package_types
+      where package_key = :package_key
+    </querytext>
+  </fullquery>
+
+  <fullquery name="apm_package_list_url_resolution.get_dependencies">
+    <querytext>
+      select apd.service_uri, apd.dependency_type
+      from apm_package_versions apv, apm_package_dependencies apd
+      where apv.package_key = :package_key
+        and apv.installed_p = 't'
+        and apd.version_id = apv.version_id
+        and (apd.dependency_type = 'embeds'
+             or apd.dependency_type =  'extends' and :inherit_templates_p = 't')
       order by apd.dependency_id
     </querytext>
   </fullquery>
@@ -47,7 +60,7 @@
       where apv.package_key = :package_key
         and apv.installed_p = 't'
         and apd.version_id = apv.version_id
-        and apd.dependency_type = 'extends'
+        and apd.dependency_type in ('extends', 'embeds')
       order by apd.dependency_id desc
     </querytext>
   </fullquery>
@@ -59,7 +72,7 @@
       where apv.package_key = :package_key
         and apv.installed_p = 't'
         and apd.version_id = apv.version_id
-        and apd.dependency_type in ('requires', 'extends')
+        and apd.dependency_type in ('requires', 'embeds', 'extends')
       order by apd.dependency_id desc
     </querytext>
   </fullquery>

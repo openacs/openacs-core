@@ -34,12 +34,12 @@ ad_proc -public rp_internal_redirect {
     the current directory, relative links returned to the clients
     browser may be broken (since the client will have the original URL).
 
-    Use rp_form_put if you want to feed query variables to the redirected page.
+    Use rp_form_put or rp_form_update if you want to feed query variables to the redirected page.
     
     @param absolute_path If set the path is an absolute path within the host filesystem
     @param path path to the file to serve
 
-    @see rp_form_put
+    @see rp_form_put, rp_form_update
 
 } {
 
@@ -861,31 +861,36 @@ ad_proc -private rp_handler {} {
       rp_debug -debug t "error in rp_handler: $errmsg"
     }
 
-    set roots [ns_info pageroot][string trimright [ad_conn package_url] /]
+    set resolve_values [concat [ns_info pageroot][string trimright [ad_conn package_url] /] \
+                               [apm_package_url_resolution [ad_conn package_key]]]
 
-    if { [ad_conn package_key] ne "" } {
-        foreach package_key [apm_package_search_order [ad_conn package_key]] {
-            lappend roots [acs_root_dir]/packages/$package_key/www
+    foreach resolve_value $resolve_values {
+        foreach {root match_prefix} $resolve_value {}
+        set extra_url [ad_conn extra_url]
+        if { $match_prefix ne "" } {
+            if { [string first $match_prefix $extra_url] == 0 } {
+                set extra_url [string trimleft \
+                    [string range $extra_url [string length $match_prefix] end] /]
+            } else {
+                continue
+            }
         }
-    }
-
-    foreach root $roots {
-        ds_add rp [list notice "Trying rp_serve_abstract_file $root/[ad_conn extra_url]" $startclicks [clock clicks -milliseconds]]
+        ds_add rp [list notice "Trying rp_serve_abstract_file $root/$extra_url" $startclicks [clock clicks -milliseconds]]
         ad_try {
-            rp_serve_abstract_file "$root/[ad_conn extra_url]"
+            rp_serve_abstract_file "$root/$extra_url"
             set tcl_url2file([ad_conn url]) [ad_conn file]
             set tcl_url2path_info([ad_conn url]) [ad_conn path_info]
         } notfound val {
-            ds_add rp [list notice "File $root/[ad_conn extra_url]: Not found" $startclicks [clock clicks -milliseconds]]
-            ds_add rp [list transformation [list notfound "$root / [ad_conn extra_url]" $val] $startclicks [clock clicks -milliseconds]]
+            ds_add rp [list notice "File $root/$extra_url: Not found" $startclicks [clock clicks -milliseconds]]
+            ds_add rp [list transformation [list notfound "$root / $extra_url" $val] $startclicks [clock clicks -milliseconds]]
             continue
         } redirect url {
-            ds_add rp [list notice "File $root/[ad_conn extra_url]: Redirect" $startclicks [clock clicks -milliseconds]]
-            ds_add rp [list transformation [list redirect $root/[ad_conn extra_url] $url] $startclicks [clock clicks -milliseconds]]
+            ds_add rp [list notice "File $root/$extra_url: Redirect" $startclicks [clock clicks -milliseconds]]
+            ds_add rp [list transformation [list redirect $root/$extra_url $url] $startclicks [clock clicks -milliseconds]]
             ad_returnredirect $url
         } directory dir_index {
-            ds_add rp [list notice "File $root/[ad_conn extra_url]: Directory index" $startclicks [clock clicks -milliseconds]]
-            ds_add rp [list transformation [list directory $root/[ad_conn extra_url] $dir_index] $startclicks [clock clicks -milliseconds]]
+            ds_add rp [list notice "File $root/$extra_url: Directory index" $startclicks [clock clicks -milliseconds]]
+            ds_add rp [list transformation [list directory $root/$extra_url $dir_index] $startclicks [clock clicks -milliseconds]]
             continue
         }
         return
@@ -904,30 +909,40 @@ ad_proc -private rp_handler {} {
     # OK, we didn't find a normal file. Let's look for a path info style thingy,
     # visiting possible file matches from most specific to least.
 
-    foreach prefix [rp_path_prefixes [ad_conn extra_url]] {
-        foreach root $roots {
+    foreach prefix [rp_path_prefixes $extra_url] {
+        foreach resolve_value $resolve_values {
+            foreach {root match_prefix} $resolve_value {}
+            set extra_url [ad_conn extra_url]
+            if { $match_prefix ne "" } {
+                if { [string first $match_prefix $extra_url] == 0 } {
+                    set extra_url [string trimleft \
+                        [string range $extra_url [string length $match_prefix] end] /]
+                } else {
+                    continue
+                }
+            }
             ad_try {
                 ad_conn -set path_info \
-                    [string range [ad_conn extra_url] [expr {[string length $prefix] - 1}] end]
+                    [string range $extra_url [expr {[string length $prefix] - 1}] end]
                 rp_serve_abstract_file -noredirect -nodirectory \
                     -extension_pattern ".vuh" "$root$prefix"
                     set tcl_url2file([ad_conn url]) [ad_conn file]
                     set tcl_url2path_info([ad_conn url]) [ad_conn path_info]
                 } notfound val {
-                    ds_add rp [list transformation [list notfound $root/[ad_conn extra_url] $val] $startclicks [clock clicks -milliseconds]]
+                    ds_add rp [list transformation [list notfound $root$prefix $val] $startclicks [clock clicks -milliseconds]]
                     continue
                 } redirect url {
-                    ds_add rp [list transformation [list redirect $root/[ad_conn extra_url] $url] $startclicks [clock clicks -milliseconds]]
+                    ds_add rp [list transformation [list redirect $root$prefix $url] $startclicks [clock clicks -milliseconds]]
                     ad_returnredirect $url
                 } directory dir_index {
-                    ds_add rp [list transformation [list directory $root/[ad_conn extra_url] $dir_index] $startclicks [clock clicks -milliseconds]]
+                    ds_add rp [list transformation [list directory $root$prefix $dir_index] $startclicks [clock clicks -milliseconds]]
                     continue
                 }
             return
         }
     }
 
-    ds_add rp [list transformation [list notfound $root/[ad_conn extra_url] notfound] $startclicks [clock clicks -milliseconds]]
+    ds_add rp [list transformation [list notfound $root/$extra_url notfound] $startclicks [clock clicks -milliseconds]]
     ns_returnnotfound
   } errmsg]] } {
     if {$code == 1} {

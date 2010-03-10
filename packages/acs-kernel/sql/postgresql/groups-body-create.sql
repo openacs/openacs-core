@@ -15,18 +15,18 @@
 
 -- However, PG 7.3 introduces a new type "trigger" for the return type
 -- needed for functions called by triggers.  "create function" transmorgifies
--- the return type "opaque" to "trigger" so PG 7.2 dumps can be restored into
+-- the return type "trigger" to "trigger" so PG 7.2 dumps can be restored into
 -- PG 7.3.  But "create or replace" doesn't do it.   We can't use "trigger"
 -- because we currently are still supporting PG 7.2.  Isn't life a pleasure?
 
 -- I'm leaving the triggers we aren't overriding as "create or replace" because
 -- this will be the right thing to do if the PG folks fix this problem or when
--- we drop support of PG 7.2 and no longer need to declare these as type "opaque"
+-- we drop support of PG 7.2 and no longer need to declare these as type "trigger"
 
 drop trigger membership_rels_in_tr on membership_rels;
 drop function membership_rels_in_tr ();
 
-create or replace function membership_rels_in_tr () returns opaque as '
+create or replace function membership_rels_in_tr () returns trigger as '
 declare
   v_object_id_one acs_rels.object_id_one%TYPE;
   v_object_id_two acs_rels.object_id_two%TYPE;
@@ -85,7 +85,7 @@ end;' language 'plpgsql';
 create trigger membership_rels_in_tr after insert on membership_rels
 for each row execute procedure membership_rels_in_tr ();
 
-create or replace function membership_rels_up_tr () returns opaque as '
+create or replace function membership_rels_up_tr () returns trigger as '
 declare
   map             record;
 begin
@@ -112,7 +112,7 @@ end;' language 'plpgsql';
 create trigger membership_rels_up_tr before update on membership_rels
 for each row execute procedure membership_rels_up_tr ();
 
-create or replace function membership_rels_del_tr () returns opaque as '
+create or replace function membership_rels_del_tr () returns trigger as '
 declare
   v_error text;
   map             record;
@@ -143,7 +143,7 @@ for each row execute procedure membership_rels_del_tr ();
 drop trigger composition_rels_in_tr on composition_rels;
 drop function composition_rels_in_tr ();
 
-create or replace function composition_rels_in_tr () returns opaque as '
+create or replace function composition_rels_in_tr () returns trigger as '
 declare
   v_object_id_one acs_rels.object_id_one%TYPE;
   v_object_id_two acs_rels.object_id_two%TYPE;
@@ -253,7 +253,7 @@ for each row execute procedure composition_rels_in_tr ();
 -- TO DO: See if this can be optimized now that the member and component
 -- mapping tables have been combined
 --
-create or replace function composition_rels_del_tr () returns opaque as '
+create or replace function composition_rels_del_tr () returns trigger as '
 declare
   v_object_id_one acs_rels.object_id_one%TYPE;
   v_object_id_two acs_rels.object_id_two%TYPE;

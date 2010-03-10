@@ -61,7 +61,7 @@ begin
   return tree_sortkey from acs_object_types where object_type = p_object_type;
 end;' language 'plpgsql';
 
-create function acs_object_type_insert_tr () returns opaque as '
+create function acs_object_type_insert_tr () returns trigger as '
 declare
         v_parent_sk     varbit default null;
         v_max_value     integer;
@@ -84,7 +84,7 @@ create trigger acs_object_type_insert_tr before insert
 on acs_object_types for each row 
 execute procedure acs_object_type_insert_tr ();
 
-create function acs_object_type_update_tr () returns opaque as '
+create function acs_object_type_update_tr () returns trigger as '
 declare
         v_parent_sk     varbit default null;
         v_max_value     integer;

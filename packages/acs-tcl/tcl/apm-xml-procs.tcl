@@ -169,7 +169,8 @@ ad_proc -public apm_read_package_info_file { path } {
     <ul>
     <li><code>path</code>: a path to the file read
     <li><code>mtime</code>: the mtime of the file read
-    <li><code>provides</code>, <code>extends</code>, and <code>requires</code>:
+    <li><code>provides</code>, <code>embeds</code>, <code>extends</code>,
+      and <code>requires</code>: <p>
       lists of dependency information, containing elements of the form
       <code>[list $url $version]</code>
     <li><code>owners</code>: a list of owners containing elements of the form
@@ -311,9 +312,10 @@ ad_proc -public apm_read_package_info_file { path } {
 
     set properties(provides) [list]
     set properties(requires) [list]
+    set properties(embeds) [list]
     set properties(extends) [list]
 
-    foreach dependency_type { provides requires extends } {
+    foreach dependency_type { provides requires embeds extends } {
 	set dependency_types [xml_node_get_children_by_name $version $dependency_type]
 
 	foreach node $dependency_types {

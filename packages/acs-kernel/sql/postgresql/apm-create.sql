@@ -708,6 +708,11 @@ create table apm_parameters (
 	datatype	        varchar(100) not null
 			        constraint apm_parameters_datatype_ck 
 				check(datatype in ('number', 'string','text')),
+        scope                   varchar(10) default 'instance'
+                                constraint apm_parameters_scope_ck
+                                check (scope in ('global','instance'))
+                                constraint apm_parameters_scope_nn
+                                not null,
 	default_value		text,
 	min_n_values		integer default 1 not null
 			        constraint apm_parameters_min_n_values_ck
@@ -731,6 +736,11 @@ parameter::get.
 
 comment on column apm_parameters.parameter_name is '
   This is the name of the parameter, for example "DebugP."
+';
+
+comment on column apm_parameters.scope is '
+  If the scope is "global", only one value of the parameter exists for the entire site.
+  If "instance", each package instance has its own value.
 ';
 
 comment on column apm_parameters.description is '
@@ -836,6 +846,22 @@ begin
    ''type_specific'',
    ''f''
    );
+
+attr_id := acs_attribute__create_attribute (
+   ''apm_parameter'',
+   ''scope'',
+   ''string'',
+   ''Scope'',
+   ''Scope'',
+   null,
+   null,
+   null,
+   1,
+   1,
+   null,
+   ''type_specific'',
+   ''f''
+   ); 
 
  attr_id := acs_attribute__create_attribute (
    ''apm_parameter'',
@@ -996,7 +1022,7 @@ create table apm_package_dependencies (
     dependency_type    varchar(20)
                        constraint apm_package_deps_type_nn not null
                        constraint apm_package_deps_type_ck
-                       check(dependency_type in ('extends', 'provides','requires')),
+                       check(dependency_type in ('embeds', 'extends', 'provides','requires')),
     service_uri        varchar(1500)
                        constraint apm_package_deps_uri_nn not null,
     service_version    varchar(100)
@@ -1307,18 +1333,19 @@ begin
    return 0; 
 end;' language 'plpgsql';
 
-create or replace function apm__register_parameter (integer,varchar,varchar,varchar,varchar,varchar,varchar,integer,integer)
+create or replace function apm__register_parameter (integer,varchar,varchar,varchar,varchar,varchar,varchar,varchar,integer,integer)
 returns integer as '
 declare
   register_parameter__parameter_id           alias for $1;  -- default null  
   register_parameter__package_key            alias for $2;  
   register_parameter__parameter_name         alias for $3;  
-  register_parameter__description            alias for $4;  -- default null  
-  register_parameter__datatype               alias for $5;  -- default ''string''  
-  register_parameter__default_value          alias for $6;  -- default null  
-  register_parameter__section_name           alias for $7;  -- default null 
-  register_parameter__min_n_values           alias for $8;  -- default 1
-  register_parameter__max_n_values           alias for $9;  -- default 1
+  register_parameter__scope                  alias for $4;  
+  register_parameter__description            alias for $5;  -- default null  
+  register_parameter__datatype               alias for $6;  -- default ''string''  
+  register_parameter__default_value          alias for $7;  -- default null  
+  register_parameter__section_name           alias for $8;  -- default null 
+  register_parameter__min_n_values           alias for $9;  -- default 1
+  register_parameter__max_n_values           alias for $10;  -- default 1
 
   v_parameter_id         apm_parameters.parameter_id%TYPE;
   v_value_id             apm_parameter_values.value_id%TYPE;
@@ -1339,10 +1366,10 @@ begin
     );
     
     insert into apm_parameters 
-    (parameter_id, parameter_name, description, package_key, datatype, 
+    (parameter_id, parameter_name, scope, description, package_key, datatype, 
     default_value, section_name, min_n_values, max_n_values)
     values
-    (v_parameter_id, register_parameter__parameter_name, 
+    (v_parameter_id, register_parameter__parameter_name, register_parameter__scope,
      register_parameter__description, register_parameter__package_key, 
      register_parameter__datatype, register_parameter__default_value, 
      register_parameter__section_name, register_parameter__min_n_values, 
@@ -1364,6 +1391,30 @@ begin
 	
     return v_parameter_id;
    
+end;' language 'plpgsql';
+
+-- For backwards compatibility, register a parameter with "instance" scope.
+
+create or replace function apm__register_parameter (integer,varchar,varchar,varchar,varchar,varchar,varchar,integer,integer)
+returns integer as '
+declare
+  register_parameter__parameter_id           alias for $1;  -- default null  
+  register_parameter__package_key            alias for $2;  
+  register_parameter__parameter_name         alias for $3;  
+  register_parameter__description            alias for $4;  -- default null  
+  register_parameter__datatype               alias for $5;  -- default ''string''  
+  register_parameter__default_value          alias for $6;  -- default null  
+  register_parameter__section_name           alias for $7;  -- default null 
+  register_parameter__min_n_values           alias for $8;  -- default 1
+  register_parameter__max_n_values           alias for $9;  -- default 1
+
+begin
+  return
+    apm__register_parameter(register_parameter__parameter_id, register_parameter__package_key,
+                           register_parameter__parameter_name, ''instance'',
+                           register_parameter__description, register_parameter__datatype,
+                           register_parameter__default_value, register_parameter__section_name,
+                           register_parameter__min_n_values, register_parameter__max_n_values);
 end;' language 'plpgsql';
 
 -- function update_parameter
@@ -1468,40 +1519,99 @@ begin
    
 end;' language 'plpgsql' stable strict;
 
+create or replace function apm__id_for_name (integer,varchar)
+returns integer as '
+declare
+  id_for_name__package_id             alias for $1;  
+  id_for_name__parameter_name         alias for $2;  
+  a_parameter_id                      apm_parameters.parameter_id%TYPE;
+begin
+    select parameter_id into a_parameter_id 
+    from apm_parameters 
+    where parameter_name = id_for_name__parameter_name
+      and package_key = (select package_key from apm_packages
+                         where package_id = id_for_name__package_id);
 
--- function get_value
+    if NOT FOUND
+      then
+      	raise EXCEPTION ''-20000: The specified package % AND/OR parameter % do not exist in the system'', id_for_name__package_id, id_for_name__parameter_name;
+    end if;
+
+    return a_parameter_id;
+   
+end;' language 'plpgsql' stable strict;
+
+create or replace function apm__id_for_name (varchar,varchar)
+returns integer as '
+declare
+  id_for_name__package_key            alias for $1;  
+  id_for_name__parameter_name         alias for $2;  
+  a_parameter_id                      apm_parameters.parameter_id%TYPE;
+begin
+    select parameter_id into a_parameter_id
+    from apm_parameters p
+    where p.parameter_name = id_for_name__parameter_name and
+          p.package_key = id_for_name__package_key;
+
+    if NOT FOUND
+      then
+      	raise EXCEPTION ''-20000: The specified package % AND/OR parameter % do not exist in the system'', id_for_name__package_key, id_for_name__parameter_name;
+    end if;
+
+    return a_parameter_id;
+   
+end;' language 'plpgsql' stable strict;
+
 create or replace function apm__get_value (integer,varchar)
 returns varchar as '
 declare
   get_value__package_id             alias for $1;  
   get_value__parameter_name         alias for $2;  
   v_parameter_id                    apm_parameter_values.parameter_id%TYPE;
+  value                             apm_parameter_values.attr_value%TYPE;
 begin
-    select parameter_id into v_parameter_id 
-    from apm_parameters 
-    where parameter_name = get_value__parameter_name
-    and package_key = (select package_key  from apm_packages
-			where package_id = get_value__package_id);
-    return apm__get_value(
-	v_parameter_id,
-	get_value__package_id
-    );	
+    v_parameter_id := apm__id_for_name (get_value__package_id, get_value__parameter_name);
+
+    select attr_value into value from apm_parameter_values v
+    where v.package_id = get_value__package_id
+    and parameter_id = get_value__parameter_id;
+
+    return value;
    
 end;' language 'plpgsql' stable strict;
 
+create or replace function apm__get_value (varchar,varchar)
+returns varchar as '
+declare
+  get_value__package_key            alias for $1;  
+  get_value__parameter_name         alias for $2;  
+  v_parameter_id                    apm_parameter_values.parameter_id%TYPE;
+  value                             apm_parameter_values.attr_value%TYPE;
+begin
+    v_parameter_id := apm__id_for_name (get_value__package_key, get_value__parameter_name);
 
--- procedure set_value
-create or replace function apm__set_value (integer,integer,varchar)
+    select attr_value into value from apm_parameter_values v
+    where v.package_id is null
+    and parameter_id = get_value__parameter_id;
+
+    return value;
+   
+end;' language 'plpgsql' stable strict;
+
+create or replace function apm__set_value (integer,varchar,varchar)
 returns integer as '
 declare
-  set_value__parameter_id           alias for $1;  
-  set_value__package_id             alias for $2;  
+  set_value__package_id             alias for $1;  
+  set_value__parameter_name         alias for $2;  
   set_value__attr_value             alias for $3;  
+  v_parameter_id                    apm_parameter_values.parameter_id%TYPE;
   v_value_id                        apm_parameter_values.value_id%TYPE;
 begin
+    v_parameter_id := apm__id_for_name (set_value__package_id, set_value__parameter_name);
+
     -- Determine if the value exists
     select value_id into v_value_id from apm_parameter_values 
-     where parameter_id = set_value__parameter_id 
+     where parameter_id = v_parameter_id 
      and package_id = set_value__package_id;
     update apm_parameter_values set attr_value = set_value__attr_value
      where value_id = v_value_id;
@@ -1513,50 +1623,46 @@ begin
          v_value_id := apm_parameter_value__new(
             null,
             set_value__package_id,
-            set_value__parameter_id,
+            v_parameter_id,
             set_value__attr_value
          );
      end if;
 
-     return 0; 
-end;' language 'plpgsql';
-
-
--- procedure set_value
-create or replace function apm__set_value (integer,varchar,varchar)
-returns integer as '
-declare
-  set_value__package_id             alias for $1;  
-  set_value__parameter_name         alias for $2;  
-  set_value__attr_value             alias for $3;  
-  v_parameter_id                    apm_parameter_values.parameter_id%TYPE;
-begin
-    select parameter_id into v_parameter_id 
-    from apm_parameters 
-    where parameter_name = set_value__parameter_name
-    and package_key = (select package_key  from apm_packages
-			where package_id = set_value__package_id);
-
-    if NOT FOUND
-      then
-      	raise EXCEPTION ''-20000: The specified package % AND/OR parameter % do not exist in the system'', set_value__package_id, set_value__parameter_name;
-    end if;
-
-    PERFORM apm__set_value(
-	v_parameter_id,
-	set_value__package_id,
-	set_value__attr_value
-    );
-
     return 0; 
 end;' language 'plpgsql';
 
+create or replace function apm__set_value (varchar,varchar,varchar)
+returns integer as '
+declare
+  set_value__package_key            alias for $1;  
+  set_value__parameter_name         alias for $2;  
+  set_value__attr_value             alias for $3;  
+  v_parameter_id                    apm_parameter_values.parameter_id%TYPE;
+  v_value_id                        apm_parameter_values.value_id%TYPE;
+begin
+    v_parameter_id := apm__id_for_name (set_value__package_key, set_value__parameter_name);
 
+    -- Determine if the value exists
+    select value_id into v_value_id from apm_parameter_values 
+     where parameter_id = v_parameter_id 
+     and package_id is null;
+    update apm_parameter_values set attr_value = set_value__attr_value
+     where value_id = v_value_id;
+    update acs_objects set last_modified = now() 
+     where object_id = v_value_id;
+   --  exception 
+     if NOT FOUND
+       then
+         v_value_id := apm_parameter_value__new(
+            null,
+            null,
+            v_parameter_id,
+            set_value__attr_value
+         );
+     end if;
 
--- show errors
-
--- create or replace package body apm_package
--- procedure initialize_parameters
+    return 0; 
+end;' language 'plpgsql';
 
 create or replace function apm_package__is_child(varchar, varchar) returns boolean as '
 declare
@@ -1574,7 +1680,7 @@ begin
     from apm_package_versions apv, apm_package_dependencies apd
     where apd.version_id = apv.version_id
       and apv.enabled_p
-      and apd.dependency_type = ''extends''
+      and apd.dependency_type in (''embeds'', ''extends'')
       and apv.package_key = child_package_key
   loop
     if dependency.service_uri = parent_package_key or
@@ -2586,6 +2692,3 @@ begin
     return 0; 
 end;' language 'plpgsql';
 
-
-
--- show errors

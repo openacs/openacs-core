@@ -394,7 +394,7 @@ create index acs_data_links_rel_tag_idx on acs_data_links (relation_tag);
 
 -- added by oumi@arsdigita.com - Jan 11, 2001
 
-create function acs_rels_in_tr () returns opaque as '
+create function acs_rels_in_tr () returns trigger as '
 declare
   dummy integer;
   target_object_type_one acs_object_types.object_type%TYPE;

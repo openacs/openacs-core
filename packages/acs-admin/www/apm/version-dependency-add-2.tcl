@@ -30,8 +30,14 @@ db_transaction {
             apm_copy_inherited_params $our_package_key
 	}
 
+        embed {
+	    apm_dependency_add -dependency_id $dependency_id ${dependency_type}s $version_id $package_key $version_name
+            apm_build_one_package_relationships $our_package_key
+            apm_copy_inherited_params $our_package_key
+	}
+
 	default {
-	    ad_return_complaint 1 "Entry error: Depenendencies are either provided or required."
+	    ad_return_complaint 1 "Entry error: Allowable dependencies are required, extends and embeds."
 	}
     }
 } on_error {
