@@ -31,19 +31,19 @@ ad_proc http_auth::set_user_id {} {
                             -password $password \
 			    -authority_id $authority_id \
 			    -no_cookie]
-	    if {![string equal $auth(auth_status) "ok"]} {
+	    if {$auth(auth_status) ne "ok" } {
 		array set auth [auth::authenticate \
 				    -email $user \
 				    -password $password \
 				    -authority_id $authority_id \
 				    -no_cookie]
 	    }
-	    if {[string equal $auth(auth_status) "ok"]} {
+	    if {$auth(auth_status) eq "ok"} {
 		# we can stop checking
 		break
 	    }
 	}
-	if {![string equal $auth(auth_status) "ok"]} {
+	if {$auth(auth_status) ne "ok" } {
 	    ns_log debug "\nTDAV 5.0 auth status $auth(auth_status)"
 	    ns_returnunauthorized
 	    return 0

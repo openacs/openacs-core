@@ -857,11 +857,11 @@ ad_proc -public ad_html_to_text {
         #     - alpha or
         #     - a slash, and then alpha
         # Otherwise, it's probably just a lone < character
-        if { $i >= [expr $length-1] || \
-                 (![string is alpha [string index $html [expr $i + 1]]] && \
+        if { $i >= [expr {$length-1}] || \
+                 (![string is alpha [string index $html [expr {$i + 1}]]] && \
 		      [string index $html [expr {$i + 1}]] ne "!" && \
-                      (![string equal "/" [string index $html [expr $i + 1]]] || \
-                           ![string is alpha [string index $html [expr $i + 2]]])) } {
+                      (![string equal "/" [string index $html [expr {$i + 1}]]] || \
+                           ![string is alpha [string index $html [expr {$i + 2}]]])) } {
             # Output the < and continue with next character
             ad_html_to_text_put_text output "<"
             set last_tag_end [incr i]
