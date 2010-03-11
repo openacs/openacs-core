@@ -13,10 +13,10 @@ randomInit [ns_time]
 # Create mutex for util_background_exec
 nsv_set util_background_exec_mutex . [ns_mutex create oacs:bg_exec]
 
-# if maxbackup in config is missing or zero, don't run auto-logrolling
-set maxbackup [ns_config -int "ns/parameters" maxbackup 0]
+# if logmaxbackup in config is missing or zero, don't run auto-logrolling
+set logmaxbackup [ns_config -int "ns/parameters" logmaxbackup 0]
 
-if { $maxbackup } {
+if { $logmaxbackup } {
     ad_schedule_proc -all_servers t -schedule_proc ns_schedule_daily \
 	[list 00 00] util::roll_server_log
 }

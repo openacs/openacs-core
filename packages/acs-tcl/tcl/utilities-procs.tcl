@@ -4356,7 +4356,7 @@ ad_proc -public util::roll_server_log {{}} {
     Invoke the AOLserver ns_logroll command with some bookend log records.  This rolls the error log, not the access log.
 } { 
     # This param controlls how many backups of the server log to keep, 
-    ns_config -int "ns/parameters" maxbackup 7
+    ns_config -int "ns/parameters" logmaxbackup 10
     ns_log Notice "util::roll_server_log: Rolling the server log now..." 
     ns_logroll 
     ns_log Notice "util::roll_server_log: Done rolling the server log." 

@@ -82,6 +82,7 @@ ns_section ns/parameters
     # maxkeepalive is ignored in aolserver4.x
     ns_param   maxkeepalive       0
     ns_param   logroll            on
+    ns_param   logmaxbackup       10
     ns_param   maxbackup          5
     ns_param   debug              $debug
 #    ns_param   mailhost           localhost 
