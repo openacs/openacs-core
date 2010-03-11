@@ -1651,7 +1651,7 @@ ad_proc -public security::locations {} {
     if {[ns_conn isconnected]} {
         set hdrs [ns_conn headers]
         set host [ns_set iget $hdrs host]
-        if {[string equal "" $host]} {
+        if {$host eq ""} {
             set driver nssock
         } 
     }
