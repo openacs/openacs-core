@@ -135,32 +135,46 @@ proc ns_putscript {conn ignored} {
 	ns_returnbadrequest $conn "Cannot PUT a script file"
 }
 
-ns_share NS
-set NS(months) [list January February March April May June \
-        July August September October November December]
+if {[ns_info name] ne "NaviServer"} {
+  #
+  # Naviserver has dropped support for ns_share.
+  #
+  ns_share NS
+  set NS(months) [list January February March April May June \
+                      July August September October November December]
+}
 
+# _ns_dateentrywidget is not very popular and is not
+# internationalized. We keep it in Naviserver for backward
+# compatibility. It should become deprecated.
 proc _ns_dateentrywidget {column} {
-    ns_share NS
 
-    set output "<SELECT name=$column.month>\n"
+    if {[ns_info name] ne "NaviServer"} {
+        ns_share NS
+    } else {
+        set NS(months) [list January February March April May June \
+                            July August September October November December]
+    }
+
+    set output "<select name='$column.month'>\n"
     for {set i 0} {$i < 12} {incr i} {
-	append output "<OPTION> [lindex $NS(months) $i]\n"
+        append output "<option> [lindex $NS(months) $i]\n"
     }
 
     append output \
-"</SELECT>&nbsp;<INPUT NAME=$column.day\
-TYPE=text SIZE=3 MAXLENGTH=2>&nbsp;<INPUT NAME=$column.year\
-TYPE=text SIZE=5 MAXLENGTH=4>"
+        "</select>&nbsp;<INPUT name='$column.day'\
+type='text' size='3' maxlength='2'>&nbsp;<input name='$column.year'\
+type='text' size='5' maxlength='4'>"
 
     return [ns_dbformvalueput $output $column date [lindex [split [ns_localsqltimestamp] " "] 0]]
 }
 
 proc _ns_timeentrywidget {column} {
     
-    set output "<INPUT NAME=$column.time TYPE=text SIZE=9>&nbsp;<SELECT NAME=$column.ampm>
-<OPTION> AM
-<OPTION> PM
-</SELECT>"
+    set output "<INPUT NAME='$column.time' type='text' size='9'>&nbsp;<select name='$column.ampm'>\
+<option> AM\
+<option> PM\
+</select>"
 
     return [ns_dbformvalueput $output $column time [lindex [split [ns_localsqltimestamp] " "] 1]]
 }
