@@ -140,3 +140,24 @@ ad_proc -public util_memoize_flush_regexp {
        }
     }
 }
+
+ad_proc -public util_memoize_flush_pattern {
+    -log:boolean
+    pattern
+} {
+
+    Loop through all cached scripts, flushing all that match the
+    pattern that was passed in.
+
+    @param pattern Match pattern (glob pattern like in 'string match $pattern').
+    @param log Whether to log keys checked and flushed (useful for debugging).
+
+} {
+    foreach name [ns_cache names util_memoize $pattern] {
+       if {$log_p} {
+           ns_log Debug "util_memoize_flush_regexp: flushing $name"
+       }
+       util_memoize_flush $name
+    }
+}
+
