@@ -689,6 +689,14 @@ begin
 
  attr_id := acs_attribute.create_attribute(
    object_type => 'apm_parameter',
+   attribute_name => 'scope',
+   datatype => 'string',
+   pretty_name => 'Scope',
+   pretty_plural => 'Scope'
+ );
+
+ attr_id := acs_attribute.create_attribute(
+   object_type => 'apm_parameter',
    attribute_name => 'datatype',
    datatype => 'string',
    pretty_name => 'Datatype',
