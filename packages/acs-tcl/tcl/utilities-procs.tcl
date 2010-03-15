@@ -1873,6 +1873,7 @@ ad_proc -public ad_set_cookie {
 	-max_age ""
 	-domain ""
 	-path "/"
+	-discard f
     }
     name {value ""}
 } { 
@@ -1902,6 +1903,9 @@ ad_proc -public ad_set_cookie {
     without the replace option being specified, the client will
     receive both copies of the cookie.
 
+    @param discard instructs the user agent to discard the
+    cookie when when the user agent terminates.
+
     @param value is autmatically URL encoded.
 
     @see ad_get_cookie
@@ -1928,7 +1932,9 @@ ad_proc -public ad_set_cookie {
 	append cookie "; Path=$path"
     }
 
-    if { $max_age eq "inf" } {
+    if { $discard ne "f" } {
+	append cookie "; Discard"
+    } elseif { $max_age eq "inf" } {
         if { $expire ne "t" } {
             # netscape seemed unhappy with huge max-age, so we use
             # expires which seems to work on both netscape and IE
@@ -1950,6 +1956,7 @@ ad_proc -public ad_set_cookie {
 	append cookie "; Secure"
     }
 
+    ns_log Debug "OACS Set-Cookie: $cookie"
     ns_set put $headers "Set-Cookie" $cookie
 }
 
