@@ -17,10 +17,11 @@ namespace eval security {}
 #   ad_session_id         session_id,user_id,login_level SessionTimeout  no
 #   ad_user_login         user_id,issue_time,auth_token  never expires   no
 #   ad_user_login_secure  user_id,random                 never expires   yes
-#   ad_secure_token       session_id,user_id,random      SessionLifetime yes
+#   ad_secure_token       session_id,random,peeraddr     SessionLifetime yes
 #
 #   the random data is used to hinder attack the secure hash. 
 #   currently the random data is ns_time
+#   peeraddr is used to avoid session hijacking
 #
 #   ad_user_login issue_time: [ns_time] at the time the user last authenticated
 #
@@ -75,6 +76,12 @@ ad_proc -private sec_handler {} {
 
 } {
     ns_log debug "OACS= sec_handler: enter"
+
+    #foreach c [list ad_session_id ad_secure_token ad_user_login ad_user_login_secure] {
+    #    lappend msg "$c [ad_get_cookie $c]"
+    #}
+    #ns_log notice "OACS cookies: $msg"
+
     if { [catch { 
 	set cookie_list [ad_get_signed_cookie_with_expr "ad_session_id"]
     } errmsg ] } {
@@ -84,7 +91,8 @@ ad_proc -private sec_handler {} {
 	# -> it expired.
 
         # Now check for login cookie
-        ns_log Debug "OACS: Not a valid session cookie, looking for login cookie"
+        ns_log Debug "OACS: Not a valid session cookie, looking for login cookie '$errmsg'"
+        ad_user_logout
         sec_login_handler
     } else {
 	# The session cookie already exists and is valid.
@@ -121,7 +129,9 @@ ad_proc -private sec_handler {} {
         if { $auth_level eq "ok" && [security::secure_conn_p] } {
             catch { 
                 set sec_token [split [ad_get_signed_cookie "ad_secure_token"] {,}] 
-                if {[lindex $sec_token 0] eq $session_id} {
+                if {[lindex $sec_token 0] eq $session_id 
+                    && [lindex $sec_token 2] eq [ad_conn peeraddr]
+                  } {
                     set auth_level secure
                 }
             }
@@ -469,14 +479,14 @@ ad_proc -private sec_generate_session_id_cookie {} {
 
     set domain [parameter::get -parameter CookieDomain -package_id [ad_acs_kernel_id]]
 
-    ad_set_signed_cookie -replace t -max_age [sec_session_timeout] -domain $domain \
+    ad_set_signed_cookie -discard t -replace t -max_age [sec_session_timeout] -domain $domain \
 	    "ad_session_id" "$session_id,$user_id,$login_level"
 }
 
 ad_proc -private sec_generate_secure_token_cookie { } { 
     Sets the ad_secure_token cookie.
 } {
-    ad_set_signed_cookie -secure t "ad_secure_token" "[ad_conn session_id],[ad_conn user_id],[ns_time]"
+    ad_set_signed_cookie -secure t "ad_secure_token" "[ad_conn session_id],[ns_time],[ad_conn peeraddr]"
 }
 
 ad_proc -public -deprecated -warn ad_secure_conn_p {} { 
@@ -995,6 +1005,7 @@ ad_proc -public ad_get_signed_cookie_with_expr {
 ad_proc -public ad_set_signed_cookie {
     {-replace f}
     {-secure f}
+    {-discard f}
     {-max_age ""}
     {-signature_max_age ""}
     {-domain ""}
@@ -1045,7 +1056,7 @@ ad_proc -public ad_set_signed_cookie {
 
     set data [ns_urlencode [list $value $cookie_value]]
 
-    ad_set_cookie -replace $replace -secure $secure -max_age $max_age -domain $domain -path $path $name $data
+    ad_set_cookie -replace $replace -secure $secure -discard $discard -max_age $max_age -domain $domain -path $path $name $data
 }
 
 
@@ -1731,6 +1742,7 @@ ad_proc -public security::locations {} {
     lappend locations $insecure_location
     # if we have a secure location, add it
     set host_map_https_port ""
+
     if { $sdriver ne "" } {
         set secure_location "https://${host_name}"
         if {$secure_port ne "" && $secure_port ne "443"}  {
