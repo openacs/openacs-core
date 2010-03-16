@@ -25,3 +25,12 @@ nsv_set acs_mail_lite send_mails_p 0
 nsv_set acs_mail_lite check_bounce_p 0
 
 # ad_schedule_proc -thread t -schedule_proc ns_schedule_daily [list 0 25] acs_mail_lite::check_bounces
+
+
+# Redefine ns_sendmail as a wrapper for acs_mail_lite::send
+
+
+ns_log Notice "acs-mail-lite: renaming acs_mail_lite::sendmail to ns_sendmail"
+
+rename ns_sendmail _old_ns_sendmail
+rename acs_mail_lite::sendmail ns_sendmail
