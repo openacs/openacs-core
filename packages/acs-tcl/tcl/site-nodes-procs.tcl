@@ -288,36 +288,33 @@ ad_proc -private site_node::update_cache {
     ns_mutex lock [nsv_get site_nodes_mutex mutex]
 
     with_finally -code {
-
-        array set nodes [nsv_array get site_nodes]
-        array set url_by_node_id [nsv_array get site_node_url_by_node_id]
-        array set url_by_object_id [nsv_array get site_node_url_by_object_id]
-        array set url_by_package_key [nsv_array get site_node_url_by_package_key]
-        
+	
         # Lars: We need to record the object_id's touched, so we can sort the 
         # object_id->url mappings again. We store them sorted by length of the URL 
-        if { [info exists url_by_node_id($node_id)] } {
-            set old_url $url_by_node_id($node_id)
+        if { [nsv_exists site_node_url_by_node_id $node_id] } {
+            set old_url [nsv_get site_node_url_by_node_id $node_id]
             if { $sync_children_p } {
                 append old_url *
             }
-
+	    
             # This is a little cumbersome, but we have to remove the entry for
             # the object_id->url mapping, for each object_id that used to be 
             # mounted here
             
             # Loop over all the URLs under the node we're updating
-            foreach cur_node_url [array names nodes $old_url] {
-                array set cur_node $nodes($cur_node_url)
-
+            set cur_nodes [nsv_array get site_nodes $old_url]
+            foreach {cur_node_url curr_node_values} $cur_nodes {
+                array set cur_node $curr_node_values
                 # Find the object_id previously mounted there
                 set cur_object_id $cur_node(object_id)
                 if { $cur_object_id ne "" } {
                     # Remove the URL from the url_by_object_id entry for that object_id
-                    set cur_idx [lsearch -exact $url_by_object_id($cur_object_id) $cur_node_url]
+		    set cur_url_by_object_id [nsv_get site_node_url_by_object_id $cur_object_id]
+		    set cur_idx [lsearch -exact $cur_url_by_object_id $cur_node_url]
                     if { $cur_idx != -1 } {
-                        set url_by_object_id($cur_object_id) \
-                            [lreplace $url_by_object_id($cur_object_id) $cur_idx $cur_idx]
+                        set cur_url_by_object_id \
+			    [lreplace $cur_url_by_object_id $cur_idx $cur_idx]
+                        nsv_set site_node_url_by_object_id $cur_object_id $cur_url_by_object_id
                     }
                 }
                 
@@ -325,16 +322,17 @@ ad_proc -private site_node::update_cache {
                 set cur_package_key $cur_node(package_key)
                 if { $cur_package_key ne "" } {
                     # Remove the URL from the url_by_package_key entry for that package_key
-                    set cur_idx [lsearch -exact $url_by_package_key($cur_package_key) $cur_node_url]
+                    set cur_url_by_package_key [nsv_get site_node_url_by_package_key $cur_package_key]
+                    set cur_idx [lsearch -exact $cur_url_by_package_key $cur_node_url]
                     if { $cur_idx != -1 } {
-                        set url_by_package_key($cur_package_key) \
-                            [lreplace $url_by_package_key($cur_package_key) $cur_idx $cur_idx]
+                        set cur_url_by_package_key \
+			    [lreplace $cur_url_by_package_key $cur_idx $cur_idx]
+                        nsv_set site_node_url_by_package_key $cur_package_key $cur_url_by_package_key
                     }
                 }
-            }
-
-            # unset old nodes-subtree
-            array unset nodes $old_url
+                nsv_unset site_nodes $cur_node_url
+                nsv_unset site_node_url_by_node_id $cur_node(node_id)
+	    }
         }
 
         # Note that in the queries below, we use connect by instead of site_node.url
@@ -346,23 +344,25 @@ ad_proc -private site_node::update_cache {
             set query_name select_site_node
         }
         
+        set cur_obj_ids [list]
         db_foreach $query_name {} {
             if {$parent_id eq ""} {
                 # url of root node
                 set url "/"
             } else {
                 # append directory to url of parent node
-                set url $url_by_node_id($parent_id)
+                set url [nsv_get site_node_url_by_node_id $parent_id]
                 append url $name
                 if { $directory_p == "t" } { append url "/" }
             }
             # save new url
-            set url_by_node_id($node_id) $url
+            nsv_set site_node_url_by_node_id $node_id $url
             if { $object_id ne "" } {
-                lappend url_by_object_id($object_id) $url
+                nsv_lappend site_node_url_by_object_id $object_id $url
+                lappend cur_obj_ids $object_id
             }
             if { $package_key ne "" } {
-                lappend url_by_package_key($package_key) $url
+                nsv_lappend site_node_url_by_package_key $package_key $url
             }
 
             if { $package_id eq "" } {
@@ -372,32 +372,24 @@ ad_proc -private site_node::update_cache {
             }
 
             # save new node
-            set nodes($url) \
+            nsv_set site_nodes $url \
                 [list url $url node_id $node_id parent_id $parent_id name $name \
                      directory_p $directory_p pattern_p $pattern_p \
                      object_id $object_id object_type $object_type \
                      package_key $package_key package_id $package_id \
                      instance_name $instance_name package_type $package_type]
         }
-
         # AG: This lsort used to live in the db_foreach loop above.  I moved it here
         # to avoid redundant re-sorting on systems where multiple URLs are mapped to
         # the same object_id.  This was causing a 40 minute startup delay on a .LRN site
         # with 4000+ URLs mapped to one instance of the attachments package.
         # The sort facilitates deleting child nodes before parent nodes.
-        foreach object_id [array names url_by_object_id] {
-                set url_by_object_id($object_id) [lsort \
-                                                      -decreasing \
-                                                      -command util::string_length_compare \
-                                                      $url_by_object_id($object_id)]
+        foreach object_id [lsort -unique $cur_obj_ids] {
+	    nsv_set site_node_url_by_object_id $object_id [lsort \
+							       -decreasing \
+							       -command util::string_length_compare \
+							       [nsv_get site_node_url_by_object_id $object_id] ]
         }
-
-        # update arrays
-        nsv_array reset site_nodes [array get nodes]
-        nsv_array reset site_node_url_by_node_id [array get url_by_node_id]
-        nsv_array reset site_node_url_by_object_id [array get url_by_object_id]
-        nsv_array reset site_node_url_by_package_key [array get url_by_package_key]
-
     } -finally {
         ns_mutex unlock [nsv_get site_nodes_mutex mutex]
     }
