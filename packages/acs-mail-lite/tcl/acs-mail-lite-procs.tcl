@@ -451,7 +451,7 @@ namespace eval acs_mail_lite {
         }
 
         # Rollout support
-        set delivery_mode [ns_config ns/server/[ns_info server]/acs/acs-rollout-support EmailDeliveryMode]
+        set delivery_mode [parameter::get -package_id [get_package_id] -parameter EmailDeliveryMode -default default]
 
         switch $delivery_mode {
             log {
@@ -460,7 +460,7 @@ namespace eval acs_mail_lite {
             }
             filter {
                 set send_mode "smtp"
-                set allowed_addr [split [ns_config ns/server/[ns_info server]/acs/acs-rollout-support EmailAllow] ","]
+                set allowed_addr [parameter::get -package_id [get_package_id] -parameter EmailAllow]
 
                 foreach recipient [concat $to_addr $cc_addr $bcc_addr] {
                     
@@ -482,7 +482,7 @@ namespace eval acs_mail_lite {
                 # Since we have to redirect to a list of addresses
                 # we need to remove the CC and BCC ones
 
-                set to_addr [split [ns_config ns/server/[ns_info server]/acs/acs-rollout-support EmailRedirectTo] ","]
+                set to_addr [parameter::get -package_id [get_package_id] -parameter EmailRedirectTo]
                 set cc_addr ""
                 set bcc_addr ""
             }
@@ -586,5 +586,38 @@ namespace eval acs_mail_lite {
     }
 
     #---------------------------------------
+
+    ad_proc -public -deprecated sendmail {
+        to 
+        from 
+        subject 
+        body 
+        {extraheaders {}} 
+        {bcc {}}
+    } {
+
+        Replacement for ns_sendmail for backward compability.
+
+    } {
+
+
+        ns_log Warning "ns_sendmail is no longer supported in OpenACS. Use acs_mail_lite::send instead."
+
+        set extraheaders_list [list]
+
+        if { $extraheaders ne "" } {
+            foreach {key value} [util_ns_set_to_list -set $extraheaders] {
+                lappend extraheaders_list [list $key $value]
+            }
+        }
+
+        acs_mail_lite::send \
+            -to_addr [split $to ","] \
+            -from_addr $from \
+            -subject $subject \
+            -body $body \
+            -bcc_addr [split $bcc ","] \
+            -extraheaders $extraheaders_list
+    }
 
 }
