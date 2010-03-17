@@ -923,6 +923,8 @@ ad_proc -public site_node_delete_package_instance {
         set package_id [site_node::get_object_id -node_id $node_id]
         site_node::unmount -node_id $node_id
         apm_package_instance_delete $package_id
+    } on_error {
+        site_node::update_cache -node_id $node_id
     }
 }
 
