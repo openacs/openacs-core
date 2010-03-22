@@ -45,6 +45,7 @@
 					 :package_key,
 					 :parameter_name,
 					 :description,
+                                         :scope,
 					 :datatype,
 					 :default_value,
 					 :section_name,

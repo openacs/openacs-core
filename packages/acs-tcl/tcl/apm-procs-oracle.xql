@@ -47,9 +47,10 @@
 	    begin
 	    :1 := apm.register_parameter(
 					 parameter_id => :parameter_id,
-					 parameter_name => :parameter_name,
 					 package_key => :package_key,
+					 parameter_name => :parameter_name,
 					 description => :description,
+                                         scope => :scope,
 					 datatype => :datatype,
 					 default_value => :default_value,
 					 section_name => :section_name,
