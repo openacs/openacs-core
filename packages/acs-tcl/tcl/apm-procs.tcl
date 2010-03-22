@@ -976,10 +976,15 @@ ad_proc -public apm_parameter_register {
     {
 	-callback apm_dummy_callback
 	-parameter_id ""
+        -scope instance
     } 
     parameter_name description package_key default_value datatype {section_name ""} {min_n_values 1} {max_n_values 1}
 } {
     Register a parameter in the system.
+
+    The new "scope" parameter is named rather than positional to avoid breaking existing
+    code.
+
     @return The parameter id of the new parameter.
 
 } {
@@ -993,21 +998,7 @@ ad_proc -public apm_parameter_register {
 
     ns_log debug "apm_parameter_register: Registering $parameter_name, $section_name, $default_value"
 
-    set parameter_id [db_exec_plsql parameter_register {
-	    begin
-	    :1 := apm.register_parameter(
-					 parameter_id => :parameter_id,
-					 parameter_name => :parameter_name,
-					 package_key => :package_key,
-					 description => :description,
-					 datatype => :datatype,
-					 default_value => :default_value,
-					 section_name => :section_name,
-					 min_n_values => :min_n_values,
-					 max_n_values => :max_n_values
-	                                );
-	    end;
-	}]
+    set parameter_id [db_exec_plsql parameter_register {}]
 
     # Update the cache.
     db_foreach apm_parameter_cache_update {
