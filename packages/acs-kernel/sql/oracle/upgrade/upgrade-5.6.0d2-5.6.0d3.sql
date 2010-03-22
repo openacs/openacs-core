@@ -10,8 +10,11 @@ begin
    pretty_name => 'Modifying User'
  );
 
+ acs_attribute.drop_attribute('person','bio');
+ acs_attribute.drop_attribute('person','bio_mime_type');
+
  attr_id := acs_attribute.create_attribute (
-        object_type => 'user',
+        object_type => 'person',
         attribute_name => 'bio',
         datatype => 'string',
         pretty_name => '#acs-kernel.Bio#',

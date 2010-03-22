@@ -435,14 +435,17 @@ as
     register_parameter.default_value, register_parameter.section_name, 
 	register_parameter.min_n_values, register_parameter.max_n_values);
     -- Propagate parameter to new instances.	
-    for pkg in (select package_id from apm_packages where package_key = register_parameter.package_key)
-      loop
-      	v_value_id := apm_parameter_value.new(
-	    package_id => pkg.package_id,
-	    parameter_id => v_parameter_id, 
-	    attr_value => register_parameter.default_value
-	    ); 	
-      end loop;		
+    if register_parameter.scope = 'instance' then
+      for pkg in (select package_id from apm_packages where package_key = register_parameter.package_key)
+        loop
+        	v_value_id := apm_parameter_value.new(
+  	    package_id => pkg.package_id,
+  	    parameter_id => v_parameter_id, 
+  	    attr_value => register_parameter.default_value
+  	    ); 	
+        end loop;		
+    end if;
+
     return v_parameter_id;
   end register_parameter;
 
