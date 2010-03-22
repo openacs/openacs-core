@@ -5,7 +5,7 @@
 
 
 create table language_codes (
-       iso_639_2            char(3) constraint language_codes_pk primary key,
+       iso_639_2            char(3) constraint language_codes_iso_639_2_pk primary key,
        iso_639_1            char(2),
        label                varchar(200)
 );
@@ -14,7 +14,7 @@ comment on table language_codes is 'Contains ISO-639-2 language codes and their 
 
 create table country_codes (
        label               varchar(200),
-       country             char(2) constraint country_codes_pk primary key
+       country             char(2) constraint country_codes_country_pk primary key
 );
 
 comment on table country_codes is 'Contains ISO-3166 country codes';
