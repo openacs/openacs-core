@@ -74,11 +74,12 @@ drop function apm__register_parameter (integer,varchar,varchar,varchar,varchar,v
 drop function apm__update_parameter (integer,varchar,varchar,varchar,varchar,varchar,integer,integer);
 drop function apm__parameter_p (varchar,varchar);
 drop function apm__unregister_parameter (integer);
+drop function apm__id_for_name (integer,varchar);
 drop function apm__id_for_name (varchar,varchar);
-drop function apm__get_value (integer,integer);
+drop function apm__get_value (varchar,varchar);
 drop function apm__get_value (integer,varchar);
-drop function apm__set_value (integer,integer,varchar);
 drop function apm__set_value (integer,varchar,varchar);
+drop function apm__set_value (varchar,varchar,varchar);
 drop function apm_package__initialize_parameters (integer,varchar);
 drop function apm_package__new (integer,varchar,varchar,varchar,timestamptz,integer,varchar,integer);
 drop function apm_package__delete (integer);

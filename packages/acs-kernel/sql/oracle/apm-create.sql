@@ -972,6 +972,8 @@ as
     default 'instance',
     description			in apm_parameters.description%TYPE
 				default null,
+    scope                       in apm_parameters.scope%TYPE
+                                default 'instance',
     datatype			in apm_parameters.datatype%TYPE 
 				default 'string',
     default_value		in apm_parameters.default_value%TYPE 
@@ -1547,10 +1549,10 @@ as
 				default null,
     package_key			in apm_parameters.package_key%TYPE,				
     parameter_name		in apm_parameters.parameter_name%TYPE,
-    scope	in apm_parameters.scope%TYPE
-    default 'instance',
     description			in apm_parameters.description%TYPE
 				default null,
+    scope                       in apm_parameters.scope%TYPE
+                                default 'instance',
     datatype			in apm_parameters.datatype%TYPE 
 				default 'string',
     default_value		in apm_parameters.default_value%TYPE 
@@ -1574,13 +1576,13 @@ as
     );
     
     insert into apm_parameters 
-    (parameter_id, parameter_name, description, package_key, datatype, 
+    (parameter_id, parameter_name, description, package_key, datatype, scope,
     default_value, section_name, min_n_values, max_n_values)
     values
     (v_parameter_id, register_parameter.parameter_name, register_parameter.description,
-    register_parameter.package_key, register_parameter.datatype, 
+    register_parameter.package_key, register_parameter.datatype, register_parameter.scope,
     register_parameter.default_value, register_parameter.section_name, 
-	register_parameter.min_n_values, register_parameter.max_n_values);
+    register_parameter.min_n_values, register_parameter.max_n_values);
     -- Propagate parameter to new instances.	
     if register_parameter.scope = 'instance' then
       for pkg in (select package_id from apm_packages where package_key = register_parameter.package_key)
