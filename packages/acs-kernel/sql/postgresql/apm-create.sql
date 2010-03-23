@@ -1339,8 +1339,8 @@ declare
   register_parameter__parameter_id           alias for $1;  -- default null  
   register_parameter__package_key            alias for $2;  
   register_parameter__parameter_name         alias for $3;  
-  register_parameter__scope                  alias for $4;  
-  register_parameter__description            alias for $5;  -- default null  
+  register_parameter__description            alias for $4;  -- default null  
+  register_parameter__scope                  alias for $5;  
   register_parameter__datatype               alias for $6;  -- default ''string''  
   register_parameter__default_value          alias for $7;  -- default null  
   register_parameter__section_name           alias for $8;  -- default null 
@@ -1376,18 +1376,20 @@ begin
      register_parameter__max_n_values);
 
     -- Propagate parameter to new instances.	
-    for v_pkg in
-        select package_id
-	from apm_packages
-	where package_key = register_parameter__package_key
-      loop
-      	v_value_id := apm_parameter_value__new(
-	    null,
-	    v_pkg.package_id,
-	    v_parameter_id, 
-	    register_parameter__default_value
-	    ); 	
-      end loop;		
+    if register_parameter__scope = ''instance'' then
+      for v_pkg in
+          select package_id
+  	from apm_packages
+  	where package_key = register_parameter__package_key
+        loop
+        	v_value_id := apm_parameter_value__new(
+  	    null,
+  	    v_pkg.package_id,
+  	    v_parameter_id, 
+  	    register_parameter__default_value
+  	    ); 	
+        end loop;		
+     end if;
 	
     return v_parameter_id;
    
@@ -1411,8 +1413,8 @@ declare
 begin
   return
     apm__register_parameter(register_parameter__parameter_id, register_parameter__package_key,
-                           register_parameter__parameter_name, ''instance'',
-                           register_parameter__description, register_parameter__datatype,
+                           register_parameter__parameter_name, register_parameter__description,
+                           ''instance'',  register_parameter__datatype,
                            register_parameter__default_value, register_parameter__section_name,
                            register_parameter__min_n_values, register_parameter__max_n_values);
 end;' language 'plpgsql';
@@ -1483,41 +1485,6 @@ begin
 
     return 0; 
 end;' language 'plpgsql';
-
-
--- function id_for_name
-create or replace function apm__id_for_name (varchar,varchar)
-returns integer as '
-declare
-  id_for_name__parameter_name         alias for $1;  
-  id_for_name__package_key            alias for $2;  
-  a_parameter_id                      apm_parameters.parameter_id%TYPE;
-begin
-    select parameter_id into a_parameter_id
-    from apm_parameters p
-    where p.parameter_name = id_for_name__parameter_name and
-          p.package_key = id_for_name__package_key;
-
-    return a_parameter_id;
-   
-end;' language 'plpgsql' stable strict;
-
-
--- function get_value
-create or replace function apm__get_value (integer,integer)
-returns varchar as '
-declare
-  get_value__parameter_id           alias for $1;  
-  get_value__package_id             alias for $2;  
-  value                             apm_parameter_values.attr_value%TYPE;
-begin
-    select attr_value into value from apm_parameter_values v
-    where v.package_id = get_value__package_id
-    and parameter_id = get_value__parameter_id;
-
-    return value;
-   
-end;' language 'plpgsql' stable strict;
 
 create or replace function apm__id_for_name (integer,varchar)
 returns integer as '
