@@ -114,8 +114,6 @@ as
 				default null,
     package_key			in apm_parameters.package_key%TYPE,				
     parameter_name		in apm_parameters.parameter_name%TYPE,
-    scope	in apm_parameters.scope%TYPE
-    default 'instance',
     description			in apm_parameters.description%TYPE
 				default null,
     scope                       in apm_parameters.scope%TYPE
@@ -445,6 +443,11 @@ as
   	    attr_value => register_parameter.default_value
   	    ); 	
         end loop;		
+    else
+      v_value_id := apm_parameter_value.new(
+  	                   package_id => null,
+  	                   parameter_id => v_parameter_id, 
+  	                   attr_value => register_parameter.default_value); 	
     end if;
 
     return v_parameter_id;
