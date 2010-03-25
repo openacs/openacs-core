@@ -1017,36 +1017,21 @@ ad_proc -public apm_parameter_unregister {
     Unregisters a parameter from the system.
 } {
     if { $parameter_id eq "" } {
-        set parameter_id [db_string select_parameter_id { 
-            select parameter_id
-            from   apm_parameters
-            where  package_key = :package_key
-            and    parameter_name = :parameter
-        }]
+        set parameter_id [db_string select_parameter_id {}]
     }
+
+    db_1row get_scope_and_name {}
 
     ns_log Debug "apm_parameter_unregister: Unregistering parameter $parameter_id."
-    db_foreach all_parameters_packages {
-	select package_id, parameter_id, parameter_name 
-	from apm_packages p, apm_parameters ap
-	where p.package_key = ap.package_key
-	and ap.parameter_id = :parameter_id
 
-    } {
-	ad_parameter_cache -delete $package_id $parameter_name
-    } if_no_rows {
-	return
+    if { $scope eq "global" } {
+	ad_parameter_cache -delete $package_key $parameter_name
+    } else {
+        db_foreach all_parameters_packages {} {
+	    ad_parameter_cache -delete $package_id $parameter_name
+        }
     }
-	
-    db_exec_plsql parameter_unregister {
-	begin
-	delete from apm_parameter_values 
-	where parameter_id = :parameter_id;
-	delete from apm_parameters 
-	where parameter_id = :parameter_id;
-	acs_object.del(:parameter_id);
-	end;
-    }   
+    db_exec_plsql unregister {}
 }
 
 ad_proc -public apm_dependency_add {

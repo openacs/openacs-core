@@ -62,6 +62,13 @@
       </querytext>
 </fullquery>
 
+<fullquery name="apm_parameter_unregister.unregister">
+  <querytext>
+    begin
+      apm.unregister_parameter(:parameter_id);
+    end;
+  </querytext>
+</fullquery>
  
 <fullquery name="apm_parameter_register.apm_parameter_cache_update">      
       <querytext>

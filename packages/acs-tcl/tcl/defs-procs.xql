@@ -10,11 +10,21 @@
     </querytext>
   </fullquery>
 
-  <fullquery name="ad_parameter_cache.select_parameter_value">      
+  <fullquery name="ad_parameter_cache.select_global_parameter_value">      
     <querytext>
       select apm_parameter_values.attr_value
       from apm_parameters, apm_parameter_values
-      where apm_parameter_values.package_id = :package_id
+      where apm_parameter_values.package_id is null
+      and apm_parameter_values.parameter_id = apm_parameters.parameter_id
+      and apm_parameters.parameter_name = :parameter_name
+    </querytext>
+  </fullquery>
+
+  <fullquery name="ad_parameter_cache.select_instance_parameter_value">      
+    <querytext>
+      select apm_parameter_values.attr_value
+      from apm_parameters, apm_parameter_values
+      where apm_parameter_values.package_id = :key
       and apm_parameter_values.parameter_id = apm_parameters.parameter_id
       and apm_parameters.parameter_name = :parameter_name
     </querytext>
