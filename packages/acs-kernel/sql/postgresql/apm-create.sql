@@ -1382,13 +1382,18 @@ begin
   	from apm_packages
   	where package_key = register_parameter__package_key
         loop
-        	v_value_id := apm_parameter_value__new(
+          v_value_id := apm_parameter_value__new(
   	    null,
   	    v_pkg.package_id,
   	    v_parameter_id, 
-  	    register_parameter__default_value
-  	    ); 	
+  	    register_parameter__default_value); 	
         end loop;		
+     else
+       v_value_id := apm_parameter_value__new(
+  	 null,
+  	 null,
+  	 v_parameter_id, 
+  	 register_parameter__default_value); 	
      end if;
 	
     return v_parameter_id;
