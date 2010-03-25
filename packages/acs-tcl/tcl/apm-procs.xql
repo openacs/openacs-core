@@ -172,6 +172,23 @@
     </querytext>
   </fullquery>
   
+  <fullquery name="apm_parameter_unregister.select_parameter_id">      
+    <querytext>
+      select parameter_id
+      from apm_parameters
+      where package_key = :package_key
+        and parameter_name = :parameter
+    </querytext>
+  </fullquery>
+  
+  <fullquery name="apm_parameter_unregister.get_scope_and_name">      
+    <querytext>
+      select scope, parameter_name
+      from apm_parameters
+      where parameter_id = :parameter_id
+    </querytext>
+  </fullquery>
+  
   <fullquery name="apm_parameter_unregister.all_parameters_packages">      
     <querytext>
       select package_id, parameter_id, parameter_name 

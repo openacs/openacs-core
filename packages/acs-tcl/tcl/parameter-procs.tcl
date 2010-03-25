@@ -43,7 +43,7 @@ ad_proc -public parameter::set_global_value {
 
     db_exec_plsql set_parameter_value {}
 
-    return [ad_parameter_cache -set $value $package_id $parameter]
+    return [ad_parameter_cache -set $value $package_key $parameter]
 }
 
 ad_proc -public parameter::get_global_value {
@@ -73,7 +73,7 @@ ad_proc -public parameter::get_global_value {
 
     # 2. check the parameter cache
     if {$value eq ""} {
-        set value [ad_parameter_cache $package_id $parameter]
+        set value [ad_parameter_cache -global $package_key $parameter]
     }
     # 3. use the default value
     if {$value eq ""} {

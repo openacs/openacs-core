@@ -683,42 +683,39 @@ ad_proc -public ad_parameter_from_file {
 ad_proc -private ad_parameter_cache {
     -set
     -delete:boolean
-    package_id
+    -global:boolean
+    key
     parameter_name
 } {
     
     Manages the cache for ad_paremeter.
     @param -set Use this flag to indicate a value to set in the cache.
-    @param package_id Specifies the package instance id for the parameter.
+    @param -delete Delete the value from the cache
+    @param -global If true, global param, false, instance param
+    @param key Specifies the key for the cache'd parameter, either the package instance
+     id (instance parameter) or package key (global parameter).
     @param parameter_name Specifies the parameter name that is being cached.
     @return The cached value.
     
 } {
     if {$delete_p} {
-	if {[nsv_exists ad_param_$package_id $parameter_name]} {
-	    nsv_unset ad_param_$package_id $parameter_name
+	if {[nsv_exists ad_param_$key $parameter_name]} {
+	    nsv_unset ad_param_$key $parameter_name
 	}
 	return
     }
     if {[info exists set]} {
-	nsv_set "ad_param_${package_id}" $parameter_name $set
+	nsv_set "ad_param_${key}" $parameter_name $set
 	return $set
-    } elseif { [nsv_exists ad_param_$package_id $parameter_name] } {
-	return [nsv_get ad_param_$package_id $parameter_name]
+    } elseif { [nsv_exists ad_param_$key $parameter_name] } {
+	return [nsv_get ad_param_$key $parameter_name]
+    } elseif { $global_p } {
+        set value [db_string select_global_parameter_value {} -default ""]
     } else {
-        set value [db_string select_parameter_value {
-            select apm_parameter_values.attr_value
-            from apm_parameters,
-                 apm_parameter_values
-            where apm_parameter_values.package_id = :package_id
-            and apm_parameter_values.parameter_id = apm_parameters.parameter_id
-            and apm_parameters.parameter_name = :parameter_name
-        } -default ""]
-
-	nsv_set "ad_param_${package_id}" $parameter_name $value
-
-	return $value
+        set value [db_string select_instance_parameter_value {} -default ""]
     }
+    nsv_set "ad_param_${key}" $parameter_name $value
+    return $value
 }
 
 ad_proc -private ad_parameter_cache_all {} {
