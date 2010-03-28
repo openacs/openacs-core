@@ -1019,7 +1019,7 @@ aa_register_case -cats {api db} db__caching {
 
 aa_register_case \
     -cats {api smoke} \
-    -procs {parameter::get parameter::get_from_package_key parameter::set_default parameter::set_default parameter::set_value parameter::set_from} \
+    -procs {parameter::get parameter::get_from_package_key parameter::set_default parameter::set_default parameter::set_value parameter::set_from_package_key parameter::set_global_value parameter::get_global_value} \
     parameter__check_procs {
     Test the parameter::* procs
 
@@ -1030,6 +1030,14 @@ aa_register_case \
     aa_run_with_teardown \
 	-rollback \
 	-test_code {
+
+            aa_log "Test global parameter functionality"
+            set parameter_id [db_nextval "acs_object_id_seq"]
+            apm_parameter_register -parameter_id $parameter_id -scope global x_test_x "" acs-tcl 0 number
+            parameter::set_global_value -package_key acs-tcl -parameter x_test_x -value 3
+            aa_true "check global parameter value set/get" [string equal [parameter::get_global_value -package_key acs-tcl -parameter x_test_x] 3]
+            apm_parameter_unregister $parameter_id
+
 	    db_foreach get_param {
 		select ap.parameter_name, ap.package_key, ap.default_value, ap.parameter_id
 		from apm_parameters ap, apm_package_types apt
