@@ -1301,21 +1301,23 @@ ad_proc -private apm_package_upgrade_parameters {
 	# Keep a running tally of all parameters that are in the current version.
 	set description [lindex $parameter 1]
 	set section_name [lindex $parameter 2]
-	set datatype [lindex $parameter 3]
-	set min_n_values [lindex $parameter 4]
-	set max_n_values [lindex $parameter 5]
-	set default_value [lindex $parameter 6]
+        set scope [lindex $parameter 3]
+	set datatype [lindex $parameter 4]
+	set min_n_values [lindex $parameter 5]
+	set max_n_values [lindex $parameter 6]
+	set default_value [lindex $parameter 7]
 	if {[db_0or1row parameter_id_get {
 	    select parameter_id from apm_parameters
 	    where parameter_name = :parameter_name
 	    and package_key = :package_key
 	}]} {
 	    ns_log Debug "apm_package_upgrade_parameters: Updating parameter, $parameter_name:$parameter_id"
+            # DRB: We don't allow one to upgrade scope and should probably throw an error.
 	    apm_parameter_update $parameter_id $package_key $parameter_name $description \
 		    $default_value $datatype $section_name $min_n_values $max_n_values
 	} else {
 	    ns_log Debug "apm_package_upgrade_parameters: Registering parameter, $parameter_name."
-	    apm_parameter_register $parameter_name $description $package_key $default_value \
+	    apm_parameter_register -scope $scope $parameter_name $description $package_key $default_value \
 		    $datatype $section_name $min_n_values $max_n_values
 	}	
     }
@@ -1331,11 +1333,12 @@ ad_proc -private apm_package_install_parameters { {-callback apm_dummy_callback}
 	set parameter_name [lindex $parameter 0]
 	set description [lindex $parameter 1]
 	set section_name [lindex $parameter 2]
-	set datatype [lindex $parameter 3]
-	set min_n_values [lindex $parameter 4]
-	set max_n_values [lindex $parameter 5]
-	set default_value [lindex $parameter 6]
-	apm_parameter_register $parameter_name $description $package_key $default_value $datatype \
+        set scope [lindex $parameter 3]
+	set datatype [lindex $parameter 4]
+	set min_n_values [lindex $parameter 5]
+	set max_n_values [lindex $parameter 6]
+	set default_value [lindex $parameter 7]
+	apm_parameter_register -scope $scope $parameter_name $description $package_key $default_value $datatype \
 	    $section_name $min_n_values $max_n_values
     }
 }
