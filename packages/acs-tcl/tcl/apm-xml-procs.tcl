@@ -130,7 +130,7 @@ ad_proc -private apm_generate_package_spec { version_id } {
     append spec "\n        <parameters>\n"
     apm_log APMDebug "APM: Writing parameters"
     db_foreach parameter_info {} {
-	append spec "            <parameter datatype=\"[ad_quotehtml $datatype]\" \
+	append spec "            <parameter scope=\"[ad_quotehtml $scope]\" datatype=\"[ad_quotehtml $datatype]\" \
 		min_n_values=\"[ad_quotehtml $min_n_values]\" \
 		max_n_values=\"[ad_quotehtml $max_n_values]\" \
 		name=\"[ad_quotehtml $parameter_name]\" "
@@ -394,9 +394,14 @@ ad_proc -public apm_read_package_info_file { path } {
 	    set section_name [apm_attribute_value $parameter_node section_name]
 	    set datatype [apm_attribute_value $parameter_node datatype]
 	    set name [apm_attribute_value $parameter_node name]
+	    set scope [apm_attribute_value $parameter_node scope]
+
+            if { $scope eq "" } {
+                set scope instance
+            }
 
 	    apm_log APMDebug "APM: Reading parameter $name with default $default_value"
-	    lappend properties(parameters) [list $name $description $section_name $datatype $min_n_values $max_n_values $default_value]
+	    lappend properties(parameters) [list $name $description $section_name $scope $datatype $min_n_values $max_n_values $default_value]
 	}
     }
     

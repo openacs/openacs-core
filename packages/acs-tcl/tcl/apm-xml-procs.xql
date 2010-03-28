@@ -74,7 +74,8 @@
                section_name, 
                default_value, 
                min_n_values, 
-               max_n_values
+               max_n_values,
+               scope
         from   apm_parameters
 	where  package_key = :package_key
         order  by parameter_name
