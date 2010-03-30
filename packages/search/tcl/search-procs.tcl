@@ -181,7 +181,7 @@ ad_proc -private search::indexer {} {
                 if {[catch {
                     acs_sc_call FtsEngineDriver unindex [list $object_id] $driver
                 } errMsg]} {
-                    ns_log Error "search::indexer: error unindexing $object_id $object_type: $errMsg\n[ad_print_stack_trace]\n"
+                    ns_log Error "search::indexer: error unindexing $object_id [acs_object_type $object_id]: $errMsg\n[ad_print_stack_trace]\n"
                 } else {
                     # call the search action callbacks.
                     callback -catch search::action \
