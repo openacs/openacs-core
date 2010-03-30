@@ -24,6 +24,7 @@ set dimensional_list [apm_parameter_section_slider $package_key]
 set table_def [list \
 		   [list  parameter_name "Parameter"] \
 		   [list datatype "Type"] \
+                   [list scope "Scope"] \
 		   [list description "Description" {} {<td>[ad_quotehtml $description]</td>}]]
 
 #DRB: sql_clauses must not contain RDBMS-specific query clauses.
