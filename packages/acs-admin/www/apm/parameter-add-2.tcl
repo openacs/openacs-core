@@ -12,6 +12,7 @@ ad_page_contract {
     section_name
     description:notnull,nohtml
     datatype:notnull
+    scope:notnull
     {default_value [db_null]}
     {min_n_values:integer 1}
     {max_n_values:integer 1}
@@ -36,7 +37,7 @@ ad_page_contract {
 }
 
 db_transaction {
-    apm_parameter_register -parameter_id $parameter_id $parameter_name $description $package_key \
+    apm_parameter_register -parameter_id $parameter_id -scope $scope $parameter_name $description $package_key \
 	$default_value $datatype $section_name $min_n_values $max_n_values
     apm_package_install_spec $version_id
 } on_error {
