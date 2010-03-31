@@ -242,7 +242,8 @@
     <querytext>
       select parameter_name, attr_value
       from apm_parameters p, apm_parameter_values v, apm_packages a
-      where p.parameter_id = v.parameter_id
+      where p.scope = 'instance'
+      and p.parameter_id = v.parameter_id
       and a.package_id = v.package_id
       and a.package_id = :package_id
     </querytext>

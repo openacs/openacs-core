@@ -1676,6 +1676,7 @@ begin
     for cur_val in select parameter_id, default_value
        from apm_parameters
        where package_key = ip__package_key
+         and scope = ''instance''
       loop
         v_value_id := apm_parameter_value__new(
           null,
