@@ -290,7 +290,7 @@
   <querytext>
     begin
       :1 := apm.parameter_p(
-               package_key => :descendent_package_key,
+               package_key => :new_package_key,
                parameter_name => :parameter_name);
     end;
   </querytext>
