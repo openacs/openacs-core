@@ -254,12 +254,37 @@ ad_proc -public install::xml::action::mount-existing { node } {
     return $out
 }
 
+ad_proc -public install::xml::action::rename-instance { node } {
+    Change the instance name of an existing package (such as the main subsite).  Either
+    the url (if it's mounted) or package_id of the package may be given.
+
+    <p>&lt;rename-instance package-id=&quot;<em>package-id</em>&quot; url=&quot;<em>url</em>&quot; instance-name=&quot;<em>new instance name</em>&quot; /&gt;</p>
+
+} { 
+    set package_id [apm_attribute_value -default "" $node package-id]
+    set url [apm_attribute_value -default "" $node url]
+    set instance_name [apm_required_attribute_value $node instance-name]
+
+    if { $url ne "" && $package_id ne "" } {
+        error "rename-instance specified with both url and package-id arguments"
+    } elseif { $package_id ne "" } {
+        set package_id [install::xml::util::get_id $package_id]
+        set url [lindex [site_node::get_url_from_object_id -object_id $package_id] 0]
+    } else {
+        array set site_node [site_node::get_from_url -url $url -exact]
+        set package_id $site_node(object_id)
+    }
+
+    apm_package_rename -package_id $package_id -instance_name $instance_name
+
+    return [list "Package mounted at \"$url\" renamed to \"$instance_name\""]
+
+}
+
 ad_proc -public install::xml::action::create-package { node } {
     Create a relation type.
 } {
     variable ::install::xml::ids
-
-    set id [apm_required_attribute_value $node id]
     set package_key [apm_required_attribute_value $node package-key]
     set instance_name [apm_attribute_value -default "" $node name]
     set context_id [apm_attribute_value -default "" $node context-id]
@@ -290,7 +315,7 @@ ad_proc -public install::xml::action::create-package { node } {
 ad_proc -public install::xml::action::register-parameter { node } {
     Registers a package parameter.
 
-    <p>&lt;register-parameter name=&quot;<em>parameter</em>&quot; description=&quot;<em>description</em>&quot; package-key=&quot;<em>package-key</em>&quot; default-value=&quot;<em>default-value</em>&quot; datatype=&quot;<em>datatype</em>&quot; [ [ [ section=&quot;<em>section</em>&quot; ] min-n-values=&quot;<em>min-n-values</em>&quot; ] max-n-values=&quot;<em>max-n-values</em>&quot; ] [ callback=&quot;<em>callback</em>&quot; ] [ parameter-id=&quot;<em>parameter-id</em>&quot; ]</p>
+    <p>&lt;register-parameter name=&quot;<em>parameter</em>&quot; description=&quot;<em>description</em>&quot; package-key=&quot;<em>package-key</em>&quot; scope=&quot;<em>instance or global</em>&quot; default-value=&quot;<em>default-value</em>&quot; datatype=&quot;<em>datatype</em>&quot; [ [ [ section=&quot;<em>section</em>&quot; ] min-n-values=&quot;<em>min-n-values</em>&quot; ] max-n-values=&quot;<em>max-n-values</em>&quot; ] [ callback=&quot;<em>callback</em>&quot; ] [ parameter-id=&quot;<em>parameter-id</em>&quot; ]</p>
 } { 
     set name [apm_required_attribute_value $node name]
     set desc [apm_required_attribute_value $node description]
