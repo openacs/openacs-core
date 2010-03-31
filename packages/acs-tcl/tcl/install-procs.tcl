@@ -296,6 +296,7 @@ ad_proc -public install::xml::action::register-parameter { node } {
     set desc [apm_required_attribute_value $node description]
     set package_key [apm_required_attribute_value $node package-key]
     set default_value [apm_required_attribute_value $node default-value]
+    set scope [apm_attribute_value -default instance $node scope]
     set datatype [apm_required_attribute_value $node datatype]
     set min_n_values [apm_attribute_value -default {} $node min-n-values]
     set max_n_values [apm_attribute_value -default {} $node max-n-values]
@@ -313,7 +314,7 @@ ad_proc -public install::xml::action::register-parameter { node } {
         append command " -parameter_id $parameter_id"
     }
 
-    append command " $name \"$desc\" $package_key $default_value $datatype"
+    append command " -scope $scope $name \"$desc\" $package_key $default_value $datatype"
 
     if {$section ne ""} {
         append command " $section"
