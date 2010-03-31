@@ -1822,7 +1822,8 @@ as
    cursor cur is
        select parameter_id, default_value
        from apm_parameters
-       where package_key = initialize_parameters.package_key;
+       where package_key = initialize_parameters.package_key
+         and scope = 'instance';
   begin
     -- need to initialize all params for this type
     for cur_val in cur

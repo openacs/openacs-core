@@ -209,7 +209,7 @@
 <fullquery name="apm_copy_descendent_params.copy_descendent_param">      
   <querytext>
     select apm__register_parameter(null, :descendent_package_key, :parameter_name,
-                                   :description, :datatype, :default_value,
+                                   :description, :scope, :datatype, :default_value,
                                    :section_name, :min_n_values, :max_n_values)
   </querytext>
 </fullquery>
@@ -223,7 +223,7 @@
 <fullquery name="apm_copy_inherited_params.copy_inherited_param">      
   <querytext>
     select apm__register_parameter(null, :new_package_key, :parameter_name, :description,
-                                   :datatype, :default_value, :section_name,
+                                   :scope, :datatype, :default_value, :section_name,
                                    :min_n_values, :max_n_values)
   </querytext>
 </fullquery>

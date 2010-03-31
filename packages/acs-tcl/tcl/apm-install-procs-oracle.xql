@@ -263,8 +263,8 @@
   <querytext>
     begin
       :1 := apm.parameter_p(
-               :descendent_package_key,
-               :parameter_name);
+               package_key => :descendent_package_key,
+               parameter_name => :parameter_name);
     end;
   </querytext>
 </fullquery>
@@ -273,15 +273,15 @@
   <querytext>
     begin
       :1 := apm.register_parameter(
-               null,
-               :descendent_package_key,
-               :parameter_name,
-               :description,
-               :datatype,
-               :default_value,
-               :section_name,
-               :min_n_values,
-               :max_n_values);
+               package_key => :descendent_package_key,
+               parameter_name => :parameter_name,
+               description => :description,
+               scope => :scope,
+               datatype => :datatype,
+               default_value => :default_value,
+               section_name => :section_name,
+               min_n_values => :min_n_values,
+               max_n_values => :max_n_values);
     end;
   </querytext>
 </fullquery>
@@ -290,8 +290,8 @@
   <querytext>
     begin
       :1 := apm.parameter_p(
-               :new_package_key,
-               :parameter_name);
+               package_key => :descendent_package_key,
+               parameter_name => :parameter_name);
     end;
   </querytext>
 </fullquery>
@@ -300,15 +300,15 @@
   <querytext>
     begin
       :1 := apm.register_parameter(
-               null,
-               :new_package_key,
-               :parameter_name,
-               :description,
-               :datatype,
-               :default_value,
-               :section_name,
-               :min_n_values,
-               :max_n_values);
+               package_key => :new_package_key,
+               parameter_name => :parameter_name,
+               description => :description,
+               scope => :scope,
+               datatype => :datatype,
+               default_value => :default_value,
+               section_name => :section_name,
+               min_n_values => :min_n_values,
+               max_n_values => :max_n_values);
     end;
   </querytext>
 </fullquery>

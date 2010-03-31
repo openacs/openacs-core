@@ -94,6 +94,7 @@
     select ap.*
     from apm_parameters ap
     where package_key = :new_package_key
+      and scope = 'instance'
   </querytext>
 </fullquery>
 
@@ -102,6 +103,7 @@
     select ap.*
     from apm_parameters ap
     where package_key = :inherited_package_key
+      and scope = 'instance'
    </querytext>
 </fullquery>
  
