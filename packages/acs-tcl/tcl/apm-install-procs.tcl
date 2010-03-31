@@ -866,6 +866,9 @@ ad_proc -private apm_package_install {
                                 $package_key $version_name \
 		    $version_uri $summary $description $description_format $vendor $vendor_uri $auto_mount $release_date]
 	    apm_version_upgrade $version_id
+	    apm_package_install_dependencies -callback $callback \
+                $version(embeds) $version(extends) $version(provides) $version(requires) $version_id
+            apm_build_one_package_relationships $package_key
 	    apm_package_upgrade_parameters -callback $callback $version(parameters) $package_key
 
 	} else {
@@ -884,23 +887,19 @@ ad_proc -private apm_package_install {
 	    }
 
 	    apm_load_catalog_files $package_key
+	    apm_package_install_dependencies -callback $callback \
+                $version(embeds) $version(extends) $version(provides) $version(requires) $version_id
+            apm_build_one_package_relationships $package_key
+            apm_copy_inherited_params $package_key
 	    
 	    # Install the parameters for the version.
 	    apm_package_install_parameters -callback $callback $version(parameters) $package_key
 	}
 
 	# Update all other package information.
-	apm_package_install_dependencies -callback $callback \
-            $version(embeds) $version(extends) $version(provides) $version(requires) $version_id
 	apm_package_install_owners -callback $callback $version(owners) $version_id
         apm_package_install_callbacks -callback $callback $version(callbacks) $version_id
         apm_build_one_package_relationships $package_key
-
-        if { $upgrade_p } {
-            apm_copy_descendent_params $package_key
-        } else {
-            apm_copy_inherited_params $package_key
-        }
 
 	apm_callback_and_log $callback "<p>Installed $version(package-name), version $version(name).</p>"
     } {
@@ -987,17 +986,17 @@ ad_proc -private apm_package_install {
 
     return $version_id
 }
-ad_proc apm_copy_descendent_params { new_package_key } {
-    Copy new parameters in the package to its descendents.  Called when a package is
-    upgraded.
+
+ad_proc apm_copy_param_to_descendents { new_package_key parameter_name } {
+    Copy a new parameter in a package to its descendents.  Called when a package is
+    upgraded or a parameter added in the APM.
 } {
+    db_1row param {}
     foreach descendent_package_key [nsv_get apm_package_descendents $new_package_key] {
-        db_foreach descendent_params {} {
-            if { [db_exec_plsql param_exists {}] } {
-                error "$parameter_name already exists in package $descendent_package_key"
-            } else {
-                db_exec_plsql copy_descendent_param {}
-            }
+        if { [db_exec_plsql param_exists {}] } {
+            error "$parameter_name already exists in package $descendent_package_key"
+        } else {
+            db_exec_plsql copy_descendent_param {}
         }
     }
 }

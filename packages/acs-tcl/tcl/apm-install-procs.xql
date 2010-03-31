@@ -89,12 +89,12 @@
       </querytext>
 </fullquery>
 
-<fullquery name="apm_copy_descendent_params.descendent_params">      
+<fullquery name="apm_copy_param_to_descendents.param">      
   <querytext>
     select ap.*
     from apm_parameters ap
     where package_key = :new_package_key
-      and scope = 'instance'
+      and parameter_name = :parameter_name
   </querytext>
 </fullquery>
 

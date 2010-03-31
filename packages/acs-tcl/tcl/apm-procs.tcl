@@ -1000,6 +1000,12 @@ ad_proc -public apm_parameter_register {
 
     set parameter_id [db_exec_plsql parameter_register {}]
 
+    # Propagate to descendents if it's an instance parameter.
+
+    if { $scope eq "instance" } {
+        apm_copy_param_to_descendents $package_key $parameter_name
+    }
+
     # Update the cache.
     db_foreach apm_parameter_cache_update {
     } {

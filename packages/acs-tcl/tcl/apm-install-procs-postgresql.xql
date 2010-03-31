@@ -200,13 +200,13 @@
       </querytext>
 </fullquery>
 
-<fullquery name="apm_copy_descendent_params.param_exists">      
+<fullquery name="apm_copy_param_to_descendents.param_exists">      
   <querytext>
     select apm__parameter_p(:descendent_package_key, :parameter_name);
   </querytext>
 </fullquery>
 
-<fullquery name="apm_copy_descendent_params.copy_descendent_param">      
+<fullquery name="apm_copy_param_to_descendents.copy_descendent_param">      
   <querytext>
     select apm__register_parameter(null, :descendent_package_key, :parameter_name,
                                    :description, :scope, :datatype, :default_value,
