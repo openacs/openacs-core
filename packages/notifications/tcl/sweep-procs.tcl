@@ -17,6 +17,11 @@ namespace eval notification::sweep {
         # Also sweep the dynamic notification requests that have been sent out
         db_dml delete_dynamic_requests {}
 
+	# before the killing starts, remove invalid requests
+	foreach request_id [db_list select_invalid_request_ids {}] {
+	    notification::request::delete -request_id $request_id
+	}
+
         # Get the list of the ones to kill
         set notification_id_list [db_list select_notification_ids {}]
 
