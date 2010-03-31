@@ -259,7 +259,7 @@
       </querytext>
 </fullquery>
 
-<fullquery name="apm_copy_descendent_params.param_exists">      
+<fullquery name="apm_copy_param_to_descendents.param_exists">      
   <querytext>
     begin
       :1 := apm.parameter_p(
@@ -269,7 +269,7 @@
   </querytext>
 </fullquery>
 
-<fullquery name="apm_copy_descendent_params.copy_descendent_param">      
+<fullquery name="apm_copy_param_to_descendents.copy_descendent_param">      
   <querytext>
     begin
       :1 := apm.register_parameter(
