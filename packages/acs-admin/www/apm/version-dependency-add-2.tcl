@@ -27,13 +27,13 @@ db_transaction {
         extend {
 	    apm_dependency_add -dependency_id $dependency_id ${dependency_type}s $version_id $package_key $version_name
             apm_build_one_package_relationships $our_package_key
-            apm_copy_inherited_params $our_package_key
+            apm_copy_inherited_params $our_package_key [list $package_key $version_name]
 	}
 
         embed {
 	    apm_dependency_add -dependency_id $dependency_id ${dependency_type}s $version_id $package_key $version_name
             apm_build_one_package_relationships $our_package_key
-            apm_copy_inherited_params $our_package_key
+            apm_copy_inherited_params $our_package_key [list $package_key $version_name]
 	}
 
 	default {

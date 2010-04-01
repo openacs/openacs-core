@@ -890,7 +890,7 @@ ad_proc -private apm_package_install {
 	    apm_package_install_dependencies -callback $callback \
                 $version(embeds) $version(extends) $version(provides) $version(requires) $version_id
             apm_build_one_package_relationships $package_key
-            apm_copy_inherited_params $package_key
+            apm_copy_inherited_params $package_key [concat $version(embeds) $version(extends)]
 	    
 	    # Install the parameters for the version.
 	    apm_package_install_parameters -callback $callback $version(parameters) $package_key
@@ -1001,14 +1001,15 @@ ad_proc apm_copy_param_to_descendents { new_package_key parameter_name } {
     }
 }
 
-ad_proc apm_copy_inherited_params { new_package_key } {
+ad_proc apm_copy_inherited_params { new_package_key dependencies } {
     Copy parameters from a packages ancestors.  Called for "embeds" and "extends"
     dependencies.
 } {
-    foreach inherited_package_key [lrange [nsv_get apm_package_inherit_order $new_package_key] 0 end-1] {
+    foreach dependency $dependencies {
+        set inherited_package_key [lindex $dependency 0]
         db_foreach inherited_params {} {
             if { [db_exec_plsql param_exists {}] } {
-                error "$parameter_name already exists in package $package_key"
+                error "$parameter_name already exists in package $new_package_key"
             } else {
                 db_exec_plsql copy_inherited_param {}
             }
