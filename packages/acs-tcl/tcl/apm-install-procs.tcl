@@ -899,7 +899,7 @@ ad_proc -private apm_package_install {
 	# Update all other package information.
 	apm_package_install_owners -callback $callback $version(owners) $version_id
         apm_package_install_callbacks -callback $callback $version(callbacks) $version_id
-        apm_build_one_package_relationships $package_key
+        apm_build_subsite_packages_list
 
 	apm_callback_and_log $callback "<p>Installed $version(package-name), version $version(name).</p>"
     } {
