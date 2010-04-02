@@ -9,5 +9,13 @@ ad_proc search::install::after_instantiate {
     Schedule the indexer so the admin doesn't have to restart their server to get search
     up and running after mounting it.
 } {
-    search::init::schedule_indexer
+
+    # DRB: Unless it is being instantiated from initial install as specified by an install.xml
+    # file, in which case the init file hasn't been sourced, and the user has to restart their
+    # server anyway ...
+
+    if { [info procs search::init::schedule_indexer] ne "" } {
+        search::init::schedule_indexer
+    }
+
 }
