@@ -5,37 +5,46 @@ ad_page_contract {
     @creation-date 2003-06-13
     @cvs-id $Id$
 } {
-    {package_id {[ad_conn package_id]}}
-    {return_url {[ad_conn url]}}
+    package_id:optional,naturalnum
+    package_key:optional
+    {scope "instance"}
+    {return_url:optional "[ad_conn url]?[ad_conn query]"}
     {section ""}
 }
 
-permission::require_permission -object_id $package_id -privilege admin
-
-db_1row select_instance_name {
-    select instance_name, package_key
-    from   apm_packages
-    where  package_id = :package_id
-}
-
-set package_url [site_node::get_url_from_object_id -object_id $package_id]
-
-set page_title "$instance_name Parameters"
-
-if { $package_url eq [subsite::get_element -element url] } {
-    set context [list [list "${package_url}admin/" "Administration"] $page_title]
-} elseif { $package_url ne "" } {
-        set context [list [list $package_url $instance_name] [list "${package_url}admin/" "Administration"] $page_title]
+if { $scope eq "global" } {
+    permission::require_permission \
+        -object_id [acs_lookup_magic_object security_context_root] \
+        -privilege admin
+    db_1row select_pretty_name {}
+    set package_url /acs-admin
+    set page_title "$instance_name Global Parameters"
+    set context [list [list $package_url "Site-Wide Administration"] $page_title]
 } else {
-    set context [list $page_title]
+    if { ![info exists package_id] } {
+        set package_id [ad_conn package_id]
+    }
+    permission::require_permission -object_id $package_id -privilege admin
+
+    db_1row select_instance_name {}
+
+    set package_url [site_node::get_url_from_object_id -object_id $package_id]
+    set page_title "$instance_name Instance Parameters"
+
+    if { $package_url eq [subsite::get_element -element url] } {
+        set context [list [list "${package_url}admin/" "Administration"] $page_title]
+    } elseif { $package_url ne "" } {
+        set context [list [list $package_url $instance_name] [list "${package_url}admin/" "Administration"] $page_title]
+    } else {
+        set context [list $page_title]
+    }
 }
-
-
-ad_require_permission $package_id admin
 
 ad_form -name parameters -export {section} -cancel_url $return_url -form {
-    {return_url:text(hidden),optional}
+    {return_url:text(hidden)}
+    {scope:text(hidden)}
     {package_id:integer(hidden),optional}
+    {package_key:text(hidden),optional}
 }
 
 set display_warning_p 0
@@ -50,21 +59,21 @@ if {$section ne ""} {
 
 array set sections {}
 
-db_foreach select_params {} {
+db_foreach select_${scope}_params {} {
     if { $section_name eq "" } {
         set section_name "main"
-		set section_pretty "Main"
+        set section_pretty "Main"
     } else {
         set section_name [string map {- {_} " " {_}} $section_name]
         set section_pretty [string map {_ { }} $section_name]
         set section_pretty "[string toupper [string index $section_pretty 0]][string range $section_pretty 1 end]"
     }
     
-	if { ![info exists sections($section_name)] } {
-		set sec [list "-section" $section_name {legendtext "$section_pretty"}]
-		ad_form -extend -name parameters -form [list $sec]
-		set sections($section_name) "$section_pretty"
-	}
+    if { ![info exists sections($section_name)] } {
+        set sec [list "-section" $section_name {legendtext "$section_pretty"}]
+        ad_form -extend -name parameters -form [list $sec]
+        set sections($section_name) "$section_pretty"
+    }
 
     if { $counter == 0 } {
         set focus_elm $parameter_name
@@ -108,9 +117,25 @@ if { $counter > 0 } {
             set $name $param($name)
         }
     } -on_submit {
-        db_foreach select_params_set {} {
-            if { [info exists $c__parameter_name]} {
-		callback subsite::parameter_changed -package_id $package_id -parameter $c__parameter_name -value [set $c__parameter_name]
+        if { $scope eq "instance" } {
+            db_foreach select_instance_params_set {} {
+                if { [info exists $c__parameter_name] } {
+                    parameter::set_value \
+	                -package_id $package_id \
+	                -parameter $c__parameter_name \
+	                -value [set $c__parameter_name]
+                    callback subsite::parameter_changed -package_id $package_id -parameter $c__parameter_name -value [set $c__parameter_name]
+                }
+            }
+        } else {
+            db_foreach select_global_params_set {} {
+                if { [info exists $c__parameter_name] } {
+                    parameter::set_global_value \
+	                -package_key $package_key \
+	                -parameter $c__parameter_name \
+	                -value [set $c__parameter_name]
+                    callback subsite::global_parameter_changed -package_key $package_key -parameter $c__parameter_name -value [set $c__parameter_name]
+                }
             }
         }
     } -after_submit {

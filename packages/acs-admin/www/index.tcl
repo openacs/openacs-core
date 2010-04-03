@@ -29,10 +29,39 @@ if {$subsite_number > 100} {
     multirow sort subsites path_pretty
 }
 
-db_multirow -extend { admin_url } packages installed_packages {} {
+db_multirow -extend { admin_url global_param_url } packages installed_packages {} {
     if { [apm_package_installed_p $package_key] && [file exists "[acs_package_root_dir $package_key]/www/sitewide-admin/"] } {
         set admin_url "package/$package_key/"
     } else {
+        set admin_url ""
+    }
+    if { [db_string global_params_exist {}] != 0 } {
+        set global_param_url [export_vars -base /shared/parameters {package_key {scope global}}]
+    } else {
+        set global_param_url ""
+    }
+    if { $admin_url eq "" && $global_param_url eq "" } {
         continue
     }
 } 
+
+template::list::create \
+    -name packages \
+    -multirow packages \
+    -elements {
+        pretty_name {
+            label "Package"
+        }
+        admin_url {
+            label "Site-Wide Administration"
+            link_html { title "Site-wide Administration" }
+            link_url_col admin_url
+            display_template {<if @packages.admin_url@ not nil>#acs-admin.Administration#</if>}
+        }
+        global_param_url {
+            label "Global Parameters"
+            link_html {title "Manage Global Parameters" }
+            link_url_col global_param_url
+            display_template {<if @packages.global_param_url@ not nil>#acs-admin.Parameters#</if>}
+        }
+    }

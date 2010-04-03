@@ -18,4 +18,13 @@
     </querytext>
   </fullquery>
 
+  <fullquery name="global_params_exist">
+    <querytext>
+      select count(*)
+      from apm_parameters
+      where package_key = :package_key
+        and scope = 'global'
+    </querytext>
+  </fullquery>
+
 </queryset>
