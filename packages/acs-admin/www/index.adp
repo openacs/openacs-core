@@ -11,11 +11,7 @@
 
 <if @packages:rowcount@ gt 0>
   <h1>Site-Wide Package Administration</h1>
-  <ul>
-    <multiple name="packages">
-      <li><a href="@packages.admin_url@/\">@packages.pretty_name@</a></li>
-    </multiple>
-  </ul>
+  <listtemplate name="packages"></listtemplate>
 </if>
 
 <if @too_many_subsites_p@ gt 0>
