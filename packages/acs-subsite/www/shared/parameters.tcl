@@ -5,7 +5,7 @@ ad_page_contract {
     @creation-date 2003-06-13
     @cvs-id $Id$
 } {
-    package_id:optional,naturalnum
+    {package_id:naturalnum "[ad_conn package_id]"}
     package_key:optional
     {scope "instance"}
     {return_url:optional "[ad_conn url]?[ad_conn query]"}
@@ -21,9 +21,6 @@ if { $scope eq "global" } {
     set page_title "$instance_name Global Parameters"
     set context [list [list $package_url "Site-Wide Administration"] $page_title]
 } else {
-    if { ![info exists package_id] } {
-        set package_id [ad_conn package_id]
-    }
     permission::require_permission -object_id $package_id -privilege admin
 
     db_1row select_instance_name {}
@@ -59,7 +56,7 @@ if {$section ne ""} {
 
 array set sections {}
 
-db_foreach select_${scope}_params {} {
+db_foreach select_params {} {
     if { $section_name eq "" } {
         set section_name "main"
         set section_pretty "Main"
@@ -117,23 +114,19 @@ if { $counter > 0 } {
             set $name $param($name)
         }
     } -on_submit {
-        if { $scope eq "instance" } {
-            db_foreach select_instance_params_set {} {
-                if { [info exists $c__parameter_name] } {
+        db_foreach select_params_set {} {
+            if { [info exists $c__parameter_name] } {
+                if { $scope eq "instance" } {
                     parameter::set_value \
 	                -package_id $package_id \
 	                -parameter $c__parameter_name \
 	                -value [set $c__parameter_name]
                     callback subsite::parameter_changed -package_id $package_id -parameter $c__parameter_name -value [set $c__parameter_name]
-                }
-            }
-        } else {
-            db_foreach select_global_params_set {} {
-                if { [info exists $c__parameter_name] } {
+                } else {
                     parameter::set_global_value \
-	                -package_key $package_key \
-	                -parameter $c__parameter_name \
-	                -value [set $c__parameter_name]
+                        -package_key $package_key \
+                        -parameter $c__parameter_name \
+                        -value [set $c__parameter_name]
                     callback subsite::global_parameter_changed -package_key $package_key -parameter $c__parameter_name -value [set $c__parameter_name]
                 }
             }
