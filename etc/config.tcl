@@ -1,17 +1,3 @@
-# Changes in 5.6.0
-# ================
-#
-# - ROLLOUT SUPPORT
-#
-# ns_sendmail and its rollout support are now DEPRECATED in
-# OpenACS. Use acs_mail_lite::send instead.
-#
-# acs-mail-lite provides rollout support for acs_mail_lite::send and
-# implements ns_sendmail as a wrapper to it for backward
-# compatibility. See acs-mail-lite package parameters to set rollout
-# support.
-#
-
 ns_log notice "nsd.tcl: starting to read config file..."
 
 ###################################################################### 
@@ -96,7 +82,6 @@ ns_section ns/parameters
     # maxkeepalive is ignored in aolserver4.x
     ns_param   maxkeepalive       0
     ns_param   logroll            on
-    ns_param   logmaxbackup       10
     ns_param   maxbackup          5
     ns_param   debug              $debug
 #    ns_param   mailhost           localhost 
@@ -197,6 +182,30 @@ ns_section ns/server/${server}/tcl
     ns_param   autoclose          on 
     ns_param   debug              $debug
  
+#---------------------------------------------------------------------
+#
+# Rollout email support
+#
+# These procs help manage differing email behavior on 
+# dev/staging/production.
+#
+#---------------------------------------------------------------------
+ns_section ns/server/${server}/acs/acs-rollout-support
+
+    # EmailDeliveryMode can be:
+    #   default:  Email messages are sent in the usual manner.
+    #   log:      Email messages are written to the server's error log.
+    #   redirect: Email messages are redirected to the addresses specified 
+    #             by the EmailRedirectTo parameter.  If this list is absent 
+    #             or empty, email messages are written to the server's error log.
+    #   filter:   Email messages are sent to in the usual manner if the 
+    #             recipient appears in the EmailAllow parameter, otherwise they 
+    #             are logged.
+
+#    ns_param   EmailDeliveryMode redirect
+#    ns_param   EmailRedirectTo    somenerd@yourdomain.test, othernerd@yourdomain.test
+#    ns_param   EmailAllow         somenerd@yourdomain.test,othernerd@yourdomain.test
+
 #---------------------------------------------------------------------
 #
 # WebDAV Support (optional, requires oacs-dav package to be installed
@@ -661,3 +670,6 @@ ns_section ns/server/${server}/modules
 
 ns_log notice "nsd.tcl: using threadsafe tcl: [info exists tcl_platform(threaded)]"
 ns_log notice "nsd.tcl: finished reading config file."
+if {[ns_info version] >= 4.5} {
+    ns_limits set default -maxupload [ns_config ns/server/${server}/module/nssock maxinput]
+}

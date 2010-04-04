@@ -1098,11 +1098,6 @@ function new (
         package_id in apm_packages.package_id%TYPE
     ) return apm_packages.package_id%TYPE;
 
-  function is_child (
-    parent_package_key in apm_packages.package_key%TYPE,
-    child_package_key in apm_packages.package_key%TYPE
-  ) return char;
-
 end apm_package;
 /
 show errors
@@ -2059,35 +2054,6 @@ end new;
         exception when NO_DATA_FOUND then
             return -1;
     end parent_id;
-
-  function is_child (
-    parent_package_key in apm_packages.package_key%TYPE,
-    child_package_key in apm_packages.package_key%TYPE
-  ) return char
-    is
-    begin
-
-      if parent_package_key = child_package_key then
-        return 't';
-      end if;
-
-      for row in
-        (select apd.service_uri
-         from apm_package_versions apv, apm_package_dependencies apd
-         where apd.version_id = apv.version_id
-           and apv.enabled_p = 't'
-           and apd.dependency_type in ('embeds', 'extends')
-           and apv.package_key = child_package_key)
-      loop
-        if row.service_uri = parent_package_key or
-          is_child(parent_package_key, row.service_uri) = 't' then
-        return 't';
-      end if;
-    end loop;
- 
-    return 'f';
-  end is_child;
-
 
 end apm_package;
 /

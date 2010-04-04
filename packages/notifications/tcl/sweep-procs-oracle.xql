@@ -31,7 +31,6 @@
                     notifications.notif_html,
                     notifications.file_ids,
                     notification_requests.user_id,
-                    notification_requests.object_id,
                     notification_requests.type_id,
                     notification_requests.delivery_method_id,
                     notification_requests.request_id,
@@ -49,10 +48,6 @@
               and (nnr.notif_date is null or nnr.notif_date < sysdate)
               and acs_objects.object_id = nnr.request_id
               and acs_objects.creation_date <= nnr.notif_date
-              and exists (select 1 from acs_object_party_privilege_map ppm 
-                           where ppm.object_id = nnr.object_id
-                             and ppm.privilege = 'read'
-                             and ppm.party_id = nnr.user_id)
             order by nnr.user_id, nnr.type_id, nnr.notif_date
         </querytext>
     </fullquery>
