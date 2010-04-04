@@ -7,7 +7,7 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.6.0d1" url="http://openacs.org/repository/download/apm/acs-service-contract-5.6.0d1.apm">
+    <version name="5.6.0a1" url="http://openacs.org/repository/download/apm/acs-service-contract-5.6.0a1.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>API and UI for service contracts</summary>
         <release-date>2009-06-19</release-date>
@@ -19,8 +19,8 @@
         <license>GPL version 2</license>
         <maturity>3</maturity>
 
-        <provides url="acs-service-contract" version="5.6.0d1"/>
-        <requires url="acs-kernel" version="5.6.0d1"/>
+        <provides url="acs-service-contract" version="5.6.0a1"/>
+        <requires url="acs-kernel" version="5.6.0a1"/>
 
         <callbacks>
         </callbacks>
