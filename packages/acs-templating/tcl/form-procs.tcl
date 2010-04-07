@@ -33,6 +33,7 @@ ad_proc -public template::form { command args } {
     @see template::form::get_button
     @see template::form::get_action
     @see template::form::set_properties
+    @see template::form::get_properties
     @see template::form::exists
     @see template::form::export
     @see template::form::get_combined_values
@@ -153,8 +154,8 @@ ad_proc -public template::form::create { id args } {
 
   # If the user hit a button named "cancel", redirect and about
   if { $submission && $formbutton eq "cancel" && [exists_and_not_null opts(cancel_url)]} {
-    ad_returnredirect $opts(cancel_url)
-    ad_script_abort
+      ad_returnredirect $opts(cancel_url)
+      ad_script_abort
   }
 
   set formaction [get_action $id]
@@ -192,6 +193,25 @@ ad_proc -public template::form::set_properties { id args } {
   upvar #$level $id:properties opts
 
   template::util::get_opts $args
+}
+
+ad_proc -public template::form::get_properties { id } {
+    Get properties of a form
+
+    @param id  The ID of a form
+} {
+    set level [template::adp_level]
+
+    # form properties 
+    upvar #$level $id:properties formprop
+
+    if { [info exists formprop] } {
+        # properties exist in the form, return them
+        return [array get formprop]
+    } else {
+        # no props exist in the form, return the empty list
+        return [list]
+    }
 }
 
 ad_proc -public template::form::get_button { id } {
