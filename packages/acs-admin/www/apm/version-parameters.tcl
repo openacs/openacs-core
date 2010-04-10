@@ -63,10 +63,10 @@ foreach section $sections {
     }
 }
 
-
+set parent_package_keys [lrange [apm_one_package_inherit_order $package_key] 0 end-1]
 
 append body "[ad_table -Torderby $orderby \
-     -bind [ad_tcl_vars_to_ns_set version_id package_key] \
+     -bind [ad_tcl_vars_to_ns_set version_id package_key parent_package_keys] \
      -Textra_vars {version_id} \
      -Tmissing_text "No parameters registered in this section." \
 		     parameter_table "" $table_def]
