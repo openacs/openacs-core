@@ -36,7 +36,7 @@ foreach spec_file $spec_files {
     
     # Save the package info, we may need it for dependency satisfaction later
     lappend pkg_info_list [pkg_info_new $package(package.key) $spec_file \
-            $package(provides) $package(requires) ""]
+            $package(embeds) $package(provides) $package(requires) ""]
     
     if { [lsearch -exact $install $package(package.key)] != -1 } {
         # This is a package which we should install
