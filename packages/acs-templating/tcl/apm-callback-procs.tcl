@@ -61,12 +61,14 @@ ad_proc -private template::apm::before_upgrade {
                                  -package_id $package_id_templating \
                                  -parameter "XinhaDefaultPlugins" \
                                  -default ""]
-                set del_pos [lsearch $plugins FullScreen]
-                set plugins [lreplace $plugins $del_pos $del_pos]
-                parameter::set_value \
-                    -package_id $package_id_templating \
-                    -parameter "XinhaDefaultPlugins" \
-                    -value $plugins 
+                if { $plugins ne "" } {
+		    set del_pos [lsearch $plugins FullScreen]
+		    set plugins [lreplace $plugins $del_pos $del_pos]
+		    parameter::set_value \
+			-package_id $package_id_templating \
+			-parameter "XinhaDefaultPlugins" \
+			-value $plugins 
+                }
             }
         }
 }
