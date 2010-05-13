@@ -16,7 +16,7 @@ ad_proc -public ref_countries::get_country_code {
     
     set country_code [db_string get_country_code "select iso from countries where default_name = upper(:country)" -default ""]
 
-    if {[string eq "" $country_code]} {
+    if { $country_code eq "" } {
         
         # Lets try to be smart.
         set country_list [list \
