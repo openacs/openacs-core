@@ -19,23 +19,22 @@ create table language_codes (
 );
 
 comment on table language_codes is '
-    This is data from the ISO 639 standard on language codes.
+    This is data from the ISO 639-1 standard on language codes.
 ';
 
 comment on column language_codes.language_id is '
-    This is the ISO standard language code
+    This is the ISO standard language 2 chars code
 ';
 
 comment on column language_codes.name is '
     This is the English version of the language name. 
-    I don''t want to get crazy here!
 ';
 
 -- now register this table with the repository
 select acs_reference__new(
     'LANGUAGE_CODES',
     null,
-    'ISO 639',
+    'ISO 639-1',
     'http://www.iso.ch',
     now()
 );
