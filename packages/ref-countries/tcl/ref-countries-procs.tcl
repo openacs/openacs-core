@@ -17,9 +17,9 @@ ad_proc -public ref_countries::get_country_code {
     set country_code [db_string get_country_code "select iso from countries where default_name = upper(:country)" -default ""]
 
     if {[string eq "" $country_code]} {
-	
-	# Lets try to be smart.
-	set country_list [list \
+        
+        # Lets try to be smart.
+        set country_list [list \
                               [list England GB] \
                               [list "Great Britain" GB] \
                               [list Korea KR] \
@@ -33,9 +33,9 @@ ad_proc -public ref_countries::get_country_code {
 
         template::util::list_of_lists_to_array $country_list countries
 
-	if {[exists_and_not_null countries($country)]} {
-	    set country_code $countries($country)
-	}
+        if {[exists_and_not_null countries($country)]} {
+            set country_code $countries($country)
+        }
     }
     
     return $country_code
