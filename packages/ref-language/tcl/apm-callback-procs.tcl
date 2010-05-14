@@ -9,6 +9,13 @@ ad_library {
 namespace eval ref_language {}
 namespace eval ref_language::apm {}
 
+ad_proc -private ref_language::apm::after_install {
+} {
+    Fill ISO-639-2 codes table
+} {
+    ref_language::apm::add_language_639_2_codes
+}
+
 ad_proc -private ref_language::apm::after_upgrade {
     {-from_version_name:required}
     {-to_version_name:required}
@@ -21,23 +28,71 @@ ad_proc -private ref_language::apm::after_upgrade {
 
                 set new_languages [ref_language::apm::lang_list_for_5_6_0d2]
 
-                foreach {name code} $new_languages {
-                    set exists_p [db_string get_lang {select count(*) from language_codes where language_id = :code} -default 0]
-
-                    if { $exists_p } {
-                        db_dml update_lang {
-                            update language_codes set name = :name
-                            where language_id = :code
-                        }
-                    } else {
-                        db_dml insert_lang {
-                            insert into language_codes (language_id, name)
-                            values (:code, :name)
-                        }
-                    }
+                foreach {code name} $new_languages {
+                    ref_language::set_data -iso1 $code -label $name
                 }
+
+            }
+            5.6.0d2 5.6.0d3 {
+
+                ref_language::apm::add_language_639_2_codes
+
             }
         }
+}
+
+## Helper procs
+
+ad_proc -private ref_language::apm::add_language_639_2_codes {
+} {
+    Fills language_639_2_codes
+
+    The ISO-639-2 codes are in a dat file located at
+    ref-language/sql/commjon directory. The file was downloaded from
+    http://www.loc.gov/standards/iso639-2/ISO-639-2_utf-8.txt
+
+    Separator is "|" and the columns are:
+    
+    <ul>
+    <li>ISO 639-2 Bibliographic code (used if terminology one is empty)</li>
+    <li>ISO 639-2 Terminology code (used if exists)</li>
+    <li>ISO 639-1 code (2 digits)</li>
+    <li>Language name in english</li>
+    <li>Language name in french (ignored if present)</li>
+    </ul>
+
+} {
+
+    set filename "[acs_root_dir]/packages/ref-language/sql/common/iso-639-2.dat"
+
+    set channel [open $filename]
+    set data [read $channel]
+    close $channel
+
+    set row_list [split $data "\n"]
+    foreach row $row_list {
+
+        if { $row eq "" } {
+            continue
+        }
+
+        set col_list [split $row "|"]
+
+        # Set iso-639-2 code to terminology if exists, otherwise
+        # uses the bibliography one (see RFC 4646)
+
+        set iso2b [lindex $col_list 0]
+        set iso2 [lindex $col_list 1]
+        set iso1 [lindex $col_list 2]
+        set label [lindex $col_list 3]
+
+        if { $iso2 eq "" } {
+            set iso2 $iso2b
+        }
+
+        ref_language::set_data -iso2 $iso2 -iso1 $iso1 -label $label
+
+    }
 }
 
 ad_proc -private ref_language::apm::lang_list_for_5_6_0d2 {

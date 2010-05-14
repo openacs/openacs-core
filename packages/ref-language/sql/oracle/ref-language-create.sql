@@ -6,7 +6,7 @@
 --
 
 
--- ISO 639
+-- ISO 639-1
 create table language_codes (
     language_id char(2)
         constraint language_codes_language_id_pk
@@ -43,3 +43,13 @@ begin
 commit;
 end;
 /
+
+-- Languages ISO-639-2 codes
+
+create table language_639_2_codes (
+       iso_639_2            char(3) constraint language_codes_iso_639_2_pk primary key,
+       iso_639_1            char(2),
+       label                varchar(200)
+);
+
+comment on table language_639_2_codes is 'Contains ISO-639-2 language codes and their corresponding ISO-639-1 when it exists.';
