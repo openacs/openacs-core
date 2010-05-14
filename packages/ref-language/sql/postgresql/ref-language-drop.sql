@@ -10,6 +10,8 @@
 -- This will probably fail if their is a child table using this.
 -- I can probably make this cleaner also, but ... no time today
 
+drop table language_639_2_codes;
+
 create function inline_0() returns integer as '
 declare
     rec        acs_reference_repositories%ROWTYPE;
