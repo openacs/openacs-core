@@ -7,15 +7,15 @@
     <initial-install-p>f</initial-install-p>
     <singleton-p>t</singleton-p>
 
-    <version name="5.6.0d3" url="http://www.mayuli.com/acs-repository/download/apm/ref-language-5.6.0d3.apm">
+    <version name="5.6.0b1" url="http://www.mayuli.com/acs-repository/download/apm/ref-language-5.6.0b1.apm">
         <owner url="mailto:jon@jongriffin.com">Jon Griffin</owner>
         <summary>ISO 639-1 language reference data for acs-reference.</summary>
         <vendor url="http://www.mayuli.com">Mayuli Enterprises, LLC</vendor>
         <description format="text/plain">This is the ISO 639-1 language reference data (with languages names in English).</description>
 
-        <provides url="ref-language" version="5.6.0d3"/>
-        <requires url="acs-kernel" version="5.6.0d1"/>
-        <requires url="acs-reference" version="5.6.0d1"/>
+        <provides url="ref-language" version="5.6.0b1"/>
+        <requires url="acs-kernel" version="5.6.0b1"/>
+        <requires url="acs-reference" version="5.6.0b1"/>
 
         <callbacks>
             <callback type="after-install"  proc="ref_language::apm::after_install"/>
