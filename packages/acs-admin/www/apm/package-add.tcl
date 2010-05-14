@@ -236,9 +236,8 @@ for URLs, in which case you should precede them with <tt>mailto:</tt> (e.g.,
   <td></td>
   <td>
     <table><tr valign=baseline><td><input type=checkbox name=install_p value=1 checked></td><td>
-Write a package specification file for this package by executing <a href=\"/api-doc/proc-view?proc=apm_package_install_spec\" target=\"_blank\">apm_package_install_spec</a> (opens in new window). 
-(You almost certainly want to leave this checked.) 
-</td></tr></table>
+Write a package specification file for this package.
+(You almost certainly want to leave this checked.)</td></tr></table>
   </td>
 </tr>
 
