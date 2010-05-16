@@ -1,4 +1,3 @@
-alter table persons add bio text;
 
 create function inline_0 ()
 returns integer as '
@@ -7,6 +6,39 @@ declare
   bio_id integer;
   attr_id integer;
 begin
+
+  if exists(select 1
+            from acs_attributes
+            where object_type = ''person''
+              and attribute_name = ''bio''
+              and storage = ''type_specific'')
+  then
+    return 0;
+  end if;
+
+  alter table persons add bio text;
+
+  drop view acs_users_all;
+  create view acs_users_all
+  as
+  select pa.*, pe.*, u.*
+  from  parties pa, persons pe, users u
+  where  pa.party_id = pe.person_id
+  and pe.person_id = u.user_id;
+
+  drop view cc_users;
+  create view cc_users
+  as
+  select o.*, pa.*, pe.*, u.*, mr.member_state, mr.rel_id
+  from acs_objects o, parties pa, persons pe, users u, group_member_map m, membership_rels mr
+  where o.object_id = pa.party_id
+    and pa.party_id = pe.person_id
+    and pe.person_id = u.user_id
+    and u.user_id = m.member_id
+    and m.group_id = acs__magic_object_id(''registered_users'')
+    and m.rel_id = mr.rel_id
+    and m.container_id = m.group_id
+    and m.rel_type = ''membership_rel'';
 
   bio_id := attribute_id
             from acs_attributes
