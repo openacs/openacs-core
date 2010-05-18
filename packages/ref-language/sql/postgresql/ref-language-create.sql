@@ -12,8 +12,6 @@ create table language_codes (
         constraint language_codes_language_id_pk
         primary key,
     name varchar(100)
-        constraint language_codes_name_un
-        unique
         constraint language_codes_name_nn
         not null
 );
