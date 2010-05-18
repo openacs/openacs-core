@@ -4,6 +4,7 @@ returns integer as '
 declare
   one_user_id integer;
   bio_id integer;
+  bio_mime_type_id integer;
   attr_id integer;
 begin
 
@@ -26,6 +27,11 @@ begin
   where  pa.party_id = pe.person_id
   and pe.person_id = u.user_id;
 
+  bio_mime_type_id := attribute_id
+                      from acs_attributes
+                      where object_type = ''person''
+                      and attribute_name = ''bio_mime_type'';
+
   bio_id := attribute_id
             from acs_attributes
             where object_type = ''person''
@@ -47,6 +53,9 @@ begin
 
   delete from acs_attribute_values
   where attribute_id = bio_id;
+
+  delete from acs_attribute_values
+  where attribute_id = bio_mime_type_id;
 
   perform acs_attribute__drop_attribute (''person'',''bio'');
   perform acs_attribute__drop_attribute (''person'',''bio_mime_type'');
