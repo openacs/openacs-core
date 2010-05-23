@@ -1,3 +1,131 @@
-/* This compressed file is part of Xinha. For uncompressed sources, forum, and bug reports, go to xinha.org */
-/* This file is part of version 0.96beta2 released Fri, 20 Mar 2009 11:01:14 +0100 */
-function dragTableCols(h){this.table=document.getElementById(h);var b=this.table.rows[0].cells;this.ths=b;var a=this;var g;for(var d=0;d<this.table.rows.length;d++){for(var e=0;e<this.table.rows[d].cells.length;e++){g=this.table.rows[d].cells[e];g._i=e;dragTableCols.addEvent(g,"mousemove",function(c){a.cellMouseMove(c)});dragTableCols.addEvent(g,"mouseover",function(i){i=i?i:window.event;var c=i.target||i.srcElement;c._pos=dragTableCols.getElementTopLeft(c)})}}function f(){a.drag=false;a._col=null;document.body.style.cursor=""}dragTableCols.addEvent(document.body,"mousemove",function(c){a.bodyMouseMove(c)});dragTableCols.addEvent(document.body,"mouseup",f)}dragTableCols.prototype.cellMouseMove=function(d){d=d?d:window.event;var b=d.target||d.srcElement;if(typeof dragTableCols=="undefined"){return}if(!b._pos){b._pos=dragTableCols.getElementTopLeft(b);return}if(b.tagName.toLowerCase()!="td"&&b.tagName.toLowerCase()!="th"){return}var a=this;function c(g){g=g?g:window.event;a.drag=true;a.startX=b._pos.left+b.offsetWidth;a._col=b;var f=b.offsetWidth;a.startWidth=(b.width)?parseInt(b.width,10):b.offsetWidth;b.style.width=a.startWidth+"px";a.offset=b.offsetWidth-f;b.style.width=a.startWidth-a.offset+"px"}if(b._pos.left+b.offsetWidth-dragTableCols.getPageX(d)<5&&b!=b.parentNode.cells[b.parentNode.cells.length-1]){b.style.cursor="e-resize";dragTableCols.addEvent(b,"mousedown",c)}else{b.style.cursor="";dragTableCols.removeEvent(b,"mousedown",c)}};dragTableCols.prototype.bodyMouseMove=function(c){if(!this.drag){return true}c=c?c:window.event;var a=dragTableCols.getPageX(c);var d=a-this.startX;document.body.style.cursor=(d<0)?"e-resize":"w-resize";var b=this.startWidth+d-this.offset;this._col.style.width=((b>10)?b:10)+"px";return true};dragTableCols.addEvent=function(c,b,a){if(c.addEventListener){c.addEventListener(b,a,true)}else{if(c.attachEvent){c.attachEvent("on"+b,a)}else{return false}}};dragTableCols.removeEvent=function(c,b,a){if(c.addEventListener){c.removeEventListener(b,a,true)}else{if(c.detachEvent){c.detachEvent("on"+b,a)}else{return false}}};dragTableCols.getElementTopLeft=function(a){var c=0;var b=0;if(a.offsetParent){c=a.offsetLeft;b=a.offsetTop;while(a=a.offsetParent){c+=a.offsetLeft;b+=a.offsetTop}}return{top:b,left:c}};dragTableCols.getPageX=function(a){if(a.pageX){return a.pageX}else{if(document.documentElement&&document.documentElement.scrollTop){return document.documentElement.scrollLeft+a.clientX}else{if(document.body){return document.body.scrollLeft+a.clientX}}}};
+/** makes the columns of a given table resizable with the mouse
+ * @author Raimund Meyer
+ * @param id {String} the id of the table
+ */
+function dragTableCols (id)
+{
+	this.table = document.getElementById(id);
+	var ths = this.table.rows[0].cells;
+	this.ths = ths;
+	var self = this;
+	var c;
+	for (var j = 0; j < this.table.rows.length; j++) 
+	{
+		for (var i = 0; i < this.table.rows[j].cells.length; i++) 
+		{
+			c = this.table.rows[j].cells[i];
+			c._i = i;
+			dragTableCols.addEvent(c, 'mousemove', function(e)
+			{
+				self.cellMouseMove(e);
+			});
+			dragTableCols.addEvent(c, 'mouseover', function(e)
+			{
+				e = e ? e : window.event;
+				var t = e.target  || e.srcElement;
+				t._pos = dragTableCols.getElementTopLeft(t);
+			});
+		}
+	}
+	function deactivate ()
+	{
+		 self.drag = false; self._col = null; document.body.style.cursor = '';
+	}
+	dragTableCols.addEvent(document.body, 'mousemove',function (e) { self.bodyMouseMove(e); });
+	dragTableCols.addEvent(document.body, 'mouseup',deactivate);
+	
+
+}
+dragTableCols.prototype.cellMouseMove = function (e)
+{
+	e = e ? e : window.event;
+	var t = e.target || e.srcElement;
+	
+	if ( typeof dragTableCols == 'undefined' ) return;// sometimes happens, no idea why
+	if (!t._pos) 
+	{
+		t._pos = dragTableCols.getElementTopLeft(t);
+		return;
+	}
+	
+	if (t.tagName.toLowerCase() != 'td' && t.tagName.toLowerCase() != 'th') return;
+	var self = this;
+	function activate (e)
+	{
+		e = e ? e : window.event;
+		self.drag = true;
+		self.startX = t._pos.left + t.offsetWidth;
+		self._col = t;
+		var offsetWidth = t.offsetWidth;
+		self.startWidth = (t.width) ? parseInt(t.width, 10) : t.offsetWidth;
+		t.style.width = self.startWidth + 'px';
+		self.offset = t.offsetWidth - offsetWidth; //padding + border; 
+		t.style.width = self.startWidth - self.offset+ 'px';
+	}
+	// activate right side
+	if (t._pos.left + t.offsetWidth - dragTableCols.getPageX (e)  < 5 && t != t.parentNode.cells[t.parentNode.cells.length -1] )
+	{
+		t.style.cursor = 'e-resize';
+
+		dragTableCols.addEvent(t,'mousedown', activate);
+	}
+	else 
+	{
+		t.style.cursor = '';
+		dragTableCols.removeEvent(t,'mousedown', activate);
+	}
+}
+dragTableCols.prototype.bodyMouseMove = function (e)
+{
+	if (!this.drag) return true;
+	e = e ? e : window.event;
+	var mouseX = dragTableCols.getPageX (e);
+	var delta = mouseX - this.startX;
+	document.body.style.cursor = (delta < 0) ? 'e-resize' : 'w-resize';
+	var newWidth = this.startWidth + delta - this.offset;
+	this._col.style.width =  ((newWidth > 10 ) ? newWidth : 10 ) + 'px';
+	return true;
+}
+
+dragTableCols.addEvent = function (obj, evType, fn)
+{
+    if (obj.addEventListener) { obj.addEventListener(evType, fn, true); }
+    else if (obj.attachEvent) { obj.attachEvent("on"+evType, fn);}
+    else {  return false; }
+}
+dragTableCols.removeEvent = function (obj, evType, fn)
+{
+    if (obj.addEventListener) { obj.removeEventListener(evType, fn, true); }
+    else if (obj.detachEvent) { obj.detachEvent("on"+evType, fn); }
+    else {  return false; }
+}
+dragTableCols.getElementTopLeft = function(element) 
+{
+  var curleft = 0;
+  var curtop = 0;
+  if (element.offsetParent) 
+  {
+    curleft = element.offsetLeft
+    curtop = element.offsetTop
+    while (element = element.offsetParent) 
+    {
+      curleft += element.offsetLeft
+      curtop += element.offsetTop
+    }
+  }
+  return { top:curtop, left:curleft };
+}
+dragTableCols.getPageX = function (e)
+{
+	if ( e.pageX ) return e.pageX;
+	else if (document.documentElement && document.documentElement.scrollTop)
+	// Explorer 6 Strict
+	{
+		return document.documentElement.scrollLeft + e.clientX;
+
+	}
+	else if (document.body) // all other Explorers
+	{
+		return document.body.scrollLeft + e.clientX;
+	}
+}

@@ -1,3 +1,725 @@
-/* This compressed file is part of Xinha. For uncompressed sources, forum, and bug reports, go to xinha.org */
-/* This file is part of version 0.96beta2 released Fri, 20 Mar 2009 11:01:14 +0100 */
-function Node(c,f,a,b,i,g,h,d,e){this.id=c;this.pid=f;this.name=a;this.url=b;this.title=i;this.target=g;this.icon=h;this.iconOpen=d;this._io=e||false;this._is=false;this._ls=false;this._hc=false;this._ai=0;this._p}function dTree(b,a){this.config={target:null,folderLinks:true,useSelection:true,useCookies:true,useLines:true,useIcons:true,useStatusText:false,closeSameLevel:false,inOrder:false};this.icon={root:a+"img/base.gif",folder:a+"img/folder.gif",folderOpen:a+"img/folderopen.gif",node:a+"img/page.gif",empty:a+"img/empty.gif",line:a+"img/line.gif",join:a+"img/join.gif",joinBottom:a+"img/joinbottom.gif",plus:a+"img/plus.gif",plusBottom:a+"img/plusbottom.gif",minus:a+"img/minus.gif",minusBottom:a+"img/minusbottom.gif",nlPlus:a+"img/nolines_plus.gif",nlMinus:a+"img/nolines_minus.gif"};this.obj=b;this.aNodes=[];this.aIndent=[];this.root=new Node(-1);this.selectedNode=null;this.selectedFound=false;this.completed=false}dTree.prototype.add=function(c,f,a,b,i,g,h,d,e){this.aNodes[this.aNodes.length]=new Node(c,f,a,b,i,g,h,d,e)};dTree.prototype.openAll=function(){this.oAll(true)};dTree.prototype.closeAll=function(){this.oAll(false)};dTree.prototype.toString=function(){this.setCS_All();var a='<div class="dtree">\n';if(document.getElementById){if(this.config.useCookies){this.selectedNode=this.getSelected()}a+=this.addNode(this.root)}else{a+="Browser not supported."}a+="</div>";if(!this.selectedFound){this.selectedNode=null}this.completed=true;return a};dTree.prototype.addNode=function(a){var b="";var d=0;if(this.config.inOrder){d=a._ai}for(d;d<this.aNodes.length;d++){if(this.aNodes[d].pid==a.id){var c=this.aNodes[d];c._p=a;c._ai=d;if(!c.target&&this.config.target){c.target=this.config.target}if(c._hc&&!c._io&&this.config.useCookies){c._io=this.isOpen(c.id)}if(!this.config.folderLinks&&c._hc){c.url=null}if(this.config.useSelection&&c.id==this.selectedNode&&!this.selectedFound){c._is=true;this.selectedNode=d;this.selectedFound=true}b+=this.node(c,d);if(c._ls){break}}}return b};dTree.prototype.node=function(a,c){var b='<div class="dTreeNode">'+this.indent(a,c);if(this.config.useIcons){if(!a.icon){a.icon=(this.root.id==a.pid)?this.icon.root:((a._hc)?this.icon.folder:this.icon.node)}if(!a.iconOpen){a.iconOpen=(a._hc)?this.icon.folderOpen:this.icon.node}if(this.root.id==a.pid){a.icon=this.icon.root;a.iconOpen=this.icon.root}b+='<img id="i'+this.obj+c+'" src="'+((a._io)?a.iconOpen:a.icon)+'" alt="" />'}if(a.url){b+='<a id="s'+this.obj+c+'" class="'+((this.config.useSelection)?((a._is?"nodeSel":"node")):"node")+'" href="'+a.url+'"';if(a.title){b+=' title="'+a.title+'"'}if(a.target){b+=' target="'+a.target+'"'}if(this.config.useStatusText){b+=" onmouseover=\"window.status='"+a.name+"';return true;\" onmouseout=\"window.status='';return true;\" "}if(this.config.useSelection&&((a._hc&&this.config.folderLinks)||!a._hc)){b+=' onclick="javascript: '+this.obj+".s("+c+');"'}b+=">"}else{if((!this.config.folderLinks||!a.url)&&a._hc&&a.pid!=this.root.id){b+='<a href="javascript: '+this.obj+".o("+c+');" class="node">'}}b+=a.name;if(a.url||((!this.config.folderLinks||!a.url)&&a._hc)){b+="</a>"}b+="</div>";if(a._hc){b+='<div id="d'+this.obj+c+'" class="clip" style="display:'+((this.root.id==a.pid||a._io)?"block":"none")+';">';b+=this.addNode(a);b+="</div>"}this.aIndent.pop();return b};dTree.prototype.indent=function(a,c){var b="";if(this.root.id!=a.pid){for(var d=0;d<this.aIndent.length;d++){b+='<img src="'+((this.aIndent[d]==1&&this.config.useLines)?this.icon.line:this.icon.empty)+'" alt="" />'}(a._ls)?this.aIndent.push(0):this.aIndent.push(1);if(a._hc){b+='<a href="javascript: '+this.obj+".o("+c+');"><img id="j'+this.obj+c+'" src="';if(!this.config.useLines){b+=(a._io)?this.icon.nlMinus:this.icon.nlPlus}else{b+=((a._io)?((a._ls&&this.config.useLines)?this.icon.minusBottom:this.icon.minus):((a._ls&&this.config.useLines)?this.icon.plusBottom:this.icon.plus))}b+='" alt="" /></a>'}else{b+='<img src="'+((this.config.useLines)?((a._ls)?this.icon.joinBottom:this.icon.join):this.icon.empty)+'" alt="" />'}}return b};dTree.prototype.setCS=function(a){var b;for(var c=0;c<this.aNodes.length;c++){if(this.aNodes[c].pid==a.id){a._hc=true}if(this.aNodes[c].pid==a.pid){b=this.aNodes[c].id}}if(b==a.id){a._ls=true}};dTree.prototype.setCS_All=function(){var a={};for(var c=0;c<this.aNodes.length;c++){var b=this.aNodes[c];if(!a[b.pid]){a[b.pid]={_hc:true,_ls_is:b.id}}else{a[b.pid]._hc=true;a[b.pid]._ls_is=b.id}if(!a[b.id]){a[b.id]={_hc:false,_ls_is:null}}}for(var c=0;c<this.aNodes.length;c++){var b=this.aNodes[c];b._ls=a[b.pid]._ls_is==b.id?true:false;b._hc=a[b.id]._hc}};dTree.prototype.getSelected=function(){var a=this.getCookie("cs"+this.obj);return(a)?a:null};dTree.prototype.s=function(b){if(!this.config.useSelection){return}var a=this.aNodes[b];if(a._hc&&!this.config.folderLinks){return}if(this.selectedNode!=b){if(this.selectedNode||this.selectedNode==0){eOld=document.getElementById("s"+this.obj+this.selectedNode);eOld.className="node"}eNew=document.getElementById("s"+this.obj+b);eNew.className="nodeSel";this.selectedNode=b;if(this.config.useCookies){this.setCookie("cs"+this.obj,a.id)}}};dTree.prototype.o=function(b){var a=this.aNodes[b];this.nodeStatus(!a._io,b,a._ls);a._io=!a._io;if(this.config.closeSameLevel){this.closeLevel(a)}if(this.config.useCookies){this.updateCookie()}};dTree.prototype.oAll=function(a){for(var b=0;b<this.aNodes.length;b++){if(this.aNodes[b]._hc&&this.aNodes[b].pid!=this.root.id){this.nodeStatus(a,b,this.aNodes[b]._ls);this.aNodes[b]._io=a}}if(this.config.useCookies){this.updateCookie()}};dTree.prototype.openTo=function(b,a,c){if(!c){for(var e=0;e<this.aNodes.length;e++){if(this.aNodes[e].id==b){b=e;break}}}var d=this.aNodes[b];if(d.pid==this.root.id||!d._p){return}d._io=true;d._is=a;if(this.completed&&d._hc){this.nodeStatus(true,d._ai,d._ls)}if(this.completed&&a){this.s(d._ai)}else{if(a){this._sn=d._ai}}this.openTo(d._p._ai,false,true)};dTree.prototype.closeLevel=function(a){for(var b=0;b<this.aNodes.length;b++){if(this.aNodes[b].pid==a.pid&&this.aNodes[b].id!=a.id&&this.aNodes[b]._hc){this.nodeStatus(false,b,this.aNodes[b]._ls);this.aNodes[b]._io=false;this.closeAllChildren(this.aNodes[b])}}};dTree.prototype.closeAllChildren=function(a){for(var b=0;b<this.aNodes.length;b++){if(this.aNodes[b].pid==a.id&&this.aNodes[b]._hc){if(this.aNodes[b]._io){this.nodeStatus(false,b,this.aNodes[b]._ls)}this.aNodes[b]._io=false;this.closeAllChildren(this.aNodes[b])}}};dTree.prototype.nodeStatus=function(a,c,b){eDiv=document.getElementById("d"+this.obj+c);eJoin=document.getElementById("j"+this.obj+c);if(this.config.useIcons){eIcon=document.getElementById("i"+this.obj+c);eIcon.src=(a)?this.aNodes[c].iconOpen:this.aNodes[c].icon}eJoin.src=(this.config.useLines)?((a)?((b)?this.icon.minusBottom:this.icon.minus):((b)?this.icon.plusBottom:this.icon.plus)):((a)?this.icon.nlMinus:this.icon.nlPlus);eDiv.style.display=(a)?"block":"none"};dTree.prototype.clearCookie=function(){var a=new Date();var b=new Date(a.getTime()-1000*60*60*24);this.setCookie("co"+this.obj,"cookieValue",b);this.setCookie("cs"+this.obj,"cookieValue",b)};dTree.prototype.setCookie=function(f,e,a,d,b,c){document.cookie=escape(f)+"="+escape(e)+(a?"; expires="+a.toGMTString():"")+(d?"; path="+d:"")+(b?"; domain="+b:"")+(c?"; secure":"")};dTree.prototype.getCookie=function(e){var d="";var b=document.cookie.indexOf(escape(e)+"=");if(b!=-1){var c=b+(escape(e)+"=").length;var a=document.cookie.indexOf(";",c);if(a!=-1){d=unescape(document.cookie.substring(c,a))}else{d=unescape(document.cookie.substring(c))}}return(d)};dTree.prototype.updateCookie=function(){var a="";for(var b=0;b<this.aNodes.length;b++){if(this.aNodes[b]._io&&this.aNodes[b].pid!=this.root.id){if(a){a+="."}a+=this.aNodes[b].id}}this.setCookie("co"+this.obj,a)};dTree.prototype.isOpen=function(c){var b=this.getCookie("co"+this.obj).split(".");for(var a=0;a<b.length;a++){if(b[a]==c){return true}}return false};if(!Array.prototype.push){Array.prototype.push=function array_push(){for(var a=0;a<arguments.length;a++){this[this.length]=arguments[a]}return this.length}}if(!Array.prototype.pop){Array.prototype.pop=function array_pop(){lastElement=this[this.length-1];this.length=Math.max(this.length-1,0);return lastElement}};
+/*--------------------------------------------------|
+
+| dTree 2.05 | www.destroydrop.com/javascript/tree/ |
+
+|---------------------------------------------------|
+
+| Copyright (c) 2002-2003 Geir Landr?               |
+
+|                                                   |
+
+| This script can be used freely as long as all     |
+
+| copyright messages are intact.                    |
+
+|                                                   |
+
+| Updated: 17.04.2003                               |
+
+|--------------------------------------------------*/
+
+
+
+// Node object
+
+function Node(id, pid, name, url, title, target, icon, iconOpen, open) {
+
+  this.id = id;
+
+  this.pid = pid;
+
+  this.name = name;
+
+  this.url = url;
+
+  this.title = title;
+
+  this.target = target;
+
+  this.icon = icon;
+
+  this.iconOpen = iconOpen;
+
+  this._io = open || false;
+
+  this._is = false;
+
+  this._ls = false;
+
+  this._hc = false;
+
+  this._ai = 0;
+
+  this._p;
+
+}
+
+
+
+// Tree object
+
+function dTree(objName, baseDir) {
+
+  this.config = {
+
+    target					: null,
+
+    folderLinks			: true,
+
+    useSelection		: true,
+
+    useCookies			: true,
+
+    useLines				: true,
+
+    useIcons				: true,
+
+    useStatusText		: false,
+
+    closeSameLevel	: false,
+
+    inOrder					: false
+
+  };
+
+  this.icon = {
+
+    root				: baseDir + 'img/base.gif',
+
+    folder			: baseDir + 'img/folder.gif',
+
+    folderOpen	: baseDir + 'img/folderopen.gif',
+
+    node				: baseDir + 'img/page.gif',
+
+    empty				: baseDir + 'img/empty.gif',
+
+    line				: baseDir + 'img/line.gif',
+
+    join				: baseDir + 'img/join.gif',
+
+    joinBottom	: baseDir + 'img/joinbottom.gif',
+
+    plus				: baseDir + 'img/plus.gif',
+
+    plusBottom	: baseDir + 'img/plusbottom.gif',
+
+    minus				: baseDir + 'img/minus.gif',
+
+    minusBottom	: baseDir + 'img/minusbottom.gif',
+
+    nlPlus			: baseDir + 'img/nolines_plus.gif',
+
+    nlMinus			: baseDir + 'img/nolines_minus.gif'
+
+  };
+
+  this.obj = objName;
+
+  this.aNodes = [];
+
+  this.aIndent = [];
+
+  this.root = new Node(-1);
+
+  this.selectedNode = null;
+
+  this.selectedFound = false;
+
+  this.completed = false;
+
+}
+
+
+
+// Adds a new node to the node array
+
+dTree.prototype.add = function(id, pid, name, url, title, target, icon, iconOpen, open) {
+
+  this.aNodes[this.aNodes.length] = new Node(id, pid, name, url, title, target, icon, iconOpen, open);
+
+};
+
+
+
+// Open/close all nodes
+
+dTree.prototype.openAll = function() {
+
+  this.oAll(true);
+
+};
+
+dTree.prototype.closeAll = function() {
+
+  this.oAll(false);
+
+};
+
+
+
+// Outputs the tree to the page
+
+dTree.prototype.toString = function() {
+  this.setCS_All();
+  var str = '<div class="dtree">\n';
+
+  if (document.getElementById) {
+
+    if (this.config.useCookies) this.selectedNode = this.getSelected();
+
+    str += this.addNode(this.root);
+
+  } else str += 'Browser not supported.';
+
+  str += '</div>';
+
+  if (!this.selectedFound) this.selectedNode = null;
+
+  this.completed = true;
+
+  return str;
+
+};
+
+
+
+// Creates the tree structure
+
+dTree.prototype.addNode = function(pNode) {
+
+  var str = '';
+
+  var n=0;
+
+  if (this.config.inOrder) n = pNode._ai;
+
+  for (n; n<this.aNodes.length; n++) {
+
+    if (this.aNodes[n].pid == pNode.id) {
+
+      var cn = this.aNodes[n];
+
+      cn._p = pNode;
+
+      cn._ai = n;
+
+      // this.setCS(cn);
+
+      if (!cn.target && this.config.target) cn.target = this.config.target;
+
+      if (cn._hc && !cn._io && this.config.useCookies) cn._io = this.isOpen(cn.id);
+
+      if (!this.config.folderLinks && cn._hc) cn.url = null;
+
+      if (this.config.useSelection && cn.id == this.selectedNode && !this.selectedFound) {
+
+          cn._is = true;
+
+          this.selectedNode = n;
+
+          this.selectedFound = true;
+
+      }
+
+      str += this.node(cn, n);
+
+      if (cn._ls) break;
+
+    }
+
+  }
+
+  return str;
+
+};
+
+
+
+// Creates the node icon, url and text
+
+dTree.prototype.node = function(node, nodeId) {
+
+  var str = '<div class="dTreeNode">' + this.indent(node, nodeId);
+
+  if (this.config.useIcons) {
+
+    if (!node.icon) node.icon = (this.root.id == node.pid) ? this.icon.root : ((node._hc) ? this.icon.folder : this.icon.node);
+
+    if (!node.iconOpen) node.iconOpen = (node._hc) ? this.icon.folderOpen : this.icon.node;
+
+    if (this.root.id == node.pid) {
+
+      node.icon = this.icon.root;
+
+      node.iconOpen = this.icon.root;
+
+    }
+
+    str += '<img id="i' + this.obj + nodeId + '" src="' + ((node._io) ? node.iconOpen : node.icon) + '" alt="" />';
+
+  }
+
+  if (node.url) {
+
+    str += '<a id="s' + this.obj + nodeId + '" class="' + ((this.config.useSelection) ? ((node._is ? 'nodeSel' : 'node')) : 'node') + '" href="' + node.url + '"';
+
+    if (node.title) str += ' title="' + node.title + '"';
+
+    if (node.target) str += ' target="' + node.target + '"';
+
+    if (this.config.useStatusText) str += ' onmouseover="window.status=\'' + node.name + '\';return true;" onmouseout="window.status=\'\';return true;" ';
+
+    if (this.config.useSelection && ((node._hc && this.config.folderLinks) || !node._hc))
+
+      str += ' onclick="javascript: ' + this.obj + '.s(' + nodeId + ');"';
+
+    str += '>';
+
+  }
+
+  else if ((!this.config.folderLinks || !node.url) && node._hc && node.pid != this.root.id)
+
+    str += '<a href="javascript: ' + this.obj + '.o(' + nodeId + ');" class="node">';
+
+  str += node.name;
+
+  if (node.url || ((!this.config.folderLinks || !node.url) && node._hc)) str += '</a>';
+
+  str += '</div>';
+
+  if (node._hc) {
+
+    str += '<div id="d' + this.obj + nodeId + '" class="clip" style="display:' + ((this.root.id == node.pid || node._io) ? 'block' : 'none') + ';">';
+
+    str += this.addNode(node);
+
+    str += '</div>';
+
+  }
+
+  this.aIndent.pop();
+
+  return str;
+
+};
+
+
+
+// Adds the empty and line icons
+
+dTree.prototype.indent = function(node, nodeId) {
+
+  var str = '';
+
+  if (this.root.id != node.pid) {
+
+    for (var n=0; n<this.aIndent.length; n++)
+
+      str += '<img src="' + ( (this.aIndent[n] == 1 && this.config.useLines) ? this.icon.line : this.icon.empty ) + '" alt="" />';
+
+    (node._ls) ? this.aIndent.push(0) : this.aIndent.push(1);
+
+    if (node._hc) {
+
+      str += '<a href="javascript: ' + this.obj + '.o(' + nodeId + ');"><img id="j' + this.obj + nodeId + '" src="';
+
+      if (!this.config.useLines) str += (node._io) ? this.icon.nlMinus : this.icon.nlPlus;
+
+      else str += ( (node._io) ? ((node._ls && this.config.useLines) ? this.icon.minusBottom : this.icon.minus) : ((node._ls && this.config.useLines) ? this.icon.plusBottom : this.icon.plus ) );
+
+      str += '" alt="" /></a>';
+
+    } else str += '<img src="' + ( (this.config.useLines) ? ((node._ls) ? this.icon.joinBottom : this.icon.join ) : this.icon.empty) + '" alt="" />';
+
+  }
+
+  return str;
+
+};
+
+
+
+// Checks if a node has any children and if it is the last sibling
+
+dTree.prototype.setCS = function(node) {
+
+  var lastId;
+
+  for (var n=0; n<this.aNodes.length; n++) {
+
+    if (this.aNodes[n].pid == node.id) node._hc = true;
+
+    if (this.aNodes[n].pid == node.pid) lastId = this.aNodes[n].id;
+
+  }
+
+  if (lastId==node.id) node._ls = true;
+
+};
+
+dTree.prototype.setCS_All = function()
+{
+  var ids = { }; // ID => { _hc: haschildren, _ls_is: lastsibling}
+
+  for(var n = 0; n < this.aNodes.length; n++)
+  {
+    var node = this.aNodes[n];
+    if(!ids[node.pid])
+    {
+      ids[node.pid] = { _hc: true, _ls_is: node.id };
+    }
+    else
+    {
+      ids[node.pid]._hc    = true;
+      ids[node.pid]._ls_is = node.id;
+    }
+
+    if(!ids[node.id])
+    {
+      ids[node.id] = { _hc: false, _ls_is: null }
+    }
+  }
+
+  for(var n = 0; n < this.aNodes.length; n++)
+  {
+    var node = this.aNodes[n];
+    node._ls = ids[node.pid]._ls_is == node.id ? true : false;
+    if(ids[node.id]) 
+    {
+      node._hc = ids[node.id]._hc;
+    }
+  }
+};
+
+// Returns the selected node
+
+dTree.prototype.getSelected = function() {
+
+  var sn = this.getCookie('cs' + this.obj);
+
+  return (sn) ? sn : null;
+
+};
+
+
+
+// Highlights the selected node
+
+dTree.prototype.s = function(id) {
+
+  if (!this.config.useSelection) return;
+
+  var cn = this.aNodes[id];
+
+  if (cn._hc && !this.config.folderLinks) return;
+
+  if (this.selectedNode != id) {
+
+    if (this.selectedNode || this.selectedNode==0) {
+
+      eOld = document.getElementById("s" + this.obj + this.selectedNode);
+
+      eOld.className = "node";
+
+    }
+
+    eNew = document.getElementById("s" + this.obj + id);
+
+    eNew.className = "nodeSel";
+
+    this.selectedNode = id;
+
+    if (this.config.useCookies) this.setCookie('cs' + this.obj, cn.id);
+
+  }
+
+};
+
+
+
+// Toggle Open or close
+
+dTree.prototype.o = function(id) {
+
+  var cn = this.aNodes[id];
+
+  this.nodeStatus(!cn._io, id, cn._ls);
+
+  cn._io = !cn._io;
+
+  if (this.config.closeSameLevel) this.closeLevel(cn);
+
+  if (this.config.useCookies) this.updateCookie();
+
+};
+
+
+
+// Open or close all nodes
+
+dTree.prototype.oAll = function(status) {
+
+  for (var n=0; n<this.aNodes.length; n++) {
+
+    if (this.aNodes[n]._hc && this.aNodes[n].pid != this.root.id) {
+
+      this.nodeStatus(status, n, this.aNodes[n]._ls)
+
+      this.aNodes[n]._io = status;
+
+    }
+
+  }
+
+  if (this.config.useCookies) this.updateCookie();
+
+};
+
+
+
+// Opens the tree to a specific node
+
+dTree.prototype.openTo = function(nId, bSelect, bFirst) {
+
+  if (!bFirst) {
+
+    for (var n=0; n<this.aNodes.length; n++) {
+
+      if (this.aNodes[n].id == nId) {
+
+        nId=n;
+
+        break;
+
+      }
+
+    }
+
+  }
+
+  var cn=this.aNodes[nId];
+
+  if (cn.pid==this.root.id || !cn._p) return;
+
+  cn._io = true;
+
+  cn._is = bSelect;
+
+  if (this.completed && cn._hc) this.nodeStatus(true, cn._ai, cn._ls);
+
+  if (this.completed && bSelect) this.s(cn._ai);
+
+  else if (bSelect) this._sn=cn._ai;
+
+  this.openTo(cn._p._ai, false, true);
+
+};
+
+
+
+// Closes all nodes on the same level as certain node
+
+dTree.prototype.closeLevel = function(node) {
+
+  for (var n=0; n<this.aNodes.length; n++) {
+
+    if (this.aNodes[n].pid == node.pid && this.aNodes[n].id != node.id && this.aNodes[n]._hc) {
+
+      this.nodeStatus(false, n, this.aNodes[n]._ls);
+
+      this.aNodes[n]._io = false;
+
+      this.closeAllChildren(this.aNodes[n]);
+
+    }
+
+  }
+
+}
+
+
+
+// Closes all children of a node
+
+dTree.prototype.closeAllChildren = function(node) {
+
+  for (var n=0; n<this.aNodes.length; n++) {
+
+    if (this.aNodes[n].pid == node.id && this.aNodes[n]._hc) {
+
+      if (this.aNodes[n]._io) this.nodeStatus(false, n, this.aNodes[n]._ls);
+
+      this.aNodes[n]._io = false;
+
+      this.closeAllChildren(this.aNodes[n]);
+
+    }
+
+  }
+
+}
+
+
+
+// Change the status of a node(open or closed)
+
+dTree.prototype.nodeStatus = function(status, id, bottom) {
+
+  eDiv	= document.getElementById('d' + this.obj + id);
+
+  eJoin	= document.getElementById('j' + this.obj + id);
+
+  if (this.config.useIcons) {
+
+    eIcon	= document.getElementById('i' + this.obj + id);
+
+    eIcon.src = (status) ? this.aNodes[id].iconOpen : this.aNodes[id].icon;
+
+  }
+
+  eJoin.src = (this.config.useLines)?
+
+  ((status)?((bottom)?this.icon.minusBottom:this.icon.minus):((bottom)?this.icon.plusBottom:this.icon.plus)):
+
+  ((status)?this.icon.nlMinus:this.icon.nlPlus);
+
+  eDiv.style.display = (status) ? 'block': 'none';
+
+};
+
+
+
+
+
+// [Cookie] Clears a cookie
+
+dTree.prototype.clearCookie = function() {
+
+  var now = new Date();
+
+  var yesterday = new Date(now.getTime() - 1000 * 60 * 60 * 24);
+
+  this.setCookie('co'+this.obj, 'cookieValue', yesterday);
+
+  this.setCookie('cs'+this.obj, 'cookieValue', yesterday);
+
+};
+
+
+
+// [Cookie] Sets value in a cookie
+
+dTree.prototype.setCookie = function(cookieName, cookieValue, expires, path, domain, secure) {
+
+  document.cookie =
+
+    escape(cookieName) + '=' + escape(cookieValue)
+
+    + (expires ? '; expires=' + expires.toGMTString() : '')
+
+    + (path ? '; path=' + path : '')
+
+    + (domain ? '; domain=' + domain : '')
+
+    + (secure ? '; secure' : '');
+
+};
+
+
+
+// [Cookie] Gets a value from a cookie
+
+dTree.prototype.getCookie = function(cookieName) {
+
+  var cookieValue = '';
+
+  var posName = document.cookie.indexOf(escape(cookieName) + '=');
+
+  if (posName != -1) {
+
+    var posValue = posName + (escape(cookieName) + '=').length;
+
+    var endPos = document.cookie.indexOf(';', posValue);
+
+    if (endPos != -1) cookieValue = unescape(document.cookie.substring(posValue, endPos));
+
+    else cookieValue = unescape(document.cookie.substring(posValue));
+
+  }
+
+  return (cookieValue);
+
+};
+
+
+
+// [Cookie] Returns ids of open nodes as a string
+
+dTree.prototype.updateCookie = function() {
+
+  var str = '';
+
+  for (var n=0; n<this.aNodes.length; n++) {
+
+    if (this.aNodes[n]._io && this.aNodes[n].pid != this.root.id) {
+
+      if (str) str += '.';
+
+      str += this.aNodes[n].id;
+
+    }
+
+  }
+
+  this.setCookie('co' + this.obj, str);
+
+};
+
+
+
+// [Cookie] Checks if a node id is in a cookie
+
+dTree.prototype.isOpen = function(id) {
+
+  var aOpen = this.getCookie('co' + this.obj).split('.');
+
+  for (var n=0; n<aOpen.length; n++)
+
+    if (aOpen[n] == id) return true;
+
+  return false;
+
+};
+
+
+
+// If Push and pop is not implemented by the browser
+
+if (!Array.prototype.push) {
+
+  Array.prototype.push = function array_push() {
+
+    for(var i=0;i<arguments.length;i++)
+
+      this[this.length]=arguments[i];
+
+    return this.length;
+
+  };
+
+}
+
+if (!Array.prototype.pop) {
+
+  Array.prototype.pop = function array_pop() {
+
+    lastElement = this[this.length-1];
+
+    this.length = Math.max(this.length-1,0);
+
+    return lastElement;
+
+  };
+
+}

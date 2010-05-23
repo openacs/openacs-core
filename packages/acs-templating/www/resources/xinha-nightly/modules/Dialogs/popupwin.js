@@ -1,3 +1,179 @@
-/* This compressed file is part of Xinha. For uncompressed sources, forum, and bug reports, go to xinha.org */
-/* This file is part of version 0.96beta2 released Fri, 20 Mar 2009 11:01:14 +0100 */
-function PopupWin(d,g,i,e){this.editor=d;this.handler=i;var f=window.open("","__ha_dialog","toolbar=no,menubar=no,personalbar=no,width=600,height=600,left=20,top=40,scrollbars=no,resizable=yes");this.window=f;var h=f.document;this.doc=h;var j=this;var a=document.baseURI||document.URL;if(a&&a.match(/(.*)\/([^\/]+)/)){a=RegExp.$1+"/"}if(typeof _editor_url!="undefined"&&!(/^\//.test(_editor_url))&&!(/http:\/\//.test(_editor_url))){a+=_editor_url}else{a=_editor_url}if(!(/\/$/.test(a))){a+="/"}this.baseURL=a;h.open();var c="<html><head><title>"+g+"</title>\n";c+='<style type="text/css">@import url('+_editor_url+"Xinha.css);</style>\n";if(_editor_skin!=""){c+='<style type="text/css">@import url('+_editor_url+"skins/"+_editor_skin+"/skin.css);</style>\n"}c+="</head>\n";c+='<body class="dialog popupwin" id="--HA-body"></body></html>';h.write(c);h.close();function b(){var k=h.body;if(!k){setTimeout(b,25);return false}f.title=g;h.documentElement.style.padding="0px";h.documentElement.style.margin="0px";var l=h.createElement("div");l.className="content";j.content=l;k.appendChild(l);j.element=k;e(j);f.focus()}b()}PopupWin.prototype.callHandler=function(){var c=["input","textarea","select"];var h={};for(var f=c.length;--f>=0;){var a=c[f];var d=this.content.getElementsByTagName(a);for(var b=0;b<d.length;++b){var e=d[b];var g=e.value;if(e.tagName.toLowerCase()=="input"){if(e.type=="checkbox"){g=e.checked}}h[e.name]=g}}this.handler(this,h);return false};PopupWin.prototype.close=function(){this.window.close()};PopupWin.prototype.addButtons=function(){var a=this;var e=this.doc.createElement("div");this.content.appendChild(e);e.id="buttons";e.className="buttons";for(var d=0;d<arguments.length;++d){var c=arguments[d];var b=this.doc.createElement("button");e.appendChild(b);b.innerHTML=Xinha._lc(c,"Xinha");switch(c.toLowerCase()){case"ok":Xinha.addDom0Event(b,"click",function(){a.callHandler();a.close();return false});break;case"cancel":Xinha.addDom0Event(b,"click",function(){a.close();return false});break}}};PopupWin.prototype.showAtElement=function(){var a=this;setTimeout(function(){var b=a.content.offsetWidth+4;var e=a.content.offsetHeight+4;var d=a.content;var c=d.style;c.position="absolute";c.left=parseInt((b-d.offsetWidth)/2,10)+"px";c.top=parseInt((e-d.offsetHeight)/2,10)+"px";if(Xinha.is_gecko){a.window.innerWidth=b;a.window.innerHeight=e}else{a.window.resizeTo(b+8,e+70)}},25)};
+// (c) dynarch.com 2003-2004
+// Distributed under the same terms as HTMLArea itself.
+
+function PopupWin(editor, title, handler, initFunction)
+{
+  this.editor = editor;
+  this.handler = handler;
+  var dlg = window.open("", "__ha_dialog", "toolbar=no,menubar=no,personalbar=no,width=600,height=600,left=20,top=40,scrollbars=no,resizable=yes");
+  this.window = dlg;
+  var doc = dlg.document;
+  this.doc = doc;
+  var self = this;
+
+  var base = document.baseURI || document.URL;
+  if ( base && base.match(/(.*)\/([^\/]+)/) )
+  {
+    base = RegExp.$1 + "/";
+  }
+  // @fixme: why using a regex here and not a simple string test ?
+  if ( typeof _editor_url != "undefined" && ! ( /^\//.test(_editor_url) ) && ! ( /http:\/\//.test(_editor_url) ) )
+  {
+    // _editor_url doesn't start with '/' which means it's relative
+    // FIXME: there's a problem here, it could be http:// which
+    // doesn't start with slash but it's not relative either.
+    base += _editor_url;
+  }
+  else
+  {
+    base = _editor_url;
+  }
+ 
+  // @fixme: why using a regex here and not a simple string test ?
+  if ( ! ( /\/$/.test(base) ) )
+  {
+    // base does not end in slash, add it now
+    base += '/';
+  }
+  this.baseURL = base;
+
+  doc.open();
+  var html = "<html><head><title>" + title + "</title>\n";
+  // html += "<base href='" + base + "htmlarea.js' />\n";
+  html += '<style type="text/css">@import url(' + _editor_url + 'Xinha.css);</style>\n';
+  if ( _editor_skin != "" )
+  {
+    html += '<style type="text/css">@import url(' + _editor_url + 'skins/' + _editor_skin + '/skin.css);</style>\n';
+  }
+  html += "</head>\n";
+  html += '<body class="dialog popupwin" id="--HA-body"></body></html>';
+  doc.write(html);
+  doc.close();
+
+  // sometimes I Hate Mozilla... ;-(
+  function init2()
+  {
+    var body = doc.body;
+    if ( !body )
+    {
+      setTimeout(init2, 25);
+      return false;
+    }
+    dlg.title = title;
+    doc.documentElement.style.padding = "0px";
+    doc.documentElement.style.margin = "0px";
+    var content = doc.createElement("div");
+    content.className = "content";
+    self.content = content;
+    body.appendChild(content);
+    self.element = body;
+    initFunction(self);
+    dlg.focus();
+  }
+  init2();
+}
+
+PopupWin.prototype.callHandler = function()
+{
+  var tags = ["input", "textarea", "select"];
+  var params = {};
+  for ( var ti = tags.length; --ti >= 0; )
+  {
+    var tag = tags[ti];
+    var els = this.content.getElementsByTagName(tag);
+    for ( var j = 0; j < els.length; ++j )
+    {
+      var el = els[j];
+      var val = el.value;
+      if ( el.tagName.toLowerCase() == "input" )
+      {
+        if ( el.type == "checkbox" )
+        {
+          val = el.checked;
+        }
+      }
+      params[el.name] = val;
+    }
+  }
+  this.handler(this, params);
+  return false;
+};
+
+PopupWin.prototype.close = function()
+{
+  this.window.close();
+};
+
+PopupWin.prototype.addButtons = function()
+{
+  // @fixme: isn't self a predefined variable used to access self frame in most browsers ?
+  //         if yes, then we break it here
+  var self = this;
+  var div = this.doc.createElement("div");
+  this.content.appendChild(div);
+  div.id = "buttons";
+  div.className = "buttons";
+  for ( var i = 0; i < arguments.length; ++i )
+  {
+    var btn = arguments[i];
+    var button = this.doc.createElement("button");
+    div.appendChild(button);
+    button.innerHTML = Xinha._lc(btn, 'Xinha');
+    switch (btn.toLowerCase())
+    {
+      case "ok":
+        Xinha.addDom0Event(button, 'click',
+          function()
+          {
+            self.callHandler();
+            self.close();
+            return false;
+          }
+        );
+      break;
+      case "cancel":
+        Xinha.addDom0Event(button, 'click',
+          function()
+          {
+            self.close();
+            return false;
+          }
+        );
+      break;
+    }
+  }
+};
+
+PopupWin.prototype.showAtElement = function()
+{
+  var self = this;
+  // Mozilla needs some time to realize what's goin' on..
+  setTimeout(function()
+    {
+      var w = self.content.offsetWidth + 4;
+      var h = self.content.offsetHeight + 4;
+      // size to content -- that's fuckin' buggy in all fuckin' browsers!!!
+      // so that we set a larger size for the dialog window and then center
+      // the element inside... phuck!
+
+      // center...
+      var el = self.content;
+      var s = el.style;
+      // s.width = el.offsetWidth + "px";
+      // s.height = el.offsetHeight + "px";
+      s.position = "absolute";
+      s.left = parseInt((w - el.offsetWidth) / 2, 10) + "px";
+      s.top = parseInt((h - el.offsetHeight) / 2, 10) + "px";
+      if (Xinha.is_gecko)
+      {
+        self.window.innerWidth = w;
+        self.window.innerHeight = h;
+      }
+      else
+      {
+        self.window.resizeTo(w + 8, h + 70);
+      }
+      
+    },
+    25);
+};

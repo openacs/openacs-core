@@ -1,3 +1,90 @@
-/* This compressed file is part of Xinha. For uncompressed sources, forum, and bug reports, go to xinha.org */
-/* This file is part of version 0.96beta2 released Fri, 20 Mar 2009 11:01:14 +0100 */
-InsertTable._pluginInfo={name:"InsertTable",origin:"Xinha Core",version:"$LastChangedRevision: 1085 $".replace(/^[^:]*:\s*(.*)\s*\$$/,"$1"),developer:"The Xinha Core Developer Team",developer_url:"$HeadURL: http://svn.xinha.org/trunk/modules/InsertTable/insert_table.js $".replace(/^[^:]*:\s*(.*)\s*\$$/,"$1"),sponsor:"",sponsor_url:"",license:"htmlArea"};function InsertTable(c){this.editor=c;var a=c.config;var b=this;c.config.btnList.inserttable[3]=function(){b.show()}}InsertTable.prototype._lc=function(a){return Xinha._lc(a,"Xinha")};InsertTable.prototype.onGenerateOnce=function(){InsertTable.loadAssets()};InsertTable.loadAssets=function(){var self=InsertTable;if(self.loading){return}self.loading=true;Xinha._getback(_editor_url+"modules/InsertTable/dialog.html",function(getback){self.html=getback;self.dialogReady=true});Xinha._getback(_editor_url+"modules/InsertTable/pluginMethods.js",function(getback){eval(getback);self.methodsReady=true})};InsertTable.prototype.onUpdateToolbar=function(){if(!(InsertTable.dialogReady&&InsertTable.methodsReady)){this.editor._toolbarObjects.inserttable.state("enabled",false)}else{this.onUpdateToolbar=null}};InsertTable.prototype.prepareDialog=function(){var a=this;var c=this.editor;var b=this.dialog=new Xinha.Dialog(c,InsertTable.html,"Xinha",{width:400});b.getElementById("ok").onclick=function(){a.apply()};b.getElementById("cancel").onclick=function(){a.dialog.hide()};this.borderColorPicker=new Xinha.colorPicker.InputBinding(b.getElementById("border_color"));this.dialog.onresize=function(){this.getElementById("layout_fieldset").style.width=(this.width/2)+50+"px";this.getElementById("spacing_fieldset").style.width=(this.width/2)-120+"px"};this.dialogReady=true};
+
+  /*--------------------------------------:noTabs=true:tabSize=2:indentSize=2:--
+    --  Xinha (is not htmlArea) - http://xinha.org
+    --
+    --  Use of Xinha is granted by the terms of the htmlArea License (based on
+    --  BSD license)  please read license.txt in this package for details.
+    --
+    --  Copyright (c) 2005-2008 Xinha Developer Team and contributors
+    --
+    --  Xinha was originally based on work by Mihai Bazon which is:
+    --      Copyright (c) 2003-2004 dynarch.com.
+    --      Copyright (c) 2002-2003 interactivetools.com, inc.
+    --      This copyright notice MUST stay intact for use.
+    --
+    --  This is the Xinha standard implementation of a table insertion plugin
+    --
+    --  The file is loaded by the Xinha Core when no alternative method (plugin) is loaded.
+    --
+    --
+    --  $HeadURL: http://svn.xinha.org/trunk/modules/InsertTable/insert_table.js $
+    --  $LastChangedDate: 2008-10-13 06:52:26 +1300 (Mon, 13 Oct 2008) $
+    --  $LastChangedRevision: 1085 $
+    --  $LastChangedBy: ray $
+    --------------------------------------------------------------------------*/
+InsertTable._pluginInfo = {
+  name          : "InsertTable",
+  origin        : "Xinha Core",
+  version       : "$LastChangedRevision: 1085 $".replace(/^[^:]*:\s*(.*)\s*\$$/, '$1'),
+  developer     : "The Xinha Core Developer Team",
+  developer_url : "$HeadURL: http://svn.xinha.org/trunk/modules/InsertTable/insert_table.js $".replace(/^[^:]*:\s*(.*)\s*\$$/, '$1'),
+  sponsor       : "",
+  sponsor_url   : "",
+  license       : "htmlArea"
+};
+
+function InsertTable(editor) {
+	this.editor = editor;
+	var cfg = editor.config;
+	var self = this;
+
+	editor.config.btnList.inserttable[3] = function() { self.show(); }
+      }
+
+InsertTable.prototype._lc = function(string) {
+	return Xinha._lc(string, 'Xinha');
+};
+
+
+InsertTable.prototype.onGenerateOnce = function()
+{
+	InsertTable.loadAssets();
+};
+InsertTable.loadAssets = function()
+{
+	var self = InsertTable;
+	if (self.loading) return;
+	self.loading = true;
+	Xinha._getback(_editor_url + 'modules/InsertTable/dialog.html', function(getback) { self.html = getback; self.dialogReady = true; });
+	Xinha._getback(_editor_url + 'modules/InsertTable/pluginMethods.js', function(getback) { eval(getback); self.methodsReady = true; });
+};
+
+InsertTable.prototype.onUpdateToolbar = function()
+{ 
+  if (!(InsertTable.dialogReady && InsertTable.methodsReady))
+	{
+	  this.editor._toolbarObjects.inserttable.state("enabled", false);
+	}
+	else this.onUpdateToolbar = null;
+};
+
+InsertTable.prototype.prepareDialog = function()
+{
+	var self = this;
+	var editor = this.editor;
+
+	var dialog = this.dialog = new Xinha.Dialog(editor, InsertTable.html, 'Xinha',{width:400})
+	// Connect the OK and Cancel buttons
+	dialog.getElementById('ok').onclick = function() {self.apply();}
+	dialog.getElementById('cancel').onclick = function() { self.dialog.hide()};
+  
+	this.borderColorPicker = new Xinha.colorPicker.InputBinding(dialog.getElementById('border_color'));
+
+	this.dialog.onresize = function ()
+	{
+		this.getElementById("layout_fieldset").style.width =(this.width / 2) + 50 + 'px';
+    this.getElementById("spacing_fieldset").style.width =(this.width / 2) - 120 + 'px'; 
+	}
+
+	this.dialogReady = true;
+};

@@ -39,6 +39,25 @@
   </style>
   <script type="text/javascript">
  // <![CDATA[
+// START - Added for compatibility with ASCIIMathML 2.0
+var AMtranslated = false;
+// Next 2 functions copied from ASCIIMathML 1.4.7
+function AMcreateElementXHTML(t) {
+  if (isIE) return document.createElement(t);
+  else return document.createElementNS("http://www.w3.org/1999/xhtml", t);
+}
+function AMinitSymbols() {
+  var texsymbols = [], i;
+  for (i=0; i<AMsymbols.length; i++)
+    if (AMsymbols[i].tex) 
+      texsymbols[texsymbols.length] = {input:AMsymbols[i].tex, 
+        tag:AMsymbols[i].tag, output:AMsymbols[i].output, ttype:AMsymbols[i].ttype};
+  AMsymbols = AMsymbols.concat(texsymbols);
+  AMsymbols.sort(compareNames);
+  for (i=0; i<AMsymbols.length; i++) AMnames[i] = AMsymbols[i].input;
+}
+// END - Added for compatibility with ASCIIMathML 2.0
+
    window.resizeTo(500, 300);
 var showasciiformulaonhover = false;
 if (typeof Xinha == "undefined")
@@ -66,7 +85,7 @@ function preview() {
       var n = outnode.childNodes.length;
       for (var i = 0; i < n; i++)
         outnode.removeChild(outnode.firstChild);
-      outnode.appendChild(document.createComment("`"+str+"`"));
+      outnode.appendChild(document.createTextNode("`"+str+"`"));
       AMprocessNode(outnode,true);
   }
 }

@@ -1,3 +1,353 @@
-/* This compressed file is part of Xinha. For uncompressed sources, forum, and bug reports, go to xinha.org */
-/* This file is part of version 0.96beta2 released Fri, 20 Mar 2009 11:01:14 +0100 */
-function Forms(e){this.editor=e;var a=e.config;var h=Forms.btnList;var b=this;var f=["linebreak"];for(var d=0;d<h.length;++d){var c=h[d];if(!c){f.push("separator")}else{var g=c[0];if(d<3){a.registerButton(g,this._lc(c[1]),e.imgURL("ed_"+c[0]+".gif","Forms"),false,function(i,j){b.buttonPress(i,j)})}else{a.registerButton(g,this._lc(c[1]),e.imgURL("ed_"+c[0]+".gif","Forms"),false,function(i,j){b.buttonPress(i,j)},"form")}f.push(g)}}a.toolbar.push(f)}Forms._pluginInfo={name:"Forms",origin:"version: 1.0, by Nelson Bright, BrightWork, Inc., http://www.brightworkweb.com",version:"2.0",developer:"Udo Schmal",developer_url:"",sponsor:"L.N.Schaffrath NeueMedien",sponsor_url:"http://www.schaffrath-neuemedien.de/",c_owner:"Udo Schmal & Schaffrath-NeueMedien",license:"htmlArea"};Forms.btnList=[null,["form","Form"],null,["textarea","Textarea"],["select","Selection Field"],["checkbox","Checkbox"],["radio","Radio Button"],["text","Text Field"],["password","Password Field"],["file","File Field"],["button","Button"],["submit","Submit Button"],["reset","Reset Button"],["image","Image Button"],["hidden","Hidden Field"],["label","Label"],["fieldset","Field Set"]];Forms.prototype._lc=function(a){return Xinha._lc(a,"Forms")};Forms.prototype.onGenerate=function(){this.editor.addEditorStylesheet(Xinha.getPluginDir("Forms")+"/forms.css")};Forms.prototype.buttonPress=function(h,e,c){function n(p,i){this.text=p;this.value=i}var g=new Object();var k=e;var a=h._getSelection();var f=h._createRange(a);if(e=="form"){var j=h.getParentElement();var m=null;while(j&&(j.nodeType==1)&&(j.tagName.toLowerCase()!="body")){if(j.tagName.toLowerCase()=="form"){m=j;break}else{j=j.parentNode}}if(m){g.f_name=m.name;g.f_action=m.action;g.f_method=m.method;g.f_enctype=m.enctype;g.f_target=m.target}else{g.f_name="";g.f_action="";g.f_method="";g.f_enctype="";g.f_target=""}h._popupDialog("plugin://Forms/form",function(i){if(i){if(m){m.name=i.f_name;m.setAttribute("action",i.f_action);m.setAttribute("method",i.f_method);m.setAttribute("enctype",i.f_enctype);m.setAttribute("target",i.f_target)}else{m='<form name="'+i.f_name+'"';if(i.f_action!=""){m+=' action="'+i.f_action+'"'}if(i.f_method!=""){m+=' method="'+i.f_method+'"'}if(i.f_enctype!=""){m+=' enctype="'+i.f_enctype+'"'}if(i.f_target!=""){m+=' target="'+i.f_target+'"'}m+=">";h.surroundHTML(m,"&nbsp;</form>")}}},g)}else{var b="";if(typeof c=="undefined"){c=h.getParentElement();var o=c.tagName.toLowerCase();if(c&&(o=="legend")){c=c.parentElement;o=c.tagName.toLowerCase()}if(c&&!(o=="textarea"||o=="select"||o=="input"||o=="label"||o=="fieldset")){c=null}}if(c){k=c.tagName.toLowerCase();g.f_name=c.name;b=c.tagName;if(k=="input"){g.f_type=c.type;k=c.type}switch(k){case"textarea":g.f_cols=c.cols;g.f_rows=c.rows;g.f_text=c.innerHTML;g.f_wrap=c.getAttribute("wrap");g.f_readOnly=c.getAttribute("readOnly");g.f_disabled=c.getAttribute("disabled");g.f_tabindex=c.getAttribute("tabindex");g.f_accesskey=c.getAttribute("accesskey");break;case"select":g.f_size=parseInt(c.size);g.f_multiple=c.getAttribute("multiple");g.f_disabled=c.getAttribute("disabled");g.f_tabindex=c.getAttribute("tabindex");var l=new Array();for(var d=0;d<=c.options.length-1;d++){l[d]=new n(c.options[d].text,c.options[d].value)}g.f_options=l;break;case"text":case"password":g.f_value=c.value;g.f_size=c.size;g.f_maxLength=c.maxLength;g.f_readOnly=c.getAttribute("readOnly");g.f_disabled=c.getAttribute("disabled");g.f_tabindex=c.getAttribute("tabindex");g.f_accesskey=c.getAttribute("accesskey");break;case"hidden":g.f_value=c.value;break;case"submit":case"reset":g.f_value=c.value;g.f_disabled=c.getAttribute("disabled");g.f_tabindex=c.getAttribute("tabindex");g.f_accesskey=c.getAttribute("accesskey");break;case"checkbox":case"radio":g.f_value=c.value;g.f_checked=c.checked;g.f_disabled=c.getAttribute("disabled");g.f_tabindex=c.getAttribute("tabindex");g.f_accesskey=c.getAttribute("accesskey");break;case"button":g.f_value=c.value;g.f_onclick=c.getAttribute("onclick");g.f_disabled=c.getAttribute("disabled");g.f_tabindex=c.getAttribute("tabindex");g.f_accesskey=c.getAttribute("accesskey");break;case"image":g.f_value=c.value;g.f_src=c.src;g.f_disabled=c.getAttribute("disabled");g.f_tabindex=c.getAttribute("tabindex");g.f_accesskey=c.getAttribute("accesskey");break;case"file":g.f_disabled=c.getAttribute("disabled");g.f_tabindex=c.getAttribute("tabindex");g.f_accesskey=c.getAttribute("accesskey");break;case"label":g.f_text=c.innerHTML;g.f_for=c.getAttribute("for");g.f_accesskey=c.getAttribute("accesskey");break;case"fieldset":if(c.firstChild.tagName.toLowerCase()=="legend"){g.f_text=c.firstChild.innerHTML}else{g.f_text=""}break}}else{g.f_name="";switch(e){case"textarea":case"select":case"label":case"fieldset":b=e;break;default:b="input";g.f_type=e;break}g.f_options="";g.f_cols="20";g.f_rows="4";g.f_multiple="false";g.f_value="";g.f_size="";g.f_maxLength="";g.f_checked="";g.f_src="";g.f_onclick="";g.f_wrap="";g.f_readOnly="false";g.f_disabled="false";g.f_tabindex="";g.f_accesskey="";g.f_for="";g.f_text="";g.f_legend=""}h._popupDialog("plugin://Forms/"+b+".html",function(q){if(q){if(q.f_cols){if(isNaN(parseInt(q.f_cols,10))||parseInt(q.f_cols,10)<=0){q.f_cols=""}}if(q.f_rows){if(isNaN(parseInt(q.f_rows,10))||parseInt(q.f_rows,10)<=0){q.f_rows=""}}if(q.f_size){if(isNaN(parseInt(q.f_size,10))||parseInt(q.f_size,10)<=0){q.f_size=""}}if(q.f_maxlength){if(isNaN(parseInt(q.f_maxLength,10))||parseInt(q.f_maxLength,10)<=0){q.f_maxLength=""}}if(c){for(field in q){if((field=="f_text")||(field=="f_options")||(field=="f_onclick")||(field=="f_checked")){continue}if(q[field]!=""){c.setAttribute(field.substring(2,20),q[field])}else{c.removeAttribute(field.substring(2,20))}}if(k=="textarea"){c.innerHTML=q.f_text}else{if(k=="select"){c.options.length=0;var p=q.f_options;for(d=0;d<=p.length-1;d++){c.options[d]=new Option(p[d].text,p[d].value)}}else{if(k=="label"){c.innerHTML=q.f_text}else{if(k=="fieldset"){if(g.f_text!=""){if(c.firstChild.tagName.toLowerCase()=="legend"){c.firstChild.innerHTML=q.f_text}}else{}}else{if((k=="checkbox")||(k=="radio")){if(q.f_checked!=""){c.checked=true}else{c.checked=false}}else{if(q.f_onclick){c.onclick="";if(q.f_onclick!=""){c.onclick=q.f_onclick}}}}}}}}else{var i="";for(field in q){if(!q[field]){continue}if((q[field]=="")||(field=="f_text")||(field=="f_options")){continue}i+=" "+field.substring(2,20)+'="'+q[field]+'"'}if(k=="textarea"){i="<textarea"+i+">"+q.f_text+"</textarea>"}else{if(k=="select"){i="<select"+i+">";var p=q.f_options;for(d=0;d<=p.length-1;d++){i+='<option value="'+p[d].value+'">'+p[d].text+"</option>"}i+="</select>"}else{if(k=="label"){i="<label"+i+">"+q.f_text+"</label>"}else{if(k=="fieldset"){i="<fieldset"+i+">";if(q.f_legend!=""){i+="<legend>"+q.f_text+"</legend>"}i+="</fieldset>"}else{i='<input type="'+k+'"'+i+">"}}}}h.insertHTML(i)}}},g)}};
+// Form plugin for Xinha
+// Distributed under the same terms as HTMLArea itself.
+// This notice MUST stay intact for use (see license.txt).
+
+
+function Forms(editor) {
+  this.editor = editor;
+  var cfg = editor.config;
+  var bl = Forms.btnList;
+  var self = this;
+  // register the toolbar buttons provided by this plugin
+  var toolbar = ["linebreak"];
+  for (var i = 0; i < bl.length; ++i) {
+    var btn = bl[i];
+    if (!btn) {
+      toolbar.push("separator");
+    } else {
+      var id = btn[0];
+      if (i<3)
+        cfg.registerButton(id, this._lc(btn[1]), editor.imgURL("ed_" + btn[0] + ".gif", "Forms"), false,
+             function(editor, id) {
+               // dispatch button press event
+               self.buttonPress(editor, id);
+             });
+      else
+        cfg.registerButton(id, this._lc(btn[1]), editor.imgURL("ed_" + btn[0] + ".gif", "Forms"), false,
+             function(editor, id) {
+               // dispatch button press event
+               self.buttonPress(editor, id);
+             },"form");
+      toolbar.push(id);
+    }
+  }
+  // add a new line in the toolbar
+  cfg.toolbar.push(toolbar);
+}
+
+Forms._pluginInfo = {
+  name          : "Forms",
+  origin        : "version: 1.0, by Nelson Bright, BrightWork, Inc., http://www.brightworkweb.com",
+  version       : "2.0",
+  developer     : "Udo Schmal",
+  developer_url : "",
+  sponsor       : "L.N.Schaffrath NeueMedien",
+  sponsor_url   : "http://www.schaffrath-neuemedien.de/",
+  c_owner       : "Udo Schmal & Schaffrath-NeueMedien",
+  license       : "htmlArea"
+};
+
+// the list of buttons added by this plugin
+Forms.btnList = [
+  // form properties button
+  null, // separator
+  ["form",        "Form"],
+  null, // separator
+  // form elements
+  ["textarea",    "Textarea"],
+  ["select",      "Selection Field"],
+  ["checkbox",    "Checkbox"],
+  ["radio",       "Radio Button"],
+  ["text",        "Text Field"],
+  ["password",    "Password Field"],
+  ["file",        "File Field"],
+  ["button",      "Button"],
+  ["submit",      "Submit Button"],
+  ["reset",       "Reset Button"],
+  ["image",       "Image Button"],
+  ["hidden",      "Hidden Field"],
+  ["label",       "Label"],
+  ["fieldset",    "Field Set"]
+  ];
+
+Forms.prototype._lc = function(string) {
+    return Xinha._lc(string, 'Forms');
+};
+
+Forms.prototype.onGenerate = function() {
+  this.editor.addEditorStylesheet(Xinha.getPluginDir("Forms") + '/forms.css');
+};
+
+Forms.prototype.buttonPress = function(editor,button_id, node) {
+  function optionValues(text,value) {
+    this.text = text;
+    this.value = value;
+  }
+  var outparam = new Object();
+  var type = button_id;
+  var sel = editor._getSelection();
+  var range = editor._createRange(sel);
+  if (button_id=="form") { //Form
+    // see if selection is inside an existing 'form' tag
+    var pe = editor.getParentElement();
+    var frm = null;
+    while (pe && (pe.nodeType == 1) && (pe.tagName.toLowerCase() != 'body')) {
+      if(pe.tagName.toLowerCase() == "form") {
+        frm = pe;
+        break;
+      } else
+        pe = pe.parentNode;
+    }
+    if (frm) {
+      outparam.f_name = frm.name;
+      outparam.f_action = frm.action;
+      outparam.f_method = frm.method;
+      outparam.f_enctype = frm.enctype;
+      outparam.f_target = frm.target;
+    } else {;
+      outparam.f_name = "";
+      outparam.f_action = "";
+      outparam.f_method = "";
+      outparam.f_enctype = "";
+      outparam.f_target = "";
+    }
+    editor._popupDialog("plugin://Forms/form", function(param) {
+      if (param) {
+        if(frm) {
+          frm.name = param["f_name"];
+          frm.setAttribute("action", param["f_action"]);
+          frm.setAttribute("method", param["f_method"]);
+          frm.setAttribute("enctype",param["f_enctype"]);
+          frm.setAttribute("target", param["f_target"]);
+        } else {
+          frm = '<form name="' + param["f_name"] + '"';
+          if (param["f_action"] != "") frm += ' action="' + param["f_action"] + '"';
+          if (param["f_method"] != "") frm += ' method="' + param["f_method"] + '"';
+          if (param["f_enctype"] != "") frm += ' enctype="' + param["f_enctype"] + '"';
+          if (param["f_target"] != "") frm += ' target="' + param["f_target"] + '"';
+          frm += '>';
+          editor.surroundHTML(frm, '&nbsp;</form>');
+        }
+      }
+    }, outparam);
+
+  } else { // form element (checkbox, radio, text, password, textarea, select, button, submit, reset, image, hidden)
+    var tagName = "";
+    // see if selection is an form element
+    if (typeof node == "undefined") {
+      node = editor.getParentElement();
+      var tag = node.tagName.toLowerCase()
+      if (node && (tag == "legend")) {
+        node = node.parentElement;
+        tag = node.tagName.toLowerCase();
+      }
+      if (node && !(tag == "textarea" || tag == "select" || tag == "input" || tag == "label" || tag == "fieldset"))
+        node = null;
+    }
+
+    if(node) {
+      type = node.tagName.toLowerCase();
+      outparam.f_name = node.name;
+      tagName = node.tagName;
+      if (type == "input") {
+        outparam.f_type = node.type;
+        type = node.type;
+      }
+      switch (type) {
+        case "textarea":
+          outparam.f_cols = node.cols;
+          outparam.f_rows = node.rows;
+          outparam.f_text = node.innerHTML;
+          outparam.f_wrap = node.getAttribute("wrap");
+          outparam.f_readOnly = node.getAttribute("readOnly");
+          outparam.f_disabled = node.getAttribute("disabled");
+          outparam.f_tabindex = node.getAttribute("tabindex");
+          outparam.f_accesskey = node.getAttribute("accesskey");
+          break;
+        case "select":
+          outparam.f_size = parseInt(node.size);
+          outparam.f_multiple = node.getAttribute("multiple");
+          outparam.f_disabled = node.getAttribute("disabled");
+          outparam.f_tabindex = node.getAttribute("tabindex");
+          var a_options = new Array();
+          for (var i=0; i<=node.options.length-1; i++) {
+            a_options[i] = new optionValues(node.options[i].text, node.options[i].value);
+          }
+          outparam.f_options = a_options;
+          break;
+        case "text":
+        case "password":
+          outparam.f_value = node.value;
+          outparam.f_size = node.size;
+          outparam.f_maxLength = node.maxLength;
+          outparam.f_readOnly = node.getAttribute("readOnly");
+          outparam.f_disabled = node.getAttribute("disabled");
+          outparam.f_tabindex = node.getAttribute("tabindex");
+          outparam.f_accesskey = node.getAttribute("accesskey");
+          break;
+        case "hidden":
+          outparam.f_value = node.value;
+          break;
+        case "submit":
+        case "reset":
+          outparam.f_value = node.value;
+          outparam.f_disabled = node.getAttribute("disabled");
+          outparam.f_tabindex = node.getAttribute("tabindex");
+          outparam.f_accesskey = node.getAttribute("accesskey");
+          break;
+        case "checkbox":
+        case "radio":
+          outparam.f_value = node.value;
+          outparam.f_checked = node.checked;
+          outparam.f_disabled = node.getAttribute("disabled");
+          outparam.f_tabindex = node.getAttribute("tabindex");
+          outparam.f_accesskey = node.getAttribute("accesskey");
+          break;
+        case "button":
+          outparam.f_value = node.value;
+          outparam.f_onclick = node.getAttribute("onclick");
+          outparam.f_disabled = node.getAttribute("disabled");
+          outparam.f_tabindex = node.getAttribute("tabindex");
+          outparam.f_accesskey = node.getAttribute("accesskey");
+          break;
+        case "image":
+          outparam.f_value = node.value;
+          outparam.f_src = node.src;
+          outparam.f_disabled = node.getAttribute("disabled");
+          outparam.f_tabindex = node.getAttribute("tabindex");
+          outparam.f_accesskey = node.getAttribute("accesskey");
+          break;
+        case "file":
+          outparam.f_disabled = node.getAttribute("disabled");
+          outparam.f_tabindex = node.getAttribute("tabindex");
+          outparam.f_accesskey = node.getAttribute("accesskey");
+          break;
+        case "label":
+          outparam.f_text = node.innerHTML;
+          outparam.f_for = node.getAttribute("for");
+          outparam.f_accesskey = node.getAttribute("accesskey");
+          break;
+        case "fieldset":
+          if(node.firstChild.tagName.toLowerCase()=="legend")
+            outparam.f_text = node.firstChild.innerHTML;
+          else
+            outparam.f_text = "";
+          break;
+      }
+    } else {
+      outparam.f_name = "";
+      switch (button_id) {
+        case "textarea":
+        case "select":
+        case "label":
+        case "fieldset":
+          tagName = button_id;
+          break;
+        default:
+          tagName = "input";
+          outparam.f_type = button_id;
+          break;
+      }
+      outparam.f_options = "";
+      outparam.f_cols = "20";
+      outparam.f_rows = "4";
+      outparam.f_multiple = "false";
+      outparam.f_value = "";
+      outparam.f_size = "";
+      outparam.f_maxLength = "";
+      outparam.f_checked = "";
+      outparam.f_src = "";
+      outparam.f_onclick = "";
+      outparam.f_wrap = "";
+      outparam.f_readOnly = "false";
+      outparam.f_disabled = "false";
+      outparam.f_tabindex = "";
+      outparam.f_accesskey = "";
+      outparam.f_for = "";
+      outparam.f_text = "";
+      outparam.f_legend = "";
+    }
+    editor._popupDialog("plugin://Forms/" + tagName + ".html", function(param) {
+      if (param) {
+        if(param["f_cols"])
+          if (isNaN(parseInt(param["f_cols"],10)) || parseInt(param["f_cols"],10) <= 0)
+            param["f_cols"] = "";
+        if(param["f_rows"])
+          if(isNaN(parseInt(param["f_rows"],10)) || parseInt(param["f_rows"],10) <= 0)
+            param["f_rows"] = "";
+        if(param["f_size"])
+          if(isNaN(parseInt(param["f_size"],10)) || parseInt(param["f_size"],10) <= 0)
+            param["f_size"] = "";
+        if(param["f_maxlength"])
+          if(isNaN(parseInt(param["f_maxLength"],10)) || parseInt(param["f_maxLength"],10) <= 0)
+            param["f_maxLength"] = "";
+        if(node) {
+          //prepare existing Element
+          for (field in param) {
+            //alert(field.substring(2,20) + '=' + param[field]);  //to be silent! by htanaka
+            if ((field=="f_text") || (field=="f_options") || (field=="f_onclick") || (field=="f_checked"))continue;
+            if (param[field] != "")
+              node.setAttribute(field.substring(2,20), param[field]);
+            else
+              node.removeAttribute(field.substring(2,20));
+          }
+          if (type == "textarea") {
+            node.innerHTML = param["f_text"];
+          } else if(type == "select") {
+            node.options.length = 0;
+            var optionsList =  param["f_options"];
+            for (i=0; i<= optionsList.length-1; i++) {
+              node.options[i] = new Option(optionsList[i].text, optionsList[i].value)
+            }
+          } else if(type == "label") {
+            node.innerHTML = param["f_text"];
+          } else if(type == "fieldset") {
+            if(outparam.f_text != "") {
+              if(node.firstChild.tagName.toLowerCase()=="legend")
+                node.firstChild.innerHTML = param["f_text"];
+            } else {}// not implemented jet
+          } else if((type == "checkbox") || (type == "radio")) { //input
+              if(param["f_checked"]!="")
+                node.checked = true;
+              else
+                node.checked = false;
+          } else {
+            if(param["f_onclick"]){
+              node.onclick = "";
+              if(param["f_onclick"]!="")
+                node.onclick = param["f_onclick"];
+            }
+          }
+        } else {
+          //create Element
+          var text = "";
+          for (field in param) {
+            if (!param[field]) continue;
+            if ((param[field]=="") || (field=="f_text")|| (field=="f_options"))continue;
+            text += " " + field.substring(2,20) + '="' + param[field] + '"';
+          }
+
+          if(type == "textarea") {
+            text = '<textarea' + text + '>' + param["f_text"] + '</textarea>';
+          } else if(type == "select") {
+            text = '<select' + text + '>';
+            var optionsList =  param["f_options"];
+            for (i=0; i<= optionsList.length-1; i++) {
+              text += '<option value="'+optionsList[i].value+'">'+optionsList[i].text+'</option>';
+            }
+            text += '</select>';
+          } else if(type == "label") {
+            text = '<label' + text + '>' + param["f_text"] + '</label>';
+          } else if(type == "fieldset") {
+            text = '<fieldset' + text + '>';
+            if (param["f_legend"] != "") text += '<legend>' + param["f_text"] + '</legend>';
+            text += '</fieldset>';
+          } else {
+            text = '<input type="'+type+'"' + text + '>';
+          }
+          editor.insertHTML(text);
+        }
+      }
+    }, outparam);
+  }
+};

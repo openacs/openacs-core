@@ -14,9 +14,9 @@
     --  use of the file as a boilerplate.
     --
     --  $HeadURL: http://svn.xinha.org/trunk/examples/testbed.html $
-    --  $LastChangedDate: 2008-10-12 19:42:42 +0200 (So, 12. Okt 2008) $
-    --  $LastChangedRevision: 1084 $
-    --  $LastChangedBy: ray $
+    --  $LastChangedDate: 2009-11-08 17:36:46 +1300 (Sun, 08 Nov 2009) $
+    --  $LastChangedRevision: 1197 $
+    --  $LastChangedBy: gogo $
     --------------------------------------------------------------------------->
 
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -54,7 +54,7 @@
 
       xinha_plugins = xinha_plugins ? xinha_plugins :
       [
-        'CharacterMap', 'SpellChecker', 'Linker'
+        'CharacterMap', 'SpellChecker', 'Linker', 'ContextMenu'
       ];
              // THIS BIT OF JAVASCRIPT LOADS THE PLUGINS, NO TOUCHING  :)
              if(!Xinha.loadPlugins(xinha_plugins, xinha_init)) return;
@@ -85,6 +85,7 @@
        xinha_config = xinha_config ? xinha_config : new Xinha.Config();
        xinha_config.fullPage = true;
        xinha_config.CharacterMap.mode = 'panel';
+       xinha_config.ContextMenu.customHooks = { 'a': [ ['Label', function() { alert('Action'); }, 'Tooltip', '/xinha/images/ed_copy.gif' ] ] }
 /*
        // We can load an external stylesheet like this - NOTE : YOU MUST GIVE AN ABSOLUTE URL
       //  otherwise it won't work!

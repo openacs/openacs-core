@@ -5,6 +5,87 @@ http://xinha.org
 
 Release History
 
+Xinha 0.96
+== Bugs Fixed ==
+
+ * #1425 [SmartReplace][Gecko] When inserting opening quote, the space before the cursor is deleted
+ * #1429 Problems with Apache and HEAD requests...
+ * #1478 Further important security precautions for ExtendedFileManager and ImageManager
+ * #1478 Hide all dotfiles from the Linker scanner, the linker shouldn't be showing "hidden" files.
+ * #1478 CSS fix to dTree in linker, just to make sure it's styles were not getting clobbered.
+ * #1478 Stop the Stylist from possibly adding a  duplicate stylesheet into pageStyleSheets, this was creating a subtle problem in certain circumstances.
+ * #1227  Improved handling of CSS imports in Stylist plugin.
+ * #1448 a[b.id] is undefined
+ * #1387 prevent crash in IE 
+ * #1198 Fix for bad sizing of editor.
+ * #1121 Disable tab in Internet Explorer because it exits the Xinha area.
+ * #472  Disable InsertPicture
+ * #579 Pass value to dropdown handlers.
+ * #1472 _top not respected in editing link.
+ * #1467 autofocus=false not working as expected.
+ * #1461 Special characters in image make thumbnail not appear.
+ * #1435 IE failed in TransformInnerHTML
+ * #1232 Clickable icons on ExtendedFileManager
+ * #1409 Image Properties broken in ContextMenu
+ * #1419 Stylist display problem in IE6/7, HasLayout bug.
+ * #1262 Alternative method for restoring from fullscreen mode.
+ * #1388 Change &mdash; to &8212; for xml compatability.
+ * #1093, #1377 Rewrite the InsertSmiley plugin.  Remains compatible with ray's changes in r904 if people have made a specific configuration.
+ * #1282 Opera losing it's events when designMode turned on causing status bar to not update amongst other things.
+ * r1228 Remove PersistantStorage from Newbie example, because it not actually usable atm
+ * r1229 Fix firefox version detection.
+ * r1230 avoid unecessary pollution of global namespace
+ * r1232 Removed CC license from Tango iconset, as it seems not appropriate
+ * r1232 Changed HtmlEntities plugin license to HTMLArea
+ * #1488 Fix Control Selection in IE8
+ * r1235 Change license to HTMLArea - see http://xinha.org/punbb/viewtopic.php?id=2499
+ * #1497 TransformInnerHtml handling of object tag
+ * #1498 Color picker display in new dialogs in IE6
+ * #1499 Fix focus errors in new dialogs in IE
+ * #1503 xinha_to_js did not handle booleans correctly
+ * #1509 Prevent attempting to compress REs in Safari 4
+ * #1515 Security patch to prevent rogue access to the compressors in contrib.
+ * #1518 Security patch which prevents non-default keys in xinha_pass_to_php_backend.
+ * #1518 Issue an error and ignore the special backend configuration when the key location is non default, for both the ImageManager and ExtendedFileManager deprecated config passing methods.
+ * #1209 and #1182 Upgrade Equation to use new AsciiMath, fix multiple equation editing. Thanks to Niraj Bhawnani of University of New South Wales.
+ * #1483 Fix cancel button in Equation editor.
+ * #1485 Add a double-click handler which will bring up the link/image insertion dialogs (or ImageManager/Linker) when a link or image is double clicked.
+ * #1492 Fix linker in some situations.
+ * #1471, #1508, #1510 Fix IE8 problems with TableOperations and other buttons, and absolute positioned editing.
+
+== New Features ==
+
+ * r1189 added toolbar config to Newbie example
+ * #1478 Add new method Xinha.extend to provide more classical object oriented subclasses within Javascript.
+ * #1478 Add new method Xinha.Dialog::setLocalizer() to more easily set a specific localizer for a dialog.
+ * #1478 File-Picker on arbitrary fields outside Xinha (ExtendedFileManager)
+ * #1478 Add config option to use HSpace and VSpace in ImageManager (default off)
+ * #1478 Add YouTube and Flickr support to ImageManager so that videos and Flickr images can be searched and selected in the ImageManager.
+ * #1478 Add a new dialog type "DetachedDialog" to help leverage Xinha plugins to perform tasks outside of Xinha, and an example of a simple dialog for those who wish to make their own.
+ * #1478 Link-Picker  on arbitrary fields outside Xinha (Linker)
+ * #1478 New Plugin: WysiwygWrap - combined with an appropriate pageStyleSheet(s) you can more easily simulate in Xinha what it will "look like" when that HTML is "published".
+ * #1446 Provide a means for adding custom hooks into the ContextMenu plugin.
+ * #1220 Add ability to pass extra arguments in the post to the backend handler for SuperClean.
+ * #1465  Add an option `resize_files` to both ExtendedFileManager and ImageManager, defaults true, false turns off the automatic image resizing.
+ * #1189 Add the xml:lang attribute to LangMarks plugin.  The configuration for this plugin has changed, old configurations are accepted with a warning to the console.
+ * #1433 Add a SaveOnBlur plugin, authored by Peter Siewert (with a clean up by James Sleeman).
+ * #1479 Add CSSPicker plugin.
+ * #1205 Add allow_delete and allow_edit to ImageManager
+ * #1205 Add allow_delete to ExtendedFileManager
+ * #1496 Make dialog title bar logo skinable
+ * r1243 Added a method to allow plugins to easily load assets synchronously (for dependancies). 
+ * #1502 Add new plugin MootoolsFileManager - an advanced image and file uploader/picker/inserter with multi-file-upload, progress bars, and previews.
+ * #1507 Config option to show fonts in toolbar using actual fonts.
+
+== Translation ==
+
+ * #1477 Danish translation for ExtendedFileManager and SuperClean
+ * r1205 Updated Danish translation.
+ * #1470 Contribution from Niels Baggesen to assist translators.
+ * #1454, #1455, #1456, #1457, #1458, #1459, #1460 Spanish translations.
+ * #1469 Updated danish translation.
+
+
 Xinha 0.96beta2
 Bugs Fixed
  * #1376 [IE6 & IE7 Quirksmode] Dialogs are invisible

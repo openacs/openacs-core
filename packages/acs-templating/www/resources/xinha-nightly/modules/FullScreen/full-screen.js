@@ -1,3 +1,241 @@
-/* This compressed file is part of Xinha. For uncompressed sources, forum, and bug reports, go to xinha.org */
-/* This file is part of version 0.96beta2 released Fri, 20 Mar 2009 11:01:14 +0100 */
-function FullScreen(c,b){this.editor=c;c._superclean_on=false;var a=c.config;a.registerIcon("fullscreen",[_editor_url+a.imgURL+"ed_buttons_main.png",8,0]);a.registerIcon("fullscreenrestore",[_editor_url+a.imgURL+"ed_buttons_main.png",9,0]);a.registerButton("fullscreen",this._lc("Maximize/Minimize Editor"),a.iconList.fullscreen,true,function(f,g,d){f._fullScreen()});a.addToolbarElement("fullscreen","popupeditor",0)}FullScreen._pluginInfo={name:"FullScreen",version:"1.0",developer:"James Sleeman",developer_url:"http://www.gogo.co.nz/",c_owner:"Gogo Internet Services",license:"htmlArea",sponsor:"Gogo Internet Services",sponsor_url:"http://www.gogo.co.nz/"};FullScreen.prototype._lc=function(a){return Xinha._lc(a,{url:_editor_url+"modules/FullScreen/lang/",context:"FullScreen"})};Xinha.prototype._fullScreen=function(){var g=this;var f=g.config;function j(){if(!g._isFullScreen||g._sizing){return false}g._sizing=true;var n=Xinha.viewportSize();var i=n.y-g.config.fullScreenMargins[0]-g.config.fullScreenMargins[2];var e=n.x-g.config.fullScreenMargins[1]-g.config.fullScreenMargins[3];g.sizeEditor(e+"px",i+"px",true,true);g._sizing=false;if(g._toolbarObjects.fullscreen){g._toolbarObjects.fullscreen.swapImage(f.iconList.fullscreenrestore)}}function l(){if(g._isFullScreen||g._sizing){return false}g._sizing=true;g.initSize();g._sizing=false;if(g._toolbarObjects.fullscreen){g._toolbarObjects.fullscreen.swapImage(f.iconList.fullscreen)}}function a(){if(g._isFullScreen){window.scroll(0,0);window.setTimeout(a,150)}}if(typeof this._isFullScreen=="undefined"){this._isFullScreen=false;if(g.target!=g._iframe){Xinha._addEvent(window,"resize",j)}}if(Xinha.is_gecko){this.deactivateEditor()}if(this._isFullScreen){this._htmlArea.style.position="";if(!Xinha.is_ie){this._htmlArea.style.border=""}try{if(Xinha.is_ie&&document.compatMode=="CSS1Compat"){var b=document.getElementsByTagName("html")}else{var b=document.getElementsByTagName("body")}b[0].style.overflow=""}catch(g){}this._isFullScreen=false;l();var d=this._htmlArea;while((d=d.parentNode)&&d.style){d.style.position=d._xinha_fullScreenOldPosition;d._xinha_fullScreenOldPosition=null}if(Xinha.ie_version<7){var h=document.getElementsByTagName("select");for(var c=0;c<h.length;++c){h[c].style.visibility="visible"}}window.scroll(this._unScroll.x,this._unScroll.y)}else{this._unScroll={x:(window.pageXOffset)?(window.pageXOffset):(document.documentElement)?document.documentElement.scrollLeft:document.body.scrollLeft,y:(window.pageYOffset)?(window.pageYOffset):(document.documentElement)?document.documentElement.scrollTop:document.body.scrollTop};var d=this._htmlArea;while((d=d.parentNode)&&d.style){d._xinha_fullScreenOldPosition=d.style.position;d.style.position="static"}if(Xinha.ie_version<7){var h=document.getElementsByTagName("select");var m,k;for(var c=0;c<h.length;++c){m=h[c];k=false;while(m=m.parentNode){if(m==this._htmlArea){k=true;break}}if(!k&&h[c].style.visibility!="hidden"){h[c].style.visibility="hidden"}}}window.scroll(0,0);this._htmlArea.style.position="absolute";this._htmlArea.style.zIndex=999;this._htmlArea.style.left=g.config.fullScreenMargins[3]+"px";this._htmlArea.style.top=g.config.fullScreenMargins[0]+"px";if(!Xinha.is_ie&&!Xinha.is_webkit){this._htmlArea.style.border="none"}this._isFullScreen=true;a();try{if(Xinha.is_ie&&document.compatMode=="CSS1Compat"){var b=document.getElementsByTagName("html")}else{var b=document.getElementsByTagName("body")}b[0].style.overflow="hidden"}catch(g){}j()}if(Xinha.is_gecko){this.activateEditor()}this.focusEditor()};
+function FullScreen(editor, args)
+{
+  this.editor = editor;
+  this.originalSizes = null;
+  editor._superclean_on = false;
+  var cfg = editor.config;
+
+  cfg.registerIcon('fullscreen', [_editor_url + cfg.imgURL + 'ed_buttons_main.png',8,0]);
+  cfg.registerIcon('fullscreenrestore', [_editor_url + cfg.imgURL + 'ed_buttons_main.png',9,0]);
+  
+  cfg.registerButton
+  ( 'fullscreen',
+    this._lc("Maximize/Minimize Editor"),
+    cfg.iconList.fullscreen, true,
+      function(e, objname, obj)
+      {
+        e._fullScreen();
+      }
+  );
+
+  // See if we can find 'popupeditor' and replace it with fullscreen
+  cfg.addToolbarElement("fullscreen", "popupeditor", 0);
+}
+
+FullScreen._pluginInfo =
+{
+  name     : "FullScreen",
+  version  : "1.0",
+  developer: "James Sleeman",
+  developer_url: "http://www.gogo.co.nz/",
+  c_owner      : "Gogo Internet Services",
+  license      : "htmlArea",
+  sponsor      : "Gogo Internet Services",
+  sponsor_url  : "http://www.gogo.co.nz/"
+};
+
+FullScreen.prototype._lc = function(string) {
+    return Xinha._lc(string, {url : _editor_url + 'modules/FullScreen/lang/',context:"FullScreen"});
+};
+
+/** fullScreen makes an editor take up the full window space (and resizes when the browser is resized)
+ *  the principle is the same as the "popupwindow" functionality in the original htmlArea, except
+ *  this one doesn't popup a window (it just uses to positioning hackery) so it's much more reliable
+ *  and much faster to switch between
+ */
+
+Xinha.prototype._fullScreen = function()
+{
+  var e = this;
+  var cfg = e.config;
+  function sizeItUp()
+  {
+    if(!e._isFullScreen || e._sizing) return false;
+    e._sizing = true;
+    // Width & Height of window
+    var dim = Xinha.viewportSize();
+    if(e.config.fullScreenSizeDownMethod == 'restore') 
+    {
+      e.originalSizes = {
+        x:   parseInt(e._htmlArea.style.width),
+        y:   parseInt(e._htmlArea.style.height),
+        dim: dim
+      };
+    }
+
+    var h = dim.y - e.config.fullScreenMargins[0] -  e.config.fullScreenMargins[2];
+    var w = dim.x - e.config.fullScreenMargins[1] -  e.config.fullScreenMargins[3];
+
+    e.sizeEditor(w + 'px', h + 'px',true,true);
+    e._sizing = false;
+    if ( e._toolbarObjects.fullscreen ) e._toolbarObjects.fullscreen.swapImage(cfg.iconList.fullscreenrestore); 
+  }
+
+  function sizeItDown()
+  {
+    if(e._isFullScreen || e._sizing) return false;
+    e._sizing = true;
+
+    if(e.originalSizes != null) 
+    {
+        var os = e.originalSizes;
+        var nDim = Xinha.viewportSize();
+        var nW = os.x + (nDim.x - os.dim.x);
+        var nH = os.y + (nDim.y - os.dim.y);
+        e.sizeEditor( nW + 'px', nH + 'px', e.config.sizeIncludesBars, e.config.sizeIncludesPanels);
+        e.originalSizes = null;
+    }
+    else e.initSize();
+
+    e._sizing = false;
+    if ( e._toolbarObjects.fullscreen ) e._toolbarObjects.fullscreen.swapImage(cfg.iconList.fullscreen); 
+  }
+
+  /** It's not possible to reliably get scroll events, particularly when we are hiding the scrollbars
+   *   so we just reset the scroll ever so often while in fullscreen mode
+   */
+  function resetScroll()
+  {
+    if(e._isFullScreen)
+    {
+      window.scroll(0,0);
+      window.setTimeout(resetScroll,150);
+    }
+  }
+
+  if(typeof this._isFullScreen == 'undefined')
+  {
+    this._isFullScreen = false;
+    if(e.target != e._iframe)
+    {
+      Xinha._addEvent(window, 'resize', sizeItUp);
+    }
+  }
+
+  // Gecko has a bug where if you change position/display on a
+  // designMode iframe that designMode dies.
+  if(Xinha.is_gecko)
+  {
+    this.deactivateEditor();
+  }
+
+  if(this._isFullScreen)
+  {
+    // Unmaximize
+    this._htmlArea.style.position = '';
+    if (!Xinha.is_ie ) this._htmlArea.style.border   = '';
+
+    try
+    {
+      if(Xinha.is_ie && document.compatMode == 'CSS1Compat')
+      {
+        var bod = document.getElementsByTagName('html');
+      }
+      else
+      {
+        var bod = document.getElementsByTagName('body');
+      }
+      bod[0].style.overflow='';
+    }
+    catch(e)
+    {
+      // Nutthin
+    }
+    this._isFullScreen = false;
+    sizeItDown();
+
+    // Restore all ancestor positions
+    var ancestor = this._htmlArea;
+    while((ancestor = ancestor.parentNode) && ancestor.style)
+    {
+      ancestor.style.position = ancestor._xinha_fullScreenOldPosition;
+      ancestor._xinha_fullScreenOldPosition = null;
+    }
+    
+    if ( Xinha.ie_version < 7 )
+    {
+      var selects = document.getElementsByTagName("select");
+      for ( var i=0;i<selects.length;++i )
+      {
+        selects[i].style.visibility = 'visible';
+      }
+    }
+    window.scroll(this._unScroll.x, this._unScroll.y);
+  }
+  else
+  {
+
+    // Get the current Scroll Positions
+    this._unScroll =
+    {
+     x:(window.pageXOffset)?(window.pageXOffset):(document.documentElement)?document.documentElement.scrollLeft:document.body.scrollLeft,
+     y:(window.pageYOffset)?(window.pageYOffset):(document.documentElement)?document.documentElement.scrollTop:document.body.scrollTop
+    };
+
+
+    // Make all ancestors position = static
+    var ancestor = this._htmlArea;
+    while((ancestor = ancestor.parentNode) && ancestor.style)
+    {
+      ancestor._xinha_fullScreenOldPosition = ancestor.style.position;
+      ancestor.style.position = 'static';
+    }
+    // very ugly bug in IE < 7 shows select boxes through elements that are positioned over them
+    if ( Xinha.ie_version < 7 )
+    {
+      var selects = document.getElementsByTagName("select");
+      var s, currentEditor;
+      for ( var i=0;i<selects.length;++i )
+      {
+        s = selects[i];
+        currentEditor = false;
+        while ( s = s.parentNode )
+        {
+          if ( s == this._htmlArea )
+          {
+            currentEditor = true;
+            break;
+          }
+        }
+        if ( !currentEditor && selects[i].style.visibility != 'hidden')
+        {
+          selects[i].style.visibility = 'hidden';
+        }
+      }
+    }
+    // Maximize
+    window.scroll(0,0);
+    this._htmlArea.style.position = 'absolute';
+    this._htmlArea.style.zIndex   = 999;
+    this._htmlArea.style.left     = e.config.fullScreenMargins[3] + 'px';
+    this._htmlArea.style.top      = e.config.fullScreenMargins[0] + 'px';
+    if ( !Xinha.is_ie && !Xinha.is_webkit ) this._htmlArea.style.border   = 'none';
+    this._isFullScreen = true;
+    resetScroll();
+
+    try
+    {
+      if(Xinha.is_ie && document.compatMode == 'CSS1Compat')
+      {
+        var bod = document.getElementsByTagName('html');
+      }
+      else
+      {
+        var bod = document.getElementsByTagName('body');
+      }
+      bod[0].style.overflow='hidden';
+    }
+    catch(e)
+    {
+      // Nutthin
+    }
+
+    sizeItUp();
+  }
+
+  if(Xinha.is_gecko)
+  {
+    this.activateEditor();
+  }
+  this.focusEditor();
+};

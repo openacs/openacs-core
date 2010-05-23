@@ -1,3 +1,101 @@
-/* This compressed file is part of Xinha. For uncompressed sources, forum, and bug reports, go to xinha.org */
-/* This file is part of version 0.96beta2 released Fri, 20 Mar 2009 11:01:14 +0100 */
-function CharCounter(a){this.editor=a;this._Chars=0;this._Words=0;this._HTML=0;this.onKeyPress=this.__onKeyPress}Xinha.Config.prototype.CharCounter={showChar:true,showWord:true,showHtml:true,separator:" | ",maxHTML:-1};CharCounter._pluginInfo={name:"CharCounter",version:"1.31",developer:"Udo Schmal",developer_url:"http://www.schaffrath-neuemedien.de",sponsor:"L.N.Schaffrath NeueMedien",sponsor_url:"http://www.schaffrath-neuemedien.de",c_owner:"Udo Schmal & L.N.Schaffrath NeueMedien",license:"htmlArea"};CharCounter.prototype._lc=function(a){return Xinha._lc(a,"CharCounter")};CharCounter.prototype.onGenerateOnce=function(){var b=this;if(this.charCount==null){var a=b.editor.registerStatusWidget("CharCounter",["wysiwyg"]);this.charCount=a}};CharCounter.prototype.__onKeyPress=function(b){if((b.keyCode!=8)&&(b.keyCode!=46)){if(this.editor.config.CharCounter.maxHTML!=-1){var a=this.editor.getHTML();if(a.length>=this.editor.config.CharCounter.maxHTML){Xinha._stopEvent(b);return true}}}};CharCounter.prototype._updateCharCount=function(){var d=this.editor;var b=d.config;var e=d.getHTML();var c=new Array();if(b.CharCounter.showHtml){c[c.length]=this._lc("HTML")+": "+e.length}this._HTML=e.length;if(b.CharCounter.showWord||b.CharCounter.showChar){e=e.replace(/<\/?\s*!--[^-->]*-->/gi,"");e=e.replace(/<(.+?)>/g,"");e=e.replace(/&nbsp;/gi," ");e=e.replace(/([\n\r\t])/g," ");e=e.replace(/(  +)/g," ");e=e.replace(/&(.*);/g," ");e=e.replace(/^\s*|\s*$/g,"")}if(b.CharCounter.showWord){this._Words=0;for(var a=0;a<e.length;a++){if(e.charAt(a)==" "){this._Words++}}if(this._Words>=1){this._Words++}c[c.length]=this._lc("Words")+": "+this._Words}if(b.CharCounter.showChar){c[c.length]=this._lc("Chars")+": "+e.length;this._Chars=e.length}this.charCount.innerHTML=c.join(b.CharCounter.separator)};CharCounter.prototype.onUpdateToolbar=function(){this.charCount.innerHTML=this._lc("... in progress");if(this._timeoutID){window.clearTimeout(this._timeoutID)}var a=this;this._timeoutID=window.setTimeout(function(){a._updateCharCount()},1000)};
+// Charcounter for Xinha
+// (c) Udo Schmal & L.N.Schaffrath NeueMedien
+// Distributed under the same terms as HTMLArea itself.
+// This notice MUST stay intact for use (see license.txt).
+
+function CharCounter(editor) {
+  this.editor = editor;
+  this._Chars = 0;
+  this._Words = 0;
+  this._HTML = 0;
+  this.onKeyPress = this.__onKeyPress;
+}
+
+Xinha.Config.prototype.CharCounter =
+{
+  'showChar': true, // show the characters count,
+  'showWord': true, // show the words count,
+  'showHtml': true, // show the exact html count
+  'separator': ' | ', // separator used to join informations
+  'maxHTML' : -1 // -1 for unlimited length, other number for limiting the length of the edited HTML
+};
+
+CharCounter._pluginInfo = {
+  name          : "CharCounter",
+  version       : "1.31",
+  developer     : "Udo Schmal",
+  developer_url : "http://www.schaffrath-neuemedien.de",
+  sponsor       : "L.N.Schaffrath NeueMedien",
+  sponsor_url   : "http://www.schaffrath-neuemedien.de",
+  c_owner       : "Udo Schmal & L.N.Schaffrath NeueMedien",
+  license       : "htmlArea"
+};
+
+CharCounter.prototype._lc = function(string) {
+  return Xinha._lc(string, "CharCounter");
+};
+
+
+CharCounter.prototype.onGenerateOnce = function() {
+  var self = this;
+  if (this.charCount==null) {
+      var charCount = self.editor.registerStatusWidget('CharCounter', ['wysiwyg']);
+      this.charCount = charCount;
+  }
+};
+
+CharCounter.prototype.__onKeyPress= function(ev) {
+  if ((ev.keyCode != 8) && (ev.keyCode !=46)) { // not backspace & delete
+    if (this.editor.config.CharCounter.maxHTML!=-1) {
+      var contents = this.editor.getHTML();
+      if (contents.length >= this.editor.config.CharCounter.maxHTML) {
+        Xinha._stopEvent(ev);
+        return true;
+      }
+    }
+  }
+}
+
+CharCounter.prototype._updateCharCount= function() {
+  var editor = this.editor;
+  var cfg = editor.config;
+  var contents = editor.getHTML();
+  var string = new Array();
+  if (cfg.CharCounter.showHtml) {
+    string[string.length] = this._lc("HTML") + ": " + contents.length;
+  }
+  this._HTML = contents.length;
+  if (cfg.CharCounter.showWord || cfg.CharCounter.showChar) {
+    contents = contents.replace(/<\/?\s*!--[^-->]*-->/gi, "" );
+    contents = contents.replace(/<(.+?)>/g, '');//Don't count HTML tags
+    contents = contents.replace(/&nbsp;/gi, ' ');
+    contents = contents.replace(/([\n\r\t])/g, ' ');//convert newlines and tabs into space
+    contents = contents.replace(/(  +)/g, ' ');//count spaces only once
+    contents = contents.replace(/&(.*);/g, ' ');//Count htmlentities as one keystroke
+    contents = contents.replace(/^\s*|\s*$/g, '');//trim
+  }
+  if (cfg.CharCounter.showWord) {
+    this._Words = 0;
+    for (var x=0;x<contents.length;x++)
+    {
+      if (contents.charAt(x) == " " ) {this._Words++;}
+    }
+    if (this._Words >=1) { this._Words++; }
+    string[string.length] = this._lc("Words") + ": " + this._Words ;
+  }
+  if (cfg.CharCounter.showChar) {
+    string[string.length] = this._lc("Chars") + ": " + contents.length;
+    this._Chars = contents.length;
+  }
+  this.charCount.innerHTML = string.join(cfg.CharCounter.separator);
+};
+
+CharCounter.prototype.onUpdateToolbar = function() {
+  this.charCount.innerHTML = this._lc("... in progress");
+  if(this._timeoutID) {
+    window.clearTimeout(this._timeoutID);
+  }
+  var e = this;
+  this._timeoutID = window.setTimeout(function() {e._updateCharCount();}, 1000);
+};
+
