@@ -1,3 +1,554 @@
-/* This compressed file is part of Xinha. For uncompressed sources, forum, and bug reports, go to xinha.org */
-/* This file is part of version 0.96beta2 released Fri, 20 Mar 2009 11:01:14 +0100 */
-function comboSelectValue(f,d){var b=f.getElementsByTagName("option");for(var a=b.length;--a>=0;){var e=b[a];e.selected=(e.value==d)}f.value=d}function i18n(a){return Xinha._lc(a,"ExtendedFileManager")}function setAlign(c){var b=document.getElementById("f_align");for(var a=0;a<b.length;a++){if(b.options[a].value==c){b.selectedIndex=a;break}}}function onTargetChanged(){var a=document.getElementById("f_other_target");if(this.value=="_other"){a.style.visibility="visible";a.select();a.focus()}else{a.style.visibility="hidden"}}function init(){if(typeof imgManager=="undefined"){setTimeout(init,10);return}var r=650;var A=600;window.resizeTo(r,A);var f=Xinha.pageSize(window);window.resizeTo(r,A);var v=Xinha.viewportSize(window);window.resizeBy(0,f.y-v.y+5);v=Xinha.viewportSize(window);if(!Xinha.is_ie){var q=opener.screenX+(opener.outerWidth-v.x)/2;var o=opener.screenY+(opener.outerHeight-v.x)/2}else{var q=(self.screen.availWidth-v.x)/2;var o=(self.screen.availHeight-v.y)/2}window.moveTo(q,o);__xinha_dlg_init();__dlg_translate("ExtendedFileManager");var m=document.getElementById("uploadForm");if(m){m.target="imgManager"}var d=window.dialogArguments.editor;var g=window.dialogArguments.param;var k=null;if(manager_mode=="image"&&g){var n=new RegExp("^https?://");if(g.f_url.length>0&&!n.test(g.f_url)&&typeof g.baseHref=="string"){g.f_url=g.baseHref+g.f_url}var t=new RegExp("(https?://[^/]*)?"+base_url.replace(/\/$/,""));g.f_url=g.f_url.replace(t,"");var u=(_resized_dir)?_resized_dir.replace(Xinha.RE_Specials,"\\$1")+"/":"";var p=_resized_prefix.replace(Xinha.RE_Specials,"\\$1");var c=new RegExp("^(.*/)"+u+p+"_([0-9]+)x([0-9]+)_([^/]+)$");var l=g.f_url.match(c);if(c.test(g.f_url)){g.f_url=RegExp.$1+RegExp.$4;g.f_width=RegExp.$2;g.f_height=RegExp.$3}document.getElementById("f_url").value=g.f_url;document.getElementById("f_alt").value=g.f_alt;document.getElementById("f_title").value=g.f_title;document.getElementById("f_border").value=g.f_border;document.getElementById("f_width").value=g.f_width;document.getElementById("f_height").value=g.f_height;document.getElementById("f_margin").value=g.f_margin;document.getElementById("f_padding").value=g.f_padding;document.getElementById("f_borderColor").value=g.f_borderColor;document.getElementById("f_backgroundColor").value=g.f_backgroundColor;setAlign(g.f_align);document.getElementById("f_url").focus();document.getElementById("orginal_width").value=g.f_width;document.getElementById("orginal_height").value=g.f_height;var c=new RegExp("^(.*/)([^/]+)$");if(c.test(g.f_url)){k=RegExp.$1}document.getElementById("f_preview").src=_backend_url+"__function=thumbs&img="+g.f_url}else{if(manager_mode=="link"&&g){var e=document.getElementById("f_target");var n=new RegExp("^https?://");if(g.f_href.length>0&&!n.test(g.f_href)&&typeof g.baseHref=="string"){g.f_href=g.baseHref+g.f_href}var s=new RegExp("(https?://[^/]*)?"+base_url.replace(/\/$/,""));g.f_href=g.f_href.replace(s,"");var c=new RegExp("^(.*/)([^/]+)$");if(c.test(g.f_href)){k=RegExp.$1}else{k=document.cookie.match(/EFMStartDirlink=(.*?)(;|$)/);if(k){k=k[1]}}if(g){if(typeof g.f_href!="undefined"){document.getElementById("f_href").value=g.f_href;document.getElementById("f_title").value=g.f_title;comboSelectValue(e,g.f_target);if(e.value!=g.f_target){var a=document.createElement("option");a.value=g.f_target;a.innerHTML=a.value;e.appendChild(a);a.selected=true}}}if(g.f_usetarget==false||manager_show_target!=false){document.getElementById("f_target_label").style.visibility="hidden";document.getElementById("f_target").style.visibility="hidden";document.getElementById("f_other_target").style.visibility="hidden"}if(e&&g.f_usetarget&&manager_show_target!=false){var a=document.createElement("option");a.value="_other";a.innerHTML=i18n("Other");e.appendChild(a);e.onchange=onTargetChanged}document.getElementById("f_href").focus()}else{if(!g){k=document.cookie.match(new RegExp("EFMStartDir"+manager_mode+"=(.*?)(;|$)"));if(k){k=k[1]}}}}if(k){iframeUrl+="&dir="+k;var b=document.getElementById("dirPath");for(var z=0;z<b.options.length;z++){if(b.options[z].value==encodeURIComponent(k)){b.options[z].selected=true;break}}}imgManager.location.replace(iframeUrl);if(manager_mode=="image"&&typeof Xinha.colorPicker!="undefined"&&document.getElementById("f_backgroundColor")&&document.getElementById("f_backgroundColor").type=="text"){var j={cellsize:d.config.colorPickerCellSize,granularity:d.config.colorPickerGranularity,websafe:d.config.colorPickerWebSafe,savecolors:d.config.colorPickerSaveColors};new Xinha.colorPicker.InputBinding(document.getElementById("f_backgroundColor"),j);new Xinha.colorPicker.InputBinding(document.getElementById("f_borderColor"),j)}setTimeout(function(){resize();addEvent(window,"resize",resize)},500)}function pasteButton(e){var d=document.getElementById("pasteBtn");if(!d.firstChild){var b=document.createElement("a");b.href="javascript:void(0);";var c=document.createElement("img");c.src=window.opener.Xinha.getPluginDir("ExtendedFileManager")+"/img/edit_paste.gif";c.alt=i18n("Paste");b.appendChild(c);d.appendChild(b)}d.onclick=function(){if(typeof imgManager!="undefined"){imgManager.paste(e)}if(e.action=="moveFile"||e.action=="moveDir"){this.onclick=null;this.removeChild(this.firstChild)}};switch(e.action){case"copyFile":d.firstChild.title=i18n('Copy "$file='+e.file+'$" from "$dir='+decodeURIComponent(e.dir)+'$" here');break;case"copyDir":d.firstChild.title=i18n('Copy folder "$file='+e.file+'$" from "$dir='+decodeURIComponent(e.dir)+'$" here');break;case"moveFile":d.firstChild.title=i18n('Move "$file='+e.file+'$" from "$dir='+decodeURIComponent(e.dir)+'$" here');break;break;case"moveDir":d.firstChild.title=i18n('Move folder "$file='+e.file+'$" from "$dir='+decodeURIComponent(e.dir)+'$" here');break}}function onCancel(){__dlg_close(null);return false}function onOK(){if(manager_mode=="image"){var fields=["f_url","f_alt","f_title","f_align","f_border","f_margin","f_padding","f_height","f_width","f_borderColor","f_backgroundColor"];var param=new Object();for(var i in fields){var id=fields[i];var el=document.getElementById(id);if(id=="f_url"&&el.value.indexOf("://")<0&&el.value){param[id]=makeURL(base_url,el.value)}else{param[id]=el.value}}var origsize={w:document.getElementById("orginal_width").value,h:document.getElementById("orginal_height").value};if((origsize.w!=param.f_width)||(origsize.h!=param.f_height)){var resized=Xinha._geturlcontent(window.opener.Xinha.getPluginDir("ExtendedFileManager")+"/"+_backend_url+"&__function=resizer&img="+encodeURIComponent(document.getElementById("f_url").value)+"&width="+param.f_width+"&height="+param.f_height);resized=eval(resized);if(resized){param.f_url=makeURL(base_url,resized)}}__dlg_close(param);return false}else{if(manager_mode=="link"){var required={};for(var i in required){var el=document.getElementById(i);if(!el.value){alert(required[i]);el.focus();return false}}var fields=["f_href","f_title","f_target"];var param=new Object();for(var i in fields){var id=fields[i];var el=document.getElementById(id);if(id=="f_href"&&el.value.indexOf("://")<0){param[id]=makeURL(base_url,el.value)}else{param[id]=el.value}}if(param.f_target=="_other"){param.f_target=document.getElementById("f_other_target").value}__dlg_close(param);return false}}}function makeURL(b,a){if(b.substring(b.length-1)!="/"){b+="/"}if(a.charAt(0)=="/"){}a=a.substring(1);return b+a}function updateDir(a){var b=a.options[a.selectedIndex].value;changeDir(b)}function goUpDir(){var d=document.getElementById("dirPath");var g=d.options[d.selectedIndex].text;if(g.length<2){return false}var f=g.split("/");var c="";for(var b=0;b<f.length-2;b++){c+=f[b]+"/"}for(var b=0;b<d.length;b++){var a=d.options[b].text;if(a==c){d.selectedIndex=b;var e=d.options[b].value;changeDir(e);break}}}function changeDir(a){if(typeof imgManager!="undefined"){imgManager.changeDir(a)}}function updateView(){refresh()}function toggleConstrains(b){var a=document.getElementById("imgLock");var b=document.getElementById("constrain_prop");if(b.checked){a.src="img/locked.gif";checkConstrains("width")}else{a.src="img/unlocked.gif"}}function checkConstrains(d){var c=document.getElementById("constrain_prop");if(c.checked){var e=document.getElementById("orginal_width");var b=parseInt(e.value);var e=document.getElementById("orginal_height");var f=parseInt(e.value);var g=document.getElementById("f_width");var h=document.getElementById("f_height");var a=parseInt(g.value);var i=parseInt(h.value);if(b>0&&f>0){if(d=="width"&&a>0){h.value=parseInt((a/b)*f)}if(d=="height"&&i>0){g.value=parseInt((i/f)*b)}}}}function showMessage(a){var c=document.getElementById("message");var b=document.getElementById("messages");if(c.firstChild){c.removeChild(c.firstChild)}c.appendChild(document.createTextNode(i18n(a)));b.style.display="block"}function addEvent(d,c,a){if(d.addEventListener){d.addEventListener(c,a,true);return true}else{if(d.attachEvent){var b=d.attachEvent("on"+c,a);return b}else{return false}}}function doUpload(){var a=document.getElementById("uploadForm");if(a){showMessage("Uploading")}}function refresh(){var a=document.getElementById("dirPath");updateDir(a)}function newFolder(){function a(e){var d=document.getElementById("dirPath");var c=d.options[d.selectedIndex].value;if(e==thumbdir){alert(i18n("Invalid folder name, please choose another folder name."));return false}if(e&&e!=""&&typeof imgManager!="undefined"){imgManager.newFolder(c,encodeURI(e))}}if(Xinha.ie_version>6){popupPrompt(i18n("Please enter name for new folder..."),i18n("Untitled"),a,i18n("New Folder"))}else{var b=prompt(i18n("Please enter name for new folder..."),i18n("Untitled"));a(b)}}function resize(){var c=Xinha.viewportSize(window);var a=document.getElementById("messages");var b=(a&&a.style.display!="none")?parseInt(document.getElementById("messages").offsetHeight,10):0;document.getElementById("imgManager").style.height=parseInt(c.y-130-document.getElementById("controls").offsetHeight,10)-b+"px";return true}Xinha.addOnloadHandler(init,window);
+/**
+ * Functions for the ExtendedFileManager, used by manager.php only
+ * Authors: Wei Zhuo, Afru, Krzysztof Kotowicz, Raimund Meyer
+ * Version: Updated on 08-01-2005 by Afru
+ * Version: Updated on 20-06-2006 by Krzysztof Kotowicz
+ * Version: Updated on 17-11-2006 by Raimund Meyer
+ * Version: Updated on 20-01-2008 by Raimund Meyer
+ * Package: ExtendedFileManager (EFM 1.4)
+ * http://www.afrusoft.com/htmlarea
+ */
+
+function comboSelectValue(c, val) {
+    var ops = c.getElementsByTagName("option");
+    for (var i = ops.length; --i >= 0;) {
+        var op = ops[i];
+        op.selected = (op.value == val);
+    }
+    c.value = val;
+}
+
+//Translation
+function i18n(str) {
+    return Xinha._lc(str, 'ExtendedFileManager');
+}
+
+//set the alignment options
+function setAlign(align)
+{
+    var selection = document.getElementById('f_align');
+    for(var i = 0; i < selection.length; i++)
+    {
+        if(selection.options[i].value == align)
+        {
+            selection.selectedIndex = i;
+            break;
+        }
+    }
+}
+
+function onTargetChanged() {
+  var f = document.getElementById("f_other_target");
+  if (this.value == "_other") {
+    f.style.visibility = "visible";
+    f.select();
+    f.focus();
+  } else f.style.visibility = "hidden";
+}
+
+function init ()
+{
+	if (typeof imgManager == 'undefined' )
+	{
+		setTimeout(init,10); // sometimes we are too hasty
+		return;
+	}
+	
+	var w = 650;
+	var h = 600;
+	
+	window.resizeTo(w,h);
+	var page = Xinha.pageSize(window);
+	window.resizeTo(w,h);
+	
+	var dim = Xinha.viewportSize(window);
+
+	window.resizeBy(0, page.y - dim.y + 5);
+
+	dim = Xinha.viewportSize(window);
+	
+	if (!Xinha.is_ie)
+	{
+	  var x = opener.screenX + (opener.outerWidth - dim.x) / 2;
+	  var y = opener.screenY + (opener.outerHeight - dim.x) / 2;
+	}
+	else
+	{//IE does not have window.outer... , so center it on the screen at least
+	  var x =  (self.screen.availWidth - dim.x) / 2;
+	  var y =  (self.screen.availHeight - dim.y) / 2;	
+	}
+	window.moveTo(x,y);
+	
+	__xinha_dlg_init();
+    __dlg_translate('ExtendedFileManager');
+
+    var uploadForm = document.getElementById('uploadForm');
+    if(uploadForm) uploadForm.target = 'imgManager';
+    
+    var editor = window.dialogArguments.editor;
+
+    var param = window.dialogArguments.param;
+    var startDir = null;
+	
+    if(manager_mode=="image" && param)
+    {
+        var absoluteURL = new RegExp('^https?://');
+
+        if (param.f_url.length > 0 && !absoluteURL.test(param.f_url) && typeof param.baseHref == "string") {
+            // URL is not absolute, prepend baseHref
+            param.f_url = param.baseHref + param.f_url;
+        }
+
+        // strip base_url from url
+        var image_regex = new RegExp( '(https?://[^/]*)?' + base_url.replace(/\/$/, '') );
+        param.f_url = param.f_url.replace( image_regex, "" );
+
+        // The image URL may reference one of the automatically resized images
+        // (when the user alters the dimensions in the picker), clean that up
+        // so it looks right and we get back to a normal f_url
+        var rd = (_resized_dir) ? _resized_dir.replace(Xinha.RE_Specials, '\\$1') + '/' : '';
+        var rp = _resized_prefix.replace(Xinha.RE_Specials, '\\$1');
+        var dreg = new RegExp('^(.*/)' + rd + rp + '_([0-9]+)x([0-9]+)_([^/]+)$');
+
+        var match = param.f_url.match(dreg);
+
+        if(dreg.test(param.f_url))
+        {
+          param.f_url    = RegExp.$1 + RegExp.$4;
+          param.f_width  = RegExp.$2;
+          param.f_height = RegExp.$3;
+        }
+
+        document.getElementById("f_url").value = param["f_url"];
+        document.getElementById("f_alt").value = param["f_alt"];
+        document.getElementById("f_title").value = param["f_title"];
+        document.getElementById("f_border").value = param["f_border"];
+        document.getElementById("f_width").value = param["f_width"];
+        document.getElementById("f_height").value = param["f_height"];
+        document.getElementById("f_margin").value = param["f_margin"];
+        document.getElementById("f_padding").value = param["f_padding"];
+        document.getElementById("f_borderColor").value = param["f_borderColor"];
+        document.getElementById("f_backgroundColor").value = param["f_backgroundColor"];
+
+        setAlign(param["f_align"]);
+
+        document.getElementById("f_url").focus();
+
+        document.getElementById("orginal_width").value = param["f_width"];
+        document.getElementById("orginal_height").value = param["f_height"];
+
+        // Locate to the correct directory
+        var dreg = new RegExp('^(.*/)([^/]+)$');
+        if (dreg.test(param['f_url']))
+        {
+		  startDir = RegExp.$1;
+        }
+
+        document.getElementById('f_preview').src = _backend_url + '__function=thumbs&img=' + param.f_url;
+
+    }
+
+    else if(manager_mode=="link" && param)
+    {
+        var target_select = document.getElementById("f_target");
+        var absoluteURL = new RegExp('^https?://');
+
+        if (param.f_href.length > 0 && !absoluteURL.test(param.f_href) && typeof param.baseHref == "string") {
+            // URL is not absolute, prepend baseHref
+            param.f_href = param.baseHref + param.f_href;
+        }
+
+        // strip base_url from href
+        var href_regex = new RegExp( '(https?://[^/]*)?' + base_url.replace(/\/$/, '') );
+        param.f_href = param.f_href.replace( href_regex, "" );
+
+        // Locate to the correct directory
+        var dreg = new RegExp('^(.*/)([^/]+)$');
+        if (dreg.test(param['f_href']))
+        {
+        	startDir = RegExp.$1;
+        }
+        else
+        {
+        	startDir = document.cookie.match(/EFMStartDirlink=(.*?)(;|$)/);
+        	if (startDir) startDir = startDir[1];
+        }
+        
+        if (param)
+        {
+            if ( typeof param["f_href"] != "undefined" )
+            {
+                document.getElementById("f_href").value = param["f_href"];
+                document.getElementById("f_title").value = param["f_title"];
+                comboSelectValue(target_select, param["f_target"]);
+                if (target_select.value != param.f_target)
+                {
+                    var opt = document.createElement("option");
+                    opt.value = param.f_target;
+                    opt.innerHTML = opt.value;
+                    target_select.appendChild(opt);
+                    opt.selected = true;
+                }
+            }
+        }
+        
+        if ( param["f_usetarget"] == false || manager_show_target != false)
+        {
+            document.getElementById("f_target_label").style.visibility = "hidden";
+            document.getElementById("f_target").style.visibility = "hidden";
+            document.getElementById("f_other_target").style.visibility = "hidden";
+        }
+        if (target_select && param["f_usetarget"] && manager_show_target != false)
+        {
+            var opt = document.createElement("option");
+            opt.value = "_other";
+            opt.innerHTML = i18n("Other");
+            target_select.appendChild(opt);
+            target_select.onchange = onTargetChanged;
+        }
+        
+        document.getElementById("f_href").focus();
+    }
+    else if (!param)
+    {
+    	startDir = document.cookie.match(new RegExp ("EFMStartDir" + manager_mode + "=(.*?)(;|$)"));
+    	if (startDir)
+    	{
+    		startDir = startDir[1];
+    	}
+    }
+	if ( startDir )
+	{
+		iframeUrl += '&dir=' + startDir;
+		var dirPath = document.getElementById('dirPath');
+		for(var i = 0; i < dirPath.options.length; i++)
+		{
+			if(dirPath.options[i].value == encodeURIComponent(startDir))
+			{
+				dirPath.options[i].selected = true;
+				break;
+			}
+		}
+	};
+	imgManager.location.replace(iframeUrl);
+
+    if (manager_mode == 'image' && typeof Xinha.colorPicker != "undefined" && document.getElementById('f_backgroundColor') && document.getElementById('f_backgroundColor').type == 'text') {
+      // Hookup color pickers
+
+      var pickerConfig = {
+        cellsize:editor.config.colorPickerCellSize,
+        granularity:editor.config.colorPickerGranularity,
+        websafe:editor.config.colorPickerWebSafe,
+        savecolors:editor.config.colorPickerSaveColors
+      };
+
+      new Xinha.colorPicker.InputBinding(document.getElementById('f_backgroundColor'),pickerConfig);
+      new Xinha.colorPicker.InputBinding(document.getElementById('f_borderColor'),pickerConfig);
+    }
+	setTimeout(function() { resize();addEvent(window, 'resize', resize); }, 500);
+}
+
+function pasteButton(action)
+{
+	var buttonHolder = document.getElementById('pasteBtn');
+	if (!buttonHolder.firstChild)
+	{
+		var a = document.createElement('a');
+			a.href = "javascript:void(0);";
+			
+		var img = document.createElement('img');
+			img.src = window.opener.Xinha.getPluginDir('ExtendedFileManager')+'/img/edit_paste.gif';
+			img.alt = i18n('Paste');
+			a.appendChild(img);
+			buttonHolder.appendChild(a);
+	}
+	buttonHolder.onclick = function() {  
+				if(typeof imgManager != 'undefined') imgManager.paste(action);
+				if (action.action ==  'moveFile' || action.action ==  'moveDir' )
+				{
+					this.onclick = null;
+					this.removeChild(this.firstChild)
+				}
+	}
+	switch (action.action)
+	{
+		case 'copyFile':
+			buttonHolder.firstChild.title = i18n('Copy "$file='+action.file+'$" from "$dir='+decodeURIComponent(action.dir)+'$" here');			
+		break;
+		case 'copyDir':
+			buttonHolder.firstChild.title = i18n('Copy folder "$file='+action.file+'$" from "$dir='+decodeURIComponent(action.dir)+'$" here');		
+		break;
+		case 'moveFile':
+			buttonHolder.firstChild.title = i18n('Move "$file='+action.file+'$" from "$dir='+decodeURIComponent(action.dir)+'$" here');
+		break;
+		break;
+		case 'moveDir':
+			buttonHolder.firstChild.title = i18n('Move folder "$file='+action.file+'$" from "$dir='+decodeURIComponent(action.dir)+'$" here');
+		break;	
+	}
+	
+}
+function onCancel()
+{
+    __dlg_close(null);
+    return false;
+}
+
+function onOK()
+{
+    if(manager_mode=="image")
+    {
+        // pass data back to the calling window
+        var fields = ["f_url", "f_alt", "f_title", "f_align", "f_border", "f_margin", "f_padding", "f_height", "f_width", "f_borderColor", "f_backgroundColor"];
+        var param = new Object();
+        for (var i in fields)
+        {
+            var id = fields[i];
+            var el = document.getElementById(id);
+            if(id == "f_url" && el.value.indexOf('://') < 0 && el.value )
+                param[id] = makeURL(base_url,el.value);
+            else
+                param[id] = el.value;
+        }
+
+        // See if we need to resize the image
+        var origsize =
+        {
+          w:document.getElementById('orginal_width').value,
+          h:document.getElementById('orginal_height').value
+        }
+
+        if(  (origsize.w != param.f_width)
+          || (origsize.h != param.f_height) )
+        {
+          // Yup, need to resize
+          var resized = Xinha._geturlcontent(window.opener.Xinha.getPluginDir('ExtendedFileManager') + '/' + _backend_url + '&__function=resizer&img=' + encodeURIComponent(document.getElementById('f_url').value) + '&width=' + param.f_width + '&height=' + param.f_height);
+
+          // alert(resized);
+          resized = eval(resized);
+          if(resized)
+          {
+            param.f_url = makeURL(base_url, resized);
+          }
+        }
+        __dlg_close(param);
+        return false;
+    }
+    else if(manager_mode=="link")
+    {
+        var required = {
+            // f_href shouldn't be required or otherwise removing the link by entering an empty
+
+            // url isn't possible anymore.
+
+            // "f_href": i18n("You must enter the URL where this link points to")
+
+        };
+        for (var i in required) {
+        var el = document.getElementById(i);
+            if (!el.value) {
+              alert(required[i]);
+              el.focus();
+              return false;
+            }
+        }
+
+        // pass data back to the calling window
+        var fields = ["f_href", "f_title", "f_target" ];
+        var param = new Object();
+        for (var i in fields) {
+            var id = fields[i];
+            var el = document.getElementById(id);
+
+            if(id == "f_href" && el.value.indexOf('://') < 0 )
+                param[id] = makeURL(base_url,el.value);
+            else
+                param[id] = el.value;
+
+        }
+        if (param.f_target == "_other")
+            param.f_target = document.getElementById("f_other_target").value;
+
+//          alert(param.f_target);
+          __dlg_close(param);
+        return false;
+    }
+}
+
+//similar to the Files::makeFile() in Files.php
+function makeURL(pathA, pathB)
+{
+    if(pathA.substring(pathA.length-1) != '/')
+        pathA += '/';
+
+    if(pathB.charAt(0) == '/');
+        pathB = pathB.substring(1);
+
+    return pathA+pathB;
+}
+
+function updateDir(selection)
+{
+    var newDir = selection.options[selection.selectedIndex].value;
+    changeDir(newDir);
+}
+
+function goUpDir()
+{
+    var selection = document.getElementById('dirPath');
+    var currentDir = selection.options[selection.selectedIndex].text;
+    if(currentDir.length < 2)
+        return false;
+    var dirs = currentDir.split('/');
+
+    var search = '';
+
+    for(var i = 0; i < dirs.length - 2; i++)
+    {
+        search += dirs[i]+'/';
+    }
+
+    for(var i = 0; i < selection.length; i++)
+    {
+        var thisDir = selection.options[i].text;
+        if(thisDir == search)
+        {
+            selection.selectedIndex = i;
+            var newDir = selection.options[i].value;
+            changeDir(newDir);
+            break;
+        }
+    }
+}
+
+function changeDir(newDir)
+{
+    if(typeof imgManager != 'undefined')
+        imgManager.changeDir(newDir);
+}
+
+function updateView()
+{
+    refresh();
+}
+
+function toggleConstrains(constrains)
+{
+    var lockImage = document.getElementById('imgLock');
+    var constrains = document.getElementById('constrain_prop');
+
+    if(constrains.checked)
+    {
+        lockImage.src = "img/locked.gif";
+        checkConstrains('width')
+    }
+    else
+    {
+        lockImage.src = "img/unlocked.gif";
+    }
+}
+
+function checkConstrains(changed)
+{
+    //alert(document.form1.constrain_prop);
+    var constrains = document.getElementById('constrain_prop');
+
+    if(constrains.checked)
+    {
+        var obj = document.getElementById('orginal_width');
+        var orginal_width = parseInt(obj.value);
+        var obj = document.getElementById('orginal_height');
+        var orginal_height = parseInt(obj.value);
+
+        var widthObj = document.getElementById('f_width');
+        var heightObj = document.getElementById('f_height');
+
+        var width = parseInt(widthObj.value);
+        var height = parseInt(heightObj.value);
+
+        if(orginal_width > 0 && orginal_height > 0)
+        {
+            if(changed == 'width' && width > 0) {
+                heightObj.value = parseInt((width/orginal_width)*orginal_height);
+            }
+
+            if(changed == 'height' && height > 0) {
+                widthObj.value = parseInt((height/orginal_height)*orginal_width);
+            }
+        }
+    }
+}
+
+function showMessage(newMessage)
+{
+    var message = document.getElementById('message');
+    var messages = document.getElementById('messages');
+    if(message.firstChild)
+        message.removeChild(message.firstChild);
+
+    message.appendChild(document.createTextNode(i18n(newMessage)));
+
+    messages.style.display = "block";
+}
+
+function addEvent(obj, evType, fn)
+{
+    if (obj.addEventListener) { obj.addEventListener(evType, fn, true); return true; }
+    else if (obj.attachEvent) {  var r = obj.attachEvent("on"+evType, fn);  return r;  }
+    else {  return false; }
+}
+
+function doUpload()
+{
+    var uploadForm = document.getElementById('uploadForm');
+    if(uploadForm)
+        showMessage('Uploading');
+}
+
+function refresh()
+{
+    var selection = document.getElementById('dirPath');
+    updateDir(selection);
+}
+
+function newFolder()
+{
+  function createFolder(folder)
+  {
+    var selection = document.getElementById('dirPath');
+    var dir = selection.options[selection.selectedIndex].value;
+
+    if(folder == thumbdir)
+    {
+      alert(i18n('Invalid folder name, please choose another folder name.'));
+      return false;
+    }
+
+    if (folder && folder != '' && typeof imgManager != 'undefined')
+    {
+      imgManager.newFolder(dir, encodeURI(folder));
+    }
+  }
+    // IE7 has crippled the prompt()
+  if ( Xinha.ie_version > 6 )
+  {
+    popupPrompt(i18n('Please enter name for new folder...'), i18n('Untitled'), createFolder, i18n("New Folder"));
+  }
+  else
+  {
+    var folder = prompt(i18n('Please enter name for new folder...'), i18n('Untitled'));
+    createFolder(folder);
+  }
+}
+
+
+function resize()
+{
+	var win = Xinha.viewportSize(window);
+	var m = document.getElementById('messages');
+	var messagesHeight = (m && m.style.display != 'none' ) ?  parseInt( document.getElementById('messages').offsetHeight, 10 ) : 0;
+	document.getElementById('imgManager').style.height = parseInt( win.y - 130 - document.getElementById('controls').offsetHeight, 10 ) - messagesHeight  + 'px';
+	return true;
+}
+
+Xinha.addOnloadHandler( init, window );

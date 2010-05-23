@@ -1,3 +1,119 @@
-/* This compressed file is part of Xinha. For uncompressed sources, forum, and bug reports, go to xinha.org */
-/* This file is part of version 0.96beta2 released Fri, 20 Mar 2009 11:01:14 +0100 */
-function Dialog(a,c,d){if(typeof d=="undefined"){d=window}if(typeof window.showModalDialog=="function"){Dialog._return=c;var b=window.showModalDialog(a,d,"dialogheight=10;dialogwidth=10;resizable=yes")}else{Dialog._geckoOpenModal(a,c,d)}}Dialog._parentEvent=function(a){setTimeout(function(){if(Dialog._modal&&!Dialog._modal.closed){Dialog._modal.focus()}},50);if(Dialog._modal&&!Dialog._modal.closed){Dialog._stopEvent(a)}};Dialog._return=null;Dialog._modal=null;Dialog._arguments=null;Dialog._geckoOpenModal=function(a,c,j){var f="hadialog"+a;var h=/\W/g;f=f.replace(h,"_");var g=window.open(a,f,"toolbar=no,menubar=no,personalbar=no,width=10,height=10,scrollbars=no,resizable=yes,modal=yes,dependable=yes");Dialog._modal=g;Dialog._arguments=j;function b(i){Dialog._addEvent(i,"click",Dialog._parentEvent);Dialog._addEvent(i,"mousedown",Dialog._parentEvent);Dialog._addEvent(i,"focus",Dialog._parentEvent)}function e(i){Dialog._removeEvent(i,"click",Dialog._parentEvent);Dialog._removeEvent(i,"mousedown",Dialog._parentEvent);Dialog._removeEvent(i,"focus",Dialog._parentEvent)}b(window);for(var d=0;d<window.frames.length;b(window.frames[d++])){}Dialog._return=function(l){if(l&&c){c(l)}e(window);for(var k=0;k<window.frames.length;e(window.frames[k++])){}Dialog._modal=null}};Dialog._addEvent=function(a,c,b){if(Dialog.is_ie){a.attachEvent("on"+c,b)}else{a.addEventListener(c,b,true)}};Dialog._removeEvent=function(a,c,b){if(Dialog.is_ie){a.detachEvent("on"+c,b)}else{a.removeEventListener(c,b,true)}};Dialog._stopEvent=function(a){if(Dialog.is_ie){a.cancelBubble=true;a.returnValue=false}else{a.preventDefault();a.stopPropagation()}};Dialog.agt=navigator.userAgent.toLowerCase();Dialog.is_ie=((Dialog.agt.indexOf("msie")!=-1)&&(Dialog.agt.indexOf("opera")==-1));
+// Dialog v3.0 - Copyright (c) 2003-2004 interactivetools.com, inc.
+// This copyright notice MUST stay intact for use (see license.txt).
+//
+// Portions (c) dynarch.com, 2003-2004
+//
+// A free WYSIWYG editor replacement for <textarea> fields.
+// For full source code and docs, visit http://www.interactivetools.com/
+//
+// Version 3.0 developed by Mihai Bazon.
+//   http://dynarch.com/mishoo
+//
+// $Id$
+
+// Though "Dialog" looks like an object, it isn't really an object.  Instead
+// it's just namespace for protecting global symbols.
+
+function Dialog(url, action, init) {
+	if (typeof init == "undefined") {
+		init = window;	// pass this window object by default
+	}
+	if (typeof window.showModalDialog == 'function')
+	{
+		Dialog._return = action;
+		var r = window.showModalDialog(url, init, "dialogheight=10;dialogwidth=10;resizable=yes");
+	}
+	else
+	{
+		Dialog._geckoOpenModal(url, action, init);
+	}
+}
+
+Dialog._parentEvent = function(ev) {
+	setTimeout( function() { if (Dialog._modal && !Dialog._modal.closed) { Dialog._modal.focus() } }, 50);
+	if (Dialog._modal && !Dialog._modal.closed) {
+		Dialog._stopEvent(ev);
+	}
+};
+
+
+// should be a function, the return handler of the currently opened dialog.
+Dialog._return = null;
+
+// constant, the currently opened dialog
+Dialog._modal = null;
+
+// the dialog will read it's args from this variable
+Dialog._arguments = null;
+
+Dialog._geckoOpenModal = function(url, action, init) {
+	//var urlLink = "hadialog"+url.toString();
+	var myURL = "hadialog"+url;
+	var regObj = /\W/g;
+	myURL = myURL.replace(regObj,'_');
+	var dlg = window.open(url, myURL,
+			      "toolbar=no,menubar=no,personalbar=no,width=10,height=10," +
+			      "scrollbars=no,resizable=yes,modal=yes,dependable=yes");
+	Dialog._modal = dlg;
+	Dialog._arguments = init;
+
+	// capture some window's events
+	function capwin(w) {
+		Dialog._addEvent(w, "click", Dialog._parentEvent);
+		Dialog._addEvent(w, "mousedown", Dialog._parentEvent);
+		Dialog._addEvent(w, "focus", Dialog._parentEvent);
+	}
+	// release the captured events
+	function relwin(w) {
+		Dialog._removeEvent(w, "click", Dialog._parentEvent);
+		Dialog._removeEvent(w, "mousedown", Dialog._parentEvent);
+		Dialog._removeEvent(w, "focus", Dialog._parentEvent);
+	}
+	capwin(window);
+	// capture other frames
+	for (var i = 0; i < window.frames.length; capwin(window.frames[i++]));
+	// make up a function to be called when the Dialog ends.
+	Dialog._return = function (val) {
+		if (val && action) {
+			action(val);
+		}
+		relwin(window);
+		// capture other frames
+		for (var i = 0; i < window.frames.length; relwin(window.frames[i++]));
+		Dialog._modal = null;
+	};
+};
+
+
+// event handling
+
+Dialog._addEvent = function(el, evname, func) {
+	if (Dialog.is_ie) {
+		el.attachEvent("on" + evname, func);
+	} else {
+		el.addEventListener(evname, func, true);
+	}
+};
+
+
+Dialog._removeEvent = function(el, evname, func) {
+	if (Dialog.is_ie) {
+		el.detachEvent("on" + evname, func);
+	} else {
+		el.removeEventListener(evname, func, true);
+	}
+};
+
+
+Dialog._stopEvent = function(ev) {
+	if (Dialog.is_ie) {
+		ev.cancelBubble = true;
+		ev.returnValue = false;
+	} else {
+		ev.preventDefault();
+		ev.stopPropagation();
+	}
+};
+
+Dialog.agt = navigator.userAgent.toLowerCase();
+Dialog.is_ie	   = ((Dialog.agt.indexOf("msie") != -1) && (Dialog.agt.indexOf("opera") == -1));

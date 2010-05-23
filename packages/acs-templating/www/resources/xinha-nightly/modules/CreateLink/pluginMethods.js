@@ -1,3 +1,165 @@
-/* This compressed file is part of Xinha. For uncompressed sources, forum, and bug reports, go to xinha.org */
-/* This file is part of version 0.96beta2 released Fri, 20 Mar 2009 11:01:14 +0100 */
-CreateLink.prototype.show=function(c){if(!this.dialog){this.prepareDialog()}var d=this.editor;this.a=c;if(!c&&this.editor.selectionEmpty(this.editor.getSelection())){alert(this._lc("You need to select some text before creating a link"));return false}var b={f_href:"",f_title:"",f_target:"",f_other_target:""};if(c&&c.tagName.toLowerCase()=="a"){b.f_href=this.editor.fixRelativeLinks(c.getAttribute("href"));b.f_title=c.title;if(c.target){if(!/_self|_top_|_blank/.test(c.target)){b.f_target="_other";b.f_other_target=c.target}else{b.f_target=c.target;b.f_other_target=""}}}this.dialog.show(b)};CreateLink.prototype.apply=function(){var m=this.dialog.hide();var l=this.a;var h=this.editor;var k={href:"",target:"",title:""};if(m.f_href){k.href=m.f_href;k.title=m.f_title;if(m.f_target.value){if(m.f_target.value=="other"){k.target=m.f_other_target}else{k.target=m.f_target.value}}}if(m.f_target.value){if(m.f_target.value!="_other"){k.target=m.f_target.value}else{k.target=m.f_other_target}}if(l&&l.tagName.toLowerCase()=="a"){if(!k.href){if(confirm(this._lc("Are you sure you wish to remove this link?"))){var c=l.parentNode;while(l.hasChildNodes()){c.insertBefore(l.removeChild(l.childNodes[0]),l)}c.removeChild(l);h.updateToolbar();return}}else{for(var f in k){l.setAttribute(f,k[f])}if(Xinha.is_ie){if(/mailto:([^?<>]*)(\?[^<]*)?$/i.test(l.innerHTML)){l.innerHTML=RegExp.$1}}}}else{if(!k.href){return true}var g=Xinha.uniq("http://www.example.com/Link");h._doc.execCommand("createlink",false,g);var b=h._doc.getElementsByTagName("a");for(var f=0;f<b.length;f++){var e=b[f];if(e.href==g){if(!l){l=e}for(var d in k){e.setAttribute(d,k[d])}}}}h.selectNodeContents(l);h.updateToolbar()};CreateLink.prototype._getSelectedAnchor=function(){var d=this.editor.getSelection();var c=this.editor.createRange(d);var b=this.editor.activeElement(d);if(b!=null&&b.tagName.toLowerCase()=="a"){return b}else{b=this.editor._getFirstAncestor(d,"a");if(b!=null){return b}}return null};
+
+CreateLink.prototype.show = function(a)
+{
+  if (!this.dialog)
+  {
+    this.prepareDialog();
+  } 
+	var editor = this.editor;
+	this.a = a;
+	if(!a && this.editor.selectionEmpty(this.editor.getSelection()))
+	{
+		alert(this._lc("You need to select some text before creating a link"));
+		return false;
+	}
+
+	var inputs =
+	{
+		f_href   : '',
+		f_title  : '',
+		f_target : '',
+		f_other_target : ''
+	};
+
+	if(a && a.tagName.toLowerCase() == 'a')
+	{
+		inputs.f_href   = this.editor.fixRelativeLinks(a.getAttribute('href'));
+		inputs.f_title  = a.title;
+		if (a.target)
+		{
+			if (!/_self|_top|_blank/.test(a.target))
+			{
+				inputs.f_target = '_other';
+				inputs.f_other_target = a.target;
+			}
+			else
+			{
+				inputs.f_target = a.target;
+				inputs.f_other_target = '';
+			}
+		}
+	}
+
+	// now calling the show method of the Xinha.Dialog object to set the values and show the actual dialog
+	this.dialog.show(inputs);
+};
+
+// and finally ... take some action
+CreateLink.prototype.apply = function()
+{
+
+	var values = this.dialog.hide();
+	var a = this.a;
+	var editor = this.editor;
+
+	var atr =
+	{
+		href: '',
+		target:'',
+		title:''
+	};
+
+	if(values.f_href)
+	{
+		atr.href = values.f_href;
+		atr.title = values.f_title;
+		if (values.f_target.value)
+		{
+			if (values.f_target.value == 'other') atr.target = values.f_other_target;
+			else atr.target = values.f_target.value;
+		}
+	}
+	if (values.f_target.value)
+	{
+		if (values.f_target.value != '_other')
+		{
+			atr.target = values.f_target.value;
+		}
+		else
+		{
+			atr.target = values.f_other_target;
+		}
+	}
+	
+	if(a && a.tagName.toLowerCase() == 'a')
+	{
+		if(!atr.href)
+		{
+			if(confirm(this._lc('Are you sure you wish to remove this link?')))
+			{
+				var p = a.parentNode;
+				while(a.hasChildNodes())
+				{
+					p.insertBefore(a.removeChild(a.childNodes[0]), a);
+				}
+				p.removeChild(a);
+				editor.updateToolbar();
+				return;
+			}
+		}
+		else
+		{
+			// Update the link
+			for(var i in atr)
+			{
+				a.setAttribute(i, atr[i]);
+			}
+
+			// If we change a mailto link in IE for some hitherto unknown
+			// reason it sets the innerHTML of the link to be the
+			// href of the link.  Stupid IE.
+			if(Xinha.is_ie)
+			{
+				if(/mailto:([^?<>]*)(\?[^<]*)?$/i.test(a.innerHTML))
+				{
+					a.innerHTML = RegExp.$1;
+				}
+			}
+		}
+	}
+	else
+	{
+		if(!atr.href) return true;
+
+		// Insert a link, we let the browser do this, we figure it knows best
+		var tmp = Xinha.uniq('http://www.example.com/Link');
+		editor._doc.execCommand('createlink', false, tmp);
+
+		// Fix them up
+		var anchors = editor._doc.getElementsByTagName('a');
+		for(var i = 0; i < anchors.length; i++)
+		{
+			var anchor = anchors[i];
+			if(anchor.href == tmp)
+			{
+				// Found one.
+				if (!a) a = anchor;
+				for(var j in atr)
+				{
+					anchor.setAttribute(j, atr[j]);
+				}
+			}
+		}
+	}
+	editor.selectNodeContents(a);
+	editor.updateToolbar();
+};
+CreateLink.prototype._getSelectedAnchor = function()
+{
+  var sel  = this.editor.getSelection();
+  var rng  = this.editor.createRange(sel);
+  var a    = this.editor.activeElement(sel);
+  if(a != null && a.tagName.toLowerCase() == 'a')
+  {
+    return a;
+  }
+  else
+  {
+    a = this.editor._getFirstAncestor(sel, 'a');
+    if(a != null)
+    {
+      return a;
+    }
+  }
+  return null;
+};

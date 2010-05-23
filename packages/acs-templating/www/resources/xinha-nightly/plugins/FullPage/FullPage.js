@@ -1,3 +1,209 @@
-/* This compressed file is part of Xinha. For uncompressed sources, forum, and bug reports, go to xinha.org */
-/* This file is part of version 0.96beta2 released Fri, 20 Mar 2009 11:01:14 +0100 */
-function FullPage(c){this.editor=c;var a=c.config;a.fullPage=true;var b=this;a.registerButton("FP-docprop",this._lc("Document properties"),c.imgURL("docprop.gif","FullPage"),false,function(d,e){b.buttonPress(d,e)});a.addToolbarElement(["separator","FP-docprop"],"separator",-1)}FullPage._pluginInfo={name:"FullPage",version:"1.0",developer:"Mihai Bazon",developer_url:"http://dynarch.com/mishoo/",c_owner:"Mihai Bazon",sponsor:"Thycotic Software Ltd.",sponsor_url:"http://thycotic.com",license:"htmlArea"};FullPage.prototype._lc=function(a){return Xinha._lc(a,"FullPage")};FullPage.prototype.buttonPress=function(e,a){var q=this;switch(a){case"FP-docprop":var k=e._doc;var n=k.getElementsByTagName("link");var l="";var j="";var d="";var m="";var b="";for(var c=n.length;--c>=0;){var g=n[c];if(/stylesheet/i.test(g.rel)){if(/alternate/i.test(g.rel)){j=g.href}else{l=g.href}}}var f=k.getElementsByTagName("meta");for(var c=f.length;--c>=0;){var p=f[c];if(/content-type/i.test(p.httpEquiv)){r=/^text\/html; *charset=(.*)$/i.exec(p.content);b=r[1]}else{if((/keywords/i.test(p.name))||(/keywords/i.test(p.id))){d=p.content}else{if((/description/i.test(p.name))||(/description/i.test(p.id))){m=p.content}}}}var h=k.getElementsByTagName("title")[0];h=h?h.innerHTML:"";var o={f_doctype:e.doctype,f_title:h,f_body_bgcolor:Xinha._colorToRgb(k.body.style.backgroundColor),f_body_fgcolor:Xinha._colorToRgb(k.body.style.color),f_base_style:l,f_alt_style:j,f_charset:b,f_keywords:d,f_description:m,editor:e};e._popupDialog("plugin://FullPage/docprop",function(i){q.setDocProp(i)},o);break}};FullPage.prototype.setDocProp=function(q){var j="";var u=this.editor._doc;var d=u.getElementsByTagName("head")[0];var b=u.getElementsByTagName("link");var a=u.getElementsByTagName("meta");var o=null;var n=null;var c=null;var f=null;var g=null;var l=null;for(var m=b.length;--m>=0;){var e=b[m];if(/stylesheet/i.test(e.rel)){if(/alternate/i.test(e.rel)){n=e}else{o=e}}}for(var m=a.length;--m>=0;){var h=a[m];if(/content-type/i.test(h.httpEquiv)){r=/^text\/html; *charset=(.*)$/i.exec(h.content);c=r[1];f=h}else{if((/keywords/i.test(h.name))||(/keywords/i.test(h.id))){g=h}else{if((/description/i.test(h.name))||(/description/i.test(h.id))){l=h}}}}function k(v){var i=u.createElement("link");i.rel=v?"alternate stylesheet":"stylesheet";d.appendChild(i);return i}function p(i,v,w){var x=u.createElement("meta");if(i!=""){x.httpEquiv=i}if(v!=""){x.name=v}if(v!=""){x.id=v}x.content=w;d.appendChild(x);return x}if(!o&&q.f_base_style){o=k(false)}if(q.f_base_style){o.href=q.f_base_style}else{if(o){d.removeChild(o)}}if(!n&&q.f_alt_style){n=k(true)}if(q.f_alt_style){n.href=q.f_alt_style}else{if(n){d.removeChild(n)}}if(f){d.removeChild(f);f=null}if(!f&&q.f_charset){f=p("Content-Type","","text/html; charset="+q.f_charset)}if(!g&&q.f_keywords){g=p("","keywords",q.f_keywords)}else{if(q.f_keywords){g.content=q.f_keywords}else{if(g){d.removeChild(g)}}}if(!l&&q.f_description){l=p("","description",q.f_description)}else{if(q.f_description){l.content=q.f_description}else{if(l){d.removeChild(l)}}}for(var m in q){var t=q[m];switch(m){case"f_title":var s=u.getElementsByTagName("title")[0];if(!s){s=u.createElement("title");d.appendChild(s)}else{while(node=s.lastChild){s.removeChild(node)}}if(!Xinha.is_ie){s.appendChild(u.createTextNode(t))}else{u.title=t}break;case"f_doctype":this.editor.setDoctype(t);break;case"f_body_bgcolor":u.body.style.backgroundColor=t;break;case"f_body_fgcolor":u.body.style.color=t;break}}};
+// FullPage Plugin for HTMLArea-3.0
+// Implementation by Mihai Bazon.  Sponsored by http://thycotic.com
+//
+// htmlArea v3.0 - Copyright (c) 2002 interactivetools.com, inc.
+// This notice MUST stay intact for use (see license.txt).
+//
+// A free WYSIWYG editor replacement for <textarea> fields.
+// For full source code and docs, visit http://www.interactivetools.com/
+//
+// Version 3.0 developed by Mihai Bazon for InteractiveTools.
+//   http://dynarch.com/mishoo
+//
+// $Id$
+
+function FullPage(editor) {
+	this.editor = editor;
+
+	var cfg = editor.config;
+	cfg.fullPage = true;
+	var self = this;
+
+	cfg.registerButton("FP-docprop", this._lc("Document properties"), editor.imgURL("docprop.gif", "FullPage"), false,
+			   function(editor, id) {
+				   self.buttonPress(editor, id);
+			   });
+
+	// add a new line in the toolbar
+	cfg.addToolbarElement(["separator","FP-docprop"],"separator",-1);
+}
+
+FullPage._pluginInfo = {
+	name          : "FullPage",
+	version       : "1.0",
+	developer     : "Mihai Bazon",
+	developer_url : "http://dynarch.com/mishoo/",
+	c_owner       : "Mihai Bazon",
+	sponsor       : "Thycotic Software Ltd.",
+	sponsor_url   : "http://thycotic.com",
+	license       : "htmlArea"
+};
+
+FullPage.prototype._lc = function(string) {
+    return Xinha._lc(string, 'FullPage');
+};
+
+FullPage.prototype.buttonPress = function(editor, id) {
+	var self = this;
+	switch (id) {
+	    case "FP-docprop":
+		var doc = editor._doc;
+		var links = doc.getElementsByTagName("link");
+		var style1 = '';
+		var style2 = '';
+		var keywords = '';
+		var description = '';
+		var charset = '';
+		for (var i = links.length; --i >= 0;) {
+			var link = links[i];
+			if (/stylesheet/i.test(link.rel)) {
+				if (/alternate/i.test(link.rel))
+					style2 = link.href;
+				else
+					style1 = link.href;
+			}
+		}
+		var metas = doc.getElementsByTagName("meta");
+		for (var i = metas.length; --i >= 0;) {
+			var meta = metas[i];
+			if (/content-type/i.test(meta.httpEquiv)) {
+				r = /^text\/html; *charset=(.*)$/i.exec(meta.content);
+				charset = r[1];
+			} else if ((/keywords/i.test(meta.name)) || (/keywords/i.test(meta.id))) {
+				keywords = meta.content;
+			}	else if ((/description/i.test(meta.name)) || (/description/i.test(meta.id))) {
+				description = meta.content;
+			}
+		}
+		var title = doc.getElementsByTagName("title")[0];
+		title = title ? title.innerHTML : '';
+		var init = {
+			f_doctype      : editor.doctype,
+			f_title        : title,
+			f_body_bgcolor : Xinha._colorToRgb(doc.body.style.backgroundColor),
+			f_body_fgcolor : Xinha._colorToRgb(doc.body.style.color),
+			f_base_style   : style1,
+			f_alt_style    : style2,
+			f_charset      : charset,
+			f_keywords     : keywords,
+			f_description  : description,
+			editor         : editor
+		};
+		editor._popupDialog("plugin://FullPage/docprop", function(params) {
+			self.setDocProp(params);
+		}, init);
+		break;
+	}
+};
+
+FullPage.prototype.setDocProp = function(params) {
+	var txt = "";
+	var doc = this.editor._doc;
+	var head = doc.getElementsByTagName("head")[0];
+	var links = doc.getElementsByTagName("link");
+	var metas = doc.getElementsByTagName("meta");
+	var style1 = null;
+	var style2 = null;
+	var charset = null;
+	var charset_meta = null;
+	var keywords = null;
+	var description = null;
+	for (var i = links.length; --i >= 0;) {
+		var link = links[i];
+		if (/stylesheet/i.test(link.rel)) {
+			if (/alternate/i.test(link.rel))
+				style2 = link;
+			else
+				style1 = link;
+		}
+	}
+	for (var i = metas.length; --i >= 0;) {
+		var meta = metas[i];
+		if (/content-type/i.test(meta.httpEquiv)) {
+			r = /^text\/html; *charset=(.*)$/i.exec(meta.content);
+			charset = r[1];
+			charset_meta = meta;
+		} else if ((/keywords/i.test(meta.name)) || (/keywords/i.test(meta.id))) {
+			keywords = meta;
+		}	else if ((/description/i.test(meta.name)) || (/description/i.test(meta.id))) {
+			description = meta;
+		}
+	}
+	function createLink(alt) {
+		var link = doc.createElement("link");
+		link.rel = alt ? "alternate stylesheet" : "stylesheet";
+		head.appendChild(link);
+		return link;
+	}
+	function createMeta(httpEquiv, name, content) {
+		var meta = doc.createElement("meta");
+		if (httpEquiv!="") meta.httpEquiv = httpEquiv;
+		if (name!="") meta.name = name;
+		if (name!="") meta.id = name;
+		meta.content = content;
+		head.appendChild(meta);
+		return meta;
+	}
+
+	if (!style1 && params.f_base_style)
+		style1 = createLink(false);
+	if (params.f_base_style)
+		style1.href = params.f_base_style;
+	else if (style1)
+		head.removeChild(style1);
+
+	if (!style2 && params.f_alt_style)
+		style2 = createLink(true);
+	if (params.f_alt_style)
+		style2.href = params.f_alt_style;
+	else if (style2)
+		head.removeChild(style2);
+
+	if (charset_meta) {
+		head.removeChild(charset_meta);
+		charset_meta = null;
+	}
+	if (!charset_meta && params.f_charset)
+		charset_meta = createMeta("Content-Type","", "text/html; charset="+params.f_charset);
+
+	if (!keywords && params.f_keywords)
+		keywords = createMeta("","keywords", params.f_keywords);
+	else if (params.f_keywords)
+		keywords.content = params.f_keywords;
+	else if (keywords)
+		head.removeChild(keywords);
+
+	if (!description && params.f_description)
+		description = createMeta("","description", params.f_description);
+	else if (params.f_description)
+		description.content = params.f_description;
+	else if (description)
+		head.removeChild(description);
+
+  	for (var i in params) {
+		var val = params[i];
+		switch (i) {
+		    case "f_title":
+			var title = doc.getElementsByTagName("title")[0];
+			if (!title) {
+				title = doc.createElement("title");
+				head.appendChild(title);
+			} else while (node = title.lastChild)
+				title.removeChild(node);
+			if (!Xinha.is_ie)
+				title.appendChild(doc.createTextNode(val));
+			else
+				doc.title = val;
+			break;
+		    case "f_doctype":
+			this.editor.setDoctype(val);
+			break;
+		    case "f_body_bgcolor":
+			doc.body.style.backgroundColor = val;
+			break;
+		    case "f_body_fgcolor":
+			doc.body.style.color = val;
+			break;
+		}
+	}
+};

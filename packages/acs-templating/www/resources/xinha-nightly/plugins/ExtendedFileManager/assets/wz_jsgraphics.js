@@ -1,3 +1,1160 @@
-/* This compressed file is part of Xinha. For uncompressed sources, forum, and bug reports, go to xinha.org */
-/* This file is part of version 0.96beta2 released Fri, 20 Mar 2009 11:01:14 +0100 */
-var jg_ok,jg_ie,jg_fast,jg_dom,jg_moz;function _chkDHTM(a,b){a=document.body||null;jg_ie=a&&typeof a.insertAdjacentHTML!="undefined"&&document.createElement;jg_dom=(a&&!jg_ie&&typeof a.appendChild!="undefined"&&typeof document.createRange!="undefined"&&typeof(b=document.createRange()).setStartBefore!="undefined"&&typeof b.createContextualFragment!="undefined");jg_fast=jg_ie&&document.all&&!window.opera;jg_moz=jg_dom&&typeof a.style.MozOpacity!="undefined";jg_ok=!!(jg_ie||jg_dom)}function _pntCnvDom(){var a=this.wnd.document.createRange();a.setStartBefore(this.cnv);a=a.createContextualFragment(jg_fast?this._htmRpc():this.htm);if(this.cnv){this.cnv.appendChild(a)}this.htm=""}function _pntCnvIe(){if(this.cnv){this.cnv.insertAdjacentHTML("BeforeEnd",jg_fast?this._htmRpc():this.htm)}this.htm=""}function _pntDoc(){this.wnd.document.write(jg_fast?this._htmRpc():this.htm);this.htm=""}function _pntN(){}function _mkDiv(a,d,b,c){this.htm+='<div style="position:absolute;left:'+a+"px;top:"+d+"px;width:"+b+"px;height:"+c+"px;clip:rect(0,"+b+"px,"+c+"px,0);background-color:"+this.color+(!jg_moz?";overflow:hidden":"")+';"></div>'}function _mkDivIe(a,d,b,c){this.htm+="%%"+this.color+";"+a+";"+d+";"+b+";"+c+";"}function _mkDivPrt(a,d,b,c){this.htm+='<div style="position:absolute;border-left:'+b+"px solid "+this.color+";left:"+a+"px;top:"+d+"px;width:0px;height:"+c+"px;clip:rect(0,"+b+"px,"+c+"px,0);background-color:"+this.color+(!jg_moz?";overflow:hidden":"")+';"></div>'}var _regex=/%%([^;]+);([^;]+);([^;]+);([^;]+);([^;]+);/g;function _htmRpc(){return this.htm.replace(_regex,'<div style="overflow:hidden;position:absolute;background-color:$1;left:$2;top:$3;width:$4;height:$5"></div>\n')}function _htmPrtRpc(){return this.htm.replace(_regex,'<div style="overflow:hidden;position:absolute;background-color:$1;left:$2;top:$3;width:$4;height:$5;border-left:$4px solid $1"></div>\n')}function _mkLin(e,m,b,k){if(e>b){var j=b;var g=k;b=e;k=m;e=j;m=g}var q=b-e,o=Math.abs(k-m),l=e,i=m,n=(m>k)?-1:1;if(q>=o){var a=o<<1,h=a-(q<<1),d=a-q,f=l;while(q>0){--q;++l;if(d>0){this._mkDiv(f,i,l-f,1);i+=n;d+=h;f=l}else{d+=a}}this._mkDiv(f,i,b-f+1,1)}else{var a=q<<1,h=a-(o<<1),d=a-o,c=i;if(k<=m){while(o>0){--o;if(d>0){this._mkDiv(l++,i,1,c-i+1);i+=n;d+=h;c=i}else{i+=n;d+=a}}this._mkDiv(b,k,1,c-k+1)}else{while(o>0){--o;i+=n;if(d>0){this._mkDiv(l++,c,1,i-c);d+=h;c=i}else{d+=a}}this._mkDiv(b,c,1,k-c+1)}}}function _mkLin2D(r,b,q,a){if(r>q){var f=q;var n=a;q=r;a=b;r=f;b=n}var j=q-r,i=Math.abs(a-b),h=r,g=b,m=(b>a)?-1:1;var k=this.stroke;if(j>=i){if(j>0&&k-3>0){var t=(k*j*Math.sqrt(1+i*i/(j*j))-j-(k>>1)*i)/j;t=(!(k-4)?Math.ceil(t):Math.round(t))+1}else{var t=k}var u=Math.ceil(k/2);var o=i<<1,e=o-(j<<1),l=o-j,d=h;while(j>0){--j;++h;if(l>0){this._mkDiv(d,g,h-d+u,t);g+=m;l+=e;d=h}else{l+=o}}this._mkDiv(d,g,q-d+u+1,t)}else{if(k-3>0){var t=(k*i*Math.sqrt(1+j*j/(i*i))-(k>>1)*j-i)/i;t=(!(k-4)?Math.ceil(t):Math.round(t))+1}else{var t=k}var u=Math.round(k/2);var o=j<<1,e=o-(i<<1),l=o-i,c=g;if(a<=b){++u;while(i>0){--i;if(l>0){this._mkDiv(h++,g,t,c-g+u);g+=m;l+=e;c=g}else{g+=m;l+=o}}this._mkDiv(q,a,t,c-a+u)}else{while(i>0){--i;g+=m;if(l>0){this._mkDiv(h++,c,t,g-c+u);l+=e;c=g}else{l+=o}}this._mkDiv(q,c,t,a-c+u+1)}}}function _mkLinDott(d,k,b,i){if(d>b){var h=b;var e=i;b=d;i=k;d=h;k=e}var o=b-d,n=Math.abs(i-k),j=d,g=k,m=(k>i)?-1:1,l=true;if(o>=n){var a=n<<1,f=a-(o<<1),c=a-o;while(o>0){--o;if(l){this._mkDiv(j,g,1,1)}l=!l;if(c>0){g+=m;c+=f}else{c+=a}++j}}else{var a=o<<1,f=a-(n<<1),c=a-n;while(n>0){--n;if(l){this._mkDiv(j,g,1,1)}l=!l;g+=m;if(c>0){++j;c+=f}else{c+=a}}}if(l){this._mkDiv(j,g,1,1)}}function _mkOv(g,q,u,s){var B=(++u)>>1,A=(++s)>>1,o=u&1,f=s&1,e=g+B,d=q+A,l=0,k=A,j=0,i=A,t=(B*B)<<1,r=t<<1,p=(A*A)<<1,n=p<<1,v=(t>>1)*(1-(A<<1))+p,c=(p>>1)-t*((A<<1)-1),m,z;while(k>0){if(v<0){v+=p*((l<<1)+3);c+=n*(++l)}else{if(c<0){v+=p*((l<<1)+3)-r*(k-1);c+=n*(++l)-t*(((k--)<<1)-3);m=l-j;z=i-k;if((m&2)&&(z&2)){this._mkOvQds(e,d,l-2,k+2,1,1,o,f);this._mkOvQds(e,d,l-1,k+1,1,1,o,f)}else{this._mkOvQds(e,d,l-1,i,m,z,o,f)}j=l;i=k}else{c-=t*((k<<1)-3);v-=r*(--k)}}}m=B-j+1;z=(i<<1)+f;k=d-i;this._mkDiv(e-B,k,m,z);this._mkDiv(e+j+o-1,k,m,z)}function _mkOv2D(g,m,c,d){var L=this.stroke;c+=L+1;d+=L+1;var V=c>>1,T=d>>1,S=c&1,E=d&1,q=g+V,p=m+T,J=0,G=T,B=(V*V)<<1,z=B<<1,k=(T*T)<<1,f=k<<1,n=(B>>1)*(1-(T<<1))+k,R=(k>>1)-B*((T<<1)-1);if(L-4<0&&(!(L-2)||c-51>0&&d-51>0)){var u=0,t=T,K,P,C;while(G>0){if(n<0){n+=k*((J<<1)+3);R+=f*(++J)}else{if(R<0){n+=k*((J<<1)+3)-z*(G-1);R+=f*(++J)-B*(((G--)<<1)-3);K=J-u;P=t-G;if(K-1){C=K+1+(L&1);P=L}else{if(P-1){C=L;P+=1+(L&1)}else{C=P=L}}this._mkOvQds(q,p,J-1,t,C,P,S,E);u=J;t=G}else{R-=B*((G<<1)-3);n-=z*(--G)}}}this._mkDiv(q-V,p-t,L,(t<<1)+E);this._mkDiv(q+V+S-L,p-t,L,(t<<1)+E)}else{var W=(c-(L<<1))>>1,U=(d-(L<<1))>>1,H=0,F=U,A=(W*W)<<1,v=A<<1,j=(U*U)<<1,e=j<<1,o=(A>>1)*(1-(U<<1))+j,Q=(j>>1)-A*((U<<1)-1),I=new Array(),D=new Array(),M=new Array();I[0]=0;D[0]=T;M[0]=U-1;while(G>0){if(n<0){I[I.length]=J;D[D.length]=G;n+=k*((J<<1)+3);R+=f*(++J)}else{if(R<0){I[I.length]=J;n+=k*((J<<1)+3)-z*(G-1);R+=f*(++J)-B*(((G--)<<1)-3);D[D.length]=G}else{R-=B*((G<<1)-3);n-=z*(--G)}}if(F>0){if(o<0){o+=j*((H<<1)+3);Q+=e*(++H);M[M.length]=F-1}else{if(Q<0){o+=j*((H<<1)+3)-v*(F-1);Q+=e*(++H)-A*(((F--)<<1)-3);M[M.length]=F-1}else{Q-=A*((F<<1)-3);o-=v*(--F);M[M.length-1]--}}}}var u=-S,t=T,r=M[0],N=I.length,K,P;for(var O=0;O<N;O++){if(typeof M[O]!="undefined"){if(M[O]<r||D[O]<t){J=I[O];this._mkOvQds(q,p,J,t,J-u,t-r,S,E);u=J;t=D[O];r=M[O]}}else{J=I[O];this._mkDiv(q-J,p-t,1,(t<<1)+E);this._mkDiv(q+u+S,p-t,1,(t<<1)+E);u=J;t=D[O]}}this._mkDiv(q-V,p-t,1,(t<<1)+E);this._mkDiv(q+u+S,p-t,1,(t<<1)+E)}}function _mkOvDott(g,n,s,q){var v=(++s)>>1,u=(++q)>>1,l=s&1,f=q&1,j=f^1,e=g+v,d=n+u,i=0,h=u,r=(v*v)<<1,o=r<<1,m=(u*u)<<1,k=m<<1,t=(r>>1)*(1-(u<<1))+m,c=(m>>1)-r*((u<<1)-1),p=true;while(h>0){if(t<0){t+=m*((i<<1)+3);c+=k*(++i)}else{if(c<0){t+=m*((i<<1)+3)-o*(h-1);c+=k*(++i)-r*(((h--)<<1)-3)}else{c-=r*((h<<1)-3);t-=o*(--h)}}if(p&&h>=j){this._mkOvQds(e,d,i,h,1,1,l,f)}p=!p}}function _mkRect(a,e,b,d){var c=this.stroke;this._mkDiv(a,e,b,c);this._mkDiv(a+b,e,c,d);this._mkDiv(a,e+d,b+c,c);this._mkDiv(a,e+c,c,d-c)}function _mkRectDott(a,d,b,c){this.drawLine(a,d,a+b,d);this.drawLine(a+b,d,a+b,d+c);this.drawLine(a,d+c,a+b,d+c);this.drawLine(a,d,a,d+c)}function jsgFont(){this.PLAIN="font-weight:normal;";this.BOLD="font-weight:bold;";this.ITALIC="font-style:italic;";this.ITALIC_BOLD=this.ITALIC+this.BOLD;this.BOLD_ITALIC=this.ITALIC_BOLD}var Font=new jsgFont();function jsgStroke(){this.DOTTED=-1}var Stroke=new jsgStroke();function jsGraphics(a,b){this.setColor=function(c){this.color=c.toLowerCase()};this.setStroke=function(c){this.stroke=c;if(!(c+1)){this.drawLine=_mkLinDott;this._mkOv=_mkOvDott;this.drawRect=_mkRectDott}else{if(c-1>0){this.drawLine=_mkLin2D;this._mkOv=_mkOv2D;this.drawRect=_mkRect}else{this.drawLine=_mkLin;this._mkOv=_mkOv;this.drawRect=_mkRect}}};this.setPrintable=function(c){this.printable=c;if(jg_fast){this._mkDiv=_mkDivIe;this._htmRpc=c?_htmPrtRpc:_htmRpc}else{this._mkDiv=c?_mkDivPrt:_mkDiv}};this.setFont=function(d,e,c){this.ftFam=d;this.ftSz=e;this.ftSty=c||Font.PLAIN};this.drawPolyline=this.drawPolyLine=function(c,e){for(var d=c.length-1;d;){--d;this.drawLine(c[d],e[d],c[d+1],e[d+1])}};this.setColor=new Function("arg","this.color = arg;");this.getColor=new Function("return this.color");this.fillRect=function(c,f,d,e){this._mkDiv(c,f,d,e)};this.fillRectPattern=function(c,g,d,f,e){this.htm+='<div style="position:absolute;left:'+c+"px;top:"+g+"px;width:"+d+"px;height:"+f+"px;clip:rect(0,"+d+"px,"+f+"px,0);overflow:hidden;background-image: url('"+e+"');layer-background-image: url('"+e+"');z-index:100;\"></div>"};this.drawHandle=function(c,g,d,e,f){this.htm+='<div style="position:absolute;left:'+c+"px;top:"+g+"px;width:"+d+"px;height:"+e+"px;clip:rect(0,"+d+"px,"+e+"px,0);padding: 2px;overflow:hidden;cursor: '"+f+'\';" class="handleBox" id="'+f+'" ></div>'};this.drawHandleBox=function(c,g,d,e,f){this.htm+='<div style="position:absolute;left:'+c+"px;top:"+g+"px;width:"+d+"px;height:"+e+"px;clip:rect(0,"+(d+2)+"px,"+(e+2)+"px,0);overflow:hidden; border: solid 1px "+this.color+";cursor: '"+f+'\';" class="handleBox" id="'+f+'" ></div>'};this.drawPolygon=function(c,d){this.drawPolyline(c,d);this.drawLine(c[c.length-1],d[c.length-1],c[0],d[0])};this.drawEllipse=this.drawOval=function(c,f,d,e){this._mkOv(c,f,d,e)};this.fillEllipse=this.fillOval=function(g,r,m,v){var B=m>>1,A=v>>1,n=m&1,f=v&1,e=g+B,d=r+A,k=0,j=A,i=A,t=(B*B)<<1,s=t<<1,p=(A*A)<<1,l=p<<1,u=(t>>1)*(1-(A<<1))+p,c=(p>>1)-t*((A<<1)-1),q,o,z;if(m){while(j>0){if(u<0){u+=p*((k<<1)+3);c+=l*(++k)}else{if(c<0){u+=p*((k<<1)+3)-s*(j-1);q=e-k;o=(k<<1)+n;c+=l*(++k)-t*(((j--)<<1)-3);z=i-j;this._mkDiv(q,d-i,o,z);this._mkDiv(q,d+j+f,o,z);i=j}else{c-=t*((j<<1)-3);u-=s*(--j)}}}}this._mkDiv(e-B,d-i,m,(i<<1)+f)};this.fillArc=function(e,G,B,i,f,u){var F=B>>1,E=i>>1,q=(B&1)|((i&1)<<16),g=e+F,d=G+E,o=0,m=E,k=o,j=m,v=(F*F)<<1,t=v<<1,r=(E*E)<<1,p=r<<1,z=(v>>1)*(1-(E<<1))+r,c=(r>>1)-v*((E<<1)-1),A,n,l,D,C=(1<<(Math.floor((f%=360)/180)<<3))|(2<<(Math.floor((u%=360)/180)<<3))|((f>=u)<<16),h=new Array(E+1),w=new Array(E+1);f*=Math.PI/180;u*=Math.PI/180;A=g+Math.round(F*Math.cos(f));n=d+Math.round(-E*Math.sin(f));_mkLinVirt(h,g,d,A,n);l=g+Math.round(F*Math.cos(u));D=d+Math.round(-E*Math.sin(u));_mkLinVirt(w,g,d,l,D);while(m>0){if(z<0){z+=r*((o<<1)+3);c+=p*(++o)}else{if(c<0){z+=r*((o<<1)+3)-t*(m-1);k=o;c+=p*(++o)-v*(((m--)<<1)-3);this._mkArcDiv(k,m,j,g,d,q,h,w,C);j=m}else{c-=v*((m<<1)-3);z-=t*(--m);if(m&&(h[m]!=h[m-1]||w[m]!=w[m-1])){this._mkArcDiv(o,m,j,g,d,q,h,w,C);k=o;j=m}}}}this._mkArcDiv(o,0,j,g,d,q,h,w,C);if(q>>16){if(C>>16){var s=(n<=d||D>d)?(g-o):g;this._mkDiv(s,d,o+g-s+(q&65535),1)}else{if((C&1)&&D>d){this._mkDiv(g-o,d,o,1)}}}};this.fillPolygon=function(j,h){var k;var q;var s,o;var d,r;var c,p;var m,l;var e;var f=j.length;if(!f){return}s=h[0];o=h[0];for(k=1;k<f;k++){if(h[k]<s){s=h[k]}if(h[k]>o){o=h[k]}}for(q=s;q<=o;q++){var g=new Array();e=0;for(k=0;k<f;k++){if(!k){m=f-1;l=0}else{m=k-1;l=k}r=h[m];p=h[l];if(r<p){d=j[m];c=j[l]}else{if(r>p){p=h[m];r=h[l];c=j[m];d=j[l]}else{continue}}if((q>=r)&&(q<p)){g[e++]=Math.round((q-r)*(c-d)/(p-r)+d)}else{if((q==o)&&(q>r)&&(q<=p)){g[e++]=Math.round((q-r)*(c-d)/(p-r)+d)}}}g.sort(_CompInt);for(k=0;k<e;k+=2){this._mkDiv(g[k],q,g[k+1]-g[k]+1,1)}}};this.drawString=function(d,c,e){this.htm+='<div style="position:absolute;white-space:nowrap;left:'+c+"px;top:"+e+"px;font-family:"+this.ftFam+";font-size:"+this.ftSz+";color:"+this.color+";"+this.ftSty+'">'+d+"</div>"};this.drawStringRect=function(d,c,g,e,f){this.htm+='<div style="position:absolute;overflow:hidden;left:'+c+"px;top:"+g+"px;width:"+e+"px;text-align:"+f+";font-family:"+this.ftFam+";font-size:"+this.ftSz+";color:"+this.color+";"+this.ftSty+'">'+d+"</div>"};this.drawImage=function(g,c,i,e,f,d){this.htm+='<div style="position:absolute;left:'+c+"px;top:"+i+"px;width:"+e+"px;height:"+f+'px;"><img src="'+g+'" width="'+e+'" height="'+f+'"'+(d?(" "+d):"")+"></div>"};this.clear=function(){this.htm="";if(this.cnv){this.cnv.innerHTML=""}};this._mkOvQds=function(e,d,l,k,m,f,o,j){var g=e-l,c=e+l+o-m,n=d-k,i=d+k+j-f;if(c>g+m){this._mkDiv(c,n,m,f);this._mkDiv(c,i,m,f)}else{m=c-g+m}this._mkDiv(g,n,m,f);this._mkDiv(g,i,m,f)};this._mkArcDiv=function(p,o,d,i,g,e,m,l,r){var c=i+p+(e&65535),n,j=d-o,k,f,q;if(!j){j=1}p=i-p;if(r&16711680){n=g-o-j;if(r&255){if(r&2){k=Math.max(p,l[o]);q=c-k;if(q>0){this._mkDiv(k,n,q,j)}}if(r&1){f=Math.min(c,m[o]);q=f-p;if(q>0){this._mkDiv(p,n,q,j)}}}else{this._mkDiv(p,n,c-p,j)}n=g+o+(e>>16);if(r&65280){if(r&256){k=Math.max(p,m[o]);q=c-k;if(q>0){this._mkDiv(k,n,q,j)}}if(r&512){f=Math.min(c,l[o]);q=f-p;if(q>0){this._mkDiv(p,n,q,j)}}}else{this._mkDiv(p,n,c-p,j)}}else{if(r&255){if(r&2){k=Math.max(p,l[o])}else{k=p}if(r&1){f=Math.min(c,m[o])}else{f=c}n=g-o-j;q=f-k;if(q>0){this._mkDiv(k,n,q,j)}}if(r&65280){if(r&256){k=Math.max(p,m[o])}else{k=p}if(r&512){f=Math.min(c,l[o])}else{f=c}n=g+o+(e>>16);q=f-k;if(q>0){this._mkDiv(k,n,q,j)}}}};this.setStroke(1);this.setFont("verdana,geneva,helvetica,sans-serif","12px",Font.PLAIN);this.color="#000000";this.htm="";this.wnd=b||window;if(!jg_ok){_chkDHTM()}if(jg_ok){if(a){if(typeof(a)=="string"){this.cont=document.all?(this.wnd.document.all[a]||null):document.getElementById?(this.wnd.document.getElementById(a)||null):null}else{if(a==window.document){this.cont=document.getElementsByTagName("body")[0]}else{this.cont=a}}this.cnv=this.wnd.document.createElement("div");this.cnv.style.fontSize=0;this.cont.appendChild(this.cnv);this.paint=jg_dom?_pntCnvDom:_pntCnvIe}else{this.paint=_pntDoc}}else{this.paint=_pntN}this.setPrintable(false)}function _mkLinVirt(n,e,l,c,k){var r=Math.abs(c-e),q=Math.abs(k-l),m=e,j=l,a=(e>c)?-1:1,o=(l>k)?-1:1,d,f=0;if(r>=q){var b=q<<1,h=b-(r<<1);d=b-r;while(r>0){--r;if(d>0){n[f++]=m;j+=o;d+=h}else{d+=b}m+=a}}else{var b=r<<1,h=b-(q<<1);d=b-q;while(q>0){--q;j+=o;n[f++]=m;if(d>0){m+=a;d+=h}else{d+=b}}}for(var g=n.length,f=g-f;f;){n[g-(f--)]=m}}function _CompInt(a,b){return(a-b)};
+/***********************************************************************
+** Filename......:  wz_jsgraphics.js
+** Last changed..:  2 November 2007 by Raimund Meyer updated to new version  
+** Notes.........:  Modified by Xiang Wei ZHUO <wei@zhuo.org> for Image Editor, added extra commands l. 690-740
+**/ 
+
+/* This notice must be untouched at all times.
+
+wz_jsgraphics.js    v. 3.02
+The latest version is available at
+http://www.walterzorn.com
+or http://www.devira.com
+or http://www.walterzorn.de
+
+Copyright (c) 2002-2004 Walter Zorn. All rights reserved.
+Created 3. 11. 2002 by Walter Zorn (Web: http://www.walterzorn.com )
+Last modified: 26. 10. 2007
+
+Performance optimizations for Internet Explorer
+by Thomas Frank and John Holdsworth.
+fillPolygon method implemented by Matthieu Haller.
+
+High Performance JavaScript Graphics Library.
+Provides methods
+- to draw lines, rectangles, ellipses, polygons
+	with specifiable line thickness,
+- to fill rectangles, polygons, ellipses and arcs
+- to draw text.
+NOTE: Operations, functions and branching have rather been optimized
+to efficiency and speed than to shortness of source code.
+
+LICENSE: LGPL
+
+This library is free software; you can redistribute it and/or
+modify it under the terms of the GNU Lesser General Public
+License (LGPL) as published by the Free Software Foundation; either
+version 2.1 of the License, or (at your option) any later version.
+
+This library is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public
+License along with this library; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA,
+or see http://www.gnu.org/copyleft/lesser.html
+*/
+
+
+var jg_ok, jg_ie, jg_fast, jg_dom, jg_moz;
+
+
+function _chkDHTM(x, i)
+{
+	x = document.body || null;
+	jg_ie = x && typeof x.insertAdjacentHTML != "undefined" && document.createElement;
+	jg_dom = (x && !jg_ie &&
+		typeof x.appendChild != "undefined" &&
+		typeof document.createRange != "undefined" &&
+		typeof (i = document.createRange()).setStartBefore != "undefined" &&
+		typeof i.createContextualFragment != "undefined");
+	jg_fast = jg_ie && document.all && !window.opera;
+	jg_moz = jg_dom && typeof x.style.MozOpacity != "undefined";
+	jg_ok = !!(jg_ie || jg_dom);
+}
+
+function _pntCnvDom()
+{
+	var x = this.wnd.document.createRange();
+	x.setStartBefore(this.cnv);
+	x = x.createContextualFragment(jg_fast? this._htmRpc() : this.htm);
+	if(this.cnv) this.cnv.appendChild(x);
+	this.htm = "";
+}
+
+function _pntCnvIe()
+{
+	if(this.cnv) this.cnv.insertAdjacentHTML("BeforeEnd", jg_fast? this._htmRpc() : this.htm);
+	this.htm = "";
+}
+
+function _pntDoc()
+{
+	this.wnd.document.write(jg_fast? this._htmRpc() : this.htm);
+	this.htm = '';
+}
+
+function _pntN()
+{
+	;
+}
+
+function _mkDiv(x, y, w, h)
+{
+	this.htm += '<div style="position:absolute;'+
+		'left:' + x + 'px;'+
+		'top:' + y + 'px;'+
+		'width:' + w + 'px;'+
+		'height:' + h + 'px;'+
+		'clip:rect(0,'+w+'px,'+h+'px,0);'+
+		'background-color:' + this.color +
+		(!jg_moz? ';overflow:hidden' : '')+
+		';"><\/div>';
+}
+
+function _mkDivIe(x, y, w, h)
+{
+	this.htm += '%%'+this.color+';'+x+';'+y+';'+w+';'+h+';';
+}
+
+function _mkDivPrt(x, y, w, h)
+{
+	this.htm += '<div style="position:absolute;'+
+		'border-left:' + w + 'px solid ' + this.color + ';'+
+		'left:' + x + 'px;'+
+		'top:' + y + 'px;'+
+		'width:0px;'+
+		'height:' + h + 'px;'+
+		'clip:rect(0,'+w+'px,'+h+'px,0);'+
+		'background-color:' + this.color +
+		(!jg_moz? ';overflow:hidden' : '')+
+		';"><\/div>';
+}
+
+var _regex =  /%%([^;]+);([^;]+);([^;]+);([^;]+);([^;]+);/g;
+function _htmRpc()
+{
+	return this.htm.replace(
+		_regex,
+		'<div style="overflow:hidden;position:absolute;background-color:'+
+		'$1;left:$2;top:$3;width:$4;height:$5"></div>\n');
+}
+
+function _htmPrtRpc()
+{
+	return this.htm.replace(
+		_regex,
+		'<div style="overflow:hidden;position:absolute;background-color:'+
+		'$1;left:$2;top:$3;width:$4;height:$5;border-left:$4px solid $1"></div>\n');
+}
+
+function _mkLin(x1, y1, x2, y2)
+{
+	if(x1 > x2)
+	{
+		var _x2 = x2;
+		var _y2 = y2;
+		x2 = x1;
+		y2 = y1;
+		x1 = _x2;
+		y1 = _y2;
+	}
+	var dx = x2-x1, dy = Math.abs(y2-y1),
+	x = x1, y = y1,
+	yIncr = (y1 > y2)? -1 : 1;
+
+	if(dx >= dy)
+	{
+		var pr = dy<<1,
+		pru = pr - (dx<<1),
+		p = pr-dx,
+		ox = x;
+		while(dx > 0)
+		{--dx;
+			++x;
+			if(p > 0)
+			{
+				this._mkDiv(ox, y, x-ox, 1);
+				y += yIncr;
+				p += pru;
+				ox = x;
+			}
+			else p += pr;
+		}
+		this._mkDiv(ox, y, x2-ox+1, 1);
+	}
+
+	else
+	{
+		var pr = dx<<1,
+		pru = pr - (dy<<1),
+		p = pr-dy,
+		oy = y;
+		if(y2 <= y1)
+		{
+			while(dy > 0)
+			{--dy;
+				if(p > 0)
+				{
+					this._mkDiv(x++, y, 1, oy-y+1);
+					y += yIncr;
+					p += pru;
+					oy = y;
+				}
+				else
+				{
+					y += yIncr;
+					p += pr;
+				}
+			}
+			this._mkDiv(x2, y2, 1, oy-y2+1);
+		}
+		else
+		{
+			while(dy > 0)
+			{--dy;
+				y += yIncr;
+				if(p > 0)
+				{
+					this._mkDiv(x++, oy, 1, y-oy);
+					p += pru;
+					oy = y;
+				}
+				else p += pr;
+			}
+			this._mkDiv(x2, oy, 1, y2-oy+1);
+		}
+	}
+}
+
+function _mkLin2D(x1, y1, x2, y2)
+{
+	if(x1 > x2)
+	{
+		var _x2 = x2;
+		var _y2 = y2;
+		x2 = x1;
+		y2 = y1;
+		x1 = _x2;
+		y1 = _y2;
+	}
+	var dx = x2-x1, dy = Math.abs(y2-y1),
+	x = x1, y = y1,
+	yIncr = (y1 > y2)? -1 : 1;
+
+	var s = this.stroke;
+	if(dx >= dy)
+	{
+		if(dx > 0 && s-3 > 0)
+		{
+			var _s = (s*dx*Math.sqrt(1+dy*dy/(dx*dx))-dx-(s>>1)*dy) / dx;
+			_s = (!(s-4)? Math.ceil(_s) : Math.round(_s)) + 1;
+		}
+		else var _s = s;
+		var ad = Math.ceil(s/2);
+
+		var pr = dy<<1,
+		pru = pr - (dx<<1),
+		p = pr-dx,
+		ox = x;
+		while(dx > 0)
+		{--dx;
+			++x;
+			if(p > 0)
+			{
+				this._mkDiv(ox, y, x-ox+ad, _s);
+				y += yIncr;
+				p += pru;
+				ox = x;
+			}
+			else p += pr;
+		}
+		this._mkDiv(ox, y, x2-ox+ad+1, _s);
+	}
+
+	else
+	{
+		if(s-3 > 0)
+		{
+			var _s = (s*dy*Math.sqrt(1+dx*dx/(dy*dy))-(s>>1)*dx-dy) / dy;
+			_s = (!(s-4)? Math.ceil(_s) : Math.round(_s)) + 1;
+		}
+		else var _s = s;
+		var ad = Math.round(s/2);
+
+		var pr = dx<<1,
+		pru = pr - (dy<<1),
+		p = pr-dy,
+		oy = y;
+		if(y2 <= y1)
+		{
+			++ad;
+			while(dy > 0)
+			{--dy;
+				if(p > 0)
+				{
+					this._mkDiv(x++, y, _s, oy-y+ad);
+					y += yIncr;
+					p += pru;
+					oy = y;
+				}
+				else
+				{
+					y += yIncr;
+					p += pr;
+				}
+			}
+			this._mkDiv(x2, y2, _s, oy-y2+ad);
+		}
+		else
+		{
+			while(dy > 0)
+			{--dy;
+				y += yIncr;
+				if(p > 0)
+				{
+					this._mkDiv(x++, oy, _s, y-oy+ad);
+					p += pru;
+					oy = y;
+				}
+				else p += pr;
+			}
+			this._mkDiv(x2, oy, _s, y2-oy+ad+1);
+		}
+	}
+}
+
+function _mkLinDott(x1, y1, x2, y2)
+{
+	if(x1 > x2)
+	{
+		var _x2 = x2;
+		var _y2 = y2;
+		x2 = x1;
+		y2 = y1;
+		x1 = _x2;
+		y1 = _y2;
+	}
+	var dx = x2-x1, dy = Math.abs(y2-y1),
+	x = x1, y = y1,
+	yIncr = (y1 > y2)? -1 : 1,
+	drw = true;
+	if(dx >= dy)
+	{
+		var pr = dy<<1,
+		pru = pr - (dx<<1),
+		p = pr-dx;
+		while(dx > 0)
+		{--dx;
+			if(drw) this._mkDiv(x, y, 1, 1);
+			drw = !drw;
+			if(p > 0)
+			{
+				y += yIncr;
+				p += pru;
+			}
+			else p += pr;
+			++x;
+		}
+	}
+	else
+	{
+		var pr = dx<<1,
+		pru = pr - (dy<<1),
+		p = pr-dy;
+		while(dy > 0)
+		{--dy;
+			if(drw) this._mkDiv(x, y, 1, 1);
+			drw = !drw;
+			y += yIncr;
+			if(p > 0)
+			{
+				++x;
+				p += pru;
+			}
+			else p += pr;
+		}
+	}
+	if(drw) this._mkDiv(x, y, 1, 1);
+}
+
+function _mkOv(left, top, width, height)
+{
+	var a = (++width)>>1, b = (++height)>>1,
+	wod = width&1, hod = height&1,
+	cx = left+a, cy = top+b,
+	x = 0, y = b,
+	ox = 0, oy = b,
+	aa2 = (a*a)<<1, aa4 = aa2<<1, bb2 = (b*b)<<1, bb4 = bb2<<1,
+	st = (aa2>>1)*(1-(b<<1)) + bb2,
+	tt = (bb2>>1) - aa2*((b<<1)-1),
+	w, h;
+	while(y > 0)
+	{
+		if(st < 0)
+		{
+			st += bb2*((x<<1)+3);
+			tt += bb4*(++x);
+		}
+		else if(tt < 0)
+		{
+			st += bb2*((x<<1)+3) - aa4*(y-1);
+			tt += bb4*(++x) - aa2*(((y--)<<1)-3);
+			w = x-ox;
+			h = oy-y;
+			if((w&2) && (h&2))
+			{
+				this._mkOvQds(cx, cy, x-2, y+2, 1, 1, wod, hod);
+				this._mkOvQds(cx, cy, x-1, y+1, 1, 1, wod, hod);
+			}
+			else this._mkOvQds(cx, cy, x-1, oy, w, h, wod, hod);
+			ox = x;
+			oy = y;
+		}
+		else
+		{
+			tt -= aa2*((y<<1)-3);
+			st -= aa4*(--y);
+		}
+	}
+	w = a-ox+1;
+	h = (oy<<1)+hod;
+	y = cy-oy;
+	this._mkDiv(cx-a, y, w, h);
+	this._mkDiv(cx+ox+wod-1, y, w, h);
+}
+
+function _mkOv2D(left, top, width, height)
+{
+	var s = this.stroke;
+	width += s+1;
+	height += s+1;
+	var a = width>>1, b = height>>1,
+	wod = width&1, hod = height&1,
+	cx = left+a, cy = top+b,
+	x = 0, y = b,
+	aa2 = (a*a)<<1, aa4 = aa2<<1, bb2 = (b*b)<<1, bb4 = bb2<<1,
+	st = (aa2>>1)*(1-(b<<1)) + bb2,
+	tt = (bb2>>1) - aa2*((b<<1)-1);
+
+	if(s-4 < 0 && (!(s-2) || width-51 > 0 && height-51 > 0))
+	{
+		var ox = 0, oy = b,
+		w, h,
+		pxw;
+		while(y > 0)
+		{
+			if(st < 0)
+			{
+				st += bb2*((x<<1)+3);
+				tt += bb4*(++x);
+			}
+			else if(tt < 0)
+			{
+				st += bb2*((x<<1)+3) - aa4*(y-1);
+				tt += bb4*(++x) - aa2*(((y--)<<1)-3);
+				w = x-ox;
+				h = oy-y;
+
+				if(w-1)
+				{
+					pxw = w+1+(s&1);
+					h = s;
+				}
+				else if(h-1)
+				{
+					pxw = s;
+					h += 1+(s&1);
+				}
+				else pxw = h = s;
+				this._mkOvQds(cx, cy, x-1, oy, pxw, h, wod, hod);
+				ox = x;
+				oy = y;
+			}
+			else
+			{
+				tt -= aa2*((y<<1)-3);
+				st -= aa4*(--y);
+			}
+		}
+		this._mkDiv(cx-a, cy-oy, s, (oy<<1)+hod);
+		this._mkDiv(cx+a+wod-s, cy-oy, s, (oy<<1)+hod);
+	}
+
+	else
+	{
+		var _a = (width-(s<<1))>>1,
+		_b = (height-(s<<1))>>1,
+		_x = 0, _y = _b,
+		_aa2 = (_a*_a)<<1, _aa4 = _aa2<<1, _bb2 = (_b*_b)<<1, _bb4 = _bb2<<1,
+		_st = (_aa2>>1)*(1-(_b<<1)) + _bb2,
+		_tt = (_bb2>>1) - _aa2*((_b<<1)-1),
+
+		pxl = new Array(),
+		pxt = new Array(),
+		_pxb = new Array();
+		pxl[0] = 0;
+		pxt[0] = b;
+		_pxb[0] = _b-1;
+		while(y > 0)
+		{
+			if(st < 0)
+			{
+				pxl[pxl.length] = x;
+				pxt[pxt.length] = y;
+				st += bb2*((x<<1)+3);
+				tt += bb4*(++x);
+			}
+			else if(tt < 0)
+			{
+				pxl[pxl.length] = x;
+				st += bb2*((x<<1)+3) - aa4*(y-1);
+				tt += bb4*(++x) - aa2*(((y--)<<1)-3);
+				pxt[pxt.length] = y;
+			}
+			else
+			{
+				tt -= aa2*((y<<1)-3);
+				st -= aa4*(--y);
+			}
+
+			if(_y > 0)
+			{
+				if(_st < 0)
+				{
+					_st += _bb2*((_x<<1)+3);
+					_tt += _bb4*(++_x);
+					_pxb[_pxb.length] = _y-1;
+				}
+				else if(_tt < 0)
+				{
+					_st += _bb2*((_x<<1)+3) - _aa4*(_y-1);
+					_tt += _bb4*(++_x) - _aa2*(((_y--)<<1)-3);
+					_pxb[_pxb.length] = _y-1;
+				}
+				else
+				{
+					_tt -= _aa2*((_y<<1)-3);
+					_st -= _aa4*(--_y);
+					_pxb[_pxb.length-1]--;
+				}
+			}
+		}
+
+		var ox = -wod, oy = b,
+		_oy = _pxb[0],
+		l = pxl.length,
+		w, h;
+		for(var i = 0; i < l; i++)
+		{
+			if(typeof _pxb[i] != "undefined")
+			{
+				if(_pxb[i] < _oy || pxt[i] < oy)
+				{
+					x = pxl[i];
+					this._mkOvQds(cx, cy, x, oy, x-ox, oy-_oy, wod, hod);
+					ox = x;
+					oy = pxt[i];
+					_oy = _pxb[i];
+				}
+			}
+			else
+			{
+				x = pxl[i];
+				this._mkDiv(cx-x, cy-oy, 1, (oy<<1)+hod);
+				this._mkDiv(cx+ox+wod, cy-oy, 1, (oy<<1)+hod);
+				ox = x;
+				oy = pxt[i];
+			}
+		}
+		this._mkDiv(cx-a, cy-oy, 1, (oy<<1)+hod);
+		this._mkDiv(cx+ox+wod, cy-oy, 1, (oy<<1)+hod);
+	}
+}
+
+function _mkOvDott(left, top, width, height)
+{
+	var a = (++width)>>1, b = (++height)>>1,
+	wod = width&1, hod = height&1, hodu = hod^1,
+	cx = left+a, cy = top+b,
+	x = 0, y = b,
+	aa2 = (a*a)<<1, aa4 = aa2<<1, bb2 = (b*b)<<1, bb4 = bb2<<1,
+	st = (aa2>>1)*(1-(b<<1)) + bb2,
+	tt = (bb2>>1) - aa2*((b<<1)-1),
+	drw = true;
+	while(y > 0)
+	{
+		if(st < 0)
+		{
+			st += bb2*((x<<1)+3);
+			tt += bb4*(++x);
+		}
+		else if(tt < 0)
+		{
+			st += bb2*((x<<1)+3) - aa4*(y-1);
+			tt += bb4*(++x) - aa2*(((y--)<<1)-3);
+		}
+		else
+		{
+			tt -= aa2*((y<<1)-3);
+			st -= aa4*(--y);
+		}
+		if(drw && y >= hodu) this._mkOvQds(cx, cy, x, y, 1, 1, wod, hod);
+		drw = !drw;
+	}
+}
+
+function _mkRect(x, y, w, h)
+{
+	var s = this.stroke;
+	this._mkDiv(x, y, w, s);
+	this._mkDiv(x+w, y, s, h);
+	this._mkDiv(x, y+h, w+s, s);
+	this._mkDiv(x, y+s, s, h-s);
+}
+
+function _mkRectDott(x, y, w, h)
+{
+	this.drawLine(x, y, x+w, y);
+	this.drawLine(x+w, y, x+w, y+h);
+	this.drawLine(x, y+h, x+w, y+h);
+	this.drawLine(x, y, x, y+h);
+}
+
+function jsgFont()
+{
+	this.PLAIN = 'font-weight:normal;';
+	this.BOLD = 'font-weight:bold;';
+	this.ITALIC = 'font-style:italic;';
+	this.ITALIC_BOLD = this.ITALIC + this.BOLD;
+	this.BOLD_ITALIC = this.ITALIC_BOLD;
+}
+var Font = new jsgFont();
+
+function jsgStroke()
+{
+	this.DOTTED = -1;
+}
+var Stroke = new jsgStroke();
+
+function jsGraphics(cnv, wnd)
+{
+	this.setColor = function(x)
+	{
+		this.color = x.toLowerCase();
+	};
+
+	this.setStroke = function(x)
+	{
+		this.stroke = x;
+		if(!(x+1))
+		{
+			this.drawLine = _mkLinDott;
+			this._mkOv = _mkOvDott;
+			this.drawRect = _mkRectDott;
+		}
+		else if(x-1 > 0)
+		{
+			this.drawLine = _mkLin2D;
+			this._mkOv = _mkOv2D;
+			this.drawRect = _mkRect;
+		}
+		else
+		{
+			this.drawLine = _mkLin;
+			this._mkOv = _mkOv;
+			this.drawRect = _mkRect;
+		}
+	};
+
+	this.setPrintable = function(arg)
+	{
+		this.printable = arg;
+		if(jg_fast)
+		{
+			this._mkDiv = _mkDivIe;
+			this._htmRpc = arg? _htmPrtRpc : _htmRpc;
+		}
+		else this._mkDiv = arg? _mkDivPrt : _mkDiv;
+	};
+
+	this.setFont = function(fam, sz, sty)
+	{
+		this.ftFam = fam;
+		this.ftSz = sz;
+		this.ftSty = sty || Font.PLAIN;
+	};
+
+	this.drawPolyline = this.drawPolyLine = function(x, y)
+	{
+		for (var i=x.length - 1; i;)
+		{--i;
+			this.drawLine(x[i], y[i], x[i+1], y[i+1]);
+		}
+	};
+/************** Xinha added *******************************************/
+	
+	this.setColor = new Function('arg', 'this.color = arg;');
+    this.getColor = new Function('return this.color');
+
+	this.fillRect = function(x, y, w, h)
+	{
+		this._mkDiv(x, y, w, h);
+	};
+	
+    this.fillRectPattern = function(x, y, w, h, url)
+    {
+        this.htm += '<div style="position:absolute;'+
+            'left:' + x + 'px;'+
+            'top:' + y + 'px;'+
+            'width:' + w + 'px;'+
+            'height:' + h + 'px;'+
+            'clip:rect(0,'+w+'px,'+h+'px,0);'+
+            'overflow:hidden;'+
+            //'background-color:' + this.color + ';'+
+            "background-image: url('" + url + "');"+
+            "layer-background-image: url('" + url + "');"+
+            'z-index:100;"><\/div>';
+        //alert(this.htm);
+    };
+
+    this.drawHandle = function(x, y, w, h, cursor)
+    {
+        
+        this.htm += '<div style="position:absolute;'+
+        'left:' + x + 'px;'+
+        'top:' + y + 'px;'+
+        'width:' + w + 'px;'+
+        'height:' + h + 'px;'+
+        'clip:rect(0,'+w+'px,'+h+'px,0);'+
+        'padding: 2px;overflow:hidden;'+
+        "cursor: '" + cursor + "';"+
+        '" class="handleBox" id="' + cursor + '" ><\/div>';
+    };
+	
+	this.drawHandleBox = function(x, y, w, h, cursor)
+    {
+        
+        this.htm += '<div style="position:absolute;'+
+        'left:' + x + 'px;'+
+        'top:' + y + 'px;'+
+        'width:' + w + 'px;'+
+        'height:' + h + 'px;'+
+        'clip:rect(0,'+(w+2)+'px,'+(h+2)+'px,0);'+
+        'overflow:hidden; border: solid 1px '+ this.color+';'+
+        "cursor: '" + cursor + "';"+
+        '" class="handleBox" id="' + cursor + '" ><\/div>';
+    };
+
+/************** end Xinha added *******************************************/
+	this.drawPolygon = function(x, y)
+	{
+		this.drawPolyline(x, y);
+		this.drawLine(x[x.length-1], y[x.length-1], x[0], y[0]);
+	};
+
+	this.drawEllipse = this.drawOval = function(x, y, w, h)
+	{
+		this._mkOv(x, y, w, h);
+	};
+
+	this.fillEllipse = this.fillOval = function(left, top, w, h)
+	{
+		var a = w>>1, b = h>>1,
+		wod = w&1, hod = h&1,
+		cx = left+a, cy = top+b,
+		x = 0, y = b, oy = b,
+		aa2 = (a*a)<<1, aa4 = aa2<<1, bb2 = (b*b)<<1, bb4 = bb2<<1,
+		st = (aa2>>1)*(1-(b<<1)) + bb2,
+		tt = (bb2>>1) - aa2*((b<<1)-1),
+		xl, dw, dh;
+		if(w) while(y > 0)
+		{
+			if(st < 0)
+			{
+				st += bb2*((x<<1)+3);
+				tt += bb4*(++x);
+			}
+			else if(tt < 0)
+			{
+				st += bb2*((x<<1)+3) - aa4*(y-1);
+				xl = cx-x;
+				dw = (x<<1)+wod;
+				tt += bb4*(++x) - aa2*(((y--)<<1)-3);
+				dh = oy-y;
+				this._mkDiv(xl, cy-oy, dw, dh);
+				this._mkDiv(xl, cy+y+hod, dw, dh);
+				oy = y;
+			}
+			else
+			{
+				tt -= aa2*((y<<1)-3);
+				st -= aa4*(--y);
+			}
+		}
+		this._mkDiv(cx-a, cy-oy, w, (oy<<1)+hod);
+	};
+
+	this.fillArc = function(iL, iT, iW, iH, fAngA, fAngZ)
+	{
+		var a = iW>>1, b = iH>>1,
+		iOdds = (iW&1) | ((iH&1) << 16),
+		cx = iL+a, cy = iT+b,
+		x = 0, y = b, ox = x, oy = y,
+		aa2 = (a*a)<<1, aa4 = aa2<<1, bb2 = (b*b)<<1, bb4 = bb2<<1,
+		st = (aa2>>1)*(1-(b<<1)) + bb2,
+		tt = (bb2>>1) - aa2*((b<<1)-1),
+		// Vars for radial boundary lines
+		xEndA, yEndA, xEndZ, yEndZ,
+		iSects = (1 << (Math.floor((fAngA %= 360.0)/180.0) << 3))
+				| (2 << (Math.floor((fAngZ %= 360.0)/180.0) << 3))
+				| ((fAngA >= fAngZ) << 16),
+		aBndA = new Array(b+1), aBndZ = new Array(b+1);
+		
+		// Set up radial boundary lines
+		fAngA *= Math.PI/180.0;
+		fAngZ *= Math.PI/180.0;
+		xEndA = cx+Math.round(a*Math.cos(fAngA));
+		yEndA = cy+Math.round(-b*Math.sin(fAngA));
+		_mkLinVirt(aBndA, cx, cy, xEndA, yEndA);
+		xEndZ = cx+Math.round(a*Math.cos(fAngZ));
+		yEndZ = cy+Math.round(-b*Math.sin(fAngZ));
+		_mkLinVirt(aBndZ, cx, cy, xEndZ, yEndZ);
+
+		while(y > 0)
+		{
+			if(st < 0) // Advance x
+			{
+				st += bb2*((x<<1)+3);
+				tt += bb4*(++x);
+			}
+			else if(tt < 0) // Advance x and y
+			{
+				st += bb2*((x<<1)+3) - aa4*(y-1);
+				ox = x;
+				tt += bb4*(++x) - aa2*(((y--)<<1)-3);
+				this._mkArcDiv(ox, y, oy, cx, cy, iOdds, aBndA, aBndZ, iSects);
+				oy = y;
+			}
+			else // Advance y
+			{
+				tt -= aa2*((y<<1)-3);
+				st -= aa4*(--y);
+				if(y && (aBndA[y] != aBndA[y-1] || aBndZ[y] != aBndZ[y-1]))
+				{
+					this._mkArcDiv(x, y, oy, cx, cy, iOdds, aBndA, aBndZ, iSects);
+					ox = x;
+					oy = y;
+				}
+			}
+		}
+		this._mkArcDiv(x, 0, oy, cx, cy, iOdds, aBndA, aBndZ, iSects);
+		if(iOdds >> 16) // Odd height
+		{
+			if(iSects >> 16) // Start-angle > end-angle
+			{
+				var xl = (yEndA <= cy || yEndZ > cy)? (cx - x) : cx;
+				this._mkDiv(xl, cy, x + cx - xl + (iOdds & 0xffff), 1);
+			}
+			else if((iSects & 0x01) && yEndZ > cy)
+				this._mkDiv(cx - x, cy, x, 1);
+		}
+	};
+
+/* fillPolygon method, implemented by Matthieu Haller.
+This javascript function is an adaptation of the gdImageFilledPolygon for Walter Zorn lib.
+C source of GD 1.8.4 found at http://www.boutell.com/gd/
+
+THANKS to Kirsten Schulz for the polygon fixes!
+
+The intersection finding technique of this code could be improved
+by remembering the previous intertersection, and by using the slope.
+That could help to adjust intersections to produce a nice
+interior_extrema. */
+	this.fillPolygon = function(array_x, array_y)
+	{
+		var i;
+		var y;
+		var miny, maxy;
+		var x1, y1;
+		var x2, y2;
+		var ind1, ind2;
+		var ints;
+
+		var n = array_x.length;
+		if(!n) return;
+
+		miny = array_y[0];
+		maxy = array_y[0];
+		for(i = 1; i < n; i++)
+		{
+			if(array_y[i] < miny)
+				miny = array_y[i];
+
+			if(array_y[i] > maxy)
+				maxy = array_y[i];
+		}
+		for(y = miny; y <= maxy; y++)
+		{
+			var polyInts = new Array();
+			ints = 0;
+			for(i = 0; i < n; i++)
+			{
+				if(!i)
+				{
+					ind1 = n-1;
+					ind2 = 0;
+				}
+				else
+				{
+					ind1 = i-1;
+					ind2 = i;
+				}
+				y1 = array_y[ind1];
+				y2 = array_y[ind2];
+				if(y1 < y2)
+				{
+					x1 = array_x[ind1];
+					x2 = array_x[ind2];
+				}
+				else if(y1 > y2)
+				{
+					y2 = array_y[ind1];
+					y1 = array_y[ind2];
+					x2 = array_x[ind1];
+					x1 = array_x[ind2];
+				}
+				else continue;
+
+				 //  Modified 11. 2. 2004 Walter Zorn
+				if((y >= y1) && (y < y2))
+					polyInts[ints++] = Math.round((y-y1) * (x2-x1) / (y2-y1) + x1);
+
+				else if((y == maxy) && (y > y1) && (y <= y2))
+					polyInts[ints++] = Math.round((y-y1) * (x2-x1) / (y2-y1) + x1);
+			}
+			polyInts.sort(_CompInt);
+			for(i = 0; i < ints; i+=2)
+				this._mkDiv(polyInts[i], y, polyInts[i+1]-polyInts[i]+1, 1);
+		}
+	};
+
+	this.drawString = function(txt, x, y)
+	{
+		this.htm += '<div style="position:absolute;white-space:nowrap;'+
+			'left:' + x + 'px;'+
+			'top:' + y + 'px;'+
+			'font-family:' +  this.ftFam + ';'+
+			'font-size:' + this.ftSz + ';'+
+			'color:' + this.color + ';' + this.ftSty + '">'+
+			txt +
+			'<\/div>';
+	};
+
+/* drawStringRect() added by Rick Blommers.
+Allows to specify the size of the text rectangle and to align the
+text both horizontally (e.g. right) and vertically within that rectangle */
+	this.drawStringRect = function(txt, x, y, width, halign)
+	{
+		this.htm += '<div style="position:absolute;overflow:hidden;'+
+			'left:' + x + 'px;'+
+			'top:' + y + 'px;'+
+			'width:'+width +'px;'+
+			'text-align:'+halign+';'+
+			'font-family:' +  this.ftFam + ';'+
+			'font-size:' + this.ftSz + ';'+
+			'color:' + this.color + ';' + this.ftSty + '">'+
+			txt +
+			'<\/div>';
+	};
+
+	this.drawImage = function(imgSrc, x, y, w, h, a)
+	{
+		this.htm += '<div style="position:absolute;'+
+			'left:' + x + 'px;'+
+			'top:' + y + 'px;'+
+			'width:' +  w + 'px;'+
+			'height:' + h + 'px;">'+
+			'<img src="' + imgSrc + '" width="' + w + '" height="' + h + '"' + (a? (' '+a) : '') + '>'+
+			'<\/div>';
+	};
+
+	this.clear = function()
+	{
+		this.htm = "";
+		if(this.cnv) this.cnv.innerHTML = "";
+	};
+
+	this._mkOvQds = function(cx, cy, x, y, w, h, wod, hod)
+	{
+		var xl = cx - x, xr = cx + x + wod - w, yt = cy - y, yb = cy + y + hod - h;
+		if(xr > xl+w)
+		{
+			this._mkDiv(xr, yt, w, h);
+			this._mkDiv(xr, yb, w, h);
+		}
+		else
+			w = xr - xl + w;
+		this._mkDiv(xl, yt, w, h);
+		this._mkDiv(xl, yb, w, h);
+	};
+	
+	this._mkArcDiv = function(x, y, oy, cx, cy, iOdds, aBndA, aBndZ, iSects)
+	{
+		var xrDef = cx + x + (iOdds & 0xffff), y2, h = oy - y, xl, xr, w;
+
+		if(!h) h = 1;
+		x = cx - x;
+
+		if(iSects & 0xff0000) // Start-angle > end-angle
+		{
+			y2 = cy - y - h;
+			if(iSects & 0x00ff)
+			{
+				if(iSects & 0x02)
+				{
+					xl = Math.max(x, aBndZ[y]);
+					w = xrDef - xl;
+					if(w > 0) this._mkDiv(xl, y2, w, h);
+				}
+				if(iSects & 0x01)
+				{
+					xr = Math.min(xrDef, aBndA[y]);
+					w = xr - x;
+					if(w > 0) this._mkDiv(x, y2, w, h);
+				}
+			}
+			else
+				this._mkDiv(x, y2, xrDef - x, h);
+			y2 = cy + y + (iOdds >> 16);
+			if(iSects & 0xff00)
+			{
+				if(iSects & 0x0100)
+				{
+					xl = Math.max(x, aBndA[y]);
+					w = xrDef - xl;
+					if(w > 0) this._mkDiv(xl, y2, w, h);
+				}
+				if(iSects & 0x0200)
+				{
+					xr = Math.min(xrDef, aBndZ[y]);
+					w = xr - x;
+					if(w > 0) this._mkDiv(x, y2, w, h);
+				}
+			}
+			else
+				this._mkDiv(x, y2, xrDef - x, h);
+		}
+		else
+		{
+			if(iSects & 0x00ff)
+			{
+				if(iSects & 0x02)
+					xl = Math.max(x, aBndZ[y]);
+				else
+					xl = x;
+				if(iSects & 0x01)
+					xr = Math.min(xrDef, aBndA[y]);
+				else
+					xr = xrDef;
+				y2 = cy - y - h;
+				w = xr - xl;
+				if(w > 0) this._mkDiv(xl, y2, w, h);
+			}
+			if(iSects & 0xff00)
+			{
+				if(iSects & 0x0100)
+					xl = Math.max(x, aBndA[y]);
+				else
+					xl = x;
+				if(iSects & 0x0200)
+					xr = Math.min(xrDef, aBndZ[y]);
+				else
+					xr = xrDef;
+				y2 = cy + y + (iOdds >> 16);
+				w = xr - xl;
+				if(w > 0) this._mkDiv(xl, y2, w, h);
+			}
+		}
+	};
+
+	this.setStroke(1);
+	this.setFont("verdana,geneva,helvetica,sans-serif", "12px", Font.PLAIN);
+	this.color = "#000000";
+	this.htm = "";
+	this.wnd = wnd || window;
+
+	if(!jg_ok) _chkDHTM();
+	if(jg_ok)
+	{
+		if(cnv)
+		{
+			if(typeof(cnv) == "string")
+				this.cont = document.all? (this.wnd.document.all[cnv] || null)
+					: document.getElementById? (this.wnd.document.getElementById(cnv) || null)
+					: null;
+			else if(cnv == window.document)
+				this.cont = document.getElementsByTagName("body")[0];
+			// If cnv is a direct reference to a canvas DOM node
+			// (option suggested by Andreas Luleich)
+			else this.cont = cnv;
+			// Create new canvas inside container DIV. Thus the drawing and clearing
+			// methods won't interfere with the container's inner html.
+			// Solution suggested by Vladimir.
+			this.cnv = this.wnd.document.createElement("div");
+			this.cnv.style.fontSize=0;
+			this.cont.appendChild(this.cnv);
+			this.paint = jg_dom? _pntCnvDom : _pntCnvIe;
+		}
+		else
+			this.paint = _pntDoc;
+	}
+	else
+		this.paint = _pntN;
+
+	this.setPrintable(false);
+}
+
+function _mkLinVirt(aLin, x1, y1, x2, y2)
+{
+	var dx = Math.abs(x2-x1), dy = Math.abs(y2-y1),
+	x = x1, y = y1,
+	xIncr = (x1 > x2)? -1 : 1,
+	yIncr = (y1 > y2)? -1 : 1,
+	p,
+	i = 0;
+	if(dx >= dy)
+	{
+		var pr = dy<<1,
+		pru = pr - (dx<<1);
+		p = pr-dx;
+		while(dx > 0)
+		{--dx;
+			if(p > 0)    //  Increment y
+			{
+				aLin[i++] = x;
+				y += yIncr;
+				p += pru;
+			}
+			else p += pr;
+			x += xIncr;
+		}
+	}
+	else
+	{
+		var pr = dx<<1,
+		pru = pr - (dy<<1);
+		p = pr-dy;
+		while(dy > 0)
+		{--dy;
+			y += yIncr;
+			aLin[i++] = x;
+			if(p > 0)    //  Increment x
+			{
+				x += xIncr;
+				p += pru;
+			}
+			else p += pr;
+		}
+	}
+	for(var len = aLin.length, i = len-i; i;)
+		aLin[len-(i--)] = x;
+};
+
+function _CompInt(x, y)
+{
+	return(x - y);
+}
+

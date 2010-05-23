@@ -1,3 +1,396 @@
-/* This compressed file is part of Xinha. For uncompressed sources, forum, and bug reports, go to xinha.org */
-/* This file is part of version 0.96beta2 released Fri, 20 Mar 2009 11:01:14 +0100 */
-function InsertSnippet2(c){this.editor=c;var a=c.config;var b=this;a.registerButton({id:"InsertSnippet2",tooltip:this._lc("Insert Snippet"),image:c.imgURL("ed_snippet.gif","InsertSnippet2"),textMode:false,action:function(d){b.buttonPress(d)}});a.addToolbarElement("InsertSnippet2","insertimage",-1);this.snippets=null;this.categories=null;this.html=null;Xinha._getback(a.InsertSnippet2.snippets,function(f,l){var g=l.responseXML;var k=g.getElementsByTagName("c");b.categories=[];for(var e=0;e<k.length;e++){b.categories.push(k[e].getAttribute("n"))}var n=g.getElementsByTagName("s");b.snippets=[];var h,m;for(var e=0;e<n.length;e++){m={};for(var d=0;d<n[e].attributes.length;d++){m[n[e].attributes[d].nodeName]=n[e].attributes[d].nodeValue}m.html=n[e].text||n[e].textContent;b.snippets.push(m)}});Xinha.loadStyle("InsertSnippet.css","InsertSnippet2","IScss")}InsertSnippet2.prototype.onUpdateToolbar=function(){if(!this.snippets){this.editor._toolbarObjects.InsertSnippet2.state("enabled",false)}else{InsertSnippet2.prototype.onUpdateToolbar=null}};InsertSnippet2._pluginInfo={name:"InsertSnippet2",version:"1.2",developer:"Raimund Meyer",developer_url:"http://x-webservice.net",c_owner:"Raimund Meyer",sponsor:"",sponsor_url:"",license:"htmlArea"};Xinha.Config.prototype.InsertSnippet2={snippets:Xinha.getPluginDir("InsertSnippet2")+"/snippets.xml"};InsertSnippet2.prototype._lc=function(a){return Xinha._lc(a,"InsertSnippet2")};InsertSnippet2.prototype.onGenerateOnce=function(){this._prepareDialog()};InsertSnippet2.prototype._prepareDialog=function(){var c=this;if(!this.html){Xinha._getback(Xinha.getPluginDir("InsertSnippet2")+"/dialog.html",function(g){c.html=g;c._prepareDialog()});return}if(!this.snippets){setTimeout(function(){c._prepareDialog()},50);return}var f=this.editor;var e=this;this.dialog=new Xinha.Dialog(f,this.html,"InsertSnippet2",{width:800,height:400},{modal:true});Xinha._addClass(this.dialog.rootElem,"InsertSnippet2");var d=this.dialog;var a=this.dialog.main;var b=this.dialog.captionBar;this.snippetTable=d.getElementById("snippettable");this.drawCatTabs();this.drawSnippetTable();this.preparePreview();d.onresize=function(){c.resize()};this.dialog.getElementById("search").onkeyup=function(){c.search()};this.dialog.getElementById("wordbegin").onclick=function(){c.search()};this.dialog.getElementById("cancel").onclick=function(){c.dialog.hide()}};InsertSnippet2.prototype.drawSnippetTable=function(){if(!this.snippets.length){return}var o=this;var g=this.snippetTable;var n=this.snippets;while(g.hasChildNodes()){g.removeChild(g.lastChild)}var a,k,d,l,c,j,f,m,b;for(var e=0,h=0;e<n.length;e++){a=e;k=n[e]["n"];l=n[e]["c"];c=n[e]["v"];d=n[e]["html"];if(this.categoryFilter&&l!=this.categoryFilter&&this.categoryFilter!="all"){continue}j=g.insertRow(h);h++;m=0;f=j.insertCell(m);f.onmouseover=function(i){return o.preview(i||window.event)};f.onmouseout=function(){return o.preview()};f.appendChild(document.createTextNode(k));f.snID=a;f.id="cell"+a;m++;f=j.insertCell(m);f.style.whiteSpace="nowrap";b=document.createElement("button");b.snID=a;b._insAs="html";b.onclick=function(i){o.doInsert(i||window.event);return false};b.appendChild(document.createTextNode(this._lc("HTML")));b.title=this._lc("Insert as HTML");f.appendChild(b);if(c){f.appendChild(document.createTextNode(" "));var b=document.createElement("button");b.snID=a;b._insAs="variable";b.onclick=function(i){o.doInsert(i||window.event);return false};b.appendChild(document.createTextNode(this._lc("Variable")));b.title=this._lc("Insert as template variable");f.appendChild(b)}m++}};InsertSnippet2.prototype.drawCatTabs=function(){if(!this.categories.length){return}var b=this;var a=this.dialog.getElementById("cattabs");while(a.hasChildNodes()){a.removeChild(a.lastChild)}var f=1;var e=document.createElement("a");e.href="javascript:void(0);";e.appendChild(document.createTextNode(this._lc("All Categories")));e.cat="all";e.className="tab"+f;e.onclick=function(){b.categoryFilter=b.cat;b.drawCatTabs();b.drawSnippetTable();b.search()};if(!this.categoryFilter||this.categoryFilter=="all"){Xinha._addClass(e,"active");e.onclick=null}a.appendChild(e);f++;for(var d=0;d<this.categories.length;d++){var c=this.categories[d];var e=document.createElement("a");e.href="javascript:void(0);";e.appendChild(document.createTextNode(c));e.cat=c;e.className="tab"+f;e.onclick=function(){b.categoryFilter=this.cat;b.drawCatTabs();b.drawSnippetTable();b.search()};if(c==this.categoryFilter){Xinha._addClass(e,"active");e.onclick=null}a.appendChild(e);if(Xinha.is_gecko){a.appendChild(document.createTextNode(String.fromCharCode(8203)))}f=(f<16)?f+1:1}if(!this.catTabsH){this.catTabsH=a.offsetHeight}};InsertSnippet2.prototype.search=function(){var f=this.dialog.getElementById("snippettable");var k=this.dialog.getElementById("search");if(k.value){var b=k.value;b=b.replace(/\.?([*?+])/g,".$1");var c=(this.dialog.getElementById("wordbegin").checked)?"^":"";try{var j=new RegExp(c+b,"i")}catch(g){var j=null}}else{var j=null}for(var d=0;d<f.childNodes.length;d++){var h=f.childNodes[d];var a=h.firstChild.firstChild.data;if(j&&!a.match(j)){h.style.display="none"}else{h.style.display=""}}};InsertSnippet2.prototype.preview=function(a){if(!a){this.previewBody.innerHTML="";return}var c=a.target||a.srcElement;var b=c.snID;if(!this.previewBody){this.preparePreview();return}if(this.previewIframe.style.display=="none"){this.previewIframe.style.display="block"}this.previewBody.innerHTML=this.snippets[b].html};InsertSnippet2.prototype.preparePreview=function(){var e=this.editor;var a=this;var g=this.previewIframe=this.dialog.getElementById("preview_iframe");var f=null;try{if(g.contentDocument){f=g.contentDocument}else{f=g.contentWindow.document}if(!f){if(Xinha.is_gecko){setTimeout(function(){a.preparePreview(snID)},50);return false}else{throw ("ERROR: IFRAME can't be initialized.")}}}catch(d){setTimeout(function(){a.preparePreview(snID)},50)}f.open("text/html","replace");var c="<html><head><title></title>";c+='<meta http-equiv="Content-Type" content="text/html; charset='+e.config.charSet+'">\n';c+='<style type="text/css">body {background-color:#fff} </style>';if(typeof e.config.baseHref!="undefined"&&e.config.baseHref!==null){c+='<base href="'+e.config.baseHref+'"/>\n'}if(e.config.pageStyle){c+='<style type="text/css">\n'+e.config.pageStyle+"\n</style>"}if(typeof e.config.pageStyleSheets!=="undefined"){for(var b=0;b<e.config.pageStyleSheets.length;b++){if(e.config.pageStyleSheets[b].length>0){c+='<link rel="stylesheet" type="text/css" href="'+e.config.pageStyleSheets[b]+'">'}}}c+="</head>\n";c+="<body>\n";c+="</body>\n";c+="</html>";f.write(c);f.close();setTimeout(function(){a.previewBody=f.getElementsByTagName("body")[0]},100)};InsertSnippet2.prototype.buttonPress=function(a){this.dialog.toggle()};InsertSnippet2.prototype.doInsert=function(b){var c=b.target||b.srcElement;var d=this.snippets[c.snID];this.dialog.hide();var a=this.editor.config.InsertSnippet2;if(c._insAs=="variable"){this.editor.insertHTML(d.v)}else{this.editor.insertHTML(d.html)}};InsertSnippet2.prototype.resize=function(){var a=this.dialog.getElementById("insert_div");var d=this.dialog.getElementById("preview_iframe");var c={h:this.dialog.height,w:this.dialog.width};var b=c.h-90;if(this.categories.length){b-=this.catTabsH}a.style.height=d.style.height=b+"px";return true};
+/*------------------------------------------*\
+ InsertSnippet2 for Xinha
+ _______________________
+ 
+ Insert HTML fragments or template variables
+ 
+\*------------------------------------------*/
+
+function InsertSnippet2(editor) {
+  this.editor = editor;
+
+  var cfg = editor.config;
+  var self = this;
+  
+
+  cfg.registerButton({
+  id       : "InsertSnippet2",
+  tooltip  : this._lc("Insert Snippet"),
+  image    : editor.imgURL("ed_snippet.gif", "InsertSnippet2"),
+  textMode : false,
+  action   : function(editor) {
+          self.buttonPress(editor);
+      }
+  });
+  cfg.addToolbarElement("InsertSnippet2", "insertimage", -1);
+  this.snippets = null;
+  this.categories = null;
+  this.html =null;
+      
+  Xinha._getback(cfg.InsertSnippet2.snippets,function (txt,req) {
+                  var xml=req.responseXML;
+                  var c = xml.getElementsByTagName('c');
+                  self.categories = [];
+                  for (var i=0;i<c.length;i++)
+                  {
+                      self.categories.push(c[i].getAttribute('n'));	
+                  }
+                  var s = xml.getElementsByTagName('s');
+                  self.snippets = [];
+                  var textContent,item;
+                  
+                  for (var i=0;i<s.length;i++)
+                  {
+                      item = {};
+                      for (var j=0;j<s[i].attributes.length;j++)
+                      {
+                          item[s[i].attributes[j].nodeName] = s[i].attributes[j].nodeValue;
+                      }
+                      item.html = s[i].text || s[i].textContent;
+                      self.snippets.push(item);
+                  }
+  });
+  Xinha.loadStyle('InsertSnippet.css','InsertSnippet2','IScss');
+}
+
+InsertSnippet2.prototype.onUpdateToolbar = function() 
+{
+  if (!this.snippets)
+  {
+      this.editor._toolbarObjects.InsertSnippet2.state("enabled", false);
+  }
+  else InsertSnippet2.prototype.onUpdateToolbar = null;
+}
+
+InsertSnippet2._pluginInfo = {
+  name          : "InsertSnippet2",
+  version       : "1.2",
+  developer     : "Raimund Meyer",
+  developer_url : "http://x-webservice.net",
+  c_owner       : "Raimund Meyer",
+  sponsor       : "",
+  sponsor_url   : "",
+  license       : "htmlArea"
+};
+
+Xinha.Config.prototype.InsertSnippet2 =
+{
+  'snippets' : Xinha.getPluginDir('InsertSnippet2')+'/snippets.xml'
+};
+    
+InsertSnippet2.prototype._lc = function(string) {
+    return Xinha._lc(string, 'InsertSnippet2');
+};
+
+InsertSnippet2.prototype.onGenerateOnce = function()
+{
+    this._prepareDialog();
+};
+InsertSnippet2.prototype._prepareDialog = function()
+{
+  var self = this;
+  if(!this.html) // retrieve the raw dialog contents
+  {
+    Xinha._getback(Xinha.getPluginDir('InsertSnippet2')+'/dialog.html', function(getback) { self.html = getback; self._prepareDialog(); });
+    return;
+  }
+  if (!this.snippets)
+  {
+    setTimeout(function(){self._prepareDialog()},50);
+    return;
+  }
+  var editor = this.editor;
+  var InsertSnippet2 = this;
+  
+  this.dialog = new Xinha.Dialog(editor, this.html, 'InsertSnippet2',{width:800,height:400},{modal:true});
+  Xinha._addClass( this.dialog.rootElem, 'InsertSnippet2' );
+  
+  var dialog = this.dialog;
+  var main = this.dialog.main;
+  var caption = this.dialog.captionBar;
+  
+  this.snippetTable = dialog.getElementById('snippettable');
+  
+  this.drawCatTabs();
+  this.drawSnippetTable();
+  this.preparePreview();
+  
+  dialog.onresize = function() {self.resize(); } 
+  
+  this.dialog.getElementById('search').onkeyup = function() { self.search ()};
+  this.dialog.getElementById('wordbegin').onclick = function() { self.search ()};
+  this.dialog.getElementById('cancel').onclick = function() { self.dialog.hide ()};
+  
+}
+
+InsertSnippet2.prototype.drawSnippetTable = function()
+{
+  if (!this.snippets.length) return;
+  var self = this;
+  var tbody = this.snippetTable;
+  var snippets = this.snippets;
+
+  while (tbody.hasChildNodes())
+  {
+    tbody.removeChild(tbody.lastChild);
+  }
+  var id,snippet_name, snippet_html, snippet_cat, snippet_varname, trow, newCell, cellNo, btn;
+
+  for(var i = 0,trowNo=0; i < snippets.length; i++) 
+  {
+    id = i;
+    snippet_name = snippets[i]['n'];
+    snippet_cat = snippets[i]['c'];
+    snippet_varname = snippets[i]['v']
+    snippet_html = snippets[i]['html'];
+    
+    if (this.categoryFilter && snippet_cat != this.categoryFilter && this.categoryFilter != 'all') continue;
+
+    trow = tbody.insertRow(trowNo);
+    trowNo++;
+
+    cellNo = 0;
+    newCell = trow.insertCell(cellNo);
+
+    newCell.onmouseover = function(event) {return self.preview(event || window.event)};
+    newCell.onmouseout  = function() {return self.preview()};
+    newCell.appendChild(document.createTextNode(snippet_name));
+    newCell.snID = id;
+    
+    newCell.id = 'cell' + id;
+    cellNo++;
+
+    newCell = trow.insertCell(cellNo);
+    
+    newCell.style.whiteSpace = 'nowrap';
+    btn = document.createElement('button');
+    btn.snID = id;
+    btn._insAs = 'html';
+    btn.onclick = function(event) {self.doInsert(event || window.event); return false};
+    btn.appendChild(document.createTextNode(this._lc("HTML")));
+    btn.title = this._lc("Insert as HTML");
+    newCell.appendChild(btn);
+    
+    if (snippet_varname)
+    {
+      newCell.appendChild(document.createTextNode(' '));
+      var btn = document.createElement('button');
+          btn.snID = id;
+          btn._insAs = 'variable';
+          btn.onclick = function(event) {self.doInsert(event || window.event); return false};
+          btn.appendChild(document.createTextNode(this._lc("Variable")));
+          btn.title = this._lc("Insert as template variable");
+
+      newCell.appendChild(btn);
+    }
+
+    cellNo++;
+  }
+}
+InsertSnippet2.prototype.drawCatTabs = function()
+{
+  if (!this.categories.length) return;
+  var self = this;
+  var tabsdiv = this.dialog.getElementById("cattabs");
+  
+  while (tabsdiv.hasChildNodes())
+  {
+    tabsdiv.removeChild(tabsdiv.lastChild);
+  }
+  var tabs_i = 1;
+  var tab = document.createElement('a');
+      tab.href = "javascript:void(0);";
+      tab.appendChild(document.createTextNode(this._lc("All Categories")));
+      tab.cat = 'all';
+      tab.className = "tab"+tabs_i;
+      tab.onclick = function() {self.categoryFilter = self.cat; self.drawCatTabs();self.drawSnippetTable(); self.search ()} 
+      if (!this.categoryFilter || this.categoryFilter == 'all')
+      {
+        Xinha._addClass(tab,'active');
+        tab.onclick = null;
+      }
+  tabsdiv.appendChild(tab);
+  tabs_i++;
+
+  for (var i = 0;i < this.categories.length;i++)
+  {
+    var name = this.categories[i];
+    var tab = document.createElement('a');
+        tab.href = "javascript:void(0);";
+        tab.appendChild(document.createTextNode(name));
+        tab.cat = name;
+        tab.className = "tab"+tabs_i;
+        tab.onclick = function() {self.categoryFilter = this.cat; self.drawCatTabs();self.drawSnippetTable(); self.search ()} 
+        if (name == this.categoryFilter)
+        {
+            Xinha._addClass(tab,'active');
+            tab.onclick = null;
+        }
+    tabsdiv.appendChild(tab);
+    if (Xinha.is_gecko) tabsdiv.appendChild(document.createTextNode(String.fromCharCode(8203)));
+    tabs_i = (tabs_i<16) ? tabs_i +1 : 1;
+  }
+
+  if (!this.catTabsH)
+  {
+    this.catTabsH = tabsdiv.offsetHeight;
+  }
+}
+InsertSnippet2.prototype.search = function ()
+{
+  var tbody = this.dialog.getElementById("snippettable");
+  var searchField =this.dialog.getElementById('search');
+  if (searchField.value)
+  {
+    var val =  searchField.value;
+
+        val = val.replace(/\.?([*?+])/g,'.$1');
+
+    var wordstart = (this.dialog.getElementById('wordbegin').checked) ? '^' : '';
+    try { var re = new RegExp (wordstart+val,'i'); } catch (e) {var re = null};
+  }
+  else var re = null;
+
+  for (var i=0;i<tbody.childNodes.length;i++)
+  {
+    var tr = tbody.childNodes[i]; 
+    var name = tr.firstChild.firstChild.data;
+    if (re && !name.match(re))
+    {
+      tr.style.display = 'none';
+    }
+    else 
+    {
+      tr.style.display = '';
+    }
+  }
+}
+InsertSnippet2.prototype.preview = function(event)
+{
+  if (!event)
+  {
+    this.previewBody.innerHTML = '';
+    return;
+  }
+  var target = event.target || event.srcElement;
+  var snID = target.snID;
+  if (!this.previewBody)
+  {
+    this.preparePreview();
+    return;
+  }
+  if (this.previewIframe.style.display == 'none')
+  {
+    this.previewIframe.style.display = 'block';
+  }
+  this.previewBody.innerHTML = this.snippets[snID].html;
+}
+InsertSnippet2.prototype.preparePreview = function()
+{
+  var editor = this.editor;
+  var self = this;
+  var preview_iframe = this.previewIframe = this.dialog.getElementById('preview_iframe');
+
+  var doc = null;
+  
+  try
+  {
+    if ( preview_iframe.contentDocument )
+    {
+      doc = preview_iframe.contentDocument;        
+    }
+    else
+    {
+      doc = preview_iframe.contentWindow.document;
+    }
+    // try later
+    if ( !doc )
+    {
+      if ( Xinha.is_gecko )
+      {
+        setTimeout(function() { self.preparePreview(snID); }, 50);
+        return false;
+      }
+      else
+      {
+        throw("ERROR: IFRAME can't be initialized.");
+      }
+    }
+  }
+  catch(ex)
+  { // try later
+    setTimeout(function() { self.preparePreview(snID);  }, 50);
+  }
+  doc.open("text/html","replace");
+
+  var html = '<html><head><title></title>';
+  html += "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=" + editor.config.charSet + "\">\n";
+  html += '<style type="text/css">body {background-color:#fff} </style>';
+  if ( typeof editor.config.baseHref != 'undefined' && editor.config.baseHref !== null )
+  {
+    html += "<base href=\"" + editor.config.baseHref + "\"/>\n";
+  }
+  
+  if ( editor.config.pageStyle )
+  {
+    html += "<style type=\"text/css\">\n" + editor.config.pageStyle + "\n</style>";
+  }
+
+  if ( typeof editor.config.pageStyleSheets !== 'undefined' )
+  {
+    for ( var i = 0; i < editor.config.pageStyleSheets.length; i++ )
+    {
+      if ( editor.config.pageStyleSheets[i].length > 0 )
+      {
+        html += "<link rel=\"stylesheet\" type=\"text/css\" href=\"" + editor.config.pageStyleSheets[i] + "\">";
+        //html += "<style> @import url('" + editor.config.pageStyleSheets[i] + "'); </style>\n";
+      }
+    }
+  }
+  html += "</head>\n";
+  html += "<body>\n";
+  html += "</body>\n";
+  html += "</html>";
+
+  doc.write(html);
+  doc.close();
+  setTimeout(function() {
+    self.previewBody = doc.getElementsByTagName('body')[0];
+  },100);
+}
+
+InsertSnippet2.prototype.buttonPress = function(editor)
+{
+  this.dialog.toggle();
+}
+
+InsertSnippet2.prototype.doInsert = function(event)
+{
+  var target = event.target || event.srcElement;
+  var sn  = this.snippets[target.snID];
+  this.dialog.hide();
+  var cfg = this.editor.config.InsertSnippet2;
+  if (target._insAs == 'variable') 
+  {
+      this.editor.insertHTML(sn.v);
+  } 
+  else 
+  {
+      this.editor.insertHTML(sn.html);
+  }	
+}
+
+InsertSnippet2.prototype.resize = function ()
+{
+  var insertDiv = this.dialog.getElementById('insert_div');
+  var preview_iframe = this.dialog.getElementById('preview_iframe');
+  var win = {h:this.dialog.height,w:this.dialog.width};
+
+  var h = win.h - 90;
+  if (this.categories.length) h -= this.catTabsH;
+  insertDiv.style.height = preview_iframe.style.height =  h + 'px';
+  
+  //insertDiv.style.width =  win.w + 'px';
+
+  return true;
+}

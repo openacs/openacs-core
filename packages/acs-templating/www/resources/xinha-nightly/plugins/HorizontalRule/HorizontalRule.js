@@ -1,3 +1,163 @@
-/* This compressed file is part of Xinha. For uncompressed sources, forum, and bug reports, go to xinha.org */
-/* This file is part of version 0.96beta2 released Fri, 20 Mar 2009 11:01:14 +0100 */
-HorizontalRule._pluginInfo={name:"HorizontalRule",version:"1.0",developer:"Nelson Bright",developer_url:"http://www.brightworkweb.com/",c_owner:"Nelson Bright",sponsor:"BrightWork, Inc.",sponsor_url:"http://www.brightworkweb.com/",license:"htmlArea"};function HorizontalRule(c){this.editor=c;var a=c.config;var d=a.toolbar;var b=this;a.registerButton({id:"edithorizontalrule",tooltip:this._lc("Insert/edit horizontal rule"),image:[_editor_url+"images/ed_buttons_main.gif",6,0],textMode:false,action:function(e){b.buttonPress(e)}});a.addToolbarElement("edithorizontalrule","inserthorizontalrule",0)}HorizontalRule.prototype._lc=function(a){return Xinha._lc(a,"HorizontalRule")};HorizontalRule.prototype.buttonPress=function(a){this.editor=a;this._editHorizontalRule()};HorizontalRule.prototype._editHorizontalRule=function(d){editor=this.editor;var c=editor._getSelection();var a=editor._createRange(c);var e=null;if(typeof d=="undefined"){d=editor.getParentElement();if(d&&!/^hr$/i.test(d.tagName)){d=null}}if(d){var b=d.style.width||d.width;e={f_size:parseInt(d.style.height,10)||d.size,f_widthUnit:(/(%|px)$/.test(b))?RegExp.$1:"px",f_width:parseInt(b,10),f_color:Xinha._colorToRgb(d.style.backgroundColor)||d.color,f_align:d.style.textAlign||d.align,f_noshade:(parseInt(d.style.borderWidth,10)==0)||d.noShade}}editor._popupDialog("plugin://HorizontalRule/edit_horizontal_rule.html",function(j){if(!j){return false}var g=d;if(!g){var f=editor._doc.createElement("hr");for(var i in j){var h=j[i];if(h==""){continue}switch(i){case"f_width":if(j.f_widthUnit=="%"){f.style.width=h+"%"}else{f.style.width=h+"px"}break;case"f_size":f.style.height=h+"px";break;case"f_align":f.style.textAlign=h;switch(h){case"left":f.style.marginLeft="0";break;case"right":f.style.marginRight="0";break;case"center":f.style.marginLeft="auto";f.style.marginRight="auto";break}break;case"f_color":f.style.backgroundColor=h;break;case"f_noshade":f.style.border="0";break}}if(Xinha.is_gecko){editor.execCommand("inserthtml",false,Xinha.getOuterHTML(f))}else{editor.insertNodeAtSelection(f)}}else{for(var i in j){var h=j[i];switch(i){case"f_width":if(j.f_widthUnit=="%"){g.style.width=h+"%"}else{g.style.width=h+"px"}break;case"f_size":g.style.height=h+"px";break;case"f_align":g.style.textAlign=h;switch(h){case"left":g.style.marginLeft="0";g.style.marginRight=null;break;case"right":g.style.marginRight="0";g.style.marginLeft=null;break;case"center":g.style.marginLeft="auto";g.style.marginRight="auto";break}break;case"f_color":g.style.backgroundColor=h;break;case"f_noshade":break}g.style.border=(j.f_noshade)?"0":null}}},e)};
+
+HorizontalRule._pluginInfo = {
+	name          : "HorizontalRule",
+	version       : "1.0",
+	developer     : "Nelson Bright",
+	developer_url : "http://www.brightworkweb.com/",
+	c_owner       : "Nelson Bright",
+	sponsor       : "BrightWork, Inc.",
+	sponsor_url   : "http://www.brightworkweb.com/",
+	license       : "htmlArea"
+};
+
+function HorizontalRule(editor) {
+    this.editor = editor;
+
+    var cfg = editor.config;
+	var toolbar = cfg.toolbar;
+	var self = this;
+        
+	cfg.registerButton({
+		id       : "edithorizontalrule",
+		tooltip  : this._lc("Insert/edit horizontal rule"),
+	//	image    : editor.imgURL("ed_hr.gif", "HorizontalRule"),
+		image    : [_editor_url + "images/ed_buttons_main.gif",6,0],
+		textMode : false,
+		action   : function(editor) {
+						self.buttonPress(editor);
+				   }
+	});
+
+	cfg.addToolbarElement("edithorizontalrule","inserthorizontalrule",0);
+}
+
+HorizontalRule.prototype._lc = function(string) {
+    return  Xinha._lc(string, 'HorizontalRule');
+};
+
+HorizontalRule.prototype.buttonPress = function(editor) {
+	this.editor = editor;
+	this._editHorizontalRule();
+};
+
+HorizontalRule.prototype._editHorizontalRule = function(rule) {
+	editor = this.editor;
+	var sel = editor._getSelection();
+	var range = editor._createRange(sel);
+	var outparam = null;
+	if (typeof rule == "undefined") {
+		rule = editor.getParentElement();
+		if (rule && !/^hr$/i.test(rule.tagName))
+			rule = null;
+	}
+	if (rule) {
+		var f_widthValue    = rule.style.width || rule.width;
+		outparam = {
+			f_size      : parseInt(rule.style.height,10) || rule.size,
+			f_widthUnit : (/(%|px)$/.test(f_widthValue)) ? RegExp.$1 : 'px',
+			f_width     : parseInt (f_widthValue,10),
+			f_color     : Xinha._colorToRgb(rule.style.backgroundColor) || rule.color,
+			f_align     : rule.style.textAlign || rule.align,
+			f_noshade   : (parseInt(rule.style.borderWidth,10) == 0) || rule.noShade
+		};
+	}
+	editor._popupDialog("plugin://HorizontalRule/edit_horizontal_rule.html", function(param) {
+		if (!param) {	// user pressed Cancel
+			return false;
+		}
+		var hr = rule;
+		if (!hr) {
+			var hrule = editor._doc.createElement("hr");
+			for (var field in param) {
+				var value = param[field];
+				if(value == "") continue;
+				switch (field) { 
+				case "f_width" :
+					if(param["f_widthUnit"]=="%")
+					{
+						hrule.style.width = value + "%";
+					}
+					else
+					{
+						hrule.style.width = value + "px";
+					}
+				break;
+				case "f_size" :
+					hrule.style.height = value + "px"; 
+				break;
+				case "f_align" : // Gecko needs the margins for alignment
+					hrule.style.textAlign = value;
+					switch (value) {
+						case 'left':
+							hrule.style.marginLeft = "0";
+						break;
+						case 'right':
+							hrule.style.marginRight = "0";
+						break;
+						case 'center':
+							hrule.style.marginLeft = "auto";
+							hrule.style.marginRight = "auto";
+						break;
+					}
+				break;
+				case "f_color" :
+					hrule.style.backgroundColor = value; 
+				break;
+				case "f_noshade" :
+					hrule.style.border = "0"; 
+				break;
+				}
+			}
+			if ( Xinha.is_gecko )
+			{   // If I use editor.insertNodeAtSelection(hrule) here I get get a </hr> closing tag
+				editor.execCommand("inserthtml",false,Xinha.getOuterHTML(hrule));
+			}
+			else editor.insertNodeAtSelection(hrule);
+			
+		} else {
+			for (var field in param) {
+			  var value = param[field];
+			  switch (field) {
+				case "f_width" :
+					if(param["f_widthUnit"]=="%")
+					{
+						hr.style.width = value + "%";
+					}
+					else
+					{
+						hr.style.width = value + "px";
+					}
+				break;
+				case "f_size" :
+					hr.style.height = value + "px"; 
+				break;
+				case "f_align" :
+					hr.style.textAlign = value;
+					switch (value) {
+						case 'left':
+							hr.style.marginLeft = "0";
+							hr.style.marginRight = null;
+						break;
+						case 'right':
+							hr.style.marginRight = "0";
+							hr.style.marginLeft = null;
+						break;
+						case 'center':
+							hr.style.marginLeft = "auto";
+							hr.style.marginRight = "auto";
+						break;
+					}
+				break;
+				case "f_color" :
+					hr.style.backgroundColor = value; 
+				break;
+				case "f_noshade" :
+					
+				break;
+			  }
+			  hr.style.border = (param["f_noshade"]) ? "0" : null; 
+			}
+		}
+	}, outparam);
+};
+	

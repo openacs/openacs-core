@@ -1,3 +1,756 @@
-/* This compressed file is part of Xinha. For uncompressed sources, forum, and bug reports, go to xinha.org */
-/* This file is part of version 0.96beta2 released Fri, 20 Mar 2009 11:01:14 +0100 */
-Xinha.Config.prototype.FormOperations={multiple_field_format:"php",allow_edit_form:false,default_form_action:Xinha.getPluginDir("FormOperations")+"/formmail.php",default_form_html:Xinha._geturlcontent(Xinha.getPluginDir("FormOperations")+"/default_form.html")};FormOperations._pluginInfo={name:"FormOperations",version:"1.0",developer:"James Sleeman",developer_url:"http://www.gogo.co.nz/",c_owner:"Gogo Internet Services",license:"htmlArea",sponsor:"Gogo Internet Services",sponsor_url:"http://www.gogo.co.nz/"};function FormOperations(b){this.editor=b;this.panel=false;this.html=false;this.ready=false;this.activeElement=null;this._preparePanel();b.config.pageStyleSheets.push(Xinha.getPluginDir("FormOperations")+"/iframe.css");var c=["separator","insert_form","insert_text_field","insert_textarea_field","insert_select_field","insert_cb_field","insert_rb_field","insert_button"];this.editor.config.toolbar.push(c);function a(e){var g=Xinha.uniq("fo");e=e.replace(/^<([^ \/>]+)/i,'<$1 id="'+g+'"');b.insertHTML(e);var f=b._doc.getElementById(g);f.setAttribute("id","");b.selectNodeContents(f);b.updateToolbar();return f}var d=b.imgURL("buttons.gif","FormOperations");FormOperations.prototype._lc=function(e){return Xinha._lc(e,"FormOperations")};this.editor.config.btnList.insert_form=[this._lc("Insert a Form."),[d,0,0],false,function(){var e=null;if(b.config.FormOperations.default_form_html){e=a(b.config.FormOperations.default_form_html)}else{e=a("<form>&nbsp;</form>")}if(b.config.FormOperations.default_form_action&&!e.action){e.action=b.config.FormOperations.default_form_action}}];this.editor.config.btnList.insert_text_field=[this._lc("Insert a text, password or hidden field."),[d,1,0],false,function(){a('<input type="text" />')},"form"];this.editor.config.btnList.insert_textarea_field=[this._lc("Insert a multi-line text field."),[d,2,0],false,function(){a("<textarea> </textarea>")},"form"];this.editor.config.btnList.insert_select_field=[this._lc("Insert a select field."),[d,3,0],false,function(){a('<select> <option value="">Please Select...</option> </select>')},"form"];this.editor.config.btnList.insert_cb_field=[this._lc("Insert a check box."),[d,4,0],false,function(){a('<input type="checkbox" />')},"form"];this.editor.config.btnList.insert_rb_field=[this._lc("Insert a radio button."),[d,5,0],false,function(){a('<input type="radio" />')},"form"];this.editor.config.btnList.insert_button=[this._lc("Insert a submit/reset button."),[d,6,0],false,function(){a('<input type="submit" value="Send" />')},"form"]}FormOperations.prototype.onGenerate=function(){if(Xinha.is_gecko){var a=this.editor;var b=this.editor._doc;Xinha._addEvents(b,["mousemove"],function(c){return a._editorEvent(c)})}};FormOperations.prototype._preparePanel=function(){var a=this;if(this.html==false){Xinha._getback(Xinha.getPluginDir("FormOperations")+"/panel.html",function(b){a.html=b;a._preparePanel()});return false}if(typeof Xinha.Dialog=="undefined"){Xinha._loadback(_editor_url+"modules/Dialogs/XinhaDialog.js",function(){a._preparePanel()});return false}if(typeof Xinha.PanelDialog=="undefined"){Xinha._loadback(_editor_url+"modules/Dialogs/panel-dialog.js",function(){a._preparePanel()});return false}this.panel=new Xinha.PanelDialog(this.editor,"bottom",this.html,"FormOperations");this.panel.hide();this.ready=true};FormOperations.prototype.onUpdateToolbar=function(){if(!this.ready){return true}var b=this.editor._activeElement(this.editor._getSelection());if(b!=null){if(b==this.activeElement){return true}var a=b.tagName.toLowerCase();this.hideAll();if(a==="form"){if(this.editor.config.FormOperations.allow_edit_form){this.showForm(b)}else{this.panel.hide();this.activeElement=null;this.panel.hide();return true}}else{if(this.editor.config.FormOperations.allow_edit_form&&typeof b.form!="undefined"&&b.form){this.showForm(b.form)}switch(a){case"form":this.showForm(b);break;case"input":switch(b.getAttribute("type").toLowerCase()){case"text":case"password":case"hidden":this.showText(b);break;case"radio":case"checkbox":this.showCbRd(b);break;case"submit":case"reset":case"button":this.showButton(b);break}break;case"textarea":this.showTextarea(b);break;case"select":this.showSelect(b);break;default:this.activeElement=null;this.panel.hide();return true}}this.panel.show();this.activeElement=b;return true}else{this.activeElement=null;this.panel.hide();return true}};FormOperations.prototype.hideAll=function(){this.panel.getElementById("fs_form").style.display="none";this.panel.getElementById("fs_text").style.display="none";this.panel.getElementById("fs_textarea").style.display="none";this.panel.getElementById("fs_select").style.display="none";this.panel.getElementById("fs_cbrd").style.display="none";this.panel.getElementById("fs_button").style.display="none"};FormOperations.prototype.showForm=function(a){this.panel.getElementById("fs_form").style.display="";var c={action:a.action,method:a.method.toUpperCase()};this.panel.setValues(c);var b=a;this.panel.getElementById("action").onkeyup=function(){b.action=this.value};this.panel.getElementById("method").onchange=function(){b.method=this.options[this.selectedIndex].value}};FormOperations.prototype.showText=function(b){this.panel.getElementById("fs_text").style.display="";var e={text_name:this.deformatName(b,b.name),text_value:b.value,text_type:b.type.toLowerCase(),text_width:b.style.width?parseFloat(b.style.width.replace(/[^0-9.]/,"")):"",text_width_units:b.style.width?b.style.width.replace(/[0-9.]/,"").toLowerCase():"ex",text_maxlength:b.maxlength?b.maxlength:""};this.panel.setValues(e);var d=b;var c=this;this.panel.getElementById("text_name").onkeyup=function(){d.name=c.formatName(d,this.value)};this.panel.getElementById("text_value").onkeyup=function(){d.value=this.value};this.panel.getElementById("text_type").onchange=function(){if(!Xinha.is_ie){d.type=this.options[this.selectedIndex].value}else{var h=c.editor._doc.createElement("div");if(!/type=/.test(d.outerHTML)){h.innerHTML=d.outerHTML.replace(/<INPUT/i,'<input type="'+this.options[this.selectedIndex].value+'"')}else{h.innerHTML=d.outerHTML.replace(/type="?[a-z]+"?/i,'type="'+this.options[this.selectedIndex].value+'"')}var g=Xinha.removeFromParent(h.childNodes[0]);d.parentNode.insertBefore(g,d);Xinha.removeFromParent(d);b=d=g}};var a=this.panel.getElementById("text_width");var f=this.panel.getElementById("text_width_units");this.panel.getElementById("text_width").onkeyup=this.panel.getElementById("text_width_units").onchange=function(){if(!a.value||isNaN(parseFloat(a.value))){d.style.width=""}d.style.width=parseFloat(a.value)+f.options[f.selectedIndex].value};this.panel.getElementById("text_maxlength").onkeyup=function(){d.maxlength=this.value}};FormOperations.prototype.showCbRd=function(a){this.panel.getElementById("fs_cbrd").style.display="";var d={cbrd_name:this.deformatName(a,a.name),cbrd_value:a.value,cbrd_checked:a.checked?1:0,cbrd_type:a.type.toLowerCase()};this.panel.setValues(d);var c=a;var b=this;this.panel.getElementById("cbrd_name").onkeyup=function(){c.name=b.formatName(c,this.value)};this.panel.getElementById("cbrd_value").onkeyup=function(){c.value=this.value};this.panel.getElementById("cbrd_type").onchange=function(){if(!Xinha.is_ie){c.type=this.options[this.selectedIndex].value}else{var f=b.editor._doc.createElement("div");if(!/type=/.test(c.outerHTML)){f.innerHTML=c.outerHTML.replace(/<INPUT/i,'<input type="'+this.options[this.selectedIndex].value+'"')}else{f.innerHTML=c.outerHTML.replace(/type="?[a-z]+"?/i,'type="'+this.options[this.selectedIndex].value+'"')}var e=Xinha.removeFromParent(f.childNodes[0]);c.parentNode.insertBefore(e,c);Xinha.removeFromParent(c);a=c=e}};this.panel.getElementById("cbrd_checked").onclick=function(){c.checked=this.checked}};FormOperations.prototype.showButton=function(a){this.panel.getElementById("fs_button").style.display="";var d={button_name:this.deformatName(a,a.name),button_value:a.value,button_type:a.type.toLowerCase()};this.panel.setValues(d);var c=a;var b=this;this.panel.getElementById("button_name").onkeyup=function(){c.name=b.formatName(c,this.value)};this.panel.getElementById("button_value").onkeyup=function(){c.value=this.value};this.panel.getElementById("button_type").onchange=function(){if(!Xinha.is_ie){c.type=this.options[this.selectedIndex].value}else{var f=b.editor._doc.createElement("div");if(!/type=/.test(c.outerHTML)){f.innerHTML=c.outerHTML.replace(/<INPUT/i,'<input type="'+this.options[this.selectedIndex].value+'"')}else{f.innerHTML=c.outerHTML.replace(/type="?[a-z]+"?/i,'type="'+this.options[this.selectedIndex].value+'"')}var e=Xinha.removeFromParent(f.childNodes[0]);c.parentNode.insertBefore(e,c);Xinha.removeFromParent(c);a=c=e}}};FormOperations.prototype.showTextarea=function(c){this.panel.getElementById("fs_textarea").style.display="";var g={textarea_name:this.deformatName(c,c.name),textarea_value:c.value,textarea_width:c.style.width?parseFloat(c.style.width.replace(/[^0-9.]/,"")):"",textarea_width_units:c.style.width?c.style.width.replace(/[0-9.]/,"").toLowerCase():"ex",textarea_height:c.style.height?parseFloat(c.style.height.replace(/[^0-9.]/,"")):"",textarea_height_units:c.style.height?c.style.height.replace(/[0-9.]/,"").toLowerCase():"ex"};this.panel.setValues(g);var e=c;var d=this;this.panel.getElementById("textarea_name").onkeyup=function(){e.name=d.formatName(e,this.value)};this.panel.getElementById("textarea_value").onkeyup=function(){e.value=e.innerHTML=this.value};var a=this.panel.getElementById("textarea_width");var j=this.panel.getElementById("textarea_width_units");this.panel.getElementById("textarea_width").onkeyup=this.panel.getElementById("textarea_width_units").onchange=function(){if(!a.value||isNaN(parseFloat(a.value))){e.style.width=""}e.style.width=parseFloat(a.value)+j.options[j.selectedIndex].value};var f=this.panel.getElementById("textarea_height");var b=this.panel.getElementById("textarea_height_units");this.panel.getElementById("textarea_height").onkeyup=this.panel.getElementById("textarea_height_units").onchange=function(){if(!f.value||isNaN(parseFloat(f.value))){e.style.height=""}e.style.height=parseFloat(f.value)+b.options[b.selectedIndex].value}};FormOperations.prototype.showSelect=function(j){this.panel.getElementById("fs_select").style.display="";var f={select_name:this.deformatName(j,j.name),select_multiple:j.multiple?1:0,select_width:j.style.width?parseFloat(j.style.width.replace(/[^0-9.]/,"")):"",select_width_units:j.style.width?j.style.width.replace(/[0-9.]/,"").toLowerCase():"ex",select_height:j.style.height?parseFloat(j.style.height.replace(/[^0-9.]/,"")):(j.size&&j.size>0?j.size:1),select_height_units:j.style.height?j.style.height.replace(/[0-9.]/,"").toLowerCase():"items"};this.panel.setValues(f);var b=j;var e=this;this.panel.getElementById("select_name").onkeyup=function(){b.name=e.formatName(b,this.value)};this.panel.getElementById("select_multiple").onclick=function(){b.multiple=this.checked};var k=this.panel.getElementById("select_width");var d=this.panel.getElementById("select_width_units");this.panel.getElementById("select_width").onkeyup=this.panel.getElementById("select_width_units").onchange=function(){if(!k.value||isNaN(parseFloat(k.value))){b.style.width=""}b.style.width=parseFloat(k.value)+d.options[d.selectedIndex].value};var c=this.panel.getElementById("select_height");var g=this.panel.getElementById("select_height_units");this.panel.getElementById("select_height").onkeyup=this.panel.getElementById("select_height_units").onchange=function(){if(!c.value||isNaN(parseFloat(c.value))){b.style.height="";return}if(g.selectedIndex==0){b.style.height="";b.size=parseInt(c.value)}else{b.style.height=parseFloat(c.value)+g.options[g.selectedIndex].value}};var a=this.panel.getElementById("select_options");this.arrayToOpts(this.optsToArray(j.options),a.options);this.panel.getElementById("add_option").onclick=function(){var h=prompt(Xinha._lc("Enter the name for new option.","FormOperations"));if(h==null){return}var l=new Option(h);var i=e.optsToArray(a.options);if(a.selectedIndex>=0){i.splice(a.selectedIndex,0,l)}else{i.push(l)}e.arrayToOpts(i,j.options);e.arrayToOpts(i,a.options)};this.panel.getElementById("del_option").onclick=function(){var m=e.optsToArray(a.options);var l=[];for(var h=0;h<m.length;h++){if(m[h].selected){continue}l.push(m[h])}e.arrayToOpts(l,j.options);e.arrayToOpts(l,a.options)};this.panel.getElementById("up_option").onclick=function(){if(!(a.selectedIndex>0)){return}var i=e.optsToArray(a.options);var h=i.splice(a.selectedIndex,1).pop();i.splice(a.selectedIndex-1,0,h);e.arrayToOpts(i,j.options);e.arrayToOpts(i,a.options)};this.panel.getElementById("down_option").onclick=function(){if(a.selectedIndex==a.options.length-1){return}var i=e.optsToArray(a.options);var h=i.splice(a.selectedIndex,1).pop();i.splice(a.selectedIndex+1,0,h);e.arrayToOpts(i,j.options);e.arrayToOpts(i,a.options)};this.panel.getElementById("select_options").onchange=function(){e.arrayToOpts(e.optsToArray(a.options),j.options)}};FormOperations.prototype.optsToArray=function(d){var b=[];for(var c=0;c<d.length;c++){b.push({text:d[c].text,value:d[c].value,defaultSelected:d[c].defaultSelected,selected:d[c].selected})}return b};FormOperations.prototype.arrayToOpts=function(b,d){for(var c=d.length-1;c>=0;c--){d[c]=null}for(var c=0;c<b.length;c++){d[c]=new Option(b[c].text,b[c].value,b[c].defaultSelected,b[c].selected)}};FormOperations.prototype.formatName=function(a,b){var c=b;switch(this.editor.config.FormOperations.multiple_field_format){case"php":c+="[]";break;case"unmodified":break;default:throw ("Unknown multiple field format "+this.editor.config.FormOperations.multiple_field_format)}if((a.tagName.toLowerCase()=="select"&&a.multiple)||(a.tagName.toLowerCase()=="input"&&a.type.toLowerCase()=="checkbox")){b=c}return b};FormOperations.prototype.deformatName=function(a,b){if(this.editor.config.FormOperations.multiple_field_format=="php"){b=b.replace(/\[\]$/,"")}return b};
+
+  /*--------------------------------------:noTabs=true:tabSize=2:indentSize=2:--
+    --  FormOperations Plugin
+    --
+    --  $HeadURL: http://svn.xinha.org/trunk/plugins/FormOperations/FormOperations.js $
+    --  $LastChangedDate: 2008-10-13 06:42:42 +1300 (Mon, 13 Oct 2008) $
+    --  $LastChangedRevision: 1084 $
+    --  $LastChangedBy: ray $
+    --------------------------------------------------------------------------*/
+
+Xinha.Config.prototype.FormOperations =
+{
+  // format for fields where multiple values may be selected
+  //    'php'          => FieldName[]
+  //    'unmodified'   => FieldName
+  'multiple_field_format': 'php',
+  'allow_edit_form'      : false,
+  'default_form_action'  : Xinha.getPluginDir('FormOperations') + '/formmail.php',
+  'default_form_html'    : Xinha._geturlcontent(Xinha.getPluginDir('FormOperations') + '/default_form.html')
+};
+
+FormOperations._pluginInfo =
+{
+  name     : "FormOperations",
+  version  : "1.0",
+  developer: "James Sleeman",
+  developer_url: "http://www.gogo.co.nz/",
+  c_owner      : "Gogo Internet Services",
+  license      : "htmlArea",
+  sponsor      : "Gogo Internet Services",
+  sponsor_url  : "http://www.gogo.co.nz/"
+};
+
+function FormOperations(editor)
+{
+  this.editor = editor;
+  this.panel  = false;
+  this.html   = false;
+  this.ready  = false;
+  this.activeElement = null;
+  this._preparePanel();
+
+
+  editor.config.pageStyleSheets.push(Xinha.getPluginDir('FormOperations') + '/iframe.css');
+
+  var toolbar =
+  [
+    'separator',
+    'insert_form',
+    'insert_text_field',
+    'insert_textarea_field',
+    'insert_select_field',
+    'insert_cb_field',
+    'insert_rb_field',
+    'insert_button'
+  ];
+
+  this.editor.config.toolbar.push(toolbar);
+
+  function pasteAndSelect(htmlTag)
+  {
+    var id = Xinha.uniq('fo');
+    htmlTag = htmlTag.replace(/^<([^ \/>]+)/i, '<$1 id="'+id+'"');
+    editor.insertHTML(htmlTag);
+    var el = editor._doc.getElementById(id);
+    el.setAttribute('id', '');
+    editor.selectNodeContents(el);
+    editor.updateToolbar();
+    return el;
+  }
+
+  var buttonsImage = editor.imgURL('buttons.gif', 'FormOperations');
+
+  FormOperations.prototype._lc = function(string) {
+    return Xinha._lc(string, 'FormOperations');
+  };
+
+  this.editor.config.btnList.insert_form =
+  [ this._lc("Insert a Form."),
+    [buttonsImage, 0, 0],
+    false,
+    function()
+    {
+      var form = null;
+      if(editor.config.FormOperations.default_form_html)
+      {
+        form = pasteAndSelect(editor.config.FormOperations.default_form_html);
+      }
+      else
+      {
+        form = pasteAndSelect('<form>&nbsp;</form>');
+      }
+
+      if(editor.config.FormOperations.default_form_action && !form.action)
+      {
+        form.action = editor.config.FormOperations.default_form_action;
+      }
+    }
+  ];
+
+  this.editor.config.btnList.insert_text_field =
+  [ this._lc("Insert a text, password or hidden field."),
+    [buttonsImage, 1, 0],
+    false,
+    function()
+    {
+      pasteAndSelect('<input type="text" />');
+    },
+    'form'
+  ];
+
+  this.editor.config.btnList.insert_textarea_field =
+  [ this._lc("Insert a multi-line text field."),
+    [buttonsImage, 2, 0],
+    false,
+    function()
+    {
+      pasteAndSelect('<textarea> </textarea>');
+    },
+    'form'
+  ];
+
+  this.editor.config.btnList.insert_select_field =
+  [ this._lc("Insert a select field."),
+    [buttonsImage, 3, 0],
+    false,
+    function()
+    {
+      pasteAndSelect('<select> <option value="">Please Select...</option> </select>');
+    },
+    'form'
+  ];
+
+  this.editor.config.btnList.insert_cb_field =
+  [ this._lc("Insert a check box."),
+    [buttonsImage, 4, 0],
+    false,
+    function()
+    {
+      pasteAndSelect('<input type="checkbox" />');
+    },
+    'form'
+  ];
+
+  this.editor.config.btnList.insert_rb_field =
+  [ this._lc("Insert a radio button."),
+    [buttonsImage, 5, 0],
+    false,
+    function()
+    {
+      pasteAndSelect('<input type="radio" />');
+    },
+    'form'
+  ];
+
+  this.editor.config.btnList.insert_button =
+  [ this._lc("Insert a submit/reset button."),
+    [buttonsImage, 6, 0],
+    false,
+    function()
+    {
+      pasteAndSelect('<input type="submit" value="Send" />');
+    },
+    'form'
+  ];
+}
+
+FormOperations.prototype.onGenerate = function()
+{
+  // Gecko does not register click events on select lists inside the iframe
+  // so the only way of detecting that is to do an event on mouse move.
+  if( Xinha.is_gecko)
+  {
+    var editor = this.editor;
+    var doc    = this.editor._doc;
+    Xinha._addEvents
+    (doc, ["mousemove"],
+     function (event) {
+       return editor._editorEvent(event);
+     });
+  }
+};
+
+FormOperations.prototype._preparePanel = function ()
+{
+  var fo = this;
+  if(this.html == false)
+  {
+
+    Xinha._getback(Xinha.getPluginDir('FormOperations') + '/panel.html',
+      function(txt)
+      {
+        fo.html = txt;
+        fo._preparePanel();
+      }
+    );
+    return false;
+  }
+
+  if(typeof Xinha.Dialog == 'undefined')
+  {
+    Xinha._loadback
+      (_editor_url + 'modules/Dialogs/XinhaDialog.js', function() { fo._preparePanel(); } );
+      return false;
+  }
+
+  if(typeof Xinha.PanelDialog == 'undefined')
+  {
+    Xinha._loadback
+      (_editor_url + 'modules/Dialogs/panel-dialog.js', function() { fo._preparePanel(); } );
+      return false;
+  }
+
+
+
+  this.panel = new Xinha.PanelDialog(this.editor,'bottom',this.html,'FormOperations');
+  this.panel.hide();
+  this.ready = true;
+};
+
+FormOperations.prototype.onUpdateToolbar = function()
+{
+  if(!this.ready) return true;
+  var activeElement = this.editor._activeElement(this.editor._getSelection());
+  if(activeElement != null)
+  {
+    if(activeElement == this.activeElement) return true;
+
+    var tag = activeElement.tagName.toLowerCase();
+    
+    this.hideAll();
+    if(tag === 'form')
+    {
+      if(this.editor.config.FormOperations.allow_edit_form)
+      {
+        this.showForm(activeElement);
+      }
+      else
+      {
+        this.panel.hide();
+        this.activeElement = null;
+        this.panel.hide();
+        return true;
+      }
+    }
+    else
+    {
+
+      if(this.editor.config.FormOperations.allow_edit_form && typeof activeElement.form != 'undefined' && activeElement.form)
+      {
+        this.showForm(activeElement.form);
+      }
+
+      switch(tag)
+      {
+        case 'form':
+        {
+          this.showForm(activeElement);
+        }
+        break;
+
+        case 'input':
+        {
+          switch(activeElement.getAttribute('type').toLowerCase())
+          {
+            case 'text'    :
+            case 'password':
+            case 'hidden'  :
+            {
+              this.showText(activeElement);
+            }
+            break;
+
+            case 'radio'   :
+            case 'checkbox':
+            {
+              this.showCbRd(activeElement);
+            }
+            break;
+
+            case 'submit'  :
+            case 'reset'   :
+            case 'button'  :
+            {
+              this.showButton(activeElement);
+            }
+            break;
+          }
+        }
+        break;
+
+        case 'textarea':
+        {
+          this.showTextarea(activeElement);
+        }
+        break;
+
+        case 'select':
+        {
+          this.showSelect(activeElement);
+        }
+        break;
+
+        default:
+        {
+          this.activeElement = null;
+          this.panel.hide();
+          return true;
+        }
+      }
+    }
+    
+    this.panel.show();
+    
+    //this.editor.scrollToElement(activeElement);
+    this.activeElement = activeElement;
+    return true;
+  }
+  else
+  {
+    this.activeElement = null;
+    this.panel.hide();
+    return true;
+  }
+};
+
+
+FormOperations.prototype.hideAll = function()
+{
+  this.panel.getElementById('fs_form').style.display = 'none';
+  this.panel.getElementById('fs_text').style.display = 'none';
+  this.panel.getElementById('fs_textarea').style.display = 'none';
+  this.panel.getElementById('fs_select').style.display = 'none';
+  this.panel.getElementById('fs_cbrd').style.display = 'none';
+  this.panel.getElementById('fs_button').style.display = 'none';
+};
+
+FormOperations.prototype.showForm = function(form)
+{
+  this.panel.getElementById('fs_form').style.display = '';
+  var vals =
+  {
+    'action' : form.action,
+    'method' : form.method.toUpperCase()
+  }
+  this.panel.setValues(vals);
+  var f = form;
+  this.panel.getElementById('action').onkeyup = function () { f.action = this.value; };
+  this.panel.getElementById('method').onchange   = function () { f.method = this.options[this.selectedIndex].value; };
+};
+
+FormOperations.prototype.showText = function (input)
+{
+  this.panel.getElementById('fs_text').style.display = '';
+
+  var vals =
+  {
+    'text_name'  : this.deformatName(input, input.name),
+    'text_value' : input.value,
+    'text_type'  : input.type.toLowerCase(),
+    'text_width' : input.style.width ? parseFloat(input.style.width.replace(/[^0-9.]/, '')) : '',
+    'text_width_units': input.style.width ? input.style.width.replace(/[0-9.]/, '').toLowerCase() : 'ex',
+    'text_maxlength'  : input.maxlength   ? input.maxlength : ''
+  }
+  this.panel.setValues(vals);
+
+  var i = input;
+  var fo = this;
+
+  this.panel.getElementById('text_name').onkeyup   = function () { i.name = fo.formatName(i, this.value); }
+  this.panel.getElementById('text_value').onkeyup  = function () { i.value = this.value; }
+  this.panel.getElementById('text_type').onchange   = function ()
+    {
+      if(!Xinha.is_ie)
+      {
+        i.type = this.options[this.selectedIndex].value;
+      }
+      else
+      {
+        // IE does not permit modifications of the type of a form field once it is set
+        // We therefor have to destroy and recreate it.  I swear, if I ever
+        // meet any of the Internet Explorer development team I'm gonna
+        // kick them in the nuts!
+        var tmpContainer = fo.editor._doc.createElement('div');
+        if(!/type=/.test(i.outerHTML))
+        {
+          tmpContainer.innerHTML = i.outerHTML.replace(/<INPUT/i, '<input type="'+ this.options[this.selectedIndex].value + '"');
+        }
+        else
+        {
+          tmpContainer.innerHTML = i.outerHTML.replace(/type="?[a-z]+"?/i, 'type="' + this.options[this.selectedIndex].value + '"');
+        }
+        var newElement = Xinha.removeFromParent(tmpContainer.childNodes[0]);
+        i.parentNode.insertBefore(newElement, i);
+        Xinha.removeFromParent(i);
+        input = i = newElement;
+      }
+    }
+
+  var w  = this.panel.getElementById('text_width');
+  var wu = this.panel.getElementById('text_width_units');
+
+  this.panel.getElementById('text_width').onkeyup     =
+  this.panel.getElementById('text_width_units').onchange =
+    function ()
+    {
+      if(!w.value || isNaN(parseFloat(w.value)))
+      {
+        i.style.width = '';
+      }
+      i.style.width = parseFloat(w.value) + wu.options[wu.selectedIndex].value;
+    }
+
+  this.panel.getElementById('text_maxlength').onkeyup = function () { i.maxlength = this.value; }
+};
+
+FormOperations.prototype.showCbRd = function (input)
+{
+  this.panel.getElementById('fs_cbrd').style.display = '';
+  var vals =
+  {
+    'cbrd_name'    : this.deformatName(input, input.name),
+    'cbrd_value'   : input.value,
+    'cbrd_checked' : input.checked ? 1 : 0,
+    'cbrd_type'    : input.type.toLowerCase()
+  };
+  this.panel.setValues(vals);
+
+  var i = input;
+  var fo = this;
+  this.panel.getElementById('cbrd_name').onkeyup   = function () { i.name = fo.formatName(i, this.value); }
+  this.panel.getElementById('cbrd_value').onkeyup  = function () { i.value = this.value; }
+  this.panel.getElementById('cbrd_type').onchange   = function ()
+    {
+      if(!Xinha.is_ie)
+      {
+        i.type = this.options[this.selectedIndex].value;
+      }
+      else
+      {
+        // IE does not permit modifications of the type of a form field once it is set
+        // We therefor have to destroy and recreate it.  I swear, if I ever
+        // meet any of the Internet Explorer development team I'm gonna
+        // kick them in the nuts!
+        var tmpContainer = fo.editor._doc.createElement('div');
+        if(!/type=/.test(i.outerHTML))
+        {
+          tmpContainer.innerHTML = i.outerHTML.replace(/<INPUT/i, '<input type="'+ this.options[this.selectedIndex].value + '"');
+        }
+        else
+        {
+          tmpContainer.innerHTML = i.outerHTML.replace(/type="?[a-z]+"?/i, 'type="' + this.options[this.selectedIndex].value + '"');
+        }
+        var newElement = Xinha.removeFromParent(tmpContainer.childNodes[0]);
+        i.parentNode.insertBefore(newElement, i);
+        Xinha.removeFromParent(i);
+        input = i = newElement;
+      }
+    }
+  this.panel.getElementById('cbrd_checked').onclick   = function () { i.checked = this.checked; }
+};
+
+FormOperations.prototype.showButton = function (input)
+{
+  this.panel.getElementById('fs_button').style.display = '';
+  var vals =
+  {
+    'button_name'    : this.deformatName(input, input.name),
+    'button_value'   : input.value,
+    'button_type'    : input.type.toLowerCase()
+  };
+  this.panel.setValues(vals);
+
+  var i = input;
+  var fo = this;
+  this.panel.getElementById('button_name').onkeyup   = function () { i.name = fo.formatName(i, this.value); };
+  this.panel.getElementById('button_value').onkeyup  = function () { i.value = this.value; };
+  this.panel.getElementById('button_type').onchange   = function ()
+    {
+      if(!Xinha.is_ie)
+      {
+        i.type = this.options[this.selectedIndex].value;
+      }
+      else
+      {
+        // IE does not permit modifications of the type of a form field once it is set
+        // We therefor have to destroy and recreate it.  I swear, if I ever
+        // meet any of the Internet Explorer development team I'm gonna
+        // kick them in the nuts!
+        var tmpContainer = fo.editor._doc.createElement('div');
+        if(!/type=/.test(i.outerHTML))
+        {
+          tmpContainer.innerHTML = i.outerHTML.replace(/<INPUT/i, '<input type="'+ this.options[this.selectedIndex].value + '"');
+        }
+        else
+        {
+          tmpContainer.innerHTML = i.outerHTML.replace(/type="?[a-z]+"?/i, 'type="' + this.options[this.selectedIndex].value + '"');
+        }
+        var newElement = Xinha.removeFromParent(tmpContainer.childNodes[0]);
+        i.parentNode.insertBefore(newElement, i);
+        Xinha.removeFromParent(i);
+        input = i = newElement;
+      }
+    };
+};
+
+FormOperations.prototype.showTextarea = function (input)
+{
+  this.panel.getElementById('fs_textarea').style.display = '';
+  var vals =
+  {
+    'textarea_name'  : this.deformatName(input, input.name),
+    'textarea_value' : input.value,
+    'textarea_width' : input.style.width ? parseFloat(input.style.width.replace(/[^0-9.]/, '')) : '',
+    'textarea_width_units' : input.style.width ? input.style.width.replace(/[0-9.]/, '').toLowerCase() : 'ex',
+    'textarea_height'      : input.style.height ? parseFloat(input.style.height.replace(/[^0-9.]/, '')) : '',
+    'textarea_height_units': input.style.height ? input.style.height.replace(/[0-9.]/, '').toLowerCase() : 'ex'
+  };
+
+  this.panel.setValues(vals);
+
+  var i = input;
+  var fo = this;
+  this.panel.getElementById('textarea_name').onkeyup   = function () { i.name = fo.formatName(i, this.value); };
+  this.panel.getElementById('textarea_value').onkeyup  = function () { i.value = i.innerHTML = this.value; };
+
+  var w  = this.panel.getElementById('textarea_width');
+  var wu = this.panel.getElementById('textarea_width_units');
+
+  this.panel.getElementById('textarea_width').onkeyup     =
+  this.panel.getElementById('textarea_width_units').onchange =
+    function ()
+    {
+      if(!w.value || isNaN(parseFloat(w.value)))
+      {
+        i.style.width = '';
+      }
+      i.style.width = parseFloat(w.value) + wu.options[wu.selectedIndex].value;
+    };
+
+  var h  = this.panel.getElementById('textarea_height');
+  var hu = this.panel.getElementById('textarea_height_units');
+
+  this.panel.getElementById('textarea_height').onkeyup     =
+  this.panel.getElementById('textarea_height_units').onchange =
+    function ()
+    {
+      if(!h.value || isNaN(parseFloat(h.value)))
+      {
+        i.style.height = '';
+      }
+      i.style.height = parseFloat(h.value) + hu.options[hu.selectedIndex].value;
+    };
+
+};
+
+FormOperations.prototype.showSelect = function (input)
+{
+  this.panel.getElementById('fs_select').style.display = '';
+  var vals =
+  {
+    'select_name'  : this.deformatName(input, input.name),
+    'select_multiple' : input.multiple ? 1 : 0,
+    'select_width' : input.style.width ? parseFloat(input.style.width.replace(/[^0-9.]/, '')) : '',
+    'select_width_units' : input.style.width ? input.style.width.replace(/[0-9.]/, '').toLowerCase() : 'ex',
+      'select_height'      : input.style.height ? parseFloat(input.style.height.replace(/[^0-9.]/, '')) : (input.size && input.size > 0 ? input.size : 1),
+    'select_height_units': input.style.height ? input.style.height.replace(/[0-9.]/, '').toLowerCase() : 'items'
+  };
+
+  this.panel.setValues(vals);
+
+  var i = input;
+  var fo = this;
+  this.panel.getElementById('select_name').onkeyup   = function () { i.name = fo.formatName(i, this.value); };
+  this.panel.getElementById('select_multiple').onclick   = function () { i.multiple = this.checked; };
+
+  var w  = this.panel.getElementById('select_width');
+  var wu = this.panel.getElementById('select_width_units');
+
+  this.panel.getElementById('select_width').onkeyup     =
+  this.panel.getElementById('select_width_units').onchange =
+    function ()
+    {
+      if(!w.value || isNaN(parseFloat(w.value)))
+      {
+        i.style.width = '';
+      }
+      i.style.width = parseFloat(w.value) + wu.options[wu.selectedIndex].value;
+    };
+
+  var h  = this.panel.getElementById('select_height');
+  var hu = this.panel.getElementById('select_height_units');
+
+  this.panel.getElementById('select_height').onkeyup     =
+  this.panel.getElementById('select_height_units').onchange =
+    function ()
+    {
+      if(!h.value || isNaN(parseFloat(h.value)))
+      {
+        i.style.height = '';
+        return;
+      }
+
+      if(hu.selectedIndex == 0)
+      {
+        i.style.height = '';
+        i.size = parseInt(h.value);
+      }
+      else
+      {
+        i.style.height = parseFloat(h.value) + hu.options[hu.selectedIndex].value;
+      }
+    };
+
+
+  var fo_sel = this.panel.getElementById('select_options');
+  this.arrayToOpts(this.optsToArray(input.options), fo_sel.options);
+
+  this.panel.getElementById('add_option').onclick =
+    function()
+    {
+      var txt = prompt(Xinha._lc("Enter the name for new option.", 'FormOperations'));
+      if(txt == null) return;
+      var newOpt = new Option(txt);
+      var opts   = fo.optsToArray(fo_sel.options);
+      if(fo_sel.selectedIndex >= 0)
+      {
+        opts.splice(fo_sel.selectedIndex, 0, newOpt);
+      }
+      else
+      {
+        opts.push(newOpt);
+      }
+      fo.arrayToOpts(opts, input.options);
+      fo.arrayToOpts(opts, fo_sel.options);
+    };
+
+  this.panel.getElementById('del_option').onclick =
+    function()
+    {
+      var opts    = fo.optsToArray(fo_sel.options);
+      var newOpts = [ ];
+      for(var i = 0; i < opts.length; i++)
+      {
+        if(opts[i].selected) continue;
+        newOpts.push(opts[i]);
+      }
+      fo.arrayToOpts(newOpts, input.options);
+      fo.arrayToOpts(newOpts, fo_sel.options);
+    };
+
+  this.panel.getElementById('up_option').onclick =
+    function()
+    {
+      if(!(fo_sel.selectedIndex > 0)) return;
+      var opts    = fo.optsToArray(fo_sel.options);
+      var move    = opts.splice(fo_sel.selectedIndex, 1).pop();
+      opts.splice(fo_sel.selectedIndex - 1, 0, move);
+      fo.arrayToOpts(opts, input.options);
+      fo.arrayToOpts(opts, fo_sel.options);
+    };
+
+  this.panel.getElementById('down_option').onclick =
+    function()
+    {
+      if(fo_sel.selectedIndex == fo_sel.options.length - 1) return;
+      var opts    = fo.optsToArray(fo_sel.options);
+      var move    = opts.splice(fo_sel.selectedIndex, 1).pop();
+      opts.splice(fo_sel.selectedIndex+1, 0, move);
+      fo.arrayToOpts(opts, input.options);
+      fo.arrayToOpts(opts, fo_sel.options);
+    };
+
+  this.panel.getElementById('select_options').onchange =
+    function()
+    {
+      fo.arrayToOpts(fo.optsToArray(fo_sel.options), input.options);
+    };
+};
+
+FormOperations.prototype.optsToArray = function(o)
+{
+  var a = [ ];
+  for(var i = 0; i < o.length; i++)
+  {
+    a.push(
+      {
+        'text'            : o[i].text,
+        'value'           : o[i].value,
+        'defaultSelected' : o[i].defaultSelected,
+        'selected'        : o[i].selected
+      }
+    );
+  }
+  return a;
+};
+
+FormOperations.prototype.arrayToOpts = function(a, o)
+{
+  for(var i = o.length -1; i >= 0; i--)
+  {
+    o[i] = null;
+  }
+
+  for(var i = 0; i < a.length; i++)
+  {
+    o[i] = new Option(a[i].text, a[i].value, a[i].defaultSelected, a[i].selected);
+  }
+};
+
+FormOperations.prototype.formatName = function(input, name)
+{
+
+  // Multiple name
+  var mname = name;
+  switch(this.editor.config.FormOperations.multiple_field_format)
+  {
+    case 'php':
+    {
+      mname += '[]';
+    }
+    break;
+
+    case 'unmodified':
+    {
+      // Leave as is.
+    }
+    break;
+
+    default:
+    {
+      throw("Unknown multiple field format " + this.editor.config.FormOperations.multiple_field_format);
+    }
+  }
+
+  if
+  (
+       (input.tagName.toLowerCase() == 'select' && input.multiple)
+    || (input.tagName.toLowerCase() == 'input'  && input.type.toLowerCase() == 'checkbox')
+  )
+  {
+    name = mname;
+  }
+
+  return name;
+};
+
+FormOperations.prototype.deformatName = function(input, name)
+{
+  if(this.editor.config.FormOperations.multiple_field_format == 'php')
+  {
+    name = name.replace(/\[\]$/, '');
+  }
+
+  return name;
+};
