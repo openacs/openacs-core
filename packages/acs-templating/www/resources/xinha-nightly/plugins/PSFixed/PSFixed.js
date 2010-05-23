@@ -1,3 +1,147 @@
-/* This compressed file is part of Xinha. For uncompressed sources, forum, and bug reports, go to xinha.org */
-/* This file is part of version 0.96beta2 released Fri, 20 Mar 2009 11:01:14 +0100 */
-(function(){var b=window.PSFixed=function b(c){this.editor=c};b._pluginInfo={name:"PSFixed",version:"2.0",developer:"Douglas Mayle",developer_url:"http://xinha.org",license:"BSD"};b.prototype.onGenerateOnce=function(){this._registerBackend()};b.prototype._registerBackend=function(f){var e=this.editor;var c=this;if(!f){f=0}var d=10000;if(f>d){return}if(!e.plugins.PersistentStorage||!e.plugins.PersistentStorage.instance||!e.plugins.PersistentStorage.instance.ready){window.setTimeout(function(){c._registerBackend(f?f*2:50)},f?f:50);return}e.plugins.PersistentStorage.instance.registerBackend("PSFixed",this)};b.prototype.loadData=function(c){if(!this.config.$type){this.config.$type="folder"}c(this.config)};var a=function a(c,f,d){if(typeof d=="undefined"){d="/";f("/","",c)}for(var e in c){f(d,e,c[e]);if(c[e].$type=="folder"){a(c[e],f,d+e+"/")}}};b.prototype.getFilters=function(c){var d=[];a(c,function(h,f,g){if(g.$type!="folder"){return}var e=f.length?h+f+"/":h;d.push({value:e,display:e})});return d};b.prototype.getMetadata=function(d,g){var f=this.editor;var c=this;var e=[];a(d,function(j,h,i){if(!i.$type||!h){return}if(j!=g){return}if(i.$type=="folder"){e.push({URL:c.editor.imgURL("folder.gif","PersistentStorage"),name:h,key:j+h,$type:i.$type})}else{e.push({URL:i.URL,name:h,key:j+h,$type:i.$type})}});return e}})();
+/**
+ * PSFixed PSFixed.js file.
+ * This plugin is a fake persistent storage backed.  It is configured with a
+ * fixed list of stored objects and presents them to the user for insertion.
+ * A sample config is below:
+ *
+ * PSFixed.config = {
+ *     'xinha.png': {
+ *         $type: 'image',
+ *         URL: 'http://trac.xinha.org/chrome/common/trac_banner.png'
+ *     },
+ *     'browser': {
+ *         $type: 'folder',
+ *         'firefox.png': {
+ *             $type: 'image',
+ *             URL: 'http://www.mozilla.com/img/tignish/firefox/vs-firefox-logo.png'
+ *         }
+ *     }
+ * }
+ */
+(function() {
+var PSFixed = window.PSFixed = function PSFixed(editor) {
+  this.editor = editor;
+}
+
+PSFixed._pluginInfo = {
+    name          : "PSFixed",
+    version       : "2.0",
+    developer     : "Douglas Mayle",
+    developer_url : "http://xinha.org",
+    license       : "BSD"
+};
+
+PSFixed.prototype.onGenerateOnce = function () {
+  // We use _prepareDialog to asynchronously load the dialog markup and then
+  // perform necessary processing.
+  this._registerBackend();
+};
+
+PSFixed.prototype._registerBackend = function(timeWaited) {
+  var editor = this.editor;
+  var self = this;
+
+  if (!timeWaited) {
+    timeWaited = 0;
+  }
+
+  // Retry over a period of ten seconds to register.  We back off exponentially
+  // to limit resouce usage in the case of misconfiguration.
+  var registerTimeout = 10000;
+
+  if (timeWaited > registerTimeout) {
+    // This is most likely a configuration error.  We're loaded and
+    // PersistentStorage is not.
+    return;
+  }
+
+  if (!editor.plugins['PersistentStorage'] ||
+      !editor.plugins['PersistentStorage'].instance ||
+      !editor.plugins['PersistentStorage'].instance.ready) {
+
+    window.setTimeout(function() {self._registerBackend(timeWaited ? timeWaited*2 : 50);}, timeWaited ? timeWaited : 50);
+    return;
+  }
+  editor.plugins['PersistentStorage'].instance.registerBackend('PSFixed', this);
+}
+
+PSFixed.prototype.loadData = function (asyncCallback) {
+  // We don't expect the user to set the type on the root folder, so we set it
+  // ourselves.
+  if (!this.config.$type) {
+    this.config.$type = 'folder';
+  }
+  asyncCallback(this.config);
+}
+
+var treeRecurse = function treeRecurse(tree, callback, root) {
+  if (typeof root == 'undefined') {
+    root = '/';
+    callback('/', '', tree);
+  }
+
+  for (var key in tree) {
+    callback(root, key, tree[key]);
+
+    if (tree[key].$type == 'folder') {
+      treeRecurse(tree[key], callback, root + key + '/');
+    }
+  }
+};
+
+PSFixed.prototype.getFilters = function(dirTree) {
+  var filters = [];
+
+  treeRecurse(dirTree, function(path, key, value) {
+      if (value.$type != 'folder') {
+        return;
+      }
+
+      var filePath = key.length ? path + key + '/' : path;
+      filters.push({
+        value: filePath,
+        display: filePath
+      });
+  });
+
+  return filters;
+}
+
+PSFixed.prototype.getMetadata = function(dirTree, filterPath) {
+  var editor = this.editor;
+  var self = this;
+
+  var metadata = [];
+
+  treeRecurse(dirTree, function(path, key, value) {
+    if (!value.$type || !key) {
+      // This is a builtin property of objects, not one returned by the
+      // backend.
+      return;
+    }
+
+    if (path != filterPath) {
+      return;
+    }
+
+    if (value.$type == 'folder') {
+      metadata.push({
+        URL: self.editor.imgURL('folder.gif', 'PersistentStorage'),
+        name: key,
+        key: path + key,
+        $type: value.$type
+      });
+    } else {
+      metadata.push({
+        URL: value.URL,
+        name: key,
+        key: path + key,
+        $type: value.$type
+      });
+    }
+  });
+
+  return metadata;
+}
+
+})();

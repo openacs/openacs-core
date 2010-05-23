@@ -1,3 +1,454 @@
-/* This compressed file is part of Xinha. For uncompressed sources, forum, and bug reports, go to xinha.org */
-/* This file is part of version 0.96beta2 released Fri, 20 Mar 2009 11:01:14 +0100 */
-var SpellChecker=window.opener.SpellChecker;var Xinha=window.opener.Xinha;var _editor_url=window.opener._editor_url;var is_ie=Xinha.is_ie;var editor=SpellChecker.editor;var frame=null;var currentElement=null;var wrongWords=null;var modified=false;var allWords={};var fixedWords=[];var suggested_words={};var to_p_dict=[];var to_r_list=[];function _lc(a){return Xinha._lc(a,"SpellChecker")}function makeCleanDoc(c){var d=wrongWords.concat(fixedWords);for(var a=d.length;--a>=0;){var b=d[a];if(!(c&&/HA-spellcheck-fixed/.test(b.className))){if(b.firstChild){b.parentNode.insertBefore(b.firstChild,b)}b.parentNode.removeChild(b)}else{b.className="HA-spellcheck-fixed"}}return Xinha.getHTML(frame.contentWindow.document.body,true,editor)}function recheckClicked(){document.getElementById("status").innerHTML=_lc("Please wait: changing dictionary to")+': "'+document.getElementById("f_dictionary").value+'".';var a=document.getElementById("f_content");a.value=makeCleanDoc(true);a.form.submit()}function saveClicked(){if(modified){editor.setHTML(makeCleanDoc(false))}if(to_p_dict.length||to_r_list.length&&editor.config.SpellChecker.backend=="php"){var b={};for(var a=0;a<to_p_dict.length;a++){b["to_p_dict["+a+"]"]=to_p_dict[a]}for(var a=0;a<to_r_list.length;a++){b["to_r_list["+a+"][0]"]=to_r_list[a][0];b["to_r_list["+a+"][1]"]=to_r_list[a][1]}window.opener.Xinha._postback(Xinha.getPluginDir("SpellChecker")+"/spell-check-savedicts.php",b);window.close()}else{window.close()}return false}function cancelClicked(){var a=true;if(modified){a=confirm(_lc("This will drop changes and quit spell checker.  Please confirm."))}if(a){window.close()}return false}function replaceWord(b){var a=document.getElementById("v_replacement").value;var c=(b.innerHTML!=a);if(c){modified=true}if(b){b.className=b.className.replace(/\s*HA-spellcheck-(hover|fixed)\s*/g," ")}b.className+=" HA-spellcheck-fixed";b.__msh_fixed=true;if(!c){return false}to_r_list.push([b.innerHTML,a]);b.innerHTML=a}function replaceClicked(){replaceWord(currentElement);var b=currentElement.__msh_id;var a=b;do{++a;if(a==wrongWords.length){a=0}}while((a!=b)&&wrongWords[a].__msh_fixed);if(a==b){a=0;alert(_lc("Finished list of mispelled words"))}wrongWords[a].__msh_wordClicked(true);return false}function revertClicked(){document.getElementById("v_replacement").value=currentElement.__msh_origWord;replaceWord(currentElement);currentElement.className="HA-spellcheck-error HA-spellcheck-current";return false}function replaceAllClicked(){var d=document.getElementById("v_replacement").value;var c=true;var b=allWords[currentElement.__msh_origWord];if(b.length==0){alert("An impossible condition just happened.  Call FBI.  ;-)")}else{if(b.length==1){replaceClicked();return false}}if(c){for(var a=0;a<b.length;++a){if(b[a]!=currentElement){replaceWord(b[a])}}replaceClicked()}return false}function ignoreClicked(){document.getElementById("v_replacement").value=currentElement.__msh_origWord;replaceClicked();return false}function ignoreAllClicked(){document.getElementById("v_replacement").value=currentElement.__msh_origWord;replaceAllClicked();return false}function learnClicked(){to_p_dict.push(currentElement.__msh_origWord);return ignoreAllClicked()}function internationalizeWindow(){var f=["div","span","button"];for(var e=0;e<f.length;++e){var b=f[e];var d=document.getElementsByTagName(b);for(var c=d.length;--c>=0;){var g=d[c];if(g.childNodes.length==1&&/\S/.test(g.innerHTML)){var a=g.innerHTML;g.innerHTML=_lc(a)}}}}function initDocument(){internationalizeWindow();modified=false;frame=document.getElementById("i_framecontent");var b=document.getElementById("f_content");b.value=Xinha.getHTML(editor._doc.body,false,editor);var c=document.getElementById("f_dictionary");if(typeof editor.config.SpellChecker.defaultDictionary!="undefined"&&editor.config.SpellChecker.defaultDictionary!=""){c.value=editor.config.SpellChecker.defaultDictionary}else{c.value="en_GB"}if(editor.config.SpellChecker.backend=="php"){b.form.action=Xinha.getPluginDir("SpellChecker")+"/spell-check-logic.php"}if(editor.config.SpellChecker.utf8_to_entities){document.getElementById("utf8_to_entities").value=1}else{document.getElementById("utf8_to_entities").value=0}b.form.submit();document.getElementById("f_init").value="0";var a=document.getElementById("v_suggestions");a.onchange=function(){document.getElementById("v_replacement").value=this.value};if(is_ie){a.attachEvent("ondblclick",replaceClicked)}else{a.addEventListener("dblclick",replaceClicked,true)}document.getElementById("b_replace").onclick=replaceClicked;if(editor.config.SpellChecker.backend=="php"){document.getElementById("b_learn").onclick=learnClicked}else{document.getElementById("b_learn").parentNode.removeChild(document.getElementById("b_learn"))}document.getElementById("b_replall").onclick=replaceAllClicked;document.getElementById("b_ignore").onclick=ignoreClicked;document.getElementById("b_ignall").onclick=ignoreAllClicked;document.getElementById("b_recheck").onclick=recheckClicked;document.getElementById("b_revert").onclick=revertClicked;document.getElementById("b_info").onclick=displayInfo;document.getElementById("b_ok").onclick=saveClicked;document.getElementById("b_cancel").onclick=cancelClicked;a=document.getElementById("v_dictionaries");a.onchange=function(){document.getElementById("f_dictionary").value=this.value}}function getAbsolutePos(b){var c={x:b.offsetLeft,y:b.offsetTop};if(b.offsetParent){var a=getAbsolutePos(b.offsetParent);c.x+=a.x;c.y+=a.y}return c}function wordClicked(h){var k=this;if(h){(function(){var l=getAbsolutePos(k);var a={x:frame.offsetWidth-4,y:frame.offsetHeight-4};var i={x:frame.contentWindow.document.body.scrollLeft,y:frame.contentWindow.document.body.scrollTop};l.x-=Math.round(a.x/2);if(l.x<0){l.x=0}l.y-=Math.round(a.y/2);if(l.y<0){l.y=0}frame.contentWindow.scrollTo(l.x,l.y)})()}if(currentElement){var g=allWords[currentElement.__msh_origWord];currentElement.className=currentElement.className.replace(/\s*HA-spellcheck-current\s*/g," ");for(var c=0;c<g.length;++c){var b=g[c];if(b!=currentElement){b.className=b.className.replace(/\s*HA-spellcheck-same\s*/g," ")}}}currentElement=this;this.className+=" HA-spellcheck-current";var g=allWords[currentElement.__msh_origWord];for(var c=0;c<g.length;++c){var b=g[c];if(b!=currentElement){b.className+=" HA-spellcheck-same"}}var d;if(g.length==1){d="one occurrence"}else{if(g.length==2){d="two occurrences"}else{d=g.length+" occurrences"}}var f=suggested_words[this.__msh_origWord];if(f){f=f.split(/,/)}else{f=[]}var j=document.getElementById("v_suggestions");document.getElementById("statusbar").innerHTML="Found "+d+' for word "<b>'+currentElement.__msh_origWord+'</b>"';for(var c=j.length;--c>=0;){j.remove(c)}for(var c=0;c<f.length;++c){var d=f[c];var e=document.createElement("option");e.value=d;e.appendChild(document.createTextNode(d));j.appendChild(e)}document.getElementById("v_currentWord").innerHTML=this.__msh_origWord;if(f.length>0){j.selectedIndex=0;j.onchange()}else{document.getElementById("v_replacement").value=this.innerHTML}j.style.display="none";j.style.display="block";return false}function wordMouseOver(){this.className+=" HA-spellcheck-hover"}function wordMouseOut(){this.className=this.className.replace(/\s*HA-spellcheck-hover\s*/g," ")}function displayInfo(){var c=frame.contentWindow.spellcheck_info;if(!c){alert("No information available")}else{var a="** Document information **";for(var b in c){a+="\n"+b+" : "+c[b]}alert(a)}return false}function finishedSpellChecking(){currentElement=null;wrongWords=null;allWords={};fixedWords=[];suggested_words=frame.contentWindow.suggested_words;document.getElementById("status").innerHTML='Xinha Spell Checker (<a href="readme-tech.html" onclick="window.open(this.href,\'_blank\');return false;" title="Technical information">info</a>)';var o=frame.contentWindow.document;var k=o.getElementsByTagName("span");var b=[];var d=0;for(var g=0;g<k.length;++g){var e=k[g];if(/HA-spellcheck-error/.test(e.className)){b.push(e);e.__msh_wordClicked=wordClicked;e.onclick=function(a){a||(a=window.event);a&&Xinha._stopEvent(a);return this.__msh_wordClicked(false)};e.onmouseover=wordMouseOver;e.onmouseout=wordMouseOut;e.__msh_id=d++;var h=(e.__msh_origWord=e.firstChild.data);e.__msh_fixed=false;if(typeof allWords[h]=="undefined"){allWords[h]=[e]}else{allWords[h].push(e)}}else{if(/HA-spellcheck-fixed/.test(e.className)){fixedWords.push(e)}}}var c=o.getElementById("HA-spellcheck-dictionaries");if(c){c.parentNode.removeChild(c);c=c.innerHTML.split(/,/);var n=document.getElementById("v_dictionaries");for(var g=n.length;--g>=0;){n.remove(g)}var l=document.getElementById("f_dictionary").value;for(var g=0;g<c.length;++g){var h=c[g];var j=document.createElement("option");if(h==l){j.selected=true}j.value=h;j.appendChild(document.createTextNode(h));n.appendChild(j)}}wrongWords=b;if(b.length==0){if(!modified){alert(_lc("No mispelled words found with the selected dictionary."))}else{alert(_lc("No mispelled words found with the selected dictionary."))}return false}(currentElement=b[0]).__msh_wordClicked(true);var f=o.getElementsByTagName("a");for(var g=f.length;--g>=0;){var m=f[g];m.onclick=function(){if(confirm(_lc("Please confirm that you want to open this link")+":\n"+this.href+"\n"+_lc("I will open it in a new page."))){window.open(this.href)}return false}}};
+// Spell Checker Plugin for HTMLArea-3.0
+// Sponsored by www.americanbible.org
+// Implementation by Mihai Bazon, http://dynarch.com/mishoo/
+//
+// (c) dynarch.com 2003.
+// Distributed under the same terms as HTMLArea itself.
+// This notice MUST stay intact for use (see license.txt).
+//
+// $Id$
+
+// internationalization file was already loaded in parent ;-)
+var SpellChecker = window.opener.SpellChecker;
+
+var Xinha    = window.opener.Xinha;
+
+var _editor_url = window.opener._editor_url;
+
+var is_ie = Xinha.is_ie;
+var editor = SpellChecker.editor;
+var frame = null;
+var currentElement = null;
+var wrongWords = null;
+var modified = false;
+var allWords = {};
+var fixedWords = [];
+var suggested_words = {};
+
+var to_p_dict = []; // List of words to add to personal dictionary.
+var to_r_list = []; // List of words to add to replacement list.
+
+function _lc(string) {
+  return Xinha._lc(string, 'SpellChecker');
+}
+
+function makeCleanDoc(leaveFixed) {
+  // document.getElementById("status").innerHTML = 'Please wait: rendering valid HTML';
+  var words = wrongWords.concat(fixedWords);
+  for (var i = words.length; --i >= 0;) {
+    var el = words[i];
+    if (!(leaveFixed && /HA-spellcheck-fixed/.test(el.className))) {
+      if(el.firstChild)
+        el.parentNode.insertBefore(el.firstChild, el);
+      el.parentNode.removeChild(el);
+    } else
+      el.className = "HA-spellcheck-fixed";
+  }
+  // we should use innerHTML here, but IE6's implementation fucks up the
+  // HTML to such extent that our poor Perl parser doesn't understand it
+  // anymore.
+  return Xinha.getHTML(frame.contentWindow.document.body, true, editor);
+}
+
+function recheckClicked() {
+  document.getElementById("status").innerHTML = _lc("Please wait: changing dictionary to") + ': "' + document.getElementById("f_dictionary").value + '".';
+  var field = document.getElementById("f_content");
+  field.value = makeCleanDoc(true);
+  field.form.submit();
+}
+
+function saveClicked() {
+  if (modified) {
+    editor.setHTML(makeCleanDoc(false));
+  }
+
+  if(to_p_dict.length || to_r_list.length && editor.config.SpellChecker.backend == 'php')
+  {
+    var data = {};
+    for(var i = 0;i < to_p_dict.length;i++)
+    {
+      data['to_p_dict[' + i + ']'] = to_p_dict[i];
+    }
+    for(var i = 0;i < to_r_list.length;i++)
+    {
+      data['to_r_list[' + i + '][0]'] = to_r_list[i][0];
+      data['to_r_list[' + i + '][1]'] = to_r_list[i][1];
+    }
+    // var win = window;
+    window.opener.Xinha._postback(Xinha.getPluginDir("SpellChecker") + '/spell-check-savedicts.php', data);
+    window.close();
+  }
+  else
+  {
+    window.close();
+  }
+  return false;
+}
+
+function cancelClicked() {
+  var ok = true;
+  if (modified) {
+    ok = confirm(_lc("This will drop changes and quit spell checker.  Please confirm."));
+  }
+  if (ok) {
+    window.close();
+  }
+  return false;
+}
+
+function replaceWord(el) {
+  var replacement = document.getElementById("v_replacement").value;
+  var this_word_modified = (el.innerHTML != replacement);
+  if (this_word_modified)
+    modified = true;
+  if (el) {
+    el.className = el.className.replace(/\s*HA-spellcheck-(hover|fixed)\s*/g, " ");
+  }
+  el.className += " HA-spellcheck-fixed";
+  el.__msh_fixed = true;
+  if (!this_word_modified) {
+    return false;
+  }
+  to_r_list.push([el.innerHTML, replacement]);
+  el.innerHTML = replacement;
+}
+
+function replaceClicked() {
+  replaceWord(currentElement);
+  var start = currentElement.__msh_id;
+  var index = start;
+  do {
+    ++index;
+    if (index == wrongWords.length) {
+      index = 0;
+    }
+  } while ((index != start) && wrongWords[index].__msh_fixed);
+  if (index == start) {
+    index = 0;
+    alert(_lc("Finished list of mispelled words"));
+  }
+  wrongWords[index].__msh_wordClicked(true);
+  return false;
+}
+
+function revertClicked() {
+  document.getElementById("v_replacement").value = currentElement.__msh_origWord;
+  replaceWord(currentElement);
+  currentElement.className = "HA-spellcheck-error HA-spellcheck-current";
+  return false;
+}
+
+function replaceAllClicked() {
+  var replacement = document.getElementById("v_replacement").value;
+  var ok = true;
+  var spans = allWords[currentElement.__msh_origWord];
+  if (spans.length == 0) {
+    alert("An impossible condition just happened.  Call FBI.  ;-)");
+  } else if (spans.length == 1) {
+    replaceClicked();
+    return false;
+  }
+  /*
+  var message = "The word \"" + currentElement.__msh_origWord + "\" occurs " + spans.length + " times.\n";
+  if (replacement == currentElement.__msh_origWord) {
+    ok = confirm(message + "Ignore all occurrences?");
+  } else {
+    ok = confirm(message + "Replace all occurrences with \"" + replacement + "\"?");
+  }
+  */
+  if (ok) {
+    for (var i = 0; i < spans.length; ++i) {
+      if (spans[i] != currentElement) {
+        replaceWord(spans[i]);
+      }
+    }
+    // replace current element the last, so that we jump to the next word ;-)
+    replaceClicked();
+  }
+  return false;
+}
+
+function ignoreClicked() {
+  document.getElementById("v_replacement").value = currentElement.__msh_origWord;
+  replaceClicked();
+  return false;
+}
+
+function ignoreAllClicked() {
+  document.getElementById("v_replacement").value = currentElement.__msh_origWord;
+  replaceAllClicked();
+  return false;
+}
+
+function learnClicked() {
+  to_p_dict.push(currentElement.__msh_origWord);
+  return ignoreAllClicked();
+}
+
+function internationalizeWindow() {
+  var types = ["div", "span", "button"];
+  for (var i = 0; i < types.length; ++i) {
+    var tag = types[i];
+    var els = document.getElementsByTagName(tag);
+    for (var j = els.length; --j >= 0;) {
+      var el = els[j];
+      if (el.childNodes.length == 1 && /\S/.test(el.innerHTML)) {
+        var txt = el.innerHTML;
+        el.innerHTML = _lc(txt);
+      }
+    }
+  }
+}
+
+function initDocument() {
+  internationalizeWindow();
+  modified = false;
+  frame = document.getElementById("i_framecontent");
+  var field = document.getElementById("f_content");
+  field.value = Xinha.getHTML(editor._doc.body, false, editor);
+  var dict = document.getElementById("f_dictionary");
+  if(typeof editor.config.SpellChecker.defaultDictionary != "undefined"
+     && editor.config.SpellChecker.defaultDictionary != "") {
+    dict.value = editor.config.SpellChecker.defaultDictionary;
+  } else {
+    dict.value = "en_GB";
+  }
+  if(editor.config.SpellChecker.backend == 'php')
+  {
+    field.form.action = Xinha.getPluginDir("SpellChecker") + '/spell-check-logic.php';
+  }
+  if(editor.config.SpellChecker.utf8_to_entities)
+  {
+    document.getElementById('utf8_to_entities').value = 1;
+  }
+  else
+  {
+    document.getElementById('utf8_to_entities').value = 0;
+  }
+  field.form.submit();
+  document.getElementById("f_init").value = "0";
+
+  // assign some global event handlers
+
+  var select = document.getElementById("v_suggestions");
+  select.onchange = function() {
+    document.getElementById("v_replacement").value = this.value;
+  };
+  if (is_ie) {
+    select.attachEvent("ondblclick", replaceClicked);
+  } else {
+    select.addEventListener("dblclick", replaceClicked, true);
+  }
+
+  document.getElementById("b_replace").onclick = replaceClicked;
+  if(editor.config.SpellChecker.backend == 'php')
+  {
+    document.getElementById("b_learn").onclick = learnClicked;
+  }
+  else
+  {
+    document.getElementById("b_learn").parentNode.removeChild(document.getElementById("b_learn"));
+  }
+  document.getElementById("b_replall").onclick = replaceAllClicked;
+  document.getElementById("b_ignore").onclick = ignoreClicked;
+  document.getElementById("b_ignall").onclick = ignoreAllClicked;
+  document.getElementById("b_recheck").onclick = recheckClicked;
+  document.getElementById("b_revert").onclick = revertClicked;
+  document.getElementById("b_info").onclick = displayInfo;
+
+  document.getElementById("b_ok").onclick = saveClicked;
+  document.getElementById("b_cancel").onclick = cancelClicked;
+
+  select = document.getElementById("v_dictionaries");
+  select.onchange = function() {
+    document.getElementById("f_dictionary").value = this.value;
+  };
+}
+
+function getAbsolutePos(el) {
+  var r = { x: el.offsetLeft, y: el.offsetTop };
+  if (el.offsetParent) {
+    var tmp = getAbsolutePos(el.offsetParent);
+    r.x += tmp.x;
+    r.y += tmp.y;
+  }
+  return r;
+}
+
+function wordClicked(scroll) {
+  var self = this;
+  if (scroll) (function() {
+    var pos = getAbsolutePos(self);
+    var ws = { x: frame.offsetWidth - 4,
+         y: frame.offsetHeight - 4 };
+    var wp = { x: frame.contentWindow.document.body.scrollLeft,
+         y: frame.contentWindow.document.body.scrollTop };
+    pos.x -= Math.round(ws.x/2);
+    if (pos.x < 0) pos.x = 0;
+    pos.y -= Math.round(ws.y/2);
+    if (pos.y < 0) pos.y = 0;
+    frame.contentWindow.scrollTo(pos.x, pos.y);
+  })();
+  if (currentElement) {
+    var a = allWords[currentElement.__msh_origWord];
+    currentElement.className = currentElement.className.replace(/\s*HA-spellcheck-current\s*/g, " ");
+    for (var i = 0; i < a.length; ++i) {
+      var el = a[i];
+      if (el != currentElement) {
+        el.className = el.className.replace(/\s*HA-spellcheck-same\s*/g, " ");
+      }
+    }
+  }
+  currentElement = this;
+  this.className += " HA-spellcheck-current";
+  var a = allWords[currentElement.__msh_origWord];
+  for (var i = 0; i < a.length; ++i) {
+    var el = a[i];
+    if (el != currentElement) {
+      el.className += " HA-spellcheck-same";
+    }
+  }
+  // document.getElementById("b_replall").disabled = (a.length <= 1);
+  // document.getElementById("b_ignall").disabled = (a.length <= 1);
+  var txt;
+  if (a.length == 1) {
+    txt = "one occurrence";
+  } else if (a.length == 2) {
+    txt = "two occurrences";
+  } else {
+    txt = a.length + " occurrences";
+  }
+  var suggestions = suggested_words[this.__msh_origWord];
+  if (suggestions)
+    suggestions = suggestions.split(/,/);
+  else
+    suggestions = [];
+  var select = document.getElementById("v_suggestions");
+  document.getElementById("statusbar").innerHTML = "Found " + txt +
+    ' for word "<b>' + currentElement.__msh_origWord + '</b>"';
+  for (var i = select.length; --i >= 0;) {
+    select.remove(i);
+  }
+  for (var i = 0; i < suggestions.length; ++i) {
+    var txt = suggestions[i];
+    var option = document.createElement("option");
+    option.value = txt;
+    option.appendChild(document.createTextNode(txt));
+    select.appendChild(option);
+  }
+  document.getElementById("v_currentWord").innerHTML = this.__msh_origWord;
+  if (suggestions.length > 0) {
+    select.selectedIndex = 0;
+    select.onchange();
+  } else {
+    document.getElementById("v_replacement").value = this.innerHTML;
+  }
+  select.style.display = "none";
+  select.style.display = "block";
+  return false;
+}
+
+function wordMouseOver() {
+  this.className += " HA-spellcheck-hover";
+}
+
+function wordMouseOut() {
+  this.className = this.className.replace(/\s*HA-spellcheck-hover\s*/g, " ");
+}
+
+function displayInfo() {
+  var info = frame.contentWindow.spellcheck_info;
+  if (!info)
+    alert("No information available");
+  else {
+    var txt = "** Document information **";
+    for (var i in info) {
+      txt += "\n" + i + " : " + info[i];
+    }
+    alert(txt);
+  }
+  return false;
+}
+
+function finishedSpellChecking() {
+  // initialization of global variables
+  currentElement = null;
+  wrongWords = null;
+  allWords = {};
+  fixedWords = [];
+  suggested_words = frame.contentWindow.suggested_words;
+
+  document.getElementById("status").innerHTML = "Xinha Spell Checker (<a href=\"readme-tech.html\" onclick=\"window.open(this.href,'_blank');return false;\" title=\"Technical information\">info</a>)";
+  var doc = frame.contentWindow.document;
+        var spans = doc.getElementsByTagName("span");
+        var sps = [];
+  var id = 0;
+        for (var i = 0; i < spans.length; ++i) {
+                var el = spans[i];
+                if (/HA-spellcheck-error/.test(el.className)) {
+                        sps.push(el);
+      el.__msh_wordClicked = wordClicked;
+      el.onclick = function(ev) {
+        ev || (ev = window.event);
+        ev && Xinha._stopEvent(ev);
+        return this.__msh_wordClicked(false);
+      };
+      el.onmouseover = wordMouseOver;
+      el.onmouseout = wordMouseOut;
+      el.__msh_id = id++;
+      var txt = (el.__msh_origWord = el.firstChild.data);
+      el.__msh_fixed = false;
+      if (typeof allWords[txt] == "undefined") {
+        allWords[txt] = [el];
+      } else {
+        allWords[txt].push(el);
+      }
+                } else if (/HA-spellcheck-fixed/.test(el.className)) {
+      fixedWords.push(el);
+    }
+        }
+        
+  var dicts = doc.getElementById("HA-spellcheck-dictionaries");
+  if (dicts) {
+    dicts.parentNode.removeChild(dicts);
+    dicts = dicts.innerHTML.split(/,/);
+    var select = document.getElementById("v_dictionaries");
+    for (var i = select.length; --i >= 0;) {
+      select.remove(i);
+    }
+    var activeDictionary = document.getElementById("f_dictionary").value;
+    for (var i = 0; i < dicts.length; ++i) {
+      var txt = dicts[i];
+      var option = document.createElement("option");
+      if(txt == activeDictionary) {
+        option.selected = true;
+      }
+      option.value = txt;
+      option.appendChild(document.createTextNode(txt));
+      select.appendChild(option);
+    }
+  }
+        
+  wrongWords = sps;
+  if (sps.length == 0) {
+    if (!modified) {
+      alert(_lc("No mispelled words found with the selected dictionary."));
+      // window.close();
+    } else {
+      alert(_lc("No mispelled words found with the selected dictionary."));
+    }
+    return false;
+  }
+  (currentElement = sps[0]).__msh_wordClicked(true);
+  var as = doc.getElementsByTagName("a");
+  for (var i = as.length; --i >= 0;) {
+    var a = as[i];
+    a.onclick = function() {
+      if (confirm(_lc("Please confirm that you want to open this link") + ":\n" +
+            this.href + "\n" + _lc("I will open it in a new page."))) {
+        window.open(this.href);
+      }
+      return false;
+    };
+  }  
+}
