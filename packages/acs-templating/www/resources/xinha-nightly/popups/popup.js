@@ -1,3 +1,140 @@
-/* This compressed file is part of Xinha. For uncompressed sources, forum, and bug reports, go to xinha.org */
-/* This file is part of version 0.96beta2 released Fri, 20 Mar 2009 11:01:14 +0100 */
-if(typeof Xinha=="undefined"){Xinha=window.opener.Xinha}HTMLArea=Xinha;function getAbsolutePos(b){var c={x:b.offsetLeft,y:b.offsetTop};if(b.offsetParent){var a=getAbsolutePos(b.offsetParent);c.x+=a.x;c.y+=a.y}return c}function comboSelectValue(f,d){var b=f.getElementsByTagName("option");for(var a=b.length;--a>=0;){var e=b[a];e.selected=(e.value==d)}f.value=d}function __dlg_onclose(){opener.Dialog._return(null)}function __dlg_init(b,a){__xinha_dlg_init(a)}function __xinha_dlg_init(b){if(window.__dlg_init_done){return true}if(window.opener._editor_skin){var c=document.getElementsByTagName("head")[0];var d=document.createElement("link");d.type="text/css";d.href=window.opener._editor_url+"skins/"+window.opener._editor_skin+"/skin.css";d.rel="stylesheet";c.appendChild(d)}if(!window.dialogArguments&&opener.Dialog._arguments){window.dialogArguments=opener.Dialog._arguments}var e=Xinha.pageSize(window);if(!b){b={width:e.x,height:e.y}}window.resizeTo(b.width,b.height);var f=Xinha.viewportSize(window);window.resizeBy(0,e.y-f.y);if(b.top&&b.left){window.moveTo(b.left,b.top)}else{if(!Xinha.is_ie){var a=opener.screenX+(opener.outerWidth-b.width)/2;var g=opener.screenY+(opener.outerHeight-b.height)/2}else{var a=(self.screen.availWidth-b.width)/2;var g=(self.screen.availHeight-b.height)/2}window.moveTo(a,g)}Xinha.addDom0Event(document.body,"keypress",__dlg_close_on_esc);window.__dlg_init_done=true}function __dlg_translate(e){var d=["input","select","legend","span","option","td","th","button","div","label","a","img"];for(var g=0;g<d.length;++g){var c=document.getElementsByTagName(d[g]);for(var b=c.length;--b>=0;){var f=c[b];if(f.firstChild&&f.firstChild.data){var a=Xinha._lc(f.firstChild.data,e);if(a){f.firstChild.data=a}}if(f.title){var a=Xinha._lc(f.title,e);if(a){f.title=a}}if(f.tagName.toLowerCase()=="input"&&(/^(button|submit|reset)$/i.test(f.type))){var a=Xinha._lc(f.value,e);if(a){f.value=a}}}}document.title=Xinha._lc(document.title,e)}function __dlg_close(a){opener.Dialog._return(a);window.close()}function __dlg_close_on_esc(a){a||(a=window.event);if(a.keyCode==27){__dlg_close(null);return false}return true};
+// htmlArea v3.0 - Copyright (c) 2002, 2003 interactivetools.com, inc.
+// This copyright notice MUST stay intact for use (see license.txt).
+//
+// Portions (c) dynarch.com, 2003
+//
+// A free WYSIWYG editor replacement for <textarea> fields.
+// For full source code and docs, visit http://www.interactivetools.com/
+//
+// Version 3.0 developed by Mihai Bazon.
+//   http://dynarch.com/mishoo
+//
+// $Id$
+if(typeof Xinha == 'undefined')
+  Xinha = window.opener.Xinha;
+
+// Backward compatibility will be removed some time or not?
+HTMLArea = Xinha;
+
+function getAbsolutePos(el) {
+	var r = { x: el.offsetLeft, y: el.offsetTop };
+	if (el.offsetParent) {
+		var tmp = getAbsolutePos(el.offsetParent);
+		r.x += tmp.x;
+		r.y += tmp.y;
+	}
+	return r;
+}
+
+function comboSelectValue(c, val) {
+	var ops = c.getElementsByTagName("option");
+	for (var i = ops.length; --i >= 0;) {
+		var op = ops[i];
+		op.selected = (op.value == val);
+	}
+	c.value = val;
+}
+
+function __dlg_onclose() {
+	opener.Dialog._return(null);
+}
+// ray: I mark this on deprecated, because bottom is never used
+function __dlg_init( bottom, win_dim ) {
+  __xinha_dlg_init(win_dim);
+}
+
+function __xinha_dlg_init( win_dim ) {
+  if(window.__dlg_init_done) return true;
+  
+  if(window.opener._editor_skin) {
+    var head = document.getElementsByTagName("head")[0];
+    var link = document.createElement("link");
+    link.type = "text/css";
+    link.href = window.opener._editor_url + 'skins/' + window.opener._editor_skin + '/skin.css';
+    link.rel = "stylesheet";
+    head.appendChild(link);
+  }
+  if (!window.dialogArguments && opener.Dialog._arguments)
+  {
+    window.dialogArguments = opener.Dialog._arguments;
+  }
+  
+
+  var page = Xinha.pageSize(window);
+  if ( !win_dim )
+  {
+    win_dim = {width:page.x, height: page.y};
+  }
+  window.resizeTo(win_dim.width, win_dim.height);
+
+  var dim = Xinha.viewportSize(window);
+
+  window.resizeBy(0, page.y - dim.y);
+
+  if(win_dim.top && win_dim.left)
+  {
+    window.moveTo(win_dim.left,win_dim.top);
+  }
+  else
+  {
+    if (!Xinha.is_ie)
+    {
+      var x = opener.screenX + (opener.outerWidth - win_dim.width) / 2;
+      var y = opener.screenY + (opener.outerHeight - win_dim.height) / 2;
+    }
+    else
+    {//IE does not have window.outer... , so center it on the screen at least
+      var x =  (self.screen.availWidth - win_dim.width) / 2;
+      var y =  (self.screen.availHeight - win_dim.height) / 2;	
+    }
+    window.moveTo(x,y);
+  }
+  
+  Xinha.addDom0Event(document.body, 'keypress', __dlg_close_on_esc);
+  window.__dlg_init_done = true;
+}
+
+function __dlg_translate(context) {
+	var types = ["input", "select", "legend", "span", "option", "td", "th", "button", "div", "label", "a", "img"];
+	for (var type = 0; type < types.length; ++type) {
+		var spans = document.getElementsByTagName(types[type]);
+		for (var i = spans.length; --i >= 0;) {
+			var span = spans[i];
+			if (span.firstChild && span.firstChild.data) {
+				var txt = Xinha._lc(span.firstChild.data, context);
+				if (txt) {
+					span.firstChild.data = txt;
+				}
+			}
+			if (span.title) {
+				var txt = Xinha._lc(span.title, context);
+				if (txt) {
+					span.title = txt;
+				}
+			}
+			if (span.tagName.toLowerCase() == 'input' && 
+					(/^(button|submit|reset)$/i.test(span.type))) {
+				var txt = Xinha._lc(span.value, context);
+				if (txt) {
+					span.value = txt;
+				}
+			}
+		}
+	}
+	document.title = Xinha._lc(document.title, context);
+}
+
+// closes the dialog and passes the return info upper.
+function __dlg_close(val) {
+	opener.Dialog._return(val);
+	window.close();
+}
+
+function __dlg_close_on_esc(ev) {
+	ev || (ev = window.event);
+	if (ev.keyCode == 27) {
+		__dlg_close(null);
+		return false;
+	}
+	return true;
+}
