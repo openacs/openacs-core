@@ -41,7 +41,7 @@ aa_register_case -cats {smoke production_safe} files__tcl_file_syntax_errors {
     aa_log "$good good of $nfiles checked"
 }
 
-aa_register_case -cats {smoke production_safe} -error_level notice files__tcl_file_common_errors {
+aa_register_case -cats {smoke production_safe} -error_level error files__tcl_file_common_errors {
     Check for some common error patterns.
 
     @author Jeff Davis davis@xarg.net
@@ -59,16 +59,18 @@ aa_register_case -cats {smoke production_safe} -error_level notice files__tcl_fi
     #inspect every tcl file in the directory tree starting with $startdir
     foreach file [ad_find_all_files -check_file_func ::tcl_p $startdir] { 
 
+        if {[string match */acs-tcl/tcl/test/file-test-procs.tcl $file]} continue
+
         set fp [open $file "r"]
         set data [read $fp]
         close $fp
 
-	if {![regexp {/packages/acs-tcl/tcl/test/acs-tcl-test-procs\.tcl$} $file match]} {
-	    if {[string first @returns $data] < 0} { 
-                aa_log_result fail "$file should not contain '@returns'.  @returns is probably a typo of @return"
-            }
-	}
+        if {[string first @returns $data] > -1} { 
+            aa_log_result fail "$file should not contain '@returns'.  @returns is probably a typo of @return"
+        }
+
     }
+
     aa_log "Checked $count tcl files"
 }
 

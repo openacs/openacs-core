@@ -15,7 +15,7 @@ namespace eval acs_mail_lite {
 
     #---------------------------------------
     ad_proc -public address_domain {} {
-	@returns domain address to which bounces are directed to
+	@return domain address to which bounces are directed to
     } {
         set domain [parameter::get_from_package_key -package_key "acs-mail-lite" -parameter "BounceDomain"]
         if { $domain eq "" } {

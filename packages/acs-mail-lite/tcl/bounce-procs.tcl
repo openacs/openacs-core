@@ -15,7 +15,7 @@ namespace eval acs_mail_lite {
 
     #---------------------------------------
     ad_proc -private bounce_prefix {} {
-        @returns bounce prefix for x-envelope-from
+        @return bounce prefix for x-envelope-from
     } {
         return [parameter::get_from_package_key -package_key "acs-mail-lite" -parameter "EnvelopePrefix"]
     }
@@ -26,7 +26,7 @@ namespace eval acs_mail_lite {
     } {
         Checks if email address is bouncing mail
         @option email email address to be checked for bouncing
-        @returns boolean 1 if bouncing 0 if ok.
+        @return boolean 1 if bouncing 0 if ok.
     } {
         return [db_string bouncing_p {} -default 0]
     }
@@ -37,7 +37,7 @@ namespace eval acs_mail_lite {
     } {
         Checks if email address of user is bouncing mail
         @option user_id user to be checked for bouncing
-        @returns boolean 1 if bouncing 0 if ok.
+        @return boolean 1 if bouncing 0 if ok.
     } {
         return [db_string bouncing_p {} -default 0]
     }
@@ -53,7 +53,7 @@ namespace eval acs_mail_lite {
         @option package_id package_id of the mail sending package
         (needed to call package-specific code to deal with bounces)
         @option message_id message-id of the mail
-        @returns bounce address
+        @return bounce address
     } {
         return "[bounce_prefix]-$user_id-[ns_sha1 $message_id]-$package_id@[address_domain]"
     }
@@ -65,7 +65,7 @@ namespace eval acs_mail_lite {
         This takes a reply address, checks it for consistency,
         and returns a list of user_id, package_id and bounce_signature found
         @option bounce_address bounce address to be checked
-        @returns tcl-list of user_id package_id bounce_signature
+        @return tcl-list of user_id package_id bounce_signature
     } {
         set regexp_str "\[[bounce_prefix]\]-(\[0-9\]+)-(\[^-\]+)-(\[0-9\]*)\@"
         if {![regexp $regexp_str $bounce_address all user_id signature package_id]} {
