@@ -1,3 +1,60 @@
+create or replace package apm_package
+as
+
+function new (
+  package_id		in apm_packages.package_id%TYPE 
+			default null,
+  instance_name		in apm_packages.instance_name%TYPE
+			default null,
+  package_key		in apm_packages.package_key%TYPE,
+  object_type		in acs_objects.object_type%TYPE
+			default 'apm_package', 
+  creation_date		in acs_objects.creation_date%TYPE 
+			default sysdate,
+  creation_user		in acs_objects.creation_user%TYPE 
+			default null,
+  creation_ip		in acs_objects.creation_ip%TYPE 
+			default null,
+  context_id		in acs_objects.context_id%TYPE 
+			default null
+  ) return apm_packages.package_id%TYPE;
+
+  procedure del (
+   package_id		in apm_packages.package_id%TYPE
+  );
+
+  function initial_install_p (
+	package_key		in apm_packages.package_key%TYPE
+  ) return integer;
+
+  function singleton_p (
+	package_key		in apm_packages.package_key%TYPE
+  ) return integer;
+
+  function num_instances (
+	package_key		in apm_package_types.package_key%TYPE
+  ) return integer;
+
+  function name (
+    package_id		in apm_packages.package_id%TYPE
+  ) return varchar2;
+
+  function highest_version (
+   package_key		in apm_package_types.package_key%TYPE
+  ) return apm_package_versions.version_id%TYPE;
+  
+    function parent_id (
+        package_id in apm_packages.package_id%TYPE
+    ) return apm_packages.package_id%TYPE;
+
+  function is_child (
+    parent_package_key in apm_packages.package_key%TYPE,
+    child_package_key in apm_packages.package_key%TYPE
+  ) return char;
+
+end apm_package;
+/
+show errors
 
 create or replace package body apm_package
 as
@@ -242,6 +299,34 @@ end new;
         exception when NO_DATA_FOUND then
             return -1;
     end parent_id;
+
+  function is_child (
+    parent_package_key in apm_packages.package_key%TYPE,
+    child_package_key in apm_packages.package_key%TYPE
+  ) return char
+    is
+    begin
+
+      if parent_package_key = child_package_key then
+        return 't';
+      end if;
+
+      for row in
+        (select apd.service_uri
+         from apm_package_versions apv, apm_package_dependencies apd
+         where apd.version_id = apv.version_id
+           and apv.enabled_p = 't'
+           and apd.dependency_type in ('embeds', 'extends')
+           and apv.package_key = child_package_key)
+      loop
+        if row.service_uri = parent_package_key or
+          is_child(parent_package_key, row.service_uri) = 't' then
+        return 't';
+      end if;
+    end loop;
+ 
+    return 'f';
+  end is_child;
 
 end apm_package;
 /

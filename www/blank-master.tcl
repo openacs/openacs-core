@@ -84,6 +84,7 @@ template::head::add_javascript -src "/resources/acs-subsite/core.js"
 
 set css [parameter::get -package_id [ad_conn subsite_id] -parameter ThemeCSS -default ""]
 if { $css ne "" } {
+    set params [list]
 
     # DRB: Need to handle two cases, the lame first attempt and the more complete current
     # attempt which allows you to specify all of the parameters to template::head::add_css
@@ -94,7 +95,6 @@ if { $css ne "" } {
         if { [llength $css] == 2 && [llength [lindex $css 0]] == 1 } {
             template::head::add_css -href [lindex $css 0] -media [lindex $css 1]
         } else {
-	    set params [list]
             foreach param $css {
                 lappend params -[lindex $param 0] [lindex $param 1]
             }
