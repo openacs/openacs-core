@@ -340,7 +340,7 @@ ad_proc -public item::publish {
     if { $revision_id eq "" } {
       set revision_id [::content::item::get_latest_revision -item_id $item_id]
     }
-    ::content::item::set_live_revision -revision_id $revision_id -publish_status 'live'
+    ::content::item::set_live_revision -revision_id $revision_id -publish_status "live"
 }
 
 ad_proc -public item::unpublish {
