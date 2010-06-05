@@ -246,8 +246,9 @@ if {[info exists focus] && $focus ne ""} {
     }
 }
 
-template::head::prepare_multirows
-set event_handlers [template::get_body_event_handlers]
 # Retrieve headers and footers
 set header [template::get_header_html]
 set footer [template::get_footer_html]
+
+template::head::prepare_multirows
+set event_handlers [template::get_body_event_handlers]
