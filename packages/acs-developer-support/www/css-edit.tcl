@@ -10,6 +10,7 @@ ad_page_contract {
 } {
     {file_location}
     {css_location}
+    {revision_id ""}
     {return_url "/"}
 } -properties {
 } -validate {
@@ -31,7 +32,11 @@ if {[file exists $file_location] && [file extension $file_location] eq ".css"} {
 
 	set package_id [ad_conn package_id]
 	set css_path "<a href='$css_location'>$css_location</a>"
-	set fp [open "$file_location" "r"]
+        if {$revision_id eq ""} {
+            set fp [open "$file_location" "r"]
+        } else {
+            set fp [open [content::revision::get_cr_file_path -revision_id $revision_id] "r"]
+        }
 	set css_content ""
 	while { [gets $fp line] >= 0 } {
 	    append css_content "$line \n"
@@ -50,14 +55,14 @@ if {[file exists $file_location] && [file extension $file_location] eq ".css"} {
 		    set make_live "<a href=\"[export_vars -base "css-make-live" -url {revision_id return_url_2 file_location}]\">make live!</a>"
 		}
 		set return_url ""
-		append revision_html "<li><a href='/o/$revision_id'>$publish_date</a> \[$make_live\]: [string range $description 0 50]</li>"
+                set revision_url [export_vars -base "css-edit" {revision_id file_location css_location}]
+                append revision_html "<li><a href='$revision_url'>$publish_date</a> \[$make_live\]: [string range $description 0 50]</li>"
 	    }
 	    append revision_html "</ol>"
 	    file stat $file_location file_stat_arr
 	    # mcordova: ugly things until I figure out how to do that in a
 	    # better way...
 	    set item_id [content::item::get_id_by_name -name $file_location -parent_id $package_id]
-	    ns_log Notice " * * * the file $file_location (cr_item_id: $item_id) has that modif time: \[$file_stat_arr(mtime)\]"
 	    #todo compare file mtime with live revision time
 	    ## if they are not the same date, show user a warning
 	    # recommening to make a new revision...
@@ -80,8 +85,7 @@ if {[file exists $file_location] && [file extension $file_location] eq ".css"} {
 		append old_css_content "$line \n"
 	    }
 	    close $fp
-
-	    set item_id [content::item::new -name $file_location -parent_id $package_id -content_type "css_file" -title "$css_location" -description "First revision" -text $old_css_content]
+            set item_id [content::item::new -name $file_location -parent_id $package_id -title "$css_location" -description "First revision" -text $old_css_content]
 	}
 
 	
