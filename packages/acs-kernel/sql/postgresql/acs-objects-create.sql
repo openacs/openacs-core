@@ -654,7 +654,7 @@ end;' language 'plpgsql';
 
 -- function new
 
-select define_function_args('acs_object__new','object_id,object_type;acs_object,creation_date;now(),creation_user,creation_ip,context_id,security_inherit_p;t,title,package_id');
+select define_function_args('acs_object__new','object_id,object_type;acs_object,creation_date,creation_user,creation_ip,context_id,security_inherit_p;t,title,package_id');
 
 create or replace function acs_object__new (integer,varchar,timestamptz,integer,varchar,integer,boolean,varchar,integer)
 returns integer as '
