@@ -7,7 +7,7 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.6.0b2" url="http://openacs.org/repository/download/apm/acs-lang-5.6.0b2.apm">
+    <version name="5.6.0b3" url="http://openacs.org/repository/download/apm/acs-lang-5.6.0b3.apm">
         <owner url="mailto:peter@collaboraid.biz">Peter Marklund</owner>
         <summary>OpenACS Internationalization Support.</summary>
         <release-date>2010-05-18</release-date>
@@ -18,12 +18,12 @@
 request processor hooks, templating, accessing and managing the message catalog, and
 locale-specific formatting functions for localizing dates, times, monetary amounts etc.</description>
 
-        <provides url="acs-lang" version="5.6.0b2"/>
-        <requires url="acs-kernel" version="5.6.0b2"/>
-        <requires url="acs-translations" version="5.6.0b2"/>
-        <requires url="ref-timezones" version="5.6.0b2"/>
-        <requires url="ref-countries" version="5.6.0b2"/>
-        <requires url="ref-language" version="5.6.0b2"/>
+        <provides url="acs-lang" version="5.6.0b3"/>
+        <requires url="acs-kernel" version="5.6.0b3"/>
+        <requires url="acs-translations" version="5.6.0b3"/>
+        <requires url="ref-timezones" version="5.6.0b3"/>
+        <requires url="ref-countries" version="5.6.0b3"/>
+        <requires url="ref-language" version="5.6.0b3"/>
 
         <callbacks>
             <callback type="after-install"  proc="lang::apm::after_install"/>
