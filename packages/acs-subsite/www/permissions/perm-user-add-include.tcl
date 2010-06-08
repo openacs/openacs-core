@@ -48,8 +48,6 @@ list::create \
 	return_url {}
     }
 
-set page_where_clause [list::page_where_clause -name users -and]
-
 db_multirow -extend { add_url } users users_who_dont_have_any_permissions {} {
     set add_url [export_vars -base "${perm_url}perm-user-add-2" { return_url object_id user_id }]
 }
