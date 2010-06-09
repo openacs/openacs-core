@@ -29,7 +29,7 @@ ad_proc -public ::content::item::new {
     {-text ""}
     {-data ""}
     {-relation_tag ""}
-    {-is_live ""}
+    {-is_live "f"}
     {-storage_type "file"}
     {-attributes ""}
     {-tmp_filename ""}
