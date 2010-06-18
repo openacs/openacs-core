@@ -37,6 +37,52 @@ END OF TEMPLATE -->
 linkend="changelog-latest"></xref>) since the last release and in the
 entire &majorversion;.&minorversion; release sequence <xref linkend="changelog"></xref>.</para>
 
+  <sect2 id="release-notes-5-6-0">
+    <title>Release 5.6.0</title>
+    <itemizedlist>
+      <listitem>
+        <para>
+          Added new package dependency type, "embeds".  This is a variant of the
+          "extends" package dependency type added in OpenACS 5.5.0.  It allows one
+          to write embeddable packages, with scripts made visible in client packages
+          using URLs which include the embedded package's package key.  An example
+          embeddable package might be a rewritten "attachments" package.  The current
+          implementation requires a global instance be mounted, and client packages
+          generate urls to that global instance.  Among other things, this leads to
+          the user navigating to the top-level subsite, losing any subsite theming
+          that might be associated with a community.  Using "embeds", a rewritten
+          package would run in the client package's context, maintaining theming and
+          automatically associating attachments with the client package.
+        </para>
+        <para>
+          Added global package parameters - parameters can now have scope "local" or "global",
+          with "local" being the default..
+        </para>
+        <para>
+          Fixes for ns_proxy handling
+        </para>
+        <para>
+          Significant speedup for large sites
+        </para>
+        <para>
+          Optional support for selenium remote control (acs-automated-tests)
+        </para>
+        <para>
+          New administration UI to manage mime types and extension map
+        </para>
+        <para>
+          Added acs-mail-lite package params for rollout support
+        </para>
+        <para>
+          Support for 3-chars language codes in acs-lang
+        </para>
+        <para>
+         Added OOXML mime types in acs-content-repository
+        </para>
+      </listitem>
+    </itemizedlist>
+   </sect2>
+
   <sect2 id="release-notes-5-5-0">
     <title>Release 5.5.0</title>
     <itemizedlist>
