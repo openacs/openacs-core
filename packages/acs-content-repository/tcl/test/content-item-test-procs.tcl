@@ -56,6 +56,7 @@ aa_register_case content_item {
                                             -name "$test_name" \
                                             -item_id $first_item_id \
                                             -parent_id $first_folder_id \
+                                            -is_live "t" \
                                             -attributes [list [list title "$test_name"]]
                                        ]
 
@@ -158,6 +159,7 @@ aa_register_case content_item {
                                             -name "test_item_${new_type_item_id}" \
                                             -item_id $new_type_item_id \
                                             -parent_id $first_folder_id \
+                                            -is_live "t" \
                                             -content_type  "test_type" \
                                                -attributes [list [list title "Title"] [list attribute_name "attribute_value"]]]
 
