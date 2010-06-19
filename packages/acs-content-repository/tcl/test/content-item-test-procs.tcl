@@ -61,7 +61,7 @@ aa_register_case content_item {
 
             aa_true "First item created" [expr {$first_item_id == $returned_first_item_id}]
 
-            aa_true "first item exists" [expr {[content::item::get -item_id $first_item_id] == 1}]
+            aa_true "first item exists" [expr {[content::item::get -item_id $first_item_id -revision "latest"] == 1}]
 
             aa_true "First item's revision exists" \
                 [expr \
