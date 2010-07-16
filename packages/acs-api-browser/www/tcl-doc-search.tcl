@@ -27,7 +27,7 @@ set len [string length $tcl_proc]
 for { set i [expr { $len-1 }] } { $i >= 0 } { incr i -1 } {
     set search_for [string range $tcl_proc 0 $i]
     if { [regexp "<a href=\"(\[^>\]+)\">$search_for</a>" $tcl_docs_index_page match relative_url] } {
-        ad_returnredirect "$tcl_docs_root$relative_url"
+        ad_returnredirect -allow_complete_url "$tcl_docs_root$relative_url"
         ad_script_abort
     } 
 }
