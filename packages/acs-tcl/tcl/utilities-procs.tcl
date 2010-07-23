@@ -1571,17 +1571,36 @@ ad_proc -private set_encoding {
   <li> The "content_type" string points to a "text/*" media subtype,
   but does not specify a charset (e.g., "text/xml"). In this case, the
   charset defined by ns/parameters/OutputCharset (see config.tcl)
-  applies. If this parameter is missing, or [ns_encodingfortype] fails
-  to resolve any Tcl encoding name, the general default is
+  applies. If this parameter is missing, the default is
   "iso-8859-1" (see tcl/charsets.tcl; this follows from <a
   href="http://tools.ietf.org/html/rfc2616">RFC 2616 (HTTP 1.1)</a>;
   Section 3.7.1).</li>
     
   <li>If neither case 1 or case 2 become effective, the encoding is
   resolved to "binary".</li>
+  
+  <li>If [ns_encodingfortype] fails to resolve any Tcl encoding name
+  (i.e., returns an empty string), the general fallback is "iso8859-1"
+  for text/* media subtypes and "binary" for any other. This is the
+  case in two situations:
+  
+  <ul>
+  <li>Invalid IANA/MIME charsets: The name in the "charset" parameter
+  of the content type spec is not a valid name or alias in <a
+  href="http://www.iana.org/assignments/character-sets">IANA's
+  charater sets registry</a> (a special variant would be an empty
+  charset value, e.g. "text/plain; charset=")</li>
+  
+  <li>Unknown IANA/MIME charsets: The name in the "charset" parameter
+  of the content type spec does not match any known (= registered)
+  IANA/MIME charset in the MIME/Tcl mappings.</li>
+  </ul>
+  
+  </li>
   </ol>
 
-  <ul>References:
+  References:
+  <ul>
   <li><a href="http://www.mail-archive.com/aolserver@listserv.aol.com/msg07261.html">http://www.mail-archive.com/aolserver@listserv.aol.com/msg07261.html</a></li>
   <li><a href="http://sourceforge.net/tracker/?func=detail&atid=103152&aid=932459&group_id=3152">http://sourceforge.net/tracker/?func=detail&atid=103152&aid=932459&group_id=3152</a></li>
   <li><a href="http://sourceforge.net/tracker/index.php?func=detail&aid=962233&group_id=3152&atid=353152">http://sourceforge.net/tracker/index.php?func=detail&aid=962233&group_id=3152&atid=353152</a></li>
