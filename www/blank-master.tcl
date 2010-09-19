@@ -248,6 +248,7 @@ if {[info exists focus] && $focus ne ""} {
 
 # OpenGraph protocol http://opengraphprotocol.org for social networking
 # Should these use parameterized values instead? 
+# see packages/acs-subsite/lib/share-bar for an example of how to implement share
 template::head::defaults_meta -name "og:title" -content $doc(title)
 template::head::defaults_meta -name "og:type" -content "website"
 template::head::defaults_meta -name "og:url" -content [ad_return_url -qualified]
