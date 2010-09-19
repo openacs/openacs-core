@@ -161,6 +161,47 @@ ad_proc -public template::head::add_meta {
     ]
 }
 
+ad_proc -public template::head::defaults_meta {
+    {-http_equiv ""}
+    {-name ""}
+    {-scheme ""}
+    {-content ""}
+    {-lang ""}
+} {
+    Add a meta tag to the head section of the document to be returned to the
+    users client if the meta tag does not yet exist.
+    Either name or http_equiv <strong>must</strong> be supplied.
+
+    @param http_equiv the http-equiv attribute of the meta tag, ie. the 
+                      HTTP header which this metadata is equivalent to
+                      eg. 'content-type'
+    @param name       the name attribute of the meta tag, ie. the metadata 
+                      identifier
+    @param scheme     the scheme attribute of the meta tag defining which 
+                      metadata scheme should be used to interpret the metadata, 
+                      eg. 'DC' for Dublin Core (http://dublincore.org/)
+    @param content    the content attribute of the meta tag, ie the metadata
+                      value
+    @param lang       the lang attribute of the meta tag specifying the language 
+                      of its attributes if they differ from the document language
+} {
+    variable ::template::head::metas
+
+    if {$http_equiv eq "" && $name eq ""} {
+        error "You must supply either -http_equiv or -name."
+    }
+    if { ![info exists metas($http_equiv,$name) ] } {
+        set metas($http_equiv,$name) [list \
+        $http_equiv \
+        $name \
+        $scheme \
+        $content \
+        $lang \
+        ]
+    }
+}
+
+
 ad_proc -public template::head::add_style {
     {-style:required}
     {-title ""}

@@ -246,6 +246,19 @@ if {[info exists focus] && $focus ne ""} {
     }
 }
 
+# OpenGraph protocol http://opengraphprotocol.org for social networking
+# Should these use parameterized values instead? 
+template::head::defaults_meta -name "og:title" -content $doc(title)
+template::head::defaults_meta -name "og:type" -content "website"
+template::head::defaults_meta -name "og:url" -content [ad_return_url -qualified]
+template::head::defaults_meta -name "og:image" -content "[ad_url]/favicon.ico"
+if { [info exists ::template::head::metas(,description)] } {
+    template::head::defaults_meta -name "og:description" -content "[lindex $::template::head::metas(,description) 3]"
+}
+template::head::defaults_meta -name "og:site_name" -content [ad_system_name]
+
+
+
 template::head::prepare_multirows
 set event_handlers [template::get_body_event_handlers]
 # Retrieve headers and footers
