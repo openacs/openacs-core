@@ -25,7 +25,7 @@ ad_proc -public image::new {
     {-package_id ""}
     {-creation_ip ""}
     {-item_subtype "content_item"}
-    {-content_type "content_revision"}
+    {-content_type "image"}
     {-title ""}
     {-description ""}
     {-mime_type ""}
@@ -58,7 +58,6 @@ ad_proc -public image::new {
     
     @error 
 } {
-ns_log notice "IMAGE::NEW"
     if {$width eq "" || $height eq ""} {
 	foreach {width height} [image::get_file_dimensions \
 				    -filename $tmp_filename \
@@ -82,7 +81,7 @@ ns_log notice "IMAGE::NEW"
                 -package_id $package_id \
                 -creation_ip $creation_ip \
                 -item_subtype $item_subtype \
-                -content_type "image" \
+                -content_type $content_type \
                 -title $title \
                 -description $description \
                 -mime_type $mime_type \
