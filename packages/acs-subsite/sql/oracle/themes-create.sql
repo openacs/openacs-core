@@ -13,10 +13,10 @@ create table subsite_themes (
                   constraint subsite_themes_key_pk
                   primary key,
     name          varchar(100) 
-                  constraint subsite_theme_name_nn
+                  constraint subsite_themes_name_nn
                   not null,
     template      varchar(200)
-                  constraint subsite_theme_template_nn
+                  constraint subsite_themes_template_nn
                   not null,
     css           varchar(2000),
     form_template varchar(200),

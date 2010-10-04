@@ -31,11 +31,13 @@ ad_page_contract {
 }
 
 
-if { [catch {db_dml insert_rel_type {
+if { [catch {
+    set group_rel_type_id [db_nextval acs_object_id_seq]
+    db_dml insert_rel_type {
     insert into group_type_rels
     (group_rel_type_id, group_type, rel_type)
     values
-    (acs_object_id_seq.nextval, :group_type, :rel_type)
+    (:group_rel_type_id, :group_type, :rel_type)
 }   } err_msg] } {
     # Does this pair already exists?
     if { ![db_string exists_p {select count(*) from group_type_rels where group_type = :group_type and rel_type = :rel_type}] } {

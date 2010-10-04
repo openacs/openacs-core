@@ -4,7 +4,7 @@
 <fullquery name="apm_get_name">      
       <querytext>
        
-    select package_key, pretty_name, version_name, acs_object_id_seq.nextval as parameter_id
+    select package_key, pretty_name, version_name
       from apm_package_version_info
      where version_id = :version_id
 
