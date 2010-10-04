@@ -1,43 +1,34 @@
--- Data model to support content repository of the ArsDigita Community
--- System
+-- @author Victor Guerra (vguerra@gmail.com)
+-- @creation-date 2010-09-29
+-- 
 
--- Copyright (C) 1999-2000 ArsDigita Corporation
--- Author: Karl Goldstein (karlg@arsdigita.com)
 
--- $Id$
+-- The following function get's rid of the foreign key constraint between cr_folders(folder_id) and cr_items(item_id), 
+-- at somepoint ( upgrade-5.4.2d1-5.42d2 ) it was added using the statement "alter table add foreign key .. " 
+-- which will add a constraint with name $1, since this is not for sure ( could have also other name assigned), we better look for the right constraint name
+-- to be deleted using pg_constraint and pg_class table
 
--- This is free software distributed under the terms of the GNU Public
--- License.  Full text of the license is available from the GNU Project:
--- http://www.fsf.org/copyleft/gpl.html
-
-create view content_template_globals as 
-select -200 as c_root_folder_id;
-
-create or replace function content_template__get_root_folder() returns integer as '
+create function inline_0 ()
+returns integer as '
 declare
-  v_folder_id                 integer;
+    constraints RECORD;
 begin
-  select c_root_folder_id from content_template_globals into v_folder_id;
-  return v_folder_id;
-end;' language 'plpgsql' immutable;
-
--- create or replace package body content_template
-
-create or replace function content_template__new(varchar) returns integer as '
-declare
-        new__name       alias for $1;
-begin
-        return content_template__new(new__name,
-                                     null,
-                                     null,
-                                     now(),
-                                     null,
-                                     null
-        );
-
+  for constraints in select conname 
+      from pg_constraint con ,pg_class cla1, pg_class cla2 
+      where con.contype = ''f'' and con.conrelid = cla1.oid and cla1.relname = ''cr_folders'' 
+      and con.confrelid = cla2.oid and cla2.relname = ''cr_items''
+  loop
+	EXECUTE ''alter table cr_folders drop constraint '' || constraints.conname;
+  end loop;
+  return null;
 end;' language 'plpgsql';
 
--- function new
+select inline_0();
+drop function inline_0();
+
+-- Now we create the foreign key constraint with the right name
+alter table cr_folders add constraint cr_folders_folder_id_fk foreign key (folder_id) references cr_items(item_id) on delete cascade; 
+
 
 create or replace function content_template__new (varchar,integer,integer,timestamptz,integer,varchar)
 returns integer as '
@@ -95,27 +86,6 @@ begin
   end if;
  
 end;' language 'plpgsql';
-
-
-create or replace function content_template__new(varchar,text,bool) returns integer as '
-declare
-        new__name       alias for $1;
-        new__text       alias for $2;
-        new__is_live    alias for $3;
-begin
-        return content_template__new(new__name,
-                                     null,
-                                     null,
-                                     now(),
-                                     null,
-                                     null,
-                                     new__text,
-                                     new__is_live
-        );
-
-end;' language 'plpgsql';
-
-select define_function_args('content_template__new','name,parent_id,template_id,creation_date;now,creation_user,creation_ip,text,is_live;f');
 
 create or replace function content_template__new (varchar,integer,integer,timestamptz,integer,varchar,text,bool)
 returns integer as '
@@ -175,68 +145,3 @@ begin
   end if;
  
 end;' language 'plpgsql';
-
-
--- procedure delete
-select define_function_args('content_template__del','template_id');
-create or replace function content_template__del (integer)
-returns integer as '
-declare
-  delete__template_id            alias for $1;  
-begin
-
-  delete from cr_type_template_map
-    where template_id = delete__template_id;
-
-  delete from cr_item_template_map
-    where template_id = delete__template_id;
- 
-  delete from cr_templates
-    where template_id = delete__template_id;
-
-  PERFORM content_item__delete(delete__template_id);
-
-  return 0; 
-end;' language 'plpgsql';
-
-select define_function_args('content_template__delete','template_id');
-create or replace function content_template__delete (integer)
-returns integer as '
-declare
-  delete__template_id            alias for $1;  
-begin
-  PERFORM content_template__delete(delete__template_id);
-
-  return 0; 
-end;' language 'plpgsql';
-
--- function is_template
-select define_function_args('content_template__is_template','template_id');
-create or replace function content_template__is_template (integer)
-returns boolean as '
-declare
-  is_template__template_id            alias for $1;  
-begin
-  
-  return count(*) > 0 from cr_templates
-    where template_id = is_template__template_id;
- 
-end;' language 'plpgsql' stable;
-
--- function get_path
-select define_function_args('content_template__get_path','template_id,root_folder_id');
-create or replace function content_template__get_path (integer,integer)
-returns varchar as '
-declare
-  template_id            alias for $1;  
-  root_folder_id         alias for $2; -- default content_template_globals.c_root_folder_id
-                                        
-begin
-
-  return content_item__get_path(template_id, root_folder_id);
-
-end;' language 'plpgsql' stable;
-
-
-
--- show errors

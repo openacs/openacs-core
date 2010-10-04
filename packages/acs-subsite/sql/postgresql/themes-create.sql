@@ -13,10 +13,10 @@ create table subsite_themes (
                   constraint subsite_themes_key_pk
                   primary key,
     name          text
-                  constraint subsite_theme_name_nn
+                  constraint subsite_themes_name_nn
                   not null,
     template      text
-                  constraint subsite_theme_template_nn
+                  constraint subsite_themes_template_nn
                   not null,
     css           text,
     form_template text,

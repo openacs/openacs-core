@@ -218,6 +218,7 @@ namespace eval rel_types {
 	Add a permissible relationship for a given group type
     } {
 	if {[catch {
+	    set group_rel_type_id [db_nextval acs_object_id_seq]
 	    db_dml insert_rel_type {}
 	} errmsg]} {
 	}

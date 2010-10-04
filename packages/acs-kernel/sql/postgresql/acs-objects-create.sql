@@ -475,8 +475,8 @@ for each row execute procedure acs_objects_context_id_in_tr ();
 create or replace function acs_objects_context_id_up_tr () returns trigger as '
 declare
         pair    record;
-        outer record;
-        inner record;
+        outer_record record;
+        inner_record record;
         security_context_root integer;
 begin
   if new.object_id = old.object_id
@@ -487,13 +487,13 @@ begin
   end if;
 
   -- Remove my old ancestors from my descendants.
-  for outer in select object_id from acs_object_context_index where 
+  for outer_record in select object_id from acs_object_context_index where 
                ancestor_id = old.object_id and object_id <> old.object_id loop
-    for inner in select ancestor_id from acs_object_context_index where
+    for inner_record in select ancestor_id from acs_object_context_index where
                  object_id = old.object_id and ancestor_id <> old.object_id loop
       delete from acs_object_context_index
-      where object_id = outer.object_id
-        and ancestor_id = inner.ancestor_id;
+      where object_id = outer_record.object_id
+        and ancestor_id = inner_record.ancestor_id;
     end loop;
   end loop;
 
@@ -1197,9 +1197,9 @@ begin
    v_table_name := acs_object__get_attr_storage_table(v_storage);
    v_key_sql    := acs_object__get_attr_storage_sql(v_storage);
 
-   for v_rec in execute ''select '' || quote_ident(v_column) || ''::text as return from '' || quote_ident(v_table_name) || '' where '' || v_key_sql
+   for v_rec in execute ''select '' || quote_ident(v_column) || ''::text as column_return from '' || quote_ident(v_table_name) || '' where '' || v_key_sql
       LOOP
-        v_return := v_rec.return;
+        v_return := v_rec.column_return;
         exit;
    end loop;
    if not FOUND then 
