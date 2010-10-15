@@ -1829,15 +1829,19 @@ ad_proc -public ReturnHeaders {{content_type text/html}} {
      append content_type "; charset=[ns_config ns/parameters OutputCharset iso-8859-1]"
    }
 
-   set all_the_headers "HTTP/1.0 200 OK
+   if {[ns_info name] eq "NaviServer"} {
+       ns_headers 200 $content_type
+   } else {
+       set all_the_headers "HTTP/1.0 200 OK
 MIME-Version: 1.0
 Content-Type: $content_type\r\n"
-    util_WriteWithExtraOutputHeaders $all_the_headers
-   if {[string match "text/*" $content_type]} {
-      ns_startcontent -type $content_type
-    } else {
-      ns_startcontent
-    }
+       util_WriteWithExtraOutputHeaders $all_the_headers
+       if {[string match "text/*" $content_type]} {
+	   ns_startcontent -type $content_type
+       } else {
+	   ns_startcontent
+       }
+   }
 }
 
 ad_proc -public ad_return_top_of_page {first_part_of_page {content_type text/html}} { 
