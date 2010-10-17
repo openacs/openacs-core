@@ -1651,7 +1651,7 @@ ad_proc -private security::get_insecure_location {} {
 }
 
 ad_proc -public security::locations {} {
-    @returns insecure location and secure location followed possibly by alternate insecure location(s)  as a list.
+    @return insecure location and secure location followed possibly by alternate insecure location(s)  as a list.
 
     The location consists of protocol://domain:port for website. This proc is ported from ec_insecure_location and ec_secure_location for reliably getting locations.  If acs-tcl's SuppressHttpPort parameter is true, then the alternate ec_insecure_location without port is appended to the list, since it is a valid alternate.  This proc also assumes hostnames from host_node_map table are accurate and legit.
 } {

@@ -22,8 +22,8 @@ set locale_user [ad_conn locale]
 #  ns_setformencoding $encoding_charset
 #  ns_set put [ns_conn outputheaders] "content-type" "text/html; charset=$encoding_charset"
 
-set page_title "Edit Locale"
-set context [list $page_title]
+set doc(title) "Edit Locale"
+set context [list $doc(title)]
 
 form create locale_editing
 
@@ -64,13 +64,16 @@ catch {
 # Greenpeace had a table of contries and languages and their two-digit ISO-code
 # but not so in ACS-LANG - here you must provide the two-digit ISO-code
 
-element create locale_editing country -label "Country (2 digit ISO-code)" \
-        -datatype text -widget text -html { maxLength 2 size 2 }
+element create locale_editing locale -label "Locale" \
+    -datatype text -widget inform
 
-element create locale_editing language -label "Language (2 digit ISO-code)" \
-        -datatype text -widget text -html { maxLength 2 size 2 }
+element create locale_editing label -label "Label" -datatype text -widget inform
 
-element create locale_editing label -label "Label" -datatype text
+element create locale_editing country -label "Country" \
+        -datatype text -widget inform
+
+element create locale_editing language -label "Language" \
+        -datatype text -widget inform
 
 if { [info exists list_nls_language] } {
     element create locale_editing nls_language -label "NLS Language" \
@@ -98,9 +101,6 @@ element create locale_editing mime_charset \
 element create locale_editing default_p -label "Default" \
     -datatype text -widget hidden  
 
-element create locale_editing locale -p label "Locale" \
-    -datatype text -widget hidden -value $locale
-
 if { [form is_request locale_editing] } {
 
     # Finish building the form to present to the user
@@ -111,14 +111,32 @@ if { [form is_request locale_editing] } {
             mime_charset as locale_mime_charset, default_p as locale_default_p
         from ad_locales
         where locale = :locale"
+
+    set locale_language [string trim $locale_language]
+    
+    element set_properties locale_editing locale -value $locale_locale
     element set_properties locale_editing label -value $locale_label
-    element set_properties locale_editing language -value $locale_language
-    element set_properties locale_editing country -value $locale_country
     element set_properties locale_editing nls_language -value $locale_nls_language
     element set_properties locale_editing nls_territory -value $locale_nls_territory
     element set_properties locale_editing nls_charset -value $locale_nls_charset
     element set_properties locale_editing mime_charset -value $locale_mime_charset
     element set_properties locale_editing default_p -value $locale_default_p
+
+    set lang_query "select label from language_639_2_codes"
+
+    if { [string length $locale_language] eq 3 } {
+        append lang_query " where iso_639_2 = :locale_language"
+    } else {
+        append lang_query " where iso_639_1 = :locale_language"
+    }
+
+    element set_properties locale_editing language \
+        -value [db_string get_lang_label $lang_query -default $locale_language]
+
+    element set_properties locale_editing country \
+        -value [db_string get_country_name {
+            select default_name from countries where iso = :locale_country
+        } -default $locale_country]
 
 } else {
 
@@ -146,7 +164,6 @@ if { [form is_valid locale_editing] } {
     db_transaction {
 
         db_dml update_locale "update ad_locales set
-            language = :language, country = :country, label = :label,
             nls_language = :nls_language, nls_territory = :nls_territory,
             nls_charset = :nls_charset, mime_charset = :mime_charset,
             default_p = :default_p

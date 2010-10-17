@@ -129,6 +129,9 @@ ad_proc -private apm_generate_package_spec { version_id } {
     append spec "        </callbacks>"
     append spec "\n        <parameters>\n"
     apm_log APMDebug "APM: Writing parameters"
+
+    set parent_package_keys [lrange [apm_one_package_inherit_order $package_key] 0 end-1]
+
     db_foreach parameter_info {} {
 	append spec "            <parameter scope=\"[ad_quotehtml $scope]\" datatype=\"[ad_quotehtml $datatype]\" \
 		min_n_values=\"[ad_quotehtml $min_n_values]\" \

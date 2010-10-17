@@ -15,7 +15,7 @@ create table countries (
     default_name varchar(100)
         constraint countries_default_name_nn
         not null
-        constraint countries_default_name_uq
+        constraint countries_default_name_un
         unique,
     iso char(2)
         constraint countries_iso_pk

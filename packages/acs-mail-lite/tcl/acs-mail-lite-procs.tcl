@@ -15,7 +15,7 @@ package require base64 2.3.1
 namespace eval acs_mail_lite {
     
     ad_proc -public get_package_id {} {
-        @returns package_id of this package
+        @return package_id of this package
     } {
         return [apm_package_id_from_key acs-mail-lite]
     }
@@ -27,13 +27,13 @@ namespace eval acs_mail_lite {
         Returns an apm-parameter value of this package
         @option name parameter name
         @option default default parameter value
-        @returns apm-parameter value of this package
+        @return apm-parameter value of this package
     } {
         return [parameter::get -package_id [get_package_id] -parameter $name -default $default]
     }
     
     ad_proc -private mail_dir {} {
-        @returns incoming mail directory to be scanned for bounces
+        @return incoming mail directory to be scanned for bounces
     } {
         return [get_parameter -name "BounceMailDir"]
     }
@@ -44,7 +44,7 @@ namespace eval acs_mail_lite {
     } {
         Extracts the email address out of a mail address (like Joe User <joe@user.com>)
         @option email mail address to be parsed
-        @returns only the email address part of the mail address
+        @return only the email address part of the mail address
     } {
         if {![regexp {<([^>]*)>} $email all clean_email]} {
             return $email
@@ -72,7 +72,7 @@ namespace eval acs_mail_lite {
     ad_proc -public generate_message_id {
     } {
         Generate an id suitable as a Message-Id: header for an email.
-        @returns valid message-id for mail header
+        @return valid message-id for mail header
     } {
         # The combination of high resolution time and random
         # value should be pretty unique.
@@ -88,7 +88,7 @@ namespace eval acs_mail_lite {
         Validates if provided signature matches message_id
         @option signature signature to be checked
         @option msg message-id that the signature should be checked against
-        @returns boolean 0 or 1
+        @return boolean 0 or 1
     } {
         if {![regexp "(<\[\-0-9\]+\\.\[0-9\]+\\.oacs@[address_domain]>)" $message_id match id] || $signature ne [ns_sha1 $id] } {
             # either couldn't find message-id or signature doesn't match
@@ -153,7 +153,7 @@ namespace eval acs_mail_lite {
         user_names and user_ids. If not, get the additional data
         from the db and return the full array.
         @option addresses variable to checked for array
-        @returns array of emails, user_names and user_ids to be used
+        @return array of emails, user_names and user_ids to be used
         for the mail procedures
     } {
         if {[catch {array set address_array $addresses}]

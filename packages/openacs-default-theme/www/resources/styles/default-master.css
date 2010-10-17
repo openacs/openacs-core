@@ -496,6 +496,18 @@ a.button:active {
   border: solid 1px black;
 }
 
+a.button .disabled
+{
+    color: #A0A0A0;
+    background-color: #E0E0E0;
+    cursor: not-allowed;
+}
+
+a.button .disabled:hover
+{
+    text-decoration: none;
+}
+
 /* END BUTTON ---- */
 
 .center {text-align: center;}

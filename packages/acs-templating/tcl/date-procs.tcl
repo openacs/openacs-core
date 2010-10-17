@@ -274,7 +274,8 @@ ad_proc -public template::util::date::get_property { what date } {
       }
       return 0
     }
-    sql_date {
+    sql_date -
+    sql_timestamp {
       # LARS: Empty date results in NULL value
       if { $date eq "" } {
         return "NULL"

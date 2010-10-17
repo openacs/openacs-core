@@ -7,20 +7,19 @@ ad_page_contract {
     {version_id:integer}
     {dependency_id:integer}
     dependency_type:notnull
+    package_key:notnull
 }
 
 db_transaction {
     switch $dependency_type {
-	provide {
+
+	provide - require {
 	    apm_dependency_remove $dependency_id
-	}
-
-	require {
-	    apm_interface_remove $dependency_id
-	}
-
-	extend {
-	    apm_interface_remove $dependency_id
+        }
+        embed - extend {
+            apm_unregister_disinherited_params $package_key $dependency_id
+	    apm_dependency_remove $dependency_id
+            apm_build_one_package_relationships $package_key
 	}
 
 	default {

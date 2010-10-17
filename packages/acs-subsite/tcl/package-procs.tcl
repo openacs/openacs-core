@@ -819,7 +819,7 @@ ad_proc -public package_instantiate_object {
 
     lappend var_list [list creation_user $creation_user]
     lappend var_list [list creation_ip $creation_ip]
-
+    lappend var_list [list object_type $object_type]
 
     # The first thing we need to do is select out the list of all
     # the parameters that can be passed to this object type's new function.

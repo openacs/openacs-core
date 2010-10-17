@@ -35,10 +35,11 @@ db_multirow -extend { admin_url global_param_url } packages installed_packages {
     } else {
         set admin_url ""
     }
-    if { [db_string global_params_exist {}] != 0 } {
-        set global_param_url [export_vars -base /shared/parameters {package_key {scope global}}]
+    if { [catch {db_1row global_params_exist {}} errmsg] ||
+         $global_params == 0 } {
+         set global_param_url ""
     } else {
-        set global_param_url ""
+        set global_param_url [export_vars -base /shared/parameters {package_key {scope global}}]
     }
     if { $admin_url eq "" && $global_param_url eq "" } {
         continue

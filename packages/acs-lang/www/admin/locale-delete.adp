@@ -2,14 +2,11 @@
   <property name="title">@page_title@</property>
   <property name="context">@context;noquote@</property>
 
-<p />
+<h1>Delete @locale_label@</h1>
 
-<p>Deleting locale <strong>@locale_label@</strong> [ <tt>@locale@</tt> ]</p>
+<p>Are you sure you want to delete @locale_label@ which locale is @locale@?</p>
 
 <form action="locale-delete">
 @form_export_vars;noquote@
 <input type="submit" value="Confirm delete">
 </form>
-
-
-

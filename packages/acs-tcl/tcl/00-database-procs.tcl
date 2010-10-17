@@ -160,7 +160,7 @@ ad_proc -private db_state_array_name_is {{ -dbn "" }} {
 }
 
 
-ad_proc -private -private db_driverkey {{
+ad_proc -private db_driverkey {{
     -handle_p 0
 } dbn } {
     Normally, a dbn is passed to this proc.  Unfortunately, there are
