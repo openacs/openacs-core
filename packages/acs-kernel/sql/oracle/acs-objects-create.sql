@@ -165,7 +165,7 @@ alter table acs_objects modify constraint acs_objects_context_object_un enable;
 create index acs_objects_creation_user_idx on acs_objects (creation_user);
 create index acs_objects_modify_user_idx on acs_objects (modifying_user);
 
-create index acs_objects_package_object_idx on acs_objects (package_id, object_id);
+create index acs_objects_package_idx on acs_objects (package_id);
 create index acs_objects_title_idx on acs_objects(title);
 
 -- create bitmap index acs_objects_object_type_idx on acs_objects (object_type);

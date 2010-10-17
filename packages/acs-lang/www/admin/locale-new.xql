@@ -4,16 +4,16 @@
 
   <fullquery name="select_countries">
     <querytext>
-      select label, country 
-      from country_codes 
-      order by label
+      select default_name, iso
+      from countries 
+      order by default_name
     </querytext>
   </fullquery>
 
   <fullquery name="select_languages">
     <querytext>
       select label, coalesce(iso_639_1, iso_639_2) 
-      from language_codes 
+      from language_639_2_codes 
       order by label
     </querytext>
   </fullquery>

@@ -45,7 +45,7 @@
     <querytext>
       
       select iso_639_2
-      from   language_codes
+      from   language_639_2_codes
       where  iso_639_1 = :language
     
     </querytext>
@@ -55,7 +55,7 @@
     <querytext>
       
       select iso_639_2
-      from   language_codes
+      from   language_639_2_codes
       where  iso_639_2 = :language
     
     </querytext>
@@ -65,7 +65,7 @@
     <querytext>
       
       select label
-      from   language_codes
+      from   language_639_2_codes
       where  iso_639_1 = :language
     
     </querytext>
@@ -75,7 +75,7 @@
     <querytext>
       
       select label
-      from   language_codes
+      from   language_639_2_codes
       where  iso_639_2 = :language
     
     </querytext>

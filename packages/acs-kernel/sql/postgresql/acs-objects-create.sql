@@ -253,7 +253,7 @@ create table acs_objects (
 create index acs_objects_creation_user_idx on acs_objects (creation_user);
 create index acs_objects_modify_user_idx on acs_objects (modifying_user);
 
-create index acs_objects_package_object_idx on acs_objects (package_id, object_id);
+create index acs_objects_package_idx on acs_objects (package_id);
 create index acs_objects_title_idx on acs_objects(title);
 
 create index acs_objects_object_type_idx on acs_objects (object_type);
@@ -654,7 +654,7 @@ end;' language 'plpgsql';
 
 -- function new
 
-select define_function_args('acs_object__new','object_id,object_type;acs_object,creation_date;now(),creation_user,creation_ip,context_id,security_inherit_p;t,title,package_id');
+select define_function_args('acs_object__new','object_id,object_type;acs_object,creation_date,creation_user,creation_ip,context_id,security_inherit_p;t,title,package_id');
 
 create or replace function acs_object__new (integer,varchar,timestamptz,integer,varchar,integer,boolean,varchar,integer)
 returns integer as '

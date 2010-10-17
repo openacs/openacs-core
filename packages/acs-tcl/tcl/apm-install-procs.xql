@@ -89,6 +89,19 @@
       </querytext>
 </fullquery>
 
+<fullquery name="apm_unregister_disinherited_params.get_parameter_ids">      
+  <querytext>
+    select ap.parameter_id
+    from apm_parameters ap
+    where ap.package_key = :package_key
+      and exists (select 1
+                  from apm_parameters ap2, apm_package_dependencies apd
+                  where ap2.package_key = apd.service_uri
+                    and ap2.parameter_name = ap.parameter_name
+                    and apd.dependency_id = :dependency_id)
+  </querytext>
+</fullquery>
+
 <fullquery name="apm_copy_param_to_descendents.param">      
   <querytext>
     select ap.*

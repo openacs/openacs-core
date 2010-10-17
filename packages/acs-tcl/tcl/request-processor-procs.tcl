@@ -869,6 +869,12 @@ ad_proc -private rp_handler {} {
         set extra_url [ad_conn extra_url]
         if { $match_prefix ne "" } {
             if { [string first $match_prefix $extra_url] == 0 } {
+                # An empty root indicates we should reject the attempted reference.  This
+                # is used to block references to embeded package [sitewide-]admin pages that
+                # avoid the request processor permission check
+                if { $root eq "" } {
+                    break
+                }
                 set extra_url [string trimleft \
                     [string range $extra_url [string length $match_prefix] end] /]
             } else {

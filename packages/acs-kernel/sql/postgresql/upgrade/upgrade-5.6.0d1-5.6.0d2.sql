@@ -1,12 +1,36 @@
-alter table persons add bio text;
 
 create function inline_0 ()
 returns integer as '
 declare
   one_user_id integer;
   bio_id integer;
+  bio_mime_type_id integer;
   attr_id integer;
 begin
+
+  if exists(select 1
+            from acs_attributes
+            where object_type = ''person''
+              and attribute_name = ''bio''
+              and storage = ''type_specific'')
+  then
+    return 0;
+  end if;
+
+  alter table persons add bio text;
+
+  drop view acs_users_all;
+  create view acs_users_all
+  as
+  select pa.*, pe.*, u.*
+  from  parties pa, persons pe, users u
+  where  pa.party_id = pe.person_id
+  and pe.person_id = u.user_id;
+
+  bio_mime_type_id := attribute_id
+                      from acs_attributes
+                      where object_type = ''person''
+                      and attribute_name = ''bio_mime_type'';
 
   bio_id := attribute_id
             from acs_attributes
@@ -29,6 +53,9 @@ begin
 
   delete from acs_attribute_values
   where attribute_id = bio_id;
+
+  delete from acs_attribute_values
+  where attribute_id = bio_mime_type_id;
 
   perform acs_attribute__drop_attribute (''person'',''bio'');
   perform acs_attribute__drop_attribute (''person'',''bio_mime_type'');

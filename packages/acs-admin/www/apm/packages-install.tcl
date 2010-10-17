@@ -120,7 +120,7 @@ function checkAll() {
 	} else {
 	    apm_log APMDebug "APM: Adding $package(package.key) to list for installation." 
 	    lappend pkg_info_list [pkg_info_new $package(package.key) $spec_file \
-		    $package(embeds) $package(provides) $package(requires) ""]
+		    $package(embeds) $package(extends) $package(provides) $package(requires) ""]
             lappend pkg_key_list $package(package.key)
 	}
     }

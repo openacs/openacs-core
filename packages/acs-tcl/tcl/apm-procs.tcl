@@ -195,9 +195,30 @@ ad_proc apm_package_list_url_resolution {
         switch $dependency_type {
             extends -
             "" { lappend apm_package_url_resolution [acs_root_dir]/packages/$package_key/www }
-            embeds { lappend apm_package_url_resolution \
-                          [list [acs_root_dir]/packages/$package_key/embed $package_key]
-                    }
+            embeds {
+
+               # Reference to an embedded package is through URLs relative to the embedding
+               # package's mount point, taking one  of the forms package-key,
+               # admin/package-key and sitewide-admin/package-key.  These map to package-key/embed,
+               # package-key/embed/admin, and package-key/embed/sitewide-admin respectively.
+
+               # We break references like package-key/admin because such references are unsafe,
+               # as the request processor will not perform the expected permission check.
+
+               lappend apm_package_url_resolution \
+                   [list [acs_root_dir]/packages/$package_key/embed/admin admin/$package_key]
+               lappend apm_package_url_resolution \
+                   [list "" $package_key/admin]
+
+               lappend apm_package_url_resolution \
+                   [list [acs_root_dir]/packages/$package_key/embed/sitewide-admin \
+                       sitewide-admin/$package_key]
+               lappend apm_package_url_resolution \
+                   [list "" $package_key/sitewide-admin]
+
+               lappend apm_package_url_resolution \
+                   [list [acs_root_dir]/packages/$package_key/embed $package_key]
+            }
             default {
                 error "apm_package_list_url_resolution: dependency type is $dependency_type"
             }

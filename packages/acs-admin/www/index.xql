@@ -20,7 +20,7 @@
 
   <fullquery name="global_params_exist">
     <querytext>
-      select count(*)
+      select count(*) as global_params
       from apm_parameters
       where package_key = :package_key
         and scope = 'global'

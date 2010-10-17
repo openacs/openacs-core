@@ -115,6 +115,8 @@ db_transaction {
                         $package_key $version_name $version_uri $summary $description \
                         $description_format $vendor $vendor_uri $auto_mount]
     apm_version_enable -callback apm_dummy_callback $version_id
+    apm_build_one_package_relationships $package_key
+    apm_build_subsite_packages_list
     apm_package_install_owners -callback apm_dummy_callback \
 	    [apm_package_install_owners_prepare $owner_name $owner_uri] $version_id
 

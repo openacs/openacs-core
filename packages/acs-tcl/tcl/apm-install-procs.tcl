@@ -987,6 +987,18 @@ ad_proc -private apm_package_install {
     return $version_id
 }
 
+ad_proc apm_unregister_disinherited_params { package_key dependency_id } {
+
+    Remove parameters for package_key that have been disinherited (i.e., the
+    dependency that caused them to be inherited have been removed).  Called only
+    by the APM and keep it that way, please.
+
+} {
+    foreach parameter_id [db_list get_parameter_ids {}] {
+        apm_parameter_unregister $parameter_id
+    }
+}
+
 ad_proc apm_copy_param_to_descendents { new_package_key parameter_name } {
     Copy a new parameter in a package to its descendents.  Called when a package is
     upgraded or a parameter added in the APM.

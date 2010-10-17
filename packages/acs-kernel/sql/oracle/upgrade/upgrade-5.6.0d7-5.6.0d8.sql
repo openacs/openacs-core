@@ -1,3 +1,60 @@
+create or replace package apm_package
+as
+
+function new (
+  package_id		in apm_packages.package_id%TYPE 
+			default null,
+  instance_name		in apm_packages.instance_name%TYPE
+			default null,
+  package_key		in apm_packages.package_key%TYPE,
+  object_type		in acs_objects.object_type%TYPE
+			default 'apm_package', 
+  creation_date		in acs_objects.creation_date%TYPE 
+			default sysdate,
+  creation_user		in acs_objects.creation_user%TYPE 
+			default null,
+  creation_ip		in acs_objects.creation_ip%TYPE 
+			default null,
+  context_id		in acs_objects.context_id%TYPE 
+			default null
+  ) return apm_packages.package_id%TYPE;
+
+  procedure del (
+   package_id		in apm_packages.package_id%TYPE
+  );
+
+  function initial_install_p (
+	package_key		in apm_packages.package_key%TYPE
+  ) return integer;
+
+  function singleton_p (
+	package_key		in apm_packages.package_key%TYPE
+  ) return integer;
+
+  function num_instances (
+	package_key		in apm_package_types.package_key%TYPE
+  ) return integer;
+
+  function name (
+    package_id		in apm_packages.package_id%TYPE
+  ) return varchar2;
+
+  function highest_version (
+   package_key		in apm_package_types.package_key%TYPE
+  ) return apm_package_versions.version_id%TYPE;
+  
+    function parent_id (
+        package_id in apm_packages.package_id%TYPE
+    ) return apm_packages.package_id%TYPE;
+
+  function is_child (
+    parent_package_key in apm_packages.package_key%TYPE,
+    child_package_key in apm_packages.package_key%TYPE
+  ) return char;
+
+end apm_package;
+/
+show errors
 
 create or replace package body apm_package
 as

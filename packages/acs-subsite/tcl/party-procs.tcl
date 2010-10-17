@@ -239,7 +239,7 @@ namespace eval party {
 	@param party_id The party_id to get the name from.
 	@param email The email of the party
 
-	@returns The party name
+	@return The party name
     } {
 	if {$party_id eq "" && $email eq ""} {
 	    error "You need to provide either party_id or email"
