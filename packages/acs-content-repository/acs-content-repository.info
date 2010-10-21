@@ -22,8 +22,8 @@
 
         <provides url="acs-content-repository" version="5.7.0d2"/>
         <requires url="acs-kernel" version="5.7.0d2"/>
-        <requires url="acs-service-contract" version="5.6.0d1"/>
-        <requires url="search" version="5.6.0d1"/>
+        <requires url="acs-service-contract" version="5.7.0d1"/>
+        <requires url="search" version="5.7.0d1"/>
 
         <callbacks>
           <callback type="after-upgrade"  proc="content::apm::after_upgrade"/>
