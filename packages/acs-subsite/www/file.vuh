@@ -6,7 +6,7 @@
 # @creation-date 2006-08-01
 # @cvs-id $Id$
 
-if {![regexp {^/([0-9]{1,8})(/(private)/([0-9]{1,8}))?(/(.*))?$} [ad_conn path_info] match object_id private_slash private private_parent_id anchor]} {
+if {![regexp {^/([0-9]+)(/(private)/([0-9]+))?(/(.*))?$} [ad_conn path_info] match object_id private_slash private private_parent_id anchor]} {
     ad_return_warning "Invalid object id" [subst {
         The identifier given for this object is invalid.  Please check your url 
         or contact the webmaster if you think it should work.
