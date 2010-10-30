@@ -1853,7 +1853,7 @@ ad_proc -public ad_return_top_of_page {first_part_of_page {content_type text/htm
     }
 }
 
-ad_proc -public apply {func arglist} {
+ad_proc -public ad_apply {func arglist} {
     Evaluates the first argument with ARGLIST as its arguments, in the
     environment of its caller. Analogous to the Lisp function of the same name.
 } {
@@ -1870,7 +1870,7 @@ ad_proc -public safe_eval args {
 	    return -code error "Unsafe argument to safe_eval: $arg"
 	}
     }
-    return [apply uplevel $args]
+    return [ad_apply uplevel $args]
 }
 
 ad_proc -public lmap {list proc_name} {
