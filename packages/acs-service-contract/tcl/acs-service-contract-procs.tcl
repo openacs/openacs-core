@@ -255,7 +255,7 @@ ad_proc -private -deprecated acs_sc_call {
     set proc_name [acs_sc_generate_name $contract $impl $operation]
 
     if { [llength [info procs $proc_name]] == 1 } {
-	return [apply $proc_name $arguments]
+	return [ad_apply $proc_name $arguments]
     } else {
         if { $error_p } {
             error "Operation $operation is not implemented in '$impl' implementation of contract '$contract'"
