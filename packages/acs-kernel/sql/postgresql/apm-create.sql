@@ -1546,7 +1546,7 @@ begin
 
     select attr_value into value from apm_parameter_values v
     where v.package_id = get_value__package_id
-    and parameter_id = get_value__parameter_id;
+    and parameter_id = v_parameter_id;
 
     return value;
    
@@ -1564,7 +1564,7 @@ begin
 
     select attr_value into value from apm_parameter_values v
     where v.package_id is null
-    and parameter_id = get_value__parameter_id;
+    and parameter_id = v_parameter_id;
 
     return value;
    
