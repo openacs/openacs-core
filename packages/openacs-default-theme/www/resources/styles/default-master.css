@@ -291,11 +291,11 @@ tr.table-header {
 }
 
 tr.even {
-  background-color: #f0f0f0;
+  background-color: #ffffff;
 }
 
 tr.odd {
-  background-color: #e0e0e0;
+  background-color: #f0eff0;
 }
 
 /* Replace deprecated center tags in forms. Eventually all forms should use form builder and this tag should not be used */
