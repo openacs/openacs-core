@@ -179,7 +179,7 @@ ad_proc -callback search::search -impl tsearch2-driver {
     
     set results_ids [db_list search {}]
 
-    set count [db_string count "select count(*) from txt $base_query"]
+    set count [db_string count {}]
 
     set stop_words [list]
 

@@ -37,6 +37,18 @@
     </querytext>
   </fullquery>
 
+  <fullquery name="callback::search::search::impl::tsearch2-driver.count">
+  <rdbms><type>postgresql</type><version>8.3</version></rdbms>
+    <querytext>
+      select count(*)
+      from
+      [join $from_clauses ","]
+      $base_query
+      [expr {[llength $where_clauses] > 0 ? " and " : ""}]
+      [join $where_clauses " and "]
+    </querytext>
+  </fullquery>
+
   <fullquery name="tsearch2::summary.summary">
   <rdbms><type>postgresql</type><version>8.3</version></rdbms>
     <querytext>
@@ -89,6 +101,18 @@
       [join $where_clauses " and "]
       order by rank(fti,to_tsquery('default',:query)) desc
       $limit_clause $offset_clause
+    </querytext>
+  </fullquery>
+
+  <fullquery name="callback::search::search::impl::tsearch2-driver.count">
+  <rdbms><type>postgresql</type><version>8.2</version></rdbms>
+    <querytext>
+      select count(*)
+      from
+      [join $from_clauses ","]
+      $base_query
+      [expr {[llength $where_clauses] > 0 ? " and " : ""}]
+      [join $where_clauses " and "]
     </querytext>
   </fullquery>
 
