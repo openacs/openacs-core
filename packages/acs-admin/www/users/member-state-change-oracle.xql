@@ -9,8 +9,7 @@
                    member_state as member_state_old,
                    first_names || ' ' || last_name as name,
                    email,
-                   rel_id,
-                   rownum as row_id
+                   rel_id
             from cc_users
             where user_id = :user_id
         </querytext>
