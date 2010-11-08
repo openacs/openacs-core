@@ -18,16 +18,7 @@ ad_page_contract {
     return_url:onevalue
 }
 
-if {![db_0or1row get_states {
-    select email_verified_p as email_verified_p_old,
-           member_state as member_state_old,
-           first_names || ' ' || last_name as name,
-           email,
-           rel_id,
-           row_id
-    from cc_users
-    where user_id = :user_id
-}]} {
+if {![db_0or1row get_states {}]} {
     # The user is not in there
     ad_return_complaint 1 "Invalid User: the user is not in the system"
     return
@@ -65,7 +56,7 @@ switch $email_verified_p {
     }
     "f" {
 	set action "Require Email from $name"
-	set email_message "Your email in [ad_system_name] needs approval. please go to [ad_url]/register/email-confirm?[export_url_vars row_id]"
+	set email_message "Your email in [ad_system_name] needs approval. please go to [ad_url]/register/email-confirm"
     }
 }
 

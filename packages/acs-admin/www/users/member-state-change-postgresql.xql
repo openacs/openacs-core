@@ -8,7 +8,7 @@
       select u.email_verified_p as email_verified_p_old,
           mr.member_state as member_state_old,
           per.first_names || ' ' || per.last_name as name,
-          part.email, mr.rel_id, u.oid as row_id
+          part.email, mr.rel_id
       from users u
       JOIN parties part on (part.party_id = u.user_id)
         JOIN persons per on (per.person_id = u.user_id)

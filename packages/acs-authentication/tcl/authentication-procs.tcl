@@ -1415,7 +1415,7 @@ ad_proc -private auth::get_user_secret_token {
 } {
     Get a secret token for the user. Can be used for email verification purposes. 
 } {
-    return [db_string select_secret_token {}]
+    return [ns_sha1 "${user_id}[sec_get_token 1]"]
 }
 
 ad_proc -private auth::send_email_verification_email {
