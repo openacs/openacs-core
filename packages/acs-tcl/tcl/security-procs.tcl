@@ -1166,10 +1166,7 @@ ad_proc -private populate_secret_tokens_db {} {
     while { $counter < $num_tokens } {
 	set random_token [sec_random_token]
 
-	db_dml insert_random_token {
-	    insert /*+ APPEND */ into secret_tokens(token_id, token, timestamp)
-	    values(sec_security_token_id_seq.nextval, :random_token, sysdate)
-	}
+	db_dml insert_random_token {}
 	incr counter
     }
 
