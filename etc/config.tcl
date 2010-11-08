@@ -344,98 +344,98 @@ ns_section "ns/server/${server}/module/nsopenssl"
     # is currently no provision to specify which SSL context to use for a
     # particular connection via an ns_openssl Tcl command.
 ns_section "ns/server/${server}/module/nsopenssl/sslcontexts"
-        ns_param users        "SSL context used for regular user access"
+    ns_param users        "SSL context used for regular user access"
     #    ns_param admins       "SSL context used for administrator access"
-        ns_param client       "SSL context used for outgoing script socket connections"
+    ns_param client       "SSL context used for outgoing script socket connections"
 
 ns_section "ns/server/${server}/module/nsopenssl/defaults"
-        ns_param server               users
-        ns_param client               client
+    ns_param server               users
+    ns_param client               client
     
 ns_section "ns/server/${server}/module/nsopenssl/sslcontext/users"
-        ns_param Role                  server
-        ns_param ModuleDir             ${serverroot}/etc/certs
-        ns_param CertFile              users-certfile.pem 
-        ns_param KeyFile               users-keyfile.pem
-        # CADir/CAFile can be commented out, if CA chain cert is appended to CA issued server cert.
-        ns_param CADir                 ${serverroot}/etc/certs
-        ns_param CAFile                users-ca.crt
-        # for Protocols                "ALL" = "SSLv2, SSLv3, TLSv1"
-        ns_param Protocols             "SSLv3, TLSv1" 
-        ns_param CipherSuite           "ALL:!ADH:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP" 
-        ns_param PeerVerify            false
-        ns_param PeerVerifyDepth       3
-        ns_param Trace                 false
+    ns_param Role                  server
+    ns_param ModuleDir             ${serverroot}/etc/certs
+    ns_param CertFile              users-certfile.pem 
+    ns_param KeyFile               users-keyfile.pem
+    # CADir/CAFile can be commented out, if CA chain cert is appended to CA issued server cert.
+    ns_param CADir                 ${serverroot}/etc/certs
+    ns_param CAFile                users-ca.crt
+    # for Protocols                "ALL" = "SSLv2, SSLv3, TLSv1"
+    ns_param Protocols             "SSLv3, TLSv1" 
+    ns_param CipherSuite           "ALL:!ADH:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP" 
+    ns_param PeerVerify            false
+    ns_param PeerVerifyDepth       3
+    ns_param Trace                 false
     
-	    # following helps to stablize some openssl connections from buggy clients.
-        ns_param SessionCache true
-        ns_param SessionCacheID 1
-        ns_param SessionCacheSize 512
-        ns_param SessionCacheTimeout 300
+    # following helps to stablize some openssl connections from buggy clients.
+    ns_param SessionCache true
+    ns_param SessionCacheID 1
+    ns_param SessionCacheSize 512
+    ns_param SessionCacheTimeout 300
 
 
 #    ns_section "ns/server/${server}/module/nsopenssl/sslcontext/admins"
-    #    ns_param Role                  server
-    #    ns_param ModuleDir             /path/to/dir
-    #    ns_param CertFile              server/server.crt 
-    #    ns_param KeyFile               server/server.key 
-    #    ns_param CADir                 ca-client/dir 
-    #    ns_param CAFile                ca-client/ca-client.crt
-        # for Protocols                "ALL" = "SSLv2, SSLv3, TLSv1"
-    #    ns_param Protocols             "All"
-    #    ns_param CipherSuite           "ALL:!ADH:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP" 
-    #    ns_param PeerVerify            false
-    #    ns_param PeerVerifyDepth       3
-    #    ns_param Trace                 false
+#    ns_param Role                  server
+#    ns_param ModuleDir             /path/to/dir
+#    ns_param CertFile              server/server.crt 
+#    ns_param KeyFile               server/server.key 
+#    ns_param CADir                 ca-client/dir 
+#    ns_param CAFile                ca-client/ca-client.crt
+    # for Protocols                "ALL" = "SSLv2, SSLv3, TLSv1"
+#    ns_param Protocols             "All"
+#    ns_param CipherSuite           "ALL:!ADH:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP" 
+#    ns_param PeerVerify            false
+#    ns_param PeerVerifyDepth       3
+#    ns_param Trace                 false
     
 ns_section "ns/server/${server}/module/nsopenssl/sslcontext/client"
-        ns_param Role                  client
-        ns_param ModuleDir             ${serverroot}/etc/certs
-        ns_param CertFile              client-certfile.pem
-        ns_param KeyFile               client-keyfile.pem 
-        # CADir/CAFile can be commented out, if CA chain cert is appended to CA issued server cert.
-        ns_param CADir                 ${serverroot}/etc/certs
-        ns_param CAFile                client-ca.crt
-        # for Protocols                "ALL" = "SSLv2, SSLv3, TLSv1"
-        ns_param Protocols             "SSLv2, SSLv3, TLSv1" 
-        ns_param CipherSuite           "ALL:!ADH:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP" 
-        ns_param PeerVerify            false
-        ns_param PeerVerifyDepth       3
-        ns_param Trace                 false
-    
-	    # following helps to stablize some openssl connections to buggy servers.
-        ns_param SessionCache true
-        ns_param SessionCacheID 1
-        ns_param SessionCacheSize 512
-        ns_param SessionCacheTimeout 300
+    ns_param Role                  client
+    ns_param ModuleDir             ${serverroot}/etc/certs
+    ns_param CertFile              client-certfile.pem
+    ns_param KeyFile               client-keyfile.pem 
+    # CADir/CAFile can be commented out, if CA chain cert is appended to CA issued server cert.
+    ns_param CADir                 ${serverroot}/etc/certs
+    ns_param CAFile                client-ca.crt
+    # for Protocols                "ALL" = "SSLv2, SSLv3, TLSv1"
+    ns_param Protocols             "SSLv2, SSLv3, TLSv1" 
+    ns_param CipherSuite           "ALL:!ADH:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP" 
+    ns_param PeerVerify            false
+    ns_param PeerVerifyDepth       3
+    ns_param Trace                 false
 
-    # SSL drivers. Each driver defines a port to listen on and an explitictly named
-    # SSL context to associate with it. Note that you can now have multiple driver
-    # connections within a single virtual server, which can be tied to different
-    # SSL contexts.
+# following helps to stablize some openssl connections to buggy servers.
+    ns_param SessionCache true
+    ns_param SessionCacheID 1
+    ns_param SessionCacheSize 512
+    ns_param SessionCacheTimeout 300
+
+# SSL drivers. Each driver defines a port to listen on and an explitictly named
+# SSL context to associate with it. Note that you can now have multiple driver
+# connections within a single virtual server, which can be tied to different
+# SSL contexts.
 ns_section "ns/server/${server}/module/nsopenssl/ssldrivers"
-        ns_param users         "Driver for regular user access"
-    #    ns_param admins        "Driver for administrator access"
-    
+    ns_param users         "Driver for regular user access"
+#    ns_param admins        "Driver for administrator access"
+
 ns_section "ns/server/${server}/module/nsopenssl/ssldriver/users"
-        ns_param sslcontext            users
-        # ns_param port                  $httpsport_users
-        ns_param port                  $httpsport
-        ns_param hostname              $hostname
-        ns_param address               $address
-        # following added per
-        # http://www.mail-archive.com/aolserver@listserv.aol.com/msg07365.html
-        # Maximum File Size for uploads:
-        ns_param   maxinput           [expr {$max_file_upload_mb * 1024 * 1024}] ;# in bytes
-        # Maximum request time
-        ns_param   recvwait           [expr {$max_file_upload_min * 60}] ;# in minutes
+    ns_param sslcontext            users
+    # ns_param port                  $httpsport_users
+    ns_param port                  $httpsport
+    ns_param hostname              $hostname
+    ns_param address               $address
+    # following added per
+    # http://www.mail-archive.com/aolserver@listserv.aol.com/msg07365.html
+    # Maximum File Size for uploads:
+    ns_param   maxinput           [expr {$max_file_upload_mb * 1024 * 1024}] ;# in bytes
+    # Maximum request time
+    ns_param   recvwait           [expr {$max_file_upload_min * 60}] ;# in minutes
 
 #    ns_section "ns/server/${server}/module/nsopenssl/ssldriver/admins"
-    #    ns_param sslcontext            admins
-    #    ns_param port                  $httpsport_admins
-    #    ns_param port                  $httpsport
-    #    ns_param hostname              $hostname
-    #    ns_param address               $address
+#    ns_param sslcontext            admins
+#    ns_param port                  $httpsport_admins
+#    ns_param port                  $httpsport
+#    ns_param hostname              $hostname
+#    ns_param address               $address
 
 
 #---------------------------------------------------------------------
@@ -446,17 +446,17 @@ ns_section "ns/server/${server}/module/nsopenssl/ssldriver/users"
 #
 #---------------------------------------------------------------------
 ns_section "ns/db/drivers" 
-if { $database eq "oracle" } {
-    ns_param   ora8           ${bindir}/ora8.so
-} else {
-    ns_param   postgres       ${bindir}/nspostgres.so  ;# Load PostgreSQL driver
-}
+    if { $database eq "oracle" } {
+        ns_param   ora8           ${bindir}/ora8.so
+    } else {
+        ns_param   postgres       ${bindir}/nspostgres.so  ;# Load PostgreSQL driver
+    }
 
-if { $database eq "oracle" } {
-    ns_section "ns/db/driver/ora8"
-    ns_param  maxStringLogLength -1
-    ns_param  LobBufferSize      32768
-}
+    if { $database eq "oracle" } {
+        ns_section "ns/db/driver/ora8"
+        ns_param  maxStringLogLength -1
+        ns_param  LobBufferSize      32768
+    }
 
  
 # Database Pools: This is how AOLserver  ``talks'' to the RDBMS. You need 
@@ -571,6 +571,8 @@ ns_section ns/server/${server}/db
 #    ns_param database_names [list main other1]
 #    ns_param pools_main [list pool1 pool2 pool3]
 #    ns_param pools_other1 [list pool4 pool5 pool6]
+# Start each pool set with pools_* 
+# The code assumes the name in database_names matches the suffix to pools_ in one of the ns_params.
 
 
 
