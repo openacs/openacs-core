@@ -13,6 +13,8 @@ namespace eval template::data::validate {}
 namespace eval template::util {}
 namespace eval template::util::richtext {}
 namespace eval template::widget {}
+namespace eval template::data::to_sql {}
+namespace eval template::data::from_sql {}
 
 ad_proc -public template::util::richtext { command args } {
     Dispatch procedure for the richtext object
@@ -613,3 +615,13 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
     
     return $output
 }
+
+# handle richtext transformations using a standardized naming convention.
+
+namespace eval template::util::richtext {}
+
+ad_proc template::data::to_sql::richtext { value } {
+    return "'[DoubleApos [list [template::util::richtext::get_property content $value] \
+                               [template::util::richtext::get_property format $value]]]'"
+}
+
