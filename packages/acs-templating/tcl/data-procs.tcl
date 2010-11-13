@@ -20,14 +20,19 @@ ad_proc -public template::data::validate { type value_ref message_ref } {
     @see template::data::validate::boolean 
     @see template::data::validate::date 
     @see template::data::validate::email 
+    @see template::data::validate::enumeration 
     @see template::data::validate::filename 
     @see template::data::validate::float
     @see template::data::validate::integer 
     @see template::data::validate::keyword 
     @see template::data::validate::naturalnum 
+    @see template::data::validate::number 
     @see template::data::validate::search 
     @see template::data::validate::string 
     @see template::data::validate::text 
+    @see template::data::validate::textdate
+    @see template::data::validate::timestamp
+    @see template::data::validate::time_of_day
     @see template::data::validate::url  
 } { 
 
@@ -326,6 +331,77 @@ ad_proc -public template::data::validate::date {
   return [template::util::date::validate $value message]
 }
 
+ad_proc -public template::data::validate::timestamp {
+  value_ref
+  message_ref
+} {
+  Validate that a submitted date conforms to the template system's notion
+  of what a date should be.
+
+  @param value_ref Reference variable to the submitted value
+  @param message_ref Reference variable for returning an error message
+
+  @return True (1) if valid, false (0) if not
+} {
+
+  upvar 2 $message_ref message $value_ref value
+
+  return [template::util::date::validate $value message]
+}
+
+ad_proc -public template::data::validate::textdate {
+    value_ref
+    message_ref
+} {
+  Validate that a submitted textdate if properly formatted.
+
+  @param value_ref Reference variable to the submitted value.
+  @param message_ref Reference variable for returning an error message.
+
+  @return True (1) if valid, false (0) if not.
+} {
+
+    upvar 2 $message_ref message $value_ref textdate
+    
+    set error_msg [list]
+    if { [exists_and_not_null textdate] } {
+	if { [regexp {^[0-9]{4}-[0-9]{2}-[0-9]{2}$} $textdate match] } {
+	    if { [catch { clock scan "${textdate}" }] } {
+		# the textdate is formatted properly the template::data::transform::textdate proc
+		# will only return correctly formatted dates in iso format, but the date is not
+                # valid so they have entered some info incorrectly
+		set datelist [split $textdate "-"]
+		set year  [lindex $datelist 0]
+		set month [::string trimleft [lindex $datelist 1] 0]
+		set day   [::string trimleft [lindex $datelist 2] 0]
+		if { $month < 1 || $month > 12 } {
+		    lappend error_msg [_ acs-templating.Month_must_be_between_1_and_12]
+		} else {		    
+		    set maxdays [template::util::date::get_property days_in_month $datelist]
+		    if { $day < 1 || $day > $maxdays } {
+			set month_pretty [template::util::date::get_property long_month_name $datelist]
+			if { $month == "2" } {
+			    # February has a different number of days depending on the year
+			    append month_pretty " ${year}"
+			}
+			lappend error_msg [_ acs-templating.lt_day_between_for_month_pretty]
+		    }
+		}
+	    }
+	} else {
+	    # the textdate is not formatted properly
+	    set format [::string toupper [template::util::textdate_localized_format]]
+	    lappend error_msg [_ acs-templating.lt_Dates_must_be_formatted_]
+	}
+    }
+    if { [llength $error_msg] > 0 } {
+	set message "[join $error_msg {<br>}]"
+        return 0
+    } else {
+        return 1
+    }
+}
+
 
 ad_proc -public template::data::validate::search {
   value_ref
@@ -366,3 +442,76 @@ ad_proc -public template::data::transform {
   }
 }
 
+ad_proc -public template::data::validate::number {
+  value_ref
+  message_ref
+} {
+  Validate number - any float - should be any rational number?
+
+  @param value_ref Reference variable to the submitted value
+  @param message_ref Reference variable for returning an error message
+
+  @return True (1) if valid, false (0) if not
+} {
+
+  upvar 2 $message_ref message $value_ref value
+
+  # Not allowing for scientific notation. Would the databases swallow it?
+  set result [regexp {^([+-]?)(?=\d|\.\d)\d*(\.\d*)?$} $value]
+
+  if { ! $result } {
+    set message "Invalid number \"$value\""
+  }
+   
+  return $result 
+}
+
+ad_proc -public template::data::validate::enumeration {
+  value_ref
+  message_ref
+} {
+  Validate enumeration as a unique csv alphanum list.
+
+  @param value_ref Reference variable to the submitted value
+  @param message_ref Reference variable for returning an error message
+
+  @return True (1) if valid, false (0) if not
+} {
+
+  upvar 2 $message_ref message $value_ref value
+
+  # alphanumeric csv
+  set result [regexp {^([A-z0-9]+,?)+$} $value]
+  
+  if { ! $result } {
+    set message "Invalid enumeration \"$value\""
+    return $result
+  }
+  
+  # unique list
+  set list [split $value ,]
+  set result [expr [llength $list] == [llength [lsort -unique $list]]]
+  
+  if { ! $result } {
+    set message "Invalid enumeration. \"$value\" does not contain unique values."
+  }  
+  
+  return $result 
+}
+
+ad_proc -public template::data::validate::time_of_day {
+  value_ref
+  message_ref
+} {
+  Validate time of day.
+
+  @param value_ref Reference variable to the submitted value
+  @param message_ref Reference variable for returning an error message
+
+  @return True (1) if valid, false (0) if not
+} {
+
+  upvar 2 $message_ref message $value_ref value
+
+  return [template::util::date::validate $value message]
+}
