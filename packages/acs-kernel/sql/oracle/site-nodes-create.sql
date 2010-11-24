@@ -28,7 +28,7 @@ create table site_nodes (
                         primary key,
         parent_id       constraint site_nodes_parent_id_fk
                         references site_nodes (node_id),
-        name            varchar2(100) constraint site_nodes_name_nn null
+        name            varchar2(100)
                         constraint site_nodes_name_ck
                         check (name not like '%/%'),
         constraint site_nodes_un
