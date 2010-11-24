@@ -43,7 +43,8 @@ create table site_nodes (
                         primary key,
         parent_id       integer constraint site_nodes_parent_id_fk
                         references site_nodes (node_id),
-        name            varchar(100)
+        name            varchar(100) 
+                        constraint site_nodes_name_nn not null
                         constraint site_nodes_name_ck
                         check (name not like '%/%'),
         constraint site_nodes_un
@@ -330,12 +331,18 @@ begin
       v_rest := substr(v_url, v_pos + 1);
     end if;
 
-    -- begin
-      -- Is there a better way to do these freaking null compares?
+    if node_id__parent_id is not null then 
       select node_id, directory_p into v_node_id, v_directory_p
       from site_nodes
-      where coalesce(parent_id, 3.14) = coalesce(node_id__parent_id, 3.14)
-      and coalesce(name, chr(10)) = coalesce(v_first, chr(10));
+      where parent_id = node_id__parent_id
+      and name = v_first;
+    else 
+      select node_id, directory_p into v_node_id, v_directory_p
+      from site_nodes
+      where parent_id is null 
+      and name = v_first;
+    end if;
+
     if NOT FOUND then 
         return site_node__find_pattern(node_id__parent_id);
     end if;
