@@ -79,4 +79,3 @@ begin
 
 end;' language 'plpgsql';
 
-alter table site_nodes alter column name set not null;
