@@ -54,7 +54,7 @@ set filename "[acs_root_dir]/$path"
 
 if {[regsub -all {[.][.]/} $filename "" shortened_filename]} {
     ns_log notice "INTRUDER ALERT:\n\nsomesone tried to snarf '$filename'!\n  file exists: [file exists $filename]\n  user_id: [ad_conn user_id]\n  peer: [ad_conn peeraddr]\n"
-    #set filename shortened_filename
+    set filename shortened_filename
 }
 
 if {![file exists $filename] || [file isdirectory $filename]} {
