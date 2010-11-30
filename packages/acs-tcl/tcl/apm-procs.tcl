@@ -1188,7 +1188,7 @@ ad_proc -public apm_instance_name_from_id {package_id} {
 ad_proc -private apm_instance_name_from_id_mem {package_id} {
     unmemoized version of apm_instance_name_from_id
 } {
-    return [db_string apm_package_key_from_id {
+    return [db_string apm_package_instance_name_from_id {
 	select instance_name from apm_packages where package_id = :package_id
     } -default ""]
 }
@@ -2053,6 +2053,7 @@ ad_proc -public apm::convert_type {
 
 } {
     db_dml update_package_key {}
+    util_memoize_flush "apm_package_key_from_id_mem $package_id"
 
     set node_id [site_node::get_node_id_from_object_id -object_id $package_id]
     if { $node_id ne "" } {
