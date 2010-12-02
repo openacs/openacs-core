@@ -191,6 +191,7 @@ aa_register_case -cats {db smoke production_safe} datamodel__acs_attribute_check
                 if {[string is space $column_name]} {
                     set column_name $attribute_name
                 }
+                set column_name [string tolower $column_name]
 
                 if {[lsearch $columns($obj_type_table) $column_name] < 0} {
                     aa_log_result fail "Type $object_type attribute column $column_name not found in $obj_type_table"
