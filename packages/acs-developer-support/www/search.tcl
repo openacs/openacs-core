@@ -9,6 +9,8 @@ ad_page_contract {
     expression:notnull
 }
 
+ds_require_permission [ad_conn package_id] "admin"
+
 set context [list [list request-info?request=$request "request $request"] search]
 
 if {![ns_cache get ds_page_bits $request pages]} {

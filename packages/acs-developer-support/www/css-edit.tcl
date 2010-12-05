@@ -1,9 +1,7 @@
-# 
-
 ad_page_contract {
-    
+
     Edit and write the CSS file
-    
+
     @author Malte Sussdorff (malte.sussdorff@cognovis.de)
     @creation-date 2007-09-29
     @cvs-id $Id$
@@ -16,10 +14,10 @@ ad_page_contract {
 } -errors {
 }
 
+ds_require_permission [ad_conn package_id] "admin"
 
 if {[file exists $file_location] && [file extension $file_location] eq ".css"} {
 
-    
     ad_form -name css-edit -export {file_location css_location} -form {
 	{css_path:text(inform)}
 	{revision_html:text(inform)}
@@ -44,7 +42,7 @@ if {[file exists $file_location] && [file extension $file_location] eq ".css"} {
 	    append revision_html "<ol>"
 	    db_foreach revision {select revision_id, publish_date, description from cr_revisions where item_id = :item_id order by publish_date desc} {
 		if { [content::revision::is_live -revision_id $revision_id] eq "t" } {
-		    set make_live "<b>that's live!</b>"
+		    set make_live "<strong>that's live!</strong>"
 		} else {
 		    set return_url_2 [ad_return_url]
 		    set make_live "<a href=\"[export_vars -base "css-make-live" -url {revision_id return_url_2 file_location}]\">make live!</a>"
@@ -63,7 +61,6 @@ if {[file exists $file_location] && [file extension $file_location] eq ".css"} {
 	    # recommening to make a new revision...
 	} else {
 	    append revision_html "<em>no revisions yet</em>"
-	 
 	}
     } -on_submit {
 
@@ -75,13 +72,10 @@ if {[file exists $file_location] && [file extension $file_location] eq ".css"} {
 
 	    # Get the old version to initialize the item with
 	    set fp [open "$file_location" "r"]
-	    set old_css_content ""
-	    while { [gets $fp line] >= 0 } {
-		append old_css_content "$line \n"
-	    }
+            set old_css_content [read $fp]
 	    close $fp
 
-	    set item_id [content::item::new -name $file_location -parent_id $package_id -content_type "css_file" -title "$css_location" -description "First revision" -text $old_css_content]
+	    set item_id [content::item::new -name $file_location -parent_id $package_id -title "$css_location" -description "First revision" -text $old_css_content]
 	}
 
 	

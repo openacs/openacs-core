@@ -16,6 +16,7 @@ ad_page_contract {
 } -errors {
 }
 
+ds_require_permission [ad_conn package_id] "admin"
 
 content::item::set_live_revision -revision_id $revision_id
 

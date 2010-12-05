@@ -15,6 +15,8 @@ ad_page_contract {
 } -errors {
 }
 
+ds_require_permission [ad_conn package_id] "admin"
+
 template::multirow create css_multirow css_location file_location edit_url
 foreach css $css_list {
     set css_path_list [split $css "/"]
