@@ -26,6 +26,7 @@ foreach name [nsv_array names ds_request] {
 }
 
 if { [info exists property(start)] } {
+    set expired_p 0
     append body "
 <h3>Parameters</h3>
 
@@ -33,6 +34,7 @@ if { [info exists property(start)] } {
 <table cellspacing=0 cellpadding=0>
 <tr><th align=left>Request Start Time:&nbsp;</th><td>[clock format [lindex $property(start) 0] -format "%Y-%m-%d %H:%M:%S"]\n"
 } else {
+    set expired_p 1
     append body "The information for this request is gone - either the server has been restarted, or
 the request is more than [parameter::get -parameter DeveloperSupportLifetime -default 900] seconds old.
 [ad_admin_footer]"
