@@ -147,7 +147,7 @@ done
           <title>Upgrading a local CVS repository</title>
           <mediaobject>
             <imageobject>
-              <imagedata fileref="../images/development-with-cvs.png" format="PNG" align="center"/>
+              <imagedata fileref="images/development-with-cvs.png" format="PNG" align="center"/>
             </imageobject>
           </mediaobject>
         </figure>
@@ -1249,7 +1249,7 @@ db_multirow \
       <title>.LRN home page with table-based layout</title>
     <mediaobject>
       <imageobject>
-        <imagedata fileref="../images/dotlrn-style-1.png" format="PNG" align="center"/>
+        <imagedata fileref="images/dotlrn-style-1.png" format="PNG" align="center"/>
       </imageobject>
     </mediaobject>
     <para>A sample of the HTML code (<ulink url="files/dotlrn-style-1.html">full source</ulink>)</para>
@@ -1281,7 +1281,7 @@ db_multirow \
       <title>.LRN Home with CSS-based layout</title>
       <mediaobject>
         <imageobject>
-          <imagedata fileref="../images/dotlrn-style-3.png" format="PNG" align="center"/>
+          <imagedata fileref="images/dotlrn-style-3.png" format="PNG" align="center"/>
         </imageobject>
       </mediaobject>
     <para>A sample of the HTML code (<ulink url="files/dotlrn-style-2.html">full source</ulink>)</para>
@@ -1297,7 +1297,7 @@ db_multirow \
     <para>If the CSS is removed from the file, it looks somewhat different:</para>
     <mediaobject>
       <imageobject>
-        <imagedata fileref="../images/dotlrn-style-2.png" format="PNG" align="center"/>
+        <imagedata fileref="images/dotlrn-style-2.png" format="PNG" align="center"/>
       </imageobject>
     </mediaobject>
     </sect2>

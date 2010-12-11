@@ -1238,10 +1238,10 @@
     <programlisting>
 &lt;mediaobject&gt;
   &lt;imageobject&gt;
-    &lt;imagedata fileref="../images/rp-flow.gif" format="GIF" align="center"/&gt;
+    &lt;imagedata fileref="images/rp-flow.gif" format="GIF" align="center"/&gt;
   &lt;/imageobject&gt;
   &lt;imageobject&gt;
-    &lt;imagedata fileref="../images/rp-flow.eps" format="EPS" align="center"/&gt;
+    &lt;imagedata fileref="images/rp-flow.eps" format="EPS" align="center"/&gt;
   &lt;/imageobject&gt;
   &lt;textobject&gt;
     &lt;phrase&gt;This is an image of the flow in the Request Processor&lt;/phrase&gt;
