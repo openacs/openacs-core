@@ -537,7 +537,11 @@ entire &majorversion;.&minorversion; release sequence <xref linkend="changelog">
 
 
 
+<<<<<<< release-notes.xml
   <para><phrase role="cvstag">($Id$)</phrase></para>
+=======
+  <para><phrase role="cvstag">($Id$)</phrase></para>
+>>>>>>> 1.28
   </sect2>
 
 

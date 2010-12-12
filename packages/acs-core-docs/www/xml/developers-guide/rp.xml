@@ -31,7 +31,7 @@ request like <computeroutput>http://someserver.com/notes/somepage.adp</computero
 
 <mediaobject>
   <imageobject>
-    <imagedata fileref="../images/rp-flow.gif" format="GIF" align="center"/>
+    <imagedata fileref="images/rp-flow.gif" format="GIF" align="center"/>
   </imageobject>
 </mediaobject>
 

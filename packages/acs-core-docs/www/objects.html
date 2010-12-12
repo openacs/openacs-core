@@ -1,9 +1,19 @@
+<<<<<<< objects.html
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 'http://www.w3.org/TR/html4/loose.dtd"'>
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>OpenACS Data Models and the Object System</title><link rel="stylesheet" href="openacs.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.60.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="previous" href="packages.html" title="OpenACS Packages"><link rel="next" href="request-processor.html" title="The Request Processor"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="packages.html">Prev</a> </td><th width="60%" align="center">Chapter 11. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="request-processor.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="objects"></a>OpenACS Data Models and the Object System</h2></div></div><div></div></div><div class="authorblurb"><p>By Pete Su</p>
+=======
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 'http://www.w3.org/TR/html4/loose.dtd"'>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>OpenACS Data Models and the Object System</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.76.0"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="dev-guide.html" title="Chapter 10. Development Reference"><link rel="previous" href="packages.html" title="OpenACS Packages"><link rel="next" href="request-processor.html" title="The Request Processor"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="packages.html">Prev</a> </td><th width="60%" align="center">Chapter 10. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="request-processor.html">Next</a></td></tr></table><hr></div><div class="sect1" title="OpenACS Data Models and the Object System"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="objects"></a>OpenACS Data Models and the Object System</h2></div></div></div><div class="authorblurb"><p>By Pete Su</p>
+>>>>>>> 1.50
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
+<<<<<<< objects.html
         </div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="objects-overview"></a>Overview</h3></div></div><div></div></div><p>
 Developing data models in OpenACS 5.6.0 is much like developing data models
+=======
+        </div><div class="sect2" title="Overview"><div class="titlepage"><div><div><h3 class="title"><a name="objects-overview"></a>Overview</h3></div></div></div><p>
+Developing data models in OpenACS 5.6.0 is much like developing data models
+>>>>>>> 1.50
 for OpenACS 3, save for the implementation.  As usual, you need to examine
 how to model the information that the application must store and
 manipulate, and define a suitable set of SQL tables.  In our Notes
@@ -25,15 +35,15 @@ We've omitted constraint names for the purpose of clarity.
 </p><p>
 Thinking further ahead, we can imagine doing any of the following
 things with Notes as well:
-</p><div class="itemizedlist"><ul type="opencircle"><li style="list-style-type: circle"><p>Define access control policies on notes.</p></li><li style="list-style-type: circle"><p>Attach user comments on notes.</p></li><li style="list-style-type: circle"><p>Allow users to define custom fields to store on their notes.</p></li><li style="list-style-type: circle"><p>Automatically generate input forms or output displays for notes.</p></li><li style="list-style-type: circle"><p>Allow other applications to use notes in ways we don't know of yet.</p></li></ul></div><p>
+</p><div class="itemizedlist"><ul class="itemizedlist" type="opencircle"><li class="listitem" style="list-style-type: circle"><p>Define access control policies on notes.</p></li><li class="listitem" style="list-style-type: circle"><p>Attach user comments on notes.</p></li><li class="listitem" style="list-style-type: circle"><p>Allow users to define custom fields to store on their notes.</p></li><li class="listitem" style="list-style-type: circle"><p>Automatically generate input forms or output displays for notes.</p></li><li class="listitem" style="list-style-type: circle"><p>Allow other applications to use notes in ways we don't know of yet.</p></li></ul></div><p>
 In OpenACS, the key to enabling these types of services on your
 application data is to take advantage of the Object System.  The first
-question, then, is &quot;Just what are objects, and what do
-you use them for anyway?&quot;.  The short answer: objects are anything
+question, then, is "Just what are objects, and what do
+you use them for anyway?".  The short answer: objects are anything
 represented in the application's data model that will need to be
 managed by any central service in OpenACS, or that may be reusable in
 the context of future applications. Every object in the system is
-represented using a row in the <tt class="computeroutput">acs_objects</tt> table. This
+represented using a row in the <code class="computeroutput">acs_objects</code> table. This
 table defines all the standard attributes that are stored on every
 object, including its system-wide unique ID, object type, and some
 generic auditing columns.
@@ -42,22 +52,22 @@ To make use of the object system, you as the application developer
 have to write your data model in a way that is slightly more complex
 than in the ACS 3.x days. What you get for this extra work includes:
 
-</p><div class="itemizedlist"><ul type="disc"><li><p>The <a href="permissions.html">Permissions System</a> lets you 
+</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>The <a class="xref" href="permissions.html" title="Groups, Context, Permissions">Permissions System</a> lets you 
       track who is allowed to do what to the rows
       in an application table, and gives you an easy way to enforce
-      this from Tcl.</p></li><li><p>Every object has an attribute called <tt class="computeroutput">context_id</tt>
+      this from Tcl.</p></li><li class="listitem"><p>Every object has an attribute called <code class="computeroutput">context_id</code>
       that provides a way to trivially specify both the default
-      permissions for an object, and the intended &quot;scope&quot; of an
-      object. Just set the <tt class="computeroutput">context_id</tt> to the controlling
-      object and forget about it.</p></li><li><p>And most importantly, any future object-level service - from
+      permissions for an object, and the intended "scope" of an
+      object. Just set the <code class="computeroutput">context_id</code> to the controlling
+      object and forget about it.</p></li><li class="listitem"><p>And most importantly, any future object-level service - from
       a general-comments replacement to personalized ranking - will
-      become available to your application &quot;for free.&quot;</p></li></ul></div><p>
-</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="objects-how-to-use"></a>How to Use Objects</h3></div></div><div></div></div><p>
+      become available to your application "for free."</p></li></ul></div><p>
+</p></div><div class="sect2" title="How to Use Objects"><div class="titlepage"><div><div><h3 class="title"><a name="objects-how-to-use"></a>How to Use Objects</h3></div></div></div><p>
 Using ACS objects is straightforward: all that's required are a few
 extra steps in the design of your application data model. 
 </p><p>
 In order to hook our Notes application into the object system, we
-make some calls to use our <tt class="computeroutput">notes</tt> table as the basis for a
+make some calls to use our <code class="computeroutput">notes</code> table as the basis for a
 new <span class="emphasis"><em>object type</em></span>. Object types are analogous to classes in
 programming languages such as C++ and Java. In Java, a
 class defines a set of attributes that store data and a set of methods
@@ -66,21 +76,28 @@ data attributes, and we define a stored procedure package to hold procedures to
 define the programming interface to the data model.
 </p><p>
 The object type itself is described using data in the
-<tt class="computeroutput">acs_object_types</tt> and
-<tt class="computeroutput">acs_attributes</tt> tables, which play a role
+<code class="computeroutput">acs_object_types</code> and
+<code class="computeroutput">acs_attributes</code> tables, which play a role
 similar to the data dictionary in Oracle. As in Java, object types can
 inherit attributes from a parent type, so the type system forms a
 hierarchy. Unlike Java, Oracle does not support this inheritance
 transparently, so we have to make sure we add our own bookkeeping code to
 keep everything consistent. Below you'll find the code needed to describe a
-new object type called <tt class="computeroutput">notes</tt> in your
+new object type called <code class="computeroutput">notes</code> in your
 system.
 </p><p>
 Fire up your text editor and open the
+<<<<<<< objects.html
 <tt class="computeroutput">ROOT/packages/notes/sql/oracle/notes-create.sql</tt> (<tt class="computeroutput">ROOT/packages/notes/sql/postgresql/notes-create.sql</tt> for the PG version) file created
 when we <a href="packages.html" title="OpenACS Packages">created the package</a>.  Then, do the following:
 </p><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2968380"></a>Describe the new type to the type system</h4></div></div><div></div></div><p>
 First, add an entry to the <tt class="computeroutput">acs_object_types</tt> table with the following PL/SQL call:
+=======
+<code class="computeroutput">ROOT/packages/notes/sql/oracle/notes-create.sql</code> (<code class="computeroutput">ROOT/packages/notes/sql/postgresql/notes-create.sql</code> for the PG version) file created
+when we <a class="link" href="packages.html" title="OpenACS Packages">created the package</a>.  Then, do the following:
+</p><div class="sect3" title="Describe the new type to the type system"><div class="titlepage"><div><div><h4 class="title"><a name="id3159323"></a>Describe the new type to the type system</h4></div></div></div><p>
+First, add an entry to the <code class="computeroutput">acs_object_types</code> table with the following PL/SQL call:
+>>>>>>> 1.50
 </p><pre class="programlisting">
 begin  
   acs_object_type.create_type ( 
@@ -96,18 +113,18 @@ end;
 show errors;
 </pre><p>
 This PL/SQL call tells the system that we would like to use the table
-<tt class="computeroutput">NOTES</tt> as the basis for a new object type called
-<tt class="computeroutput">note</tt>. This type is a subtype of the 
-<tt class="computeroutput">acs_object</tt> type, which means that we want to inherit all
+<code class="computeroutput">NOTES</code> as the basis for a new object type called
+<code class="computeroutput">note</code>. This type is a subtype of the 
+<code class="computeroutput">acs_object</code> type, which means that we want to inherit all
 of the basic attributes of all ACS objects. As mentioned, it will take
 some work on our part to make this happen, since Oracle can't do it
 automatically.  In general, most basic applications will define types
-that are simple subtypes of <tt class="computeroutput">acs_object</tt>.
+that are simple subtypes of <code class="computeroutput">acs_object</code>.
 </p><p>
-Add entries to the <tt class="computeroutput">acs_attributes</tt> table to describe
+Add entries to the <code class="computeroutput">acs_attributes</code> table to describe
 the data attributes of the new type. This data can eventually be used
 to do things like automatically generate user interfaces to manipulate
-the <tt class="computeroutput">notes</tt> table, though that functionality isn't yet
+the <code class="computeroutput">notes</code> table, though that functionality isn't yet
 available.
 </p><pre class="programlisting">
 declare 
@@ -133,17 +150,21 @@ end;
 show errors; 
 </pre><p>
 We can stop here and not bother to register the usual OpenACS 3.x
-attributes of <tt class="computeroutput">creation_user</tt>, <tt class="computeroutput">creation_date</tt>
-and <tt class="computeroutput">last_modified</tt>, since the object type
-<tt class="computeroutput">acs_object</tt> already defines these attributes. Again,
-because the new type <tt class="computeroutput">note</tt> is a subtype of
-<tt class="computeroutput">acs_object</tt>, it will inherit these attributes, so there is
+attributes of <code class="computeroutput">creation_user</code>, <code class="computeroutput">creation_date</code>
+and <code class="computeroutput">last_modified</code>, since the object type
+<code class="computeroutput">acs_object</code> already defines these attributes. Again,
+because the new type <code class="computeroutput">note</code> is a subtype of
+<code class="computeroutput">acs_object</code>, it will inherit these attributes, so there is
 no need for us to define them.
+<<<<<<< objects.html
 </p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2929862"></a>Define a table in which to store your objects</h4></div></div><div></div></div><p>
+=======
+</p></div><div class="sect3" title="Define a table in which to store your objects"><div class="titlepage"><div><div><h4 class="title"><a name="id3139867"></a>Define a table in which to store your objects</h4></div></div></div><p>
+>>>>>>> 1.50
 The next thing we do is make a small modification to the data model to
-reflect the fact that each row in the <tt class="computeroutput">notes</tt> table
+reflect the fact that each row in the <code class="computeroutput">notes</code> table
 represents something that is not only an object of type
-<tt class="computeroutput">note</tt>, but also an <tt class="computeroutput">acs_object</tt>. The new table
+<code class="computeroutput">note</code>, but also an <code class="computeroutput">acs_object</code>. The new table
 definition looks like this:
 </p><pre class="programlisting">
 create table notes (
@@ -153,18 +174,23 @@ create table notes (
     body       varchar(1024)
 )
 </pre><p>
-The usual <tt class="computeroutput">creation_date</tt> and
-<tt class="computeroutput">modified_date</tt> columns are absent since they already exist
-in <tt class="computeroutput">acs_objects</tt>.  Also, note the constraint we have added
-to reference the <tt class="computeroutput">acs_objects</tt> table, which makes clear
-that since <tt class="computeroutput">note</tt> is a subtype of <tt class="computeroutput">acs_object</tt>,
+The usual <code class="computeroutput">creation_date</code> and
+<code class="computeroutput">modified_date</code> columns are absent since they already exist
+in <code class="computeroutput">acs_objects</code>.  Also, note the constraint we have added
+to reference the <code class="computeroutput">acs_objects</code> table, which makes clear
+that since <code class="computeroutput">note</code> is a subtype of <code class="computeroutput">acs_object</code>,
 every row in the notes table must have a corresponding row in the
-<tt class="computeroutput">acs_objects</tt> table. This is the fundamental means by which
+<code class="computeroutput">acs_objects</code> table. This is the fundamental means by which
 we model inheritance; it guarantees that any services that
-use the <tt class="computeroutput">acs_objects</tt> table to find objects will
+use the <code class="computeroutput">acs_objects</code> table to find objects will
 transparently find any objects that are instances of any subtype of
+<<<<<<< objects.html
 <tt class="computeroutput">acs_objects</tt>.
 </p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2908461"></a>Define a package for type specific procedures</h4></div></div><div></div></div><p>
+=======
+<code class="computeroutput">acs_objects</code>.
+</p></div><div class="sect3" title="Define a package for type specific procedures"><div class="titlepage"><div><div><h4 class="title"><a name="id3233103"></a>Define a package for type specific procedures</h4></div></div></div><p>
+>>>>>>> 1.50
 The next step is to define a PL/SQL package for your new type, and
 write some basic procedures to create and delete objects. Here is a
 package definition for our new type:
@@ -196,30 +222,34 @@ You might be wondering what all the extra parameters are to these
 calls, since we haven't mentioned them before.  These parameters are
 needed to fill out information that will be stored about the object
 that's not stored directly in the table you defined. The OpenACS Object
-System defines these attributes on the type <tt class="computeroutput">acs_object</tt>
+System defines these attributes on the type <code class="computeroutput">acs_object</code>
 since all objects should have these attributes. Internally, there are
 tables that store this information for you. Most of the data is pretty
 self-explanatory and reflects attributes that existed in the earlier
-OpenACS 3.x data models, with the exception of the <tt class="computeroutput">context_id</tt>
+OpenACS 3.x data models, with the exception of the <code class="computeroutput">context_id</code>
 attribute.
 </p><p>
-The <tt class="computeroutput">context_id</tt> attribute stores the ID of an object that
+The <code class="computeroutput">context_id</code> attribute stores the ID of an object that
 represents the default security domain to which the object belongs. It
-is used by the <a href="permissions.html" title="Groups, Context, Permissions">permissions</a> system in
+is used by the <a class="link" href="permissions.html" title="Groups, Context, Permissions">permissions</a> system in
 this way: if no permissions are explicitly attached to the object,
 then the object inherits its permissions from the context. For
-example, if I had told you how to use the <a href="permissions.html" title="Groups, Context, Permissions">permissions</a> system to specify that an
-object OBJ was &quot;read only&quot;, then any other object that used OBJ as its
-context would also be &quot;read only&quot; by default. We'll talk about this more
+example, if I had told you how to use the <a class="link" href="permissions.html" title="Groups, Context, Permissions">permissions</a> system to specify that an
+object OBJ was "read only", then any other object that used OBJ as its
+context would also be "read only" by default. We'll talk about this more
 later.
+<<<<<<< objects.html
 </p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2904538"></a>Define a package body for type specific procedures</h4></div></div><div></div></div><p>
+=======
+</p></div><div class="sect3" title="Define a package body for type specific procedures"><div class="titlepage"><div><div><h4 class="title"><a name="id3154210"></a>Define a package body for type specific procedures</h4></div></div></div><p>
+>>>>>>> 1.50
 The PL/SQL package body contains the implementations of the procedures
 defined above. The only subtle thing going on here is that we must use
-<tt class="computeroutput">acs_object.new</tt> to insert a row into
-<tt class="computeroutput">acs_objects</tt>, before inserting a row into the
-<tt class="computeroutput">notes</tt>. Similarly, when we delete a row from
-<tt class="computeroutput">note</tt>, we have to be sure to delete the corresponding
-<tt class="computeroutput">acs_object</tt> row.
+<code class="computeroutput">acs_object.new</code> to insert a row into
+<code class="computeroutput">acs_objects</code>, before inserting a row into the
+<code class="computeroutput">notes</code>. Similarly, when we delete a row from
+<code class="computeroutput">note</code>, we have to be sure to delete the corresponding
+<code class="computeroutput">acs_object</code> row.
 </p><pre class="programlisting">
 create or replace package body note 
 as 
@@ -272,14 +302,14 @@ end note;
 / 
 show errors; 
 </pre><p>
-That's pretty much it! As long as you use the <tt class="computeroutput">note.new</tt>
-function to create notes, and the <tt class="computeroutput">note.delete</tt> function to
+That's pretty much it! As long as you use the <code class="computeroutput">note.new</code>
+function to create notes, and the <code class="computeroutput">note.delete</code> function to
 delete them, you'll be assured that the relationship each
-<tt class="computeroutput">note</tt> has with its corresponding <tt class="computeroutput">acs_object</tt>
+<code class="computeroutput">note</code> has with its corresponding <code class="computeroutput">acs_object</code>
 is preserved.
 </p><p>
 The last thing to do is to make a file
-<tt class="computeroutput">ROOT/packages/notes/sql/notes-drop.sql</tt> so it's easy to
+<code class="computeroutput">ROOT/packages/notes/sql/notes-drop.sql</code> so it's easy to
 drop the data model when, say, you're testing:
 </p><pre class="programlisting">
 begin 
@@ -290,7 +320,7 @@ show errors
  
 drop package note; 
 drop table notes; 
-</pre></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="objects-when-to-use-objects"></a>When to Use Objects</h3></div></div><div></div></div><p>
+</pre></div></div><div class="sect2" title="When to Use Objects"><div class="titlepage"><div><div><h3 class="title"><a name="objects-when-to-use-objects"></a>When to Use Objects</h3></div></div></div><p>
 While it is hard to give general design advice without
 knowing anything about a particular application, you should follow the
 following rule of thumb when deciding when to hook part of your data
@@ -298,9 +328,9 @@ model to the object system:
 </p><p>
 Anything in your data model that needs to be available to general OpenACS
 services such as user comments, permissions, and so on should be a
-subtype of <tt class="computeroutput">acs_object</tt>. In addition, if you want your data
+subtype of <code class="computeroutput">acs_object</code>. In addition, if you want your data
 model to take advantage of attributes that exist in some object type
-that is a subtype of <tt class="computeroutput">acs_object</tt>, then you should use the
+that is a subtype of <code class="computeroutput">acs_object</code>, then you should use the
 object system.
 </p><p>
 For example, for most applications, you will want to use objects to
@@ -310,7 +340,7 @@ tables and so on probably don't need to be objects. As before, this
 kind of design decision is mostly made on an
 application-by-application basis, but this is a good baseline from
 which to start.
-</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="objects-design-guidance"></a>Design Guidance</h3></div></div><div></div></div><p>
+</p></div><div class="sect2" title="Design Guidance"><div class="titlepage"><div><div><h3 class="title"><a name="objects-design-guidance"></a>Design Guidance</h3></div></div></div><p>
 In this section we cover some overall guidelines for designing data
 models that are meant to be integrated with the OpenACS object
 system. 
@@ -319,25 +349,25 @@ There are two basic rules you should follow when designing OpenACS 5.6.0 data
 models:
 
 
-</p><div class="orderedlist"><ol type="1"><li><p>
-Never utilize fields in the <tt class="computeroutput">acs_objects</tt> table in
+</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>
+Never utilize fields in the <code class="computeroutput">acs_objects</code> table in
 application specific ways. That is, never assign any
 application-specific semantics to this data.  In the notes
-application, we use the <tt class="computeroutput">creation_date</tt> and
-<tt class="computeroutput">last_modified</tt> fields, but this is OK since we do not
+application, we use the <code class="computeroutput">creation_date</code> and
+<code class="computeroutput">last_modified</code> fields, but this is OK since we do not
 assign any application-specific meaning to these fields.
-</p></li><li><p>
+</p></li><li class="listitem"><p>
 In particular, never assign any application specific semantics to the
-<tt class="computeroutput">context_id</tt> attribute of an object. This field is used for
+<code class="computeroutput">context_id</code> attribute of an object. This field is used for
 a very specific purpose by the permissions system, and using this
 field in <span class="emphasis"><em>any other way whatsoever</em></span> is guaranteed to make your
 application act strangely.
 </p><p>
 As we'll see later, the Notes example will point each note object's
-<tt class="computeroutput">context_id</tt> to the package instance in which the note was
+<code class="computeroutput">context_id</code> to the package instance in which the note was
 created. The idea will be that in a real site, the administrator would
 create one package instance for every separate set of Notes (say, one
-per user). The instance would &quot;own&quot; all of the notes that it created,
+per user). The instance would "own" all of the notes that it created,
 and the administrator would be able to use the package instance as
 the basis for access control, which is convenient.
 </p></li></ol></div><p>
@@ -355,43 +385,52 @@ application. This would make it impossible to build the generic tools
 that the data model is trying to support.
 </p><p>
 Another less important reason for these two rules is to not introduce
-any joins against the <tt class="computeroutput">acs_objects</tt> table in SQL queries in
+any joins against the <code class="computeroutput">acs_objects</code> table in SQL queries in
 your application that you do not absolutely need. 
 </p><p>
 In the Notes example,  the result of applying these rules is that we
-are careful to define our own attribute for <tt class="computeroutput">owner_id</tt>
-rather than overloading <tt class="computeroutput">creation_user</tt> from the objects
-table. But, since we will probably use <tt class="computeroutput">creation_date</tt> and
+are careful to define our own attribute for <code class="computeroutput">owner_id</code>
+rather than overloading <code class="computeroutput">creation_user</code> from the objects
+table. But, since we will probably use <code class="computeroutput">creation_date</code> and
 so on for their intended purposes, we don't bother to define our own
 attributes to store that data again. This will entail joins with
-<tt class="computeroutput">acs_objects</tt> but that's OK because it makes the overall
+<code class="computeroutput">acs_objects</code> but that's OK because it makes the overall
 data model cleaner. The real lesson is that deciding exactly how and
 when to use inherited attributes is fairly straightforward, but
 requires a good amount of thought at design time even for simple
 applications.
+<<<<<<< objects.html
 </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="objects-summary"></a>Summary</h3></div></div><div></div></div><p>
 Hooking into the OpenACS 5.6.0 object system brings the application developer
+=======
+</p></div><div class="sect2" title="Summary"><div class="titlepage"><div><div><h3 class="title"><a name="objects-summary"></a>Summary</h3></div></div></div><p>
+Hooking into the OpenACS 5.6.0 object system brings the application developer
+>>>>>>> 1.50
 numerous benefits, and doing it involves only four easy steps:
 
 
-</p><div class="itemizedlist"><ul type="opencircle"><li style="list-style-type: circle"><p>
+</p><div class="itemizedlist"><ul class="itemizedlist" type="opencircle"><li class="listitem" style="list-style-type: circle"><p>
 Describe the a new object type to the system. Most new application
-types will be subtypes of the built-in type <tt class="computeroutput">acs_object</tt>.
-</p></li><li style="list-style-type: circle"><p>
+types will be subtypes of the built-in type <code class="computeroutput">acs_object</code>.
+</p></li><li class="listitem" style="list-style-type: circle"><p>
 Define a table to store application object data.
-</p></li><li style="list-style-type: circle"><p>
+</p></li><li class="listitem" style="list-style-type: circle"><p>
 Define a PL/SQL package to store procedures related to the new
-type. You have to define at least a function called <tt class="computeroutput">new</tt>
+type. You have to define at least a function called <code class="computeroutput">new</code>
 to create new application objects and a procedure called
-<tt class="computeroutput">delete</tt> to delete them.
-</p></li><li style="list-style-type: circle"><p>
+<code class="computeroutput">delete</code> to delete them.
+</p></li><li class="listitem" style="list-style-type: circle"><p>
 Define a package body that contains the implementations of the PL/SQL
 procedures defined above.
-</p></li><li style="list-style-type: circle"><p>
+</p></li><li class="listitem" style="list-style-type: circle"><p>
 Try not to write queries in your application that join against
-<tt class="computeroutput">acs_objects</tt>. This means you should never use the fields
-in <tt class="computeroutput">acs_objects</tt> for application-specific purposes. This is
-especially true for the <tt class="computeroutput">context_id</tt> field.
+<code class="computeroutput">acs_objects</code>. This means you should never use the fields
+in <code class="computeroutput">acs_objects</code> for application-specific purposes. This is
+especially true for the <code class="computeroutput">context_id</code> field.
 </p></li></ul></div><p>
 
+<<<<<<< objects.html
 </p><div class="cvstag">($Id$)</div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="packages.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="request-processor.html">Next</a></td></tr><tr><td width="40%" align="left">OpenACS Packages </td><td width="20%" align="center"><a accesskey="u" href="dev-guide.html">Up</a></td><td width="40%" align="right"> The Request Processor</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/current/objects.html#comments">View comments on this page at openacs.org</a></center></body></html>
+=======
+</p><div class="cvstag">($Id$)</div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="packages.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="request-processor.html">Next</a></td></tr><tr><td width="40%" align="left">OpenACS Packages </td><td width="20%" align="center"><a accesskey="u" href="dev-guide.html">Up</a></td><td width="40%" align="right"> The Request Processor</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/current/objects.html#comments">View comments on this page at openacs.org</a></center></body></html>
+>>>>>>> 1.50
