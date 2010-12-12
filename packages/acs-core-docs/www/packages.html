@@ -1,10 +1,5 @@
-<<<<<<< packages.html
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 'http://www.w3.org/TR/html4/loose.dtd"'>
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>OpenACS Packages</title><link rel="stylesheet" href="openacs.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.60.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="previous" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="next" href="objects.html" title="OpenACS Data Models and the Object System"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="dev-guide.html">Prev</a> </td><th width="60%" align="center">Chapter 11. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="objects.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="packages"></a>OpenACS Packages</h2></div></div><div></div></div><div class="authorblurb"><p>By Pete Su and Bryan Quinn</p>
-=======
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 'http://www.w3.org/TR/html4/loose.dtd"'>
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>OpenACS Packages</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.76.0"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="dev-guide.html" title="Chapter 10. Development Reference"><link rel="previous" href="dev-guide.html" title="Chapter 10. Development Reference"><link rel="next" href="objects.html" title="OpenACS Data Models and the Object System"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="dev-guide.html">Prev</a> </td><th width="60%" align="center">Chapter 10. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="objects.html">Next</a></td></tr></table><hr></div><div class="sect1" title="OpenACS Packages"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="packages"></a>OpenACS Packages</h2></div></div></div><div class="authorblurb"><p>By Pete Su and Bryan Quinn</p>
->>>>>>> 1.49
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>OpenACS Packages</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.76.0"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="previous" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="next" href="objects.html" title="OpenACS Data Models and the Object System"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="dev-guide.html">Prev</a> </td><th width="60%" align="center">Chapter 11. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="objects.html">Next</a></td></tr></table><hr></div><div class="sect1" title="OpenACS Packages"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="packages"></a>OpenACS Packages</h2></div></div></div><div class="authorblurb"><p>By Pete Su and Bryan Quinn</p>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
         </div><div class="sect2" title="Overview"><div class="titlepage"><div><div><h3 class="title"><a name="packages-overview"></a>Overview</h3></div></div></div><p>
@@ -18,11 +13,7 @@
     </p></div><div class="sect2" title="Server file layout"><div class="titlepage"><div><div><h3 class="title"><a name="server-file-layout"></a>Server file layout</h3></div></div></div><p>
       Here is how an OpenACS 5 server is laid out
       starting from the Server root (ROOT):
-<<<<<<< packages.html
-    </p><div class="figure"><a name="id2945815"></a><p class="title"><b>Figure 11.1. Server file layout diagram</b></p><pre class="programlisting">
-=======
-    </p><div class="figure"><a name="id3132415"></a><p class="title"><b>Figure 10.1. Server file layout diagram</b></p><div class="figure-contents"><pre class="programlisting">
->>>>>>> 1.49
+    </p><div class="figure"><a name="id2890292"></a><p class="title"><b>Figure 11.1. Server file layout diagram</b></p><div class="figure-contents"><pre class="programlisting">
 ROOT/
     bin/
         Various executables and scripts for server maintanence.
@@ -59,13 +50,8 @@ ROOT/
     </p><p>
       <a class="indexterm" name="baby"></a>
       To illustrate the general structure of a package, let's see what the
-<<<<<<< packages.html
-      package for the &quot;notes&quot; application should look like.
-    </p><div class="figure"><a name="id2945910"></a><p class="title"><b>Figure 11.2. Package file layout diagram</b></p><pre class="programlisting">
-=======
       package for the "notes" application should look like.
-    </p><div class="figure"><a name="id3152294"></a><p class="title"><b>Figure 10.2. Package file layout diagram</b></p><div class="figure-contents"><pre class="programlisting">
->>>>>>> 1.49
+    </p><div class="figure"><a name="id2900816"></a><p class="title"><b>Figure 11.2. Package file layout diagram</b></p><div class="figure-contents"><pre class="programlisting">
 ROOT/
   +-- packages/    APM Root
         |
@@ -138,11 +124,7 @@ ROOT/
       directories.  This makes it suitable for storing icons, css
       files, javascript, and other static content which can be treated
       this way.
-<<<<<<< packages.html
-    </p><div class="table"><a name="id2915266"></a><p class="title"><b>Table 11.1. Package files</b></p><table summary="Package files" cellspacing="0" border="1"><colgroup><col><col><col></colgroup><thead><tr><th>File Type</th><th>Its Use</th><th>Naming Convention</th></tr></thead><tbody><tr><td>Package Specification File</td><td>The package specification file is an XML file generated and
-=======
-    </p><div class="table"><a name="id3170277"></a><p class="title"><b>Table 10.1. Package files</b></p><div class="table-contents"><table summary="Package files" cellspacing="0" border="1"><colgroup><col><col><col></colgroup><thead><tr><th>File Type</th><th>Its Use</th><th>Naming Convention</th></tr></thead><tbody><tr><td>Package Specification File</td><td>The package specification file is an XML file generated and
->>>>>>> 1.49
+    </p><div class="table"><a name="id2929445"></a><p class="title"><b>Table 11.1. Package files</b></p><div class="table-contents"><table summary="Package files" cellspacing="0" border="1"><colgroup><col><col><col></colgroup><thead><tr><th>File Type</th><th>Its Use</th><th>Naming Convention</th></tr></thead><tbody><tr><td>Package Specification File</td><td>The package specification file is an XML file generated and
           maintained by the OpenACS Package Manager (APM).  It specifies
           information about the package including its parameters and its
           files.</td><td><code class="computeroutput">notes.info</code></td></tr><tr><td>Data Model Creation Script</td><td>
@@ -367,11 +349,7 @@ ROOT/
       this point, you should add your package files to your CVS repository.
       I'll assume that you have set up your development repository according
       to the standards described in 
-<<<<<<< packages.html
-      <a href="">this appendix</a>. If so, then you just do this:
-=======
       <a class="link" href="cvs-tips.html#cvs-service-import" title="Add the Service to CVS - OPTIONAL">this appendix</a>. If so, then you just do this:
->>>>>>> 1.49
     </p><pre class="programlisting">% cd ROOT/packages
 % cvs add notes
 % cd notes
@@ -383,13 +361,8 @@ ROOT/
 % cvs commit -m "add new package for notes"
     </pre></li><li class="listitem"><p>
       Now you can start developing the package. In addition to writing code,
-<<<<<<< packages.html
-      you should also consider the tasks outlined in the <a href="tutorial-newpackage.html" title="Creating an Application Package">package development tutorial</a>.
-    </p></li></ol></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="packages-subsites"></a>The Site Map and Package Instances</h3></div></div><div></div></div><p>
-=======
       you should also consider the tasks outlined in the <a class="link" href="tutorial-newpackage.html" title="Creating an Application Package">package development tutorial</a>.
     </p></li></ol></div></div><div class="sect2" title="The Site Map and Package Instances"><div class="titlepage"><div><div><h3 class="title"><a name="packages-subsites"></a>The Site Map and Package Instances</h3></div></div></div><p>
->>>>>>> 1.49
       At this point, you are probably excited to see your new package in
       action. But, we haven't added any user visible pages yet. By
       convention, user visible pages go in the
@@ -416,11 +389,7 @@ ROOT/
       of many indedendent applications that actually run on a single shared
       code base. The <a class="link" href="request-processor.html" title="The Request Processor">request-processor</a> document shows
       you how OpenACS figures out which instance of your application was
-<<<<<<< packages.html
-      requested by the user at any given time. The <a href="subsites.html" title="Writing OpenACS Application Pages">page development</a> tutorial shows you how to use this
-=======
       requested by the user at any given time. The <a class="link" href="subsites.html" title="Writing OpenACS Application Pages">page development</a> tutorial shows you how to use this
->>>>>>> 1.49
       information in your user interface.
     </p><p>
       In order to make the new <code class="computeroutput">notes</code> application visible to
@@ -442,13 +411,8 @@ ROOT/
       yet written Notes application at various places in the site. In a
       later document, we'll see how to write your application so that the
       code can detect from what URL it was invoked. This is the key
-<<<<<<< packages.html
-      to supporting <a href="subsites.html" title="Writing OpenACS Application Pages">subsites</a>.
-    </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="packages-summary"></a>Summary</h3></div></div><div></div></div><p>
-=======
       to supporting <a class="link" href="subsites.html" title="Writing OpenACS Application Pages">subsites</a>.
     </p></div><div class="sect2" title="Summary"><div class="titlepage"><div><div><h3 class="title"><a name="packages-summary"></a>Summary</h3></div></div></div><p>
->>>>>>> 1.49
       The APM performs the following tasks in an OpenACS site:
     </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
       Manages creation, installation, and removal of packages from the
@@ -463,8 +427,4 @@ ROOT/
     </p></li><li class="listitem"><p>
       Writes out package distribution files for other people to download and
       install. We'll cover this later.
-<<<<<<< packages.html
-    </p></li></ul></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="packages-add-reading"></a>Additional Reading</h3></div></div><div></div></div><div class="itemizedlist"><ul type="disc"><li><p><a href="apm-design.html">Package Manager Design</a></p></li><li><p><a href="apm-requirements.html">Package Manager Requirements</a></p></li><li><p><a href="tutorial-newpackage.html" title="Creating an Application Package">package development tutorial</a></p></li></ul></div><div class="cvstag">($Id$)</div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="dev-guide.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="objects.html">Next</a></td></tr><tr><td width="40%" align="left">Chapter 11. Development Reference </td><td width="20%" align="center"><a accesskey="u" href="dev-guide.html">Up</a></td><td width="40%" align="right"> OpenACS Data Models and the Object System</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/current/packages.html#comments">View comments on this page at openacs.org</a></center></body></html>
-=======
-    </p></li></ul></div></div><div class="sect2" title="Additional Reading"><div class="titlepage"><div><div><h3 class="title"><a name="packages-add-reading"></a>Additional Reading</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p><a class="xref" href="apm-design.html" title="Package Manager Design">Package Manager Design</a></p></li><li class="listitem"><p><a class="xref" href="apm-requirements.html" title="Package Manager Requirements">Package Manager Requirements</a></p></li><li class="listitem"><p><a class="link" href="tutorial-newpackage.html" title="Creating an Application Package">package development tutorial</a></p></li></ul></div><div class="cvstag">($Id$)</div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="dev-guide.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="objects.html">Next</a></td></tr><tr><td width="40%" align="left">Chapter 10. Development Reference </td><td width="20%" align="center"><a accesskey="u" href="dev-guide.html">Up</a></td><td width="40%" align="right"> OpenACS Data Models and the Object System</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/current/packages.html#comments">View comments on this page at openacs.org</a></center></body></html>
->>>>>>> 1.49
+    </p></li></ul></div></div><div class="sect2" title="Additional Reading"><div class="titlepage"><div><div><h3 class="title"><a name="packages-add-reading"></a>Additional Reading</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p><a class="xref" href="apm-design.html" title="Package Manager Design">Package Manager Design</a></p></li><li class="listitem"><p><a class="xref" href="apm-requirements.html" title="Package Manager Requirements">Package Manager Requirements</a></p></li><li class="listitem"><p><a class="link" href="tutorial-newpackage.html" title="Creating an Application Package">package development tutorial</a></p></li></ul></div><div class="cvstag">($Id$)</div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="dev-guide.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="objects.html">Next</a></td></tr><tr><td width="40%" align="left">Chapter 11. Development Reference </td><td width="20%" align="center"><a accesskey="u" href="dev-guide.html">Up</a></td><td width="40%" align="right"> OpenACS Data Models and the Object System</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/current/packages.html#comments">View comments on this page at openacs.org</a></center></body></html>

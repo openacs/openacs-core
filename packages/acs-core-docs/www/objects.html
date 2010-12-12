@@ -1,19 +1,9 @@
-<<<<<<< objects.html
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 'http://www.w3.org/TR/html4/loose.dtd"'>
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>OpenACS Data Models and the Object System</title><link rel="stylesheet" href="openacs.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.60.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="previous" href="packages.html" title="OpenACS Packages"><link rel="next" href="request-processor.html" title="The Request Processor"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="packages.html">Prev</a> </td><th width="60%" align="center">Chapter 11. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="request-processor.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="objects"></a>OpenACS Data Models and the Object System</h2></div></div><div></div></div><div class="authorblurb"><p>By Pete Su</p>
-=======
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 'http://www.w3.org/TR/html4/loose.dtd"'>
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>OpenACS Data Models and the Object System</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.76.0"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="dev-guide.html" title="Chapter 10. Development Reference"><link rel="previous" href="packages.html" title="OpenACS Packages"><link rel="next" href="request-processor.html" title="The Request Processor"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="packages.html">Prev</a> </td><th width="60%" align="center">Chapter 10. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="request-processor.html">Next</a></td></tr></table><hr></div><div class="sect1" title="OpenACS Data Models and the Object System"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="objects"></a>OpenACS Data Models and the Object System</h2></div></div></div><div class="authorblurb"><p>By Pete Su</p>
->>>>>>> 1.50
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>OpenACS Data Models and the Object System</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.76.0"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="previous" href="packages.html" title="OpenACS Packages"><link rel="next" href="request-processor.html" title="The Request Processor"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="packages.html">Prev</a> </td><th width="60%" align="center">Chapter 11. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="request-processor.html">Next</a></td></tr></table><hr></div><div class="sect1" title="OpenACS Data Models and the Object System"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="objects"></a>OpenACS Data Models and the Object System</h2></div></div></div><div class="authorblurb"><p>By Pete Su</p>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
-<<<<<<< objects.html
-        </div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="objects-overview"></a>Overview</h3></div></div><div></div></div><p>
-Developing data models in OpenACS 5.6.0 is much like developing data models
-=======
         </div><div class="sect2" title="Overview"><div class="titlepage"><div><div><h3 class="title"><a name="objects-overview"></a>Overview</h3></div></div></div><p>
 Developing data models in OpenACS 5.6.0 is much like developing data models
->>>>>>> 1.50
 for OpenACS 3, save for the implementation.  As usual, you need to examine
 how to model the information that the application must store and
 manipulate, and define a suitable set of SQL tables.  In our Notes
@@ -87,17 +77,10 @@ new object type called <code class="computeroutput">notes</code> in your
 system.
 </p><p>
 Fire up your text editor and open the
-<<<<<<< objects.html
-<tt class="computeroutput">ROOT/packages/notes/sql/oracle/notes-create.sql</tt> (<tt class="computeroutput">ROOT/packages/notes/sql/postgresql/notes-create.sql</tt> for the PG version) file created
-when we <a href="packages.html" title="OpenACS Packages">created the package</a>.  Then, do the following:
-</p><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2968380"></a>Describe the new type to the type system</h4></div></div><div></div></div><p>
-First, add an entry to the <tt class="computeroutput">acs_object_types</tt> table with the following PL/SQL call:
-=======
 <code class="computeroutput">ROOT/packages/notes/sql/oracle/notes-create.sql</code> (<code class="computeroutput">ROOT/packages/notes/sql/postgresql/notes-create.sql</code> for the PG version) file created
 when we <a class="link" href="packages.html" title="OpenACS Packages">created the package</a>.  Then, do the following:
-</p><div class="sect3" title="Describe the new type to the type system"><div class="titlepage"><div><div><h4 class="title"><a name="id3159323"></a>Describe the new type to the type system</h4></div></div></div><p>
+</p><div class="sect3" title="Describe the new type to the type system"><div class="titlepage"><div><div><h4 class="title"><a name="id2872488"></a>Describe the new type to the type system</h4></div></div></div><p>
 First, add an entry to the <code class="computeroutput">acs_object_types</code> table with the following PL/SQL call:
->>>>>>> 1.50
 </p><pre class="programlisting">
 begin  
   acs_object_type.create_type ( 
@@ -156,11 +139,7 @@ and <code class="computeroutput">last_modified</code>, since the object type
 because the new type <code class="computeroutput">note</code> is a subtype of
 <code class="computeroutput">acs_object</code>, it will inherit these attributes, so there is
 no need for us to define them.
-<<<<<<< objects.html
-</p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2929862"></a>Define a table in which to store your objects</h4></div></div><div></div></div><p>
-=======
-</p></div><div class="sect3" title="Define a table in which to store your objects"><div class="titlepage"><div><div><h4 class="title"><a name="id3139867"></a>Define a table in which to store your objects</h4></div></div></div><p>
->>>>>>> 1.50
+</p></div><div class="sect3" title="Define a table in which to store your objects"><div class="titlepage"><div><div><h4 class="title"><a name="id2861222"></a>Define a table in which to store your objects</h4></div></div></div><p>
 The next thing we do is make a small modification to the data model to
 reflect the fact that each row in the <code class="computeroutput">notes</code> table
 represents something that is not only an object of type
@@ -184,13 +163,8 @@ every row in the notes table must have a corresponding row in the
 we model inheritance; it guarantees that any services that
 use the <code class="computeroutput">acs_objects</code> table to find objects will
 transparently find any objects that are instances of any subtype of
-<<<<<<< objects.html
-<tt class="computeroutput">acs_objects</tt>.
-</p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2908461"></a>Define a package for type specific procedures</h4></div></div><div></div></div><p>
-=======
 <code class="computeroutput">acs_objects</code>.
-</p></div><div class="sect3" title="Define a package for type specific procedures"><div class="titlepage"><div><div><h4 class="title"><a name="id3233103"></a>Define a package for type specific procedures</h4></div></div></div><p>
->>>>>>> 1.50
+</p></div><div class="sect3" title="Define a package for type specific procedures"><div class="titlepage"><div><div><h4 class="title"><a name="id2888134"></a>Define a package for type specific procedures</h4></div></div></div><p>
 The next step is to define a PL/SQL package for your new type, and
 write some basic procedures to create and delete objects. Here is a
 package definition for our new type:
@@ -238,11 +212,7 @@ example, if I had told you how to use the <a class="link" href="permissions.html
 object OBJ was "read only", then any other object that used OBJ as its
 context would also be "read only" by default. We'll talk about this more
 later.
-<<<<<<< objects.html
-</p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2904538"></a>Define a package body for type specific procedures</h4></div></div><div></div></div><p>
-=======
-</p></div><div class="sect3" title="Define a package body for type specific procedures"><div class="titlepage"><div><div><h4 class="title"><a name="id3154210"></a>Define a package body for type specific procedures</h4></div></div></div><p>
->>>>>>> 1.50
+</p></div><div class="sect3" title="Define a package body for type specific procedures"><div class="titlepage"><div><div><h4 class="title"><a name="id2934136"></a>Define a package body for type specific procedures</h4></div></div></div><p>
 The PL/SQL package body contains the implementations of the procedures
 defined above. The only subtle thing going on here is that we must use
 <code class="computeroutput">acs_object.new</code> to insert a row into
@@ -399,13 +369,8 @@ data model cleaner. The real lesson is that deciding exactly how and
 when to use inherited attributes is fairly straightforward, but
 requires a good amount of thought at design time even for simple
 applications.
-<<<<<<< objects.html
-</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="objects-summary"></a>Summary</h3></div></div><div></div></div><p>
-Hooking into the OpenACS 5.6.0 object system brings the application developer
-=======
 </p></div><div class="sect2" title="Summary"><div class="titlepage"><div><div><h3 class="title"><a name="objects-summary"></a>Summary</h3></div></div></div><p>
 Hooking into the OpenACS 5.6.0 object system brings the application developer
->>>>>>> 1.50
 numerous benefits, and doing it involves only four easy steps:
 
 
@@ -429,8 +394,4 @@ in <code class="computeroutput">acs_objects</code> for application-specific purp
 especially true for the <code class="computeroutput">context_id</code> field.
 </p></li></ul></div><p>
 
-<<<<<<< objects.html
 </p><div class="cvstag">($Id$)</div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="packages.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="request-processor.html">Next</a></td></tr><tr><td width="40%" align="left">OpenACS Packages </td><td width="20%" align="center"><a accesskey="u" href="dev-guide.html">Up</a></td><td width="40%" align="right"> The Request Processor</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/current/objects.html#comments">View comments on this page at openacs.org</a></center></body></html>
-=======
-</p><div class="cvstag">($Id$)</div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="packages.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="request-processor.html">Next</a></td></tr><tr><td width="40%" align="left">OpenACS Packages </td><td width="20%" align="center"><a accesskey="u" href="dev-guide.html">Up</a></td><td width="40%" align="right"> The Request Processor</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/current/objects.html#comments">View comments on this page at openacs.org</a></center></body></html>
->>>>>>> 1.50

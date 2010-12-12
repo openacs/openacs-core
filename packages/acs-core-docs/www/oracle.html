@@ -5,11 +5,7 @@
         </div><p>
     If you are installing PostGreSQL instead of Oracle, skip this section.
   </p><p>
-<<<<<<< oracle.html
-    OpenACS 5.6.0 will install with Oracle 9i but has not been extensively tested so may still have bugs or tuning issues.  See <a href="http://www.piskorski.com/docs/oracle.html" target="_top">Andrew Piskorski's Oracle 9i notes</a> for guidance.
-=======
     OpenACS 5.6.0 will install with Oracle 9i but has not been extensively tested so may still have bugs or tuning issues.  See <a class="ulink" href="http://www.piskorski.com/docs/oracle.html" target="_top">Andrew Piskorski's Oracle 9i notes</a> for guidance.
->>>>>>> 1.47
   </p><p>
       This installation guide attempts to present all of the information necessary to complete an OpenACS installation.  We try hard to make all of the steps possible in one pass, rather than having a step which amounts to "go away and develop a profound understanding of software X and then come back and, in 99% of all cases, type these two lines."  The exception to our rule is Oracle production systems.  This page describes a set of steps to get a working Oracle development server, but it is <span class="strong"><strong>unsuitable for production systems</strong></span>.  If you will be using OpenACS on Oracle in a production environment, you will experience many problems unless you develop a basic understanding of Oracle which is outside the scope of this document.  T
     </p><p>
@@ -1239,14 +1235,7 @@ SQL&gt; drop tablespace <span class="emphasis"><em>table_space_name</em></span> 
       For more information on Oracle, please consult the <a class="ulink" href="http://oradoc.photo.net/" target="_top">documentation</a>.
     </p></div><div class="sect2" title="Oracle Next Steps"><div class="titlepage"><div><div><h3 class="title"><a name="oracle-next-steps"></a>Oracle Next Steps</h3></div></div></div><p><a class="xref" href="maint-performance.html#install-oracle-monitoring" title="Creating an appropriate tuning and monitoring environment">Creating an appropriate tuning and monitoring environment</a></p></div><div class="sect2" title="Defaults"><div class="titlepage"><div><div><h3 class="title"><a name="install-oracle-defaults"></a>Defaults</h3></div></div></div><p>We used the following defaults while installing Oracle.</p><div class="informaltable"><table cellspacing="0" border="1"><colgroup><col><col><col></colgroup><thead><tr><th>Variable</th><th>Value</th><th>Reason</th></tr></thead><tbody><tr><td>ORACLE_HOME</td><td>/ora8/m01/app/oracle/product/8.1.7</td><td>This is the default Oracle installation directory.</td></tr><tr><td>ORACLE_SERVICE</td><td>ora8</td><td>The service name is a domain-qualified identifier for
               your Oracle server.</td></tr><tr><td>ORACLE_SID</td><td>ora8</td><td>This is an identifier for your Oracle server.</td></tr><tr><td>ORACLE_OWNER</td><td>oracle</td><td>The user who owns all of the oracle files.</td></tr><tr><td>ORACLE_GROUP</td><td>dba</td><td>The special oracle group. Users in the dba group are
-<<<<<<< oracle.html
-              authorized to do a <tt class="computeroutput">connect
-              internal</tt> within
-              <tt class="computeroutput">svrmgrl</tt> to gain full system
-              access to the Oracle system.</td></tr></tbody></table></div><div class="cvstag">($Id$)</div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="unix-installation.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="postgres.html">Next</a></td></tr><tr><td width="40%" align="left">Install a Unix-like system and supporting software </td><td width="20%" align="center"><a accesskey="u" href="complete-install.html">Up</a></td><td width="40%" align="right"> Install PostgreSQL</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/current/oracle.html#comments">View comments on this page at openacs.org</a></center></body></html>
-=======
               authorized to do a <code class="computeroutput">connect
               internal</code> within
               <code class="computeroutput">svrmgrl</code> to gain full system
               access to the Oracle system.</td></tr></tbody></table></div><div class="cvstag">($Id$)</div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="unix-installation.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="postgres.html">Next</a></td></tr><tr><td width="40%" align="left">Install a Unix-like system and supporting software </td><td width="20%" align="center"><a accesskey="u" href="complete-install.html">Up</a></td><td width="40%" align="right"> Install PostgreSQL</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/current/oracle.html#comments">View comments on this page at openacs.org</a></center></body></html>
->>>>>>> 1.47

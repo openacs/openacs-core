@@ -1,10 +1,5 @@
-<<<<<<< eng-standards-filenaming.html
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 'http://www.w3.org/TR/html4/loose.dtd"'>
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>ACS File Naming and Formatting Standards</title><link rel="stylesheet" href="openacs.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.60.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="eng-standards.html" title="Chapter 12. Engineering Standards"><link rel="previous" href="eng-standards-constraint-naming.html" title="Constraint naming standard"><link rel="next" href="eng-standards-plsql.html" title="PL/SQL Standards"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="eng-standards-constraint-naming.html">Prev</a> </td><th width="60%" align="center">Chapter 12. Engineering Standards</th><td width="20%" align="right"> <a accesskey="n" href="eng-standards-plsql.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="eng-standards-filenaming"></a>ACS File Naming and Formatting Standards</h2></div></div><div></div></div><div class="authorblurb"><p>By Michael Yoon and Aurelius Prochazka</p>
-=======
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 'http://www.w3.org/TR/html4/loose.dtd"'>
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>ACS File Naming and Formatting Standards</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.76.0"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="eng-standards.html" title="Chapter 11. Engineering Standards"><link rel="previous" href="eng-standards-constraint-naming.html" title="Constraint naming standard"><link rel="next" href="eng-standards-plsql.html" title="PL/SQL Standards"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="eng-standards-constraint-naming.html">Prev</a> </td><th width="60%" align="center">Chapter 11. Engineering Standards</th><td width="20%" align="right"> <a accesskey="n" href="eng-standards-plsql.html">Next</a></td></tr></table><hr></div><div class="sect1" title="ACS File Naming and Formatting Standards"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="eng-standards-filenaming"></a>ACS File Naming and Formatting Standards</h2></div></div></div><div class="authorblurb"><p>By Michael Yoon and Aurelius Prochazka</p>
->>>>>>> 1.46
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>ACS File Naming and Formatting Standards</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.76.0"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="eng-standards.html" title="Chapter 12. Engineering Standards"><link rel="previous" href="eng-standards-constraint-naming.html" title="Constraint naming standard"><link rel="next" href="eng-standards-plsql.html" title="PL/SQL Standards"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="eng-standards-constraint-naming.html">Prev</a> </td><th width="60%" align="center">Chapter 12. Engineering Standards</th><td width="20%" align="right"> <a accesskey="n" href="eng-standards-plsql.html">Next</a></td></tr></table><hr></div><div class="sect1" title="ACS File Naming and Formatting Standards"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="eng-standards-filenaming"></a>ACS File Naming and Formatting Standards</h2></div></div></div><div class="authorblurb"><p>By Michael Yoon and Aurelius Prochazka</p>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
         </div><p>
@@ -100,11 +95,7 @@ Last Modified: file-standards.html,v 1.2 2000/09/19 07:22:45 ron Exp
 This can be at the top or bottom of the file.
 </p><div>Using ad_page_contract</div><p>
 For non-library Tcl files (those not in the private Tcl directory),
-<<<<<<< eng-standards-filenaming.html
-use <a href=""><tt class="computeroutput">ad_page_contract</tt></a>
-=======
 use <a class="link" href="tcl-doc.html#tcl-doc-ad-page-contract" title="ad_page_contract"><code class="computeroutput">ad_page_contract</code></a>
->>>>>>> 1.46
 after the file path comment (this supersedes set_the_usual_form_variables and
 ad_return_complaint).  Here is an example of using
 ad_page_contract, which serves both documentation and page input
@@ -150,11 +141,7 @@ QQvariables, which were automatically created by ad_page_variables and
 set_the_usual_form_variables. The use of bind variables makes such
 previous variable syntax obsolete.
 </p></li></ul></div><div>Using ad_library</div><p>
-<<<<<<< eng-standards-filenaming.html
-For shared Tcl library files, use <a href=""><tt class="computeroutput">ad_library</tt></a> after
-=======
 For shared Tcl library files, use <a class="link" href="tcl-doc.html#tcl-doc-ad-library" title="ad_library"><code class="computeroutput">ad_library</code></a> after
->>>>>>> 1.46
 the file path comment. Its only argument is a doc_string in the
 standard (javadoc-style) format, like
 <code class="computeroutput">ad_page_contract</code>. Don't forget to put the @cvs-id in
@@ -178,11 +165,7 @@ For SQL and other non-Tcl source files, the following file header structure is r
 -- <span class="emphasis"><em>author</em></span>
 -- <span class="emphasis"><em>created</em></span>
 --
-<<<<<<< eng-standards-filenaming.html
--- <a href="http://www.loria.fr/~molli/cvs/doc/cvs_12.html#SEC93" target="_top">$Id$</a>
-=======
 -- <a class="ulink" href="http://www.loria.fr/~molli/cvs/doc/cvs_12.html#SEC93" target="_top">$Id$</a>
->>>>>>> 1.46
 </pre><p>
 Of course, replace "<code class="computeroutput">--</code>" with the comment delimiter
 appropriate for the language in which you are programming.
@@ -245,8 +228,4 @@ customize the look and feel of the entire site.
 </p></div><div class="sect2" title="Tcl Library Files"><div class="titlepage"><div><div><h3 class="title"><a name="eng-standards-filenaming-tcllib"></a>Tcl Library Files</h3></div></div></div><p>
 Further standards for Tcl library files are under discussion; we plan to 
 include naming conventions for procs.
-<<<<<<< eng-standards-filenaming.html
 </p><div class="cvstag">($Id$)</div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="eng-standards-constraint-naming.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="eng-standards-plsql.html">Next</a></td></tr><tr><td width="40%" align="left">Constraint naming standard </td><td width="20%" align="center"><a accesskey="u" href="eng-standards.html">Up</a></td><td width="40%" align="right"> PL/SQL Standards</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/current/eng-standards-filenaming.html#comments">View comments on this page at openacs.org</a></center></body></html>
-=======
-</p><div class="cvstag">($Id$)</div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="eng-standards-constraint-naming.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="eng-standards-plsql.html">Next</a></td></tr><tr><td width="40%" align="left">Constraint naming standard </td><td width="20%" align="center"><a accesskey="u" href="eng-standards.html">Up</a></td><td width="40%" align="right"> PL/SQL Standards</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/current/eng-standards-filenaming.html#comments">View comments on this page at openacs.org</a></center></body></html>
->>>>>>> 1.46

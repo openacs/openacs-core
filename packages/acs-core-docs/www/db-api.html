@@ -1,10 +1,5 @@
-<<<<<<< db-api.html
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 'http://www.w3.org/TR/html4/loose.dtd"'>
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>The OpenACS Database Access API</title><link rel="stylesheet" href="openacs.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.60.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="previous" href="request-processor.html" title="The Request Processor"><link rel="next" href="templates.html" title="Using Templates in OpenACS"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="request-processor.html">Prev</a> </td><th width="60%" align="center">Chapter 11. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="templates.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="db-api"></a>The OpenACS Database Access API</h2></div></div><div></div></div><p>
-=======
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 'http://www.w3.org/TR/html4/loose.dtd"'>
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>The OpenACS Database Access API</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.76.0"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="dev-guide.html" title="Chapter 10. Development Reference"><link rel="previous" href="request-processor.html" title="The Request Processor"><link rel="next" href="templates.html" title="Using Templates in OpenACS"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="request-processor.html">Prev</a> </td><th width="60%" align="center">Chapter 10. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="templates.html">Next</a></td></tr></table><hr></div><div class="sect1" title="The OpenACS Database Access API"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="db-api"></a>The OpenACS Database Access API</h2></div></div></div><p>
->>>>>>> 1.48
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>The OpenACS Database Access API</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.76.0"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="dev-guide.html" title="Chapter 11. Development Reference"><link rel="previous" href="request-processor.html" title="The Request Processor"><link rel="next" href="templates.html" title="Using Templates in OpenACS"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="request-processor.html">Prev</a> </td><th width="60%" align="center">Chapter 11. Development Reference</th><td width="20%" align="right"> <a accesskey="n" href="templates.html">Next</a></td></tr></table><hr></div><div class="sect1" title="The OpenACS Database Access API"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="db-api"></a>The OpenACS Database Access API</h2></div></div></div><p>
     By Pete Su and Jon Salz. Modified by Roberto Mello.
   </p><div class="sect2" title="Overview"><div class="titlepage"><div><div><h3 class="title"><a name="db-api-overview"></a>Overview</h3></div></div></div><p>
       One of OpenACS's great strengths is that code written for it is
@@ -13,13 +8,8 @@
       coherent API for database access which makes this even easier.
     </p><p>
       More detailed information about the DB api is available at
-<<<<<<< db-api.html
-      <a href="db-api-detailed.html">Database Access API</a>.
-    </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="db-api-examples"></a>DB API Examples</h3></div></div><div></div></div><p>
-=======
       <a class="xref" href="db-api-detailed.html" title="Database Access API">Database Access API</a>.
     </p></div><div class="sect2" title="DB API Examples"><div class="titlepage"><div><div><h3 class="title"><a name="db-api-examples"></a>DB API Examples</h3></div></div></div><p>
->>>>>>> 1.48
       The OpenACS database API is meant to save developers from making
       common mistakes and to provide a more structured syntax for
       specifying database operations, including transactions.  Here's
@@ -666,13 +656,8 @@ set n_rows [db_string unused "select count(*) from foo where baz is null"]
 db_dml foo_insert "insert into foo(baz) values(:1)" {[db_nullify_empty_string $baz]}
 
 	  </pre></dd></dl></div><p>
-<<<<<<< db-api.html
-      </p><div class="cvstag">($Id$)</div><p>
-    </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="db-api-caching"></a>Caching Database API Results</h3></div></div><div></div></div><p>The database API allows for direct caching of query results.  Repeated calls will
-=======
       </p><div class="cvstag">($Id$)</div><p>
     </p></div><div class="sect2" title="Caching Database API Results"><div class="titlepage"><div><div><h3 class="title"><a name="db-api-caching"></a>Caching Database API Results</h3></div></div></div><p>The database API allows for direct caching of query results.  Repeated calls will
->>>>>>> 1.48
       return the cached value until it is either explicitly flushed using db_flush_cache, 
       times out (configured the ns_cache is called to create the cache), or another cached
       query fills the cache, causing older entries to be flushed.
