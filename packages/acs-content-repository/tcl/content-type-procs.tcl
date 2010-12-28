@@ -286,7 +286,7 @@ ad_proc -public content::type::rotate_template {
 ad_proc -public content::type::set_default_template {
     -content_type:required
     -template_id:required
-    {use_context: "public"}
+    {use_context "public"}
 } {
     @param content_type
     @param template_id
