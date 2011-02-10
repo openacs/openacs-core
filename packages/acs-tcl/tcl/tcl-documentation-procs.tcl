@@ -842,7 +842,7 @@ ad_proc -public ad_page_contract {
 
 
 	# Check the name of the argument to passed in the form, ignore if not valid
-    if { [string match -nocase {[a-z0-9_\.]*} [ns_set key $form $form_counter_i] ] } {
+        if { [regexp -nocase -- {^[a-z0-9_\.\:]*$}  [ns_set key $form $form_counter_i] ] } {
         set actual_name [ns_set key $form $form_counter_i]
 
         # The name of the formal argument in the page
