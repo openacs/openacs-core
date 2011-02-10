@@ -268,7 +268,12 @@ ad_form -extend -name login -on_request {
 		
 	    } else {
 		# Display the message on a separate page
-		ad_returnredirect [export_vars -base "[subsite::get_element -element url]register/account-closed" { { message $auth_info(account_message) } }]
+            ad_returnredirect \
+                -message $auth_info(account_message) \
+                -html \
+                [export_vars \
+                     -base "[subsite::get_element \
+                                -element url]register/account-closed"]
 		ad_script_abort
 	    }
         }

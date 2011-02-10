@@ -3,7 +3,7 @@ ad_page_contract {
 
     @cvs-id $Id$
 } {
-    {message:html ""}
+
 }
 
 set page_title [_ acs-subsite.Account_closed_title]
