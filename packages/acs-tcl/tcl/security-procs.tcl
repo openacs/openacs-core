@@ -162,6 +162,28 @@ ad_proc -private sec_handler {} {
     }
 }
 
+ad_proc -private sec_login_read_cookie {} {
+
+    Fetches values either from ad_user_login_secure or ad_user_login,
+    depending weather we are in a secured connection
+    
+    @author Victor Guerra 
+
+    @return List of values read from ad_user_login_secure or ad_user_login
+} {
+    # If over HTTPS, we look for a secure cookie, otherwise we look for the normal one
+    set login_list [list]
+    if { [security::secure_conn_p] } {
+	catch {
+	    set login_list [split [ad_get_signed_cookie "ad_user_login_secure"] ","]
+	}
+    } 
+    if { $login_list eq "" } {
+	set login_list [split [ad_get_signed_cookie "ad_user_login"] ","]
+    }
+    return $login_list
+}
+
 ad_proc -private sec_login_handler {} {
 
     Reads the login cookie, setting fields in ad_conn accordingly.
@@ -176,16 +198,7 @@ ad_proc -private sec_login_handler {} {
     
     # check for permanent login cookie
     catch {
-        # If over HTTPS, we look for a secure cookie, otherwise we look for the normal one
-        set login_list [list]
-        if { [security::secure_conn_p] } {
-            catch {
-                set login_list [split [ad_get_signed_cookie "ad_user_login_secure"] ","]
-            }
-        } 
-        if { $login_list eq "" } {
-            set login_list [split [ad_get_signed_cookie "ad_user_login"] ","]
-        }
+	set login_list [sec_login_read_cookie]
         
         set untrusted_user_id [lindex $login_list 0]
         set login_expr [lindex $login_list 1]
@@ -252,7 +265,7 @@ ad_proc -public ad_user_login {
             -secure t \
 	    -domain $domain \
             ad_user_login_secure \
-            "$user_id,[ns_time],[sec_get_user_auth_token $user_id],[ns_time]"
+            "$user_id,[ns_time],[sec_get_user_auth_token $user_id],[ns_time],$forever_p"
 
         # We're secure
         set auth_level "secure"
@@ -268,7 +281,7 @@ ad_proc -public ad_user_login {
 	-domain $domain \
         -secure f \
         ad_user_login \
-        "$user_id,[ns_time],[sec_get_user_auth_token $user_id]"
+        "$user_id,[ns_time],[sec_get_user_auth_token $user_id],$forever_p"
 
     # deal with the current session
     sec_setup_session $user_id $auth_level $account_status
@@ -479,7 +492,16 @@ ad_proc -private sec_generate_session_id_cookie {} {
 
     set domain [parameter::get -parameter CookieDomain -package_id [ad_acs_kernel_id]]
 
-    ad_set_signed_cookie -discard t -replace t -max_age [sec_session_timeout] -domain $domain \
+    # we fetch the last value element of ad_user_login cookie (or ad_user_login_secure) that indicates
+    # if user wanted to be remembered when loggin in
+    set discard t
+    catch { 
+	set login_list [sec_login_read_cookie]
+	if {[lindex $login_list end] == 1} {
+	    set discard f
+	}
+    }
+    ad_set_signed_cookie -discard $discard -replace t -max_age [sec_session_timeout] -domain $domain \
 	    "ad_session_id" "$session_id,$user_id,$login_level"
 }
 
