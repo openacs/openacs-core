@@ -45,7 +45,7 @@ foreach priv $privs {
              label [string totitle [string map {_ { }} [_ acs-subsite.$priv]]] \
              display_template "
                <if @permissions.${priv}_p@ ge 2>
-                 <img src=\"/shared/images/checkboxchecked\" style=\"border:0\" height=\"13\" width=\"13\" alt=\"X\" title=\"This permission is inherited, to remove, click the 'Do not inherit ...' button above.\">
+                 <img src=\"/shared/images/checkboxchecked.gif\" style=\"border:0\" height=\"13\" width=\"13\" alt=\"X\" title=\"This permission is inherited, to remove, click the 'Do not inherit ...' button above.\">
                </if>
                <else>
                  <input type=\"checkbox\" name=\"perm\" value=\"@permissions.grantee_id@,${priv}\" @permissions.${priv}_checked@>
