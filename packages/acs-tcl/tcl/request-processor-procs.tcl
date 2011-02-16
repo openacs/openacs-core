@@ -699,7 +699,10 @@ ad_proc -private rp_filter { why } {
       ad_try {
         switch -glob -- [ad_conn extra_url] {
             admin/* {
-              permission::require_permission -object_id [ad_conn object_id] -privilege admin
+                # double check someone has not accidentally granted
+                # admin to public and require logins for all admin pages
+                auth::require_login
+                permission::require_permission -object_id [ad_conn object_id] -privilege admin
             }
             sitewide-admin/* {
                 permission::require_permission -object_id [acs_lookup_magic_object security_context_root] -privilege admin
