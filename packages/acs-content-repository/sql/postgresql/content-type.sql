@@ -68,20 +68,9 @@ begin
     end if;
   end if;
 
- -- create the attribute table if not already created
-
-  select count(*) > 0 into v_temp_p 
+  select count(*) = 0 into v_temp_p 
     from pg_class
    where relname = lower(create_type__table_name);
-
-  if NOT v_temp_p and create_type__table_name is not null then
-    select table_name into v_supertype_table from acs_object_types
-      where object_type = create_type__supertype;
-
-    execute ''create table '' || create_type__table_name || '' ('' ||
-      create_type__id_column || '' integer constraint '' || create_type__table_name || ''_pk primary key '' || 
-      '' constraint '' || create_type__table_name || ''_fk references '' || v_supertype_table || '')'';
-  end if;
 
   PERFORM acs_object_type__create_type (
     create_type__content_type,
@@ -93,7 +82,9 @@ begin
     null,
     ''f'',
     null,
-    create_type__name_method
+    create_type__name_method,
+    v_temp_p,
+    ''f''
   );
 
   PERFORM content_type__refresh_view(create_type__content_type);
@@ -324,8 +315,6 @@ begin
   return 0; 
 end;' language 'plpgsql';
 
-
-
 select define_function_args('content_type__create_attribute','content_type,attribute_name,datatype,pretty_name,pretty_plural,sort_order,default_value,column_spec;text');
 
 create or replace function content_type__create_attribute (varchar,varchar,varchar,varchar,varchar,integer,varchar,varchar)
@@ -359,12 +348,6 @@ begin
     and c.oid = a.attrelid
     and a.attname = lower(create_attribute__attribute_name);
 
- if NOT v_column_exists then
-   execute ''alter table '' || v_table_name || '' add '' || 
-      create_attribute__attribute_name || '' '' 
-      || create_attribute__column_spec;
- end if;
-
  v_attr_id := acs_attribute__create_attribute (
    create_attribute__content_type,
    create_attribute__attribute_name,
@@ -378,7 +361,14 @@ begin
    1,
    create_attribute__sort_order,
    ''type_specific'',
-   ''f''
+   ''f'',
+   not v_column_exists,
+   null,
+   null,
+   null,
+   null,
+   null,
+   create_attribute__column_spec
  );
 
  PERFORM content_type__refresh_view(create_attribute__content_type);
@@ -386,7 +376,6 @@ begin
  return v_attr_id;
 
 end;' language 'plpgsql';
-
 
 select define_function_args('content_type__drop_attribute','content_type,attribute_name,drop_column;f');
 
