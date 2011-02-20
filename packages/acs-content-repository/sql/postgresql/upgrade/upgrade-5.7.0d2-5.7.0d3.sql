@@ -28,6 +28,10 @@ begin
     end if;
   end if;
 
+  select count(*) = 0 into v_temp_p 
+    from pg_class
+   where relname = lower(create_type__table_name);
+
   PERFORM acs_object_type__create_type (
     create_type__content_type,
     create_type__pretty_name,
@@ -39,7 +43,7 @@ begin
     ''f'',
     null,
     create_type__name_method,
-    ''t'',
+    v_temp_p,
     ''f''
   );
 
@@ -75,6 +79,12 @@ begin
    raise EXCEPTION ''-20000: Content type % does not exist in content_type.create_attribute'', create_attribute__content_type;
  end if; 
 
+ select count(*) > 0 into v_column_exists 
+   from pg_class c, pg_attribute a
+  where c.relname::varchar = v_table_name
+    and c.oid = a.attrelid
+    and a.attname = lower(create_attribute__attribute_name);
+
  v_attr_id := acs_attribute__create_attribute (
    create_attribute__content_type,
    create_attribute__attribute_name,
@@ -89,7 +99,7 @@ begin
    create_attribute__sort_order,
    ''type_specific'',
    ''f'',
-   ''t'',
+   not v_column_exists,
    null,
    null,
    null,
