@@ -165,11 +165,11 @@ ad_proc -private sec_handler {} {
 ad_proc -private sec_login_read_cookie {} {
 
     Fetches values either from ad_user_login_secure or ad_user_login,
-    depending weather we are in a secured connection
+    depending whether we are in a secured connection or not.
     
     @author Victor Guerra 
 
-    @return List of values read from ad_user_login_secure or ad_user_login
+    @return List of values read from cookie ad_user_login_secure or ad_user_login
 } {
     # If over HTTPS, we look for a secure cookie, otherwise we look for the normal one
     set login_list [list]
