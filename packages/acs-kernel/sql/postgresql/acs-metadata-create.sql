@@ -630,6 +630,10 @@ begin
       v_supertype := ''acs_object'';
     else
       v_supertype := p_supertype;
+      if not acs_object_type__is_subtype_p(''acs_object'', p_supertype)
+      then
+        raise exception ''%s is not a valid type'', p_supertype;
+      end if;
     end if;
 
     insert into acs_object_types
