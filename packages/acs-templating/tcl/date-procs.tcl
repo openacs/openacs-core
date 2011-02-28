@@ -15,6 +15,7 @@ namespace eval template {}
 namespace eval template::data {}
 namespace eval template::data::validate {}
 namespace eval template::util {}
+namespace eval template::util::time_of_day {}
 namespace eval template::util::timestamp {}
 namespace eval template::util::date {}
 namespace eval template::util::textdate {}
@@ -1357,6 +1358,59 @@ ad_proc -public template::util::timestamp::get_property { what date } {
 
 ad_proc -public template::widget::timestamp { element_reference tag_attributes } {
     Render a timestamp widget.  Default is the localized version.
+} {
+
+    upvar $element_reference element
+
+    if { ! [info exists element(format)] } { 
+        set element(format) "[_ acs-lang.localization-formbuilder_date_format] [_ acs-lang.localization-formbuilder_time_format]"
+    }
+    return [template::widget::date element $tag_attributes]
+}
+
+# The abstract type system includes a time-of-day type, so we need to implement one
+# in the template "data type" system.
+
+ad_proc template::data::to_sql::time_of_day { value } {
+} {
+    return [template::data::to_sql::date $value]
+}
+
+ad_proc template::data::from_sql::time_of_day { value } {
+} {
+    return [template::data::from_sql::date $value]
+}
+
+ad_proc -public template::data::transform::time_of_day { element_ref } {
+    Collect a time_of_day object from the form
+} {
+    upvar $element_ref element
+    return [template::data::transform::date element]
+}
+
+ad_proc -public template::util::time_of_day::set_property { what date value } {
+
+    get a property in a list created by a time_of_day  widget.  It's the same
+    as the date one.
+
+    This is needed by the form builder to support explicit from_sql element modifiers.
+
+} {
+    return [template::util::date::set_property $what $date $value]
+}
+
+ad_proc -public template::util::time_of_day::get_property { what date } {
+
+    Replace a property in a list created by a time_of_day  widget.  It's the same
+    as the date one.
+
+    This is needed by the form builder to support explicit to_sql element modifiers.
+} {
+    return [template::util::date::get_property $what $date]
+}
+
+ad_proc -public template::widget::time_of_day { element_reference tag_attributes } {
+    Render a time_of_day widget.  Default is the localized version.
 } {
 
     upvar $element_reference element
