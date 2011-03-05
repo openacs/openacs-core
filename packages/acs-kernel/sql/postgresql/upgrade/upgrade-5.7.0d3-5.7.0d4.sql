@@ -440,12 +440,12 @@ begin
         p_attribute_name || ''_'';
 
       if v_datatype.check_expr is not null then
-        v_column_spec := v_column_spec || v_constraint_stub || ''_ck check('' ||
+        v_column_spec := v_column_spec || v_constraint_stub || ''ck check('' ||
           p_attribute_name || v_datatype.check_expr || '')'';
       end if;
 
       if not p_null_p then
-        v_column_spec := v_column_spec || v_constraint_stub || ''_nn not null'';
+        v_column_spec := v_column_spec || v_constraint_stub || ''nn not null'';
       end if;
 
       if p_references is not null then
