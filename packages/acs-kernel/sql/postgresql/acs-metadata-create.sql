@@ -656,7 +656,7 @@ begin
       end if;
 
       select table_name into v_supertype_table from acs_object_types
-      where object_type = p_supertype;
+      where object_type = v_supertype;
   
       execute ''create table '' || v_table_name || '' ('' ||
         v_id_column || '' integer constraint '' || v_table_name ||
