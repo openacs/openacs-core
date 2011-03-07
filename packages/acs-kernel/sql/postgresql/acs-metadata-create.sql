@@ -626,13 +626,14 @@ begin
       v_package_name := p_package_name;
     end if;
 
-    if p_supertype is null or p_supertype = '''' then
-      v_supertype := ''acs_object'';
-    else
-      v_supertype := p_supertype;
-      if not acs_object_type__is_subtype_p(''acs_object'', p_supertype)
-      then
-        raise exception ''%s is not a valid type'', p_supertype;
+    if p_object_type <> ''acs_object'' then
+      if p_supertype is null or p_supertype = '''' then
+        v_supertype := ''acs_object'';
+      else
+        v_supertype := p_supertype;
+        if not acs_object_type__is_subtype_p(''acs_object'', p_supertype) then
+          raise exception ''%s is not a valid type'', p_supertype;
+        end if;
       end if;
     end if;
 
