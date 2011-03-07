@@ -20,7 +20,7 @@ insert into acs_datatypes
 
 insert into acs_datatypes
   (datatype, database_type)
-(select 'float', 'float8' from dual
+(select 'float', 'float' from dual
   where not exists (select 1 from acs_datatypes where datatype = 'float'));
 
 insert into acs_datatypes
@@ -126,11 +126,11 @@ begin
   where datatype = 'date';
 
   update acs_datatypes
-  set database_type = 'date'
+  set database_type = 'timestamp'
   where datatype = 'timestamp';
 
   update acs_datatypes
-  set database_type = 'date'
+  set database_type = 'timestamp'
   where datatype = 'time_of_day';
 
   update acs_datatypes
@@ -226,8 +226,7 @@ is
   procedure drop_type (
     object_type		in acs_object_types.object_type%TYPE,
     drop_children_p in varchar2 default 'f',
-    drop_table_p in varchar2 default 'f',
-    cascade_p		in char default 'f'
+    drop_table_p in varchar2 default 'f'
   );
 
   -- look up an object type's pretty_name
@@ -293,13 +292,10 @@ is
       v_package_name := package_name;
     end if;
 
-    if supertype is null or supertype = '' then
+    if object_type <> 'acs_object' and (supertype is null or supertype = '') then
       v_supertype := 'acs_object';
     else
       v_supertype := supertype;
-      if is_subtype_p('acs_object', supertype) = 'f' then
-        raise_application_error(-20000,  supertype || ' is not a valid type');
-      end if;
     end if;
 
     insert into acs_object_types
@@ -338,30 +334,20 @@ end create_type;
   procedure drop_type (
     object_type		in acs_object_types.object_type%TYPE,
     drop_children_p in varchar2 default 'f',
-    drop_table_p in varchar2 default 'f',
-    cascade_p		in char default 'f'
+    drop_table_p in varchar2 default 'f'
   )
   is
     cursor c_attributes (object_type IN varchar) is
       select attribute_name from acs_attributes where object_type = c_attributes.object_type;
     cursor c_subtypes (object_type IN varchar) is
       select object_type from acs_object_types where supertype = c_subtypes.object_type;
-    cursor c_objects (object_type IN varchar) is
-      select object_id from acs_objects where object_type = c_objects.object_type;
     v_table_name acs_object_types.table_name%TYPE;
   begin
 
     -- drop children recursively
     if drop_children_p = 't' then
       for row in c_subtypes (drop_type.object_type) loop
-         drop_type(row.object_type, 't', drop_table_p, cascade_p);
-      end loop;
-    end if;
-
-    -- drop object rows
-    if cascade_p = 't' then
-      for row in c_objects (drop_type.object_type) loop
-         acs_object.del(row.object_id);
+         drop_type(row.object_type, 't', drop_table_p);
       end loop;
     end if;
 
