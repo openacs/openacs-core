@@ -183,7 +183,11 @@ create table acs_datatypes (
 			constraint acs_datatypes_datatype_pk primary key,
 	max_n_values	integer default 1
 			constraint acs_datatypes_max_n_values_ck
-			check (max_n_values > 0)
+			check (max_n_values > 0),
+ database_type varchar(100),
+ column_size varchar(100),
+ column_check_expr varchar(250),
+ column_output_function varchar(100)
 );
 
 comment on table acs_datatypes is '
@@ -202,72 +206,124 @@ comment on column acs_datatypes.max_n_values is '
  optional, i.e., min_n_values would always be zero.
 ';
 
+comment on column acs_datatypes.database_type is '
+  The base database type corresponding to the abstract datatype.  For example "varchar" or
+  "integer".
+';
+
+comment on column acs_datatypes.column_size is '
+  Optional default column size specification to append to the base database type.  For
+  example "1000" for the "string" abstract datatype, or "10,2" for "number".
+';
+
+comment on column acs_datatypes.column_check_expr is '
+  Optional check constraint expression to declare for the type_specific database column.  In
+  Oracle, for instance, the abstract "boolean" type is declared "text", with a column
+  check expression to restrict the values to "f" and "t".
+';
+
+comment on column acs_datatypes.column_output_function is '
+  Function to call for this datatype when building a select view.  If not null, it will
+  be called with an attribute name and is expected to return an expression on that
+  attribute.  Example: date attributes will be transformed to calls to "to_char()".
+';
+
 -- Load pre-defined datatypes.
 --
 begin
  insert into acs_datatypes
-  (datatype, max_n_values)
+  (datatype, max_n_values, database_type, column_size)
  values
-  ('string', null);
+  ('string', null, 'varchar', '4000');
 
  insert into acs_datatypes
-  (datatype, max_n_values)
+  (datatype, max_n_values, database_type, column_size, column_check_expr)
  values
-  ('boolean', 1);
+  ('boolean', 1, 'char', 1, 'in (''t'', ''f''))');
 
  insert into acs_datatypes
-  (datatype, max_n_values)
+  (datatype, max_n_values, database_type, column_size)
  values
-  ('number', null);
+  ('number', null, 'number', '10,2');
 
  insert into acs_datatypes
-  (datatype, max_n_values)
+  (datatype, max_n_values, database_type, column_size)
  values
-  ('integer', 1);
+  ('integer', 1, 'integer', null);
 
  insert into acs_datatypes
-  (datatype, max_n_values)
+  (datatype, max_n_values, database_type, column_size)
  values
-  ('money', null);
+  ('currency', null, 'number', '10,2');
 
  insert into acs_datatypes
-  (datatype, max_n_values)
+  (datatype, max_n_values, database_type, column_output_function)
  values
-  ('date', null);
+  ('date', null, 'date', 'acs_datatype.date_output_function');
 
  insert into acs_datatypes
-  (datatype, max_n_values)
+  (datatype, max_n_values, database_type, column_output_function)
  values
-  ('timestamp', null);
+  ('timestamp', null, 'timestamp', 'acs_datatype.timestamp_output_function');
 
  insert into acs_datatypes
-  (datatype, max_n_values)
+  (datatype, max_n_values, database_type, column_output_function)
  values
-  ('time_of_day', null);
+  ('time_of_day', null, 'timestamp', 'acs_datatype.timestamp_output_function');
 
  insert into acs_datatypes
-  (datatype, max_n_values)
+  (datatype, max_n_values, database_type, column_size)
  values
-  ('enumeration', null);
+  ('enumeration', null, 'varchar', '100');
+insert into acs_datatypes
+  (datatype, max_n_values, database_type, column_size)
+ values
+  ('url', null, 'varchar', '250');
 
  insert into acs_datatypes
-  (datatype, max_n_values)
+  (datatype, max_n_values, database_type, column_size)
  values
-  ('url', null);
+  ('email', null, 'varchar', '200');
 
  insert into acs_datatypes
-  (datatype, max_n_values)
+  (datatype, max_n_values, database_type, column_size)
  values
-  ('email', null);
+  ('file', 1, 'varchar', '100');
 
- insert into acs_datatypes
-  (datatype, max_n_values)
- values
-  ('file', 1);
+insert into acs_datatypes
+ (datatype, max_n_values, database_type, column_size)
+values
+ ('text', null, 'clob', null);
+
+insert into acs_datatypes
+ (datatype, max_n_values, database_type, column_size)
+values
+  ('keyword', 1, 'varchar', '100');
+
+insert into acs_datatypes
+ (datatype, max_n_values, database_type, column_size)
+values
+ ('richtext', null, 'clob', null);
+
+insert into acs_datatypes
+ (datatype, max_n_values, database_type, column_size)
+values
+ ('filename', null, 'varchar', '100');
+
+insert into acs_datatypes
+ (datatype, max_n_values, database_type, column_size)
+values
+ ('float', null, 'float', null);
+
+insert into acs_datatypes
+ (datatype, max_n_values, database_type, column_size)
+values
+ ('naturalnum', null, 'integer', null);
 
  commit;
 end;
 /
+show errors
 
 --create table acs_input_types (
 --);
@@ -432,10 +488,19 @@ from acs_attributes attr,
         from acs_object_types t) all_types
 where attr.object_type = all_types.ancestor_type;
 
-
 -----------------------
 -- METADATA PACKAGES --
 -----------------------
+
+create or replace package acs_datatype
+is
+  function date_output_function(attribute_name in varchar2)
+  return acs_datatypes.column_output_function%TYPE;
+  function timestamp_output_function(attribute_name in varchar2)
+  return acs_datatypes.column_output_function%TYPE;
+end acs_datatype;
+/
+show errors
 
 create or replace package acs_object_type
 is
@@ -452,13 +517,16 @@ is
     abstract_p		in acs_object_types.abstract_p%TYPE default 'f',
     type_extension_table in acs_object_types.type_extension_table%TYPE
 			    default null,
-    name_method		in acs_object_types.name_method%TYPE default null
+    name_method		in acs_object_types.name_method%TYPE default null,
+    create_table_p in varchar2 default 'f',
+    dynamic_p in varchar2 default 'f'
   );
 
   -- delete an object type definition
   procedure drop_type (
     object_type		in acs_object_types.object_type%TYPE,
-    cascade_p		in char default 'f'
+    drop_children_p in varchar2 default 'f',
+    drop_table_p in varchar2 default 'f'
   );
 
   -- look up an object type's pretty_name
@@ -478,7 +546,6 @@ end acs_object_type;
 /
 show errors
 
-
 create or replace package acs_attribute
 is
 
@@ -496,12 +563,20 @@ is
     max_n_values	in acs_attributes.max_n_values%TYPE default 1,
     sort_order		in acs_attributes.sort_order%TYPE default null,
     storage		in acs_attributes.storage%TYPE default 'type_specific',
-    static_p		in acs_attributes.static_p%TYPE default 'f'
+    static_p		in acs_attributes.static_p%TYPE default 'f',
+    create_column_p in varchar2 default 'f',
+    database_type in acs_datatypes.database_type%TYPE default null,
+    column_size in acs_datatypes.column_size%TYPE default null,
+    null_p in varchar2 default 't',
+    references in varchar2 default null,
+    check_expr in acs_datatypes.column_check_expr%TYPE default null,
+    column_spec in varchar2 default null
   ) return acs_attributes.attribute_id%TYPE;
 
   procedure drop_attribute (
     object_type in varchar2,
-    attribute_name in varchar2
+    attribute_name in varchar2,
+    drop_column_p in varchar2 default 'f'
   );
 
   procedure add_description (
@@ -521,6 +596,25 @@ end acs_attribute;
 /
 show errors
 
+create or replace package body acs_datatype
+is
+  function date_output_function(attribute_name in varchar2)
+  return acs_datatypes.column_output_function%TYPE
+  is
+  begin
+    return 'to_char(' || attribute_name || ', ''YYYY-MM-DD'')';
+  end date_output_function;
+
+  function timestamp_output_function(attribute_name in varchar2)
+  return acs_datatypes.column_output_function%TYPE
+  is
+  begin
+    return 'to_char(' || attribute_name || ', ''YYYY-MM-DD HH24:MI::SS'')';
+  end timestamp_output_function;
+
+end acs_datatype;
+/
+show errors
 
 create or replace package body acs_object_type
 is
@@ -537,16 +631,41 @@ is
     abstract_p		in acs_object_types.abstract_p%TYPE default 'f',
     type_extension_table in acs_object_types.type_extension_table%TYPE
 			    default null,
-    name_method		in acs_object_types.name_method%TYPE default null
+    name_method		in acs_object_types.name_method%TYPE default null,
+    create_table_p in varchar2 default 'f',
+    dynamic_p in varchar2 default 'f'
   )
   is
     v_package_name acs_object_types.package_name%TYPE;
+    v_table_name	acs_object_types.table_name%TYPE;
+    v_id_column	acs_object_types.id_column%TYPE;
+    v_supertype	acs_object_types.supertype%TYPE;
+    v_supertype_table	acs_object_types.table_name%TYPE;
+    v_table_exists integer;
   begin
-    -- XXX This is a hack for losers who haven't created packages yet.
+
+    if (create_table_p = 't') and (table_name is null or table_name = '') then
+      v_table_name := object_type || '_t';
+    else
+      v_table_name := table_name;
+    end if;
+
+    if (create_table_p = 't') and (id_column is null or id_column = '') then
+      v_id_column := object_type || '_id';
+    else
+      v_id_column := id_column;
+    end if;
+
     if package_name is null then
       v_package_name := object_type;
     else
       v_package_name := package_name;
+    end if;
+
+    if object_type <> 'acs_object' and (supertype is null or supertype = '') then
+      v_supertype := 'acs_object';
+    else
+      v_supertype := supertype;
     end if;
 
     insert into acs_object_types
@@ -554,27 +673,66 @@ is
        id_column, abstract_p, type_extension_table, package_name,
        name_method)
     values
-      (object_type, pretty_name, pretty_plural, supertype, table_name,
-       id_column, abstract_p, type_extension_table, v_package_name,
+      (object_type, pretty_name, pretty_plural, v_supertype, v_table_name,
+       v_id_column, abstract_p, type_extension_table, v_package_name,
        name_method);
+
+    if (create_table_p = 't') then
+
+      select decode(count(*),0,0,1) into v_table_exists from user_tables
+        where table_name = upper(v_table_name);
+
+      if v_table_exists = 1 then
+        raise_application_error(-20000, 'Table ' || v_table_name || ' already exists.');
+      end if;
+
+      loop
+        select table_name,object_type into v_supertype_table,v_supertype
+        from acs_object_types
+        where object_type = v_supertype;
+        exit when v_supertype_table is not null;
+      end loop;
+
+      execute immediate 'create table ' || v_table_name || ' (' ||
+        v_id_column  || ' integer primary key references ' ||
+        v_supertype_table || ')';
+
+    end if;
+
   end create_type;
 
   procedure drop_type (
     object_type		in acs_object_types.object_type%TYPE,
-    cascade_p		in char default 'f'
+    drop_children_p in varchar2 default 'f',
+    drop_table_p in varchar2 default 'f'
   )
   is
     cursor c_attributes (object_type IN varchar) is
-      select attribute_name from acs_attributes where object_type = object_type;
+      select attribute_name from acs_attributes where object_type = c_attributes.object_type;
+    cursor c_subtypes (object_type IN varchar) is
+      select object_type from acs_object_types where supertype = c_subtypes.object_type;
+    v_table_name acs_object_types.table_name%TYPE;
   begin
+
+    -- drop children recursively
+    if drop_children_p = 't' then
+      for row in c_subtypes (drop_type.object_type) loop
+         drop_type(row.object_type, 't', drop_table_p);
+      end loop;
+    end if;
 
     -- drop all the attributes associated with this type
     for row in c_attributes (drop_type.object_type) loop
        acs_attribute.drop_attribute ( drop_type.object_type, row.attribute_name );
     end loop;
 
-    delete from acs_attributes
-    where object_type = drop_type.object_type;
+    if drop_table_p = 't' then
+      select table_name into v_table_name
+      from acs_object_types
+      where object_type = drop_type.object_type;
+
+      execute immediate 'drop table ' || v_table_name || ' cascade';
+    end if;
 
     delete from acs_object_types
     where object_type = drop_type.object_type;
@@ -623,8 +781,6 @@ end acs_object_type;
 /
 show errors
 
-
-
 create or replace package body acs_attribute
 is
 
@@ -641,12 +797,39 @@ is
     max_n_values	in acs_attributes.max_n_values%TYPE default 1,
     sort_order		in acs_attributes.sort_order%TYPE default null,
     storage		in acs_attributes.storage%TYPE default 'type_specific',
-    static_p		in acs_attributes.static_p%TYPE default 'f'
+    static_p		in acs_attributes.static_p%TYPE default 'f',
+    create_column_p in varchar2 default 'f',
+    database_type in acs_datatypes.database_type%TYPE default null,
+    column_size in acs_datatypes.column_size%TYPE default null,
+    null_p in varchar2 default 't',
+    references in varchar2 default null,
+    check_expr in acs_datatypes.column_check_expr%TYPE default null,
+    column_spec in varchar2 default null
   ) return acs_attributes.attribute_id%TYPE
   is
+    type datatype_type is record (
+        database_type acs_datatypes.database_type%TYPE,
+        column_size acs_datatypes.column_size%TYPE,
+        column_check_expr acs_datatypes.column_check_expr%TYPE);
     v_sort_order acs_attributes.sort_order%TYPE;
     v_attribute_id    acs_attributes.attribute_id%TYPE;
+    v_column_spec varchar2(4000);
+    v_table_name acs_attributes.table_name%TYPE;
+    v_constraint_stub varchar2(4000);
+    v_column_name acs_attributes.column_name%TYPE;
+    v_type_exists integer;
+    v_table_exists integer;
+    v_column_exists integer;
+    v_datatype datatype_type;
   begin
+
+    select decode(count(*),0,0,1) into v_type_exists
+    from acs_object_types
+    where object_type = create_attribute.object_type;
+    if v_type_exists = 0 then
+      raise_application_error(-20000, object_type || ' does not exist');
+    end if;
+
     if sort_order is null then
       select nvl(max(sort_order), 1) into v_sort_order
       from acs_attributes
@@ -667,12 +850,109 @@ is
        pretty_name, pretty_plural, v_sort_order, datatype, default_value,
        min_n_values, max_n_values, storage, static_p);
 
+    if create_column_p = 't' then
+
+      select table_name into v_table_name
+      from acs_object_types
+      where object_type = create_attribute.object_type;
+
+      select decode(count(*),0,0,1) into v_table_exists
+      from user_tables
+      where table_name = upper(v_table_name);
+
+      if v_table_exists = 0 then
+        raise_application_error(-20000, 'Table ' || v_table_name || ' does not exists.');
+      end if;
+
+      -- Add the appropriate column to the table
+
+      -- We can only create the table column if
+      -- 1. the attribute is declared type_specific (generic storage uses an auxillary table)
+      -- 2. the attribute is not declared static
+      -- 3. it does not already exist in the table
+
+      if storage <> 'type_specific' then
+        raise_application_error(-20000, 'Attribute ' || attribute_name || ' for object type ' || object_type || ' must be declared with type_specific storage');
+      end if;
+
+      if static_p = 't' then
+        raise_application_error(-20000, 'Attribute ' || attribute_name || ' for object type ' || object_type || ' can not be declared static');
+      end if;
+
+      if table_name is not null then
+        raise_application_error(-20000, 'Attribute ' || attribute_name || ' for object type ' || object_type || ' can not specify a table for storage');
+      end if;
+
+      select decode(count(*),0,0,1) into v_column_exists
+      from user_tab_columns
+      where table_name = upper(v_table_name)
+        and column_name = upper(attribute_name);
+
+      if v_column_exists = 1 then
+        raise_application_error(-20000, 'Column ' || attribute_name || ' for object type ' || object_type || ' already exists');
+      end if;
+
+      -- all conditions for creating this column have been met, now let''s see if the type
+      -- spec is OK
+
+      if column_spec is not null then
+        if database_type is not null
+          or column_size is not null
+          or null_p is not null
+          or references is not null
+          or check_expr is not null then
+        raise_application_error(-20000, 'Attribute ' || attribute_name || ' for object type ' || object_type || ' is being created with an explicit column_spec, but not all of the type modification fields are null');
+        end if;
+        v_column_spec := column_spec;
+      else
+        select coalesce(create_attribute.database_type, database_type) as database_type,
+          coalesce(create_attribute.column_size, column_size) as column_size,
+          coalesce(check_expr, column_check_expr) as column_check_expr
+        into v_datatype
+        from acs_datatypes
+        where datatype = create_attribute.datatype;
+
+        v_column_spec := v_datatype.database_type;
+
+        if v_datatype.column_size is not null then
+          v_column_spec := v_column_spec || '(' || v_datatype.column_size || ')';
+        end if;
+
+        v_constraint_stub := ' constraint ' || object_type || '_' ||
+          attribute_name || '_';
+
+        if v_datatype.column_check_expr is not null then
+          v_column_spec := v_column_spec || v_constraint_stub || 'ck check(' ||
+          attribute_name || v_datatype.column_check_expr || ')';
+        end if;
+
+        if null_p = 'f' then
+          v_column_spec := v_column_spec || v_constraint_stub || 'nn not null';
+        end if;
+
+        if references is not null then
+          v_column_spec := v_column_spec || v_constraint_stub || 'fk references ' ||
+          references || ' on delete';
+          if null_p = 't' then
+            v_column_spec := v_column_spec || ' set null';
+          else
+            v_column_spec := v_column_spec || ' cascade';
+          end if;
+        end if;
+
+      end if;
+
+      execute immediate 'alter table ' || v_table_name || ' add ' || 
+        attribute_name || ' ' || v_column_spec;
+    end if;
+
     return v_attribute_id;
   end create_attribute;
 
   procedure drop_attribute (
     object_type in varchar2,
-    attribute_name in varchar2
+    attribute_name in varchar2,
+    drop_column_p in varchar2 default 'f'
   )
   is
   begin
