@@ -693,19 +693,15 @@ begin
       p_type_extension_table, p_name_method,''f'',''f'');
 end;' language 'plpgsql';
 
--- "cascade_p" corresponds to the more logical "drop_objects_p" in the content repository
--- code.  The name is being kept for backwards compatibilit.
-
-select define_function_args('acs_object_type__drop_type','object_type,cascade_p;f,drop_table_p;f,drop_children_p;f');
+select define_function_args('acs_object_type__drop_type','object_type,drop_table_p;f,drop_children_p;f');
 
 -- procedure drop_type
-create or replace function acs_object_type__drop_type (varchar,boolean,boolean,boolean)
+create or replace function acs_object_type__drop_type (varchar,boolean,boolean)
 returns integer as '
 declare
   p_object_type                     alias for $1;  
   p_drop_children_p                 alias for $2;
   p_drop_table_p                    alias for $3;
-  p_cascade_p                       alias for $4;
   row                               record;
   object_row                        record;
   v_table_name                      acs_object_types.table_name%TYPE;
@@ -717,17 +713,7 @@ begin
                from acs_object_types
                where supertype = p_object_type 
     loop
-      perform acs_object_type__drop_type(row.object_type, p_cascade_p, p_drop_table_p, ''t'');
-    end loop;
-  end if;
-
-  -- drop object rows
-  if p_cascade_p then
-    for object_row in select object_id
-                      from acs_objects
-                      where object_type = p_object_type
-    loop
-      perform acs_object__delete (object_row.object_id);
+      perform acs_object_type__drop_type(row.object_type, ''t'', p_drop_table_p);
     end loop;
   end if;
 
@@ -770,7 +756,7 @@ end;' language 'plpgsql';
 create or replace function acs_object_type__drop_type (varchar,boolean)
 returns integer as '
 begin
-  return acs_object_type__drop_type($1,$2,''f'',''f'');
+  return acs_object_type__drop_type($1,$2,''f'');
 end;' language 'plpgsql';
 
 -- function pretty_name
