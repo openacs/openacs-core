@@ -1,4 +1,3 @@
--- DRB: THIS IS A WORK IN PROGRESS AND NOT COMPLETE, DO NOT TRY TO USE
 alter table acs_datatypes add database_type varchar(100);
 alter table acs_datatypes add column_size varchar(100);
 alter table acs_datatypes add column_check_expr varchar(250);
@@ -55,9 +54,7 @@ comment on table acs_datatypes is '
  an optional default mapping to a database type, size, and constraint to use if the
  attribute is created with create_attribute''s storage_type param set to "type_specific"
  and the create_storage_p param is set to true.  These defaults can be overwritten by
- the caller.
-
- The set of pre-defined datatypes is inspired by XForms
+ the caller.  The set of pre-defined datatypes is inspired by XForms
  (http://www.w3.org/TR/xforms-datamodel/).
 ';
 
@@ -88,7 +85,7 @@ comment on column acs_datatypes.column_output_function is '
 -- it possible to write a high-level type specification that works in both Oracle and PG.
 
 -- DRB: add double bigint etc if Oracle supports them
-begin;
+begin
 
   update acs_datatypes
   set database_type = 'varchar',
@@ -102,8 +99,8 @@ begin;
 
   update acs_datatypes
   set database_type = 'char',
-    column_size = 1,
-    column_check_expr = 'in ('t', 'f'))'
+    column_size = '1',
+    column_check_expr = 'in (''t'', ''f''))'
   where datatype = 'boolean';
 
   update acs_datatypes
@@ -172,6 +169,8 @@ begin;
   set column_output_function = 'acs_datatype.timestamp_output_function'
   where datatype = 'time_of_day';
 end;
+/
+show errors
 
 create or replace package acs_datatype
 is
@@ -264,17 +263,43 @@ is
     type_extension_table in acs_object_types.type_extension_table%TYPE
 			    default null,
     name_method		in acs_object_types.name_method%TYPE default null,
-    create_table in varchar2 default 'f',
+    create_table_p in varchar2 default 'f',
     dynamic_p in varchar2 default 'f'
   )
   is
     v_package_name acs_object_types.package_name%TYPE;
+    v_table_name	acs_object_types.table_name%TYPE;
+    v_id_column	acs_object_types.id_column%TYPE;
+    v_supertype	acs_object_types.supertype%TYPE;
+    v_supertype_table	acs_object_types.table_name%TYPE;
+    v_table_exists integer;
   begin
-    -- XXX This is a hack for losers who haven't created packages yet.
+
+    if (create_table_p = 't') and (table_name is null or table_name = '') then
+      v_table_name := object_type || '_t';
+    else
+      v_table_name := table_name;
+    end if;
+
+    if (create_table_p = 't') and (id_column is null or id_column = '') then
+      v_id_column := object_type || '_id';
+    else
+      v_id_column := id_column;
+    end if;
+
     if package_name is null then
       v_package_name := object_type;
     else
       v_package_name := package_name;
+    end if;
+
+    if supertype is null or supertype = '' then
+      v_supertype := 'acs_object';
+    else
+      v_supertype := supertype;
+      if is_subtype_p('acs_object', supertype) = 'f' then
+        raise_application_error(-20000,  supertype || ' is not a valid type');
+      end if;
     end if;
 
     insert into acs_object_types
@@ -282,10 +307,33 @@ is
        id_column, abstract_p, type_extension_table, package_name,
        name_method)
     values
-      (object_type, pretty_name, pretty_plural, supertype, table_name,
-       id_column, abstract_p, type_extension_table, v_package_name,
+      (object_type, pretty_name, pretty_plural, v_supertype, v_table_name,
+       v_id_column, abstract_p, type_extension_table, v_package_name,
        name_method);
-  end create_type;
+
+    if (create_table_p = 't') then
+
+      select decode(count(*),0,0,1) into v_table_exists from user_tables
+        where table_name = upper(v_table_name);
+
+      if v_table_exists = 1 then
+        raise_application_error(-20000, 'Table ' || v_table_name || ' already exists.');
+      end if;
+
+      loop
+        select table_name,object_type into v_supertype_table,v_supertype
+        from acs_object_types
+        where object_type = v_supertype;
+        exit when v_supertype_table is not null;
+      end loop;
+
+      execute immediate 'create table ' || v_table_name || ' (' ||
+        v_id_column  || ' integer primary key references ' ||
+        v_supertype_table || ')';
+
+    end if;
+
+end create_type;
 
   procedure drop_type (
     object_type		in acs_object_types.object_type%TYPE,
@@ -471,7 +519,7 @@ is
 
     select decode(count(*),0,0,1) into v_type_exists
     from acs_object_types
-    where object_type = upper(create_attribute.object_type);
+    where object_type = create_attribute.object_type;
     if v_type_exists = 0 then
       raise_application_error(-20000, object_type || ' does not exist');
     end if;
