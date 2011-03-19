@@ -370,6 +370,11 @@ ad_proc -private util::json::gen_inner {value} {
                     && ![regexp {^(?:true|false|null)$} $value]} {
                     set value "\"$value\""
                 }
+                # Cleanup linebreaks
+                regsub -all {\r\n} $value "\n" value
+                regsub -all {\r} $value "\n" value
+                # JSON requires new line characters be escaped
+                regsub -all {\n} $value "\\n" value
                 return $value
             }
          }
