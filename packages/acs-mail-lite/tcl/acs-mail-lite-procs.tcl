@@ -407,7 +407,7 @@ namespace eval acs_mail_lite {
         set message_date [acs_mail_lite::utils::build_date]
 
         # Build the message body
-        set tokens [acs_mail_lite::utils::build_body -mime_type $mime_type $body]
+        set tokens [acs_mail_lite::utils::build_body -mime_type $mime_type -- $body]
 
         # Add attachments if any
         if {[exists_and_not_null file_ids]} {
