@@ -238,17 +238,13 @@
   <if @bulk_actions:rowcount@ gt 0>
     <!-- list-button-bar-bottom div -->
     <div class="list-button-bar-bottom">
-        <ul class="compact">
         <multiple name="bulk_actions">
-          <li><a href="#" title="@bulk_actions.title@" class="button"
-          onclick="@list_properties.bulk_action_click_function@('@list_properties.name@', '@bulk_actions.url@'); return false;" onkeypress="acs_ListBulkActionClick('@list_properties.name@', '@bulk_actions.url@'); return false;">@bulk_actions.label@</a></li>
+        <input type="submit" title="@bulk_actions.title@" onclick="@list_properties.bulk_action_click_function@('@list_properties.name@', '@bulk_actions.url@'); return false;" value="@bulk_actions.label@" class="button">
         </multiple>
-        </ul>
     </div>
     <!-- end of list-button-bar-bottom div -->
   </if>
 <noparse></if></noparse>
-
 
 <if @list_properties.page_size@ not nil>
 <!-- bottom pagination -->

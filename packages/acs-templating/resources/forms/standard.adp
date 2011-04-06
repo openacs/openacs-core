@@ -57,7 +57,7 @@
 
                <if @form_properties.show_required_p@ true>
                  <if @elements.optional@ nil and @elements.mode@ ne "display" and @elements.widget@ ne "inform">
-                   <span class="form-required-mark">(#acs-templating.required#)</span>
+                   <strong class="form-required-mark">(#acs-templating.required#)</strong>
                  </if>
                </if>
                </span><!-- form-label -->

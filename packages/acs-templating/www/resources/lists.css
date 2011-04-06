@@ -7,6 +7,18 @@ div.list-button-bar-bottom {
 	padding-top: 10px; 
 } 
  
+div.list-button-bar-bottom > input.button { 
+  font-size: .85em;
+  background-color: #e1e1e1;
+  text-align: center; 
+  padding: 4px 8px;
+  color: #000;
+  text-decoration: none;
+  line-height: 1.5em;
+  white-space: nowrap;
+  font-family: Tahoma, 'Lucida Grande', sans-serif;
+}
+
 table.list-table { 
 	border-collapse: collapse; 
 	border: 1px solid #ccc;	 
