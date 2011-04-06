@@ -3,6 +3,10 @@
 	color: #c30000;
 }
 
+strong.form-required-mark {
+    font-weight: inherit;
+}
+
 .form-label-error {
 	font-weight: bold;
 }
