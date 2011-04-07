@@ -7,4 +7,4 @@
     self_register_p="0" 
     email="@email@" 
     return_url="." 
-    rel_group_id="@group_id@" />
+    rel_group_id="@rel_group_id@" />
