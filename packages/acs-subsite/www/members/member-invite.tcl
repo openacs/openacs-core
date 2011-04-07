@@ -18,6 +18,10 @@ group::get \
     -group_id $group_id \
     -array group_info
 
+# if we are at main site, only show the form for creating a new user
+
+set subsite_p [expr { [subsite::main_site_id] ne [ad_conn package_id] }]
+
 ad_form -name user_search -cancel_url . -form {
     {user_id:search
         {result_datatype integer}
