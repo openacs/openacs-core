@@ -54,10 +54,12 @@ db_multirow -extend {
            (select count(*) 
             from   lang_messages lm 
             where  lm.package_key = q.package_key
-            and    lm.locale = :current_locale) as num_translated
+            and    lm.locale = :current_locale
+            and    lm.deleted_p = 'f') as num_translated
     from   (select lmk.package_key,
                    count(message_key) as num_messages
-            from   lang_message_keys lmk
+            from   lang_messages lmk
+            where  lmk.locale = :default_locale and lmk.deleted_p = 'f' 
             group  by package_key) q
     order  by package_key
 } {
