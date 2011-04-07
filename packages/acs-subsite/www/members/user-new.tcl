@@ -12,6 +12,15 @@ subsite::assert_user_may_add_member
 
 set group_id [application_group::group_id_from_package_id]
 
+set mainsite_group_id [application_group::group_id_from_package_id \
+                           -no_complain \
+                           -package_id [subsite::main_site_id]]
+
+set rel_group_id ""
+if { $mainsite_group_id ne $group_id } {
+    set rel_group_id $group_id
+}
+
 set page_title "Inivite Member to [ad_conn instance_name]"
 set context [list [list "." "Members"] "Invite"]
 
