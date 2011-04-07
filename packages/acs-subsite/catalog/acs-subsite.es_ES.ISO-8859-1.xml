@@ -155,6 +155,7 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="Information_Updated">Información Actualizada</msg>
   <msg key="Install_locales">Instalar Idiomas</msg>
   <msg key="Invite">Invitar</msg>
+  <msg key="Invite_a_user">Invitar un usuario</msg>
   <msg key="ISO_Code">Código ISO</msg>
   <msg key="ISO_Code_List">Lista de Códigos ISO</msg>
   <msg key="ISO_Codes_Not_Loaded">Los Códigos ISO no han sido cargados</msg>
