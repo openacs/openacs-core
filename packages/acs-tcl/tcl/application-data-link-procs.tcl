@@ -246,7 +246,7 @@ ad_proc -public application_data_link::get_links_from {
 
     if {[info exists to_type] && $to_type ne ""} {
 	set to_type_clause [db_map to_type_where_clause]
-        if {[content::type::is_content_type -content_type $to_type]} {
+        if {[content::type::is_content_type -object_type $to_type]} {
 	    set to_type_clause [db_map content_type_where_clause]
 	    set content_type_from_clause [db_map content_type_from_clause]
 	}
