@@ -7,6 +7,7 @@
   <msg key="anytime">cualquier hora</msg>
   <msg key="Date_Range">Rango de Fechas</msg>
   <msg key="details">detalles</msg>
+  <msg key="Enter_keywords_to_search_for">Introducir palabras a buscar</msg>
   <msg key="Feeling_Lucky">Me siento afortunado</msg>
   <msg key="lt_bstopwordsb_is_a_very">&quot;&lt;b&gt;%stopwords%&lt;/b&gt;&quot; es una palabra muy común y no ha sido tomada en cuenta para la búsqueda.</msg>
   <msg key="lt_FtsEngineDriver_not_a">¡FtsEngineDriver no disponible!</msg>

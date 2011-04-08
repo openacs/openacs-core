@@ -8,6 +8,7 @@
   <msg key="anytime">anytime</msg>
   <msg key="Date_Range">Date Range</msg>
   <msg key="details">details</msg>
+  <msg key="Enter_keywords_to_search_for">Enter keywords to search for</msg>
   <msg key="Feeling_Lucky">Feeling Lucky</msg>
   <msg key="lt_bstopwordsb_is_a_very">&quot;&lt;b&gt;%stopwords%&lt;/b&gt;&quot; is a very common word and was not included in your search.</msg>
   <msg key="lt_FtsEngineDriver_not_a">FtsEngineDriver not available!</msg>
