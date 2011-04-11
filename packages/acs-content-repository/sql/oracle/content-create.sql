@@ -10,25 +10,6 @@
 -- License.  Full text of the license is available from the GNU Project:
 -- http://www.fsf.org/copyleft/gpl.html
 
-----------------------------------
--- CMS datatypes
-----------------------------------
-
--- create ats datatypes for cms
-begin
-  insert into acs_datatypes
-    (datatype, max_n_values)
-  values
-    ('text', null);
-
-  insert into acs_datatypes
-    (datatype, max_n_values)
-  values
-    ('keyword', 1);
-
-end;
-/
-
 
 --------------------------------------------------------------
 -- MIME TYPES

@@ -195,20 +195,5 @@ drop table cr_content_mime_type_map ;
 drop table cr_mime_types ;
 
 
--- dropping ats datatypes for cms
-begin
-
-  delete from acs_datatypes where datatype in ('text');
-
-  delete from acs_datatypes where datatype in ('keyword');
-
-  delete from acs_datatypes where datatype in ('integer');
-
-commit;
-end;
-/
-show errors
-
-
 
 
