@@ -116,6 +116,7 @@
   <msg key="Define_a_new_relationship_type">Define un nuevo tipo de relación</msg>
   <msg key="Delete">Borrar</msg>
   <msg key="delete">Borrar</msg>
+  <msg key="Delete_selected_app">Borrar aplicaciones seleccionadas</msg>
   <msg key="Delete_this_application">Borrar esta aplicación</msg>
   <msg key="Description">Descripción</msg>
   <msg key="DevAdmin">Administración de desarrolladores</msg>
@@ -419,6 +420,7 @@ El equipo de %system_name%</msg>
   <msg key="See_full_size">Ver a tamaño completo</msg>
   <msg key="Select_an_Object_by_Id">Seleccionar un objeto por Id </msg>
   <msg key="Select_Applications">Selecciona las aplicaciones</msg>
+  <msg key="Select_Applications__helptext">Si una aplicación no aparece en la lista, necesitará &lt;a href=\&quot;/acs-admin/install/\&quot;&gt;instalarla&lt;/a&gt; en el servidor</msg>
   <msg key="Select_relation_type">Selecciona el tipo de relación</msg>
   <msg key="Send_email_to_this_user">Enviar email a este usuario</msg>
   <msg key="Send_me_a_copy">Envienme una copia:</msg>
