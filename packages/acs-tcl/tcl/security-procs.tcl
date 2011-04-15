@@ -495,13 +495,15 @@ ad_proc -private sec_generate_session_id_cookie {} {
     # we fetch the last value element of ad_user_login cookie (or ad_user_login_secure) that indicates
     # if user wanted to be remembered when loggin in
     set discard t
+    set max_age [sec_session_timeout]
     catch { 
-	set login_list [sec_login_read_cookie]
-	if {[lindex $login_list end] == 1} {
-	    set discard f
-	}
+	    set login_list [sec_login_read_cookie]
+      	if {[lindex $login_list end] == 1} {
+	        set discard f
+            set max_age inf
+	    }
     }
-    ad_set_signed_cookie -discard $discard -replace t -max_age [sec_session_timeout] -domain $domain \
+    ad_set_signed_cookie -discard $discard -replace t -max_age $max_age -domain $domain \
 	    "ad_session_id" "$session_id,$user_id,$login_level"
 }
 
