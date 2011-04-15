@@ -19,7 +19,9 @@ ad_page_contract {
 }
 
 set return_url_enc [ad_urlencode "[ad_conn url]?[ad_conn query]"]
-set context [list [list "[ad_conn package_url]admin/group-types/" "Group types"] [list one?[ad_export_vars {group_type}] "One type"] "Add relation type"]
+
+set doc(title) [_ acs-subsite.Add_a_permissible_relationship_type]
+set context [list [list "[ad_conn package_url]admin/group-types/" [_ acs-subsite.Group_Types]] [list one?[ad_export_vars {group_type}] $group_type] $doc(title)]
 
 
 # Select out all the relationship types that are not currently

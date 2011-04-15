@@ -13,7 +13,8 @@ ad_page_contract {
     group_types:multirow
 }
 
-set context [list "Group types"]
+set doc(title) [_ acs-subsite.Group_type_administration]
+set context [list [_ acs-subsite.Group_Types]]
 
 # we may want to move the inner count to get the number of groups of
 # each type to its own pl/sql function. That way, we execute the
