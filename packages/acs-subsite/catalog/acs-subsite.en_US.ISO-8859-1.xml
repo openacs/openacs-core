@@ -135,6 +135,7 @@ logging in again. &lt;/p&gt;
   <msg key="Define_a_new_relationship_type">Define a new relationship type</msg>
   <msg key="Delete">Delete</msg>
   <msg key="delete">delete</msg>
+  <msg key="Delete_selected_app">Delete selected applications</msg>
   <msg key="Delete_this_application">Delete this application</msg>
   <msg key="Description">Description</msg>
   <msg key="DevAdmin">DevAdmin</msg>
@@ -495,6 +496,7 @@ You can always change your password by doing the following:
   <msg key="See_full_size">See full size</msg>
   <msg key="Select_an_Object_by_Id">Select an Object by Id:</msg>
   <msg key="Select_Applications">Select Applications</msg>
+  <msg key="Select_Applications__helptext">If the application is not in the list, you may need to &lt;a href=\&quot;/acs-admin/install/\&quot;&gt;install&lt;/a&gt; it on the server</msg>
   <msg key="Select_relation_type">Select relation type</msg>
   <msg key="Send_email_to_this_user">Send email to this user</msg>
   <msg key="Send_me_a_copy">Send me a copy:</msg>

@@ -6,5 +6,5 @@
 <formtemplate id="application"></formtemplate>
 
 <ul class="action-links">
-  <li><a href="@multiple_add_url@">Add multiple applications</a></li>
+  <li><a href="@multiple_add_url@">#acs-subsite.Add_multiple_applications#</a></li>
 </ul>

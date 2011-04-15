@@ -9,7 +9,7 @@ ad_page_contract {
     {return_url "."}
 }
 
-set page_title "New Application"
+set page_title "[_ acs-subsite.New_Application]"
 set context [list [list "." "Applications"] $page_title]
 
 set packages [subsite::get_application_options]
@@ -26,18 +26,18 @@ ad_form -name application -cancel_url . -form {
     {return_url:text(hidden),optional}
     {node_id:key}
     {package_key:text(select)
-        {label "Application"}
+        {label "[_ acs-subsite.Application]"}
         {options $packages}
         {help_text "The type of application you want to add.  If the application is not in the list, you may need to <a href=\"/acs-admin/install/\">install</a> it on the server."}
         {mode {[ad_decode [ad_form_new_p -key node_id] 1 "" "display"]}}
     }
     {instance_name:text,optional
-        {label "Application name"}
+        {label "[_ acs-subsite.Application_name]"}
         {help_text "The human-readable name of your application. If blank, the name of the application is used (e.g. 'Forums')."}
         {html {size 50}}
     }
     {folder:text,optional
-        {label "URL folder name"}
+        {label "[_ acs-subsite.URL_folder_name]"}
         {help_text "The partial URL of the new application.  This should be a short string, all lowercase, with hyphens instead of spaces. If blank, the package name is used (e.g. 'forum')."}
         {html {size 30}}
     }
