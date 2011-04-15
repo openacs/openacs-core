@@ -17,16 +17,20 @@
   <msg key="Action">Acción</msg>
   <msg key="Add">Añadir</msg>
   <msg key="Add_a_group_of_this_type">Añadir un grupo de este tipo</msg>
-  <msg key="Add_a_permissible_relationship_type">Añadir un tipo de relación admisible</msg>
+  <msg key="Add_a_permissible_relationship_type">Añadir un tipo de relación</msg>
+  <msg key="Add_an_attribute">Añadir un atributo</msg>
   <msg key="Add_another_hostname_URL_pair">Añadir otra pareja hostname/URL</msg>
   <msg key="Add_application">Añadir aplicación</msg>
   <msg key="Add_Applications">Añadir Aplicaciones</msg>
   <msg key="add_folder">Añadir carpeta</msg>
+  <msg key="Add_group_type">Crear un tipo de grupo</msg>
   <msg key="Add_multiple_applications">Añadir múltiples aplicaciones</msg>
   <msg key="Add_new_app">Añadir una nueva aplicación</msg>
   <msg key="Add_Pair">Añadir Pareja</msg>
   <msg key="Add_permissible_relationship_type">Añadir el tipo de relacion admisible</msg>
+  <msg key="Add_relationship_for_group__group_type">Añadir un tipo de relación para %group_type%</msg>
   <msg key="Add_this_user">Añadir este usuario</msg>
+  <msg key="Add_type">Crear tipo</msg>
   <msg key="Add_User">Añadir Usuario</msg>
   <msg key="Add_users">Añadir usuarios</msg>
   <msg key="Additional_Information">Información Adicional</msg>
@@ -112,13 +116,16 @@
   <msg key="Date_of_birth">Fecha de nacimiento</msg>
   <msg key="Default_allowed_relationship_types">Tipos de relaciones permitidas por defecto</msg>
   <msg key="default_context">contexto por defecto</msg>
+  <msg key="Default_join_policy">Política de alta</msg>
   <msg key="Define_a_new_group_type">Definir un nuevo tipo de grupo</msg>
   <msg key="Define_a_new_relationship_type">Define un nuevo tipo de relación</msg>
   <msg key="Delete">Borrar</msg>
   <msg key="delete">Borrar</msg>
   <msg key="Delete_selected_app">Borrar aplicaciones seleccionadas</msg>
   <msg key="Delete_this_application">Borrar esta aplicación</msg>
+  <msg key="Delete_this_group_type">Borrar este tipo de grupo</msg>
   <msg key="Description">Descripción</msg>
+  <msg key="Details_for__group_type_pretty_name">Detalles de %group_type_pretty_name%</msg>
   <msg key="DevAdmin">Administración de desarrolladores</msg>
   <msg key="Developers_Admin">Administración de desarrolladores</msg>
   <msg key="Direct_Permissions">Permisos directos</msg>
@@ -127,6 +134,7 @@
   <msg key="Domain">Dominio</msg>
   <msg key="E_mail">Email</msg>
   <msg key="Edit">Editar</msg>
+  <msg key="edit">editar</msg>
   <msg key="Edit_application_name_and_path">Editar nombre de la aplicación y la ruta</msg>
   <msg key="edit_asm">Editar el Cuestionario Seleccionado</msg>
   <msg key="Edit_caption">Editar Leyenda</msg>
@@ -182,6 +190,8 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="go_upload_your_portrait">subir su foto</msg>
   <msg key="Grant">Otorgar</msg>
   <msg key="Grant_Permission">Autorizar</msg>
+  <msg key="Group_type">Tipo de grupo</msg>
+  <msg key="Group_type_administration">Administración de tipos de grupos</msg>
   <msg key="Group_Types">Tipos de Grupo</msg>
   <msg key="Groups">Grupos</msg>
   <msg key="Groups_of_this_type">Grupos de este tipo</msg>
@@ -377,6 +387,8 @@ El equipo de %system_name%</msg>
   <msg key="Please_select">-- Por favor selecciona --</msg>
   <msg key="Portrait">Foto</msg>
   <msg key="Powered_by_OpenACS">Powered by &lt;a href=&quot;http://openacs.org&quot; title=&quot;The OpenACS Project Homepage&quot;&gt;OpenACS&lt;/a&gt;</msg>
+  <msg key="Pretty_name">Nombre</msg>
+  <msg key="Pretty_plural">Nombre en plural</msg>
   <msg key="Privacy">Privacidad</msg>
   <msg key="Problem_auth_no_memb">Hubo un problema autenticando la cuenta. Probablemente la base de datos contiene usuarios sin member_state</msg>
   <msg key="Profile">Perfil</msg>

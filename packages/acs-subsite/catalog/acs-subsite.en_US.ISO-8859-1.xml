@@ -28,15 +28,19 @@
   <msg key="Add">Add</msg>
   <msg key="Add_a_group_of_this_type">Add a group of this type</msg>
   <msg key="Add_a_permissible_relationship_type">Add a permissible relationship type</msg>
+  <msg key="Add_an_attribute">Add an attribute</msg>
   <msg key="Add_another_hostname_URL_pair">Add another hostname/URL pair</msg>
   <msg key="Add_application">Add application</msg>
   <msg key="Add_Applications">Add Applications</msg>
   <msg key="add_folder">add folder</msg>
+  <msg key="Add_group_type">Add group type</msg>
   <msg key="Add_multiple_applications">Add multiple applications</msg>
   <msg key="Add_new_app">Add new application</msg>
   <msg key="Add_Pair">Add Pair</msg>
   <msg key="Add_permissible_relationship_type">Add permissible relationship type</msg>
+  <msg key="Add_relationship_for_group__group_type">Add a relationship type for %group_type%</msg>
   <msg key="Add_this_user">Add this user</msg>
+  <msg key="Add_type">Add type</msg>
   <msg key="Add_User">Add User</msg>
   <msg key="Add_users">Add users</msg>
   <msg key="Additional_Information">Additional Information</msg>
@@ -131,13 +135,16 @@ logging in again. &lt;/p&gt;
   <msg key="Date_of_birth">Date of birth</msg>
   <msg key="Default_allowed_relationship_types">Default allowed relationship types</msg>
   <msg key="default_context">default context</msg>
+  <msg key="Default_join_policy">Default join policy</msg>
   <msg key="Define_a_new_group_type">Define a new group type</msg>
   <msg key="Define_a_new_relationship_type">Define a new relationship type</msg>
   <msg key="Delete">Delete</msg>
   <msg key="delete">delete</msg>
   <msg key="Delete_selected_app">Delete selected applications</msg>
   <msg key="Delete_this_application">Delete this application</msg>
+  <msg key="Delete_this_group_type">Delete this group type</msg>
   <msg key="Description">Description</msg>
+  <msg key="Details_for__group_type_pretty_name">Details for %group_type_pretty_name%</msg>
   <msg key="DevAdmin">DevAdmin</msg>
   <description key="DevAdmin">Can we please have a description about the purpose of this key?</description>
 
@@ -148,6 +155,7 @@ logging in again. &lt;/p&gt;
   <msg key="Domain">Domain</msg>
   <msg key="E_mail">E-mail</msg>
   <msg key="Edit">Edit</msg>
+  <msg key="edit">edit</msg>
   <msg key="Edit_application_name_and_path">Edit application name and path</msg>
   <msg key="edit_asm">Edit Selected Questionnaire</msg>
   <msg key="Edit_caption">Edit Caption</msg>
@@ -215,6 +223,8 @@ Please visit the following link to change your password now:
   <msg key="go_upload_your_portrait">go upload your portrait</msg>
   <msg key="Grant">Grant</msg>
   <msg key="Grant_Permission">Grant Permission</msg>
+  <msg key="Group_type">Group type</msg>
+  <msg key="Group_type_administration">Group type administration</msg>
   <msg key="Group_Types">Group Types</msg>
   <msg key="Groups">Groups</msg>
   <msg key="Groups_of_this_type">Groups of this type</msg>
@@ -450,6 +460,8 @@ You can always change your password by doing the following:
   <msg key="Please_select">-- Please select --</msg>
   <msg key="Portrait">Portrait</msg>
   <msg key="Powered_by_OpenACS">Powered by &lt;a href=&quot;http://openacs.org&quot; title=&quot;The OpenACS Project Homepage&quot;&gt;OpenACS&lt;/a&gt;</msg>
+  <msg key="Pretty_name">Pretty name</msg>
+  <msg key="Pretty_plural">Pretty plural</msg>
   <msg key="Privacy">Privacy</msg>
   <msg key="Problem_auth_no_memb">There was a problem authenticating the account.  Most likely, the database contains users with no member_state.</msg>
   <msg key="Profile">Profile</msg>

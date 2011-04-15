@@ -16,13 +16,14 @@ ad_page_contract {
     context:onevalue
 }
 
-set context [list [list "[ad_conn package_url]admin/group-types/" "Group types"] "Add type"]
+set doc(title) [_ acs-subsite.Add_group_type]
+set context [list [list "[ad_conn package_url]admin/group-types/" [_ acs-subsite.Group_Types]] [_ acs-subsite.Add_type]]
 
 template::form create group_type
 
 template::element create group_type object_type \
 	-datatype "text" \
-	-label "Group type" \
+	-label "[_ acs-subsite.Group_type]" \
 	-html { size 30 maxlength 30 }
 
 set supertype_options [db_list_of_lists "select_group_supertypes" {
@@ -38,16 +39,16 @@ template::element create group_type supertype \
 	-datatype "text" \
 	-widget select \
 	-options $supertype_options_i18n \
-	-label "Supertype"
+	-label "[_ acs-subsite.Supertype]"
 
 template::element create group_type pretty_name \
 	-datatype "text" \
-	-label "Pretty name" \
+	-label "[_ acs-subsite.Pretty_name]" \
 	-html { size 50 maxlength 100 }
 
 template::element create group_type pretty_plural \
 	-datatype "text" \
-	-label "Pretty plural" \
+	-label "[_ acs-subsite.Pretty_plural]" \
 	-html { size 50 maxlength 100 }
 
 set approval_policy_options {
