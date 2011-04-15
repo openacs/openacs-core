@@ -9,8 +9,8 @@ ad_page_contract {
 
 auth::require_login
 
-set page_title "New subsite"
-set subsite_pretty_name "Subsite name"
+set page_title "[_ acs-subsite.New_subsite]"
+set subsite_pretty_name "[_ acs-subsite.Subsite_name]"
 
 set context [list $page_title]
 
@@ -28,7 +28,7 @@ if { [llength $subsite_package_options] == 1 } {
 } else {
     ad_form -extend -name subsite -form {
         {package_key:text(select)
-            {label "Subsite Package"}
+            {label "[_ acs-subsite.Subsite_Package]"}
             {help_text "Choose the subsite package you'd like to mount"}
             {options $subsite_package_options}
         }
@@ -38,25 +38,25 @@ if { [llength $subsite_package_options] == 1 } {
 ad_form -extend -name subsite -form {
     {instance_name:text
         {label $subsite_pretty_name}
-        {help_text "The name of the new subsite you're setting up."}
+        {help_text "[_ acs-subsite.The_name_of_the_new_subsite_you_re_setting_up]"}
         {html {size 30}}
     }
     {folder:url_element(text),optional
-        {label "URL folder name"}
-        {help_text "This should be a short string, all lowercase, with hyphens instead of spaces, whicn will be used in the URL of the new application. If you leave this blank, we will generate one for you from name of the application."}
+        {label "[_ acs-subsite.URL_folder_name]"}
+        {help_text "[_ acs-subsite.This_should_be_a_short_string]"}
         {html {size 30}}
     }
     {theme:text(select)
-        {label "Theme"}
-        {help_text "Choose the layout and navigation theme you want for your subsite."}
+        {label "[_ acs-subsite.Theme]"}
+        {help_text "[_ acs-subsite.Choose_the_layout_and_navigation]"}
         {options [subsite::get_theme_options]}
     }
     {visibility:text(select)
-        {label "Visible to"}
-        {options { { "Members only" "members" } { "Anyone" "any" } }}
+        {label "[_ acs-subsite.Visible_to]"}
+        {options { { "[_ acs-subsite.Members_only]" "members" } { "[_ acs-subsite.Anyone]" "any" } }}
     }
     {join_policy:text(select)
-        {label "Join policy"}
+        {label "[_ acs-subsite.Join_policy]"}
         {options [group::get_join_policy_options]}
     }
 } -on_submit {

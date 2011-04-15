@@ -6,32 +6,32 @@ ad_page_contract {
     @cvs-id $Id$
 }
 
-set page_title "Subsite Configuration"
+set page_title "[_ acs-subsite.Subsite_Configuration]"
 
-set context [list "Configuration"]
+set context [list "[_ acs-subsite.Configuration]"]
 
 set group_id [application_group::group_id_from_package_id]
 
 ad_form -name name -cancel_url [ad_conn url] -mode display -form {
     {instance_name:text
-        {label "Subsite name"}
+        {label "[_ acs-subsite.Subsite_name]"}
         {html {size 50}}
     }
     {theme:text(select)
-        {label "Theme"}
+        {label "[_ acs-subsite.Theme]"}
         {help_text "Choose the layout and navigation theme you want for your subsite."}
         {options [subsite::get_theme_options]}
     }
     {visibility:text(select)
-        {label "Visible to"}
-        {options { { "Members only" "members" } { "Anyone" "any" } }}
+        {label "[_ acs-subsite.Visible_to]"}
+        {options { { "[_ acs-subsite.Members_only]" "members" } { "[_ acs-subsite.Anyone]" "any" } }}
     }
     {join_policy:text(select)
-        {label "Join policy"}
+        {label "[_ acs-subsite.Join_policy]"}
         {options [group::get_join_policy_options]}
     }
     {description:text(textarea),optional
-        {label "Description"}
+        {label "[_ acs-subsite.Description]"}
 	{html { rows 6 cols 80 }}
     }
 } -on_request {
