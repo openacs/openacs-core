@@ -143,11 +143,16 @@ set errno [catch {
     # GN: Should be loaded before user packages such they can use
     # the xotcl infrastructure
     # DRB: only do it if xotcl's installed
-    if {[info command ::xotcl::Class] ne "" &&
-        [file isdirectory $root_directory/packages/xotcl-core]} {
-       apm_bootstrap_load_libraries -procs xotcl-core
-       apm_bootstrap_load_libraries -init xotcl-core
-    }
+
+    # Package libraries are now loaded in dependency order, rather than
+    # alphabetically.  This code is obsolete and has been commented out
+    # for 5.7.
+
+    #if {[info command ::xotcl::Class] ne "" &&
+    #    [file isdirectory $root_directory/packages/xotcl-core]} {
+    #   apm_bootstrap_load_libraries -procs xotcl-core
+    #   apm_bootstrap_load_libraries -init xotcl-core
+    #}
 
     # Build the list of subsite packages
     apm_build_subsite_packages_list
