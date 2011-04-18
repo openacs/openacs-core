@@ -85,22 +85,20 @@ ad_proc -private sec_handler {} {
     if { [catch { 
 	set cookie_list [ad_get_signed_cookie "ad_session_id"]
     } errmsg ] } {
-        # Cookie is invalid because either:
-        # -> it was never set
-        # -> it failed the cryptographic check
-        # ad_get_signed_cookie_with_expr does not return enough information
-        # to tell if cookie is invalid OR expired so we need to check
-        # expiration seperately below
-        ns_log Debug "OACS: Not a valid session cookie, force login"
+	# Cookie is invalid because either:
+	# -> it was never set
+	# -> it failed the cryptographic check
+	# -> it expired.
+
+        # Now check for login cookie
+        ns_log Debug "OACS: Not a valid session cookie, looking for login cookie '$errmsg'"
         ad_user_logout
         sec_login_handler
     } else {
-	# The session cookie already exists and is valid but might be expired
+	# The session cookie already exists and is valid.
 	set cookie_data [split [lindex $cookie_list 0] {,}]
-	set session_expr [lindex $cookie_list 1]
-    if {$session_expr > 0 && $session_expr < [ns_time]} {
-        # check if session cookie expires
-        # and if it is expired check login cookie
+	set session_expr [expr {[lindex $cookie_data 3] + [sec_session_timeout]}]
+    if {$session_expr < [ns_time]} {
         sec_login_handler
     }
 	set session_id [lindex $cookie_data 0]
@@ -155,9 +153,6 @@ ad_proc -private sec_handler {} {
 	# knows about sec_session_timeout.
 	# [sec_session_renew] = SessionTimeout - SessionRenew (see security-init.tcl)
 	# $session_expr = PreviousSessionIssue + SessionTimeout
-    if { $session_expr eq ""} {
-        set session_expr [expr {[ns_time] + [sec_session_timeout]}]
-    }
 	if { $session_expr - [sec_session_renew] < [ns_time] } {
             
             # LARS: We abandoned the use of sec_login_handler here. This lets people stay logged in forever
@@ -510,8 +505,8 @@ ad_proc -private sec_generate_session_id_cookie {} {
             set max_age inf
 	    }
     }
-    ad_set_signed_cookie -discard $discard -replace t -max_age $max_age \
-        -domain $domain "ad_session_id" "$session_id,$user_id,$login_level"
+    ad_set_signed_cookie -discard $discard -replace t -max_age $max_age -domain $domain \
+	    "ad_session_id" "$session_id,$user_id,$login_level,[ns_time]"
 }
 
 ad_proc -private sec_generate_secure_token_cookie { } { 
