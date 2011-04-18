@@ -98,7 +98,7 @@ ad_proc -private sec_handler {} {
 	# The session cookie already exists and is valid.
 	set cookie_data [split [lindex $cookie_list 0] {,}]
 	set session_expr [expr {[lindex $cookie_data 3] + [sec_session_timeout]}]
-    if {$session_expr < [ns_time]} {
+    if {![string is integer $session_expr] || $session_expr < [ns_time]} {
         sec_login_handler
     }
 	set session_id [lindex $cookie_data 0]
@@ -502,7 +502,6 @@ ad_proc -private sec_generate_session_id_cookie {} {
 	    set login_list [sec_login_read_cookie]
       	if {[lindex $login_list end] == 1} {
 	        set discard f
-            set max_age inf
 	    }
     }
     ad_set_signed_cookie -discard $discard -replace t -max_age $max_age -domain $domain \
