@@ -1,6 +1,6 @@
 <if @group_types:rowcount@ eq 0>
   <ul>
-  <li>(none)</li>
+  <li>#acs-subsite.none#</li>
   </ul>
 </if>
 <else>

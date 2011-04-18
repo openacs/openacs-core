@@ -1,10 +1,10 @@
 <master>
-  <property name="title">@page_title@</property>
+  <property name="doc(title)">@doc.title@</property>
   <property name="context">@context@</property>
 
-<ul class="action-links">
- <li><a href="alphabetical-index">View Alphabetical Index</a></li>
-</ul>
-<p>
+<h1>@doc.title@</h1>
+ <p><a href="alphabetical-index" class="button">#acs-subsite.View_Alphabetical_Index#</a></p>
 
+<p>
 @object_type_hierarchy;noquote@
+</p>

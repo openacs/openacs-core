@@ -24,7 +24,8 @@ ad_page_contract {
     view_by:onevalue
 }
 
-set context [list "Groups"]
+set context [list [_ acs-subsite.Groups]]
+set doc(title) [_ acs-subsite.Group_administration]
 
 set this_url [ad_conn url]
 
@@ -37,5 +38,6 @@ db_1row subsite_info {
       and ag.package_id = :package_id
 }
 
+set intro_text [lang::util::localize [_ acs-subsite.Currently_the_instance_name_has_the_following_groups]]
 
 ad_return_template

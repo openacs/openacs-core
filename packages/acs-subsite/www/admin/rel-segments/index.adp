@@ -1,18 +1,20 @@
 <master>
 <property name="context">@context;noquote@</property>
-<property name="title">Relational Segment administration</property>
+<property name="doc(title)">@doc.title@</property>
 
-Currently, the system is able to handle the following relational segments:
+<h1>@doc.title@</h1>
+
+<p>#acs-subsite.Currently_the_system_is_able_to_handle_the_following_relational_segments#</p>
 
 <ul>
 
   <if @seg:rowcount@ eq 0>
-    <li>(none)</li>
+    <li>#acs-subsite.none#</li>
   </if>
   <else>
   
   <multiple name="seg">
-    <li> <a href="one?segment_id=@seg.segment_id@">@seg.segment_name@</a> (<a href=../rel-types/one?rel_type=@seg.rel_type@>@seg.rel_type_pretty_name@</a> to <a href=../groups/one?group_id=@seg.group_id@>@seg.group_name@</a>)
+    <li> <a href="one?segment_id=@seg.segment_id@">@seg.segment_name@</a> (<a href="../rel-types/one?rel_type=@seg.rel_type@">@seg.rel_type_pretty_name@</a> to <a href="../groups/one?group_id=@seg.group_id@">@seg.group_name@</a>)
     </li>
   </multiple>
 
@@ -20,4 +22,4 @@ Currently, the system is able to handle the following relational segments:
 
 </ul>
 
-Note: Relational segments are created from the <a href=../groups/>groups administration pages</a>
+<p>#acs-subsite.Note_Relational_segments_are_created_from_the_groups_administration_pages#</p>

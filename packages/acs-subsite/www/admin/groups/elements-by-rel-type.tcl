@@ -30,7 +30,7 @@ set create_p [ad_permission_p $group_id "create"]
 set return_url "[ad_conn url]?[ad_conn query]"
 set return_url_enc [ad_urlencode $return_url]
 
-db_multirow rels relations_query { 
+db_multirow -extend {elements_display_url relations_add_url} rels relations_query { 
     select g.rel_type, g.group_rel_id,
            acs_object_type.pretty_name(g.rel_type) as rel_type_pretty_name,
            s.segment_id, s.segment_name, 
@@ -66,4 +66,8 @@ db_multirow rels relations_query {
     # to be localized before they are displayed
     set role_pretty_name [lang::util::localize $role_pretty_name]
     set role_pretty_plural [lang::util::localize $role_pretty_plural]    
+
+    set elements_display_url [export_vars -url -base "elements-display" {group_id rel_type}]
+    set relations_add_url [export_vars -url -base "../relations/add" {group_id rel_type {return_url $return_url_enc}}]
+
 }

@@ -14,7 +14,8 @@ ad_page_contract {
     seg:multirow
 }
 
-set context [list "Relational segments"]
+set context [list [_ acs-subsite.Relational_Segments]]
+set doc(title) [_ acs-subsite.Relational_Segment_administration]
 
 set user_id [ad_conn user_id]
 

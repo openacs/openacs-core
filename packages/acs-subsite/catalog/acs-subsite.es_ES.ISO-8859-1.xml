@@ -190,6 +190,7 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="go_upload_your_portrait">subir su foto</msg>
   <msg key="Grant">Otorgar</msg>
   <msg key="Grant_Permission">Autorizar</msg>
+  <msg key="Group_administration">Administración de grupos</msg>
   <msg key="Group_type">Tipo de grupo</msg>
   <msg key="Group_type_administration">Administración de tipos de grupos</msg>
   <msg key="Group_Types">Tipos de Grupo</msg>
@@ -326,7 +327,7 @@ El equipo de %system_name%</msg>
   <msg key="Make_yourself_visible_label">Volverse visible</msg>
   <msg key="Male">Hombre</msg>
   <msg key="Manage_Portrait">Administrar Foto</msg>
-  <msg key="Manage_unmounted_applications">Manejar sin montar aplicaciones</msg>
+  <msg key="Manage_unmounted_applications">Administrar aplicaciones no montadas</msg>
   <msg key="manage_users_email">Administrar la privacidad del correo electrónico de los usuarios</msg>
   <msg key="Manage_your_notifications">Administrar notificaciones</msg>
   <msg key="Mem_list_not_allowed">No esta autorizado para ver la lista de miembros.</msg>
@@ -441,8 +442,8 @@ El equipo de %system_name%</msg>
 
 </msg>
   <msg key="Show">Mostrar</msg>
-  <msg key="Site_Map">Site Map</msg>
-  <msg key="Site_Map_Instructions">Instrucciones del Mapa del sitio</msg>
+  <msg key="Site_Map">Mapa del Sitio</msg>
+  <msg key="Site_Map_Instructions">Instrucciones para el Mapa del sitio</msg>
   <msg key="Site_node_you_would_like_to_map_hostname_to">El sitio debe asignar un nombre de host</msg>
   <msg key="Site_Wide_Admin">Administración del Sitio Principal</msg>
   <msg key="Site_wide_administration">Administración general</msg>
@@ -472,12 +473,12 @@ El equipo de %system_name%</msg>
   <msg key="This_should_be_a_short_string">Debe ser una cadena corta, todo en minúsculas, con guiones en lugar de espacios, se utilizará en la dirección de la nueva aplicación. Si deja en blanco, vamos a generar una en nombre de la aplicación.</msg>
   <msg key="this_subsite">este subsitio</msg>
   <msg key="This_user_has_left_the">Este usuario ha dejado la comunidad.</msg>
-  <msg key="To_add_a_group_first_select_a_group_type_above_or_go_to_the">Para añadir un grupo primero selecciona un tipo de grupos de la página &lt;a href='../group-types/'&gt;administración de tipos de grupo&lt;/a&gt;</msg>
-  <msg key="To_add_an_application_to_this_site">Para &lt;strong&gt;añadir una nueva aplicación&lt;/strong&gt; en este sitio, cree un &lt;em&gt;nuevo subdirectorio&lt;/em&gt; bajo el directorio seleccionado. Entonces elija &lt;em&gt;nueva aplicación&lt;/em&gt; para seleccionar e instalar un paquete para la instancia. La aplicación estará disponible en la URL mostrada.</msg>
-  <msg key="To_configure_an_application_select_set_parameters">Para &lt;strong&gt;configurar&lt;/strong&gt; una aplicación, seleccione &lt;em&gt;parámetros establecidos&lt;/em&gt; para ver y editar las opciones específicas de la aplicación. &lt;em&gt;Establecer permisos&lt;/em&gt; permitidos a los usuarios y grupos a las aplicaciones específicas u otra aplicación. Para mas información de los parámetros y permisos, ver la documentación específica del paquete.</msg>
-  <msg key="To_copy_an_application_instance_to_another">Para &lt;strong&gt;copiar&lt;/strong&gt; una aplicación a otra URL, crear un nuevo directorio, entonces seleccionar &lt;em&gt;montar&lt;/em&gt;. Seleccionar la aplicación que será copiada desde la lista de paquetes disponibles.</msg>
+  <msg key="To_add_a_group_first_select_a_group_type_above_or_go_to_the">Para añadir un grupo primero selecciona un tipo de grupos de la página &lt;a href=&quot;../group-types/&quot;&gt;administración de tipos de grupo&lt;/a&gt;</msg>
+  <msg key="To_add_an_application_to_this_site">Para &lt;strong&gt;añadir una nueva aplicación&lt;/strong&gt; en este sitio, cree un &lt;em&gt;nuevo subdirectorio&lt;/em&gt; bajo el directorio seleccionado. Entonces elija &lt;em&gt;nueva aplicación&lt;/em&gt; para seleccionar e instalar el paquete a instanciar. La aplicación estará disponible en la URL mostrada.</msg>
+  <msg key="To_configure_an_application_select_set_parameters">Para &lt;strong&gt;configurar&lt;/strong&gt; una aplicación, seleccione &lt;em&gt;parámetros&lt;/em&gt; para ver y editar las opciones específicas de la aplicación. &lt;em&gt;Permisos&lt;/em&gt; permite otorgar privilegios a los usuarios y grupos sobre aplicaciones específicas u otros datos de la aplicación. Para más información sobre parámetros y permisos, ver la documentación específica del paquete.</msg>
+  <msg key="To_copy_an_application_instance_to_another">Para &lt;strong&gt;copiar&lt;/strong&gt; una aplicación a otra URL, crear una nueva carpeta y entonces seleccionar &lt;em&gt;montar&lt;/em&gt;. Seleccionar la aplicación que será copiada desde la lista de paquetes disponibles.</msg>
   <msg key="To_log_in_visit_the">Por favor, compruebe la bandeja de Entrada. En los próximos minutos debe recibir un correo de %system_owner% con una nueva contraseña generada aleatoriamente y las instrucciones de cómo proceder. Una vez recibidas, vuelva a la</msg>
-  <msg key="To_move_an_application_copy_it_as_above">Para &lt;strong&gt;mover&lt;/strong&gt; una aplicación, copielo como una nueva localización, entonces selecione &lt;em&gt;desmontar&lt;/em&gt; en la antigua localización. Seleccionando &lt;em&gt;borrar&lt;/em&gt; en el directorio vacío que lo eliminará del sitio.</msg>
+  <msg key="To_move_an_application_copy_it_as_above">Para &lt;strong&gt;mover&lt;/strong&gt; una aplicación, copiela a la nueva ubicación como indicado arriba, entonces selecione &lt;em&gt;desmontar&lt;/em&gt; en la antigua localización. Seleccionando &lt;em&gt;borrar&lt;/em&gt; en la carpeta vacía la eliminará del nodo.</msg>
   <msg key="To_remove_an_application_and_all_of_its_data">Para &lt;strong&gt;eliminar&lt;/strong&gt; una aplicación y todos sus datos, seleccione &lt;em&gt;Desmontar&lt;/em&gt; en todos los nodos donde se montaron, entonces &lt;em&gt;borrelos&lt;/em&gt; desde las &lt;em&gt;Aplicaciones no montadas&lt;/em&gt;, con el link debajo del mapa del sitio.</msg>
   <msg key="Topic">Tópico</msg>
   <msg key="type_specific_info">Introduzca información especifica</msg>
