@@ -8,6 +8,6 @@ ad_page_contract {
 
 } {}
 
-set page_title "Object Type Alphabetical Index"
+set doc(title) "Object Type Alphabetical Index"
 set context [list "Object Type Alphabetical Index"]
 db_multirow alpha_object_types object_type_in_alphabetical_order {}

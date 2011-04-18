@@ -223,6 +223,7 @@ Please visit the following link to change your password now:
   <msg key="go_upload_your_portrait">go upload your portrait</msg>
   <msg key="Grant">Grant</msg>
   <msg key="Grant_Permission">Grant Permission</msg>
+  <msg key="Group_administration">Group administration</msg>
   <msg key="Group_type">Group type</msg>
   <msg key="Group_type_administration">Group type administration</msg>
   <msg key="Group_Types">Group Types</msg>
@@ -548,7 +549,7 @@ You can always change your password by doing the following:
   <msg key="This_should_be_a_short_string">This should be a short string, all lowercase, with hyphens instead of spaces, whicn will be used in the URL of the new application. If you leave this blank, we will generate one for you from name of the application.</msg>
   <msg key="this_subsite">this subsite</msg>
   <msg key="This_user_has_left_the">This user has left the community.</msg>
-  <msg key="To_add_a_group_first_select_a_group_type_above_or_go_to_the">To add a group first select a group type above or go to the &lt;a href=../group-types/&gt;group type administration&lt;/a&gt; page</msg>
+  <msg key="To_add_a_group_first_select_a_group_type_above_or_go_to_the">To add a group first select a group type above or go to the &lt;a href=&quot;../group-types/&quot;&gt;group type administration&lt;/a&gt; page</msg>
   <msg key="To_add_an_application_to_this_site">To &lt;strong&gt;add an application&lt;/strong&gt; to this site, use &lt;em&gt;new sub folder&lt;/em&gt; to create a new site node beneath under the selected folder. Then choose &lt;em&gt;new application&lt;/em&gt; to select an installed application package for instantiation. The application will then be available at the displayed URL. </msg>
   <msg key="To_configure_an_application_select_set_parameters">To &lt;strong&gt;configure&lt;/strong&gt; an application select &lt;em&gt;set parameters&lt;/em&gt; to view and edit application specific options. &lt;em&gt;set permissions&lt;/em&gt; allows one to grant privileges to users and groups to specific application instances or other application data. For more info on parameters and permissions, see the package specific documentation.</msg>
   <msg key="To_copy_an_application_instance_to_another">To &lt;strong&gt;copy&lt;/strong&gt; an application instance to another URL, create a new folder as above, then select &lt;em&gt;mount&lt;/em&gt;.  Select the application to be copied from the list of available packages.</msg>

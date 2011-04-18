@@ -1,28 +1,28 @@
 <master>
+<property name="doc(title)">@doc.title@</property>
 <property name="context">@context;noquote@</property>
-<property name="title">Group administration</property>
 
-Currently, the @instance_name@ has the following groups:
+<h1>@doc.title@</h1>
 
-<p>
+<p>@intro_text@</p>
 
 <if @view_by@ eq group_type>
-    <b>
-    by group type
+    <strong>
+    #acs-subsite.by_group_type#
     |
-    <a href=@this_url@?view_by=rel_type>relationship to site</a>
-    </b>
+    <a href="@this_url@?view_by=rel_type">#acs-subsite.relationship_to_site#</a>
+    </strong>
 
     <include src="elements-by-group-type" group_id=@subsite_group_id;noquote@>
 </if>
 <else>
-    <b>
-    by <a href=@this_url@?view_by=group_type>group type</a>
+    <strong>
+    <a href="@this_url@?view_by=group_type">#acs-subsite.by_group_type#</a>
     |
-    relationship to site
-    </b>
+    #acs-subsite.relationship_to_site#
+    </strong>
 
     <include src="elements-by-rel-type" group_id=@subsite_group_id;noquote@>
 </else>
 
-To add a group, first select a group type above or go to the <a href=../group-types/>group type administration</a> page
+<p>#acs-subsite.To_add_a_group_first_select_a_group_type_above_or_go_to_the#</p>
