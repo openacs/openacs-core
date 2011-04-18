@@ -98,7 +98,7 @@ ad_proc -private sec_handler {} {
 	# The session cookie already exists and is valid.
 	set cookie_data [split [lindex $cookie_list 0] {,}]
 	set session_expr [expr {[lindex $cookie_data 3] + [sec_session_timeout]}]
-    if {![string is integer $session_expr] || $session_expr < [ns_time]} {
+    if {![string is integer -strict $session_expr] || $session_expr < [ns_time]} {
         sec_login_handler
     }
 	set session_id [lindex $cookie_data 0]
