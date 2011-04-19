@@ -23,7 +23,7 @@ db_multirow supertypes select_supertypes {
      start with t.object_type in ('membership_rel','composition_rel')
 }
 
-set context [list [list "[ad_conn package_url]admin/rel-types/" "Relationship types"] "Add relationship type"]
+set context [list [list "[ad_conn package_url]admin/rel-types/" [_ acs-subsite.Relationship_Types]] [_ acs-subsite.Create_relation_type]]
 
 set export_vars [ad_export_vars -form {return_url}]
 

@@ -26,7 +26,7 @@
   <msg key="Add_group_type">Crear un tipo de grupo</msg>
   <msg key="Add_multiple_applications">Añadir múltiples aplicaciones</msg>
   <msg key="Add_new_app">Añadir una nueva aplicación</msg>
-  <msg key="Add_Pair">Añadir Pareja</msg>
+  <msg key="Add_Pair">Mapear</msg>
   <msg key="Add_permissible_relationship_type">Añadir el tipo de relacion admisible</msg>
   <msg key="Add_relationship_for_group__group_type">Añadir un tipo de relación para %group_type%</msg>
   <msg key="Add_this_user">Añadir este usuario</msg>
@@ -409,6 +409,7 @@ El equipo de %system_name%</msg>
   <msg key="Relational_Segments">Segmentos relacionales</msg>
   <msg key="relationship_to_site">relación con el sitio</msg>
   <msg key="Relationship_Types">Tipos de Relación</msg>
+  <msg key="Relationship_types_administration">Administración de Tipos de Relación</msg>
   <msg key="Remember_my_login">Recordar mi contraseña en este equipo</msg>
   <msg key="Remove">Eliminar</msg>
   <msg key="remove">eliminar</msg>
@@ -444,7 +445,7 @@ El equipo de %system_name%</msg>
   <msg key="Show">Mostrar</msg>
   <msg key="Site_Map">Mapa del Sitio</msg>
   <msg key="Site_Map_Instructions">Instrucciones para el Mapa del sitio</msg>
-  <msg key="Site_node_you_would_like_to_map_hostname_to">El sitio debe asignar un nombre de host</msg>
+  <msg key="Site_node_you_would_like_to_map_hostname_to">El nodo al que desea mapear el hostname</msg>
   <msg key="Site_Wide_Admin">Administración del Sitio Principal</msg>
   <msg key="Site_wide_administration">Administración general</msg>
   <msg key="sorry_forgotten_pwd">No se le puede ayudar con el olvido de su contraseña.</msg>

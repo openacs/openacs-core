@@ -6,8 +6,8 @@ ad_page_contract {
 } {
 }
 
-set page_title "Host-Node Map"
-set context [list "Host-Node Map"]
+set page_title [_ acs-subsite.Host_Node_Map]
+set context [list $page_title]
 
 template::list::create \
     -name host_node_pairs \
@@ -15,13 +15,13 @@ template::list::create \
     -key node_id \
     -elements {
 	host {
-	    label "Hostname"
+	    label "[_ acs-subsite.Hostname]"
 	}
 	node_id {
-	    label "Root Node"
+	    label "[_ acs-subsite.Root_Node]"
 	} 
 	url {
-	    label "Root URL"
+	    label "[_ acs-subsite.Root_URL]"
 	}
 	delete_url {
 	    display_template "<if @host_node_pairs.delete_url@ not nil><a href=\"@host_node_pairs.delete_url@\" title=\"Delete this mapping\">delete</a></if>"
@@ -47,18 +47,18 @@ set sorted_node_list [lsort $node_list]
 
 ad_form -name add_host_node_mapping -form {
     {host:text(text)
-	{label "Hostname"}
+	{label "[_ acs-subsite.Hostname]"}
 	{html {size 40}}
 	{value "mydomain.com"}
-	{help_text "Hostname must be unique"}
+	{help_text "[_ acs-subsite.Hostname_must_be_unique]"}
     }
     {root:text(radio)
-	{label "Root Node"}
+	{label "[_ acs-subsite.Root_Node]"}
 	{options $sorted_node_list}
-	{help_text "Site node you would like to map hostname to"}
+	{help_text "[_ acs-subsite.Site_node_you_would_like_to_map_hostname_to]"}
     }
     {submit:text(submit)
-	{label "Add Pair"}
+	{label "[_ acs-subsite.Add_Pair]"}
     }
 } -validate {
     {host
