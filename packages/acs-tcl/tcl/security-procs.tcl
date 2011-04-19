@@ -98,11 +98,17 @@ ad_proc -private sec_handler {} {
 	# The session cookie already exists and is valid.
 	set cookie_data [split [lindex $cookie_list 0] {,}]
 	set session_last_renew_time [lindex $cookie_data 3]
-    if {[string is integer -strict $session_last_renew_time]} {
-        set session_expr \
-            [expr {$session_last_renew_time + [sec_session_timeout]}]
+    if {![string is integer -strict $session_last_renew_time]} {
+        # This only happens if the session cookie is old style
+        # previous to openacs 5.7 and does not have session review time
+        # embedded.
+        # Assume cookie expired and force login handler
+        set session_last_renew_time 0
     }
-    if {![info exists session_expr] || $session_expr < [ns_time]} {
+    
+    set session_expr [expr {$session_last_renew_time + [sec_session_timeout]}]
+    
+    if {$session_expr < [ns_time]} {
         sec_login_handler
     }
                
@@ -507,6 +513,7 @@ ad_proc -private sec_generate_session_id_cookie {} {
 	    set login_list [sec_login_read_cookie]
       	if {[lindex $login_list end] == 1} {
 	        set discard f
+            set max_age inf
 	    }
     }
     ad_set_signed_cookie -discard $discard -replace t -max_age $max_age -domain $domain \
