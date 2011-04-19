@@ -1,11 +1,13 @@
 <master>
-  <property name="title">@page_title@</property>
+  <property name="doc(title)">@page_title@</property>
   <property name="context">@context@</property>
 
-  <h3>Registered hostname/URL pairs</h3>
+<h1>@page_title@</h1>
+
+  <h2>#acs-subsite.Registered_hostname_URL_pairs#</h2>
 
   <listtemplate name="host_node_pairs"></listtemplate>
 
-  <h3>Add another hostname/URL pair</h3>
+  <h2>#acs-subsite.Add_another_hostname_URL_pair#</h2>
 
   <formtemplate id="add_host_node_mapping"></formtemplate>

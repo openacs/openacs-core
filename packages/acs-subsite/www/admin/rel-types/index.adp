@@ -1,26 +1,29 @@
 <master>
 <property name="context">@context;noquote@</property>
-<property name="title">Relationship administration</property>
+<property name="doc(title)">#acs-subsite.Relationship_types_administration#</property>
 
-Currently, the system is able to handle the following types of relationships: 
+<h1>#acs-subsite.Relationship_types_administration#</h1>
+
+<p>#acs-subsite.Currently_the_system_is_able_to_handle_the_following_types_of_relationships#</p>
 
 <ul>
 
   <if @rel_types:rowcount@ eq 0>
-    <li><em>(none)</em></li>
+    <li><em>#acs-subsite.none#</em></li>
   </if>
   <else>
   
   <multiple name="rel_types">
-    <li> @rel_types.indent;noquote@<a href="one?rel_type=@rel_types.rel_type@">@rel_types.pretty_name@</a> (number of relationships defined: @rel_types.number_relationships@)
+    <li>@rel_types.indent;noquote@<a href="one?rel_type=@rel_types.rel_type@">@rel_types.pretty_name@</a> (#acs-subsite.number_of_relationships_defined#: @rel_types.number_relationships@)
     </li>
   </multiple>
 
   </else>
+</ul>
 
-  <p>
-  <li><a href="new">Define a new relationship type</a>
-  <li><a href="roles">View all roles</a>
+<ul>
+  <li><a href="new">#acs-subsite.Define_a_new_relationship_type#</a></li>
+  <li><a href="roles">#acs-subsite.View_all_roles#</a></li>
 </ul>
 
 

@@ -15,7 +15,7 @@ ad_page_contract {
     rel_types:multirow
 }
 
-set context [list "Relationship types"]
+set context [list [_ acs-subsite.Relationship_Types]]
 
 set package_id [ad_conn package_id]
 
