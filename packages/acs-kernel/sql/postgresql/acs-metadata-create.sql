@@ -817,13 +817,13 @@ declare
   p_sort_order             alias for $11; -- default null
   p_storage                alias for $12; -- default ''type_specific''
   p_static_p               alias for $13; -- default ''f''
-  p_create_column_p        alias for $14;
-  p_database_type          alias for $15;
-  p_size                   alias for $16;
-  p_null_p                 alias for $17;
-  p_references             alias for $18;
-  p_check_expr             alias for $19;
-  p_column_spec            alias for $20;
+  p_create_column_p        alias for $14; -- default ''f''
+  p_database_type          alias for $15; -- default null
+  p_size                   alias for $16; -- default null
+  p_null_p                 alias for $17; -- default ''t''
+  p_references             alias for $18; -- default null
+  p_check_expr             alias for $19; -- default null
+  p_column_spec            alias for $20; -- default null
 
   v_sort_order            acs_attributes.sort_order%TYPE;
   v_attribute_id          acs_attributes.attribute_id%TYPE;
