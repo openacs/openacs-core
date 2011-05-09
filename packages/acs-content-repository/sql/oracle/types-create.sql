@@ -294,7 +294,7 @@ begin
  attr_id := content_type.create_attribute (
    content_type   => 'content_revision',
    attribute_name => 'content',
-   datatype => 'text',
+   datatype => 'richtext',
    pretty_name => 'content',
    pretty_plural => 'content'
  );

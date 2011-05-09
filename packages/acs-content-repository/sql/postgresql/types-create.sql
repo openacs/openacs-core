@@ -390,7 +390,7 @@ begin;
  select content_type__create_attribute (
    'content_revision',
    'content',
-   'text',
+   'richtext',
    'Content',
    'Content',
    null,
