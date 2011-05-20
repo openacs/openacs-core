@@ -79,7 +79,7 @@ ad_proc month_list {} "Returns list of month abbreviations" {
 }
 
 ad_proc long_month_list {} "Returns list of months" {
-    return  {January February March April May Jun July August September October November December}
+    return  {January February March April May June July August September October November December}
 }
 
 # use ad_integer_optionlist instead of month_value_list
