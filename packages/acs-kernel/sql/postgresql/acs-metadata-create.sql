@@ -584,8 +584,8 @@ declare
   p_abstract_p             alias for $8;  -- default ''f''
   p_type_extension_table   alias for $9;  -- default null
   p_name_method            alias for $10; -- default null
-  p_create_table_p         alias for $11;
-  p_dynamic_p              alias for $12;
+  p_create_table_p         alias for $11; -- default ''f''
+  p_dynamic_p              alias for $12; -- default ''f''
   v_package_name                      acs_object_types.package_name%TYPE;
   v_supertype                         acs_object_types.supertype%TYPE;
   v_name_method                       varchar;
