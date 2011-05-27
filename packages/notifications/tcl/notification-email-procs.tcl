@@ -135,6 +135,12 @@ namespace eval notification::email {
            set content $content_html
        }
 
+       # DAVEB convert relative URLs to fully qualified URLs
+       set host "[string trimright [ad_url] "/"]/"
+       set re {(href|src)=['\"][^(http|https|mailto:)]/?([^'\"]+?)['\"]}
+       set subspec "\\1='${host}\\2'"
+       set content [regsub -all $re $content $subspec]
+
        # Use this to build up extra mail headers        
        set extra_headers [list]
 
