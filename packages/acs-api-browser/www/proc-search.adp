@@ -6,6 +6,7 @@
   <include src="/packages/acs-api-browser/lib/search" query_string="@query_string@">
 </div>
 
+<div style="float: left; width: 60%;">
 <h3>Procedure Matches</h3>
 <ul>
   <multiple name="results">
@@ -57,5 +58,7 @@ No results found
     </p>
   </else>
 </if>
+<br clear="both">
+</div>
 
 

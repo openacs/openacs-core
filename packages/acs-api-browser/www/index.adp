@@ -6,6 +6,7 @@
   <include src="/packages/acs-api-browser/lib/search">
 </div>
 
+<div style="float: left; width: 60%;">
 <h3>Installed Enabled Packages</h3>
 <ul>
   
@@ -37,3 +38,4 @@
 </if>
 
 <br clear="both">
+</div>
