@@ -7,10 +7,10 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
 
-    <version name="5.7.0b1" url="http://openacs.org/repository/download/apm/acs-content-repository-5.7.0b1.apm">
+    <version name="5.7.0" url="http://openacs.org/repository/download/apm/acs-content-repository-5.7.0.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>The canonical repository for OpenACS content.</summary>
-        <release-date>2011-05-29</release-date>
+        <release-date>2011-06-12</release-date>
         <maturity>3</maturity>
         <vendor url="http://openacs.org">OpenACS</vendor>
         <description format="text/html">Provides the API for creating and managing user generated content including 
@@ -20,10 +20,10 @@
         <license>GPL</license>
         <maturity>3</maturity>
 
-        <provides url="acs-content-repository" version="5.7.0b1"/>
-        <requires url="acs-kernel" version="5.7.0b1"/>
-        <requires url="acs-service-contract" version="5.7.0b1"/>
-        <requires url="search" version="5.7.0b1"/>
+        <provides url="acs-content-repository" version="5.7.0"/>
+        <requires url="acs-kernel" version="5.7.0"/>
+        <requires url="acs-service-contract" version="5.7.0"/>
+        <requires url="search" version="5.7.0"/>
 
         <callbacks>
           <callback type="after-upgrade"  proc="content::apm::after_upgrade"/>
