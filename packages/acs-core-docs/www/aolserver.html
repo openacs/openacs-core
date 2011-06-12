@@ -2,7 +2,7 @@
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Install AOLserver 3.3oacs1</title><link rel="stylesheet" href="openacs.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.60.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="install-more-software.html" title="Appendix B. Install additional supporting software"><link rel="previous" href="install-ldap-radius.html" title="Install LDAP for use as external authentication"><link rel="next" href="acs-package-dev.html" title="Part III. For OpenACS Package Developers"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="install-ldap-radius.html">Prev</a> </td><th width="60%" align="center">Appendix B. Install additional supporting software</th><td width="20%" align="right"> <a accesskey="n" href="acs-package-dev.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="aolserver"></a>Install AOLserver 3.3oacs1</h2></div></div><div></div></div><div class="authorblurb"><p>by <a href="mailto:vinod@kurup.com" target="_top">Vinod Kurup</a></p>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
-        </div><p>We recommend the use of <a href="">AOLserver 4.0.1</a> or later.  These instructions are retained as a resource.</p><p>
+        </div><p>We recommend the use of <a href="aolserver4.html" title="Install AOLserver 4">AOLserver 4.0.1</a> or later.  These instructions are retained as a resource.</p><p>
     Debian users: we do not recommend installing Debian packages for
     Aolserver or Postgres. Several people have
     reported problems while trying to install using apt-get
@@ -83,17 +83,17 @@ Done Building Sat Mar  8 10:31:35 PST 2003
 	  communicate with the database.  There is one script each for
 	  Oracle and PostgreSQL.  They don't conflict, so if you plan
 	  to use both databases, install both.</p><div class="itemizedlist"><ul type="disc"><li><p>Oracle</p><pre class="screen">[root aolserver]# <b class="userinput"><tt>cd /usr/local/aolserver/bin</tt></b>
-[root bin]# <b class="userinput"><tt>cp /var/tmp/openacs-5.6.0/packages/acs-core-docs/www/files/nsd-oracle.txt ./nsd-oracle</tt></b>
+[root bin]# <b class="userinput"><tt>cp /var/tmp/openacs-5.7.0/packages/acs-core-docs/www/files/nsd-oracle.txt ./nsd-oracle</tt></b>
 [root bin]# <b class="userinput"><tt>chmod 750 nsd-oracle</tt></b>
 [root bin]#
 <span class="action"><span class="action">cd /usr/local/aolserver/bin
-cp /var/tmp/openacs-5.6.0/packages/acs-core-docs/www/files/nsd-oracle.txt ./nsd-oracle
+cp /var/tmp/openacs-5.7.0/packages/acs-core-docs/www/files/nsd-oracle.txt ./nsd-oracle
 chmod 750 nsd-oracle</span></span></pre></li><li><p>PostgreSQL</p><pre class="screen">[root aolserver]# <b class="userinput"><tt>cd /usr/local/aolserver/bin</tt></b>
-[root bin]# <b class="userinput"><tt>cp /var/tmp/openacs-5.6.0/packages/acs-core-docs/www/files/nsd-postgres.txt ./nsd-postgres</tt></b>
+[root bin]# <b class="userinput"><tt>cp /var/tmp/openacs-5.7.0/packages/acs-core-docs/www/files/nsd-postgres.txt ./nsd-postgres</tt></b>
 [root bin]# <b class="userinput"><tt>chmod 755 nsd-postgres</tt></b>
 [root bin]#
 <span class="action"><span class="action">cd /usr/local/aolserver/bin
-cp /var/tmp/openacs-5.6.0/packages/acs-core-docs/www/files/nsd-postgres.txt ./nsd-postgres
+cp /var/tmp/openacs-5.7.0/packages/acs-core-docs/www/files/nsd-postgres.txt ./nsd-postgres
 chmod 755 nsd-postgres</span></span></pre></li></ul></div></li><li><a name="install-tdom"></a><p><b>Install tDOM. </b>Download the <a href="individual-programs.html#source-tdom">tDOM
         tarball</a>, unpack it, adjust the configuration file to match our patched
         distribution of aolserver, and compile it.</p><pre class="screen">[root root]# <b class="userinput"><tt>cd /usr/local/src</tt></b>
@@ -205,7 +205,7 @@ config file.</pre><p>The first warning, about nsssl, can be ignored.  We won't b
           The <tt class="computeroutput">killall</tt> command will kill
           all processes with the name <tt class="computeroutput">nsd</tt>,
           but clearly this is not a good tool to use for managing your
-          services in general. We cover this topic in the <a href="install-openacs-keepalive.html">Keep AOLserver alive</a> section.
+          services in general. We cover this topic in the ??? section.
 
         </p></li><li><a name="install-aolserver-troubleshooting"></a><p><b>Troubleshooting. </b>If you can't view the welcome page, it's likely there's a
       problem with your server configuration. Start by viewing your

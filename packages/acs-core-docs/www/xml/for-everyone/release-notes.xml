@@ -37,6 +37,21 @@ END OF TEMPLATE -->
 linkend="changelog-latest"></xref>) since the last release and in the
 entire &majorversion;.&minorversion; release sequence <xref linkend="changelog"></xref>.</para>
 
+  <sect2 id="release-notes-5-7-0">
+    <title>Release 5.7.0</title>
+    <itemizedlist>
+      <listitem>
+        <para>
+          Made changes that extend acs-kernel's create_type and create_attribute procs,
+          so they're optionally able to create sql tables and columns.  Optional metadata
+          params allow for the automatic generation of foreign key references, check
+          exprs, etc.
+        </para>
+      </listitem>
+    </itemizedlist>
+   </sect2>
+
+
   <sect2 id="release-notes-5-6-0">
     <title>Release 5.6.0</title>
     <itemizedlist>

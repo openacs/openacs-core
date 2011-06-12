@@ -1,8 +1,8 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 'http://www.w3.org/TR/html4/loose.dtd"'>
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Install PostgreSQL</title><link rel="stylesheet" href="openacs.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.60.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="complete-install.html" title="Chapter 3. Complete Installation"><link rel="previous" href="oracle.html" title="Install Oracle 8.1.7"><link rel="next" href="openacs.html" title="Install OpenACS 5.6.0"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="oracle.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Complete Installation</th><td width="20%" align="right"> <a accesskey="n" href="openacs.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="postgres"></a>Install PostgreSQL</h2></div></div><div></div></div><div class="authorblurb"><p>by <a href="mailto:vinod@kurup.com" target="_top">Vinod Kurup</a></p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Install PostgreSQL</title><link rel="stylesheet" href="openacs.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.60.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="complete-install.html" title="Chapter 3. Complete Installation"><link rel="previous" href="oracle.html" title="Install Oracle 8.1.7"><link rel="next" href="aolserver4.html" title="Install AOLserver 4"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="oracle.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Complete Installation</th><td width="20%" align="right"> <a accesskey="n" href="aolserver4.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="postgres"></a>Install PostgreSQL</h2></div></div><div></div></div><div class="authorblurb"><p>by <a href="mailto:vinod@kurup.com" target="_top">Vinod Kurup</a></p>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
-        </div><p>Skip this section if you will run only Oracle.</p><p>OpenACS 5.6.0 will run with <a href="individual-programs.html#source-postgresql">PostgreSQL</a> 7.3.2, 7.3.3, and 7.3.4 and 7.4.x.  7.4.7 is the recommended version of PostgreSQL.</p><div class="itemizedlist"><ul type="disc"><li><p><a name="install-postgres-mac"></a><b>Special notes for Mac OS X. </b>If you are running Mac OS X prior to 10.3, you should be
+        </div><p>Skip this section if you will run only Oracle.</p><p>OpenACS 5.7.0 will run with <a href="individual-programs.html#source-postgresql">PostgreSQL</a> 7.3.2, 7.3.3, and 7.3.4 and 7.4.x.  7.4.7 is the recommended version of PostgreSQL.</p><div class="itemizedlist"><ul type="disc"><li><p><a name="install-postgres-mac"></a><b>Special notes for Mac OS X. </b>If you are running Mac OS X prior to 10.3, you should be
         able to install and use PostGreSQL 7.3.x.  Mac OS X 10.3
         requires PostGreSQL 7.4. </p></li><li><p><a name="install-postgres-debian"></a><b>Special Notes for Debian. </b></p><p>Debian stable user should install PostGreSQL from source
       as detailed below, or they should use the www.backports.org
@@ -215,11 +215,11 @@ logout
         state. Red Hat and Debian and SuSE each work a little
         differently.  If you haven't <a href="openacs.html#install-from-tarball" title="Installation Option 2: Install from tarball"> untarred the OpenACS tarball</a>, you will need to do so now to access the postgresql.txt file.
 	</p><div class="itemizedlist"><ul type="circle"><li><p>Red Hat RPM:</p><p>The init script is already installed; just turn it on for the appropriate run levels.</p><pre class="screen">[root root]# <b class="userinput"><tt>chkconfig --level 345 postgresql on</tt></b>
-[root root]# </pre></li><li><p>Red Hat from source:</p><pre class="screen">[root src]# <b class="userinput"><tt>cp /var/tmp/openacs-5.6.0/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql</tt></b>
+[root root]# </pre></li><li><p>Red Hat from source:</p><pre class="screen">[root src]# <b class="userinput"><tt>cp /var/tmp/openacs-5.7.0/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql</tt></b>
 [root src]# <b class="userinput"><tt>chown root.root /etc/rc.d/init.d/postgresql</tt></b>
 [root src]# <b class="userinput"><tt>chmod 755 /etc/rc.d/init.d/postgresql</tt></b>
 [root src]# 
-<span class="action"><span class="action">cp /var/tmp/openacs-5.6.0/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql
+<span class="action"><span class="action">cp /var/tmp/openacs-5.7.0/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql
 chown root.root /etc/rc.d/init.d/postgresql
 chmod 755 /etc/rc.d/init.d/postgresql</span></span></pre><p>Test the script.</p><pre class="screen">[root root]# <b class="userinput"><tt>service postgresql stop</tt></b>
 Stopping PostgreSQL: ok
@@ -242,7 +242,7 @@ service postgresql start</span></span></pre></li><li><p>Debian:</p><pre class="s
 [root ~]# <b class="userinput"><tt>chown root.root /etc/init.d/postgresql</tt></b>
 [root ~]# <b class="userinput"><tt>chmod 755 /etc/init.d/postgresql</tt></b>
 [root ~]# <span class="action"><span class="action">
-cp /var/tmp/openacs-5.6.0/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql
+cp /var/tmp/openacs-5.7.0/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql
 chown root.root /etc/init.d/postgresql
 chmod 755 /etc/init.d/postgresql</span></span></pre><p>Test the script</p><pre class="screen">[root ~]# <b class="userinput"><tt>/etc/init.d/postgresql stop</tt></b>
 Stopping PostgreSQL: ok
@@ -260,11 +260,11 @@ Stopping PostgreSQL: ok
    /etc/rc5.d/S20postgresql -&gt; ../init.d/postgresql
 [root ~]# <b class="userinput"><tt>/etc/init.d/postgresql start</tt></b>
 Starting PostgreSQL: ok
-[root ~]#</pre></li><li><p>FreeBSD:</p><pre class="screen">[root ~]# <b class="userinput"><tt>cp /tmp/openacs-5.6.0/packages/acs-core-docs/www/files/postgresql.txt /usr/local/etc/rc.d/postgresql.sh</tt></b>
+[root ~]#</pre></li><li><p>FreeBSD:</p><pre class="screen">[root ~]# <b class="userinput"><tt>cp /tmp/openacs-5.7.0/packages/acs-core-docs/www/files/postgresql.txt /usr/local/etc/rc.d/postgresql.sh</tt></b>
 [root ~]# <b class="userinput"><tt>chown root:wheel /usr/local/etc/rc.d/postgresql.sh</tt></b>
 [root ~]# <b class="userinput"><tt>chmod 755 /usr/local/etc/rc.d/postgresql.sh</tt></b>
 [root ~]# <span class="action"><span class="action">
-cp /tmp/openacs-5.6.0/packages/acs-core-docs/www/files/postgresql.txt /usr/local/etc/rc.d/postgresql.sh
+cp /tmp/openacs-5.7.0/packages/acs-core-docs/www/files/postgresql.txt /usr/local/etc/rc.d/postgresql.sh
 chown root:wheel /usr/local/etc/rc.d/postgresql.sh
 chmod 755 /usr/local/etc/rc.d/postgresql.sh</span></span></pre><p>Test the script</p><pre class="screen">[root ~]# <b class="userinput"><tt>/usr/local/etc/rc.d/postgresql.sh stop</tt></b>
 Stopping PostgreSQL: ok
@@ -282,7 +282,7 @@ Starting PostgreSQL: ok
             <tt class="computeroutput">rc.d/</tt> part in each of the
             following commands.
 
-          </p></div><pre class="screen">[root ~]# <b class="userinput"><tt>cp /var/tmp/openacs-5.6.0/packages/acs-core-docs/www/files/postgresql.txt /etc/rc.d/init.d/postgresql</tt></b>
+          </p></div><pre class="screen">[root ~]# <b class="userinput"><tt>cp /var/tmp/openacs-5.7.0/packages/acs-core-docs/www/files/postgresql.txt /etc/rc.d/init.d/postgresql</tt></b>
 [root ~]# <b class="userinput"><tt>chown root.root /etc/rc.d/init.d/postgresql</tt></b>
 [root ~]# <b class="userinput"><tt>chmod 755 /etc/rc.d/init.d/postgresql</tt></b></pre><p>
 
@@ -381,4 +381,4 @@ checkpoint_segments = 3     # in logfile segments (16MB each), min 1
           <a href="http://www.linuxjournal.com/article.php?sid=4791" target="_top">PostgreSQL
         Performance Tuning</a>
 
-        </p></li></ul></div><div class="cvstag">($Id$)</div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="oracle.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="openacs.html">Next</a></td></tr><tr><td width="40%" align="left">Install Oracle 8.1.7 </td><td width="20%" align="center"><a accesskey="u" href="complete-install.html">Up</a></td><td width="40%" align="right"> Install OpenACS 5.6.0</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/current/postgres.html#comments">View comments on this page at openacs.org</a></center></body></html>
+        </p></li></ul></div><div class="cvstag">($Id$)</div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="oracle.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="aolserver4.html">Next</a></td></tr><tr><td width="40%" align="left">Install Oracle 8.1.7 </td><td width="20%" align="center"><a accesskey="u" href="complete-install.html">Up</a></td><td width="40%" align="right"> Install AOLserver 4</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/current/postgres.html#comments">View comments on this page at openacs.org</a></center></body></html>

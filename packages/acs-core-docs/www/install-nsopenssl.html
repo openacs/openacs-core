@@ -6,7 +6,7 @@
           https.  These commands compile nsopenssl and install it,
           along with a tcl helper script to handle https connections.
           You will also need ssl certificates.  Because those should
-          be different for each server service, you won't need <a href="install-ssl.html#ssl-certificates">those instructions</a> until
+          be different for each server service, you won't need <a href="">those instructions</a> until
       later. </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="install-nsopenssl-aolserver3"></a>Install on AOLserver3</h3></div></div><div></div></div><p> You will need the <a href="aolserver.html#install-aolserver-compile">unpacked Aolserver tarball</a> in
       <tt class="computeroutput">/usr/local/src/aolserver</tt> and
       the <a href="individual-programs.html#nsopenssl-download">nsopenssl tarball</a> in
@@ -62,7 +62,7 @@ ln -s /usr/local/ssl/lib/libcrypto.so.0.9.7 libcrypto.so.0.9.7
 </span></span>
 </pre><p>
 </p><p>SSL support must be enabled seperately in each OpenACS
-        server (<a href="install-ssl.html#ssl-certificates">Generate ssl certificates</a>. </p><p>If your ports for SSL are privileged (below 1024), you
+        server (???. </p><p>If your ports for SSL are privileged (below 1024), you
         will have to start AOLserver with prebinds for both your HTTP
         and your HTTPS port (usually by adding <tt class="computeroutput">-b
         <span class="replaceable"><span class="replaceable">your_ip:your_http_port</span></span>,<span class="replaceable"><span class="replaceable">your_ip:your_https_port</span></span></tt>
