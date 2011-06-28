@@ -20,11 +20,6 @@ ad_proc content_search__datasource {
         and i.item_id = r.item_id
     " -column_array datasource
 
-    if { $datasource(storage_type) ne "lob" } {
-        set datasource(storage_type) "text"
-        set datasource(content) [cr_write_content -string -revision_id $object_id ]
-    }
-
     return [array get datasource]
 }
 
