@@ -52,67 +52,103 @@ create table acs_logs (
 
 -- create or replace package body acs_log
 -- procedure notice
-create function acs_log__notice (varchar,varchar)
-returns integer as '
-declare
-  notice__log_key                alias for $1;  
-  notice__message                alias for $2;  
-begin
+
+
+-- added
+select define_function_args('acs_log__notice','log_key,message');
+
+--
+-- procedure acs_log__notice/2
+--
+CREATE OR REPLACE FUNCTION acs_log__notice(
+   notice__log_key varchar,
+   notice__message varchar
+) RETURNS integer AS $$
+DECLARE
+BEGIN
     insert into acs_logs
      (log_id, log_level, log_key, message)
     values
-     (nextval(''t_acs_log_id_seq''), ''notice'', notice__log_key, notice__message);
+     (nextval('t_acs_log_id_seq'), 'notice', notice__log_key, notice__message);
 
     return 0; 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
 -- procedure warn
-create function acs_log__warn (varchar,varchar)
-returns integer as '
-declare
-  warn__log_key                alias for $1;  
-  warn__message                alias for $2;  
-begin
+
+
+-- added
+select define_function_args('acs_log__warn','log_key,message');
+
+--
+-- procedure acs_log__warn/2
+--
+CREATE OR REPLACE FUNCTION acs_log__warn(
+   warn__log_key varchar,
+   warn__message varchar
+) RETURNS integer AS $$
+DECLARE
+BEGIN
     insert into acs_logs
      (log_id, log_level, log_key, message)
     values
-     (nextval(''t_acs_log_id_seq''), ''warn'', warn__log_key, warn__message);
+     (nextval('t_acs_log_id_seq'), 'warn', warn__log_key, warn__message);
 
     return 0; 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
 -- procedure error
-create function acs_log__error (varchar,varchar)
-returns integer as '
-declare
-  error__log_key                alias for $1;  
-  error__message                alias for $2;  
-begin
+
+
+-- added
+select define_function_args('acs_log__error','log_key,message');
+
+--
+-- procedure acs_log__error/2
+--
+CREATE OR REPLACE FUNCTION acs_log__error(
+   error__log_key varchar,
+   error__message varchar
+) RETURNS integer AS $$
+DECLARE
+BEGIN
     insert into acs_logs
      (log_id, log_level, log_key, message)
     values
-     (nextval(''t_acs_log_id_seq''), ''error'', error__log_key, error__message);
+     (nextval('t_acs_log_id_seq'), 'error', error__log_key, error__message);
 
     return 0; 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
 -- procedure debug
-create function acs_log__debug (varchar,varchar)
-returns integer as '
-declare
-  debug__log_key                alias for $1;  
-  debug__message                alias for $2;  
-begin
+
+
+-- added
+select define_function_args('acs_log__debug','log_key,message');
+
+--
+-- procedure acs_log__debug/2
+--
+CREATE OR REPLACE FUNCTION acs_log__debug(
+   debug__log_key varchar,
+   debug__message varchar
+) RETURNS integer AS $$
+DECLARE
+BEGIN
     insert into acs_logs
      (log_id, log_level, log_key, message)
     values
-     (nextval(''t_acs_log_id_seq''), ''debug'', debug__log_key, debug__message);
+     (nextval('t_acs_log_id_seq'), 'debug', debug__log_key, debug__message);
 
     return 0; 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
 

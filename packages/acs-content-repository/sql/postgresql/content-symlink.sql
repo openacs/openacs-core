@@ -12,57 +12,67 @@
 -- create or replace package body content_symlink
 -- function new
 
-select define_function_args('content_symlink__new','name,label,target_id,parent_id,symlink_id,creation_date;now,creation_user,creation_ip,package_id');
 
-create or replace function content_symlink__new (varchar,varchar,integer,integer,integer,timestamptz,integer,varchar,integer)
-returns integer as '
-declare
-  new__name                   alias for $1;  -- default null  
-  new__label                  alias for $2;  -- default null
-  new__target_id              alias for $3;  
-  new__parent_id              alias for $4;  
-  new__symlink_id             alias for $5;  -- default null
-  new__creation_date          alias for $6;  -- default now()
-  new__creation_user          alias for $7;  -- default null
-  new__creation_ip            alias for $8;  -- default null
-  new__package_id             alias for $9;  -- default null
+-- old define_function_args('content_symlink__new','name,label,target_id,parent_id,symlink_id,creation_date;now,creation_user,creation_ip,package_id')
+-- new
+select define_function_args('content_symlink__new','name;null,label;null,target_id,parent_id,symlink_id;null,creation_date;now,creation_user;null,creation_ip;null,package_id;null');
+
+
+
+
+--
+-- procedure content_symlink__new/9
+--
+CREATE OR REPLACE FUNCTION content_symlink__new(
+   new__name varchar,              -- default null
+   new__label varchar,             -- default null
+   new__target_id integer,
+   new__parent_id integer,
+   new__symlink_id integer,        -- default null
+   new__creation_date timestamptz, -- default now() -- default 'now'
+   new__creation_user integer,     -- default null
+   new__creation_ip varchar,       -- default null
+   new__package_id integer         -- default null
+
+) RETURNS integer AS $$
+DECLARE
   v_symlink_id                cr_symlinks.symlink_id%TYPE;
   v_package_id                acs_objects.package_id%TYPE;
   v_name                      cr_items.name%TYPE;
   v_label                     cr_symlinks.label%TYPE;
   v_ctype                     varchar;
-begin
+BEGIN
 
   -- SOME CHECKS --
 
   -- 1) check that the target is now a symlink
-  if content_symlink__is_symlink(new__target_id) = ''t'' then
-    raise EXCEPTION ''-20000: Cannot create a symlink to a symlink %'', new__target_id;
+  if content_symlink__is_symlink(new__target_id) = 't' then
+    raise EXCEPTION '-20000: Cannot create a symlink to a symlink %', new__target_id;
   end if;
 
   -- 2) check that the parent is a folder
-  if content_folder__is_folder(new__parent_id) = ''f'' then
-    raise EXCEPTION ''-20000: The parent is not a folder'';
+  if content_folder__is_folder(new__parent_id) = 'f' then
+    raise EXCEPTION '-20000: The parent is not a folder';
   end if;
 
   -- 3) check that parent folder supports symlinks
-  if content_folder__is_registered(new__parent_id,''content_symlink'',''f'') = ''f'' then
-    raise EXCEPTION ''-20000: This folder does not allow symlinks to be created'';
+  if content_folder__is_registered(new__parent_id,'content_symlink','f') = 'f' then
+    raise EXCEPTION '-20000: This folder does not allow symlinks to be created';
   end if;
 
   -- 4) check that the content folder supports the target items content type
-  if content_folder__is_registered(new__parent_id, content_item__get_content_type(new__target_id), ''f'') = ''f'' then
+  if content_folder__is_registered(new__parent_id, content_item__get_content_type(new__target_id), 'f') = 'f' then
 
     v_ctype := content_item__get_content_type(new__target_id);
-    raise EXCEPTION ''-20000: This folder does not allow symlinks to items of type % to be created'', v_ctype;
+    raise EXCEPTION '-20000: This folder does not allow symlinks to items of type % to be created', v_ctype;
   end if;
 
   -- PASSED ALL CHECKS --
 
   -- Select default name if the name is null
-  if  new__name is null or new__name = '''' then
+  if  new__name is null or new__name = '' then
     select 
-      ''symlink_to_'' ||  name into v_name
+      'symlink_to_' ||  name into v_name
     from 
       cr_items
     where
@@ -77,7 +87,7 @@ begin
 
   -- Select default label if the label is null
   if new__label is null then
-    v_label := ''Symlink to '' || v_name;
+    v_label := 'Symlink to ' || v_name;
   else
     v_label := new__label;
   end if;
@@ -97,14 +107,14 @@ begin
       new__creation_user, 
       null,
       new__creation_ip, 
-      ''content_item'',
-      ''content_symlink'', 
+      'content_item',
+      'content_symlink', 
       null,
       null,
-      ''text/plain'',
+      'text/plain',
       null,
       null,
-      ''text'',
+      'text',
       v_package_id
   );
 
@@ -119,21 +129,31 @@ begin
 
   return v_symlink_id;
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
-create or replace function content_symlink__new (varchar,varchar,integer,integer,integer,timestamptz,integer,varchar)
-returns integer as '
-declare
-  new__name                   alias for $1;  -- default null  
-  new__label                  alias for $2;  -- default null
-  new__target_id              alias for $3;  
-  new__parent_id              alias for $4;  
-  new__symlink_id             alias for $5;  -- default null
-  new__creation_date          alias for $6;  -- default now()
-  new__creation_user          alias for $7;  -- default null
-  new__creation_ip            alias for $8;  -- default null
-begin
+
+
+--
+-- procedure content_symlink__new/8
+--
+CREATE OR REPLACE FUNCTION content_symlink__new(
+   new__name varchar,              -- default null
+   new__label varchar,             -- default null
+   new__target_id integer,
+   new__parent_id integer,
+   new__symlink_id integer,        -- default null
+   new__creation_date timestamptz, -- default now()
+   new__creation_user integer,     -- default null
+   new__creation_ip varchar        -- default null
+
+) RETURNS integer AS $$
+--
+-- content_symlink__new/8 maybe obsolete, when we define proper defaults for /9
+--
+DECLARE
+BEGIN
   return content_extlink__new(new__name,
                               new__label,
                               new__target_id,
@@ -145,28 +165,40 @@ begin
                               null
   );
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 -- procedure delete
 select define_function_args('content_symlink__delete','symlink_id');
-create or replace function content_symlink__delete (integer)
-returns integer as '
-declare
-  delete__symlink_id             alias for $1;  
-begin
+
+
+--
+-- procedure content_symlink__delete/1
+--
+CREATE OR REPLACE FUNCTION content_symlink__delete(
+   delete__symlink_id integer
+) RETURNS integer AS $$
+DECLARE
+BEGIN
 
   PERFORM content_symlink__del(delete__symlink_id);
 
   return 0; 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
 select define_function_args('content_symlink__del','symlink_id');
-create or replace function content_symlink__del (integer)
-returns integer as '
-declare
-  del__symlink_id             alias for $1;  
-begin
+
+
+--
+-- procedure content_symlink__del/1
+--
+CREATE OR REPLACE FUNCTION content_symlink__del(
+   del__symlink_id integer
+) RETURNS integer AS $$
+DECLARE
+BEGIN
 
   delete from cr_symlinks
     where symlink_id = del__symlink_id;
@@ -174,18 +206,24 @@ begin
   PERFORM content_item__delete(del__symlink_id);
 
   return 0; 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
 
 -- function is_symlink
 select define_function_args('content_symlink__is_symlink','item_id');
-create or replace function content_symlink__is_symlink (integer)
-returns boolean as '
-declare
-  is_symlink__item_id                alias for $1;  
+
+
+--
+-- procedure content_symlink__is_symlink/1
+--
+CREATE OR REPLACE FUNCTION content_symlink__is_symlink(
+   is_symlink__item_id integer
+) RETURNS boolean AS $$
+DECLARE
   v_symlink_p                        boolean;
-begin
+BEGIN
 
   select 
     count(*) = 1 into v_symlink_p
@@ -196,32 +234,39 @@ begin
 
   return v_symlink_p;  
  
-end;' language 'plpgsql' stable;
+END;
+$$ LANGUAGE plpgsql stable;
 
 
 -- procedure copy
-select define_function_args('content_symlink__copy','symlink_id,target_folder_id,creation_user,creation_ip,name');
-create or replace function content_symlink__copy (
-	integer,
-	integer,
-	integer,
-	varchar,
-	varchar) returns integer as '
-declare
-  copy__symlink_id             alias for $1;  
-  copy__target_folder_id       alias for $2;  
-  copy__creation_user          alias for $3;  
-  copy__creation_ip            alias for $4;  -- default null  
-  copy__name	               alias for $5; -- default null
+
+-- old define_function_args('content_symlink__copy','symlink_id,target_folder_id,creation_user,creation_ip,name')
+-- new
+select define_function_args('content_symlink__copy','symlink_id,target_folder_id,creation_user,creation_ip;null,name;null');
+
+
+
+--
+-- procedure content_symlink__copy/5
+--
+CREATE OR REPLACE FUNCTION content_symlink__copy(
+   copy__symlink_id integer,
+   copy__target_folder_id integer,
+   copy__creation_user integer,
+   copy__creation_ip varchar, -- default null
+   copy__name varchar         -- default null
+
+) RETURNS integer AS $$
+DECLARE
 v_current_folder_id          cr_folders.folder_id%TYPE;
   v_name                       cr_items.name%TYPE;
   v_target_id                  cr_items.item_id%TYPE;
   v_label                      cr_symlinks.label%TYPE;
   v_symlink_id                 cr_symlinks.symlink_id%TYPE;
-begin
+BEGIN
   -- XXX: bug if target is not a folder this will silently fail.
 
-  if content_folder__is_folder(copy__target_folder_id) = ''t'' then
+  if content_folder__is_folder(copy__target_folder_id) = 't' then
     select
       parent_id
     into
@@ -231,7 +276,7 @@ begin
     where
       item_id = copy__symlink_id;
 
-    -- can''t copy to the same folder unless name is different
+    -- can't copy to the same folder unless name is different
 
     select
       i.name, content_symlink__resolve(i.item_id), s.label
@@ -248,9 +293,9 @@ begin
 	-- is different
     if copy__target_folder_id != v_current_folder_id  or ( v_name <> copy_name and copy_name is not null ) then
       if content_folder__is_registered(copy__target_folder_id,
-        ''content_symlink'',''f'') = ''t'' then
+        'content_symlink','f') = 't' then
         if content_folder__is_registered(copy__target_folder_id,
-          content_item__get_content_type(content_symlink__resolve(copy__symlink_id)),''f'') = ''t'' then
+          content_item__get_content_type(content_symlink__resolve(copy__symlink_id)),'f') = 't' then
 
 	  v_symlink_id := content_symlink__new(
               coalesce (copy__name,v_name),
@@ -271,25 +316,31 @@ begin
   end if;
 
   return v_symlink_id; 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
-create or replace function content_symlink__copy (
-	integer,
-	integer,
-	integer,
-	varchar)
-returns integer as '
-declare
-  copy__symlink_id             alias for $1;  
-  copy__target_folder_id       alias for $2;  
-  copy__creation_user          alias for $3;  
-  copy__creation_ip            alias for $4;  -- default null  
+
+
+--
+-- procedure content_symlink__copy/4
+--
+CREATE OR REPLACE FUNCTION content_symlink__copy(
+   copy__symlink_id integer,
+   copy__target_folder_id integer,
+   copy__creation_user integer,
+   copy__creation_ip varchar -- default null
+
+) RETURNS integer AS $$
+--
+-- content_symlink__copy/4 maybe obsolete, when we define proper defaults for /5
+--
+DECLARE
   v_current_folder_id          cr_folders.folder_id%TYPE;
   v_name                       cr_items.name%TYPE;
   v_target_id                  cr_items.item_id%TYPE;
   v_label                      cr_symlinks.label%TYPE;
   v_symlink_id                 cr_symlinks.symlink_id%TYPE;
-begin
+BEGIN
 	v_symlink_id := content_symlink__copy (
 		copy__symlink_id,
 		copy__target_folder_id,
@@ -298,16 +349,22 @@ begin
                 NULL
                 );
 	return v_symlink_id;
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 -- function resolve
 select define_function_args('content_symlink__resolve','item_id');
-create or replace function content_symlink__resolve (integer)
-returns integer as '
-declare
-  resolve__item_id                alias for $1;  
+
+
+--
+-- procedure content_symlink__resolve/1
+--
+CREATE OR REPLACE FUNCTION content_symlink__resolve(
+   resolve__item_id integer
+) RETURNS integer AS $$
+DECLARE
   v_target_id                     cr_items.item_id%TYPE;
-begin
+BEGIN
 
   select
     target_id into v_target_id
@@ -322,17 +379,23 @@ begin
      return v_target_id;
   end if;
 
-end;' language 'plpgsql' stable strict;
+END;
+$$ LANGUAGE plpgsql stable strict;
 
 
 -- function resolve_content_type
 select define_function_args('content_symlink__resolve_content_type','item_id');
-create or replace function content_symlink__resolve_content_type (integer)
-returns varchar as '
-declare
-  resolve_content_type__item_id                alias for $1;  
+
+
+--
+-- procedure content_symlink__resolve_content_type/1
+--
+CREATE OR REPLACE FUNCTION content_symlink__resolve_content_type(
+   resolve_content_type__item_id integer
+) RETURNS varchar AS $$
+DECLARE
   v_content_type                               cr_items.content_type%TYPE;
-begin
+BEGIN
 
   select 
     content_item__get_content_type(target_id) into v_content_type
@@ -343,7 +406,8 @@ begin
 
   return v_content_type;
  
-end;' language 'plpgsql' stable strict;
+END;
+$$ LANGUAGE plpgsql stable strict;
 
 
 

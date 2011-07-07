@@ -8,37 +8,56 @@
 -- @cvs-id $Id$
 --
 
-create function util__multiple_nextval (varchar,integer)
-returns varchar as '
-declare
-  v_sequence_name        alias for $1;  
-  v_count                alias for $2;  
-  a_sequence_values      text default ''''; 
+
+
+-- added
+select define_function_args('util__multiple_nextval','v_sequence_name,v_count');
+
+--
+-- procedure util__multiple_nextval/2
+--
+CREATE OR REPLACE FUNCTION util__multiple_nextval(
+   v_sequence_name varchar,
+   v_count integer
+) RETURNS varchar AS $$
+DECLARE
+  a_sequence_values      text default ''; 
   v_rec                  record;
-begin
+BEGIN
     for counter in 1..v_count loop
-        for v_rec in EXECUTE ''select '' || quote_ident(v_sequence_name) || ''.nextval as a_seq_val''
+        for v_rec in EXECUTE 'select ' || quote_ident(v_sequence_name) || '.nextval as a_seq_val'
         LOOP
-           a_sequence_values := a_sequence_values || '''','''' || v_rec.a_seq_val;
+           a_sequence_values := a_sequence_values || '','' || v_rec.a_seq_val;
           exit;
         end loop;
     end loop;
 
     return substr(a_sequence_values, 2);
  
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
-create function util__logical_negation (boolean) returns boolean as '
-declare
-        true_or_false alias for $1;
-begin
+
+
+-- added
+select define_function_args('util__logical_negation','true_or_false');
+
+--
+-- procedure util__logical_negation/1
+--
+CREATE OR REPLACE FUNCTION util__logical_negation(
+   true_or_false boolean
+) RETURNS boolean AS $$
+DECLARE
+BEGIN
       IF true_or_false is null THEN
         return null;
-      ELSE IF true_or_false = ''f'' THEN
-        return ''t'';   
+      ELSE IF true_or_false = 'f' THEN
+        return 't';   
       ELSE 
-        return ''f'';   
+        return 'f';   
       END IF; END IF;
-END;' language 'plpgsql' immutable strict;
+END;
+$$ LANGUAGE plpgsql immutable strict;
 
 

@@ -9,46 +9,63 @@
 -- http://www.fsf.org/copyleft/gpl.html
 
 select define_function_args ('content_keyword__get_heading','keyword_id');
-create or replace function content_keyword__get_heading (integer)
-returns text as '
-declare
-  get_heading__keyword_id             alias for $1;  
+
+
+--
+-- procedure content_keyword__get_heading/1
+--
+CREATE OR REPLACE FUNCTION content_keyword__get_heading(
+   get_heading__keyword_id integer
+) RETURNS text AS $$
+DECLARE
   v_heading                           text; 
-begin
+BEGIN
 
   select heading into v_heading from cr_keywords
     where keyword_id = get_heading__keyword_id;
 
   return v_heading;
  
-end;' language 'plpgsql' stable strict;
+END;
+$$ LANGUAGE plpgsql stable strict;
 
 
 -- function get_description
 select define_function_args ('content_keyword__get_description','keyword_id');
-create or replace function content_keyword__get_description (integer)
-returns text as '
-declare
-  get_description__keyword_id             alias for $1;  
+
+
+--
+-- procedure content_keyword__get_description/1
+--
+CREATE OR REPLACE FUNCTION content_keyword__get_description(
+   get_description__keyword_id integer
+) RETURNS text AS $$
+DECLARE
   v_description                           text; 
-begin
+BEGIN
 
   select description into v_description from cr_keywords
     where keyword_id = get_description__keyword_id;
 
   return v_description;
  
-end;' language 'plpgsql' stable strict;
+END;
+$$ LANGUAGE plpgsql stable strict;
 
 
 -- procedure set_heading
 select define_function_args ('content_keyword__set_heading','keyword_id,heading');
-create or replace function content_keyword__set_heading (integer,varchar)
-returns integer as '
-declare
-  set_heading__keyword_id             alias for $1;  
-  set_heading__heading                alias for $2;  
-begin
+
+
+--
+-- procedure content_keyword__set_heading/2
+--
+CREATE OR REPLACE FUNCTION content_keyword__set_heading(
+   set_heading__keyword_id integer,
+   set_heading__heading varchar
+) RETURNS integer AS $$
+DECLARE
+BEGIN
 
   update cr_keywords set 
     heading = set_heading__heading
@@ -60,17 +77,23 @@ begin
   where object_id = set_heading__keyword_id;
 
   return 0; 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
 -- procedure set_description
 select define_function_args ('content_keyword__set_description','keyword_id,description');
-create or replace function content_keyword__set_description (integer,varchar)
-returns integer as '
-declare
-  set_description__keyword_id             alias for $1;  
-  set_description__description            alias for $2;  
-begin
+
+
+--
+-- procedure content_keyword__set_description/2
+--
+CREATE OR REPLACE FUNCTION content_keyword__set_description(
+   set_description__keyword_id integer,
+   set_description__description varchar
+) RETURNS integer AS $$
+DECLARE
+BEGIN
 
   update cr_keywords set 
     description = set_description__description
@@ -78,16 +101,22 @@ begin
     keyword_id = set_description__keyword_id;
 
   return 0; 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
 -- function is_leaf
 select define_function_args ('content_keyword__is_leaf','keyword_id');
-create or replace function content_keyword__is_leaf (integer)
-returns boolean as '
-declare
-  is_leaf__keyword_id             alias for $1;  
-begin
+
+
+--
+-- procedure content_keyword__is_leaf/1
+--
+CREATE OR REPLACE FUNCTION content_keyword__is_leaf(
+   is_leaf__keyword_id integer
+) RETURNS boolean AS $$
+DECLARE
+BEGIN
 
   return 
       count(*) = 0
@@ -96,28 +125,39 @@ begin
   where
     k.parent_id = is_leaf__keyword_id;
  
-end;' language 'plpgsql' stable;
+END;
+$$ LANGUAGE plpgsql stable;
 
 
 -- function new
 
-select define_function_args('content_keyword__new','heading,description,parent_id,keyword_id,creation_date;now,creation_user,creation_ip,object_type;content_keyword');
 
-create or replace function content_keyword__new (varchar,varchar,integer,integer,timestamptz,integer,varchar,varchar,integer)
-returns integer as '
-declare
-  new__heading                alias for $1;  
-  new__description            alias for $2;  -- default null  
-  new__parent_id              alias for $3;  -- default null
-  new__keyword_id             alias for $4;  -- default null
-  new__creation_date          alias for $5;  -- default now()
-  new__creation_user          alias for $6;  -- default null
-  new__creation_ip            alias for $7;  -- default null
-  new__object_type            alias for $8;  -- default ''content_keyword''
-  new__package_id             alias for $9;  -- default null
+-- old define_function_args('content_keyword__new','heading,description,parent_id,keyword_id,creation_date;now,creation_user,creation_ip,object_type;content_keyword')
+-- new
+select define_function_args('content_keyword__new','heading,description;null,parent_id;null,keyword_id;null,creation_date;now,creation_user;null,creation_ip;null,object_type;content_keyword');
+
+
+
+
+--
+-- procedure content_keyword__new/9
+--
+CREATE OR REPLACE FUNCTION content_keyword__new(
+   new__heading varchar,
+   new__description varchar,       -- default null
+   new__parent_id integer,         -- default null
+   new__keyword_id integer,        -- default null
+   new__creation_date timestamptz, -- default now() -- default 'now'
+   new__creation_user integer,     -- default null
+   new__creation_ip varchar,       -- default null
+   new__object_type varchar,       -- default 'content_keyword'
+   new__package_id integer         -- default null
+
+) RETURNS integer AS $$
+DECLARE
   v_id                        integer;       
   v_package_id                acs_objects.package_id%TYPE;
-begin
+BEGIN
 
   if new__package_id is null then
     v_package_id := acs_object__package_id(new__parent_id);
@@ -131,7 +171,7 @@ begin
                            new__creation_user, 
                            new__creation_ip,
                            new__parent_id,
-                           ''t'',
+                           't',
                            new__heading,
                            v_package_id
   );
@@ -143,20 +183,27 @@ begin
 
   return v_id;
  
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
-create or replace function content_keyword__new (varchar,varchar,integer,integer,timestamptz,integer,varchar,varchar)
-returns integer as '
-declare
-  new__heading                alias for $1;  
-  new__description            alias for $2;  -- default null  
-  new__parent_id              alias for $3;  -- default null
-  new__keyword_id             alias for $4;  -- default null
-  new__creation_date          alias for $5;  -- default now()
-  new__creation_user          alias for $6;  -- default null
-  new__creation_ip            alias for $7;  -- default null
-  new__object_type            alias for $8;  -- default ''content_keyword''
-begin
+
+
+--
+-- procedure content_keyword__new/8
+--
+CREATE OR REPLACE FUNCTION content_keyword__new(
+   new__heading varchar,
+   new__description varchar,       -- default null
+   new__parent_id integer,         -- default null
+   new__keyword_id integer,        -- default null
+   new__creation_date timestamptz, -- default now() -- default 'now'
+   new__creation_user integer,     -- default null
+   new__creation_ip varchar,       -- default null
+   new__object_type varchar        -- default 'content_keyword'
+
+) RETURNS integer AS $$
+DECLARE
+BEGIN
   return content_keyword__new(new__heading,
                               new__description,
                               new__parent_id,
@@ -168,16 +215,22 @@ begin
                               null
   );
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 -- procedure delete
 select define_function_args ('content_keyword__del','keyword_id');
-create or replace function content_keyword__del (integer)
-returns integer as '
-declare
-  delete__keyword_id             alias for $1;  
+
+
+--
+-- procedure content_keyword__del/1
+--
+CREATE OR REPLACE FUNCTION content_keyword__del(
+   delete__keyword_id integer
+) RETURNS integer AS $$
+DECLARE
   v_rec                          record; 
-begin
+BEGIN
 
   for v_rec in select item_id from cr_item_keyword_map 
     where keyword_id = delete__keyword_id LOOP
@@ -187,31 +240,47 @@ begin
   PERFORM acs_object__delete(delete__keyword_id);
 
   return 0; 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
-create or replace function content_keyword__delete (integer)
-returns integer as '
-declare
-  delete__keyword_id             alias for $1;  
+
+
+-- added
+select define_function_args('content_keyword__delete','keyword_id');
+
+--
+-- procedure content_keyword__delete/1
+--
+CREATE OR REPLACE FUNCTION content_keyword__delete(
+   delete__keyword_id integer
+) RETURNS integer AS $$
+DECLARE
   v_rec                          record; 
-begin
+BEGIN
   perform content_keyword__del(delete__keyword_id);
   return 0; 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
 -- procedure item_assign
 select define_function_args ('content_keyword__item_assign','item_id,keyword_id,context_id;null,creation_user;null,creation_ip;null');
-create or replace function content_keyword__item_assign (integer,integer,integer,integer,varchar)
-returns integer as '
-declare
-  item_assign__item_id                alias for $1;  
-  item_assign__keyword_id             alias for $2;  
-  item_assign__context_id             alias for $3;  -- default null  
-  item_assign__creation_user          alias for $4;  -- default null
-  item_assign__creation_ip            alias for $5;  -- default null
+
+
+--
+-- procedure content_keyword__item_assign/5
+--
+CREATE OR REPLACE FUNCTION content_keyword__item_assign(
+   item_assign__item_id integer,
+   item_assign__keyword_id integer,
+   item_assign__context_id integer,    -- default null
+   item_assign__creation_user integer, -- default null
+   item_assign__creation_ip varchar    -- default null
+
+) RETURNS integer AS $$
+DECLARE
   exists_p                            boolean;
-begin
+BEGIN
   
   -- Do nothing if the keyword is assigned already
   select count(*) > 0 into exists_p from dual 
@@ -229,52 +298,65 @@ begin
   end if;
 
   return 0; 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
 -- procedure item_unassign
 select define_function_args ('content_keyword__item_unassign','item_id,keyword_id');
-create or replace function content_keyword__item_unassign (integer,integer)
-returns integer as '
-declare
-  item_unassign__item_id                alias for $1;  
-  item_unassign__keyword_id             alias for $2;  
-begin
+
+
+--
+-- procedure content_keyword__item_unassign/2
+--
+CREATE OR REPLACE FUNCTION content_keyword__item_unassign(
+   item_unassign__item_id integer,
+   item_unassign__keyword_id integer
+) RETURNS integer AS $$
+DECLARE
+BEGIN
 
   delete from cr_item_keyword_map
     where item_id = item_unassign__item_id 
     and keyword_id = item_unassign__keyword_id;
 
   return 0; 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
 -- function is_assigned
 select define_function_args ('content_keyword__is_assigned','item_id,keyword_id,recurse;none');
-create or replace function content_keyword__is_assigned (integer,integer,varchar)
-returns boolean as '
-declare
-  is_assigned__item_id                alias for $1;  
-  is_assigned__keyword_id             alias for $2;  
-  is_assigned__recurse                alias for $3;  -- default ''none''  
+
+
+--
+-- procedure content_keyword__is_assigned/3
+--
+CREATE OR REPLACE FUNCTION content_keyword__is_assigned(
+   is_assigned__item_id integer,
+   is_assigned__keyword_id integer,
+   is_assigned__recurse varchar -- default 'none'
+
+) RETURNS boolean AS $$
+DECLARE
   v_ret                               boolean;    
   v_is_assigned__recurse	      varchar;
-begin
+BEGIN
   if is_assigned__recurse is null then 
-	v_is_assigned__recurse := ''none'';
+	v_is_assigned__recurse := 'none';
   else
       	v_is_assigned__recurse := is_assigned__recurse;	
   end if;
 
   -- Look for an exact match
-  if v_is_assigned__recurse = ''none'' then
+  if v_is_assigned__recurse = 'none' then
       return count(*) > 0 from cr_item_keyword_map
        where item_id = is_assigned__item_id
          and keyword_id = is_assigned__keyword_id;
   end if;
 
   -- Look from specific to general
-  if v_is_assigned__recurse = ''up'' then
+  if v_is_assigned__recurse = 'up' then
       return count(*) > 0
       where exists (select 1
                     from (select keyword_id from cr_keywords c, cr_keywords c2
@@ -285,7 +367,7 @@ begin
                       and m.item_id = is_assigned__item_id);
   end if;
 
-  if v_is_assigned__recurse = ''down'' then
+  if v_is_assigned__recurse = 'down' then
       return count(*) > 0
       where exists (select 1
                     from (select k2.keyword_id
@@ -299,23 +381,29 @@ begin
   end if;  
 
   -- Tried none, up and down - must be an invalid parameter
-  raise EXCEPTION ''-20000: The recurse parameter to content_keyword.is_assigned should be \\\'none\\\', \\\'up\\\' or \\\'down\\\''';
+  raise EXCEPTION '-20000: The recurse parameter to content_keyword.is_assigned should be ''none'', ''up'' or ''down''';
   
   return null;
-end;' language 'plpgsql' stable;
+END;
+$$ LANGUAGE plpgsql stable;
 
 
 -- function get_path
 select define_function_args ('content_keyword__get_path','keyword_id');
-create or replace function content_keyword__get_path (integer)
-returns text as '
-declare
-  get_path__keyword_id             alias for $1;  
-  v_path                          text default '''';
-  v_is_found                      boolean default ''f'';   
+
+
+--
+-- procedure content_keyword__get_path/1
+--
+CREATE OR REPLACE FUNCTION content_keyword__get_path(
+   get_path__keyword_id integer
+) RETURNS text AS $$
+DECLARE
+  v_path                          text default '';
+  v_is_found                      boolean default 'f';   
   v_heading                       cr_keywords.heading%TYPE;
   v_rec                           record;
-begin
+BEGIN
 --               select
 --                 heading 
 --               from (
@@ -335,31 +423,33 @@ begin
                 order by tree_level desc 
   LOOP
       v_heading := v_rec.heading;
-      v_is_found := ''t'';
-      v_path := v_path || ''/'' || v_heading;
+      v_is_found := 't';
+      v_path := v_path || '/' || v_heading;
   end LOOP;
 
-  if v_is_found = ''f'' then
+  if v_is_found = 'f' then
     return null;
   else
     return v_path;
   end if;
  
-end;' language 'plpgsql' stable strict;
+END;
+$$ LANGUAGE plpgsql stable strict;
 
 
 -- Ensure that the context_id in acs_objects is always set to the
 -- parent_id in cr_keywords
 
-create function cr_keywords_update_tr () returns opaque as '
-begin
+CREATE OR REPLACE FUNCTION cr_keywords_update_tr () RETURNS trigger AS $$
+BEGIN
   if old.parent_id <> new.parent_id then
     update acs_objects set context_id = new.parent_id
       where object_id = new.keyword_id;
   end if;
 
   return new;
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 create trigger cr_keywords_update_tr after update on cr_keywords
 for each row execute procedure cr_keywords_update_tr ();

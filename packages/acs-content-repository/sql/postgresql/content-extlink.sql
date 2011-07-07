@@ -10,26 +10,36 @@
 -- License.  Full text of the license is available from the GNU Project:
 -- http://www.fsf.org/copyleft/gpl.html
 
-select define_function_args('content_extlink__new','name,url,label,description,parent_id,extlink_id,creation_date;now,creation_user,creation_ip,package_id');
 
-create or replace function content_extlink__new (varchar,varchar,varchar,varchar,integer,integer,timestamptz,integer,varchar,integer)
-returns integer as '
-declare
-  new__name                   alias for $1;  -- default null  
-  new__url                    alias for $2;  
-  new__label                  alias for $3;  -- default null
-  new__description            alias for $4;  -- default null
-  new__parent_id              alias for $5;  
-  new__extlink_id             alias for $6;  -- default null
-  new__creation_date          alias for $7;  -- default now()
-  new__creation_user          alias for $8;  -- default null
-  new__creation_ip            alias for $9;  -- default null
-  new__package_id             alias for $10; -- default null
+-- old define_function_args('content_extlink__new','name,url,label,description,parent_id,extlink_id,creation_date;now,creation_user,creation_ip,package_id')
+-- new
+select define_function_args('content_extlink__new','name;null,url,label;null,description;null,parent_id,extlink_id;null,creation_date;now,creation_user;null,creation_ip;null,package_id;null');
+
+
+
+
+--
+-- procedure content_extlink__new/10
+--
+CREATE OR REPLACE FUNCTION content_extlink__new(
+   new__name varchar,              -- default null
+   new__url varchar,
+   new__label varchar,             -- default null
+   new__description varchar,       -- default null
+   new__parent_id integer,
+   new__extlink_id integer,        -- default null
+   new__creation_date timestamptz, -- default now() -- default 'now'
+   new__creation_user integer,     -- default null
+   new__creation_ip varchar,       -- default null
+   new__package_id integer         -- default null
+
+) RETURNS integer AS $$
+DECLARE
   v_extlink_id                cr_extlinks.extlink_id%TYPE;
   v_package_id                acs_objects.package_id%TYPE;
   v_label                     cr_extlinks.label%TYPE;
   v_name                      cr_items.name%TYPE;
-begin
+BEGIN
 
   if new__label is null then
     v_label := new__url;
@@ -38,8 +48,8 @@ begin
   end if;
 
   if new__name is null then
-    select nextval(''t_acs_object_id_seq'') into v_extlink_id from dual;
-    v_name := ''link'' || v_extlink_id;
+    select nextval('t_acs_object_id_seq') into v_extlink_id from dual;
+    v_name := 'link' || v_extlink_id;
   else
     v_name := new__name;
   end if;
@@ -59,14 +69,14 @@ begin
       new__creation_user, 
       null,
       new__creation_ip, 
-      ''content_item'',
-      ''content_extlink'', 
+      'content_item',
+      'content_extlink', 
       null,
       null,
-      ''text/plain'',
+      'text/plain',
       null,
       null,
-      ''text'',
+      'text',
       v_package_id
   );
 
@@ -81,21 +91,31 @@ begin
 
   return v_extlink_id;
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
-create or replace function content_extlink__new (varchar,varchar,varchar,varchar,integer,integer,timestamptz,integer,varchar)
-returns integer as '
-declare
-  new__name                   alias for $1;  -- default null  
-  new__url                    alias for $2;  
-  new__label                  alias for $3;  -- default null
-  new__description            alias for $4;  -- default null
-  new__parent_id              alias for $5;  
-  new__extlink_id             alias for $6;  -- default null
-  new__creation_date          alias for $7;  -- default now()
-  new__creation_user          alias for $8;  -- default null
-  new__creation_ip            alias for $9;  -- default null
-begin
+
+
+--
+-- procedure content_extlink__new/9
+--
+CREATE OR REPLACE FUNCTION content_extlink__new(
+   new__name varchar,              -- default null
+   new__url varchar,
+   new__label varchar,             -- default null
+   new__description varchar,       -- default null
+   new__parent_id integer,
+   new__extlink_id integer,        -- default null
+   new__creation_date timestamptz, -- default now()
+   new__creation_user integer,     -- default null
+   new__creation_ip varchar        -- default null
+
+) RETURNS integer AS $$
+--
+-- content_extlink__new/9 maybe obsolete, when we define proper defaults for /10
+--
+DECLARE
+BEGIN
   return content_extlink__new(new__name,
                               new__url,
                               new__label,
@@ -108,15 +128,21 @@ begin
                               null
   );
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 select define_function_args('content_extlink__delete','extlink_id');
 
-create or replace function content_extlink__delete (integer)
-returns integer as '
-declare
-  delete__extlink_id             alias for $1;  
-begin
+
+
+--
+-- procedure content_extlink__delete/1
+--
+CREATE OR REPLACE FUNCTION content_extlink__delete(
+   delete__extlink_id integer
+) RETURNS integer AS $$
+DECLARE
+BEGIN
 
   delete from cr_extlinks
     where extlink_id = delete__extlink_id;
@@ -124,15 +150,21 @@ begin
   PERFORM content_item__delete(delete__extlink_id);
 
 return 0; 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 select define_function_args('content_extlink__is_extlink','item_id');
-create or replace function content_extlink__is_extlink (integer)
-returns boolean as '
-declare
-  is_extlink__item_id                alias for $1;  
+
+
+--
+-- procedure content_extlink__is_extlink/1
+--
+CREATE OR REPLACE FUNCTION content_extlink__is_extlink(
+   is_extlink__item_id integer
+) RETURNS boolean AS $$
+DECLARE
   v_extlink_p                        boolean;
-begin
+BEGIN
 
   select 
     count(1) = 1 into v_extlink_p
@@ -143,21 +175,27 @@ begin
   
   return v_extlink_p;
  
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
-create or replace function content_extlink__copy (
-	integer,
-	integer,
-	integer,
-	varchar)
-returns integer as '
-declare
-  copy__extlink_id             alias for $1;  
-  copy__target_folder_id       alias for $2;  
-  copy__creation_user          alias for $3;  
-  copy__creation_ip            alias for $4;  -- default null
+
+
+--
+-- procedure content_extlink__copy/4
+--
+CREATE OR REPLACE FUNCTION content_extlink__copy(
+   copy__extlink_id integer,
+   copy__target_folder_id integer,
+   copy__creation_user integer,
+   copy__creation_ip varchar -- default null
+
+) RETURNS integer AS $$
+--
+-- content_extlink__copy/4 maybe obsolete, when we define proper defaults for /5
+--
+DECLARE
   v_extlink_id                 cr_extlinks.extlink_id%TYPE;
-begin
+BEGIN
 	v_extlink_id := content_extlink__copy (
 		copy__extlink_id,
 		copy__target_folder_id,
@@ -166,31 +204,37 @@ begin
 		NULL
 	);
 	return 0;
-end;' language 'plpgsql' stable;
+END;
+$$ LANGUAGE plpgsql stable;
 
-select define_function_args('content_extlink__copy','extlink_id,target_folder_id,creation_user,creation_ip,name');
-create or replace function content_extlink__copy (
-	integer,
-	integer,
-	integer,
-	varchar,
-	varchar)
-returns integer as '
-declare
-  copy__extlink_id             alias for $1;  
-  copy__target_folder_id       alias for $2;  
-  copy__creation_user          alias for $3;  
-  copy__creation_ip            alias for $4;  -- default null
-  copy__name                   alias for $5;
+
+-- old define_function_args('content_extlink__copy','extlink_id,target_folder_id,creation_user,creation_ip,name')
+-- new
+select define_function_args('content_extlink__copy','extlink_id,target_folder_id,creation_user,creation_ip;null,name');
+
+
+
+--
+-- procedure content_extlink__copy/5
+--
+CREATE OR REPLACE FUNCTION content_extlink__copy(
+   copy__extlink_id integer,
+   copy__target_folder_id integer,
+   copy__creation_user integer,
+   copy__creation_ip varchar, -- default null
+   copy__name varchar
+
+) RETURNS integer AS $$
+DECLARE
   v_current_folder_id          cr_folders.folder_id%TYPE;
   v_name                       cr_items.name%TYPE;
   v_url                        cr_extlinks.url%TYPE;
   v_description                cr_extlinks.description%TYPE;
   v_label                      cr_extlinks.label%TYPE;
   v_extlink_id                 cr_extlinks.extlink_id%TYPE;
-begin
+BEGIN
 
-  if content_folder__is_folder(copy__target_folder_id) = ''t'' then
+  if content_folder__is_folder(copy__target_folder_id) = 't' then
     select
       parent_id
     into
@@ -200,7 +244,7 @@ begin
     where
       item_id = copy__extlink_id;
 
-    -- can''t copy to the same folder
+    -- can't copy to the same folder
 
     select
       i.name, e.url, e.description, e.label
@@ -218,7 +262,7 @@ begin
     if copy__target_folder_id != v_current_folder_id  or ( v_name <> copy__name and copy__name is not null ) then
 
       if content_folder__is_registered(copy__target_folder_id,
-        ''content_extlink'',''f'') = ''t'' then
+        'content_extlink','f') = 't' then
 
         v_extlink_id := content_extlink__new(
             coalesce (copy__name, v_name),
@@ -238,7 +282,8 @@ begin
   end if;
 
   return 0; 
-end;' language 'plpgsql' stable;
+END;
+$$ LANGUAGE plpgsql stable;
 
 
 

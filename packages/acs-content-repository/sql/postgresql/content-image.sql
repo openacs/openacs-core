@@ -109,26 +109,35 @@ end;
 -- than the standard package_instantiate_object.  So we don't bother calling define_function_args
 -- here.
 
-create or replace function image__new (varchar,integer,integer,integer,varchar,integer,varchar,varchar,varchar,varchar,boolean,timestamptz,varchar,integer,integer,integer,integer)
-returns integer as '
-  declare
-    new__name		alias for $1;
-    new__parent_id	alias for $2; -- default null
-    new__item_id	alias for $3; -- default null
-    new__revision_id	alias for $4; -- default null
-    new__mime_type	alias for $5; -- default jpeg
-    new__creation_user  alias for $6; -- default null
-    new__creation_ip    alias for $7; -- default null
-    new__relation_tag	alias for $8; -- default null
-    new__title          alias for $9; -- default null
-    new__description    alias for $10; -- default null
-    new__is_live        alias for $11; -- default f
-    new__publish_date	alias for $12; -- default now()
-    new__path   	alias for $13; 
-    new__file_size   	alias for $14; 
-    new__height    	alias for $15;
-    new__width		alias for $16; 
-    new__package_id     alias for $17; -- default null
+
+
+-- added
+select define_function_args('image__new','name,parent_id;null,item_id;null,revision_id;null,mime_type;jpeg,creation_user;null,creation_ip;null,relation_tag;null,title;null,description;null,is_live;f,publish_date;now(),path,file_size,height,width,package_id;null');
+
+--
+-- procedure image__new/17
+--
+CREATE OR REPLACE FUNCTION image__new(
+   new__name varchar,
+   new__parent_id integer,        -- default null
+   new__item_id integer,          -- default null
+   new__revision_id integer,      -- default null
+   new__mime_type varchar,        -- default jpeg
+   new__creation_user integer,    -- default null
+   new__creation_ip varchar,      -- default null
+   new__relation_tag varchar,     -- default null
+   new__title varchar,            -- default null
+   new__description varchar,      -- default null
+   new__is_live boolean,          -- default f
+   new__publish_date timestamptz, -- default now()
+   new__path varchar,
+   new__file_size integer,
+   new__height integer,
+   new__width integer,
+   new__package_id integer        -- default null
+
+) RETURNS integer AS $$
+DECLARE
 
     new__locale          varchar default null;
     new__nls_language	 varchar default null;
@@ -138,7 +147,7 @@ returns integer as '
     v_item_id		 cr_items.item_id%TYPE;
     v_package_id	 acs_objects.package_id%TYPE;
     v_revision_id	 cr_revisions.revision_id%TYPE;
-  begin
+  BEGIN
     new__context_id := new__parent_id;
 
     if new__package_id is null then
@@ -156,14 +165,14 @@ returns integer as '
       new__creation_user,	
       new__context_id,
       new__creation_ip,
-      ''content_item'',
-      ''image'',
+      'content_item',
+      'image',
       null,
       new__description,
       new__mime_type,
       new__nls_language,
       null,
-      ''file'', -- storage_type
+      'file', -- storage_type
       v_package_id
     );
 
@@ -172,7 +181,7 @@ returns integer as '
     set relation_tag = new__relation_tag
     where parent_id = new__parent_id
     and child_id = new__item_id
-    and relation_tag = content_item__get_content_type(new__parent_id) || ''-'' || ''image'';
+    and relation_tag = content_item__get_content_type(new__parent_id) || '-' || 'image';
 
     v_revision_id := content_revision__new (
       new__title,
@@ -200,37 +209,44 @@ returns integer as '
     content = new__path
     where revision_id = v_revision_id;
 
-    -- is_live => ''t'' not used as part of content_item.new
+    -- is_live => 't' not used as part of content_item.new
     -- because content_item.new does not let developer specify revision_id,
     -- revision_id is determined in advance 
 
-    if new__is_live = ''t'' then
+    if new__is_live = 't' then
        PERFORM content_item__set_live_revision (v_revision_id);
     end if;
 
     return v_item_id;
-end; ' language 'plpgsql';
+END; 
+$$ LANGUAGE plpgsql;
 
-create or replace function image__new (varchar,integer,integer,integer,varchar,integer,varchar,varchar,varchar,varchar,boolean,timestamptz,varchar,integer,integer,integer
-  ) returns integer as '
-  declare
-    new__name		alias for $1;
-    new__parent_id	alias for $2; -- default null
-    new__item_id	alias for $3; -- default null
-    new__revision_id	alias for $4; -- default null
-    new__mime_type	alias for $5; -- default jpeg
-    new__creation_user  alias for $6; -- default null
-    new__creation_ip    alias for $7; -- default null
-    new__relation_tag	alias for $8; -- default null
-    new__title          alias for $9; -- default null
-    new__description    alias for $10; -- default null
-    new__is_live        alias for $11; -- default f
-    new__publish_date	alias for $12; -- default now()
-    new__path   	alias for $13; 
-    new__file_size   	alias for $14; 
-    new__height    	alias for $15;
-    new__width		alias for $16; 
-  begin
+
+
+--
+-- procedure image__new/16
+--
+CREATE OR REPLACE FUNCTION image__new(
+   new__name varchar,
+   new__parent_id integer,        -- default null
+   new__item_id integer,          -- default null
+   new__revision_id integer,      -- default null
+   new__mime_type varchar,        -- default jpeg
+   new__creation_user integer,    -- default null
+   new__creation_ip varchar,      -- default null
+   new__relation_tag varchar,     -- default null
+   new__title varchar,            -- default null
+   new__description varchar,      -- default null
+   new__is_live boolean,          -- default f
+   new__publish_date timestamptz, -- default now()
+   new__path varchar,
+   new__file_size integer,
+   new__height integer,
+   new__width integer
+
+) RETURNS integer AS $$
+DECLARE
+  BEGIN
     return image__new(new__name,
                       new__parent_id,
                       new__item_id,
@@ -249,37 +265,44 @@ create or replace function image__new (varchar,integer,integer,integer,varchar,i
                       new__width,
                       null
     );
-end; ' language 'plpgsql';
+END; 
+$$ LANGUAGE plpgsql;
 
 -- DRB's version
 
-create or replace function image__new (varchar,integer,integer,integer,varchar,integer,varchar,varchar,varchar,varchar,varchar,
-                            varchar,timestamptz,integer, integer, integer) returns integer as '
-  declare
-    p_name              alias for $1;
-    p_parent_id         alias for $2; -- default null
-    p_item_id           alias for $3; -- default null
-    p_revision_id       alias for $4; -- default null
-    p_mime_type         alias for $5; -- default jpeg
-    p_creation_user     alias for $6; -- default null
-    p_creation_ip       alias for $7; -- default null
-    p_title             alias for $8; -- default null
-    p_description       alias for $9; -- default null
-    p_storage_type      alias for $10;
-    p_content_type      alias for $11;
-    p_nls_language      alias for $12;
-    p_publish_date      alias for $13;
-    p_height            alias for $14;
-    p_width             alias for $15;
-    p_package_id        alias for $16; -- default null
+
+
+--
+-- procedure image__new/16
+--
+CREATE OR REPLACE FUNCTION image__new(
+   p_name varchar,
+   p_parent_id integer,     -- default null
+   p_item_id integer,       -- default null
+   p_revision_id integer,   -- default null
+   p_mime_type varchar,     -- default jpeg
+   p_creation_user integer, -- default null
+   p_creation_ip varchar,   -- default null
+   p_title varchar,         -- default null
+   p_description varchar,   -- default null
+   p_storage_type varchar,
+   p_content_type varchar,
+   p_nls_language varchar,
+   p_publish_date timestamptz,
+   p_height integer,
+   p_width integer,
+   p_package_id integer     -- default null
+
+) RETURNS integer AS $$
+DECLARE
 
     v_item_id		 cr_items.item_id%TYPE;
     v_revision_id	 cr_revisions.revision_id%TYPE;
     v_package_id	 acs_objects.package_id%TYPE;
-  begin
+  BEGIN
 
-     if content_item__is_subclass(p_content_type, ''image'') = ''f'' then
-       raise EXCEPTION ''-20000: image__new can only be called for an image type''; 
+     if content_item__is_subclass(p_content_type, 'image') = 'f' then
+       raise EXCEPTION '-20000: image__new can only be called for an image type'; 
      end if;
 
     if p_package_id is null then
@@ -297,7 +320,7 @@ create or replace function image__new (varchar,integer,integer,integer,varchar,i
       p_creation_user,	
       p_parent_id,
       p_creation_ip,
-      ''content_item'',
+      'content_item',
       p_content_type,
       null,
       null,
@@ -331,27 +354,34 @@ create or replace function image__new (varchar,integer,integer,integer,varchar,i
     (v_revision_id, p_height, p_width);
 
     return v_item_id;
-end; ' language 'plpgsql';
+END; 
+$$ LANGUAGE plpgsql;
 
-create or replace function image__new (varchar,integer,integer,integer,varchar,integer,varchar,varchar,varchar,varchar,varchar,
-                            varchar,timestamptz,integer, integer) returns integer as '
-  declare
-    p_name              alias for $1;
-    p_parent_id         alias for $2; -- default null
-    p_item_id           alias for $3; -- default null
-    p_revision_id       alias for $4; -- default null
-    p_mime_type         alias for $5; -- default jpeg
-    p_creation_user     alias for $6; -- default null
-    p_creation_ip       alias for $7; -- default null
-    p_title             alias for $8; -- default null
-    p_description       alias for $9; -- default null
-    p_storage_type      alias for $10;
-    p_content_type      alias for $11;
-    p_nls_language      alias for $12;
-    p_publish_date      alias for $13;
-    p_height            alias for $14;
-    p_width             alias for $15;
-  begin
+
+
+--
+-- procedure image__new/15
+--
+CREATE OR REPLACE FUNCTION image__new(
+   p_name varchar,
+   p_parent_id integer,     -- default null
+   p_item_id integer,       -- default null
+   p_revision_id integer,   -- default null
+   p_mime_type varchar,     -- default jpeg
+   p_creation_user integer, -- default null
+   p_creation_ip varchar,   -- default null
+   p_title varchar,         -- default null
+   p_description varchar,   -- default null
+   p_storage_type varchar,
+   p_content_type varchar,
+   p_nls_language varchar,
+   p_publish_date timestamptz,
+   p_height integer,
+   p_width integer
+
+) RETURNS integer AS $$
+DECLARE
+  BEGIN
     return image__new(p_name,
                       p_parent_id,
                       p_item_id,
@@ -369,27 +399,36 @@ create or replace function image__new (varchar,integer,integer,integer,varchar,i
                       p_width,
                       null
     );
-end; ' language 'plpgsql';
+END; 
+$$ LANGUAGE plpgsql;
 
 
-create or replace function image__new_revision(integer, integer, varchar, varchar, timestamptz, varchar, varchar,
-                                    integer, varchar, integer, integer, integer) returns integer as '
-declare
-   p_item_id          alias for $1;
-   p_revision_id      alias for $2;
-   p_title            alias for $3;
-   p_description      alias for $4;
-   p_publish_date     alias for $5;
-   p_mime_type        alias for $6;
-   p_nls_language     alias for $7;
-   p_creation_user    alias for $8;
-   p_creation_ip      alias for $9;
-   p_height           alias for $10;
-   p_width            alias for $11;
-   p_package_id       alias for $12;
+
+
+-- added
+select define_function_args('image__new_revision','item_id,revision_id,title,description,publish_date,mime_type,nls_language,creation_user,creation_ip,height,width,package_id');
+
+--
+-- procedure image__new_revision/12
+--
+CREATE OR REPLACE FUNCTION image__new_revision(
+   p_item_id integer,
+   p_revision_id integer,
+   p_title varchar,
+   p_description varchar,
+   p_publish_date timestamptz,
+   p_mime_type varchar,
+   p_nls_language varchar,
+   p_creation_user integer,
+   p_creation_ip varchar,
+   p_height integer,
+   p_width integer,
+   p_package_id integer
+) RETURNS integer AS $$
+DECLARE
    v_revision_id      integer;
    v_package_id       acs_objects.package_id%TYPE;
-begin
+BEGIN
     -- We will let the caller fill in the LOB data or file path.
 
     if p_package_id is null then
@@ -419,24 +458,30 @@ begin
     (v_revision_id, p_height, p_width);
 
     return v_revision_id;
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
-create or replace function image__new_revision(integer,integer,varchar,varchar,timestamptz,varchar,varchar,
-                                    integer,varchar,integer,integer) returns integer as '
-declare
-   p_item_id          alias for $1;
-   p_revision_id      alias for $2;
-   p_title            alias for $3;
-   p_description      alias for $4;
-   p_publish_date     alias for $5;
-   p_mime_type        alias for $6;
-   p_nls_language     alias for $7;
-   p_creation_user    alias for $8;
-   p_creation_ip      alias for $9;
-   p_height           alias for $10;
-   p_width            alias for $11;
+
+
+--
+-- procedure image__new_revision/11
+--
+CREATE OR REPLACE FUNCTION image__new_revision(
+   p_item_id integer,
+   p_revision_id integer,
+   p_title varchar,
+   p_description varchar,
+   p_publish_date timestamptz,
+   p_mime_type varchar,
+   p_nls_language varchar,
+   p_creation_user integer,
+   p_creation_ip varchar,
+   p_height integer,
+   p_width integer
+) RETURNS integer AS $$
+DECLARE
    v_revision_id      integer;
-begin
+BEGIN
    return image__new_revision(p_item_id,
                               p_revision_id,
                               p_title,
@@ -452,16 +497,26 @@ begin
                               null
    );
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
-create or replace function image__delete (integer)
-returns integer as '
-declare
-  v_item_id		alias for $1;
-begin
+
+
+-- added
+select define_function_args('image__delete','v_item_id');
+
+--
+-- procedure image__delete/1
+--
+CREATE OR REPLACE FUNCTION image__delete(
+   v_item_id integer
+) RETURNS integer AS $$
+DECLARE
+BEGIN
 
     -- This should take care of deleting revisions, too.
     PERFORM content_item__delete (v_item_id);
     return 0;
 
-end; ' language 'plpgsql';
+END; 
+$$ LANGUAGE plpgsql;

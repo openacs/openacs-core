@@ -24,12 +24,17 @@ create table site_node_object_mappings (
 
 select define_function_args('site_node_object_map__new', 'object_id,node_id');
 
-create function site_node_object_map__new (integer,integer)
-returns integer as '
-declare
-    p_object_id                     alias for $1;
-    p_node_id                       alias for $2;
-begin
+
+
+--
+-- procedure site_node_object_map__new/2
+--
+CREATE OR REPLACE FUNCTION site_node_object_map__new(
+   p_object_id integer,
+   p_node_id integer
+) RETURNS integer AS $$
+DECLARE
+BEGIN
     perform site_node_object_map__del(p_object_id);
 
     insert
@@ -39,20 +44,27 @@ begin
     (p_object_id, p_node_id);
 
     return 0;
-end;
-' language 'plpgsql';
+END;
+
+$$ LANGUAGE plpgsql;
 
 select define_function_args('site_node_object_map__del', 'object_id');
 
-create function site_node_object_map__del (integer)
-returns integer as '
-declare
-    p_object_id                     alias for $1;
-begin
+
+
+--
+-- procedure site_node_object_map__del/1
+--
+CREATE OR REPLACE FUNCTION site_node_object_map__del(
+   p_object_id integer
+) RETURNS integer AS $$
+DECLARE
+BEGIN
     delete
     from site_node_object_mappings
     where object_id = p_object_id;
 
     return 0;
-end;
-' language 'plpgsql';
+END;
+
+$$ LANGUAGE plpgsql;

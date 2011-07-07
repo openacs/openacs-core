@@ -5,11 +5,12 @@
 -- @creation-date 2000-11-22
 -- @cvs-id $Id$
 \t
-create function  inline_0 () returns integer as '
-begin
-        PERFORM acs_rel_type__drop_type(''rel_constraint'');
+CREATE OR REPLACE FUNCTION  inline_0 () RETURNS integer AS $$
+BEGIN
+        PERFORM acs_rel_type__drop_type('rel_constraint');
         return null;
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 select inline_0 ();
 drop function inline_0 ();
 

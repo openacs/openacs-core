@@ -15,16 +15,23 @@
 
 -- create or replace package body rel_constraint
 
-create or replace function rel_constraint__new(varchar,integer,varchar,integer) 
-returns integer as '
-declare
-        nam     alias for $1;
-        sid1    alias for $2;
-        side    alias for $3;
-        sid2    alias for $4;
-begin
+
+
+-- added
+
+--
+-- procedure rel_constraint__new/4
+--
+CREATE OR REPLACE FUNCTION rel_constraint__new(
+   nam varchar,
+   sid1 integer,
+   side varchar,
+   sid2 integer
+) RETURNS integer AS $$
+DECLARE
+BEGIN
         return rel_constraint__new(null,
-                                   ''rel_constraint'',
+                                   'rel_constraint',
                                    nam,
                                    sid1,
                                    side,
@@ -33,23 +40,33 @@ begin
                                    null,
                                    null
                                    );                                   
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 -- function new
-create or replace function rel_constraint__new (integer,varchar,varchar,integer,char,integer,integer,integer,varchar)
-returns integer as '
-declare
-  new__constraint_id          alias for $1;  -- default null  
-  new__constraint_type        alias for $2;  -- default ''rel_constraint''
-  new__constraint_name        alias for $3;  
-  new__rel_segment            alias for $4;  
-  new__rel_side               alias for $5;  -- default ''two''
-  new__required_rel_segment   alias for $6;  
-  new__context_id             alias for $7;  -- default null
-  new__creation_user          alias for $8;  -- default null
-  new__creation_ip            alias for $9;  -- default null
+
+
+-- added
+select define_function_args('rel_constraint__new','constraint_id;null,constraint_type;rel_constraint,constraint_name,rel_segment,rel_side;two,required_rel_segment,context_id;null,creation_user;null,creation_ip;null');
+
+--
+-- procedure rel_constraint__new/9
+--
+CREATE OR REPLACE FUNCTION rel_constraint__new(
+   new__constraint_id integer,   -- default null
+   new__constraint_type varchar, -- default 'rel_constraint'
+   new__constraint_name varchar,
+   new__rel_segment integer,
+   new__rel_side char,           -- default 'two'
+   new__required_rel_segment integer,
+   new__context_id integer,      -- default null
+   new__creation_user integer,   -- default null
+   new__creation_ip varchar      -- default null
+
+) RETURNS integer AS $$
+DECLARE
   v_constraint_id             rel_constraints.constraint_id%TYPE;
-begin
+BEGIN
     v_constraint_id := acs_object__new (
       new__constraint_id,
       new__constraint_type,
@@ -57,7 +74,7 @@ begin
       new__creation_user,
       new__creation_ip,
       new__context_id,
-      ''t'',
+      't',
       new__constraint_name,
       null
     );
@@ -71,30 +88,48 @@ begin
 
      return v_constraint_id;
    
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
 -- procedure delete
-create or replace function rel_constraint__delete (integer)
-returns integer as '
-declare
-  constraint_id          alias for $1;  
-begin
+
+
+-- added
+select define_function_args('rel_constraint__delete','constraint_id');
+
+--
+-- procedure rel_constraint__delete/1
+--
+CREATE OR REPLACE FUNCTION rel_constraint__delete(
+   constraint_id integer
+) RETURNS integer AS $$
+DECLARE
+BEGIN
     PERFORM acs_object__delete(constraint_id);
 
     return 0; 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
 -- function get_constraint_id
-create or replace function rel_constraint__get_constraint_id (integer,char,integer)
-returns integer as '
-declare
-  get_constraint_id__rel_segment            alias for $1;  
-  get_constraint_id__rel_side               alias for $2;  
-  get_constraint_id__required_rel_segment   alias for $3;  
+
+
+-- added
+select define_function_args('rel_constraint__get_constraint_id','rel_segment,rel_side,required_rel_segment');
+
+--
+-- procedure rel_constraint__get_constraint_id/3
+--
+CREATE OR REPLACE FUNCTION rel_constraint__get_constraint_id(
+   get_constraint_id__rel_segment integer,
+   get_constraint_id__rel_side char,
+   get_constraint_id__required_rel_segment integer
+) RETURNS integer AS $$
+DECLARE
   v_constraint_id                           rel_constraints.constraint_id%TYPE;
-begin
+BEGIN
 
     return constraint_id
     from rel_constraints
@@ -102,17 +137,26 @@ begin
       and rel_side = get_constraint_id__rel_side
       and required_rel_segment = get_constraint_id__required_rel_segment;
 
-end;' language 'plpgsql' stable strict;
+END;
+$$ LANGUAGE plpgsql stable strict;
 
 
 -- function violation
-create or replace function rel_constraint__violation (integer)
-returns varchar as '
-declare
-  violation__rel_id                 alias for $1;  
+
+
+-- added
+select define_function_args('rel_constraint__violation','rel_id');
+
+--
+-- procedure rel_constraint__violation/1
+--
+CREATE OR REPLACE FUNCTION rel_constraint__violation(
+   violation__rel_id integer
+) RETURNS varchar AS $$
+DECLARE
   v_error                           text; 
   constraint_violated               record;
-begin
+BEGIN
 
     v_error := null;
 
@@ -123,11 +167,11 @@ begin
        LIMIT 1 
     LOOP
 
-	  v_error := coalesce(v_error,'''') || 
-                     ''Relational Constraint Violation: '' ||
+	  v_error := coalesce(v_error,'') || 
+                     'Relational Constraint Violation: ' ||
                      constraint_violated.constraint_name || 
-                     '' (constraint_id='' ||
-                     constraint_violated.constraint_id || ''). '';
+                     ' (constraint_id=' ||
+                     constraint_violated.constraint_id || '). ';
 
           return v_error;
     end loop;
@@ -139,29 +183,38 @@ begin
       LIMIT 1 
     LOOP
 
-           v_error := coalesce(v_error,'''') || 
-                      ''Relational Constraint Violation: '' ||
+           v_error := coalesce(v_error,'') || 
+                      'Relational Constraint Violation: ' ||
                       constraint_violated.constraint_name || 
-                      '' (constraint_id='' ||
-                      constraint_violated.constraint_id || ''). '';
+                      ' (constraint_id=' ||
+                      constraint_violated.constraint_id || '). ';
 
            return v_error;
     end loop;
 
     return v_error;
    
-end;' language 'plpgsql' stable strict;
+END;
+$$ LANGUAGE plpgsql stable strict;
 
 
 -- function violation_if_removed
-create or replace function  rel_constraint__violation_if_removed (integer)
-returns varchar as '
-declare
-  violation_if_removed__rel_id                 alias for $1;  
+
+
+-- added
+select define_function_args('rel_constraint__violation_if_removed','rel_id');
+
+--
+-- procedure rel_constraint__violation_if_removed/1
+--
+CREATE OR REPLACE FUNCTION rel_constraint__violation_if_removed(
+   violation_if_removed__rel_id integer
+) RETURNS varchar AS $$
+DECLARE
   v_count                                      integer;       
   v_error                                      text; 
   constraint_violated                          record;
-begin
+BEGIN
     v_error := null;
 
     select count(*) into v_count
@@ -178,10 +231,10 @@ begin
                                   where r.rel_id = violation_if_removed__rel_id 
       LOOP
 
-          v_error := v_error || ''Relational Constraint Violation: '' ||
+          v_error := v_error || 'Relational Constraint Violation: ' ||
                      constraint_violated.constraint_name || 
-                     '' (constraint_id='' ||
-                     constraint_violated.constraint_id || ''). '';
+                     ' (constraint_id=' ||
+                     constraint_violated.constraint_id || '). ';
 
       end loop;
 
@@ -190,7 +243,8 @@ begin
     return v_error;
 
    
-end;' language 'plpgsql' stable strict;
+END;
+$$ LANGUAGE plpgsql stable strict;
 
 
 

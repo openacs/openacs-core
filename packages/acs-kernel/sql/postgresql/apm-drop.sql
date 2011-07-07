@@ -30,34 +30,35 @@ drop table apm_applications;
 drop table apm_packages;
 drop table apm_package_types;
 
-create function inline_0 () returns integer as '
-begin
+CREATE OR REPLACE FUNCTION inline_0 () RETURNS integer AS $$
+BEGIN
     PERFORM acs_object_type__drop_type (
-      ''apm_package'', ''f''
+      'apm_package', 'f'
     );
 
     PERFORM acs_object_type__drop_type (
-      ''apm_application'', ''f''
+      'apm_application', 'f'
     );
 
     PERFORM acs_object_type__drop_type (
-      ''apm_service'', ''f''
+      'apm_service', 'f'
     );
 
     PERFORM acs_object_type__drop_type (
-      ''apm_package_version'', ''f''
+      'apm_package_version', 'f'
     );
 
     PERFORM acs_object_type__drop_type (
-      ''apm_parameter_value'', ''f''
+      'apm_parameter_value', 'f'
     );
 
     PERFORM acs_object_type__drop_type (
-      ''apm_parameter'', ''f''
+      'apm_parameter', 'f'
     );
 
     return null;
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 select inline_0 ();
 

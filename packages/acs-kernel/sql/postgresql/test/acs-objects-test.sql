@@ -72,22 +72,29 @@
 -- create or replace package body ut#acs_object
 -- as
 
-create function ut_acs_object__setup() returns integer as '
-declare
+
+
+--
+-- procedure ut_acs_object__setup/0
+--
+CREATE OR REPLACE FUNCTION ut_acs_object__setup(
+
+) RETURNS integer AS $$
+DECLARE
         attr_id acs_attributes.attribute_id%TYPE;
-begin
-        raise NOTICE ''Setting up...'';
+BEGIN
+        raise NOTICE 'Setting up...';
 
         -- create the test_object type
         PERFORM acs_object_type__create_type (
-     	    ''test_object'',
-	    ''Test Object'',
-	    ''Test Objects'',
-	    ''acs_object'',
-            ''test_objects'',
-	    ''test_id'',
+     	    'test_object',
+	    'Test Object',
+	    'Test Objects',
+	    'acs_object',
+            'test_objects',
+	    'test_id',
             null,
-            ''f'',
+            'f',
             null,
             null            
 	);
@@ -96,37 +103,38 @@ begin
 	insert into acs_object_type_tables 
                (object_type, table_name, id_column)
                values 
-               (''test_object'',''test_objects'',''test_id'');
+               ('test_object','test_objects','test_id');
 
 	-- create the attribute
 	attr_id := acs_attribute__create_attribute (
-	    ''test_object'',
-	    ''data'',
-	    ''string'',
-	    ''Data'',
-	    ''Mo Data'',
-            ''test_objects'',
-	    ''data'',
+	    'test_object',
+	    'data',
+	    'string',
+	    'Data',
+	    'Mo Data',
+            'test_objects',
+	    'data',
             null,
             0,
             1,
             null,
-            ''type_specific'',
-            ''f''
+            'type_specific',
+            'f'
 	);
 
         return null;
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
-create function ut_acs_object__teardown() returns integer as '
-begin
-        raise NOTICE ''Tearing down...'';
+CREATE OR REPLACE FUNCTION ut_acs_object__teardown() RETURNS integer AS $$
+BEGIN
+        raise NOTICE 'Tearing down...';
 
 	-- delete the test object
-	delete from acs_attributes where object_type = ''test_object'';
-	delete from acs_object_type_tables where object_type = ''test_object'';
-	delete from acs_objects where object_type = ''test_object'';
+	delete from acs_attributes where object_type = 'test_object';
+	delete from acs_object_type_tables where object_type = 'test_object';
+	delete from acs_objects where object_type = 'test_object';
 
     	drop table test_objects;
 
@@ -134,33 +142,41 @@ begin
   	drop table ut_acs_objects;
 
 	-- delete the object_type
-	delete from acs_object_types where object_type = ''test_object'';
+	delete from acs_object_types where object_type = 'test_object';
 
         return null;
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
-create function ut_acs_object__new() returns integer as '
-declare
+
+
+--
+-- procedure ut_acs_object__new/0
+--
+CREATE OR REPLACE FUNCTION ut_acs_object__new(
+
+) RETURNS integer AS $$
+DECLARE
         result  boolean;
-begin
-        raise NOTICE ''Testing new...'';
+BEGIN
+        raise NOTICE 'Testing new...';
 
         -- Tests just the common functionality of the API.
 
-        if acs_object__new(-1000, ''test_object'') <> -1000 then
-           raise NOTICE ''Creating a new test object failed'';
+        if acs_object__new(-1000, 'test_object') <> -1000 then
+           raise NOTICE 'Creating a new test object failed';
         end if;
 
 	-- create a new object to delete; note that this test assumes that
 	-- the .new operator works.
 
-        if acs_object__new(-1001, ''test_object'') <> -1001 then
-           raise NOTICE ''Creating a new test object failed'';
+        if acs_object__new(-1001, 'test_object') <> -1001 then
+           raise NOTICE 'Creating a new test object failed';
         end if;
 
-        if acs_object__new(-1003, ''test_object'') <> -1003 then
-           raise NOTICE ''Creating a new test object failed'';
+        if acs_object__new(-1003, 'test_object') <> -1003 then
+           raise NOTICE 'Creating a new test object failed';
         end if;
 
 	-- create an object
@@ -169,28 +185,36 @@ begin
                                 (object_id, object_type, creation_date, 
                                  security_inherit_p, last_modified)
                                 values
-                                (-1000, ''test_object'', now(), ''t'', now());
+                                (-1000, 'test_object', now(), 't', now());
 	
 	-- Verify that the API does the correct insert.
 
-        select ''t'' into result 
+        select 't' into result 
           from ut_acs_objects uo, acs_objects o  
          where uo.object_id = o.object_id 
            and uo.object_id = -1000;
 
         if NOT FOUND then 
-           raise NOTICE ''Comparing created data for object failed'';
+           raise NOTICE 'Comparing created data for object failed';
         end if;
 
         return null;
 	
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
-create function ut_acs_object__delete() returns integer as '
-declare
+
+
+--
+-- procedure ut_acs_object__delete/0
+--
+CREATE OR REPLACE FUNCTION ut_acs_object__delete(
+
+) RETURNS integer AS $$
+DECLARE
         v_rec   record;
-begin
-        raise NOTICE ''Testing delete...'';
+BEGIN
+        raise NOTICE 'Testing delete...';
 
 	-- delete the row.
 	PERFORM acs_object__delete(-1001);
@@ -201,48 +225,58 @@ begin
           from acs_objects where object_id = -1001;
 
         if FOUND then 
-           raise NOTICE ''Delete verification failed'';
+           raise NOTICE 'Delete verification failed';
         end if;
 
         return null;
 
-end;' language 'plpgsql'; 
+END;
+$$ LANGUAGE plpgsql; 
 
-create function ut_acs_object__name() returns integer as '
-begin
-	raise NOTICE ''Testing name...'';
+CREATE OR REPLACE FUNCTION ut_acs_object__name() RETURNS integer AS $$
+BEGIN
+	raise NOTICE 'Testing name...';
 
-        if acs_object__name(-1001) <> ''Test Object -1000'' then
-           raise NOTICE ''Creating a name failed'';
+        if acs_object__name(-1001) <> 'Test Object -1000' then
+           raise NOTICE 'Creating a name failed';
         end if;
 
         return null;
 
-end;' language 'plpgsql'; 
+END;
+$$ LANGUAGE plpgsql; 
 
-create function ut_acs_object__default_name() returns integer as '
-begin
-	raise NOTICE ''Testing default_name...'';
+CREATE OR REPLACE FUNCTION ut_acs_object__default_name() RETURNS integer AS $$
+BEGIN
+	raise NOTICE 'Testing default_name...';
 
-        if acs_object__default_name(-1001) <> ''Test Object -1000'' then
-           raise NOTICE ''Creating a default name failed'';
+        if acs_object__default_name(-1001) <> 'Test Object -1000' then
+           raise NOTICE 'Creating a default name failed';
         end if;
 
         return null;
 
-end;' language 'plpgsql'; 
+END;
+$$ LANGUAGE plpgsql; 
 
-create function ut_acs_object__set_attribute() returns integer as '
-declare
+
+
+--
+-- procedure ut_acs_object__set_attribute/0
+--
+CREATE OR REPLACE FUNCTION ut_acs_object__set_attribute(
+
+) RETURNS integer AS $$
+DECLARE
         v_sql_result test_objects.data%TYPE;
-begin
-        raise NOTICE ''Testing set_attribute'';
+BEGIN
+        raise NOTICE 'Testing set_attribute';
 
 	-- since we did not create a test object new constructor
 	-- were going to insert into attributes here.
 	insert into test_objects(test_id) values(-1003);
 
-	PERFORM acs_object__set_attribute(-1003, ''data'', ''2702'');
+	PERFORM acs_object__set_attribute(-1003, 'data', '2702');
 
 	-- since utassert is not powerful enough right now, we do this
 	-- comparison manually
@@ -251,37 +285,46 @@ begin
          where test_id = -1003;
 
 	if v_sql_result = 2702 then
-	    raise NOTICE ''SUCCESS: set_attribute'';
+	    raise NOTICE 'SUCCESS: set_attribute';
         else
-            raise NOTICE ''Verifying attribute data FAILED'';
+            raise NOTICE 'Verifying attribute data FAILED';
         end if;
 
 	return null;
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
-create function ut_acs_object__get_attribute() returns integer as '
-declare
+
+
+--
+-- procedure ut_acs_object__get_attribute/0
+--
+CREATE OR REPLACE FUNCTION ut_acs_object__get_attribute(
+
+) RETURNS integer AS $$
+DECLARE
         v_attr_value varchar(4000);
-begin
-        raise NOTICE ''Testing get_attribute'';
+BEGIN
+        raise NOTICE 'Testing get_attribute';
 
 	-- we assume that set attribute works. since im lazy
 	-- im going to recycle the -1003 object.
 
-	PERFORM acs_object__set_attribute(-1003, ''data'', ''sugarwen'');
+	PERFORM acs_object__set_attribute(-1003, 'data', 'sugarwen');
 
-	v_attr_value := acs_object__get_attribute(-1003, ''data'');
+	v_attr_value := acs_object__get_attribute(-1003, 'data');
 
-	if v_attr_value = ''sugarwen'' then
-    	    raise NOTICE ''SUCCESS: get_attribute'';
+	if v_attr_value = 'sugarwen' then
+    	    raise NOTICE 'SUCCESS: get_attribute';
         else
-            raise NOTICE ''Verifying get attribute data FAILED'';
+            raise NOTICE 'Verifying get attribute data FAILED';
         end if;
 
 	return null;
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 create table test_objects (
        test_id integer primary key, 

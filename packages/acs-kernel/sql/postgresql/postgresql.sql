@@ -5,23 +5,29 @@ create sequence t_anon_func_seq;
 create view anon_func_seq as 
 select nextval('t_anon_func_seq') as nextval;
 
-create or replace function instr(varchar,char,integer,integer) returns integer as '
-declare
-        str             alias for $1;
-        pat             alias for $2;
-        dir             alias for $3;
-        cnt             alias for $4;
+
+
+--
+-- procedure instr/4
+--
+CREATE OR REPLACE FUNCTION instr(
+   str varchar,
+   pat char,
+   dir integer,
+   cnt integer
+) RETURNS integer AS $$
+DECLARE
         v_len           integer;
         v_i             integer;
         v_c             char;
         v_cnt           integer;
         v_inc           integer;
-begin
+BEGIN
         v_len := length(str);
         v_cnt := 0;
         
         if dir < 0 then
-           v_inc := \-1;
+           v_inc := -1;
            v_i   := v_len;
         else 
            v_inc := 1;
@@ -41,42 +47,62 @@ begin
 
         return 0;
 
-end;' language 'plpgsql' immutable;
+END;
+$$ LANGUAGE plpgsql immutable;
 
 
-create or replace function instr(varchar,char,integer) returns integer as '
-declare
-        str             alias for $1;
-        pat             alias for $2;
-        dir             alias for $3;
-begin
+
+
+--
+-- procedure instr/3
+--
+CREATE OR REPLACE FUNCTION instr(
+   str varchar,
+   pat char,
+   dir integer
+) RETURNS integer AS $$
+DECLARE
+BEGIN
         return instr(str,pat,dir,1);
-end;' language 'plpgsql' immutable;
+END;
+$$ LANGUAGE plpgsql immutable;
 
 
-create or replace function instr(varchar,char) returns integer as '
-declare
-        str             alias for $1;
-        pat             alias for $2;
-begin
+
+
+--
+-- procedure instr/2
+--
+CREATE OR REPLACE FUNCTION instr(
+   str varchar,
+   pat char
+) RETURNS integer AS $$
+DECLARE
+BEGIN
         return instr(str,pat,1,1);
-end;' language 'plpgsql' immutable;
+END;
+$$ LANGUAGE plpgsql immutable;
 
 
 -- Splits string on requested character. Returns requested element
 -- (1-based)
 
-create or replace function split(varchar,char,integer)
-returns varchar as '
-declare
-  p_string		alias for $1;
-  p_split_char		alias for $2;
-  p_element		alias for $3;
+
+
+--
+-- procedure split/3
+--
+CREATE OR REPLACE FUNCTION split(
+   p_string varchar,
+   p_split_char char,
+   p_element integer
+) RETURNS varchar AS $$
+DECLARE
 
   v_left_split		integer;
   v_right_split		integer;
   v_len			integer;
-begin
+BEGIN
   v_len = length(p_string);
   if v_len = 0 or p_string is null or p_element <= 0 then
     return NULL;
@@ -94,12 +120,19 @@ begin
     return null;
   end if;
   return substr(p_string, v_left_split+1, (v_right_split - v_left_split - 1));
-end;' language 'plpgsql' immutable;
+END;
+$$ LANGUAGE plpgsql immutable;
 
 
-create or replace function get_func_drop_command (varchar) returns varchar as '
-declare
-        fname           alias for $1;
+
+
+--
+-- procedure get_func_drop_command/1
+--
+CREATE OR REPLACE FUNCTION get_func_drop_command(
+   fname varchar
+) RETURNS varchar AS $$
+DECLARE
         nargs           integer default 0;
         v_pos           integer;
         v_funcdef       text;
@@ -107,113 +140,134 @@ declare
         v_one_arg       varchar;
         v_one_type      varchar;
         v_nargs         integer;
-begin
-        v_funcdef := ''drop function '' || fname || ''('';
+BEGIN
+        v_funcdef := 'drop function ' || fname || '(';
 
         select proargtypes, pronargs
           into v_args, v_nargs
           from pg_proc 
          where proname = fname::name;
 
-        v_pos := position('' '' in v_args);
+        v_pos := position(' ' in v_args);
         
         while nargs < v_nargs loop
               nargs := nargs + 1;
               if nargs = v_nargs then 
                  v_one_arg := v_args;
-                 v_args    := '''';
+                 v_args    := '';
               else
-                 v_one_arg := substr(v_args, 1, v_pos \- 1);
+                 v_one_arg := substr(v_args, 1, v_pos - 1);
                  v_args    := substr(v_args, v_pos + 1);
-                 v_pos     := position('' '' in v_args);            
+                 v_pos     := position(' ' in v_args);            
               end if;
               select case when nargs = 1 
                             then typname 
-                            else '','' || typname 
+                            else ',' || typname 
                           end into v_one_type 
                 from pg_type 
                where oid = v_one_arg::integer;
               v_funcdef := v_funcdef || v_one_type;            
         end loop;
-        v_funcdef := v_funcdef || '') CASCADE'';
+        v_funcdef := v_funcdef || ') CASCADE';
 
         return v_funcdef;
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
-create or replace function drop_package (varchar) returns varchar as '
-declare
-       package_name      alias for $1;
+
+
+--
+-- procedure drop_package/1
+--
+CREATE OR REPLACE FUNCTION drop_package(
+   package_name varchar
+) RETURNS varchar AS $$
+DECLARE
        v_rec             record;
        v_drop_cmd        varchar;
        v_pkg_name        varchar;
-begin
-        raise NOTICE ''DROP PACKAGE: %'', package_name;
-        v_pkg_name := package_name || ''\\\\_\\\\_'' || ''%'';
+BEGIN
+        raise NOTICE 'DROP PACKAGE: %', package_name;
+        v_pkg_name := package_name || '__' || '%';
 
         for v_rec in select proname 
                        from pg_proc 
                       where proname like v_pkg_name 
                    order by proname 
         LOOP
-            raise NOTICE ''DROPPING FUNCTION: %'', v_rec.proname;
+            raise NOTICE 'DROPPING FUNCTION: %', v_rec.proname;
             v_drop_cmd := get_func_drop_command (v_rec.proname::varchar);
             EXECUTE v_drop_cmd;
         end loop;
 
         if NOT FOUND then 
-          raise NOTICE ''PACKAGE: % NOT FOUND'', package_name;
+          raise NOTICE 'PACKAGE: % NOT FOUND', package_name;
         else
-          raise NOTICE ''PACKAGE: %: DROPPED'', package_name;
+          raise NOTICE 'PACKAGE: %: DROPPED', package_name;
         end if;
         
         return null;
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
-create or replace function number_src(text) returns text as '
-declare
-        v_src   alias for $1;
+
+
+--
+-- procedure number_src/1
+--
+CREATE OR REPLACE FUNCTION number_src(
+   v_src text
+) RETURNS text AS $$
+DECLARE
         v_pos   integer;
-        v_ret   text default '''';
+        v_ret   text default '';
         v_tmp   text;
         v_cnt   integer default -1;
-begin
+BEGIN
         if v_src is null then 
 	     return null;
         end if;
 
         v_tmp := v_src;
         LOOP
-            v_pos := position(''\n'' in v_tmp);
+            v_pos := position(E'\n' in v_tmp);
             v_cnt := v_cnt + 1;
 
             exit when v_pos = 0;
 
             if v_cnt != 0 then
-              v_ret := v_ret || to_char(v_cnt,''9999'') || '':'' || substr(v_tmp,1,v_pos);
+              v_ret := v_ret || to_char(v_cnt,'9999') || ':' || substr(v_tmp,1,v_pos);
             end if;
             v_tmp := substr(v_tmp,v_pos + 1);
         end LOOP;
 
-        return v_ret || to_char(v_cnt,''9999'') || '':'' || v_tmp;
+        return v_ret || to_char(v_cnt,'9999') || ':' || v_tmp;
 
-end;' language 'plpgsql' immutable strict;
+END;
+$$ LANGUAGE plpgsql immutable strict;
 
-create or replace function get_func_definition (varchar,oidvector) returns text as '
-declare
-        fname           alias for $1;
-        args            alias for $2;
+
+
+--
+-- procedure get_func_definition/2
+--
+CREATE OR REPLACE FUNCTION get_func_definition(
+   fname varchar,
+   args oidvector
+) RETURNS text AS $$
+DECLARE
         nargs           integer default 0;
         v_pos           integer;
-        v_funcdef       text default '''';
+        v_funcdef       text default '';
         v_args          varchar;
         v_one_arg       varchar;
         v_one_type      varchar;
         v_nargs         integer;
         v_src           text;
         v_rettype       varchar;
-begin
+BEGIN
         select proargtypes, pronargs, number_src(prosrc), 
                (select typname from pg_type where oid = p.prorettype::integer)
           into v_args, v_nargs, v_src, v_rettype
@@ -221,48 +275,56 @@ begin
          where proname = fname::name
            and proargtypes = args;
 
-         v_funcdef := v_funcdef || ''
-create or replace function '' || fname || ''('';
+         v_funcdef := v_funcdef || '
+create or replace function ' || fname || '(';
 
-         v_pos := position('' '' in v_args);
+         v_pos := position(' ' in v_args);
 
          while nargs < v_nargs loop
              nargs := nargs + 1;
              if nargs = v_nargs then 
                  v_one_arg := v_args;
-                 v_args    := '''';
+                 v_args    := '';
              else
-                 v_one_arg := substr(v_args, 1, v_pos \- 1);
+                 v_one_arg := substr(v_args, 1, v_pos - 1);
                  v_args    := substr(v_args, v_pos + 1);
-                 v_pos     := position('' '' in v_args);            
+                 v_pos     := position(' ' in v_args);            
              end if;
              select case when nargs = 1 
                            then typname 
-                           else '','' || typname 
+                           else ',' || typname 
                          end into v_one_type 
                from pg_type 
               where oid = v_one_arg::integer;
              v_funcdef := v_funcdef || v_one_type;
          end loop;
-         v_funcdef := v_funcdef || '') returns '' || v_rettype || '' as \\\'\\n'' || v_src || ''\\\' language \\\'plpgsql\\\';'';
+         v_funcdef := v_funcdef || ') returns ' || v_rettype || E' as ''\n' || v_src || ''' language ''plpgsql'';';
 
         return v_funcdef;
 
-end;' language 'plpgsql' stable strict;
+END;
+$$ LANGUAGE plpgsql stable strict;
 
-create or replace function get_func_header(varchar,oidvector) returns text as '
-declare
-        fname   alias for $1;
-        args    alias for $2;
+
+
+--
+-- procedure get_func_header/2
+--
+CREATE OR REPLACE FUNCTION get_func_header(
+   fname varchar,
+   args oidvector
+) RETURNS text AS $$
+DECLARE
         v_src   text;
         pos     integer;
-begin
+BEGIN
         v_src := get_func_definition(fname,args);
-        pos := position(''begin'' in lower(v_src));
+        pos := position('begin' in lower(v_src));
 
         return substr(v_src, 1, pos + 4);
 
-end;' language 'plpgsql' stable strict;
+END;
+$$ LANGUAGE plpgsql stable strict;
 
 create view acs_func_defs as 
 select get_func_definition(proname::varchar,proargtypes) as definition, 
@@ -276,40 +338,56 @@ select get_func_header(proname::varchar,proargtypes) as definition,
 
 ----------------------------------------------------------------------------
 
-create or replace function inline_0 () returns integer as '
--- Create a bitfromint4(integer) function if it doesn''t exists.
+
+
+--
+-- procedure inline_0/0
+--
+CREATE OR REPLACE FUNCTION inline_0(
+
+) RETURNS integer AS $$
+-- Create a bitfromint4(integer) function if it doesn't exists.
 -- This function is no longer present in 7.3 and above
-declare
+DECLARE
     v_bitfromint4_count integer;
-begin
-    select into v_bitfromint4_count count(*) from pg_proc where proname = ''bitfromint4'';
+BEGIN
+    select into v_bitfromint4_count count(*) from pg_proc where proname = 'bitfromint4';
     if v_bitfromint4_count = 0 then
-	create or replace function bitfromint4 (integer) returns bit varying as ''
+	create or replace function bitfromint4 (integer) returns bit varying as '
 	begin 
     	    return $1::bit(32);
-	end;'' language ''plpgsql'' immutable strict;
+	end;' language 'plpgsql' immutable strict;
    end if;
    return 1;
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 select inline_0();
 drop function inline_0();
 
-create or replace function inline_1 () returns integer as '
--- Create a bitfromint4(integer) function if it doesn''t exists.
+
+
+--
+-- procedure inline_1/0
+--
+CREATE OR REPLACE FUNCTION inline_1(
+
+) RETURNS integer AS $$
+-- Create a bitfromint4(integer) function if it doesn't exists.
 -- This function is no longer present in 7.3 and above
-declare
+DECLARE
     v_bittoint4_count integer;
-begin
-    select into v_bittoint4_count count(*) from pg_proc where proname = ''bittoint4'';
+BEGIN
+    select into v_bittoint4_count count(*) from pg_proc where proname = 'bittoint4';
     if v_bittoint4_count = 0 then
-	create or replace function bittoint4 (bit varying) returns integer as ''
+	create or replace function bittoint4 (bit varying) returns integer as '
 	begin 
     	    return "int4"($1);
-	end;'' language ''plpgsql'' immutable strict;
+	end;' language 'plpgsql' immutable strict;
    end if;
    return 1;
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 select inline_1();
 drop function inline_1();
@@ -347,8 +425,14 @@ drop function inline_1();
 -- SQL92 standard "bit varying" so I've used the synonym "varbit"
 -- throughout.
 
-create or replace function int_to_tree_key(integer) returns varbit as '
 
+
+--
+-- procedure int_to_tree_key/1
+--
+CREATE OR REPLACE FUNCTION int_to_tree_key(
+   p_intkey integer
+) RETURNS varbit AS $$
 -- Convert an integer into the bit string format used to store
 -- tree sort keys.   Using 4 bytes for the long keys requires
 -- using -2^31 rather than 2^31 to avoid a twos-complement 
@@ -358,12 +442,10 @@ create or replace function int_to_tree_key(integer) returns varbit as '
 -- There was an "out of range" check in here when I was using 15
 -- bit long keys but the only check that does anything with the long
 -- keys is to check for negative numbers.
-
-declare
-  p_intkey        alias for $1;
-begin
+DECLARE
+BEGIN
   if p_intkey < 0 then
-    raise exception ''int_to_tree_key: key must be a positive integer'';
+    raise exception 'int_to_tree_key: key must be a positive integer';
   end if;
 
   if p_intkey < 128 then
@@ -372,26 +454,31 @@ begin
     return substring(bitfromint4(cast (-2^31 + p_intkey as int4)), 1, 32);
   end if;
 
-end;' language 'plpgsql' immutable strict;
+END;
+$$ LANGUAGE plpgsql immutable strict;
 
-create or replace function tree_key_to_int(varbit, integer) returns integer as '
 
+
+--
+-- procedure tree_key_to_int/2
+--
+CREATE OR REPLACE FUNCTION tree_key_to_int(
+   p_tree_key varbit,
+   p_level integer
+) RETURNS integer AS $$
 -- Convert the compressed key for the node at the given level to an 
 -- integer.
-
-declare
-  p_tree_key      alias for $1;
-  p_level         alias for $2;
+DECLARE
   v_level         integer default 0;
   v_parent_pos    integer default 1;
   v_pos           integer default 1;
-begin
+BEGIN
 
   -- Find the right key first
   while v_pos < length(p_tree_key) and v_level < p_level loop
     v_parent_pos := v_pos;
     v_level := v_level + 1;
-    if substring(p_tree_key, v_pos, 1) = ''1'' then
+    if substring(p_tree_key, v_pos, 1) = '1' then
       v_pos := v_pos + 32;
     else
       v_pos := v_pos + 8;
@@ -399,36 +486,41 @@ begin
   end loop;
 
   if v_level < p_level then
-    raise exception ''tree_key_to_int: key is at a level less than %'', p_level;
+    raise exception 'tree_key_to_int: key is at a level less than %', p_level;
   end if;
 
-  if substring(p_tree_key, v_parent_pos, 1) = ''1'' then
+  if substring(p_tree_key, v_parent_pos, 1) = '1' then
     return bittoint4(substring(p_tree_key, v_parent_pos + 1, 31));
   else
     return bittoint4(substring(p_tree_key, v_parent_pos, 8));
   end if;
 
-end;' language 'plpgsql' immutable strict;
+END;
+$$ LANGUAGE plpgsql immutable strict;
 
-create or replace function tree_ancestor_key(varbit, integer) returns varbit as '
 
+
+--
+-- procedure tree_ancestor_key/2
+--
+CREATE OR REPLACE FUNCTION tree_ancestor_key(
+   p_tree_key varbit,
+   p_level integer
+) RETURNS varbit AS $$
 -- Returns a key for the ancestor at the given level.  The root is level
 -- one.
-
-declare
-  p_tree_key      alias for $1;
-  p_level         alias for $2;
+DECLARE
   v_level         integer default 0;
   v_pos           integer default 1;
-begin
+BEGIN
 
   if tree_level(p_tree_key) < p_level then
-    raise exception ''tree_ancestor_key: key is at a level less than %'', p_level;
+    raise exception 'tree_ancestor_key: key is at a level less than %', p_level;
   end if;
 
   while v_level < p_level loop
     v_level := v_level + 1;
-    if substring(p_tree_key, v_pos, 1) = ''1'' then
+    if substring(p_tree_key, v_pos, 1) = '1' then
       v_pos := v_pos + 32;
     else
       v_pos := v_pos + 8;
@@ -437,60 +529,77 @@ begin
 
   return substring(p_tree_key, 1, v_pos - 1);
 
-end;' language 'plpgsql' immutable strict;
+END;
+$$ LANGUAGE plpgsql immutable strict;
 
-create or replace function tree_root_key(varbit) returns varbit as '
 
+
+--
+-- procedure tree_root_key/1
+--
+CREATE OR REPLACE FUNCTION tree_root_key(
+   p_tree_key varbit
+) RETURNS varbit AS $$
 -- Return the tree_sortkey for the root node of the node with the 
--- given tree_sortkey.  
+-- given tree_sortkey.
+DECLARE
+BEGIN
 
-declare
-  p_tree_key      alias for $1;
-begin
-
-  if substring(p_tree_key, 1, 1) = ''1'' then
+  if substring(p_tree_key, 1, 1) = '1' then
       return substring(p_tree_key, 1, 32);
   else
       return substring(p_tree_key, 1, 8);
   end if;
 
-end;' language 'plpgsql' immutable strict;
+END;
+$$ LANGUAGE plpgsql immutable strict;
 
-create or replace function tree_leaf_key_to_int(varbit) returns integer as '
 
+
+--
+-- procedure tree_leaf_key_to_int/1
+--
+CREATE OR REPLACE FUNCTION tree_leaf_key_to_int(
+   p_tree_key varbit
+) RETURNS integer AS $$
 -- Convert the bitstring for the last, or leaf, node represented by this key
 -- to an integer.
-
-declare
-  p_tree_key      alias for $1;
+DECLARE
   v_leaf_pos      integer default 1;
   v_pos           integer default 1;
-begin
+BEGIN
 
   -- Find the leaf key first
   while v_pos < length(p_tree_key) loop
     v_leaf_pos := v_pos;
-    if substring(p_tree_key, v_pos, 1) = ''1'' then
+    if substring(p_tree_key, v_pos, 1) = '1' then
       v_pos := v_pos + 32;
     else
       v_pos := v_pos + 8;
     end if;
   end loop;
 
-  if substring(p_tree_key, v_leaf_pos, 1) = ''1'' then
+  if substring(p_tree_key, v_leaf_pos, 1) = '1' then
     return bittoint4(substring(p_tree_key, v_leaf_pos + 1, 31));
   else
     return bittoint4(substring(p_tree_key, v_leaf_pos, 8));
   end if;
 
-end;' language 'plpgsql' immutable strict;
+END;
+$$ LANGUAGE plpgsql immutable strict;
 
-create or replace function tree_next_key(varbit, integer) returns varbit as '
-declare
-  p_parent_key      alias for $1;
-  p_child_value     alias for $2;
+
+
+--
+-- procedure tree_next_key/2
+--
+CREATE OR REPLACE FUNCTION tree_next_key(
+   p_parent_key varbit,
+   p_child_value integer
+) RETURNS varbit AS $$
+DECLARE
   v_child_value     integer;
-begin
+BEGIN
 -- Create a new child of the given key with a leaf key number one greater than
 -- the child value parameter.  If the child value parameter is null, make the
 -- child the first child of the parent.
@@ -507,14 +616,20 @@ begin
     return p_parent_key || int_to_tree_key(v_child_value);
   end if;
 
-end;' language 'plpgsql' immutable;
+END;
+$$ LANGUAGE plpgsql immutable;
 
-create or replace function tree_increment_key(varbit)
-returns varbit as '
-declare
-    p_child_sort_key                alias for $1;
+
+
+--
+-- procedure tree_increment_key/1
+--
+CREATE OR REPLACE FUNCTION tree_increment_key(
+   p_child_sort_key varbit
+) RETURNS varbit AS $$
+DECLARE
     v_child_sort_key                integer;
-begin
+BEGIN
     if p_child_sort_key is null then
         v_child_sort_key := 0;
     else
@@ -522,50 +637,65 @@ begin
     end if;
 
     return int_to_tree_key(v_child_sort_key);
-end;' language 'plpgsql' immutable;
+END;
+$$ LANGUAGE plpgsql immutable;
 
-create or replace function tree_left(varbit) returns varbit as '
 
+
+--
+-- procedure tree_left/1
+--
+CREATE OR REPLACE FUNCTION tree_left(
+   key varbit
+) RETURNS varbit AS $$
 -- Create a key less than or equal to that of any child of the
 -- current key.
-
-declare
-  key      alias for $1;
-begin
+DECLARE
+BEGIN
   if key is null then
-    return ''X00''::varbit;
+    return 'X00'::varbit;
   else
-    return key || ''X00''::varbit;
+    return key || 'X00'::varbit;
   end if;
-end;' language 'plpgsql' immutable;
+END;
+$$ LANGUAGE plpgsql immutable;
 
-create or replace function tree_right(varbit) returns varbit as '
 
+
+--
+-- procedure tree_right/1
+--
+CREATE OR REPLACE FUNCTION tree_right(
+   key varbit
+) RETURNS varbit AS $$
 -- Create a key greater or equal to that of any child of the current key.
 -- Used in BETWEEN expressions to select the subtree rooted at the given
--- key. 
-
-declare
-  key      alias for $1;
-begin
+-- key.
+DECLARE
+BEGIN
   if key is null then
-    return ''XFFFFFFFF''::varbit;
+    return 'XFFFFFFFF'::varbit;
   else
-    return key || ''XFFFFFFFF''::varbit;
+    return key || 'XFFFFFFFF'::varbit;
   end if;
-end;' language 'plpgsql' immutable;
+END;
+$$ LANGUAGE plpgsql immutable;
 
-create or replace function tree_level(varbit) returns integer as '
 
+
+--
+-- procedure tree_level/1
+--
+CREATE OR REPLACE FUNCTION tree_level(
+   p_tree_key varbit
+) RETURNS integer AS $$
 -- Return the tree level of the given key.  The root level is defined
 -- to be at level one.
-
-declare
-  p_tree_key           alias for $1;
+DECLARE
   v_pos                integer;        
   v_level              integer;
   
-begin
+BEGIN
 
   if p_tree_key is null then
     return 0;
@@ -576,7 +706,7 @@ begin
 
   while v_pos <= length(p_tree_key) loop
     v_level := v_level + 1;
-    if substring(p_tree_key, v_pos, 1) = ''1'' then
+    if substring(p_tree_key, v_pos, 1) = '1' then
       v_pos := v_pos + 32;
     else
       v_pos := v_pos + 8;
@@ -584,15 +714,23 @@ begin
   end loop;
 
   return v_level;
-end;' language 'plpgsql' immutable;
+END;
+$$ LANGUAGE plpgsql immutable;
 
-create or replace function tree_ancestor_p(varbit, varbit) returns boolean as '
-declare
-  p_potential_ancestor      alias for $1;
-  p_potential_child         alias for $2;
-begin
+
+
+--
+-- procedure tree_ancestor_p/2
+--
+CREATE OR REPLACE FUNCTION tree_ancestor_p(
+   p_potential_ancestor varbit,
+   p_potential_child varbit
+) RETURNS boolean AS $$
+DECLARE
+BEGIN
   return position(p_potential_ancestor in p_potential_child) = 1;
-end;' language 'plpgsql' immutable;
+END;
+$$ LANGUAGE plpgsql immutable;
 
 -- PG does not allow recursive SQL functions during CREATE, but you can fool it easily
 -- with CREATE OR REPLACE, a feature added in 7.2.
@@ -607,9 +745,6 @@ end;' language 'plpgsql' immutable;
 create or replace function tree_ancestor_keys(varbit, integer) returns setof varbit as '
   select $1
 ' language 'sql';
-
--- The bootstrap installer has made certain that we are running a version >= 7.2 so it is safe
--- at this point to assume create or replace is supported.
 
 create or replace function tree_ancestor_keys(varbit, integer) returns setof varbit as '
   select tree_ancestor_key($1, $2)
@@ -722,24 +857,28 @@ create table acs_function_args (
 -- Add entries to acs_function_args for one function
 -- Usage: select define_function_args('function_name','arg1,arg2;default,arg3,arg4;default')
 
-create or replace function define_function_args(varchar,varchar)
-returns integer as '
-declare
-  p_function            alias for $1;
-  p_arg_list            alias for $2;
+
+--
+-- procedure define_function_args/2
+--
+CREATE OR REPLACE FUNCTION define_function_args(
+   p_function varchar,
+   p_arg_list varchar
+) RETURNS integer AS $$
+DECLARE
 
   v_arg_seq             integer default 1;
   v_arg_name            varchar;
   v_arg_default         varchar;
   v_elem                varchar;
   v_pos                 integer;
-begin
+BEGIN
   delete from acs_function_args where function = upper(trim(p_function));
 
-  v_elem = split(p_arg_list, '','', v_arg_seq);
+  v_elem = split(p_arg_list, ',', v_arg_seq);
   while v_elem is not null loop
     
-    v_pos = instr(v_elem, '';'', 1, 1);
+    v_pos = instr(v_elem, ';', 1, 1);
     if v_pos > 0 then
       v_arg_name := substr(v_elem, 1, v_pos-1);
       v_arg_default := substr(v_elem, v_pos+1, length(v_elem) - v_pos);
@@ -752,52 +891,83 @@ begin
 	   values (upper(trim(p_function)), v_arg_seq, upper(trim(v_arg_name)), v_arg_default);
 
     v_arg_seq := v_arg_seq + 1;
-    v_elem = split(p_arg_list, '','', v_arg_seq);
+    v_elem = split(p_arg_list, ',', v_arg_seq);
   end loop;
     
   return 1;
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 -- Returns an english-language description of the trigger type.  Used by the
 -- schema browser
 
-create or replace function trigger_type (integer) returns varchar as '
-declare
-  tgtype            alias for $1;
+
+
+--
+-- procedure trigger_type/1
+--
+CREATE OR REPLACE FUNCTION trigger_type(
+   tgtype integer
+) RETURNS varchar AS $$
+DECLARE
   description       varchar;
   sep               varchar;
-begin
+BEGIN
 
  if (tgtype & 2) > 0 then
-    description := ''BEFORE '';
+    description := 'BEFORE ';
  else 
-    description := ''AFTER '';
+    description := 'AFTER ';
  end if;
 
- sep := '''';
+ sep := '';
 
  if (tgtype & 4) > 0 then
-    description := description || ''INSERT '';
-    sep := ''OR '';
+    description := description || 'INSERT ';
+    sep := 'OR ';
  end if;
 
  if (tgtype & 8) > 0 then
-    description := description || sep || ''DELETE '';
-    sep := ''OR '';
+    description := description || sep || 'DELETE ';
+    sep := 'OR ';
  end if;
 
  if (tgtype & 16) > 0 then
-    description := description || sep || ''UPDATE '';
-    sep := ''OR '';
+    description := description || sep || 'UPDATE ';
+    sep := 'OR ';
  end if;
 
  if (tgtype & 1) > 0 then
-    description := description || ''FOR EACH ROW'';
+    description := description || 'FOR EACH ROW';
  else
-    description := description || ''STATEMENT'';
+    description := description || 'STATEMENT';
  end if;
 
  return description;
 
-end;' language 'plpgsql' with (iscachable);
+END;
+$$ LANGUAGE plpgsql with (iscachable);
+
+
+-- added
+select define_function_args('instr','str,pat,dir,cnt');
+select define_function_args('split','string,split_char,element');
+select define_function_args('get_func_drop_command','fname');
+select define_function_args('drop_package','package_name');
+select define_function_args('number_src','v_src');
+select define_function_args('get_func_definition','fname,args');
+select define_function_args('get_func_header','fname,args');
+select define_function_args('int_to_tree_key','intkey');
+select define_function_args('tree_key_to_int','tree_key,level');
+select define_function_args('tree_ancestor_key','tree_key,level');
+select define_function_args('tree_root_key','tree_key');
+select define_function_args('tree_leaf_key_to_int','tree_key');
+select define_function_args('tree_next_key','parent_key,child_value');
+select define_function_args('tree_increment_key','child_sort_key');
+select define_function_args('tree_left','key');
+select define_function_args('tree_right','key');
+select define_function_args('tree_level','tree_key');
+select define_function_args('tree_ancestor_p','potential_ancestor,potential_child');
+select define_function_args('define_function_args','function,arg_list');
+select define_function_args('trigger_type','tgtype');
 

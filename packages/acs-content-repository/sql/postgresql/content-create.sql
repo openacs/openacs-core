@@ -238,19 +238,36 @@ alter table apm_package_versions add
   foreign key (item_id) references cr_items(item_id);
 
 
-create function cr_items_get_tree_sortkey(integer) returns varbit as '
-declare
-  p_item_id    alias for $1;
-begin
-  return tree_sortkey from cr_items where item_id = p_item_id;
-end;' language 'plpgsql' stable strict;
 
-create function cr_items_tree_insert_tr () returns opaque as '
-declare
+
+-- added
+select define_function_args('cr_items_get_tree_sortkey','item_id');
+
+--
+-- procedure cr_items_get_tree_sortkey/1
+--
+CREATE OR REPLACE FUNCTION cr_items_get_tree_sortkey(
+   p_item_id integer
+) RETURNS varbit AS $$
+DECLARE
+BEGIN
+  return tree_sortkey from cr_items where item_id = p_item_id;
+END;
+$$ LANGUAGE plpgsql stable strict;
+
+
+
+--
+-- procedure cr_items_tree_insert_tr/0
+--
+CREATE OR REPLACE FUNCTION cr_items_tree_insert_tr(
+
+) RETURNS trigger AS $$
+DECLARE
     v_parent_sk      	varbit default null;
     v_max_child_sortkey varbit;
     v_parent_id      	integer default null;
-begin
+BEGIN
     select item_id
     into   v_parent_id
     from   cr_items
@@ -281,19 +298,27 @@ begin
     end if;
 
     return new;
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 create trigger cr_items_tree_insert_tr before insert 
 on cr_items for each row 
 execute procedure cr_items_tree_insert_tr ();
 
-create function cr_items_tree_update_tr () returns opaque as '
-declare
+
+
+--
+-- procedure cr_items_tree_update_tr/0
+--
+CREATE OR REPLACE FUNCTION cr_items_tree_update_tr(
+
+) RETURNS trigger AS $$
+DECLARE
         v_parent_sk     	varbit default null;
         v_max_child_sortkey     varbit;
         v_parent_id            	integer default null;
         v_old_parent_length	integer;
-begin
+BEGIN
         if new.item_id = old.item_id and 
            ((new.parent_id = old.parent_id) or
             (new.parent_id is null and old.parent_id is null)) then
@@ -335,7 +360,8 @@ begin
 
         return new;
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 create trigger cr_items_tree_update_tr after update 
 on cr_items
@@ -487,12 +513,19 @@ comment on column cr_revisions.nls_language  is '
 --   foreign key (latest_revision) references cr_revisions(revision_id);
 
 
-create function cr_revision_del_ri_trg() returns opaque as '
-declare
+
+
+--
+-- procedure cr_revision_del_ri_tr/0
+--
+CREATE OR REPLACE FUNCTION cr_revision_del_ri_tr(
+
+) RETURNS trigger AS $$
+DECLARE
         dummy           integer;
         v_latest        integer;
         v_live          integer;
-begin
+BEGIN
         select 1 into dummy
         from 
           cr_revisions           
@@ -500,7 +533,7 @@ begin
           revision_id = old.live_revision;
         
         if FOUND then
-          raise EXCEPTION ''Referential Integrity: live_revision still exists: %'', old.live_revision;
+          raise EXCEPTION 'Referential Integrity: live_revision still exists: %', old.live_revision;
         end if;
         
         select 1 into dummy
@@ -510,18 +543,26 @@ begin
           revision_id = old.latest_revision;
         
         if FOUND then
-          raise EXCEPTION ''Referential Integrity: latest_revision still exists: %'', old.latest_revision;
+          raise EXCEPTION 'Referential Integrity: latest_revision still exists: %', old.latest_revision;
         end if;
         
         return old;
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
-create function cr_revision_ins_ri_trg() returns opaque as '
-declare
+
+
+--
+-- procedure cr_revision_ins_ri_tr/0
+--
+CREATE OR REPLACE FUNCTION cr_revision_ins_ri_tr(
+
+) RETURNS trigger AS $$
+DECLARE
         dummy           integer;
         v_latest        integer;
         v_live          integer;
-begin
+BEGIN
         select 1 into dummy
         from 
           cr_revisions           
@@ -529,7 +570,7 @@ begin
           revision_id = new.live_revision;
         
         if NOT FOUND and new.live_revision is NOT NULL then
-          raise EXCEPTION ''Referential Integrity: live_revision does not exist: %'', new.live_revision;
+          raise EXCEPTION 'Referential Integrity: live_revision does not exist: %', new.live_revision;
         end if;
         
         select 1 into dummy
@@ -539,18 +580,26 @@ begin
           revision_id = new.latest_revision;
         
         if NOT FOUND and new.latest_revision is NOT NULL then
-          raise EXCEPTION ''Referential Integrity: latest_revision does not exist: %'', new.latest_revision;
+          raise EXCEPTION 'Referential Integrity: latest_revision does not exist: %', new.latest_revision;
         end if;
 
         return new;
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
-create function cr_revision_up_ri_trg() returns opaque as '
-declare
+
+
+--
+-- procedure cr_revision_up_ri_tr/0
+--
+CREATE OR REPLACE FUNCTION cr_revision_up_ri_tr(
+
+) RETURNS trigger AS $$
+DECLARE
         dummy           integer;
         v_latest        integer;
         v_live          integer;
-begin
+BEGIN
         select 1 into dummy
         from 
           cr_revisions           
@@ -558,7 +607,7 @@ begin
           revision_id = new.live_revision;
         
         if NOT FOUND and new.live_revision <> old.live_revision and new.live_revision is NOT NULL then
-          raise EXCEPTION ''Referential Integrity: live_revision does not exist: %'', new.live_revision;
+          raise EXCEPTION 'Referential Integrity: live_revision does not exist: %', new.live_revision;
         end if;
         
         select 1 into dummy
@@ -568,16 +617,24 @@ begin
           revision_id = new.latest_revision;
         
         if NOT FOUND and new.latest_revision <> old.latest_revision and new.latest_revision is NOT NULL then
-          raise EXCEPTION ''Referential Integrity: latest_revision does not exist: %'', new.latest_revision;
+          raise EXCEPTION 'Referential Integrity: latest_revision does not exist: %', new.latest_revision;
         end if;
         
         return new;
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
-create function cr_revision_del_rev_ri_trg() returns opaque as '
-declare
+
+
+--
+-- procedure cr_revision_del_rev_ri_tr/0
+--
+CREATE OR REPLACE FUNCTION cr_revision_del_rev_ri_tr(
+
+) RETURNS trigger AS $$
+DECLARE
         dummy           integer;
-begin
+BEGIN
         select 1 into dummy
         from 
           cr_items
@@ -587,7 +644,7 @@ begin
           live_revision = old.revision_id;
         
         if FOUND then
-          raise EXCEPTION ''Referential Integrity: attempting to delete live_revision: %'', old.revision_id;
+          raise EXCEPTION 'Referential Integrity: attempting to delete live_revision: %', old.revision_id;
         end if;
         
         select 1 into dummy
@@ -599,51 +656,60 @@ begin
           latest_revision = old.revision_id;
         
         if FOUND then
-          raise EXCEPTION ''Referential Integrity: attempting to delete latest_revision: %'', old.revision_id;
+          raise EXCEPTION 'Referential Integrity: attempting to delete latest_revision: %', old.revision_id;
         end if;
         
         return old;
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
 -- reimplementation of RI triggers. (DanW dcwickstrom@earthlink.net)
 
-create trigger cr_revision_del_ri_trg 
+create trigger cr_revision_del_ri_tr 
 after delete on cr_items
-for each row execute procedure cr_revision_del_ri_trg();
+for each row execute procedure cr_revision_del_ri_tr();
 
-create trigger cr_revision_up_ri_trg 
+create trigger cr_revision_up_ri_tr 
 after update on cr_items
-for each row execute procedure cr_revision_up_ri_trg();
+for each row execute procedure cr_revision_up_ri_tr();
 
-create trigger cr_revision_ins_ri_trg 
+create trigger cr_revision_ins_ri_tr 
 after insert on cr_items
-for each row execute procedure cr_revision_ins_ri_trg();
+for each row execute procedure cr_revision_ins_ri_tr();
 
-create trigger cr_revision_del_rev_ri_trg 
+create trigger cr_revision_del_rev_ri_tr 
 after delete on cr_revisions
-for each row execute procedure cr_revision_del_rev_ri_trg();
+for each row execute procedure cr_revision_del_rev_ri_tr();
 
 -- (DanW - OpenACS) Added cleanup trigger to log file items that need 
 -- to be cleaned up from the CR.
 
-create function cr_cleanup_cr_files_del_trg() returns opaque as '
-declare
+
+
+--
+-- procedure cr_cleanup_cr_files_del_tr/0
+--
+CREATE OR REPLACE FUNCTION cr_cleanup_cr_files_del_tr(
+
+) RETURNS trigger AS $$
+DECLARE
         
-begin
+BEGIN
         insert into cr_files_to_delete
         select r.content as path, i.storage_area_key
           from cr_items i, cr_revisions r
          where i.item_id = r.item_id
            and r.revision_id = old.revision_id
-           and i.storage_type = ''file'';
+           and i.storage_type = 'file';
 
         return old;
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
-create trigger cr_cleanup_cr_files_del_trg
+create trigger cr_cleanup_cr_files_del_tr
 before delete on cr_revisions
-for each row execute procedure cr_cleanup_cr_files_del_trg();
+for each row execute procedure cr_cleanup_cr_files_del_tr();
 
 
 create table cr_revision_attributes (
@@ -946,18 +1012,35 @@ create table cr_keywords (
 -- RI Indexes 
 create index cr_keywords_parent_id_idx ON cr_keywords(parent_id);
 
-create function cr_keywords_get_tree_sortkey(integer) returns varbit as '
-declare
-  p_keyword_id    alias for $1;
-begin
-  return tree_sortkey from cr_keywords where keyword_id = p_keyword_id;
-end;' language 'plpgsql' stable strict;
 
-create function cr_keywords_tree_insert_tr () returns opaque as '
-declare
+
+-- added
+select define_function_args('cr_keywords_get_tree_sortkey','keyword_id');
+
+--
+-- procedure cr_keywords_get_tree_sortkey/1
+--
+CREATE OR REPLACE FUNCTION cr_keywords_get_tree_sortkey(
+   p_keyword_id integer
+) RETURNS varbit AS $$
+DECLARE
+BEGIN
+  return tree_sortkey from cr_keywords where keyword_id = p_keyword_id;
+END;
+$$ LANGUAGE plpgsql stable strict;
+
+
+
+--
+-- procedure cr_keywords_tree_insert_tr/0
+--
+CREATE OR REPLACE FUNCTION cr_keywords_tree_insert_tr(
+
+) RETURNS trigger AS $$
+DECLARE
         v_parent_sk      varbit default null;
         v_max_value      integer;
-begin
+BEGIN
         if new.parent_id is null then 
             select max(tree_leaf_key_to_int(tree_sortkey)) into v_max_value 
               from cr_keywords 
@@ -976,20 +1059,28 @@ begin
 
         return new;
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 create trigger cr_keywords_tree_insert_tr before insert 
 on cr_keywords for each row 
 execute procedure cr_keywords_tree_insert_tr ();
 
-create function cr_keywords_tree_update_tr () returns opaque as '
-declare
+
+
+--
+-- procedure cr_keywords_tree_update_tr/0
+--
+CREATE OR REPLACE FUNCTION cr_keywords_tree_update_tr(
+
+) RETURNS trigger AS $$
+DECLARE
         v_parent_sk     varbit default null;
         v_max_value     integer;
         p_id            integer;
         v_rec           record;
-        clr_keys_p      boolean default ''t'';
-begin
+        clr_keys_p      boolean default 't';
+BEGIN
         if new.keyword_id = old.keyword_id and 
            ((new.parent_id = old.parent_id) or
             (new.parent_id is null and old.parent_id is null)) 
@@ -1007,7 +1098,7 @@ begin
             if clr_keys_p then
                update cr_keywords set tree_sortkey = null
                where tree_sortkey between new.tree_sortkey and tree_right(new.tree_sortkey);
-               clr_keys_p := ''f'';
+               clr_keys_p := 'f';
             end if;
             
             select parent_id into p_id
@@ -1036,7 +1127,8 @@ begin
 
         return new;
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 create trigger cr_keywords_tree_update_tr after update 
 on cr_keywords
@@ -1093,14 +1185,15 @@ comment on table cr_text is '
 
 insert into cr_text values (NULL);
 
-create function cr_text_tr () returns opaque as '
-begin
+CREATE OR REPLACE FUNCTION cr_text_tr () RETURNS trigger AS $$
+BEGIN
 
-   raise EXCEPTION ''-20000: Inserts are not allowed into cr_text.'';
+   raise EXCEPTION '-20000: Inserts are not allowed into cr_text.';
 
    return new;
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 create trigger cr_text_tr before insert on cr_text
 for each row execute procedure cr_text_tr ();
@@ -1161,23 +1254,29 @@ comment on table cr_doc_filter is '
 
 -- by default, map all MIME types to 'content_revision'
 
-create function inline_1 ()
-returns integer as '
-declare
-  v_id integer;
-begin
 
-  PERFORM content_type__register_mime_type(''content_revision'', 
-                                           ''text/html'');
-  PERFORM content_type__register_mime_type(''content_revision'', 
-                                           ''text/plain'');
-  PERFORM content_type__register_mime_type(''content_revision'', 
-                                           ''application/rtf'');
+
+--
+-- procedure inline_1/0
+--
+CREATE OR REPLACE FUNCTION inline_1(
+
+) RETURNS integer AS $$
+DECLARE
+  v_id integer;
+BEGIN
+
+  PERFORM content_type__register_mime_type('content_revision', 
+                                           'text/html');
+  PERFORM content_type__register_mime_type('content_revision', 
+                                           'text/plain');
+  PERFORM content_type__register_mime_type('content_revision', 
+                                           'application/rtf');
 
   v_id := content_folder__new (
-    ''pages'',
-    ''Pages'', 
-    ''Site pages go here'',
+    'pages',
+    'Pages', 
+    'Site pages go here',
     -4,
     null,
     content_item__get_root_folder(null),
@@ -1188,31 +1287,31 @@ begin
 
   PERFORM content_folder__register_content_type(
     v_id,
-    ''content_revision'',
-    ''t''
+    'content_revision',
+    't'
   );
 
   PERFORM content_folder__register_content_type(
     v_id,
-    ''content_folder'',
-    ''t''
+    'content_folder',
+    't'
   );
 
   PERFORM content_folder__register_content_type(
     v_id,
-    ''content_symlink'',
-    ''t''
+    'content_symlink',
+    't'
   );
 
   -- add the root content folder to acs_magic_objects
   insert into acs_magic_objects (name, object_id)
-  select ''cr_item_root'',
+  select 'cr_item_root',
          content_item__get_root_folder(null);
 
   v_id := content_folder__new (
-    ''templates'',
-    ''Templates'', 
-    ''Templates which render the pages go here'',
+    'templates',
+    'Templates', 
+    'Templates which render the pages go here',
     -4,
     null,
     content_template__get_root_folder(),
@@ -1223,47 +1322,54 @@ begin
 
   PERFORM content_folder__register_content_type(
     v_id,
-    ''content_folder'',
-    ''t''
+    'content_folder',
+    't'
   );
 
   PERFORM content_folder__register_content_type(
     v_id,
-    ''content_symlink'',
-    ''t''
+    'content_symlink',
+    't'
   );
 
   PERFORM content_folder__register_content_type(
     v_id,
-    ''content_template'',
-    ''t''
+    'content_template',
+    't'
   );
 
   -- add to acs_magic_objects
   insert into acs_magic_objects (name, object_id)
-  select ''cr_template_root'',
+  select 'cr_template_root',
          content_template__get_root_folder();
 
   return 0;
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 select inline_1 ();
 
 drop function inline_1 ();
 
 
-create function inline_2 ()
-returns integer as '
-declare
+
+
+--
+-- procedure inline_2/0
+--
+CREATE OR REPLACE FUNCTION inline_2(
+
+) RETURNS integer AS $$
+DECLARE
   v_item_id     integer;
   v_revision_id integer;
-begin
+BEGIN
 
-  select nextval(''t_acs_object_id_seq'') into v_item_id;
+  select nextval('t_acs_object_id_seq') into v_item_id;
 
   PERFORM content_template__new(
-                ''default_template'',
-                ''-200'',
+                'default_template',
+                '-200',
                 v_item_id,
                 now(),
                 null,
@@ -1271,12 +1377,12 @@ begin
         );
 
   v_revision_id := content_revision__new(
-               ''Template'',
+               'Template',
                NULL,
                now(),
-               ''text/html'',
+               'text/html',
                null,
-               ''<html><body>@text;noquote@</body></html>'',
+               '<html><body>@text;noquote@</body></html>',
                v_item_id,
                NULL,
                now(),
@@ -1299,27 +1405,28 @@ begin
 
 
   PERFORM content_type__register_template(
-                       ''content_revision'',
+                       'content_revision',
 	               v_item_id,
-	               ''public'',
-                       ''t'');
+	               'public',
+                       't');
 
 
   PERFORM content_type__register_template(
-                       ''image'',
+                       'image',
 	               v_item_id,
-	               ''public'',
-                       ''t'');
+	               'public',
+                       't');
 
   -- testing, this may go away.  DanW
   PERFORM content_type__register_template(
-                       ''content_template'',
+                       'content_template',
 	               v_item_id,
-	               ''public'',
-                       ''t'');
+	               'public',
+                       't');
 
   return 0;
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 select inline_2 ();
 

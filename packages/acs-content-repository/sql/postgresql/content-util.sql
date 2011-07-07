@@ -10,24 +10,41 @@
 -- License.  Full text of the license is available from the GNU Project:
 -- http://www.fsf.org/copyleft/gpl.html
 
-create function table_exists (varchar)
-returns boolean as '
-declare
-        table_exists__table_name             alias for $1;  
-begin
+
+
+-- added
+select define_function_args('table_exists','table_name');
+
+--
+-- procedure table_exists/1
+--
+CREATE OR REPLACE FUNCTION table_exists(
+   table_exists__table_name varchar
+) RETURNS boolean AS $$
+DECLARE
+BEGIN
 
         return count(*) > 0
           from pg_class 
          where relname = lower(table_exists__table_name);
  
-end;' language 'plpgsql' stable strict;
+END;
+$$ LANGUAGE plpgsql stable strict;
 
-create or replace function column_exists (varchar,varchar)
-returns boolean as '
-declare
-        column_exists__table_name             alias for $1;  
-        column_exists__column_name            alias for $2;  
-begin
+
+
+-- added
+select define_function_args('column_exists','table_name,column_name');
+
+--
+-- procedure column_exists/2
+--
+CREATE OR REPLACE FUNCTION column_exists(
+   column_exists__table_name varchar,
+   column_exists__column_name varchar
+) RETURNS boolean AS $$
+DECLARE
+BEGIN
 
         return count(*) > 0
           from pg_class c, pg_attribute a
@@ -35,41 +52,72 @@ begin
            and c.oid = a.attrelid
            and a.attname = lower(column_exists__column_name);
 
-end;' language 'plpgsql' stable;
+END;
+$$ LANGUAGE plpgsql stable;
 
-create or replace function trigger_exists (varchar,varchar) returns boolean as '
-declare 
-        trigger_name    alias for $1;
-        on_table        alias for $2;
-begin
+
+
+-- added
+select define_function_args('trigger_exists','trigger_name,on_table');
+
+--
+-- procedure trigger_exists/2
+--
+CREATE OR REPLACE FUNCTION trigger_exists(
+   trigger_name varchar,
+   on_table varchar
+) RETURNS boolean AS $$
+DECLARE 
+BEGIN
         return count(*) > 0
           from pg_class c, pg_trigger t
          where c.relname = lower(on_table)
            and c.oid = t.tgrelid
            and t.tgname = lower(trigger_name);
 
-end;' language 'plpgsql' stable;
+END;
+$$ LANGUAGE plpgsql stable;
 
-create or replace function trigger_func_exists (varchar) returns boolean as '
-declare 
-        trigger_name    alias for $1;
-begin
+
+
+-- added
+select define_function_args('trigger_func_exists','trigger_name');
+
+--
+-- procedure trigger_func_exists/1
+--
+CREATE OR REPLACE FUNCTION trigger_func_exists(
+   trigger_name varchar
+) RETURNS boolean AS $$
+DECLARE 
+BEGIN
         return count(*) = 1
           from pg_proc
          where proname = lower(trigger_name)
            and pronargs = 0;
 
-end;' language 'plpgsql' stable;
+END;
+$$ LANGUAGE plpgsql stable;
 
-create or replace function rule_exists (varchar,varchar) returns boolean as '
-declare
-        rule_name       alias for $1;
-        table_name      alias for $2;
-begin
+
+
+-- added
+select define_function_args('rule_exists','rule_name,table_name');
+
+--
+-- procedure rule_exists/2
+--
+CREATE OR REPLACE FUNCTION rule_exists(
+   rule_name varchar,
+   table_name varchar
+) RETURNS boolean AS $$
+DECLARE
+BEGIN
         return count(*) = 1
           from pg_rules
          where tablename::varchar = lower(table_name)
            and rulename::varchar = lower(rule_name);
 
-end;' language 'plpgsql' stable;
+END;
+$$ LANGUAGE plpgsql stable;
 

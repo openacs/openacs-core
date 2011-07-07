@@ -118,18 +118,25 @@ create index acs_priv_desc_map_privilege_idx on acs_privilege_descendant_map (pr
 -- This would be better, since the same query could be used for both oracle
 -- and postgresql.
 
-create or replace function acs_priv_hier_ins_del_tr () returns trigger as '
-declare
+
+
+--
+-- procedure acs_priv_hier_ins_del_tr/0
+--
+CREATE OR REPLACE FUNCTION acs_priv_hier_ins_del_tr(
+
+) RETURNS trigger AS $$
+DECLARE
         new_value       integer;
         new_key         varbit default null;
         v_rec           record;
         deleted_p       boolean;
-begin
+BEGIN
 
         -- if more than one node was deleted the second trigger call
         -- will error out.  This check avoids that problem.
 
-        if TG_OP = ''DELETE'' then 
+        if TG_OP = 'DELETE' then 
             select count(*) = 0 into deleted_p
               from acs_privilege_hierarchy_index 
              where old.privilege = privilege
@@ -184,35 +191,45 @@ begin
 
         return new;
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 create trigger acs_priv_hier_ins_del_tr after insert or delete
 on acs_privilege_hierarchy for each row
 execute procedure acs_priv_hier_ins_del_tr ();
 
-create or replace function acs_priv_del_tr () returns trigger as '
-begin
+CREATE OR REPLACE FUNCTION acs_priv_del_tr () RETURNS trigger AS $$
+BEGIN
 
   delete from acs_privilege_descendant_map
   where privilege = old.privilege;
 
   return old;
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 create trigger acs_priv_del_tr before delete
 on acs_privileges for each row
 execute procedure acs_priv_del_tr ();
 
-create function priv_recurse_subtree(varbit, varchar) 
-returns integer as '
-declare
-        nkey            alias for $1;
-        child_priv      alias for $2;
+
+
+-- added
+select define_function_args('priv_recurse_subtree','nkey,child_priv');
+
+--
+-- procedure priv_recurse_subtree/2
+--
+CREATE OR REPLACE FUNCTION priv_recurse_subtree(
+   nkey varbit,
+   child_priv varchar
+) RETURNS integer AS $$
+DECLARE
         new_value       integer;
         v_rec           record;
         new_key         varbit;
-begin
+BEGIN
 
         -- now iterate over all of the children of the 
         -- previous node.
@@ -257,7 +274,8 @@ begin
 
         return null;
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 comment on table acs_privileges is '
  Privileges share a global namespace. This is to avoid a
@@ -271,13 +289,22 @@ comment on table acs_privilege_hierarchy is '
  privilege is a superset of the bar privilege.
 ';
 
-create function acs_privilege__create_privilege (varchar,varchar,varchar)
-returns integer as '
-declare
-  create_privilege__privilege              alias for $1;  
-  create_privilege__pretty_name            alias for $2;  -- default null  
-  create_privilege__pretty_plural          alias for $3;  -- default null
-begin
+
+
+-- added
+select define_function_args('acs_privilege__create_privilege','privilege,pretty_name;null,pretty_plural;null');
+
+--
+-- procedure acs_privilege__create_privilege/3
+--
+CREATE OR REPLACE FUNCTION acs_privilege__create_privilege(
+   create_privilege__privilege varchar,
+   create_privilege__pretty_name varchar,  -- default null
+   create_privilege__pretty_plural varchar -- default null
+
+) RETURNS integer AS $$
+DECLARE
+BEGIN
     insert into acs_privileges
      (privilege, pretty_name, pretty_plural)
     values
@@ -286,54 +313,88 @@ begin
       create_privilege__pretty_plural);
       
     return 0; 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
-create function acs_privilege__create_privilege (varchar)
-returns integer as '
-declare
-  create_privilege__privilege              alias for $1;
-begin
+
+
+--
+-- procedure acs_privilege__create_privilege/1
+--
+CREATE OR REPLACE FUNCTION acs_privilege__create_privilege(
+   create_privilege__privilege varchar
+) RETURNS integer AS $$
+DECLARE
+BEGIN
     return acs_privilege__create_privilege(create_privilege__privilege, null, null);
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
-create function acs_privilege__drop_privilege (varchar)
-returns integer as '
-declare
-  drop_privilege__privilege     alias for $1;  
-begin
+
+
+-- added
+select define_function_args('acs_privilege__drop_privilege','privilege');
+
+--
+-- procedure acs_privilege__drop_privilege/1
+--
+CREATE OR REPLACE FUNCTION acs_privilege__drop_privilege(
+   drop_privilege__privilege varchar
+) RETURNS integer AS $$
+DECLARE
+BEGIN
     delete from acs_privileges
     where privilege = drop_privilege__privilege;
 
     return 0; 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
-create function acs_privilege__add_child (varchar,varchar)
-returns integer as '
-declare
-  add_child__privilege              alias for $1;  
-  add_child__child_privilege        alias for $2;  
-begin
+
+
+-- added
+select define_function_args('acs_privilege__add_child','privilege,child_privilege');
+
+--
+-- procedure acs_privilege__add_child/2
+--
+CREATE OR REPLACE FUNCTION acs_privilege__add_child(
+   add_child__privilege varchar,
+   add_child__child_privilege varchar
+) RETURNS integer AS $$
+DECLARE
+BEGIN
     insert into acs_privilege_hierarchy
      (privilege, child_privilege)
     values
      (add_child__privilege, add_child__child_privilege);
 
     return 0; 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
-create function acs_privilege__remove_child (varchar,varchar)
-returns integer as '
-declare
-  remove_child__privilege              alias for $1;  
-  remove_child__child_privilege        alias for $2;  
-begin
+
+
+-- added
+select define_function_args('acs_privilege__remove_child','privilege,child_privilege');
+
+--
+-- procedure acs_privilege__remove_child/2
+--
+CREATE OR REPLACE FUNCTION acs_privilege__remove_child(
+   remove_child__privilege varchar,
+   remove_child__child_privilege varchar
+) RETURNS integer AS $$
+DECLARE
+BEGIN
     delete from acs_privilege_hierarchy
     where privilege = remove_child__privilege
     and child_privilege = remove_child__child_privilege;
 
     return 0; 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
 ------------------------------------
@@ -418,24 +479,33 @@ create table acs_permissions_lock (
        lck  integer
 );
 
-create function acs_permissions_lock_tr () returns trigger as '
-begin
-        raise EXCEPTION ''FOR LOCKING ONLY, NO DML STATEMENTS ALLOWED'';
+CREATE OR REPLACE FUNCTION acs_permissions_lock_tr () RETURNS trigger AS $$
+BEGIN
+        raise EXCEPTION 'FOR LOCKING ONLY, NO DML STATEMENTS ALLOWED';
         return null;
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 create trigger acs_permissions_lock_tr 
 before insert or update or delete on acs_permissions_lock
 for each row execute procedure acs_permissions_lock_tr();
 
-create function acs_permission__grant_permission (integer, integer, varchar)
-returns integer as '
-declare
-    grant_permission__object_id         alias for $1;
-    grant_permission__grantee_id        alias for $2;
-    grant_permission__privilege         alias for $3;
+
+
+-- added
+select define_function_args('acs_permission__grant_permission','object_id,grantee_id,privilege');
+
+--
+-- procedure acs_permission__grant_permission/3
+--
+CREATE OR REPLACE FUNCTION acs_permission__grant_permission(
+   grant_permission__object_id integer,
+   grant_permission__grantee_id integer,
+   grant_permission__privilege varchar
+) RETURNS integer AS $$
+DECLARE
     exists_p                            boolean;
-begin
+BEGIN
     lock table acs_permissions_lock;
 
     select count(*) > 0 into exists_p
@@ -459,17 +529,26 @@ begin
     --    return;
 
     return 0; 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
 -- procedure revoke_permission
-create or replace function acs_permission__revoke_permission (integer, integer, varchar)
-returns integer as '
-declare
-    revoke_permission__object_id         alias for $1;
-    revoke_permission__grantee_id        alias for $2;
-    revoke_permission__privilege         alias for $3;
-begin
+
+
+-- added
+select define_function_args('acs_permission__revoke_permission','object_id,grantee_id,privilege');
+
+--
+-- procedure acs_permission__revoke_permission/3
+--
+CREATE OR REPLACE FUNCTION acs_permission__revoke_permission(
+   revoke_permission__object_id integer,
+   revoke_permission__grantee_id integer,
+   revoke_permission__privilege varchar
+) RETURNS integer AS $$
+DECLARE
+BEGIN
     lock table acs_permissions_lock;
 
     delete from acs_permissions
@@ -478,18 +557,27 @@ begin
     and privilege = revoke_permission__privilege;
 
     return 0; 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 -- Really speedy version of permission_p written by Don Baccus
 
-create or replace function acs_permission__permission_p (integer,integer,varchar)
-returns boolean as '
-declare
-    permission_p__object_id           alias for $1;
-    permission_p__party_id            alias for $2;
-    permission_p__privilege           alias for $3;
+
+
+-- added
+select define_function_args('acs_permission__permission_p','object_id,party_id,privilege');
+
+--
+-- procedure acs_permission__permission_p/3
+--
+CREATE OR REPLACE FUNCTION acs_permission__permission_p(
+   permission_p__object_id integer,
+   permission_p__party_id integer,
+   permission_p__privilege varchar
+) RETURNS boolean AS $$
+DECLARE
     exists_p                          boolean;
-begin
+BEGIN
   return exists (select 1
                  from acs_permissions p, party_approved_member_map m,
                    acs_object_context_index c, acs_privilege_descendant_map h
@@ -499,4 +587,5 @@ begin
                    and m.member_id = permission_p__party_id
                    and p.privilege = h.privilege
                    and p.grantee_id = m.party_id);
-end;' language 'plpgsql' stable;
+END;
+$$ LANGUAGE plpgsql stable;

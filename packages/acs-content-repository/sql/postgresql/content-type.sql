@@ -14,14 +14,14 @@
 -- Create a trigger to make sure that there will never be more than
 -- one default template for a given content type and use context
 
-create function cr_type_template_map_tr () returns opaque as '
-begin
+CREATE OR REPLACE FUNCTION cr_type_template_map_tr () RETURNS trigger AS $$
+BEGIN
 
-  if new.is_default = ''t'' then
+  if new.is_default = 't' then
     update
       cr_type_template_map
     set
-      is_default = ''f''
+      is_default = 'f'
     where
       content_type = new.content_type
     and
@@ -29,42 +29,53 @@ begin
     and 
       template_id <> new.template_id
     and
-      is_default = ''t'';
+      is_default = 't';
   end if;
 
   return new;
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 create trigger cr_type_template_map_tr before insert on cr_type_template_map
 for each row execute procedure cr_type_template_map_tr ();
 
-select define_function_args('content_type__create_type','content_type,supertype;content_revision,pretty_name,pretty_plural,table_name,id_column,name_method');
 
-create or replace function content_type__create_type (varchar,varchar,varchar,varchar,varchar,varchar,varchar)
-returns integer as '
-declare
-  create_type__content_type           alias for $1;  
-  create_type__supertype              alias for $2;  -- default ''content_revision''  
-  create_type__pretty_name            alias for $3;  
-  create_type__pretty_plural          alias for $4;  
-  create_type__table_name             alias for $5;
-  create_type__id_column              alias for $6;  -- default ''XXX''
-  create_type__name_method            alias for $7;  -- default null
+-- old define_function_args('content_type__create_type','content_type,supertype;content_revision,pretty_name,pretty_plural,table_name,id_column,name_method')
+-- new
+select define_function_args('content_type__create_type','content_type,supertype;content_revision,pretty_name,pretty_plural,table_name,id_column;XXX,name_method;null');
+
+
+
+
+--
+-- procedure content_type__create_type/7
+--
+CREATE OR REPLACE FUNCTION content_type__create_type(
+   create_type__content_type varchar,
+   create_type__supertype varchar,  -- default 'content_revision'
+   create_type__pretty_name varchar,
+   create_type__pretty_plural varchar,
+   create_type__table_name varchar,
+   create_type__id_column varchar,  -- default 'XXX'
+   create_type__name_method varchar -- default null
+
+) RETURNS integer AS $$
+DECLARE
   v_temp_p                            boolean;       
   v_supertype_table                   acs_object_types.table_name%TYPE;
                                         
-begin
+BEGIN
 
-  if (create_type__supertype <> ''content_revision'')
-      and (create_type__content_type <> ''content_revision'') then
+  if (create_type__supertype <> 'content_revision')
+      and (create_type__content_type <> 'content_revision') then
     select count(*) > 0 into v_temp_p
     from  acs_object_type_supertype_map
     where object_type = create_type__supertype
-    and ancestor_type = ''content_revision'';
+    and ancestor_type = 'content_revision';
 
     if not v_temp_p then
-      raise EXCEPTION ''-20000: supertype % must be a subtype of content_revision'', create_type__supertype;
+      raise EXCEPTION '-20000: supertype % must be a subtype of content_revision', create_type__supertype;
     end if;
   end if;
 
@@ -80,27 +91,38 @@ begin
     create_type__table_name,
     create_type__id_column,
     null,
-    ''f'',
+    'f',
     null,
     create_type__name_method,
     v_temp_p,
-    ''f''
+    'f'
   );
 
   PERFORM content_type__refresh_view(create_type__content_type);
 
   return 0; 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
+
+-- old define_function_args('content_type__drop_type','content_type,drop_children_p;f,drop_table_p;f,drop_objects_p;f')
+-- new
 select define_function_args('content_type__drop_type','content_type,drop_children_p;f,drop_table_p;f,drop_objects_p;f');
 
-create or replace function content_type__drop_type (varchar,boolean,boolean,boolean)
-returns integer as '
-declare
-  drop_type__content_type           alias for $1;  
-  drop_type__drop_children_p        alias for $2;  -- default ''f''  
-  drop_type__drop_table_p           alias for $3;  -- default ''f''
-  drop_type__drop_objects_p         alias for $4;  -- default ''f''
+
+
+
+--
+-- procedure content_type__drop_type/4
+--
+CREATE OR REPLACE FUNCTION content_type__drop_type(
+   drop_type__content_type varchar,
+   drop_type__drop_children_p boolean, -- default 'f'
+   drop_type__drop_table_p boolean,    -- default 'f'
+   drop_type__drop_objects_p boolean   -- default 'f'
+
+) RETURNS integer AS $$
+DECLARE
   table_exists_p                      boolean;       
   v_table_name                      varchar;   
   is_subclassed_p                   boolean;      
@@ -108,9 +130,9 @@ declare
   attr_row                          record;
   revision_row                      record;
   item_row                          record;
-begin
+BEGIN
 
-  -- first we''ll rid ourselves of any dependent child types, if any , 
+  -- first we'll rid ourselves of any dependent child types, if any , 
   -- along with their own dependent grandchild types
 
   select 
@@ -122,7 +144,7 @@ begin
   -- this is weak and will probably break;
   -- to remove grand child types, the process will probably
   -- require some sort of querying for drop_type 
-  -- methods within the children''s packages to make
+  -- methods within the children's packages to make
   -- certain there are no additional unanticipated
   -- restraints preventing a clean drop
 
@@ -135,7 +157,7 @@ begin
                      where
                        supertype = drop_type__content_type 
     LOOP
-      PERFORM content_type__drop_type(child_rec.object_type, ''t'', drop_type__drop_table_p, drop_type__drop_objects_p);
+      PERFORM content_type__drop_type(child_rec.object_type, 't', drop_type__drop_table_p, drop_type__drop_objects_p);
     end LOOP;
 
   end if;
@@ -150,11 +172,11 @@ begin
   LOOP
     PERFORM content_type__drop_attribute(drop_type__content_type,
                                          attr_row.attribute_name,
-                                         ''f''
+                                         'f'
     );
   end LOOP;
 
-  -- we''ll remove the associated table if it exists
+  -- we'll remove the associated table if it exists
   select 
     table_exists(lower(table_name)) into table_exists_p
   from 
@@ -180,7 +202,7 @@ begin
     -- different syntax for dropping a rule in 7.2 and 7.3 so check which
     -- version is being used (olah).
 
-    execute ''drop table '' || v_table_name || '' cascade'';
+    execute 'drop table ' || v_table_name || ' cascade';
 
   end if;
 
@@ -209,25 +231,36 @@ begin
   PERFORM acs_object_type__drop_type(drop_type__content_type, drop_type__drop_objects_p);
 
   return 0; 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 -- don't define function_args twice
--- select define_function_args('content_type__drop_type','content_type,drop_children_p;f,drop_table_p;f');
+-- 
+-- old define_function_args('content_type__drop_type','content_type,drop_children_p;f,drop_table_p;f')
+-- new
+select define_function_args('content_type__drop_type','content_type,drop_children_p;f,drop_table_p;f,drop_objects_p;f');
 
-create or replace function content_type__drop_type (varchar,boolean,boolean)
-returns integer as '
-declare
-  drop_type__content_type           alias for $1;  
-  drop_type__drop_children_p        alias for $2;  -- default ''f''  
-  drop_type__drop_table_p           alias for $3;  -- default ''f''
+
+
+
+--
+-- procedure content_type__drop_type/3
+--
+CREATE OR REPLACE FUNCTION content_type__drop_type(
+   drop_type__content_type varchar,
+   drop_type__drop_children_p boolean, -- default 'f'
+   drop_type__drop_table_p boolean     -- default 'f'
+
+) RETURNS integer AS $$
+DECLARE
   table_exists_p                      boolean;       
   v_table_name                      varchar;   
   is_subclassed_p                   boolean;      
   child_rec                         record;    
   attr_row                          record;
-begin
+BEGIN
 
-  -- first we''ll rid ourselves of any dependent child types, if any , 
+  -- first we'll rid ourselves of any dependent child types, if any , 
   -- along with their own dependent grandchild types
 
   select 
@@ -239,7 +272,7 @@ begin
   -- this is weak and will probably break;
   -- to remove grand child types, the process will probably
   -- require some sort of querying for drop_type 
-  -- methods within the children''s packages to make
+  -- methods within the children's packages to make
   -- certain there are no additional unanticipated
   -- restraints preventing a clean drop
 
@@ -252,7 +285,7 @@ begin
                      where
                        supertype = drop_type__content_type 
     LOOP
-      PERFORM content_type__drop_type(child_rec.object_type, ''t'', ''f'');
+      PERFORM content_type__drop_type(child_rec.object_type, 't', 'f');
     end LOOP;
 
   end if;
@@ -267,11 +300,11 @@ begin
   LOOP
     PERFORM content_type__drop_attribute(drop_type__content_type,
                                          attr_row.attribute_name,
-                                         ''f''
+                                         'f'
     );
   end LOOP;
 
-  -- we''ll remove the associated table if it exists
+  -- we'll remove the associated table if it exists
   select 
     table_exists(lower(table_name)) into table_exists_p
   from 
@@ -294,44 +327,46 @@ begin
     -- The rule dropping might be redundant as the rule might be dropped
     -- when the view is dropped.
 
-    -- different syntax for dropping a rule in 7.2 and 7.3 so check which
-    -- version is being used (olah).
+    execute 'drop rule ' || v_table_name || '_r ' || 'on ' || v_table_name || 'i';
+    execute 'drop view ' || v_table_name || 'x cascade';
+    execute 'drop view ' || v_table_name || 'i cascade';
 
-    if version() like ''%PostgreSQL 7.2%'' then
-      execute ''drop rule '' || v_table_name || ''_r'';
-    else
-      -- 7.3 syntax
-      execute ''drop rule '' || v_table_name || ''_r '' || ''on '' || v_table_name || ''i'';
-    end if;
-
-    execute ''drop view '' || v_table_name || ''x cascade'';
-    execute ''drop view '' || v_table_name || ''i cascade'';
-
-    execute ''drop table '' || v_table_name;
+    execute 'drop table ' || v_table_name;
   end if;
 
-  PERFORM acs_object_type__drop_type(drop_type__content_type, ''f'');
+  PERFORM acs_object_type__drop_type(drop_type__content_type, 'f');
 
   return 0; 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
-select define_function_args('content_type__create_attribute','content_type,attribute_name,datatype,pretty_name,pretty_plural,sort_order,default_value,column_spec;text');
 
-create or replace function content_type__create_attribute (varchar,varchar,varchar,varchar,varchar,integer,varchar,varchar)
-returns integer as '
-declare
-  create_attribute__content_type           alias for $1;  
-  create_attribute__attribute_name         alias for $2;  
-  create_attribute__datatype               alias for $3;  
-  create_attribute__pretty_name            alias for $4;  
-  create_attribute__pretty_plural          alias for $5;  -- default null  
-  create_attribute__sort_order             alias for $6;  -- default null
-  create_attribute__default_value          alias for $7;  -- default null
-  create_attribute__column_spec            alias for $8;  -- default ''text''
+-- old define_function_args('content_type__create_attribute','content_type,attribute_name,datatype,pretty_name,pretty_plural,sort_order,default_value,column_spec;text')
+-- new
+select define_function_args('content_type__create_attribute','content_type,attribute_name,datatype,pretty_name,pretty_plural;null,sort_order;null,default_value;null,column_spec;text');
+
+
+
+
+--
+-- procedure content_type__create_attribute/8
+--
+CREATE OR REPLACE FUNCTION content_type__create_attribute(
+   create_attribute__content_type varchar,
+   create_attribute__attribute_name varchar,
+   create_attribute__datatype varchar,
+   create_attribute__pretty_name varchar,
+   create_attribute__pretty_plural varchar, -- default null
+   create_attribute__sort_order integer,    -- default null
+   create_attribute__default_value varchar, -- default null
+   create_attribute__column_spec varchar    -- default 'text'
+
+) RETURNS integer AS $$
+DECLARE
   v_attr_id                                acs_attributes.attribute_id%TYPE;
   v_table_name                             acs_object_types.table_name%TYPE;
   v_column_exists                          boolean;       
-begin
+BEGIN
 
  -- add the appropriate column to the table
  
@@ -339,7 +374,7 @@ begin
   where object_type = create_attribute__content_type;
 
  if NOT FOUND then
-   raise EXCEPTION ''-20000: Content type % does not exist in content_type.create_attribute'', create_attribute__content_type;
+   raise EXCEPTION '-20000: Content type % does not exist in content_type.create_attribute', create_attribute__content_type;
  end if; 
 
  select count(*) > 0 into v_column_exists 
@@ -360,8 +395,8 @@ begin
    1,
    1,
    create_attribute__sort_order,
-   ''type_specific'',
-   ''f'',
+   'type_specific',
+   'f',
    not v_column_exists,
    null,
    null,
@@ -375,19 +410,26 @@ begin
 
  return v_attr_id;
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 select define_function_args('content_type__drop_attribute','content_type,attribute_name,drop_column;f');
 
-create or replace function content_type__drop_attribute (varchar,varchar,boolean)
-returns integer as '
-declare
-  drop_attribute__content_type           alias for $1;  
-  drop_attribute__attribute_name         alias for $2;  
-  drop_attribute__drop_column            alias for $3;  -- default ''f''  
+
+
+--
+-- procedure content_type__drop_attribute/3
+--
+CREATE OR REPLACE FUNCTION content_type__drop_attribute(
+   drop_attribute__content_type varchar,
+   drop_attribute__attribute_name varchar,
+   drop_attribute__drop_column boolean -- default 'f'
+
+) RETURNS integer AS $$
+DECLARE
   v_attr_id                              acs_attributes.attribute_id%TYPE;
   v_table                                acs_object_types.table_name%TYPE;
-begin
+BEGIN
 
   -- Get attribute information 
   select 
@@ -404,7 +446,7 @@ begin
     a.attribute_name = drop_attribute__attribute_name;
     
   if NOT FOUND then
-    raise EXCEPTION ''-20000: Attribute %:% does not exist in content_type.drop_attribute'', drop_attribute__content_type, drop_attribute__attribute_name;
+    raise EXCEPTION '-20000: Attribute %:% does not exist in content_type.drop_attribute', drop_attribute__content_type, drop_attribute__attribute_name;
   end if;
 
   -- Drop the attribute
@@ -414,27 +456,34 @@ begin
   -- FIXME: postgresql does not support drop column.
   -- Drop the column if neccessary
   if drop_attribute__drop_column then
-      execute ''alter table '' || v_table || '' drop column '' ||
-        drop_attribute__attribute_name || '' cascade'';
+      execute 'alter table ' || v_table || ' drop column ' ||
+        drop_attribute__attribute_name || ' cascade';
 
   end if;  
 
   PERFORM content_type__refresh_view(drop_attribute__content_type);
 
   return 0; 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
 select define_function_args('content_type__register_template','content_type,template_id,use_context,is_default;f');
-create or replace function content_type__register_template (varchar,integer,varchar,boolean)
-returns integer as '
-declare
-  register_template__content_type           alias for $1;  
-  register_template__template_id            alias for $2;  
-  register_template__use_context            alias for $3;  
-  register_template__is_default             alias for $4;  -- default ''f''  
+
+
+--
+-- procedure content_type__register_template/4
+--
+CREATE OR REPLACE FUNCTION content_type__register_template(
+   register_template__content_type varchar,
+   register_template__template_id integer,
+   register_template__use_context varchar,
+   register_template__is_default boolean -- default 'f'
+
+) RETURNS integer AS $$
+DECLARE
   v_template_registered                     boolean;       
-begin
+BEGIN
   select 
     count(*) > 0 into v_template_registered
   from
@@ -461,7 +510,7 @@ begin
     -- unset the default template before setting this one as the default
     if register_template__is_default then
       update cr_type_template_map
-        set is_default = ''f''
+        set is_default = 'f'
         where content_type = register_template__content_type
         and use_context = register_template__use_context;
     end if;
@@ -474,21 +523,27 @@ begin
   end if;
 
   return 0; 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 select define_function_args('content_type__set_default_template','content_type,template_id,use_context');
 
-create or replace function content_type__set_default_template (varchar,integer,varchar)
-returns integer as '
-declare
-  set_default_template__content_type           alias for $1;  
-  set_default_template__template_id            alias for $2;  
-  set_default_template__use_context            alias for $3;  
+
+
+--
+-- procedure content_type__set_default_template/3
+--
+CREATE OR REPLACE FUNCTION content_type__set_default_template(
+   set_default_template__content_type varchar,
+   set_default_template__template_id integer,
+   set_default_template__use_context varchar
+) RETURNS integer AS $$
+DECLARE
                                         
-begin
+BEGIN
 
   update cr_type_template_map
-    set is_default = ''t''
+    set is_default = 't'
     where template_id = set_default_template__template_id
     and content_type = set_default_template__content_type
     and use_context = set_default_template__use_context;
@@ -496,25 +551,31 @@ begin
   -- make sure there is only one default template for
   --   any given content_type/use_context pair
   update cr_type_template_map
-    set is_default = ''f''
+    set is_default = 'f'
     where template_id <> set_default_template__template_id
     and content_type = set_default_template__content_type
     and use_context = set_default_template__use_context
-    and is_default = ''t'';
+    and is_default = 't';
 
   return 0; 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
 select define_function_args('content_type__get_template','content_type,use_context');
 
-create or replace function content_type__get_template (varchar,varchar)
-returns integer as '
-declare
-  get_template__content_type           alias for $1;  
-  get_template__use_context            alias for $2;  
+
+
+--
+-- procedure content_type__get_template/2
+--
+CREATE OR REPLACE FUNCTION content_type__get_template(
+   get_template__content_type varchar,
+   get_template__use_context varchar
+) RETURNS integer AS $$
+DECLARE
   v_template_id                        cr_templates.template_id%TYPE;
-begin
+BEGIN
   select
     template_id
   into
@@ -526,22 +587,33 @@ begin
   and
     use_context = get_template__use_context
   and
-    is_default = ''t'';
+    is_default = 't';
 
   return v_template_id;
  
-end;' language 'plpgsql' stable strict;
+END;
+$$ LANGUAGE plpgsql stable strict;
 
 
-select define_function_args('content_type__unregister_template','content_type,template_id,use_context');
 
-create or replace function content_type__unregister_template (varchar,integer,varchar)
-returns integer as '
-declare
-  unregister_template__content_type           alias for $1;  -- default null  
-  unregister_template__template_id            alias for $2; 
-  unregister_template__use_context            alias for $3;  -- default null 
-begin
+-- old define_function_args('content_type__unregister_template','content_type,template_id,use_context')
+-- new
+select define_function_args('content_type__unregister_template','content_type;null,template_id,use_context;null');
+
+
+
+
+--
+-- procedure content_type__unregister_template/3
+--
+CREATE OR REPLACE FUNCTION content_type__unregister_template(
+   unregister_template__content_type varchar, -- default null
+   unregister_template__template_id integer,
+   unregister_template__use_context varchar   -- default null
+
+) RETURNS integer AS $$
+DECLARE
+BEGIN
 
   if unregister_template__use_context is null and 
      unregister_template__content_type is null then
@@ -571,23 +643,29 @@ begin
   end if; end if; end if;
 
   return 0; 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
 -- function trigger_insert_statement
 select define_function_args('content_type__trigger_insert_statement','content_type');
-create or replace function content_type__trigger_insert_statement (varchar)
-returns varchar as '
-declare
-  trigger_insert_statement__content_type   alias for $1;  
+
+
+--
+-- procedure content_type__trigger_insert_statement/1
+--
+CREATE OR REPLACE FUNCTION content_type__trigger_insert_statement(
+   trigger_insert_statement__content_type varchar
+) RETURNS varchar AS $$
+DECLARE
   v_table_name                             acs_object_types.table_name%TYPE;
   v_id_column                              acs_object_types.id_column%TYPE;
-  cols                                     varchar default '''';
-  vals                                     varchar default '''';
+  cols                                     varchar default '';
+  vals                                     varchar default '';
   attr_rec                                 record;
-begin
+BEGIN
   if trigger_insert_statement__content_type is null then 
-        return exception ''content_type__trigger_insert_statement called with null content_type'';
+        return exception 'content_type__trigger_insert_statement called with null content_type';
   end if;
 
   select 
@@ -604,15 +682,16 @@ begin
                   where
                     object_type = trigger_insert_statement__content_type 
   LOOP
-    cols := cols || '', '' || attr_rec.attribute_name;
-    vals := vals || '', p_new.'' || attr_rec.attribute_name;
+    cols := cols || ', ' || attr_rec.attribute_name;
+    vals := vals || ', p_new.' || attr_rec.attribute_name;
   end LOOP;
 
-  return ''insert into '' || v_table_name || 
-    '' ( '' || v_id_column || cols || '' ) values (v_revision_id'' ||
-    vals || '')'';
+  return 'insert into ' || v_table_name || 
+    ' ( ' || v_id_column || cols || ' ) values (v_revision_id' ||
+    vals || ')';
   
-end;' language 'plpgsql' stable;
+END;
+$$ LANGUAGE plpgsql stable;
 
 -- FIXME: need to look at this in more detail.  This probably can't be made 
 -- to work reliably in postgresql.  Currently we are using a rule to insert 
@@ -634,18 +713,23 @@ end;' language 'plpgsql' stable;
 
 select define_function_args('content_type__refresh_trigger','content_type');
 
-create or replace function content_type__refresh_trigger (varchar)
-returns integer as '
-declare
-  refresh_trigger__content_type           alias for $1;  
-  rule_text                               text default '''';
-  function_text                           text default '''';
+
+
+--
+-- procedure content_type__refresh_trigger/1
+--
+CREATE OR REPLACE FUNCTION content_type__refresh_trigger(
+   refresh_trigger__content_type varchar
+) RETURNS integer AS $$
+DECLARE
+  rule_text                               text default '';
+  function_text                           text default '';
   v_table_name                            acs_object_types.table_name%TYPE;
   type_rec                                record;
-begin
+BEGIN
 
   -- get the table name for the content type (determines view name)
-  raise NOTICE ''refresh trigger for % '', refresh_trigger__content_type;
+  raise NOTICE 'refresh trigger for % ', refresh_trigger__content_type;
 
     -- Since we allow null table name use object type if table name is null so
   -- we still can have a view.
@@ -657,8 +741,8 @@ begin
   --=================== start building rule code =======================
 
   function_text := function_text ||
-             ''create or replace function '' || v_table_name || ''_f (p_new ''|| v_table_name || ''i)
-             returns void as ''''
+             'create or replace function ' || v_table_name || '_f (p_new '|| v_table_name || 'i)
+             returns void as ''
              declare
                v_revision_id integer;
              begin
@@ -680,48 +764,39 @@ begin
                                      p_new.creation_ip,
                                      p_new.object_package_id
                 ) into v_revision_id;
-                '';
+                ';
 
   -- add an insert statement for each subtype in the hierarchy for this type
 
   for type_rec in select ot2.object_type, tree_level(ot2.tree_sortkey) as level
                   from acs_object_types ot1, acs_object_types ot2
-                  where ot2.object_type <> ''acs_object''                       
-                    and ot2.object_type <> ''content_revision''
+                  where ot2.object_type <> 'acs_object'                       
+                    and ot2.object_type <> 'content_revision'
                     and ot1.object_type = refresh_trigger__content_type
                     and ot1.tree_sortkey between ot2.tree_sortkey and tree_right(ot2.tree_sortkey)
                     and ot1.table_name is not null
                   order by level asc
   LOOP
-    function_text := function_text || '' '' || content_type__trigger_insert_statement(type_rec.object_type) || '';
-    '';
+    function_text := function_text || ' ' || content_type__trigger_insert_statement(type_rec.object_type) || ';
+    ';
   end loop;
 
-  function_text := function_text || ''
+  function_text := function_text || '
    return;
-   end;'''' language ''''plpgsql''''; 
-   '';
+   end;'' language ''plpgsql''; 
+   ';
   -- end building the rule definition code
 
   -- create the new function
   execute function_text;
 
-  rule_text := ''create rule '' || v_table_name || ''_r as on insert to '' ||
-               v_table_name || ''i do instead SELECT '' || v_table_name || ''_f(new); '' ;
+  rule_text := 'create rule ' || v_table_name || '_r as on insert to ' ||
+               v_table_name || 'i do instead SELECT ' || v_table_name || '_f(new); ' ;
   --================== done building rule code =======================
 
   -- drop the old rule
-  if rule_exists(v_table_name || ''_r'', v_table_name || ''i'') then 
-
-    -- different syntax for dropping a rule in 7.2 and 7.3 so check which
-    -- version is being used (olah).
-    if version() like ''%PostgreSQL 7.2%'' then
-      execute ''drop rule '' || v_table_name || ''_r'';
-    else
-      -- 7.3 syntax
-      execute ''drop rule '' || v_table_name || ''_r '' || ''on '' || v_table_name || ''i'';
-    end if;
-
+  if rule_exists(v_table_name || '_r', v_table_name || 'i') then 
+     execute 'drop rule ' || v_table_name || '_r ' || 'on ' || v_table_name || 'i';
   end if;
 
   -- create the new rule for inserts on the content type
@@ -729,36 +804,42 @@ begin
 
   return null; 
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 select define_function_args('content_type__refresh_view','content_type');
 
-create or replace function content_type__refresh_view (varchar)
-returns integer as '
-declare
-  refresh_view__content_type           alias for $1;  
-  cols                                 varchar default ''''; 
-  tabs                                 varchar default ''''; 
-  joins                                varchar default '''';
+
+
+--
+-- procedure content_type__refresh_view/1
+--
+CREATE OR REPLACE FUNCTION content_type__refresh_view(
+   refresh_view__content_type varchar
+) RETURNS integer AS $$
+DECLARE
+  cols                                 varchar default ''; 
+  tabs                                 varchar default ''; 
+  joins                                varchar default '';
   v_table_name                         varchar;
   join_rec                             record;
-begin
+BEGIN
 
   for join_rec in select ot2.table_name, ot2.id_column, tree_level(ot2.tree_sortkey) as level
                   from acs_object_types ot1, acs_object_types ot2
-                  where ot2.object_type <> ''acs_object''                       
-                    and ot2.object_type <> ''content_revision''
-                    and lower(ot2.table_name) <> ''acs_objects''     
-                    and lower(ot2.table_name) <> ''cr_revisions''
+                  where ot2.object_type <> 'acs_object'                       
+                    and ot2.object_type <> 'content_revision'
+                    and lower(ot2.table_name) <> 'acs_objects'     
+                    and lower(ot2.table_name) <> 'cr_revisions'
                     and ot1.object_type = refresh_view__content_type
                     and ot1.tree_sortkey between ot2.tree_sortkey and tree_right(ot2.tree_sortkey)
                   order by ot2.tree_sortkey desc
   LOOP
     if join_rec.table_name is not null then
-        cols := cols || '', '' || join_rec.table_name || ''.*'';
-        tabs := tabs || '', '' || join_rec.table_name;
-        joins := joins || '' and acs_objects.object_id = '' || 
-                 join_rec.table_name || ''.'' || join_rec.id_column;
+        cols := cols || ', ' || join_rec.table_name || '.*';
+        tabs := tabs || ', ' || join_rec.table_name;
+        joins := joins || ' and acs_objects.object_id = ' || 
+                 join_rec.table_name || '.' || join_rec.id_column;
     end if;
   end loop;
 
@@ -768,21 +849,21 @@ begin
     where object_type = refresh_view__content_type;
 
   if length(v_table_name) > 57 then
-      raise exception ''Table name cannot be longer than 57 characters, because that causes conflicting rules when we create the views.'';
+      raise exception 'Table name cannot be longer than 57 characters, because that causes conflicting rules when we create the views.';
   end if;
 
   -- create the input view (includes content columns)
 
-  if table_exists(v_table_name || ''i'') then
-     execute ''drop view '' || v_table_name || ''i'' || '' CASCADE'';
+  if table_exists(v_table_name || 'i') then
+     execute 'drop view ' || v_table_name || 'i' || ' CASCADE';
   end if;
 
   -- FIXME:  need to look at content_revision__get_content.  Since the CR
   -- can store data in a lob, a text field or in an external file, getting
   -- the data attribute for this view will be problematic.
 
-  execute ''create view '' || v_table_name ||
-    ''i as select  acs_objects.object_id,
+  execute 'create view ' || v_table_name ||
+    'i as select  acs_objects.object_id,
  acs_objects.object_type,
  acs_objects.title as object_title,
  acs_objects.package_id as object_package_id,
@@ -798,19 +879,19 @@ begin
  acs_objects.max_child_sortkey, cr.revision_id, cr.title, cr.item_id,
     content_revision__get_content(cr.revision_id) as data, 
     cr_text.text_data as text,
-    cr.description, cr.publish_date, cr.mime_type, cr.nls_language'' || 
+    cr.description, cr.publish_date, cr.mime_type, cr.nls_language' || 
     cols || 
-    '' from acs_objects, cr_revisions cr, cr_text'' || tabs || '' where 
-    acs_objects.object_id = cr.revision_id '' || joins;
+    ' from acs_objects, cr_revisions cr, cr_text' || tabs || ' where 
+    acs_objects.object_id = cr.revision_id ' || joins;
 
   -- create the output view (excludes content columns to enable SELECT *)
 
-  if table_exists(v_table_name || ''x'') then
-     execute ''drop view '' || v_table_name || ''x cascade'';
+  if table_exists(v_table_name || 'x') then
+     execute 'drop view ' || v_table_name || 'x cascade';
   end if;
 
-  execute ''create view '' || v_table_name ||
-    ''x as select  acs_objects.object_id,
+  execute 'create view ' || v_table_name ||
+    'x as select  acs_objects.object_id,
  acs_objects.object_type,
  acs_objects.title as object_title,
  acs_objects.package_id as object_package_id,
@@ -825,36 +906,51 @@ begin
  acs_objects.tree_sortkey,
  acs_objects.max_child_sortkey, cr.revision_id, cr.title, cr.item_id,
     cr.description, cr.publish_date, cr.mime_type, cr.nls_language,
-    i.name, i.parent_id'' || 
+    i.name, i.parent_id' || 
     cols || 
-    '' from acs_objects, cr_revisions cr, cr_items i, cr_text'' || tabs || 
-    '' where acs_objects.object_id = cr.revision_id 
-      and cr.item_id = i.item_id'' || joins;
+    ' from acs_objects, cr_revisions cr, cr_items i, cr_text' || tabs || 
+    ' where acs_objects.object_id = cr.revision_id 
+      and cr.item_id = i.item_id' || joins;
 
   PERFORM content_type__refresh_trigger(refresh_view__content_type);
 
 -- exception
 --   when others then
---     dbms_output.put_line(''Error creating attribute view or trigger for''
+--     dbms_output.put_line('Error creating attribute view or trigger for'
 --  || content_type);
 
   return 0; 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
-select define_function_args('content_type__register_child_type','parent_type,child_type,relation_tag;generic,min_n;0,max_n');
+
+-- old define_function_args('content_type__register_child_type','parent_type,child_type,relation_tag;generic,min_n;0,max_n')
+-- new
+select define_function_args('content_type__register_child_type','parent_type,child_type,relation_tag;generic,min_n;0,max_n;null');
+
 
 -- procedure register_child_type
-select define_function_args('content_type__register_child_type','parent_type,child_type,relation_tag;generic,min_n;0,max_n');
-create or replace function content_type__register_child_type (varchar,varchar,varchar,integer,integer)
-returns integer as '
-declare
-  register_child_type__parent_type   alias for $1;  
-  register_child_type__child_type    alias for $2;  
-  register_child_type__relation_tag  alias for $3;  -- default ''generic''  
-  register_child_type__min_n         alias for $4;  -- default 0
-  register_child_type__max_n         alias for $5;  -- default null
+
+-- old define_function_args('content_type__register_child_type','parent_type,child_type,relation_tag;generic,min_n;0,max_n')
+-- new
+select define_function_args('content_type__register_child_type','parent_type,child_type,relation_tag;generic,min_n;0,max_n;null');
+
+
+
+--
+-- procedure content_type__register_child_type/5
+--
+CREATE OR REPLACE FUNCTION content_type__register_child_type(
+   register_child_type__parent_type varchar,
+   register_child_type__child_type varchar,
+   register_child_type__relation_tag varchar, -- default 'generic'
+   register_child_type__min_n integer,        -- default 0 -- default '0'
+   register_child_type__max_n integer         -- default null
+
+) RETURNS integer AS $$
+DECLARE
   v_exists                           integer;
-begin
+BEGIN
 
   select count(*) into v_exists 
     from cr_type_children
@@ -888,18 +984,28 @@ begin
   end if;
       
   return 0; 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
-select define_function_args('content_type__unregister_child_type','content_type,child_type,relation_tag');
 
-create or replace function content_type__unregister_child_type (varchar,varchar,varchar)
-returns integer as '
-declare
-  unregister_child_type__parent_type            alias for $1;  
-  unregister_child_type__child_type             alias for $2;  
-  unregister_child_type__relation_tag           alias for $3;
-begin
+-- old define_function_args('content_type__unregister_child_type','content_type,child_type,relation_tag')
+-- new
+select define_function_args('content_type__unregister_child_type','parent_type,child_type,relation_tag');
+
+
+
+
+--
+-- procedure content_type__unregister_child_type/3
+--
+CREATE OR REPLACE FUNCTION content_type__unregister_child_type(
+   unregister_child_type__parent_type varchar,
+   unregister_child_type__child_type varchar,
+   unregister_child_type__relation_tag varchar
+) RETURNS integer AS $$
+DECLARE
+BEGIN
 
   delete from 
     cr_type_children
@@ -911,21 +1017,32 @@ begin
     relation_tag = unregister_child_type__relation_tag;
 
   return 0; 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
-select define_function_args('content_type__register_relation_type','content_type,target_type,relation_tag;generic,min_n;0,max_n');
 
-create or replace function content_type__register_relation_type (varchar,varchar,varchar,integer,integer)
-returns integer as '
-declare
-  register_relation_type__content_type  alias for $1;  
-  register_relation_type__target_type   alias for $2;  
-  register_relation_type__relation_tag  alias for $3;  -- default ''generic''  
-  register_relation_type__min_n         alias for $4;  -- default 0
-  register_relation_type__max_n         alias for $5;  -- default null
+-- old define_function_args('content_type__register_relation_type','content_type,target_type,relation_tag;generic,min_n;0,max_n')
+-- new
+select define_function_args('content_type__register_relation_type','content_type,target_type,relation_tag;generic,min_n;0,max_n;null');
+
+
+
+
+--
+-- procedure content_type__register_relation_type/5
+--
+CREATE OR REPLACE FUNCTION content_type__register_relation_type(
+   register_relation_type__content_type varchar,
+   register_relation_type__target_type varchar,
+   register_relation_type__relation_tag varchar, -- default 'generic'
+   register_relation_type__min_n integer,        -- default 0 -- default '0'
+   register_relation_type__max_n integer         -- default null
+
+) RETURNS integer AS $$
+DECLARE
   v_exists                              integer;       
-begin
+BEGIN
 
   -- check if the relation type exists
   select 
@@ -964,19 +1081,26 @@ begin
   end if;
 
   return 0; 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
 select define_function_args('content_type__unregister_relation_type','content_type,target_type,relation_tag;null');
 
-create or replace function content_type__unregister_relation_type (varchar,varchar,varchar)
-returns integer as '
-declare
-  unregister_relation_type__content_type  alias for $1;  
-  unregister_relation_type__target_type   alias for $2;  
-  unregister_relation_type__relation_tag  alias for $3;  -- default null
+
+
+--
+-- procedure content_type__unregister_relation_type/3
+--
+CREATE OR REPLACE FUNCTION content_type__unregister_relation_type(
+   unregister_relation_type__content_type varchar,
+   unregister_relation_type__target_type varchar,
+   unregister_relation_type__relation_tag varchar -- default null
+
+) RETURNS integer AS $$
+DECLARE
                                         
-begin
+BEGIN
 
   delete from 
     cr_type_relations
@@ -988,18 +1112,24 @@ begin
     relation_tag = unregister_relation_type__relation_tag;
 
   return 0; 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
 select define_function_args('content_type__register_mime_type','content_type,mime_type');
 
-create or replace function content_type__register_mime_type (varchar,varchar)
-returns integer as '
-declare
-  register_mime_type__content_type           alias for $1;  
-  register_mime_type__mime_type              alias for $2;  
+
+
+--
+-- procedure content_type__register_mime_type/2
+--
+CREATE OR REPLACE FUNCTION content_type__register_mime_type(
+   register_mime_type__content_type varchar,
+   register_mime_type__mime_type varchar
+) RETURNS integer AS $$
+DECLARE
   v_valid_registration                       integer;       
-begin
+BEGIN
 
   -- check if this type is already registered  
   select
@@ -1026,62 +1156,80 @@ begin
   end if;
 
   return 0; 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
 select define_function_args('content_type__unregister_mime_type','content_type,mime_type');
 
-create or replace function content_type__unregister_mime_type (varchar,varchar)
-returns integer as '
-declare
-  unregister_mime_type__content_type           alias for $1;  
-  unregister_mime_type__mime_type              alias for $2;  
-begin
+
+
+--
+-- procedure content_type__unregister_mime_type/2
+--
+CREATE OR REPLACE FUNCTION content_type__unregister_mime_type(
+   unregister_mime_type__content_type varchar,
+   unregister_mime_type__mime_type varchar
+) RETURNS integer AS $$
+DECLARE
+BEGIN
 
   delete from cr_content_mime_type_map
     where content_type = unregister_mime_type__content_type
     and mime_type = unregister_mime_type__mime_type;
 
   return 0; 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
 select define_function_args('content_type__is_content_type','object_type'); 
 
-create or replace function content_type__is_content_type (varchar)
-returns boolean as '
-declare
-  is_content_type__object_type            alias for $1;  
+
+
+--
+-- procedure content_type__is_content_type/1
+--
+CREATE OR REPLACE FUNCTION content_type__is_content_type(
+   is_content_type__object_type varchar
+) RETURNS boolean AS $$
+DECLARE
   v_is_content_type                       boolean;
-begin
+BEGIN
 
-  if is_content_type__object_type = ''content_revision'' then
+  if is_content_type__object_type = 'content_revision' then
 
-    v_is_content_type := ''t'';
+    v_is_content_type := 't';
 
   else    
     select count(*) > 0 into v_is_content_type
     from acs_object_type_supertype_map
     where object_type = is_content_type__object_type 
-    and ancestor_type = ''content_revision'';
+    and ancestor_type = 'content_revision';
   end if;
   
   return v_is_content_type;
  
-end;' language 'plpgsql' stable;
+END;
+$$ LANGUAGE plpgsql stable;
 
 
 select define_function_args('content_type__rotate_template','template_id,v_content_type,use_context');
 
-create or replace function content_type__rotate_template (integer,varchar,varchar)
-returns integer as '
-declare
-  rotate_template__template_id            alias for $1;  
-  rotate_template__v_content_type         alias for $2;  
-  rotate_template__use_context            alias for $3;  
+
+
+--
+-- procedure content_type__rotate_template/3
+--
+CREATE OR REPLACE FUNCTION content_type__rotate_template(
+   rotate_template__template_id integer,
+   rotate_template__v_content_type varchar,
+   rotate_template__use_context varchar
+) RETURNS integer AS $$
+DECLARE
   v_template_id                           cr_templates.template_id%TYPE;
   v_items_val                             record;
-begin
+BEGIN
 
   -- get the default template
   select
@@ -1093,7 +1241,7 @@ begin
   and
     use_context = rotate_template__use_context
   and
-    is_default = ''t'';
+    is_default = 't';
 
   if v_template_id is not null then
 
@@ -1131,12 +1279,13 @@ begin
         rotate_template__v_content_type,
         rotate_template__template_id,
         rotate_template__use_context,
-        ''t''
+        't'
     );
   end if;
 
   return 0; 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
 
@@ -1146,15 +1295,21 @@ end;' language 'plpgsql';
 
 -- prompt *** Refreshing content type attribute views...
 
-create or replace function inline_0 ()
-returns integer as '
-declare 
+
+
+--
+-- procedure inline_0/0
+--
+CREATE OR REPLACE FUNCTION inline_0(
+
+) RETURNS integer AS $$
+DECLARE 
         type_rec        record;
-begin
+BEGIN
 
   for type_rec in select ot.object_type 
                   from acs_object_types ot, acs_object_types ot2
-                  where ot2.object_type = ''content_revision''
+                  where ot2.object_type = 'content_revision'
                     and ot.tree_sortkey between ot2.tree_sortkey and tree_right(ot2.tree_sortkey)
                   order by ot.tree_sortkey
   LOOP
@@ -1162,7 +1317,8 @@ begin
   end LOOP;
 
   return 0;
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 select inline_0 ();
 
