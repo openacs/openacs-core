@@ -1,47 +1,47 @@
 
-create function inline_0 ()
-returns integer as '
-begin
+CREATE OR REPLACE FUNCTION inline_0 () RETURNS integer AS $$
+BEGIN
 	PERFORM acs_rel_type__create_type (
-		''blah_member_rel'',
-		''Blah Membership Relationship'',
-		''Blah Membership Relationships'',
-                ''membership_rel'',
-		''blah_member_rels'',
-		''rel_id'',
-		''blah_member_rel'',
-		''group'',
+		'blah_member_rel',
+		'Blah Membership Relationship',
+		'Blah Membership Relationships',
+                'membership_rel',
+		'blah_member_rels',
+		'rel_id',
+		'blah_member_rel',
+		'group',
                 null,
 		0,
 		null,
-		''party'',
-                ''member'',
+		'party',
+                'member',
 		0,
 		null
 		);
 
 
 	PERFORM acs_rel_type__create_type (
-		''yippie_member_rel'',
-		''Yippie Membership Relationship'',
-		''Yippie Membership Relationships'',
-		''membership_rel'',
-		''yippie_member_rels'',
-		''rel_id'',
-		''yippie_member_rel'',
-		''group'',
+		'yippie_member_rel',
+		'Yippie Membership Relationship',
+		'Yippie Membership Relationships',
+		'membership_rel',
+		'yippie_member_rels',
+		'rel_id',
+		'yippie_member_rel',
+		'group',
 		null,
 		0,
 		null,
-		''party'',
-                ''member'',
+		'party',
+                'member',
 		0,
 		null
 		);
 
         return null;
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 select inline_0 ();
 
@@ -85,22 +85,30 @@ create table yippie_member_rels (
 
 -- create or replace package body blah_member_rel
 -- function new
-create function blah_member_rel__new (integer,varchar,integer,integer)
-returns integer as '
-declare
-  new__rel_id                 alias for $1;  
-  new__rel_type               alias for $2;  
-  new__object_id_one          alias for $3;  
-  new__object_id_two          alias for $4;  
+
+
+-- added
+select define_function_args('blah_member_rel__new','rel_id,rel_type,object_id_one,object_id_two');
+
+--
+-- procedure blah_member_rel__new/4
+--
+CREATE OR REPLACE FUNCTION blah_member_rel__new(
+   new__rel_id integer,
+   new__rel_type varchar,
+   new__object_id_one integer,
+   new__object_id_two integer
+) RETURNS integer AS $$
+DECLARE
   v_rel_id                    blah_member_rels.rel_id%TYPE;
-begin
+BEGIN
 
 	v_rel_id := membership_rel__new(
 		new__rel_id,
 		new__rel_type,
 		new__object_id_one,
 		new__object_id_two,
-                ''approved'',
+                'approved',
                 null,
                 null
 	);
@@ -112,22 +120,32 @@ begin
 
 	return v_rel_id;
    
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
 -- procedure delete
-create function blah_member_rel__delete (integer)
-returns integer as '
-declare
-  delete__rel_id                 alias for $1;  
-begin
+
+
+-- added
+select define_function_args('blah_member_rel__delete','rel_id');
+
+--
+-- procedure blah_member_rel__delete/1
+--
+CREATE OR REPLACE FUNCTION blah_member_rel__delete(
+   delete__rel_id integer
+) RETURNS integer AS $$
+DECLARE
+BEGIN
 
 	delete from blah_member_rels where rel_id = delete__rel_id;
 
 	PERFORM membership_rel__delete(delete__rel_id);
 
   return 0; 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
 
@@ -155,22 +173,30 @@ end;' language 'plpgsql';
 
 -- create or replace package body yippie_member_rel
 -- function new
-create function yippie_member_rel__new (integer,varchar,integer,integer)
-returns integer as '
-declare
-  new__rel_id                 alias for $1;  
-  new__rel_type               alias for $2;  
-  new__object_id_one          alias for $3;  
-  new__object_id_two          alias for $4;  
+
+
+-- added
+select define_function_args('yippie_member_rel__new','rel_id,rel_type,object_id_one,object_id_two');
+
+--
+-- procedure yippie_member_rel__new/4
+--
+CREATE OR REPLACE FUNCTION yippie_member_rel__new(
+   new__rel_id integer,
+   new__rel_type varchar,
+   new__object_id_one integer,
+   new__object_id_two integer
+) RETURNS integer AS $$
+DECLARE
   v_rel_id                    yippie_member_rels.rel_id%TYPE;
-begin
+BEGIN
 
 	v_rel_id := membership_rel__new(
 		new__rel_id,
 		new__rel_type,
 		new__object_id_one,
 		new__object_id_two,
-                ''approved'',
+                'approved',
                 null,
                 null
 	);
@@ -182,22 +208,32 @@ begin
 
 	return v_rel_id;
    
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
 -- procedure delete
-create function yippie_member_rel__delete (integer)
-returns integer as '
-declare
-  delete__rel_id                 alias for $1;  
-begin
+
+
+-- added
+select define_function_args('yippie_member_rel__delete','rel_id');
+
+--
+-- procedure yippie_member_rel__delete/1
+--
+CREATE OR REPLACE FUNCTION yippie_member_rel__delete(
+   delete__rel_id integer
+) RETURNS integer AS $$
+DECLARE
+BEGIN
 
 	delete from yippie_member_rels where rel_id = delete__rel_id;
 
 	PERFORM membership_rel__delete(delete__rel_id);
 
         return 0; 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
 

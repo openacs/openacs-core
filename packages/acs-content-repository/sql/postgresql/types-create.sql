@@ -564,26 +564,34 @@ end;
 
 -- prompt *** Refreshing content type attribute views...
 
-create function inline_0 () returns integer as '
-declare
+
+
+--
+-- procedure inline_0/0
+--
+CREATE OR REPLACE FUNCTION inline_0(
+
+) RETURNS integer AS $$
+DECLARE
         type_rec   record;       
-begin
+BEGIN
 
 -- select object_type from acs_object_types 
 --    connect by supertype = prior object_type 
---    start with object_type = ''content_revision'' 
+--    start with object_type = 'content_revision' 
 
   for type_rec in select o1.object_type
                   from acs_object_types o1, acs_object_types o2
                   where o1.tree_sortkey between o2.tree_sortkey and tree_right(o2.tree_sortkey)
-                    and o2.object_type = ''content_revision''
+                    and o2.object_type = 'content_revision'
                   
   LOOP
     PERFORM content_type__refresh_view(type_rec.object_type);
   end LOOP;
 
   return null;
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 select inline_0();
 

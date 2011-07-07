@@ -10,20 +10,27 @@
 -- @cvs-id $Id$
 --
 
-create function inline_0 ()
-returns integer as '
-declare
+
+
+--
+-- procedure inline_0/0
+--
+CREATE OR REPLACE FUNCTION inline_0(
+
+) RETURNS integer AS $$
+DECLARE
         row     record;
-begin
+BEGIN
         for row in select authority_id from auth_authorities
         loop
                 perform authority__del(row.authority_id);
         end loop;
 
-        perform acs_object_type__drop_type(''authority'', ''t'');
+        perform acs_object_type__drop_type('authority', 't');
 
         return 1;
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 select inline_0 ();
 drop function inline_0();
 

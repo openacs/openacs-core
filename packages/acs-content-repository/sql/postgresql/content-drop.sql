@@ -13,30 +13,37 @@
 -- set serveroutput on
 
 -- unregistering types, deleting the default folders
-create function inline_0 () returns integer as '
-declare
+
+
+--
+-- procedure inline_0/0
+--
+CREATE OR REPLACE FUNCTION inline_0(
+
+) RETURNS integer AS $$
+DECLARE
   v_id integer;
-begin
+BEGIN
 
   -- root folder for templates
   v_id := content_template__get_root_folder();
 
   PERFORM content_folder__unregister_content_type(
     v_id,
-    ''content_template'',
-    ''t''
+    'content_template',
+    't'
     );
 
   PERFORM content_folder__unregister_content_type(
     v_id,
-    ''content_symlink'',
-    ''t''
+    'content_symlink',
+    't'
   );
 
   PERFORM content_folder__unregister_content_type(
     v_id,
-    ''content_folder'',
-    ''t''
+    'content_folder',
+    't'
   );
 
   PERFORM content_folder__delete(v_id);
@@ -47,27 +54,28 @@ begin
 
   PERFORM content_folder__unregister_content_type(
     v_id,
-    ''content_symlink'',
-    ''t''
+    'content_symlink',
+    't'
   );
 
   PERFORM content_folder__unregister_content_type(
     v_id,
-    ''content_folder'',
-    ''t''
+    'content_folder',
+    't'
   );
 
   PERFORM content_folder__unregister_content_type (
     v_id,
-    ''content_revision'',
-    ''t''
+    'content_revision',
+    't'
   );	 
 
   PERFORM content_folder__delete (v_id);
 
   return null;
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 select inline_0 ();
 

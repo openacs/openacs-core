@@ -5,47 +5,54 @@
 --
 --------------------------------------------------------------
 
-create function inline_0 ()
-returns integer as '
-declare 
+
+
+--
+-- procedure inline_0/0
+--
+CREATE OR REPLACE FUNCTION inline_0(
+
+) RETURNS integer AS $$
+DECLARE 
         found_p         boolean;
-begin
+BEGIN
 
   select count(*) > 0 into found_p from dual 
    where exists (select 1 from acs_privileges 
-                  where privilege = ''cm_root'');
+                  where privilege = 'cm_root');
 
   if NOT found_p then
 
     -- Dummy root privilege
-    PERFORM acs_privilege__create_privilege(''cm_root'', ''Root'', ''Root'');
+    PERFORM acs_privilege__create_privilege('cm_root', 'Root', 'Root');
     -- He can do everything
-    PERFORM acs_privilege__create_privilege(''cm_admin'', ''Administrator'', ''Administrators'');
-    PERFORM acs_privilege__create_privilege(''cm_write'', ''Write'', ''Write'');    
-    PERFORM acs_privilege__create_privilege(''cm_new'', ''Create New Item'', ''Create New Item'');    
-    PERFORM acs_privilege__create_privilege(''cm_examine'', ''Admin-level Read'', ''Admin-level Read'');    
-    PERFORM acs_privilege__create_privilege(''cm_read'', ''User-level Read'', ''User-level Read'');    
-    PERFORM acs_privilege__create_privilege(''cm_item_workflow'', ''Modify Workflow'', ''Modify Workflow'');    
-    PERFORM acs_privilege__create_privilege(''cm_perm_admin'', ''Modify Any Permissions'', ''Modify Any Permissions'');    
-    PERFORM acs_privilege__create_privilege(''cm_perm'', ''Donate Permissions'', ''Donate Permissions'');    
+    PERFORM acs_privilege__create_privilege('cm_admin', 'Administrator', 'Administrators');
+    PERFORM acs_privilege__create_privilege('cm_write', 'Write', 'Write');    
+    PERFORM acs_privilege__create_privilege('cm_new', 'Create New Item', 'Create New Item');    
+    PERFORM acs_privilege__create_privilege('cm_examine', 'Admin-level Read', 'Admin-level Read');    
+    PERFORM acs_privilege__create_privilege('cm_read', 'User-level Read', 'User-level Read');    
+    PERFORM acs_privilege__create_privilege('cm_item_workflow', 'Modify Workflow', 'Modify Workflow');    
+    PERFORM acs_privilege__create_privilege('cm_perm_admin', 'Modify Any Permissions', 'Modify Any Permissions');    
+    PERFORM acs_privilege__create_privilege('cm_perm', 'Donate Permissions', 'Donate Permissions');    
 
-    PERFORM acs_privilege__add_child(''cm_root'', ''cm_admin'');           -- Do anything to an object
-    PERFORM acs_privilege__add_child(''cm_admin'', ''cm_write'');          -- Do anything to an object
-    PERFORM acs_privilege__add_child(''cm_write'', ''cm_new'');            -- Create subitems
-    PERFORM acs_privilege__add_child(''cm_new'', ''cm_examine'');          -- View in admin mode 
-    PERFORM acs_privilege__add_child(''cm_examine'', ''cm_read'');         -- View in user mode
-    PERFORM acs_privilege__add_child(''cm_write'', ''cm_item_workflow'');  -- Change item workflow
+    PERFORM acs_privilege__add_child('cm_root', 'cm_admin');           -- Do anything to an object
+    PERFORM acs_privilege__add_child('cm_admin', 'cm_write');          -- Do anything to an object
+    PERFORM acs_privilege__add_child('cm_write', 'cm_new');            -- Create subitems
+    PERFORM acs_privilege__add_child('cm_new', 'cm_examine');          -- View in admin mode 
+    PERFORM acs_privilege__add_child('cm_examine', 'cm_read');         -- View in user mode
+    PERFORM acs_privilege__add_child('cm_write', 'cm_item_workflow');  -- Change item workflow
 
-    PERFORM acs_privilege__add_child(''cm_admin'', ''cm_perm_admin'');     -- Modify any permissions
-    PERFORM acs_privilege__add_child(''cm_perm_admin'', ''cm_perm'');      -- Modify any permissions on an item
+    PERFORM acs_privilege__add_child('cm_admin', 'cm_perm_admin');     -- Modify any permissions
+    PERFORM acs_privilege__add_child('cm_perm_admin', 'cm_perm');      -- Modify any permissions on an item
 
     -- Proper inheritance
-    PERFORM acs_privilege__add_child(''admin'', ''cm_root'');
+    PERFORM acs_privilege__add_child('admin', 'cm_root');
 
   end if;
   
   return 0;
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 select inline_0 ();
 
@@ -54,14 +61,23 @@ drop function inline_0 ();
 
 -- create or replace package body content_permission
 -- procedure inherit_permissions
-create function content_permission__inherit_permissions (integer,integer,integer)
-returns integer as '
-declare
-  inherit_permissions__parent_object_id       alias for $1;  
-  inherit_permissions__child_object_id        alias for $2;  
-  inherit_permissions__child_creator_id       alias for $3;  -- default null  
+
+
+-- added
+select define_function_args('content_permission__inherit_permissions','parent_object_id,child_object_id,child_creator_id;null');
+
+--
+-- procedure content_permission__inherit_permissions/3
+--
+CREATE OR REPLACE FUNCTION content_permission__inherit_permissions(
+   inherit_permissions__parent_object_id integer,
+   inherit_permissions__child_object_id integer,
+   inherit_permissions__child_creator_id integer -- default null
+
+) RETURNS integer AS $$
+DECLARE
   v_dummy                                     integer;       
-begin
+BEGIN
 
     -- Determine if the child is a direct descendant of the
     -- parent
@@ -70,7 +86,7 @@ begin
     and context_id = inherit_permissions__parent_object_id;
 
     if NOT FOUND then
-      raise EXCEPTION ''-20000: Child object is not actually a child of the parent object in inherit_permissions'';
+      raise EXCEPTION '-20000: Child object is not actually a child of the parent object in inherit_permissions';
     end if;
 
     -- Copy everything one level down
@@ -89,73 +105,91 @@ begin
       if content_permission__permission_p (
 	   inherit_permissions__child_object_id, 
            inherit_permissions__child_creator_id, 
-           ''cm_perm''
-	 ) != ''t'' then
+           'cm_perm'
+	 ) != 't' then
         -- Turn off inheritance and grant permission
-        update acs_objects set security_inherit_p = ''f''
+        update acs_objects set security_inherit_p = 'f'
           where object_id = inherit_permissions__child_object_id;
 	PERFORM acs_permission__grant_permission (
 	   inherit_permissions__child_object_id, 
            inherit_permissions__child_creator_id, 
-           ''cm_perm''
+           'cm_perm'
 	);
       end if;
 
       if content_permission__permission_p (
 	   inherit_permissions__child_object_id, 
            inherit_permissions__child_creator_id, 
-           ''cm_write''
-	 ) != ''t'' then
+           'cm_write'
+	 ) != 't' then
 	PERFORM acs_permission__grant_permission (
 	   inherit_permissions__child_object_id, 
            inherit_permissions__child_creator_id, 
-           ''cm_write''
+           'cm_write'
 	);
       end if;
     end if;
    
     return 0; 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
 -- function has_grant_authority
-create function content_permission__has_grant_authority (integer,integer,varchar)
-returns boolean as '
-declare
-  object_id              alias for $1;  
-  holder_id              alias for $2;  
-  privilege              alias for $3;  
-begin
+
+
+-- added
+select define_function_args('content_permission__has_grant_authority','object_id,holder_id,privilege');
+
+--
+-- procedure content_permission__has_grant_authority/3
+--
+CREATE OR REPLACE FUNCTION content_permission__has_grant_authority(
+   object_id integer,
+   holder_id integer,
+   privilege varchar
+) RETURNS boolean AS $$
+DECLARE
+BEGIN
     -- Can donate permission only if you already have it and you have cm_perm,
     -- OR you have cm_perm_admin
-    if content_permission__permission_p (object_id, holder_id, ''cm_perm_admin'')= ''t'' 
+    if content_permission__permission_p (object_id, holder_id, 'cm_perm_admin')= 't' 
        or (
-         content_permission__permission_p (object_id, holder_id, ''cm_perm'') = ''t'' and
-         content_permission__permission_p (object_id, holder_id, privilege) = ''t''
+         content_permission__permission_p (object_id, holder_id, 'cm_perm') = 't' and
+         content_permission__permission_p (object_id, holder_id, privilege) = 't'
        ) 
     then
-      return ''t'';
+      return 't';
     else
-      return ''f'';
+      return 'f';
     end if;
    
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
 -- function has_revoke_authority
-create function content_permission__has_revoke_authority (integer,integer,varchar,integer)
-returns boolean as '
-declare
-  has_revoke_authority__object_id              alias for $1;  
-  has_revoke_authority__holder_id              alias for $2;  
-  has_revoke_authority__privilege              alias for $3;  
-  has_revoke_authority__revokee_id             alias for $4;  
-begin
+
+
+-- added
+select define_function_args('content_permission__has_revoke_authority','object_id,holder_id,privilege,revokee_id');
+
+--
+-- procedure content_permission__has_revoke_authority/4
+--
+CREATE OR REPLACE FUNCTION content_permission__has_revoke_authority(
+   has_revoke_authority__object_id integer,
+   has_revoke_authority__holder_id integer,
+   has_revoke_authority__privilege varchar,
+   has_revoke_authority__revokee_id integer
+) RETURNS boolean AS $$
+DECLARE
+BEGIN
 
     -- DRB: Note that the privilege selection doesn't use the slick tree_ancestor_keys
     -- trick.  There are two reasons for this.  The first is that we might have a set of
     -- tree_sortkeys returned from the acs_privilege_hierarchy_index when child_privilege
-    -- is ''cm_perm''.  The second is that this table is relatively small anyway and the
+    -- is 'cm_perm'.  The second is that this table is relatively small anyway and the
     -- old style's probably just as efficient as the first as an index scan is only preferred
     -- by the Postgres optimizer when it will significantly reduce the number of rows scanned.
 
@@ -178,31 +212,40 @@ begin
           t.object_id, has_revoke_authority__revokee_id, h.privilege
         ));    
    
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
 -- procedure grant_permission_h
-create function content_permission__grant_permission_h (integer,integer,varchar)
-returns integer as '
-declare
-  grant_permission_h__object_id              alias for $1;  
-  grant_permission_h__grantee_id             alias for $2;  
-  grant_permission_h__privilege              alias for $3;  
+
+
+-- added
+select define_function_args('content_permission__grant_permission_h','object_id,grantee_id,privilege');
+
+--
+-- procedure content_permission__grant_permission_h/3
+--
+CREATE OR REPLACE FUNCTION content_permission__grant_permission_h(
+   grant_permission_h__object_id integer,
+   grant_permission_h__grantee_id integer,
+   grant_permission_h__privilege varchar
+) RETURNS integer AS $$
+DECLARE
   v_privilege                                acs_privilege_descendant_map.privilege%TYPE;
   v_rec                                      record;
-begin
+BEGIN
   
     -- If the permission is already granted, do nothing
     if content_permission__permission_p (
          grant_permission_h__object_id, 
          grant_permission_h__grantee_id, 
          grant_permission_h__privilege
-       ) = ''t'' then
+       ) = 't' then
       return null;
     end if;
  
     -- Grant the parent, make sure there is no inheritance
-    update acs_objects set security_inherit_p = ''f''
+    update acs_objects set security_inherit_p = 'f'
       where object_id = grant_permission_h__object_id;
 
     PERFORM acs_permission__grant_permission(grant_permission_h__object_id, 
@@ -223,21 +266,31 @@ begin
     end LOOP;
 
     return 0; 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
 -- procedure grant_permission
-create function content_permission__grant_permission (integer,integer,varchar,integer,boolean,varchar)
-returns integer as '
-declare
-  grant_permission__object_id      alias for $1;  
-  grant_permission__holder_id      alias for $2;  
-  grant_permission__privilege      alias for $3;  
-  grant_permission__recepient_id   alias for $4;  
-  grant_permission__is_recursive   alias for $5;  -- default ''f''  
-  grant_permission__object_type    alias for $6;  -- default ''content_item''
+
+
+-- added
+select define_function_args('content_permission__grant_permission','object_id,holder_id,privilege,recepient_id,is_recursive;f,object_type;content_item');
+
+--
+-- procedure content_permission__grant_permission/6
+--
+CREATE OR REPLACE FUNCTION content_permission__grant_permission(
+   grant_permission__object_id integer,
+   grant_permission__holder_id integer,
+   grant_permission__privilege varchar,
+   grant_permission__recepient_id integer,
+   grant_permission__is_recursive boolean, -- default 'f'
+   grant_permission__object_type varchar   -- default 'content_item'
+
+) RETURNS integer AS $$
+DECLARE
   v_object_id                              acs_objects.object_id%TYPE;
-begin
+BEGIN
 --      select 
 --       o.object_id
 --      from
@@ -247,9 +300,9 @@ begin
 --      where
 --        content_permission__has_grant_authority (
 --          o.object_id, holder_id, grant_permission__privilege
---        ) = ''t''
+--        ) = 't'
 --      and
---        content_item__is_subclass (o.object_type, grant_permission__object_type) = ''t''
+--        content_item__is_subclass (o.object_type, grant_permission__object_type) = 't'
   
     for v_rec in select 
         o.object_id
@@ -268,22 +321,31 @@ begin
         grant_permission__recepient_id, 
         grant_permission__privilege
       );      
-      exit when grant_permission__is_recursive = ''f'';    
+      exit when grant_permission__is_recursive = 'f';    
     end loop;
          
     return 0; 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
 -- procedure revoke_permission_h
-create function content_permission__revoke_permission_h (integer,integer,varchar)
-returns integer as '
-declare
-  revoke_permission_h__object_id              alias for $1;  
-  revoke_permission_h__revokee_id             alias for $2;  
-  revoke_permission_h__privilege              alias for $3;  
+
+
+-- added
+select define_function_args('content_permission__revoke_permission_h','object_id,revokee_id,privilege');
+
+--
+-- procedure content_permission__revoke_permission_h/3
+--
+CREATE OR REPLACE FUNCTION content_permission__revoke_permission_h(
+   revoke_permission_h__object_id integer,
+   revoke_permission_h__revokee_id integer,
+   revoke_permission_h__privilege varchar
+) RETURNS integer AS $$
+DECLARE
   v_rec                                       record;
-begin
+BEGIN
     
     -- Grant all child privileges of the parent privilege
     for v_rec in select child_privilege from acs_privilege_hierarchy
@@ -304,21 +366,31 @@ begin
     );
 
     return 0; 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
 -- procedure revoke_permission
-create function content_permission__revoke_permission (integer,integer,varchar,integer,boolean,varchar)
-returns integer as '
-declare
-  revoke_permission__object_id    alias for $1;  
-  revoke_permission__holder_id    alias for $2;  
-  revoke_permission__privilege    alias for $3;  
-  revoke_permission__revokee_id   alias for $4;  
-  revoke_permission__is_recursive alias for $5;  -- default ''f''  
-  revoke_permission__object_type  alias for $6;  -- default ''content_item''
+
+
+-- added
+select define_function_args('content_permission__revoke_permission','object_id,holder_id,privilege,revokee_id,is_recursive;f,object_type;content_item');
+
+--
+-- procedure content_permission__revoke_permission/6
+--
+CREATE OR REPLACE FUNCTION content_permission__revoke_permission(
+   revoke_permission__object_id integer,
+   revoke_permission__holder_id integer,
+   revoke_permission__privilege varchar,
+   revoke_permission__revokee_id integer,
+   revoke_permission__is_recursive boolean, -- default 'f'
+   revoke_permission__object_type varchar   -- default 'content_item'
+
+) RETURNS integer AS $$
+DECLARE
   v_rec                                     record;
-begin
+BEGIN
 --                     select object_id, object_type from acs_objects 
 --                    connect by context_id = prior object_id
 --                    start with object_id = revoke_permission__object_id
@@ -329,9 +401,9 @@ begin
                        where o1.tree_sortkey between o2.tree_sortkey and tree_right(o2.tree_sortkey)
                          and o2.object_id = revoke_permission__object_id) o
                  where 
-                   content_permission__has_revoke_authority (o.object_id, revoke_permission__holder_id, revoke_permission__privilege, revoke_permission__revokee_id) = ''t''
+                   content_permission__has_revoke_authority (o.object_id, revoke_permission__holder_id, revoke_permission__privilege, revoke_permission__revokee_id) = 't'
                  and
-                   content_item__is_subclass(o.object_type, revoke_permission__object_type) = ''t''
+                   content_item__is_subclass(o.object_type, revoke_permission__object_type) = 't'
     LOOP   
       PERFORM content_permission__revoke_permission_h (
         v_rec.object_id, 
@@ -339,37 +411,48 @@ begin
         revoke_permission__privilege
       );
       
-      exit when revoke_permission__is_recursive = ''f'';    
+      exit when revoke_permission__is_recursive = 'f';    
     end loop;
 
     return 0; 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
 -- function permission_p
-create function content_permission__permission_p (integer,integer,varchar)
-returns boolean as '
-declare
-  object_id              alias for $1;  
-  holder_id              alias for $2;  
-  privilege              alias for $3;  
-begin
+
+
+-- added
+select define_function_args('content_permission__permission_p','object_id,holder_id,privilege');
+
+--
+-- procedure content_permission__permission_p/3
+--
+CREATE OR REPLACE FUNCTION content_permission__permission_p(
+   object_id integer,
+   holder_id integer,
+   privilege varchar
+) RETURNS boolean AS $$
+DECLARE
+BEGIN
 
     return acs_permission__permission_p (object_id, holder_id, privilege);
    
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
   -- Determine if the CMS admin exists
-create function cm_admin_exists () returns boolean as '
-begin
+CREATE OR REPLACE FUNCTION cm_admin_exists () RETURNS boolean AS $$
+BEGIN
     
     return count(*) > 0 from dual 
      where exists (
        select 1 from acs_permissions 
-       where privilege in (''cm_admin'', ''cm_root'')
+       where privilege in ('cm_admin', 'cm_root')
      );
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 -- show errors
 

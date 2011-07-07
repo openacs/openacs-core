@@ -15,29 +15,29 @@
 -- change in the future, particularly the functions marked "EXPERIMENTAL".
 -- 
 
-create function inline_0 ()
-returns integer as '
-begin
+CREATE OR REPLACE FUNCTION inline_0 () RETURNS integer AS $$
+BEGIN
  --
  -- Relational Segment: a dynamically derived set of parties, defined
  --                     in terms of a particular type of membership or 
  --                     composition to a particular group.
  --
  PERFORM acs_object_type__create_type (
-   ''rel_segment'',
-   ''#acs-kernel.lt_Relational_Party_Segm#'',
-   ''#acs-kernel.lt_Relational_Party_Segm_1#'',
-   ''party'',
-   ''rel_segments'',
-   ''segment_id'',
-   ''rel_segment'',
-   ''f'',
+   'rel_segment',
+   '#acs-kernel.lt_Relational_Party_Segm#',
+   '#acs-kernel.lt_Relational_Party_Segm_1#',
+   'party',
+   'rel_segments',
+   'segment_id',
+   'rel_segment',
+   'f',
    null,
-   ''rel_segment__name''
+   'rel_segment__name'
    );
 
   return 0;
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 select inline_0 ();
 
@@ -182,12 +182,21 @@ create index party_member_member_idx on party_approved_member_map(member_id);
 
 -- Helper functions to maintain the materialized party_approved_member_map. 
 
-create or replace function party_approved_member__add_one(integer, integer, integer) returns integer as '
-declare
-  p_party_id alias for $1;
-  p_member_id alias for $2;
-  p_rel_id alias for $3;
-begin
+
+
+-- added
+select define_function_args('party_approved_member__add_one','party_id,member_id,rel_id');
+
+--
+-- procedure party_approved_member__add_one/3
+--
+CREATE OR REPLACE FUNCTION party_approved_member__add_one(
+   p_party_id integer,
+   p_member_id integer,
+   p_rel_id integer
+) RETURNS integer AS $$
+DECLARE
+BEGIN
 
   insert into party_approved_member_map
     (party_id, member_id, tag)
@@ -196,16 +205,26 @@ begin
 
   return 1;
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
-create or replace function party_approved_member__add(integer, integer, integer, varchar) returns integer as '
-declare
-  p_party_id alias for $1;
-  p_member_id alias for $2;
-  p_rel_id alias for $3;
-  p_rel_type alias for $4;
+
+
+-- added
+select define_function_args('party_approved_member__add','party_id,member_id,rel_id,rel_type');
+
+--
+-- procedure party_approved_member__add/4
+--
+CREATE OR REPLACE FUNCTION party_approved_member__add(
+   p_party_id integer,
+   p_member_id integer,
+   p_rel_id integer,
+   p_rel_type varchar
+) RETURNS integer AS $$
+DECLARE
   v_segments record;
-begin
+BEGIN
 
   perform party_approved_member__add_one(p_party_id, p_member_id, p_rel_id);
 
@@ -224,14 +243,24 @@ begin
 
   return 1;
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
-create or replace function party_approved_member__remove_one(integer, integer, integer) returns integer as '
-declare
-  p_party_id alias for $1;
-  p_member_id alias for $2;
-  p_rel_id alias for $3;
-begin
+
+
+-- added
+select define_function_args('party_approved_member__remove_one','party_id,member_id,rel_id');
+
+--
+-- procedure party_approved_member__remove_one/3
+--
+CREATE OR REPLACE FUNCTION party_approved_member__remove_one(
+   p_party_id integer,
+   p_member_id integer,
+   p_rel_id integer
+) RETURNS integer AS $$
+DECLARE
+BEGIN
 
   delete from party_approved_member_map
   where party_id = p_party_id
@@ -240,17 +269,27 @@ begin
 
   return 1;
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
-create or replace function party_approved_member__remove(integer, integer, integer, varchar) returns integer as '
-declare
-  p_party_id alias for $1;
-  p_member_id alias for $2;
-  p_rel_id alias for $3;
-  p_rel_type alias for $4;
+
+
+-- added
+select define_function_args('party_approved_member__remove','party_id,member_id,rel_id,rel_type');
+
+--
+-- procedure party_approved_member__remove/4
+--
+CREATE OR REPLACE FUNCTION party_approved_member__remove(
+   p_party_id integer,
+   p_member_id integer,
+   p_rel_id integer,
+   p_rel_type varchar
+) RETURNS integer AS $$
+DECLARE
   v_segments record;
-begin
+BEGIN
 
   perform party_approved_member__remove_one(p_party_id, p_member_id, p_rel_id);
 
@@ -269,15 +308,16 @@ begin
 
   return 1;
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
 -- Triggers to maintain party_approved_member_map when parties are created or
 -- destroyed.  These don't call the above helper functions because we're just
 -- creating the identity row for the party.
 
-create or replace function parties_in_tr () returns trigger as '
-begin
+CREATE OR REPLACE FUNCTION parties_in_tr () RETURNS trigger AS $$
+BEGIN
 
   insert into party_approved_member_map
     (party_id, member_id, tag)
@@ -286,13 +326,14 @@ begin
 
   return new;
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 create trigger parties_in_tr after insert on parties
 for each row execute procedure parties_in_tr ();
 
-create or replace function parties_del_tr () returns trigger as '
-begin
+CREATE OR REPLACE FUNCTION parties_del_tr () RETURNS trigger AS $$
+BEGIN
 
   delete from party_approved_member_map
   where party_id = old.party_id
@@ -300,7 +341,8 @@ begin
 
   return old;
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 create trigger parties_del_tr before delete on parties
 for each row execute procedure parties_del_tr ();
@@ -311,8 +353,8 @@ for each row execute procedure parties_del_tr ();
 -- group with that rel_type.  This was intentional on the part of the aD folks
 -- who added relational segments to ACS 4.2.
 
-create or replace function rel_segments_in_tr () returns trigger as '
-begin
+CREATE OR REPLACE FUNCTION rel_segments_in_tr () RETURNS trigger AS $$
+BEGIN
 
   insert into party_approved_member_map
     (party_id, member_id, tag)
@@ -323,13 +365,14 @@ begin
 
   return new;
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 create trigger rel_segments_in_tr before insert on rel_segments
 for each row execute procedure rel_segments_in_tr ();
 
-create or replace function rel_segments_del_tr () returns trigger as '
-begin
+CREATE OR REPLACE FUNCTION rel_segments_del_tr () RETURNS trigger AS $$
+BEGIN
 
   delete from party_approved_member_map
   where party_id = old.segment_id
@@ -340,7 +383,8 @@ begin
 
   return old;
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 create trigger rel_segments_del_tr before delete on rel_segments
 for each row execute procedure rel_segments_del_tr ();

@@ -18,45 +18,37 @@ comment on table acs_magic_objects is '
  objects like the site-wide organization, and the all users party.
 ';
 
-create or replace function acs__add_user (
-    integer,      -- user_id
-    varchar,      -- object_type
-    timestamptz,  -- creation_date
-    integer,      -- creation_user
-    varchar,      -- cretion_ip
-    integer,      -- authority_id; default 'local'
-    varchar,      -- username
-    varchar,      -- email
-    varchar,      -- url
-    varchar,      -- first_names
-    varchar,      -- last_name
-    char,         -- password
-    char,         -- salt
-    varchar,      -- screen_name
-    boolean,      -- email_verified_p
-    varchar       -- member_state
-)
-returns integer as '
-declare
-    p_user_id              alias for $1;  -- default null    
-    p_object_type          alias for $2;  -- default ''user''
-    p_creation_date        alias for $3;  -- default now()
-    p_creation_user        alias for $4;  -- default null
-    p_creation_ip          alias for $5;  -- default null
-    p_authority_id         alias for $6;  -- defaults to local authority
-    p_username             alias for $7;  --
-    p_email                alias for $8;  
-    p_url                  alias for $9;  -- default null
-    p_first_names          alias for $10;  
-    p_last_name            alias for $11;  
-    p_password             alias for $12; 
-    p_salt                 alias for $13; 
-    p_screen_name          alias for $14; -- default null
-    p_email_verified_p     alias for $15; -- default ''t''
-    p_member_state         alias for $16; -- default ''approved''
+
+
+-- added
+select define_function_args('acs__add_user','user_id;null,object_type;user,creation_date;now(),creation_user;null,creation_ip;null,authority_id,username,email,url;null,first_names,last_name,password,salt,screen_name;null,email_verified_p;t,member_state;approved');
+
+--
+-- procedure acs__add_user/16
+--
+CREATE OR REPLACE FUNCTION acs__add_user(
+   p_user_id integer,           -- default null
+   p_object_type varchar,       -- default 'user'
+   p_creation_date timestamptz, -- default now()
+   p_creation_user integer,     -- default null
+   p_creation_ip varchar,       -- default null
+   p_authority_id integer,      -- defaults to local authority
+   p_username varchar, 
+   p_email varchar,
+   p_url varchar,               -- default null
+   p_first_names varchar,
+   p_last_name varchar,
+   p_password char,
+   p_salt char,
+   p_screen_name varchar,       -- default null
+   p_email_verified_p boolean,  -- default 't'
+   p_member_state varchar       -- default 'approved'
+
+) RETURNS integer AS $$
+DECLARE
     v_user_id              users.user_id%TYPE;
     v_rel_id               membership_rels.rel_id%TYPE;
-begin
+BEGIN
     v_user_id := acs_user__new (
         p_user_id, 
         p_object_type, 
@@ -78,8 +70,8 @@ begin
    
     v_rel_id := membership_rel__new (
       null,
-      ''membership_rel'',
-      acs__magic_object_id(''registered_users''),      
+      'membership_rel',
+      acs__magic_object_id('registered_users'),      
       v_user_id,
       p_member_state,
       null,
@@ -88,25 +80,34 @@ begin
     PERFORM acs_permission__grant_permission (
       v_user_id,
       v_user_id,
-      ''read''
+      'read'
       );
 
     PERFORM acs_permission__grant_permission (
       v_user_id,
       v_user_id,
-      ''write''
+      'write'
       );
 
     return v_user_id;
    
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
-create function acs__remove_user (integer)
-returns integer as '
-declare
-  remove_user__user_id                alias for $1;  
+
+
+-- added
+select define_function_args('acs__remove_user','user_id');
+
+--
+-- procedure acs__remove_user/1
+--
+CREATE OR REPLACE FUNCTION acs__remove_user(
+   remove_user__user_id integer
+) RETURNS integer AS $$
+DECLARE
   v_rec           record;
-begin
+BEGIN
     delete
     from acs_permissions
     where grantee_id = remove_user__user_id;
@@ -121,17 +122,27 @@ begin
     perform acs_user__delete(remove_user__user_id);
 
     return 0; 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
-create function acs__magic_object_id (varchar)
-returns integer as '
-declare
-  magic_object_id__name                   alias for $1;  
-begin
+
+
+-- added
+select define_function_args('acs__magic_object_id','name');
+
+--
+-- procedure acs__magic_object_id/1
+--
+CREATE OR REPLACE FUNCTION acs__magic_object_id(
+   magic_object_id__name varchar
+) RETURNS integer AS $$
+DECLARE
+BEGIN
     return object_id
     from acs_magic_objects
     where name = magic_object_id__name;
-end;' language 'plpgsql' stable strict;
+END;
+$$ LANGUAGE plpgsql stable strict;
 
 -- ******************************************************************
 -- * Community Core API
@@ -182,33 +193,40 @@ where o.object_id = pa.party_id
 -- The very first thing we must do is create the security_context_root
 -- object.
 
-create function inline_0 ()
-returns integer as '
-declare
+
+
+--
+-- procedure inline_0/0
+--
+CREATE OR REPLACE FUNCTION inline_0(
+
+) RETURNS integer AS $$
+DECLARE
   root_id integer;
-begin
+BEGIN
 
   root_id := acs_object__new (
     -4,
-    ''acs_object'',
+    'acs_object',
     now(),
     null,
     null,
     null,
-    ''t'',
-    ''#acs-kernel.lt_Security_context_root#'',
+    't',
+    '#acs-kernel.lt_Security_context_root#',
     null
     );
 
   insert into acs_magic_objects
    (name, object_id)
   values
-   (''security_context_root'', -4);
+   ('security_context_root', -4);
 
 
   return root_id;
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 select inline_0 ();
 
@@ -245,11 +263,17 @@ end;
 -- Now create our special groups and users.   We can not create the
 -- relationships between these entities yet.  This is done in acs-install.sql
 
-create function inline_2 ()
-returns integer as '
-declare
+
+
+--
+-- procedure inline_2/0
+--
+CREATE OR REPLACE FUNCTION inline_2(
+
+) RETURNS integer AS $$
+DECLARE
   v_object_id integer;
-begin
+BEGIN
 
   -- Make an "Unregistered Visitor" as object 0, which corresponds
   -- with the user_id assigned throughout the toolkit Tcl code
@@ -257,7 +281,7 @@ begin
   insert into acs_objects
     (object_id, object_type, title)
   values
-    (0, ''user'', ''#acs-kernel.Unregistered_Visitor#'');
+    (0, 'user', '#acs-kernel.Unregistered_Visitor#');
 
   insert into parties
     (party_id)
@@ -267,96 +291,104 @@ begin
   insert into persons
     (person_id, first_names, last_name)
   values
-    (0, ''#acs-kernel.Unregistered#'', ''#acs-kernel.Visitor#'');
+    (0, '#acs-kernel.Unregistered#', '#acs-kernel.Visitor#');
 
   insert into users
     (user_id, username)
   values
-    (0, ''guest'');
+    (0, 'guest');
 
   insert into acs_magic_objects
     (name, object_id)
   values
-    (''unregistered_visitor'', 0);
+    ('unregistered_visitor', 0);
 
   v_object_id := acs_group__new (
     -1,
-    ''group'',
+    'group',
     now(),
     null,
     null,
     null,
     null,
-    ''#acs-kernel.The_Public#'',
-    ''closed'',
+    '#acs-kernel.The_Public#',
+    'closed',
     null
   );
 
   insert into acs_magic_objects
    (name, object_id)
   values
-   (''the_public'', -1);
+   ('the_public', -1);
 
   -- Add our only user, the Unregistered Visitor, to The Public
   -- group.
 
   perform membership_rel__new (
     null,
-    ''membership_rel'',
-    acs__magic_object_id(''the_public''),      
-    acs__magic_object_id(''unregistered_visitor''),
-    ''approved'',
+    'membership_rel',
+    acs__magic_object_id('the_public'),      
+    acs__magic_object_id('unregistered_visitor'),
+    'approved',
     null,
     null);
 
   return 0;
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 select inline_2 ();
 
 drop function inline_2 ();
 
-create function inline_3 ()
-returns integer as '
-declare
+
+
+--
+-- procedure inline_3/0
+--
+CREATE OR REPLACE FUNCTION inline_3(
+
+) RETURNS integer AS $$
+DECLARE
   group_id integer;
-begin
+BEGIN
 
   -- We will create the registered users group with type group for the moment
   -- because the application_group package has not yet been created.
 
   group_id := acs_group__new (
     -2,
-    ''group'',
+    'group',
     now(),
     null,
     null,
     null,
     null,
-    ''#acs-kernel.Registered_Users#'',
-    ''closed'',
+    '#acs-kernel.Registered_Users#',
+    'closed',
     null
   );
 
   insert into acs_magic_objects
    (name, object_id)
   values
-   (''registered_users'', -2);
+   ('registered_users', -2);
 
   -- Now declare "The Public" to be composed of itself and the "Registered
   -- Users" group
 
   perform composition_rel__new (
     null,
-    ''composition_rel'',
-    acs__magic_object_id(''the_public''),
-    acs__magic_object_id(''registered_users''),
+    'composition_rel',
+    acs__magic_object_id('the_public'),
+    acs__magic_object_id('registered_users'),
     null,
     null);
 
   return 0;
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 select inline_3 ();
 

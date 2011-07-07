@@ -17,48 +17,54 @@
 -- PREDEFINED OBJECT TYPES --
 -----------------------------
 
-create function inline_0 ()
-returns integer as '
-declare
+
+
+--
+-- procedure inline_0/0
+--
+CREATE OR REPLACE FUNCTION inline_0(
+
+) RETURNS integer AS $$
+DECLARE
  attr_id acs_attributes.attribute_id%TYPE;
-begin
+BEGIN
  --
  -- The ultimate supertype: object
  --
  PERFORM acs_object_type__create_type (
-   ''acs_object'',
-   ''Object'',
-   ''Objects'',
+   'acs_object',
+   'Object',
+   'Objects',
    null,
-   ''acs_objects'',
-   ''object_id'',
-   ''acs_object'',
-   ''f'',
+   'acs_objects',
+   'object_id',
+   'acs_object',
+   'f',
    null,
-   ''acs_object.default_name''
+   'acs_object.default_name'
    );
 
  attr_id := acs_attribute__create_attribute (
-   ''acs_object'',
-   ''object_type'',
-   ''string'',
-   ''Object Type'',
-   ''Object Types'',
+   'acs_object',
+   'object_type',
+   'string',
+   'Object Type',
+   'Object Types',
    null,
    null,
    null,   
    1,
    1,
    null,
-   ''type_specific'',
-   ''f''
+   'type_specific',
+   'f'
    );
 
  attr_id := acs_attribute__create_attribute (
-   ''acs_object'',
-   ''creation_date'',
-   ''date'',
-   ''Created Date'',
+   'acs_object',
+   'creation_date',
+   'date',
+   'Created Date',
    null,
    null,
    null,
@@ -66,15 +72,15 @@ begin
    1,
    1,
    null,
-   ''type_specific'',
-   ''f''
+   'type_specific',
+   'f'
    );
 
  attr_id := acs_attribute__create_attribute (
-   ''acs_object'',
-   ''creation_ip'',
-   ''string'',
-   ''Creation IP Address'',
+   'acs_object',
+   'creation_ip',
+   'string',
+   'Creation IP Address',
    null,
    null,
    null,
@@ -82,15 +88,15 @@ begin
    1,
    1,
    null,
-   ''type_specific'',
-   ''f''
+   'type_specific',
+   'f'
    );
 
  attr_id := acs_attribute__create_attribute (
-   ''acs_object'',
-   ''last_modified'',
-   ''date'',
-   ''Last Modified On'',
+   'acs_object',
+   'last_modified',
+   'date',
+   'Last Modified On',
    null,
    null,
    null,
@@ -98,15 +104,15 @@ begin
    1,
    1,
    null,
-   ''type_specific'',
-   ''f''
+   'type_specific',
+   'f'
    );
 
  attr_id := acs_attribute__create_attribute (
-   ''acs_object'',
-   ''modifying_ip'',
-   ''string'',
-   ''Modifying IP Address'',
+   'acs_object',
+   'modifying_ip',
+   'string',
+   'Modifying IP Address',
    null,
    null,
    null,
@@ -114,15 +120,15 @@ begin
    1,
    1,
    null,
-   ''type_specific'',
-   ''f''
+   'type_specific',
+   'f'
    );
 
  attr_id := acs_attribute__create_attribute (
-   ''acs_object'',
-   ''modifying_user'',
-   ''integer'',
-   ''Modifying User'',
+   'acs_object',
+   'modifying_user',
+   'integer',
+   'Modifying User',
    null,
    null,
    null,
@@ -130,76 +136,77 @@ begin
    1,
    1,
    null,
-   ''type_specific'',
-   ''f''
+   'type_specific',
+   'f'
    );
 
  attr_id := acs_attribute__create_attribute (
-	''acs_object'',
-	''creation_user'',
-	''integer'',
-	''Creation user'',
-	''Creation users'',
+	'acs_object',
+	'creation_user',
+	'integer',
+	'Creation user',
+	'Creation users',
 	null,
 	null,
 	null,
 	0,
 	1,
 	null,
-	''type_specific'',
-	''f''
+	'type_specific',
+	'f'
 	);
 
  attr_id := acs_attribute__create_attribute (
-	''acs_object'',
-	''context_id'',
-	''integer'',
-	''Context ID'',
-	''Context IDs'',
+	'acs_object',
+	'context_id',
+	'integer',
+	'Context ID',
+	'Context IDs',
 	null,
 	null,
 	null,
 	0,
 	1,
 	null,
-	''type_specific'',
-	''f''
+	'type_specific',
+	'f'
 	);
 
  attr_id := acs_attribute__create_attribute (
-	''acs_object'',
-	''package_id'',
-	''integer'',
-	''Package ID'',
-	''Package IDs'',
+	'acs_object',
+	'package_id',
+	'integer',
+	'Package ID',
+	'Package IDs',
 	null,
 	null,
 	null,
 	0,
 	1,
 	null,
-	''type_specific'',
-	''f''
+	'type_specific',
+	'f'
 	);
 
  attr_id := acs_attribute__create_attribute (
-	''acs_object'',
-	''title'',
-	''string'',
-	''Title'',
-	''Titles'',
+	'acs_object',
+	'title',
+	'string',
+	'Title',
+	'Titles',
 	null,
 	null,
 	null,
 	0,
 	1,
 	null,
-	''type_specific'',
-	''f''
+	'type_specific',
+	'f'
 	);
 
   return 0;
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 select inline_0 ();
 
@@ -258,46 +265,65 @@ create index acs_objects_title_idx on acs_objects(title);
 
 create index acs_objects_object_type_idx on acs_objects (object_type);
 
-create function acs_objects_mod_ip_insert_tr () returns trigger as '
-begin
+CREATE OR REPLACE FUNCTION acs_objects_mod_ip_insert_tr () RETURNS trigger AS $$
+BEGIN
   new.modifying_ip := new.creation_ip;
 
   return new;
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 create trigger acs_objects_mod_ip_insert_tr before insert on acs_objects
 for each row execute procedure acs_objects_mod_ip_insert_tr ();
 
 -- show errors
 
-create function acs_objects_last_mod_update_tr () returns trigger as '
-begin
+CREATE OR REPLACE FUNCTION acs_objects_last_mod_update_tr () RETURNS trigger AS $$
+BEGIN
   if new.last_modified is null then
      new.last_modified := old.last_modified;
   elsif new.last_modified = old.last_modified then
      new.last_modified := now();
   end if;
   return new;
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 create trigger acs_objects_last_mod_update_tr before update on acs_objects
 for each row execute procedure acs_objects_last_mod_update_tr ();
 
 -- tree query support for acs_objects
 
-create or replace function acs_objects_get_tree_sortkey(integer) returns varbit as '
-declare
-  p_object_id    alias for $1;
-begin
-  return tree_sortkey from acs_objects where object_id = p_object_id;
-end;' language 'plpgsql' stable strict;
 
-create function acs_objects_insert_tr() returns trigger as '
-declare
+
+-- added
+select define_function_args('acs_objects_get_tree_sortkey','object_id');
+
+--
+-- procedure acs_objects_get_tree_sortkey/1
+--
+CREATE OR REPLACE FUNCTION acs_objects_get_tree_sortkey(
+   p_object_id integer
+) RETURNS varbit AS $$
+DECLARE
+BEGIN
+  return tree_sortkey from acs_objects where object_id = p_object_id;
+END;
+$$ LANGUAGE plpgsql stable strict;
+
+
+
+--
+-- procedure acs_objects_insert_tr/0
+--
+CREATE OR REPLACE FUNCTION acs_objects_insert_tr(
+
+) RETURNS trigger AS $$
+DECLARE
         v_parent_sk    		varbit default null;
         v_max_child_sortkey	varbit;
-begin
+BEGIN
         if new.context_id is null then
  	    new.tree_sortkey := int_to_tree_key(new.object_id+1000);
         else
@@ -316,19 +342,27 @@ begin
 
 	new.max_child_sortkey := null;
         return new;
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 create trigger acs_objects_insert_tr before insert 
 on acs_objects for each row 
 execute procedure acs_objects_insert_tr ();
 
 
-create function acs_objects_update_tr () returns trigger as '
-declare
+
+
+--
+-- procedure acs_objects_update_tr/0
+--
+CREATE OR REPLACE FUNCTION acs_objects_update_tr(
+
+) RETURNS trigger AS $$
+DECLARE
         v_parent_sk     varbit default null;
         v_max_child_sortkey	varbit;
         v_old_parent_length	integer;
-begin
+BEGIN
         if new.object_id = old.object_id
            and ((new.context_id = old.context_id)
                 or (new.context_id is null 
@@ -363,7 +397,8 @@ begin
         WHERE tree_sortkey between new.tree_sortkey and tree_right(new.tree_sortkey);
 
         return new;
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 create trigger acs_objects_update_tr after update
 on acs_objects
@@ -438,16 +473,23 @@ as select object_id, ancestor_id, n_generations
    from acs_object_context_index
    where object_id != ancestor_id;
 
-create or replace function acs_objects_context_id_in_tr () returns trigger as '
-declare
+
+
+--
+-- procedure acs_objects_context_id_in_tr/0
+--
+CREATE OR REPLACE FUNCTION acs_objects_context_id_in_tr(
+
+) RETURNS trigger AS $$
+DECLARE
         security_context_root integer;
-begin
+BEGIN
   insert into acs_object_context_index
    (object_id, ancestor_id, n_generations)
   values
    (new.object_id, new.object_id, 0);
 
-  if new.context_id is not null and new.security_inherit_p = ''t'' then
+  if new.context_id is not null and new.security_inherit_p = 't' then
     insert into acs_object_context_index
      (object_id, ancestor_id, n_generations)
     select
@@ -456,7 +498,7 @@ begin
     from acs_object_context_index
     where object_id = new.context_id;
   else
-    security_context_root = acs__magic_object_id(''security_context_root'');
+    security_context_root = acs__magic_object_id('security_context_root');
     if new.object_id != security_context_root then
       insert into acs_object_context_index
         (object_id, ancestor_id, n_generations)
@@ -467,18 +509,26 @@ begin
 
   return new;
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 create trigger acs_objects_context_id_in_tr after insert on acs_objects
 for each row execute procedure acs_objects_context_id_in_tr ();
 
-create or replace function acs_objects_context_id_up_tr () returns trigger as '
-declare
+
+
+--
+-- procedure acs_objects_context_id_up_tr/0
+--
+CREATE OR REPLACE FUNCTION acs_objects_context_id_up_tr(
+
+) RETURNS trigger AS $$
+DECLARE
         pair    record;
         outer_record record;
         inner_record record;
         security_context_root integer;
-begin
+BEGIN
   if new.object_id = old.object_id
      and ((new.context_id = old.context_id)
 	  or (new.context_id is null and old.context_id is null))
@@ -506,7 +556,7 @@ begin
   values
    (new.object_id, new.object_id, 0);
 
-  if new.context_id is not null and new.security_inherit_p = ''t'' then
+  if new.context_id is not null and new.security_inherit_p = 't' then
      -- Now insert my new ancestors for my descendants.
     for pair in select *
 		 from acs_object_context_index
@@ -521,7 +571,7 @@ begin
       where object_id = new.context_id;
     end loop;
   else
-    security_context_root = acs__magic_object_id(''security_context_root'');
+    security_context_root = acs__magic_object_id('security_context_root');
     if new.object_id != security_context_root then
     -- We need to make sure that new.OBJECT_ID and all of its
     -- children have security_context_root as an ancestor.
@@ -539,19 +589,21 @@ begin
 
   return new;
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 create trigger acs_objects_context_id_up_tr after update on acs_objects
 for each row execute procedure acs_objects_context_id_up_tr ();
 
-create function acs_objects_context_id_del_tr () returns trigger as '
-begin
+CREATE OR REPLACE FUNCTION acs_objects_context_id_del_tr () RETURNS trigger AS $$
+BEGIN
   delete from acs_object_context_index
   where object_id = old.object_id;
 
   return old;
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 create trigger acs_objects_context_id_del_tr before delete on acs_objects
 for each row execute procedure acs_objects_context_id_del_tr ();
@@ -609,14 +661,19 @@ comment on table acs_static_attr_values is '
 
 select define_function_args('acs_object__initialize_attributes','initialize_attributes__object_id');
 
-create or replace function acs_object__initialize_attributes (integer)
-returns integer as '
-declare
-  initialize_attributes__object_id              alias for $1;  
+
+
+--
+-- procedure acs_object__initialize_attributes/1
+--
+CREATE OR REPLACE FUNCTION acs_object__initialize_attributes(
+   initialize_attributes__object_id integer
+) RETURNS integer AS $$
+DECLARE
   v_object_type                                 acs_objects.object_type%TYPE;
-begin
+BEGIN
    if  initialize_attributes__object_id is null then 
-	raise exception ''acs_object__initialize_attributes called with null object_id'';
+	raise exception 'acs_object__initialize_attributes called with null object_id';
    end if;
 
    -- Initialize dynamic attributes
@@ -627,8 +684,8 @@ begin
    from acs_attributes a, acs_objects o
    where a.object_type = o.object_type
    and o.object_id = initialize_attributes__object_id
-   and a.storage = ''generic''
-   and a.static_p = ''f'';
+   and a.storage = 'generic'
+   and a.static_p = 'f';
 
    -- Retrieve type for static attributes
    select object_type into v_object_type from acs_objects
@@ -643,38 +700,49 @@ begin
      from acs_attributes a, acs_objects o
      where a.object_type = o.object_type
        and o.object_id = initialize_attributes__object_id
-       and a.storage = ''generic''
-       and a.static_p = ''t''
+       and a.storage = 'generic'
+       and a.static_p = 't'
        and not exists (select 1 from acs_static_attr_values
                        where object_type = a.object_type);
    -- exception when no_data_found then null;
 
    return 0; 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 -- function new
 
-select define_function_args('acs_object__new','object_id,object_type;acs_object,creation_date,creation_user,creation_ip,context_id,security_inherit_p;t,title,package_id');
 
-create or replace function acs_object__new (integer,varchar,timestamptz,integer,varchar,integer,boolean,varchar,integer)
-returns integer as '
-declare
-  new__object_id              alias for $1;  -- default null
-  new__object_type            alias for $2;  -- default ''acs_object''
-  new__creation_date          alias for $3;  -- default now()
-  new__creation_user          alias for $4;  -- default null
-  new__creation_ip            alias for $5;  -- default null
-  new__context_id             alias for $6;  -- default null
-  new__security_inherit_p     alias for $7;  -- default ''t''
-  new__title                  alias for $8;  -- default null
-  new__package_id             alias for $9;  -- default null
+-- old define_function_args('acs_object__new','object_id,object_type;acs_object,creation_date,creation_user,creation_ip,context_id,security_inherit_p;t,title,package_id')
+-- new
+select define_function_args('acs_object__new','object_id;null,object_type;acs_object,creation_date;now(),creation_user;null,creation_ip;null,context_id;null,security_inherit_p;t,title;null,package_id;null');
+
+
+
+
+--
+-- procedure acs_object__new/9
+--
+CREATE OR REPLACE FUNCTION acs_object__new(
+   new__object_id integer,          -- default null
+   new__object_type varchar,        -- default 'acs_object'
+   new__creation_date timestamptz,  -- default now()
+   new__creation_user integer,      -- default null
+   new__creation_ip varchar,        -- default null
+   new__context_id integer,         -- default null
+   new__security_inherit_p boolean, -- default 't'
+   new__title varchar,              -- default null
+   new__package_id integer          -- default null
+
+) RETURNS integer AS $$
+DECLARE
   v_object_id                 acs_objects.object_id%TYPE;
   v_creation_date	      timestamptz;
   v_title                     acs_objects.title%TYPE;
   v_object_type_pretty_name   acs_object_types.pretty_name%TYPE;
-begin
+BEGIN
   if new__object_id is null then
-    select nextval(''t_acs_object_id_seq'') into v_object_id;
+    select nextval('t_acs_object_id_seq') into v_object_id;
   else
     v_object_id := new__object_id;
   end if;
@@ -685,7 +753,7 @@ begin
    from acs_object_types
    where object_type = new__object_type;
 
-    v_title := v_object_type_pretty_name || '' '' || v_object_id;
+    v_title := v_object_type_pretty_name || ' ' || v_object_id;
   else
     v_title := new__title;
   end if;
@@ -708,112 +776,179 @@ begin
 
   return v_object_id;
   
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 -- function new
 
-create or replace function acs_object__new (integer,varchar,timestamptz,integer,varchar,integer)
-returns integer as '
-declare
-  new__object_id              alias for $1;  -- default null
-  new__object_type            alias for $2;  -- default ''acs_object''
-  new__creation_date          alias for $3;  -- default now()
-  new__creation_user          alias for $4;  -- default null
-  new__creation_ip            alias for $5;  -- default null
-  new__context_id             alias for $6;  -- default null
+
+
+--
+-- procedure acs_object__new/6
+--
+CREATE OR REPLACE FUNCTION acs_object__new(
+   new__object_id integer,         -- default null
+   new__object_type varchar,       -- default 'acs_object'
+   new__creation_date timestamptz, -- default now()
+   new__creation_user integer,     -- default null
+   new__creation_ip varchar,       -- default null
+   new__context_id integer         -- default null
+
+) RETURNS integer AS $$
+--
+-- acs_object__new/6 maybe obsolete, when we define proper defaults for /9
+--
+DECLARE
   v_object_id                 acs_objects.object_id%TYPE;
   v_creation_date	      timestamptz;
-begin
+BEGIN
   return acs_object__new(new__object_id, new__object_type, new__creation_date,
                          new__creation_user, new__creation_ip, new__context_id,
-                         ''t'', null, null);
-end;' language 'plpgsql';
+                         't', null, null);
+END;
+$$ LANGUAGE plpgsql;
 
-create or replace function acs_object__new (integer,varchar,timestamptz,integer,varchar,integer,boolean)
-returns integer as '
-declare
-  new__object_id              alias for $1;  -- default null
-  new__object_type            alias for $2;  -- default ''acs_object''
-  new__creation_date          alias for $3;  -- default now()
-  new__creation_user          alias for $4;  -- default null
-  new__creation_ip            alias for $5;  -- default null
-  new__context_id             alias for $6;  -- default null
-  new__security_inherit_p     alias for $7;  -- default ''t''
-begin
+
+
+--
+-- procedure acs_object__new/7
+--
+CREATE OR REPLACE FUNCTION acs_object__new(
+   new__object_id integer,         -- default null
+   new__object_type varchar,       -- default 'acs_object'
+   new__creation_date timestamptz, -- default now()
+   new__creation_user integer,     -- default null
+   new__creation_ip varchar,       -- default null
+   new__context_id integer,        -- default null
+   new__security_inherit_p boolean -- default 't'
+
+) RETURNS integer AS $$
+--
+-- acs_object__new/7 maybe obsolete, when we define proper defaults for /9
+--
+DECLARE
+BEGIN
   return acs_object__new(new__object_id, new__object_type, new__creation_date,
                          new__creation_user, new__creation_ip, new__context_id,
                          new__security_inherit_p, null, null);
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
-create or replace function acs_object__new (integer,varchar,timestamptz,integer,varchar,integer,boolean,varchar)
-returns integer as '
-declare
-  new__object_id              alias for $1;  -- default null
-  new__object_type            alias for $2;  -- default ''acs_object''
-  new__creation_date          alias for $3;  -- default now()
-  new__creation_user          alias for $4;  -- default null
-  new__creation_ip            alias for $5;  -- default null
-  new__context_id             alias for $6;  -- default null
-  new__security_inherit_p     alias for $7;  -- default ''t''
-  new__title                  alias for $8;  -- default null
-begin
+
+
+--
+-- procedure acs_object__new/8
+--
+CREATE OR REPLACE FUNCTION acs_object__new(
+   new__object_id integer,          -- default null
+   new__object_type varchar,        -- default 'acs_object'
+   new__creation_date timestamptz,  -- default now()
+   new__creation_user integer,      -- default null
+   new__creation_ip varchar,        -- default null
+   new__context_id integer,         -- default null
+   new__security_inherit_p boolean, -- default 't'
+   new__title varchar               -- default null
+
+) RETURNS integer AS $$
+--
+-- acs_object__new/8 maybe obsolete, when we define proper defaults for /9
+--
+DECLARE
+BEGIN
   return acs_object__new(new__object_id, new__object_type, new__creation_date,
                          new__creation_user, new__creation_ip, new__context_id,
                          new__security_inherit_p, new__title, null);
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
-create or replace function acs_object__new (integer,varchar,timestamptz,integer,varchar,integer,varchar,integer)
-returns integer as '
-declare
-  new__object_id              alias for $1;  -- default null
-  new__object_type            alias for $2;  -- default ''acs_object''
-  new__creation_date          alias for $3;  -- default now()
-  new__creation_user          alias for $4;  -- default null
-  new__creation_ip            alias for $5;  -- default null
-  new__context_id             alias for $6;  -- default null
-  new__title                  alias for $7;  -- default null
-  new__package_id             alias for $8;  -- default null
-begin
+
+
+--
+-- procedure acs_object__new/8
+--
+CREATE OR REPLACE FUNCTION acs_object__new(
+   new__object_id integer,         -- default null
+   new__object_type varchar,       -- default 'acs_object'
+   new__creation_date timestamptz, -- default now()
+   new__creation_user integer,     -- default null
+   new__creation_ip varchar,       -- default null
+   new__context_id integer,        -- default null
+   new__title varchar,             -- default null
+   new__package_id integer         -- default null
+
+) RETURNS integer AS $$
+--
+-- acs_object__new/8 maybe obsolete, when we define proper defaults for /9
+--
+DECLARE
+BEGIN
   return acs_object__new(new__object_id, new__object_type, new__creation_date,
                          new__creation_user, new__creation_ip, new__context_id,
-                         ''t'', new__title, new__package_id);
-end;' language 'plpgsql';
+                         't', new__title, new__package_id);
+END;
+$$ LANGUAGE plpgsql;
 
-create or replace function acs_object__new (integer,varchar,timestamptz,integer,varchar,integer,varchar)
-returns integer as '
-declare
-  new__object_id              alias for $1;  -- default null
-  new__object_type            alias for $2;  -- default ''acs_object''
-  new__creation_date          alias for $3;  -- default now()
-  new__creation_user          alias for $4;  -- default null
-  new__creation_ip            alias for $5;  -- default null
-  new__context_id             alias for $6;  -- default null
-  new__title                  alias for $7;  -- default null
-begin
+
+
+--
+-- procedure acs_object__new/7
+--
+CREATE OR REPLACE FUNCTION acs_object__new(
+   new__object_id integer,         -- default null
+   new__object_type varchar,       -- default 'acs_object'
+   new__creation_date timestamptz, -- default now()
+   new__creation_user integer,     -- default null
+   new__creation_ip varchar,       -- default null
+   new__context_id integer,        -- default null
+   new__title varchar              -- default null
+
+) RETURNS integer AS $$
+--
+-- acs_object__new/7 maybe obsolete, when we define proper defaults for /9
+--
+DECLARE
+BEGIN
   return acs_object__new(new__object_id, new__object_type, new__creation_date,
                          new__creation_user, new__creation_ip, new__context_id,
-                         ''t'', new__title, null);
-end;' language 'plpgsql';
+                         't', new__title, null);
+END;
+$$ LANGUAGE plpgsql;
 
-create function acs_object__new (integer,varchar) returns integer as '
-declare
-        object_id       alias for $1; -- default null
-        object_type     alias for $2; -- default ''acs_object''
-begin
+
+
+--
+-- procedure acs_object__new/2
+--
+CREATE OR REPLACE FUNCTION acs_object__new(
+   object_id integer,  -- default null
+   object_type varchar -- default 'acs_object'
+
+) RETURNS integer AS $$
+--
+-- acs_object__new/2 maybe obsolete, when we define proper defaults for /9
+--
+DECLARE
+BEGIN
         return acs_object__new(object_id,object_type,now(),null,null,null);
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
 -- procedure delete
 
 select define_function_args('acs_object__delete','object_id');
 
-create function acs_object__delete (integer)
-returns integer as '
-declare
-  delete__object_id              alias for $1;  
+
+
+--
+-- procedure acs_object__delete/1
+--
+CREATE OR REPLACE FUNCTION acs_object__delete(
+   delete__object_id integer
+) RETURNS integer AS $$
+DECLARE
   obj_type                       record;
-begin
+BEGIN
   
   -- Delete dynamic/generic attributes
   delete from acs_attribute_values where object_id = delete__object_id;
@@ -854,30 +989,36 @@ begin
 -- table name, so we need to check if the table exists. Wp-slim does this too
 
     if table_exists(obj_type.table_name) then
-      execute ''delete from '' || obj_type.table_name ||
-          '' where '' || obj_type.id_column || '' =  '' || delete__object_id;
+      execute 'delete from ' || obj_type.table_name ||
+          ' where ' || obj_type.id_column || ' =  ' || delete__object_id;
     end if;
   end loop;
 
   return 0; 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
 -- function name
 select define_function_args('acs_object__name','name__object_id');
 
-create function acs_object__name (integer)
-returns varchar as '
-declare
-  name__object_id        alias for $1;  
+
+
+--
+-- procedure acs_object__name/1
+--
+CREATE OR REPLACE FUNCTION acs_object__name(
+   name__object_id integer
+) RETURNS varchar AS $$
+DECLARE
   object_name            varchar;  
   v_object_id            integer;
   obj_type               record;  
   obj                    record;      
-begin
+BEGIN
   -- Find the name function for this object, which is stored in the
   -- name_method column of acs_object_types. Starting with this
-  -- object''s actual type, traverse the type hierarchy upwards until
+  -- object's actual type, traverse the type hierarchy upwards until
   -- a non-null name_method value is found.
   --
   -- select name_method
@@ -904,15 +1045,15 @@ begin
          and o1.tree_sortkey between o2.tree_sortkey and tree_right(o2.tree_sortkey)
     order by o2.tree_sortkey desc
   loop
-   if obj_type.name_method != '''' and obj_type.name_method is NOT null then
+   if obj_type.name_method != '' and obj_type.name_method is NOT null then
 
-    -- Execute the first name_method we find (since we''re traversing
-    -- up the type hierarchy from the object''s exact type) using
+    -- Execute the first name_method we find (since we're traversing
+    -- up the type hierarchy from the object's exact type) using
     -- Native Dynamic SQL, to ascertain the name of this object.
     --
-    --execute ''select '' || object_type.name_method || ''(:1) from dual''
+    --execute 'select ' || object_type.name_method || '(:1) from dual'
 
-    for obj in execute ''select '' || obj_type.name_method || ''('' || name__object_id || '')::varchar as object_name'' loop
+    for obj in execute 'select ' || obj_type.name_method || '(' || name__object_id || ')::varchar as object_name' loop
         object_name := obj.object_name;
         exit;
     end loop;
@@ -923,40 +1064,55 @@ begin
 
   return object_name;
   
-end;' language 'plpgsql' stable strict;
+END;
+$$ LANGUAGE plpgsql stable strict;
 
 
 -- function default_name
 
 select define_function_args('acs_object__default_name','default_name__object_id');
 
-create or replace function acs_object__default_name (integer)
-returns varchar as '
-declare
-  default_name__object_id   alias for $1;  
+
+
+--
+-- procedure acs_object__default_name/1
+--
+CREATE OR REPLACE FUNCTION acs_object__default_name(
+   default_name__object_id integer
+) RETURNS varchar AS $$
+DECLARE
   object_type_pretty_name   acs_object_types.pretty_name%TYPE;
-begin
+BEGIN
   select ot.pretty_name
   into object_type_pretty_name
   from acs_objects o, acs_object_types ot
   where o.object_id = default_name__object_id
   and o.object_type = ot.object_type;
 
-  return object_type_pretty_name || '' '' || default_name__object_id;
+  return object_type_pretty_name || ' ' || default_name__object_id;
 
-end;' language 'plpgsql' stable strict;
+END;
+$$ LANGUAGE plpgsql stable strict;
 
 
 -- function package_id
 
 select define_function_args('acs_object__object_id','p_object_id');
 
-create or replace function acs_object__package_id (integer)
-returns integer as '
-declare
-  p_object_id  alias for $1;
+
+
+-- added
+select define_function_args('acs_object__package_id','object_id');
+
+--
+-- procedure acs_object__package_id/1
+--
+CREATE OR REPLACE FUNCTION acs_object__package_id(
+   p_object_id integer
+) RETURNS integer AS $$
+DECLARE
   v_package_id acs_objects.package_id%TYPE;
-begin
+BEGIN
   if p_object_id is null then
     return null;
   end if;
@@ -966,18 +1122,24 @@ begin
   where object_id = p_object_id;
 
   return v_package_id;
-end;' language 'plpgsql' stable strict;
+END;
+$$ LANGUAGE plpgsql stable strict;
 
 
 -- procedure get_attribute_storage
 
 select define_function_args('acs_object__get_attribute_storage','object_id_in,attribute_name_in');
 
-create or replace function acs_object__get_attribute_storage (integer,varchar)
-returns text as '
-declare
-  object_id_in           alias for $1;  
-  attribute_name_in      alias for $2;  
+
+
+--
+-- procedure acs_object__get_attribute_storage/2
+--
+CREATE OR REPLACE FUNCTION acs_object__get_attribute_storage(
+   object_id_in integer,
+   attribute_name_in varchar
+) RETURNS text AS $$
+DECLARE
 
 --  these three are the out variables
   v_column               varchar;  
@@ -993,7 +1155,7 @@ declare
   v_sql                  text;  
   v_return               text;  
   v_rec                  record;
-begin
+BEGIN
    --   select 
    --     object_type, id_column
    --   from
@@ -1026,7 +1188,7 @@ begin
      a.object_type = t.object_type;
 
    if NOT FOUND then 
-      raise EXCEPTION ''-20000: No such attribute % for object % in acs_object.get_attribute_storage.'', attribute_name_in, object_id_in;
+      raise EXCEPTION '-20000: No such attribute % for object % in acs_object.get_attribute_storage.', attribute_name_in, object_id_in;
    end if;
 
    -- This should really be done in a trigger on acs_attributes,
@@ -1034,28 +1196,28 @@ begin
 
    -- If there is no specific table name for this attribute,
    -- figure it out based on the object type
-   if v_table_name is null or v_table_name = '''' then
+   if v_table_name is null or v_table_name = '' then
 
      -- Determine the appropriate table name
-     if v_storage = ''generic'' then
+     if v_storage = 'generic' then
        -- Generic attribute: table name/column are hardcoded
 
-       v_column := ''attr_value'';
+       v_column := 'attr_value';
 
-       if v_static = ''f'' then
-         v_table_name := ''acs_attribute_values'';
-         v_key_sql := ''(object_id = '' || object_id_in || '' and '' ||
-                      ''attribute_id = '' || v_attr_id || '')'';
+       if v_static = 'f' then
+         v_table_name := 'acs_attribute_values';
+         v_key_sql := '(object_id = ' || object_id_in || ' and ' ||
+                      'attribute_id = ' || v_attr_id || ')';
        else
-         v_table_name := ''acs_static_attr_values'';
-         v_key_sql := ''(object_type = '''''' || v_object_type || '''''' and '' ||
-                      ''attribute_id = '' || v_attr_id || '')'';
+         v_table_name := 'acs_static_attr_values';
+         v_key_sql := '(object_type = ''' || v_object_type || ''' and ' ||
+                      'attribute_id = ' || v_attr_id || ')';
        end if;
 
      else
        -- Specific attribute: table name/column need to be retreived
  
-       if v_static = ''f'' then
+       if v_static = 'f' then
          select 
            table_name, id_column 
          into 
@@ -1065,10 +1227,10 @@ begin
          where 
            object_type = v_object_type;
          if NOT FOUND then 
-            raise EXCEPTION ''-20000: No data found for attribute %::% object_id % in acs_object.get_attribute_storage'', v_object_type, attribute_name_in, object_id_in;
+            raise EXCEPTION '-20000: No data found for attribute %::% object_id % in acs_object.get_attribute_storage', v_object_type, attribute_name_in, object_id_in;
          end if;
        else
-         raise EXCEPTION ''-20000: No table name specified for storage specific static attribute %::% object_id % in acs_object.get_attribute_storage.'',v_object_type, attribute_name_in, object_id_in;
+         raise EXCEPTION '-20000: No table name specified for storage specific static attribute %::% object_id % in acs_object.get_attribute_storage.',v_object_type, attribute_name_in, object_id_in;
        end if;
   
      end if;
@@ -1080,116 +1242,140 @@ begin
        where object_type = v_object_type 
        and table_name = v_table_name;
        if NOT FOUND then 
-          raise EXCEPTION ''-20000: No data found for attribute %::% object_id % in acs_object.get_attribute_storage'', v_object_type, attribute_name_in, object_id_in;
+          raise EXCEPTION '-20000: No data found for attribute %::% object_id % in acs_object.get_attribute_storage', v_object_type, attribute_name_in, object_id_in;
        end if;
    end if;
 
-   if v_column is null or v_column = '''' then
+   if v_column is null or v_column = '' then
 
-     if v_storage = ''generic'' then
-       v_column := ''attr_value'';
+     if v_storage = 'generic' then
+       v_column := 'attr_value';
      else
        v_column := v_attr_name;
      end if;
 
    end if;
 
-   if v_key_sql is null or v_key_sql = '''' then
-     if v_static = ''f'' then   
-       v_key_sql := v_id_column || '' = '' || object_id_in ; 
+   if v_key_sql is null or v_key_sql = '' then
+     if v_static = 'f' then   
+       v_key_sql := v_id_column || ' = ' || object_id_in ; 
      else
-       v_key_sql := v_id_column || '' = '''''' || v_object_type || '''''''';
+       v_key_sql := v_id_column || ' = ''' || v_object_type || '''';
      end if;
    end if;
 
-   return v_column || '','' || v_table_name || '','' || v_key_sql; 
+   return v_column || ',' || v_table_name || ',' || v_key_sql; 
 
-end;' language 'plpgsql' stable;
+END;
+$$ LANGUAGE plpgsql stable;
 
 
 select define_function_args('acs_object__get_attr_storage_column','v_vals');
 
-create or replace function acs_object__get_attr_storage_column(text) 
-returns text as '
-declare
-        v_vals  alias for $1;
+
+
+--
+-- procedure acs_object__get_attr_storage_column/1
+--
+CREATE OR REPLACE FUNCTION acs_object__get_attr_storage_column(
+   v_vals text
+) RETURNS text AS $$
+DECLARE
         v_idx   integer;
-begin
-        v_idx := strpos(v_vals,'','');
+BEGIN
+        v_idx := strpos(v_vals,',');
         if v_idx = 0 or v_vals is null then 
-           raise exception ''invalid storage format: acs_object.get_attr_storage_column %'',v_vals;
+           raise exception 'invalid storage format: acs_object.get_attr_storage_column %',v_vals;
         end if;
 
         return substr(v_vals,1,v_idx - 1);
 
-end;' language 'plpgsql' immutable;
+END;
+$$ LANGUAGE plpgsql immutable;
 
 select define_function_args('acs_object__get_attr_storage_table','v_vals');
 
-create or replace function acs_object__get_attr_storage_table(text) 
-returns text as '
-declare
-        v_vals  alias for $1;
+
+
+--
+-- procedure acs_object__get_attr_storage_table/1
+--
+CREATE OR REPLACE FUNCTION acs_object__get_attr_storage_table(
+   v_vals text
+) RETURNS text AS $$
+DECLARE
         v_idx   integer;
         v_tmp   varchar;
-begin
-        v_idx := strpos(v_vals,'','');
+BEGIN
+        v_idx := strpos(v_vals,',');
 
         if v_idx = 0 or v_vals is null then 
-           raise exception ''invalid storage format: acs_object.get_attr_storage_table %'',v_vals;
+           raise exception 'invalid storage format: acs_object.get_attr_storage_table %',v_vals;
         end if;
 
         v_tmp := substr(v_vals,v_idx + 1);
-        v_idx := strpos(v_tmp,'','');
+        v_idx := strpos(v_tmp,',');
         if v_idx = 0 then 
-           raise exception ''invalid storage format: acs_object.get_attr_storage_table %'',v_vals;
+           raise exception 'invalid storage format: acs_object.get_attr_storage_table %',v_vals;
         end if;
 
         return substr(v_tmp,1,v_idx - 1);
 
-end;' language 'plpgsql' immutable;
+END;
+$$ LANGUAGE plpgsql immutable;
 
 select define_function_args('acs_object__get_attr_storage_sql','v_vals');
 
-create or replace function acs_object__get_attr_storage_sql(text) 
-returns text as '
-declare
-        v_vals  alias for $1;
+
+
+--
+-- procedure acs_object__get_attr_storage_sql/1
+--
+CREATE OR REPLACE FUNCTION acs_object__get_attr_storage_sql(
+   v_vals text
+) RETURNS text AS $$
+DECLARE
         v_idx   integer;
         v_tmp   varchar;
-begin
-        v_idx := strpos(v_vals, '','');
+BEGIN
+        v_idx := strpos(v_vals, ',');
 
         if v_idx = 0 or v_vals is null then 
-           raise exception ''invalid storage format: acs_object.get_attr_storage_sql %'',v_vals;
+           raise exception 'invalid storage format: acs_object.get_attr_storage_sql %',v_vals;
         end if;
 
         v_tmp := substr(v_vals, v_idx + 1);
-        v_idx := strpos(v_tmp, '','');
+        v_idx := strpos(v_tmp, ',');
         if v_idx = 0 then 
-           raise exception ''invalid storage format: acs_object.get_attr_storage_sql %'',v_vals;
+           raise exception 'invalid storage format: acs_object.get_attr_storage_sql %',v_vals;
         end if;
 
         return substr(v_tmp, v_idx + 1);
 
-end;' language 'plpgsql' immutable;
+END;
+$$ LANGUAGE plpgsql immutable;
 
 -- function get_attribute
 
 select define_function_args('acs_object__get_attribute','object_id_in,attribute_name_in');
 
-create or replace function acs_object__get_attribute (integer,varchar)
-returns text as '
-declare
-  object_id_in           alias for $1;  
-  attribute_name_in      alias for $2;  
+
+
+--
+-- procedure acs_object__get_attribute/2
+--
+CREATE OR REPLACE FUNCTION acs_object__get_attribute(
+   object_id_in integer,
+   attribute_name_in varchar
+) RETURNS text AS $$
+DECLARE
   v_table_name           varchar(200);  
   v_column               varchar(200);  
   v_key_sql              text; 
   v_return               text; 
   v_storage              text;
   v_rec                  record;
-begin
+BEGIN
 
    v_storage := acs_object__get_attribute_storage(object_id_in, attribute_name_in);
 
@@ -1197,7 +1383,7 @@ begin
    v_table_name := acs_object__get_attr_storage_table(v_storage);
    v_key_sql    := acs_object__get_attr_storage_sql(v_storage);
 
-   for v_rec in execute ''select '' || quote_ident(v_column) || ''::text as column_return from '' || quote_ident(v_table_name) || '' where '' || v_key_sql
+   for v_rec in execute 'select ' || quote_ident(v_column) || '::text as column_return from ' || quote_ident(v_table_name) || ' where ' || v_key_sql
       LOOP
         v_return := v_rec.column_return;
         exit;
@@ -1208,28 +1394,34 @@ begin
 
    return v_return;
 
-end;' language 'plpgsql' stable;
+END;
+$$ LANGUAGE plpgsql stable;
 
 
 -- procedure set_attribute
 
 select define_function_args('acs_object__set_attribute','object_id_in,attribute_name_in,value_in');
 
-create or replace function acs_object__set_attribute (integer,varchar,varchar)
-returns integer as '
-declare
-  object_id_in           alias for $1;  
-  attribute_name_in      alias for $2;  
-  value_in               alias for $3;  
+
+
+--
+-- procedure acs_object__set_attribute/3
+--
+CREATE OR REPLACE FUNCTION acs_object__set_attribute(
+   object_id_in integer,
+   attribute_name_in varchar,
+   value_in varchar
+) RETURNS integer AS $$
+DECLARE
   v_table_name           varchar;  
   v_column               varchar;  
   v_key_sql              text; 
   v_return               text; 
   v_storage              text;
-begin
+BEGIN
    if value_in is null then 
 	-- this will fail more cryptically in the execute so catch now. 
-	raise exception ''acs_object__set_attribute: attempt to set % to null for object_id %'',attribute_name_in, object_id_in;
+	raise exception 'acs_object__set_attribute: attempt to set % to null for object_id %',attribute_name_in, object_id_in;
    end if;
 
    v_storage := acs_object__get_attribute_storage(object_id_in, attribute_name_in);
@@ -1238,28 +1430,34 @@ begin
    v_table_name := acs_object__get_attr_storage_table(v_storage);
    v_key_sql    := acs_object__get_attr_storage_sql(v_storage);
 
-   execute ''update '' || v_table_name || '' set '' || quote_ident(v_column) || '' = '' || quote_literal(value_in) || '' where '' || v_key_sql;
+   execute 'update ' || v_table_name || ' set ' || quote_ident(v_column) || ' = ' || quote_literal(value_in) || ' where ' || v_key_sql;
 
    return 0; 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
 -- function check_context_index
 
 select define_function_args('acs_object__check_context_index','check_context_index__object_id,check_context_index__ancestor_id,check_context_index__n_generations');
 
-create or replace function acs_object__check_context_index (integer,integer,integer)
-returns boolean as '
-declare
-  check_context_index__object_id              alias for $1;  
-  check_context_index__ancestor_id            alias for $2;  
-  check_context_index__n_generations          alias for $3;  
+
+
+--
+-- procedure acs_object__check_context_index/3
+--
+CREATE OR REPLACE FUNCTION acs_object__check_context_index(
+   check_context_index__object_id integer,
+   check_context_index__ancestor_id integer,
+   check_context_index__n_generations integer
+) RETURNS boolean AS $$
+DECLARE
   n_rows                                      integer;       
   n_gens                                      integer;       
-begin
+BEGIN
    -- Verify that this row exists in the index.
    if check_context_index__object_id is null or check_context_index__ancestor_id is null then
-	raise exception ''object_id or ancestor_id is null in acs_object__check_context_index'';
+	raise exception 'object_id or ancestor_id is null in acs_object__check_context_index';
    end if;	
    select case when count(*) = 0 then 0 else 1 end into n_rows
    from acs_object_context_index
@@ -1274,57 +1472,66 @@ begin
      and ancestor_id = check_context_index__ancestor_id;
 
      if n_gens != check_context_index__n_generations then
-       PERFORM acs_log__error(''acs_object.check_representation'', 
-                              ''Ancestor '' ||
-                     check_context_index__ancestor_id || '' of object '' || 
+       PERFORM acs_log__error('acs_object.check_representation', 
+                              'Ancestor ' ||
+                     check_context_index__ancestor_id || ' of object ' || 
                      check_context_index__object_id ||
-		     '' reports being generation '' || n_gens ||
-		     '' when it is actually generation '' || 
+		     ' reports being generation ' || n_gens ||
+		     ' when it is actually generation ' || 
                      check_context_index__n_generations ||
-		     ''.'');
-       return ''f'';
+		     '.');
+       return 'f';
      else
-       return ''t'';
+       return 't';
      end if;
    else
-     PERFORM acs_log__error(''acs_object.check_representation'', 
-                            ''Ancestor '' ||
+     PERFORM acs_log__error('acs_object.check_representation', 
+                            'Ancestor ' ||
                             check_context_index__ancestor_id || 
-                            '' of object '' || check_context_index__object_id 
-                            || '' is missing an entry in acs_object_context_index.'');
-     return ''f'';
+                            ' of object ' || check_context_index__object_id 
+                            || ' is missing an entry in acs_object_context_index.');
+     return 'f';
    end if;
   
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
 -- function check_object_ancestors
-create function acs_object__check_object_ancestors (integer,integer,integer)
-returns boolean as '
-declare
-  check_object_ancestors__object_id              alias for $1;  
-  check_object_ancestors__ancestor_id            alias for $2;  
-  check_object_ancestors__n_generations          alias for $3;  
+
+
+-- added
+select define_function_args('acs_object__check_object_ancestors','object_id,ancestor_id,n_generations');
+
+--
+-- procedure acs_object__check_object_ancestors/3
+--
+CREATE OR REPLACE FUNCTION acs_object__check_object_ancestors(
+   check_object_ancestors__object_id integer,
+   check_object_ancestors__ancestor_id integer,
+   check_object_ancestors__n_generations integer
+) RETURNS boolean AS $$
+DECLARE
   check_object_ancestors__context_id             acs_objects.context_id%TYPE;
   check_object_ancestors__security_inherit_p     acs_objects.security_inherit_p%TYPE;
   n_rows                                         integer;       
   n_gens                                         integer;       
   result                                         boolean;       
-begin
+BEGIN
    -- OBJECT_ID is the object we are verifying
    -- ANCESTOR_ID is the current ancestor we are tracking
    -- N_GENERATIONS is how far ancestor_id is from object_id
 
    -- Note that this function is only supposed to verify that the
-   -- index contains each ancestor for OBJECT_ID. It doesn''''t
-   -- guarantee that there aren''''t extraneous rows or that
-   -- OBJECT_ID''''s children are contained in the index. That is
+   -- index contains each ancestor for OBJECT_ID. It doesn''t
+   -- guarantee that there aren''t extraneous rows or that
+   -- OBJECT_ID''s children are contained in the index. That is
    -- verified by seperate functions.
 
-   result := ''t'';
+   result := 't';
 
    -- Grab the context and security_inherit_p flag of the current
-   -- ancestor''''s parent.
+   -- ancestor''s parent.
    select context_id, security_inherit_p 
    into check_object_ancestors__context_id, 
         check_object_ancestors__security_inherit_p
@@ -1333,48 +1540,57 @@ begin
 
    if check_object_ancestors__ancestor_id = 0 then
      if check_object_ancestors__context_id is null then
-       result := ''t'';
+       result := 't';
      else
-       -- This can be a constraint, can''''t it?
-       PERFORM acs_log__error(''acs_object.check_representation'',
-                     ''Object 0 doesn''''t have a null context_id'');
-       result := ''f'';
+       -- This can be a constraint, can''t it?
+       PERFORM acs_log__error('acs_object.check_representation',
+                     'Object 0 doesn''t have a null context_id');
+       result := 'f';
      end if;
    else
      if check_object_ancestors__context_id is null or 
-        check_object_ancestors__security_inherit_p = ''f'' 
+        check_object_ancestors__security_inherit_p = 'f' 
      THEN
        check_object_ancestors__context_id := 0;
      end if;
 
      if acs_object__check_context_index(check_object_ancestors__object_id, 
                                         check_object_ancestors__ancestor_id, 
-                                        check_object_ancestors__n_generations) = ''f'' then
-       result := ''f'';
+                                        check_object_ancestors__n_generations) = 'f' then
+       result := 'f';
      end if;
 
      if acs_object__check_object_ancestors(check_object_ancestors__object_id, 
                                            check_object_ancestors__context_id,
-	                      check_object_ancestors__n_generations + 1) = ''f'' then
-       result := ''f'';
+	                      check_object_ancestors__n_generations + 1) = 'f' then
+       result := 'f';
      end if;
    end if;
 
    return result;
   
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
 -- function check_object_descendants
-create function acs_object__check_object_descendants (integer,integer,integer)
-returns boolean as '
-declare
-  object_id              alias for $1;  
-  descendant_id          alias for $2;  
-  n_generations          alias for $3;  
+
+
+-- added
+select define_function_args('acs_object__check_object_descendants','object_id,descendant_id,n_generations');
+
+--
+-- procedure acs_object__check_object_descendants/3
+--
+CREATE OR REPLACE FUNCTION acs_object__check_object_descendants(
+   object_id integer,
+   descendant_id integer,
+   n_generations integer
+) RETURNS boolean AS $$
+DECLARE
   result                 boolean;     
   obj                    record;  
-begin
+BEGIN
    -- OBJECT_ID is the object we are verifying.
    -- DESCENDANT_ID is the current descendant we are tracking.
    -- N_GENERATIONS is how far the current DESCENDANT_ID is from
@@ -1382,15 +1598,15 @@ begin
 
    -- This function will verfy that each actualy descendant of
    -- OBJECT_ID has a row in the index table. It does not check that
-   -- there aren''t extraneous rows or that the ancestors of OBJECT_ID
+   -- there aren't extraneous rows or that the ancestors of OBJECT_ID
    -- are maintained correctly.
 
-   result := ''t'';
+   result := 't';
 
    -- First verify that OBJECT_ID and DESCENDANT_ID are actually in
    -- the index.
-   if acs_object__check_context_index(descendant_id, object_id, n_generations) = ''f'' then
-     result := ''f'';
+   if acs_object__check_context_index(descendant_id, object_id, n_generations) = 'f' then
+     result := 'f';
    end if;
 
    -- For every child that reports inheriting from OBJECT_ID we need to call
@@ -1398,35 +1614,41 @@ begin
    for obj in  select *
 	       from acs_objects
 	       where context_id = descendant_id
-	       and security_inherit_p = ''t'' loop
+	       and security_inherit_p = 't' loop
      if acs_object__check_object_descendants(object_id, obj.object_id,
-       n_generations + 1) = ''f'' then
-       result := ''f'';
+       n_generations + 1) = 'f' then
+       result := 'f';
      end if;
    end loop;
 
    return result;
   
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
 -- function check_path
 select define_function_args('acs_object__check_path','check_path__object_id,check_path__ancestor_id');
 
-create or replace function acs_object__check_path (integer,integer)
-returns boolean as '
-declare
-  check_path__object_id              alias for $1;  
-  check_path__ancestor_id            alias for $2;  
+
+
+--
+-- procedure acs_object__check_path/2
+--
+CREATE OR REPLACE FUNCTION acs_object__check_path(
+   check_path__object_id integer,
+   check_path__ancestor_id integer
+) RETURNS boolean AS $$
+DECLARE
   check_path__context_id             acs_objects.context_id%TYPE;
   check_path__security_inherit_p     acs_objects.security_inherit_p%TYPE;
-begin
+BEGIN
    if check_path__object_id is null or check_path__ancestor_id then
-	raise exception ''acs_object__check_path called with null object_id or ancestor_id'';
+	raise exception 'acs_object__check_path called with null object_id or ancestor_id';
    end if;
 
    if check_path__object_id = check_path__ancestor_id then
-     return ''t'';
+     return 't';
    end if;
 
    select context_id, security_inherit_p 
@@ -1438,10 +1660,10 @@ begin
    -- should we not?
 
    if check_path__object_id = 0 and check_path__context_id is null then 
-      return ''f'';
+      return 'f';
    end if;
 
-   if check_path__context_id is null or check_path__security_inherit_p = ''f'' 
+   if check_path__context_id is null or check_path__security_inherit_p = 'f' 
    then
      check_path__context_id := 0;
    end if;
@@ -1449,38 +1671,44 @@ begin
    return acs_object__check_path(check_path__context_id, 
                                  check_path__ancestor_id);
   
-end;' language 'plpgsql' stable;
+END;
+$$ LANGUAGE plpgsql stable;
 
 
 -- function check_representation
 
 select define_function_args('acs_object__check_representation','check_representation__object_id');
 
-create or replace function acs_object__check_representation (integer)
-returns boolean as '
-declare
-  check_representation__object_id              alias for $1;  
+
+
+--
+-- procedure acs_object__check_representation/1
+--
+CREATE OR REPLACE FUNCTION acs_object__check_representation(
+   check_representation__object_id integer
+) RETURNS boolean AS $$
+DECLARE
   result                                       boolean;       
   check_representation__object_type            acs_objects.object_type%TYPE;
   n_rows                                       integer;    
   v_rec                                        record;  
   row                                          record; 
-begin
+BEGIN
    if check_representation__object_id is null then 
-	raise exception ''acs_object__check_representation called for null object_id'';
+	raise exception 'acs_object__check_representation called for null object_id';
    end if;
 
-   result := ''t'';
-   PERFORM acs_log__notice(''acs_object.check_representation'',
-                  ''Running acs_object.check_representation on object_id = '' 
-                  || check_representation__object_id || ''.'');
+   result := 't';
+   PERFORM acs_log__notice('acs_object.check_representation',
+                  'Running acs_object.check_representation on object_id = ' 
+                  || check_representation__object_id || '.');
 
    select object_type into check_representation__object_type
    from acs_objects
    where object_id = check_representation__object_id;
 
-   PERFORM acs_log__notice(''acs_object.check_representation'',
-                  ''OBJECT STORAGE INTEGRITY TEST'');
+   PERFORM acs_log__notice('acs_object.check_representation',
+                  'OBJECT STORAGE INTEGRITY TEST');
 
    for v_rec in  select t.object_type, t.table_name, t.id_column
              from acs_object_type_supertype_map m, acs_object_types t
@@ -1492,80 +1720,98 @@ begin
 	     where object_type = check_representation__object_type 
      LOOP
 
-        for row in execute ''select case when count(*) = 0 then 0 else 1 end as n_rows from '' || quote_ident(v_rec.table_name) || '' where '' || quote_ident(v_rec.id_column) || '' = '' || check_representation__object_id
+        for row in execute 'select case when count(*) = 0 then 0 else 1 end as n_rows from ' || quote_ident(v_rec.table_name) || ' where ' || quote_ident(v_rec.id_column) || ' = ' || check_representation__object_id
         LOOP
             n_rows := row.n_rows;
             exit;
         end LOOP;
 
         if n_rows = 0 then
-           result := ''f'';
-           PERFORM acs_log__error(''acs_object.check_representation'',
-                     ''Table '' || v_rec.table_name || 
-                     '' (primary storage for '' ||
+           result := 'f';
+           PERFORM acs_log__error('acs_object.check_representation',
+                     'Table ' || v_rec.table_name || 
+                     ' (primary storage for ' ||
 		     v_rec.object_type || 
-                     '') doesn''''t have a row for object '' ||
-		     check_representation__object_id || '' of type '' || 
-                     check_representation__object_type || ''.'');
+                     ') doesn''t have a row for object ' ||
+		     check_representation__object_id || ' of type ' || 
+                     check_representation__object_type || '.');
         end if;
 
    end loop;
 
-   PERFORM acs_log__notice(''acs_object.check_representation'',
-                  ''OBJECT CONTEXT INTEGRITY TEST'');
+   PERFORM acs_log__notice('acs_object.check_representation',
+                  'OBJECT CONTEXT INTEGRITY TEST');
 
    if acs_object__check_object_ancestors(check_representation__object_id, 
-                                         check_representation__object_id, 0) = ''f'' then
-     result := ''f'';
+                                         check_representation__object_id, 0) = 'f' then
+     result := 'f';
    end if;
 
    if acs_object__check_object_descendants(check_representation__object_id, 
-                                           check_representation__object_id, 0) = ''f'' then
-     result := ''f'';
+                                           check_representation__object_id, 0) = 'f' then
+     result := 'f';
    end if;
    for row in  select object_id, ancestor_id, n_generations
 	       from acs_object_context_index
 	       where object_id = check_representation__object_id
 	       or ancestor_id = check_representation__object_id 
    LOOP
-     if acs_object__check_path(row.object_id, row.ancestor_id) = ''f'' then
-       PERFORM acs_log__error(''acs_object.check_representation'',
-		     ''acs_object_context_index contains an extraneous row: ''
-                     || ''object_id = '' || row.object_id || 
-                     '', ancestor_id = '' || row.ancestor_id || 
-                     '', n_generations = '' || row.n_generations || ''.'');
-       result := ''f'';
+     if acs_object__check_path(row.object_id, row.ancestor_id) = 'f' then
+       PERFORM acs_log__error('acs_object.check_representation',
+		     'acs_object_context_index contains an extraneous row: '
+                     || 'object_id = ' || row.object_id || 
+                     ', ancestor_id = ' || row.ancestor_id || 
+                     ', n_generations = ' || row.n_generations || '.');
+       result := 'f';
      end if;
    end loop;
 
-   PERFORM acs_log__notice(''acs_object.check_representation'',
-		  ''Done running acs_object.check_representation '' || 
-		  ''on object_id = '' || check_representation__object_id || ''.'');
+   PERFORM acs_log__notice('acs_object.check_representation',
+		  'Done running acs_object.check_representation ' || 
+		  'on object_id = ' || check_representation__object_id || '.');
 
    return result;
   
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
-create function acs_object__update_last_modified (integer, integer, varchar)
-returns integer as '
-declare
-    acs_object__update_last_modified__object_id          alias for $1;
-    acs_object__update_last_modified__modifying_user     alias for $2;
-    acs_object__update_last_modified__modifying_ip       alias for $3;
-begin
+
+
+-- added
+
+--
+-- procedure acs_object__update_last_modified/3
+--
+CREATE OR REPLACE FUNCTION acs_object__update_last_modified(
+   acs_object__update_last_modified__object_id integer,
+   acs_object__update_last_modified__modifying_user integer,
+   acs_object__update_last_modified__modifying_ip varchar
+) RETURNS integer AS $$
+DECLARE
+BEGIN
     return acs_object__update_last_modified(acs_object__update_last_modified__object_id, acs_object__update_last_modified__modifying_user, acs_object__update_last_modified__modifying_ip, now());
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
-create function acs_object__update_last_modified (integer, integer, varchar, timestamptz)
-returns integer as '
-declare
-    acs_object__update_last_modified__object_id          alias for $1; 
-    acs_object__update_last_modified__modifying_user     alias for $2;
-    acs_object__update_last_modified__modifying_ip       alias for $3;
-    acs_object__update_last_modified__last_modified      alias for $4; -- default now()
+
+
+-- added
+select define_function_args('acs_object__update_last_modified','update_last_modified__object_id,update_last_modified__modifying_user,update_last_modified__modifying_ip,update_last_modified__last_modified;now()');
+
+--
+-- procedure acs_object__update_last_modified/4
+--
+CREATE OR REPLACE FUNCTION acs_object__update_last_modified(
+   acs_object__update_last_modified__object_id integer,
+   acs_object__update_last_modified__modifying_user integer,
+   acs_object__update_last_modified__modifying_ip varchar,
+   acs_object__update_last_modified__last_modified timestamptz -- default now()
+
+) RETURNS integer AS $$
+DECLARE
     v_parent_id                                          integer;
     v_last_modified                                      timestamptz;
-begin
+BEGIN
     if acs_object__update_last_modified__last_modified is null then
         v_last_modified := now();
     else
@@ -1588,7 +1834,8 @@ begin
     end if;
 
     return acs_object__update_last_modified__object_id;
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 -- show errors
 

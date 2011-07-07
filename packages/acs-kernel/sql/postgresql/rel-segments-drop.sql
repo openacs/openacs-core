@@ -14,9 +14,10 @@ begin
 	PERFORM rel_segment__delete(r.segment_id);
     end loop;
 
-    PERFORM acs_object_type__drop_type(''rel_segment'');
+    PERFORM acs_object_type__drop_type('rel_segment');
     return null;
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 select inline_0 ();
 
 drop view party_element_map;

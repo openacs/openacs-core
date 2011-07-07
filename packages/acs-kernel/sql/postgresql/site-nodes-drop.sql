@@ -10,11 +10,12 @@
 select drop_package('site_node');
 drop table site_nodes;
 
-create function inline_0 () returns integer as '
-begin
-  PERFORM acs_object_type__drop_type (''site_node'');
+CREATE OR REPLACE FUNCTION inline_0 () RETURNS integer AS $$
+BEGIN
+  PERFORM acs_object_type__drop_type ('site_node');
   returns null;
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 select inline_0 ();
 drop function inline_0 ();
 \t

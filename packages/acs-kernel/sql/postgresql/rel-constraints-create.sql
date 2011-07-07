@@ -17,24 +17,24 @@
 -- change in the future, particularly the functions marked "EXPERIMENTAL".
 --
 
-create function inline_0 ()
-returns integer as '
-begin
+CREATE OR REPLACE FUNCTION inline_0 () RETURNS integer AS $$
+BEGIN
     PERFORM acs_object_type__create_type (
-      ''rel_constraint'',
-      ''#acs-kernel.lt_Relational_Constraint#'',
-      ''#acs-kernel.lt_Relational_Constraint_1#'',
-      ''acs_object'',
-      ''rel_constraints'',
-      ''constraint_id'',
-      ''rel_constraint'',
-      ''f'',
+      'rel_constraint',
+      '#acs-kernel.lt_Relational_Constraint#',
+      '#acs-kernel.lt_Relational_Constraint_1#',
+      'acs_object',
+      'rel_constraints',
+      'constraint_id',
+      'rel_constraint',
+      'f',
       null,
       null
       );
 
       return 0;
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 select inline_0 ();
 
@@ -496,10 +496,17 @@ create table rc_segment_required_seg_map (
 create index rc_segment_required_seg_idx on 
 rc_segment_required_seg_map(required_rel_segment);
 
-create function rel_constraints_ins_tr () returns trigger as '
-declare
+
+
+--
+-- procedure rel_constraints_ins_tr/0
+--
+CREATE OR REPLACE FUNCTION rel_constraints_ins_tr(
+
+) RETURNS trigger AS $$
+DECLARE
         v_rec   record;
-begin
+BEGIN
         -- insert the constraint
 
         insert into rc_segment_required_seg_map
@@ -533,16 +540,24 @@ begin
 
         return new;
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 create trigger rel_constraints_ins_tr after insert 
 on rel_constraints for each row 
 execute procedure rel_constraints_ins_tr ();
 
-create function rel_constraints_del_tr () returns trigger as '
-declare
+
+
+--
+-- procedure rel_constraints_del_tr/0
+--
+CREATE OR REPLACE FUNCTION rel_constraints_del_tr(
+
+) RETURNS trigger AS $$
+DECLARE
         v_rec   record;
-begin
+BEGIN
 
         -- now update the rel_segments that depend on this segment
         
@@ -583,7 +598,8 @@ begin
 
         return old;
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 create trigger rel_constraints_del_tr after delete
 on rel_constraints for each row 

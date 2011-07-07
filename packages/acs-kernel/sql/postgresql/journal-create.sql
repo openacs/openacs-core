@@ -12,25 +12,25 @@
 -- http://www.fsf.org/copyleft/gpl.html
 
 
-create function inline_0 ()
-returns integer as '
-begin
+CREATE OR REPLACE FUNCTION inline_0 () RETURNS integer AS $$
+BEGIN
   PERFORM acs_object_type__create_type (
-    ''journal_entry'',
-    ''Journal Entry'',
-    ''Journal Entries'',
-    ''acs_object'',
-    ''journal_entries'',
-    ''journal_id'',
-    ''journal_entry'',
-    ''f'',
+    'journal_entry',
+    'Journal Entry',
+    'Journal Entries',
+    'acs_object',
+    'journal_entries',
+    'journal_id',
+    'journal_entry',
+    'f',
     null,
     null
     );
 
   -- XXX fill in all the attributes in later.
   return 0;
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 select inline_0 ();
 
@@ -88,27 +88,36 @@ comment on table journal_entries is '
 
 -- create or replace package body journal_entry
 -- function new
-create function journal_entry__new (integer,integer,varchar,varchar,timestamptz,integer,varchar,varchar)
-returns integer as '
-declare
-  new__journal_id             alias for $1;  -- default null  
-  new__object_id              alias for $2;  
-  new__action                 alias for $3;  
-  new__action_pretty          alias for $4;  -- default null
-  new__creation_date          alias for $5;  -- default now()
-  new__creation_user          alias for $6;  -- default null
-  new__creation_ip            alias for $7;  -- default null
-  new__msg                    alias for $8;  -- default null
+
+
+-- added
+select define_function_args('journal_entry__new','journal_id;null,object_id,action,action_pretty;null,creation_date;now(),creation_user;null,creation_ip;null,msg;null');
+
+--
+-- procedure journal_entry__new/8
+--
+CREATE OR REPLACE FUNCTION journal_entry__new(
+   new__journal_id integer,        -- default null
+   new__object_id integer,
+   new__action varchar,
+   new__action_pretty varchar,     -- default null
+   new__creation_date timestamptz, -- default now()
+   new__creation_user integer,     -- default null
+   new__creation_ip varchar,       -- default null
+   new__msg varchar                -- default null
+
+) RETURNS integer AS $$
+DECLARE
   v_journal_id                journal_entries.journal_id%TYPE;
-begin
+BEGIN
 	v_journal_id := acs_object__new (
 	  new__journal_id,
-	  ''journal_entry'',
+	  'journal_entry',
 	  new__creation_date,
 	  new__creation_user,
 	  new__creation_ip,
 	  new__object_id,
-          ''t'',
+          't',
           new__action,
           null
 	);
@@ -122,29 +131,47 @@ begin
 
         return v_journal_id;
      
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
 -- procedure delete
-create function journal_entry__delete (integer)
-returns integer as '
-declare
-  delete__journal_id             alias for $1;  
-begin
+
+
+-- added
+select define_function_args('journal_entry__delete','journal_id');
+
+--
+-- procedure journal_entry__delete/1
+--
+CREATE OR REPLACE FUNCTION journal_entry__delete(
+   delete__journal_id integer
+) RETURNS integer AS $$
+DECLARE
+BEGIN
 	delete from journal_entries where journal_id = delete__journal_id;
 	PERFORM acs_object__delete(delete__journal_id);
 
         return 0; 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
 -- procedure delete_for_object
-create function journal_entry__delete_for_object (integer)
-returns integer as '
-declare
-  delete_for_object__object_id          alias for $1;  
+
+
+-- added
+select define_function_args('journal_entry__delete_for_object','object_id');
+
+--
+-- procedure journal_entry__delete_for_object/1
+--
+CREATE OR REPLACE FUNCTION journal_entry__delete_for_object(
+   delete_for_object__object_id integer
+) RETURNS integer AS $$
+DECLARE
   journal_rec                           record;
-begin
+BEGIN
         for journal_rec in select journal_id 
                              from journal_entries 
                             where object_id = delete_for_object__object_id  
@@ -153,7 +180,8 @@ begin
 	end loop;
 
         return 0; 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
 

@@ -20,8 +20,15 @@ create table groups_test_users (
        uname       varchar(100)
 );
 
-create function test_groups() returns integer as '
-declare
+
+
+--
+-- procedure test_groups/0
+--
+CREATE OR REPLACE FUNCTION test_groups(
+
+) RETURNS integer AS $$
+DECLARE
   A      integer;
   B      integer;
   C      integer;
@@ -53,51 +60,51 @@ declare
   rel_l  integer;
   gp     record;
   n_rows integer;
-begin
+BEGIN
   -- Create the test groups.
 
-  A := acs_group__new(''A'');
-  B := acs_group__new(''B'');
-  C := acs_group__new(''C'');
-  D := acs_group__new(''D'');
-  E := acs_group__new(''E'');
-  F := acs_group__new(''F'');
-  G := acs_group__new(''G'');
+  A := acs_group__new('A');
+  B := acs_group__new('B');
+  C := acs_group__new('C');
+  D := acs_group__new('D');
+  E := acs_group__new('E');
+  F := acs_group__new('F');
+  G := acs_group__new('G');
 
-  insert into groups_test_groups values (A,1,''A'');
-  insert into groups_test_groups values (B,2,''B'');
-  insert into groups_test_groups values (C,3,''C'');
-  insert into groups_test_groups values (D,4,''D'');
-  insert into groups_test_groups values (E,5,''E'');
-  insert into groups_test_groups values (F,6,''F'');  
-  insert into groups_test_groups values (G,7,''G'');
+  insert into groups_test_groups values (A,1,'A');
+  insert into groups_test_groups values (B,2,'B');
+  insert into groups_test_groups values (C,3,'C');
+  insert into groups_test_groups values (D,4,'D');
+  insert into groups_test_groups values (E,5,'E');
+  insert into groups_test_groups values (F,6,'F');  
+  insert into groups_test_groups values (G,7,'G');
 
   -- Create the test members.
-  joe   := acs_user__new(''joe@asdf.com'',''Joe'',
-                         ''Smith'',''assword'',''p'');
-  jane  := acs_user__new(''jane@asdf.com'',''Jane'',
-                         ''Smith'',''assword'',''p'');
-  bob   := acs_user__new(''bob@asdf.com'',''Bob'',
-                         ''Smith'',''assword'',''p'');
-  betty := acs_user__new(''betty@asdf.com'',''Betty'',
-                         ''Smith'',''assword'',''p'');
-  jack  := acs_user__new(''jack@asdf.com'',''Jack'',
-                         ''Smith'',''assword'',''p'');
-  jill  := acs_user__new(''jill@asdf.com'',''Jill'',
-                         ''Smith'',''assword'',''p'');
-  sven  := acs_user__new(''sven@asdf.com'',''Sven'',
-                         ''Smith'',''assword'',''p'');
-  stacy := acs_user__new(''stacy@asdf.com'',''Stacy'',
-                         ''Smith'',''assword'',''p'');
+  joe   := acs_user__new('joe@asdf.com','Joe',
+                         'Smith','assword','p');
+  jane  := acs_user__new('jane@asdf.com','Jane',
+                         'Smith','assword','p');
+  bob   := acs_user__new('bob@asdf.com','Bob',
+                         'Smith','assword','p');
+  betty := acs_user__new('betty@asdf.com','Betty',
+                         'Smith','assword','p');
+  jack  := acs_user__new('jack@asdf.com','Jack',
+                         'Smith','assword','p');
+  jill  := acs_user__new('jill@asdf.com','Jill',
+                         'Smith','assword','p');
+  sven  := acs_user__new('sven@asdf.com','Sven',
+                         'Smith','assword','p');
+  stacy := acs_user__new('stacy@asdf.com','Stacy',
+                         'Smith','assword','p');
 
-  insert into groups_test_users values (joe,1,''joe'');
-  insert into groups_test_users values (jane,2,''jane'');
-  insert into groups_test_users values (bob,3,''bob'');
-  insert into groups_test_users values (betty,4,''betty'');
-  insert into groups_test_users values (jack,5,''jack'');
-  insert into groups_test_users values (jill,6,''jill'');  
-  insert into groups_test_users values (sven,7,''sven'');
-  insert into groups_test_users values (stacy,8,''stacy'');
+  insert into groups_test_users values (joe,1,'joe');
+  insert into groups_test_users values (jane,2,'jane');
+  insert into groups_test_users values (bob,3,'bob');
+  insert into groups_test_users values (betty,4,'betty');
+  insert into groups_test_users values (jack,5,'jack');
+  insert into groups_test_users values (jill,6,'jill');  
+  insert into groups_test_users values (sven,7,'sven');
+  insert into groups_test_users values (stacy,8,'stacy');
 
   -- Make a couple of compositions.
 
@@ -121,24 +128,32 @@ begin
 
   return null;
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
-create function check_groups () returns integer as '
-declare 
+
+
+--
+-- procedure check_groups/0
+--
+CREATE OR REPLACE FUNCTION check_groups(
+
+) RETURNS integer AS $$
+DECLARE 
         gp      record;
         v_rec   record;
-begin
+BEGIN
   for gp in select * from groups order by group_name LOOP
     if NOT acs_group__check_representation(gp.group_id) then
-      raise notice ''Group % (%) failed'', gp.group_name, gp.group_id;
+      raise notice 'Group % (%) failed', gp.group_name, gp.group_id;
     else 
-      raise notice ''Group % (%) passed'', gp.group_name, gp.group_id;
+      raise notice 'Group % (%) passed', gp.group_name, gp.group_id;
     end if;
   end LOOP;
 
   for v_rec in select group_id from groups_test_groups order by sorder desc
   LOOP
-    raise notice ''dropping %'', v_rec.group_id;
+    raise notice 'dropping %', v_rec.group_id;
     PERFORM acs_group__delete(v_rec.group_id);
   end LOOP;
 
@@ -146,14 +161,15 @@ begin
 
   for v_rec in select user_id from groups_test_users order by sorder
   LOOP
-    raise notice ''dropping %'', v_rec.user_id;
+    raise notice 'dropping %', v_rec.user_id;
     PERFORM acs_user__delete(v_rec.user_id);
   end LOOP;
   delete from groups_test_users;
 
   return null;
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 select test_groups();
 select check_groups();

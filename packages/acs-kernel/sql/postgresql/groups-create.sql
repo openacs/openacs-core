@@ -44,63 +44,69 @@ create table admin_rels (
                         primary key
 );
 
-create function inline_0 ()
-returns integer as '
-declare
+
+
+--
+-- procedure inline_0/0
+--
+CREATE OR REPLACE FUNCTION inline_0(
+
+) RETURNS integer AS $$
+DECLARE
   attr_id acs_attributes.attribute_id%TYPE;
-begin
+BEGIN
  --
  -- Group: a composite party
  --
  attr_id := acs_object_type__create_type (
-   ''group'',
-   ''#acs-kernel.Group#'',
-   ''#acs-kernel.Groups#'',
-   ''party'',
-   ''groups'',
-   ''group_id'',
-   ''acs_group'',
-   ''f'',
-   ''group_types'',
-   ''acs_group__name''
+   'group',
+   '#acs-kernel.Group#',
+   '#acs-kernel.Groups#',
+   'party',
+   'groups',
+   'group_id',
+   'acs_group',
+   'f',
+   'group_types',
+   'acs_group__name'
    );
 
  attr_id := acs_attribute__create_attribute (
-	''group'',
-	''group_name'',
-	''string'',
-	''#acs-kernel.Group_name#'',
-	''#acs-kernel.Group_names#'',
+	'group',
+	'group_name',
+	'string',
+	'#acs-kernel.Group_name#',
+	'#acs-kernel.Group_names#',
 	null,
 	null,
 	null,
 	1,
 	1,
 	null,
-	''type_specific'',
-	''f''
+	'type_specific',
+	'f'
 	);
 
  --
  -- Composition Relationship
  --
- attr_id := acs_rel_type__create_role (''composite'', ''Composite'', ''Composites'');
- attr_id := acs_rel_type__create_role (''component'', ''Component'', ''Components'');
+ attr_id := acs_rel_type__create_role ('composite', 'Composite', 'Composites');
+ attr_id := acs_rel_type__create_role ('component', 'Component', 'Components');
 
  attr_id := acs_rel_type__create_type (
-   ''composition_rel'',
-   ''Composition Relation'',
-   ''Composition Relationships'',
-   ''relationship'',
-   ''composition_rels'',
-   ''rel_id'',
-   ''composition_rel'',
-   ''group'',
-   ''composite'',
+   'composition_rel',
+   'Composition Relation',
+   'Composition Relationships',
+   'relationship',
+   'composition_rels',
+   'rel_id',
+   'composition_rel',
+   'group',
+   'composite',
     0, 
     null,
-   ''group'',
-   ''component'',
+   'group',
+   'component',
    0,
    null
    );
@@ -109,22 +115,22 @@ begin
  --
  -- Membership Relationship
  --
- attr_id := acs_rel_type__create_role (''member'', ''#acs-kernel.member_role_pretty_name#'', ''#acs-kernel.member_role_pretty_plural#'');
+ attr_id := acs_rel_type__create_role ('member', '#acs-kernel.member_role_pretty_name#', '#acs-kernel.member_role_pretty_plural#');
 
  attr_id := acs_rel_type__create_type (
-   ''membership_rel'',                 -- rel_type
-   ''#acs-kernel.Membership_Relation#'',            -- pretty_name
-   ''#acs-kernel.lt_Membership_Relationsh#'',       -- pretty_plural
-   ''relationship'',                   -- supertype
-   ''membership_rels'',                -- table_name
-   ''rel_id'',                         -- id_column
-   ''membership_rel'',                 -- package_name
-   ''group'',                          -- object_type_one
+   'membership_rel',                 -- rel_type
+   '#acs-kernel.Membership_Relation#',            -- pretty_name
+   '#acs-kernel.lt_Membership_Relationsh#',       -- pretty_plural
+   'relationship',                   -- supertype
+   'membership_rels',                -- table_name
+   'rel_id',                         -- id_column
+   'membership_rel',                 -- package_name
+   'group',                          -- object_type_one
    null,                               -- role_one
    0,                                  -- min_n_rels_one
    null,                               -- max_n_rels_one
-   ''person'',                         -- object_type_two
-   ''member'',                         -- role_two
+   'person',                         -- object_type_two
+   'member',                         -- role_two
    0,                                  -- min_n_rels_two
    null                                -- max_n_rels_two
    );
@@ -132,28 +138,29 @@ begin
  --
  -- Administrator Relationship
  --
- attr_id := acs_rel_type__create_role (''admin'', ''#acs-kernel.Administrator#'', ''#acs-kernel.Administrators#'');
+ attr_id := acs_rel_type__create_role ('admin', '#acs-kernel.Administrator#', '#acs-kernel.Administrators#');
 
  attr_id := acs_rel_type__create_type (
-   ''admin_rel'',                      -- rel_type
-   ''#acs-kernel.lt_Administrator_Relatio#'',         -- pretty_name
-   ''#acs-kernel.lt_Administrator_Relatio_1#'',    -- pretty_plural
-   ''membership_rel'',                 -- supertype
-   ''admin_rels'',                     -- table_name
-   ''rel_id'',                         -- id_column
-   ''admin_rel'',                      -- package_name
-   ''group'',                          -- object_type_one
+   'admin_rel',                      -- rel_type
+   '#acs-kernel.lt_Administrator_Relatio#',         -- pretty_name
+   '#acs-kernel.lt_Administrator_Relatio_1#',    -- pretty_plural
+   'membership_rel',                 -- supertype
+   'admin_rels',                     -- table_name
+   'rel_id',                         -- id_column
+   'admin_rel',                      -- package_name
+   'group',                          -- object_type_one
    null,                               -- role_one
    0,                                  -- min_n_rels_one
    null,                               -- max_n_rels_one
-   ''person'',                         -- object_type_two
-   ''admin'',                          -- role_two
+   'person',                         -- object_type_two
+   'admin',                          -- role_two
    0,                                  -- min_n_rels_two
    null                                -- max_n_rels_two   
    );
 
   return 0;
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 select inline_0 ();
 
@@ -361,16 +368,24 @@ create view group_member_index as select * from group_member_map;
 -- FUNCTIONS --
 ---------------
 -- drop function group_contains_p (integer, integer, integer);
-create function group_contains_p (integer, integer, integer) 
-returns boolean as '
-declare 
-        group_contains_p__group_id        alias for $1;
-        group_contains_p__component_id    alias for $2;
-        group_contains_p__rel_id          alias for $3;
+
+
+-- added
+select define_function_args('group_contains_p','group_id,component_id,rel_id');
+
+--
+-- procedure group_contains_p/3
+--
+CREATE OR REPLACE FUNCTION group_contains_p(
+   group_contains_p__group_id integer,
+   group_contains_p__component_id integer,
+   group_contains_p__rel_id integer
+) RETURNS boolean AS $$
+DECLARE 
         map                               record;
-begin
+BEGIN
   if group_contains_p__group_id = group_contains_p__component_id then
-    return ''t'';
+    return 't';
   else
     if group_contains_p__rel_id is null then
       for map in  select *
@@ -378,8 +393,8 @@ begin
                   where component_id = group_contains_p__component_id
                   and group_id = container_id 
       LOOP
-        if group_contains_p(group_contains_p__group_id, map.group_id, null) = ''t'' then
-          return ''t'';
+        if group_contains_p(group_contains_p__group_id, map.group_id, null) = 't' then
+          return 't';
         end if;
       end loop;
     else
@@ -389,14 +404,15 @@ begin
                   and rel_id = group_contains_p__rel_id
                   and group_id = container_id 
       LOOP
-        if group_contains_p(group_contains_p__group_id, map.group_id, null) = ''t'' then
-          return ''t'';
+        if group_contains_p(group_contains_p__group_id, map.group_id, null) = 't' then
+          return 't';
         end if;
       end loop;
     end if;
-    return ''f'';
+    return 'f';
   end if;
-end;' language 'plpgsql' stable;
+END;
+$$ LANGUAGE plpgsql stable;
 
 
 
@@ -412,14 +428,22 @@ end;' language 'plpgsql' stable;
 -- sourced. That file will replace these triggers with triggers
 -- that actually do useful work
 
-create function membership_rels_in_tr () returns trigger as '
-declare
-begin
-  raise EXCEPTION ''-20000: Insert to membership rels not yet supported'';
+
+
+--
+-- procedure membership_rels_in_tr/0
+--
+CREATE OR REPLACE FUNCTION membership_rels_in_tr(
+
+) RETURNS trigger AS $$
+DECLARE
+BEGIN
+  raise EXCEPTION '-20000: Insert to membership rels not yet supported';
 
   return new;
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 create trigger  membership_rels_in_tr after insert  on membership_rels
 for each row  execute procedure membership_rels_in_tr ();
@@ -427,14 +451,22 @@ for each row  execute procedure membership_rels_in_tr ();
 -- show errors
 
 
-create function composition_rels_in_tr () returns trigger as '
-declare
-begin
-  raise EXCEPTION ''-20000: Insert to composition rels not yet supported'';
+
+
+--
+-- procedure composition_rels_in_tr/0
+--
+CREATE OR REPLACE FUNCTION composition_rels_in_tr(
+
+) RETURNS trigger AS $$
+DECLARE
+BEGIN
+  raise EXCEPTION '-20000: Insert to composition rels not yet supported';
 
   return new;
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 create trigger composition_rels_in_tr  after insert on composition_rels
 for each row  execute procedure  composition_rels_in_tr();

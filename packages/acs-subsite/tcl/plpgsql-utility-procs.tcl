@@ -63,7 +63,7 @@ namespace eval plpgsql_utility {
 	    if { [info exists user_supplied($arg_name)] } {
 		lappend pieces "${prepend}$user_supplied($arg_name)"
 	    } else {
-		if { $arg_default eq "" } {
+		if { $arg_default eq "" || $arg_default eq "null"} {
 		    lappend pieces "NULL"
 		} else {
 		    lappend pieces "'[db_quote $arg_default]'"

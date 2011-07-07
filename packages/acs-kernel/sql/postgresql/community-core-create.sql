@@ -114,172 +114,179 @@
 --
 -- * Create constraints for creation_user and modifying_user
 
-create or replace function inline_0 ()
-returns integer as '
-declare
+
+
+--
+-- procedure inline_0/0
+--
+CREATE OR REPLACE FUNCTION inline_0(
+
+) RETURNS integer AS $$
+DECLARE
   attr_id acs_attributes.attribute_id%TYPE;
-begin
+BEGIN
  --
  -- Party: the supertype of person and organization
  -- 
  PERFORM acs_object_type__create_type (
-   ''party'',
-   ''#acs-kernel.Party#'',
-   ''#acs-kernel.Parties#'',
-   ''acs_object'',
-   ''parties'',
-   ''party_id'',
-    ''party'',
-   ''f'',
+   'party',
+   '#acs-kernel.Party#',
+   '#acs-kernel.Parties#',
+   'acs_object',
+   'parties',
+   'party_id',
+    'party',
+   'f',
    null,
-   ''party__name''
+   'party__name'
    );
 
  attr_id := acs_attribute__create_attribute (
-	''party'',
-	''email'',
-	''string'',
-	''#acs-kernel.Email_Address#'',
-	''#acs-kernel.Email_Addresses#'',
+	'party',
+	'email',
+	'string',
+	'#acs-kernel.Email_Address#',
+	'#acs-kernel.Email_Addresses#',
 	null,
 	null,
 	null,
 	0,
 	1,
 	null,
-	''type_specific'',
-	''f''
+	'type_specific',
+	'f'
 	);
 
  attr_id := acs_attribute__create_attribute (
-	''party'',
-	''url'',
-	''string'',
-	''#acs-kernel.URL#'',
-	''#acs-kernel.URLs#'',
+	'party',
+	'url',
+	'string',
+	'#acs-kernel.URL#',
+	'#acs-kernel.URLs#',
 	null,
 	null,
 	null,
 	0,
 	1,
 	null,
-	''type_specific'',
-	''f''
+	'type_specific',
+	'f'
 	);
 
  --
  -- Person: the supertype of user
  --
  attr_id := acs_object_type__create_type (
-   ''person'',
-   ''#acs-kernel.Person#'',
-   ''#acs-kernel.People#'',
-   ''party'',
-   ''persons'',
-   ''person_id'',
-   ''person'',
-   ''f'',
+   'person',
+   '#acs-kernel.Person#',
+   '#acs-kernel.People#',
+   'party',
+   'persons',
+   'person_id',
+   'person',
+   'f',
    null,
-   ''person__name''
+   'person__name'
    );
 
  attr_id := acs_attribute__create_attribute (
-        ''person'',
-        ''first_names'',
-        ''string'',
-        ''#acs-kernel.First_Names#'',
-        ''#acs-kernel.First_Names#'',
+        'person',
+        'first_names',
+        'string',
+        '#acs-kernel.First_Names#',
+        '#acs-kernel.First_Names#',
         null,
         null,
         null,
 	0,
 	1,
         null,
-        ''type_specific'',
-        ''f''
+        'type_specific',
+        'f'
       );
 
  attr_id := acs_attribute__create_attribute (
-        ''person'',
-        ''last_name'',
-        ''string'',
-        ''#acs-kernel.Last_Name#'',
-        ''#acs-kernel.Last_Names#'',
+        'person',
+        'last_name',
+        'string',
+        '#acs-kernel.Last_Name#',
+        '#acs-kernel.Last_Names#',
         null,
         null,
         null,
 	0,
 	1,
         null,
-        ''type_specific'',
-        ''f''
+        'type_specific',
+        'f'
       );
   --
  -- User: people who have registered in the system
  --
  attr_id := acs_object_type__create_type (
-   ''user'',
-   ''#acs-kernel.User#'',
-   ''#acs-kernel.Users#'',
-   ''person'',
-   ''users'',
-   ''user_id'',
-   ''acs_user'',
-   ''f'',
+   'user',
+   '#acs-kernel.User#',
+   '#acs-kernel.Users#',
+   'person',
+   'users',
+   'user_id',
+   'acs_user',
+   'f',
    null,
    null
    );
 
  attr_id := acs_attribute__create_attribute (
-        ''user'',
-        ''username'',
-        ''string'',
-        ''#acs-kernel.Username#'',
-        ''#acs-kernel.Usernames#'',
+        'user',
+        'username',
+        'string',
+        '#acs-kernel.Username#',
+        '#acs-kernel.Usernames#',
         null,
         null,
         null,
 	0,
 	1,
         null,
-        ''type_specific'',
-        ''f''
+        'type_specific',
+        'f'
       );
 
  attr_id := acs_attribute__create_attribute (
-        ''user'',
-        ''screen_name'',
-        ''string'',
-        ''#acs-kernel.Screen_Name#'',
-        ''#acs-kernel.Screen_Names#'',
+        'user',
+        'screen_name',
+        'string',
+        '#acs-kernel.Screen_Name#',
+        '#acs-kernel.Screen_Names#',
         null,
         null,
         null,
 	0,
 	1,
         null,
-        ''type_specific'',
-        ''f''
+        'type_specific',
+        'f'
       );
 
  attr_id := acs_attribute__create_attribute (
-        ''person'',
-        ''bio'',
-        ''string'',
-        ''#acs-kernel.Bio#'',
-        ''#acs-kernel.Bios#'',
+        'person',
+        'bio',
+        'string',
+        '#acs-kernel.Bio#',
+        '#acs-kernel.Bios#',
         null,
         null,
         null,
 	0,
 	1,
         null,
-        ''type_specific'',
-        ''f''
+        'type_specific',
+        'f'
       );
 
   return 0;
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 select inline_0 ();
 
@@ -318,23 +325,32 @@ comment on column parties.url is '
 -- PARTY PACKAGE --
 -------------------
 
-create or replace function party__new (integer,varchar,timestamptz,integer,varchar,varchar,varchar,integer)
-returns integer as '
-declare
-  new__party_id               alias for $1;  -- default null  
-  new__object_type            alias for $2;  -- default ''party''
-  new__creation_date          alias for $3;  -- default now()
-  new__creation_user          alias for $4;  -- default null
-  new__creation_ip            alias for $5;  -- default null
-  new__email                  alias for $6;  
-  new__url                    alias for $7;  -- default null
-  new__context_id             alias for $8;  -- default null
+
+
+-- added
+select define_function_args('party__new','party_id;null,object_type;party,creation_date;now(),creation_user;null,creation_ip;null,email,url;null,context_id;null');
+
+--
+-- procedure party__new/8
+--
+CREATE OR REPLACE FUNCTION party__new(
+   new__party_id integer,          -- default null
+   new__object_type varchar,       -- default 'party'
+   new__creation_date timestamptz, -- default now()
+   new__creation_user integer,     -- default null
+   new__creation_ip varchar,       -- default null
+   new__email varchar,
+   new__url varchar,               -- default null
+   new__context_id integer         -- default null
+
+) RETURNS integer AS $$
+DECLARE
   v_party_id                  parties.party_id%TYPE;
-begin
+BEGIN
   v_party_id :=
    acs_object__new(new__party_id, new__object_type, new__creation_date, 
                    new__creation_user, new__creation_ip, new__context_id,
-                   ''t'', new__email, null);
+                   't', new__email, null);
 
   insert into parties
    (party_id, email, url)
@@ -343,40 +359,68 @@ begin
 
   return v_party_id;
   
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
-create or replace function party__delete (integer)
-returns integer as '
-declare
-  party_id               alias for $1;  
-begin
+
+
+-- added
+select define_function_args('party__delete','party_id');
+
+--
+-- procedure party__delete/1
+--
+CREATE OR REPLACE FUNCTION party__delete(
+   party_id integer
+) RETURNS integer AS $$
+DECLARE
+BEGIN
   PERFORM acs_object__delete(party_id);
 
   return 0; 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
-create or replace function party__name (integer)
-returns varchar as '
-declare
-  party_id               alias for $1;  
-begin
+
+
+-- added
+select define_function_args('party__name','party_id');
+
+--
+-- procedure party__name/1
+--
+CREATE OR REPLACE FUNCTION party__name(
+   party_id integer
+) RETURNS varchar AS $$
+DECLARE
+BEGIN
   if party_id = -1 then
-   return ''The Public'';
+   return 'The Public';
   else
    return null;
   end if;
   
-end;' language 'plpgsql' immutable strict;
+END;
+$$ LANGUAGE plpgsql immutable strict;
 
-create or replace function party__email (integer)
-returns varchar as '
-declare
-  email__party_id		alias for $1;
-begin
+
+
+-- added
+select define_function_args('party__email','party_id');
+
+--
+-- procedure party__email/1
+--
+CREATE OR REPLACE FUNCTION party__email(
+   email__party_id integer
+) RETURNS varchar AS $$
+DECLARE
+BEGIN
 
   return email from parties where party_id = email__party_id;
 
-end;' language 'plpgsql' stable strict;
+END;
+$$ LANGUAGE plpgsql stable strict;
 
 
 -- show errors
@@ -437,29 +481,39 @@ comment on table persons is '
 
 -- create or replace package body person
 -- function new
-select define_function_args('person__new','person_id,object_type;person,creation_date;now(),creation_user,creation_ip,email,url,first_names,last_name,context_id');
-create or replace function person__new (integer,varchar,timestamptz,integer,varchar,varchar,varchar,varchar,varchar,integer)
-returns integer as '
-declare
-  new__person_id              alias for $1;  -- default null  
-  new__object_type            alias for $2;  -- default ''person''
-  new__creation_date          alias for $3;  -- default now()
-  new__creation_user          alias for $4;  -- default null
-  new__creation_ip            alias for $5;  -- default null
-  new__email                  alias for $6;  
-  new__url                    alias for $7;  -- default null
-  new__first_names            alias for $8; 
-  new__last_name              alias for $9;  
-  new__context_id             alias for $10; -- default null 
+
+-- old define_function_args('person__new','person_id,object_type;person,creation_date;now(),creation_user,creation_ip,email,url,first_names,last_name,context_id')
+-- new
+select define_function_args('person__new','person_id;null,object_type;person,creation_date;now(),creation_user;null,creation_ip;null,email,url;null,first_names,last_name,context_id;null');
+
+
+
+--
+-- procedure person__new/10
+--
+CREATE OR REPLACE FUNCTION person__new(
+   new__person_id integer,         -- default null
+   new__object_type varchar,       -- default 'person'
+   new__creation_date timestamptz, -- default now() -- default 'now()'
+   new__creation_user integer,     -- default null
+   new__creation_ip varchar,       -- default null
+   new__email varchar,
+   new__url varchar,               -- default null
+   new__first_names varchar,
+   new__last_name varchar,
+   new__context_id integer         -- default null
+
+) RETURNS integer AS $$
+DECLARE
   v_person_id                 persons.person_id%TYPE;
-begin
+BEGIN
   v_person_id :=
    party__new(new__person_id, new__object_type,
              new__creation_date, new__creation_user, new__creation_ip,
              new__email, new__url, new__context_id);
 
   update acs_objects
-  set title = new__first_names || '' '' || new__last_name
+  set title = new__first_names || ' ' || new__last_name
   where object_id = v_person_id;
 
   insert into persons
@@ -469,62 +523,99 @@ begin
 
   return v_person_id;
   
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
 -- procedure delete
-create or replace function person__delete (integer)
-returns integer as '
-declare
-  delete__person_id     alias for $1;  
-begin
+
+
+-- added
+select define_function_args('person__delete','person_id');
+
+--
+-- procedure person__delete/1
+--
+CREATE OR REPLACE FUNCTION person__delete(
+   delete__person_id integer
+) RETURNS integer AS $$
+DECLARE
+BEGIN
   delete from persons
   where person_id = delete__person_id;
 
   PERFORM party__delete(delete__person_id);
 
   return 0; 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
 -- function name
-create or replace function person__name (integer)
-returns varchar as '
-declare
-  name__person_id        alias for $1;  
-begin
 
-  return first_names || '' '' || last_name
+
+-- added
+select define_function_args('person__name','person_id');
+
+--
+-- procedure person__name/1
+--
+CREATE OR REPLACE FUNCTION person__name(
+   name__person_id integer
+) RETURNS varchar AS $$
+DECLARE
+BEGIN
+
+  return first_names || ' ' || last_name
   from persons
   where person_id = name__person_id;
 
-end;' language 'plpgsql' stable strict;
+END;
+$$ LANGUAGE plpgsql stable strict;
 
 
 -- function first_names
-create or replace function person__first_names (integer)
-returns varchar as '
-declare
-  first_names__person_id        alias for $1;  
-begin
+
+
+-- added
+select define_function_args('person__first_names','person_id');
+
+--
+-- procedure person__first_names/1
+--
+CREATE OR REPLACE FUNCTION person__first_names(
+   first_names__person_id integer
+) RETURNS varchar AS $$
+DECLARE
+BEGIN
   return first_names
   from persons
   where person_id = first_names__person_id;
   
-end;' language 'plpgsql' stable strict;
+END;
+$$ LANGUAGE plpgsql stable strict;
 
 
 -- function last_name
-create or replace function person__last_name (integer)
-returns varchar as '
-declare
-  last_name__person_id        alias for $1;  
-begin
+
+
+-- added
+select define_function_args('person__last_name','person_id');
+
+--
+-- procedure person__last_name/1
+--
+CREATE OR REPLACE FUNCTION person__last_name(
+   last_name__person_id integer
+) RETURNS varchar AS $$
+DECLARE
+BEGIN
   return last_name
   from persons
   where person_id = last_name__person_id;
 
-end;' language 'plpgsql' stable strict;
+END;
+$$ LANGUAGE plpgsql stable strict;
 
 
 -- show errors
@@ -580,16 +671,16 @@ create table user_preferences (
         timezone                varchar(100)
 );
 
-create or replace function inline_1 ()
-returns integer as '
-begin
+CREATE OR REPLACE FUNCTION inline_1 () RETURNS integer AS $$
+BEGIN
 
   insert into acs_object_type_tables
     (object_type, table_name, id_column)
     values
-    (''user'', ''user_preferences'', ''user_id'');
+    ('user', 'user_preferences', 'user_id');
   return 0;
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 select inline_1 ();
 
@@ -685,52 +776,44 @@ comment on column users.n_sessions is '
 select define_function_args('user__new','user_id,object_type;user,creation_date;now(),creation_user,creation_ip,authority_id,username,email,url,first_names,last_name,password,salt,screen_name,email_verified_p;t,context_id');
 
 
-create or replace function acs_user__new (
-    integer,      -- user_id
-    varchar,      -- object_type
-    timestamptz,  -- creation_date
-    integer,      -- creation_user
-    varchar,      -- creation_ip
-    integer,      -- authority_id; default 'local'
-    varchar,      -- username
-    varchar,      -- email
-    varchar,      -- url
-    varchar,      -- first_names
-    varchar,      -- last_name
-    char,         -- password
-    char,         -- salt
-    varchar,      -- screen_name
-    boolean,      -- email_verified_p
-    integer       -- context_id
-)
-returns integer as '
-declare
-    p_user_id                  alias for $1;  -- default null  
-    p_object_type              alias for $2;  -- default ''user''
-    p_creation_date            alias for $3;  -- default now()
-    p_creation_user            alias for $4;  -- default null
-    p_creation_ip              alias for $5;  -- default null
-    p_authority_id             alias for $6;  -- defaults to local authority
-    p_username                 alias for $7;  --
-    p_email                    alias for $8;  
-    p_url                      alias for $9;  -- default null
-    p_first_names              alias for $10;  
-    p_last_name                alias for $11;  
-    p_password                 alias for $12; 
-    p_salt                     alias for $13; 
-    p_screen_name              alias for $14; -- default null
-    p_email_verified_p         alias for $15; -- default ''t''
-    p_context_id               alias for $16; -- default null
+
+
+-- added
+select define_function_args('acs_user__new','user_id;null,object_type;user,creation_date;now(),creation_user;null,creation_ip;null,authority_id,username,email,url;null,first_names,last_name,password,salt,screen_name;null,email_verified_p;t,context_id;null');
+
+--
+-- procedure acs_user__new/16
+--
+CREATE OR REPLACE FUNCTION acs_user__new(
+   p_user_id integer,           -- default null
+   p_object_type varchar,       -- default 'user'
+   p_creation_date timestamptz, -- default now()
+   p_creation_user integer,     -- default null
+   p_creation_ip varchar,       -- default null
+   p_authority_id integer,      -- defaults to local authority
+   p_username varchar, 
+   p_email varchar,
+   p_url varchar,               -- default null
+   p_first_names varchar,
+   p_last_name varchar,
+   p_password char,
+   p_salt char,
+   p_screen_name varchar,       -- default null
+   p_email_verified_p boolean,  -- default 't'
+   p_context_id integer         -- default null
+
+) RETURNS integer AS $$
+DECLARE
     v_user_id                  users.user_id%TYPE;
     v_authority_id             auth_authorities.authority_id%TYPE;
     v_person_exists            varchar;			
-begin
+BEGIN
     v_user_id := p_user_id;
 
-    select case when count(*) = 0 then ''f'' else ''t'' end into v_person_exists
+    select case when count(*) = 0 then 'f' else 't' end into v_person_exists
     from persons where person_id = v_user_id;
 
-    if v_person_exists = ''f'' then
+    if v_person_exists = 'f' then
         v_user_id := person__new(
             v_user_id, 
             p_object_type,
@@ -744,7 +827,7 @@ begin
             p_context_id
         );
     else
-     update acs_objects set object_type = ''user'' where object_id = v_user_id;
+     update acs_objects set object_type = 'user' where object_id = v_user_id;
     end if;
 
     -- default to local authority
@@ -752,7 +835,7 @@ begin
         select authority_id
         into   v_authority_id
         from   auth_authorities
-        where  short_name = ''local'';
+        where  short_name = 'local';
     else
         v_authority_id := p_authority_id;
     end if;
@@ -769,20 +852,26 @@ begin
 
     return v_user_id;
   
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
-create or replace function acs_user__new(varchar,varchar,varchar,char,char) 
-returns integer as '
-declare
-        email   alias for $1;
-        fname   alias for $2;
-        lname   alias for $3;
-        pword   alias for $4;
-        salt    alias for $5;
-begin
+
+
+--
+-- procedure acs_user__new/5
+--
+CREATE OR REPLACE FUNCTION acs_user__new(
+   email varchar,
+   fname varchar,
+   lname varchar,
+   pword char,
+   salt char
+) RETURNS integer AS $$
+DECLARE
+BEGIN
         return acs_user__new(null,
-                             ''user'',
+                             'user',
                              now(),
                              null,
                              null,                
@@ -795,64 +884,100 @@ begin
                              null,
                              null,
                              null,
-                             ''t'',
+                             't',
                              null
                              );
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
 -- function receives_alerts_p
-create or replace function acs_user__receives_alerts_p (integer)
-returns boolean as '
-declare
-  receives_alerts_p__user_id                alias for $1;  
+
+
+-- added
+select define_function_args('acs_user__receives_alerts_p','user_id');
+
+--
+-- procedure acs_user__receives_alerts_p/1
+--
+CREATE OR REPLACE FUNCTION acs_user__receives_alerts_p(
+   receives_alerts_p__user_id integer
+) RETURNS boolean AS $$
+DECLARE
   counter                                   boolean;       
-begin
-  select case when count(*) = 0 then ''f'' else ''t'' end into counter
+BEGIN
+  select case when count(*) = 0 then 'f' else 't' end into counter
    from users
    where no_alerts_until >= now()
    and user_id = receives_alerts_p__user_id;
 
   return counter;
   
-end;' language 'plpgsql' stable;
+END;
+$$ LANGUAGE plpgsql stable;
 
 
 -- procedure approve_email
-create or replace function acs_user__approve_email (integer)
-returns integer as '
-declare
-  approve_email__user_id        alias for $1;  
-begin
+
+
+-- added
+select define_function_args('acs_user__approve_email','user_id');
+
+--
+-- procedure acs_user__approve_email/1
+--
+CREATE OR REPLACE FUNCTION acs_user__approve_email(
+   approve_email__user_id integer
+) RETURNS integer AS $$
+DECLARE
+BEGIN
     update users
-    set email_verified_p = ''t''
+    set email_verified_p = 't'
     where user_id = approve_email__user_id;
 
     return 0; 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
 -- procedure unapprove_email
-create or replace function acs_user__unapprove_email (integer)
-returns integer as '
-declare
-  unapprove_email__user_id      alias for $1;  
-begin
+
+
+-- added
+select define_function_args('acs_user__unapprove_email','user_id');
+
+--
+-- procedure acs_user__unapprove_email/1
+--
+CREATE OR REPLACE FUNCTION acs_user__unapprove_email(
+   unapprove_email__user_id integer
+) RETURNS integer AS $$
+DECLARE
+BEGIN
     update users
-    set email_verified_p = ''f''
+    set email_verified_p = 'f'
     where user_id = unapprove_email__user_id;
 
     return 0; 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
 -- procedure delete
-create or replace function acs_user__delete (integer)
-returns integer as '
-declare
-  delete__user_id       alias for $1;  
-begin
+
+
+-- added
+select define_function_args('acs_user__delete','user_id');
+
+--
+-- procedure acs_user__delete/1
+--
+CREATE OR REPLACE FUNCTION acs_user__delete(
+   delete__user_id integer
+) RETURNS integer AS $$
+DECLARE
+BEGIN
   delete from user_preferences
   where user_id = delete__user_id;
 
@@ -862,7 +987,8 @@ begin
   PERFORM person__delete(delete__user_id);
 
   return 0; 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
 

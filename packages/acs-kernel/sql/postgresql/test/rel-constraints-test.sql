@@ -25,18 +25,25 @@ create table groups_test_segs (
        sname       varchar(100)
 );
 
-create function rel_constraint_dump_views() returns integer as '
-declare
+
+
+--
+-- procedure rel_constraint_dump_views/0
+--
+CREATE OR REPLACE FUNCTION rel_constraint_dump_views(
+
+) RETURNS integer AS $$
+DECLARE
        r        record;
        str      varchar;
-begin
+BEGIN
 
-   raise NOTICE ''Contents of view rel_constraints_violated_one:'';
-   str := rpad(''constraint_id'', 20) || rpad(''rel_id'', 20) || 
-          rpad(''name(container_id)'',20) ||
-          rpad(''name(party_id)'',20);
+   raise NOTICE 'Contents of view rel_constraints_violated_one:';
+   str := rpad('constraint_id', 20) || rpad('rel_id', 20) || 
+          rpad('name(container_id)',20) ||
+          rpad('name(party_id)',20);
 
-   raise NOTICE ''%'', str;
+   raise NOTICE '%', str;
    for r in select * from rel_constraints_violated_one 
    LOOP
       str := rpad(r.constraint_id, 20) ||
@@ -44,11 +51,11 @@ begin
              rpad(acs_object__name(r.container_id), 20) ||
              rpad(acs_object__name(r.party_id), 20);
 
-      raise NOTICE ''%'', str;
+      raise NOTICE '%', str;
    end LOOP;
 
 
-   raise NOTICE ''Contents of view rel_constraints_violated_two:'';
+   raise NOTICE 'Contents of view rel_constraints_violated_two:';
 
    for r in select * from rel_constraints_violated_two 
    LOOP
@@ -57,32 +64,41 @@ begin
              rpad(acs_object__name(r.container_id), 20) ||
              rpad(acs_object__name(r.party_id), 20);
 
-      raise NOTICE ''%'', str;
+      raise NOTICE '%', str;
    end loop;
 
    return null;
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
-create function rel_constraint_test_check (integer, char) 
-returns integer as '
-declare
-  v_rel_id              alias for $1;
-  expect_violation_p  alias for $2;
+
+
+-- added
+select define_function_args('rel_constraint_test_check','v_rel_id,expect_violation_p');
+
+--
+-- procedure rel_constraint_test_check/2
+--
+CREATE OR REPLACE FUNCTION rel_constraint_test_check(
+   v_rel_id integer,
+   expect_violation_p char
+) RETURNS integer AS $$
+DECLARE
   v_violation_msg     varchar(4000);
   v_violation_p       char;
   v_object_id_one     integer;
   v_object_id_two     integer;
   v_rel_type          acs_rels.rel_type%TYPE;
   str                 varchar;
-begin
+BEGIN
 
-  v_violation_p := ''f'';
+  v_violation_p := 'f';
 
   v_violation_msg := rel_constraint__violation(v_rel_id);
 
   if v_violation_msg is not null then
-     v_violation_p := ''t'';
+     v_violation_p := 't';
   end if;
 
   if v_violation_p::char != expect_violation_p::char then
@@ -92,39 +108,47 @@ begin
       from acs_rels
       where rel_id = v_rel_id;
 
-      str :=        ''Relation '' || acs_object__name(v_rel_id) || 
-                    '' ('' || v_rel_id || '')'' ||
-                    '' failed (violation_p = '' || v_violation_p::varchar 
-                    || '').  '' ||
-                    ''Rel info: type = '' || v_rel_type || 
-                    '', object one = '' ||
+      str :=        'Relation ' || acs_object__name(v_rel_id) || 
+                    ' (' || v_rel_id || ')' ||
+                    ' failed (violation_p = ' || v_violation_p::varchar 
+                    || ').  ' ||
+                    'Rel info: type = ' || v_rel_type || 
+                    ', object one = ' ||
                     acs_object__name(v_object_id_one) || 
-                    '' ('' || v_object_id_one || '')'' || 
-                    '', object two = '' ||
+                    ' (' || v_object_id_one || ')' || 
+                    ', object two = ' ||
                     acs_object__name(v_object_id_two) || 
-                    '' ('' || v_object_id_two || '').'';
+                    ' (' || v_object_id_two || ').';
 
-      PERFORM acs_log__error(''rel_constraint_test_check'', str);
+      PERFORM acs_log__error('rel_constraint_test_check', str);
 
-      raise NOTICE ''%'', str;
+      raise NOTICE '%', str;
 
-      raise NOTICE ''Violation Message:'';
-      raise NOTICE ''%'', v_violation_msg;
+      raise NOTICE 'Violation Message:';
+      raise NOTICE '%', v_violation_msg;
 
   else 
-      raise NOTICE ''passed %'', v_rel_id;
+      raise NOTICE 'passed %', v_rel_id;
   end if;
 
   return null;
 
-end;' language 'plpgsql'; 
+END;
+$$ LANGUAGE plpgsql; 
 
 -- creates blah_member_rel and yippie_member_rel relationships
 
 \i rel-segments-test-types-create.sql
 
-create function test_rel_constraints() returns integer as '
-declare
+
+
+--
+-- procedure test_rel_constraints/0
+--
+CREATE OR REPLACE FUNCTION test_rel_constraints(
+
+) RETURNS integer AS $$
+DECLARE
   A      integer;
   B      integer;
   C      integer;
@@ -161,53 +185,53 @@ declare
 
   r       record;
 
-begin
+BEGIN
   -- Create the test groups.
-  A := acs_group__new(''A'');
-  B := acs_group__new(''B'');
-  C := acs_group__new(''C'');
-  D := acs_group__new(''D'');
-  E := acs_group__new(''E'');
-  F := acs_group__new(''F'');
-  G := acs_group__new(''G'');
+  A := acs_group__new('A');
+  B := acs_group__new('B');
+  C := acs_group__new('C');
+  D := acs_group__new('D');
+  E := acs_group__new('E');
+  F := acs_group__new('F');
+  G := acs_group__new('G');
 
-  insert into groups_test_groups values (A,1,''A'');
-  insert into groups_test_groups values (B,2,''B'');
-  insert into groups_test_groups values (C,3,''C'');
-  insert into groups_test_groups values (D,4,''D'');
-  insert into groups_test_groups values (E,5,''E'');
-  insert into groups_test_groups values (F,6,''F'');  
-  insert into groups_test_groups values (G,7,''G'');
+  insert into groups_test_groups values (A,1,'A');
+  insert into groups_test_groups values (B,2,'B');
+  insert into groups_test_groups values (C,3,'C');
+  insert into groups_test_groups values (D,4,'D');
+  insert into groups_test_groups values (E,5,'E');
+  insert into groups_test_groups values (F,6,'F');  
+  insert into groups_test_groups values (G,7,'G');
 
   -- Create the test members.
-  joe   := acs_user__new(''joe@asdf.com'',''Joe'',
-                         ''Smith'',''assword'',''p'');
-  jane  := acs_user__new(''jane@asdf.com'',''Jane'',
-                         ''Smith'',''assword'',''p'');
-  bob   := acs_user__new(''bob@asdf.com'',''Bob'',
-                         ''Smith'',''assword'',''p'');
-  betty := acs_user__new(''betty@asdf.com'',''Betty'',
-                         ''Smith'',''assword'',''p'');
-  jack  := acs_user__new(''jack@asdf.com'',''Jack'',
-                         ''Smith'',''assword'',''p'');
-  jill  := acs_user__new(''jill@asdf.com'',''Jill'',
-                         ''Smith'',''assword'',''p'');
-  sven  := acs_user__new(''sven@asdf.com'',''Sven'',
-                         ''Smith'',''assword'',''p'');
-  stacy := acs_user__new(''stacy@asdf.com'',''Stacy'',
-                         ''Smith'',''assword'',''p'');
+  joe   := acs_user__new('joe@asdf.com','Joe',
+                         'Smith','assword','p');
+  jane  := acs_user__new('jane@asdf.com','Jane',
+                         'Smith','assword','p');
+  bob   := acs_user__new('bob@asdf.com','Bob',
+                         'Smith','assword','p');
+  betty := acs_user__new('betty@asdf.com','Betty',
+                         'Smith','assword','p');
+  jack  := acs_user__new('jack@asdf.com','Jack',
+                         'Smith','assword','p');
+  jill  := acs_user__new('jill@asdf.com','Jill',
+                         'Smith','assword','p');
+  sven  := acs_user__new('sven@asdf.com','Sven',
+                         'Smith','assword','p');
+  stacy := acs_user__new('stacy@asdf.com','Stacy',
+                         'Smith','assword','p');
 
-  reg_users := acs__magic_object_id(''registered_users'');
+  reg_users := acs__magic_object_id('registered_users');
 
-  insert into groups_test_users values (joe,1,''joe'');
-  insert into groups_test_users values (jane,2,''jane'');
-  insert into groups_test_users values (bob,3,''bob'');
-  insert into groups_test_users values (betty,4,''betty'');
-  insert into groups_test_users values (jack,5,''jack'');
-  insert into groups_test_users values (jill,6,''jill'');  
-  insert into groups_test_users values (sven,7,''sven'');
-  insert into groups_test_users values (stacy,8,''stacy'');
-  insert into groups_test_users values (reg_users,9,''reg_users'');
+  insert into groups_test_users values (joe,1,'joe');
+  insert into groups_test_users values (jane,2,'jane');
+  insert into groups_test_users values (bob,3,'bob');
+  insert into groups_test_users values (betty,4,'betty');
+  insert into groups_test_users values (jack,5,'jack');
+  insert into groups_test_users values (jill,6,'jill');  
+  insert into groups_test_users values (sven,7,'sven');
+  insert into groups_test_users values (stacy,8,'stacy');
+  insert into groups_test_users values (reg_users,9,'reg_users');
 
   -- Make a couple of compositions.
 
@@ -228,14 +252,14 @@ begin
 
   side_two_constraint := rel_constraint__new(
                                 null,
-                                ''rel_constraint'',
-                                ''Yippie: side 2 must be a blah of A'',
+                                'rel_constraint',
+                                'Yippie: side 2 must be a blah of A',
                                 rel_segment__get_or_new(reg_users, 
-                                                        ''yippie_member_rel'', 
+                                                        'yippie_member_rel', 
                                                         null),
-                                ''two'',
+                                'two',
                                 rel_segment__get_or_new(A,
-                                                        ''blah_member_rel'', 
+                                                        'blah_member_rel', 
                                                         null),
                                 null,
                                 null,
@@ -245,33 +269,33 @@ begin
 
   side_one_constraint := rel_constraint__new(
                                 null,
-                                ''rel_constraint'',
-                                ''Yippie: side 1 must be a component of E'',
+                                'rel_constraint',
+                                'Yippie: side 1 must be a component of E',
                                 rel_segment__get_or_new(reg_users, 
-                                                        ''yippie_member_rel'', 
+                                                        'yippie_member_rel', 
                                                         null),
-                                ''one'',
+                                'one',
                                 rel_segment__get_or_new(E, 
-                                                        ''composition_rel'', 
+                                                        'composition_rel', 
                                                         null),
                                 null,
                                 null,
                                 null
   );
 
-  insert into groups_test_segs values (side_two_constraint,1,''side_two_constraint'');
-  insert into groups_test_segs values (side_one_constraint,2,''side_one_constraint'');
+  insert into groups_test_segs values (side_two_constraint,1,'side_two_constraint');
+  insert into groups_test_segs values (side_one_constraint,2,'side_one_constraint');
 /*
   side_two_constraint := rel_constraint__new(
                                 null,
-                                ''rel_constraint'',
-                                ''A: side 2 must be a blah of C'',
+                                'rel_constraint',
+                                'A: side 2 must be a blah of C',
                                 rel_segment__get_or_new(A,
-                                                        ''blah_member_rel'', 
+                                                        'blah_member_rel', 
                                                         null),
-                                 ''two'',
+                                 'two',
                                 rel_segment__get_or_new(C,
-                                                        ''blah_member_rel'', 
+                                                        'blah_member_rel', 
                                                         null),
                                 null,
                                 null,
@@ -281,22 +305,22 @@ begin
 
   side_one_constraint := rel_constraint__new(
                                 null,
-                                ''rel_constraint'',
-                                ''E: side 1 must be a component of B'',
+                                'rel_constraint',
+                                'E: side 1 must be a component of B',
                                 rel_segment__get_or_new(E, 
-                                                        ''composition_rel'', 
+                                                        'composition_rel', 
                                                         null),
-                                ''one'',
+                                'one',
                                 rel_segment__get_or_new(B, 
-                                                        ''composition_rel'', 
+                                                        'composition_rel', 
                                                         null),
                                 null,
                                 null,
                                 null
   );
 
-  insert into groups_test_segs values (side_two_constraint,3,''side_two_constraint 1'');
-  insert into groups_test_segs values (side_one_constraint,4,''side_one_constraint 1'');
+  insert into groups_test_segs values (side_two_constraint,3,'side_two_constraint 1');
+  insert into groups_test_segs values (side_one_constraint,4,'side_one_constraint 1');
 */
   delete from acs_logs;
 
@@ -308,43 +332,51 @@ begin
   -- joe is a blah of A, and F is component of E, so its legal to make joe
   -- a yippie of F.
 
-  rel_a := blah_member_rel__new(null, ''blah_member_rel'', A, joe);
+  rel_a := blah_member_rel__new(null, 'blah_member_rel', A, joe);
 
-  rel_b := yippie_member_rel__new(null, ''yippie_member_rel'', F, joe);
+  rel_b := yippie_member_rel__new(null, 'yippie_member_rel', F, joe);
 
   -- do constraints respect group hierarchy? If so, this will be legal:
-  rel_c := blah_member_rel__new(null, ''blah_member_rel'', B, jane);
+  rel_c := blah_member_rel__new(null, 'blah_member_rel', B, jane);
 
-  rel_d := yippie_member_rel__new(null, ''yippie_member_rel'', F, jane);
+  rel_d := yippie_member_rel__new(null, 'yippie_member_rel', F, jane);
 
   -- ILLEGAL MEMBERSHIPS:
   
   -- G is not a component of F, therefore no one can be a yippie of G
   -- This should violated 2 constraints (object one and object two are both
   -- invalid).
-  rel_e := yippie_member_rel__new(null, ''yippie_member_rel'', G, bob);
+  rel_e := yippie_member_rel__new(null, 'yippie_member_rel', G, bob);
 
   -- betty is not a blah of A, therefore she cannot be a yippie of F.
-  rel_f := yippie_member_rel__new(null, ''yippie_member_rel'', F, betty);
+  rel_f := yippie_member_rel__new(null, 'yippie_member_rel', F, betty);
 
   -- make sven be a regular member of A.  Sven cannot be a yippie of F.
   rel_id := membership_rel__new(A, sven);
-  rel_g := yippie_member_rel__new(null, ''yippie_member_rel'', F, sven);
+  rel_g := yippie_member_rel__new(null, 'yippie_member_rel', F, sven);
 
-  insert into groups_test_segs values (rel_a,3,''a'');
-  insert into groups_test_segs values (rel_b,4,''b'');
-  insert into groups_test_segs values (rel_c,5,''c'');
-  insert into groups_test_segs values (rel_d,6,''d'');
-  insert into groups_test_segs values (rel_e,7,''e'');
-  insert into groups_test_segs values (rel_f,8,''f'');
-  insert into groups_test_segs values (rel_g,9,''g'');
+  insert into groups_test_segs values (rel_a,3,'a');
+  insert into groups_test_segs values (rel_b,4,'b');
+  insert into groups_test_segs values (rel_c,5,'c');
+  insert into groups_test_segs values (rel_d,6,'d');
+  insert into groups_test_segs values (rel_e,7,'e');
+  insert into groups_test_segs values (rel_f,8,'f');
+  insert into groups_test_segs values (rel_g,9,'g');
 
   return null;
 
-end;' language 'plpgsql'; 
+END;
+$$ LANGUAGE plpgsql; 
 
-create function check_rel_constraints() returns integer as '
-declare
+
+
+--
+-- procedure check_rel_constraints/0
+--
+CREATE OR REPLACE FUNCTION check_rel_constraints(
+
+) RETURNS integer AS $$
+DECLARE
   A      integer;
   B      integer;
   C      integer;
@@ -380,40 +412,40 @@ declare
   v_count integer;
 
   r       record;
-begin
-  select group_id into A from groups_test_groups where gname = ''A'';
-  select group_id into B from groups_test_groups where gname = ''B'';
-  select group_id into C from groups_test_groups where gname = ''C'';
-  select group_id into D from groups_test_groups where gname = ''D'';
-  select group_id into E from groups_test_groups where gname = ''E'';
-  select group_id into F from groups_test_groups where gname = ''F'';
-  select group_id into G from groups_test_groups where gname = ''G'';
+BEGIN
+  select group_id into A from groups_test_groups where gname = 'A';
+  select group_id into B from groups_test_groups where gname = 'B';
+  select group_id into C from groups_test_groups where gname = 'C';
+  select group_id into D from groups_test_groups where gname = 'D';
+  select group_id into E from groups_test_groups where gname = 'E';
+  select group_id into F from groups_test_groups where gname = 'F';
+  select group_id into G from groups_test_groups where gname = 'G';
 
-  select user_id into joe   from groups_test_users where uname = ''joe'';
-  select user_id into jane  from groups_test_users where uname = ''jane'';
-  select user_id into bob   from groups_test_users where uname = ''bob'';
-  select user_id into betty from groups_test_users where uname = ''betty'';
-  select user_id into jack  from groups_test_users where uname = ''jack'';
-  select user_id into jill  from groups_test_users where uname = ''jill'';
-  select user_id into sven  from groups_test_users where uname = ''sven'';
-  select user_id into stacy from groups_test_users where uname = ''stacy'';
-  select user_id into reg_users from groups_test_users where uname = ''reg_users'';
+  select user_id into joe   from groups_test_users where uname = 'joe';
+  select user_id into jane  from groups_test_users where uname = 'jane';
+  select user_id into bob   from groups_test_users where uname = 'bob';
+  select user_id into betty from groups_test_users where uname = 'betty';
+  select user_id into jack  from groups_test_users where uname = 'jack';
+  select user_id into jill  from groups_test_users where uname = 'jill';
+  select user_id into sven  from groups_test_users where uname = 'sven';
+  select user_id into stacy from groups_test_users where uname = 'stacy';
+  select user_id into reg_users from groups_test_users where uname = 'reg_users';
 
   select seg_id into side_one_constraint 
     from groups_test_segs 
-   where sname = ''side_one_constraint'';
+   where sname = 'side_one_constraint';
 
   select seg_id into side_two_constraint
     from groups_test_segs 
-   where sname = ''side_two_constraint'';
+   where sname = 'side_two_constraint';
 
-   select seg_id into rel_a from groups_test_segs where sname = ''a'';
-   select seg_id into rel_b from groups_test_segs where sname = ''b'';
-   select seg_id into rel_c from groups_test_segs where sname = ''c'';
-   select seg_id into rel_d from groups_test_segs where sname = ''d'';
-   select seg_id into rel_e from groups_test_segs where sname = ''e'';
-   select seg_id into rel_f from groups_test_segs where sname = ''f'';
-   select seg_id into rel_g from groups_test_segs where sname = ''g'';
+   select seg_id into rel_a from groups_test_segs where sname = 'a';
+   select seg_id into rel_b from groups_test_segs where sname = 'b';
+   select seg_id into rel_c from groups_test_segs where sname = 'c';
+   select seg_id into rel_d from groups_test_segs where sname = 'd';
+   select seg_id into rel_e from groups_test_segs where sname = 'e';
+   select seg_id into rel_f from groups_test_segs where sname = 'f';
+   select seg_id into rel_g from groups_test_segs where sname = 'g';
 
   -- Make a couple of memberships.
 
@@ -423,27 +455,27 @@ begin
   -- joe is a blah of A, and F is component of E, so its legal to make joe
   -- a yippie of F.
 
-  PERFORM rel_constraint_test_check(rel_a, ''f'');
+  PERFORM rel_constraint_test_check(rel_a, 'f');
 
-  PERFORM rel_constraint_test_check(rel_b, ''f'');
+  PERFORM rel_constraint_test_check(rel_b, 'f');
 
   -- do constraints respect group hierarchy? If so, this will be legal:
-  PERFORM rel_constraint_test_check(rel_c, ''f'');
+  PERFORM rel_constraint_test_check(rel_c, 'f');
 
-  PERFORM rel_constraint_test_check(rel_d, ''f'');
+  PERFORM rel_constraint_test_check(rel_d, 'f');
 
   -- ILLEGAL MEMBERSHIPS:
   
   -- G is not a component of F, therefore no one can be a yippie of G
   -- This should violated 2 constraints (object one and object two are both
   -- invalid).
-  PERFORM rel_constraint_test_check(rel_e, ''t'');
+  PERFORM rel_constraint_test_check(rel_e, 't');
 
   -- betty is not a blah of A, therefore she cannot be a yippie of F.
-  PERFORM rel_constraint_test_check(rel_f, ''t'');
+  PERFORM rel_constraint_test_check(rel_f, 't');
 
   -- make sven be a regular member of A.  Sven cannot be a yippie of F.
-  PERFORM rel_constraint_test_check(rel_g, ''t'');
+  PERFORM rel_constraint_test_check(rel_g, 't');
 
   -- TEST THE VIEWS (there should be 4 violated constraints,
   -- 1 side one violation and 3 side two violations.
@@ -452,7 +484,7 @@ begin
   from rel_constraints_violated_one;
 
   if v_count != 1 then
-     raise NOTICE ''rel_constraints_violated_one should have 1 row. Found % rows.'', 
+     raise NOTICE 'rel_constraints_violated_one should have 1 row. Found % rows.', 
                   v_count;
      PERFORM rel_constraint_dump_views();
   end if;
@@ -461,7 +493,7 @@ begin
   from rel_constraints_violated_two;
 
   if v_count != 3 then
-     raise NOTICE ''rel_constraints_violated_two should have 2 rows. Found % rows.'', 
+     raise NOTICE 'rel_constraints_violated_two should have 2 rows. Found % rows.', 
                   v_count;
      PERFORM rel_constraint_dump_views();
   end if;
@@ -471,11 +503,11 @@ begin
   PERFORM rel_constraint__delete(side_two_constraint);
   select seg_id into side_one_constraint 
     from groups_test_segs 
-   where sname = ''side_one_constraint 1'';
+   where sname = 'side_one_constraint 1';
 
   select seg_id into side_two_constraint
     from groups_test_segs 
-   where sname = ''side_two_constraint 1'';
+   where sname = 'side_two_constraint 1';
   PERFORM rel_constraint__delete(side_one_constraint);
   PERFORM rel_constraint__delete(side_two_constraint);
 
@@ -489,9 +521,9 @@ begin
   end loop;
 
   -- Remove the test segments.
-  PERFORM rel_segment__delete(rel_segment__get(A,''blah_member_rel''));
-  PERFORM rel_segment__delete(rel_segment__get(E,''composition_rel''));
-  PERFORM rel_segment__delete(rel_segment__get(reg_users,''yippie_member_rel''));
+  PERFORM rel_segment__delete(rel_segment__get(A,'blah_member_rel'));
+  PERFORM rel_segment__delete(rel_segment__get(E,'composition_rel'));
+  PERFORM rel_segment__delete(rel_segment__get(reg_users,'yippie_member_rel'));
 
   -- Remove the test groups.
   PERFORM acs_group__delete(G);
@@ -514,7 +546,8 @@ begin
 
   return null;
 
-end;' language 'plpgsql'; 
+END;
+$$ LANGUAGE plpgsql; 
 
 select test_rel_constraints();
 select check_rel_constraints();
