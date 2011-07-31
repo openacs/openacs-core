@@ -10,7 +10,7 @@
     <version name="5.8.0d1" url="http://openacs.org/repository/download/apm/acs-automated-testing-5.8.0d1.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>The interface to the automated testing facilities within OpenACS.</summary>
-        <release-date>2010-06-17</release-date>
+        <release-date>2011-06-12</release-date>
         <maturity>3</maturity>
         <vendor url="http://openacs.org">OpenACS</vendor>
         <maturity>3</maturity>

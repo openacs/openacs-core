@@ -10,7 +10,7 @@
     <version name="5.8.0d1" url="http://openacs.org/repository/download/apm/tsearch2-driver-5.8.0d1.apm">
         <owner url="mailto:dave@thedesignexperience.org">Dave Bauer</owner>
         <summary>Full text search support for Search via Tsearch2.</summary>
-        <release-date>2010-06-17</release-date>
+        <release-date>2011-06-12</release-date>
         <description format="text/html">Provides an implementation for the search packages service contract for searching on postgresql.</description>
         <maturity>3</maturity>
 

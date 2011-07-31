@@ -11,10 +11,10 @@
         <owner url="mailto:dhogaza@pacifier.com">Don Baccus</owner>
         <summary>An interface for Site-wide administration of an OpenACS Installation.</summary>
         <maturity>3</maturity>
-        <release-date>2010-06-17</release-date>
+        <release-date>2011-06-12</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
-	<license url="http://www.gnu.org/copyleft/gpl.html">GPL</license>
-	<maturity>3</maturity>
+        <license url="http://www.gnu.org/copyleft/gpl.html">GPL</license>
+        <maturity>3</maturity>
         <description format="text/html">Provides a UI for administering site-wide services
           (including package installation, cache, authentication, and user accounts) for an OpenACS system.
         </description>
@@ -28,7 +28,6 @@
         <parameters>
         <!-- No version parameters -->
         </parameters>
-
     </version>
 </package>
 
