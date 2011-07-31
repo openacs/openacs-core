@@ -80,9 +80,7 @@ aa_register_case \
                   end;"
 
 		set type_drop_sql "begin
-                  acs_object_type.drop_type(
- 			object_type => :object_type,
- 			cascade_p => 't');
+                  acs_object_type.drop_type(object_type => :object_type);
                   end;"
 	    }
 

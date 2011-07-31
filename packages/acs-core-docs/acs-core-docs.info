@@ -10,7 +10,7 @@
     <version name="5.8.0d1" url="http://openacs.org/repository/download/apm/acs-core-docs-5.8.0d1.apm">
         <owner url="mailto:docs@openacs.org">OpenACS Documentation Team</owner>
         <summary>Documentation for the OpenACS Core.</summary>
-        <release-date>2010-06-17</release-date>
+        <release-date>2011-06-12</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
 	<license url="http://www.gnu.org/copyleft/gpl.html">GPL</license>
 	<maturity>3</maturity>

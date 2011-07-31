@@ -9,7 +9,7 @@
     
     <version name="5.8.0d1" url="http://openacs.org/repository/download/apm/search-5.8.0d1.apm">
         <owner url="http://openacs.org">OpenACS</owner>
-        <release-date>2010-06-17</release-date>
+        <release-date>2011-06-12</release-date>
         <maturity>3</maturity>
         <summary>Site wide search</summary>
         <vendor url="http://openacs.org">OpenACS</vendor>
