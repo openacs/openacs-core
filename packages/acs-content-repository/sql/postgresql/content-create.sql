@@ -748,9 +748,12 @@ comment on table cr_content_text is '
 --------------------------------------------------------------
 
 create table cr_item_publish_audit (
-  item_id            integer, 
-  old_revision       integer, 
-  new_revision       integer, 
+  item_id            integer 
+                     constraint cr_item_publish_audit_item_fk references cr_items,
+  old_revision       integer
+                     constraint cr_item_publish_audit_orev_fk references cr_revisions (revision_id),
+  new_revision       integer
+                     constraint cr_item_publish_audit_nrev_fk references cr_revisions (revision_id),
   old_status         varchar(40),
   new_status         varchar(40),
   publish_date       timestamptz
@@ -759,6 +762,8 @@ create table cr_item_publish_audit (
 );
 
 create index cr_item_publish_audit_idx on cr_item_publish_audit(item_id);
+create index cr_item_publish_audit_orev_idx on cr_item_publish_audit(old_revision);
+create index cr_item_publish_audit_nrev_idx on cr_item_publish_audit(new_revision);
 
 comment on table cr_item_publish_audit is '
   An audit table (populated by a trigger on cr_items.live_revision)
