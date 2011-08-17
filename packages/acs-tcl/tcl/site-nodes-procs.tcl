@@ -1085,32 +1085,12 @@ ad_proc -public site_node::conn_url {
 } {
     Use this in place of ns_conn url when referencing host_nodes.  This proc returns the appropriate ns_conn url value, depending on if host_node_map is used for current connection, or hostname's domain.
 } {
-
     set ns_conn_url [ns_conn url]
-    # get config.tcl's hostname                                                                                                                                                     
-    set nssock [ns_config ns/server/[ns_info server]/modules nssock]
-    set nsunix [ns_config ns/server/[ns_info server]/modules nsunix]
-    if {$nsunix ne ""} {
-        set driver nsunix
-    } else {
-        set driver nssock
+    set subsite_get_url [subsite::get_url]
+    set joined_url [file join $subsite_get_url $ns_conn_url]
+    # join drops ending slash for some cases. Add back if appropriate.
+    if { [string range $ns_conn_url end end] eq "/" && [string range $joined_url end end] ne "/" } {
+        append joined_url "/"
     }
-    set config_hostname [ns_config ns/server/[ns_info server]/module/$driver Hostname]
-    set current_location [util_current_location]
-    # if current domain and hostdomain are different (and UseHostnameDomain), revise ns_conn_url                                                                                    
-    if { ![string match -nocase "*${config_hostname}*" $current_location] } {
-        # revise return_url to use hostname's domain                                                                                                                                
-        set host_node_map_hosts_list [db_list -cache_key security-locations-host-names get_node_host_names "select host from host_node_map"]
-        if { [llength $host_node_map_hosts_list] > 0 } {
-            foreach hostname $host_node_map_hosts_list {
-                if { [string match -nocase "http://${hostname}*" $current_location] || [string match -nocase "https://${hostname}*" $current_location] } {
-                    db_1row get_node_id_from_host_name "select node_id as host_node_id from host_node_map where host = :hostname"
-
-                    if { ![regsub -- "[site_node::get_url -node_id ${host_node_id} -notrailing]" $ns_conn_url {} ns_conn_url] } {
-                        ns_log Warning "site_node:conn_url(ref1111): regsub was unable to modify conn_url. User may not have reached intended url. ns_conn_url: ${ns_conn_url} ns_conn url: [ns_conn url]"
-                    }
-                }
-            }
-        }
-    }
+    return $joined_url
 }
