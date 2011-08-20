@@ -321,7 +321,7 @@ ad_proc -private util::json::parseValue {tokens nrTokens tokenCursorName} {
         incr tokenCursor
 
         set leadingChar [string index $token 0]
-        switch -exact $leadingChar {
+        switch -exact -- $leadingChar {
             "\{" {
                 return [parseObject $tokens $nrTokens tokenCursor]
             }
