@@ -452,6 +452,27 @@ ad_proc util::json::json_value_to_sql_value {value} {
     }
 }
 
+ad_proc util::json::sql_values_to_json_values {row} {
+
+    Converts empty values to "null", consistent with how oracle, mysql, and
+    the nspostgres bindvar hack treats them.
+
+    @param row A row (list) returned by a sql SELECT.
+
+    @return A new list with empty strings converted to null.
+
+} {
+    set new_row {}
+    foreach value $row {
+        if { $value == "" } {
+            lappend new_row null
+        } else {
+            lappend new_row $value
+        }
+    }
+    return $new_row
+}
+
 ad_proc util::json::array::create {values} {
 
     Construct a JSON object with the given values list
