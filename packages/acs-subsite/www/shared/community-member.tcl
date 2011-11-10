@@ -54,7 +54,7 @@ set bind_vars [ad_tcl_vars_to_ns_set user_id]
     
 if { ![db_0or1row user_information "select first_names, last_name, email, priv_email, url, creation_date, member_state from cc_users where user_id = :user_id" -bind $bind_vars]} {
     
-    ad_return_error "No user found" "There is no community member with the user_id of $user_id"
+    ad_return_exception_page 404 "No user found" "There is no community member with the user_id of $user_id"
     ns_log Notice "Could not find user_id $user_id in community-member.tcl from [ad_conn peeraddr]"
     return
 }
