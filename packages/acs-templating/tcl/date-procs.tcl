@@ -872,7 +872,11 @@ ad_proc -public template::widget::dateFragment {
   if { $mode ne "edit" } {
     set output {}
     append output "<input type=\"hidden\" name=\"$element(name).$fragment\" value=\"[template::util::leadingPad $value $size]\">"
-    append output $value
+    if {[lsearch {minutes seconds} $fragment]>=0} {
+        append output [template::util::leadingPad $value $size]
+    } else {
+        append output $value
+    }
     return $output
   } else {
     if { [info exists element(${fragment}_interval)] } {
@@ -916,7 +920,7 @@ ad_proc -public template::widget::ampmFragment {
   if { $mode ne "edit" } {
     set output {}
     append output "<input type=\"hidden\" name=\"$element(name).$fragment\" value=\"$value\">"
-    append output $value
+      append output [string toupper $value]
     return $output
   } else {
     return [template::widget::menu \
