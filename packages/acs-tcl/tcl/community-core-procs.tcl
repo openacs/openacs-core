@@ -677,6 +677,7 @@ ad_proc -public party::update {
     db_dml party_update {}
     if {[info exists email]} {
 	db_dml object_title_update {}
+	util_memoize_flush [list ::party::email_not_cached -party_id $party_id]
     }
     acs_user::flush_cache -user_id $party_id
 }
