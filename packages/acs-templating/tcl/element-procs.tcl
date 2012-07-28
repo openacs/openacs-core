@@ -355,6 +355,7 @@ ad_proc -public template::element::get_value { form_id element_id } {
   get_reference
 
   if { [info exists element(value)] } {
+    regsub {<script>} $element(value) {\<\s\c\r\i\p\t\>} $element(value)
     return $element(value)
   } else {
     return ""
@@ -374,7 +375,7 @@ ad_proc -public template::element::get_values { form_id element_id } {
     @see template::element::get_value
 } {
   get_reference
-
+  regsub {<script>} $element(values) {\<\s\c\r\i\p\t\>} $element(values)
   return $element(values)
 }
 
