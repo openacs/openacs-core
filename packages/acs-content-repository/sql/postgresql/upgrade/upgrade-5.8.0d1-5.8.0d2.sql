@@ -644,7 +644,8 @@ BEGIN
           from cr_items i, cr_revisions r
          where i.item_id = r.item_id
            and r.revision_id = old.revision_id
-           and i.storage_type = 'file';
+           and i.storage_type = 'file'
+           and r.content is not null;
 
         return old;
 END;
