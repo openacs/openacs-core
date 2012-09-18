@@ -2006,7 +2006,7 @@ ad_proc -public ad_set_cookie {
     @see ad_get_cookie
 } {
     set headers [ad_conn outputheaders]
-    if { $replace ne "f" } {
+    if { $replace } {
 	# Try to find an already-set cookie named $name.
 	for { set i 0 } { $i < [ns_set size $headers] } { incr i } {
 	    if { ![string compare [string tolower [ns_set key $headers $i]] "set-cookie"] && \
@@ -2030,7 +2030,7 @@ ad_proc -public ad_set_cookie {
     if { $discard ne "f" } {
 	append cookie "; Discard"
     } elseif { $max_age eq "inf" } {
-        if { $expire ne "t" } {
+        if { !$expire } {
             # netscape seemed unhappy with huge max-age, so we use
             # expires which seems to work on both netscape and IE
             append cookie "; Expires=Mon, 01-Jan-2035 01:00:00 GMT"
@@ -2039,7 +2039,7 @@ ad_proc -public ad_set_cookie {
         append cookie "; Max-Age=$max_age; Expires=[util::cookietime [expr {[ns_time] + $max_age}]]"
     }
 
-    if {$expire eq "t"} {
+    if {$expire} {
         append cookie "; Expires=Tue, 01-Jan-1980 01:00:00 GMT"
     }
 
@@ -2047,7 +2047,7 @@ ad_proc -public ad_set_cookie {
 	append cookie "; Domain=$domain"
     }
 
-    if { $secure ne "f" } {
+    if { $secure } {
 	append cookie "; Secure"
     }
 
