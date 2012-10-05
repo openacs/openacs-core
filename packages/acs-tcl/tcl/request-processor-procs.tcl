@@ -1542,17 +1542,19 @@ ad_proc -public request_denied_filter { why } {
 if {[ns_info name] eq "NaviServer"} {
   # this is written for NaviServer 4.99.1 or newer
   foreach filter {rp_filter rp_resources_filter request_denied_filter} {
-    if {[info command ::${filter}_aolserver] eq ""} {
-      rename $filter ${filter}_aolserver
-    }
-    proc $filter {why} [list ${filter}_aolserver \$why ]
+    set cmd ${filter}_aolserver
+    if {[info command $cmd] ne ""} {rename $cmd ""}
+    rename $filter $cmd
+    proc $filter {why} "$cmd \$why" 
   }
 
-  if {[info command rp_invoke_filter_conn] eq ""} {
-    rename rp_invoke_filter rp_invoke_filter_conn
-    rename rp_invoke_proc   rp_invoke_proc_conn
-  }
-  proc   rp_invoke_filter { why filter_info} { rp_invoke_filter_conn _ $filter_info $why}
-  proc   rp_invoke_proc   { argv }            { rp_invoke_proc_conn _ $argv }
-
+  set cmd rp_invoke_filter_conn
+  if {[info command $cmd] ne ""} {rename $cmd ""}
+  rename rp_invoke_filter $cmd
+  proc   rp_invoke_filter { why filter_info} "$cmd _ \$filter_info \$why"
+  
+  set cmd rp_invoke_proc_conn
+  if {[info command $cmd] ne ""} {rename $cmd ""}
+  rename rp_invoke_proc   $cmd
+  proc   rp_invoke_proc   { argv } "$cmd _ \$argv"
 }
