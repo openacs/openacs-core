@@ -508,7 +508,7 @@ ad_proc -public template::adp_compile { source_type source } {
 } {
   variable parse_list
   # initialize the compiled code
-  set parse_list [list "set __adp_output \"\""]
+  set parse_list [list "set __adp_output {}; set __ad_conn_locale \[ad_conn locale\]"]
 
   switch -exact -- $source_type {
     -file { set chunk [template::util::read_file $source] }
@@ -542,7 +542,7 @@ ad_proc -public template::adp_compile { source_type source } {
 
   # Since messages may read the variables of the adp page they go trough
   # expand_percentage_signs which amongst other things does an uplevel subst
-  while {[regsub -all {([^\\])\#([-a-zA-Z0-9_:\.]+)\#} $code {\1[template::expand_percentage_signs [lang::message::lookup [ad_conn locale] {\2} {TRANSLATION MISSING} {} -1]]} code]} {}
+  while {[regsub -all {([^\\])\#([-a-zA-Z0-9_:\.]+)\#} $code {\1[template::expand_percentage_signs [lang::message::lookup $__ad_conn_locale {\2} {TRANSLATION MISSING} {} -1]]} code]} {}
 
   # We do each substitution set in two pieces, separately for normal
   # variables and for variables with ";noquote" attached to them.
