@@ -51,7 +51,7 @@ template_tag master { params } {
   if {[template::util::is_true $slave_properties_p]} {
     template::adp_append_code "
       foreach {__key __value} \$__args {
-        if {!\[string equal \$__key __adp_slave\]} {
+        if {\$__key ne \"__adp_slave\"} {
           set __adp_properties(\$__key) \"\$__value\"
         }
       }
@@ -122,7 +122,7 @@ template_tag include { params } {
   # (We do catch it, but then we re-throw it)
   template::adp_append_code "if { \[catch { append __adp_output \[$command\] } errmsg\] } {"
   template::adp_append_code "    global errorInfo errorCode"
-  template::adp_append_code "    if { \[string equal \[lindex \$errorCode 0\] \"AD\"\] && \[string equal \[lindex \$errorCode 1\] \"EXCEPTION\"\] && \[string equal \[lindex \$errorCode 2\] \"ad_script_abort\"\] } {"
+  template::adp_append_code "    if { \[lindex \$errorCode 0\] eq \"AD\" && \[lindex \$errorCode 1\] eq \"EXCEPTION\" && \[lindex \$errorCode 2\] eq \"ad_script_abort\" } {"
   template::adp_append_code "        ad_script_abort"
   template::adp_append_code "    } else {"
   template::adp_append_code "        append __adp_output \"Error in include template \\\"\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]\\\": \$errmsg\""
@@ -284,8 +284,8 @@ template_tag group { chunk params } {
       if { \$$i >= \${$name:rowcount} } {
         set ${name}(groupnum_last_p) 1
       } else {
-        upvar 0 ${name}:\[expr \$$i + 1\] $name:next 
-        set ${name}(groupnum_last_p) \[expr !\[string equal \[set \"${name}:next(${column})\"\] \$${name}($column)\]\]
+        upvar 0 ${name}:\[expr {\$$i + 1}\] $name:next 
+        set ${name}(groupnum_last_p) \[expr {\${${name}:next(${column})} ne \$${name}($column)}\]
       }
   "
 
@@ -297,8 +297,8 @@ template_tag group { chunk params } {
       if { \$$i >= \${$name:rowcount} } {
         break
       }
-      upvar 0 ${name}:\[expr \$$i + 1\] $name:next 
-      if { !\[string equal \[set \"${name}:next(${column})\"\] \$${name}(${column})\] } { 
+      upvar 0 ${name}:\[expr {\$$i + 1}\] $name:next 
+      if { \${${name}:next($column)} ne \$${name}(${column}) } { 
         break
       }
   "
@@ -668,7 +668,7 @@ template_tag include-optional { chunk params } {
   template::adp_append_code "    append __adp_output \"Error in include template \\\"\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]\\\": \$errmsg\""
   template::adp_append_code "    ns_log Error \"Error in include template \\\"\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]\\\": \$errmsg\n\$errorInfo\""
   template::adp_append_code "} else {"
-  template::adp_append_code "if { !\[string equal \[string trim \[lindex \$__adp_include_optional_output end\]\] \"\"] } {"
+  template::adp_append_code "if { \[string trim \[lindex \$__adp_include_optional_output end\]\] ne {} } {"
 
   template::adp_compile_chunk $chunk
 

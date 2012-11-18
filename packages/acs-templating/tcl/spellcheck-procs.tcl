@@ -202,6 +202,10 @@ ad_proc -public template::util::spellcheck::get_element_formtext {
 
     set spellchecker_path [nsv_get spellchecker path]
 
+    #
+    # Force default language to en_US
+    #set ::env(LANG) en_US.UTF-8
+
     # the --lang switch only works with aspell and if it is not present
     # aspell's (or ispell's) default language will have to do.
     set lang_and_enc "--encoding=utf-8"

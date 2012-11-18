@@ -134,11 +134,11 @@ ad_proc -public template_tag_if_interp_expr {} {
       set next [expr {$i + 1}]
     }
     eq { 
-      append condition "\[string equal $arg1 \"[lindex $args $i]\"\]" 
+      append condition "$arg1 eq \"[lindex $args $i]\"" 
       set next [expr {$i + 1}]
     }
     ne { 
-      append condition "! \[string equal $arg1 \"[lindex $args $i]\"\]" 
+      append condition "$arg1 ne \"[lindex $args $i]\"" 
       set next [expr {$i + 1}]
     }
 
@@ -158,7 +158,7 @@ ad_proc -public template_tag_if_interp_expr {} {
     nil {
       if { [string first @ $arg1] == -1 } {
         # We're assuming this is a static string, not a variable
-        append condition "\[empty_string_p $arg1\]"
+        append condition "$arg1 eq {}"
       } else {
         # substitute array variables
         if {! ( [regsub {^"@([a-zA-Z0-9_]+)\.([a-zA-Z0-9_.]+)@"$} $arg1 {\1(\2)} arg1]
