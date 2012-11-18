@@ -11,7 +11,8 @@ ad_page_contract {
 ds_require_permission [ad_conn package_id] "admin"
 
 set enabled_p [nsv_get ds_properties enabled_p]
-set user_switching_enabled_p [nsv_get ds_properties user_switching_enabled_p]
+set user_switching_enabled_p [expr {[nsv_exists ds_properties user_switching_enabled_p] ? 
+				    [nsv_get ds_properties user_switching_enabled_p] : 0}]
 set database_enabled_p [nsv_get ds_properties database_enabled_p]
 set profiling_enabled_p [nsv_get ds_properties profiling_enabled_p]
 set adp_reveal_enabled_p [nsv_get ds_properties adp_reveal_enabled_p]
