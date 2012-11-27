@@ -9,10 +9,6 @@ ad_library {
 
 }
 
-namespace eval template {}
-namespace eval template::query {}
-
-
 # Database Query API for the ArsDigita Templating System
 
 # Copyright (C) 1999-2000 ArsDigita Corporation
@@ -24,17 +20,10 @@ namespace eval template::query {}
 # License.  Full text of the license is available from the GNU Project:
 # http://www.fsf.org/copyleft/gpl.html
 
-
 # (DCW - Openacs) converted template db api to use standard api and hooked it
 # into the query-dispatcher.  This ties into the standard db api's 
 # transaction control and handle allocation into the templating query interface
 # allowing the two db api's to be mixed together. 
-
-# Todo - convert caching to use ns_cache. 
-
-nsv_set __template_query_persistent_cache . .
-nsv_set __template_query_persistent_timeout . .
-
 
 ad_proc -public template::query { statement_name result_name type sql args } {
     Public interface to template query api.  This routine parses the arguements and
@@ -439,25 +428,27 @@ ad_proc -private get_cached_result { name type } {
 
   if { [info exists opts(persistent)] } {
 
-    if { [nsv_exists __template_query_persistent_cache $cache_key] } {
+    if { [ns_cache names template_query_cache $cache_key] ne ""} {
 
-      # check the timeout 
+      if {[ns_info name] ne "NaviServer"} {
+	set cached_result [ns_cache_eval template_query_cache $cache_key {}]
+      } else {
 
-      set timeout [nsv_get __template_query_persistent_timeout $cache_key]
-      if { $timeout > [ns_time] } {
-	set cached_result \
-	    [nsv_get __template_query_persistent_cache $cache_key]
-	set success 1
+	# get the pair of the timeout and value
+	lset [ns_cache get template_query_cache $cache_key] timeout cached_result
+
+	# check the timeout
+	if { $timeout > [ns_time] } {
+	  set success 1
+	} else {
+	  ns_cache flush template_query_cache $cache_key
+	}
       }
     }
 
   } else {
-
-    global __template_query_request_cache
-
-    if { [info exists __template_query_request_cache($cache_key)] } {
-
-      set cached_result $__template_query_request_cache($cache_key)
+    if { [info exists ::__template_query_request_cache($cache_key)] } {
+      set cached_result $::__template_query_request_cache($cache_key)
       set success 1
     }      
   }
@@ -510,23 +501,30 @@ ad_proc -private set_cached_result {} {
   set cache_key $opts(cache)
 
   if { [info exists opts(persistent)] } {
-
-    # set the result in the persistent cache
-
-    nsv_set __template_query_persistent_cache $cache_key $opts(result)
-
+    #
+    # calculate the timeout
+    #
     if { [info exists opts(timeout)] } {
       set timeout [expr {[ns_time] + $opts(timeout)}]
     } else {
       set timeout [expr {[ns_time] + 60 * 60 * 24 * 7}]
-    }      
+    }
 
-    nsv_set __template_query_persistent_timeout $cache_key $timeout
+    if {[ns_info name] eq "NaviServer"} {
+      #
+      # NaviServer allows per entry expire time
+      #
+      ns_cache_eval -expires $timeout -force 1 template_query_cache $cache_key \
+	  set _ $opts(result)
+    } else {
+      #
+      # set the cached value as a pair of timeout and value
+      #
+      ns_cache set template_query_cache $cache_key [list $timeout $opts(result)]
+    }
 
   } else {
-
-    global __template_query_request_cache
-    set __template_query_request_cache($cache_key) $opts(result)
+    set ::__template_query_request_cache($cache_key) $opts(result)
   }
 }
 
@@ -575,21 +573,23 @@ ad_proc -private template::query::flush_cache { cache_match } {
     @param cache_match Name of query to match for cache flushing
 } {
   # Flush persistent cache
-  set names [nsv_array names __template_query_persistent_cache]
+  set names [ns_cache names template_query_cache]
   foreach name $names {
     if { [string match $cache_match $name] } {
       ns_log debug "template::query::flush_cache: FLUSHING QUERY (persistent): $name"
-      nsv_unset __template_query_persistent_cache $name
+      nsv_cache flush template_query_cache $name
+      if {[ns_info name] ne "NaviServer"} {
+	nsv_cache flush template_timeout_cache $name
+      }
     }
   }
 
   # Flush temporary cache
-  global __template_query_request_cache
-  set names [array names __template_query_persistent_cache]
+  set names [array names ::__template_query_persistent_cache]
   foreach name $names {
     if { [string match $cache_match $name] } {
       ns_log debug "template::query::flush_cache: FLUSHING QUERY (request): $name"
-      unset __template_query_persistent_cache($name)
+      unset ::__template_query_persistent_cache($name)
     }
   }
 
@@ -1068,7 +1068,7 @@ ad_proc -public template::url { command args } {
 nsv_set __template_cache_value . .
 nsv_set __template_cache_timeout . .
 
-ad_proc -public cache { command key args } {
+ad_proc -public cache { command cache_key args } {
     Generic Caching
 } {
 
@@ -1077,24 +1077,25 @@ ad_proc -public cache { command key args } {
   switch -exact $command {
 
     get {
-
-      if { [nsv_exists __template_cache_value $key] } {
-
-	# check the timeout 
-	set timeout [nsv_get __template_cache_timeout $key]
-
-	if { $timeout > [ns_time] } {
-	  set result [nsv_get __template_cache_value $key]
-	} else {
-	  nsv_unset __template_cache_value $key
-	  nsv_unset __template_cache_timeout $key
+      if {[ns_info name] ne "NaviServer"} {
+	if {[ns_cache_keys template_cache $cache_key]} {
+	  set result [ns_cache_eval template_cache $cache_key {}]
+	}
+      } else {
+	if { [ns_cache names template_cache $cache_key] ne "" } {
+	  # get timeout and value
+	  lset [ns_cache get template_cache $cache_key] timeout value
+	  # validate timeout
+	  if { $timeout > [ns_time] } {
+	    set result $value
+	  } else {
+	    ns_cache flush template_cache $cache_key
+	  }
 	}
       }
     }
  
     set {
-
-      set value [lindex $args 0]
 
       if { [llength $args] == 1 } {
 	set timeout [expr {[ns_time] + 60 * 60 * 24 * 7}]
@@ -1102,18 +1103,49 @@ ad_proc -public cache { command key args } {
 	set timeout [expr {[ns_time] + [lindex $args 1]}]
       }
 
-      nsv_set __template_cache_value $key $value
-      nsv_set __template_cache_timeout $key $timeout
+      if {[ns_info name] ne "NaviServer"} {
+	#
+	# NaviServer allows per entry expire time
+	#
+	ns_cache_eval -expires $timeout -force 1 template_cache $cache_key \
+	    set _ [lindex $args 0]
+      } else {
+	#
+	# Use a pair for aolserver
+	#
+	ns_cache set template_cache $cache_key [list $timeout [lindex $args 0]]
+      }
     }
 
     flush {
       # The key is actually a string match pattern
-      set names [nsv_array names __template_cache_value]
-      foreach name $names {
-        if { [string match $key $name] } {
-          ns_log debug "cache: FLUSHING CACHE: $name"
-          nsv_unset __template_cache_value $name
-	} 
+      if {[ns_info name] ne "NaviServer"} {
+	ns_cache_flush -glob template_cache $cache_key
+      } else {
+	set names [ns_cache names template_cache]
+	foreach name $names {
+	  if { [string match $cache_key $name] } {
+	    ns_log debug "cache: FLUSHING CACHE: $name"
+	    ns_cache flush template_cache $name
+	  }
+	}
+      }
+    }
+
+    exists  {
+      if {[ns_info name] eq "NaviServer"} {
+	set result [expr {[ns_cache_keys template_cache $cache_key] ne ""}]
+      } else {
+	if { [ns_cache exists template_cache $cache_key] } {
+	  # get timeout and value
+	  lset [ns_cache get template_cache $cache_key] timeout value
+	  # validate timeout
+	  if { $timeout > [ns_time] } {
+	    set result 1
+	  } else {
+	    set result 0
+	  }
+	}
       }
     }
 

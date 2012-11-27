@@ -98,7 +98,19 @@ ad_proc -public template::paginator::create { statement_name name query args } {
   set cache_key	$name:$query
   set row_ids [cache get $cache_key:row_ids]
 
-    if { ($row_ids eq {} && ![nsv_exists __template_cache_timeout $cache_key]) || ([info exists opts(flush_p)] && $opts(flush_p) eq "t") } {
+    #
+    # GN: In the following line, we had instead of [::cache exists
+    # $cache_key] the commdand [nsv_exists __template_cache_timeout
+    # $cache_key] It is not clear, what the intended semantic was, and
+    # why not the API working on the nsv was used. See as well
+    # below. In general, using a test for a cache entry and a code
+    # depening on the cached entry is NOT AN GOOD idea, since the
+    # operations are not atomic. Between the check and the later code,
+    # the cache entry might be deleted.  refactoring of this code is
+    # recommended. Unfortunately, several places in OpenACS have this
+    # problem.
+    #
+    if { ($row_ids eq {} && ![::cache exists $cache_key]) || ([info exists opts(flush_p)] && $opts(flush_p) eq "t") } {
       if { [info exists opts(printing_prefs)] && $opts(printing_prefs) ne "" } {
 	  ReturnHeaders "text/html"
 	  ns_write "
@@ -131,9 +143,10 @@ ad_proc -public template::paginator::create { statement_name name query args } {
 	  }
 	  set return_url [lindex $opts(printing_prefs) 5]
 	  if { $return_url ne "" } {
-	      if { [llength $opts(row_ids)]==0 } {
-		  nsv_set __template_cache_timeout $cache_key $opts(timeout)
-	      }
+	      # Not sure, what the intented semantics of this command was...
+	      #if { [llength $opts(row_ids)]==0 } {
+	      #	  nsv_set __template_cache_timeout $cache_key $opts(timeout)
+	      #}
 	      ns_write "
           <SCRIPT type=\"text/javascript\">
           <!-- Begin
