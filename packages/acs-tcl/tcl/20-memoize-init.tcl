@@ -12,7 +12,7 @@ ns_cache create util_memoize -size \
 # on whether clustering is enabled and what command is available for
 # cluster-wide flushing.
 
-if {[llength [info commands ncf.send]] > 0} {
+if {[info command ncf.send] ne ""} {
     set flush_body {
         ncf.send util_memoize $script
     }
