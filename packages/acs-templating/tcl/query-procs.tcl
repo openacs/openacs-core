@@ -438,7 +438,7 @@ ad_proc -private get_cached_result { name type } {
       } else {
 
 	# get the pair of the timeout and value
-	lset [ns_cache get template_query_cache $cache_key] timeout cached_result
+	lassign [ns_cache get template_query_cache $cache_key] timeout cached_result
 
 	# check the timeout
 	if { $timeout > [ns_time] } {
@@ -1087,7 +1087,7 @@ ad_proc -public cache { command cache_key args } {
       } else {
 	if { [ns_cache names template_cache $cache_key] ne "" } {
 	  # get timeout and value
-	  lset [ns_cache get template_cache $cache_key] timeout value
+	  lassign [ns_cache get template_cache $cache_key] timeout value
 	  # validate timeout
 	  if { $timeout > [ns_time] } {
 	    set result $value
@@ -1141,7 +1141,7 @@ ad_proc -public cache { command cache_key args } {
       } else {
 	if { [ns_cache exists template_cache $cache_key] } {
 	  # get timeout and value
-	  lset [ns_cache get template_cache $cache_key] timeout value
+	  lassign [ns_cache get template_cache $cache_key] timeout value
 	  # validate timeout
 	  if { $timeout > [ns_time] } {
 	    set result 1
