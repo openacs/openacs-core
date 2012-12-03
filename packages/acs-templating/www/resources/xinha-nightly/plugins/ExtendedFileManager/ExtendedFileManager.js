@@ -238,7 +238,9 @@ Xinha.prototype._linkFile = function(link) {
             f_usetarget : editor.config.makeLinkShowsTarget,
             baseHref: editor.config.baseHref
         };
-    } else
+    } 
+    else
+    {      
         outparam.param = {
             f_href   : Xinha.is_ie ? link.href : link.getAttribute("href"),
             f_title  : link.title,
@@ -246,6 +248,7 @@ Xinha.prototype._linkFile = function(link) {
             f_usetarget : editor.config.makeLinkShowsTarget,
             baseHref: editor.config.baseHref
         };
+    }
 
     Dialog(this.config.ExtendedFileManager.manager+'&mode=link', function(param){
         if (!param)

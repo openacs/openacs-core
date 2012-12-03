@@ -15,9 +15,9 @@
     --  Developers - Coding Style: 
     --         Before you are going to work on Xinha code, please see http://trac.xinha.org/wiki/Documentation/StyleGuide
     --
-    --  $HeadURL: http://svn.xinha.org/trunk/XinhaCore.js $
-    --  $LastChangedDate: 2010-05-12 09:40:06 +1200 (Wed, 12 May 2010) $
-    --  $LastChangedRevision: 1263 $
+    --  $HeadURL: http://svn.xinha.webfactional.com/trunk/XinhaCore.js $
+    --  $LastChangedDate: 2011-03-29 12:08:39 +1300 (Tue, 29 Mar 2011) $
+    --  $LastChangedRevision: 1297 $
     --  $LastChangedBy: gogo $
     --------------------------------------------------------------------------*/
 /*jslint regexp: false, rhino: false, browser: true, bitwise: false, forin: true, adsafe: false, evil: true, nomen: false, 
@@ -31,9 +31,9 @@ white: false, widget: false, undef: true, plusplus: false*/
 Xinha.version =
 {
   'Release'   : 'Trunk',
-  'Head'      : '$HeadURL: http://svn.xinha.org/trunk/XinhaCore.js $'.replace(/^[^:]*:\s*(.*)\s*\$$/, '$1'),
-  'Date'      : '$LastChangedDate: 2010-05-12 09:40:06 +1200 (Wed, 12 May 2010) $'.replace(/^[^:]*:\s*([0-9\-]*) ([0-9:]*) ([+0-9]*) \((.*)\)\s*\$/, '$4 $2 $3'),
-  'Revision'  : '$LastChangedRevision: 1263 $'.replace(/^[^:]*:\s*(.*)\s*\$$/, '$1'),
+  'Head'      : '$HeadURL: http://svn.xinha.webfactional.com/trunk/XinhaCore.js $'.replace(/^[^:]*:\s*(.*)\s*\$$/, '$1'),
+  'Date'      : '$LastChangedDate: 2011-03-29 12:08:39 +1300 (Tue, 29 Mar 2011) $'.replace(/^[^:]*:\s*([0-9\-]*) ([0-9:]*) ([+0-9]*) \((.*)\)\s*\$/, '$4 $2 $3'),
+  'Revision'  : '$LastChangedRevision: 1297 $'.replace(/^[^:]*:\s*(.*)\s*\$$/, '$1'),
   'RevisionBy': '$LastChangedBy: gogo $'.replace(/^[^:]*:\s*(.*)\s*\$$/, '$1')
 };
 
@@ -228,7 +228,7 @@ if ( Xinha.isRunLocally && Xinha.isSupportedBrowser)
 }
 
 /** Creates a new Xinha object
- * @version $Rev: 1263 $ $LastChangedDate: 2010-05-12 09:40:06 +1200 (Wed, 12 May 2010) $
+ * @version $Rev: 1297 $ $LastChangedDate: 2011-03-29 12:08:39 +1300 (Tue, 29 Mar 2011) $
  * @constructor
  * @param {String|DomNode}   textarea the textarea to replace; can be either only the id or the DOM object as returned by document.getElementById()
  * @param {Xinha.Config} config optional if no Xinha.Config object is passed, the default config is used
@@ -500,7 +500,7 @@ Xinha.RE_url      = /(https?:\/\/)?(([a-z0-9_]+:[a-z0-9_]+@)?[a-z0-9_\-]{2,}(\.[
 /**
  * This class creates an object that can be passed to the Xinha constructor as a parameter.
  * Set the object's properties as you need to configure the editor (toolbar etc.)
- * @version $Rev: 1263 $ $LastChangedDate: 2010-05-12 09:40:06 +1200 (Wed, 12 May 2010) $
+ * @version $Rev: 1297 $ $LastChangedDate: 2011-03-29 12:08:39 +1300 (Tue, 29 Mar 2011) $
  * @constructor
  */
 Xinha.Config = function()
@@ -863,6 +863,11 @@ Xinha.Config = function()
    */
    this.convertUrlsToLinks = true;
 
+ /** Set to true to hide media objects when a div-type dialog box is open, to prevent show-through
+  *  Default: <code>false</code>
+  *  @type Boolean
+  */
+  this.hideObjectsBehindDialogs = false;
 
  /** Size of color picker cells<br />
    * Use number + "px"<br />
@@ -1026,15 +1031,17 @@ Xinha.Config = function()
    *<pre>
    *xinha_config.formatblock =
    *{
-   *  "&#8212; size &#8212;": "",
-   *  "1 (8 pt)" : "1",
-   *  "2 (10 pt)": "2",
-   *  "3 (12 pt)": "3",
-   *  "4 (14 pt)": "4",
-   *  "5 (18 pt)": "5",
-   *  "6 (24 pt)": "6",
-   *  "7 (36 pt)": "7"
-   *};
+   *  "&#8212; format &#8212;": "", // &#8212; is mdash
+   *  "Heading 1": "h1",
+   *  "Heading 2": "h2",
+   *  "Heading 3": "h3",
+   *  "Heading 4": "h4",
+   *  "Heading 5": "h5",
+   *  "Heading 6": "h6",
+   *  "Normal"   : "p",
+   *  "Address"  : "address",
+   *  "Formatted": "pre"
+   *}
    *</pre>
    * @type Object
    */
@@ -1051,9 +1058,33 @@ Xinha.Config = function()
     "Address"  : "address",
     "Formatted": "pre"
   };
-  
+
+  /** You can provide custom functions that will be used to determine which of the
+   * "formatblock" options is currently active and selected in the dropdown.
+   *
+   * Example:
+   * <pre>
+   * xinha_config.formatblockDetector['h5'] = function(xinha, currentElement)
+   * {
+   *   if (my_special_matching_logic(currentElement)) {
+   *     return true;
+   *   } else {
+   *     return false;
+   *   }
+   * };
+   * </pre>
+   *
+   * You probably don't want to mess with this, unless you are adding new, custom
+   * "formatblock" options which don't correspond to real HTML tags.  If you want
+   * to do that, you can use this configuration option to tell xinha how to detect
+   * when it is within your custom context.
+   *
+   * For more, see: http://www.coactivate.org/projects/xinha/custom-formatblock-options
+   */
+  this.formatblockDetector = {};
+
   this.dialogOptions =
-  { 
+  {
     'centered' : true, //true: dialog is shown in the center the screen, false dialog is shown near the clicked toolbar button
     'greyout':true, //true: when showing modal dialogs, the page behind the dialoge is greyed-out
     'closeOnEscape':true
@@ -1149,7 +1180,7 @@ Xinha.Config = function()
     selectall: [ "Select all", ["ed_buttons_main.png",3,5], false, function(e) {e.execCommand("selectall");} ],
 
     inserthorizontalrule: [ "Horizontal Rule", ["ed_buttons_main.png",6,0], false, function(e) { e.execCommand("inserthorizontalrule"); } ],
-    createlink: [ "Insert Web Link", ["ed_buttons_main.png",6,1], false, function(e) { e._createLink(); } ],
+    createlink: [ "Insert Web Link", ["ed_buttons_main.png",6,1], false, function(e) { e.execCommand("createlink"); } ],
     insertimage: [ "Insert/Modify Image", ["ed_buttons_main.png",6,3], false, function(e) { e.execCommand("insertimage"); } ],
     inserttable: [ "Insert Table", ["ed_buttons_main.png",6,2], false, function(e) { e.execCommand("inserttable"); } ],
 
@@ -1178,9 +1209,25 @@ Xinha.Config = function()
    
   this.dblclickList = 
   {
-    "a": [function(e, target) {e._createLink(target);}],
+      "a": [function(e, target) {e.execCommand("createlink", false, target);}],
     "img": [function(e, target) {e._insertImage(target);}]
   };
+
+ /**
+  * HTML class attribute to apply to the <body> tag within the editor's iframe.
+  * If it is not specified, no class will be set.
+  * 
+  *  Default: <code>null</code>
+  */
+  this.bodyClass = null;
+
+ /**
+  * HTML ID attribute to apply to the <body> tag within the editor's iframe.
+  * If it is not specified, no ID will be set.
+  * 
+  *  Default: <code>null</code>
+  */
+  this.bodyID = null;
   
   /** A container for additional icons that may be swapped within one button (like fullscreen)
    * @private
@@ -2385,6 +2432,7 @@ Xinha.prototype.generate = function ()
       switch (toolbar[i][j])
       {
         case "popupeditor":
+        case "fullscreen":
           if (!this.plugins.FullScreen) 
           {
             editor.registerPlugin('FullScreen');
@@ -3609,6 +3657,12 @@ Xinha.prototype.setEditorEvents = function(resetting_events_for_opera)
       {
         editor._onGenerate();
       }
+      
+      if(editor._textArea.hasAttribute('onxinhaready'))
+      {               
+        (function() { eval(editor._textArea.getAttribute('onxinhaready')) }).call(editor.textArea);
+      }
+      
       //ticket #1407 IE8 fires two resize events on one actual resize, seemingly causing an infinite loop (but not  when Xinha is in an frame/iframe) 
       Xinha.addDom0Event(window, 'resize', function(e) 
       {
@@ -3764,15 +3818,15 @@ Xinha.loadPlugin = function(pluginName, callback, url)
     return true;
   }
   Xinha._pluginLoadStatus[pluginName] = 'loading';
-  
-  // This function will try to load a plugin in multiple passes.  It tries to
-  // load the plugin from either the plugin or unsupported directory, using
-  // both naming schemes in this order:
-  // 1. /plugins -> CurrentNamingScheme
-  // 2. /plugins -> old-naming-scheme
-  // 3. /unsupported -> CurrentNamingScheme
-  // 4. /unsupported -> old-naming-scheme
 
+  /** This function will try to load a plugin in multiple passes.  It tries to
+   * load the plugin from either the plugin or unsupported directory, using
+   * both naming schemes in this order:
+   * 1. /plugins -> CurrentNamingScheme
+   * 2. /plugins -> old-naming-scheme
+   * 3. /unsupported -> CurrentNamingScheme
+   * 4. /unsupported -> old-naming-scheme
+   */
   function multiStageLoader(stage,pluginName)
   {
     var nextstage, dir, file, success_message;
@@ -3793,13 +3847,13 @@ Xinha.loadPlugin = function(pluginName, callback, url)
         nextstage = 'unsupported_old_name';
         dir = Xinha.getPluginDir(pluginName, true);
         file = pluginName + ".js";
-        success_message = 'You are using the unsupported Xinha plugin '+pluginName+'. If you wish continued support, please see http://trac.xinha.org/ticket/1297';
+        success_message = 'You are using the unsupported Xinha plugin '+pluginName+'. If you wish continued support, please see http://trac.xinha.org/wiki/Documentation/UnsupportedPlugins';
         break;
       case 'unsupported_old_name':
         nextstage = '';
         dir = Xinha.getPluginDir(pluginName, true);
         file = pluginName.replace(/([a-z])([A-Z])([a-z])/g, function (str, l1, l2, l3) { return l1 + "-" + l2.toLowerCase() + l3; }).toLowerCase() + ".js";
-        success_message = 'You are using the unsupported Xinha plugin '+pluginName+'. If you wish continued support, please see http://trac.xinha.org/ticket/1297';
+        success_message = 'You are using the unsupported Xinha plugin '+pluginName+'. If you wish continued support, please see http://trac.xinha.org/wiki/Documentation/UnsupportedPlugins';
         break;
       default:
         Xinha._pluginLoadStatus[pluginName] = 'failed';
@@ -4156,7 +4210,8 @@ Xinha.includeAssets = function()
           Xinha.loadStyle(nxt.url, nxt.plugin);
           return this.loadNext();
         
-        case 'text/javascript':
+        case 'text/javascript':          
+          this.loadedScripts.push(nxt);
           Xinha.loadScript(nxt.url, nxt.plugin, function() { self.loadNext(); });
       }
     }
@@ -4182,9 +4237,21 @@ Xinha.includeAssets = function()
     for(var i = 0; i < this.loadedScripts.length; i++)
     {
       if(this.loadedScripts[i].url == url && this.loadedScripts[i].plugin == plugin)
+      {
+        if(!this.loaderRunning) this.loadNext();
         return this; // Already done (or in process)
+      }
     }
     
+    for(var i = 0; i < this.pendingAssets.length; i++)
+    {
+      if(this.pendingAssets[i].url == url && this.pendingAssets[i].plugin == plugin)
+      {
+        if(!this.loaderRunning) this.loadNext();
+        return this; // Already pending
+      }
+    }
+        
     return this.loadScript(url, plugin);
   }
   
@@ -4877,23 +4944,24 @@ Xinha.prototype.updateToolbar = function(noStatus)
         var blocks = [];
         for ( var indexBlock in this.config.formatblock )
         {
+	  var blockname = this.config.formatblock[indexBlock];
           // prevent iterating over wrong type
-          if ( typeof this.config.formatblock[indexBlock] == 'string' )
+          if ( typeof blockname  == 'string' )
           {
-            blocks[blocks.length] = this.config.formatblock[indexBlock];
+            blocks[blocks.length] = this.config.formatblockDetector[blockname] || blockname;
           }
         }
 
-        var deepestAncestor = this._getFirstAncestor(this.getSelection(), blocks);
+        var match = this._getFirstAncestorAndWhy(this.getSelection(), blocks);
+        var deepestAncestor = match[0];
+        var matchIndex = match[1];
+
+
         if ( deepestAncestor )
         {
-          for ( var x = 0; x < blocks.length; x++ )
-          {
-            if ( blocks[x].toLowerCase() == deepestAncestor.tagName.toLowerCase() )
-            {
-              btn.element.selectedIndex = x;
-            }
-          }
+          // the function can return null for its second element even if a match is found,
+          // but we passed in an array, so we know it will be a numerical index.
+	  btn.element.selectedIndex = matchIndex;
         }
         else
         {
@@ -5018,10 +5086,21 @@ Xinha.prototype.getAllAncestors = function()
 
 /** Traverses the DOM upwards and returns the first element that is of one of the specified types
  *  @param {Selection} sel  Selection object as returned by getSelection
- *  @param {Array} types Array of matching criteria.  Each criteria is either a string containing the tag name, or a callback used to select the element.
+ *  @param {Array|String} types Array of matching criteria.  Each criteria is either a string containing the tag name, or a callback used to select the element.
  *  @returns {DomNode|null} 
  */
 Xinha.prototype._getFirstAncestor = function(sel, types)
+{
+  return this._getFirstAncestorAndWhy(sel, types)[0];
+};
+
+/** Traverses the DOM upwards and returns the first element that is one of the specified types,
+ *  and which (of the specified types) the found element successfully matched.
+ *  @param {Selection} sel  Selection object as returned by getSelection
+ *  @param {Array|String} types Array of matching criteria.  Each criteria is either a string containing the tag name, or a callback used to select the element.
+ *  @returns {Array} The array will look like [{DomNode|null}, {Integer|null}] -- that is, it always contains two elements.  The first element is the element that matched, or null if no match was found. The second is the numerical index that can be used to identify which element of the "types" was responsible for the match.  It will be null if no match was found.  It will also be null if the "types" argument was omitted. 
+ */
+Xinha.prototype._getFirstAncestorAndWhy = function(sel, types)
 {
   var prnt = this.activeElement(sel);
   if ( prnt === null )
@@ -5033,7 +5112,7 @@ Xinha.prototype._getFirstAncestor = function(sel, types)
     }
     catch(ex)
     {
-      return null;
+      return [null, null];
     }
   }
 
@@ -5048,16 +5127,16 @@ Xinha.prototype._getFirstAncestor = function(sel, types)
     {
       if ( types === null )
       {
-        return prnt;
+	return [prnt, null];
       }
       for (var index=0; index<types.length; ++index) {
         if (typeof types[index] == 'string' && types[index] == prnt.tagName.toLowerCase()){
           // Criteria is a tag name.  It matches
-        return prnt;
+	  return [prnt, index];
       }
         else if (typeof types[index] == 'function' && types[index](this, prnt)) {
           // Criteria is a callback.  It matches
-          return prnt;
+	  return [prnt, index];
         }
       }
 
@@ -5073,7 +5152,7 @@ Xinha.prototype._getFirstAncestor = function(sel, types)
     prnt = prnt.parentNode;
   }
 
-  return null;
+  return [null, null];
 };
 
 /** Traverses the DOM upwards and returns the first element that is a block level element
@@ -5736,6 +5815,7 @@ Xinha.prototype.inwardHtml = function(html)
   
   html = this.inwardSpecialReplacements(html);
 
+  html = html.replace(/(<script)(?![^>]*((type=[\"\']text\/)|(language=[\"\']))javascript[\"\'])/gi,'$1 type="text/javascript"');
   html = html.replace(/(<script[^>]*((type=[\"\']text\/)|(language=[\"\'])))(javascript)/gi,"$1freezescript");
 
   // For IE's sake, make any URLs that are semi-absolute (="/....") to be
@@ -7140,6 +7220,44 @@ Xinha._geturlcontent = function(url, returnXML)
   }
 };
 
+
+/** Use XMLHTTPRequest to send some some data to the server and return the result synchronously
+ *
+ * @param {String} url The address for the HTTPRequest
+ * @param data the data to send, streing or array
+ */
+Xinha._posturlcontent = function(url, data, returnXML)
+{
+  var req = null;
+  req = Xinha.getXMLHTTPRequestObject();
+
+  var content = '';
+  if (typeof data == 'string')
+  {
+    content = data;
+  }
+  else if(typeof data == "object")
+  {
+    for ( var i in data )
+    {
+      content += (content.length ? '&' : '') + i + '=' + encodeURIComponent(data[i]);
+    }
+  }
+
+  req.open('POST', url, false);    
+  req.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded'+(Xinha._postback_send_charset ? '; charset=UTF-8' : ''));
+  req.send(content);
+  
+  if ( ((req.status / 100) == 2) || Xinha.isRunLocally && req.status === 0 )
+  {
+    return (returnXML) ? req.responseXML : req.responseText;
+  }
+  else
+  {
+    return '';
+  }
+  
+};
 // Unless somebody already has, make a little function to debug things
 
 if (typeof dumpValues == 'undefined') 
@@ -7204,7 +7322,7 @@ if ( !Array.prototype.indexOf )
 {
   /** Walks through an array and, if the specified item exists in it, returns the position
   * @param {String} needle The string to search for
-  * @returns {Integer|null} Index position if item found, null otherwise 
+  * @returns {Integer|-1} Index position if item found, -1 otherwise (same as built in js)
   */
   Array.prototype.indexOf = function(needle)
   {
@@ -7216,7 +7334,7 @@ if ( !Array.prototype.indexOf )
         return i;
       }
     }
-    return null;
+    return -1;
   };
 }
 if ( !Array.prototype.append )

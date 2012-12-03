@@ -51,30 +51,33 @@ if(typeof FileManager == 'undefined')
   MootoolsFileManager.AssetLoader
     .loadStyle('mootools-filemanager/Css/FileManager.css', 'MootoolsFileManager')
     .loadStyle('mootools-filemanager/Css/Additions.css', 'MootoolsFileManager')
-    .loadScript('mootools-filemanager/Source/FileManager.js', 'MootoolsFileManager')
-    .loadScript('mootools-filemanager/Language/Language.en.js', 'MootoolsFileManager')
-    .loadScript('mootools-filemanager/Source/Additions.js', 'MootoolsFileManager')
+    .loadScript('mootools-filemanager/Source/Additions.js', 'MootoolsFileManager')        
     .loadScript('mootools-filemanager/Source/Uploader/Fx.ProgressBar.js', 'MootoolsFileManager')
     .loadScript('mootools-filemanager/Source/Uploader/Swiff.Uploader.js', 'MootoolsFileManager')
-    .loadScript('mootools-filemanager/Source/Uploader.js', 'MootoolsFileManager');
+    .loadScript('mootools-filemanager/Source/FileManager.js', 'MootoolsFileManager')
+    .loadScript('mootools-filemanager/Source/Uploader.js', 'MootoolsFileManager')
+    .loadScript('mootools-filemanager/Language/Language.en.js', 'MootoolsFileManager');
 }
 MootoolsFileManager.AssetLoader.loadStyle('MootoolsFileManager.css', 'MootoolsFileManager');
 
 
 function MootoolsFileManager(editor)
-{
+{  
   this.editor = editor;
   var self = this;
   var cfg = editor.config;
     
   // Do a callback to the PHP backend and get it to "decode" the configuration for us into a 
-  // javascript object.
-  Xinha._postback(editor.config.MootoolsFileManager.backend+'__function=read-config', editor.config.MootoolsFileManager.backend_data, 
-    function(phpcfg) 
-    { 
-      eval ('var f = '+phpcfg+';'); 
-      self.phpcfg = f; self.hookUpButtons(); 
-    });  
+  // javascript object.  
+  
+  // IMPORTANT: we need to do this synchronously to ensure that the buttons are added to the toolbar
+  //  before the toolbar is drawn.
+  
+  var phpcfg = Xinha._posturlcontent(editor.config.MootoolsFileManager.backend+'__function=read-config', editor.config.MootoolsFileManager.backend_data);
+
+  eval ('var f = '+phpcfg+';'); 
+  self.phpcfg = f; 
+  self.hookUpButtons(); 
     
   return;  
 };
@@ -115,9 +118,9 @@ MootoolsFileManager.prototype.hookUpButtons = function()
     MootoolsFileManager.AssetLoader.loadScriptOnce('MootoolsFileManager.ImageManager.js', 'MootoolsFileManager');
     
     // Override our Editors insert image button action.  
-    self.editor._insertImage = function()
+    self.editor._insertImage = function(image)
     {
-      MootoolsFileManager.AssetLoader.whenReady(function() { self.OpenImageManager(); });
+      MootoolsFileManager.AssetLoader.whenReady(function() { self.OpenImageManager(image); });
     }              
   } 
 };

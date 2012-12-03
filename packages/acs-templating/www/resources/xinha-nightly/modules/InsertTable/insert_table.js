@@ -17,17 +17,17 @@
     --  The file is loaded by the Xinha Core when no alternative method (plugin) is loaded.
     --
     --
-    --  $HeadURL: http://svn.xinha.org/trunk/modules/InsertTable/insert_table.js $
-    --  $LastChangedDate: 2008-10-13 06:52:26 +1300 (Mon, 13 Oct 2008) $
-    --  $LastChangedRevision: 1085 $
-    --  $LastChangedBy: ray $
+    --  $HeadURL: http://svn.xinha.webfactional.com/trunk/modules/InsertTable/insert_table.js $
+    --  $LastChangedDate: 2010-11-17 17:08:18 +1300 (Wed, 17 Nov 2010) $
+    --  $LastChangedRevision: 1272 $
+    --  $LastChangedBy: ejucovy $
     --------------------------------------------------------------------------*/
 InsertTable._pluginInfo = {
   name          : "InsertTable",
   origin        : "Xinha Core",
-  version       : "$LastChangedRevision: 1085 $".replace(/^[^:]*:\s*(.*)\s*\$$/, '$1'),
+  version       : "$LastChangedRevision: 1272 $".replace(/^[^:]*:\s*(.*)\s*\$$/, '$1'),
   developer     : "The Xinha Core Developer Team",
-  developer_url : "$HeadURL: http://svn.xinha.org/trunk/modules/InsertTable/insert_table.js $".replace(/^[^:]*:\s*(.*)\s*\$$/, '$1'),
+  developer_url : "$HeadURL: http://svn.xinha.webfactional.com/trunk/modules/InsertTable/insert_table.js $".replace(/^[^:]*:\s*(.*)\s*\$$/, '$1'),
   sponsor       : "",
   sponsor_url   : "",
   license       : "htmlArea"
@@ -38,8 +38,12 @@ function InsertTable(editor) {
 	var cfg = editor.config;
 	var self = this;
 
-	editor.config.btnList.inserttable[3] = function() { self.show(); }
-      }
+	if(typeof editor._insertTable == 'undefined') {
+	    editor._insertTable = function() {
+		self.show();
+	    }
+	}
+}
 
 InsertTable.prototype._lc = function(string) {
 	return Xinha._lc(string, 'Xinha');

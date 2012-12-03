@@ -37,7 +37,7 @@ UnFormat.prototype.onGenerateOnce = function(editor){
 UnFormat.prototype.onUpdateToolbar = function(editor){
   if (!(UnFormat.dialogReady && UnFormat.methodsReady))
   {
-    this.editor._toolbarObjects.UnFormat.state("enabled", false);
+    this.editor._toolbarObjects.unformat.state("enabled", false);
   }
   else this.onUpdateToolbar = null;
 

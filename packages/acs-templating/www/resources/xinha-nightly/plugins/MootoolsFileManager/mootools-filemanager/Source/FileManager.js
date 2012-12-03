@@ -309,7 +309,13 @@ var FileManager = new Class({
 		this.switchButton();
 	},
 
-	load: function(dir, nofade){
+	/* XINHA: We add a callback capability which will be called whe the loading is completed. 
+    *  NOTE: For some reason, MFM wants the dir to include the last component of the prefix
+    *  eg if your images_dir is /fancy/images and you want to load /fancy/images/foo/bar you must pass
+    *   images/foo/bar -- crazy annoying
+    */
+
+	load: function(dir, nofade, callback){
 		this.deselect();
 		if (!nofade) this.info.fade(0);
 
@@ -319,6 +325,7 @@ var FileManager = new Class({
 			url: this.options.url,
 			onSuccess: (function(j){
 				this.fill(j, nofade);
+        if(callback) callback(j);
 			}).bind(this),
 			data: {
 				directory: dir
@@ -443,7 +450,8 @@ var FileManager = new Class({
 			el.inject(new Element('li').inject(this.browser)).store('parent', el.getParent());
 			icons = $$(icons.map(function(icon){ return icon.appearOn(icon, [1, 0.7]); })).appearOn(el.getParent('li'), 0.7);
 		}, this);
-
+       this.CurrentFiles = j.files;  // XINHA - fillInfo() will use this to find a pre-selected file
+    
 		var self = this, revert = function(el){
 			el.set('opacity', 1).store('block', true).removeClass('drag').removeClass('move').setStyles({
 				opacity: 1,
@@ -453,7 +461,7 @@ var FileManager = new Class({
 				left: 0,
 				top: 0
 			}).inject(el.retrieve('parent'));
-			el.getElements('img.browser-icon').set('opacity', 0);
+		//	el.getElements('img.browser-icon').set('opacity', 0); // XINHA - NOT REQUIRED?
 			
 			document.removeEvents('keydown', self.bound.keydown).removeEvents('keyup', self.bound.keydown);
 			self.imageadd.fade(0);
@@ -551,8 +559,35 @@ var FileManager = new Class({
 	fillInfo: function(file, path){
 		if (!file) file = this.CurrentDir;
 		if (!path) path = this.Directory;
-
+  
 		if (!file) return;
+       
+       /* XINHA: In order to facilitate pre-selecting an image/file for modification, we can pass in a filename (just the basename)
+           as file and we will search in the current files for it.  You must have done a load first, and call the fillInfo as a result of the load.
+           YourImageManager.load('path/to/dir', true, function() { YourImageManager.fillInfo('file.jpg'); });
+        */
+       var self = this;
+	if(typeof file == 'string')
+    {
+        if(this.CurrentFiles)
+        {
+          this.CurrentFiles.each(function(f)
+          {
+            if(typeof file != 'string') return;
+            if(f.name == file) 
+            {
+                file = f;
+                if(file.element) 
+                {
+                  self.Current = file.element.addClass('selected');
+                  self.switchButton();
+                }
+               
+            }
+          });
+        }
+    }
+    
 		var size = this.size(file.size);
 
 		this.info.fade(1).getElement('img').set({

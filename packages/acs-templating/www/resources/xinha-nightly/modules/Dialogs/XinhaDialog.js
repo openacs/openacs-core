@@ -14,9 +14,9 @@
     --  This is the new all-in-one implementation of dialogs for Xinha
     --
     --
-    --  $HeadURL: http://svn.xinha.org/trunk/modules/Dialogs/XinhaDialog.js $
-    --  $LastChangedDate: 2010-02-15 07:13:26 +1300 (Mon, 15 Feb 2010) $
-    --  $LastChangedRevision: 1238 $
+    --  $HeadURL: http://svn.xinha.webfactional.com/trunk/modules/Dialogs/XinhaDialog.js $
+    --  $LastChangedDate: 2010-06-18 12:23:58 +1200 (Fri, 18 Jun 2010) $
+    --  $LastChangedRevision: 1267 $
     --  $LastChangedBy: wymsy $
     --------------------------------------------------------------------------*/
 /*jslint regexp: false, rhino: false, browser: true, bitwise: false, forin: false, adsafe: false, evil: true, nomen: false, 
@@ -27,7 +27,7 @@ white: false, widget: false, undef: true, plusplus: false*/
 /** Xinha Dialog
  *  
  * @constructor
- * @version $LastChangedRevision: 1238 $ $LastChangedDate: 2010-02-15 07:13:26 +1300 (Mon, 15 Feb 2010) $
+ * @version $LastChangedRevision: 1267 $ $LastChangedDate: 2010-06-18 12:23:58 +1200 (Fri, 18 Jun 2010) $
  * @param {Xinha} editor Xinha object    
  * @param {String} html string The HTML for the dialog's UI
  * @param {String} localizer string the "context" parameter for Xinha._lc(), typically the name of the plugin
@@ -537,6 +537,23 @@ Xinha.Dialog.prototype.show = function(values)
         }
       }
     });
+    //hide object & embed tags in document so they won't show through
+    if (this.editor.config.hideObjectsBehindDialogs)
+    {
+      this.objTags = this.editor._doc.getElementsByTagName('object');
+      this.embedTags = this.editor._doc.getElementsByTagName('embed');
+      for (var j=0; j<this.objTags.length; j++)
+      {
+        this.objTags[j].__object_hidden = this.objTags[j].style.visibility;
+        this.objTags[j].style.visibility = 'hidden';
+      }
+      for (j=0; j<this.embedTags.length; j++)
+      {
+        this.embedTags[j].__embed_hidden = this.embedTags[j].style.visibility;
+        this.embedTags[j].style.visibility = 'hidden';
+      }
+    }
+
     var dialogHeight = rootElem.offsetHeight;
     var dialogWidth = rootElem.offsetWidth;
     var viewport = Xinha.viewportSize();
@@ -638,6 +655,19 @@ Xinha.Dialog.prototype.hide = function()
       this.editor._textArea.style.display = this._restoreTo[0];
       this.editor._iframe.style.visibility   = this._restoreTo[1];
       this.editor.showPanels(this._restoreTo[2]);
+    }
+
+    //restore visibility of object & embed tags in document
+    if (this.editor.config.hideObjectsBehindDialogs)
+    {
+      for (var j=0; j<this.objTags.length; j++)
+      {
+        this.objTags[j].style.visibility = this.objTags[j].__object_hidden;
+      }
+      for (j=0; j<this.embedTags.length; j++)
+      {
+        this.embedTags[j].style.visibility = this.embedTags[j].__embed_hidden;
+      }
     }
 
     if (!this.editor._isFullScreen && this.modal)

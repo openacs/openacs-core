@@ -36,7 +36,7 @@ MootoolsFileManager.prototype.OpenImageManager = function(image)
   {
     outparam =
       {
-        f_url    : Xinha.is_ie ? image.src : image.src,
+        f_url    : image.getAttribute('src'), //Xinha.is_ie ? image.src : image.src,
         f_alt    : image.alt,
         f_border : image.style.borderWidth ? image.style.borderWidth : image.border,
         f_align  : image.hasAttribute('align') ? image.align : null,
@@ -72,7 +72,25 @@ MootoolsFileManager.prototype.OpenImageManager = function(image)
       uploadAuthData: this.editor.config.MootoolsFileManager.backend_data,
       onComplete:     function(path, file) { self.ImageManagerReturn(path,file); },
       onHide:         function() { if(this.swf && this.swf.box) this.swf.box.style.display = 'none'; },
-      onShow:         function() { if(this.swf && this.swf.box) this.swf.box.style.display = ''; },
+      onShow:         function() {        
+        if(this.swf && this.swf.box) this.swf.box.style.display = ''; 
+        if(self.current_image)
+        {
+            var src  = self.current_image.getAttribute('src');
+            if(!src.match(/^(([a-z]+:)|\/)/i))
+            {
+                src = self.editor.config.baseHref.replace(/\/[^\/]*$/, '') + '/' + src;
+                if(src.match(/^[a-z]+:/i) && !self.phpcfg.images_url.match(/^[a-z]:/i))
+                {
+                  src = src.replace(/^[a-z]+:(\/\/?)[^/]*/i, '');
+                }
+            }
+            var path = src.replace(self.phpcfg.images_url+'/', '').split('/');
+            var base = path.pop();
+            path     = self.phpcfg.images_url.split('/').pop() + (path.length ? ('/' + path.join('/')) : '');  
+            this.load(path, true, (function() { this.fillInfo(base); }).bind(this));            
+        }
+      },
       onDetails:      function(details) 
                       {                                                 
                         this.info.adopt(self.ImageManagerAttributes(details)); 
@@ -177,7 +195,7 @@ MootoolsFileManager.prototype.ImageManagerAttributes = function (details)
           div.style.position = 'relative';
           
           var img   = div.appendChild(document.createElement('img'));
-          img.src   = '/plugins/ImageManager/img/locked.gif';
+          img.src   =  Xinha.getPluginDir("ImageManager") + '/img/locked.gif';
           img.width = 25;
           img.height = 32;
           img.alt = 'Constrain Proportions';
@@ -200,21 +218,25 @@ MootoolsFileManager.prototype.ImageManagerAttributes = function (details)
         if(self.phpcfg.UseHSpaceVSpace)      
         { // HSPACE/VSPACE        
           var th    = tr.appendChild(document.createElement('th'));
-          var label = th.appendChild(document.createTextNode('Margin:'));
+          var label = th.appendChild(document.createTextNode('L/R Margin:'));
           
           var td    = tr.appendChild(document.createElement('td'));
           var input = td.appendChild(document.createElement('input'));
           input.name   = 'f_hspace';
           input.size = 3;    
           input.type = 'text';
+          td.appendChild(document.createTextNode(' px '));               
+          th.className = td.className = 'filemanager-f_hspace';      
           
-          td.appendChild(document.createTextNode(' x '));        
+          var th    = tr.appendChild(document.createElement('th'));
+          var label = th.appendChild(document.createTextNode('T/B Margin:'));
+          var td    = tr.appendChild(document.createElement('td'));
           var input = td.appendChild(document.createElement('input'));
           input.name   = 'f_vspace';
           input.size = 3;    
           input.type = 'text';
           td.appendChild(document.createTextNode(' px '));               
-          th.className = td.className = 'filemanager-f_hspace filemanager-f_vspace';      
+          th.className = td.className = 'filemanager-f_vspace';      
         }
         else
         {
@@ -290,11 +312,11 @@ MootoolsFileManager.prototype.ImageManagerAttributes = function (details)
           input.name   = 'f_align';
           input.title = 'Positioning of this image';
           input.options[0] = new Option('', true, true);
-          input.options[1] = new Option('Left');
-          input.options[2] = new Option('Right');
-          input.options[3] = new Option('Top');
-          input.options[4] = new Option('Middle');
-          input.options[5] = new Option('Bottom');
+          input.options[1] = new Option('Left', 'left');
+          input.options[2] = new Option('Right', 'right');
+          input.options[3] = new Option('Top', 'top');
+          input.options[4] = new Option('Middle', 'middle');
+          input.options[5] = new Option('Bottom', 'bottom');
           
           // @TODO Constrain Ratio
           th.className = td.className = 'filemanager-f_align';              
@@ -419,43 +441,64 @@ MootoolsFileManager.prototype.ImageManagerAttributes = function (details)
       f_height: f('f_height').value,
       
       table: this._ImageManagerAttributesTable
-    }
-    
+    } 
     return details;
   }
   
   // If details were supplied, we set the appropriate ones.  
   if(
-      (f('f_width').value  && f('f_width').value  != details.width)   
-   || (f('f_height').value && f('f_height').value != details.height)   
+   (   (f('f_width').value  && f('f_width').value  != details.width)   
+    || (f('f_height').value && f('f_height').value != details.height)  )
+   && 
+    (!details.url || !this.current_image || this.current_image.getAttribute('src') != details.url)
   )
   {
-    new Dialog('This image is a different size, would you like to use the new size?', {
-      language: {        
-        confirm: 'Shrink/Grow To Fit',        
-        decline: 'Fullsize'
-      },
-        
-      buttons: [
-        'confirm',
-        'decline'
-      ],
-      
-      onConfirm: function(){
-        if(f('f_constrain').checked)
-        {
-          var new_size = self.ScaleImage(details, {width: f('f_width').value, height: f('f_height').value});
+    // Check if this is the same image
+    var warn = function() {      
+      new Dialog('This image is a different size, would you like to use the new size?', {
+        language: {        
+          confirm: 'Shrink/Grow To Fit',        
+          decline: 'Fullsize'
+        },
           
-          f('f_width').value = f('f_width').value   ? new_size.width : '';
-          f('f_height').value = f('f_height').value ? new_size.height : '';
+        buttons: [
+          'confirm',
+          'decline'
+        ],
+        
+        onConfirm: function(){
+          if(f('f_constrain').checked)
+          {
+            var new_size = self.ScaleImage(details, {width: f('f_width').value, height: f('f_height').value});
+            
+            f('f_width').value = f('f_width').value   ? new_size.width : '';
+            f('f_height').value = f('f_height').value ? new_size.height : '';
+          }
+        },
+        
+        onDecline: function(){
+          f('f_width').value = '';
+          f('f_height').value = '';
         }
-      },
+      });
+    }
       
-      onDecline: function(){
-        f('f_width').value = '';
-        f('f_height').value = '';
+      if(!details.url) warn();
+      else if(!this.current_image) warn();
+      else
+      {
+          var src  = self.current_image.getAttribute('src');
+          if(!src.match(/^(([a-z]+:)|\/)/i))
+          {
+              src = self.editor.config.baseHref.replace(/\/[^\/]*$/, '') + '/' + src;
+              if(src.match(/^[a-z]+:/i) && !self.phpcfg.images_url.match(/^[a-z]:/i))
+              {
+                src = src.replace(/^[a-z]+:(\/\/?)[^/]*/i, '');
+              }
+          }
+          if(details.url != src) warn();
       }
-    });
+    
   }
   
   f('f_align').style.visibility = ''; // Ensure that the select hasn't been hidden by an overlay and not put back
@@ -536,7 +579,7 @@ MootoolsFileManager.prototype.ImageManagerReturn = function(path, file)
         
         case "f_margin": 
         {
-          if(value.length)
+          if(value && value.length)
           {
             img.style.margin = /[^0-9]/.test(value) ? value :  (parseInt(value) + 'px'); 
           }
@@ -547,7 +590,7 @@ MootoolsFileManager.prototype.ImageManagerReturn = function(path, file)
         }
         break;
         
-        case "f_align"  : if(img.align && img.align !== true) { img.align  = value; } else { img.removeAttribute('align'); } break;
+        case "f_align"  : if(value && value !== true) { img.align  = value; } else { img.removeAttribute('align'); } break;
           
         case "f_width" : 
         {
