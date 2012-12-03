@@ -151,7 +151,7 @@ function init ()
     else if(manager_mode=="link" && param)
     {
         var target_select = document.getElementById("f_target");
-        var absoluteURL = new RegExp('^https?://');
+        var absoluteURL = new RegExp('^(/|(https?://))');
 
         if (param.f_href.length > 0 && !absoluteURL.test(param.f_href) && typeof param.baseHref == "string") {
             // URL is not absolute, prepend baseHref

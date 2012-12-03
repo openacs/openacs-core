@@ -15,9 +15,11 @@
 // Object that will encapsulate all the table operations provided by
 // HTMLArea-3.0 (except "insert table" which is included in the main file)
 Xinha.Config.prototype.TableOperations = {
-  'showButtons' : true // Set to false to hide all but inserttable and toggleborders buttons on the toolbar
+  'showButtons' : true, // Set to false to hide all but inserttable and toggleborders buttons on the toolbar
   // this is useful if you have the ContextMenu plugin and want to save toolbar space
   // (the context menu can perform all the button operations)
+  'addToolbarLineBreak': true // By default TableOperations adds a 'linebreak' in the toolbar.
+  // Set to false to prevent this and instead just append the buttons without a 'linebreak'.
 }
 
 function TableOperations(editor) {
@@ -29,12 +31,16 @@ function TableOperations(editor) {
 
   // register the toolbar buttons provided by this plugin
 
-  // Remove existing inserttable and toggleborders, we will replace it in our group  
-  cfg.removeToolbarElement(' inserttable toggleborders '); 
-  
-  var toolbar = ["linebreak", "inserttable", "toggleborders"];
-  
-  
+  // Remove existing inserttable and toggleborders, we will replace it in our group
+  cfg.removeToolbarElement(' inserttable toggleborders ');
+
+  var toolbar;
+  if( cfg.TableOperations.addToolbarLineBreak ) {
+    toolbar = ["linebreak", "inserttable", "toggleborders"];
+  } else {
+    toolbar = ["inserttable", "toggleborders"];
+  }
+
   for (var i = 0; i < bl.length; ++i) {
     var btn = bl[i];
     if (!btn) {
@@ -62,7 +68,8 @@ function TableOperations(editor) {
   {
     Xinha._loadback(_editor_url + 'modules/InlineStyler/InlineStyler.js');
   }
-  
+
+  cfg.dblclickList['td'] = [function() { self.dialogTableProperties() }];
 }
 
 TableOperations._pluginInfo = {

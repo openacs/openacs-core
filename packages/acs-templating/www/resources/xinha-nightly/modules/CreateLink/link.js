@@ -17,10 +17,10 @@
     --  The file is loaded as a special plugin by the Xinha Core when no alternative method (plugin) is loaded.
     --
     --
-    --  $HeadURL: http://svn.xinha.org/trunk/modules/CreateLink/link.js $
-    --  $LastChangedDate: 2008-10-13 06:42:42 +1300 (Mon, 13 Oct 2008) $
-    --  $LastChangedRevision: 1084 $
-    --  $LastChangedBy: ray $
+    --  $HeadURL: http://svn.xinha.webfactional.com/trunk/modules/CreateLink/link.js $
+    --  $LastChangedDate: 2010-11-16 05:15:48 +1300 (Tue, 16 Nov 2010) $
+    --  $LastChangedRevision: 1271 $
+    --  $LastChangedBy: ejucovy $
     --------------------------------------------------------------------------*/
 
 function CreateLink(editor) {
@@ -28,15 +28,20 @@ function CreateLink(editor) {
 	var cfg = editor.config;
 	var self = this;
 
-   editor.config.btnList.createlink[3] = function() { self.show(self._getSelectedAnchor()); }
+	if(typeof editor._createLink == 'undefined') {
+	    editor._createLink = function(target) {
+		if(!target) target = self._getSelectedAnchor();
+		self.show(target);
+	    }
+	}
 }
 
 CreateLink._pluginInfo = {
   name          : "CreateLink",
   origin        : "Xinha Core",
-  version       : "$LastChangedRevision: 1084 $".replace(/^[^:]*:\s*(.*)\s*\$$/, '$1'),
+  version       : "$LastChangedRevision: 1271 $".replace(/^[^:]*:\s*(.*)\s*\$$/, '$1'),
   developer     : "The Xinha Core Developer Team",
-  developer_url : "$HeadURL: http://svn.xinha.org/trunk/modules/CreateLink/link.js $".replace(/^[^:]*:\s*(.*)\s*\$$/, '$1'),
+  developer_url : "$HeadURL: http://svn.xinha.webfactional.com/trunk/modules/CreateLink/link.js $".replace(/^[^:]*:\s*(.*)\s*\$$/, '$1'),
   sponsor       : "",
   sponsor_url   : "",
   license       : "htmlArea"

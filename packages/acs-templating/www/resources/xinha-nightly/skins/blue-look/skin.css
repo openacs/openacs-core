@@ -14,6 +14,11 @@
   height:25px;
 }
 
+.htmlarea .toolbarRow td.toolBarElement
+{
+  margin:0px; padding:0px;
+}
+
 .htmlarea .toolbar .button
 {
   background-image: url(button-background.png);

@@ -31,16 +31,17 @@ function Linker(editor, args)
   this.lConfig = editor.config.Linker;
 
   var linker = this;
-  if(editor.config.btnList.createlink)
-  {
-    editor.config.btnList.createlink[3]
-      =  function(e, objname, obj) { linker._createLink(linker._getSelectedAnchor()); };
+  if(typeof editor._createLink == 'undefined') {
+      editor._createLink = function(target) {
+	  if(!target) target = linker._getSelectedAnchor();
+	  linker._createLink(target);
+      }
   }
-  else
+  if(!editor.config.btnList.createlink)
   {
     editor.config.registerButton(
                                  'createlink', 'Insert/Modify Hyperlink', [_editor_url + "images/ed_buttons_main.gif",6,1], false,
-                                 function(e, objname, obj) { linker._createLink(linker._getSelectedAnchor()); }
+                                 function(e, objname, obj) { editor.execCommand("createlink"); }
                                  );
   }
 

@@ -25,7 +25,7 @@
     --   be a part of the InternetExplorer.prototype, we won't trample on 
     --   namespace that way.
     --
-    --  $HeadURL: http://svn.xinha.org/trunk/modules/InternetExplorer/InternetExplorer.js $
+    --  $HeadURL: http://svn.xinha.webfactional.com/trunk/modules/InternetExplorer/InternetExplorer.js $
     --  $LastChangedDate: 2010-05-12 00:31:04 +1200 (Wed, 12 May 2010) $
     --  $LastChangedRevision: 1260 $
     --  $LastChangedBy: gogo $
@@ -36,7 +36,7 @@ InternetExplorer._pluginInfo = {
   origin        : "Xinha Core",
   version       : "$LastChangedRevision: 1260 $".replace(/^[^:]*:\s*(.*)\s*\$$/, '$1'),
   developer     : "The Xinha Core Developer Team",
-  developer_url : "$HeadURL: http://svn.xinha.org/trunk/modules/InternetExplorer/InternetExplorer.js $".replace(/^[^:]*:\s*(.*)\s*\$$/, '$1'),
+  developer_url : "$HeadURL: http://svn.xinha.webfactional.com/trunk/modules/InternetExplorer/InternetExplorer.js $".replace(/^[^:]*:\s*(.*)\s*\$$/, '$1'),
   sponsor       : "",
   sponsor_url   : "",
   license       : "htmlArea"

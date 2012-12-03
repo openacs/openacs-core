@@ -30,8 +30,8 @@
 */
 
 // Strip slashes if MQGPC is on
-set_magic_quotes_runtime(0);
-if(get_magic_quotes_gpc())
+if(function_exists('set_magic_quotes_runtime')) @set_magic_quotes_runtime(0);
+if(function_exists('get_magic_quotes_gpc') && @get_magic_quotes_gpc())
 {
   $to_clean = array(&$_GET, &$_POST, &$_REQUEST, &$_COOKIE);
   while(count($to_clean))
@@ -56,7 +56,7 @@ function size_to_bytes($s)
 {
   if(preg_match('/([0-9\.])+([a-zA-Z]+)/', $s, $M))
   {
-    switch(strtolower($M))
+    switch(strtolower($M[2]))
     {      
       case 'm':
         return floor(floatval($M[1]) * 1024 * 1024);

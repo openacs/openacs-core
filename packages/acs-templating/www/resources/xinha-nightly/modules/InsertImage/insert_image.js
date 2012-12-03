@@ -11,7 +11,7 @@
     --  he file is loaded as a special plugin by the Xinha Core when no alternative method (plugin) is loaded.
     --
     --
-    --  $HeadURL: http://svn.xinha.org/trunk/modules/InsertImage/insert_image.js $
+    --  $HeadURL: http://svn.xinha.webfactional.com/trunk/modules/InsertImage/insert_image.js $
     --  $LastChangedDate: 2010-02-18 15:14:45 +1300 (Thu, 18 Feb 2010) $
     --  $LastChangedRevision: 1239 $
     --  $LastChangedBy: gogo $
@@ -22,7 +22,7 @@ InsertImage._pluginInfo = {
   origin        : "Xinha Core",
   version       : "$LastChangedRevision: 1239 $".replace(/^[^:]*:\s*(.*)\s*\$$/, '$1'),
   developer     : "The Xinha Core Developer Team",
-  developer_url : "$HeadURL: http://svn.xinha.org/trunk/modules/InsertImage/insert_image.js $".replace(/^[^:]*:\s*(.*)\s*\$$/, '$1'),
+  developer_url : "$HeadURL: http://svn.xinha.webfactional.com/trunk/modules/InsertImage/insert_image.js $".replace(/^[^:]*:\s*(.*)\s*\$$/, '$1'),
   sponsor       : "",
   sponsor_url   : "",
   license       : "htmlArea"

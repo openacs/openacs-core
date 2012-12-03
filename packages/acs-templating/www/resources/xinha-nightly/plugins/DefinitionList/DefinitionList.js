@@ -9,28 +9,30 @@ function DefinitionList(editor) {
   var bl = DefinitionList.btnList;
   var self = this;
   // register the toolbar buttons provided by this plugin
-  var toolbar = ["linebreak"];
   for (var i = 0; i < bl.length; ++i) {
     var btn = bl[i];
     if (!btn) {
-      toolbar.push("separator");
-    } else {
-      var id = btn[0];
-      cfg.registerButton(id, this._lc(btn[1]), editor.imgURL("ed_" + btn[0] + ".gif", "DefinitionList"), false,
-             function(editor, id) {
-               // dispatch button press event
-               self.buttonPress(editor, id);
-             });
-      toolbar.push(id);
+      continue;
     }
+    var id = btn[0];
+    cfg.registerButton(id, this._lc(btn[1]), editor.imgURL("ed_" + btn[0] + ".gif", "DefinitionList"), false,
+      function(editor, id) {
+        // dispatch button press event
+        self.buttonPress(editor, id);
+      });
   }
-  // add a new line in the toolbar
-  cfg.toolbar.push(toolbar);
+
+  // We'll insert the buttons next to the UL/OL buttons, if they exist.
+  // If neither of those buttons exists, addToolbarElement puts our buttons
+  // at the beginning of the toolbar, which is good enough.
+  cfg.addToolbarElement("dl", ["insertunorderedlist", "insertorderedlist"], 1);
+  cfg.addToolbarElement("dt", "dl", 1);
+  cfg.addToolbarElement("dd", "dt", 1);
 }
 
 DefinitionList._pluginInfo = {
   name          : "DefinitionList",
-  version       : "1.0",
+  version       : "1.1",
   developer     : "Udo Schmal",
   developer_url : "",
   c_owner       : "Udo Schmal",
@@ -53,28 +55,34 @@ DefinitionList.prototype.onGenerate = function() {
 };
 
 DefinitionList.prototype.buttonPress = function(editor,button_id) {
+  var pe;
+  var dx;
   if (button_id=='dl') { //definition list
-    var pe = editor.getParentElement();
-    while (pe.parentNode.tagName.toLowerCase() != 'body') {
-      pe = pe.parentNode;
+    pe = editor.getParentElement();
+    if( pe.tagName.toLowerCase() != 'body' ) {
+      while (pe.parentNode.tagName.toLowerCase() != 'body') {
+        pe = pe.parentNode;
+      }
     }
-    var dx = editor._doc.createElement(button_id);
+    dx = editor._doc.createElement(button_id);
     dx.innerHTML = '&nbsp;';
-    if(pe.parentNode.lastChild==pe) {
+    if( pe.tagName.toLowerCase() == 'body' ) {
+      pe.appendChild(dx);
+    }else if(pe.parentNode.lastChild==pe) {
       pe.parentNode.appendChild(dx);
     }else{
       pe.parentNode.insertBefore(dx,pe.nextSibling);
     }
   } else if ((button_id=='dt')||(button_id=='dd')) { //definition term or description
-    var pe = editor.getParentElement();
+    pe = editor.getParentElement();
     while (pe && (pe.nodeType == 1) && (pe.tagName.toLowerCase() != 'body')) {
       if(pe.tagName.toLowerCase() == 'dl') {
-        var dx = editor._doc.createElement(button_id);
+        dx = editor._doc.createElement(button_id);
         dx.innerHTML = '&nbsp;';
         pe.appendChild(dx);
         break;
       }else if((pe.tagName.toLowerCase() == 'dt')||(pe.tagName.toLowerCase() == 'dd')){
-        var dx = editor._doc.createElement(button_id)
+        dx = editor._doc.createElement(button_id);
         dx.innerHTML = '&nbsp;';
         if(pe.parentNode.lastChild==pe) {
         pe.parentNode.appendChild(dx);

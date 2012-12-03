@@ -25,7 +25,7 @@
     --   be a part of the Gecko.prototype, we won't trample on namespace
     --   that way.
     --
-    --  $HeadURL: http://svn.xinha.org/trunk/modules/Gecko/Gecko.js $
+    --  $HeadURL: http://svn.xinha.webfactional.com/trunk/modules/Gecko/Gecko.js $
     --  $LastChangedDate: 2008-10-13 06:42:42 +1300 (Mon, 13 Oct 2008) $
     --  $LastChangedRevision: 1084 $
     --  $LastChangedBy: ray $
@@ -36,7 +36,7 @@ Gecko._pluginInfo = {
   origin        : "Xinha Core",
   version       : "$LastChangedRevision: 1084 $".replace(/^[^:]*:\s*(.*)\s*\$$/, '$1'),
   developer     : "The Xinha Core Developer Team",
-  developer_url : "$HeadURL: http://svn.xinha.org/trunk/modules/Gecko/Gecko.js $".replace(/^[^:]*:\s*(.*)\s*\$$/, '$1'),
+  developer_url : "$HeadURL: http://svn.xinha.webfactional.com/trunk/modules/Gecko/Gecko.js $".replace(/^[^:]*:\s*(.*)\s*\$$/, '$1'),
   sponsor       : "",
   sponsor_url   : "",
   license       : "htmlArea"

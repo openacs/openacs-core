@@ -136,6 +136,17 @@
 $IMConfig['base_dir'] = getcwd();
 $IMConfig['base_url'] = preg_replace('/\/backend\.php.*/', '', $_SERVER['REQUEST_URI']);
 
+/**
+
+== HTML Compatability ==
+
+ For most people the default of using CSS will be fine, but if the HTML you are editing
+ in Xinha is destined for an email you will probably want to use hspace and vspace
+ instead of CSS margins because of poor Email support for CSS.
+ 
+*/
+
+$IMConfig['UseHSpaceVSpace'] = TRUE;
 
  /**
   // Future use, not yet required.
