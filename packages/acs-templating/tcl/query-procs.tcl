@@ -433,7 +433,7 @@ ad_proc -private get_cached_result { name type } {
 
     if { [ns_cache names template_query_cache $cache_key] ne ""} {
 
-      if {[ns_info name] ne "NaviServer"} {
+      if {[ns_info name] eq "NaviServer"} {
 	set cached_result [ns_cache_eval template_query_cache $cache_key {}]
       } else {
 
@@ -517,7 +517,7 @@ ad_proc -private set_cached_result {} {
       #
       # NaviServer allows per entry expire time
       #
-      ns_cache_eval -expires $timeout -force 1 template_query_cache $cache_key \
+      ns_cache_eval -expires $timeout -force template_query_cache $cache_key \
 	  set _ $opts(result)
     } else {
       #
@@ -580,9 +580,9 @@ ad_proc -private template::query::flush_cache { cache_match } {
   foreach name $names {
     if { [string match $cache_match $name] } {
       ns_log debug "template::query::flush_cache: FLUSHING QUERY (persistent): $name"
-      nsv_cache flush template_query_cache $name
+      ns_cache flush template_query_cache $name
       if {[ns_info name] ne "NaviServer"} {
-	nsv_cache flush template_timeout_cache $name
+	ns_cache flush template_timeout_cache $name
       }
     }
   }
@@ -1080,8 +1080,8 @@ ad_proc -public cache { command cache_key args } {
   switch -exact $command {
 
     get {
-      if {[ns_info name] ne "NaviServer"} {
-	if {[ns_cache_keys template_cache $cache_key]} {
+      if {[ns_info name] eq "NaviServer"} {
+	if {[ns_cache_keys template_cache $cache_key] ne ""} {
 	  set result [ns_cache_eval template_cache $cache_key {}]
 	}
       } else {
@@ -1106,11 +1106,11 @@ ad_proc -public cache { command cache_key args } {
 	set timeout [expr {[ns_time] + [lindex $args 1]}]
       }
 
-      if {[ns_info name] ne "NaviServer"} {
+      if {[ns_info name] eq "NaviServer"} {
 	#
 	# NaviServer allows per entry expire time
 	#
-	ns_cache_eval -expires $timeout -force 1 template_cache $cache_key \
+	ns_cache_eval -expires $timeout -force template_cache $cache_key \
 	    set _ [lindex $args 0]
       } else {
 	#
@@ -1122,7 +1122,7 @@ ad_proc -public cache { command cache_key args } {
 
     flush {
       # The key is actually a string match pattern
-      if {[ns_info name] ne "NaviServer"} {
+      if {[ns_info name] eq "NaviServer"} {
 	ns_cache_flush -glob template_cache $cache_key
       } else {
 	set names [ns_cache names template_cache]
@@ -1139,15 +1139,17 @@ ad_proc -public cache { command cache_key args } {
       if {[ns_info name] eq "NaviServer"} {
 	set result [expr {[ns_cache_keys template_cache $cache_key] ne ""}]
       } else {
-	if { [ns_cache exists template_cache $cache_key] } {
+	if { [ns_cache get template_cache $cache_key cached_value] } {
 	  # get timeout and value
-	  lassign [ns_cache get template_cache $cache_key] timeout value
+	  lassign $cached_value timeout value
 	  # validate timeout
 	  if { $timeout > [ns_time] } {
 	    set result 1
 	  } else {
 	    set result 0
 	  }
+	} else {
+	  set result 0
 	}
       }
     }
