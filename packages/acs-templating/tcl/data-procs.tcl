@@ -434,10 +434,8 @@ ad_proc -public template::data::transform {
   @param type The data type to be transformed.
 } {
 
-  set proc_name [info procs ::template::data::transform::$type]
-
+  set proc_name [info commands ::template::data::transform::$type]
   if { $proc_name ne {} } {
-
     transform::$type $value_ref
   }
 }

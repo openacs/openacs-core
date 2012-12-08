@@ -73,7 +73,7 @@ template_tag master { params } {
 template_tag slave { params } {
 
   #Start developer support frame around subordinate template.
-  if { [llength [info procs ::ds_enabled_p]] && [llength [info procs ::ds_adp_start_box]] } {
+  if { [info commands ::ds_enabled_p] ne "" && [info commands ::ds_adp_start_box] ne "" } {
       ::ds_adp_start_box
   }
 
@@ -84,7 +84,7 @@ template_tag slave { params } {
   "
 
   #End developer support frame around subordinate template.
-  if { [llength [info procs ::ds_enabled_p]] && [llength [info procs ::ds_adp_end_box]] } {
+  if { [info commands ::ds_enabled_p] ne "" && [info commands ::ds_adp_end_box] ne "" } {
       ::ds_adp_end_box
   }
 
@@ -97,7 +97,7 @@ template_tag include { params } {
   set src [ns_set iget $params src]
 
   #Start developer support frame around subordinate template.
-  if { [llength [info procs ::ds_enabled_p]] && [llength [info procs ::ds_adp_start_box]] } {
+  if { [info commands ::ds_enabled_p] ne "" && [info commands ::ds_adp_start_box] ne "" } {
       ::ds_adp_start_box -stub "\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]"
   }
 
@@ -127,7 +127,7 @@ template_tag include { params } {
   template::adp_append_code "    } else {"
   template::adp_append_code "        append __adp_output \"Error in include template \\\"\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]\\\": \$errmsg\""
   # JCD: If we have the ds_page_bits cache maybe save the error for later
-  if { [llength [info procs ::ds_enabled_p]] && [llength [info procs ::ds_page_fragment_cache_enabled_p]] } {
+  if { [info commands ::ds_enabled_p] ne "" && [info commands ::ds_page_fragment_cache_enabled_p] ne "" } {
       template::adp_append_code "        if {\[::ds_enabled_p\]"
       template::adp_append_code "            && \[::ds_collection_enabled_p\] } {"
       template::adp_append_code "            set __include_errors {}"
@@ -140,7 +140,7 @@ template_tag include { params } {
   template::adp_append_code "}"
 
   #End developer support frame around subordinate template.
-  if { [llength [info procs ::ds_enabled_p]] && [llength [info procs ::ds_adp_end_box]] } {
+  if { [info commands ::ds_enabled_p] ne "" && [info commands ::ds_adp_end_box] ne "" } {
       ::ds_adp_end_box -stub "\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]"
   }
 
@@ -637,7 +637,7 @@ template_tag include-optional { chunk params } {
   set src [ns_set iget $params src]
 
   #Start developer support frame around subordinate template.
-  if { [llength [info procs ::ds_enabled_p]] && [llength [info procs ::ds_adp_start_box]] } {
+  if { [info commands ::ds_enabled_p] ne "" && [info commands ::ds_adp_start_box] ne ""} {
       ::ds_adp_start_box -stub "\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]"
   }
 
@@ -679,7 +679,7 @@ template_tag include-optional { chunk params } {
   "
 
   #End developer support frame around subordinate template.
-  if { [llength [info procs ::ds_enabled_p]] && [llength [info procs ::ds_adp_end_box]] } {
+  if { [info commands ::ds_enabled_p] ne "" && [info commands ::ds_adp_end_box] ne "" } {
       ::ds_adp_end_box -stub "\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]"
   }
 

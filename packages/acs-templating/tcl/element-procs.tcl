@@ -597,7 +597,7 @@ ad_proc -public template::element::querygetall { element_ref } {
 
   set transform_proc "::template::data::transform::$datatype"
 
-  if {[info procs $transform_proc] eq {}} {
+  if {[info commands $transform_proc] eq {}} {
 
     set values [ns_querygetall $element(id)]
 
