@@ -834,7 +834,7 @@ ad_proc -public export_vars {
     # Prepend with the base URL
     if { [exists_and_not_null base] } {
         if { $export_string ne "" } {
-            if { [regexp {\?} $base] } {
+            if { [string match {*[?]*} $base] } {
                 # The base already has query vars
                 set export_string "${base}&${export_string}"
             } else { 
@@ -1866,7 +1866,7 @@ ad_proc -public safe_eval args {
     that may be used to execute unsafe code.
 } {
     foreach arg $args {
-	if { [regexp {[\[;]} $arg] } {
+	if { [string match {*[\[;]*} $arg] } {
 	    return -code error "Unsafe argument to safe_eval: $arg"
 	}
     }
@@ -2009,8 +2009,8 @@ ad_proc -public ad_set_cookie {
     if { $replace } {
 	# Try to find an already-set cookie named $name.
 	for { set i 0 } { $i < [ns_set size $headers] } { incr i } {
-	    if { ![string compare [string tolower [ns_set key $headers $i]] "set-cookie"] && \
-		    [regexp "^$name=" [ns_set value $headers $i]] } {
+	    if { [string tolower [ns_set key $headers $i]] eq "set-cookie" && 
+		 [string match "$name=*" [ns_set value $headers $i]] } {
 		ns_set delete $headers $i
 	    }
 	}
@@ -2325,7 +2325,7 @@ ad_proc -public ad_returnredirect {
     set type [ns_set iget [ad_conn headers] content-type]
     if { [string match *multipart/form-data* [string tolower $type]] } {
         set user_agent [ns_set get [ad_conn headers] User-Agent]
-        set use_metarefresh_p [regexp -nocase "msie 5.0" $user_agent match]
+        set use_metarefresh_p [string match -nocase "*msie 5.0*" $user_agent match]
     }
     if {[string match "https://*" [ad_conn location]] && [string match "http://*" $url]} {
 	# workaround the You are about to be redirected to a connection that
@@ -2549,7 +2549,7 @@ ad_proc -public util_current_directory {{}} {
 ad_proc -public ad_call_proc_if_exists { proc args } {
     Calls a procedure with particular arguments, only if the procedure is defined.
 } {
-    if { [llength [info procs $proc]] == 1 } {
+    if { [llength [info commands $proc]] == 1 } {
 	eval $proc $args
     }
 }

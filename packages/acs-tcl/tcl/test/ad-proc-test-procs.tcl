@@ -23,14 +23,14 @@ aa_register_case -cats {api smoke} ad_proc_create_callback {
         } error]
 
     ad_proc -callback a_callback { -arg1 arg2 } { this is a test callback } -
-    set callback_procs [info procs ::callback::a_callback::*]
+    set callback_procs [info command ::callback::a_callback::*]
     aa_true "creation of a valid callback contract with '-' body" \
         [expr {[lsearch -exact \
             $callback_procs \
             ::callback::a_callback::contract] >= 0}]
 
     ad_proc -callback a_callback_2 { arg1 arg2 } { this is a test callback } {}
-    set callback_procs [info procs ::callback::a_callback_2::*]
+    set callback_procs [info commands ::callback::a_callback_2::*]
     aa_true "creation of a valid callback contract with no body" \
         [expr {[lsearch -exact \
             $callback_procs \
@@ -50,7 +50,7 @@ aa_register_case -cats {api smoke} ad_proc_create_callback {
         this is a test callback implementation 
     } {
     }
-    set impl_procs [info procs ::callback::a_callback::impl::*]
+    set impl_procs [info commands ::callback::a_callback::impl::*]
     aa_true "creation of a valid callback implementation" \
         [expr {[lsearch -exact \
             $impl_procs \

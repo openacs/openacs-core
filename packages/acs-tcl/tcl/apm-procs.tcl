@@ -1202,7 +1202,10 @@ ad_proc -public apm_package_id_from_key {package_key} {
     @return The package id of the instance of the package.
     0 if no instance exists, error if several instances exist.
 } {
-    return [util_memoize "apm_package_id_from_key_mem $package_key"]
+    set var ::apm::package_id_from_key($package_key)
+    if {[info exists $var]} {return [set $var]}
+    set $var [util_memoize "apm_package_id_from_key_mem $package_key"]
+    #set $var [ns_cache_eval ns:memoize apm_package_id_from_key_$package_key [list apm_package_id_from_key_mem $package_key]]
 }
 
 ad_proc -private apm_package_id_from_key_mem {package_key} {
@@ -1364,7 +1367,7 @@ ad_proc -private apm_post_instantiation_tcl_proc_from_key { package_key } {
     set procedure_name [string tolower "[string trim $package_key]_post_instantiation"]
     # Change all "-" to "_" to mimic our tcl standards
     regsub -all {\-} $procedure_name "_" procedure_name
-    if { [empty_string_p [info procs ::$procedure_name]] } {
+    if { [info commands ::$procedure_name] eq "" } {
 	# No such procedure exists... 
 	return ""
     }
@@ -1674,7 +1677,7 @@ ad_proc -private apm_callback_has_valid_args {
     @author Peter Marklund
 } {
 
-    if { [empty_string_p [info procs ::${proc_name}]] } {
+    if { [info commands ::$proc_name] eq "" } {
         return 0
     }
 

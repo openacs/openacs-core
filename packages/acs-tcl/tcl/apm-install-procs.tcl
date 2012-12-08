@@ -656,7 +656,7 @@ ad_proc -private apm_load_catalog_files {
     @author Peter Marklund
 } {
     # If acs-lang hasn't been installed yet we simply return
-    if { [llength [info proc lang::catalog::import]] == 0 || ![apm_package_installed_p acs-lang] } {
+    if { [info commands lang::catalog::import] eq "" || ![apm_package_installed_p acs-lang] } {
         return
     }
 
