@@ -16,7 +16,7 @@
 # The following code allows ad_proc to be used
 # here (a local workalike is declared if absent).
 # added 2002-09-11 Jeff Davis (davis@xarg.net)
-if {{} ne [info procs ad_library] } { 
+if {[info commands ad_library] ne "" } { 
     ad_library {
         Query Dispatching for multi-RDBMS capability
 
@@ -26,7 +26,7 @@ if {{} ne [info procs ad_library] } {
     } 
 }
 
-if { {} ne [info procs ad_proc] } {
+if { [info commands ad_proc] ne ""} {
     set remove_ad_proc_p 0
 } else { 
     set remove_ad_proc_p 1

@@ -38,8 +38,8 @@ ad_proc -public acs_sc::invoke {
     @author Lars Pind (lars@collaboraid.biz)
     @see acs_sc_call
 } {
-    if { [exists_and_not_null impl_id] } {
-        if { [exists_and_not_null impl] } {
+    if { $impl_id ne "" } {
+        if { $impl ne "" } {
             error "Cannot supply both impl and impl_id"
         }
         acs_sc::impl::get -impl_id $impl_id -array impl_info
@@ -49,7 +49,7 @@ ad_proc -public acs_sc::invoke {
         }
         set contract $impl_info(impl_contract_name)
     }
-    if { ![exists_and_not_null impl] || ![exists_and_not_null contract] } {
+    if { $impl eq "" || $contract eq "" } {
         error "You must supply either impl_id, or contract and impl to acs_sc::invoke"
     }
     return [acs_sc_call -error=$error_p $contract $operation $call_args $impl]
@@ -254,13 +254,13 @@ ad_proc -private -deprecated acs_sc_call {
 } {
     set proc_name [acs_sc_generate_name $contract $impl $operation]
 
-    if { [llength [info procs $proc_name]] == 1 } {
+    if { [info commands $proc_name] ne "" } {
 	return [ad_apply $proc_name $arguments]
     } else {
         if { $error_p } {
             error "Operation $operation is not implemented in '$impl' implementation of contract '$contract'"
         } else {
-            ns_log warning "ACS-SC: Function Not Found: $proc_name [info procs $proc_name]"
+            ns_log warning "ACS-SC: Function Not Found: $proc_name [info commands $proc_name]"
         }
 	return
     }

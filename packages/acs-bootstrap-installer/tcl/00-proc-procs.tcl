@@ -433,7 +433,7 @@ proc ad_proc args {
     }
 
     if { $callback ne "" && $impl ne "" } {
-        if { [llength [info procs "::callback::${callback}::contract__arg_parser"]] == 0 } {
+        if { [info commands "::callback::${callback}::contract__arg_parser"] eq "" } {
             # We create a dummy arg parser for the contract in case
             # the contract hasn't been defined yet.  We need this
             # because the implementation doesn't tell us what the
@@ -783,7 +783,7 @@ ad_proc -public callback {
     # arg validation -- ::callback::${callback}::contract is an 
     # empty function that only runs the ad_proc generated arg parser.
 
-    if {[llength [info proc ::callback::${callback}::contract]] != 1} {
+    if {[info commands ::callback::${callback}::contract] eq ""} {
         error "Undefined callback $callback"
     }
     eval ::callback::${callback}::contract $args
@@ -791,8 +791,7 @@ ad_proc -public callback {
     set returns {}
 
     set base ::callback::${callback}::impl
-    foreach procname [lsort [info procs ${base}::$impl]] {
-
+    foreach procname [lsort [info commands ${base}::$impl]] {
         set c [catch {::uplevel 1 $procname $args} ret]
         switch -exact $c {
             0 { # code ok

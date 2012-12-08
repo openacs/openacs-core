@@ -379,7 +379,7 @@ ad_proc -public datatype_validator_exists_p {
     if {$datatype eq "enumeration"} { 
 	return 1
     }
-    if { [empty_string_p [info procs "::template::data::validate::$datatype"]] } {
+    if { [info commands "::template::data::validate::$datatype"] eq "" } {
 	return 0
     }
     return 1

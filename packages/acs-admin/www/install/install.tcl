@@ -69,8 +69,8 @@ if {[catch {set maturity_label [apm::package_version::attributes::get_pretty_nam
 
 foreach name [lsort -ascii [array names package]] {
     set row $package($name)
-    if {[info procs apm::package_version::attributes::maturity_int_to_text] != 0} {
-	set maturity_text "[apm::package_version::attributes::maturity_int_to_text [lindex $row 6]]"
+    if {[info commands ::apm::package_version::attributes::maturity_int_to_text] ne ""} {
+	set maturity_text [::apm::package_version::attributes::maturity_int_to_text [lindex $row 6]]
     } else { 
 	set maturity_text ""
     }

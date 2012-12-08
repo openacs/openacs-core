@@ -199,9 +199,7 @@ ad_proc -public publish::proc_exists { namespace_name proc_name } {
 
 } {
 
-  return [expr ![string equal \
-                  [namespace eval $namespace_name \
-                    "info procs $proc_name"] {}]]
+  return [expr {[namespace eval $namespace_name "info commands $proc_name"] ne ""}]
 }
 
 ##########################################################
