@@ -50,7 +50,7 @@ db_multirow -extend {check} binding binding {
 } {
     if {$impl_pl eq "TCL"} {
         regsub {^::} $impl_alias {} impl_alias
-        if {[info proc ::$impl_alias] ne ""} {
+        if {[info commands ::$impl_alias] ne ""} {
             append impl_alias "</b> {[info args ::$impl_alias]}"
         } elseif {[llength $impl_alias]>1 
 		  && [info command ::xotcl::Object] ne "" 

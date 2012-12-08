@@ -127,7 +127,7 @@ ad_proc -public group::new {
     # (through the pretty name). We just have to change the display of
     # groups to the title at the appropriate places.
 
-    if { [info procs "::lang::util::convert_to_i18n"] ne "" } {
+    if { [info commands "::lang::util::convert_to_i18n"] ne "" } {
 	set pretty_name [lang::util::convert_to_i18n -message_key "group_title_${group_id}" -text "$pretty_name"]
     } 
 	
