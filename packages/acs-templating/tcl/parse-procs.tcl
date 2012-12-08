@@ -128,7 +128,7 @@ ad_proc -private template::adp_parse { __adp_stub __args } {
       set templated_p 1
     }
 
-    if { [llength [info procs ::ds_page_fragment_cache_enabled_p]]
+    if { [info commands ::ds_page_fragment_cache_enabled_p] ne ""
          && [::ds_enabled_p]
          && [::ds_page_fragment_cache_enabled_p]
          && [::ds_collection_enabled_p] } {
@@ -146,7 +146,7 @@ ad_proc -private template::adp_parse { __adp_stub __args } {
       template::code::${template_extension}::$__adp_stub
 
       # JCD: Lets keep a copy of all the page fragments!  WooHoo.
-      if { [llength [info procs ::ds_page_fragment_cache_enabled_p]]
+      if { [info commands ::ds_page_fragment_cache_enabled_p] ne ""
            && [::ds_enabled_p]
            && [::ds_page_fragment_cache_enabled_p]
            && [::ds_collection_enabled_p] } {
@@ -382,7 +382,7 @@ ad_proc -private template::adp_init { type file_stub } {
                       to the .adp or .tcl file to source.
 } { 
   # this will return the name of the proc if it exists
-  set proc_name [info procs ::template::mtimes::${type}::$file_stub]
+  set proc_name [info commands ::template::mtimes::${type}::$file_stub]
 
   set pkg_id [apm_package_id_from_key acs-templating]
   set refresh_cache [parameter::get -package_id $pkg_id -parameter RefreshCache -default "as needed"]
@@ -411,7 +411,7 @@ ad_proc -private template::adp_init { type file_stub } {
 
       # Here we add profiling calls if developer support exists on the 
       # system.
-      if {[llength [info procs ::ds_enabled_p]]} { 
+      if {[info commands ::ds_enabled_p] ne ""} { 
         proc ::template::code::${type}::$file_stub {} "if {\[::ds_enabled_p\] && \[::ds_collection_enabled_p\] && \[::ds_profiling_enabled_p\]} { ds_profile start $file_stub.$type }
 uplevel {
 $code

@@ -20,7 +20,7 @@ ad_proc -public template_tag { name arglist body } {
   # (if the proc doesn't exist).
   # This makes debugging templating tags so much easier, because you don't have
   # to restart the server each time.
-  set exists_p [llength [info procs template_tag_$name]]
+  set exists_p [llength [info commands template_tag_$name]]
 
   switch [llength $arglist] {
 
