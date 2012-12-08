@@ -299,7 +299,7 @@ ad_proc -deprecated ad_footer {
     } else {
 	set curriculum_bar ""
     }
-    if { [llength [info procs ds_link]] == 1 } {
+    if { [info commands ds_link] ne "" } {
 	set ds_link [ds_link]
     } else {
 	set ds_link ""
@@ -352,7 +352,7 @@ ad_proc -deprecated ad_admin_footer {} {
 
     @see  Documentation on the site master template for the proper way to standardize page footers
 } {
-    if { [llength [info procs ds_link]] == 1 } {
+    if { [info commands ds_link] ne "" } {
 	set ds_link [ds_link]
     } else {
 	set ds_link ""
