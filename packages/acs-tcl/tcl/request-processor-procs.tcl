@@ -578,9 +578,8 @@ ad_proc -private rp_filter { why } {
     set user_agent [ns_set iget $headers User-Agent]
     ns_log Debug "user agent is $user_agent" 
 
-    set match_seeker [regexp ".*YahooSeeker.*" $user_agent]
-    set match_slurp  [regexp ".*Yahoo! Slurp.*" $user_agent]
-    if {$match_seeker == 1 || $match_slurp == 1} {
+    if {[string match "*YahooSeeker*" $user_agent] 
+	|| [string match ".*Yahoo! Slurp.*" $user_agent]} {
         ns_log Notice "nasty spider $user_agent"
         ns_returnredirect "http://www.yahoo.com"
         return "filter_return"
@@ -686,6 +685,12 @@ ad_proc -private rp_filter { why } {
         ad_conn -set charset ""
     }
 
+    if {[ns_info name] eq "NaviServer"}  {
+      # provide context information for background writer
+      set requestor [expr {$::ad_conn(user_id) == 0 ? [ad_conn peeraddr] : $::ad_conn(user_id)}]
+      catch {ns_conn clientdata [list $requestor [ns_conn url]]}
+    }
+    
     # Who's online
     whos_online::user_requested_page [ad_conn untrusted_user_id]
 
@@ -695,7 +700,7 @@ ad_proc -private rp_filter { why } {
     #
     #####
 
-    if { ![empty_string_p [ad_conn object_id]] } {
+    if { [ad_conn object_id] ne "" } {
       ad_try {
         switch -glob -- [ad_conn extra_url] {
             admin/* {
@@ -921,6 +926,12 @@ ad_proc -private rp_handler {} {
 
     # OK, we didn't find a normal file. Let's look for a path info style thingy,
     # visiting possible file matches from most specific to least.
+
+    # On iternal redirects, the current extra_url might be from a
+    # previous request, leading e.g. to a not-found error. This can
+    # lead to an hard-to find loop which ends with a "recursion depth
+    # exceeded". Therefore, we refetch the url from the server.
+    set extra_url [string trimleft [ns_conn url] /]
 
     foreach prefix [rp_path_prefixes $extra_url] {
         foreach resolve_value $resolve_values {
