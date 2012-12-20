@@ -391,13 +391,14 @@ ad_proc -private apm_mark_files_for_reload {
 	# which differs the mtime it had when last loaded, mark to be loaded.
 	if { [file isfile $full_path] } {
 	    set mtime [file mtime $full_path]
-
-	    if { $force_reload_p || (![nsv_exists apm_library_mtime $relative_path] || \
-		    [nsv_get apm_library_mtime $relative_path] != $mtime) } {
-
-		lappend changed_files $relative_path
+	  ns_log notice "apm_mark_files_for_reload nsv-mtime [nsv_get apm_library_mtime $relative_path] mtime $mtime $full_path // [expr {[clock seconds]-$mtime}]"
+	    if { $force_reload_p 
+		 || (![nsv_exists apm_library_mtime $relative_path] 
+		     || [nsv_get apm_library_mtime $relative_path] != $mtime 
+		     || [clock seconds]-$mtime < 5) } {
+	        lappend changed_files $relative_path
 	    }
-	} 
+	}
     }
 
     if { [llength $changed_files] > 0 } {
@@ -425,9 +426,9 @@ ad_proc -private apm_mark_version_for_reload { version_id { changed_files_var ""
     if { $changed_files_var ne "" } {
 	upvar $changed_files_var changed_files
     }
-
+  ns_log notice "apm_mark_version_for_reload try to get package_key from $version_id"
     set package_key [apm_package_key_from_version_id $version_id]
-
+  ns_log notice "apm_mark_version_for_reload $package_key $version_id"
     set changed_files [list]
 
     set file_types [list tcl_procs query_file]
