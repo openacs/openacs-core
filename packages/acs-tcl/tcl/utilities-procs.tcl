@@ -2325,7 +2325,7 @@ ad_proc -public ad_returnredirect {
     set type [ns_set iget [ad_conn headers] content-type]
     if { [string match *multipart/form-data* [string tolower $type]] } {
         set user_agent [ns_set get [ad_conn headers] User-Agent]
-        set use_metarefresh_p [string match -nocase "*msie 5.0*" $user_agent match]
+        set use_metarefresh_p [string match -nocase "*msie 5.0*" $user_agent]
     }
     if {[string match "https://*" [ad_conn location]] && [string match "http://*" $url]} {
 	# workaround the You are about to be redirected to a connection that
