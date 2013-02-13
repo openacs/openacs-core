@@ -391,7 +391,6 @@ ad_proc -private apm_mark_files_for_reload {
 	# which differs the mtime it had when last loaded, mark to be loaded.
 	if { [file isfile $full_path] } {
 	    set mtime [file mtime $full_path]
-	  ns_log notice "apm_mark_files_for_reload nsv-mtime [nsv_get apm_library_mtime $relative_path] mtime $mtime $full_path // [expr {[clock seconds]-$mtime}]"
 	    if { $force_reload_p 
 		 || (![nsv_exists apm_library_mtime $relative_path] 
 		     || [nsv_get apm_library_mtime $relative_path] != $mtime 
