@@ -86,7 +86,8 @@ ad_proc -public template_tag_if_concat_params { params } {
   # I'm not sure why we need to eval here at all, there ought to be another solution,
   # but it's not clear what the intention of below statement is.
 
-  set tokens [eval [concat list [join $tokens " "]]]
+  set tokens [join $tokens " "]
+  #set tokens [eval [concat list [join $tokens " "]]]
 
   return $tokens
 }
