@@ -850,6 +850,17 @@ ad_proc -private rp_handler {} {
       ad_returnredirect [ns_conn url]
       return
   }
+  if {$ad_conn(extra_url) ne "" && ![string match *$ad_conn(extra_url) [ns_conn url]]} {
+    # On internal redirects, the current extra_url might be from a
+    # previous request, which might have lead to a not-found error
+    # pointing to a new url. This can lead to an hard-to find loop
+    # which ends with a "recursion depth exceeded". Therefore, we
+    # refetch the url in case, in case, we have already extra_url 
+    # set to an incompatible value
+    #
+    array set node [site_node::get -url [ad_conn url]]
+    ad_conn -set extra_url [string range [ad_conn url] [string length $node(url)] end]
+  }
 
   # JCD: keep track of rp_handler call count to prevent dev support from recording 
   # information twice when for example we get a 404 internal redirect. We should probably 
@@ -875,13 +886,6 @@ ad_proc -private rp_handler {} {
 
     set resolve_values [concat [ns_info pageroot][string trimright [ad_conn package_url] /] \
                                [apm_package_url_resolution [ad_conn package_key]]]
-
-    # On iternal redirects, the current extra_url might be from a
-    # previous request, leading e.g. to a not-found error. This can
-    # lead to an hard-to find loop which ends with a "recursion depth
-    # exceeded". Therefore, we refetch the url from the server.
-    array set node [site_node::get -url [ad_conn url]]
-    ad_conn -set extra_url [string range [ad_conn url] [string length $node(url)] end]
 
     foreach resolve_value $resolve_values {
         foreach {root match_prefix} $resolve_value {}
