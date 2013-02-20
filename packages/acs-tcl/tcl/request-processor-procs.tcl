@@ -876,6 +876,13 @@ ad_proc -private rp_handler {} {
     set resolve_values [concat [ns_info pageroot][string trimright [ad_conn package_url] /] \
                                [apm_package_url_resolution [ad_conn package_key]]]
 
+    # On iternal redirects, the current extra_url might be from a
+    # previous request, leading e.g. to a not-found error. This can
+    # lead to an hard-to find loop which ends with a "recursion depth
+    # exceeded". Therefore, we refetch the url from the server.
+    array set node [site_node::get -url [ad_conn url]]
+    ad_conn -set extra_url [string range [ad_conn url] [string length $node(url)] end]
+
     foreach resolve_value $resolve_values {
         foreach {root match_prefix} $resolve_value {}
         set extra_url [ad_conn extra_url]
@@ -926,12 +933,6 @@ ad_proc -private rp_handler {} {
 
     # OK, we didn't find a normal file. Let's look for a path info style thingy,
     # visiting possible file matches from most specific to least.
-
-    # On iternal redirects, the current extra_url might be from a
-    # previous request, leading e.g. to a not-found error. This can
-    # lead to an hard-to find loop which ends with a "recursion depth
-    # exceeded". Therefore, we refetch the url from the server.
-    set extra_url [string trimleft [ns_conn url] /]
 
     foreach prefix [rp_path_prefixes $extra_url] {
         foreach resolve_value $resolve_values {
