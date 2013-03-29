@@ -1444,8 +1444,7 @@ ad_proc -private ad_http_cache_control { } {
         return
     }
 
-    global ad_conn
-    if { [info exists ad_conn(no_http_cache_control_p)] && $ad_conn(no_http_cache_control_p) } {
+    if { [info exists ::ad_conn(no_http_cache_control_p)] && $::ad_conn(no_http_cache_control_p) } {
         return
     }
 
@@ -1455,13 +1454,13 @@ ad_proc -private ad_http_cache_control { } {
     # don't touch anything. 
     set modify_p 1
 
-    if { ([ns_set ifind $headers  "cache-control"] > -1 ||
-         [ns_set ifind $headers  "expires"] > -1) } {
+    if { [ns_set ifind $headers "cache-control"] > -1 ||
+         [ns_set ifind $headers "expires"] > -1 } {
         set modify_p 0
     } else {
         for { set i 0 } { $i < [ns_set size $headers] } { incr i } {
-            if { [string tolower [ns_set key $headers $i]] == "pragma" &&
-                 [string tolower [ns_set value $headers $i]] == "no-cache" } {
+            if { [string tolower [ns_set key $headers $i]] eq "pragma" &&
+                 [string tolower [ns_set value $headers $i]] eq "no-cache" } {
                 set modify_p 0
                 break
             }
@@ -1525,7 +1524,7 @@ ad_proc root_of_host {host} {
 
     if {$node_id eq ""} {
         set host [regsub "www\." $host ""]
-        set node_id [rp_lookup_node_from_host $host]
+	set node_id [util_memoize [list rp_lookup_node_from_host $host]]
     }
 
     if { $node_id ne "" } {

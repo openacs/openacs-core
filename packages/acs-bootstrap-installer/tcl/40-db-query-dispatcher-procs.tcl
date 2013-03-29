@@ -345,8 +345,7 @@ ad_proc -public db_qd_get_fullname {local_name {added_stack_num 1}} {
         # db_qd_log QDDebug "calling namespace = $calling_namespace"
 
         if {$calling_namespace ne "" && 
-            ![regexp {::} $proc_name all]} {
-
+            ![string match *::* $proc_name]} {
             set proc_name ${calling_namespace}::${proc_name}
         }
 	# db_qd_log QDDebug "proc_name is -$proc_name-"
@@ -387,20 +386,18 @@ ad_proc -public db_qd_get_fullname {local_name {added_stack_num 1}} {
 
     # db_qd_log QDDebug "generated fullname of $full_name"
     
+    # The following block is apparently just for debugging
     # aks - making debug output actually useable
-    if {[llength $proc_name] > 1} {
-        
-        set proc_name_with_parameters "[lindex $proc_name 0] "
-        
-        set i 1
-        foreach parameter [lrange $proc_name  1 end] {
-            append proc_name_with_parameters "parameter$i: $parameter " 
-            incr i
-        }
-    } else {
-        set proc_name_with_parameters $proc_name
-    }
-
+    # if {[llength $proc_name] > 1} {
+    #     set proc_name_with_parameters "[lindex $proc_name 0] "
+    #     set i 1
+    #     foreach parameter [lrange $proc_name  1 end] {
+    #         append proc_name_with_parameters "parameter$i: $parameter " 
+    #         incr i
+    #     }
+    # } else {
+    #     set proc_name_with_parameters $proc_name
+    # }
     # db_qd_log QDDebug "db_qd_get_fullname: following query in file: $url proc: $proc_name_with_parameters"
 
     return $full_name
