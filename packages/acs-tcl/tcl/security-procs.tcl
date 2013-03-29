@@ -111,10 +111,7 @@ ad_proc -private sec_handler {} {
     if {$session_expr < [ns_time]} {
         sec_login_handler
     }
-               
-	set session_id [lindex $cookie_data 0]
-	set untrusted_user_id [lindex $cookie_data 1]
-	set login_level [lindex $cookie_data 2]
+	lassign $cookie_data session_id untrusted_user_id login_level
         set user_id 0
         set account_status closed
         
@@ -211,12 +208,7 @@ ad_proc -private sec_login_handler {} {
     
     # check for permanent login cookie
     catch {
-	set login_list [sec_login_read_cookie]
-        
-        set untrusted_user_id [lindex $login_list 0]
-        set login_expr [lindex $login_list 1]
-        set auth_token [lindex $login_list 2]
-        
+        lassign [sec_login_read_cookie] untrusted_user_id login_expr auth_token
         set auth_level expired
         
         # Check authentication cookie
@@ -510,7 +502,7 @@ ad_proc -private sec_generate_session_id_cookie {} {
     set discard t
     set max_age [sec_session_timeout]
     catch { 
-	    set login_list [sec_login_read_cookie]
+        set login_list [sec_login_read_cookie]
       	if {[lindex $login_list end] == 1} {
 	        set discard f
             set max_age inf
@@ -868,12 +860,8 @@ ad_proc -public ad_verify_signature {
     @param secret specifies an external secret to use instead of the
     one provided by the ACS signature mechanism.
 } {
-    set token_id [lindex $signature 0]
-    set expire_time [lindex $signature 1]
-    set hash [lindex $signature 2]
-
+    lassign $signature token_id expire_time hash
     return [__ad_verify_signature $value $token_id $secret $expire_time $hash]
-
 }
 
 ad_proc -public ad_verify_signature_with_expr {
@@ -887,10 +875,7 @@ ad_proc -public ad_verify_signature_with_expr {
     @param secret specifies an external secret to use instead of the
     one provided by the ACS signature mechanism.
 } {
-    set token_id [lindex $signature 0]
-    set expire_time [lindex $signature 1]
-    set hash [lindex $signature 2]
-
+    lassign $signature token_id expire_time hash
     if { [__ad_verify_signature $value $token_id $secret $expire_time $hash] } {
 	return $expire_time
     } else {
@@ -987,8 +972,7 @@ ad_proc -public ad_get_signed_cookie {
 	error "Cookie does not exist."
     }
 
-    set value [lindex $cookie_value 0]
-    set signature [lindex $cookie_value 1]
+    lassign $cookie_value value signature
 
     ns_log Debug "ad_get_signed_cookie: Got signed cookie $name with value $value, signature $signature."
 
@@ -1025,9 +1009,7 @@ ad_proc -public ad_get_signed_cookie_with_expr {
 	error "Cookie does not exist."
     }
 
-    set value [lindex $cookie_value 0]
-    set signature [lindex $cookie_value 1]
-
+    lassign $cookie_value value signature
     set expr_time [ad_verify_signature_with_expr $value $signature]
 
     ns_log Debug "Security: Done calling get_cookie $cookie_value for $name; received $expr_time expiration, getting $value and $signature."
@@ -1122,10 +1104,8 @@ ad_proc -private sec_get_token {
 
 } {
     
-    global tcl_secret_tokens
-
-    if { [info exists tcl_secret_tokens($token_id)] } {
-	return $tcl_secret_tokens($token_id)
+    if { [info exists ::security::tcl_secret_tokens($token_id)] } {
+	return $::security::tcl_secret_tokens($token_id)
     } else {
 	set token [ns_cache eval secret_tokens $token_id {
 	    set token [db_string get_token {select token from secret_tokens
@@ -1141,9 +1121,8 @@ ad_proc -private sec_get_token {
 	    return $token
 	}]
 
-	set tcl_secret_tokens($token_id) $token
+	set ::security::tcl_secret_tokens($token_id) $token
 	return $token
-	
     }
 
 }
@@ -1297,8 +1276,7 @@ ad_proc -public ad_get_client_property {
     if { $property eq "" } {
 	return $default
     }
-    set value [lindex $property 0]
-    set secure_p [lindex $property 1]
+    lassign $property value secure_p
     
     if { $secure_p ne "f" && ![security::secure_conn_p] } {
 	return ""
