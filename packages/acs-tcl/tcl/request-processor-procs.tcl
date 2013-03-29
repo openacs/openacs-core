@@ -495,16 +495,19 @@ ad_proc -private rp_resources_filter { why } {
 
 } {
     set path "[acs_package_root_dir [lindex [ns_conn urlv] 1]]/www/resources/[join [lrange [ns_conn urlv] 2 end] /]"
-    if { ![file isfile $path] } {
-        set path "[acs_root_dir]/www/resources/[join [lrange [ns_conn urlv] 1 end] /]"
-    }
     if { [file isfile $path] } {
         ns_returnfile 200 [ns_guesstype $path] $path
         return filter_return
-    } else {
-        ns_log Error "rp_sources_filter: file \"$path\" does not exists trying to serve as a normal request"
-        return filter_ok
     }
+
+    set path "[acs_root_dir]/www/resources/[join [lrange [ns_conn urlv] 1 end] /]"
+    if { [file isfile $path] } {
+        ns_returnfile 200 [ns_guesstype $path] $path
+        return filter_return
+    } 
+
+    ns_log Error "rp_sources_filter: file \"$path\" does not exists trying to serve as a normal request"
+    return filter_ok
 }
 
 ad_proc -private rp_filter { why } {
