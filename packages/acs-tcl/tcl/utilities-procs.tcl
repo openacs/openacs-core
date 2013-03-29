@@ -1937,8 +1937,8 @@ ad_proc -public ad_get_cookie {
     if { $include_set_cookies eq "t" } {
 	set headers [ad_conn outputheaders]
 	for { set i 0 } { $i < [ns_set size $headers] } { incr i } {
-	    if { ![string compare [string tolower [ns_set key $headers $i]] "set-cookie"] && \
-		    [regexp "^$name=(\[^;\]*)" [ns_set value $headers $i] "" "value"] } {
+	    if { [string tolower [ns_set key $headers $i]] eq "set-cookie" && \
+		     [regexp "^$name=(\[^;\]*)" [ns_set value $headers $i] match value] } {
 		return $value
 	    }
 	}
