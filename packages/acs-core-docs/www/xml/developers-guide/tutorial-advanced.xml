@@ -883,45 +883,45 @@ cvs tag -F openacs-5-1-compat
     above).</para>
 
     <programlisting>
-    create function inline_0() returns integer as '
+    create function inline_0() returns integer as $$
     declare
             impl_id integer;
             v_foo   integer;
     begin
         -- the notification type impl
         impl_id := acs_sc_impl__new (
-                      ''NotificationType'',
-                      ''lars_blogger_notif_type'',
-                      ''lars-blogger''
+                      'NotificationType',
+                      'lars_blogger_notif_type',
+                      'lars-blogger'
         );
 
         v_foo := acs_sc_impl_alias__new (
-                    ''NotificationType'',
-                    ''lars_blogger_notif_type'',
-                    ''GetURL'',
-                    ''lars_blogger::notification::get_url'',
-                    ''TCL''
+                    'NotificationType',
+                    'lars_blogger_notif_type',
+                    'GetURL',
+                    'lars_blogger::notification::get_url',
+                    'TCL'
         );
 
         v_foo := acs_sc_impl_alias__new (
-                    ''NotificationType'',
-                    ''lars_blogger_notif_type'',
-                    ''ProcessReply'',
-                    ''lars_blogger::notification::process_reply'',
-                    ''TCL''
+                    'NotificationType',
+                    'lars_blogger_notif_type',
+                    'ProcessReply',
+                    'lars_blogger::notification::process_reply',
+                    'TCL'
         );
 
         PERFORM acs_sc_binding__new (
-                    ''NotificationType'',
-                    ''lars_blogger_notif_type''
+                    'NotificationType',
+                    'lars_blogger_notif_type'
         );
 
         v_foo:= notification_type__new (
 	        NULL,
                 impl_id,
-                ''lars_blogger_notif'',
-                ''Blog Notification'',
-                ''Notifications for Blog'',
+                'lars_blogger_notif',
+                'Blog Notification',
+                'Notifications for Blog',
 		now(),
                 NULL,
                 NULL,
@@ -932,16 +932,16 @@ cvs tag -F openacs-5-1-compat
         insert into notification_types_intervals
         (type_id, interval_id)
         select v_foo, interval_id
-        from notification_intervals where name in (''instant'',''hourly'',''daily'');
+        from notification_intervals where name in ('instant','hourly','daily');
 
         insert into notification_types_del_methods
         (type_id, delivery_method_id)
         select v_foo, delivery_method_id
-        from notification_delivery_methods where short_name in (''email'');
+        from notification_delivery_methods where short_name in ('email');
 
         return (0);
     end;
-    ' language 'plpgsql';
+    $$ language plpgsql;
 
     select inline_0();
     drop function inline_0();
@@ -958,19 +958,20 @@ cvs tag -F openacs-5-1-compat
       -- Lars and Jade in turn lifted this from gwong and ben.
 
 create function inline_0 ()
-returns integer as '
+returns integer as $$
 declare
     row                             record;
 begin
     for row in select nt.type_id
                from notification_types nt
-               where nt.short_name in (''lars_blogger_notif_type'',''lars_blogger_notif'')
+               where nt.short_name in ('lars_blogger_notif_type','lars_blogger_notif')
     loop
         perform notification_type__delete(row.type_id);
     end loop;
 
     return null;
-end;' language 'plpgsql';
+end;
+$$ language plpgsql;
 
 select inline_0();
 drop function inline_0 ();
@@ -979,7 +980,7 @@ drop function inline_0 ();
 -- Service contract drop stuff was missing - Roberto Mello 
 --
 
-create function inline_0() returns integer as '
+create function inline_0() returns integer as $$
 declare
         impl_id integer;
         v_foo   integer;
@@ -987,31 +988,31 @@ begin
 
         -- the notification type impl
         impl_id := acs_sc_impl__get_id (
-                      ''NotificationType'',		-- impl_contract_name
-                      ''lars_blogger_notif_type''	-- impl_name
+                      'NotificationType',		-- impl_contract_name
+                      'lars_blogger_notif_type' 	-- impl_name
         );
 
         PERFORM acs_sc_binding__delete (
-                    ''NotificationType'',
-                    ''lars_blogger_notif_type''
+                    'NotificationType',
+                    'lars_blogger_notif_type'
         );
 
         v_foo := acs_sc_impl_alias__delete (
-                    ''NotificationType'',		-- impl_contract_name	
-                    ''lars_blogger_notif_type'',	-- impl_name
-                    ''GetURL''				-- impl_operation_name
+                    'NotificationType', 		-- impl_contract_name	
+                    'lars_blogger_notif_type',  	-- impl_name
+                    'GetURL'				-- impl_operation_name
         );
 
         v_foo := acs_sc_impl_alias__delete (
-                    ''NotificationType'',		-- impl_contract_name	
-                    ''lars_blogger_notif_type'',	-- impl_name
-                    ''ProcessReply''			-- impl_operation_name
+                    'NotificationType', 	 	-- impl_contract_name	
+                    'lars_blogger_notif_type',  	-- impl_name
+                    'ProcessReply'      		-- impl_operation_name
         );
 
 	select into v_foo type_id 
 	  from notification_types
 	 where sc_impl_id = impl_id
-	  and short_name = ''lars_blogger_notif'';
+	  and short_name = 'lars_blogger_notif';
 
 	perform notification_type__delete (v_foo);
 
@@ -1020,7 +1021,7 @@ begin
 	   and interval_id in ( 
 		select interval_id
 		  from notification_intervals 
-		 where name in (''instant'',''hourly'',''daily'')
+		 where name in ('instant','hourly','daily')
 	);
 
 	delete from notification_types_del_methods
@@ -1028,12 +1029,12 @@ begin
 	   and delivery_method_id in (
 		select delivery_method_id
 		  from notification_delivery_methods 
-		 where short_name in (''email'')
+		 where short_name in ('email')
 	);
 
 	return (0);
 end;
-' language 'plpgsql';
+$$ language plpgsql;
 
 select inline_0();
 drop function inline_0();
