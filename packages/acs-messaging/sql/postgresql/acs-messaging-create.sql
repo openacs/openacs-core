@@ -95,18 +95,35 @@ comment on column acs_messages.rfc822_id is '
 
 -- support for tree queries on acs_messages
 
-create or replace function acs_message_get_tree_sortkey(integer) returns varbit as '
-declare
-  p_message_id    alias for $1;
-begin
-  return tree_sortkey from acs_messages where message_id = p_message_id;
-end;' language 'plpgsql' stable strict;
 
-create or replace function acs_message_insert_tr () returns opaque as '
-declare
+
+-- added
+select define_function_args('acs_message_get_tree_sortkey','message_id');
+
+--
+-- procedure acs_message_get_tree_sortkey/1
+--
+CREATE OR REPLACE FUNCTION acs_message_get_tree_sortkey(
+   p_message_id integer
+) RETURNS varbit AS $$
+DECLARE
+BEGIN
+  return tree_sortkey from acs_messages where message_id = p_message_id;
+END;
+$$ LANGUAGE plpgsql stable strict;
+
+
+
+--
+-- procedure acs_message_insert_tr/0
+--
+CREATE OR REPLACE FUNCTION acs_message_insert_tr(
+
+) RETURNS trigger AS $$
+DECLARE
         v_parent_sk     varbit  default null;
         v_max_value     integer;
-begin
+BEGIN
 	if new.reply_to is null then
 	    select max(tree_leaf_key_to_int(tree_sortkey)) into v_max_value
               from acs_messages
@@ -125,20 +142,28 @@ begin
 
         return new;
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 create trigger acs_message_insert_tr before insert 
 on acs_messages 
 for each row 
 execute procedure acs_message_insert_tr ();
 
-create function acs_message_update_tr () returns opaque as '
-declare
+
+
+--
+-- procedure acs_message_update_tr/0
+--
+CREATE OR REPLACE FUNCTION acs_message_update_tr(
+
+) RETURNS trigger AS $$
+DECLARE
         v_parent_sk     varbit default null;
         v_max_value     integer;
         v_rec           record;
-        clr_keys_p      boolean default ''t'';
-begin
+        clr_keys_p      boolean default 't';
+BEGIN
         if new.message_id = old.message_id and 
            ((new.reply_to = old.reply_to) or 
             (new.reply_to is null and old.reply_to is null)) then
@@ -155,7 +180,7 @@ begin
             if clr_keys_p then
                update acs_messages set tree_sortkey = null
                where tree_sortkey between new.tree_sortkey and tree_right(new.tree_sortkey);
-               clr_keys_p := ''f'';
+               clr_keys_p := 'f';
             end if;
             
             select max(tree_leaf_key_to_int(tree_sortkey)) into v_max_value
@@ -174,7 +199,8 @@ begin
 
         return new;
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 create trigger acs_message_update_tr after update 
 on acs_messages

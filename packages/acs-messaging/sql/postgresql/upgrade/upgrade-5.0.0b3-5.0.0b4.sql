@@ -1,11 +1,20 @@
 -- call image__delete instead.
 
-create or replace function acs_message__delete_image (integer)
-returns integer as '
-declare
-    p_image_id  alias for $1;
-begin
+
+
+-- added
+select define_function_args('acs_message__delete_image','image_id');
+
+--
+-- procedure acs_message__delete_image/1
+--
+CREATE OR REPLACE FUNCTION acs_message__delete_image(
+   p_image_id integer
+) RETURNS integer AS $$
+DECLARE
+BEGIN
     perform image__delete(p_image_id);
 
     return 1;
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
