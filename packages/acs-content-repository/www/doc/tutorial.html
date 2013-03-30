@@ -359,36 +359,22 @@ You can see the actual functions used in project manager via the <a href="http:/
 select define_function_args('pm_task__new_task_item', 'task_id, project_id, title, description, end_date, percent_complete, estimated_hours_work, estimated_hours_work_min, estimated_hours_work_max, creation_date, creation_user, creation_ip, package_id');
 
 create function pm_task__new_task_item (
-        integer,        -- task_id
-        integer,        -- project_id
-        varchar,        -- title
-        varchar,        -- description
-        timestamptz,    -- end_date
-        numeric,        -- percent_complete
-        numeric,        -- estimated_hours_work
-        numeric,        -- estimated_hours_work_min
-        numeric,        -- estimated_hours_work_max,
-        timestamptz,    -- creation_date
-        integer,        -- creation_user
-        varchar,        -- creation_ip
-        integer         -- package_id
+        p_task_id integer,
+        p_project_id integer,
+        p_title varchar,
+        p_description varchar,
+        p_end_date timestamptz,
+        p_percent_complete numeric,
+        p_estimated_hours_work numeric,
+        p_estimated_hours_work_min numeric,
+        p_estimated_hours_work_max numeric,
+        p_creation_date timestamptz,
+        p_creation_user integer,
+        p_creation_ip varchar,     
+        p_package_id integer       
 ) returns integer 
-as '
+as $$
 declare
-        p_task_id                               alias for $1;
-        p_project_id                            alias for $2;
-        p_title                                 alias for $3;
-        p_description                           alias for $4;
-        p_end_date                              alias for $5;
-        p_percent_complete                      alias for $6;
-        p_estimated_hours_work                  alias for $7;
-        p_estimated_hours_work_min              alias for $8;
-        p_estimated_hours_work_max              alias for $9;
-        p_creation_date                         alias for $10;
-        p_creation_user                         alias for $11;
-        p_creation_ip                           alias for $12;
-        p_package_id                            alias for $13;
-
         v_item_id               cr_items.item_id%TYPE;
         v_revision_id           cr_revisions.revision_id%TYPE;
         v_id                    cr_items.item_id%TYPE;
@@ -409,11 +395,11 @@ begin
                 p_creation_user,        -- creation_user
                 p_package_id,           -- context_id
                 p_creation_ip,          -- creation_ip
-                ''content_item'',       -- item_subtype
-                ''pm_task'',            -- content_type
+                'content_item',         -- item_subtype
+                'pm_task',              -- content_type
                 p_title,                -- title
                 p_description,          -- description
-                ''text/plain'',         -- mime_type
+                'text/plain',           -- mime_type
                 null,                   -- nls_language
                 null                    -- data
         );
@@ -422,7 +408,7 @@ begin
                 p_title,                -- title
                 p_description,          -- description
                 now(),                  -- publish_date
-                ''text/plain'',         -- mime_type
+                'text/plain',           -- mime_type
                 NULL,                   -- nls_language
                 NULL,                   -- data
                 v_item_id,              -- item_id
@@ -442,53 +428,39 @@ begin
         insert into pm_tasks_revisions (
                 task_revision_id, end_date, percent_complete, estimated_hours_work, estimated_hours_work_min, estimated_hours_work_max, actual_hours_worked)
         values (
-                v_revision_id, p_end_date, p_percent_complete, p_estimated_hours_work, p_estimated_hours_work_min, p_estimated_hours_work_max, ''0'');
+                v_revision_id, p_end_date, p_percent_complete, p_estimated_hours_work, p_estimated_hours_work_min, p_estimated_hours_work_max, '0');
 
         PERFORM acs_permission__grant_permission(
                 v_revision_id,
                 p_creation_user,
-                ''admin''
+                'admin'
         );
 
         return v_revision_id;
-end;' language 'plpgsql';
+end;
+$$ language plpgsql;
 
 
 select define_function_args('pm_task__new_task_revision', 'task_id, project_id, title, description, end_date, percent_complete, estimated_hours_work, estimated_hours_work_min, estimated_hours_work_max, actual_hours_worked, creation_date, creation_user, creation_ip, package_id');
 
 create function pm_task__new_task_revision (
-        integer,        -- task_id (the item_id)
-        integer,        -- project_id
-        varchar,        -- title
-        varchar,        -- description
-        timestamptz,    -- end_date
-        numeric,        -- percent_complete
-        numeric,        -- estimated_hours_work
-        numeric,        -- estimated_hours_work_min
-        numeric,        -- estimated_hours_work_max
-        numeric,        -- actual_hours_worked
-        timestamptz,    -- creation_date
-        integer,        -- creation_user
-        varchar,        -- creation_ip
-        integer         -- package_id
+        p_task_id integer,     -- the item_id
+        p_project_id integer,
+        p_title varchar,
+        p_description varchar,
+        p_end_date timestamptz,
+        p_percent_complete numeric,
+        p_estimated_hours_work numeric,
+        p_estimated_hours_work_min numeric,
+        p_estimated_hours_work_max numeric,
+        p_actual_hours_worked numeric,
+        p_creation_date timestamptz,
+        p_creation_user integer,
+        p_creation_ip varchar,
+        p_package_id integer
 ) returns integer 
-as '
+as $$
 declare
-        p_task_id                               alias for $1;
-        p_project_id                            alias for $2;
-        p_title                                 alias for $3;
-        p_description                           alias for $4;
-        p_end_date                              alias for $5;
-        p_percent_complete                      alias for $6;
-        p_estimated_hours_work                  alias for $7;
-        p_estimated_hours_work_min              alias for $8;
-        p_estimated_hours_work_max              alias for $9;
-        p_actual_hours_worked                   alias for $10;
-        p_creation_date                         alias for $11;
-        p_creation_user                         alias for $12;
-        p_creation_ip                           alias for $13;
-        p_package_id                            alias for $14;
-
         v_revision_id           cr_revisions.revision_id%TYPE;
         v_id                    cr_items.item_id%TYPE;
 begin
@@ -500,7 +472,7 @@ begin
                 p_title,                -- title
                 p_description,          -- description
                 now(),                  -- publish_date
-                ''text/plain'',         -- mime_type
+                'text/plain',           -- mime_type
                 NULL,                   -- nls_language
                 NULL,                   -- data
                 p_task_id,              -- item_id
@@ -520,21 +492,21 @@ begin
         PERFORM acs_permission__grant_permission(
                 v_revision_id,
                 p_creation_user,
-                ''admin''
+                'admin'
         );
 
         return v_revision_id;
-end;' language 'plpgsql';
+end;
+$$ language plpgsql;
 
 
 -- The delete function deletes a record and all related overhead. 
 
 select define_function_args('pm_task__delete_task_item', 'task_id');
 
-create or replace function pm_task__delete_task_item (integer)
-returns integer as '
+create or replace function pm_task__delete_task_item (p_task_id integer)
+returns integer as $$
 declare
-        p_task_id                               alias for $1;
 begin
         delete from pm_tasks_revisions
                 where task_revision_id in (select revision_id from pm_tasks_revisionsx where item_id = p_task_id);
@@ -542,11 +514,12 @@ begin
         delete from pm_tasks
                 where task_id = p_task_id;
 
-        raise NOTICE ''Deleting pm_task...'';
+        raise NOTICE 'Deleting pm_task...';
 
         PERFORM content_item__delete(p_task_id);
         return 0;
-end;' language 'plpgsql';
+end;
+$$ language plpgsql;
 </pre></blockquote>
 
 <h3>Explanation of the columns in cr_items and cr_revisions</h3>
@@ -617,11 +590,9 @@ One thing that you might want to do for your application is to give the applicat
 
 select define_function_args('pm_project__new_unique_name', 'package_id');
 
-create function pm_project__new_unique_name (integer)
-returns text as '
+create function pm_project__new_unique_name (p_package_id integer)
+returns text as $$
 declare
-	p_package_id		alias for $1;
-
 	v_name			cr_items.name%TYPE;
 	v_package_key		apm_packages.package_key%TYPE;
 	v_id			integer;
@@ -632,21 +603,20 @@ begin
 	select acs_object_id_seq.nextval into v_id from dual;
 
 	-- Set the name
-	select v_package_key || ''_'' || 
-	    to_char(current_timestamp, ''YYYYMMDD'') || ''_'' ||
+	select v_package_key || '_' || 
+	    to_char(current_timestamp, 'YYYYMMDD') || '_' ||
 	    v_id into v_name;
 
 	return v_name;
-end;' language 'plpgsql';
+end;
+$$ language plpgsql;
 
 
 select define_function_args('pm_project__new_root_folder', 'package_id');
 
-create function pm_project__new_root_folder (integer)
-returns integer as '
+create function pm_project__new_root_folder (p_package_id integer)
+returns integer as $$
 declare
-	p_package_id		alias for $1;
-
         v_folder_id                cr_folders.folder_id%TYPE;
 	v_folder_name		cr_items.name%TYPE;
 begin
@@ -654,24 +624,26 @@ begin
 	v_folder_name := pm_project__new_unique_name (p_package_id);
 
 	v_folder_id := content_folder__new (
-	    v_folder_name,			-- name
-	    ''Projects'',			-- label
-	    ''Project Repository'',		-- description
-	    p_package_id				-- parent_id
+	    v_folder_name,		-- name
+	    'Projects',			-- label
+	    'Project Repository',	-- description
+	    p_package_id		-- parent_id
 	);
 
 	-- Register the standard content types
 	PERFORM content_folder__register_content_type (
 	    v_folder_id,	 -- folder_id
-	    ''pm_project'',      -- content_type
-	    ''f''		 -- include_subtypes
+	    'pm_project',        -- content_type
+	    'f'	 	         -- include_subtypes
 	);
 
 	-- TODO: Handle Permissions here for this folder.
 
 	return v_folder_id;
-end;' language 'plpgsql';
+end;
+$$ language plpgsql;
 </pre></blockquote>
+
 
 Note that this example is for projects rather than tasks. This is because for the application I'm writing, projects are what tasks are stored inside of. A project has many component tasks. If you were writing another application, or if I wasn't doing anythign with projects, then this would be creating a folder for just tasks.
 
