@@ -172,7 +172,7 @@ if {![xml_support_ok xml_status_msg]} {
 
 # AOLserver must support the "fancy" ADP parser.
 set adp_support [ns_config "ns/server/[ns_info server]/adp" DefaultParser]
-if {$adp_support ne "fancy"  } {
+if {$adp_support ne "fancy" && [ns_info name] ne "NaviServer"} {
     append errors "<li><p><strong>The fancy ADP parser is not enabled.  This is required to support 
 the OpenACS Templating System.  Without this templating system, none of the OpenACS pages installed by default
 will display.  Please add the following to your AOLserver configuration file (usually in 
