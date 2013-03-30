@@ -34,7 +34,7 @@ DECLARE
 BEGIN
         v_reply_id:= acs_object__new (
                                     p_reply_id,
-                                    ''notification_reply'',
+                                    'notification_reply',
                                     p_creation_date,
                                     p_creation_user,
                                     p_creation_ip,
@@ -49,7 +49,8 @@ BEGIN
 
         return v_reply_id;
 END;
-' language 'plpgsql';
+
+$$ LANGUAGE plpgsql;
 
 
 create function notification_reply__delete(integer)
@@ -60,4 +61,5 @@ BEGIN
         perform acs_object__delete(p_reply_id);
         return (0);
 END;
-' language 'plpgsql';
+
+$$ LANGUAGE plpgsql;

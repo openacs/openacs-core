@@ -1,11 +1,16 @@
 select define_function_args ('notification_request__delete_all_for_user', 'user_id');
 
-create function notification_request__delete_all_for_user(integer)
-returns integer as '
-declare
-    p_user_id                       alias for $1;
+
+
+--
+-- procedure notification_request__delete_all_for_user/1
+--
+CREATE OR REPLACE FUNCTION notification_request__delete_all_for_user(
+   p_user_id integer
+) RETURNS integer AS $$
+DECLARE
     v_request                       RECORD;
-begin
+BEGIN
     for v_request in select request_id
                      from notification_requests
                      where user_id= p_user_id
@@ -14,5 +19,6 @@ begin
     end loop;
 
     return 0;
-end;
-' language 'plpgsql';
+END;
+
+$$ LANGUAGE plpgsql;

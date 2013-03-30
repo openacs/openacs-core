@@ -84,6 +84,7 @@ BEGIN
       return v_request_id;                          
 
 END;
-' language 'plpgsql';
+
+$$ LANGUAGE plpgsql;
 
 

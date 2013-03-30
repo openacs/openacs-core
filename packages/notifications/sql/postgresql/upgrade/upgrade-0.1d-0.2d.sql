@@ -1,13 +1,22 @@
 drop function notification__delete;
 
-create function notification__delete(integer)
-returns integer as '
-declare
-    p_notification_id               alias for $1;
-begin
+
+
+-- added
+select define_function_args('notification__delete','notification_id');
+
+--
+-- procedure notification__delete/1
+--
+CREATE OR REPLACE FUNCTION notification__delete(
+   p_notification_id integer
+) RETURNS integer AS $$
+DECLARE
+BEGIN
     delete from notifications where notification_id = p_notification_id;
     perform acs_object__delete(p_notification_id);
     return 0;
-end;
-' language 'plpgsql';
+END;
+
+$$ LANGUAGE plpgsql;
 

@@ -1,11 +1,19 @@
 -- DRB: deleting requests would fail if any notification were still pending
 
-create or replace function notification_request__delete(integer)
-returns integer as '
-declare
-    p_request_id                    alias for $1;
+
+
+-- added
+select define_function_args('notification_request__delete','request_id');
+
+--
+-- procedure notification_request__delete/1
+--
+CREATE OR REPLACE FUNCTION notification_request__delete(
+   p_request_id integer
+) RETURNS integer AS $$
+DECLARE
     v_notifications record;
-begin
+BEGIN
     for v_notifications in select notification_id
                            from notifications n, notification_requests nr
                            where n.response_id = nr.object_id
@@ -16,6 +24,7 @@ begin
 
     perform acs_object__delete(p_request_id);
     return 0;
-end;
-' language 'plpgsql';
+END;
+
+$$ LANGUAGE plpgsql;
 

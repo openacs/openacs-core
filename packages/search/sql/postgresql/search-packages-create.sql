@@ -2,12 +2,17 @@
 --
 -- @cvs-id $Id$ 
 
-create or replace function search_observer__enqueue(integer,varchar)
-returns integer as '
-declare
-    p_object_id			alias for $1;
-    p_event			alias for $2;
-begin
+
+
+--
+-- procedure search_observer__enqueue/2
+--
+CREATE OR REPLACE FUNCTION search_observer__enqueue(
+   p_object_id integer,
+   p_event varchar
+) RETURNS integer AS $$
+DECLARE
+BEGIN
     insert into search_observer_queue (
 	object_id,
 	event
@@ -18,26 +23,33 @@ begin
 
     return 0;
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 select define_function_args('search_observer__enqueue','object_id,event');
 
-create or replace function search_observer__dequeue(integer,timestamptz,varchar)
-returns integer as '
-declare
-    p_object_id                 alias for $1;
-    p_event_date                alias for $2;
-    p_event                     alias for $3;
-begin
+
+
+--
+-- procedure search_observer__dequeue/3
+--
+CREATE OR REPLACE FUNCTION search_observer__dequeue(
+   p_object_id integer,
+   p_event_date timestamptz,
+   p_event varchar
+) RETURNS integer AS $$
+DECLARE
+BEGIN
 
     delete from search_observer_queue 
     where object_id = p_object_id 
     and event = p_event
-    and to_char(event_date,''yyyy-mm-dd hh24:mi:ss.us-tz'') = to_char(p_event_date,''yyyy-mm-dd hh24:mi:ss.us-tz'');
+    and to_char(event_date,'yyyy-mm-dd hh24:mi:ss.us-tz') = to_char(p_event_date,'yyyy-mm-dd hh24:mi:ss.us-tz');
 
     return 0;
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 select define_function_args('search_observer__dequeue','object_id,event_date,event');
 

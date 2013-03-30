@@ -16,33 +16,33 @@ drop table notification_types;
 drop table notification_intervals;
 drop table notification_delivery_methods;
 
-create function inline_0 ()
-returns integer as '
-begin
+CREATE OR REPLACE FUNCTION inline_0 () RETURNS integer AS $$
+BEGIN
 
     perform acs_object_type__drop_type(
-        ''notification_interval'', ''f''
+        'notification_interval', 'f'
     );
 
     perform acs_object_type__drop_type(
-        ''notification_delivery_method'', ''f''
+        'notification_delivery_method', 'f'
     );
 
     perform acs_object_type__drop_type(
-        ''notification_type'', ''f''
+        'notification_type', 'f'
     );
 
     perform acs_object_type__drop_type(
-        ''notification_request'', ''f''
+        'notification_request', 'f'
     );
 
     perform acs_object_type__drop_type(
-        ''notification'', ''f''
+        'notification', 'f'
     );
 
     return null;
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 select inline_0();
 drop function inline_0();
