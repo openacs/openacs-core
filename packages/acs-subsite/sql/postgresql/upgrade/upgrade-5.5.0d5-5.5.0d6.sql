@@ -1,21 +1,31 @@
-select define_function_args('application_group__new','group_id,object_type;application_group,creation_date;now(),creation_user,creation_ip,email,url,group_name,package_id,join_policy,context_id');
 
-create or replace function application_group__new(integer,varchar,timestamptz,integer,varchar,varchar,varchar,varchar,integer,varchar,integer)
-returns integer as '
-declare
-  new__group_id              alias for $1;
-  new__object_type           alias for $2; -- default ''application_group'',
-  new__creation_date         alias for $3; -- default sysdate,
-  new__creation_user         alias for $4; -- default null,
-  new__creation_ip           alias for $5; -- default null,
-  new__email                 alias for $6; -- default null,
-  new__url                   alias for $7; -- default null,
-  new__group_name            alias for $8;
-  new__package_id            alias for $9;
-  new__join_policy           alias for $10;
-  new__context_id	     alias for $11; -- default null
+-- old define_function_args('application_group__new','group_id,object_type;application_group,creation_date;now(),creation_user,creation_ip,email,url,group_name,package_id,join_policy,context_id')
+-- new
+select define_function_args('application_group__new','group_id,object_type;application_group,creation_date;now(),creation_user;null,creation_ip;null,email;null,url;null,group_name,package_id,join_policy,context_id;null');
+
+
+
+
+--
+-- procedure application_group__new/11
+--
+CREATE OR REPLACE FUNCTION application_group__new(
+   new__group_id integer,
+   new__object_type varchar,       -- default 'application_group',
+   new__creation_date timestamptz, -- default sysdate, -- default 'now()'
+   new__creation_user integer,     -- default null,
+   new__creation_ip varchar,       -- default null,
+   new__email varchar,             -- default null,
+   new__url varchar,               -- default null,
+   new__group_name varchar,
+   new__package_id integer,
+   new__join_policy varchar,
+   new__context_id integer         -- default null
+
+) RETURNS integer AS $$
+DECLARE
   v_group_id		     application_groups.group_id%TYPE;
-begin
+BEGIN
   v_group_id := acs_group__new (
     new__group_id,
     new__object_type,
@@ -34,5 +44,6 @@ begin
 
   return v_group_id;
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 

@@ -42,35 +42,35 @@
 -- /
 -- show errors
 
-create function inline_0 ()
-returns integer as '
-begin
-    -- the ''user'' role should already exist from the portraits stuff.
-    -- acs_rel_type.create_role(''user'', 
-    --                         ''Registered User'', ''Registered Users'');
+CREATE OR REPLACE FUNCTION inline_0 () RETURNS integer AS $$
+BEGIN
+    -- the 'user' role should already exist from the portraits stuff.
+    -- acs_rel_type.create_role('user', 
+    --                         'Registered User', 'Registered Users');
 
-    PERFORM acs_rel_type__create_role(''application'', ''Application Group'', ''Application Group'');
+    PERFORM acs_rel_type__create_role('application', 'Application Group', 'Application Group');
 
     PERFORM acs_rel_type__create_type (
-        ''user_profile'',
-	''#acs-subsite.User_Profile#'',
-	''#acs-subsite.User_Profiles#'',
-	''membership_rel'',
-	''user_profiles'',
-	''profile_id'',
-	''user_profile'',
-	''application_group'',
-	''application'',
+        'user_profile',
+	'#acs-subsite.User_Profile#',
+	'#acs-subsite.User_Profiles#',
+	'membership_rel',
+	'user_profiles',
+	'profile_id',
+	'user_profile',
+	'application_group',
+	'application',
 	0,
 	null,
-	''user'',
-	''user'',
+	'user',
+	'user',
 	0,
 	null
     );
 
     return 0;
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 select inline_0 ();
 
@@ -137,20 +137,30 @@ create table user_profiles (
 --     return v_profile_id;
 --   end new;
 
-select define_function_args('user_profile__new','profile_id,rel_type;user_profile,object_id_one,object_id_two,member_state,creation_user,creation_ip');
 
-create function user_profile__new(integer,varchar,integer,integer,varchar,integer,varchar)
-returns integer as '
-declare
-    new__profile_id          alias for $1; -- default null,
-    new__rel_type            alias for $2; -- default ''user_profile'',
-    new__object_id_one       alias for $3;
-    new__object_id_two       alias for $4;
-    new__member_state        alias for $5; -- default null,
-    new__creation_user       alias for $6; -- default null,
-    new__creation_ip         alias for $7; -- default null
+-- old define_function_args('user_profile__new','profile_id,rel_type;user_profile,object_id_one,object_id_two,member_state,creation_user,creation_ip')
+-- new
+select define_function_args('user_profile__new','profile_id;null,rel_type;user_profile,object_id_one,object_id_two,member_state;null,creation_user;null,creation_ip;null');
+
+
+
+
+--
+-- procedure user_profile__new/7
+--
+CREATE OR REPLACE FUNCTION user_profile__new(
+   new__profile_id integer,    -- default null,
+   new__rel_type varchar,      -- default 'user_profile',
+   new__object_id_one integer,
+   new__object_id_two integer,
+   new__member_state varchar,  -- default null,
+   new__creation_user integer, -- default null,
+   new__creation_ip varchar    -- default null
+
+) RETURNS integer AS $$
+DECLARE
     v_profile_id	     integer;
-begin
+BEGIN
     v_profile_id := membership_rel__new (
       new__profile_id,
       new__rel_type,
@@ -164,7 +174,8 @@ begin
     insert into user_profiles (profile_id) values (v_profile_id);
 
     return v_profile_id;
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 --   procedure delete (
 --     profile_id      in user_profiles.profile_id%TYPE
@@ -176,16 +187,25 @@ end;' language 'plpgsql';
 
 --   end delete;
 
-create function user_profile__delete(integer)
-returns integer as '
-declare
-    profile_id      alias for $1;
-begin
+
+
+-- added
+select define_function_args('user_profile__delete','profile_id');
+
+--
+-- procedure user_profile__delete/1
+--
+CREATE OR REPLACE FUNCTION user_profile__delete(
+   profile_id integer
+) RETURNS integer AS $$
+DECLARE
+BEGIN
 
     PERFORM membership_rel__delete(profile_id);
 
     return 0;
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 -- end user_profile;
 -- /
