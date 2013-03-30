@@ -14,18 +14,25 @@ drop function template_demo_note__name (integer);
 delete from acs_permissions where object_id in (select template_demo_note_id from template_demo_notes);
 
 --drop objects
-create function inline_0 ()
-returns integer as '
-declare
+
+
+--
+-- procedure inline_0/0
+--
+CREATE OR REPLACE FUNCTION inline_0(
+
+) RETURNS integer AS $$
+DECLARE
 	object_rec		record;
-begin
-	for object_rec in select object_id from acs_objects where object_type=''template_demo_note''
+BEGIN
+	for object_rec in select object_id from acs_objects where object_type='template_demo_note'
 	loop
 		perform acs_object__delete( object_rec.object_id );
 	end loop;
 
 	return 0;
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 select inline_0();
 drop function inline_0();

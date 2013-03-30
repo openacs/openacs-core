@@ -37,32 +37,32 @@ create table user_portraits (
 -- /
 -- show errors
 
-create function inline_0 ()
-returns integer as '
-begin
-  PERFORM acs_rel_type__create_role(''user'', ''User'', ''Users'');
-  PERFORM acs_rel_type__create_role(''portrait'', ''Portrait'', ''Portraits'');
+CREATE OR REPLACE FUNCTION inline_0 () RETURNS integer AS $$
+BEGIN
+  PERFORM acs_rel_type__create_role('user', 'User', 'Users');
+  PERFORM acs_rel_type__create_role('portrait', 'Portrait', 'Portraits');
 
   PERFORM acs_rel_type__create_type (
-      ''user_portrait_rel'',
-      ''#acs-subsite.User_Portrait#'',
-      ''#acs-subsite.User_Portraits#'',
-      ''relationship'',
-      ''user_portraits'',
-      ''user_id'',
-      ''user_portrait_rel'',
-      ''user'',
-      ''user'',
+      'user_portrait_rel',
+      '#acs-subsite.User_Portrait#',
+      '#acs-subsite.User_Portraits#',
+      'relationship',
+      'user_portraits',
+      'user_id',
+      'user_portrait_rel',
+      'user',
+      'user',
       1,
       1,
-      ''content_item'',
+      'content_item',
       null,
       0,
       1
   );
 
   return 0;
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 select inline_0 ();
 

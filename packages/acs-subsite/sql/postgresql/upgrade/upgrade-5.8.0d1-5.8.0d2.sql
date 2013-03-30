@@ -1,20 +1,29 @@
 -- providing upgrade script for subsite_callback__new
 
-create or replace function subsite_callback__new(integer,varchar,varchar,varchar,varchar,integer)
-returns integer as '
-declare
-  new__callback_id         alias for $1; -- default null,
-  new__event_type          alias for $2;
-  new__object_type         alias for $3;
-  new__callback		   alias for $4;
-  new__callback_type       alias for $5;
-  new__sort_order          alias for $6; -- default null
+
+
+-- added
+select define_function_args('subsite_callback__new','callback_id;null,event_type,object_type,callback,callback_type,sort_order;null');
+
+--
+-- procedure subsite_callback__new/6
+--
+CREATE OR REPLACE FUNCTION subsite_callback__new(
+   new__callback_id integer, -- default null,
+   new__event_type varchar,
+   new__object_type varchar,
+   new__callback varchar,
+   new__callback_type varchar,
+   new__sort_order integer   -- default null
+
+) RETURNS integer AS $$
+DECLARE
   v_callback_id		   subsite_callbacks.callback_id%TYPE;
   v_sort_order		   subsite_callbacks.sort_order%TYPE;
-begin
+BEGIN
 
     if new__callback_id is null then
-       select nextval(''t_acs_object_id_seq'') into v_callback_id;
+       select nextval('t_acs_object_id_seq') into v_callback_id;
     else
        v_callback_id := new__callback_id;
     end if;
@@ -47,4 +56,5 @@ begin
 --    end;
     return v_callback_id;
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
