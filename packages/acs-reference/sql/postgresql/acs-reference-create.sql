@@ -69,35 +69,40 @@ create table acs_reference_repositories (
 
 -- default for Oracle
 
-create function acs_reference__new (integer,varchar,boolean,varchar,timestamptz,
-varchar,varchar,timestamptz,timestamptz,integer,integer,varchar,varchar,
-varchar,varchar,integer)
-returns integer as '
-declare
-    p_repository_id   alias for $1; -- default null
-    p_table_name      alias for $2; -- 
-    p_internal_data_p alias for $3; -- default "f"
-    p_package_name    alias for $4; -- default null
-    p_last_update     alias for $5; -- default sysdate
-    p_source          alias for $6; -- default null
-    p_source_url      alias for $7; -- default null
-    p_effective_date  alias for $8; -- default sysdate
-    p_expiry_date     alias for $9; -- default null
-    p_maintainer_id   alias for $10; -- default null
-    p_notes           alias for $11; -- default null (not Oracle empty_blob())
--- I really see no need for these as parameters
---    creation_date   alias for $12; -- default sysdate
-    p_first_names     alias for $12; -- default null
-    p_last_name      alias for $13; -- default null
-    p_creation_ip     alias for $14; -- default null
-    p_object_type     alias for $15; -- default "acs_reference_repository"
-    p_creation_user   alias for $16; -- default null
+
+
+-- added
+select define_function_args('acs_reference__new','repository_id;null,table_name,internal_data_p;"f",package_name;null,last_update;sysdate,source;null,source_url;null,effective_date;sysdate,expiry_date;null,maintainer_id;null,notes;null (not Oracle empty_blob()),first_names;null,last_name;null,creation_ip;null,object_type;"acs_reference_repository",creation_user;null');
+
+--
+-- procedure acs_reference__new/16
+--
+CREATE OR REPLACE FUNCTION acs_reference__new(
+   p_repository_id integer,      -- default null
+   p_table_name varchar, 
+   p_internal_data_p boolean,    -- default "f"
+   p_package_name varchar,       -- default null
+   p_last_update timestamptz,    -- default sysdate
+   p_source varchar,             -- default null
+   p_source_url varchar,         -- default null
+   p_effective_date timestamptz, -- default sysdate
+   p_expiry_date timestamptz,    -- default null
+   p_maintainer_id integer,      -- default null
+   p_notes integer,              -- default null (not Oracle empty_blob())
+   p_first_names varchar,        -- default null
+   p_last_name varchar,          -- default null
+   p_creation_ip varchar,        -- default null
+   p_object_type varchar,        -- default "acs_reference_repository"
+   p_creation_user integer       -- default null
+
+) RETURNS integer AS $$
+DECLARE
     v_repository_id acs_reference_repositories.repository_id%TYPE;
     v_object_type   acs_objects.object_type%TYPE;
     v_maintainer_id persons.person_id%TYPE;
-begin
+BEGIN
     if p_object_type is null then
-        v_object_type := ''acs_reference_repository'';
+        v_object_type := 'acs_reference_repository';
     else
         v_object_type := p_object_type;
     end if;
@@ -109,7 +114,7 @@ begin
          p_creation_user,
          p_creation_ip,
          null,
-         ''t'',
+         't',
          p_source,
          null
     );
@@ -129,7 +134,7 @@ begin
     -- NEEDS TO BE FIXED - jag
 
     if p_first_names is not null and p_last_name is not null and p_maintainer_id is null then
-        v_maintainer_id := person__new (null, ''person'', now(), null, null, null, null,
+        v_maintainer_id := person__new (null, 'person', now(), null, null, null, null,
 	                                p_first_names, p_last_name, null);
 	else if p_maintainer_id is not null then
            v_maintainer_id := p_maintainer_id;
@@ -149,34 +154,49 @@ begin
          p_effective_date, p_expiry_date, v_maintainer_id, p_notes);
 
     return v_repository_id;    
-end;
-' language 'plpgsql';
+END;
+
+$$ LANGUAGE plpgsql;
 
 -- made initially for PG 
-create function acs_reference__new (varchar,timestamptz,
-varchar,varchar,timestamptz)
-returns integer as '
-declare
-    p_table_name      alias for $1; -- 
-    p_last_update     alias for $2; -- default sysdate
-    p_source          alias for $3; -- default null
-    p_source_url      alias for $4; -- default null
-    p_effective_date  alias for $5; -- default sysdate
+
+
+--
+-- procedure acs_reference__new/5
+--
+CREATE OR REPLACE FUNCTION acs_reference__new(
+   p_table_name varchar, 
+   p_last_update timestamptz,   -- default sysdate
+   p_source varchar,            -- default null
+   p_source_url varchar,        -- default null
+   p_effective_date timestamptz -- default sysdate
+
+) RETURNS integer AS $$
+DECLARE
     v_repository_id acs_reference_repositories.repository_id%TYPE;
-begin
-    return acs_reference__new(null, p_table_name, ''f'', null, null, p_source, p_source_url,
+BEGIN
+    return acs_reference__new(null, p_table_name, 'f', null, null, p_source, p_source_url,
                               p_effective_date, null, null, null, null, null, null,
-                              ''acs_reference_repository'', null);
-end;
-' language 'plpgsql';
+                              'acs_reference_repository', null);
+END;
+
+$$ LANGUAGE plpgsql;
 
 
-create function acs_reference__delete (integer)
-returns integer as '
-declare
-    p_repository_id alias for $1;
+
+
+-- added
+select define_function_args('acs_reference__delete','repository_id');
+
+--
+-- procedure acs_reference__delete/1
+--
+CREATE OR REPLACE FUNCTION acs_reference__delete(
+   p_repository_id integer
+) RETURNS integer AS $$
+DECLARE
     v_maintainer_id		acs_objects.object_id%TYPE;
-begin
+BEGIN
     select maintainer_id into v_maintainer_id
     from   acs_reference_repositories
     where  repository_id = p_repository_id;
@@ -186,24 +206,34 @@ begin
 
     perform acs_object__delete(p_repository_id);
     return 0;
-end;
-' language 'plpgsql';
+END;
 
-create function acs_reference__is_expired_p (integer)
-returns char as '
-declare
-    repository_id alias for $1;
+$$ LANGUAGE plpgsql;
+
+
+
+-- added
+select define_function_args('acs_reference__is_expired_p','repository_id');
+
+--
+-- procedure acs_reference__is_expired_p/1
+--
+CREATE OR REPLACE FUNCTION acs_reference__is_expired_p(
+   repository_id integer
+) RETURNS char AS $$
+DECLARE
     v_expiry_date acs_reference_repositories.expiry_date%TYPE;
-begin
+BEGIN
     select expiry_date into v_expiry_date
     from   acs_reference_repositories
     where  repository_id = is_expired_p.repository_id;
 
     if coalesce(v_expiry_date,now()+1) < now() then
-        return ''t'';
+        return 't';
     else
-        return ''f'';
+        return 'f';
     end if;
-end;
-' language 'plpgsql';
+END;
+
+$$ LANGUAGE plpgsql;
 
