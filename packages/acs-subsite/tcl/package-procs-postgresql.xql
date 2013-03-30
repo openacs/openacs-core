@@ -208,12 +208,12 @@ perform drop_package('${package_name}');
 
 perform define_function_args('${package_name}__new','[plpgsql_utility::define_function_args $attribute_list]');
 
-create function ${package_name}__new([plpgsql_utility::generate_function_signature $attribute_list])
-returns [plpgsql_utility::table_column_type ${table_name} ${id_column}] as '
-declare
+CREATE FUNCTION ${package_name}__new([plpgsql_utility::generate_function_signature $attribute_list])
+RETURNS [plpgsql_utility::table_column_type ${table_name} ${id_column}] AS \$\$
+DECLARE
     [plpgsql_utility::generate_attribute_parameters $attribute_list];
     v_$id_column ${table_name}.${id_column}%TYPE;
-begin
+BEGIN
 
     v_$id_column := ${supertype_package_name}__new (
                      [plpgsql_utility::generate_attribute_parameter_call_from_attributes \
@@ -229,18 +229,20 @@ begin
 
     return v_$id_column;
 
-end;' language 'plpgsql';
+END; 
+\$\$ LANGUAGE plpgsql;
 
-create function ${package_name}__delete ([plpgsql_utility::table_column_type ${table_name} ${id_column}])
-returns integer as '
-declare
-    p_${id_column}      alias for [plpgsql_utility::dollar]1;
-begin
+CREATE FUNCTION ${package_name}__delete (
+    p_${id_column} [plpgsql_utility::table_column_type ${table_name} ${id_column}]
+) RETURNS integer AS \$\$
+DECLARE
+BEGIN
 
     perform ${supertype_package_name}__delete( p_${id_column} );
     return 1;
 
-end;' language 'plpgsql';
+END;
+\$\$ LANGUAGE plpgsql;
 
 return null;
 end;
