@@ -16,20 +16,20 @@ select define_function_args ('notification_reply__new','reply_id,object_id,type_
 select define_function_args ('notification_reply__delete','reply_id');
 
 
-create function notification_reply__new (integer,integer,integer,integer,varchar,text,timestamptz,timestamptz,integer,varchar,integer)
-returns integer as '
+CREATE OR REPLACE FUNCTION notification_reply__new (
+       p_reply_id integer,
+       p_object_id integer,
+       p_type_id integer,
+       p_from_user integer,
+       p_subject varchar,
+       p_content text,
+       p_reply_date timestamptz,
+       p_creation_date timestamptz,
+       p_creation_user integer,
+       p_creation_ip varchar,
+       p_context_id integer
+) RETURNS integer AS $$
 DECLARE
-        p_reply_id                      alias for $1;
-        p_object_id                     alias for $2;
-        p_type_id                       alias for $3;
-        p_from_user                     alias for $4;
-        p_subject                       alias for $5;
-        p_content                       alias for $6;
-        p_reply_date                    alias for $7;
-        p_creation_date                 alias for $8;
-        p_creation_user                 alias for $9;
-        p_creation_ip                   alias for $10;
-        p_context_id                    alias for $11;
         v_reply_id                      integer;        
 BEGIN
         v_reply_id:= acs_object__new (
@@ -49,17 +49,16 @@ BEGIN
 
         return v_reply_id;
 END;
-
 $$ LANGUAGE plpgsql;
 
 
-create function notification_reply__delete(integer)
-returns integer as '
+CREATE OR REPLACE FUNCTION notification_reply__delete(
+       p_reply_id integer
+)
+RETURNS integer AS $$
 DECLARE
-        p_reply_id              alias for $1;
 BEGIN
         perform acs_object__delete(p_reply_id);
         return (0);
 END;
-
 $$ LANGUAGE plpgsql;

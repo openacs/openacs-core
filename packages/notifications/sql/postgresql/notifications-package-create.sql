@@ -105,15 +105,14 @@ END;
 $$ LANGUAGE plpgsql;
 
 
-create function notification_delivery_method__delete(integer)
-returns integer as '
+CREATE OR REPLACE FUNCTION notification_delivery_method__delete(
+     p_delivery_method_id integer
+) RETURNS integer AS $$
 DECLARE
-        p_delivery_method_id            alias for $1;
 BEGIN
         perform acs_object__delete(p_delivery_method_id);
         return 0;
 END;
-
 $$ LANGUAGE plpgsql;
 
 
@@ -122,18 +121,18 @@ select define_function_args ('notification_type__new','type_id,sc_impl_id,short_
 
 -- implementation
 
-create function notification_type__new (integer,integer,varchar,varchar,varchar,timestamptz,integer,varchar,integer)
-returns integer as '
+CREATE OR REPLACE FUNCTION notification_type__new (
+       p_type_id integer,
+       p_sc_impl_id integer,
+       p_short_name varchar,
+       p_pretty_name varchar,
+       p_description varchar,
+       p_creation_date timestamptz,
+       p_creation_user	integer,
+       p_creation_ip varchar,
+       p_context_id integer
+) RETURNS integer AS $$
 DECLARE
-        p_type_id                       alias for $1;
-        p_sc_impl_id                    alias for $2;
-        p_short_name                    alias for $3;
-        p_pretty_name                   alias for $4;
-        p_description                   alias for $5;
-        p_creation_date                 alias for $6;
-        p_creation_user                 alias for $7;
-        p_creation_ip                   alias for $8;
-        p_context_id                    alias for $9;
         v_type_id                       integer;
 BEGIN
         v_type_id:= acs_object__new (
@@ -150,7 +149,6 @@ BEGIN
       
       return v_type_id;
 END;
-
 $$ LANGUAGE plpgsql;
 
 select define_function_args ('notification_type__delete','type_id');
@@ -168,42 +166,27 @@ BEGIN
     perform acs_object__delete(p_type_id);
     return 0;
 END;
-
 $$ LANGUAGE plpgsql;
 
 select define_function_args ('notification_request__new','request_id,object_type;notification_request,type_id,user_id,object_id,interval_id,delivery_method_id,format,dynamic_p;f,creation_date,creation_user,creation_ip,context_id');
 
 create function notification_request__new (
-       integer,                       -- request_id
-       varchar,                       -- object_type
-       integer,                       -- type_id
-       integer,                       -- user_id
-       integer,                       -- object_id
-       integer,                       -- interval_id
-       integer,                       -- delivery_method_id
-       varchar,                       -- format
-       bool,                          -- dynamic_p
-       timestamptz,                   -- creation_date
-       integer,                       -- creation_user
-       varchar,                       -- creation_ip
-       integer                        -- context_id
-) returns integer as '
-
+       p_request_id integer,
+       p_object_type varchar,
+       p_type_id integer,
+       p_user_id integer,
+       p_object_id integer,
+       p_interval_id integer,
+       p_delivery_method_id integer,
+       p_format varchar,
+       p_dynamic_p bool,
+       p_creation_date timestamptz,
+       p_creation_user integer,
+       p_creation_ip varchar,
+       p_context_id integer
+) returns integer as $$
 DECLARE
-        p_request_id                            alias for $1;
-        p_object_type                           alias for $2;
-        p_type_id                               alias for $3;
-        p_user_id                               alias for $4;
-        p_object_id                             alias for $5;
-        p_interval_id                           alias for $6;
-        p_delivery_method_id                    alias for $7;
-        p_format                                alias for $8;
-        p_dynamic_p                             alias for $9;
-        p_creation_date                         alias for $10;
-        p_creation_user                         alias for $11;
-        p_creation_ip                           alias for $12;
-        p_context_id                            alias for $13;
-        v_request_id                            integer;
+        v_request_id integer;
 BEGIN
         v_request_id:= acs_object__new (
                                        p_request_id,
@@ -218,9 +201,7 @@ BEGIN
       (v_request_id, p_type_id, p_user_id, p_object_id, p_interval_id, p_delivery_method_id, p_format, p_dynamic_p);
 
       return v_request_id;                          
-
 END;
-
 $$ LANGUAGE plpgsql;
 
 select define_function_args ('notification_request__delete','request_id');
@@ -247,7 +228,6 @@ BEGIN
     perform acs_object__delete(p_request_id);
     return 0;
 END;
-
 $$ LANGUAGE plpgsql;
 
 select define_function_args ('notification_request__delete_all', 'object_id');
@@ -272,7 +252,6 @@ BEGIN
 
     return 0;
 END;
-
 $$ LANGUAGE plpgsql;
 
 select define_function_args ('notification_request__delete_all_for_user', 'user_id');
@@ -297,7 +276,6 @@ BEGIN
 
     return 0;
 END;
-
 $$ LANGUAGE plpgsql;
 
 
@@ -351,7 +329,6 @@ BEGIN
 
     return v_notification_id;
 END;
-
 $$ LANGUAGE plpgsql;
 
 select define_function_args ('notification__delete','notification_id');
@@ -370,5 +347,4 @@ BEGIN
     perform acs_object__delete(p_notification_id);
     return 0;
 END;
-
 $$ LANGUAGE plpgsql;
