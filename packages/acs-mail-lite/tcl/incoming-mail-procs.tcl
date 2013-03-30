@@ -108,7 +108,7 @@ namespace eval acs_mail_lite {
 	    }
 
             #let's delete the file now
-            if {[catch {ns_unlink $msg} errmsg]} {
+            if {[catch {file delete $msg} errmsg]} {
                 ns_log Error "load_mails: unable to delete queued message $msg: $errmsg"
             } else {
 		ns_log Debug "load_mails: deleted $msg"
@@ -172,8 +172,8 @@ namespace eval acs_mail_lite {
 	    set stream [open $file]
 	    set content [read $stream]
 	    close $stream
-	    ns_log error "$content"
-	    ns_unlink $file
+	    ns_log error $content
+	    file delete $file
 	    return
 	}
 	
