@@ -551,12 +551,14 @@ ad_proc -public template::adp_compile { source_type source } {
   # variable references.
 
    # substitute array variable references
-  while {[regsub -all [template::adp_array_variable_regexp] $code {\1[ad_quotehtml [lang::util::localize $\2(\3)]]} code]} {}
   while {[regsub -all [template::adp_array_variable_regexp_noquote] $code {\1[lang::util::localize $\2(\3)]} code]} {}
+  while {[regsub -all [template::adp_array_variable_regexp_literal] $code {\1$\2(\3)} code]} {}
+  while {[regsub -all [template::adp_array_variable_regexp] $code {\1[ns_quotehtml [lang::util::localize $\2(\3)]]} code]} {}
 
   # substitute simple variable references
-  while {[regsub -all [template::adp_variable_regexp] $code {\1[ad_quotehtml [lang::util::localize ${\2}]]} code]} {}
   while {[regsub -all [template::adp_variable_regexp_noquote] $code {\1[lang::util::localize ${\2}]} code]} {}
+  while {[regsub -all [template::adp_variable_regexp_literal] $code {\1${\2}} code]} {}
+  while {[regsub -all [template::adp_variable_regexp] $code {\1[ns_quotehtml [lang::util::localize ${\2}]]} code]} {}
 
   # unescape protected # references
   # unescape protected @ references
@@ -585,6 +587,15 @@ ad_proc -public template::adp_array_variable_regexp_noquote {} {
   return {(^|[^\\])@([a-zA-Z0-9_:]+)\.([a-zA-Z0-9_:\.]+);noquote@}
 }
 
+ad_proc -public template::adp_array_variable_regexp_literal {} {
+  adp_array_variable_regexp's pattern augmented by "literal"
+
+  @author Gustaf Neumann
+  @creation-date December 2012
+} {
+  return {(^|[^\\])@([a-zA-Z0-9_:]+)\.([a-zA-Z0-9_:\.]+);literal@}
+}
+
 ad_proc -public template::adp_variable_regexp {} {
   The regexp pattern used to find adp variables in
   a piece of text, i.e. occurenceis of @variable_name@. 
@@ -604,6 +615,15 @@ ad_proc -public template::adp_variable_regexp_noquote {} {
   @creation-date 12 February 2003
 } {
   return {(^|[^\\])@([a-zA-Z0-9_:]+);noquote@}
+}
+
+ad_proc -public template::adp_variable_regexp_literal {} {
+  adp_variable_regexp augmented by "literal"
+
+  @author Gustaf Neumann
+  @creation-date Dezember 2012
+} {
+  return {(^|[^\\])@([a-zA-Z0-9_:]+);literal@}
 }
 
 ad_proc -private template::adp_compile_chunk { chunk } {

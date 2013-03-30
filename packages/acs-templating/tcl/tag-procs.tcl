@@ -86,8 +86,8 @@ ad_proc -public template_tag_if_concat_params { params } {
   # I'm not sure why we need to eval here at all, there ought to be another solution,
   # but it's not clear what the intention of below statement is.
 
-  set tokens [join $tokens " "]
   #set tokens [eval [concat list [join $tokens " "]]]
+  set tokens [join $tokens " "]
 
   return $tokens
 }
@@ -162,8 +162,8 @@ ad_proc -public template_tag_if_interp_expr {} {
         append condition "$arg1 eq {}"
       } else {
         # substitute array variables
-        if {! ( [regsub {^"@([a-zA-Z0-9_]+)\.([a-zA-Z0-9_.]+)@"$} $arg1 {\1(\2)} arg1]
-                || [regsub {^"@([a-zA-Z0-9_:]+)@"$} $arg1 {\1} arg1] ) } {
+        if {! ( [regsub {^"@([a-zA-Z0-9_]+)\.([a-zA-Z0-9_.]+)(;\w+)?@"$} $arg1 {\1(\2)} arg1]
+		|| [regsub {^"@([a-zA-Z0-9_:]+)(;\w+)?@"$} $arg1 {\1} arg1] ) } {
           error "IF tag nil test uses string not variable for $arg1"
         }
         append condition "\[template::util::is_nil $arg1\]"
