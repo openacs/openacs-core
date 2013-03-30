@@ -84,13 +84,21 @@ ad_proc -public tsearch2::update_index {
     }
 }
 
+#ad_proc -callback search::search -impl tsearch2-driver {
+#    {-extra_args {}}
+#    query
+#    offset
+#    limit
+#    user_id
+#    df
+#} 
 ad_proc -callback search::search -impl tsearch2-driver {
     {-extra_args {}}
-    query
-    offset
-    limit
-    user_id
-    df
+    -query
+    -offset
+    -limit
+    -user_id
+    -df
 } {
     ftsenginedriver search operation implementation for tsearch2
 
