@@ -26,22 +26,30 @@ where object_type = 'acs_sc_implementation';
 
 drop function acs_sc_msg_type__new(varchar,varchar);
 
-create or replace function acs_sc_msg_type__new(varchar,varchar)
-returns integer as '
-declare
-    p_msg_type_name             alias for $1;
-    p_msg_type_spec		alias for $2;
+
+
+-- added
+select define_function_args('acs_sc_msg_type__new','msg_type_name,msg_type_spec');
+
+--
+-- procedure acs_sc_msg_type__new/2
+--
+CREATE OR REPLACE FUNCTION acs_sc_msg_type__new(
+   p_msg_type_name varchar,
+   p_msg_type_spec varchar
+) RETURNS integer AS $$
+DECLARE
     v_msg_type_id               integer;
-begin
+BEGIN
 
     v_msg_type_id := acs_object__new(
                 null,
-                ''acs_sc_msg_type'',
+                'acs_sc_msg_type',
                 now(),
                 null,
                 null,
                 null,
-                ''t'',
+                't',
                 p_msg_type_name,
                 null
             );
@@ -58,28 +66,37 @@ begin
 
     return v_msg_type_id;
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
 
 drop function acs_sc_contract__new(varchar,text);
 
-create or replace function acs_sc_contract__new(varchar,text)
-returns integer as '
-declare
-    p_contract_name             alias for $1;
-    p_contract_desc             alias for $2;
+
+
+-- added
+select define_function_args('acs_sc_contract__new','contract_name,contract_desc');
+
+--
+-- procedure acs_sc_contract__new/2
+--
+CREATE OR REPLACE FUNCTION acs_sc_contract__new(
+   p_contract_name varchar,
+   p_contract_desc text
+) RETURNS integer AS $$
+DECLARE
     v_contract_id               integer;
-begin
+BEGIN
 
     v_contract_id := acs_object__new(
                 null,
-                ''acs_sc_contract'',
+                'acs_sc_contract',
                 now(),
                 null,
                 null,
                 null,
-                ''t'',
+                't',
                 p_contract_name,
                 null
             );
@@ -96,38 +113,47 @@ begin
 
     return v_contract_id;
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
 
 drop function acs_sc_operation__new(varchar,varchar,text,boolean,integer,varchar,varchar);
 
-create or replace function acs_sc_operation__new(varchar,varchar,text,boolean,integer,varchar,varchar)
-returns integer as '
-declare
-    p_contract_name             alias for $1;
-    p_operation_name            alias for $2;
-    p_operation_desc            alias for $3;
-    p_operation_iscachable_p    alias for $4;
-    p_operation_nargs           alias for $5;
-    p_operation_inputtype       alias for $6;
-    p_operation_outputtype      alias for $7;
+
+
+-- added
+select define_function_args('acs_sc_operation__new','contract_name,operation_name,operation_desc,operation_iscachable_p,operation_nargs,operation_inputtype,operation_outputtype');
+
+--
+-- procedure acs_sc_operation__new/7
+--
+CREATE OR REPLACE FUNCTION acs_sc_operation__new(
+   p_contract_name varchar,
+   p_operation_name varchar,
+   p_operation_desc text,
+   p_operation_iscachable_p boolean,
+   p_operation_nargs integer,
+   p_operation_inputtype varchar,
+   p_operation_outputtype varchar
+) RETURNS integer AS $$
+DECLARE
     v_contract_id               integer;
     v_operation_id              integer;
     v_operation_inputtype_id    integer;
     v_operation_outputtype_id   integer;
-begin
+BEGIN
 
     v_contract_id := acs_sc_contract__get_id(p_contract_name);
 
     v_operation_id := acs_object__new(
                          null,
-                         ''acs_sc_operation'',
+                         'acs_sc_operation',
                          now(),
                          null,
                          null,
                          null,
-                         ''t'',
+                         't',
                          p_operation_name,
                          null
                      );
@@ -160,30 +186,39 @@ begin
 
     return v_operation_id;
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 
 
 
 drop function acs_sc_impl__new(varchar,varchar,varchar,varchar);
 
-create or replace function acs_sc_impl__new(varchar,varchar,varchar,varchar)
-returns integer as '
-declare
-    p_impl_contract_name        alias for $1;
-    p_impl_name                 alias for $2;
-    p_impl_pretty_name          alias for $3;
-    p_impl_owner_name           alias for $4;
+
+
+-- added
+select define_function_args('acs_sc_impl__new','impl_contract_name,impl_name,impl_pretty_name,impl_owner_name');
+
+--
+-- procedure acs_sc_impl__new/4
+--
+CREATE OR REPLACE FUNCTION acs_sc_impl__new(
+   p_impl_contract_name varchar,
+   p_impl_name varchar,
+   p_impl_pretty_name varchar,
+   p_impl_owner_name varchar
+) RETURNS integer AS $$
+DECLARE
     v_impl_id                   integer;
-begin
+BEGIN
 
     v_impl_id := acs_object__new(
                 null,
-                ''acs_sc_implementation'',
+                'acs_sc_implementation',
                 now(),
                 null,
                 null,
                 null,
-                ''t'',
+                't',
                 p_impl_pretty_name,
                 null
             );
@@ -204,4 +239,5 @@ begin
 
     return v_impl_id;
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
