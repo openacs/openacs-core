@@ -29,9 +29,9 @@ ad_proc -private cr_delete_scheduled_files {} {
          db_foreach fetch_paths { *SQL* } {
 
              # try to remove file from filesystem
-             set file "[cr_fs_path $storage_area_key]/${path}"
+             set file [cr_fs_path $storage_area_key]/$path
              ns_log Debug "cr_delete_scheduled_files: deleting $file"
-             ns_unlink  -nocomplain "$file"
+             file delete $file
          }
          # now that all scheduled files deleted, clear table
          db_dml delete_files { *SQL* }

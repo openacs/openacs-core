@@ -238,7 +238,7 @@ ad_proc -public template::util::spellcheck::get_element_formtext {
 	ad_script_abort
     }
 
-    ns_unlink $tmpfile
+    file delete $tmpfile
 
     if { $try == $max_retry } {
         return -code error "webspell: Tried to execute spellchecker $max_retry times but it did not work out. Sorry!"

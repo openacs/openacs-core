@@ -15,7 +15,7 @@ ad_page_contract {
 ReturnHeaders "image/gif"
 
 if { [catch {
-    set file [open "[acs_package_root_dir "acs-subsite"]/www/shared/1pixel.header"]
+    set file [open [acs_package_root_dir "acs-subsite"]/www/shared/1pixel.header]
     ns_writefp $file
     close $file
 
@@ -27,13 +27,13 @@ if { [catch {
     ns_log "Notice" "logging to $file_name"
     set file [open $file_name w+]
     fconfigure $file -encoding binary -translation binary
-    puts -nonewline $file "[format "%c%c%c" $r $g $b]"
+    puts -nonewline $file [format "%c%c%c" $r $g $b]
     seek $file 0
     ns_writefp $file
     close $file
-    ns_unlink $file_name
+    file delete $file_name
 
-    set file [open "[acs_package_root_dir "acs-subsite"]/www/shared/1pixel.footer"]
+    set file [open [acs_package_root_dir "acs-subsite"]/www/shared/1pixel.footer]
     ns_writefp $file
     close $file
 
