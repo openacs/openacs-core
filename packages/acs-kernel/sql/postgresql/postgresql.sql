@@ -353,10 +353,11 @@ DECLARE
 BEGIN
     select into v_bitfromint4_count count(*) from pg_proc where proname = 'bitfromint4';
     if v_bitfromint4_count = 0 then
-	create or replace function bitfromint4 (integer) returns bit varying as '
+	create or replace function bitfromint4 (integer) returns bit varying as $$
 	begin 
     	    return $1::bit(32);
-	end;' language 'plpgsql' immutable strict;
+	end;
+        $$ language plpgsql immutable strict;
    end if;
    return 1;
 END;
@@ -380,10 +381,11 @@ DECLARE
 BEGIN
     select into v_bittoint4_count count(*) from pg_proc where proname = 'bittoint4';
     if v_bittoint4_count = 0 then
-	create or replace function bittoint4 (bit varying) returns integer as '
+	create or replace function bittoint4 (bit varying) returns integer as $$
 	begin 
     	    return "int4"($1);
-	end;' language 'plpgsql' immutable strict;
+	end;
+        $$ language plpgsql immutable strict;
    end if;
    return 1;
 END;
@@ -742,16 +744,16 @@ $$ LANGUAGE plpgsql immutable;
 -- tree_ancestor_keys(varbit), which returns the set of tree_sortkeys for all of the
 -- ancestors of the given tree_sortkey...
 
-create or replace function tree_ancestor_keys(varbit, integer) returns setof varbit as '
+create or replace function tree_ancestor_keys(varbit, integer) returns setof varbit as $$
   select $1
-' language 'sql';
+$$ language 'sql';
 
-create or replace function tree_ancestor_keys(varbit, integer) returns setof varbit as '
+create or replace function tree_ancestor_keys(varbit, integer) returns setof varbit as $$
   select tree_ancestor_key($1, $2)
   union
   select tree_ancestor_keys($1, $2 + 1)
   where $2 < tree_level($1)
-' language 'sql' immutable strict;
+$$ language 'sql' immutable strict;
 
 
 ------------------------------
@@ -799,11 +801,11 @@ create or replace function tree_ancestor_keys(varbit, integer) returns setof var
 -- WARNING: subselects in where clauses that call this function and join on an outer table appear
 -- to reliably kill PG 7.1.2, at least if "exists" is involved.   PG 7.2 doesn''t die on my test
 -- case, so it appears to have been fixed.
-create or replace function tree_ancestor_keys(varbit) returns setof varbit as '
+create or replace function tree_ancestor_keys(varbit) returns setof varbit as $$
 
   select tree_ancestor_keys($1, 1)
 
-' language 'sql' immutable strict;
+$$ language 'sql' immutable strict;
 
 ----------------------------------------------------------------------------
 
