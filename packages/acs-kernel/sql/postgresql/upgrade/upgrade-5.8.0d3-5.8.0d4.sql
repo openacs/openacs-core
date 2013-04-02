@@ -57,7 +57,7 @@ CREATE OR REPLACE FUNCTION  acs_permission__permission_p_recursive_array(
     permission_p__privilege varchar
 ) RETURNS table (object_id integer, orig_object_id integer) as $$
 BEGIN
-    return query With RECURSIVE object_context(object_id, context_id, orig_object_id) AS (
+    return query With RECURSIVE object_context(obj_id, context_id, orig_obj_id) AS (
 
             select unnest(permission_p__objects), unnest(permission_p__objects), unnest(permission_p__objects)
 
@@ -66,7 +66,7 @@ BEGIN
             select ao.object_id,
             case when (ao.security_inherit_p = 'f' or ao.context_id is null) 
             then acs__magic_object_id('security_context_root') else ao.context_id END, 
-            oc.orig_object_id
+            oc.orig_obj_id
             from object_context oc, acs_objects ao
             where ao.object_id = oc.context_id
             and ao.object_id != acs__magic_object_id('security_context_root')
@@ -74,8 +74,6 @@ BEGIN
         ), privilege_ancestors(privilege, child_privilege) AS (
 
            select permission_p__privilege, permission_p__privilege
-           from acs_privilege_hierarchy 
-           where privilege = permission_p__privilege
 
            union all
 
@@ -84,7 +82,7 @@ BEGIN
            on aph.child_privilege = pa.privilege
 
         ) select
-          p.object_id, oc.orig_object_id
+          p.object_id, oc.orig_obj_id
           from
           acs_permissions p
           join  party_approved_member_map pap on pap.party_id   =  p.grantee_id
