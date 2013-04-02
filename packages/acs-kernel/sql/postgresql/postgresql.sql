@@ -353,11 +353,11 @@ DECLARE
 BEGIN
     select into v_bitfromint4_count count(*) from pg_proc where proname = 'bitfromint4';
     if v_bitfromint4_count = 0 then
-	create or replace function bitfromint4 (integer) returns bit varying as $$
+	create or replace function bitfromint4 (integer) returns bit varying as '
 	begin 
     	    return $1::bit(32);
 	end;
-        $$ language plpgsql immutable strict;
+        ' language plpgsql immutable strict;
    end if;
    return 1;
 END;
@@ -381,11 +381,11 @@ DECLARE
 BEGIN
     select into v_bittoint4_count count(*) from pg_proc where proname = 'bittoint4';
     if v_bittoint4_count = 0 then
-	create or replace function bittoint4 (bit varying) returns integer as $$
+	create or replace function bittoint4 (bit varying) returns integer as '
 	begin 
     	    return "int4"($1);
 	end;
-        $$ language plpgsql immutable strict;
+        ' language plpgsql immutable strict;
    end if;
    return 1;
 END;
