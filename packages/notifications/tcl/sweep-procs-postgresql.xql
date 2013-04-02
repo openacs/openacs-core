@@ -44,4 +44,13 @@
         </querytext>
     </fullquery>
 
+    <fullquery name="notification::sweep::cleanup_notifications.select_invalid_request_ids">
+        <rdbms><type>postgresql</type><version>8.4</version></rdbms>
+        <querytext>
+         select request_id
+           from notification_requests
+          where acs_permission__permission_p(object_id, user_id, 'read') is false;
+        </querytext>
+    </fullquery>
+
 </queryset>

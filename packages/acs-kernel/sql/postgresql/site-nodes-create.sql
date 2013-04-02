@@ -444,29 +444,22 @@ select define_function_args('site_node__url','node_id');
 CREATE OR REPLACE FUNCTION site_node__url(
    url__node_id integer
 ) RETURNS varchar AS $$
-DECLARE
-  v_parent_id            site_nodes.node_id%TYPE;
-  v_name                 site_nodes.name%TYPE;
-  v_directory_p          site_nodes.directory_p%TYPE;
 BEGIN
-    if url__node_id is null then
-      return '';
-    end if;
+    return ( With RECURSIVE site_nodes_recursion(parent_id, path, directory_p, node_id) as (
+    
+        select parent_id, ARRAY[name || case when directory_p then '/' else ' ' end]::text[] as path, directory_p, node_id
+        from site_nodes where node_id = url__node_id
+    
+        UNION ALL
+    
+        select sn.parent_id, sn.name::text || snr.path , sn.directory_p, snr.parent_id
+        from site_nodes sn join site_nodes_recursion snr on sn.node_id = snr.parent_id 
+        where snr.parent_id is not null    
 
-    select parent_id, name, directory_p into
-           v_parent_id, v_name, v_directory_p
-    from site_nodes
-    where node_id = url__node_id;
-
-    if v_directory_p = 't' then
-      return site_node__url(v_parent_id) || v_name || '/';
-    else
-      return site_node__url(v_parent_id) || v_name;
-    end if;
-   
-END;
-$$ LANGUAGE plpgsql;
-
+    ) select array_to_string(path,'/') from site_nodes_recursion where parent_id is null
+);
+END; 
+$$ LANGUAGE plpgsql; 
 
 
 -- show errors
