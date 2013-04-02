@@ -47,4 +47,12 @@
         </querytext>
     </fullquery>
 
+    <fullquery name="permission::permission_p_not_cached.select_permission_p">
+        <querytext>
+            select acs_permission.permission_p(:object_id, :party_id, :privilege)
+            from dual
+        </querytext>
+    </fullquery>
+
+
 </queryset>

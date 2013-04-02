@@ -34,14 +34,4 @@
         </querytext>
     </fullquery>
  
-    <fullquery name="permission::permission_p_not_cached.select_permission_p">
-        <querytext>
-		select 1 from dual
-		where exists
-	        	( select 1
-                	from acs_object_party_privilege_map ppm
-	  		where ppm.object_id = :object_id and ppm.party_id = :party_id and ppm.privilege = :privilege )
-        </querytext>
-    </fullquery>
-
 </queryset>

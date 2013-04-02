@@ -20,7 +20,7 @@
 
         <provides url="acs-tcl" version="5.8.0d2"/>
         <requires url="acs-bootstrap-installer" version="5.8.0d1"/>
-        <requires url="acs-kernel" version="5.8.0d1"/>
+        <requires url="acs-kernel" version="5.8.0d4"/>
 
         <callbacks>
         </callbacks>

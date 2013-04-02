@@ -131,7 +131,7 @@ ad_proc -private permission::permission_p_not_cached {
     # We have a thread-local cache here
     global permission__permission_p__cache
     if { ![info exists permission__permission_p__cache($party_id,$object_id,$privilege)] } {
-        set permission__permission_p__cache($party_id,$object_id,$privilege) [db_0or1row select_permission_p {}]
+        set permission__permission_p__cache($party_id,$object_id,$privilege) [expr {[db_exec_plsql select_permission_p {}] ? 1 : 0 }]
     }
     return $permission__permission_p__cache($party_id,$object_id,$privilege)
 }
