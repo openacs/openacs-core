@@ -522,7 +522,7 @@ ad_proc -private apm_ignore_file_p { path } {
 	if {[lindex $parts end] eq "resources" && [lindex $parts end-1] eq "www"} {
 	    return 1
 	}
-	if {[lindex $parts end] in {CVS catalog upgrade}} {
+	if {[lindex $parts end] in {CVS .git catalog upgrade}} {
 	    return 1
 	}
     }
