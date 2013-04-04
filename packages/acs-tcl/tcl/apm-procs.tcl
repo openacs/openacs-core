@@ -615,21 +615,26 @@ ad_proc -public apm_load_packages {
 
     # Load up the Automated Tests and associated Queries if necessary
     if {$load_tests_p} {
-      apm_load_libraries -force_reload=$force_reload_p -packages $packages -test_procs
-      apm_load_queries -packages $packages_to_load -test_queries
+	apm_load_libraries -force_reload=$force_reload_p -packages $packages -test_procs
+	apm_load_queries -packages $packages_to_load -test_queries
     }
 
     if { $load_libraries_p } {
         # branimir: acs-lang needs to be initialized before anything else
         # because there are packages whose *-init.tcl files depend on it.
-        apm_load_libraries -force_reload=$force_reload_p -init -packages acs-lang
-
-        apm_load_libraries -force_reload=$force_reload_p -init -packages $packages_to_load
+	apm_load_libraries -force_reload=$force_reload_p -init -packages acs-lang
+	set p [lsearch $packages_to_load acs-lang]
+	if {$p > -1} {
+	    set unique_packages [lreplace $packages_to_load $p $p]
+	} else {
+	    set unique_packages $packages_to_load
+	}
+        apm_load_libraries -force_reload=$force_reload_p -init -packages $unique_packages
     }
 
     # Load up the Automated Tests initialisation scripts if necessary
     if {$load_tests_p} {
-      apm_load_libraries -force_reload=$force_reload_p -packages $packages_to_load -test_init
+	apm_load_libraries -force_reload=$force_reload_p -packages $packages_to_load -test_init
     }
 }
 
