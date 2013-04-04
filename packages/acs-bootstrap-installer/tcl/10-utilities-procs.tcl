@@ -8,11 +8,9 @@ ad_library {
 }
 
 ad_proc -public ad_find_all_files {
-    {
-	-include_dirs 0
-	-max_depth 10
-	-check_file_func ""
-    }
+    {-include_dirs 0}
+    {-max_depth 10}
+    {-check_file_func ""}
     path
 } {
 
@@ -45,7 +43,7 @@ ad_proc -public ad_find_all_files {
 		# Remember that we've examined the file.
 		set examined_files($file) 1
 
-		if { $check_file_func eq "" || [eval [list $check_file_func $file]] } {
+		if { $check_file_func eq "" || [$check_file_func $file] } {
 		    # If it's a file, add to our list. If it's a
 		    # directory, add its contents to our list of files to
 		    # examine next time.
@@ -55,7 +53,7 @@ ad_proc -public ad_find_all_files {
 			if { $include_dirs == 1 } {
 			    lappend files $file
 			}
-			set new_files_to_examine [concat $new_files_to_examine [glob -nocomplain "$file/*"]]
+			lappend new_files_to_examine {*}[glob -nocomplain "$file/*"]
 		    }
 		}
 	    }
