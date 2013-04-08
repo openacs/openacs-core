@@ -24,6 +24,41 @@ if { [parameter::get -package_id [ad_acs_kernel_id] -parameter PerformanceModeP 
   }
 }
 
+if { [parameter::get -package_id [ad_acs_kernel_id] -parameter DebugP -default 0] ||
+     [parameter::get -package_id [ad_acs_kernel_id] -parameter LogDebugP -default 0]
+ } { 
+
+    ad_proc -private rp_debug { { -debug f } { -ns_log_level notice } string } {
+
+	Logs a debugging message, including a high-resolution (millisecond)
+	timestamp. 
+	
+    } {
+	if { [parameter::get -package_id [ad_acs_kernel_id] -parameter DebugP -default 0] } { 
+	    set clicks [clock clicks -milliseconds]
+	    ds_add rp [list debug $string $clicks $clicks]
+	}
+	if { [parameter::get -package_id [ad_acs_kernel_id] -parameter LogDebugP -default 0]
+	     || $debug eq "t" 
+	     || $debug eq "1"
+	 } {
+	    if { [info exists ::ad_conn(start_clicks)] } {
+		set timing " ([expr {([clock clicks -milliseconds] - $::ad_conn(start_clicks))}] ms)"
+	    } else {
+		set timing ""
+	    }
+	    ns_log $ns_log_level "RP$timing: $string"
+	}
+    }
+} else {
+    ad_proc -private rp_debug { { -debug f } { -ns_log_level notice } string } {
+	dummy placeholder
+    } {
+	return
+    }
+}
+
+
 # JCD this belongs in acs-permission-init.tcl but I did not want to duplicate [ad_acs_kernel_id]
 # Nuke the existing definition. and create one with the parameter set
 

@@ -150,31 +150,31 @@ ad_proc -public parameter::get {
     if {$package_id eq ""} {
         set package_id [ad_requested_object_id]
     }
-
-    set package_key ""
     set value ""
+
+    # 1. If there is not package_id provided, check whether there is a
+    # parameter by this name in the parameter file?  Actually,
+    # ad_parameter_from_file is a misnomer, since the it checks ns_config
+    # values 
     if {$package_id ne ""} {
+	set package_key ""
         # This can fail at server startup--OpenACS calls parameter::get to
         # get the size of the util_memoize cache so it can setup the cache.
         # apm_package_key_from_id needs that cache, but on server start 
         # when the toolkit tries to get the parameter for the cache size
         # the cache doesn't exist yet, so apm_package_key_from_id fails
-        catch {
+        if {![catch {
             set package_key [apm_package_key_from_id $package_id]
-        }
-    }
-
-    # If I convert the package_id to a package_key, is there a parameter by this
-    # name in the parameter file?  If so, it takes precedence.
-    # 1. use the parameter file
-    if {$package_key ne ""} {
-        set value [ad_parameter_from_file $parameter $package_key]
+        }]} {
+	    set value [ad_parameter_from_file $parameter $package_key]
+	}
     }
 
     # 2. check the parameter cache
     if {$value eq ""} {
         set value [ad_parameter_cache $package_id $parameter]
     }
+
     # 3. use the default value
     if {$value eq ""} {
         set value $default
@@ -184,9 +184,6 @@ ad_proc -public parameter::get {
         # Replace message keys in hash marks with localized texts
         set value [lang::util::localize $value]
     }
-
-    # Trimming the value as people may have accidentally put in trailing spaces
-    set value [string trim $value]
 
     # Special parsing for boolean parameters, true and false can be written
     # in many different ways

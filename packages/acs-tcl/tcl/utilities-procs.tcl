@@ -191,7 +191,7 @@ ad_proc -public NsSettoTclString {set_id} {
 ad_proc -public get_referrer {} {
     gets the Referer for the headers
 } { 
-    return [ns_set get [ad_conn headers] Referer]
+    return [ns_set get [ns_conn headers] Referer]
 }
 
 ##
@@ -1930,13 +1930,16 @@ ad_proc -public ad_urlencode { string } {
 
 ad_proc -public ad_get_cookie {
     { -include_set_cookies t }
-    name { default "" }
+    name 
+    { default "" }
 } { 
     Returns the value of a cookie, or $default if none exists.
 } {
+
     if { $include_set_cookies eq "t" } {
-	set headers [ad_conn outputheaders]
-	for { set i 0 } { $i < [ns_set size $headers] } { incr i } {
+	set headers [ns_conn outputheaders]
+	set nr_headers [ns_set size $headers]
+	for { set i 0 } { $i < $nr_headers } { incr i } {
 	    if { [string tolower [ns_set key $headers $i]] eq "set-cookie" && \
 		     [regexp "^$name=(\[^;\]*)" [ns_set value $headers $i] match value] } {
 		return $value
@@ -1944,8 +1947,9 @@ ad_proc -public ad_get_cookie {
 	}
     }
 
-    set headers [ad_conn headers]
+    set headers [ns_conn headers]
     set cookie [ns_set iget $headers Cookie]
+
     if { [regexp " $name=(\[^;\]*)" " $cookie" match value] } {
 
         # If the cookie was set to a blank value we actually stored two quotes.  We need
@@ -2322,9 +2326,10 @@ ad_proc -public ad_returnredirect {
     #Meta Refresh page instead of a redirect. 
     # jbank@arsdigita.com 6/7/2000
     set use_metarefresh_p 0
-    set type [ns_set iget [ad_conn headers] content-type]
+    set headers [ns_conn headers]
+    set type [ns_set iget $headers content-type]
     if { [string match *multipart/form-data* [string tolower $type]] } {
-        set user_agent [ns_set get [ad_conn headers] User-Agent]
+        set user_agent [ns_set iget $headers User-Agent]
         set use_metarefresh_p [string match -nocase "*msie 5.0*" $user_agent]
     }
     if {[string match "https://*" [ad_conn location]] && [string match "http://*" $url]} {
@@ -2484,7 +2489,7 @@ ad_proc -public util_current_location {{}} {
     set port $driver(port)
 
     # This is the host from the browser's HTTP request
-    set Host [ns_set iget [ad_conn headers] Host]
+    set Host [ns_set iget [ns_conn headers] Host]
     set Hostv [split $Host ":"]
     set Host_hostname [lindex $Hostv 0]
     set Host_port [lindex $Hostv 1]
