@@ -665,18 +665,15 @@ ad_proc -public ad_parameter_from_file {
     @param name The name of the parameter.
     @return The parameter of the object or if it doesn't exist, the default.
 } {
-    set ns_param ""
 
     # The below is really a hack because none of the calls to ad_parameter in the system
     # actually call 'ad_parameter param_name acs-kernel'.
 
     if { $package_key eq "" || $package_key eq "acs-kernel"} {
-	set ns_param [ns_config "ns/server/[ns_info server]/acs" $name]
-    } else {
-	set ns_param [ns_config "ns/server/[ns_info server]/acs/$package_key" $name]
+	return [ns_config "ns/server/[ns_info server]/acs" $name]
     }
 
-    return $ns_param
+    return [ns_config "ns/server/[ns_info server]/acs/$package_key" $name]
 }
 
 
@@ -688,7 +685,7 @@ ad_proc -private ad_parameter_cache {
     parameter_name
 } {
     
-    Manages the cache for ad_paremeter.
+    Manages the cache for ad_parameter.
     @param -set Use this flag to indicate a value to set in the cache.
     @param -delete Delete the value from the cache
     @param -global If true, global param, false, instance param

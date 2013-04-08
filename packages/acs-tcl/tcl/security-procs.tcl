@@ -98,19 +98,19 @@ ad_proc -private sec_handler {} {
 	# The session cookie already exists and is valid.
 	set cookie_data [split [lindex $cookie_list 0] {,}]
 	set session_last_renew_time [lindex $cookie_data 3]
-    if {![string is integer -strict $session_last_renew_time]} {
-        # This only happens if the session cookie is old style
-        # previous to openacs 5.7 and does not have session review time
-        # embedded.
-        # Assume cookie expired and force login handler
-        set session_last_renew_time 0
-    }
-    
-    set session_expr [expr {$session_last_renew_time + [sec_session_timeout]}]
-    
-    if {$session_expr < [ns_time]} {
-        sec_login_handler
-    }
+	if {![string is integer -strict $session_last_renew_time]} {
+	    # This only happens if the session cookie is old style
+	    # previous to openacs 5.7 and does not have session review time
+	    # embedded.
+	    # Assume cookie expired and force login handler
+	    set session_last_renew_time 0
+	}
+
+	set session_expr [expr {$session_last_renew_time + [sec_session_timeout]}]
+	if {$session_expr < [ns_time]} {
+	    sec_login_handler
+	}
+	
 	lassign $cookie_data session_id untrusted_user_id login_level
         set user_id 0
         set account_status closed
@@ -902,6 +902,7 @@ ad_proc -private __ad_verify_signature {
 	    return 0
 	}
 	set secret_token [sec_get_token $token_id]
+
     } else {
 	set secret_token $secret
     }
@@ -910,7 +911,6 @@ ad_proc -private __ad_verify_signature {
     ns_log Debug "__ad_verify_signature: Expire_Time is $expire_time (compare to [ns_time]), hash is $hash"
 
     # validate cookie: verify hash and expire_time
-
     set computed_hash [ns_sha1 "$value$token_id$expire_time$secret_token"]
 
     # Need to verify both hash and expiration
@@ -962,18 +962,13 @@ ad_proc -public ad_get_signed_cookie {
 
 } {
 
-    if { $include_set_cookies eq "t" } {
-	set cookie_value [ns_urldecode [ad_get_cookie $name]]
-    } else {
-	set cookie_value [ns_urldecode [ad_get_cookie -include_set_cookies f $name]]
-    }
+    set cookie_value [ns_urldecode [ad_get_cookie -include_set_cookies $include_set_cookies $name]]
 
     if { $cookie_value eq "" } {
 	error "Cookie does not exist."
     }
 
     lassign $cookie_value value signature
-
     ns_log Debug "ad_get_signed_cookie: Got signed cookie $name with value $value, signature $signature."
 
     if { [ad_verify_signature $value $signature] } {
@@ -999,11 +994,7 @@ ad_proc -public ad_get_signed_cookie_with_expr {
 
 } {
 
-    if { $include_set_cookies eq "t" } {
-	set cookie_value [ns_urldecode [ad_get_cookie $name]]
-    } else {
-	set cookie_value [ns_urldecode [ad_get_cookie -include_set_cookies f $name]]
-    }
+    set cookie_value [ns_urldecode [ad_get_cookie -include_set_cookies $include_set_cookies $name]]
 
     if { $cookie_value eq "" } {
 	error "Cookie does not exist."
@@ -1104,40 +1095,65 @@ ad_proc -private sec_get_token {
 
 } {
     
-    if { [info exists ::security::tcl_secret_tokens($token_id)] } {
-	return $::security::tcl_secret_tokens($token_id)
-    } else {
-	set token [ns_cache eval secret_tokens $token_id {
-	    set token [db_string get_token {select token from secret_tokens
-                       	                 where token_id = :token_id} -default 0]
-	    db_release_unused_handles
+    set key ::security::tcl_secret_tokens($token_id)
+    if { [info exists $key] } { return [set $key] } 
 
-	    # Very important to throw the error here if $token == 0
-
-            if { $token == 0 } {
-	        error "Invalid token ID"
-	    }
-
-	    return $token
-	}]
-
-	set ::security::tcl_secret_tokens($token_id) $token
-	return $token
+    if {[array size ::security::tcl_secret_tokens] == 0} {
+	populate_secret_tokens_thread_cache
+	if { [info exists $key] } { return [set $key] } 
     }
+    
+    #
+    # We might get token_ids from previous runs, so we have fetch these
+    # in case of a validation
+    #
+    set token [ns_cache eval secret_tokens $token_id {
+       set token [db_string get_token {select token from secret_tokens
+           where token_id = :token_id} -default 0]
+       db_release_unused_handles
+       
+       # Very important to throw the error here if $token == 0
+       
+       if { $token == 0 } {
+           error "Invalid token ID"
+       }
+       
+        return $token
+    }]
 
+    set $key $token
+    return $token
 }
 
 ad_proc -private sec_get_random_cached_token_id {} {
     
-    Randomly returns a token_id from the ns_cache.
+    Randomly returns a token_id from the token cache
 
 } {
- 
-    set list_of_names [ns_cache names secret_tokens]
-    set random_seed [ns_rand [llength $list_of_names]]
+    #set list_of_names [ns_cache names secret_tokens]
+    set list_of_names [array names ::security::tcl_secret_tokens]
+    if {[llength $list_of_names] == 0} {
+        populate_secret_tokens_thread_cache
+        set list_of_names [array names ::security::tcl_secret_tokens]
+    }
 
+    set random_seed [ns_rand [llength $list_of_names]]
     return [lindex $list_of_names $random_seed]
-    
+}
+
+ad_proc -private populate_secret_tokens_thread_cache {} {
+     
+    Copy secret_tokens cache to per-thread variables
+
+} {
+    set ids [ns_cache names secret_tokens]
+    if {[llength $ids] == 0} {
+       populate_secret_tokens_cache
+       set ids [ns_cache names secret_tokens]
+    }
+    foreach name $ids {
+       set ::security::tcl_secret_tokens($name) [ns_cache get secret_tokens $name]
+    }
 }
 
 ad_proc -private populate_secret_tokens_cache {} {
@@ -1437,13 +1453,13 @@ ad_proc -public security::https_available_p {} {
 
     @author Peter Marklund
 } {
-    return [expr ![empty_string_p [get_https_port]]]
+    return [expr {[get_https_port] ne ""}]
 }
 
 ad_proc -public security::secure_conn_p {} { 
     Returns true if the connection [ad_conn] is secure (HTTPS), or false otherwise. 
 } {
-    return [string match "https:*" [util_current_location]]
+    return [string match "https:*" [ns_conn location]]
 }
 
 ad_proc -public security::RestrictLoginToSSLP {} {

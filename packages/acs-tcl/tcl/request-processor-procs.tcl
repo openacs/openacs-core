@@ -525,7 +525,15 @@ ad_proc -private rp_filter { why } {
     #####
 
     ad_conn -reset
-    ad_conn -set request [nsv_incr rp_properties request_count]
+    if {[ns_info name] eq "NaviServer"} {
+	# ns_conn id the internal counter by aolserver 4.5 and
+	# NaviServer. The semantics of the counter were different in
+	# Aolserver 4.0, when we require at least AolServer 4.5 the
+	# server test could go away.
+	ad_conn -set request [ns_conn id]
+    } else {
+	ad_conn -set request [nsv_incr rp_properties request_count]
+    }
     ad_conn -set user_id 0
     ad_conn -set start_clicks [clock clicks -milliseconds]
 
@@ -536,11 +544,12 @@ ad_proc -private rp_filter { why } {
     # -------------------------------------------------------------------------
     # 1. determine the root of the host and the requested URL
     set root [root_of_host [ad_host]]
-    set url [ad_conn url]
+    set ad_conn_url [ad_conn url]
+
     # 2. handle special case: if the root is a prefix of the URL, 
     #                         remove this prefix from the URL, and redirect.
     if { $root ne "" } {
-        if { [regexp "^${root}(.*)$" $url match url] } {
+        if { [regexp "^${root}(.*)$" $ad_conn_url match url] } {
 
             if { [regexp {^GET [^\?]*\?(.*) HTTP} [ns_conn request] match vars] } {
                 append url ?$vars
@@ -548,17 +557,18 @@ ad_proc -private rp_filter { why } {
             if { [security::secure_conn_p] } {
                 # it's a secure connection.
                 ad_returnredirect \
-                    -allow_complete_url https://[ad_host][ad_port]$url
+                    -allow_complete_url https://[ad_host][ad_port]$ad_conn_url
                 return "filter_return"
             } else {
                 ad_returnredirect \
-                    -allow_complete_url http://[ad_host][ad_port]$url
+                    -allow_complete_url http://[ad_host][ad_port]$ad_conn_url
                 return "filter_return"
             }
         }
         # Normal case: Prepend the root to the URL.
         # 3. set the intended URL
-        ad_conn -set url ${root}${url}
+        ad_conn -set url ${root}${ad_conn_url}
+	set ad_conn_url [ad_conn url]
 
         # 4. set urlv and urlc for consistency
         set urlv [lrange [split $root /] 1 end]
@@ -587,12 +597,10 @@ ad_proc -private rp_filter { why } {
         ns_returnredirect "http://www.yahoo.com"
         return "filter_return"
     }
-
     ## BLOCK NASTY YAHOO FINISH
 
-    set acs_kernel_id [util_memoize ad_acs_kernel_id]
     if { $root eq "" 
-         && [parameter::get -package_id $acs_kernel_id -parameter ForceHostP -default 0] } { 
+         && [parameter::get -package_id [ad_acs_kernel_id] -parameter ForceHostP -default 0] } { 
         set host_header [ns_set iget [ns_conn headers] "Host"]
         regexp {^([^:]*)} $host_header "" host_no_port
         regexp {^https?://([^:]+)} [ns_conn location] "" desired_host_no_port
@@ -616,14 +624,14 @@ ad_proc -private rp_filter { why } {
         ad_conn -set urlc [expr {[ad_conn urlc] - 1}]
         ad_conn -set urlv [lrange [ad_conn urlv] 0 [expr {[llength [ad_conn urlv]] - 2}] ]
     }
-
     rp_debug -ns_log_level debug -debug t "rp_filter: setting up request: [ns_conn method] [ns_conn url] [ns_conn query]"
 
-    if { [catch { array set node [site_node::get -url [ad_conn url]] } errmsg] } {
+    if { [catch { array set node [site_node::get -url $ad_conn_url] } errmsg] } {
         # log and do nothing
         rp_debug "error within rp_filter [ns_conn method] [ns_conn url] [ns_conn query].  $errmsg"
     } else {
-        if {$node(url) eq "[ad_conn url]/"} {
+
+        if {$node(url) eq "$ad_conn_url/"} {
             ad_returnredirect $node(url)
             rp_debug "rp_filter: returnredirect $node(url)"
             rp_debug "rp_filter: return filter_return"
@@ -639,7 +647,7 @@ ad_proc -private rp_filter { why } {
         ad_conn -set package_key $node(package_key)
         ad_conn -set package_url $node(url)
         ad_conn -set instance_name $node(instance_name)
-        ad_conn -set extra_url [string range [ad_conn url] [string length $node(url)] end]
+        ad_conn -set extra_url [string range $ad_conn_url [string length $node(url)] end]
     }
 
     #####
@@ -653,11 +661,9 @@ ad_proc -private rp_filter { why } {
       # We wrap this in a catch, because we don't want an error here to 
       # cause the request to fail.
       if { [catch { apm_load_any_changed_libraries } error] } {
-        global errorInfo
-        ns_log Error "rp_filter: error apm_load_any_changed_libraries: $errorInfo"
+        ns_log Error "rp_filter: error apm_load_any_changed_libraries: $::errorInfo"
       }
     }
-
     #####
     #
     # Read in and/or generate security cookies.
@@ -674,9 +680,10 @@ ad_proc -private rp_filter { why } {
 
     # Set locale and language of the request. We need ad_conn user_id to be set at this point
     if { [catch {
-        ad_conn -set locale [lang::conn::locale]
-        ad_conn -set language [lang::conn::language]
-        ad_conn -set charset [lang::util::charset_for_locale [ad_conn locale]] 
+	set locale [lang::conn::locale -package_id [ad_conn package_id]]
+        ad_conn -set locale $locale
+        ad_conn -set language [lang::conn::language -locale $locale]
+        ad_conn -set charset [lang::util::charset_for_locale $locale] 
     }] } {
         # acs-lang doesn't seem to be installed. Even though it must be installed now,
         # the problem is that if it isn't, everything breaks. So we wrap it in
@@ -689,9 +696,9 @@ ad_proc -private rp_filter { why } {
     }
 
     if {[ns_info name] eq "NaviServer"}  {
-      # provide context information for background writer
-      set requestor [expr {$::ad_conn(user_id) == 0 ? [ad_conn peeraddr] : $::ad_conn(user_id)}]
-      catch {ns_conn clientdata [list $requestor [ns_conn url]]}
+	# provide context information for background writer
+	set requestor [expr {$::ad_conn(user_id) == 0 ? [ad_conn peeraddr] : $::ad_conn(user_id)}]
+	catch {ns_conn clientdata [list $requestor [ns_conn url]]}
     }
     
     # Who's online
@@ -702,7 +709,6 @@ ad_proc -private rp_filter { why } {
     # Make sure the user is authorized to make this request. 
     #
     #####
-
     if { [ad_conn object_id] ne "" } {
       ad_try {
         switch -glob -- [ad_conn extra_url] {
@@ -720,38 +726,14 @@ ad_proc -private rp_filter { why } {
             }
         }
       } ad_script_abort val {
-        rp_finish_serving_page
-        rp_debug "rp_filter: return filter_return"
-        return "filter_return"
+          rp_finish_serving_page
+          rp_debug "rp_filter: return filter_return"
+          return "filter_return"
       }
     }
+
     rp_debug "rp_filter: return filter_ok"
     return "filter_ok"
-}
-
-ad_proc -private rp_debug { { -debug f } { -ns_log_level notice } string } {
-
-    Logs a debugging message, including a high-resolution (millisecond)
-    timestamp. 
-
-} {
-    if { [parameter::get -package_id [ad_acs_kernel_id] -parameter DebugP -default 0] } { 
-        global ad_conn
-        set clicks [clock clicks -milliseconds]
-        ds_add rp [list debug $string $clicks $clicks]
-    }
-    if { [parameter::get -package_id [ad_acs_kernel_id] -parameter LogDebugP -default 0]
-         || $debug eq "t" 
-         || $debug eq "1"
-     } {
-        global ad_conn
-        if { [info exists ad_conn(start_clicks)] } {
-            set timing " ([expr {([clock clicks -milliseconds] - $ad_conn(start_clicks))}] ms)"
-        } else {
-            set timing ""
-        }
-        ns_log $ns_log_level "RP$timing: $string"
-    }
 }
 
 ad_proc rp_report_error {
@@ -1515,11 +1497,19 @@ ad_proc ad_port {} {
     }
 }
 
+namespace eval ::acs {}
+
 ad_proc root_of_host {host} {
     Maps a hostname to the corresponding sub-directory.
 } {
+    set key ::acs::root_of_host($host)
+    if {[info exists $key]} {return [set $key]}
+    set $key [root_of_host1 $key]
+}
+
+proc root_of_host1 {host} {
     # The main hostname is mounted at /.
-    if { [string equal $host [ns_config ns/server/[ns_info server]/module/nssock Hostname]] } {
+    if { $host eq [ns_config ns/server/[ns_info server]/module/nssock Hostname] } {
         return ""
     }
     # Other hostnames map to subsites.
@@ -1557,6 +1547,7 @@ ad_proc -public request_denied_filter { why } {
 }
 
 
+
 if {[ns_info name] eq "NaviServer"} {
   # this is written for NaviServer 4.99.1 or newer
   foreach filter {rp_filter rp_resources_filter request_denied_filter} {
@@ -1576,3 +1567,4 @@ if {[ns_info name] eq "NaviServer"} {
   rename rp_invoke_proc   $cmd
   proc   rp_invoke_proc   { argv } "$cmd _ \$argv"
 }
+

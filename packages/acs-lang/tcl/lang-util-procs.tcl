@@ -367,7 +367,9 @@ ad_proc -public lang::util::charset_for_locale {
     @return        IANA MIME character set name
 } {
     # DRB: cache this now that ad_conn tracks it
-    return [db_string -cache_key ad_lang_mime_charset_$locale charset_for_locale {}]
+    set key ::lang::util::charset_for_locale($locale)
+    if {[info exists $key]} {return [set $key]}
+    set $key [db_string -cache_key ad_lang_mime_charset_$locale charset_for_locale {}]
 }
 
 ad_proc -private lang::util::default_locale_from_lang_not_cached { 

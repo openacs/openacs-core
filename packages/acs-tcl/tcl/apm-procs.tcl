@@ -1162,6 +1162,7 @@ ad_proc -public apm_version_get {
     db_1row select_version_info {} -column_array row
 }
 
+namespace eval ::acs {}
 #
 # package_id -> package_key
 #
@@ -1169,7 +1170,9 @@ ad_proc -public apm_version_get {
 ad_proc -public apm_package_key_from_id {package_id} {
     @return The package key of the instance.
 } {
-    return [util_memoize "apm_package_key_from_id_mem $package_id"]
+    set key ::acs::apm_package_key_from_id($package_id)
+    if {[info exists $key]} {return [set $key]}
+    set $key [apm_package_key_from_id_mem $package_id]
 }
 
 ad_proc -private apm_package_key_from_id_mem {package_id} {

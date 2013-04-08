@@ -640,17 +640,20 @@ ad_proc -public lang::conn::language {
     {-package_id ""}
     {-site_wide:boolean}
     {-iso6392:boolean}
+    {-locale ""}
 } {
     Get the language for this request, perhaps for a given package instance.
     
     @param package_id The package for which you want to get the language.
     @param site_wide Set this if you want to get the site-wide language.
     @param iso6392   Set this if you want to force the iso-639-2 code
+    @param locale   obtain language from provided locale
 
     @return 3 chars language code if iso6392 is set, left part of locale otherwise
 } {
-
-    set locale [locale -package_id $package_id -site_wide=$site_wide_p]
+    if {$locale eq ""} {
+	set locale [locale -package_id $package_id -site_wide=$site_wide_p]
+    }
     set conn_lang [lindex [split $locale "_"] 0]
 
     if { $iso6392_p } {
