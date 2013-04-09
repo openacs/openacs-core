@@ -1348,9 +1348,8 @@ ad_proc -public db_foreach {{ -dbn "" } statement_name sql args } {
         set counter 0
         while { [db_getrow $db $selection] } {
             incr counter
-            if { [info exists array_val] } {
-                unset array_val
-            }
+	    unset -nocomplain array_val
+
             if { ![info exists column_set] } {
                 for { set i 0 } { $i < [ns_set size $selection] } { incr i } {
                     if { [info exists column_array] } {
@@ -1414,9 +1413,7 @@ proc db_multirow_helper {} {
             # the multirow generation
             # Also make the 'next_row' array available as a magic __db_multirow__next_row variable
             upvar 1 __db_multirow__next_row next_row
-            if { [info exists next_row] } {
-                unset next_row
-            }
+	    unset -nocomplain next_row
             
             set more_rows_p 1
             while { 1 } {
@@ -1483,18 +1480,14 @@ proc db_multirow_helper {} {
                     # There is a code block to execute
 
                     # Copy next_row to this_row, if it exists
-                    if { [info exists this_row] } {
-                        unset this_row 
-                    }
+		    unset -nocomplain this_row 
                     set array_get_next_row [array get next_row]
                     if { $array_get_next_row ne "" } {
                         array set this_row [array get next_row]
                     }
 
                     # Pull values from the query into next_row
-                    if { [info exists next_row] } {
-                        unset next_row 
-                    }
+		    unset -nocomplain this_row 
                     if { $more_rows_p } {
                         for { set i 0 } { $i < [ns_set size $selection] } { incr i } {
                             set next_row([ns_set key $selection $i]) [ns_set value $selection $i]
@@ -1567,9 +1560,7 @@ proc db_multirow_helper {} {
                 upvar 1 $col column_value __saved_$col column_save
 
                 # Unset it first, so the road's paved to restoring
-                if { [info exists column_value] } {
-                    unset column_value
-                }
+		unset -nocomplain column_value
 
                 # Restore it
                 if { [info exists column_save] } {
@@ -1585,9 +1576,7 @@ proc db_multirow_helper {} {
             }
         }
         # Unset the next_row variable, just in case
-        if { [info exists next_row] } {
-            unset next_row
-         }
+	unset -nocomplain next_row
     }
 }
 
@@ -2023,9 +2012,7 @@ ad_proc -public db_0or1row {
 
     if { [info exists column_array] } {
         upvar 1 $column_array array_val
-        if { [info exists array_val] } {
-            unset array_val
-        }
+	unset -nocomplain array_val
     }
 
     if { [info exists column_set] } {
