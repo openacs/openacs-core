@@ -489,8 +489,7 @@ ad_proc -public db_with_handle {{ -dbn "" } db code_block } {
         ds_collect_db_call $db gethandle "" $pool $start_time $errno $error
         lappend db_state(handles) $db
         if { $errno } {
-            global errorInfo errorCode
-            return -code $errno -errorcode $errorCode -errorinfo $errorInfo $error
+            return -code $errno -errorcode $::errorCode -errorinfo $::errorInfo $error
         }
     }
     set my_dbh [lindex $db_state(handles) $db_state(n_handles_used)]
@@ -505,20 +504,15 @@ ad_proc -public db_with_handle {{ -dbn "" } db code_block } {
     set db_state(last_used) $my_dbh
 
     # Unset dbh, so any subsequence use of this variable will bomb.
-    if { [info exists dbh] } {
-        unset dbh
-    }
-
+    unset -nocomplain dbh
 
     # If errno is 1, it's an error, so return errorCode and errorInfo;
     # if errno = 2, it's a return, so don't try to return errorCode/errorInfo
     # errno = 3 or 4 give undefined results
 
     if { $errno == 1 } {
-        
         # A real error occurred
-        global errorInfo errorCode
-        return -code $errno -errorcode $errorCode -errorinfo $errorInfo $error
+        return -code $errno -errorcode $::errorCode -errorinfo $::errorInfo $error
     }
 
     if { $errno == 2 } {
@@ -806,9 +800,8 @@ ad_proc -private db_exec_plpgsql { db statement_name pre_sql fname } {
 
     } error]
 
-    global errorInfo errorCode
-    set errinfo $errorInfo
-    set errcode $errorCode
+    set errinfo $::errorInfo
+    set errcode $::errorCode
 
     ds_collect_db_call $db 0or1row $statement_name $sql $start_time $errno $error
 
@@ -963,8 +956,7 @@ ad_proc -private db_getrow { db selection } {
     if { $errno == 2 } {
         return $error
     }
-    global errorInfo errorCode
-    return -code $errno -errorinfo $errorInfo -errorcode $errorCode $error
+    return -code $errno -errorinfo $::errorInfo -errorcode $::errorCode $error
 }
 
 
@@ -1082,8 +1074,7 @@ ad_proc -private db_exec { type db statement_name pre_sql {ulevel 2} args } {
         return $error
     }
 
-    global errorInfo errorCode
-    return -code $errno -errorinfo $errorInfo -errorcode $errorCode $error
+    return -code $errno -errorinfo $::errorInfo -errorcode $::errorCode $error
 }
 
 
@@ -1380,8 +1371,7 @@ ad_proc -public db_foreach {{ -dbn "" } statement_name sql args } {
                 }
                 1 {
                     # TCL_ERROR
-                    global errorInfo errorCode
-                    error $error $errorInfo $errorCode
+                    error $error $::errorInfo $::errorCode
                 }
                 2 {
                     # TCL_RETURN
@@ -1537,8 +1527,7 @@ proc db_multirow_helper {} {
                             }
                             1 {
                                 # TCL_ERROR
-                                global errorInfo errorCode
-                                error $error $errorInfo $errorCode
+                                error $error $::errorInfo $::errorCode
                             }
                             2 {
                                 # TCL_RETURN
@@ -2290,8 +2279,7 @@ ad_proc -public db_transaction {{ -dbn ""} transaction_code args } {
                     ns_db dml $dbh "abort transaction"
                 } 
                 # We throw this error because it was thrown from the error handling code that the programmer must fix.
-                global errorInfo errorCode
-                error $on_errmsg $errorInfo $errorCode
+                error $on_errmsg $::errorInfo $::errorCode
             } else {
                 # Good, no error thrown by the on_error block.
                 if { [db_abort_transaction_p -dbn $dbn] } {
@@ -2303,8 +2291,7 @@ ad_proc -public db_transaction {{ -dbn ""} transaction_code args } {
                         ns_log Error "Aborting transaction due to error:\n$errmsg" 
                     } else {
                         # Propagate the error up to the next level.
-                        global errorInfo errorCode
-                        error $errmsg $errorInfo $errorCode
+                        error $errmsg $::errorInfo $::errorCode
                     }
                 } else {
                     # The on_error block has resolved the transaction error.  If we're at the top, commit and exit.
@@ -2319,12 +2306,10 @@ ad_proc -public db_transaction {{ -dbn ""} transaction_code args } {
             if { $level == 1 } {
                 set db_state(db_abort_p,$dbh) 0
                 ns_db dml $dbh "abort transaction"
-                global errorInfo errorCode
-                error "Transaction aborted: $errmsg" $errorInfo $errorCode
+                error "Transaction aborted: $errmsg" $::errorInfo $::errorCode
             } else {            
                 db_abort_transaction -dbn $dbn
-                global errorInfo errorCode
-                error $errmsg $errorInfo $errorCode
+                error $errmsg $::errorInfo $::errorCode
             }
         }
     } else {
@@ -2530,10 +2515,9 @@ ad_proc -public db_source_sql_file {{
     switch $driverkey {
 
         oracle {
-            global env
             set user_pass [db_get_sql_user -dbn $dbn]
             cd [file dirname $file]
-            set fp [open "|[file join $env(ORACLE_HOME) bin sqlplus] $user_pass @$file" "r"]
+            set fp [open "|[file join $::env(ORACLE_HOME) bin sqlplus] $user_pass @$file" "r"]
 
             while { [gets $fp line] >= 0 } {
                 # Don't bother writing out lines which are purely whitespace.
@@ -2545,7 +2529,6 @@ ad_proc -public db_source_sql_file {{
         }
 
         postgresql {
-            global tcl_platform 
             set file_name [file tail $file]
 
             set pguser [db_get_username]
@@ -2576,7 +2559,7 @@ ad_proc -public db_source_sql_file {{
             }
 
             cd [file dirname $file]
-            if { $tcl_platform(platform) eq "windows" } {
+            if { $::tcl_platform(platform) eq "windows" } {
                 set fp [open "|[file join [db_get_pgbin] psql] $pghost $pgport $pguser -f $file_name [db_get_database] $pgpass" "r"]
             } else {
                 set fp [open "|[file join [db_get_pgbin] psql] $pghost $pgport $pguser -f $file_name [db_get_database] $pgpass" "r"]
@@ -2614,8 +2597,7 @@ ad_proc -public db_source_sql_file {{
             }
 
             if { $error_found } {
-                global errorCode
-                return -code error -errorinfo $error_lines -errorcode $errorCode $error_lines
+                return -code error -errorinfo $error_lines -errorcode $::errorCode $error_lines
             }
 
         }
@@ -2651,8 +2633,6 @@ ad_proc -public db_load_sql_data {{
     switch [db_driverkey $dbn] {
 
         oracle {
-            global env
-
             set user_pass [db_get_sql_user -dbn $dbn]
             set tmpnam [ns_tmpnam]
 
@@ -2668,7 +2648,7 @@ ad_proc -public db_load_sql_data {{
 
             cd [file dirname $file]
 
-            set fd [open "|[file join $env(ORACLE_HOME) bin sqlldr] userid=$user_pass control=$tmpnam" "r"]
+            set fd [open "|[file join $::env(ORACLE_HOME) bin sqlldr] userid=$user_pass control=$tmpnam" "r"]
 
             while { [gets $fd line] >= 0 } {
                 # Don't bother writing out lines which are purely whitespace.
@@ -2680,8 +2660,6 @@ ad_proc -public db_load_sql_data {{
         }
 
         postgresql {
-            global tcl_platform 
-
             set pguser [db_get_username]
             if { $pguser ne "" } {
                 set pguser "-U $pguser"
@@ -2711,7 +2689,7 @@ ad_proc -public db_load_sql_data {{
             puts $fd $copy_command
             close $fd
             
-            if { $tcl_platform(platform) eq "windows" } {
+            if { $::tcl_platform(platform) eq "windows" } {
                 set fp [open "|[file join [db_get_pgbin] psql] -f $copy_file $pghost $pgport $pguser  [db_get_database]" "r"]
             } else {
                 set fp [open "|[file join [db_get_pgbin] psql] -f $copy_file $pghost $pgport $pguser [db_get_database] $pgpass" "r"]
@@ -2752,8 +2730,7 @@ ad_proc -public db_load_sql_data {{
             }
 
             if { $error_found } {
-                global errorCode
-                return -code error -errorinfo $error_lines -errorcode $errorCode $error_lines
+                return -code error -errorinfo $error_lines -errorcode $::errorCode $error_lines
             }
 
         }
@@ -2777,9 +2754,8 @@ ad_proc -public db_source_sqlj_file {{
 
     @param dbn The database name to use.  If empty_string, uses the default database.
 } {
-    global env
     set user_pass [db_get_sql_user -dbn $dbn]
-    set fp [open "|[file join $env(ORACLE_HOME) bin loadjava] -verbose -user $user_pass $file" "r"]
+    set fp [open "|[file join $::env(ORACLE_HOME) bin loadjava] -verbose -user $user_pass $file" "r"]
 
     # Despite the fact that this works, the text does not get written to the stream.
     # The output is generated as an error when you attempt to close the input stream as
@@ -3281,8 +3257,7 @@ ad_proc -private db_exec_lob_oracle {{
 	return $error
     }
 
-    global errorInfo errorCode
-    return -code $errno -errorinfo $errorInfo -errorcode $errorCode $error
+    return -code $errno -errorinfo $::errorInfo -errorcode $::errorCode $error
 }
 
 
@@ -3483,9 +3458,8 @@ ad_proc -private db_exec_lob_postgresql {{
 
     } error]
 
-    global errorInfo errorCode
-    set errinfo $errorInfo
-    set errcode $errorCode
+    set errinfo $::errorInfo
+    set errcode $::errorCode
 
     ds_collect_db_call $db 0or1row $statement_name $sql $start_time $errno $error
 
