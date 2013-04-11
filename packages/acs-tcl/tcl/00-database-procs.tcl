@@ -2089,7 +2089,7 @@ ad_proc -public db_1row { args } {
     @param cache_pool Override the default db_cache_pool
 
 } {
-    if { ![uplevel db_0or1row $args] } {
+    if { ![uplevel ::db_0or1row $args] } {
         return -code error "Query did not return any rows."
     }
 }
