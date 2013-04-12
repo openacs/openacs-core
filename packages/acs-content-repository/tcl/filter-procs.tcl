@@ -313,7 +313,7 @@ ad_proc -public content::deploy { url_stub } {
     render the template and write it to the file system
     with template::util::write_file
 } {
-    set output_path [ns_info pageroot]$url_stub
+    set output_path $::acs::pageroot$url_stub
 
     init url_stub root_path
 

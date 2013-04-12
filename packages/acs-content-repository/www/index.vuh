@@ -11,7 +11,7 @@ ad_page_contract {
 }
 
 # Get the paths
-set the_root [ns_info pageroot]
+set the_root $::acs::pageroot
 set the_url [ad_conn path_info]
 set content_type ""
 

@@ -869,7 +869,7 @@ ad_proc -private rp_handler {} {
       rp_debug -debug t "error in rp_handler: $errmsg"
     }
 
-    set resolve_values [concat [ns_info pageroot][string trimright [ad_conn package_url] /] \
+    set resolve_values [concat $::acs::pageroot[string trimright [ad_conn package_url] /] \
                                [apm_package_url_resolution [ad_conn package_key]]]
 
     foreach resolve_value $resolve_values {
