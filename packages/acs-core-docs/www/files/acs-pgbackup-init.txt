@@ -13,7 +13,7 @@ proc acs_pgbackup {} {
     set ftp_password "my-ftp-password"
     set ftp_dir      "my-ftp-path"
     set ftp_server   "my.ftpserver.com"
-    set bak          "[file dirname [ns_info pageroot]]/backup"
+    set bak          "[file dirname $::acs::pageroot]/backup"
     set servername   "[ns_info server]"
 
     set pguser "[db_get_username]"

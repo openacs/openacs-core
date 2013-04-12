@@ -503,7 +503,7 @@ ad_proc -public template::util::url_to_file { url {reference_url ""} } {
 ad_proc -public template::util::resolve_directory_url { url } {
     Resolve the file name for a directory URL
 } {
-  set path [ns_info pageroot]$url
+  set path $::acs::pageroot$url
 
   if { [file isdirectory $path] && [file exists ${path}index.adp] } {
     set url ${url}index.acs

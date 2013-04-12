@@ -363,7 +363,7 @@ ad_proc -private template::form::template { id { style "" } } {
   # set the asset url for images
   set assets "[template::get_resource_path]/assets"
   # assume resources are under page root (not safe)
-  regsub "^[ns_info pageroot]" $assets {} assets
+  regsub "^$::acs::pageroot" $assets {} assets
 
   # ensure that the style template has been compiled and is up-to-date
   template::adp_init adp $file_stub

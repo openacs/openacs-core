@@ -410,7 +410,7 @@ proc ad_menu_header {{section ""} {uplink ""}} {
 
     # if it is an excluded directory, just return
     set url_stub [ad_conn url]
-    set full_filename "[ns_info pageroot]$url_stub"
+    set full_filename "$::acs::pageroot$url_stub"
    
 
     foreach naked_pattern [ad_naked_html_patterns] {
@@ -614,7 +614,7 @@ proc ad_menu_footer {{section ""}} {
    
     # if it is an excluded directory, just return
     set url_stub [ad_conn url]
-    set full_filename "[ns_info pageroot]$url_stub"
+    set full_filename "$::acs::pageroot$url_stub"
    
     foreach naked_pattern [ad_naked_html_patterns] {
 	if { [string match $naked_pattern $url_stub] } {

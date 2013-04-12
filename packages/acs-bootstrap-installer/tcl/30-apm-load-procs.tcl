@@ -82,7 +82,7 @@ ad_proc -public apm_guess_file_type { package_key path } {
 
 } {
     set components [split $path "/"]
-    set dirs_in_pageroot [llength [split [ns_info pageroot] "/"]]	   ;# See comments by RBM
+    set dirs_in_pageroot [llength [split $::acs::pageroot "/"]]	   ;# See comments by RBM
 
     # Fix to cope with both full and relative paths
     if { [string index $path 0] eq "/"} {                          

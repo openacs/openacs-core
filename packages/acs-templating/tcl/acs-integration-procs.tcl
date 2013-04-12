@@ -88,7 +88,7 @@ ad_proc -public ad_return_exception_template {
 ad_proc -public get_server_root {} {
     Get the server root directory (supposing we run under ACS)
 } {
-    file dir [ns_info tcllib]
+    file dir $::acs::tcllib
 }
 
 

@@ -12,8 +12,8 @@ ad_proc -public publish::get_page_root {} {
     Get the page root. All items will be published to the 
     filesystem with their URLs relative to this root.
     The page root is controlled by the PageRoot parameter in CMS.
-    A relative path is relative to [ns_info pageroot]
-    The default is [ns_info pageroot]
+    A relative path is relative to $::acs::pageroot
+    The default is $::acs::pageroot
     
     @return The page root
     
@@ -27,7 +27,7 @@ ad_proc -public publish::get_page_root {} {
     
     if { [string index $root_path 0] ne "/" } {
         # Relative path, prepend server_root
-        set root_path "[ns_info pageroot]/$root_path"
+        set root_path "$::acs::pageroot/$root_path"
     }
     
     return [ns_normalizepath $root_path]
