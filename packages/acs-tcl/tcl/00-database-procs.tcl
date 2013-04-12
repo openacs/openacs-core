@@ -1487,7 +1487,7 @@ proc db_multirow_helper {} {
                     }
 
                     # Pull values from the query into next_row
-		    unset -nocomplain this_row 
+		    unset -nocomplain next_row 
                     if { $more_rows_p } {
                         for { set i 0 } { $i < [ns_set size $selection] } { incr i } {
                             set next_row([ns_set key $selection $i]) [ns_set value $selection $i]
