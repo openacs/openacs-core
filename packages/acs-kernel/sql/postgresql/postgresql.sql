@@ -973,3 +973,52 @@ select define_function_args('tree_ancestor_p','potential_ancestor,potential_chil
 select define_function_args('define_function_args','function,arg_list');
 select define_function_args('trigger_type','tgtype');
 
+
+-- PG version checking helper
+-- vguerra@wu.ac.at 
+
+-- This helper function indicates wether the current version of PG 
+-- one runs on is greater than, less than or equal to a given version, 
+-- returning 1 , -1 or 0 correspondingly.
+
+-- The version the function uses to compare against is interpreted as follows: 
+-- '9' means '9.0.0'
+-- '9.1' means '9.1.0'
+-- '9.1.2' means '9.1.2'
+
+select define_function_args('cmp_pg_version','p__version');
+CREATE or REPLACE function cmp_pg_version(
+    p__version varchar
+) RETURNS integer AS $$
+DECLARE
+    pg_version integer[];
+    user_pg_version integer[];
+    index integer;
+    ret_val integer;
+    i integer;
+BEGIN
+    ret_val = 0;
+
+    user_pg_version := string_to_array(trim(p__version),'.')::int[];
+    select string_to_array(setting, '.','')::int[] into pg_version from pg_settings where name = 'server_version';
+
+
+    for index in array_length(user_pg_version, 1) + 1..array_length(pg_version, 1) loop
+        user_pg_version[index] := 0;
+    end loop;
+
+    index := 1;
+
+    while (index <= array_length(pg_version, 1) and ret_val = 0) loop
+        if user_pg_version[index] > pg_version[index] then
+            ret_val := -1;
+    elsif user_pg_version[index] < pg_version[index] then
+            ret_val := 1;
+        end if;
+        index := index + 1;
+    end loop;
+
+    return ret_val;
+END;
+
+$$ LANGUAGE plpgsql;
