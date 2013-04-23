@@ -529,7 +529,7 @@ ad_proc -private apm_ignore_file_p { path } {
     #
     # ignored extensions
     #
-    if {[file extension $path] in {.html .gif .png .jpg .ico .pdf .js .css .xsl .tgz .zip .gz .java .sql}} {
+    if {[file extension $path] in {.html .gif .png .jpg .ico .pdf .js .css .xsl .tgz .zip .gz .java}} {
 	return 1 
     }
 
