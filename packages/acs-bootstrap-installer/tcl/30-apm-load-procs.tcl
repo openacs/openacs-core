@@ -166,6 +166,7 @@ ad_proc -public apm_guess_file_type { package_key path } {
 }
 
 ad_proc -public apm_get_package_files {
+   {-include_data_model_files:boolean}
    {-all_db_types:boolean}
    {-package_key:required}
    {-package_path {}}
@@ -201,7 +202,8 @@ ad_proc -public apm_get_package_files {
         set package_path [acs_package_root_dir $package_key]
     }
 
-    set files [lsort [ad_find_all_files -check_file_func apm_include_file_p $package_path]]
+    set file_function [expr {$include_data_model_files_p ? "apm_include_data_model_file_p" : "apm_include_file_p"}]
+    set files [lsort [ad_find_all_files -check_file_func $file_function $package_path]]
     # We don't assume db_type proc is defined yet
     set system_db_type [nsv_get ad_database_type .]
 
@@ -508,7 +510,10 @@ ad_proc -private apm_install_xml_file_path {} {
     return "[acs_root_dir]/install.xml"
 }
 
-ad_proc -private apm_ignore_file_p { path } {
+ad_proc -private apm_ignore_file_p { 
+    {-data_model_files:boolean}
+    path 
+} {
 
     Return 1 if $path should, in general, be ignored for package operations.
     Currently, a file is ignored if it is a backup file or a CVS directory.
@@ -529,12 +534,16 @@ ad_proc -private apm_ignore_file_p { path } {
     #
     # ignored extensions
     #
-    if {[file extension $path] in {.html .gif .png .jpg .ico .pdf .js .css .xsl .tgz .zip .gz .java}} {
-	return 1 
+    set extension_list {.html .gif .png .jpg .ico .pdf .js .css .xsl .tgz .zip .gz .java}
+    if {!$data_model_files_p} {
+        lappend extension_list ".sql"
+    }
+    if {[file extension $path] in $extension_list} {
+        return 1 
     }
 
     if { [apm_backup_file_p [file tail $path]] } {
-	return 1
+        return 1
     }
 
     return 0
@@ -555,6 +564,16 @@ ad_proc -private apm_backup_file_p { path } {
 } {
     return [regexp {(\.old|\.bak|~)$|^#|^bak$|^bak([^a-zA-Z]+)} $path]
 }
+
+ad_proc -private apm_include_data_model_file_p { filename } {    
+    Check if the APM should consider a file found by ad_find_all_files.
+    Files for which apm_ignore_file_p returns true will be ignored.
+    Backup files are ignored.
+} {
+    #ns_log notice "apm_include_file_p <$filename> => [apm_ignore_file_p $filename]"
+    return [expr {![apm_ignore_file_p -data_model_files $filename]}] 
+}
+
 
 ad_proc -private apm_include_file_p { filename } {    
     Check if the APM should consider a file found by ad_find_all_files.
