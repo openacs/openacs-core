@@ -1742,7 +1742,7 @@ ad_proc -private apm_data_model_scripts_find {
     set data_model_list [list]
     set upgrade_file_list [list]
     set ctl_file_list [list]
-    set file_list [apm_get_package_files -file_types $types_to_retrieve -package_path $package_path -package_key $package_key]
+    set file_list [apm_get_package_files -include_data_model_files -file_types $types_to_retrieve -package_path $package_path -package_key $package_key]
 
     foreach path $file_list {
         set file_type [apm_guess_file_type $package_key $path]
