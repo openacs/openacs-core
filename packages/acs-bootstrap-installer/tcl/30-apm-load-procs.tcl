@@ -527,7 +527,13 @@ ad_proc -private apm_ignore_file_p {
 	if {[lindex $parts end] eq "resources" && [lindex $parts end-1] eq "www"} {
 	    return 1
 	}
-	if {[lindex $parts end] in {CVS .git catalog upgrade}} {
+
+    set dir_list {CVS .git catalog}
+    if {!$data_model_files_p} {
+        lappend dir_list "upgrade"
+    }
+    
+	if {[lindex $parts end] in $dir_list} {
 	    return 1
 	}
     }
@@ -570,7 +576,7 @@ ad_proc -private apm_include_data_model_file_p { filename } {
     Files for which apm_ignore_file_p returns true will be ignored.
     Backup files are ignored.
 } {
-    #ns_log notice "apm_include_file_p <$filename> => [apm_ignore_file_p $filename]"
+    #ns_log notice "apm_include_file_p <$filename> => [apm_ignore_file_p -data_model_files $filename]"
     return [expr {![apm_ignore_file_p -data_model_files $filename]}] 
 }
 
@@ -578,7 +584,7 @@ ad_proc -private apm_include_data_model_file_p { filename } {
 ad_proc -private apm_include_file_p { filename } {    
     Check if the APM should consider a file found by ad_find_all_files.
     Files for which apm_ignore_file_p returns true will be ignored.
-    Backup files are ignored.
+    Backup files and sql scripts (including the ones in upgrade directory) are ignored.
 } {
     #ns_log notice "apm_include_file_p <$filename> => [apm_ignore_file_p $filename]"
     return [expr {![apm_ignore_file_p $filename]}] 
