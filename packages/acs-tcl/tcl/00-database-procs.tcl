@@ -3470,8 +3470,17 @@ ad_proc -public db_flush_cache {
     @author Don Baccus (dhogasa@pacifier.com)
 
 } {
-    foreach key [ns_cache names $cache_pool $cache_key_pattern] {
-        ns_cache flush $cache_pool $key
+    #
+    # If the key pattern has meta characters, iterate over the entries.
+    # Otherwise, make a direct lookup, without retrieven the all keys
+    # from the cache, which can cause large mutex lock times.
+    #
+    if {[regexp {[*\]\[]} $cache_key_pattern]} {
+        foreach key [ns_cache names $cache_pool $cache_key_pattern] {
+            ns_cache flush $cache_pool $key
+        }
+    } else {
+        ns_cache flush $cache_pool $cache_key_pattern
     }
 }
 
