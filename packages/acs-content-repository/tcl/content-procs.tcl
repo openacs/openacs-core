@@ -34,7 +34,7 @@ ad_proc -private cr_create_content_file_path {item_id revision_id} {
 	    if {$i < $item_id_length} {
 		# Check that the directory exists
 		if {![file exists [cr_fs_path]$path]} {
-		    ns_mkdir [cr_fs_path]$path
+		    file mkdir [cr_fs_path]$path
 		}
 
 		append path "/"
@@ -44,7 +44,7 @@ ad_proc -private cr_create_content_file_path {item_id revision_id} {
 
     # Check that the directory exists
     if {![file exists [cr_fs_path]$path]} {
-	ns_mkdir [cr_fs_path]$path
+	file mkdir [cr_fs_path]$path
     }
 
     if {[string index $path end] ne "/" } {

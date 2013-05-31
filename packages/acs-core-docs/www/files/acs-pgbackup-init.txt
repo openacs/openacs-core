@@ -22,7 +22,7 @@ proc acs_pgbackup {} {
 	
 	# make the backup directory
 	if ![file exists $bak] {
-        if [catch {ns_mkdir $bak} errmsg] {
+        if [catch {file mkdir $bak} errmsg] {
             ns_log Error "mkdir failed: $errmsg"
 		ns_sendmail [ad_system_owner] [ad_system_owner] "[ad_system_name] : mkdir failed..." "$errmsg" 
             return
