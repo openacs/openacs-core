@@ -27,7 +27,10 @@ ad_proc -private ref_language::apm::after_upgrade {
             5.6.0d1 5.6.0d2 {
 
                 # If the constraint doesn't exist, we don't care ...
-                catch [db_dml drop_constraint {}]
+                catch {
+                    db_dml drop_unique_index {}
+                    db_dml drop_constraint {}
+                }
 
                 set new_languages [ref_language::apm::lang_list_for_5_6_0d2]
 
