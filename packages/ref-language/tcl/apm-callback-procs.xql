@@ -8,4 +8,10 @@
     </querytext>
   </fullquery>
 
+  <fullquery name="ref_language::apm::after_upgrade.drop_unique_index">
+    <querytext>
+      drop index language_codes_name_uq
+    </querytext>
+  </fullquery>
+
 </queryset>
