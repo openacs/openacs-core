@@ -277,7 +277,7 @@ proc install_handler { conn arg why } {
 
     if { ![regexp {/([a-zA-Z0-9\-_]*)$} [ad_conn url] "" script] } {
 	ad_returnredirect "/"
-	return
+	return "filter_return"
     }
 
     if { $script eq "" } {
