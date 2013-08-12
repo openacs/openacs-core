@@ -262,7 +262,7 @@ ad_proc -deprecated db_package_supports_rdbms_p { db_type_list } {
 ad_proc -private db_legacy_package_p { db_type_list } {
     @return 1 if the package is a legacy package.  We can only tell for certain if it explicitly supports Oracle 8.1.6 rather than the OpenACS more general oracle.
 } {
-    if { [lsearch $db_type_list "oracle-8.1.6"] != -1 } {
+    if {"oracle-8.1.6" in $db_type_list} {
         return 1
     }
     return 0
@@ -994,13 +994,13 @@ ad_proc -private db_exec { type db statement_name pre_sql {ulevel 2} args } {
 
                 switch $driverkey {
                     oracle {
-                        return [eval [list ns_ora $type $db -bind $bind $sql] $args]
+                        return [ns_ora $type $db -bind $bind $sql {*}$args]
                     }
                     postgresql {
-                        return [eval [list ns_pg_bind $type $db -bind $bind $sql]]
+                        return [ns_pg_bind $type $db -bind $bind $sql]
                     }
                     nsodbc {
-                        return [eval [list ns_odbc_bind $type $db -bind $bind $sql]]
+                        return [ns_odbc_bind $type $db -bind $bind $sql]
                     }
                     default {
                         error "Unknown database driver.  Bind variables not supported for this database."
@@ -1024,13 +1024,13 @@ ad_proc -private db_exec { type db statement_name pre_sql {ulevel 2} args } {
                     # hard to know.  Document or fix.
                     # --atp@piskorski.com, 2003/04/09 15:33 EDT
 
-                    return [eval [list ns_ora $type $db -bind $bind_vars $sql] $args]
+                    return [ns_ora $type $db -bind $bind_vars $sql {*}$args]
                 }
                 postgresql {
-                    return [eval [list ns_pg_bind $type $db -bind $bind_vars $sql]]
+                    return [ns_pg_bind $type $db -bind $bind_vars $sql]
                 }
                 nsodbc {
-                    return [eval [list ns_odbc_bind $type $db -bind $bind_vars $sql]]
+                    return [ns_odbc_bind $type $db -bind $bind_vars $sql]
                 }
                 default {
                     error "Unknown database driver.  Bind variables not supported for this database."
@@ -3030,7 +3030,7 @@ ad_proc -public db_blob_get_file {{ -dbn "" } statement_name sql args } {
     switch $driverkey {
         oracle {
             db_with_handle -dbn $dbn db {
-                eval [list db_exec_lob blob_get_file $db $full_statement_name $sql $file]
+                db_exec_lob blob_get_file $db $full_statement_name $sql $file
             }
         }
 
@@ -3175,6 +3175,7 @@ ad_proc -private db_exec_lob_oracle {{
 	if { [info exists bind] && [llength $bind] != 0 } {
 	    if { [llength $bind] == 1 } {
                 if { $file eq "" } {
+		    # gn: not sure, why the eval was ever needed (4 times)
                     set selection [eval [list ns_ora $qtype $db -bind $bind $sql]]
                 } else {
                     set selection [eval [list ns_ora $qtype $db -bind $bind $sql $file]]
