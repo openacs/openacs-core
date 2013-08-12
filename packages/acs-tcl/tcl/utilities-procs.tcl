@@ -445,7 +445,7 @@ ad_proc -public db_html_select_value_options {
     }
 
     foreach option $options {
-	if { [lsearch -exact $select_option [lindex $option $value_index]] >= 0 } {
+	if { [lindex $option $value_index] in $select_option } {
 	    append select_options "<option value=\"[util_quote_double_quotes [lindex $option $value_index]]\" selected=\"selected\">[lindex $option $option_index]</option>\n"
 	} else {
 	    append select_options "<option value=\"[util_quote_double_quotes [lindex $option $value_index]]\">[lindex $option $option_index]</option>\n"
@@ -937,17 +937,17 @@ doc_body_append [ad_export_vars -override { order_by $new_order_by } $my_vars]</
     foreach argument { include override } {
 	foreach arg [set $argument] {
 	    if { [llength $arg] == 1 } { 
-		if { $override_p || [lsearch -exact $exclude $arg] == -1 } {
+		if { $override_p || $arg ni $exclude } {
 		    upvar $arg var
 		    if { [array exists var] } {
 			# export the entire array
 			foreach name [array names var] {
-			    if { $override_p || [lsearch -exact $exclude "${arg}($name)"] == -1 } {
+			    if { $override_p || "${arg}($name)" ni $exclude } {
 				set export($arg.$name) $var($name)
 			    }
 			}
 		    } elseif { [info exists var] } {
-			if { $override_p || [lsearch -exact $exclude $arg] == -1 } {
+			if { $override_p || $arg ni $exclude } {
 			    # if the var is part of an array, we'll translate the () into a dot.
 			    set left_paren [string first ( $arg]
 			    if { $left_paren == -1 } {
@@ -962,7 +962,7 @@ doc_body_append [ad_export_vars -override { order_by $new_order_by } $my_vars]</
 		}
 	    } elseif { [llength $arg] %2 == 0 } {
 		foreach { name value } $arg {
-		    if { $override_p || [lsearch -exact $exclude $name] == -1 } {
+		    if { $override_p || $name ni $exclude } {
 			set left_paren [string first ( $name]
 			if { $left_paren == -1 } {
 			    set export($name) [lindex [uplevel list \[subst [list $value]\]] 0]
@@ -1106,7 +1106,7 @@ ad_proc export_ns_set_vars {{format "url"} {exclusion_list ""} {setid ""}} {
         while { $set_counter_i<$set_size } {
             set name [ns_set key $setid $set_counter_i]
             set value [ns_set value $setid $set_counter_i]
-            if {[lsearch $exclusion_list $name] == -1 && $name ne ""} {
+            if {$name ni $exclusion_list && $name ne ""} {
                 if {$format eq "url"} {
                     lappend return_list "[ns_urlencode $name]=[ns_urlencode $value]"
                 } else {
@@ -1220,7 +1220,7 @@ ad_proc -public export_entire_form_as_url_vars {
 	    set varvalue [ns_set value $the_form $i]
 	    if {
 		$vars_to_passthrough eq "" ||
-		([lsearch -exact $vars_to_passthrough $varname] != -1)
+		($varname in $vars_to_passthrough)
 	    } {
 		lappend params "[ns_urlencode $varname]=[ns_urlencode $varvalue]" 
 	    }
@@ -1346,7 +1346,7 @@ ad_proc -public util_link_responding_p {
 	return 0
     } else {
 	# we got the page but it might have been a 404 or something
-	if { [lsearch $list_of_bad_codes $status] != -1 } {
+	if { $status in $list_of_bad_codes } {
 	    return 0
 	} else {
 	    return 1
@@ -2106,7 +2106,8 @@ ad_proc -private ad_run_scheduled_proc { proc_info } {
     ns_log debug "Running scheduled proc $proc..."
 
     # Actually run the procedure.
-    eval [concat [list $proc] $args]
+    if {$proc ne ""} {$proc {*}$args}
+
     ns_log debug "Done running scheduled proc $proc."
 }
 
@@ -2173,9 +2174,9 @@ ad_proc -public ad_schedule_proc {
     # Schedule the wrapper procedure (ad_run_scheduled_proc).
 
     if { $schedule_proc eq "" } {
-        eval [concat [list ns_schedule_proc] $my_args [list $interval ad_run_scheduled_proc [list $proc_info]]]
+        ns_schedule_proc {*}$my_args {*}$interval ad_run_scheduled_proc [list $proc_info]
     } else {
-        eval [concat [list $schedule_proc] $my_args $interval [list ad_run_scheduled_proc [list $proc_info]]]
+        $schedule_proc {*}$my_args {*}$interval ad_run_scheduled_proc [list $proc_info]
     }
 }
 
@@ -2243,9 +2244,9 @@ ad_proc -public ad_cache_returnredirect { url { persistent "f" } { excluded_vars
 	    set item_value_pair [split $item_value "="]
 	    set item [lindex $item_value_pair 0]
 	    set value [ns_urldecode [lindex $item_value_pair 1]]
-	    if { [lsearch -exact $excluded_vars_list $item] == -1 } {
+	    if {$item ni $excluded_vars_list} {
 		# No need to save the value if it's being passed ...
-		if { [lsearch -exact $saved_list $item] != -1 } {
+		if {$item in $saved_list} {
 		    # Allows for multiple values ...
 		    append value " [ad_get_client_property [ad_conn package_id] $item]"
 		} else {
@@ -2602,7 +2603,7 @@ ad_proc -public ad_ns_set_to_tcl_vars {
 
     @author Lars Pind (lars@pinds.com)
 } {
-    if { [lsearch -exact {ignore fail overwrite} $duplicates] == -1 } {
+    if { $duplicates ni {ignore fail overwrite} } {
 	return -code error "The optional switch duplicates must be either overwrite, ignore or fail"
     }
     
@@ -2910,7 +2911,7 @@ ad_proc -public ad_ns_set_keys {
     set size [ns_set size $set_id]
     for { set i 0 } { $i < $size } { incr i } {
 	set key [ns_set key $set_id $i]
-	if { [lsearch -exact $exclude $key] == -1 } {
+	if {$key ni $exclude} {
 	    if { $colon_p } { 
 		lappend keys ":$key"
 	    } else {
@@ -3017,7 +3018,7 @@ ad_proc -public util_text_to_url {
     }
 
     # check if the resulting url is already present
-    if { [lsearch -exact $existing_urls $text] > -1 } {
+    if {$text in $existing_urls} {
         
         if { $no_resolve_p } {
             # URL is already present in the existing_urls list and we
@@ -3297,7 +3298,7 @@ ad_proc -public util_http_file_upload { -file -data -binary:boolean -filename
 } {
 
     # sanity checks on switches given
-    if {[lsearch -exact {formvars array ns_set vars} $mode] == -1} {
+    if {$mode ni {formvars array ns_set vars}} {
         error "Invalid mode \"$mode\"; should be one of: formvars,\
             array, ns_set, vars"
     }
@@ -3466,11 +3467,11 @@ ad_proc -public util_http_file_upload { -file -data -binary:boolean -filename
             return -code error -errorinfo $errorInfo $errMsg
         }
     } errmsg] } {
-        if {[info exists wfd] && [lsearch [file channels] $wfd] >= 0} {
+        if {[info exists wfd] && $wfd in [file channels]} {
             close $wfd
         }
 
-        if {[info exists rfd] && [lsearch [file channels] $rfd] >= 0} {
+        if {[info exists rfd] && $rfd in [file channels]} {
             close $rfd
         }
 
@@ -3983,7 +3984,7 @@ proc ad_set_typed_form_variables {conn args why} {
 
     global ad_typed_form_variables
 
-    eval lappend ad_typed_form_variables [lindex $args 0]
+    lappend ad_typed_form_variables {*}[lindex $args 0]
 
     return filter_ok
 }
