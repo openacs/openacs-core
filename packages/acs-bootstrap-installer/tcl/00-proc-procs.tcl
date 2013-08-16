@@ -154,6 +154,10 @@ proc ad_proc args {
         return -code error "Switch -warn can be provided to ad_proc only if -deprecated is also provided"
     }
 
+    if { $deprecated_p } {
+	set warn_p 1
+    }
+
     if { $impl ne "" && $callback eq "" } {
         return -code error "A callback contract name must be specified with -callback when defining an implementation with -impl"
     }
