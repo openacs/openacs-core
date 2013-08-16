@@ -20,8 +20,8 @@
         </description>
 
         <provides url="acs-admin" version="5.8.0a1"/>
-        <requires url="acs-kernel" version="5.8.0d1"/>
-        <requires url="acs-mail-lite" version="5.8.0d1"/>
+        <requires url="acs-kernel" version="5.8.0a1"/>
+        <requires url="acs-mail-lite" version="5.8.0a1"/>
 
         <callbacks>
         </callbacks>
