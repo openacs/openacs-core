@@ -1678,6 +1678,26 @@ ad_proc -private security::get_insecure_location {} {
     return $insecure_location
 }
 
+if {[ns_info name] ne "NaviServer"} {
+    #
+    # compatibility with NaviServer, which allows global and per-server
+    # defined drivers.
+    #
+    ad_proc -public ns_driversection {
+	{-driver "nssock"}
+	{-server ""}
+    } {
+	Return the section name in the config file containing configuration information about the 
+	network connection.
+	@param driver (e.g. nssock)
+	@param server symobolic server name 
+	@return name of section of the drive in the config file
+    } {
+	if {$server eq ""} {set server [ns_info server]}
+	return "ns/server/$server/module/$driver"
+    }
+}
+
 ad_proc -public security::locations {} {
     @return insecure location and secure location followed possibly by alternate insecure location(s)  as a list.
 
@@ -1734,15 +1754,18 @@ ad_proc -public security::locations {} {
     if {![regexp {(http://|https://)(.*?):(.*?)/?} [util_current_location] discard host_protocol host_name host_port]} {
         regexp {(http://|https://)(.*?)/?} [util_current_location] discard host_protocol host_name
     }
-    # let's give a warning if util_current_location returns host_name
+
+    set driver_section [ns_driversection -driver $driver]
+    
+    # Let's give a warning if util_current_location returns host_name
     # not same as from config.tcl, may help with proxy issues etc
-    set config_hostname [ns_config ns/server/[ns_info server]/module/$driver Hostname]
+    set config_hostname [ns_config $driver_section Hostname]
     if { $config_hostname ne $host_name } {
-        ns_log Warning "security::locations hostname '[ns_config ns/server/[ns_info server]/module/$driver Hostname]' from config.tcl does not match from util_current_location: $host_name"
+        ns_log Warning "security::locations hostname '[ns_config $driver_section Hostname]' from config.tcl does not match from util_current_location: $host_name"
     }
 
     # insecure locations
-    set insecure_port [ns_config -int "ns/server/[ns_info server]/module/$driver" port 80]
+    set insecure_port [ns_config -int $driver_section port 80]
 
     set insecure_location "http://${host_name}"
     set host_map_http_port ""
@@ -1758,10 +1781,14 @@ ad_proc -public security::locations {} {
         set secure_port [ns_config -int "ns/server/[ns_info server]/module/$sdriver/ssldriver/users" port 443]
     } elseif { $sdriver ne "" } {
         # get secure port for all other cases of nsssl, nsssle etc
-        set secure_port [ns_config -int "ns/server/[ns_info server]/module/$sdriver" port]
-        # checking nsopenssl 2.0 which has different names for the secure port etc, and deprecated with this version of OpenACS
+	set driver_section [ns_driversection -driver $sdriver]
+        set secure_port [ns_config -int $driver_section port]
+	
+        # checking nsopenssl 2.0 which has different names for 
+	# the secure port etc, and deprecated with this version of OpenACS
         if {$secure_port eq "" || $secure_port eq "443" } {
-            set secure_port [ns_config -int "ns/server/[ns_info server]/module/$sdriver" ServerPort 443]
+	    ns_log Notice "Using 'ServerPort' in $driver_section is deprecated"
+            set secure_port [ns_config -int $driver_section ServerPort 443]
         }
     } else {
         set secure_port ""
@@ -1780,7 +1807,9 @@ ad_proc -public security::locations {} {
         lappend locations $secure_location
     }
     # consider if we are behind a proxy and don't want to publish the proxy's backend port
-    set suppress_http_port [parameter::get -parameter SuppressHttpPort -package_id [apm_package_id_from_key acs-tcl] -default 0]
+    set suppress_http_port [parameter::get -parameter SuppressHttpPort \
+				-package_id [apm_package_id_from_key acs-tcl] \
+				-default 0]
     if { [info exists alt_insecure_location] && $suppress_http_port } {
         lappend locations $alt_insecure_location
     }
