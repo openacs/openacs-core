@@ -7,7 +7,7 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
 
-    <version name="5.8.0d1" url="http://www.mayuli.com/acs-repository/download/apm/ref-countries-5.8.0d1.apm">
+    <version name="5.9.0d1" url="http://www.mayuli.com/acs-repository/download/apm/ref-countries-5.9.0d1.apm">
         <owner url="mailto:jon@jongriffin.com">Jon Griffin</owner>
         <summary>ISO 3166 country data.</summary>
         <release-date>2011-06-12</release-date>
@@ -16,9 +16,9 @@
 	    <maturity>1</maturity>
         <description format="text/plain">Countries supplies the ISO 3166 Country data for acs-reference.</description>
 
-        <provides url="ref-countries" version="5.8.0d1"/>
-        <requires url="acs-kernel" version="5.8.0d1"/>
-        <requires url="acs-reference" version="5.8.0d1"/>
+        <provides url="ref-countries" version="5.9.0d1"/>
+        <requires url="acs-kernel" version="5.9.0d1"/>
+        <requires url="acs-reference" version="5.9.0d1"/>
 
         <callbacks>
             <callback type="after-upgrade"  proc="ref_countries::apm::after_upgrade"/>
