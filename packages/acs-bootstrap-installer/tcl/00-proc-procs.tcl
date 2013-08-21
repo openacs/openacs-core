@@ -954,8 +954,3 @@ ad_proc -public ad_assert_arg_value_in_list {
 
     return 1
 }
-
-# handling NaviServer deprecated ns_info subcommands. 
-namespace eval acs {}
-set ::acs::pageroot [expr {[catch {ns_server pagedir}] ? [ns_info pageroot] : [ns_server pagedir]}]
-set ::acs::tcllib [expr {[catch {ns_server tcllib}] ? [ns_info tcllib] : [ns_server tcllib]}]

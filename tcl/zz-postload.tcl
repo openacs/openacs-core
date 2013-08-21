@@ -4,10 +4,8 @@
 # Date:        24 Feb 2000
 # Description: Sources library files that need to be loaded after the rest.
 
-set tcllib [ns_info tcllib]
-
 ns_log "Notice" "Sourcing files for postload..."
-foreach file [glob -nocomplain ${tcllib}/*.tcl.postload] {
+foreach file [glob -nocomplain ${::acs::tcllib}/*.tcl.postload] {
     ns_log Notice "postloading $file"
     source "$file"
 }

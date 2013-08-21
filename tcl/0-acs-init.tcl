@@ -7,9 +7,14 @@
 #
 # $Id$
 
+# handling NaviServer deprecated ns_info subcommands. 
+namespace eval acs {}
+set ::acs::pageroot [expr {[catch {ns_server pagedir}] ? [ns_info pageroot] : [ns_server pagedir]}]
+set ::acs::tcllib [expr {[catch {ns_server tcllib}] ? [ns_info tcllib] : [ns_server tcllib]}]
+
 # Determine the OpenACS root directory, which is the directory right above the
-# Tcl library directory [ns_info tcllib].
-set root_directory [file dirname [string trimright [ns_info tcllib] "/"]]
+# Tcl library directory ::acs::tcllib.
+set root_directory [file dirname [string trimright ${::acs::tcllib} "/"]]
 nsv_set acs_properties root_directory $root_directory
 
 ns_log "Notice" "Loading OpenACS, rooted at $root_directory"
