@@ -29,6 +29,7 @@ XSL:
 	if [ ! -d XSL -a ! -L XSL ]; then \
 		echo -e "\n\nNo XSL directory here.  I am looking for one...\n"; \
 		for d in \
+			/opt/local/share/xsl/docbook-xsl \
 			/sw/share/xml/docbook-xsl \
 			/usr/share/sgml/docbook/xsl-stylesheets-* \
 			/usr/share/sgml/docbook/xsl-stylesheets \
