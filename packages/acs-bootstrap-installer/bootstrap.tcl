@@ -40,7 +40,7 @@ proc bootstrap_fatal_error { message { throw_error_p 1 } } {
     ns_log Error "$proc_name: Server startup failed: $message\n$errorInfo"
 
     # Define a filter procedure which displays the appropriate error message.
-    proc bootstrap_write_error { conn arg why } {
+    proc bootstrap_write_error { args } {
 	ns_returnerror 503 "Server startup failed: [nsv_get bootstrap_fatal_error .]"
 	return "filter_return"
     }
@@ -61,7 +61,7 @@ set errno [catch {
 
     # Load the special bootstrap tcl library.
 
-    set files [glob -nocomplain "$root_directory/packages/acs-bootstrap-installer/tcl/*-procs.tcl"]
+    set files [lsort [glob -nocomplain "$root_directory/packages/acs-bootstrap-installer/tcl/*-procs.tcl"]]
     if { [llength $files] == 0 } {
 	error "Unable to locate $root_directory/packages/acs-bootstrap-installer/tcl/*-procs.tcl."
     }
