@@ -553,12 +553,28 @@ ad_proc -public template::adp_compile { source_type source } {
    # substitute array variable references
   while {[regsub -all [template::adp_array_variable_regexp_noquote] $code {\1[lang::util::localize $\2(\3)]} code]} {}
   while {[regsub -all [template::adp_array_variable_regexp_literal] $code {\1$\2(\3)} code]} {}
-  while {[regsub -all [template::adp_array_variable_regexp] $code {\1[ns_quotehtml [lang::util::localize $\2(\3)]]} code]} {}
+  # 
+  # Some aolservers have broken implementations of ns_quotehtml
+  # (returning for the empty string input a one byte output). If this
+  # happens, we fall back to the "manual" ad_quotehtml. However, we
+  # prefer to use the faster (C-implemented) ns_quotehtml, since the
+  # actual subsitutions occur at page-view time, and they are called
+  # therefore very often.
+  #
+  if {[ns_quotehtml ""] eq ""} {
+    while {[regsub -all [template::adp_array_variable_regexp] $code {\1[ns_quotehtml [lang::util::localize $\2(\3)]]} code]} {}
+  } else {
+    while {[regsub -all [template::adp_array_variable_regexp] $code {\1[ad_quotehtml [lang::util::localize $\2(\3)]]} code]} {}
+  }
 
   # substitute simple variable references
   while {[regsub -all [template::adp_variable_regexp_noquote] $code {\1[lang::util::localize ${\2}]} code]} {}
   while {[regsub -all [template::adp_variable_regexp_literal] $code {\1${\2}} code]} {}
-  while {[regsub -all [template::adp_variable_regexp] $code {\1[ns_quotehtml [lang::util::localize ${\2}]]} code]} {}
+  if {[ns_quotehtml ""] eq ""} {
+    while {[regsub -all [template::adp_variable_regexp] $code {\1[ns_quotehtml [lang::util::localize ${\2}]]} code]} {}
+  } else {
+    while {[regsub -all [template::adp_variable_regexp] $code {\1[ad_quotehtml [lang::util::localize ${\2}]]} code]} {}
+  }
 
   # unescape protected # references
   # unescape protected @ references
