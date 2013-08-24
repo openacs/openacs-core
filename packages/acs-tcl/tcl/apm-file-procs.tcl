@@ -495,10 +495,19 @@ ad_proc -private apm_transfer_file {
   # reliably under windows, for unknown reasons the downloaded file is
   # truncated.
   #
-  # Therefore, we check first if the optional xotcl-core components
-  # are available...
+  # Therefore, we check first for the NaviServer built in ns_http, then 
+  # if the optional xotcl-core components are available...
   #
-  if {[info command ::xo::HttpRequest] ne ""} {
+  if {[info command ::ns_http] ne ""} {
+    # 
+    # ... use ns_http ...
+    #
+    # ns_log notice "Transfer $url based to $output_file_name on ns_http"
+    set h [ns_http queue $url]
+    ns_http wait -file F -spoolsize 1 -timeout 10:0 $h
+    if {[file exists $output_file_name]} {file delete $output_file_name}
+    file rename $F $output_file_name
+  } elseif {[info command ::xo::HttpRequest] ne ""} {
     # 
     # ... use xo::HttpRequest...
     #
@@ -512,8 +521,8 @@ ad_proc -private apm_transfer_file {
 
   } elseif {[set wget [::util::which wget]] ne ""} {
     #
-    # ... if we have no ::xo::* and we have "wget" installed, we use
-    # it.
+    # ... if we have no ns_http, no ::xo::* and we have "wget"
+    # installed, we use it.
     #
     ns_log notice "Transfer $url based on wget"
     catch {exec $wget -O $output_file_name $url}
