@@ -167,6 +167,7 @@ ad_proc -public apm_guess_file_type { package_key path } {
 
 ad_proc -public apm_get_package_files {
    {-include_data_model_files:boolean}
+   {-all:boolean}
    {-all_db_types:boolean}
    {-package_key:required}
    {-package_path {}}
@@ -202,7 +203,11 @@ ad_proc -public apm_get_package_files {
         set package_path [acs_package_root_dir $package_key]
     }
 
-    set file_function [expr {$include_data_model_files_p ? "apm_include_data_model_file_p" : "apm_include_file_p"}]
+    if {$all_p} {
+      set file_function ""
+    } else {
+      set file_function [expr {$include_data_model_files_p ? "apm_include_data_model_file_p" : "apm_include_file_p"}]
+    }
     set files [lsort [ad_find_all_files -check_file_func $file_function $package_path]]
     # We don't assume db_type proc is defined yet
     set system_db_type [nsv_get ad_database_type .]
