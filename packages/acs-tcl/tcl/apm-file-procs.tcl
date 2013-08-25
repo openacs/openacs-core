@@ -503,8 +503,8 @@ ad_proc -private apm_transfer_file {
     # ... use ns_http ...
     #
     # ns_log notice "Transfer $url based to $output_file_name on ns_http"
-    set h [ns_http queue $url]
-    ns_http wait -file F -spoolsize 1 -timeout 10:0 $h
+    set h [ns_http queue -timeout 60:0 $url]
+    ns_http wait -file F -spoolsize 1 $h
     if {[file exists $output_file_name]} {file delete $output_file_name}
     file rename $F $output_file_name
   } elseif {[info command ::xo::HttpRequest] ne ""} {
