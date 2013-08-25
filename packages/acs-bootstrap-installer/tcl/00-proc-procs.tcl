@@ -433,7 +433,7 @@ proc ad_proc args {
 
     set log_code ""
     if { $warn_p } {
-        set log_code "ns_log Debug \"Deprecated proc $proc_name used:\\n\[ad_get_tcl_call_stack\]\"\n"
+        set log_code "ns_log Notice \"Deprecated proc $proc_name used:\\n\[ad_get_tcl_call_stack\]\"\n"
     }
 
     if { $callback ne "" && $impl ne "" } {
