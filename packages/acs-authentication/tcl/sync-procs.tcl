@@ -518,7 +518,9 @@ ad_proc -public auth::sync::purge_jobs {
                           -default 0]
     }
     
-    validate_integer num_days $num_days
+    if {![string is integer -strict $num_days]} {
+	error "num_days ($num_days) has to be an integer"
+    }
 
     if { $num_days > 0 } { 
         db_dml purge_jobs {}
