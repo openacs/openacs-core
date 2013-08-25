@@ -936,7 +936,7 @@ ad_proc -public auth::create_local_account {
     with_catch errmsg {
         # We create the user without a password
         # If it's a local account, that'll get set later
-        set user_id [ad_user_new \
+        set user_id [auth::create_local_account_helper \
                          $user_info(email) \
                          $user_info(first_names) \
                          $user_info(last_name) \
@@ -995,6 +995,87 @@ ad_proc -public auth::create_local_account {
 
     return [array get result]
 }
+
+ad_proc -private auth::create_local_account_helper {
+    email
+    first_names
+    last_name
+    password 
+    password_question
+    password_answer
+    {url ""} 
+    {email_verified_p "t"} 
+    {member_state "approved"} 
+    {user_id ""} 
+    {username ""} 
+    {authority_id ""}
+    {screen_name ""}
+} {
+    Creates a new user in the system.  The user_id can be specified as an argument to enable double click protection.
+    If this procedure succeeds, returns the new user_id.  Otherwise, returns 0.
+    
+    @see auth::create_user
+    @see auth::create_local_account
+} {
+    if { $user_id eq "" } {
+        set user_id [db_nextval acs_object_id_seq]
+    }
+
+    if { $password_question eq "" } {
+        set password_question [db_null]
+    }
+
+    if { $password_answer eq "" } {
+        set password_answer [db_null]
+    }
+
+    if { $url eq "" } {
+        set url [db_null]
+    }
+
+    set creation_user ""
+    set peeraddr ""
+    
+    # This may fail, either because there's no connection, or because
+    # we're in the bootstrap-installer, at which point [ad_conn user_id] is undefined.
+    catch {
+        set creation_user [ad_conn user_id]
+        set peeraddr [ad_conn peeraddr]
+    } 
+
+    set salt [sec_random_token]
+    set hashed_password [ns_sha1 "$password$salt"]
+
+    set error_p 0
+    db_transaction {
+
+        set user_id [db_exec_plsql user_insert {}]
+
+        # set password_question, password_answer
+        db_dml update_question_answer {*SQL*} 
+
+        if {[catch {
+            # Call the extension
+            acs_user_extension::user_new -user_id $user_id
+        } errmsg]} {
+            # At this point, we don't want the user addition to fail
+            # if some extension is screwing things up
+        }
+
+    } on_error {
+        # we got an error.  log it and signal failure.
+        global errorInfo
+        ns_log Error "Problem creating a new user: $errorInfo"
+        set error_p 1
+    }
+    
+    if { $error_p } {
+        return 0
+    } 
+    # success.
+    return $user_id
+}
+
 
 
 ad_proc -public auth::update_local_account {
