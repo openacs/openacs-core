@@ -236,9 +236,38 @@ ad_proc -private lang::catalog::messages_in_db {
     template::util::multirow_foreach all_messages {
         lappend message_list @all_messages.message_key@ @all_messages.message@
     }
+    #template::multirow foreach all_messages {
+    #    lappend message_list $message_key $message
+    #}
 
     return $message_list
 }
+ad_proc -private lang::catalog::messages_in_db2 {
+    {-package_key:required}
+    {-locale:required}
+} {
+    Return a list of all messages for a certain package and locale.
+
+    @return An array list with message keys as keys and messages as
+            values.
+
+    @see lang::catalog::all_messages_for_package_and_locale
+
+    @author Peter Marklund
+} {
+    set message_list [list]
+
+    all_messages_for_package_and_locale $package_key $locale
+    #template::util::multirow_foreach all_messages {
+    #    lappend message_list @all_messages.message_key@ @all_messages.message@
+    #}
+    template::multirow foreach all_messages {
+        lappend message_list $message_key $message
+    }
+
+    return $message_list
+}
+
 
 ad_proc -private lang::catalog::last_sync_messages {
     {-package_key:required}
@@ -404,10 +433,14 @@ ad_proc -public lang::catalog::export {
 		set messages_list [list]
 		set descriptions_list [list]
 		all_messages_for_package_and_locale $package_key $locale
-		template::util::multirow_foreach all_messages {
-		    lappend messages_list @all_messages.message_key@ @all_messages.message@
-		    lappend descriptions_list @all_messages.message_key@ @all_messages.description@
+ 		template::util::multirow_foreach all_messages {
+ 		    lappend messages_list @all_messages.message_key@ @all_messages.message@
+ 		    lappend descriptions_list @all_messages.message_key@ @all_messages.description@
 		}
+		#template::multirow foreach all_messages {
+		#    lappend messages_list $message_key $message
+		#    lappend descriptions_list $message_key $description
+		#}
 		
 		set catalog_file_path [get_catalog_file_path \
 					   -package_key $package_key \
