@@ -52,7 +52,19 @@ ad_proc -public acs_sc::invoke {
     if { $impl eq "" || $contract eq "" } {
         error "You must supply either impl_id, or contract and impl to acs_sc::invoke"
     }
-    return [acs_sc_call -error=$error_p $contract $operation $call_args $impl]
+
+    set proc_name [acs_sc_generate_name $contract $impl $operation]
+
+    if { [info commands $proc_name] ne "" } {
+	return [ad_apply $proc_name $call_args]
+    } 
+
+    if { $error_p } {
+	error "Operation $operation is not implemented in '$impl' implementation of contract '$contract'"
+    } else {
+	ns_log warning "ACS-SC: Function Not Found: $proc_name [info commands $proc_name]"
+    }
+    return
 }
 
 
@@ -117,9 +129,6 @@ ad_proc -private acs_sc_get_alias {
     return [list $impl_alias $impl_pl]
 
 }
-
-
-
 
 ad_proc -private acs_sc_proc {
     contract
@@ -230,9 +239,6 @@ ad_proc -private acs_sc_get_statement {
     return $full_statement
 }
 
-
-
-
 ad_proc -private -deprecated acs_sc_call {
     {-error:boolean}
     contract
@@ -252,19 +258,9 @@ ad_proc -private -deprecated acs_sc_call {
 
     @see acs_sc::invoke
 } {
-    set proc_name [acs_sc_generate_name $contract $impl $operation]
+    acs_sc::invoke -contract $contract -operation $operation -impl $impl -call_args $arguments -error=$error_p
+} 
 
-    if { [info commands $proc_name] ne "" } {
-	return [ad_apply $proc_name $arguments]
-    } else {
-        if { $error_p } {
-            error "Operation $operation is not implemented in '$impl' implementation of contract '$contract'"
-        } else {
-            ns_log warning "ACS-SC: Function Not Found: $proc_name [info commands $proc_name]"
-        }
-	return
-    }
-}
 
 
 ##
