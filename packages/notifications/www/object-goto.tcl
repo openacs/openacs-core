@@ -19,6 +19,6 @@ ad_page_contract {
 
 set sc_impl_name [db_string get_notif_type {}]
 
-set url [acs_sc_call NotificationType GetURL [list $object_id] $sc_impl_name]
+set url [acs_sc::invoke -contract NotificationType -operation GetURL -call_args [list $object_id] -impl $sc_impl_name]
 
 ad_returnredirect $url

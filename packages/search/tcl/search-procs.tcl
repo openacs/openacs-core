@@ -140,7 +140,7 @@ ad_proc -private search::indexer {} {
                                 #ns_log notice "\n-----DB-----\n SEARCH INDEX callback datasource exists for object_type '${object_type}'\n------------\n "
                                 array set datasource [lindex [callback -impl $object_type search::datasource -object_id $object_id] 0]
                             } else {
-                                array set datasource  [acs_sc_call FtsContentProvider datasource [list $object_id] $object_type]
+                                array set datasource  [acs_sc::invoke -contract FtsContentProvider -operation datasource -call_args [list $object_id] -impl $object_type]
                             }
                             search::content_get txt $datasource(content) $datasource(mime) $datasource(storage_type) $object_id
 
@@ -155,9 +155,7 @@ ad_proc -private search::indexer {} {
                                 }
                                 callback -impl $driver search::index -object_id $object_id -content $txt -title $datasource(title) -keywords $datasource(keywords) -package_id $datasource(package_id) -community_id $datasource(community_id) -relevant_date $datasource(relevant_date) -datasource datasource 
                             } else {
-                                acs_sc_call FtsEngineDriver \
-                                    [ad_decode $event UPDATE update_index index] \
-                                    [list $datasource(object_id) $txt $datasource(title) $datasource(keywords)] $driver
+                                set r [acs_sc::invoke -contract FtsEngineDriver -operation [ad_decode $event UPDATE update_index index] -call_args [list $datasource(object_id) $txt $datasource(title) $datasource(keywords)] -impl $driver]
                             }
                         } errMsg]} {
                             ns_log Error "search::indexer: error getting datasource for $object_id $object_type: $errMsg\n[ad_print_stack_trace]\n"
@@ -179,7 +177,7 @@ ad_proc -private search::indexer {} {
             }
             DELETE {
                 if {[catch {
-                    acs_sc_call FtsEngineDriver unindex [list $object_id] $driver
+                    set r [acs_sc::invoke -contract FtsEngineDriver -operation unindex -call_args [list $object_id] -impl $driver]
                 } errMsg]} {
                     ns_log Error "search::indexer: error unindexing $object_id [acs_object_type $object_id]: $errMsg\n[ad_print_stack_trace]\n"
                 } else {

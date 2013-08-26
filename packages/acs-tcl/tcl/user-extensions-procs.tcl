@@ -32,7 +32,7 @@ namespace eval acs_user_extension {
 
         # Loop through the extensions
         foreach extension $extensions {
-            acs_sc_call UserData $op $list_of_args $extension
+            set r [acs_sc::invoke -contract UserData -operation $op -call_args $list_of_args -impl $extension]
         }
     }
 

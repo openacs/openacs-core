@@ -145,7 +145,7 @@ ad_proc content_search__search_ids {
 
     set package_id [apm_package_id_from_key search]
     set driver [parameter::get -package_id $package_id -parameter FtsEngineDriver]
-    array set result [acs_sc_call FtsEngineDriver search [list $q $offset $limit] $driver]
+    array set result [acs_sc::invoke -contract FtsEngineDriver -operation search -call_args [list $q $offset $limit] -impl $driver]
 
     return $result(ids)
 }
