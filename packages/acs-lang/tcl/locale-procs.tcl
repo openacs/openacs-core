@@ -570,7 +570,7 @@ ad_proc -private lang::conn::browser_locale {} {
     foreach locale $conn_locales {       
         regexp {^([^_]+)(?:_([^_]+))?$} $locale locale language region 
 
-        if { [exists_and_not_null region] } {
+        if { ([info exists region] && $region ne "") } {
             # We have both language and region, e.g. en_US
             if { [lsearch -exact $system_locales $locale] != -1 } {
                 # The locale was found in the system, a perfect match           
@@ -601,9 +601,9 @@ ad_proc -private lang::conn::browser_locale {} {
         }
     }
 
-    if { [exists_and_not_null perfect_match] } {
+    if { ([info exists perfect_match] && $perfect_match ne "") } {
         return $perfect_match
-    } elseif { [exists_and_not_null tentative_match] } {
+    } elseif { ([info exists tentative_match] && $tentative_match ne "") } {
         return $tentative_match
     } else {
         # We didn't find a match

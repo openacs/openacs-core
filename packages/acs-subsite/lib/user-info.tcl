@@ -41,10 +41,10 @@ foreach elm $read_only_elements {
     set elm_mode($elm) {display}
 }
 
-set edit_mode_p [expr ![empty_string_p [form::get_action user_info]]]
+set edit_mode_p [expr {[form::get_action user_info] ne ""}]
 
 set form_mode display
-if { [exists_and_equal edit_p 1] } {
+if { [info exists edit_p] && $edit_p eq "1" } {
     set form_mode edit
 }
 

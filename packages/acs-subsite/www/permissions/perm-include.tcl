@@ -8,11 +8,11 @@ set user_id [ad_conn user_id]
 
 set admin_p [ad_permission_p $object_id admin]
 
-if { ![exists_and_not_null return_url] } {
+if { (![info exists return_url] || $return_url eq "") } {
     set return_url [ad_return_url]
 }
 
-if { ![exists_and_not_null privs] } {
+if { (![info exists privs] || $privs eq "") } {
     set privs { read create write delete admin }
 }
 
@@ -65,7 +65,7 @@ lappend elements remove_all {
 
 set perm_url "[ad_conn subsite_url]permissions/"
 
-if { ![exists_and_not_null user_add_url] } {
+if { (![info exists user_add_url] || $user_add_url eq "") } {
     set user_add_url "${perm_url}perm-user-add"
 }
 set user_add_url [export_vars -base $user_add_url { object_id expanded {return_url "[ad_return_url]"}}]

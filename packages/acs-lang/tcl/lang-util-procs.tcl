@@ -749,7 +749,7 @@ ad_proc -private lang::util::escape_vars_if_not_null {
 } {
     foreach lm $list {
 	upvar $lm foreign_var
-	if { [exists_and_not_null foreign_var] } {
+	if { ([info exists foreign_var] && $foreign_var ne "") } {
 	    set foreign_var "\[$foreign_var\]"
 	}
     }
@@ -783,7 +783,7 @@ ad_proc -public lang::util::convert_to_i18n {
 	
 	# Register the language keys
 	lang::message::register en_US $package_key $message_key $text
-	if {[exists_and_not_null locale]} {
+	if {([info exists locale] && $locale ne "")} {
 	    lang::message::register $locale $package_key $message_key $text
 	}
 	

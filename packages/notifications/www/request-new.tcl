@@ -20,7 +20,7 @@ notification::security::require_notify_object -object_id $object_id
 set doc(title) [_ notifications.Request_Notification]
 set context [list $doc(title)]
 
-if {[empty_string_p $pretty_name]} { 
+if {$pretty_name eq ""} { 
     set page_title [_ notifications.Request_Notification]
 } else { 
     set page_title [_ notifications.lt_Request_Notification_]

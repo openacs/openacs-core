@@ -262,11 +262,11 @@ ad_proc -private group::get_id_not_cached {
 
     @error
 } {
-    if {[exists_and_not_null subsite_id]} {
+    if {([info exists subsite_id] && $subsite_id ne "")} {
 	set application_group_id [application_group::group_id_from_package_id -package_id [ad_conn subsite_id]]
     } 
     
-    if {[exists_and_not_null application_group_id]} {
+    if {([info exists application_group_id] && $application_group_id ne "")} {
 	set group_ids [db_list get_group_id_with_application {}]
     } else {
 	set group_ids [db_list get_group_id {}]

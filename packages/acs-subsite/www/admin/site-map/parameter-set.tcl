@@ -31,7 +31,7 @@ set table_sql "select p.parameter_id, p.parameter_name, p.package_key, nvl(p.des
 set dimensional_list [apm_parameter_section_slider $package_key]
 set additional_sql ""
 
-if {[exists_and_not_null dimensional_list] } {
+if {([info exists dimensional_list] && $dimensional_list ne "") } {
     lappend table_def [list section_name "Section:"]
     append additional_sql [ad_dimensional_sql $dimensional_list]
     ns_log Notice [ad_dimensional_sql $dimensional_list]
@@ -47,7 +47,7 @@ set display_warning_p 0
 lappend table_def [list attr_value "Value" no_sort \
 	{<td>
 	   <input name=params.$parameter_id value=\"$attr_value\" size=50>
-	    <font color=red><strong>[if { ![empty_string_p [ad_parameter_from_file $parameter_name [uplevel set package_key]]] } { uplevel set display_warning_p 1 } ; ad_parameter_from_file $parameter_name [uplevel set package_key]]</strong></font>
+	    <font color=red><strong>[if { [ad_parameter_from_file $parameter_name [uplevel set package_key]] ne "" } { uplevel set display_warning_p 1 } ; ad_parameter_from_file $parameter_name [uplevel set package_key]]</strong></font>
 	    </td>}]
 
 append additional_sql [ad_order_by_from_sort_spec $orderby $table_def]

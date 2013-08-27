@@ -28,7 +28,7 @@ ad_form -name application -cancel_url . -form {
         {html {size 30}}
         {validate {
             empty_or_not_exists 
-            {expr \[empty_string_p \$value\] || \[catch { site_node::get_from_url -url "[ad_conn package_url]\$value/" -exact }\]}
+	  {\$value\ eq {} || \[catch { site_node::get_from_url -url "[ad_conn package_url]\$value/" -exact }\]}
             {This folder name is already used.}
         }}
     }

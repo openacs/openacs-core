@@ -39,12 +39,12 @@ if { ![info exists source_p] } {
 
 # Try and be helpful about the procedure.
 if { ![nsv_exists api_proc_doc $proc] } {
-    if {![empty_string_p [namespace eval :: [list info procs $proc]]]} { 
+    if {[info procs ::$proc] ne ""} { 
         set error_msg "<p>This procedure is defined in the server but not documented via ad_proc or proc_doc and may be intended as a private interface.</p><p>The procedure is defined as: <pre>
 proc $proc {[info args $proc]} {
 [ad_quotehtml [info body $proc]]
 }</pre></p>"
-    } elseif {![empty_string_p [namespace eval :: [list info commands $proc]]]} { 
+    } elseif {[info commands ::$proc] ne ""} { 
         set error_msg "<p>The procedure <b>$proc</b> is an available command on the server and might be found in the <a href=\"http://dev.scriptics.com/man/tcl8.3/TclCmd/contents.htm\">TCL</a> or <a href=\"http://www.aolserver.com/docs/devel/tcl/api/\">AOLServer</a> documentation or in documentation for a loadable module (like ns_cache for example).</p>"
     } else { 
         set error_msg "<p>The procedure <b>$proc</b> is not defined in the server.</p>"

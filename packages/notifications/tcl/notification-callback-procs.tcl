@@ -73,7 +73,7 @@ ad_proc -public -callback acs_mail_lite::incoming_email -impl notifications {
     
     set to_stuff [notification::email::parse_reply_address -reply_address $to]
     # We don't accept a bad incoming email address
-    if {[empty_string_p $to_stuff]} {
+    if {$to_stuff eq ""} {
 	# This is not an e-mail notification can work with. Maybe bounce ?
 	return
     }
@@ -83,7 +83,7 @@ ad_proc -public -callback acs_mail_lite::incoming_email -impl notifications {
     set user_id [cc_lookup_email_user $from]
     
     # We don't accept empty users for now
-    if {[empty_string_p $user_id]} {
+    if {$user_id eq ""} {
 	ns_log Notice "acs_mail_lite::incoming_email -impl notifications: Unknown sender with email $from. Bouncing message."
 	# bounce message with an informative error.
 	notification::email::bounce_mail_message \

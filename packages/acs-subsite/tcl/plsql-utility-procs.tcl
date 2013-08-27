@@ -224,7 +224,7 @@ select acs_group.name('-2') from dual
 	foreach triple $attr_list {
 	    set table [string toupper [string trim [lindex $triple 0]]]
 	    set attr [string toupper [string trim [lindex $triple 1]]]
-	    if { [empty_string_p [lindex $triple 2]] } {
+	    if { [lindex $triple 2] eq "" } {
 		set default_string ""
 	    } else {
 		set default_string " DEFAULT [lindex $triple 2]"

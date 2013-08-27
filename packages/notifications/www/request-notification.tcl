@@ -2,7 +2,7 @@ ad_page_contract {
 
     Subscribe a person or a group to a notification of an object and a type.
 
-    @author Natalia Pérez (nperper@it.uc3m.es)
+    @author Natalia PÃ©rez (nperper@it.uc3m.es)
     @create-date 2005-03-28
 
 } {
@@ -27,13 +27,13 @@ set intervals [notification::get_intervals -type_id $type_id]
 set delivery_methods [notification::get_delivery_methods -type_id $type_id]
 
 #if group_id parameter exists then all users of this community are subscribed if they're not already subscribed
-if {$group_id != ""} {        
+if {$group_id ne ""} {        
     set interval_id [notification::get_interval_id -name instant]
     set delivery_method_id [notification::get_delivery_method_id -name email]
         
     db_foreach get_member_id {} {
         # Add notification for this user if they're not already subscribed for an instant alert        
-        if {[string equal [notification::request::get_request_id -user_id $user_id -type_id $type_id -object_id $object_id] ""] } {
+        if {[notification::request::get_request_id -user_id $user_id -type_id $type_id -object_id $object_id] eq ""} {
             notification::request::new -type_id $type_id -user_id $user_id -object_id $object_id -interval_id $interval_id \
                 -delivery_method_id $delivery_method_id
         }        
@@ -69,7 +69,7 @@ if {[template::form is_valid notify]} {
     template::form get_values notify party_id interval_id type_id delivery_method_id
     
     db_foreach get_user {} {
-        if {[string equal [notification::request::get_request_id -user_id $user_id -type_id $type_id -object_id $object_id] ""] } {
+        if {[notification::request::get_request_id -user_id $user_id -type_id $type_id -object_id $object_id] eq ""} {
                 notification::request::new -type_id $type_id -user_id $user_id -object_id $object_id -interval_id $interval_id \
                 -delivery_method_id $delivery_method_id
             }
@@ -77,7 +77,7 @@ if {[template::form is_valid notify]} {
         
     #if party_id is a group of users then returnredirect, else we get an error
     db_0or1row get_user_name {}
-    if {$username == ""} {
+    if {$username eq ""} {
         ad_returnredirect $return_url
     }
     

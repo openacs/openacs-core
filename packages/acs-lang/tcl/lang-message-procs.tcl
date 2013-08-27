@@ -120,7 +120,7 @@ ad_proc -public lang::message::register {
     } else {
         set cols(sync_time) "null"
     } 
-    if { [empty_string_p [string trim $message]] } {
+    if { [string trim $message] eq "" } {
         set cols(message) "null"
     } else {
         set cols(message) [db_map message]
@@ -168,7 +168,7 @@ ad_proc -public lang::message::register {
                 $old_message_array(upgrade_status)
             
             # Trying to avoid hitting Oracle bug#2011927    
-            if { [empty_string_p [string trim $message]] } {
+            if { [string trim $message] eq "" } {
                 db_dml lang_message_null_update {}
             } else { 
                 set cols(message) [db_map message]
@@ -197,7 +197,7 @@ ad_proc -public lang::message::register {
         }
         
         # avoiding bug#2011927 from Oracle.
-        if { [empty_string_p [string trim $message]] } {
+        if { [string trim $message] eq "" } {
             db_dml lang_message_insert_null_msg {}
         } else {
             db_dml lang_message_insert {} -clobs [list $message]
@@ -480,7 +480,7 @@ ad_proc -public lang::message::conflict_count {
     # Build any package and locale where clauses
     set where_clauses [list]
     foreach col {package_key locale} {
-        if { ![empty_string_p [set $col]] } {
+        if { [set $col] ne "" } {
             lappend where_clauses "$col = :${col}"
         }
     }
@@ -607,7 +607,7 @@ ad_proc -private lang::message::format {
                 upvar $upvar_level $variable_name local_variable
 
                 if { [info exists local_variable] } {
-                    if { ![exists_and_not_null array_key] } {
+                    if { (![info exists array_key] || $array_key eq "") } {
                         # Normal Tcl variable
                         append formated_message $local_variable
                     } else {
@@ -961,7 +961,7 @@ ad_proc -public lang::message::update_description {
     @author Simon Carstensen
     @creation_date 2003-08-12
 } {
-    if { [empty_string_p [string trim $description]] } {
+    if { [string trim $description] eq "" } {
         db_dml update_description_insert_null {}
     } else {
         db_dml update_description {} -clobs [list $description]

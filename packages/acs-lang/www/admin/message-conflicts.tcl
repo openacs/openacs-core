@@ -11,7 +11,7 @@ ad_page_contract {
 
 foreach optional_var {locale package_key} {
     if { [info exists $optional_var] } {
-        if { [empty_string_p [set $optional_var]] } {
+        if { [set $optional_var] eq "" } {
             unset $optional_var
         }
     }

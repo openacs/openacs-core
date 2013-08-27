@@ -95,7 +95,7 @@ $body
  </ul>"
     }
 
-if { [exists_and_not_null table_name] } {
+if { ([info exists table_name] && $table_name ne "") } {
 
     set body [db_string table_comment "select comments from user_tab_comments where table_name = '[string toupper $table_name]'" -default ""]
 

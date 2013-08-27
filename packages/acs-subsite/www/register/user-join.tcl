@@ -34,7 +34,7 @@ set group_name $group_info(group_name)
 set join_policy $group_info(join_policy)
 
 
-if { [exists_and_not_null return_url] } {
+if { ([info exists return_url] && $return_url ne "") } {
     set ret_link "<a href=\"$return_url\">Return to previous page.</a>"
 } else {
     set ret_link ""

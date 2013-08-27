@@ -126,7 +126,7 @@ ad_proc -public subsite::default::create_app_group {
     </ul>
 
 } {
-    if { [empty_string_p [application_group::group_id_from_package_id -no_complain -package_id $package_id]] } {
+    if { [application_group::group_id_from_package_id -no_complain -package_id $package_id] eq "" } {
         array set node [site_node::get_from_object_id -object_id $package_id]
         set node_id $node(node_id)
 

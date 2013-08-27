@@ -161,7 +161,7 @@ if { [form is_valid grant] } {
         }
     }
     
-    if {[exists_and_not_null return_url]} {
+    if {([info exists return_url] && $return_url ne "")} {
         ad_returnredirect "$return_url"
     } else {
         ad_returnredirect "one?[export_vars [list object_id application_url]]"

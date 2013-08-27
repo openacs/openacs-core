@@ -255,7 +255,7 @@ namespace eval rel_types {
 
 	@return 1 if successful
     } {
-	if {![exists_and_not_null role]} {
+	if {![info exists role] || $role eq ""} {
 	    set role [util_text_to_url \
 			  -text $pretty_name \
 			  -replacement "_" \

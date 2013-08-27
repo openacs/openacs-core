@@ -415,7 +415,7 @@ ad_proc -public lc_time_fmt {
         return ""
     }
 
-    if { ![exists_and_not_null locale] } {
+    if { (![info exists locale] || $locale eq "") } {
         set locale [ad_conn locale]
     }
     

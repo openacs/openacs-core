@@ -30,7 +30,7 @@ if { $member_p } {
 
 }
 
-if { ![exists_and_not_null return_url] } {
+if { (![info exists return_url] || $return_url eq "") } {
     set return_url "../"
 }
 
