@@ -53,7 +53,7 @@ ad_proc -private ad_user_class_description { set_id } {
     # All the SQL statements are named after the criteria name (e.g. category_id)
 
     foreach criteria [ad_user_class_parameters] {
-	if { [info exists $criteria] && ![empty_string_p [set $criteria]] } {
+	if { [info exists $criteria] && [set $criteria] ne "" } {
 
 	    switch $criteria {
 		"category_id" {
@@ -224,7 +224,7 @@ ad_proc -private ad_user_class_query { set_id  } {
     }
 
     foreach criteria [ad_user_class_parameters] {
-	if { [info exists $criteria] && ![empty_string_p [set $criteria]] } {
+	if { [info exists $criteria] && [set $criteria] ne "" } {
 	    switch $criteria {
 		"category_id" {
 		    if {[lsearch $tables "users_interests"] == -1 } {

@@ -1000,7 +1000,7 @@ ad_proc -public ad_html_to_text {
                             }
                         } else {
                             if { [llength $href_stack] > 0 } {
-                                if { ![empty_string_p [lindex $href_stack end]] } {
+                                if { [lindex $href_stack end] ne "" } {
                                     ad_html_to_text_put_text output " [lindex $href_stack end]"
                                 }
                                 set href_stack [lreplace $href_stack end end]

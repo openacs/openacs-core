@@ -837,18 +837,18 @@ ad_proc -public ad_form {
                     }
 
                     default {
-                        if { [empty_string_p [info commands "::template::data::validate::$flag"]] } {
+                        if { [info commands "::template::data::validate::$flag"] eq "" } {
                            return -code error "element $element_name: data type \"$flag\" is not valid"
                         }
                         lappend form_command "-datatype"
                         lappend form_command $flag
                         set af_type(${form_name}__$element_name) $flag
                         if { $af_element_parameters($element_name:$flag) eq "" } {
-                            if { ![empty_string_p [info command "::template::widget::$flag"]] } {
+                            if { [info command "::template::widget::$flag"] ne "" } {
                                 lappend form_command "-widget" $flag
                             }
                         } else {
-                            if { [empty_string_p [info commands "::template::widget::$af_element_parameters($element_name:$flag)"]] } {
+                            if { [info commands "::template::widget::$af_element_parameters($element_name:$flag)"] eq ""} {
                                 return -code error "element $element_name: widget \"$af_element_parameters($element_name:$flag)\" does not exist"
                             }
                             lappend form_command "-widget" $af_element_parameters($element_name:$flag)
@@ -881,7 +881,7 @@ ad_proc -public ad_form {
                 }
             }
             if { [info exists af_to_html(${form_name}__$element_name)] } {
-                if { [empty_string_p [info commands ::template::util::$af_type(${form_name}__$element_name)::get_property]] } {
+                if { [info commands ::template::util::$af_type(${form_name}__$element_name)::get_property] eq "" } {
                     return -code error "\"to_html\" not valid for type \"$af_type(${form_name}__$element_name)\""
                 }
             }

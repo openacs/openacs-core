@@ -86,7 +86,7 @@ ad_proc -public db_rdbms_compatible_p {rdbms_test rdbms_pattern} {
     # db_qd_log QDDebug "The RDBMS_PATTERN is [db_rdbms_get_type $rdbms_pattern] - [db_rdbms_get_version $rdbms_pattern]"
 
     # If the pattern is for all RDBMS, then yeah, compatible
-    if {[empty_string_p [db_rdbms_get_type $rdbms_test]]} {
+    if {[db_rdbms_get_type $rdbms_test] eq ""} {
 	return 1
     }
 
@@ -97,7 +97,7 @@ ad_proc -public db_rdbms_compatible_p {rdbms_test rdbms_pattern} {
     }
 
     # If the pattern has no version
-    if {[empty_string_p [db_rdbms_get_version $rdbms_pattern]]} {
+    if {[db_rdbms_get_version $rdbms_pattern] eq ""} {
 	return 1
     }
 
@@ -194,11 +194,11 @@ ad_proc -public db_qd_pick_most_specific_query {rdbms query_1 query_2} {
     # We ASSUME that both queries are at least compatible.
     # Otherwise this is a stupid exercise
 
-    if {[empty_string_p [db_rdbms_get_version $rdbms_1]]} {
+    if {[db_rdbms_get_version $rdbms_1] eq ""} {
 	return $query_2
     }
 
-    if {[empty_string_p [db_rdbms_get_version $rdbms_2]]} {
+    if {[db_rdbms_get_version $rdbms_2] eq ""} {
 	return $query_1
     }
 

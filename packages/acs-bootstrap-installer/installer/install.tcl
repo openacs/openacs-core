@@ -8,7 +8,7 @@ install_page_contract [install_mandatory_params] [install_optional_params]
 
 # Default all system emails to the administrators email
 foreach var_name {system_owner admin_owner host_administrator outgoing_sender new_registrations} {
-    if { [empty_string_p [set $var_name]] } {
+    if { [set $var_name] eq "" } {
         set $var_name $email
     }
 }
@@ -99,12 +99,11 @@ if { ![db_string user_exists {
 
     if { !$user_id } {
 
-	global errorInfo    
 	install_return 200 "Unable to Create Administrator" "
     
 Unable to create the site-wide administrator:
    
-<blockquote><pre>[ns_quotehtml $errorInfo]</pre></blockquote>
+<blockquote><pre>[ns_quotehtml $::errorInfo]</pre></blockquote>
     
 Please <a href=\"javascript:history.back()\">try again</a>.
     

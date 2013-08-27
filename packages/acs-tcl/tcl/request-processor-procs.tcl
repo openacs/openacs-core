@@ -92,7 +92,7 @@ ad_proc rp_getform {} {
     
 } {
     # The form may not exist, if there's nothing in it
-    if { ![empty_string_p [ns_getform]] } {
+    if { [ns_getform] ne "" } {
         # It's there
         return [ns_getform]
     } {
@@ -1024,7 +1024,7 @@ ad_proc -private rp_serve_abstract_file {
 
     ad_conn -set file [rp_concrete_file -extension_pattern $extension_pattern $path]
     
-    if { [empty_string_p [ad_conn file]] } {
+    if { [ad_conn file] eq "" } {
       
       if { [file isdirectory $path] && !$noredirect_p } {
         # Directory name with no trailing slash. Redirect to the same

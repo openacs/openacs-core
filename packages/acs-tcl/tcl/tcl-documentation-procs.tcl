@@ -1631,7 +1631,7 @@ ad_page_contract_filter -type post date { name date } {
     }
   
     # check if all elements are blank
-    if { [empty_string_p "$date(day)$date(month)$date(year)"] } {
+    if { "$date(day)$date(month)$date(year)" eq ""} {
 	set date(date) {}
 	return 1
     } 
@@ -1692,7 +1692,7 @@ ad_page_contract_filter -type post time { name time } {
     }
   
     # check if all elements are blank
-    if { [empty_string_p "$time(time)$time(ampm)"] } {
+    if { "$time(time)$time(ampm)" eq "" } {
 	return 1
     } 
 
@@ -1736,7 +1736,7 @@ ad_page_contract_filter -type post time24 { name time } {
     }
   
     # check if all elements are blank
-    if { [empty_string_p "$time(time)"] } {
+    if { "$time(time)" eq "" } {
 	return 1
     } 
 
@@ -1912,7 +1912,7 @@ ad_page_contract_filter phone { name value } {
     @author Randy Beggs (randyb@arsdigita.com)
     @creation-date August 2000
 } {
-    if { ![empty_string_p [string trim $value]] } {
+    if { [string trim $value] ne "" } {
 	if { ![regexp {^\(?([1-9][0-9]{2})\)?(-|\.|\ )?([0-9]{3})(-|\.|\ )?([0-9]{4})} $value] } {
 	    ad_complain "[_ acs-tcl.lt_value_does_not_appear]"
 	    return 0
@@ -1930,7 +1930,8 @@ ad_page_contract_filter usphone { name value } {
     @author Randy Beggs (randyb@arsdigita.com)
     @creation-date 22 August 2000
 } {
-    if {![empty_string_p [string trim $value]] && ![regexp {[1-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]} $value]} {
+    if { [string trim $value] ne "" 
+	 && ![regexp {[1-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]} $value]} {
 	ad_complain "[_ acs-tcl.lt_name_does_not_appear__1]"
 	return 0
     }

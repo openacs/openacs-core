@@ -1696,7 +1696,7 @@ ad_proc -private apm_callback_has_valid_args {
 
     if { $test_arg_list eq "" } {
         # The callback proc should take no args
-        return [empty_string_p [info args ::${proc_name}]]
+        return [expr {[info args ::${proc_name}] eq ""}]
     }
 
     # The callback proc should have required arg switches. Check

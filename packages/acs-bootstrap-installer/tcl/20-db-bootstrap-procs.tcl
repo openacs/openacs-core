@@ -138,7 +138,7 @@ ad_proc db_bootstrap_set_db_type { errors } {
                 ns_log Notice "$proc_name: For database '$dbn', the following pools are available: $dbn_pools"
             }
 
-            if { [empty_string_p [db_available_pools $default_dbn]] } {
+            if { [db_available_pools $default_dbn] eq "" } {
                 ns_log Error "$proc_name: No pools specified for database '$default_dbn'." 
                 set old_availablepool_p 1
             }

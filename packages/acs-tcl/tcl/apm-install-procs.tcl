@@ -1408,7 +1408,7 @@ ad_proc -private apm_package_install_owners_prepare {owner_names owner_uris } {
 } {
     set owners [list]
     for {set i 0} {$i < [llength $owner_names] } {incr i} {
-	if { ![empty_string_p [lindex $owner_names $i]] } {
+	if { [lindex $owner_names $i] ne "" } {
 	    lappend owners [list [lindex $owner_names $i] [lindex $owner_uris $i]]
 	}
     }
