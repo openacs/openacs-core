@@ -134,7 +134,7 @@ ACS Service Contract Documentation
 
      Dispatching    
 
-	- (tcl) acs_sc_call (contract, operation, [arguments, impl]):
+	- (tcl) acs_sc::invoke (contract, operation, [arguments, impl]):
 		calls an operation
 
   Examples
