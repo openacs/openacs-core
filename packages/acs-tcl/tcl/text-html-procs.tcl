@@ -789,7 +789,7 @@ ad_proc ad_html_security_check { html } {
                     }
             
                     if { [string tolower $attr_name] ne "style" } {
-                        if { [regexp {^\s*([^\s:]+):} $attr_value match protocol] } {
+                        if { [regexp {^\s*([^\s:]+):\/\/} $attr_value match protocol] } {
                             if { ![info exists allowed_protocol([string tolower $protocol])] && ![info exists allowed_protocol(*)] } {
                                 return "Your URLs can only use these protocols: [join $allowed_protocols_list ", "].
                 You have a '$protocol' protocol in there."
