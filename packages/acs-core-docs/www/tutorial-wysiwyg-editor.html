@@ -80,7 +80,7 @@
     	{submit:text(submit) {label "Change"}}
 	} -on_submit {
     	parameter::set_value  -parameter "UseWysiwygP" -value $enabled_p
-    	if {![empty_string_p $return_url]} {
+    	if {$return_url ne ""} {
         	ns_returnredirect $return_url
     	}
 	}

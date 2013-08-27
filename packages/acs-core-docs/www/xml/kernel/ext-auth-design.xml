@@ -225,7 +225,7 @@ auth::registration::get_optional_attributes
     # Always register the user locally
     lappend authorities_list [auth::authority::local]
     # Default authority_id if none was provided
-    if { [empty_string_p $authority_id] } {
+    if { $authority_id eq "" } {
         # Pick the first authority that can create users
         set authority_id [db_string first_registering_authority {
             select authority_id
@@ -236,7 +236,7 @@ auth::registration::get_optional_attributes
                               where register_p = 't'
                              )
         } -default ""]
-        if { [empty_string_p $authority_id] } {
+        if { $authority_id eq "" } {
             error "No authority_id provided and could not find an authority that can create users"
         }    
         lappend authorities_list $authority_id
@@ -278,7 +278,7 @@ auth::registration::get_optional_attributes
     @secret_question Question to ask on forgotten password
     @secret_answer Answer to forgotten password question
 } {
-    if { [empty_string_p $authority_id] } {
+    if { $authority_id eq "" } {
         set authority_id [auth::authority::local]
     }
     # TODO:
@@ -1039,7 +1039,7 @@ ad_proc -private auth::authentication::Authenticate {
     
     @param authority_id The ID of the authority to ask to verify the user. Leave blank for local authority.
 } {
-    if { [empty_string_p $authority_id] } {
+    if { $authority_id eq "" } {
         set authority_id [auth::authority::local]
     }
     # TODO:
@@ -1164,7 +1164,7 @@ ad_proc -private auth::registration::Register {
     Invoke the Register service contract operation for the given authority.
     
 } {
-    if { [empty_string_p $authority_id] } {
+    if { $authority_id eq "" } {
         set authority_id [auth::authority::local]
     }
 
