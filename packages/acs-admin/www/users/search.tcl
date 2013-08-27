@@ -106,12 +106,12 @@ if { ![info exists passthrough] } {
     set passthrough_parameters "[export_entire_form_as_url_vars $passthrough]"
 }
 
-if { [exists_and_not_null limit_to_user_id ] } {
+if { ([info exists limit_to_user_id] && $limit_to_user_id ne "") } {
     set limit_to_user_id [join $limit_to_user_id ","]
     lappend where_clause "cc_users.user_id not in ($limit_to_user_id)"
 }
 
-if { [exists_and_not_null limit_to_users_in_group_id] } {
+if { ([info exists limit_to_users_in_group_id] && $limit_to_users_in_group_id ne "") } {
 set query "select distinct first_names, last_name, email, member_state, email_verified_p, cu.user_id
 from cc_users cu, group_member_map gm, membership_rels mr
 where cu.user_id = gm.member_id
@@ -163,7 +163,7 @@ db_foreach user_search_admin $query {
 set user_search:rowcount $rowcount
 
 # We are limiting the search to one group - display that group's name
-if { [exists_and_not_null limit_to_users_in_group_id] && ![regexp {[^0-9]} $limit_to_users_in_group_id] } {
+if { ([info exists limit_to_users_in_group_id] && $limit_to_users_in_group_id ne "") && ![regexp {[^0-9]} $limit_to_users_in_group_id] } {
     set group_name [db_string user_group_name_from_id "select group_name from user_groups where group_id = :limit_to_users_in_group_id"]
     set title "User search in $group_name"
 } else {

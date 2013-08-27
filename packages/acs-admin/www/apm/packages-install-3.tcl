@@ -67,7 +67,9 @@ foreach pkg_info $pkg_install_list {
 	    incr file_count
 	}
 
-        if { [empty_string_p $version(auto-mount)] && [string equal $version(package.type) apm_application] } {
+        if { $version(auto-mount) eq "" 
+	     && $version(package.type) eq "apm_application" 
+	   } {
             set mount_html "<input type=\"checkbox\" name=\"mount_p\" value=\"$version(package.key)\" checked> Mount package under the main site at path <input type=\"text\" name=\"mount_path.$version(package.key)\" value=\"$version(package.key)\">"
         } else {
             set mount_html ""

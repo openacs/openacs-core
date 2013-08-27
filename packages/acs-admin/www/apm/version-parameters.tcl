@@ -30,7 +30,7 @@ set table_def [list \
 #DRB: sql_clauses must not contain RDBMS-specific query clauses.
 set sql_clauses ""
 
-if { [exists_and_not_null dimensional_list] } {
+if { ([info exists dimensional_list] && $dimensional_list ne "") } {
     lappend table_def [list section_name "Section:"]
     append sql_clauses [ad_dimensional_sql $dimensional_list]
 }

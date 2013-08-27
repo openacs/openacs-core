@@ -63,7 +63,7 @@ ad_form -extend -name update -form {
             # Continue
         }
         old_password_bad {
-            if { ![exists_and_not_null old_password] } {
+            if { (![info exists old_password] || $old_password eq "") } {
                 form set_error update password_old $result(password_message)
             } else {
                 # This hack causes the form to reload as if submitted, but with the old password showing

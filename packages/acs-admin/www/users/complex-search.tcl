@@ -101,7 +101,7 @@ if { ![info exists passthrough] } {
 set where_clause [list]
 set rowcount 0
 
-if {[exists_and_not_null limit_to_users_in_group_id] && ![regexp {[^-0-9]} $limit_to_users_in_group_id] } {
+if {([info exists limit_to_users_in_group_id] && $limit_to_users_in_group_id ne "") && ![regexp {[^-0-9]} $limit_to_users_in_group_id] } {
     set group_name [db_string user_group_name_from_id \
 "select group_name from groups where group_id = :limit_to_users_in_group_id"]
     incr rowcount
@@ -109,33 +109,33 @@ if {[exists_and_not_null limit_to_users_in_group_id] && ![regexp {[^-0-9]} $limi
         "Is a member of '$group_name'"
 }
 
-if { [exists_and_not_null authority_id] } {
+if { ([info exists authority_id] && $authority_id ne "") } {
     lappend where_clause "authority_id = :authority_id"
     incr rowcount
     set criteria:[set rowcount](data) "Authority is '[auth::authority::get_element -authority_id $authority_id -element pretty_name]'"
 }
 
-if { [exists_and_not_null email] } {
+if { ([info exists email] && $email ne "") } {
     set sql_email "%[string tolower $email]%"
     lappend where_clause "email like :sql_email"
     incr rowcount
     set criteria:[set rowcount](data) "Email contains '$email'"
 }
 
-if { [exists_and_not_null ip] } {
+if { ([info exists ip] && $ip ne "") } {
     lappend where_clause "creation_ip = :ip"
     incr rowcount
     set criteria:[set rowcount](data) "Creation IP is $ip"
 }
 
-if { [exists_and_not_null last_name_starts_with] } {
+if { ([info exists last_name_starts_with] && $last_name_starts_with ne "") } {
     set sql_last_name_starts_with "[string tolower $last_name_starts_with]%"
     lappend where_clause "lower(last_name) like :sql_last_name_starts_with"
     incr rowcount
     set criteria:[set rowcount](data) "Last name starts with '$last_name_starts_with'"
 }
 
-if { [exists_and_not_null first_names] } {
+if { ([info exists first_names] && $first_names ne "") } {
     set sql_first_names "%[string tolower $first_names]%"
     lappend where_clause "lower(first_names) like :sql_first_names"
     incr rowcount
@@ -192,7 +192,7 @@ if { $number_visits_above >= 0 } {
 set criteria:rowcount $rowcount
 
 
-if { [exists_and_not_null limit_to_users_in_group_id] } {
+if { ([info exists limit_to_users_in_group_id] && $limit_to_users_in_group_id ne "") } {
 set query "select distinct first_names, last_name, email, member_state, email_verified_p, cu.user_id
 from cc_users cu, group_member_map gm
 where (cu.user_id = gm.member_id

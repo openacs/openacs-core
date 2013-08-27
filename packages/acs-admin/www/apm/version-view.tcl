@@ -39,7 +39,7 @@ if { $vendor eq "" } {
     set vendor $vendor_uri
 }
 foreach field { summary description release_date vendor } {
-    if { [empty_string_p [set $field]] } {
+    if { [set $field] eq "" } {
 	set $field "-"
     }
 }

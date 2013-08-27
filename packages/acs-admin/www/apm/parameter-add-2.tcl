@@ -18,7 +18,7 @@ ad_page_contract {
     {max_n_values:integer 1}
 } -validate {
     datatype_type_ck {
-	if {$datatype != "number" && $datatype != "string" && $datatype != "text"} {
+	if {$datatype ne "number" && $datatype ne "string" && $datatype ne "text"} {
 	    ad_complain
 	}
     }

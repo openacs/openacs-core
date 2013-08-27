@@ -14,7 +14,7 @@ aa_register_case -cats smoke acs_admin_trivial_smoke_test {
         -rollback \
         -test_code {
             set header_result [apm_header]
-            aa_true "apm_header returns a non-null string?" [exists_and_not_null header_result]
+	    aa_true "apm_header returns a non-null string?" [expr {$header_result ne ""}]
         }
 }
 

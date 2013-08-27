@@ -9,7 +9,7 @@ ad_page_contract {
 }
 
 set page_title ""
-if { [exists_and_not_null authority_id] } {
+if { ([info exists authority_id] && $authority_id ne "") } {
     # Initial request in display or edit mode or a submit of the form
     set authority_exists_p [db_string authority_exists_p {
         select count(*)
@@ -282,7 +282,7 @@ if { $display_batch_history_p } {
         }
         set run_time [util::interval_pretty -seconds $run_time_seconds]
     }
-    if { [exists_and_not_null get_doc_impl_id] && [exists_and_not_null process_doc_impl_id] } {
+    if { ([info exists get_doc_impl_id] && $get_doc_impl_id ne "") && ([info exists process_doc_impl_id] && $process_doc_impl_id ne "") } {
         set batch_sync_run_url [export_vars -base batch-job-run { authority_id }]
     } else {
         # If there's neither a driver, nor any log history to display, hide any mention of batch jobs
@@ -294,7 +294,7 @@ if { $display_batch_history_p } {
 
 set context [list [list "." "Authentication"] $page_title]
 
-if { [exists_and_not_null authority_id] } {
+if { ([info exists authority_id] && $authority_id ne "") } {
     set num_users [lc_numeric [db_string num_users_in_auhtority { select count(*) from users where authority_id = :authority_id }]]
 } else {
     set num_users 0
@@ -305,7 +305,7 @@ set show_users_url [export_vars -base ../users/complex-search { authority_id { t
 # This code should be executed for non-local authorities in the following types of requests:
 # - initial request of the form (display mode)
 # - The form is being submitted (display mode)
-set initial_request_p [empty_string_p [form get_action authority]]
+set initial_request_p [expr {[form get_action authority] eq ""}]
 set submit_p [form is_valid authority]
 if { ($initial_request_p || $submit_p) && !$local_authority_p } {
 
@@ -313,8 +313,8 @@ if { ($initial_request_p || $submit_p) && !$local_authority_p } {
     foreach element_name [auth::authority::get_sc_impl_columns] {
         # Only offer link if there is an implementation chosen and that implementation has
         # parameters to configure
-        if { [exists_and_not_null element_array($element_name)] && 
-             ![empty_string_p [auth::driver::get_parameters -impl_id $element_array($element_name)]]} {
+        if { ([info exists element_array($element_name)] && $element_array($element_name) ne "") && 
+             [auth::driver::get_parameters -impl_id $element_array($element_name)] ne ""} {
             
             set configure_url [export_vars -base authority-parameters { authority_id }]
             break
