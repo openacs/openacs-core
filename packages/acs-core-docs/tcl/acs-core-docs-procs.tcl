@@ -17,7 +17,7 @@ ad_proc -private core_docs_uninstalled_packages_internal {} {
     foreach spec_file [apm_scan_packages "[acs_root_dir]/packages"] {
         if { ! [catch {array set version [apm_read_package_info_file $spec_file]} errMsg] } { 
             if { ! [apm_package_registered_p $version(package.key)] } {
-                if {[empty_string_p $version(package-name)]} { 
+                if {$version(package-name) eq ""} { 
                     set version(package-name) $version(package.key)
                 }
                 lappend uninstalled [list $version(package.key) $version(package-name)]

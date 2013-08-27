@@ -942,7 +942,7 @@ ad_proc -public aa_run_with_teardown {
 
             aa_execute_rollback_tests
 
-            if { !\[empty_string_p \$errmsg\] && !\[string equal \$errmsg \"rollback tests\"\] } {
+            if { \$errmsg ne {} && \$errmsg ne \"rollback tests\"\ } {
                 global errorInfo
                 error \"\$errmsg \n\n \$errorInfo\"
             }
