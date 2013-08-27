@@ -61,18 +61,42 @@ if { ![db_string user_exists {
 
   db_transaction {
     
-    set user_id [ad_user_new \
-                     $email \
-                     $first_names \
-                     $last_name \
-                     $password \
-                     "" \
-                     "" \
-                     "" \
-                     "t" \
-                     "approved" \
-                     "" \
-                     $username]
+    # Can't use auth::create_user
+    # Operation GetParameters is not implemented in 'local' implementation of contract 'auth_registration'
+    # set user_id [auth::create_user \
+    # 		     -email $email \
+    # 		     -first_names $first_names \
+    # 		     -last_name $last_name \
+    # 		     -password $password \
+    # 		     -email_verified_p "t" \
+    # 		     -username $username ]
+    
+
+    # Can't use auth::create_local_account, account does not work
+    # array set user [list email $email first_names $first_names \
+    # 			last_name $last_name password $password email_verified_p "t"]
+    # array set creation_info [auth::create_local_account \
+    # 				 -authority_id [auth::authority::local] \
+    # 				 -username $username \
+    # 				 -array user]
+    # if {$creation_info(creation_status) eq "ok"} {
+    #   set user_id $creation_info(user_id)
+    # }
+
+    # .. so use the low level helper
+    set user_id [auth::create_local_account_helper \
+    		     $email \
+    		     $first_names \
+    		     $last_name \
+    		     $password \
+    		     "" \
+    		     "" \
+    		     "" \
+    		     "t" \
+    		     "approved" \
+    		     "" \
+    		     $username ]
+
     if { !$user_id } {
 
 	global errorInfo    
