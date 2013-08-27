@@ -80,7 +80,7 @@ ad_proc -private lang::catalog::all_messages_for_package_and_locale { package_ke
 
     @author Peter Marklund
 } {
-    db_multirow -local -upvar_level 2 all_messages get_messages {}
+    return [db_list_of_lists get_messages {}]
 }
     
 ad_proc -private lang::catalog::package_catalog_dir { package_key } {
@@ -232,39 +232,10 @@ ad_proc -private lang::catalog::messages_in_db {
 } {
     set message_list [list]
 
-    all_messages_for_package_and_locale $package_key $locale
-    template::util::multirow_foreach all_messages {
-        lappend message_list @all_messages.message_key@ @all_messages.message@
-    }
-    #template::multirow foreach all_messages {
-    #    lappend message_list $message_key $message
-    #}
-
-    return $message_list
-}
-ad_proc -private lang::catalog::messages_in_db2 {
-    {-package_key:required}
-    {-locale:required}
-} {
-    Return a list of all messages for a certain package and locale.
-
-    @return An array list with message keys as keys and messages as
-            values.
-
-    @see lang::catalog::all_messages_for_package_and_locale
-
-    @author Peter Marklund
-} {
-    set message_list [list]
-
-    all_messages_for_package_and_locale $package_key $locale
-    #template::util::multirow_foreach all_messages {
-    #    lappend message_list @all_messages.message_key@ @all_messages.message@
-    #}
-    template::multirow foreach all_messages {
+    foreach message_tuple [all_messages_for_package_and_locale $package_key $locale] {
+        lassign $message_tuple message_key message description
         lappend message_list $message_key $message
     }
-
     return $message_list
 }
 
@@ -432,16 +403,12 @@ ad_proc -public lang::catalog::export {
 		# Get messages and descriptions for the locale
 		set messages_list [list]
 		set descriptions_list [list]
-		all_messages_for_package_and_locale $package_key $locale
- 		template::util::multirow_foreach all_messages {
- 		    lappend messages_list @all_messages.message_key@ @all_messages.message@
- 		    lappend descriptions_list @all_messages.message_key@ @all_messages.description@
+		foreach message_tuple [all_messages_for_package_and_locale $package_key $locale] {
+            lassign $message_tuple message_key message description
+ 		    lappend messages_list $message_key $message
+ 		    lappend descriptions_list $message_key description
 		}
-		#template::multirow foreach all_messages {
-		#    lappend messages_list $message_key $message
-		#    lappend descriptions_list $message_key $description
-		#}
-		
+
 		set catalog_file_path [get_catalog_file_path \
 					   -package_key $package_key \
 					   -locale $locale]
