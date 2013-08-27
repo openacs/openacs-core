@@ -354,7 +354,7 @@ ad_proc -public template::util::spellcheck::spellcheck_properties {
 } {
     upvar $element_ref element
     
-    if { [empty_string_p [set spellcheck_value [ns_queryget $element(id).spellcheck]]] } {
+    if { [set spellcheck_value [ns_queryget $element(id).spellcheck]] eq "" } {
 	
 	# The user hasn't been able to state whether (s)he wants spellchecking to be performed or not.
 	# That's either because spell-checking is disabled for this element, or we're not dealing with a submit.
@@ -364,7 +364,7 @@ ad_proc -public template::util::spellcheck::spellcheck_properties {
 
 	if { [string equal "display" $element(mode)] \
 		 || [info exists element(nospell)] \
-		 || [empty_string_p [nsv_get spellchecker path]] } {
+		 || [nsv_get spellchecker path] eq "" } {
 
 	    set spellcheck_p 0
 	} else {

@@ -251,7 +251,7 @@ ad_proc -public template::element::create { form_id element_id args } {
   # check for submission
   if { [template::form is_submission $form_id] || [info exists opts(param)] } {
     validate $form_id $element_id
-  } elseif { ![empty_string_p [ns_queryget "__edit"]] } {
+  } elseif { [ns_queryget "__edit"] ne "" } {
     # If the magic __edit button was hit, try to get values from the form still
     # but don't do any validation
     set opts(values) [querygetall opts]

@@ -1606,7 +1606,7 @@ ad_proc -private template::list::prepare_filters {
             # because then the foreach loop would run more than once
             foreach { label value count } [lrange $elm 0 2] {}
 
-            if { [empty_string_p [string trim $label]] } {
+            if { [string trim $label] eq "" } {
                 set label $filter_properties(null_label)
             }
             switch $filter_properties(type) {
@@ -1742,7 +1742,7 @@ ad_proc -private template::list::render_filters {
                 # because then the foreach loop would run more than once
                 foreach { label value count } [lrange $elm 0 2] {}
                 
-                if { [empty_string_p [string trim $label]] } {
+                if { [string trim $label] eq "" } {
                     set label $filter_properties(null_label)
                 }
 
@@ -3262,7 +3262,7 @@ ad_proc -private template::list::prepare_filter_form {
 		# because then the foreach loop would run more than once
 		foreach { label value count } [lrange $elm 0 2] {}
 
-		if { [empty_string_p [string trim $label]] } {
+		if { [string trim $label] eq "" } {
 		    set label $filter_properties(null_label)
 		}
 		lappend  options [list $label $value]
