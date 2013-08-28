@@ -265,6 +265,9 @@ ad_proc tsearch2::build_query { -query } {
         regsub -all {\(|\)} $query {} query
     }
 
+    # remove empty ()
+    regsub -all {\(\s*\)} $query {} query
+
     # remove or at beginning of query 
     regsub -nocase "^or " $query {} query
     # replace boolean words with boolean operators
