@@ -312,10 +312,10 @@ namespace eval acs_mail_lite {
                             -use_sender_p $use_sender_p        
                     } errMsg]
                     if {$err} {
-                        ns_log Error "Error while sending queued mail: $errMsg"
-                        # release the lock
-                        set locking_server ""
-                        db_dml lock_queued_message {}    
+                        ns_log Error "Could not send queued mail (message $return_id): $errMsg"
+                        # release the lock (MS not now)
+                        # set locking_server ""
+                        # db_dml lock_queued_message {}    
                     } else {
                         # mail was sent, delete the queue entry
                         db_dml delete_queue_entry {}
