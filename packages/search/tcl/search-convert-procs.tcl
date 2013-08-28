@@ -36,7 +36,7 @@ ad_proc -public search::convert::binary_to_text {
         }
         {application/mspowerpoint} -
         {application/vnd.ms-powerpoint} {
-            set convert_command {ppthtml $filename >$tmp_filename}
+            set convert_command {catppt $filename >$tmp_filename}
         }
         {application/pdf} {
             set convert_command {pdftotext $filename $tmp_filename}
