@@ -567,7 +567,11 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
                         set config_value [lindex $config_pair 1]
                     }
                     ns_log debug "tinymce: key $config_key value $config_value"
-                    lappend pairslist "${config_key}:\"${config_value}\""
+                    if  {$config_value eq "true" || $config_value eq "false"} {
+                        lappend pairslist "${config_key}:${config_value}"
+                    } else {
+                        lappend pairslist "${config_key}:\"${config_value}\""
+                    }
                 }
 
                 foreach name [array names options] {
