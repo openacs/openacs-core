@@ -66,6 +66,8 @@ append table_sql $additional_sql
 
 ns_log Notice "table_sql = $table_sql"
 
+#vguerra: This is the only call to ad_table within core, but 
+#this page is not linked from anywhere anymore, probably we remove it later on.
 set table [ad_table -Torderby $orderby \
      -bind [ad_tcl_vars_to_ns_set package_id] \
      -Tmissing_text "No parameters registered in this section." \

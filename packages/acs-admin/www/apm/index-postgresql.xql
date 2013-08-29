@@ -19,9 +19,8 @@
              end as tarball_p
         from    apm_package_versions v, apm_package_types t
         where  t.package_key = v.package_key
-        [ad_dimensional_sql $dimensional_list where and]
-        [ad_order_by_from_sort_spec $orderby $table_def]
-
+        $filter_where_clause
+        [template::list::orderby_clause -orderby -name package_list]
       </querytext>
 </fullquery>
 
