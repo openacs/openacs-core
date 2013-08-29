@@ -2517,7 +2517,13 @@ ad_proc -public util_current_location {{}} {
             set port $Host_port
         }    
     }
-
+    
+    if { [ns_config "ns/parameters" ReverseProxyMode] == "true" } {
+	if { [ns_set iget [ad_conn headers] X-Forwarded-For] != ""  && [ns_set iget [ad_conn headers] X-SSL-Request] == "1"} {
+	    set proto https
+	}
+    }
+    
     if { $port ne "" && $port ne $default_port($proto) } {
         return "$proto://$hostname:$port"
     } else {

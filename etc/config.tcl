@@ -43,6 +43,9 @@ set servername                "New OpenACS Installation - Development"
 
 set serverroot                "/var/www/${server}"
 
+# Are we runnng behind a proxy? 
+set proxy_mode                false
+
 #---------------------------------------------------------------------
 # which database do you want? postgres or oracle
 set database              postgres 
@@ -109,6 +112,7 @@ ns_section ns/parameters
     ns_param   OutputCharset      utf-8
     ns_param   URLCharset         utf-8
 
+    ns_param   ReverseProxyMode   $proxy_mode
 #---------------------------------------------------------------------
 # Thread library (nsthread) parameters 
 #---------------------------------------------------------------------
