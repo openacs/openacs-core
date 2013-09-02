@@ -2538,19 +2538,16 @@ ad_proc -public db_source_sql_file {{
             # patch checked for a blank hostname, which fails in the driver.  Arguably the
             # driver's wrong but a lot of non-OpenACS folks use it, and even though I'm the
             # maintainer we shouldn't break existing code over such trivialities...
+            # GN: windows requires $pghost "-h ..."
 
-            if { [string equal [db_get_dbhost] "localhost"] || [string equal [db_get_dbhost] ""] } {
+            if { ([db_get_dbhost] eq "localhost" || [db_get_dbhost] eq "") && $::tcl_platform(platform) ne "windows"  } {
                 set pghost ""
             } else {
                 set pghost "-h [db_get_dbhost]"
             }
 
-            cd [file dirname $file]
-            if { $::tcl_platform(platform) eq "windows" } {
-                set fp [open "|[file join [db_get_pgbin] psql] $pghost $pgport $pguser -f $file_name [db_get_database] $pgpass" "r"]
-            } else {
-                set fp [open "|[file join [db_get_pgbin] psql] $pghost $pgport $pguser -f $file_name [db_get_database] $pgpass" "r"]
-            }
+            #cd [file dirname $file]
+            set fp [open "|[file join [db_get_pgbin] psql] $pghost $pgport $pguser -f $file [db_get_database] $pgpass" "r"]
 
             while { [gets $fp line] >= 0 } {
                 # Don't bother writing out lines which are purely whitespace.
