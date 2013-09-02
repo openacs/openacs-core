@@ -5,7 +5,7 @@ ad_page_contract {
     userlist
     from
     subject
-    message:allhtml
+    message:html
 } -properties {
     title:onevalue
     success_text:onevalue
