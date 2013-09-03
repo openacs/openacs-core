@@ -2546,7 +2546,7 @@ ad_proc -public db_source_sql_file {{
                 set pghost "-h [db_get_dbhost]"
             }
 
-            #cd [file dirname $file]
+            cd [file dirname $file]
             set fp [open "|[file join [db_get_pgbin] psql] $pghost $pgport $pguser -f $file [db_get_database] $pgpass" "r"]
 
             while { [gets $fp line] >= 0 } {
