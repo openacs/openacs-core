@@ -43,10 +43,24 @@ ad_proc -public lc_parse_number {
 	return ""
     }
 
-    set dec [lc_get -locale $locale "decimal_point"]
+    set dec  [lc_get -locale $locale "decimal_point"]
     set thou [lc_get -locale $locale "mon_thousands_sep"][lc_get -locale $locale "thousands_sep"]
-    set neg [lc_get -locale $locale "negative_sign"]
-    set pos [lc_get -locale $locale "positive_sign"]
+    set neg  [lc_get -locale $locale "negative_sign"]
+    set pos  [lc_get -locale $locale "positive_sign"]
+
+    #
+    # Sanity check: decimal point must be different from the thousands
+    # separators. This test should be really either in regression
+    # testing or be forumulated as constraint after changing the
+    # message keys.  However, since a violation can lead to incorrect
+    # results, the safety check is here as well.
+    #
+    if {[string first $dec $thou] > -1} {
+	error "error in locale $locale: decimal point '$decimal_point' must be different\
+		from thousands separator\
+		(mon_thousands_sep '[lc_get -locale $locale mon_thousands_sep]'\
+		and thousands_sep '[lc_get -locale $locale thousands_sep]')"
+    }
 
     lang::util::escape_vars_if_not_null {dec thou neg pos}
 
