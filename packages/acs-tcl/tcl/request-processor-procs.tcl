@@ -1300,16 +1300,18 @@ ad_proc -public ad_conn {args} {
                         return 0
                     }
         	    peeraddr {
-        		# Get the address provided by a reverse proxy such as NGINX via 
-                        # X-Forwarded-For, if available
-        		set headers [ns_conn headers]
-        		set i [ns_set find $headers "X-Forwarded-For"]
-        		if {$i < 0 } {
-        		    # Use ns_conn
-        		    return [ns_conn $var]
-        		} else {
-        		    return [ns_set value $headers $i]
-        		}
+			if {[ns_config "ns/parameters" ReverseProxyMode false]} {
+			    # Try to get the address provided by a
+			    # reverse proxy such as NGINX via
+			    # X-Forwarded-For, if available
+			    set headers [ns_conn headers]
+			    set i [ns_set ifind $headers "X-Forwarded-For"]
+			    if {$i > -1 } {
+				return [ns_set value $headers $i]
+			    }
+			}
+			# return the physical peer address
+			return [ns_conn $var]
         	    }
                     default {
                         return [ns_conn $var]
