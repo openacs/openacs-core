@@ -9,7 +9,8 @@
 
     <version name="5.8.0" url="http://www.mayuli.com/acs-repository/download/apm/ref-language-5.8.0.apm">
         <owner url="mailto:jon@jongriffin.com">Jon Griffin</owner>
-        <summary>ISO 639-1 language reference data for acs-reference.</summary>
+	<release-date>2013-08-30</release-date>
+	<summary>ISO 639-1 language reference data for acs-reference.</summary>
         <vendor url="http://www.mayuli.com">Mayuli Enterprises, LLC</vendor>
         <description format="text/plain">This is the ISO 639-1 language reference data (with languages names in English).</description>
 
