@@ -10,7 +10,7 @@
     <version name="5.8.0" url="http://openacs.org/repository/download/apm/openacs-default-theme-5.8.0.apm">
         <owner url="mailto:dhogaza@pacifier.com">Don Baccus</owner>
         <summary>Provides the default &quot;plain&quot; and &quot;tabbed&quot; themes for OpenACS Subsites.</summary>
-        <release-date>2011-06-12</release-date>
+        <release-date>2013-08-30</release-date>
         <description format="text/plain">Provides the default &quot;plain&quot; and &quot;tabbed&quot; themes for OpenACS Subsites.   This has been moved out to a separate package, with availability recorded in the database, to make it easier for developer's to create their own themes and distribute and/or install them in package form.
 
 </description>

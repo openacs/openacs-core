@@ -11,7 +11,7 @@
         <owner url="mailto:dhogaza@pacifier.com">Don Baccus</owner>
         <summary>An interface for Site-wide administration of an OpenACS Installation.</summary>
         <maturity>3</maturity>
-        <release-date>2011-06-12</release-date>
+        <release-date>2013-08-30</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
         <license url="http://www.gnu.org/copyleft/gpl.html">GPL</license>
         <maturity>3</maturity>
