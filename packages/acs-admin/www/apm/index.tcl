@@ -70,6 +70,10 @@ template::list::create -name package_list \
             label "Ver."
             orderby "version_name"
         }
+        release_date {
+            label "Released"
+            orderby "release_date"
+        }
         status {
             label "Status"
         }
@@ -85,6 +89,7 @@ template::list::create -name package_list \
 set performance_p [parameter::get -package_id [ad_acs_kernel_id] -parameter PerformanceModeP -default 1] 
 set reload_links_p [ad_decode [ns_set iget [rp_getform] reload_links_p] \
                         "" 0 [ns_set iget [rp_getform] reload_links_p]]
+
 db_multirow -extend {package_url maintained status action_html} packages apm_table {} {
     set package_url [export_vars -base version-view {version_id}]
     set maintained [ad_decode $distribution_uri "" "Locally" "Externally"]
@@ -107,7 +112,7 @@ db_multirow -extend {package_url maintained status action_html} packages apm_tab
         if {!$performance_p} {
             lappend file_link_list "<a href=\"package-watch?package_key=$package_key\">watch all files</a>"
         } 
-        if { !$reload_links_p || [string equal [apm_version_load_status $version_id] "needs_reload"]} {
+        if { !$reload_links_p || [apm_version_load_status $version_id] eq "needs_reload"} {
             lappend file_link_list "<a href=\"version-reload?version_id=$version_id\">reload changed</a>"
         } 
     } 
