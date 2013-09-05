@@ -1031,7 +1031,7 @@ ad_proc -private api_tclcode_to_html {{-scope ""} {-proc_namespace ""} script} {
         }
 
         "\$" {
-            if {$in_comment || ([string index $data [expr {$i + 1}]] == " ")} {
+            if {$in_comment || ([string index $data $i+1] eq " ")} {
                 append html "\$"
             } else {
                 set varl [length_var [string range $data $i end]]
@@ -1054,7 +1054,7 @@ ad_proc -private api_tclcode_to_html {{-scope ""} {-proc_namespace ""} script} {
         }
 
         "\#" {
-            set prevchar [string index $data [expr {$i-1}]]
+            set prevchar [string index $data $i-1]
             if {$proc_ok && !$in_comment && [regexp {[\s;]} $prevchar]} {
                 set in_comment 1
                 set proc_ok 0
@@ -1147,7 +1147,7 @@ ad_proc -private api_tclcode_to_html {{-scope ""} {-proc_namespace ""} script} {
                 # Hack for nasty regexp stuff
                 if {"regexp" eq $proc_name || "regsub" eq $proc_name} {
                     set regexpl [length_regexp [string range $data $i end]]
-                    append html [string range $data [expr {$i+1}] [expr {$i + $regexpl}]]
+                    append html [string range $data $i+1 $i+$regexpl]
                     incr i $regexpl
                 }
             } else {
