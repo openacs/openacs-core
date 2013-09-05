@@ -486,22 +486,22 @@ ad_proc -public api_proc_documentation {
 	lappend command_line $pretty_proc_name
 	foreach switch $doc_elements(switches) {
 	  if {$xotcl} {
-	    if { [lsearch $flags($switch) "boolean"] >= 0} {
+	    if {"boolean" in $flags($switch)} {
 	      set value "<i>on|off</i> "
-	    } elseif { [lsearch $flags($switch) "switch"] >= 0} {
+	    } elseif {"switch" in $flags($switch)} {
 	      set value ""
 	    } else {
 	      set value "</i>$switch</i> "
 	    }
-	    if { [lsearch $flags($switch) "required"] >= 0} {
+	    if {"required" in $flags($switch)} {
 	      lappend command_line "-$switch $value"
 	    } else {
 	      lappend command_line "\[ -$switch $value\]"
 	    }
 	  } else {
-	    if { [lsearch $flags($switch) "boolean"] >= 0} {
+	    if {"boolean" in $flags($switch)} {
 	                lappend command_line "\[ -$switch \]"
-		} elseif { [lsearch $flags($switch) "required"] >= 0 } {
+		} elseif {"required" in $flags($switch)} {
 			lappend command_line "-$switch <i>$switch</i>"
 		} else {
 			lappend command_line "\[ -$switch <i>$switch</i> \]"
@@ -552,7 +552,7 @@ ad_proc -public api_proc_documentation {
 		append out "<dt><b>Switches:</b></dt><dd><dl>\n"
 		foreach switch $doc_elements(switches) {
 			append out "<dt><b>-$switch</b>"
-			if { [lsearch $flags($switch) "boolean"] >= 0 } {
+			if {"boolean" in $flags($switch)} {
 				append out " (boolean)"
 			} 
 			
@@ -561,7 +561,7 @@ ad_proc -public api_proc_documentation {
 				append out " (defaults to <code>\"$default_values($switch)\"</code>)"
 			} 
 			
-			if { [lsearch $flags($switch) "required"] >= 0 } {
+			if {"required" in $flags($switch)} {
 				append out " (required)"
 			} else {
 				append out " (optional)"
@@ -1035,7 +1035,7 @@ ad_proc -private api_tclcode_to_html {{-scope ""} {-proc_namespace ""} script} {
                 append html "\$"
             } else {
                 set varl [length_var [string range $data $i end]]
-                append html "$HTML(var)[string range $data $i [expr {$i + $varl}]]$HTML(/var)"
+                append html "$HTML(var)[string range $data $i $i+$varl]$HTML(/var)"
                 incr i $varl
             }
         }
@@ -1110,13 +1110,13 @@ ad_proc -private api_tclcode_to_html {{-scope ""} {-proc_namespace ""} script} {
             if {$proc_ok} {
                 set proc_ok 0
                 set procl [length_proc [string range $data $i end]]
-                set proc_name [string range $data $i [expr {$i + $procl}]]
+                set proc_name [string range $data $i $i+$procl]
 
-	        if {[lsearch -exact $KEYWORDS $proc_name] != -1 ||
+	        if {$proc_name in $KEYWORDS $proc_name ||
                     ([regexp {^::(.*)} $proc_name match had_colons] && 
-		     [lsearch -exact $KEYWORDS $had_colons] != -1)} {
+		     $had_colons in $KEYWORDS $had_colons)} {
 		  append html "$HTML(procs)${proc_name}$HTML(/procs)"
-                } elseif {[lsearch -exact $XOTCL_KEYWORDS $proc_name] != -1 } {
+                } elseif {$proc_name in $XOTCL_KEYWORDS} {
 		  append html "$HTML(procs)${proc_name}$HTML(/procs)"
                 } elseif {[api_is_xotcl_object $scope $proc_name]} {
 		  set url [::xotcl::api object_url \
@@ -1130,11 +1130,11 @@ ad_proc -private api_tclcode_to_html {{-scope ""} {-proc_namespace ""} script} {
  			'$url'>$HTML(procs)${proc_name}$HTML(/procs)</A>"
                 } elseif {[string match "*__arg_parser" $proc_name]} {
 		  append html "$HTML(procs)${proc_name}$HTML(/procs)"
-                } elseif {[lsearch -exact $COMMANDS ::${proc_namespace}::${proc_name}] != -1}  {
+                } elseif {"::${proc_namespace}::${proc_name}" in $COMMANDS}  {
 		  set url [api_proc_url ${proc_namespace}::${proc_name}]
 		  append html "<A style='text-decoration:none' href=\
 			'$url'>$HTML(procs)${proc_name}$HTML(/procs)</A>"
-                } elseif {[lsearch -exact $COMMANDS ::$proc_name] != -1}  {
+                } elseif {"::$proc_name" in $COMMANDS}  {
 		  set url [api_proc_url $proc_name]
 		  append html "<A style='text-decoration:none' href=\
 			'$url'>$HTML(procs)${proc_name}$HTML(/procs)</A>"
