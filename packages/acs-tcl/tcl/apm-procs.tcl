@@ -689,7 +689,7 @@ ad_proc -private apm_load_queries {
             #             !( 1 ^ 0 )             = Nope
             #             !( 1 ^ 1 )             = Yep
             #
-            if {![expr {$test_queries_p ^ $is_test_file_p}] &&
+            if {!($test_queries_p ^ $is_test_file_p) &&
                 $file_type eq "query_file" &&
                 ($file_db_type eq "" || $file_db_type eq [db_type])} {
 	        db_qd_load_query_file $file

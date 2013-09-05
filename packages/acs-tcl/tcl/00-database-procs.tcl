@@ -848,7 +848,7 @@ ad_proc -private db_bind_var_quoted_p { sql bind_start_idx bind_end_idx} {
 
 } {
     foreach {quote_start_idx quote_end_idx} [db_get_quote_indices $sql] {
-        if { [expr {$bind_start_idx > $quote_start_idx}] && [expr {$bind_end_idx < $quote_end_idx}]} {
+        if { $bind_start_idx > $quote_start_idx && $bind_end_idx < $quote_end_idx } {
             return 1
         }
     }
@@ -1063,7 +1063,7 @@ ad_proc -private db_exec { type db statement_name pre_sql {ulevel 2} args } {
 
     # JCD: we log the clicks, dbname, query time, and statement to catch long running queries.
     # If we took more than 5 seconds yack about it.
-    if { [expr {[clock clicks -milliseconds] - $start_time}] > 5000} {
+    if { [clock clicks -milliseconds] - $start_time > 5000 } {
         ns_log Warning "db_exec: longdb [expr {[clock seconds] - $start_time_fine}] seconds $db $type $statement_name"
     } else { 
         ns_log Debug "db_exec: timing [expr {[clock seconds] - $start_time_fine}] seconds $db $type $statement_name"
@@ -2437,12 +2437,12 @@ ad_proc -public db_get_port {{ -dbn "" }} {
     }
     set first_colon_pos [string first ":" $datasource]
 
-    if { $first_colon_pos == $last_colon_pos || [expr {$last_colon_pos - $first_colon_pos}] == 1 } {
+    if { $first_colon_pos == $last_colon_pos || ($last_colon_pos - $first_colon_pos) == 1 } {
 	# No port specified
 	return ""
     }
 
-    return [string range $datasource [expr {$first_colon_pos + 1}] [expr {$last_colon_pos - 1}] ]
+    return [string range $datasource $first_colon_pos+1 $last_colon_pos-1]
 }
 
 

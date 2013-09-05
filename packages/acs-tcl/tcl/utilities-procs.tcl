@@ -4053,7 +4053,7 @@ ad_proc ad_var_type_check_number_p {value} {
     #
     <pre>
 } {
-    if { [catch {expr 1.0 * $value}] } {
+    if { [catch {expr {1.0 * $value}}] } {
         return 0
     } else {
         return 1
@@ -4224,7 +4224,7 @@ ad_proc -public util::array_list_spec_pretty {
 } {
     set output {}
     foreach { elm val } $list {
-        if { [llength $val] > 1 && [expr {[llength $val] % 2}] == 0  } {
+        if { [llength $val] > 1 && [llength $val] % 2 == 0  } {
             append output [string repeat " " $indent] "$elm \{" \n
 
             append output [util::array_list_spec_pretty $val [expr {$indent + 4}]]
@@ -4307,10 +4307,10 @@ ad_proc -public util::age_pretty {
         set age_seconds 60
     }
 
-   if { $age_seconds < [expr {$hours_limit * 60 * 60}] } {
+   if { $age_seconds < $hours_limit * 60 * 60 } {
         set hours [expr {abs($age_seconds / 3600)}]
         set minutes [expr {round(($age_seconds% 3600)/60.0)}]
-        if {[expr {$hours < 24}]} {
+        if {$hours < 24} {
             switch $hours {
                 0 { set result "" }
                 1 { set result "One hour " }
@@ -4330,7 +4330,7 @@ ad_proc -public util::age_pretty {
         }
 
         append result "ago"
-    } elseif { $age_seconds < [expr {$days_limit * 60 * 60 * 24}] } {
+    } elseif { $age_seconds < $days_limit * 60 * 60 * 24 } {
         set result [lc_time_fmt $timestamp_ansi $mode_2_fmt $locale]
     } else {
         set result [lc_time_fmt $timestamp_ansi $mode_3_fmt $locale]

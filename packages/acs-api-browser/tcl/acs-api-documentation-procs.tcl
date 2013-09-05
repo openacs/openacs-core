@@ -951,7 +951,7 @@ ad_proc -private api_tclcode_to_html {{-scope ""} {-proc_namespace ""} script} {
         while {$curchar != "\$" && $curchar != "\[" &&
                ($curchar ne "\{" || !$found_regexp)} {
             if {$curchar eq "\{"} {set found_regexp 1}
-            if {[string match "-start" [string range $data $i [expr {$i+5}]]]} {
+            if {[string range $data $i $i+5] eq "-start"} {
                 incr i [length_exp [string range $data $i end]] ;# -start
                 incr i [length_exp [string range $data $i end]] ;# spaces
                 incr i [length_exp [string range $data $i end]] ;# expression - it could be a var

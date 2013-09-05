@@ -404,7 +404,7 @@ ad_proc -private util_close_html_tags {
             if { ! $discard } {
                 # figure out if we can break with the pretag chunk 
                 if { $break_soft } {
-                    if {! $nobr && [expr {[string length $pretag] + $out_len}] > $break_soft } {
+                    if {! $nobr && [string length $pretag] + $out_len > $break_soft } {
                         # first chop pretag to the right length
                         set pretag [string range $pretag 0 [expr {$break_soft - $out_len - [string length $ellipsis]}]]
                         # clip the last word
@@ -412,12 +412,12 @@ ad_proc -private util_close_html_tags {
                         append out [string range $pretag 0 $break_soft]
                         set broken_p 1
                         break
-                    } elseif { $nobr &&  [expr {[string length $pretag] + $out_len}] > $break_hard } {
+                    } elseif { $nobr &&  [string length $pretag] + $out_len > $break_hard } {
                         # we are in a nonbreaking tag and are past the hard break
                         # so chop back to the point we got the nobr tag...
                         set tagptr $nobr_tagptr 
                         if { $nobr_out_point > 0 } { 
-                            set out [string range $out 0 [expr {$nobr_out_point - 1}]]
+                            set out [string range $out 0 $nobr_out_point-1]
                         } else { 
                             # here maybe we should decide if we should keep the tag anyway 
                             # if zero length result would be the result...
@@ -649,7 +649,7 @@ attribute_array(heres)='  something for   you to = "consider" '</pre>
         if { [incr count] > 1000 } {
             error "There appears to be a programming bug in ad_parse_html_attributes_upvar: We've entered an infinite loop. We are here: \noffset $i: [string range $html $i [expr {$i + 60}]]"
         }
-        if { [string equal [string range $html $i [expr { $i + 1 }]] "/>"] } {
+        if { [string range $html $i $i+1] eq "/>" } {
             # This is an XML-style tag ending: <... />
             break
         }
@@ -857,16 +857,16 @@ ad_proc -public ad_html_to_text {
         #     - alpha or
         #     - a slash, and then alpha
         # Otherwise, it's probably just a lone < character
-        if { $i >= [expr {$length-1}] || \
-                 (![string is alpha [string index $html [expr {$i + 1}]]] && \
-		      [string index $html [expr {$i + 1}]] ne "!" && \
-                      (![string equal "/" [string index $html [expr {$i + 1}]]] || \
-                           ![string is alpha [string index $html [expr {$i + 2}]]])) } {
+        if { $i >= $length - 1 || \
+                 (![string is alpha [string index $html $i+1]] && \
+		      [string index $html $i+1] ne "!" && \
+                      ("/" ne [string index $html $i+1] || \
+                           ![string is alpha [string index $html $i+2]])) } {
             # Output the < and continue with next character
             ad_html_to_text_put_text output "<"
             set last_tag_end [incr i]
             continue
-        } elseif {[string match "!--*" [string range $html [expr {$i + 1}] end]]} {
+        } elseif {[string match "!--*" [string range $html $i+1 end]]} {
 	    # handle HTML comments, I can't beleive noone noticed this before.
 	    # this code maybe not be elegant but it works
 	    
@@ -1215,7 +1215,7 @@ ad_proc -private ad_html_to_text_put_text { output_var text } {
                 }
             }
             default {
-                if { [expr {$output(linelen) + $wordlen}] > $output(maxlen) && $output(maxlen) != 0 } {
+                if { $output(linelen) + $wordlen > $output(maxlen) && $output(maxlen) != 0 } {
                     ad_html_to_text_put_newline output
                 }
                 append output(text) "$word"
@@ -1353,7 +1353,7 @@ ad_proc wrap_string {input {threshold 80}} {
             set start_of_line_index [expr {$start_of_line_index + $first_new_line_pos + 1}]
             continue
         }
-        if { [expr {$start_of_line_index + $threshold + 1}] >= [string length $input] } {
+        if { $start_of_line_index + $threshold + 1 >= [string length $input] } {
             # we're on the last line and it is < threshold so just return it
             lappend result_rows $this_line
             return [join $result_rows "\n"]
@@ -1692,7 +1692,7 @@ ad_proc -public string_truncate {
             set end_index [expr $len-[string length $ellipsis]-1]
             
             # Back up to the nearest whitespace
-            if { ![string is space [string index $string [expr {$end_index + 1}]]] } {
+            if { ![string is space [string index $string $end_index+1]] } {
                 while { $end_index >= 0 && ![string is space [string index $string $end_index]] } {
                     incr end_index -1
                 }

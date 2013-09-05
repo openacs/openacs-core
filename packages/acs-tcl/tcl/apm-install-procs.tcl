@@ -1986,7 +1986,7 @@ ad_proc -public apm_upgrade_logic {
 
     @author Lars Pind
 } {
-    if { [expr {[llength $spec] % 3}] != 0 } {
+    if { [llength $spec] % 3 != 0 } {
         error "The length of spec should be dividable by 3"
     }
 
@@ -2396,7 +2396,7 @@ ad_proc -private apm::package_version::attributes::validate_maturity { maturity 
     if { $maturity ne "" } {
         if { ![regexp {^-?[0-9]+$} $maturity] } {
             set error_message "Maturity must be integer"
-        } elseif { [expr {$maturity < -1 || $maturity > 3}] } {
+        } elseif { $maturity < -1 || $maturity > 3 } {
             set error_message "Maturity must be integer between -1 and 3"
         }
     }

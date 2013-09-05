@@ -394,7 +394,7 @@ proc dom::document {method token args} {
 	configure {
 	    if {[llength $args] == 1} {
 		return [document cget $token [lindex $args 0]]
-	    } elseif {[expr {[llength $args] % 2}]} {
+	    } elseif {[llength $args] % 2} {
 		return -code error "no value specified for option \"[lindex $args end]\""
 	    } else {
 		foreach {option value} $args {
@@ -866,7 +866,7 @@ proc dom::node {method token args} {
 
 	    if {[llength $args] == 1} {
 		return [document cget $token [lindex $args 0]]
-	    } elseif {[expr {[llength $args] % 2}]} {
+	    } elseif {[llength $args] % 2} {
 		return -code error "no value specified for option \"[lindex $args end]\""
 	    } else {
 		foreach {option value} $args {
@@ -1204,7 +1204,7 @@ proc dom::element {method token args} {
 	configure {
 	    if {[llength $args] == 1} {
 		return [document cget $token [lindex $args 0]]
-	    } elseif {[expr {[llength $args] % 2}]} {
+	    } elseif {[llength $args] % 2} {
 		return -code error "no value specified for option \"[lindex $args end]\""
 	    } else {
 		foreach {option value} $args {
@@ -1438,7 +1438,7 @@ proc dom::processinginstruction {method token args} {
 	configure {
 	    if {[llength $args] == 1} {
 		return [document cget $token [lindex $args 0]]
-	    } elseif {[expr {[llength $args] % 2}]} {
+	    } elseif {[llength $args] % 2} {
 		return -code error "no value specified for option \"[lindex $args end]\""
 	    } else {
 		foreach {option value} $args {

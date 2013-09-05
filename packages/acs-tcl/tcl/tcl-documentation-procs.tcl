@@ -629,7 +629,7 @@ ad_proc -public ad_page_contract {
 		    return -code error "Missing or misplaced end parenthesis for flag '$flag' on argument '$name'"
 		}
 		set flag_parameters [string range $flag [expr {$left_paren + 1}] [expr {[string length $flag]-2}]]
-		set flag [string range $flag 0 [expr {$left_paren - 1}]]
+		set flag [string range $flag 0 $left_paren-1]
 
 		lappend flag_list $flag
 		foreach flag_parameter [split $flag_parameters "|"] {
@@ -715,8 +715,8 @@ ad_proc -public ad_page_contract {
 	set root_dir [nsv_get acs_properties root_directory]
 	set script [info script]
 	set root_length [string length $root_dir]
-	if { ![string compare $root_dir [string range $script 0 [expr { $root_length - 1 }]]] } {
-	    set script [string range $script [expr { $root_length + 1 }] end]
+	if { ![string compare $root_dir [string range $script 0 $root_length-1 ]] } {
+	    set script [string range $script $root_length+1 end]
 	}
 
 	error [array get doc_elements] "ad_page_contract documentation"

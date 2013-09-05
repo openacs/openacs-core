@@ -802,7 +802,7 @@ ad_proc -private db_qd_relative_path_p {path} {
     set root_path_length [string length $root_path]
 
     # Check if the path starts with the root
-    if {[string range $path 0 [expr {$root_path_length - 1}]] == $root_path} {
+    if {[string range $path 0 $root_path_length-1] eq $root_path} {
 	return 0
     } else {
 	return 1
