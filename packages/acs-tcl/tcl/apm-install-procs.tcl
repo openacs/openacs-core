@@ -2412,7 +2412,7 @@ ad_proc -private apm::package_version::attributes::maturity_int_to_text { maturi
 } {
     if {[exists_and_not_null maturity]} {
 
-        if { ![expr {$maturity >= -1 && $maturity <= 3}] } {
+        if { !($maturity >= -1 && $maturity <= 3) } {
             error "Maturity must be between -1 and 3 but is \"$maturity\""
         }
 
