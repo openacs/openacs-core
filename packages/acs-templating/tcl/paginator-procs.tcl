@@ -229,7 +229,7 @@ ad_proc -private template::paginator::init { statement_name name query {print_p 
 
           lappend row_ids [lindex $row 0]
 
-          if { [expr {$i % $page_size}] == 0 } {
+          if { $i % $page_size == 0 } {
               lappend context_ids [lindex $row 1]
           }
           incr i

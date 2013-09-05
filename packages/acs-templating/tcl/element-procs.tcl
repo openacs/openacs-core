@@ -262,7 +262,7 @@ ad_proc -public template::element::create { form_id element_id args } {
     }
   } 
 
-  if { [string equal $opts(widget) "hidden"] 
+  if { $opts(widget) eq "hidden"
        && [info exists opts(sign)] 
        && $opts(sign)
    } { 
@@ -476,7 +476,7 @@ ad_proc -private template::element::validate { form_id element_id } {
       # a single anonymous validation check was specified
       set element(validate) [linsert $element(validate) 0 "anonymous"]
 
-    } elseif { [expr {$v_length % 3}] } {
+    } elseif { $v_length % 3 } {
 
       error "Invalid number of parameters to validate option: 
              $element(validate) (Length is $v_length)"

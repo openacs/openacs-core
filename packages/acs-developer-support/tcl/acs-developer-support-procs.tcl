@@ -382,7 +382,7 @@
      foreach name $names {
          if { [regexp {^([0-9]+)\.start$} $name match request] 
               && $now - [lindex [nsv_get ds_request $name] 0] > $lifetime } {
-             if {[expr {$request > $max_request}]} { 
+             if {$request > $max_request} { 
                  set max_request $request
              }
          }
