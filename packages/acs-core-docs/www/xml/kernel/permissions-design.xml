@@ -367,7 +367,7 @@ other presents an error page.</para>
 <para>To receive a true or false value, Tcl code should call:</para>
 
 <programlisting>
-ad_permission_p $object_id $object_type $method -user_id $user_id
+permission::permission_p -object_id $object_id -party_id $user_id -privilege $method
 </programlisting>
 
 <para>If the <computeroutput>user_id</computeroutput> argument is left out, then the currently logged in

@@ -53,7 +53,7 @@ if { $admin_p } {
     set delete_p 1
 } else {
     # user doesn't have admin -- now find out if they have delete.
-    set delete_p [ad_permission_p -user_id $user_id $group_id "delete"]
+    set delete_p [permission::permission_p -party_id $user_id -object_id $group_id -privilege "delete"]
 }
 
 set actions {}

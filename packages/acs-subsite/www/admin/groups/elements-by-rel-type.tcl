@@ -24,8 +24,8 @@
 # @cvs-id $Id$
 
 set user_id [ad_conn user_id]
-set admin_p [ad_permission_p $group_id "admin"]
-set create_p [ad_permission_p $group_id "create"]
+set admin_p [permission::permission_p -object_id $group_id -privilege "admin"]
+set create_p [permission::permission_p -object_id $group_id -privilege "create"]
 
 set return_url "[ad_conn url]?[ad_conn query]"
 set return_url_enc [ad_urlencode $return_url]

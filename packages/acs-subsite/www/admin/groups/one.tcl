@@ -33,8 +33,8 @@ ad_page_contract {
 }
 
 set user_id [ad_conn user_id]
-set write_p [ad_permission_p $group_id "write"]
-set admin_p [ad_permission_p $group_id "admin"]
+set write_p [permission::permission_p -object_id $group_id -privilege "write"]
+set admin_p [permission::permission_p -object_id $group_id -privilege "admin"]
 
 set return_url "[ad_conn url]?[ad_conn query]"
 set return_url_enc [ad_urlencode $return_url]

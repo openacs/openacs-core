@@ -22,13 +22,13 @@ set user_id [ad_conn user_id]
 # We need to know both: 
 #    - does user have admin on group?
 #    - does user have delete on group?
-set admin_p [ad_permission_p -user_id $user_id $group_id "admin"]
+set admin_p [permission::permission_p -party_id $user_id -object_id $group_id -privilege "admin"]
 if {$admin_p} {
     # We can skip the permissions check for "delete" because user had admin.
     set delete_p 1
 } else {
     # user doesn't have admin -- now find out if they have delete.
-    set delete_p [ad_permission_p -user_id $user_id $group_id "delete"]
+    set delete_p [permission::permission_p -party_id $user_id -object_id $group_id -privilege "delete"]
 }
 
 # Pull out all the relations of the specified type

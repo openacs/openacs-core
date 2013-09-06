@@ -64,6 +64,6 @@ db_1row select_segment_info {
 }
 set number_elements [util_commify_number $number_elements]
 
-set admin_p [ad_permission_p $segment_id "admin"]
+set admin_p [permission::permission_p -object_id $segment_id -privilege "admin"]
 
 ad_return_template

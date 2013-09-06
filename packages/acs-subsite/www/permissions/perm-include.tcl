@@ -6,7 +6,7 @@
 
 set user_id [ad_conn user_id]
 
-set admin_p [ad_permission_p $object_id admin]
+set admin_p [permission::permission_p -object_id $object_id -privilege admin]
 
 if { (![info exists return_url] || $return_url eq "") } {
     set return_url [ad_return_url]

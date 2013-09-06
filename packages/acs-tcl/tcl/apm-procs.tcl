@@ -1879,7 +1879,7 @@ ad_proc -private apm_application_new_checkbox {} {
     }
 
     # If this is a site-wide admin, offer a link to the package manager
-    if { [ad_permission_p 0 admin] } {
+    if { [permission::permission_p -object_id 0 -privilege admin] } {
         append html_string "<option value=\"/new\">--Install new package--</option>\n"
     }
 

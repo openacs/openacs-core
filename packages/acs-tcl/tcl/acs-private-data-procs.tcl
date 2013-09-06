@@ -32,7 +32,7 @@ namespace eval acs_privacy {
         check if a user can access an object's private data
     } {
         if {[privacy_control_enabled_p]} {
-            return [ad_permission_p -user_id $user_id $object_id read_private_data]
+            return [permission::permission_p -party_id $user_id -object_id $object_id -privilege read_private_data]
         } else {
             # backwards compatibility
             return 1

@@ -33,7 +33,7 @@ ad_page_contract {
 }
 
 set user_id [ad_conn user_id]
-set create_p [ad_permission_p -user_id $user_id $group_id "create"]
+set create_p [permission::permission_p -party_id $user_id -object_id $group_id -privilege "create"]
 set return_url_enc [ad_urlencode "[ad_conn url]?[ad_conn query]"]
 set rel_type_enc [ad_urlencode $rel_type]
 

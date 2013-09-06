@@ -20,7 +20,7 @@ ad_page_contract {
 
 ad_require_permission $constraint_id read
 
-set admin_p [ad_permission_p $constraint_id admin]
+set admin_p [permission::permission_p -object_id $constraint_id -privilege admin]
 
 set package_id [ad_conn package_id]
 

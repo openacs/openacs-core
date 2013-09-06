@@ -25,7 +25,7 @@ namespace eval party {
 	@creation-date 10/2000
 
     } {
-	return [ad_permission_p -user_id $user_id $party_id $privilege]
+	return [permission::permission_p -party_id $user_id -object_id $party_id -privilege $privilege]
     }
 
 
