@@ -12,7 +12,7 @@ ad_page_contract {
   root_id:integer,optional
 }
 
-ad_require_permission $package_id read
+permission::require_permission -object_id $package_id -privilege read
 
 site_node::mount -node_id $node_id -object_id $package_id
 

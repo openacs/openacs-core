@@ -1258,10 +1258,10 @@ ad_proc -public ad_form_new_p {
     Example usage:
     <pre>
     if { [ad_form_new_p -key item_id] } {
-        ad_require_permission $package_id create
+        permission::require_permission -object_id $package_id -privilege create
         set page_title "New Item"
     } else {
-        ad_require_permission $item_id write
+        permission::require_permission -object_id $item_id -privilege write
         set page_title "Edit Item"
     }
 

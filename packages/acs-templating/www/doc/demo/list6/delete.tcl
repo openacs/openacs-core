@@ -10,7 +10,7 @@ ad_page_contract {
 }
 
 foreach template_demo_note_id $template_demo_note_id {
-    ad_require_permission $template_demo_note_id delete
+    permission::require_permission -object_id $template_demo_note_id -privilege delete
 
     package_exec_plsql -var_list [list [list template_demo_note_id $template_demo_note_id]] template_demo_note del
 }

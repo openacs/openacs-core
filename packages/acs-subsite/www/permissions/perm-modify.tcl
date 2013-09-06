@@ -6,7 +6,7 @@ ad_page_contract {} {
 }
 
 
-ad_require_permission $object_id admin
+permission::require_permission -object_id $object_id -privilege admin
 
 # entried in 'perm' have the form "${party_id}_${privilege}"
 

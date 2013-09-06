@@ -35,7 +35,7 @@ if { $rel_type ne "" } {
     ad_script_abort
 } 
 
-ad_require_permission $group_id "read"
+permission::require_permission -object_id $group_id -privilege "read"
 
 set context [list [list "" "Relational segments"] "Add segment"]
 

@@ -12,7 +12,7 @@ ad_page_contract {
     {return_url "."}
 }
 
-ad_require_permission $package_id admin
+permission::require_permission -object_id $package_id -privilege admin
 
 db_1row package_info {}
 

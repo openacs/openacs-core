@@ -14,7 +14,7 @@ ad_page_contract {
 }
 
 set user_id [auth::require_login]
-ad_require_permission $object_id admin
+permission::require_permission -object_id $object_id -privilege admin
 
 # RBM: Check if this is the Main Site and prevent the user from being
 #      able to remove Read permission on "The Public" and locking

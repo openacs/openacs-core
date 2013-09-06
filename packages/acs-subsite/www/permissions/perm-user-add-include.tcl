@@ -7,7 +7,7 @@ ad_page_contract {
 
 # check they have read permission on this file
 
-ad_require_permission $object_id admin
+permission::require_permission -object_id $object_id -privilege admin
 
 # TODO:
 # parties, select privilges, css, clean up

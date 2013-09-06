@@ -33,7 +33,7 @@ ad_page_contract {
 
 
 # Make sure we are creating a segment on a group we can actually see
-ad_require_permission $group_id "read"
+permission::require_permission -object_id $group_id -privilege "read"
 
 db_transaction {
     set segment_id [rel_segments_new -context_id $group_id $group_id $rel_type $segment_name]

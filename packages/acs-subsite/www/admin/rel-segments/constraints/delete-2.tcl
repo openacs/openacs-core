@@ -14,7 +14,7 @@ ad_page_contract {
     { return_url "" }
 }
 
-ad_require_permission $constraint_id delete
+permission::require_permission -object_id $constraint_id -privilege delete
 
 set package_id [ad_conn package_id]
 

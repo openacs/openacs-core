@@ -12,7 +12,7 @@ ad_page_contract {
     {return_url ""}
 }
 
-ad_require_permission $object_id admin
+permission::require_permission -object_id $object_id -privilege admin
 
 # The object name is used in various localized messages below
 set name [acs_object_name $object_id]

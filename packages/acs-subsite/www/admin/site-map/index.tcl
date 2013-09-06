@@ -29,7 +29,7 @@ set parent_id $node(parent_id)
 set object_id $node(object_id)
 
 if {$object_id ne ""} {
-    ad_require_permission $object_id admin
+    permission::require_permission -object_id $object_id -privilege admin
 }
 
 if {$new_parent ne ""} {

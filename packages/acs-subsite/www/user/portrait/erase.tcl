@@ -20,7 +20,7 @@ if {$user_id eq "" || $user_id eq $current_user_id} {
     set admin_p 1
 }
 
-ad_require_permission $user_id "write"
+permission::require_permission -object_id $user_id -privilege "write"
 
 set doc(title) [_ acs-subsite.Erase]
 if {$admin_p} {

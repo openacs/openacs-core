@@ -5,7 +5,7 @@ ad_page_contract {
     {member_state:notnull}
 }
 
-ad_require_permission $rel_id "admin"
+permission::require_permission -object_id $rel_id -privilege "admin"
 
 membership_rel::change_state \
     -rel_id $rel_id \

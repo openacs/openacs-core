@@ -35,7 +35,7 @@ ad_page_contract {
 set subsite_group_id [application_group::group_id_from_package_id]
 
 
-ad_require_permission $group_id "read"
+permission::require_permission -object_id $group_id -privilege "read"
 
 set context [list [list "[ad_conn package_url]admin/rel-segments/" "Relational segments"] "Add segment"]
 

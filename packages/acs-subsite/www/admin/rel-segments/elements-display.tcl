@@ -1,5 +1,5 @@
 # included from elements.
-ad_require_permission $segment_id "read"
+permission::require_permission -object_id $segment_id -privilege "read"
 
 set write_p [permission::permission_p -object_id $segment_id -privilege "write"]
 

@@ -11,7 +11,7 @@ ad_page_contract {
   {application_url ""}
 }
 
-ad_require_permission $object_id admin
+permission::require_permission -object_id $object_id -privilege admin
 
 if {[llength $revoke_list] == 0} {
   ad_returnredirect "./?[export_url_vars object_id]"

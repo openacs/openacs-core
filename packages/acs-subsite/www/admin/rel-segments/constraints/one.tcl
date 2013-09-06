@@ -18,7 +18,7 @@ ad_page_contract {
     req_rel:onerow
 }
 
-ad_require_permission $constraint_id read
+permission::require_permission -object_id $constraint_id -privilege read
 
 set admin_p [permission::permission_p -object_id $constraint_id -privilege admin]
 
