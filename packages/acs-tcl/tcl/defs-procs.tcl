@@ -229,7 +229,7 @@ ad_proc -deprecated ad_header {
     @see   Documentation on the site master template for the proper way to standardize page headers
 } {
     
-    #    if {[ad_parameter MenuOnUserPagesP pdm] == 1} {
+    #    if {[parameter::get -parameter MenuOnUserPagesP -default pdm] == 1} {
     #	return [ad_header_with_extra_stuff -focus $focus $page_title [ad_pdm] [ad_pdm_spacer]]
     #    } else {
     #    }
@@ -336,7 +336,7 @@ ad_proc -deprecated ad_admin_header {
     @see  Documentation on the site master template for the proper way to standardize page headers
 } {
     
-    # if {[ad_parameter -package_id [ad_acs_kernel_id]  MenuOnAdminPagesP pdm] == 1} {
+    # if {[parameter::get -package_id [ad_acs_kernel_id] -parameter MenuOnAdminPagesP -default pdm] == 1} {
 	
 	# return [ad_header_with_extra_stuff -focus $focus $page_title [ad_pdm "admin" 5 5] [ad_pdm_spacer "admin"]]
 	
