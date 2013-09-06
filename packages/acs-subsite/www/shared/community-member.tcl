@@ -94,8 +94,8 @@ and a.rel_type = 'user_portrait_rel'"]} {
     }
 }
 
-
-if { $priv_email <= [ad_privacy_threshold] } {
+# priv_email seems obsolete, since ad_privacy_threshold is deprecated
+if { [ad_conn user_id] > 0 } {
     set show_email_p 1
 } else {
     set show_email_p 0
