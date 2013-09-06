@@ -1112,9 +1112,9 @@ ad_proc -private api_tclcode_to_html {{-scope ""} {-proc_namespace ""} script} {
                 set procl [length_proc [string range $data $i end]]
                 set proc_name [string range $data $i $i+$procl]
 
-	        if {$proc_name in $KEYWORDS $proc_name ||
+	        if {$proc_name in $KEYWORDS ||
                     ([regexp {^::(.*)} $proc_name match had_colons] && 
-		     $had_colons in $KEYWORDS $had_colons)} {
+		     $had_colons in $KEYWORDS)} {
 		  append html "$HTML(procs)${proc_name}$HTML(/procs)"
                 } elseif {$proc_name in $XOTCL_KEYWORDS} {
 		  append html "$HTML(procs)${proc_name}$HTML(/procs)"
