@@ -574,8 +574,8 @@ ad_proc -private ds_replace_get_user_procs { enabled_p } {
 		ad_set_client_property developer-support user_id [ad_conn user_id]
 	    }
             rename ad_conn orig_ad_conn
-	    rename ad_get_user_id orig_ad_get_user_id
-	    rename ad_verify_and_get_user_id orig_ad_verify_and_get_user_id
+	    #rename ad_get_user_id orig_ad_get_user_id
+	    #rename ad_verify_and_get_user_id orig_ad_verify_and_get_user_id
 	    
             proc ad_conn { args } {
 	        ds_conn {*}$args
@@ -583,9 +583,9 @@ ad_proc -private ds_replace_get_user_procs { enabled_p } {
 	    proc ad_get_user_id {} {
                 ds_get_user_id
 	    }
-	    proc ad_verify_and_get_user_id {} {
-                ds_get_user_id
-	    }
+	    #proc ad_verify_and_get_user_id {} {
+            #    ds_get_user_id
+	    #}
 	}
     } else {
         #ds_comment "Disabling user-switching"
@@ -593,11 +593,11 @@ ad_proc -private ds_replace_get_user_procs { enabled_p } {
             rename ad_conn {}
             rename orig_ad_conn ad_conn
 
-	    rename ad_get_user_id {}
-	    rename orig_ad_get_user_id ad_get_user_id
+	    #rename ad_get_user_id {}
+	    #rename orig_ad_get_user_id ad_get_user_id
 
-	    rename ad_verify_and_get_user_id {}
-	    rename orig_ad_verify_and_get_user_id ad_verify_and_get_user_id
+	    #rename ad_verify_and_get_user_id {}
+	    #rename orig_ad_verify_and_get_user_id ad_verify_and_get_user_id
 	}
     }
 }

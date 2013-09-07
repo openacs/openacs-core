@@ -14,8 +14,4 @@ set file_selector_link [export_vars -base file-selector \
 			    {fs_package_id folder_id selector_type file_types}]
 set fs_found 1
 
-#set user_id [ad_verify_and_get_user_id]
-#permission::require_permission -party_id $user_id -object_id $fs_package_id \
-#    -privilege "admin"
-
 ad_return_template
