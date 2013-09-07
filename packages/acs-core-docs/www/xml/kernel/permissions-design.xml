@@ -374,7 +374,7 @@ permission::permission_p -object_id $object_id -party_id $user_id -privilege $me
 user is checked. To create an error page, Tcl code should call:</para>
 
 <programlisting>
-ad_require_permission $object_id $object_type $method
+permission::require_permission -object_id $object_id -privilege $method
 </programlisting>
 
 <para>These procedures are defined in <computeroutput>acs-permissions-procs.tcl</computeroutput>.</para>
