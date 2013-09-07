@@ -1414,7 +1414,7 @@ ad_proc -public -deprecated ad_privacy_threshold {} {
 
     @see  ad_conn
 } {
-    set session_user_id [ad_get_user_id]
+    set session_user_id [ad_conn user_id]
     if {$session_user_id == 0} {
 	# viewer of this page isn't logged in, only show stuff 
 	# that is extremely unprivate

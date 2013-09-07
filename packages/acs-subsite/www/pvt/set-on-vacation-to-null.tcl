@@ -9,7 +9,7 @@ ad_page_contract {
     home_link:onevalue
 }
 
-set user_id [ad_get_user_id]
+set user_id [ad_conn user_id]
 
 set no_alerts_until [db_string no_alerts_until {
     select no_alerts_until from users where user_id = :user_id

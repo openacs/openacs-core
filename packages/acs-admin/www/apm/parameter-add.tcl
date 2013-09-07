@@ -8,7 +8,7 @@ ad_page_contract {
     {section_name ""}
 }
 
-set user_id [ad_get_user_id]
+set user_id [ad_conn user_id]
 
 set parameter_id [db_nextval acs_object_id_seq]
 db_1row apm_get_name {}

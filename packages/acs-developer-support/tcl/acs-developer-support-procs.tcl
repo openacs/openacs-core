@@ -426,7 +426,7 @@
      expensive (returns a big file) for openacs instances with a large number of users,
      so perhaps best used on test instances.
  } {
-     set user_id [ad_get_user_id]
+     set user_id [ad_conn user_id]
      set real_user_id [ds_get_real_user_id]
 
      set return_url [ad_conn url]
@@ -571,7 +571,7 @@ ad_proc -private ds_replace_get_user_procs { enabled_p } {
             #ds_comment "Enabling user-switching"
             # let the user stay who he is now (but ignore any error trying to do so)
 	    catch {
-		ad_set_client_property developer-support user_id [ad_get_user_id]
+		ad_set_client_property developer-support user_id [ad_conn user_id]
 	    }
             rename ad_conn orig_ad_conn
 	    rename ad_get_user_id orig_ad_get_user_id

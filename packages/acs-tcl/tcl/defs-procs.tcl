@@ -97,7 +97,7 @@ ad_proc -public ad_pvt_home_link {} {
 ad_proc -public ad_site_home_link {} {
     @return a link to the user's workspace if the user is logged in. Otherwise, a link to the page root.
 } {
-    if { [ad_get_user_id] != 0 } {
+    if { [ad_conn user_id] != 0 } {
 	return "<a href=\"[ad_pvt_home]\">[subsite::get_element -element name]</a>"
     } else {
 	# we don't know who this person is
