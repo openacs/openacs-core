@@ -992,7 +992,7 @@ ad_proc -deprecated -warn site_node_closest_ancestor_package {
 
     <pre>
     # Pull out the package_id of the subsite closest to our current node
-    set pkg_id [site_node_closest_ancestor_package "acs-subsite"]
+    set pkg_id [site_node::closest_ancestor_package -include_self -package_key "acs-subsite"]
     </pre>
 
     @author Michael Bryzek (mbryzek@arsdigita.com)
