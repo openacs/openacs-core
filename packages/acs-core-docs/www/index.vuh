@@ -8,7 +8,7 @@ set package_key [lindex $purlv 0]
 set path_tail \
   "doc[string range [ad_conn path_info] [string length $package_key] end]"
 
-if {![string compare [ad_conn path_info] "index.html"]} {
+if {[ad_conn path_info] eq "index.html" } {
     rp_internal_redirect "/packages/acs-core-docs/www/index.adp"
 } elseif {[file isdirectory "[acs_root_dir]/packages/$package_key/www/doc"]} {
   rp_internal_redirect "/packages/$package_key/www/$path_tail"
