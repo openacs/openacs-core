@@ -148,7 +148,7 @@ set curriculum_bar_p [expr {
 
 
 # Find the subsite we belong to
-set subsite_url [site_node_closest_ancestor_package_url]
+set subsite_url [lindex [site_node::get_url_from_object_id -object_id [site_node::closest_ancestor_package -include_self -package_key [subsite::package_keys]]] 0]
 array set subsite_sitenode [site_node::get -url $subsite_url]
 set subsite_node_id $subsite_sitenode(node_id)
 set subsite_name $subsite_sitenode(instance_name)

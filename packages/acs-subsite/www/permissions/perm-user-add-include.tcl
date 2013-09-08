@@ -16,7 +16,7 @@ permission::require_permission -object_id $object_id -privilege admin
 
 set user_id [ad_conn user_id]
 
-set perm_url "[site_node_closest_ancestor_package_url]permissions/"
+set perm_url "[lindex [site_node::get_url_from_object_id -object_id [site_node::closest_ancestor_package -include_self -package_key [subsite::package_keys]]] 0]permissions/"
 
 list::create \
     -name users \
