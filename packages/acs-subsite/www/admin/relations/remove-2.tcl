@@ -28,7 +28,7 @@ if {$operation eq "Yes, I really want to remove this relation"} {
 } else {
     if { $return_url eq "" } {
 	# redirect to the relation by default, if we haven't deleted it
-	set return_url "one?[ad_export_vars rel_id]"
+	set return_url "one?[export_vars rel_id]"
     }
 }
 

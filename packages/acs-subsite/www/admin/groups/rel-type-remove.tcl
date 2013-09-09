@@ -32,7 +32,7 @@ if { ![db_0or1row select_info {
 
 permission::require_permission -object_id $group_id -privilege admin
 
-set export_vars [ad_export_vars -form {group_rel_id return_url}]
-set context [list [list "[ad_conn package_url]admin/groups/" "Groups"] [list one?[ad_export_vars {group_id}] "One group"] "Remove relation type"]
+set export_vars [export_vars -form {group_rel_id return_url}]
+set context [list [list "[ad_conn package_url]admin/groups/" "Groups"] [list one?[export_vars {group_id}] "One group"] "Remove relation type"]
 
 ad_return_template

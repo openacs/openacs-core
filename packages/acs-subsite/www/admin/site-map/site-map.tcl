@@ -256,7 +256,7 @@ db_foreach nodes_select {} {
 	if {$new_application == $node_id} {
 	    
 	    set action_type "new_app"
-	    set action_form_part "[export_form_vars expand:multiple root_id node_id new_package_id] [apm_application_new_checkbox]"
+	    set action_form_part "[export_vars -form expand:multiple root_id node_id new_package_id] [apm_application_new_checkbox]"
 	    
 	    #Generate a package_id for double click protection
 	    set new_package_id [db_nextval acs_object_id_seq]
@@ -265,7 +265,7 @@ db_foreach nodes_select {} {
 	}
     } elseif {$rename_application == $node_id} {
 	set action_type "rename_app"
-	set action_form_part "[export_form_vars expand:multiple root_id node_id rename_package_id]"
+	set action_form_part "[export_vars -form expand:multiple root_id node_id rename_package_id]"
 	
     } else {}
     
@@ -273,14 +273,14 @@ db_foreach nodes_select {} {
 	set parent_id $new_parent
 	set node_type $new_type	
 	set action_type "new_folder"
-	set action_form_part "[export_form_vars expand:multiple parent_id node_type root_id]"
+	set action_form_part "[export_vars -form expand:multiple parent_id node_type root_id]"
     }
 
     multirow append nodes $node_id $expand_mode $expand_url $indent $name $name_url $object_name $url $package_pretty_name $action_type $action_form_part $add_folder_url $new_app_url $unmount_url $mount_url $rename_url $delete_url $parameters_url $permissions_url "" $view_p
 
 }
 
-#set new_app_form_part_1 "<p align=\"top\"><form name=new_application action=package-new><input type=hidden name=node_id value=$node(node_id)><input type=hidden name=root_id value=$node(node_id) /><input type=hidden name=new_node_p value=t>[export_form_vars expand:multiple]<input name=node_name type=text size=8></p>"
+#set new_app_form_part_1 "<p align=\"top\"><form name=new_application action=package-new><input type=hidden name=node_id value=$node(node_id)><input type=hidden name=root_id value=$node(node_id) /><input type=hidden name=new_node_p value=t>[export_vars -form expand:multiple]<input name=node_name type=text size=8></p>"
 
 #set new_app_form_part_2 "<p align=\"top\">[apm_application_new_checkbox]</p>"
 #set new_app_form_part_3 "<p align=\"top\"><input type=submit value=\"Mount Package\"></form></p>"

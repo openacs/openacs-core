@@ -20,7 +20,7 @@ ad_page_contract {
 
 set context [list "Add relation type"]
 set constraint_id [db_nextval "acs_object_id_seq"]
-set export_form_vars [export_form_vars constraint_id object_type return_url]
+set export_form_vars [export_vars -form constraint_id object_type return_url]
 set export_url_vars [export_url_vars constraint_id object_type return_url]
 
 db_multirow primary_rels select_primary_relations {

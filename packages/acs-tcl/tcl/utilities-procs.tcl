@@ -491,7 +491,7 @@ ad_proc -public export_vars {
     <p>
     
     This will export the three variables <code>foo</code>, <code>bar</code> and <code>baz</code> as 
-    hidden HTML form fields. It does exactly the same as <code>[export_form_vars foo bar baz]</code>.
+    hidden HTML form fields. It does exactly the same as <code>[export_vars -form foo bar baz]</code>.
 
     <p>
 
@@ -887,7 +887,7 @@ ad_proc -deprecated ad_export_vars {
 
     Example:
 
-    <blockquote><pre>doc_body_append [ad_export_vars { msg_id user(email) { order_by date } }]</pre></blockquote>
+    <blockquote><pre>doc_body_append [export_vars { msg_id user(email) { order_by date } }]</pre></blockquote>
     will export the variable <code>msg_id</code> and the value <code>email</code> from the array <code>user</code>,
     and it will export a variable named <code>order_by</code> with the value <code>date</code>.
 
@@ -908,7 +908,7 @@ ad_proc -deprecated ad_export_vars {
 
     A more involved example:
     <blockquote><pre>set my_vars { msg_id user(email) order_by }
-doc_body_append [ad_export_vars -override { order_by $new_order_by } $my_vars]</pre></blockquote>
+doc_body_append [export_vars -override { order_by $new_order_by } $my_vars]</pre></blockquote>
 
     @param form set this parameter if you want the variables exported as hidden form variables,
     as opposed to URL variables, which is the default.
@@ -1020,7 +1020,7 @@ ad_proc -deprecated export_form_vars {
     export_vars is now the prefered interface.
     <p>
 
-    Example usage: <code>[export_form_vars -sign foo bar:multiple baz]</code>
+    Example usage: <code>[export_vars -form -sign foo bar:multiple baz]</code>
 
     @param sign If this flag is set, all the variables output will be
     signed using <a

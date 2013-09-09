@@ -61,7 +61,7 @@ if { $subtypes_exist_p } {
           from acs_object_types t
          where t.supertype = :group_type
     } {
-	template::multirow append subtypes $pretty_name [ad_export_vars {group_type return_url}]
+	template::multirow append subtypes $pretty_name [export_vars {group_type return_url}]
     }
     ad_return_template "delete-subtypes-exist"
     return
@@ -90,13 +90,13 @@ if { $rel_types_depend_p } {
                 or rel.object_type_two = :group_type)
 	   and rel.rel_type = t.object_type
     } {
-	template::multirow append rel_types $pretty_name [ad_export_vars {rel_type return_url}]
+	template::multirow append rel_types $pretty_name [export_vars {rel_type return_url}]
     }
     ad_return_template "delete-rel-types-exist"
     return
 }
 
-set export_form_vars [ad_export_vars -form {group_type return_url}]
+set export_form_vars [export_vars -form {group_type return_url}]
 
 set groups_of_this_type [util_commify_number [db_string groups_of_this_type {
     select count(o.object_id) 

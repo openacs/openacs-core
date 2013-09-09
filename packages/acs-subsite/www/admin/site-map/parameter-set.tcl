@@ -92,7 +92,7 @@ tables.
 ns_return 200 text/html "$body
 <blockquote>
 <form method=post action=parameter-set-2>
-[export_form_vars package_key package_id instance_name return_url]
+[export_vars -form package_key package_id instance_name return_url]
 $table
 </blockquote>
 </form>

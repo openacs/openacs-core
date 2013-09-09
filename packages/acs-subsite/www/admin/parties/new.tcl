@@ -116,7 +116,7 @@ if {$group_rel_type_list eq ""} {
 	
 	lappend export_var_list group_rel_type_list
 	
-	set export_url_vars [ad_export_vars -exclude {add_to_group_id add_with_rel_type} $export_var_list]
+	set export_url_vars [export_vars -exclude {add_to_group_id add_with_rel_type} $export_var_list]
 	
 	ad_return_template new-list-required-segments
 	return
@@ -132,9 +132,9 @@ if {$group_rel_type_list eq ""} {
 set object_type_path_list [subsite::util::object_type_path_list $party_type party]
 
 set redirects_for_type [list \
-	group "groups/new?group_id=$party_id&group_type_exact_p=$party_type_exact_p&group_type=$party_type&[ad_export_vars -exclude {party_id party_type_exact_p party_type} $export_var_list]" \
+	group "groups/new?group_id=$party_id&group_type_exact_p=$party_type_exact_p&group_type=$party_type&[export_vars -exclude {party_id party_type_exact_p party_type} $export_var_list]" \
 	rel_segment "rel-segments/new?segment_id=$party_id&group_id=$add_to_group_id" \
-	user "users/new?user_id=$party_id&[ad_export_vars -exclude {party_id party_type_exact_p party_type} $export_var_list]"]
+	user "users/new?user_id=$party_id&[export_vars -exclude {party_id party_type_exact_p party_type} $export_var_list]"]
 
 foreach {type url} $redirects_for_type {
     if {[lsearch $object_type_path_list $type] != -1} {
@@ -148,7 +148,7 @@ if { $party_type_exact_p eq "f" && \
 
     # Sub party-types exist... select one
     set party_type_exact_p "t"
-    set export_url_vars [ad_export_vars -exclude party_type $export_var_list ]
+    set export_url_vars [export_vars -exclude party_type $export_var_list ]
 
     party::types_valid_for_rel_type_multirow -datasource_name object_types -start_with $party_type -rel_type $add_with_rel_type
 
