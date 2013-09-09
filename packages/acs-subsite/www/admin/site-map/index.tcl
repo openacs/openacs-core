@@ -42,7 +42,7 @@ if {$new_parent ne ""} {
     set javascript ""
 }
 
-set parent_link ".?[export_url_vars expand:multiple root_id=$parent_id]"
+set parent_link ".?[export_vars -url {expand:multiple {root_id $parent_id}}]"
 
 set doc(title) [_ acs-subsite.Site_Map]
 set context [list $doc(title)]
@@ -60,7 +60,7 @@ if {$subsite_number > 100} {
 
 db_foreach path_select {} {
     if {$node_id != $root_id && $admin_p eq "t"} {
-        append head [subst {<a href=".?[export_url_vars expand:multiple root_id=$node_id]">}]
+        append head [subst {<a href=".?[export_vars -url {expand:multiple {root_id $node_id}}]">}]
     }
     if {$name eq ""} {
 	append head "$obj_name:"
@@ -206,10 +206,10 @@ db_foreach nodes_select {} {
     if { [lsearch -exact $open_nodes $parent_id] == -1 && $parent_id ne "" && $mylevel > 2 } { continue } 
         
     if {$directory_p eq "t"} {
-	set add_folder_url "?[export_url_vars expand:multiple root_id node_id new_parent=$node_id new_type=folder]"
+	set add_folder_url "?[export_vars -url {expand:multiple root_id node_id {new_parent $node_id} {new_type folder}}]"
 	if {$object_id eq ""} {
 	    set mount_url "mount?[export_vars -url {expand:multiple root_id node_id}]"
-	    set new_app_url "?[export_url_vars expand:multiple root_id new_application=$node_id]"
+	    set new_app_url "?[export_vars -url {expand:multiple root_id {new_application $node_id}}]"
 	} else {
 	    # This makes sure you can't unmount the thing that is serving the page you're looking at.
 	    if {[ad_conn node_id] != $node_id} {
@@ -219,7 +219,7 @@ db_foreach nodes_select {} {
 	    # Add a link to control permissioning
 	    if {$object_admin_p} {
 		set permissions_url "../../permissions/one?[export_vars -url {object_id}]"
-		set rename_url "?[export_url_vars expand:multiple root_id rename_application=$node_id]"
+		set rename_url "?[export_vars -url {expand:multiple root_id {rename_application $node_id}}]"
 		set delete_url "instance-delete?package_id=$object_id&root_id=$root_id"
 	    }
 	    # Is the object a package?
@@ -265,7 +265,7 @@ db_foreach nodes_select {} {
 	set expand_url ""
     }
     
-    set name_url [export_url_vars expand:multiple root_id=$node_id]
+    set name_url [export_vars -url {expand:multiple {root_id $node_id}}]
         
     set action_type 0
     set action_form_part ""
