@@ -1123,7 +1123,7 @@ ad_proc export_ns_set_vars {{format "url"} {exclusion_list ""} {setid ""}} {
     }
 }
 
-ad_proc export_url_vars {
+ad_proc -deprecated export_url_vars {
     -sign:boolean
     args 
 } {
