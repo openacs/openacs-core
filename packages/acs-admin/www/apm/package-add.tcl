@@ -17,7 +17,7 @@ set version_id [db_nextval acs_object_id_seq]
 db_release_unused_handles
 
 doc_body_append "[apm_header -form "action=package-add-2 method=post" "Add a New Package"]
-[export_form_vars package_id version_id]
+[export_vars package_id version_id]
 
 
 <script type=\"text/javascript\">

@@ -64,6 +64,6 @@ if { [relation_segment_has_dependant -rel_id $rel_id] } {
 }
 
 
-set export_vars [export_form_vars rel_id return_url]
+set export_vars [export_vars rel_id return_url]
 
 ad_return_template

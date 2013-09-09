@@ -100,7 +100,7 @@ $warning_text
 
 <p>
 
-[export_form_vars version_id]
+[export_vars version_id]
 $file_list
 
 <p>

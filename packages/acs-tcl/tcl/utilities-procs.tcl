@@ -491,7 +491,7 @@ ad_proc -public export_vars {
     <p>
     
     This will export the three variables <code>foo</code>, <code>bar</code> and <code>baz</code> as 
-    hidden HTML form fields. It does exactly the same as <code>[export_form_vars foo bar baz]</code>.
+    hidden HTML form fields. It does exactly the same as <code>[export_vars foo bar baz]</code>.
 
     <p>
 
@@ -1020,7 +1020,7 @@ ad_proc -deprecated export_form_vars {
     export_vars is now the prefered interface.
     <p>
 
-    Example usage: <code>[export_form_vars -sign foo bar:multiple baz]</code>
+    Example usage: <code>[export_vars -sign foo bar:multiple baz]</code>
 
     @param sign If this flag is set, all the variables output will be
     signed using <a
