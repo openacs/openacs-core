@@ -14,4 +14,4 @@ ad_page_contract {
 
 site_node::unmount -node_id $node_id
 
-ad_returnredirect ".?[export_url_vars expand:multiple root_id]"
+ad_returnredirect ".?[export_vars -url {expand:multiple root_id}]"

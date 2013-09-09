@@ -28,7 +28,7 @@ db_1row select_segment_info {
      where s.segment_id = :segment_id
 }
 
-set export_vars [export_vars -form segment_id]
+set export_vars [export_vars -form {segment_id}]
 set context [list \
      [list "[ad_conn package_url]admin/rel-segments/" "Relational segments"] \
      [list one?[export_vars segment_id] "One segment"] \

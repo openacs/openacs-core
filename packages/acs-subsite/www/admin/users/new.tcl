@@ -251,7 +251,7 @@ The user was added by $creation_name from [ad_conn url]."
 	    ns_sendmail [template::element::get_value add_user email] \
 		    $notification_address \
 		    "Welcome to [ad_system_name]" \
-		    "To confirm your registration, please go to [parameter::get -package_id [ad_acs_kernel_id] -parameter SystemURL]/register/email-confirm?[export_url_vars row_id]
+		    "To confirm your registration, please go to [parameter::get -package_id [ad_acs_kernel_id] -parameter SystemURL]/register/email-confirm?[export_vars -url {row_id}]
 
 After confirming your email, here's how you can log in at [ad_url]:
 

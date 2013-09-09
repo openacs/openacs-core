@@ -46,7 +46,7 @@ if { $width ne "" && $height ne "" } {
 
 set doc(title) [_ acs-subsite.lt_Portrait_of_first_last]
 set context [list [list [acs_community_member_url -user_id $user_id] "$first_names $last_name"] [_ acs-subsite.Portrait]]
-set export_vars [export_url_vars user_id]
+set export_vars [export_vars -url {user_id}]
 set pretty_date [lc_time_fmt $publish_date "%q"]
 
 ad_return_template

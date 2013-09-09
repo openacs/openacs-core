@@ -27,7 +27,7 @@ foreach dependency_type { provide require extend embed } {
 	doc_body_append "<li>[string totitle $dependency_type_prep] service $service_uri, version $service_version"
 
         if { $dependency_type ne "provide" } {
-            doc_body_append "(<a href=\"version-dependency-remove?[export_url_vars package_key dependency_id version_id dependency_type]\">remove</a>)\n"
+            doc_body_append "(<a href=\"version-dependency-remove?[export_vars -url {package_key dependency_id version_id dependency_type}]\">remove</a>)\n"
         }
 	
 	# If this package provides a service, show a list of all packages that require it,
@@ -59,7 +59,7 @@ foreach dependency_type { provide require extend embed } {
 	doc_body_append "<li>This package does not $dependency_type any services.\n"
     }
     if { $installed_p eq "t" && $dependency_type ne "provide"} {
-	doc_body_append "<li><a href=\"version-dependency-add?[export_url_vars version_id dependency_type]\">Add a service $dependency_type_prep_2 by this package</a>\n"
+	doc_body_append "<li><a href=\"version-dependency-add?[export_vars -url {version_id dependency_type}]\">Add a service $dependency_type_prep_2 by this package</a>\n"
     }
     doc_body_append "</ul>\n"
 }

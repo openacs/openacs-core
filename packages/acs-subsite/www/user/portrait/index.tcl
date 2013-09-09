@@ -45,8 +45,8 @@ if { $current_user_id == $user_id } {
     set admin_p 0
 }
 
-set export_vars      [export_url_vars user_id]
-set export_edit_vars [export_url_vars user_id return_url]
+set export_vars      [export_vars -url {user_id}]
+set export_edit_vars [export_vars -url {user_id return_url}]
 
 if {![db_0or1row user_info "select 
   first_names, 

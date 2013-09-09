@@ -33,7 +33,7 @@ append body "
 <form action=\"parameter-edit-2\" method=\"post\">
 <blockquote>
 <table>
-[export_vars -form package_key parameter_id version_id]
+[export_vars -form {package_key parameter_id version_id}]
 
 <tr>
   <td></td>

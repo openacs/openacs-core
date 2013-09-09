@@ -208,17 +208,17 @@ db_foreach nodes_select {} {
     if {$directory_p eq "t"} {
 	set add_folder_url "?[export_url_vars expand:multiple root_id node_id new_parent=$node_id new_type=folder]"
 	if {$object_id eq ""} {
-	    set mount_url "mount?[export_url_vars expand:multiple root_id node_id]"
+	    set mount_url "mount?[export_vars -url {expand:multiple root_id node_id}]"
 	    set new_app_url "?[export_url_vars expand:multiple root_id new_application=$node_id]"
 	} else {
 	    # This makes sure you can't unmount the thing that is serving the page you're looking at.
 	    if {[ad_conn node_id] != $node_id} {
-		set unmount_url "unmount?[export_url_vars expand:multiple root_id node_id]"
+		set unmount_url "unmount?[export_vars -url {expand:multiple root_id node_id}]"
 	    }
 	    
 	    # Add a link to control permissioning
 	    if {$object_admin_p} {
-		set permissions_url "../../permissions/one?[export_url_vars object_id]"
+		set permissions_url "../../permissions/one?[export_vars -url {object_id}]"
 		set rename_url "?[export_url_vars expand:multiple root_id rename_application=$node_id]"
 		set delete_url "instance-delete?package_id=$object_id&root_id=$root_id"
 	    }
@@ -232,7 +232,7 @@ db_foreach nodes_select {} {
     }
     
     if {[ad_conn node_id] != $node_id && $n_children == 0 && $object_id eq ""} {
-	set delete_url "delete?[export_url_vars expand:multiple root_id node_id]"
+	set delete_url "delete?[export_vars -url {expand:multiple root_id node_id}]"
     }
     
     # use the indent variable to hold current indent level we'll use it later to indent stuff at the end by the amount of the last node
@@ -274,7 +274,7 @@ db_foreach nodes_select {} {
 	if {$new_application == $node_id} {
 	    
 	    set action_type "new_app"
-	    set action_form_part "[export_vars -form expand:multiple root_id node_id new_package_id] [apm_application_new_checkbox]"
+	    set action_form_part "[export_vars -form {expand:multiple root_id node_id new_package_id}] [apm_application_new_checkbox]"
 	    
 	    #Generate a package_id for double click protection
 	    set new_package_id [db_nextval acs_object_id_seq]
@@ -283,7 +283,7 @@ db_foreach nodes_select {} {
 	}
     } elseif {$rename_application == $node_id} {
 	set action_type "rename_app"
-	set action_form_part "[export_vars -form expand:multiple root_id node_id rename_package_id]"
+	set action_form_part "[export_vars -form {expand:multiple root_id node_id rename_package_id}]"
 	
     } else {}
     
@@ -291,14 +291,14 @@ db_foreach nodes_select {} {
 	set parent_id $new_parent
 	set node_type $new_type	
 	set action_type "new_folder"
-	set action_form_part "[export_vars -form expand:multiple parent_id node_type root_id]"
+	set action_form_part "[export_vars -form {expand:multiple parent_id node_type root_id}]"
     }
 
     multirow append nodes $node_id $expand_mode $expand_url $indent $name $name_url $object_name $url $package_pretty_name $action_type $action_form_part $add_folder_url $new_app_url $unmount_url $mount_url $rename_url $delete_url $parameters_url $permissions_url ""
 
 }
 
-set new_app_form_part_1 [subst {<form name="new_application" action="package-new"><input type="hidden" name="node_id" value="$node(node_id)"><input type="hidden" name="root_id" value="$node(node_id)"><input type="hidden" name="new_node_p" value="t">[export_vars -form expand:multiple]<input name="node_name" type="text" size="8">}]
+set new_app_form_part_1 [subst {<form name="new_application" action="package-new"><input type="hidden" name="node_id" value="$node(node_id)"><input type="hidden" name="root_id" value="$node(node_id)"><input type="hidden" name="new_node_p" value="t">[export_vars -form {expand:multiple}]<input name="node_name" type="text" size="8">}]
 
 set new_app_form_part_2 "[apm_application_new_checkbox]"
 set new_app_form_part_3 "<input type=\"submit\" value=\"Mount Package\"></form>"

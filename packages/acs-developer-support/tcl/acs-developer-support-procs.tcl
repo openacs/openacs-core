@@ -474,7 +474,7 @@
          $you_are_really
          Change user: <select name=\"user_id\">
          $options
-         </select>[export_vars -form return_url]<input type=submit value=\"Go\"></form>"
+         </select>[export_vars -form {return_url}]<input type=submit value=\"Go\"></form>"
      } else {
          ns_log Error "ACS-Developer-Support: Unable to offer link to Developer Support \
                  because it is not mounted anywhere."

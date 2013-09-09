@@ -73,7 +73,7 @@ set bio [ad_text_to_html -- [person::get_bio -person_id $user_id]]
 
 # Do we show the portrait?
 set inline_portrait_state "none"
-set portrait_export_vars [export_url_vars user_id]
+set portrait_export_vars [export_vars -url {user_id}]
 
 if {[db_0or1row portrait_info "
 select i.width, i.height, cr.title, cr.description, cr.publish_date

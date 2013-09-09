@@ -19,7 +19,7 @@ set name [acs_object_name $object_id]
 
 set title [_ acs-subsite.lt_Grant_Permission_on_n]
 
-set context [list [list one?[export_url_vars object_id] "[_ acs-subsite.Permissions_for_name]"] [_ acs-subsite.Grant]]
+set context [list [list one?[export_vars -url {object_id}] "[_ acs-subsite.Permissions_for_name]"] [_ acs-subsite.Grant]]
 
 
 # Compute a hierarchical tree representation of the contents of

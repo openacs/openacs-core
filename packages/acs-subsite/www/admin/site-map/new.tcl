@@ -65,4 +65,4 @@ if {[lsearch $expand $parent_id] == -1} {
     lappend expand $parent_id
 }
 
-ad_returnredirect ".?[export_url_vars expand:multiple root_id]"
+ad_returnredirect ".?[export_vars -url {expand:multiple root_id}]"

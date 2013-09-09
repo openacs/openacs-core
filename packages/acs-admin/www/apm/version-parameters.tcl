@@ -69,8 +69,8 @@ append sql_clauses " [template::list::orderby_clause -orderby -name parameters_l
 
 db_multirow -extend {actions} parameters parameter_table {} {
     set actions "\[<font size=-1>
-        <a href=parameter-delete?[export_url_vars parameter_id version_id section_name]>delete</a> | 
-        <a href=parameter-edit?[export_url_vars version_id parameter_id]>edit</a></font>\]"
+        <a href=parameter-delete?[export_vars -url {parameter_id version_id section_name}]>delete</a> | 
+        <a href=parameter-edit?[export_vars -url {version_id parameter_id}]>edit</a></font>\]"
 }
 
 

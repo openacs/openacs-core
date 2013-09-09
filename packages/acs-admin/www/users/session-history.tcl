@@ -38,7 +38,7 @@ while { [ns_db getrow $db $selection] } {
 	set last_year $pretty_year
     }
     append whole_page "<tr>
-<td><a href=\"sessions-one-month?[export_url_vars pretty_month pretty_year]\">$pretty_month $pretty_year</a>
+<td><a href=\"sessions-one-month?[export_vars -url {pretty_month pretty_year}]\">$pretty_month $pretty_year</a>
 <td align=right>[util_commify_number $total_sessions]</td>
 <td align=right>[util_commify_number $total_repeats]</td>
 </tr>

@@ -111,12 +111,12 @@ ad_return_template
 #  if {$contact_info ne ""} {
 #      append whole_page "<h3>Contact Info</h3>\n\n$contact_info\n
 #  <ul>
-#  <li><a href=contact-edit?[export_url_vars user_id]>Edit contact information</a>
+#  <li><a href=contact-edit?[export_vars -url {user_id}]>Edit contact information</a>
 #  </ul>"
 #  } else {
 #      append whole_page "<h3>Contact Info</h3>\n\n$contact_info\n
 #  <ul>
-#  <li><a href=contact-edit?[export_url_vars user_id]>Add contact information</a>
+#  <li><a href=contact-edit?[export_vars -url {user_id}]>Add contact information</a>
 #  </ul>"
 #  }
 
@@ -165,7 +165,7 @@ ad_return_template
 #  if { [im_enabled_p] && [ad_user_group_member $db [im_employee_group_id] $user_id] } {
 #      # We are running an intranet enabled acs and this user is a member of the 
 #      # employees group. Offer a link to the employee administration page
-#      set intranet_admin_link "<li><a href=\"[im_url_stub]/employees/admin/view?[export_url_vars user_id]\">Update this user's employee information</a><p>"
+#      set intranet_admin_link "<li><a href=\"[im_url_stub]/employees/admin/view?[export_vars -url {user_id}]\">Update this user's employee information</a><p>"
 #  } else {
 #      set intranet_admin_link ""
 #  }

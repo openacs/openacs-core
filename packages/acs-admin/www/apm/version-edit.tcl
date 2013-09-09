@@ -48,7 +48,7 @@ function checkMailto(element) {
 }
 </script>
 
-[export_vars -form version_id release_date]
+[export_vars -form {version_id release_date}]
 
 <table>
 

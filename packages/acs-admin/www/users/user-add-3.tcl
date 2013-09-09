@@ -19,7 +19,7 @@ ad_page_contract {
 set admin_user_id [ad_conn user_id]
 
 set context [list [list "./" "Users"] "New user notified"]
-set export_vars [export_url_vars user_id]
+set export_vars [export_vars -url {user_id}]
 
 set admin_email [db_string get_admin_email {}]
 set subject "You have been added as a user to [ad_system_name] at [ad_url]"
