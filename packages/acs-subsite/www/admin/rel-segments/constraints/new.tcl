@@ -33,7 +33,7 @@ ad_page_contract {
 
 }
 
-set return_url_enc [ad_urlencode "[ad_conn url]?[ad_export_vars {rel_segment constraint_name rel_side required_rel_segment return_url}]"]
+set return_url_enc [ad_urlencode "[ad_conn url]?[export_vars {rel_segment constraint_name rel_side required_rel_segment return_url}]"]
 
 set context [list [list "../" "Relational segments"] [list "../one?segment_id=$rel_segment" "One Segment"] "Add constraint"]
 

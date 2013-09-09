@@ -57,7 +57,7 @@ if { [relation_segment_has_dependant -rel_id $rel_id] } {
 	  from rc_violations_by_removing_rel r
 	 where r.rel_id = :rel_id
     } {
-	template::multirow append dependants $rel_id $rel_type_pretty_name $object_id_one_name $object_id_two_name [ad_export_vars {rel_id return_url}]
+	template::multirow append dependants $rel_id $rel_type_pretty_name $object_id_one_name $object_id_two_name [export_vars {rel_id return_url}]
     }
     ad_return_template remove-dependants-exist
     return

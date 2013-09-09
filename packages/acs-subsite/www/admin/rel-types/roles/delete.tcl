@@ -17,9 +17,9 @@ ad_page_contract {
     export_vars:onevalue
 }
 
-set context [list [list "../" "Relationship types"] [list "" "Roles"] [list one?[ad_export_vars role] "One role"] "Delete role"]
+set context [list [list "../" "Relationship types"] [list "" "Roles"] [list one?[export_vars role] "One role"] "Delete role"]
 
-set export_vars [ad_export_vars -form {role return_url}]
+set export_vars [export_vars -form {role return_url}]
 
 set pretty_name [db_string select_role_pretty_name {
     select r.pretty_name from acs_rel_roles r where r.role = :role

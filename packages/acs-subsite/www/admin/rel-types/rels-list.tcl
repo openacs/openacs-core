@@ -19,7 +19,7 @@ ad_page_contract {
 set user_id [ad_conn user_id]
 set package_id [ad_conn package_id]
 
-set context [list [list "" "Relationship types"] [list one?[ad_export_vars rel_type] "One type"] "Relations"]
+set context [list [list "" "Relationship types"] [list one?[export_vars rel_type] "One type"] "Relations"]
 
 if { ![db_0or1row select_pretty_name {
     select t.pretty_name as rel_type_pretty_name

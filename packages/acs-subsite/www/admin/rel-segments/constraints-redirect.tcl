@@ -17,10 +17,10 @@ ad_page_contract {
 set operation [string trim [string tolower $operation]]
 
 if {$operation eq "yes"} {
-    ad_returnredirect "constraints/new?rel_segment=$segment_id&[ad_export_vars return_url]"
+    ad_returnredirect "constraints/new?rel_segment=$segment_id&[export_vars return_url]"
 } else {
     if { $return_url eq "" } {
-	set return_url "one?[ad_export_vars segment_id]"
+	set return_url "one?[export_vars segment_id]"
     }
     ad_returnredirect $return_url
 }

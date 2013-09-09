@@ -22,7 +22,7 @@ db_1row select_role_props {
      where r.role = :role
 }
 
-set context [list [list "../" "Relationship types"] [list "one?[ad_export_vars role]" "One role"] "Edit"]
+set context [list [list "../" "Relationship types"] [list "one?[export_vars role]" "One role"] "Edit"]
 
 template::form create role_form
 
@@ -57,7 +57,7 @@ if { [template::form is_valid role_form] } {
 	 where r.role = :role
     } -bind [ns_getform]
     if { $return_url eq "" } {
-	set return_url "one?[ad_export_vars role]"
+	set return_url "one?[export_vars role]"
     }
     ad_returnredirect $return_url
     ad_script_abort
