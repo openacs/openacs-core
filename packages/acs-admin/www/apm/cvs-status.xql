@@ -3,7 +3,7 @@
 
 <fullquery name="email_by_user_id">      
       <querytext>
-      select email from parties where party_id = [ad_get_user_id]
+      select email from parties where party_id = [ad_conn user_id]
       </querytext>
 </fullquery>
 

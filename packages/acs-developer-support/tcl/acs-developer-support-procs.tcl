@@ -567,7 +567,7 @@ ad_proc -private ds_replace_get_user_procs { enabled_p } {
     Replace the ad_get_user procs with our own versions
 } {
     if { $enabled_p } {
-	if { [info commands orig_ad_get_user_id] eq ""} {
+	if { [info commands orig_ad_conn] eq ""} {
             #ds_comment "Enabling user-switching"
             # let the user stay who he is now (but ignore any error trying to do so)
 	    catch {
@@ -580,16 +580,16 @@ ad_proc -private ds_replace_get_user_procs { enabled_p } {
             proc ad_conn { args } {
 	        ds_conn {*}$args
             }
-	    proc ad_get_user_id {} {
-                ds_get_user_id
-	    }
+	    #proc ad_get_user_id {} {
+            #    ds_get_user_id
+	    #}
 	    #proc ad_verify_and_get_user_id {} {
             #    ds_get_user_id
 	    #}
 	}
     } else {
         #ds_comment "Disabling user-switching"
-	if { [info commands orig_ad_get_user_id] ne ""} {
+	if { [info commands orig_ad_conn] ne ""} {
             rename ad_conn {}
             rename orig_ad_conn ad_conn
 
