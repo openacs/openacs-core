@@ -29,7 +29,7 @@ if {$operation eq "Yes, I really want to delete this attribute"} {
 	}
     }
 } elseif { $return_url eq "" } {
-    set return_url one?[export_vars attribute_id]
+    set return_url one?[ad_export_vars attribute_id]
 }
 
 ad_returnredirect $return_url

@@ -17,7 +17,7 @@ ad_page_contract {
 if { $operation ne "Yes, I really want to delete this relationship type" } {
     # set the return_url to something useful if we are not deleting
     if { $return_url eq "" } {
-	set return_url "one?[export_vars rel_type]"
+	set return_url "one?[ad_export_vars rel_type]"
     }
 } else {
     db_1row select_type_info {

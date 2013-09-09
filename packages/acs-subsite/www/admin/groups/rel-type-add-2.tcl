@@ -67,10 +67,10 @@ if { [db_string segment_exists_p {
       from dual
 }] } {
     if { $return_url eq "" } {
-	set return_url one?[export_vars group_id]
+	set return_url one?[ad_export_vars group_id]
     }
     ad_returnredirect $return_url 
 } else {
-    ad_returnredirect constraints-create?[export_vars {group_id rel_type return_url}]
+    ad_returnredirect constraints-create?[ad_export_vars {group_id rel_type return_url}]
 }
 

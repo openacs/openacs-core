@@ -84,7 +84,7 @@ but you'll never need to use it.) The new API routines set local
 variables automatically. For instance: 
 </p><pre class="programlisting">
 
-db_1row select_names "select first_names, last_name from users where user_id = [ad_conn user_id]"
+db_1row select_names "select first_names, last_name from users where user_id = [ad_get_user_id]"
 doc_body_append "Hello, $first_names $last_name!"
 
 </pre><p>
@@ -93,7 +93,7 @@ any rows (no such user exists). If this isn't what you want, you can
 write: 
 </p><pre class="programlisting">
 
-if { [db_0or1row select_names "select first_names, last_name from users where user_id = [ad_conn user_id]"] } {
+if { [db_0or1row select_names "select first_names, last_name from users where user_id = [ad_get_user_id]"] } {
     doc_body_append "Hello, $first_names $last_name!"
 } else {
     # Executed if the query returns no rows.

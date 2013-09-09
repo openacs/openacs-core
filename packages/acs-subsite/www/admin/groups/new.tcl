@@ -100,7 +100,7 @@ if { $group_type_exact_p eq "f" && \
 
     # Sub rel-types exist... select one
     set group_type_exact_p "t"
-    set export_url_vars [export_vars -exclude group_type $export_var_list ]
+    set export_url_vars [ad_export_vars -exclude group_type $export_var_list ]
 
     party::types_valid_for_rel_type_multirow -datasource_name object_types -start_with $group_type -rel_type $add_with_rel_type
 

@@ -24,7 +24,7 @@ ad_page_contract {
 
 if { $operation ne "Yes, I really want to delete this group type" } {
     if { $return_url eq "" } {
-	ad_returnredirect "one?[export_vars {group_type}]"
+	ad_returnredirect "one?[ad_export_vars {group_type}]"
     } else {
 	ad_returnredirect $return_url
     }

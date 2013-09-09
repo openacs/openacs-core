@@ -39,7 +39,7 @@ permission::require_permission -object_id $group_id -privilege "read"
 
 set context [list [list "[ad_conn package_url]admin/rel-segments/" "Relational segments"] "Add segment"]
 
-set export_vars [export_vars -form {group_id rel_type return_url}]
+set export_vars [ad_export_vars -form {group_id rel_type return_url}]
 
 db_1row select_basic_info {
     select acs_group.name(:group_id) as group_name,

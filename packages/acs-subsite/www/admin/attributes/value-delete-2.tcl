@@ -12,7 +12,7 @@ ad_page_contract {
     attribute_id:naturalnum,notnull
     enum_value:trim,notnull
     { operation:trim "No, I want to cancel my request" } 
-    { return_url "one?[export_vars attribute_id]" }    
+    { return_url "one?[ad_export_vars attribute_id]" }    
 }
 
 if {$operation eq "Yes, I really want to delete this attribute value"} {

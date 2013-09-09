@@ -54,6 +54,6 @@ db_1row group_and_rel_info {
 set role_pretty_name [lang::util::localize $role_pretty_name]
 set role_pretty_plural [lang::util::localize $role_pretty_plural]    
 
-set context [list [list "[ad_conn package_url]admin/groups/" "Groups"] [list one?[export_vars group_id] "One Group"] "All $role_pretty_plural"]
+set context [list [list "[ad_conn package_url]admin/groups/" "Groups"] [list one?[ad_export_vars group_id] "One Group"] "All $role_pretty_plural"]
 
 ad_return_template

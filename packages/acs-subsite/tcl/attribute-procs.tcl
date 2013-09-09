@@ -518,7 +518,7 @@ ad_proc -public multirow {
 		    # pretty name for that attribute
 		    set col_value $enum_values($key:$col_value)
 		}
-		template::multirow append $datasource_name $attr_props(pretty_name:$key) $col_value "id_column=$object_id&[export_vars {attribute_id return_url}]"
+		template::multirow append $datasource_name $attr_props(pretty_name:$key) $col_value "id_column=$object_id&[ad_export_vars {attribute_id return_url}]"
 	    }
 	}
     }

@@ -20,8 +20,8 @@ ad_page_contract {
     group_name:onevalue
 }
 
-set context [list [list "[ad_conn package_url]admin/groups/" "Groups"] [list one?[export_vars group_id] "One Group"] "Add constraint"]
-set export_vars [export_vars -form {group_id rel_type return_url}]
+set context [list [list "[ad_conn package_url]admin/groups/" "Groups"] [list one?[ad_export_vars group_id] "One Group"] "Add constraint"]
+set export_vars [ad_export_vars -form {group_id rel_type return_url}]
 
 db_1row select_props {
     select acs_group.name(:group_id) as group_name,

@@ -606,25 +606,25 @@ ad_proc ad_table_form {datadef {type select} {return_url {}} {item_group {}} {it
         append html "<form method=\"get\" action=\"/tools/table-custom\">"
         append html "<input type=\"submit\" value=\"Delete this view\">"
         append html "<input type=\"hidden\" name=\"delete_the_view\" value=\"1\">"
-        append html "[export_vars item_group item]"
+        append html "[export_form_vars item_group item]"
         if {$return_url ne ""} {
-            append html "[export_vars return_url]"
+            append html "[export_form_vars return_url]"
         }
         append html "</form>"
     }
 
     append html "<form method=get action=\"/tools/table-custom\">" 
     if {$return_url ne ""} {
-        append html "[export_vars return_url]"
+        append html "[export_form_vars return_url]"
     }
     if {$item_group eq ""} {
         set item_group [ad_conn url]
     }
 
-    append html "[export_vars item_group]"
+    append html "[export_form_vars item_group]"
     if {$item ne ""} {
         set item_original $item
-        append html "[export_vars item_original]"
+        append html "[export_form_vars item_original]"
         append html "<input type=\"submit\" value=\"Save changes\">"
     } else {
         append html "<input type=\"submit\" value=\"Save new view\">"
@@ -634,7 +634,7 @@ ad_proc ad_table_form {datadef {type select} {return_url {}} {item_group {}} {it
     append html "<tr><th>Name:</th><td><input type=\"text\" size=\"60\" name=\"item\" [export_form_value item]></td></tr>"
     if {$item ne ""} {
         set item_original item
-        append html "[export_vars item_original]"
+        append html "[export_form_vars item_original]"
         append html "<tr><td>&nbsp;</td><td><em>Editing the name will rename the view</em></td></tr>"
     }
 
@@ -731,25 +731,25 @@ ad_proc ad_table_sort_form {datadef {type select} {return_url {}} {item_group {}
         append html "<form method=\"get\" action=\"/tools/sort-custom\">"
         append html "<input type=\"submit\" value=\"Delete this sort\">"
         append html "<input type=\"hidden\" name=\"delete_the_sort\" value=\"1\">"
-        append html "[export_vars item_group item]"
+        append html "[export_form_vars item_group item]"
         if {$return_url ne ""} {
-            append html "[export_vars return_url]"
+            append html "[export_form_vars return_url]"
         }
         append html "</form>"
     }
 
     append html "<form method=get action=\"/tools/sort-custom\">" 
     if {$return_url ne ""} {
-        append html "[export_vars return_url]"
+        append html "[export_form_vars return_url]"
     }
     if {$item_group eq ""} {
         set item_group [ad_conn url]
     }
 
-    append html "[export_vars item_group]"
+    append html "[export_form_vars item_group]"
     if {$item ne ""} {
         set item_original $item
-        append html "[export_vars item_original]"
+        append html "[export_form_vars item_original]"
         append html "<input type=\"submit\" value=\"Save changes\">"
     } else {
         append html "<input type=\"submit\" value=\"Save new sort\">"
@@ -759,7 +759,7 @@ ad_proc ad_table_sort_form {datadef {type select} {return_url {}} {item_group {}
     append html "<tr><th>Name:</th><td><input type=\"text\" size=\"60\" name=\"item\" [export_form_value item]></td></tr>"
     if {$item ne ""} {
         set item_original item
-        append html "[export_vars item_original]"
+        append html "[export_form_vars item_original]"
         append html "<tr><td>&nbsp;</td><td><em>Editing the name will rename the sort</em></td></tr>"
     }
 
@@ -962,13 +962,13 @@ ad_proc ad_custom_form {return_url item_group item} {
 } {
     append html "<form method=\"get\" action=\"/tools/form-custom\">\n" 
     if {$return_url ne ""} {
-        append html "[export_vars return_url]\n"
+        append html "[export_form_vars return_url]\n"
     }
     if {$item_group eq ""} {
         set item_group [ad_conn url]
     }
     set item_original $item
-    append html "[export_vars item_group item item_original]\n"
+    append html "[export_form_vars item_group item item_original]\n"
     append html "<input type=\"submit\" value=\"Save settings\">"
 }
 

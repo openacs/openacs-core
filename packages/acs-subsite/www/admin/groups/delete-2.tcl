@@ -25,11 +25,11 @@ if {$operation eq "Yes, I really want to delete this group"} {
 	set group_type [group::delete $group_id]
     }
     if { $return_url eq "" && $group_type ne "" } {
-	set return_url "../group-types/one?[export_vars group_type]"
+	set return_url "../group-types/one?[ad_export_vars group_type]"
     }
 } else {
     if { $return_url eq "" } {
-	set return_url "one?[export_vars group_id]"
+	set return_url "one?[ad_export_vars group_id]"
     }
 }
 

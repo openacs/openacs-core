@@ -66,7 +66,7 @@ if { [lindex $dependency_results 0] == 1 && [llength [lindex $dependency_results
     We've added these additional packages needed, and ask you to review the list of packages below.
 
     <form action=\"packages-install-2\" method=\"post\">
-    [export_vars spec_files]<p>
+    [export_form_vars spec_files]<p>
     
     <blockquote>
     <table>
@@ -111,7 +111,7 @@ if { [lindex $dependency_results 0] == 1 && [llength [lindex $dependency_results
     If you think you might want to use a package later (but not right away),
     install it but don't enable it.
     
-    [export_vars spec_files]<p>
+    [export_form_vars spec_files]<p>
     
     <blockquote>
     <table>

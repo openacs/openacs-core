@@ -51,6 +51,6 @@ db_1row select_attr_name {
 
 set context [list [list one?[export_url_vars attribute_id] "One attribute"] "Add values"]
 
-set export_vars [export_vars -form {attribute_id return_url}]
+set export_vars [ad_export_vars -form {attribute_id return_url}]
 
 ad_return_template

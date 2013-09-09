@@ -72,7 +72,7 @@ order by lower(element_name)
 
 # Build the member state dimensional slider
 
-set base_url [ad_conn package_url]admin/groups/elements-display?[export_vars {group_id rel_type}]
+set base_url [ad_conn package_url]admin/groups/elements-display?[ad_export_vars {group_id rel_type}]
 
 template::multirow create possible_member_states \
 	val label url

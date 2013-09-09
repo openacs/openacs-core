@@ -19,7 +19,7 @@ ad_page_contract {
     export_form_vars:onevalue
 }
 
-set context [list [list one?[export_vars attribute_id] "One attribute"] "Delete attribute"]
+set context [list [list one?[ad_export_vars attribute_id] "One attribute"] "Delete attribute"]
 
 db_1row select_object_type {
     select a.object_type, a.pretty_name as attribute_pretty_name
@@ -27,6 +27,6 @@ db_1row select_object_type {
      where a.attribute_id = :attribute_id
 }
 
-set export_form_vars [export_vars -form {attribute_id return_url}]
+set export_form_vars [ad_export_vars -form {attribute_id return_url}]
 
 ad_return_template

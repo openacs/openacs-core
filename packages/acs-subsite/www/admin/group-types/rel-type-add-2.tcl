@@ -50,7 +50,7 @@ if { [catch {
 db_release_unused_handles
 
 if { $return_url eq "" } {
-    set return_url "one?[export_vars {group_type}]"
+    set return_url "one?[ad_export_vars {group_type}]"
 }
 
 ad_returnredirect $return_url

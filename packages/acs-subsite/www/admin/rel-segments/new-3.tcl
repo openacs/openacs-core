@@ -66,7 +66,7 @@ if { ![db_string segments_exists_p {
 }
 
 
-set context [list [list "[ad_conn package_url]admin/rel-segments/" "Relational segments"] [list one?[export_vars segment_id] "One segment"] "Create constraints"]
-set export_vars [export_vars -form {segment_id return_url}]
+set context [list [list "[ad_conn package_url]admin/rel-segments/" "Relational segments"] [list one?[ad_export_vars segment_id] "One segment"] "Create constraints"]
+set export_vars [ad_export_vars -form {segment_id return_url}]
 
 ad_return_template

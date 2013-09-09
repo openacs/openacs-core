@@ -18,7 +18,7 @@ ad_page_contract {
     counts:onerow
 }
 
-set context [list [list "" "Relationship types"] [list one?[export_vars rel_type] "One type"] "Delete type"]
+set context [list [list "" "Relationship types"] [list one?[ad_export_vars rel_type] "One type"] "Delete type"]
 
 set rel_type_pretty_name [db_string select_pretty_name {
     select t.pretty_name
@@ -46,7 +46,7 @@ if { $subtypes_exist_p } {
           from acs_object_types t
          where t.supertype = :rel_type
     } {
-	template::multirow append subtypes $rel_type $pretty_name [export_vars {rel_type return_url}]
+	template::multirow append subtypes $rel_type $pretty_name [ad_export_vars {rel_type return_url}]
     }
     ad_return_template "delete-subtypes-exist"
     return
@@ -59,6 +59,6 @@ db_1row select_counts {
       from dual
 } -column_array counts
 
-set export_vars [export_vars -form {rel_type return_url}]
+set export_vars [ad_export_vars -form {rel_type return_url}]
 
 ad_return_template

@@ -21,7 +21,7 @@ if { $return_url eq "" } {
 	from group_type_rels g 
 	where g.group_rel_type_id = :group_rel_type_id
     }
-    set return_url one?[export_vars {group_type}]
+    set return_url one?[ad_export_vars {group_type}]
 }
 
 if {$operation eq "Yes, I really want to remove this relationship type"} {
