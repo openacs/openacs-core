@@ -446,9 +446,9 @@ ad_proc -public db_html_select_value_options {
 
     foreach option $options {
 	if { [lindex $option $value_index] in $select_option } {
-	    append select_options "<option value=\"[util_quote_double_quotes [lindex $option $value_index]]\" selected=\"selected\">[lindex $option $option_index]</option>\n"
+	    append select_options "<option value=\"[ad_quotehtml [lindex $option $value_index]]\" selected=\"selected\">[lindex $option $option_index]</option>\n"
 	} else {
-	    append select_options "<option value=\"[util_quote_double_quotes [lindex $option $value_index]]\">[lindex $option $option_index]</option>\n"
+	    append select_options "<option value=\"[ad_quotehtml [lindex $option $value_index]]\">[lindex $option $option_index]</option>\n"
 	}
     }
     return $select_options
