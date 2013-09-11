@@ -1,5 +1,5 @@
 <master>
-<property name=title>@title;noquote@</property>
+<property name="doc(title)">@title;noquote@</property>
 <property name="context">@context;noquote@</property>
 
 Sorry, no AOLserver Tcl API procedures were found with that name.
