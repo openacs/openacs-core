@@ -1,5 +1,5 @@
 <master>
-<property name="title">#acs-subsite.ISO_Codes_Not_Loaded#</property>
+<property name="doc(title)">#acs-subsite.ISO_Codes_Not_Loaded#</property>
 <property name="context">#acs-subsite.No_ISO_Codes#</property>
  
 <H2>#acs-subsite.ISO_Codes_not_loaded#</H2>

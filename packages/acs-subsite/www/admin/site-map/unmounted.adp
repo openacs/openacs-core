@@ -1,5 +1,5 @@
 <master>
-  <property name="title">@page_title@</property>
+  <property name="doc(title)">@page_title@</property>
   <property name="context">@context@</property>
 
   The following application packages are not mounted anywhere.  You can delete an unmounted package by clicking the "delete" option.

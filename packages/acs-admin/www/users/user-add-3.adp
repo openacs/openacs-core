@@ -1,5 +1,5 @@
 <master>
-<property name=title>Email sent</property>
+<property name="doc(title)">Email sent</property>
 <property name="context">@context;noquote@</property>
 
 <p>

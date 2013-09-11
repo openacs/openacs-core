@@ -1,5 +1,5 @@
 <master>
-<property name="title">#acs-subsite.Vacation_Info_Updated#</property>
+<property name="doc(title)">#acs-subsite.Vacation_Info_Updated#</property>
 <property name="context">#acs-subsite.Information_Updated#</property>
  
 <p>#acs-subsite.Vacation_information_updated#</p>

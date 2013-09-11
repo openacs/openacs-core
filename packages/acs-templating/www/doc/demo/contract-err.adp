@@ -1,5 +1,5 @@
 <master>
-<property name=title>Problem with Your Input</property>
+<property name="doc(title)">Problem with Your Input</property>
 
 <hr>
 

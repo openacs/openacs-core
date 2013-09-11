@@ -1,5 +1,5 @@
 <master>
-<property name=title>User Input Form</property>
+<property name="doc(title)">User Input Form</property>
 
 <form action=contract-2>
   <table>

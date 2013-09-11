@@ -1,6 +1,6 @@
 <master>
 <property name="context">@context;noquote@</property>
-<property name="title">@props.constraint_name;noquote@</property>
+<property name="doc(title)">@props.constraint_name;noquote@</property>
 
 All elements in side @props.rel_side@ of the segment 
   <a href=../one?segment_id=@props.segment_id@>@props.segment_name@</a> 

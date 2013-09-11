@@ -2,7 +2,7 @@
 
 <!-- examine master-sample.adp to see that title and closing_text are essentially
 used as onevalues within the master page -->
-<property name="title">@name;noquote@'s Personal Home Page</property>
+<property name="doc(title)">@name;noquote@'s Personal Home Page</property>
 <property name="closing_text"><small>It's been a pleasure to serve you this page</small></property>
 
 

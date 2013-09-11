@@ -1,5 +1,5 @@
 <master>
-  <property name="title">#acs-subsite.Reset_Password#</property>
+  <property name="doc(title)">#acs-subsite.Reset_Password#</property>
   <property name="context">@context;noquote@</property>
 
 <if @message@ not nil>

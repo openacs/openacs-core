@@ -1,6 +1,6 @@
 <master>
 <property name="context">@context;noquote@</property>
-<property name="title">One relation</property>
+<property name="doc(title)">One relation</property>
 				   
 <h3>Attributes</h3>
 

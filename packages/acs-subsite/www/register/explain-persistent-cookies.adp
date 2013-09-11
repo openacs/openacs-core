@@ -1,5 +1,5 @@
 <master>
-<property name="title">#acs-subsite.lt_Saving_email_address_#</property>
+<property name="doc(title)">#acs-subsite.lt_Saving_email_address_#</property>
 <property name="context_bar">#acs-subsite.at# @home_link;noquote@</property>
 <property name="context">#acs-subsite.lt_Saving_email_address_#</property>
 

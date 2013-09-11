@@ -1,5 +1,5 @@
 <master>
-  <property name="title">@page_title@</property>
+  <property name="doc(title)">@page_title@</property>
 
 <div style="float: right;">
   <a href="developer" class="button">Developer's Admin</a>

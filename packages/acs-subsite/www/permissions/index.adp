@@ -1,5 +1,5 @@
   <master>
-    <property name="title">#acs-subsite.Permissions#</property>
+    <property name="doc(title)">#acs-subsite.Permissions#</property>
     <property name="context">@context;noquote@</property>
 
     <if @objects:rowcount@ gt 0> 

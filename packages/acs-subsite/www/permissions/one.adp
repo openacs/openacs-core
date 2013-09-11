@@ -1,5 +1,5 @@
   <master>
-  <property name="title">#acs-subsite.Permissions_for_name#</property>
+  <property name="doc(title)">#acs-subsite.Permissions_for_name#</property>
   <property name="context">@context;noquote@</property>
 
   <h3>#acs-subsite.lt_Inherited_Permissions#</h3>

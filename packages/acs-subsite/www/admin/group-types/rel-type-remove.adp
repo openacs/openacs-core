@@ -1,6 +1,6 @@
 <master>
 <property name="context">@context;noquote@</property>
-<property name="title">Remove @rel_pretty_name;noquote@</property>
+<property name="doc(title)">Remove @rel_pretty_name;noquote@</property>
 
 Are you sure you want to remove @rel_pretty_name@ from the list of allowable relations for groups of type @group_type_pretty_name@?
 

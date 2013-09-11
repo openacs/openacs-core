@@ -1,6 +1,6 @@
 <master>
 <property name="context">@context;noquote@</property>
-<property name="title">Violations exists</property>
+<property name="doc(title)">Violations exists</property>
 
 The following relations are in violation of the constraint you are
 adding. You must remove these relations before you can add the

@@ -1,6 +1,6 @@
 <master>
 <property name="context">@context;noquote@</property>
-<property name="title">Roles</property>
+<property name="doc(title)">Roles</property>
 
 <ul>
   <if @roles:rowcount@ eq 0>

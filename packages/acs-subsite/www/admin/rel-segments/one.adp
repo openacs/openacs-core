@@ -1,6 +1,6 @@
 <master>
 <property name="context">@context;noquote@</property>
-<property name="title">Segment "@props.segment_name;noquote@"</property>
+<property name="doc(title)">Segment "@props.segment_name;noquote@"</property>
 				   
 <h4>Properties of this segment</h4>
 

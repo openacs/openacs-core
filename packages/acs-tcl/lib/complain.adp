@@ -1,5 +1,5 @@
 <master>
-  <property name="title">#acs-tcl.lt_Problem_with_your_inp#</property>
+  <property name="doc(title)">#acs-tcl.lt_Problem_with_your_inp#</property>
 
 <p>
   #acs-tcl.We_had#

@@ -1,5 +1,5 @@
 <master>
-<property name="title">Edit and code links</property>
+<property name="doc(title)">Edit and code links</property>
 <property name="context">editlocal</property>
 <p>
 The <u>e</u> and <u>c</u> links in the bottom profiling pane display when ds is enabled 

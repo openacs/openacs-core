@@ -1,5 +1,5 @@
 <master>
-<property name="title">#search.Advanced_Search#</property>
+<property name="doc(title)">#search.Advanced_Search#</property>
 <property name="context">"advanced search"</property>
 
 <div>
