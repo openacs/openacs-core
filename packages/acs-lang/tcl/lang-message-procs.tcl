@@ -17,6 +17,65 @@ ad_library {
 
 namespace eval lang::message {}
 
+ad_proc -public lang::message::check { 
+    locale
+    package_key
+    message_key
+    message
+} { 
+    <p>
+    Check a message for semantic and sanity correctness (usually called just before a message is registered).
+    Throws an error when one of the checks fails.
+    </p>
+} { 
+    # Qualify the locale variable value with a country code if it is
+    # just a language
+    if { [string length $locale] == 2 } {
+        # It seems to be a language (iso codes are 2 characters)
+        # We don't do a more throughout check since this is not
+        # invoked by users.
+        # let's get the default locale for that language
+        set locale [lang::util::default_locale_from_lang $locale]
+    } 
+
+    # Create a globally (across packages) unique key for the cache
+    set key "${package_key}.${message_key}"
+
+    # Check that non-en_US messages don't have invalid embedded variables
+    # Exclude the special case of datetime configuration messages in acs-lang. An alternative
+    # to treating those messages as a special case here would be to have those messages use
+    # quoted percentage signs (double percentage signs).
+    if { $locale ne "en_US" && ![regexp {^acs-lang\.localization-} $key] } {
+        set embedded_vars [get_embedded_vars $message]
+        set embedded_vars_en_us [get_embedded_vars [lang::message::lookup en_US $key {} {} 0]]
+        set missing_vars [util_get_subset_missing $embedded_vars $embedded_vars_en_us]
+
+        if { [llength $missing_vars] > 0 } {
+            error "Message key '$key' in locale '$locale' has these embedded variables not present in the en_US locale: [join $missing_vars ","]."
+        }
+    }
+    
+    # If a localization key from acs-lang...
+    if {[regexp {^acs-lang\.localization-(.*)} $key match lc_key]} {
+	# ...number separators for decimal and thousands must be checked to ensure they are not equal,
+	# otherwise the localized number parsing will fail.
+	if {$lc_key in {decimal_point thousands_sep mon_decimal_point mon_thousands_sep}} {
+	  if {[regexp {^mon_(.*)} $lc_key match lc_key]} {
+	    set decimal_point [lc_get -locale $locale "mon_decimal_point"]
+	    set thousands_sep [lc_get -locale $locale "mon_thousands_sep"]
+	  } else {
+	    set decimal_point [lc_get -locale $locale "decimal_point"]
+	    set thousands_sep [lc_get -locale $locale "thousands_sep"]
+	  }
+	  set $lc_key $message
+	  if {$decimal_point eq $thousands_sep} {
+	      error "Message keys for thousands and decimal separators must be different."
+	  }
+	}
+    }
+}
+
+
 ad_proc -public lang::message::register { 
     {-update_sync:boolean}
     {-upgrade_status "no_upgrade"}
@@ -98,20 +157,9 @@ ad_proc -public lang::message::register {
             error $error_message
         }
     }
-
-    # Check that non-en_US messages don't have invalid embedded variables
-    # Exclude the special case of datetime configuration messages in acs-lang. An alternative
-    # to treating those messages as a special case here would be to have those messages use
-    # quoted percentage signs (double percentage signs).
-    if { $locale ne "en_US" && ![regexp {^acs-lang\.localization-} $key] } {
-        set embedded_vars [get_embedded_vars $message]
-        set embedded_vars_en_us [get_embedded_vars [lang::message::lookup en_US $key {} {} 0]]
-        set missing_vars [util_get_subset_missing $embedded_vars $embedded_vars_en_us]
-
-        if { [llength $missing_vars] > 0 } {
-            error "Message key '$key' in locale '$locale' has these embedded variables not present in the en_US locale: [join $missing_vars ","]. Message has not been imported."
-        }
-    }
+    
+    # Call semantic and sanity checks on the key before registering.
+    lang::message::check $locale $package_key $message_key $message
     
     # Build up an array of columns to set
     array set cols [list]

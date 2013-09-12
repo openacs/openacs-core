@@ -1063,3 +1063,15 @@ aa_register_case -procs {
             lang::message::unregister $package_key $message_key
         }
 }
+
+aa_register_case lang_messages_correct {
+    This test calls the checks to ensure a message is correct on every message in the system
+} {
+    aa_run_with_teardown -rollback -test_code {
+	db_foreach query "
+	  select message_key, package_key, locale, message from lang_messages" {
+	    aa_false "Message $message_key in package $package_key for locale $locale correct" \
+	      [catch {lang::message::check $locale $package_key $message_key $message}]
+	}
+    }
+}

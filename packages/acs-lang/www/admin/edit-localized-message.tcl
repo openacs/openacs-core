@@ -168,6 +168,16 @@ ad_form -extend -name message -form {
     }
 } -on_submit {
 
+    set first_translated_message ""
+    
+    with_catch errmsg {
+	# Call semantic and sanity checks on the key before registering.
+	lang::message::check $locale $package_key $message_key $message
+    } {
+	template::form::set_error message message $errmsg
+	break
+    }
+    
     # Register message via acs-lang
     lang::message::register -comment $comment $locale $package_key $message_key $message
 
