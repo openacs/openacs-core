@@ -59,16 +59,13 @@ ad_proc -public lang::message::check {
     if {[regexp {^acs-lang\.localization-(.*)} $key match lc_key]} {
 	# ...number separators for decimal and thousands must be checked to ensure they are not equal,
 	# otherwise the localized number parsing will fail.
-	if {$lc_key in {decimal_point thousands_sep mon_decimal_point mon_thousands_sep}} {
-	  if {[regexp {^mon_(.*)} $lc_key match lc_key]} {
-	    set decimal_point [lc_get -locale $locale "mon_decimal_point"]
-	    set thousands_sep [lc_get -locale $locale "mon_thousands_sep"]
-	  } else {
-	    set decimal_point [lc_get -locale $locale "decimal_point"]
-	    set thousands_sep [lc_get -locale $locale "thousands_sep"]
-	  }
+	if {$lc_key in {decimal_point thousands_sep mon_thousands_sep}} {
+	  set decimal_point [lc_get -locale $locale "decimal_point"]
+	  set thousands_sep [lc_get -locale $locale "thousands_sep"]
+	  set mon_thousands_sep [lc_get -locale $locale "mon_thousands_sep"]
 	  set $lc_key $message
-	  if {$decimal_point eq $thousands_sep} {
+	  set thousands_sep ${thousands_sep}${mon_thousands_sep}
+	  if {[string first $decimal_point $thousands_sep] > -1} {
 	      error "Message keys for thousands and decimal separators must be different."
 	  }
 	}
