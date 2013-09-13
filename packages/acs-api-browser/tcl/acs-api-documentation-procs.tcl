@@ -626,11 +626,11 @@ ad_proc -public api_proc_documentation {
                          -parameter FancySourceFormattingP \
                          -default 1]} {
 			append out "<dt><b>Source code:</b></dt><dd>
-<pre>[api_tcl_to_html $proc_name]<pre>
+<pre>[api_tcl_to_html $proc_name]</pre>
 </dd><p>\n"
 		} else {
 		append out "<dt><b>Source code:</b></dt><dd>
-<pre>[ns_quotehtml [api_get_body $proc_name]]<pre>
+<pre>[ns_quotehtml [api_get_body $proc_name]]</pre>
 </dd><p>\n"
 	        }
         }
@@ -642,21 +642,21 @@ ad_proc -public api_proc_documentation {
                 set missing {}
 		if { [file exists ${xql_base_name}.xql] } {
 			append there "<dt><b>Generic XQL file:</b></dt>
-<blockquote>[api_quote_file ${xql_base_name}.xql]</blockquote>
+<blockquote><pre>[api_quote_file ${xql_base_name}.xql]</pre></blockquote>
 <p>\n"
 		} else {
                       lappend missing Generic
 		}
 		if { [file exists ${xql_base_name}-postgresql.xql] } {
 			append there "<dt><b>Postgresql XQL file:</b></dt>
-<blockquote>[api_quote_file ${xql_base_name}-postgresql.xql]</blockquote>
+<blockquote><pre>[api_quote_file ${xql_base_name}-postgresql.xql]</pre></blockquote>
 <p>\n"
 		} else {
                       lappend missing PostgreSQL
 		}
 		if { [file exists ${xql_base_name}-oracle.xql] } {
 			append there "<dt><b>Oracle XQL file:</b></dt>
-<blockquote>[api_quote_file ${xql_base_name}-oracle.xql]</blockquote>
+<blockquote><pre>[api_quote_file ${xql_base_name}-oracle.xql]</pre></blockquote>
 <p>\n"
 		} else {
                     lappend missing Oracle
