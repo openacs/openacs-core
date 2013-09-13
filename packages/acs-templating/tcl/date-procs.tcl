@@ -706,7 +706,6 @@ ad_proc -public template::util::negative { value } {
     return 0
   } else {
     return [expr {[template::util::leadingTrim $value] < 0}]
-    return [expr {$value < 0}]
   }
 }
 
