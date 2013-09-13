@@ -134,7 +134,7 @@ ad_proc -public template::util::is_true { x } {
     @return 0 if the variable can be interpreted as false; 
             1 for true if it can't.
 } {
-  expr {[string tolower $x] in {0 f false n no off ""}}
+    expr {[string tolower $x] ni {0 f false n no off ""}}
 }
 
 ad_proc -public template::util::lpop { ref } {
