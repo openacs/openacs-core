@@ -832,8 +832,10 @@ ad_proc -public api_get_body {proc_name} {
     }
   } elseif {[regexp {^([^ ]+)(Class|Object) (.*)$} $proc_name match thread kind obj]} {
     return [$thread do $obj serialize]
-  } else {
+  } elseif {[info proc $proc_name] ne ""} {
     return [info body $proc_name]
+  } else {
+    return "No such Tcl-proc"
   }
 }
 
