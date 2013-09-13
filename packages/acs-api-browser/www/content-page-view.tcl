@@ -59,6 +59,7 @@ if {[regsub -all {[.][.]/} $filename "" shortened_filename]} {
 
 if {![file exists $filename] || [file isdirectory $filename]} {
     set file_contents "file '$filename' not found"
+    multirow create xql_links link
 } else {
     if { $source_p } {
         if {[catch {
