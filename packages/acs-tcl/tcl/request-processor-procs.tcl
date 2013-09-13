@@ -1120,10 +1120,21 @@ ad_proc -private rp_concrete_file {
 
   # None of the extensions from ExtensionPrecedence were found - just pick
   # the first in alphabetical order.
-  if { [llength $files] > 0 } {
-    set files [lsort $files]
-    return [lindex $files 0]
-  }
+  #
+  # GN: OpenACS was trying to serve files with arbitrary extensions
+  # (i.e. not included in the kernel parameter ExtensionPrecedence) in
+  # case the requested file was not found.  This is quite dangerous
+  # and breaks e.g. the listing of openacs.org/repository (which is a
+  # directory), since the directory is moved every night into
+  # openacs.org/repository.bak. With the given logic, it tries to
+  # server the .bak directory as a file (which does of course not
+  # work). That blind logic is not inecessary, and is actually a
+  # potential attack vector.
+  #
+  #if { [llength $files] > 0 } {
+  #  set files [lsort $files]
+  #  return [lindex $files 0]
+  #}
 
   # Nada!
   return ""
