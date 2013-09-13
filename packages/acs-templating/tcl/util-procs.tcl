@@ -134,7 +134,7 @@ ad_proc -public template::util::is_true { x } {
     @return 0 if the variable can be interpreted as false; 
             1 for true if it can't.
 } {
-  expr [lsearch -exact {0 f false n no off ""} [string tolower $x]] == -1   
+  expr {[string tolower $x] in {0 f false n no off ""}}
 }
 
 ad_proc -public template::util::lpop { ref } {
@@ -143,10 +143,8 @@ ad_proc -public template::util::lpop { ref } {
 
     @param ref The name of a list in the calling frame on which to operate.
 } {
-
   upvar $ref the_list
-
-  set the_list [lrange $the_list 0 [expr {[llength $the_list] - 2}]]
+  set the_list [lrange $the_list 0 end-1]
 }
 
 ad_proc -public template::util::lnest { listref value next args } {
@@ -229,7 +227,7 @@ ad_proc -public template::util::set_to_list { set args } {
   for { set i 0 } { $i < [ns_set size $set] } { incr i } {
 
     set key [ns_set key $set $i]
-    if { [lsearch -exact $args $key] != -1 } { continue }
+    if { $key in $args } { continue }
 
     lappend result $key [ns_set value $set $i]
   }
