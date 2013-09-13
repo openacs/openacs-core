@@ -1110,9 +1110,10 @@ ad_proc -private rp_concrete_file {
   # Grab a list of all available files with extensions.
   set files [glob -nocomplain "$path_glob$extension_pattern"]
 
-  # Search for files in the order specified in ExtensionPrecedence.
+  # Search for files in the order specified in ExtensionPrecedence,
+  # include always "vuh"
   set precedence [parameter::get -package_id [ad_acs_kernel_id] -parameter ExtensionPrecedence -default tcl]
-  foreach extension [split [string trim $precedence] ","] {
+  foreach extension [concat [split [string trim $precedence] ","] vuh] {
     if { [lsearch -glob $files "*.$extension"] != -1 } {
       return "$path.$extension"
     }
