@@ -595,15 +595,13 @@ ad_proc -public template::util::clear_cookie { name { domain "" } } {
   ns_set put [ns_conn outputheaders] "Set-Cookie" $cookie
 } 
 
-ad_proc -public template::util::quote_html {
+ad_proc -deprecated -public template::util::quote_html {
   html
 } {
   Quote possible HTML tags in the contents of the html parameter.  
 } {
 
-  regsub -all \" [ns_quotehtml $html] \\&quot\; html
-
-  return $html
+  return [ad_quotehtml $html]
 }
 
 ad_proc -public template::util::multirow_quote_html {multirow_ref column_ref} {
@@ -619,7 +617,7 @@ ad_proc -public template::util::multirow_quote_html {multirow_ref column_ref} {
 
     for { set i 1 } { $i <= $rowcount } { incr i} {
         upvar $multirow_ref:$i arr
-        set arr($column_ref) [template::util::quote_html [set arr($column_ref)]]
+        set arr($column_ref) [ad_quotehtml [set arr($column_ref)]]
     }
 
 }

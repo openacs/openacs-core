@@ -401,7 +401,7 @@ ad_proc -public template::widget::input {
 		}
 
         if { [info exists element(value)] } {
-            append output " value=\"[template::util::quote_html $element(value)]\""
+            append output " value=\"[ad_quotehtml $element(value)]\""
         } 
 
         foreach name [array names attributes] {
@@ -655,7 +655,7 @@ ad_proc -public template::widget::menu {
                     set label [lindex $option 0]
                     set value [lindex $option 1]
 
-                    append output " <input type=\"$widget_type\" name=\"$widget_name\" value=\"[template::util::quote_html $value]\""
+                    append output " <input type=\"$widget_type\" name=\"$widget_name\" value=\"[ad_quotehtml $value]\""
                     if { [info exists values($value)] } {
                         append output " checked=\"checked\""
                     }
@@ -680,7 +680,7 @@ ad_proc -public template::widget::menu {
                     set label [lindex $option 0]
                     set value [lindex $option 1]
 
-                    append output " <option value=\"[template::util::quote_html $value]\""
+                    append output " <option value=\"[ad_quotehtml $value]\""
                     if { [info exists values($value)] } {
                         append output " selected=\"selected\""
                     }
