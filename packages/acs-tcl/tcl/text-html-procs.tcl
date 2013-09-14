@@ -288,8 +288,7 @@ ad_proc -private util_close_html_tags {
       set frag [string map [list &# "&amp;#"] $html_fragment]
       if {[catch {dom parse -html <body>$frag doc} errorMsg]} {
         # we got an error, so do normal processing
-        ns_log notice "tdom can't parse the provided HTML, error=$errorMsg,\n\
-	  checking fragment without tdom"
+        #ns_log notice "tdom can't parse the provided HTML, error=$errorMsg,\nchecking fragment without tdom"
       } else {
         $doc documentElement root
         set html ""
