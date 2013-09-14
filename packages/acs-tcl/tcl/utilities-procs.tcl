@@ -4245,7 +4245,7 @@ ad_proc -public util::interval_pretty {
     set result {}
     if { $seconds > 0 } {
         set hrs [expr {$seconds / (60*60)}]
-        set mins [expr ($seconds / 60) % 60]
+        set mins [expr {($seconds / 60) % 60}]
         set secs [expr {$seconds % 60}]
         if { $hrs > 0 } { append result "${hrs}h " }
         if { $hrs > 0 || $mins > 0 } { append result "${mins}m " }

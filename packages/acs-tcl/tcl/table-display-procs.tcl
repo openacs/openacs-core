@@ -436,8 +436,8 @@ ad_proc -deprecated ad_table {
 	    # generate the row band color 
             if { $Tband_count >= $Trows_per_band } {
                 set Tband_count 0
-                set Tband_color [expr ($Tband_color + 1) % $Tn_bands ]
-                set Tband_class [expr ($Tband_class + 1) % $Tn_band_classes ]
+                set Tband_color [expr {($Tband_color + 1) % $Tn_bands} ]
+                set Tband_class [expr {($Tband_class + 1) % $Tn_band_classes} ]
             }
             # do this check since we would like the ability to band with
             # page background as well
