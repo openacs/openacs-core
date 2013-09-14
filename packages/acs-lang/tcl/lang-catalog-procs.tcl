@@ -404,9 +404,9 @@ ad_proc -public lang::catalog::export {
 		set messages_list [list]
 		set descriptions_list [list]
 		foreach message_tuple [all_messages_for_package_and_locale $package_key $locale] {
-            lassign $message_tuple message_key message description
+                    lassign $message_tuple message_key message description
  		    lappend messages_list $message_key $message
- 		    lappend descriptions_list $message_key description
+ 		    lappend descriptions_list $message_key $description
 		}
 
 		set catalog_file_path [get_catalog_file_path \
