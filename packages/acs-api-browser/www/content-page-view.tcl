@@ -38,12 +38,14 @@ if { ![info exists version_id] && \
 }
 
 if { [info exists version_id] } {
-    db_1row package_info_from_version_id {
+    db_0or1row package_info_from_version_id {
         select pretty_name, package_key, version_name
           from apm_package_version_info
          where version_id = :version_id
     }
-    lappend context [list "package-view?version_id=$version_id&kind=content" "$pretty_name $version_name"]
+    if {[info exists pretty_name]} {
+        lappend context [list "package-view?version_id=$version_id&kind=content" "$pretty_name $version_name"]
+    }
 }
 
 
