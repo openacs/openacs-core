@@ -2299,10 +2299,12 @@ ad_proc -public ad_returnredirect {
     @see util_user_message
     @see ad_script_abort
 } {
-    if { [string is false $html_p] } {
-      	util_user_message -message $message
-    } else {
-      	util_user_message -message $message -html
+    if {$message ne ""} {
+	if { [string is false $html_p] } {
+	    util_user_message -message $message
+	} else {
+	    util_user_message -message $message -html
+	}
     }
 
     if { [util_complete_url_p $target_url] } {
