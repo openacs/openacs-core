@@ -127,27 +127,25 @@ ad_proc -public apm_guess_file_type { package_key path } {
 	set type "java_code"
     } elseif {$extension eq ".jar"} {
 	set type "java_archive"
-    } elseif { [lsearch $components "doc"] >= 0 } {
+    } elseif { "doc" in $components } {
 	set type "documentation"
-    } elseif { $extension eq ".pl" || \
-	       $extension eq ".sh" || \
-	       [lsearch $components "bin"] >= 0 } {
+    } elseif { $extension eq ".pl" || $extension eq ".sh" || "bin" in $components } {
 	set type "shell"
-    } elseif { [lsearch $components "templates"] >= 0 } {
+    } elseif { "templates" in $components } {
 	set type "template"
-    } elseif { [llength $components] == 1 && \
-              ($extension eq ".html" || $extension eq ".adp") } {
+    } elseif { [llength $components] == 1 && 
+	       ($extension eq ".html" || $extension eq ".adp") } {
 		# HTML or ADP file in the top level of a package - assume it's documentation.
 	set type "documentation"
 
         # RBM: Changed the next elseif to check for 'www' or 'admin-www' only n levels down
         # the path, since that'd be the minimum in a path counting from the pageroot
 
-    } elseif { [lsearch $components_lesser "www"] >= 0 || [lsearch $components_lesser "admin-www"] >= 0 } {
+    } elseif { "www" in $components_lesser || "admin-www" in $components_lesser } {
 	set type "content_page"
-    } elseif { [lsearch $components_lesser "lib"] >= 0 } {
+    } elseif { "lib" in $components_lesser } {
 	set type "include_page"
-    } elseif { $extension eq ".tcl" && [string equal [lindex $components_lesser 0] "tcl"] } {
+    } elseif { $extension eq ".tcl" && [lindex $components_lesser 0] eq "tcl" } {
         # A .tcl file residing under dir .../package_key/tcl/
         if { [regexp -- {-(procs|init)(-[0-9a-zA-Z]*)?\.tcl$} [file tail $path] "" kind] } {
             if {[lindex $components end-1] eq "test"} {
