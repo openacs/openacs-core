@@ -62,19 +62,21 @@ switch $kind {
     procs_files {
         array set procs [list]
 
-        multirow create procs_files path full_path first_sentence
+        multirow create procs_files path full_path first_sentence view
 
-        foreach path [apm_get_package_files -package_key $package_key -file_types tcl_procs] {
+        foreach path [apm_get_package_files -package_key $package_key -file_types {tcl_procs include_page}] {
             set full_path "packages/$package_key/$path"
             
             if { [nsv_exists api_library_doc $full_path] } {
                 array set doc_elements [nsv_get api_library_doc $full_path]
                 set first_sentence "[api_first_sentence [lindex $doc_elements(main) 0]]"
+                set view procs-file-view
             } else {
                 set first_sentence ""
+                set view content-page-view
             }
 
-            multirow append procs_files $path $full_path $first_sentence
+            multirow append procs_files $path $full_path $first_sentence $view
         }
     }
     procs {
