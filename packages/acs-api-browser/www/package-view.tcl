@@ -28,10 +28,17 @@ ad_page_contract {
 
 set public_p [api_set_public $version_id $public_p]
 
-db_1row pretty_name_from_package_id {
+db_0or1row pretty_name_from_package_id {
     select pretty_name, package_key, version_name
       from apm_package_version_info
      where version_id = :version_id
+}
+if {![info exists pretty_name]} {
+    set context ""
+    set kind "none"
+    set title "No such Package (probably outdated link)"
+    set dimensional_slider $title
+    return
 }
 
 set dimensional_list {
