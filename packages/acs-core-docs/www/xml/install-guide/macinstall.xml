@@ -8,37 +8,9 @@
 <sect1 id="mac-installation">
   <title>OpenACS Installation Guide for Mac OS X</title>
   <formalpara>
-    <title>Prerequisites</title>
-    <para>Install readline:</para>
+    See the wiki for an actual guideline: <ulink url="http://openacs.org/xowiki/openacs-system-install-osx/">Installing OpenACS on Mac OS X</ulink>
   </formalpara>
-  <orderedlist>
-    <listitem>
-      <para>Download readline from http://ftp.gnu.org/pub/gnu/readline/readline-4.3.tar.gz into /usr/local/src</para>
-    </listitem>
-    <listitem>
-      <para>Extract readline in /usr/local/src, configure, compile, and install:</para>
-      <screen><userinput>su - root
-cd /usr/local/src
-tar xvfz readline-4.3.tar.gz
-readline-4.3
-./configure
-make
-make install</userinput></screen>
-    </listitem>
-    <listitem>
-      <para>Proceed with the Unix-like system instructions.  OS X is incompatible with Oracle 8, and Oracle 9i on OSX is not yet verified for OpenACS.  So continue with <xref linkend="postgres"/>.  Additional special steps for OS X are documented inline with the standard Unix-like instructions.</para>
-    </listitem>
-  </orderedlist>
-  
-  <para>Additional resources for installing on OS X.</para>
-  <itemizedlist>
-    <listitem><para><ulink url="http://borkware.com/rants/openacs/">OpenACS on Mac OS X Quickstart</ulink></para>    </listitem>
-    <listitem><para><ulink
-    url="http://openacs.org/forums/message-view?message_id=24887">An
-    older forum thread</ulink></para>
-    </listitem>
-  </itemizedlist>
 
-<para><phrase role="cvstag">($Id$)</phrase></para>
+  <para><phrase role="cvstag">($Id$)</phrase></para>
 
 </sect1>
