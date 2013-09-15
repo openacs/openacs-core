@@ -106,7 +106,7 @@ switch $kind {
         multirow create sql_files path relative_path
 
         set file_types [list data_model data_model_create data_model_drop data_model_upgrade]
-        foreach path [apm_get_package_files -package_key $package_key -file_types $file_types] {
+        foreach path [apm_get_package_files -include_data_model_files -package_key $package_key -file_types $file_types] {
            # Set relative path to everything after sql/ (just using
            # file tail breaks when you've got subdirs of sql)
            regexp {^sql/(.*)} $path match relative_path
