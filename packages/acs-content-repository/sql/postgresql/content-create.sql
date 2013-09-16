@@ -100,6 +100,8 @@ comment on table cr_locales is '
   territory and character set.  (Languages are associated with default
   territories and character sets when not defined).  The formats
   for numbers, currency, dates, etc. are determined by the territory.
+
+  The cr_locales table is deprecated for OpenACS 5.2, and will be removed in OpenACS 6 (TIP #66)
 ';
 
 insert into cr_locales (
