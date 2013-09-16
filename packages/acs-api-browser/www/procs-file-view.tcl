@@ -15,12 +15,12 @@ ad_page_contract {
     proc_doc_list:multirow
 }
 
-if { ![info exists version_id] && \
-        [regexp {^packages/([^ /]+)/} $path "" package_key] } {
+if { ![info exists version_id] && 
+     [regexp {^packages/([^ /]+)/} $path "" package_key] } {
     db_0or1row version_id_from_package_key {
         select version_id 
-          from apm_enabled_package_versions 
-         where package_key = :package_key
+	from apm_enabled_package_versions 
+	where package_key = :package_key
     }
 }
 
@@ -41,12 +41,15 @@ set dimensional_list {
 
 set context [list]
 if { [info exists version_id] } {
-    db_1row package_info_from_package_id {
+    db_0or1row package_info_from_package_id {
         select pretty_name, package_key, version_name
           from apm_package_version_info
          where version_id = :version_id
     }
-    lappend context [list "package-view?version_id=$version_id" "$pretty_name $version_name"]
+    if {[info exists pretty_name]} {
+	lappend context [list "package-view?version_id=$version_id" "$pretty_name $version_name"]
+    }
+
 }
 
 lappend context [file tail $path]
