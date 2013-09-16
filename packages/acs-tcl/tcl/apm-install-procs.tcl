@@ -2394,10 +2394,10 @@ ad_proc -private apm::package_version::attributes::get_pretty_name { attribute_n
 ad_proc -private apm::package_version::attributes::validate_maturity { maturity } {
     set error_message ""
     if { $maturity ne "" } {
-        if { ![regexp {^-?[0-9]+$} $maturity] } {
+        if { ![string is integer $maturity] } {
             set error_message "Maturity must be integer"
-        } elseif { $maturity < -1 || $maturity > 3 } {
-            set error_message "Maturity must be integer between -1 and 3"
+        } elseif { $maturity < -1 || $maturity > 4 } {
+            set error_message "Maturity must be integer between -1 and 4"
         }
     }
 
@@ -2410,10 +2410,10 @@ ad_proc -private apm::package_version::attributes::maturity_int_to_text { maturi
 
     @author Peter Marklund
 } {
-    if {[exists_and_not_null maturity]} {
+    if { $maturity ne "" } {
 
-        if { !($maturity >= -1 && $maturity <= 3) } {
-            error "Maturity must be between -1 and 3 but is \"$maturity\""
+        if { !($maturity >= -1 && $maturity <= 4) } {
+            error "Maturity must be between -1 and 4 but is \"$maturity\""
         }
 
         set maturity_key(-1) "#acs-tcl.maturity_incompatible#"
@@ -2421,6 +2421,7 @@ ad_proc -private apm::package_version::attributes::maturity_int_to_text { maturi
         set maturity_key(1) "#acs-tcl.maturity_immature#"
         set maturity_key(2) "#acs-tcl.maturity_mature#"
         set maturity_key(3) "#acs-tcl.maturity_mature_and_standard#"
+        set maturity_key(4) "#acs-tcl.maturity_deprecated#"
 
         set result [lang::util::localize $maturity_key($maturity)]
 

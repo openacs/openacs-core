@@ -83,6 +83,7 @@
   <msg key="lt_You_must_supply_a_val">You must supply a value for %formal_name%</msg>
   <msg key="lt_You_specified_a_path_">You specified a path to a file that is not allowed on the system.</msg>
   <msg key="lt_Youve_supplied_two_va">You've supplied two values for '%formal_name%'</msg>
+  <msg key="maturity_deprecated">Deprecated</msg>
   <msg key="maturity_immature">Immature</msg>
   <description key="maturity_immature">Maturity level is visible in the Installer and when browsing the repository
 
