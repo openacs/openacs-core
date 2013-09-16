@@ -1770,7 +1770,7 @@ ad_proc -deprecated util_maybe_convert_to_html {raw_string html_p} {
     if { $html_p eq "t" } {
         return $raw_string
     } else {
-        return [util_convert_plaintext_to_html $raw_string]
+        return [ad_text_to_html $raw_string]
     }
 }
 
