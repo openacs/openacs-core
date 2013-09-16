@@ -179,8 +179,8 @@ ad_proc -private db_driverkey {{
         set handle $dbn ; set dbn {}
         set pool [ns_db poolname $handle]
 
-        if { [nsv_exists {db_pool_to_dbn} $pool] } {
-            set dbn [nsv_get {db_pool_to_dbn} $pool]
+        if { [nsv_exists db_pool_to_dbn $pool] } {
+            set dbn [nsv_get db_pool_to_dbn $pool]
         } else {
             # db_pool_to_dbn_init runs on startup, so other than some
             # broken code deleting the nsv key (very unlikely), the
@@ -192,7 +192,7 @@ ad_proc -private db_driverkey {{
         }
     }
 
-    if { ![nsv_exists {db_driverkey} $dbn] } {
+    if { ![nsv_exists db_driverkey $dbn] } {
         # This ASSUMES that any overriding of this default value via
         # "ns_param driverkey_dbn" has already been done:
 
@@ -209,19 +209,19 @@ ad_proc -private db_driverkey {{
 
         if { [string match "Oracle*" $driver] } {
             set driverkey {oracle}
-        } elseif { [string equal $driver {PostgreSQL}] } {
-            set driverkey {postgresql}
-        } elseif { [string equal $driver {ODBC}] } {
-            set driverkey {nsodbc}
+        } elseif { $driver eq "PostgreSQL"] } {
+            set driverkey "postgresql"
+        } elseif { $driver eq "ODBC"] } {
+            set driverkey "nsodbc"
         } else {
             set driverkey {}
-            ns_log Error "$proc_name: Unknown driver '$driver_type'."
+            ns_log Error "$proc_name: Unknown driver '$driver'."
         }
 
-        nsv_set {db_driverkey} $dbn $driverkey
+        nsv_set db_driverkey $dbn $driverkey
     }
 
-    return [nsv_get {db_driverkey} $dbn]
+    return [nsv_get db_driverkey $dbn]
 }
 
 
