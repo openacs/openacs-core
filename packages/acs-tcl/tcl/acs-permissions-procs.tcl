@@ -72,19 +72,41 @@ ad_proc -public permission::permission_p {
 } {
     if { $party_id eq "" } {
         set party_id [ad_conn user_id]
-    }    
-
-    if { $no_cache_p } {
-        permission::permission_thread_cache_flush
     }
 
-    if { $no_cache_p || ![permission::cache_p] } {
-        util_memoize_flush [list permission::permission_p_not_cached -party_id $party_id -object_id $object_id -privilege $privilege]
-        set permission_p [permission::permission_p_not_cached -party_id $party_id -object_id $object_id -privilege $privilege]
+    set caching_activated [permission::cache_p]
+
+    if { $no_cache_p || !$caching_activated } {
+
+	if { $no_cache_p } {
+	    permission::permission_thread_cache_flush
+	}
+
+	if {$caching_activated} {
+	    # If there is no caching activated, there is no need to
+	    # flush the memoize cache. Frequent momoize cache flushing
+	    # causes a flood of intra-server talk in a cluster
+	    # configuration (see bug #2398);
+	    # 
+	    util_memoize_flush [list permission::permission_p_not_cached \
+				    -party_id $party_id \
+				    -object_id $object_id \
+				    -privilege $privilege]
+	}
+
+        set permission_p [permission::permission_p_not_cached \
+			      -party_id $party_id \
+			      -object_id $object_id \
+			      -privilege $privilege]
     } else { 
         set permission_p [util_memoize \
-                              [list permission::permission_p_not_cached -party_id $party_id -object_id $object_id -privilege $privilege] \
-                              [parameter::get -package_id [ad_acs_kernel_id] -parameter PermissionCacheTimeout -default 300]]
+                              [list permission::permission_p_not_cached \
+				   -party_id $party_id \
+				   -object_id $object_id \
+				   -privilege $privilege] \
+                              [parameter::get -package_id [ad_acs_kernel_id] \
+				   -parameter PermissionCacheTimeout \
+				   -default 300]]
     }
 
     if { 
