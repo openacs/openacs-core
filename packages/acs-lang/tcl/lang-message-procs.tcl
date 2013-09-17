@@ -51,23 +51,40 @@ ad_proc -public lang::message::check {
         set missing_vars [util_get_subset_missing $embedded_vars $embedded_vars_en_us]
 
         if { [llength $missing_vars] > 0 } {
-            error "Message key '$key' in locale '$locale' has these embedded variables not present in the en_US locale: [join $missing_vars ","]."
+            error "Message key '$key' in locale '$locale' has these embedded variables not present in the en_US locale:\
+		[join $missing_vars ","]."
         }
     }
     
     # If a localization key from acs-lang...
-    if {[regexp {^acs-lang\.localization-(.*)} $key match lc_key]} {
-	# ...number separators for decimal and thousands must be checked to ensure they are not equal,
-	# otherwise the localized number parsing will fail.
+    if {[regexp {^acs-lang\.localization-(.*)$} $key match lc_key]} {
+	#
+	# ...number separators for decimal and thousands must be
+	# checked to ensure they are not equal, otherwise the
+	# localized number parsing will fail. 
+	#
 	if {$lc_key in {decimal_point thousands_sep mon_thousands_sep}} {
-	  set decimal_point [lc_get -locale $locale "decimal_point"]
-	  set thousands_sep [lc_get -locale $locale "thousands_sep"]
-	  set mon_thousands_sep [lc_get -locale $locale "mon_thousands_sep"]
-	  set $lc_key $message
-	  set thousands_sep ${thousands_sep}${mon_thousands_sep}
-	  if {[string first $decimal_point $thousands_sep] > -1} {
-	      error "Message keys for thousands and decimal separators must be different."
-	  }
+	    #
+	    # Fetch values in case there were already loaded.
+	    #
+	    foreach k {decimal_point thousands_sep mon_thousands_sep} {
+		set $k [expr {[lang::message::message_exists_p $locale acs-lang.localization-$k] ?
+			      [lc_get -locale $locale $k] : ""}]
+	    }
+	    #
+	    # Overwrite the fetched value with the provided one.
+	    #
+	    set $lc_key $message
+
+	    #
+	    # We require, that the decimal_point was either provided
+	    # or loaded before to be able to compare it with the
+	    # thousands points.
+	    #
+	    if {$decimal_point ne "" &&
+		[string first $decimal_point "$thousands_sep$mon_thousands_sep"] > -1} {
+		error "locale $locale, key: $key: Message keys for thousands and decimal separators must be different."
+	    }
 	}
     }
 }
