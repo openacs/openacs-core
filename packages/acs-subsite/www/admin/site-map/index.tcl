@@ -50,9 +50,14 @@ set context [list $doc(title)]
 set user_id [ad_conn user_id]
 
 set subsite_number [db_string count_subsites "select count(*) from apm_packages where package_key = 'acs-subsite'"]
-if {$subsite_number > 100} {
+#
+# Not sure, what the intentions was to omit all(!) subsites if there
+# are more than 100. e.g. http://openacs.org/bugtracker/openacs/bug?bug_number=3174
+# Subsite-omitting is deactivated for the time being.
+#
+if {0 && $subsite_number > 100} {
     set too_many_subsites_p 1
-    set where_limit "where apm_packages.package_key <> 'acs-subsite'"
+    set where_limit "where p.package_key <> 'acs-subsite'"
 } else {
     set too_many_subsites_p 0
     set where_limit ""
