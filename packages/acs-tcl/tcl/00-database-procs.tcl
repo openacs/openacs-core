@@ -209,9 +209,9 @@ ad_proc -private db_driverkey {{
 
         if { [string match "Oracle*" $driver] } {
             set driverkey {oracle}
-        } elseif { $driver eq "PostgreSQL"] } {
+        } elseif { $driver eq "PostgreSQL" } {
             set driverkey "postgresql"
-        } elseif { $driver eq "ODBC"] } {
+        } elseif { $driver eq "ODBC" } {
             set driverkey "nsodbc"
         } else {
             set driverkey {}
