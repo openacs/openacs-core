@@ -135,7 +135,7 @@ ad_proc apm_callback_and_log { { -severity Notice } callback message } {
 
 } {
     $callback $message
-    ns_log $severity $message
+    ns_log $severity [ad_html_to_text -- $message]
 }   
 
 ad_proc apm_one_package_descendents {
