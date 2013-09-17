@@ -224,13 +224,13 @@ ad_proc -public permission::write_permission_p {
 
     @see permission::require_write_permission
 } {
-    if { [permission::permission_p -privilege write -object_id $object_id -party_id $party_id] } {
-        return 1
-    }
     if { $creation_user eq "" } {
         set creation_user [acs_object::get_element -object_id $object_id -element creation_user]
     }
     if { [ad_conn user_id] == $creation_user } {
+        return 1
+    }
+    if { [permission::permission_p -privilege write -object_id $object_id -party_id $party_id] } {
         return 1
     }
     return 0
