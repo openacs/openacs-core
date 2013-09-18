@@ -127,11 +127,11 @@ namespace eval notification::email {
 
        if { $content_html eq "" } {
            set mime_type "text/plain"
-           append content_text "\n#notifications.lt_Getting_too_much_emai#"
+           append content_text "\n#" "notifications.lt_Getting_too_much_emai#"
            set content $content_text
        } else {
            set mime_type "text/html"
-           append content_html "<p>#notifications.lt_Getting_too_much_emai#</p>"
+           append content_html "<p>#" "notifications.lt_Getting_too_much_emai#</p>"
            set content $content_html
        }
 
