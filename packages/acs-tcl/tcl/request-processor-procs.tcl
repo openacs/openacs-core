@@ -836,15 +836,21 @@ ad_proc -private rp_handler {} {
       return
   }
   if {$ad_conn(extra_url) ne "" && ![string match *$ad_conn(extra_url) [ns_conn url]]} {
-    # On internal redirects, the current extra_url might be from a
-    # previous request, which might have lead to a not-found error
-    # pointing to a new url. This can lead to an hard-to find loop
-    # which ends with a "recursion depth exceeded". Therefore, we
-    # refetch the url in case, in case, we have already extra_url 
-    # set to an incompatible value
+    #
+    # On internal redirects, the current ad_conn(extra_url) might be
+    # from a previous request, which might have lead to a not-found
+    # error pointing to a new url. This can lead to an hard-to find
+    # loop which ends with a "recursion depth exceeded". There is a
+    # similar problem with ad_conn(package_key) and
+    # ad_conn(package_url) Therefore, we refetch the url info in case,
+    # in case, and reset these values. These variables seem to be
+    # sufficient to handle request processor loops, but maybe other
+    # variables have to be reset either.
     #
     array set node [site_node::get -url [ad_conn url]]
     ad_conn -set extra_url [string range [ad_conn url] [string length $node(url)] end]
+    ad_conn -set package_key $node(package_key)
+    ad_conn -set package_url $node(url)
   }
 
   # JCD: keep track of rp_handler call count to prevent dev support from recording 
