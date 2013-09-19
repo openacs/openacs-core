@@ -750,9 +750,10 @@ ad_proc doc_return {args} {
     of every non-templated user-viewable page. 
 
 } {
-    db_release_unused_handles
+    # Aolserver/Naviserver releases handles automatically since ages
+    #db_release_unused_handles
     ad_http_cache_control
-    eval "ns_return $args"
+    ns_return {*}$args
 }
 
 ad_proc -public ad_return_url {
