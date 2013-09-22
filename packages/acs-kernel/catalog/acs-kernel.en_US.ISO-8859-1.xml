@@ -144,8 +144,10 @@
   <msg key="Unregistered">Unregistered</msg>
   <msg key="Unregistered_Visitor">Unregistered Visitor</msg>
   <msg key="URL">URL</msg>
+  <msg key="URLs">URLs</msg>
   <msg key="User">User</msg>
+  <msg key="Users">Users</msg>
   <msg key="Username">Username</msg>
-  <msg key="Usernames">Username</msg>
+  <msg key="Usernames">Usernames</msg>
   <msg key="Visitor">Visitor</msg>
 </message_catalog>
