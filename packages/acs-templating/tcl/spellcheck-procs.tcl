@@ -15,7 +15,7 @@ namespace eval template::util::spellcheck {}
 ad_proc -public template::util::spellcheck { command args } {
     Dispatch procedure for the spellcheck object
 } {
-  eval template::util::spellcheck::$command $args
+    template::util::spellcheck::$command {*}$args
 }
 
 ad_proc -public template::util::spellcheck::merge_text { element_id } {
@@ -61,7 +61,7 @@ ad_proc -public template::data::transform::spellcheck {
     # case 2, submission of the page showing errors: returns the corrected text.
     set merge_text [template::util::spellcheck::merge_text $element(id)]
 
-    if { [set richtext_p [string equal "richtext" $element(datatype)]] } {
+    if { [set richtext_p $element(datatype) eq "richtext"] } {
 	# special treatment for the "richtext" datatype.
     	set format [template::util::richtext::get_property format [lindex $values 0]]
 	if { $merge_text ne "" } {
@@ -376,9 +376,9 @@ ad_proc -public template::util::spellcheck::spellcheck_properties {
 	
 	# Do the "cheap" checks first and then (if needed) read the parameter and do additional checks.
 
-	if { [string equal "display" $element(mode)] \
-		 || [info exists element(nospell)] \
-		 || [nsv_get spellchecker path] eq "" } {
+	if { $element(mode) eq "display" 
+	     || [info exists element(nospell)] 
+	     || [nsv_get spellchecker path] eq "" } {
 
 	    set spellcheck_p 0
 	} else {
@@ -389,9 +389,11 @@ ad_proc -public template::util::spellcheck::spellcheck_properties {
 						    -parameter SpellcheckFormWidgets \
 						    -default ""]]
 	    
-	    set spellcheck_p [expr {[array size widget_info] \
-				  && ($element(widget) eq "richtext" || $element(widget) eq "textarea" || $element(widget) eq "text") \
-				  && [lsearch -exact [array names widget_info] $element(widget)] != -1}]
+	    set spellcheck_p [expr {[array size widget_info] 
+				    && ($element(widget) eq "richtext" || 
+					$element(widget) eq "textarea" || 
+					$element(widget) eq "text") 
+				    && $element(widget) in [array names widget_info]}]
 	    
 	}
 	
