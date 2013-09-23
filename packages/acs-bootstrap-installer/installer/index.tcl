@@ -41,10 +41,9 @@ The installation program has encounted an error.  Please drop your OpenACS table
 and the OpenACS username, recreate them, and try again.  You can log this as a bug
 using the <a href=\"http://openacs.org/bugtracker/openacs\">OpenACS Bug Tracker</a>. 
 "
-    return
+   return
   }
   return
-
 }
 
 set body "
@@ -125,44 +124,24 @@ if { !$error_p } {
 if { [catch { ns_sha1 quixotusishardcore }] } {
     append errors "<li><p><b>The ns_sha1 function is missing. This function is
     required in OpenACS 4.x so that passwords can be securely stored in
-    the database. This function is available in the nssha1 module that is part of the <a
-    href=\"http://www.arsdigita.com/aol3/\">ArsDigita server
-    distribution</a>.</b></p>"
+    the database.</b></p>"
 
     set error_p 1
 }
 
 # OpenNSD must support Tcl 8.x
-if { [string range [info tclversion] 0 0] < 8 } {
-    append errors " <li><p><strong> You are using a version of Tcl less than 8.0.  You must use Tcl version 8.0
-    for OpenACS to work.  Probably your <code>nsd</code> executable is linked to <code>nsd76</code>.  Please
-    link it to <code>nsd8x</code> to fix this problem.  Please refer to the 
-    <a href=\"/doc/install-guide/\">Installation Guide</a>.
-    <blockquote><pre>
-    ln -s /home/aol30/bin/nsd8x /home/aol30/nsd
-    </pre></blockquote>
+if { [info tclversion] < 8.5 } {
+    append errors " <li><p><strong> You are using a version of Tcl less than 8.5.  You must use Tcl version 8.5
+    or newer for OpenACS to work.  Probably your <code>nsd</code> executable is linked to an older version of Tcl.
     "
     set error_p 1
 }
  
 # AOLserver must support ns_cache.
 if {[llength [info commands ns_cache]] < 1} {
-    append errors "<li><p><strong>The <code>ns_cache</code> module is not installed.  This
-is required to support the OpenACS Security system.  Please make sure that <code>ns_cache</code>
-is included in your module list.  An example module list is shown below:
-file (usually in <code>/home/aol30/yourservername.ini</code>) or see the 
-<a href=\"/doc/install-guide/\">Installation Guide</a> for more information.<p>
-<blockquote><pre>
-\[ns/server/bquinn/modules\] 
-nssock=nssock.so 
-nslog=nslog.so 
-nssha1=nssha1.so
-nscache=nscache.so
-</blockquote></pre>
-After adding <code>ns_cache</code>, please restart your web server.
-</strong></p>"
+    append errors "<li><p><strong>The <code>ns_cache</code> module is not installed.  This is required for OpenACS."
     set error_p 1
-} 
+}
 
 # AOLserver must have XML parsing.
 if {![xml_support_ok xml_status_msg]} {
@@ -231,11 +210,11 @@ if { ![file writable [file join [acs_root_dir] packages]] } {
     privileges on this directory and all of its subdirectories.  You can correct this by running the following 
     script as root.
     To give another user access to the files, add them to <code>web</code> group.
-<blockquote><pre>
+    <blockquote><pre>
 groupadd web
 chown -R nsadmin:web [acs_root_dir]/packages
 chmod -R ug+rw [acs_root_dir]/packages
-</pre></blockquote></strong></p>"
+    </pre></blockquote></strong></p>"
     set error_p 1
 }
 
@@ -244,18 +223,18 @@ db_helper_checks errors error_p
 # Now that we know that the database and aolserver are set up
 # correctly, let's check out the actual db.
 if {$error_p} {
-    append body "<p>
-<strong>At least one misconfiguration was discovered that must be corrected.
-Please fix all of them, restart the web server, and try running the OpenACS installer again.
-You can proceed without resolving these errors, but the system may not function
-correctly.
-</strong>
-<p>
-<ul>
-$errors
-</ul>
-<p>
-"
+    append body [subst {<p>
+	<strong>At least one misconfiguration was discovered that must be corrected.
+        Please fix all of them, restart the web server, and try running the OpenACS installer again.
+	You can proceed without resolving these errors, but the system may not function
+	correctly.
+	</strong>
+	<p>
+	<ul>
+	$errors
+	</ul>
+	<p>
+    }]
 }
 
 # See whether the data model appears to be installed or not. The very first
@@ -266,8 +245,9 @@ if { ![db_table_exists apm_packages] } {
     # Get the default for system_url. First try to get it from the nssock
     # hostname setting - if that is not available then try ns_info
     if { [catch {
-        set system_url "http://[ns_config "ns/server/[ns_info server]/module/nssock" hostname [ns_info hostname]]"
-        set system_port [ns_config "ns/server/[ns_info server]/module/nssock" port [ns_conn port]]
+	set driversection [ns_driversection]
+        set system_url "http://[ns_config $driversection hostname [ns_info hostname]]"
+        set system_port [ns_config $driversection port [ns_conn port]]
 
         # append port number if non-standard port
         if { !($system_port == 0 || $system_port == 80) } {
