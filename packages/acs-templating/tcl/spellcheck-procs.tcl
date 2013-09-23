@@ -161,6 +161,7 @@ ad_proc -public template::util::spellcheck::get_element_formtext {
     -var_to_spellcheck:required
     {-language ""}
     -error_num_ref:required
+    {-no_abort:boolean 0}
     -formtext_to_display_ref:required
     {-just_the_errwords_ref ""}
 } {
@@ -168,6 +169,7 @@ ad_proc -public template::util::spellcheck::get_element_formtext {
     @param text The string to check for spelling errors.
     
     @param html_p Does the text have html in it? If so, we strip out html tags in the string we feed to ispell (or aspell).
+    @param no_abort_p Set this tue for testing purposes (e.g. aa_test).
     
     @param var_to_spellcheck The name of the text input type or textarea that holds this text (eg., "email_body")
     
@@ -200,6 +202,23 @@ ad_proc -public template::util::spellcheck::get_element_formtext {
 
     set spelling_wrapper [file join [acs_root_dir] bin webspell]
 
+    if {![file executable $spelling_wrapper]} {
+	#
+	# In case no_abort is given we just return the error
+	# message. Otherwise an ad_return_error is raised and the
+	# script is ad_script_aborted.
+	#
+	if {!$no_abort_p} {
+	    ad_return_error "Webspell could not be executed" \
+		"Spell-checking is enabled but the spell-check wrapper\
+		 ([acs_root_dir]/bin/webspell) returns  not be executed.\
+		 Check that the wrapper exists, and that its permissions are correct."
+	    ad_script_abort
+	} else {
+	    error $errmsg
+	}
+    }
+
     set spellchecker_path [nsv_get spellchecker path]
 
     #
@@ -213,36 +232,31 @@ ad_proc -public template::util::spellcheck::get_element_formtext {
         append lang_and_enc " --lang=$language"
     }
 
-    # Caveat: The "open" arg must be a list (not a string) to allow the wrapper args to be the empty string
-    # (which $language will be when ispell is used, for instance)
+    #ns_log notice WRAPPER=[list |$spelling_wrapper [ns_info home] $spellchecker_path $lang_and_enc $dictionaryfile $tmpfile]
 
-    if { [catch { set ispell_proc [open [list |$spelling_wrapper [ns_info home] $spellchecker_path $lang_and_enc $dictionaryfile $tmpfile] r] } errmsg] } {
-	ad_return_error "Webspell could not be executed" "Spell-checking is enabled but the spell-check wrapper ([acs_root_dir]/bin/webspell) could not be executed. Check that the wrapper exists, and that its permissions are correct. <p>Here is the error message: <pre>$errmsg</pre>"
-	ad_script_abort
-    }
-    
-    # read will occasionally error out with "interrupted system call",
-    # so retry a few times in the hopes that it will go away.
-    set try 0
-    set max_retry 10
-    while { [catch { set ispell_text [read -nonewline $ispell_proc] } errmsg]
-	    && $try < $max_retry } {
-	incr try
-	ns_log warning "template::util::spellcheck::get_element_formtext: spellchecker had a problem: $errmsg"
-    }
-
-    fconfigure $ispell_proc -blocking 0
-    
-    if { [catch { close $ispell_proc } errmsg] } {
-	ad_return_error "No dictionary found" "Spell-checking is enabled but the spell-check dictionary could not be reached. Check that the dictionary exists, and that its permissions are correct. <p>Here is the error message: <pre>$errmsg</pre>"
-	ad_script_abort
+    if {[catch {
+	set ispell_lines [exec $spelling_wrapper [ns_info home] $spellchecker_path $lang_and_enc $dictionaryfile $tmpfile]
+    } errmsg]} {
+	#ns_log notice "errorMsg = $errmsg"
+	
+	#
+	# In case no_abort is given we just return the error
+	# message. Otherwise an ad_return_error is raised and the
+	# script is ad_script_aborted.
+	#
+	if {!$no_abort_p} {
+	    ad_return_error "No dictionary found" \
+		"Spell-checking is enabled but the spell-check dictionary\
+		 could not be reached. Check that the dictionary exists,\
+		 and that its permissions are correct.\
+		 <p>Here is the error message: <pre>$errmsg</pre>"
+	    ad_script_abort
+	} else {
+	    error $errmsg
+	}
     }
 
     file delete $tmpfile
-
-    if { $try == $max_retry } {
-        return -code error "webspell: Tried to execute spellchecker $max_retry times but it did not work out. Sorry!"
-    }
 
     ####
     #
@@ -250,7 +264,7 @@ ad_proc -public template::util::spellcheck::get_element_formtext {
     #
     ####
     
-    set ispell_lines [split $ispell_text "\n"]
+    set ispell_lines [split $ispell_lines "\n"]
     # Remove the version line.
     if { [llength $ispell_lines] > 0 } {
 	set ispell_lines [lreplace $ispell_lines 0 0]
