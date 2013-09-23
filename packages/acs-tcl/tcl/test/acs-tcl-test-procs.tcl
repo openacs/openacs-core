@@ -1038,15 +1038,16 @@ aa_register_case \
             aa_true "check global parameter value set/get" [string equal [parameter::get_global_value -package_key acs-tcl -parameter x_test_x] 3]
             apm_parameter_unregister $parameter_id
 
-	    db_foreach get_param {
+	    foreach tuple [db_list_of_lists get_param {
 		select ap.parameter_name, ap.package_key, ap.default_value, ap.parameter_id
 		from apm_parameters ap, apm_package_types apt
 		where
 		ap.package_key = apt.package_key
 		and apt.singleton_p ='t'
 		and ap.package_key <> 'acs-kernel'
-	    } {
+	    }] {
 
+		lassign $tuple parameter_name package_key default_value parameter_id
 		set value [random]
 		if {$parameter_name ne "PasswordExpirationDays" && $value > 0.7} {
 
@@ -1069,10 +1070,9 @@ aa_register_case \
 			select default_value from apm_parameters
 			where package_key = :package_key and parameter_name = :parameter_name
 		    }]
-		    aa_true "check parameter::set_default" \
-			[string equal $value $value_db]
-
+		    aa_true "check parameter::set_default" [string equal $value $value_db]
 		    set value [expr {$value + 10}]
+
 		    parameter::set_from_package_key -package_key $package_key -parameter $parameter_name -value $value
 		    aa_true "check parameter::set_from_package_key" \
 			[string equal $value [parameter::get -package_id $package_id -parameter $parameter_name]]
@@ -1081,6 +1081,8 @@ aa_register_case \
 		    parameter::set_value -package_id $package_id -parameter $parameter_name -value $value
 		    aa_true "check parameter::set_value" \
 			[string equal $value [parameter::get -package_id $package_id -parameter $parameter_name]]
+
+		    ad_parameter_cache -delete $package_id $parameter_name
 
 		    break;
 		}
