@@ -396,7 +396,7 @@ ad_proc -public lang::catalog::export {
 	    # and write a catalog file for each such locale
 	    db_foreach get_locales_for_package {} {
 		# If we are only exporting certain locales and this is not one of them - continue
-		if { [llength $locales] > 0 && [lsearch -exact $locales $locale] == -1 } {
+		if { [llength $locales] > 0 && $locale ni $locales } {
 		    continue
 		}
 		
@@ -946,7 +946,7 @@ ad_proc -private lang::catalog::import_messages {
             ns_log Debug "lang::catalog::import_messages - not doing anything: import_case=\"$import_case\" $message_key $upgrade_status $conflict_p"
         }
 
-        if { [lsearch -exact {added updated deleted} $upgrade_status] != -1 } {
+        if { $upgrade_status in {added updated deleted} } {
             if { ! $error_p } {
                 incr message_count($upgrade_status)
             }
@@ -999,7 +999,7 @@ ad_proc -public lang::catalog::import {
     }
 
     foreach package_key $package_key_list {
-        if {$initialize_p && [lsearch -exact $uninitialized_packages $package_key] == -1} {
+        if {$initialize_p && $package_key ni $uninitialized_packages} {
             # The package is already initialized
             continue
         }
@@ -1015,7 +1015,7 @@ ad_proc -public lang::catalog::import {
 
         # Issue a warning and exit if there are no catalog files
         if { $catalog_files eq "" } {
-            ns_log Warning "No catalog files found for package $package_key"
+            ns_log Warning "No catalog files found for package $package_key in locales: $locales"
             continue
         }
 
@@ -1072,7 +1072,7 @@ ad_proc -private lang::catalog::get_catalog_paths_for_import {
     foreach locale $locales_list {        
 
         # If we are only processing certain locales and this is not one of them - continue
-        if { [llength $locales] > 0 && [lsearch -exact $locales $locale] == -1 } {
+        if { [llength $locales] > 0 && $locale ni $locales } {
             continue
         }
 
