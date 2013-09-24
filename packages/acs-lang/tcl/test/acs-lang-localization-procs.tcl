@@ -1,8 +1,8 @@
 ad_library {
     Helper test Tcl procedures.
 
-    @author Peter Marklund (peter@collaboraid.biz)
-    @creation-date 18 October 2002
+    @author Gustaf Neumann
+    @creation-date Sept 2013
 }
 
 namespace eval lang::test {}
@@ -10,7 +10,13 @@ namespace eval lang::test {}
 
 aa_register_case \
     -procs {
-	lc_numeric
+
+      lc_numeric
+      lc_parse_number
+      lc_time_fmt
+      lc_time_utc_to_local
+      lc_time_local_to_utc
+
     } lang_test__lc_numeric {
 
     Minimal testset for localization functions. To be extended.
@@ -44,6 +50,8 @@ aa_register_case \
     set time [lc_time_fmt "2013-09-21 23:11:22" "%c" it_IT] 
     aa_equals "format us time" [lrange $time 0 end-1] "Sab 21 Settembre 2013 23:11"
 
+    aa_equals "asian time " [lc_time_utc_to_local "2013-09-21 23:11:22" "Asia/Tokyo"] "2013-09-22 08:11:22"
+    aa_equals "local time " [lc_time_local_to_utc "2013-09-22 08:11:22" "Asia/Tokyo"] "2013-09-21 23:11:22"
 
   }
 }
