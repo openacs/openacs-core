@@ -177,7 +177,7 @@ db_1row news_item_select {
 }
 
 
-set header [ad_header $title]
+
 
 set context_bar [ad_context_bar \
     [list "" "News"] $title]
@@ -189,7 +189,7 @@ set context_bar [ad_context_bar \
 
 
 
-set footer [ad_footer]
+
 
 
 ad_return_template
@@ -223,10 +223,9 @@ ad_return_template
 
 
 
-
-@header@
-&lt;h2&gt;@title@&lt;/h2&gt;
-@context-bar@
+&lt;master&gt;
+&lt;property name="doc(title)"&gt;@title@&lt;/property&gt;
+&lt;property name="context"&gt;@context;noquote@&lt;/property&gt;
 
 &lt;hr&gt;
 
@@ -236,7 +235,6 @@ ad_return_template
 @body@
 &lt;/blockquote&gt;
 
-@footer@
 	  </pre>
 	</td>
       </tr>
