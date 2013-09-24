@@ -63,16 +63,4 @@ set tokyo_time [lc_time_utc_to_local $system_time "Asia/Tokyo"]
 set tokyo_utc_time [lc_time_local_to_utc $paris_time "Asia/Tokyo"]
 
 
-# Test 5 checks the localization routines
-set us_number [lc_numeric 123456.789 {} en_US]
-set fr_number [lc_numeric 123456.789 {} fr_FR]
-set us_parse [lc_parse_number 123,456.789 en_US]
-set fr_parse [lc_parse_number "123 456,789" fr_FR]
-set us_currency [lc_monetary_currency -label_p 1 -style local 123.4 USD en_US]
-set fr_currency [lc_monetary_currency -label_p 1 -style local 123.4 USD fr_FR]
-set us_label [lc_monetary_currency -label_p 1 -style local 1234 FRF en_US]
-set fr_label [lc_monetary_currency -label_p 1 -style local 1234 FRF fr_FR]
-set us_time [lc_time_fmt $system_time "%c" en_US]
-set fr_time [lc_time_fmt $system_time "%c" fr_FR]
-
 ad_return_template
