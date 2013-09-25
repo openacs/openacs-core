@@ -1,3 +1,4 @@
+
 <h2>OpenACS Package Repository</h2>
 
 <p> Available channels. </p>
@@ -8,3 +9,4 @@
   </multiple>
 </ul>
  
+Updated: @update_pretty_date@

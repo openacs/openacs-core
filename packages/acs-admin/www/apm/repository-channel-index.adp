@@ -1,4 +1,6 @@
+
 <h2>OpenACS @channel@ Core and compatibile packages</h2>
+
 <p>Packages can be installed with the OpenACS Automated Installer on
 your OpenACS site at <code>/acs-admin/install</code>.  Only packages
 designated compatible with your OpenACS kernel will be shown.</p>
@@ -11,16 +13,23 @@ designated compatible with your OpenACS kernel will be shown.</p>
   <multiple name="packages">
     <tr>
       <td style="border-color:gray; text-align:center" valign="center" >
-        <b>@packages.pretty_name@</b>
+        <a href="/xowiki/@packages.package_key@"><b>@packages.pretty_name@</b></a>
       </td>
       <td>
-        @packages.maturity@: @packages.maturity_text@<br>
-        <a href="@packages.license_url@">@packages.license@</a>
+        <if @packages.maturity@ not nil>@packages.maturity@: @packages.maturity_text@<br></if>
+        <if @packages.license@ not nil>
+           <small>
+	   <if @packages.license_url@ not nil><a href="@packages.license_url@">@packages.license@</a></if>
+           <else>@packages.license@</else>
+           </small>
+        </if>
+
       </td>
       <td style="border-color:gray">
         <b>@packages.summary@</b>
         <br>@packages.description;noquote@
-        <br><small>@packages.package_key@ @packages.version@ released @packages.release_date@ by @packages.vendor@</small>
+        <p><small>@packages.package_key@ @packages.version@ released @packages.release_date@ 
+	<if @packages.vendor@ not nil> by @packages.vendor@</if></small>
 
 </td>
    </tr>
