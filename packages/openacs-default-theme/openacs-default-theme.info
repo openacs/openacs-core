@@ -12,9 +12,9 @@
         <summary>Provides the default &quot;plain&quot; and &quot;tabbed&quot; themes for OpenACS Subsites.</summary>
         <release-date>2013-09-08</release-date>
         <description format="text/plain">Provides the default &quot;plain&quot; and &quot;tabbed&quot; themes for OpenACS Subsites.   This has been moved out to a separate package, with availability recorded in the database, to make it easier for developer's to create their own themes and distribute and/or install them in package form.
-
 </description>
-        <maturity>0</maturity>
+        <license>GPL version 2</license>
+        <maturity>1</maturity>
 
         <provides url="openacs-default-theme" version="5.8.1d1"/>
         <requires url="acs-subsite" version="5.8.1d1"/>
