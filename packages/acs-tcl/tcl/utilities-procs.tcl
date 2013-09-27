@@ -198,7 +198,7 @@ ad_proc -public get_referrer {} {
 #  Database-related code
 ##
 
-ad_proc ad_dbclick_check_dml { 
+ad_proc -deprecated ad_dbclick_check_dml { 
     {
 	-bind  ""
     }
