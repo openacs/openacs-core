@@ -780,9 +780,8 @@ ad_proc rp_report_error {
         set rendered_page [ad_parse_template -params $params "/packages/acs-tcl/lib/page-error"]
     } {
         # An error occurred during rendering of the error page
-        global errorInfo
-        ns_log Error "rp_report_error: Error rendering error page (!)\n$errorInfo"
-        set rendered_page "</table></table></table></h1></b></i><blockquote><pre>[ns_quotehtml $error_message]</pre></blockquote>[ad_footer]"
+        ns_log Error "rp_report_error: Error rendering error page (!)\n$::errorInfo"
+        set rendered_page "</table></table></table></h1></b></i><blockquote><pre>[ns_quotehtml $error_message]</pre></blockquote>"
     }
 
     ns_return 500 text/html $rendered_page
