@@ -8,21 +8,18 @@ ad_page_contract {
 } {
 
 }
-
-set pkg_install_list [ad_get_client_property apm pkg_install_list]
-set body ""
-
-append body "[apm_header "Package Installation"]
-<h2>Select Data Model Scripts to Run</h2>
-<p>
-
-Check all the files you want to be loaded into the database.<p>
-<form action=\"packages-install-4\" method=\"post\">
-"
+set title "Package Installation"
+set context [list [list "/acs-admin/apm/" "Package Manager"] $title]
+set body {
+    <h2>Select Data Model Scripts to Run</h2>
+    <p>
+    Check all the files you want to be loaded into the database.<p>
+    <form action="packages-install-4" method="post">
+}
 
 set sql_file_list [list]
 set file_count 0
-foreach pkg_info $pkg_install_list {
+foreach pkg_info [ad_get_client_property apm pkg_install_list] {
 
     set package_key [pkg_info_key $pkg_info]
     set package_path [pkg_info_path $pkg_info]
@@ -97,10 +94,7 @@ if {$sql_file_list eq ""} {
     ad_script_abort
 }
 
-append body "
-<input type=submit value=\"Install Packages\">
-</form>
-[ad_footer]
-"
-
-doc_return 200 text/html $body
+append body {
+    <input type=submit value="Install Packages">
+    </form>
+}

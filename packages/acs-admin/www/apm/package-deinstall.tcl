@@ -9,11 +9,12 @@ ad_page_contract {
     version_id:naturalnum
 }
 
-
 apm_version_info $version_id
 
-doc_body_append "[apm_header [list "version-view?version_id=$version_id" "$pretty_name $version_name"] "Deinstall"]"
-
+set title "Deinstall"
+set context [list [list "/acs-admin/apm/" "Package Manager"] \
+		 [list "version-view?version_id=$version_id" "$pretty_name $version_name"] \
+		 $title]
 
 db_transaction {
     doc_body_append "<ul>"
@@ -26,11 +27,7 @@ db_transaction {
     }
 }
 
-doc_body_append "
-<p>
-Return to the <a href=\"index\">index</a>.
-[ad_footer]
-"
+append body "<p>Return to the <a href='index'>index</a>"
 
 
 
