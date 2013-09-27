@@ -1,37 +1,29 @@
 
-<h2>OpenACS @channel@ Core and compatibile packages</h2>
 
-<p>Packages can be installed with the OpenACS Automated Installer on
-your OpenACS site at <code>/acs-admin/install</code>.  Only packages
-designated compatible with your OpenACS kernel will be shown.</p>
 <table border="1" cellpadding="4" cellspacing="0">
   <tr>
     <th>Package</th>
-    <th>Status</th>
     <th>Description</th>
   </tr>
-  <multiple name="packages">
+  <multiple name="pkgs">
     <tr>
-      <td style="border-color:gray; text-align:center" valign="center" >
-        <a href="/xowiki/@packages.package_key@"><b>@packages.pretty_name@</b></a>
+      <td style="text-align:center;" valign="center" width="120">
+        <a href="/xowiki/@pkgs.package_key@">@pkgs.package_key@</a>
       </td>
-      <td>
-        <if @packages.maturity@ not nil>@packages.maturity@: @packages.maturity_text@<br></if>
-        <if @packages.license@ not nil>
-           <small>
-	   <if @packages.license_url@ not nil><a href="@packages.license_url@">@packages.license@</a></if>
-           <else>@packages.license@</else>
-           </small>
+      <td style="border-color:gray;">
+        <b>@pkgs.pretty_name@:</b><br><em>@pkgs.summary@</em>
+        <p>@pkgs.description;noquote@
+        <p><small>@pkgs.package_key@ @pkgs.version@ released @pkgs.release_date@ 
+        <if @pkgs.license@ not nil>
+	   on
+	   <if @pkgs.license_url@ not nil><a href="@pkgs.license_url@">@pkgs.license@</a></if>
+           <else>@pkgs.license@</else>
+           license
         </if>
-
+	<if @pkgs.vendor@ not nil> by @pkgs.vendor@</if>
+	<if @pkgs.maturity@ not nil><br>@pkgs.maturity@: @pkgs.maturity_text@</if>
+	</small>
       </td>
-      <td style="border-color:gray">
-        <b>@packages.summary@</b>
-        <br>@packages.description;noquote@
-        <p><small>@packages.package_key@ @packages.version@ released @packages.release_date@ 
-	<if @packages.vendor@ not nil> by @packages.vendor@</if></small>
-
-</td>
    </tr>
   </multiple>
 </table>

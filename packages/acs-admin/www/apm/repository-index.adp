@@ -5,7 +5,7 @@
 
 <ul>
   <multiple name="channels">
-    <li><a href="@channels.name@/">@channels.name@</a></li>
+    <li><a href="@channels.name@/">@channels.name@</a> (@channels.tag@)</li>
   </multiple>
 </ul>
  

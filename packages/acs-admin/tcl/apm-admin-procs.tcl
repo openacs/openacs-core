@@ -274,8 +274,9 @@ ad_proc -private apm_higher_version_installed_p {
 
 
 ad_proc -private apm_build_repository {
-    {debug_p 0} 
-    {head_channel 5-9} 
+    {-debug:boolean 0} 
+    {-channels *} 
+    {-head_channel 5-9} 
 } {    
 
     Rebuild the repository on the local machine.  
@@ -283,6 +284,7 @@ ad_proc -private apm_build_repository {
     Adapted from Lars' build-repository.tcl page.
     @param debug_p Set to 1 to test with only a small subset of packages instead of the whole cvs tree.
     @param head_channel The artificial branch label to apply to HEAD.  Should be one minor version past the current release.
+    @channels@ Generate apm files for the matching channels only
     @author Lars Pind (lars@collaboraid.biz)
     @return 0 for success.   Also outputs debug strings to log.
 
@@ -355,7 +357,7 @@ ad_proc -private apm_build_repository {
     }
 
     set channel_tag($head_channel) HEAD
-    ns_log Notice "Repository: Channels are: [array get channel_tag]</ul>"
+    ns_log Notice "Repository: Channels are: [array get channel_tag]"
 
 
     #----------------------------------------------------------------------
@@ -370,6 +372,8 @@ ad_proc -private apm_build_repository {
     #cd $work_dir
     
     foreach channel [lsort -decreasing [array names channel_tag]] {
+
+	if {![string match $channels $channel]} continue
 	ns_log Notice "Repository: Channel $channel using tag $channel_tag($channel)"
 	
 	# Wipe and re-create the checkout directory
@@ -429,60 +433,60 @@ ad_proc -private apm_build_repository {
 		    continue
 		}
 		
-		if { [array exists version] } {
-		    array unset version
+		if { [array exists pkg_info] } {
+		    array unset pkg_info
 		}
-		if { [info exists version] } {
-		    unset version
+		if { [info exists pkg_info] } {
+		    unset pkg_info
 		}
 		
 		with_catch errmsg {
-		    array set version [apm_read_package_info_file $spec_file]
+		    array set pkg_info [apm_read_package_info_file $spec_file]
 		    
-		    if { $version(package.key) in $packages } {
+		    if { $pkg_info(package.key) in $packages } {
 			ns_log Debug "Repository: Skipping package $package_key, because we already have another version of it"
 		    } else {
-			lappend packages $version(package.key)
+			lappend packages $pkg_info(package.key)
 			
 			append manifest \
 			    "  <package>" \n \
-			    "    <package-key>[ad_quotehtml $version(package.key)]</package-key>\n" \
-			    "    <version>[ad_quotehtml $version(name)]</version>\n" \
-			    "    <pretty-name>[ad_quotehtml $version(package-name)]</pretty-name>\n" \
-			    "    <package-type>[ad_quotehtml $version(package.type)]</package-type>\n" \
-			    "    <summary>[ad_quotehtml $version(summary)]</summary>\n" \
-			    "    <description format=\"[ad_quotehtml $version(description.format)]\">" \
-			    [ad_quotehtml $version(description)] "</description>\n" \
-			    "    <release-date>[ad_quotehtml $version(release-date)]</release-date>\n" \
-			    "    <vendor url=\"[ad_quotehtml $version(vendor.url)]\">" \
-			    [ad_quotehtml $version(vendor)] "</vendor>\n" \
-			    "    <maturity>$version(maturity)</maturity>\n"
+			    "    <package-key>[ad_quotehtml $pkg_info(package.key)]</package-key>\n" \
+			    "    <version>[ad_quotehtml $pkg_info(name)]</version>\n" \
+			    "    <pretty-name>[ad_quotehtml $pkg_info(package-name)]</pretty-name>\n" \
+			    "    <package-type>[ad_quotehtml $pkg_info(package.type)]</package-type>\n" \
+			    "    <summary>[ad_quotehtml $pkg_info(summary)]</summary>\n" \
+			    "    <description format=\"[ad_quotehtml $pkg_info(description.format)]\">" \
+			    [ad_quotehtml $pkg_info(description)] "</description>\n" \
+			    "    <release-date>[ad_quotehtml $pkg_info(release-date)]</release-date>\n" \
+			    "    <vendor url=\"[ad_quotehtml $pkg_info(vendor.url)]\">" \
+			    [ad_quotehtml $pkg_info(vendor)] "</vendor>\n" \
+			    "    <maturity>$pkg_info(maturity)</maturity>\n"
 			
-			if {![info exists version(maturity_text)]} {
-			    set version(maturity_text) ""
+			if {![info exists pkg_info(maturity_text)]} {
+			    set pkg_info(maturity_text) ""
 			}
 			
 			template::multirow append packages \
-			    $package_path $package_key $version(name) $version(package-name) \
-			    $version(package.type) $version(summary) $version(description) \
-			    $version(release-date) $version(vendor.url) $version(vendor) \
-			    $version(maturity) $version(maturity_text) \
-			    $version(license)  $version(license_url)
+			    $package_path $package_key $pkg_info(name) $pkg_info(package-name) \
+			    $pkg_info(package.type) $pkg_info(summary) $pkg_info(description) \
+			    $pkg_info(release-date) $pkg_info(vendor.url) $pkg_info(vendor) \
+			    $pkg_info(maturity) $pkg_info(maturity_text) \
+			    $pkg_info(license)  $pkg_info(license_url)
 			
-			set apm_file "${channel_dir}${version(package.key)}-${version(name)}.apm"
+			set apm_file "${channel_dir}${pkg_info(package.key)}-${pkg_info(name)}.apm"
 			ns_log Notice "Repository: Building package $package_key for channel $channel"
 			
 			set files [apm_get_package_files \
 				       -all \
 				       -include_data_model_files \
 				       -all_db_types \
-				       -package_key $version(package.key) \
+				       -package_key $pkg_info(package.key) \
 				       -package_path $package_path]
 			
 			if { [llength $files] == 0 } {
 			    ns_log Notice "Repository: No files in package"
 			} else {
-			    ns_log Notice "Repository: [llength $files] files in package $version(package.key) ($channel)"
+			    ns_log Notice "Repository: [llength $files] files in package $pkg_info(package.key) ($channel)"
 			    set cmd [list exec [apm_tar_cmd] cf -  2>/dev/null]
 			    
 			    # The path to the 'packages' directory in the checkout
@@ -501,21 +505,21 @@ ad_proc -private apm_build_repository {
 			    ns_log Notice "Executing: [ad_quotehtml $cmd]"
 			    if {[catch "exec $cd_helper $packages_root_path $cmd" errmsg]} {
 				ns_log notice "Error during tar in repository creation for\
-					file ${channel_dir}$version(package.key)-$version(name).apm:\
+					file ${channel_dir}$pkg_info(package.key)-$pkg_info(name).apm:\
 					\n$errmsg\n$::errorCode,$::errorInfo"
 			    }
 			}
 			
-			set apm_url "${repository_url}$channel/$version(package.key)-$version(name).apm"
+			set apm_url "${repository_url}$channel/$pkg_info(package.key)-$pkg_info(name).apm"
 			
 			append manifest "    <download-url>$apm_url</download-url>\n"
-			foreach elm $version(provides) {
+			foreach elm $pkg_info(provides) {
 			    append manifest "    <provides " \
 				"url=\"[ad_quotehtml [lindex $elm 0]]\" " \
 				"version=\"[ad_quotehtml [lindex $elm 1]]\" />\n"
 			}
 			
-			foreach elm $version(requires) {
+			foreach elm $pkg_info(requires) {
 			    append manifest "    <requires " \
 				"url=\"[ad_quotehtml [lindex $elm 0]]\" " \
 				"version=\"[ad_quotehtml [lindex $elm 1]]\" />\n"
@@ -538,8 +542,82 @@ ad_proc -private apm_build_repository {
 	set fw [open "${channel_dir}index.adp" w]
 	set packages [lsort $packages]
 	puts $fw "<master>\n<property name=\"doc(title)\">OpenACS $channel Compatible Packages</property>\n\n"
-	puts $fw [template::adp_include $channel_index_template \
-		      [list channel $channel &packages packages update_pretty_date $update_pretty_date]]
+	puts $fw "<h2>OpenACS $channel Core and compatibile packages</h2>
+           <p>Packages can be installed with the OpenACS Automated Installer on
+           your OpenACS site at <code>/acs-admin/install</code>.  Only packages
+           designated compatible with your OpenACS kernel will be shown.</p>
+        "
+	set category_title(core) "Core Packages"
+	set package_keys(core) {
+	    acs-admin
+	    acs-api-browser
+	    acs-authentication
+	    acs-automated-testing
+	    acs-bootstrap-installer
+	    acs-content-repository
+	    acs-core-docs
+	    acs-kernel
+	    acs-lang
+	    acs-mail-lite
+	    acs-messaging
+	    acs-reference
+	    acs-service-contract
+	    acs-subsite
+	    acs-tcl
+	    acs-templating
+	    ref-timezones
+	    acs-translations
+	    intermedia-driver
+	    openacs-default-theme
+	    notifications
+	    search
+	    tsearch2-driver 
+	}
+	set category_title(common-app) "Common Applications"
+	set package_keys(common-app) {
+	    xowiki 
+	    xotcl-request-monitor 
+	    file-storage 
+	    acs-developer-support 
+	    forums 
+	    calendar
+	    news
+	    faq
+	}
+	set category_title(extra) "Extra Packages and Libraries"
+	set package_keys(extra) ""
+	foreach p $packages {
+	    if {$p ni $package_keys(core) && $p ni $package_keys(common-app)} {
+		lappend package_keys(extra) $p
+	    }
+	}
+
+	foreach category {core common-app extra} {
+
+	    template::multirow create pkgs \
+		package_path package_key version pretty_name \
+		package_type summary description \
+		release_date vendor_url vendor \
+		maturity maturity_text \
+		license license_url
+	    
+	    template::multirow foreach packages {
+		if {$package_key in $package_keys($category)} {
+		    template::multirow append pkgs \
+			$package_path $package_key $version $pretty_name \
+			$package_type $summary $description \
+			$release_date $vendor_url $vendor \
+			$maturity $maturity_text \
+			$license $license_url
+		}
+	    }
+
+	    puts $fw "\n<h2>$category_title($category)</h2>\n"
+	    
+	    puts $fw [template::adp_include $channel_index_template \
+			  [list channel $channel &pkgs pkgs update_pretty_date $update_pretty_date]]
+	    
+	}
 	close $fw
 
 	ns_log Notice "Repository:  Channel $channel complete."
@@ -550,9 +628,9 @@ ad_proc -private apm_build_repository {
 
     # Write the index page
     ns_log Notice "Repository: Writing repository index page to ${work_dir}repository/index.adp"
-    template::multirow create channels name
+    template::multirow create channels name tag
     foreach channel [lsort -decreasing [array names channel_tag]] {
-	template::multirow append channels $channel
+	template::multirow append channels $channel $channel_tag($channel)
     }
     set fw [open "${work_dir}repository/index.adp" w]
     puts $fw "<master>\n<property name=\"doc(title)\">OpenACS Package Repository</property>\n\n"
