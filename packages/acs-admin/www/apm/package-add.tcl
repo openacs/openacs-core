@@ -14,13 +14,17 @@ db_1row apm_get_name {
 
 set package_id [db_nextval acs_object_id_seq]
 set version_id [db_nextval acs_object_id_seq]
-db_release_unused_handles
 
-doc_body_append "[apm_header -form "action=package-add-2 method=post" "Add a New Package"]
-[export_vars -form {package_id version_id}]
+set title "Add a New Package"
+set context [list \
+		 [list "/acs-admin/apm/" "Package Manager"] \
+		 $title]
 
-
-<script type=\"text/javascript\">
+set body "<form action='package-add-2' method='post'>\n"
+append body \
+    [export_vars -form {package_id version_id}] \
+    [subst {
+<script type="text/javascript">
 function updateURLs() {
     // Update the package and version URL, if the package key and/or version name change.
     var form = document.forms\[0\];
@@ -31,7 +35,7 @@ function updateURLs() {
 }
 </script>
 
-<script type=\"text/javascript\">
+<script type="text/javascript">
 function checkMailto(element) {
     // If it looks like an email address without a mailto: (contains an @ but
     // no colon) then prepend 'mailto:'.
@@ -51,19 +55,19 @@ Files for your package will be placed in a directory with this name.</td>
 </tr>
 
 <tr>
-  <th align=right nowrap>Package Key:</th>
-  <td><input name=package_key size=30 onChange=\"updateURLs()\"></td>
+  <th align="right" nowrap>Package Key:</th>
+  <td><input name="package_key" size="30" onChange="updateURLs()"></td>
 </tr>
 
 <tr>
   <td></td>
-  <td>Select a short, human-readable name for your package, e.g., \"Address Book\" or
-\"Photo Album.\"
+  <td>Select a short, human-readable name for your package, e.g., "Address Book" or
+"Photo Album."
 </tr>
 
 <tr>
-  <th align=right nowrap>Package Name:</th>
-  <td><input name=pretty_name size=30></td>
+  <th align="right" nowrap>Package Name:</th>
+  <td><input name="pretty_name" size="30"></td>
 </tr>
 
 <tr>
@@ -72,8 +76,8 @@ Files for your package will be placed in a directory with this name.</td>
 </tr>
 
 <tr>
-  <th align=right nowrap>Package Plural:</th>
-  <td><input name=pretty_plural size=40></td>
+  <th align="right" nowrap>Package Plural:</th>
+  <td><input name="pretty_plural" size="40"></td>
 </tr>
 
 
@@ -85,38 +89,38 @@ Files for your package will be placed in a directory with this name.</td>
   e.g. Workflow.
 </tr>
 <tr>
-  <th align=right nowrap>Package Type:</th>
-  <td><select name=package_type>
-      <option value=apm_application>Application
-      <option value=apm_service>Service
+  <th align="right" nowrap>Package Type:</th>
+  <td><select name="package_type">
+      <option value="apm_application">Application
+      <option value="apm_service">Service
       </select>
    </td>
    </tr>
 </tr>
 <tr>
-  <th align=right nowrap>OpenACS Core?</th>
-  <td><input type=checkbox name=initial_install_p value=t> Is your package part of the OpenACS Core that
+  <th align="right" nowrap>OpenACS Core?</th>
+  <td><input type="checkbox" name="initial_install_p" value="t"> Is your package part of the OpenACS Core that
 forms the set of packages initially installed?  If you're not part of the OpenACS Core development team,
 it would be best if you'd leave this box unchecked.
 </tr>
 <tr>
-  <th align=right nowrap>Singleton?</th>
-  <td><input type=checkbox name=singleton_p value=t> Is your package a singleton package?  Singleton packages
+  <th align="right" nowrap>Singleton?</th>
+  <td><input type="checkbox" name="singleton_p" value="t"> Is your package a singleton package?  Singleton packages
 can have at most one instance; attempts to create more instances of the singleton will return the currently
 created instance.  Singleton packages are appropriate for services that should not have multiple instances,
 such as the ACS Kernel.
 </tr>
 <tr>
-  <th align=right nowrap>Implements Subsite?</th>
-  <td><input type=checkbox name=implements_subsite_p value=t> Does your package implement subsite semantics?  Your package may do so by extending acs-subsite or by providing the means to mount applications, generate navigation tools, specify master templates, and manage community-oriented features such as user groups and roles.
+  <th align="right" nowrap>Implements Subsite?</th>
+  <td><input type="checkbox" name="implements_subsite_p" value="t"> Does your package implement subsite semantics?  Your package may do so by extending acs-subsite or by providing the means to mount applications, generate navigation tools, specify master templates, and manage community-oriented features such as user groups and roles.
 </tr>
 <tr>
-  <th align=right nowrap>Inherit Templates?</th>
-  <td><input type=checkbox name=inherit_templates_p value=t> Do you want your package to inherit templates from packages it extends?  If true, the request processor will first try to map a URL corresponding to a mounted instance of your package to one of its templates, and if no match is found, will search extended packages.  If false, only templates in your package will be mapped to URLs.
+  <th align="right" nowrap>Inherit Templates?</th>
+  <td><input type="checkbox" name="inherit_templates_p" value="t"> Do you want your package to inherit templates from packages it extends?  If true, the request processor will first try to map a URL corresponding to a mounted instance of your package to one of its templates, and if no match is found, will search extended packages.  If false, only templates in your package will be mapped to URLs.
 </tr>
 <tr>
-  <th align=right nowrap>Auto-mount URI</th>
-  <td><input name=auto_mount size=30></td>
+  <th align="right" nowrap>Auto-mount URI</th>
+  <td><input name="auto_mount" size="30"></td>
 </tr>
 
 <tr>
@@ -131,8 +135,8 @@ such as the ACS Kernel.
 </tr>
 
 <tr>
-  <th align=right nowrap>Package URL:</th>
-  <td><input name=package_uri size=60></td>
+  <th align="right" nowrap>Package URL:</th>
+  <td><input name="package_uri" size="60"></td>
 </tr>
 
 <tr>
@@ -146,8 +150,8 @@ an optional suffix of <strong>d</strong> for development, <strong>a</strong> for
 </tr>
 
 <tr>
-  <th align=right nowrap>Initial Version:</th>
-  <td><input name=version_name size=10 onChange=\"updateURLs()\"></td>
+  <th align="right" nowrap>Initial Version:</th>
+  <td><input name="version_name" size="10" onChange="updateURLs()"></td>
 </tr>
 
 <tr>
@@ -157,22 +161,22 @@ will always be correct.</td>
 </tr>
 
 <tr>
-  <th align=right nowrap>Version URL:</th>
-  <td><input name=version_uri size=60></td>
+  <th align="right" nowrap>Version URL:</th>
+  <td><input name="version_uri" size="60"></td>
 </tr>
 
 <tr>
   <td></td>
   <td>Type a brief, one-sentence-or-less summary of the functionality of your package.
 In general, this should be similar to the text introducing the
-<a href=\"/doc/\">developer documentation</a>. The summary should begin
+<a href="/doc/">developer documentation</a>. The summary should begin
 with a capital letter and end with a period.
 </td>
 </tr>
 
 <tr valign=top>
-  <th align=right><br>Summary:</th>
-  <td><textarea name=summary cols=60 rows=2 wrap=soft></textarea></td>
+  <th align="right"><br>Summary:</th>
+  <td><textarea name="summary" cols="60" rows="2" wrap="soft"></textarea></td>
 </tr>
 
 <tr>
@@ -182,11 +186,11 @@ first paragraph in your package's documentation.</td>
 </tr>
 
 <tr valign=top>
-  <th align=right><br>Description:</th>
-  <td><textarea name=description cols=60 rows=5 wrap=soft></textarea><br>
-This description is <select name=description_format>
-<option value=text/html>HTML-formatted.
-<option value=text/plain>plain text.
+  <th align="right"><br>Description:</th>
+  <td><textarea name="description" cols="60" rows="5" wrap="soft"></textarea><br>
+This description is <select name="description_format">
+<option value="text/html">HTML-formatted.
+<option value="text/plain">plain text.
 </select>
 </td>
 </tr>
@@ -201,59 +205,58 @@ for URLs, in which case you should precede them with <tt>mailto:</tt> (e.g.,
 </tr>
 
 <tr>
-  <th align=right nowrap>Primary Owner:</th>
-  <td><input name=owner_name size=30 value=\"$user_name\"></td>
+  <th align="right" nowrap>Primary Owner:</th>
+  <td><input name="owner_name" size="30" value="$user_name"></td>
 </tr>
 <tr>
-  <th align=right nowrap>Primary Owner URL:</th>
-  <td><input name=owner_uri size=30 value=\"mailto:$email\" onChange=\"checkMailto(this)\"></td>
+  <th align="right" nowrap>Primary Owner URL:</th>
+  <td><input name="owner_uri" size="30" value="mailto:$email" onChange="checkMailto(this)"></td>
 </tr>
 <tr>
-  <th align=right nowrap>Secondary Owner:</th>
-  <td><input name=owner_name size=30></td>
+  <th align="right" nowrap>Secondary Owner:</th>
+  <td><input name="owner_name" size="30"></td>
 </tr>
 <tr>
-  <th align=right nowrap>Secondary Owner URL:</th>
-  <td><input name=owner_uri size=30 onChange=\"checkMailto(this)\"></td>
+  <th align="right" nowrap>Secondary Owner URL:</th>
+  <td><input name="owner_uri" size="30" onChange="checkMailto(this)"></td>
 </tr>
 
 <tr>
   <td></td>
   <td>If the package is being released by a company, type in its name and URL here.
-<!-- ArsDigita employees should <a href=\"javascript:document.forms\[0\].vendor.value='ArsDigita Corporation';document.forms\[0\].vendor_uri.value='http://www.arsdigita.com/';void(0)\">click here</a> to fill this in automatically.</td> -->
+<!-- ArsDigita employees should <a href="javascript:document.forms\[0\].vendor.value='ArsDigita Corporation';document.forms\[0\].vendor_uri.value='http://www.arsdigita.com/';void(0)">click here</a> to fill this in automatically.</td> -->
 </tr>
 
 <tr>
-  <th align=right nowrap>Vendor:</th>
-  <td><input name=vendor size=30></td>
+  <th align="right" nowrap>Vendor:</th>
+  <td><input name="vendor" size="30"></td>
 </tr>
 <tr>
-  <th align=right nowrap>Vendor URL:</th>
-  <td><input name=vendor_uri size=60></td>
+  <th align="right" nowrap>Vendor URL:</th>
+  <td><input name="vendor_uri" size="60"></td>
 </tr>
 
 <tr>
   <td></td>
   <td>
-    <table><tr valign=baseline><td><input type=checkbox name=install_p value=1 checked></td><td>
-Write a package specification file for this package by executing <a href=\"/api-doc/proc-view?proc=apm_package_install_spec\" target=\"_blank\">apm_package_install_spec</a> (opens in new window). 
+    <table><tr valign="baseline"><td><input type="checkbox" name="install_p" value="1" checked></td><td>
+Write a package specification file for this package by executing <a href="/api-doc/proc-view?proc=apm_package_install_spec" target="_blank">apm_package_install_spec</a> (opens in new window). 
 (You almost certainly want to leave this checked.) 
 </td></tr></table>
   </td>
 </tr>
 
 <tr>
-  <td colspan=2 align=center><br>
-Click \"Create Package\" to register your package.  If there are data models for
+  <td colspan="2" align="center"><br>
+Click "Create Package" to register your package.  If there are data models for
 this package, please load them manually into your database.
-<p><input type=submit value=\"Create Package\">
+<p><input type="submit" value="Create Package">
 </td>
 </tr>
 
 </table>
 
-[ad_footer]
-"
+"}]
 
 
 
