@@ -261,7 +261,7 @@ ad_proc -private apm_dependency_check {
     foreach spec_file $spec_files {
 	if { [catch {
 	    array set package [apm_read_package_info_file $spec_file]
-	    if { ([string equal $package(initial-install-p) "t"] || !$initial_install_p) && \
+	    if { ($package(initial-install-p) eq "t" || !$initial_install_p) && \
                     [apm_package_supports_rdbms_p -package_key $package(package.key)] } {
                 lappend install_pend [pkg_info_new \
                                          $package(package.key) \
@@ -277,7 +277,7 @@ ad_proc -private apm_dependency_check {
             # either we're already installing it, or it can't be installed
             set counter 0
             foreach pkg_info $pkg_info_all {
-                if { [string equal [pkg_info_key $pkg_info] $package(package.key)] } {
+                if { [pkg_info_key $pkg_info] eq $package(package.key) } {
                     set pkg_info_all [lreplace $pkg_info_all $counter $counter]
                     break
                 }
@@ -316,8 +316,8 @@ ad_proc -private apm_dependency_check {
                         set satisfied_p 0
                         # Check to see if we've recorded it already
                         set errmsg "Requires [lindex $req 0] of version >= [lindex $req 1]."
-                        if { ![info exists install_error([pkg_info_key $pkg_info])] || \
-                                [lsearch -exact $install_error([pkg_info_key $pkg_info]) $errmsg] == -1} {
+                        if { ![info exists install_error([pkg_info_key $pkg_info])] || 
+			     $errmsg ni $install_error([pkg_info_key $pkg_info])} {
                             lappend install_error([pkg_info_key $pkg_info]) $errmsg
                         }
                         lappend new_install_pend $pkg_info
@@ -356,7 +356,7 @@ ad_proc -private apm_dependency_check {
                     set counter 0
                     foreach pkg_info_add $pkg_info_all {
                         # Will this package do anything to change whether this requirement has been satisfied?
-                        if { [string equal [pkg_info_key $pkg_info_add] [lindex $req 0]] &&
+                        if { [pkg_info_key $pkg_info_add] eq [lindex $req 0] &&
                              [apm_dependency_provided_p -dependency_list [pkg_info_provides $pkg_info_add] \
                                 [lindex $req 0] [lindex $req 1]] == 1 } {
 
@@ -906,15 +906,15 @@ ad_proc -private apm_package_install {
         global errorInfo
         ns_log Error "apm_package_install: Error installing $version(package-name) version $version(name): $errmsg\n$errorInfo"
 
-	apm_callback_and_log -severity Error $callback "<p>Failed to install $version(package-name), version $version(name).  The following error was generated:
+	apm_callback_and_log -severity Error $callback [subst {<p>Failed to install $version(package-name), version $version(name).  The following error was generated:
 <pre><blockquote>
 [ad_quotehtml $errmsg]
 </blockquote></pre>
 
 <p>
-<b><font color=\"red\">NOTE:</font></b> If the error comes from a sql script you may try to source it manually. When you are done with that you should revisit the APM and try again but remember to leave the manually souced sql scipts unchecked on the previous page. 
+<b><font color="red">NOTE:</font></b> If the error comes from a sql script you may try to source it manually. When you are done with that you should revisit the APM and try again but remember to leave the manually souced sql scipts unchecked on the previous page. 
 </p>
-"
+}]
 	return 0
     }
 
@@ -1252,8 +1252,8 @@ ad_proc -private apm_package_install_data_model {
 	set file_path [lindex $item 0]
 	set file_type [lindex $item 1]
 	ns_log Debug "apm_package_install_data_model: Now processing $file_path of type $file_type"
-	if {$file_type eq "data_model_create" || \
-		$file_type eq "data_model_upgrade" } {
+	if {$file_type eq "data_model_create" || 
+	    $file_type eq "data_model_upgrade" } {
 	    if { !$ul_p } {
 		apm_callback_and_log $callback "<ul>\n"
 		set ul_p 1
@@ -1749,7 +1749,7 @@ ad_proc -private apm_data_model_scripts_find {
         set file_db_type [apm_guess_db_type $package_key $path]
 	apm_log APMDebug "apm_data_model_scripts_find: Checking \"$path\" of type \"$file_type\" and db_type \"$file_db_type\"."
 
-	if {[lsearch -exact $types_to_retrieve $file_type] != -1 } {
+	if {$file_type in $types_to_retrieve} {
             set list_item [list $path $file_type $package_key]
 	    if {$file_type eq "data_model_upgrade"} {
                 # Upgrade script
@@ -1796,7 +1796,7 @@ ad_proc -private apm_query_files_find {
         # is defined, which we interpret to mean a file containing queries that work with all of our
         # supported databases.
 
-	if {[lsearch -exact "query_file" $file_type] != -1 && \
+	if {"query_file" eq $file_type && 
             ($file_db_type eq "" || [db_type] eq $file_db_type )} {
             ns_log Debug "apm_query_files_find: Adding $path to the list of query files."
             lappend query_file_list $path
@@ -2087,8 +2087,8 @@ ad_proc -private apm_get_package_repository {
             if { ![info exists installed_version($version(package.key))] } {
                 # Package is not installed
                 set version(install_type) install
-            } elseif { [string equal $version(name) $installed_version($version(package.key))] || \
-                           [apm_higher_version_installed_p $version(package.key) $version(name)] != 1 } {
+            } elseif { $version(name) eq $installed_version($version(package.key)) || 
+		       [apm_higher_version_installed_p $version(package.key) $version(name)] != 1 } {
                 # This version or a higher version already installed
                 set version(install_type) already_installed
             } else {
@@ -2115,8 +2115,8 @@ ad_proc -private apm_get_package_repository {
                     if { ![info exists installed_version($version(package.key))] } {
                         # Package is not installed
                         set version(install_type) install
-                    } elseif { [string equal $version(name) $installed_version($version(package.key))] || \
-                                   [apm_higher_version_installed_p $version(package.key) $version(name)] != 1 } {
+                    } elseif { $version(name) eq $installed_version($version(package.key)) || 
+			       [apm_higher_version_installed_p $version(package.key) $version(name)] != 1 } {
                         # This version or a higher version already installed
                         set version(install_type) already_installed
                     } else {
