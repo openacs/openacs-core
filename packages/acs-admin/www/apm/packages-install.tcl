@@ -9,6 +9,15 @@ ad_page_contract {
     {checked_by_default_p:boolean 0}
 }
 
+set title "Package Installation"
+set context [list [list "/acs-admin/apm/" "Package Manager"] $title]
+set body {
+    <h2>Select Data Model Scripts to Run</h2>
+    <p>
+    Check all the files you want to be loaded into the database.<p>
+    <form action="packages-install-4" method="post">
+}
+
 ad_return_top_of_page "[apm_header "Package Installation"]
 <p>Please wait while the installer searches your system for packages to install ...<p>
 

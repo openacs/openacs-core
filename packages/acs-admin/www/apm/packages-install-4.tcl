@@ -15,8 +15,7 @@ set pkg_install_list [ad_get_client_property apm pkg_install_list]
 set pkg_enable_list [ad_get_client_property apm pkg_enable_list]
 set sql_file_paths [ad_get_client_property apm sql_file_paths]
 
-ReturnHeaders
-ns_write "[apm_header  "Package Installation"]
+ad_return_top_of_page "[apm_header "Package Installation"]
 <h2>Installing packages...</h2>
 <p>
 <ul>
