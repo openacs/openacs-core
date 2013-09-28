@@ -365,9 +365,9 @@ $ds_link
 }
 
 ad_proc -public ad_return_string_as_file {
-    -string
-    -filename
-    -mime_type
+    -string:required
+    -filename:required
+    -mime_type:required
 } {
     Return a string as the content of a file
     
@@ -376,8 +376,7 @@ ad_proc -public ad_return_string_as_file {
     @param mime_type Mime Type of the file being returned
 } {
     ns_set put [ns_conn outputheaders] "Content-Disposition" "attachment; filename=\"$filename\""
-    ReturnHeaders "$mime_type"
-    ns_write $string
+    ns_return 200 $mime_type $string
 }
 
 ad_proc -public ad_return_complaint {

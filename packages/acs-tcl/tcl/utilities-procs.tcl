@@ -1815,7 +1815,7 @@ ad_proc -private util_WriteWithExtraOutputHeaders {headers_so_far {first_part_of
     ns_write $entire_string_to_write
 }
 
-ad_proc -public ReturnHeaders {{content_type text/html}} {
+ad_proc -private ReturnHeaders {{content_type text/html}} {
    We use this when we want to send out just the headers
    and then do incremental writes with ns_write.  This way the user
    doesn't have to wait for streamed output (useful when doing
@@ -1846,6 +1846,7 @@ Content-Type: $content_type\r\n"
 
 ad_proc -public ad_return_top_of_page {first_part_of_page {content_type text/html}} { 
     Returns HTTP headers plus the top of the user-visible page.  
+    To be used with streaming HTML output
 } {
     ReturnHeaders $content_type
     if { $first_part_of_page ne "" } {
@@ -2186,8 +2187,7 @@ ad_proc -deprecated util_ReturnMetaRefresh { url { seconds_delay 0 } } {
     Meta Refresh page instead of a redirect.                                                                                                                   
     
 } {
-    ReturnHeaders
-    ns_write "
+    ad_return_top_of_page "
     <head>
     <meta http-equiv=\"refresh\" content=\"$seconds_delay;URL=$url\">
     <script type=\"text/javascript\">
