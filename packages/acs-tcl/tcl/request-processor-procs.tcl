@@ -766,7 +766,14 @@ ad_proc rp_report_error {
     set params [list]
     
     #Serve the stacktrace
-    set params [list [list stacktrace $message] [list user_id $user_id] [list error_file $error_file] [list prev_url $prev_url] [list feedback_id $feedback_id] [list error_url $error_url] [list bug_package_id $bug_package_id] [list vars_to_export $vars_to_export]]
+    set params [list [list stacktrace $message] \
+		    [list user_id $user_id] \
+		    [list error_file $error_file] \
+		    [list prev_url $prev_url] \
+		    [list feedback_id $feedback_id] \
+		    [list error_url $error_url] \
+		    [list bug_package_id $bug_package_id] \
+		    [list vars_to_export $vars_to_export]]
     
     set error_message $message
 
