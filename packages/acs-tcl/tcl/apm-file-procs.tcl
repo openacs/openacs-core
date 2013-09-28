@@ -502,11 +502,18 @@ ad_proc -private apm_transfer_file {
     # 
     # ... use ns_http when we have a version with the "-file" flag ...
     #
-    # ns_log notice "Transfer $url based to $output_file_name on ns_http"
-    set h [ns_http queue -timeout 60:0 $url]
-    ns_http wait -file F -spoolsize 1 $h
-    if {[file exists $output_file_name]} {file delete $output_file_name}
-    file rename $F $output_file_name
+      foreach i {1 2 3} {
+	  ns_log notice "Transfer $url to $output_file_name based on ns_http"
+	  set h [ns_http queue -timeout 60:0 $url]
+	  set replyHeaders [ns_set create]
+	  ns_http wait -file F -headers $replyHeaders -spoolsize 1 $h
+	  if {[file exists $output_file_name]} {file delete $output_file_name}
+	  file rename $F $output_file_name
+	  set location [ns_set iget $replyHeaders location]
+	  if {$location eq ""} break
+	  ns_log notice "Transfer $url redirected to $location ..."
+	  set url $location
+      }
   } elseif {[info command ::xo::HttpRequest] ne ""} {
     # 
     # ... use xo::HttpRequest...
