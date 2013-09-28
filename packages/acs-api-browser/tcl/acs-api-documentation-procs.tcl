@@ -834,6 +834,8 @@ ad_proc -public api_get_body {proc_name} {
     return [$thread do $obj serialize]
   } elseif {[info proc $proc_name] ne ""} {
     return [info body $proc_name]
+  } elseif {[info proc ::nsf::procs::$proc_name] ne ""} {
+    return [info body ::nsf::procs::$proc_name]
   } else {
     return "No such Tcl-proc"
   }
