@@ -11,22 +11,18 @@ ad_page_contract {
 
 set title "Package Installation"
 set context [list [list "/acs-admin/apm/" "Package Manager"] $title]
-set body {
-    <h2>Select Data Model Scripts to Run</h2>
-    <p>
-    Check all the files you want to be loaded into the database.<p>
-    <form action="packages-install-4" method="post">
-}
 
-ad_return_top_of_page "[apm_header "Package Installation"]
-<p>Please wait while the installer searches your system for packages to install ...<p>
-
-"
+ad_return_top_of_page [ad_parse_template -params [list context title] \
+			   "/packages/openacs-default-theme/lib/plain-streaming-head"]
 
 ### Get all the spec files
-# If a package is in the apm_workspace dir then we assume that that is the package that
-# should be installed and we ignore any such package in the packages dir.
+#
+# If a package is in the apm_workspace dir then we assume that that is
+# the package that should be installed and we ignore any such package
+# in the packages dir.  
+#
 # TODO: make sure that it's a later version than that in the packages dir?
+#
 set packages_root_dir "[acs_root_dir]/packages"
 set packages_spec_files [apm_scan_packages $packages_root_dir]
 set workspace_spec_files [apm_scan_packages [apm_workspace_install_dir]]
@@ -60,7 +56,8 @@ foreach spec_file $all_spec_files {
                 lappend spec_files $spec_file
             } else {
                 ns_log Notice "need upgrade of package $package_key $version_name"
-                lappend already_installed_list "Package &quot;$package_name&quot; ($package_key) version $version_name or higher is already installed."
+                lappend already_installed_list \
+		    "Package &quot;$package_name&quot; ($package_key) version $version_name or higher is already installed."
             }
         } else {
             lappend spec_files $spec_file
@@ -72,27 +69,25 @@ foreach spec_file $all_spec_files {
 
 apm_log APMDebug $spec_files
 
-ns_write "Done.<p>
-"
-
 if { $spec_files eq "" } {
     # No spec files to work with.
-    ns_write "
+    ns_write [subst {
     <h2>No New Packages to Install</h2><p>
 
     There are no new packages to install.  Please load some
-    using the <a href=\"package-load\">Package Loader</a>.<p>
-    Return to the <a href=\"index\">APM</a>.<p>
-    "
+    using the <a href="package-load">Package Loader</a>.<p>
+    Return to the <a href="index">APM</a>.<p>
+    }]
 } else {   
     
-    ns_write "
+    ns_write {
     <h2>Select Packages to Install</h2><p>
-    <p>Please select the set of packages you'd like to install.</p>"
+    <p>Please select the set of packages you'd like to install.</p>
+    }
 
-    ns_write "
+    ns_write [subst {
 
-<script type=\"text/javascript\">
+<script type="text/javascript">
 function uncheckAll() {
     for (var i = 0; i < [expr {[llength $spec_files] }]; ++i)
         document.forms\[0\].elements\[i\].checked = false;
@@ -104,9 +99,9 @@ function checkAll() {
     this.href='';
 }
 </script>
-<a href=\"packages-install?checked_by_default_p=0\" onclick=\"javascript:uncheckAll();return false\"><b>uncheck all boxes</b></a> |
-<a href=\"packages-install?checked_by_default_p=1\"  onclick=\"javascript:checkAll(); return false\"><b>check all boxes</b></a>
-"
+<a href="packages-install?checked_by_default_p=0" onclick="javascript:uncheckAll();return false"><b>uncheck all boxes</b></a> |
+<a href="packages-install?checked_by_default_p=1" onclick="javascript:checkAll(); return false"><b>check all boxes</b></a>
+    }]
 
     ns_write "<form action=packages-install-2 method=post>"
 
@@ -138,19 +133,18 @@ function checkAll() {
         set widget [apm_package_selection_widget $pkg_info_list $pkg_key_list $pkg_key_list]
     } else {
         set widget [apm_package_selection_widget $pkg_info_list]
-    }
+}
 
     if {$widget eq ""} {
-	ns_write "There are no new packages available.<p>
-	[ad_footer]"
+	ns_write "There are no new packages available."
 	ad_script_abort
     }
-    
+
     ns_write $widget
-    ns_write "
-    <input type=submit value=\"Next -->\">
+    ns_write [subst {
+    <input type="submit" value="Next -->">
     </form>
-    "
+    }]
     
     if {$errors ne ""} {
 	ns_write "The following errors were generated
@@ -168,9 +162,3 @@ if { [llength $not_compatible_list] > 0 } {
 if { [llength $already_installed_list] > 0 } {
     ns_log Notice "APM packages-install: Already Installed Packages\n- [join $already_installed_list "\n- "]"
 }
-
-
-
-ns_write "
-[ad_footer]
-" 
