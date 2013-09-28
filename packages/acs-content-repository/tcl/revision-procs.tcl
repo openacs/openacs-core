@@ -63,14 +63,14 @@ ad_proc -public cr_write_content {
             if { $string_p } {
                 return $text
             }
-            ReturnHeaders $mime_type
-            ns_write $text
+            ns_return 200 $mime_type $text
         }
         file {
             set path [cr_fs_path $storage_area_key]
             set filename [db_string write_file_content ""]
 	    if {$filename eq ""} {
-		ad_return -code error "No content for the revision $revision_id. This seems to be an error which occured during the upload of the file"
+		ad_return -code error "No content for the revision $revision_id.\
+		This seems to be an error which occured during the upload of the file"
 	    } else {
 		if { $string_p } {
 		    set fd [open $filename "r"]
