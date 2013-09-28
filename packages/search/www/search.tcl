@@ -43,8 +43,7 @@ if {[callback::impl_exists -impl $driver -callback search::driver_info]} {
 }
 
 if { [array get info] eq "" } {
-    ReturnHeaders
-    ns_write "[_ search.lt_FtsEngineDriver_not_a]"
+    ns_return 200 text/html [_ search.lt_FtsEngineDriver_not_a]
     ad_script_abort
 }
 
