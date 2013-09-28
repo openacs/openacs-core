@@ -225,16 +225,9 @@ ad_proc -deprecated ad_header {
 } {
     writes HEAD, TITLE, and BODY tags to start off pages in a consistent fashion
 
-
     @see   Documentation on the site master template for the proper way to standardize page headers
 } {
-    
-    #    if {[parameter::get -parameter MenuOnUserPagesP -default pdm] == 1} {
-    #	return [ad_header_with_extra_stuff -focus $focus $page_title [ad_pdm] [ad_pdm_spacer]]
-    #    } else {
-    #    }
     return [ad_header_with_extra_stuff -focus $focus $page_title $extra_stuff_for_document_head]
-
 }
 
 ad_proc -deprecated ad_header_with_extra_stuff {
@@ -335,14 +328,7 @@ ad_proc -deprecated ad_admin_header {
     
     @see  Documentation on the site master template for the proper way to standardize page headers
 } {
-    
-    # if {[parameter::get -package_id [ad_acs_kernel_id] -parameter MenuOnAdminPagesP -default pdm] == 1} {
-	
-	# return [ad_header_with_extra_stuff -focus $focus $page_title [ad_pdm "admin" 5 5] [ad_pdm_spacer "admin"]]
-	
-	# } else {}
-
-	return [ad_header_with_extra_stuff -focus $focus $page_title]
+    return [ad_header_with_extra_stuff -focus $focus $page_title]
 }
 
 ad_proc -deprecated ad_admin_footer {} {
@@ -391,16 +377,17 @@ ad_proc -public ad_return_complaint {
 
     @param exception_text HTML chunk to go inside an UL tag with the error messages.
 } {
-    set complaint_template [parameter::get_from_package_key -package_key "acs-tcl" -parameter "ReturnComplaint" -default "/packages/acs-tcl/lib/ad-return-complaint"]
+    set complaint_template [parameter::get_from_package_key \
+				-package_key "acs-tcl" \
+				-parameter "ReturnComplaint" \
+				-default "/packages/acs-tcl/lib/ad-return-complaint"]
     ns_return 200 text/html [ad_parse_template \
                                  -params [list [list exception_count $exception_count] \
                                               [list exception_text $exception_text]] \
 				 $complaint_template]
 				 
-    
     # raise abortion flag, e.g., for templating
-    global request_aborted
-    set request_aborted [list 200 "Problem with Your Input"]
+    set ::request_aborted [list 200 "Problem with Your Input"]
 }
 
 

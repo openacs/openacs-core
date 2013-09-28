@@ -2030,25 +2030,14 @@ ad_proc ad_page_contract_handle_datasource_error {error} {
   @author Chrisitan Brechbuehler <christian@arsdigita.com>
   @creation-date 13 Aug 2000
 } {
-  # copied from defs-procs.tcl: ad_return_complaint
-
-  doc_return 200 text/html "[ad_header_with_extra_stuff \
-                             "[_ acs-tcl.lt_Problem_with_a_Templa]" "" ""]
-    
-<h2>[_ acs-tcl.lt_Problem_with_a_Page_o]</h2>
-
-<hr>
-
-[_ acs-tcl.lt_We_had_a_problem_proc]
-	
-<ul>
-  <li>$error
-</ul>
-	
-<p>
-	
-[_ acs-tcl.Sorry]
-	
-[ad_footer]
-"
+    set complaint_template [parameter::get_from_package_key \
+				-package_key "acs-tcl" \
+				-parameter "ReturnComplaint" \
+				-default "/packages/acs-admin/www/apm/apm.adpacs-tcl/lib/ad-return-complaint"]
+    set exception_count 1
+    set exception_text $error
+    ns_return 200 text/html [ad_parse_template \
+                                 -params [list [list exception_count $exception_count] \
+                                              [list exception_text $exception_text]] \
+				 $complaint_template]
 }
