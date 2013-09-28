@@ -52,11 +52,12 @@ lappend table_def [list attr_value "Value" no_sort \
 
 append additional_sql [ad_order_by_from_sort_spec $orderby $table_def]
 
-set body "[ad_header "Parameters for $instance_name"]
-<h2>Parameters for $instance_name</h2>
-[ad_context_bar [list "index" "Site Map"] "$instance_name Parameters"]
-<hr>
-"
+set title "Parameters for $instance_name"
+set context [list [list "index" "Site Map"] "$instance_name Parameters"]
+
+set body [subst {<h2>Parameters for $instance_name</h2>
+    <hr>
+}]
 
 if { $dimensional_list ne "" } {
     append body "[ad_dimensional $dimensional_list]<p>"
@@ -78,23 +79,22 @@ set table [ad_table -Torderby $orderby \
 
 
 if { $display_warning_p } {
-    append body "
-Note text in red below the parameter entry fields indicates the value of this
-parameter is being overridden by an entry in the OpenACS parameter file.  The
-use of the parameter file is discouraged but some sites need it to provide
-instance-specific values for parameters independent of the apm_parameter
-tables.
-<hr>
-"
+    append body {
+	Note text in red below the parameter entry fields indicates the value of this
+	parameter is being overridden by an entry in the OpenACS parameter file.  The
+	use of the parameter file is discouraged but some sites need it to provide
+	instance-specific values for parameters independent of the apm_parameter
+	tables.
+	<hr>
+    }
 }
 
+append body [subst {
+    <blockquote>
+    <form method=post action=parameter-set-2>
+    [export_vars -form {package_key package_id instance_name return_url}]
+    $table
+    </blockquote>
+    </form>
+}]
 
-ns_return 200 text/html "$body
-<blockquote>
-<form method=post action=parameter-set-2>
-[export_vars -form {package_key package_id instance_name return_url}]
-$table
-</blockquote>
-</form>
-[ad_footer]
-"
