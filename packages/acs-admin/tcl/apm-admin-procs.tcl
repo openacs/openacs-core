@@ -33,7 +33,7 @@ ad_proc apm_parameter_section_slider {package_key} {
     }
 }
 
-ad_proc apm_header { { -form "" } args } {
+ad_proc -deprecated apm_header { { -form "" } args } {
     Generates HTML for the header of a page (including context bar).
     Must only be used for APM admin pages (under /acs-admin/apm).
 
