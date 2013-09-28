@@ -6,18 +6,6 @@ ad_library {
     @cvs-id $Id$
 }
 
-aa_register_case -cats smoke acs_admin_trivial_smoke_test {
-    Minimal smoke test for acs-admin package.
-} {    
-
-    aa_run_with_teardown \
-        -rollback \
-        -test_code {
-            set header_result [apm_header]
-	    aa_true "apm_header returns a non-null string?" [expr {$header_result ne ""}]
-        }
-}
-
 aa_register_case -cats {api smoke} apm_higher_version_installed_p {
     Test apm_higher_version_installed_p proc.
 } {    
