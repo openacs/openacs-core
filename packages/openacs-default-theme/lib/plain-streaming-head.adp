@@ -1,6 +1,6 @@
 <html>
 <link rel="stylesheet" href="/resources/openacs-default-theme/styles/default-master.css" type="text/css" media="all">
-<title>$title</title>
+<title>@title@</title>
 <body>
 
 <div id="wrapper">
