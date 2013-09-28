@@ -76,7 +76,7 @@ if { [file extension $file_path] eq "apm" || $url_param ne ""} {
     } else {
 	# Not sure what to do... stop.
 	ns_write "The specified file path is not an APM file or a directory.  Please try
-	entering a new file path.[ad_footer]"
+	entering a new file path."
 	return
     }
 }

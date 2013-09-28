@@ -576,7 +576,7 @@ ad_proc -private apm_load_apm_file {
         if { [catch {apm_transfer_file -url $url -output_file_name $file_path} errmsg] } {
             apm_callback_and_log $callback "Unable to download. Please check your URL.</ul>.
             The following error was returned: <blockquote><pre>[ad_quotehtml $errmsg]
-            </pre></blockquote>[ad_footer]"
+            </pre></blockquote>"
             return
         }	
 

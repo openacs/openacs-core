@@ -112,24 +112,29 @@ ad_proc -public template::paginator::create { statement_name name query args } {
     #
     if { ($row_ids eq {} && ![::cache exists $cache_key]) || ([info exists opts(flush_p)] && $opts(flush_p) eq "t") } {
       if { [info exists opts(printing_prefs)] && $opts(printing_prefs) ne "" } {
-	  ReturnHeaders "text/html"
-	  ns_write "
-<html>
-<head>"
 	  set title [lindex $opts(printing_prefs) 0]
-	  ns_write "<title>$title</title>
-          <meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\">"
 	  set stylesheet [lindex $opts(printing_prefs) 1]
 	  if { $stylesheet ne "" } {
-	      ns_write "<link rel=\"stylesheet\" href=\"$stylesheet\" type=\"text/css\">"
+	      set css_link "<link rel=\"stylesheet\" href=\"$stylesheet\" type=\"text/css\">"
+	  } else {
+	      set css_link ""
 	  }
-	  ns_write "</head>"
-	  ns_write "<body "
 	  set background [lindex $opts(printing_prefs) 2]
 	  if { $background ne "" } {
-	      ns_write "background=\"$background\""
+	      set bg "background=\"$background\""
+	  } else {
+	      set bg ""
 	  }
-	  ns_write ">"
+
+	  ad_return_top_of_page [subst {
+<html>
+<head>
+<title>$title</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+$css_link
+</head>
+<body $bg>
+	  }]
 	  set header_file [lindex $opts(printing_prefs) 3]
 	  if { $header_file ne "" } {
 	      ns_write [ns_adp_parse -file $header_file]
@@ -157,7 +162,6 @@ ad_proc -public template::paginator::create { statement_name name query args } {
           <a href=\"$return_url\">Click here to Continue</a>
           </noscript>"
 	  }
-	  ns_write [ad_footer]
 	  ad_script_abort
       } else {
 	  init $statement_name $name $query
