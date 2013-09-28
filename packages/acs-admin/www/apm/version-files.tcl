@@ -13,20 +13,23 @@ apm_version_info $version_id
 set return_url "[ad_conn url]?[ad_conn query]"
 
 set page_title "Files"
-set context [list [list "../developer" "Developer's Administration"] [list "/acs-admin/apm/" "Package Manager"] [list [export_vars -base version-view { version_id }] "$pretty_name $version_name"] $page_title]
-
-append body "
-
-<blockquote>
-<table cellspacing=0 cellpadding=0>
-"
-doc_body_flush
+set context [list \
+		 [list "../developer" "Developer's Administration"] \
+		 [list "/acs-admin/apm/" "Package Manager"] \
+		 [list [export_vars -base version-view { version_id }] "$pretty_name $version_name"] \
+		 $page_title]
+set body {
+    <blockquote>
+    <table cellspacing="0" cellpadding="0">
+    <tr>
+    <th align="left">Path</th><th width="40"></th>
+    <th align="left">File type</th><th width="40"></th>
+    <th align="left">Database support</th><th width="40"></th>
+    </tr>
+}
 
 set last_components [list]
 set counter 0
-
-append body "<tr><th align=left>Path</th><th width=40></th><th align=left>File type</th><th width=40></th>
-                 <th align=left>Database support</th><th width=40></th></tr>\n"
 
 foreach path [apm_get_package_files -package_key $package_key] {
     set file_id ""
@@ -70,30 +73,36 @@ foreach path [apm_get_package_files -package_key $package_key] {
 	if { $i < [llength $components] - 1 } {
 	    append body "/</td>"
 	} else {
-	    append body "</td>"
-	    append body "<td width=40>&nbsp;</td><td>$file_pretty_name</td><td width=40>&nbsp</td><td>$db_pretty_name</td>
-                             <td width=40>&nbsp;</td>"
+	    append body [subst {
+		</td>
+		<td width="40">&nbsp;</td><td>$file_pretty_name</td>
+		<td width="40">&nbsp</td><td>$db_pretty_name</td>
+		<td width="40">&nbsp;</td>
+	    }]
 
-		if { $installed_p eq "t" } {
-                    set server_rel_path "packages/$package_key/$path"
-		    if { [apm_file_watchable_p $server_rel_path] } {
-			if { [nsv_exists apm_reload_watch $server_rel_path] } {
-			    # This procs file is already being watched.
-			    append body "<td>&nbsp;being watched&nbsp;</td>"
-			} else {
-			    if {![parameter::get -package_id [ad_acs_kernel_id] \
-                                      -parameter PerformanceModeP -default 1]} {
-				# Provide a link to watch the procs file.
-				append body "<td>&nbsp;<a href=\"file-watch?[export_vars -url {version_id {paths $path} return_url}]\">watch</a>&nbsp;</td>"
-			    } else {
-				append body "<td></td>"
-			    }
-			}
+	    if { $installed_p eq "t" } {
+		set server_rel_path "packages/$package_key/$path"
+		if { [apm_file_watchable_p $server_rel_path] } {
+		    if { [nsv_exists apm_reload_watch $server_rel_path] } {
+			# This procs file is already being watched.
+			append body "<td>&nbsp;being watched&nbsp;</td>"
 		    } else {
-			append body "<td></td>"
+			if {![parameter::get -package_id [ad_acs_kernel_id] \
+				  -parameter PerformanceModeP -default 1]} {
+			    # Provide a link to watch the procs file.
+			    append body [subst {
+				<td>&nbsp;<a href="file-watch?[export_vars -url {version_id {paths $path} return_url}]">watch</a>
+				&nbsp;</td>
+			    }]
+			} else {
+			    append body "<td></td>"
+			}
 		    }
+		} else {
+			append body "<td></td>"
+		}
 
-                }
+	    }
 	}
 	append body "</tr>\n"
 	incr i
@@ -101,39 +110,34 @@ foreach path [apm_get_package_files -package_key $package_key] {
     set last_components $components
 } 
 
-if {$counter eq "0"} {
+if {$counter == 0} {
     append body "<tr><td>This package does not contain any registered files.</td></tr>\n"
 }
 
-append body "</table>
-</blockquote>
-"
+append body {</table>
+    </blockquote>
+}
 
 if { $installed_p eq "t" } {
-    append body "<ul>
-    <li><a href=\"package-watch?[export_vars -url {package_key return_url}]\">watch all files</a></li>
-<li><a href=\"package-watch-cancel?[export_vars -url {package_key return_url}]\">cancel all watches</a></li>"
-
-    if { $distribution_uri eq "" } {
-        append body "
-    <p>
-    <!--li><a href=\"version-tag?version_id=$version_id\">Create a CVS tag for this version in each file</a-->"
-
-    }
+    append body [subst {<ul>
+	<li><a href="package-watch?[export_vars -url {package_key return_url}]">watch all files</a></li>
+	<li><a href="package-watch-cancel?[export_vars -url {package_key return_url}]">cancel all watches</a></li>
+    }]
 
     if {$tagged_p eq "t"} {
-        append body "
-        <li><a href=\"archive/[file tail $version_uri]?version_id=$version_id\">Download a tarball from the package archive</a>"
+	append body [subst {
+	    <li><a href="archive/[file tail $version_uri]?version_id=$version_id">Download a tarball from the package archive</a>
+	}]
     }
 
     append body "</ul>"
 
 } elseif { [info exists tagged_p] } {
     if { $tagged_p eq "t" } {
-        append body "<ul>
-        <li><a href=\"archive/[file tail $version_uri]?version_id=$version_id\">Download a tarball from the package archive</a>
+	append body [subst {<ul>
+	    <li><a href="archive/[file tail $version_uri]?version_id=$version_id">Download a tarball from the package archive</a>
         </ul>
-        "
+	}]
     }
 }
 
