@@ -6,12 +6,16 @@ ad_page_contract {
 } {
 }
 
-ad_return_top_of_page "[apm_header "Generate Package Specifications"]
+set title "Generate Package Specifications"
+set context [list [list "." "Package Manager"] $title]
 
-Regenerating all package specifications for locally maintained packages.
+ad_return_top_of_page [ad_parse_template -params [list context title] \
+			   "/packages/openacs-default-theme/lib/plain-streaming-head"]
 
-<ul>
-"
+ns_write {
+    Regenerating all package specifications for locally maintained packages.
+    <ul>
+}
 
 db_foreach apm_get_all_packages {
     select version_id, version_name, pretty_name, distribution_uri, v.package_key
@@ -35,8 +39,6 @@ db_foreach apm_get_all_packages {
     }
 }
 
-ns_write "</ul>
-
-<a href=\"./\">Return to the Package Manager</a>
-
-[ad_footer]"
+ns_write [subst {</ul>
+<a href="./">Return to the Package Manager</a>
+}]
