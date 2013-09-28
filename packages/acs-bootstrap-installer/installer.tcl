@@ -195,11 +195,6 @@ $page
 [install_footer]"
 }
 
-# Write out a bullet item (suitable for use as a callback for, e.g., apm_register_new_packages).
-proc install_write_bullet_item { item } {
-    ns_write "$item<li>\n"
-}
-
 # Does the ACS kernel data model seem installed?
 proc install_good_data_model_p {} {
     foreach table_name { acs_objects sec_session_properties } {
