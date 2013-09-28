@@ -21,9 +21,8 @@ set context [list \
 		 $title]
 
 set body "<form action='package-add-2' method='post'>\n"
-append body \
-    [export_vars -form {package_id version_id}] \
-    [subst {
+append body [subst {
+[export_vars -form {package_id version_id}] 
 <script type="text/javascript">
 function updateURLs() {
     // Update the package and version URL, if the package key and/or version name change.
@@ -255,10 +254,9 @@ this package, please load them manually into your database.
 </tr>
 
 </table>
+}]
 
-"}]
-
-
+ad_return_template apm
 
 
 

@@ -7,7 +7,19 @@ ad_page_contract {
     {version_id:integer}
 }
 
-db_1row apm_all_version_info {}
+db_1row apm_all_version_info {
+    select version_id, package_key, package_uri, pretty_name, version_name, version_uri,
+    summary, description_format, description, singleton_p, initial_install_p,
+    implements_subsite_p, inherit_templates_p,
+    to_char(release_date, 'Month DD, YYYY') as release_date , vendor, vendor_uri, auto_mount,
+    enabled_p, installed_p, tagged_p, imported_p, data_model_loaded_p, 
+    to_char(activation_date, 'Month DD, YYYY') as activation_date,
+    tarball_length, distribution_uri,
+    to_char(deactivation_date, 'Month DD, YYYY') as deactivation_date,
+    to_char(distribution_date, 'Month DD, YYYY') as distribution_date
+ from apm_package_version_info 
+ where version_id = :version_id
+}
 
 set downloaded_p [ad_decode $version_uri "" 0 1]
 
@@ -51,11 +63,16 @@ set prompts [list]
 
 if { ![info exists installed_version_id] } {
     if { !$downloaded_p } {
-	set status "No version of this package is installed: there is no <tt>.info</tt> file in the
-<tt>packages/$package_key</tt> directory. If you're building the package now, you probably
-want to <a href=\"version-generate-info?version_id=$version_id&write_p=1\">generate one</a>."
+	set status [subst {
+	    No version of this package is installed: there is no <tt>.info</tt> file in the
+	    <tt>packages/$package_key</tt> directory. If you're building the package now, you probably
+	    want to <a href="version-generate-info?version_id=$version_id&write_p=1">generate one</a>.
+	}]
     } else {
-	set status "No version of this package is installed. You may <a href=\"version-install\?version_id=$version_id\">install this package now</a>."
+	set status [subst {
+	    No version of this package is installed. You may 
+	    <a href="version-install?version_id=$version_id">install this package now</a>.
+	}]
     }
     lappend prompts $status
 } elseif { $installed_version_id == $version_id } {
@@ -68,18 +85,21 @@ want to <a href=\"version-generate-info?version_id=$version_id&write_p=1\">gener
 	set can_enable_p 1
     }
 } else {
-    set status "[ad_decode $version_name_greater -1 "An older" "A newer"] version of this package,
-version $installed_version_name, is installed and [ad_decode $installed_enabled_p "t" "enabled" "disabled"]."
+    set status [subst {
+	[ad_decode $version_name_greater -1 "An older" "A newer"] version of this package,
+	version $installed_version_name, is installed and [ad_decode $installed_enabled_p "t" "enabled" "disabled"].
+    }]
     if { $version_name_greater < 0 } {
-	append body " You may <a href=\"version-upgrade?version_id=$version_id\">upgrade to this version now</a>."
+	append body [subst {
+	    You may <a href="version-upgrade?version_id=$version_id">upgrade to this version now</a>.
+	}]
     }
 }
 
 if { ![info exists data_model_installed_version] } {
     set data_model_status " No version of the data model for this package has been loaded."
 } elseif {$data_model_installed_version ne $version_name  } {
-    set data_model_status " The data model for version $data_model_installed_version of this package has been
-loaded."
+    set data_model_status " The data model for version $data_model_installed_version of this package has been loaded."
 } else {
     set data_model_status " The data model for this version of this package has been loaded."
 }
@@ -113,29 +133,29 @@ if { [llength $prompts] == 0 } {
     set prompt_text "<ul><li>[join $prompts "\n<li>"]</ul>"
 }
 
-db_release_unused_handles
+set title "$pretty_name $version_name"
+set context [list \
+		 [list "../developer" "Developer's Administration"] \
+		 [list "/acs-admin/apm/" "Package Manager"] \
+		 $title]
 
-set page_title "$pretty_name $version_name"
-set context [list [list "../developer" "Developer's Administration"] [list "/acs-admin/apm/" "Package Manager"] $page_title]
-
-
-append body "
+append body [subst {
 $prompt_text
 
 <h3>Package Information</h3>
 
 <blockquote>
 <table>
-<tr valign=baseline><th align=left>Package Name:</th><td>$pretty_name</td></th></tr>
-<tr valign=baseline><th align=left>Version:</th><td>$version_name</td></tr>
-<tr valign=baseline><th align=left>OpenACS Core:</th><td>[ad_decode $initial_install_p "t" "Yes" "No"]</td></tr>
-<tr valign=baseline><th align=left>Singleton:</th><td>[ad_decode $singleton_p "t" "Yes" "No"]</td></tr>
-<tr valign=baseline><th align=left>Implements Subsite:</th><td>[ad_decode $implements_subsite_p t Yes No]</td></tr>
-<tr valign=baseline><th align=left>Inherit Templates:</th><td>[ad_decode $inherit_templates_p t Yes No]</td></tr>
-<tr valign=baseline><th align=left>Auto-mount:</th><td>$auto_mount</td></tr>
-<tr valign=baseline><th align=left>Status:</th><td>$status</td></tr>
-<tr valign=baseline><th align=left>Data Model:</th><td>$data_model_status</td></th></tr>
-"
+<tr valign="baseline"><th align="left">Package Name:</th><td>$pretty_name</td></th></tr>
+<tr valign="baseline"><th align="left">Version:</th><td>$version_name</td></tr>
+<tr valign="baseline"><th align="left">OpenACS Core:</th><td>[ad_decode $initial_install_p "t" "Yes" "No"]</td></tr>
+<tr valign="baseline"><th align="left">Singleton:</th><td>[ad_decode $singleton_p "t" "Yes" "No"]</td></tr>
+<tr valign="baseline"><th align="left">Implements Subsite:</th><td>[ad_decode $implements_subsite_p t Yes No]</td></tr>
+<tr valign="baseline"><th align="left">Inherit Templates:</th><td>[ad_decode $inherit_templates_p t Yes No]</td></tr>
+<tr valign="baseline"><th align="left">Auto-mount:</th><td>$auto_mount</td></tr>
+<tr valign="baseline"><th align="left">Status:</th><td>$status</td></tr>
+<tr valign="baseline"><th align="left">Data Model:</th><td>$data_model_status</td></th></tr>
+}]
 
 set supported_databases_list [apm_package_supported_databases $package_key]
 if { $supported_databases_list eq "" } {
@@ -144,17 +164,15 @@ if { $supported_databases_list eq "" } {
     set supported_databases [join $supported_databases_list ", "]
 }
 
-append body "
-<tr valign=baseline><th align=left>Database Support:</th><td>$supported_databases</td></th></tr>
-"
-
-append body "
-<tr valign=baseline><th align=left>CVS:</th><td>$cvs_status</td></tr>
-<tr valign=baseline><th align=left>[ad_decode [llength $owners] 1 "Owner" "Owners"]:</th><td>[join $owners "<br>"]</td></th></tr>
-<tr valign=baseline><th align=left>Package Key:</th><td>$package_key</td></th></tr>
-<tr valign=baseline><th align=left>Summary:</th><td>$summary</td></tr>
-<tr valign=baseline><th align=left>Description:</th><td>$description</td></tr>
-<tr valign=baseline><th align=left>Release Date:</th><td>$release_date</td></tr>"
+append body [subst {
+<tr valign="baseline"><th align="left">Database Support:</th><td>$supported_databases</td></th></tr>
+<tr valign="baseline"><th align="left">CVS:</th><td>$cvs_status</td></tr>
+<tr valign="baseline"><th align="left">[ad_decode [llength $owners] 1 "Owner" "Owners"]:</th><td>[join $owners "<br>"]</td></th></tr>
+<tr valign="baseline"><th align="left">Package Key:</th><td>$package_key</td></th></tr>
+<tr valign="baseline"><th align="left">Summary:</th><td>$summary</td></tr>
+<tr valign="baseline"><th align="left">Description:</th><td>$description</td></tr>
+<tr valign="baseline"><th align="left">Release Date:</th><td>$release_date</td></tr>
+}]
 
 # Dynamic package version attributes
 array set all_attributes [apm::package_version::attributes::get_spec]
@@ -163,18 +181,22 @@ array set attributes [apm::package_version::attributes::get \
                           -array attributes]
 foreach attribute_name [array names attributes] {
     array set attribute $all_attributes($attribute_name)
-
-    append body "<tr valign=baseline><th align=left>$attribute(pretty_name)</th><td>$attributes($attribute_name)</td></tr>"
+    append body [subst {
+	<tr valign="baseline"><th align="left">$attribute(pretty_name)</th><td>$attributes($attribute_name)</td></tr>
+    }]
 }
 
-append body "
-<tr valign=baseline><th align=left>Vendor:</th><td>[ad_decode $vendor_uri "" $vendor "<a href=\"$vendor_uri\">$vendor</a>"]</td></tr>
-<tr valign=baseline><th align=left>Package URL:</th><td><a href=\"$package_uri\">$package_uri</a></td></th></tr>
-<tr valign=baseline><th align=left>Version URL:</th><td><a href=\"$version_uri\">$version_uri</a></td></th></tr>
-<tr valign=baseline><th align=left>Distribution File:</th><td>"
+append body [subst {
+<tr valign="baseline"><th align="left">Vendor:</th><td>[ad_decode $vendor_uri "" $vendor "<a href=\"$vendor_uri\">$vendor</a>"]</td></tr>
+<tr valign="baseline"><th align="left">Package URL:</th><td><a href="$package_uri">$package_uri</a></td></th></tr>
+<tr valign="baseline"><th align="left">Version URL:</th><td><a href="$version_uri">$version_uri</a></td></th></tr>
+<tr valign="baseline"><th align="left">Distribution File:</th><td>
+}]
 
 if { $tarball_length ne "" && $tarball_length > 0 } {
-    append body "<a href=\"packages/[file tail $version_uri]?version_id=$version_id\">[format "%.1f" [expr { $tarball_length / 1024.0 }]]KB</a> "
+    append body [subst {
+	<a href="packages/[file tail $version_uri]?version_id=$version_id">[format "%.1f" [expr { $tarball_length / 1024.0 }]]KB</a> 
+    }]
     if { $distribution_uri eq "" } {
 	append body "(generated on this system"
 	if { $distribution_date ne "" } {
@@ -191,73 +213,86 @@ if { $tarball_length ne "" && $tarball_length > 0 } {
 } else {
     append body "None available"
     if { $installed_p eq "t" } {
-	append body " (<a href=\"version-generate-tarball?version_id=$version_id\">generate one now</a> from the filesystem)"
+	append body [subst {
+	    (<a href="version-generate-tarball?version_id=$version_id">generate one now</a> from the filesystem)
+	}]
     }
 }
 
-append body "
+append body [subst {
 </td></tr>
-
 </table>
-"
-
-append body "
 </blockquote>
 
 <ul>
-<li><a href=\"version-edit?[export_vars { version_id }]\">Edit above information</a> (Also use this to create a new version)
+<li><a href="version-edit?[export_vars { version_id }]">Edit above information</a> (Also use this to create a new version)
 </ul>
 <h4>Manage</h4>
 <ul>
-<li><a href=\"version-files?[export_vars { version_id }]\">Files</a>
-<li><a href=\"version-dependencies?[export_vars { version_id }]\">Dependencies and Provides</a>
-<li><a href=\"version-parameters?[export_vars { version_id }]\">Parameters</a>
-<li><a href=\"version-callbacks?[export_vars { version_id }]\">Tcl Callbacks (install, instantiate, mount)</a>
-<li><a href=\"version-i18n-index?[export_vars { version_id }]\">Internationalization</a>
+<li><a href="version-files?[export_vars { version_id }]">Files</a>
+<li><a href="version-dependencies?[export_vars { version_id }]">Dependencies and Provides</a>
+<li><a href="version-parameters?[export_vars { version_id }]">Parameters</a>
+<li><a href="version-callbacks?[export_vars { version_id }]">Tcl Callbacks (install, instantiate, mount)</a>
+<li><a href="version-i18n-index?[export_vars { version_id }]">Internationalization</a>
 </ul>
 <h4>Reload</h4>
 <ul>
-<li><a href=\"[export_vars -base version-reload { version_id {return_url [ad_return_url]}}]\">Reload this package</a>
-<li><a href=\"[export_vars -base package-watch { package_key {return_url [ad_return_url]}}]\">Watch all files in package</a>
+<li><a href="[export_vars -base version-reload { version_id {return_url [ad_return_url]}}]">Reload this package</a>
+<li><a href="[export_vars -base package-watch { package_key {return_url [ad_return_url]}}]">Watch all files in package</a>
 </ul>
 <h4>XML .info package specification file</h4>
 <ul>
-<li><a href=\"version-generate-info?[export_vars { version_id }]\">Display an XML package specification file for this version</a>
-"
+<li><a href="version-generate-info?[export_vars { version_id }]">Display an XML package specification file for this version</a>
+}]
 
-if { ![info exists installed_version_id] || $installed_version_id == $version_id && \
-	$distribution_uri eq "" } {
+if { ![info exists installed_version_id] || $installed_version_id == $version_id && 
+     $distribution_uri eq "" } {
     # As long as there isn't a different installed version, and this package is being
     # generated locally, allow the user to write a specification file for this version
     # of the package.
-    append body "<li><a href=\"version-generate-info?[export_vars { version_id }]&write_p=1\">Write an XML package specification to the <tt>packages/$package_key/$package_key.info</tt> file</a>\n"
+    append body [subst {
+	<li><a href="version-generate-info?[export_vars { version_id }]&write_p=1">Write 
+	an XML package specification to the <tt>packages/$package_key/$package_key.info</tt> file</a>
+    }]
 }
 
 if { $installed_p eq "t" } {
     if { $distribution_uri eq "" } {
 	# The distribution tarball was either (a) never generated, or (b) generated on this
 	# system. Allow the user to make a tarball based on files in the filesystem.
-	append body "<p><li><a href=\"version-generate-tarball?[export_vars { version_id }]\">Generate a distribution file for this package from the filesystem</a>\n"
+	append body [subst {
+	    <p><li><a href="version-generate-tarball?[export_vars { version_id }]">Generate 
+	    a distribution file for this package from the filesystem</a>
+	}]
     }
 
     append body "</ul><h4>Disable/Uninstall</h4><ul>"
 
     if { [info exists can_disable_p] } {
-	append body "<p><li><a href=\"version-disable?[export_vars { version_id }]\">Disable this version of the package</a>\n"
+	append body [subst {
+	    <p><li><a href="version-disable?[export_vars { version_id }]">Disable 
+	    this version of the package</a>
+	}]
     }
     if { [info exists can_enable_p] } {
-	append body "<p><li><a href=\"version-enable?[export_vars { version_id }]\">Enable this version of the package</a>\n"
+	append body [subst {
+	    <p><li><a href="version-enable?[export_vars { version_id }]">Enable 
+	    this version of the package</a>
+	}]
     }
     
     append body "<p>"
     
     if { $installed_p eq "t" } {	
-	append body "
-	<li><a href=\"package-delete?[export_vars { version_id }]\">Uninstall this package from your system.</a> (be very careful!)\n"
-	
+	append body [subst {
+	    <li><a href="package-delete?[export_vars { version_id }]">Uninstall 
+	    this package from your system</a> (be very careful!)
+	}]
     }
 }
 
-append body "
-</ul>
-"
+append body {
+    </ul>
+}
+
+ad_return_template apm

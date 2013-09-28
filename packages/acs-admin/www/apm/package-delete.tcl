@@ -111,5 +111,6 @@ set body [subst {
     </form>
 }]
 
+ad_return_template apm
 
 

@@ -134,3 +134,5 @@ if {![info exists install_spec_files]} {
 	    }]
     }
 }
+
+ad_return_template apm

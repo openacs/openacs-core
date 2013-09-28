@@ -8,9 +8,6 @@ ad_page_contract {
     version_id:notnull,naturalnum
 }
 
-
-set user_id [ad_conn user_id]
-
 db_1row param_info { 
     select parameter_name, datatype, description, default_value, min_n_values, max_n_values, parameter_id, 
     section_name, default_value
@@ -24,14 +21,12 @@ db_1row apm_get_name {
      where version_id = :version_id
 }
 
-db_release_unused_handles
-
-set page_title "Edit Parameter"
+set title "Edit Parameter"
 set context [list \
 		 [list "." "Package Manager"] \
 		 [list [export_vars -base version-view { version_id }] "$pretty_name $version_name"] \
 		 [list [export_vars -base version-parameters { version_id }] "Parameters"] \
-		 $page_title]
+		 $title]
 
 append body [subst {
 <form action="parameter-edit-2" method="post">
@@ -108,5 +103,4 @@ to indicate which parameters pertain to security.
 </form>
 }]
 
-
-
+ad_return_template apm

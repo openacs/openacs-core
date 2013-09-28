@@ -35,7 +35,6 @@ db_foreach apm_get_all_packages {
     }
 }
 
-db_release_unused_handles
 ns_write "</ul>
 
 <a href=\"./\">Return to the Package Manager</a>

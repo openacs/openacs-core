@@ -1065,9 +1065,8 @@ ad_proc -private apm_package_install_version {
 
 
 ad_proc -private apm_package_deinstall {
-    {
-	-callback apm_dummy_callback
-    } package_key
+    {-callback apm_dummy_callback} 
+    package_key
 } {
 
     Deinstalls a package from the filesystem.

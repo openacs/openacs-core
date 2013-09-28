@@ -12,8 +12,8 @@ ad_page_contract {
 
 db_1row apm_package_by_version_id {
     select pretty_name, version_name, package_key
-      from apm_package_version_info 
-     where version_id = :version_id
+    from apm_package_version_info 
+    where version_id = :version_id
 }
 
 # LARS hack
@@ -50,6 +50,8 @@ ad_form -name del -form {
 } -cancel_url $return_url
 
 set page_title "Confirm Deletion"
-set context [list [list "." "Package Manager"] [list [export_vars -base version-view { version_id }] "$pretty_name $version_name"] [list [export_vars -base version-parameters { version_id section_name }] "Parameters"] $page_title]
+set context [list [list "." "Package Manager"] \
+		 [list [export_vars -base version-view { version_id }] "$pretty_name $version_name"] \
+		 [list [export_vars -base version-parameters { version_id section_name }] "Parameters"] \
+		 $page_title]
 
-ad_return_template

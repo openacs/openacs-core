@@ -11,14 +11,21 @@ ad_page_contract {
 set user_id [ad_conn user_id]
 
 set parameter_id [db_nextval acs_object_id_seq]
-db_1row apm_get_name {}
-db_release_unused_handles
+db_1row apm_get_name {
+    select package_key, pretty_name, version_name
+    from apm_package_version_info
+    where version_id = :version_id
+}
 
-set page_title "Add Parameter"
-set context [list [list "." "Package Manager"] [list [export_vars -base version-view { version_id }] "$pretty_name $version_name"] [list [export_vars -base version-parameters { version_id }] "Parameters"] $page_title]
+set title "Add Parameter"
+set context [list \
+		 [list "." "Package Manager"] \
+		 [list [export_vars -base version-view { version_id }] "$pretty_name $version_name"] \
+		 [list [export_vars -base version-parameters { version_id }] "Parameters"] \
+		 $title]
 
-append body "
-<form action=\"parameter-add-2\" method=\"post\">
+append body [subst {
+<form action="parameter-add-2" method="post">
 <blockquote>
 <table>
 [export_vars -form {package_key parameter_id version_id}]
@@ -32,8 +39,8 @@ plain text string that identifies the parameter.
 </tr>
 
 <tr>
-  <th align=right nowrap>Parameter Name:</th>
-  <td><input name=parameter_name size=50></td>
+  <th align="right" nowrap>Parameter Name:</th>
+  <td><input name="parameter_name" size="50"></td>
 </tr>
 
 <tr>
@@ -42,33 +49,35 @@ plain text string that identifies the parameter.
 </tr>
 
 <tr valign=top>
-  <th align=right><br>Description:</th>
-  <td><textarea name=description cols=60 rows=8></textarea>
+  <th align="right"><br>Description:</th>
+  <td><textarea name="description" cols="60" rows="8"></textarea>
 </td>
 </tr>
 
 
 <tr>
   <td></td>
-  <td>You may enter a section name to identify the parameter.  For example, the ACS Kernel has a \"security\" section
-to indicate which parameters pertain to security.
+  <td>You may enter a section name to identify the parameter.  
+   For example, the ACS Kernel has a "security" section
+   to indicate which parameters pertain to security.
 </tr>
 
-<tr valign=top>
-  <th align=right><br>Section Name:</th>
-<td><input name=section_name size=50 value=\"[ad_quotehtml $section_name]\"><br>
+<tr valign="top">
+  <th align="right"><br>Section Name:</th>
+<td><input name="section_name" size="50" value="[ad_quotehtml $section_name]"><br>
 </td>
 </tr>
 
 <tr>
   <td></td>
-  <td>Please indicate if the parameter is of \"global\" (has one system-wide value) or \"instance\" (a vlue for each package instance) scope.<br>
+  <td>Please indicate if the parameter is of "global" (has one system-wide value) 
+      or "instance" (a value for each package instance) scope.<br>
   </td>
 </tr>
 
 <tr>
-  <th align=right nowrap>Scope:</th>
-  <td><select name=scope>
+  <th align="right" nowrap>Scope:</th>
+  <td><select name="scope">
 [ad_generic_optionlist {instance global} {instance global}]
       </select>
   </td>
@@ -80,8 +89,8 @@ to indicate which parameters pertain to security.
 </tr>
 
 <tr>
-  <th align=right nowrap>Type:</th>
-  <td><select name=datatype>
+  <th align="right" nowrap>Type:</th>
+  <td><select name="datatype">
 [ad_generic_optionlist {number string textarea} {number string text}]
       </select>
   </td>
@@ -96,15 +105,15 @@ to indicate which parameters pertain to security.
 
 <tr>
   <th align=right nowrap>Default:</th>
-  <td><input name=default_value size=50></td>
+  <td><input name="default_value" size="50"></td>
 </tr>
 
-<tr><th colspan=2><input type=submit value=\"Add Parameter\"></th>
+<tr><th colspan="2"><input type="submit" value="Add Parameter"></th>
 </tr>
 </table>
 </blockquote>
 </form>
-"
+}]
 
-
+ad_return_template apm
 

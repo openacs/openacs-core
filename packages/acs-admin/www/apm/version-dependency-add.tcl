@@ -12,26 +12,32 @@ db_1row apm_package_info_by_version_id_and_package {}
 
 set dependency_id [db_nextval acs_object_id_seq] 
 
-doc_body_append "[apm_header -form "action=version-dependency-add-2" [list "version-view?version_id=$version_id" "$pretty_name $version_name"] [list "version-dependencies?version_id=$version_id" "Dependencies"] "Add a Dependency"]
+set title "Add a Dependency"
+set context [list \
+		 [list "/acs-admin/apm/" "Package Manager"] \
+		 [list "version-view?version_id=$version_id" "$pretty_name $version_name"] \
+		 [list "version-dependencies?version_id=$version_id" "Dependencies"] \
+		 $title]
 
-[export_vars -form {version_id dependency_type dependency_id {our_package_key $package_key}}]
+set body [subst {
+    <form action='version-dependency-add-2' method='post'>
+    [export_vars -form {version_id dependency_type dependency_id {our_package_key $package_key}}]
 
-$pretty_name ${dependency_type}s the following service:
-<p>
-<select name=service size=8>
-"
+    $pretty_name ${dependency_type}s the following service:
+    <p>
+    <select name="service" size="20">
+}]
 
 db_foreach apm_packages {} {
-    doc_body_append "<option value=\"$package_key;$version_name\">$package_key, version $version_name\n"
+    append body [subst {
+	<option value="$package_key;$version_name">$package_key, version $version_name
+    }]
 }
 
+append body [subst {
+    </select>
+    <br>
+    <input type="submit" value="Add Dependency">
+}]
 
-db_release_unused_handles
-
-doc_body_append "</select>
-<br>
-<input type=submit value=\"Add Dependency\">
-
-[ad_footer]
-"
-
+ad_return_template apm

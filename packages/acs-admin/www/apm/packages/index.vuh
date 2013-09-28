@@ -11,26 +11,25 @@ ad_page_contract {
 }
 
 if { [db_string apm_archive_exist_p {
- select count(*) 
-   from cr_revisions 
-  where revision_id = (select content_item.get_latest_revision(item_id) 
+    select count(*) 
+    from cr_revisions 
+    where revision_id = (select content_item.get_latest_revision(item_id) 
                          from apm_package_versions
-                  	where version_id = :version_id)
+			 where version_id = :version_id)
 } -default 0] } {
 
     set file [ns_tmpnam]
 
-    db_blob_get_file apm_archive_serve "
- select content 
-   from cr_revisions 
-  where revision_id = (select content_item.get_latest_revision(item_id) 
-                         from apm_package_versions
-                  	where version_id = :version_id)
-    " -file $file
-    db_release_unused_handles
+    db_blob_get_file apm_archive_serve {
+	select content 
+	from cr_revisions 
+	where revision_id = (select content_item.get_latest_revision(item_id) 
+			     from apm_package_versions
+			     where version_id = :version_id)
+    } -file $file
     ns_returnfile 200 application/octet-stream $file
 } else {
-  ad_return_complaint "No Archive Available" "There is no APM archive for the version you requested."
+    ad_return_complaint "No Archive Available" "There is no APM archive for the version you requested."
 }
 
 

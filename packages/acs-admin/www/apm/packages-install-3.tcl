@@ -56,22 +56,28 @@ foreach pkg_info [ad_get_client_property apm pkg_install_list] {
 	foreach file $data_model_files {
 	    set path [lindex $file 0]
 	    set file_type [lindex $file 1]
-	    append table_rows "  <tr>
-    <td><input type=checkbox checked name=\"sql_file\" value=\"$file_count\"></td>
-    <td>$path</td>
-    <td>[apm_pretty_name_for_file_type $file_type]</td>
-  </tr>"
+	    append table_rows [subst {
+		<tr>
+		<td><input type="checkbox" checked name="sql_file" value="$file_count"></td>
+		<td>$path</td>
+		<td>[apm_pretty_name_for_file_type $file_type]</td>
+		</tr>
+	    }]
 	    incr file_count
 	}
 
         if { $version(auto-mount) eq "" 
 	     && $version(package.type) eq "apm_application" 
 	   } {
-            set mount_html "<input type=\"checkbox\" name=\"mount_p\" value=\"$version(package.key)\" checked> Mount package under the main site at path <input type=\"text\" name=\"mount_path.$version(package.key)\" value=\"$version(package.key)\">"
+            set mount_html [subst {
+		<input type="checkbox" name="mount_p" value="$version(package.key)" checked> 
+		Mount package under the main site at path 
+		<input type="text" name="mount_path.$version(package.key)" value="$version(package.key)">
+	    }]
         } else {
             set mount_html ""
         }
-	append body "
+	append body [subst {
 	Select what data files to load for $version(package-name) $final_version_name
 	<blockquote>
 	<table cellpadding=3 cellspacing=3>
@@ -83,7 +89,8 @@ foreach pkg_info [ad_get_client_property apm pkg_install_list] {
 	$table_rows
 	</table>
         $mount_html
-       </blockquote> <p>"
+        </blockquote> <p>
+	}]
     }
 }
 
@@ -98,3 +105,5 @@ append body {
     <input type=submit value="Install Packages">
     </form>
 }
+
+ad_return_template apm

@@ -122,6 +122,13 @@ ad_proc -public apm_ns_write_callback { string } {
     ns_write $string
 }
 
+ad_proc -public apm_body_callback { string } {
+    This callback uses the document api to append more text to the stream.
+} {
+    append ::__apm_body $string
+}
+
+
 ad_proc -public apm_doc_body_callback { string } {
     This callback uses the document api to append more text to the stream.
 } {

@@ -10,13 +10,21 @@ ad_page_contract {
     {version_id:integer}
 }
 
-db_1row apm_all_version_info {}
+db_1row apm_all_version_info {
+    select version_id, package_key, package_uri, pretty_name, version_name,
+      version_uri, auto_mount, summary, description_format, description, release_date,
+      vendor, vendor_uri, enabled_p, installed_p, tagged_p, imported_p,
+      data_model_loaded_p, activation_date, tarball_length, 
+      deactivation_date, distribution_uri, distribution_date, singleton_p,
+      initial_install_p, implements_subsite_p, inherit_templates_p
+    from apm_package_version_info where version_id = :version_id
+}
 
 set title "Edit a Version"
 set context [list \
 		 [list "/acs-admin/apm/" "Package Manager"] \
-		 [list "version-view?version_id=$version_id" "View Package"] \
-		 "$pretty_name $version_name"]
+		 [list "version-view?version_id=$version_id" "$pretty_name $version_name"] \
+		 $title]
 
 set body "<form action='version-edit-2' method='post'>"
 
@@ -219,3 +227,5 @@ Upgrade the local package $pretty_name to this version and supersede older versi
 </table>
 </form>
 }]
+
+ad_return_template apm

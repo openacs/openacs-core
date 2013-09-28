@@ -14,8 +14,8 @@ ad_page_contract {
 
 db_1row apm_package_by_version_id {
     select pretty_name, version_name, package_key
-      from apm_package_version_info 
-     where version_id = :version_id
+    from apm_package_version_info 
+    where version_id = :version_id
 }
 
 

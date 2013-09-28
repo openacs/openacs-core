@@ -17,9 +17,11 @@ set context [list [list "/acs-admin/apm/" "Package Manager"] \
 		 $title]
 
 db_transaction {
-    doc_body_append "<ul>"
-    apm_package_deinstall -callback apm_doc_body_callback $package_key
-    doc_body_append "</ul>"
+    append body "<ul>\n"
+    set ::__apm_body ""
+    apm_package_deinstall -callback apm_body_callback $package_key
+    append body $::__apm_body
+    append body "</ul>\n"
 } on_error {
     if {![apm_version_installed_p $version_id] } {
 	ad_return_complaint 1 "Database Error: The database returned the following error
@@ -27,9 +29,11 @@ db_transaction {
     }
 }
 
-append body "<p>Return to the <a href='index'>index</a>"
+append body {
+    <p>Return to the <a href='index'>index</a>
+}
 
-
+ad_return_template apm
 
 
 

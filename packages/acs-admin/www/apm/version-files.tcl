@@ -12,12 +12,12 @@ apm_version_info $version_id
 
 set return_url "[ad_conn url]?[ad_conn query]"
 
-set page_title "Files"
+set title "Files"
 set context [list \
 		 [list "../developer" "Developer's Administration"] \
 		 [list "/acs-admin/apm/" "Package Manager"] \
 		 [list [export_vars -base version-view { version_id }] "$pretty_name $version_name"] \
-		 $page_title]
+		 $title]
 set body {
     <blockquote>
     <table cellspacing="0" cellpadding="0">
@@ -142,3 +142,4 @@ if { $installed_p eq "t" } {
 }
 
 
+ad_return_template apm
