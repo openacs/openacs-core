@@ -832,9 +832,9 @@ ad_proc -public export_vars {
     }
 
     # Prepend with the base URL
-    if { [exists_and_not_null base] } {
+    if { [info exists base] && $base ne "" } {
         if { $export_string ne "" } {
-            if { [string match {*[?]*} $base] } {
+            if { [string first ? $base] > -1 } {
                 # The base already has query vars
                 set export_string "${base}&${export_string}"
             } else { 
@@ -847,7 +847,7 @@ ad_proc -public export_vars {
     }
     
     # Append anchor
-    if { [exists_and_not_null anchor] } {
+    if { ([info exists anchor] && $anchor ne "") } {
         append export_string "\#$anchor"
     }
     

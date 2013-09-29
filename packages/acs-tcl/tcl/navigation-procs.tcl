@@ -106,7 +106,7 @@ ad_proc -public ad_context_bar_multirow {
 	return ""
     }
     
-    if { ![exists_and_not_null node_id] } {
+    if { ![info exists node_id] || $node_id eq "" } {
         set node_id [ad_conn node_id]
     }
 
@@ -168,7 +168,7 @@ ad_proc -public ad_context_bar {
 	return ""
     }
 
-    if { ![exists_and_not_null node_id] } {
+    if { ![info exists node_id] || $node_id eq "" } {
         set node_id [ad_conn node_id]
     }
 

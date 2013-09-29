@@ -296,7 +296,7 @@ ad_proc -private apm_dependency_check {
     while { $updated_p } {
 
         # Inner loop tries to add another package from the install_pend list
-        while { $updated_p && [exists_and_not_null install_pend]} {
+        while { $updated_p && [info exists install_pend] && $install_pend ne ""} {
             set install_in_provides [list]
             set new_install_pend [list]
             set updated_p 0
@@ -343,7 +343,7 @@ ad_proc -private apm_dependency_check {
 
         set updated_p 0
         
-        if { [exists_and_not_null install_pend] && [llength $pkg_info_all] > 0 } {
+        if { [info exists install_pend] && $install_pend ne "" && [llength $pkg_info_all] > 0 } {
             # Okay, there are some packages that could not be installed
             
             # Let's find a package, which
@@ -390,7 +390,7 @@ ad_proc -private apm_dependency_check {
         
     set install_order(order) $install_in
     # Update all of the packages that cannot be installed.
-    if { [exists_and_not_null install_pend] } {
+    if { [info exists install_pend] && $install_pend ne "" } {
 	foreach pkg_info $install_pend {
 	    lappend install_in [pkg_info_new [pkg_info_key $pkg_info] [pkg_info_spec $pkg_info] \
 				    [pkg_info_embeds $pkg_info] [pkg_info_extends $pkg_info] \

@@ -216,7 +216,7 @@ ad_proc -public site_node::instantiate_and_mount {
             # Check that there isn't already a package mounted at the node
             array set node [get -url $url]
 
-            if { [exists_and_not_null node(object_id)] } {
+            if { [info exists node(object_id)] && $node(object_id) ne "" } {
                 error "Cannot mount package at url $url as package $node(object_id) is already mounted there"
             }
 
@@ -484,7 +484,7 @@ ad_proc -public site_node::get_from_url {
             if {[nsv_exists site_nodes $url]} {
                 array set node [nsv_get site_nodes $url]
 
-                if {$node(pattern_p) == "t" && $node(object_id) ne ""} {
+                if {$node(pattern_p) eq "t" && $node(object_id) ne ""} {
                     return [array get node]
                 }
             }
@@ -1039,7 +1039,9 @@ ad_proc -deprecated -warn site_node_closest_ancestor_package {
         
           if {[catch {nsv_get site_nodes $url} result] == 0} {
               array set node $result
-              if {$node(pattern_p) == "t" && $node(object_id) ne "" && [lsearch -exact $package_keys $node(package_key)] != -1 } {
+              if {$node(pattern_p) == "t" 
+		  && $node(object_id) ne "" 
+		  && $node(package_key) in $package_keys} {
                     return $node(package_id)
               }
           }

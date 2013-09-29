@@ -715,7 +715,7 @@ ad_proc -public ad_page_contract {
 	set root_dir [nsv_get acs_properties root_directory]
 	set script [info script]
 	set root_length [string length $root_dir]
-	if { ![string compare $root_dir [string range $script 0 $root_length-1 ]] } {
+	if { $root_dir eq [string range $script 0 $root_length-1 ] } {
 	    set script [string range $script $root_length+1 end]
 	}
 
@@ -1135,7 +1135,7 @@ ad_proc -public ad_page_contract {
     }
 
     # Set the __submit_button_variable. This is used in double click protection.
-    if {[exists_and_not_null __submit_button_name] && [info exists __submit_button_value]} {
+    if {[info exists __submit_button_name] && $__submit_button_name ne "" && [info exists __submit_button_value]} {
 	uplevel 1 [list set $__submit_button_name $__submit_button_value]
     }
 
@@ -1148,7 +1148,7 @@ ad_proc -public ad_page_contract_get_variables { } {
     empty list.  
 } {
     global ad_page_contract_variables
-    if { [exists_and_not_null ad_page_contract_variables] } {
+    if { [info exists ad_page_contract_variables] && $ad_page_contract_variables ne "" } {
 	return $ad_page_contract_variables
     } 
     return [list]

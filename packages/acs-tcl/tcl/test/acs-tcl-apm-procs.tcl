@@ -41,7 +41,7 @@ aa_register_case -cats {api smoke} -procs { apm_parameter_register } test_apm_pa
 
        set parameter_id [apm_parameter_register $parameter_name $description $package_key $default_value $datatype]
 
-	aa_true "Parameter register succeeded" [exists_and_not_null parameter_id]        
+	aa_true "Parameter register succeeded" [expr {[info exists parameter_id] && $parameter_id ne ""}]
      
     }
 }
@@ -66,7 +66,7 @@ aa_register_case -cats {api smoke} -procs {apm_package_instance_new} test_apm_pa
         aa_log "Instance name to be added: $instance_name"
         set error_ocurred [catch {set package_id [apm_package_instance_new -package_key $package_key -instance_name $instance_name ]} err_men]
         aa_log "Error Message $error_ocurred: $err_men "
-        aa_true "Setting the new instance succeeded" [exists_and_not_null package_id]
+        aa_true "Setting the new instance succeeded" [expr {[info exists package_id] && $package_id ne ""}]
         
      
     }

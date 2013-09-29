@@ -669,11 +669,11 @@ ad_proc -public ad_get_login_url {
     append url "register/"
 
     set export_vars [list]
-    if { [exists_and_not_null authority_id] } {
+    if { [info exists authority_id] && $authority_id ne "" } {
         lappend export_vars authority_id
         
     }
-    if { [exists_and_not_null username] } {
+    if { ([info exists username] && $username ne "") } {
         lappend export_vars username
         
     }

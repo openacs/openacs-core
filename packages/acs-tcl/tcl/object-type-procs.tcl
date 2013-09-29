@@ -34,7 +34,7 @@ ad_proc -public acs_object_type_hierarchy {
 
     set result ""
 
-    if { [exists_and_not_null object_type] } {
+    if { [info exists object_type] && $object_type ne "" } {
         set sql [db_map object_type_not_null]
 	set join_string "&nbsp;&gt;&nbsp;"
     } else {
