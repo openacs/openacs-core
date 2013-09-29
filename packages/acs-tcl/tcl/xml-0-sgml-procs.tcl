@@ -1282,7 +1282,7 @@ proc sgml::followpos {state st firstpos lastpos} {
 			[lindex [lindex $firstpos 0] $i-1]	\
 			[lindex [lindex $lastpos 0] $i-1]
 	    	foreach pos [lindex [lindex [lindex $lastpos 0] $i-1] 1] {
-		    eval lappend var($pos) [lindex [lindex [lindex $firstpos 0] $i] 1]
+		    lappend var($pos) {*}[lindex [lindex [lindex $firstpos 0] $i] 1]
 		    set var($pos) [makeSet $var($pos)]
 	    	}
 	    }
@@ -1306,7 +1306,7 @@ proc sgml::followpos {state st firstpos lastpos} {
 	}
 	* {
 	    foreach pos [lindex $lastpos 1] {
-		eval lappend var($pos) [lindex $firstpos 1]
+		lappend var($pos) {*}[lindex $firstpos 1]
 		set var($pos) [makeSet $var($pos)]
 	    }
 	}
