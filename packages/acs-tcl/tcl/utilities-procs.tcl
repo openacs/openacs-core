@@ -2546,7 +2546,7 @@ ad_proc -public util_current_directory {{}} {
 } {
    set path [ad_conn url]
 
-   set lastchar [string range $path [expr {[string length $path]-1}] end]
+   set lastchar [string range $path end end]
    if {$lastchar eq "/" } {
         return $path
    } else { 
@@ -2555,7 +2555,7 @@ ad_proc -public util_current_directory {{}} {
         if {$file_dirname eq "/" } {
             return /
         } else {
-            return  $file_dirname/
+            return $file_dirname/
         }
    }
 }
@@ -2564,8 +2564,8 @@ ad_proc -public util_current_directory {{}} {
 ad_proc -public ad_call_proc_if_exists { proc args } {
     Calls a procedure with particular arguments, only if the procedure is defined.
 } {
-    if { [llength [info commands $proc]] == 1 } {
-	eval $proc $args
+    if { [info commands $proc] ne "" } {
+	$proc {*}$args
     }
 }
 
@@ -4662,7 +4662,7 @@ ad_proc util::catch_exec {command result_var} {
         switch -exact -- [lindex $::errorCode 0] {
 
             CHILDKILLED {
-                foreach { - pid sigName msg } $::errorCode break
+                lassign $::errorCode  - pid sigName msg 
 
                 # A child process, whose process ID was $pid,                   
                 # died on a signal named $sigName.  A human-                    
@@ -4674,7 +4674,7 @@ ad_proc util::catch_exec {command result_var} {
 
             CHILDSTATUS {
 
-                foreach { - pid code } $::errorCode break
+                lassign $::errorCode  - pid code 
 
                 # A child process, whose process ID was $pid,                   
                 # exited with a non-zero exit status, $code.
@@ -4683,7 +4683,7 @@ ad_proc util::catch_exec {command result_var} {
 
             CHILDSUSP {
 
-                foreach { - pid sigName msg } $::errorCode break
+                lassign $::errorCode  - pid sigName msg 
 
                 # A child process, whose process ID was $pid,                   
                 # has been suspended because of a signal named                  
@@ -4696,7 +4696,7 @@ ad_proc util::catch_exec {command result_var} {
 
             POSIX {
 
-                foreach { - errName msg } $::errorCode break
+                lassign $::errorCode  - errName msg 
 
                 # One of the kernel calls to launch the command                 
                 # failed.  The error code is in $errName, and a                 
