@@ -37,7 +37,7 @@ if { [llength $files] == 0 } {
 	    set files_to_watch_p 1
 
             # Remove the two first elements of the path, namely packages/package-key/
-            set local_path [eval [concat file join [lrange [file split $file] 2 end]]]
+            set local_path [file join {*}[lrange [file split $file] 2 end]]
 
 	    append body [subst {
 		(<a href="file-watch?[export_vars { version_id { paths $local_path } }]">watch this file</a>)
