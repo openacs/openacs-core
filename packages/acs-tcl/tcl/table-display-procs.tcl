@@ -382,7 +382,7 @@ ad_proc -deprecated ad_table {
 	    
 	    if { $Tpost_data && $Tpost_data <= [llength $Tpost_data_ns_sets] } { 
 		# bind the Tpost_data_ns_sets row of the passed in data
-		set_variables_after_query_not_selection [lindex $Tpost_data_ns_sets [expr {$Tpost_data - 1}]]
+		set_variables_after_query_not_selection [lindex $Tpost_data_ns_sets $Tpost_data-1]
 	    } elseif { $Tpost_data } { 
 		# past the end of the fake data drop out.
 		break
@@ -485,7 +485,7 @@ ad_proc -deprecated ad_table {
 	    # so on next row we can say things like if $Pvar != $var not blank
 	    if { $Tpost_data && $Tpost_data <= [llength $Tpost_data_ns_sets] } { 
 		# bind the Tpost_data_ns_sets row of the passed in data
-		set_variables_after_query_not_selection [lindex $Tpost_data_ns_sets [expr {$Tpost_data - 1}]] P
+		set_variables_after_query_not_selection [lindex $Tpost_data_ns_sets $Tpost_data-1] P
 	    } else { 
 		set_variables_after_query_not_selection $selection P
 	    }

@@ -837,8 +837,8 @@ ad_proc -private db_get_quote_indices { sql } {
     set all_indices [regexp -inline -indices -all -- {(?:^|[^'])(')(?:[^']|'')+(')(?=$|[^'])} $sql]
 
     for {set i 0} { $i < [llength $all_indices] } { incr i 3 } {
-        lappend quote_indices [lindex [lindex $all_indices [expr {$i + 1}]] 0]
-        lappend quote_indices [lindex [lindex $all_indices [expr {$i + 2}]] 0]
+        lappend quote_indices [lindex [lindex $all_indices $i+1] 0]
+        lappend quote_indices [lindex [lindex $all_indices $i+2] 0]
     }
 
     return $quote_indices

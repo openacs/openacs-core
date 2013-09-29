@@ -880,7 +880,7 @@ ad_proc -public ad_page_contract {
                 set formal_name [join [lrange $actual_name_v 0 $i] "."]
                 if { [info exists apc_internal_filter($formal_name:array)] } {
                     set found_p 1
-                    set variable_to_set var([join [lrange $actual_name_v [expr {$i+1}] end] "."])
+                    set variable_to_set var([join [lrange $actual_name_v $i+1 end] "."])
                     break
                 }
             }
@@ -983,7 +983,7 @@ ad_proc -public ad_page_contract {
 		    set array_list ""
 		    foreach arrayvar [ns_cache names util_memoize] {
 			if [regexp [list [ad_conn session_id] [ad_conn package_id] "$formal_name."] $arrayvar] {
-			    set arrayvar [lindex $arrayvar [expr {[llength $arrayvar] - 1}]]
+			    set arrayvar [lindex $arrayvar [llength $arrayvar]-1]
 			    if { $array_list ne "" } {
 				append array_list " "
 			    }

@@ -369,7 +369,7 @@ ad_proc -public doc_adp_compile { adp } {
 		if { $tag ne [lindex $balanced_tag_stack end] } {
 		    return -code error "Expected end tag to be </[lindex $balanced_tag_stack end]>, not </$tag>"
 		}
-		set balanced_tag_stack [lrange $balanced_tag_stack 0 [expr { [llength $balanced_tag_stack] - 2 }]]
+		set balanced_tag_stack [lrange $balanced_tag_stack 0 [llength $balanced_tag_stack]-2]
 		doc_adp_append_code "\}"
 	    } else {
 		doc_adp_append_code "set __doc_attributes \[ns_set create\]"

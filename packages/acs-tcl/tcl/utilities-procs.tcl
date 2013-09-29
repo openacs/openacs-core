@@ -273,7 +273,7 @@ ad_proc -public util_AnsiDatetoPrettyDate {sql_date} {
 	# was "8.0"
 
 	set trimmed_month [string trimleft $month 0]
-	set pretty_month [lindex $allthemonths [expr {$trimmed_month - 1}]]
+	set pretty_month [lindex $allthemonths $trimmed_month-1]
 
 	set trimmed_day [string trimleft $day 0]
 

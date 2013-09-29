@@ -39,7 +39,7 @@ ad_proc -public ad_context_bar_html {
     }
 
     set out {}
-    foreach element [lrange $context 0 [expr {[llength $context] - 2}]] { 
+    foreach element [lrange $context 0 [llength $context]-2] { 
         append out "<a href=\"[lindex $element 0]\">[lindex $element 1]</a> $separator "
     }
     append out [lindex $context end]
