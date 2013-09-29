@@ -2442,26 +2442,28 @@ ad_proc -public util_driver_info {
         set driver [ad_conn driver]
     }
 
+    set section [ns_driversection -driver $driver]
+
     switch $driver {
         nssock {
             set result(proto) http
-            set result(port) [ns_config -int "ns/server/[ns_info server]/module/nssock" Port]
+            set result(port) [ns_config -int $section Port]
         }
         nsunix {
             set result(proto) http
             set result(port) {}
         }
         nsssl - nsssle {
-            set result(port) [ns_config -int "ns/server/[ns_info server]/module/[ad_conn driver]" Port]
+            set result(port) [ns_config -int $section Port]
             set result(proto) https
         }
         nsopenssl {
-            set result(port) [ns_config -int "ns/server/[ns_info server]/module/[ad_conn driver]" ServerPort]
+            set result(port) [ns_config -int $section ServerPort]
             set result(proto) https
         }
         default {
             ns_log Error "Unknown driver: [ad_conn driver]. Only know nssock, nsunix, nsssl, nsssle, nsopenssl"
-            set result(port) [ns_config -int "ns/server/[ns_info server]/module/nssock" Port]
+            set result(port) [ns_config -int $section Port]
             set result(proto) http
         }
     }
