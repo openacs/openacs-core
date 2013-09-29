@@ -19,7 +19,7 @@ set user_id [ad_conn user_id]
 
 # Determine the user's email address.  If its not registered, put in a default.  
 set my_email [db_string email_by_user_id {
-    select email  from parties where party_id = :user_id
+    select email from parties where party_id = :user_id
 } -default "me"]
 
 set dimensional_list {
