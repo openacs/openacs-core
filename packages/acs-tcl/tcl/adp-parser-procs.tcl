@@ -228,7 +228,7 @@ ad_proc -public doc_adp_compile { adp } {
 	}
 
 	# Append to the text buffer any text before the "<".
-	append text_buffer [string range $adp $index [expr { $lt_index - 1 }]]
+	append text_buffer [string range $adp $index $lt_index-1]
 	set index $lt_index
 
 	if { [info exists tag] } {
@@ -244,11 +244,11 @@ ad_proc -public doc_adp_compile { adp } {
 	if { [string index $adp $index] eq "/" } {
 	    set end_tag_p 1
 	    incr index
-	} elseif { ![info exists literal_tag] && [string index $adp $index] == "%" } {
+	} elseif { ![info exists literal_tag] && [string index $adp $index] eq "%" } {
 	    doc_adp_flush_text_buffer
 
 	    incr index
-	    if { [string index $adp $index] == "=" } {
+	    if { [string index $adp $index] eq "=" } {
 		incr index
 		set puts_p 1
 	    } else {
@@ -257,14 +257,14 @@ ad_proc -public doc_adp_compile { adp } {
 	    set tcl_code_begin $index
 
 	    while { $index < [string length $adp] && \
-		    ([string index $adp $index] != "%" || [string index $adp [expr { $index + 1 }]] != ">") } {
+		    ([string index $adp $index] ne "%" || [string index $adp $index+1] ne ">") } {
 		incr index
 	    }
 	    if { $index >= [string length $adp] } {
 		return -code error "Unbalanced Tcl evaluation block"
 	    }
 
-	    set tcl_code [string range $adp $tcl_code_begin [expr { $index - 1 }]]
+	    set tcl_code [string range $adp $tcl_code_begin $index-1]
 	    if { $puts_p } {
 		doc_adp_append_code "doc_adp_puts \[subst [doc_adp_quote_tcl_string $tcl_code]]"
 	    } else {
@@ -275,7 +275,7 @@ ad_proc -public doc_adp_compile { adp } {
 	    incr index 2
 
 	    continue
-	} elseif { ![info exists literal_tag] && [string index $adp $index] == "$" } {
+	} elseif { ![info exists literal_tag] && [string index $adp $index] eq "$" } {
 	    incr index
 	    set tag "var"
 	    set end_tag_p 0
@@ -290,7 +290,7 @@ ad_proc -public doc_adp_compile { adp } {
 		    [string is wordchar -strict [string index $adp $index]] } {
 		incr index
 	    }
-	    set tag [string range $adp $tag_begin [expr { $index - 1 }]]
+	    set tag [string range $adp $tag_begin $index-1]
 	}
 
 	if { (![info exists literal_tag] || ($end_tag_p && $tag eq $literal_tag)) && \
@@ -313,7 +313,7 @@ ad_proc -public doc_adp_compile { adp } {
 		}
 
 		# If it's a >, we're done.
-		if { [string index $adp $index] == ">" } {
+		if { [string index $adp $index] eq ">" } {
 		    # Done with attribute list.
 		    incr index
 		    break
@@ -322,18 +322,18 @@ ad_proc -public doc_adp_compile { adp } {
 		# Not a > - must be an attribute name.
 		set attr_name_begin $index
 		while { $index < $adp_length && \
-			[string index $adp $index] != ">" && \
-			[string index $adp $index] != "=" && \
+			[string index $adp $index] ne ">" && \
+			[string index $adp $index] ne "=" && \
 			![string is space -strict [string index $adp $index]] } {
 		    incr index
 		}
-		if { $attr_name_begin == $index } {
+		if { $attr_name_begin eq $index } {
 		    return -code error "Weird attribute format to tag \"$tag\""
 		}
 
-		set attr_name [string range $adp $attr_name_begin [expr { $index - 1 }]]
+		set attr_name [string range $adp $attr_name_begin $index-1]
 
-		if { [string index $adp $index] == "=" } {
+		if { [string index $adp $index] eq "=" } {
 		    incr index
 		    while { [string is space -strict [string index $adp $index]] } {
 			incr index
@@ -349,14 +349,14 @@ ad_proc -public doc_adp_compile { adp } {
 		    } else {
 			set value_begin $index
 			while { $index < $adp_length && \
-				[string index $adp $index] != ">" && \
-				[string index $adp $index] != "=" && \
+				[string index $adp $index] ne ">" && \
+				[string index $adp $index] ne "=" && \
 				![string is space -strict [string index $adp $index]] } {
 			    incr index
 			}
 			set value_end $index
 		    }
-		    ns_set put $attributes $attr_name [string range $adp $value_begin [expr { $value_end - 1 }]]
+		    ns_set put $attributes $attr_name [string range $adp $value_begin $value_end-1]
 		} else {
 		    ns_set put $attributes $attr_name $attr_name
 		}
@@ -389,7 +389,7 @@ ad_proc -public doc_adp_compile { adp } {
 		}
 	    }
 	} else {
-	    append text_buffer [string range $adp $lt_index [expr { $index - 1 }]]
+	    append text_buffer [string range $adp $lt_index $index-1]
 	}
     }
 

@@ -628,8 +628,9 @@ ad_proc -public ad_form {
                         if { [string index $flag end] ne ")" } {
                             return -code error "Missing or misplaced end parenthesis for flag '$flag' on argument '$element_name'"
                         }
-                        set flag_stem [string range $flag 0 [expr {$left_paren - 1}]]
-                        lappend af_element_parameters($element_name:$flag_stem) [string range $flag [expr {$left_paren + 1}] [expr {[string length $flag]-2}]]
+                        set flag_stem [string range $flag 0 $left_paren-1]
+                        lappend af_element_parameters($element_name:$flag_stem) \
+			    [string range $flag $left_paren+1 [string length $flag]-2]
                         lappend af_flag_list(${form_name}__$element_name) $flag_stem
                     } else {
                         lappend af_flag_list(${form_name}__$element_name) $flag

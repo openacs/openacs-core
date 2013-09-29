@@ -2463,7 +2463,7 @@ ad_proc -public db_get_database {{ -dbn "" }} {
         ns_log Error "datasource contains no \":\"? datasource = $datasource"
         return ""
     }
-    return [string range $datasource [expr {$last_colon_pos + 1}] end]
+    return [string range $datasource $last_colon_pos+1 end]
 }
 
  
@@ -2484,7 +2484,7 @@ ad_proc -public db_get_dbhost {{ -dbn "" }} {
         ns_log Error "datasource contains no \":\"? datasource = $datasource"
         return ""
     }
-    return [string range $datasource 0 [expr {$first_colon_pos - 1}]]
+    return [string range $datasource 0 $first_colon_pos-1]
 }
 
 ad_proc -public db_source_sql_file {{

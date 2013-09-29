@@ -24,7 +24,11 @@ proc proc_source_file_full_path {proc_name} {
     }
 }
 
-ad_proc util_report_library_entry {{extra_message ""}} "Should be called at beginning of private Tcl library files so that it is easy to see in the error log whether or not private Tcl library files contain errors." {
+ad_proc util_report_library_entry {{extra_message ""}} {
+    Should be called at beginning of private Tcl library files so
+    that it is easy to see in the error log whether or not 
+    private Tcl library files contain errors.
+} {
     set tentative_path [info script]
     regsub -all {/\./} $tentative_path {/} scrubbed_path
     if { $extra_message eq ""  } {
@@ -954,8 +958,7 @@ doc_body_append [export_vars -override { order_by $new_order_by } $my_vars]</pre
 				set export($arg) $var
 			    } else {
 				# convert the parenthesis into a dot before setting
-				set export([string range $arg 0 [expr { $left_paren - 1}]].[string \
-					range $arg [expr { $left_paren + 1}] end-1]) $var
+				set export([string range $arg 0 $left_paren-1].[string range $arg $left_paren+1 end-1]) $var
 			    }
 			}
 		    }
@@ -968,8 +971,7 @@ doc_body_append [export_vars -override { order_by $new_order_by } $my_vars]</pre
 			    set export($name) [lindex [uplevel list \[subst [list $value]\]] 0]
 			} else {
 			    # convert the parenthesis into a dot before setting
-			    set export([string range $arg 0 [expr { $left_paren - 1}]].[string \
-				    range $arg [expr { $left_paren + 1}] end-1]) \
+			    set export([string range $arg 0 $left_paren-1].[string range $arg $left_paren+1 end-1]) \
 				    [lindex [uplevel list \[subst [list $value]\]] 0]
 			}
 		    }

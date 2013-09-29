@@ -628,7 +628,7 @@ ad_proc -public ad_page_contract {
 		if { [string index $flag end] ne ")" } {
 		    return -code error "Missing or misplaced end parenthesis for flag '$flag' on argument '$name'"
 		}
-		set flag_parameters [string range $flag [expr {$left_paren + 1}] [expr {[string length $flag]-2}]]
+		set flag_parameters [string range $flag $left_paren+1 [string length $flag]-2]
 		set flag [string range $flag 0 $left_paren-1]
 
 		lappend flag_list $flag
@@ -987,7 +987,7 @@ ad_proc -public ad_page_contract {
 			    if { $array_list ne "" } {
 				append array_list " "
 			    }
-			    set arrayvar_formal [string range $arrayvar [expr {[string first "." $arrayvar] + 1}] [string length $arrayvar]]
+			    set arrayvar_formal [string range $arrayvar [string first "." $arrayvar]+1 [string length $arrayvar]]
 			    append array_list "{$arrayvar_formal} {[ad_get_client_property [ad_conn package_id] $arrayvar]}"
 			}
 		    }

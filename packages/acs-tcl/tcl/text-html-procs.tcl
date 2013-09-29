@@ -646,7 +646,7 @@ attribute_array(heres)='  something for   you to = "consider" '</pre>
     set count 0
     while { $i < [string length $html] && ![string equal [string index $html $i] {>}] } {
         if { [incr count] > 3000 } {
-            error "There appears to be a programming bug in ad_parse_html_attributes_upvar: We've entered an infinite loop. We are here: \noffset $i: [string range $html $i [expr {$i + 60}]]"
+            error "There appears to be a programming bug in ad_parse_html_attributes_upvar: We've entered an infinite loop. We are here: \noffset $i: [string range $html $i $i+60]"
         }
         if { [string range $html $i $i+1] eq "/>" } {
             # This is an XML-style tag ending: <... />

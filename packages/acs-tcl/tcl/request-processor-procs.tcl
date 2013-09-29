@@ -949,7 +949,7 @@ ad_proc -private rp_handler {} {
             }
             ad_try {
                 ad_conn -set path_info \
-                    [string range $extra_url [expr {[string length $prefix] - 1}] end]
+                    [string range $extra_url [string length $prefix]-1 end]
                 rp_serve_abstract_file -noredirect -nodirectory \
                     -extension_pattern ".vuh" "$root$prefix"
                     set tcl_url2file([ad_conn url]) [ad_conn file]
@@ -1549,7 +1549,7 @@ proc root_of_host1 {host} {
     if { $node_id ne "" } {
         set url [site_node::get_url -node_id $node_id]
 
-       return [string range $url 0 [expr {[string length $url]-2}]]
+       return [string range $url 0 end-1]
     } else {
        # Hack to provide a useful default
        return ""
