@@ -294,7 +294,7 @@ ad_proc -public template::adp_level { { up "" } } {
     if {$up eq ""} {
       set result [lindex $parse_level end]
     } else {
-      set result [lindex $parse_level [expr {[llength $parse_level] - $up}]]
+      set result [lindex $parse_level [llength $parse_level]-$up]
     }
   }
 
