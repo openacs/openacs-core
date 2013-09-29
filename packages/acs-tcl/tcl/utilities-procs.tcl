@@ -3061,7 +3061,7 @@ ad_proc -public util_text_to_url {
 
 }
 
-ad_proc -public util_unlist { list args } {
+ad_proc -public -deprecated util_unlist { list args } {
 
     Places the <i>n</i>th element of <code>list</code> into the variable named by
     the <i>n</i>th element of <code>args</code>.
