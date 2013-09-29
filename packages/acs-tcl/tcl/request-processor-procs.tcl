@@ -240,7 +240,7 @@ ad_proc -private rp_invoke_filter { conn filter_info why } {
 } {
     set startclicks [clock clicks -milliseconds]
 
-    util_unlist $filter_info filter_index debug_p arg_count proc arg
+    lassign $filter_info filter_index debug_p arg_count proc arg
 
     rp_debug -debug $debug_p "Invoking $why filter $proc"
 
@@ -298,7 +298,7 @@ ad_proc -private rp_invoke_proc { conn argv } {
 } {
     set startclicks [clock clicks -milliseconds]
 
-    util_unlist $argv proc_index debug_p arg_count proc arg
+    lassign $argv proc_index debug_p arg_count proc arg
 
     rp_debug -debug $debug_p "Invoking registered procedure $proc"
 

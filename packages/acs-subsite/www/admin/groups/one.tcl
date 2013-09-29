@@ -64,7 +64,7 @@ if {[apm_package_installed_p categories]} {
 
     set mapped_trees [category_tree::get_mapped_trees $group_id]
     foreach mapped_tree $mapped_trees {
-	util_unlist $mapped_tree tree_id tree_name subtree_id
+	lassign $mapped_tree tree_id tree_name subtree_id
 	if {$subtree_id ne ""} {
 	    set tree_name "${tree_name}::[category::get_name $subtree_id]"
 	}

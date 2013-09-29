@@ -284,7 +284,7 @@ ad_proc -private apm_files_load {
     global apm_current_package_key
 
     foreach file_info $files {
-	util_unlist $file_info package_key path
+	lassign $file_info package_key path
 
 	if { $force_reload_p || ![nsv_exists apm_library_mtime packages/$package_key/$path] } {
 	    if { [file exists "[acs_root_dir]/packages/$package_key/$path"] } {
