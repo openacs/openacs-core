@@ -726,7 +726,7 @@ ad_proc -private template::element::options { form_id element_id tag_attributes 
 
     upvar #$level formgroup:$i formgroup
     
-    set option [lindex $options [expr {$i - 1}]]
+    set option [lindex $options $i-1]
     set value [lindex $option 1]
 
     if { ![info exists values($value)] } {

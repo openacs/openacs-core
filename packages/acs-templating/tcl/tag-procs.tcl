@@ -151,7 +151,7 @@ ad_proc -public template_tag_if_interp_expr {} {
 
     between { 
       set expr1 "$arg1 >= \"[lindex $args $i]\""
-      set expr2 "$arg1 <= \"[lindex $args [expr {$i + 1}]]\""
+      set expr2 "$arg1 <= \"[lindex $args $i+1]\""
       append condition "($expr1 && $expr2)" 
       set next [expr {$i + 2}]
     }

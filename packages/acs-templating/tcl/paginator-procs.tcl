@@ -513,7 +513,7 @@ ad_proc -public template::paginator::get_context { name datasource pages } {
 
     set row(rownum) $rowcount
     set row(page) $page
-    set row(context) [lindex $context_ids [expr {$page - 1}]]
+    set row(context) [lindex $context_ids $page-1]
   }
 }
 
@@ -668,7 +668,7 @@ ad_proc -public template::paginator::get_display_info { name datasource page } {
   if { [info exists properties(context_ids)] } {
     foreach elm { next_page previous_page next_group previous_group } {
       if { [exists_and_not_null info($elm)] } {
-        set info(${elm}_context) [lindex $properties(context_ids) [expr {$info($elm) -1}]]
+        set info(${elm}_context) [lindex $properties(context_ids) $info($elm)-1]
       }
     }
   }

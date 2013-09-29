@@ -566,7 +566,7 @@ ad_proc -public template::wizard::forward { } {
 
     } elseif { [ns_queryexists wizard_submit_back] } {
 
-	set last_id [lindex $steps [expr {$current_index - 2}]]
+	set last_id [lindex $steps $current_index-2]
 	template::forward [get_forward_url $last_id] $cache_p $persistent_p $excluded_vars
 
     } elseif { [ns_queryexists wizard_submit_repeat] } {
