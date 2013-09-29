@@ -485,7 +485,7 @@ proc dom::document {method token args} {
 		return -code error "wrong number of arguments"
 	    }
 
-	    foreach {name extid dtd entities notations} $args break
+	    lassign $args name extid dtd entities notations
 	    set result [CreateDocType $token $name $extid $dtd $entities $notations]
 	}
 

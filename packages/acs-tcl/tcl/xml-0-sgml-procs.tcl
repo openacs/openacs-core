@@ -616,7 +616,7 @@ proc sgml::ParseEvent:ElementOpen {tag attr opts args} {
 		# the message "unterminated attribute value", the attribute list it
 		# did manage to parse and the remainder of the attribute list.
 
-		foreach {msg attlist brokenattr} $attr break
+		lassign $attr msg attlist brokenattr
 
 		upvar text elemText
 		if {[string first > $elemText] >= 0} {

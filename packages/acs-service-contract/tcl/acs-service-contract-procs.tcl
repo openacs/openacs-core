@@ -153,7 +153,7 @@ ad_proc -private acs_sc_proc {
     acs_sc_log SCDebug "ACS_SC_PROC: proc_name = $proc_name"
     
     if { $impl_alias eq "" } {
-        foreach {impl_alias impl_pl} [acs_sc_get_alias $contract $operation $impl] break 
+        lassign [acs_sc_get_alias $contract $operation $impl] impl_alias impl_pl 
     }
 
     if { $impl_alias eq "" } {
