@@ -140,9 +140,9 @@ ad_proc -public doc_adp_execute_file {
 	# We use procs so that the Tcl code can be byte-code-compiled for extra performance
 	# benefit.
 
-	if { [catch { set info [__doc_adp_cache_info,$file_name] }] || \
-		[lindex $info 0] != $mtime || \
-		[lindex $info 1] != $size } {
+	if { [catch { set info [__doc_adp_cache_info,$file_name] }] 
+	     || [lindex $info 0] != $mtime
+	     || [lindex $info 1] != $size } {
 	    set reparse_p 1
 	} else {
 	    ns_log "Error" "CACHE HIT for $file_name"
@@ -266,7 +266,7 @@ ad_proc -public doc_adp_compile { adp } {
 
 	    set tcl_code [string range $adp $tcl_code_begin $index-1]
 	    if { $puts_p } {
-		doc_adp_append_code "doc_adp_puts \[subst [doc_adp_quote_tcl_string $tcl_code]]"
+		doc_adp_append_code "doc_adp_puts \[subst [doc_adp_quote_tcl_string $tcl_code]\]"
 	    } else {
 		doc_adp_append_code $tcl_code
 	    }
