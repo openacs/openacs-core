@@ -1370,7 +1370,7 @@ ad_proc -private rp_handle_tcl_request {} {
   Sets up the stack of datasource frames, in case the page is templated.
 
 } {
-    namespace eval template variable parse_level [info level]
+    namespace eval template {variable parse_level [info level]}
     source [ad_conn file]
 }
 
@@ -1578,18 +1578,18 @@ if {[ns_info name] eq "NaviServer"} {
   # this is written for NaviServer 4.99.1 or newer
   foreach filter {rp_filter rp_resources_filter request_denied_filter} {
     set cmd ${filter}_aolserver
-    if {[info command $cmd] ne ""} {rename $cmd ""}
+    if {[info commands $cmd] ne ""} {rename $cmd ""}
     rename $filter $cmd
     proc $filter {why} "$cmd \$why" 
   }
 
   set cmd rp_invoke_filter_conn
-  if {[info command $cmd] ne ""} {rename $cmd ""}
+  if {[info commands $cmd] ne ""} {rename $cmd ""}
   rename rp_invoke_filter $cmd
   proc   rp_invoke_filter { why filter_info} "$cmd _ \$filter_info \$why"
   
   set cmd rp_invoke_proc_conn
-  if {[info command $cmd] ne ""} {rename $cmd ""}
+  if {[info commands $cmd] ne ""} {rename $cmd ""}
   rename rp_invoke_proc   $cmd
   proc   rp_invoke_proc   { argv } "$cmd _ \$argv"
 }
