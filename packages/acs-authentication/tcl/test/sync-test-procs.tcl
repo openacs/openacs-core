@@ -18,7 +18,7 @@ aa_register_case -cats {api db} sync_start_end {
             set job_id [auth::sync::job::start \
                             -authority_id [auth::authority::local]]
                             
-            aa_true "Returns a job_id" [exists_and_not_null job_id]
+            aa_true "Returns a job_id" [expr {$job_id ne ""}]
 
 
             # Get doc
@@ -92,7 +92,7 @@ aa_register_case -cats {api} sync_actions {
             set job_id [auth::sync::job::start \
                             -authority_id [auth::authority::local]]
                             
-            aa_true "Returns a job_id" [exists_and_not_null job_id]
+            aa_true "Returns a job_id" [expr {[info exists job_id]}]
 
             #####
             #
@@ -128,7 +128,7 @@ aa_register_case -cats {api} sync_actions {
             aa_log "entry.message = '$entry(message)'"
             aa_log "entry.element_messages = '$entry(element_messages)'"
 
-            if { [aa_true "Entry has user_id set" [exists_and_not_null entry(user_id)]] } {
+            if { [aa_true "Entry has user_id set" [expr {$entry(user_id) ne ""}]] } {
                 array unset user
                 acs_user::get -user_id $entry(user_id) -array user
                 
@@ -166,7 +166,7 @@ aa_register_case -cats {api} sync_actions {
 
             aa_equals "entry.success_p" $entry(success_p) "f"
 
-            aa_true "entry.message not empty" [exists_and_not_null entry(message)]
+            aa_true "entry.message not empty" [expr {$entry(message) ne ""}]
 
             aa_log "entry.user_id = '$entry(user_id)'"
             aa_log "entry.message = '$entry(message)'"
@@ -203,7 +203,7 @@ aa_register_case -cats {api} sync_actions {
             aa_log "entry.message = '$entry(message)'"
             aa_log "entry.element_messages = '$entry(element_messages)'"
 
-            if { [aa_true "Entry has user_id set" [exists_and_not_null entry(user_id)]] } {
+            if { [aa_true "Entry has user_id set" [expr {$entry(user_id) ne ""}]] } {
                 array unset user
                 acs_user::get -user_id $entry(user_id) -array user
                 
@@ -243,7 +243,7 @@ aa_register_case -cats {api} sync_actions {
             aa_log "entry.message = '$entry(message)'"
             aa_log "entry.element_messages = '$entry(element_messages)'"
 
-            if { [aa_true "Entry has user_id set" [exists_and_not_null entry(user_id)]] } {
+            if { [aa_true "Entry has user_id set" [expr {$entry(user_id) ne ""}]] } {
                 array unset user
                 acs_user::get -user_id $entry(user_id) -array user
                 
@@ -280,7 +280,8 @@ aa_register_case -cats {api} sync_actions {
 
             aa_equals "entry.success_p" $entry(success_p) "f"
             aa_log "entry.message = '$entry(message)'"
-            if { [aa_true "entry.element_messages not empty" [exists_and_not_null entry(element_messages)]] } {
+            if { [aa_true "entry.element_messages not empty" \
+		      [expr {[info exists entry(element_messages)] && $entry(element_messages) ne ""}]] } {
                 aa_log "entry.element_messages = '$entry(element_messages)'"
                 array unset elm_msgs
                 array set elm_msgs $entry(element_messages)
@@ -308,7 +309,7 @@ aa_register_case -cats {api} sync_actions {
             aa_equals "entry.success_p" $entry(success_p) "t"
             aa_log "entry.message = '$entry(message)'"
 
-            if { [aa_true "Entry has user_id set" [exists_and_not_null entry(user_id)]] } {
+            if { [aa_true "Entry has user_id set" [expr {[info exists entry(user_id)] && $entry(user_id) ne ""}]] } {
                 array unset user
                 acs_user::get -user_id $entry(user_id) -array user
                 aa_equals "User member state is banned" $user(member_state) "banned"
@@ -348,7 +349,7 @@ aa_register_case -cats {api db} sync_snapshot {
             set job_id [auth::sync::job::start \
                             -authority_id [auth::authority::local]]
                             
-            aa_true "Returns a job_id" [exists_and_not_null job_id]
+            aa_true "Returns a job_id" [expr {$job_id ne ""}]
 
             #####
             #
@@ -383,7 +384,7 @@ aa_register_case -cats {api db} sync_snapshot {
             aa_log "entry.message = '$entry(message)'"
             aa_log "entry.element_messages = '$entry(element_messages)'"
 
-            if { [aa_true "Entry has user_id set" [exists_and_not_null entry(user_id)]] } {
+            if { [aa_true "Entry has user_id set" [expr {$entry(user_id) ne ""}]] } {
                 array unset user
                 acs_user::get -user_id $entry(user_id) -array user
                 
@@ -426,7 +427,7 @@ aa_register_case -cats {api db} sync_snapshot {
             aa_log "entry.message = '$entry(message)'"
             aa_log "entry.element_messages = '$entry(element_messages)'"
 
-            if { [aa_true "Entry has user_id set" [exists_and_not_null entry(user_id)]] } {
+            if { [aa_true "Entry has user_id set" [expr {$entry(user_id) ne ""}]] } {
                 array unset user
                 acs_user::get -user_id $entry(user_id) -array user
                 
@@ -491,7 +492,7 @@ aa_register_case -cats {api smoke} sync_batch_for_local {
             auth::sync::job::get -job_id $job_id -array job
 
             aa_log "job.message = '$job(message)'"
-            aa_true "job.message not empty when called for local authority" [exists_and_not_null job(message)]
+            aa_true "job.message not empty when called for local authority" [expr {$job(message) ne ""}]
         }
 }
 

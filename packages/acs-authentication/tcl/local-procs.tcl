@@ -367,7 +367,7 @@ ad_proc -private auth::local::password::ResetPassword {
     }
 
     # Reset the password
-    if {[exists_and_not_null new_password]} {
+    if { $new_password ne "" } {
 	set password $new_password
     } else {
 	set password [ad_generate_random_string]

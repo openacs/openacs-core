@@ -511,7 +511,7 @@ ad_proc -public auth::sync::purge_jobs {
 } {
     Purge jobs that are older than KeepBatchLogDays days.
 } {
-    if { ![exists_and_not_null num_days] } {
+    if { $num_days eq "" } {
         set num_days [parameter::get_from_package_key \
                           -parameter KeepBatchLogDays \
                           -package_key "acs-authentication" \

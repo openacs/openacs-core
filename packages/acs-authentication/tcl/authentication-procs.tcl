@@ -260,7 +260,7 @@ ad_proc -public auth::authenticate {
         bad_password -
         auth_error -
         failed_to_connect {
-            if { ![exists_and_not_null result(auth_message)] } {
+            if { ![info exists result(auth_message)] || $result(auth_message) eq "" } {
                 array set default_auth_message {
                     no_account {Unknown username}
                     bad_password {Bad password}
@@ -289,7 +289,7 @@ ad_proc -public auth::authenticate {
             }
         }
         closed {
-            if { ![exists_and_not_null result(account_message)] } {
+            if { ![info exists result(account_message)] || $result(account_message) eq "" } {
                 set result(account_message) [_ acs-subsite.Account_not_avail_now]
             }
         }
@@ -333,7 +333,7 @@ ad_proc -public auth::authenticate {
             }
         }
         closed {
-            if { ![exists_and_not_null result(account_message)] } {
+            if { ![info exists result(account_message)] || $result(account_message) eq "" } {
                 set result(account_message) [_ acs-subsite.Account_not_avail_now]
             }
         }
@@ -350,8 +350,8 @@ ad_proc -public auth::authenticate {
         set result(account_status) closed
     }
 
-    if { [exists_and_not_null remote_account_message] } {
-        if { [exists_and_not_null result(account_message)] } {
+    if { $remote_account_message ne "" } {
+        if { [info exists result(account_message)] && $result(account_message) ne "" } {
             # Concatenate local and remote account messages
             set result(account_message) "<p>[auth::authority::get_element -authority_id $authority_id -element pretty_name]: $remote_account_message </p> <p>[ad_system_name]: $result(account_message)</p>"
         } else {
@@ -360,7 +360,7 @@ ad_proc -public auth::authenticate {
     }
         
     # Issue login cookie if login was successful
-    if { $result(auth_status) eq "ok" && !$no_cookie_p && [exists_and_not_null result(user_id)] } {
+    if { $result(auth_status) eq "ok" && !$no_cookie_p && [info exists result(user_id)] && $result(user_id) ne "" } {
         auth::issue_login \
             -user_id $result(user_id) \
             -persistent=$persistent_p \
@@ -565,7 +565,7 @@ ad_proc -public auth::create_user {
                 data_error -
                 reg_error -
                 failed_to_connect {
-                    if { ![exists_and_not_null creation_info(creation_message)] } {
+                    if { $creation_info(creation_message) eq "" } {
                         set creation_info(creation_message) $default_creation_message($creation_info(creation_status))
                     }
                     if { ![info exists creation_info(element_messages)] } {
@@ -587,7 +587,7 @@ ad_proc -public auth::create_user {
                     set creation_info(account_message) {}
                 }
                 closed {
-                    if { ![exists_and_not_null creation_info(account_message)] } {
+                    if { $creation_info(account_message) eq "" } {
                         set creation_info(account_message) [_ acs-subsite.Account_not_avail_now]
                     }
                 }
@@ -601,8 +601,7 @@ ad_proc -public auth::create_user {
     } on_error {
         set creation_info(creation_status) failed_to_connect
         set creation_info(creation_message) $errmsg
-        global errorInfo
-        ns_log Error "auth::create_user: Error invoking account registration driver for authority_id = $authority_id: $errorInfo"
+        ns_log Error "auth::create_user: Error invoking account registration driver for authority_id = $authority_id: $::errorInfo"
     } 
 
     if { $creation_info(creation_status) ne "ok" } { 
@@ -620,8 +619,8 @@ ad_proc -public auth::create_user {
         set creation_info(account_status) closed
     }
 
-    if { [exists_and_not_null local_account_message] } {
-        if { [exists_and_not_null creation_info(account_message)] } {
+    if { ([info exists local_account_message] && $local_account_message ne "") } {
+        if { ([info exists creation_info(account_message)] && $creation_info(account_message) ne "") } {
             # Concatenate local and remote account messages
             set creation_info(account_message) "<p>[auth::authority::get_element -authority_id $authority_id -element pretty_name]: $creation_info(account_message)</p> <p>[ad_system_name]: $local_account_message</p>"
         } else {
@@ -888,7 +887,7 @@ ad_proc -public auth::create_local_account {
         set member_state "approved"
     }
 
-    if { ![exists_and_not_null user_info(email_verified_p)] } {
+    if { ![info exists user_info(email_verified_p)] || $user_info(email_verified_p) eq "" } {
         if { [parameter::get -parameter RegistrationRequiresEmailVerificationP -default 0] } {
             set user_info(email_verified_p) "f"
         } else {
@@ -964,8 +963,7 @@ ad_proc -public auth::create_local_account {
     if { $error_p || $user_id == 0 } {
         set result(creation_status) "failed_to_connect"
         set result(creation_message) [_ acs-subsite.Error_trying_to_register]
-        global errorInfo
-        ns_log Error "auth::create_local_account: Error creating local account.\n$errorInfo"
+        ns_log Error "auth::create_local_account: Error creating local account.\n$::errorInfo"
         return [array get result]
     }
 
@@ -987,8 +985,7 @@ ad_proc -public auth::create_local_account {
         with_catch errmsg {
             auth::send_email_verification_email -user_id $user_id
         } {
-            global errorInfo
-            ns_log Error "auth::create_local_account: Error sending out email verification email to email $email:\n$errorInfo"
+            ns_log Error "auth::create_local_account: Error sending out email verification email to email $email:\n$::errorInfo"
             set auth_info(account_message) [_ acs_subsite.Error_sending_verification_mail]
         }
     }
@@ -1324,16 +1321,19 @@ ad_proc -private auth::get_local_account {
 
             array set user $info_result(user_info)
 	    
-	    if {$email ne "" \
-		    && (![info exists user(email)] || $user(email) eq "")} {
+	    if {$email ne "" 
+		&& (![info exists user(email)] || $user(email) eq "")
+	    } {
 		set user(email) $email
 	    }
-	    if {$first_names ne "" \
-		    && (![info exists user(first_names)] || $user(first_names) eq "")} {
+	    if {$first_names ne "" 
+		&& (![info exists user(first_names)] || $user(first_names) eq "")
+	    } {
 		set user(first_names) $first_names
 	    }
-	    if {$last_name ne "" \
-		    && (![info exists user(last_name)] || $user(last_name) eq "")} {
+	    if {$last_name ne "" 
+		&& (![info exists user(last_name)] || $user(last_name) eq "")
+	    } {
 		set user(last_name) $last_name
 	    }
             array set creation_info [auth::create_local_account \
@@ -1542,7 +1542,7 @@ ad_proc -private auth::validate_account_info {
     }
     
     foreach elm $required_elms {
-        if { ![exists_and_not_null user($elm)] } {
+        if { ![info exists user($elm)] || $user($elm) eq "" } {
             set element_messages($elm) "Required"
         }
     }
@@ -1570,15 +1570,17 @@ ad_proc -private auth::validate_account_info {
     }
 
     # TODO: When doing RBM's parameter, make sure that we still require both first_names and last_names, or none of them
-    if { [exists_and_not_null user(first_names)] && [string first "<" $user(first_names)] != -1 } {
+    if { ([info exists user(first_names)] && $user(first_names) ne "") 
+	 && [string first "<" $user(first_names)] != -1 } {
         set element_messages(first_names) [_ acs-subsite.lt_You_cant_have_a_lt_in]
     }
 
-    if { [exists_and_not_null user(last_name)] && [string first "<" $user(last_name)] != -1 } {
+    if { ([info exists user(last_name)] && $user(last_name) ne "") 
+	 && [string first "<" $user(last_name)] != -1 } {
         set element_messages(last_name) [_ acs-subsite.lt_You_cant_have_a_lt_in_1]
     }
 
-    if { [exists_and_not_null user(email)] } { 
+    if { [info exists user(email)] && $user(email) ne "" } { 
         if { ![util_email_valid_p $user(email)] } {
             set element_messages(email) [_ acs-subsite.Not_valid_email_addr]
         } else {
@@ -1605,7 +1607,7 @@ ad_proc -private auth::validate_account_info {
         }
     }
     
-    if { [exists_and_not_null user(email)] } {
+    if { ([info exists user(email)] && $user(email) ne "") } {
         # Check that email is unique
         set email $user(email)
         set email_party_id [party::get_by_email -email $user(email)]
@@ -1638,12 +1640,15 @@ ad_proc -private auth::validate_account_info {
     }
         
     # They're trying to set the username
-    if { [exists_and_not_null user(username)] } {
+    if { [info exists user(username)] && $user(username) ne "" } {
         # Check that username is unique
         set username_user_id [acs_user::get_by_username -authority_id $authority_id -username $user(username)]
 
-        if { $username_user_id ne "" && (!$update_p || $username_user_id != $user(user_id)) } {
-            # We already have a user with this username, and either we're not updating, or it's not the same user_id as the one we're updating
+        if { $username_user_id ne "" 
+	     && (!$update_p || $username_user_id != $user(user_id)) } {
+            # We already have a user with this username, and either
+            # we're not updating, or it's not the same user_id as the
+            # one we're updating
             
             set username_member_state [acs_user::get_element -user_id $username_user_id -element member_state] 
             switch $username_member_state {

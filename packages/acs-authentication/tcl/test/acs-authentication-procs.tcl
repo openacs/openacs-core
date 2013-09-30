@@ -167,7 +167,8 @@ aa_register_case \
                 }
             }
 
-            aa_false "No creation_message for successful creation" [exists_and_not_null user_info(creation_message)]
+            aa_false "No creation_message for successful creation" \
+		[expr {[info exists user_info(creation_message)] && $user_info(creation_message) ne ""}]
             aa_true "returns user_id" [info exists user_info(user_id)]
             
             if { [info exists user_info(user_id)] } {         
@@ -187,12 +188,14 @@ aa_register_case \
 
             aa_equals "creation_status for duplicate email and username" $user_info(creation_status) "data_error"
             
-            aa_true "element_messages exists" [exists_and_not_null user_info(element_messages)]
-            if { [exists_and_not_null user_info(element_messages)] } {
+            aa_true "element_messages exists" [info exists user_info(element_messages)]
+            if { [info exists user_info(element_messages)] && $user_info(element_messages) ne "" } {
                 array unset elm_msgs
                 array set elm_msgs $user_info(element_messages)
-                aa_true "element_message for username exists" [exists_and_not_null elm_msgs(username)]
-                aa_true "element_message for email exists" [exists_and_not_null elm_msgs(email)]
+                aa_true "element_message for username exists" \
+		    [expr {[info exists elm_msgs(username)] && $elm_msgs(username) ne ""}]
+                aa_true "element_message for email exists" \
+		    [expr {[info exists elm_msgs(email)] && $elm_msgs(email) ne ""}]
             }
             set user_id [acs_user::get_by_username -username auth_create_user1]
             if { $user_id ne "" } {
@@ -212,18 +215,19 @@ aa_register_case \
             
             aa_equals "creation_status is data_error" $user_info(creation_status) "data_error" 
             
-            aa_true "element_messages exists" [exists_and_not_null user_info(element_messages)]
-            if { [exists_and_not_null user_info(element_messages)] } {
+            aa_true "element_messages exists" [info exists user_info(element_messages)]
+            if { [info exists user_info(element_messages)] && $user_info(element_messages) ne "" } {
                 array unset elm_msgs
                 array set elm_msgs $user_info(element_messages)
 
-                if { [aa_true "element_message(email) exists" [exists_and_not_null elm_msgs(email)]] } {
+                if { [aa_true "element_message(email) exists" \
+			  [expr {[info exists elm_msgs(email)] && $elm_msgs(email) ne ""}]
                     aa_log "element_message(email) = $elm_msgs(email)"
                 }
-                if { [aa_true "element_message(first_names) exists" [exists_and_not_null elm_msgs(first_names)]] } {
+                if { [aa_true "element_message(first_names) exists" [info exists elm_msgs(first_names)]
                     aa_log "element_message(first_names) = $elm_msgs(first_names)"
                 }
-                if { [aa_true "element_message(last_name) exists" [exists_and_not_null elm_msgs(last_name)]] } {
+                if { [aa_true "element_message(last_name) exists" [info exists elm_msgs(last_name)]
                     aa_log "element_message(last_name) = $elm_msgs(last_name)"
                 }
             }
@@ -245,18 +249,18 @@ aa_register_case \
             
             aa_equals "creation_status is data_error" $user_info(creation_status) "data_error" 
             
-            aa_true "element_messages exists" [exists_and_not_null user_info(element_messages)]
-            if { [exists_and_not_null user_info(element_messages)] } {
+            aa_true "element_messages exists" [info exists user_info(element_messages)]
+            if { [info exists user_info(element_messages)] && $user_info(element_messages) ne "" } {
                 array unset elm_msgs
                 array set elm_msgs $user_info(element_messages)
 
-                if { [aa_true "element_message(email) exists" [exists_and_not_null elm_msgs(email)]] } {
+                if { [aa_true "element_message(email) exists" [info exists elm_msgs(email)]] } {
                     aa_log "element_message(email) = $elm_msgs(email)"
                 }
-                if { [aa_true "element_message(first_names) exists" [exists_and_not_null elm_msgs(first_names)]] } {
+                if { [aa_true "element_message(first_names) exists" [info exists elm_msgs(first_names)]] } {
                     aa_log "element_message(first_names) = $elm_msgs(first_names)"
                 }
-                if { [aa_true "element_message(last_name) exists" [exists_and_not_null elm_msgs(last_name)]] } {
+                if { [aa_true "element_message(last_name) exists" [info exists elm_msgs(last_name)]] } {
                     aa_log "element_message(last_name) = $elm_msgs(last_name)"
                 }
             }
