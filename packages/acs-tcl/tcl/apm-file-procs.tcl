@@ -107,9 +107,7 @@ ad_proc -public apm_db_type_keys {} {
 
 
 ad_proc -public apm_package_info_file_path { 
-    {
-	-path ""
-    }
+    {-path ""}
     package_key 
 } {
 
