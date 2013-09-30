@@ -47,7 +47,8 @@
 
 <if @url@ not nil>
   <p>
-    <b>#acs-subsite.Home_page#:</b><a href="@url@">@url@</a>
+    <b>#acs-subsite.Home_page#:</b> 
+    <a href="@url@">@url@</a>
   </p>
 </if>
 
