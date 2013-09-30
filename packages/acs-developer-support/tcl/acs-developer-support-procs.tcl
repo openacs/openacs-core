@@ -668,7 +668,7 @@ ad_proc -public ds_profile { command {tag {}} } {
             if { [info exists ::ds_profile__start_clock($tag)] 
                  && $::ds_profile__start_clock($tag) ne "" } {
                 ds_add prof $tag \
-                    [expr [clock clicks -milliseconds] - $::ds_profile__start_clock($tag)]
+                    [expr {[clock clicks -milliseconds] - $::ds_profile__start_clock($tag)}]
                 unset ::ds_profile__start_clock($tag)
             } else {
                 ns_log Warning "ds_profile stop called without a corresponding call to ds_profile start, with tag $tag"

@@ -157,7 +157,7 @@ if { [llength $requests] == 0 } {
                 set url {}
 	    }
 
-	    if { [info exists conn(query)] && ![empty_string_p $conn(query)] } {
+	    if { [info exists conn(query)] && $conn(query) ne "" } {
 		if { [string length $conn(query)] > 50 } {
 		    set query "?[string range $conn(query) 0 46]..."
 		} else {

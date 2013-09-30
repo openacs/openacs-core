@@ -110,7 +110,7 @@ if { [info exists property(rp)] } {
 
 	set duration "[format "%.1f" [expr { ($endclicks - $startclicks) }]] ms"
 
-	if { [string equal $kind debug] && !$rp_show_debug_p } {
+	if { $kind eq "debug" && !$rp_show_debug_p } {
 	    continue
 	}
 
@@ -126,7 +126,7 @@ if { [info exists property(rp)] } {
                 set from [lindex $info 1]
                 set to [lindex $info 2]
 #		unlist $info proc from to
-		if { [empty_string_p $to] } {
+		if { $to eq "" } {
 		    set to "?"
 		}
 		append body "Applied transformation from <b>$from -> $to</b> - $duration\n"
@@ -139,9 +139,9 @@ if { [info exists property(rp)] } {
 		set args [lindex $info 5]
 
 		append body "Applied $kind filter: <b>$proc</b> [ns_quotehtml $args] (for $method $path) - $duration\n"
-		if { [string equal $action "error"] } {
+		if {$action eq "error"} {
 		    append body "<ul><li>returned error: <pre>[ns_quotehtml $error]</pre></ul>\n"
-		} elseif { ![empty_string_p $action] } {
+		} elseif { $action ne "" } {
 		    append body "<ul><li>returned $action</ul>\n"
 		}
 	    }
@@ -149,7 +149,7 @@ if { [info exists property(rp)] } {
 		set proc [lindex $info 2]
 		set args [lindex $info 3]
 		append body "Called registered procedure: <b>$proc</b> [ns_quotehtml $args] for ($method $path) - $duration\n"
-		if { [string equal $action "error"] } {
+		if {$action eq "error"} {
 		    append body "<ul><li>returned error: <pre>[ns_quotehtml $error]</pre></ul>\n"
 		}
 	    }
@@ -157,7 +157,7 @@ if { [info exists property(rp)] } {
 		set file [lindex $info 0]
 		set handler [lindex $info 1]
 		append body "Served file <b>$file</b> with <b>$handler</b> - $duration\n"
-		if { [string equal $action "error"] } {
+		if {$action eq "error"} {
 		    append body "<ul><li>returned error: <pre>[ns_quotehtml $error]</pre></ul>\n"
 		}
 	    }
@@ -211,21 +211,21 @@ if { ![info exists property(db)] } {
 
     foreach { handle command statement_name sql start end errno return } $property(db) {
 
-	if { ![empty_string_p $handle] && [info exists pool($handle)] } {
+	if { $handle ne "" && [info exists pool($handle)] } {
 	    set statement_pool $pool($handle)
 	} else {
 	    set statement_pool ""
 	}
         
-	if { $command == "gethandle" } {
+	if { $command eq "gethandle" } {
 	    # Remember which handle was acquired from which pool.
 	    set statement_pool $sql
 	    set value "gethandle (returned $return)"
 	    set pool($return) $sql
-	} elseif { $command == "releasehandle" } {
+	} elseif { $command eq "releasehandle" } {
 	    set value "releasehandle $handle"
 	} else {
-	    if { [empty_string_p $statement_name] } {
+	    if { $statement_name eq "" } {
 		set value ""
 	    } else {
 		set value "$statement_name: "
@@ -237,7 +237,7 @@ if { ![info exists property(db)] } {
                 set len [string length $line]
                 set trimleft_len [string length [string trimleft $line]]
                 if { $trimleft_len > 0 } {
-                    set whitespace [expr $len - $trimleft_len]
+                    set whitespace [expr {$len - $trimleft_len}]
                     if { $min_whitespace == -1 || $whitespace < $min_whitespace } {
                         set min_whitespace $whitespace
                     }
@@ -255,7 +255,7 @@ if { ![info exists property(db)] } {
 	    append value "$command $statement_pool $handle<pre>[ns_quotehtml $sql]</pre>"
 	}
 
-        if { ![string equal $command "getrow"] || [template::util::is_true $getrow_p] } {
+        if { $command ne "getrow" || [template::util::is_true $getrow_p] } {
             multirow append dbreqs $handle $command $sql [expr { $end - $start }] $value
         }
 

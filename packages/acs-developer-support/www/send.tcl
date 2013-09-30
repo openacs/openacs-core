@@ -7,15 +7,15 @@ ad_page_contract {
 }
 ds_require_permission [ad_conn package_id] "admin"
 
-if {![empty_string_p $code]} { 
+if {$code ne ""} { 
     if {[regexp {(.*)\.(adp)} $code match stub ext]} { 
         ns_return 200 text/plain [info body ::template::code::${ext}::$stub]
     } else { 
         ns_returnfile 200 text/plain $code
     }
-} elseif {![empty_string_p $fname]} {
+} elseif {$fname ne ""} {
     ns_return 200 application/x-editlocal [ns_set get [ns_conn form] fname]
-} elseif {![empty_string_p $output]} { 
+} elseif {$output ne ""} { 
     if {[regexp {[0-9]+:error} $output]} { 
         if {[ns_cache get ds_page_bits $output content]} { 
             foreach error $content { 
