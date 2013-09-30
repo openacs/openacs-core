@@ -126,11 +126,12 @@ ad_proc -public ::content::item::new {
 	# since we can't rely on content_item__new to create a revision
 	# we have to pass is_live to content::revision::new and
 	# set the live revision there
-	if {[exists_and_not_null title] \
-            || [exists_and_not_null text] \
-		|| [exists_and_not_null data] \
-		|| [exists_and_not_null tmp_filename] \
-		|| [llength $attributes]} {
+	if {([info exists title] && $title ne "") 
+            || ([info exists text] && $text ne "") 
+	    || ([info exists data] && $data ne "") 
+	    || ([info exists tmp_filename] && $tmp_filename ne "") 
+	    || [llength $attributes]
+	} {
 	    content::revision::new \
 		-item_id $item_id \
 		-title $title \
@@ -202,7 +203,7 @@ ad_proc -public ::content::item::move {
     set var_list [list \
                       [list item_id $item_id] \
                       [list target_folder_id $target_folder_id] ]
-    if {[exists_and_not_null name]} {
+    if {[info exists name] && $name ne ""} {
 	lappend var_list [list name $name]
     }
     return [package_exec_plsql \
@@ -818,7 +819,8 @@ ad_proc -public content::item::upload_file {
 	set mime_type [template::util::file::get_property mime_type $upload_file]
 	set tmp_size [file size $tmp_filename]
 	set extension [file extension $filename]
-	if {![exists_and_not_null title]} {
+	# GN: where is the title supposed to come from? missing nonpos arg?
+	if {![info exists title] || $title eq ""} {
 
 	    # maltes: The following regsub garbles the title and consequently the filename as well. 
 	    # "info_c+w.zip" will become "info_c+"

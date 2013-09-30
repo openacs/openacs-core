@@ -92,10 +92,10 @@ ad_proc -public ::content::revision::new {
 	set creation_ip [ad_conn peeraddr]
     }
 
-    if {![exists_and_not_null content_type]} {
+    if {![info exists content_type] || $content_type eq ""} {
 	set content_type [::content::item::content_type -item_id $item_id]
     }
-    if {![exists_and_not_null storage_type]} {
+    if {$storage_type eq ""} {
 	set storage_type [db_string get_storage_type ""]
     }
     if {![info exists package_id]} {
@@ -104,7 +104,7 @@ ad_proc -public ::content::revision::new {
     set attribute_names ""
     set attribute_values ""
 
-    if { [exists_and_not_null attributes] } {
+    if { [info exists attributes] && $attributes ne "" } {
 	set type_attributes [package_object_attribute_list $content_type]
 	set valid_attributes [list]
 	# add in extended attributes for this type, ingore
@@ -112,8 +112,9 @@ ad_proc -public ::content::revision::new {
 	# parameters to this procedure
 	
 	foreach type_attribute $type_attributes {
-	    if {"cr_revisions" ne [lindex $type_attribute 1] \
-                && "acs_objects" ne [lindex $type_attribute 1] } {
+	    if {"cr_revisions" ne [lindex $type_attribute 1] 
+                && "acs_objects" ne [lindex $type_attribute 1] 
+	    } {
 		lappend valid_attributes [lindex $type_attribute 2]
 	    }
 	}

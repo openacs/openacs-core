@@ -116,8 +116,10 @@ ad_proc -public item::get_revision_content { revision_id args } {
   # Get the mime type, decide if we want the text
   get_mime_info $revision_id
 
-  if { [exists_and_not_null mime_info(mime_type)] && \
-           [string equal [lindex [split $mime_info(mime_type) "/"] 0] "text"] } {
+  if { [info exists mime_info(mime_type)] 
+       && $mime_info(mime_type) ne "" 
+       && [string match "text/*" $mime_info(mime_type)] 
+   } {
       set text_sql [db_map grc_get_all_content_1]
   } else {
       set text_sql ""
@@ -483,7 +485,7 @@ ad_proc -public -deprecated item::get_id { url {root_folder ""}} {
   # Strip off file extension
   set last [string last "." $url]
   if { $last > 0 } {
-    set url [string range $url 0 [expr {$last - 1}]]
+    set url [string range $url 0 $last-1]
   }
 
   if {$root_folder ne ""} {

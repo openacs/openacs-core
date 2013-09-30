@@ -181,10 +181,10 @@ ad_proc -public content::keyword::new {
         [list creation_user $creation_user ] \
         [list creation_ip $creation_ip ] \
     ]
-    if {[exists_and_not_null creation_date]} {
+    if {[info exists creation_date] && $creation_date ne ""} {
         lappend var_list [list creation_date $creation_date ]
     }
-    if {[exists_and_not_null object_type]} {
+    if {[info exists object_type] && $object_type ne ""} {
         lappend var_list [list object_type $object_type ]
     }
     return [package_exec_plsql -var_list $var_list content_keyword new]

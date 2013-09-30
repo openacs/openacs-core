@@ -87,7 +87,7 @@ ad_proc -public content::symlink::new {
         [list creation_user $creation_user ] \
         [list creation_ip $creation_ip ] \
     ]
-    if {[exists_and_not_null creation_date]} {
+    if {[info exists creation_date] && $creation_date ne ""} {
         lappend var_list [list creation_date $creation_date ]
     }
     return [package_exec_plsql -var_list $var_list content_symlink new]

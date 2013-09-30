@@ -78,7 +78,7 @@ ad_proc -public publish::mkdirs { path } {
 } {
     set index [string last "/" $path]
     if { $index != -1 } {
-        file mkdir [string range $path 0 [expr {$index - 1}]]
+        file mkdir [string range $path 0 $index-1]
     } 
 }
 
@@ -815,7 +815,7 @@ ad_proc -public publish::render_subitem {
       set subitems [db_list cs_get_subitems_related ""]
   }
 
-  set sub_item_id [lindex $subitems [expr {$index - 1}]]
+  set sub_item_id [lindex $subitems $index-1]
 
   if { [template::util::is_nil sub_item_id] } {
     ns_log notice "publish::render_subitem: No such subitem"
