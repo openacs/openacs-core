@@ -845,7 +845,7 @@ ad_proc -public ad_form {
                         lappend form_command $flag
                         set af_type(${form_name}__$element_name) $flag
                         if { $af_element_parameters($element_name:$flag) eq "" } {
-                            if { [info command "::template::widget::$flag"] ne "" } {
+                            if { [info commands "::template::widget::$flag"] ne "" } {
                                 lappend form_command "-widget" $flag
                             }
                         } else {

@@ -498,7 +498,7 @@ ad_proc -private apm_transfer_file {
   # Therefore, we check first for the NaviServer built in ns_http, then 
   # if the optional xotcl-core components are available...
   #
-  if {[info command ::ns_http] ne "" && [ns_info patchlevel] > "4.99.5"} {
+  if {[info commands ::ns_http] ne "" && [ns_info patchlevel] > "4.99.5"} {
     # 
     # ... use ns_http when we have a version with the "-file" flag ...
     #
@@ -514,7 +514,7 @@ ad_proc -private apm_transfer_file {
 	  ns_log notice "Transfer $url redirected to $location ..."
 	  set url $location
       }
-  } elseif {[info command ::xo::HttpRequest] ne ""} {
+  } elseif {[info commands ::xo::HttpRequest] ne ""} {
     # 
     # ... use xo::HttpRequest...
     #
