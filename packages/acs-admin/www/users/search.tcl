@@ -53,14 +53,12 @@ if {[info exists keyword]} {
     }
 } else {
     # from one of the user pages
-    if { (![info exists email] || $email eq "") && \
-	    (![info exists last_name] || $last_name eq "") } {
+    if { $email eq "" && $last_name eq "" } {
 	incr exception_count
 	append exception_text "<li>You must specify either an email address or last name to search for.\n"
     }
 
-    if { [info exists email] && [info exists last_name] && \
-	    $email ne "" && $last_name ne "" } {
+    if { $email ne ""  && $last_name ne "" } {
 	incr exception_count
 	append exception_text "<li>You can only specify either email or last name, not both.\n"
     }
