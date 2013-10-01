@@ -148,7 +148,7 @@ set errno [catch {
     # alphabetically.  This code is obsolete and has been commented out
     # for 5.7.
 
-    #if {[info command ::xotcl::Class] ne "" &&
+    #if {[info commands ::xotcl::Class] ne "" &&
     #    [file isdirectory $root_directory/packages/xotcl-core]} {
     #   apm_bootstrap_load_libraries -procs xotcl-core
     #   apm_bootstrap_load_libraries -init xotcl-core

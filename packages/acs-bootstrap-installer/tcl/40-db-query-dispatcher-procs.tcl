@@ -853,13 +853,13 @@ ad_proc -private db_qd_internal_prepare_queryfile_content {file_content} {
 	append new_file_content [string range $rest_of_file_content 0 [expr {$first_querytext_open + $querytext_open_len - 1}]]
 
 	# append quoted querytext
-	append new_file_content [ns_quotehtml [string range $rest_of_file_content [expr {$first_querytext_open + $querytext_open_len}] [expr {$first_querytext_close - 1}]]]
+	append new_file_content [ns_quotehtml [string range $rest_of_file_content $first_querytext_open+$querytext_open_len $first_querytext_close-1]]
 
 	# append close querytext
 	append new_file_content $querytext_close
 
 	# Set up the rest
-	set rest_of_file_content [string range $rest_of_file_content [expr {$first_querytext_close + $querytext_close_len}] end]
+	set rest_of_file_content [string range $rest_of_file_content $first_querytext_close+$querytext_close_len end]
     }
 
     # db_qd_log QDDebug "new massaged file content: \n $new_file_content \n"

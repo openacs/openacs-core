@@ -38,7 +38,7 @@ proc acs_package_root_dir { package } {
 
 proc ad_make_relative_path { path } {
     set root_length [string length [acs_root_dir]]
-    if { ![string compare [acs_root_dir] [string range $path 0 $root_length-1]] } {
+    if { [acs_root_dir] eq [string range $path 0 $root_length-1] } {
 	return [string range $path $root_length+1 [string length $path]]
     }
     error "$path is not under the path root ([acs_root_dir])"
@@ -254,7 +254,7 @@ proc ad_proc args {
         }
     }
 
-    set arg_list [lindex $args [expr { $i + 1 }]]
+    set arg_list [lindex $args $i+1]
     if { $n_args_remaining == 3 } {
         # No doc string provided.
         array set doc_elements [list]
@@ -307,7 +307,7 @@ proc ad_proc args {
     set last_arg [lindex $effective_arg_list end]
     if { [llength $last_arg] == 1 && [string equal [lindex $last_arg 0] "args"] } {
         set varargs_p 1
-        set effective_arg_list [lrange $effective_arg_list 0 [expr { [llength $effective_arg_list] - 2 }]]
+        set effective_arg_list [lrange $effective_arg_list 0 [llength $effective_arg_list]-2]
     }
 
     set check_code ""
@@ -403,7 +403,7 @@ proc ad_proc args {
     set root_dir [nsv_get acs_properties root_directory]
     set script [info script]
     set root_length [string length $root_dir]
-    if { ![string compare $root_dir [string range $script 0 $root_length-1]] } {
+    if { $root_dir eq [string range $script 0 $root_length-1] } {
         set script [string range $script $root_length+1 end]
     }
     
@@ -684,7 +684,7 @@ ad_proc -public ad_arg_parser { allowed_args argv } {
 } {
     if {[lindex $allowed_args end] eq "args"} {
 	set varargs_p 1
-	set allowed_args [lrange $allowed_args 0 [expr { [llength $allowed_args] - 2 }]]
+	set allowed_args [lrange $allowed_args 0 [llength $allowed_args]-2]
     } else {
 	set varargs_p 0
     }

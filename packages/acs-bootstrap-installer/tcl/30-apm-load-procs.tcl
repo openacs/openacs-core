@@ -212,7 +212,7 @@ ad_proc -public apm_get_package_files {
 
     set matching_files [list]
     foreach file $files {
-        set rel_path [string range $file [expr {[string length $package_path] + 1}] end]
+        set rel_path [string range $file [string length $package_path]+1 end]
         set file_type [apm_guess_file_type $package_key $rel_path]
         set file_db_type [apm_guess_db_type $package_key $rel_path]
 
@@ -333,7 +333,7 @@ ad_proc -private apm_guess_db_type { package_key path } {
          "ctl_file" eq $file_type } {
         set sql_index [lsearch $components "sql"]
         if { $sql_index >= 0 } {
-            set db_dir [lindex $components [expr {$sql_index + 1}]]
+            set db_dir [lindex $components $sql_index+1]
             if {$db_dir eq "common"} {
                 return ""
             }
