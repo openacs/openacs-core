@@ -71,7 +71,7 @@ and let them know what happened.\n"
     }
 }
 
-if { $exception_count != 00 } {
+if { $exception_count != 0 } {
     ad_return_complaint $exception_count $exception_text
     return
 }
@@ -84,7 +84,7 @@ if { [info exists keyword] } {
     set search_type "keyword"
     set sql_keyword "%[string tolower $keyword]%"
     lappend where_clause "(email like :sql_keyword or lower(first_names || ' ' || last_name) like :sql_keyword)"
-} elseif { [info exists email] && $email ne "" } {
+} elseif { $email ne "" } {
     set search_type "email"    
     set sql_email "%[string tolower $email]%"
     lappend where_clause "email like :sql_email"
@@ -104,7 +104,7 @@ if { ![info exists passthrough] } {
     set passthrough_parameters "[export_entire_form_as_url_vars $passthrough]"
 }
 
-if { ([info exists limit_to_user_id] && $limit_to_user_id ne "") } {
+if { $limit_to_user_id ne "" } {
     set limit_to_user_id [join $limit_to_user_id ","]
     lappend where_clause "cc_users.user_id not in ($limit_to_user_id)"
 }
