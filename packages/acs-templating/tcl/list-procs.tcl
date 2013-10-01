@@ -1354,7 +1354,7 @@ ad_proc -private template::list::render {
         if 0 {
             set num_pages 11
             set pages [list]
-            for { set i [expr {$current_page - $num_pages}] } { $i < [expr {$current_page + $num_pages}] } { incr i } {
+            for { set i [expr {$current_page - $num_pages}] } { $i < $current_page + $num_pages } { incr i } {
                 if { $i > 0 && $i <= $paginator(page_count) } {
                     lappend pages $i
                 }

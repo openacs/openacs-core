@@ -544,7 +544,7 @@ ad_proc -private package_object_view_helper {
     }
 
     set pk_formatted [list]
-    for { set i 0 } { $i < [expr {[llength $primary_keys] - 1}] } { incr i } {
+    for { set i 0 } { $i < [llength $primary_keys] - 1 } { incr i } {
 	lappend pk_formatted "[lindex $primary_keys $i] = [lindex $primary_keys [expr {$i +1}]]"
     }
     return "SELECT [string tolower [join $columns ",\n       "]]

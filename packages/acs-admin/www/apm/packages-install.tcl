@@ -89,12 +89,12 @@ if { $spec_files eq "" } {
 
 <script type="text/javascript">
 function uncheckAll() {
-    for (var i = 0; i < [expr {[llength $spec_files] }]; ++i)
+    for (var i = 0; i < [llength $spec_files]; ++i)
         document.forms\[0\].elements\[i\].checked = false;
     this.href='';
 }
 function checkAll() {
-    for (var i = 0; i < [expr {[llength $spec_files] }]; ++i)
+    for (var i = 0; i < [llength $spec_files]; ++i)
         document.forms\[0\].elements\[i\].checked = true;
     this.href='';
 }
