@@ -256,7 +256,7 @@ ad_proc -public db_qd_get_fullname {local_name {added_stack_num 1}} {
 
     # We check if we're running the special ns_ proc that tells us
     # whether this is an URL or a Tcl proc.
-    if {[lsearch $list_of_source_procs [lindex $proc_name 0]] != -1} {
+    if { [lindex $proc_name 0] in $list_of_source_procs } {
 
 	# Means we are running inside an URL
 
