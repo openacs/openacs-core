@@ -53,7 +53,7 @@ db_multirow -extend {check} binding binding {
         if {[info commands ::$impl_alias] ne ""} {
             append impl_alias "</b> {[info args ::$impl_alias]}"
         } elseif {[llength $impl_alias]>1 
-		  && [info command ::xotcl::Object] ne "" 
+		  && [info commands ::xotcl::Object] ne "" 
 		  && [::xotcl::Object isobject [lindex $impl_alias 0]]
 		  && [[lindex $impl_alias 0] info methods [lindex $impl_alias 1]] ne ""} {
 	    # - it looks like a method, 

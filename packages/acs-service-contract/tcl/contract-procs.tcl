@@ -134,8 +134,8 @@ ad_proc -public acs_sc::contract::new_from_spec {
 }
 
 ad_proc -public acs_sc::contract::delete {
-    {-contract_id}
-    {-name}
+    {-contract_id ""}
+    {-name ""}
     {-no_cascade:boolean}
 } {
     Delete a service contract definition. Supply either contract_id or name.
@@ -143,15 +143,15 @@ ad_proc -public acs_sc::contract::delete {
     @param contract_id The ID of the service contract to delete
     @param name Name of the service contract to delete
 } {
-    if { ![exists_and_not_null contract_id] && ![exists_and_not_null name] } {
+    if { $contract_id eq "" && $name eq "" } {
         error "You must supply either name or contract_id"
     }
 
     db_transaction {
         # Need both name and ID below
-        if { ![exists_and_not_null name] } {
+        if { (![info exists name] || $name eq "") } {
             set name [db_string get_name_by_id {}]
-        } elseif { ![exists_and_not_null contract_id] } {
+        } elseif { (![info exists contract_id] || $contract_id eq "") } {
             set contract_id [db_string get_id_by_name {}]
         }
 
@@ -246,16 +246,17 @@ ad_proc -public acs_sc::contract::operation::new {
 }
 
 ad_proc -public acs_sc::contract::operation::delete {
-    {-operation_id}
-    {-contract_name}
-    {-operation_name}
+    {-operation_id ""}
+    {-contract_name ""}
+    {-operation_name ""}
 } {
     Delete a message type. Supply either ID or name.
 
     @param msg_type_id The ID of the msg_type to delete.
     @param name Name of the service contract to delete
 } {
-    if { ![exists_and_not_null operation_id] && ( ![exists_and_not_null contract_name] || ![exists_and_not_null operation_name] ) } {
+    if { $operation_id eq "" && ( $contract_name eq "" || $operation_name eq "") 
+     } {
         error "You must supply either contract_name and operation_name, or operation_id"
     }
 
@@ -263,7 +264,7 @@ ad_proc -public acs_sc::contract::operation::delete {
     # It seems like delete by ID doesn't work, because our PG bind thing turns all integers into strings
     # by wrapping them in single quotes, causing PG to invoke the function for deleting by name
 
-    if { ![exists_and_not_null contract_name] || ![exists_and_not_null operation_name] } {
+    if { $contract_name eq "" || $operation_name eq "" } {
         # get contract_name and operation_name
         db_1row select_names {}
     }
