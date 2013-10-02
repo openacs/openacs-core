@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="acs-authentication" locale="ar_LB" charset="utf-8">
-
-  <msg key="Invalid_username_or_password">الاسم او كلمة السر غير صحيحة</msg>
-</message_catalog>
