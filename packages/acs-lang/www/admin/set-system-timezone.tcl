@@ -104,12 +104,8 @@ if { [info exists utc_epoch] } {
         
         set try_offsets [list]
         foreach offset [list $recommended_offset [expr {$recommended_offset -24}]] {
-            # LARS 2003-11-05
-            # This is a workaround for a Tcl 8.3 bug on Solaris that causes int() on negative decimal
-            # numbers to fail with "integer value too large to represent".
-            # Example: 'expr int(-1.0)' throws an error; 'expr int(-1)' does not.
             if { $offset < 0 } {
-                lappend try_offsets "'[db_quote [expr -int(abs($offset)*60*60)]]'"
+                lappend try_offsets "'[db_quote [expr {-int(abs($offset)*60*60)]}]'"
             } else {
                 lappend try_offsets "'[db_quote [expr {int($offset*60*60)}]]'"
             }

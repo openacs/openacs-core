@@ -188,7 +188,7 @@ template_tag trn { chunk params } {
     }
 
     # Is the "static" attribute present?
-    set static_p [expr [ns_set find $params static] >= 0]
+    set static_p [expr {[ns_set find $params static] >= 0}]
 
     # If "static" attribute is present, do the call now
     if {$static_p} {

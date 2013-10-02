@@ -137,8 +137,7 @@ ad_proc -private lc_sepfmt {
 } {
     # with empty seperator or grouping string we behave 
     # posixly
-    if {$grouping eq "" 
-        || $sep eq "" } { 
+    if {$grouping eq "" || $sep eq "" } { 
         return $num
     }
     
@@ -148,7 +147,7 @@ ad_proc -private lc_sepfmt {
     set match "^(-?$num_re+)("
     set group [lindex $grouping 0]
     
-    while { 1 && $group > 0} { 
+    while { $group > 0} { 
         set re "$match[string repeat $num_re $group])"
         if { ![regsub -- $re $num "\\1$sep\\2" num] } { 
             break 
@@ -328,12 +327,12 @@ ad_proc -public lc_time_fmt {
 	}
     }
 
-    set a [expr (14 - $lc_time_month) / 12]
+    set a [expr {(14 - $lc_time_month) / 12}]
     set y [expr {$lc_time_year - $a}]
     set m [expr {$lc_time_month + 12*$a - 2}]
     
     # day_no becomes 0 for Sunday, through to 6 for Saturday. Perfect for addressing zero-based lists pulled from locale info.
-    set lc_time_day_no [expr (($lc_time_days + $y + ($y/4) - ($y / 100) + ($y / 400)) + ((31*$m) / 12)) % 7]
+    set lc_time_day_no [expr {(($lc_time_days + $y + $y/4 - $y/100 + $y/400) + (31 * $m / 12)) % 7}]
     
     return [subst [util_memoize "lc_time_fmt_compile {$fmt} $locale"]]
 }

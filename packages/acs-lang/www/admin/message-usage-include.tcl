@@ -28,8 +28,8 @@ with_catch errmsg {
             set colon [string first ":" $line]
             
             multirow append message_usage \
-                [string range $line 0 [expr {$colon-1}]] \
-                [string trim [string range $line [expr {$colon+1}] end]]
+                [string range $line 0 $colon-1] \
+                [string trim [string range $line $colon+1 end]]
         }
     }
 }

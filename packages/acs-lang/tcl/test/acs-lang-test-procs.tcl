@@ -61,7 +61,7 @@ ad_proc -private lang::test::setup_test_package {} {
         -enable \
         [apm_package_info_file_path $package_key]
     aa_true "Package install: package enabled" \
-        [expr [lsearch -exact [apm_enabled_packages] $package_key] != -1]
+        [expr {$package_key in [apm_enabled_packages]}]
 }
 
 ad_proc -private lang::test::teardown_test_package {} {
@@ -554,7 +554,7 @@ aa_register_case \
     set tcl_file_id [open "[acs_root_dir]/$tcl_file" r]
     set updated_tcl_contents [read $tcl_file_id]
     close $tcl_file_id
-    aa_true "tags in tcl file replaced" [expr [llength [lang::util::get_temporary_tags_indices $updated_tcl_contents]] == 0]
+    aa_true "tags in tcl file replaced" [expr {[llength [lang::util::get_temporary_tags_indices $updated_tcl_contents]] == 0}]
 
     # Delete the test message keys
     foreach message_key [concat [array names messages_array] $expected_new_keys] {
@@ -588,8 +588,8 @@ aa_register_case \
       set expected_index_item [lindex $expected_indices_list $counter]
       
       aa_true "checking start and end indices of item $counter" \
-              [expr [string equal [lindex $index_item 0] [lindex $expected_index_item 0]] && \
-              [string equal [lindex $index_item 1] [lindex $expected_index_item 1]]]
+	  [expr {[lindex $index_item 0] eq [lindex $expected_index_item 0]
+		 && [lindex $index_item 1] eq [lindex $expected_index_item 1]}]
 
       set counter [expr {$counter + 1}]
   }

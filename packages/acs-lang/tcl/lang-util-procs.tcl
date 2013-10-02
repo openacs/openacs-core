@@ -338,7 +338,7 @@ ad_proc -public lang::util::localize {
         # The replacement string starts and ends with a hash mark
         set replacement_string [string range $string_with_hashes [lindex $item_idx 0] \
                 [lindex $item_idx 1]]
-        set message_key [string range $replacement_string 1 [expr {[string length $replacement_string] - 2}]]
+        set message_key [string range $replacement_string 1 [string length $replacement_string]-2]
 
         # Attempt a message lookup
         set message_value [lang::message::lookup $locale $message_key "" "" 2]
@@ -346,7 +346,7 @@ ad_proc -public lang::util::localize {
         # Replace the string
         # LARS: We don't use regsub here, because regsub interprets certain characters
         # in the replacement string specially.
-        append subst_string [string range $string_with_hashes $start_idx [expr {[lindex $item_idx 0]-1}]]
+        append subst_string [string range $string_with_hashes $start_idx [lindex $item_idx 0]-1]
         append subst_string $message_value
 
         set start_idx [expr {[lindex $item_idx 1] + 1}]
@@ -702,7 +702,7 @@ ad_proc -private lang::util::record_message_lookup {
     if { [ad_conn locale] ne "en_US" } {
         if { ![info exists __lang_message_lookups] } {
             lappend __lang_message_lookups $message_key
-        } elseif { [lsearch -exact $__lang_message_lookups $message_key] == -1 } {
+        } elseif {$message_key ni $__lang_message_lookups} {
             lappend __lang_message_lookups $message_key
         }
     }

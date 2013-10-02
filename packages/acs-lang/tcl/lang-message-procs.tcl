@@ -650,7 +650,7 @@ ad_proc -private lang::message::format {
             if { [llength $value_array_list] > 0 } {
                 # A substitution list is provided, the key should be in there
                 
-                if { [lsearch -exact $value_array_keys $variable_string] == -1 } {
+                if {$variable_string ni $value_array_keys} {
                     ns_log Warning "lang::message::format: The value_array_list \"$value_array_list\" does not contain the variable name $variable_string found in the message: $localized_message"
                     
                     # There is no value available to do the substitution with
