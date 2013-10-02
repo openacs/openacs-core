@@ -325,8 +325,9 @@ ad_proc -public tsearch2::seperate_query_and_operators {
     set end_q 0
     set valid_operators [tsearch2_driver::valid_operators]
     foreach e [split $query] {
-        if {[regexp {(^\w*):} $e discard operator] \
-                && [lsearch -exact $valid_operators $operator] != -1} {
+        if {[regexp {(^\w*):} $e discard operator]
+	    && $operator in $valid_operators
+        } {
             # query element contains an operator, split operator from
             # query fragment
             set e [split $e ":"]
@@ -366,7 +367,10 @@ ad_proc -public tsearch2::seperate_query_and_operators {
         ns_log debug "operator(e)='${e}' start_q=$start_q end_q=$end_q"
         if {$last_operator ne ""} {
             # FIXME need introspection for operator phrase support
-            if {($last_operator eq "title:" || $last_operator eq "description:") && ($start_q || $end_q)} {
+            if {
+		($last_operator eq "title:" || $last_operator eq "description:") 
+		&& ($start_q || $end_q)
+	    } {
                 lappend ${last_operator}_phrase [regsub -all {\"} $e {}]
             } else {
                 lappend $last_operator [regsub -all {\"} ${e} {}]
@@ -381,7 +385,7 @@ ad_proc -public tsearch2::seperate_query_and_operators {
     }
 
     foreach op $valid_operators {
-        if {[exists_and_not_null $op]} {
+        if {([info exists $op] && [set $op] ne "")} {
             lappend operators $op $title
         }
     }
