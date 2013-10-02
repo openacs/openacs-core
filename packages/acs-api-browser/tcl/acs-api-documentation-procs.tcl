@@ -250,9 +250,9 @@ ad_proc -public api_script_documentation {
 }
 
 ad_proc -private api_format_author { author_string } {
-    if { [regexp {^[^ \n\r\t]+$} $author_string] && \
-	    [string first "@" $author_string] >= 0 && \
-	    [string first ":" $author_string] < 0 } {
+    if { [regexp {^[^ \n\r\t]+$} $author_string] 
+	 && [string first "@" $author_string] >= 0 
+	 && [string first ":" $author_string] < 0 } {
 	return "<a href=\"mailto:$author_string\">$author_string</a>"
     } elseif { [regexp {^([^\(\)]+)\s+\((.+)\)$} [string trim $author_string] {} name email] } {
 	return "$name &lt;<a href=\"mailto:$email\">$email</a>&gt;"
@@ -441,8 +441,7 @@ ad_proc -public api_proc_documentation {
 	@return the formatted documentation string.
 	@error if the procedure is not defined.	   
 } {
-	if { $format ne "text/html" && \
-			$format ne "text/plain" } {
+	if { $format ne "text/html" && $format ne "text/plain" } {
 		return -code error "Only text/html and text/plain documentation are currently supported"
 	}
 	array set doc_elements [nsv_get api_proc_doc $proc_name]
@@ -556,8 +555,9 @@ ad_proc -public api_proc_documentation {
 				append out " (boolean)"
 			} 
 			
-			if { [info exists default_values($switch)] && \
-					$default_values($switch) ne "" } {
+			if { [info exists default_values($switch)]
+			     && $default_values($switch) ne "" 
+			} {
 				append out " (defaults to <code>\"$default_values($switch)\"</code>)"
 			} 
 			
@@ -832,9 +832,9 @@ ad_proc -public api_get_body {proc_name} {
     }
   } elseif {[regexp {^([^ ]+)(Class|Object) (.*)$} $proc_name match thread kind obj]} {
     return [$thread do $obj serialize]
-  } elseif {[info proc $proc_name] ne ""} {
+  } elseif {[info procs $proc_name] ne ""} {
     return [info body $proc_name]
-  } elseif {[info proc ::nsf::procs::$proc_name] ne ""} {
+  } elseif {[info procs ::nsf::procs::$proc_name] ne ""} {
     return [info body ::nsf::procs::$proc_name]
   } else {
     return "No such Tcl-proc"
@@ -863,7 +863,7 @@ ad_proc -private api_tcl_to_html {proc_name} {
 
 } {
 
-    if {[info command ::xotcl::api] ne ""} {
+    if {[info commands ::xotcl::api] ne ""} {
       set scope [::xotcl::api scope_from_proc_index $proc_name]
     } else {
       set scope ""
@@ -996,7 +996,7 @@ ad_proc -private api_tclcode_to_html {{-scope ""} {-proc_namespace ""} script} {
         {gets puts socket tell format scan} \
         ]
 
-    if {[info command ::xotcl::api] ne ""} {
+    if {[info commands ::xotcl::api] ne ""} {
       set XOTCL_KEYWORDS [list self my next]
       # only command names are highlighted, otherwise we could add xotcl method
       # names by [lsort -unique [concat [list self my next] ..
@@ -1035,7 +1035,7 @@ ad_proc -private api_tclcode_to_html {{-scope ""} {-proc_namespace ""} script} {
         }
 
         "\$" {
-            if {$in_comment || ([string index $data $i+1] eq " ")} {
+            if {$in_comment || [string index $data $i+1] eq " "} {
                 append html "\$"
             } else {
                 set varl [length_var [string range $data $i end]]

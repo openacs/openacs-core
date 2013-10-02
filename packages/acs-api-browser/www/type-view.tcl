@@ -13,8 +13,9 @@ ad_page_contract {
     documentation:onevalue
 }
 
-if { ![info exists version_id] && \
-        [regexp {^([^ /]+)/} $type "" package_key] } {
+if { ![info exists version_id] 
+     && [regexp {^([^ /]+)/} $type "" package_key] 
+ } {
     db_0or1row version_id_from_package_key {
         select version_id 
           from apm_enabled_package_versions 
