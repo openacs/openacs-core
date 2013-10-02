@@ -227,14 +227,14 @@ ad_proc -private ad_user_class_query { set_id  } {
 	if { [info exists $criteria] && [set $criteria] ne "" } {
 	    switch $criteria {
 		"category_id" {
-		    if {[lsearch $tables "users_interests"] == -1 } {
+		    if {"users_interests" ni $tables} {
 		    lappend tables "users_interests"
 			lappend join_clauses "users.user_id = users_interests.user_id"
 		    }
 		    lappend where_clauses "users_interests.category_id = [ns_dbquotevalue $category_id]"
 		}
 		"Country_code" {
-		    if {[lsearch $tables "users_contact"] == -1 } {
+		    if {"users_contact" ni $tables} {
 			lappend tables "users_contact"
 			lappend join_clauses "users.user_id = users_contact.user_id"
 		    }
@@ -242,7 +242,7 @@ ad_proc -private ad_user_class_query { set_id  } {
 		    
 		}
 		"usps_abbrev" {
-		    if {[lsearch $tables "users_contact"] == -1 } {
+		    if {"users_contact" ni $tables} {
 			lappend tables "users_contact"
 			lappend join_clauses "users.user_id = users_contact.user_id"
 		    }
@@ -276,7 +276,7 @@ ad_proc -private ad_user_class_query { set_id  } {
 		    if { [info exists count_only_p] && $count_only_p } {
 			lappend where_clauses "[parameter::get -parameter ExpensiveThreshold] < (select sum(amount) from users_charges where users_charges.user_id = users.user_id)"
 		    } else {
-			if {[lsearch $tables "user_charges"] == -1 } {
+			if {"user_charges" ni $tables} {
 			    lappend tables "users_charges"
 			    lappend join_clauses "users.user_id = users_charges.user_id"
 			}
@@ -293,7 +293,7 @@ ad_proc -private ad_user_class_query { set_id  } {
 		    
 		}
 		"sex" {
-		    if {[lsearch $tables "users_demographics"] == -1 } {
+		    if {"users_demographics" ni $tables} {
 			lappend tables "users_demographics"
 			lappend join_clauses "users.user_id = users_demographics.user_id"
 		    }
@@ -302,7 +302,7 @@ ad_proc -private ad_user_class_query { set_id  } {
 		    
 		}
 		"age_below_years" {
-		    if {[lsearch $tables "users_demographics"] == -1 } {
+		    if {"users_demographics" ni $tables} {
 			lappend tables "users_demographics"
 			lappend join_clauses "users.user_id = users_demographics.user_id"
 		    }
@@ -310,7 +310,7 @@ ad_proc -private ad_user_class_query { set_id  } {
 		    
 		}
 		"age_above_years" {
-		    if {[lsearch $tables "users_demographics"] == -1 } {
+		    if {"users_demographics" ni $tables} {
 			lappend tables "users_demographics"
 			lappend join_clauses "users.user_id = users_demographics.user_id"
 		    }
