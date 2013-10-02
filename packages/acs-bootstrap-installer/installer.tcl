@@ -45,7 +45,7 @@ ad_proc -private install_param_mandatory_p { param_name } {
 } {
     array set mandatory_params_array [install_mandatory_params]
     set mandatory_names [array names mandatory_params_array]
-    return [expr {[lsearch -exact $mandatory_names $param_name] != -1}]
+    return [expr {$param_name in $mandatory_names}]
 }
 
 ad_proc -private install_mandatory_params {} {
@@ -115,7 +115,7 @@ ad_proc -private install_page_contract { mandatory_params optional_params } {
                                  [array names optional_params_array]]
         foreach param_name $all_param_names {
             set param_value [ns_set iget $form $param_name]
-            set mandatory_p [expr {[lsearch -exact $mandatory_params $param_name] != -1}]
+            set mandatory_p [expr {$param_name in $mandatory_params}]
 
             if { $param_value ne "" } {
                 # Param in form - set value in callers scope

@@ -681,7 +681,7 @@ aa_register_case  \
             aa_false "Param UseEmailForLoginP 0 -> false" [auth::UseEmailForLoginP]
 
             array set elms [auth::get_registration_elements]
-            aa_false "Registration elements do contain username" [expr [lsearch [concat $elms(required) $elms(optional)] "username"] == -1]
+            aa_false "Registration elements do contain username" [expr {"username" ni [concat $elms(required) $elms(optional)]}]
 
             parameter::set_value -parameter UseEmailForLoginP -package_id [ad_acs_kernel_id] -value {}
             aa_true "Param UseEmailForLoginP {} -> true" [auth::UseEmailForLoginP]
@@ -696,7 +696,7 @@ aa_register_case  \
 
             # GetElements
             array set elms [auth::get_registration_elements]
-            aa_true "Registration elements do NOT contain username" [expr {[lsearch [concat $elms(required) $elms(optional)] "username"] == -1}]
+            aa_true "Registration elements do NOT contain username" [expr {"username" ni [concat $elms(required) $elms(optional)]}]
             
             # Create a user with no username
             set email [string tolower "[ad_generate_random_string]@foobar.com"]

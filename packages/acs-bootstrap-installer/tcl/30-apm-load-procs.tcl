@@ -216,7 +216,7 @@ ad_proc -public apm_get_package_files {
         set file_type [apm_guess_file_type $package_key $rel_path]
         set file_db_type [apm_guess_db_type $package_key $rel_path]
 
-        set type_match_p [expr {$file_types eq "" || [lsearch $file_types $file_type] != -1}]
+        set type_match_p [expr {$file_types eq "" || $file_type in $file_types}]
 
         if { $all_db_types_p } {
             set db_match_p 1
