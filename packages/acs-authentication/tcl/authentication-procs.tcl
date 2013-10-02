@@ -767,10 +767,10 @@ ad_proc -public auth::get_registration_form_elements {
 
     array set element_info [auth::get_registration_elements]
 
-    if { [lsearch $element_info(required) password] != -1 } {
+    if {"password" in $element_info(required)} {
         lappend element_info(required) password_confirm
     }
-    if { [lsearch $element_info(optional) password] != -1 } {
+    if {"password" in $element_info(optional)} {
         lappend element_info(optional) password_confirm
     }
     

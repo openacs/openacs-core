@@ -347,7 +347,7 @@ proc ad_proc args {
             set arg [string range $arg 1 end]
             lappend switches $arg
 
-            if { [lsearch $arg_flags "boolean"] >= 0 } {
+            if {"boolean" in $arg_flags} {
                 set default_values(${arg}_p) 0
 		append switch_code "            -$arg - -$arg=1 - -$arg=t - -$arg=true {
                 ::uplevel ::set ${arg}_p 1
@@ -365,7 +365,7 @@ proc ad_proc args {
 		append switch_code "            }\n"
             }
 
-            if { [lsearch $arg_flags "required"] >= 0 } {
+            if {"required" in $arg_flags} {
                 append check_code "    ::if { !\[::uplevel ::info exists $arg\] } {
         ::return -code error \"Required switch -$arg not provided\"
     }
@@ -948,7 +948,7 @@ ad_proc -public ad_assert_arg_value_in_list {
 } {
     upvar $arg_name arg_value
 
-    if { [lsearch -exact $allowed_values_list $arg_value] == -1 } {
+    if {$arg_value ni $allowed_values_list} {
         error "argument $arg_name has value $arg_value but must be in ([join $allowed_values_list ", "])"
     }
 

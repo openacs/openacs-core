@@ -84,7 +84,7 @@ ad_proc -public auth::authority::create {
         # Check that the columns provided in the array are all valid 
         # Set array entries as local variables
         foreach name $names {
-            if { [lsearch -exact $all_columns $name] == -1 } {
+            if {$name ni $all_columns} {
                 error "Attribute '$name' isn't valid for auth_authorities."
             }
             set $name $row($name)
@@ -248,7 +248,7 @@ ad_proc -public auth::authority::edit {
     # Check that the columns provided in the array are all valid 
     # Set array entries as local variables
     foreach name $names {
-        if { [lsearch -exact $columns $name] == -1 } {
+        if {$name ni $columns} {
             error "Attribute '$name' isn't valid for auth_authorities."
         }
         if {$name eq "authority_id"} {
