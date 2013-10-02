@@ -659,7 +659,7 @@ aa_register_case  \
                 }
                 array unset retrieved_value $parameter
             }
-            aa_true "Only the right parameters were retrieved" [expr [llength [array names retrieved_value]] == 0]
+            aa_true "Only the right parameters were retrieved" [expr {[llength [array names retrieved_value]] == 0}]
         }
 }
 

@@ -86,7 +86,7 @@ proc ad_parse_documentation_string { doc_string elements_var } {
 }
 
 proc ad_proc_valid_switch_p {str} {
-  return [expr [string equal "-" [string index $str 0]] && ![number_p $str]]
+  return [expr {[string index $str 0] eq "-" && ![number_p $str]}]
 }
 
 proc ad_proc args {

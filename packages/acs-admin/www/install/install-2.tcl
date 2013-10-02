@@ -63,7 +63,7 @@ array set failed $result(failed)
 multirow create install package_key version_name package_name comment extra_p
 
 foreach key $result(packages) {
-    set extra_p [expr {[lsearch $package_key $key] == -1}]
+    set extra_p [expr {$key ni $package_key}]
     if { $extra_p } {
         set extras_p 1
     }

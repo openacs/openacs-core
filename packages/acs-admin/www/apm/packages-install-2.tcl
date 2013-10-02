@@ -38,7 +38,7 @@ foreach spec_file $spec_files {
     lappend pkg_info_list [pkg_info_new $package(package.key) $spec_file \
             $package(embeds) $package(extends) $package(provides) $package(requires) ""]
     
-    if { [lsearch -exact $install $package(package.key)] != -1 } {
+    if {$package(package.key) in $install} {
         # This is a package which we should install
         lappend install_spec_files $spec_file
     }

@@ -1093,9 +1093,7 @@ ad_proc -private api_tclcode_to_html {{-scope ""} {-proc_namespace ""} script} {
             if {[regexp {^\}(\s*)(else|elseif)(\s*\{)} [string range $data $i end] match pre els post]} {
                 append html "${pre}$HTML(procs)${els}$HTML(/procs)${post}"
                 set proc_ok 1
-                incr i [expr [string length $pre] + \
-                             [string length $els] + \
-                             [string length $post]]
+                incr i [expr {[string length $pre] + [string length $els] + [string length $post]}]
             }
         }
 

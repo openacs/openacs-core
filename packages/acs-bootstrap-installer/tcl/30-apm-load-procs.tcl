@@ -372,7 +372,7 @@ ad_proc apm_package_supports_rdbms_p {
     # We need to add that information back into the .info files.
     
     set package_path [acs_package_root_dir $package_key]
-    return [expr ![file exists "${package_path}/sql"] || [file exists "${package_path}/sql/[db_type]"]]
+    return [expr {![file exists "${package_path}/sql"] || [file exists "${package_path}/sql/[db_type]"]}]
 }
 
 ad_proc -private apm_source { __file } {
