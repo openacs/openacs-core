@@ -482,8 +482,9 @@ ad_proc -private apm_version_load_status { version_id } {
 	set full_path "[acs_package_root_dir $package_key]/$file"
 	# If $file had a different mtime when it was last loaded, return
 	# needs_reload. (If the file should exist but doesn't, just skip it.)
-	if { [file exists $full_path] && 
-	[file mtime $full_path] != [nsv_get apm_library_mtime "packages/$package_key/$file"] } {
+	if { [file exists $full_path] 
+	     &&  [file mtime $full_path] ne [nsv_get apm_library_mtime "packages/$package_key/$file"] 
+	 } {
 	    return "needs_reload"
 	}
     }
@@ -498,8 +499,9 @@ ad_proc -private apm_version_load_status { version_id } {
 	set full_path "[acs_package_root_dir $package_key]/$file"
 	# If $file had a different mtime when it was last loaded, return
 	# needs_reload. (If the file should exist but doesn't, just skip it.)
-	if { [file exists $full_path] && 
-	[file mtime $full_path] != [nsv_get apm_library_mtime "packages/$package_key/$file"] } {
+	if { [file exists $full_path] 
+	     && [file mtime $full_path] ne [nsv_get apm_library_mtime "packages/$package_key/$file"] 
+	 } {
 	    return "needs_reload"
 	}
     }
@@ -696,9 +698,10 @@ ad_proc -private apm_load_queries {
             #             !( 1 ^ 0 )             = Nope
             #             !( 1 ^ 1 )             = Yep
             #
-            if {!($test_queries_p ^ $is_test_file_p) &&
-                $file_type eq "query_file" &&
-                ($file_db_type eq "" || $file_db_type eq [db_type])} {
+            if {!($test_queries_p ^ $is_test_file_p) 
+		&& $file_type eq "query_file" 
+		&& ($file_db_type eq "" || $file_db_type eq [db_type])
+	    } {
 	        db_qd_load_query_file $file
             } 
         }
@@ -770,9 +773,10 @@ ad_proc -public apm_load_any_changed_libraries {} {
 	set path "[acs_root_dir]/$file"
 	ns_log Debug "APM: File being watched: $path"
 
-	if { [file exists $path] && \
-		(![nsv_exists apm_library_mtime $file] || \
-		[file mtime $path] != [nsv_get apm_library_mtime $file]) } {
+	if { [file exists $path] 
+	     && (![nsv_exists apm_library_mtime $file] || 
+		 [file mtime $path] ne [nsv_get apm_library_mtime $file]) 
+	 } {
 	    lappend files_to_reload $file
 	}
     }
@@ -1591,7 +1595,7 @@ ad_proc -public apm_callback_type_supported_p { type } {
 
     @author Peter Marklund
 } {
-    return [expr [lsearch -exact [apm_supported_callback_types] $type] >= 0]
+    return [expr {$type in [apm_supported_callback_types]}]
 }
 
 ad_proc -public apm_callback_format_args {
@@ -1994,7 +1998,10 @@ ad_proc -private apm::metrics_internal {
             # ignore drop and upgrade scripts
             set pg_files {}
             foreach file $filelist {
-                if { [string match {*/postgresql/*} $file] && ![string match *-drop.sql $file] && ![string match {*/upgrade/*} $file] } {
+                if { [string match {*/postgresql/*} $file] 
+		     && ![string match *-drop.sql $file] 
+		     && ![string match {*/upgrade/*} $file] 
+		 } {
                     lappend pg_files $file
                 } 
             }
@@ -2004,7 +2011,10 @@ ad_proc -private apm::metrics_internal {
             # ignore drop and upgrade scripts
             set ora_files {}
             foreach file $filelist {
-                if { [string match {*/oracle/*} $file] && ![string match *-drop.sql $file] && ![string match {*/upgrade/*} $file] } {
+                if { [string match {*/oracle/*} $file] 
+		     && ![string match *-drop.sql $file] 
+		     && ![string match {*/upgrade/*} $file] 
+		 } {
                     lappend ora_files $file
                 }
             }

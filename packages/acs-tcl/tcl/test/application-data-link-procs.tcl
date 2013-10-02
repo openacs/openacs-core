@@ -218,20 +218,23 @@ aa_register_case -cats api data_links_with_tag {
         application_data_link::new -this_object_id $o(3) -target_object_id $o(4) -relation_tag tag2
         application_data_link::new -this_object_id $o(3) -target_object_id $o(5) -relation_tag tag2
         
-        aa_true "Verify link for tag1" [expr [llength [application_data_link::get_linked -from_object_id $o(0) \
-                                        -to_object_type [acs_object_type $o(0)] -relation_tag tag1]] == 2]
+        aa_true "Verify link for tag1" \
+	    [expr {[llength [application_data_link::get_linked -from_object_id $o(0) \
+				 -to_object_type [acs_object_type $o(0)] -relation_tag tag1]] == 2}]
 
-        aa_true "Verify link for tag2" [expr [llength [application_data_link::get_linked -from_object_id $o(3) \
-                                        -to_object_type [acs_object_type $o(3)] -relation_tag tag2]] == 3]
+        aa_true "Verify link for tag2" \
+	    [expr {[llength [application_data_link::get_linked -from_object_id $o(3) \
+				 -to_object_type [acs_object_type $o(3)] -relation_tag tag2]] == 3}]
 
-        aa_true "Verify content link" [expr [llength [application_data_link::get_linked_content -from_object_id $o(0) \
-                                                        -to_content_type content_revision -relation_tag tag1]] == 2]
+        aa_true "Verify content link" \
+	    [expr {[llength [application_data_link::get_linked_content -from_object_id $o(0) \
+				 -to_content_type content_revision -relation_tag tag1]] == 2}]
         
         aa_true "Verify links to one object with multiple link tags" \
-                                      [expr [llength [application_data_link::get -object_id $o(0) -relation_tag tag1]] == 2]
+	    [expr {[llength [application_data_link::get -object_id $o(0) -relation_tag tag1]] == 2}]
         
         aa_true "Verify links to one object with multiple link tags" \
-                                      [expr [llength [application_data_link::get -object_id $o(0) -relation_tag tag2]] == 1]
+	    [expr {[llength [application_data_link::get -object_id $o(0) -relation_tag tag2]] == 1}]
 
     }
 }

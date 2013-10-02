@@ -799,7 +799,7 @@ ad_proc -public site_node::closest_ancestor_package {
     if { $include_self_p && $package_key ne ""} {
         array set node_array [site_node::get -url $url]
 
-        if { [lsearch -exact $package_key $node_array(package_key)] != -1 } {
+        if {$node_array(package_key) in $package_key} {
             return $node_array($element)
         }
     }
@@ -1015,7 +1015,7 @@ ad_proc -deprecated -warn site_node_closest_ancestor_package {
     # Try the URL as is.
     if {[catch {nsv_get site_nodes $url} result] == 0} {
           array set node $result
-          if { [lsearch -exact $package_keys $node(package_key)] != -1 } {
+          if {$node(package_key) in $package_keys} {
               return $node(package_id)
           }
     }
@@ -1025,7 +1025,7 @@ ad_proc -deprecated -warn site_node_closest_ancestor_package {
           append url "/"
           if {[catch {nsv_get site_nodes $url} result] == 0} {
               array set node $result
-              if { [lsearch -exact $package_keys $node(package_key)] != -1 } {
+              if {$node(package_key) in $package_keys} {
                     return $node(package_id)
               }
           }

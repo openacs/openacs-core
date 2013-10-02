@@ -404,19 +404,21 @@ ad_proc ad_return_exception_page {
     @param title Title to be used for the error (will be shown to user)
     @param explanation Explanation for the exception.
 } {
-    set error_template [parameter::get_from_package_key -package_key "acs-tcl" -parameter "ReturnError" -default "/packages/acs-tcl/lib/ad-return-error"]
+    set error_template [parameter::get_from_package_key \
+			    -package_key "acs-tcl" \
+			    -parameter "ReturnError" \
+			    -default "/packages/acs-tcl/lib/ad-return-error"]
     set page [ad_parse_template -params [list [list title $title] [list explanation $explanation]] $error_template]
     if {$status > 399 
         && [string match {*; MSIE *} [ns_set iget [ad_conn headers] User-Agent]]
         && [string length $page] < 512 } { 
-        append page [string repeat " " [expr 513 - [string length $page]]]
+        append page [string repeat " " [expr {513 - [string length $page]}]]
     }
     
     ns_return $status text/html $page
 
     # raise abortion flag, e.g., for templating
-    global request_aborted
-    set request_aborted [list $status $title]
+    set ::request_aborted [list $status $title]
 }
 
 

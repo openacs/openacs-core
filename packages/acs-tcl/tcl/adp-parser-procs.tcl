@@ -244,7 +244,9 @@ ad_proc -public doc_adp_compile { adp } {
 	if { [string index $adp $index] eq "/" } {
 	    set end_tag_p 1
 	    incr index
-	} elseif { ![info exists literal_tag] && [string index $adp $index] eq "%" } {
+	} elseif { ![info exists literal_tag] 
+		   && [string index $adp $index] eq "%" 
+	} {
 	    doc_adp_flush_text_buffer
 
 	    incr index
@@ -256,8 +258,9 @@ ad_proc -public doc_adp_compile { adp } {
 	    }
 	    set tcl_code_begin $index
 
-	    while { $index < [string length $adp] && \
-		    ([string index $adp $index] ne "%" || [string index $adp $index+1] ne ">") } {
+	    while { $index < [string length $adp] 
+		    && ([string index $adp $index] ne "%" || [string index $adp $index+1] ne ">") 
+		} {
 		incr index
 	    }
 	    if { $index >= [string length $adp] } {
@@ -286,15 +289,17 @@ ad_proc -public doc_adp_compile { adp } {
 	if { ![info exists tag] } {
 	    # Find the next non-word character.
 	    set tag_begin $index
-	    while { [string index $adp $index] eq "-" || \
-		    [string is wordchar -strict [string index $adp $index]] } {
+	    while { [string index $adp $index] eq "-" 
+		    || [string is wordchar -strict [string index $adp $index]] 
+		} {
 		incr index
 	    }
 	    set tag [string range $adp $tag_begin $index-1]
 	}
 
-	if { (![info exists literal_tag] || ($end_tag_p && $tag eq $literal_tag)) && \
-		[nsv_exists doc_adptags $tag] } {
+	if { (![info exists literal_tag] || ($end_tag_p && $tag eq $literal_tag)) 
+	     && [nsv_exists doc_adptags $tag] 
+	 } {
 	    doc_adp_flush_text_buffer
 
 	    if { [info exists literal_tag] } {
@@ -321,10 +326,11 @@ ad_proc -public doc_adp_compile { adp } {
 
 		# Not a > - must be an attribute name.
 		set attr_name_begin $index
-		while { $index < $adp_length && \
-			[string index $adp $index] ne ">" && \
-			[string index $adp $index] ne "=" && \
-			![string is space -strict [string index $adp $index]] } {
+		while { $index < $adp_length 
+			&& [string index $adp $index] ne ">" 
+			&& [string index $adp $index] ne "=" 
+			&& ![string is space -strict [string index $adp $index]] 
+		    } {
 		    incr index
 		}
 		if { $attr_name_begin eq $index } {
@@ -348,10 +354,11 @@ ad_proc -public doc_adp_compile { adp } {
 			incr index
 		    } else {
 			set value_begin $index
-			while { $index < $adp_length && \
-				[string index $adp $index] ne ">" && \
-				[string index $adp $index] ne "=" && \
-				![string is space -strict [string index $adp $index]] } {
+			while { $index < $adp_length 
+				&& [string index $adp $index] ne ">" 
+				&& [string index $adp $index] ne "=" 
+				&& ![string is space -strict [string index $adp $index]] 
+			    } {
 			    incr index
 			}
 			set value_end $index

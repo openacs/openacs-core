@@ -558,8 +558,9 @@ ad_proc -public ad_form {
 
     foreach valid_arg $valid_args {
         if { [info exists $valid_arg] } {
-            if { [info exists af_parts(${form_name}__$valid_arg)] &&
-                 [lsearch { form name validate export } $valid_arg] == -1 } {
+            if { [info exists af_parts(${form_name}__$valid_arg)] 
+		 && [lsearch { form name validate export } $valid_arg] == -1 
+	     } {
                 return -code error "Form \"$form_name\" already has a \"$valid_arg\" section"
             }
 
@@ -1016,8 +1017,9 @@ ad_proc -public ad_form {
 
         foreach element_name $properties(element_names) {
             if { [info exists values($element_name)] } {
-                if { [info exists af_flag_list(${form_name}__$element_name)] && \
-                     [lsearch $af_flag_list(${form_name}__$element_name) multiple] >= 0 } {
+                if { [info exists af_flag_list(${form_name}__$element_name)] 
+		     && [lsearch $af_flag_list(${form_name}__$element_name) multiple] >= 0 
+		 } {
                     template::element set_values $form_name $element_name $values($element_name)
                 } else {
                     template::element set_value $form_name $element_name $values($element_name)
@@ -1034,8 +1036,9 @@ ad_proc -public ad_form {
         # in a reasonable way.
 
         foreach element_name $properties(element_names) {
-            if { [info exists af_flag_list(${form_name}__$element_name)] && \
-                 [lsearch $af_flag_list(${form_name}__$element_name) multiple] >= 0 } {
+            if { [info exists af_flag_list(${form_name}__$element_name)] 
+		 && [lsearch $af_flag_list(${form_name}__$element_name) multiple] >= 0 
+	     } {
                 set values [uplevel #$level [list template::element get_values $form_name $element_name]]
                 uplevel #$level [list set $element_name $values]
             } else {
@@ -1065,8 +1068,9 @@ ad_proc -public ad_form {
 
         foreach validate_element $af_validate_elements($form_name) {
             foreach {element_name validate_expr error_message} $validate_element {
-                if { ![template::element error_p $form_name $element_name] && \
-                    ![uplevel #$level [list expr $validate_expr]] } {
+                if { ![template::element error_p $form_name $element_name] 
+		     && ![uplevel #$level [list expr $validate_expr]] 
+		 } {
                     template::element set_error $form_name $element_name [uplevel [list subst $error_message]]
                 }
             }

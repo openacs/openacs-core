@@ -541,8 +541,9 @@ proc sgml::parseEvent {sgml args} {
 	    regsub -all &xml:intdtd\; $text \[$options(-internaldtd)\] text
 
 	    # Look for entity references
-	    if {([array size entities] || [string length $options(-entityreferencecommand)]) && \
-		[regexp {&[^;]+;} $text]} {
+	    if {([array size entities] || [string length $options(-entityreferencecommand)]) 
+                && [regexp {&[^;]+;} $text]
+            } {
 
 		# protect Tcl specials
 		regsub -all {([][$\\])} $text {\\\1} text

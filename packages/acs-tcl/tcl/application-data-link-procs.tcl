@@ -327,23 +327,34 @@ ad_proc -public application_data_link::update_links_from {
     @author Dave Bauer (dave@solutiongrove.com)
     @creation-date 2006-08-31
 } {
-    set old_links [application_data_link::get_links_from -object_id $object_id -relation_tag $relation_tag]
+    set old_links [application_data_link::get_links_from \
+		       -object_id $object_id \
+		       -relation_tag $relation_tag]
+
     if {![llength $link_object_ids]} {
 	set link_object_ids [application_data_link::scan_for_links -text $text]
     }
     set delete_ids [list]
     foreach old_link $old_links {
-	if {[lsearch $link_object_ids $old_link] < 0} {
+	if {$old_link ni $link_object_ids} {
 	    lappend delete_ids $old_link
 	}
     }
-    application_data_link::delete_from_list -object_id $object_id -link_object_id_list $delete_ids -relation_tag $relation_tag
+    application_data_link::delete_from_list \
+	-object_id $object_id \
+	-link_object_id_list $delete_ids \
+	-relation_tag $relation_tag
+
     foreach new_link $link_object_ids {
 	if {![application_data_link::link_exists \
 		  -from_object_id $object_id \
 		  -to_object_id $new_link \
-          -relation_tag $relation_tag]} {
-        application_data_link::new_from -object_id $object_id -to_object_id $new_link -relation_tag $relation_tag
+		  -relation_tag $relation_tag]
+	} {
+	    application_data_link::new_from \
+		-object_id $object_id \
+		-to_object_id $new_link \
+		-relation_tag $relation_tag
 	}
     }
 }

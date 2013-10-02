@@ -562,8 +562,9 @@ proc dom::CreateElement {token name aList args} {
 
 	if {$parent(node:nodeType) eq "documentFragment" } {
 	    if {$parent(id) == $parent(documentFragment:masterDoc)} {
-		if {[info exists parent(document:documentElement)] && \
-		    [string length $parent(document:documentElement)]} {
+		if {[info exists parent(document:documentElement)] 
+		    && [string length $parent(document:documentElement)]
+		} {
 		    unset docArray($id)
 		    return -code error "document element already exists"
 		} else {
@@ -1308,8 +1309,9 @@ proc dom::Element:GetByTagName {token name} {
 	foreach child [set $node(node:childNodes)] {
 	    catch {unset childNode}
 	    array set childNode [set $child]
-	    if {$childNode(node:nodeType) eq "element" && \
-		[GetField childNode(node:nodeName)] eq $name } {
+	    if {$childNode(node:nodeType) eq "element" 
+		&& [GetField childNode(node:nodeName)] eq $name 
+	    } {
 		lappend result $child
 	    }
 	}

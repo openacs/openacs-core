@@ -29,12 +29,13 @@ ad_proc -private ad_try {code args} {
   @see with_finally 
   @see with_catch
 } {
-  global errorInfo errorCode
 
   if {[set errno [catch {uplevel $code} result]]} {
-    if {$errno == 1 && [string equal [lindex $errorCode 0] "AD"] && \
-	[string equal [lindex $errorCode 1] "EXCEPTION"]} {
-      set exception [lindex $errorCode 2]
+    if {$errno == 1 
+	&& [lindex $::errorCode 0] eq "AD"
+	&& [lindex $::errorCode 1] eq "EXCEPTION"
+    } {
+      set exception [lindex $::errorCode 2]
 
       set matched 0
       for {set i 0} {$i < [llength $args]} {incr i 3} {
@@ -51,6 +52,6 @@ ad_proc -private ad_try {code args} {
       }
     }
 
-    return -code $errno -errorcode $errorCode -errorinfo $errorInfo $result
+    return -code $errno -errorcode $::errorCode -errorinfo $::errorInfo $result
   }
 }

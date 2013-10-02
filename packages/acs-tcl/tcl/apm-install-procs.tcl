@@ -261,8 +261,9 @@ ad_proc -private apm_dependency_check {
     foreach spec_file $spec_files {
 	if { [catch {
 	    array set package [apm_read_package_info_file $spec_file]
-	    if { ($package(initial-install-p) eq "t" || !$initial_install_p) && \
-                    [apm_package_supports_rdbms_p -package_key $package(package.key)] } {
+	    if { ($package(initial-install-p) eq "t" || !$initial_install_p) 
+		 && [apm_package_supports_rdbms_p -package_key $package(package.key)] 
+	     } {
                 lappend install_pend [pkg_info_new \
                                          $package(package.key) \
                                          $spec_file \
@@ -356,9 +357,10 @@ ad_proc -private apm_dependency_check {
                     set counter 0
                     foreach pkg_info_add $pkg_info_all {
                         # Will this package do anything to change whether this requirement has been satisfied?
-                        if { [pkg_info_key $pkg_info_add] eq [lindex $req 0] &&
-                             [apm_dependency_provided_p -dependency_list [pkg_info_provides $pkg_info_add] \
-                                [lindex $req 0] [lindex $req 1]] == 1 } {
+                        if { [pkg_info_key $pkg_info_add] eq [lindex $req 0] 
+			     && [apm_dependency_provided_p -dependency_list [pkg_info_provides $pkg_info_add] \
+				     [lindex $req 0] [lindex $req 1]] == 1 
+			 } {
 
                             # It sure does. Add it to list of packages to install
                             lappend install_pend $pkg_info_add
@@ -538,8 +540,9 @@ ad_proc -private apm_dependency_check_new {
                         }
                         # If what we provide is required, and the required version is less than what we provide,
                         # drop the requirement
-                        if { [info exists required($prov_uri)] && \
-                                 [apm_version_names_compare $required($prov_uri) $prov_version] <= 0 } {
+                        if { [info exists required($prov_uri)] 
+			     && [apm_version_names_compare $required($prov_uri) $prov_version] <= 0 
+			 } {
                             array unset required($prov_uri)
                         }
                     }
@@ -578,9 +581,9 @@ ad_proc -private apm_dependency_check_new {
                     set prov_uri [lindex $prov 0]
                     set prov_version [lindex $prov 1]
 
-                    if { [info exists required($prov_uri)] && \
-                             [apm_version_names_compare $required($prov_uri) $prov_version] <= 0 } {
-
+                    if { [info exists required($prov_uri)] 
+			 && [apm_version_names_compare $required($prov_uri) $prov_version] <= 0 
+		     } {
                         ns_log Debug "apm_dependency_check_new: Adding $package_key, as it provides $prov_uri $prov_version"
 
                         # If this package provides something that's required in a version high enough
@@ -685,7 +688,8 @@ ad_proc -public apm_simple_package_install {
         }
 
         if { [apm_package_supports_rdbms_p -package_key $package(package.key)]
-             && ![apm_package_installed_p $package(package.key)] } {
+             && ![apm_package_installed_p $package(package.key)] 
+	 } {
             lappend install_spec_files $install_spec_file
         }
     }
@@ -701,7 +705,8 @@ ad_proc -public apm_simple_package_install {
         }
 
         if { [apm_package_supports_rdbms_p -package_key $package(package.key)]
-             && ![apm_package_installed_p $package(package.key)] } {
+             && ![apm_package_installed_p $package(package.key)] 
+	 } {
             # Save the package info, we may need it for dependency 
             # satisfaction later
             lappend pkg_info_list [pkg_info_new $package(package.key) \
@@ -1707,8 +1712,9 @@ ad_proc -private apm_upgrade_script_compare {f1 f2} {
     set f2 [lindex [split $f2 /] end]
 
     # Get the version number from, e.g. the 2.0 from upgrade-2.0-3.0.sql 
-    if {[regexp {\-(.*)-.*.sql} $f1 match f1_version_from] && 
-    [regexp {\-(.*)-.*.sql} $f2 match f2_version_from]} {
+    if {[regexp {\-(.*)-.*.sql} $f1 match f1_version_from] 
+	&& [regexp {\-(.*)-.*.sql} $f2 match f2_version_from]
+    } {
 	# At this point we should have something like 2.0 and 3.1d which Tcl string
 	# comparison can handle. 
 	set f1_version_from [db_exec_plsql test_f1 {}]
@@ -1795,8 +1801,9 @@ ad_proc -private apm_query_files_find {
         # is defined, which we interpret to mean a file containing queries that work with all of our
         # supported databases.
 
-	if {"query_file" eq $file_type && 
-            ($file_db_type eq "" || [db_type] eq $file_db_type )} {
+	if {"query_file" eq $file_type 
+	    && ($file_db_type eq "" || [db_type] eq $file_db_type )
+	} {
             ns_log Debug "apm_query_files_find: Adding $path to the list of query files."
             lappend query_file_list $path
 	}
@@ -1995,9 +2002,10 @@ ad_proc -public apm_upgrade_logic {
         # Check that
         # from_version_name < elm_from < elm_to < to_version_name
 
-        if { [apm_version_names_compare $from_version_name $elm_from] <= 0 && \
-                 [apm_version_names_compare $elm_from $elm_to] <= 0 && \
-                 [apm_version_names_compare $elm_to $to_version_name] <= 0 } {
+        if { [apm_version_names_compare $from_version_name $elm_from] <= 0 
+	     && [apm_version_names_compare $elm_from $elm_to] <= 0 
+	     && [apm_version_names_compare $elm_to $to_version_name] <= 0 
+	 } {
             set chunks($elm_from,$elm_to) $elm_chunk
         }
     }

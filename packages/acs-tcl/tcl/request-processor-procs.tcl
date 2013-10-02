@@ -224,7 +224,7 @@ ad_proc -public ad_register_proc {
         return
     }
 
-    if { [lsearch -exact { GET POST HEAD } $method] == -1 } {
+    if {$method ni { GET POST HEAD }} {
         error "Method passed to ad_register_proc must be one of GET, POST, or HEAD"
     }
 
@@ -259,25 +259,27 @@ ad_proc -private rp_invoke_filter { conn filter_info why } {
         }
     }
 
-    global errorCode
     if { $errno } {
-      # Uh-oh - an error occurred.
-      global errorInfo
-      ds_add rp [list filter [list $why [ns_conn method] [ns_conn url] $proc $arg] $startclicks [clock clicks -milliseconds] "error" $errorInfo]
-      # make sure you report catching the error!
-      rp_debug "error in filter $proc for [ns_conn method] [ns_conn url]?[ns_conn query] errno is $errno message is $errorInfo"
-      rp_report_error
-      set result "filter_return"
-    } elseif {$result ne "filter_ok"  && $result ne "filter_break"  && \
-            [string compare $result "filter_return"] } {
+	# Uh-oh - an error occurred.
+	ds_add rp [list filter [list $why [ns_conn method] [ns_conn url] $proc $arg] \
+		       $startclicks [clock clicks -milliseconds] "error" $::errorInfo]
+	# make sure you report catching the error!
+	rp_debug "error in filter $proc for [ns_conn method] [ns_conn url]?[ns_conn query] errno is $errno message is $::errorInfo"
+	rp_report_error
+	set result "filter_return"
+
+    } elseif {$result ne "filter_ok" && $result ne "filter_break" && $result ne "filter_return" } {
+
        set error_msg "error in filter $proc for [ns_conn method] [ns_conn url]?[ns_conn query].  Filter returned invalid result \"$result\""
-       ds_add rp [list filter [list $why [ns_conn method] [ns_conn url] $proc $arg] $startclicks [clock clicks -milliseconds] "error" $error_msg]
+       ds_add rp [list filter [list $why [ns_conn method] [ns_conn url] $proc $arg] \
+		      $startclicks [clock clicks -milliseconds] "error" $error_msg]
        # report the bad filter_return message
        rp_debug -debug t -ns_log_level error $error_msg
        rp_report_error -message $error_msg
        set result "filter_return"
     } else {
-       ds_add rp [list filter [list $why [ns_conn method] [ns_conn url] $proc $arg] $startclicks [clock clicks -milliseconds] $result]
+       ds_add rp [list filter [list $why [ns_conn method] [ns_conn url] $proc $arg] \
+		      $startclicks [clock clicks -milliseconds] $result]
     }
 
     rp_debug -debug $debug_p "Done invoking $why filter $proc (returning $result)"
@@ -385,7 +387,7 @@ ad_proc -public ad_register_filter {
         return
     }
 
-    if { [lsearch -exact { GET POST HEAD } $method] == -1 } {
+    if {$method ni { GET POST HEAD }} {
         error "Method passed to ad_register_filter must be one of GET, POST, or HEAD"
     }
 
@@ -572,7 +574,7 @@ ad_proc -private rp_filter { why } {
 
         # 4. set urlv and urlc for consistency
         set urlv [lrange [split $root /] 1 end]
-        ad_conn -set urlc [expr [ad_conn urlc]+[llength $urlv]]
+        ad_conn -set urlc [expr {[ad_conn urlc] + [llength $urlv]}]
         ad_conn -set urlv [concat $urlv [ad_conn urlv]]
     }
     # -------------------------------------------------------------------------
@@ -592,7 +594,8 @@ ad_proc -private rp_filter { why } {
     ns_log Debug "user agent is $user_agent" 
 
     if {[string match "*YahooSeeker*" $user_agent] 
-	|| [string match ".*Yahoo! Slurp.*" $user_agent]} {
+	|| [string match ".*Yahoo! Slurp.*" $user_agent]
+    } {
         ns_log Notice "nasty spider $user_agent"
         ns_returnredirect "http://www.yahoo.com"
         return "filter_return"
@@ -600,7 +603,8 @@ ad_proc -private rp_filter { why } {
     ## BLOCK NASTY YAHOO FINISH
 
     if { $root eq "" 
-         && [parameter::get -package_id [ad_acs_kernel_id] -parameter ForceHostP -default 0] } { 
+         && [parameter::get -package_id [ad_acs_kernel_id] -parameter ForceHostP -default 0] 
+     } { 
         set host_header [ns_set iget [ns_conn headers] "Host"]
         regexp {^([^:]*)} $host_header "" host_no_port
         regexp {^https?://([^:]+)} [ns_conn location] "" desired_host_no_port
@@ -777,8 +781,9 @@ ad_proc rp_report_error {
     
     set error_message $message
 
-    if {[parameter::get -package_id [ad_acs_kernel_id] -parameter RestrictErrorsToAdminsP -default 0] && \
-            ![permission::permission_p -object_id [ad_conn package_id] -privilege admin] } {
+    if {[parameter::get -package_id [ad_acs_kernel_id] -parameter RestrictErrorsToAdminsP -default 0] 
+	&& ![permission::permission_p -object_id [ad_conn package_id] -privilege admin] 
+    } {
         set message {}
         set params [lreplace $params 0 0 [list stacktrace $message]]    
     }
@@ -1465,13 +1470,14 @@ ad_proc -private ad_http_cache_control { } {
     # don't touch anything. 
     set modify_p 1
 
-    if { [ns_set ifind $headers "cache-control"] > -1 ||
-         [ns_set ifind $headers "expires"] > -1 } {
+    if { [ns_set ifind $headers "cache-control"] > -1 
+	 || [ns_set ifind $headers "expires"] > -1 } {
         set modify_p 0
     } else {
         for { set i 0 } { $i < [ns_set size $headers] } { incr i } {
-            if { [string tolower [ns_set key $headers $i]] eq "pragma" &&
-                 [string tolower [ns_set value $headers $i]] eq "no-cache" } {
+            if { [string tolower [ns_set key $headers $i]] eq "pragma" 
+		 && [string tolower [ns_set value $headers $i]] eq "no-cache" 
+	     } {
                 set modify_p 0
                 break
             }

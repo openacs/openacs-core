@@ -100,9 +100,11 @@ ad_proc -private ad_canonical_server_p {} {
 	set canonical_port 80
 	set canonical_ip $canonical_server
     }
-   
-    if { [ns_config ns/server/[ns_info server]/module/nssock Address] == $canonical_ip && \
-	    [ns_config ns/server/[ns_info server]/module/nssock Port 80] == $canonical_port } {
+
+    set driver_section [ns_driversection -driver nssock]
+    if { [ns_config $driver_section Address] == $canonical_ip 
+	 && [ns_config $driver_section Port 80] == $canonical_port 
+     } {
 	return 1
     }
 

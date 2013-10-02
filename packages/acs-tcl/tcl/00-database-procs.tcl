@@ -709,14 +709,13 @@ ad_proc -public db_exec_plsql {{ -dbn "" } statement_name sql args } {
             if {[regexp -nocase -- {^\s*select} $test_sql match]} {
                 # ns_log Debug "PLPGSQL: bypassed anon function"
                 set selection [db_exec 0or1row $db $full_statement_name $sql]
-            } elseif {[regexp -nocase -- {^\s*create table} $test_sql match] || [regexp -nocase -- {^\s*drop table} $test_sql match]} {
+            } elseif {[regexp -nocase -- {^\s*(create|drop) table} $test_sql match]} {
                 ns_log Debug "PLPGSQL: bypassed anon function for create/drop table"
                 set selection [db_exec dml $db $full_statement_name $sql]
                 return ""
             } else {
                 # ns_log Debug "PLPGSQL: using anonymous function"
-                set selection [db_exec_plpgsql $db $full_statement_name $sql \
-                                   $statement_name]
+                set selection [db_exec_plpgsql $db $full_statement_name $sql $statement_name]
             }
             return [ns_set value $selection 0]
         }
@@ -929,8 +928,9 @@ ad_proc -public db_release_unused_handles {{ -dbn "" }} {
             set db [lindex $db_state(handles) $index_to_examine]
 
             # Stop now if the handle is part of a transaction.
-            if { [info exists db_state(transaction_level,$db)] && \
-                     $db_state(transaction_level,$db) > 0 } {
+            if { [info exists db_state(transaction_level,$db)] 
+		 && $db_state(transaction_level,$db) > 0 
+	    } {
                 break
             }
 
@@ -1321,7 +1321,9 @@ ad_proc -public db_foreach {{ -dbn "" } statement_name sql args } {
         set code_block [lindex $args 0]
     } elseif { $arglength == 3 } {
         # Should have code block + if_no_rows + code block.
-        if { [lindex $args 1] ne "if_no_rows" && [lindex $args 1] ne "else" } {
+        if { [lindex $args 1] ne "if_no_rows" 
+	     && [lindex $args 1] ne "else" 
+	 } {
             return -code error "Expected if_no_rows as second-to-last argument"
         }
         set code_block [lindex $args 0]
@@ -1714,8 +1716,9 @@ ad_proc -public db_multirow {
         set code_block [lindex $args 0]
     } elseif { $arglength == 3 } {
         # Should have code block + if_no_rows + code block.
-        if {   [lindex $args 1] ne "if_no_rows" \
-            && [lindex $args 1] ne "else" } {
+        if { [lindex $args 1] ne "if_no_rows" 
+	     && [lindex $args 1] ne "else" 
+	} {
             return -code error "Expected if_no_rows as second-to-last argument"
         }
         set code_block [lindex $args 0]
@@ -1727,8 +1730,10 @@ ad_proc -public db_multirow {
     upvar $level_up "$var_name:rowcount" counter
     upvar $level_up "$var_name:columns" columns
 
-    if { [info exists cache_key] && $append_p &&
-         [info exists counter] && $counter > 0 } {
+    if { [info exists cache_key] 
+	 && $append_p 
+	 && [info exists counter] && $counter > 0 
+     } {
         return -code error "Can't append and cache a non-empty multirow datasource simultaneously"
     }
 
@@ -2540,7 +2545,9 @@ ad_proc -public db_source_sql_file {{
             # maintainer we shouldn't break existing code over such trivialities...
             # GN: windows requires $pghost "-h ..."
 
-            if { ([db_get_dbhost] eq "localhost" || [db_get_dbhost] eq "") && $::tcl_platform(platform) ne "windows"  } {
+            if { ([db_get_dbhost] eq "localhost" || [db_get_dbhost] eq "") 
+		 && $::tcl_platform(platform) ne "windows"  
+	     } {
                 set pghost ""
             } else {
                 set pghost "-h [db_get_dbhost]"

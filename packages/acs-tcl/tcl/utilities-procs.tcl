@@ -1221,8 +1221,8 @@ ad_proc -public export_entire_form_as_url_vars {
 	    set varname [ns_set key $the_form $i]
 	    set varvalue [ns_set value $the_form $i]
 	    if {
-		$vars_to_passthrough eq "" ||
-		($varname in $vars_to_passthrough)
+		$vars_to_passthrough eq "" 
+		|| ($varname in $vars_to_passthrough)
 	    } {
 		lappend params "[ns_urlencode $varname]=[ns_urlencode $varvalue]" 
 	    }
@@ -1943,8 +1943,9 @@ ad_proc -public ad_get_cookie {
 	set headers [ns_conn outputheaders]
 	set nr_headers [ns_set size $headers]
 	for { set i 0 } { $i < $nr_headers } { incr i } {
-	    if { [string tolower [ns_set key $headers $i]] eq "set-cookie" && \
-		     [regexp "^$name=(\[^;\]*)" [ns_set value $headers $i] match value] } {
+	    if { [string tolower [ns_set key $headers $i]] eq "set-cookie" 
+		 && [regexp "^$name=(\[^;\]*)" [ns_set value $headers $i] match value] 
+	     } {
 		return $value
 	    }
 	}
@@ -2016,8 +2017,9 @@ ad_proc -public ad_set_cookie {
     if { $replace } {
 	# Try to find an already-set cookie named $name.
 	for { set i 0 } { $i < [ns_set size $headers] } { incr i } {
-	    if { [string tolower [ns_set key $headers $i]] eq "set-cookie" && 
-		 [string match "$name=*" [ns_set value $headers $i]] } {
+	    if { [string tolower [ns_set key $headers $i]] eq "set-cookie" 
+		 && [string match "$name=*" [ns_set value $headers $i]] 
+	     } {
 		ns_set delete $headers $i
 	    }
 	}
@@ -2503,7 +2505,7 @@ ad_proc -public util_current_location {{}} {
 
     # suppress the configured http port when server is behind a proxy, to keep connection behind proxy
     set suppress_port [parameter::get -package_id [apm_package_id_from_key acs-tcl] -parameter SuppressHttpPort -default 0]
-    if { $suppress_port && [string equal $port [ns_config -int "ns/server/[ns_info server]/module/nssock" Port]] } {
+    if { $suppress_port && $port eq [ns_config -int "ns/server/[ns_info server]/module/nssock" Port] } {
         ns_log Debug "util_current_location: suppressing http port $Host_port"
         set Host_port ""
         set port ""
@@ -3878,8 +3880,8 @@ ad_proc -public -deprecated ad_block_sql_urls {
 	# characters in length.
 	#
         if {
-	    [regexp -nocase {[^a-z_]or[^a-z0-9_]} $value] ||
-	    [regexp -nocase {union([^a-z0-9_].*all)?[^a-z0-9_].*select} $value]
+	    [regexp -nocase {[^a-z_]or[^a-z0-9_]} $value] 
+	    || [regexp -nocase {union([^a-z0-9_].*all)?[^a-z0-9_].*select} $value]
 	} {
 	    # Looks like the user has added "union [all] select" to
 	    # the variable, # or is trying to modify the WHERE clause
@@ -3919,12 +3921,12 @@ ad_proc -public -deprecated ad_block_sql_urls {
             }
 
             if {
-		$parse_result_integer == 0 ||
-		$parse_result_integer == -904  ||
-		$parse_result_integer == -1789 ||
-		$parse_result_string == 0 ||
-		$parse_result_string == -904 ||
-		$parse_result_string == -1789
+		$parse_result_integer == 0 
+		|| $parse_result_integer == -904
+		|| $parse_result_integer == -1789 
+		|| $parse_result_string == 0 
+		|| $parse_result_string == -904 
+		|| $parse_result_string == -1789
 	    } {
                 # Code -904 means "invalid column", -1789 means
 		# "incorrect number of result columns". We treat this

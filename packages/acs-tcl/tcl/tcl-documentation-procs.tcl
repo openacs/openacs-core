@@ -892,7 +892,9 @@ ad_proc -public ad_page_contract {
             }
         }
         
-        if { [info exists apc_internal_filter($formal_name:multiple)] && $actual_value eq "" } {
+        if { [info exists apc_internal_filter($formal_name:multiple)] 
+	     && $actual_value eq "" 
+	 } {
             # LARS:
             # If you lappend an emptry_string, it'll actually add the empty string to the list as an element
             # which is not what we want
@@ -977,7 +979,11 @@ ad_proc -public ad_page_contract {
 	upvar 1 $formal_name var
 
 	if { [info exists apc_internal_filter($formal_name:cached)] } {
-	    if { ![ad_page_contract_get_validation_passed_p $formal_name] && ![info exists apc_internal_filter($formal_name:notnull)] && (![info exists apc_default_value($formal_name)] || $apc_default_value($formal_name) eq "") } {
+	    if { ![ad_page_contract_get_validation_passed_p $formal_name] 
+		 && ![info exists apc_internal_filter($formal_name:notnull)] 
+		 && (![info exists apc_default_value($formal_name)] 
+		     || $apc_default_value($formal_name) eq "") 
+	     } {
 		if { [info exists apc_internal_filter($formal_name:array)] } {
 		    # This is an array variable, so we need to loop through each name.* variable for this package we have ...
 		    set array_list ""
@@ -1003,15 +1009,17 @@ ad_proc -public ad_page_contract {
 	    if { [info exists apc_internal_filter($formal_name:verify)] } {
 		if { ![info exists apc_internal_filter($formal_name:array)] } {
  		    # This is not an array, verify the variable
-		    if { ![info exists apc_signatures($formal_name)] || \
-			    ![ad_verify_signature $var $apc_signatures($formal_name)] } {
+		    if { ![info exists apc_signatures($formal_name)] 
+			 || ![ad_verify_signature $var $apc_signatures($formal_name)] 
+		    } {
 			ad_complain -key $formal_name:verify "[_ acs-tcl.lt_The_signature_for_the]"
 			continue
 		    }
 		} else {
 		    # This is an array: verify the [array get] form of the array
-		    if { ![info exists apc_signatures($formal_name)] || \
-			    ![ad_verify_signature [lsort [array get var]] $apc_signatures($formal_name)] } {
+		    if { ![info exists apc_signatures($formal_name)] 
+			 || ![ad_verify_signature [lsort [array get var]] $apc_signatures($formal_name)] 
+		    } {
 			ad_complain -key $formal_name:verify "[_ acs-tcl.lt_The_signature_for_the]"
 			continue
 		    }
@@ -1095,8 +1103,9 @@ ad_proc -public ad_page_contract {
 		set validation_ok_p [ad_page_contract_eval uplevel 1 $code]
 		set ad_page_contract_errorkeys [lrange $ad_page_contract_errorkeys 1 end]
 
-		if { $validation_ok_p eq "" || \
-			($validation_ok_p ne "1" && $validation_ok_p ne "0" )} {
+		if { $validation_ok_p eq "" 
+		     || ($validation_ok_p ne "1" && $validation_ok_p ne "0" )
+		 } {
 		    set validation_ok_p [expr {[ad_complaints_count] == $no_complaints_before}]
 		}
 		
@@ -1135,7 +1144,10 @@ ad_proc -public ad_page_contract {
     }
 
     # Set the __submit_button_variable. This is used in double click protection.
-    if {[info exists __submit_button_name] && $__submit_button_name ne "" && [info exists __submit_button_value]} {
+    if {[info exists __submit_button_name] 
+	&& $__submit_button_name ne "" 
+	&& [info exists __submit_button_value]
+    } {
 	uplevel 1 [list set $__submit_button_name $__submit_button_value]
     }
 
@@ -1657,18 +1669,18 @@ ad_page_contract_filter -type post date { name date } {
     }
 
     if {
-	"" eq $date(month) \
-	    || "" eq $date(day) \
-	    || "" eq $date(year) \
-	    || $date(month) < 1 || $date(month) > 12 \
-	    || $date(day) < 1 || $date(day) > 31 \
-	    || $date(year) < 1 \
-	    || ($date(month) == 2 && $date(day) > 29) \
-	    || (($date(year) % 4) != 0 && $date(month) == 2 && $date(day) > 28) \
-	    || ($date(month) == 4 && $date(day) > 30) \
-	    || ($date(month) == 6 && $date(day) > 30) \
-	    || ($date(month) == 9 && $date(day) > 30) \
-	    || ($date(month) == 11 && $date(day) > 30)
+	"" eq $date(month) 
+	|| "" eq $date(day) 
+	|| "" eq $date(year) 
+	|| $date(month) < 1 || $date(month) > 12 
+	|| $date(day) < 1 || $date(day) > 31
+	|| $date(year) < 1 
+	|| ($date(month) == 2 && $date(day) > 29) 
+	|| (($date(year) % 4) != 0 && $date(month) == 2 && $date(day) > 28) 
+	|| ($date(month) == 4 && $date(day) > 30) 
+	|| ($date(month) == 6 && $date(day) > 30) 
+	|| ($date(month) == 9 && $date(day) > 30) 
+	|| ($date(month) == 11 && $date(day) > 30)
     } {
 	ad_complain "[_ acs-tcl.lt_Invalid_date_datemont]"
 	return 0
@@ -1709,13 +1721,13 @@ ad_page_contract_filter -type post time { name time } {
     }
 
     if {
-	"" eq $time(hours) \
-	    || "" eq $time(minutes) \
-	    || "" eq $time(seconds) \
-	    || (![string equal -nocase "pm" $time(ampm)] && ![string equal -nocase "am" $time(ampm)])
-	    || $time(hours) < 1 || $time(hours) > 12 \
-	    || $time(minutes) < 0 || $time(minutes) > 59 \
-	    || $time(seconds) < 0 || $time(seconds) > 59
+	"" eq $time(hours) 
+	|| "" eq $time(minutes) 
+	|| "" eq $time(seconds) 
+	|| (![string equal -nocase "pm" $time(ampm)] && ![string equal -nocase "am" $time(ampm)])
+	|| $time(hours) < 1 || $time(hours) > 12 
+	|| $time(minutes) < 0 || $time(minutes) > 59 
+	|| $time(seconds) < 0 || $time(seconds) > 59
     } {
 	ad_complain "[_ acs-tcl.lt_Invalid_time_timetime_1]"
 	return 0

@@ -213,7 +213,8 @@ ad_proc ad_db_select_widget {
             set item [lindex $opt 1]
             set value [lindex $opt 0]
             if { (!$multiple && $value eq $default ) 
-                 || ($multiple && [lsearch -exact $default $value] > -1)} {
+                 || ($multiple && $value in $default) 
+	     } {
                 append retval "<option selected value=\"$value\">$item</option>\n"
             } else {
                 append retval "<option value=\"$value\">$item</option>\n"
@@ -234,7 +235,8 @@ ad_proc ad_db_select_widget {
 	    set item [ns_set value $selection 0]
 	    set value [ns_set value $selection 1]
 	    if { (!$multiple && $value eq $default ) 
-		 || ($multiple && [lsearch -exact $default $value] > -1)} {
+		 || ($multiple && $value in $default)
+	    } {
 		append retval "<option selected=\"selected\" value=\"$value\">$item</option>\n"
 	    } else {
 		append retval "<option value=\"$value\">$item</option>\n"

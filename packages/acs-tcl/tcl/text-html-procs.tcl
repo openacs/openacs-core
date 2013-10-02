@@ -783,13 +783,15 @@ ad_proc ad_html_security_check { html } {
                     set attr_name [lindex $attribute 0]
                     set attr_value [lindex $attribute 1]
                     
-                    if { ![info exists allowed_attribute($attr_name)] && ![info exists allowed_attribute(*)] } {
+                    if { ![info exists allowed_attribute($attr_name)] 
+			 && ![info exists allowed_attribute(*)] } {
                         return "The attribute '$attr_name' is not allowed for $tagname tags"
                     }
             
                     if { [string tolower $attr_name] ne "style" } {
                         if { [regexp {^\s*([^\s:]+):\/\/} $attr_value match protocol] } {
-                            if { ![info exists allowed_protocol([string tolower $protocol])] && ![info exists allowed_protocol(*)] } {
+                            if { ![info exists allowed_protocol([string tolower $protocol])] 
+				 && ![info exists allowed_protocol(*)] } {
                                 return "Your URLs can only use these protocols: [join $allowed_protocols_list ", "].
                 You have a '$protocol' protocol in there."
                             }
@@ -856,11 +858,12 @@ ad_proc -public ad_html_to_text {
         #     - alpha or
         #     - a slash, and then alpha
         # Otherwise, it's probably just a lone < character
-        if { $i >= $length - 1 || \
-                 (![string is alpha [string index $html $i+1]] && \
-		      [string index $html $i+1] ne "!" && \
-                      ("/" ne [string index $html $i+1] || \
-                           ![string is alpha [string index $html $i+2]])) } {
+        if { $i >= $length - 1 || 
+	     (![string is alpha [string index $html $i+1]] 
+	      && [string index $html $i+1] ne "!" 
+	      && ("/" ne [string index $html $i+1] || 
+		  ![string is alpha [string index $html $i+2]])) 
+	 } {
             # Output the < and continue with next character
             ad_html_to_text_put_text output "<"
             set last_tag_end [incr i]
