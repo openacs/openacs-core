@@ -7,7 +7,7 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.8.1d1" url="http://openacs.org/repository/download/apm/acs-bootstrap-installer-5.8.1d1.apm">
+    <version name="5.8.1d2" url="http://openacs.org/repository/download/apm/acs-bootstrap-installer-5.8.1d2.apm">
         <owner url="mailto:dhogaza@pacifier.com">Don Baccus</owner>
         <summary>Bootstraps an OpenACS installation.</summary>
         <release-date>2013-09-08</release-date>
@@ -17,7 +17,7 @@
 	<maturity>3</maturity>
         <description format="text/html">This package bootstraps OpenACS. If the core packages have not yet been installed, it calls the installer which leads the user through the steps necessary to do so.  It also checks that the installation meets the requirements for a successful install of OpenACS.</description>
 
-        <provides url="acs-bootstrap-installer" version="5.8.1d1"/>
+        <provides url="acs-bootstrap-installer" version="5.8.1d2"/>
         <requires url="acs-kernel" version="5.8.1d1"/>
 
         <callbacks>
