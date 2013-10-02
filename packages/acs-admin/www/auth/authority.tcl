@@ -137,7 +137,7 @@ if { $local_authority_p } {
     foreach element $form_widgets_full {
         regexp {^[a-zA-Z_]+} [lindex $element 0] element_name
 
-        if { [lsearch -exact $local_editable_elements $element_name] != -1 } {
+        if {$element_name in $local_editable_elements} {
             lappend form_widgets $element
         }
     }

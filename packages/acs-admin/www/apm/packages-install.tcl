@@ -33,7 +33,7 @@ foreach spec_path $workspace_spec_files {
 set all_spec_files $workspace_spec_files
 foreach spec_path $packages_spec_files {
     set spec_filename [file tail $spec_path]
-    if { [lsearch -exact $workspace_filenames $spec_filename] == -1 } {
+    if {$spec_filename ni $workspace_filenames} {
         lappend all_spec_files $spec_path
     }
 }

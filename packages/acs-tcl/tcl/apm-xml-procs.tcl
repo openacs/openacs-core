@@ -354,7 +354,7 @@ ad_proc -public apm_read_package_info_file { path } {
                 continue
             }
             
-            if { [lsearch -exact [apm_supported_callback_types] $type] < 0 } {
+            if {$type ni [apm_supported_callback_types]} {
                 # The callback type is not supported
                 ns_log Error "package info file $path contains an unsupported callback type $type - ignoring. Valid values are [apm_supported_callback_types]"
                 continue

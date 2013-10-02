@@ -103,7 +103,7 @@ ad_proc -public application_data_link::exist_link {
     @param relation_tag Relationship identifier
 } {
     set linked_objects [ application_data_link::get -object_id $object_id -relation_tag $relation_tag]
-    if { [lsearch -exact $linked_objects "$target_object_id"] != -1 } {
+    if {$target_object_id in $linked_objects} {
       # found link
       return 1
     } else {

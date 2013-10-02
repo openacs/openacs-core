@@ -16,7 +16,7 @@ ad_library {
 ad_proc set_member? { s v } {
     <p>Tests whether or not $v is a member of set $s.</p>
 } {
-    if { [lsearch -exact $s $v] == -1 } {
+    if {$v ni $s} {
 	return 0
     } else {
 	return 1

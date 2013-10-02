@@ -178,7 +178,7 @@ ad_proc apm_build_subsite_packages_list {} {
 
     # Make sure old versions work ...
     catch { nsv_set apm_subsite_packages_list package_keys [db_list get_subsites {}] }
-    if { [lsearch -exact [nsv_get apm_subsite_packages_list package_keys] acs-subsite] == -1 } {
+    if {"acs-subsite" ni [nsv_get apm_subsite_packages_list package_keys]} {
         nsv_lappend apm_subsite_packages_list package_keys acs-subsite
     }
 
@@ -601,7 +601,7 @@ ad_proc -public apm_load_packages {
     set packages_to_load [list]
     foreach package_key $packages {
         foreach package_to_load [apm_package_load_libraries_order $package_key] {
-            if { [lsearch -exact $packages_to_load $package_to_load] == -1 } {
+            if {$package_to_load ni $packages_to_load} {
                 lappend packages_to_load $package_to_load
             }
         }
@@ -1503,7 +1503,7 @@ ad_proc -public apm_unused_callback_types {
 
     set unused_types [list]
     foreach supported_type $supported_types {
-        if { [lsearch -exact $used_callback_types $supported_type] < 0 } {
+        if {$supported_type ni $used_callback_types} {
             lappend unused_types $supported_type
         }
     }
@@ -1610,7 +1610,7 @@ ad_proc -public apm_callback_format_args {
     set arg_string ""
     set provided_arg_names [array names args_array]
     foreach required_arg_name [apm_arg_names_for_callback_type -type $type] {
-        if { [lsearch -exact $provided_arg_names $required_arg_name] < 0 } {
+        if {$required_arg_name ni $provided_arg_names} {
             error "required argument $required_arg_name not supplied to callback proc of type $type"
         }
 
