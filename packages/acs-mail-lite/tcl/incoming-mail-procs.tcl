@@ -19,7 +19,7 @@ namespace eval acs_mail_lite {
     } {
         set domain [parameter::get_from_package_key -package_key "acs-mail-lite" -parameter "BounceDomain"]
         if { $domain eq "" } {
-	    regsub {http://} [ns_config ns/server/[ns_info server]/module/nssock hostname] {} domain
+	    regsub {http://} [ns_config [ns_driversection -driver nssock] hostname] _ domain
 	}
 	return $domain
     }
@@ -237,7 +237,7 @@ namespace eval acs_mail_lite {
 		array set param $params
 
 		# Append the file if there exist a filename to use. Otherwise do not append
-		if {[exists_and_not_null param(name)]} {
+		if {([info exists param(name)] && $param(name) ne "")} {
 		    set filename $param(name)
 
 		    # Determine the content_type
