@@ -389,7 +389,7 @@ ad_proc -public publish::handle::image { item_id args } {
   # Concatenate all the extra html arguments into a string
   if { [info exists opts(html)] } {
     set extra_html [publish::html_args $opts(html)]
-    set have_alt [expr [lsearch [string tolower $opts(html)] "alt"] >= 0]
+    set have_alt [expr {"alt" in [string tolower $opts(html)]}]
   } else {
     set extra_html ""
     set have_alt 0

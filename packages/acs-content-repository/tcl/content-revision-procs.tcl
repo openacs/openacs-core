@@ -120,7 +120,7 @@ ad_proc -public ::content::revision::new {
 	}
 	foreach attribute_pair $attributes {
             lassign $attribute_pair attribute_name attribute_value
-	    if {[lsearch $valid_attributes $attribute_name] > -1}  {
+	    if {[lsearch -exact $valid_attributes $attribute_name] > -1}  {
 
                 # first add the column name to the list
 		append attribute_names  ", ${attribute_name}"		

@@ -282,7 +282,7 @@ ad_proc -public content::init {
 
 content::get_content $content_type
 
-if { !\[string equal \"text/html\" \$content(mime_type)\] && !\[ad_html_text_convertable_p -from \$content(mime_type) -to text/html\] } {
+if { \"text/html\" ne \$content(mime_type) && !\[ad_html_text_convertable_p -from \$content(mime_type) -to text/html\] } {
     \# don't render its content
     cr_write_content -revision_id \$content(revision_id)
     ad_script_abort

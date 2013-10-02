@@ -229,7 +229,7 @@ ad_proc -public ::content::item::get {
     @error
 } {
     upvar $array_name local_array
-    if {[lsearch {live latest} $revision] == -1} {
+    if {$revision ni {live latest}} {
         error "content::item::get revision was '${revision}'. It must be 'live' or 'latest'"
     }
     set content_type [content_type -item_id $item_id]
@@ -274,7 +274,7 @@ ad_proc -public ::content::item::update {
     foreach {attribute_list} $attributes {
 	set attribute [lindex $attribute_list 0]
 	set value [lindex $attribute_list 1]	
-	if {[lsearch $valid_attributes $attribute] > -1}  {
+	if {$attribute in $valid_attributes}  {
 
 	    # create local variable to use for binding
 
