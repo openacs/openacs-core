@@ -57,7 +57,7 @@ ad_proc -private doc::sort_@see { list_ref directive_comments } {
 	  set split_name $see_name
 	  doc::util::text_divider split_name ::
 	  set name_length [llength $split_name]
-	  set see_namespace [join [lrange $split_name 0 [expr {$name_length - 2}]] ""]
+	  set see_namespace [join [lrange $split_name 0 $name_length-2] ""]
 	  set url "[doc::util::dbl_colon_fix $see_namespace].html#[set see_name]"
 	}
     }
@@ -92,7 +92,7 @@ ad_proc -private doc::util::find_marker_indices { text marker } {
    
   while { [regexp -indices $marker $text marker_idx] } {
     lappend indices_list [expr {[lindex $marker_idx 0] + $last_index}]
-    set text [string range $text [expr {[lindex $marker_idx 1] + 1}]  end]
+    set text [string range $text [lindex $marker_idx 1]+1 end]
     set last_index [expr {[lindex $marker_idx 1] + $last_index + 1}]
   }
 

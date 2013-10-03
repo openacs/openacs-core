@@ -516,7 +516,7 @@ ad_proc -public template::util::get_url_directory { url } {
 } {
   set directory $url
 
-  set lastchar [string range $url [expr {[string length $url]-1}] end]
+  set lastchar [string range $url [string length $url]-1 end]
 
   if {$lastchar ne "/" } {
 

@@ -212,7 +212,7 @@ ad_proc -public template::util::currency::set_property {
                 set whole_part "[string range "0" [string length $whole_part] end]$whole_part"
 
                 # Chop off trailing digits beyond those called for by the given format
-                set fractional_part "[string range $fractional_part 0 [expr {[lindex $format 3] - 1}]]"
+                set fractional_part "[string range $fractional_part 0 [lindex $format 3]-1]"
             }
             set new_value [lreplace $currency_list 1 1 $whole_part]
             return [lreplace $new_value 3 3 $fractional_part]

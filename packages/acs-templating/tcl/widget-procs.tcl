@@ -927,7 +927,7 @@ ad_proc -public template::widget::block {
 		set required_p [lindex $question 1]
 		append output "<td>[ad_decode $required_p "t" "<span style=\"color: #f00;\">*</span>" "&nbsp;"]</td>"
 		foreach choice [lindex $question 2] {
-		    if {[lsearch -exact $value $choice]==-1} {
+		    if {$choice ni $value} {
 			append output "<td><input type=\"radio\" name=\"$name\" value=\"$choice\"></td>"
 		    } else {
 			append output "<td><input type=\"radio\" name=\"$name\" value=\"$choice\" checked></td>"

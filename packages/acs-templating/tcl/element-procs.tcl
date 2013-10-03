@@ -460,7 +460,7 @@ ad_proc -private template::element::validate { form_id element_id } {
     set formerror($element_id) [_ acs-templating.Element_is_required]
     set formerror($element_id:required) [_ acs-templating.Element_is_required]
 
-    if { [lsearch -exact {hidden submit} $element(widget)] > -1 } {
+    if {$element(widget) in {hidden submit}} {
        ns_log Warning "template::element::validate: No value for hidden/submit element $label"
      }
   }

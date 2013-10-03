@@ -124,9 +124,9 @@ ad_proc adp_parse_ad_conn_file {} {
                 if { [string first "</select" [string tolower $select]] != -1 } {
                     set start [lindex $indices 1]
                 } else {
-                    set before [string range $parsed_template 0 [expr {[lindex $indices 0]-1}]]
+                    set before [string range $parsed_template 0 [lindex $indices 0]-1]
                     set message [string range $parsed_template [lindex $message_idx 0] [lindex $message_idx 1]]
-                    set after [string range $parsed_template [expr {[lindex $indices 1] + 1}] end]
+                    set after [string range $parsed_template [lindex $indices 1]+1 end]
                     set parsed_template "${before}${message}${select}${after}"
                 }
             }
@@ -134,8 +134,8 @@ ad_proc adp_parse_ad_conn_file {} {
             # TODO: We could also move message keys out of <head>...</head>
 
             while { [regexp -indices {\x002\(\x001([^\x001]*)\x001\)\x002} $parsed_template indices key] } {
-                set before [string range $parsed_template 0 [expr {[lindex $indices 0] - 1}]]
-                set after [string range $parsed_template [expr {[lindex $indices 1] + 1}] end]
+                set before [string range $parsed_template 0 [lindex $indices 0]-1]
+                set after [string range $parsed_template [lindex $indices 1]+1 end]
 
                 set key [string range $parsed_template [lindex $key 0] [lindex $key 1]]
 

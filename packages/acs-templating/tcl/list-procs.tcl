@@ -3151,7 +3151,7 @@ ad_proc -private template::list::prepare_filter_form {
     foreach option_list $filter_names_options_tmp {
 	set option_label [lindex $option_list 0]
 	set option_name [lindex $option_list 1]
-	if {[lsearch $client_property_filters "${name}:filter:${option_name}:properties"]<0} {
+	if {"${name}:filter:${option_name}:properties" ni $client_property_filters} {
 	    lappend filter_names_options [list $option_label $option_name]
 	}
     }
