@@ -7,7 +7,7 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
 
-    <version name="5.8.1d1" url="http://www.mayuli.com/acs-repository/download/apm/ref-language-5.8.1d1.apm">
+    <version name="5.8.1d2" url="http://www.mayuli.com/acs-repository/download/apm/ref-language-5.8.1d2.apm">
         <owner url="mailto:jon@jongriffin.com">Jon Griffin</owner>
 	<release-date>2013-09-08</release-date>
         <maturity>2</maturity>
@@ -15,7 +15,7 @@
         <vendor url="http://www.mayuli.com">Mayuli Enterprises, LLC</vendor>
         <description format="text/plain">This is the ISO 639-1 language reference data (with languages names in English).</description>
 
-        <provides url="ref-language" version="5.8.1d1"/>
+        <provides url="ref-language" version="5.8.1d2"/>
         <requires url="acs-kernel" version="5.8.1d1"/>
         <requires url="acs-reference" version="5.8.1d1"/>
 
