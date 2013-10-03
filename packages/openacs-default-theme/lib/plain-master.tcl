@@ -47,7 +47,7 @@ if { [template::multirow exists navigation] } {
     }
     for {set i 1} {$i <= [template::multirow size navigation]} {incr i} {
         template::multirow get navigation $i
-        if { [lsearch -exact $navigation_groups $navigation(group)] < 0} {
+        if {$navigation(group) ni $navigation_groups} {
             lappend navigation_groups $navigation(group)
         }
     }
