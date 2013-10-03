@@ -262,7 +262,7 @@ namespace eval notification::email {
             # walk through the headers and extract each one
             set is_auto_reply_p 0
             while {$line ne ""} {
-                set next_line [lindex $file [expr {$i + 1}]]
+                set next_line [lindex $file $i+1]
                 if {[regexp {^[ ]*$} $next_line match] && $i > 0} {
                     set end_of_headers_p 1
                 }
