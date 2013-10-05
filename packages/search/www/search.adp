@@ -1,5 +1,6 @@
 <master>
 <property name="context">Results</property>
+<property name="doc(title)">@page_title@</property>
 
 <if @empty_p@ true>
     <p class="hint">#search.lt_You_must_specify_some#</p>

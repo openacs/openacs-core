@@ -1,4 +1,6 @@
 <master>
+<property name="doc(title)">Notification Package Documentation</property>
+
 <h1>Notifications Package</h1>
 
 <h2>The Idea</h2>
