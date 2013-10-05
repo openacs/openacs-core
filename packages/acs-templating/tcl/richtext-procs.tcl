@@ -19,7 +19,7 @@ namespace eval template::data::from_sql {}
 ad_proc -public template::util::richtext { command args } {
     Dispatch procedure for the richtext object
 } {
-  eval template::util::richtext::$command $args
+  template::util::richtext::$command {*}$args
 }
 
 ad_proc -public template::util::richtext::create {

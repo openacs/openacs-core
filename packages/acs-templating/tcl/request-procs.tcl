@@ -28,7 +28,7 @@ ad_proc -public template::request {
 } {
   Dispatch procedure for requests.
 } {
-  eval request::$command $args
+  request::$command {*}$args
 }
 
 ad_proc -public template::request::create { args } {
@@ -39,7 +39,7 @@ ad_proc -public template::request::create { args } {
                    Equivalent to calling set_param for each parameter, but
                    requiring slightly less typing.
 } {
-  eval template::form::create request $args
+  template::form::create request {*}$args
 
   set level [template::adp_level]
 
@@ -89,7 +89,7 @@ ad_proc -public template::request::set_param { name args } {
     @see template::element::create
 } {
   set level [template::adp_level]
-  eval template::element::create request $name $args
+  template::element::create request $name {*}$args
 
   # Set a local variable with the parameter value but no
   # clobber the variable if it already exists.

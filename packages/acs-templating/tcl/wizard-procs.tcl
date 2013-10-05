@@ -41,7 +41,7 @@ ad_proc -public template::wizard { command args } {
 
     @see template::wizard::submit
 } {
-    eval wizard::$command $args
+    wizard::$command {*}$args
 }
 
 # create a wizard from a set of steps
@@ -111,7 +111,7 @@ ad_proc -public template::wizard::create { args } {
 	    set step [string trim $step]
 	    if {$step eq {}} { continue }
 
-	    eval add $step
+	    add {*}$step
 	}
     }
 }

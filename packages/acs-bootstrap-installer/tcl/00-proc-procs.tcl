@@ -790,7 +790,7 @@ ad_proc -public callback {
     if {[info commands ::callback::${callback}::contract] eq ""} {
         error "Undefined callback $callback"
     }
-    eval ::callback::${callback}::contract $args
+    ::callback::${callback}::contract {*}$args
 
     set returns {}
 

@@ -27,7 +27,7 @@ namespace eval template::data::from_sql {}
 ad_proc -public template::util::date { command args } {
     Dispatch procedure for the date object
 } {
-  eval template::util::date::$command $args
+  template::util::date::$command {*}$args
 }
 
 ad_proc -public template::util::date::init {} {
@@ -1134,7 +1134,7 @@ ad_proc -public template::data::transform::date { element_ref } {
 ad_proc -public template::util::textdate { command args } {
     Dispatch procedure for the textdate object
 } {
-    eval template::util::textdate::$command $args
+    template::util::textdate::$command {*}$args
 }
 
 ad_proc -public template::util::textdate_localized_format {} {

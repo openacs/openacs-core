@@ -44,7 +44,7 @@ ad_proc -public template::element { command form_id element_id args } {
     
     @see template::form
 } {
-  eval template::element::$command $form_id $element_id $args
+  template::element::$command $form_id $element_id {*}$args
 }
 
 ad_proc -public template::element::create { form_id element_id args } {

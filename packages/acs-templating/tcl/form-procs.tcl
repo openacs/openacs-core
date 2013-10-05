@@ -49,7 +49,7 @@ ad_proc -public template::form { command args } {
     @see template::form::size
     @see template::element
 } {
-  eval template::form::$command $args
+  template::form::$command {*}$args
 }
 
 ad_proc -public template::form::create { id args } {
@@ -176,7 +176,7 @@ ad_proc -public template::form::create { id args } {
       set element [string trim $element]
       if {$element eq {}} { continue }
 
-      eval template::element create $id $element
+      template::element create $id {*}$element
     }
   }
 }

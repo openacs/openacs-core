@@ -978,7 +978,7 @@ ad_proc -public template::multirow {
             lappend sort_list [list $i $sortby]
         }
 
-        set sort_list [eval lsort $sort_args -index 1 [list $sort_list]]
+        set sort_list [lsort {*}$sort_args -index 1 $sort_list]
 
         
         # Now we have a list with two elms, (rownum, sort-by-value), sorted by sort-by-value

@@ -61,7 +61,7 @@ ad_proc -public template::tabstrip {
 } {
   Dispatch procedure for tabstrip.
 } {
-  eval template::tabstrip::$command $args
+  template::tabstrip::$command {*}$args
 }
 
 # Create a new tabbed page

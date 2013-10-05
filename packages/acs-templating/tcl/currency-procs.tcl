@@ -24,7 +24,7 @@ namespace eval template::widget::currency {}
 ad_proc -public template::util::currency { command args } {
     Dispatch procedure for the currency object
 } {
-  eval template::util::currency::$command $args
+  template::util::currency::$command {*}$args
 }
 
 ad_proc -public template::util::currency::create {

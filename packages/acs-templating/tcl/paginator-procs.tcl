@@ -35,7 +35,7 @@ ad_proc -public template::paginator { command args } {
     @see template::paginator::get_row_last
     @see template::paginator::reset
 } {
-  eval paginator::$command $args
+  paginator::$command {*}$args
 }
 
 ad_proc -public template::paginator::create { statement_name name query args } {
