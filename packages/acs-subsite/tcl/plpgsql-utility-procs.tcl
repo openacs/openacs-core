@@ -154,7 +154,7 @@ namespace eval plpgsql_utility {
 		set default ""
 	    } else {
 		if { [string index $dft 0] eq "'" } {
-		    set dft [string range $dft 1 [expr {[string length $dft] - 2}]]
+		    set dft [string range $dft 1 [string length $dft]-2]
 		}
 		set default ";${dft}"
 	    }

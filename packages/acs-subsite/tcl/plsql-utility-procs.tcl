@@ -30,7 +30,7 @@ namespace eval plsql_utility {
 	@creation-date 11/2000
 
     } {
-	set max_length_without_stem [expr $max_length - [expr {[string length $stem] + 1}]]
+	set max_length_without_stem [expr {$max_length - [expr {[string length $stem] + 1}]}]
 
 	set text "${table}_$column"
 	if { [string length $text] > $max_length_without_stem } {
@@ -41,7 +41,7 @@ namespace eval plsql_utility {
 	    }
 	    append text "_$column"
 	}
-	return [string toupper "[string range $text 0 [expr {$max_length_without_stem - 1}]]_$stem"]
+	return [string toupper "[string range $text 0 $max_length_without_stem-1]_$stem"]
     }
 
     ad_proc -public object_type_exists_p { object_type } {
@@ -163,7 +163,7 @@ object_type    => group,
 	#Trim to fit in $max_length character limit
 	set max_length_without_suffix [expr {$max_length - [string length $suffix]}]
 	if { [string length $stem] >= $max_length_without_suffix } {
-	    set stem [string range $stem 0 [expr {$max_length_without_suffix - 1}]]
+	    set stem [string range $stem 0 $max_length_without_suffix-1]
 	}
 	if { $stem eq "" } {
 	    error "generate_oracle_name failed to generate a safe oracle name from the stem \"$stem\"\n"
@@ -229,7 +229,7 @@ select acs_group.name('-2') from dual
 	    } else {
 		set default_string " DEFAULT [lindex $triple 2]"
 	    }
-	    lappend pieces [list "$attr" "IN ${table}.${attr}%TYPE${default_string}"]
+	    lappend pieces [list $attr "IN ${table}.${attr}%TYPE${default_string}"]
 	}
 	return [format_pieces -indent $indent $pieces]
 
@@ -298,7 +298,7 @@ select acs_group.name('-2') from dual
 	foreach triple $attr_list {
 	    set table [string toupper [string trim [lindex $triple 0]]]
 	    set column [string toupper [string trim [lindex $triple 1]]]
-	    if { [lsearch -exact $ignore [string toupper $column]] != -1 } {
+	    if {[string toupper $column] in $ignore} {
 		# Ignore this column
 		continue
 	    }

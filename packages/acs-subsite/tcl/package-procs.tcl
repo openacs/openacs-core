@@ -131,7 +131,7 @@ ad_proc -private package_create_attribute_list {
 	if { $limit_to ne "" } {
 	    # We have a limited list of arguments to use. Make sure
 	    # this attribute is one of them
-	    if { [lsearch -exact $limit_to $attr_column_name] == -1 } {
+	    if {$attr_column_name ni $limit_to} {
 		# This column is not in the list of allowed
 		# columns... ignore
 		continue
@@ -528,7 +528,7 @@ ad_proc -private package_object_view_helper {
 	}
 
 	# Do the column check first to include only the tables we need
-	if { [lsearch -exact $columns "$table.$column"] != -1 } {
+	if {"$table.$column" in $columns} {
 	    # We already have a column with the same name. Keep the
 	    # first one as it's lower in the type hierarchy.
 	    continue
@@ -536,7 +536,7 @@ ad_proc -private package_object_view_helper {
 	# first time we're seeing this column
 	lappend columns "${table}.${column}"
 
-	if { [lsearch -exact $tables $table] == -1 } {
+	if {$table ni $tables} {
 	    # First time we're seeing this table
 	    lappend tables $table
 	    lappend primary_keys "${table}.${object_column}"
@@ -545,7 +545,7 @@ ad_proc -private package_object_view_helper {
 
     set pk_formatted [list]
     for { set i 0 } { $i < [llength $primary_keys] - 1 } { incr i } {
-	lappend pk_formatted "[lindex $primary_keys $i] = [lindex $primary_keys [expr {$i +1}]]"
+	lappend pk_formatted "[lindex $primary_keys $i] = [lindex $primary_keys $i+1]"
     }
     return "SELECT [string tolower [join $columns ",\n       "]]
   FROM [string tolower [join $tables ", "]]

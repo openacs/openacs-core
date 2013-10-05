@@ -209,7 +209,7 @@ ad_proc -private datatype_to_sql_type {
         # treat db literals appropriately - null is much different
         # than 'null' - mbryzek
         set vars [list null sysdate]
-        if { [lsearch -exact $vars [string tolower $default]] == -1 } {
+        if {[string tolower $default] ni $vars} {
             set default "'$default'"
         }
         append sql " default $default"
@@ -452,7 +452,7 @@ ad_proc -public array_for_type {
         order by type_level, a.sort_order
     " {
 	# Enumeration values show up more than once...
-	if { [lsearch -exact $attr_list $name] == -1 } {
+	if {$name ni $attr_list} {
 	    lappend attr_list $name
 	    set attr_props(pretty_name:$name) $pretty_name
 	    set attr_props(datatype:$name) $datatype

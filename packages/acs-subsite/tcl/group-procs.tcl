@@ -394,7 +394,7 @@ ad_proc -public group::update {
     set columns { group_name join_policy description }
     set set_clauses [list]
     foreach name [array names row] {
-        if { [lsearch -exact $columns $name] == -1 } {
+        if {$name ni $columns} {
             error "Attribute '$name' isn't valid for groups."
         }
         lappend set_clauses "$name = :$name"
