@@ -44,13 +44,13 @@ ad_proc -public rp_internal_redirect {
 } {
 
     # protect from circular redirects
-    global __rp_internal_redirect_recursion_counter
-    if { ![info exists __rp_internal_redirect_recursion_counter] } {
-        set __rp_internal_redirect_recursion_counter 0
-    } elseif { $__rp_internal_redirect_recursion_counter > 10 } {
+
+    if { ![info exists ::__rp_internal_redirect_recursion_counter] } {
+        set ::__rp_internal_redirect_recursion_counter 0
+    } elseif { $::__rp_internal_redirect_recursion_counter > 10 } {
         error "rp_internal_redirect: Recursion limit exceeded."
     } else {
-        incr __rp_internal_redirect_recursion_counter
+        incr ::__rp_internal_redirect_recursion_counter
     }
 
     if { [string is false $absolute_path_p] } {
@@ -316,12 +316,10 @@ ad_proc -private rp_invoke_proc { conn argv } {
         } error] }
     }
 
-    global errorCode
     if { $errno } {
       # Uh-oh - an error occurred.
-      global errorInfo
-      ds_add rp [list registered_proc [list $proc $arg] $startclicks [clock clicks -milliseconds] "error" $errorInfo]
-      rp_debug "error in $proc for [ns_conn method] [ns_conn url]?[ns_conn query] errno is $errno message is $errorInfo"
+      ds_add rp [list registered_proc [list $proc $arg] $startclicks [clock clicks -milliseconds] "error" $::errorInfo]
+      rp_debug "error in $proc for [ns_conn method] [ns_conn url]?[ns_conn query] errno is $errno message is $::errorInfo"
       rp_report_error
     } else {
       ds_add rp [list registered_proc [list $proc $arg] $startclicks [clock clicks -milliseconds]]
@@ -890,7 +888,7 @@ ad_proc -private rp_handler {} {
                                [apm_package_url_resolution [ad_conn package_key]]]
 
     foreach resolve_value $resolve_values {
-        foreach {root match_prefix} $resolve_value {}
+	lassign $resolve_value root match_prefix
         set extra_url [ad_conn extra_url]
         if { $match_prefix ne "" } {
             if { [string first $match_prefix $extra_url] == 0 } {
@@ -907,6 +905,7 @@ ad_proc -private rp_handler {} {
             }
         }
         ds_add rp [list notice "Trying rp_serve_abstract_file $root/$extra_url" $startclicks [clock clicks -milliseconds]]
+
         ad_try {
             rp_serve_abstract_file "$root/$extra_url"
             set tcl_url2file([ad_conn url]) [ad_conn file]
@@ -942,7 +941,7 @@ ad_proc -private rp_handler {} {
 
     foreach prefix [rp_path_prefixes $extra_url] {
         foreach resolve_value $resolve_values {
-            foreach {root match_prefix} $resolve_value {}
+	    lassign $resolve_value root match_prefix
             set extra_url [ad_conn extra_url]
             if { $match_prefix ne "" } {
                 if { [string first $match_prefix $extra_url] == 0 } {
@@ -1085,9 +1084,9 @@ ad_proc -public rp_serve_concrete_file {file} {
             rp_finish_serving_page
             ds_add rp [list serve_file [list $file $handler] $startclicks [clock clicks -milliseconds]]
         } error]] } {
-            global errorCode errorInfo
-            ds_add rp [list serve_file [list $file $handler] $startclicks [clock clicks -milliseconds] error "$errorCode: $errorInfo"]
-            return -code $errno -errorcode $errorCode -errorinfo $errorInfo $error
+            ds_add rp [list serve_file [list $file $handler] $startclicks [clock clicks -milliseconds] \
+			   error "$::errorCode: $::errorInfo"]
+            return -code $errno -errorcode $::errorCode -errorinfo $::errorInfo $error
         }
     } else {
         # Some other random kind of file - guess the type and return it.
@@ -1098,7 +1097,7 @@ ad_proc -public rp_serve_concrete_file {file} {
                 ad_raise notfound
             } 
         } 
-        if {[string equal $extension ".xql"]
+        if {$extension eq ".xql"
             && ![parameter::get -parameter ServeXQLFiles -package_id [ad_acs_kernel_id] -default 0] } { 
                 ad_raise notfound
         } else { 

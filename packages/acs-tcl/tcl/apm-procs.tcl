@@ -195,7 +195,7 @@ ad_proc apm_package_list_url_resolution {
     global apm_package_url_resolution
 
     foreach package $package_list {
-        foreach {package_key dependency_type} $package {}
+	lassign $package package_key dependency_type
         if { [info exists apm_visited_package_keys($package_key)] } {
             continue
         }
@@ -235,7 +235,7 @@ ad_proc apm_package_list_url_resolution {
 
     # Make sure old versions work ...
     foreach package $package_list {
-        foreach {package_key dependency_type} $package {}
+	lassign $package package_key dependency_type
         set inherit_templates_p t
 #fix!
         catch { db_1row get_inherit_templates_p {} }
@@ -2097,8 +2097,7 @@ ad_proc -public apm::convert_type {
     apm_parameter_sync $new_package_key $package_id
     
     foreach inherited_package_key [apm_package_inherit_order $new_package_key] {
-        if { [lsearch -exact [apm_package_inherit_order $old_package_key] $inherited_package_key]
-             == -1 } {
+        if {$inherited_package_key ni [apm_package_inherit_order $old_package_key]} {
             apm_invoke_callback_proc \
                 -package_key $inherited_package_key \
                 -type after-instantiate \
