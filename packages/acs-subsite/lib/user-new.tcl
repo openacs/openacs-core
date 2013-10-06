@@ -21,7 +21,7 @@ array set parameter_defaults {
     return_url {}
 }
 foreach parameter [array names parameter_defaults] { 
-    if { (![info exists $parameter] || $$parameter eq "") } { 
+    if { (![info exists $parameter] || $parameter eq "") } { 
         set $parameter $parameter_defaults($parameter)
     }
 }
