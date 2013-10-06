@@ -752,7 +752,7 @@ ad_proc -public template::get_resource_path {} {
     Get the template directory
     The body is doublequoted, so it is interpreted when this file is read
 } "
-  return \"[file dir [file dir [info script]]]/resources\"
+  return \"[file dirname [file dirname [info script]]]/resources\"
 "
 
 
