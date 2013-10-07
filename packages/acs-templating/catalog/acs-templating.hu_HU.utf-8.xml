@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<message_catalog package_key="acs-templating" locale="hu_HU" charset="utf-8">
-
-  <msg key="No_row_pretty_plural">Nincsenek %row_pretty_plural%.</msg>
-  <msg key="required">kötelező megadni</msg>
-  <msg key="Spellcheck">Helyesírás-ellenőrzés</msg>
-</message_catalog>
