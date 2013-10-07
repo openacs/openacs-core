@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<message_catalog package_key="acs-admin" locale="de_DE" charset="ISO-8859-1">
+
+  <msg key="No">Nein</msg>
+  <msg key="Yes">Ja</msg>
+</message_catalog>
