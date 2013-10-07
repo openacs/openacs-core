@@ -251,18 +251,12 @@ ad_proc -public template::adp_eval { coderef } {
 
     @return The output produced by the compiled template code.
 } {
-  upvar $coderef code
+  upvar $coderef code __adp_output output
+  lappend ::template::parse_level [expr {[info level]-1}]
 
-  eval "uplevel {
-    lappend ::template::parse_level \[info level\]
+  uplevel $code
 
-    $code
-
-    template::util::lpop ::template::parse_level
-  }"
-
-  upvar __adp_output output
-
+  template::util::lpop ::template::parse_level
   return $output
 }
 
