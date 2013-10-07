@@ -1,4 +1,5 @@
 <master>
+<property name="doc(title)">OpenACS Documentation</property>
 <center>
 <table border="0" cellpadding="8" cellspacing="0" width="80%">
 
