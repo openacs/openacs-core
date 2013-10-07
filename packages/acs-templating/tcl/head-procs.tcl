@@ -18,30 +18,23 @@ ad_proc -private template::reset_request_vars {} {
     returned document.  This should be called at the beginning of any request
     handled by the templating system.
 } {
-    variable ::template::head::scripts
-    array unset scripts
-    array set scripts [list]
+    array unset ::template::head::scripts
+    #array set ::template::head::scripts [list]
 
-    variable ::template::head::links
-    array unset links
-    array set links [list]
+    array unset ::template::head::links
+    #array set ::template::head::links [list]
 
-    variable ::template::head::metas
-    array unset metas
-    array set metas [list]
+    array unset ::template::head::metas
+    #array set ::template::head::metas [list]
 
-    variable ::template::body_handlers
-    array unset body_handlers
-    array set body_handlers [list]
+    array unset ::template::body_handlers
+    #array set ::template::head::body_handlers [list]
 
-    variable ::template::body_scripts
-    array unset body_scripts
-    set body_scripts [list]
+    array unset ::template::body_scripts
+    #array set ::template::body_scripts [list]
 
-    variable ::template::headers
-    set headers [list]
-    variable ::template::footers
-    set footers [list]
+    set ::template::headers [list]
+    set ::template::footers [list]
 }
 
 ad_proc -public template::head::add_script {
