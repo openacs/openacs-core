@@ -139,8 +139,7 @@ namespace eval template {
         set __adp_stub "[acs_root_dir]/packages/$package_key/www$rest"
 
         # Set the parse level
-        variable parse_level
-        lappend parse_level [info level]
+        lappend ::templating::parse_level [info level]
 
         # execute the code to prepare the form(s) for a template
         adp_prepare

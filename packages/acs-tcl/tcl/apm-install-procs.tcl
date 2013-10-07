@@ -2224,7 +2224,6 @@ ad_proc -public apm::process_install_xml {
         set ids(MAIN_SITE) [subsite::main_site_id]
     }
 
-    variable ::template::parse_level
     lappend ::template::parse_level [info level]
 
     set root_node [apm_load_install_xml $filename $binds] 
@@ -2249,7 +2248,7 @@ ad_proc -public apm::process_install_xml {
     }
 
     # pop off parse level
-    template::util::lpop parse_level
+    template::util::lpop ::template::parse_level
 
     return $out
 }

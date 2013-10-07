@@ -50,13 +50,12 @@ ad_proc -public template::adp_include {
 } {
   # set the stack frame at which the template is being parsed so that
   # other procedures can reference variables cleanly
-  variable parse_level
-  lappend parse_level [expr {[info level] - $uplevel}]
+  lappend ::template::parse_level [expr {[info level] - $uplevel}]
 
   set __adp_out [template::adp_parse [template::util::url_to_file $src] $varlist]
 
   # pop off parse level
-  template::util::lpop parse_level
+  template::util::lpop ::template::parse_level
 
   return $__adp_out
 }
@@ -100,8 +99,7 @@ ad_proc -private template::adp_parse { __adp_stub __args } {
   
   # set the stack frame at which the template is being parsed so that
   # other procedures can reference variables cleanly
-  variable parse_level
-  lappend parse_level [info level]
+  lappend ::template::parse_level [info level]
   
   # execute the code to prepare the data sources for a template
   set return_code [catch { 
@@ -183,7 +181,7 @@ ad_proc -private template::adp_parse { __adp_stub __args } {
   set s_errorCode $errorCode
 
   # Always pop off the parse_level no matter how we exit
-  template::util::lpop parse_level
+  template::util::lpop ::template::parse_level
 
   switch $return_code {
     0 - 2 {
@@ -256,8 +254,6 @@ ad_proc -public template::adp_eval { coderef } {
   upvar $coderef code
 
   eval "uplevel {
-
-    variable ::template::parse_level
     lappend ::template::parse_level \[info level\]
 
     $code
@@ -286,15 +282,14 @@ ad_proc -public template::adp_level { { up "" } } {
 } {
   set result ""
 
-  variable parse_level
   # when serving a page, this variable is always defined.
   # but we need to check it for the case of isolated compilation
 
-  if { [info exists parse_level] } {
+  if { [info exists ::template::parse_level] } {
     if {$up eq ""} {
-      set result [lindex $parse_level end]
+      set result [lindex $::template::parse_level end]
     } else {
-      set result [lindex $parse_level [llength $parse_level]-$up]
+      set result [lindex $::template::parse_level [llength $::template::parse_level]-$up]
     }
   }
 
@@ -305,8 +300,7 @@ ad_proc -public template::adp_level { { up "" } } {
 ad_proc -public template::adp_levels {} {
     @return all stack frame levels
 } {
-  variable parse_level
-  if { [info exists parse_level] } {return $parse_level}
+  if { [info exists ::template::parse_level] } {return $::template::parse_level}
   return ""
 }
 

@@ -95,11 +95,11 @@ ad_proc -public get_server_root {} {
 ad_proc adp_parse_ad_conn_file {} {
     handle a request for an adp and/or tcl file in the template system.
 } {
-    namespace eval template variable parse_level ""
-    #ns_log debug "adp_parse_ad_conn_file => file '[file root [ad_conn file]]'"
+    set ::template::parse_level ""
+    #ns_log debug "adp_parse_ad_conn_file => file '[file rootname [ad_conn file]]'"
     template::reset_request_vars
 
-    set parsed_template [template::adp_parse [file root [ad_conn file]] {}]
+    set parsed_template [template::adp_parse [file rootname [ad_conn file]] {}]
 
     if {$parsed_template ne ""} {
         

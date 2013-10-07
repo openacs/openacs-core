@@ -1374,7 +1374,7 @@ ad_proc -private rp_handle_tcl_request {} {
   Sets up the stack of datasource frames, in case the page is templated.
 
 } {
-    namespace eval template {variable parse_level [info level]}
+    set ::template::parse_level [info level]
     source [ad_conn file]
 }
 
