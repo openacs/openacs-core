@@ -12,7 +12,7 @@ ad_library {
 # The User Namespace
 namespace eval oacs::user {
 
-    ad_proc -public get {
+    ad_proc -deprecated -public get {
         {-user_id:required}
         {-array:required}
     } {
