@@ -23,7 +23,7 @@ db_transaction {
 	}
 
 	default {
-	    ad_return complaint 1 "Dependency Entry Error: Depenendencies are either interfaces or requirements."
+	    ad_return_complaint 1 "Dependency Entry Error: Depenendencies are either interfaces or requirements."
 	}
     }
     apm_package_install_spec $version_id
