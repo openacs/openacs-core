@@ -144,7 +144,13 @@ ad_proc rp_form_update { name value } {
     return $form
 }
 
-ad_proc ad_return { args } {
+#
+# GN: maybe this function was useful for ancient versions of tcl, but
+# unless i oversee something, it does not make any sense. The comment
+# argues, that "return -code ..." ignores the error code, but then the
+# function uses "return -code ..." to fix this...
+#
+ad_proc -deprecated ad_return { args } {
 
   Works like the "return" Tcl command, with one difference. Where
   "return" will always return TCL_RETURN, regardless of the -code
