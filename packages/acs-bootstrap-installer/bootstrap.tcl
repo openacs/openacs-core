@@ -19,6 +19,8 @@ nsv_set proc_source_file . ""
 # Initialize ad_after_server_initialization.
 nsv_set ad_after_server_initialization . ""
 
+ns_log Notice "bootstrap begin encoding [encoding system]"
+
 ###
 #
 # Bootstrapping code.
@@ -175,7 +177,7 @@ set errno [catch {
 	bootstrap_fatal_error "The request processor routines have not been loaded."
     }
 
-
+    ns_log Notice "bootstrap finished encoding [encoding system]"
     ns_log Notice "$proc_name: Done loading OpenACS."
 }]
 
