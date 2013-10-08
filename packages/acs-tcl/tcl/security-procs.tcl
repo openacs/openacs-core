@@ -1565,7 +1565,7 @@ ad_proc -private security::get_https_port {} {
 
 	if {$secure_port eq ""} {
 	    # nsopenssl 3 has variable locations for the secure port, openacs standardized at:
-	    set secure_port [ns_config -int "ns/server/[ns_info server]/module/nsopenssl/ssldriver/users" port 443]
+	    set secure_port [ns_config -int "ns/server/[ns_info server]/module/nsopenssl/ssldriver/users" port]
 	}
     }
 
