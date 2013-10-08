@@ -620,18 +620,13 @@ ad_proc -public ad_get_login_url {
         set url /
     }
 
-    set UseHostnameDomainforReg [parameter::get -package_id [apm_package_id_from_key acs-tcl] -parameter UseHostnameDomainforReg -default 0]
+    set UseHostnameDomainforReg [parameter::get -package_id [apm_package_id_from_key acs-tcl] \
+				     -parameter UseHostnameDomainforReg -default 0]
     if { $UseHostnameDomainforReg } {
 
         # get config.tcl's hostname
-        set nssock [ns_config ns/server/[ns_info server]/modules nssock]
-        set nsunix [ns_config ns/server/[ns_info server]/modules nsunix]
-        if {$nsunix ne ""} {
-            set driver nsunix
-        } else {
-            set driver nssock
-        }
-        set config_hostname [ns_config ns/server/[ns_info server]/module/$driver Hostname]
+	set config_hostname [ns_config [ns_driversection] hostname]
+
         set current_location [util_current_location]
         # if current domain and hostdomain are different (and UseHostnameDomain), revise url
         if { ![string match -nocase "*${config_hostname}*" $current_location] } {
@@ -649,11 +644,17 @@ ad_proc -public ad_get_login_url {
 
             # revise url to use hostname's domain
             # if url points to a non / host_node, redirect to main hostname
-            set host_node_map_hosts_list [db_list -cache_key security-locations-host-names get_node_host_names "select host from host_node_map"]
+            set host_node_map_hosts_list [db_list -cache_key security-locations-host-names \
+					      get_node_host_names "select host from host_node_map"]
             if { [llength $host_node_map_hosts_list] > 0 } {
                 foreach hostname $host_node_map_hosts_list {
-                    if { [string match -nocase "http://${hostname}*" $url_decoded] || [string match -nocase "https://${hostname}*" $url_decoded] } {
-                        db_1row get_node_id_from_host_name "select node_id as host_node_id from host_node_map where host = :hostname"
+                    if { [string match -nocase "http://${hostname}*" $url_decoded] 
+			 || [string match -nocase "https://${hostname}*" $url_decoded] } {
+                        db_1row get_node_id_from_host_name {
+			    select node_id as host_node_id 
+			    from host_node_map 
+			    where host = :hostname
+			}
                         # site node already in url, so just switching domain.
                         if { ![regsub -- "${hostname}" $url_decoded "${config_hostname}" url_decoded] } {
                             ns_log Warning "ad_get_login_url(ref619): regsub was unable to modify url to hostname's domain. User may not appear to be logged-in after login. url_decoded: ${url_decoded} url: ${url}"
@@ -703,12 +704,20 @@ ad_proc -public ad_get_login_url {
                 }
                 # revise return_url to use hostname's domain
                 # if return_url points to a non / host_node, redirect to main hostname
-                set host_node_map_hosts_list [db_list -cache_key security-locations-host-names get_node_host_names "select host from host_node_map"]
+                set host_node_map_hosts_list [db_list -cache_key security-locations-host-names \
+						  get_node_host_names "select host from host_node_map"]
                 if { [llength $host_node_map_hosts_list] > 0 } {
                     foreach hostname $host_node_map_hosts_list {
-                        if { [string match -nocase "http://${hostname}*" $return_url_decoded] || [string match -nocase "https://${hostname}*" $return_url_decoded] } {
-                            db_1row get_node_id_from_host_name "select node_id as host_node_id from host_node_map where host = :hostname"
-                            if { ![regsub -- "${hostname}" $return_url_decoded "${config_hostname}[site_node::get_url -node_id ${host_node_id} -notrailing]" return_url_decoded] } {
+                        if { [string match -nocase "http://${hostname}*" $return_url_decoded] \
+				 || [string match -nocase "https://${hostname}*" $return_url_decoded] } {
+                            db_1row get_node_id_from_host_name {
+				select node_id as host_node_id 
+				from host_node_map 
+				where host = :hostname
+			    }
+                            if { ![regsub -- ${hostname} $return_url_decoded \
+				       "${config_hostname}[site_node::get_url -node_id ${host_node_id} -notrailing]" \
+				       return_url_decoded] } {
                                 ns_log Warning "ad_get_login_url(ref672): regsub was unable to modify return_url to hostname's domain. User may not appear to be logged-in after login. return_url_decoded: ${return_url_decoded} return_url: ${return_url}"
                             } 
                         }
@@ -1538,31 +1547,25 @@ ad_proc -private security::get_https_port {} {
 
     @author Peter Marklund
 } {
-    set secure_port ""
-
-   # decide if we are using nsssl or nsopenssl or nsssle, favor nsopenssl
-    set nsssl [ns_config ns/server/[ns_info server]/modules nsssl]
-    set nsopenssl [ns_config ns/server/[ns_info server]/modules nsopenssl]
-    set nsssle [ns_config ns/server/[ns_info server]/modules nsssle]
-    if { $nsopenssl ne "" } {
-        set sdriver nsopenssl
-    } elseif { $nsssl ne "" } {
-        set sdriver nsssl
-    } elseif { $nsssle ne "" } {
-        set sdriver nsssle
-    } else {
-        return ""
-    }
-     # ec_secure_location
-    # nsopenssl 3 has variable locations for the secure port, openacs standardized at:
-    set secure_port [ns_config -int "ns/server/[ns_info server]/module/$sdriver/ssldriver/users" port 443]
-    # nsssl, nsssle etc
+    # first try nsssl, supported by aolserver and naviserver
+    set secure_port [ns_config -int [ns_driversection -driver nsssl] port]
     if {$secure_port eq ""} {
-        set secure_port [ns_config -int "ns/server/[ns_info server]/module/$sdriver" port]
-    }
-    # checking nsopenssl 2.0 which has different names for the secure port etc, and is not supported with this version of OpenACS
-    if {$secure_port eq "" || $secure_port eq "443"} {
-        set secure_port [ns_config -int "ns/server/[ns_info server]/module/$sdriver" ServerPort 443]
+	# try "port" of nsopenssl
+	set secure_port [ns_config -int [ns_driversection -driver nsopenssl] port]
+
+	if {$secure_port eq ""} {
+	    # checking nsopenssl 2.0 which has different names for the secure port etc, 
+	    # and is not supported with this version of OpenACS
+	    set secure_port [ns_config -int [ns_driversection -driver nsopenssl] ServerPort]
+	}
+	# now try nsssl
+	if {$secure_port eq ""} {
+	    set secure_port [ns_config -int [ns_driversection -driver nsssle] port]
+	}
+
+	# ec_secure_location
+	# nsopenssl 3 has variable locations for the secure port, openacs standardized at:
+	set secure_port [ns_config -int "ns/server/[ns_info server]/module/$sdriver/ssldriver/users" port 443]
     }
 
     return $secure_port
@@ -1613,14 +1616,12 @@ ad_proc -private security::get_qualified_uri { url } {
 } {
     set uri [get_uri_part $url]
 
-    if { ![regexp {^/} $uri] } {
+    if { [string range $uri 0 0] ne "/" } {
         # Make relative URI qualified
-        set qualified_uri [ad_conn url]/$uri
-    } else {
-        set qualified_uri $uri
+        return [ad_conn url]/$uri
     }
 
-    return $qualified_uri
+    return $uri
 }
 
 ad_proc -private security::get_secure_location {} {
@@ -1662,14 +1663,14 @@ ad_proc -private security::get_insecure_location {} {
     set current_location [util_current_location]
     set http_prefix {http://}
 
-    if { [regexp $http_prefix $current_location] } {
+    if { [string match "$http_prefix*" $current_location] } {
         # Current location is already insecure - do nothing
         set insecure_location $current_location
     } else {
         # Current location is secure - use location from config file
         set insecure_location [ad_conn location]
         regsub -all {https://} $insecure_location "" insecure_location
-        if { ![regexp $http_prefix $insecure_location] } {
+        if { ![string match "$http_prefix*" $insecure_location] } {
             # Prepend http://
             set insecure_location ${http_prefix}${insecure_location}
         }
@@ -1699,32 +1700,17 @@ if {[ns_info name] ne "NaviServer"} {
 }
 
 ad_proc -public security::locations {} {
-    @return insecure location and secure location followed possibly by alternate insecure location(s)  as a list.
+    @return insecure location and secure location followed possibly by alternate insecure location(s) as a list.
 
-    The location consists of protocol://domain:port for website. This proc is ported from ec_insecure_location and ec_secure_location for reliably getting locations.  If acs-tcl's SuppressHttpPort parameter is true, then the alternate ec_insecure_location without port is appended to the list, since it is a valid alternate.  This proc also assumes hostnames from host_node_map table are accurate and legit.
+    The location consists of protocol://domain:port for website. This proc is ported 
+    from ec_insecure_location and ec_secure_location for reliably getting locations.  
+    If acs-tcl's SuppressHttpPort parameter is true, then the alternate ec_insecure_location 
+    without port is appended to the list, since it is a valid alternate.  
+    This proc also assumes hostnames from host_node_map table are accurate and legit.
 } {
     set locations [list]
     # following from ec_preferred_drivers
-    set driver ""
-    set sdriver ""
-    if {[ns_conn isconnected]} {
-        set hdrs [ns_conn headers]
-        set host [ns_set iget $hdrs host]
-        if {$host eq ""} {
-            set driver nssock
-        } 
-    }
-    #   Determine nssock or nsunix
-    if {$driver eq ""} {
-        # decide if we're using nssock or nsunix
-        set nssock [ns_config ns/server/[ns_info server]/modules nssock]
-        set nsunix [ns_config ns/server/[ns_info server]/modules nsunix]
-        if {$nsunix ne ""} {
-            set driver nsunix
-        } else {
-            set driver nssock
-        }
-    }
+    set driver "nssock"
     
     # decide if we are using nsssl or nsopenssl, favor nsopenssl
     set nsssl [ns_config ns/server/[ns_info server]/modules nsssl]
@@ -1815,7 +1801,8 @@ ad_proc -public security::locations {} {
     }
 
     # add locations from host_node_map 
-    set host_node_map_hosts_list [db_list -cache_key security-locations-host-names get_node_host_names "select host from host_node_map"]
+    set host_node_map_hosts_list [db_list -cache_key security-locations-host-names \
+				      get_node_host_names "select host from host_node_map"]
     # fastest place for handling this special case:
     if { $config_hostname ne $host_name } {
         ns_log Notice "security::locations adding $config_hostname since utl_current_location different than config.tcl."
@@ -1834,5 +1821,5 @@ ad_proc -public security::locations {} {
             }
         }
     }
-    return  $locations
+    return $locations
 }
