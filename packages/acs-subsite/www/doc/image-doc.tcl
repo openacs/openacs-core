@@ -17,9 +17,9 @@ Image can be included with a link of the form &lt;img src=&quot;/resources/acs-s
 <table border="0">
 }
 foreach i [glob ../resources/*.*] {
-   set name [file tail $i]
-   if {[file extension $name] eq ".js"} continue
-   append text {<tr><td><img src="/resources/acs-subsite/} $name {"></td><td> } $name {</td></tr>} \n
+    set name [file tail $i]
+    if {[file extension $name] in {.js .css}} continue
+    append text {<tr><td><img src="/resources/acs-subsite/} $name {"></td><td> } $name {</td></tr>} \n
 }
 append text "</table>"
 
