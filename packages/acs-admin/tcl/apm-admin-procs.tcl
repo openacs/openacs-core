@@ -508,6 +508,7 @@ ad_proc -private apm_build_repository {
 					file ${channel_dir}$pkg_info(package.key)-$pkg_info(name).apm:\
 					\n$errmsg\n$::errorCode,$::errorInfo"
 			    }
+			    file delete $tmp_filename
 			}
 			
 			set apm_url "${repository_url}$channel/$pkg_info(package.key)-$pkg_info(name).apm"
