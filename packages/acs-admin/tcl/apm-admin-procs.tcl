@@ -502,7 +502,7 @@ ad_proc -private apm_build_repository {
 			    close $fp
 			    
 			    lappend cmd "|" [apm_gzip_cmd] -c ">" $apm_file
-			    ns_log Notice "Executing: [ad_quotehtml $cmd]"
+			    ns_log Notice "Executing: $cmd"
 			    if {[catch "exec $cd_helper $packages_root_path $cmd" errmsg]} {
 				ns_log notice "Error during tar in repository creation for\
 					file ${channel_dir}$pkg_info(package.key)-$pkg_info(name).apm:\
