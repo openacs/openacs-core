@@ -4754,6 +4754,8 @@ ad_proc -public ad_job {
     expires, the client side will raise an error. Note that the
     executing job is not canceled but will run to its end.
 
+    @author Gustaf Neumann
+
     @param queue Name of job queue
     @param timeout timeout for job, might be 1:0 for 1 sec
     @param args the command to be executed
