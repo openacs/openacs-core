@@ -4737,3 +4737,35 @@ ad_proc util::external_url_p { url } {
     }
     return $external_url_p
 }
+
+ad_proc -public ad_job {
+    {-queue jobs}
+    {-timeout ""}
+    args
+} {
+
+    Convenience wrapper for simple usages of ns_job provided by
+    AOLServer and NaviServer. The provided command (args) is executed
+    in a separate thread of the specified job queue. On success the
+    function returns the result of the provided command.
+
+    If the queue does not exist, the queue is generated on the fly
+    with default settings. When the timeout is specified and it
+    expires, the client side will raise an error. Note that the
+    executing job is not canceled but will run to its end.
+
+    @param queue Name of job queue
+    @param timeout timeout for job, might be 1:0 for 1 sec
+    @param args the command to be executed
+    @return result of the specified command
+} {
+
+    if {$timeout ne ""} {
+	set timeout "-timeout $timeout"
+    }
+    if {$queue ni [ns_job queues]} {
+	ns_job create $queue
+    }
+    set j [ns_job queue $queue $args]
+    return [ns_job wait {*}$timeout $queue $j]
+}
