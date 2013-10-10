@@ -1702,29 +1702,37 @@ ad_proc -public ad_server_modules {} {
     Return the list of the available sever modules
     @author Gustaf Neumann
 } {
-    set module_list ""
+    if {[info exists ::acs::server_modules]} {
+	return $::acs::server_modules
+    }
+    set ::acs::server_modules ""
     set nssets [ns_configsection ns/server/[ns_info server]/modules]
     lappend nssets {*}[ns_configsection ns/modules]
     foreach nsset $nssets {
         foreach {module file} [ns_set array $nsset] {
 	    if {$file ne ""} {
-		lappend module_list $module
+		lappend ::acs::server_modules $module
 	    }
 	}
     }
-    return $module_list
+    return $::acs::server_modules
 }
 
 ad_proc -public security::driver {} {
     Return the secure driver if available
     @author Gustaf Neumann
 } {
+    if {[info exists ::acs::sdriver]} {
+	return $::acs::sdriver
+    }
+    set ::acs::sdriver ""
     set server_modules [ad_server_modules]
     foreach driver {nsssl nsopenssl nsssle} {
 	if {$driver ni $server_modules} continue
-	return $driver
+	set ::acs::sdriver $driver
+	break
     }
-    return ""
+    return $::acs::sdriver
 }
 
 
