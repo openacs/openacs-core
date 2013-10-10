@@ -147,7 +147,7 @@ object_type    => group,
 
     } {
 	
-	if { $include_object_id eq "t" } {
+	if { $include_object_id == "t" } {
 	    set id [db_nextval "acs_object_id_seq"]
 	    set suffix "_$id"
 	} else {
@@ -311,7 +311,7 @@ select acs_group.name('-2') from dual
 	    return ""
 	}
 	set return_value [join $this_columns ", "]
-	if { $start_with_comma eq "t" } {
+	if { $start_with_comma == "t" } {
 	    return ", $return_value"
 	}
 	return $return_value

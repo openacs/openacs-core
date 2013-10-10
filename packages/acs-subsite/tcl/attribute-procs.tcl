@@ -59,7 +59,7 @@ ad_proc -public exists_p {
     specified name. 0 otherwise
     
 } {
-    if { $convert_p eq "t" } {
+    if { $convert_p == "t" } {
 	set attribute [plsql_utility::generate_oracle_name $orig_attribute]
     } else {
 	set attribute $orig_attribute
@@ -71,7 +71,7 @@ ad_proc -public exists_p {
        and a.object_type = :object_type
     } -default 0]
 	
-    if { $attr_exists_p || $convert_p eq "f" } {
+    if { $attr_exists_p || $convert_p == "f" } {
 	# If the attribute exists, o
         return $attr_exists_p
     }    
@@ -574,7 +574,7 @@ ad_proc -public add_form_elements {
 		where enum.attribute_id = :attribute_id 
 		order by enum.sort_order
 	    }]
-	    if {$required_p eq "f"} {
+	    if {$required_p == "f"} {
 		# This is not a required option list... offer a default
 		lappend option_list [list " (no value) " ""]
 	    }

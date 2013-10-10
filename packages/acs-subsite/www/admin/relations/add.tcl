@@ -25,14 +25,14 @@ ad_page_contract {
     add_party_url:onevalue
 } -validate {
     party_in_scope_p -requires {party_id:notnull} {
-	if { $allow_out_of_scope_p eq "f" && \
-		![application_group::contains_party_p -party_id $party_id]} {
+	if { $allow_out_of_scope_p == "f" 
+	     && ![application_group::contains_party_p -party_id $party_id]} {
 	    ad_complain "The party either does not exist or does not belong to this subsite."
 	}
     }
     rel_type_valid_p -requires {group_id:notnull rel_type:notnull exact_p:notnull} {
-	if {$exact_p eq "t" && \
-	    ![relation_type_is_valid_to_group_p -group_id $group_id $rel_type]} {
+	if {$exact_p == "t" 
+	    && ![relation_type_is_valid_to_group_p -group_id $group_id $rel_type]} {
 	    ad_complain "Relations of this type to this group would violate a relational constraint."
 	}
     }
@@ -92,8 +92,8 @@ if {$ancestor_rel_type eq "membership_rel"} {
     set member_state ""
 }
 
-if { $exact_p eq "f" && \
-	[subsite::util::sub_type_exists_p $rel_type] } {
+if { $exact_p == "f" 
+     && [subsite::util::sub_type_exists_p $rel_type] } {
 
     # Sub rel-types exist... select one
     set exact_p "t"
@@ -202,7 +202,7 @@ if {$party_id ne ""} {
     # the list of parties that can be added to $group_id with a relation
     # of type $rel_type.
     
-    if {$allow_out_of_scope_p eq "f"} {
+    if {$allow_out_of_scope_p == "f"} {
 	set scope_query [db_map select_parties_scope_query]
 
 	set scope_clause "

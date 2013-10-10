@@ -143,8 +143,8 @@ foreach {type url} $redirects_for_type {
 }
 
 
-if { $party_type_exact_p eq "f" && \
-	[subsite::util::sub_type_exists_p $party_type] } {
+if { $party_type_exact_p == "f" 
+     && [subsite::util::sub_type_exists_p $party_type] } {
 
     # Sub party-types exist... select one
     set party_type_exact_p "t"

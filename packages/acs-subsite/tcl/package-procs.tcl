@@ -312,7 +312,7 @@ ad_proc -private package_create {
     lappend plsql [list "package" "create_package" [package_generate_spec $object_type]]
     lappend plsql [list "package body" "create_package_body" [package_generate_body $object_type]]
 
-    if { $debug_p eq "t" } {
+    if { $debug_p == "t" } {
 	foreach pair $plsql {
 #	    append text "[plsql_utility::parse_sql [lindex $pair 1]]\n\n"
 	    append text [lindex $pair 2]
@@ -475,7 +475,7 @@ ad_proc -public package_object_view {
     @param start_with The highest parent object type for which to include attributes
     @param object_type The object for which to create a package spec
 } {
-    if {$refresh_p eq "t"} {
+    if {$refresh_p == "t"} {
 	package_object_view_reset $object_type
     }
     return [util_memoize "package_object_view_helper -start_with $start_with $object_type"]

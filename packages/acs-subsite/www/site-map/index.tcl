@@ -46,7 +46,7 @@ set context [list $page_title]
 set user_id [ad_conn user_id]
 
 db_foreach path_select {} {
-    if {$node_id != $root_id && $admin_p eq "t"} {
+    if {$node_id != $root_id && $admin_p == "t"} {
         append head "<a href=\".?[export_vars -url {expand:multiple {root_id $node_id}}]\">"
     }
     if {$name eq ""} {
@@ -55,11 +55,11 @@ db_foreach path_select {} {
 	append head $name
     }
     
-    if {$node_id != $root_id && $admin_p eq "t"} {
+    if {$node_id != $root_id && $admin_p == "t"} {
 	append head "</a>"
     }
     
-    if {$directory_p eq "t"} {
+    if {$directory_p == "t"} {
 	append head "/"
     }
 } if_no_rows {
@@ -149,7 +149,7 @@ db_foreach nodes_select {} {
 
     if { [lsearch -exact $open_nodes $parent_id] == -1 && $parent_id ne "" && $mylevel > 2 } { continue } 
         
-    if {$directory_p eq "t"} {
+    if {$directory_p == "t"} {
 	set add_folder_url "?[export_vars -url {expand:multiple root_id node_id {new_parent $node_id} {new_type folder}}]"
 	if {$object_id eq ""} {
 	    set mount_url "mount?[export_vars -url {expand:multiple root_id node_id}]"

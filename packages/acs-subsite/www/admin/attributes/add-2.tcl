@@ -39,7 +39,7 @@ if { [attribute::exists_p $object_type $pretty_name] } {
 
 # Right now, we do not support multiple values for attributes
 set max_n_values 1
-if {$required_p eq "t"} {
+if {$required_p == "t"} {
     set min_n_values 1
 } else {
     set min_n_values 0

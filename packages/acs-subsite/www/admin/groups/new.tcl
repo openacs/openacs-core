@@ -95,8 +95,8 @@ set export_var_list [list group_id group_type \
 ## constraint violations in the database because the constraints are enforced
 ## by triggers in the DB.
 
-if { $group_type_exact_p eq "f" && \
-	[subsite::util::sub_type_exists_p $group_type] } {
+if { $group_type_exact_p == "f" 
+     && [subsite::util::sub_type_exists_p $group_type] } {
 
     # Sub rel-types exist... select one
     set group_type_exact_p "t"

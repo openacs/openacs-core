@@ -136,7 +136,7 @@ namespace eval group_type {
         lappend plsql_drop [list remove_rel_types "delete from group_type_rels where group_type = :group_type"]
         lappend plsql [list copy_rel_types [db_map copy_rel_types]]
 
-        if { $execute_p eq "f" } {
+        if { $execute_p == "f" } {
 	    set text "-- Create script"
 	    foreach pair $plsql {
 		append text "[plsql_utility::parse_sql [lindex $pair 1]]\n\n"

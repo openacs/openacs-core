@@ -183,7 +183,7 @@ namespace eval rel_types {
 	# The following create table statement commits the transaction. If it
 	# fails, we roll back what we've done
 
-	if {$create_table_p eq "t"} {
+	if {$create_table_p == "t"} {
 	    if {[catch {db_exec_plsql create_table "
 		create table $table_name (
         	   rel_id constraint $fk_constraint_name

@@ -24,7 +24,7 @@ if { ![db_0or1row select_pretty_name {
     return
 }
 
-if {$dynamic_p ne "t" } {
+if {$dynamic_p != "t" } {
     ad_return_error "Cannot administer group type" "Group type \"$group_type\" can only be administered by programmers"
 }
 

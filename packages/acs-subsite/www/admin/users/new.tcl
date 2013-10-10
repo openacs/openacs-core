@@ -86,8 +86,8 @@ db_1row select_type_info {
 ## constraint violations in the database because the constraints are enforced
 ## by triggers in the DB.
 
-if { $user_type_exact_p eq "f" && \
-	[subsite::util::sub_type_exists_p $user_type] } {
+if { $user_type_exact_p == "f" 
+     && [subsite::util::sub_type_exists_p $user_type] } {
 
     # Sub user-types exist... select one
     set user_type_exact_p "t"
@@ -243,7 +243,7 @@ The user was added by $creation_name from [ad_conn url]."
 
     }
 
-	if { $email_verified_p eq "f" } {
+	if { $email_verified_p == "f" } {
 	
 	    set row_id [db_string user_new_2_rowid_for_email "select rowid from users where user_id = :user_id"]
 	    # the user has to come back and activate their account
