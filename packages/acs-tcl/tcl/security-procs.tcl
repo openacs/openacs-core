@@ -1545,30 +1545,28 @@ ad_proc -private security::get_https_port {} {
     
     @return The HTTPS port or the empty string if none is configured.
 
-    @author Peter Marklund
+    @author Gustaf Neumann
 } {
-    # first try nsssl, supported by aolserver and naviserver
-    set secure_port [ns_config -int [ns_driversection -driver nsssl] port]
-    if {$secure_port eq ""} {
-	# try "port" of nsopenssl
-	set secure_port [ns_config -int [ns_driversection -driver nsopenssl] port]
 
-	if {$secure_port eq ""} {
-	    # checking nsopenssl 2.0 which has different names for the secure port etc, 
-	    # and is not supported with this version of OpenACS
-	    set secure_port [ns_config -int [ns_driversection -driver nsopenssl] ServerPort]
-	}
-	# now try nsssl
-	if {$secure_port eq ""} {
-	    set secure_port [ns_config -int [ns_driversection -driver nsssle] port]
-	}
+    # get available server modules
+    set sdriver [security::driver]
 
+    if {$sdriver eq ""} {
+	return ""
+    }
+
+    set secure_port [ns_config -int [ns_driversection -driver $driver] port]
+    if {$secure_port eq "" && $driver eq "nsopenssl"} {
+	# checking nsopenssl 2.0 which has different names for the secure port etc, 
+	# and is not supported with this version of OpenACS
+	set secure_port [ns_config -int [ns_driversection -driver nsopenssl] ServerPort]
 	if {$secure_port eq ""} {
-	    # nsopenssl 3 has variable locations for the secure port, openacs standardized at:
+	    # nsopenssl 3 has variable locations for the secure
+	    # port, openacs standardized at:
 	    set secure_port [ns_config -int "ns/server/[ns_info server]/module/nsopenssl/ssldriver/users" port]
 	}
     }
-
+    
     return $secure_port
 }
 
@@ -1700,6 +1698,36 @@ if {[ns_info name] ne "NaviServer"} {
     }
 }
 
+ad_proc -public ad_server_modules {} {
+    Return the list of the available sever modules
+    @author Gustaf Neumann
+} {
+    set module_list ""
+    set nssets [ns_configsection ns/server/[ns_info server]/modules]
+    lappend nssets {*}[ns_configsection ns/modules]
+    foreach nsset $nssets {
+        foreach {module file} [ns_set array $nsset] {
+	    if {$file ne ""} {
+		lappend module_list $module
+	    }
+	}
+    }
+    return $module_list
+}
+
+ad_proc -public security::driver {} {
+    Return the secure driver if available
+    @author Gustaf Neumann
+} {
+    set server_modules [ad_server_modules]
+    foreach driver {nsssl nsopenssl nsssle} {
+	if {$driver ni $server_modules} continue
+	return $driver
+    }
+    return ""
+}
+
+
 ad_proc -public security::locations {} {
     @return insecure location and secure location followed possibly by alternate insecure location(s) as a list.
 
@@ -1712,20 +1740,7 @@ ad_proc -public security::locations {} {
     set locations [list]
     # following from ec_preferred_drivers
     set driver "nssock"
-    
-    # decide if we are using nsssl or nsopenssl, favor nsopenssl
-    set nsssl [ns_config ns/server/[ns_info server]/modules nsssl]
-    set nsopenssl [ns_config ns/server/[ns_info server]/modules nsopenssl]
-    set nsssle [ns_config ns/server/[ns_info server]/modules nsssle]
-    if { $nsopenssl ne ""} {
-        set sdriver nsopenssl
-    } elseif { $nsssl ne ""} {
-        set sdriver nsssl
-    } elseif { $nsssle ne "" } {
-        set sdriver nsssle
-    } else {
-        set sdriver ""
-    }
+    set sdriver [security::driver]
 
     # set the driver results
     array set drivers [list driver $driver sdriver $sdriver]
