@@ -1928,7 +1928,7 @@ proc dom::Trim nodeid {
     switch $node(node:nodeType) {
 
 	textNode {
-	    if {![string length [string trim $node(node:nodeValue)]]} {
+	    if {[string trim $node(node:nodeValue)] eq ""} {
 		node removeChild $node(node:parentNode) $nodeid
 	    }
 	}
