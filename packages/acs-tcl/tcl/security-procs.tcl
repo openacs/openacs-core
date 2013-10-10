@@ -504,9 +504,9 @@ ad_proc -private sec_generate_session_id_cookie {} {
     catch { 
         set login_list [sec_login_read_cookie]
       	if {[lindex $login_list end] == 1} {
-	        set discard f
+	    set discard f
             set max_age inf
-	    }
+	}
     }
     ad_set_signed_cookie -discard $discard -replace t -max_age $max_age -domain $domain \
 	    "ad_session_id" "$session_id,$user_id,$login_level,[ns_time]"
@@ -1289,11 +1289,11 @@ ad_proc -public ad_get_client_property {
 
     set cmd [list sec_lookup_property $id $module $name]
 
-    if { $cache_only eq "t" && ![util_memoize_cached_p $cmd] } {
+    if { $cache_only == "t" && ![util_memoize_cached_p $cmd] } {
 	return ""
     }
 
-    if { $cache ne "t" } {
+    if { $cache != "t" } {
 	util_memoize_flush $cmd
     }
 
@@ -1303,7 +1303,7 @@ ad_proc -public ad_get_client_property {
     }
     lassign $property value secure_p
     
-    if { $secure_p ne "f" && ![security::secure_conn_p] } {
+    if { $secure_p != "f" && ![security::secure_conn_p] } {
 	return ""
     }
 
@@ -1332,7 +1332,7 @@ ad_proc -public ad_set_client_property {
 
 } {
 
-    if { $secure ne "f" && ![security::secure_conn_p] } {
+    if { $secure != "f" && ![security::secure_conn_p] } {
 	error "Unable to set secure property in insecure or invalid session"
     }
 
@@ -1340,7 +1340,7 @@ ad_proc -public ad_set_client_property {
         set session_id [ad_conn session_id]
     }
 
-    if { $persistent eq "t" } {
+    if { $persistent == "t" } {
         # Write to database - either defer, or write immediately. First delete the old
         # value if any; then insert the new one.
 	
@@ -1365,7 +1365,7 @@ ad_proc -public ad_set_client_property {
 
             db_dml prop_insert_dml ""
 
-            if { $clob eq "t" && $clob_update_dml ne "" } {
+            if { $clob == "t" && $clob_update_dml ne "" } {
                 db_dml prop_update_dml_clob "" -clobs [list $value]
             } else {
                 db_dml prop_update_dml ""
@@ -1779,7 +1779,7 @@ ad_proc -public security::locations {} {
 
     set insecure_location "http://${host_name}"
     set host_map_http_port ""
-    if { $insecure_port ne "" && $insecure_port ne 80 } {
+    if { $insecure_port ne "" && $insecure_port != 80 } {
         set alt_insecure_location $insecure_location
         append insecure_location ":$insecure_port"
         set host_map_http_port ":$insecure_port"

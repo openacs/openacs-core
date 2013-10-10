@@ -974,7 +974,7 @@ ad_proc -private apm_package_install {
                 apm_callback_and_log $callback "<p> $error_text </p>"
             } 
 
-        } elseif { $package_type eq "apm_service" && $singleton_p eq "t" } {
+        } elseif { $package_type eq "apm_service" && $singleton_p == "t" } {
             # This is a singleton package.  Instantiate it automatically, but don't mount.
 
             # Using empty context_id

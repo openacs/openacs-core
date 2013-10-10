@@ -484,7 +484,7 @@ ad_proc -public site_node::get_from_url {
             if {[nsv_exists site_nodes $url]} {
                 array set node [nsv_get site_nodes $url]
 
-                if {$node(pattern_p) eq "t" && $node(object_id) ne ""} {
+                if {$node(pattern_p) == "t" && $node(object_id) ne ""} {
                     return [array get node]
                 }
             }

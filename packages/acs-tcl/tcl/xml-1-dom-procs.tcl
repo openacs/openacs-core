@@ -1521,7 +1521,7 @@ proc dom::Serialize:document {token args} {
 
     if {![info exists node(document:documentElement)]} {
 	return -code error "document has no document element"
-    } elseif {![string length $node(document:doctype)]} {
+    } elseif {$node(document:doctype) eq ""} {
 	return -code error "no document type declaration given"
     } else {
 

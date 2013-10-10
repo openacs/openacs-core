@@ -340,9 +340,9 @@ ad_proc -public merge_form_with_query {
 
 
 proc util_PrettyBoolean {t_or_f { default  "default" } } {
-    if { $t_or_f eq "t" || $t_or_f eq "T" } {
+    if { $t_or_f == "t" || $t_or_f eq "T" } {
 	return "Yes"
-    } elseif { $t_or_f eq "f" || $t_or_f eq "F" } {
+    } elseif { $t_or_f == "f" || $t_or_f eq "F" } {
 	return "No"
     } else {
 	# Note that we can't compare default to the empty string as in 
@@ -1105,7 +1105,7 @@ ad_proc export_ns_set_vars {{format "url"} {exclusion_list ""} {setid ""}} {
     if { $setid ne "" } {
         set set_size [ns_set size $setid]
         set set_counter_i 0
-        while { $set_counter_i<$set_size } {
+        while { $set_counter_i < $set_size } {
             set name [ns_set key $setid $set_counter_i]
             set value [ns_set value $setid $set_counter_i]
             if {$name ni $exclusion_list && $name ne ""} {
@@ -1442,11 +1442,11 @@ ad_proc -public util_httppost {url formvars {timeout 30} {depth 0} {http_referer
 	close $wfd
 
 	set rpset [ns_set new [_ns_http_gets $timeout $rfd]]
-		while 1 {
-			set line [_ns_http_gets $timeout $rfd]
-			if { ![string length $line] } break
-			ns_parseheader $rpset $line
-		}
+	while {1} {
+	    set line [_ns_http_gets $timeout $rfd]
+	    if { $line eq "" } break
+	    ns_parseheader $rpset $line
+	}
 
 	set headers $rpset
 	set response [ns_set name $headers]
@@ -1464,15 +1464,15 @@ ad_proc -public util_httppost {url formvars {timeout 30} {depth 0} {http_referer
       	set type [ns_set iget $headers content-type]
       	set_encoding $type $rfd
 	set err [catch {
-		while 1 {
-			set buf [_ns_http_read $timeout $rfd $length]
-			append page $buf
-			if { "" eq $buf } break
-			if {$length > 0} {
-				incr length -[string length $buf]
-				if {$length <= 0} break
-			}
+	    while {1} {
+		set buf [_ns_http_read $timeout $rfd $length]
+		append page $buf
+		if { "" eq $buf } break
+		if {$length > 0} {
+		    incr length -[string length $buf]
+		    if {$length <= 0} break
 		}
+	    }
 	} errMsg]
 	ns_set free $headers
 	close $rfd
@@ -1669,7 +1669,7 @@ ad_proc -public ad_httpget {
       	set_encoding $type $rfd
 	
         set err [catch {
-            while 1 {
+            while {1} {
                 set buf [_ns_http_read $timeout $rfd $length]
                 append page $buf
                 if { "" eq $buf } break
@@ -1900,7 +1900,7 @@ ad_proc -public ad_decode { args } {
 
     set counter 1
 
-    while { $counter < [expr {$num_args - 2}] } {
+    while { $counter < $num_args - 2 } {
 	lappend from_list [lindex $args $counter]
 	incr counter
 	lappend to_list [lindex $args $counter]
@@ -1939,7 +1939,7 @@ ad_proc -public ad_get_cookie {
     Returns the value of a cookie, or $default if none exists.
 } {
 
-    if { $include_set_cookies eq "t" } {
+    if { $include_set_cookies == "t" } {
 	set headers [ns_conn outputheaders]
 	set nr_headers [ns_set size $headers]
 	for { set i 0 } { $i < $nr_headers } { incr i } {
@@ -2036,7 +2036,7 @@ ad_proc -public ad_set_cookie {
 	append cookie "; Path=$path"
     }
 
-    if { $discard ne "f" } {
+    if { $discard != "f" } {
 	append cookie "; Discard"
     } elseif { $max_age eq "inf" } {
         if { !$expire } {
@@ -2099,7 +2099,7 @@ ad_proc -private ad_run_scheduled_proc { proc_info } {
 	}
     }
 
-    if { $once eq "f" } {
+    if { $once == "f" } {
 	# The proc will run again - readd it to the shared variable (updating ns_time and
 	# incrementing the count).
 	lappend procs [list $thread $once $interval $proc $args [ns_time] [expr { $count + 1 }] $debug]
@@ -2153,7 +2153,7 @@ ad_proc -public ad_schedule_proc {
 } {
     # we don't schedule a proc to run if we have enabled server clustering,
     # we're not the canonical server, and the procedure was not requested to run on all servers.
-    if { [server_cluster_enabled_p] && ![ad_canonical_server_p] && $all_servers eq "f" } {
+    if { [server_cluster_enabled_p] && ![ad_canonical_server_p] && $all_servers == "f" } {
         return
     } 
 
@@ -2169,10 +2169,10 @@ ad_proc -public ad_schedule_proc {
     ns_mutex unlock [nsv_get ad_procs mutex]
 
     set my_args [list]
-    if { $thread eq "t" } {
+    if { $thread == "t" } {
 	lappend my_args "-thread"
     }
-    if { $once eq "t" } {
+    if { $once == "t" } {
 	lappend my_args "-once"
     }
 
@@ -3449,9 +3449,9 @@ ad_proc -public util_http_file_upload { -file -data -binary:boolean -filename
         close $wfd
         
         set rpset [ns_set new [_ns_http_gets $timeout $rfd]]
-        while 1 {
+        while {1} {
             set line [_ns_http_gets $timeout $rfd]
-            if { ![string length $line] } break
+            if { $line eq "" } break
             ns_parseheader $rpset $line
         }
 
@@ -3463,7 +3463,7 @@ ad_proc -public util_http_file_upload { -file -data -binary:boolean -filename
       	set type [ns_set iget $headers content-type]
       	set_encoding $type $rfd
         set err [catch {
-            while 1 {
+            while {1} {
                 set buf [_ns_http_read $timeout $rfd $length]
                 append page $buf
                 if { "" eq $buf } break
@@ -4194,8 +4194,8 @@ ad_proc -public util::backup_file {
 } {
     # Keep generating backup paths until we find one that doesn't already exist
     set backup_counter 1
-    while 1 {
-        if { $backup_counter == "1" } {
+    while {1} {
+        if { $backup_counter == 1 } {
             set backup_path "${file_path}${backup_suffix}"
         } else {
             set backup_path "${file_path}${backup_suffix}.${backup_counter}"

@@ -517,8 +517,8 @@ ad_proc ad_table_column_list {
     if {$columns eq ""} {
         for {set i 0} {$i < [llength $datadef]} {incr i} {
             if {$sortable eq "all" 
-                || ($sortable eq "t" && [lindex [lindex $datadef $i] 2] != "no_sort")
-                || ($sortable eq "f" && [lindex [lindex $datadef $i] 2] == "no_sort")
+                || ($sortable == "t" && [lindex [lindex $datadef $i] 2] != "no_sort")
+                || ($sortable == "f" && [lindex [lindex $datadef $i] 2] == "no_sort")
             } {
                 lappend column_list $i
             } 
@@ -527,8 +527,8 @@ ad_proc ad_table_column_list {
         set colnames {}
         foreach col $datadef { 
             if {$sortable eq "all" 
-                || ($sortable eq "t" && [lindex $col 2] ne "no_sort")
-                || ($sortable eq "f" && [lindex $col 2] eq "no_sort")
+                || ($sortable == "t" && [lindex $col 2] ne "no_sort")
+                || ($sortable == "f" && [lindex $col 2] eq "no_sort")
             } {
                 lappend colnames [lindex $col 0]
             } else {

@@ -16,7 +16,7 @@ proc ns_dbformvalue {formdata column type valuebyref} {
 
     upvar $valuebyref value
 
-    if {[ns_set get $formdata $column.NULL] eq "t"} {
+    if {[ns_set get $formdata $column.NULL] == "t"} {
 	set value ""
 	return 0
     }
