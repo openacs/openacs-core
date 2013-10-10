@@ -153,7 +153,7 @@ ad_proc -public template::form::create { id args } {
   set formbutton [get_button $id]
 
   # If the user hit a button named "cancel", redirect and about
-  if { $submission && $formbutton eq "cancel" && [exists_and_not_null opts(cancel_url)]} {
+  if { $submission && $formbutton eq "cancel" && ([info exists opts(cancel_url)] && $opts(cancel_url) ne "")} {
       ad_returnredirect $opts(cancel_url)
       ad_script_abort
   }
@@ -504,11 +504,11 @@ ad_proc -private template::form::render { id tag_attributes } {
   # Buttons
   #----------------------------------------------------------------------
 
-  if { [exists_and_not_null form_properties(cancel_url)] && ![exists_and_not_null form_properties(cancel_label)] } {
+  if { ([info exists form_properties(cancel_url)] && $form_properties(cancel_url) ne "") && (![info exists form_properties(cancel_label)] || $form_properties(cancel_label) eq "") } {
       set form_properties(cancel_label) [_ acs-kernel.common_Cancel]
   }
 
-  if { [exists_and_not_null form_properties(cancel_url)] } {
+  if { ([info exists form_properties(cancel_url)] && $form_properties(cancel_url) ne "") } {
     lappend form_properties(edit_buttons) [list $form_properties(cancel_label) cancel]
   }
 
@@ -560,7 +560,7 @@ ad_proc -private template::form::render { id tag_attributes } {
     # get a reference by element ID 
     upvar #$level $element_ref element
    
-    if { $element(widget) eq "hidden" && [exists_and_not_null $id:error($element(id))] } {
+    if { $element(widget) eq "hidden" && ([info exists $id:error($element(id))] && $$id:error($element(id)) ne "") } {
       error "Validation error in hidden form element: '[set $id:error($element(id))]' on element '$element(id)'."
     }
   }
@@ -626,7 +626,7 @@ ad_proc -private template::form::render { id tag_attributes } {
   
   # If we're in edit mode, output the action
   upvar #$level $id:formaction formaction
-  if { $properties(mode) eq "edit" && [exists_and_not_null formaction] } {
+  if { $properties(mode) eq "edit" && ([info exists formaction] && $formaction ne "") } {
     upvar #$level $id:formaction action
     append output [export_vars -form { { form\:formaction $formaction } }]
   }
@@ -651,7 +651,7 @@ ad_proc -private template::form::check_elements { id } {
     upvar #$level $element_ref element
    
     # Check if the element has been rendered already
-    if {$element(is_rendered) eq "f"} {
+    if {$element(is_rendered) == "f"} {
 
       # If the element is hidden, render it
       if {$element(widget) eq "hidden"} {

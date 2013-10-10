@@ -195,7 +195,7 @@ template::list::create \
       }
     }
 
-set order_by_clause [expr {[exists_and_not_null orderby] ?
+set order_by_clause [expr {([info exists orderby] && $orderby ne "") ?
 			   [template::list::orderby_clause -orderby -name contents] :
 			   " order by fs_objects.sort_key, fs_objects.name asc"}]
 

@@ -473,7 +473,7 @@ ad_proc -public template::util::date::set_property { what date value } {
 
         # robustness check: make sure we handle form of 08:00am  --jfr
         regexp {0([0-9])} $hours match trimmed_hours
-        if {[exists_and_not_null trimmed_hours]} {
+        if {([info exists trimmed_hours] && $trimmed_hours ne "")} {
             set hours $trimmed_hours
         }
 
@@ -882,7 +882,7 @@ ad_proc -public template::widget::dateFragment {
       set interval $element(${fragment}_interval)
     } else {
        # Display text entry for some elements, or if the type is text
-       if { $type eq "t" ||
+       if { $type == "t" ||
             [regexp "year|short_year" $fragment] } {
          set output "<input type=\"text\" name=\"$element(name).$fragment\" id=\"$element(name).$fragment\" size=\"$size\""
          append output " maxlength=\"$size\" value=\"[template::util::leadingPad $value $size]\""
@@ -941,7 +941,7 @@ ad_proc -public template::widget::monthFragment {
 
   if { $mode ne "edit" } {
     set output {}
-    if { [exists_and_not_null value] } {
+    if { ([info exists value] && $value ne "") } {
       append output "<input type=\"hidden\" name=\"$element(name).$fragment\" value=\"$value\">"
       append output [template::util::date::monthName $value $size]
     }
@@ -1056,7 +1056,7 @@ ad_proc -public template::widget::date { element_reference tag_attributes } {
     set fragment_def $template::util::date::fragment_widgets([string toupper $token])
     set fragment [lindex $fragment_def 1]
 
-    if {[exists_and_not_null id_attr_name]} {
+    if {([info exists id_attr_name] && $id_attr_name ne "")} {
 	  set attributes(id) "${id_attr_name}.${fragment}"
     }
 

@@ -828,7 +828,7 @@ ad_proc -public template::list::page_where_clause {
         append result "and "
     }
 
-    if { ![exists_and_not_null key] } {
+    if { (![info exists key] || $key eq "") } {
         set key $list_properties(key)
     }
     
@@ -1190,7 +1190,7 @@ ad_proc -private template::list::prepare_for_rendering {
             }
 
             # aggregate
-            if { [exists_and_not_null element_properties(aggregate)] } {
+            if { ([info exists element_properties(aggregate)] && $element_properties(aggregate) ne "") } {
                 # Set the aggregate_col to the name of the new, dynamic column
                 set element_properties(aggregate_col) "$element_properties(name)___$element_properties(aggregate)"
                 set element_properties(aggregate_group_col) "$element_properties(name)___$element_properties(aggregate)_group"
@@ -1228,7 +1228,7 @@ ad_proc -private template::list::prepare_for_rendering {
                 }
 
                 # aggregate
-                if { [exists_and_not_null __element_properties(aggregate)] } {
+                if { ([info exists __element_properties(aggregate)] && $__element_properties(aggregate) ne "") } {
                     # Update totals
                     incr __agg_counter($__element_properties(name))
                     if {$__element_properties(aggregate) eq "sum" } {
@@ -1237,7 +1237,7 @@ ad_proc -private template::list::prepare_for_rendering {
                     }
 
                     # Check if the value of the groupby column has changed
-                    if { [exists_and_not_null $__list_properties(groupby)] } {
+                    if { ([info exists $__list_properties(groupby)] && $$__list_properties(groupby) ne "") } {
                         if { $__last_group_val ne [set $__list_properties(groupby)] } {
                             # Initialize our group counters to 0
                             set __agg_group_counter($__element_properties(name)) 0
@@ -1252,14 +1252,14 @@ ad_proc -private template::list::prepare_for_rendering {
                     switch $__element_properties(aggregate) {
                         sum {
                             set $__element_properties(aggregate_col) $__agg_sum($__element_properties(name))
-                            if { [exists_and_not_null $__list_properties(groupby)] } {
+                            if { ([info exists $__list_properties(groupby)] && $$__list_properties(groupby) ne "") } {
                                 set $__element_properties(aggregate_group_col) $__agg_group_sum($__element_properties(name))
                             }
                         }
                         average {
                             set $__element_properties(aggregate_col) \
                                 [expr {$__agg_sum($__element_properties(name)) / $__agg_counter($__element_properties(name))}]
-                            if { [exists_and_not_null $__list_properties(groupby)] } {
+                            if { ([info exists $__list_properties(groupby)] && $$__list_properties(groupby) ne "") } {
                                 set $__element_properties(aggregate_group_col) \
                                     [expr {$__agg_sum($__element_properties(name)) / $__agg_group_counter($__element_properties(name))}]
                             }
@@ -1267,7 +1267,7 @@ ad_proc -private template::list::prepare_for_rendering {
                         count {
                             set $__element_properties(aggregate_col) \
                                 [expr {$__agg_counter($__element_properties(name))}]
-                            if { [exists_and_not_null $__list_properties(groupby)] } {
+                            if { ([info exists $__list_properties(groupby)] && $$__list_properties(groupby) ne "") } {
                                 set $__element_properties(aggregate_group_col) \
                                     [expr {$__agg_group_counter($__element_properties(name))}]
                             }
@@ -1283,7 +1283,7 @@ ad_proc -private template::list::prepare_for_rendering {
             }
 
             # Remember this value of the groupby column
-            if { [exists_and_not_null $__list_properties(groupby)] } { 
+            if { ([info exists $__list_properties(groupby)] && $$__list_properties(groupby) ne "") } { 
                 set __last_group_val [set $__list_properties(groupby)]
             }
         }
@@ -1337,7 +1337,7 @@ ad_proc -private template::list::render {
 
         # Set the URLs which the next/prev page/group links should point to
         foreach elm { next_page previous_page next_group previous_group } {
-            if { [exists_and_not_null paginator($elm)] } {
+            if { ([info exists paginator($elm)] && $paginator($elm) ne "") } {
                 set paginator(${elm}_url) [get_url \
                                                -name $list_properties(name) \
                                                -override [list [list page $paginator($elm)]]]
@@ -1534,7 +1534,7 @@ ad_proc -private template::list::prepare_filters {
         upvar $list_properties(ulevel) $filter_properties(name) current_filter_value
 
         # Set to default value if undefined
-        if { ![exists_and_not_null current_filter_value] && $filter_properties(default_value) ne "" } {
+        if { (![info exists current_filter_value] || $current_filter_value eq "") && $filter_properties(default_value) ne "" } {
             set current_filter_value $filter_properties(default_value)
         }
 
@@ -1614,7 +1614,7 @@ ad_proc -private template::list::prepare_filters {
                     set selected_p [exists_and_equal current_filter_value $value]
                 }
                 multival {
-                    if { ![exists_and_not_null current_filter_value] } {
+                    if { (![info exists current_filter_value] || $current_filter_value eq "") } {
                         set selected_p 0
                     } else {
 			# Since here we have multiple values
@@ -1676,7 +1676,7 @@ ad_proc -private template::list::prepare_filters {
             }
 
             # Generate add_url, and add to filter(add_urls)
-            if { [exists_and_not_null filter_properties(add_url_eval)] } {
+            if { ([info exists filter_properties(add_url_eval)] && $filter_properties(add_url_eval) ne "") } {
                 upvar $list_properties(ulevel) __filter_value __filter_value
                 set __filter_value $value
                 lappend filter_properties(add_urls) [uplevel $list_properties(ulevel) subst $filter_properties(add_url_eval)]
@@ -1684,7 +1684,7 @@ ad_proc -private template::list::prepare_filters {
 	    
 
 	    # Handle 'other_label'
-	    if { [exists_and_not_null current_filter_value] && \
+	    if { ([info exists current_filter_value] && $current_filter_value ne "") && \
 		     !$found_selected_p && \
 		     $filter_properties(other_label) ne "" } {
 		
@@ -2178,9 +2178,9 @@ ad_proc -private template::list::element::render {
     # We ignore if the element doesn't exist, 'cause then we'll just hope it exists in the multirow and display the value directly
     get_reference -create -list_name $list_name -element_name $element_name
 
-    if { [exists_and_not_null element_properties(display_template)] } {
+    if { ([info exists element_properties(display_template)] && $element_properties(display_template) ne "") } {
         set output $element_properties(display_template)
-    } elseif { [exists_and_not_null element_properties(display_col)] } {
+    } elseif { ([info exists element_properties(display_col)] && $element_properties(display_col) ne "") } {
         set output "@$multirow.$element_properties(display_col)@"
     } else {
         set output "@$multirow.$element_name@"
@@ -2190,15 +2190,15 @@ ad_proc -private template::list::element::render {
     set link_url {}
     set link_html {}
 
-    if { [exists_and_not_null element_properties(link_url_col)] } {
+    if { ([info exists element_properties(link_url_col)] && $element_properties(link_url_col) ne "") } {
         set link_url "@$multirow.$element_properties(link_url_col)@"
-    } elseif { [exists_and_not_null element_properties(link_url)] } {
+    } elseif { ([info exists element_properties(link_url)] && $element_properties(link_url) ne "") } {
         set link_url $element_properties(link_url)
     }
     
-    if { [exists_and_not_null element_properties(link_html_col)] } {
+    if { ([info exists element_properties(link_html_col)] && $element_properties(link_html_col) ne "") } {
         set link_html "@$multirow.$element_properties(link_html_col)@"
-    } elseif { [exists_and_not_null element_properties(link_html)] } {
+    } elseif { ([info exists element_properties(link_html)] && $element_properties(link_html) ne "") } {
         set link_html $element_properties(link_html)
     }
     
@@ -3177,7 +3177,7 @@ ad_proc -private template::list::prepare_filter_form {
 	set __form [ns_getform]
 	set clear_one [ns_set get $__form clear_one]
 
-	if {[exists_and_not_null clear_one]} {
+	if {([info exists clear_one] && $clear_one ne "")} {
 	    # loop through the saved filters and remove 
 	    # the filter from the client property if its 
 	    # specified in clear_one
@@ -3201,7 +3201,7 @@ ad_proc -private template::list::prepare_filter_form {
 	}
     } -on_submit {
 
-	if {[exists_and_not_null clear_all]} {
+	if {([info exists clear_all] && $clear_all ne "")} {
 	    set __client_property_filters {}
 	    ad_set_client_property acs-templating $__list_filter_form_client_property_key $__client_property_filters
 	    break

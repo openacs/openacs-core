@@ -43,6 +43,6 @@ if { [form is_request sandwich] } {
 }
 
 # Choose standard or gridded output
-if {[element get_value sandwich grid] eq "t"} {
+if {[element get_value sandwich grid] == "t"} {
   ad_return_template sandwich-grid
 }

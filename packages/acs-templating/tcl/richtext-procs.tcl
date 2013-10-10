@@ -228,7 +228,7 @@ ad_proc -public -deprecated template::widget::richtext_htmlarea { element_refere
       
       set attributes(id) "richtext__$element(form_id)__$element(id)"
       
-      if { [exists_and_not_null element(htmlarea_p)] } {
+      if { ([info exists element(htmlarea_p)] && $element(htmlarea_p) ne "") } {
           set htmlarea_p [template::util::is_true $element(htmlarea_p)]
       } else {
           set htmlarea_p [parameter::get \
@@ -451,7 +451,7 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
             }
         }
 
-        if { [exists_and_not_null element(htmlarea_p)] } {
+        if { ([info exists element(htmlarea_p)] && $element(htmlarea_p) ne "") } {
             set htmlarea_p [template::util::is_true $element(htmlarea_p)]
         } else {
             set htmlarea_p [parameter::get \

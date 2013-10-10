@@ -1033,7 +1033,7 @@ ad_proc -public template::widget::select_text {
     }
 
     set output {}
-    if { [string equal $element(mode) "edit"] } {
+    if {$element(mode) eq "edit"} {
 	# edit mode
 	set element(value) $select
 	append output [template::widget::menu $element(name) $element(options) $select attributes $element(mode)]
@@ -1149,7 +1149,7 @@ ad_proc -public template::widget::radio_text {
     set radio_text "<input type=radio name=$element(name)"
 
     foreach name [array names attributes] {
-        if { [string equal $attributes($name) {}] } {
+        if {$attributes($name) eq {}} {
             append radio_text " $name"
         } else {
             append radio_text " $name=\"$attributes($name)\""
@@ -1275,7 +1275,7 @@ ad_proc -public template::widget::checkbox_text {
     set checkbox_text "<input type=checkbox name=$element(name)"
 
     foreach name [array names attributes] {
-	if { [string equal $attributes($name) {}] } {
+	if {$attributes($name) eq {}} {
 	    append checkbox_text " $name"
 	} else {
 	    append checkbox_text " $name=\"$attributes($name)\""

@@ -110,7 +110,7 @@ ad_proc -public template::paginator::create { statement_name name query args } {
     # recommended. Unfortunately, several places in OpenACS have this
     # problem.
     #
-    if { ($row_ids eq {} && ![::cache exists $cache_key]) || ([info exists opts(flush_p)] && $opts(flush_p) eq "t") } {
+    if { ($row_ids eq {} && ![::cache exists $cache_key]) || ([info exists opts(flush_p)] && $opts(flush_p) == "t") } {
       if { [info exists opts(printing_prefs)] && $opts(printing_prefs) ne "" } {
 	  set title [lindex $opts(printing_prefs) 0]
 	  set stylesheet [lindex $opts(printing_prefs) 1]
@@ -667,7 +667,7 @@ ad_proc -public template::paginator::get_display_info { name datasource page } {
   # If the paginator is contextual, set the context
   if { [info exists properties(context_ids)] } {
     foreach elm { next_page previous_page next_group previous_group } {
-      if { [exists_and_not_null info($elm)] } {
+      if { ([info exists info($elm)] && $info($elm) ne "") } {
         set info(${elm}_context) [lindex $properties(context_ids) $info($elm)-1]
       }
     }
