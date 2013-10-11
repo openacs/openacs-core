@@ -61,7 +61,7 @@ element create notify delivery_method_id\
     -widget select\
     -label  "[_ notifications.Delivery_Method]"\
     -options $delivery_methods\
-    -value [lindex [lindex $delivery_methods 0] 1]
+    -value [lindex $delivery_methods 0 1]
 
 
 set username ""        

@@ -36,7 +36,7 @@ ad_form -name subscribe -export {type_id object_id return_url} -form {
     {delivery_method_id:integer(select)    
         {label "[_ notifications.Delivery_Method]"}
         {options $delivery_methods}
-        {value {[lindex [lindex $delivery_methods 0] 1]}}
+        {value {[lindex $delivery_methods 0 1]}}
     }
 } -on_submit {
 
