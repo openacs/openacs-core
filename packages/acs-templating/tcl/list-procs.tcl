@@ -550,10 +550,10 @@ ad_proc -public template::list::prepare {
         set page $list_properties(filter,page)
         set groupsize $list_properties(page_groupsize)
         set page_size $list_properties(page_size)
-        set page_group [expr ($page - 1 - (($page - 1) % $groupsize)) / $groupsize + 1]
-        set first_row [expr ($page_group - 1) * $groupsize * $page_size + 1]
+        set page_group [expr {($page - 1 - (($page - 1) % $groupsize)) / $groupsize + 1}]
+        set first_row [expr {($page_group - 1) * $groupsize * $page_size + 1}]
         set last_row [expr {$first_row + ($groupsize + 1) * $page_size - 1}]
-        set page_offset [expr ($page_group - 1) * $groupsize]
+        set page_offset [expr {($page_group - 1) * $groupsize}]
 
         # Now wrap the provided query with the limit information
         set list_properties(page_query_substed) [db_map pagination_query]
@@ -1208,6 +1208,8 @@ ad_proc -private template::list::prepare_for_rendering {
                 set __agg_group_sum($element_properties(name)) 0
             }
         }
+      set __have_groupby [expr { [info exists $__list_properties(groupby)] && [set $__list_properties(groupby)] ne "" }]
+		
 
         # This keeps track of the value of the group-by column for sub-totals
         set __last_group_val {}
@@ -1233,11 +1235,12 @@ ad_proc -private template::list::prepare_for_rendering {
                     incr __agg_counter($__element_properties(name))
                     if {$__element_properties(aggregate) eq "sum" } {
                         set __agg_sum($__element_properties(name)) \
-                            [expr {$__agg_sum($__element_properties(name)) + ([set $__element_properties(name)] ne "" ? [set $__element_properties(name)] : 0)} ]
+                            [expr {$__agg_sum($__element_properties(name)) + 
+				   ([set $__element_properties(name)] ne "" ? [set $__element_properties(name)] : 0)} ]
                     }
 
                     # Check if the value of the groupby column has changed
-                    if { ([info exists $__list_properties(groupby)] && $$__list_properties(groupby) ne "") } {
+                    if { $__have_groupby } {
                         if { $__last_group_val ne [set $__list_properties(groupby)] } {
                             # Initialize our group counters to 0
                             set __agg_group_counter($__element_properties(name)) 0
@@ -1246,31 +1249,31 @@ ad_proc -private template::list::prepare_for_rendering {
                         # Update subtotals
                         incr __agg_group_counter($__element_properties(name))
                         set __agg_group_sum($__element_properties(name)) \
-                            [expr $__agg_group_sum($__element_properties(name)) + [expr {[string is double [set $__element_properties(name)]] ? [set $__element_properties(name)] : 0}]]
+                            [expr {$__agg_group_sum($__element_properties(name)) + 
+				   ([string is double [set $__element_properties(name)]] ? [set $__element_properties(name)] : 0)}]
                     }
-
+		    
                     switch $__element_properties(aggregate) {
                         sum {
-                            set $__element_properties(aggregate_col) $__agg_sum($__element_properties(name))
-                            if { ([info exists $__list_properties(groupby)] && $$__list_properties(groupby) ne "") } {
-                                set $__element_properties(aggregate_group_col) $__agg_group_sum($__element_properties(name))
-                            }
+			  set $__element_properties(aggregate_col) $__agg_sum($__element_properties(name))
+			  if { $__have_groupby } {
+			    set $__element_properties(aggregate_group_col) $__agg_group_sum($__element_properties(name))
+			  }
                         }
                         average {
-                            set $__element_properties(aggregate_col) \
-                                [expr {$__agg_sum($__element_properties(name)) / $__agg_counter($__element_properties(name))}]
-                            if { ([info exists $__list_properties(groupby)] && $$__list_properties(groupby) ne "") } {
-                                set $__element_properties(aggregate_group_col) \
-                                    [expr {$__agg_sum($__element_properties(name)) / $__agg_group_counter($__element_properties(name))}]
-                            }
+			  set $__element_properties(aggregate_col) \
+			      [expr {$__agg_sum($__element_properties(name)) / $__agg_counter($__element_properties(name))}]
+			  if { $__have_groupby } {
+			    set $__element_properties(aggregate_group_col) \
+				[expr {$__agg_sum($__element_properties(name)) / $__agg_group_counter($__element_properties(name))}]
+			  }
                         }
                         count {
-                            set $__element_properties(aggregate_col) \
-                                [expr {$__agg_counter($__element_properties(name))}]
-                            if { ([info exists $__list_properties(groupby)] && $$__list_properties(groupby) ne "") } {
-                                set $__element_properties(aggregate_group_col) \
-                                    [expr {$__agg_group_counter($__element_properties(name))}]
-                            }
+			  set $__element_properties(aggregate_col) [expr {$__agg_counter($__element_properties(name))}]
+			  if { $__have_groupby } {
+			    set $__element_properties(aggregate_group_col) \
+				[expr {$__agg_group_counter($__element_properties(name))}]
+			  }
                         }
                         default {
                             error "Unknown aggregate function '$__element_properties(aggregate)'"
@@ -1283,7 +1286,7 @@ ad_proc -private template::list::prepare_for_rendering {
             }
 
             # Remember this value of the groupby column
-            if { ([info exists $__list_properties(groupby)] && $$__list_properties(groupby) ne "") } { 
+            if { $__have_groupby } { 
                 set __last_group_val [set $__list_properties(groupby)]
             }
         }
