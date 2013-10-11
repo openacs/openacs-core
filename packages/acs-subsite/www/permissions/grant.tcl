@@ -59,7 +59,7 @@ db_foreach select_privileges_hierarchy { } {
     # to move
     set end_pos $start_pos
     for { set i [expr {$start_pos + 1}] } { $i <= [llength $hierarchy] } { incr i } {
-        set level [lindex [lindex $hierarchy $i] 0]
+        set level [lindex $hierarchy $i 0]
         if { $level <= $start_pos_level } {
             break
         }
@@ -83,7 +83,7 @@ db_foreach select_privileges_hierarchy { } {
     set target_level [lindex [lindex $hierarchy $target_pos] 0]
 
     # remember the starting level in the block
-    set offset [lindex [lindex $block_to_move 0] 0]
+    set offset [lindex $block_to_move 0 0]
 
     # insert the block to the new position, looping through the block
     foreach element $block_to_move {

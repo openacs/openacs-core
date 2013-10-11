@@ -145,7 +145,7 @@ namespace eval group_type {
 	    append text "-- Drop script\n";
 	    for { set i [expr {[llength $plsql_drop] - 1}] } { $i >= 0 } { set i [expr {$i - 1}] } {
 		# Don't need the sql keys when we display debugging information
-		append text "-- [lindex [lindex $plsql_drop $i] 1]\n\n"
+		append text "-- [lindex $plsql_drop $i 1]\n\n"
 	    }
 	    return $text
 	}

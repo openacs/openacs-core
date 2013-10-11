@@ -22,7 +22,7 @@ set subsite_package_options [subsite::util::get_package_options]
 if { [llength $subsite_package_options] == 1 } {
     ad_form -extend -name subsite -form {
         {package_key:text(hidden)
-            {value "[lindex [lindex $subsite_package_options 0] 1]"}
+            {value "[lindex $subsite_package_options 0 1]"}
         }
     }
 } else {

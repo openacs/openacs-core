@@ -80,7 +80,7 @@ if { [info exists return_url] && $return_url ne "" } {
 set authority_options [auth::authority::get_authority_options]
 
 if { ![info exists authority_id] || $authority_id eq "" } {
-    set authority_id [lindex [lindex $authority_options 0] 1]
+    set authority_id [lindex $authority_options 0 1]
 }
 
 set forgotten_pwd_url [auth::password::get_forgotten_url -authority_id $authority_id -username $username -email $email]

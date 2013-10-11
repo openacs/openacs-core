@@ -31,7 +31,7 @@ if {[string is false $email_forgotten_password_p]} {
 set authority_options [auth::authority::get_authority_options]
 
 if { (![info exists authority_id] || $authority_id eq "") } {
-    set authority_id [lindex [lindex $authority_options 0] 1]
+    set authority_id [lindex $authority_options 0 1]
 }
 
 ad_form -name recover -edit_buttons [list [list [_ acs-kernel.common_continue] ok]] -form { {dummy:text(hidden),optional} }
