@@ -53,7 +53,7 @@ db_foreach select_privileges_hierarchy { } {
     }
 
     # the level of the first privilege element that we move
-    set start_pos_level [lindex [lindex $hierarchy $start_pos] 0]
+    set start_pos_level [lindex $hierarchy $start_pos 0]
 
     # find the end position up to where the block extends that we have
     # to move
@@ -71,7 +71,7 @@ db_foreach select_privileges_hierarchy { } {
     # Only cut out the block if it is on the toplevel, which means it
     # hasn't been moved yet. Otherwise the block will appear in two
     # places intentionally.
-    if { [lindex [lindex $hierarchy $start_pos] 0] == 0 } {
+    if { [lindex $hierarchy $start_pos 0] == 0 } {
         set hierarchy [lreplace $hierarchy $start_pos $end_pos]
     }
 
@@ -80,7 +80,7 @@ db_foreach select_privileges_hierarchy { } {
         # hierarchy. 
         continue
     }
-    set target_level [lindex [lindex $hierarchy $target_pos] 0]
+    set target_level [lindex $hierarchy $target_pos 0]
 
     # remember the starting level in the block
     set offset [lindex $block_to_move 0 0]
@@ -102,8 +102,7 @@ incr maxlevel
 # The $hierarchy datastructure is ready, fill a select widget options list with it.
 
 foreach element $hierarchy {
-    set privilege [lindex $element 1]
-    set level [lindex $element 0]
+    lassign $element level privilege
 
     lappend select_list [list "[string repeat "&nbsp;&nbsp;&nbsp;" $level] $privilege" $privilege]
 }
