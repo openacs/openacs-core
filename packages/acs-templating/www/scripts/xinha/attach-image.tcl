@@ -172,7 +172,7 @@ if {$write_p} {
 	    } else {
 		# user chose an existing file
 		set item_id $choose_file 
-		set file_name [lindex [lindex $recent_images_options [util_search_list_of_lists $recent_images_options $item_id 1]] 0]
+		set file_name [lindex $recent_images_options [util_search_list_of_lists $recent_images_options $item_id 1] 0]
 	    }
 		set f_url "/image/${item_id}/${file_name}"			    
 	}

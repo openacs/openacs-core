@@ -42,9 +42,8 @@ ad_proc -private doc::sort_@see { list_ref directive_comments } {
     procedure to deal with @see comments
 } {
   upvar $list_ref see_list
-  set type [lindex $directive_comments 0]
-  set see_name [lindex $directive_comments 1]
-  set url [lindex $directive_comments 2]
+
+  lassign $directive_comments type see_name url
 
   if {$url eq "" } {
     switch -exact $type {
@@ -273,9 +272,7 @@ ad_proc -private template::util::alphabetized_index {list entry} {
 ad_proc -private template::util::proc_element_compare { element1 element2 } {
     used to compare two different elements in a list of parsed data for public or private procs
 } {
-
-    return [string compare -nocase [lindex [lindex [lindex $element2 1] 0] 1] [lindex [lindex [lindex $element1 1] 0] 1]]
-
+    return [string compare -nocase [lindex $element2 1 0 1] [lindex $element1 1 0 1]]
 }
 
 ad_proc -private doc::set_proc_name_source_text_comment_text { proc_block } {
@@ -468,9 +465,9 @@ ad_proc -private doc::parse_namespace { text_lines }  {
 
         set namespace_entry [lindex $total_result_listing [lsearch -exact $namespace_list $namespace_name]]
 
-	set namespace_info [lindex [lindex $namespace_entry 0] 1]
-	set namespace_public [lindex [lindex $namespace_entry 1] 1]
-	set namespace_private [lindex [lindex $namespace_entry 2] 1]
+	set namespace_info [lindex $namespace_entry 0 1]
+	set namespace_public [lindex $namespace_entry 1 1]
+	set namespace_private [lindex $namespace_entry 2 1]
 		
     } else {
         set namespace_info [list name "$namespace_name" overview "$namespace_description" author "$namespace_author" see "$namespace_see"]

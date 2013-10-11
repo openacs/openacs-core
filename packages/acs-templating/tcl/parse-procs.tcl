@@ -765,7 +765,7 @@ ad_proc -private template::current_tag {} {
 } {
   variable tag_stack
 
-  return [lindex [lindex $tag_stack end] 1]
+  return [lindex $tag_stack end 1]
 }
     
 ad_proc -private template::enclosing_tag { 

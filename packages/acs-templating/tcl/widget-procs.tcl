@@ -182,7 +182,7 @@ ad_proc -private template::data::transform::party_search {
         set element(options) [concat $options { { "Search again..." ":search:" } }]
         if { ![info exists value] } {
             # set value to first item
-            set value [lindex [lindex $options 0] 1]
+            set value [lindex $options 0 1]
         }
 
         if { ![ns_queryexists $element_id:confirmed_p] } {
@@ -811,7 +811,7 @@ ad_proc -public template::data::transform::search {
         } elseif { $option_count == 1 } {
 
             # only one option so just reset the value
-            set value [lindex [lindex $options 0] 1]
+            set value [lindex $options 0 1]
 
         } else {
 
@@ -820,7 +820,7 @@ ad_proc -public template::data::transform::search {
             template::element::set_error $element(form_id) $element_id \
                 "More than one match was found for \"$value\".<br>Please\nchoose one from the list."
 
-            set value [lindex [lindex $options 0] 1]
+            set value [lindex $options 0 1]
         }
     }
 

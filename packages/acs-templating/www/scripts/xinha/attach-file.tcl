@@ -206,7 +206,7 @@ if {$write_p} {
 		} else {
 		    if {$choose_file ne ""} {
 			set item_id $choose_file
-			set file_name [lindex [lindex $recent_files_options [util_search_list_of_lists $recent_files_options $item_id 1]] 0]
+			set file_name [lindex $recent_files_options [util_search_list_of_lists $recent_files_options $item_id 1] 0]
 			# we have to get rid of the icon from the form.
 			set file_name [regsub -all {<.*?>} $file_name {}]
 		    }
