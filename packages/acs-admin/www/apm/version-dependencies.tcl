@@ -65,7 +65,7 @@ foreach dependency_type { provide require extend embed } {
     } else {
 	append body "<li>This package does not $dependency_type any services.\n"
     }
-    if { $installed_p eq "t" && $dependency_type ne "provide"} {
+    if { $installed_p == "t" && $dependency_type ne "provide"} {
 	append body [subst {
 	    <li><a href="version-dependency-add?[export_vars -url {version_id dependency_type}]">Add a 
 	    service $dependency_type_prep_2 by this package</a>

@@ -17,7 +17,7 @@ db_1row apm_package_by_version_id {
 }
 
 # LARS hack
-set sections [lindex [lindex [apm_parameter_section_slider $package_key] 0] 3]
+set sections [lindex [apm_parameter_section_slider $package_key] 0 3]
 foreach section $sections {
     if {$section_name eq [lindex $section 1]} {
         set section_name [lindex $section 0]

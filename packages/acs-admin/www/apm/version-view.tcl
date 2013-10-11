@@ -77,7 +77,7 @@ if { ![info exists installed_version_id] } {
     lappend prompts $status
 } elseif { $installed_version_id == $version_id } {
     set status "This version of the package is installed"
-    if { $enabled_p eq "t" } {
+    if { $enabled_p == "t" } {
 	append status " and enabled."
 	set can_disable_p 1
     } else {
@@ -212,7 +212,7 @@ if { $tarball_length ne "" && $tarball_length > 0 } {
     }
 } else {
     append body "None available"
-    if { $installed_p eq "t" } {
+    if { $installed_p == "t" } {
 	append body [subst {
 	    (<a href="version-generate-tarball?version_id=$version_id">generate one now</a> from the filesystem)
 	}]
@@ -256,7 +256,7 @@ if { ![info exists installed_version_id] || $installed_version_id == $version_id
     }]
 }
 
-if { $installed_p eq "t" } {
+if { $installed_p == "t" } {
     if { $distribution_uri eq "" } {
 	# The distribution tarball was either (a) never generated, or (b) generated on this
 	# system. Allow the user to make a tarball based on files in the filesystem.
@@ -283,7 +283,7 @@ if { $installed_p eq "t" } {
     
     append body "<p>"
     
-    if { $installed_p eq "t" } {	
+    if { $installed_p == "t" } {	
 	append body [subst {
 	    <li><a href="package-delete?[export_vars { version_id }]">Uninstall 
 	    this package from your system</a> (be very careful!)

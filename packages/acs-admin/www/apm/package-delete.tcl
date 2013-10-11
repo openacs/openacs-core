@@ -47,7 +47,7 @@ set initial_install_p [db_string initial_install_p {
     where package_key = :package_key
 }]
 
-if {$initial_install_p eq "t"} {
+if {$initial_install_p == "t"} {
     set kernel_deletion_warning "
 <p>
   You are about to delete package <code>$package_key</code> which is part of the <b>OpenACS core</b>

@@ -94,8 +94,8 @@ db_multirow -extend {package_url maintained status action_html} packages apm_tab
     set package_url [export_vars -base version-view {version_id}]
     set maintained [ad_decode $distribution_uri "" "Locally" "Externally"]
     
-    if { $installed_p eq "t" } {
-		if { $enabled_p eq "t" } {
+    if { $installed_p == "t" } {
+		if { $enabled_p == "t" } {
 		    set status "Enabled"
 		} else {
 		    set status "Disabled"
@@ -108,7 +108,7 @@ db_multirow -extend {package_url maintained status action_html} packages apm_tab
     
     set file_link_list [list]
     lappend file_link_list "<a href=\"version-files?version_id=$version_id\">view files</a>"
-    if { $installed_p eq "t" && $enabled_p eq "t" } {
+    if { $installed_p == "t" && $enabled_p == "t" } {
         if {!$performance_p} {
             lappend file_link_list "<a href=\"package-watch?package_key=$package_key\">watch all files</a>"
         } 

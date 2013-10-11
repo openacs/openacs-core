@@ -84,7 +84,7 @@ if { $dimensional_list ne "" } {
 }
 
 # LARS hack
-set sections [lindex [lindex $dimensional_list 0] 3]
+set sections [lindex $dimensional_list 0 3]
 foreach section $sections {
     if {$section_name eq [lindex $section 0]} {
         set section_name [lindex $section 1]

@@ -87,7 +87,7 @@ if {![info exists install_spec_files]} {
 	    </form>
 	}]
 	
-    } elseif { ([lindex $dependency_results 0] == 1) || $force_p eq "t" } {
+    } elseif { ([lindex $dependency_results 0] == 1) || $force_p == "t" } {
 
 	### Check passed!  Initiate install.
 

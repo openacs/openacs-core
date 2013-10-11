@@ -131,7 +131,7 @@ ad_proc -private apm_package_selection_widget {
 
         append widget "  <tr valign=baseline bgcolor=[lindex $band_colors \
                 [expr { $counter % [llength $band_colors] }]]>"
-        if { [pkg_info_dependency_p $pkg_info] eq "t" } {
+        if { [pkg_info_dependency_p $pkg_info] == "t" } {
             # Dependency passed.
 
             if { $install_enable_p } {
@@ -165,7 +165,7 @@ ad_proc -private apm_package_selection_widget {
             <td>$package_rel_path</td>
             <td><font color=green>Dependencies satisfied.</font></td>
             </tr> "
-        } elseif { [pkg_info_dependency_p $pkg_info] eq "f" } {
+        } elseif { [pkg_info_dependency_p $pkg_info] == "f" } {
             #Dependency failed.
             if { $install_enable_p } {
                 append widget "  <td align=center><input type=checkbox name=install value=\"$package_key\"
