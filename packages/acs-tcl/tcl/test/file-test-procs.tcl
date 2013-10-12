@@ -59,7 +59,7 @@ aa_register_case -cats {smoke production_safe} -error_level error files__tcl_fil
     #inspect every tcl file in the directory tree starting with $startdir
     foreach file [ad_find_all_files -check_file_func ::tcl_p $startdir] { 
 
-        if {[string match */acs-tcl/tcl/test/file-test-procs.tcl $file]} continue
+        if {[string match "*/acs-tcl/tcl/test/file-test-procs.tcl" $file]} continue
 
         set fp [open $file "r"]
         set data [read $fp]
@@ -87,7 +87,7 @@ aa_register_case -cats {smoke production_safe} files__check_info_files {
             set errp 1
         } else {
             regexp {packages/([^/]*)/} $spec_file match key
-            if {![string equal $version(package.key) $key]} {
+            if {$version(package.key) ne $key } {
                 aa_log_result fail "MISMATCH DIRECTORY/PACKAGE KEY: $spec_file $version(package.key) != $key"
                 set errp 1
             }
@@ -97,11 +97,11 @@ aa_register_case -cats {smoke production_safe} files__check_info_files {
                 aa_log_result fail "$spec_file SERVICE MISSING PROVIDES: $key"
                 set errp 1
             } elseif { $version(provides) ne ""} {
-                if { ![string equal $version(name) [lindex [lindex $version(provides) 0] 1]]} {
+                if { $version(name) ne [lindex $version(provides) 0 1] } {
                     aa_log_result fail "$spec_file: MISMATCH PROVIDES VERSION: $version(provides) $version(name)"
                     set errp 1
                 }
-                if { ![string equal $key [lindex [lindex $version(provides) 0] 0]]} {
+                if { $key ne [lindex $version(provides) 0 0] } {
                     aa_log_result fail "$spec_file MISMATCH PROVIDES KEY: $key $version(provides)"
                     set errp 1
                 }

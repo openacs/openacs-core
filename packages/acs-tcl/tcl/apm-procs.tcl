@@ -1999,7 +1999,7 @@ ad_proc -private apm::metrics_internal {
             set pg_files {}
             foreach file $filelist {
                 if { [string match {*/postgresql/*} $file] 
-		     && ![string match *-drop.sql $file] 
+		     && ![string match "*-drop.sql" $file] 
 		     && ![string match {*/upgrade/*} $file] 
 		 } {
                     lappend pg_files $file
@@ -2012,7 +2012,7 @@ ad_proc -private apm::metrics_internal {
             set ora_files {}
             foreach file $filelist {
                 if { [string match {*/oracle/*} $file] 
-		     && ![string match *-drop.sql $file] 
+		     && ![string match "*-drop.sql" $file] 
 		     && ![string match {*/upgrade/*} $file] 
 		 } {
                     lappend ora_files $file

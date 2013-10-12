@@ -1827,7 +1827,7 @@ ad_proc -private ReturnHeaders {{content_type text/html}} {
    any added to outputheaders.
 } {
 
-   if {[string match "text/*" $content_type] && ![string match *charset=* $content_type]} {
+   if {[string match "text/*" $content_type] && ![string match "*charset=*" $content_type]} {
      append content_type "; charset=[ns_config ns/parameters OutputCharset iso-8859-1]"
    }
 
@@ -2222,14 +2222,17 @@ ad_proc -public ad_cache_returnredirect { url { persistent "f" } { excluded_vars
     set excluded_vars_list ""
     set excluded_vars_url ""
     for { set i 0 } { $i < [llength $excluded_vars] } { incr i } {
-	set item [lindex [lindex $excluded_vars $i] 0]
-	set value [lindex [lindex $excluded_vars $i] 1]
+
+	lassign [lindex $excluded_vars $i] item value
+
 	if { $value eq "" } {
+	    set level [template::adp_level]
 	    # Obtain value from adp level
-	    upvar #[template::adp_level] __item item_reference
+	    upvar #$level \
+		__item item_reference \
+		__value value_reference 
 	    set item_reference $item
-	    upvar #[template::adp_level] __value value_reference
-	    uplevel #[template::adp_level] {set __value [expr {$$__item}]}
+	    uplevel #$level {set __value [set $__item]}
 	    set value $value_reference
 	}
 	lappend excluded_vars_list $item
@@ -2335,7 +2338,7 @@ ad_proc -public ad_returnredirect {
     set use_metarefresh_p 0
     set headers [ns_conn headers]
     set type [ns_set iget $headers content-type]
-    if { [string match *multipart/form-data* [string tolower $type]] } {
+    if { [string match "*multipart/form-data*" [string tolower $type]] } {
         set user_agent [ns_set iget $headers User-Agent]
         set use_metarefresh_p [string match -nocase "*msie 5.0*" $user_agent]
     }
@@ -3340,7 +3343,7 @@ ad_proc -public util_http_file_upload { -file -data -binary:boolean -filename
             set filename [file tail $file]
         }
 
-        if {[string equal */* $mime_type] || $mime_type eq ""} {
+        if {"*/*" eq $mime_type || $mime_type eq ""} {
             set mime_type [ns_guesstype $file]
         }
     }
@@ -3357,10 +3360,10 @@ ad_proc -public util_http_file_upload { -file -data -binary:boolean -filename
             error "Cannot upload file without specifing -filename"
         }
     
-        if {[string equal $mime_type */*] || $mime_type eq ""} {
+        if {$mime_type eq "*/*" || $mime_type eq ""} {
             set mime_type [ns_guesstype $filename]
     
-            if {[string equal $mime_type */*] || $mime_type eq ""} {
+            if {$mime_type eq "*/*" || $mime_type eq ""} {
                 set mime_type application/octet-stream
             }
         }
@@ -4032,7 +4035,7 @@ ad_proc ad_var_type_check_safefilename_p {value} {
     <pre>
 } {
 
-    if { [string match *..* $value] } {
+    if { [string match "*..*" $value] } {
         return 0
     } else {
         return 1
@@ -4108,7 +4111,7 @@ ad_proc ad_var_type_check_noquote_p {value} {
     <pre>
 } {
 
-    if { [string match *'* $value] } {
+    if { [string match "*'*" $value] } {
         return 0
     } else {
         return 1

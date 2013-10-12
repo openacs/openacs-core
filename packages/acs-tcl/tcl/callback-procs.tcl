@@ -12,9 +12,7 @@ ad_proc -public callback::impl_exists {
 } {
     Returns whether the specified implementation exists.
 } {
-    return [expr {![string equal \
-        [info commands ::callback::${callback}::impl::${impl}] \
-        ""]}]
+    return [expr {[info commands ::callback::${callback}::impl::${impl}] ne ""}]
 }
 
 ad_proc -public callback::get_object_type_impl {

@@ -325,7 +325,7 @@ ad_proc -public apm_read_package_info_file { path } {
 	    set service_uri [apm_required_attribute_value $node url]
 	    set service_version [apm_required_attribute_value $node version]
             # Package always provides itself, we'll add that below, so don't add it here
-            if { $dependency_type ne "provides" || ![string equal $service_uri $properties(package.key)] } {
+            if { $dependency_type ne "provides" || $service_uri ne $properties(package.key) } {
                 lappend properties($dependency_type) [list $service_uri $service_version]
             }
 	}

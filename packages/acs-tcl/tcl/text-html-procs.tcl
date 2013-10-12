@@ -149,35 +149,35 @@ ad_proc -public util_convert_line_breaks_to_html {
     Convert line breaks to <p> and <br> tags, respectively.
 } {
     # Remove any leading or trailing whitespace
-    regsub {^[\s]*} $text {} text
-    regsub {[\s]*$} $text {} text
+    regsub {^[\s]+} $text {} text
+    regsub {[\s]+$} $text {} text
 
     # Make sure all line breaks are single \n's
     regsub -all {\r\n} $text "\n" text
     regsub -all {\r} $text "\n" text
     
     # Remove whitespace before \n's
-    regsub -all {[ \t]*\n} $text "\n" text
+    regsub -all {[ \t]+\n} $text "\n" text
     
     # Wrap P's around paragraphs
-    regsub -all {([^\n\s])\n\n([^\n\s])} $text {\1<p>\2} text
-
-    # Convert _single_ CRLF's to <br>'s to preserve line breaks
-    # Lars: This must be done after we've made P tags, because otherwise the line
-    # breaks will already have been converted into BR's.
+    regsub -all {([^\n\s])\n\n+([^\n\s])} $text {\1<p>\2} text
 
     # remove line breaks right before and after HTML tags that will insert a paragraph break themselves
     if { $includes_html_p } {
-        foreach tag { ul ol li blockquote p div table tr td th } {
-            regsub -all -nocase "\\n\\s*(</?${tag}\\s*\[^>\]*>)" $text {\1} text
-            regsub -all -nocase "(</?${tag}\\s*\[^>\]*>)\\s*\\n" $text {\1} text
-        }
+	set tags [join { ul ol li blockquote p div table tr td th } |]
+        regsub -all -nocase "\\s*(</?($tags)\\s*\[^>\]*>)\\s*" $text {\1} text
+
+        #foreach tag { ul ol li blockquote p div table tr td th } {
+        #    regsub -all -nocase "\\n\\s*(</?${tag}\\s*\[^>\]*>)" $text {\1} text
+        #    regsub -all -nocase "(</?${tag}\\s*\[^>\]*>)\\s*\\n" $text {\1} text
+        #}
     }
 
+    # Convert _single_ CRLF's to <br>'s to preserve line breaks
     regsub -all {\n} $text "<br>\n" text
 
     # Add line breaks to P tags
-    regsub -all {</p>} $text "</p>\n" text
+    #regsub -all {</p>} $text "</p>\n" text
 
     return $text
 }
@@ -644,7 +644,7 @@ attribute_array(heres)='  something for   you to = "consider" '</pre>
     # Loop over the attributes.
     # We maintain counter is so that we don't accidentally enter an infinite loop
     set count 0
-    while { $i < [string length $html] && ![string equal [string index $html $i] {>}] } {
+    while { $i < [string length $html] && [string index $html $i] ne ">" } {
         if { [incr count] > 3000 } {
             error "There appears to be a programming bug in ad_parse_html_attributes_upvar: We've entered an infinite loop. We are here: \noffset $i: [string range $html $i $i+60]"
         }
@@ -1321,7 +1321,7 @@ ad_proc util_expand_entities_ie_style { html } {
         incr i
         if { $match_p } {
             # remove trailing semicolon
-            if { [string equal [string index $html $i] {;}] } {
+            if {[string index $html $i] eq ";"} {
                 set html [string replace $html $i $i]
             }
         }
@@ -1593,7 +1593,7 @@ ad_proc -public ad_convert_to_html {
     @author Lars Pind (lars@pinds.com)
     @creation-date 19 July 2000
 } {
-    if {$html_p eq "t"} {
+    if {$html_p == "t"} {
         set from "text/html"
     } else {
         set from "text/plain"
@@ -1614,7 +1614,7 @@ ad_proc -public ad_convert_to_text {
     @author Lars Pind (lars@pinds.com)
     @creation-date 19 July 2000
 } {
-    if {$html_p eq "t"} {
+    if {$html_p == "t"} {
         set from "text/html"
     } else {
         set from "text/plain"
@@ -1770,7 +1770,7 @@ ad_proc -deprecated util_maybe_convert_to_html {raw_string html_p} {
     @see ad_convert_to_html
 
 }  {
-    if { $html_p eq "t" } {
+    if { $html_p == "t" } {
         return $raw_string
     } else {
         return [ad_text_to_html $raw_string]

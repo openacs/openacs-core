@@ -1745,9 +1745,9 @@ proc dom::Serialize:attributeList {l} {
 	# Handle special characters
 	regsub -all < $value {\&lt;} value
 
-	if {![string match *\"* $value]} {
+	if {![string match "*\"*" $value]} {
 	    append result \"$value\"
-	} elseif {![string match *'* $value]} {
+	} elseif {![string match "*'*" $value]} {
 	    append result '$value'
 	} else {
 	    regsub -all \" $value {\&quot;} value

@@ -517,8 +517,8 @@ ad_proc ad_table_column_list {
     if {$columns eq ""} {
         for {set i 0} {$i < [llength $datadef]} {incr i} {
             if {$sortable eq "all" 
-                || ($sortable == "t" && [lindex [lindex $datadef $i] 2] != "no_sort")
-                || ($sortable == "f" && [lindex [lindex $datadef $i] 2] == "no_sort")
+                || ($sortable == "t" && [lindex $datadef $i 2] ne "no_sort")
+                || ($sortable == "f" && [lindex $datadef $i 2] eq "no_sort")
             } {
                 lappend column_list $i
             } 
@@ -642,12 +642,12 @@ ad_proc ad_table_form {datadef {type select} {return_url {}} {item_group {}} {it
         # select table
         set options "<option value=\"\">---</option>"
         foreach opt $sel_list { 
-            append options " <option value=\"[lindex [lindex $datadef $opt] 0]\">[lindex [lindex $datadef $opt] 1]</option>"
+            append options " <option value=\"[lindex $datadef $opt 0]\">[lindex $datadef $opt 1]</option>"
         }
     
         for {set i 0} { $i < $max_columns} {incr i} {
             if {$i < $n_sel_columns} {
-                set match [lindex [lindex $datadef [lindex $sel_columns $i]] 0]
+                set match [lindex $datadef [lindex $sel_columns $i] 0]
                 regsub "(<option )(value=\"$match\">)" $options "\\1 selected=\"selected\" \\2" out
             } else { 
                 set out $options
@@ -658,16 +658,16 @@ ad_proc ad_table_form {datadef {type select} {return_url {}} {item_group {}} {it
         # radio button table
         append html "<tr><th>Col \#</th>"
         foreach opt $sel_list { 
-            append html "<th>[lindex [lindex $datadef $opt] 1]</th>"
+            append html "<th>[lindex $datadef $opt 1]</th>"
         }
         append html "</tr>"
 
         foreach opt $sel_list { 
-            append options "<td><input name=\"col_@@\" type=\"radio\" value=\"[lindex [lindex $datadef $opt] 0]\"></td>"
+            append options "<td><input name=\"col_@@\" type=\"radio\" value=\"[lindex $datadef $opt 0]\"></td>"
         }
         for {set i 0} { $i < $max_columns} {incr i} {
             if {$i < $n_sel_columns} {
-                set match [lindex [lindex $datadef [lindex $sel_columns $i]] 0]
+                set match [lindex $datadef [lindex $sel_columns $i] 0]
                 regsub "( type=\"radio\" )(value=\"$match\">)" $options "\\1 checked=\"checked\" \\2" out
             } else { 
                 set out $options
@@ -765,7 +765,7 @@ ad_proc ad_table_sort_form {datadef {type select} {return_url {}} {item_group {}
 
     set options "<option value=\"\">---</option>"
     foreach opt $sel_list { 
-        append options " <option value=\"[lindex [lindex $datadef $opt] 0]\">[lindex [lindex $datadef $opt] 1]</option>"
+        append options " <option value=\"[lindex $datadef $opt 0]\">[lindex $datadef $opt 1]</option>"
     }
     
     for {set i 0} { $i < $max_columns} {incr i} {

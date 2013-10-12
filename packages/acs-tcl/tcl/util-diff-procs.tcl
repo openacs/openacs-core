@@ -37,10 +37,9 @@ ad_proc -public util::diff {
     foreach chunk $result {
 	ns_log notice "\n$chunk\n"
         set action [lindex $chunk 0]
-        set old_index1 [lindex [lindex $chunk 1] 0]
-        set old_index2 [lindex [lindex $chunk 1] 1]
-        set new_index1 [lindex [lindex $chunk 2] 0]
-        set new_index2 [lindex [lindex $chunk 2] 1]
+
+	lassign [lindex $chunk 1] old_index1 old_index2
+	lassign [lindex $chunk 2] new_index1 new_index2
         
         while {$i < $old_index1} {
             lappend output [lindex $old $i]
@@ -180,10 +179,10 @@ ad_proc -public util::html_diff {
     foreach chunk $result {
 
         set action [lindex $chunk 0]
-        set old_index1 [lindex [lindex $chunk 1] 0]
-        set old_index2 [lindex [lindex $chunk 1] 1]
-        set new_index1 [lindex [lindex $chunk 2] 0]
-        set new_index2 [lindex [lindex $chunk 2] 1]
+
+	lassign [lindex $chunk 1] old_index1 old_index2
+	lassign [lindex $chunk 2] new_index1 new_index2
+
         while {$i < $old_index1} {
             lappend output [lindex $old_list $i]
             incr i

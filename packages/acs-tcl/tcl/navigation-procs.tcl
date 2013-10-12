@@ -181,7 +181,7 @@ ad_proc -public ad_context_bar {
 
     if {[llength $args] == 0} { 
         # fix last element to just be literal string
-        set context [lreplace $context end end [lindex [lindex $context end] 1]]
+        set context [lreplace $context end end [lindex $context end 1]]
     } else {
 	if {![string match "\{*" $args]} {
 	    # args is not a list, transform it into one.
@@ -387,7 +387,7 @@ proc menu_submenu_select_list {items urls {highlight_url "" }} {
 	# the current url then select it
 	if {$highlight_url ne "" && $highlight_url == [lindex $urls $counter]} {
  	    append return_string "<OPTION VALUE=\"[lindex $urls $counter]\" selected>$item"
-	} elseif {$highlight_url eq "" && [string match *$url_stub* [lindex $urls $counter]]} {
+	} elseif {$highlight_url eq "" && [string match "*$url_stub*" [lindex $urls $counter]]} {
 	    append return_string "<OPTION VALUE=\"[lindex $urls $counter]\" selected>$item"
 	} else {
 	    append return_string "<OPTION VALUE=\"[lindex $urls $counter]\">$item"

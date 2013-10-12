@@ -850,7 +850,7 @@ ad_proc -private rp_handler {} {
       ad_returnredirect [ns_conn url]
       return
   }
-  if {$ad_conn(extra_url) ne "" && ![string match *$ad_conn(extra_url) [ns_conn url]]} {
+  if {$ad_conn(extra_url) ne "" && ![string match "*$ad_conn(extra_url)" [ns_conn url]]} {
     #
     # On internal redirects, the current ad_conn(extra_url) might be
     # from a previous request, which might have lead to a not-found
@@ -933,7 +933,7 @@ ad_proc -private rp_handler {} {
     }
 
     if {[info exists dir_index]
-        && ![string match */CVS/* $dir_index]
+        && ![string match "*/CVS/*" $dir_index]
     } {
         if { [nsv_get rp_directory_listing_p .] } {
             ns_returnnotice 200 "Directory listing of $dir_index" \

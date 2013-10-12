@@ -836,8 +836,7 @@ ad_proc -private db_get_quote_indices { sql } {
     set all_indices [regexp -inline -indices -all -- {(?:^|[^'])(')(?:[^']|'')+(')(?=$|[^'])} $sql]
 
     for {set i 0} { $i < [llength $all_indices] } { incr i 3 } {
-        lappend quote_indices [lindex [lindex $all_indices $i+1] 0]
-        lappend quote_indices [lindex [lindex $all_indices $i+2] 0]
+        lappend quote_indices [lindex $all_indices $i+1 0] [lindex $all_indices $i+2 0]
     }
 
     return $quote_indices
@@ -869,8 +868,8 @@ ad_proc -private db_bind_var_substitution { sql { bind "" } } {
         uplevel {            
             set __db_lst [regexp -inline -indices -all -- {:?:\w+} $__db_sql]
             for {set __db_i [expr {[llength $__db_lst] - 1}]} {$__db_i >= 0} {incr __db_i -1} {
-                set __db_ws [lindex [lindex $__db_lst $__db_i] 0]
-                set __db_we [lindex [lindex $__db_lst $__db_i] 1]
+                set __db_ws [lindex $__db_lst $__db_i 0]
+                set __db_we [lindex $__db_lst $__db_i 1]
                 set __db_bind_var [string range $__db_sql $__db_ws $__db_we]                
                 if {![string match "::*" $__db_bind_var] && ![db_bind_var_quoted_p $__db_sql $__db_ws $__db_we]} {
                     set __db_tcl_var [string range $__db_bind_var 1 end]
@@ -891,8 +890,8 @@ ad_proc -private db_bind_var_substitution { sql { bind "" } } {
         set lsql $sql
         set lst [regexp -inline -indices -all -- {:?:\w+} $sql]
         for {set i [expr {[llength $lst] - 1}]} {$i >= 0} {incr i -1} {
-            set ws [lindex [lindex $lst $i] 0]
-            set we [lindex [lindex $lst $i] 1]
+            set ws [lindex $lst $i 0]
+            set we [lindex $lst $i 1]
             set bind_var [string range $sql $ws $we]
             if {![string match "::*" $bind_var] && ![db_bind_var_quoted_p $lsql $ws $we]} {
                 set tcl_var [string range $bind_var 1 end]
@@ -1438,7 +1437,7 @@ proc db_multirow_helper {} {
                         set columns $local_columns
                     } else {
                         # Check that the columns match, if not throw an error
-                        if { ![string equal [join [lsort -ascii $local_columns]] [join [lsort -ascii $columns]]] } {
+                        if { [join [lsort -ascii $local_columns]] ne [join [lsort -ascii $columns]] } {
                             error "Appending to a multirow with differing columns.
     Original columns     : [join [lsort -ascii $columns] ", "].
     Columns in this query: [join [lsort -ascii $local_columns] ", "]" "" "ACS_MULTIROW_APPEND_COLUMNS_MISMATCH"
@@ -1752,12 +1751,9 @@ ad_proc -public db_multirow {
             return [list $counter $columns $values]
         }]
 
-        set counter [lindex $value 0]
-        set columns [lindex $value 1]
-        set values [lindex $value 2]
+	lassign $value counter columns values
 
         set count 1
-
         foreach value $values {
            upvar $level_up "$var_name:[expr {$count}]" array_val
            array set array_val $value
@@ -2666,7 +2662,7 @@ ad_proc -public db_load_sql_data {{
                 set pgpass "<<$pgpass"
             }
 
-            if { [string equal [db_get_dbhost] "localhost"] || [string equal [db_get_dbhost] ""] } {
+            if { [db_get_dbhost] eq "localhost" || [db_get_dbhost] eq "" } {
                 set pghost ""
             } else {
                 set pghost "-h [db_get_dbhost]"
