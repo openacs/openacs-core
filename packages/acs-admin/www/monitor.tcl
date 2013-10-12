@@ -14,7 +14,7 @@ set context [list $page_title]
 set threads [ns_info threads]
 set connections [list]
 foreach thread $threads {
-    if { [string equal [lindex $thread 5] "ns:connthread"] && [llength [lindex $thread 6]] > 0 } {
+    if { [lindex $thread 5] eq "ns:connthread" && [llength [lindex $thread 6]] > 0 } {
 	lappend connections [lindex $thread 6]
     }
 }

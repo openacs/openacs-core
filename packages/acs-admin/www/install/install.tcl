@@ -32,7 +32,7 @@ foreach package_key [array names repository] {
     array unset version
     array set version $repository($package_key)
 
-    if { (![info exists package_type] || $package_type eq "") || [string equal $version(package.type) $package_type] } {
+    if { (![info exists package_type] || $package_type eq "") || $version(package.type) eq $package_type } {
         set package_key $version(package.key)
             
         # If in upgrade mode, only add to list if it's an upgrade
