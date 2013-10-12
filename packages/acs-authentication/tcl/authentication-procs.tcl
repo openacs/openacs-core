@@ -1427,7 +1427,7 @@ ad_proc -private auth::check_local_account_status {
             set PasswordExpirationDays [parameter::get -parameter PasswordExpirationDays -package_id [ad_acs_kernel_id] -default 0]
             
 
-            if { $email_verified_p eq "f" } {
+            if { $email_verified_p == "f" } {
                 if { !$no_dialogue_p } {
                     set result(account_message) "<p>[_ acs-subsite.lt_Registration_informat]</p><p>[_ acs-subsite.lt_Please_read_and_follo]</p>"
                     
