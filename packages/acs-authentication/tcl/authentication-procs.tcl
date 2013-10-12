@@ -1439,7 +1439,7 @@ ad_proc -private auth::check_local_account_status {
                         set result(account_message) [_ acs-subsite.Error_sending_verification_mail]
                     }
                 }
-            } elseif { [string equal [acs_user::ScreenName] "require"] && $screen_name eq "" } {
+            } elseif { [acs_user::ScreenName] eq "require" && $screen_name eq "" } {
                 set message "Please enter a screen name now."
                 set result(account_url) [export_vars -no_empty -base "[subsite::get_element -element url]user/basic-info-update" { message return_url {edit_p 1} }]
             } elseif { $PasswordExpirationDays > 0 && \
