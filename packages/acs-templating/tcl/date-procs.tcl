@@ -218,37 +218,35 @@ ad_proc -public template::util::date::get_property { what date } {
     seconds    { return [lindex $date 5] }
     format     { return [lindex $date 6] }
     long_month_name {
-      if {[lindex $date 1] eq {}} {
+      if {[lindex $date 1] eq ""} {
         return {}
       } else {
         return [monthName [lindex $date 1] long]
       }
     }
     short_month_name {
-      if {[lindex $date 1] eq {}} {
+      if {[lindex $date 1] eq ""} {
         return {}
       } else {
         return [monthName [lindex $date 1] short]
       }
     }
     days_in_month {
-      if { [string equal [lindex $date 1] {}] || \
-           [string equal [lindex $date 0] {}]} {
+      if { [lindex $date 1] eq "" || [lindex $date 0] eq "" } {
         return 31
       } else {
-        return [daysInMonth \
-               [lindex $date 1] [lindex $date 0]]
+        return [daysInMonth [lindex $date 1] [lindex $date 0]]
       }
     }
     short_year {
-      if {[lindex $date 0] eq {}} {
+      if {[lindex $date 0] eq ""} {
         return {}
       } else {
 	  return [expr {[lindex $date 0] % 100}]
       }
     }
     short_hours {
-      if {[lindex $date 3] eq {}} {
+      if {[lindex $date 3] eq ""} {
         return {}
       } else {    
         set value [expr {[lindex $date 3] % 12}]
@@ -260,7 +258,7 @@ ad_proc -public template::util::date::get_property { what date } {
       }
     }
     ampm {
-      if {[lindex $date 3] eq {}} {
+      if {[lindex $date 3] eq ""} {
         return {}
       } else { 
         if { [lindex $date 3] > 11 } {
@@ -303,7 +301,7 @@ ad_proc -public template::util::date::get_property { what date } {
       # DEDS: revert this first as to_timestamp is only for
       # oracle9i. no clear announcement that openacs has dropped
       # support for 8i
-      if { [llength $date] <= 3 || ([string equal [db_type] "oracle"] && [string match "8.*" [db_version]]) } {
+      if { [llength $date] <= 3 || ([db_type] eq "oracle" && [string match "8.*" [db_version]]) } {
           return "to_date('$value', '$format')"
       } else { 	 
           return "to_timestamp('$value', '$format')"
@@ -371,8 +369,7 @@ ad_proc -public template::util::date::get_property { what date } {
       }
       set value [lc_time_fmt [join $date_list "-"] "%q"]
       unpack $date
-      if { $hours ne {} && \
-           $minutes ne {} } {
+      if { $hours ne "" && $minutes ne "" } {
 	  append value " [string range $pad [string length $hours] end]${hours}:[string range $pad [string length $minutes] end]$minutes"
 	  if { $seconds ne {} } {
 	      append value ":[string range $pad [string length $seconds] end]$seconds"
@@ -384,15 +381,12 @@ ad_proc -public template::util::date::get_property { what date } {
       set value ""
       # Unreliable !
       unpack $date
-      if { $year ne {} && \
-           $month ne {} && \
-           $day ne {} } {
+      if { $year ne "" && $month ne "" && $day ne "" } {
         append value "$month/$day/$year"
       }
-      if { $hours ne {} && \
-           $minutes ne {} } {
+      if { $hours ne "" && $minutes ne "" } {
         append value " ${hours}:${minutes}"
-        if { $seconds ne {} } {
+        if { $seconds ne "" } {
           append value ":$seconds"
 	}
       }
@@ -466,7 +460,7 @@ ad_proc -public template::util::date::set_property { what date value } {
       return [lreplace $date 3 3 $value]
     }
     ampm {
-      if {[lindex $date 3] eq {}} {
+      if {[lindex $date 3] eq ""} {
         return $date
       } else { 
         set hours [lindex $date 3]
@@ -702,7 +696,7 @@ ad_proc -public template::util::negative { value } {
     Check if a value is less than zero, but return false
     if the value is an empty string
 } {
-  if {$value eq {}} {
+  if {$value eq ""} {
     return 0
   } else {
     return [expr {[template::util::leadingTrim $value] < 0}]
@@ -731,7 +725,7 @@ ad_proc -public template::util::date::validate { date error_ref } {
                       hours "HH24|HH12" minutes "MI" seconds "SS" } {
 
     # If the field is required, but missing, report an error
-    if {[set $field] eq {}} {
+    if {[set $field] eq ""} {
 	if { [regexp $exp $format match] } {
 	    set field_pretty [_ acs-templating.${field}]
 	    lappend error_msg [_ acs-templating.lt_No_value_supplied_for_-field_pretty-]
@@ -795,8 +789,8 @@ ad_proc -public template::util::leadingPad { string size } {
     Pad a string with leading zeroes
 } {
   
-  if {$string eq {}} {
-    return {}
+  if {$string eq ""} {
+    return ""
   }
 
   set ret [string repeat "0" [expr {$size - [string length $string]}]]
@@ -809,9 +803,9 @@ ad_proc -public template::util::leadingTrim { value } {
     Trim the leading zeroes from the value, but preserve the value
     as "0" if it is "00"
 } {
-  set empty [string equal $value {}]
+  set empty [string equal $value ""]
   set value [string trimleft $value 0]
-  if { !$empty && $value eq {} } {
+  if { !$empty && $value eq "" } {
     set value 0
   }
   return $value
@@ -882,13 +876,14 @@ ad_proc -public template::widget::dateFragment {
       set interval $element(${fragment}_interval)
     } else {
        # Display text entry for some elements, or if the type is text
-       if { $type == "t" ||
-            [regexp "year|short_year" $fragment] } {
+       if { $type == "t" 
+	    || [regexp "year|short_year" $fragment] 
+	} {
          set output "<input type=\"text\" name=\"$element(name).$fragment\" id=\"$element(name).$fragment\" size=\"$size\""
          append output " maxlength=\"$size\" value=\"[template::util::leadingPad $value $size]\""
          array set attributes $tag_attributes
          foreach attribute_name [array names attributes] {
-           if {$attributes($attribute_name) eq {}} {
+           if {$attributes($attribute_name) eq ""} {
              append output " $attribute_name"
            } else {
              append output " $attribute_name=\"$attributes($attribute_name)\""
@@ -1020,8 +1015,9 @@ ad_proc -public template::widget::date { element_reference tag_attributes } {
   append output "value=\"$element(format)\" >\n"
 
   # Prepare the value to set defaults on the form
-  if { [info exists element(value)] && 
-       [template::util::date::get_property not_null $element(value)] } {
+  if { [info exists element(value)] 
+       && [template::util::date::get_property not_null $element(value)] 
+   } {
     set value $element(value)
     foreach v $value {
       lappend trim_value [template::util::leadingTrim $v]
@@ -1153,7 +1149,9 @@ ad_proc -public template::util::textdate_localized_format {} {
     set format [string tolower $format]
     # this format key must now be at max five characters, and contain one y, one m and one d
     # as well as two punction marks ( - . / )
-    if { [regexp {^([y|m|d])([\-|\.|/])([y|m|d])([\-|\.|/])([y|m|d])} $format match first first_punct second second_punct third] && [string length $format] eq "5" } {
+    if { [regexp {^([y|m|d])([\-|\.|/])([y|m|d])([\-|\.|/])([y|m|d])} $format match first first_punct second second_punct third] 
+	 && [string length $format] == "5" 
+     } {
 	if { [lsort [list $first $second $third]] eq "d m y" } {
 	    # we have a valid format from acs-lang.localization-d_fmt with all 3 necessary elements
             # and only two valid punctuation marks

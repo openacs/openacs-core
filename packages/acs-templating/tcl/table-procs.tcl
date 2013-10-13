@@ -211,16 +211,15 @@ ad_proc -public template::widget::table::prepare {
       set row(name) $column_name
 
       set label [lindex $column 0]
-      if {$label eq {}} {
+      if {$label eq ""} {
         set label $column_name
       }
       set orderby_clause [lindex $column 1]
-      if {$orderby_clause eq {}} {
+      if {$orderby_clause eq ""} {
         set orderby_clause $column_name
       }
  
-      if { [info exists widget(orderby)] && \
-           [string equal $column_name $widget(orderby)] } {
+      if { [info exists widget(orderby)] && $column_name eq $widget(orderby) } {
         set row(html) "<b>$label</b>"
         set row(selected) "t"
       } else {

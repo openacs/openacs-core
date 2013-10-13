@@ -188,8 +188,7 @@ ad_proc -public template::element::create { form_id element_id args } {
 
   # If the widget is a submit widget, remember it
   # All submit widgets are optional
-  if { $opts(widget) eq "submit" || \
-       [string equal $opts(widget) "button"] } {
+  if { $opts(widget) eq "submit" || $opts(widget) eq "button" } {
     set form_properties(has_submit) 1
     set opts(optional) 1
     if { ! [info exists opts(value)] } { set opts(value) $opts(label) }
@@ -197,9 +196,7 @@ ad_proc -public template::element::create { form_id element_id args } {
   }
 
   # If the widget is a checkbox or radio widget, set attributes
-    if { $opts(widget) eq "radio" || \
-             [string equal $opts(widget) "checkbox"] } {
-
+    if { $opts(widget) eq "radio" || $opts(widget) eq "checkbox" } {
         # If there's no legend text, no point to generate the fieldset
         if { ![info exists opts(legendtext)] } {
             if { [info exists opts(legend)] || [info exists opts(fieldset)] } {
@@ -296,7 +293,7 @@ ad_proc -public template::element::set_properties { form_id element_id args } {
 
   template::util::get_opts $args
 
-    if { [string equal $opts(widget) "hidden"] 
+    if { $opts(widget) eq "hidden"
          && [info exists opts(sign)] 
          && $opts(sign) 
          && [info exists opts(value)] } {
@@ -427,7 +424,7 @@ ad_proc -private template::element::validate { form_id element_id } {
   set is_optional [info exists element(optional)]
 
   # if the element is optional and the value is an empty string, then ignore
-  if { $is_optional && [string equal [lindex $values 0] {}] } {
+  if { $is_optional && [lindex $values 0] eq "" } {
     set values [list]
 
     # also clobber the value(s) for a submit widget
@@ -597,7 +594,7 @@ ad_proc -public template::element::querygetall { element_ref } {
 
   set transform_proc "::template::data::transform::$datatype"
 
-  if {[info commands $transform_proc] eq {}} {
+  if {[info commands $transform_proc] eq ""} {
 
     set values [ns_querygetall $element(id)]
 
@@ -747,9 +744,9 @@ ad_proc -private template::element::copy_value_to_values_if_defined {} {
     define values from value, if the latter is more defined
 } {
   upvar opts opts
-  # values is always defined, init to "" from template::element::defaults
+  # opts(values) is always defined, init to "" from template::element::defaults
   if { [info exists opts(value)] && [llength $opts(values)] == 0 } {
-    if { [string equal opts(value) {}] } {
+    if { $opts(value) eq "" } {
       set opts(values) [list]
     } else {
       set opts(values) [list $opts(value)]

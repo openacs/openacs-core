@@ -159,7 +159,7 @@ ad_proc -public template::form::create { id args } {
 
   set formaction [get_action $id]
   # If we were in display mode, and a button was clicked, we should be in edit mode now
-  if { $submission && [string equal [ns_queryget "form:mode"] "display"] } {
+  if { $submission && [ns_queryget "form:mode"] eq "display" } {
     set opts(mode) "edit"
     set submission 0
   }

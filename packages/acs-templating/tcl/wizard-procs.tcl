@@ -628,7 +628,7 @@ ad_proc -public template::wizard::get_forward_url { step_id } {
 		    set param [lindex [split $param ":"] 0]
 		    if {$param ni $multiple_listed} {
 			foreach check_param $properties(params) {
-			    if { [string equal [lindex [split $check_param ":"] 0] $param] } {
+			    if { [lindex [split $check_param ":"] 0] eq $param } {
 				set value_list [ns_querygetall $param]
 				for { set i 0 } { $i < [llength $value_list] } { incr i } {
 				    append url "&$param=[ns_urlencode [lindex $value_list $i]]"
