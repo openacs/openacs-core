@@ -496,8 +496,8 @@ ad_proc -private lang::catalog::parse { catalog_file_contents } {
 
     # Get the message catalog root node
     set root_node [xml_doc_get_first_node $tree]
-    if { ![string equal [xml_node_get_name $root_node] ${MESSAGE_CATALOG_TAG}] } {
-        error "lang::catalog_parse: Could not find root node ${MESSAGE_CATALOG_TAG}"
+    if { [xml_node_get_name $root_node] ne $MESSAGE_CATALOG_TAG } {
+        error "lang::catalog_parse: Could not find root node $MESSAGE_CATALOG_TAG"
     }
 
     # Set the message catalog root level attributes
