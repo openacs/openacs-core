@@ -176,9 +176,8 @@ ad_proc -private template::adp_parse { __adp_stub __args } {
     return $__adp_output				; # empty in non-templated page
   } return_value]
 
-  global errorInfo errorCode
-  set s_errorInfo $errorInfo
-  set s_errorCode $errorCode
+  set s_errorInfo $::errorInfo
+  set s_errorCode $::errorCode
 
   # Always pop off the parse_level no matter how we exit
   template::util::lpop ::template::parse_level
@@ -322,11 +321,13 @@ ad_proc -private template::adp_prepare {} {
       code::tcl::$__adp_stub
 
       # propagate aborting
-      global request_aborted
-      if {[info exists request_aborted]} {
+      if {[info exists ::request_aborted]} {
 	ns_log warning "propagating abortion from $__adp_remember_stub.tcl\
           (status [lindex $request_aborted 0]): '[lindex $request_aborted 1]')"
-	adp_abort
+	unset ::request_aborted
+        ad_script_abort
+        #adp_abort
+        return 0
       }
      
       # if the file has changed than prepare again
@@ -375,9 +376,10 @@ ad_proc -private template::adp_init { type file_stub } {
   set pkg_id [apm_package_id_from_key acs-templating]
   set refresh_cache [parameter::get -package_id $pkg_id -parameter RefreshCache -default "as needed"]
 
-  if {$proc_name eq {} || $refresh_cache ne "never" } {
+  if {$proc_name eq "" || $refresh_cache ne "never" } {
     set mtime [file mtime $file_stub.$type]
-    if {$proc_name eq {} || $mtime != [$proc_name]
+    if {$proc_name eq "" 
+	|| $mtime != [$proc_name]
 	|| $refresh_cache eq "always"} {
 
       # either the procedure does not already exist or is not up-to-date
@@ -852,8 +854,8 @@ ad_proc -private template::get_attribute { tag params name { default "ERROR" } }
 } {
   set value [ns_set iget $params $name]
 
-  if {$value eq {}} {
-    if { [string equal $default {ERROR}] } {
+  if {$value eq ""} {
+    if { $default eq "ERROR" } {
       error "Missing [string toupper $name] property\
              in [string toupper $tag] tag"
     } else {
