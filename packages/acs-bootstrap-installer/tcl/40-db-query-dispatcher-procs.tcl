@@ -345,7 +345,7 @@ ad_proc -public db_qd_get_fullname {local_name {added_stack_num 1}} {
         # db_qd_log QDDebug "calling namespace = $calling_namespace"
 
         if {$calling_namespace ne "" && 
-            ![string match *::* $proc_name]} {
+            ![string match "*::*" $proc_name]} {
             set proc_name ${calling_namespace}::${proc_name}
         }
 	# db_qd_log QDDebug "proc_name is -$proc_name-"

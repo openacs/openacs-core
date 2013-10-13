@@ -305,7 +305,7 @@ proc ad_proc args {
     set effective_arg_list $arg_list
 
     set last_arg [lindex $effective_arg_list end]
-    if { [llength $last_arg] == 1 && [string equal [lindex $last_arg 0] "args"] } {
+    if { [llength $last_arg] == 1 && [lindex $last_arg 0] eq "args" } {
         set varargs_p 1
         set effective_arg_list [lrange $effective_arg_list 0 [llength $effective_arg_list]-2]
     }
@@ -827,7 +827,7 @@ ad_proc -public callback {
         }
     }
 
-    if {![string equal $impl *] && ![info exists c] && !$catch_p} {
+    if {$impl ne "*" && ![info exists c] && !$catch_p} {
         error "callback $callback implementation $impl does not exist"
     }
 
