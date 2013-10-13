@@ -37,7 +37,7 @@ package require Tcl 8.2
 # keep this in sync with pkgIndex.tcl
 package provide http 2.6.3
 
-if {0 && [info command _proc] == {}} {
+if {0 && [info commands _proc] == {}} {
     rename proc _proc
     _proc proc {name arglist body} {
         _proc $name $arglist [concat "proc_begin;" $body ";proc_end"]
@@ -203,13 +203,13 @@ proc http::Finish { token {errormsg ""} {skipCB 0}} {
 	set state(error) [list $errormsg $errorInfo $errorCode]
 	set state(status) error
     }
-    if {[info exists state(connection)] && $state(connection) == "close"} {
+    if {[info exists state(connection)] && $state(connection) eq "close"} {
         CloseSocket $state(sock) $token
     }
     catch {after cancel $state(after)}
     if {[info exists state(-command)] && !$skipCB} {
 	if {[catch {eval $state(-command) {$token}} err]} {
-	    if {[string length $errormsg] == 0} {
+	    if {$errormsg eq ""} {
 		set state(error) [list $err $errorInfo $errorCode]
 		set state(status) error
 	    }
@@ -393,7 +393,7 @@ proc http::geturl { url args } {
 	unset $token
 	return -code error "Unsupported URL: $url"
     }
-    if {[string length $proto] == 0} {
+    if {$proto eq ""} {
 	set proto http
 	set url ${proto}://$url
     }
@@ -404,13 +404,13 @@ proc http::geturl { url args } {
     set defport [lindex $urlTypes($proto) 0]
     set defcmd [lindex $urlTypes($proto) 1]
 
-    if {[string length $port] == 0} {
+    if {$port eq ""} {
 	set port $defport
     }
-    if {[string length $srvurl] == 0} {
+    if {$srvurl eq ""} {
 	set srvurl /
     }
-    if {[string length $proto] == 0} {
+    if {$proto eq ""} {
 	set url http://$url
     }
     set state(url) $url
@@ -484,7 +484,7 @@ proc http::geturl { url args } {
 	fileevent $s writable [list http::Connect $token]
 	http::wait $token
 
-	if {[string equal $state(status) "error"]} {
+	if {$state(status) eq "error"} {
 	    # something went wrong while trying to establish the connection
 	    # Clean up after events and such, but DON'T call the command
 	    # callback (if available) because we're going to throw an 
@@ -492,7 +492,7 @@ proc http::geturl { url args } {
 	    set err [lindex $state(error) 0]
 	    cleanup $token
 	    return -code error $err
-	} elseif {![string equal $state(status) "connect"]} {
+	} elseif {$state(status) ne "connect" } {
 	    # Likely to be connection timeout
 	    return $token
 	}
@@ -554,7 +554,7 @@ proc http::geturl { url args } {
 	foreach {key value} $state(-headers) {
 	    set value [string map [list \n "" \r ""] $value]
 	    set key [string trim $key]
-	    if {[string equal $key "Content-Length"]} {
+	    if {$key eq "Content-Length"} {
 		set contDone 1
 		set state(querylength) $value
 	    }
@@ -610,7 +610,7 @@ proc http::geturl { url args } {
 	    # calls it synchronously, we just do a wait here.
 
 	    wait $token
-	    if {[string equal $state(status) "error"]} {
+	    if {$state(status) eq "error"} {
 		# Something went wrong, so throw the exception, and the
 		# enclosing catch will do cleanup.
 		return -code error [lindex $state(error) 0]
@@ -626,7 +626,7 @@ proc http::geturl { url args } {
 	
 	# if state(status) is error, it means someone's already called Finish
 	# to do the above-described clean up.
-	if {[string equal $state(status) "error"]} {
+	if {$state(status) eq "error"} {
 	    Finish $token $err 1
 	}
 	cleanup $token
@@ -827,12 +827,12 @@ proc http::Event {s token} {
         }
 	return
     }
-    if {[string equal $state(state) "header"]} {
+    if {$state(state) eq "header"} {
 	if {[catch {gets $s line} n]} {
 	    Finish $token $n
 	} elseif {$n == 0} {
             # We now have read all headers.
-            if {$state(http) == ""} {puts ">$line<"; return}
+            if {$state(http) eq ""} {puts ">$line<"; return}
 #puts "[string repeat - 60]\n$token: [array get state]\n[string repeat - 60]"
             # We ignore HTTP/1.1 100 Continue returns. RFC2616 sec 8.2.3
             if {[lindex $state(http) 1] == 100} {
@@ -845,8 +845,8 @@ proc http::Event {s token} {
             fconfigure $s -translation binary
 
 	    if {$state(-binary) || ![string match -nocase text* $state(type)]
-		    || [string match *gzip* $state(coding)]
-		    || [string match *compress* $state(coding)]} {
+		    || [string match "*gzip*" $state(coding)]
+		    || [string match "*compress*" $state(coding)]} {
 		# Turn off conversions for non-text data
                 set state(binary) 1
 		if {[info exists state(-channel)]} {
@@ -887,7 +887,7 @@ proc http::Event {s token} {
                 }
                 lappend state(meta) $key [string trim $value]
                 
-            } elseif {[string match HTTP* $line]} {
+            } elseif {[string match "HTTP*" $line]} {
                 set state(http) $line
             }
 	}
@@ -907,11 +907,11 @@ proc http::Event {s token} {
                     Eof $token
                 }
             } elseif {[info exists state(transfer)]
-                      && $state(transfer) == "chunked"} {
+                      && $state(transfer) eq "chunked"} {
                 set size 0
                 set chunk [getTextLine $s]
 		set n [string length $chunk]
-                if {[string trim $chunk] != ""} {
+                if {[string trim $chunk] ne ""} {
                     scan $chunk %x size
                     if {$size != 0} {
 			set bl [fconfigure $s -blocking]
@@ -1039,7 +1039,7 @@ proc http::CopyDone {token count {error {}}} {
 proc http::Eof {token {force 0}} {
     variable $token
     upvar 0 $token state
-    if {[string equal $state(state) "header"]} {
+    if {$state(state) eq "header"} {
 	# Premature eof
 	set state(status) eof
     } else {
@@ -1054,7 +1054,7 @@ proc http::Eof {token {force 0}} {
         # how to convert what we have encodings for.
 
         set enc [CharsetToEncoding $state(charset)]
-        if {$enc != "binary"} {
+        if {$enc ne "binary"} {
             set state(body) [encoding convertfrom $enc $state(body)]
         }
 
@@ -1079,7 +1079,7 @@ proc http::wait {token} {
     variable $token
     upvar 0 $token state
 
-    if {![info exists state(status)] || [string length $state(status)] == 0} {
+    if {![info exists state(status)] || $state(status) eq ""} {
 	# We must wait on the original variable name, not the upvar alias
 	vwait $token\(status)
     }
@@ -1105,7 +1105,7 @@ proc http::formatQuery {args} {
     set sep ""
     foreach i $args {
 	append result $sep [mapReply $i]
-	if {[string equal $sep "="]} {
+	if {$sep eq "="} {
 	    set sep &
 	} else {
 	    set sep =
@@ -1152,7 +1152,7 @@ proc http::ProxyRequired {host} {
     variable http
     if {[info exists http(-proxyhost)] && [string length $http(-proxyhost)]} {
 	if {![info exists http(-proxyport)] || \
-		![string length $http(-proxyport)]} {
+		$http(-proxyport) eq ""} {
 	    set http(-proxyport) 8080
 	}
 	return [list $http(-proxyhost) $http(-proxyport)]
@@ -1178,7 +1178,7 @@ proc http::CharsetToEncoding {charset} {
 	set encoding "shiftjis"
     } elseif {[regexp {(windows|cp)-?([0-9]+)} $charset - - num]} {
 	set encoding "cp$num"
-    } elseif {[string equal $charset "us-ascii"]} {
+    } elseif {$charset eq "us-ascii"} {
 	set encoding "ascii"
     } elseif {[regexp {(iso-?)?lat(in)?-?([0-9]+)} $charset - - - num]} {
 	switch $num {

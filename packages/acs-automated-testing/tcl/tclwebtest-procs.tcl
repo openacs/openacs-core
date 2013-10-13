@@ -83,7 +83,7 @@ ad_proc twt::server_url {} {
 
     regexp {(:[0-9]*)?$} [util_current_location] match port
 
-    if { [exists_and_not_null port] } {
+    if { ([info exists port] && $port ne "") } {
         return "http://${ip_address}${port}"
     } else {
         return "http://$ip_address"
