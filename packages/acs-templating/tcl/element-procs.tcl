@@ -197,6 +197,7 @@ ad_proc -public template::element::create { form_id element_id args } {
 
   # If the widget is a checkbox or radio widget, set attributes
     if { $opts(widget) eq "radio" || $opts(widget) eq "checkbox" } {
+
         # If there's no legend text, no point to generate the fieldset
         if { ![info exists opts(legendtext)] } {
             if { [info exists opts(legend)] || [info exists opts(fieldset)] } {
@@ -746,7 +747,12 @@ ad_proc -private template::element::copy_value_to_values_if_defined {} {
   upvar opts opts
   # opts(values) is always defined, init to "" from template::element::defaults
   if { [info exists opts(value)] && [llength $opts(values)] == 0 } {
-    if { $opts(value) eq "" } {
+      #
+      # GN: the following test is broken, since "opts(value)" is never
+      # empty; ... but changing this to a comparison with $opts(value)
+      # breaks eg ad_form.
+      #
+    if { [string equal opts(value) {}] } {
       set opts(values) [list]
     } else {
       set opts(values) [list $opts(value)]
