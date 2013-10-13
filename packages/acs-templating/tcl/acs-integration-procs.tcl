@@ -53,11 +53,9 @@ ad_proc -public ad_parse_template {
     set template_params [list]
     foreach param $params {
         switch [llength $param] {
-            1 { lappend template_params "&"
-                lappend template_params [lindex $param 0]
+            1 { lappend template_params "&" [lindex $param 0]
               }
-            2 { lappend template_params [lindex $param 0]
-                lappend template_params [lindex $param 1]
+            2 { lappend template_params [lindex $param 0] [lindex $param 1]
               }
             default { return -code error [_ acs-templating.Template_parser_error_in_parameter_list] }
         }
