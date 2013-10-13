@@ -35,7 +35,7 @@ if { [string match "*..*" $url] || [string match "*..*" $package_key] } {
     ad_script_abort
 }
 
-if {[exists_and_not_null package_key]} {
+if {$package_key ne ""} {
     set safe_p [regexp {/?(.*)} $url package_url]
 }
 

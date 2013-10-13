@@ -434,7 +434,7 @@ ad_returnrediredt $return_url
         User is redirected to /register/index.tcl if login is required
         (i.e. auth::require is specified) and the login is taken care of by
         user-login.tcl. If user not registered (i.e.
-        <literal>$auth_info(account_status) == "no_account"
+        <literal>$auth_info(account_status) eq "no_account"
 </literal>),
         user is redirected to user-register.tcl. 
       </sect3>
@@ -1654,7 +1654,7 @@ set subject "[_ acs-subsite.lt_Your_forgotten_passwo]"
 # Should make use of auth::password::RetrievePassword
 set body "[_ acs-subsite.lt_Please_follow_the_fol]"
 # Send email
-if [catch {ns_sendmail $email $system_owner $subject $body} errmsg] {
+if {[catch {ns_sendmail $email $system_owner $subject $body} errmsg]} {
     ad_return_error \
         "[_ acs-subsite.Error_sending_mail]" \
         "[_ acs-subsite.lt_Now_were_really_in_tr]
@@ -1852,7 +1852,7 @@ set system_owner [ad_system_owner]
 set subject "some other i18n key msg"
 set body "some other i18n key msg"
 # Send email
-if [catch {ns_sendmail $email $system_owner $subject $body} errmsg] {
+if {[catch {ns_sendmail $email $system_owner $subject $body} errmsg]} {
     ad_return_error \
         "[_ acs-subsite.Error_sending_mail]" \
         "[_ acs-subsite.lt_Now_were_really_in_tr]

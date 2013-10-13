@@ -97,7 +97,7 @@
       <listitem>
         <para>This is text from a program or file which you may need to
           examine or edit:</para>
-        <programlisting>if {$database == "oracle"} {
+        <programlisting>if {$database eq "oracle"} {
           set db_password        "mysitepassword"
 }</programlisting>
       </listitem>
