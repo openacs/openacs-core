@@ -152,7 +152,7 @@ ad_proc -public template::form::create { id args } {
   set formbutton [get_button $id]
 
   # If the user hit a button named "cancel", redirect and about
-  if { $submission && $formbutton eq "cancel" && ([info exists opts(cancel_url)] && $opts(cancel_url) ne "")} {
+  if { $submission && $formbutton eq "cancel" && [info exists opts(cancel_url)] && $opts(cancel_url) ne ""} {
       ad_returnredirect $opts(cancel_url)
       ad_script_abort
   }
