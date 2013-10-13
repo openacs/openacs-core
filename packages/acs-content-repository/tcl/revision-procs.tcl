@@ -45,9 +45,10 @@ ad_proc -public cr_write_content {
         error "Either revision_id or item_id must be specified"
     }
 
-    if { $storage_type ne "file" && \
-         $storage_type ne "text" && \
-         $storage_type ne "lob" } {
+    if { $storage_type ne "file" 
+	 && $storage_type ne "text" 
+	 && $storage_type ne "lob" 
+     } {
         error "Storage type '$storage_type' is invalid."
     }
 
@@ -225,7 +226,7 @@ ad_proc -public cr_import_content {
         switch $content_type {
             image {
 
-                if { [db_string image_subclass ""] eq "f" } {
+                if { [db_string image_subclass ""] == "f" } {
                     error "Image file must be stored in an image object"
                 }
     
@@ -268,7 +269,7 @@ ad_proc -public cr_import_content {
                     error "The file you uploaded was not an image (.gif, .jpg or .jpeg) file"
                 }
 
-                if { [db_string content_revision_subclass ""] eq "f" } {
+                if { [db_string content_revision_subclass ""] == "f" } {
                     error "Content must be stored in a content revision object"
                 }
 

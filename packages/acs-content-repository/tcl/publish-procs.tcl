@@ -825,7 +825,7 @@ ad_proc -public publish::render_subitem {
   # Call the appropriate handler function
   set code [list handle_item $sub_item_id -html $extra_args]
 
-  if {$is_embed eq "t"} {
+  if {$is_embed == "t"} {
     lappend code -embed
   }
 
