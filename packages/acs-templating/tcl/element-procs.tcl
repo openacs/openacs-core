@@ -216,7 +216,7 @@ ad_proc -public template::element::create { form_id element_id args } {
                 append fs_options " class=\"form-fieldset\""
             }
             foreach name [array names fs_attributes] {
-                if {$fs_attributes($name) eq {}} {
+                if {$fs_attributes($name) eq ""} {
                     append fs_options " $name"
                 } else {
                     append fs_options " $name=\"$fs_attributes($name)\""
@@ -226,12 +226,12 @@ ad_proc -public template::element::create { form_id element_id args } {
 
             # set legend attributes
             if { ![info exists opts(legend)] } {
-                set opts(legend) {}
+                set opts(legend) ""
             }
             array set lg_attributes $opts(legend)
             set lg_options ""
             foreach name [array names lg_attributes] {
-                if {$lg_attributes($name) eq {}} {
+                if {$lg_attributes($name) eq ""} {
                     append lg_options " $name"
                 } else {
                     append lg_options " $name=\"$lg_attributes($name)\""
@@ -267,7 +267,7 @@ ad_proc -public template::element::create { form_id element_id args } {
       if {[info exists opts(value)] } {
           set val $opts(value)
       } else { 
-          set val {}
+          set val ""
       }
       template::element::create $opts(form_id) $opts(id):sig \
           -datatype text \
@@ -437,13 +437,13 @@ ad_proc -private template::element::validate { form_id element_id } {
 
   # if no values were submitted then look for values specified in the
   # declaration (either values or value)
-  if { ! [llength $values] && [info exists element(values)] } {
+  if { [llength $values] == 0 && [info exists element(values)] } {
     set values $element(values)
   }
 
   # set a label for use in the template
   set label $element(label)
-  if {$label eq {}} {
+  if {$label eq ""} {
     set label $element(name)
   }
 
@@ -452,7 +452,7 @@ ad_proc -private template::element::validate { form_id element_id } {
   set is_inform [expr {$element(widget) eq "inform" || ($element(mode) ne "edit" && $element(mode) ne "" )}]
 
   # Check for required element
-  if { ! $is_inform  && ! $is_optional && ! [llength $values] } {
+  if { ! $is_inform  && ! $is_optional && ![llength $values] } {
 
     # no value was submitted for a required element
     set formerror($element_id) [_ acs-templating.Element_is_required]
