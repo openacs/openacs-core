@@ -323,7 +323,7 @@ ad_proc -private template::adp_prepare {} {
       # propagate aborting
       if {[info exists ::request_aborted]} {
 	ns_log warning "propagating abortion from $__adp_remember_stub.tcl\
-          (status [lindex $request_aborted 0]): '[lindex $request_aborted 1]')"
+          (status [lindex $::request_aborted 0]): '[lindex $::request_aborted 1]')"
 	unset ::request_aborted
         ad_script_abort
         #adp_abort
