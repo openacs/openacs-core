@@ -133,7 +133,7 @@ ad_proc doc_body_flush {} { Flushes the body (if possible). } {
 }
 
 ad_proc doc_find_template { filename } { Finds a master.adp file which can be used as a master template, looking in the directory containing $filename and working our way down the directory tree. } {
-    set path_root [acs_root_dir]
+    set path_root $::acs::rootdir
 
     set start [clock clicks -milliseconds]
 

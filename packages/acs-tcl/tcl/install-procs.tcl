@@ -66,11 +66,11 @@ ad_proc -private ::install::xml::action::source { node } {
 
     switch -exact $type {
         tcl {
-            set code [template::util::read_file [acs_root_dir]$src]
+            set code [template::util::read_file $::acs::rootdir$src]
             set out [eval $code]
         }
         sql {
-            db_source_sql_file [acs_root_dir]$src
+            db_source_sql_file $::acs::rootdir$src
             set out "$src completed"
         }
         install.xml {

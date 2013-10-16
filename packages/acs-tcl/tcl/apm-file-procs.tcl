@@ -32,7 +32,7 @@ ad_proc -public apm_workspace_dir {} {
     Return the path to the apm-workspace, creating the directory if necessary.
     
 } {
-    set path [file join [acs_root_dir] apm-workspace]
+    set path [file join $::acs::rootdir apm-workspace]
     if { [file isdirectory $path] } {
 	return $path
     } else {
@@ -179,11 +179,11 @@ ad_proc -private apm_generate_tarball { version_id } {
     #
     # Note that -C changes the working directory before compressing the next
     # file; we need this to ensure that the tarballs are relative to the
-    # package root directory ([acs_root_dir]/packages).
+    # package root directory ($::acs::rootdir/packages).
 
     set cmd [list exec [apm_tar_cmd] cf - 2> [apm_dev_null]]
     foreach file $files {
-	lappend cmd -C "[acs_root_dir]/packages"
+	lappend cmd -C "$::acs::rootdir/packages"
 	lappend cmd "$package_key/$file"
     }
     
@@ -285,11 +285,11 @@ ad_proc -private apm_files_load {
 	lassign $file_info package_key path
 
 	if { $force_reload_p || ![nsv_exists apm_library_mtime packages/$package_key/$path] } {
-	    if { [file exists "[acs_root_dir]/packages/$package_key/$path"] } {
+	    if { [file exists "$::acs::rootdir/packages/$package_key/$path"] } {
 		apm_callback_and_log $callback "Loading packages/$package_key/$path..."
 		set apm_current_package_key $package_key
 
-		apm_source "[acs_root_dir]/packages/$package_key/$path"
+		apm_source "$::acs::rootdir/packages/$package_key/$path"
 
 		# Release outstanding database handles (in case this file
 		# used the db_* database API and a subsequent one uses
@@ -358,7 +358,7 @@ ad_proc -public apm_file_watchable_p { path } {
     # The apm_guess procs need package_key and a path relative to package root
     # so parse those out of the given path
     if { [regexp {^packages/([^/]+)/(.*)$} $path match package_key package_rel_path] } {
-        if { ![file exists "[acs_root_dir]/$path"] } {
+        if { ![file exists "$::acs::rootdir/$path"] } {
             error "apm_file_watchable_p: path $path does not correspond to an existing file"
         }
     } else {
@@ -422,7 +422,7 @@ ad_proc -private apm_get_watchable_files { package_key } {
 } {
     set watchable_files [list]
 
-    set files [ad_find_all_files [acs_root_dir]/packages/$package_key]
+    set files [ad_find_all_files $::acs::rootdir/packages/$package_key]
     foreach file [lsort $files] {
         set rel_path [ad_make_relative_path $file]
         if { [apm_file_watchable_p $rel_path] } {

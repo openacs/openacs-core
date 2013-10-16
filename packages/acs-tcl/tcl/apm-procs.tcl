@@ -201,7 +201,7 @@ ad_proc apm_package_list_url_resolution {
         }
         switch $dependency_type {
             extends -
-            "" { lappend apm_package_url_resolution [acs_root_dir]/packages/$package_key/www }
+            "" { lappend apm_package_url_resolution $::acs::rootdir/packages/$package_key/www }
             embeds {
 
                # Reference to an embedded package is through URLs relative to the embedding
@@ -213,18 +213,18 @@ ad_proc apm_package_list_url_resolution {
                # as the request processor will not perform the expected permission check.
 
                lappend apm_package_url_resolution \
-                   [list [acs_root_dir]/packages/$package_key/embed/admin admin/$package_key]
+                   [list $::acs::rootdir/packages/$package_key/embed/admin admin/$package_key]
                lappend apm_package_url_resolution \
                    [list "" $package_key/admin]
 
                lappend apm_package_url_resolution \
-                   [list [acs_root_dir]/packages/$package_key/embed/sitewide-admin \
+                   [list $::acs::rootdir/packages/$package_key/embed/sitewide-admin \
                        sitewide-admin/$package_key]
                lappend apm_package_url_resolution \
                    [list "" $package_key/sitewide-admin]
 
                lappend apm_package_url_resolution \
-                   [list [acs_root_dir]/packages/$package_key/embed $package_key]
+                   [list $::acs::rootdir/packages/$package_key/embed $package_key]
             }
             default {
                 error "apm_package_list_url_resolution: dependency type is $dependency_type"
@@ -392,7 +392,7 @@ ad_proc -private apm_mark_files_for_reload {
 } {
     set changed_files [list]
     foreach relative_path $file_list {
-        set full_path "[acs_root_dir]/$relative_path"
+        set full_path "$::acs::rootdir/$relative_path"
 
 	# If the file exists, and either has never been loaded or has an mtime
 	# which differs the mtime it had when last loaded, mark to be loaded.
@@ -668,12 +668,12 @@ ad_proc -private apm_load_queries {
     set files [list]    
     foreach package $packages {
 
-        set files [ad_find_all_files [acs_root_dir]/packages/$package]
+        set files [ad_find_all_files $::acs::rootdir/packages/$package]
         if { [llength $files] == 0 } {
-    	    ns_log Error "apm_load_queries: Unable to locate [acs_root_dir]/packages/$package/*. when scanning for SQL queries to load."
+    	    ns_log Error "apm_load_queries: Unable to locate $::acs::rootdir/packages/$package/*. when scanning for SQL queries to load."
         }
 
-        set testdir    "[acs_root_dir]/packages/$package/tcl/test"
+        set testdir    "$::acs::rootdir/packages/$package/tcl/test"
         set testlength [string length $testdir]
 
         foreach file [lsort $files] {
@@ -770,7 +770,7 @@ ad_proc -public apm_load_any_changed_libraries {} {
     # changed.
     set files_to_reload [list]
     foreach file [nsv_array names apm_reload_watch] {
-	set path "[acs_root_dir]/$file"
+	set path "$::acs::rootdir/$file"
 	ns_log Debug "APM: File being watched: $path"
 
 	if { [file exists $path] 
@@ -810,7 +810,7 @@ ad_proc -public apm_load_any_changed_libraries {} {
 		    ns_log Notice "apm_load_any_changed_libraries: Reloading *-procs.tcl files in this interpreter..."
 		}
 		# File is usually of form packages/package_key
-		set file_path "[acs_root_dir]/$file"
+		set file_path "$::acs::rootdir/$file"
                 set file_ext [file extension $file_path]
                 
                 switch $file_ext {

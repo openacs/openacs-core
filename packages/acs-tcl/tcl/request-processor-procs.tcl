@@ -58,7 +58,7 @@ ad_proc -public rp_internal_redirect {
             # it's a relative path, prepend the current location
             set path "[file dirname [ad_conn file]]/$path"
         } else {
-            set path "[acs_root_dir]$path"
+            set path "$::acs::rootdir$path"
         }
     }
 
@@ -506,7 +506,7 @@ ad_proc -private rp_resources_filter { why } {
         return filter_return
     }
 
-    set path "[acs_root_dir]/www/resources/[join [lrange [ns_conn urlv] 1 end] /]"
+    set path "$::acs::rootdir/www/resources/[join [lrange [ns_conn urlv] 1 end] /]"
     if { [file isfile $path] } {
         ns_returnfile 200 [ns_guesstype $path] $path
         return filter_return

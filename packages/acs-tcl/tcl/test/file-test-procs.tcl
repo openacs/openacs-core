@@ -18,8 +18,8 @@ aa_register_case -cats {smoke production_safe} files__tcl_file_syntax_errors {
         return [expr {[string match {*.tcl} $file] || [file isdirectory $file]}]
     }
 
-    # if startdir is not [acs_root_dir]/packages, then somebody checked in the wrong thing by accident
-    set startdir [acs_root_dir]/packages
+    # if startdir is not $::acs::rootdir/packages, then somebody checked in the wrong thing by accident
+    set startdir $::acs::rootdir/packages
 
     aa_log "Checks starting from $startdir"
 
@@ -51,8 +51,8 @@ aa_register_case -cats {smoke production_safe} -error_level error files__tcl_fil
         return [expr {[string match {*.tcl} $file] || [file isdirectory $file]}]
     }
 
-    # if startdir is not [acs_root_dir]/packages, then somebody checked in the wrong thing by accident
-    set startdir [acs_root_dir]/packages
+    # if startdir is not $::acs::rootdir/packages, then somebody checked in the wrong thing by accident
+    set startdir $::acs::rootdir/packages
 
     aa_log "Checks starting from $startdir"
     set count 0
@@ -80,7 +80,7 @@ aa_register_case -cats {smoke production_safe} files__check_info_files {
 
     @author Jeff Davis davis@xarg.net
 } {
-    foreach spec_file [glob -nocomplain "[acs_root_dir]/packages/*/*.info"] {
+    foreach spec_file [glob -nocomplain "$::acs::rootdir/packages/*/*.info"] {
         set errp 0
         if {  [catch {array set version [apm_read_package_info_file $spec_file]} errMsg] } {
             aa_log_result fail "$spec_file returned $errMsg"
@@ -129,7 +129,7 @@ aa_register_case -cats {smoke production_safe} files__check_upgrade_ordering {
 
     @author Jeff Davis davis@xarg.net
 } {
-    foreach dir [lsort [glob -nocomplain -types f "[acs_root_dir]/packages/*/*.info"]] {
+    foreach dir [lsort [glob -nocomplain -types f "$::acs::rootdir/packages/*/*.info"]] {
 
         set error_p 0
 
@@ -201,8 +201,8 @@ aa_register_case -cats {smoke} files__check_xql_files {
         return [expr {[string match {*.xql} $file] || [file isdirectory $file]}]
     }
     
-    # if startdir is not [acs_root_dir]/packages, then somebody checked in the wrong thing by accident
-    set startdir [acs_root_dir]/packages
+    # if startdir is not $::acs::rootdir/packages, then somebody checked in the wrong thing by accident
+    set startdir $::acs::rootdir/packages
     
     aa_log "Checks starting from $startdir"
 

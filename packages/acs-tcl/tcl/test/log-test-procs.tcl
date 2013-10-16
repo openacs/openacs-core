@@ -14,7 +14,7 @@ aa_register_case -cats {smoke} -error_level warning server_error_log {
     set logfile [ns_info log]
 
     if {$logfile eq "STDOUT"} {
-        set logfile "[acs_root_dir]/log/error/current"
+        set logfile "$::acs::rootdir/log/error/current"
     }
 
     set fd [open $logfile r]

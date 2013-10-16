@@ -675,7 +675,7 @@ ad_proc -public apm_simple_package_install {
     Simple basic package install function.  Wraps up
     basically what the old install xml action did.
 } {
-    set package_info_path "[acs_root_dir]/packages/${package_key}/*.info"
+    set package_info_path "$::acs::rootdir/packages/${package_key}/*.info"
 
     set install_spec_files [list]
     foreach install_spec_file [glob -nocomplain $package_info_path] {
@@ -695,7 +695,7 @@ ad_proc -public apm_simple_package_install {
     }
 
     set pkg_info_list [list]
-    foreach spec_file [glob -nocomplain "[acs_root_dir]/packages/*/*.info"] {
+    foreach spec_file [glob -nocomplain "$::acs::rootdir/packages/*/*.info"] {
         # Get package info, and find out if this is a package we should install
         if { [catch { 
             array set package [apm_read_package_info_file $spec_file] 
@@ -774,8 +774,8 @@ ad_proc -private apm_package_install {
         }
 
         # Move the package into the packages dir        
-        #exec "mv" "$package_path" "[acs_root_dir]/packages"
-	file rename $package_path [acs_root_dir]/packages
+        #exec "mv" "$package_path" "$::acs::rootdir/packages"
+	file rename $package_path $::acs::rootdir/packages
 
         # We moved the spec file, so update its path
         set package_path $old_package_path
@@ -1092,7 +1092,7 @@ ad_proc -private apm_package_deinstall {
     apm_callback_and_log $callback "
     <li>Moving <tt>packages/$package_key</tt> to $backup_dir... "
 
-    if { [catch { file rename "[acs_root_dir]/packages/$package_key" $backup_dir } error] } {
+    if { [catch { file rename "$::acs::rootdir/packages/$package_key" $backup_dir } error] } {
 	apm_callback_and_log $callback "<font color=red>[ns_quotehtml $error]</font>"
     } else {
 	apm_callback_and_log $callback "moved."
@@ -2111,7 +2111,7 @@ ad_proc -private apm_get_package_repository {
         }
     } else {
         # Parse spec files
-        foreach spec_file [apm_scan_packages "[acs_root_dir]/packages"] {
+        foreach spec_file [apm_scan_packages "$::acs::rootdir/packages"] {
             with_catch errmsg {
                 array unset version
                 array set version [apm_read_package_info_file $spec_file]
@@ -2167,7 +2167,7 @@ ad_proc -private apm_load_install_xml {filename binds} {
     @creation-date 2003-10-30
 } {
     # Abort if there is no install.xml file
-    set filename [acs_root_dir]$filename
+    set filename $::acs::rootdir$filename
 
     if { ![file exists $filename] } {
         error "File $filename not found"
