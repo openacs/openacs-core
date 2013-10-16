@@ -137,8 +137,7 @@ switch $kind {
                 for { set n_same_components 0 } \
                         { $n_same_components < [llength $last_components] } \
                         { incr n_same_components } {
-                    if { ![string equal [lindex $last_components $n_same_components] \
-                            [lindex $components $n_same_components]] } {
+                    if { [lindex $last_components $n_same_components] ne [lindex $components $n_same_components] } {
                         break
                     }
                 }

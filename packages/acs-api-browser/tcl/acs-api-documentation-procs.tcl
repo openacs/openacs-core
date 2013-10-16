@@ -41,11 +41,11 @@ ad_proc -public api_read_script_documentation {
     # line begins with the string "ad_page_contract".
     set has_contract_p 0
 
-    if { ![file exists "[acs_root_dir]/$path"] } {
+    if { ![file exists "$::acs::rootdir/$path"] } {
 	return -code error "File $path does not exist"
     }
 
-    set file [open "[acs_root_dir]/$path" "r"]
+    set file [open "$::acs::rootdir/$path" "r"]
     while { [gets $file line] >= 0 } {
 	# Eliminate any comment characters.
 	regsub -all {#.*$} $line "" line
@@ -62,7 +62,7 @@ ad_proc -public api_read_script_documentation {
     } 
 
     doc_set_page_documentation_mode 1
-    set errno [catch { source "[acs_root_dir]/$path" } error]
+    set errno [catch { source "$::acs::rootdir/$path" } error]
     doc_set_page_documentation_mode 0
     if { $errno == 1 } {
 	global errorInfo
@@ -270,7 +270,7 @@ ad_proc -private api_format_see { see } {
         || [util_url_valid_p $see]} { 
         return "<a href=\"${see}]\">$see</a>"
     }
-    if {[file exists "[get_server_root]${see}"]} {
+    if {[file exists "$::acs::rootdir${see}"]} {
         return "<a href=\"content-page-view?source_p=1&path=[ns_urlencode $see]\">$see</a>"
     }
     return ${see}
@@ -522,7 +522,9 @@ ad_proc -public api_proc_documentation {
 	append out "[util_wrap_list $command_line]\n<blockquote>\n"
 	
 	if { $script_p } {
-		append out "Defined in <a href=\"/api-doc/procs-file-view?path=[ns_urlencode $doc_elements(script)]\">$doc_elements(script)</a><p>"
+	    append out [subst {Defined in 
+		<a href="/api-doc/procs-file-view?path=[ns_urlencode $doc_elements(script)]">$doc_elements(script)</a>
+		<p>}]
 	}
 	
 	if { $doc_elements(deprecated_p) } {
@@ -625,44 +627,49 @@ ad_proc -public api_proc_documentation {
                          -package_key acs-api-browser \
                          -parameter FancySourceFormattingP \
                          -default 1]} {
-			append out "<dt><b>Source code:</b></dt><dd>
+		    append out [subst {<dt><b>Source code:</b></dt><dd>
 <pre>[api_tcl_to_html $proc_name]</pre>
-</dd><p>\n"
+</dd><p>
+}]
 		} else {
-		append out "<dt><b>Source code:</b></dt><dd>
+		append out [subst {<dt><b>Source code:</b></dt><dd>
 <pre>[ns_quotehtml [api_get_body $proc_name]]</pre>
-</dd><p>\n"
+</dd><p>
+}]
 	        }
         }
 
-	set xql_base_name [get_server_root]/
+	set xql_base_name $::acs::rootdir/
 	append xql_base_name [file rootname $doc_elements(script)]
 	if { $xql_p } {
                 set there {}
                 set missing {}
 		if { [file exists ${xql_base_name}.xql] } {
-			append there "<dt><b>Generic XQL file:</b></dt>
+			append there [subst {<dt><b>Generic XQL file:</b></dt>
 <blockquote><pre>[api_quote_file ${xql_base_name}.xql]</pre></blockquote>
-<p>\n"
+<p>
+}]
 		} else {
                       lappend missing Generic
 		}
 		if { [file exists ${xql_base_name}-postgresql.xql] } {
-			append there "<dt><b>Postgresql XQL file:</b></dt>
+			append there [subst {<dt><b>Postgresql XQL file:</b></dt>
 <blockquote><pre>[api_quote_file ${xql_base_name}-postgresql.xql]</pre></blockquote>
-<p>\n"
+<p>
+}]
 		} else {
                       lappend missing PostgreSQL
 		}
 		if { [file exists ${xql_base_name}-oracle.xql] } {
-			append there "<dt><b>Oracle XQL file:</b></dt>
+			append there [subst {<dt><b>Oracle XQL file:</b></dt>
 <blockquote><pre>[api_quote_file ${xql_base_name}-oracle.xql]</pre></blockquote>
-<p>\n"
+<p>
+}]
 		} else {
                     lappend missing Oracle
 		}
                 if {[llength $missing] > 0} { 
-		    append out "<dt><b>XQL Not present:</b></dt><dd>[join $missing ", "]</dd>"
+		    append out [subst {<dt><b>XQL Not present:</b></dt><dd>[join $missing ", "]</dd>}]
                 }
                 append out $there  
 	}
@@ -692,11 +699,16 @@ ad_proc api_proc_pretty_name {
 	append out "$label"
     }
     array set doc_elements [nsv_get api_proc_doc $proc]
+    if {$doc_elements(deprecated_p)} {
+	set deprecated ", decprecated"
+    } else {
+	set deprecated ""
+    }
     if { $doc_elements(public_p) } {
-	append out " (public)"
+	append out " (public$deprecated)"
     }
     if { $doc_elements(private_p) } {
-	append out " (private)"
+	append out " (private$deprecated)"
     }
     return $out
 }
@@ -763,9 +775,9 @@ ad_proc -public api_apropos_functions { string } {
 } {
     set matches [list]
     foreach function [nsv_array names api_proc_doc] {
-        if {[string match -nocase *$string* $function]} {
+        if {[string match -nocase "*$string*" $function]} {
             array set doc_elements [nsv_get api_proc_doc $function]
-            lappend matches [list "$function" "$doc_elements(positionals)"]
+            lappend matches [list $function $doc_elements(positionals)]
         }
     }
     return $matches
@@ -1197,13 +1209,13 @@ ad_proc api_proc_link { proc } {
 ad_proc -private api_xql_links_list { path } {
     
     Returns list of xql files related to tcl script file
-    @param path path and filename from [acs_root_dir]
+    @param path path and filename from $::acs::rootdir
     
     
 } {
     
     set linkList [list]
-    set filename "[acs_root_dir]/$path"
+    set filename "$::acs::rootdir/$path"
     set path_dirname [file dirname $path]
     set file_dirname [file dirname $filename]
     set file_rootname [file rootname [file tail $filename]]

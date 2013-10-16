@@ -29,7 +29,7 @@ ad_page_contract {
 }
 
 set context [list]
-if {[exists_and_not_null version_id]} {
+if {$version_id ne ""} {
     db_0or1row package_info_from_package_id {
         select pretty_name, package_key, version_name
           from apm_package_version_info
@@ -55,7 +55,7 @@ if { [string match "*..*" $url] || [string match "*..*" $package_key] } {
     return
 }
 
-if {[exists_and_not_null package_key]} {
+if { $package_key ne "" } {
     set safe_p [regexp {/?(.*)} $url package_url]
 }
 

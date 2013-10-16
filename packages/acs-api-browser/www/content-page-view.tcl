@@ -2,7 +2,7 @@ ad_page_contract {
     Displays information about a content page.
     
     @param version_id the id of the package version the file belongs to
-    @param path the path and filename of the page to document, relative to [acs_root_dir]
+    @param path the path and filename of the page to document, relative to $::acs::rootdir
     
     @author Jon Salz (jsalz@mit.edu)
     @author Lars Pind (lars@pinds.com)
@@ -52,7 +52,7 @@ if { [info exists version_id] } {
 
 lappend context [file tail $path]
 
-set filename "[acs_root_dir]/$path"
+set filename "$::acs::rootdir/$path"
 
 if {[regsub -all {[.][.]/} $filename "" shortened_filename]} {
     ns_log notice "INTRUDER ALERT:\n\nsomesone tried to snarf '$filename'!\n  file exists: [file exists $filename]\n  user_id: [ad_conn user_id]\n  peer: [ad_conn peeraddr]\n"

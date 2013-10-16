@@ -19,7 +19,7 @@ ad_page_contract {
 set title $proc
 
 set context [list]
-if { [exists_and_not_null version_id] } {
+if { $version_id ne "" } {
     db_0or1row package_info_from_package_id {
         select pretty_name, package_key, version_name
           from apm_package_version_info
