@@ -461,7 +461,6 @@ proc apm_bootstrap_load_queries { package_key } {
 
     # Load up queries.
 
-    set root_directory [nsv_get acs_properties root_directory]
     set db_type [nsv_get ad_database_type .]
 
     # DRB: We can't parse the $package_key.info file at this point in time, primarily because
@@ -470,9 +469,9 @@ proc apm_bootstrap_load_queries { package_key } {
 	# queryfiles in this package that match the current database or no database
     # (which we interpret to mean all supported databases).
 
-    set files [ad_find_all_files $root_directory/packages/$package_key]
+    set files [ad_find_all_files $::acs::rootdir/packages/$package_key]
     if { [llength $files] == 0 } {
-	error "Unable to locate $root_directory/packages/$package_key/*."
+	error "Unable to locate $::acs::rootdir/packages/$package_key/*."
     }
 
     foreach file [lsort $files] {
@@ -510,7 +509,7 @@ ad_proc -private apm_install_xml_file_path {} {
 
     @author Peter Marklund
 } {
-    return "[acs_root_dir]/install.xml"
+    return "$::acs::rootdir/install.xml"
 }
 
 ad_proc -private apm_ignore_file_p { 

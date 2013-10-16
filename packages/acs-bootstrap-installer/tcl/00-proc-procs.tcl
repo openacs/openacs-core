@@ -29,19 +29,19 @@ proc empty_string_p { query_string } {
 }
 
 proc acs_root_dir {} {
-    return [nsv_get acs_properties root_directory]
+    return $::acs::rootdir
 }
 
 proc acs_package_root_dir { package } {
-    return "[file join [acs_root_dir] packages $package]"
+    return [file join $::acs::rootdir packages $package]
 }
 
 proc ad_make_relative_path { path } {
-    set root_length [string length [acs_root_dir]]
-    if { [acs_root_dir] eq [string range $path 0 $root_length-1] } {
+    set root_length [string length $::acs::rootdir]
+    if { $::acs::rootdir eq [string range $path 0 $root_length-1] } {
 	return [string range $path $root_length+1 [string length $path]]
     }
-    error "$path is not under the path root ([acs_root_dir])"
+    error "$path is not under the path root ($::acs::rootdir)"
 }
 
 proc ad_get_tcl_call_stack { { level -2 }} {
@@ -400,10 +400,9 @@ proc ad_proc args {
         set doc_elements($element) [array get $element]
     }
     
-    set root_dir [nsv_get acs_properties root_directory]
     set script [info script]
-    set root_length [string length $root_dir]
-    if { $root_dir eq [string range $script 0 $root_length-1] } {
+    set root_length [string length $::acs::rootdir]
+    if { $::acs::rootdir eq [string range $script 0 $root_length-1] } {
         set script [string range $script $root_length+1 end]
     }
     
