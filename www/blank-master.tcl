@@ -59,7 +59,7 @@ ad_page_contract {
   $Id$
 }
 
-if {[template::util::is_nil doc(type)]} { 
+if {![info exists doc(type)]} { 
     set doc(type) {<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">}
 }
 
@@ -199,7 +199,7 @@ if {![info exists doc(title)]} {
 # AG: Markup in <title> tags doesn't render well.
 set doc(title) [ns_striphtml $doc(title)]
 
-if {[template::util::is_nil doc(charset)]} {
+if {![info exists doc(charset)]} {
     set doc(charset) [ns_config ns/parameters OutputCharset [ad_conn charset]]
 }
 
