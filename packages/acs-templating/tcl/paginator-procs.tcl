@@ -228,7 +228,8 @@ ad_proc -private template::paginator::init { statement_name name query {print_p 
       set i 0
       set page_size $properties(pagesize)
       set context_ids [list]
-      
+      set row_ids ""
+
       foreach row $ids {
 
           lappend row_ids [lindex $row 0]
@@ -241,11 +242,6 @@ ad_proc -private template::paginator::init { statement_name name query {print_p 
 
       set properties(context_ids) $context_ids
       cache set $name:$query:context_ids $context_ids $properties(timeout)
-
-
-      if { [template::util::is_nil row_ids] } {
-          set row_ids ""
-      }
 
       set properties(row_ids) $row_ids
 
