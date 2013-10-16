@@ -76,7 +76,7 @@ ad_proc -public cmp_page_filter { why } {
         set url [ns_conn url]
         regsub {.cmp} $url {} url_stub
         regexp {^/([^/]*)(.*)} $url_stub all package_key rest
-        set file_stub "[acs_root_dir]/packages/$package_key/www$rest"
+        set file_stub "$::acs::rootdir/packages/$package_key/www$rest"
 
         set beginTime [clock clicks -milliseconds]
 
@@ -102,7 +102,7 @@ ad_proc -public dat_page_filter { why } {
         set url [ns_conn url]
         regsub {.dat} $url {} url_stub
         regexp {^/([^/]*)(.*)} $url_stub all package_key rest
-        set code_stub "[acs_root_dir]/packages/$package_key/www$rest"
+        set code_stub "$::acs::rootdir/packages/$package_key/www$rest"
 
         set beginTime [clock clicks -milliseconds]
 
@@ -136,7 +136,7 @@ namespace eval template {
         set url [ns_conn url]
         regsub {.frm} $url {} url_stub
         regexp {^/([^/]*)(.*)} $url_stub all package_key rest
-        set __adp_stub "[acs_root_dir]/packages/$package_key/www$rest"
+        set __adp_stub "$::acs::rootdir/packages/$package_key/www$rest"
 
         # Set the parse level
         lappend ::templating::parse_level [info level]

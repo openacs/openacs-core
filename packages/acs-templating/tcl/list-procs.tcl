@@ -1121,7 +1121,7 @@ ad_proc -private template::list::template {
     
     # Added support for storing form templates outside acs-templating
     if {[regexp {^/(.*)} $style path]} {
-        set file_stub "[acs_root_dir]$path"
+        set file_stub "$::acs::rootdir$path"
     } else {
         set file_stub [template::get_resource_path]/lists/$style  
     }
@@ -1780,7 +1780,7 @@ ad_proc -private template::list::render_filters {
     }
     # Added support for storing form templates outside acs-templating
     if {[regexp {^/(.*)} $style path]} {
-        set file_stub "[acs_root_dir]$path"
+        set file_stub "$::acs::rootdir$path"
     } else {
         set file_stub [template::get_resource_path]/lists/$style  
     }

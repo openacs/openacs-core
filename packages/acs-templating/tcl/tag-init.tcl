@@ -150,9 +150,9 @@ template_tag include { params } {
 
 template_tag multiple { chunk params } {
 
-  set name     [template::get_attribute multiple $params name       ]
-  set startrow [template::get_attribute multiple $params startrow  0]
-  set maxrows  [template::get_attribute multiple $params maxrows  -1]; #unlimit
+  set name      [template::get_attribute multiple $params name       ]
+  set startrow  [template::get_attribute multiple $params startrow  0]
+  set maxrows   [template::get_attribute multiple $params maxrows  -1]; #unlimit
   set delimiter [template::get_attribute multiple $params delimiter ""]
 
   set tag_id [template::current_tag]

@@ -492,7 +492,7 @@ ad_proc -public template::util::url_to_file { url {reference_url ""} } {
 
   } else {
 
-    set path [get_server_root]/$url
+    set path $::acs::rootdir/$url
   }
 
   return [ns_normalizepath $path]

@@ -340,7 +340,7 @@ ad_proc -private template::form::template { id { style "" } } {
 
     # Added support for storing form templates outside acs-templating
     if {[regexp {^/(.*)} $style path]} {
-        set file_stub "[acs_root_dir]$path"
+        set file_stub "$::acs::rootdir$path"
     } else {
         set file_stub [template::get_resource_path]/forms/$style  
     }
