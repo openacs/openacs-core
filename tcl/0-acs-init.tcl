@@ -11,21 +11,22 @@
 namespace eval acs {}
 set ::acs::pageroot [expr {[catch {ns_server pagedir}] ? [ns_info pageroot] : [ns_server pagedir]}]
 set ::acs::tcllib [expr {[catch {ns_server tcllib}] ? [ns_info tcllib] : [ns_server tcllib]}]
+set ::acs::rootdir [file dirname [string trimright $::acs::tcllib "/"]]
 
 # Determine the OpenACS root directory, which is the directory right above the
 # Tcl library directory ::acs::tcllib.
-set root_directory [file dirname [string trimright ${::acs::tcllib} "/"]]
-nsv_set acs_properties root_directory $root_directory
 
-ns_log "Notice" "Loading OpenACS, rooted at $root_directory"
-set bootstrap_file "$root_directory/packages/acs-bootstrap-installer/bootstrap.tcl"
+nsv_set acs_properties root_directory $::acs::rootdir
+
+ns_log "Notice" "Loading OpenACS, rooted at $::acs::rootdir"
+set bootstrap_file "$::acs::rootdir/packages/acs-bootstrap-installer/bootstrap.tcl"
 ns_log "Notice" "Sourcing $bootstrap_file"
 
 if { [file isfile $bootstrap_file] } {
 
     # Check that the appropriate version of tDom (http://www.tdom.org) is installed
     # and spit out a comment or try to install it if not.
-    if {{} eq [info commands domNode]} { 
+    if {[info commands domNode] eq ""} { 
 	if {[ns_info version] < 4} {
 	    ns_log Error "0-acs-init.tcl: domNode command not found -- libtdom.so not loaded?"
 	} elseif {[ns_info version] >= 4} {

@@ -6,6 +6,11 @@
 # @author Jon Salz [jsalz@arsdigita.com]
 # @cvs-id $Id$
 
+if {![info exists ::acs::rootdir]} {
+    # just a temporary measure before the release of OpenACS 5.8.1
+    ns_log warning "update openacs-4/tcl/0-acs-init.tcl"
+    set ::acs::rootdir [file dirname [string trimright $::acs::tcllib "/"]]
+}
 
 # Remember the length of the error log file (so we can easily seek back to this
 # point later). This is used in /www/admin/monitoring/startup-log.tcl to show
@@ -35,11 +40,10 @@ proc bootstrap_fatal_error { message { throw_error_p 1 } } {
     proc rp_invoke_procs { conn arg why } {}
     set proc_name {Bootstrap}
 
-    global errorInfo
     # Save the error message.
-    nsv_set bootstrap_fatal_error . "$message<blockquote><pre>[ns_quotehtml $errorInfo]</pre></blockquote>"
+    nsv_set bootstrap_fatal_error . "$message<blockquote><pre>[ns_quotehtml $::errorInfo]</pre></blockquote>"
     # Log the error message.
-    ns_log Error "$proc_name: Server startup failed: $message\n$errorInfo"
+    ns_log Error "$proc_name: Server startup failed: $message\n$::errorInfo"
 
     # Define a filter procedure which displays the appropriate error message.
     proc bootstrap_write_error { args } {
@@ -63,9 +67,9 @@ set errno [catch {
 
     # Load the special bootstrap tcl library.
 
-    set files [lsort [glob -nocomplain "$root_directory/packages/acs-bootstrap-installer/tcl/*-procs.tcl"]]
+    set files [lsort [glob -nocomplain "$::acs::rootdir/packages/acs-bootstrap-installer/tcl/*-procs.tcl"]]
     if { [llength $files] == 0 } {
-	error "Unable to locate $root_directory/packages/acs-bootstrap-installer/tcl/*-procs.tcl."
+	error "Unable to locate $::acs::rootdir/packages/acs-bootstrap-installer/tcl/*-procs.tcl."
     }
 
     foreach file [lsort $files] {
@@ -86,7 +90,7 @@ set errno [catch {
     # gauntlet thus far.
 
     if { ![info exists database_problem] } {
-        set db_fn "$root_directory/packages/acs-bootstrap-installer/db-init-checks-[nsv_get ad_database_type .].tcl"
+        set db_fn "$::acs::rootdir/packages/acs-bootstrap-installer/db-init-checks-[nsv_get ad_database_type .].tcl"
         if { ![file isfile $db_fn] } {
             set database_problem "\"$db_fn\" does not exist."
         } else {
@@ -104,17 +108,17 @@ set errno [catch {
 
         # Check if the admin enabled the site-failure message, display
         # it if enabled.
-        if { [file exists "$root_directory/www/global/site-failure.html"] } {
+        if { [file exists "$::acs::rootdir/www/global/site-failure.html"] } {
             ns_log Notice "$proc_name: database problem found; enabling www/global/site-failure.html. Rename this html page if you want to run the installer instead."
-            source "$root_directory/packages/acs-bootstrap-installer/site-failure-message.tcl"
+            source "$::acs::rootdir/packages/acs-bootstrap-installer/site-failure-message.tcl"
             return
         }
 
         # Remember what the problem is, and run the installer.
 	nsv_set acs_properties database_problem $database_problem
 	ns_log Notice "$proc_name: database problem found; Sourcing the installer."
-	source "$root_directory/packages/acs-bootstrap-installer/installer.tcl"
-	source "$root_directory/packages/acs-bootstrap-installer/installer-init.tcl"
+	source "$::acs::rootdir/packages/acs-bootstrap-installer/installer.tcl"
+	source "$::acs::rootdir/packages/acs-bootstrap-installer/installer-init.tcl"
 	return
     }
 
@@ -127,8 +131,8 @@ set errno [catch {
     # Is OpenACS installation complete? If not, source the installer and bail.
     if { ![ad_verify_install] } {
 	ns_log Notice "$proc_name: Installation is not complete - sourcing the installer."
-	source "$root_directory/packages/acs-bootstrap-installer/installer.tcl"
-	source "$root_directory/packages/acs-bootstrap-installer/installer-init.tcl"
+	source "$::acs::rootdir/packages/acs-bootstrap-installer/installer.tcl"
+	source "$::acs::rootdir/packages/acs-bootstrap-installer/installer-init.tcl"
 	return
     }
 
@@ -142,16 +146,12 @@ set errno [catch {
     ns_log Notice "Loading acs-automated-testing specially so other packages can define tests..."
     apm_bootstrap_load_libraries -procs acs-automated-testing
 
-    # GN: Should be loaded before user packages such they can use
-    # the xotcl infrastructure
-    # DRB: only do it if xotcl's installed
-
     # Package libraries are now loaded in dependency order, rather than
     # alphabetically.  This code is obsolete and has been commented out
     # for 5.7.
 
     #if {[info commands ::xotcl::Class] ne "" &&
-    #    [file isdirectory $root_directory/packages/xotcl-core]} {
+    #    [file isdirectory $::acs::rootdir/packages/xotcl-core]} {
     #   apm_bootstrap_load_libraries -procs xotcl-core
     #   apm_bootstrap_load_libraries -init xotcl-core
     #}
@@ -189,8 +189,7 @@ if { $errno && $errno != 2 } {
     # If the $errorCode is "bootstrap_fatal_error", then the error was explicitly
     # thrown by a call to bootstrap_fatal_error. If not, bootstrap_fatal_error was
     # never called, so we need to call it now.
-    global errorCode
-    if {$errorCode ne "bootstrap_fatal_error"  } {
+    if {$::errorCode ne "bootstrap_fatal_error"  } {
 	bootstrap_fatal_error "Error during bootstrapping" 0
     }
 }
