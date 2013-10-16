@@ -1298,6 +1298,49 @@ ad_proc -public ad_conn {args} {
                                                  -default {en_US}]
                         return $ad_conn(locale)
                     }
+                    node_id {
+			# This is just a fallback, when the request
+			# processor has failed to set the actual site
+			# node, e.g. on invalid requests. When the
+			# fallback is missing, ns_conn spits out an
+			# error message since it does not know what a
+			# "node_id" is. The fallback is especially
+			# necessary, when a template is used for the
+			# error message, the templating system cannot
+			# determine the appropriate template without
+			# the node_id. In case of failure, the
+			# toplevel node_is is returned.
+		        array set node [site_node::get -url /]
+			set ad_conn($var) $node(node_id)
+			ns_log notice "request processor did not set <ad_conn $var>, fallback: $ad_conn($var)"
+                        return $ad_conn($var)
+                    }
+                    package_id {
+			# This is just a fallback, when the request
+			# processor has failed to set the actual
+			# package_id (see as wee under node_id above).
+		        array set node [site_node::get -url /]
+			set ad_conn($var) $node(package_id)
+			ns_log notice "request processor did not set <ad_conn $var>, fallback: $ad_conn($var)"
+                        return $ad_conn($var)
+                    }
+		    untrusted_user_id -
+		    session_id -
+                    user_id {
+			# Fallbacks, see above.
+			set ad_conn($var) 0
+			ns_log notice "request processor did not set <ad_conn $var>, fallback: $ad_conn($var)"
+                        return $ad_conn($var)
+                    }
+		    extra_url -
+		    locale -
+		    language -
+		    charset {
+			# Fallbacks, see above.
+			set ad_conn($var) ""
+			ns_log notice "request processor did not set <ad_conn $var>, use empty fallback value"
+                        return $ad_conn($var)
+		    }
                     subsite_node_id {
                         set ad_conn(subsite_node_id) [site_node::closest_ancestor_package \
                                                      -node_id [ad_conn node_id] \

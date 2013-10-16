@@ -458,8 +458,7 @@ ad_proc ad_return_forbidden {
     Title and explanation is optional. If neither is specified,
     then a default "Permission Denied" message will be displayed.
 } {
-    if { [template::util::is_nil title] 
-         && [template::util::is_nil explanation] } {
+    if { $title eq "" && $explanation eq "" } {
 	set title "Permission Denied"
 	set explanation "Sorry, you haven't been given access to this area."
     }
