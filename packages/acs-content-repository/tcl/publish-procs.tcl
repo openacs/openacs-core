@@ -267,7 +267,7 @@ ad_proc -public publish::handle_binary_file {
   upvar $revision_id_ref revision_id
   set error_msg ""
 
-  if { [template::util::is_nil opts(revision_id)] } {
+  if { ![info exists opts(revision_id)] } {
     set revision_id [::content::item::get_live_revision -item_id $item_id]
   } else {
     set revision_id $opts(revision_id)
@@ -445,7 +445,7 @@ ad_proc -private publish::merge_with_template { item_id args } {
   template::util::get_opts $args
 
   # Either auto-get the live revision or use the parameter
-  if { ![template::util::is_nil opts(revision_id)] } {
+  if { [info exists opts(revision_id)] } {
     set revision_id $opts(revision_id)
   } else {
     set revision_id [::content::item::get_live_revision -item_id $item_id]
@@ -466,7 +466,7 @@ ad_proc -private publish::merge_with_template { item_id args } {
   set file_stub [ns_normalizepath "$root_path/$::content::template_url"]
 
   # Set the passed-in variables
-  if { ![template::util::is_nil opts(html)] } {
+  if { [info exists opts(html)] } {
     set adp_args $opts(html)
   } else {
     set adp_args ""
@@ -491,7 +491,7 @@ ad_proc -public publish::handle::text { item_id args } {
 
   template::util::get_opts $args
 
-  if { [template::util::is_nil opts(revision_id)] } {
+  if { ![info exists opts(revision_id)] } {
     set revision_id [::content::item::get_live_revision -item_id $item_id]
   } else {
     set revision_id $opts(revision_id)
@@ -679,7 +679,7 @@ ad_proc -private publish::handle_item { item_id args } {
   variable revision_html
 
   # Process options
-  if { [template::util::is_nil opts(revision_id)] } {
+  if { ![info exists opts(revision_id)] } {
     set revision_id [::content::item::get_live_revision -item_id $item_id]
   } else {
     set revision_id $opts(revision_id)
@@ -690,7 +690,7 @@ ad_proc -private publish::handle_item { item_id args } {
     return ""
   }
 
-  if { [template::util::is_nil opts(no_merge)] } {
+  if { ![info exists opts(no_merge)] } {
     set merge_str "merge"
   } else {
     set merge_str "no_merge"
@@ -698,7 +698,7 @@ ad_proc -private publish::handle_item { item_id args } {
 
   # Create a unique key
   set revision_key "$merge_str $revision_id"
-  if { ![template::util::is_nil opts(html)] } {
+  if { [info exists opts(html)] } {
     lappend revision_key $opts(html)
   }
 
@@ -1035,7 +1035,7 @@ ad_proc -public publish::write_content { revision_id args } {
 
   template::util::get_opts $args
 
-  if { [template::util::is_nil opts(root_path)] } {
+  if { ![info exists opts(root_path)] } {
     set root_path ""
   } else {
     set root_path $opts(root_path)
@@ -1044,7 +1044,7 @@ ad_proc -public publish::write_content { revision_id args } {
   db_transaction {
 
       # Get the item id if none specified
-      if { [template::util::is_nil opts(item_id)] } {
+      if { ![info exists opts(item_id)] } {
           set item_id [db_string get_one_revision ""]
 	  
 	  if { [template::util::is_nil item_id] } {

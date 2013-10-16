@@ -79,7 +79,7 @@ ad_proc -public template::tabstrip::create {
   set code [list template::form create $dlg_name]
  
   # Determine cookie name
-  if { [template::util::is_nil opts(cookie_name)] } {
+  if { ![info exists opts(cookie_name)] } {
     set cookie_name $dlg_name
   } else {
     set cookie_name $opts(cookie_name)
@@ -94,7 +94,7 @@ ad_proc -public template::tabstrip::create {
   upvar #$level $dlg_name:properties form_properties
 
   # Check parameters
-  if { ![template::util::is_nil opts(current_tab)] } {
+  if { [info exists opts(current_tab)] } {
     set current_tab $opts(current_tab)
   } else {
     # Check http
@@ -140,8 +140,8 @@ ad_proc -public template::tabstrip::add_tab {
 
   # Set tab-specific params
 
-  if { [template::util::is_nil opts(base_url)] } {
-    if { ![template::util::is_nil properties(base_url)] } {
+  if { ![info exists opts(base_url)] } {
+    if { [info exists properties(base_url)] } {
       # use global base_url
       lappend code -base_url $properties(base_url)
     } else {
@@ -163,7 +163,7 @@ ad_proc -public template::tabstrip::add_tab {
   upvar #$level $dlg_name:$name element
 
   # If this is the first tab being added, set it as current
-  if { [template::util::is_nil properties(current_tab)] } {
+  if { ![info exists properties(current_tab)] } {
     set_current_tab $dlg_name [lindex $properties(element_names) 0] 3
   }
 

@@ -1555,7 +1555,7 @@ ad_proc -private template::list::prepare_filters {
                 if { $filter_properties($property) ne "" } {
                     # We've found a where_clause to include
 
-                    if { [string match *_eval $property] } {
+                    if { [string match "*_eval" $property] } {
                         # It's an _eval, subst it now
                         lappend list_properties(filter_where_clauses) \
                             [uplevel $list_properties(ulevel) $filter_properties($property)]

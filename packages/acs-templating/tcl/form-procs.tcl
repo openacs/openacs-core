@@ -499,19 +499,19 @@ ad_proc -private template::form::render { id tag_attributes } {
     lappend form_properties(edit_buttons) [list $form_properties(cancel_label) cancel]
   }
 
-  if { ![template::util::is_nil form_properties(has_submit)] 
+  if { [info exists form_properties(has_submit)] 
        && [template::util::is_true $form_properties(has_submit)] 
      } {
     set form_properties(edit_buttons) {}
   }
   
-  if { ![template::util::is_nil form_properties(has_edit)] 
+  if { [info exists form_properties(has_edit)] 
        && [template::util::is_true $form_properties(has_edit)] 
      } {
     set form_properties(display_buttons) {}
   }
 
-  if { ![template::util::is_nil form_properties(actions)] 
+  if { [info exists form_properties(actions)] 
        && [template::util::is_true $form_properties(actions)] 
      } {
     set form_properties(display_buttons) $form_properties(actions)

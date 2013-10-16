@@ -101,7 +101,7 @@ ad_proc -public item::get_revision_content { revision_id args } {
 
   template::util::get_opts $args
  
-  if { [template::util::is_nil opts(item_id)] } {
+  if { ![info exists opts(item_id)] } {
     # Get the item id
     set item_id [::content::revision::item_id -revision_id $revision_id]
 
@@ -282,7 +282,7 @@ ad_proc -public item::get_extended_url { item_id args } {
     # Use item mime type if template extension does not exist
 
     # Determine live revision, if none specified
-    if { [template::util::is_nil opts(revision_id)] } {
+    if { ![info exists opts(revision_id)] } {
       set revision_id [::content::item::get_live_revision -item_id $item_id]
 
       if { [template::util::is_nil revision_id] } {

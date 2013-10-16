@@ -87,7 +87,7 @@ ad_proc -public template::widget::table::default_column_def {
 
   upvar $level "tablewidget:${name}" widget
 
-  if { [template::util::is_nil widget(column_def)] } {
+  if { ![info exists widget(column_def)] } {
     # Get the column definition based on the first row of the datasource
     upvar $level "tw_${name}_rows:rowcount" rowcount
     if { $rowcount < 1 } {
@@ -113,8 +113,8 @@ ad_proc -public template::widget::table::prepare {
   upvar $level "tablewidget:${name}" widget
  
   # Get the rows
-  if { [template::util::is_nil widget(rows_data)] } {
-    if { [template::util::is_nil widget(query)] } {
+  if { ![info exists widget(rows_data)] } {
+    if { ![info exists widget(query)] } {
       error "No row datasource available for tablewidget $name"
     }
 
@@ -122,14 +122,14 @@ ad_proc -public template::widget::table::prepare {
     set sql_query $widget(query)
 
     # Append the order by clause, if any
-    if { ![template::util::is_nil widget(orderby)] } {
+    if { [info exists widget(orderby)] } {
       if { ![regexp -nocase "order +by" $sql_query match] } {
         append sql_query "\n order by"
       }
       append sql_query " $widget(orderby)"
     }
 
-    if { ![template::util::is_nil widget(column_def)] } {
+    if { [info exists widget(column_def)] } {
       # Convert the column def list to an array for extra speed 
       upvar $level "tablewidget:${name}_column_def" column_arr
       array set column_arr $widget(column_def)
@@ -164,7 +164,7 @@ ad_proc -public template::widget::table::prepare {
 
     }
 
-    if { ![template::util::is_nil widget(eval)] } {
+    if { [info exists widget(eval)] } {
       append eval_code $widget(eval)
     }
     uplevel $level "
@@ -173,7 +173,7 @@ ad_proc -public template::widget::table::prepare {
     "
   
     # Get the column definition if it does not exist
-    if { [template::util::is_nil widget(column_def)] } {
+    if { ![info exists widget(column_def)] } {
       template::widget::table::default_column_def widget \
         [expr {$level + 1}]
     }
@@ -185,7 +185,7 @@ ad_proc -public template::widget::table::prepare {
   }
 
   # Process the rows datasource and get the columns
-  if { [template::util::is_nil widget(columns_data)] } {
+  if { ![info exists widget(columns_data)] } {
     upvar $level "tw_${name}_columns:rowcount" rowcount 
 
     # Get the base url for the page
