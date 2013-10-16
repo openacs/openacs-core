@@ -669,7 +669,11 @@ ad_proc -deprecated -public template::util::multirow_foreach { name code_text } 
   
 }
 
-ad_proc -public template::util::get_param { name {section {}} {key {}} } {
+ad_proc -public template::util::get_param { 
+    name 
+    {section ""} 
+    {key ""} 
+} {
     Retreive a stored parameter, or "" if no such parameter
     If section/key are present, read the parameter from the specified
     section.key in the INI file, and cache them under the given name
@@ -678,10 +682,10 @@ ad_proc -public template::util::get_param { name {section {}} {key {}} } {
   if { ![nsv_exists __template_config $name] } {
 
     # Extract the parameter from the ini file if possible
-    if { ![template::util::is_nil section] } {
+    if { $section ne "" } {
 
       # Use the name if no key is specified
-      if { [template::util::is_nil key] } {
+      if { $key ne "" } {
         set key $name
       }
 
@@ -713,7 +717,7 @@ ad_proc -public template::util::nvl { value value_if_null } {
     Analogous to SQL NVL
 } {
 
-  if { [template::util::is_nil value] } {
+  if { $value ne "" } {
     return $value_if_null
   } else {
     return $value

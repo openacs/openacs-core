@@ -242,8 +242,8 @@ template_tag tablewidget { chunk params } {
   set style [ns_set iget $params style]
 
   # Use the style unless the template is specified in the tag
-  if { [template::util::is_nil chunk] } {
-    if { [template::util::is_nil style] } {
+  if { $chunk eq "" } {
+    if { $style eq "" } {
       template::adp_append_code "set __tablewidget_style \"$style\""
     } else {
       template::adp_append_code "set __tablewidget_style \"\$tablewidget:${name}(style)\""
