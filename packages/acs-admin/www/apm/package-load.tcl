@@ -8,6 +8,6 @@ ad_page_contract {
 
 set title "Load a New Package"
 set context [list [list "/acs-admin/apm/" "Package Manager"] $title]
-set acs_root_dir [acs_root_dir]
+
 
 

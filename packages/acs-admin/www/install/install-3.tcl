@@ -64,7 +64,7 @@ foreach package_key $install {
         set package_path "[apm_workspace_install_dir]/$package_key"
     } else {
         set spec_file $version(path)
-        set package_path "[acs_root_dir]/packages/$package_key"
+        set package_path "$::acs::rootdir/packages/$package_key"
     }
         
     set final_version_name $version(name)

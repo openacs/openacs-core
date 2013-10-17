@@ -52,11 +52,11 @@
       <ul>
       <li>
 	<b>Customize the front page</b>. Edit the files
-      <code>@acs_root_dir@/www/index.adp</code> and
-      <code>@acs_root_dir@/www/index.tcl</code>.  (<a
+      <code>@acs::rootdir@/www/index.adp</code> and
+      <code>@acs::rootdir@/www/index.tcl</code>.  (<a
       href="/doc/templates.html">More information</a>)
       </li>
-      <li>Change the site's overall appearance by <b>editing the master template</b> that wraps every page. The master template is <code>@acs_root_dir@/www/default-master.adp</code>.       An ADP file is almost like HTML, except with a few extra bells
+      <li>Change the site's overall appearance by <b>editing the master template</b> that wraps every page. The master template is <code>@acs::rootdir@/www/default-master.adp</code>.       An ADP file is almost like HTML, except with a few extra bells
       and whistles (<a href="/doc/acs-templating/designer-guide.html"
       title="Templating Designer's Guide">more information</a>).</li>
 

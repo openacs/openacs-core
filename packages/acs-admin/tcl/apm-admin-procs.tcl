@@ -122,7 +122,7 @@ ad_proc -private apm_package_selection_widget {
         incr counter
         set package_key [pkg_info_key $pkg_info]
         set package_path [pkg_info_path $pkg_info]
-        set package_rel_path [string range $package_path [string length [acs_root_dir]] end]
+        set package_rel_path [string range $package_path [string length $::acs::rootdir] end]
         set spec_file [pkg_info_spec $pkg_info]
         array set package [apm_read_package_info_file $spec_file]
         set version_name $package(name)
@@ -294,14 +294,14 @@ ad_proc -private apm_build_repository {
     # Configuration Settings
     #----------------------------------------------------------------------
 
-    set cd_helper 		"[acs_root_dir]/bin/cd-helper"
+    set cd_helper 		"$::acs::rootdir/bin/cd-helper"
 
     set cvs_command 		"cvs"
     set cvs_root 		":pserver:anonymous@cvs.openacs.org:/cvsroot"
 
-    set work_dir 		"[acs_root_dir]/repository-builder/"
+    set work_dir 		"$::acs::rootdir/repository-builder/"
 
-    set repository_dir 		"[acs_root_dir]/www/repository/"
+    set repository_dir 		"$::acs::rootdir/www/repository/"
     set repository_url 		"http://openacs.org/repository/"
 
     set channel_index_template  "/packages/acs-admin/www/apm/repository-channel-index"

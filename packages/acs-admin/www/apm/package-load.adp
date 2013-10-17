@@ -8,7 +8,7 @@
 You can retrieve a package archive to prepare for installation by using
 one of the options below.  
 Otherwise, please specify a filesystem location for the packages you want to install.
-You can also copy the extracted package files directly into the <code>@acs_root_dir@/packages/</code> directory if you prefer.
+You can also copy the extracted package files directly into the <code>@acs::rootdir@/packages/</code> directory if you prefer.
 <p>
 
 Load a package from the <tt>.apm</tt> file at this URL:

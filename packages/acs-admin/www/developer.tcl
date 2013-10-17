@@ -9,5 +9,3 @@ ad_page_contract {
 
 set page_title "Developer's Administration"
 set context [list $page_title]
-
-set acs_root_dir [acs_root_dir]

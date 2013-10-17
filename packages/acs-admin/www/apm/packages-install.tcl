@@ -23,7 +23,7 @@ ad_return_top_of_page [ad_parse_template -params [list context title] \
 #
 # TODO: make sure that it's a later version than that in the packages dir?
 #
-set packages_root_dir "[acs_root_dir]/packages"
+set packages_root_dir "$::acs::rootdir/packages"
 set packages_spec_files [apm_scan_packages $packages_root_dir]
 set workspace_spec_files [apm_scan_packages [apm_workspace_install_dir]]
 set workspace_filenames [list]
