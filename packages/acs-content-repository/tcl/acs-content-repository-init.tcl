@@ -36,7 +36,7 @@ if {![nsv_exists CR_LOCATIONS CR_FILES]} {
 
     if {$relativepath_p} {
 	# The file location is relative to acs_root_dir
-	append file_location "[acs_root_dir]/"
+	append file_location "$::acs::rootdir/"
     }
     append file_location [parameter::get_from_package_key -package_key "acs-content-repository" -parameter "CRFileLocationRoot" -default "content-repository-content-files"]
     

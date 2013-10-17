@@ -540,7 +540,7 @@ ad_proc -private db_qd_internal_load_queries {file_pointer file_tag} {
     }
 
     set relative_path [string range $file_tag \
-        [expr { [string length [acs_root_dir]] + 1 }] end]
+        [expr { [string length $::acs::rootdir] + 1 }] end]
     nsv_set apm_library_mtime $relative_path [file mtime $file_tag]
 }
 

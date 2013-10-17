@@ -965,7 +965,7 @@ aa_register_case -cats {api smoke} sync_http_get_document {
 aa_register_case -cats {api web} sync_file_get_document {
     Test the HTTPGet implementation of GetDocument service contract.
 } {
-    set path "[acs_root_dir]/www/SYSTEM/dbtest.tcl"
+    set path "$::acs::rootdir/www/SYSTEM/dbtest.tcl"
 
     aa_log "Getting path '$path'"
 

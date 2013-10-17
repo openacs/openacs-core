@@ -80,7 +80,7 @@ aa_register_case -cats {api smoke db} image_new {
                 -folder_id $first_folder_id \
                 -content_type "image" \
 
-            set tmp_filename "[acs_root_dir]/packages/acs-content-repository/tcl/test/test-image-1.jpg"
+            set tmp_filename "$::acs::rootdir/packages/acs-content-repository/tcl/test/test-image-1.jpg"
             set image_item_id_orig [db_nextval  "acs_object_id_seq"]
             set image_name [ns_mktemp "XXXXXX"]
             set image_item_id [image::new \

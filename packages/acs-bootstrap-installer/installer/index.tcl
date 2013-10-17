@@ -190,30 +190,30 @@ After adding support the larger stacksize, please restart your web server.
 
 # APM needs to check its permissions.
 if { [catch {apm_workspace_dir} ] } {
-    append errors "<li><p><strong>The [acs_root_dir] directory has incorrect permissions.  It must be owned by
+    append errors "<li><p><strong>The $::acs::rootdir directory has incorrect permissions.  It must be owned by
 the user executing the web server, normally <code>nsadmin</code>, and the owner must have read and write privileges
 on this directory.  You can correct this by running the following script as root.
 To give another user access to the files, add them to <code>web</code> group.
 <blockquote><pre>
 groupadd web
-chown -R nsadmin:web [acs_root_dir]
-chmod -R ug+rw [acs_root_dir]
+chown -R nsadmin:web $::acs::rootdir
+chmod -R ug+rw $::acs::rootdir
 </pre></blockquote>
 </strong></p>"
     set error_p 1
 }
 
 # We have the workspace dir, but what about the package root?
-if { ![file writable [file join [acs_root_dir] packages]] } {
-    append errors "<li><p><strong>The [acs_root_dir]/packages directory has incorrect permissions.  It must be owned by
+if { ![file writable [file join $::acs::rootdir packages]] } {
+    append errors "<li><p><strong>The $::acs::rootdir/packages directory has incorrect permissions.  It must be owned by
     the user executing the web server, normally <code>nsadmin</code> and the owner must have read and write 
     privileges on this directory and all of its subdirectories.  You can correct this by running the following 
     script as root.
     To give another user access to the files, add them to <code>web</code> group.
     <blockquote><pre>
 groupadd web
-chown -R nsadmin:web [acs_root_dir]/packages
-chmod -R ug+rw [acs_root_dir]/packages
+chown -R nsadmin:web $::acs::rootdir/packages
+chmod -R ug+rw $::acs::rootdir/packages
     </pre></blockquote></strong></p>"
     set error_p 1
 }

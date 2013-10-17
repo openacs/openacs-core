@@ -144,7 +144,7 @@ ad_proc -public aa_register_init_class {
     #
     # Work out the package key
     #
-    set package_root [file join [acs_root_dir] packages]
+    set package_root [file join $::acs::rootdir packages]
     set package_rel [string replace [info script] \
                          0 [string length $package_root]]
     if {![info exists package_key]} {
@@ -215,7 +215,7 @@ ad_proc -public aa_register_component {
     #
     # Work out the package key
     #
-    set package_root [file join [acs_root_dir] packages]
+    set package_root [file join $::acs::rootdir packages]
     set package_rel [string replace [info script] \
                          0 [string length $package_root]]
     set package_key [lindex [file split $package_rel] 0]
@@ -355,7 +355,7 @@ ad_proc -public aa_register_case {
     #
     # Work out the package_key.
     #
-    set package_root [file join [acs_root_dir] packages]
+    set package_root [file join $::acs::rootdir packages]
     set package_rel [string replace [info script] \
                          0 [string length $package_root]]
     set package_key [lindex [file split $package_rel] 0]

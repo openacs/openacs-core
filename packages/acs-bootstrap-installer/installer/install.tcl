@@ -124,7 +124,7 @@ Please <a href=\"javascript:history.back()\">try again</a>.
 
 # Now process the application bundle if an install.xml file was found.
 
-if { [file exists "[acs_root_dir]/install.xml"] } {
+if { [file exists "$::acs::rootdir/install.xml"] } {
     set output [apm::process_install_xml "/install.xml" {}]
     ns_write "<p>[join $output "</p><p>"]</p>"
 }

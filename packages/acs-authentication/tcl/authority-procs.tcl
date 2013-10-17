@@ -361,7 +361,7 @@ ad_proc -public auth::authority::batch_sync {
                 if { $ack_file_name ne "" } {
                     # Interpolate
                     set pairs [list \
-                                   acs_root_dir [acs_root_dir] \
+                                   acs_root_dir $::acs::rootdir \
                                    ansi_date [clock format [clock seconds] -format %Y-%m-%d] \
                                    authority $authority(short_name)]
                     foreach { var value } $pairs {

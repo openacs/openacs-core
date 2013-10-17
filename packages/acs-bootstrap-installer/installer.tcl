@@ -244,15 +244,15 @@ proc install_handler { conn arg why } {
 	set doc_urlv [split [string trimleft $doc_url] /]
 	set package_key [lindex $doc_urlv 1]
 	ns_log Debug "Scanning $doc_url with package_key $package_key..."
-	if {[file isfile "[acs_root_dir]/packages/acs-core-docs/www[join $doc_urlv /]"]} {
-	    install_file_serve "[acs_root_dir]/packages/acs-core-docs/www[join $doc_urlv /]"
+	if {[file isfile "$::acs::rootdir/packages/acs-core-docs/www[join $doc_urlv /]"]} {
+	    install_file_serve "$::acs::rootdir/packages/acs-core-docs/www[join $doc_urlv /]"
 	} elseif {[file isdirectory \
-		"[acs_root_dir]/packages/acs-core-docs/www[join $doc_urlv /]"]} {
-	    install_file_serve "[acs_root_dir]/packages/acs-core-docs/www[join $doc_urlv /]"
-	} elseif {[file isdirectory "[acs_root_dir]/packages/$package_key/www/doc"]} {
-	    install_file_serve "[acs_root_dir]/packages/$package_key/www/doc[join [lrange $doc_urlv 2 end] /]"
+		"$::acs::rootdir/packages/acs-core-docs/www[join $doc_urlv /]"]} {
+	    install_file_serve "$::acs::rootdir/packages/acs-core-docs/www[join $doc_urlv /]"
+	} elseif {[file isdirectory "$::acs::rootdir/packages/$package_key/www/doc"]} {
+	    install_file_serve "$::acs::rootdir/packages/$package_key/www/doc[join [lrange $doc_urlv 2 end] /]"
 	} else {
-	    install_file_serve "[acs_root_dir]/packages/$package_key/doc[join $doc_url /]"
+	    install_file_serve "$::acs::rootdir/packages/$package_key/doc[join $doc_url /]"
 	}
 	return "filter_return"
     }
@@ -266,7 +266,7 @@ proc install_handler { conn arg why } {
 	]} {
 	    set system_file "$system_file.tcl"
 	}
-	apm_source "[acs_root_dir]/www/SYSTEM/$system_file"
+	apm_source "$::acs::rootdir/www/SYSTEM/$system_file"
 	return "filter_return"
     }
 
@@ -353,7 +353,7 @@ ad_proc -private install_do_data_model_install {} {
     Installing the OpenACS kernel data model...
     <blockquote><pre>
     "
-    cd [file join [acs_root_dir] packages acs-kernel sql [db_type]]
+    cd [file join $::acs::rootdir packages acs-kernel sql [db_type]]
     db_source_sql_file -callback apm_ns_write_callback acs-kernel-create.sql
 
     # DRB: Now initialize the APM's table of known database types.  This is
@@ -391,12 +391,12 @@ ad_proc -private install_do_data_model_install {} {
     apm_source "[acs_package_root_dir acs-tcl]/tcl/20-memoize-init.tcl"
     apm_source [acs_package_root_dir acs-tcl]/tcl/database-init.tcl
 
-    apm_version_enable -callback apm_ns_write_callback [apm_package_install -callback apm_ns_write_callback "[file join [acs_root_dir] packages acs-kernel acs-kernel.info]"]
+    apm_version_enable -callback apm_ns_write_callback [apm_package_install -callback apm_ns_write_callback "[file join $::acs::rootdir packages acs-kernel acs-kernel.info]"]
 
     ns_write "<p>Loading package .info files.<p>"
 
     # Preload all the .info files so the next page is snappy.
-    apm_dependency_check -initial_install [apm_scan_packages -new [file join [acs_root_dir] packages]]
+    apm_dependency_check -initial_install [apm_scan_packages -new [file join $::acs::rootdir packages]]
 
     ns_write "Done loading package .info files<p>"    
 }
@@ -434,7 +434,7 @@ ad_proc -private install_do_packages_install {} {
     install_redefine_ad_conn
 
     # Attempt to install all packages.
-    set dependency_results [apm_dependency_check -initial_install [apm_scan_packages -new [file join [acs_root_dir] packages]]]
+    set dependency_results [apm_dependency_check -initial_install [apm_scan_packages -new [file join $::acs::rootdir packages]]]
     set dependencies_satisfied_p [lindex $dependency_results 0]
     set pkg_list [lindex $dependency_results 1]
 
@@ -452,7 +452,7 @@ ad_proc -private install_do_packages_install {} {
         <blockquote><pre>"
 
         # Mount the main site
-        cd [file join [acs_root_dir] packages acs-kernel sql [db_type]]
+        cd [file join $::acs::rootdir packages acs-kernel sql [db_type]]
         db_source_sql_file -callback apm_ns_write_callback acs-install.sql
 
         # Make sure the site-node cache is updated with the main site

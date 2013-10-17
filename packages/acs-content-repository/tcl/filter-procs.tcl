@@ -24,10 +24,10 @@ ad_proc -public content::get_template_root {} {
 
     If it is not found in any of these places, it defaults to
 
-    [acs_root_dir]/templates
+    $::acs::rootdir/templates
 
     If the value resulting from the search does not start with a '/'
-    it is taken to be relative to [acs_root_dir]
+    it is taken to be relative to $::acs::rootdir
 
     @return the template root (full path from /)
 } {
@@ -46,7 +46,7 @@ ad_proc -public content::get_template_root {} {
 
     if { [string index $template_root 0] ne "/" } {
         # Relative path, prepend server_root
-        set template_root "[acs_root_dir]/$template_root"
+        set template_root "$::acs::rootdir/$template_root"
     }
 
     return [ns_normalizepath $template_root]
