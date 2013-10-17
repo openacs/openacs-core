@@ -23,12 +23,12 @@ psql -f upgrade-5.0.0b2-5.0.0b3.sql <span class="replaceable"><span class="repla
 psql -f upgrade-5.0.0b3-5.0.0b4.sql <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span></pre></li><li class="listitem"><p>Upgrade ACS Service Contracts manually:</p><pre class="screen">[$OPENACS_SERVICE_NAME aolserver]$ <strong class="userinput"><code>cd /var/lib/aolserver/ <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/acs-service-contracts/sql/postgresql/upgrade</code></strong>
 psql -f upgrade-4.7d2-4.7d3.sql <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
 </pre></li><li class="listitem"><p>Load acs-authentication data model.</p><pre class="screen"><strong class="userinput"><code>psql -f /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/openacs-5/packages/acs-authentication/sql/postgresql/acs-authentication-create.sql <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span></code></strong></pre></li><li class="listitem"><p>Load acs-lang data model.</p><pre class="screen"><strong class="userinput"><code>psql -f /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/acs-lang/sql/postgresql/acs-lang-create.sql <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span></code></strong></pre></li><li class="listitem"><p>(This step may overlap with the two previous steps, but I think it's harmless?) Create a file which will be executed on startup which takes care of a few issues with authentication and internationalization: create <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/tcl/zzz-postload.tcl containing:</p><pre class="programlisting">if {![apm_package_installed_p acs-lang]} {
-apm_package_install -enable -mount_path acs-lang [acs_root_dir]/packages/acs-lang/acs-lang.info
+apm_package_install -enable -mount_path acs-lang $::acs::rootdir/packages/acs-lang/acs-lang.info
 lang::catalog::import -locales [list "en_US"]
 }
 
 if {![apm_package_installed_p acs-authentication]} {
-apm_package_install -enable [acs_root_dir]/packages/acs-authentication/acs-authentication.info
+apm_package_install -enable $::acs::rootdir/packages/acs-authentication/acs-authentication.info
 apm_parameter_register "UsePasswordWidgetForUsername" \
 "Should we hide what the user types in the username
 field, the way we do with the password field? Set

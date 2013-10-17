@@ -10,7 +10,7 @@ set path_tail \
 
 if {[ad_conn path_info] eq "index.html" } {
     rp_internal_redirect "/packages/acs-core-docs/www/index.adp"
-} elseif {[file isdirectory "[acs_root_dir]/packages/$package_key/www/doc"]} {
+} elseif {[file isdirectory "$::acs::rootdir/packages/$package_key/www/doc"]} {
   rp_internal_redirect "/packages/$package_key/www/$path_tail"
 } else {
   rp_internal_redirect "/packages/$package_key/$path_tail"
