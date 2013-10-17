@@ -60,7 +60,7 @@ namespace eval apm {}
 #
 #         Indicates that $path is a -procs.tcl file which should be examined
 #         every time apm_load_any_changed_libraries is invoked, to see whether
-#         it has changed since last loaded. The path starts at acs_root_dir.
+#         it has changed since last loaded. The path starts at $::acs::rootdir.
 #
 # RELOADING VOODOO
 #
@@ -381,7 +381,7 @@ ad_proc -private apm_mark_files_for_reload {
     interpreters. Only marks files for reload if they haven't been
     loaded before or they have changed since last reload.
 
-    @param file_list A list of paths relative to acs_root_dir
+    @param file_list A list of paths relative to $::acs::rootdir
     @param force_reload Mark the files for reload even if their modification
                         time in the nsv cache doesn't differ from the one
                         in the filesystem.
