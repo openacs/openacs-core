@@ -34,7 +34,7 @@ ad_proc -private lang::test::test_package_key {} {
 ad_proc -private lang::test::setup_test_package {} {
     set package_key [test_package_key]
     set package_name "acs-lang temporary test package"
-    set package_dir [file join [acs_root_dir] packages $package_key]
+    set package_dir [file join $::acs::rootdir packages $package_key]
     file mkdir $package_dir
 
     set info_file_path "${package_dir}/${package_key}.info"
@@ -500,7 +500,7 @@ aa_register_case \
     set expected_new_keys [list Auto_Key key_1_1] 
 
     # Write the test tcl file
-    set tcl_file_id [open "[acs_root_dir]/$tcl_file" w]    
+    set tcl_file_id [open "$::acs::rootdir/$tcl_file" w]    
     set new_key_1 "_"
     set new_text_1 "Auto Key"
     set new_key_2 "key_1"
@@ -551,7 +551,7 @@ aa_register_case \
                                                    $messages_array($new_key_3)]
 
     # Check that there are no tags left in the tcl file
-    set tcl_file_id [open "[acs_root_dir]/$tcl_file" r]
+    set tcl_file_id [open "$::acs::rootdir/$tcl_file" r]
     set updated_tcl_contents [read $tcl_file_id]
     close $tcl_file_id
     aa_true "tags in tcl file replaced" [expr {[llength [lang::util::get_temporary_tags_indices $updated_tcl_contents]] == 0}]
@@ -565,8 +565,8 @@ aa_register_case \
     file delete $catalog_file
 
     # Delete the tcl files
-    file delete "[acs_root_dir]/$tcl_file"
-    file delete "[acs_root_dir]/$tcl_backup_file"
+    file delete "$::acs::rootdir/$tcl_file"
+    file delete "$::acs::rootdir/$tcl_backup_file"
 }
 
 aa_register_case \

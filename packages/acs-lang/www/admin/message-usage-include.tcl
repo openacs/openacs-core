@@ -18,9 +18,9 @@ if { [string match "acs-lang.localization-*" $full_key] } {
 multirow create message_usage file code
 
 with_catch errmsg {
-    exec find [acs_root_dir] -type f -regex ".*\\.\\(info\\|adp\\|sql\\|tcl\\)" -follow | xargs egrep "$grepfor" 2>/dev/null
+    exec find $::acs::rootdir -type f -regex ".*\\.\\(info\\|adp\\|sql\\|tcl\\)" -follow | xargs egrep "$grepfor" 2>/dev/null
 } {
-    #error "find [acs_root_dir] -type f -regex \".*\\.\\(info\\|adp\\|sql\\|tcl\\)\" -follow | xargs egrep \"${full_key_pattern}\""
+    #error "find $::acs::rootdir -type f -regex \".*\\.\\(info\\|adp\\|sql\\|tcl\\)\" -follow | xargs egrep \"${full_key_pattern}\""
     global errorInfo
 
     foreach line [split $errmsg "\n"] {

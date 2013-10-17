@@ -137,7 +137,7 @@ ad_proc lang::util::replace_temporary_tags_with_lookups {
     is not accessed in any way.
 
     @param file_list         A list of paths to adp or tcl files to do replacements in. The
-                             paths should be relative to [acs_root_dir]. All files must
+                             paths should be relative to $::acs::rootdir. All files must
                              belong to the same package.
 
     @author Peter marklund (peter@collaboraid.biz)
@@ -176,7 +176,7 @@ ad_proc lang::util::replace_temporary_tags_with_lookups {
     foreach file $file_list {                
         ns_log debug "lang::util::replace_temporary_tags_with_lookups: processing file $file"
 
-        set full_file_path "[acs_root_dir]/$file"
+        set full_file_path "$::acs::rootdir/$file"
         regexp {\.([^.]+)$} $file match file_ending
 
         # Attempt a backup of the file first. Do not overwrite an old backup file.
