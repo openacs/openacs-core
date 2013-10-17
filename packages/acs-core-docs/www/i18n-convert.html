@@ -124,12 +124,12 @@ begins.
 &lt;/if&gt;
 </pre><p>It would probably be better to do this as something like:</p><pre class="programlisting">&lt;if @components.view_bugs_url@ not nil&gt;
   &lt;if @components.num_bugs@ eq 1&gt;
-    &lt;a href="@components.view_bugs_url@" title="#bug-tracker.View_the_bug_fo_component#"&gt;#bug-tracker.one_bug#&lt;/a&gt;
+    &lt;a href="@components.view_bugs_url@" title="<span>#</span>bug-tracker.View_the_bug_fo_component#"&gt;<span>#</span>bug-tracker.one_bug#&lt;/a&gt;
   &lt;/if&gt;&lt;else&gt;
-    &lt;a href="@components.view_bugs_url@" title="#bug-tracker.View_the_bug_fo_component#"&gt;#bug-tracker.N_bugs#&lt;/a&gt;
+    &lt;a href="@components.view_bugs_url@" title="<span>#</span>bug-tracker.View_the_bug_fo_component#"&gt;<span>#</span>bug-tracker.N_bugs#&lt;/a&gt;
   &lt;/else&gt;
 &lt;/if&gt;</pre></li><li class="listitem"><p><b>Don't combine keys in  display text. </b>Converting a phrase from one language to another is usually more complicated than simply replacing each word with an equivalent.  When several keys are concatenated, the resulting word order will not be correct for every language.  Different languages may use expressions or idioms that don't match the phrase key-for-key.  Create complete, distinct keys instead of building text from several keys.  For example:</p><p>Original code:</p><pre class="programlisting">multirow append links "New [bug_tracker::conn Bug]" </pre><p>Problematic conversion:</p><pre class="programlisting">multirow append links "[_ bug-tracker.New] [bug_tracker::conn Bug]"</pre><p>Better conversion:</p><pre class="programlisting">set bug_label [bug_tracker::conn Bug]
-multirow append links "[_ bug-tracker.New_Bug]" "${url_prefix}bug-add"</pre><p>... and include the variable in the key: <code class="computeroutput">"New %bug_label%"</code>.  This gives translators more control over the phrase.</p><p>In this example of bad i18n, full name is created by concatenating first and last name (admittedly this is pervasive in the toolkit):</p><pre class="programlisting">&lt;a href="@past_version.maintainer_url@" title="#bug-tracker.Email# @past_version.maintainer_email@"&gt;
+multirow append links "[_ bug-tracker.New_Bug]" "${url_prefix}bug-add"</pre><p>... and include the variable in the key: <code class="computeroutput">"New %bug_label%"</code>.  This gives translators more control over the phrase.</p><p>In this example of bad i18n, full name is created by concatenating first and last name (admittedly this is pervasive in the toolkit):</p><pre class="programlisting">&lt;a href="@past_version.maintainer_url@" title="<span>#</span>bug-tracker.Email# @past_version.maintainer_email@"&gt;
 @past_version.maintainer_first_names@ @past_version.maintainer_last_name@&lt;/a&gt;</pre></li><li class="listitem"><p><b>Avoid unnecessary duplicate keys. </b>When phrases are exactly the same in several places, use a single key.</p><p>For common words such as
             Yes and No, you can use a library of keys at <a class="ulink" href="/acs-lang/admin/message-list?package%5fkey=acs%2dkernel&amp;locale=en%5fUS" target="_top">acs-kernel</a>.
             For example, instead of using
