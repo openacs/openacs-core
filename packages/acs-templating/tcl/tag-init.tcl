@@ -128,8 +128,8 @@ template_tag include { params } {
   template::adp_append_code "        append __adp_output \"Error in include template \\\"\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]\\\": \$errmsg\""
   # JCD: If we have the ds_page_bits cache maybe save the error for later
   if { [info commands ::ds_enabled_p] ne "" && [info commands ::ds_page_fragment_cache_enabled_p] ne "" } {
-      template::adp_append_code "        if {\[::ds_enabled_p\]"
-      template::adp_append_code "            && \[::ds_collection_enabled_p\] } {"
+      template::adp_append_code "        if {\[info exists ::ds_enabled_p\]"
+      template::adp_append_code "            && \[info exists ::ds_collection_enabled_p\] } {"
       template::adp_append_code "            set __include_errors {}"
       template::adp_append_code "            ns_cache get ds_page_bits \[ad_conn request\]:error __include_errors"
       template::adp_append_code "            ns_cache set ds_page_bits \[ad_conn request\]:error \[lappend __include_errors \[list \"$src\" \$errorInfo\]\]"

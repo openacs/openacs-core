@@ -679,3 +679,23 @@ ad_proc -public ds_profile { command {tag {}} } {
         }
     }
 }
+
+ad_proc -public ds_init { } {
+
+    Perform setup for the developer support for a single request.  We
+    save the state in global variables to avoid highly redundant
+    computations (up to 50 times per page on openacs.org)
+
+} {
+    if {[::ds_enabled_p] } {
+	#
+	# Save current setup for developer support in global
+	# variables, which are deleted automatically after every
+	# request.
+	#
+	set ::ds_enabled_p 1
+	if {[::ds_collection_enabled_p] } {set ::ds_collection_enabled_p 1}
+	if {[::ds_profiling_enabled_p] } {set ::ds_profiling_enabled_p 1}
+	if {[::ds_show_p]} {set ::_ds_show_p 1}
+    }
+}
