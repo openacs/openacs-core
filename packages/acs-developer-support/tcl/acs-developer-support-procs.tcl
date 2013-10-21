@@ -147,7 +147,7 @@
     Appends adp start box if the show toggle is true
  } {
      template::adp_append_code "if { \[info exists ::ds_show_p\] } {"
-     template::adp_append_code "    set __apidoc_path \[string range $stub \[string length \$::acs::root_dir\] end\].adp"
+     template::adp_append_code "    set __apidoc_path \[string range $stub \[string length \$::acs::rootdir\] end\].adp"
      template::adp_append_code "    set __stub_path \[join \[split $stub /\] \" / \"\]"
      template::adp_append_code "    append __adp_output \"<div class=\\\"\[::ds_adp_box_class\]\\\"><span class=\\\"\[::ds_adp_file_class\]\\\"><a href=\\\"/api-doc/content-page-view?source_p=1&path=\$__apidoc_path\\\" style=\\\"text-decoration: none;\\\">\$__stub_path</a></span><div class=\\\"\[::ds_adp_output_class\]\\\">\""
      template::adp_append_code "}"
@@ -687,6 +687,8 @@ ad_proc -public ds_init { } {
     computations (up to 50 times per page on openacs.org)
 
 } {
+    #ns_log notice "ds_init called [::ds_enabled_p]"
+
     if {[::ds_enabled_p] } {
 	#
 	# Save current setup for developer support in global
@@ -696,6 +698,6 @@ ad_proc -public ds_init { } {
 	set ::ds_enabled_p 1
 	if {[::ds_collection_enabled_p] } {set ::ds_collection_enabled_p 1}
 	if {[::ds_profiling_enabled_p] } {set ::ds_profiling_enabled_p 1}
-	if {[::ds_show_p]} {set ::_ds_show_p 1}
+	if {[::ds_show_p]} {set ::ds_show_p 1}
     }
 }

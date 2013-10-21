@@ -1081,6 +1081,8 @@ ad_proc -public rp_serve_concrete_file {file} {
     if { [nsv_exists rp_extension_handlers $extension] } {
         set handler [nsv_get rp_extension_handlers $extension]
 
+	catch {ds_init}
+
         if { [set errno [catch {
             ad_try {
                 $handler
@@ -1433,7 +1435,6 @@ ad_proc -private rp_handle_adp_request {} {
 
 } {
     doc_init
-    ds_init
 
     set adp [ns_adp_parse -file [ad_conn file]]
 
