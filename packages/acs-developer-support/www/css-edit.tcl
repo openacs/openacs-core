@@ -41,7 +41,7 @@ if {[file exists $file_location] && [file extension $file_location] eq ".css"} {
 	if {$item_id ne ""} {
 	    append revision_html "<ol>"
 	    db_foreach revision {select revision_id, publish_date, description from cr_revisions where item_id = :item_id order by publish_date desc} {
-		if { [content::revision::is_live -revision_id $revision_id] eq "t" } {
+		if { [content::revision::is_live -revision_id $revision_id] == "t" } {
 		    set make_live "<strong>that's live!</strong>"
 		} else {
 		    set return_url_2 [ad_return_url]
