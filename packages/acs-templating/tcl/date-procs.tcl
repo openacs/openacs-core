@@ -144,7 +144,7 @@ ad_proc -public template::util::date::today {} {
     lappend today [template::util::leadingTrim $v]
   }
 
-  return [eval create $today]
+  return [create {*}$today]
 }
 
 ad_proc -public template::util::date::now {} {
@@ -157,7 +157,7 @@ ad_proc -public template::util::date::now {} {
     lappend today [template::util::leadingTrim $v]
   }
 
-  return [eval create $today]
+    return [create {*}$today]
 }
 
 ad_proc -public template::util::date::from_ansi {
@@ -551,7 +551,7 @@ ad_proc -public template::util::date::unpack { date } {
 
     @see template::util::date::from_ans
 } {
-    uplevel [list lassign $date year month day hours minutes seconds format ]
+    uplevel [list foreach {year month day hours minutes seconds format} $date { break }]
 }
 
 ad_proc -public template::util::date::now_min_interval {} {
@@ -584,7 +584,7 @@ ad_proc -public template::util::date::now_min_interval {} {
   # replace the minute value in the now list with new value
   set now [lreplace $now 4 4 $minute]
 
-  return [eval create $now]
+  return [create {*}$now]
 }
 
 ad_proc -public template::util::date::now_min_interval_plus_hour {} {
@@ -620,7 +620,7 @@ ad_proc -public template::util::date::now_min_interval_plus_hour {} {
   # replace the hour and minute values in the now list with new values
   set now [lreplace $now 3 4 [incr hour $minute]]
 
-  return [eval create $now]
+  return [create {*}$now]
 }
 
 ad_proc -public template::util::date::add_time { {-time_array_name:required} {-date_array_name:required} } {
@@ -753,7 +753,7 @@ ad_proc -public template::util::date::validate { date error_ref } {
           set maxdays [get_property days_in_month $date]
           if { [string trimleft $day "0"] < 1 || [string trimleft $day "0"] > $maxdays } {
             set month_pretty [template::util::date::get_property long_month_name $date]
-	      if { $month == "2" } {
+	      if { $month == 2 } {
 		  # February has a different number of days depending on the year
 		  append month_pretty " ${year}"
 	      }
@@ -1150,7 +1150,7 @@ ad_proc -public template::util::textdate_localized_format {} {
     # this format key must now be at max five characters, and contain one y, one m and one d
     # as well as two punction marks ( - . / )
     if { [regexp {^([y|m|d])([\-|\.|/])([y|m|d])([\-|\.|/])([y|m|d])} $format match first first_punct second second_punct third] 
-	 && [string length $format] == "5" 
+	 && [string length $format] == 5
      } {
 	if { [lsort [list $first $second $third]] eq "d m y" } {
 	    # we have a valid format from acs-lang.localization-d_fmt with all 3 necessary elements
@@ -1215,8 +1215,7 @@ ad_proc -public template::data::transform::textdate { element_ref } {
         # de_DE which is dd.mm.yyyy)
 
 	# we check if adding the year and punctuation makes it a valid date
-	set command "regexp {$exp} \"\${value}\${year_punctuation}\[dt_sysdate -format %Y\]\" match $results"
-	if { [eval $command] } {
+	if { [regexp $exp "${value}${year_punctuation}[dt_sysdate -format %Y]" match {*}$results] } {
 	    if { ![catch { clock scan "${year}-${month}-${day}" }] } {
 		# we add the missing year and punctuation to the value
                 # we don't return it here because formatting is done
@@ -1228,8 +1227,7 @@ ad_proc -public template::data::transform::textdate { element_ref } {
 
     # now we verify that we have a valid date
     # and adding leading/trailing zeros if needed
-    set command "regexp {$exp} \"\${value}\" match $results"
-    if { [eval $command] } {
+    if { [regexp $exp $value match {*}$results] } {
 	# the regexp will have given us: year month day format_one format_two
 	if { [string length $month] eq "1" } {
 	    set month "0$month"
