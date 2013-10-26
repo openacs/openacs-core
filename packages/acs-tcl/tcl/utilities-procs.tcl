@@ -2531,7 +2531,7 @@ ad_proc -public util_current_location {{}} {
     
     if { [ns_config "ns/parameters" ReverseProxyMode false] } {
 	if { [ns_set ifind [ad_conn headers] X-Forwarded-For] > -1
-	     && [ns_set iget [ad_conn headers] X-SSL-Request] == "1"} {
+	     && [ns_set iget [ad_conn headers] X-SSL-Request] == 1} {
 	    set proto https
 	}
     }

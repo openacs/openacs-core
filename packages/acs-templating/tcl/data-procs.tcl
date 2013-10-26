@@ -380,7 +380,7 @@ ad_proc -public template::data::validate::textdate {
 		    set maxdays [template::util::date::get_property days_in_month $datelist]
 		    if { $day < 1 || $day > $maxdays } {
 			set month_pretty [template::util::date::get_property long_month_name $datelist]
-			if { $month == "2" } {
+			if { $month == 2 } {
 			    # February has a different number of days depending on the year
 			    append month_pretty " ${year}"
 			}
