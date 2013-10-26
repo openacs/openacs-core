@@ -164,7 +164,7 @@ set count $result(count)
 
 template::multirow create searchresult title_summary txt_summary url_one object_id
 
-for { set __i 0 } { $__i < [expr {$high - $low +1}] } { incr __i } {
+for { set __i 0 } { $__i < $high - $low + 1 } { incr __i } {
     if {[catch {
         set object_id [lindex $result(ids) $__i]
         if {$object_id eq ""} {

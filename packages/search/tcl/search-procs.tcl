@@ -121,7 +121,7 @@ ad_proc -private search::indexer {} {
             }
         }
 
-        foreach {object_id event_date event} $row { break }
+        lassign $row object_id event_date event
         array unset datasource
         switch -- $event {
             UPDATE -
