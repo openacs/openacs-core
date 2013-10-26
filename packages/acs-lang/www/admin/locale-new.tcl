@@ -114,7 +114,7 @@ if { [form is_valid locale_creation] } {
 
         # We first make sure that there is no default for this language
         set is_default_p [db_string select_default {}]
-        if { $is_default_p == "0" } {
+        if { $is_default_p == 0 } {
             # There is a no default for this language
             set default_p "t"
         }

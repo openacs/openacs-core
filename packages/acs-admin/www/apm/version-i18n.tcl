@@ -63,7 +63,7 @@ foreach file [lsort [ad_find_all_files [acs_package_root_dir $package_key]]] {
         # If we are showing adp:s and we are only showing adp:s with texts to translate, check if
         # this file has any texts
         if { $file_type eq "adp" && $only_text_p } {
-            if { $number_of_text_snippets == "0" } {
+            if { $number_of_text_snippets == 0 } {
                 set add_file_p 0
             }
         }
