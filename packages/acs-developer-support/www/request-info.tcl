@@ -330,7 +330,7 @@ if { [info exists property(prof)] } {
         }
 
         if { $page_fragment_cache_p } {
-            if { [string match *.adp $tag]} {
+            if { [string match "*.adp" $tag]} {
                 append file_links " <a href=\"send?output=$request:[ns_urlencode $tag]\" title=\"output\">o</a>"
                 if {[ns_cache get ds_page_bits "$request:$tag" dummy]} {
                     set size [string length $dummy]
