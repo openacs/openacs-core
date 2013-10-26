@@ -551,7 +551,7 @@ ad_proc -public template::util::date::unpack { date } {
 
     @see template::util::date::from_ans
 } {
-    uplevel [list foreach {year month day hours minutes seconds format} $date { break }]
+    uplevel [list lassign $date year month day hours minutes seconds format ]
 }
 
 ad_proc -public template::util::date::now_min_interval {} {
