@@ -176,8 +176,8 @@ namespace eval rel_types {
 	set pretty_name "#acs-translations.${message_key}#"
 	set pretty_plural "#acs-translations.${message_key}_plural#"
 
-	foreach pair $plsql {
-	    eval [lindex $pair 0] [lindex $pair 1] [lindex $pair 2]
+	foreach cmd $plsql {
+	    eval $cmd
 	}
 
 	# The following create table statement commits the transaction. If it
@@ -194,8 +194,8 @@ namespace eval rel_types {
 		# Roll back our work so for
 
 		for {set i [expr {[llength $plsql_drop] - 1}]} {$i >= 0} {incr i -1} {
-		    set drop_pair [lindex $plsql_drop $i]
-		    if {[catch {eval [lindex $drop_pair 0] [lindex $drop_pair 1] [lindex $drop_pair 2]} err_msg_2]} {
+		    set drop_cmd [lindex $plsql_drop $i]
+		    if {[catch {eval $dropcmd} err_msg_2]} {
 			append errmsg "\nAdditional error while trying to roll back: $err_msg_2"
 			return -code error $errmsg
 		    }

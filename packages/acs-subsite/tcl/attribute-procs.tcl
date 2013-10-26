@@ -140,16 +140,16 @@ ad_proc -public add {
     lappend plsql [list "add_column" "FOO" db_dml]
     
     for { set i 0 } { $i < [llength $plsql] } { incr i } {
-        set pair [lindex $plsql $i]
-        if { [catch {eval [lindex $pair 2] [lindex $pair 0] [lindex $pair 1]} err_msg] } {
+        set cmd [lindex $plsql $i]
+        if { [catch {eval $cmd} err_msg] } {
             # Rollback what we've done so far. The loop contitionals are:
             #  start at the end of the plsql_drop list (Drop things in reverse order of creation)
             # execute drop statements until we reach position $i+1
             #  This position represents the operation on which we failed, and thus
             #  is not executed
             for { set inner [expr {[llength $plsql_drop] - 1}] } { $inner > $i + 1 } { set inner [expr {$inner - 1}] } {
-                set drop_pair [lindex $plsql_drop $inner]
-                if { [catch {eval [lindex $drop_pair 2] [lindex $drop_pair 0] [lindex $drop_pair 1]} err_msg_2] } {
+                set drop_cmd [lindex $plsql_drop $inner]
+                if { [catch {eval $drop_cmd} err_msg_2] } {
                     append err_msg "\nAdditional error while trying to roll back: $err_msg_2"
                     return -code error $err_msg
                 }
@@ -257,8 +257,8 @@ ad_proc -public delete { attribute_id } {
         lappend plsql [list "drop_attr_column" "FOO" "db_dml"]
     }
 
-    foreach pair $plsql {
-        eval [lindex $pair 2] [lindex $pair 0] [lindex $pair 1]
+    foreach cmd $plsql {
+        eval $cmd
     }
     
     return 1
@@ -557,14 +557,10 @@ ad_proc -public add_form_elements {
     set attr_list_of_lists [package_object_attribute_list -start_with $start_with $object_type]
 
     foreach row $attr_list_of_lists {
-	set attribute_id [lindex $row 0]
-	set attribute_name [lindex $row 2]
-	set pretty_name [lindex $row 3]
+	lassign $row  attribute_id . attribute_name pretty_name datatype required_p default
 	# Might translate the datatype into one for which we have a
 	# validator (e.g. a string datatype would change into text).
-	set datatype [translate_datatype [lindex $row 4]]
-	set required_p [lindex $row 5]
-	set default [lindex $row 6]
+	set datatype [translate_datatype $datatype]
 
 	if {$datatype eq "enumeration"} {
 	    # For enumerations, we generate a select box of all the possible values
