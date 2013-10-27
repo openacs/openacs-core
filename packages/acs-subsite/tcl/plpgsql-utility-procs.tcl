@@ -58,8 +58,8 @@ namespace eval plpgsql_utility {
 	# For each real arg, append default or supplied arg value
 	set pieces [list]
 	foreach row $real_args {
-	    set arg_name [lindex $row 0]
-	    set arg_default [lindex $row 1]
+	    lassign $row arg_name arg_default
+
 	    if { [info exists user_supplied($arg_name)] } {
 		lappend pieces "${prepend}$user_supplied($arg_name)"
 	    } else {

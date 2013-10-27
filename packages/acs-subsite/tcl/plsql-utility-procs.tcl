@@ -111,8 +111,7 @@ object_type    => group,
 	set text ""
 	set col_width [expr {$max_length + $num_spaces}]
 	foreach pair $pieces {
-	    set left [lindex $pair 0]
-	    set right [lindex $pair 1]
+	    lassign $pair left right
 	    while { [string length $left] < $col_width } {
 		append left " "
 	    }

@@ -903,12 +903,10 @@ ad_proc -public subsite::get_url {
 
         util_driver_info -array request
 
-        set headers [ns_conn headers]
-        set host_addr [split [ns_set iget $headers host] :]
-        set request(vhost) [lindex $host_addr 0]
+	lassign [split [ns_set iget [ns_conn headers] host] :] request(vhost) provided_port
 
-        if {[lindex $host_addr 1] ne "" } {
-            set request(port) [lindex $host_addr 1]
+        if {$provided_port ne "" } {
+            set request(port) $provided_port
         }
 
         set request_vhost_p [expr {$main_host ne $request(vhost) }]

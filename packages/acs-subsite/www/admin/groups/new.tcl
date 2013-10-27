@@ -147,8 +147,7 @@ if { [template::form is_valid add_group] } {
     set package_url [ad_conn package_url]
 
     foreach group_rel_type $group_rel_type_list {
-	set next_group_id [lindex $group_rel_type 0]
-	set next_rel_type [lindex $group_rel_type 1]
+	lassign $group_rel_type next_group_id next_rel_type
 	lappend return_url_list \
 		"${package_url}admin/relations/add?group_id=$next_group_id&rel_type=[ad_urlencode $next_rel_type]&party_id=$group_id&allow_out_of_scope_p=t"
     }

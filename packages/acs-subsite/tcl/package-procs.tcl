@@ -147,8 +147,7 @@ ad_proc -private package_create_attribute_list {
     
     if { $supertype ne "" && $object_name ne "" } {
 	foreach row [util_memoize "package_table_columns_for_type \"$supertype\""] {
-	    set table_name [lindex $row 0]
-	    set column_name [lindex $row 1]
+	    lassign $row table_name column_name
 
 	    # Note that limit_to doesn't apply here as we always need
 	    # to include these arguments else the call will fail
@@ -321,9 +320,8 @@ ad_proc -private package_create {
     }
 
     foreach pair $plsql {
-	set type [lindex $pair 0]
-	set stmt_name [lindex $pair 1]
-	set code [lindex $pair 2]
+	lassign $pair type stmt_name code
+
 	db_exec_plsql $stmt_name $code
 	
 	# Let's check to make sure the package is valid
@@ -839,9 +837,7 @@ ad_proc -public package_instantiate_object {
     set pieces [list]
     
     foreach pair $var_list {
-
-	set __key [lindex $pair 0]
-	set __value [lindex $pair 1]
+	lassign $pair __key __value
 	if { ![info exists real_params([string toupper $__key])] } {
 	    # The parameter is not accepted as a parameter to the
 	    # pl/sql function. Ignore it.
@@ -959,8 +955,7 @@ ad_proc -public package_exec_plsql {
     set pieces [list]
 
     foreach pair $var_list {
-	set __key [lindex $pair 0]
-	set __value [lindex $pair 1]
+	lassign $pair __key __value
 	if { ![info exists real_params([string toupper $__key])] } {
 	    # The parameter is not accepted as a parameter to the
 	    # pl/sql function. Ignore it.
