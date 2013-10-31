@@ -43,7 +43,7 @@ set untrusted_user_id [ad_conn untrusted_user_id]
 if { $user_id eq "" } {
     if { $verified_user_id == 0 } {
 	# Don't know what to do! 
-	ad_return_error "Missing user_id" "We need a user_id to display the community page"
+	auth::require_login
 	return
     }
     set user_id $verified_user_id
