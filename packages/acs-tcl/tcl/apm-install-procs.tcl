@@ -495,8 +495,7 @@ ad_proc -private apm_dependency_check_new {
 
                 set satisfied_p 1
                 foreach req [concat $version(embeds) $version(extends) $version(requires)] {
-                    set req_uri [lindex $req 0]
-                    set req_version [lindex $req 1]
+                    lassign $req req_uri req_version
 
                     if { ![info exists provided($req_uri)] || \
                              [apm_version_names_compare $provided($req_uri) $req_version]== -1 } {
@@ -530,8 +529,7 @@ ad_proc -private apm_dependency_check_new {
 
                     # Record what this package provides, and remove it from the required list, if appropriate
                     foreach prov $version(provides) {
-                        set prov_uri [lindex $prov 0]
-                        set prov_version [lindex $prov 1]
+			lassign $prov prov_uri prov_version
                         # If what we provide is not already provided, or the alredady provided version is
                         # less than what we provide, record this new provision
                         if { ![info exists provided($prov_uri)] || \
@@ -578,8 +576,7 @@ ad_proc -private apm_dependency_check_new {
 
                 # Let's see if this package provides anything we need
                 foreach prov $version(provides) {
-                    set prov_uri [lindex $prov 0]
-                    set prov_version [lindex $prov 1]
+		    lassign $prov prov_uri prov_version
 
                     if { [info exists required($prov_uri)] 
 			 && [apm_version_names_compare $required($prov_uri) $prov_version] <= 0 
@@ -625,10 +622,8 @@ ad_proc -private apm_dependency_check_new {
             
             # Find unsatisfied requirements
             foreach req [concat $version(embeds) $version(extends) $version(requires)] {
-                set req_uri [lindex $req 0]
-                set req_version [lindex $req 1]
-                if { ![info exists provided($req_uri)] || \
-                         [apm_version_names_compare $provided($req_uri) $req_version] == -1 } {
+		lassign $req req_uri req_version
+                if { ![info exists provided($req_uri)] || [apm_version_names_compare $provided($req_uri) $req_version] == -1 } {
                     lappend failed($package_key) [list $req_uri $req_version]
                     if { [info exists provided($req_uri)] } {
                         ns_log Debug "apm_dependency_check_new: Failed dependency: $package_key embeds/extends/requires $req_uri $req_version, but we only provide $provided($req_uri)"
@@ -725,8 +720,7 @@ ad_proc -public apm_simple_package_install {
             $install_spec_files]
 
         if { [lindex $dependency_results 0] == 1 } {
-            apm_packages_full_install -callback apm_ns_write_callback \
-                [lindex $dependency_results 1]
+            apm_packages_full_install -callback apm_ns_write_callback [lindex $dependency_results 1]
         } else {
             foreach package_spec [lindex $dependency_results 1] {
                 if {[string is false [pkg_info_dependency_p $package_spec]]} {
@@ -1253,8 +1247,7 @@ ad_proc -private apm_package_install_data_model {
     }
 
     foreach item $data_model_files {
-	set file_path [lindex $item 0]
-	set file_type [lindex $item 1]
+	lassign $item file_path file_type
 	ns_log Debug "apm_package_install_data_model: Now processing $file_path of type $file_type"
 	if {$file_type eq "data_model_create" || 
 	    $file_type eq "data_model_upgrade" } {
@@ -1377,29 +1370,25 @@ ad_proc -private apm_package_install_dependencies { {-callback apm_dummy_callbac
 
 
     foreach item $provides {
-	set interface_uri [lindex $item 0]
-	set interface_version [lindex $item 1]
+	lassign $item interface_uri interface_version
 	ns_log Debug "apm_package_install_dependencies: Registering dependency $interface_uri, $interface_version for $version_id"
 	apm_interface_add $version_id $interface_uri $interface_version
     }
 
     foreach item $embeds {
-	set dependency_uri [lindex $item 0]
-	set dependency_version [lindex $item 1]
+	lassign $item dependency_uri dependency_version
 	ns_log Debug "apm_package_install_dependencies: Registering dependency $dependency_uri, $dependency_version for $version_id"
 	apm_dependency_add embeds $version_id $dependency_uri $dependency_version
     }
 
     foreach item $extends {
-	set dependency_uri [lindex $item 0]
-	set dependency_version [lindex $item 1]
+	lassign $item dependency_uri dependency_version
 	ns_log Debug "apm_package_install_dependencies: Registering dependency $dependency_uri, $dependency_version for $version_id"
 	apm_dependency_add extends $version_id $dependency_uri $dependency_version
     }
 
     foreach item $requires {
-	set dependency_uri [lindex $item 0]
-	set dependency_version [lindex $item 1]
+	lassign $item dependency_uri dependency_version
 	ns_log Debug "apm_package_install_dependencies: Registering dependency $dependency_uri, $dependency_version for $version_id"
 	apm_dependency_add requires $version_id $dependency_uri $dependency_version
     }
@@ -1429,8 +1418,7 @@ ad_proc -private apm_package_install_owners { {-callback apm_dummy_callback} own
     }
     set counter 0
     foreach item $owners {
-	set owner_name [lindex $item 0]
-	set owner_uri [lindex $item 1]
+	lassign $item owner_name owner_uri
 	db_dml owner_insert {
 	    insert into apm_package_owners(version_id, owner_uri, owner_name, sort_key)
 	    values(:version_id, :owner_uri, :owner_name, :counter)
@@ -1792,9 +1780,7 @@ ad_proc -private apm_query_files_find {
     set query_file_list [list]
 
     foreach file $file_list {
-	set path [lindex $file 0]
-	set file_type [lindex $file 1]
-        set file_db_type [lindex $file 2]
+	lassign $file path file_type file_db_type 
 	ns_log Debug "apm_query_files_find: Checking \"$path\" of type \"$file_type\" and db_type \"$file_db_type\"."
 
         # DRB: we return query files which match the given database type or for which no db_type

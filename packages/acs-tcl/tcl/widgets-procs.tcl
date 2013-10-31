@@ -145,16 +145,12 @@ ad_proc ad_dateentrywidget {column { value 0 } } {
 	set value  [lindex [split [ns_localsqltimestamp] " "] 0]
     } 
 
-    set date_parts [split $value "-"]
     if { $value eq "" } {
 	set month ""
 	set day ""
 	set year ""
     } else {
-	set date_parts [split $value "-"]
-	set month [lindex $date_parts 1]
-	set year [lindex $date_parts 0]
-	set day [lindex $date_parts 2]
+	lassign [split $value "-"] year month day
     }
 
     set output "<select name=\"$column.month\">\n"
@@ -210,8 +206,7 @@ ad_proc ad_db_select_widget {
     if {$option_list ne ""} {
         foreach opt $option_list { 
             incr count
-            set item [lindex $opt 1]
-            set value [lindex $opt 0]
+	    lassign $opt value item
             if { (!$multiple && $value eq $default ) 
                  || ($multiple && $value in $default) 
 	     } {

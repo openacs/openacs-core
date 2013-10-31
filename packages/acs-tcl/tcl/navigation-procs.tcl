@@ -124,8 +124,7 @@ ad_proc -public ad_context_bar_multirow {
     template::multirow create $multirow url label
 
     foreach elm [ad_context_node_list -from_node $from_node $node_id] {
-        set elm_0 [lindex $elm 0]
-        set elm_1 [lindex $elm 1]
+	lassign $elm elm_0 elm_1
         if { $node_id_url_end > 0 && [string match -nocase $node_id_url [string range $elm_0 0 ${node_id_url_end}-1] ] } {
             set elm_0 [string range $elm_0 $node_id_url_end end]
         }

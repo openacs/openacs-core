@@ -780,8 +780,7 @@ ad_proc ad_html_security_check { html } {
                 set attr_count 0
                 foreach attribute $attr_list {
                     incr attr_count
-                    set attr_name [lindex $attribute 0]
-                    set attr_value [lindex $attribute 1]
+		    lassign $attribute attr_name attr_value
                     
                     if { ![info exists allowed_attribute($attr_name)] 
 			 && ![info exists allowed_attribute(*)] } {

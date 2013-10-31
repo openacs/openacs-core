@@ -1037,9 +1037,7 @@ ad_proc -deprecated export_form_vars {
 } { 
     set hidden ""
     foreach var_spec $args {
-	set var_spec_pieces [split $var_spec ":"]
-	set var [lindex $var_spec_pieces 0]
-	set type [lindex $var_spec_pieces 1]
+	lassign [split $var_spec ":"] var type
 	upvar 1 $var value
 	if { [info exists value] } {
 	    switch $type {
@@ -1168,18 +1166,13 @@ ad_proc -deprecated export_url_vars {
     foreach var_spec $args { 
 	if { [string first "=" $var_spec] != -1 } {
 	    # There shouldn't be more than one equal sign, since the value should already be url-encoded.
-	    set var_spec_pieces [split $var_spec "="]
-	    set var [lindex $var_spec_pieces 0]
-	    set value [lindex $var_spec_pieces 1]
+	    lassign [split $var_spec "="] var value
 	    lappend params "$var=$value"
 	    if { $sign_p } {
 		lappend params "[ns_urlencode [ns_urldecode $var]:sig]=[ns_urlencode [ad_sign [ns_urldecode $value]]]"
 	    }
 	} else {
-	    set var_spec_pieces [split $var_spec ":"]
-	    set var [lindex $var_spec_pieces 0]
-	    set type [lindex $var_spec_pieces 1]
-	    
+	    lassign [split $var_spec ":"] var type
 	    upvar 1 $var upvar_value
 	    if { [info exists upvar_value] } {
 		switch $type {
@@ -1324,11 +1317,9 @@ ad_proc -public util_get_http_status {url {use_get_p 1} {timeout 30}} {
     } else {
 	set http [ns_httpopen HEAD $url "" $timeout] 
     }
-    set rfd [lindex $http 0] 
-    set wfd [lindex $http 1] 
+    lassign $http rfd wfd headers
     close $rfd
     close $wfd
-    set headers [lindex $http 2] 
     set response [ns_set name $headers] 
     set status [lindex $response 1] 
     ns_set free $headers
@@ -1373,14 +1364,12 @@ ad_proc -public util_httpopen {
         return -code error "Invalid url \"$url\":  _httpopen only supports HTTP"
     }
     set url [split $url /]
-    set hp [split [lindex $url 2] :]
-    set host [lindex $hp 0]
-    set port [lindex $hp 1]
+    lassign [split [lindex $url 2] :] host port
     if { [string match $port ""] } {set port 80}
+
     set uri /[join [lrange $url 3 end] /]
-    set fds [ns_sockopen -nonblock $host $port]
-    set rfd [lindex $fds 0]
-    set wfd [lindex $fds 1]
+    lassign [ns_sockopen -nonblock $host $port] rfd wfd
+
     if { [catch {
         _ns_http_puts $timeout $wfd "$method $uri HTTP/1.0\r"
         _ns_http_puts $timeout $wfd "Host: $host\r"
@@ -1428,10 +1417,7 @@ ad_proc -public util_httppost {url formvars {timeout 30} {depth 0} {http_referer
 	if {[incr depth] > 10} {
 		return -code error "util_httppost:  Recursive redirection:  $url"
 	}
-	set http [util_httpopen POST $url "" $timeout $http_referer]
-	set rfd [lindex $http 0]
-	set wfd [lindex $http 1]
-
+	lassign [util_httpopen POST $url "" $timeout $http_referer] rfd wfd
 	#headers necesary for a post and the form variables
 
 	_ns_http_puts $timeout $wfd "Content-type: application/x-www-form-urlencoded \r"
@@ -1639,10 +1625,9 @@ ad_proc -public ad_httpget {
         return -code error "ad_httpget:  Recursive redirection:  $url"
     }
 
-    set http [ns_httpopen GET $url $headers $timeout]
-    set rfd [lindex $http 0]
-    close [lindex $http 1]
-    set headers [lindex $http 2]
+    lassign [ns_httpopen GET $url $headers $timeout] rdf wfd headers
+
+    close $wfd
     set response [ns_set name $headers]
     set status [lindex $response 1]
     set last_modified [ns_set iget $headers last-modified]
@@ -2072,14 +2057,8 @@ ad_proc -private ad_run_scheduled_proc { proc_info } {
     }
 
     # Grab information about the scheduled procedure.
-    set thread [lindex $proc_info 0]
-    set once [lindex $proc_info 1]
-    set interval [lindex $proc_info 2]
-    set proc [lindex $proc_info 3]
-    set args [lindex $proc_info 4]
-    set time [lindex $proc_info 5]
+    lassign $proc_info thread once interval proc args time . debug
     set count 0
-    set debug [lindex $proc_info 7]
 
     ns_mutex lock [nsv_get ad_procs mutex]
     set procs [nsv_get ad_procs .]
@@ -2215,9 +2194,7 @@ ad_proc -public ad_cache_returnredirect { url { persistent "f" } { excluded_vars
 } {
     util_memoize_flush_regexp [list [ad_conn session_id] [ad_conn package_id]]
 
-    set url_list [split $url "?"]
-    set url [lindex $url_list 0]
-    set vars [lindex $url_list 1]
+    lassign [split $url "?"] url vars
 
     set excluded_vars_list ""
     set excluded_vars_url ""
@@ -2248,9 +2225,7 @@ ad_proc -public ad_cache_returnredirect { url { persistent "f" } { excluded_vars
     set saved_list ""
     if { $vars ne "" } {
 	foreach item_value [split $vars "&"] {
-	    set item_value_pair [split $item_value "="]
-	    set item [lindex $item_value_pair 0]
-	    set value [ns_urldecode [lindex $item_value_pair 1]]
+	    lassign [split $item_value "="] item value
 	    if {$item ni $excluded_vars_list} {
 		# No need to save the value if it's being passed ...
 		if {$item in $saved_list} {
@@ -2502,9 +2477,7 @@ ad_proc -public util_current_location {{}} {
 
     # This is the host from the browser's HTTP request
     set Host [ns_set iget [ns_conn headers] Host]
-    set Hostv [split $Host ":"]
-    set Host_hostname [lindex $Hostv 0]
-    set Host_port [lindex $Hostv 1]
+    lassign [split $Host ":"] Host_hostname Host_port
 
     # suppress the configured http port when server is behind a proxy, to keep connection behind proxy
     set suppress_port [parameter::get -package_id [apm_package_id_from_key acs-tcl] -parameter SuppressHttpPort -default 0]
@@ -3439,9 +3412,7 @@ ad_proc -public util_http_file_upload { -file -data -binary:boolean -filename
                 Recursive redirection: $url"
         }
 
-        set http [util_httpopen POST $url $rqset $timeout $http_referer]
-        set rfd  [lindex $http 0]
-        set wfd  [lindex $http 1]
+        lassign [util_httpopen POST $url $rqset $timeout $http_referer] rfd wfd 
 
         _ns_http_puts $timeout $wfd \
             "Content-type: multipart/form-data; boundary=$boundary\r"
@@ -4544,7 +4515,7 @@ ad_proc -public util::find_all_files {
 		# Remember that we've examined the file.
 		set examined_files($file) 1
 
-		if { $check_file_func eq "" || [eval [list $check_file_func $file]] } {
+		if { $check_file_func eq "" || [$check_file_func $file] } {
 		    # If it's a file, add to our list. If it's a
 		    # directory, add its contents to our list of files to
 		    # examine next time.
