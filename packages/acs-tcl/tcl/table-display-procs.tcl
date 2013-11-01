@@ -336,10 +336,8 @@ ad_proc -deprecated ad_table {
 	foreach Ti $Tcolumn_list {
 	    set Tcol [lindex $Tdatadef $Ti]
 	    if { ( [ns_set find $selection [lindex $Tcol 0]] < 0
-		   && ([empty_string_p [lindex $Tcol 2]] || 
-	               ([lindex $Tcol 2] ne "sort_by_pos" )
-	              )
-	         )
+		   && ([lindex $Tcol 2] eq "" || [lindex $Tcol 2] ne "sort_by_pos")
+		   )
 		 || [lindex $Tcol 2] eq "no_sort" 
 	     } {
 		
@@ -441,10 +439,10 @@ ad_proc -deprecated ad_table {
             }
             # do this check since we would like the ability to band with
             # page background as well
-            if {$Tn_bands && ![empty_string_p [lindex $Tband_colors $Tband_color]]} {
+            if {$Tn_bands && [lindex $Tband_colors $Tband_color] ne ""} {
                 append Trow_default " style=\"background-color:[lindex $Tband_colors $Tband_color]\""
             }
-            if {$Tn_band_classes && ![empty_string_p [lindex $Tband_classes $Tband_class]]} {
+            if {$Tn_band_classes && [lindex $Tband_classes $Tband_class] ne ""} {
                 append Trow_default " class=\"[lindex $Tband_classes $Tband_class]\""
             }
 
@@ -816,7 +814,7 @@ ad_proc ad_order_by_from_sort_spec {sort_by tabledef} {
                     }
 
                     # tack on the order by clause 
-                    if {![empty_string_p [lindex $order_spec 2]] && ([lindex $order_spec 2] ne "sort_by_pos" )} {
+                    if {[lindex $order_spec 2] ne "" && [lindex $order_spec 2] ne "sort_by_pos"} {
                         append order_by_clause "[subst [lindex $order_spec 2]]"
                     } else { 
                         append order_by_clause "$sort_key $order"
@@ -1007,7 +1005,7 @@ ad_proc ad_table_orderby_sql {datadef orderby order} {
     set orderclause "order by $orderby $order"
     foreach col $datadef {
         if {$orderby eq [lindex $col 0] } {
-            if {![empty_string_p [lindex $col 2]]} {
+            if {[lindex $col 2] ne ""} {
                 set orderclause [subst [lindex $col 2]]
             }
         }
