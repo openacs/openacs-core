@@ -1078,12 +1078,13 @@ ad_proc -public apm_parameter_unregister {
 }
 
 ad_proc -public apm_dependency_add {
-    {
-	-callback apm_dummy_callback
-	-dependency_id ""
-    } dependency_type version_id dependency_uri dependency_version
+    {-callback apm_dummy_callback}
+    {-dependency_id ""} 
+    dependency_type 
+    version_id 
+    dependency_uri 
+    dependency_version
 } {
-    
     Add a dependency to a version.
     @return The id of the new dependency.
 } {
@@ -1091,8 +1092,9 @@ ad_proc -public apm_dependency_add {
     if {$dependency_id eq ""} {
 	set dependency_id [db_null]
     }
-    
-    return [db_exec_plsql dependency_add {}] }
+   
+    return [db_exec_plsql dependency_add {}] 
+}
 
 ad_proc -public apm_dependency_remove {dependency_id} {
     
