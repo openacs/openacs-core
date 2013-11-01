@@ -1352,13 +1352,18 @@ ad_proc -private apm_package_install_parameters { {-callback apm_dummy_callback}
     }
 }
 
-ad_proc -private apm_package_install_dependencies { {-callback apm_dummy_callback} embeds \
-    extends provides requires version_id} {
-
+ad_proc -private apm_package_install_dependencies { 
+    {-callback apm_dummy_callback} 
+    embeds 
+    extends 
+    provides 
+    requires 
+    version_id
+} {
     Install all package dependencies.
 
 } {
-    ns_log Debug "apm_package_install_dependencies: Installing dependencies."
+    ns_log Debug "apm_package_install_dependencies: Installing dependencies.\nembeds: $embeds\nextends: $extends\nprovides: $provides\nrequires:$requires"
     # Delete any dependencies register for this version.
     db_foreach all_dependencies_for_version {
 	select dependency_id from apm_package_dependencies
@@ -1367,29 +1372,27 @@ ad_proc -private apm_package_install_dependencies { {-callback apm_dummy_callbac
 	apm_dependency_remove $dependency_id
     }
 
-
-
-    foreach item $provides {
+    foreach item [lsort -unique $provides] {
 	lassign $item interface_uri interface_version
 	ns_log Debug "apm_package_install_dependencies: Registering dependency $interface_uri, $interface_version for $version_id"
 	apm_interface_add $version_id $interface_uri $interface_version
     }
 
-    foreach item $embeds {
+    foreach item [lsort -unique $embeds] {
 	lassign $item dependency_uri dependency_version
-	ns_log Debug "apm_package_install_dependencies: Registering dependency $dependency_uri, $dependency_version for $version_id"
+	ns_log Debug "apm_package_install_dependencies: Registering dependency embeds $dependency_uri, $dependency_version for $version_id"
 	apm_dependency_add embeds $version_id $dependency_uri $dependency_version
     }
 
-    foreach item $extends {
+    foreach item [lsort -unique $extends] {
 	lassign $item dependency_uri dependency_version
-	ns_log Debug "apm_package_install_dependencies: Registering dependency $dependency_uri, $dependency_version for $version_id"
+	ns_log Debug "apm_package_install_dependencies: Registering dependency extends $dependency_uri, $dependency_version for $version_id"
 	apm_dependency_add extends $version_id $dependency_uri $dependency_version
     }
 
-    foreach item $requires {
+    foreach item [lsort -unique $requires] {
 	lassign $item dependency_uri dependency_version
-	ns_log Debug "apm_package_install_dependencies: Registering dependency $dependency_uri, $dependency_version for $version_id"
+	ns_log Debug "apm_package_install_dependencies: Registering dependency requires $dependency_uri, $dependency_version for $version_id"
 	apm_dependency_add requires $version_id $dependency_uri $dependency_version
     }
 }
