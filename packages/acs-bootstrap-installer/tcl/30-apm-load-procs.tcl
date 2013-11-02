@@ -7,23 +7,10 @@ ad_library {
     @cvs-id $Id$
 }
 
-# FIXME: Peter M - This file cannot be watched with the APM as it re-initializes 
-# the reload level to 0 everytime it is sourced. Could we move these initialization 
-# to an -init.tcl file instead?
-
-# Initialize loader NSV arrays. See apm-procs.tcl for a description of
-# these arrays.
-nsv_array set apm_library_mtime [list]
-nsv_array set apm_version_procs_loaded_p [list]
-nsv_array set apm_reload_watch [list]
-nsv_array set apm_package_info [list]
-nsv_set apm_properties reload_level 0
-
 ad_proc apm_first_time_loading_p {} { 
     Returns 1 if this is a -procs.tcl file's first time loading, or 0 otherwise. 
 } {
-    global apm_first_time_loading_p
-    return [info exists apm_first_time_loading_p]
+    return [info exists ::apm_first_time_loading_p]
 }
 
 ad_proc -public ad_after_server_initialization { name args } {
@@ -417,7 +404,7 @@ ad_proc -private apm_bootstrap_load_libraries {
     and procs flags.
 
     This proc is an analog of apm_load_libraries.  In addition though
-    this proc sets apm_first_time_loading_p nsv variable.
+    this proc sets apm_first_time_loading_p variable.
 
     @author Don Baccus (dhogaza@pacifier.com)
     @author Peter Marklund
@@ -439,8 +426,7 @@ ad_proc -private apm_bootstrap_load_libraries {
 
     # This is the first time each of these files is being loaded (see
     # the documentation for the apm_first_time_loading_p proc).
-    global apm_first_time_loading_p
-    set apm_first_time_loading_p 1
+    set ::apm_first_time_loading_p 1
 
     set package_root_dir [acs_package_root_dir $package_key]
     foreach file [apm_get_package_files -package_key $package_key -file_types $file_types] {
@@ -454,7 +440,7 @@ ad_proc -private apm_bootstrap_load_libraries {
         }
     }
 
-    unset apm_first_time_loading_p
+    unset ::apm_first_time_loading_p
 }
 
 proc apm_bootstrap_load_queries { package_key } {
@@ -590,4 +576,19 @@ ad_proc -private apm_include_file_p { filename } {
 } {
     #ns_log notice "apm_include_file_p <$filename> => [apm_ignore_file_p $filename]"
     return [expr {![apm_ignore_file_p $filename]}] 
+}
+
+ad_proc apm_bootstrap_upgrade {
+    {-from_version_name:required}
+    {-to_version_name:required}
+} {
+    # just for testing; in the future, we might simply copy for every release
+    set doCopy [expr {$to_version_name eq "5.8.1d3"}]
+
+    if {$doCopy} {
+	set source [acs_root_dir]/packages/acs-bootstrap-installer/installer/tcl
+	foreach file [glob -nocomplain $source/*tcl] {
+	    file copy -force $file [acs_root_dir]/tcl
+	}
+    }
 }
