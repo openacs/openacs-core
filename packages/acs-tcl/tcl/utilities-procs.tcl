@@ -3048,6 +3048,8 @@ ad_proc -public -deprecated util_unlist { list args } {
     Places the <i>n</i>th element of <code>list</code> into the variable named by
     the <i>n</i>th element of <code>args</code>.
 
+    One should use the built-in Tcl command "lassign" instread of this proc.
+
 } {
     for { set i 0 } { $i < [llength $args] } { incr i } {
 	upvar [lindex $args $i] val
