@@ -562,12 +562,10 @@ ad_proc -private rp_filter { why } {
             }
             if { [security::secure_conn_p] } {
                 # it's a secure connection.
-                ad_returnredirect \
-                    -allow_complete_url https://[ad_host][ad_port]$ad_conn_url
+                ad_returnredirect -allow_complete_url https://[ad_host][ad_port]$url
                 return "filter_return"
             } else {
-                ad_returnredirect \
-                    -allow_complete_url http://[ad_host][ad_port]$ad_conn_url
+                ad_returnredirect -allow_complete_url http://[ad_host][ad_port]$url
                 return "filter_return"
             }
         }
