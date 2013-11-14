@@ -26,34 +26,50 @@ ad_proc -public search::convert::binary_to_text {
     set result ""
 
     switch $mime_type {
-        {application/msword} -
-        {application/vnd.ms-word} {
+        application/msword -
+        application/vnd.ms-word {
             set convert_command {catdoc $filename >$tmp_filename}
         }
-        {application/msexcel} -
-        {application/vnd.ms-excel} {
+        application/msexcel -
+        application/vnd.ms-excel {
             set convert_command {xls2csv $filename >$tmp_filename}
         }
-        {application/mspowerpoint} -
-        {application/vnd.ms-powerpoint} {
+        application/mspowerpoint -
+        application/vnd.ms-powerpoint {
             set convert_command {catppt $filename >$tmp_filename}
         }
-        {application/pdf} {
+        application/pdf {
             set convert_command {pdftotext $filename $tmp_filename}
         }
-        {application/vnd.oasis.opendocument.text} -
-        {application/vnd.oasis.opendocument.text-template} -
-        {application/vnd.oasis.opendocument.text-web} -
-        {application/vnd.oasis.opendocument.text-master} -
-        {application/vnd.oasis.opendocument.presentation} -
-        {application/vnd.oasis.opendocument.presentation-template} -
-        {application/vnd.oasis.opendocument.spreadsheet} -
-        {application/vnd.oasis.opendocument.spreadsheet-template} {
+        application/vnd.oasis.opendocument.text -
+        application/vnd.oasis.opendocument.text-template -
+        application/vnd.oasis.opendocument.text-web -
+        application/vnd.oasis.opendocument.text-master -
+        application/vnd.oasis.opendocument.presentation -
+        application/vnd.oasis.opendocument.presentation-template -
+        application/vnd.oasis.opendocument.spreadsheet -
+        application/vnd.oasis.opendocument.spreadsheet-template {
             set convert_command {unzip -p $filename content.xml >$tmp_filename}
         }
-        {text/html} {
-            return [catch {[ns_striphtml $filename]} error]
+        text/html {
+	    file delete $tmp_filename
+	    #
+	    # Reading the whole content into memory is not necessarily
+	    # the best when dealing with huge files. However, for
+	    # html-files this is probably ok.
+	    #
+            return [ns_striphtml [template::util::read_file $filename]]
         }
+        text/plain {
+	    file delete $tmp_filename
+	    #
+	    # Reading the whole content into memory is not necessarily
+	    # the best when dealing with huge files. However, for
+	    # txt-files this is probably ok.
+	    #
+	    return [template::util::read_file $filename]
+        }
+
         default {
             # If there's nothing implemented for a particular mime type
             # we'll just index filename and pathname

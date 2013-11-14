@@ -130,8 +130,9 @@ ad_proc -private search::indexer {} {
                 if {![info exists seen($object_id)]} {
                     set object_type [acs_object_type $object_id]
                     ns_log debug "\n-----DB-----\n SEARCH INDEX object type = '${object_type}' \n------------\n "
-                    if {[callback::impl_exists -callback search::datasource -impl $object_type] \
-                            || [acs_sc_binding_exists_p FtsContentProvider $object_type]} {
+                    if {[callback::impl_exists -callback search::datasource -impl $object_type]
+			|| [acs_sc_binding_exists_p FtsContentProvider $object_type]} {
+
                         array set datasource {mime {} storage_type {} keywords {}}
                         if {[catch {
                             # check if a callback exists, if not fall
@@ -140,22 +141,41 @@ ad_proc -private search::indexer {} {
                                 #ns_log notice "\n-----DB-----\n SEARCH INDEX callback datasource exists for object_type '${object_type}'\n------------\n "
                                 array set datasource [lindex [callback -impl $object_type search::datasource -object_id $object_id] 0]
                             } else {
-                                array set datasource  [acs_sc::invoke -contract FtsContentProvider -operation datasource -call_args [list $object_id] -impl $object_type]
+				#ns_log notice "invoke contract [list acs_sc::invoke -contract FtsContentProvider -operation datasource -call_args [list $object_id] -impl $object_type]"
+                                array set datasource  [acs_sc::invoke -contract FtsContentProvider \
+							   -operation datasource \
+							   -call_args [list $object_id] \
+							   -impl $object_type]
                             }
+
                             search::content_get txt $datasource(content) $datasource(mime) $datasource(storage_type) $object_id
 
                             if {[callback::impl_exists -callback search::index -impl $driver]} {
                                 if {![info exists datasource(package_id)]} {
                                     set datasource(package_id) ""
                                 }
-                                #				set datasource(community_id) [search::dotlrn::get_community_id -package_id $datasource(package_id)]
+                                # set datasource(community_id) [search::dotlrn::get_community_id -package_id $datasource(package_id)]
                                 
                                 if {![info exists datasource(relevant_date)]} {
                                     set datasource(relevant_date) ""
                                 }
-                                callback -impl $driver search::index -object_id $object_id -content $txt -title $datasource(title) -keywords $datasource(keywords) -package_id $datasource(package_id) -community_id $datasource(community_id) -relevant_date $datasource(relevant_date) -datasource datasource 
+				#ns_log notice "callback invoke search::index"
+                                callback -impl $driver search::index \
+				    -object_id $object_id \
+				    -content $txt \
+				    -title $datasource(title) \
+				    -keywords $datasource(keywords) \
+				    -package_id $datasource(package_id) \
+				    -community_id $datasource(community_id) \
+				    -relevant_date $datasource(relevant_date) \
+				    -datasource datasource 
                             } else {
-                                set r [acs_sc::invoke -contract FtsEngineDriver -operation [ad_decode $event UPDATE update_index index] -call_args [list $datasource(object_id) $txt $datasource(title) $datasource(keywords)] -impl $driver]
+				#ns_log notice "acs_sc::invoke FtsEngineDriver"
+                                set r [acs_sc::invoke \
+					   -contract FtsEngineDriver \
+					   -operation [ad_decode $event UPDATE update_index index] \
+					   -call_args [list $datasource(object_id) $txt $datasource(title) $datasource(keywords)] \
+					   -impl $driver]
                             }
                         } errMsg]} {
                             ns_log Error "search::indexer: error getting datasource for $object_id $object_type: $errMsg\n[ad_print_stack_trace]\n"
@@ -225,8 +245,8 @@ ad_proc -private search::content_get {
     holds the lob_id if storage_type=lob
 } {
     upvar $_txt txt
-
     set txt ""
+    set passing_style string
 
     # lob and file are not currently implemented
     switch $storage_type {
@@ -235,16 +255,18 @@ ad_proc -private search::content_get {
         }
         file {
             set data [cr_fs_path][db_string get_filename "select content from cr_revisions where revision_id=:object_id"]
+	    set passing_style file
         }
         lob {
             set data [db_blob_get get_lob_data {}]
         }
     }
     
-    search::content_filter txt data $mime
+    search::content_filter -passing_style $passing_style txt data $mime
 }
 
 ad_proc -private search::content_filter {
+    {-passing_style string}
     _txt
     _data
     mime
@@ -254,13 +276,33 @@ ad_proc -private search::content_filter {
     upvar $_txt txt
     upvar $_data data
 
-    switch -glob -- $mime {
-        {text/*} {
-            set txt $data
-        }
-        default { 
-	    set txt [search::convert::binary_to_text -filename $data -mime_type $mime]
-        }
+    #ns_log notice "---search::content_filter $mime data=[string length $data] <$passing_style>"
+    
+    if {$passing_style eq "string"} {
+	if {[string match text/* $mime]} {
+	    if {$mime eq "text/html"} {
+		set txt [ns_striphtml $data]
+	    } else {
+		set txt $data
+	    }
+	    return
+	}
+	#
+	# Write content to a file and let the filter below extract the 
+	# words for the index from the file.
+	#
+	set tmp_filename [ns_tmpnam]
+	set f [open $tmp_filename w]
+	puts $f $data
+	close $f
+	set data $tmp_filename
+    } 
+
+    set txt [search::convert::binary_to_text -filename $data -mime_type $mime]
+    #ns_log notice "search::content_filter txt len [string length $txt]"
+
+    if {[info exists tmp_filename]} {
+	file delete $tmp_filename
     }
 }
 
