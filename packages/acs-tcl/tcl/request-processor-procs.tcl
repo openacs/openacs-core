@@ -1587,7 +1587,7 @@ ad_proc root_of_host {host} {
 } {
     set key ::acs::root_of_host($host)
     if {[info exists $key]} {return [set $key]}
-    set $key [root_of_host1 $key]
+    set $key [root_of_host1 $host]
 }
 
 proc root_of_host1 {host} {
