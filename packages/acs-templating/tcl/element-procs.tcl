@@ -139,7 +139,7 @@ ad_proc -public template::element::create { form_id element_id args } {
     @see template::widget
     @see template::data::validate
     @see template::form::create
-	@see template::form::section
+    @see template::form::section
 } {
   set level [template::adp_level]
 
@@ -172,11 +172,12 @@ ad_proc -public template::element::create { form_id element_id args } {
 
   # set the form section
   set opts(section) $form_properties(section)
-	if { $opts(section) ne "" } {
-		set opts(sec_fieldset) $form_properties(sec_fieldset)
-		set opts(sec_legend) $form_properties(sec_legend)
-		set opts(sec_legendtext) $form_properties(sec_legendtext)
-	}
+  if { $opts(section) ne "" } {
+    array set opts {sec_fieldset "" sec_legend "" sec_legendtext ""}
+    if {[info exists form_properties(sec_fieldset)]}   {set opts(sec_fieldset)   $form_properties(sec_fieldset)}
+    if {[info exists form_properties(sec_legend)]}     {set opts(sec_legend)     $form_properties(sec_legend)}
+    if {[info exists form_properties(sec_legendtext)]} {set opts(sec_legendtext) $form_properties(sec_legendtext)}
+  }
 
   template::util::get_opts $args
 

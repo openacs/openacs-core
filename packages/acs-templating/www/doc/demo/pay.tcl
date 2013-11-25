@@ -1,4 +1,4 @@
-form create pay_bill -section required -elements {
+form create pay_bill -section required -sec_legendtext Payment -elements {
   payee -label "Payee" -datatype text -widget text 
   amount -label "Amount" -datatype integer -widget text 
 } 
