@@ -38,8 +38,8 @@ ad_proc -public template::util::get_opts { argv } {
     # Get the next arg
     set next [lindex $argv [incr i]]
 
-    if { [string index $next 0] ne "-" ||
-         ! [regexp {[a-zA-Z*]} [string index $next 1] match] } {
+    if { [string index $next 0] ne "-" 
+	 || ![regexp {[a-zA-Z*]} [string index $next 1] match] } {
       
       # the next arg was not a switch so assume it is a parameter 
       set opts($opt) $next

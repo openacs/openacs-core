@@ -413,11 +413,11 @@ ad_proc -public template::form::section {
 
     @param id          The form identifier.
     @param section     The current fieldset identifier
-	@param fieldset    A list of name-value attribute pairs for the FIELDSET tag
-	@param legendtext  The legend text
-	@param legend      A list of name-value attribute pairs for the LEGEND tag
+    @param fieldset    A list of name-value attribute pairs for the FIELDSET tag
+    @param legendtext  The legend text
+    @param legend      A list of name-value attribute pairs for the LEGEND tag
 } {
-	get_reference
+    get_reference
 
     # legend can't be empty
     if { $section ne "" && $legendtext eq "" } {
