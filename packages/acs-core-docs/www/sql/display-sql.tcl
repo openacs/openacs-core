@@ -31,7 +31,7 @@ ad_page_contract {
 # for example
 
 if { [string match "*..*" $url] || [string match "*..*" $package_key] } {
-    ad_return_error "Can't back up beyond the pageroot" "You can't use display-sql.tcl to look at files underneath the pageroot."
+    ad_return_warning "Can't back up beyond the pageroot" "You can't use display-sql.tcl to look at files underneath the pageroot."
     ad_script_abort
 }
 
@@ -70,7 +70,7 @@ if {$db eq ""} {
     if { $safe_p && [llength $files] > 0 } {
         ns_returnfile 200 text/plain $files
     } else {
-        ad_return_error "Invalid file location" "Can only display files in package or doc directory."
+        ad_return_warning "Invalid file location" "Can only display files in package or doc directory."
     }
     ad_script_abort
 }
