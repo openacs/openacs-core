@@ -231,11 +231,12 @@ if { [template::form is_valid add_user] } {
 	    }]
 
 	    # we're supposed to notify the administrator when someone new registers
-	    acs_mail_lite::send -send_immediately \
-            -to_addr $notification_address \
-		    -from_addr [template::element::get_value add_user email] \
-            -subject "New registration at [ad_url]" \
-            -body "[template::element::get_value add_user first_names] [template::element::get_value add_user last_name] ([template::element::get_value add_user email]) was added as a registered as a user of 
+	    acs_mail_lite::send \
+		-send_immediately \
+		-to_addr $notification_address \
+		-from_addr [template::element::get_value add_user email] \
+		-subject "New registration at [ad_url]" \
+		-body "[template::element::get_value add_user first_names] [template::element::get_value add_user last_name] ([template::element::get_value add_user email]) was added as a registered as a user of 
 [ad_url]
 
 The user was added by $creation_name from [ad_conn url]."
@@ -247,24 +248,27 @@ The user was added by $creation_name from [ad_conn url]."
 	    set row_id [db_string user_new_2_rowid_for_email "select rowid from users where user_id = :user_id"]
 	    # the user has to come back and activate their account
 
-	    ns_sendmail [template::element::get_value add_user email] \
-		    $notification_address \
-		    "Welcome to [ad_system_name]" \
-		    "To confirm your registration, please go to [parameter::get -package_id [ad_acs_kernel_id] -parameter SystemURL]/register/email-confirm?[export_vars -url {row_id}]
+	    acs_mail_lite::send \
+		-to_addr [template::element::get_value add_user email] \
+		-from_addr $notification_address \
+		-subject "Welcome to [ad_system_name]" \
+		-body "To confirm your registration, please go to [parameter::get -package_id [ad_acs_kernel_id] -parameter SystemURL]/register/email-confirm?[export_vars -url {row_id}]
 
 After confirming your email, here's how you can log in at [ad_url]:
 
 Username:  [template::element::get_value add_user email]
 Password:  $password
 "
+
 	
 	} else {
 	    with_catch errmsg {
 #		ns_log Notice "sending mail from $notification_address to [template::element::get_value add_user email]"
-		ns_sendmail [template::element::get_value add_user email] \
-			$notification_address \
-			"Thank you for visiting [ad_system_name]" \
-			"Here's how you can log in at [ad_url]:
+		acs_mail_lite::send \
+			-to_addr [template::element::get_value add_user email] \
+			-from_addr $notification_address \
+			-subject "Thank you for visiting [ad_system_name]" \
+			-body "Here's how you can log in at [ad_url]:
 	    
 Username:  [template::element::get_value add_user email]
 Password:  $password

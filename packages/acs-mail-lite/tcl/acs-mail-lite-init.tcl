@@ -28,9 +28,6 @@ nsv_set acs_mail_lite check_bounce_p 0
 
 
 # Redefine ns_sendmail as a wrapper for acs_mail_lite::send
-
-
-ns_log Notice "acs-mail-lite: renaming acs_mail_lite::sendmail to ns_sendmail"
-
-rename ns_sendmail _old_ns_sendmail
-rename acs_mail_lite::sendmail ns_sendmail
+#ns_log Notice "acs-mail-lite: renaming acs_mail_lite::sendmail to ns_sendmail"
+#rename ns_sendmail _old_ns_sendmail
+#rename acs_mail_lite::sendmail ns_sendmail

@@ -587,7 +587,7 @@ namespace eval acs_mail_lite {
 
     #---------------------------------------
 
-    ad_proc -public -deprecated sendmail {
+    ad_proc -public -deprecated ::ns_sendmail {
         to 
         from 
         subject 
@@ -599,7 +599,6 @@ namespace eval acs_mail_lite {
         Replacement for ns_sendmail for backward compability.
 
     } {
-
 
         ns_log Warning "ns_sendmail is no longer supported in OpenACS. Use acs_mail_lite::send instead."
 

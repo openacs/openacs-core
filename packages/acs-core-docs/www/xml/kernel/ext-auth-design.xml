@@ -1243,11 +1243,11 @@ ad_proc -private auth::local::registration::Register {
         # Send email verification email to user
         set confirmation_url "[ad_url]/register/email-confirm?[export_vars { row_id }]"
         with_catch errmsg {
-            ns_sendmail \
-                $email \
-                $notification_address \
-                "[_ acs-subsite.lt_Welcome_to_system_nam]" \
-                "[_ acs-subsite.lt_To_confirm_your_regis]"
+            acs_mail_lite::send \
+                -to_addr $email \
+                -from_addr $notification_address \
+                -subject "[_ acs-subsite.lt_Welcome_to_system_nam]" \
+                -body "[_ acs-subsite.lt_To_confirm_your_regis]"
         } {
             ns_returnerror "500" "$errmsg"
             ns_log Warning "Error sending email verification email to $email. Error: $errmsg"
@@ -1259,11 +1259,11 @@ ad_proc -private auth::local::registration::Register {
     if { [parameter::get -parameter RegistrationProvidesRandomPasswordP -default 0] || \
              [parameter::get -parameter EmailRegistrationConfirmationToUserP -default 0] } {
         with_catch errmsg {
-            ns_sendmail \
-                $email \
-                $notification_address \
-                "[_ acs-subsite.lt_Welcome_to_system_nam]" \
-                "[_ acs-subsite.lt_Thank_you_for_visitin]"
+            acs_mail_lite::send \
+                -to_addr $email \
+                -from_addr $notification_address \
+                -subject "[_ acs-subsite.lt_Welcome_to_system_nam]" \
+                -body "[_ acs-subsite.lt_Thank_you_for_visitin]"
         } {
             ns_returnerror "500" "$errmsg"
             ns_log Warning "Error sending registration confirmation to $email. Error: $errmsg"
@@ -1272,11 +1272,11 @@ ad_proc -private auth::local::registration::Register {
     # Notify admin on new registration
     if {[parameter::get -parameter NotifyAdminOfNewRegistrationsP -default 0]} {
         with_catch errmsg {
-            ns_sendmail \
-                $notification_address \
-                $email \
-                "[_ acs-subsite.lt_New_registration_at_s]" \
-                "[_ acs-subsite.lt_first_names_last_name]"
+            acs_mail_lite::send \
+                -to_addr $notification_address \
+                -from_addr $email \
+                -subject "[_ acs-subsite.lt_New_registration_at_s]" \
+                -body "[_ acs-subsite.lt_first_names_last_name]"
         } {
             ns_returnerror "500" "$errmsg"
             ns_log Warning "Error sending admin notification to $notification_address. Error: $errmsg"
@@ -1654,7 +1654,7 @@ set subject "[_ acs-subsite.lt_Your_forgotten_passwo]"
 # Should make use of auth::password::RetrievePassword
 set body "[_ acs-subsite.lt_Please_follow_the_fol]"
 # Send email
-if {[catch {ns_sendmail $email $system_owner $subject $body} errmsg]} {
+if {[catch {acs_mail_lite::send -to_addr $email -from_addr $system_owner -subject $subject -body $body} errmsg]} {
     ad_return_error \
         "[_ acs-subsite.Error_sending_mail]" \
         "[_ acs-subsite.lt_Now_were_really_in_tr]
@@ -1852,7 +1852,7 @@ set system_owner [ad_system_owner]
 set subject "some other i18n key msg"
 set body "some other i18n key msg"
 # Send email
-if {[catch {ns_sendmail $email $system_owner $subject $body} errmsg]} {
+if {[catch {acs_mail_lite::send -to_addr $email -from_addr $system_owner -subject $subject -body $body} errmsg]} {
     ad_return_error \
         "[_ acs-subsite.Error_sending_mail]" \
         "[_ acs-subsite.lt_Now_were_really_in_tr]
