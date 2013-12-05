@@ -23,8 +23,6 @@ ad_library {
 }
 
 ad_proc -public ad_sql_get { 
-    { 
-    }
     sqlarrayname
 } {
     @param sqlarrayname array reference
@@ -60,13 +58,11 @@ ad_proc -public ad_sql_get {
 }
 
 ad_proc -public ad_sql_append { 
-    {
-	-select {}
-	-from {}
-	-where {}
-	-groupby {}
-	-orderby {}
-    } 
+    {-select {}}
+    {-from {}}
+    {-where {}}
+    {-groupby {}}
+    {-orderby {}}
     sqlarrayname
 } { 
     Adds to the SQL statement.

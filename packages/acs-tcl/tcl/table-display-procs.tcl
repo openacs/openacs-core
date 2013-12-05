@@ -6,7 +6,12 @@ ad_library {
     
 # Dimensional selection bars.
 #
-ad_proc ad_dimensional {option_list {url {}} {options_set ""} {optionstype url}} {
+ad_proc ad_dimensional {
+    option_list 
+    {url {}} 
+    {options_set ""} 
+    {optionstype url}
+} {
     Generate an option bar as in the ticket system; 
     <ul>
       <li> option_list -- the structure with the option data provided 
@@ -100,7 +105,12 @@ ad_proc ad_dimensional {option_list {url {}} {options_set ""} {optionstype url}}
     append html "</tr>\n</table>\n"
 }
 
-ad_proc ad_dimensional_sql {option_list {what "where"} {joiner "and"} {options_set ""}} {
+ad_proc ad_dimensional_sql {
+    option_list 
+    {what "where"} 
+    {joiner "and"} 
+    {options_set ""}
+} {
     see ad_dimensional for the format of option_list
     <p>
     Given what clause we are asking for and the joiner this returns 
@@ -179,31 +189,29 @@ ad_proc ad_dimensional_set_variables {option_list {options_set ""}} {
 }
 
 ad_proc -deprecated ad_table { 
-    {
-        -Torder_target_url {}
-        -Torderby {}
-	-Tasc_order_img {^}
-	-Tdesc_order_img {v}
-        -Tmissing_text "<em>No data found.</em>"
-        -Tsuffix {}
-        -Tcolumns {}
-        -Taudit {}
-        -Trows_per_band 1
-        -Tband_colors {{} "#ececec"}
-        -Tband_classes {{even} {odd}}
-        -Trows_per_page 0
-        -Tmax_rows 0
-        -Ttable_extra_html {cellpadding=3 cellspacing=0 class="table-display"}
-        -Theader_row_extra {style="background-color:#f8f8f8" class="table-header"}
-        -Ttable_break_html "<br><br>"
-        -Tpre_row_code {}
-        -Trow_code {[subst $Trow_default]}
-        -Tpost_data_ns_sets {}
-        -Textra_vars {}
-	-Textra_rows {}
-	-bind {}
-        -dbn {}
-    }
+    {-Torder_target_url {}}
+    {-Torderby {}}
+    {-Tasc_order_img {^}}
+    {-Tdesc_order_img {v}}
+    {-Tmissing_text "<em>No data found.</em>"}
+    {-Tsuffix {}}
+    {-Tcolumns {}}
+    {-Taudit {}}
+    {-Trows_per_band 1}
+    {-Tband_colors {{} "#ececec"}}
+    {-Tband_classes {{even} {odd}}}
+    {-Trows_per_page 0}
+    {-Tmax_rows 0}
+    {-Ttable_extra_html {cellpadding=3 cellspacing=0 class="table-display"}}
+    {-Theader_row_extra {style="background-color:#f8f8f8" class="table-header"}}
+    {-Ttable_break_html "<br><br>"}
+    {-Tpre_row_code {}}
+    {-Trow_code {[subst $Trow_default]}}
+    {-Tpost_data_ns_sets {}}
+    {-Textra_vars {}}
+    {-Textra_rows {}}
+    {-bind {}}
+    {-dbn {}}
     statement_name sql_qry Tdatadef
 } {
 
@@ -500,9 +508,7 @@ ad_proc -deprecated ad_table {
 }
 
 ad_proc ad_table_column_list {
-    { 
-        -sortable all
-    }
+    { -sortable all }
     datadef columns
 } {
     build a list of pointers into the list of column definitions
@@ -545,7 +551,7 @@ ad_proc ad_table_column_list {
     return $column_list
 }
 
-ad_proc ad_sort_primary_key orderby {
+ad_proc ad_sort_primary_key {orderby} {
     return the primary (first) key of an order spec
     used by 
 } {
@@ -577,7 +583,15 @@ ad_proc ad_table_span {str {td_html "align=\"left\""}} {
     return "<tr><td colspan=\"[uplevel llength \$Tcolumn_list]\" $td_html>$str</td></tr>"
 }
 
-ad_proc ad_table_form {datadef {type select} {return_url {}} {item_group {}} {item {}} {columns {}} {allowed {}}} {
+ad_proc ad_table_form {
+    datadef 
+    {type select} 
+    {return_url {}} 
+    {item_group {}} 
+    {item {}} 
+    {columns {}} 
+    {allowed {}}
+} {
     builds a form for chosing the columns to display 
     <p>
     columns is a list of the currently selected columns.
@@ -679,7 +693,15 @@ ad_proc ad_table_form {datadef {type select} {return_url {}} {item_group {}} {it
     return $html
 }
 
-ad_proc ad_table_sort_form {datadef {type select} {return_url {}} {item_group {}} {item {}} {sort_spec {}} {allowed {}}} {
+ad_proc ad_table_sort_form {
+    datadef 
+    {type select} 
+    {return_url {}} 
+    {item_group {}} 
+    {item {}} 
+    {sort_spec {}} 
+    {allowed {}}
+} {
     builds a form for setting up custom sorts.
     <p>
     <ul>
@@ -927,7 +949,7 @@ ad_proc ad_custom_list {user_id item_group item_set item_type target_url custom_
 }
     
 
-ad_proc ad_custom_page_defaults defaults { 
+ad_proc ad_custom_page_defaults {defaults} { 
     set the page defaults. If the form is 
     empty do a returnredirect with the defaults set
 } {
