@@ -1,5 +1,5 @@
 
-ad_proc -private db_available_pools {{} dbn } {
+ad_proc -private db_available_pools {dbn} {
     Returns a list of the available pools for the given database name.
 
     <p>
@@ -20,8 +20,7 @@ ad_proc -private db_available_pools {{} dbn } {
     return [nsv_get {db_available_pools} $dbn]
 }
 
-ad_proc -private db_pool_to_dbn_init {{
-}} {
+ad_proc -private db_pool_to_dbn_init {} {
     Simply initializes the <code>db_pool_to_dbn</code> nsv, which is
     used by "<code>db_driverkey -handle</code>".
 
