@@ -415,8 +415,10 @@ ad_proc -private apm_mark_files_for_reload {
     return $changed_files
 }
 
-ad_proc -private apm_mark_version_for_reload { version_id { changed_files_var "" } } {
-
+ad_proc -private apm_mark_version_for_reload { 
+    version_id 
+    { changed_files_var "" } 
+} {
     Examines all tcl_procs files in package version $version_id; if any have
     changed since they were loaded, marks (in the apm_reload array) that
     they must be reloaded by each Tcl interpreter (using the
@@ -976,11 +978,16 @@ ad_proc -public apm_num_instances {package_key} {
 }
 
 ad_proc -public apm_parameter_update {
-    {
-	-callback apm_dummy_callback
-    }
-    parameter_id package_key parameter_name description default_value datatype \
-	{section_name ""} {min_n_values 1} {max_n_values 1} 
+    {-callback apm_dummy_callback}
+    parameter_id 
+    package_key 
+    parameter_name 
+    description 
+    default_value 
+    datatype 
+    {section_name ""} 
+    {min_n_values 1} 
+    {max_n_values 1} 
 } {
     @return The parameter id that has been updated.
 } {
@@ -1010,12 +1017,17 @@ ad_proc -public apm_parameter_update {
 }
 
 ad_proc -public apm_parameter_register { 
-    {
-	-callback apm_dummy_callback
-	-parameter_id ""
-        -scope instance
-    } 
-    parameter_name description package_key default_value datatype {section_name ""} {min_n_values 1} {max_n_values 1}
+    {-callback apm_dummy_callback}
+    {-parameter_id ""}
+    {-scope instance}
+    parameter_name 
+    description 
+    package_key 
+    default_value 
+    datatype 
+    {section_name ""} 
+    {min_n_values 1} 
+    {max_n_values 1}
 } {
     Register a parameter in the system.
 
@@ -1111,10 +1123,11 @@ ad_proc -public apm_dependency_remove {dependency_id} {
 }
 
 ad_proc -public apm_interface_add {
-    {
-	-callback apm_dummy_callback
-	-interface_id ""
-    } version_id interface_uri interface_version
+    {-callback apm_dummy_callback}
+    {-interface_id ""}
+    version_id 
+    interface_uri 
+    interface_version
 } {
     
     Add a interface to a version.
