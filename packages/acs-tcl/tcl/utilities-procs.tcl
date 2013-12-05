@@ -24,7 +24,9 @@ proc proc_source_file_full_path {proc_name} {
     }
 }
 
-ad_proc util_report_library_entry {{extra_message ""}} {
+ad_proc util_report_library_entry {
+    {extra_message ""}
+} {
     Should be called at beginning of private Tcl library files so
     that it is easy to see in the error log whether or not 
     private Tcl library files contain errors.
@@ -203,9 +205,7 @@ ad_proc -public get_referrer {} {
 ##
 
 ad_proc -deprecated ad_dbclick_check_dml { 
-    {
-	-bind  ""
-    }
+    {-bind  ""}
     statement_name table_name id_column_name generated_id return_url insert_dml 
 } {
     This proc is used for pages using double click protection. table_name
@@ -263,7 +263,9 @@ ad_proc -deprecated ad_dbclick_check_dml {
     return
 }
 
-ad_proc -public util_AnsiDatetoPrettyDate {sql_date} { 
+ad_proc -public util_AnsiDatetoPrettyDate {
+    sql_date
+} { 
     Converts 1998-09-05 to September 5, 1998
 } {
     set sql_date [string range $sql_date 0 9]
@@ -285,7 +287,9 @@ ad_proc -public util_AnsiDatetoPrettyDate {sql_date} {
     }
 }
 
-ad_proc -public remove_nulls_from_ns_set {old_set_id} {
+ad_proc -public remove_nulls_from_ns_set {
+    old_set_id
+} {
     Creates and returns a new ns_set without any null value fields
 
     @return new ns_set 
@@ -306,9 +310,7 @@ ad_proc -public remove_nulls_from_ns_set {old_set_id} {
 }
 
 ad_proc -public merge_form_with_query {
-    {
-	-bind {}
-    }
+    {-bind {}}
     form statement_name sql_qry 
 } {
     Merges a form with a query string.
@@ -356,7 +358,11 @@ proc util_PrettyBoolean {t_or_f { default  "default" } } {
     }
 }
 
-ad_proc util_PrettyTclBoolean {zero_or_one} "Turns a 1 (or anything else that makes a Tcl IF happy) into Yes; anything else into No" {
+ad_proc util_PrettyTclBoolean {
+    zero_or_one
+} {
+    Turns a 1 (or anything else that makes a Tcl IF happy) into Yes; anything else into No
+} {
   if {$zero_or_one} {
 	return "Yes"
     } else {
@@ -1080,7 +1086,11 @@ ad_proc -public export_entire_form {} {
     return $hidden
 }
 
-ad_proc export_ns_set_vars {{format "url"} {exclusion_list ""} {setid ""}} {
+ad_proc export_ns_set_vars {
+    {format "url"} 
+    {exclusion_list ""} 
+    {setid ""}
+} {
     Returns all the params in an ns_set with the exception of those in
     exclusion_list. If no setid is provide, ns_getform is used. If
     format = url, a url parameter string will be returned. If format = form, a
@@ -1304,7 +1314,11 @@ ad_proc -public util_search_list_of_lists {list_of_lists query_string {sublist_e
 
 # --- network stuff 
 
-ad_proc -public util_get_http_status {url {use_get_p 1} {timeout 30}} {
+ad_proc -public util_get_http_status {
+    url 
+    {use_get_p 1} 
+    {timeout 30}
+} {
     Returns the HTTP status code, e.g., 200 for a normal response 
     or 500 for an error, of a URL.  By default this uses the GET method 
     instead of HEAD since not all servers will respond properly to a 
@@ -1404,7 +1418,13 @@ ad_proc -public util_httpopen {
 
 # in the event of an error or timeout, -1 is returned
 
-ad_proc -public util_httppost {url formvars {timeout 30} {depth 0} {http_referer ""}} {
+ad_proc -public util_httppost {
+    url 
+    formvars 
+    {timeout 30} 
+    {depth 0} 
+    {http_referer ""}
+} {
     Returns the result of POSTing to another Web server or -1 if there is an error or timeout.  
     formvars should be in the form \"arg1=value1&arg2=value2\".  
     <p> 
@@ -1470,7 +1490,9 @@ ad_proc -public util_httppost {url formvars {timeout 30} {depth 0} {http_referer
 	return $page
 }
 
-ad_proc -public util_report_successful_library_load {{extra_message ""}} {
+ad_proc -public util_report_successful_library_load {
+    {extra_message ""}
+} {
     Should be called at end of private Tcl library files so that it is 
     easy to see in the error log whether or not private Tcl library 
     files contain errors.
@@ -1681,7 +1703,10 @@ ad_proc -public ad_httpget {
 }
 
 ad_proc -public util_httpget {
-    url {headers ""} {timeout 30} {depth 0}
+    url 
+    {headers ""} 
+    {timeout 30} 
+    {depth 0}
 } {
     util_httpget simply calls ad_httpget which also returns 
     status and last_modfied
@@ -1694,7 +1719,9 @@ ad_proc -public util_httpget {
 # some procs to make it easier to deal with CSV files (reading and writing)
 # added by philg@mit.edu on October 30, 1999
 
-ad_proc util_escape_quotes_for_csv {string} "Returns its argument with double quote replaced by backslash double quote" {
+ad_proc util_escape_quotes_for_csv {string} {
+    Returns its argument with double quote replaced by backslash double quote
+} {
     regsub -all \" $string {\"}  result
 
     return $result
@@ -1784,7 +1811,10 @@ ad_proc -deprecated validate_ad_dateentrywidget {field_name column form {allow_n
     return $date
 }
 
-ad_proc -private util_WriteWithExtraOutputHeaders {headers_so_far {first_part_of_page ""}} {
+ad_proc -private util_WriteWithExtraOutputHeaders {
+    headers_so_far 
+    {first_part_of_page ""}
+} {
     Takes in a string of headers to write to an HTTP connection,
     terminated by a newline.  Checks \[ad_conn outputheaders\] and adds
     those headers if appropriate.  Adds two newlines at the end and writes
@@ -1802,7 +1832,9 @@ ad_proc -private util_WriteWithExtraOutputHeaders {headers_so_far {first_part_of
     ns_write $entire_string_to_write
 }
 
-ad_proc -private ReturnHeaders {{content_type text/html}} {
+ad_proc -private ReturnHeaders {
+    {content_type text/html}
+} {
    We use this when we want to send out just the headers
    and then do incremental writes with ns_write.  This way the user
    doesn't have to wait for streamed output (useful when doing
@@ -1831,7 +1863,10 @@ Content-Type: $content_type\r\n"
    }
 }
 
-ad_proc -public ad_return_top_of_page {first_part_of_page {content_type text/html}} { 
+ad_proc -public ad_return_top_of_page {
+    first_part_of_page 
+    {content_type text/html}
+} { 
     Returns HTTP headers plus the top of the user-visible page.  
     To be used with streaming HTML output
 } {
@@ -1954,16 +1989,15 @@ ad_proc -public ad_get_cookie {
 }
 
 ad_proc -public ad_set_cookie {
-    {
-	-replace f
-	-secure f
-        -expire f
-	-max_age ""
-	-domain ""
-	-path "/"
-	-discard f
-    }
-    name {value ""}
+    {-replace f}
+    {-secure f}
+    {-expire f}
+    {-max_age ""}
+    {-domain ""}
+    {-path "/"}
+    {-discard f}
+    name 
+    {value ""}
 } { 
 
     Sets a cookie.
@@ -2102,13 +2136,11 @@ if { [apm_first_time_loading_p] } {
 }
 
 ad_proc -public ad_schedule_proc {
-    {
-	-thread f
-	-once f
-	-debug f
-	-all_servers f
-        -schedule_proc ""
-    }
+    {-thread f}
+    {-once f}
+    {-debug f}
+    {-all_servers f}
+    {-schedule_proc ""}
     interval
     proc
     args
@@ -2164,7 +2196,10 @@ ad_proc -public ad_schedule_proc {
     }
 }
 
-ad_proc -deprecated util_ReturnMetaRefresh { url { seconds_delay 0 } } {
+ad_proc -deprecated util_ReturnMetaRefresh { 
+    url 
+    { seconds_delay 0 } 
+} {
     Ugly workaround to deal with IE5.0 bug handling
     multipart/form-data using                                                                                  
     Meta Refresh page instead of a redirect.                                                                                                                   
@@ -2185,7 +2220,11 @@ ad_proc -deprecated util_ReturnMetaRefresh { url { seconds_delay 0 } } {
 
 # Brad Duell (bduell@ncacasi.org) 07/10/2003
 # User session variables, then redirect
-ad_proc -public ad_cache_returnredirect { url { persistent "f" } { excluded_vars "" } } {
+ad_proc -public ad_cache_returnredirect { 
+    url 
+    { persistent "f" } 
+    { excluded_vars "" } 
+} {
     An addition to ad_returnredirect.  It caches all variables in the redirect except those in excluded_vars
     and then calls ad_returnredirect with the resultant string.
 
@@ -2386,7 +2425,7 @@ ad_proc -public util_get_user_messages {
     }
 }
 
-ad_proc -public util_complete_url_p {{} string} {
+ad_proc -public util_complete_url_p {string} {
   Determine whether string is a complete URL, i.e.
   wheteher it begins with protocol: where protocol
   consists of letters only.
@@ -2398,7 +2437,7 @@ ad_proc -public util_complete_url_p {{} string} {
   }
 }
 
-ad_proc -public util_absolute_path_p {{} path} {
+ad_proc -public util_absolute_path_p {path} {
    Check whether the path begins with a slash
 } {
    set firstchar [string index $path 0]
@@ -2451,7 +2490,7 @@ ad_proc -public util_driver_info {
     }
 }
 
-ad_proc -public util_current_location {{}} {
+ad_proc -public util_current_location {} {
    Like ad_conn location - Returns the location string of the current
    request in the form protocol://hostname[:port] but it looks at the
    Host header, that is, takes into account the host name the client
@@ -2516,7 +2555,7 @@ ad_proc -public util_current_location {{}} {
     }
 }
 
-ad_proc -public util_current_directory {{}} {
+ad_proc -public util_current_directory {} {
     Returns the directory of the current URL.
     <p>
     We can't just use [file dirname [ad_conn url]] because
@@ -2551,7 +2590,9 @@ ad_proc -public ad_call_proc_if_exists { proc args } {
     }
 }
 
-ad_proc -public ad_get_tcl_call_stack { {level -2} } {
+ad_proc -public ad_get_tcl_call_stack { 
+    {level -2} 
+} {
     Returns a stack trace from where the caller was called.
     See also ad_print_stack_trace which generates a more readable 
     stack trace at the expense of truncating args.
@@ -3212,10 +3253,20 @@ ad_proc -public util_sets_equal_p { list1 list2 } {
     return 1    
 }
 
-ad_proc -public util_http_file_upload { -file -data -binary:boolean -filename 
-                               -name {-mime_type */*} {-mode formvars} 
-                               {-rqset ""} url {formvars {}} {timeout 30} 
-                               {depth 10} {http_referer ""}
+ad_proc -public util_http_file_upload { 
+    -file 
+    -data 
+    -binary:boolean 
+    -filename 
+    -name 
+    {-mime_type */*} 
+    {-mode formvars} 
+    {-rqset ""} 
+    url 
+    {formvars {}} 
+    {timeout 30} 
+    {depth 10} 
+    {http_referer ""}
 } {
     Implement client-side HTTP file uploads as multipart/form-data as per 
     RFC 1867.
@@ -3640,7 +3691,9 @@ ad_proc -public xml_get_child_node_attribute_by_path {
 }
 
 
-ad_proc -public ad_generate_random_string {{length 8}} {
+ad_proc -public ad_generate_random_string {
+    {length 8}
+} {
     Generates a random string made of numbers and letters
 } {
     return [string range [sec_random_token] 0 $length]
@@ -4453,7 +4506,7 @@ ad_proc -public util::string_length_compare { s1 s2 } {
     }
 }
 
-ad_proc -public util::roll_server_log {{}} {
+ad_proc -public util::roll_server_log {} {
     Invoke the AOLserver ns_logroll command with some bookend log records.  This rolls the error log, not the access log.
 } { 
     # This param controlls how many backups of the server log to keep, 
