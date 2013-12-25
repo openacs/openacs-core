@@ -76,17 +76,16 @@ ad_proc -private cr_scan_mime_types {} {
 ##
 
 
-ad_proc cr_check_orphaned_files {-delete:boolean} { 
+ad_proc cr_check_orphaned_files {-delete:boolean {-mtime ""}} { 
 
   Check for orphaned files in the content respository directory, and
   delete such files if required.  Orphaned files might be created, when
   files add added to the content repository, but the transaction is being aborted.
 
   @param -delete delete the orphaned files
+  @param -mtime same semantics as mtime in the file command
   
 } {
-  package require fileutil
-
   set cr_root [nsv_get CR_LOCATIONS CR_FILES]
   set root_length [string length $cr_root]
   set result ""
@@ -94,10 +93,12 @@ ad_proc cr_check_orphaned_files {-delete:boolean} {
   # For every file in the content respository directory, check if this
   # file is still referenced from the content-revisions.
 
-  foreach f [::fileutil::find $cr_root "file isfile"] {
+  set cmd [list exec find $cr_root -type f]
+  if {$mtime ne ""} {lappend cmd -mtime $mtime}
+  foreach f [split [{*}$cmd] \n] {
     set name [string range $f $root_length end]
     if {![regexp {^[0-9/]+$} $name]} continue
-    set x [db_string _ {select count(*) from cr_revisions where content = :name}]
+    set x [db_string fetch_path { *SQL* }]
     if {$x > 0} continue
 
     lappend result $f
