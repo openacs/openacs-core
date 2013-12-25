@@ -67,3 +67,43 @@ ad_proc -private cr_scan_mime_types {} {
         }
     }
 }
+
+##
+## Check for orphans in the content respository directory, and delete
+## such files if required.
+##
+## gustaf.neumann@wu-wien.ac.at
+##
+
+
+ad_proc cr_check_orphaned_files {-delete:boolean} { 
+
+  Check for orphaned files in the content respository directory, and
+  delete such files if required.  Orphaned files might be created, when
+  files add added to the content repository, but the transaction is being aborted.
+
+  @param -delete delete the orphaned files
+  
+} {
+  package require fileutil
+
+  set cr_root [nsv_get CR_LOCATIONS CR_FILES]
+  set root_length [string length $cr_root]
+  set result ""
+
+  # For every file in the content respository directory, check if this
+  # file is still referenced from the content-revisions.
+
+  foreach f [::fileutil::find $cr_root "file isfile"] {
+    set name [string range $f $root_length end]
+    if {![regexp {^[0-9/]+$} $name]} continue
+    set x [db_string _ {select count(*) from cr_revisions where content = :name}]
+    if {$x > 0} continue
+
+    lappend result $f
+    if {$delete_p} {
+      file delete $f
+    }
+  }
+  return $result
+}
