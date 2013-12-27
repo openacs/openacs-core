@@ -86,25 +86,32 @@ ad_proc cr_check_orphaned_files {-delete:boolean {-mtime ""}} {
   @param -mtime same semantics as mtime in the file command
   
 } {
-  set cr_root [nsv_get CR_LOCATIONS CR_FILES]
-  set root_length [string length $cr_root]
-  set result ""
+    set cr_root [nsv_get CR_LOCATIONS CR_FILES]
+    set root_length [string length $cr_root]
+    set result ""
 
-  # For every file in the content respository directory, check if this
-  # file is still referenced from the content-revisions.
-
-  set cmd [list exec find $cr_root -type f]
-  if {$mtime ne ""} {lappend cmd -mtime $mtime}
-  foreach f [split [{*}$cmd] \n] {
-    set name [string range $f $root_length end]
-    if {![regexp {^[0-9/]+$} $name]} continue
-    set x [db_string fetch_path { *SQL* }]
-    if {$x > 0} continue
-
-    lappend result $f
-    if {$delete_p} {
-      file delete $f
+    # Check for missing trailing slash on directory.
+    # Find needs folders to end with slash to search them.
+    if {[string index $cr_root end] != "/"} {
+	append cr_root /
     }
-  }
-  return $result
+
+    # For every file in the content respository directory, check if this
+    # file is still referenced from the content-revisions.
+
+    set cmd [list exec find $cr_root -type f]
+    if {$mtime ne ""} {lappend cmd -mtime $mtime}
+    foreach f [split [{*}$cmd] \n] {
+	set name [string range $f $root_length end]
+	if {![regexp {^[0-9/]+$} $name]} continue
+	set x [db_string fetch_path { *SQL* }]
+	if {$x > 0} continue
+	
+	lappend result $f
+	if {$delete_p} {
+	    file delete $f
+	}
+    }
+    
+    return $result
 }
