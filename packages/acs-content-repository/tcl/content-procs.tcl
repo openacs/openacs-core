@@ -69,12 +69,21 @@ ad_proc -public cr_create_content_file {
     if the -move flag is given the file is renamed instead
 } {
     set content_file [cr_create_content_file_path $item_id $revision_id]
+    set dir [cr_fs_path]
 
     if { $move_p } { 
-        file rename -- $client_filename [cr_fs_path]$content_file
+        file rename -- $client_filename $dir$content_file
     } else { 
-        file copy -force -- $client_filename [cr_fs_path]$content_file
+        file copy -force -- $client_filename $dir$content_file
     }
+
+    # Record an entry in the file creation log for managing orphaned
+    # files.
+    ad_mutex_eval [nsv_get mutex cr_file_creation] {
+	set f [open $dir/file-creation.log a]
+	puts $f $content_file
+	close $f
+    } 
 
     return $content_file
 }
@@ -92,6 +101,12 @@ ad_proc -public cr_create_content_file_from_string {item_id revision_id str} {
     puts -nonewline $ofp $str
     close $ofp
 
+    ad_mutex_eval [nsv_get mutex cr_file_creation] {
+	set f [open $dir/file-creation.log a]
+	puts $f $content_file
+	close $f
+    } 
+
     return $content_file
 }
 
@@ -102,4 +117,70 @@ ad_proc -public cr_file_size {relative_file_path} {
 
 } {
     return [file size [cr_fs_path]$relative_file_path]
+}
+
+
+#
+# Manage a log for created files in the content repository. The log is
+# used for cleaning up orphaned files after aborted transactions
+# involving file inserts in the content repository.
+#
+
+ad_proc -public cr_cleanup_orphaned_files {} {
+
+    Helper proc to cleanup orphaned files in the content
+    repository. Orphaned files can be created during aborted
+    transactions involving the files being added to the content
+    respository.
+
+} {
+    cr_delete_orphans [cr_get_file_creation_log]
+}
+
+ad_proc -private cr_get_file_creation_log {} {
+
+    Return the contents of the file creation log and truncate it
+    (i.e. remove all entries).
+
+} {
+    set dir [cr_fs_path]
+    ad_mutex_eval [nsv_get mutex cr_file_creation] {
+	set f [open $dir/file-creation.log]
+	set content [read $f]
+	close $f
+	# truncate the log file
+	set f [open $dir/file-creation.log w]; close $f
+    }
+    return $content
+}
+
+ad_proc -public cr_count_file_entries {name} {
+
+    Count the number of entries from the content repository having the
+    specified partial path their content field. The result should be
+    0 or 1 in consistent databases.
+
+} {
+    db_string count_entries { *SQL* }
+}
+
+ad_proc -private cr_delete_orphans {files} {
+
+    delete orphaned files in the content repository
+    
+} {
+    set dir [cr_fs_path]
+    foreach name $files {
+	if {![file exists $dir$name]} {
+	    # the file does not exist anymore, nothing to do
+	    continue
+	}
+	set count [cr_count_file_entries $name]
+	if {$count == 0} {
+	    # the content entry does not exist anymore, therefore the
+	    # file is an orphan and should be removed
+	    ns_log notice "delete orphaned file $dir$name"
+	    file delete $dir$name
+	}
+    }
 }

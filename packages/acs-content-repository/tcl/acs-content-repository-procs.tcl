@@ -36,6 +36,11 @@ ad_proc -private cr_delete_scheduled_files {} {
          # now that all scheduled files deleted, clear table
          db_dml delete_files { *SQL* }
     }
+
+    #
+    # cleanup orphaned files (leftovers from aborted transactions)
+    #
+    cr_cleanup_orphaned_files
 }
 
 
@@ -79,8 +84,13 @@ ad_proc -private cr_scan_mime_types {} {
 ad_proc cr_check_orphaned_files {-delete:boolean {-mtime ""}} { 
 
   Check for orphaned files in the content respository directory, and
-  delete such files if required.  Orphaned files might be created, when
-  files add added to the content repository, but the transaction is being aborted.
+  delete such files if required.  Orphaned files might be created,
+  when files are added to the content repository, but the transaction
+  is being aborted. This function is intended to be used for one-time
+  maintainenace operations. Starting with 5.8.1, OpenACS contains
+  support for handling orphaned files much more efficiently via a
+  transaction log that is checked via cr_cleanup_orphaned_files in
+  cr_delete_scheduled_files.
 
   @param -delete delete the orphaned files
   @param -mtime same semantics as mtime in the file command
@@ -90,21 +100,16 @@ ad_proc cr_check_orphaned_files {-delete:boolean {-mtime ""}} {
     set root_length [string length $cr_root]
     set result ""
 
-    # Check for missing trailing slash on directory.
-    # Find needs folders to end with slash to search them.
-    if {[string index $cr_root end] != "/"} {
-	append cr_root /
-    }
-
-    # For every file in the content respository directory, check if this
-    # file is still referenced from the content-revisions.
-
-    set cmd [list exec find $cr_root -type f]
+    set cmd [list exec find $cr_root/ -type f]
     if {$mtime ne ""} {lappend cmd -mtime $mtime}
     foreach f [split [{*}$cmd] \n] {
 	set name [string range $f $root_length end]
 	if {![regexp {^[0-9/]+$} $name]} continue
-	set x [db_string fetch_path { *SQL* }]
+
+	# For every file in the content respository directory, check if this
+	# file is still referenced from the content-revisions.
+
+	set x [cr_count_file_entries $name]
 	if {$x > 0} continue
 	
 	lappend result $f

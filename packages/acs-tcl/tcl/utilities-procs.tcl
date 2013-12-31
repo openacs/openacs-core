@@ -4800,3 +4800,41 @@ ad_proc -public ad_job {
     set j [ns_job queue $queue $args]
     return [ns_job wait {*}$timeout $queue $j]
 }
+
+#
+# Provide a clean way of handling exceptions in mutexed regions
+# (between locking and unlocking of an mutex). Should be used probably
+# on more places in OpenACS.
+#
+
+if {[ns_info name] eq "NaviServer"} {
+    ad_proc -public ad_mutex_eval {mutex script} {
+
+	Compatibility proc for handling differences between NaviServer
+	and AOLserver since AOLserver does not support "ns_mutex
+	eval".
+
+	@author Gustaf Neumann
+	
+    } {
+	uplevel [list ns_mutex eval $mutex $script]
+    }
+} else {
+    ad_proc -public ad_mutex_eval {mutex script} {
+
+	Compatibility proc for handling differences between NaviServer
+	and AOLserver since AOLserver does not support "ns_mutex
+	eval".
+
+	@author Gustaf Neumann
+
+    } {
+	ns_mutex lock $mutex
+	set err [catch {uplevel $script} result]
+	ns_mutex unlock $mutex
+	if {$err} {
+	    error $result
+	}
+	return $result
+    }
+}
