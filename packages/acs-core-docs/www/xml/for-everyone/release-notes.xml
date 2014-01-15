@@ -37,6 +37,29 @@ END OF TEMPLATE -->
 linkend="changelog-latest"></xref>) since the last release and in the
 entire &majorversion;.&minorversion; release sequence <xref linkend="changelog"></xref>.</para>
 
+
+  <sect2  id="release-notes-5-8-0">
+    <title>Release 5.8.0</title>
+    <itemizedlist>
+      <listitem><para>
+	  Compatibility with PostgreSQL 9.2:
+	  The new version installs without any need for special parameter
+	  settings in new PostgreSQL versions. This makes it easier to use
+	  e.g. shared or packaged PostgreSQL installations.
+      </para></listitem>
+      <listitem><para>Compatibility with NaviServer 4.99.5 or newer/para></listitem>
+      <listitem><para>Performance and scalability improvements/para></listitem>
+      <listitem><para>Various bug fixes </para></listitem>
+    </itemizedlist>
+    <para> Altogether, OpenACS 5.8.0 differs from OpenACS 5.7.0 in
+    more than 18.000 modifications (781 commits) contributed by 7
+    committers.
+    </para>
+    <para> For details, see
+    <programlisting><xi:include href="../../../../../Announce-OpenACS-5.8.0" xi:parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"><xi:fallback>Announcement missing</xi:fallback></xi:include></programlisting>
+    </para>
+  </sect2>
+    
   <sect2 id="release-notes-5-7-0">
     <title>Release 5.7.0</title>
     <itemizedlist>
@@ -584,7 +607,7 @@ entire &majorversion;.&minorversion; release sequence <xref linkend="changelog">
  
   <sect2 id="changelog-latest">
     <title>Changelog (most recent release only)</title>
-    <programlisting><xi:include href="../../../../../ChangeLog-latest" xi:parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"><xi:fallback>ChangeLog missing</xi:fallback></xi:include></programlisting>
+    <programlisting><xi:include href="../../../../../ChangeLog" xi:parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"><xi:fallback>ChangeLog missing</xi:fallback></xi:include></programlisting>
 
   </sect2>
 -->
