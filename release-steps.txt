@@ -18,7 +18,7 @@ Alpha Release
 - optionally branch and tag application packages (non-core)
      xowiki xotcl-core xotcl-request-monitor categories acs-events 
      acs-datetime file-storage rss-support general-comments 
-     oacs-dav acs-developer-support ajaxhelper forums attachments
+     oacs-dav acs-developer-support ajaxhelper forums attachments calendar
 
  - testing (automated testing, install xowiki + forums from repository, 
    create xowiki page, forum entry)
@@ -72,6 +72,11 @@ Final Release
  - update raw ChangeLog
 
  - update Summary
+
+ - update release notes in
+   acs-core-docs/www/xml/for-everyone/release-notes.xml
+
+ - regenerate xml documentation
 
  - tag with final:
    cvs -q  tag -F openacs-5-8-0-final
