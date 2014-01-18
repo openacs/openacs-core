@@ -29,22 +29,22 @@ ad_proc -private cr_create_content_file_path {item_id revision_id} {
     set path "/"
     
     for {set i 0} {$i < $item_id_length} {incr i} {
-	append path [string range $item_id $i $i]
-	if {($i % 2) == 1} {
-	    if {$i < $item_id_length} {
-		# Check that the directory exists
-		if {![file exists [cr_fs_path]$path]} {
-		    file mkdir [cr_fs_path]$path
-		}
-
-		append path "/"
-	    }
-	}
+        append path [string range $item_id $i $i]
+        if {($i % 2) == 1} {
+            if {$i < $item_id_length} {
+                # Check that the directory exists
+                if {![file exists [cr_fs_path]$path]} {
+                    file mkdir [cr_fs_path]$path
+                }
+                
+                append path "/"
+            }
+        }
     }
 
     # Check that the directory exists
     if {![file exists [cr_fs_path]$path]} {
-	file mkdir [cr_fs_path]$path
+        file mkdir [cr_fs_path]$path
     }
 
     if {[string index $path end] ne "/" } {
@@ -80,9 +80,9 @@ ad_proc -public cr_create_content_file {
     # Record an entry in the file creation log for managing orphaned
     # files.
     ad_mutex_eval [nsv_get mutex cr_file_creation] {
-	set f [open $dir/file-creation.log a]
-	puts $f $content_file
-	close $f
+        set f [open $dir/file-creation.log a]
+        puts $f $content_file
+        close $f
     } 
 
     return $content_file
@@ -93,18 +93,17 @@ ad_proc -public cr_create_content_file_from_string {item_id revision_id str} {
     Copies the string to the content repository file storage area, and it 
     returns the relative file path from the root of the content repository 
     file storage area.
-
 } {
-
-    set content_file [cr_create_content_file_path $item_id $revision_id]
-    set ofp [open [cr_fs_path]$content_file w]
-    puts -nonewline $ofp $str
-    close $ofp
-
     ad_mutex_eval [nsv_get mutex cr_file_creation] {
-	set f [open $dir/file-creation.log a]
-	puts $f $content_file
-	close $f
+
+        set f [open $dir/file-creation.log a]
+        puts $f $content_file
+        close $f
+
+        set content_file [cr_create_content_file_path $item_id $revision_id]
+        set ofp [open [cr_fs_path]$content_file w]
+        puts -nonewline $ofp $str
+        close $ofp
     } 
 
     return $content_file
@@ -145,11 +144,11 @@ ad_proc -private cr_get_file_creation_log {} {
 } {
     set dir [cr_fs_path]
     ad_mutex_eval [nsv_get mutex cr_file_creation] {
-	set f [open $dir/file-creation.log]
-	set content [read $f]
-	close $f
-	# truncate the log file
-	set f [open $dir/file-creation.log w]; close $f
+        set f [open $dir/file-creation.log]
+        set content [read $f]
+        close $f
+        # truncate the log file
+        set f [open $dir/file-creation.log w]; close $f
     }
     return $content
 }
@@ -171,16 +170,29 @@ ad_proc -private cr_delete_orphans {files} {
 } {
     set dir [cr_fs_path]
     foreach name $files {
-	if {![file exists $dir$name]} {
-	    # the file does not exist anymore, nothing to do
-	    continue
-	}
-	set count [cr_count_file_entries $name]
-	if {$count == 0} {
-	    # the content entry does not exist anymore, therefore the
-	    # file is an orphan and should be removed
-	    ns_log notice "delete orphaned file $dir$name"
-	    file delete $dir$name
-	}
+
+        if {![file exists $dir$name]} {
+            # the file does not exist anymore, nothing to do
+            continue
+        }
+
+        if {![regexp {^[0-9/]+$} $name]} {
+            ns_log notice "orphan handling: ignore strange entry from deletion log <$dir$name>"
+        }
+
+        set count [cr_count_file_entries $name]
+        if {$count == 0} {
+            # the content entry does not exist anymore, therefore the
+            # file is an orphan and should be removed
+            ns_log notice "delete orphaned file $dir$name"
+            file delete $dir$name
+          }
     }
 }
+
+#
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:
