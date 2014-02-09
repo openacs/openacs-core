@@ -15,32 +15,32 @@ if { $show_p } {
 
     # multirow append ds_buttons COM \
         "Display comments inline" \
-        [export_vars -base "${ds_url}comments-toggle" { { return_url [ad_return_url] } }] \
+        [export_vars -base "${ds_url}comments-toggle" { { return_url [ad_return_url]} }] \
         [ad_decode [ds_comments_p]  1 "on" "off"]
 
     multirow append ds_buttons USR \
         "Toggle user switching" \
-        [export_vars -base "${ds_url}set" { {field user} {enabled_p {[expr {![ds_user_switching_enabled_p]}] }} {return_url [ad_return_url]} }] \
+        [export_vars -base "${ds_url}set" { {field user} {enabled_p {[expr {![ds_user_switching_enabled_p]}]}} {return_url [ad_return_url]} }] \
         [ad_decode [ds_user_switching_enabled_p] 1 "on" "off"] 
 
     multirow append ds_buttons DB \
         "Toggle DB data collection" \
-        [export_vars -base "${ds_url}set" { {field db} {enabled_p {[expr {![ds_database_enabled_p]}] }} {return_url [ad_return_url]} }] \
+        [export_vars -base "${ds_url}set" { {field db} {enabled_p {[expr {![ds_database_enabled_p]}]}} {return_url [ad_return_url]} }] \
         [ad_decode [ds_database_enabled_p] 1 "on" "off"]
 
     multirow append ds_buttons PRO \
         "Toggle template profiling" \
-        [export_vars -base "${ds_url}set" { {field prof} {enabled_p {[expr {![ds_profiling_enabled_p]}] }} {return_url [ad_return_url]} }] \
+        [export_vars -base "${ds_url}set" { {field prof} {enabled_p {[expr {![ds_profiling_enabled_p]}]}} {return_url [ad_return_url]} }] \
         [ad_decode [ds_profiling_enabled_p] 1 "on" "off"]
 
     multirow append ds_buttons FRG \
         "Toggle caching page fragments" \
-        [export_vars -base "${ds_url}set" { {field frag} {enabled_p {[expr {![ds_page_fragment_cache_enabled_p]}] }} {return_url [ad_return_url]} }] \
+        [export_vars -base "${ds_url}set" { {field frag} {enabled_p {[expr {![ds_page_fragment_cache_enabled_p]}]}} {return_url [ad_return_url]} }] \
         [ad_decode [ds_page_fragment_cache_enabled_p] 1 "on" "off"]
 
     multirow append ds_buttons TRN \
         "Toggle translation mode" \
-        [export_vars -base "[ad_url]/acs-lang/admin/translator-mode-toggle" { { return_url [ad_return_url] } }] \
+        [export_vars -base "[ad_url]/acs-lang/admin/translator-mode-toggle" { { return_url [ad_return_url]}}] \
         [ad_decode [lang::util::translator_mode_p] 1 "on" "off"]
 
     multirow append ds_buttons ADP \
