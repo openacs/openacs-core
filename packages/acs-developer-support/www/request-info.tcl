@@ -256,12 +256,12 @@ if { ![info exists property(db)] } {
 	}
 
         if { $command ne "getrow" || [template::util::is_true $getrow_p] } {
-            multirow append dbreqs $handle $command $sql [expr { $end - $start }] $value
+            multirow append dbreqs $handle $command $sql [format %.2f [expr { $end - $start }]] $value
         }
 
     }
 
-    multirow sort dbreqs -integer -decreasing duration_ms
+    multirow sort dbreqs -real -decreasing duration_ms
 
     template::list::create \
         -name dbreqs \

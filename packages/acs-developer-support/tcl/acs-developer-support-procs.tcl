@@ -203,13 +203,13 @@
              set total 0
              set counter 0
              foreach { handle command statement_name sql start end errno error } [nsv_get ds_request $::ad_conn(request).db] {
-                 incr total [expr { $end - $start }]
-                 if { [lsearch { dml exec 1row 0or1row select } [lindex $command 0]] >= 0 } {
+                 set total [expr { $total + ($end - $start) }]
+                 if { [lindex $command 0] in { dml exec 1row 0or1row select } } {
                      incr counter
                  }
              }
              if { $counter > 0 } {
-                 append out "$counter database command[ad_decode $counter 1 " taking" "s totalling"] [format {%.f} [expr { $total }]] ms<br>"
+                 append out "$counter database command[ad_decode $counter 1 " taking" "s totalling"] [format {%.f} $total] ms<br>"
              }
          }
 
@@ -277,8 +277,8 @@
              set total 0
              set counter 0
              foreach { handle command statement_name sql start end errno error } [nsv_get ds_request $::ad_conn(request).db] {
-                 incr total [expr { $end - $start }]
-                 if { [lsearch { dml exec 1row 0or1row select } [lindex $command 0]] >= 0 } {
+                 set total [expr { $total + ($end - $start) }]
+                 if { [lindex $command 0] in { dml exec 1row 0or1row select } } {
                      incr counter
                  }
              }
@@ -343,7 +343,7 @@
              }
          }
 
-         ds_add db $db $command $statement_name $bound_sql $start_time [clock clicks -milliseconds] $errno $error
+         ds_add db $db $command $statement_name $bound_sql $start_time [clock clicks -microseconds] $errno $error
      }
  }
 

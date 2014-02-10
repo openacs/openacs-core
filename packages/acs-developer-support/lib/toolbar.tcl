@@ -65,7 +65,11 @@ if { $show_p } {
     set db_info [ds_get_db_command_info]
 
     set db_num_cmds [lindex $db_info 0]
-    set db_num_ms [lc_numeric [lindex $db_info 1]]
+    if {[lindex $db_info 1] eq ""} {
+	set db_num_ms [lc_numeric [lindex $db_info 1]]
+    } else {
+	set db_num_ms [lc_numeric [format %.1f [lindex $db_info 1]]]
+    }
 
     set flush_url [export_vars -base "[ad_url]/acs-admin/cache/flush-cache" { { suffix util_memoize } { return_url [ad_return_url] } }]
 
