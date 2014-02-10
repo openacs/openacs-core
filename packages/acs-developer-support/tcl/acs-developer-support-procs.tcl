@@ -343,7 +343,7 @@
              }
          }
 
-         ds_add db $db $command $statement_name $bound_sql $start_time [clock clicks -microseconds] $errno $error
+         ds_add db $db $command $statement_name $bound_sql $start_time [expr {[clock clicks -microseconds]/1000.0}] $errno $error
      }
  }
 
@@ -404,7 +404,7 @@
 
  ad_proc -private ds_trace_filter { conn args why } { Adds developer-support information about the end of sessions.} {
      if { [ds_enabled_p] && [ds_collection_enabled_p] } {
-         ds_add conn end [ns_time] endclicks [clock clicks -milliseconds]
+         ds_add conn end [ns_time] endclicks [clock clicks -microseconds]
 
          for { set i 0 } { $i < [ns_set size [ad_conn outputheaders]] } { incr i } {
              ds_add oheaders [ns_set key [ad_conn outputheaders] $i] [ns_set value [ad_conn outputheaders] $i]
