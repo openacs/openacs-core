@@ -256,7 +256,7 @@ if { ![info exists property(db)] } {
 	}
 
         if { $command ne "getrow" || [template::util::is_true $getrow_p] } {
-            multirow append dbreqs $handle $command $sql [format %.2f [expr { $end - $start }]] $value
+            multirow append dbreqs $handle [lindex $command 0] $sql [format %.2f [expr { $end - $start }]] $value
         }
 
     }
