@@ -1555,7 +1555,7 @@ ad_proc -private security::get_https_port {} {
 	return ""
     }
 
-    set secure_port [ns_config -int [ns_driversection -driver $driver] port]
+    set secure_port [ns_config -int [ns_driversection -driver $sdriver] port]
     if {$secure_port eq "" && $driver eq "nsopenssl"} {
 	# checking nsopenssl 2.0 which has different names for the secure port etc, 
 	# and is not supported with this version of OpenACS
