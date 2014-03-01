@@ -548,14 +548,20 @@ ad_proc -private template::form::render { id tag_attributes } {
 
   # Check for errors in hidden elements
   foreach element_ref $elements { 
- 
+    
     # get a reference by element ID 
     upvar #$level $element_ref element
    
     if { $element(widget) eq "hidden" && 
 	 [info exists $id:error($element(id))] && [set $id:error($element(id))] ne "" 
        } {
-      error "Validation error in hidden form element: '[set $id:error($element(id))]' on element '$element(id)'."
+      # Submitting invalid data to hidden elements is a common attack vector.  
+      # This does not give them much information in the response.
+      ad_return_complaint 1 "Your request is invalid."
+      ns_log Warning "Validation error in hidden form element.\
+	This may be part of a vulnerability scan or attack reconnaissance: \
+	'[set $id:error($element(id))]' on element '$element(id)'."
+      ad_script_abort
     }
   }
 
@@ -857,8 +863,7 @@ ad_proc -public template::form::export {} {
     set value [ns_set value $form $i]
 
     append export_data "
-      <div><input type=\"hidden\" name=\"$key\" 
-             value=\"[ad_quotehtml $value]\"></div>"
+      <div><input type=\"hidden\" name=\"$key\" value=\"[ad_quotehtml $value]\"></div>"
   }
 
   return $export_data
