@@ -1078,7 +1078,22 @@ ad_proc -public ad_form {
     }
 
     if { [template::form is_submission $form_name] } {
-        if { [uplevel #$level {set __refreshing_p}] } {
+        upvar #$level __refreshing_p __refreshing_p __confirmed_p __confirmed_p
+	#
+	# The values for __refreshing_p and __confirmed_p are returend
+	# from the client.  Since Submitting invalid data to hidden
+	# elements is a common attack vector, we react harsh if we see
+	# an invalid input here.
+	#
+	if {![string is boolean -strict $__refreshing_p] 
+	    || ![string is boolean -strict $__confirmed_p] } {
+	    ad_return_complaint 1 "Your request is invalid."
+	    ns_log Warning "Validation error in hidden form element.\
+		This may be part of a vulnerability scan or attack reconnaissance: \
+		fish values __refreshing_p '$__refreshing_p' or __confirmed_p '$__confirmed_p'"
+	    ad_script_abort
+	}
+        if { $__refreshing_p } {
             uplevel array unset ${form_name}:error
 
             if { [info exists on_refresh] } {
@@ -1091,7 +1106,7 @@ ad_proc -public ad_form {
 
                 # Run confirm and preview templates before we do final processing of the form
 
-                if { [info exists confirm_template] && ![uplevel #$level {set __confirmed_p}] } {
+                if { [info exists confirm_template] && ! $__confirmed_p } {
 
                     # Pass the form variables to the confirm template, applying the to_html filter if present
 
