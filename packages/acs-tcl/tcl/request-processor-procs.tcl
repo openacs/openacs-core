@@ -480,6 +480,18 @@ ad_proc -private rp_html_directory_listing { dir } {
 #
 #####
 
+ad_proc -private rp_serve_resource_file { path } {
+
+    Serve the resource file if kernel parameter settings allow this.
+
+} {
+    if { ![rp_file_can_be_public_p $path] } {
+        ad_raise notfound
+    }
+    ns_returnfile 200 [ns_guesstype $path] $path
+    return filter_return
+}
+
 ad_proc -private rp_resources_filter { why } {
 
     This filter runs on all URLs of the form /resources/*.  The acs-resources package
@@ -502,14 +514,12 @@ ad_proc -private rp_resources_filter { why } {
 } {
     set path "[acs_package_root_dir [lindex [ns_conn urlv] 1]]/www/resources/[join [lrange [ns_conn urlv] 2 end] /]"
     if { [file isfile $path] } {
-        ns_returnfile 200 [ns_guesstype $path] $path
-        return filter_return
+        return [rp_serve_resource_file $path]
     }
 
     set path "$::acs::rootdir/www/resources/[join [lrange [ns_conn urlv] 1 end] /]"
     if { [file isfile $path] } {
-        ns_returnfile 200 [ns_guesstype $path] $path
-        return filter_return
+        return [rp_serve_resource_file $path]
     } 
 
     ns_log Error "rp_sources_filter: file \"$path\" does not exists trying to serve as a normal request"
@@ -1094,24 +1104,48 @@ ad_proc -public rp_serve_concrete_file {file} {
 			   error "$::errorCode: $::errorInfo"]
             return -code $errno -errorcode $::errorCode -errorinfo $::errorInfo $error
         }
+    } elseif { [rp_file_can_be_public_p $file] } {
+        set type [ns_guesstype $file]
+        ds_add rp [list serve_file [list $file $type] $startclicks [clock clicks -milliseconds]]
+        ns_returnfile 200 $type $file
     } else {
-        # Some other random kind of file - guess the type and return it.
-
-        #  first check that we are not serving a forbidden file like a .xql, a backup or CVS file
-        foreach match [parameter::get -parameter ExcludedFiles -package_id [ad_acs_kernel_id] -default {}] {
-            if {[string match $match $file]} { 
-                ad_raise notfound
-            } 
-        } 
-        if {$extension eq ".xql"
-            && ![parameter::get -parameter ServeXQLFiles -package_id [ad_acs_kernel_id] -default 0] } { 
-                ad_raise notfound
-        } else { 
-            set type [ns_guesstype $file]
-            ds_add rp [list serve_file [list $file $type] $startclicks [clock clicks -milliseconds]]
-            ns_returnfile 200 $type $file
-        } 
+        ad_raise notfound
     }
+}
+
+ad_proc -private rp_file_can_be_public_p { path } {
+    Determines if -- absent application restrictions -- a file can be served to
+    a client without violating simple security checks.  The checks and response
+    do not require the initialization of ad_conn or expensive permission::
+    calls.
+
+    The proc will return page-not-found messages to the client in the case
+    where the file must not be served, log a warning, and close the connection
+    to the client.
+
+    @param  path    The file to perform the simple security checks on.
+    @return 0 (and close the connection!) if the file must not be served.  1 if the application should
+            perform its own checks, if any.
+} {
+    #  first check that we are not serving a forbidden file like a .xql, a backup or CVS file                                                                                                      
+    if {[file extension $path] eq ".xql"
+        && ![parameter::get -parameter ServeXQLFiles -package_id [ad_acs_kernel_id] -default 0] } {
+        # Can't use ad_return_exception_page because it depends upon an initialized ad_conn                                                                                                        
+        ns_log Warning "An attempt was made to access an .XQL resource: {$path}."
+        ns_return 404 "text/html" "Not Found"
+        ns_conn close
+        return 0
+    }
+    foreach match [parameter::get -parameter ExcludedFiles -package_id [ad_acs_kernel_id] -default {}] {
+        if {[string match $match $path]} {
+            # Can't use ad_return_exception_page because it depends upon an initialized ad_conn                                                                                                    
+            ns_log Warning "An attempt was made to access an ExcludedFiles resource: {$path}."
+            ns_return 404 "text/html" "Not Found"
+            ns_conn close
+            return 0
+        }
+    }
+    return 1
 }
 
 ad_proc -private rp_concrete_file {
