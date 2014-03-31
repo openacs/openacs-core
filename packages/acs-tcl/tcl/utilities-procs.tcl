@@ -1647,7 +1647,7 @@ ad_proc -public ad_httpget {
         return -code error "ad_httpget:  Recursive redirection:  $url"
     }
 
-    lassign [ns_httpopen GET $url $headers $timeout] rdf wfd headers
+    lassign [ns_httpopen GET $url $headers $timeout] rfd wfd headers
 
     close $wfd
     set response [ns_set name $headers]
