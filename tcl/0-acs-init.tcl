@@ -12,7 +12,7 @@ namespace eval acs {
     set ::acs::pageroot [expr {[catch {ns_server pagedir}] ? [ns_info pageroot] : [ns_server pagedir]}]
     set ::acs::tcllib [expr {[catch {ns_server tcllib}] ? [ns_info tcllib] : [ns_server tcllib]}]
     set ::acs::rootdir [file dirname [string trimright $::acs::tcllib "/"]]
-    if {[info commands ::dbi_rows] ne ""} { set ::acs::preferdbi 1 }
+    #if {[info commands ::dbi_rows] ne ""} { set ::acs::preferdbi 1 }
 }
 
 # Determine the OpenACS root directory, which is the directory right above the
