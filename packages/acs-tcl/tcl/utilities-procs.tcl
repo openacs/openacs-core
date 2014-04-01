@@ -4417,8 +4417,8 @@ ad_proc -public util::word_diff {
 		set new [$filter_proc $new]
 	}
 
-	set old_f [ns_tmpnam]
-	set new_f [ns_tmpnam]
+	set old_f [ad_tmpnam]
+	set new_f [ad_tmpnam]
 	set old_fd [open $old_f "w"]
 	set new_fd [open $new_f "w"]
 	puts $old_fd [join [split $old $split_by] "\n"]
@@ -4837,4 +4837,11 @@ if {[ns_info name] eq "NaviServer"} {
 	}
 	return $result
     }
+}
+
+ad_proc ad_tmpnam {{template "oacs-XXXXXX"}} {
+    A stub function to replace the deprecated "ns_tmpnam", 
+    which uses the deprecated C-library function "tmpnam()"
+} {
+    ns_mktemp $template
 }

@@ -7,7 +7,7 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.8.1d2" url="http://openacs.org/repository/download/apm/acs-admin-5.8.1d2.apm">
+    <version name="5.8.1d3" url="http://openacs.org/repository/download/apm/acs-admin-5.8.1d3.apm">
         <owner url="mailto:dhogaza@pacifier.com">Don Baccus</owner>
         <summary>An interface for Site-wide administration of an OpenACS Installation.</summary>
         <maturity>3</maturity>
@@ -19,7 +19,7 @@
           (including package installation, cache, authentication, and user accounts) for an OpenACS system.
         </description>
 
-        <provides url="acs-admin" version="5.8.1d2"/>
+        <provides url="acs-admin" version="5.8.1d3"/>
         <requires url="acs-kernel" version="5.8.1d1"/>
         <requires url="acs-mail-lite" version="5.8.1d1"/>
 

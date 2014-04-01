@@ -29,7 +29,7 @@ ad_proc -public text_templates::create_pdf_content {
     @return the pdf-file-name
 } {
 
-    set tmp_filename [ns_tmpnam]
+    set tmp_filename [ad_tmpnam]
     # create html.file
     set html_content [create_html_content -template_id $template_id -set_var_call $set_var_call]
     set tmp_html_filename "${tmp_filename}.html"
@@ -61,7 +61,7 @@ ad_proc -public text_templates::create_pdf_from_html {
     @param html_content HTML Content that is transformed into PDF
     @return filename of the pdf file
 } {
-    set tmp_filename [ns_tmpnam]
+    set tmp_filename [ad_tmpnam]
     set tmp_html_filename "${tmp_filename}.html"
     set fp [open $tmp_html_filename w]
     puts $fp $html_content

@@ -136,7 +136,7 @@ ad_proc -private apm_extract_tarball { version_id dir } {
 
 } {
 
-    set apm_file [ns_tmpnam]
+    set apm_file [ad_tmpnam]
 
     db_blob_get_file distribution_tar_ball_select {
         select content 
@@ -163,7 +163,7 @@ ad_proc -private apm_generate_tarball { version_id } {
 } {
     set package_key [apm_package_key_from_version_id $version_id]
     set files [apm_get_package_files -all_db_types -package_key $package_key]
-    set tmpfile [ns_tmpnam]
+    set tmpfile [ad_tmpnam]
     
     db_1row package_key_select {
         select package_key 
@@ -569,7 +569,7 @@ ad_proc -private apm_load_apm_file {
 } {    
     # First download the apm file if a URL is provided
     if { $url ne "" } {
-        set file_path [ns_tmpnam].apm
+        set file_path [ad_tmpnam].apm
         apm_callback_and_log $callback "<li>Downloading $url..."
         if { [catch {apm_transfer_file -url $url -output_file_name $file_path} errmsg] } {
             apm_callback_and_log $callback "Unable to download. Please check your URL.</ul>.
@@ -639,7 +639,7 @@ ad_proc -private apm_load_apm_file {
     }
 
     apm_callback_and_log $callback  "Extracting the .info file (<tt>$info_file</tt>)..."
-    set tmpdir [ns_tmpnam]
+    set tmpdir [ad_tmpnam]
     file mkdir $tmpdir
     exec [apm_gzip_cmd] -d -q -c -S .apm $file_path | [apm_tar_cmd] -xf - -C $tmpdir $info_file 2> [apm_dev_null]
 

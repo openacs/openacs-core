@@ -22,7 +22,7 @@ ad_proc -public search::convert::binary_to_text {
     @creation-date 2005-06-25
 } {
 
-    set tmp_filename [ns_tmpnam]
+    set tmp_filename [ad_tmpnam]
     set result ""
 
     switch $mime_type {

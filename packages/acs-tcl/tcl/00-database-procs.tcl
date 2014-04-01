@@ -2647,7 +2647,7 @@ ad_proc -public db_load_sql_data {
 
         oracle {
             set user_pass [db_get_sql_user -dbn $dbn]
-            set tmpnam [ns_tmpnam]
+            set tmpnam [ad_tmpnam]
 
             set fd [open $file r]
             set file_contents [read $fd]

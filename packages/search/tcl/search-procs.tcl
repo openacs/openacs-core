@@ -291,7 +291,7 @@ ad_proc -private search::content_filter {
 	# Write content to a file and let the filter below extract the 
 	# words for the index from the file.
 	#
-	set tmp_filename [ns_tmpnam]
+	set tmp_filename [ad_tmpnam]
 	set f [open $tmp_filename w]
 	puts $f $data
 	close $f

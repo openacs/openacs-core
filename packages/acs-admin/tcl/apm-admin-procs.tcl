@@ -492,7 +492,7 @@ ad_proc -private apm_build_repository {
 			    # The path to the 'packages' directory in the checkout
 			    set packages_root_path [file join {*}[lrange [file split $spec_file] 0 end-2]]
 			    
-			    set tmp_filename [ns_tmpnam]
+			    set tmp_filename [ad_tmpnam]
 			    lappend cmd  --files-from $tmp_filename -C $packages_root_path
 			    
 			    set fp [open $tmp_filename w]
