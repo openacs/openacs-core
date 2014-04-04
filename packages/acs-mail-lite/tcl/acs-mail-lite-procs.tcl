@@ -112,11 +112,11 @@ namespace eval acs_mail_lite {
         set mail_package_id [apm_package_id_from_key "acs-mail-lite"]
 
         # Get the SMTP Parameters
-        set smtp [parameter::get -parameter "SMTPHost" \
+        set smtpHost [parameter::get -parameter "SMTPHost" \
                       -package_id $mail_package_id \
                       -default [ns_config ns/parameters mailhost]]
-        if {$smtp eq ""} {
-            set smtp localhost
+        if {$smtpHost eq ""} {
+            set smtpHost localhost
         }
 
         set timeout [parameter::get -parameter "SMTPTimeout" \
@@ -141,9 +141,12 @@ namespace eval acs_mail_lite {
         foreach header $headers {
             append cmd_string " -header {$header}"
         }
-        append cmd_string " -servers $smtp -ports $smtpport -username $smtpuser -password $smtppassword"
+        append cmd_string " -servers $smtpHost -ports $smtpport -username [list $smtpuser] -password [list $smtppassword]"
         ns_log Debug "send cmd_string: $cmd_string"
-        eval $cmd_string
+        if {[catch $cmd_string errorInfo]} {
+	    ns_log Error "acs-mail-lite::smtp: error $errorInfo while executing\n$cmd_string"
+	    error $errorInfo
+	}
     }
 
     #---------------------------------------
