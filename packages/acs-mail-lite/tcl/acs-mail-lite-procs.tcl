@@ -137,14 +137,27 @@ namespace eval acs_mail_lite {
         set smtppassword [parameter::get -parameter "SMTPPassword" \
                               -package_id $mail_package_id]
         
-        set cmd_string "smtp::sendmessage $multi_token -originator $originator"     
+        set cmd [list smtp::sendmessage $multi_token -originator $originator]
         foreach header $headers {
-            append cmd_string " -header [list $header]"
+            lappend cmd -header $header
         }
-        append cmd_string " -servers $smtpHost -ports $smtpport -username [list $smtpuser] -password [list $smtppassword]"
-        ns_log Debug "send cmd_string: $cmd_string"
-        if {[catch $cmd_string errorInfo]} {
-	    ns_log Error "acs-mail-lite::smtp: error $errorInfo while executing\n$cmd_string"
+        lappend cmd -servers $smtpHost -ports $smtpport
+
+	#
+	# Request authentication only, when user AND password are
+	# specified. If only one of these is specified, issue a
+	# warning and ignore the parameter.
+	#
+	if {$smtpuser ne "" && $smtppassword ne ""} {
+	    lappend cmd -username $smtpuser -password $smtppassword
+	} elseif {$smtpuser ne ""|| $smtppassword ne ""} {
+	    ns_log warning "acs-mail-lite::smtp: invalid parameter combination;\
+		when SMTPUser is specified, SMTPPassword has to be provided as well and vice versa"
+	}
+
+        ns_log Debug "send cmd: $cmd"
+        if {[catch $cmd errorInfo]} {
+	    ns_log Error "acs-mail-lite::smtp: error $errorInfo while executing\n$cmd"
 	    error $errorInfo
 	}
     }
