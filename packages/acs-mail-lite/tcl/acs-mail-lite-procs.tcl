@@ -139,7 +139,7 @@ namespace eval acs_mail_lite {
         
         set cmd_string "smtp::sendmessage $multi_token -originator $originator"     
         foreach header $headers {
-            append cmd_string " -header {$header}"
+            append cmd_string " -header [list $header]"
         }
         append cmd_string " -servers $smtpHost -ports $smtpport -username [list $smtpuser] -password [list $smtppassword]"
         ns_log Debug "send cmd_string: $cmd_string"
