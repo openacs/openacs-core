@@ -4839,9 +4839,12 @@ if {[ns_info name] eq "NaviServer"} {
     }
 }
 
-ad_proc ad_tmpnam {{template "oacs-XXXXXX"}} {
+ad_proc ad_tmpnam {{template ""}} {
     A stub function to replace the deprecated "ns_tmpnam", 
     which uses the deprecated C-library function "tmpnam()"
 } {
+    if {$template eq ""} {
+	set template [ns_config ns/parameters tmpdir]/oacs-XXXXXX
+    }
     ns_mktemp $template
 }
