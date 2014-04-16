@@ -2320,7 +2320,13 @@ ad_proc -public ad_returnredirect {
     @see util_user_message
     @see ad_script_abort
 } {
+    ns_log notice "ad_returnredirect message <$message> url <$target_url>"
     if {$message ne ""} {
+	#
+	# Leave a hint, that we do not want to be consumed on the
+	# current page.
+	#
+        set ::__skip_util_get_user_messages 1
 	if { [string is false $html_p] } {
 	    util_user_message -message $message
 	} else {
@@ -2416,6 +2422,14 @@ ad_proc -public util_get_user_messages {
     @see util_user_message
 } {
     set messages [ad_get_client_property -default {} -cache_only t "acs-kernel" "general_messages"]
+
+    #
+    # If there is a hint on the current page, that we do not want the
+    # content to be consumed (e.g. a redirect) the force keep_p.
+    #
+    if {[info exists ::__skip_util_get_user_messages]} {
+       set keep_p 1
+    }
     if { !$keep_p && $messages ne "" } {
         ad_set_client_property "acs-kernel" "general_messages" {}
     }
