@@ -5,7 +5,7 @@ ad_page_contract {
     @cvs-id $Id$
 
 } {
-    version_id:optional
+    version_id:integer,optional
     type
 } -properties {
     title:onevalue

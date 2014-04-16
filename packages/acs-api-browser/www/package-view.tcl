@@ -9,7 +9,7 @@ ad_page_contract {
     @creation-date 3 Jul 2000
     @cvs-id $Id$
 } {
-    version_id
+    version_id:integer
     { public_p "" }
     { kind "procs_files" }
     { about_package_key ""}
