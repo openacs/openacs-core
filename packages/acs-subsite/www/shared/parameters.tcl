@@ -17,16 +17,9 @@ if { $scope eq "global" } {
         -object_id [acs_lookup_magic_object security_context_root] \
         -privilege admin
     db_1row select_pretty_name {}
-    set package_url /acs-admin
+
     set page_title "$instance_name Global Parameters"
-    set context [list [list $package_url "Site-Wide Administration"] $page_title]
-} else {
-    permission::require_permission -object_id $package_id -privilege admin
-
-    db_1row select_instance_name {}
-
     set package_url [site_node::get_url_from_object_id -object_id $package_id]
-    set page_title "$instance_name Instance Parameters"
 
     if { $package_url eq [subsite::get_element -element url] } {
         set context [list [list "${package_url}admin/" "Administration"] $page_title]
@@ -34,6 +27,38 @@ if { $scope eq "global" } {
         set context [list [list $package_url $instance_name] [list "${package_url}admin/" "Administration"] $page_title]
     } else {
         set context [list $page_title]
+    }
+
+} else {
+    permission::require_permission -object_id $package_id -privilege admin
+    db_1row select_instance_name {}
+
+    set page_title "$instance_name Instance Parameters"
+    set package_url [site_node::get_url_from_object_id -object_id $package_id]
+}
+
+if { $package_url eq [subsite::get_element -element url] } {
+    set context [list [list "${package_url}admin/" "Administration"] $page_title]
+} elseif { $package_url ne "" } {
+    set context [list [list $package_url $instance_name] [list "${package_url}admin/" "Administration"] $page_title]
+} else {
+    set context [list $page_title]
+}
+
+if { $scope ne "global" } {
+
+    if {![info exists package_key] || $package_key eq ""} {
+	set package_key [apm_package_key_from_id $package_id]
+    }
+    set global_parameters [db_list get_global_parameters {
+	select parameter_name from apm_parameters where package_key = :package_key and scope = 'global'
+    }] 
+    if {[llength $global_parameters] > 0} {
+	#
+	# Just provide a link to the global parameters in case these exist
+	#
+	set global_parameter_label [join [lsort $global_parameters] ", "]
+	set global_param_url [export_vars -base /shared/parameters {package_key return_url package_id {scope global}}]
     }
 }
 

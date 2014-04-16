@@ -3,6 +3,13 @@
   <property name="context">@context@</property>
   <property name="focus">@focus;noquote@</property>
 
+<if @global_param_url@ defined>
+<h2>Global parameters</h2> 
+<blockquote>
+<a href='@global_param_url;literal@'>@global_parameter_label@</a><br>
+</blockquote>
+<h2>Instance parameters</h2>
+</if>
 <if @counter@ gt 0>
   <formtemplate id="parameters"></formtemplate>
 
