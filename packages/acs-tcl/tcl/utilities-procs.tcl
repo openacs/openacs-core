@@ -2320,7 +2320,6 @@ ad_proc -public ad_returnredirect {
     @see util_user_message
     @see ad_script_abort
 } {
-    ns_log notice "ad_returnredirect message <$message> url <$target_url>"
     if {$message ne ""} {
 	#
 	# Leave a hint, that we do not want to be consumed on the
