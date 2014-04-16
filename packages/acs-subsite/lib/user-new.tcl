@@ -136,13 +136,23 @@ ad_form -extend -name register -on_request {
             # Continue below
         }
         default {
+
+	    if {[parameter::get -parameter RegistrationRequiresEmailVerificationP -default 0] &&
+		$creation_info(account_status) eq "closed"} {
+		ad_return_warning "Email Validation is required" $creation_info(account_message)
+		ad_script_abort
+	    }
+	    if {[parameter::get -parameter RegistrationRequiresApprovalP -default 0] &&
+		$creation_info(account_status) eq "closed"} {
+		ad_return_warning "Account approval is required" $creation_info(account_message)
+		ad_script_abort
+	    }
+
             # Display the message on a separate page
             ad_returnredirect \
                 -message $creation_info(account_message) \
                 -html \
-                [export_vars \
-                     -base "[subsite::get_element \
-                                -element url]register/account-closed"]
+		"[subsite::get_element -element url]register/account-closed"
             ad_script_abort
         }
     }
