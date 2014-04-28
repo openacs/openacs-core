@@ -1402,8 +1402,8 @@ ad_proc -public ad_html_text_convertable_p {
     set valid_froms { text/enhanced text/plain text/fixed-width text/html text/xml }
     set valid_tos { text/plain text/html }
     # Validate procedure input
-    set from [ad_decode $from "html" "text/html" "text" "text/plain" "plain" "text/plain" $from]
-    set to [ad_decode $to "html" "text/html" "text" "text/plain" "plain" "text/plain" $to]
+    set from [ad_decode $from html text/html text text/plain plain text/plain pre text/plain $from]
+    set to   [ad_decode $to   html text/html text text/plain plain text/plain pre text/plain $to]
     return [expr {$from in $valid_froms && $to in $valid_tos}]
 }
 
@@ -1481,8 +1481,8 @@ ad_proc -public ad_html_text_convert {
     }
     
     # For backwards compatibility
-    set from [ad_decode $from "html" "text/html" "text" "text/plain" "plain" "text/plain" $from]
-    set to [ad_decode $to "html" "text/html" "text" "text/plain" "plain" "text/plain" $to]
+    set from [ad_decode $from html text/html text text/plain plain text/plain pre text/plain $from]
+    set to   [ad_decode $to   html text/html text text/plain plain text/plain pre text/plain $to]
 
     if { ![ad_html_text_convertable_p -from $from -to $to] } {
         error "Illegal mime types for conversion - from: $from to: $to"
