@@ -569,7 +569,7 @@ ad_proc -public aa_runseries {
             }
 
             # if we don't want stress, then the test must not be stress
-            if { ! $stress && "stress" in $categories "stress" } {
+            if { ! $stress && "stress" in $categories } {
                 continue
             }
             
