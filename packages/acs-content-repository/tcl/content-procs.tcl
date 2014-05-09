@@ -143,12 +143,17 @@ ad_proc -private cr_get_file_creation_log {} {
 
 } {
     set dir [cr_fs_path]
+    set logName $dir/file-creation.log
     ad_mutex_eval [nsv_get mutex cr_file_creation] {
-        set f [open $dir/file-creation.log]
-        set content [read $f]
-        close $f
-        # truncate the log file
-        set f [open $dir/file-creation.log w]; close $f
+        if {[file readable $logName]} {
+            set f [open $logName]
+            set content [read $f]
+            close $f
+            # truncate the log file
+            set f [open $logName w]; close $f
+        } else {
+            set content ""
+        }
     }
     return $content
 }
