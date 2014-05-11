@@ -27,14 +27,13 @@ ad_proc -private cr_delete_scheduled_files {} {
     db_transaction {
         # subselect makes sure there isn't a parent revision still lying around
         db_foreach fetch_paths { *SQL* } {
-
             set file [cr_fs_path $storage_area_key]/$path
-            if {$path eq ""} {
-                ns_log Warning "cr_delete_scheduled_files: refuse to delete $file"
-            } else {
-                # remove the file from filesystem
+            if {[regexp {^[0-9/]+$} $path]} {
+                # the filename looks valid, delete the file from filesystem
                 ns_log Debug "cr_delete_scheduled_files: deleting $file"
                 file delete $file
+            } else {
+                ns_log Warning "cr_delete_scheduled_files: refuse to delete $file"
             }
         }
         # now that all scheduled files deleted, clear table
