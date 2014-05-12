@@ -57,7 +57,7 @@ ad_proc -public template::head::add_script {
     @param defer   whether execution of the script should be defered until after
                    the page has been loaded
     @param async   whether execution of the script should be executed asynchronously
-                   as soon it is available
+                   as soon as it is available
     @param src     the src attribute of the script tag, ie. the source url of the
                    script
     @param charset the charset attribute of the script tag, ie. the character 
@@ -207,7 +207,7 @@ ad_proc -public template::head::add_javascript {
     @param defer   whether execution of the script should be defered until after
                    the page has been loaded
     @param async   whether execution of the script should be executed asynchronously
-                   as soon it is available
+                   as soon as it is available
     @param src     the src attribute of the script tag, ie. the source url of the
                    script
     @param charset the charset attribute of the script tag, ie. the character 
@@ -332,7 +332,7 @@ ad_proc -public template::add_body_script {
     @param defer   whether execution of the script should be defered until after
                    the page has been loaded
     @param async   whether execution of the script should be executed asynchronously
-                   as soon it is available
+                   as soon as it is available
     @param src     the src attribute of the script tag, ie. the source url of the
                    script
     @param charset the charset attribute of the script tag, ie. the character 
