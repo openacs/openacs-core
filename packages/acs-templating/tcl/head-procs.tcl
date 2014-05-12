@@ -40,6 +40,7 @@ ad_proc -private template::reset_request_vars {} {
 ad_proc -public template::head::add_script {
     {-type:required}
     {-defer:boolean}
+    {-async:boolean}
     {-src ""}
     {-charset ""}
     {-script ""}
@@ -55,6 +56,8 @@ ad_proc -public template::head::add_script {
     @param type    the type attribute of the script tag, eg. 'text/javascript'
     @param defer   whether execution of the script should be defered until after
                    the page has been loaded
+    @param async   whether execution of the script should be executed asynchronously
+                   as soon it is available
     @param src     the src attribute of the script tag, ie. the source url of the
                    script
     @param charset the charset attribute of the script tag, ie. the character 
@@ -71,14 +74,20 @@ ad_proc -public template::head::add_script {
         set defer ""
     }
 
+    if {$async_p} {
+        set async async
+    } else {
+        set async ""
+    }
+
     if {$src eq ""} {
         if {$script eq ""} {
             error "You must supply either -src or -script."
         }
 
-        lappend scripts(anonymous) $type "" $charset $defer $script $order
+        lappend scripts(anonymous) $type "" $charset $defer $async $script $order
     } else {
-        set scripts($src) [list $type $src $charset $defer "" $order]
+        set scripts($src) [list $type $src $charset $defer $async "" $order]
     }
 }
 
@@ -185,6 +194,7 @@ ad_proc -public template::head::add_style {
 
 ad_proc -public template::head::add_javascript {
     {-defer:boolean}
+    {-async:boolean}
     {-src ""}
     {-charset ""}
     {-script ""}
@@ -196,6 +206,8 @@ ad_proc -public template::head::add_javascript {
 
     @param defer   whether execution of the script should be defered until after
                    the page has been loaded
+    @param async   whether execution of the script should be executed asynchronously
+                   as soon it is available
     @param src     the src attribute of the script tag, ie. the source url of the
                    script
     @param charset the charset attribute of the script tag, ie. the character 
@@ -206,7 +218,7 @@ ad_proc -public template::head::add_javascript {
 
     @see template::head::add_script
 } {
-    template::head::add_script -defer=$defer_p \
+    template::head::add_script -defer=$defer_p -async=$async_p \
         -type text/javascript \
         -src $src \
         -charset $charset \
@@ -308,6 +320,7 @@ ad_proc -public template::add_body_handler {
 ad_proc -public template::add_body_script {
     {-type:required}
     {-defer:boolean}
+    {-async:boolean}
     {-src ""}
     {-charset ""}
     {-script ""}
@@ -318,6 +331,8 @@ ad_proc -public template::add_body_script {
     @param type    the type attribute of the script tag, eg. 'text/javascript'
     @param defer   whether execution of the script should be defered until after
                    the page has been loaded
+    @param async   whether execution of the script should be executed asynchronously
+                   as soon it is available
     @param src     the src attribute of the script tag, ie. the source url of the
                    script
     @param charset the charset attribute of the script tag, ie. the character 
@@ -333,12 +348,17 @@ ad_proc -public template::add_body_script {
     } else {
         set defer ""
     }
+    if {$async_p} {
+        set async async
+    } else {
+        set async ""
+    }
 
     if {$src eq "" && $script eq ""} {
         error "You must supply either -src or -script."
     }
 
-    lappend body_scripts $type $src $charset $defer $script
+    lappend body_scripts $type $src $charset $defer $async $script
 }
 
 ad_proc -public template::add_header {
@@ -513,15 +533,16 @@ ad_proc template::head::prepare_multirows {} {
 
     # Generate the head <script /> tag multirow
     variable ::template::head::scripts
-    template::multirow create headscript type src charset defer content order
+    template::multirow create headscript type src charset defer async content order
     if {[array exists scripts]} {
         foreach name [array names scripts] {
-            foreach {type src charset defer content order} $scripts($name) {
+            foreach {type src charset defer async content order} $scripts($name) {
                 template::multirow append headscript \
                     $type \
                     $src \
                     $charset \
                     $defer \
+                    $async \
                     $content \
                     $order
             }
@@ -532,14 +553,15 @@ ad_proc template::head::prepare_multirows {} {
 
     # Generate the body <script /> tag multirow
     variable ::template::body_scripts
-    template::multirow create body_script type src charset defer content
+    template::multirow create body_script type src charset defer async content
     if {[info exists body_scripts]} {
-        foreach {type src charset defer content} $body_scripts {
+        foreach {type src charset defer async content} $body_scripts {
             template::multirow append body_script \
                 $type \
                 $src \
                 $charset \
                 $defer \
+                $async \
                 $content
         }
         unset body_scripts

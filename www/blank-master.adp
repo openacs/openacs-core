@@ -23,7 +23,7 @@ _editor_lang = "@::xinha_lang@";
 </script>
 </if>
 
-<multiple name="headscript">   <script type="@headscript.type;noquote@"<if @headscript.src@ not nil> src="@headscript.src;noquote@"</if><if @headscript.charset@ not nil> charset="@headscript.charset;noquote@"</if><if @headscript.defer@ not nil> defer="@headscript.defer;noquote@"</if>><if @headscript.content@ not nil>@headscript.content;noquote@</if></script>
+<multiple name="headscript">   <script type="@headscript.type;noquote@"<if @headscript.src@ not nil> src="@headscript.src;noquote@"</if><if @headscript.charset@ not nil> charset="@headscript.charset;noquote@"</if><if @headscript.defer@ not nil> defer="@headscript.defer;noquote@"</if><if @headscript.async@ not nil> async="@headscript.async;noquote@"</if>><if @headscript.content@ not nil>@headscript.content;noquote@</if></script>
 
 </multiple>
 <if @head@ not nil>@head;noquote@</if>
@@ -32,7 +32,7 @@ _editor_lang = "@::xinha_lang@";
   @header;noquote@
 <slave>
   @footer;noquote@
-<multiple name="body_script">    <script type="@body_script.type;noquote@"<if @body_script.src@ not nil> src="@body_script.src;noquote@"</if><if @body_script.charset@ not nil> charset="@body_script.charset;noquote@"</if><if @body_script.defer@ not nil> defer="@body_script.defer;noquote@"</if>><if @body_script.content@ not nil>@body_script.content;noquote@</if></script>
+<multiple name="body_script">    <script type="@body_script.type;noquote@"<if @body_script.src@ not nil> src="@body_script.src;noquote@"</if><if @body_script.charset@ not nil> charset="@body_script.charset;noquote@"</if><if @body_script.defer@ not nil> defer="@body_script.defer;noquote@"</if><if @body_script.async@ not nil> async="@body_script.async;noquote@"</if>><if @body_script.content@ not nil>@body_script.content;noquote@</if></script>
 </multiple>
 
 </body>
