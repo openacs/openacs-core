@@ -847,7 +847,7 @@ ad_proc -public api_get_body {proc_name} {
   } elseif {[info procs $proc_name] ne ""} {
     return [info body $proc_name]
   } elseif {[info procs ::nsf::procs::$proc_name] ne ""} {
-    return [info body ::nsf::procs::$proc_name]
+    return [::nx::Object info method body ::nsf::procs::$proc_name]
   } else {
     return "No such Tcl-proc"
   }
