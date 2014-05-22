@@ -1216,7 +1216,7 @@ ad_proc -private apm_package_key_from_id_mem {package_id} {
 ad_proc -public apm_instance_name_from_id {package_id} {
     @return The name of the instance.
 } {
-    return [util_memoize "apm_instance_name_from_id_mem $package_id"]
+    return [util_memoize [list apm_instance_name_from_id_mem $package_id]]
 }
 
 ad_proc -private apm_instance_name_from_id_mem {package_id} {
@@ -1238,7 +1238,7 @@ ad_proc -public apm_package_id_from_key {package_key} {
 } {
     set var ::apm::package_id_from_key($package_key)
     if {[info exists $var]} {return [set $var]}
-    set $var [util_memoize "apm_package_id_from_key_mem $package_key"]
+    set $var [util_memoize [list apm_package_id_from_key_mem $package_key]]
     #set $var [ns_cache_eval ns:memoize apm_package_id_from_key_$package_key [list apm_package_id_from_key_mem $package_key]]
 }
 
@@ -1311,7 +1311,7 @@ ad_proc -public apm_package_url_from_key {package_key} {
     @return The package url of the instance of the package.
     only valid for singleton packages.
 } {
-    return [util_memoize "apm_package_url_from_key_mem $package_key"]
+    return [util_memoize [list apm_package_url_from_key_mem $package_key]]
 }
 
 ad_proc -private apm_package_url_from_key_mem {package_key} {
@@ -1342,7 +1342,7 @@ ad_proc -public apm_package_key_from_version_id {version_id} {
 
     @author Peter Marklund (peter@collaboraid.biz)
 } {
-    return [util_memoize "apm_package_key_from_version_id_mem $version_id"]
+    return [util_memoize [list apm_package_key_from_version_id_mem $version_id]]
     
 }
 

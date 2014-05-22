@@ -334,7 +334,7 @@ ad_proc -public lc_time_fmt {
     # day_no becomes 0 for Sunday, through to 6 for Saturday. Perfect for addressing zero-based lists pulled from locale info.
     set lc_time_day_no [expr {(($lc_time_days + $y + $y/4 - $y/100 + $y/400) + (31 * $m / 12)) % 7}]
     
-    return [subst [util_memoize "lc_time_fmt_compile {$fmt} $locale"]]
+    return [subst [util_memoize [list lc_time_fmt_compile {$fmt} $locale]]]
 }
 
 ad_proc -public lc_time_fmt_compile {

@@ -14,7 +14,7 @@ set tcl_docs_root "http://tcl.tk/man/tcl[info tclversion]/TclCmd/"
 set tcl_docs_url "${tcl_docs_root}contents.htm"
 
 with_catch errmsg {
-    set tcl_docs_index_page [util_memoize "ns_httpget $tcl_docs_url"]
+    set tcl_docs_index_page [util_memoize [list ns_httpget $tcl_docs_url]]
 } {
     ad_return_error "Cannot Connect" "We're sorry, but we're having problems connecting to the server containing the Tcl documentation: $tcl_docs_url"
     ad_script_abort

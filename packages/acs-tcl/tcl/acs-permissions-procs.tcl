@@ -32,7 +32,7 @@ ad_proc -public permission::grant {
     grant privilege Y to party X on object Z
 } {
     db_exec_plsql grant_permission {}
-    util_memoize_flush "permission::permission_p_not_cached -party_id $party_id -object_id $object_id -privilege $privilege"
+    util_memoize_flush [list permission::permission_p_not_cached -party_id $party_id -object_id $object_id -privilege $privilege]
     permission::permission_thread_cache_flush
 }
 
