@@ -2261,6 +2261,7 @@ ad_proc -public util_driver_info {
     set section [ns_driversection -driver $driver]
 
     switch $driver {
+	nsudp -
         nssock {
             set result(proto) http
             set result(port) [ns_config -int $section Port]
