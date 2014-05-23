@@ -2148,6 +2148,8 @@ ad_proc -public ad_returnredirect {
         # is not secure bug in IE
 	set use_metarefresh_p 1
     }
+    # Sanitize URL to avoid potential injection attack
+    regsub -all {[\r\n]} $url "" url
     if { $use_metarefresh_p != 0 } {
         util_ReturnMetaRefresh $url 
     } else {
