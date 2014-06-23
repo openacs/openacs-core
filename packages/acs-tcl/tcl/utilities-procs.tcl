@@ -2143,7 +2143,7 @@ ad_proc -public ad_returnredirect {
         set user_agent [ns_set iget $headers User-Agent]
         set use_metarefresh_p [string match -nocase "*msie 5.0*" $user_agent]
     }
-    if {[string match "https://*" [ad_conn location]] && [string match "http://*" $url]} {
+    if {[string match "https://*" [ad_conn location]] && [string match "http://*" $url] && $allow_complete_url_p} {
 	# workaround the You are about to be redirected to a connection that
         # is not secure bug in IE
 	set use_metarefresh_p 1
