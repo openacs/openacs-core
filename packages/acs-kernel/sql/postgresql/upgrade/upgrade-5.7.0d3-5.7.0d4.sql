@@ -3,6 +3,11 @@ alter table acs_datatypes add column_size text;
 alter table acs_datatypes add column_check_expr text;
 alter table acs_datatypes add column_output_function text;
 
+alter table acs_attributes drop constraint acs_attributes_datatype_fk; 
+alter table acs_attributes add constraint acs_attributes_datatype_fk 
+   foreign key (datatype) 
+   references acs_datatypes(datatype) on update cascade;
+
 insert into acs_datatypes
   (datatype, database_type)
 (select 'text', 'text' from dual
