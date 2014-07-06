@@ -516,7 +516,7 @@ ad_proc -private apm_transfer_file {
         # 
         # ... use xo::HttpRequest...
         #
-        #ns_log notice "Transfer $url based to $output_file_name on ::xo::HttpRequest"
+        ns_log notice "Transfer $url to $output_file_name based on ::xo::HttpRequest"
         #
         set r [::xo::HttpRequest new -url $url]
         set fileChan [open $output_file_name w 0640]
@@ -529,14 +529,14 @@ ad_proc -private apm_transfer_file {
         # ... if we have no ns_http, no ::xo::* and we have "wget"
         # installed, we use it.
         #
-        ns_log notice "Transfer $url based on wget"
+        ns_log notice "Transfer $url to $output_file_name based on wget"
         catch {exec $wget -O $output_file_name $url}
 
     } else {
         #
         # Everything else failed, fall back to the original solution.
         #
-        ns_log notice "Transfer $url based on ns_httpopen"
+        ns_log notice "Transfer $url to $output_file_name based on ns_httpopen"
         # Open a destination file.
         set fileChan [open  $output_file_name w 0640]
         # Open the channel to the server.
