@@ -12,7 +12,7 @@
 # http://www.fsf.org/copyleft/gpl.html
 
 ad_proc -public ad_return_template {
-     -string:boolean
+    -string:boolean
     {template ""}
 } {
     This function is a wrapper for sundry template:: procs. Will set the 
@@ -21,16 +21,16 @@ ad_proc -public ad_return_template {
     @param template Name of template file 
 
     @param string If specified, will return the resulting page to the caller
-                  string instead sending it to the connection.
+    string instead sending it to the connection.
 } {
     if {$template ne ""} {
-	template::set_file \
-	    [template::util::url_to_file $template [ad_conn file]]
+        template::set_file \
+            [template::util::url_to_file $template [ad_conn file]]
     }
     
     if { $string_p } {
-	return [template::adp_parse \
-		    [template::util::url_to_file $template [ad_conn file]] {}]
+        return [template::adp_parse \
+                    [template::util::url_to_file $template [ad_conn file]] {}]
     }
 }
 
@@ -53,10 +53,8 @@ ad_proc -public ad_parse_template {
     set template_params [list]
     foreach param $params {
         switch [llength $param] {
-            1 { lappend template_params "&" [lindex $param 0]
-              }
-            2 { lappend template_params [lindex $param 0] [lindex $param 1]
-              }
+            1 { lappend template_params "&" [lindex $param 0] }
+            2 { lappend template_params [lindex $param 0] [lindex $param 1] }
             default { return -code error [_ acs-templating.Template_parser_error_in_parameter_list] }
         }
     }
@@ -106,7 +104,7 @@ ad_proc adp_parse_ad_conn_file {} {
         #
 
         if { [lang::util::translator_mode_p] } {
-	    set apm_package_url [apm_package_url_from_key "acs-lang"]
+            set apm_package_url [apm_package_url_from_key "acs-lang"]
             
             # Attempt to move all message keys outside of tags
             while { [regsub -all {(<[^>]*)(\x002\(\x001[^\x001]*\x001\)\x002)([^>]*>)} $parsed_template {\2\1\3} parsed_template] } {}
@@ -140,7 +138,7 @@ ad_proc adp_parse_ad_conn_file {} {
                 lassign [split $key "."] package_key message_key
 
                 set edit_url [export_vars -base "${apm_package_url}admin/edit-localized-message" { 
-		    { locale {[ad_conn locale]} } package_key message_key { return_url [ad_return_url] } }]
+                    { locale {[ad_conn locale]} } package_key message_key { return_url [ad_return_url] } }]
 
                 if { [lang::message::message_exists_p [ad_conn locale] $key] } {
                     set edit_link "<a href=\"$edit_url\" title=\"$key\" style=\"color: green;\"><b>o</b></a>"
@@ -151,7 +149,7 @@ ad_proc adp_parse_ad_conn_file {} {
                     } else {
                         # Message key missing entirely
                         set new_url [export_vars -base "${apm_package_url}admin/localized-message-new" { 
-			    { locale en_US } package_key message_key { return_url [ad_return_url] } }]
+                            { locale en_US } package_key message_key { return_url [ad_return_url] } }]
                         set edit_link "<a href=\"$new_url\" title=\"$key\" style=\"background-color: red; color: white;\"><b>@</b></a>"
                     }
                 }
@@ -162,7 +160,7 @@ ad_proc adp_parse_ad_conn_file {} {
 
         set mime_type [template::get_mime_type]
         set header_preamble [template::get_mime_header_preamble $mime_type]
-	doc_return 200 $mime_type "$header_preamble$parsed_template"
+        doc_return 200 $mime_type "$header_preamble$parsed_template"
     } else {
         db_release_unused_handles
     }
