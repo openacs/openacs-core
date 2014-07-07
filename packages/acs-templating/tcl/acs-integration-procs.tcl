@@ -106,6 +106,7 @@ ad_proc adp_parse_ad_conn_file {} {
         #
 
         if { [lang::util::translator_mode_p] } {
+	    set apm_package_url [apm_package_url_from_key "acs-lang"]
             
             # Attempt to move all message keys outside of tags
             while { [regsub -all {(<[^>]*)(\x002\(\x001[^\x001]*\x001\)\x002)([^>]*>)} $parsed_template {\2\1\3} parsed_template] } {}
@@ -136,12 +137,10 @@ ad_proc adp_parse_ad_conn_file {} {
                 set after [string range $parsed_template [lindex $indices 1]+1 end]
 
                 set key [string range $parsed_template [lindex $key 0] [lindex $key 1]]
+                lassign [split $key "."] package_key message_key
 
-                set keyv [split $key "."]
-                set package_key [lindex $keyv 0]
-                set message_key [lindex $keyv 1]
-
-                set edit_url [export_vars -base "[apm_package_url_from_key "acs-lang"]admin/edit-localized-message" { { locale {[ad_conn locale]} } package_key message_key { return_url [ad_return_url] } }]
+                set edit_url [export_vars -base "${apm_package_url}admin/edit-localized-message" { 
+		    { locale {[ad_conn locale]} } package_key message_key { return_url [ad_return_url] } }]
 
                 if { [lang::message::message_exists_p [ad_conn locale] $key] } {
                     set edit_link "<a href=\"$edit_url\" title=\"$key\" style=\"color: green;\"><b>o</b></a>"
@@ -151,7 +150,8 @@ ad_proc adp_parse_ad_conn_file {} {
                         set edit_link "<a href=\"$edit_url\" title=\"$key\" style=\"background-color: yellow; color: red;\"><b>*</b></a>"
                     } else {
                         # Message key missing entirely
-                        set new_url [export_vars -base "[apm_package_url_from_key "acs-lang"]admin/localized-message-new" { { locale en_US } package_key message_key { return_url [ad_return_url] } }]
+                        set new_url [export_vars -base "${apm_package_url}admin/localized-message-new" { 
+			    { locale en_US } package_key message_key { return_url [ad_return_url] } }]
                         set edit_link "<a href=\"$new_url\" title=\"$key\" style=\"background-color: red; color: white;\"><b>@</b></a>"
                     }
                 }
@@ -167,4 +167,11 @@ ad_proc adp_parse_ad_conn_file {} {
         db_release_unused_handles
     }
 }
+
+#
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:
 
