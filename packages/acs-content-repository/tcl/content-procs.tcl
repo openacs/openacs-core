@@ -95,17 +95,15 @@ ad_proc -public cr_create_content_file_from_string {item_id revision_id str} {
     file storage area.
 } {
     ad_mutex_eval [nsv_get mutex cr_file_creation] {
-
-        set f [open $dir/file-creation.log a]
-        puts $f $content_file
-        close $f
-
         set content_file [cr_create_content_file_path $item_id $revision_id]
         set ofp [open [cr_fs_path]$content_file w]
         puts -nonewline $ofp $str
         close $ofp
-    } 
 
+        set f [open [cr_fs_path]/file-creation.log a]
+        puts $f $content_file
+        close $f
+    }
     return $content_file
 }
 
