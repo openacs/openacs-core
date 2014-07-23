@@ -122,7 +122,7 @@ ad_proc -private acs_sc_get_alias {
     # LARS
     set exists_p [acs_sc_binding_exists_p $contract $impl]
 
-    #set exists_p [util_memoize "acs_sc_binding_exists_p $contract $impl"]
+    #set exists_p [util_memoize [list acs_sc_binding_exists_p $contract $impl]]
 
     if {![set exists_p]} {return ""}
     

@@ -146,7 +146,7 @@ ad_proc -private package_create_attribute_list {
     }
     
     if { $supertype ne "" && $object_name ne "" } {
-	foreach row [util_memoize "package_table_columns_for_type \"$supertype\""] {
+      foreach row [util_memoize [list package_table_columns_for_type $supertype]] {
 	    lassign $row table_name column_name
 
 	    # Note that limit_to doesn't apply here as we always need
@@ -262,8 +262,8 @@ ad_proc -public package_recreate_hierarchy {
     # performance. -mbryzek
 
     foreach object_type $object_type_list {
-	if { [util_memoize_cached_p "package_table_columns_for_type \"$object_type\""] } {
-	    util_memoize_flush "package_table_columns_for_type \"$object_type\""
+      if { [util_memoize_cached_p [list package_table_columns_for_type $object_type]] } {
+	util_memoize_flush [list package_table_columns_for_type $object_type]
 	}
     }
     
@@ -439,8 +439,8 @@ ad_proc -public package_object_view_reset {
 	 start with t.object_type = :object_type 
        connect by prior t.supertype = t.object_type
     } {
-	if { [util_memoize_cached_p "package_object_view_helper -start_with $ancestor_type $object_type"] } {
-	    util_memoize_flush "package_object_view_helper -start_with $ancestor_type $object_type"
+      if { [util_memoize_cached_p [list package_object_view_helper -start_with $ancestor_type $object_type]] } {
+	util_memoize_flush [list package_object_view_helper -start_with $ancestor_type $object_type]
 	}
     }
 
@@ -451,8 +451,8 @@ ad_proc -public package_object_view_reset {
 	 start with t.object_type = :object_type 
        connect by prior t.object_type = t.supertype
     } {
-	if { [util_memoize_cached_p "package_object_view_helper -start_with $object_type $sub_type"] } {
-	    util_memoize_flush "package_object_view_helper -start_with $object_type $sub_type"
+      if { [util_memoize_cached_p [list package_object_view_helper -start_with $object_type $sub_type]] } {
+	util_memoize_flush [list package_object_view_helper -start_with $object_type $sub_type]
 	}
     }
 }
@@ -476,7 +476,7 @@ ad_proc -public package_object_view {
     if {$refresh_p == "t"} {
 	package_object_view_reset $object_type
     }
-    return [util_memoize "package_object_view_helper -start_with $start_with $object_type"]
+    return [util_memoize [list package_object_view_helper -start_with $start_with $object_type]]
 }
 
 
@@ -824,7 +824,7 @@ ad_proc -public package_instantiate_object {
     # This will prevent us from passing in any parameters that are
     # not defined
 
-    foreach arg [util_memoize "package_plsql_args \"$package_name\""] {
+    foreach arg [util_memoize [list package_plsql_args $package_name]] {
 	set real_params([string toupper $arg]) 1
     }
     
