@@ -388,7 +388,7 @@ ad_proc -private install_do_data_model_install {} {
 
     # Some APM procedures use util_memoize, so initialize the cache 
     # before starting APM install
-    apm_source "[acs_package_root_dir acs-tcl]/tcl/20-memoize-init.tcl"
+    apm_source [acs_package_root_dir acs-tcl]/tcl/20-memoize-init.tcl
     apm_source [acs_package_root_dir acs-tcl]/tcl/database-init.tcl
 
     apm_version_enable -callback apm_ns_write_callback [apm_package_install -callback apm_ns_write_callback "[file join $::acs::rootdir packages acs-kernel acs-kernel.info]"]
