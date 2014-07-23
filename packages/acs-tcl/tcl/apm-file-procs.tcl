@@ -496,7 +496,7 @@ ad_proc -private apm_transfer_file {
     # Therefore, we check first for the NaviServer built in ns_http, then 
     # if the optional xotcl-core components are available...
     #
-    if {[info commands ::ns_http] ne "" && [ns_info patchlevel] > "4.99.5"} {
+    if {[info commands ::ns_http] ne "" && [apm_version_names_compare [ns_info patchlevel] "4.99.5"] == 1} {
         # 
         # ... use ns_http when we have a version with the "-file" flag ...
         #
