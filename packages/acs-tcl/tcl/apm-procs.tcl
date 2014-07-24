@@ -142,7 +142,7 @@ ad_proc apm_callback_and_log { { -severity Notice } callback message } {
 
 } {
     $callback $message
-    ns_log $severity [ad_html_to_text -- $message]
+    ns_log $severity [ad_html_to_text -maxlen 140 -- $message]
 }   
 
 ad_proc apm_one_package_descendents {
