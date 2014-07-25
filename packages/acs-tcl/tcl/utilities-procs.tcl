@@ -3260,6 +3260,19 @@ ad_proc -public with_finally {
 	}
 	1 {
 	    # Error
+	    if {[lindex $s_errorCode 0 0] eq "CHILDSTATUS"} {
+		#
+		# GN: In case the errorCode starts with CHILDSTATUS it
+		# means that an error was raised from an "exec". In
+		# that case the raw error just tells that the "child
+		# process exited abnormally", whithout given any
+		# details. Therefore we add the exit code to the
+		# messages.
+		#
+		set extra "called child process exited with exit-code [lindex $s_errorCode 0 end]"
+		append string " ($extra)"
+		set s_errorInfo $extra\n$s_errorInfo 
+	    }
 	    return -code error -errorinfo $s_errorInfo -errorcode $s_errorCode $string
 	}
 	2 {
