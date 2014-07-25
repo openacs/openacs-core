@@ -3269,7 +3269,7 @@ ad_proc -public with_finally {
 		# details. Therefore we add the exit code to the
 		# messages.
 		#
-		set extra "called child process exited with exit-code [lindex $s_errorCode 0 end]"
+		set extra "child process (pid [lindex $s_errorCode 0 1]) exited with exit-code [lindex $s_errorCode 0 end]"
 		append string " ($extra)"
 		set s_errorInfo $extra\n$s_errorInfo 
 	    }
