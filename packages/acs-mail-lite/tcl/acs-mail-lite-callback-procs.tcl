@@ -21,6 +21,8 @@ ad_proc -public -callback acs_mail_lite::send {
     {-cc_addr}
     {-bcc_addr}
     {-file_ids}
+    {-filesystem_files}
+    {-delete_filesystem_files_p}
     {-object_id}
 } {
 

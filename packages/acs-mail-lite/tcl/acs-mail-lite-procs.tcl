@@ -223,6 +223,8 @@ namespace eval acs_mail_lite {
         {-package_id ""}
         -no_callback:boolean 
         {-file_ids ""}
+        {-filesystem_files ""}
+        -delete_filesystem_files:boolean
         {-extraheaders ""}
         -use_sender:boolean
         {-object_id ""}
@@ -248,7 +250,11 @@ namespace eval acs_mail_lite {
 
         @param package_id Package ID of the sending package
 
-        @param file_ids List of file ids (items or revisions) to be send as attachments. This will only work with files stored in the file system.
+        @param file_ids List of file ids (items or revisions) to be send as attachments. This will only work with files stored in the file-storage.
+        
+        @param filesystem_files List of regular files on the filesystem to be send as attachments.
+        
+        @param delete_filesystem_files_p Decides if we want files specified by the 'file' parameter to be deleted once sent.
 
         @param mime_type MIME Type of the mail to send out. Can be "text/plain", "text/html".
 
@@ -278,6 +284,8 @@ namespace eval acs_mail_lite {
                 -body $body \
                 -package_id $package_id \
                 -file_ids $file_ids \
+                -filesystem_files $filesystem_files \
+                -delete_filesystem_files_p $delete_filesystem_files_p \
                 -mime_type $mime_type \
                 -no_callback_p $no_callback_p \
                 -extraheaders $extraheaders \
@@ -322,6 +330,8 @@ namespace eval acs_mail_lite {
                             -body $body \
                             -package_id $package_id \
                             -file_ids $file_ids \
+                            -filesystem_files $filesystem_files \
+                            -delete_filesystem_files_p $delete_filesystem_files_p \
                             -mime_type $mime_type \
                             -no_callback_p $no_callback_p \
                             -extraheaders $extraheaders \
@@ -355,6 +365,8 @@ namespace eval acs_mail_lite {
         -body:required
         {-package_id ""}
         {-file_ids ""}
+        {-filesystem_files ""}
+        {-delete_filesystem_files_p "0"}
         {-mime_type "text/plain"}
         {-no_callback_p "0"}
         {-extraheaders ""}
@@ -384,7 +396,11 @@ namespace eval acs_mail_lite {
 
         @param package_id Package ID of the sending package
 
-        @param file_ids List of file ids (items or revisions) to be send as attachments. This will only work with files stored in the file system.
+        @param file_ids List of file ids (items or revisions) to be send as attachments. This will only work with files stored in the file-storage.
+        
+        @param filesystem_files List of regular files on the filesystem to be send as attachments.
+        
+        @param delete_filesystem_files_p Decides if we want files specified by the 'file' parameter to be deleted once sent.
 
         @param mime_type MIME Type of the mail to send out. Can be "text/plain", "text/html".
 
@@ -425,7 +441,10 @@ namespace eval acs_mail_lite {
         # Build the message body
         set tokens [acs_mail_lite::utils::build_body -mime_type $mime_type -- $body]
 
+        
         # Add attachments if any
+        
+        # ...from file-storage
         if {$file_ids ne ""} {
             set item_ids [list]
             
@@ -447,8 +466,44 @@ namespace eval acs_mail_lite {
                                     -canonical $mime_type \
                                     -file "[cr_fs_path]$filename"]
             }
-            set tokens [mime::initialize -canonical "multipart/mixed" -parts $tokens]
         }
+        
+        # ...from filesystem
+        if {$filesystem_files ne ""} {
+	    # get root of folders into which files are allowed to be sent
+	    set filesystem_attachments_root [parameter::get -parameter "FilesystemAttachmentsRoot" \
+                              -package_id $mail_package_id -default ""]
+	    if {$filesystem_attachments_root eq ""} {
+		# on a unix system this should be '/tmp'
+		set filesystem_attachments_root [file dirname [ns_tmpnam]]
+	    }
+            foreach f $filesystem_files {
+		# make the file name absolute
+		if {[file pathtype $f] ne "absolute"} {
+		    set f [file join [pwd] $f]
+		}
+		if {![file exists $f]} {
+		    ns_log Error "acs-mail-lite::send: Could not send mail: file '$f' does not exist"
+		    return
+		}
+		if {[string first $filesystem_attachments_root $f] != 0} {
+		    ns_log Error "acs-mail-lite::send: Could not send mail: file '$f' is outside the allowed root folder for attachments '$filesystem_attachments_root'"
+		    return
+		}
+		set name [file tail $f]
+		set mime_type [cr_filename_to_mime_type $name]
+                lappend tokens [mime::initialize \
+                                    -param [list name $name] \
+                                    -header [list "Content-Disposition" "attachment; filename=\"$name\""] \
+                                    -header [list Content-Description $name] \
+                                    -canonical $mime_type \
+                                    -file $f]
+            }
+        }
+        
+        if {$file_ids ne "" || $filesystem_files ne ""} {
+	    set tokens [mime::initialize -canonical "multipart/mixed" -parts $tokens]
+	}
 
         ### Add the headers
 
@@ -564,8 +619,8 @@ namespace eval acs_mail_lite {
             # Close all mime tokens
             mime::finalize $tokens -subordinates all
             
-        }       
-
+        }
+                
         if { !$no_callback_p } {
             callback acs_mail_lite::send \
                 -package_id $package_id \
@@ -578,8 +633,19 @@ namespace eval acs_mail_lite {
                 -cc_addr $cc_addr \
                 -bcc_addr $bcc_addr \
                 -file_ids $file_ids \
+                -filesystem_files $filesystem_files \
+                -delete_filesystem_files_p $delete_filesystem_files_p \
                 -object_id $object_id
         }
+        
+	# Attachment files can now be deleted, if so required.
+	# I leave this as the last thing to do, because callbacks
+	# could need to look at files for their own purposes.
+        if {[string is true $delete_filesystem_files_p]} {
+	    foreach f $filesystem_files {
+		file delete $f
+	    }
+	}
     }
 
     #---------------------------------------
