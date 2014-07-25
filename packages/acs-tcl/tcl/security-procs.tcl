@@ -419,6 +419,12 @@ ad_proc -private sec_setup_session {
         # the empty string
         set prev_user_id [ad_conn user_id]
 
+	#
+	# Change the session id for all user_id changes, also on
+	# changes from user_id 0, since owasp recommends to renew the
+	# session_id after any privilege level change
+	#
+        #if { $prev_user_id != 0 && $prev_user_id != $new_user_id } 
         if { $prev_user_id != 0 && $prev_user_id != $new_user_id } {
             # this is a change in identity so we should create
             # a new session so session-level data is not shared
