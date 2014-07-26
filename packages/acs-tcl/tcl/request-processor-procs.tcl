@@ -1086,8 +1086,12 @@ ad_proc -public rp_serve_concrete_file {file} {
     set extension [file extension $file]
     set startclicks [clock clicks -milliseconds]
 
+    ns_log notice "check for extension handler for <$file>"
+
     if { [nsv_exists rp_extension_handlers $extension] } {
         set handler [nsv_get rp_extension_handlers $extension]
+
+        ns_log notice "check for extension handler for <$file> ==> <$handler>"
 
         catch {ds_init}
 
@@ -1469,6 +1473,7 @@ ad_proc -private rp_handle_adp_request {} {
     doc_init
 
     set adp [ns_adp_parse -file [ad_conn file]]
+    ns_log notice "ns_adp_parse -file [ad_conn file] -> [string length $adp]"
 
     if { [doc_exists_p] } {
         doc_set_property body $adp
