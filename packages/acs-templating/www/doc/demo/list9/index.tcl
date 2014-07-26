@@ -8,7 +8,7 @@ ad_page_contract {
 } -query {
   orderby:optional
   color_filter_value:optional
-  page:optional
+  page:integer,optional
 } -properties {
   notes:multirow
   context:onevalue
