@@ -4,8 +4,8 @@ ad_page_contract {
   @creation-date 13.07.2004
   @cvs-id $Id$
 } {
-  {fs_package_id:integer,optional}
-  {folder_id:integer,optional}
+  {fs_package_id:naturalnum,optional}
+  {folder_id:naturalnum,optional}
 }
  
 set selector_type "image"

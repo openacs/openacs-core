@@ -7,7 +7,7 @@ ad_page_contract {
     @creation-date 13.07.2004
     @cvs-id $Id$
 } {
-    {parent_id:integer,optional}
+    {parent_id:naturalnum,optional}
     {package_id ""}
     {selector_type "image"}
 }

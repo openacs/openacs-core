@@ -4,7 +4,7 @@ ad_page_contract {
     @author Steffen Tiedemann Christensen (steffen@christensen.name)
     @creation-date 2003-09-26
 } {
-    node_id:integer,optional
+    node_id:naturalnum,optional
 }
 
 auth::require_login

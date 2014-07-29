@@ -10,7 +10,7 @@ ad_page_contract {
     
     @cvs-id $Id$
 } {
-    version_id:integer,optional
+    version_id:naturalnum,optional
     source_p:integer,optional,trim
     path
 } -properties {

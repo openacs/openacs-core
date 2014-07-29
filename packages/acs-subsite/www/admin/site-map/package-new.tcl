@@ -17,7 +17,7 @@ ad_page_contract {
     {instance_name ""}
     package_key:notnull
     {expand:integer,multiple ""}
-    root_id:integer,optional
+    root_id:naturalnum,optional
 }
 
 if {$package_key eq "/new"} {

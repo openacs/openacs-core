@@ -4,7 +4,7 @@ ad_page_contract {
     @author Peter Marklund
     @creation-date 2003-09-08
 } {
-    authority_id:integer,optional
+    authority_id:naturalnum,optional
     {ad_form_mode display}
 }
 

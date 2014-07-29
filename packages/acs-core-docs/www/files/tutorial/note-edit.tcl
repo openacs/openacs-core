@@ -6,7 +6,7 @@ ad_page_contract {
  
     @param item_id If present, assume we are editing that note.  Otherwise, we are creating a new note.
 } {
-    item_id:integer,optional
+    item_id:naturalnum,optional
 }
 
 ad_form -name note -form {

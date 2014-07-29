@@ -9,7 +9,7 @@ ad_page_contract {
   node_id:integer,notnull
   package_id:integer,notnull
   {expand:integer,multiple {}}
-  root_id:integer,optional
+  root_id:naturalnum,optional
 }
 
 permission::require_permission -object_id $package_id -privilege read

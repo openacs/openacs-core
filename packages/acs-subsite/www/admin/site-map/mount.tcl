@@ -8,7 +8,7 @@ ad_page_contract {
 } {
   node_id:integer,notnull
   {expand:integer,multiple {}}
-  root_id:integer,optional
+  root_id:naturalnum,optional
 }
 
 set user_id [ad_conn user_id]

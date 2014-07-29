@@ -5,7 +5,7 @@ ad_page_contract {
   @cvs-id $Id$
 } {	
   {fs_package_id:integer,notnull,optional}
-  {folder_id:integer,optional}
+  {folder_id:naturalnum,optional}
   {orderby:optional}
   {selector_type "image"}
   {file_types "*"}
