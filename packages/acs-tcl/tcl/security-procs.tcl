@@ -514,7 +514,7 @@ ad_proc -private sec_generate_session_id_cookie {} {
             set max_age inf
 	}
     }
-    ad_set_signed_cookie -discard $discard -replace t -max_age $max_age -domain $domain \
+    ad_set_signed_cookie -secure t -discard $discard -replace t -max_age $max_age -domain $domain \
 	    "ad_session_id" "$session_id,$user_id,$login_level,[ns_time]"
 }
 
