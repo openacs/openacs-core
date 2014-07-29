@@ -79,7 +79,7 @@ ad_proc -public template::data::validate::naturalnum {
 
   @return True (1) if valid, false (0) if not
 } {
-  upvar 2 $message_ref message $value_ref value
+    upvar 2 $message_ref message $value_ref value
 
     set result [regexp {^(0*)(([1-9][0-9]*|0))$} $value match zeros value]
 

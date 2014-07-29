@@ -5,7 +5,7 @@ ad_page_contract {
 } {
     proc
     source_p:optional,integer,trim
-    {version_id:optional,integer ""}
+    {version_id:naturalnum,optional ""}
 } -properties {
     title:onevalue
     context:onevalue

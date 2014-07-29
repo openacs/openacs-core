@@ -1,6 +1,6 @@
 #
 # Expects: 
-#  user_id:optional
+#  user_id:naturalnum,optional
 #  return_url:optional
 #  edit_p:optional
 #  message:optional

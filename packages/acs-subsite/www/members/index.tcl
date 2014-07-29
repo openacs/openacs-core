@@ -7,7 +7,7 @@ ad_page_contract {
 } {
     {member_state "approved"}
     {orderby "name,asc"}
-    page:integer,optional
+    page:naturalnum,optional
 } -validate {
     member_state_valid -requires { member_state } {
         if { [lsearch [group::possible_member_states] $member_state] == -1 } {

@@ -2,7 +2,7 @@ ad_page_contract {
 } {
     object_id:integer,notnull
     return_url
-    page:integer,optional
+    page:naturalnum,optional
 }
 
 # check they have read permission on this file
