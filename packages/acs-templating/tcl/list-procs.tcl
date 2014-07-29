@@ -140,7 +140,7 @@ ad_proc -public template::list::create {
                            A form will be submitted to the url, containing a list of the key values of the checked rows.
                            For example, if 'key' is 'message_id', and rows with message_id 2 4 and 9 are chcked, the 
                            page will get variables message_id=2&message_id=4&message_id=9. The receiving page
-                           should declare message_id:integer,multiple in its ad_page_contract. Note that the 'message_id' 
+                           should declare message_id:naturalnum,multiple in its ad_page_contract. Note that the 'message_id' 
                            local variable will the be a Tcl list.
 
     @param  bulk_action_method should a bulk action be a "get" or "post"

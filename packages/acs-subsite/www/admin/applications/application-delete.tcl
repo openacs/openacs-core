@@ -5,7 +5,7 @@ ad_page_contract {
     @creation-date 2003-05-28
     @cvs-id $Id$
 } {
-    node_id:integer,multiple
+    node_id:naturalnum,multiple
     {confirm_p 0}
 }
 

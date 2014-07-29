@@ -5,7 +5,7 @@ ad_page_contract {
     @creation-date 2003-06-02
     @cvs-id $Id$
 } {
-    user_id:integer,multiple
+    user_id:naturalnum,multiple
 }
 
 set group_id [application_group::group_id_from_package_id]
