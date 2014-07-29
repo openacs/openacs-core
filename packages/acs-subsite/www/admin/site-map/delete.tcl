@@ -8,7 +8,7 @@ ad_page_contract {
 
 } {
     expand:integer,multiple
-    node_id:integer,notnull
+    node_id:naturalnum,notnull
     {root_id:integer ""}
 }
 

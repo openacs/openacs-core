@@ -7,7 +7,7 @@ ad_page_contract {
     @cvs-id $Id$
 
 } {
-    node_id:integer,notnull
+    node_id:naturalnum,notnull
     {expand:integer,multiple ""}
     root_id:naturalnum,optional
 }

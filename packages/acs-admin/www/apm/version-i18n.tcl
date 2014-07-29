@@ -6,7 +6,7 @@ ad_page_contract {
     @creation-date 8 October 2002
     @cvs-id $Id$  
 } {
-    version_id:integer,notnull    
+    version_id:naturalnum,notnull    
     {pre_select_files_p "1"}
     {show_status_p "0"}
     {only_text_p "0"}

@@ -9,7 +9,7 @@ ad_page_contract {
     @cvs-id $Id$
 
 } {
-    attribute_id:integer,notnull
+    attribute_id:naturalnum,notnull
     attribute_enum_values:array,trim,optional
     { operation:trim "Finish adding values" }
     { return_url "" }

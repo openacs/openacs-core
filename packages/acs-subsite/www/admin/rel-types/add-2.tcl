@@ -9,7 +9,7 @@ ad_page_contract {
     @cvs-id $Id$
 
 } {
-    constraint_id:integer,notnull
+    constraint_id:naturalnum,notnull
     rel_type:notnull
     object_type:notnull
     { return_url "" }

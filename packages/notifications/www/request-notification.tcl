@@ -6,7 +6,7 @@ ad_page_contract {
     @create-date 2005-03-28
 
 } {
-  object_id:integer,notnull
+  object_id:naturalnum,notnull
   type_id
   {group_id ""}
 }

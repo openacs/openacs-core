@@ -6,7 +6,7 @@ ad_page_contract {
   @creation-date 2000-10-23
   @cvs-id $Id$
 } {
-  template_demo_note_id:integer,notnull,multiple
+  template_demo_note_id:naturalnum,notnull,multiple
 }
 
 # Here, we delete all the notes being fed to us, which is all 

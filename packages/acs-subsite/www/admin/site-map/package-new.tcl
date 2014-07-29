@@ -11,7 +11,7 @@ ad_page_contract {
 
 } {
     {new_package_id:integer ""}
-    node_id:integer,notnull
+    node_id:naturalnum,notnull
     {new_node_p f}
     {node_name:trim ""}
     {instance_name ""}

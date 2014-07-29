@@ -5,7 +5,7 @@ ad_page_contract {
     @creation-date 23 October 2002
     @cvs-id $Id$  
 } {
-    version_id:integer,notnull    
+    version_id:naturalnum,notnull    
     {return_url {[export_vars -base "version-i18n-index" { version_id }]}}
 }
 

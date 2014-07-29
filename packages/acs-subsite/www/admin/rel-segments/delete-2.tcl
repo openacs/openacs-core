@@ -9,7 +9,7 @@ ad_page_contract {
     @cvs-id $Id$
 
 } {
-    segment_id:integer,notnull
+    segment_id:naturalnum,notnull
     { operation "" }
     { return_url "" }
 } -validate {

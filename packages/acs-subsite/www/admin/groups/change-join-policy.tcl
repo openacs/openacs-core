@@ -8,7 +8,7 @@ ad_page_contract {
     @creation-date 2001-02-23
     @cvs-id $Id$
 } {
-    group_id:integer,notnull
+    group_id:naturalnum,notnull
     {return_url ""}
 } -properties {
     context:onevalue

@@ -9,7 +9,7 @@ ad_page_contract {
     @creation-date 2001-02-06
     @cvs-id $Id$
 } {
-    party_id:integer,notnull
+    party_id:naturalnum,notnull
 } -properties {
     context:onevalue
     party_id:onevalue

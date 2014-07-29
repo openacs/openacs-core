@@ -10,7 +10,7 @@ ad_page_contract {
     @cvs-id $Id$
 
 } {
-    group_id:integer,notnull
+    group_id:naturalnum,notnull
     segment_name:notnull
     rel_type:notnull
     { return_url "" }

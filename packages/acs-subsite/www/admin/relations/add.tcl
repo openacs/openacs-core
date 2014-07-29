@@ -9,7 +9,7 @@ ad_page_contract {
     @creation-date 2000-12-11
     @cvs-id $Id$
 } {
-    group_id:integer,notnull
+    group_id:naturalnum,notnull
     rel_type:notnull
     {party_id:integer ""}
     { exact_p "f" }

@@ -6,8 +6,8 @@ ad_page_contract {
     @creation-date 2002-05-24
     @cvs-id $Id$
 } {
-    type_id:integer,notnull
-    object_id:integer,notnull
+    type_id:naturalnum,notnull
+    object_id:naturalnum,notnull
     {pretty_name ""}
     return_url
 }

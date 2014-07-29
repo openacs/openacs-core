@@ -2,7 +2,7 @@ ad_page_contract {
     @author Neophytos Demetriou <k2pts@yahoo.com>
     @creation-date 2001-09-02
 } {
-    note_id:integer,notnull
+    note_id:naturalnum,notnull
 } -properties {
     context:onevalue
     title:onevalue

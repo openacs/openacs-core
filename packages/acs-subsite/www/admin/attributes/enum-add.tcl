@@ -9,7 +9,7 @@ ad_page_contract {
     @cvs-id $Id$
 
 } {
-    attribute_id:integer,notnull
+    attribute_id:naturalnum,notnull
     { return_url "" }
 } -properties {
     context:onevalue

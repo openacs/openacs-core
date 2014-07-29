@@ -7,7 +7,7 @@ ad_page_contract {
     @creation-date 2000-12-16
     @cvs-id $Id$
 } {
-    rel_id:integer,notnull
+    rel_id:naturalnum,notnull
     { operation "" }
     { return_url "" }
 } -validate {

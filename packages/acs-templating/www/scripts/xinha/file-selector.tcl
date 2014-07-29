@@ -4,7 +4,7 @@ ad_page_contract {
   @creation-date 13.10.2005
   @cvs-id $Id$
 } {	
-  {fs_package_id:integer,notnull,optional}
+  {fs_package_id:naturalnum,notnull,optional}
   {folder_id:naturalnum,optional}
   {orderby:optional}
   {selector_type "image"}

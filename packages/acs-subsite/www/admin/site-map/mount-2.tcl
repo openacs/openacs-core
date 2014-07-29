@@ -6,8 +6,8 @@ ad_page_contract {
   @creation-date 2000-09-12
   @cvs-id $Id$
 } {
-  node_id:integer,notnull
-  package_id:integer,notnull
+  node_id:naturalnum,notnull
+  package_id:naturalnum,notnull
   {expand:integer,multiple {}}
   root_id:naturalnum,optional
 }

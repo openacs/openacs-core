@@ -9,7 +9,7 @@ ad_page_contract {
     @cvs-id $Id$
 
 } {
-    rel_id:integer,notnull
+    rel_id:naturalnum,notnull
     member_state:notnull
     {return_url ""}
 } -validate {
