@@ -669,7 +669,7 @@ attribute_array(heres)='  something for   you to = "consider" '</pre>
             # If there is an equal sign, we're expecting the next token to be a value
             if { [lindex $equal_sign_idx 1] - [lindex $equal_sign_idx 0] < 0 } {
                 # No equal sign, no value
-                lappend attributes $attr_name
+		lappend attributes [list $attr_name]
                 if { [info exists attribute_array] } {
                     set attribute_array_var($attr_name) {}
                 }
@@ -780,6 +780,7 @@ ad_proc ad_html_security_check { html } {
                 set attr_count 0
                 foreach attribute $attr_list {
                     incr attr_count
+
 		    lassign $attribute attr_name attr_value
                     
                     if { ![info exists allowed_attribute($attr_name)] 
