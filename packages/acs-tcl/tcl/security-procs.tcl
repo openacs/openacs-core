@@ -32,11 +32,10 @@ namespace eval security {}
 ad_proc -private sec_random_token {} { 
     Generates a random token. 
 } {
-    # tcl_sec_seed is used to maintain a small subset of the previously
+    # ::tcl_sec_seed is used to maintain a small subset of the previously
     # generated random token to use as the seed for the next
     # token. this makes finding a pattern in sec_random_token harder
     # to guess when it is called multiple times in the same thread.
-    global tcl_sec_seed
 
     if { [ad_conn -connected_p] } {
         set request [ad_conn request]
@@ -46,12 +45,12 @@ ad_proc -private sec_random_token {} {
 	set start_clicks "cvs.openacs.org"
     }
     
-    if { ![info exists tcl_sec_seed] } {
-	set tcl_sec_seed "listentowmbr89.1"
+    if { ![info exists ::tcl_sec_seed] } {
+	set ::tcl_sec_seed "listentowmbr89.1"
     }
 
-    set random_base [ns_sha1 "[ns_time][ns_rand]$start_clicks$request$tcl_sec_seed"]
-    set tcl_sec_seed [string range $random_base 0 10]
+    set random_base [ns_sha1 "[ns_time][ns_rand]$start_clicks$request$::tcl_sec_seed"]
+    set ::tcl_sec_seed [string range $random_base 0 10]
     
     return [ns_sha1 [string range $random_base 11 39]]
 }
@@ -529,19 +528,16 @@ ad_proc -private sec_allocate_session {} {
     Returns a new session id
 
 } {
-    
-    global tcl_max_value
-    global tcl_current_sequence_id
 
-    if { ![info exists tcl_max_value] || ![info exists tcl_current_sequence_id] || $tcl_current_sequence_id > $tcl_max_value } {
+    if { ![info exists ::tcl_max_value] || ![info exists ::tcl_current_sequence_id] || $::tcl_current_sequence_id > $::tcl_max_value } {
 	# Thread just spawned or we exceeded preallocated count.
-	set tcl_current_sequence_id [db_nextval sec_id_seq]
+	set ::tcl_current_sequence_id [db_nextval sec_id_seq]
 	db_release_unused_handles
-	set tcl_max_value [expr {$tcl_current_sequence_id + 100}]
+	set ::tcl_max_value [expr {$::tcl_current_sequence_id + 100}]
     } 
 
-    set session_id $tcl_current_sequence_id
-    incr tcl_current_sequence_id
+    set session_id $::tcl_current_sequence_id
+    incr ::tcl_current_sequence_id
 
     return $session_id
 }
