@@ -283,7 +283,7 @@ ad_proc -public ad_user_login {
     ad_set_signed_cookie \
         -max_age $max_age \
         -domain $domain \
-        -secure $secure_p \
+        -secure f \
         ad_user_login \
         "$user_id,[ns_time],[sec_get_user_auth_token $user_id],$forever_p"
 
@@ -514,7 +514,7 @@ ad_proc -private sec_generate_session_id_cookie {} {
         }
     }
     ad_set_signed_cookie \
-        -secure [security::secure_conn_p] \
+        -secure f \
         -discard $discard -replace t -max_age $max_age -domain $domain \
         ad_session_id "$session_id,$user_id,$login_level,[ns_time]"
 }
