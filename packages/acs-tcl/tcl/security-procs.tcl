@@ -260,11 +260,11 @@ ad_proc -public ad_user_login {
     }
 
     set auth_level "ok"
-
+    set secure_p [security::secure_conn_p]
     set domain [parameter::get -parameter CookieDomain -package_id [ad_acs_kernel_id]]
 
     # If you're logged in over a secure connection, you're secure
-    if { [security::secure_conn_p] } {
+    if { $secure_p } {
         ad_set_signed_cookie \
             -max_age $max_age \
             -secure t \
@@ -284,7 +284,7 @@ ad_proc -public ad_user_login {
     ad_set_signed_cookie \
         -max_age $max_age \
 	-domain $domain \
-        -secure f \
+        -secure $secure_p \
         ad_user_login \
         "$user_id,[ns_time],[sec_get_user_auth_token $user_id],$forever_p"
 
