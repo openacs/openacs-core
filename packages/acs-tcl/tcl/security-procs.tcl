@@ -39,14 +39,14 @@ ad_proc -private sec_random_token {} {
 
     if { [ad_conn -connected_p] } {
         set request [ad_conn request]
-	set start_clicks [ad_conn start_clicks]
+        set start_clicks [ad_conn start_clicks]
     } else {
-	set request "yoursponsoredadvertisementhere"
-	set start_clicks "cvs.openacs.org"
+        set request "yoursponsoredadvertisementhere"
+        set start_clicks "cvs.openacs.org"
     }
     
     if { ![info exists ::tcl_sec_seed] } {
-	set ::tcl_sec_seed "listentowmbr89.1"
+        set ::tcl_sec_seed "listentowmbr89.1"
     }
 
     set random_base [ns_sha1 "[ns_time][ns_rand]$start_clicks$request$::tcl_sec_seed"]
@@ -82,35 +82,35 @@ ad_proc -private sec_handler {} {
     #ns_log notice "OACS cookies: $msg"
 
     if { [catch { 
-	set cookie_list [ad_get_signed_cookie "ad_session_id"]
+        set cookie_list [ad_get_signed_cookie "ad_session_id"]
     } errmsg ] } {
-	# Cookie is invalid because either:
-	# -> it was never set
-	# -> it failed the cryptographic check
-	# -> it expired.
+        # Cookie is invalid because either:
+        # -> it was never set
+        # -> it failed the cryptographic check
+        # -> it expired.
 
         # Now check for login cookie
         ns_log Debug "OACS: Not a valid session cookie, looking for login cookie '$errmsg'"
         ad_user_logout
         sec_login_handler
     } else {
-	# The session cookie already exists and is valid.
-	set cookie_data [split [lindex $cookie_list 0] {,}]
-	set session_last_renew_time [lindex $cookie_data 3]
-	if {![string is integer -strict $session_last_renew_time]} {
-	    # This only happens if the session cookie is old style
-	    # previous to openacs 5.7 and does not have session review time
-	    # embedded.
-	    # Assume cookie expired and force login handler
-	    set session_last_renew_time 0
-	}
+        # The session cookie already exists and is valid.
+        set cookie_data [split [lindex $cookie_list 0] {,}]
+        set session_last_renew_time [lindex $cookie_data 3]
+        if {![string is integer -strict $session_last_renew_time]} {
+            # This only happens if the session cookie is old style
+            # previous to openacs 5.7 and does not have session review time
+            # embedded.
+            # Assume cookie expired and force login handler
+            set session_last_renew_time 0
+        }
 
-	set session_expr [expr {$session_last_renew_time + [sec_session_timeout]}]
-	if {$session_expr < [ns_time]} {
-	    sec_login_handler
-	}
-	
-	lassign $cookie_data session_id untrusted_user_id login_level
+        set session_expr [expr {$session_last_renew_time + [sec_session_timeout]}]
+        if {$session_expr < [ns_time]} {
+            sec_login_handler
+        }
+        
+        lassign $cookie_data session_id untrusted_user_id login_level
         set user_id 0
         set account_status closed
         
@@ -140,7 +140,7 @@ ad_proc -private sec_handler {} {
                 set sec_token [split [ad_get_signed_cookie "ad_secure_token"] {,}] 
                 if {[lindex $sec_token 0] eq $session_id 
                     && [lindex $sec_token 2] eq [ad_conn peeraddr]
-                  } {
+                } {
                     set auth_level secure
                 }
             }
@@ -148,26 +148,26 @@ ad_proc -private sec_handler {} {
         }
 
         # Setup ad_conn
-	ad_conn -set session_id $session_id
+        ad_conn -set session_id $session_id
         ad_conn -set untrusted_user_id $untrusted_user_id
         ad_conn -set user_id $user_id
         ad_conn -set auth_level $auth_level
         ad_conn -set account_status $account_status
 
-	# reissue session cookie so session doesn't expire if the
-	# renewal period has passed. this is a little tricky because
-	# the cookie doesn't know about sec_session_renew; it only
-	# knows about sec_session_timeout.
-	# [sec_session_renew] = SessionTimeout - SessionRenew (see security-init.tcl)
-	# $session_expr = PreviousSessionIssue + SessionTimeout
-	if { $session_expr - [sec_session_renew] < [ns_time] } {
+        # reissue session cookie so session doesn't expire if the
+        # renewal period has passed. this is a little tricky because
+        # the cookie doesn't know about sec_session_renew; it only
+        # knows about sec_session_timeout.
+        # [sec_session_renew] = SessionTimeout - SessionRenew (see security-init.tcl)
+        # $session_expr = PreviousSessionIssue + SessionTimeout
+        if { $session_expr - [sec_session_renew] < [ns_time] } {
             
             # LARS: We abandoned the use of sec_login_handler here. This lets people stay logged in forever
-	    # if only the keep requesting pages frequently enough, but the alternative was that 
-	    # the situation where LoginTimeout = 0 (infinte) and the user unchecks the "Remember me" checkbox
-	    # would cause users' sessions to expire as soon as the session needed to be renewed
-	    sec_generate_session_id_cookie
-	}
+            # if only the keep requesting pages frequently enough, but the alternative was that 
+            # the situation where LoginTimeout = 0 (infinte) and the user unchecks the "Remember me" checkbox
+            # would cause users' sessions to expire as soon as the session needed to be renewed
+            sec_generate_session_id_cookie
+        }
     }
 }
 
@@ -183,12 +183,12 @@ ad_proc -private sec_login_read_cookie {} {
     # If over HTTPS, we look for a secure cookie, otherwise we look for the normal one
     set login_list [list]
     if { [security::secure_conn_p] } {
-	catch {
-	    set login_list [split [ad_get_signed_cookie "ad_user_login_secure"] ","]
-	}
+        catch {
+            set login_list [split [ad_get_signed_cookie "ad_user_login_secure"] ","]
+        }
     } 
     if { $login_list eq "" } {
-	set login_list [split [ad_get_signed_cookie "ad_user_login"] ","]
+        set login_list [split [ad_get_signed_cookie "ad_user_login"] ","]
     }
     return $login_list
 }
@@ -224,7 +224,7 @@ ad_proc -private sec_login_handler {} {
                 }
             }
         }
-    
+        
         # Check account status
         set account_status [auth::get_local_account_status -user_id $untrusted_user_id]
 
@@ -254,7 +254,7 @@ ad_proc -public ad_user_login {
     if { $forever_p } {
         set max_age inf
     } else {
-	# ad_user_login cookie will live for as long as the maximum login time
+        # ad_user_login cookie will live for as long as the maximum login time
         set max_age [sec_login_timeout]
     }
 
@@ -267,7 +267,7 @@ ad_proc -public ad_user_login {
         ad_set_signed_cookie \
             -max_age $max_age \
             -secure t \
-	    -domain $domain \
+            -domain $domain \
             ad_user_login_secure \
             "$user_id,[ns_time],[sec_get_user_auth_token $user_id],[ns_time],$forever_p"
 
@@ -282,7 +282,7 @@ ad_proc -public ad_user_login {
     ns_log Debug "ad_user_login: Setting new ad_user_login cookie with max_age $max_age"
     ad_set_signed_cookie \
         -max_age $max_age \
-	-domain $domain \
+        -domain $domain \
         -secure $secure_p \
         ad_user_login \
         "$user_id,[ns_time],[sec_get_user_auth_token $user_id],$forever_p"
@@ -347,13 +347,13 @@ ad_proc -public ad_check_password {
     set found_p [db_0or1row password_select {select password, salt from users where user_id = :user_id}]
     db_release_unused_handles
     if { !$found_p } {
-    	return 0
+        return 0
     }
 
     set salt [string trim $salt]
 
     if {$password ne [ns_sha1 "$password_from_form$salt"]  } {
-	return 0
+        return 0
     }
 
     return 1
@@ -395,18 +395,18 @@ ad_proc -private sec_setup_session {
     # figure out the session id, if we don't already have it
     if { $session_id eq ""} {
 
-	ns_log debug "OACS= empty session_id"
+        ns_log debug "OACS= empty session_id"
 
-	set session_id [sec_allocate_session]
+        set session_id [sec_allocate_session]
         # if we have a user on an newly allocated session, update
         # users table
 
-	ns_log debug "OACS= newly allocated session $session_id"
+        ns_log debug "OACS= newly allocated session $session_id"
 
         if { $new_user_id != 0 } {
-	    ns_log debug "OACS= about to update user session info, user_id NONZERO"
+            ns_log debug "OACS= about to update user session info, user_id NONZERO"
             sec_update_user_session_info $new_user_id
-	    ns_log debug "OACS= done updating user session info, user_id NONZERO"
+            ns_log debug "OACS= done updating user session info, user_id NONZERO"
         }
     } else {
         # $session_id is an active verified session
@@ -418,11 +418,11 @@ ad_proc -private sec_setup_session {
         # the empty string
         set prev_user_id [ad_conn user_id]
 
-	#
-	# Change the session id for all user_id changes, also on
-	# changes from user_id 0, since owasp recommends to renew the
-	# session_id after any privilege level change
-	#
+        #
+        # Change the session id for all user_id changes, also on
+        # changes from user_id 0, since owasp recommends to renew the
+        # session_id after any privilege level change
+        #
         #if { $prev_user_id != 0 && $prev_user_id != $new_user_id } 
         if { $prev_user_id != 0 && $prev_user_id != $new_user_id } {
             # this is a change in identity so we should create
@@ -460,7 +460,7 @@ ad_proc -private sec_setup_session {
     if { $auth_level eq "secure" && [security::secure_conn_p] && $new_user_id != 0 } {
         # this is a secure session, so the browser needs
         # a cookie marking it as such
-	sec_generate_secure_token_cookie
+        sec_generate_secure_token_cookie
     }
 }
 
@@ -474,8 +474,8 @@ ad_proc -private sec_update_user_session_info {
     db_dml update_last_visit {
         update users
         set second_to_last_visit = last_visit,
-            last_visit = sysdate,
-            n_sessions = n_sessions + 1
+        last_visit = sysdate,
+        n_sessions = n_sessions + 1
         where user_id = :user_id
     }
     db_release_unused_handles
@@ -508,13 +508,15 @@ ad_proc -private sec_generate_session_id_cookie {} {
     set max_age [sec_session_timeout]
     catch { 
         set login_list [sec_login_read_cookie]
-      	if {[lindex $login_list end] == 1} {
-	    set discard f
+        if {[lindex $login_list end] == 1} {
+            set discard f
             set max_age inf
-	}
+        }
     }
-    ad_set_signed_cookie -secure [security::secure_conn_p] -discard $discard -replace t -max_age $max_age -domain $domain \
-	    ad_session_id "$session_id,$user_id,$login_level,[ns_time]"
+    ad_set_signed_cookie \
+        -secure [security::secure_conn_p] \
+        -discard $discard -replace t -max_age $max_age -domain $domain \
+        ad_session_id "$session_id,$user_id,$login_level,[ns_time]"
 }
 
 ad_proc -private sec_generate_secure_token_cookie { } { 
@@ -529,11 +531,12 @@ ad_proc -private sec_allocate_session {} {
 
 } {
 
-    if { ![info exists ::tcl_max_value] || ![info exists ::tcl_current_sequence_id] || $::tcl_current_sequence_id > $::tcl_max_value } {
-	# Thread just spawned or we exceeded preallocated count.
-	set ::tcl_current_sequence_id [db_nextval sec_id_seq]
-	db_release_unused_handles
-	set ::tcl_max_value [expr {$::tcl_current_sequence_id + 100}]
+    if { ![info exists ::tcl_max_value] || ![info exists ::tcl_current_sequence_id] 
+         || $::tcl_current_sequence_id > $::tcl_max_value } {
+        # Thread just spawned or we exceeded preallocated count.
+        set ::tcl_current_sequence_id [db_nextval sec_id_seq]
+        db_release_unused_handles
+        set ::tcl_max_value [expr {$::tcl_current_sequence_id + 100}]
     } 
 
     set session_id $::tcl_current_sequence_id
@@ -550,10 +553,10 @@ ad_proc -private ad_login_page {} {
 
     set url [ad_conn url]
     if { [string match "*register/*" $url] || [string match "/index*" $url] || \
-            [string match "/index*" $url] || \
-            "/" eq $url || \
-            [string match "*password-update*" $url] } {
-	return 1
+             [string match "/index*" $url] || \
+             "/" eq $url || \
+             [string match "*password-update*" $url] } {
+        return 1
     }
 
     return 0
@@ -595,8 +598,8 @@ ad_proc -public ad_get_login_url {
     Returns a URL to the login page of the closest subsite, or the main site, if there's no current connection.
     
     @option return      If set, will export the current form, so when the registration is complete, 
-                        the user will be returned to the current location.  All variables in 
-                        ns_getform (both posts and gets) will be maintained.
+    the user will be returned to the current location.  All variables in 
+    ns_getform (both posts and gets) will be maintained.
 
     @author Lars Pind (lars@collaboraid.biz)
 } {
@@ -615,11 +618,11 @@ ad_proc -public ad_get_login_url {
     }
 
     set UseHostnameDomainforReg [parameter::get -package_id [apm_package_id_from_key acs-tcl] \
-				     -parameter UseHostnameDomainforReg -default 0]
+                                     -parameter UseHostnameDomainforReg -default 0]
     if { $UseHostnameDomainforReg } {
 
         # get config.tcl's hostname
-	set config_hostname [ns_config [ns_driversection] hostname]
+        set config_hostname [ns_config [ns_driversection] hostname]
 
         set current_location [util_current_location]
         # if current domain and hostdomain are different (and UseHostnameDomain), revise url
@@ -639,16 +642,16 @@ ad_proc -public ad_get_login_url {
             # revise url to use hostname's domain
             # if url points to a non / host_node, redirect to main hostname
             set host_node_map_hosts_list [db_list -cache_key security-locations-host-names \
-					      get_node_host_names "select host from host_node_map"]
+                                              get_node_host_names "select host from host_node_map"]
             if { [llength $host_node_map_hosts_list] > 0 } {
                 foreach hostname $host_node_map_hosts_list {
                     if { [string match -nocase "http://${hostname}*" $url_decoded] 
-			 || [string match -nocase "https://${hostname}*" $url_decoded] } {
+                         || [string match -nocase "https://${hostname}*" $url_decoded] } {
                         db_1row get_node_id_from_host_name {
-			    select node_id as host_node_id 
-			    from host_node_map 
-			    where host = :hostname
-			}
+                            select node_id as host_node_id 
+                            from host_node_map 
+                            where host = :hostname
+                        }
                         # site node already in url, so just switching domain.
                         if { ![regsub -- "${hostname}" $url_decoded "${config_hostname}" url_decoded] } {
                             ns_log Warning "ad_get_login_url(ref619): regsub was unable to modify url to hostname's domain. User may not appear to be logged-in after login. url_decoded: ${url_decoded} url: ${url}"
@@ -699,19 +702,19 @@ ad_proc -public ad_get_login_url {
                 # revise return_url to use hostname's domain
                 # if return_url points to a non / host_node, redirect to main hostname
                 set host_node_map_hosts_list [db_list -cache_key security-locations-host-names \
-						  get_node_host_names "select host from host_node_map"]
+                                                  get_node_host_names "select host from host_node_map"]
                 if { [llength $host_node_map_hosts_list] > 0 } {
                     foreach hostname $host_node_map_hosts_list {
                         if { [string match -nocase "http://${hostname}*" $return_url_decoded] \
-				 || [string match -nocase "https://${hostname}*" $return_url_decoded] } {
+                                 || [string match -nocase "https://${hostname}*" $return_url_decoded] } {
                             db_1row get_node_id_from_host_name {
-				select node_id as host_node_id 
-				from host_node_map 
-				where host = :hostname
-			    }
+                                select node_id as host_node_id 
+                                from host_node_map 
+                                where host = :hostname
+                            }
                             if { ![regsub -- ${hostname} $return_url_decoded \
-				       "${config_hostname}[site_node::get_url -node_id ${host_node_id} -notrailing]" \
-				       return_url_decoded] } {
+                                       "${config_hostname}[site_node::get_url -node_id ${host_node_id} -notrailing]" \
+                                       return_url_decoded] } {
                                 ns_log Warning "ad_get_login_url(ref672): regsub was unable to modify return_url to hostname's domain. User may not appear to be logged-in after login. return_url_decoded: ${return_url_decoded} return_url: ${return_url}"
                             } 
                         }
@@ -740,8 +743,8 @@ ad_proc -public ad_get_logout_url {
     Returns a URL to the logout page of the closest subsite, or the main site, if there's no current connection.
     
     @option return      If set, will export the current form, so when the logout is complete
-                        the user will be returned to the current location.  All variables in 
-                        ns_getform (both posts and gets) will be maintained.
+    the user will be returned to the current location.  All variables in 
+    ns_getform (both posts and gets) will be maintained.
 
     @author Lars Pind (lars@collaboraid.biz)
 } {
@@ -775,13 +778,19 @@ ad_proc -public ad_restrict_entire_server_to_registered_users {
     unregistered, except the site index page and stuff underneath
     [subsite]/register. Use permissions on the site node map to control access.
 } {
-    if {"/favicon.ico" ne [ad_conn url] && "/index.tcl" ne [ad_conn url] && "/" ne [ad_conn url] && ![string match "/global/*" [ad_conn url]] && ![string match "*/register/*" [ad_conn url]] && ![string match "*/SYSTEM/*" [ad_conn url]] && ![string match "*/user_please_login.tcl" [ad_conn url]]} {
-	# not one of the magic acceptable URLs
-	set user_id [ad_conn user_id]
-	if {$user_id == 0} {
-	    ad_returnredirect "[subsite::get_element -element url]register/?return_url=[ns_urlencode [ad_conn url]?[ad_conn query]]"
-	    return filter_return
-	}
+    if {"/favicon.ico" ne [ad_conn url] 
+        && "/index.tcl" ne [ad_conn url] 
+        && "/" ne [ad_conn url] 
+        && ![string match "/global/*" [ad_conn url]] 
+        && ![string match "*/register/*" [ad_conn url]] 
+        && ![string match "*/SYSTEM/*" [ad_conn url]] 
+        && ![string match "*/user_please_login.tcl" [ad_conn url]]} {
+        # not one of the magic acceptable URLs
+        set user_id [ad_conn user_id]
+        if {$user_id == 0} {
+            ad_returnredirect "[subsite::get_element -element url]register/?return_url=[ns_urlencode [ad_conn url]?[ad_conn query]]"
+            return filter_return
+        }
     }
     return filter_ok
 }
@@ -830,18 +839,18 @@ ad_proc -public ad_sign {
             # pick a random token_id
             set token_id [sec_get_random_cached_token_id]
         }
-	set secret_token [sec_get_token $token_id]
+        set secret_token [sec_get_token $token_id]
     } else {
-	set secret_token $secret
+        set secret_token $secret
     }
     
 
     ns_log Debug "Security: Getting token_id $token_id, value $secret_token"
 
     if { $max_age eq "" } {
-	set expire_time 0
+        set expire_time 0
     } else {
-	set expire_time [expr {$max_age + [ns_time]}]
+        set expire_time [expr {$max_age + [ns_time]}]
     }
 
     set hash [ns_sha1 "$value$token_id$expire_time$secret_token"]
@@ -880,9 +889,9 @@ ad_proc -public ad_verify_signature_with_expr {
 } {
     lassign $signature token_id expire_time hash
     if { [__ad_verify_signature $value $token_id $secret $expire_time $hash] } {
-	return $expire_time
+        return $expire_time
     } else {
-	return 0
+        return 0
     }
 
 }
@@ -900,14 +909,14 @@ ad_proc -private __ad_verify_signature {
 } {
 
     if { $secret eq "" } {
-	if { $token_id eq "" } {
-	    ns_log Debug "__ad_verify_signature: Neither secret, nor token_id supplied"
-	    return 0
-	}
-	set secret_token [sec_get_token $token_id]
+        if { $token_id eq "" } {
+            ns_log Debug "__ad_verify_signature: Neither secret, nor token_id supplied"
+            return 0
+        }
+        set secret_token [sec_get_token $token_id]
 
     } else {
-	set secret_token $secret
+        set secret_token $secret
     }
 
     ns_log Debug "__ad_verify_signature: Getting token_id $token_id, value $secret_token ; "
@@ -921,31 +930,31 @@ ad_proc -private __ad_verify_signature {
     set expiration_ok_p 0
     
     if {$computed_hash eq $hash} {
-	ns_log Debug "__ad_verify_signature: Hash matches - Hash check OK"
-	set hash_ok_p 1
+        ns_log Debug "__ad_verify_signature: Hash matches - Hash check OK"
+        set hash_ok_p 1
     } else {
-	# check to see if IE is lame (and buggy!) and is expanding \n to \r\n
-	# See: http://rhea.redhat.com/bboard-archive/webdb/000bfF.html
-	set value [string map [list \r ""] $value]
-	set org_computed_hash $computed_hash
-	set computed_hash [ns_sha1 "$value$token_id$expire_time$secret_token"]
+        # check to see if IE is lame (and buggy!) and is expanding \n to \r\n
+        # See: http://rhea.redhat.com/bboard-archive/webdb/000bfF.html
+        set value [string map [list \r ""] $value]
+        set org_computed_hash $computed_hash
+        set computed_hash [ns_sha1 "$value$token_id$expire_time$secret_token"]
 
-	if {$computed_hash eq $hash} {
-	    ns_log Debug "__ad_verify_signature: Hash matches after correcting for IE bug - Hash check OK"
-	    set hash_ok_p 1
-	} else {
-	    ns_log Debug "__ad_verify_signature: Hash ($hash) doesn't match what we expected ($org_computed_hash) - Hash check FAILED"
-	}
+        if {$computed_hash eq $hash} {
+            ns_log Debug "__ad_verify_signature: Hash matches after correcting for IE bug - Hash check OK"
+            set hash_ok_p 1
+        } else {
+            ns_log Debug "__ad_verify_signature: Hash ($hash) doesn't match what we expected ($org_computed_hash) - Hash check FAILED"
+        }
     }
     
     if { $expire_time == 0 } {
-	ns_log Debug "__ad_verify_signature: No expiration time - Expiration OK"
-	set expiration_ok_p 1
+        ns_log Debug "__ad_verify_signature: No expiration time - Expiration OK"
+        set expiration_ok_p 1
     } elseif { $expire_time > [ns_time] } {
-	ns_log Debug "__ad_verify_signature: Expiration time ($expire_time) greater than current time ([ns_time]) - Expiration check OK"
-	set expiration_ok_p 1
+        ns_log Debug "__ad_verify_signature: Expiration time ($expire_time) greater than current time ([ns_time]) - Expiration check OK"
+        set expiration_ok_p 1
     } else {
-	ns_log Debug "__ad_verify_signature: Expiration time ($expire_time) less than or equal to current time ([ns_time]) - Expiration check FAILED"
+        ns_log Debug "__ad_verify_signature: Expiration time ($expire_time) less than or equal to current time ([ns_time]) - Expiration check FAILED"
     }
 
     # Return validation result
@@ -968,15 +977,15 @@ ad_proc -public ad_get_signed_cookie {
     set cookie_value [ns_urldecode [ad_get_cookie -include_set_cookies $include_set_cookies $name]]
 
     if { $cookie_value eq "" } {
-	error "Cookie does not exist."
+        error "Cookie does not exist."
     }
 
     lassign $cookie_value value signature
     ns_log Debug "ad_get_signed_cookie: Got signed cookie $name with value $value, signature $signature."
 
     if { [ad_verify_signature $value $signature] } {
-	ns_log Debug "ad_get_signed_cookie: Verification of cookie $name OK"
-	return $value
+        ns_log Debug "ad_get_signed_cookie: Verification of cookie $name OK"
+        return $value
     }
 
     ns_log Debug "ad_get_signed_cookie: Verification of cookie $name FAILED"
@@ -1000,7 +1009,7 @@ ad_proc -public ad_get_signed_cookie_with_expr {
     set cookie_value [ns_urldecode [ad_get_cookie -include_set_cookies $include_set_cookies $name]]
 
     if { $cookie_value eq "" } {
-	error "Cookie does not exist."
+        error "Cookie does not exist."
     }
 
     lassign $cookie_value value signature
@@ -1009,7 +1018,7 @@ ad_proc -public ad_get_signed_cookie_with_expr {
     ns_log Debug "Security: Done calling get_cookie $cookie_value for $name; received $expr_time expiration, getting $value and $signature."
 
     if { $expr_time } {
-	return [list $value $expr_time]
+        return [list $value $expr_time]
     }
 
     error "Cookie could not be authenticated."
@@ -1102,8 +1111,8 @@ ad_proc -private sec_get_token {
     if { [info exists $key] } { return [set $key] } 
 
     if {[array size ::security::tcl_secret_tokens] == 0} {
-	populate_secret_tokens_thread_cache
-	if { [info exists $key] } { return [set $key] } 
+        populate_secret_tokens_thread_cache
+        if { [info exists $key] } { return [set $key] } 
     }
     
     #
@@ -1111,16 +1120,16 @@ ad_proc -private sec_get_token {
     # in case of a validation
     #
     set token [ns_cache eval secret_tokens $token_id {
-       set token [db_string get_token {select token from secret_tokens
-           where token_id = :token_id} -default 0]
-       db_release_unused_handles
-       
-       # Very important to throw the error here if $token == 0
-       
-       if { $token == 0 } {
-           error "Invalid token ID"
-       }
-       
+        set token [db_string get_token {select token from secret_tokens
+            where token_id = :token_id} -default 0]
+        db_release_unused_handles
+        
+        # Very important to throw the error here if $token == 0
+        
+        if { $token == 0 } {
+            error "Invalid token ID"
+        }
+        
         return $token
     }]
 
@@ -1145,17 +1154,17 @@ ad_proc -private sec_get_random_cached_token_id {} {
 }
 
 ad_proc -private populate_secret_tokens_thread_cache {} {
-     
+    
     Copy secret_tokens cache to per-thread variables
 
 } {
     set ids [ns_cache names secret_tokens]
     if {[llength $ids] == 0} {
-       populate_secret_tokens_cache
-       set ids [ns_cache names secret_tokens]
+        populate_secret_tokens_cache
+        set ids [ns_cache names secret_tokens]
     }
     foreach name $ids {
-       set ::security::tcl_secret_tokens($name) [ns_cache get secret_tokens $name]
+        set ::security::tcl_secret_tokens($name) [ns_cache get secret_tokens $name]
     }
 }
 
@@ -1170,15 +1179,15 @@ ad_proc -private populate_secret_tokens_cache {} {
     # this is called directly from security-init.tcl,
     # so it runs during the install before the data model has been loaded
     if { [db_table_exists secret_tokens] } {
-	db_foreach get_secret_tokens {
-	    select * from (
-	    select token_id, token
-	    from secret_tokens
-	    sample(15)
-	    ) where rownum < :num_tokens
-	} {
-	    ns_cache set secret_tokens $token_id $token
-	}
+        db_foreach get_secret_tokens {
+            select * from (
+                           select token_id, token
+                           from secret_tokens
+                           sample(15)
+                           ) where rownum < :num_tokens
+        } {
+            ns_cache set secret_tokens $token_id $token
+        }
     }
     db_release_unused_handles
 }
@@ -1199,10 +1208,10 @@ ad_proc -private populate_secret_tokens_db {} {
     # the best thing to use here would be an array_dml, except
     # that an array_dml makes it hard to use sysdate and sequences.
     while { $counter < $num_tokens } {
-	set random_token [sec_random_token]
+        set random_token [sec_random_token]
 
-	db_dml insert_random_token {}
-	incr counter
+        db_dml insert_random_token {}
+        incr counter
     }
 
     db_release_unused_handles
@@ -1229,24 +1238,24 @@ ad_proc -private sec_lookup_property {
 
 } {
     if {
-	![db_0or1row property_lookup_sec {
-	    select property_value, secure_p
-	    from sec_session_properties
-	    where session_id = :id
-	    and module = :module
-	    and property_name = :name
-	}]
+        ![db_0or1row property_lookup_sec {
+            select property_value, secure_p
+            from sec_session_properties
+            where session_id = :id
+            and module = :module
+            and property_name = :name
+        }]
     } {
-	return ""
+        return ""
     }
 
     set new_last_hit [clock seconds]
 
     db_dml update_last_hit_dml {
         update sec_session_properties
-           set last_hit = :new_last_hit
-         where session_id = :id and
-               property_name = :name
+        set last_hit = :new_last_hit
+        where session_id = :id and
+        property_name = :name
     }
 
     return [list $property_value $secure_p]
@@ -1263,7 +1272,7 @@ ad_proc -public ad_get_client_property {
     Looks up a property for a session. If $cache is true, will use the
     cached value if available. If $cache_only is true, will never
     incur a database hit (i.e., will only return a value if
-    cached). If the property is secure, we must be on a validated session
+                          cached). If the property is secure, we must be on a validated session
     over SSL.
 
     @param session_id controls which session is used
@@ -1284,21 +1293,21 @@ ad_proc -public ad_get_client_property {
     set cmd [list sec_lookup_property $id $module $name]
 
     if { $cache_only == "t" && ![util_memoize_cached_p $cmd] } {
-	return ""
+        return ""
     }
 
     if { $cache != "t" } {
-	util_memoize_flush $cmd
+        util_memoize_flush $cmd
     }
 
     set property [util_memoize $cmd [sec_session_timeout]]
     if { $property eq "" } {
-	return $default
+        return $default
     }
     lassign $property value secure_p
     
     if { $secure_p != "f" && ![security::secure_conn_p] } {
-	return ""
+        return ""
     }
 
     return $value
@@ -1317,7 +1326,7 @@ ad_proc -public ad_set_client_property {
     the new value will be written through to the database. If
     $deferred is true, the database write will be delayed until
     connection close (although calls to ad_get_client_property will
-    still return the correct value immediately). If $secure is true,
+                      still return the correct value immediately). If $secure is true,
     the property will not be retrievable except via a validated,
     secure (HTTPS) connection.
 
@@ -1327,7 +1336,7 @@ ad_proc -public ad_set_client_property {
 } {
 
     if { $secure != "f" && ![security::secure_conn_p] } {
-	error "Unable to set secure property in insecure or invalid session"
+        error "Unable to set secure property in insecure or invalid session"
     }
 
     if { $session_id eq "" } {
@@ -1337,10 +1346,10 @@ ad_proc -public ad_set_client_property {
     if { $persistent == "t" } {
         # Write to database - either defer, or write immediately. First delete the old
         # value if any; then insert the new one.
-	
-	set last_hit [ns_time]
+        
+        set last_hit [ns_time]
 
-	db_transaction {
+        db_transaction {
 
             # DRB: Older versions of this code did a delete/insert pair in an attempt
             # to guard against duplicate insertions.  This didn't work if there was
@@ -1363,8 +1372,8 @@ ad_proc -public ad_set_client_property {
                 db_dml prop_update_dml_clob "" -clobs [list $value]
             } else {
                 db_dml prop_update_dml ""
-	    }
-	}
+            }
+        }
     }
 
     # Remember the new value, seeding the memoize cache with the proper value.
@@ -1403,12 +1412,12 @@ ad_proc -public security::RestrictLoginToSSLP {} {
     @author Peter Marklund
 } {
     if { ![security::https_available_p] } {
-	return 0
+        return 0
     }
     return [parameter::get \
-		-boolean \
-		-parameter RestrictLoginToSSLP \
-		-package_id [ad_acs_kernel_id]]
+                -boolean \
+                -parameter RestrictLoginToSSLP \
+                -package_id [ad_acs_kernel_id]]
 }
 
 ad_proc -public security::require_secure_conn {} {
@@ -1476,19 +1485,19 @@ ad_proc -private security::get_https_port {} {
     set sdriver [security::driver]
 
     if {$sdriver eq ""} {
-	return ""
+        return ""
     }
 
     set secure_port [ns_config -int [ns_driversection -driver $sdriver] port]
     if {$secure_port eq "" && $driver eq "nsopenssl"} {
-	# checking nsopenssl 2.0 which has different names for the secure port etc, 
-	# and is not supported with this version of OpenACS
-	set secure_port [ns_config -int [ns_driversection -driver nsopenssl] ServerPort]
-	if {$secure_port eq ""} {
-	    # nsopenssl 3 has variable locations for the secure
-	    # port, openacs standardized at:
-	    set secure_port [ns_config -int "ns/server/[ns_info server]/module/nsopenssl/ssldriver/users" port]
-	}
+        # checking nsopenssl 2.0 which has different names for the secure port etc, 
+        # and is not supported with this version of OpenACS
+        set secure_port [ns_config -int [ns_driversection -driver nsopenssl] ServerPort]
+        if {$secure_port eq ""} {
+            # nsopenssl 3 has variable locations for the secure
+            # port, openacs standardized at:
+            set secure_port [ns_config -int "ns/server/[ns_info server]/module/nsopenssl/ssldriver/users" port]
+        }
     }
     
     return $secure_port
@@ -1560,11 +1569,11 @@ ad_proc -private security::get_secure_location {} {
         set secure_location $current_location
     } else {
         # Current location is insecure - get location from config file
-	set secure_location [ad_conn location]
-	# Prefix with https
+        set secure_location [ad_conn location]
+        # Prefix with https
         regsub {^(?:http://)?} $secure_location {https://} secure_location
 
-	# remove port number if using nonstandard port
+        # remove port number if using nonstandard port
         regexp {^(.*:.*):([0-9]+)} $secure_location match secure_location port
 
         # Add port number if non-standard
@@ -1608,17 +1617,17 @@ if {[ns_info name] ne "NaviServer"} {
     # defined drivers.
     #
     ad_proc -public ns_driversection {
-	{-driver "nssock"}
-	{-server ""}
+        {-driver "nssock"}
+        {-server ""}
     } {
-	Return the section name in the config file containing configuration information about the 
-	network connection.
-	@param driver (e.g. nssock)
-	@param server symobolic server name 
-	@return name of section of the drive in the config file
+        Return the section name in the config file containing configuration information about the 
+        network connection.
+        @param driver (e.g. nssock)
+        @param server symobolic server name 
+        @return name of section of the drive in the config file
     } {
-	if {$server eq ""} {set server [ns_info server]}
-	return "ns/server/$server/module/$driver"
+        if {$server eq ""} {set server [ns_info server]}
+        return "ns/server/$server/module/$driver"
     }
 }
 
@@ -1627,17 +1636,17 @@ ad_proc -public ad_server_modules {} {
     @author Gustaf Neumann
 } {
     if {[info exists ::acs::server_modules]} {
-	return $::acs::server_modules
+        return $::acs::server_modules
     }
     set ::acs::server_modules ""
     set nssets [ns_configsection ns/server/[ns_info server]/modules]
     lappend nssets {*}[ns_configsection ns/modules]
     foreach nsset $nssets {
         foreach {module file} [ns_set array $nsset] {
-	    if {$file ne ""} {
-		lappend ::acs::server_modules $module
-	    }
-	}
+            if {$file ne ""} {
+                lappend ::acs::server_modules $module
+            }
+        }
     }
     return $::acs::server_modules
 }
@@ -1647,14 +1656,14 @@ ad_proc -public security::driver {} {
     @author Gustaf Neumann
 } {
     if {[info exists ::acs::sdriver]} {
-	return $::acs::sdriver
+        return $::acs::sdriver
     }
     set ::acs::sdriver ""
     set server_modules [ad_server_modules]
     foreach driver {nsssl nsopenssl nsssle} {
-	if {$driver ni $server_modules} continue
-	set ::acs::sdriver $driver
-	break
+        if {$driver ni $server_modules} continue
+        set ::acs::sdriver $driver
+        break
     }
     return $::acs::sdriver
 }
@@ -1715,13 +1724,13 @@ ad_proc -public security::locations {} {
         set secure_port [ns_config -int "ns/server/[ns_info server]/module/$sdriver/ssldriver/users" port 443]
     } elseif { $sdriver ne "" } {
         # get secure port for all other cases of nsssl, nsssle etc
-	set driver_section [ns_driversection -driver $sdriver]
+        set driver_section [ns_driversection -driver $sdriver]
         set secure_port [ns_config -int $driver_section port]
-	
+        
         # checking nsopenssl 2.0 which has different names for 
-	# the secure port etc, and deprecated with this version of OpenACS
+        # the secure port etc, and deprecated with this version of OpenACS
         if {$secure_port eq "" || $secure_port eq "443" } {
-	    ns_log Notice "Using 'ServerPort' in $driver_section is deprecated"
+            ns_log Notice "Using 'ServerPort' in $driver_section is deprecated"
             set secure_port [ns_config -int $driver_section ServerPort 443]
         }
     } else {
@@ -1742,15 +1751,15 @@ ad_proc -public security::locations {} {
     }
     # consider if we are behind a proxy and don't want to publish the proxy's backend port
     set suppress_http_port [parameter::get -parameter SuppressHttpPort \
-				-package_id [apm_package_id_from_key acs-tcl] \
-				-default 0]
+                                -package_id [apm_package_id_from_key acs-tcl] \
+                                -default 0]
     if { [info exists alt_insecure_location] && $suppress_http_port } {
         lappend locations $alt_insecure_location
     }
 
     # add locations from host_node_map 
     set host_node_map_hosts_list [db_list -cache_key security-locations-host-names \
-				      get_node_host_names "select host from host_node_map"]
+                                      get_node_host_names "select host from host_node_map"]
     # fastest place for handling this special case:
     if { $config_hostname ne $host_name } {
         ns_log Notice "security::locations adding $config_hostname since utl_current_location different than config.tcl."
@@ -1771,3 +1780,11 @@ ad_proc -public security::locations {} {
     }
     return $locations
 }
+
+#
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:
+
