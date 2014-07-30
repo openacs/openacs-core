@@ -524,14 +524,6 @@ ad_proc -private sec_generate_secure_token_cookie { } {
     ad_set_signed_cookie -secure t "ad_secure_token" "[ad_conn session_id],[ns_time],[ad_conn peeraddr]"
 }
 
-ad_proc -public -deprecated -warn ad_secure_conn_p {} { 
-    Use security::secure_conn_p instead.
-    
-    @see security::secure_conn_p
-} {
-    return [security::secure_conn_p]
-}
-
 ad_proc -private sec_allocate_session {} {
 
     Returns a new session id
@@ -1385,78 +1377,6 @@ ad_proc -public ad_set_client_property {
 
 
 
-
-
-
-
-
-#####
-#
-# Deprecated procs
-#
-#####
-
-ad_proc -public -deprecated ad_get_user_id {} {
-    Gets the user ID. 0 indicates the user is not logged in.
-
-    Deprecated since user_id now provided via ad_conn user_id
-
-    @see ad_conn
-} {
-    return [ad_conn user_id]
-}
-
-ad_proc -public -deprecated -warn ad_verify_and_get_user_id { 
-    {-secure f}
-} {
-    Returns the current user's ID. 0 indicates user is not logged in
-
-    Deprecated since user_id now provided via ad_conn user_id
-
-    @see ad_conn
-} {
-    return [ad_conn user_id]
-}
-
-# handling privacy
-
-ad_proc -public -deprecated ad_privacy_threshold {} {
-    Pages that are consider whether to display a user's name or email
-    address should test to make sure that a user's priv_ from the
-    database is less than or equal to what ad_privacy_threshold returns.
-    
-    Now deprecated.
-
-    @see  ad_conn
-} {
-    set session_user_id [ad_conn user_id]
-    if {$session_user_id == 0} {
-	# viewer of this page isn't logged in, only show stuff 
-	# that is extremely unprivate
-	set privacy_threshold 0
-    } else {
-	set privacy_threshold 5
-    }
-    return $privacy_threshold
-}
-
-ad_proc -deprecated ad_maybe_redirect_for_registration {} {
-
-    Checks to see if a user is logged in.  If not, redirects to
-    [subsite]/register/index to require the user to register.
-    When registration is complete, the user will return to the current
-    location. All variables in ns_getform (both posts and gets) will
-    be maintained. Note that this will return out of its caller so that
-    the caller need not explicitly call "return". Returns the user id
-    if login was succesful.
-
-    @see auth::require_login
-} {
-    auth::require_login
-}
-
-
-
 #####
 #
 # security namespace public procs
@@ -1474,6 +1394,8 @@ ad_proc -public security::https_available_p {} {
 ad_proc -public security::secure_conn_p {} { 
     Returns true if the connection [ad_conn] is secure (HTTPS), or false otherwise. 
 } {
+    # interestingly, "string match" is faster than "string range" + "eq"
+
     return [string match "https:*" [ns_conn location]]
 }
 
