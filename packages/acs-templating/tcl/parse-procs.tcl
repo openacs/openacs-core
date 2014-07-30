@@ -622,6 +622,15 @@ ad_proc -public template::adp_variable_regexp_literal {} {
     return {(^|[^\\])@([a-zA-Z0-9_:]+);literal@}
 }
 
+# Naviserver requires for disambiguation of flags and values at the
+# end of the argument processing a terminating "--" (like for other
+# commands). AOLserver does not allow the "--".
+if {[ns_info name] eq "NaviServer"} {
+    ad_proc template::adp_parse_string { chunk } {Parse string as ADP} {ns_adp_parse -string -- $chunk}
+} else {
+    ad_proc template::adp_parse_string { chunk } {Parse string as ADP} {ns_adp_parse -string $chunk}
+}
+
 ad_proc -private template::adp_compile_chunk { chunk } {
     Parses a single chunk of a template.  A chunk is either the entire
     template or the portion of a template contained within a balanced
@@ -632,15 +641,13 @@ ad_proc -private template::adp_compile_chunk { chunk } {
     ATS tags.
 } {
     # parse the template chunk inside the tag
-    set remaining [ns_adp_parse -string $chunk]
+    set remaining [adp_parse_string $chunk]
 
     # add everything from either the beginning of the chunk or the
     # last balanced tag in the chunk to the list
 
     if { ! [string is space $remaining] } {
-
         adp_quote_chunk remaining remaining_quoted
-
         adp_append_string $remaining_quoted
     }
 }

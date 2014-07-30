@@ -206,7 +206,7 @@ proc doc_tag_ad_document { contents params } {
 	doc_set_property [ns_set key $params $i] [ns_set value $params $i]
     }
     doc_set_property _adp 1
-    return [ns_adp_parse -string $contents]
+    return [template::adp_parse_string $contents]
 }
 
 proc doc_tag_ad_property { contents params } {
