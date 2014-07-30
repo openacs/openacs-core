@@ -514,8 +514,8 @@ ad_proc -private sec_generate_session_id_cookie {} {
             set max_age inf
 	}
     }
-    ad_set_signed_cookie -secure t -discard $discard -replace t -max_age $max_age -domain $domain \
-	    "ad_session_id" "$session_id,$user_id,$login_level,[ns_time]"
+    ad_set_signed_cookie -secure [security::secure_conn_p] -discard $discard -replace t -max_age $max_age -domain $domain \
+	    ad_session_id "$session_id,$user_id,$login_level,[ns_time]"
 }
 
 ad_proc -private sec_generate_secure_token_cookie { } { 
@@ -1464,7 +1464,7 @@ ad_proc -deprecated ad_maybe_redirect_for_registration {} {
 #####
 
 ad_proc -public security::https_available_p {} {
-    Return 1 if AOLserver is configured to support HTTPS and 0 otherwise.
+    Return 1 if server is configured to support HTTPS and 0 otherwise.
 
     @author Peter Marklund
 } {
