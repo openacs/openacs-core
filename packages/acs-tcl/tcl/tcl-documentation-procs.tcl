@@ -1532,9 +1532,9 @@ ad_page_contract_filter naturalnum { name value } {
     @creation-date 25 July 2000
 } {
 
-    # First simple a quick check avoiding the slow regexp
-    if {[string is integer -strict $value]} {
-	return [expr {$value >= 0}]
+    # First a simple quick check to avoid the slow regexp
+    if {[string is integer -strict $value] && $value >= 0} {
+	return 1
     }
 
     # Check with leading zeros, but no "-" allowed, so it must be positive
@@ -1543,8 +1543,9 @@ ad_page_contract_filter naturalnum { name value } {
 	return 1
       }
     }
-  ad_complain "[_ acs-tcl.lt_name_is_not_a_natural]"
-  return 0
+
+    ad_complain "[_ acs-tcl.lt_name_is_not_a_natural]"
+    return 0
 }
 
 ad_page_contract_filter range { name value range } {
