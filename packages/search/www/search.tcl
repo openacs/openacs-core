@@ -176,7 +176,7 @@ for { set __i 0 } { $__i < $high - $low + 1 } { incr __i } {
             array set datasource [lindex [callback -impl $object_type search::datasource -object_id $object_id] 0]
             set url_one [lindex [callback -impl $object_type search::url -object_id $object_id] 0]
         } else {
-            ns_log warning "SEARCH search/www/search.tcl callback::datasource::$object_type not found"
+            #ns_log warning "SEARCH search/www/search.tcl callback::datasource::$object_type not found"
             array set datasource [acs_sc::invoke -contract FtsContentProvider -operation datasource \
 				      -call_args [list $object_id] -impl $object_type]
             set url_one [acs_sc::invoke -contract FtsContentProvider -operation url \
@@ -200,7 +200,7 @@ for { set __i 0 } { $__i < $high - $low + 1 } { incr __i } {
 }
 
 set search_the_web [parameter::get -package_id $package_id -parameter SearchTheWeb]
-if {[llength $search_the_web]} {
+if {$search_the_web ne ""} {
     set stw ""
     foreach {url site} $search_the_web {
 	append stw "<a href=\"[format $url $urlencoded_query]\">$site</a> "
