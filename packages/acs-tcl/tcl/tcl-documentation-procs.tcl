@@ -26,9 +26,8 @@ ad_proc api_page_documentation_mode_p { } {
     @see doc_set_page_documentation_mode
 
 } {
-    global ad_conn
-    if { [info exists ad_conn(api_page_documentation_mode_p)] } {
-	return $ad_conn(api_page_documentation_mode_p)
+    if { [info exists ::ad_conn(api_page_documentation_mode_p)] } {
+	return $::ad_conn(api_page_documentation_mode_p)
     }
     return 0
 }
@@ -42,8 +41,7 @@ ad_proc doc_set_page_documentation_mode { page_documentation_mode_p } {
         or false to clear it.
     @see api_page_documentation_mode_p
 } {
-    global ad_conn
-    set ad_conn(api_page_documentation_mode_p) $page_documentation_mode_p
+    set ::ad_conn(api_page_documentation_mode_p) $page_documentation_mode_p
 }
 
 #################### 
@@ -66,9 +64,8 @@ ad_proc -private ad_complaints_init {} {
     @author Lars Pind (lars@pinds.com)
     @creation-date 24 July 2000
 } {
-    global ad_page_contract_complaints ad_page_contract_errorkeys
-    set ad_page_contract_complaints [list]
-    set ad_page_contract_errorkeys [list]
+    set ::ad_page_contract_complaints [list]
+    set ::ad_page_contract_errorkeys [list]
 }
 
 ad_proc -public ad_complain { 
@@ -88,18 +85,16 @@ ad_proc -public ad_complain {
     @author Lars Pind (lars@pinds.com)
     @creation-date 24 July 2000
 } {
-    global ad_page_contract_complaints ad_page_contract_errorkeys ad_page_contract_error_string
-
     # if no key was specified, grab one from the internally kept stack
-    if { $key eq "" && [info exists ad_page_contract_errorkeys] } {
-	set key [lindex $ad_page_contract_errorkeys 0]
+    if { $key eq "" && [info exists ::ad_page_contract_errorkeys] } {
+	set key [lindex $::ad_page_contract_errorkeys 0]
     }
-    if { [info exists ad_page_contract_error_string($key)] } {
-	lappend ad_page_contract_complaints $ad_page_contract_error_string($key)
+    if { [info exists ::ad_page_contract_error_string($key)] } {
+	lappend ::ad_page_contract_complaints $::ad_page_contract_error_string($key)
     } elseif { $message eq "" } {
-	lappend ad_page_contract_complaints "[_ acs-tcl.lt_Validation_key_compla]"
+	lappend ::ad_page_contract_complaints "[_ acs-tcl.lt_Validation_key_compla]"
     } else {
-	lappend ad_page_contract_complaints $message
+	lappend ::ad_page_contract_complaints $message
     }
 }
 
@@ -111,10 +106,9 @@ ad_proc -private ad_complaints_with_key { errorkey code } {
     @author Lars Pind
     @creation-date 25 July 2000
 } {
-    global ad_page_contract_errorkeys
-    set ad_page_contract_errorkeys [concat $errorkey $ad_page_contract_errorkeys]
+    set ::ad_page_contract_errorkeys [concat $errorkey $::ad_page_contract_errorkeys]
     uplevel 1 $code
-    set ad_page_contract_errorkeys [lrange $ad_page_contract_errorkeys 1 end]
+    set ::ad_page_contract_errorkeys [lrange $::ad_page_contract_errorkeys 1 end]
 }
 
 ad_proc -private ad_complaints_count {} {
@@ -123,8 +117,7 @@ ad_proc -private ad_complaints_count {} {
     @author Lars Pind
     @creation-date 25 July 2000
 } {
-    global ad_page_contract_complaints
-    return [llength $ad_page_contract_complaints]
+    return [llength $::ad_page_contract_complaints]
 }
 
 ad_proc -private ad_complaints_get_list {} {
@@ -133,8 +126,7 @@ ad_proc -private ad_complaints_get_list {} {
     @author Lars Pind (lars@pinds.com)
     @creation-date 24 July 2000
 } {
-    global ad_page_contract_complaints
-    return $ad_page_contract_complaints
+    return $::ad_page_contract_complaints
 }
 
 ad_proc -private ad_complaints_parse_error_strings { errorstrings } {
@@ -144,8 +136,7 @@ ad_proc -private ad_complaints_parse_error_strings { errorstrings } {
     @author Lars Pind (lars@pinds.com)
     @creation-date 25 July 2000
 } {
-    global ad_page_contract_error_string
-    array set ad_page_contract_error_string [list]
+    array set ::ad_page_contract_error_string [list]
 
     foreach { errorkeys text } $errorstrings {
 	foreach errorkey $errorkeys {
@@ -156,13 +147,13 @@ ad_proc -private ad_complaints_parse_error_strings { errorstrings } {
 	    set name [lindex $errorkeyv 0]
 	    set flags [lindex $errorkeyv 1]
 	    if { $flags eq "" } {
-		set ad_page_contract_error_string($name) $text
+		set ::ad_page_contract_error_string($name) $text
 	    } else {
 		foreach flag [split $flags ","] {
 		    if { $flag ne "" } {
-			set ad_page_contract_error_string($name:$flag) $text
+			set ::ad_page_contract_error_string($name:$flag) $text
 		    } else {
-			set ad_page_contract_error_string($name) $text
+			set ::ad_page_contract_error_string($name) $text
 		    }
 		}
 	    }
@@ -190,8 +181,7 @@ ad_proc -private ad_page_contract_set_validation_passed { key } {
     @author Lars Pind (lars@pinds.com)
     @creation-date 24 July 2000
 } {
-    global ad_page_contract_validations_passed
-    set ad_page_contract_validations_passed($key) 1
+    set ::ad_page_contract_validations_passed($key) 1
 }
 
 ad_proc -private ad_page_contract_get_validation_passed_p { key } { 
@@ -202,8 +192,7 @@ ad_proc -private ad_page_contract_get_validation_passed_p { key } {
     @author Lars Pind (lars@pinds.com)
     @creation-date 24 July 2000
 } {
-    global ad_page_contract_validations_passed
-    return [info exists ad_page_contract_validations_passed($key)]
+    return [info exists ::ad_page_contract_validations_passed($key)]
 }
 
 ####################
@@ -922,21 +911,20 @@ ad_proc -public ad_page_contract {
                 ad_page_contract_set_validation_passed $formal_name:notnull
             }
         } else {
-            global ad_page_contract_errorkeys ad_page_contract_validations_passed
-            set ad_page_contract_validations_passed($formal_name:notnull) 1
+            set ::ad_page_contract_validations_passed($formal_name:notnull) 1
             
             foreach filter $apc_filters($formal_name) {
-                set ad_page_contract_errorkeys [concat $formal_name:$filter $ad_page_contract_errorkeys]
+                set ::ad_page_contract_errorkeys [concat $formal_name:$filter $::ad_page_contract_errorkeys]
                 if { ![info exists apc_filter_parameters($formal_name:$filter)] } {
                     set filter_ok_p [[ad_page_contract_filter_proc $filter] $formal_name actual_value]
                 } else {
                     set filter_ok_p [[ad_page_contract_filter_proc $filter] $formal_name actual_value \
                                          $apc_filter_parameters($formal_name:$filter)]
                 }
-                set ad_page_contract_errorkeys [lrange $ad_page_contract_errorkeys 1 end]
+                set ::ad_page_contract_errorkeys [lrange $::ad_page_contract_errorkeys 1 end]
                 
                 if { $filter_ok_p } {
-                    set ad_page_contract_validations_passed($formal_name:$filter) 1
+                    set ::ad_page_contract_validations_passed($formal_name:$filter) 1
                 } else {
                     break
                 }
@@ -1075,7 +1063,6 @@ ad_proc -public ad_page_contract {
     ####################
 
     set done_p 0
-    global ad_page_contract_validations_passed ad_page_contract_errorkeys
     while { !$done_p } {
 
 	set done_p 1
@@ -1085,7 +1072,7 @@ ad_proc -public ad_page_contract {
 
 	    set dependencies_met_p 1
 	    foreach dependency $dependencies {
-		if { ![info exists ad_page_contract_validations_passed($dependency)] } {
+		if { ![info exists ::ad_page_contract_validations_passed($dependency)] } {
 		    set dependencies_met_p 0
 		    break
 		}
@@ -1099,9 +1086,9 @@ ad_proc -public ad_page_contract {
 		set no_complaints_before [ad_complaints_count]
 
 		# Execute the validation block with an environment with a default error key set
-		set ad_page_contract_errorkeys [concat $validation_name $ad_page_contract_errorkeys]
+		set ::ad_page_contract_errorkeys [concat $validation_name $::ad_page_contract_errorkeys]
 		set validation_ok_p [ad_page_contract_eval uplevel 1 $code]
-		set ad_page_contract_errorkeys [lrange $ad_page_contract_errorkeys 1 end]
+		set ::ad_page_contract_errorkeys [lrange $::ad_page_contract_errorkeys 1 end]
 
 		if { $validation_ok_p eq "" 
 		     || ($validation_ok_p ne "1" && $validation_ok_p ne "0" )
@@ -1110,7 +1097,7 @@ ad_proc -public ad_page_contract {
 		}
 		
 		if { $validation_ok_p } {
-		    set ad_page_contract_validations_passed($validation_name) 1
+		    set ::ad_page_contract_validations_passed($validation_name) 1
 		    # more stuff to process still
 		    set done_p 0
 		}
@@ -1126,8 +1113,7 @@ ad_proc -public ad_page_contract {
     ####################
 
     # Initialize the list of page variables for other scripts to use
-    global ad_page_contract_variables
-    set ad_page_contract_variables $apc_formals
+    set ::ad_page_contract_variables $apc_formals
 
     if { [ad_complaints_count] > 0 } {
 	if { [info exists return_errors] } {
@@ -1159,9 +1145,8 @@ ad_proc -public ad_page_contract_get_variables { } {
     ad_page_contract. If no variables have been specified, returns an
     empty list.  
 } {
-    global ad_page_contract_variables
-    if { [info exists ad_page_contract_variables] && $ad_page_contract_variables ne "" } {
-	return $ad_page_contract_variables
+    if { [info exists ::ad_page_contract_variables] && $::ad_page_contract_variables ne "" } {
+	return $::ad_page_contract_variables
     } 
     return [list]
 }
