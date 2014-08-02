@@ -1733,6 +1733,33 @@ ad_proc -public ad_urlencode { string } {
     return $ad_encoded_string
 }
 
+if {[ns_info name] eq "NaviServer"} {
+    ad_proc -public ad_urlencode_path { string } {
+	encode provided string with url-encoding for paths (instead of queries) as defined in RFC 3986
+    } { 
+	return [ns_urlencode -part path $string]
+    }
+    ad_proc -public ad_urldecode_path { string } {
+	decode provided string with url-encoding for paths (instead of queries) as defined in RFC 3986
+    } {
+	return [ns_urldecode -part path $string]
+    }
+} else {
+    ad_proc -public ad_urlencode_path { string } {
+	encode provided string with url-encodingfor paths; 
+	same as ad_urlencode, since aolserver does not support this difference
+    } {
+	return [ad_urlencode $string]
+    }
+    ad_proc -public ad_urldecode_path { string } {
+	decode provided string with url-encoding for paths; 
+	same as ns_urldecode, since aolserver does not support this difference
+    } {
+	return [ns_urldecode $string]
+    }
+}
+
+
 ad_proc -public ad_get_cookie {
     { -include_set_cookies t }
     name 
