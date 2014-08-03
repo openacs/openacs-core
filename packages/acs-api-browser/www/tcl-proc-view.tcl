@@ -13,16 +13,20 @@ ad_page_contract {
 #set tcl_api_host  "http://www.aolserver.com/"
 #set tcl_api_index "docs/devel/tcl/api/"
 
-# wiki on dev.aolserver; might be the place in the future
-#set tcl_api_host  "http://dev.aolserver.com/"
-#set tcl_api_index "wiki/Tcl_API"
-
 # wiki on panpotic
-set tcl_api_host  "http://panoptic.com/"
-set tcl_api_index "wiki/aolserver/Tcl_API"
+#set tcl_api_host  "http://panoptic.com/"
+#set tcl_api_index "wiki/aolserver/Tcl_API"
+#set tcl_api_root ${tcl_api_host}${tcl_api_index}
+#set tcl_api_index_page [util_memoize [list ns_httpget $tcl_api_root]]
 
+# naviserver at sourceforge
+set tcl_api_host  "http://naviserver.sourceforge.net/"
+set tcl_api_index "n/naviserver/files/"
 set tcl_api_root ${tcl_api_host}${tcl_api_index}
-set tcl_api_index_page [util_memoize [list ns_httpget $tcl_api_root]]
+set tcl_api_html_index $tcl_api_root/commandlist.html
+set tcl_api_index_result [util_memoize [list util::http::get -url $tcl_api_html_index]]
+set tcl_api_index_page [dict get $tcl_api_index_result page]
+
 set tcl_proc [lindex $tcl_proc 0]
 
 for { set i [expr { [string length $tcl_proc] - 1 }] } { $i >= 0 } { incr i -1 } {
