@@ -5,11 +5,11 @@ ad_page_contract {
 } {
     q:trim
     {t:trim ""}
-    {offset:integer 0}
-    {num:integer 0}
+    {offset:naturalnum 0}
+    {num:naturalnum 0}
     {dfs:trim ""}
     {dts:trim ""}
-    {search_package_id ""}
+    {search_package_id:naturalnum ""}
     {scope ""}
     {object_type ""}
 } -validate {
@@ -27,7 +27,7 @@ set package_id [ad_conn package_id]
 set package_url [ad_conn package_url]
 set package_url_with_extras $package_url
 
-set context results
+set context Results
 set context_base_url $package_url
 
 # Do we want debugging information at the end of the page
@@ -46,19 +46,6 @@ if { [array get info] eq "" } {
     ns_return 200 text/html [_ search.lt_FtsEngineDriver_not_a]
     ad_script_abort
 }
-
-if {[string trim $q] eq ""} {
-    set query {}
-    set empty_p 1
-    set url_advanced_search "advanced-search"
-    ad_return_template
-    # FIXME DAVEB I don't understand why I can't call ad_script_abort here instead of return....
-    # if I call ad_script_abort the adp is never rendered
-    return
-} else { 
-    set empty_p 0
-}
-
 
 if { $num <= 0} {
     set limit [parameter::get -package_id $package_id -parameter LimitDefault]
@@ -116,7 +103,7 @@ if {"this" ne $scope } {
 if {[callback::impl_exists -impl $driver -callback search::search]} {
     # DAVEB TODO Add subsite to the callback def?
     # FIXME do this in the intermedia driver!
-#    set final_query_string [db_string final_query_select "select site_wide_search.im_convert(:q) from dual"]
+    #    set final_query_string [db_string final_query_select "select site_wide_search.im_convert(:q) from dual"]
 
     array set result [lindex [callback -impl $driver search::search -query $q -offset $offset -limit $limit \
 				  -user_id $user_id -df $df \
