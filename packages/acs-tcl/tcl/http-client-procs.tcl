@@ -425,7 +425,8 @@ ad_proc util::http::post {
     # Body will be appended as is to the payload
     append payload $body; unset body
     
-    return [util::http::request -method POST \
+    return [util::http::request \
+                -method          POST \
                 -body            $payload \
                 -headers         $headers \
                 -url             $url \
@@ -442,7 +443,7 @@ ad_proc util::http::post {
 
 ad_proc util::http::request {
     -url 
-    -method
+    {-method GET}
     {-headers ""} 
     {-body ""}
     {-timeout 30} 
@@ -523,7 +524,8 @@ ad_proc util::http::request {
         return -code error "${this_proc}:  HTTP client functionalities for this protocol are not available with current system configuration."
     }
     
-    return [util::http::${impl}::request -method $method \
+    return [util::http::${impl}::request \
+                -method          $method \
                 -body            $body \
                 -headers         $headers \
                 -url             $url \
@@ -546,7 +548,7 @@ namespace eval util::http::native {}
 
 ad_proc -private util::http::native::request {
     -url 
-    -method
+    {-method GET}
     {-headers ""} 
     {-body ""}
     {-timeout 30} 
@@ -764,20 +766,22 @@ ad_proc -private util::http::native::request {
         }
         
         if {$method eq "GET"} {
-            return [$this_proc -url $location
-                    -method          GET
-                    -force_ssl=$force_ssl_p 
-                    -gzip_response=$gzip_response_p 
-                    -post_redirect=$post_redirect_p
-                    -headers         $headers 
-                    -timeout         $timeout 
-                    -depth           $depth 
-                    -spool_file      $spool_file]
+            return [$this_proc \
+                        -method          GET \
+                        -url             $location \
+                        -force_ssl=$force_ssl_p \
+                        -gzip_response=$gzip_response_p \
+                        -post_redirect=$post_redirect_p \
+                        -headers         $headers \
+                        -timeout         $timeout \
+                        -depth           $depth \
+                        -spool_file      $spool_file]
         } else {
-            return [$this_proc -method POST \
+            return [$this_proc \
+                        -method          POST \
+                        -url             $location \
                         -body            $body \
                         -headers         $headers \
-                        -url             $location \
                         -timeout         $timeout \
                         -depth           $depth \
                         -force_ssl=$force_ssl_p \
@@ -823,7 +827,7 @@ namespace eval util::http::curl {}
 
 ad_proc -private util::http::curl::request {
     -url 
-    -method
+    {-method GET}
     {-headers ""} 
     {-body ""}
     {-timeout 30} 
@@ -1043,7 +1047,7 @@ ad_proc -deprecated -public ad_httpget {
     headers to send during the fetch.
 
     ad_httpget also makes use of Conditional GETs (if called with a 
-                                                   Last-Modified header).
+    Last-Modified header).
 
     Returns the data in array get form with array elements page status modified.
 } {
