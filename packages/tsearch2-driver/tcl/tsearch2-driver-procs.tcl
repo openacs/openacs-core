@@ -252,18 +252,21 @@ ad_proc tsearch2::build_query { -query } {
     regsub -all {[^-/@.\d\w\s\(\)]+} $query { } query
 
     # match parens, if they don't match just throw them away
-    set p 0
-    for {set i 0} {$i < [string length $query]} {incr i} {
-        if {[string index $query $i] eq "("} {
-            incr p
-        }
-        if {[string index $query $i] eq ")"} {
-            incr p -1
-        }
-    }
-    if {$p != 0} {
-        regsub -all {\(|\)} $query {} query
-    }
+    # set p 0
+    # for {set i 0} {$i < [string length $query]} {incr i} {
+    #     if {[string index $query $i] eq "("} {
+    #         incr p
+    #     }
+    #     if {[string index $query $i] eq ")"} {
+    #         incr p -1
+    #     }
+    # }
+    # if {$p != 0} {
+    #     regsub -all {\(|\)} $query {} query
+    # }
+
+    # remove all parens
+    regsub -all {\(|\)} $query {} query
 
     # remove empty ()
     regsub -all {\(\s*\)} $query {} query
