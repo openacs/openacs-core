@@ -83,7 +83,7 @@ if {$search_package_id eq "" && [parameter::get -package_id $package_id -paramet
     set subsite_packages [concat [ad_conn subsite_id] [subsite::util::packages -node_id [ad_conn node_id]]]
     lappend params $subsite_packages
     set search_package_id $subsite_packages
-} else { 
+} elseif {$search_package_id ne ""} { 
   lappend params $search_package_id
 }
 
