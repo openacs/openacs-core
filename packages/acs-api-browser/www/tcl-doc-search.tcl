@@ -10,18 +10,17 @@ ad_page_contract {
 }
 
 set tcl_docs_root "http://tcl.tk/man/tcl[info tclversion]/TclCmd/"
-
 set tcl_docs_url "${tcl_docs_root}contents.htm"
 
 with_catch errmsg {
-    set tcl_docs_index_page [util_memoize [list ns_httpget $tcl_docs_url]]
+    set tcl_docs_index_result [util_memoize [list util::http::get -url $tcl_docs_url]]
+    set tcl_docs_index_page [dict get $tcl_docs_index_result page]
 } {
     ad_return_error "Cannot Connect" "We're sorry, but we're having problems connecting to the server containing the Tcl documentation: $tcl_docs_url"
     ad_script_abort
 }
 
 set tcl_proc [lindex $tcl_proc 0] 
-
 set len [string length $tcl_proc]
 
 for { set i [expr { $len-1 }] } { $i >= 0 } { incr i -1 } {
