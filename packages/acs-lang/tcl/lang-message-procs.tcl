@@ -894,9 +894,10 @@ ad_proc -private lang::message::translate {
     set marker "XXYYZZXX. "
     set qmsg "$marker $msg"
     set url "http://babel.altavista.com/translate.dyn?doit=done&BabelFishFrontPage=yes&bblType=urltext&url="
-    set babel_result [ns_httpget "$url&lp=$lang&urltext=[ns_urlencode $qmsg]"]
+    set babel_result [util::http::get -url "$url&lp=$lang&urltext=[ns_urlencode $qmsg]"]
+    set babel_page [dict get $babel_result page]
     set result_pattern "$marker (\[^<\]*)"
-    if {[regexp -nocase $result_pattern $babel_result ignore msg_tr]} {
+    if {[regexp -nocase $result_pattern $babel_page ignore msg_tr]} {
         regsub "$marker." $msg_tr "" msg_tr
         return [string trim $msg_tr]
     } else {
