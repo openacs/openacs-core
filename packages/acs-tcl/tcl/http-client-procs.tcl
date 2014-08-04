@@ -133,7 +133,7 @@ ad_proc -private util::http::get_channel_settings {
         }   
     }
     # Cases (C) and (B.2) are covered by the [expr] below.
-    set enc [expr {$enc eq ""?"binary":$enc}]
+    set enc [expr {$enc eq "" ? "binary" : $enc}]
     
     return $enc
 }
@@ -1055,11 +1055,79 @@ ad_proc -private util::http::curl::request {
                 modified $last_modified]
 }
 
+ad_proc -public util::get_http_status {
+    -url 
+    {-use_get_p 1} 
+    {-timeout 30}
+} {
+    Returns the HTTP status code, e.g., 200 for a normal response 
+    or 500 for an error, of a URL.  By default this uses the GET method 
+    instead of HEAD since not all servers will respond properly to a 
+    HEAD request even when the URL is perfectly valid.  Note that 
+    this means AOLserver may be sucking down a lot of bits that it 
+    doesn't need.
+} { 
+    set result [util::http::request \
+                    -url             $url \
+                    -method          [expr {$use_get_p ? "GET" : "HEAD"}] \
+                    -timeout         $timeout]
+    return [dict get $result status]
+}
+
+
+ad_proc -public util::link_responding_p {
+    -url 
+    {-list_of_bad_codes "404"}
+} {
+    Returns 1 if the URL is responding (generally we think that anything other than 404 (not found) is okay).
+
+    @see util::get_http_status 
+} {
+    if { [catch { set status [util::get_http_status -url $url] } errmsg] } {
+	# got an error; definitely not valid
+	return 0
+    } else {
+	# we got the page but it might have been a 404 or something
+	if { $status in $list_of_bad_codes } {
+	    return 0
+	} else {
+	    return 1
+	}
+    }
+}
 
 
 #########################
 ## Deprecated HTTP api ##
 #########################
+
+ad_proc -deprecated -public util_link_responding_p {
+    url 
+    {list_of_bad_codes "404"}
+} {
+    Returns 1 if the URL is responding (generally we think that anything other than 404 (not found) is okay).
+
+    @see util::link_responding_p
+} {
+    util::link_responding_p -url $url -list_of_bad_codes $list_of_bad_codes
+}
+
+ad_proc -public -deprecated util_get_http_status {
+    url 
+    {use_get_p 1} 
+    {timeout 30}
+} {
+    Returns the HTTP status code, e.g., 200 for a normal response 
+    or 500 for an error, of a URL.  By default this uses the GET method 
+    instead of HEAD since not all servers will respond properly to a 
+    HEAD request even when the URL is perfectly valid.  Note that 
+    this means AOLserver may be sucking down a lot of bits that it 
+    doesn't need.
+
+    @see util::get_http_status
+} { 
+    return [util::get_http_status -url $url -use_get_p $use_get_p -timeout $timeout]
+}
 
 ad_proc -deprecated -public ad_httpget {
     -url 

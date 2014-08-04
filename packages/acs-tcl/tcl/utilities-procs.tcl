@@ -1312,55 +1312,6 @@ ad_proc -public util_search_list_of_lists {list_of_lists query_string {sublist_e
     return -1
 }
 
-# --- network stuff 
-
-ad_proc -public util_get_http_status {
-    url 
-    {use_get_p 1} 
-    {timeout 30}
-} {
-    Returns the HTTP status code, e.g., 200 for a normal response 
-    or 500 for an error, of a URL.  By default this uses the GET method 
-    instead of HEAD since not all servers will respond properly to a 
-    HEAD request even when the URL is perfectly valid.  Note that 
-    this means AOLserver may be sucking down a lot of bits that it 
-    doesn't need.
-} { 
-    if {$use_get_p} {
-	set http [ns_httpopen GET $url "" $timeout] 
-    } else {
-	set http [ns_httpopen HEAD $url "" $timeout] 
-    }
-    lassign $http rfd wfd headers
-    close $rfd
-    close $wfd
-    set response [ns_set name $headers] 
-    set status [lindex $response 1] 
-    ns_set free $headers
-    return $status
-}
-
-ad_proc -public util_link_responding_p {
-    url 
-    {list_of_bad_codes "404"}
-} {
-    Returns 1 if the URL is responding (generally we think that anything other than 404 (not found) is okay).
-
-    @see util_get_http_status 
-} {
-    if { [catch { set status [util_get_http_status $url] } errmsg] } {
-	# got an error; definitely not valid
-	return 0
-    } else {
-	# we got the page but it might have been a 404 or something
-	if { $status in $list_of_bad_codes } {
-	    return 0
-	} else {
-	    return 1
-	}
-    }
-}
-
 ad_proc -public util_report_successful_library_load {
     {extra_message ""}
 } {
