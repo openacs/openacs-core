@@ -636,9 +636,9 @@ ad_proc -private util::http::native::request {
     # Servers uncapable of treating such requests will likely throw an error...
     set req_content_encoding [ns_set iget $headers "content-encoding"]
     if {$req_content_encoding ne ""} {
-         set gzip_request_p [string match "*gzip*" $req_content_encoding]
+        set gzip_request_p [string match "*gzip*" $req_content_encoding]
     } elseif {$gzip_request_p} {
-         ns_set put $headers "Content-Encoding" "gzip"
+        ns_set put $headers "Content-Encoding" "gzip"
     }
     
     # See if we want the response to be gzipped by headers or options
@@ -702,8 +702,8 @@ ad_proc -private util::http::native::request {
     
     if {$gzip_response_p} {
         # Naviserver since 4.99.6 can decompress response transparently
-        if {[ns_info patchlevel] >= 4.99.6} {
-            append wait_cmd { -decompress}
+        if {[apm_version_names_compare [ns_info patchlevel] "4.99.5"] == 1} {
+            lappend wait_cmd -decompress
         }
     }
     
@@ -798,7 +798,7 @@ ad_proc -private util::http::native::request {
     # If response was compressed and our Naviserver
     # is prior 4.99.6, we have to decompress on our own.
     if {$content_encoding eq "gzip"} {
-      if {[ns_info patchlevel] < 4.99.6} {
+      if {[apm_version_names_compare [ns_info patchlevel] "4.99.5"] == 1} {
         if {$spool_file eq "" } {
             set page [zlib gunzip $page]
         }
