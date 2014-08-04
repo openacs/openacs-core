@@ -149,35 +149,34 @@ ad_proc util::http::get {
     {-spool_file ""}
     {-preference {native curl}}
 } {
-    <p>
-    Issue an http GET request to <code>url</code>.<br/>
-    </p>
+    Issue an http GET request to <code>url</code>.
     
-    <p>
-    <tt>-headers</tt> specifies an ns_set of extra headers to send to the server when doing the request. 
-    Some options exist that allow to avoid the need to specify headers manually, but headers will always take precedence over options.
-    <p>
+    @param headers specifies an ns_set of extra headers to send
+    to the server when doing the request.  Some options exist that
+    allow to avoid the need to specify headers manually, but headers
+    will always take precedence over options. 
     
-    <p>
-    <tt>-gzip_response_p</tt> informs the server that we are capable of receiving gzipped responses.
-    If server complies to our indication, the result will be automatically decompressed.
-    </p>
+    @param gzip_response_p informs the server that we are
+    capable of receiving gzipped responses.  If server complies to our
+    indication, the result will be automatically decompressed. 
     
-    <p>
-    <tt>-force_ssl_p</tt> specifies wether we want to use SSL despite the url being in http:// form.
-    Default behavior is to use SSL on https:// urls only.
-    </p>
+    @param force_ssl_p specifies wether we want to use SSL
+    despite the url being in http:// form.  Default behavior is to use
+    SSL on https:// urls only. 
     
-    <p>
-    <tt>-spool_file</tt> enables file spooling of the request on the file specified. It is useful when we expect large responses from the server.
-    </p>
+    @param spool_file enables file spooling of the request on
+    the file specified. It is useful when we expect large responses
+    from the server. 
     
-    <p>
-    <tt>-preference decides which available implementation prefer in respective order. Choice is between 'native', based on ns_ api, available for Naviserver 
-    only and giving the best performances and 'curl', which wraps the command line utility (available on every system with curl installed).
-    </p>
+    @param preference decides which available implementation prefer
+    in respective order. Choice is between 'native', based on ns_ api,
+    available for NaviServer only and giving the best performances and
+    'curl', which wraps the command line utility (available on every
+    system with curl installed). 
     
-    Returns the data in array get form with array elements page, status, and modified.
+    @return Returns the data as dict with elements <code>page</code>,
+    <code>status</code>, and <code>modified</code>.
+
 } {
     return [util::http::request \
                 -url             $url \
@@ -210,19 +209,18 @@ ad_proc util::http::post {
     {-spool_file ""}
     {-preference {native curl}}
 } {
-    <p>
     Implement client-side HTTP POST request.
-    </p>
     
-    <p>
-    <tt>-body</tt> is the payload for the request and will be passed as is (useful for many purposes, such as webDav). 
-    A convenient way to specify form variables through this argument is passing a string obtained by <code>export_vars -url</code>.
-    </p>
+    @param body is the payload for the request and will be
+    passed as is (useful for many purposes, such as webDav).  A
+    convenient way to specify form variables through this argument is
+    passing a string obtained by <code>export_vars -url</code>. 
     
-    <p>
-    File upload can be specified using actual files on the filesystem or binary strings of data using the <code>-files</code> parameter.
-    <code>-files</code> must be a list of array-lists in the form returned by <code>array get</code>.<br/>
+    @param files File upload can be specified using actual files on the
+    filesystem or binary strings of data using the <code>-files</code>
+    parameter.  <code>-files</code> must be a dict (flat list of key value pairs).
     Keys of <code>-files</code> parameter are:
+
     <ul>
     <li>data: binary data to be sent. If set, has precedence on 'file' key</li>
     <li>file: path for the actual file on filesystem</li>
@@ -230,63 +228,74 @@ ad_proc util::http::post {
     <li>fieldname: name the field this file will be sent as</li>
     <li>mime_type: mime_type the form will receive for this file</li>
     </ul>
-    If 'filename' is missing and an actual file is being sent, it will be set as the same name as the file.<br/>
-    If 'mime_type' is missing, it will be guessed from 'filename'. If result is */* or an empty mime_type, 'application/octet-stream' will be used<br/>
-    If <code>-base64</code> flag is set, files will be base64 encoded (useful for some kind of form).
-    </p>    
-    <p>
-    Other form variables can be passes in<code>-formvars</code> easily by the use of <code>export_vars -url</code> and will be translated 
-    for the proper type of form. URL variables, as with GET requests, are also sent, but an error is thrown if URL variables conflict with those specified
-    in other ways.
-    </p>
-    
-    <p>
-    Default behavior is to build payload as an 'application/x-www-form-urlencoded' payload if no files are specified,
-    and 'multipart/form-data' otherwise. If <code>-multipart</code> flag is set, format will be forced to multipart.
-    </p>
 
-    <p>
-    <tt>-headers</tt> specifies an ns_set of extra headers to send to the server when doing the request. 
-    Some options exist that allow to avoid the need to specify headers manually, but headers will always take precedence over options.
-    </p>
+    If 'filename' is missing and an actual file is being sent, it will
+    be set as the same name as the file.<br/> If 'mime_type' is
+    missing, it will be guessed from 'filename'. If result is */* or
+    an empty mime_type, 'application/octet-stream' will be used<br/>
+    If <code>-base64</code> flag is set, files will be base64 encoded
+    (useful for some kind of form). 
 
-    <p>
-    <tt>-gzip_request_p</tt> informs the server that we are sending data in gzip format. Data will be automatically compressed.
-    Notice that not all servers can treat gzipped requests properly, and in such cases response will likely be an error.
-    </p>
+    @param -formvars Other form variables can be passes in<code>-formvars</code>
+    easily by the use of <code>export_vars -url</code> and will be
+    translated for the proper type of form. URL variables, as with GET
+    requests, are also sent, but an error is thrown if URL variables
+    conflict with those specified in other ways.
+    
+    <p> Default behavior is to build payload as an
+    'application/x-www-form-urlencoded' payload if no files are
+    specified, and 'multipart/form-data' otherwise. If
+    <code>-multipart</code> flag is set, format will be forced to
+    multipart.
 
-    <p>
-    <tt>-gzip_response_p</tt> informs the server that we are capable of receiving gzipped responses.
-    If server complies to our indication, the result will be automatically decompressed.
-    </p>
+    @param headers specifies an ns_set of extra headers to send to the
+    server when doing the request.  Some options exist that allow to
+    avoid the need to specify headers manually, but headers will
+    always take precedence over options.
+
+    @param gzip_request_p informs the server that we are sending data
+    in gzip format. Data will be automatically compressed.  Notice
+    that not all servers can treat gzipped requests properly, and in
+    such cases response will likely be an error.
+
+    @param gzip_response_p informs the server that we are capable of
+    receiving gzipped responses.  If server complies to our
+    indication, the result will be automatically decompressed.
     
-    <p>
-    <tt>-force_ssl_p</tt> specifies wether we want to use SSL despite the url being in http:// form.
-    Default behavior is to use SSL on https:// urls only.
-    </p>
+    @param force_ssl_p specifies wether we want to use SSL despite the
+    url being in http:// form.  Default behavior is to use SSL on
+    https:// urls only.
     
-    <p>
-    <tt>-spool_file</tt> enables file spooling of the request on the file specified. It is useful when we expect large responses from the server.
-    </p>
+    @param spool_file enables file spooling of the request on the file
+    specified. It is useful when we expect large responses from the
+    server.
     
-    <p>
-    <tt>-post_redirect</tt> decides what happens when we are POSTing and server replies with 301, 302 or 303 redirects. RFC 2616/10.3.2 states that method 
-    should not change when 301 or 302 are returned, and that GET should be used on a 303 response, but most HTTP clients fail in respecting this and switch 
-    to a GET request independently. This options forces this kinds of redirect to conserve their original method.
-    </p>
+    @param post_redirect decides what happens when we are POSTing and
+    server replies with 301, 302 or 303 redirects. RFC 2616/10.3.2
+    states that method should not change when 301 or 302 are returned,
+    and that GET should be used on a 303 response, but most HTTP
+    clients fail in respecting this and switch to a GET request
+    independently. This options forces this kinds of redirect to
+    conserve their original method.
     
-    <p>
-    <tt>-max_depth</tt> is the maximum number of redirects the proc is allowed to follow. Be aware that when following redirects, unless it is a code 303
-    redirect, url and POST urlencoded variables will be sent again to the redirected host. Multipart variables won't be sent again. 
-    Sending to the redirected host can be dangerous, if such host is not trusted or uses a lower level of secutiry. The default behavior is to not follow
-    redirects.
-    </p>
+    @param max_depth is the maximum number of redirects the proc is
+    allowed to follow. Be aware that when following redirects, unless
+    it is a code 303 redirect, url and POST urlencoded variables will
+    be sent again to the redirected host. Multipart variables won't be
+    sent again.  Sending to the redirected host can be dangerous, if
+    such host is not trusted or uses a lower level of secutiry. The
+    default behavior is to not follow redirects.
     
-    <p>
-    <tt>-preference decides which available implementation prefer in respective order. Choice is between 'native', based on ns_ api, available for Naviserver 
-    only and giving the best performances and 'curl', which wraps the command line utility (available on every system with curl installed).
-    </p>
-} {
+    @param preference decides which available implementation prefer in
+    respective order. Choice is between 'native', based on ns_ api,
+    available for NaviServer only and giving the best performances and
+    'curl', which wraps the command line utility (available on every
+    system with curl installed).
+
+    @return Returns the data as dict with elements <code>page</code>,
+    <code>status</code>, and <code>modified</code>.
+
+} { 
     set this_proc [lindex [info level 0] 0]
     
     # Retrieve variables sent by the URL...
@@ -441,7 +450,7 @@ ad_proc util::http::post {
                 -preference      $preference]
 }
 
-ad_proc util::http::request {
+ad_proc -private util::http::request {
     -url 
     {-method GET}
     {-headers ""} 
@@ -456,57 +465,63 @@ ad_proc util::http::request {
     {-spool_file ""}
     {-preference {native curl}}
 } {
-    <p>
     Issue an HTTP request either GET or POST to the url specified.
-    </p>
-    
-    <p>
-    <tt>-headers</tt> specifies an ns_set of extra headers to send to the server when doing the request. 
-    Some options exist that allow to avoid the need to specify headers manually, but headers will always take precedence over options.
-    <p>
-    
-    <p>
-    <tt>-body</tt> is the payload for the request and will be passed as is (useful for many purposes, such as webDav). 
-    A convenient way to specify form variables for POST payloads through this argument is passing a string obtained by <code>export_vars -url</code>.
-    </p>
 
-    <p>
-    <tt>-gzip_request_p</tt> informs the server that we are sending data in gzip format. Data will be automatically compressed.
-    Notice that not all servers can treat gzipped requests properly, and in such cases response will likely be an error.
-    </p>
+    @param headers specifies an ns_set of extra headers to send to the
+    server when doing the request.  Some options exist that allow to
+    avoid the need to specify headers manually, but headers will
+    always take precedence over options.
     
-    <p>
-    <tt>-gzip_response_p</tt> informs the server that we are capable of receiving gzipped responses.
-    If server complies to our indication, the result will be automatically decompressed.
-    </p>
+    @param body is the payload for the request and will be passed as
+    is (useful for many purposes, such as webDav).  A convenient way
+    to specify form variables for POST payloads through this argument
+    is passing a string obtained by <code>export_vars -url</code>.
+
+    @param gzip_request_p informs the server that we are sending data
+    in gzip format. Data will be automatically compressed.  Notice
+    that not all servers can treat gzipped requests properly, and in
+    such cases response will likely be an error.
     
-    <p>
-    <tt>-force_ssl_p</tt> specifies wether we want to use SSL despite the url being in http:// form. Default behavior is to use SSL on https:// urls only.
-    </p>
+    @param gzip_response_p informs the server that we are capable of
+    receiving gzipped responses.  If server complies to our
+    indication, the result will be automatically decompressed.
     
-    <p>
-    <tt>-spool_file</tt> enables file spooling of the request on the file specified. It is useful when we expect large responses from the server.
-    </p>
+    @param force_ssl_p specifies wether we want to use SSL despite the
+    url being in http:// form. Default behavior is to use SSL on
+    https:// urls only.
     
-    <p>
-    <tt>-post_redirect</tt> decides what happens when we are POSTing and server replies with 301, 302 or 303 redirects. RFC 2616/10.3.2 states that method 
-    should not change when 301 or 302 are returned, and that GET should be used on a 303 response, but most HTTP clients fail in respecting this and switch 
-    to a GET request independently. This options forces this kinds of redirect to conserve their original method. Notice that, as from RFC, a 303 redirect
-    won't send again any data to the server, as specification says we can assume variables to have been received.
-    </p>
+    @param spool_file enables file spooling of the request on the file
+    specified. It is useful when we expect large responses from the
+    server.
     
-    <p>
-    <tt>-max_depth</tt> is the maximum number of redirects the proc is allowed to follow. Be aware that when following redirects, unless it is a code 303
-    redirect, url and POST urlencoded variables will be sent again to the redirected host. Multipart variables won't be sent again. 
-    Sending to the redirected host can be dangerous, if such host is not trusted or uses a lower level of secutiry. The default behavior is to not follow
-    redirects.
-    </p>
+    @param post_redirect decides what happens when we are POSTing and
+    server replies with 301, 302 or 303 redirects. RFC 2616/10.3.2
+    states that method should not change when 301 or 302 are returned,
+    and that GET should be used on a 303 response, but most HTTP
+    clients fail in respecting this and switch to a GET request
+    independently. This options forces this kinds of redirect to
+    conserve their original method. Notice that, as from RFC, a 303
+    redirect won't send again any data to the server, as specification
+    says we can assume variables to have been received.
     
-    <p>
-    <tt>-preference decides which available implementation prefer in respective order. Choice is between 'native', based on ns_ api, available for Naviserver 
-    only and giving the best performances and 'curl', which wraps the command line utility (available on every system with curl installed).
-    </p>
-} {
+    @param max_depth is the maximum number of redirects the proc is
+    allowed to follow. Be aware that when following redirects, unless
+    it is a code 303 redirect, url and POST urlencoded variables will
+    be sent again to the redirected host. Multipart variables won't be
+    sent again.  Sending to the redirected host can be dangerous, if
+    such host is not trusted or uses a lower level of secutiry. The
+    default behavior is to not follow redirects.
+    
+    @param preference decides which available implementation prefer
+    in respective order. Choice is between 'native', based on ns_ api,
+    available for NaviServer only and giving the best performances and
+    'curl', which wraps the command line utility (available on every
+    system with curl installed).
+
+    @return Returns the data as dict with elements <code>page</code>,
+    <code>status</code>, and <code>modified</code>.
+
+} { 
     set this_proc [lindex [info level 0] 0]
     
     if {$force_ssl_p || [string match "https://*" $url]} {
@@ -541,7 +556,7 @@ ad_proc util::http::request {
 
 
 #
-## Native Naviserver implementation
+## Native NaviServer implementation
 #
 
 namespace eval util::http::native {}
@@ -560,53 +575,58 @@ ad_proc -private util::http::native::request {
     -post_redirect:boolean
     {-spool_file ""}
 } {
-    <p>
-    Issue an HTTP request either GET or POST to the url specified.
-    </p>
-    
-    <p>
-    <tt>-headers</tt> specifies an ns_set of extra headers to send to the server when doing the request. 
-    Some options exist that allow to avoid the need to specify headers manually, but headers will always take precedence over options.
-    <p>
-    
-    <p>
-    <tt>-body</tt> is the payload for the request and will be passed as is (useful for many purposes, such as webDav). 
-    A convenient way to specify form variables for POST payloads through this argument is passing a string obtained by <code>export_vars -url</code>.
-    </p>
 
-    <p>
-    <tt>-gzip_request_p</tt> informs the server that we are sending data in gzip format. Data will be automatically compressed.
-    Notice that not all servers can treat gzipped requests properly, and in such cases response will likely be an error.
-    </p>
+    Issue an HTTP request either GET or POST to the url specified.
+    This is the native implementation based on NaviServer HTTP api.
     
-    <p>
-    <tt>-gzip_response_p</tt> informs the server that we are capable of receiving gzipped responses.
-    If server complies to our indication, the result will be automatically decompressed.
-    </p>
+    @param headers specifies an ns_set of extra headers to send to the
+    server when doing the request.  Some options exist that allow to
+    avoid the need to specify headers manually, but headers will
+    always take precedence over options.
     
-    <p>
-    <tt>-force_ssl_p</tt> specifies wether we want to use SSL despite the url being in http:// form. Default behavior is to use SSL on https:// urls only.
-    </p>
+    @param body is the payload for the request and will be passed as
+    is (useful for many purposes, such as webDav).  A convenient way
+    to specify form variables for POST payloads through this argument
+    is passing a string obtained by <code>export_vars -url</code>.
+
+    @param gzip_request_p informs the server that we are sending data
+    in gzip format. Data will be automatically compressed.  Notice
+    that not all servers can treat gzipped requests properly, and in
+    such cases response will likely be an error.
     
-    <p>
-    <tt>-spool_file</tt> enables file spooling of the request on the file specified. It is useful when we expect large responses from the server.
-    </p>
+    @param gzip_response_p informs the server that we are capable of
+    receiving gzipped responses.  If server complies to our
+    indication, the result will be automatically decompressed.
     
-    <p>
-    <tt>-post_redirect</tt> decides what happens when we are POSTing and server replies with 301, 302 or 303 redirects. RFC 2616/10.3.2 states that method 
-    should not change when 301 or 302 are returned, and that GET should be used on a 303 response, but most HTTP clients fail in respecting this and switch 
-    to a GET request independently. This options forces this kinds of redirect to conserve their original method. Notice that, as from RFC, a 303 redirect
-    won't send again any data to the server, as specification says we can assume variables to have been received.
-    </p>
+    @param force_ssl_p specifies wether we want to use SSL despite the
+    url being in http:// form. Default behavior is to use SSL on
+    https:// urls only.
     
-    <p>
-    <tt>-max_depth</tt> is the maximum number of redirects the proc is allowed to follow. Be aware that when following redirects, unless it is a code 303
-    redirect, url and POST urlencoded variables will be sent again to the redirected host. Multipart variables won't be sent again. 
-    Sending to the redirected host can be dangerous, if such host is not trusted or uses a lower level of secutiry. The default behavior is to not follow
-    redirects.
-    </p>
-    <br/>
-    This is the native implementation based on Naviserver HTTP api
+    @param spool_file enables file spooling of the request on the file
+    specified. It is useful when we expect large responses from the
+    server.
+    
+    @param post_redirect decides what happens when we are POSTing and
+    server replies with 301, 302 or 303 redirects. RFC 2616/10.3.2
+    states that method should not change when 301 or 302 are returned,
+    and that GET should be used on a 303 response, but most HTTP
+    clients fail in respecting this and switch to a GET request
+    independently. This options forces this kinds of redirect to
+    conserve their original method. Notice that, as from RFC, a 303
+    redirect won't send again any data to the server, as specification
+    says we can assume variables to have been received.
+    
+    @param max_depth is the maximum number of redirects the proc is
+    allowed to follow. Be aware that when following redirects, unless
+    it is a code 303 redirect, url and POST urlencoded variables will
+    be sent again to the redirected host. Multipart variables won't be
+    sent again.  Sending to the redirected host can be dangerous, if
+    such host is not trusted or uses a lower level of secutiry. The
+    default behavior is to not follow redirects.
+
+    @return Returns the data as dict with elements <code>page</code>,
+    <code>status</code>, and <code>modified</code>.
+
 } {
     set this_proc [lindex [info level 0] 0]
     
@@ -701,7 +721,7 @@ ad_proc -private util::http::native::request {
     }
     
     if {$gzip_response_p} {
-        # Naviserver since 4.99.6 can decompress response transparently
+        # NaviServer since 4.99.6 can decompress response transparently
         if {[apm_version_names_compare [ns_info patchlevel] "4.99.5"] == 1} {
             lappend wait_cmd -decompress
         }
@@ -795,7 +815,7 @@ ad_proc -private util::http::native::request {
     
     ## Decoding of the response
     
-    # If response was compressed and our Naviserver
+    # If response was compressed and our NaviServer
     # is prior 4.99.6, we have to decompress on our own.
     if {$content_encoding eq "gzip"} {
       if {[apm_version_names_compare [ns_info patchlevel] "4.99.5"] == 1} {
@@ -839,52 +859,56 @@ ad_proc -private util::http::curl::request {
     -post_redirect:boolean
     {-spool_file ""}
 } {
-    <p>
-    Issue an HTTP request either GET or POST to the url specified.
-    </p>
-    
-    <p>
-    <tt>-headers</tt> specifies an ns_set of extra headers to send to the server when doing the request. 
-    Some options exist that allow to avoid the need to specify headers manually, but headers will always take precedence over options.
-    <p>
-    
-    <p>
-    <tt>-body</tt> is the payload for the request and will be passed as is (useful for many purposes, such as webDav). 
-    A convenient way to specify form variables for POST payloads through this argument is passing a string obtained by <code>export_vars -url</code>.
-    </p>
 
-    <p>
-    <tt>-gzip_request_p</tt> informs the server that we are sending data in gzip format. Data will be automatically compressed.
-    Notice that not all servers can treat gzipped requests properly, and in such cases response will likely be an error.
-    </p>
+    Issue an HTTP request either GET or POST to the url specified.
+    This is the curl wrapper implementation, used on Aolserver and
+    when ssl native capabilities are not available.
     
-    <p>
-    <tt>-gzip_response_p</tt> informs the server that we are capable of receiving gzipped responses.
-    If server complies to our indication, the result will be automatically decompressed.
-    </p>
+    @param headers specifies an ns_set of extra headers to send to the
+    server when doing the request.  Some options exist that allow to
+    avoid the need to specify headers manually, but headers will
+    always take precedence over options.
     
-    <p>
-    <tt>-force_ssl_p</tt> is ignored when using curl http client implementation and is only kept for cross compatibility
-    </p>
+    @param body is the payload for the request and will be passed as
+    is (useful for many purposes, such as webDav).  A convenient way
+    to specify form variables for POST payloads through this argument
+    is passing a string obtained by <code>export_vars -url</code>.
+
+    @param gzip_request_p informs the server that we are sending data
+    in gzip format. Data will be automatically compressed.  Notice
+    that not all servers can treat gzipped requests properly, and in
+    such cases response will likely be an error.
     
-    <p>
-    <tt>-spool_file</tt> enables file spooling of the request on the file specified. It is useful when we expect large responses from the server.
-    </p>
+    @param gzip_response_p informs the server that we are
+    capable of receiving gzipped responses.  If server complies to our
+    indication, the result will be automatically decompressed. 
     
-    <p>
-    <tt>-post_redirect</tt> decides what happens when we are POSTing and server replies with 301, 302 or 303 redirects. RFC 2616/10.3.2 states that method 
-    should not change when 301 or 302 are returned, and that GET should be used on a 303 response, but most HTTP clients fail in respecting this and switch 
-    to a GET request independently. This options forces this kinds of redirect to conserve their original method.
-    </p>
+    @param force_ssl_p is ignored when using curl http client
+    implementation and is only kept for cross compatibility.
     
-    <p>
-    <tt>-max_depth</tt> is the maximum number of redirects the proc is allowed to follow. Be aware that when following redirects, unless it is a code 303
-    redirect, url and POST urlencoded variables will be sent again to the redirected host. Multipart variables won't be sent again. 
-    Sending to the redirected host can be dangerous, if such host is not trusted or uses a lower level of secutiry. The default behavior is to not follow
-    redirects.
-    </p>
-    <br/>
-    This is the curl wrapper implementation, used on Aolserver and when ssl native capabilities are not available.
+    @param spool_file enables file spooling of the request on the file
+    specified. It is useful when we expect large responses from the
+    server.
+    
+    @param post_redirect decides what happens when we are POSTing and
+    server replies with 301, 302 or 303 redirects. RFC 2616/10.3.2
+    states that method should not change when 301 or 302 are returned,
+    and that GET should be used on a 303 response, but most HTTP
+    clients fail in respecting this and switch to a GET request
+    independently. This options forces this kinds of redirect to
+    conserve their original method.
+    
+    @param max_depth is the maximum number of redirects the proc is
+    allowed to follow. Be aware that when following redirects, unless
+    it is a code 303 redirect, url and POST urlencoded variables will
+    be sent again to the redirected host. Multipart variables won't be
+    sent again.  Sending to the redirected host can be dangerous, if
+    such host is not trusted or uses a lower level of secutiry. The
+    default behavior is to not follow redirects.
+
+    @return Returns the data as dict with elements <code>page</code>,
+    <code>status</code>, and <code>modified</code>.
+
 } {
     set this_proc [lindex [info level 0] 0]
     
@@ -1265,12 +1289,12 @@ ad_proc -deprecated -public util_http_file_upload { -file -data -binary:boolean 
 
     <p>
 
-    The switches <tt>-file /path/to/file</tt> and <tt>-data $raw_data</tt>
-    are mutually exclusive.  You can specify one or the other, but not
-    both.  NOTE: it is perfectly valid to not specify either, in which
-    case no file is uploaded, but form variables are encoded using
-    <tt>multipart/form-data</tt> instead of the usual encoding (as
-                                                                noted aboved).
+    The switches <tt>-file /path/to/file</tt> and <tt>-data
+    $raw_data</tt> are mutually exclusive.  You can specify one or the
+    other, but not both.  NOTE: it is perfectly valid to not specify
+    either, in which case no file is uploaded, but form variables are
+    encoded using <tt>multipart/form-data</tt> instead of the usual
+    encoding (as noted aboved).
 
     <p>
 
