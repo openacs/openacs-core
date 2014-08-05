@@ -14,6 +14,41 @@ ad_library {
 namespace eval util {}
 namespace eval util::http {}
 
+ad_proc -public util::http::available {
+    -url 
+    {-preference {native curl}}
+    -force_ssl:boolean
+} {
+
+    Check, if for the given url and preferences the current
+    installation supports util::http::* . If not, please use
+    NaviServer, configure nsssl, and/or install curl.
+
+    @param preference decides which available implementation prefer
+    in respective order. Choice is between 'native', based on ns_ api,
+    available for NaviServer only and giving the best performances and
+    'curl', which wraps the command line utility (available on every
+    system with curl installed).
+
+    @param force_ssl_p specifies wether we want to use SSL despite the
+    url being in http:// form. Default behavior is to use SSL on
+    https:// urls only.
+
+} {
+    if {$force_ssl_p || [string match "https://*" $url]} {
+        set apis [lindex [apis] 1]
+    } else {
+        set apis [lindex [apis] 0]
+    }
+    
+    foreach p $preference {
+       if {$p in $apis} {
+           return $p
+       }
+    }
+    
+    return ""
+}
 
 ad_proc -private util::http::apis_not_cached {
 } {
@@ -533,18 +568,8 @@ ad_proc -private util::http::request {
 } { 
     set this_proc [lindex [info level 0] 0]
     
-    if {$force_ssl_p || [string match "https://*" $url]} {
-        set apis [lindex [apis] 1]
-    } else {
-        set apis [lindex [apis] 0]
-    }
-    
-    foreach p $preference {
-       if {$p in $apis} {
-          set impl $p; break
-       }
-    }
-    if {![info exists impl]} {
+    set impl [available -url $url -force_ssl=$force_ssl_p -preference $preference]
+    if {$impl eq ""} {
         return -code error "${this_proc}:  HTTP client functionalities for this protocol are not available with current system configuration."
     }
     
