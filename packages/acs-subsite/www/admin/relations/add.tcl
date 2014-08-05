@@ -11,7 +11,7 @@ ad_page_contract {
 } {
     group_id:naturalnum,notnull
     rel_type:notnull
-    {party_id:integer ""}
+    {party_id:naturalnum ""}
     { exact_p "f" }
     { return_url "" }
     { allow_out_of_scope_p "f" }

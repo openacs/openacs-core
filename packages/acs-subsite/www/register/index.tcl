@@ -2,7 +2,7 @@ ad_page_contract {
     Prompt the user for email and password.
     @cvs-id $Id$
 } {
-    {authority_id ""}
+    {authority_id:naturalnum ""}
     {username ""}
     {email ""}
     {return_url ""}

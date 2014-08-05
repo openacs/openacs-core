@@ -1,7 +1,7 @@
 ad_page_contract {
     Make administrators.
 } {
-    {user_id:multiple ""}
+    {user_id:naturalnum,multiple ""}
 }
 
 set group_id [application_group::group_id_from_package_id]

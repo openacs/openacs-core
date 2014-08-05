@@ -1,5 +1,5 @@
 ad_page_contract {} {
-    object_id:integer
+    object_id:naturalnum,notnull
     {perm:multiple {[list]}}
     {privs:optional}
     return_url

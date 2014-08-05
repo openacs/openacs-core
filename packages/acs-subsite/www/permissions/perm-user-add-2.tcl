@@ -1,6 +1,6 @@
 ad_page_contract {} {
-    object_id
-    user_id:multiple,integer
+    object_id:naturalnum,notnull
+    user_id:multiple,naturalnum
     return_url
 }
 

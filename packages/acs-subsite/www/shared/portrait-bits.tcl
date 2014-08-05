@@ -5,8 +5,8 @@ ad_page_contract {
     @creation-date 26 Sept 1999
     @cvs-id $Id$
 } {
-    user_id:integer
-    {item_id ""}
+    user_id:naturalnum,notnull
+    {item_id:naturalnum ""}
     {size ""}
 }
 

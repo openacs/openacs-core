@@ -10,7 +10,7 @@ ad_page_contract {
 
 } {
     package_id:naturalnum
-    {root_id ""}
+    {root_id:naturalnum ""}
 }
 db_transaction {
 

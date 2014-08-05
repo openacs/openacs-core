@@ -4,7 +4,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     host
-    node_id:integer
+    node_id:naturalnum,notnull
 }
 
 # Flush the cache

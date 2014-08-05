@@ -9,7 +9,7 @@ ad_page_contract {
     name:notnull
     node_type:notnull
     {expand:integer,multiple {}}
-    {root_id:integer {}}
+    {root_id:naturalnum,notnull {}}
 } -validate {
     name_root_ck -requires name:notnull {
         if {[string match "*/*" $name]} {

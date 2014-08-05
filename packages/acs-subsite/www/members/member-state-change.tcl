@@ -1,7 +1,7 @@
 ad_page_contract {
     Change member state
 } {
-    {rel_id:multiple ""}
+    {rel_id:naturalnum,multiple ""}
     {member_state:notnull}
 }
 

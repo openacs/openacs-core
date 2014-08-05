@@ -13,7 +13,7 @@ ad_page_contract {
     { user_type_exact_p t }
     { user_id:naturalnum "" }
     { return_url "" }
-    {add_to_group_id ""}
+    {add_to_group_id:naturalnum ""}
     {add_with_rel_type "user_profile"}
     {group_rel_type_list ""}
 } -properties {

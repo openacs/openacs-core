@@ -4,7 +4,7 @@ ad_page_contract {
     @param user_id defaults to currently logged in user if there is one
     @cvs-id $Id$
 } {
-    {user_id:integer ""}
+    {user_id:naturalnum ""}
 } -properties {
     context:onevalue
     member_state:onevalue

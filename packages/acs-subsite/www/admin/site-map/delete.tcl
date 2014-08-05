@@ -9,7 +9,7 @@ ad_page_contract {
 } {
     expand:integer,multiple
     node_id:naturalnum,notnull
-    {root_id:integer ""}
+    {root_id:naturalnum ""}
 }
 
 if {$root_id == $node_id} {

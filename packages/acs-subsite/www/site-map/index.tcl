@@ -9,7 +9,7 @@ ad_page_contract {
     {expand:integer,multiple ""}
     {new_parent:integer ""}
     {new_type ""}
-    {root_id:integer ""}
+    {root_id:naturalnum ""}
     {new_application:integer ""}
     {rename_application:integer {}}
 }

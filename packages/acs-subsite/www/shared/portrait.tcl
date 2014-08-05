@@ -4,7 +4,7 @@ ad_page_contract {
     @creation-date 26 Sept 1999
     @cvs-id $Id$
 } {
-    user_id:integer
+    user_id:naturalnum,notnull
 } -properties {
     context:onevalue
     first_names:onevalue

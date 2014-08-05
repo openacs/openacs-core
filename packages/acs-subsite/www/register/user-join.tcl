@@ -9,7 +9,7 @@ ad_page_contract {
     @creation-date 2000-2-28
     @cvs-id $Id$
 } {
-    {group_id:integer {[application_group::group_id_from_package_id]}}
+    {group_id:naturalnum,notnull {[application_group::group_id_from_package_id]}}
     {rel_type:notnull "membership_rel"}
     {return_url {}}
 } -properties {

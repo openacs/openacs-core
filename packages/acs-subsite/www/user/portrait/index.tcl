@@ -7,7 +7,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     {return_url "" }
-    {user_id ""}
+    {user_id:naturalnum ""}
 } -properties {
     first_names:onevalue
     last_name:onevalue

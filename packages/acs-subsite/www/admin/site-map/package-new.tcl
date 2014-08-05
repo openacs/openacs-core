@@ -10,7 +10,7 @@ ad_page_contract {
     @cvs-id $Id$
 
 } {
-    {new_package_id:integer ""}
+    {new_package_id:naturalnum ""}
     node_id:naturalnum,notnull
     {new_node_p f}
     {node_name:trim ""}

@@ -14,7 +14,7 @@ ad_page_contract {
     { party_id:naturalnum "" }
     { party.email ""}
     { return_url "" }
-    {add_to_group_id ""}
+    {add_to_group_id:naturalnum ""}
     {add_with_rel_type "membership_rel"}
     {group_rel_type_list ""}
 } -properties {
