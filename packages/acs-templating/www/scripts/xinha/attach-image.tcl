@@ -1,6 +1,7 @@
 ad_page_contract {
     Simple image upload, attach image to object_id passed in, if no
     object_id, use the current package_id
+
     @author Guenter Ernst guenter.ernst@wu-wien.ac.at, 
     @author Gustaf Neumann neumann@wu-wien.ac.at
     @author Dave Bauer (dave@solutiongrove.com)
@@ -8,7 +9,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     {parent_id:naturalnum,optional}
-    {package_id ""}
+    {package_id:naturalnum ""}
     {selector_type "image"}
 }
 
