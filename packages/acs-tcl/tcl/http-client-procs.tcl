@@ -728,8 +728,12 @@ ad_proc -private util::http::native::request {
     
     ## Issuing of the request
     
-    # Spooling to files is disabled for now
-    set spool_file ""
+    #
+    # Spooling to file is disabled for versions earlier than 4.99.6 
+    #
+    if {[apm_version_names_compare [ns_info patchlevel] "4.99.6"] == -1} {
+        set spool_file ""
+    }
     
     set queue_cmd [list $http_api queue \
                        -timeout [timeout $timeout] \
@@ -1140,15 +1144,15 @@ ad_proc -public util::link_responding_p {
     @see util::get_http_status 
 } {
     if { [catch { set status [util::get_http_status -url $url] } errmsg] } {
-	# got an error; definitely not valid
-	return 0
+        # got an error; definitely not valid
+        return 0
     } else {
-	# we got the page but it might have been a 404 or something
-	if { $status in $list_of_bad_codes } {
-	    return 0
-	} else {
-	    return 1
-	}
+        # we got the page but it might have been a 404 or something
+        if { $status in $list_of_bad_codes } {
+            return 0
+        } else {
+            return 1
+        }
     }
 }
 
