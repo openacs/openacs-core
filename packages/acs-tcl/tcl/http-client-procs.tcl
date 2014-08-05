@@ -173,6 +173,9 @@ ad_proc util::http::get {
     available for NaviServer only and giving the best performances and
     'curl', which wraps the command line utility (available on every
     system with curl installed). 
+
+    @param timeout Timeout in seconds. The value can be an integer,
+    a floating point number or an ns_time value.
     
     @return Returns the data as dict with elements <code>page</code>,
     <code>status</code>, and <code>modified</code>.
@@ -292,6 +295,9 @@ ad_proc util::http::post {
     'curl', which wraps the command line utility (available on every
     system with curl installed).
 
+    @param timeout Timeout in seconds. The value can be an integer,
+    a floating point number or an ns_time value.
+    
     @return Returns the data as dict with elements <code>page</code>,
     <code>status</code>, and <code>modified</code>.
 
@@ -518,6 +524,9 @@ ad_proc -private util::http::request {
     'curl', which wraps the command line utility (available on every
     system with curl installed).
 
+    @param timeout Timeout in seconds. The value can be an integer,
+    a floating point number or an ns_time value.
+    
     @return Returns the data as dict with elements <code>page</code>,
     <code>status</code>, and <code>modified</code>.
 
@@ -560,6 +569,21 @@ ad_proc -private util::http::request {
 #
 
 namespace eval util::http::native {}
+
+ad_proc -private util::http::native::timeout {input} {
+
+    Convert the provided value to a ns_time format
+    used be NaviServer
+
+} {
+    if {[string is integer -strict $input]} {
+        return $input:0
+    } elseif {[string is double -strict $input]} {
+        set secs [expr {int($input)}]
+        return $secs:[expr {($input - $secs)*1000000}]
+    }
+    return $input
+}
 
 ad_proc -private util::http::native::request {
     -url 
@@ -624,6 +648,9 @@ ad_proc -private util::http::native::request {
     such host is not trusted or uses a lower level of secutiry. The
     default behavior is to not follow redirects.
 
+    @param timeout Timeout in seconds. The value can be an integer,
+    a floating point number or an ns_time value.
+    
     @return Returns the data as dict with elements <code>page</code>,
     <code>status</code>, and <code>modified</code>.
 
@@ -704,7 +731,10 @@ ad_proc -private util::http::native::request {
     # Spooling to files is disabled for now
     set spool_file ""
     
-    set queue_cmd [list $http_api queue -timeout $timeout -method $method -headers $headers]
+    set queue_cmd [list $http_api queue \
+                       -timeout [timeout $timeout] \
+                       -method $method \
+                       -headers $headers]
     if {$body ne ""} {
         lappend queue_cmd -body $body
     }
@@ -845,6 +875,27 @@ ad_proc -private util::http::native::request {
 
 namespace eval util::http::curl {}
 
+ad_proc -private util::http::curl::timeout {input} {
+
+    Convert the provided timeout value to a format suitable for curl.
+    Since curl versions before 7.32.0 just accept integer, the
+    granularity is set to seconds. On doubt, the value is rounded up.
+
+} {
+    if {[string is integer -strict $input]} {
+        return $input
+    } elseif {[string is double -strict $input]} {
+        set secs    [expr {int($input)}]
+        set secfrac [expr {$input - $secs}]
+        if {$secfrac < 0.001} { return [expr {$secs + 1}] }
+        return $secs
+    } elseif {[regexp {^([0-9]+):([0-9]*)$} $input _ secs microsecs]} {
+        if {$microsecs > 1000} { return [expr {$secs + 1}] }
+        return $secs
+    }
+    return $input
+}
+
 ad_proc -private util::http::curl::request {
     -url 
     {-method GET}
@@ -906,6 +957,11 @@ ad_proc -private util::http::curl::request {
     such host is not trusted or uses a lower level of secutiry. The
     default behavior is to not follow redirects.
 
+    @param timeout Timeout in seconds. The value can be an integer, a
+    floating point number or an ns_time value. Since curl versions
+    before 7.32.0 just accept integer, the granularity is set to
+    seconds.
+    
     @return Returns the data as dict with elements <code>page</code>,
     <code>status</code>, and <code>modified</code>.
 
@@ -974,7 +1030,7 @@ ad_proc -private util::http::curl::request {
     }
     
     if {$timeout ne ""} {
-        lappend cmd --connect-timeout $timeout
+        lappend cmd --connect-timeout [timeout $timeout]
     }
     
     # Set redirection up to max_depth
@@ -1142,6 +1198,8 @@ ad_proc -deprecated -public ad_httpget {
     Last-Modified header).
 
     Returns the data in array get form with array elements page status modified.
+
+    @see util::http::get
 } {
     ns_log debug "Getting {$url} {$headers} {$timeout} {$depth}"
 
@@ -1206,12 +1264,12 @@ ad_proc -deprecated -public ad_httpget {
 ad_proc -deprecated -public util_httpget {
     url {headers ""} {timeout 30} {depth 0}
 } {
-    util_httpget simply calls ad_httpget which also returns 
+    util_httpget simply calls util::http::get which also returns 
     status and last_modfied
     
-    @see ad_httpget
+    @see util::http::get
 } {
-    return [lindex [ad_httpget -url $url -headers $headers -timeout $timeout -depth $depth] 1]
+    return [dict get [util::http::get -url $url -headers $headers -timeout $timeout -depth $depth] page]
 }
 
 # httppost; give it a URL and a string with formvars, and it 
@@ -1416,6 +1474,8 @@ ad_proc -deprecated -public util_http_file_upload { -file -data -binary:boolean 
 
     @author Michael A. Cleverly (michael@cleverly.com)
     @creation-date 3 September 2002
+
+    @see util::http::post
 } {
 
     # sanity checks on switches given
