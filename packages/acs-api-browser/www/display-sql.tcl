@@ -20,7 +20,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     url:notnull
-    { version_id:integer "" }
+    { version_id:naturalnum "" }
     { package_key ""}
 } -properties {
     title:onevalue
