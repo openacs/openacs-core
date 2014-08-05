@@ -2041,13 +2041,13 @@ ad_proc -private apm_get_package_repository {
 
         if { $manifest eq "" } {
             # Nope, get it now
-            array set result [ad_httpget -timeout 120 -url $manifest_url]
+            set dict [util::http::get -timeout 120 -url $manifest_url]
         
-            if { $result(status) ne "200" } {
+            if { [dict get $dict status] ne "200" } {
                 error "Couldn't get the package list. Please try again later."
             }
             
-            set manifest $result(page)
+            set manifest [dict get $dict page]
             
             # Store for subsequent requests
             ad_set_client_property -clob t acs-admin [string range $manifest_url end-49 end] $manifest
@@ -2060,8 +2060,8 @@ ad_proc -private apm_get_package_repository {
         
         foreach package_node [xml_node_get_children_by_name $root_node "package"] {
             array unset version
-            set version(package.key) [xml_node_get_content [xml_node_get_first_child_by_name $package_node "package-key"]]
-            set version(name) [xml_node_get_content [xml_node_get_first_child_by_name $package_node "version"]]
+            set version(package.key)  [xml_node_get_content [xml_node_get_first_child_by_name $package_node "package-key"]]
+            set version(name)         [xml_node_get_content [xml_node_get_first_child_by_name $package_node "version"]]
             set version(package-name) [xml_node_get_content [xml_node_get_first_child_by_name $package_node "pretty-name"]]
             set version(package.type) [xml_node_get_content [xml_node_get_first_child_by_name $package_node "package-type"]]
             set version(download_url) [xml_node_get_content [xml_node_get_first_child_by_name $package_node "download-url"]]
