@@ -738,7 +738,8 @@ ad_proc -private auth::sync::get_doc::http::GetDocument {
         error "You must specify at least one URL to get."
     }
 
-    set result(document) [util_httpget $url]
+    set dict [util::http::get -url $url]
+    set result(document) [dict get $dict page]
 
     set result(doc_status) "ok"
 
