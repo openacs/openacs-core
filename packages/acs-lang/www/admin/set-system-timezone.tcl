@@ -44,7 +44,8 @@ foreach entry [lc_list_all_timezones] {
 
 # Try to get the correct UTC time from www.timeanddate.com
 if { [catch {
-    set time_and_date_page [util_httpget "http://www.timeanddate.com/worldclock/"]
+    set result [util::http::get -url "http://www.timeanddate.com/worldclock/"]
+    set time_and_date_page [dict get $result page]
 } errmsg] } {
     global errorInfo
     ns_log Error "set-system-timezone.tcl: Error trying to get timeanddate.com/worldclock/"
