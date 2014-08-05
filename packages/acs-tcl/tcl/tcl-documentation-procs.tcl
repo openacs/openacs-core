@@ -1954,22 +1954,20 @@ ad_page_contract_filter boolean { name value } {
     @creation-date 23 August 2000
 } {
 
-    set lcase_value [string tolower $value]
-    if {[string match $value "0"] || \
-	    [string match $value "1"] || \
-	    [string match $lcase_value "f"] || \
-	    [string match $lcase_value "t"] || \
-	    [string match $lcase_value "true"] || \
-	    [string match $lcase_value "false"] || \
-	    [string match $lcase_value "y"] || \
-	    [string match $lcase_value "n"] || \
-	    [string match $lcase_value "yes"] || \
-	    [string match $lcase_value "no"] } {
+    if {[string is boolean -strict $value]} {
 	return 1
-    } else {
-	ad_complain "[_ acs-tcl.lt_name_does_not_appear__2]"
-	return 0
     }
+    # set lcase_value [string tolower $value]
+    # if {$value eq "0" || $value eq "1" 
+    # 	|| $lcase_value eq "f" || $lcase_value eq "t" 
+    # 	|| $lcase_value eq "y" || $lcase_value eq "n" ||
+    # 	|| $lcase_value eq "true" || $lcase_value eq "false"
+    # 	|| $lcase_value eq "yes"  || $lcase_value eq "no" 
+    # } {
+    # 	return 1
+    # } 
+    ad_complain "[_ acs-tcl.lt_name_does_not_appear__2]"
+    return 0
 }
 
 
