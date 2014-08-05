@@ -7,7 +7,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     field 
-    enabled_p
+    enabled_p:boolean
     {return_url "."}
 }
 

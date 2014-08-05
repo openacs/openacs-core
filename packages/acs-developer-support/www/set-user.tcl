@@ -1,7 +1,7 @@
 ad_page_contract {
     A hack that will allow us to simulate being a different user
 } {
-    user_id:integer
+    user_id:naturalnum,notnull
     return_url
 }
 
