@@ -4,7 +4,7 @@ ad_page_contract {
     @author Peter marklund (peter@collaboraid.biz)
     @creation-date 2003-09-10
 } {
-    entry_id:integer
+    entry_id:naturalnum,notnull
 }
 
 auth::sync::job::get_entry -entry_id $entry_id -array batch_action

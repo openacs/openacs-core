@@ -1,7 +1,7 @@
 ad_page_contract {
     Reset a user's password.
 } {
-    user_id:integer
+    user_id:naturalnum,notnull
     {return_url .}
 }
 

@@ -6,7 +6,7 @@ ad_page_contract {
 
     @creation-date 2003-09-09
 } {
-    authority_id
+    authority_id:naturalnum,notnull
     enabled_p:boolean
 }
 

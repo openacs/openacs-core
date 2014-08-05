@@ -4,7 +4,7 @@ ad_page_contract {
     @creation-date 17 April 2000
     @cvs-id $Id$
 } {
-    {version_id:integer}
+    {version_id:naturalnum,notnull}
 }
 
 db_1row apm_all_version_info {

@@ -13,7 +13,7 @@ ad_page_contract {
     @param target URL to return to
     @param passthrough Form variables to pass along from caller
     @param limit_to_users_in_group_id Limits search to users in the specified group id.  This can be a comma separated list to allow searches within multiple groups. (optional)
-    @param limit_to_user_id. This is useful is you don't want to show a list of user_ids. This could be a comma separated list. (optional)
+    @param limit_to_user_id This is useful is you don't want to show a list of user_ids. This could be a comma separated list. (optional)
     @param from_user_id is used if you want to merge the user_id with user_id_from_search (optional)
 
     @author Jin Choi (jsc@arsdigita.com)
@@ -23,10 +23,10 @@ ad_page_contract {
     keyword:optional
     target
     {passthrough ""}
-    {limit_to_users_in_group_id ""}
+    {limit_to_users_in_group_id:naturalnum ""}
     {only_authorized_p:integer 1}
-    {limit_to_user_id ""}
-    {from_user_id ""}
+    {limit_to_user_id:naturalnum ""}
+    {from_user_id:naturalnum ""}
 } -properties {
     group_name:onevalue
     search_type:onevalue

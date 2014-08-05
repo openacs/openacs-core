@@ -7,7 +7,7 @@ ad_page_contract {
     @creation-date Thu Oct 12 17:45:38 2000
     @cvs-id $Id$
 } {
-    version_id
+    version_id:naturalnum,notnull
 }
 apm_version_info $version_id
 

@@ -4,8 +4,8 @@ ad_page_contract {
     @creation-date 17 April 2000
     @cvs-id $Id$
 } {
-    {version_id:integer}
-    {dependency_id:integer}
+    {version_id:naturalnum,notnull}
+    {dependency_id:naturalnum,notnull}
     dependency_type:notnull
     package_key:notnull
 }

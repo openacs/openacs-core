@@ -7,7 +7,7 @@ ad_page_contract {
     @cvs-id $Id$
 
 } {
-    user_id
+    user_id:naturalnum,notnull
     {member_state "no_change"}
     {email_verified_p "no_change"}
     {return_url ""}

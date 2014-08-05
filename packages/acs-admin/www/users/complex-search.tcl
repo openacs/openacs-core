@@ -28,7 +28,7 @@ ad_page_contract {
 
     @author Mark Thomas (mthomas@arsdigita.com)
 } {
-    {authority_id:integer ""}
+    {authority_id:naturalnum ""}
     {email ""}
     {ip ""}
     {last_name_starts_with ""}
@@ -36,7 +36,7 @@ ad_page_contract {
     keyword:optional
     target
     {passthrough ""}
-    {limit_to_users_in_group_id ""}
+    {limit_to_users_in_group_id:naturalnum ""}
     {only_authorized_p:integer 1}
     {only_needs_approval_p:naturalnum 0}
     {registration_before_days:integer -1}

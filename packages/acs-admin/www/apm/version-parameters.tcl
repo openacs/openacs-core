@@ -8,7 +8,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     {orderby "parameter_name"}
-    {version_id:integer}
+    {version_id:naturalnum,notnull}
     {section_name ""}
 }
 
