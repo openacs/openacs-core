@@ -1,13 +1,13 @@
 ad_page_contract {
     @cvs-id $Id$
 } {
-    {quiet 0}
+    {quiet:boolean 0}
     {by_package_key ""}
     {by_category:aa_test_category ""}
     {view_by:aa_test_view_by "package"}
-    {stress 0}
-    {security_risk 0}
-    {populator 0}
+    {stress:boolean 0}
+    {security_risk:boolean 0}
+    {populator:boolean 0}
 } -properties {
     context_bar:onevalue
     title:onevalue
@@ -36,8 +36,7 @@ foreach testcase [nsv_get aa_test cases] {
     set testcase_desc [lindex $testcase 1]
     set package_key   [lindex $testcase 3]
     set categories    [lindex $testcase 4]
-    set results("$testcase_id,$package_key") \
-        [list $testcase_desc $package_key $categories]
+    set results("$testcase_id,$package_key") [list $testcase_desc $package_key $categories]
     set packages($package_key) [list 0 0 0]
 }
 

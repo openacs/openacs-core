@@ -1,10 +1,10 @@
 ad_page_contract {
     @cvs-id $Id$
 } {
-    testcase_id:nohtml
+    testcase_id:naturalnum,nonull
     package_key:nohtml
-    {showsource 0}
-    {quiet 1}
+    {showsource:boolean 0}
+    {quiet:boolean 1}
 } -properties {
     title:onevalue
     context_bar:onevalue

@@ -4,10 +4,10 @@ ad_page_contract {
     {package_key ""}
     {category:aa_test_category ""}
     {view_by:aa_test_view_by "package"}
-    {testcase_id:nohtml ""}
-    {quiet "0"}
-    {stress "0"}
-    {security_risk "0"}
+    {testcase_id:naturalnum ""}
+    {quiet:boolean "0"}
+    {stress:boolean "0"}
+    {security_risk:boolean "0"}
 } -properties {
 }
 
