@@ -18,6 +18,7 @@ ad_proc -public util::http::available {
     -url 
     {-preference {native curl}}
     -force_ssl:boolean
+    -spool:boolean
 } {
 
     Check, if for the given url and preferences the current
@@ -30,7 +31,7 @@ ad_proc -public util::http::available {
     'curl', which wraps the command line utility (available on every
     system with curl installed).
 
-    @param force_ssl_p specifies wether we want to use SSL despite the
+    @param force_ssl specifies wether we want to use SSL despite the
     url being in http:// form. Default behavior is to use SSL on
     https:// urls only.
 
@@ -41,6 +42,14 @@ ad_proc -public util::http::available {
         set apis [lindex [apis] 0]
     }
     
+    # just allow spool when NaviServer os 4.99.6 or newer
+    if {$spool_p && [apm_version_names_compare [ns_info patchlevel] "4.99.6"] == -1} {
+        if {"native" in $apis} {
+            set index [lsearch $apis "native"]
+            set apis [lreplace $apis $index $index]
+        }
+    }
+
     foreach p $preference {
        if {$p in $apis} {
            return $p
@@ -177,11 +186,10 @@ ad_proc util::http::get {
     -url 
     {-headers ""} 
     {-timeout 30}
-    {-depth 0}
-    {-max_depth 1}
+    {-max_depth 10}
     -force_ssl:boolean
     -gzip_response:boolean
-    {-spool_file ""}
+    -spool:boolean
     {-preference {native curl}}
 } {
     Issue an http GET request to <code>url</code>.
@@ -191,17 +199,18 @@ ad_proc util::http::get {
     allow to avoid the need to specify headers manually, but headers
     will always take precedence over options. 
     
-    @param gzip_response_p informs the server that we are
+    @param gzip_response informs the server that we are
     capable of receiving gzipped responses.  If server complies to our
     indication, the result will be automatically decompressed. 
     
-    @param force_ssl_p specifies wether we want to use SSL
+    @param force_ssl specifies wether we want to use SSL
     despite the url being in http:// form.  Default behavior is to use
     SSL on https:// urls only. 
     
-    @param spool_file enables file spooling of the request on
-    the file specified. It is useful when we expect large responses
-    from the server. 
+    @param spool enables file spooling of the request on the file
+    specified. It is useful when we expect large responses from the
+    server. The result is spooled to a temporary file, the name is
+    returned in the file component of the result.
     
     @param preference decides which available implementation prefer
     in respective order. Choice is between 'native', based on ns_ api,
@@ -213,20 +222,19 @@ ad_proc util::http::get {
     a floating point number or an ns_time value.
     
     @return Returns the data as dict with elements <code>page</code>,
-    <code>status</code>, and <code>modified</code>.
+    <code>file</code> <code>status</code>, and <code>modified</code>.
 
 } {
     return [util::http::request \
                 -url             $url \
                 -method          GET \
-                -force_ssl=$force_ssl_p \
-                -gzip_response=$gzip_response_p \
                 -headers         $headers \
                 -timeout         $timeout \
                 -max_depth       $max_depth \
-                -depth           $depth \
-                -spool_file      $spool_file \
-                -preference      $preference]
+                -preference      $preference \
+                -force_ssl=$force_ssl_p \
+                -gzip_response=$gzip_response_p \
+                -spool=$spool_p]
 }
 
 ad_proc util::http::post {
@@ -237,14 +245,13 @@ ad_proc util::http::post {
     {-body ""}
     {-headers ""}
     {-timeout 30}
-    {-depth 0}
-    {-max_depth 1}
+    {-max_depth 10}
     -force_ssl:boolean
     -multipart:boolean
     -gzip_request:boolean
     -gzip_response:boolean
     -post_redirect:boolean
-    {-spool_file ""}
+    -spool:boolean
     {-preference {native curl}}
 } {
     Implement client-side HTTP POST request.
@@ -291,22 +298,23 @@ ad_proc util::http::post {
     avoid the need to specify headers manually, but headers will
     always take precedence over options.
 
-    @param gzip_request_p informs the server that we are sending data
+    @param gzip_request informs the server that we are sending data
     in gzip format. Data will be automatically compressed.  Notice
     that not all servers can treat gzipped requests properly, and in
     such cases response will likely be an error.
 
-    @param gzip_response_p informs the server that we are capable of
+    @param gzip_response informs the server that we are capable of
     receiving gzipped responses.  If server complies to our
     indication, the result will be automatically decompressed.
     
-    @param force_ssl_p specifies wether we want to use SSL despite the
+    @param force_ssl specifies wether we want to use SSL despite the
     url being in http:// form.  Default behavior is to use SSL on
     https:// urls only.
     
-    @param spool_file enables file spooling of the request on the file
+    @param spool enables file spooling of the request on the file
     specified. It is useful when we expect large responses from the
-    server.
+    server. The result is spooled to a temporary file, the name is
+    returned in the file component of the result.
     
     @param post_redirect decides what happens when we are POSTing and
     server replies with 301, 302 or 303 redirects. RFC 2616/10.3.2
@@ -334,7 +342,7 @@ ad_proc util::http::post {
     a floating point number or an ns_time value.
     
     @return Returns the data as dict with elements <code>page</code>,
-    <code>status</code>, and <code>modified</code>.
+    <code>file</code> <code>status</code>, and <code>modified</code>.
 
 } { 
     set this_proc [lindex [info level 0] 0]
@@ -481,14 +489,14 @@ ad_proc util::http::post {
                 -headers         $headers \
                 -url             $url \
                 -timeout         $timeout \
-                -depth           $depth \
                 -max_depth       $max_depth \
+                -preference      $preference \
                 -force_ssl=$force_ssl_p \
                 -gzip_request=$gzip_request_p \
                 -gzip_response=$gzip_response_p \
                 -post_redirect=$post_redirect_p \
-                -spool_file      $spool_file \
-                -preference      $preference]
+                -spool=$spool_p]
+
 }
 
 ad_proc -private util::http::request {
@@ -498,12 +506,12 @@ ad_proc -private util::http::request {
     {-body ""}
     {-timeout 30} 
     {-depth 0}
-    {-max_depth 1}
+    {-max_depth 10}
     -force_ssl:boolean
     -gzip_request:boolean
     -gzip_response:boolean
     -post_redirect:boolean
-    {-spool_file ""}
+    -spool:boolean
     {-preference {native curl}}
 } {
     Issue an HTTP request either GET or POST to the url specified.
@@ -518,22 +526,23 @@ ad_proc -private util::http::request {
     to specify form variables for POST payloads through this argument
     is passing a string obtained by <code>export_vars -url</code>.
 
-    @param gzip_request_p informs the server that we are sending data
+    @param gzip_request informs the server that we are sending data
     in gzip format. Data will be automatically compressed.  Notice
     that not all servers can treat gzipped requests properly, and in
     such cases response will likely be an error.
     
-    @param gzip_response_p informs the server that we are capable of
+    @param gzip_response informs the server that we are capable of
     receiving gzipped responses.  If server complies to our
     indication, the result will be automatically decompressed.
     
-    @param force_ssl_p specifies wether we want to use SSL despite the
+    @param force_ssl specifies wether we want to use SSL despite the
     url being in http:// form. Default behavior is to use SSL on
     https:// urls only.
     
-    @param spool_file enables file spooling of the request on the file
+    @param spool enables file spooling of the request on the file
     specified. It is useful when we expect large responses from the
-    server.
+    server. The result is spooled to a temporary file, the name is
+    returned in the file component of the result.
     
     @param post_redirect decides what happens when we are POSTing and
     server replies with 301, 302 or 303 redirects. RFC 2616/10.3.2
@@ -563,12 +572,12 @@ ad_proc -private util::http::request {
     a floating point number or an ns_time value.
     
     @return Returns the data as dict with elements <code>page</code>,
-    <code>status</code>, and <code>modified</code>.
+    <code>file</code> <code>status</code>, and <code>modified</code>.
 
 } { 
     set this_proc [lindex [info level 0] 0]
     
-    set impl [available -url $url -force_ssl=$force_ssl_p -preference $preference]
+    set impl [available -url $url -force_ssl=$force_ssl_p -preference $preference -spool=$spool_p]
     if {$impl eq ""} {
         return -code error "${this_proc}:  HTTP client functionalities for this protocol are not available with current system configuration."
     }
@@ -585,7 +594,7 @@ ad_proc -private util::http::request {
                 -gzip_request=$gzip_request_p \
                 -gzip_response=$gzip_response_p \
                 -post_redirect=$post_redirect_p \
-                -spool_file      $spool_file]
+                -spool=$spool_p]
 }
 
 
@@ -617,12 +626,12 @@ ad_proc -private util::http::native::request {
     {-body ""}
     {-timeout 30} 
     {-depth 0}
-    {-max_depth 1}
+    {-max_depth 10}
     -force_ssl:boolean
     -gzip_request:boolean
     -gzip_response:boolean
     -post_redirect:boolean
-    {-spool_file ""}
+    -spool:boolean
 } {
 
     Issue an HTTP request either GET or POST to the url specified.
@@ -638,22 +647,23 @@ ad_proc -private util::http::native::request {
     to specify form variables for POST payloads through this argument
     is passing a string obtained by <code>export_vars -url</code>.
 
-    @param gzip_request_p informs the server that we are sending data
+    @param gzip_request informs the server that we are sending data
     in gzip format. Data will be automatically compressed.  Notice
     that not all servers can treat gzipped requests properly, and in
     such cases response will likely be an error.
     
-    @param gzip_response_p informs the server that we are capable of
+    @param gzip_response informs the server that we are capable of
     receiving gzipped responses.  If server complies to our
     indication, the result will be automatically decompressed.
     
-    @param force_ssl_p specifies wether we want to use SSL despite the
+    @param force_ssl specifies wether we want to use SSL despite the
     url being in http:// form. Default behavior is to use SSL on
     https:// urls only.
     
-    @param spool_file enables file spooling of the request on the file
+    @param spool enables file spooling of the request on the file
     specified. It is useful when we expect large responses from the
-    server.
+    server. The result is spooled to a temporary file, the name is
+    returned in the file component of the result.
     
     @param post_redirect decides what happens when we are POSTing and
     server replies with 301, 302 or 303 redirects. RFC 2616/10.3.2
@@ -677,7 +687,7 @@ ad_proc -private util::http::native::request {
     a floating point number or an ns_time value.
     
     @return Returns the data as dict with elements <code>page</code>,
-    <code>status</code>, and <code>modified</code>.
+    <code>file</code> <code>status</code>, and <code>modified</code>.
 
 } {
     set this_proc [lindex [info level 0] 0]
@@ -753,13 +763,6 @@ ad_proc -private util::http::native::request {
     
     ## Issuing of the request
     
-    #
-    # Spooling to file is disabled for versions earlier than 4.99.6 
-    #
-    if {[apm_version_names_compare [ns_info patchlevel] "4.99.6"] == -1} {
-        set spool_file ""
-    }
-    
     set queue_cmd [list $http_api queue \
                        -timeout [timeout $timeout] \
                        -method $method \
@@ -767,27 +770,32 @@ ad_proc -private util::http::native::request {
     if {$body ne ""} {
         lappend queue_cmd -body $body
     }
-    if {$spool_file ne ""} {
-        lappend queue_cmd -spoolsize 0 -file $spool_file
-        set page "${this_proc}: response spooled to '$spool_file'"
-    }
     lappend queue_cmd $url
     
     set resp_headers [ns_set create resp_headers]
     set wait_cmd [list $http_api wait -headers $resp_headers -status status]
-    if {$spool_file eq ""} {
+    if {$spool_p} {
+        lappend wait_cmd -spoolsize 0 -file spool_file
+        set page ""
+    } else {
         lappend wait_cmd -result page
     }
-    
+
     if {$gzip_response_p} {
         # NaviServer since 4.99.6 can decompress response transparently
         if {[apm_version_names_compare [ns_info patchlevel] "4.99.5"] == 1} {
             lappend wait_cmd -decompress
         }
     }
-    
+
     # Queue call to the url and wait for response
     {*}$wait_cmd [{*}$queue_cmd]
+
+    if {[info exists spool_file]} {
+        set page "${this_proc}: response spooled to '$spool_file'"
+    } else {
+        set spool_file ""
+    }
 
     # Get values from response headers, then remove them
     set content_type     [ns_set iget $resp_headers content-type]
@@ -848,13 +856,14 @@ ad_proc -private util::http::native::request {
             return [$this_proc \
                         -method          GET \
                         -url             $location \
-                        -force_ssl=$force_ssl_p \
-                        -gzip_response=$gzip_response_p \
-                        -post_redirect=$post_redirect_p \
                         -headers         $headers \
                         -timeout         $timeout \
                         -depth           $depth \
-                        -spool_file      $spool_file]
+                        -max_depth       $max_depth \
+                        -force_ssl=$force_ssl_p \
+                        -gzip_response=$gzip_response_p \
+                        -post_redirect=$post_redirect_p \
+                        -spool=$spool_p]
         } else {
             return [$this_proc \
                         -method          POST \
@@ -863,11 +872,12 @@ ad_proc -private util::http::native::request {
                         -headers         $headers \
                         -timeout         $timeout \
                         -depth           $depth \
+                        -max_depth       $max_depth \
                         -force_ssl=$force_ssl_p \
                         -gzip_request=$gzip_request_p \
                         -gzip_response=$gzip_response_p \
                         -post_redirect=$post_redirect_p \
-                        -spool_file      $spool_file]
+                        -spool=$spool_p]
         }
     }
     
@@ -893,6 +903,7 @@ ad_proc -private util::http::native::request {
     
     return [list \
                 page     $page \
+                file     $spool_file \
                 status   $status \
                 modified $last_modified]
 }
@@ -932,12 +943,12 @@ ad_proc -private util::http::curl::request {
     {-body ""}
     {-timeout 30} 
     {-depth 0}
-    {-max_depth 1}
+    {-max_depth 10}
     -force_ssl:boolean
     -gzip_request:boolean
     -gzip_response:boolean
     -post_redirect:boolean
-    {-spool_file ""}
+    -spool:boolean
 } {
 
     Issue an HTTP request either GET or POST to the url specified.
@@ -954,21 +965,22 @@ ad_proc -private util::http::curl::request {
     to specify form variables for POST payloads through this argument
     is passing a string obtained by <code>export_vars -url</code>.
 
-    @param gzip_request_p informs the server that we are sending data
+    @param gzip_request informs the server that we are sending data
     in gzip format. Data will be automatically compressed.  Notice
     that not all servers can treat gzipped requests properly, and in
     such cases response will likely be an error.
     
-    @param gzip_response_p informs the server that we are
+    @param gzip_response informs the server that we are
     capable of receiving gzipped responses.  If server complies to our
     indication, the result will be automatically decompressed. 
     
-    @param force_ssl_p is ignored when using curl http client
+    @param force_ssl is ignored when using curl http client
     implementation and is only kept for cross compatibility.
     
-    @param spool_file enables file spooling of the request on the file
+    @param spool enables file spooling of the request on the file
     specified. It is useful when we expect large responses from the
-    server.
+    server. The result is spooled to a temporary file, the name is
+    returned in the file component of the result.
     
     @param post_redirect decides what happens when we are POSTing and
     server replies with 301, 302 or 303 redirects. RFC 2616/10.3.2
@@ -992,7 +1004,7 @@ ad_proc -private util::http::curl::request {
     seconds.
     
     @return Returns the data as dict with elements <code>page</code>,
-    <code>status</code>, and <code>modified</code>.
+    <code>file</code> <code>status</code>, and <code>modified</code>.
 
 } {
     set this_proc [lindex [info level 0] 0]
@@ -1048,14 +1060,14 @@ ad_proc -private util::http::curl::request {
     }
     
     ## Issuing of the request
-    
-    # Spooling to files is disabled for now
-    set spool_file ""
-    
+
     set cmd [list exec curl -s]
-    
-    if {$spool_file ne ""} {
+
+    if {$spool_p} {
+        set spool_file [ad_tmpnam]
         lappend cmd -o $spool_file
+    } else {
+        set spool_file ""
     }
     
     if {$timeout ne ""} {
@@ -1136,6 +1148,7 @@ ad_proc -private util::http::curl::request {
     
     return [list \
                 page     $page \
+                file     $spool_file \
                 status   $status \
                 modified $last_modified]
 }
@@ -1149,7 +1162,7 @@ ad_proc -public util::get_http_status {
     or 500 for an error, of a URL.  By default this uses the GET method 
     instead of HEAD since not all servers will respond properly to a 
     HEAD request even when the URL is perfectly valid.  Note that 
-    this means AOLserver may be sucking down a lot of bits that it 
+    this means that the server may be sucking down a lot of bits that it 
     doesn't need.
 } { 
     set result [util::http::request \
