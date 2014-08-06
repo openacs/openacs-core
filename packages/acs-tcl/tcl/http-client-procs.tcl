@@ -915,6 +915,20 @@ ad_proc -private util::http::native::request {
 
 namespace eval util::http::curl {}
 
+ad_proc -private util::http::curl::version_not_cached {
+} {
+    Gets Curl's version number.
+} {
+    set version [lindex [exec curl --version] 1]
+}
+
+ad_proc -private util::http::curl::version {
+} {
+    Gets Curl's version number.
+} {
+    return [util_memoize [list util::http::curl::version_not_cached]]
+}
+
 ad_proc -private util::http::curl::timeout {input} {
 
     Convert the provided timeout value to a format suitable for curl.
@@ -989,6 +1003,11 @@ ad_proc -private util::http::curl::request {
     clients fail in respecting this and switch to a GET request
     independently. This options forces this kinds of redirect to
     conserve their original method.
+    Be aware that curl allows the POSTing of 303 requests only since
+    version 7.26. Versions prior than this will follow 303 redirects
+    by GET method. If following by POST is a requirement, please
+    consider switching to the native http client implementation, or
+    update curl.
     
     @param max_depth is the maximum number of redirects the proc is
     allowed to follow. Be aware that when following redirects, unless
@@ -1085,7 +1104,10 @@ ad_proc -private util::http::curl::request {
     
     # If required, we'll follow POST request redirections by GET
     if {!$post_redirect_p} {
-        lappend cmd --post301 --post302 --post303
+        lappend cmd --post301 --post302
+        if {[apm_version_names_compare [version] "7.26"] >= 0} {
+	    lappend cmd --post303
+	}
     }
     
     # Curl can decompress response transparently
