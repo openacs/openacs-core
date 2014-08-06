@@ -781,7 +781,7 @@ ad_proc -public ad_page_contract {
 		    return -code error "[_ acs-tcl.lt_The_-requires_element_1]"
 		}
 		set req_filter [lindex $parts_v 1]
-		if { $req_filter eq "array" || $req_filter eq "multiple" } {
+		if { $req_filter in {array multiple} } {
 		    return -code error "You can't require \"$req_name:$req_filter\" for block \"$name\"."
 		}
 	    }
@@ -1071,12 +1071,24 @@ ad_proc -public ad_page_contract {
 	    set code [lindex $apc_validation_blocks($validation_name) 1]
 
 	    set dependencies_met_p 1
-	    foreach dependency $dependencies {
-		if { ![info exists ::ad_page_contract_validations_passed($dependency)] } {
-		    set dependencies_met_p 0
-		    break
-		}
-	    }
+	    #
+	    # With the following code, the page contract spec
+	    # (name+filter) in "requires" has to be fully identical
+	    # with the name listed in the query variable
+	    # section. Otherweise, the validation is skipped. 
+	    #
+	    # foreach dependency $dependencies {
+	    #	if { ![info exists ::ad_page_contract_validations_passed($dependency)] } {
+	    #	    set dependencies_met_p 0
+	    #	    break
+	    #	}
+	    # }
+	    #
+	    # It is sufficient to check, whether the earlier section
+	    # haven't returned errors, in which case the detailed
+	    # validation is not necessary.
+	    #
+	    if {[ad_complaints_count]>0} {set dependencies_met_p 0}
 
 	    if { $dependencies_met_p } {
 
