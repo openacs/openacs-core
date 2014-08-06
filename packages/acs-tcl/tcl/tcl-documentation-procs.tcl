@@ -1072,23 +1072,25 @@ ad_proc -public ad_page_contract {
 
 	    set dependencies_met_p 1
 	    #
-	    # With the following code, the page contract spec
-	    # (name+filter) in "requires" has to be fully identical
-	    # with the name listed in the query variable
-	    # section. Otherweise, the validation is skipped. 
+	    # Check, of the variables of the dependencies were provided.
 	    #
-	    # foreach dependency $dependencies {
-	    #	if { ![info exists ::ad_page_contract_validations_passed($dependency)] } {
-	    #	    set dependencies_met_p 0
-	    #	    break
-	    #	}
-	    # }
+	    foreach dependency $dependencies {
+		set varName [lindex [split $dependency ":"] 0]
+		if { ![ad_page_contract_get_validation_passed_p $varName] } {
+		    # var $varName was not provided
+		    set dependencies_met_p 0
+		    break
+		}
+	    }
+
 	    #
-	    # It is sufficient to check, whether the earlier section
-	    # haven't returned errors, in which case the detailed
-	    # validation is not necessary.
+	    # Check, whether the earlier section haven't returned
+	    # errors, in which case the detailed validation is not
+	    # necessary.
 	    #
-	    if {[ad_complaints_count]>0} {set dependencies_met_p 0}
+	    if { $dependencies_met_p && [ad_complaints_count] > 0} {
+		set dependencies_met_p 0
+	    }
 
 	    if { $dependencies_met_p } {
 
