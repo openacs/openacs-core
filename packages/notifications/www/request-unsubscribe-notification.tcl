@@ -7,7 +7,7 @@ ad_page_contract {
     
 } {
     object_id:naturalnum,notnull
-    type_id
+    type_id:naturalnum,notnull
 }
 
 set package_id [ad_conn package_id]
