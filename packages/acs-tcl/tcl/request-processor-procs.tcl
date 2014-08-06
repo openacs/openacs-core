@@ -512,6 +512,7 @@ ad_proc -private rp_resources_filter { why } {
     @author Don Baccus (dhogaza@pacifier.com)
 
 } {
+    ad_conn -set untrusted_user_id 0
     set path "[acs_package_root_dir [lindex [ns_conn urlv] 1]]/www/resources/[join [lrange [ns_conn urlv] 2 end] /]"
     if { [file isfile $path] } {
         return [rp_serve_resource_file $path]
