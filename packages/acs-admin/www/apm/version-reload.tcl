@@ -27,7 +27,19 @@ set files_to_watch [list]
 if { [llength $files] == 0 } {
     append body "There are no changed files to reload in this package.<p>"
 } else {
-    append body "Marked the following file[ad_decode [llength $files] 1 "" "s"] for reloading:<ul>\n"
+    append body "Marked the following file[ad_decode [llength $files] 1 "" "s"] for reloading:<ul id='files'>\n"
+
+    # Source all of the marked files using the current interpreter, accumulating
+    # errors into apm_package_load_errors
+    array set errors [list]
+    catch { apm_load_any_changed_libraries errors }
+
+    if {[info exists errors($package_key)]} {
+ 	array set package_errors $errors($package_key)
+    } else {
+ 	array set package_errors [list]
+    }
+
     foreach file $files {
 	append body "<li>$file"
 	if { [nsv_exists apm_reload_watch $file] } {
@@ -44,9 +56,30 @@ if { [llength $files] == 0 } {
 	    }]
             lappend files_to_watch $local_path
 	}
-	append body "\n"
+
+	if {[info exists package_errors($file)]} {
+	    append body "<dl class='error'><dt title='Errors while loading $file'>ERROR!</dt>" \
+		"<dd><code><pre>[ad_quotehtml $package_errors($file)]</pre></code></dd></dl>"
+	}
+	append body "</li>\n"
+     }
+     append body "</ul>\n"
+
+    set n_errors [array size package_errors]
+    if {$n_errors > 0} {
+	if {$n_errors > 1} {
+	    set exist_n_error_files "were $n_errors files"
+	} else {
+	    set exist_n_error_files "was $n_errors file"
+	}
+	append body "
+		<p><strong style='color:red;font-size:112.5%;'>There
+		$exist_n_error_files with errors that prevented complete
+		reloading</strong>.  Fix the problem, then reload the
+		package again to finish the reload.
+		</p>
+	"
     }
-    append body "</ul>\n"
 }
 
 
@@ -68,4 +101,6 @@ append body [subst {
     </ul>
 }]
 
-ad_return_template apm
+# template::head::add_javascript -src "//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"
+
+ad_return_template

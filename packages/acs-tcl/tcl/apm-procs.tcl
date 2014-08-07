@@ -751,7 +751,7 @@ ad_proc -private apm_pretty_name_for_db_type { db_type } {
     " -default "all" -bind [list db_type $db_type]]]
 }
 
-ad_proc -public apm_load_any_changed_libraries {} {
+ad_proc -public apm_load_any_changed_libraries { {errorVarName {}} } {
     
     In the running interpreter, reloads files marked for reload by
     apm_mark_version_for_reload. If any watches are set, examines watched
@@ -760,6 +760,13 @@ ad_proc -public apm_load_any_changed_libraries {} {
     before any filters or registered procedures are applied).
 
 } {
+
+    if {$errorVarName ne ""} {
+	upvar $errorVarName errors
+    } else {
+	array set errors [list]
+    }
+
     # Determine the current reload level in this interpreter by calling
     # apm_reload_level_in_this_interpreter. If this fails, we define the reload level to be
     # zero.
@@ -820,12 +827,12 @@ ad_proc -public apm_load_any_changed_libraries {} {
                         # Make sure this is not a -init.tcl file as those should only be sourced on server startup
                         if { ![regexp {\-init\.tcl$} $file_path] } {
                             ns_log Notice "apm_load_any_changed_libraries: Reloading $file..."
-                            apm_source $file_path
+                            apm_source $file_path errors
                         }
                     }
                     .xql { 
                         ns_log Notice "apm_load_any_changed_libraries: Reloading $file..."
-                        db_qd_load_query_file $file_path
+                        db_qd_load_query_file $file_path errors
                     }
                     default {
                         ns_log Notice "apm_load_any_changed_libraries: File $file_path has unknown extension. Not reloading."

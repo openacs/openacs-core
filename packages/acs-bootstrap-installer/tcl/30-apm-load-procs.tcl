@@ -362,24 +362,35 @@ ad_proc apm_package_supports_rdbms_p {
     return [expr {![file exists "${package_path}/sql"] || [file exists "${package_path}/sql/[db_type]"]}]
 }
 
-ad_proc -private apm_source { __file } {
+ad_proc -private apm_source { __file {errorVarName ""}} {
     Sources $__file in a clean environment, returning 1 if successful or 0 if not.
     Records that the file has been sourced and stores its mtime in the nsv array
     apm_library_mtime
 } {
+    if {$errorVarName ne ""} {
+	upvar $errorVarName errors
+    } else {
+	array set errors [list]
+    }
+
     if { ![file exists $__file] } {
-		ns_log "Error" "Unable to source $__file: file does not exist."
+	ns_log "Error" "Unable to source $__file: file does not exist."
 	return 0
     }
+
+    set r_file [ad_make_relative_path $__file]
 
     # Actually do the source.
-    if { [catch { source $__file }] } {
-	global errorInfo
-		ns_log "Error" "Error sourcing $__file:\n$errorInfo"
+    if { [catch { source $__file } errorMsg] } {
+	set backTrace $::errorInfo
+	ns_log "Error" "Error sourcing $__file:\n$backTrace"
+	set package_key ""
+	regexp {/packages/([^/]+)/} $__file -> package_key
+	lappend errors($package_key) $r_file $backTrace
 	return 0
     }
 
-    nsv_set apm_library_mtime [ad_make_relative_path $__file] [file mtime $__file]    
+    nsv_set apm_library_mtime $r_file [file mtime $__file]    
 
     return 1
 }

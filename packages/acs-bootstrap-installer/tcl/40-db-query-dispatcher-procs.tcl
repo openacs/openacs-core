@@ -217,13 +217,22 @@ ad_proc -public db_qd_pick_most_specific_query {rdbms query_1 query_2} {
 #
 ################################################
 
-ad_proc -public db_qd_load_query_file {file_path} {
+ad_proc -public db_qd_load_query_file {file_path {errorVarName ""}} {
     A procedure that is called from the outside world (APM) 
     to load a particular file
-} { 
-    if { [catch {db_qd_internal_load_cache $file_path} errmsg] } {
-        global errorInfo
-        ns_log Error "Error parsing queryfile $file_path:\n\n$errmsg\n\n$errorInfo"
+} {
+    if {$errorVarName ne ""} {
+	upvar $errorVarName errors
+    } else {
+	array set errors [list]
+    }
+    if { [catch {db_qd_internal_load_cache $file_path} errMsg] } {
+        set backTrace $::errorInfo
+        ns_log Error "Error parsing queryfile $file_path:\n\n$errMsg\n\n$backTrace"
+	set r_file [ad_make_relative_path $file_path]
+	set package_key ""
+	regexp {/packages/([^/]+)/} $file_path -> package_key
+	lappend errors($package_key) $r_file $backTrace
     }
 }
 
