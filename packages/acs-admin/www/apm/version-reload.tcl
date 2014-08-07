@@ -14,10 +14,10 @@ apm_version_info $version_id
 
 set title "Reload $pretty_name"
 set context [list \
-		 [list "../developer" "Developer's Administration"] \
-		 [list "/acs-admin/apm/" "Package Manager"] \
-		 [list [export_vars -base version-view { version_id }] "$pretty_name $version_name"] \
-		 $title]
+                 [list "../developer" "Developer's Administration"] \
+                 [list "/acs-admin/apm/" "Package Manager"] \
+                 [list [export_vars -base version-view { version_id }] "$pretty_name $version_name"] \
+                 $title]
 
 # files in $files.
 apm_mark_version_for_reload $version_id files
@@ -35,62 +35,62 @@ if { [llength $files] == 0 } {
     catch { apm_load_any_changed_libraries errors }
 
     if {[info exists errors($package_key)]} {
- 	array set package_errors $errors($package_key)
+        array set package_errors $errors($package_key)
     } else {
- 	array set package_errors [list]
+        array set package_errors [list]
     }
 
     foreach file $files {
-	append body "<li>$file"
-	if { [nsv_exists apm_reload_watch $file] } {
-	    append body " (currently being watched)"
-	} else {
-	    # This file isn't being watched right now - provide a link setting a watch on it.
-	    set files_to_watch_p 1
+        append body "<li>$file"
+        if { [nsv_exists apm_reload_watch $file] } {
+            append body " (currently being watched)"
+        } else {
+            # This file isn't being watched right now - provide a link setting a watch on it.
+            set files_to_watch_p 1
 
             # Remove the two first elements of the path, namely packages/package-key/
             set local_path [file join {*}[lrange [file split $file] 2 end]]
 
-	    append body [subst {
-		(<a href="file-watch?[export_vars { version_id { paths $local_path } }]">watch this file</a>)
-	    }]
+            append body [subst {
+                (<a href="file-watch?[export_vars { version_id { paths $local_path } }]">watch this file</a>)
+            }]
             lappend files_to_watch $local_path
-	}
+        }
 
-	if {[info exists package_errors($file)]} {
-	    append body "<dl class='error'><dt title='Errors while loading $file'>ERROR!</dt>" \
-		"<dd><code><pre>[ad_quotehtml $package_errors($file)]</pre></code></dd></dl>"
-	}
-	append body "</li>\n"
-     }
-     append body "</ul>\n"
+        if {[info exists package_errors($file)]} {
+            append body "<dl class='error'><dt title='Errors while loading $file'>ERROR!</dt>" \
+                "<dd><code><pre>[ad_quotehtml $package_errors($file)]</pre></code></dd></dl>"
+        }
+        append body "</li>\n"
+    }
+    append body "</ul>\n"
 
     set n_errors [array size package_errors]
     if {$n_errors > 0} {
-	if {$n_errors > 1} {
-	    set exist_n_error_files "were $n_errors files"
-	} else {
-	    set exist_n_error_files "was $n_errors file"
-	}
-	append body "
-		<p><strong style='color:red;font-size:112.5%;'>There
-		$exist_n_error_files with errors that prevented complete
-		reloading</strong>.  Fix the problem, then reload the
-		package again to finish the reload.
-		</p>
-	"
+        if {$n_errors > 1} {
+            set exist_n_error_files "were $n_errors files"
+        } else {
+            set exist_n_error_files "was $n_errors file"
+        }
+        append body "
+        <p><strong style='color:red;font-size:112.5%;'>There
+        $exist_n_error_files with errors that prevented complete
+        reloading</strong>.  Fix the problem, then reload the
+        package again to finish the reload.
+        </p>
+    "
     }
 }
 
 
 if { [info exists files_to_watch_p] } {
     append body [subst {
-	If you know you're going to be modifying one of the above files frequently,
-    select the "watch this file" link next to a filename to cause the interpreters to
-    reload the file immediately whenever it is changed.<p>
-    <ul class="action-links">
-    <li><a href="file-watch?[export_vars { version_id { paths:multiple $files_to_watch } }]">Watch 
-	all above files</a></li>
+        If you know you're going to be modifying one of the above files frequently,
+        select the "watch this file" link next to a filename to cause the interpreters to
+        reload the file immediately whenever it is changed.<p>
+        <ul class="action-links">
+        <li><a href="file-watch?[export_vars { version_id { paths:multiple $files_to_watch } }]">Watch 
+        all above files</a></li>
     }]
 } else {
     append body "<ul class=\"action-links\">"
@@ -104,3 +104,10 @@ append body [subst {
 # template::head::add_javascript -src "//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"
 
 ad_return_template
+
+#
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -104,9 +104,9 @@ ad_proc -public db_rdbms_compatible_p {rdbms_test rdbms_pattern} {
     # If the query being tested was written for a version that is older than 
     # the current RDBMS then we have compatibility. Otherwise we don't.
     foreach t [split [db_rdbms_get_version $rdbms_test   ] "\."] \
-            p [split [db_rdbms_get_version $rdbms_pattern] "\."] {
-                if {$t != $p} {return [expr {$t < $p}]}
-            }
+	p [split [db_rdbms_get_version $rdbms_pattern] "\."] {
+	    if {$t != $p} {return [expr {$t < $p}]}
+	}
     
     # Same version (though not strictly "older") is OK
     return 1
@@ -532,12 +532,12 @@ ad_proc -private db_qd_internal_load_queries {file_pointer file_tag} {
 	    set new_name [db_qd_make_absolute_path $queryname_root [db_fullquery_get_name $one_query]]
 
 	    set new_fullquery [db_fullquery_create \
-		    $new_name \
-		    [db_fullquery_get_querytext $one_query] \
-		    [db_fullquery_get_bind_vars $one_query] \
-		    [db_fullquery_get_query_type $one_query] \
-		    [db_fullquery_get_rdbms $one_query] \
-		    [db_fullquery_get_load_location $one_query]]
+				   $new_name \
+				   [db_fullquery_get_querytext $one_query] \
+				   [db_fullquery_get_bind_vars $one_query] \
+				   [db_fullquery_get_query_type $one_query] \
+				   [db_fullquery_get_rdbms $one_query] \
+				   [db_fullquery_get_load_location $one_query]]
 
 	    set one_query $new_fullquery
 
@@ -549,7 +549,7 @@ ad_proc -private db_qd_internal_load_queries {file_pointer file_tag} {
     }
 
     set relative_path [string range $file_tag \
-        [expr { [string length $::acs::rootdir] + 1 }] end]
+			   [expr { [string length $::acs::rootdir] + 1 }] end]
     nsv_set apm_library_mtime $relative_path [file mtime $file_tag]
 }
 
@@ -894,3 +894,10 @@ ad_proc -private db_qd_log {level msg} {
 if { $remove_ad_proc_p } { 
     rename ad_proc {}
 }
+
+#
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

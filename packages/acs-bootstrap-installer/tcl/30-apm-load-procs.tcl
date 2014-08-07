@@ -28,16 +28,15 @@ ad_proc -public apm_guess_file_type { package_key path } {
 
     Guesses and returns the file type key corresponding to a particular path
     (or an empty string if none is known). <code>$path</code> should be
-    relative to the package directory (e.g., <code>www/index.tcl</code>
+    relative to the package directory (e.g., <code>www/index.tcl</code>)
     for <code>/packages/bboard/admin-www/index.tcl</code>. We use the following rules:
 
     <ol>
     <li>Files with extension <code>.sql</code> are considered data-model files,
     <li>Files with extension <code>.dat</code> are considered SQL data files.
     <li>Files with extension <code>.ctl</code> are considered sql data loader control files.
-    or if any path contains the substring <code>upgrade</code>, data-model upgrade
-    files.
-    <li>Files with extension <code>.sqlj</code> are considered sqlj_code files.				       
+    or if any path contains the substring <code>upgrade</code>, data-model upgrade files.
+    <li>Files with extension <code>.sqlj</code> are considered sqlj_code files.                       
     <li>Files with extension <code>.info</code> are considered package specification files.
     <li>Files with extension <code>.xql</code> are considered query files.
     <li>Files with extension <code>.java</code> are considered java code files.
@@ -45,7 +44,7 @@ ad_proc -public apm_guess_file_type { package_key path } {
     <li>Files with a path component named <code>doc</code> are considered
     documentation files.
     <li>Files with extension <code>.pl</code> or <code>.sh</code> or
-        which have a path component named
+    which have a path component named
     <code>bin</code>, are considered shell-executable files.
     <li>Files with a path component named <code>templates</code> are considered
     template files.
@@ -55,27 +54,27 @@ ad_proc -public apm_guess_file_type { package_key path } {
     are considered content-page files.
     <li>Files with a path component named <code>lib</code>
     are considered include_page files.
-    <li>Files under package-key/tcl ending in <code>-procs(-)+()*.tcl)</code> or <code>-init.tcl</code> are considered
+    <li>Files under package-key/tcl ending in <code>-procs(-)+()*.tcl)</code> 
+    or <code>-init.tcl</code> are considered
     Tcl procedure or Tcl initialization files, respectively.
-    <li>File ending in <code>.tcl</code> are considered Tcl utility script files (normally
-    found only in the bootstrap installer).
+    <li>File ending in <code>.tcl</code> are considered Tcl utility script files 
+      (normally found only in the bootstrap installer).
     <li>Files with extension <code>.xml</code> in the directory catalog are
-        considered message catalog files.
+      considered message catalog files.
     <li>Tcl procs or init files under package-key/tcl in a test directory are of type test_procs and test_init
-        respectively.
-    </ol>
-
+      respectively.
+     </ol>
     Rules are applied in this order (stopping with the first match).
 
 } {
     set components [split $path "/"]
-    set dirs_in_pageroot [llength [split $::acs::pageroot "/"]]	   ;# See comments by RBM
+    set dirs_in_pageroot [llength [split $::acs::pageroot "/"]]       ;# See comments by RBM
 
     # Fix to cope with both full and relative paths
     if { [string index $path 0] eq "/"} {                          
-	set components_lesser [lrange $components $dirs_in_pageroot end] 
+        set components_lesser [lrange $components $dirs_in_pageroot end] 
     } else {
-	set components_lesser $components
+        set components_lesser $components
     }
     set extension [file extension $path]
     set type ""
@@ -93,45 +92,45 @@ ad_proc -public apm_guess_file_type { package_key path } {
     # package.
 
     if {$extension eq ".sql"} {
-	if { [lsearch -glob $components "*upgrade-*-*"] >= 0 } {
-	    set type "data_model_upgrade"
+        if { [lsearch -glob $components "*upgrade-*-*"] >= 0 } {
+            set type "data_model_upgrade"
         } elseif { [regexp -- "^$package_key-(create|drop)\.sql\$" [file tail $path] "" kind] } {
-	    set type "data_model_$kind"
-	} else {
-	    set type "data_model"
-	}
+            set type "data_model_$kind"
+        } else {
+            set type "data_model"
+        }
     } elseif {$extension eq ".dat"} {
-	set type "sql_data"
+        set type "sql_data"
     } elseif {$extension eq ".ctl"} {
-	set type "ctl_file"
+        set type "ctl_file"
     } elseif {$extension eq ".sqlj"} {
-	set type "sqlj_code"
+        set type "sqlj_code"
     } elseif {$extension eq ".info"} {
-	set type "package_spec"
+        set type "package_spec"
     } elseif {$extension eq ".xql"} {
-	set type "query_file"
+        set type "query_file"
     } elseif {$extension eq ".java"} {
-	set type "java_code"
+        set type "java_code"
     } elseif {$extension eq ".jar"} {
-	set type "java_archive"
+        set type "java_archive"
     } elseif { "doc" in $components } {
-	set type "documentation"
+        set type "documentation"
     } elseif { $extension eq ".pl" || $extension eq ".sh" || "bin" in $components } {
-	set type "shell"
+        set type "shell"
     } elseif { "templates" in $components } {
-	set type "template"
+        set type "template"
     } elseif { [llength $components] == 1 && 
-	       ($extension eq ".html" || $extension eq ".adp") } {
-		# HTML or ADP file in the top level of a package - assume it's documentation.
-	set type "documentation"
+               ($extension eq ".html" || $extension eq ".adp") } {
+        # HTML or ADP file in the top level of a package - assume it's documentation.
+        set type "documentation"
 
         # RBM: Changed the next elseif to check for 'www' or 'admin-www' only n levels down
         # the path, since that'd be the minimum in a path counting from the pageroot
 
     } elseif { "www" in $components_lesser || "admin-www" in $components_lesser } {
-	set type "content_page"
+        set type "content_page"
     } elseif { "lib" in $components_lesser } {
-	set type "include_page"
+        set type "include_page"
     } elseif { $extension eq ".tcl" && [lindex $components_lesser 0] eq "tcl" } {
         # A .tcl file residing under dir .../package_key/tcl/
         if { [regexp -- {-(procs|init)(-[0-9a-zA-Z]*)?\.tcl$} [file tail $path] "" kind] } {
@@ -151,47 +150,47 @@ ad_proc -public apm_guess_file_type { package_key path } {
 }
 
 ad_proc -public apm_get_package_files {
-   {-include_data_model_files:boolean}
-   {-all:boolean}
-   {-all_db_types:boolean}
-   {-package_key:required}
-   {-package_path {}}
-   {-file_types {}}
+    {-include_data_model_files:boolean}
+    {-all:boolean}
+    {-all_db_types:boolean}
+    {-package_key:required}
+    {-package_path {}}
+    {-file_types {}}
 } {
-  <p>
-  Returns all files, or files of a certain types, belonging to an APM
-  package. Ignores files based on proc apm_include_file_p and determines file type
-  of files with proc apm_guess_file_type. Only returns file with no db type or a
-  db type matching that of the system.
-  </p>
+    <p>
+    Returns all files, or files of a certain types, belonging to an APM
+    package. Ignores files based on proc apm_include_file_p and determines file type
+    of files with proc apm_guess_file_type. Only returns file with no db type or a
+    db type matching that of the system.
+    </p>
 
-  <p>
-  Goes directly to the filesystem to find
-  files instead of using a file listing in the package info file or the database.
-  </p>
+    <p>
+    Goes directly to the filesystem to find
+    files instead of using a file listing in the package info file or the database.
+    </p>
 
-  @param package_key    The key of the package to return file paths for
-  @param file_types     The type of files to return. If not provided files of all types
-                        recognized by the APM are returned.
-  @param package_path   The full path of the root directory of the package. Defaults to 
-                        acs_package_root_dir.
+    @param package_key    The key of the package to return file paths for
+    @param file_types     The type of files to return. If not provided files of all types
+    recognized by the APM are returned.
+    @param package_path   The full path of the root directory of the package. Defaults to 
+    acs_package_root_dir.
 
-  @return The paths, relative to the root dir of the package, of matching files.    
+    @return The paths, relative to the root dir of the package, of matching files.    
 
-  @author Peter Marklund
+    @author Peter Marklund
 
-  @see apm_include_file_p
-  @see apm_guess_file_type
-  @see apm_guess_db_type
+    @see apm_include_file_p
+    @see apm_guess_file_type
+    @see apm_guess_db_type
 } {
     if { $package_path eq "" } {
         set package_path [acs_package_root_dir $package_key]
     }
 
     if {$all_p} {
-      set file_function ""
+        set file_function ""
     } else {
-      set file_function [expr {$include_data_model_files_p ? "apm_include_data_model_file_p" : "apm_include_file_p"}]
+        set file_function [expr {$include_data_model_files_p ? "apm_include_data_model_file_p" : "apm_include_file_p"}]
     }
     set files [lsort [ad_find_all_files -check_file_func $file_function $package_path]]
     # We don't assume db_type proc is defined yet
@@ -283,34 +282,33 @@ ad_proc -private apm_guess_db_type { package_key path } {
 
     Guesses and returns the database type key corresponding to a particular path
     (or an empty string if none is known). <code>$path</code> should be
-    relative to the package directory (e.g., <code>www/index.tcl</code>
-    for <code>/packages/bboard/admin-www/index.tcl</code>.  
+    relative to the package directory (e.g., <code>www/index.tcl</code> for <code>/packages/bboard/admin-www/index.tcl</code>).  
 
     We consider two cases:
-
+    
     1. Data model files.
     
-       If the path contains a string matching "sql/" followed by a database type known
-       to this version of OpenACS, the file is assumed to be specific to that database type.
-       The empty string is returned for all other data model files.
+    If the path contains a string matching "sql/" followed by a database type known
+    to this version of OpenACS, the file is assumed to be specific to that database type.
+    The empty string is returned for all other data model files.
 
-       Example: "sql/postgresql/apm-create.sql" is assumed to be the PostgreSQL-specific
-       file used to create the APM datamodel.
+    Example: "sql/postgresql/apm-create.sql" is assumed to be the PostgreSQL-specific
+    file used to create the APM datamodel.
 
-       If the path contains a string matching "sql/common" the file is assumed to be
-       compatible with all supported RDBMS's and a blank db_type is returned.
+    If the path contains a string matching "sql/common" the file is assumed to be
+    compatible with all supported RDBMS's and a blank db_type is returned.
 
-       Otherwise "oracle" is returned.  This is a hardwired kludge to allow us to
-       handle legacy ACS 4 packages.
+    Otherwise "oracle" is returned.  This is a hardwired kludge to allow us to
+    handle legacy ACS 4 packages.
 
     2. Other files.
 
-       If it is a tcl, xql, or sqlj file not under the sql dir and whose name 
-       ends in a dash and database type, the file is assumed to be specific to 
-       that database type.
+    If it is a tcl, xql, or sqlj file not under the sql dir and whose name 
+    ends in a dash and database type, the file is assumed to be specific to 
+    that database type.
 
-       Example: "tcl/10-database-postgresql-proc.tcl" is asusmed to be the file that
-       defines the PostgreSQL-specific portions of the database API.
+    Example: "tcl/10-database-postgresql-proc.tcl" is asusmed to be the file that
+    defines the PostgreSQL-specific portions of the database API.
 
 } {
     set components [split $path "/"]
@@ -368,26 +366,26 @@ ad_proc -private apm_source { __file {errorVarName ""}} {
     apm_library_mtime
 } {
     if {$errorVarName ne ""} {
-	upvar $errorVarName errors
+        upvar $errorVarName errors
     } else {
-	array set errors [list]
+        array set errors [list]
     }
 
     if { ![file exists $__file] } {
-	ns_log "Error" "Unable to source $__file: file does not exist."
-	return 0
+        ns_log "Error" "Unable to source $__file: file does not exist."
+        return 0
     }
 
     set r_file [ad_make_relative_path $__file]
 
     # Actually do the source.
     if { [catch { source $__file } errorMsg] } {
-	set backTrace $::errorInfo
-	ns_log "Error" "Error sourcing $__file:\n$backTrace"
-	set package_key ""
-	regexp {/packages/([^/]+)/} $__file -> package_key
-	lappend errors($package_key) $r_file $backTrace
-	return 0
+        set backTrace $::errorInfo
+        ns_log "Error" "Error sourcing $__file:\n$backTrace"
+        set package_key ""
+        regexp {/packages/([^/]+)/} $__file -> package_key
+        lappend errors($package_key) $r_file $backTrace
+        return 0
     }
 
     nsv_set apm_library_mtime $r_file [file mtime $__file]    
@@ -462,13 +460,13 @@ proc apm_bootstrap_load_queries { package_key } {
 
     # DRB: We can't parse the $package_key.info file at this point in time, primarily because
     # grabbing the package information uses not only the XML file but tables from the APM,
-	# which haven't been loaded yet if we're installing.  So we just snarf all of the
-	# queryfiles in this package that match the current database or no database
+    # which haven't been loaded yet if we're installing.  So we just snarf all of the
+    # queryfiles in this package that match the current database or no database
     # (which we interpret to mean all supported databases).
 
     set files [ad_find_all_files $::acs::rootdir/packages/$package_key]
     if { [llength $files] == 0 } {
-	error "Unable to locate $::acs::rootdir/packages/$package_key/*."
+        error "Unable to locate $::acs::rootdir/packages/$package_key/*."
     }
 
     foreach file [lsort $files] {
@@ -478,7 +476,7 @@ proc apm_bootstrap_load_queries { package_key } {
 
         if {$file_type eq "query_file" &&
             ($file_db_type eq "" || $file_db_type eq $db_type)} {
-	    db_qd_load_query_file $file
+            db_qd_load_query_file $file
         } 
     }
 }
@@ -519,22 +517,22 @@ ad_proc -private apm_ignore_file_p {
 
 } {
     if {[file isdirectory $path]} {
-	#
-	# ignored directories
-	#
-	set parts [file split $path]
-	if {[lindex $parts end] eq "resources" && [lindex $parts end-1] eq "www"} {
-	    return 1
-	}
+        #
+        # ignored directories
+        #
+        set parts [file split $path]
+        if {[lindex $parts end] eq "resources" && [lindex $parts end-1] eq "www"} {
+            return 1
+        }
 
-    set dir_list {CVS .git catalog}
-    if {!$data_model_files_p} {
-        lappend dir_list "upgrade"
-    }
-    
-	if {[lindex $parts end] in $dir_list} {
-	    return 1
-	}
+        set dir_list {CVS .git catalog}
+        if {!$data_model_files_p} {
+            lappend dir_list "upgrade"
+        }
+        
+        if {[lindex $parts end] in $dir_list} {
+            return 1
+        }
     }
     #
     # ignored extensions
@@ -597,9 +595,16 @@ ad_proc apm_bootstrap_upgrade {
     set doCopy [expr {$to_version_name eq "5.8.1d3"}]
 
     if {$doCopy} {
-	set source [acs_root_dir]/packages/acs-bootstrap-installer/installer/tcl
-	foreach file [glob -nocomplain $source/*tcl] {
-	    file copy -force $file [acs_root_dir]/tcl
-	}
+        set source [acs_root_dir]/packages/acs-bootstrap-installer/installer/tcl
+        foreach file [glob -nocomplain $source/*tcl] {
+            file copy -force $file [acs_root_dir]/tcl
+        }
     }
 }
+
+#
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:
