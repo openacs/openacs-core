@@ -501,7 +501,7 @@ ad_proc -private apm_transfer_file {
     if {$httpImpls ne ""} {
         ns_log notice "we can use the http::util:: interface using the $httpImpls implementation"
         set result [util::http::get -url $url -spool]
-        file rename $F $output_file_name
+        file rename [dict get $result file] $output_file_name
     } elseif {[info commands ::ns_http] ne "" && [apm_version_names_compare [ns_info patchlevel] "4.99.5"] == 1} {
         # 
         # ... use ns_http when we have a version with the "-file" flag ...
