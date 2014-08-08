@@ -4,7 +4,7 @@
 <package key="acs-mail-lite" url="http://openacs.org/repository/apm/packages/acs-mail-lite" type="apm_service">
     <package-name>Mail Services Lite</package-name>
     <pretty-plural>Mail Services Lite</pretty-plural>
-    <initial-install-p>f</initial-install-p>
+    <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     <implements-subsite-p>f</implements-subsite-p>
     <inherit-templates-p>t</inherit-templates-p>
