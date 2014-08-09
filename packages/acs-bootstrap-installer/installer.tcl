@@ -359,8 +359,11 @@ ad_proc -private install_load_errors_formatted {errorVarName} {
     set result ""
     if {[array size errors] > 0} {
 	append result "<blockquote><pre>\n"
-	foreach {key value} [array get errors] {
-	    append result "$key:\n[ad_quotehtml $value]\n"
+	foreach {package errorInfos} [array get errors] {
+	    append result "<h4>Error in Package $package:</h4>\n"
+	    foreach {fileName backTrace} $errorInfos {
+		append result "<strong>Error in File $fileName</strong>\n\n[ad_quotehtml $backTrace]\n\n\n"
+	    }
 	}
 	append result "</pre></blockquote>\n"
     }
@@ -414,7 +417,7 @@ ad_proc -private install_do_data_model_install {} {
     apm_source [acs_package_root_dir acs-tcl]/tcl/database-init.tcl errors
 
     if {[array size errors] > 0} {
-	ns_write "Errors during initial load:\n"
+	ns_write "<h3>Errors during initial load:</h3>"
 	ns_write [install_load_errors_formatted errors]
     }
 
@@ -463,12 +466,18 @@ ad_proc -private install_do_packages_install {} {
     apm_bootstrap_load_queries acs-subsite
     install_redefine_ad_conn
 
+    if {[array size errors] > 0} {
+	ns_write "<h2>Errors during load of acs-tcl init or package acs-subsite</h2>\n"
+	ns_write [install_load_errors_formatted errors]
+	 return
+    }
+
     # Attempt to install all packages.
     set dependency_results [apm_dependency_check -initial_install [apm_scan_packages -new [file join $::acs::rootdir packages]]]
     set dependencies_satisfied_p [lindex $dependency_results 0]
     set pkg_list [lindex $dependency_results 1]
 
-     if { !$dependencies_satisfied_p } {
+    if { !$dependencies_satisfied_p } {
 	 ns_write "<p><b><i>At least one core package has an unsatisifed dependency.\
               No packages have been installed missing: [lindex $dependency_results 2]. \
               Here's what the APM has computed:</i></b>"
@@ -478,9 +487,6 @@ ad_proc -private install_do_packages_install {} {
 	     lassign $dep _name _path _a _b _pkg _deps _flag _msg
 	     ns_write "<li>[lindex $_pkg 0]: $_msg</li>"
 	 }
-	 ns_write "\n</ul>\n"
-	 ns_write [install_load_errors_formatted errors]
-
 	 return
     }
 
