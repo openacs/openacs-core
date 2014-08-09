@@ -10,7 +10,6 @@
     <version name="5.8.1d3" url="http://openacs.org/repository/download/apm/acs-admin-5.8.1d3.apm">
         <owner url="mailto:dhogaza@pacifier.com">Don Baccus</owner>
         <summary>An interface for Site-wide administration of an OpenACS Installation.</summary>
-        <maturity>3</maturity>
         <release-date>2013-09-08</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
         <license url="http://www.gnu.org/copyleft/gpl.html">GPL</license>

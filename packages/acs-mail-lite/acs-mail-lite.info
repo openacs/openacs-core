@@ -16,7 +16,7 @@
         <release-date>2014-07-25</release-date>
         <vendor url="http://www.openacs.org">OpenACS</vendor>
         <description format="text/html">This package provides a service for sending messages, queueing messages in the database to ensure reliable sending and make sending a message 'transactional'. Replacement for acs-mail.</description>
-        <maturity>2</maturity>
+        <maturity>3</maturity>
 
         <provides url="acs-mail-lite" version="5.8.1d4"/>
         <requires url="acs-kernel" version="5.8.1d1"/>

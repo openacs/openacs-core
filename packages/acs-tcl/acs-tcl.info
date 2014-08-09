@@ -16,7 +16,6 @@
         <vendor url="http://openacs.org">OpenACS</vendor>
         <description format="text/html">Contains all the core Tcl API, including the request processor, security and session management, permissions, site-nodes, package management infrastructure, etc.</description>
         <license>GPL version 2</license>
-        <maturity>3</maturity>
 
         <provides url="acs-tcl" version="5.8.1d6"/>
         <requires url="acs-bootstrap-installer" version="5.8.1d1"/>

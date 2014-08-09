@@ -17,7 +17,6 @@
         Examples are the contracts used for search which provide a means to get content on a given object and to translate an object_id to a 
         url or the contracts used by dotlrn and new-portals to allow packages to provide portalized panes.</description>
         <license>GPL version 2</license>
-        <maturity>3</maturity>
 
         <provides url="acs-service-contract" version="5.8.1d2"/>
         <requires url="acs-kernel" version="5.8.1d1"/>

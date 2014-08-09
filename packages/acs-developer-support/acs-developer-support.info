@@ -16,7 +16,7 @@
         <description format="text/html">Developer support stores timing and other logged information for requests 
         to support debugging and tuning and supports user switching and a Tcl Shell to invoke arbitrary tcl code on the server.
         </description>
-        <maturity>2</maturity>
+        <maturity>3</maturity>
 
         <provides url="acs-developer-support" version="5.6.0d3"/>
 	<requires url="acs-kernel" version="5.8.1d1"/>

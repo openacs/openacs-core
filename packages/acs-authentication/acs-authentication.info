@@ -11,7 +11,6 @@
         <owner url="mailto:lars@collaboraid.biz">Lars Pind</owner>
         <summary>Authentication, account management, and related functionality.</summary>
         <release-date>2013-09-08</release-date>
-        <maturity>3</maturity>
         <vendor url="http://www.collaboraid.biz">Collaboraid</vendor>
         <maturity>3</maturity>
         <license url="http://www.gnu.org/copyleft/gpl.html">GPL version 2</license>
@@ -28,7 +27,8 @@
             <callback type="before-uninstall"  proc="auth::package_uninstall"/>
         </callbacks>
         <parameters>
-            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="AcknowledgementFileName"  default="{acs_root_dir}/batch-sync-ack-{authority}-{ansi_date}.xml" description="Full file path to where we should drop the acknowledgement file for batch syncs. You can use these special values: {acs_root_dir} will get replaced with the root directory for this OpenACS installation, e.g. '/var/lib/aolserver/service0' (no trailing slash). {ansi_date} will get replaced with today's date in ANSI format, e.g. '2003-10-29'. {authority} will get replaced with the short_name of the authority, e.g. 'rz_pam'." section_name="Batch Synchronization"/>
+            <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="AcknowledgementFileName"  default="{acs_root_dir}/batch-sync-ack-{authority}-{ansi_date}.xml" description="Full file path to where we should drop the acknowledgement file for batch syncs. You can use these special values: {acs_root_di
+r} will get replaced with the root directory for this OpenACS installation, e.g. '/var/lib/aolserver/service0' (no trailing slash). {ansi_date} will get replaced with today's date in ANSI format, e.g. '2003-10-29'. {authority} will get replaced with the short_name of the authority, e.g. 'rz_pam'." section_name="Batch Synchronization"/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="KeepBatchLogDays"  default="0" description="The number of days to keep the log for a batch user synchronization job around. Say 0 if you want to keep the log forever." section_name="Batch Synchronization"/>
             <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="RegisterAuthority"  default="local" description="The short name of the authority in which users are registered. Is best set in the Authentication admin UI."/>
             <parameter datatype="number"  min_n_values="1"  max_n_values="1"  name="SyncAddUsersToDotLrnP"  default="0" description="Should we add users to .LRN? This requires .LRN to be installed, and has serious performance implications." section_name="Batch Synchronization"/>

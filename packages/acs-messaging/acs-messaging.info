@@ -16,7 +16,6 @@
         <maturity>3</maturity>
         <vendor url="http://openacs.org">OpenACS</vendor>
 	<license url="http://www.gnu.org/copyleft/gpl.html">GPL</license>
-	<maturity>3</maturity>
         <description format="text/html">Provides generic message services, with email sending.  acs-mail-lite and notifications are the 
         prefered packages for delivering this functionality and it is anticipated that this package will ultimately be deprecated.</description>
 

@@ -11,7 +11,6 @@
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>The canonical repository for OpenACS content.</summary>
         <release-date>2013-09-08</release-date>
-        <maturity>3</maturity>
         <vendor url="http://openacs.org">OpenACS</vendor>
         <description format="text/html">Provides the API for creating and managing user generated content including 
          full support for versioning, rendering content to the filesystem, folders and composite content items, and
