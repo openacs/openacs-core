@@ -395,12 +395,12 @@ ad_proc -private apm_source { __file {errorVarName ""}} {
 
 # Special boot strap load file routine.  
 
-ad_proc -private apm_bootstrap_load_file { root_directory file } {
+ad_proc -private apm_bootstrap_load_file { root_directory file {errorVarName ""}} {
     Source a single file during initial bootstrapping and set APM data.
 } {
     ns_log "Notice" "Loading [file tail $root_directory]/$file"
-
-    apm_source "${root_directory}/${file}"
+    if {$errorVarName ne ""} {upvar $errorVarName error}
+    apm_source ${root_directory}/${file} error
 }
 
 ad_proc -private apm_bootstrap_load_libraries {
@@ -408,6 +408,7 @@ ad_proc -private apm_bootstrap_load_libraries {
     {-init:boolean}
     {-procs:boolean}
     package_key
+    {errorVarName ""}
 } {
     Scan all the files in the tcl dir of the package and load those asked for by the init
     and procs flags.
@@ -432,6 +433,9 @@ ad_proc -private apm_bootstrap_load_libraries {
     if { $load_tests_p } {
         lappend file_types test_procs
     }
+    if {$errorVarName ne ""} {
+        upvar $errorVarName error
+    }
 
     # This is the first time each of these files is being loaded (see
     # the documentation for the apm_first_time_loading_p proc).
@@ -440,7 +444,7 @@ ad_proc -private apm_bootstrap_load_libraries {
     set package_root_dir [acs_package_root_dir $package_key]
     foreach file [apm_get_package_files -package_key $package_key -file_types $file_types] {
 
-        apm_bootstrap_load_file $package_root_dir $file
+        apm_bootstrap_load_file $package_root_dir $file error
 
         # Call db_release_unused_handles, only if the library defining it
         # (10-database-procs.tcl) has been sourced yet.
