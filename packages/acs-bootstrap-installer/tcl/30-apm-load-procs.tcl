@@ -399,8 +399,8 @@ ad_proc -private apm_bootstrap_load_file { root_directory file {errorVarName ""}
     Source a single file during initial bootstrapping and set APM data.
 } {
     ns_log "Notice" "Loading [file tail $root_directory]/$file"
-    if {$errorVarName ne ""} {upvar $errorVarName error}
-    apm_source ${root_directory}/${file} error
+    if {$errorVarName ne ""} {upvar $errorVarName errors}
+    apm_source ${root_directory}/${file} errors
 }
 
 ad_proc -private apm_bootstrap_load_libraries {

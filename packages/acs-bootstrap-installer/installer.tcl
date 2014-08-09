@@ -266,7 +266,7 @@ proc install_handler { conn arg why } {
 	]} {
 	    set system_file "$system_file.tcl"
 	}
-	apm_source "$::acs::rootdir/www/SYSTEM/$system_file"
+	apm_source $::acs::rootdir/www/SYSTEM/$system_file
 	return "filter_return"
     }
 
@@ -286,21 +286,24 @@ The installation script you've requested, <code>$script</code>, doesn't exist. P
 your URL and try again.
 "
     }
+
+    array set errors {}
+
     # Engage a mutex for double-click protection.
     ns_mutex lock [nsv_get acs_installer mutex]
     if { [catch {
 	# Source the page and then unlock the mutex.
-	apm_source $path
+	apm_source $path errors
 	ns_mutex unlock [nsv_get acs_installer mutex]
     } error] } {
 	# In case of an error, don't forget to unlock the mutex.
 	ns_mutex unlock [nsv_get acs_installer mutex]
 	global errorInfo
-	install_return 500 "Error" "The following error occurred in an installation script:
-
-<blockquote><pre>[ns_quotehtml $errorInfo]</pre></blockquote>
-"
-
+	install_return 500 "Error" "The following error occurred in an installation script:\n\
+        <blockquote><pre>[ns_quotehtml $errorInfo]</pre></blockquote>\n"
+    }
+    if {[array size errors] > 0} {
+	install_return 500 "Error" [install_load_errors_formatted errors]
     }
     return "filter_return"
 }
@@ -346,6 +349,24 @@ ad_proc -public ad_windows_p {} {
     }
 }
 
+ad_proc -private install_load_errors_formatted {errorVarName} {
+    Report errors from load operations via ns_write
+
+    @param errorVarName variable name of the associative array keeping the error infos
+} {
+    upvar $errorVarName errors
+
+    set result ""
+    if {[array size errors] > 0} {
+	append result "<blockquote><pre>\n"
+	foreach {key value} [array get errors] {
+	    append result "$key:\n[ad_quotehtml $value]\n"
+	}
+	append result "</pre></blockquote>\n"
+    }
+    return $result
+}
+
 ad_proc -private install_do_data_model_install {} {
     Installs the kernel datamodel.
 } {
@@ -388,10 +409,18 @@ ad_proc -private install_do_data_model_install {} {
 
     # Some APM procedures use util_memoize, so initialize the cache 
     # before starting APM install
-    apm_source [acs_package_root_dir acs-tcl]/tcl/20-memoize-init.tcl
-    apm_source [acs_package_root_dir acs-tcl]/tcl/database-init.tcl
+    array set errors {}
+    apm_source [acs_package_root_dir acs-tcl]/tcl/20-memoize-init.tcl errors
+    apm_source [acs_package_root_dir acs-tcl]/tcl/database-init.tcl errors
 
-    apm_version_enable -callback apm_ns_write_callback [apm_package_install -callback apm_ns_write_callback "[file join $::acs::rootdir packages acs-kernel acs-kernel.info]"]
+    if {[array size errors] > 0} {
+	ns_write "Errors during initial load:\n"
+	ns_write [install_load_errors_formatted errors]
+    }
+
+    apm_version_enable -callback apm_ns_write_callback \
+	[apm_package_install -callback apm_ns_write_callback \
+	     [file join $::acs::rootdir packages acs-kernel acs-kernel.info]]
 
     ns_write "<p>Loading package .info files.<p>"
 
@@ -422,14 +451,15 @@ ad_proc -private install_do_packages_install {} {
     }
 
     ns_write "Installing OpenACS Core Services"
+    array set errors {}
 
     # Load the acs-tcl init files that might be needed when installing, instantiating and mounting packages
     # We shouldn't source request-processor-init.tcl as it might interfere with the installer request handler
     foreach { init_file } { utilities-init.tcl site-nodes-init.tcl } {
         ns_log Notice "Loading acs-tcl init file $init_file"
-        apm_source "[acs_package_root_dir acs-tcl]/tcl/$init_file"
+        apm_source "[acs_package_root_dir acs-tcl]/tcl/$init_file" errors
     }
-    apm_bootstrap_load_libraries -procs acs-subsite
+    apm_bootstrap_load_libraries -procs acs-subsite errors
     apm_bootstrap_load_queries acs-subsite
     install_redefine_ad_conn
 
@@ -438,9 +468,20 @@ ad_proc -private install_do_packages_install {} {
     set dependencies_satisfied_p [lindex $dependency_results 0]
     set pkg_list [lindex $dependency_results 1]
 
-    if { !$dependencies_satisfied_p } {
-        ns_write "<p><b><i>At least one core package has an unsatisifed dependency.  No packages have been installed.  Here's what the APM has computed:</i></b><blockquote>$pkg_list</blockquote>"
-        return
+     if { !$dependencies_satisfied_p } {
+	 ns_write "<p><b><i>At least one core package has an unsatisifed dependency.\
+              No packages have been installed missing: [lindex $dependency_results 2]. \
+              Here's what the APM has computed:</i></b>"
+
+	 ns_write "\n<ul>"
+         foreach dep $pkg_list {
+	     lassign $dep _name _path _a _b _pkg _deps _flag _msg
+	     ns_write "<li>[lindex $_pkg 0]: $_msg</li>"
+	 }
+	 ns_write "\n</ul>\n"
+	 ns_write [install_load_errors_formatted errors]
+
+	 return
     }
 
     apm_packages_full_install -callback apm_ns_write_callback $pkg_list
