@@ -282,11 +282,11 @@ ad_proc -private apm_build_repository {
     Rebuild the repository on the local machine.  
     Only useful for the openacs.org site.   
     Adapted from Lars' build-repository.tcl page.
-    @param debug_p Set to 1 to test with only a small subset of packages instead of the whole cvs tree.
+    @param debug Set to 1 to test with only a small subset of packages instead of the whole cvs tree.
     @param head_channel The artificial branch label to apply to HEAD.  Should be one minor version past the current release.
-    @channels@ Generate apm files for the matching channels only
+    @param channels Generate apm files for the matching channels only
     @author Lars Pind (lars@collaboraid.biz)
-    @return 0 for success.   Also outputs debug strings to log.
+    @return 0 for success. Also outputs debug messages to log.
 
 } {
 
@@ -460,6 +460,8 @@ ad_proc -private apm_build_repository {
 			    "    <release-date>[ad_quotehtml $pkg_info(release-date)]</release-date>\n" \
 			    "    <vendor url=\"[ad_quotehtml $pkg_info(vendor.url)]\">" \
 			    [ad_quotehtml $pkg_info(vendor)] "</vendor>\n" \
+			    "    <license url=\"[ad_quotehtml $pkg_info(license_url)]\">" \
+			    [ad_quotehtml $pkg_info(license)] "</license>\n" \
 			    "    <maturity>$pkg_info(maturity)</maturity>\n"
 			
 			if {![info exists pkg_info(maturity_text)]} {
