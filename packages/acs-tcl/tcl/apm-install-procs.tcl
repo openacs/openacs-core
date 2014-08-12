@@ -2057,7 +2057,7 @@ ad_proc -private apm_get_package_repository {
         
         set tree [xml_parse -persist $manifest]
         set root_node [xml_doc_get_first_node $tree]
-        
+
         foreach package_node [xml_node_get_children_by_name $root_node "package"] {
             array unset version
             set version(package.key)  [xml_node_get_content [xml_node_get_first_child_by_name $package_node "package-key"]]
@@ -2065,7 +2065,15 @@ ad_proc -private apm_get_package_repository {
             set version(package-name) [xml_node_get_content [xml_node_get_first_child_by_name $package_node "pretty-name"]]
             set version(package.type) [xml_node_get_content [xml_node_get_first_child_by_name $package_node "package-type"]]
             set version(download_url) [xml_node_get_content [xml_node_get_first_child_by_name $package_node "download-url"]]
-            set version(summary)      [xml_node_get_content [xml_node_get_first_child_by_name $package_node "summary"]]
+
+	    foreach element {summary release-date} {
+		set node [xml_node_get_first_child_by_name $package_node $element]
+		if {$node ne ""} {
+		    set version($element) [xml_node_get_content $node]
+		} else {
+		    set version($element) ""
+		}
+	    }
 
 	    foreach element {vendor owner} {
 		set node  [xml_node_get_first_child_by_name $package_node $element]
@@ -2599,10 +2607,4 @@ ad_proc -private apm::package_version::attributes::generate_xml {
     return $xml_string
 }
 
-
-##############
-#
-# Deprecated Procedures
-#
-#############
 
