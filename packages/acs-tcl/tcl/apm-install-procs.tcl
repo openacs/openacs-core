@@ -2066,7 +2066,18 @@ ad_proc -private apm_get_package_repository {
             set version(package.type) [xml_node_get_content [xml_node_get_first_child_by_name $package_node "package-type"]]
             set version(download_url) [xml_node_get_content [xml_node_get_first_child_by_name $package_node "download-url"]]
             set version(summary)      [xml_node_get_content [xml_node_get_first_child_by_name $package_node "summary"]]
-            
+
+	    foreach element {vendor owner} {
+		set node  [xml_node_get_first_child_by_name $package_node $element]
+		if {$node ne ""} {
+		    set version($element)     [xml_node_get_content $node]
+		    set version($element.url) [xml_node_get_attribute $node "url"]
+		} else {
+		    set version($element) ""
+		    set version($element.url) ""
+		}
+	    }
+
             apm::package_version::attributes::parse_xml \
                 -parent_node $package_node \
                 -array version            
@@ -2141,6 +2152,28 @@ ad_proc -public apm_get_repository_channel {} {
 } {
     set kernel_versionv [split [ad_acs_version] .]
     return [join [lrange $kernel_versionv 0 1] "-"]
+}
+
+ad_proc -public apm_get_repository_channels { {repository_url http://openacs.org/repository/} } {
+    Returns the channels and urls from a repository
+} {
+    set result [util::http::get -url $repository_url]
+    set status [dict get $result status]
+    if {$status != 200} {
+	return -code error "unexpected result code $status from url $repository_url"
+    }
+    set repositories ""
+    dom parse -simple -html [dict get $result page] doc
+    $doc documentElement root
+    foreach node [$root selectNodes //ul/li] {
+	set txt [$node asText]
+	if {![regexp {^(\S+)\s[\(]([^\)]+)\)} $txt _ name tag]} {
+	    ns_log warning "unexpected li found in repository $repository_url: $txt"
+	    continue
+	}
+	lappend repositories [list $name $tag]
+    }
+    return $repositories
 }
 
 ad_proc -private apm_load_install_xml {filename binds} {
@@ -2365,9 +2398,6 @@ ad_proc -private apm::package_version::attributes::get_spec {} {
         }
         license {
             pretty_name License
-        }
-        license_url {
-            pretty_name "License URL"
         }
 	package_instance_name {
             pretty_name "Package instance name"

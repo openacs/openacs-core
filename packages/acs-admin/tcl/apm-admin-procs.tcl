@@ -460,7 +460,7 @@ ad_proc -private apm_build_repository {
                             "    <release-date>[ad_quotehtml $pkg_info(release-date)]</release-date>\n" \
                             "    <vendor url=\"[ad_quotehtml $pkg_info(vendor.url)]\">" \
                             [ad_quotehtml $pkg_info(vendor)] "</vendor>\n" \
-                            "    <license url=\"[ad_quotehtml $pkg_info(license_url)]\">" \
+                            "    <license url=\"[ad_quotehtml $pkg_info(license.url)]\">" \
                             [ad_quotehtml $pkg_info(license)] "</license>\n" \
                             "    <maturity>$pkg_info(maturity)</maturity>\n"
                         
@@ -473,7 +473,7 @@ ad_proc -private apm_build_repository {
                             $pkg_info(package.type) $pkg_info(summary) $pkg_info(description) \
                             $pkg_info(release-date) $pkg_info(vendor.url) $pkg_info(vendor) \
                             $pkg_info(maturity) $pkg_info(maturity_text) \
-                            $pkg_info(license)  $pkg_info(license_url)
+                            $pkg_info(license)  $pkg_info(license.url)
                         
                         set apm_file "${channel_dir}${pkg_info(package.key)}-${pkg_info(name)}.apm"
                         ns_log Notice "Repository: Building package $package_key for channel $channel"
