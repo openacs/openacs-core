@@ -222,7 +222,7 @@ ad_proc util::http::get {
     a floating point number or an ns_time value.
     
     @return Returns the data as dict with elements <code>page</code>,
-    <code>file</code> <code>status</code>, and <code>modified</code>.
+    <code>file</code>, <code>status</code>, and <code>modified</code>.
 
 } {
     return [util::http::request \
@@ -342,7 +342,7 @@ ad_proc util::http::post {
     a floating point number or an ns_time value.
     
     @return Returns the data as dict with elements <code>page</code>,
-    <code>file</code> <code>status</code>, and <code>modified</code>.
+    <code>file</code>, <code>status</code>, and <code>modified</code>.
 
 } { 
     set this_proc [lindex [info level 0] 0]
@@ -572,7 +572,7 @@ ad_proc -private util::http::request {
     a floating point number or an ns_time value.
     
     @return Returns the data as dict with elements <code>page</code>,
-    <code>file</code> <code>status</code>, and <code>modified</code>.
+    <code>file</code>, <code>status</code>, and <code>modified</code>.
 
 } { 
     set this_proc [lindex [info level 0] 0]
@@ -687,7 +687,7 @@ ad_proc -private util::http::native::request {
     a floating point number or an ns_time value.
     
     @return Returns the data as dict with elements <code>page</code>,
-    <code>file</code> <code>status</code>, and <code>modified</code>.
+    <code>file</code>, <code>status</code>, and <code>modified</code>.
 
 } {
     set this_proc [lindex [info level 0] 0]
@@ -1023,7 +1023,7 @@ ad_proc -private util::http::curl::request {
     seconds.
     
     @return Returns the data as dict with elements <code>page</code>,
-    <code>file</code> <code>status</code>, and <code>modified</code>.
+    <code>file</code>, <code>status</code>, and <code>modified</code>.
 
 } {
     set this_proc [lindex [info level 0] 0]
