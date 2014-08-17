@@ -12,8 +12,6 @@ ad_page_contract {
 set title "Package Installation"
 set context [list [list "/acs-admin/apm/" "Package Manager"] $title]
 
-ad_return_top_of_page [ad_parse_template -params [list context title] \
-			   "/packages/openacs-default-theme/lib/plain-streaming-head"]
 
 ### Get all the spec files
 #
@@ -69,9 +67,11 @@ foreach spec_file $all_spec_files {
 
 apm_log APMDebug $spec_files
 
+set body ""
+
 if { $spec_files eq "" } {
     # No spec files to work with.
-    ns_write [subst {
+    append body [subst {
     <h2>No New Packages to Install</h2><p>
 
     There are no new packages to install.  Please load some
@@ -80,12 +80,12 @@ if { $spec_files eq "" } {
     }]
 } else {   
     
-    ns_write {
+    append body {
     <h2>Select Packages to Install</h2><p>
     <p>Please select the set of packages you'd like to install.</p>
     }
 
-    ns_write [subst {
+    append body [subst {
 
 <script type="text/javascript">
 function uncheckAll() {
@@ -103,7 +103,7 @@ function checkAll() {
 <a href="packages-install?checked_by_default_p=1" onclick="javascript:checkAll(); return false"><b>check all boxes</b></a>
     }]
 
-    ns_write "<form action=packages-install-2 method=post>"
+   append body "<form action='packages-install-2' method='post'>\n"
 
     # Client properties do not deplete the limited URL variable space.
     # But they are limited to the maximum length of a varchar ...
@@ -130,24 +130,24 @@ function checkAll() {
     }
 	
     if { $checked_by_default_p } {
-        set widget [apm_package_selection_widget $pkg_info_list $pkg_key_list $pkg_key_list]
+        set widget [apm_package_selection_widget $pkg_info_list $pkg_key_list]
     } else {
         set widget [apm_package_selection_widget $pkg_info_list]
 }
 
     if {$widget eq ""} {
-	ns_write "There are no new packages available."
+	append body "There are no new packages available."
 	ad_script_abort
     }
 
-    ns_write $widget
-    ns_write [subst {
+    append body $widget
+    append body [subst {
     <input type="submit" value="Next -->">
     </form>
     }]
     
     if {$errors ne ""} {
-	ns_write "The following errors were generated
+	append body "The following errors were generated
 	<ul>
 	    $errors
 	</ul>
@@ -162,3 +162,4 @@ if { [llength $not_compatible_list] > 0 } {
 if { [llength $already_installed_list] > 0 } {
     ns_log Notice "APM packages-install: Already Installed Packages\n- [join $already_installed_list "\n- "]"
 }
+ad_return_template apm

@@ -6,20 +6,17 @@ ad_page_contract {
     @creation-date Mon Oct  9 00:13:43 2000
     @cvs-id $Id$
 } {
-    {install:multiple ""}
-    {enable:multiple ""}
+    {package_key:multiple ""}
     {force_p "f"}
 }
 
 # Install and enable are sets of keys; need to turn them back into spec files.
 set spec_files [ad_get_client_property apm spec_files]
 
-# LARS HACK: I got rid of the separate install/enable checkboxes
-set install $enable
+set install $package_key
 
 # Clear out previous client properties.
 ad_set_client_property -clob t apm pkg_install_list ""
-ad_set_client_property -clob t apm pkg_enable_list ""
 
 foreach spec_file $spec_files {
     # Get package info, and find out if this is a package we should install
@@ -71,18 +68,13 @@ if {![info exists install_spec_files]} {
 
 	    <form action="packages-install-2" method="post">
 	    [export_vars -form {spec_files}]<p>
-	    
-	    <blockquote>
-	    <table>
 	}]
 
 	set install [concat $install $extra_package_keys]
-	set enable [concat $enable $extra_package_keys]
     
-	append body [apm_package_selection_widget [lindex $dependency_results 1] $install $enable]
+	append body [apm_package_selection_widget [lindex $dependency_results 1] $install]
 
 	append body [subst {
-	    </table></blockquote>
 	    <input type=submit value="Select Data Model Scripts">
 	    </form>
 	}]
@@ -93,7 +85,6 @@ if {![info exists install_spec_files]} {
 
 	# We use client properties to pass along this information as it is fairly large.
 	ad_set_client_property -clob t apm pkg_install_list [lindex $dependency_results 1]
-	ad_set_client_property -clob t apm pkg_enable_list $enable
 
 	ad_returnredirect packages-install-3
 	ad_script_abort
@@ -120,12 +111,10 @@ if {![info exists install_spec_files]} {
 	    
 	    [export_vars -form {spec_files}]<p>
 	    
-	    <blockquote>
-	    <table>
 	}]
     
 	append body \
-	    [apm_package_selection_widget [lindex $dependency_results 1] $install $enable] \
+	    [apm_package_selection_widget [lindex $dependency_results 1] $install] \
 	    [subst {
 		</table></blockquote>
 		<input type="checkbox" name="force_p" value="t"> <strong>Force the install<p></strong>

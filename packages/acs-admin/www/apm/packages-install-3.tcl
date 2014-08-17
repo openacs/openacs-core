@@ -80,7 +80,7 @@ foreach pkg_info [ad_get_client_property apm pkg_install_list] {
 	append body [subst {
 	Select what data files to load for $version(package-name) $final_version_name
 	<blockquote>
-	<table cellpadding=3 cellspacing=3>
+	<table cellpadding='3' cellspacing='3' class='list-table'>
 	  <tr>
             <th>Load</th>
 	    <th>File Name</th>

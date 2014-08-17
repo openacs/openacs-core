@@ -94,94 +94,57 @@ ad_proc apm_shell_wrap { cmd } {
 
 
 ad_proc -private apm_package_selection_widget {
-    -install_enable:boolean
     pkg_info_list
     {to_install ""} 
-    {to_enable ""}
 } {
 
     Provides a widget for selecting packages.  Displays dependency information if available.
-    
-    @param intall_enable Set this flag if you want separate install and enable checkboxes to be displayed. If you don't set it, 
-    only the enable checkbox will be displayed, and the resulting page is expected to assume that enable also means install.
 
+    @param pkg_info_list list of package infos for all packages to be listed
+    @param to_install list of package_keys to install
 } {
     if {$pkg_info_list eq ""} {
         return ""
     }
-    
-    set checkbox_count 0
+
     set counter 0
-    set band_colors { white "#ececec" }
-    set widget "<blockquote><table cellpadding=5 cellspacing=5>
-<tr bgcolor=\"\#f8f8f8\"><th>Install</th>[ad_decode $install_enable_p 1 "<th>Enable</th>" ""]<th>Package</th><th>Directory</th><th>Comment</th></tr>
-    "
+    set widget "<blockquote><table class='list-table' cellpadding='3' cellspacing='5' summary='Available Packages'>
+      <tr class='list-header'><th>Install</th><th>Package</th><th>Package Key</th><th>Comment</th></tr>"
 
     foreach pkg_info $pkg_info_list {
         
         incr counter
         set package_key [pkg_info_key $pkg_info]
         set package_path [pkg_info_path $pkg_info]
-        set package_rel_path [string range $package_path [string length $::acs::rootdir] end]
         set spec_file [pkg_info_spec $pkg_info]
         array set package [apm_read_package_info_file $spec_file]
         set version_name $package(name)
         ns_log Debug "Selection widget: $package_key, Dependency: [pkg_info_dependency_p $pkg_info]"
 
-
-        append widget "  <tr valign=baseline bgcolor=[lindex $band_colors \
-                [expr { $counter % [llength $band_colors] }]]>"
+        append widget "  <tr class='[lindex {even odd} [expr {$counter % 2}]]'>"
         if { [pkg_info_dependency_p $pkg_info] == "t" } {
             # Dependency passed.
 
-            if { $install_enable_p } {
-                if { $package_key in $to_install } {
-                    append widget "  <td align='center'><input type='checkbox' checked 
-                    name='install' value=\"$package_key\"
-                    onclick=\"if (!checked) document.forms\[0\].elements\[$checkbox_count+1\].checked=false\"></td> "
-                } else {
-                    append widget "  <td align='center'><input type='checkbox' 
-                    name='install' value=\"$package_key\"
-                    onclick=\"if (!checked) document.forms\[0\].elements\[$checkbox_count+1\].checked=false\"></td>"
-                }
-            }
-            if { $package_key in $to_enable } {
+            if { $package_key in $to_install } {
                 append widget "
-                <td align='center'><input type='checkbox' checked 
-                name='enable' value='$package_key' "
+                <td align='center'><input type='checkbox' checked name='package_key' value='$package_key' "
             } else {
                 append widget "
-                <td align=center><input type=checkbox 
-                name=enable value=\"$package_key\" "
+                <td align='center'><input type='checkbox' name='package_key' value='$package_key' "
             }
             
-            if { $install_enable_p } {
-                append widget "
-                onclick=\"if (checked) document.forms\[0\].elements\[$checkbox_count\].checked=true\""
-            }
-
             append widget "></td>
             <td>$package(package-name) $package(name)</td>
-            <td>$package_rel_path</td>
-            <td><font color=green>Dependencies satisfied.</font></td>
+            <td>$package_key</td>
+            <td><font color='green'>Dependencies satisfied.</font></td>
             </tr> "
         } elseif { [pkg_info_dependency_p $pkg_info] == "f" } {
             #Dependency failed.
-            if { $install_enable_p } {
-                append widget "  <td align=center><input type=checkbox name=install value=\"$package_key\"
-                onclick=\"if (!checked) document.forms\[0\].elements\[$checkbox_count+1\].checked=false\"></td>"
-            }
             append widget "
-            <td align=center><input type=checkbox name=enable value=\"$package_key\" "
-
-            if { $install_enable_p } {
-                append widget "onclick=\"if (checked) document.forms\[0\].elements\[$checkbox_count\].checked=true\""
-            }
-
-            append widget "></td>
+            <td align=center><input type='checkbox' name='package_key' value='$package_key' ></td>
             <td>$package(package-name) $package(name)</td>
-            <td>$package_rel_path</td>
-            <td><font color=red>
+            <td>$package_key</td>
+            <td><font color='red'>
             "
             foreach comment [pkg_info_comment $pkg_info] {
                 append widget "$comment<br>"
@@ -208,38 +171,16 @@ ad_proc -private apm_package_selection_widget {
                 set comment "Installing older version of package."
             }
             
-            append widget "  <tr valign=baseline bgcolor=[lindex $band_colors [expr { $counter % [llength $band_colors] }]]>"
-
-            if { $package_key in $to_install } {
-                set install_checked "checked"
-            } else { 
-                set install_checked ""
-            }
-            if { $package_key in $to_enable } {
-                set enable_checked "checked"
-            } else { 
-                set enable_checked ""
-            }
-
-            if { $install_enable_p } {
-                append widget "<td align=center><input type=checkbox $install_checked name=install value=\"$package_key\"
-                onclick=\"if (!checked) document.forms\[0\].elements\[$checkbox_count+1\].checked=false\"></td>
-                <td align=center><input type=checkbox $enable_checked name=enable value=\"$package_key\"
-                onclick=\"if (checked) document.forms\[0\].elements\[$checkbox_count\].checked=true\"></td>"
-            } else {
-                append widget "
-                <td align=center><input type=checkbox $enable_checked name=enable value=\"$package_key\"></td>"
-            }
-
+            set install_checked [lindex {"" checked} [expr {$package_key in $to_install}]]
             append widget "
+            <td align='center'><input type='checkbox' $install_checked name='package_key' value='$package_key'></td>
             <td>$package(package-name) $package(name)</td>
-            <td>$package_rel_path</td>
+            <td>$package_key</td>
             <td>$comment</td>
            </tr>"
         }
-        incr checkbox_count 2
     }
-    append widget "</table></blockquote>"
+    append widget "\n</table></blockquote>"
     return $widget
 }
 
@@ -268,7 +209,9 @@ ad_proc -private apm_higher_version_installed_p {
     # LARS: Default to 1 (the package_key/version_name you supplied was higher than what's on the system)
     # for the case where nothing it returned, because this implies that there was no highest version installed,
     # i.e., no version at all of the package was installed.
-    return [db_string apm_higher_version_installed_p {} -default 1]
+    set result [db_string apm_higher_version_installed_p {} -default 1]
+    ns_log notice "apm_higher_version_installed_p <$package_key> <$version_name> -> $result"
+    return $result
 }
 
 
