@@ -7,121 +7,148 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     {package_key:multiple ""}
-    {force_p "f"}
-}
-
-# Install and enable are sets of keys; need to turn them back into spec files.
-set spec_files [ad_get_client_property apm spec_files]
-
-set install $package_key
-
-# Clear out previous client properties.
-ad_set_client_property -clob t apm pkg_install_list ""
-
-foreach spec_file $spec_files {
-    # Get package info, and find out if this is a package we should install
-    if { [catch {
-        array set package [apm_read_package_info_file $spec_file]
-    } errmsg] } {
-        # Unable to parse specification file.
-        # If we get here, its because someone hacked the archive the loading process
-        # which checks the info file and displays an error.
-        # process
-        ns_log Error "$spec_file could not be parsed correctly.  It is not being installed. 
-        The error: $errmsg"	
-    }
-    
-    # Save the package info, we may need it for dependency satisfaction later
-    lappend pkg_info_list [pkg_info_new $package(package.key) $spec_file \
-            $package(embeds) $package(extends) $package(provides) $package(requires) ""]
-    
-    if {$package(package.key) in $install} {
-        # This is a package which we should install
-        lappend install_spec_files $spec_file
-    }
+    {force_p:boolean "f"}
 }
 
 set title "Package Installation"
 set context [list [list "/acs-admin/apm/" "Package Manager"] $title]
 
-if {![info exists install_spec_files]} {
+# Clear out previous client properties.
+ad_set_client_property -clob t apm pkg_install_list ""
+
+if {$package_key eq ""} {
     set body {
-	<p>
-	No packages selected.<p>
+        <p>
+        No packages selected.<p>
     }
 } else {
 
-    ### Dependency Check
-    set dependency_results [apm_dependency_check -pkg_info_all $pkg_info_list $install_spec_files]
+    #####
+    #
+    # Check dependencies
+    #
+    #####
+    apm_get_package_repository -array repository
 
-    if { [lindex $dependency_results 0] == 1 && [llength [lindex $dependency_results 2]] > 0 } {
+    array set result [apm_dependency_check_new \
+                          -repository_array repository \
+                          -package_keys $package_key]
+    array set failed $result(failed)
 
-	set extra_package_keys [lindex $dependency_results 2]
+    #ns_log notice [array get result]
 
-	# Check was good after adding a couple more packages
+    switch $result(status) {
+        ok {
+            set title "Confirm"
+        }
+        failed {
+            set title "Missing Required Packages"
+        }
+        default {
+            error "Bad status returned from apm_depdendency_check_new: '$result(status)'"
+        }
+    }
 
-	set body [subst {
-	    <h2>Additional Packages Automatically Added</h2><p>
-    
-	    Some of the packages you were trying to install required other packages to be installed first.
-	    We've added these additional packages needed, and ask you to review the list of packages below.
+    #
+    # Get the package info list with potential unresolved dependencies
+    #
+    set pkg_info_list {}
+    foreach pkg $result(packages) {
+        set spec_file $::acs::rootdir/packages/$pkg/$pkg.info
+        array set package [apm_read_package_info_file $spec_file]
+        
+        if {[info exists failed($pkg)]} {
+            set comments {}
+            foreach e $failed($pkg) {
+                lappend comments "Requires: [lindex $e 0] [lindex $e 1]"
+            }
+            set flag f
+        } else {
+            lassign {t ""} flag comments
+        }
+        lappend pkg_info_list [pkg_info_new $package(package.key) \
+                                   $spec_file \
+                                   $package(embeds) \
+                                   $package(extends) \
+                                   $package(provides) \
+                                   $package(requires) \
+                                   $flag $comments]
+    }
 
-	    <form action="packages-install-2" method="post">
-	    [export_vars -form {spec_files}]<p>
-	}]
+    #
+    # When the package list was extended by the dependency test, show
+    # it again to the user
+    #
 
-	set install [concat $install $extra_package_keys]
-    
-	append body [apm_package_selection_widget [lindex $dependency_results 1] $install]
+    if {$result(status) eq "ok" && [llength $result(install)] > [llength $package_key]} {
+        set body [subst {
+            <h2>Additional Packages Automatically Added</h2><p>
+            
+            Some of the packages you were trying to install required
+            other packages to be installed first.  We've added these
+            additional packages needed, and ask you to review the list
+            of packages below.
 
-	append body [subst {
-	    <input type=submit value="Select Data Model Scripts">
-	    </form>
-	}]
-	
-    } elseif { ([lindex $dependency_results 0] == 1) || $force_p == "t" } {
+            <form action="packages-install-2" method="post">
+            [export_vars -form {package_key}]<p>
+        }]
 
-	### Check passed!  Initiate install.
+        append body [apm_package_selection_widget $pkg_info_list $result(install)]
+        append body [subst {
+            <input type=submit value="Select Data Model Scripts">
+            </form>
+        }]
+        
+    } elseif {$result(status) eq "ok" || $force_p} {
+        
+        # We use client properties to pass along this information as
+        # it is fairly large.
+        ad_set_client_property -clob t apm pkg_install_list $pkg_info_list
 
-	# We use client properties to pass along this information as it is fairly large.
-	ad_set_client_property -clob t apm pkg_install_list [lindex $dependency_results 1]
-
-	ad_returnredirect packages-install-3
-	ad_script_abort
+        ad_returnredirect packages-install-3
+        ad_script_abort
 
     } else {
 
-	### Check failed.  Offer user an explanation and an ability to
-	### select unselect packages.
-	
-	set body [subst {
-    
-	    Some of the packages you are trying to install have unsatisfied dependencies.  The packages
-	    with unsatisfied dependencies have been deselected.  If you wish to install packages that do
-	    not pass dependencies, please click the "force" option below.
-	    <form action="packages-install-2" method="post">
-	    
-	    <ul>
-	    <li>To <b>install</b> a package is to load its data model.
-	    <li>To <b>enable</b> a package is to make it available to users.
-	    </ul>
-	    
-	    If you think you might want to use a package later (but not right away),
-	    install it but don't enable it.
-	    
-	    [export_vars -form {spec_files}]<p>
-	    
-	}]
-    
-	append body \
-	    [apm_package_selection_widget [lindex $dependency_results 1] $install] \
-	    [subst {
-		</table></blockquote>
-		<input type="checkbox" name="force_p" value="t"> <strong>Force the install<p></strong>
-		<input type="submit" value="Select Data Model Scripts">
-		</form>
-	    }]
+        ### Check failed.  Offer user an explanation and an ability to
+        ### select unselect packages.
+
+        set body [subst {
+
+            <h2>Unsatisfied Dependencies</h2><p>
+            
+            Some of the packages you are trying to install have
+            unsatisfied dependencies.  The packages with unsatisfied
+            dependencies have been deselected.  If you wish to install
+            packages that do not pass dependencies, please click the
+            "force" option below.
+
+            <form action="packages-install-2" method="post">
+            <p>
+            If you think you might want to use a package later (but not right away),
+            install it but don't enable it.
+            
+            [export_vars -form {package_key}]<p>
+            
+        }]
+        
+        append body \
+            [apm_package_selection_widget $pkg_info_list $result(install)] \
+            [subst {
+                <input type="checkbox" name="force_p" value="t"> <strong>Force the install<p></strong>
+                <input type="submit" value="Select Data Model Scripts">
+                </form>
+            }]
     }
+
+
 }
 
 ad_return_template apm
+
+#
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:
