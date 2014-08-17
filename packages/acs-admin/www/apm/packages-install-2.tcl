@@ -54,7 +54,7 @@ if {$package_key eq ""} {
     #
     set pkg_info_list {}
     foreach pkg $result(packages) {
-        set spec_file $::acs::rootdir/packages/$pkg/$pkg.info
+        set spec_file [apm_package_info_file_path $pkg]
         array set package [apm_read_package_info_file $spec_file]
         
         if {[info exists failed($pkg)]} {
