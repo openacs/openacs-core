@@ -10,7 +10,7 @@
 <h1>Sample Users by State</h1>
 
 <if @requesterror.state_abbrev@ not nil>
-  <p>Sorry, there was an error processing your request:<br>
+  <p>Sorry, could not obtain result for your request:<br>
      <b>@requesterror.state_abbrev@</b>
   </p>
 </if>
