@@ -55,7 +55,7 @@ foreach spec_file $all_spec_files {
             } else {
                 ns_log Notice "need upgrade of package $package_key $version_name"
                 lappend already_installed_list \
-		    "Package $package_name; ($package_key) version $version_name or higher is already installed."
+                    "Package $package_name; ($package_key) version $version_name or higher is already installed."
             }
         } else {
             lappend spec_files $spec_file
@@ -72,38 +72,38 @@ set body ""
 if { $spec_files eq "" } {
     # No spec files to work with.
     append body [subst {
-    <h2>No New Packages to Install</h2><p>
+        <h2>No New Packages to Install</h2><p>
 
-    There are no new packages to install.  Please load some
-    using the <a href="package-load">Package Loader</a>.<p>
-    Return to the <a href="index">APM</a>.<p>
+        There are no new packages to install.  Please load some
+        using the <a href="package-load">Package Loader</a>.<p>
+        Return to the <a href="index">APM</a>.<p>
     }]
 } else {   
     
     append body {
-    <h2>Select Packages to Install</h2><p>
-    <p>Please select the set of packages you'd like to install.</p>
+        <h2>Select Packages to Install</h2><p>
+        <p>Please select the set of packages you'd like to install.</p>
     }
 
     append body [subst {
 
-<script type="text/javascript">
-function uncheckAll() {
-    for (var i = 0; i < [llength $spec_files]; ++i)
-        document.forms\[0\].elements\[i\].checked = false;
-    this.href='';
-}
-function checkAll() {
-    for (var i = 0; i < [llength $spec_files]; ++i)
-        document.forms\[0\].elements\[i\].checked = true;
-    this.href='';
-}
-</script>
-<a href="packages-install?checked_by_default_p=0" onclick="javascript:uncheckAll();return false"><b>uncheck all boxes</b></a> |
-<a href="packages-install?checked_by_default_p=1" onclick="javascript:checkAll(); return false"><b>check all boxes</b></a>
+        <script type="text/javascript">
+        function uncheckAll() {
+            for (var i = 0; i < [llength $spec_files]; ++i)
+            document.forms\[0\].elements\[i\].checked = false;
+            this.href='';
+        }
+        function checkAll() {
+            for (var i = 0; i < [llength $spec_files]; ++i)
+            document.forms\[0\].elements\[i\].checked = true;
+            this.href='';
+        }
+        </script>
+        <a href="packages-install?checked_by_default_p=0" onclick="javascript:uncheckAll();return false"><b>uncheck all boxes</b></a> |
+        <a href="packages-install?checked_by_default_p=1" onclick="javascript:checkAll(); return false"><b>check all boxes</b></a>
     }]
 
-   append body "<form action='packages-install-2' method='post'>\n"
+    append body "<form action='packages-install-2' method='post'>\n"
 
     # Client properties do not deplete the limited URL variable space.
     # But they are limited to the maximum length of a varchar ...
@@ -115,43 +115,43 @@ function checkAll() {
     set pkg_key_list [list]
     apm_log APMDebug "APM: Specification files available: $spec_files"
     foreach spec_file $spec_files {
-	### Parse the package.
-	if { [catch {
-	    array set package [apm_read_package_info_file $spec_file]
-	} errmsg] } {
-	    lappend errors "<li>Unable to parse $spec_file.  The following error was generated:
-	    <blockquote><pre>[ad_quotehtml $errmsg]</pre></blockquote><p>"
-	} else {
-	    apm_log APMDebug "APM: Adding $package(package.key) to list for installation." 
-	    lappend pkg_info_list [pkg_info_new $package(package.key) $spec_file \
-		    $package(embeds) $package(extends) $package(provides) $package(requires) ""]
+        ### Parse the package.
+        if { [catch {
+            array set package [apm_read_package_info_file $spec_file]
+        } errmsg] } {
+            lappend errors "<li>Unable to parse $spec_file.  The following error was generated:
+        <blockquote><pre>[ad_quotehtml $errmsg]</pre></blockquote><p>"
+        } else {
+            apm_log APMDebug "APM: Adding $package(package.key) to list for installation." 
+            lappend pkg_info_list [pkg_info_new $package(package.key) $spec_file \
+                                       $package(embeds) $package(extends) $package(provides) $package(requires) ""]
             lappend pkg_key_list $package(package.key)
-	}
+        }
     }
-	
+    
     if { $checked_by_default_p } {
         set widget [apm_package_selection_widget $pkg_info_list $pkg_key_list]
     } else {
         set widget [apm_package_selection_widget $pkg_info_list]
-}
+    }
 
     if {$widget eq ""} {
-	append body "There are no new packages available."
-	ad_script_abort
+        append body "There are no new packages available."
+        ad_script_abort
     }
 
     append body $widget
     append body [subst {
-    <input type="submit" value="Next -->">
-    </form>
+        <input type="submit" value="Next -->">
+        </form>
     }]
     
     if {$errors ne ""} {
-	append body "The following errors were generated
-	<ul>
-	    $errors
-	</ul>
-	"
+        append body "The following errors were generated
+    <ul>
+        $errors
+    </ul>
+    "
     }    
 }
 
@@ -163,3 +163,10 @@ if { [llength $already_installed_list] > 0 } {
     ns_log Notice "APM packages-install: Already Installed Packages\n- [join $already_installed_list "\n- "]"
 }
 ad_return_template apm
+
+#
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -29,68 +29,68 @@ foreach pkg_info [ad_get_client_property apm pkg_install_list] {
 
     # Determine if we are upgrading or installing.
     if { [apm_package_upgrade_p $package_key $final_version_name] == 1} {
-	ns_log Debug "Upgrading package [string totitle $version(package-name)] to $final_version_name."
-	set upgrade_p 1
-	set initial_version_name [db_string apm_package_upgrade_from {
-	    select version_name from apm_package_versions
-	    where package_key = :package_key
-	    and version_id = apm_package.highest_version(:package_key)
-	} -default ""]
+        ns_log Debug "Upgrading package [string totitle $version(package-name)] to $final_version_name."
+        set upgrade_p 1
+        set initial_version_name [db_string apm_package_upgrade_from {
+            select version_name from apm_package_versions
+            where package_key = :package_key
+            and version_id = apm_package.highest_version(:package_key)
+        } -default ""]
     } else {
-	set upgrade_p 0
-	set initial_version_name ""
+        set upgrade_p 0
+        set initial_version_name ""
     }
 
     # Find out which script is appropriate to be run.
     set data_model_in_package 0
     set table_rows ""
     set data_model_files [apm_data_model_scripts_find \
-                                 -upgrade_from_version_name $initial_version_name \
-                                 -upgrade_to_version_name $final_version_name \
-                                 -package_path $package_path \
-                                 $package_key]
+                              -upgrade_from_version_name $initial_version_name \
+                              -upgrade_to_version_name $final_version_name \
+                              -package_path $package_path \
+                              $package_key]
 
     set sql_file_list [concat $sql_file_list $data_model_files]
 
     if {$data_model_files ne ""} {
-	foreach file $data_model_files {
-	    set path [lindex $file 0]
-	    set file_type [lindex $file 1]
-	    append table_rows [subst {
-		<tr>
-		<td><input type="checkbox" checked name="sql_file" value="$file_count"></td>
-		<td>$path</td>
-		<td>[apm_pretty_name_for_file_type $file_type]</td>
-		</tr>
-	    }]
-	    incr file_count
-	}
+        foreach file $data_model_files {
+            set path [lindex $file 0]
+            set file_type [lindex $file 1]
+            append table_rows [subst {
+                <tr>
+                <td><input type="checkbox" checked name="sql_file" value="$file_count"></td>
+                <td>$path</td>
+                <td>[apm_pretty_name_for_file_type $file_type]</td>
+                </tr>
+            }]
+            incr file_count
+        }
 
         if { $version(auto-mount) eq "" 
-	     && $version(package.type) eq "apm_application" 
-	   } {
+             && $version(package.type) eq "apm_application" 
+         } {
             set mount_html [subst {
-		<input type="checkbox" name="mount_p" value="$version(package.key)" checked> 
-		Mount package under the main site at path 
-		<input type="text" name="mount_path.$version(package.key)" value="$version(package.key)">
-	    }]
+                <input type="checkbox" name="mount_p" value="$version(package.key)" checked> 
+                Mount package under the main site at path 
+                <input type="text" name="mount_path.$version(package.key)" value="$version(package.key)">
+            }]
         } else {
             set mount_html ""
         }
-	append body [subst {
-	Select what data files to load for $version(package-name) $final_version_name
-	<blockquote>
-	<table cellpadding='3' cellspacing='3' class='list-table'>
-	  <tr>
+        append body [subst {
+            Select what data files to load for $version(package-name) $final_version_name
+            <blockquote>
+            <table cellpadding='3' cellspacing='3' class='list-table'>
+            <tr>
             <th>Load</th>
-	    <th>File Name</th>
-	    <th>File Type</th>
-          </tr>
-	$table_rows
-	</table>
-        $mount_html
-        </blockquote> <p>
-	}]
+            <th>File Name</th>
+            <th>File Type</th>
+            </tr>
+            $table_rows
+            </table>
+            $mount_html
+            </blockquote> <p>
+        }]
     }
 }
 
@@ -107,3 +107,10 @@ append body {
 }
 
 ad_return_template apm
+#
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:
+
