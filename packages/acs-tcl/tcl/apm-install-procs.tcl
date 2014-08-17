@@ -60,7 +60,7 @@ ad_proc apm_scan_packages {
     }
     
     if { [llength $new_spec_files] == 0 } {
-        ns_log Notice "apm_scan_packages: No new packages found."
+        ns_log Notice "apm_scan_packages: No new packages found in $path"
     }   
     return $new_spec_files
 }
@@ -497,8 +497,8 @@ ad_proc -private apm_dependency_check_new {
                 foreach req [concat $version(embeds) $version(extends) $version(requires)] {
                     lassign $req req_uri req_version
 
-                    if { ![info exists provided($req_uri)] || \
-                             [apm_version_names_compare $provided($req_uri) $req_version]== -1 } {
+                    if { ![info exists provided($req_uri)] 
+                         || [apm_version_names_compare $provided($req_uri) $req_version] == -1 } {
 
                         ns_log Debug "apm_dependency_check_new: $package_key embeds, extends or requires $req_uri $req_version => failed"
 
