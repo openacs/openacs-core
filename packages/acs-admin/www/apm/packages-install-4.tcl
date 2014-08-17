@@ -78,7 +78,8 @@ foreach pkg_info $pkg_install_list {
     # Install the packages.
     ns_log Debug "APM: Installing package at $package_path."
 
-    set enable_p [expr {$package_key in $pkg_enable_list}]
+    #set enable_p [expr {$package_key in $pkg_enable_list}]
+    set enable_p 1
 
     set version_id [apm_package_install \
                 -enable=$enable_p \
