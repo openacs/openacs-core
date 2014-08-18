@@ -869,7 +869,7 @@ ad_proc -public auth::create_local_account {
         -message_array element_messages
 
     # Handle validation errors
-    if { [llength [array names element_messages]] > 0 } {
+    if { [array size element_messages] > 0 } {
         return [list \
                     creation_status "data_error" \
                     creation_message {} \
@@ -1118,7 +1118,7 @@ ad_proc -public auth::update_local_account {
         -message_array element_messages
 
     # Handle validation errors
-    if { [llength [array names element_messages]] > 0 } {
+    if { [array size element_messages] > 0 } {
         return [list \
                     update_status "data_error" \
                     update_message {} \

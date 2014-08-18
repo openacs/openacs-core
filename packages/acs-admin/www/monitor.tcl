@@ -63,7 +63,7 @@ template::list::create \
         }
     }
 
-set distinct [llength [array names ip_p]]
+set distinct [array size ip_p]
 
 # run standard Unix uptime command to get load average (crude measure of 
 # system health)

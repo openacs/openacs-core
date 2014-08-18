@@ -39,7 +39,7 @@ foreach element_name [auth::authority::get_sc_impl_columns] {
     
 }
 
-set has_parameters_p [expr {[llength [array names parameters]] > 0}]
+set has_parameters_p [expr {[array size parameters] > 0}]
 
 set first_param_name ""
 if { $has_parameters_p } {

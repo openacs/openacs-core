@@ -22,7 +22,7 @@ if { $xml_report_dir ne "" } {
         if { [file exists $test_path] } {
             aa_test::parse_test_file -path $test_path -array test
             array set testcase_failure $test(testcase_failure)
-            set service(num_errors) [llength [array names testcase_failure]]
+            set service(num_errors) [array size testcase_failure]
         } 
 	
 	set admin_login_url [export_vars -base "$service(url)/register/auto-login" {{email {$service(adminemail)}} {password {$service(adminpassword)}}}]

@@ -101,7 +101,7 @@ aa_register_case -cats {api db smoke} apm__test_info_file {
         array set parsed_callback_array $spec_array(callbacks)
     
         aa_true "Only one permissible callback should be returned, got array [array get parsed_callback_array]" \
-	    [expr {[llength [array names parsed_callback_array]] == 1}]
+	    [expr {[array size parsed_callback_array] == 1}]
     
         aa_equals "Checking name of callback of allowed type $allowed_type" \
                 $parsed_callback_array($allowed_type) $callback_array($allowed_type)
