@@ -57,6 +57,8 @@ if { [string match "*..*" $url] || [string match "*..*" $package_key] } {
 
 if { $package_key ne "" } {
     set safe_p [regexp {/?(.*)} $url package_url]
+} else {
+    set safe_p 0
 }
 
 if { $safe_p } {
