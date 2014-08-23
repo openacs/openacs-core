@@ -154,7 +154,7 @@ ad_proc -private apm_package_selection_widget {
             </tr>
             "
         } else {
-            # No dependency information.           
+            # No dependency information.
             # See if the install is already installed with a higher version number.
             if {[apm_package_registered_p $package_key]} {
                 set higher_version_p [apm_higher_version_installed_p $package_key $version_name]
@@ -407,7 +407,7 @@ ad_proc -private apm_build_repository {
                             [ad_quotehtml $pkg_info(license)] "</license>\n" \
                             "    <maturity>$pkg_info(maturity)</maturity>\n"
 
-                        foreach e $package_info(install) {
+                        foreach e $pkg_info(install) {
                             append manifest "    <install package=\"$e\"/>\n"
                         }
                         
