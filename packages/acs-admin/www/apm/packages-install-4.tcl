@@ -23,6 +23,8 @@ ad_return_top_of_page [ad_parse_template -params [list context title] \
 
 ns_write {
     <h2>Installing packages...</h2>
+    <script>var myInterval = setInterval(function(){window.scrollTo(0,document.body.scrollHeight)}, 300);
+    </script>
     <p>
     <ul>
 }
@@ -49,6 +51,7 @@ foreach pkg_info $pkg_install_list {
     }
 
     if {[apm_package_version_installed_p $version(package.key) $version(name)] } {
+	ns_log notice "===== ALREADY-installed $version(package.key)"
 	# Already installed.
 	continue
     }
@@ -81,20 +84,37 @@ foreach pkg_info $pkg_install_list {
     #set enable_p [expr {$package_key in $pkg_enable_list}]
     set enable_p 1
 
-    set version_id [apm_package_install \
-                -enable=$enable_p \
-                -package_path $package_path \
-		-callback apm_ns_write_callback \
-                -load_data_model \
-		-data_model_files $data_model_files \
-                -mount_path $selected_mount_path \
-                $spec_file]
+    if {[catch {
+	ns_log notice "===== INSTALL $version(package.key)"
+	set version_id [apm_package_install \
+			    -enable=$enable_p \
+			    -package_path $package_path \
+			    -callback apm_ns_write_callback \
+			    -load_data_model \
+			    -data_model_files $data_model_files \
+			    -mount_path $selected_mount_path \
+			    $spec_file]
+
+	if {[file exists $::acs::rootdir/packages/$version(package.key)/install.xml]} {
+	    ns_log notice "===== RUN /packages/$version(package.key)/install.xml"
+	    apm::process_install_xml /packages/$version(package.key)/install.xml ""
+	}
+	ns_log notice "===== INSTALL $version(package.key) DONE"
+
+    } errorMsg]} {
+	ns_write "Error: $errorMsg\n"
+	ns_write [ns_quotehtml $::errorInfo]
+	set version_id 0
+    }
 
     if { $version_id == 0 } {
         # Installation of the package failed and we shouldn't continue with installation
         # as there might be packages depending on the failed package. Ideally we should
         # probably check for such dependencies and continue if there are none.
-        ns_write "</ul>\n"
+        ns_write {
+	    </ul>
+	    <script>window.scrollTo(0,document.body.scrollHeight);clearInterval(myInterval);</script>
+	}
         ad_script_abort
     }
 
@@ -113,4 +133,7 @@ if {$installed_count < 1} {
 	<p>You should restart the server now to make installed and upgraded packages available. 
 	<a href="../server-restart">Click here</a> to restart the server now.</p>
     }
+}
+ns_write {
+    <script>window.scrollTo(0,document.body.scrollHeight);clearInterval(myInterval);</script>
 }

@@ -55,13 +55,13 @@ foreach spec_file $all_spec_files {
             } else {
                 ns_log Notice "need upgrade of package $package_key $version_name"
                 lappend already_installed_list \
-                    "Package $package_name; ($package_key) version $version_name or higher is already installed."
+                    "Package $package_name ($package_key): version $version_name or higher is already installed."
             }
         } else {
             lappend spec_files $spec_file
         }
     } else {
-        lappend not_compatible_list "Package &quot;$package_name&quot; ($package_key) doesn't support [db_type]."
+        lappend not_compatible_list "Package $package_name ($package_key): doesn't support [db_type]."
     }
 }
 

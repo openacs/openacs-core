@@ -30,49 +30,82 @@ if {$package_key eq ""} {
     #####
     apm_get_package_repository -array repository
 
-    array set result [apm_dependency_check_new \
-                          -repository_array repository \
-                          -package_keys $package_key]
-    array set failed $result(failed)
+    set install_pkgs $package_key
+    while 1 {
+        set fixpoint_p 1
 
-    #ns_log notice [array get result]
+        ns_log notice "run apm_dependency_check_new with <$install_pkgs>"
+        array set result [apm_dependency_check_new \
+                              -repository_array repository \
+                              -package_keys $install_pkgs]
+        #ns_log notice "RESULT of apm_dependency_check_new: [array get result]"
 
-    switch $result(status) {
-        ok {
-            set title "Confirm"
-        }
-        failed {
-            set title "Missing Required Packages"
-        }
-        default {
-            error "Bad status returned from apm_depdendency_check_new: '$result(status)'"
-        }
-    }
-
-    #
-    # Get the package info list with potential unresolved dependencies
-    #
-    set pkg_info_list {}
-    foreach pkg $result(packages) {
-        set spec_file [apm_package_info_file_path $pkg]
-        array set package [apm_read_package_info_file $spec_file]
-        
-        if {[info exists failed($pkg)]} {
-            set comments {}
-            foreach e $failed($pkg) {
-                lappend comments "Requires: [lindex $e 0] [lindex $e 1]"
+        array set failed $result(failed)
+      
+        switch $result(status) {
+            ok {
+                set title "Confirm"
             }
-            set flag f
-        } else {
-            lassign {t ""} flag comments
+            failed {
+                set title "Missing Required Packages"
+            }
+            default {
+                error "Bad status returned from apm_depdendency_check_new: '$result(status)'"
+            }
         }
-        lappend pkg_info_list [pkg_info_new $package(package.key) \
-                                   $spec_file \
-                                   $package(embeds) \
-                                   $package(extends) \
-                                   $package(provides) \
-                                   $package(requires) \
-                                   $flag $comments]
+
+        #
+        # Get the package info list with potential unresolved dependencies
+        #
+        set pkg_info_list {}
+        foreach pkg $result(packages) {
+            
+            #
+            # Load package info from spec file. 
+            #
+            if {[catch {set spec_file [apm_package_info_file_path $pkg]}]} {
+                #
+                # In case the spec file is not found (unknown package)
+                # produce an empty entry.
+                #
+                array set package [list package.key $pkg embeds "" extends "" \
+                                       provides "" requires "" properties {install ""}]
+            } else {
+                array set package [apm_read_package_info_file $spec_file]
+            }
+
+            if {[info exists failed($pkg)]} {
+                set comments {}
+                foreach e $failed($pkg) {
+                    lappend comments "Requires: [lindex $e 0] [lindex $e 1]"
+                }
+                set flag f
+            } else {
+                lassign {t ""} flag comments
+                array set properties $package(properties)
+                
+                set must_add {}
+                foreach p $properties(install) {
+                    if {$p ni $install_pkgs} {
+                        lappend must_add $p
+                    }
+                }
+                if {[llength $must_add] > 0} {
+                    lappend install_pkgs {*}$must_add
+                    ns_log notice "+++ install_pkgs <$install_pkgs> after must_add <$must_add>"
+                    set fixpoint_p 0
+                    break
+                }
+            }
+            lappend pkg_info_list [pkg_info_new $package(package.key) \
+                                       $spec_file \
+                                       $package(embeds) \
+                                       $package(extends) \
+                                       $package(provides) \
+                                       $package(requires) \
+                                       $flag $comments]
+        }
+        if {$fixpoint_p} break
     }
 
     #
@@ -81,6 +114,7 @@ if {$package_key eq ""} {
     #
 
     if {$result(status) eq "ok" && [llength $result(install)] > [llength $package_key]} {
+
         set body [subst {
             <h2>Additional Packages Automatically Added</h2><p>
             
@@ -90,7 +124,6 @@ if {$package_key eq ""} {
             of packages below.
 
             <form action="packages-install-2" method="post">
-            [export_vars -form {package_key}]<p>
         }]
 
         append body [apm_package_selection_widget $pkg_info_list $result(install)]
@@ -113,6 +146,8 @@ if {$package_key eq ""} {
         ### Check failed.  Offer user an explanation and an ability to
         ### select unselect packages.
 
+        #[export_vars -form {package_key}]<p>
+
         set body [subst {
 
             <h2>Unsatisfied Dependencies</h2><p>
@@ -127,9 +162,6 @@ if {$package_key eq ""} {
             <p>
             If you think you might want to use a package later (but not right away),
             install it but don't enable it.
-            
-            [export_vars -form {package_key}]<p>
-            
         }]
         
         append body \

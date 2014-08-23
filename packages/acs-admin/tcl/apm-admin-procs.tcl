@@ -406,9 +406,9 @@ ad_proc -private apm_build_repository {
                             "    <license url=\"[ad_quotehtml $pkg_info(license.url)]\">" \
                             [ad_quotehtml $pkg_info(license)] "</license>\n" \
                             "    <maturity>$pkg_info(maturity)</maturity>\n"
-                        
-                        if {![info exists pkg_info(maturity_text)]} {
-                            set pkg_info(maturity_text) ""
+
+                        foreach e $package_info(install) {
+                            append manifest "    <install package=\"$e\"/>\n"
                         }
                         
                         template::multirow append packages \
