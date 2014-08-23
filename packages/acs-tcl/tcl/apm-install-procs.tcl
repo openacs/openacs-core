@@ -476,7 +476,7 @@ ad_proc -private apm_dependency_check_new {
     # Just to get us started
     set updated_p 1
 
-    ns_log Debug "apm_dependency_check_new: STARTING DEPENDENCY CHECK"
+    ns_log notice "apm_dependency_check_new: STARTING DEPENDENCY CHECK [array names pending_packages]"
 
     # Outer loop tries to find a package from the repository to add if 
     # we're stuck because of unsatisfied dependencies
@@ -484,12 +484,14 @@ ad_proc -private apm_dependency_check_new {
 
         # Keep looping over pending_package_keys, trying to add packages
         # So long as we've added another, try looping again, as there may be cross-dependencies
-        while { $updated_p && [llength [array names pending_packages]] > 0 } {
+        while { $updated_p && [array size pending_packages] > 0 } {
             set updated_p 0
 
             # Try to add a package from 
             foreach package_key [array names pending_packages] {
                 
+                if {![info exists repository($package_key)]} continue
+
                 array unset version
                 array set version $repository($package_key)
 
@@ -505,8 +507,8 @@ ad_proc -private apm_dependency_check_new {
                         set satisfied_p 0
 
                         # Mark this as a requirement
-                        if { ![info exists required($req_uri)] || \
-                                 [apm_version_names_compare $required($req_uri) $req_version] == -1 } {
+                        if { ![info exists required($req_uri)] 
+                             || [apm_version_names_compare $required($req_uri) $req_version] == -1 } {
                             set required($req_uri) $req_version
                         }
                     } else {
@@ -556,17 +558,24 @@ ad_proc -private apm_dependency_check_new {
 
         set updated_p 0
         
-        if { [llength [array names pending_packages]] > 0 } {
+        if { [array size pending_packages] > 0 } {
             # There are packages that have unsatisfied dependencies
             # Those unmet requirements will be registered in the 'required' array
             
             # Let's find a package which satisfies at least one of the requirements in 'required'
 
             foreach package_key [array names repository] {
-                if { [info exists pending_packages($package_key)] || \
-                         [info exists installed_packages($package_key)] } {
+                if { [info exists pending_packages($package_key)] 
+                     || [info exists installed_packages($package_key)] } {
                     # Packages already on the pending list, or already verified ok won't help us any
                     continue
+                }
+
+                if {![info exists repository($package_key)]} {
+                    ns_log notice "package $package_key is apparently missing"
+                    set pending_packages($package_key) 1
+                    set updated_p 1
+                    break
                 }
 
                 array unset version
@@ -603,7 +612,7 @@ ad_proc -private apm_dependency_check_new {
         }
     }
 
-    if { [llength [array names pending_packages]] == 0 } {
+    if { [array size pending_packages] == 0 } {
         set result(status) ok
     } else {
         set result(status) failed
@@ -614,21 +623,31 @@ ad_proc -private apm_dependency_check_new {
 
         # Find out which packages couldn't be installed and why
         foreach package_key [array names pending_packages] {
+
+            # Add to touched packages
+            lappend result(packages) $package_key
+
+            if {![info exists repository($package_key)]} {
+                lappend failed($package_key) [list Unknown "package $package_key"]
+                continue
+            }
+
             array unset version
             array set version $repository($package_key)
-
-            # Add to touched upon packages
-            lappend result(packages) $package_key
             
             # Find unsatisfied requirements
             foreach req [concat $version(embeds) $version(extends) $version(requires)] {
                 lassign $req req_uri req_version
-                if { ![info exists provided($req_uri)] || [apm_version_names_compare $provided($req_uri) $req_version] == -1 } {
+                if { ![info exists provided($req_uri)] 
+                     || [apm_version_names_compare $provided($req_uri) $req_version] == -1 } {
                     lappend failed($package_key) [list $req_uri $req_version]
                     if { [info exists provided($req_uri)] } {
-                        ns_log Debug "apm_dependency_check_new: Failed dependency: $package_key embeds/extends/requires $req_uri $req_version, but we only provide $provided($req_uri)"
+                        ns_log Debug "apm_dependency_check_new: Failed dependency:\
+				$package_key embeds/extends/requires $req_uri $req_version,\
+				but we only provide $provided($req_uri)"
                     } else {
-                        ns_log Debug "apm_dependency_check_new: Failed dependency: $package_key embeds/extends/requires $req_uri $req_version, but we don't have it"
+                        ns_log Debug "apm_dependency_check_new: Failed dependency:\
+				 $package_key embeds/extends/requires $req_uri $req_version, but we don't have it"
                     }
                 }
             }
@@ -670,23 +689,21 @@ ad_proc -public apm_simple_package_install {
     Simple basic package install function.  Wraps up
     basically what the old install xml action did.
 } {
-    set package_info_path "$::acs::rootdir/packages/${package_key}/*.info"
+    set install_spec_file [apm_package_info_file_path $package_key]
+    
+    if { [catch { 
+        array set package [apm_read_package_info_file $install_spec_file]
+    } errmsg] } {
+        # Unable to parse specification file.
+        error "install: $install_spec_file could not be parsed correctly.  The error: $errmsg"
+        return
+    }
 
-    set install_spec_files [list]
-    foreach install_spec_file [glob -nocomplain $package_info_path] {
-        if { [catch { 
-            array set package [apm_read_package_info_file $install_spec_file]
-        } errmsg] } {
-            # Unable to parse specification file.
-            error "install: $install_spec_file could not be parsed correctly.  The error: $errmsg"
-            return
-        }
-
-        if { [apm_package_supports_rdbms_p -package_key $package(package.key)]
-             && ![apm_package_installed_p $package(package.key)] 
-         } {
-            lappend install_spec_files $install_spec_file
-        }
+    if { ![apm_package_supports_rdbms_p -package_key $package(package.key)]
+        || [apm_package_installed_p $package(package.key)] 
+     } {
+        ns_log notice "apm_simple_package_install: no need to install $package(package.key)"
+        return
     }
 
     set pkg_info_list [list]
@@ -714,21 +731,19 @@ ad_proc -public apm_simple_package_install {
         }
     }
 
-    if { [llength $install_spec_files] > 0 } {
-        set dependency_results [apm_dependency_check \
-                                    -pkg_info_all $pkg_info_list \
-                                    $install_spec_files]
+    set dependency_results [apm_dependency_check \
+                                -pkg_info_all $pkg_info_list \
+                                $install_spec_file]
 
-        if { [lindex $dependency_results 0] == 1 } {
-            apm_packages_full_install -callback apm_ns_write_callback [lindex $dependency_results 1]
-        } else {
-            foreach package_spec [lindex $dependency_results 1] {
-                if {[string is false [pkg_info_dependency_p $package_spec]]} {
-                    append err_out "install: package \"[pkg_info_key $package_spec]\"[join [pkg_info_comment $package_spec] ","]\n"
-                }
+    if { [lindex $dependency_results 0] == 1 } {
+        apm_packages_full_install -callback apm_ns_write_callback [lindex $dependency_results 1]
+    } else {
+        foreach package_spec [lindex $dependency_results 1] {
+            if {[string is false [pkg_info_dependency_p $package_spec]]} {
+                append err_out "install: package \"[pkg_info_key $package_spec]\"[join [pkg_info_comment $package_spec] ,]\n"
             }
-            error $err_out
         }
+        error $err_out
     }
 }
 
@@ -2089,6 +2104,13 @@ ad_proc -private apm_get_package_repository {
                 }
             }
 
+            # Build a list of packages to install additionally
+            set version(install) [list]
+            foreach node [xml_node_get_children_by_name $package_node install] {
+                set install [apm_attribute_value $node package]
+                lappend version(install) $install
+            }
+
             apm::package_version::attributes::parse_xml \
                 -parent_node $package_node \
                 -array version            
@@ -2304,11 +2326,12 @@ ad_proc -private apm_invoke_install_proc {
     set name [xml_node_get_name $node]
     set command [info commands ::install::xml::${type}::${name}]
 
-    if {[llength $command] == 0} {
+    if {$command eq ""} {
         error "Error: got bad node \"$name\""
     }
 
-    return [eval [list ::install::xml::${type}::${name} $node]]
+    ns_log notice "apm_invoke_install_proc: call [list ::install::xml::${type}::${name} $node]"
+    return [::install::xml::${type}::${name} $node]
 }
 
 ##############
@@ -2370,20 +2393,19 @@ ad_proc -private apm::package_version::attributes::get_instance_name { package_k
     @author Cesar Hernandez
 } {
 
-    set parameter "package_instance_name"
     set version_id [apm_version_id_from_package_key $package_key]
 
     if {$version_id ne ""} {
         apm::package_version::attributes::get -version_id $version_id -array packages_names
-        # it was added this catch for those packages that does not
-        # have the attribute package instance name, in this case
-        # return ""
-        
-        if {[catch {set instance_name $packages_names($parameter)} errmsg]} {
+        #
+        # Special case for those (???) packages that do not have the
+        # attribute package instance name, in this case return ""
+        #
+        if {![info exists packages_names(package_instance_name)]} {
+            ns_log Warning "Package $package_key does not have an instance name."
             return ""
-        } else {
-            return $instance_name
         }
+        return $packages_names(package_instance_name)
 
     }
 }
@@ -2430,7 +2452,7 @@ ad_proc -private apm::package_version::attributes::get_pretty_name { attribute_n
 ad_proc -private apm::package_version::attributes::validate_maturity { maturity } {
     set error_message ""
     if { $maturity ne "" } {
-        if { ![string is integer $maturity] } {
+        if { ![string is integer -strict $maturity] } {
             set error_message "Maturity must be integer"
         } elseif { $maturity < -1 || $maturity > 4 } {
             set error_message "Maturity must be integer between -1 and 4"
