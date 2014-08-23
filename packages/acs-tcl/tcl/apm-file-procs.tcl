@@ -117,14 +117,14 @@ ad_proc -public apm_package_info_file_path {
 
 } {
     if { $path eq "" } {
-        set path "[acs_package_root_dir $package_key]/$package_key.info"
+        set path [acs_package_root_dir $package_key]
     } else {
-        set path "$path/$package_key/$package_key.info"
+        set path $path/$package_key
     }
-    if { [file exists $path] } {
-        return $path
+    if { [file exists $path/$package_key.info] } {
+        return $path/$package_key.info
     }
-    error "The $path/$package_key does not contain a package specification file ($package_key.info)."
+    error "The directory $path does not contain a package specification file ($package_key.info)."
 }
 
 
