@@ -267,12 +267,11 @@ ad_proc -public apm_read_package_info_file { path } {
     set properties(pretty-plural)        [apm_tag_value -default "$properties(package-name)s" $package pretty-plural]
 
     set versions [xml_node_get_children_by_name $package version]
-
     if { [llength $versions] != 1 } {
 	error "Package must contain exactly one <version> node"
     }
     set version [lindex $versions 0]
-    
+
     set properties(name) [apm_required_attribute_value $version name]
     set properties(url)  [apm_required_attribute_value $version url]
 
@@ -301,6 +300,14 @@ ad_proc -public apm_read_package_info_file { path } {
 	} else {
 	    set properties($property_name.$attribute_name) ""
 	}
+    }
+
+    # Build a list of packages to install additionally
+
+    set properties(install) [list]
+    foreach node [xml_node_get_children_by_name $version install] {
+	set install [apm_attribute_value $node package]
+	lappend properties(install) $install
     }
 
     # We're done constructing the properties array - save the properties into the
@@ -336,7 +343,6 @@ ad_proc -public apm_read_package_info_file { path } {
     array set callback_array {}
 
     set callbacks_node_list [xml_node_get_children_by_name $version callbacks]
-
     foreach callbacks_node $callbacks_node_list {
         
         set callback_node_list [xml_node_get_children_by_name $callbacks_node callback]
@@ -353,7 +359,9 @@ ad_proc -public apm_read_package_info_file { path } {
             
             if {$type ni [apm_supported_callback_types]} {
                 # The callback type is not supported
-                ns_log Error "package info file $path contains an unsupported callback type $type - ignoring. Valid values are [apm_supported_callback_types]"
+                ns_log Error "package info file $path contains an unsupported\
+			callback type $type - ignoring. Valid values are\
+			[apm_supported_callback_types]"
                 continue
             }
 
@@ -367,10 +375,7 @@ ad_proc -public apm_read_package_info_file { path } {
     # Build a list of the package's owners (if any).
 
     set properties(owners) [list]
-
-    set owners [xml_node_get_children_by_name $version owner]
-
-    foreach node $owners {
+    foreach node [xml_node_get_children_by_name $version owner] {
 	set url [apm_attribute_value $node url]
 	set name [xml_node_get_content $node]
 	lappend properties(owners) [list $name $url]
@@ -381,9 +386,7 @@ ad_proc -public apm_read_package_info_file { path } {
     set properties(parameters) [list]
     apm_log APMDebug "APM: Reading Parameters"
 
-    set parameters [xml_node_get_children_by_name $version parameters]
-
-    foreach node $parameters {
+    foreach node [xml_node_get_children_by_name $version parameters] {
 	set parameter_nodes [xml_node_get_children_by_name $node parameter]
 
 	foreach parameter_node $parameter_nodes {	  
@@ -401,7 +404,8 @@ ad_proc -public apm_read_package_info_file { path } {
             }
 
 	    apm_log APMDebug "APM: Reading parameter $name with default $default_value"
-	    lappend properties(parameters) [list $name $description $section_name $scope $datatype $min_n_values $max_n_values $default_value]
+	    lappend properties(parameters) [list $name $description $section_name $scope \
+						$datatype $min_n_values $max_n_values $default_value]
 	}
     }
     
