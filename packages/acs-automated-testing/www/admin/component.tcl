@@ -1,7 +1,7 @@
 ad_page_contract {
   @cvs-id $Id$
 } {
-  component_id:naturalnum,nonull
+  component_id:notnull
   package_key:nohtml
 } -properties {
   title:onevalue
@@ -16,8 +16,7 @@ set context [list $title]
 
 set component_bodys {}
 foreach component [nsv_get aa_test components] {
-  if {$component_id == [lindex $component 0] &&
-      $package_key == [lindex $component 1]} {
+  if {$component_id eq [lindex $component 0] && $package_key eq [lindex $component 1]} {
     set component_desc [lindex $component 2]
     set component_file [lindex $component 3]
     set component_body [lindex $component 4]

@@ -1,7 +1,7 @@
 ad_page_contract {
     @cvs-id $Id$
 } {
-    testcase_id:naturalnum,nonull
+    testcase_id:notnull
     package_key:nohtml
     {showsource:boolean 0}
     {quiet:boolean 1}
@@ -47,11 +47,9 @@ if {![db_0or1row acs-automated-testing.get_testcase_fails_count {
 
 set testcase_bodys {}
 foreach testcase [nsv_get aa_test cases] {
-    if {$testcase_id == [lindex $testcase 0] &&
-        $package_key == [lindex $testcase 3]} {
+    if {$testcase_id eq [lindex $testcase 0] && $package_key eq [lindex $testcase 3]} {
         set testcase_desc     [lindex $testcase 1]
         set testcase_file     [lindex $testcase 2]
-        set package_key       [lindex $testcase 3]
         set testcase_cats     [join [lindex $testcase 4] ", "]
         set testcase_inits    [join [lindex $testcase 5] ", "]
         set testcase_on_error [lindex $testcase 6]
