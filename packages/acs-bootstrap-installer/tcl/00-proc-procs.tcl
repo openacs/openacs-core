@@ -513,15 +513,6 @@ $switch_code
     }
 }
 
-ad_proc -public -deprecated proc_doc { args } {
-
-    A synonym for <code>ad_proc</code> (to support legacy code).
-
-    @see ad_proc
-} {
-    eval ad_proc $args
-}
-
 ad_proc -public ad_proc {
     -public:boolean
     -private:boolean

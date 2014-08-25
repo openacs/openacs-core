@@ -168,3 +168,12 @@ ad_proc -deprecated ad_maybe_redirect_for_registration {} {
 } {
     auth::require_login
 }
+
+ad_proc -public -deprecated proc_doc { args } {
+
+    A synonym for <code>ad_proc</code> (to support legacy code).
+
+    @see ad_proc
+} {
+    ad_proc {*}$args
+}
