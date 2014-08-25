@@ -93,7 +93,7 @@ ad_proc http_auth::authorize {
     if {$proc eq {}} {
 	set proc http_auth::site_node_authorize
     }
-    return [eval [list $proc -user_id $user_id -url [ns_conn url]]]
+    return [$proc -user_id $user_id -url [ns_conn url]]
 }
 
 ad_proc http_auth::site_node_authorize {

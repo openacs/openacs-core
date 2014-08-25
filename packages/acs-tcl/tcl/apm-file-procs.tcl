@@ -188,7 +188,7 @@ ad_proc -private apm_generate_tarball { version_id } {
     }
     
     lappend cmd "|" [apm_gzip_cmd] -c ">" $tmpfile
-    eval $cmd
+    {*}$cmd
 
     # At this point, the APM tarball is sitting in $tmpfile. Save it in 
     # the database.

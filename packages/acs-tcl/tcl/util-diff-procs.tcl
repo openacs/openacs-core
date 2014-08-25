@@ -133,7 +133,7 @@ ad_proc -public util::html_diff {
 		}
 	    }
 	    if {[llength $pretag2]} {
-		eval "lappend old_list $pretag2"
+		lappend old_list {*}$pretag2
 	    }
 	}
 	if {$fulltag ne ""} {
@@ -159,7 +159,7 @@ ad_proc -public util::html_diff {
 		}
 	    }
 	    if {[llength $pretag2]} {
-		eval "lappend new_list $pretag2"
+		lappend new_list {*}$pretag2
 	    }
 	}
 	if {$fulltag ne ""} {

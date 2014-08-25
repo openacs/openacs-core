@@ -354,7 +354,7 @@ ad_proc -public install::xml::action::register-parameter { node } {
         }
     }
 
-    eval $command
+    {*}$command
     return
 }
 
@@ -979,7 +979,7 @@ ad_proc -private ::install::xml::action::call-tcl-proc { node } {
         }
     }
 
-    set result [eval $cmd]
+    set result [{*}$cmd]
     set id [apm_attribute_value -default "" $node id]
     if {$id ne ""} {
         set ::install::xml::ids($id) $result

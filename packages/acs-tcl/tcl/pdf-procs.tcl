@@ -118,7 +118,7 @@ ad_proc -private text_templates::create_html_content {
     @param set_var_call procedure-name which sets the variables used
 } {
 
-    eval $set_var_call
+    {*}$set_var_call
     
     # retrieve template and write to tmpfile
     # set content [content::get_content_value $template_id]

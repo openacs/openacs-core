@@ -97,7 +97,7 @@ ad_proc -private doc_eval_in_separate_frame { __code } {
     Evaluates <code>__code</code> in a separate stack frame.
 
 } {
-    eval $__code
+    {*}$__code
 }
 
 ad_proc -public doc_adp_abort {} {

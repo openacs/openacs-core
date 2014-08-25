@@ -179,7 +179,7 @@ ad_proc -deprecated ad_return { args } {
     1 (TCL_ERROR).
 
 } {
-    eval return $args
+    return {*}$args
 }
 
 ad_proc -private rp_registered_proc_info_compare { info1 info2 } {

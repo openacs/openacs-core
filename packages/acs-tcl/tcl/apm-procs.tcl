@@ -1596,7 +1596,7 @@ ad_proc -public apm_invoke_callback_proc {
 
     # We are ready for invocation
     ns_log Notice "apm_invoke_callback_proc: invoking callback $type with command $command"
-    eval $command
+    {*}$command
 
     return 1
 }

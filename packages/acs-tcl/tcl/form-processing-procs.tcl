@@ -726,7 +726,7 @@ ad_proc -public ad_form {
 
         # Create the form
 
-        eval $create_command
+        {*}$create_command
 
         # Now make it impossible to add params specific to form creation to an extend
         # block
@@ -785,7 +785,7 @@ ad_proc -public ad_form {
             }
             lappend command $form_name
             lappend command [lindex $element_name 1]
-            eval $command
+            {*}$command
         } else {
             set form_command [list template::element create $form_name $element_name]
             foreach flag $af_flag_list(${form_name}__$element_name) {
@@ -863,7 +863,7 @@ ad_proc -public ad_form {
                 lappend form_command "-[lindex $extra_arg 0]"
                 lappend form_command [uplevel [list subst [lindex $extra_arg 1]]]
             }
-            eval $form_command
+            {*}$form_command
 
         }
     }
