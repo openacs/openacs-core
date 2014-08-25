@@ -595,14 +595,19 @@ ad_proc apm_bootstrap_upgrade {
     {-from_version_name:required}
     {-to_version_name:required}
 } {
-    # just for testing; in the future, we might simply copy for every release
-    set doCopy [expr {$to_version_name eq "5.8.1d3"}]
 
-    if {$doCopy} {
-        set source [acs_root_dir]/packages/acs-bootstrap-installer/installer/tcl
-        foreach file [glob -nocomplain $source/*tcl] {
-            file copy -force $file [acs_root_dir]/tcl
-        }
+    Copy the files from acs-bootstrap-installer/installer/tcl to the
+    Tcl files in the acs root directory. This makes it possible to
+    incorporate changes to these files by only updating the
+    acs-bootstrap-installer package (rather than a full tar file
+    install as in eralier versions). 
+
+    Caveat: don't modify these files in your local installation, addin
+    extra files to $::acs::rootdir/tcl is fine.
+} {
+    set source $::acs::rootdir/packages/acs-bootstrap-installer/installer/tcl
+    foreach file [glob -nocomplain $source/*tcl] {
+        file copy -force $file $::acs::rootdir/tcl
     }
 }
 
