@@ -141,7 +141,7 @@ ad_proc -public add {
     
     for { set i 0 } { $i < [llength $plsql] } { incr i } {
         set cmd [lindex $plsql $i]
-        if { [catch {eval $cmd} err_msg] } {
+        if { [catch $cmd err_msg] } {
             # Rollback what we've done so far. The loop contitionals are:
             #  start at the end of the plsql_drop list (Drop things in reverse order of creation)
             # execute drop statements until we reach position $i+1
@@ -149,7 +149,7 @@ ad_proc -public add {
             #  is not executed
             for { set inner [expr {[llength $plsql_drop] - 1}] } { $inner > $i + 1 } { set inner [expr {$inner - 1}] } {
                 set drop_cmd [lindex $plsql_drop $inner]
-                if { [catch {eval $drop_cmd} err_msg_2] } {
+                if { [catch $drop_cmd err_msg_2] } {
                     append err_msg "\nAdditional error while trying to roll back: $err_msg_2"
                     return -code error $err_msg
                 }
@@ -258,7 +258,7 @@ ad_proc -public delete { attribute_id } {
     }
 
     foreach cmd $plsql {
-        eval $cmd
+        {*}$cmd
     }
     
     return 1

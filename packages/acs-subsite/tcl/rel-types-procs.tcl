@@ -177,7 +177,7 @@ namespace eval rel_types {
 	set pretty_plural "#acs-translations.${message_key}_plural#"
 
 	foreach cmd $plsql {
-	    eval $cmd
+	    {*}$cmd
 	}
 
 	# The following create table statement commits the transaction. If it
@@ -195,7 +195,7 @@ namespace eval rel_types {
 
 		for {set i [expr {[llength $plsql_drop] - 1}]} {$i >= 0} {incr i -1} {
 		    set drop_cmd [lindex $plsql_drop $i]
-		    if {[catch {eval $dropcmd} err_msg_2]} {
+		    if {[catch $dropcmd err_msg_2]} {
 			append errmsg "\nAdditional error while trying to roll back: $err_msg_2"
 			return -code error $errmsg
 		    }
