@@ -199,7 +199,7 @@ ad_proc -public publish::proc_exists { namespace_name proc_name } {
 
 } {
 
-  return [expr {[namespace eval $namespace_name "info commands $proc_name"] ne ""}]
+    return [expr {[info commands ${namespace_name}::$proc_name] ne ""}]
 }
 
 ##########################################################
@@ -288,8 +288,7 @@ ad_proc -public publish::handle_binary_file {
 
     # Try to use the registered template for the image
     if { ![info exists opts(no_merge)] } {
-      set code "publish::merge_with_template $item_id $args"
-      set html [eval $code]
+      set html [publish::merge_with_template $item_id {*}$args]
       # Return the result of merging - could be ""
       return $html
     }
@@ -369,8 +368,8 @@ ad_proc -public publish::handle::image { item_id args } {
   template::util::get_opts $args
   
   # LARS TODO: Added -no_merge, verify how this is supposed to work
-  set html [eval publish::handle_binary_file \
-     $item_id revision_id url error_msg $args -no_merge]
+  set html [publish::handle_binary_file \
+		$item_id revision_id url error_msg {*}$args -no_merge]
 
   # If an error happened, abort
   if { ![template::util::is_nil error_msg] } {
@@ -475,7 +474,7 @@ ad_proc -private publish::merge_with_template { item_id args } {
   # Parse the template and return the result
   publish::push_id $item_id $revision_id
   ns_log debug "publish::merge_with_template: parsing $file_stub"
-  set html [eval "template::adp_parse \"$file_stub\" \[list $adp_args\]"]
+  set html [template::adp_parse $file_stub $adp_args]
   publish::pop_id
 
   return $html
@@ -500,8 +499,7 @@ ad_proc -public publish::handle::text { item_id args } {
   if { [info exists opts(embed)] } {
     # Render the child item and embed it in the code
     if { ![info exists opts(no_merge)] } {
-      set code "publish::merge_with_template $item_id $args"
-      set html [eval $code]
+      set html [publish::merge_with_template $item_id {*}$args]
     } else {
 
         db_transaction {
@@ -730,7 +728,7 @@ ad_proc -private publish::handle_item { item_id args } {
       lappend code -revision_id $revision_id
     }
 
-    set html [eval $code]
+    set html [{*}$code]
     ns_log debug "publish::handle_item: Caching html for revision $revision_id"
     set revision_html($revision_key) $html
     
@@ -829,7 +827,7 @@ ad_proc -public publish::render_subitem {
     lappend code -embed
   }
 
-  return [get_html_body [eval $code]]
+  return [get_html_body [{*}$code]]
 }
 
 #######################################################
