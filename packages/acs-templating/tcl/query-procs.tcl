@@ -352,7 +352,7 @@ ad_proc -private template::query::nestedlist { statement_name db result_name sql
       lappend group_values [ns_set get $row $group]
     }
 
-    eval template::util::lnest rows [list $values] $group_values
+    template::util::lnest rows $values {*}$group_values
   }
 
   if { [info exists opts(cache)] } {

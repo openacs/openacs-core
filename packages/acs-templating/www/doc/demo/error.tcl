@@ -6,7 +6,7 @@ if { [clock clicks -milliseconds] % 2 } {
 
 if { [info exists problems] } {
 
-  eval request error $problems
+  request error {*}$problems
 
   # Note that you must explicitly return from the tcl script following an error.
   return

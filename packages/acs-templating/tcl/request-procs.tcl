@@ -56,7 +56,7 @@ ad_proc -public template::request::create { args } {
       set param [string trim $param]
       if {$param eq {}} { continue }
 
-      eval set_param $param
+      set_param {*}$param
     }
   }
 }

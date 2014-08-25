@@ -1156,7 +1156,7 @@ ad_proc -private template::list::prepare_for_rendering {
     # Sort in webserver layer, if requested to do so    
     set __multirow_cols [template::list::multirow_cols -name $__list_properties(name)]
     if { $__multirow_cols ne "" } {
-        eval template::multirow sort $__list_properties(multirow) $__multirow_cols
+        template::multirow sort {*}$__list_properties(multirow) {*}$__multirow_cols
     }
 
     # Upvar other variables passed in through the pass_properties property

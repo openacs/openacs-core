@@ -87,7 +87,7 @@ ad_proc -public template::tabstrip::create {
 
   lappend code -cookie_name $cookie_name
 
-  eval $code $args
+  {*}$code {*}$args
 
   # Determine the current tab
   set level [template::adp_level]
@@ -158,7 +158,7 @@ ad_proc -public template::tabstrip::add_tab {
     lappend code -current 0
   }
 
-  eval "$code $args"
+  {*}$code {*}$args
 
   upvar #$level $dlg_name:$name element
 
