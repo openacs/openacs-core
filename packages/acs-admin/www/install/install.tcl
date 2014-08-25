@@ -1,11 +1,33 @@
 ad_page_contract {
     Install from local file system
 } {
-    package_type:optional
-    {upgrade_p 0}
+    {package_type ""}
+    {upgrade_p:boolean 0}
     {repository_url ""}
+    {channel ""}
+    {maturity:naturalnum ""}
+    {current_channel}
+    {head_channel}
 }
 
+#
+# In upgrade mode, offer per default all maturities, in install-mode,
+# start with mature packages.
+#
+
+if {$upgrade_p} {
+    set default_maturity 0
+} else {
+    set default_maturity 2
+}
+
+if {$maturity eq ""} {
+    set maturity $default_maturity
+}
+
+#
+# Set page title to reflect install from repository or from file system
+#
 
 if { $repository_url ne "" } {
     set page_title "Install or Upgrade From OpenACS Repository"
@@ -26,20 +48,41 @@ apm_get_installed_versions -array installed_versions
 set upgrades_p 0
 array set package [list]
 
-apm_get_package_repository -repository_url $repository_url -array repository
+if {$channel eq ""} {set channel $current_channel}
+set fetch_url $repository_url/$channel/
+
+apm_get_package_repository -repository_url $fetch_url -array repository
 
 foreach package_key [array names repository] {
     array unset version
     array set version $repository($package_key)
 
-    if { (![info exists package_type] || $package_type eq "") || $version(package.type) eq $package_type } {
+    if {![info exists version(maturity)] || $version(maturity) eq ""} {
+	set version(maturity) 0
+    }
+
+    #ns_log notice "$version(package.key) $repository($package_key)"
+    #ns_log notice "compare $version(package.key) $version(maturity) < $maturity"
+    if {$version(maturity) < $maturity} continue
+    if {![apm_package_supports_rdbms_p -package_key $package_key]} continue
+
+    if { $package_type eq "" || $version(package.type) eq $package_type } {
         set package_key $version(package.key)
-            
-        # If in upgrade mode, only add to list if it's an upgrade
-        if { !$upgrade_p || $version(install_type) eq "upgrade" } {
-	    if {(![info exists version(maturity)] || $version(maturity) eq "")} {
-		set version(maturity) ""
+         
+	#
+        # If in upgrade mode, only add to list if it's an upgrade, in
+        # install-mode list only installs.
+	#
+        if { (!$upgrade_p && $version(install_type) eq "install")
+	     || ($upgrade_p && $version(install_type) eq "upgrade")
+	 } {
+
+	    if {[info commands ::apm::package_version::attributes::maturity_int_to_text] ne ""} {
+		set maturity_text [::apm::package_version::attributes::maturity_int_to_text $version(maturity)]
+	    } else { 
+		set maturity_text ""
 	    }
+
             set package([string toupper $version(package-name)]) \
                 [list \
                      $version(package.key) \
@@ -47,8 +90,15 @@ foreach package_key [array names repository] {
                      $version(name) \
                      $version(package.type) \
                      $version(install_type) \
-                     $version(summary) \
-                     $version(maturity)]
+		     $version(summary) \
+                     $maturity_text \
+                     $version(vendor) \
+                     $version(vendor.url) \
+                     $version(owner) \
+                     $version(owner.url) \
+                     $version(release-date) \
+                     $version(license) \
+		    ]
         }
     }
 }
@@ -61,35 +111,21 @@ foreach package_key [array names repository] {
 #####
 
 # Sort the list alphabetically (in case package_name and package_key doesn't sort the same)
-multirow create packages package_key package_name version_name package_type install_type summary maturity
+multirow create packages package_key package_name version_name package_type install_type summary \
+    maturity vendor vendor_url owner owner_url release_date license 
 
 if {[catch {set maturity_label [apm::package_version::attributes::get_pretty_name maturity]} errmsg]} {
     set maturity_label "Maturity"
 }
 
 foreach name [lsort -ascii [array names package]] {
-    set row $package($name)
-    if {[info commands ::apm::package_version::attributes::maturity_int_to_text] ne ""} {
-	set maturity_text [::apm::package_version::attributes::maturity_int_to_text [lindex $row 6]]
-    } else { 
-	set maturity_text ""
-    }
-
-    multirow append packages \
-        [lindex $row 0] \
-        [lindex $row 1] \
-        [lindex $row 2] \
-        [lindex $row 3] \
-        [lindex $row 4] \
-        [lindex $row 5] \
-	$maturity_text
+    multirow append packages {*}$package($name)
 }
 
 multirow extend packages install_url
 multirow -unclobber foreach packages {
-    set install_url [export_vars -base install-2 { package_key repository_url }]
+    set install_url [export_vars -base install-2 { package_key {repository_url $fetch_url}}]
 }
-
 
 # Build the list-builder list
 template::list::create \
@@ -100,7 +136,7 @@ template::list::create \
         "Install or upgrade checked applications" "install-2" "Install or upgrade checked applications"
     } \
     -bulk_action_export_vars {
-        repository_url
+        {repository_url $fetch_url}
     } \
     -elements {
         package_name {
@@ -110,6 +146,13 @@ template::list::create \
         }
         summary {
             label "Summary"
+	    display_template {@packages.summary@<br>
+		Vendor: <if @packages.vendor_url@ nil>@packages.vendor@</if>
+		        <else><a href=" @packages.vendor_url@">@packages.vendor@</a></else>
+		        <if @packages.release_date@ not nil> (released on @packages.release_date@<if @packages.license@ not nil>, license: @packages.license@</if>)</if>
+		<br>
+		Details: <a href="http://openacs.org/xowiki/@packages.package_key@">@packages.package_key@</a>
+	    }
         }   
         maturity {
 	    label "$maturity_label"
@@ -127,6 +170,26 @@ template::list::create \
             display_eval {[ad_decode $install_type "upgrade" "Upgrade" ""]}
         }
     } -filters {
+        channel {
+            label "Channel"
+            values {
+                {Current $current_channel}
+                {Head $head_channel}
+            }
+            default_value $current_channel
+        }
+
+        maturity {
+            label "Maturity at least"
+            values {
+                {New 0}
+                {Immature 1}
+                {Mature 2}
+                {"Mature and Standard" 3}
+            }
+	    default_value default_maturity
+        }
+
         package_type {
             label "Type"
             values {
@@ -142,9 +205,9 @@ template::list::create \
             }
             default_value 0
         }
-        repository_url {
-            hide_p 1
-        }
+        repository_url  { hide_p 1 }
+        current_channel { hide_p 1 }
+        head_channel    { hide_p 1 }
     }
 
 

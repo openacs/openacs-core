@@ -6,35 +6,8 @@ ad_page_contract {
 }
 
 if { [llength $package_key] == 0 } {
-    ad_returnredirct .
+    ad_returnredirect .
     ad_script_abort
-}
-
-
-#####
-#
-# Check dependencies
-#
-#####
-
-apm_get_package_repository -repository_url $repository_url -array repository
-
-array set result [apm_dependency_check_new \
-                      -repository_array repository \
-                      -package_keys $package_key]
-
-switch $result(status) {
-    ok {
-        set continue_url [export_vars -base "install-3" { repository_url }]
-        ad_set_client_property acs-admin install $result(install)
-        set page_title "Confirm"
-    }
-    failed {
-        set page_title "Missing Required Packages"
-    }
-    default {
-        error "Bad status returned from apm_depdendency_check_new: '$result(status)'"
-    }
 }
 
 if { $repository_url ne "" } {
@@ -44,8 +17,63 @@ if { $repository_url ne "" } {
 }
 
 
-set context [list [list "." "Install Software"] [list "install" $parent_page_title] $page_title]
+#####
+#
+# Check dependencies
+#
+#####
+apm_get_package_repository -repository_url $repository_url -array repository
 
+set install_pkgs $package_key
+set count 0
+while 1 {
+    set fixpoint_p 1
+
+    ns_log notice "run apm_dependency_check_new [incr count] with <$install_pkgs>"
+
+    array set result [apm_dependency_check_new \
+			  -repository_array repository \
+			  -package_keys $install_pkgs]
+    array set failed $result(failed)
+
+    switch $result(status) {
+	ok {
+	    set continue_url [export_vars -base "install-3" { repository_url }]
+	    set page_title "Confirm"
+	}
+	failed {
+	    set page_title "Missing Required Packages"
+	}
+	default {
+	    error "Bad status returned from apm_depdendency_check_new: '$result(status)'"
+	}
+    }
+
+    set must_add {}
+    foreach pkg $result(packages) {
+
+	if {$pkg ni $install_pkgs} {
+	    lappend install_pkgs $pkg
+	}
+	
+	array unset version
+	array set version $repository($pkg)
+
+	foreach p $version(install) {
+	    if {$p ni $install_pkgs} {
+		lappend install_pkgs $p
+		set fixpoint_p 0
+	    }
+	}
+    }
+    
+    if {$fixpoint_p} break
+}
+
+#ns_log notice "install_pkgs $install_pkgs"
+ad_set_client_property acs-admin install $install_pkgs
+
+set context [list [list "." "Install Software"] [list "install" $parent_page_title] $page_title]
 
 
 #####
@@ -58,11 +86,9 @@ set context [list [list "." "Install Software"] [list "install" $parent_page_tit
 set problems_p 0
 set extras_p 0
 
-array set failed $result(failed)
-
 multirow create install package_key version_name package_name comment extra_p
 
-foreach key $result(packages) {
+foreach key $install_pkgs {
     set extra_p [expr {$key ni $package_key}]
     if { $extra_p } {
         set extras_p 1
@@ -74,7 +100,7 @@ foreach key $result(packages) {
         foreach elm $failed($key) {
             lappend comments "[lindex $elm 0] [lindex $elm 1]"
         }
-        set comment "Requires [join $comments "; "]"
+        set comment "Requires [join $comments {; }]"
     } else {
         set comment {}
     }

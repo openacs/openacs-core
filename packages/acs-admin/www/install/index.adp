@@ -17,17 +17,11 @@
   </tr>
   <tr>
     <td>
-      <a href="@remote_install_url@">Install from Repository</a>
+      <a href="@remote_install_url@">Install</a> or 
+      <a href="@remote_upgrade_url@">upgrade</a> 
+      from repository.
     </td>
-    <td><a href="@local_install_url@">Install from Local</a></td>
-  </tr>
-  <tr>
-    <td>
-      <a href="@remote_upgrade_url@">Upgrade from Repository</a>
-    </td>
-    <td>
-      <a href="@local_upgrade_url@">Upgrade from Local</a>
-    </td>
+    <td><a href="@local_install_url@">Install or upgrade</a> from local file system.</td>
   </tr>
 </table>
 

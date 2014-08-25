@@ -13,12 +13,10 @@ ad_page_contract {
 #
 #####
 
-
 ad_progress_bar_begin \
     -title "Installing Packages" \
     -message_1 "Installing selected packages, please wait ..." \
     -message_2 "We will continue automatically when installation is complete."
-
 
 #####
 #
@@ -29,7 +27,6 @@ ad_progress_bar_begin \
 apm_get_package_repository -repository_url $repository_url -array repository
 
 set install [ad_get_client_property acs-admin install]
-
 if { [llength $install] == 0 } {
     ns_log Notice "install-3.tcl: Nothing to install. Is this a double-click?"
 }
@@ -38,7 +35,45 @@ if { [llength $install] == 0 } {
 ad_set_client_property acs-admin install {}
 
 
+#
+# Perform a topological sort for the right install order
+#
+set install_order ""
+set to_install $install
+ns_log notice "to_install: $to_install"
 
+while {[llength $to_install] > 0} {
+
+    foreach package_key $to_install {
+	array unset version
+	array set version $repository($package_key)
+
+	set satisfied_p 1
+	foreach req [concat $version(embeds) $version(extends) $version(requires)] {
+	    lassign $req pkg req_version
+
+	    #
+	    # A package can be installed, when its requirements are
+	    # installed before the package. All other dependencies
+	    # were checked earlier.
+	    #
+
+	    if { $pkg in $to_install } {
+		set satisfied_p 0
+		#ns_log notice "we have to delay $pkg"
+		break
+	    }
+	}
+	if {$satisfied_p} {
+	    lappend install_order $package_key
+	    set pos [lsearch $to_install $package_key]
+	    set to_install [lreplace $to_install $pos $pos]
+	}
+    }
+    #ns_log notice "iteration: \nto_install: $to_install\ninstall_order: $install_order"
+}
+
+ns_log notice "Install packages in this order: $install_order"
 
 #####
 #
@@ -48,7 +83,7 @@ ad_set_client_property acs-admin install {}
 
 set success_p 1
 
-foreach package_key $install {
+foreach package_key $install_order {
     ns_log Notice "Installing $package_key"
     
     array unset version
@@ -102,7 +137,12 @@ foreach package_key $install {
 
     ns_log Debug "Data model scripts: \nupgrade_from_version_name = $initial_version_name\nupgrade_to_version_name=$final_version_name\npackage_path=$package_path\npackage_key=$package_key\n => $data_model_files"
 
-    # Install the packages -- this actually copies the files into the right place in the file system and backs up any old files
+    ns_write [subst {
+	<p>Installing $package_key ...<br>
+	<script>window.scrollTo(0,document.body.scrollHeight);</script>
+    }]
+    # Install the packages -- this actually copies the files into the
+    # right place in the file system and backs up any old files
     set version_id [apm_package_install \
                         -enable \
                         -package_path $package_path \
@@ -115,6 +155,16 @@ foreach package_key $install {
         # as there might be packages depending on the failed package. Ideally we should
         # probably check for such dependencies and continue if there are none.
         set success_p 0
+    } elseif {[file exists $::acs::rootdir/packages/$package_key/install.xml]} {
+	ns_write "... configure $package_key<br>\n"
+	#ns_log notice "===== RUN /packages/$package_key/install.xml"
+	apm::process_install_xml /packages/$package_key/install.xml ""
+	ns_write "... installation OK <br>\n"
+    } else {
+	ns_write "... installation OK <br>\n"
+    }
+    ns_write {
+	<script>window.scrollTo(0,document.body.scrollHeight);</script>
     }
 }
 
