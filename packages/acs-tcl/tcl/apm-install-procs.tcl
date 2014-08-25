@@ -2059,10 +2059,11 @@ ad_proc -private apm_get_package_repository {
 
         if { $manifest eq "" } {
             # Nope, get it now
+            #ns_log notice [list util::http::get -timeout 120 -url $manifest_url]
             set dict [util::http::get -timeout 120 -url $manifest_url]
             
             if { [dict get $dict status] ne "200" } {
-                error "Couldn't get the package list. Please try again later."
+                error "Couldn't get the package list. Please try again later. Status: [dict get $dict status]"
             }
             
             set manifest [dict get $dict page]
