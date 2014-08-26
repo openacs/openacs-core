@@ -21,10 +21,10 @@ aa_register_case -cats {smoke api} acs_content_repository_trivial_smoke_test {
             # so instead we have to create a child of another and then
             # retrieve the parent's child
 
-            set new_keyword_id [cr::keyword::new -heading $name]
+            set new_keyword_id [content::keyword::new -heading $name]
             aa_true "created a new cr_keyword" [expr {[info exists new_keyword_id] && $new_keyword_id ne ""}]
 
-            set new_keyword_id_2 [cr::keyword::new -heading $name_2 -parent_id $new_keyword_id]
+            set new_keyword_id_2 [content::keyword::new -heading $name_2 -parent_id $new_keyword_id]
             aa_true "created a child cr_keyword" [expr {[info exists new_keyword_id_2] && $new_keyword_id_2 ne ""}]
 
             set children [cr::keyword::get_children -parent_id $new_keyword_id ]
