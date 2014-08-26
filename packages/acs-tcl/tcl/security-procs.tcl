@@ -531,16 +531,16 @@ ad_proc -private sec_allocate_session {} {
 
 } {
 
-    if { ![info exists ::tcl_max_value] || ![info exists ::tcl_current_sequence_id] 
-         || $::tcl_current_sequence_id > $::tcl_max_value } {
+    if { ![info exists ::acs::sec_id_max_value] || ![info exists ::acs::sec_id_current_sequence_id] 
+         || $::acs::sec_id_current_sequence_id > $::acs::sec_id_max_value } {
         # Thread just spawned or we exceeded preallocated count.
-        set ::tcl_current_sequence_id [db_nextval sec_id_seq]
+        set ::acs::sec_id_current_sequence_id [db_nextval sec_id_seq]
         db_release_unused_handles
-        set ::tcl_max_value [expr {$::tcl_current_sequence_id + 100}]
+        set ::acs::sec_id_max_value [expr {$::acs::sec_id_current_sequence_id + 100}]
     } 
 
-    set session_id $::tcl_current_sequence_id
-    incr ::tcl_current_sequence_id
+    set session_id $::acs::sec_id_current_sequence_id
+    incr ::acs::sec_id_current_sequence_id
 
     return $session_id
 }
