@@ -2257,7 +2257,7 @@ ad_proc -public apm::process_install_xml {
     process an xml install definition file which is expected to contain 
     directives to install, mount and configure a series of packages.
 
-    @parameter filename path to the xml file relative to serverroot.
+    @param filename path to the xml file relative to serverroot.
     @param binds list of {variable value variable value ...}
 
     @return list of messages
@@ -2429,12 +2429,23 @@ ad_proc -private apm::package_version::attributes::get_spec {} {
             pretty_name Maturity
             default_value 0
             validation_proc apm::package_version::attributes::validate_maturity
+            size 2
         }
         license {
             pretty_name License
         }
+        license_url {
+            pretty_name "License URL"
+            size 80
+        }
         package_instance_name {
             pretty_name "Package instance name"
+        }
+        install {
+            pretty_name "Install additional packages"
+            default_value ""
+            size 80
+            xml_formatter {generate_xml_element -attribute_name package -multiple}
         }
     }
 }
@@ -2602,6 +2613,39 @@ ad_proc -private apm::package_version::attributes::get {
     }
 }
 
+ad_proc -private apm::package_version::attributes::generate_xml_element {
+    {-indentation ""}
+    {-element_name:required}
+    {-attribute_name ""}
+    {-multiple:boolean false}
+    -value:required
+} {
+    Format an XML element wit a value depending on the specified arguemnts
+    @param attribute_name code the value as xml attribute
+    @param multiple treat the value as a list and produce multiple xml elements
+    @return the xml-formatted string
+
+    @author Gustaf Neumann
+} {
+    if {$multiple_p} {
+        set xm_string ""
+        foreach v $value {
+            append xml_string [generate_xml_element \
+                                   -indentation $indentation \
+                                   -element_name $element_name \
+                                   -attribute_name $attribute_name \
+                                   -value $v]
+        }
+    } else {
+        if {$attribute_name eq ""} {
+            set xml_string "${indentation}<${element_name}>[ad_quotehtml $value]</${element_name}>\n"
+        } else {
+            set xml_string "${indentation}<$element_name $attribute_name=\"[ad_quotehtml $value]\"/>\n"
+        }
+    }
+    return $xml_string 
+}
+
 ad_proc -private apm::package_version::attributes::generate_xml {
     {-version_id:required}
     {-indentation ""}
@@ -2614,19 +2658,32 @@ ad_proc -private apm::package_version::attributes::generate_xml {
     @param indentation A string with whitespace to indent each tag with
 
     @author Peter Marklund
+    @author Gustaf Neumann
 } {
     set xml_string ""
 
     array set attributes [apm::package_version::attributes::get \
                               -version_id $version_id \
                               -array attributes]
+    set attribute_defs [apm::package_version::attributes::get_spec]
 
     # sort the array so that the xml is always in the same order so 
     # its stable for CVS.
     foreach attribute_name [lsort [array names attributes]] {
+        #
         # Only output tag if its value is non-empty
+        #
         if { $attributes($attribute_name) ne "" } {
-            append xml_string "${indentation}<${attribute_name}>[ad_quotehtml $attributes($attribute_name)]</${attribute_name}>\n"
+
+            set xml_formatter generate_xml_element
+            if {[dict exists $attribute_defs $attribute_name xml_formatter]} {
+                set xml_formatter [dict get $attribute_defs $attribute_name xml_formatter]
+            }
+
+            append xml_string [{*}$xml_formatter \
+                                   -indentation $indentation\
+                                   -element_name $attribute_name \
+                                   -value $attributes($attribute_name)]
         }
     }
 
