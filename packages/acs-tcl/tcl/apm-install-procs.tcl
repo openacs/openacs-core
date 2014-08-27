@@ -2455,10 +2455,7 @@ ad_proc -private apm::package_version::attributes::get_pretty_name { attribute_n
 
     @author Peter Marklund
 } {
-    array set attributes [apm::package_version::attributes::get_spec]
-    array set attribute $attributes($attribute_name)
-
-    return $attribute(pretty_name)
+    dict get [apm::package_version::attributes::get_spec] $attribute_name pretty_name
 }
 
 ad_proc -private apm::package_version::attributes::validate_maturity { maturity } {
@@ -2522,7 +2519,6 @@ ad_proc -private apm::package_version::attributes::parse_xml {
     array set dynamic_attributes [apm::package_version::attributes::get_spec]
     foreach attribute_name [array names dynamic_attributes] {
         set attribute_node [xml_node_get_first_child_by_name $parent_node $attribute_name]
-        array set attribute $dynamic_attributes($attribute_name)
 
         if { $attribute_node ne "" } {
             # There is a tag for the attribute so use the tag contents
@@ -2539,11 +2535,10 @@ ad_proc -private apm::package_version::attributes::default_value { attribute_nam
 
     @author Peter Marklund
 } {
-    array set dynamic_attributes [apm::package_version::attributes::get_spec]
-    array set attribute $dynamic_attributes($attribute_name)
+    set attributes [apm::package_version::attributes::get_spec]
 
-    if { [info exists attribute(default_value)] } {
-        set default_value $attribute(default_value)
+    if { [dict exists $attributes $attribute_name default_value] } {
+        set default_value [dict get $attributes $attribute_name default_value]
     } else {
         # No default value so use the empty string (the default default value)
         set default_value ""
