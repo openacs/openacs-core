@@ -143,7 +143,7 @@ array set attributes [apm::package_version::attributes::get \
                           -version_id $version_id \
                           -array attributes]
 foreach attribute_name [array names all_attributes] {
-    array set attribute $all_attributes($attribute_name)
+    set attribute $all_attributes($attribute_name)
 
     if { [info exists attributes($attribute_name)] } {
         # Attribute is already in db
@@ -152,12 +152,14 @@ foreach attribute_name [array names all_attributes] {
         # The attribute is not in the db yet
         set attribute_value [apm::package_version::attributes::default_value $attribute_name]
     }
-
+    # provide default size
+    if {![dict exists $attribute size]} {
+	dict set attribute size 30
+    }
     append body [subst {
 <tr>
-  <th align=right nowrap>${attribute(pretty_name)}:</th>
-  <td><input name="$attribute_name" size="30" value="$attribute_value">
-</td>
+  <th align=right nowrap>[dict get $attribute pretty_name]:</th>
+  <td><input name="$attribute_name" size="[dict get $attribute size]" value="$attribute_value"></td>
 </tr>
     }]
 }
