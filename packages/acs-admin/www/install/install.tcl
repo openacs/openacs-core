@@ -54,50 +54,42 @@ set fetch_url $repository_url/$channel/
 apm_get_package_repository -repository_url $fetch_url -array repository
 
 foreach package_key [array names repository] {
-    array unset version
-    array set version $repository($package_key)
+    set version $repository($package_key)
 
-    if {![info exists version(maturity)] || $version(maturity) eq ""} {
-	set version(maturity) 0
-    }
+    # Ignore the package in the following cases:
+    #  - maturity is below specified level
+    #  - package is deprecated
+    #  - package is not supported by the installed database
+    #  - don't offer "-portlet" alone (currently only useful in
+    #    connection with DotLRN)
+    if {[dict get $version maturity] < $maturity
+	|| [dict get $version maturity] == 4
+	|| ![apm_package_supports_rdbms_p -package_key $package_key]
+	|| [string match "*-portlet" $package_key]
+    } continue
 
-    #ns_log notice "$version(package.key) $repository($package_key)"
-    #ns_log notice "compare $version(package.key) $version(maturity) < $maturity"
-    if {$version(maturity) < $maturity} continue
-    if {![apm_package_supports_rdbms_p -package_key $package_key]} continue
-
-    if { $package_type eq "" || $version(package.type) eq $package_type } {
-        set package_key $version(package.key)
-         
+    if { $package_type eq "" || [dict get $version package.type] eq $package_type } {
 	#
         # If in upgrade mode, only add to list if it's an upgrade, in
         # install-mode list only installs.
 	#
-        if { (!$upgrade_p && $version(install_type) eq "install")
-	     || ($upgrade_p && $version(install_type) eq "upgrade")
+        if { (!$upgrade_p && [dict get $version install_type] eq "install")
+	     || ($upgrade_p && [dict get $version install_type] eq "upgrade")
 	 } {
-
-	    if {[info commands ::apm::package_version::attributes::maturity_int_to_text] ne ""} {
-		set maturity_text [::apm::package_version::attributes::maturity_int_to_text $version(maturity)]
-	    } else { 
-		set maturity_text ""
-	    }
-
-            set package([string toupper $version(package-name)]) \
-                [list \
-                     $version(package.key) \
-                     $version(package-name) \
-                     $version(name) \
-                     $version(package.type) \
-                     $version(install_type) \
-		     $version(summary) \
-                     $maturity_text \
-                     $version(vendor) \
-                     $version(vendor.url) \
-                     $version(owner) \
-                     $version(owner.url) \
-                     $version(release-date) \
-                     $version(license) \
+            set package([string toupper [dict get $version package-name]]) \
+                [list $package_key \
+                     [dict get $version package-name] \
+                     [dict get $version name] \
+                     [dict get $version package.type] \
+                     [dict get $version install_type] \
+		     [dict get $version summary] \
+		     [::apm::package_version::attributes::maturity_int_to_text [dict get $version maturity]] \
+                     [dict get $version vendor] \
+                     [dict get $version vendor.url] \
+                     [dict get $version owner] \
+                     [dict get $version owner.url] \
+                     [dict get $version release-date] \
+                     [dict get $version license] \
 		    ]
         }
     }
