@@ -766,7 +766,7 @@ ad_proc -public callback {
            list of returns still returned.  If not given an error simply is passed
            further on.
 
-    @params args pass the set of arguments on to each callback
+    @param args pass the set of arguments on to each callback
 
     @return list of the returns from each callback that does a normal (non-empty) return
 
