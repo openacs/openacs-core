@@ -85,17 +85,20 @@ if { $spec_files eq "" } {
         <p>Please select the set of packages you'd like to install.</p>
     }
 
+    set formName "pkgsForm"
     append body [subst {
 
         <script type="text/javascript">
         function uncheckAll() {
+            var install_form = document.getElementsByName('$formName')\[0\];
             for (var i = 0; i < [llength $spec_files]; ++i)
-            document.forms\[0\].elements\[i\].checked = false;
+            install_form.elements\[i\].checked = false;
             this.href='';
         }
         function checkAll() {
+            var install_form = document.getElementsByName('$formName')\[0\];
             for (var i = 0; i < [llength $spec_files]; ++i)
-            document.forms\[0\].elements\[i\].checked = true;
+            install_form.elements\[i\].checked = true;
             this.href='';
         }
         </script>
@@ -103,7 +106,7 @@ if { $spec_files eq "" } {
         <a href="packages-install?checked_by_default_p=1" onclick="javascript:checkAll(); return false"><b>check all boxes</b></a>
     }]
 
-    append body "<form action='packages-install-2' method='post'>\n"
+    append body "<form name='$formName' action='packages-install-2' method='post'>\n"
 
     # Client properties do not deplete the limited URL variable space.
     # But they are limited to the maximum length of a varchar ...
