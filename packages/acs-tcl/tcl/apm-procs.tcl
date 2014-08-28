@@ -1592,10 +1592,10 @@ ad_proc -public apm_invoke_callback_proc {
 
     # We have a non-empty name of a callback proc to invoke
     # Form the full command including arguments
-    set command "${proc_name} [apm_callback_format_args -type $type -arg_list $arg_list]"
+    set command [list $proc_name {*}[apm_callback_format_args -type $type -arg_list $arg_list]]
 
     # We are ready for invocation
-    ns_log Notice "apm_invoke_callback_proc: invoking callback $type with command $command"
+    ns_log notice "apm_invoke_callback_proc: invoking callback $type with command <$command>"
     {*}$command
 
     return 1
@@ -1718,6 +1718,8 @@ ad_proc -private apm_callback_has_valid_args {
     @author Peter Marklund
 } {
 
+    ns_log notice "[list info commands ::$proc_name] [info commands ::$proc_name]"
+
     if { [info commands ::$proc_name] eq "" } {
         return 0
     }
@@ -1820,8 +1822,8 @@ ad_proc -public apm_package_instance_delete {
 } {
     Deletes an instance of a package
 } {    
-
     set package_key [apm_package_key_from_id $package_id]
+    # ns_log notice "apm_package_instance_delete inherit order [nsv_get apm_package_inherit_order $package_key]"
     foreach inherited_package_key [nsv_get apm_package_inherit_order $package_key] {
         apm_invoke_callback_proc \
             -package_key $inherited_package_key \
