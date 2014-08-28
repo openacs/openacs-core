@@ -1128,7 +1128,7 @@ ad_proc -private apm_package_delete {
 } {
 
     Deinstall a package from the system. Will unmount and uninstantiate
-    package instances, invoke any before-unstall callback, source any
+    package instances, invoke any before-uninstall callback, source any
     provided sql drop scripts, remove message keys, and delete
     the package from the APM tables.
 
@@ -1147,7 +1147,7 @@ ad_proc -private apm_package_delete {
             set url [site_node::get_url -node_id $node_id]
             apm_callback_and_log $callback "Unmounting package instance at url $url <br>"
             site_node::unmount -node_id $node_id
-        }    
+        }
 
         # Delete the package instances with Tcl API that invokes 
         # before-uninstantiate callbacks
@@ -1180,7 +1180,7 @@ ad_proc -private apm_package_delete {
 
     # Source SQL drop scripts
     if {$sql_drop_scripts ne ""} {
-        
+
         apm_callback_and_log $callback "Now executing drop scripts.
     <ul>
     "
