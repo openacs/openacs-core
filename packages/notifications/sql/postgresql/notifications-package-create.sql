@@ -46,10 +46,8 @@ END;
 
 $$ LANGUAGE plpgsql;
 
+
 select define_function_args ('notification_interval__delete','interval_id');
-
-
-
 --
 -- procedure notification_interval__delete/1
 --
@@ -105,6 +103,11 @@ END;
 $$ LANGUAGE plpgsql;
 
 
+--
+-- procedure notification_delivery_method__delete/1
+--
+select define_function_args ('notification_delivery_method__delete','delivery_method_id');
+
 CREATE OR REPLACE FUNCTION notification_delivery_method__delete(
      p_delivery_method_id integer
 ) RETURNS integer AS $$
@@ -116,10 +119,11 @@ END;
 $$ LANGUAGE plpgsql;
 
 
--- Notification Types Package
-select define_function_args ('notification_type__new','type_id,sc_impl_id,short_name,pretty_name,description,creation_date,creation_user,creation_ip,context_id');
+--
+-- procedure notification_type__new/9
+--
 
--- implementation
+select define_function_args ('notification_type__new','type_id,sc_impl_id,short_name,pretty_name,description,creation_date,creation_user,creation_ip,context_id');
 
 CREATE OR REPLACE FUNCTION notification_type__new (
        p_type_id integer,
@@ -151,13 +155,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-select define_function_args ('notification_type__delete','type_id');
-
-
 
 --
 -- procedure notification_type__delete/1
 --
+select define_function_args ('notification_type__delete','type_id');
+
 CREATE OR REPLACE FUNCTION notification_type__delete(
    p_type_id integer
 ) RETURNS integer AS $$
@@ -167,6 +170,11 @@ BEGIN
     return 0;
 END;
 $$ LANGUAGE plpgsql;
+
+
+--
+-- procedure notification_request__new/13
+--
 
 select define_function_args ('notification_request__new','request_id,object_type;notification_request,type_id,user_id,object_id,interval_id,delivery_method_id,format,dynamic_p;f,creation_date,creation_user,creation_ip,context_id');
 
@@ -204,13 +212,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-select define_function_args ('notification_request__delete','request_id');
-
-
 
 --
 -- procedure notification_request__delete/1
 --
+select define_function_args ('notification_request__delete','request_id');
+
 CREATE OR REPLACE FUNCTION notification_request__delete(
    p_request_id integer
 ) RETURNS integer AS $$
@@ -230,13 +237,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-select define_function_args ('notification_request__delete_all', 'object_id');
-
-
 
 --
 -- procedure notification_request__delete_all/1
 --
+select define_function_args ('notification_request__delete_all', 'object_id');
+
 CREATE OR REPLACE FUNCTION notification_request__delete_all(
    p_object_id integer
 ) RETURNS integer AS $$
@@ -254,13 +260,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-select define_function_args ('notification_request__delete_all_for_user', 'user_id');
-
-
 
 --
 -- procedure notification_request__delete_all_for_user/1
 --
+select define_function_args ('notification_request__delete_all_for_user', 'user_id');
+
 CREATE OR REPLACE FUNCTION notification_request__delete_all_for_user(
    p_user_id integer
 ) RETURNS integer AS $$
@@ -279,13 +284,12 @@ END;
 $$ LANGUAGE plpgsql;
 
 
-select define_function_args ('notification__new','notification_id,type_id,object_id,notif_date,response_id,notif_user,notif_subject,notif_text,notif_html,file_ids,creation_date,creation_user,creation_ip,context_id');
-
-
-
 --
 -- procedure notification__new/14
 --
+
+select define_function_args ('notification__new','notification_id,type_id,object_id,notif_date,response_id,notif_user,notif_subject,notif_text,notif_html,file_ids,creation_date,creation_user,creation_ip,context_id');
+
 CREATE OR REPLACE FUNCTION notification__new(
    p_notification_id integer,
    p_type_id integer,
@@ -331,13 +335,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-select define_function_args ('notification__delete','notification_id');
-
-
 
 --
 -- procedure notification__delete/1
 --
+select define_function_args ('notification__delete','notification_id');
+
 CREATE OR REPLACE FUNCTION notification__delete(
    p_notification_id integer
 ) RETURNS integer AS $$
