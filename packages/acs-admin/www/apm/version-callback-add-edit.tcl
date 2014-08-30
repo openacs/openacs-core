@@ -65,12 +65,12 @@ ad_form -name callback -cancel_url $return_url -form {
 
 } -validate {
     {proc
-    { [info commands ::${proc} ne ""] }
-    {The specified procedure name does not exist. Is the -procs.tcl file loaded?}
+	{ {info commands ::$proc} ne "" }
+	{The specified procedure name does not exist. Is the -procs.tcl file loaded?}
     }
     {proc
-    { [apm_callback_has_valid_args -type $type -proc_name $proc] }
-    {The callback proc $proc must be defined with ad_proc [ad_decode [apm_arg_names_for_callback_type -type $type] "" "and should take no arguments" "and have the following required switches: [apm_arg_names_for_callback_type -type $type]"]}
+	{ [apm_callback_has_valid_args -type $type -proc_name $proc] }
+	{The callback proc $proc must be defined with ad_proc [ad_decode [apm_arg_names_for_callback_type -type $type] "" "and should take no arguments" "and have the following required switches: [apm_arg_names_for_callback_type -type $type]"]}
     }
 } -on_submit {
     
