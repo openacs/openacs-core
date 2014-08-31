@@ -1718,20 +1718,18 @@ ad_proc -private apm_callback_has_valid_args {
     @author Peter Marklund
 } {
 
-    ns_log notice "[list info commands ::$proc_name] [info commands ::$proc_name]"
-
     if { [info commands ::$proc_name] eq "" } {
         return 0
     }
 
     set test_arg_list ""
     foreach arg_name [apm_arg_names_for_callback_type -type $type] {
-        append test_arg_list " -${arg_name} value"
+        lappend test_arg_list -$arg_name value
     }
 
     if { $test_arg_list eq "" } {
         # The callback proc should take no args
-        return [expr {[info args ::${proc_name}] eq ""}]
+        return [expr {[info args ::$proc_name] eq ""}]
     }
 
     # The callback proc should have required arg switches. Check
