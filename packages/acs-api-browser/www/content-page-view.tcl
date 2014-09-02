@@ -77,7 +77,7 @@ if {![file exists $filename] || [file isdirectory $filename]} {
         }
     }
 
-    template::util::list_to_multirow xql_links [api_xql_links_list $path]
+    template::util::list_to_multirow xql_links [::apidoc::api_xql_links_list $path]
 }
 
 

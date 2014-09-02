@@ -79,10 +79,10 @@ foreach proc [nsv_array names api_proc_doc] {
         # value of an exact match.
 
         ##Exact match:
-        if {[string tolower $query_string] == [string tolower $proc]} {
+        if {[string tolower $query_string] eq [string tolower $proc]} {
             incr score [expr {$name_weight * 2}]
         } elseif { ! $exact_match_p } {
-            incr score [expr {$name_weight * [ad_keywords_score $query_string $proc]}] 
+            incr score [expr {$name_weight * [::apidoc::ad_keywords_score $query_string $proc]}] 
         }
     }
    
@@ -90,7 +90,7 @@ foreach proc [nsv_array names api_proc_doc] {
     ## Param Search:
     ################
     if {$param_weight} {
-        incr score [expr {$param_weight * [ad_keywords_score $query_string "$doc_elements(positionals) $doc_elements(switches)"]}]
+        incr score [expr {$param_weight * [::apidoc::ad_keywords_score $query_string "$doc_elements(positionals) $doc_elements(switches)"]}]
     }
     
 
@@ -108,7 +108,7 @@ foreach proc [nsv_array names api_proc_doc] {
         if {[info exists doc_elements(return)]} {
             append doc_string " $doc_elements(return)"
         }
-        incr score [expr {$doc_weight * [ad_keywords_score $query_string $doc_string]}]
+        incr score [expr {$doc_weight * [::apidoc::ad_keywords_score $query_string $doc_string]}]
         
     }
     
@@ -117,7 +117,7 @@ foreach proc [nsv_array names api_proc_doc] {
     #################
     if {$source_weight} {
         if {![catch {set source [info body $proc]}]} {
-            incr score [expr {$source_weight * [ad_keywords_score $query_string $source]}] 
+            incr score [expr {$source_weight * [::apidoc::ad_keywords_score $query_string $source]}] 
         }    
     }
 
@@ -141,7 +141,7 @@ foreach proc [nsv_array names api_proc_doc] {
     }
 }
 
-set matches [lsort -command ad_sort_by_score_proc $matches]
+set matches [lsort -command ::apidoc::ad_sort_by_score_proc $matches]
 
 if {$quick_view && $matches ne "" || [llength $matches] == 1 } {
     ad_returnredirect [api_proc_url [lindex $matches 0 0]]
