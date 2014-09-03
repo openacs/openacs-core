@@ -146,7 +146,7 @@ $prompt_text
 
 <blockquote>
 <table>
-<tr valign="baseline"><th align="left">Package Name:</th><td>$pretty_name</td></th></tr>
+<tr valign="baseline"><th align="left">Package Name:</th><td>$pretty_name</td></tr>
 <tr valign="baseline"><th align="left">Version:</th><td>$version_name</td></tr>
 <tr valign="baseline"><th align="left">OpenACS Core:</th><td>[ad_decode $initial_install_p "t" "Yes" "No"]</td></tr>
 <tr valign="baseline"><th align="left">Singleton:</th><td>[ad_decode $singleton_p "t" "Yes" "No"]</td></tr>
@@ -154,7 +154,7 @@ $prompt_text
 <tr valign="baseline"><th align="left">Inherit Templates:</th><td>[ad_decode $inherit_templates_p t Yes No]</td></tr>
 <tr valign="baseline"><th align="left">Auto-mount:</th><td>$auto_mount</td></tr>
 <tr valign="baseline"><th align="left">Status:</th><td>$status</td></tr>
-<tr valign="baseline"><th align="left">Data Model:</th><td>$data_model_status</td></th></tr>
+<tr valign="baseline"><th align="left">Data Model:</th><td>$data_model_status</td></tr>
 }]
 
 set supported_databases_list [apm_package_supported_databases $package_key]
@@ -165,10 +165,10 @@ if { $supported_databases_list eq "" } {
 }
 
 append body [subst {
-<tr valign="baseline"><th align="left">Database Support:</th><td>$supported_databases</td></th></tr>
+<tr valign="baseline"><th align="left">Database Support:</th><td>$supported_databases</td></tr>
 <tr valign="baseline"><th align="left">CVS:</th><td>$cvs_status</td></tr>
-<tr valign="baseline"><th align="left">[ad_decode [llength $owners] 1 "Owner" "Owners"]:</th><td>[join $owners "<br>"]</td></th></tr>
-<tr valign="baseline"><th align="left">Package Key:</th><td>$package_key</td></th></tr>
+<tr valign="baseline"><th align="left">[ad_decode [llength $owners] 1 "Owner" "Owners"]:</th><td>[join $owners "<br>"]</td></tr>
+<tr valign="baseline"><th align="left">Package Key:</th><td>$package_key</td></tr>
 <tr valign="baseline"><th align="left">Summary:</th><td>$summary</td></tr>
 <tr valign="baseline"><th align="left">Description:</th><td>$description</td></tr>
 <tr valign="baseline"><th align="left">Release Date:</th><td>$release_date</td></tr>
@@ -188,8 +188,8 @@ foreach attribute_name [array names attributes] {
 
 append body [subst {
 <tr valign="baseline"><th align="left">Vendor:</th><td>[ad_decode $vendor_uri "" $vendor "<a href=\"$vendor_uri\">$vendor</a>"]</td></tr>
-<tr valign="baseline"><th align="left">Package URL:</th><td><a href="$package_uri">$package_uri</a></td></th></tr>
-<tr valign="baseline"><th align="left">Version URL:</th><td><a href="$version_uri">$version_uri</a></td></th></tr>
+<tr valign="baseline"><th align="left">Package URL:</th><td><a href="$package_uri">$package_uri</a></td></tr>
+<tr valign="baseline"><th align="left">Version URL:</th><td><a href="$version_uri">$version_uri</a></td></tr>
 <tr valign="baseline"><th align="left">Distribution File:</th><td>
 }]
 
@@ -237,12 +237,12 @@ append body [subst {
 </ul>
 <h4>Reload</h4>
 <ul>
-<li><a href="[export_vars -base version-reload { version_id {return_url [ad_return_url]}}]">Reload this package</a>
-<li><a href="[export_vars -base package-watch { package_key {return_url [ad_return_url]}}]">Watch all files in package</a>
+<li><a href="[export_vars -base version-reload { version_id {return_url [ad_return_url]}}]">Reload this package</a></li>
+<li><a href="[export_vars -base package-watch { package_key {return_url [ad_return_url]}}]">Watch all files in package</a></li>
 </ul>
 <h4>XML .info package specification file</h4>
 <ul>
-<li><a href="version-generate-info?[export_vars { version_id }]">Display an XML package specification file for this version</a>
+<li><a href="version-generate-info?[export_vars { version_id }]">Display an XML package specification file for this version</a></li>
 }]
 
 if { ![info exists installed_version_id] || $installed_version_id == $version_id && 
@@ -252,7 +252,7 @@ if { ![info exists installed_version_id] || $installed_version_id == $version_id
     # of the package.
     append body [subst {
 	<li><a href="version-generate-info?[export_vars { version_id }]&write_p=1">Write 
-	an XML package specification to the <tt>packages/$package_key/$package_key.info</tt> file</a>
+	an XML package specification to the <tt>packages/$package_key/$package_key.info</tt> file</a></li>
     }]
 }
 
@@ -261,8 +261,8 @@ if { $installed_p == "t" } {
 	# The distribution tarball was either (a) never generated, or (b) generated on this
 	# system. Allow the user to make a tarball based on files in the filesystem.
 	append body [subst {
-	    <p><li><a href="version-generate-tarball?[export_vars { version_id }]">Generate 
-	    a distribution file for this package from the filesystem</a>
+	    <li><a href="version-generate-tarball?[export_vars { version_id }]">Generate 
+	    a distribution file for this package from the filesystem</a></li>
 	}]
     }
 
@@ -270,23 +270,21 @@ if { $installed_p == "t" } {
 
     if { [info exists can_disable_p] } {
 	append body [subst {
-	    <p><li><a href="version-disable?[export_vars { version_id }]">Disable 
-	    this version of the package</a>
+	    <li><a href="version-disable?[export_vars { version_id }]">Disable 
+	    this version of the package</a></li>
 	}]
     }
     if { [info exists can_enable_p] } {
 	append body [subst {
-	    <p><li><a href="version-enable?[export_vars { version_id }]">Enable 
-	    this version of the package</a>
+	  <li><a href="version-enable?[export_vars { version_id }]">Enable 
+	    this version of the package</a></li>
 	}]
     }
     
-    append body "<p>"
-    
     if { $installed_p == "t" } {	
 	append body [subst {
-	    <li><a href="package-delete?[export_vars { version_id }]">Uninstall 
-	    this package from your system</a> (be very careful!)
+	  <li><a href="package-delete?[export_vars { version_id }]">Uninstall 
+	    this package from your system</a> (be very careful!)</li>
 	}]
     }
 }
