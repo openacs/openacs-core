@@ -123,7 +123,7 @@ edit the information regarding existing version of the package.</td>
 
 <tr valign="top">
   <th align="right"><br>Summary:</th>
-  <td><textarea name="summary" cols="60" rows="2" wrap="soft">[ns_quotehtml $summary]</textarea></td>
+  <td><textarea name="summary" cols="60" rows="2" required="required" wrap="soft">[ns_quotehtml $summary]</textarea></td>
 </tr>
 
 <tr valign=top>
