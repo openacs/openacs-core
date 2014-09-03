@@ -250,11 +250,13 @@ ad_proc -public site_node::unmount {
     set package_id [get_object_id -node_id $node_id]
     set package_key [apm_package_key_from_id $package_id]
 
-    foreach inherited_package_key [nsv_get apm_package_inherit_order $package_key] {
-        apm_invoke_callback_proc \
-            -package_key $inherited_package_key \
-            -type before-unmount \
-            -arg_list [list package_id $package_id node_id $node_id]
+    if {[nsv_exists apm_package_inherit_order $package_key]} {
+        foreach inherited_package_key [nsv_get apm_package_inherit_order $package_key] {
+	    apm_invoke_callback_proc \
+		-package_key $inherited_package_key \
+		-type before-unmount \
+		-arg_list [list package_id $package_id node_id $node_id]
+	}
     }
 
     db_dml unmount_object {}
