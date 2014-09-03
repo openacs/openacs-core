@@ -9,6 +9,7 @@ ad_page_contract {
     {return_url .}
     {confirm_p 0}
 }
+set listing ""
 
 if { !$confirm_p } {
     set num [llength $node_id]
@@ -22,6 +23,19 @@ if { !$confirm_p } {
     set context [list [list "." "Applications"] $page_title]
     set yes_url [export_vars -base [ad_conn url] { node_id:multiple return_url { confirm_p 1 } }]
     set no_url "."
+
+    set package_ids ""
+    append listing <ul>\n
+    foreach id $node_id {
+
+        set dict [site_node::get_from_node_id -node_id $id]
+        append listing "<li>" \
+            [dict get $dict instance_name] " " \
+            [dict get $dict url] " " \
+            "(package_id [dict get $dict package_id])" \
+            </li> "\n"
+    }
+    append listing </ul>\n
 
     return
 }
@@ -57,3 +71,9 @@ db_transaction {
 ad_returnredirect $return_url
 
 
+#
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

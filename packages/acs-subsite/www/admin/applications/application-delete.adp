@@ -2,6 +2,9 @@
   <property name="doc(title)">@page_title@</property>
   <property name="context">@context@</property>
 
+<h2>@page_title@</h2>
+@listing;noquote@
+
 <p>
   Are you sure you want to delete <if @num@ eq 1>this application</if><else>these @num@ applications</else>?
 </p>
