@@ -6,6 +6,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     node_id:naturalnum,multiple
+    {return_url .}
     {confirm_p 0}
 }
 
@@ -19,7 +20,7 @@ if { !$confirm_p } {
 
     set page_title "Delete [ad_decode $num 1 "Application" "Applications"]"
     set context [list [list "." "Applications"] $page_title]
-    set yes_url [export_vars -base [ad_conn url] { node_id:multiple { confirm_p 1 } }]
+    set yes_url [export_vars -base [ad_conn url] { node_id:multiple return_url { confirm_p 1 } }]
     set no_url "."
 
     return
@@ -48,12 +49,11 @@ db_transaction {
     }
 } on_error {
     set error_p 1
-    global errorInfo
-    ns_log Error "Error deleting package with package_id $id: $errmsg\n$errorInfo"
+    ns_log Error "Error deleting package with package_id $id: $errmsg\n$::errorInfo"
     # Hm. Not sure what to do. For now, let's rethrow the error.
-    error $errmsg $errorInfo
+    error $errmsg $::errorInfo
 }
      
-ad_returnredirect .
+ad_returnredirect $return_url
 
 
