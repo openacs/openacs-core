@@ -10,7 +10,7 @@ ad_page_contract {
 set version_id [apm_highest_version $package_key]
 apm_version_info $version_id
 
-set title "Instances of $pretty_name $version_name"
+set title "Instances of Package $pretty_name $version_name ($package_key)"
 set context [list \
                  [list "../developer" "Developer's Administration"] \
                  [list "/acs-admin/apm/" "Package Manager"] \
@@ -30,14 +30,16 @@ db_foreach get_version_info {
             set node_id [dict get [site_node::get -url $url] node_id]
             append body [subst {
                 <li>$package_id $instance_name <a href="$url">$url</a> (node_id $node_id): 
-                <a href="/admin/applications/application-delete?[export_vars { node_id return_url }]">delete</a>,
-                <a href="/admin/site-map?[export_vars { {root_id $node_id} return_url }]">Site Map</a>.
+                \[<a href="/admin/applications/application-delete?[export_vars { node_id return_url }]">delete</a>,
+                <a href="/admin/site-map?[export_vars { {root_id $node_id} return_url }]">Site Map</a>\]
                 </li>
             }]
         }
     } else {
         append body [subst {
-            <li>$package_id $instance_name: (unmounted)</li>
+            <li>$package_id $instance_name (unmounted): 
+            \[<a href="/admin/applications/application-delete?[export_vars { package_id return_url }]">delete</a>\]
+            </li>
         }]
     }
 }

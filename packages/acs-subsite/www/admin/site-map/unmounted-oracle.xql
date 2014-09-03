@@ -5,7 +5,7 @@
 
     <fullquery name="packages_normal_select">
         <querytext>
-            select package_id, acs_object.name(package_id) as name
+            select package_id, acs_object.name(package_id) as name, package_key
             from apm_packages
             where (acs_permission.permission_p(package_id, :user_id, 'read') = 't' or
                     acs_permission.permission_p(package_id, acs.magic_object_id('the_public'), 'read') = 't')
@@ -19,7 +19,7 @@
 
     <fullquery name="packages_singleton_select">
         <querytext>
-            select package_id, acs_object.name(package_id) as name
+            select package_id, acs_object.name(package_id) as name,  package_key
             from apm_packages
             where (acs_permission.permission_p(package_id, :user_id, 'read') = 't' or
                     acs_permission.permission_p(package_id, acs.magic_object_id('the_public'), 'read') = 't')
