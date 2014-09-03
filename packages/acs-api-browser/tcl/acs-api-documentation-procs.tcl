@@ -55,9 +55,7 @@ ad_proc -public api_read_script_documentation {
             array set doc_elements $error
         }
     } else {
-        global errorCode
-        global errorInfo
-        return -code $errno -errorcode $errorCode -errorinfo $errorInfo $error
+        return -code $errno -errorcode $::errorCode -errorinfo $::errorInfo $error
     }
 
     if { [info exists doc_elements] } {
