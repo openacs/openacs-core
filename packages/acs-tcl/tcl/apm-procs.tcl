@@ -1822,11 +1822,13 @@ ad_proc -public apm_package_instance_delete {
 } {    
     set package_key [apm_package_key_from_id $package_id]
     # ns_log notice "apm_package_instance_delete inherit order [nsv_get apm_package_inherit_order $package_key]"
-    foreach inherited_package_key [nsv_get apm_package_inherit_order $package_key] {
-        apm_invoke_callback_proc \
-            -package_key $inherited_package_key \
-            -type before-uninstantiate \
-            -arg_list [list package_id $package_id]
+    if {[nsv_exists apm_package_inherit_order $package_key]} {
+        foreach inherited_package_key [nsv_get apm_package_inherit_order $package_key] {
+            apm_invoke_callback_proc \
+                -package_key $inherited_package_key \
+                -type before-uninstantiate \
+                -arg_list [list package_id $package_id]
+        }
     }
 
     db_exec_plsql apm_package_instance_delete {}
