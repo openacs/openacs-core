@@ -182,7 +182,7 @@ array set attributes [apm::package_version::attributes::get \
 foreach attribute_name [array names attributes] {
     array set attribute $all_attributes($attribute_name)
     append body [subst {
-	<tr valign="baseline"><th align="left">$attribute(pretty_name)</th><td>$attributes($attribute_name)</td></tr>
+	<tr valign="baseline"><th align="left">$attribute(pretty_name):</th><td>$attributes($attribute_name)</td></tr>
     }]
 }
 
@@ -219,6 +219,17 @@ if { $tarball_length ne "" && $tarball_length > 0 } {
     }
 }
 
+
+set nr_instances [apm_num_instances $package_key]
+if {$nr_instances > 0} {
+    set instances [subst {
+        Installed instances of this package:
+        <a href="package-instances?[export_vars { package_key }]">$nr_instances</a>
+    }]
+} else {
+    set instances "No installed instance of this package\n"
+    }
+
 append body [subst {
 </td></tr>
 </table>
@@ -229,11 +240,12 @@ append body [subst {
 </ul>
 <h4>Manage</h4>
 <ul>
-<li><a href="version-files?[export_vars { version_id }]">Files</a>
-<li><a href="version-dependencies?[export_vars { version_id }]">Dependencies and Provides</a>
-<li><a href="version-parameters?[export_vars { version_id }]">Parameters</a>
-<li><a href="version-callbacks?[export_vars { version_id }]">Tcl Callbacks (install, instantiate, mount)</a>
-<li><a href="version-i18n-index?[export_vars { version_id }]">Internationalization</a>
+<li><a href="version-files?[export_vars { version_id }]">Files</a></li>
+<li><a href="version-dependencies?[export_vars { version_id }]">Dependencies and Provides</a></li>
+<li><a href="version-parameters?[export_vars { version_id }]">Parameters</a></li>
+<li><a href="version-callbacks?[export_vars { version_id }]">Tcl Callbacks (install, instantiate, mount)</a></li>
+<li><a href="version-i18n-index?[export_vars { version_id }]">Internationalization</a></li>
+<li>$instances</li>
 </ul>
 <h4>Reload</h4>
 <ul>
@@ -294,3 +306,10 @@ append body {
 }
 
 ad_return_template apm
+
+#
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:
