@@ -186,8 +186,9 @@ foreach attribute_name [array names attributes] {
     }]
 }
 
+set vendorHTML [ad_decode $vendor_uri "" $vendor "<a href=\"$vendor_uri\">$vendor</a>"]
 append body [subst {
-    <tr valign="baseline"><th align="left">Vendor:</th><td>[ad_decode $vendor_uri "" $vendor "<a href=\"$vendor_uri\">$vendor</a>"]</td></tr>
+    <tr valign="baseline"><th align="left">Vendor:</th><td>$vendorHTML</td></tr>
     <tr valign="baseline"><th align="left">Package URL:</th><td><a href="$package_uri">$package_uri</a></td></tr>
     <tr valign="baseline"><th align="left">Version URL:</th><td><a href="$version_uri">$version_uri</a></td></tr>
     <tr valign="baseline"><th align="left">Distribution File:</th><td>
@@ -203,6 +204,17 @@ if { $tarball_length ne "" && $tarball_length > 0 } {
             append body " on $distribution_date"
         }
         append body ")"
+        set params [export_vars { {m create-new} {p.description $summary} {title "[file tail $version_uri]"}}]
+        append body [subst {
+            <p>
+            In order to contribute this package back to the OpenACS community, 
+            <ol>
+            <li>download the .apm-file to your file system and</li>
+            <li>submit the .apm-file 
+            <a href="http://openacs.org/xowf/package-submissions/PackageSubmit.wf?$params" target="_blank">to 
+            the package repository of OpenACS</a>.</li>
+            </ol>
+        }]
     } else {
         append body "(downloaded from $distribution_uri"
         if { $distribution_date ne "" } {
