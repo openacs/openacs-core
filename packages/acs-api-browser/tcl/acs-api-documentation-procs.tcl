@@ -9,6 +9,68 @@ ad_library {
 
 }
 
+namespace eval ::apidoc {
+
+    if {[ns_info name] eq "NaviServer"} {
+        #
+        # NaviServer at sourceforge
+        #
+        set ns_api_host  "http://naviserver.sourceforge.net/"
+        set ns_api_index "n/naviserver/files/"
+        set ns_api_root ${ns_api_host}${ns_api_index}
+        set ns_api_html_index $ns_api_root/commandlist.html
+    } else {
+        #
+        # AOLserver wiki on panpotic
+        #
+        set ns_api_host  "http://panoptic.com/"
+        set ns_api_index "wiki/aolserver/Tcl_API"
+        set ns_api_root ${ns_api_host}${ns_api_index}
+        set ns_api_html_index $ns_api_root
+    }
+
+    set tcl_api_html_index "http://www.tcl.tk/man/tcl$::tcl_version/TclCmd/contents.htm"
+
+    # set style {
+    #     .code .comment  {color: #006600; font-weight: normal; font-style: italic;}
+    #     .code .keyword  {color: #0000AA; font-weight: bold;   font-style: normal;}
+    #     .code .string   {color: #990000; font-weight: normal; font-style: italic;}
+    #     .code .var      {color: #660066; font-weight: normal; font-style: normal;}
+    #     .code .proc     {color: #0000CC; font-weight: normal; font-style: normal;}
+    #     .code .object   {color: #000066; font-weight: bold;   font-style: normal;}
+    #     .code .helper   {color: #0000CC; font-weight: bold;   font-style: normal;}
+    #     pre.code a      {text-decoration: none;}
+    # }
+    set style {
+        .code .comment  {color: #717ab3; font-weight: normal; font-style: italic;}
+        .code .keyword  {color: #7f0055; font-weight: normal; font-style: normal;}
+        .code .string   {color: #779977; font-weight: normal; font-style: italic;}
+        .code .var      {color: #AF663F; font-weight: normal; font-style: normal;}
+        .code .proc     {color: #0000CC; font-weight: normal; font-style: normal;}
+        .code .object   {color: #000066; font-weight: bold;   font-style: normal;}
+        .code .helper   {color: #aaaacc; font-weight: bold;   font-style: normal;}
+        pre.code        {background: #fafafa}
+        pre.code a      {text-decoration: none;}
+    }
+
+    set KEYWORDS {
+
+        after append apply array bgerror binary break catch cd chan
+        clock close concat continue default dict encoding eof error
+        eval exec expr fblocked fconfigure fcopy file fileevent flush
+        for foreach format gets glob global if incr info interp join
+        lappend lassign lindex linsert list llength load lrange
+        lreplace lreverse lsearch lset lsort namespace open package
+        pid proc puts pwd read refchan regexp regsub rename return
+        scan seek set socket source split string subst switch tell
+        time trace unload unset update uplevel upvar variable vwait
+        while
+
+    }
+
+}
+
+
 ad_proc -public api_read_script_documentation {
     path
 } {
@@ -482,12 +544,12 @@ ad_proc -public api_proc_documentation {
                  -parameter FancySourceFormattingP \
                  -default 1]} {
             append out [subst {<dt><b>Source code:</b></dt><dd>
-                <pre>[::apidoc::api_tcl_to_html $proc_name]</pre>
+                <pre class="code">[::apidoc::api_tcl_to_html $proc_name]</pre>
                 </dd><p>
             }]
         } else {
             append out [subst {<dt><b>Source code:</b></dt><dd>
-                <pre>[ns_quotehtml [api_get_body $proc_name]]</pre>
+                <pre class="code">[ns_quotehtml [api_get_body $proc_name]]</pre>
                 </dd><p>
             }]
         }
@@ -964,32 +1026,25 @@ namespace eval ::apidoc {
         return [expr {$i - 1}]
     }
 
-    set HTML {
-        comment   {<EM><FONT color=#006600>}
-        /comment  {</FONT></EM>}
-        procs     {<FONT color=#0000CC>}
-        /procs    {</FONT>}
-        str       {<FONT color=#990000>}
-        /str      {</FONT>}
-        var       {<FONT color=#660066>}
-        /var      {</FONT>}
-        object      {<FONT color=#000066><b>}
-        /object      {</b></FONT>}
+    ad_proc -private search_on_webindex {-page -host -root -proc} {
+        Search for a matching link in the page and return the absolute link if found
+    } {
+        set url ""
+        if { [regexp "<a href= *\['\"\](\[^>\"'\]+)\[\"'\]\[^>\]*>$proc</a>" $page match relative_url] } {
+            if {[string match "/*" $relative_url]} {
+                set url $host$relative_url
+            } else {
+                set url $root$relative_url
+            }
+        }
+        return $url
     }
 
-    set KEYWORDS {
-        if while foreach for switch default
-        after break continue return error catch
-        upvar uplevel eval exec source variable namespace package load
-        set unset trace append global vwait split join
-        concat list lappend lset lindex linsert llength lrange lreplace lsearch lsort
-        info incr expr regexp regsub binary
-        string array open close read cd pwd glob seek pid
-        file fblocked fcopy fconfigure fileevent filename flush eof
-        clock encoding proc rename subst update
-        gets puts socket tell format scan
+    ad_proc -private pretty_token {kind token} {
+        Encode the specified token in HTML
+    } {
+        return "<span class='$kind'>$token</span>"
     }
-
 
     ad_proc -private api_tclcode_to_html {{-scope ""} {-proc_namespace ""} script} {
 
@@ -1000,6 +1055,8 @@ namespace eval ::apidoc {
         @param script script to be formated in HTML
 
     } {
+
+        template::head::add_style -style $apidoc::style
 
         # Keywords will be colored as other procs, but not hyperlinked
         # to api-doc pages.  Perhaps we should hyperlink them to the TCL man pages?
@@ -1038,19 +1095,19 @@ namespace eval ::apidoc {
                         append html "\$"
                     } else {
                         set varl [length_var [string range $data $i end]]
-                        append html "[dict get $::apidoc::HTML var][string range $data $i $i+$varl][dict get $::apidoc::HTML /var]"
+                        append html [pretty_token var [string range $data $i $i+$varl]]
                         incr i $varl
                     }
                 }
 
                 "\"" {
                     if {$in_comment} {
-                        append html "\""
+                        append html \"
                     } elseif {$in_quotes} {
-                        append html \"[dict get $::apidoc::HTML /str]
+                        append html \" </span>
                         set in_quotes 0
                     } else {
-                        append html [dict get $::apidoc::HTML str]\"
+                        append html "<span class='string'>" \"
                         set in_quotes 1
                         set proc_ok 0
                     }
@@ -1061,7 +1118,7 @@ namespace eval ::apidoc {
                     if {$proc_ok && !$in_comment && [regexp {[\s;]} $prevchar]} {
                         set in_comment 1
                         set proc_ok 0
-                        append html [dict get $::apidoc::HTML comment]
+                        append html "<span class='comment'>"
                     }
                     append html "#"
                 }
@@ -1072,7 +1129,7 @@ namespace eval ::apidoc {
                         set proc_ok 0
                     }
                     if {$in_comment} {
-                        append html [dict get $::apidoc::HTML /comment]
+                        append html </span>
                     }
                     append html "\n"
                     set in_comment 0
@@ -1090,7 +1147,8 @@ namespace eval ::apidoc {
                     append html "\}"
                     # Special case else and elseif
                     if {[regexp {^\}(\s*)(else|elseif)(\s*\{)} [string range $data $i end] match pre els post]} {
-                        append html "${pre}[dict get $::apidoc::HTML procs]${els}[dict get $::apidoc::HTML /procs]${post}"
+
+                        append html $pre [pretty_token keyword $els] $post
                         set proc_ok 1
                         incr i [expr {[string length $pre] + [string length $els] + [string length $post]}]
                     }
@@ -1114,31 +1172,38 @@ namespace eval ::apidoc {
                         set proc_name [string range $data $i $i+$procl]
 
                         if {$proc_name in $::apidoc::KEYWORDS ||
-                            ([regexp {^::(.*)} $proc_name match had_colons] && 
-                             $had_colons in $::apidoc::KEYWORDS)} {
-                            append html "[dict get $::apidoc::HTML procs]${proc_name}[dict get $::apidoc::HTML /procs]"
+                            ([regexp {^::(.*)} $proc_name match had_colons] 
+                             && $had_colons in $::apidoc::KEYWORDS)} {
+
+                            set url "/api-doc/proc-view?proc=$proc_name"
+                            append html "<a href='$url'>" [pretty_token keyword $proc_name] </a>
+
+                            #append html [pretty_token keyword $proc_name]
+
                         } elseif {$proc_name in $XOTCL_KEYWORDS} {
-                            append html "[dict get $::apidoc::HTML procs]${proc_name}[dict get $::apidoc::HTML /procs]"
+                            append html [pretty_token keyword $proc_name]
+
                         } elseif {[api_is_xotcl_object $scope $proc_name]} {
                             set url [::xotcl::api object_url \
                                          -show_source 1 -show_methods 2 \
                                          $scope $proc_name]
-                            append html "<A style='text-decoration:none' href=\
-            '$url'>[dict get $::apidoc::HTML object]${proc_name}[dict get $::apidoc::HTML /object]</A>"
+                            append html "<a href='$url'>" [pretty_token object $proc_name] </a>
+
                         } elseif {[string match "ns*" $proc_name]} {
                             set url "/api-doc/tcl-proc-view?tcl_proc=$proc_name"
-                            append html "<A style='text-decoration:none' href=\
-             '$url'>[dict get $::apidoc::HTML procs]${proc_name}[dict get $::apidoc::HTML /procs]</A>"
+                            append html "<a href='$url'>" [pretty_token proc $proc_name] </a>
+
                         } elseif {[string match "*__arg_parser" $proc_name]} {
-                            append html "[dict get $::apidoc::HTML procs]${proc_name}[dict get $::apidoc::HTML /procs]"
+                            append html [pretty_token helper $proc_name]
+
                         } elseif {[info commands ::${proc_namespace}::${proc_name}] ne ""}  {
                             set url [api_proc_url ${proc_namespace}::${proc_name}]
-                            append html "<A style='text-decoration:none' href=\
-            '$url'>[dict get $::apidoc::HTML procs]${proc_name}[dict get $::apidoc::HTML /procs]</A>"
+                            append html "<a href='$url'>" [pretty_token proc $proc_name] </a>
+
                         } elseif {[info commands ::$proc_name] ne ""}  {
                             set url [api_proc_url $proc_name]
-                            append html "<A style='text-decoration:none' href=\
-            '$url'>[dict get $::apidoc::HTML procs]${proc_name}[dict get $::apidoc::HTML /procs]</A>"
+                            append html "<a href='$url'>" [pretty_token proc $proc_name] </a>
+
                         } else {
                             append html ${proc_name}
                             set proc_ok 1
