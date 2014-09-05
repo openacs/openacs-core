@@ -49,7 +49,12 @@ namespace eval ::apidoc {
         .code .proc     {color: #0000CC; font-weight: normal; font-style: normal;}
         .code .object   {color: #000066; font-weight: bold;   font-style: normal;}
         .code .helper   {color: #aaaacc; font-weight: bold;   font-style: normal;}
-        pre.code        {background: #fafafa}
+        pre.code        {
+            background: #fefefa; 
+            border-color: #aaaaaa; 
+            border-style: solid;
+            border-width: 1px; 
+        }
         pre.code a      {text-decoration: none;}
     }
 
@@ -1012,7 +1017,7 @@ namespace eval ::apidoc {
         set i 0
         set found_regexp 0
         set curchar [string index $data $i]
-        while {$curchar != "\$" && $curchar != "\[" &&
+        while {$curchar ne "\$" && $curchar ne "\[" &&
                ($curchar ne "\{" || !$found_regexp)} {
             if {$curchar eq "\{"} {set found_regexp 1}
             if {[string range $data $i $i+5] eq "-start"} {
@@ -1210,11 +1215,25 @@ namespace eval ::apidoc {
                         }
                         incr i $procl
 
-                        # Hack for nasty regexp stuff
-                        if {"regexp" eq $proc_name || "regsub" eq $proc_name} {
+                        if {$proc_name eq "regexp" || $proc_name eq "regsub"} {
+                            #
+                            # Hack for nasty regexp stuff
+                            #
                             set regexpl [length_regexp [string range $data $i end]]
                             append html [string range $data $i+1 $i+$regexpl]
                             incr i $regexpl
+                        } elseif {$proc_name eq "util_memoize"} {
+                            #
+                            # Hack for regular cases of util_memoize
+                            #
+                            for {set j 1}  {[string index $data $i+$j] eq " "} {incr j} {;}
+                            for {set k $j} {[string index $data $i+$k] ne " "} {incr k} {;}
+                            set word [string range $data $i+$j $i+$k]
+                            if {$word eq {[list }} {
+                                append html " \[" [pretty_token keyword list]
+                                incr i [expr {$k-1}]
+                                set proc_ok 1
+                            }
                         }
                     } else {
                         append html $char
@@ -1278,7 +1297,7 @@ ad_proc api_proc_url { proc } {
     @author Lars Pind (lars@pinds.com)
     @creation-date 14 July 2000
 } {
-    return "/api-doc/proc-view?proc=[ns_urlencode $proc]"
+    return "/api-doc/proc-view?proc=[ns_urlencode [string trimleft $proc :]]"
 }
 
 ad_proc api_proc_link { proc } {
