@@ -2,11 +2,11 @@
 <property name="doc(title)">@title;noquote@</property>
 <property name="context">@context;noquote@</property>
 
-Sorry, no AOLserver Tcl API procedures were found with that name.
+Sorry, no <%= [ns_info name]%> Tcl API procedures were found with that name.
 
 <p>
 
-You can try searching the <a href="@tcl_api_root@">AOLserver documentation</a> yourself.
+You can try searching the <a href="@apidoc::ns_api_html_index@"><%= [ns_info name]%> documentation</a> yourself.
 
 <p>
 
