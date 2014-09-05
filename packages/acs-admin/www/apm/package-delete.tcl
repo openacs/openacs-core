@@ -76,7 +76,7 @@ $dependency_warning_text
 }
 
 set file_list ""
-foreach file [apm_get_package_files -package_key $package_key -file_types data_model_drop] {
+foreach file [apm_get_package_files -package_key $package_key -file_types data_model_drop -include_data_model_files] {
     append file_list "  <tr>
     <td><input type=checkbox name=\"sql_drop_scripts\" value=$file checked></td>
     <td>$file</td>
