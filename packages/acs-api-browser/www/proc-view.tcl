@@ -41,13 +41,59 @@ if { ![info exists source_p] } {
 
 # Try and be helpful about the procedure.
 if { ![nsv_exists api_proc_doc $proc] } {
-    if {[info procs ::$proc] ne ""} { 
-        set error_msg "<p>This procedure is defined in the server but not documented via ad_proc or proc_doc and may be intended as a private interface.</p><p>The procedure is defined as: <pre>
-proc $proc {[info args $proc]} {
-[ad_quotehtml [info body $proc]]
-}</pre></p>"
-    } elseif {[info commands ::$proc] ne ""} { 
-        set error_msg "<p>The procedure <b>$proc</b> is an available command on the server and might be found in the <a href=\"http://dev.scriptics.com/man/tcl8.3/TclCmd/contents.htm\">TCL</a> or <a href=\"http://www.aolserver.com/docs/devel/tcl/api/\">AOLServer</a> documentation or in documentation for a loadable module (like ns_cache for example).</p>"
+    if {[info procs ::$proc] eq "::$proc"} { 
+        set error_msg [subst {
+	    <p>This procedure is defined in the server but not
+	    documented via ad_proc or proc_doc and may be intended as
+	    a private interface.</p><p>The procedure is defined as:
+	    <pre>
+	    proc $proc {[info args $proc]} {
+		[ad_quotehtml [info body $proc]]
+	    }
+	    </pre></p>
+	}]
+    } elseif {[info commands ::$proc] eq "::$proc"} { 
+
+	set result [util_memoize [list ::util::http::get -url $::apidoc::ns_api_html_index]]
+	set page [dict get $result page]
+
+	set url [apidoc::search_on_webindex \
+		     -page $page \
+		     -root $::apidoc::ns_api_root \
+		     -host $::apidoc::ns_api_host \
+		     -proc $proc]
+	
+	if {$url ne ""} {
+	    ns_log notice "got URL <$url>"
+	    ad_returnredirect -allow_complete_url $url
+	    ad_script_abort
+	}
+
+	set result [util_memoize [list ::util::http::get -url $::apidoc::tcl_api_html_index]]
+	set page [dict get $result page]
+
+	# Strip the end of the Tcl-URL to obtain the root
+	regexp {^(.*)/[^/]+} $::apidoc::tcl_api_html_index _ root
+	append root /
+
+	set url [apidoc::search_on_webindex -page $page \
+		     -root $root -host $root -proc $proc]
+	
+	if {$url ne ""} {
+	    ad_returnredirect -allow_complete_url $url
+	    ad_script_abort
+	}
+
+        set error_msg [subst {
+
+	    <p>The command <b>$proc</b> is an available command on
+	    the server and might be found in the <a
+	    href="$::apidoc::tcl_api_html_index">Tcl</a>
+	    or <a href="$::apidoc::ns_api_html_index">[ns_info name]</a>
+	    documentation or in documentation for a loadable module.
+	    </p>
+	}]
+
     } else { 
         set error_msg "<p>The procedure <b>$proc</b> is not defined in the server.</p>"
     }
