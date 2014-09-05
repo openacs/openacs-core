@@ -953,7 +953,7 @@ namespace eval ::apidoc {
     proc length_var {data} {
         if {[regexp -indices {^\$\{[^\}]+\}} $data found]} {
             return [lindex $found 1]           
-        } elseif {[regexp -indices {^\$[A-Za-z0-9_]+(\([\$A-Za-z0-9_\-/]+\))?} $data found]} {
+        } elseif {[regexp -indices {^\$[A-Za-z0-9_:]+(\([\$A-Za-z0-9_\-/]+\))?} $data found]} {
             return [lindex $found 1]
         }
         return 0
