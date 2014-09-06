@@ -153,15 +153,13 @@ ad_proc apm_one_package_descendents {
     package
 
 } {
-    global apm_visited_package_keys
-    global apm_package_descendents
 
     foreach descendent [db_list get_descendents {}] {
-        if { [info exists apm_visited_package_keys($descendent)] } {
+        if { [info exists ::apm_visited_package_keys($descendent)] } {
             continue
         }
-        set apm_visited_package_keys($descendent) 1
-        lappend apm_package_descendents $descendent
+        set ::apm_visited_package_keys($descendent) 1
+        lappend ::apm_package_descendents $descendent
         apm_one_package_descendents $descendent
     }
 
@@ -191,17 +189,15 @@ ad_proc apm_package_list_url_resolution {
     structure to be used by the request processor to resolve URLs based on a
     package's "extends" and "embeds" dependencies.
 } {
-    global apm_visited_package_keys
-    global apm_package_url_resolution
 
     foreach package $package_list {
         lassign $package package_key dependency_type
-        if { [info exists apm_visited_package_keys($package_key)] } {
+        if { [info exists ::apm_visited_package_keys($package_key)] } {
             continue
         }
         switch $dependency_type {
             extends -
-            "" { lappend apm_package_url_resolution $::acs::rootdir/packages/$package_key/www }
+            "" { lappend ::apm_package_url_resolution $::acs::rootdir/packages/$package_key/www }
             embeds {
 
                 # Reference to an embedded package is through URLs relative to the embedding
@@ -212,25 +208,25 @@ ad_proc apm_package_list_url_resolution {
                 # We break references like package-key/admin because such references are unsafe,
                 # as the request processor will not perform the expected permission check.
 
-                lappend apm_package_url_resolution \
+                lappend ::apm_package_url_resolution \
                     [list $::acs::rootdir/packages/$package_key/embed/admin admin/$package_key]
-                lappend apm_package_url_resolution \
+                lappend ::apm_package_url_resolution \
                     [list "" $package_key/admin]
 
-                lappend apm_package_url_resolution \
+                lappend ::apm_package_url_resolution \
                     [list $::acs::rootdir/packages/$package_key/embed/sitewide-admin \
                          sitewide-admin/$package_key]
-                lappend apm_package_url_resolution \
+                lappend ::apm_package_url_resolution \
                     [list "" $package_key/sitewide-admin]
 
-                lappend apm_package_url_resolution \
+                lappend ::apm_package_url_resolution \
                     [list $::acs::rootdir/packages/$package_key/embed $package_key]
             }
             default {
                 error "apm_package_list_url_resolution: dependency type is $dependency_type"
             }
         }
-        set apm_visited_package_keys($package_key) 1
+        set ::apm_visited_package_keys($package_key) 1
     }
 
     # Make sure old versions work ...
@@ -250,19 +246,17 @@ ad_proc apm_one_package_inherit_order {
     Returns a list of package keys in package inheritance order.
 
 } {
-    global apm_visited_package_keys
-    global apm_package_inherit_order
 
-    if { [info exists apm_visited_package_keys($package_key)] } {
+    if { [info exists ::apm_visited_package_keys($package_key)] } {
         return
     }
-    set apm_visited_package_keys($package_key) 1
+    set ::apm_visited_package_keys($package_key) 1
 
     foreach dependency [db_list get_dependencies {}] {
         apm_one_package_inherit_order $dependency
     }
 
-    lappend apm_package_inherit_order $package_key
+    lappend ::apm_package_inherit_order $package_key
 }
 
 ad_proc apm_one_package_load_libraries_dependencies {
@@ -272,19 +266,17 @@ ad_proc apm_one_package_load_libraries_dependencies {
     Generate a list of package keys in library load dependency order.
 
 } {
-    global apm_visited_package_keys
-    global apm_package_load_libraries_order
 
-    if { [info exists apm_visited_package_keys($package_key)] } {
+    if { [info exists ::apm_visited_package_keys($package_key)] } {
         return
     }
-    set apm_visited_package_keys($package_key) 1
+    set ::apm_visited_package_keys($package_key) 1
     set package_key_list ""
 
     foreach dependency [db_list get_dependencies {}] {
         apm_one_package_load_libraries_dependencies $dependency
     }
-    lappend apm_package_load_libraries_order $package_key
+    lappend ::apm_package_load_libraries_order $package_key
 }
 
 ad_proc apm_build_one_package_relationships {
@@ -294,31 +286,26 @@ ad_proc apm_build_one_package_relationships {
     Builds the nsv dependency structures for a single package.
 
 } {
-    global apm_visited_package_keys
-    global apm_package_url_resolution
-    global apm_package_inherit_order
-    global apm_package_load_libraries_order
-    global apm_package_descendents
 
-    array unset apm_visited_package_keys
-    set apm_package_url_resolution [list]
+    array unset ::apm_visited_package_keys
+    set ::apm_package_url_resolution [list]
     apm_package_list_url_resolution $package_key
-    nsv_set apm_package_url_resolution $package_key $apm_package_url_resolution
+    nsv_set apm_package_url_resolution $package_key $::apm_package_url_resolution
 
-    array unset apm_visited_package_keys
-    set apm_package_inherit_order [list]
+    array unset ::apm_visited_package_keys
+    set ::apm_package_inherit_order [list]
     apm_one_package_inherit_order $package_key
-    nsv_set apm_package_inherit_order $package_key $apm_package_inherit_order
+    nsv_set apm_package_inherit_order $package_key $::apm_package_inherit_order
 
-    array unset apm_visited_package_keys
-    set apm_package_load_libraries_order [list]
+    array unset ::apm_visited_package_keys
+    set ::apm_package_load_libraries_order [list]
     apm_one_package_load_libraries_dependencies $package_key
-    nsv_set apm_package_load_libraries_order $package_key $apm_package_load_libraries_order
+    nsv_set apm_package_load_libraries_order $package_key $::apm_package_load_libraries_order
 
-    array unset apm_visited_package_keys
-    set apm_package_descendents [list]
+    array unset ::apm_visited_package_keys
+    set ::apm_package_descendents [list]
     apm_one_package_descendents $package_key
-    nsv_set apm_package_descendents $package_key $apm_package_descendents
+    nsv_set apm_package_descendents $package_key $::apm_package_descendents
 
 }
 
@@ -604,7 +591,7 @@ ad_proc -public apm_load_packages {
 
     set packages_to_load [list]
     foreach package_key $packages {
-        foreach package_to_load [apm_package_load_libraries_order $package_key] {
+        foreach package_to_load [::apm_package_load_libraries_order $package_key] {
             if {$package_to_load ni $packages_to_load} {
                 lappend packages_to_load $package_to_load
             }
@@ -1822,7 +1809,7 @@ ad_proc -public apm_package_instance_delete {
 } {    
     set package_key [apm_package_key_from_id $package_id]
     # ns_log notice "apm_package_instance_delete inherit order [nsv_get apm_package_inherit_order $package_key]"
-    if {[nsv_exists apm_package_inherit_order $package_key]} {
+    if {[nsv_exists ::apm_package_inherit_order $package_key]} {
         foreach inherited_package_key [nsv_get apm_package_inherit_order $package_key] {
             apm_invoke_callback_proc \
                 -package_key $inherited_package_key \
@@ -2086,7 +2073,7 @@ ad_proc -public apm::get_package_descendent_options {
     @return a list of pretty name, package key pairs suitable for use in a template
     select widget.
 } {
-    set in_clause '[join [apm_package_descendents $package_key] ',']'
+    set in_clause '[join [::apm_package_descendents $package_key] ',']'
     return [db_list_of_lists get {}]
 }
 
@@ -2120,8 +2107,8 @@ ad_proc -public apm::convert_type {
     db_list copy_new_params {}
     apm_parameter_sync $new_package_key $package_id
     
-    foreach inherited_package_key [apm_package_inherit_order $new_package_key] {
-        if {$inherited_package_key ni [apm_package_inherit_order $old_package_key]} {
+    foreach inherited_package_key [::apm_package_inherit_order $new_package_key] {
+        if {$inherited_package_key ni [::apm_package_inherit_order $old_package_key]} {
             apm_invoke_callback_proc \
                 -package_key $inherited_package_key \
                 -type after-instantiate \
