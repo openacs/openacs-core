@@ -209,9 +209,8 @@ ad_proc -private apm_higher_version_installed_p {
     # LARS: Default to 1 (the package_key/version_name you supplied was higher than what's on the system)
     # for the case where nothing it returned, because this implies that there was no highest version installed,
     # i.e., no version at all of the package was installed.
-    set result [db_string apm_higher_version_installed_p {} -default 1]
-    ns_log notice "apm_higher_version_installed_p <$package_key> <$version_name> -> $result"
-    return $result
+
+    return [db_string apm_higher_version_installed_p {} -default 1]
 }
 
 
