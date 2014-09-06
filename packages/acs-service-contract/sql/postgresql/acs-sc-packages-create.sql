@@ -527,6 +527,8 @@ $$ LANGUAGE plpgsql;
 --
 -- procedure acs_sc_binding__new/2
 --
+--select define_function_args('acs_sc_binding__new','contract_id,impl_id');
+
 CREATE OR REPLACE FUNCTION acs_sc_binding__new(
    p_contract_id integer,
    p_impl_id integer
@@ -567,18 +569,13 @@ END;
 $$ LANGUAGE plpgsql;
 
 
--- register function record
-
--- old define_function_args('acs_sc_binding__new','contract_name,impl_name')
--- new
-select define_function_args('acs_sc_binding__new','contract_id,impl_id');
-
--- declare function
-
-
 --
 -- procedure acs_sc_binding__new/2
 --
+-- variant with names
+--
+define_function_args('acs_sc_binding__new','contract_name,impl_name')
+
 CREATE OR REPLACE FUNCTION acs_sc_binding__new(
    p_contract_name varchar,
    p_impl_name varchar
@@ -609,6 +606,8 @@ $$ LANGUAGE plpgsql;
 --
 -- procedure acs_sc_binding__delete/2
 --
+-- select define_function_args('acs_sc_binding__delete','contract_id,impl_id');
+--
 CREATE OR REPLACE FUNCTION acs_sc_binding__delete(
    p_contract_id integer,
    p_impl_id integer
@@ -625,18 +624,11 @@ END;
 $$ LANGUAGE plpgsql;
 
 
--- register function record
-
--- old define_function_args('acs_sc_binding__delete','contract_name,impl_name')
--- new
-select define_function_args('acs_sc_binding__delete','contract_id,impl_id');
-
--- declare function
-
-
 --
 -- procedure acs_sc_binding__delete/2
 --
+define_function_args('acs_sc_binding__delete','contract_name,impl_name');
+
 CREATE OR REPLACE FUNCTION acs_sc_binding__delete(
    p_contract_name varchar,
    p_impl_name varchar
