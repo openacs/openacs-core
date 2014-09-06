@@ -1224,14 +1224,17 @@ namespace eval ::apidoc {
                             incr i $regexpl
                         } elseif {$proc_name eq "util_memoize"} {
                             #
-                            # Hack for regular cases of util_memoize
+                            # special cases for util_memoize
                             #
-                            for {set j 1}  {[string index $data $i+$j] eq " "} {incr j} {;}
-                            for {set k $j} {[string index $data $i+$k] ne " "} {incr k} {;}
-                            set word [string range $data $i+$j $i+$k]
-                            if {$word eq {[list }} {
+                            set reminder [string range $data $i+1 end]
+
+                            if {[regexp {^(\s*\[\s*list)} $reminder _ list]} {
+                                # util_memoize + list
                                 append html " \[" [pretty_token keyword list]
-                                incr i [expr {$k-1}]
+                                incr i [string length $list] 
+                                set proc_ok 1
+                            } else {
+                                # util_memoize without list
                                 set proc_ok 1
                             }
                         }
