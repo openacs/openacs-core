@@ -47,9 +47,9 @@ namespace eval acs_privacy {
         grant permission to access private data
     } {
         if { [template::util::is_true $value] } {
-            ad_permission_grant $user_id $object_id read_private_data
+            permission::grant -party_id $user_id -object_id $object_id -privilege read_private_data
         } else {
-            ad_permission_revoke $user_id $object_id read_private_data
+            permission::revoke -party_id $user_id -object_id $object_id -privilege read_private_data
         }
     }
 }
