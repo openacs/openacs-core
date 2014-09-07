@@ -92,6 +92,19 @@ ad_proc -public template_tag_if_concat_params { params } {
     return $tokens
 }
 
+ad_proc -private template_tag_subst_reference {arg} {
+    substitute variable references
+    @return variable name 
+} {
+    if { [regsub {^"@([a-zA-Z0-9_]+)\.([a-zA-Z0-9_.]+)@"$} $arg {\1(\2)} arg1] } {
+    } elseif { [regsub {^"@([a-zA-Z0-9_:]+)@"$} $arg {\1} arg1] } { 
+    } else {
+        set arg1 ""
+    }
+    return $arg1
+}
+
+
 ad_proc -public template_tag_if_interp_expr {} {
     Interpret an expression as part of the simplified IF syntax
 } {
@@ -103,9 +116,20 @@ ad_proc -public template_tag_if_interp_expr {} {
     set op [lindex $args 1]
 
     if { $op eq "not" } {
-        append condition "! ("
-        set close_paren ")"
+        #
+        # Optimize common case "@arg@ no nil"
+        #
         set op [lindex $args 2]
+        set arg1 \"[lindex $args 0]\"
+        if {$op eq "nil" && [string first @ $arg1] > -1} {
+            set arg1 [template_tag_subst_reference $arg1]
+            append condition "\[info exists $arg1\] && \${$arg1} ne {}"
+            set args [lrange $args 3 end]
+            return
+        } else {
+            append condition "! ("
+            set close_paren ")"
+        }
         set i 3
     } else {
         set close_paren ""
@@ -161,12 +185,12 @@ ad_proc -public template_tag_if_interp_expr {} {
                 # We're assuming this is a static string, not a variable
                 append condition "$arg1 eq {}"
             } else {
-                # substitute array variables
-                if {! ( [regsub {^"@([a-zA-Z0-9_]+)\.([a-zA-Z0-9_.]+)(;\w+)?@"$} $arg1 {\1(\2)} arg1]
-                        || [regsub {^"@([a-zA-Z0-9_:]+)(;\w+)?@"$} $arg1 {\1} arg1] ) } {
+                set arg [template_tag_subst_reference $arg1]
+                if {$arg eq ""} {
                     error "IF tag nil test uses string not variable for $arg1"
                 }
-                append condition "\[template::util::is_nil $arg1\]"
+                #append condition "\[template::util::is_nil $arg\]"
+                append condition "!\[info exists $arg\] || \${$arg} eq {}"
             }
             set next $i
         }
