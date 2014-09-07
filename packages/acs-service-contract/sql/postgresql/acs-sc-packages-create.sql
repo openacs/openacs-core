@@ -574,7 +574,7 @@ $$ LANGUAGE plpgsql;
 --
 -- variant with names
 --
-define_function_args('acs_sc_binding__new','contract_name,impl_name')
+select define_function_args('acs_sc_binding__new','contract_name,impl_name');
 
 CREATE OR REPLACE FUNCTION acs_sc_binding__new(
    p_contract_name varchar,
@@ -627,7 +627,7 @@ $$ LANGUAGE plpgsql;
 --
 -- procedure acs_sc_binding__delete/2
 --
-define_function_args('acs_sc_binding__delete','contract_name,impl_name');
+select define_function_args('acs_sc_binding__delete','contract_name,impl_name');
 
 CREATE OR REPLACE FUNCTION acs_sc_binding__delete(
    p_contract_name varchar,
