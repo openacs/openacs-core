@@ -28,15 +28,17 @@ select package_key
 }]
 
 if { [llength $dependent_packages_list] > 0 } {
-    set dependency_warning_text "
-The following packages depend on package <code>$package_key</code> that you are about to delete: 
+    set dependency_warning_text "The following packages depend on package 
+       <code>$package_key</code> that you are about to delete:\n<ul>\n"
 
-<p>
-<code> 
-  [join $dependent_packages_list "<br>"]
-</code>
-</p>
-"
+    foreach pkg_key $dependent_packages_list {
+	set query [export_vars { {package_key $pkg_key}}]
+	append dependency_warning_text [subst {
+	    <li>$pkg_key (<a href="./version-view?$query">manage</a>)</li>
+	}]
+    }
+    append dependency_warning_text "</ul>\n"
+
 } else {
     set dependency_warning_text ""
 }

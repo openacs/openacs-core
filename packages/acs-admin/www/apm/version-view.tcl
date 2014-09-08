@@ -4,7 +4,21 @@ ad_page_contract {
     @creation-date 17 April 2000
     @cvs-id $Id$
 } {
-    {version_id:naturalnum,notnull}
+    {version_id:naturalnum,optional}
+    {package_key:optional}
+} -validate {
+    version_id_or_package_key {
+        if {[info exists package_key] && ![info exists version_id]} {
+            set version_id [apm_version_id_from_package_key $package_key]
+            if {$version_id eq ""} {
+                ad_complain "No package with package_key '$package_key' is enabled."
+                return
+            }
+        }
+        if {![info exists version_id]} {
+            ad_complain "Specify a valid version_id."
+        }
+    }
 }
 
 db_1row apm_all_version_info {
@@ -241,7 +255,7 @@ if {$nr_instances > 0} {
 } else {
     set instances "No installed instance of this package\n"
 }
-if {!$singleton_p} {
+if {$nr_instances == 0 || ($nr_instances > 0 && !$singleton_p)} {
     set query [export_vars { package_key {return_url [ad_return_url]}}]
     set instance_create [subst {
         <li><a href="package-instance-create?$query">Create 
