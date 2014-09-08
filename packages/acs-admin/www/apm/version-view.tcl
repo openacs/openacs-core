@@ -241,6 +241,15 @@ if {$nr_instances > 0} {
 } else {
     set instances "No installed instance of this package\n"
 }
+if {!$singleton_p} {
+    set query [export_vars { package_key {return_url [ad_return_url]}}]
+    set instance_create [subst {
+        <li><a href="package-instance-create?$query">Create 
+        (unmounted) instance of this package</a></li>
+    }]
+} else {
+    set instance_create ""
+}
 
 append body [subst {
     </td></tr>
@@ -258,6 +267,7 @@ append body [subst {
     <li><a href="version-callbacks?[export_vars { version_id }]">Tcl Callbacks (install, instantiate, mount)</a></li>
     <li><a href="version-i18n-index?[export_vars { version_id }]">Internationalization</a></li>
     <li>$instances</li>
+    $instance_create
     </ul>
     <h4>Reload</h4>
     <ul>
