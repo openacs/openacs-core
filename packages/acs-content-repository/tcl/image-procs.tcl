@@ -316,7 +316,7 @@ ad_proc -public image::resize {
     @return image item_id of the thumbnail
 
     @author Dave Bauer (dave@solutiongrove.com)
-    @cretion-date 2006-08-27
+    @creation-date 2006-08-27
 } {
     if {$revision_id eq ""} {
 	set revision_id [content::item::get_best_revision -item_id $item_id]

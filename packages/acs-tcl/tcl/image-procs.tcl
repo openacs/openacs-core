@@ -2,7 +2,7 @@ ad_library {
     Procedures to manage image files.
 
     @author Lars Pind (lars@collaboraid.biz)
-    @creationd-date 2003-10-29
+    @creation-date 2003-10-29
     @cvs-id $Id$
 }
 

@@ -3,7 +3,7 @@ ad_library {
     Manage external links in the content repository
 
     @author Dave Bauer (dave@thedesignexperience.org) 
-    @cvs-d $Id:
+    @cvs-id $Id$
 
 }
 

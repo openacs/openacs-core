@@ -3,7 +3,7 @@ ad_library {
     Manage external links in the content repository
 
     @author Don Baccus (dhogaza@pacifier.com)
-    @cvs-d $Id$
+    @cvs-id $Id$
 
 }
 
