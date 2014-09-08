@@ -328,14 +328,18 @@ ad_proc -public subsite::get_element {
 } {
     Return a single element from the information about a subsite.
 
-    @param subsite_id The node id of the subsite for which info is requested.
-    If no id is provided, then the id of the closest ancestor subsite will
-    be used.
-    @param element The element you want, one of:
-    directory_p object_type package_key package_id name pattern_p
-    instance_name node_id parent_id url object_id
-    @notrailing If true and the element requested is an url, then strip any
-    trailing slash ('/'). This means the empty string is returned for the root.
+    @param subsite_id The node id of the subsite for which info is
+       requested.  If no id is provided, then the id of the closest
+       ancestor subsite will be used.
+
+    @param element The element you want, one of: directory_p
+       object_type package_key package_id name pattern_p instance_name
+       node_id parent_id url object_id
+
+    @paramm notrailing If true and the element requested is an url,
+       then strip any trailing slash ('/'). This means the empty string
+       is returned for the root.
+
     @return The element you asked for
 
     @author Frank Nikolajsen (frank@warpspace.com)

@@ -539,7 +539,7 @@ ad_proc -public site_node::get_url {
 } {
     return the url of this node_id
 
-    @notrailing If true then strip any
+    @param notrailing If true then strip any
     trailing slash ('/'). This means the empty string is returned for the root.
 } {
     set url ""

@@ -1739,7 +1739,7 @@ ad_proc -private apm_data_model_scripts_find {
 } {
     @param version_id What version the files belong to.
     @param upgrade Set this switch if you want the scripts for upgrading.
-    @file_list A list of files and file types of form [list [list "foo.sql" "data_model_upgrade"] ...] 
+    @return A list of files and file types of form [list [list "foo.sql" "data_model_upgrade"] ...] 
 } {
     set types_to_retrieve [list "sqlj_code"]
     if {$upgrade_from_version_name eq ""} {
@@ -1795,7 +1795,7 @@ ad_proc -private apm_query_files_find {
     package_key
     file_list
 } {
-    @file_list A list of files and file types of form [list [list "foo.sql" "data_model_upgrade"] ...] 
+    @param file_list A list of files and file types of form [list [list "foo.sql" "data_model_upgrade"] ...] 
 } {
 
     set query_file_list [list]

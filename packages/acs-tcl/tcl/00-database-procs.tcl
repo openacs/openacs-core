@@ -2637,7 +2637,7 @@ ad_proc -public db_load_sql_data {
     packages are installed.
 
     @param dbn The database name to use.  If empty_string, uses the default database.
-    @file Filename in the format dd-table-name.ctl where 'dd' is a sequence number
+    @param file Filename in the format dd-table-name.ctl where 'dd' is a sequence number
           used to control the order in which data is loaded.  This file is an
           RDBMS-specific data loader control file.
 

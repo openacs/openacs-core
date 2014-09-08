@@ -92,15 +92,14 @@ ad_proc -public text_templates::store_final_document {
     @creation-date 2005-07-07
     @param pdf_file the pdf-file to save
     @param folder_id the folder the document is stored in
-    @title Title or name of the document
-    @description Description of the document
-    @return 
+    @param title Title or name of the document
+    @param description Description of the document
+    @return item_id
     
-    @error 
 } {
     set file_size [file size $pdf_file]
     set item_id [cr_import_content -title $title -description $description $folder_id $pdf_file $file_size application/pdf $title]
-    return item_id
+    return $item_id
 }
 
 ad_proc -private text_templates::create_html_content {
