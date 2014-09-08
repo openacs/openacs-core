@@ -308,8 +308,8 @@ ad_proc cr_set_imported_content_live {
 } {
     @param image_sql Optional SQL to extend the base image type
     @param other_sql Optional SQL to extend the base content revision type
-    @mime_type Mime type of the new revision
-    @revision_id The revision we're setting live
+    @param mime_type Mime type of the new revision
+    @param revision_id The revision we're setting live
 
     If provided execute the appropriate SQL in the caller's context, then
     set the given revision live.
@@ -334,7 +334,7 @@ ad_proc cr_registered_type_for_mime_type {
 } {
     Return the type registered for this mime type.
 
-    @mime_type param The mime type
+    @param mime_type param The mime type
 } {
     return [db_string registered_type_for_mime_type "" -default ""]
 }

@@ -358,7 +358,7 @@ ad_proc -public image::get_size_item_id {
     Get the item_id of a resized version of an image
     
     @param item_id Original image item_id
-    @size_name Name of the size to get
+    @param size_name Name of the size to get
 
     @author Dave Bauer (dave@solutiongrove.com)
     @creation-date 2006-08-27

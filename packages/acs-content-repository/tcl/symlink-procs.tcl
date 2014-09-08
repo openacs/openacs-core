@@ -20,13 +20,13 @@ ad_proc -deprecated content_symlink::new {
 
     Create a new internal link.
 
-    @symlink_id Optional pre-assigned object_id for the link
-    @target_id The item_id of the target of the link
-    @parent_id The folder that will contain this symlink
-    @name Name to assign the object (defaults to the name of the target item)
-    @label Label for the symlink (defaults to the URL)
-    @description An extended description of the link (defaults to NULL)
-    @package_id Package Id of the package that created the link
+    @param symlink_id Optional pre-assigned object_id for the link
+    @param target_id The item_id of the target of the link
+    @param parent_id The folder that will contain this symlink
+    @param name Name to assign the object (defaults to the name of the target item)
+    @param label Label for the symlink (defaults to the URL)
+    @param description An extended description of the link (defaults to NULL)
+    @param package_id Package Id of the package that created the link
     @see content::symlink::new
 
 } {
@@ -52,10 +52,10 @@ ad_proc content_symlink::edit {
     is assumed that the caller will be pulling the existing values out of
     the database before editing them.
 
-    @symlink_id Optional pre-assigned object_id for the link
-    @target_id The target item_id of the link
-    @label Label for the symlink (defaults to the target_id item title)
-    @description An extended description of the link (defaults to NULL)
+    @param symlink_id Optional pre-assigned object_id for the link
+    @param target_id The target item_id of the link
+    @param label Label for the symlink (defaults to the target_id item title)
+    @param description An extended description of the link (defaults to NULL)
 
 } {
 
@@ -75,7 +75,7 @@ ad_proc -deprecated content_symlink::delete {
 
     Delete an external link.
 
-    @symlink_id  The object id of the link to delete
+    @param symlink_id  The object id of the link to delete
     @see content::symlink::delete
 
 } {
@@ -88,7 +88,7 @@ ad_proc -deprecated content_symlink::symlink_p {
 
     Returns true if the given item is a symlink
 
-    @symlink_id  The object id of the item to check.
+    @param symlink_id  The object id of the item to check.
     @see content::symlink::is_symlink
 
 } {
@@ -101,7 +101,7 @@ ad_proc content_symlink::symlink_name {
 
     Returns the name of an symlink
 
-    @item_id  The object id of the item to check.
+    @param item_id  The object id of the item to check.
 
 } {
     return [db_string symlink_name {}]

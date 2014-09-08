@@ -69,7 +69,6 @@ ad_proc -public content::template::get_path {
 } {
     @param template_id
     @param root_folder_id
-    @throws -20000: Invalid item ID: %'', get_path__item_id;
 
     @return "/" delimited path from root to supplied template_id
 } {
