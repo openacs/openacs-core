@@ -220,7 +220,7 @@ ad_proc -public image::identify_binary {
     Find imagemagick identify binary
     
     @author Dave Bauer (dave@solutiongrove.com)
-    @creation_date 2006-08-27
+    @creation-date 2006-08-27
 } {
     # FIXME create parameter
     return [parameter::get \
@@ -234,7 +234,7 @@ ad_proc -public image::convert_binary {
     Find imagemagick convert binary
     
     @author Dave Bauer (dave@solutiongrove.com)
-    @creation_date 2006-08-27
+    @creation-date 2006-08-27
 } {
     #FIXME create parameter
     return [parameter::get \
@@ -254,7 +254,7 @@ ad_proc -public image::ns_size {
     @return List in array get format with names of width and height
 
     @author Dave Bauer (dave@solutiongrove.com)
-    @creation_date 2006-08-27
+    @creation-date 2006-08-27
 } {
     switch -- \
 	[image::filename_mime_type \
@@ -284,7 +284,7 @@ ad_proc -public image::filename_mime_type {
     @param mime_type If known, the mime type of the file
 
     @author Dave Bauer (dave@thedesignexperience.org)
-    @creation_date 2006-08-27
+    @creation-date 2006-08-27
 } {
     if {$mime_type eq ""} {
 	set mime_type [ns_guesstype $filename]

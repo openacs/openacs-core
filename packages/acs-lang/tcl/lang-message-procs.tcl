@@ -1022,7 +1022,7 @@ ad_proc -public lang::message::update_description {
     {-description:required}
 } {
     @author Simon Carstensen
-    @creation_date 2003-08-12
+    @creation-date 2003-08-12
 } {
     if { [string trim $description] eq "" } {
         db_dml update_description_insert_null {}

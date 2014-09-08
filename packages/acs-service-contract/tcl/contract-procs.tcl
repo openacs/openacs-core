@@ -278,7 +278,7 @@ ad_proc -public acs_sc::contract::operation::parse_operations_spec {
 } {
     Parse the operations defined in the operations specification
     @param name Name of the contract
-    @spec  spec Specification of all the operations
+    @param spec  spec Specification of all the operations
 } {
     foreach { operation subspec } $spec {
 	acs_sc::contract::operation::parse_spec \
