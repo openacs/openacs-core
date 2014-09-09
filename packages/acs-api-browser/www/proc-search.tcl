@@ -99,7 +99,7 @@ foreach proc [nsv_array names api_proc_doc] {
     ##############
     if {$doc_weight} {
         
-        set doc_string "[lindex $doc_elements(main) 0]"
+        set doc_string [lindex $doc_elements(main) 0]
         if {[info exists doc_elements(param)]} {
             foreach parameter $doc_elements(param) {
                 append doc_string " $parameter"
@@ -155,10 +155,8 @@ multirow create results score proc args url
 
 foreach output $matches {
     incr counter
-    set proc  [lindex $output 0]    
-    set score [lindex $output 1]
-    set args  [lindex $output 2]
-    set url   [api_proc_url $proc]
+    lassign $output proc score args
+    set url [api_proc_url $proc]
     multirow append results $score $proc $args $url
 }
 
@@ -166,10 +164,8 @@ multirow create deprecated_results score proc args url
 
 foreach output $deprecated_matches {
     incr counter
-    set proc  [lindex $output 0]    
-    set score [lindex $output 1]
-    set args  [lindex $output 2]
-    set url   [api_proc_url $proc]
+    lassign $output proc score args
+    set url [api_proc_url $proc]
     multirow append deprecated_results $score $proc $args $url
 }
 
@@ -182,10 +178,8 @@ multirow create private_results score proc args url
 
 foreach output $private_matches {
     incr counter
-    set proc  [lindex $output 0]    
-    set score [lindex $output 1]
-    set args  [lindex $output 2]
-    set url   [api_proc_url $proc]
+    lassign $output proc score args
+    set url [api_proc_url $proc]
     multirow append private_results $score $proc $args $url
 }
 
