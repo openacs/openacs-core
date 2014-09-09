@@ -1087,12 +1087,12 @@ namespace eval ::apidoc {
         template::head::add_style -style $apidoc::style
 
         # Keywords will be colored as other procs, but not hyperlinked
-        # to api-doc pages.  Perhaps we should hyperlink them to the TCL man pages?
+        # to api-doc pages.  Perhaps we should hyperlink them to the Tcl man pages?
         # else and elseif are be treated as special cases later
 
         if {[info commands ::xotcl::api] ne ""} {
             set XOTCL_KEYWORDS [list self my next]
-            # only command names are highlighted, otherwise we could add xotcl method
+            # Only command names are highlighted, otherwise we could add XOTcl method
             # names by [lsort -unique [concat [list self my next] ..
             # [::xotcl::Object info methods] [::xotcl::Class info methods] ]]
         } else {

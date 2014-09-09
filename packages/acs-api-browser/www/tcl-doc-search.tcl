@@ -32,4 +32,4 @@ for { set i [expr { $len-1 }] } { $i >= 0 } { incr i -1 } {
 }
 
 set title "Tcl API Procedure Search for: \"$tcl_proc\""
-set context [list "TCL API Search: $tcl_proc"]
+set context [list "Tcl API Search: $tcl_proc"]
