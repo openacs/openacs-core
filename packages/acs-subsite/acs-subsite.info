@@ -9,16 +9,16 @@
     <implements-subsite-p>t</implements-subsite-p>
     <inherit-templates-p>t</inherit-templates-p>
     
-    <version name="5.8.1d3" url="http://openacs.org/repository/download/apm/acs-subsite-5.8.1d3.apm">
+    <version name="5.8.1d4" url="http://openacs.org/repository/download/apm/acs-subsite-5.8.1d4.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Subsite</summary>
-        <release-date>2013-09-30</release-date>
+        <release-date>2014-09-09</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
         <description format="text/html">Provides for creating subsites within the OpenACS Community System.  Aware of parties, groups, users, portraits.  Can be themed via a per subsite master template.</description>
         <license>GPL</license>
         <maturity>3</maturity>
 
-        <provides url="acs-subsite" version="5.8.1d3"/>
+        <provides url="acs-subsite" version="5.8.1d4"/>
         <requires url="acs-authentication" version="5.8.1d1"/>
         <requires url="acs-content-repository" version="5.8.1d1"/>
         <requires url="acs-kernel" version="5.8.1d1"/>
@@ -27,11 +27,11 @@
         <requires url="acs-tcl" version="5.8.1d1"/>
 
         <callbacks>
-            <callback type="after-install"  proc="subsite::package_install"/>
-            <callback type="after-mount"  proc="subsite::after_mount"/>
-            <callback type="after-upgrade"  proc="subsite::after_upgrade"/>
-            <callback type="before-uninstantiate"  proc="subsite::before_uninstantiate"/>
             <callback type="before-upgrade"  proc="subsite::before_upgrade"/>
+            <callback type="after-mount"  proc="subsite::after_mount"/>
+            <callback type="after-install"  proc="subsite::package_install"/>
+            <callback type="before-uninstantiate"  proc="subsite::before_uninstantiate"/>
+            <callback type="after-upgrade"  proc="subsite::after_upgrade"/>
         </callbacks>
         <parameters>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="AcceptablePortraitMIMETypes"  default="image/gif image/jpeg image/png" description="Enter a set of acceptable MIME types for portrait submissions." section_name="user-info"/>
@@ -89,7 +89,7 @@ admin {
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="DefaultFormStyle"  description="The default form template to use if a particular form doesn't have something more specific defined already." section_name="theming"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="DefaultListFilterStyle"  description="The default list filter template to use if a particular listfilter tag does not explicitly specify the list filter style to use." section_name="theming"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="DefaultListStyle"  description="The default list template to use if a particular list does not explicitly specify the list style to use." section_name="theming"/>
-            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="DefaultMaster"  description="Path to the default master page (skin) for acs-templating.  Set by the admin theme-switching UI." section_name="theming"/>
+            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="DefaultMaster"  default="/packages/openacs-default-theme/lib/plain-master" description="Path to the default master page (skin) for acs-templating.  Set by the admin theme-switching UI." section_name="theming"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="EmailChangedPasswordP"  default="0" description="if the admin changes the password, should it be mailed to the user" section_name="user-login"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="EmailConfirmTemplate"  default="/packages/acs-subsite/lib/email-confirm" description="Template to use for the page the user comes to for verification of the email. Can be used to trigger additional events."/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="EmailForgottenPasswordP"  default="1" description="Email users forgotten passwords" section_name="user-login"/>
@@ -125,8 +125,11 @@ admin {
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="ShowMembersListTo"  default="1" description="Who can see the subsite members list. 0 = Everyone; 1 = Members; 2 = Only administrators."/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="SolicitPortraitP"  default="1" description="Set this to 1 if you want users to be asked to submit a portrait." section_name="user-info"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="SomeAmericanReadersP"  default="1" description="is it even worth bothering asking for state and zip code?"/>
-            <parameter scope="instance" datatype="text"  min_n_values="1"  max_n_values="1"  name="ThemeCSS"  description="A list of lists of CSS/media pairs to use with this theme.  Set by the admin theme-switching UI.  If non defined, the default list and form CSS files are used, and the subsite master is expected to provide any CSS it needs itself." section_name="theming"/>
-            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="ThemeKey"  description="Key of the acs-templating theme for this subsite.  Set by the admin theme-switching UI." section_name="theming"/>
+            <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="StreamingHead"  default="/packages/openacs-default-theme/lib/plain-streaming-head" description="Path to the head template (skin) for streaming HTML-output. " section_name="theming"/>
+            <parameter scope="instance" datatype="text"  min_n_values="1"  max_n_values="1"  name="ThemeCSS"  default="{{href /resources/openacs-default-theme/styles/default-master.css} {media all}}
+               {{href /resources/acs-templating/forms.css} {media all}}
+               {{href /resources/acs-templating/lists.css} {media all}}" description="A list of lists of CSS/media pairs to use with this theme.  Set by the admin theme-switching UI.  If non defined, the default list and form CSS files are used, and the subsite master is expected to provide any CSS it needs itself." section_name="theming"/>
+            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="ThemeKey"  default="default_plain" description="Key of the acs-templating theme for this subsite.  Set by the admin theme-switching UI." section_name="theming"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="TmpDir"  default="/tmp /var/tmp" description="What tmp directories are used on this system? Note the leading / character."/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="UserHomeTemplate"  default="/packages/acs-subsite/lib/home" description="Name of the template used for the user home page" section_name="Templates"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="UserInfoTemplate"  default="/packages/acs-subsite/lib/user-info" description="Name of the template used for description of a user" section_name="Templates"/>
