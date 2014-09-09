@@ -386,8 +386,8 @@ ad_proc -public ad_register_filter {
     if {$method eq "*"} {
         # Shortcut to allow registering filter for all methods.
         foreach method { GET POST HEAD } {
-                                          ad_register_filter -debug $debug -priority $priority -critical $critical $kind $method $path $proc $arg
-                                      }
+           ad_register_filter -debug $debug -priority $priority -critical $critical $kind $method $path $proc $arg
+        }
         return
     }
 
