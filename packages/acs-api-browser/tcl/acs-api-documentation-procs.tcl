@@ -54,6 +54,7 @@ namespace eval ::apidoc {
             border-color: #aaaaaa; 
             border-style: solid;
             border-width: 1px; 
+            /*width: 900px; overflow: auto;*/
         }
         pre.code a      {text-decoration: none;}
     }
@@ -442,11 +443,7 @@ ad_proc -public api_proc_documentation {
         append out "</i></b><p>\n"
     }
 
-    append out "[lindex $doc_elements(main) 0]
-    
-<p>
-<dl>
-"
+    append out "[lindex $doc_elements(main) 0]\n<p>\n<dl>\n"
 
     if { [info exists doc_elements(param)] } {
         foreach param $doc_elements(param) {
@@ -1199,7 +1196,9 @@ namespace eval ::apidoc {
                         set procl [length_proc [string range $data $i end]]
                         set proc_name [string range $data $i $i+$procl]
 
-                        if {$proc_name in $::apidoc::KEYWORDS ||
+                        if {$proc_name eq "*"} {
+                            append html *
+                        } elseif {$proc_name in $::apidoc::KEYWORDS ||
                             ([regexp {^::(.*)} $proc_name match had_colons] 
                              && $had_colons in $::apidoc::KEYWORDS)} {
 
