@@ -315,7 +315,7 @@ $ds_link
 # the way a page works, they should see a link to the
 # email address of the programmer who can fix the page).
 
-ad_proc -public ad_admin_owner {} {
+ad_proc -public -deprecated ad_admin_owner {} {
     @return E-mail address of the Administrator of this site.
 } {
     return [parameter::get -package_id [ad_acs_kernel_id] -parameter AdminOwner]

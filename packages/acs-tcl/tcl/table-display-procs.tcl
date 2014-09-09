@@ -849,7 +849,7 @@ ad_proc ad_order_by_from_sort_spec {sort_by tabledef} {
     return $order_by_clause
 }
 
-ad_proc ad_new_sort_by {key keys} {
+ad_proc -deprecated ad_new_sort_by {key keys} {
     Makes a new sort_by string, sorting by "key".
 
     If the key is followed by "*", that indicates the ordering should

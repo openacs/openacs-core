@@ -341,7 +341,8 @@ ad_proc -public merge_form_with_query {
 
 
 
-proc util_PrettyBoolean {t_or_f { default  "default" } } {
+ad_proc -deprecated util_PrettyBoolean {t_or_f { default  "default" } } {
+} {
     if { $t_or_f == "t" || $t_or_f eq "T" } {
 	return "Yes"
     } elseif { $t_or_f == "f" || $t_or_f eq "F" } {
@@ -1363,7 +1364,7 @@ ad_proc -public exists_and_equal { varname value } {
     return [expr { [info exists var] && $var eq $value } ]
 }
 
-ad_proc -private set_encoding {
+ad_proc -deprecated -private set_encoding {
   {-text_translation {auto binary}}
   content_type
   channel
