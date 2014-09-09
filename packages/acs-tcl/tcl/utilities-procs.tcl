@@ -2111,28 +2111,11 @@ ad_proc -public ad_returnredirect {
             set url [util_current_location][util_current_directory]$target_url
         }
     }
-    #Ugly workaround to deal with IE5.0 bug handling multipart/form-data using 
-    #Meta Refresh page instead of a redirect. 
-    # jbank@arsdigita.com 6/7/2000
-    set use_metarefresh_p 0
-    set headers [ns_conn headers]
-    set type [ns_set iget $headers content-type]
-    if { [string match "*multipart/form-data*" [string tolower $type]] } {
-        set user_agent [ns_set iget $headers User-Agent]
-        set use_metarefresh_p [string match -nocase "*msie 5.0*" $user_agent]
-    }
-    if {[string match "https://*" [ad_conn location]] && [string match "http://*" $url] && $allow_complete_url_p} {
-	# workaround the You are about to be redirected to a connection that
-        # is not secure bug in IE
-	set use_metarefresh_p 1
-    }
+
     # Sanitize URL to avoid potential injection attack
     regsub -all {[\r\n]} $url "" url
-    if { $use_metarefresh_p != 0 } {
-        util_ReturnMetaRefresh $url 
-    } else {
-        ns_returnredirect $url
-    }    
+
+    ns_returnredirect $url    
 }
 
 ad_proc -public util_user_message { 
