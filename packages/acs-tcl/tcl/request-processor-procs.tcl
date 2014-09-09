@@ -1464,9 +1464,11 @@ ad_proc -private rp_handle_tcl_request {} {
     source [ad_conn file]
 }
 
-ad_proc -private rp_handle_adp_request {} {
+ad_proc -private -deprecated rp_handle_adp_request {} {
 
     Handles a request for an .adp file.
+
+    @see adp_parse_ad_conn_file
 
 } {
     doc_init

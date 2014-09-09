@@ -129,7 +129,7 @@ ad_proc -public apm_body_callback { string } {
 }
 
 
-ad_proc -public apm_doc_body_callback { string } {
+ad_proc -public -deprecated apm_doc_body_callback { string } {
     This callback uses the document api to append more text to the stream.
 } {
     doc_body_append $string
