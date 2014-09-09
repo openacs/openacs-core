@@ -450,7 +450,7 @@ ad_proc -public template::util::read_file { path } {
 
 ad_proc -public template::util::set_file_encoding { file_channel_id } {
     Set encoding of the given file channel based on the OutputCharset
-    parameter of AOLserver. All adp, tcl, and txt files are assumed
+    parameter of AOLserver. All ADP, Tcl, and txt files are assumed
     to be in the same charset.
 
     @param file_channel_id The id of the file to set encoding for.
@@ -736,7 +736,7 @@ ad_proc -public template::util::number_list { last_number {start_at 0} } {
 }
 
 ad_proc -public template::util::tcl_to_sql_list { lst } {
-    Convert a TCL list to a SQL list, for use with the "in" statement.
+    Convert a Tcl list to a SQL list, for use with the "in" statement.
     Uses DoubleApos (similar to ns_dbquotevalue) functionality to escape single quotes
 } {
 

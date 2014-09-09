@@ -67,7 +67,7 @@ ad_proc -private lang::util::get_hash_indices { multilingual_string } {
 
 ad_proc lang::util::message_tag_regexp {} {
     The regexp expression used by proc get_temporary_tags_indices and elsewhere
-    to extract temporary message catalog tags (<#...#>) from adp and tcl files.
+    to extract temporary message catalog tags (<#...#>) from ADP and Tcl files.
     The first sub match of the expression is the whole tag, the second sub match
     is the message key, and the third sub match is the message text in en_US locale.
 
@@ -91,7 +91,7 @@ ad_proc -private lang::util::get_regexp_indices { multilingual_string regexp_pat
     Returns a list of two element lists containing 
     the start and end indices of what is captured by the first parenthesis in the
     given regexp pattern in the multilingual string. The
-    regexp pattern must follow the syntax of the expression argument to the TCL regexp command.
+    regexp pattern must follow the syntax of the expression argument to the Tcl regexp command.
     It must also contain exactly one capturing parenthesis for the pieces of text that indices
     are to be returned for.
 

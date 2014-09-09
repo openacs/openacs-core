@@ -281,7 +281,7 @@ createdb <replaceable>$OPENACS_SERVICE_NAME</replaceable></action></screen>
           you've done a search first. When you do post, be sure to include
           your setup information (OS, etc) as well as the exact commands
           that are failing with the accompanying error.  If
-          there's a SQL error in the TCL error or in the log,
+          there's a SQL error in the Tcl error or in the log,
           post that too.
         </para>
       </listitem>

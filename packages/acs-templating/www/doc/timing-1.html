@@ -37,7 +37,7 @@
     <img src="time1/stage05.gif">
 
     <p>
-    For some reason, this seems to take much longer on the TCL only
+    For some reason, this seems to take much longer on the Tcl-only
     page.  Maybe because it's the first in a triple of pages that
     e-Tester requests?  There may be a little longer time gap between
     chain-frac-2 and the next request of chain-frac-0
@@ -60,7 +60,7 @@
     <h4>Serving /webroot/web/brech/acs/packages/acs-templating/www/admin/test/chain-frac-0.tcl with rp_handle_tcl_request</h4>
     <img src="time1/stage10.gif">
     <p>
-    Here the actual work supposedly happens.  The TCL only page is
+    Here the actual work supposedly happens.  The Tcl-only page is
     clearly fastest.  Always reparsing pages expectedly affects the
     templated page, and -2, which compiles two ADP pages, is affected
     more than -1.  The benefit of -2, wrapping -1 in another include,
@@ -72,7 +72,7 @@
     <h4>Invoking trace filter ad_issue_deferred_dml</h4>
     <img src="time1/stage11.gif">
     <p>
-    For some reason, the TCL-only page takes significantly longer.
+    For some reason, the Tcl-only page takes significantly longer.
     </p>
     <h4>Done invoking trace filter ad_issue_deferred_dml (returning filter_ok)</h4>
     <img src="time1/stage12.gif">
@@ -88,7 +88,7 @@
     Overall, the templated pages are delivered <b>faster</b>.  Forcing
     the template system to always reread all files and to recompile
     the ADP part slows them down, as expected, but overall they are
-    still faster than the TCL only page.
+    still faster than the Tcl-only page.
 
     <hr>
     <address><a href="mailto:christian@arsdigita.com">Christian Brechbuehler</a></address>

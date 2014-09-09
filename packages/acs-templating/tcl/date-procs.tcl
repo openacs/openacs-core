@@ -119,7 +119,7 @@ ad_proc -public template::util::date::create {
 } {
     Create a new Date object
     I chose to implement the date objects as lists instead of 
-    arrays, because arrays are not first-class in TCL
+    arrays, because arrays are not first-class in Tcl
 } {
   return [list $year $month $day $hours $minutes $seconds $format]
 }
@@ -1179,7 +1179,7 @@ ad_proc -public template::data::transform::textdate { element_ref } {
     Collect a textdate from the form, it automatically
     reformats it from the users locale to the iso standard
     YYYY-MM-DD this is useful because it doesn't need
-    reformatting in tcl code
+    reformatting in Tcl code
 } {
 
     upvar $element_ref element

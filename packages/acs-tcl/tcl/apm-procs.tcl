@@ -409,7 +409,7 @@ ad_proc -private apm_mark_version_for_reload {
     Examines all tcl_procs files in package version $version_id; if any have
     changed since they were loaded, marks (in the apm_reload array) that
     they must be reloaded by each Tcl interpreter (using the
-                                                   apm_load_any_changed_libraries procedure).
+    apm_load_any_changed_libraries procedure).
     
     <p>Saves a list of files that have changed (and thus marked to be reloaded) in
     the variable named <code>$file_info_var</code>, if provided. Each element
@@ -1383,17 +1383,17 @@ ad_proc -public apm_package_version_enabled_p {version_id} {
 
 
 ad_proc -private apm_post_instantiation_tcl_proc_from_key { package_key } {
-    Generates the name of the TCL procedure we execute for
+    Generates the name of the Tcl procedure we execute for
     post-instantiation. 
 
     @author Michael Bryzek (mbryzek@arsdigita.com)
     @creation-date 2001-03-05
 
-    @return The name of a tcl procedure, if it exists, or empty string
-    if no such tcl procedure was found.
+    @return The name of a Tcl procedure, if it exists, or empty string
+    if no such Tcl procedure was found.
 } {
     set procedure_name [string tolower "[string trim $package_key]_post_instantiation"]
-    # Change all "-" to "_" to mimic our tcl standards
+    # Change all "-" to "_" to mimic our Tcl standards
     regsub -all {\-} $procedure_name "_" procedure_name
     if { [info commands ::$procedure_name] eq "" } {
         # No such procedure exists... 
@@ -1945,7 +1945,7 @@ ad_proc -public apm::metrics {
     <li>data_model_ora - Oracle datamodel files</li>
     <li>include_page - ADP files in package_key/lib</li>
     <li>content_page - ADP files in package_key/www</li>
-    <li>tcl_procs - TCL procs in package_key/tcl</li>
+    <li>tcl_procs - Tcl procs in package_key/tcl</li>
     <li>test_procs - automated tests in package_key/tcl/test</li>
     <li>documentation - docs in package_key/www/doc</li>
     </ul>

@@ -103,7 +103,7 @@ if {$file_type eq "adp"} {
         -options {{{Find human language text and replace with <# ... #> tags} replace_text} {{Replace <# ... #> tags with #...# keys and insert message into catalog} replace_tags}} \
         -values {replace_text} \
 } else {
-    # TCL files or SQL files
+    # Tcl files or SQL files
     element create file_list_form tcl_action_inform \
             -datatype text \
             -widget inform \

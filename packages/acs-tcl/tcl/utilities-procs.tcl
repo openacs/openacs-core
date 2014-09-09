@@ -54,7 +54,7 @@ ad_proc check_for_form_variable_naughtiness {
     $foo and $bar set to whatever the user typed in the form
 
     this uses the initially nauseating but ultimately delicious
-    tcl system function "uplevel" that lets a subroutine bash
+    Tcl system function "uplevel" that lets a subroutine bash
     the environment and local vars of its caller.  It ain't Common Lisp...
 
     This is an ad-hoc check to make sure users aren't trying to pass in
@@ -81,7 +81,7 @@ ad_proc check_for_form_variable_naughtiness {
     # out because it will cause an unstable release. To add this security
     # feature, we will need to go through all the code in the ACS and make
     # sure that the code doesn't try to overwrite intentionally and also
-    # check to make sure that when tcl files are sourced from another proc,
+    # check to make sure that when Tcl files are sourced from another proc,
     # the appropriate variables are unset.  If you want to install this
     # security feature, then you can look in the release notes for more info.
     # 
@@ -2476,7 +2476,7 @@ ad_proc -public ad_tcl_vars_list_to_ns_set {
     -put:boolean
     vars_list
 } {
-    Takes a TCL list of variable names and <code>ns_set update</code>s values in an ns_set
+    Takes a Tcl list of variable names and <code>ns_set update</code>s values in an ns_set
     correspondingly: key is the name of the var, value is the value of
     the var. The caller is (obviously) responsible for freeing the set if need be.
 
@@ -2486,7 +2486,7 @@ ad_proc -public ad_tcl_vars_list_to_ns_set {
     @param put If this boolean switch is specified, it'll use <code>ns_set put</code> instead 
     of <code>ns_set update</code> (update is default)
 
-    @param args A TCL list of variable names that will be transported into the ns_set.
+    @param args A Tcl list of variable names that will be transported into the ns_set.
 
     @author Lars Pind (lars@pinds.com)
 

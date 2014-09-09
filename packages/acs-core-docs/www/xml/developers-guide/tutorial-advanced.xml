@@ -1590,7 +1590,7 @@ db_multirow \
 
   <sect1 id="tutorial-second-database">
     <title>Connect to a second database</title>
-    <para>It is possible to use the OpenACS TCL database API with
+    <para>It is possible to use the OpenACS Tcl database API with
     other databases.  In this example, the OpenACS site uses a
     PostGre database, and accesses another PostGre database called
     legacy.</para>

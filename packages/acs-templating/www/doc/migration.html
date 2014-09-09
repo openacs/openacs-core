@@ -16,15 +16,15 @@
     <b>separate</b> code and graphical presentation.  The latter goes
     into an ADP file; it contains essentially HTML, augmented by a few
     special tags and the <code>@<i>variable</i>@</code> construct.
-    The code goes into a TCL script.  In other words, a templated page
-    consists of two files, a TCL part that puts its results in data
+    The code goes into a Tcl script.  In other words, a templated page
+    consists of two files, a Tcl part that puts its results in data
     sources, and an ADP page (the template), into which these data
     sources will be interpolated to yield a complete HTML page.
       
     <h3>General</h3>
 
     <p>
-      As usual, the TCL page should start with a call to
+      As usual, the Tcl page should start with a call to
       <code>ad_page_contract</code>.  In its <code>-properties</code>
       block you promise the data sources that your script will provide;
       they were earlier called <em>page properties</em>, hence the
@@ -34,7 +34,7 @@
       see below.
       
     <p>
-      At the end of the TCL script, you should call
+      At the end of the Tcl script, you should call
       <code>ad_return_template</code>.  The template runs after the
       tcl script, and can use these data sources.
 

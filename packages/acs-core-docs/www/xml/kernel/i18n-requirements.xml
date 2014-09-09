@@ -489,12 +489,12 @@ filesystem</para>
 <para>Acs-templating does the following.</para>
 <itemizedlist>
         <listitem>
-          <para>When the acs-templating package opens an an ADP or TCL file, it assumes the file is iso-8859-1.  If the output charset (OutputCharset) in the AOLserver config file is set, then acs-templating assumes it's that charset.  
+          <para>When the acs-templating package opens an an ADP or Tcl file, it assumes the file is iso-8859-1.  If the output charset (OutputCharset) in the AOLserver config file is set, then acs-templating assumes it's that charset.  
 Writing Files</para>
         </listitem>
         <listitem>
           <para>When the acs-templating package writes an an ADP or
-          TCL file, it assumes the file is iso-8859-1.  If the output
+          Tcl file, it assumes the file is iso-8859-1.  If the output
           charset (OutputCharset) in the AOLserver config file is set,
           then acs-templating assumes it's that charset.  </para>
         </listitem>

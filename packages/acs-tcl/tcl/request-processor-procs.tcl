@@ -145,7 +145,7 @@ ad_proc rp_form_update { name value } {
 }
 
 #
-# GN: maybe this function was useful for ancient versions of tcl, but
+# GN: maybe this function was useful for ancient versions of Tcl, but
 # unless i oversee something, it does not make any sense. The comment
 # argues, that "return -code ..." ignores the error code, but then the
 # function uses "return -code ..." to fix this...

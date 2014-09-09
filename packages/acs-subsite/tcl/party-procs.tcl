@@ -45,13 +45,13 @@ namespace eval party {
 	
 	<p> 
 	There are now several ways to create a party of a given
-	type. You can use this TCL API with or without a form from the form
+	type. You can use this Tcl API with or without a form from the form
 	system, or you can directly use the PL/SQL API for the party type.
 
 	<p><b>Examples:</b>
 	<pre>
 
-	# OPTION 1: Create the party using the TCL Procedure. Useful if the
+	# OPTION 1: Create the party using the Tcl Procedure. Useful if the
 	# only attribute you need to specify is the party name
 	
 	db_transaction {
@@ -59,7 +59,7 @@ namespace eval party {
 	}
 	
 	
-	# OPTION 2: Create the party using the TCL API with a templating
+	# OPTION 2: Create the party using the Tcl API with a templating
 	# form. Useful when there are multiple attributes to specify for the
 	# party
 	

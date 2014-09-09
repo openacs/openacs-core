@@ -19,7 +19,7 @@ ad_proc -public subsite::after_mount {
     {-package_id:required}
     {-node_id:required}
 } {
-    This is the TCL proc that is called automatically by the APM
+    This is the Tcl proc that is called automatically by the APM
     whenever a new instance of the subsites application is mounted.
 
     @author Don Baccus (dhogaza@pacifier.com)

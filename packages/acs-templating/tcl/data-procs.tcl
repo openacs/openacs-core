@@ -69,7 +69,7 @@ ad_proc -public template::data::validate::naturalnum {
 } {
   Validates natural numbers data types.
 
-  Will trim leading 0 in order to avoid TCL interpreting it as octal (code borrowed
+  Will trim leading 0 in order to avoid Tcl interpreting it as octal (code borrowed
   from ad_page_contract_filter_proc_naturalnum)
 
   @author Rocael Hernandez <roc@viaro.net>

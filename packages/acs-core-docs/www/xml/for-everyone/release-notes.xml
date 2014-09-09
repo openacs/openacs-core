@@ -270,7 +270,7 @@ entire &majorversion;.&minorversion; release sequence <xref linkend="changelog">
     <itemizedlist>
       <listitem>
         <para>Bug fixes.</para>
-        <para>The missing CR TCL API has been filled in, thanks to Rocael and
+        <para>The missing CR Tcl API has been filled in, thanks to Rocael and
         his team and Dave Bauer.</para>
         <para>This release does <emphasis role="strong">not</emphasis> include new translations.</para>
       </listitem>

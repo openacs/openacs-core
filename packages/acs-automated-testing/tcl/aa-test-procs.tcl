@@ -309,7 +309,7 @@ ad_proc -public aa_register_case {
     @param cats Properties of the test case.  Must be zero or more of the following:
     <ul>
     <li><b>db</b>: Tests the database directly
-    <li><b>api</b>: tests the TCL API
+    <li><b>api</b>: tests the Tcl API
     <li><b>web</b>: tests HTTP interface
     <li><b>smoke</b>: Minimal test to assure functionality and catch basic errors.
     <li><b>stress</b>: Puts heavy load on server or creates large numbers of records.  Intended to simulate maximal production load. 

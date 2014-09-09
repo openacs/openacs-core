@@ -183,7 +183,7 @@
     </tgroup>
   </table>
   <para>The OpenACS installation instructions assume the operating system and build environment are installed.
-    The instructions explain installation of TCL, Tcllib, tDOM, tclwebtest, a Web Server, a Database, a Process Controller, and 
+    The instructions explain installation of Tcl, Tcllib, tDOM, tclwebtest, a Web Server, a Database, a Process Controller, and 
     Source Control software. The following external links are for reference only.  
   </para>
   <itemizedlist>
@@ -274,25 +274,25 @@
     </listitem>
     <listitem>
       <formalpara>
-        <title><ulink url="http://www.tcl.tk/">TCL</ulink> 8.4.x</title>
+        <title><ulink url="http://www.tcl.tk/">Tcl</ulink> 8.5.x</title>
         <para></para>
       </formalpara>
       <itemizedlist>
         <listitem>
           <formalpara>
-            <title><ulink url="http://www.tcl.tk/">TCL</ulink> 8.4.x, REQUIRED</title>
-            <para>OpenACS is written in TCL, an interpreted
-              language.  A threaded version of the TCL interpreter must be installed for
-              OpenACS to work.  The TCL interpreter that is included in most standard
+            <title><ulink url="http://www.tcl.tk/">Tcl</ulink> 8.5.x, REQUIRED</title>
+            <para>OpenACS is written in Tcl, an interpreted
+              language.  A threaded version of the Tcl interpreter must be installed for
+              OpenACS to work.  The Tcl interpreter that is included in most standard
               distributions may not be thread safe.  </para>
           </formalpara>
         </listitem>
         <listitem>
           <formalpara>
-            <title><ulink url="http://www.tcl.tk/">TCL</ulink> 8.4.x development headers and libraries, OPTIONAL</title>
+            <title><ulink url="http://www.tcl.tk/">Tcl</ulink> 8.5.x development headers and libraries, OPTIONAL</title>
             <para>  The site-wide-search service, OpenFTS, requires these to
               compile. (Debian users: <computeroutput>apt-get install
-                tcl8.4-dev</computeroutput>).  You need this
+                tcl8.5-dev</computeroutput>).  You need this
               to install OpenFTS.</para>
           </formalpara>
         </listitem>
@@ -321,7 +321,7 @@
     <listitem id="source-tclwebtest">
       <formalpara>
         <title><ulink url="http://sourceforge.net/project/showfiles.php?group_id=31075">tclwebtest</ulink>, OPTIONAL</title>
-        <para>tclwebtest is a tool for testing web interfaces via tcl scripts.</para>
+        <para>tclwebtest is a tool for testing web interfaces via Tcl scripts.</para>
       </formalpara>
     </listitem>
 
@@ -329,7 +329,7 @@
       <formalpara>
         <title>Web Server</title>
         <para>The web server handles incoming HTTP requests, provides
-          a runtime environment for OpenACS's tcl code, connects to the
+          a runtime environment for OpenACS's Tcl code, connects to the
           database, sends out HTTP responses, and logs requests and
           errors.  OpenACS uses AOLserver;
           <ulink url="http://openacs.org/forums/message-view?message_id=21461">some people have had success running Apache with mod_nsd</ulink>.</para>
@@ -444,7 +444,7 @@
       <formalpara>
         <title><ulink
             url="http://unc.dl.sourceforge.net/sourceforge/openfts/Search-OpenFTS-tcl-0.3.2.tar.gz">OpenFTS
-            TCL 0.3.2</ulink>, OPTIONAL</title> <para>Adds
+            Tcl 0.3.2</ulink>, OPTIONAL</title> <para>Adds
             full-text-search to PostgreSQL and includes a driver for
             AOLserver.  You need this if you want users to be able to
             search for any text on your site.  For postgres 7.4.x and

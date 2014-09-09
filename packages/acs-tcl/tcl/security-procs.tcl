@@ -1096,14 +1096,14 @@ ad_proc -private sec_get_token {
 } {
 
     Returns the token corresponding to the token_id. This first checks
-    the thread-persistent TCL cache, then checks the server
+    the thread-persistent Tcl cache, then checks the server
     size-limited cache before finally hitting the db in the worst case
     if the secret_token value is not in either cache. The procedure
     also updates the caches.
 
     Cache eviction is handled by the ns_cache API for the size-limited
     cache and is handled by AOLserver (via thread termination) for the
-    thread-persistent TCL cache.
+    thread-persistent Tcl cache.
 
 } {
     

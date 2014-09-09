@@ -905,7 +905,7 @@ ad_proc -private publish::foreach_publish_path { url code {root_path ""} } {
 
   @private foreach_publish_path
  
-  Execute some TCL code for each root path in the PublishRoots
+  Execute some Tcl code for each root path in the PublishRoots
   parameter
  
   @param url       Relative URL to append to the roots

@@ -24,7 +24,7 @@
 	<p>
 	  The Templating System must not cause any performance problems to a
 	  site. It must be fast and efficient, and it must not slow down
-	  page load speed by more than 10% versus a TCL page with inline
+	  page load speed by more than 10% versus a Tcl page with inline
 	  HTML.
 	</p>
       </ul>
@@ -40,10 +40,10 @@
     <ul>
       <li><a href=
 	    "/acs-templating/admin/test/chain-frac-0?x=3.14159265358979323846"
-	    >chain-frac-0</a>, a TCL page with inline HTML,
+	    >chain-frac-0</a>, a Tcl page with inline HTML,
       <li><a href=
 	    "/acs-templating/admin/test/chain-frac-1?x=3.14159265358979323846"
-	    >chain-frac-1</a>, a templated page, i.e. a TCL and an
+	    >chain-frac-1</a>, a templated page, i.e. a Tcl and an
 	HTML file, and
       <li><a href=
 	    "/acs-templating/admin/test/chain-frac-2?x=3.14159265358979323846"
@@ -59,7 +59,7 @@
     <p>
       Normally, the templating system re-reads a file whenever the
       version on disk is out of date.  ADP pages are compiled to TCL,
-      and both ADP and TCL pages are cached as TCL procs.  The
+      and both ADP and Tcl pages are cached as Tcl procs.  The
       parameter <code>RefreshCache</code> in section
       <code>template</code> can be set to <code>always</code> or
       <code>never</code> to affect the cacheing strategy; the latter
@@ -116,7 +116,7 @@ end
       <li><em>Group and sort times</em>.  The time one stage of
 	processing takes is given by the difference of two time
 	adjacent entries.  This defines stage00 to stage13; I keep the 
-	total time in stage14.  This is done by the TCL script
+	total time in stage14.  This is done by the Tcl script
 	<code>dev0103-001:/home/brech/prog/tcl/timing.tcl</code>,
 	which generates the directories <code>stage00</code> to
 	<code>stage14</code> and the ten files
@@ -233,9 +233,9 @@ end
       On reusia.boston, we had a much better performance of the
       request processor.  The processing times of the pages proper
       (stage 10 before, 11 now) didn't change much; we just got
-      clearer results.  The total processing time of TCL-only pages is 
+      clearer results.  The total processing time of Tcl-only pages is 
       around 155ms, while templated pages take around 220ms, that is
-      42% longer (or TCL-only pages take 30% less).
+      42% longer (or Tcl-only pages take 30% less).
     </p>
     <p>
       Relative times depend on the other components of the pipeline.
@@ -244,7 +244,7 @@ end
       request processor) were slower, this wasn't that noticeable.
     </p>
     <p>
-      For ACS 3.4, TCL-only chain-frac-0 pages take 115ms, where the
+      For ACS 3.4, Tcl-only chain-frac-0 pages take 115ms, where the
       templated versisons are much slower, 320ms for chain-frac-1 and 
       340 for -2.
     </p>
