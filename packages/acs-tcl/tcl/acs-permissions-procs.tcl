@@ -328,12 +328,12 @@ ad_proc -deprecated ad_require_permission {
     permission::require_permission -object_id $object_id -privilege $privilege
 }
 
-ad_proc -private ad_admin_filter {} {
+ad_proc -private -deprecated ad_admin_filter {} {
     permission::require_permission -object_id [ad_conn object_id] -privilege "admin"
     return filter_ok
 }
 
-ad_proc -private ad_user_filter {} {
+ad_proc -private -deprecated  ad_user_filter {} {
     permission::require_permission -object_id [ad_conn object_id] -privilege "read"
     return filter_ok
 }
