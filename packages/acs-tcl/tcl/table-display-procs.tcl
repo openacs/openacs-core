@@ -507,7 +507,7 @@ ad_proc -deprecated ad_table {
     return $Thtml
 }
 
-ad_proc ad_table_column_list {
+ad_proc -deprecated ad_table_column_list {
     { -sortable all }
     datadef columns
 } {
@@ -551,7 +551,7 @@ ad_proc ad_table_column_list {
     return $column_list
 }
 
-ad_proc ad_sort_primary_key {orderby} {
+ad_proc -deprecated ad_sort_primary_key {orderby} {
     return the primary (first) key of an order spec
     used by 
 } {
@@ -561,7 +561,7 @@ ad_proc ad_sort_primary_key {orderby} {
     return $orderby
 }
 
-ad_proc ad_table_same varname {
+ad_proc -deprecated ad_table_same varname {
     Called from inside ad_table.
 
     returns true if the variable has same value as
@@ -576,14 +576,14 @@ ad_proc ad_table_same varname {
     }
 }
         
-ad_proc ad_table_span {str {td_html "align=\"left\""}} {
+ad_proc -deprecated ad_table_span {str {td_html "align=\"left\""}} {
     given string the function generates a row which spans the 
     whole table.
 } {
     return "<tr><td colspan=\"[uplevel llength \$Tcolumn_list]\" $td_html>$str</td></tr>"
 }
 
-ad_proc ad_table_form {
+ad_proc -deprecated ad_table_form {
     datadef 
     {type select} 
     {return_url {}} 
@@ -693,7 +693,7 @@ ad_proc ad_table_form {
     return $html
 }
 
-ad_proc ad_table_sort_form {
+ad_proc -deprecated ad_table_sort_form {
     datadef 
     {type select} 
     {return_url {}} 
@@ -1020,7 +1020,7 @@ ad_proc ad_dimensional_settings {define current} {
     return $html
 }
 
-ad_proc ad_table_orderby_sql {datadef orderby order} {
+ad_proc -deprecated ad_table_orderby_sql {datadef orderby order} {
     create the order by clause consistent with the orderby and order variables
     and the datadef which built the table
 } {
