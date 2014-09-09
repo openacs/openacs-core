@@ -1688,33 +1688,28 @@ ad_proc -public string_truncate {
     @author Lars Pind (lars@pinds.com)
     @creation-date September 8, 2002
 } {
-    if { $len > 0 } {
-        if { [string length $string] > $len } {
-            set end_index [expr {$len-[string length $ellipsis]-1}]
-            
-            # Back up to the nearest whitespace
-            if { ![string is space [string index $string $end_index+1]] } {
-                while { $end_index >= 0 && ![string is space [string index $string $end_index]] } {
-                    incr end_index -1
-                }
-            }
-            
-            # If that laves us with an empty string, then ignore whitespace and just truncate mid-word
-            if { $end_index == -1 } {
-                set end_index [expr {$len-[string length $ellipsis]-1}]
-            }
-            
-            # Chop off extra whitespace at the end
-            while { $end_index >= 0 && [string is space [string index $string $end_index]] } {
-                incr end_index -1
-            } 
-                
-            set string [string range $string 0 $end_index]
-            
-            append string $ellipsis
-            append string $more
-        } 
-    }
+    if { $len > 0 & [string length $string] > $len } {
+	set end_index [expr {$len-[string length $ellipsis]-1}]
+	
+	# Back up to the nearest whitespace
+	if { ![string is space [string index $string $end_index+1]] } {
+	    while { $end_index >= 0 && ![string is space [string index $string $end_index]] } {
+		incr end_index -1
+	    }
+	}
+	
+	# If that leaves us with an empty string, then ignore
+	# whitespace and just truncate mid-word
+	if { $end_index == -1 } {
+	    set end_index [expr {$len - [string length $ellipsis] - 1}]
+	}
+	
+	# Chop off extra whitespace at the end
+	set string [string trimright [string range $string 0 $end_index]]
+
+	append string $ellipsis $more"
+    } 
+
     return $string
 }
 
