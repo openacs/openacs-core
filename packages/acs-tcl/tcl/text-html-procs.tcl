@@ -1707,7 +1707,7 @@ ad_proc -public string_truncate {
 	# Chop off extra whitespace at the end
 	set string [string trimright [string range $string 0 $end_index]]
 
-	append string $ellipsis $more"
+	append string $ellipsis $more
     } 
 
     return $string
