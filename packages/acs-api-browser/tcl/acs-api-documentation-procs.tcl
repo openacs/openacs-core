@@ -325,20 +325,6 @@ ad_proc -public api_type_documentation {
     return $out
 }
 
-ad_proc -public api_quote_file {
-    filename 
-} { 
-    returns a quoted version of the given filename 
-} { 
-    if {![catch {set fp [open $filename r]} err]} { 
-        set content [ad_quotehtml [read $fp]]
-        close $fp
-        return $content
-    } 
-    return {}
-} 
-
-
 ad_proc -public api_proc_documentation {
     {-format text/html}
     -script:boolean
@@ -565,25 +551,41 @@ ad_proc -public api_proc_documentation {
     if { $xql_p } {
         set there {}
         set missing {}
-        if { [file exists ${xql_base_name}.xql] } {
-            append there [subst {<dt><b>Generic XQL file:</b></dt>
-                <blockquote><pre>[api_quote_file ${xql_base_name}.xql]</pre></blockquote>
+        set xql_fn [file rootname $doc_elements(script)].xql
+        if { [file exists $::acs::rootdir/$xql_fn] } {
+            set content [apidoc::get_xql_snippet -proc_name $proc_name -xql_file $xql_fn]
+            if {$content ne ""} {set content "<pre class='code'>$content</pre>"}
+            append there [subst {<dt><b>Generic XQL file:</b> <dt>
+                <blockquote>$content
+                <a href="content-page-view?[export_vars {{source_p 1} {path $xql_fn}}]">$xql_fn</a>
+                </blockquote>
                 <p>
             }]
         } else {
             lappend missing Generic
         }
-        if { [file exists ${xql_base_name}-postgresql.xql] } {
-            append there [subst {<dt><b>Postgresql XQL file:</b></dt>
-                <blockquote><pre>[api_quote_file ${xql_base_name}-postgresql.xql]</pre></blockquote>
+        set xql_fn [file rootname $doc_elements(script)]-postgresql.xql
+        if { [file exists $::acs::rootdir/$xql_fn] } {
+            set content [apidoc::get_xql_snippet -proc_name $proc_name -xql_file $xql_fn]
+            if {$content ne ""} {set content "<pre class='code'>$content</pre>"}
+            append there [subst {<dt><b>PostgreSQL XQL file:</b></dt>
+                <blockquote>$content
+                <a href="content-page-view?[export_vars {{source_p 1} {path $xql_fn}}]">$xql_fn</a>
+                </blockquote>
                 <p>
             }]
         } else {
             lappend missing PostgreSQL
         }
-        if { [file exists ${xql_base_name}-oracle.xql] } {
+        set xql_fn [file rootname $doc_elements(script)]-oracle.xql
+
+        if { [file exists $::acs::rootdir/$xql_fn] } {
+            set content [apidoc::get_xql_snippet -proc_name $proc_name -xql_file $xql_fn]
+            if {$content ne ""} {set content "<pre class='code'>$content</pre>"}
             append there [subst {<dt><b>Oracle XQL file:</b></dt>
-                <blockquote><pre>[api_quote_file ${xql_base_name}-oracle.xql]</pre></blockquote>
+                <blockquote>$content
+                <a href="content-page-view?[export_vars {{source_p 1} {path $xql_fn}}]">$xql_fn</a>
+                </blockquote>
                 <p>
             }]
         } else {
@@ -709,6 +711,26 @@ ad_proc -public api_get_body {proc_name} {
 
 
 namespace eval ::apidoc {
+
+    ad_proc -private get_xql_snippet {-proc_name -xql_file} {
+        @return matching xql snippet for specified proc_name
+    } {
+        set content [template::util::read_file $::acs::rootdir/$xql_file]
+
+        # make parsable XML, replace "partialquery" by "fullquery"
+        set prepared_content [db_qd_internal_prepare_queryfile_content $content]
+
+        dom parse -simple $prepared_content doc
+        $doc documentElement root
+        set result ""
+        foreach q [$root selectNodes //fullquery] {
+            if {[string match "$proc_name.*" [$q getAttribute name]]} {
+                append result [$q asXML -indent 4] \n
+            }
+        }
+        set readable_xml [string map {&lt; < &gt; > &amp; &} [string trimright $result]]
+        return [ns_quotehtml $readable_xml]
+    }
 
     ad_proc -private api_format_see { see } {
         regsub -all {proc *} $see {} see
@@ -1061,6 +1083,7 @@ namespace eval ::apidoc {
 
     } {
 
+        set script [string trimright $script]
         template::head::add_style -style $apidoc::style
 
         # Keywords will be colored as other procs, but not hyperlinked
@@ -1181,7 +1204,8 @@ namespace eval ::apidoc {
                              && $had_colons in $::apidoc::KEYWORDS)} {
 
                             set url "/api-doc/proc-view?proc=$proc_name"
-                            append html "<a href='$url'>" [pretty_token keyword $proc_name] </a>
+                            append html "<a href='$url' title='Tcl command'>" \
+                                [pretty_token keyword $proc_name] </a>
 
                             #append html [pretty_token keyword $proc_name]
 
@@ -1192,22 +1216,26 @@ namespace eval ::apidoc {
                             set url [::xotcl::api object_url \
                                          -show_source 1 -show_methods 2 \
                                          $scope $proc_name]
-                            append html "<a href='$url'>" [pretty_token object $proc_name] </a>
+                            append html "<a href='$url' title='XOTcl object'>" \
+                                [pretty_token object $proc_name] </a>
 
                         } elseif {[string match "ns*" $proc_name]} {
                             set url "/api-doc/tcl-proc-view?tcl_proc=$proc_name"
-                            append html "<a href='$url'>" [pretty_token proc $proc_name] </a>
+                            append html "<a href='$url' title='[ns_info name] command'>" \
+                                [pretty_token proc $proc_name] </a>
 
                         } elseif {[string match "*__arg_parser" $proc_name]} {
                             append html [pretty_token helper $proc_name]
 
                         } elseif {[info commands ::${proc_namespace}::${proc_name}] ne ""}  {
                             set url [api_proc_url ${proc_namespace}::${proc_name}]
-                            append html "<a href='$url'>" [pretty_token proc $proc_name] </a>
+                            append html "<a href='$url' title='API command'>" \
+                                [pretty_token proc $proc_name] </a>
 
                         } elseif {[info commands ::$proc_name] ne ""}  {
                             set url [api_proc_url $proc_name]
-                            append html "<a href='$url'>" [pretty_token proc $proc_name] </a>
+                            append html "<a href='$url' title='API command'>" \
+                                [pretty_token proc $proc_name] </a>
 
                         } else {
                             append html ${proc_name}
@@ -1222,7 +1250,7 @@ namespace eval ::apidoc {
                             set regexpl [length_regexp [string range $data $i end]]
                             append html [string range $data $i+1 $i+$regexpl]
                             incr i $regexpl
-                        } elseif {$proc_name eq "util_memoize"} {
+                        } elseif {$proc_name in {util_memoize util_memoize_seed}} {
                             #
                             # special cases for util_memoize
                             #
@@ -1300,7 +1328,7 @@ ad_proc api_proc_url { proc } {
     @author Lars Pind (lars@pinds.com)
     @creation-date 14 July 2000
 } {
-    return "/api-doc/proc-view?proc=[ns_urlencode [string trimleft $proc :]]"
+    return "/api-doc/proc-view?proc=[ns_urlencode $proc]&source_p=1"
 }
 
 ad_proc api_proc_link { proc } {
