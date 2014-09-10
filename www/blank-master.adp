@@ -23,7 +23,7 @@ _editor_lang = "@::xinha_lang;literal@";
 </script>
 </if>
 
-<multiple name="headscript">   <script type="@headscript.type;literal@"<if @headscript.src@ not nil> src="@headscript.src;literal@"</if><if @headscript.charset@ not nil> charset="@headscript.charset;literal@"</if><if @headscript.defer@ not nil> defer="@headscript.defer;literal@"</if><if @headscript.async@ not nil> async="@headscript.async;literal@"</if>><if @headscript.content@ not nil>@headscript.content;literal@</if></script>
+<multiple name="headscript">   <script type="@headscript.type;literal@"<if @headscript.src@ not nil> src="@headscript.src;literal@"</if><if @headscript.charset@ not nil> charset="@headscript.charset;literal@"</if><if @headscript.defer@ not nil> defer="@headscript.defer;literal@"</if><if @headscript.async@ not nil> async="@headscript.async;literal@"</if>><if @headscript.content@ not nil>@headscript.content;noquote@</if></script>
 </multiple>
 
 <if @head@ not nil>@head;literal@</if>
