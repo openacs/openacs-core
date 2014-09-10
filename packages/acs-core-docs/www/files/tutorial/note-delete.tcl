@@ -10,7 +10,7 @@ ad_page_contract {
 }
 
 permission::require_write_permission -object_id $item_id
-set title [item::get_title $item_id]
+set title [content::item::get_title -item_id $item_id]
 mfp::note::delete -item_id $item_id
 
 ad_returnredirect "."
