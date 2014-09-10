@@ -701,9 +701,9 @@ ad_proc -private publish::handle_item { item_id args } {
   }
 
   # Pull the item out of the cache
-  if { ![info exists opts(refresh)] && \
-        [info exists revision_html($revision_key)] } {
-
+  if { ![info exists opts(refresh)] 
+       && [info exists revision_html($revision_key)] 
+   } {
     ns_log debug "publish::handle_item: Fetching $item_id from cache"
     return $revision_html($revision_key)
 
@@ -711,10 +711,11 @@ ad_proc -private publish::handle_item { item_id args } {
 
     # Render the item and cache it
     ns_log debug "publish::handle_item: Rendering item $item_id"
-    item::get_mime_info $revision_id mime_info
-    set item_handler [get_mime_handler $mime_info(mime_type)]
+    
+    content::item::get -item_id $item_id -array_name item_info
+    set item_handler [get_mime_handler $item_info(mime_type)]
   
-    if { [template::util::is_nil item_handler] } {
+    if { $item_handler eq "" } {
       ns_log warning "publish::handle_item: No mime handler for mime type $mime_info(mime_type)"
       return ""
     }
@@ -1054,7 +1055,14 @@ ad_proc -public publish::write_content { revision_id args } {
       }
  
   
-      set file_url [item::get_extended_url $item_id -revision_id $revision_id]
+      #set file_url [item::get_extended_url $item_id -revision_id $revision_id]
+      set base_path [content::item::get_virtual_path -item_id $item_id]
+      content::item::get -item_id $item_id -array_name item_info
+      set mime_type $item_info(mime_type)
+      set ext [db_string get_extension {
+	  select file_extension from cr_mime_types where mime_type = :mime_type
+      }]
+      set file_url $base_url.$ext
 
       # LARS HACK: Delete the file if it already exists
       # Not sure what we should really do here, since on the one hand, the below db commands
