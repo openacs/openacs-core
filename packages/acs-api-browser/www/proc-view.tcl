@@ -3,7 +3,7 @@ ad_page_contract {
     
     @cvs-id $Id$
 } {
-    proc
+    proc:trim
     source_p:optional,integer,trim
     {version_id:naturalnum,optional ""}
 } -properties {
