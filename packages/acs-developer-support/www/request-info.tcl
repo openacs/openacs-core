@@ -27,23 +27,25 @@ foreach name [nsv_array names ds_request] {
 
 if { [info exists property(start)] } {
     set expired_p 0
-    append body "
-<h3>Parameters</h3>
+    append body [subst {
+       <h3>Parameters</h3>
 
-<blockquote>
-<table cellspacing=0 cellpadding=0>
-<tr><th align=left>Request Start Time:&nbsp;</th><td>[clock format [lindex $property(start) 0] -format "%Y-%m-%d %H:%M:%S"]\n"
+       <blockquote>
+       <table cellspacing=0 cellpadding=0>
+       <tr><th align=left>Request Start Time:&nbsp;</th><td>[clock format [lindex $property(start) 0] \
+           -format "%Y-%m-%d %H:%M:%S"]
+    }]
 } else {
     set expired_p 1
-    append body "The information for this request is gone - either the server has been restarted, or
-the request is more than [parameter::get -parameter DeveloperSupportLifetime -default 900] seconds old.
-[ad_admin_footer]"
+    append body [subst {
+      The information for this request is gone - either the server has been restarted, or
+      the request is more than [parameter::get -parameter DeveloperSupportLifetime -default 900] seconds old.
+    }]
     return
 }
 
 
 if { [info exists property(conn)] } {
-    array set conn $property(conn)
 
     foreach { key name } {
         end {Request Completion Time}
@@ -58,37 +60,40 @@ if { [info exists property(conn)] } {
         validated {Session Validation}
 	error {Error}
     } {
-	if { [info exists conn($key)] } {
+	if { [dict exists $property(conn) $key] } {
+	    set raw [dict get $property(conn) $key]
 	    switch $key {
 		error {
-		    set value "<pre>[ns_quotehtml $conn($key)]</pre>"
+		    set value "<pre>[ns_quotehtml $raw]</pre>"
 		}
 		endclicks {
-		    set value "[format "%.f" [expr { ($conn(endclicks) - $conn(startclicks)) }]] ms"
+		    set value [format "%.f ms" [expr { $raw/1000.0 - [dict get $property(conn) startclicks] }]]
 		}
 		end {
-		    set value [clock format $conn($key) -format "%Y-%m-%d %H:%M:%S"  ]
+		    set value [clock format $raw -format "%Y-%m-%d %H:%M:%S"]
 		}
 		user_id {
-		    if { [db_0or1row user_info "
+		    if { [db_0or1row user_info {
                         select first_names, last_name, email
                         from users
-                        where user_id = $conn(user_id)
-		    "] } {
-			set value "
-<a href=\"/shared/community-member?user_id=$conn(user_id)\">$conn(user_id)</a>:
-$first_names $last_name (<a href=\"mailto:$email\">mailto:$email</a>)
-"
+                        where user_id = :raw
+		    }] } {
+			set value [subst {
+			    <a href="/shared/community-member?user_id=$raw">$raw</a>:
+			    $first_names $last_name (<a href="mailto:$email">mailto:$email</a>)
+			}]
 		    } else {
-			set value $conn(user_id)
+			set value $raw
 		    }
 		}
 		default {
-		    set value [ns_quotehtml $conn($key)]
+		    set value [ns_quotehtml $raw]
 		}
 	    }
 
-	    append body "<tr valign=top><th align=left nowrap>$name:&nbsp;</th><td>[ad_decode $value "" "(empty)" $value]</td></tr>\n"
+	    append body [subst {
+		<tr valign=top><th align=left nowrap>$name:&nbsp;</th><td>[ad_decode $value "" "(empty)" $value]</td></tr>
+	    }]
 	}
     }
 }
@@ -96,23 +101,18 @@ $first_names $last_name (<a href=\"mailto:$email\">mailto:$email</a>)
 append body "</table></blockquote>"
 
 if { [info exists property(rp)] } {
-    append body "
-<h3>Request Processor</h3>
-<ul>
-"
+    append body [subst {
+	<h3>Request Processor</h3>
+	<ul>
+    }]
     foreach rp $property(rp) {
-	set kind [lindex $rp 0]
-	set info [lindex $rp 1]
-	set startclicks [lindex $rp 2]
-	set endclicks [lindex $rp 3]
-	set action [lindex $rp 4]
-	set error [lindex $rp 5]
-
-	set duration "[format "%.1f" [expr { ($endclicks - $startclicks) }]] ms"
+	lassign $rp kind info startclicks endclicks action error
 
 	if { $kind eq "debug" && !$rp_show_debug_p } {
 	    continue
 	}
+
+	set duration [format "%.1f ms" [expr { $endclicks - $startclicks }]]
 
 	if { [info exists conn(startclicks)] } {
 	    append body "<li>[format "%+06.1f" [expr { ($startclicks - $conn(startclicks)) }]] ms: "
@@ -122,21 +122,14 @@ if { [info exists property(rp)] } {
 
 	switch $kind {
 	    transformation {
-                set proc [lindex $info 0]
-                set from [lindex $info 1]
-                set to [lindex $info 2]
-#		unlist $info proc from to
+		lassign $info proc from to
 		if { $to eq "" } {
 		    set to "?"
 		}
 		append body "Applied transformation from <b>$from -> $to</b> - $duration\n"
 	    }
 	    filter {
-		set kind [lindex $info 1]
-		set method [lindex $info 2]
-		set path [lindex $info 3]
-		set proc [lindex $info 4]
-		set args [lindex $info 5]
+		lassign $info . kind method path proc args
 
 		append body "Applied $kind filter: <b>$proc</b> [ns_quotehtml $args] (for $method $path) - $duration\n"
 		if {$action eq "error"} {
@@ -154,8 +147,7 @@ if { [info exists property(rp)] } {
 		}
 	    }
 	    serve_file {
-		set file [lindex $info 0]
-		set handler [lindex $info 1]
+		lassign $info file handler
 		append body "Served file <b>$file</b> with <b>$handler</b> - $duration\n"
 		if {$action eq "error"} {
 		    append body "<ul><li>returned error: <pre>[ns_quotehtml $error]</pre></ul>\n"
