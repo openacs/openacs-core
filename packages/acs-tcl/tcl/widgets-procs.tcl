@@ -184,6 +184,8 @@ ad_proc ad_dateentrywidget {column { value 0 } } {
 	set year ""
     } else {
 	lassign [split $value "-"] year month day
+	# trim the day, in case we get as well a time stamp
+	regexp {^([0-9]+) } $day _ day
     }
 
     set output "<select name=\"$column.month\">\n"
@@ -198,7 +200,8 @@ ad_proc ad_dateentrywidget {column { value 0 } } {
 	}
     }
 
-    append output "</select><input name=\"$column.day\" type=\"text\" size=\"3\" maxlength=\"2\" value=\"$day\">&nbsp;<input name=\"$column.year\" type=\"text\" size=\"5\" maxlength=\"4\" value=\"$year\">"
+    append output [subst {</select><input name="$column.day" type="text" size="2" maxlength="2" value="$day">&nbsp;
+	<input name="$column.year" type="text" size="4" maxlength="4" value="$year">}]
 
      return $output
 }
