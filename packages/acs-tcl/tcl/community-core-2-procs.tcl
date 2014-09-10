@@ -17,6 +17,7 @@ namespace eval oacs::user {
         {-array:required}
     } {
         Load up user information
+	@see acs_user::get
     } {
         # Upvar the Tcl Array
         upvar $array row
