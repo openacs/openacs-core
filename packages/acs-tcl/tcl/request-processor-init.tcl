@@ -92,7 +92,6 @@ if { $listings eq "fancy" || $listings eq "simple" } {
 # acs-templating, so this adp handler can be overwritten there.
 foreach { type handler } {
     tcl rp_handle_tcl_request
-    adp rp_handle_adp_request
     vuh rp_handle_tcl_request
 } {
     rp_register_extension_handler $type $handler

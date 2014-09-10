@@ -1341,7 +1341,7 @@ ad_proc -public exists_and_not_null { varname } {
     return [expr { [info exists var] && $var ne "" }] 
 } 
 
-ad_proc -public exists_or_null { varname } {
+ad_proc -public -deprecated exists_or_null { varname } {
     Returns the contents of the variable if it exists, otherwise returns empty string
 } {
     upvar 1 $varname var
@@ -1630,7 +1630,7 @@ ad_proc -public safe_eval args {
     return [ad_apply uplevel $args]
 }
 
-ad_proc -public lmap {list proc_name} {
+ad_proc -public -deprecated lmap {list proc_name} {
     Applies proc_name to each item of the list, appending the result of 
     each call to a new list that is the return value.
 } {
@@ -1761,7 +1761,10 @@ ad_proc -public ad_set_cookie {
     {value ""}
 } { 
 
-    Sets a cookie.
+    Sets a cookie. This function can be used as well to clear a cookie via:
+<pre>
+    ad_set_cookie -replace t -max_age 0 -domain $domain ad_session_id ""
+</pre>
 
     @param max_age specifies the maximum age of the cookies in
     seconds (consistent with RFC 2109). max_age inf specifies cookies
@@ -2734,11 +2737,13 @@ ad_proc -public util_wrap_list {
 } {
     set out "<pre>"
     set line_length 0
+    set line_number 0
     foreach item $items {
 	regsub -all {<[^>]+>} $item "" item_notags
 	if { $line_length > $indent } {
 	    if { $line_length + 1 + [string length $item_notags] > $length } {
 		append out "$eol\n"
+		incr line_number
 		for { set i 0 } { $i < $indent } { incr i } {
 		    append out " "
 		}
@@ -2747,6 +2752,8 @@ ad_proc -public util_wrap_list {
 		append out " "
 		incr line_length
 	    }
+	} elseif {$line_number == 0} {
+	    append out " "
 	}
 	append out $item
 	incr line_length [string length $item_notags]
@@ -4020,7 +4027,7 @@ ad_proc -public util::roll_server_log {} {
     return 0
 } 
 
-ad_proc -public util::cookietime {time} {
+ad_proc -private util::cookietime {time} {
     Return an RFC2109 compliant string for use in "Expires".
 } {
     regsub {, (\d+) (\S+) (\d+)} [ns_httptime $time] {, \1-\2-\3} string

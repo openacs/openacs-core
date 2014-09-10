@@ -136,10 +136,12 @@ ad_proc -private doc::util::text_divider { text_ref marker } {
     return 1
 }
 
-ad_proc -private template::util::server_root {} {
+ad_proc -private -deprecated template::util::server_root {} {
     uses ns_library to find the server root, may not always be accurate
     because it essentially asks for the tcl library path and
-    strips off the last /tcl directory
+    strips off the last /tcl directory.
+
+    @see use $::acs::rootdir instead
 } {
 
   set path_length [expr [llength [file split [ns_library private]]] - 1]
@@ -167,8 +169,10 @@ ad_proc -private template::util::write_from_template { template file_name} {
 
 }
 
-ad_proc -private template::util::display_value { ref } {
+ad_proc -private -deprecated template::util::display_value { ref } {
     a proc used for debugging, just prints out a value to the error log
+
+    @see use simple "ns_log ...." instead
 } {
     upvar $ref value
     ns_log notice "$ref: $value
@@ -176,15 +180,18 @@ ad_proc -private template::util::display_value { ref } {
 }
 
 
-ad_proc -private template::util::proper_noun { string_ref } {
+ad_proc -private -deprecated template::util::proper_noun { string_ref } {
     capitalizes the first letter of a string
     @return returns formatted string (UNFINISHED. FIXME.)
+    @see use "string totitle ..."
 } {
 
 }
 
 
-ad_proc -private template::util::string_range { string indices } {
+ad_proc -private -deprecated template::util::string_range { string indices } {
+    @see use "string range instead"
+} {
     return [string range $string [lindex $indices 0] [lindex $indices 1]]
 }
 
@@ -600,7 +607,7 @@ ad_proc -private doc::parse_tcl_library { dir_list } {
   foreach dir $dir_list {
 
   #debug
-  template::util::display_value dir
+  #template::util::display_value dir
 
   # using this lame hack since most aD servers are running an earlier version of Tcl than 8.3,
   # which supports the -directory switch that this hack emulates
@@ -609,7 +616,7 @@ ad_proc -private doc::parse_tcl_library { dir_list } {
   }
 
   #debugging
-  template::util::display_value file_list
+  #template::util::display_value file_list
 
   foreach tcl_file $file_list {
       ns_log notice "doc::parse_tcl_library: parsing through $tcl_file for documentation"

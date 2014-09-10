@@ -531,9 +531,11 @@ ad_proc -public template::util::get_url_directory { url } {
   return $directory
 }
 
-ad_proc -public template::util::get_cookie { name {default_value ""} } {
+ad_proc -public -deprecated template::util::get_cookie { name {default_value ""} } {
     Retrieve the value of a cookie and return it
     Return the default if no such cookie exists
+    
+    @see ad_get_cookie
 } {
   set headers [ns_conn headers]    
 
@@ -546,10 +548,12 @@ ad_proc -public template::util::get_cookie { name {default_value ""} } {
   return $default_value
 }
 
-ad_proc -public template::util::set_cookie { expire_state name value { domain "" } } {
+ad_proc -public -deprecated template::util::set_cookie { expire_state name value { domain "" } } {
     Create a cookie with specified parameters.  The expiration state 
     may be persistent, session, or a number of minutes from the current
     time.
+
+    @see ad_set_cookie
 } {
 
   if { [string match $domain {}] } { 
@@ -579,8 +583,11 @@ ad_proc -public template::util::set_cookie { expire_state name value { domain ""
   ns_set put [ns_conn outputheaders] "Set-Cookie" $cookie
 }
 
-ad_proc -public template::util::clear_cookie { name { domain "" } } { 
+ad_proc -public -deprecated template::util::clear_cookie { name { domain "" } } { 
     Expires an existing cookie.
+
+    @see ad_get_cookie
+
 } {
   if { [string match $domain {}] } { 
     set path "ns/server/[ns_info server]/module/nssock"
@@ -720,7 +727,7 @@ ad_proc -public template::util::nvl { value value_if_null } {
   if { $value ne "" } {
     return $value_if_null
   } else {
-    return $value
+    return $valuenumber_l
   }
 }
 

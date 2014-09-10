@@ -539,12 +539,14 @@ ad_proc ad_pretty_mailing_address_from_args {
 
 
 
-ad_proc ad_get_user_info {} { 
+ad_proc -deprecated ad_get_user_info {} { 
     Sets first_names, last_name, email in the environment of its caller.
     @return ad_return_error if user_id can't be found.
 
     @author Unknown
     @author Roberto Mello
+
+    @see acs_user::get
 } {
     uplevel {
 	set user_id [ad_conn user_id]
