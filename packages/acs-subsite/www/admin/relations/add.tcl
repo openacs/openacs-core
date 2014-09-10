@@ -221,7 +221,7 @@ if {$party_id ne ""} {
 
     if { [llength $party_option_list] == 0 } {
 	ad_return_template add-no-valid-parties
-	ad_return
+	return
     }
     
     template::element create add_relation party_id \
