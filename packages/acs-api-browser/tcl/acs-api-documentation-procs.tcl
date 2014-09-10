@@ -217,7 +217,7 @@ ad_proc -public api_script_documentation {
     #     # XXX: Need to support "Returns Properties:"
     #     }
     append out "<dt><b>Location:</b><dd>$path\n"
-    append out [::apidoc::api_format_common_elements doc_elements]
+    append out [::apidoc::format_common_elements doc_elements]
 
     append out "</dl></blockquote>"
 
@@ -254,7 +254,7 @@ ad_proc -public api_library_documentation {
         if { [info exists doc_elements(author)] } {
             append out "<dt><b>Author[ad_decode [llength $doc_elements(author)] 1 "" "s"]:</b>\n"
             foreach author $doc_elements(author) {
-                append out "<dd>[::apidoc::api_format_author $author]\n"
+                append out "<dd>[::apidoc::format_author $author]\n"
             }
         }
         if { [info exists doc_elements(cvs-id)] } {
@@ -319,7 +319,7 @@ ad_proc -public api_type_documentation {
     }
 
     append out \
-        [::apidoc::api_format_common_elements doc_elements] \
+        [::apidoc::format_common_elements doc_elements] \
         "<dt><b>Location:</b><dd>$doc_elements(script)\n" \
         "</dl></blockquote>\n"
 
@@ -524,7 +524,7 @@ ad_proc -public api_proc_documentation {
         append out "<dt><b>Error:</b></dt><dd>[join $doc_elements(error) "<br>"]</dd>\n"
     }
     
-    append out [::apidoc::api_format_common_elements doc_elements]
+    append out [::apidoc::format_common_elements doc_elements]
     
     if { $source_p } {
         if {[parameter::get_from_package_key \
@@ -532,7 +532,7 @@ ad_proc -public api_proc_documentation {
                  -parameter FancySourceFormattingP \
                  -default 1]} {
             append out [subst {<dt><b>Source code:</b></dt><dd>
-                <pre class="code">[::apidoc::api_tcl_to_html $proc_name]</pre>
+                <pre class="code">[::apidoc::tcl_to_html $proc_name]</pre>
                 </dd><p>
             }]
         } else {
@@ -729,7 +729,7 @@ namespace eval ::apidoc {
         return [ns_quotehtml $readable_xml]
     }
 
-    ad_proc -private api_format_see { see } {
+    ad_proc -public format_see { see } {
         regsub -all {proc *} $see {} see
         set see [string trim $see]
         if {[nsv_exists api_proc_doc $see]} {
@@ -745,7 +745,7 @@ namespace eval ::apidoc {
         return ${see}
     }
 
-    ad_proc -private api_format_author { author_string } {
+    ad_proc -public format_author { author_string } {
         if { [regexp {^[^ \n\r\t]+$} $author_string] 
              && [string first "@" $author_string] >= 0 
              && [string first ":" $author_string] < 0 } {
@@ -756,24 +756,24 @@ namespace eval ::apidoc {
         return $author_string
     }
 
-    ad_proc -private api_format_changelog_list { changelog } {
+    ad_proc -private format_changelog_list { changelog } {
         Format the change log info
     } {
         append out "<dt><b>Changelog:</b>\n"
         foreach change $changelog {
-            append out "<dd>[api_format_changelog_change $change]</dd>\n"
+            append out "<dd>[format_changelog_change $change]</dd>\n"
         }
         return $out
     }
 
-    ad_proc -private api_format_changelog_change { change } {
+    ad_proc -private format_changelog_change { change } {
         Formats the change log line: turns email addresses in parenthesis into links.
     } { 
         regsub {\(([^ \n\r\t]+@[^ \n\r\t]+\.[^ \n\r\t]+)\)} $change {(<a href="mailto:\1">\1</a>)} change
         return $change
     }
 
-    ad_proc -private api_format_author_list { authors } {
+    ad_proc -private format_author_list { authors } {
 
         Generates an HTML-formatted list of authors 
         (including <code>&lt;dt&gt;</code> and
@@ -788,48 +788,48 @@ namespace eval ::apidoc {
         }
         append out "<dt><b>Author[ad_decode [llength $authors] 1 "" "s"]:</b>\n"
         foreach author $authors {
-            append out "<dd>[api_format_author $author]</dd>\n"
+            append out "<dd>[format_author $author]</dd>\n"
         }
         return $out
     }
 
-    ad_proc -private api_format_common_elements { doc_elements_var } {
+    ad_proc -private format_common_elements { doc_elements_var } {
         upvar $doc_elements_var doc_elements
 
         set out ""
 
         if { [info exists doc_elements(author)] } {
-            append out [api_format_author_list $doc_elements(author)]
+            append out [format_author_list $doc_elements(author)]
         }
         if { [info exists doc_elements(creation-date)] } {
             append out "<dt><b>Created:</b>\n<dd>[lindex $doc_elements(creation-date) 0]</dd>\n"
         }
         if { [info exists doc_elements(change-log)] } {
-            append out [api_format_changelog_list $doc_elements(change-log)]
+            append out [format_changelog_list $doc_elements(change-log)]
         }
         if { [info exists doc_elements(cvs-id)] } {
             append out "<dt><b>CVS ID:</b>\n<dd><code>[ns_quotehtml [lindex $doc_elements(cvs-id) 0]]</code></dd>\n"
         }
         if { [info exists doc_elements(see)] } {
-            append out [api_format_see_list $doc_elements(see)]
+            append out [format_see_list $doc_elements(see)]
         }
 
         return $out
     }
 
-    ad_proc -private api_format_see_list { sees } { 
+    ad_proc -private format_see_list { sees } { 
         Generate an HTML list of referenced procs and pages.
     } { 
         append out "<br><strong>See Also:</strong>\n<ul>"
         foreach see $sees { 
-            append out "<li>[api_format_see $see]\n"
+            append out "<li>[format_see $see]\n"
         }
         append out "</ul>\n"
         
         return $out
     }
 
-    ad_proc -private api_first_sentence { string } {
+    ad_proc -private first_sentence { string } {
 
         Returns the first sentence of a string.
 
@@ -840,7 +840,7 @@ namespace eval ::apidoc {
         return $string
     }
 
-    ad_proc -private api_set_public {
+    ad_proc -private set_public {
         version_id
         { public_p "" }
     } {
@@ -922,7 +922,7 @@ namespace eval ::apidoc {
         return $score
     }
 
-    ad_proc -private api_is_xotcl_object {scope proc_name} {
+    ad_proc -private is_xotcl_object {scope proc_name} {
         Checks, whether the specified argument is an xotcl object.
         Does not cause problems when xocl is not loaded.
         @return boolean value
@@ -934,7 +934,7 @@ namespace eval ::apidoc {
         return $result
     }
 
-    ad_proc -private api_tcl_to_html {proc_name} {
+    ad_proc -private tcl_to_html {proc_name} {
 
         Given a proc name, formats it as HTML, including highlighting syntax in
         various colors and creating hyperlinks to other proc definitions.<BR>
@@ -964,7 +964,7 @@ namespace eval ::apidoc {
         set proc_namespace ""
         regexp {^(::)?(.*)::[^:]+$} $proc_name match colons proc_namespace
 
-        return [api_tclcode_to_html -scope $scope -proc_namespace $proc_namespace [api_get_body $proc_name]]
+        return [tclcode_to_html -scope $scope -proc_namespace $proc_namespace [api_get_body $proc_name]]
     }
 
 
@@ -1070,7 +1070,7 @@ namespace eval ::apidoc {
         return "<span class='$kind'>$token</span>"
     }
 
-    ad_proc -private api_tclcode_to_html {{-scope ""} {-proc_namespace ""} script} {
+    ad_proc -public tclcode_to_html {{-scope ""} {-proc_namespace ""} script} {
 
         Given a script, this proc formats it as HTML, including highlighting syntax in
         various colors and creating hyperlinks to other proc definitions.<BR>
@@ -1081,7 +1081,7 @@ namespace eval ::apidoc {
     } {
 
         set script [string trimright $script]
-        template::head::add_style -style $apidoc::style
+        template::head::add_style -style $::apidoc::style
 
         # Keywords will be colored as other procs, but not hyperlinked
         # to api-doc pages.  Perhaps we should hyperlink them to the Tcl man pages?
@@ -1196,8 +1196,8 @@ namespace eval ::apidoc {
                         set procl [length_proc [string range $data $i end]]
                         set proc_name [string range $data $i $i+$procl]
 
-                        if {$proc_name eq "*"} {
-                            append html *
+                        if {$proc_name eq "*" || $proc_name eq "@"} {
+                            append html $proc_name
                         } elseif {$proc_name in $::apidoc::KEYWORDS ||
                             ([regexp {^::(.*)} $proc_name match had_colons] 
                              && $had_colons in $::apidoc::KEYWORDS)} {
@@ -1211,7 +1211,7 @@ namespace eval ::apidoc {
                         } elseif {$proc_name in $XOTCL_KEYWORDS} {
                             append html [pretty_token keyword $proc_name]
 
-                        } elseif {[api_is_xotcl_object $scope $proc_name]} {
+                        } elseif {[is_xotcl_object $scope $proc_name]} {
                             set url [::xotcl::api object_url \
                                          -show_source 1 -show_methods 2 \
                                          $scope $proc_name]
@@ -1277,7 +1277,7 @@ namespace eval ::apidoc {
         return [string range $html 1 end]
     }
 
-    ad_proc -private api_xql_links_list { path } {
+    ad_proc -private xql_links_list { path } {
         
         Returns list of xql files related to tcl script file
         @param path path and filename from $::acs::rootdir

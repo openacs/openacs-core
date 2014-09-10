@@ -31,6 +31,6 @@
       <h4>Content File Source</h4>
 
       <!-- directly display file contents var to avoid translating i18n strings etc -->
-      <pre><%= $file_contents %></pre>
+      <blockquote><pre class='code'>@file_contents;literal@</pre></blockquote>
     </if>
 

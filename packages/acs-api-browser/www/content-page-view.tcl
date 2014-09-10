@@ -64,20 +64,11 @@ if {![file exists $filename] || [file isdirectory $filename]} {
     multirow create xql_links link
 } else {
     if { $source_p } {
-        if {[catch {
-        
-            set fd [open $filename r]
-            set file_contents [read $fd]
-            close $fd
-        
-        } err ]} {
-            set file_contents "error opening '$filename'\n$err"
-        } else {
-            set file_contents [ad_quotehtml $file_contents]
-        }
+	set file_contents [template::util::read_file $filename]
+	set file_contents [apidoc::tclcode_to_html $file_contents]
     }
 
-    template::util::list_to_multirow xql_links [::apidoc::api_xql_links_list $path]
+    template::util::list_to_multirow xql_links [::apidoc::xql_links_list $path]
 }
 
 

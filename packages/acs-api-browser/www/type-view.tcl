@@ -24,7 +24,7 @@ if { ![info exists version_id]
 }
  
 
-set public_p [::apidoc::api_set_public $version_id]
+set public_p [::apidoc::set_public $version_id]
 
 
 set context [list]

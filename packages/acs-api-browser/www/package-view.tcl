@@ -26,7 +26,7 @@ ad_page_contract {
     content_pages:multirow
 }
 
-set public_p [::apidoc::api_set_public $version_id $public_p]
+set public_p [::apidoc::set_public $version_id $public_p]
 
 db_0or1row pretty_name_from_package_id {
     select pretty_name, package_key, version_name
@@ -76,7 +76,7 @@ switch $kind {
             
             if { [nsv_exists api_library_doc $full_path] } {
                 array set doc_elements [nsv_get api_library_doc $full_path]
-                set first_sentence [::apidoc::api_first_sentence [lindex $doc_elements(main) 0]]
+                set first_sentence [::apidoc::first_sentence [lindex $doc_elements(main) 0]]
                 set view procs-file-view
             } else {
                 set first_sentence ""
@@ -106,7 +106,7 @@ switch $kind {
                     continue
                 }
             }
-            multirow append procedures $proc [::apidoc::api_first_sentence [lindex $doc_elements(main) 0]]
+            multirow append procedures $proc [::apidoc::first_sentence [lindex $doc_elements(main) 0]]
         }
     }
     sql_files {
@@ -156,7 +156,7 @@ switch $kind {
                             set type $doc_elements(type)
                         }
                         if { [info exists doc_elements(main)] } {
-                            set first_sentence [::apidoc::api_first_sentence [lindex $doc_elements(main) 0]]
+                            set first_sentence [::apidoc::first_sentence [lindex $doc_elements(main) 0]]
                         }
                     } else {
                         set content_type directory

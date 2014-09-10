@@ -25,9 +25,9 @@ if { ![info exists version_id] &&
 }
 
 if {[info exists version_id]} {
-    set public_p [::apidoc::api_set_public $version_id $public_p]
+    set public_p [::apidoc::set_public $version_id $public_p]
 } else {
-    set public_p [::apidoc::api_set_public "" $public_p]
+    set public_p [::apidoc::set_public "" $public_p]
 }
 
 set dimensional_list {
