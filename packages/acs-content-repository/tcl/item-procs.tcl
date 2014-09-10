@@ -114,11 +114,11 @@ ad_proc -public item::get_revision_content { revision_id args } {
   }
 
   # Get the mime type, decide if we want the text
-  get_mime_info $revision_id
+  content::item::get -item_id $item_id -array_name item_info
 
-  if { [info exists mime_info(mime_type)] 
-       && $mime_info(mime_type) ne "" 
-       && [string match "text/*" $mime_info(mime_type)] 
+  if { [info exists item_info(mime_type)] 
+       && $item_info(mime_type) ne "" 
+       && [string match "text/*" $item_info(mime_type)] 
    } {
       set text_sql [db_map grc_get_all_content_1]
   } else {
@@ -126,7 +126,7 @@ ad_proc -public item::get_revision_content { revision_id args } {
   }
  
   # Get the content type
-  set content_type [::content::item::get_content_type -item_id $item_id]
+  set content_type $item_info(content_type)
 
   # Get the table name
   set table_name [db_string grc_get_table_names ""]
@@ -196,7 +196,7 @@ ad_proc -public item::content_methods_by_type { content_type args } {
 
 
 
-ad_proc -public item::get_mime_info { revision_id {datasource_ref mime_info} } {
+ad_proc -public -deprecated item::get_mime_info { revision_id {datasource_ref mime_info} } {
 
   @public get_mime_info
  
@@ -210,7 +210,7 @@ ad_proc -public item::get_mime_info { revision_id {datasource_ref mime_info} } {
     mime_type and file_extension.
  
   return    1 (one) if the revision exists, 0 (zero) otherwise.
-  @see proc item::get_extended_url
+  @see proc content::item::get
 
 } {
     set sql [db_map gmi_get_mime_info]
@@ -218,7 +218,7 @@ ad_proc -public item::get_mime_info { revision_id {datasource_ref mime_info} } {
     return [uplevel "db_0or1row ignore \"$sql\" -column_array $datasource_ref"]
 }
 
-ad_proc -public item::get_extended_url { item_id args } {
+ad_proc -public -deprecated item::get_extended_url { item_id args } {
 
   Retrieves the relative URL of the item with a file extension based
   on the item's mime_type (Example: "/foo/bar/baz.html"). 
@@ -313,7 +313,7 @@ ad_proc -public item::get_extended_url { item_id args } {
 # but use no direct sql calls.
 #
 #######################################################
-ad_proc -public item::get_element {
+ad_proc -public -deprecated item::get_element {
     {-item_id:required}
     {-element:required}
 } {
@@ -323,10 +323,12 @@ ad_proc -public item::get_element {
     @param item_id The id of the item to get element value for
     @param element The name (column name) of the element. See
                    item::get for valid element names.
+    @see content::item::get
 } {
     ::content::item::get -item_id $item_id -array row
     return $row($element)
 }
+
 ad_proc -public item::publish {
     {-item_id:required}
     {-revision_id ""}
