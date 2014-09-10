@@ -427,7 +427,7 @@ ad_proc -public api_proc_documentation {
     if { $doc_elements(varargs_p) } {
         lappend command_line "\[ <i>args</i>... \]"
     }
-    append out "[util_wrap_list $command_line]\n<blockquote>\n"
+    append out [util_wrap_list $command_line] "\n<blockquote>\n"
     
     if { $script_p } {
         append out [subst {Defined in 
