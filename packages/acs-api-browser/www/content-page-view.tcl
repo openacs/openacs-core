@@ -12,7 +12,7 @@ ad_page_contract {
 } {
     version_id:naturalnum,optional
     source_p:integer,optional,trim
-    path
+    path:trim
 } -properties {
     title:onevalue
     context:onevalue
@@ -29,7 +29,7 @@ if { ![info exists source_p] } {
 }
 
 if { ![info exists version_id] && \
-        [regexp {^packages/([^ /]+)/} $path "" package_key] } {
+        [regexp {^packages/([^ /]+)/} $path . package_key] } {
     db_0or1row version_id_from_package_key {
         select version_id 
           from apm_enabled_package_versions 

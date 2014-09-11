@@ -5,7 +5,8 @@ ad_page_contract {
 } {
     version_id:naturalnum,optional
     { public_p "" }
-    path
+    path:trim
+    source_p:integer,optional,trim
 } -properties {
     title:onevalue
     context:onevalue
@@ -13,6 +14,12 @@ ad_page_contract {
     library_documentation:onevalue
     proc_list:multirow
     proc_doc_list:multirow
+}
+
+set url_vars [export_vars -url {path version_id}]
+set default_source_p [ad_get_client_property -default 0 acs-api-browser api_doc_source_p]
+if { ![info exists source_p] } {
+    set source_p $default_source_p
 }
 
 if { ![info exists version_id] && 

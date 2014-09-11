@@ -105,7 +105,7 @@ ad_proc -public api_read_script_documentation {
         regsub -all {\#.*$} $line "" line
         set line [string trim $line]
         if { $line ne "" } {
-            set has_contract_p [regexp {^ad_page_contract\s} $line]
+            set has_contract_p [regexp {(^ad_page_contract\s)|( initialize )} $line match]
             break
         }
     }
@@ -116,20 +116,25 @@ ad_proc -public api_read_script_documentation {
     } 
 
     doc_set_page_documentation_mode 1
+    #ns_log notice "Sourcing $::acs::rootdir/$path in documentation mode"
     set errno [catch { source "$::acs::rootdir/$path" } error]
     doc_set_page_documentation_mode 0
-    if { $errno == 1 } {
-        if { [regexp {^ad_page_contract documentation} $::errorInfo] } {
+    
+    #
+    # In documentation mode, we expect ad_page_contract (and counterparts)
+    # to break out of sourcing with an error to avoid side-effects of sourcing
+    #
+    if { $errno == 1} {
+        if {[regexp {^ad_page_contract documentation} $::errorInfo] } {
             array set doc_elements $error
         }
-    } else {
-        return -code $errno -errorcode $::errorCode -errorinfo $::errorInfo $error
+        if { [info exists doc_elements] } {
+            return [array get doc_elements]
+        }
+        return [list]
     }
 
-    if { [info exists doc_elements] } {
-        return [array get doc_elements]
-    }
-    return [list]
+    return -code $errno -errorcode $::errorCode -errorinfo $::errorInfo $error
 }
 
 ad_proc -public api_script_documentation {
@@ -928,9 +933,7 @@ namespace eval ::apidoc {
         @return boolean value
     } {
         set result 0
-        if {[string match "::*" $proc_name]} { ;# only check for absolute names
-            catch {set result [::xotcl::api inscope $scope ::xotcl::Object isobject $proc_name]}
-        }
+        catch {set result [::xotcl::api inscope $scope ::xotcl::Object isobject $proc_name]}
         return $result
     }
 

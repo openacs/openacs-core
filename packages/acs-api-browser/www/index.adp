@@ -8,14 +8,13 @@
 
 <div style="float: left; width: 60%;">
 <h3>Installed Enabled Packages</h3>
+
 <ul>
-  
 <multiple name="installed_packages">
   <li><a
    href="package-view?version_id=@installed_packages.version_id@">@installed_packages.pretty_name@
    @installed_packages.version_name@</a></li>
 </multiple>
-
 </ul>
 
 <if @disabled_packages:rowcount@ gt 0>
