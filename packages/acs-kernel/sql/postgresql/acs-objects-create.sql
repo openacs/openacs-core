@@ -1097,11 +1097,6 @@ $$ LANGUAGE plpgsql stable strict;
 
 -- function package_id
 
-select define_function_args('acs_object__object_id','p_object_id');
-
-
-
--- added
 select define_function_args('acs_object__package_id','object_id');
 
 --
