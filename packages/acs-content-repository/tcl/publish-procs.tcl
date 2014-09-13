@@ -1093,7 +1093,7 @@ ad_proc -public publish::write_content { revision_id args } {
 
 	  # Determine if the blob is null. If it is, give up (or else the
 	  # ns_ora blob_get_file will crash).
-	  if { [item::content_is_null $revision_id] } {
+	  if { [content::item::content_is_null $revision_id] } {
 	      ns_log warning "publish::write_content: No content supplied for revision $revision_id"
 	      return ""
 	  }

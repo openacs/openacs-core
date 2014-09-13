@@ -12,7 +12,7 @@
 
 namespace eval item {}
 
-ad_proc -public item::get_content { 
+ad_proc -public -deprecated item::get_content { 
     {-revision_id ""}
     {-array:required}
     {-item_id ""}
@@ -37,8 +37,7 @@ ad_proc -public item::get_content {
   @return 1 on success (and set the array in the calling frame),
     0 on failure 
  
-  @see proc item::get_mime_info 
-  @see proc item::get_content_type
+  @see content::item::get_content
 
 } {
     upvar 1 $array content
@@ -59,7 +58,7 @@ ad_proc -public item::get_content {
     return [item::get_revision_content $revision_id $item_id]
 }
 
-ad_proc -public item::content_is_null { revision_id } {
+ad_proc -public -deprecated item::content_is_null { revision_id } {
 
   @public content_is_null
  
@@ -69,13 +68,15 @@ ad_proc -public item::content_is_null { revision_id } {
  
   @return 1 if the content is null, 0 otherwise
 
+  @see content::item::content_is_null
+
 } {
     set content_test [db_string cin_get_content ""]
 
     return [template::util::is_nil content_test]
 }
 
-ad_proc -public item::get_revision_content { revision_id args } {
+ad_proc -public -deprecated item::get_revision_content { revision_id args } {
 
   @public get_revision_content
  
@@ -94,8 +95,7 @@ ad_proc -public item::get_revision_content { revision_id args } {
   @return 1 on success (and create a content array in the calling frame),
     0 on failure 
  
-  @see proc item::get_mime_info 
-  @see proc item::get_content_type
+  @see content::item::get_revision_content
 
 } {
 
@@ -145,7 +145,7 @@ ad_proc -public item::get_revision_content { revision_id args } {
 }
 
 
-ad_proc -public item::content_methods_by_type { content_type args } {
+ad_proc -public -deprecated item::content_methods_by_type { content_type args } {
 
   @public content_methods_by_type
  
@@ -164,6 +164,7 @@ ad_proc -public item::content_methods_by_type { content_type args } {
     ATS switch for form widgets 
  
   @return A Tcl list of all possible content methods
+  @see content::item::content_methods_by_type
 
 } {
   
@@ -329,7 +330,7 @@ ad_proc -public -deprecated item::get_element {
     return $row($element)
 }
 
-ad_proc -public item::publish {
+ad_proc -public -deprecated item::publish {
     {-item_id:required}
     {-revision_id ""}
 } {
@@ -340,14 +341,12 @@ ad_proc -public item::publish {
     @param revision_id The id of the revision to publish. Defaults to the latest revision.
 
     @author Peter Marklund
+    @see content::item::publish
 } {
-    if { $revision_id eq "" } {
-      set revision_id [::content::item::get_latest_revision -item_id $item_id]
-    }
-    ::content::item::set_live_revision -revision_id $revision_id -publish_status "live"
+    ::content::item::unpublish -item_id $item_id -revision_id $revision_id
 }
 
-ad_proc -public item::unpublish {
+ad_proc -public -deprecated item::unpublish {
     {-item_id:required}
     {-publish_status "production"}
 } {
@@ -357,9 +356,9 @@ ad_proc -public item::unpublish {
     @param publish_status The publish_status to put the item in after unpublishing it.
 
     @author Peter Marklund
+    @see content::item::unpublish
 } {
-  ::content::item::set_live_revision -item_id $item_id
-  ::content::item::update -item_id $item_id -attributes [list [list publish_status $publish_status]]
+  ::content::item::unpublish -item_id $item_id -publish_status $publish_status
 }
 
 #######################################################
