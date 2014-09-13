@@ -14,15 +14,11 @@ create or replace view content_item_globals as
 select -100 as c_root_folder_id;
 
 
--- old define_function_args('content_item__get_root_folder','item_id')
--- new
-select define_function_args('content_item__get_root_folder','item_id;null');
-
-
-
 --
 -- procedure content_item__get_root_folder/1
 --
+select define_function_args('content_item__get_root_folder','item_id;null');
+
 CREATE OR REPLACE FUNCTION content_item__get_root_folder(
    get_root_folder__item_id integer -- default null
 
