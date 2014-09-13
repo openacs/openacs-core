@@ -676,7 +676,7 @@ ad_proc -deprecated -public template::util::multirow_foreach { name code_text } 
   
 }
 
-ad_proc -public template::util::get_param { 
+ad_proc -deprecated -public template::util::get_param { 
     name 
     {section ""} 
     {key ""} 
@@ -714,7 +714,7 @@ ad_proc -public template::util::get_param {
   }
 }
 
-ad_proc -public template::util::set_param { name value } {
+ad_proc -public -deprecated  template::util::set_param { name value } {
     Set a stored parameter
 } {
   nsv_set __template_config $name $value
