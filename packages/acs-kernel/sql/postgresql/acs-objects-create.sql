@@ -659,7 +659,7 @@ comment on table acs_static_attr_values is '
 -- ACS_OBJECT PACKAGE --
 ------------------------
 
-select define_function_args('acs_object__initialize_attributes','initialize_attributes__object_id');
+select define_function_args('acs_object__initialize_attributes','object_id');
 
 
 
@@ -1000,7 +1000,7 @@ $$ LANGUAGE plpgsql;
 
 
 -- function name
-select define_function_args('acs_object__name','name__object_id');
+select define_function_args('acs_object__name','object_id');
 
 
 
@@ -1070,7 +1070,7 @@ $$ LANGUAGE plpgsql stable strict;
 
 -- function default_name
 
-select define_function_args('acs_object__default_name','default_name__object_id');
+select define_function_args('acs_object__default_name','object_id');
 
 
 
@@ -1439,7 +1439,7 @@ $$ LANGUAGE plpgsql;
 
 -- function check_context_index
 
-select define_function_args('acs_object__check_context_index','check_context_index__object_id,check_context_index__ancestor_id,check_context_index__n_generations');
+select define_function_args('acs_object__check_context_index','object_id,ancestor_id,n_generations');
 
 
 
@@ -1628,7 +1628,7 @@ $$ LANGUAGE plpgsql;
 
 
 -- function check_path
-select define_function_args('acs_object__check_path','check_path__object_id,check_path__ancestor_id');
+select define_function_args('acs_object__check_path','object_id,ancestor_id');
 
 
 
@@ -1677,7 +1677,7 @@ $$ LANGUAGE plpgsql stable;
 
 -- function check_representation
 
-select define_function_args('acs_object__check_representation','check_representation__object_id');
+select define_function_args('acs_object__check_representation','object_id');
 
 
 
@@ -1777,8 +1777,6 @@ $$ LANGUAGE plpgsql;
 
 
 
--- added
-
 --
 -- procedure acs_object__update_last_modified/3
 --
@@ -1795,8 +1793,7 @@ $$ LANGUAGE plpgsql;
 
 
 
--- added
-select define_function_args('acs_object__update_last_modified','update_last_modified__object_id,update_last_modified__modifying_user,update_last_modified__modifying_ip,update_last_modified__last_modified;now()');
+select define_function_args('acs_object__update_last_modified','object_id,modifying_user,modifying_ip,last_modified;now()');
 
 --
 -- procedure acs_object__update_last_modified/4
