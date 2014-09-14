@@ -17,11 +17,11 @@ ad_page_contract {
 }
 
 set url_vars [export_vars -url {path version_id}]
+set return_url [ns_urlencode [ad_conn url]?][ns_urlencode $url_vars]
 set default_source_p [ad_get_client_property -default 0 acs-api-browser api_doc_source_p]
 if { ![info exists source_p] } {
     set source_p $default_source_p
 }
-
 if { ![info exists version_id] && 
      [regexp {^packages/([^ /]+)/} $path "" package_key] } {
     db_0or1row version_id_from_package_key {
@@ -30,6 +30,22 @@ if { ![info exists version_id] &&
 	where package_key = :package_key
     }
 }
+
+if {![file readable $::acs::rootdir/$path] || [file isdirectory $::acs::rootdir/$path]} {
+    if {[info exists version_id]} {
+	set kind procs
+	set href [ad_conn package_url]/package-view?[export_vars {version_id {kind procs}}]
+	set link [subst {<p>Go back to <a href="$href">Package Documentation</a>.}]
+    } else {
+	set link [subst {<p>Go back to <a href="[ad_conn package_url]">API Browser</a>.}]
+    }
+    ad_return_warning "No such library file" [subst {
+	The file '$path' was not found. Maybe the url contains a typo.
+	$link
+    }]
+    return
+}
+
 
 if {[info exists version_id]} {
     set public_p [::apidoc::set_public $version_id $public_p]
@@ -88,4 +104,9 @@ if { [nsv_exists api_proc_doc_scripts $path] } {
         }
         multirow append proc_doc_list [api_proc_documentation $proc]
     }
+}
+
+if { $source_p } {
+   set file_contents [template::util::read_file $::acs::rootdir/$path]
+   set file_contents [apidoc::tclcode_to_html $file_contents]
 }
