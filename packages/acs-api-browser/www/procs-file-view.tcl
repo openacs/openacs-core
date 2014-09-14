@@ -31,6 +31,7 @@ if { ![info exists version_id] &&
     }
 }
 
+set path [apidoc::sanitize_path $path]
 if {![file readable $::acs::rootdir/$path] || [file isdirectory $::acs::rootdir/$path]} {
     if {[info exists version_id]} {
 	set kind procs

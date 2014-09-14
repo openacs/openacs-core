@@ -1285,7 +1285,6 @@ namespace eval ::apidoc {
         Returns list of xql files related to tcl script file
         @param path path and filename from $::acs::rootdir
         
-        
     } {
         
         set linkList [list]
@@ -1309,6 +1308,35 @@ namespace eval ::apidoc {
         }
 
         return $linkList
+    }
+
+    ad_proc -private sanitize_path { {-prefix packages} path } {
+        
+        Return a sanitized path. Cleans path from directory traversal
+        attacks and checks, if someone tries to access content outside
+        of the specified prefix.
+        
+        @return sanitized path
+    } {
+
+        if {[regsub -all {[.][.]/} $path "" shortened_path]} {
+            set filename "$::acs::rootdir/$path"
+            ns_log notice [subst {INTRUDER ALERT:\n\nsomesone tried to snarf '$filename'!
+                file exists: [file exists $filename] user_id: [ad_conn user_id] peer: [ad_conn peeraddr]
+            }]
+            set path $shortened_path
+        }
+
+        if {![string match "$prefix/*" $path]} {
+            set filename "$::acs::rootdir/$path"
+            ns_log notice [subst {INTRUDER ALERT:\n\nsomesone tried to snarf '$filename'!
+                file exists: [file exists $filename] user_id: [ad_conn user_id] peer: [ad_conn peeraddr]
+            }]
+
+            set path $prefix/$path
+        }
+
+        return $path
     }
 }
 
@@ -1341,7 +1369,6 @@ ad_proc api_proc_link { proc } {
 } {
     return "<a href=\"[api_proc_url $proc]\">$proc</a>"
 }
-
 
 
 #

@@ -48,28 +48,30 @@ if { [info exists version_id] } {
     }
 }
 
-
-
 lappend context [file tail $path]
+set path [apidoc::sanitize_path $path]
 
-set filename "$::acs::rootdir/$path"
-
-if {[regsub -all {[.][.]/} $filename "" shortened_filename]} {
-    ns_log notice "INTRUDER ALERT:\n\nsomesone tried to snarf '$filename'!\n  file exists: [file exists $filename]\n  user_id: [ad_conn user_id]\n  peer: [ad_conn peeraddr]\n"
-    set filename shortened_filename
-}
-
-if {![file exists $filename] || [file isdirectory $filename]} {
-    set file_contents "file '$filename' not found"
-    multirow create xql_links link
-} else {
-    if { $source_p } {
-	set file_contents [template::util::read_file $filename]
-	set file_contents [apidoc::tclcode_to_html $file_contents]
+if {![file readable $::acs::rootdir/$path] || [file isdirectory $::acs::rootdir/$path]} {
+    if {[info exists version_id]} {
+	set kind content
+	set href [ad_conn package_url]/package-view?[export_vars {version_id {kind procs}}]
+	set link [subst {<p>Go back to <a href="$href">Package Documentation</a>.}]
+    } else {
+	set link [subst {<p>Go back to <a href="[ad_conn package_url]">API Browser</a>.}]
     }
-
-    template::util::list_to_multirow xql_links [::apidoc::xql_links_list $path]
+    ad_return_warning "No such content page" [subst {
+	The file '$path' was not found. Maybe the url contains a typo.
+	$link
+    }]
+    return
 }
+
+if { $source_p } {
+    set file_contents [template::util::read_file $$::acs::rootdir/$path]
+    set file_contents [apidoc::tclcode_to_html $file_contents]
+}
+
+template::util::list_to_multirow xql_links [::apidoc::xql_links_list $path]
 
 
 set title [file tail $path]
