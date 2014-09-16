@@ -67,7 +67,7 @@ if {![file readable $::acs::rootdir/$path] || [file isdirectory $::acs::rootdir/
 }
 
 if { $source_p } {
-    set file_contents [template::util::read_file $$::acs::rootdir/$path]
+    set file_contents [template::util::read_file $::acs::rootdir/$path]
     set file_contents [apidoc::tclcode_to_html $file_contents]
 }
 
