@@ -6,9 +6,7 @@
 <master>
 
 <body>
-<h2>Subject Keywords (Categories)</h2><b>
-<a href="../index.html">Content Repository</a> : Developer
-Guide</b><hr><h3>Overview</h3><p>
+<h2>Subject Keywords (Categories)</h2><hr><h3>Overview</h3><p>
 <em>Subject Keywords</em> are used to implement categorization
 for the Content Management system. A Subject Keyword is a small
 label, such as "Oracle Documentation" or "My Favorite Foods", which

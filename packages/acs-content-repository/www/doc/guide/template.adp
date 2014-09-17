@@ -6,9 +6,7 @@ Templates</property>
 <master>
 
 <body>
-<h2>Applying Templates</h2><b>
-<a href="../index.html">Content Repository</a> : Developer
-Guide</b><hr><p>The content repository allows you to associate templates with
+<h2>Applying Templates</h2><p>The content repository allows you to associate templates with
 both content types and individual content items. A template
 determines how a content item is rendered when exported to the file
 system or served directly to a client.</p><p>The content repository does not make any assumptions about the

@@ -6,9 +6,7 @@ Relationships</property>
 <master>
 
 <body>
-<h2>Object Relationships</h2><b>
-<a href="../index.html">Content Repository</a> : Developer
-Guide</b><hr><p>Many applications of the content repository require that content
+<h2>Object Relationships</h2><p>Many applications of the content repository require that content
 items be related to each other as well as to other classes of
 objects. Examples include:</p><ul>
 <li>News stories may be linked to other stories on the same

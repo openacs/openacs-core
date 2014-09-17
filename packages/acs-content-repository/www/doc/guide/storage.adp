@@ -4,7 +4,7 @@
 <master>
 
 <body>
-<h2>Storing Data in the Content Repository</h2><hr><p>This document provides an introduction to using the content
+<h2>Storing Data in the Content Repository</h2><p>This document provides an introduction to using the content
 repository for storing data (binary or text files) and associated
 attributes. It describes how to store user portraits as an
 example.</p><h3>Define an Item Type</h3><p>The first step towards using the content repository is to define

@@ -4,9 +4,7 @@
 <master>
 
 <body>
-<h2>Applying Workflow to Content Items</h2><b>
-<a href="../index.html">Content Repository</a> : Developer
-Guide</b><hr><p>This document describes the workflow API calls necessary to
+<h2>Applying Workflow to Content Items</h2><p>This document describes the workflow API calls necessary to
 apply a simple workflow to a content item.</p><h3>Workflow Description</h3><p>Most publishers wish to follow some variation of the following
 workflow:</p><table border="1" cellspacing="0" cellpadding="4">
 <tr bgcolor="#CCCCCC">

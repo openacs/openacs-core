@@ -4,7 +4,7 @@
 <master>
 
 <body>
-<h2>Object Model</h2><b><a href="index">Content Repository</a></b><hr><p>The content repository is an extension of the ACS Object Model.
+<h2>Object Model</h2><p>The content repository is an extension of the ACS Object Model.
 The following diagram illustrates the relationship among the
 standard object types defined by the content repository (click on a
 box to view a description and API summary for a particular object

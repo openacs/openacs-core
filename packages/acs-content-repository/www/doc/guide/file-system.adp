@@ -6,8 +6,7 @@ Items</property>
 <master>
 
 <body>
-<h2>Organizing Content Items</h2><b>
-<a href="/doc">ACS Documentation</a> : <a href="../index.html">Content Repository</a> : Developer Guide</b><hr><p>The content repository organizes content items in a hierarchical
+<h2>Organizing Content Items</h2><p>The content repository organizes content items in a hierarchical
 structure similar to a file system. You manage content items in the
 repository using the same basic operations as in a file system:</p><ul>
 <li>A freshly installed content repository consists of a single

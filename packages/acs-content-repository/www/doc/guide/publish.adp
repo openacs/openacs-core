@@ -6,9 +6,7 @@ Content</property>
 <master>
 
 <body>
-<h2>Publishing Content</h2><b>
-<a href="../index.html">Content Repository</a> : Developer
-Guide</b><hr><p>The content repository does not place any restrictions on the
+<h2>Publishing Content</h2><p>The content repository does not place any restrictions on the
 methods employed for delivering content via a public server
 infrastructure. Applications are free to query the repository and
 process the data in any way desired.</p><p>Although there are no restrictions on publishing methodology,

@@ -5,7 +5,7 @@
 
 <body>
 <h2>Content Repository Requirements</h2>
-Karl Goldstein (<a href="mailto:karlg@arsdigita.com">karlg@arsdigita.com</a>)<br><a href="#history">Revision History</a><hr><h3>VI.A Requirements: Data Model</h3><p><a name="item" id="item"><b>5.0 MIME Types</b></a></p><p>The content repository must be able to store objects in any
+Karl Goldstein (<a href="mailto:karlg@arsdigita.com">karlg@arsdigita.com</a>)<br><a href="#history">Revision History</a><h3>VI.A Requirements: Data Model</h3><p><a name="item" id="item"><b>5.0 MIME Types</b></a></p><p>The content repository must be able to store objects in any
 format, both text and binary. MIME types provide a standard set of
 codes for identifying the file format of each content item. For the
 purpose of data integrity, the repository must have a canonical

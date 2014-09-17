@@ -4,9 +4,7 @@
 <master>
 
 <body>
-<h2>Content Repository Design</h2><b>
-<a href="/doc">ACS Documentation</a> : <a href="index">Content Repository</a>
-</b><hr><h3>I. Essentials</h3><ul><li><a href="requirements">Feature Requirements
+<h2>Content Repository Design</h2><h3>I. Essentials</h3><ul><li><a href="requirements">Feature Requirements
 Document</a></li></ul><h3>II. Introduction</h3><p>Serving <em>content</em> is a basic function of any web site.
 Common types of content include:</p><ul>
 <li>Journal articles and stories</li><li>Documentation</li><li>News reports</li><li>Product reviews</li><li>Press releases</li><li>Message board postings</li><li>Photographs</li>

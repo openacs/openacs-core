@@ -4,7 +4,7 @@
 <master>
 
 <body>
-<h2>Installing the Content Repository</h2><b><a href="index">Content Repository</a></b><hr><p>The content repository is a part of the core data model of ACS
+<h2>Installing the Content Repository</h2><p>The content repository is a part of the core data model of ACS
 4.0 and greater, and is loaded automatically as part of the ACS
 installation process.</p><p>If you wish to install the content repository in a database
 schema outside the context of ACS, the following instructions

@@ -4,7 +4,7 @@
 <master>
 
 <body>
-<h2>Testing Intermedia</h2><b><a href="index">Content Repository</a></b><hr><p>Even if you follow the instructions in the <a href="install">installation notes</a>, content searches may
+<h2>Testing Intermedia</h2><p>Even if you follow the instructions in the <a href="install">installation notes</a>, content searches may
 inexplicably fail to work. This document describes how to create a
 simple test case independent of the content repository to verify
 that Intermedia is indeed functioning properly.</p><h3>Create a document table</h3><p>Create a simple table to hold some test documents:</p><pre>

@@ -4,9 +4,7 @@
 <master>
 
 <body>
-<h2>Converting Binary Documents to HTML</h2><b>
-<a href="../index.html">Content Repository</a> : Developer
-Guide</b><hr><p>The content repository uses the INSO libraries included with
+<h2>Converting Binary Documents to HTML</h2><p>The content repository uses the INSO libraries included with
 Intermedia to support conversion of binary files such as Microsoft
 Word documents to HTML. This document describes how to make this
 conversion be part of the item creation or editing process, such

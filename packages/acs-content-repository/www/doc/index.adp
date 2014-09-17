@@ -4,7 +4,7 @@
 <master>
 
 <body>
-<h2>ACS Content Repository</h2><b><a href="/doc">ACS Documentation</a></b><hr><ul>
+<h2>ACS Content Repository</h2><ul>
 <li><a href="design">Introduction</a></li><li><a href="install">Installation</a></li><li><a href="tutorial">Tutorial</a></li><li><a href="object-model">Object Model</a></li><li>
 <p>Developer Guide</p><ul>
 <li><a href="guide/types">Designing content types</a></li><li><a href="guide/items">Creating content items</a></li><li><a href="guide/revisions">Adding revisions to content

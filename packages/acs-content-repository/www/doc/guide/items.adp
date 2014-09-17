@@ -6,9 +6,7 @@ Items</property>
 <master>
 
 <body>
-<h2>Creating Content Items</h2><b>
-<a href="../index.html">Content Repository</a> : Developer
-Guide</b><hr><h3>Use the Content Item API to create the item</h3><p>Content items are initialized using the
+<h2>Creating Content Items</h2><h3>Use the Content Item API to create the item</h3><p>Content items are initialized using the
 <tt>content_item.new</tt> function. A name is the only parameter
 required to create an item:</p><pre>
 item_id := content_item.new( name =&gt; 'my_item' );

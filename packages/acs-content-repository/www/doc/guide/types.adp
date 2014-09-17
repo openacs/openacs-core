@@ -6,9 +6,7 @@ Types</property>
 <master>
 
 <body>
-<h2>Defining Content Types</h2><b>
-<a href="../index.html">Content Repository</a> : Developer
-Guide</b><hr><p>The content repository requires you to define each type of
+<h2>Defining Content Types</h2><p>The content repository requires you to define each type of
 content supported by your supplication. Content types are defined
 as <a href="?">ACS Object Types</a>, and may be created in the same
 fashion as any other object type. This page provides some specific

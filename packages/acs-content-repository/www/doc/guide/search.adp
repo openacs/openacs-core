@@ -4,9 +4,7 @@
 <master>
 
 <body>
-<h2>Search</h2><b>
-<a href="../index.html">Content Repository</a> : Developer
-Guide</b><hr><p>The content repository provides a consistent sitewide interface
+<h2>Search</h2><p>The content repository provides a consistent sitewide interface
 for searching content. It uses Intermedia to index the
 <tt>content</tt> column of <tt>cr_revisions</tt>) as well as all
 the attribute columns for each content type.</p><h3>Searching Content</h3><p>The <tt>content</tt> column in <tt>cr_revisions</tt> may contain

@@ -4,7 +4,7 @@
 <master>
 
 <body>
-<h2>Uninstalling the Content Repository</h2><b><a href="index">Content Repository</a></b><hr><p>The content repository includes an uninstall script,
+<h2>Uninstalling the Content Repository</h2><p>The content repository includes an uninstall script,
 <tt>sql/content-drop.sql</tt>. This script does two things:</p><ol>
 <li>Drops the attribute storage tables for all content types you
 have defined.</li><li>Drops the general tables for the content repository.</li>

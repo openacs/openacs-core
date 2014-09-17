@@ -6,8 +6,7 @@ Revisions</property>
 <master>
 
 <body>
-<h2>Creating Content Revisions</h2><b>
-<a href="/doc">ACS Documentation</a> : <a href="../index.html">Content Repository</a> : Developer Guide</b><hr><p>At a basic level, creating a new revision of a content item
+<h2>Creating Content Revisions</h2><p>At a basic level, creating a new revision of a content item
 involves the following steps:</p><ol>
 <li>Insert a row in the <tt>acs_objects</tt> table to create the
 object.</li><li>Insert a corresponding row in the <tt>cr_revisions</tt> table
