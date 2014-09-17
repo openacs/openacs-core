@@ -43,11 +43,11 @@
   <msg key="lt_name_is_not_a_natural">%name% sien daar nie uit nie as 'n natuurlike getal, dat is, 'n geheel getal groter as 0. </msg>
   <msg key="lt_name_is_not_a_valid_S">%name% is geen geldig SQL-simbool</msg>
   <msg key="lt_name_is_not_an_intege">%naam% is geen geheel getal nie</msg>
-  <msg key="lt_name_is_not_in_the_ra">%name% sit nie in die bereik \[%min%..%max%\] nie</msg>
-  <msg key="lt_name_is_too_long__Ple">%name% is te lang. Geef assublief 'n waarde van maximaal [lindex $range 1] tekens lang in. De waarde die u ingegeef het was [string length $value] tekens lang.</msg>
-  <msg key="lt_name_is_too_long__Ple_1">%name% is te lang. Geef assublief 'n waarde in van maximaal [lindex $length 1] tekens lang. Die waarde wat u ingegeef het was [string length $value] tekens lang.</msg>
-  <msg key="lt_name_is_too_short__Pl">%name% is te kort. Geef assublief 'n waarde van minimaal [lindex $range 0] tekens lang in. Die waarde wat u ingegeef het was [string length $value] tekens lang.</msg>
-  <msg key="lt_name_is_too_short__Pl_1">%name% is te kort. Geef assublief 'n waarde van minimaal [lindex $length 1] tekens lang in. Die waarde wat u ingegeef het was [string length $value] tekens lang.</msg>
+  <msg key="lt_name_is_not_in_the_ra">%name% sit nie in die bereik [%min%..%max%] nie</msg>
+  <msg key="lt_name_is_too_long__Ple">%name% is te lang. Geef assublief 'n waarde van maximaal %max_length% tekens lang in. De waarde die u ingegeef het was %actual_length% tekens lang.</msg>
+  <msg key="lt_name_is_too_long__Ple_1">%name% is te lang. Geef assublief 'n waarde in van maximaal %max_length% tekens lang. Die waarde wat u ingegeef het was %actual_length% tekens lang.</msg>
+  <msg key="lt_name_is_too_short__Pl">%name% is te kort. Geef assublief 'n waarde van minimaal %min_length% tekens lang in. Die waarde wat u ingegeef het was %actual_length% tekens lang.</msg>
+  <msg key="lt_name_is_too_short__Pl_1">%name% is te kort. Geef assublief 'n waarde van minimaal %min_length% tekens lang in. Die waarde wat u ingegeef het was %actual_length% tekens lang.</msg>
   <msg key="lt_NB_This_error_was_sub">Deze fout is ingestuur</msg>
   <msg key="lt_Please_back_up_using_">Gaan met u blaaier terug na die vorige bladsy en korrigeer die bostaande</msg>
   <msg key="lt_Problem_with_a_Page_o">Probleem met bladsy (kan door uw invoer veroorzaak wees)</msg>

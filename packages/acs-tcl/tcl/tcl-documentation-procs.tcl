@@ -1550,6 +1550,8 @@ ad_page_contract_filter naturalnum { name value } {
 ad_page_contract_filter range { name value range } {
     Checks whether the value falls between the specified range.
     Range must be a list of two elements: min and max.
+    Example spec:     w:range(3|7)
+
 
     @author Yonatan Feldman (yon@arsdigita.com)
     @creation-date August 18, 2000
@@ -1795,11 +1797,14 @@ ad_page_contract_filter string_length_range { name value range} {
     @author Randy Beggs (randyb@arsdigita.com)
     @creation-date August 2000
 } {
-    if { [string length $value] < [lindex $range 0] } {
-	ad_complain "[_ acs-tcl.lt_name_is_too_short__Pl]"
+    set actual_length [string length $value]
+    if { $actual_length < [lindex $range 0] } {
+	set binding [list name $name actual_length $actual_length min_length [lindex $range 0]]
+	ad_complain [_ acs-tcl.lt_name_is_too_short__Pl $binding]
 	return 0
-    } elseif { [string length $value] > [lindex $range 1] } {
-	ad_complain "[_ acs-tcl.lt_name_is_too_long__Ple]"
+    } elseif { $actual_length > [lindex $range 1] } {
+	set binding [list name $name actual_length $actual_length max_length [lindex $range 1]]
+	ad_complain [_ acs-tcl.lt_name_is_too_long__Ple $binding]
 	return 0
     }
     return 1
@@ -1814,14 +1819,17 @@ ad_page_contract_filter string_length { name value length } {
     @author Randy Beggs (randyb@arsdigita.com)
     @creation-date August 2000
 } {
+    set actual_length [string length $value]
     if { [lindex $length 0] eq "min" } {
-	if { [string length $value] < [lindex $length 1] } {
-	    ad_complain "[_ acs-tcl.lt_name_is_too_short__Pl_1]"
+	if { $actual_length < [lindex $length 1] } {
+	    set binding [list name $name actual_length $actual_length min_length [lindex $length 1]]
+	    ad_complain [_ acs-tcl.lt_name_is_too_short__Pl_1]
 	    return 0
 	}
     } else {
-	if { [string length $value] > [lindex $length 1] } {
-	    ad_complain "[_ acs-tcl.lt_name_is_too_long__Ple_1]"
+	if { $actual_length > [lindex $length 1] } {
+	    set binding [list name $name actual_length $actual_length max_length [lindex $length 1]]
+	    ad_complain [_ acs-tcl.lt_name_is_too_long__Ple_1 $binding]
 	    return 0
 	}
     }
