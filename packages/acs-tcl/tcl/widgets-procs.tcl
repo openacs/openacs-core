@@ -4,11 +4,12 @@ ad_library {
     @cvs-id $Id$
 }
 
-ad_proc state_widget { 
+ad_proc us_state_widget { 
     {default ""} 
     {select_name "usps_abbrev"}
 } {
-    Returns a state selection box
+    Returns a state selection box.
+    This widget depends on the ref-us-states package.
 } {
     set widget_value "<select name=\"$select_name\">\n"
     if { $default eq "" } {
@@ -31,13 +32,14 @@ ad_proc state_widget {
 ad_proc country_widget { 
     {default ""} 
     {select_name "country_code"} 
-    {size_subtag "size=4"}
+    {size_subtag "size='4'"}
 } {
-    Returns a country selection box
+    Returns a country selection box.
+    This widget depends on the ref-countries package.
 } {
     set widget_value "<select name=\"$select_name\" $size_subtag>\n"
     if { $default eq "" } {
-        if { [parameter::get -parameter SomeAmericanReadersP] } {
+        if { [parameter::get -parameter SomeAmericanReadersP -package_id [ad_conn subsite_id] -default 0] } {
 	    append widget_value "<option value=\"\">Choose a Country</option>
 <option value=\"us\" selected=\"selected\">United States</option>\n"
 	} else {
