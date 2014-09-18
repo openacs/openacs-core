@@ -161,7 +161,13 @@ ad_proc -public api_script_documentation {
         append out "<blockquote>DB Query file</blockquote>\n"
         return $out
     } elseif { [file extension $path] ne ".tcl" } {
-        append out "<blockquote><i>Delivered as [ns_guesstype $path]</i></blockquote>\n"
+        set mime_type [ns_guesstype $path]
+        if {[string match image/* $mime_type] && [regexp {packages/(.*)/www/resources/(.*)$} $path . pkg name]} {
+            set preview "<p><img src='/resources/$pkg/$name'>"
+        } else {
+            set preview ""
+        }
+        append out "<blockquote><i>Delivered as $mime_type</i>$preview</blockquote>\n"
         return $out
     }
 

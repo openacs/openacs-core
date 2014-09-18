@@ -13,6 +13,7 @@
     </ul>
   </if>
 
+<if @source_link@ ne 0>
   <p>
     <if @source_p@ eq 0>
       [ <a href="content-page-view?@url_vars@&amp;source_p=1">show source</a> ]
@@ -33,4 +34,4 @@
       <!-- directly display file contents var to avoid translating i18n strings etc -->
       <blockquote><pre class='code'>@file_contents;literal@</pre></blockquote>
     </if>
-
+</if>

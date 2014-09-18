@@ -66,6 +66,13 @@ if {![file readable $::acs::rootdir/$path] || [file isdirectory $::acs::rootdir/
     return
 }
 
+set mime_type [ns_guesstype $path]
+if {![string match "text/*" $mime_type]} {
+    set source_p 0
+    set source_link 0
+} else {
+    set source_link 1
+}
 if { $source_p } {
     set file_contents [template::util::read_file $::acs::rootdir/$path]
     set file_contents [apidoc::tclcode_to_html $file_contents]
