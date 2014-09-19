@@ -20,14 +20,15 @@ if {[ns_server connections] == 0} {
   ns_register_filter trace GET /repository/* repository-download
 
   if {[info commands ::xo::db::require] ne ""} {
-      ::xo::db::require table apm_package_downloads \
-	  "time     timestamp,
-           ip       text,
-           user_id  integer,
-           channel  text, 
-           package  text,
-           version  text,
-           url      text"
+      ::xo::db::require table apm_package_downloads {
+	  time     timestamp
+	  ip       text
+	  user_id  integer
+	  channel  text
+	  package  text
+	  version  text
+	  url      text
+      }
 
       ad_proc ::repository_log_to_db {} {
 	  set ip [ns_conn peeraddr]
