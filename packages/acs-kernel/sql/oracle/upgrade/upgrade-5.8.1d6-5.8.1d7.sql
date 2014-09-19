@@ -1,13 +1,3 @@
---
--- /packages/acs-kernel/sql/utilities-create.sql
---
--- Useful PL/SQL utility routines.
---
--- @author Jon Salz (jsalz@mit.edu)
--- @creation-date 12 Aug 2000
--- @cvs-id $Id$
---
-
 create or replace package util
 as
     function multiple_nextval(
