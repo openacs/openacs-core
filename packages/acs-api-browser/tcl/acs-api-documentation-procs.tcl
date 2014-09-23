@@ -1235,7 +1235,8 @@ namespace eval ::apidoc {
                         } elseif {[string match "*__arg_parser" $proc_name]} {
                             append html [pretty_token helper $proc_name]
 
-                        } elseif {[info commands ::${proc_namespace}::${proc_name}] ne ""}  {
+                        } elseif {$proc_namespace ne "" 
+                                  && [info commands ::${proc_namespace}::${proc_name}] ne ""}  {
                             set url [api_proc_url ${proc_namespace}::${proc_name}]
                             append html "<a href='$url' title='API command'>" \
                                 [pretty_token proc $proc_name] </a>
