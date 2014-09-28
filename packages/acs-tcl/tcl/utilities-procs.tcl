@@ -10,6 +10,43 @@ ad_library {
 
 namespace eval util {}
 
+ad_proc util::zip_file {
+    -source:required
+    -destination:required
+} {
+    Create a zip file.
+    If source is a directory, archive will contain all files into directory without the trailing directory itself.
+} {
+    set cmd [list exec]
+    switch $::tcl_platform(platform) {
+      windows {
+	lappend cmd cmd.exe /c
+      }
+      default {
+	lappend cmd bash -c
+      }
+    }
+    if {[file isfile $source]} {
+      set filename [file tail $source]
+      set in_path  [file dirname $source]
+    } else {
+      set filename "."
+      set in_path  $source
+    }
+    # To avoid having the full path of the file included in the archive,
+    # we must first cd to the source directory. zip doesn't have an option
+    # to do this without building a little script...
+    set zip_cmd [list]
+    lappend zip_cmd "cd $in_path"
+    lappend zip_cmd "zip -r \"${destination}\" \"${filename}\""
+    set zip_cmd [join $zip_cmd " && "]
+    
+    lappend cmd $zip_cmd
+    
+    # create the archive
+    {*}$cmd
+}
+
 # Let's define the nsv arrays out here, so we can call nsv_exists
 # on their keys without checking to see if it already exists.
 # we create the array by setting a bogus key.
