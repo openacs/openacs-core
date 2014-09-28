@@ -17,6 +17,10 @@ ad_proc util::zip_file {
     Create a zip file.
     If source is a directory, archive will contain all files into directory without the trailing directory itself.
 } {
+    set zip [util::which zip]
+    if {$zip eq ""} {
+      error "zip command not found on the system."
+    }
     set cmd [list exec]
     switch $::tcl_platform(platform) {
       windows {
@@ -38,7 +42,7 @@ ad_proc util::zip_file {
     # to do this without building a little script...
     set zip_cmd [list]
     lappend zip_cmd "cd $in_path"
-    lappend zip_cmd "zip -r \"${destination}\" \"${filename}\""
+    lappend zip_cmd "${zip} -r \"${destination}\" \"${filename}\""
     set zip_cmd [join $zip_cmd " && "]
     
     lappend cmd $zip_cmd
