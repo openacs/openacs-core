@@ -15,7 +15,11 @@ ad_proc util::zip_file {
     -destination:required
 } {
     Create a zip file.
-    If source is a directory, archive will contain all files into directory without the trailing directory itself.
+    
+    @param source is the content to be zipped. If it is a directory, archive will 
+    contain all files into directory without the trailing directory itself.
+    
+    @param destination is the name of the created file
 } {
     set zip [util::which zip]
     if {$zip eq ""} {
@@ -23,12 +27,8 @@ ad_proc util::zip_file {
     }
     set cmd [list exec]
     switch $::tcl_platform(platform) {
-      windows {
-	lappend cmd cmd.exe /c
-      }
-      default {
-	lappend cmd bash -c
-      }
+      windows {lappend cmd cmd.exe /c}
+      default {lappend cmd bash -c}
     }
     if {[file isfile $source]} {
       set filename [file tail $source]
@@ -48,6 +48,25 @@ ad_proc util::zip_file {
     lappend cmd $zip_cmd
     
     # create the archive
+    {*}$cmd
+}
+
+ad_proc util::unzip_file {
+    -source:required
+    -destination:required
+    -overwrite:boolean
+} { 
+    @param source must be the name of a valid zip file to be decompressed
+    
+    @param destination must be the name of a valid directory to contain decompressed files
+} {
+    set unzip [util::which unzip]
+    if {$unzip eq ""} {error "unzip command not found on the system."}
+    # -n means we don't overwrite existing files
+    set cmd [list exec $unzip]
+    if {$overwrite_p} {lappend cmd -o
+    } else {lappend cmd -n}
+    lappend cmd $source -d $destination
     {*}$cmd
 }
 
