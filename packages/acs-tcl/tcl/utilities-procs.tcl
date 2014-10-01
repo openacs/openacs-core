@@ -10,7 +10,7 @@ ad_library {
 
 namespace eval util {}
 
-ad_proc util::zip_file {
+ad_proc util::zip {
     -source:required
     -destination:required
 } {
@@ -51,7 +51,7 @@ ad_proc util::zip_file {
     {*}$cmd
 }
 
-ad_proc util::unzip_file {
+ad_proc util::unzip {
     -source:required
     -destination:required
     -overwrite:boolean
