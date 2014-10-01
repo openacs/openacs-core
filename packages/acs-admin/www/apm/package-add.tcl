@@ -20,13 +20,14 @@ set context [list \
 		 [list "/acs-admin/apm/" "Package Manager"] \
 		 $title]
 
-set body "<form action='package-add-2' method='post'>\n"
+set form_name "packageAdd"
+set body "<form name='$form_name' action='package-add-2' method='post'>\n"
 append body [subst {
 [export_vars -form {package_id version_id}] 
 <script type="text/javascript">
 function updateURLs() {
     // Update the package and version URL, if the package key and/or version name change.
-    var form = document.forms\[0\];
+    var form = document.getElementsByName('$form_name')\[0\];
     if (form.package_uri.value == '')
         form.package_uri.value = 'http://openacs.org/repository/apm/packages/' + form.package_key.value;
     if ((form.version_name.value != '') && (form.version_uri.value == ''))
@@ -223,7 +224,7 @@ for URLs, in which case you should precede them with <tt>mailto:</tt> (e.g.,
 <tr>
   <td></td>
   <td>If the package is being released by a company, type in its name and URL here.
-<!-- ArsDigita employees should <a href="javascript:document.forms\[0\].vendor.value='ArsDigita Corporation';document.forms\[0\].vendor_uri.value='http://www.arsdigita.com/';void(0)">click here</a> to fill this in automatically.</td> -->
+<!-- ArsDigita employees should <a href="javascript:var form = document.getElementsByName('$form_name')\[0\]; form.vendor.value='ArsDigita Corporation';form.vendor_uri.value='http://www.arsdigita.com/';void(0)">click here</a> to fill this in automatically.</td> -->
 </tr>
 
 <tr>
