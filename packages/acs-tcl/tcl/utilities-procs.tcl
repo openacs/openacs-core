@@ -3269,12 +3269,20 @@ ad_proc -public with_finally {
     @param code Code to be executed that could throw and error
     @param finally Cleanup code to be executed even if an error occurs
 } {
-    global errorInfo errorCode
 
     # Execute CODE.
     set return_code [catch {uplevel $code} string]
-    set s_errorInfo $errorInfo
-    set s_errorCode $errorCode
+
+    if {[info exists ::errorInfo]} {
+	set s_errorInfo $::errorInfo
+    } else {
+	set s_errorInfo ""
+    }
+    if {[info exists ::errorCode]} {
+	set s_errorCode $::errorCode
+    } else {
+	set s_errorCode ""
+    }
 
     # As promised, always execute FINALLY.  If FINALLY throws an
     # error, Tcl will propagate it the usual way.  If FINALLY contains
