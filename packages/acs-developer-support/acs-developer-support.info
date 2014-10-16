@@ -8,7 +8,7 @@
     <singleton-p>t</singleton-p>
     <auto-mount>ds</auto-mount>
 
-    <version name="5.8.1a3" url="http://openacs.org/repository/download/apm/acs-developer-support-5.8.1a3.apm">
+    <version name="5.8.1b1" url="http://openacs.org/repository/download/apm/acs-developer-support-5.8.1b1.apm">
         <owner url="mailto:lars@pinds.com">Lars Pind</owner>
         <summary>Profiling for requests including database timing information.</summary>
         <release-date>2013-09-08</release-date>
@@ -18,10 +18,10 @@
         </description>
         <maturity>3</maturity>
 
-        <provides url="acs-developer-support" version="5.8.1a3"/>
-	<requires url="acs-kernel" version="5.8.1a3"/>
+        <provides url="acs-developer-support" version="5.8.1b1"/>
+	<requires url="acs-kernel" version="5.8.1b1"/>
         
-        <requires url="acs-templating" version="5.8.1a3"/>
+        <requires url="acs-templating" version="5.8.1b1"/>
 
         <callbacks>
         </callbacks>
