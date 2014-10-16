@@ -12,7 +12,6 @@ namespace eval acs {
     set ::acs::pageroot [expr {[catch {ns_server pagedir}] ? [ns_info pageroot] : [ns_server pagedir]}]
     set ::acs::tcllib [expr {[catch {ns_server tcllib}] ? [ns_info tcllib] : [ns_server tcllib]}]
     set ::acs::rootdir [file dirname [string trimright $::acs::tcllib "/"]]
-    #if {[info commands ::dbi_rows] ne ""} { set ::acs::preferdbi 1 }
 }
 
 # Determine the OpenACS root directory, which is the directory right above the
@@ -25,6 +24,7 @@ set bootstrap_file "$::acs::rootdir/packages/acs-bootstrap-installer/bootstrap.t
 
 if { [file isfile $bootstrap_file] } {
 
+    ns_log "Notice" "Sourcing $bootstrap_file"
     #
     # Check that the appropriate version of tDom (http://www.tdom.org)
     # is installed and spit out a comment or try to install it if not.
@@ -44,8 +44,7 @@ if { [file isfile $bootstrap_file] } {
 	    }
 	}
     }
-
-    ns_log "Notice" "Sourcing $bootstrap_file"        
+        
     source $bootstrap_file
 } else {
     ns_log "Error" "$bootstrap_file does not exist. Aborting the OpenACS load process."
