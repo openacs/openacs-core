@@ -7,7 +7,7 @@
 ns_log "Notice" "Sourcing files for postload..."
 foreach file [glob -nocomplain ${::acs::tcllib}/*.tcl.postload] {
     ns_log Notice "postloading $file"
-    source "$file"
+    source $file
 }
 ns_log "Notice" "Done."
 
@@ -22,16 +22,10 @@ foreach init_item [nsv_get ad_after_server_initialization .] {
 	set init(args) [lindex $init(args) 0]
     }
     if { [catch $init(args) error] } {
-	global errorInfo
-	ns_log "Error" "Error executing initialization code block $init(name) in $init(script): $errorInfo"
+	ns_log "Error" "Error executing initialization code block $init(name) in $init(script): $::errorInfo"
     }
 }
 
-# We need to load query files for the top-level stuff in www and tcl
-# dirs is the list of directories to walk for xql files.  Packages .xql
-# files are parsed elsewhere in the bootstrap process.
-
-set dirs {www tcl}
 
 # The __is_xql helper function is used to filter out just the xql files.
 #
@@ -40,13 +34,16 @@ set dirs {www tcl}
 # the subdirectory and it would not be searched.
 
 proc __is_xql {arg} { 
-    return [expr {[file isdir $arg] || [string match -nocase {*.xql} $arg]}]
-}
+    return [expr {[file isdirectory $arg] || [file extension $arg] eq ".xql"}]}
 
-foreach dir $dirs {
-    set files [ad_find_all_files -check_file_func __is_xql [acs_root_dir]/$dir]
-    
-    ns_log Debug "QD=Postload files to load: $files"
+# We need to load query files for the top-level stuff in www and tcl
+# dirs is the list of directories to walk for xql files.  Packages .xql
+# files are parsed elsewhere in the bootstrap process.
+
+foreach dir {www tcl} {
+
+    set files [ad_find_all_files -check_file_func __is_xql $::acs::rootdir/$dir]
+    ns_log Notice "QD=Postload files to load from $dir: $files"
 
     foreach file $files {
 	db_qd_load_query_file $file
