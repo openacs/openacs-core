@@ -1702,9 +1702,9 @@ ad_proc -public security::locations {} {
     
     # Let's give a warning if util_current_location returns host_name
     # not same as from config.tcl, may help with proxy issues etc
-    set config_hostname [ns_config $driver_section Hostname]
+    set config_hostname [ns_config $driver_section hostname]
     if { $config_hostname ne $host_name } {
-        ns_log Warning "security::locations hostname '[ns_config $driver_section Hostname]' from config.tcl does not match from util_current_location: $host_name"
+        ns_log Warning "security::locations hostname '[ns_config $driver_section hostname]' from config.tcl does not match from util_current_location: $host_name"
     }
 
     # insecure locations
