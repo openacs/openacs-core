@@ -36,6 +36,16 @@
 
   <tr bgcolor="yellow">
     <td>
+      UTC time returned from time server  <a
+        href="http://www.timeanddate.com/worldclock/">timeanddate.com</a>:
+    </td>
+    <td>
+      <b>@utc_from_page@</b>
+    </td>
+  </tr>
+
+  <tr bgcolor="yellow">
+    <td>
       UTC time according to database and the OpenACS timezone setting above:
     </td>
     <td>
