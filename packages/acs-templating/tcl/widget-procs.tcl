@@ -486,23 +486,45 @@ ad_proc -public template::widget::password {
     return [input password element $tag_attributes]
 }
 
-
 ad_proc -public template::widget::hidden {
     element_reference
     tag_attributes
 } {
-    Render a hidden input widget.
 
     @param element_reference Reference variable to the form element
     @param tag_attributes HTML attributes to add to the tag
 
     @return Form HTML for widget
 } {
-
     upvar $element_reference element
 
-    return [input hidden element $tag_attributes]
+    #
+    # If there is a "values" element provided, but no "value", treat
+    # this a multivalued (multiple) entry.
+    #
+
+    if { [info exists element(values)] && ![info exists element(value)] } {
+      ns_log notice "hidden form element with multiple values: <$element(values)>"
+      set output {}
+      set count 0
+      foreach itemvalue $element(values) {
+	append output [subst {
+	  <input type="hidden" id="$element(form_id):$element(name):$count" name="$element(name)" value="[ad_quotehtml $itemvalue]">
+	}]
+        incr count
+      }
+      return $output
+
+    } else {
+
+      #
+      # Standard case
+      #
+      return [input hidden element $tag_attributes]
+    }
+
 }
+
 
 ad_proc -public template::widget::submit {
     element_reference
