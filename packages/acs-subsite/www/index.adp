@@ -62,5 +62,15 @@
     </td>
   </tr>
 </table>
+
+<if @admin_p@ true> 
+    <p>Dear Website Manager: <br>OpenACS offers a wide range of packages, containing 
+<ul>
+<li>collaboration tools (forums, wiki, file-storage...), 
+<li>announcement tools (news, notifications, faq), 
+<li>and the community based e-learning platform DotLRN. 
+</ul>
+The packages can be installed online from the <a href="/acs-admin/install/" title="Install Packages">OpenACS repository</a>.</p>
+</if>
   
 
