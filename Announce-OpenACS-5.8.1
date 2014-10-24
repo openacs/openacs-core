@@ -1,0 +1,199 @@
+Release of OpenACS 5.8.1:
+
+This is the announcement of the availability of the 
+OpenACS 5.8.1 release. This release finishes much of 
+the cleanup work stated in 5.8.0, but contains in contrary 
+to earlier releases as well the application packages.
+
+Since the release of OpenACS 5.8.0, we had the following changes
+
+    2305 files changed, 53249 insertions(+), 45896 deletions(-)
+
+in 6145 commits from 5 authors. These are significantly more 
+changes as the difference between OpenACS 5.7.0 and 5.8.0.
+
+Here is a short summary of the changes in this release:
+
+  - The release contains the 78 packages of the oacs-5-8 branch.
+    These packages contain the OpenACS core packages, major
+    application packages (e.g. most the ones used on OpenACS.org), and
+    DotLRN (see detailed list of packages in the attachment).
+
+  - All packages have the following properties:
+
+     * SQL:
+        + All packages are PostgreSQL 9.1+ compatible 
+          (tested with PostgreSQL 9.3)
+        + All SQL files with stored procedures use the
+          recommended $$ quoting
+        + All SQL-functions have regular function arguments
+          instead of the old-style aliases
+        + The function_args() (query-able meta-data) are
+          completed and fixed
+        + Incompatible functions (e.g. for sequences) are
+          replaced.
+
+     * Tcl:
+        + All packages were brought up Tcl 8.5, including
+          the actual Tcl idioms where appropriate (e.g.
+          using the safer expand operator, range indices,
+          dict, lassign, etc.)
+        + The code was updated to prefer byte-compiled functions
+          instead of legacy functions from ancient Tcl versions
+        + The code works with NaviServer and AOLserver
+
+     * API:
+        + All packages are free from calls to deprecated code
+          (157 functions are marked as deprecated and will be
+          moved into an "outdated" package in the 5.9 or 6.0 release)
+        + General overhaul of package management
+        + Install-from-local and install-from-repository can be used
+          to install the provided packages based on a acs-core
+          installation. This means that also DotLRN can be
+          installed from repository or from
+          local into an existing OpenACS instance.
+        + Install-from-repository offers filtering functions, allows
+          to install optionally from head-channel (for packages
+          not in the base channel of the installed instance).
+          Install-from-repository works more like an app-store,
+          showing as well vendor information
+        + Packages can be equipped with configuration files
+          (e.g. changing parameters for style packages)
+        + Package developers can upload .apm packages via workflow
+          for review by core members and for inclusion to the
+          repository. The option is integrated with package
+          management, the link is offered for local packages.
+          We hope to attract additional vendors (universities,
+          companies) to make their packages available on this path.
+        + New management-functions for package instances
+          (list, create, delete package instances)
+        + Substantially improved API browser:
+           o Show just relevant parts of .xql files for a function
+           o Provide syntax-highlighting for www scripts as well
+           o Handle more special cases like e.g. util_memoize
+           o Provide links to Tcl functions depending on the installed
+             Tcl version
+           o Provide links to NaviServer or OpenACS functions depending
+             on installed version
+           o Syntax highlighter uses CSS rather than hard-coded markup
+           o Significant performance improvement for large
+             installations
+
+This is just a quick wrap-up of the functions, probably many important
+changes are not summarized so far (especially the functional changes
+in the application packages). The full list of changes is 
+included in the raw ChangeLog [1].
+
+OpenACS.org runs these package at the newest level (but not all
+packages of the list are installed on OpenACS.org).
+
+The list of application packages contains as well the 
+DotLRN packages. For DotLRN this means essentially:
+  - This release provides an upgrade path from outdated PostgreSQL versions
+  - Use of packaged PostgreSQL distributions without
+    fiddling with PostgreSQL configuration options
+  - Easier installation and maintenance
+  - Larger choice of package combinations
+
+The version number of DotLRN changed to 2.8.1
+(in accordance to 5.8.1 of OpenACS). 
+
+For packaging of the beta release, we have produced just
+a tar file containing the acs-core files (see [2]). Based on
+acs-core packages, one can install/upgrade all application packages
+via install-from-repository. If you think one needs as well
+a full tar release, please let us know quickly.
+
+If possible, test the release and report errors.
+
+To all developers: please stop to commit on the oacs-5-8
+branch, this should receive only bug-fixes until the release,
+which should be really soon (e.g. next week). After the release, 
+all changes from oacs-5-8 will be merged into the HEAD branch, 
+which is the place for further development.
+
+-gustaf neumann
+
+[1] http://openacs.org/changelogs/ChangeLog-5.8.1
+[2] http://openacs.org/projects/openacs/download/
+
+Package list of OpenACS 5.8.1:
+
+acs-admin
+acs-api-browser
+acs-authentication
+acs-automated-testing
+acs-bootstrap-installer
+acs-content-repository
+acs-core-docs
+acs-datetime
+acs-developer-support
+acs-events
+acs-kernel
+acs-lang
+acs-mail-lite
+acs-messaging
+acs-outdated
+acs-reference
+acs-service-contract
+acs-subsite
+acs-tcl
+acs-templating
+acs-translations
+ajaxhelper
+assessment
+assessment-portlet
+attachments
+bm-portlet
+bulk-mail
+calendar
+calendar-portlet
+categories
+dotlrn
+dotlrn-assessment
+dotlrn-bm
+dotlrn-calendar
+dotlrn-dotlrn
+dotlrn-evaluation
+dotlrn-faq
+dotlrn-forums
+dotlrn-fs
+dotlrn-homework
+dotlrn-news
+dotlrn-portlet
+dotlrn-static
+dotlrn-xowiki
+evaluation
+evaluation-portlet
+faq
+faq-portlet
+file-storage
+forums
+forums-portlet
+fs-portlet
+general-comments
+intermedia-driver
+new-portal
+news
+news-portlet
+notifications
+oacs-dav
+openacs-default-theme
+profile-provider
+ref-countries
+ref-language
+ref-timezones
+rss-support
+search
+static-portlet
+survey
+theme-zen
+tsearch2-driver
+user-profile
+versions.tcl
+views
+xotcl-core
+xotcl-request-monitor
+xowf
+xowiki
+xowiki-portlet
