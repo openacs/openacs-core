@@ -156,10 +156,10 @@ procedure revoke_permission (
 <code class="computeroutput">permissions-create.sql</code></a></p><p><span class="strong"><strong>Tcl Procedures</strong></span></p><p>Two tcl procedures provide a simple call for the query, "Can this
 user perform this method on this object?" One returns true or false, the
 other presents an error page.</p><p>To receive a true or false value, Tcl code should call:</p><pre class="programlisting">
-ad_permission_p $object_id $object_type $method -user_id $user_id
+permission::permission_p -object_id $object_id -party_id $user_id -privilege $method
 </pre><p>If the <code class="computeroutput">user_id</code> argument is left out, then the currently logged in
 user is checked. To create an error page, Tcl code should call:</p><pre class="programlisting">
-ad_require_permission $object_id $object_type $method
+permission::require_permission -object_id $object_id -privilege $method
 </pre><p>These procedures are defined in <code class="computeroutput">acs-permissions-procs.tcl</code>.</p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="permissions-design-ui"></a>User Interface</h3></div></div></div><p>All users of the permissions system are the same at the user-interface
 level. If you have the <code class="computeroutput">administer_privileges</code> method permission on an
 object, then you may edit privileges for that object with the UI.</p><p>The UI currently provides a list of all granted permissions on the object.

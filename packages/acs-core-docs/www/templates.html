@@ -136,23 +136,7 @@ characters. Another point to note is the use of a master template:
 Master templates allow you do centralize display code that is used
 throughout an application in a single file. In this case, we intend to
 have a master template that does the standard page headers and footers
-for us - create the <code class="computeroutput">master.adp</code> file, which looks like
-this:
-</p><pre class="programlisting">
-
-&lt;%= [ad_header $title] %&gt; 
-&lt;h2&gt;@title@&lt;/h2&gt; 
-&lt;%= [eval ad_context_bar $context_bar] %&gt; 
-&lt;hr&gt; 
-&lt;slave&gt; 
-&lt;br clear="all"&gt; 
-&lt;%= [ad_footer] %&gt;
-
-</pre><p>
-The main subtlety in this code is the inline Tcl code for running
-procs to build the header, footer, context bar, etc.  Also, note the
-property substitutions that happen here, the values of which are set
-up in the <code class="computeroutput">&lt;property&gt;</code> tags in the slave page.  
+for us
 </p><p>
 After putting all these files into
 <code class="computeroutput">ROOT/packages/notes/www</code>, you should be able to go to

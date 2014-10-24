@@ -178,7 +178,7 @@ combining the two operations.
 </p><p>
 For example:
 </p><pre class="programlisting">
-set page_content "[ad_header "<span class="emphasis"><em>Page Title</em></span>"]
+set page_content "<span class="emphasis"><em>Page Title</em></span>]
 
 &lt;h2&gt;<span class="emphasis"><em>Page Title</em></span>&lt;/h2&gt;
 
@@ -216,15 +216,6 @@ the query is running.)
 Local procedures (i.e., procedures defined and used only within one
 page) should be prefixed with "<span class="emphasis"><em><code class="computeroutput">module_</code></em></span>" and
 should be used rarely, only when they are exceedingly useful.
-</p><p>
-All files that prepare HTML to display should end with [ad_footer] or
-[<span class="emphasis"><em>module</em></span>_footer].  If your module requires its own footer,
-this footer should call ad_footer within it.  Why?  Because when we
-adapt the ACS to a new site, it is often the case that the client will
-want a much fancier display than the ACS standard.  We like to be able to
-edit ad_header (which quite possibly can start a &lt;table&gt;) and
-ad_footer (which may need to end the table started in ad_footer) to
-customize the look and feel of the entire site.
 </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="eng-standards-filenaming-tcllib"></a>Tcl Library Files</h3></div></div></div><p>
 Further standards for Tcl library files are under discussion; we plan to 
 include naming conventions for procs.

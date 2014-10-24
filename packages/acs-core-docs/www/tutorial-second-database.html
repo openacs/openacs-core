@@ -18,7 +18,7 @@ ns_param   connections        5
 ns_param   verbose            $debug
 ns_param   extendedtableinfo  true
 ns_param   logsqlerrors       $debug
-if { $database == "oracle" } {
+if { $database eq "oracle" } {
     ns_param   driver             ora8
     ns_param   datasource         {}
     ns_param   user               $db_name

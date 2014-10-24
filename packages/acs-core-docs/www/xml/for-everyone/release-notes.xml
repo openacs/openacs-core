@@ -33,10 +33,171 @@ BEGINNING OF TEMPLATE
   </sect2>
 END OF TEMPLATE -->
 
+<!--
 <para>The ChangeLogs include an annotated list of changes (<xref
 linkend="changelog-latest"></xref>) since the last release and in the
 entire &majorversion;.&minorversion; release sequence <xref linkend="changelog"></xref>.</para>
+-->
 
+<sect2  id="release-notes-5-8-1">
+  <title>Release 5.8.1</title>
+  <itemizedlist>
+    <listitem><para>
+      The release contains the 78 packages of the oacs-5-8 branch.
+      These packages contain the OpenACS core packages, major
+      application packages (e.g. most the ones used on OpenACS.org), and
+      DotLRN.
+    </para></listitem>
+
+    <listitem><para>
+      All packages have the following properties:
+      <itemizedlist>
+	<listitem><para>SQL:
+	<itemizedlist>
+
+	  <listitem><para>
+            All packages are PostgreSQL 9.1+ compatible 
+            (tested with PostgreSQL 9.3)
+	  </para></listitem>
+
+	  <listitem><para>
+            All SQL files with stored procedures use the
+            recommended $$ quoting
+	  </para></listitem>
+
+	  <listitem><para>
+            All SQL-functions have regular function arguments
+            instead of the old-style aliases
+	  </para></listitem>
+
+	  <listitem><para>
+            The function_args() (query-able meta-data) are
+            completed and fixed
+	  </para></listitem>
+
+	  <listitem><para>
+            Incompatible functions (e.g. for sequences) are
+            replaced.
+	  </para></listitem>
+	</itemizedlist>	    
+	</para></listitem>
+
+	<listitem><para>Tcl:
+	<itemizedlist>
+
+ 	  <listitem><para>
+            All packages were brought up Tcl 8.5, including
+            the actual Tcl idioms where appropriate (e.g.
+            using the safer expand operator, range indices,
+            dict, lassign, etc.)
+	  </para></listitem>
+
+ 	  <listitem><para>
+            The code was updated to prefer byte-compiled functions
+            instead of legacy functions from ancient Tcl versions.
+	  </para></listitem>
+
+ 	  <listitem><para>
+            The code works with NaviServer and AOLserver.
+	  </para></listitem>
+	</itemizedlist>
+	</para></listitem>
+
+	<listitem><para>API:
+	<itemizedlist>
+
+ 	  <listitem><para>
+            All packages are free from calls to deprecated code
+            (157 functions are marked as deprecated and will be
+            moved into an "outdated" package in the 5.9 or 6.0
+	    release)
+	  </para></listitem>
+
+ 	  <listitem><para>
+	    General overhaul of package management
+	  </para></listitem>
+
+ 	  <listitem><para>
+            Install-from-local and install-from-repository can be used
+            to install the provided packages based on a acs-core
+            installation. This means that also DotLRN can be
+            installed from repository or from
+            local into an existing OpenACS instance.
+	  </para></listitem>
+
+ 	  <listitem><para>
+            Install-from-repository offers filtering functions, allows
+            to install optionally from head-channel (for packages
+            not in the base channel of the installed instance).
+            Install-from-repository works more like an app-store,
+            showing as well vendor information
+	  </para></listitem>
+
+ 	  <listitem><para>
+            Packages can be equipped with configuration files
+            (e.g. changing parameters for style packages)
+	  </para></listitem>
+
+ 	  <listitem><para>
+            Package developers can upload .apm packages via workflow
+            for review by core members and for inclusion to the
+            repository. The option is integrated with package
+            management, the link is offered for local packages.
+            We hope to attract additional vendors (universities,
+            companies) to make their packages available on this
+	    path.
+	  </para></listitem>
+
+ 	  <listitem><para>
+            New management-functions for package instances
+            (list, create, delete package instances)
+	  </para></listitem>
+	  
+ 	  <listitem><para>
+            Substantially improved API browser:
+	    <itemizedlist>
+ 	      <listitem><para>
+		Show just relevant parts of .xql files for a function
+	      </para></listitem>
+
+ 	      <listitem><para>
+		Provide syntax-highlighting for www scripts as well
+	      </para></listitem>
+
+ 	      <listitem><para>
+		Handle more special cases like e.g. util_memoize
+	      </para></listitem>
+
+ 	      <listitem><para>
+		Provide links to Tcl functions depending on the installed
+		Tcl version
+	      </para></listitem>
+
+ 	      <listitem><para>
+		Provide links to NaviServer or OpenACS functions depending
+		on installed version
+	      </para></listitem>
+
+ 	      <listitem><para>
+		Syntax highlighter uses CSS rather than hard-coded markup
+	      </para></listitem>
+
+ 	      <listitem><para>
+		Significant performance improvement for large
+		installations
+	      </para></listitem>
+	    </itemizedlist>
+ 	  </para></listitem>
+	</itemizedlist>
+	</para></listitem>
+      </itemizedlist>
+    </para> </listitem>
+  </itemizedlist>
+  <para> Altogether, OpenACS 5.8.1 differs from OpenACS 5.8.0 in
+  about 100,000 modifications (6145 commits) contributed by 5
+  committers.
+  </para>
+</sect2>
 
   <sect2  id="release-notes-5-8-0">
     <title>Release 5.8.0</title>
@@ -47,17 +208,15 @@ entire &majorversion;.&minorversion; release sequence <xref linkend="changelog">
 	  settings in new PostgreSQL versions. This makes it easier to use
 	  e.g. shared or packaged PostgreSQL installations.
       </para></listitem>
-      <listitem><para>Compatibility with NaviServer 4.99.5 or newer/para></listitem>
-      <listitem><para>Performance and scalability improvements/para></listitem>
+      <listitem><para>Compatibility with NaviServer 4.99.5 or newer</para></listitem>
+      <listitem><para>Performance and scalability improvements</para></listitem>
       <listitem><para>Various bug fixes </para></listitem>
     </itemizedlist>
     <para> Altogether, OpenACS 5.8.0 differs from OpenACS 5.7.0 in
     more than 18.000 modifications (781 commits) contributed by 7
     committers.
     </para>
-    <para> For details, see
-    <programlisting><xi:include href="../../../../../Announce-OpenACS-5.8.0" xi:parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"><xi:fallback>Announcement missing</xi:fallback></xi:include></programlisting>
-    </para>
+
   </sect2>
     
   <sect2 id="release-notes-5-7-0">
@@ -604,24 +763,23 @@ entire &majorversion;.&minorversion; release sequence <xref linkend="changelog">
      minor releases, changelog-latest = changelog
 -->
 
- 
-  <sect2 id="changelog-latest">
-    <title>Changelog (most recent release only)</title>
-    <programlisting><xi:include href="../../../../../ChangeLog" xi:parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"><xi:fallback>ChangeLog missing</xi:fallback></xi:include></programlisting>
-
-  </sect2>
+<!--
+     <sect2 id="changelog-latest">
+       <title>Changelog (most recent release only)</title>
+       <programlisting><xi:include href="../../../../../ChangeLog" xi:parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"><xi:fallback>ChangeLog missing</xi:fallback></xi:include></programlisting>
+     </sect2>
 -->
-
 
 <!-- &lt;if&gt; needs to be escaped, such as in changelog enteries 
      before processing will validate
 -->
+<!--
   <sect2 id="changelog">
     <title>Changelog for &releasebranch;</title>
 <programlisting>
 <xi:include href="../../../../../ChangeLog" xi:parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"><xi:fallback>ChangeLog missing</xi:fallback></xi:include>
 </programlisting>
   </sect2>
-
+-->
 
 </sect1>
