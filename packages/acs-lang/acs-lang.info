@@ -9,7 +9,7 @@
     <implements-subsite-p>f</implements-subsite-p>
     <inherit-templates-p>t</inherit-templates-p>
     
-    <version name="5.8.1b2" url="http://openacs.org/repository/download/apm/acs-lang-5.8.1b2.apm">
+    <version name="5.8.1" url="http://openacs.org/repository/download/apm/acs-lang-5.8.1.apm">
         <owner url="mailto:peter@collaboraid.biz">Peter Marklund</owner>
         <summary>OpenACS Internationalization Support.</summary>
         <release-date>2013-09-08</release-date>
@@ -20,12 +20,12 @@ locale-specific formatting functions for localizing dates, times, monetary amoun
         <license>GPL</license>
         <maturity>3</maturity>
 
-        <provides url="acs-lang" version="5.8.1b2"/>
-        <requires url="acs-kernel" version="5.8.1b2"/>
-        <requires url="acs-translations" version="5.8.1b2"/>
-        <requires url="ref-countries" version="5.8.1b2"/>
-        <requires url="ref-language" version="5.8.1b2"/>
-        <requires url="ref-timezones" version="5.8.1b2"/>
+        <provides url="acs-lang" version="5.8.1"/>
+        <requires url="acs-kernel" version="5.8.1"/>
+        <requires url="acs-translations" version="5.8.1"/>
+        <requires url="ref-countries" version="5.8.1"/>
+        <requires url="ref-language" version="5.8.1"/>
+        <requires url="ref-timezones" version="5.8.1"/>
 
         <callbacks>
             <callback type="after-install"  proc="lang::apm::after_install"/>

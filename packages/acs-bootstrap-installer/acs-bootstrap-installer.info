@@ -9,7 +9,7 @@
     <implements-subsite-p>f</implements-subsite-p>
     <inherit-templates-p>t</inherit-templates-p>
     
-    <version name="5.8.1b2" url="http://openacs.org/repository/download/apm/acs-bootstrap-installer-5.8.1b2.apm">
+    <version name="5.8.1" url="http://openacs.org/repository/download/apm/acs-bootstrap-installer-5.8.1.apm">
         <owner url="mailto:dhogaza@pacifier.com">Don Baccus</owner>
         <summary>Bootstraps an OpenACS installation.</summary>
         <release-date>2013-09-08</release-date>
@@ -18,8 +18,8 @@
         <license>GPL</license>
         <maturity>3</maturity>
 
-        <provides url="acs-bootstrap-installer" version="5.8.1b2"/>
-        <requires url="acs-kernel" version="5.8.1b2"/>
+        <provides url="acs-bootstrap-installer" version="5.8.1"/>
+        <requires url="acs-kernel" version="5.8.1"/>
 
         <callbacks>
             <callback type="after-upgrade"  proc="apm_bootstrap_upgrade"/>
