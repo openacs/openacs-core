@@ -147,7 +147,7 @@ namespace eval notification::type {
         set impl_key [get_impl_key -type_id $type_id]
 
         # Dispatch to the notification type specific reply processing
-        acs_sc_call NotificationType ProcessReply [list $reply_id] $impl_key
+        set r [acs_sc::invoke -contract NotificationType -operation ProcessReply -call_args [list $reply_id] -impl $impl_key]
     }
     
 }

@@ -377,14 +377,13 @@ db_release_unused_handles prior to executing ns_return, effectively
 combining the two operations.
 </para>
 
-
 <para>
 For example:
 </para>
  
 
 <programlisting>
-set page_content "[ad_header "<emphasis>Page Title</emphasis>"]
+set page_content "<emphasis>Page Title</emphasis>]
 
 &lt;h2&gt;<emphasis>Page Title</emphasis>&lt;/h2&gt;
 
@@ -430,16 +429,6 @@ page) should be prefixed with "<emphasis><computeroutput>module_</computeroutput
 should be used rarely, only when they are exceedingly useful.
 </para>
 
-<para>
-All files that prepare HTML to display should end with [ad_footer] or
-[<emphasis>module</emphasis>_footer].  If your module requires its own footer,
-this footer should call ad_footer within it.  Why?  Because when we
-adapt the ACS to a new site, it is often the case that the client will
-want a much fancier display than the ACS standard.  We like to be able to
-edit ad_header (which quite possibly can start a &lt;table&gt;) and
-ad_footer (which may need to end the table started in ad_footer) to
-customize the look and feel of the entire site.
-</para>
 </sect2>
 
 <sect2 id="eng-standards-filenaming-tcllib">

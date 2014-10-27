@@ -1,6 +1,6 @@
 <master>
 <property name="context">@context;noquote@</property>
-<property name="title">Delete value @pretty_name;noquote@</property>
+<property name="doc(title)">Delete value @pretty_name;noquote@</property>
 
 Are you sure you want to permanently remove this attribute value?
 

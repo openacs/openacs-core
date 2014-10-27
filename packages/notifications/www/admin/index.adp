@@ -1,5 +1,5 @@
 <master>
-<property name="title">#notifications.Administer_Notifications#</property>
+<property name="doc(title)">#notifications.Administer_Notifications#</property>
 
 <h1>#notifications.Administer_Notifications#</h1>
 

@@ -235,12 +235,12 @@ psql -f upgrade-4.7d2-4.7d3.sql <replaceable>$OPENACS_SERVICE_NAME</replaceable>
             <listitem>
               <para>(This step may overlap with the two previous steps, but I think it's harmless?) Create a file which will be executed on startup which takes care of a few issues with authentication and internationalization: create <replaceable>$OPENACS_SERVICE_NAME</replaceable>/tcl/zzz-postload.tcl containing:</para>
               <programlisting>if {![apm_package_installed_p acs-lang]} {
-apm_package_install -enable -mount_path acs-lang [acs_root_dir]/packages/acs-lang/acs-lang.info
+apm_package_install -enable -mount_path acs-lang $::acs::rootdir/packages/acs-lang/acs-lang.info
 lang::catalog::import -locales [list "en_US"]
 }
 
 if {![apm_package_installed_p acs-authentication]} {
-apm_package_install -enable [acs_root_dir]/packages/acs-authentication/acs-authentication.info
+apm_package_install -enable $::acs::rootdir/packages/acs-authentication/acs-authentication.info
 apm_parameter_register "UsePasswordWidgetForUsername" \
 "Should we hide what the user types in the username
 field, the way we do with the password field? Set

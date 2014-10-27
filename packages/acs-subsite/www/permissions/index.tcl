@@ -16,7 +16,7 @@ set user_id [auth::require_login]
 
 set context "Permissions"
 
-if {![exists_and_not_null root]} { 
+if {(![info exists root] || $root eq "")} { 
     set root [ad_conn package_id]
 }
 

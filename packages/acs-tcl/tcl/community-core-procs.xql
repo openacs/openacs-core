@@ -186,17 +186,6 @@
       </querytext>
 </fullquery>
 
-<fullquery name="ad_user_new.update_question_answer">
-      <querytext>
-
-            update users
-            set    password_question = :password_question,
-                   password_answer = :password_answer
-            where  user_id = :user_id
-
-      </querytext>
-</fullquery>
-
 
    <fullquery name="acs_user::get_portrait_id_not_cached.get_item_id">
       <querytext>

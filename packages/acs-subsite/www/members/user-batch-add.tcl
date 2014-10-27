@@ -19,7 +19,7 @@ first_names || ' ' || last_name from persons where person_id = :admin_user_id"]
 
 set context [list [list "./" "Users"] "Notify added user"]
 set system_name [ad_system_name]
-set export_vars [export_form_vars email first_names last_name user_id]
+set export_vars [export_vars -form {email first_names last_name user_id}]
 set system_url [parameter::get -package_id [ad_acs_kernel_id] -parameter SystemURL -default ""].
 
 ad_return_template

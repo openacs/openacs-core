@@ -1,6 +1,6 @@
 <master>
 <property name="context">@context;noquote@</property>
-<property name="title">Create a new user</property>
+<property name="doc(title)">Create a new user</property>
 
 <blockquote>
 

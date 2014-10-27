@@ -13,8 +13,9 @@
 <fullquery name="apm_table">      
       <querytext>
 
-        select   v.version_id, v.package_key, t.pretty_name, v.version_name, v.enabled_p,
-                 v.installed_p, v.distribution_uri,
+        select   v.version_id, v.package_key, t.pretty_name, v.version_name, 
+	         to_char(v.release_date, 'YYYY-MM-DD') as release_date
+	         v.enabled_p, v.installed_p, v.distribution_uri,
             (select count(*) from apm_package_versions v2
              where v2.package_key = v.package_key
              and   v2.installed_p = 't'
@@ -26,8 +27,8 @@
              end as tarball_p
         from    apm_package_versions v, apm_package_types t
         where  t.package_key = v.package_key
-        [ad_dimensional_sql $dimensional_list where and]
-        [ad_order_by_from_sort_spec $orderby $table_def]
+        $filter_where_clause
+        [template::list::orderby_clause -name package_list -orderby]
 
       </querytext>
 </fullquery>

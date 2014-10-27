@@ -1,0 +1,3 @@
+insert into cr_mime_types(label, mime_type, file_extension) select 'Archive Zip', 'application/x-zip', 'zip' from dual where not exists (select 1 from cr_mime_types where mime_type = 'application/x-zip');
+insert into cr_mime_types(label, mime_type, file_extension) select 'Shell Script', 'application/x-sh', 'sh' from dual where not exists (select 1 from cr_mime_types where mime_type = 'application/x-sh');
+insert into cr_mime_types(label, mime_type, file_extension) select 'RDF/XML', 'application/rdf+xml', 'rdf' from dual where not exists (select 1 from cr_mime_types where mime_type = 'application/rdf+xml');

@@ -100,6 +100,8 @@ comment on table cr_locales is '
   territory and character set.  (Languages are associated with default
   territories and character sets when not defined).  The formats
   for numbers, currency, dates, etc. are determined by the territory.
+
+  The cr_locales table is deprecated for OpenACS 5.2, and will be removed in OpenACS 6 (TIP #66)
 ';
 
 insert into cr_locales (
@@ -492,6 +494,7 @@ create index cr_revisions_publish_date_idx on cr_revisions(publish_date);
 -- create index cr_revisions_lower_title_idx on cr_revisions(lower(title));
 -- create index cr_revisions_title_ltr_idx on cr_revisions(substr(lower(title), 1, 1));
 
+create index cr_revisions_content_idx on cr_revisions (substring(content for 100));
 
 comment on table cr_revisions is '
   Each content item may be associated with any number of revisions.

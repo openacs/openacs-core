@@ -4,12 +4,12 @@
 #    @author Peter Marklund (peter@collaboraid.biz)
 #    @author Christian Hvid
 
-if { ![exists_and_not_null return_url] } {
+if { (![info exists return_url] || $return_url eq "") } {
     # Use referer header
     set return_url [ns_set iget [ns_conn headers] referer]
 }
 
-if { ![exists_and_not_null package_id] } {
+if { (![info exists package_id] || $package_id eq "") } {
     set package_id [ad_conn package_id]
 }
 

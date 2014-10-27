@@ -1,6 +1,6 @@
 <master>
 <property name="context">@context;noquote@</property>
-<property name="title">Remove segment</property>
+<property name="doc(title)">Remove segment</property>
 
 Are you sure you want to remove the relational segment @segment_name@?
 Removing this segment will also remove all relational constraints that

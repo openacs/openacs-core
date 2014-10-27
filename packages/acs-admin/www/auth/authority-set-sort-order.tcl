@@ -5,7 +5,7 @@ ad_page_contract {
     @creation-date 2003-09-09
     @cvs-id $Id$
 } {
-    authority_id:integer
+    authority_id:naturalnum,notnull
     direction
 }
 

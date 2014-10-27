@@ -10,7 +10,7 @@ ad_page_contract {
     @cvs-id $Id$
 
 } {
-    group_id:integer,notnull
+    group_id:naturalnum,notnull
     rel_type:notnull
     { return_url "" }
 } -properties {
@@ -35,11 +35,11 @@ ad_page_contract {
 set subsite_group_id [application_group::group_id_from_package_id]
 
 
-ad_require_permission $group_id "read"
+permission::require_permission -object_id $group_id -privilege "read"
 
 set context [list [list "[ad_conn package_url]admin/rel-segments/" "Relational segments"] "Add segment"]
 
-set export_vars [ad_export_vars -form {group_id rel_type return_url}]
+set export_vars [export_vars -form {group_id rel_type return_url}]
 
 db_1row select_basic_info {
     select acs_group.name(:group_id) as group_name,

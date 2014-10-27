@@ -234,7 +234,7 @@ creates a new operation as part of a contract.</para>
 <title>Dispatching    </title>
 <itemizedlist>
 <listitem><para>
-(tcl) acs_sc_call (contract, operation, [arguments, impl]):
+(tcl) acs_sc::invoke (contract, operation, [arguments, impl]):
                 calls an operation</para></listitem>
 </itemizedlist>
 

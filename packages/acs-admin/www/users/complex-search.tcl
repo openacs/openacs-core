@@ -28,7 +28,7 @@ ad_page_contract {
 
     @author Mark Thomas (mthomas@arsdigita.com)
 } {
-    {authority_id:integer ""}
+    {authority_id:naturalnum ""}
     {email ""}
     {ip ""}
     {last_name_starts_with ""}
@@ -36,7 +36,7 @@ ad_page_contract {
     keyword:optional
     target
     {passthrough ""}
-    {limit_to_users_in_group_id ""}
+    {limit_to_users_in_group_id:naturalnum ""}
     {only_authorized_p:integer 1}
     {only_needs_approval_p:naturalnum 0}
     {registration_before_days:integer -1}
@@ -101,41 +101,42 @@ if { ![info exists passthrough] } {
 set where_clause [list]
 set rowcount 0
 
-if {[exists_and_not_null limit_to_users_in_group_id] && ![regexp {[^-0-9]} $limit_to_users_in_group_id] } {
+if {$limit_to_users_in_group_id ne "" 
+    && ![regexp {[^-0-9]} $limit_to_users_in_group_id] } {
     set group_name [db_string user_group_name_from_id \
-"select group_name from groups where group_id = :limit_to_users_in_group_id"]
+			"select group_name from groups where group_id = :limit_to_users_in_group_id"]
     incr rowcount
     set criteria:[set rowcount](data) \
         "Is a member of '$group_name'"
 }
 
-if { [exists_and_not_null authority_id] } {
+if { $authority_id ne "" } {
     lappend where_clause "authority_id = :authority_id"
     incr rowcount
     set criteria:[set rowcount](data) "Authority is '[auth::authority::get_element -authority_id $authority_id -element pretty_name]'"
 }
 
-if { [exists_and_not_null email] } {
+if { $email ne "" } {
     set sql_email "%[string tolower $email]%"
     lappend where_clause "email like :sql_email"
     incr rowcount
     set criteria:[set rowcount](data) "Email contains '$email'"
 }
 
-if { [exists_and_not_null ip] } {
+if { ([info exists ip] && $ip ne "") } {
     lappend where_clause "creation_ip = :ip"
     incr rowcount
     set criteria:[set rowcount](data) "Creation IP is $ip"
 }
 
-if { [exists_and_not_null last_name_starts_with] } {
+if { $last_name_starts_with ne "" } {
     set sql_last_name_starts_with "[string tolower $last_name_starts_with]%"
     lappend where_clause "lower(last_name) like :sql_last_name_starts_with"
     incr rowcount
     set criteria:[set rowcount](data) "Last name starts with '$last_name_starts_with'"
 }
 
-if { [exists_and_not_null first_names] } {
+if { $first_names ne "" } {
     set sql_first_names "%[string tolower $first_names]%"
     lappend where_clause "lower(first_names) like :sql_first_names"
     incr rowcount
@@ -192,18 +193,18 @@ if { $number_visits_above >= 0 } {
 set criteria:rowcount $rowcount
 
 
-if { [exists_and_not_null limit_to_users_in_group_id] } {
-set query "select distinct first_names, last_name, email, member_state, email_verified_p, cu.user_id
-from cc_users cu, group_member_map gm
-where (cu.user_id = gm.member_id
-       and gm.group_id = :limit_to_users_in_group_id)"
+if { $limit_to_users_in_group_id ne "" } {
+    set query "select distinct first_names, last_name, email, member_state, email_verified_p, cu.user_id
+	from cc_users cu, group_member_map gm
+	where (cu.user_id = gm.member_id
+        and gm.group_id = :limit_to_users_in_group_id)"
     if {[llength $where_clause] > 0} {
         append query \
             "\n$where_conjunction [join $where_clause "\n$where_conjunction "]"
     }
 } else {
-set query "select user_id, email_verified_p, first_names, last_name, email, member_state
-from cc_users"
+    set query "select user_id, email_verified_p, first_names, last_name, email, member_state
+	from cc_users"
     if {[llength $where_clause] > 0} {
         append query "\nwhere [join $where_clause "\n$where_conjunction "]"
     }
@@ -228,11 +229,11 @@ db_foreach user_search_admin $query {
     set user_search:[set rowcount](first_names) $first_names
     set user_search:[set rowcount](last_name) $last_name
     set user_search:[set rowcount](email) $email
-    set user_search:[set rowcount](export_vars) [export_url_vars user_id_from_search first_names_from_search last_name_from_search email_from_search]
+    set user_search:[set rowcount](export_vars) [export_vars -url {user_id_from_search first_names_from_search last_name_from_search email_from_search}]
     set user_search:[set rowcount](member_state) $member_state
     
     if { $member_state ne "approved" } {
-	set user_search:[set rowcount](user_finite_state_links) [join [ad_registration_finite_state_machine_admin_links $member_state $email_verified_p $user_id_from_search "complex-search?[export_url_vars email last_name keyword target passthrough limit_users_in_group_id only_authorized_p]"] " | "]
+	set user_search:[set rowcount](user_finite_state_links) [join [ad_registration_finite_state_machine_admin_links $member_state $email_verified_p $user_id_from_search "complex-search?[export_vars -url {email last_name keyword target passthrough limit_to_users_in_group_id only_authorized_p}]"] " | "]
     } else {
 	set user_search:[set rowcount](user_finite_state_links) ""
     }

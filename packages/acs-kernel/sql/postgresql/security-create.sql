@@ -11,7 +11,7 @@
 -- @cvs-id $Id$
 
 create table sec_session_properties (
-    session_id     integer
+    session_id     bigint
                    constraint sec_session_prop_session_id_nn
                    not null,
     module         varchar(50)

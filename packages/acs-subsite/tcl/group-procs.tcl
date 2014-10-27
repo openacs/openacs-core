@@ -30,13 +30,13 @@ ad_proc -public group::new {
     
     <p> 
     There are now several ways to create a group of a given
-    type. You can use this TCL API with or without a form from the form
+    type. You can use this Tcl API with or without a form from the form
     system, or you can directly use the PL/SQL API for the group type.
 
     <p><b>Examples:</b>
     <pre>
 
-    # OPTION 1: Create the group using the TCL Procedure. Useful if the
+    # OPTION 1: Create the group using the Tcl Procedure. Useful if the
     # only attribute you need to specify is the group name
     
     db_transaction {
@@ -44,7 +44,7 @@ ad_proc -public group::new {
     }
     
     
-    # OPTION 2: Create the group using the TCL API with a templating
+    # OPTION 2: Create the group using the Tcl API with a templating
     # form. Useful when there are multiple attributes to specify for the
     # group
     
@@ -187,7 +187,7 @@ ad_proc group::delete { group_id } {
       END;
     "
 
-    util_memoize_flush "group::get_title_not_cached -group_id $group_id"
+  util_memoize_flush [list group::get_title_not_cached -group_id $group_id]
     return $object_type
 }
 
@@ -262,11 +262,11 @@ ad_proc -private group::get_id_not_cached {
 
     @error
 } {
-    if {[exists_and_not_null subsite_id]} {
+    if {([info exists subsite_id] && $subsite_id ne "")} {
 	set application_group_id [application_group::group_id_from_package_id -package_id [ad_conn subsite_id]]
     } 
     
-    if {[exists_and_not_null application_group_id]} {
+    if {([info exists application_group_id] && $application_group_id ne "")} {
 	set group_ids [db_list get_group_id_with_application {}]
     } else {
 	set group_ids [db_list get_group_id {}]
@@ -324,10 +324,10 @@ ad_proc -private group::flush_members_cache {
     @author Timo Hentschel (timo@timohentschel.de)
     @creation-date 2005-07-26
 } {
-    util_memoize_flush "group::get_members_not_cached -group_id $group_id -type party"
-    util_memoize_flush "group::get_members_not_cached -group_id $group_id -type user"
-    util_memoize_flush "group::get_members_not_cached -group_id $group_id -type person"
-    util_memoize_flush_regexp "group::member_p_not_cached -group_id $group_id (.*)"
+  util_memoize_flush [list group::get_members_not_cached -group_id $group_id -type party]
+  util_memoize_flush [list group::get_members_not_cached -group_id $group_id -type user]
+  util_memoize_flush [list group::get_members_not_cached -group_id $group_id -type person]
+  util_memoize_flush_regexp [list group::member_p_not_cached -group_id $group_id (.*)]
 }
 
 ad_proc -public group::permission_p { 
@@ -394,7 +394,7 @@ ad_proc -public group::update {
     set columns { group_name join_policy description }
     set set_clauses [list]
     foreach name [array names row] {
-        if { [lsearch -exact $columns $name] == -1 } {
+        if {$name ni $columns} {
             error "Attribute '$name' isn't valid for groups."
         }
         lappend set_clauses "$name = :$name"
@@ -419,7 +419,7 @@ ad_proc -public group::update {
 	    set title = :pretty_name
 	    where object_id = :group_id
 	}
-	util_memoize_flush "group::get_title_not_cached -group_id $group_id"
+      util_memoize_flush [list group::get_title_not_cached -group_id $group_id]
     }
 }
 

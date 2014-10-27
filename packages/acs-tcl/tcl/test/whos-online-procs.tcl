@@ -49,8 +49,8 @@ aa_register_case -cats {
         #Test all-invisible_user_ids
         #---------------------------------------------------------------------------------------------------
 
-        aa_true "User $user_info(email) with user_id=$user_id is in the invisible list"\
-	    [expr [lsearch [whos_online::all_invisible_user_ids] $user_id] >= 0]
+        aa_true "User $user_info(email) with user_id=$user_id is in the invisible list" \
+	    [expr {$user_id in [whos_online::all_invisible_user_ids]}]
 	
         #---------------------------------------------------------------------------------------------------
 	#Test unset_invisible
@@ -67,8 +67,8 @@ aa_register_case -cats {
         #Test user_ids
         #---------------------------------------------------------------------------------------------------
 	
-	aa_true "User $user_info(email) with user_id=$user_id is in the visible list"\
-	    [expr [lsearch [whos_online::user_ids] $user_id] >= 0]
+	aa_true "User $user_info(email) with user_id=$user_id is in the visible list" \
+	    [expr {$user_id in [whos_online::user_ids]}]
 
 	twt::user::logout
 	twt::user::delete -user_id $user_id

@@ -1,5 +1,5 @@
   <master>
-    <property name="title">Contract @contract_name;noquote@</property>
+    <property name="doc(title)">Contract @contract_name;noquote@</property>
     <property name="context">{@contract_name;noquote@}</property>
 
     <ul>

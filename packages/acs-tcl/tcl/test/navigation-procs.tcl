@@ -61,7 +61,7 @@ aa_register_case -cats {
     set separator "-"
     aa_log "List with three references:\n\n$c\nseparator= \" - \" "
 
-    aa_equals "" [ad_context_bar_html -separator $separator $ref_list] "<a href=\"[lindex [lindex $ref_list 0] 0]\">[lindex [lindex $ref_list 0] 1]</a> - <a href=\"[lindex [lindex $ref_list 1] 0]\">[lindex [lindex $ref_list 1] 1]</a> - [lindex [lindex $ref_list 2] 0] [lindex [lindex $ref_list 2] 1]"
+    aa_equals "" [ad_context_bar_html -separator $separator $ref_list] "<a href=\"[lindex $ref_list 0 0]\">[lindex $ref_list 0 1]</a> - <a href=\"[lindex $ref_list 1 0]\">[lindex $ref_list 1 1]</a> - [lindex $ref_list 2 0] [lindex $ref_list 2 1]"
 
 }
 

@@ -112,11 +112,11 @@ namespace eval acs_mail_lite {
         set mail_package_id [apm_package_id_from_key "acs-mail-lite"]
 
         # Get the SMTP Parameters
-        set smtp [parameter::get -parameter "SMTPHost" \
+        set smtpHost [parameter::get -parameter "SMTPHost" \
                       -package_id $mail_package_id \
                       -default [ns_config ns/parameters mailhost]]
-        if {$smtp eq ""} {
-            set smtp localhost
+        if {$smtpHost eq ""} {
+            set smtpHost localhost
         }
 
         set timeout [parameter::get -parameter "SMTPTimeout" \
@@ -137,13 +137,29 @@ namespace eval acs_mail_lite {
         set smtppassword [parameter::get -parameter "SMTPPassword" \
                               -package_id $mail_package_id]
         
-        set cmd_string "smtp::sendmessage $multi_token -originator $originator"     
+        set cmd [list smtp::sendmessage $multi_token -originator $originator]
         foreach header $headers {
-            append cmd_string " -header {$header}"
+            lappend cmd -header $header
         }
-        append cmd_string " -servers $smtp -ports $smtpport -username $smtpuser -password $smtppassword"
-        ns_log Debug "send cmd_string: $cmd_string"
-        eval $cmd_string
+        lappend cmd -servers $smtpHost -ports $smtpport
+
+	#
+	# Request authentication only, when user AND password are
+	# specified. If only one of these is specified, issue a
+	# warning and ignore the parameter.
+	#
+	if {$smtpuser ne "" && $smtppassword ne ""} {
+	    lappend cmd -username $smtpuser -password $smtppassword
+	} elseif {$smtpuser ne ""|| $smtppassword ne ""} {
+	    ns_log warning "acs-mail-lite::smtp: invalid parameter combination;\
+		when SMTPUser is specified, SMTPPassword has to be provided as well and vice versa"
+	}
+
+        ns_log Debug "send cmd: $cmd"
+        if {[catch $cmd errorInfo]} {
+	    ns_log Error "acs-mail-lite::smtp: error $errorInfo while executing\n$cmd"
+	    error $errorInfo
+	}
     }
 
     #---------------------------------------
@@ -207,6 +223,8 @@ namespace eval acs_mail_lite {
         {-package_id ""}
         -no_callback:boolean 
         {-file_ids ""}
+        {-filesystem_files ""}
+        -delete_filesystem_files:boolean
         {-extraheaders ""}
         -use_sender:boolean
         {-object_id ""}
@@ -232,7 +250,11 @@ namespace eval acs_mail_lite {
 
         @param package_id Package ID of the sending package
 
-        @param file_ids List of file ids (items or revisions) to be send as attachments. This will only work with files stored in the file system.
+        @param file_ids List of file ids (items or revisions) to be send as attachments. This will only work with files stored in the file-storage.
+        
+        @param filesystem_files List of regular files on the filesystem to be send as attachments.
+        
+        @param delete_filesystem_files_p Decides if we want files specified by the 'file' parameter to be deleted once sent.
 
         @param mime_type MIME Type of the mail to send out. Can be "text/plain", "text/html".
 
@@ -262,6 +284,8 @@ namespace eval acs_mail_lite {
                 -body $body \
                 -package_id $package_id \
                 -file_ids $file_ids \
+                -filesystem_files $filesystem_files \
+                -delete_filesystem_files_p $delete_filesystem_files_p \
                 -mime_type $mime_type \
                 -no_callback_p $no_callback_p \
                 -extraheaders $extraheaders \
@@ -306,16 +330,18 @@ namespace eval acs_mail_lite {
                             -body $body \
                             -package_id $package_id \
                             -file_ids $file_ids \
+                            -filesystem_files $filesystem_files \
+                            -delete_filesystem_files_p $delete_filesystem_files_p \
                             -mime_type $mime_type \
                             -no_callback_p $no_callback_p \
                             -extraheaders $extraheaders \
                             -use_sender_p $use_sender_p        
                     } errMsg]
                     if {$err} {
-                        ns_log Error "Error while sending queued mail: $errMsg"
-                        # release the lock
-                        set locking_server ""
-                        db_dml lock_queued_message {}    
+                        ns_log Error "Could not send queued mail (message $return_id): $errMsg"
+                        # release the lock (MS not now)
+                        # set locking_server ""
+                        # db_dml lock_queued_message {}    
                     } else {
                         # mail was sent, delete the queue entry
                         db_dml delete_queue_entry {}
@@ -339,6 +365,8 @@ namespace eval acs_mail_lite {
         -body:required
         {-package_id ""}
         {-file_ids ""}
+        {-filesystem_files ""}
+        {-delete_filesystem_files_p "0"}
         {-mime_type "text/plain"}
         {-no_callback_p "0"}
         {-extraheaders ""}
@@ -368,7 +396,11 @@ namespace eval acs_mail_lite {
 
         @param package_id Package ID of the sending package
 
-        @param file_ids List of file ids (items or revisions) to be send as attachments. This will only work with files stored in the file system.
+        @param file_ids List of file ids (items or revisions) to be send as attachments. This will only work with files stored in the file-storage.
+        
+        @param filesystem_files List of regular files on the filesystem to be send as attachments.
+        
+        @param delete_filesystem_files_p Decides if we want files specified by the 'file' parameter to be deleted once sent.
 
         @param mime_type MIME Type of the mail to send out. Can be "text/plain", "text/html".
 
@@ -401,7 +433,7 @@ namespace eval acs_mail_lite {
         }
 
         # Set the message_id
-        set message_id "[mime::uniqueID]"
+        set message_id [mime::uniqueID]
 
         # Set the date
         set message_date [acs_mail_lite::utils::build_date]
@@ -409,8 +441,11 @@ namespace eval acs_mail_lite {
         # Build the message body
         set tokens [acs_mail_lite::utils::build_body -mime_type $mime_type -- $body]
 
+        
         # Add attachments if any
-        if {[exists_and_not_null file_ids]} {
+        
+        # ...from file-storage
+        if {$file_ids ne ""} {
             set item_ids [list]
             
             # Check if we are dealing with revisions or items.
@@ -425,14 +460,50 @@ namespace eval acs_mail_lite {
 
             db_foreach get_file_info {} {
                 lappend tokens [mime::initialize \
-                                    -param [list name "[ad_quotehtml $title]"] \
+                                    -param [list name [ad_quotehtml $title]] \
                                     -header [list "Content-Disposition" "attachment; filename=\"$name\""] \
                                     -header [list Content-Description $title] \
                                     -canonical $mime_type \
                                     -file "[cr_fs_path]$filename"]
             }
-            set tokens [mime::initialize -canonical "multipart/mixed" -parts "$tokens"]
         }
+        
+        # ...from filesystem
+        if {$filesystem_files ne ""} {
+	    # get root of folders into which files are allowed to be sent
+	    set filesystem_attachments_root [parameter::get -parameter "FilesystemAttachmentsRoot" \
+                              -package_id $mail_package_id -default ""]
+	    if {$filesystem_attachments_root eq ""} {
+		# on a unix system this should be '/tmp'
+		set filesystem_attachments_root [file dirname [ns_tmpnam]]
+	    }
+            foreach f $filesystem_files {
+		# make the file name absolute
+		if {[file pathtype $f] ne "absolute"} {
+		    set f [file join [pwd] $f]
+		}
+		if {![file exists $f]} {
+		    ns_log Error "acs-mail-lite::send: Could not send mail: file '$f' does not exist"
+		    return
+		}
+		if {[string first $filesystem_attachments_root $f] != 0} {
+		    ns_log Error "acs-mail-lite::send: Could not send mail: file '$f' is outside the allowed root folder for attachments '$filesystem_attachments_root'"
+		    return
+		}
+		set name [file tail $f]
+		set mime_type [cr_filename_to_mime_type $name]
+                lappend tokens [mime::initialize \
+                                    -param [list name $name] \
+                                    -header [list "Content-Disposition" "attachment; filename=\"$name\""] \
+                                    -header [list Content-Description $name] \
+                                    -canonical $mime_type \
+                                    -file $f]
+            }
+        }
+        
+        if {$file_ids ne "" || $filesystem_files ne ""} {
+	    set tokens [mime::initialize -canonical "multipart/mixed" -parts $tokens]
+	}
 
         ### Add the headers
 
@@ -447,7 +518,7 @@ namespace eval acs_mail_lite {
 
         # Add extra headers
         foreach header $extraheaders {
-            mime::setheader $tokens "[lindex $header 0]" "[lindex $header 1]"
+            mime::setheader $tokens [lindex $header 0] [lindex $header 1]
         }
 
         # Rollout support
@@ -467,7 +538,7 @@ namespace eval acs_mail_lite {
                     # if any of the recipient is not in the allowed list
                     # email message has to be sent to the log instead
 
-                    if { [lsearch -exact $allowed_addr $recipient] eq -1 } {
+                    if {$recipient ni $allowed_addr} {
                         set send_mode "log"
                         set notice "logging email because one of the recipient ($recipient) is not in the EmailAllow list"
                         break
@@ -492,8 +563,8 @@ namespace eval acs_mail_lite {
         }
 
         # Prepare the headers list of recipients
-        set headers_list [list [list From "$from_addr"] \
-                              [list Reply-To "$reply_to"] \
+        set headers_list [list [list From $from_addr] \
+                              [list Reply-To $reply_to] \
                               [list To [join $to_addr ","]]]
 
         if { $cc_addr ne "" } {
@@ -527,7 +598,7 @@ namespace eval acs_mail_lite {
 
             # Add recipients to headers
             foreach header $headers_list {
-                mime::setheader $tokens "[lindex $header 0]" "[lindex $header 1]"
+                mime::setheader $tokens [lindex $header 0] [lindex $header 1]
             }
 
             # Retrieve the email message as a string
@@ -537,7 +608,7 @@ namespace eval acs_mail_lite {
             mime::finalize $tokens -subordinates all
 
             # Send the email message to the log
-            ns_log Notice "acs-mail-lite::send: $notice\n\n**********\nEnveloppe sender: $originator\n\n$packaged\n**********"
+            ns_log Notice "acs-mail-lite::send: $notice\n\n**********\nEnvelope sender: $originator\n\n$packaged\n**********"
 
         } else {
 
@@ -548,8 +619,8 @@ namespace eval acs_mail_lite {
             # Close all mime tokens
             mime::finalize $tokens -subordinates all
             
-        }       
-
+        }
+                
         if { !$no_callback_p } {
             callback acs_mail_lite::send \
                 -package_id $package_id \
@@ -562,8 +633,19 @@ namespace eval acs_mail_lite {
                 -cc_addr $cc_addr \
                 -bcc_addr $bcc_addr \
                 -file_ids $file_ids \
+                -filesystem_files $filesystem_files \
+                -delete_filesystem_files_p $delete_filesystem_files_p \
                 -object_id $object_id
         }
+        
+	# Attachment files can now be deleted, if so required.
+	# I leave this as the last thing to do, because callbacks
+	# could need to look at files for their own purposes.
+        if {[string is true $delete_filesystem_files_p]} {
+	    foreach f $filesystem_files {
+		file delete $f
+	    }
+	}
     }
 
     #---------------------------------------
@@ -587,7 +669,7 @@ namespace eval acs_mail_lite {
 
     #---------------------------------------
 
-    ad_proc -public -deprecated sendmail {
+    ad_proc -public -deprecated ::ns_sendmail {
         to 
         from 
         subject 
@@ -599,7 +681,6 @@ namespace eval acs_mail_lite {
         Replacement for ns_sendmail for backward compability.
 
     } {
-
 
         ns_log Warning "ns_sendmail is no longer supported in OpenACS. Use acs_mail_lite::send instead."
 

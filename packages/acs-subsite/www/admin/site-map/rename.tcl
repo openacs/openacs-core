@@ -25,10 +25,10 @@ ad_page_contract {
     @creation-date 2000-06-20
     @cvs-id $Id$
 } {
-  node_id:integer,notnull
+  node_id:naturalnum,notnull
   instance_name:notnull
   {expand:integer,multiple {}}
-  root_id:integer,optional
+  root_id:naturalnum,optional
 }
 
 # (bran 2000-06-20) Here I am assuming that only packages can be hung

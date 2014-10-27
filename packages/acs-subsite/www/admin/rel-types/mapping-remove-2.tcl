@@ -10,8 +10,8 @@ ad_page_contract {
     @cvs-id $Id$
 
 } {
-    { group_rel_id:integer "" }
-    { group_type_rel_id "" }
+    { group_rel_id:naturalnum "" }
+    { group_type_rel_id:naturalnum "" }
     { return_url "" }
 } -properties {
     context:onevalue

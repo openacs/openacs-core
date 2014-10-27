@@ -8,5 +8,5 @@ ad_library {
 
 }
 
-ns_register_adptag ad-document "/ad-document" doc_tag_ad_document
-ns_register_adptag ad-property "/ad-property" doc_tag_ad_property
+ns_adp_registerscript ad-document "/ad-document" doc_tag_ad_document
+ns_adp_registerscript ad-property "/ad-property" doc_tag_ad_property

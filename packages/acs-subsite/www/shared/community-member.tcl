@@ -4,7 +4,7 @@ ad_page_contract {
     @param user_id defaults to currently logged in user if there is one
     @cvs-id $Id$
 } {
-    {user_id:integer ""}
+    {user_id:naturalnum ""}
 } -properties {
     context:onevalue
     member_state:onevalue
@@ -43,7 +43,7 @@ set untrusted_user_id [ad_conn untrusted_user_id]
 if { $user_id eq "" } {
     if { $verified_user_id == 0 } {
 	# Don't know what to do! 
-	ad_return_error "Missing user_id" "We need a user_id to display the community page"
+	auth::require_login
 	return
     }
     set user_id $verified_user_id
@@ -73,7 +73,7 @@ set bio [ad_text_to_html -- [person::get_bio -person_id $user_id]]
 
 # Do we show the portrait?
 set inline_portrait_state "none"
-set portrait_export_vars [export_url_vars user_id]
+set portrait_export_vars [export_vars -url {user_id}]
 
 if {[db_0or1row portrait_info "
 select i.width, i.height, cr.title, cr.description, cr.publish_date
@@ -94,8 +94,8 @@ and a.rel_type = 'user_portrait_rel'"]} {
     }
 }
 
-
-if { $priv_email <= [ad_privacy_threshold] } {
+# priv_email seems obsolete, since ad_privacy_threshold is deprecated
+if { [ad_conn user_id] > 0 } {
     set show_email_p 1
 } else {
     set show_email_p 0

@@ -128,7 +128,7 @@ ad_proc -public auth::password::change {
             }
         } 
         no_account - not_supported - old_password_bad - new_password_bad - change_error - failed_to_connect {
-            if { ![exists_and_not_null result(password_message)] } {
+            if { ![info exists result(password_message)] || $result(password_message) eq "" } {
                 array set default_message {
                     no_account {Unknown username}
                     not_supported {This operation is not supported}
@@ -344,7 +344,7 @@ ad_proc -public auth::password::retrieve {
     # Check the result code and provide canned responses
     switch $result(password_status) {
         ok {
-            if { [exists_and_not_null result(password)] } {
+            if { [info exists result(password)] && $result(password) ne "" } {
                 # We have retrieved or reset a forgotten password that we should email to the user
                 with_catch errmsg {
                     auth::password::email_password \
@@ -361,12 +361,12 @@ ad_proc -public auth::password::retrieve {
                     ns_log Error "We had an error sending out email with new password to username $username, authority $authority_id:\n$errorInfo"
                 }
             } 
-            if { ![exists_and_not_null result(password_message)] } {
+            if { ![info exists result(password_message)] || $result(password_message) eq "" } {
                 set result(password_message) [_ acs-subsite.Check_Your_Inbox]
             }
         } 
         no_account - not_supported - retrieve_error - failed_to_connect {
-            if { ![exists_and_not_null result(password_message)] } {
+            if { ![info exists result(password_message)] || $result(password_message) eq "" } {
                 array set default_message {
                     no_account {Unknown username}
                     not_supported {This operation is not supported}
@@ -449,14 +449,13 @@ ad_proc -public auth::password::reset {
     } {
         set result(password_status) failed_to_connect
         set result(password_message) "Error invoking the password management driver."
-        global errorInfo
-        ns_log Error "Error invoking password management driver for authority_id = $authority_id: $errorInfo"
+        ns_log Error "Error invoking password management driver for authority_id = $authority_id: $::errorInfo"
     }
     
     # Check the result code and provide canned responses
     switch $result(password_status) {
         ok {
-            if { [exists_and_not_null result(password)] && \
+            if { ([info exists result(password)] && $result(password) ne "") && \
                      (!$admin_p || [parameter::get \
                                         -parameter EmailChangedPasswordP \
                                         -package_id [ad_conn subsite_id] \
@@ -477,12 +476,12 @@ ad_proc -public auth::password::reset {
                     ns_log Error "We had an error sending out email with new password to username $username, authority $authority_id:\n$errorInfo"
                 }
             }
-            if { ![exists_and_not_null result(password_message)] } {
+            if { ![info exists result(password_message)] || $result(password_message) eq "" } {
                 set result(password_message) [_ acs-subsite.Check_Your_Inbox]
             }
         } 
         no_account - not_supported - retrieve_error - failed_to_connect {
-            if { ![exists_and_not_null result(password_message)] } {
+            if { (![info exists result(password_message)] || $result(password_message) eq "") } {
                 array set default_message {
                     no_account {Unknown username}
                     not_supported {This operation is not supported}

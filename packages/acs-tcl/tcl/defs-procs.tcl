@@ -97,7 +97,7 @@ ad_proc -public ad_pvt_home_link {} {
 ad_proc -public ad_site_home_link {} {
     @return a link to the user's workspace if the user is logged in. Otherwise, a link to the page root.
 } {
-    if { [ad_get_user_id] != 0 } {
+    if { [ad_conn user_id] != 0 } {
 	return "<a href=\"[ad_pvt_home]\">[subsite::get_element -element name]</a>"
     } else {
 	# we don't know who this person is
@@ -225,16 +225,9 @@ ad_proc -deprecated ad_header {
 } {
     writes HEAD, TITLE, and BODY tags to start off pages in a consistent fashion
 
-
     @see   Documentation on the site master template for the proper way to standardize page headers
 } {
-    
-    #    if {[ad_parameter MenuOnUserPagesP pdm] == 1} {
-    #	return [ad_header_with_extra_stuff -focus $focus $page_title [ad_pdm] [ad_pdm_spacer]]
-    #    } else {
-    #    }
     return [ad_header_with_extra_stuff -focus $focus $page_title $extra_stuff_for_document_head]
-
 }
 
 ad_proc -deprecated ad_header_with_extra_stuff {
@@ -322,7 +315,7 @@ $ds_link
 # the way a page works, they should see a link to the
 # email address of the programmer who can fix the page).
 
-ad_proc -public ad_admin_owner {} {
+ad_proc -public -deprecated ad_admin_owner {} {
     @return E-mail address of the Administrator of this site.
 } {
     return [parameter::get -package_id [ad_acs_kernel_id] -parameter AdminOwner]
@@ -335,14 +328,7 @@ ad_proc -deprecated ad_admin_header {
     
     @see  Documentation on the site master template for the proper way to standardize page headers
 } {
-    
-    # if {[ad_parameter -package_id [ad_acs_kernel_id]  MenuOnAdminPagesP pdm] == 1} {
-	
-	# return [ad_header_with_extra_stuff -focus $focus $page_title [ad_pdm "admin" 5 5] [ad_pdm_spacer "admin"]]
-	
-	# } else {}
-
-	return [ad_header_with_extra_stuff -focus $focus $page_title]
+    return [ad_header_with_extra_stuff -focus $focus $page_title]
 }
 
 ad_proc -deprecated ad_admin_footer {} {
@@ -365,9 +351,9 @@ $ds_link
 }
 
 ad_proc -public ad_return_string_as_file {
-    -string
-    -filename
-    -mime_type
+    -string:required
+    -filename:required
+    -mime_type:required
 } {
     Return a string as the content of a file
     
@@ -376,8 +362,7 @@ ad_proc -public ad_return_string_as_file {
     @param mime_type Mime Type of the file being returned
 } {
     ns_set put [ns_conn outputheaders] "Content-Disposition" "attachment; filename=\"$filename\""
-    ReturnHeaders "$mime_type"
-    ns_write $string
+    ns_return 200 $mime_type $string
 }
 
 ad_proc -public ad_return_complaint {
@@ -392,16 +377,17 @@ ad_proc -public ad_return_complaint {
 
     @param exception_text HTML chunk to go inside an UL tag with the error messages.
 } {
-    set complaint_template [parameter::get_from_package_key -package_key "acs-tcl" -parameter "ReturnComplaint" -default "/packages/acs-tcl/lib/ad-return-complaint"]
+    set complaint_template [parameter::get_from_package_key \
+				-package_key "acs-tcl" \
+				-parameter "ReturnComplaint" \
+				-default "/packages/acs-tcl/lib/ad-return-complaint"]
     ns_return 200 text/html [ad_parse_template \
                                  -params [list [list exception_count $exception_count] \
                                               [list exception_text $exception_text]] \
 				 $complaint_template]
 				 
-    
     # raise abortion flag, e.g., for templating
-    global request_aborted
-    set request_aborted [list 200 "Problem with Your Input"]
+    set ::request_aborted [list 200 "Problem with Your Input"]
 }
 
 
@@ -418,19 +404,21 @@ ad_proc ad_return_exception_page {
     @param title Title to be used for the error (will be shown to user)
     @param explanation Explanation for the exception.
 } {
-    set error_template [parameter::get_from_package_key -package_key "acs-tcl" -parameter "ReturnError" -default "/packages/acs-tcl/lib/ad-return-error"]
+    set error_template [parameter::get_from_package_key \
+			    -package_key "acs-tcl" \
+			    -parameter "ReturnError" \
+			    -default "/packages/acs-tcl/lib/ad-return-error"]
     set page [ad_parse_template -params [list [list title $title] [list explanation $explanation]] $error_template]
     if {$status > 399 
         && [string match {*; MSIE *} [ns_set iget [ad_conn headers] User-Agent]]
         && [string length $page] < 512 } { 
-        append page [string repeat " " [expr 513 - [string length $page]]]
+        append page [string repeat " " [expr {513 - [string length $page]}]]
     }
     
     ns_return $status text/html $page
 
     # raise abortion flag, e.g., for templating
-    global request_aborted
-    set request_aborted [list $status $title]
+    set ::request_aborted [list $status $title]
 }
 
 
@@ -470,8 +458,7 @@ ad_proc ad_return_forbidden {
     Title and explanation is optional. If neither is specified,
     then a default "Permission Denied" message will be displayed.
 } {
-    if { [template::util::is_nil title] 
-         && [template::util::is_nil explanation] } {
+    if { $title eq "" && $explanation eq "" } {
 	set title "Permission Denied"
 	set explanation "Sorry, you haven't been given access to this area."
     }
@@ -552,12 +539,14 @@ ad_proc ad_pretty_mailing_address_from_args {
 
 
 
-ad_proc ad_get_user_info {} { 
+ad_proc -deprecated ad_get_user_info {} { 
     Sets first_names, last_name, email in the environment of its caller.
     @return ad_return_error if user_id can't be found.
 
     @author Unknown
     @author Roberto Mello
+
+    @see acs_user::get
 } {
     uplevel {
 	set user_id [ad_conn user_id]
@@ -750,9 +739,10 @@ ad_proc doc_return {args} {
     of every non-templated user-viewable page. 
 
 } {
-    db_release_unused_handles
+    # Aolserver/Naviserver releases handles automatically since ages
+    #db_release_unused_handles
     ad_http_cache_control
-    eval "ns_return $args"
+    ns_return {*}$args
 }
 
 ad_proc -public ad_return_url {

@@ -766,7 +766,8 @@ begin
         ) select :old.filename, i.storage_area_key
             from cr_items i
            where i.item_id = :old.item_id
-             and i.storage_type = 'file';
+             and i.storage_type = 'file'
+             and r.content is not null;
 
 end cr_cleanup_cr_files_del_trg;
 /

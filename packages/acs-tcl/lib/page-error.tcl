@@ -373,7 +373,7 @@ if { ![form is_valid bug_edit] } {
     }
     # Add empty option to resolution code
     if { $enabled_action_id ne "" } {
-        if { [lsearch [workflow::action::get_element -action_id $action_id -element edit_fields] "resolution"] == -1 } {
+        if {"resolution" ni [workflow::action::get_element -action_id $action_id -element edit_fields]} {
             element set_properties bug_edit resolution -options [concat {{{} {}}} [element get_property bug_edit resolution options]]
         }
     } else {

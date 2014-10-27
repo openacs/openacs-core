@@ -1,6 +1,6 @@
 set url [ad_conn package_url]admin/site-map/[ad_conn path_info]
 
-if {![empty_string_p [ad_conn query]]} {
+if {[ad_conn query] ne ""} {
   append url [ad_conn query]
 }
 

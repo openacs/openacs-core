@@ -24,7 +24,7 @@ ad_page_contract {
 }
 
 set user_id [ad_conn user_id]
-set return_url_enc [ad_urlencode [ad_conn url]?[ad_conn query]]
+set return_url [export_vars -base [ad_conn url] -entire_form -no_empty]
 set group_type_enc [ad_urlencode $group_type]
 
 set package_id [ad_conn package_id]
@@ -77,8 +77,7 @@ db_multirow -extend {one_attribute_url} attributes attributes_select {
        and t.object_type = a.ancestor_type
     order by type_level 
 } {
-
-    set one_attribute_url [export_vars -url -base "../attributes/one" {attribute_id {return_url $return_url_enc}}]
+    set one_attribute_url [export_vars -url -base "../attributes/one" {attribute_id return_url}]
 }
 
 
@@ -95,11 +94,8 @@ db_multirow allowed_relations relations_select {
 # See if we need to offer a link to add a rel type
 set more_relation_types_p [rel_types::additional_rel_types_p -group_type $group_type]
 
-set add_group_url [export_vars -url -base "../parties/new" {{party_type $group_type} {add_with_rel_type composition_rel} {return_url $return_url_enc}}]
+set add_group_url [export_vars -url -base "../parties/new" {{party_type $group_type} {add_with_rel_type composition_rel} return_url}]
 
-set add_attribute_url [export_vars -url -base "../attributes/add" {{object_type $group_type} {return_url $return_url_enc}}]
-
-
+set add_attribute_url [export_vars -url -base "../attributes/add" {{object_type $group_type} return_url}]
 
 
-ad_return_template

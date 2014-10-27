@@ -20,7 +20,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     url:notnull
-    { version_id "" }
+    { version_id:naturalnum "" }
     { package_key ""}
 } -properties {
     title:onevalue
@@ -29,13 +29,15 @@ ad_page_contract {
 }
 
 set context [list]
-if {[exists_and_not_null version_id]} {
+if {$version_id ne ""} {
     db_0or1row package_info_from_package_id {
         select pretty_name, package_key, version_name
           from apm_package_version_info
          where version_id = :version_id
     }
-    lappend context [list "package-view?version_id=$version_id&amp;kind=sql_files" "$pretty_name $version_name"]
+    if {[info exists pretty_name]} {
+	lappend context [list "package-view?version_id=$version_id&amp;kind=sql_files" "$pretty_name $version_name"]
+    }
 }
 lappend context [file tail $url]
 
@@ -48,21 +50,27 @@ set title "[file tail $url]"
 # for example
 
 if { [string match "*..*" $url] || [string match "*..*" $package_key] } {
-    ad_return_error "Can't back up beyond the pageroot" "You can't use 
+    ad_return_warning "Can't back up beyond the pageroot" "You can't use 
     display-sql.tcl to look at files underneath the pageroot."
     return
 }
 
-if {[exists_and_not_null package_key]} {
+if { $package_key ne "" } {
     set safe_p [regexp {/?(.*)} $url package_url]
+} else {
+    set safe_p 0
 }
 
 if { $safe_p } {
-    if [catch {
-        set sql [ad_quotehtml [read [open "[acs_package_root_dir $package_key]/sql/$url"]]]
-    }] {
-        ad_return_error "Problem reading file" "There was a problem reading $url"
+    set sql ""
+    set fn [acs_package_root_dir $package_key]/sql/$url
+    if {[file readable $fn]} {
+	if {[catch {
+	    set f [open $fn]; set sql [read $f]; close $f
+	} errorMsg]} {
+	    ad_return_warning "Problem reading file" "There was a problem reading $url ($errorMsg)"
+	}
     }
 } else {
-    ad_return_error "Invalid file location" "Can only display files in package or doc directory"
+    ad_return_warning "Invalid file location" "Can only display files in package or doc directory"
 }

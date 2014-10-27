@@ -12,7 +12,7 @@
 
 namespace eval item {}
 
-ad_proc -public item::get_content { 
+ad_proc -public -deprecated item::get_content { 
     {-revision_id ""}
     {-array:required}
     {-item_id ""}
@@ -37,8 +37,7 @@ ad_proc -public item::get_content {
   @return 1 on success (and set the array in the calling frame),
     0 on failure 
  
-  @see proc item::get_mime_info 
-  @see proc item::get_content_type
+  @see content::item::get_content
 
 } {
     upvar 1 $array content
@@ -59,7 +58,7 @@ ad_proc -public item::get_content {
     return [item::get_revision_content $revision_id $item_id]
 }
 
-ad_proc -public item::content_is_null { revision_id } {
+ad_proc -public -deprecated item::content_is_null { revision_id } {
 
   @public content_is_null
  
@@ -69,13 +68,15 @@ ad_proc -public item::content_is_null { revision_id } {
  
   @return 1 if the content is null, 0 otherwise
 
+  @see content::item::content_is_null
+
 } {
     set content_test [db_string cin_get_content ""]
 
     return [template::util::is_nil content_test]
 }
 
-ad_proc -public item::get_revision_content { revision_id args } {
+ad_proc -public -deprecated item::get_revision_content { revision_id args } {
 
   @public get_revision_content
  
@@ -94,14 +95,13 @@ ad_proc -public item::get_revision_content { revision_id args } {
   @return 1 on success (and create a content array in the calling frame),
     0 on failure 
  
-  @see proc item::get_mime_info 
-  @see proc item::get_content_type
+  @see content::item::get_revision_content
 
 } {
 
   template::util::get_opts $args
  
-  if { [template::util::is_nil opts(item_id)] } {
+  if { ![info exists opts(item_id)] } {
     # Get the item id
     set item_id [::content::revision::item_id -revision_id $revision_id]
 
@@ -114,17 +114,19 @@ ad_proc -public item::get_revision_content { revision_id args } {
   }
 
   # Get the mime type, decide if we want the text
-  get_mime_info $revision_id
+  content::item::get -item_id $item_id -array_name item_info
 
-  if { [exists_and_not_null mime_info(mime_type)] && \
-           [string equal [lindex [split $mime_info(mime_type) "/"] 0] "text"] } {
+  if { [info exists item_info(mime_type)] 
+       && $item_info(mime_type) ne "" 
+       && [string match "text/*" $item_info(mime_type)] 
+   } {
       set text_sql [db_map grc_get_all_content_1]
   } else {
       set text_sql ""
   }
  
   # Get the content type
-  set content_type [::content::item::get_content_type -item_id $item_id]
+  set content_type $item_info(content_type)
 
   # Get the table name
   set table_name [db_string grc_get_table_names ""]
@@ -143,7 +145,7 @@ ad_proc -public item::get_revision_content { revision_id args } {
 }
 
 
-ad_proc -public item::content_methods_by_type { content_type args } {
+ad_proc -public -deprecated item::content_methods_by_type { content_type args } {
 
   @public content_methods_by_type
  
@@ -162,6 +164,7 @@ ad_proc -public item::content_methods_by_type { content_type args } {
     ATS switch for form widgets 
  
   @return A Tcl list of all possible content methods
+  @see content::item::content_methods_by_type
 
 } {
   
@@ -194,7 +197,7 @@ ad_proc -public item::content_methods_by_type { content_type args } {
 
 
 
-ad_proc -public item::get_mime_info { revision_id {datasource_ref mime_info} } {
+ad_proc -public -deprecated item::get_mime_info { revision_id {datasource_ref mime_info} } {
 
   @public get_mime_info
  
@@ -208,7 +211,7 @@ ad_proc -public item::get_mime_info { revision_id {datasource_ref mime_info} } {
     mime_type and file_extension.
  
   return    1 (one) if the revision exists, 0 (zero) otherwise.
-  @see proc item::get_extended_url
+  @see proc content::item::get
 
 } {
     set sql [db_map gmi_get_mime_info]
@@ -216,7 +219,7 @@ ad_proc -public item::get_mime_info { revision_id {datasource_ref mime_info} } {
     return [uplevel "db_0or1row ignore \"$sql\" -column_array $datasource_ref"]
 }
 
-ad_proc -public item::get_extended_url { item_id args } {
+ad_proc -public -deprecated item::get_extended_url { item_id args } {
 
   Retrieves the relative URL of the item with a file extension based
   on the item's mime_type (Example: "/foo/bar/baz.html"). 
@@ -280,7 +283,7 @@ ad_proc -public item::get_extended_url { item_id args } {
     # Use item mime type if template extension does not exist
 
     # Determine live revision, if none specified
-    if { [template::util::is_nil opts(revision_id)] } {
+    if { ![info exists opts(revision_id)] } {
       set revision_id [::content::item::get_live_revision -item_id $item_id]
 
       if { [template::util::is_nil revision_id] } {
@@ -311,7 +314,7 @@ ad_proc -public item::get_extended_url { item_id args } {
 # but use no direct sql calls.
 #
 #######################################################
-ad_proc -public item::get_element {
+ad_proc -public -deprecated item::get_element {
     {-item_id:required}
     {-element:required}
 } {
@@ -321,11 +324,13 @@ ad_proc -public item::get_element {
     @param item_id The id of the item to get element value for
     @param element The name (column name) of the element. See
                    item::get for valid element names.
+    @see content::item::get
 } {
     ::content::item::get -item_id $item_id -array row
     return $row($element)
 }
-ad_proc -public item::publish {
+
+ad_proc -public -deprecated item::publish {
     {-item_id:required}
     {-revision_id ""}
 } {
@@ -336,14 +341,12 @@ ad_proc -public item::publish {
     @param revision_id The id of the revision to publish. Defaults to the latest revision.
 
     @author Peter Marklund
+    @see content::item::publish
 } {
-    if { $revision_id eq "" } {
-      set revision_id [::content::item::get_latest_revision -item_id $item_id]
-    }
-    ::content::item::set_live_revision -revision_id $revision_id -publish_status "live"
+    ::content::item::unpublish -item_id $item_id -revision_id $revision_id
 }
 
-ad_proc -public item::unpublish {
+ad_proc -public -deprecated item::unpublish {
     {-item_id:required}
     {-publish_status "production"}
 } {
@@ -353,9 +356,9 @@ ad_proc -public item::unpublish {
     @param publish_status The publish_status to put the item in after unpublishing it.
 
     @author Peter Marklund
+    @see content::item::unpublish
 } {
-  ::content::item::set_live_revision -item_id $item_id
-  ::content::item::update -item_id $item_id -attributes [list [list publish_status $publish_status]]
+  ::content::item::unpublish -item_id $item_id -publish_status $publish_status
 }
 
 #######################################################
@@ -483,7 +486,7 @@ ad_proc -public -deprecated item::get_id { url {root_folder ""}} {
   # Strip off file extension
   set last [string last "." $url]
   if { $last > 0 } {
-    set url [string range $url 0 [expr {$last - 1}]]
+    set url [string range $url 0 $last-1]
   }
 
   if {$root_folder ne ""} {

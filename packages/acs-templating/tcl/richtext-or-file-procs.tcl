@@ -17,7 +17,7 @@ namespace eval template::widget {}
 ad_proc -public template::util::richtext_or_file { command args } {
     Dispatch procedure for the richtext_or_file object
 } {
-  eval template::util::richtext_or_file::$command $args
+  template::util::richtext_or_file::$command {*}$args
 }
 
 ad_proc -public template::util::richtext_or_file::create {

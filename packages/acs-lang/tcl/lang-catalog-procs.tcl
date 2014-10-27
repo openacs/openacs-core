@@ -80,7 +80,7 @@ ad_proc -private lang::catalog::all_messages_for_package_and_locale { package_ke
 
     @author Peter Marklund
 } {
-    db_multirow -local -upvar_level 2 all_messages get_messages {}
+    return [db_list_of_lists get_messages {}]
 }
     
 ad_proc -private lang::catalog::package_catalog_dir { package_key } {
@@ -232,13 +232,13 @@ ad_proc -private lang::catalog::messages_in_db {
 } {
     set message_list [list]
 
-    all_messages_for_package_and_locale $package_key $locale
-    template::util::multirow_foreach all_messages {
-        lappend message_list @all_messages.message_key@ @all_messages.message@
+    foreach message_tuple [all_messages_for_package_and_locale $package_key $locale] {
+        lassign $message_tuple message_key message description
+        lappend message_list $message_key $message
     }
-
     return $message_list
 }
+
 
 ad_proc -private lang::catalog::last_sync_messages {
     {-package_key:required}
@@ -357,7 +357,7 @@ ad_proc -private lang::catalog::export_to_file {
    set message_count "0"
    foreach message_key $message_key_list {
        puts $catalog_file_id "  <msg key=\"[ad_quotehtml $message_key]\">[ad_quotehtml $messages_array($message_key)]</msg>"
-       if { [exists_and_not_null descriptions_array($message_key)] && $filename_info(locale) eq "en_US" } {
+       if { ([info exists descriptions_array($message_key)] && $descriptions_array($message_key) ne "") && $filename_info(locale) eq "en_US" } {
            puts $catalog_file_id "  <description key=\"[ad_quotehtml $message_key]\">[ad_quotehtml $descriptions_array($message_key)]</description>\n"
        }
        incr message_count
@@ -396,19 +396,19 @@ ad_proc -public lang::catalog::export {
 	    # and write a catalog file for each such locale
 	    db_foreach get_locales_for_package {} {
 		# If we are only exporting certain locales and this is not one of them - continue
-		if { [llength $locales] > 0 && [lsearch -exact $locales $locale] == -1 } {
+		if { [llength $locales] > 0 && $locale ni $locales } {
 		    continue
 		}
 		
 		# Get messages and descriptions for the locale
 		set messages_list [list]
 		set descriptions_list [list]
-		all_messages_for_package_and_locale $package_key $locale
-		template::util::multirow_foreach all_messages {
-		    lappend messages_list @all_messages.message_key@ @all_messages.message@
-		    lappend descriptions_list @all_messages.message_key@ @all_messages.description@
+		foreach message_tuple [all_messages_for_package_and_locale $package_key $locale] {
+                    lassign $message_tuple message_key message description
+ 		    lappend messages_list $message_key $message
+ 		    lappend descriptions_list $message_key $description
 		}
-		
+
 		set catalog_file_path [get_catalog_file_path \
 					   -package_key $package_key \
 					   -locale $locale]
@@ -496,8 +496,8 @@ ad_proc -private lang::catalog::parse { catalog_file_contents } {
 
     # Get the message catalog root node
     set root_node [xml_doc_get_first_node $tree]
-    if { ![string equal [xml_node_get_name $root_node] ${MESSAGE_CATALOG_TAG}] } {
-        error "lang::catalog_parse: Could not find root node ${MESSAGE_CATALOG_TAG}"
+    if { [xml_node_get_name $root_node] ne $MESSAGE_CATALOG_TAG } {
+        error "lang::catalog_parse: Could not find root node $MESSAGE_CATALOG_TAG"
     }
 
     # Set the message catalog root level attributes
@@ -946,7 +946,7 @@ ad_proc -private lang::catalog::import_messages {
             ns_log Debug "lang::catalog::import_messages - not doing anything: import_case=\"$import_case\" $message_key $upgrade_status $conflict_p"
         }
 
-        if { [lsearch -exact {added updated deleted} $upgrade_status] != -1 } {
+        if { $upgrade_status in {added updated deleted} } {
             if { ! $error_p } {
                 incr message_count($upgrade_status)
             }
@@ -999,7 +999,7 @@ ad_proc -public lang::catalog::import {
     }
 
     foreach package_key $package_key_list {
-        if {$initialize_p && [lsearch -exact $uninitialized_packages $package_key] == -1} {
+        if {$initialize_p && $package_key ni $uninitialized_packages} {
             # The package is already initialized
             continue
         }
@@ -1015,7 +1015,7 @@ ad_proc -public lang::catalog::import {
 
         # Issue a warning and exit if there are no catalog files
         if { $catalog_files eq "" } {
-            ns_log Warning "No catalog files found for package $package_key"
+            ns_log Warning "No catalog files found for package $package_key in locales: $locales"
             continue
         }
 
@@ -1072,7 +1072,7 @@ ad_proc -private lang::catalog::get_catalog_paths_for_import {
     foreach locale $locales_list {        
 
         # If we are only processing certain locales and this is not one of them - continue
-        if { [llength $locales] > 0 && [lsearch -exact $locales $locale] == -1 } {
+        if { [llength $locales] > 0 && $locale ni $locales } {
             continue
         }
 

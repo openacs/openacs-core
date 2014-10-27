@@ -9,7 +9,7 @@ ad_page_contract {
     @cvs-id $Id$
 
 } {
-    group_id:integer,notnull
+    group_id:naturalnum,notnull
     { rel_type:trim "" }
     { return_url "" }
 } -properties {
@@ -31,15 +31,15 @@ set subsite_group_id [application_group::group_id_from_package_id]
 
 # If the user has specified a rel_type, redirect to new-2
 if { $rel_type ne "" } {
-    ad_returnredirect new-2?[ad_export_vars {group_id rel_type return_url}]
+    ad_returnredirect new-2?[export_vars {group_id rel_type return_url}]
     ad_script_abort
 } 
 
-ad_require_permission $group_id "read"
+permission::require_permission -object_id $group_id -privilege "read"
 
 set context [list [list "" "Relational segments"] "Add segment"]
 
-set export_vars [ad_export_vars -form {group_id return_url}]
+set export_vars [export_vars -form {group_id return_url}]
 # Select out all relationship types
 db_multirow rel_types select_relation_types {
     select t.pretty_name, t.object_type as rel_type,

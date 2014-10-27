@@ -44,17 +44,18 @@ foreach entry [lc_list_all_timezones] {
 
 # Try to get the correct UTC time from www.timeanddate.com
 if { [catch {
-    set time_and_date_page [util_httpget "http://www.timeanddate.com/worldclock/"]
+    set h [ns_set create headers Accept-Language en-us]
+    set result [util::http::get -url "http://www.timeanddate.com/worldclock/" -headers $h]
+    set time_and_date_page [dict get $result page]
 } errmsg] } {
-    global errorInfo
     ns_log Error "set-system-timezone.tcl: Error trying to get timeanddate.com/worldclock/"
     set utc_ansi {Couldn't get time from timeanddate.com, sorry.}
 }
 
 # example input:
-# ss=m3>Current <strong>UTC</strong> \(or GMT/Zulu\)-time used: <strong id=ctu>Friday, July 27, 2012 at 19:20:27</strong>
+# ss=m3><strong>UTC</strong> \(or GMT/Zulu\)-time used: <strong id=ctu>Friday, July 27, 2012 at 19:20:27</strong>
 
-if { [regexp {Current[ ]+<strong>UTC</strong>[^:]+[:][ ]*<strong[^>]*>([^<]+)</strong>} $time_and_date_page match utc_from_page] } {
+if { [regexp {<strong>UTC</strong>[^:]+[:][ ]*<strong[^>]*>([^<]+)</strong>} $time_and_date_page match utc_from_page] } {
     # UTC in format (including some historical ones to help keep a robust regexp:
     # Friday, July 27, 2012 at 19:20:27  
     # Wednesday, 20 November 2002, at 2:49:07 PM
@@ -94,7 +95,7 @@ if { [info exists utc_epoch] } {
         set delta_hours [expr {round(($sysdate_utc_epoch - $utc_epoch)*4.0 / (60*60)) / 4.0}]
         set recommended_offset [expr {$system_utc_offset + $delta_hours}]
 
-        set recommended_offset_pretty "UTC [format "+%d:%02d" [expr {int($recommended_offset)}] [expr {int($recommended_offset*60) % 60}]]"
+        set recommended_offset_pretty "UTC [format {+%d:%02d} [expr {int($recommended_offset)}] [expr {int($recommended_offset*60) % 60}]]"
 
         if { $delta_hours == 0 } {
             set correct_p 1
@@ -104,14 +105,10 @@ if { [info exists utc_epoch] } {
         
         set try_offsets [list]
         foreach offset [list $recommended_offset [expr {$recommended_offset -24}]] {
-            # LARS 2003-11-05
-            # This is a workaround for a Tcl 8.3 bug on Solaris that causes int() on negative decimal
-            # numbers to fail with "integer value too large to represent".
-            # Example: 'expr int(-1.0)' throws an error; 'expr int(-1)' does not.
             if { $offset < 0 } {
-                lappend try_offsets "'[db_quote [expr -int(abs($offset)*60*60)]]'"
+                lappend try_offsets '[db_quote [expr {-int(abs($offset)*60*60)}]]'
             } else {
-                lappend try_offsets "'[db_quote [expr {int($offset*60*60)}]]'"
+                lappend try_offsets '[db_quote [expr {int($offset*60*60)}]]'
             }
         }
 

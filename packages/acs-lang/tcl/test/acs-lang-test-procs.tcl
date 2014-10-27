@@ -34,7 +34,7 @@ ad_proc -private lang::test::test_package_key {} {
 ad_proc -private lang::test::setup_test_package {} {
     set package_key [test_package_key]
     set package_name "acs-lang temporary test package"
-    set package_dir [file join [acs_root_dir] packages $package_key]
+    set package_dir [file join $::acs::rootdir packages $package_key]
     file mkdir $package_dir
 
     set info_file_path "${package_dir}/${package_key}.info"
@@ -61,7 +61,7 @@ ad_proc -private lang::test::setup_test_package {} {
         -enable \
         [apm_package_info_file_path $package_key]
     aa_true "Package install: package enabled" \
-        [expr [lsearch -exact [apm_enabled_packages] $package_key] != -1]
+        [expr {$package_key in [apm_enabled_packages]}]
 }
 
 ad_proc -private lang::test::teardown_test_package {} {
@@ -500,7 +500,7 @@ aa_register_case \
     set expected_new_keys [list Auto_Key key_1_1] 
 
     # Write the test tcl file
-    set tcl_file_id [open "[acs_root_dir]/$tcl_file" w]    
+    set tcl_file_id [open "$::acs::rootdir/$tcl_file" w]    
     set new_key_1 "_"
     set new_text_1 "Auto Key"
     set new_key_2 "key_1"
@@ -551,10 +551,10 @@ aa_register_case \
                                                    $messages_array($new_key_3)]
 
     # Check that there are no tags left in the tcl file
-    set tcl_file_id [open "[acs_root_dir]/$tcl_file" r]
+    set tcl_file_id [open "$::acs::rootdir/$tcl_file" r]
     set updated_tcl_contents [read $tcl_file_id]
     close $tcl_file_id
-    aa_true "tags in tcl file replaced" [expr [llength [lang::util::get_temporary_tags_indices $updated_tcl_contents]] == 0]
+    aa_true "tags in tcl file replaced" [expr {[llength [lang::util::get_temporary_tags_indices $updated_tcl_contents]] == 0}]
 
     # Delete the test message keys
     foreach message_key [concat [array names messages_array] $expected_new_keys] {
@@ -565,8 +565,8 @@ aa_register_case \
     file delete $catalog_file
 
     # Delete the tcl files
-    file delete "[acs_root_dir]/$tcl_file"
-    file delete "[acs_root_dir]/$tcl_backup_file"
+    file delete "$::acs::rootdir/$tcl_file"
+    file delete "$::acs::rootdir/$tcl_backup_file"
 }
 
 aa_register_case \
@@ -588,8 +588,8 @@ aa_register_case \
       set expected_index_item [lindex $expected_indices_list $counter]
       
       aa_true "checking start and end indices of item $counter" \
-              [expr [string equal [lindex $index_item 0] [lindex $expected_index_item 0]] && \
-              [string equal [lindex $index_item 1] [lindex $expected_index_item 1]]]
+	  [expr {[lindex $index_item 0] eq [lindex $expected_index_item 0]
+		 && [lindex $index_item 1] eq [lindex $expected_index_item 1]}]
 
       set counter [expr {$counter + 1}]
   }
@@ -1062,4 +1062,16 @@ aa_register_case -procs {
             # We need to clear the cache
             lang::message::unregister $package_key $message_key
         }
+}
+
+aa_register_case lang_messages_correct {
+    This test calls the checks to ensure a message is correct on every message in the system
+} {
+    aa_run_with_teardown -rollback -test_code {
+	db_foreach query "
+	  select message_key, package_key, locale, message from lang_messages" {
+	    aa_false "Message $message_key in package $package_key for locale $locale correct" \
+	      [catch {lang::message::check $locale $package_key $message_key $message}]
+	}
+    }
 }

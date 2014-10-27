@@ -110,7 +110,7 @@
     </para>
 
     <para>
-      Localizable text must be handled in ADP files, in TCL files, and
+      Localizable text must be handled in ADP files, in Tcl files, and
       in APM Parameters.  OpenACS provides two approaches, message
       keys and localized ADP files.  For ADP pages which are mostly
       code, replacing the message text with message key placeholders
@@ -214,7 +214,7 @@
     </sect3>
 
     <sect3 id="i18n-message-catalog-tcl">
-      <title>Message Keys in TCL Files</title>
+      <title>Message Keys in Tcl Files</title>
 
       <para>
         In adp files message lookups are typically done with the syntax 
@@ -247,10 +247,10 @@
       </para>
 
       <para>
-        Translatable texts in page TCL scripts are often found in page titles,
+        Translatable texts in page Tcl scripts are often found in page titles,
         context bars, and form labels and options. Many times the texts are
         enclosed in double quotes. The following is an example of grep commands 
-        that can be used on Linux to highlight translatable text in TCL files:
+        that can be used on Linux to highlight translatable text in Tcl files:
       </para>
       <screen>
 # Find text in double quotes
@@ -267,7 +267,7 @@
 
       </screen>
       <para>
-        You may mark up translatable text in TCL library files and TCL pages
+        You may mark up translatable text in Tcl library files and Tcl pages
         with temporary tags on the &lt;#key text#&gt; syntax. 
         If you have a sentence or paragraph of text with
         variables and or procedure calls in it you should in most cases 
@@ -342,17 +342,17 @@ ad_return_complaint 1 [_ dotlrn.class_may_not_be_deleted $msg_subst_list]
         When you feel ready you may vist your package in the
         <ulink url="/acs-admin/apm">package manager</ulink>
         and run the action "Replace tags with keys
-        and insert into catalog" on the TCL files that you've edited to
+        and insert into catalog" on the Tcl files that you've edited to
         replace the temporary tags with calls to the message lookup
         procedure.
       </para>
 
       <sect4 id="i18n-date-time-number">
 
-    <title>Dates, Times, and Numbers in TCL files</title>
+    <title>Dates, Times, and Numbers in Tcl files</title>
 
     <para>
-      Most date, time, and number variables are calculated in TCL files.  Dates and times must be converted when stored in the database,
+      Most date, time, and number variables are calculated in Tcl files.  Dates and times must be converted when stored in the database,
       when retrieved from the database, and when displayed.  All dates
       are stored in the database in the server's timezone, which is an
       APM Parameter set at
@@ -513,8 +513,8 @@ ad_return_complaint 1 [_ dotlrn.class_may_not_be_deleted $msg_subst_list]
       </listitem>
       <listitem>
         <formalpara>
-          <title>Replace human-readable text in TCL files with temporary tags</title>
-          <para>Examine all of the tcl files in the packages for human-readable text and replace it with temporary tags.  The temporary tags in TCL are slightly different from those in ADP.  If the first character in the temporary tag is an underscore (<computeroutput>_</computeroutput>), then the message keys will be auto-generated from the original message text.  Here is an unmodified tcl file:</para>
+          <title>Replace human-readable text in Tcl files with temporary tags</title>
+          <para>Examine all of the tcl files in the packages for human-readable text and replace it with temporary tags.  The temporary tags in Tcl are slightly different from those in ADP.  If the first character in the temporary tag is an underscore (<computeroutput>_</computeroutput>), then the message keys will be auto-generated from the original message text.  Here is an unmodified tcl file:</para>
         </formalpara>
 <programlisting>
 set title "Messages for $a(name) in $b(label)"
@@ -537,8 +537,8 @@ set context [list [list . &lt;#_ SimPlay#&gt;] \
       </listitem>
       <listitem>
         <formalpara>
-          <title>Replace the temporary message tags in TCL files</title>
-          <para>Repeat step 2 for tcl files.  Here is the example TCL file after conversion:</para>
+          <title>Replace the temporary message tags in Tcl files</title>
+          <para>Repeat step 2 for tcl files.  Here is the example Tcl file after conversion:</para>
         </formalpara>
         <programlisting>
 set title [_ simulation.admin_title]
@@ -551,7 +551,7 @@ set context [list [list . [_ simulation.SimPlay]] \
       <listitem>
         <formalpara>
           <title>Internationalize SQL Code</title>
-          <para>If there is any user-visible TCL code in the .sql or .xql files, internationalize that the same way as for the TCL files.</para>
+          <para>If there is any user-visible Tcl code in the .sql or .xql files, internationalize that the same way as for the Tcl files.</para>
         </formalpara>
       </listitem>
       <listitem>
@@ -582,7 +582,7 @@ grep -r "to_date.*H" *
         </listitem>
 
         <listitem>
-          <para>In TCL files where the date fields are used, convert the datetime from local server timezone, which is how it's stored in the database, to the user's timezone for display.  Do this with the localizing function <computeroutput><ulink url="/api-doc/proc-view?proc=lc_time_system_to_conn">lc_time_system_to_conn</ulink></computeroutput>:</para>
+          <para>In Tcl files where the date fields are used, convert the datetime from local server timezone, which is how it's stored in the database, to the user's timezone for display.  Do this with the localizing function <computeroutput><ulink url="/api-doc/proc-view?proc=lc_time_system_to_conn">lc_time_system_to_conn</ulink></computeroutput>:</para>
 <programlisting>
 set foo_date_ansi [lc_time_system_to_conn $foo_date_ansi]</programlisting>
           <para>When a datetime will be written to the database, first convert it from the user's local time to the server's timezone with <computeroutput><ulink url="/api-doc/proc-view?proc=lc%5ftime%5fconn%5fto%5fsystem">lc_time_conn_to_system</ulink></computeroutput>.
@@ -894,7 +894,7 @@ the message appears.
         <listitem>
           <formalpara>
             <title>Be careful with curly brackets</title>
-            <para>Code within curly brackets isn't evaluated.  TCL uses curly brackets as an alternative way to build lists.  But TCL also uses curly brackets as an alternative to quotation marks for quoting text.  So this original code</para>
+            <para>Code within curly brackets isn't evaluated.  Tcl uses curly brackets as an alternative way to build lists.  But Tcl also uses curly brackets as an alternative to quotation marks for quoting text.  So this original code</para>
           </formalpara>
           <programlisting>array set names { key "Pretty" ...} </programlisting>
           <para>... if converted to </para>
@@ -918,7 +918,7 @@ the message appears.
       <listitem><para>Use system locale (an APM parameter for acs_lang)</para></listitem>
 <listitem><para>default to en_US</para></listitem>
     </orderedlist>
-    <para>For ADP pages, message key lookup occurs in the templating engine.  For TCL pages, message key lookup happens with the <computeroutput>_</computeroutput> function.  In both cases, if the requested locale is not found but a locale which is the default for the language which matches your locale's language is
+    <para>For ADP pages, message key lookup occurs in the templating engine.  For Tcl pages, message key lookup happens with the <computeroutput>_</computeroutput> function.  In both cases, if the requested locale is not found but a locale which is the default for the language which matches your locale's language is
 found, then that locale is offered instead.</para>
   </sect1>
 

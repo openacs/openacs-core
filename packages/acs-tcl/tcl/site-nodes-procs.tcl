@@ -216,7 +216,7 @@ ad_proc -public site_node::instantiate_and_mount {
             # Check that there isn't already a package mounted at the node
             array set node [get -url $url]
 
-            if { [exists_and_not_null node(object_id)] } {
+            if { [info exists node(object_id)] && $node(object_id) ne "" } {
                 error "Cannot mount package at url $url as package $node(object_id) is already mounted there"
             }
 
@@ -250,11 +250,13 @@ ad_proc -public site_node::unmount {
     set package_id [get_object_id -node_id $node_id]
     set package_key [apm_package_key_from_id $package_id]
 
-    foreach inherited_package_key [nsv_get apm_package_inherit_order $package_key] {
-        apm_invoke_callback_proc \
-            -package_key $inherited_package_key \
-            -type before-unmount \
-            -arg_list [list package_id $package_id node_id $node_id]
+    if {[nsv_exists apm_package_inherit_order $package_key]} {
+        foreach inherited_package_key [nsv_get apm_package_inherit_order $package_key] {
+	    apm_invoke_callback_proc \
+		-package_key $inherited_package_key \
+		-type before-unmount \
+		-arg_list [list package_id $package_id node_id $node_id]
+	}
     }
 
     db_dml unmount_object {}
@@ -537,7 +539,7 @@ ad_proc -public site_node::get_url {
 } {
     return the url of this node_id
 
-    @notrailing If true then strip any
+    @param notrailing If true then strip any
     trailing slash ('/'). This means the empty string is returned for the root.
 } {
     set url ""
@@ -799,7 +801,7 @@ ad_proc -public site_node::closest_ancestor_package {
     if { $include_self_p && $package_key ne ""} {
         array set node_array [site_node::get -url $url]
 
-        if { [lsearch -exact $package_key $node_array(package_key)] != -1 } {
+        if {$node_array(package_key) in $package_key} {
             return $node_array($element)
         }
     }
@@ -992,7 +994,7 @@ ad_proc -deprecated -warn site_node_closest_ancestor_package {
 
     <pre>
     # Pull out the package_id of the subsite closest to our current node
-    set pkg_id [site_node_closest_ancestor_package "acs-subsite"]
+    set pkg_id [site_node::closest_ancestor_package -include_self -package_key "acs-subsite"]
     </pre>
 
     @author Michael Bryzek (mbryzek@arsdigita.com)
@@ -1015,7 +1017,7 @@ ad_proc -deprecated -warn site_node_closest_ancestor_package {
     # Try the URL as is.
     if {[catch {nsv_get site_nodes $url} result] == 0} {
           array set node $result
-          if { [lsearch -exact $package_keys $node(package_key)] != -1 } {
+          if {$node(package_key) in $package_keys} {
               return $node(package_id)
           }
     }
@@ -1025,7 +1027,7 @@ ad_proc -deprecated -warn site_node_closest_ancestor_package {
           append url "/"
           if {[catch {nsv_get site_nodes $url} result] == 0} {
               array set node $result
-              if { [lsearch -exact $package_keys $node(package_key)] != -1 } {
+              if {$node(package_key) in $package_keys} {
                     return $node(package_id)
               }
           }
@@ -1039,7 +1041,9 @@ ad_proc -deprecated -warn site_node_closest_ancestor_package {
         
           if {[catch {nsv_get site_nodes $url} result] == 0} {
               array set node $result
-              if {$node(pattern_p) == "t" && $node(object_id) ne "" && [lsearch -exact $package_keys $node(package_key)] != -1 } {
+              if {$node(pattern_p) == "t" 
+		  && $node(object_id) ne "" 
+		  && $node(package_key) in $package_keys} {
                     return $node(package_id)
               }
           }

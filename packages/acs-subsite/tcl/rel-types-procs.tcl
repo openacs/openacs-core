@@ -176,14 +176,14 @@ namespace eval rel_types {
 	set pretty_name "#acs-translations.${message_key}#"
 	set pretty_plural "#acs-translations.${message_key}_plural#"
 
-	foreach pair $plsql {
-	    eval [lindex $pair 0] [lindex $pair 1] [lindex $pair 2]
+	foreach cmd $plsql {
+	    {*}$cmd
 	}
 
 	# The following create table statement commits the transaction. If it
 	# fails, we roll back what we've done
 
-	if {$create_table_p eq "t"} {
+	if {$create_table_p == "t"} {
 	    if {[catch {db_exec_plsql create_table "
 		create table $table_name (
         	   rel_id constraint $fk_constraint_name
@@ -194,8 +194,8 @@ namespace eval rel_types {
 		# Roll back our work so for
 
 		for {set i [expr {[llength $plsql_drop] - 1}]} {$i >= 0} {incr i -1} {
-		    set drop_pair [lindex $plsql_drop $i]
-		    if {[catch {eval [lindex $drop_pair 0] [lindex $drop_pair 1] [lindex $drop_pair 2]} err_msg_2]} {
+		    set drop_cmd [lindex $plsql_drop $i]
+		    if {[catch $dropcmd err_msg_2]} {
 			append errmsg "\nAdditional error while trying to roll back: $err_msg_2"
 			return -code error $errmsg
 		    }
@@ -255,7 +255,7 @@ namespace eval rel_types {
 
 	@return 1 if successful
     } {
-	if {![exists_and_not_null role]} {
+	if {![info exists role] || $role eq ""} {
 	    set role [util_text_to_url \
 			  -text $pretty_name \
 			  -replacement "_" \

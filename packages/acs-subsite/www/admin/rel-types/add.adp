@@ -1,6 +1,6 @@
 <master>
 <property name="context">@context;noquote@</property>
-<property name="title">Add group type</property>
+<property name="doc(title)">Add group type</property>
 				   
 <if primary_rels:rowcount eq 0> 
 

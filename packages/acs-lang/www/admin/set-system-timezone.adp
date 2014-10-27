@@ -1,5 +1,5 @@
 <master>
-  <property name="title">@page_title@</property>
+  <property name="doc(title)">@page_title@</property>
   <property name="context">@context;noquote@</property>
 
 <p>
@@ -31,6 +31,16 @@
     </td>
     <td>
       <b>@system_utc_offset@ hours</b>
+    </td>
+  </tr>
+
+  <tr bgcolor="yellow">
+    <td>
+      UTC time returned from time server  <a
+        href="http://www.timeanddate.com/worldclock/">timeanddate.com</a>:
+    </td>
+    <td>
+      <b>@utc_from_page@</b>
     </td>
   </tr>
 

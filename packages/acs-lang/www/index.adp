@@ -1,5 +1,5 @@
 <master>
-  <property name="title">@instance_name;noquote@</property>
+  <property name="doc(title)">@instance_name;noquote@</property>
   <property name="context_bar">@context_bar;noquote@</property>
 
 <if @admin_p@>

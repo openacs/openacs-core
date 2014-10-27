@@ -44,7 +44,7 @@ ad_proc -public content::template::new {
         [list creation_ip $creation_ip ] \
         [list package_id $package_id ] \
     ]
-    if {[exists_and_not_null creation_date]} {
+    if {([info exists creation_date] && $creation_date ne "")} {
         lappend arg_list [list creation_date $creation_date ]
     }
     return [package_exec_plsql -var_list  $arg_list content_template new]
@@ -69,7 +69,6 @@ ad_proc -public content::template::get_path {
 } {
     @param template_id
     @param root_folder_id
-    @throws -20000: Invalid item ID: %'', get_path__item_id;
 
     @return "/" delimited path from root to supplied template_id
 } {

@@ -133,7 +133,7 @@ ad_proc -private acs_messaging_timezone_offset {
 } {
     Returns a best guess of the timezone offset for the machine.
 } {
-    return [format "%+05d" [expr ([lindex [ns_localtime] 2] - [lindex [ns_gmtime] 2]) * 100]]
+    return [format "%+05d" [expr {([lindex [ns_localtime] 2] - [lindex [ns_gmtime] 2]) * 100]}]
 }
 
 ad_proc -private acs_messaging_process_queue {

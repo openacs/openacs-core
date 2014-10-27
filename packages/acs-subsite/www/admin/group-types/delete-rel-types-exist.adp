@@ -1,6 +1,6 @@
 <master>
 <property name="context">@context;noquote@</property>
-<property name="title">Relationship types exist that depend on this group type</property>
+<property name="doc(title)">Relationship types exist that depend on this group type</property>
 
 You must remove all of the following relationship types before you can
 remove the @group_type_pretty_name@ group type.

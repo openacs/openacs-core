@@ -30,7 +30,7 @@ if { ![db_0or1row select_info {
     return
 }
 
-set export_vars [ad_export_vars -form {group_rel_type_id return_url}]
-set context [list [list "[ad_conn package_url]admin/group-types/" "Group types"] [list one?[ad_export_vars {group_type}] "One type"] "Remove relation type"]
+set export_vars [export_vars -form {group_rel_type_id return_url}]
+set context [list [list "[ad_conn package_url]admin/group-types/" "Group types"] [list one?[export_vars {group_type}] "One type"] "Remove relation type"]
 
 ad_return_template

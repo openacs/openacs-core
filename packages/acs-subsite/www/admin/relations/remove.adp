@@ -1,6 +1,6 @@
 <master>
 <property name="context">@context;noquote@</property>
-<property name="title">Remove relation</property>
+<property name="doc(title)">Remove relation</property>
 
 Are you sure you want to remove the @rel.rel_type_pretty_name@
 between @rel.object_id_one_name@ and @rel.object_id_two_name@?

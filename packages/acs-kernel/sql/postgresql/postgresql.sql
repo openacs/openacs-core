@@ -986,7 +986,8 @@ select define_function_args('trigger_type','tgtype');
 -- '9.1' means '9.1.0'
 -- '9.1.2' means '9.1.2'
 
-select define_function_args('cmp_pg_version','p__version');
+select define_function_args('cmp_pg_version','version');
+
 CREATE or REPLACE function cmp_pg_version(
     p__version varchar
 ) RETURNS integer AS $$

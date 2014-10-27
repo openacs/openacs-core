@@ -51,7 +51,7 @@ procedure defined in <computeroutput>security-procs.tcl</computeroutput>:</para>
     if { [ad_secure_conn_p] &amp;&amp; ![ad_login_page] } {
         set s_token_cookie [ns_urldecode [ad_get_cookie &quot;ad_secure_token&quot;]]
         
-        if { [empty_string_p $s_token_cookie] || [string compare $s_token_cookie [lindex [sec_get_session_info $session_id] 2]] != 0 } {
+        if { $s_token_cookie eq "" || $s_token_cookie ne [lindex [sec_get_session_info $session_id] 2]} {
         # token is incorrect or nonexistent, so we force relogin.
         ad_returnredirect &quot;/register/index?return_url=[ns_urlencode [ad_conn url]?[ad_conn query]]&quot;
         }

@@ -5,7 +5,7 @@ ad_page_contract {
     userlist
     from
     subject
-    message:allhtml
+    message:html
 } -properties {
     title:onevalue
     success_text:onevalue
@@ -29,7 +29,7 @@ set group_id [application_group::group_id_from_package_id]
 while {[regexp {(.[^\n]+)} $userlist match_fodder row] } {
     # remove each row as it's handled
     set remove_count [string length $row]
-    set userlist [string range $userlist [expr {$remove_count + 1}] end]
+    set userlist [string range $userlist $remove_count+1 end]
     set row [split $row ,]
     set email [string trim [lindex $row 0]]
     set first_names [string trim [lindex $row 1]]

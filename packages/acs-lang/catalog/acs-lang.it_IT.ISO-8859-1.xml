@@ -26,9 +26,9 @@
   <msg key="localization-int_curr_symbol">Euro</msg>
   <msg key="localization-int_frac_digits">2</msg>
   <msg key="localization-mon">{Gennaio} {Febbraio} {Marzo} {Aprile} {Maggio} {Giugno} {Luglio} {Agosto} {Settembre} {Ottobre} {Novembre} {Dicembre}</msg>
-  <msg key="localization-mon_decimal_point">.</msg>
+  <msg key="localization-mon_decimal_point">,</msg>
   <msg key="localization-mon_grouping">3 3 </msg>
-  <msg key="localization-mon_thousands_sep">,</msg>
+  <msg key="localization-mon_thousands_sep">.</msg>
   <msg key="localization-n_cs_precedes">1</msg>
   <msg key="localization-n_sep_by_space">0</msg>
   <msg key="localization-n_sign_posn">1</msg>
@@ -39,7 +39,7 @@
   <msg key="localization-pm_str">PM</msg>
   <msg key="localization-positive_sign">+</msg>
   <msg key="localization-t_fmt">%H:%M</msg>
-  <msg key="localization-thousands_sep">,</msg>
+  <msg key="localization-thousands_sep">.</msg>
   <msg key="Resolve_message_conflicts">Risolvi conflitti</msg>
   <msg key="Spanish">Spagnolo</msg>
   <msg key="this-language">Italiano</msg>

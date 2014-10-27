@@ -18,7 +18,7 @@ ad_page_contract {
     export_vars:onevalue
 }
 
-set context [list [list one?[ad_export_vars constraint_id] "One constraint"] "Delete constraint"]
+set context [list [list one?[export_vars constraint_id] "One constraint"] "Delete constraint"]
 
 set package_id [ad_conn package_id]
 
@@ -37,4 +37,4 @@ if { ![db_0or1row select_constraint_props {
     ad_script_abort
 }
 
-set export_vars [ad_export_vars -form {constraint_id return_url}]
+set export_vars [export_vars -form {constraint_id return_url}]

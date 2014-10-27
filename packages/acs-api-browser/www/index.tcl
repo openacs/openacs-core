@@ -24,6 +24,11 @@ set context [list]
 
 if  { [info exists about_package_key] } {
 
+    # create multirows to make property-passing happy
+    multirow create installed_packages
+    multirow create disabled_packages
+    multirow create uninstalled_packages
+
     if { [db_0or1row get_local_package_version_id {} ] } {
         rp_form_update version_id $version_id
         rp_internal_redirect package-view

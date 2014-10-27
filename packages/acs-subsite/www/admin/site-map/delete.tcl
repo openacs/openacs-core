@@ -8,8 +8,8 @@ ad_page_contract {
 
 } {
     expand:integer,multiple
-    node_id:integer,notnull
-    {root_id:integer ""}
+    node_id:naturalnum,notnull
+    {root_id:naturalnum ""}
 }
 
 if {$root_id == $node_id} {
@@ -18,4 +18,4 @@ if {$root_id == $node_id} {
 
 site_node::delete -node_id $node_id
 
-ad_returnredirect ".?[export_url_vars expand:multiple root_id]"
+ad_returnredirect ".?[export_vars -url {expand:multiple root_id}]"

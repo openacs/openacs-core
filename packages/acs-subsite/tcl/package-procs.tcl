@@ -131,7 +131,7 @@ ad_proc -private package_create_attribute_list {
 	if { $limit_to ne "" } {
 	    # We have a limited list of arguments to use. Make sure
 	    # this attribute is one of them
-	    if { [lsearch -exact $limit_to $attr_column_name] == -1 } {
+	    if {$attr_column_name ni $limit_to} {
 		# This column is not in the list of allowed
 		# columns... ignore
 		continue
@@ -146,9 +146,8 @@ ad_proc -private package_create_attribute_list {
     }
     
     if { $supertype ne "" && $object_name ne "" } {
-	foreach row [util_memoize "package_table_columns_for_type \"$supertype\""] {
-	    set table_name [lindex $row 0]
-	    set column_name [lindex $row 1]
+      foreach row [util_memoize [list package_table_columns_for_type $supertype]] {
+	    lassign $row table_name column_name
 
 	    # Note that limit_to doesn't apply here as we always need
 	    # to include these arguments else the call will fail
@@ -263,8 +262,8 @@ ad_proc -public package_recreate_hierarchy {
     # performance. -mbryzek
 
     foreach object_type $object_type_list {
-	if { [util_memoize_cached_p "package_table_columns_for_type \"$object_type\""] } {
-	    util_memoize_flush "package_table_columns_for_type \"$object_type\""
+      if { [util_memoize_cached_p [list package_table_columns_for_type $object_type]] } {
+	util_memoize_flush [list package_table_columns_for_type $object_type]
 	}
     }
     
@@ -312,7 +311,7 @@ ad_proc -private package_create {
     lappend plsql [list "package" "create_package" [package_generate_spec $object_type]]
     lappend plsql [list "package body" "create_package_body" [package_generate_body $object_type]]
 
-    if { $debug_p eq "t" } {
+    if { $debug_p == "t" } {
 	foreach pair $plsql {
 #	    append text "[plsql_utility::parse_sql [lindex $pair 1]]\n\n"
 	    append text [lindex $pair 2]
@@ -321,9 +320,8 @@ ad_proc -private package_create {
     }
 
     foreach pair $plsql {
-	set type [lindex $pair 0]
-	set stmt_name [lindex $pair 1]
-	set code [lindex $pair 2]
+	lassign $pair type stmt_name code
+
 	db_exec_plsql $stmt_name $code
 	
 	# Let's check to make sure the package is valid
@@ -441,8 +439,8 @@ ad_proc -public package_object_view_reset {
 	 start with t.object_type = :object_type 
        connect by prior t.supertype = t.object_type
     } {
-	if { [util_memoize_cached_p "package_object_view_helper -start_with $ancestor_type $object_type"] } {
-	    util_memoize_flush "package_object_view_helper -start_with $ancestor_type $object_type"
+      if { [util_memoize_cached_p [list package_object_view_helper -start_with $ancestor_type $object_type]] } {
+	util_memoize_flush [list package_object_view_helper -start_with $ancestor_type $object_type]
 	}
     }
 
@@ -453,8 +451,8 @@ ad_proc -public package_object_view_reset {
 	 start with t.object_type = :object_type 
        connect by prior t.object_type = t.supertype
     } {
-	if { [util_memoize_cached_p "package_object_view_helper -start_with $object_type $sub_type"] } {
-	    util_memoize_flush "package_object_view_helper -start_with $object_type $sub_type"
+      if { [util_memoize_cached_p [list package_object_view_helper -start_with $object_type $sub_type]] } {
+	util_memoize_flush [list package_object_view_helper -start_with $object_type $sub_type]
 	}
     }
 }
@@ -475,10 +473,10 @@ ad_proc -public package_object_view {
     @param start_with The highest parent object type for which to include attributes
     @param object_type The object for which to create a package spec
 } {
-    if {$refresh_p eq "t"} {
+    if {$refresh_p == "t"} {
 	package_object_view_reset $object_type
     }
-    return [util_memoize "package_object_view_helper -start_with $start_with $object_type"]
+    return [util_memoize [list package_object_view_helper -start_with $start_with $object_type]]
 }
 
 
@@ -528,7 +526,7 @@ ad_proc -private package_object_view_helper {
 	}
 
 	# Do the column check first to include only the tables we need
-	if { [lsearch -exact $columns "$table.$column"] != -1 } {
+	if {"$table.$column" in $columns} {
 	    # We already have a column with the same name. Keep the
 	    # first one as it's lower in the type hierarchy.
 	    continue
@@ -536,7 +534,7 @@ ad_proc -private package_object_view_helper {
 	# first time we're seeing this column
 	lappend columns "${table}.${column}"
 
-	if { [lsearch -exact $tables $table] == -1 } {
+	if {$table ni $tables} {
 	    # First time we're seeing this table
 	    lappend tables $table
 	    lappend primary_keys "${table}.${object_column}"
@@ -544,8 +542,8 @@ ad_proc -private package_object_view_helper {
     }
 
     set pk_formatted [list]
-    for { set i 0 } { $i < [expr {[llength $primary_keys] - 1}] } { incr i } {
-	lappend pk_formatted "[lindex $primary_keys $i] = [lindex $primary_keys [expr {$i +1}]]"
+    for { set i 0 } { $i < [llength $primary_keys] - 1 } { incr i } {
+	lappend pk_formatted "[lindex $primary_keys $i] = [lindex $primary_keys $i+1]"
     }
     return "SELECT [string tolower [join $columns ",\n       "]]
   FROM [string tolower [join $tables ", "]]
@@ -826,7 +824,7 @@ ad_proc -public package_instantiate_object {
     # This will prevent us from passing in any parameters that are
     # not defined
 
-    foreach arg [util_memoize "package_plsql_args \"$package_name\""] {
+    foreach arg [util_memoize [list package_plsql_args $package_name]] {
 	set real_params([string toupper $arg]) 1
     }
     
@@ -839,9 +837,7 @@ ad_proc -public package_instantiate_object {
     set pieces [list]
     
     foreach pair $var_list {
-
-	set __key [lindex $pair 0]
-	set __value [lindex $pair 1]
+	lassign $pair __key __value
 	if { ![info exists real_params([string toupper $__key])] } {
 	    # The parameter is not accepted as a parameter to the
 	    # pl/sql function. Ignore it.
@@ -959,8 +955,7 @@ ad_proc -public package_exec_plsql {
     set pieces [list]
 
     foreach pair $var_list {
-	set __key [lindex $pair 0]
-	set __value [lindex $pair 1]
+	lassign $pair __key __value
 	if { ![info exists real_params([string toupper $__key])] } {
 	    # The parameter is not accepted as a parameter to the
 	    # pl/sql function. Ignore it.

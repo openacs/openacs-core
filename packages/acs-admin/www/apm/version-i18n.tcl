@@ -6,7 +6,7 @@ ad_page_contract {
     @creation-date 8 October 2002
     @cvs-id $Id$  
 } {
-    version_id:integer,notnull    
+    version_id:naturalnum,notnull    
     {pre_select_files_p "1"}
     {show_status_p "0"}
     {only_text_p "0"}
@@ -63,7 +63,7 @@ foreach file [lsort [ad_find_all_files [acs_package_root_dir $package_key]]] {
         # If we are showing adp:s and we are only showing adp:s with texts to translate, check if
         # this file has any texts
         if { $file_type eq "adp" && $only_text_p } {
-            if { $number_of_text_snippets == "0" } {
+            if { $number_of_text_snippets == 0 } {
                 set add_file_p 0
             }
         }
@@ -103,7 +103,7 @@ if {$file_type eq "adp"} {
         -options {{{Find human language text and replace with <# ... #> tags} replace_text} {{Replace <# ... #> tags with #...# keys and insert message into catalog} replace_tags}} \
         -values {replace_text} \
 } else {
-    # TCL files or SQL files
+    # Tcl files or SQL files
     element create file_list_form tcl_action_inform \
             -datatype text \
             -widget inform \

@@ -9,7 +9,7 @@ ad_page_contract {
     @creation-date 3 Jul 2000
     @cvs-id $Id$
 } {
-    version_id
+    version_id:naturalnum,notnull
     { public_p "" }
     { kind "procs_files" }
     { about_package_key ""}
@@ -26,12 +26,19 @@ ad_page_contract {
     content_pages:multirow
 }
 
-set public_p [api_set_public $version_id $public_p]
+set public_p [::apidoc::set_public $version_id $public_p]
 
-db_1row pretty_name_from_package_id {
+db_0or1row pretty_name_from_package_id {
     select pretty_name, package_key, version_name
       from apm_package_version_info
      where version_id = :version_id
+}
+if {![info exists pretty_name]} {
+    set context ""
+    set kind "none"
+    set title "No such Package (probably outdated link)"
+    set dimensional_slider $title
+    return
 }
 
 set dimensional_list {
@@ -62,19 +69,21 @@ switch $kind {
     procs_files {
         array set procs [list]
 
-        multirow create procs_files path full_path first_sentence
+        multirow create procs_files path full_path first_sentence view
 
-        foreach path [apm_get_package_files -package_key $package_key -file_types tcl_procs] {
+        foreach path [apm_get_package_files -package_key $package_key -file_types {tcl_procs include_page}] {
             set full_path "packages/$package_key/$path"
             
             if { [nsv_exists api_library_doc $full_path] } {
                 array set doc_elements [nsv_get api_library_doc $full_path]
-                set first_sentence "[api_first_sentence [lindex $doc_elements(main) 0]]"
+                set first_sentence [::apidoc::first_sentence [lindex $doc_elements(main) 0]]
+                set view procs-file-view
             } else {
                 set first_sentence ""
+                set view content-page-view
             }
 
-            multirow append procs_files $path $full_path $first_sentence
+            multirow append procs_files $path $full_path $first_sentence $view
         }
     }
     procs {
@@ -97,14 +106,14 @@ switch $kind {
                     continue
                 }
             }
-            multirow append procedures $proc [api_first_sentence [lindex $doc_elements(main) 0]]
+            multirow append procedures $proc [::apidoc::first_sentence [lindex $doc_elements(main) 0]]
         }
     }
     sql_files {
         multirow create sql_files path relative_path
 
         set file_types [list data_model data_model_create data_model_drop data_model_upgrade]
-        foreach path [apm_get_package_files -package_key $package_key -file_types $file_types] {
+        foreach path [apm_get_package_files -include_data_model_files -package_key $package_key -file_types $file_types] {
            # Set relative path to everything after sql/ (just using
            # file tail breaks when you've got subdirs of sql)
            regexp {^sql/(.*)} $path match relative_path
@@ -128,8 +137,7 @@ switch $kind {
                 for { set n_same_components 0 } \
                         { $n_same_components < [llength $last_components] } \
                         { incr n_same_components } {
-                    if { ![string equal [lindex $last_components $n_same_components] \
-                            [lindex $components $n_same_components]] } {
+                    if { [lindex $last_components $n_same_components] ne [lindex $components $n_same_components] } {
                         break
                     }
                 }
@@ -148,7 +156,7 @@ switch $kind {
                             set type $doc_elements(type)
                         }
                         if { [info exists doc_elements(main)] } {
-                            set first_sentence [api_first_sentence [lindex $doc_elements(main) 0]]
+                            set first_sentence [::apidoc::first_sentence [lindex $doc_elements(main) 0]]
                         }
                     } else {
                         set content_type directory

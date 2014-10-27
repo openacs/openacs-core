@@ -5,11 +5,11 @@ ad_page_contract {
     @cvs-id $Id$
 
 } {
-    parent_id:integer,notnull
+    parent_id:naturalnum,notnull
     name:notnull
     node_type:notnull
     {expand:integer,multiple {}}
-    {root_id:integer {}}
+    {root_id:naturalnum,notnull {}}
 } -validate {
     name_root_ck -requires name:notnull {
         if {[string match "*/*" $name]} {
@@ -65,4 +65,4 @@ if {[lsearch $expand $parent_id] == -1} {
     lappend expand $parent_id
 }
 
-ad_returnredirect ".?[export_url_vars expand:multiple root_id]"
+ad_returnredirect ".?[export_vars -url {expand:multiple root_id}]"

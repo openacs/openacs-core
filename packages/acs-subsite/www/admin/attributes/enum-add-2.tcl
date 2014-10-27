@@ -9,7 +9,7 @@ ad_page_contract {
     @cvs-id $Id$
 
 } {
-    attribute_id:integer,notnull
+    attribute_id:naturalnum,notnull
     attribute_enum_values:array,trim,optional
     { operation:trim "Finish adding values" }
     { return_url "" }
@@ -61,9 +61,9 @@ db_release_unused_handles
 
 if {$operation eq "Add more values"} {
     # redirect to add more values
-    set return_url enum-add?[ad_export_vars {attribute_id return_url}]
+    set return_url enum-add?[export_vars {attribute_id return_url}]
 } elseif { $return_url eq "" } {
-    set return_url one?[ad_export_vars attribute_id]
+    set return_url one?[export_vars attribute_id]
 }
 
 ad_returnredirect $return_url

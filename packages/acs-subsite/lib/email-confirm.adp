@@ -1,7 +1,7 @@
 
 <if @user_info.email_verified_p@ true>
 
-  <property name="title">#acs-subsite.lt_Your_email_is_confirm#</property>
+  <property name="doc(title)">#acs-subsite.lt_Your_email_is_confirm#</property>
 
   <if @user_info.member_state@ eq "approved">
 
@@ -22,7 +22,7 @@
 </if>
 <else>
 
-  <property name="title">#acs-subsite.Email_not_Requested#</property>
+  <property name="doc(title)">#acs-subsite.Email_not_Requested#</property>
 
   <p> #acs-subsite.lt_We_were_not_awaiting_# </p>
 

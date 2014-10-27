@@ -5,8 +5,8 @@ ad_page_contract {
 
     @cvs-id $Id$
 } {
-    to_user_id:integer
-    from_user_id:integer
+    to_user_id:naturalnum,notnull
+    from_user_id:naturalnum,notnull
     merge_action
 } -properties {
     context:onevalue

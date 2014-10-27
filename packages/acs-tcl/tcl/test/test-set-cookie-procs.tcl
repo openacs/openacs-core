@@ -12,7 +12,6 @@ ad_library {
 
 aa_register_case \
     -cats {web smoke} \
-    -libraries tclwebtest \
     test_set_cookie_procs \
     {
 	Test Case for testing if a cookie is fixed
@@ -48,7 +47,42 @@ aa_register_case \
 	    #-------------------------------------------------------------------------
 	    aa_false "Check if the cookie was cleared" [string equal $cookie_info_d $data]
 
+
+	    # known secret
+	    ad_set_signed_cookie -secret "hello" -max_age 100 -token_id 101 testcookie "as,df"
+	    # random secret
+	    ad_set_signed_cookie -max_age 1 testcookie2 "lots,of,,commas"
+
+	    #set cookie_value [ad_get_signed_cookie testcookie]
+	    set cookie_value [ns_urldecode [ad_get_cookie testcookie]]
+
+	    aa_equals "cookie payload" "as,df" [lindex $cookie_value 0]
+
+	    set cookie_meta [lindex $cookie_value 1]
+
+	    aa_equals "cookie meta length" 3 [llength $cookie_meta]
+
+	    lassign $cookie_meta token_id expire hash
+
+	    aa_equals "cookie meta token_id" 101 $token_id
+
+
 	} -teardown_code {
 
+	}
+    }
+
+
+aa_register_case \
+    -cats {web smoke} \
+    client_properties \
+    {
+	Test Case client properties
+    } {
+	aa_run_with_teardown -test_code {
+	    ad_set_client_property test MyName MyValue
+
+	    aa_equals "Obtain client property" MyValue [ad_get_client_property test MyName]
+	    
 	}
     }

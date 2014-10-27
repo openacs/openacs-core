@@ -8,7 +8,7 @@ ad_page_contract {
   $Id$
 }
 
-if { [template::util::is_nil title] } {
+if { ![info exists title] } {
     set title [ad_conn instance_name]
 }
 
@@ -69,7 +69,7 @@ multirow append link stylesheet text/css /resources/acs-templating/lists.css "" 
 multirow append link stylesheet text/css /resources/acs-templating/forms.css "" [ad_conn language] all
 
 if {![template::multirow exists script]} {
-    template::multirow create script type src charset defer content
+    template::multirow create script type src charset defer async content
 }
 
 # 

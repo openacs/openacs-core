@@ -1,6 +1,6 @@
 <master>
 <property name="context">@context;noquote@</property>
-<property name="title">@party_name;noquote@</property>
+<property name="doc(title)">@party_name;noquote@</property>
 
 <h3>Attributes</h3>
 

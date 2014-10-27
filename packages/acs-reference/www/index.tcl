@@ -18,6 +18,6 @@ set package_id [ad_conn package_id]
 set context_bar [list $title]
 set user_id [ad_conn user_id]
 
-set admin_p [ad_permission_p $package_id admin]
+set admin_p [permission::permission_p -object_id $package_id -privilege admin]
 
 ad_return_template

@@ -241,7 +241,7 @@ aa_register_case content_item {
                                  -name $tmp_item_name \
                                  -title $tmp_item_name \
                                  -parent_id $first_folder_id \
-                                 -tmp_filename [acs_root_dir]/packages/acs-content-repository/tcl/test/test.html]
+                                 -tmp_filename $::acs::rootdir/packages/acs-content-repository/tcl/test/test.html]
 
             aa_true "Tmp_filename added cr_item exists" \
                 [expr {[content::item::get_id \

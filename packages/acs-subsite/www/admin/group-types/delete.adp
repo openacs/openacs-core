@@ -1,6 +1,6 @@
 <master>
 <property name="context">@context;noquote@</property>
-<property name="title">Delete @group_type_pretty_name;noquote@</property>
+<property name="doc(title)">Delete @group_type_pretty_name;noquote@</property>
 
 <ul>
 

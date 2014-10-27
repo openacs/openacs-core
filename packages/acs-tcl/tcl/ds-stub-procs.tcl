@@ -8,7 +8,7 @@ ad_library {
     every request.
 
     @author Jeff Davis <davis@xarg.net>
-    @creationd-date 2005-03-02
+    @creation-date 2005-03-02
     @cvs-id $Id$
 }
 

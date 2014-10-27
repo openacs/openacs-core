@@ -9,7 +9,7 @@ ad_page_contract {
     @cvs-id $Id$
 
 } {
-    group_id:integer,notnull
+    group_id:naturalnum,notnull
     rel_type:notnull
     {member_state ""}
 } -properties {
@@ -33,7 +33,7 @@ ad_page_contract {
 }
 
 set user_id [ad_conn user_id]
-set create_p [ad_permission_p -user_id $user_id $group_id "create"]
+set create_p [permission::permission_p -party_id $user_id -object_id $group_id -privilege "create"]
 set return_url_enc [ad_urlencode "[ad_conn url]?[ad_conn query]"]
 set rel_type_enc [ad_urlencode $rel_type]
 
@@ -54,6 +54,6 @@ db_1row group_and_rel_info {
 set role_pretty_name [lang::util::localize $role_pretty_name]
 set role_pretty_plural [lang::util::localize $role_pretty_plural]    
 
-set context [list [list "[ad_conn package_url]admin/groups/" "Groups"] [list one?[ad_export_vars group_id] "One Group"] "All $role_pretty_plural"]
+set context [list [list "[ad_conn package_url]admin/groups/" "Groups"] [list one?[export_vars group_id] "One Group"] "All $role_pretty_plural"]
 
 ad_return_template

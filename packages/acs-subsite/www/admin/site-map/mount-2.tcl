@@ -6,14 +6,14 @@ ad_page_contract {
   @creation-date 2000-09-12
   @cvs-id $Id$
 } {
-  node_id:integer,notnull
-  package_id:integer,notnull
+  node_id:naturalnum,notnull
+  package_id:naturalnum,notnull
   {expand:integer,multiple {}}
-  root_id:integer,optional
+  root_id:naturalnum,optional
 }
 
-ad_require_permission $package_id read
+permission::require_permission -object_id $package_id -privilege read
 
 site_node::mount -node_id $node_id -object_id $package_id
 
-ad_returnredirect ".?[export_url_vars expand:multiple root_id]"
+ad_returnredirect ".?[export_vars -url {expand:multiple root_id}]"

@@ -4,7 +4,7 @@
 
 proc site_failure_handler { conn arg why } {
 
-    ns_returnfile 500 text/html "[acs_root_dir]/www/global/site-failure.html"
+    ns_returnfile 500 text/html "$::acs::rootdir/www/global/site-failure.html"
     return "filter_return"
 }
 

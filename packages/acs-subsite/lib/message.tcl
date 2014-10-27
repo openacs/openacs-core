@@ -5,7 +5,7 @@ ad_page_contract {
 
     @cvs-id $Id$
 }
-if {![exists_and_not_null title]} {
+if {(![info exists title] || $title eq "")} {
     set page_title Message
 }
 set context [list $title]

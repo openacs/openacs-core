@@ -1,5 +1,5 @@
 <master>
-<property name="title">#search.Search#</property>
+<property name="doc(title)">#search.Search#</property>
 
 <div style="text-align:center">
 <form method=GET action=search>

@@ -12,11 +12,10 @@
         <owner url="mailto:prevost@maya.com">John Prevost</owner>
         <owner url="mailto:vinod@kurup.com">Vinod Kurup</owner>
         <summary>General messaging for bboard and general comments.</summary>
-        <release-date>2011-06-12</release-date>
+        <release-date>2013-09-08</release-date>
         <maturity>3</maturity>
         <vendor url="http://openacs.org">OpenACS</vendor>
 	<license url="http://www.gnu.org/copyleft/gpl.html">GPL</license>
-	<maturity>3</maturity>
         <description format="text/html">Provides generic message services, with email sending.  acs-mail-lite and notifications are the 
         prefered packages for delivering this functionality and it is anticipated that this package will ultimately be deprecated.</description>
 

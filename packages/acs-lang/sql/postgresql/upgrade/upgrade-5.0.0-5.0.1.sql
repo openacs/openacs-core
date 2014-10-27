@@ -7,12 +7,18 @@ alter table lang_messages_audit add column audit_id integer;
 
 alter table lang_messages_audit drop constraint lang_messages_audit_pk;
 
-create function inline_0()
-returns integer as '
-declare
+
+
+--
+-- procedure inline_0/0
+--
+CREATE OR REPLACE FUNCTION inline_0(
+
+) RETURNS integer AS $$
+DECLARE
   v_rec           record;
   v_next_id       integer;
-begin
+BEGIN
 
   for v_rec in select message_key,
                        package_key,
@@ -22,7 +28,7 @@ begin
                 order by overwrite_date 
   loop
 
-        select nextval(''lang_messages_audit_id_seq''::text) into v_next_id;
+        select nextval('lang_messages_audit_id_seq'::text) into v_next_id;
 
         update lang_messages_audit set audit_id = v_next_id
         where message_key = v_rec.message_key
@@ -33,7 +39,8 @@ begin
 
   return 0;
 
-end;' language 'plpgsql';
+END;
+$$ LANGUAGE plpgsql;
 select inline_0();
 drop function inline_0();
 

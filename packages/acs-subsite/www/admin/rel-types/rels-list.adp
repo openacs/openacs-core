@@ -1,6 +1,6 @@
 <master>
 <property name="context">@context;noquote@</property>
-<property name="title">All relations of type "@rel_type_pretty_name;noquote@"</property>
+<property name="doc(title)">All relations of type "@rel_type_pretty_name;noquote@"</property>
 				   
 <if @rels:rowcount@ eq 0>
  <ul>

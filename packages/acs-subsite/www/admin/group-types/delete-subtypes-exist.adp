@@ -1,6 +1,6 @@
 <master>
 <property name="context">@context;noquote@</property>
-<property name="title">Subtypes exist!</property>
+<property name="doc(title)">Subtypes exist!</property>
 
 You must remove all subtypes of the group type
 "@group_type_pretty_name@" before you can remove the group type.

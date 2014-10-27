@@ -112,25 +112,28 @@ how that part looks like for <code>note</code>.
 
 <code><pre>
 create function notes__itrg ()
-returns opaque as '
+returns opaque as $$
 begin
-    perform search_observer__enqueue(new.note_id,''INSERT'');
+    perform search_observer__enqueue(new.note_id,'INSERT');
     return new;
-end;' language 'plpgsql';
+end;
+$$ language plpgsql;
 
 create function notes__dtrg ()
-returns opaque as '
+returns opaque as $$
 begin
-    perform search_observer__enqueue(old.note_id,''DELETE'');
+    perform search_observer__enqueue(old.note_id,'DELETE');
     return old;
-end;' language 'plpgsql';
+end;
+$$ language plpgsql;
 
 create function notes__utrg ()
-returns opaque as '
+returns opaque as $$
 begin
-    perform search_observer__enqueue(old.note_id,''UPDATE'');
+    perform search_observer__enqueue(old.note_id,'UPDATE');
     return old;
-end;' language 'plpgsql';
+end;
+$$ language plpgsql;
 
 
 create trigger notes__itrg after insert on notes

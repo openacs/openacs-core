@@ -7,7 +7,7 @@ ad_page_contract {
     @creation-date 2002-05-24
     @cvs-id $Id$
 } {
-    request_id:integer,notnull
+    request_id:naturalnum,notnull
     return_url
 }
 

@@ -8,12 +8,12 @@ ad_page_contract {
     @creation-date 2000-09-30
     @cvs-id $Id$
 } {
-    object_id:integer,notnull
+    object_id:naturalnum,notnull
     {application_url ""}
     {return_url {[export_vars -base "one" {application_url object_id}]}}
 }
 
-ad_require_permission $object_id admin
+permission::require_permission -object_id $object_id -privilege admin
 
 permission::toggle_inherit -object_id $object_id
 

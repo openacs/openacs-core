@@ -1,6 +1,6 @@
 <master>
 <property name="context">@context;noquote@</property>
-<property name="title">Add @role_pretty_name;noquote@ to @group_name;noquote@</property>
+<property name="doc(title)">Add @role_pretty_name;noquote@ to @group_name;noquote@</property>
 
 <blockquote>
 There is no other @object_type_two_name@ 

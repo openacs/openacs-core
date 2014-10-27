@@ -9,7 +9,7 @@ ad_page_contract {
     @creation-date 2000-2-28
     @cvs-id $Id$
 } {
-    {group_id:integer {[application_group::group_id_from_package_id]}}
+    {group_id:naturalnum,notnull {[application_group::group_id_from_package_id]}}
     {rel_type:notnull "membership_rel"}
     {return_url {}}
 } -properties {
@@ -34,7 +34,7 @@ set group_name $group_info(group_name)
 set join_policy $group_info(join_policy)
 
 
-if { [exists_and_not_null return_url] } {
+if { ([info exists return_url] && $return_url ne "") } {
     set ret_link "<a href=\"$return_url\">Return to previous page.</a>"
 } else {
     set ret_link ""

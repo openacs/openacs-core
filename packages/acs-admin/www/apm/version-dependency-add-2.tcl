@@ -5,7 +5,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     {dependency_id:naturalnum}
-    {version_id:integer}
+    {version_id:naturalnum,notnull}
     dependency_type
     service:notnull
     our_package_key:notnull
@@ -50,4 +50,4 @@ db_transaction {
     }
 }
 
-ad_returnredirect "version-dependencies?[export_url_vars version_id]"
+ad_returnredirect "version-dependencies?[export_vars -url {version_id}]"

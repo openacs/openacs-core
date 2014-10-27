@@ -181,10 +181,10 @@ namespace eval notification {
         # We're only going to do anything if there are people who have requests, 
         # or if we have a non-empty subset and a force flag.
         
-        set subset_arg_p [expr [llength $subset] > 0]
-        set already_notified_arg_p [expr [llength $already_notified] > 0]
+        set subset_arg_p [expr {[llength $subset] > 0}]
+        set already_notified_arg_p [expr {[llength $already_notified] > 0}]
 
-        if { ($subset_arg_p || $already_notified_arg_p) && [empty_string_p $action_id] } {
+        if { ($subset_arg_p || $already_notified_arg_p) && $action_id eq "" } {
             error "You must supply an action_id if you have a subset or already_notified list"
         }
 
@@ -213,7 +213,7 @@ namespace eval notification {
                 #                       has already been notified
                 #
 
-                if { [empty_string_p $default_request_data] } {
+                if { $default_request_data eq "" } {
                     set default_request_data [list \
                             interval_id [get_interval_id -name "instant"] \
                             delivery_method_id [get_delivery_method_id -name "email"] \
@@ -282,7 +282,7 @@ namespace eval notification {
                 }
             }
             
-            if { [empty_string_p $notif_user] && [ad_conn isconnected] } {
+            if { $notif_user eq "" && [ad_conn isconnected] } {
                 set notif_user [ad_conn user_id]
             }
            

@@ -182,7 +182,7 @@ ad_proc -private template::data::transform::party_search {
         set element(options) [concat $options { { "Search again..." ":search:" } }]
         if { ![info exists value] } {
             # set value to first item
-            set value [lindex [lindex $options 0] 1]
+            set value [lindex $options 0 1]
         }
 
         if { ![ns_queryexists $element_id:confirmed_p] } {
@@ -401,7 +401,7 @@ ad_proc -public template::widget::input {
 		}
 
         if { [info exists element(value)] } {
-            append output " value=\"[template::util::quote_html $element(value)]\""
+            append output " value=\"[ad_quotehtml $element(value)]\""
         } 
 
         foreach name [array names attributes] {
@@ -486,23 +486,45 @@ ad_proc -public template::widget::password {
     return [input password element $tag_attributes]
 }
 
-
 ad_proc -public template::widget::hidden {
     element_reference
     tag_attributes
 } {
-    Render a hidden input widget.
 
     @param element_reference Reference variable to the form element
     @param tag_attributes HTML attributes to add to the tag
 
     @return Form HTML for widget
 } {
-
     upvar $element_reference element
 
-    return [input hidden element $tag_attributes]
+    #
+    # If there is a "values" element provided, but no "value", treat
+    # this a multivalued (multiple) entry.
+    #
+
+    if { [info exists element(values)] && ![info exists element(value)] } {
+      ns_log notice "hidden form element with multiple values: <$element(values)>"
+      set output {}
+      set count 0
+      foreach itemvalue $element(values) {
+	append output [subst {
+	  <input type="hidden" id="$element(form_id):$element(name):$count" name="$element(name)" value="[ad_quotehtml $itemvalue]">
+	}]
+        incr count
+      }
+      return $output
+
+    } else {
+
+      #
+      # Standard case
+      #
+      return [input hidden element $tag_attributes]
+    }
+
 }
+
 
 ad_proc -public template::widget::submit {
     element_reference
@@ -655,7 +677,7 @@ ad_proc -public template::widget::menu {
                     set label [lindex $option 0]
                     set value [lindex $option 1]
 
-                    append output " <input type=\"$widget_type\" name=\"$widget_name\" value=\"[template::util::quote_html $value]\""
+                    append output " <input type=\"$widget_type\" name=\"$widget_name\" value=\"[ad_quotehtml $value]\""
                     if { [info exists values($value)] } {
                         append output " checked=\"checked\""
                     }
@@ -680,7 +702,7 @@ ad_proc -public template::widget::menu {
                     set label [lindex $option 0]
                     set value [lindex $option 1]
 
-                    append output " <option value=\"[template::util::quote_html $value]\""
+                    append output " <option value=\"[ad_quotehtml $value]\""
                     if { [info exists values($value)] } {
                         append output " selected=\"selected\""
                     }
@@ -811,7 +833,7 @@ ad_proc -public template::data::transform::search {
         } elseif { $option_count == 1 } {
 
             # only one option so just reset the value
-            set value [lindex [lindex $options 0] 1]
+            set value [lindex $options 0 1]
 
         } else {
 
@@ -820,7 +842,7 @@ ad_proc -public template::data::transform::search {
             template::element::set_error $element(form_id) $element_id \
                 "More than one match was found for \"$value\".<br>Please\nchoose one from the list."
 
-            set value [lindex [lindex $options 0] 1]
+            set value [lindex $options 0 1]
         }
     }
 
@@ -927,7 +949,7 @@ ad_proc -public template::widget::block {
 		set required_p [lindex $question 1]
 		append output "<td>[ad_decode $required_p "t" "<span style=\"color: #f00;\">*</span>" "&nbsp;"]</td>"
 		foreach choice [lindex $question 2] {
-		    if {[lsearch -exact $value $choice]==-1} {
+		    if {$choice ni $value} {
 			append output "<td><input type=\"radio\" name=\"$name\" value=\"$choice\"></td>"
 		    } else {
 			append output "<td><input type=\"radio\" name=\"$name\" value=\"$choice\" checked></td>"
@@ -1033,7 +1055,7 @@ ad_proc -public template::widget::select_text {
     }
 
     set output {}
-    if { [string equal $element(mode) "edit"] } {
+    if {$element(mode) eq "edit"} {
 	# edit mode
 	set element(value) $select
 	append output [template::widget::menu $element(name) $element(options) $select attributes $element(mode)]
@@ -1149,7 +1171,7 @@ ad_proc -public template::widget::radio_text {
     set radio_text "<input type=radio name=$element(name)"
 
     foreach name [array names attributes] {
-        if { [string equal $attributes($name) {}] } {
+        if {$attributes($name) eq {}} {
             append radio_text " $name"
         } else {
             append radio_text " $name=\"$attributes($name)\""
@@ -1275,7 +1297,7 @@ ad_proc -public template::widget::checkbox_text {
     set checkbox_text "<input type=checkbox name=$element(name)"
 
     foreach name [array names attributes] {
-	if { [string equal $attributes($name) {}] } {
+	if {$attributes($name) eq {}} {
 	    append checkbox_text " $name"
 	} else {
 	    append checkbox_text " $name=\"$attributes($name)\""

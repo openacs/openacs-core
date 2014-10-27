@@ -3,8 +3,8 @@ ad_page_contract {
     @author Neophytos Demetriou
 
 } {
-    contract_id:integer
-    impl_id:integer
+    contract_id:naturalnum,notnull
+    impl_id:naturalnum,notnull
 }
 
 

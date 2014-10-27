@@ -4,8 +4,8 @@ ad_page_contract {
     @creation-date 17 April 2000
     @cvs-id $Id$
 } {
-    {version_id:integer}
-    {dependency_id:integer}
+    {version_id:naturalnum,notnull}
+    {dependency_id:naturalnum,notnull}
     dependency_type:notnull
     package_key:notnull
 }
@@ -23,7 +23,7 @@ db_transaction {
 	}
 
 	default {
-	    ad_return complaint 1 "Dependency Entry Error: Depenendencies are either interfaces or requirements."
+	    ad_return_complaint 1 "Dependency Entry Error: Depenendencies are either interfaces or requirements."
 	}
     }
     apm_package_install_spec $version_id
@@ -32,5 +32,5 @@ db_transaction {
 	<blockquote><pre>[ad_quotehtml $errmsg]</pre></blockquote>"
 }
 
-ad_returnredirect "version-dependencies?[export_url_vars version_id]"
+ad_returnredirect "version-dependencies?[export_vars -url {version_id}]"
 

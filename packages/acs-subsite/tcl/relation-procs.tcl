@@ -23,7 +23,7 @@ ad_proc -public relation_permission_p {
     @creation-date 12/2000
 
 } {
-    return [ad_permission_p -user_id $user_id $rel_id $privilege]
+    return [permission::permission_p -party_id $user_id -object_id $rel_id -privilege $privilege]
 }
 
 

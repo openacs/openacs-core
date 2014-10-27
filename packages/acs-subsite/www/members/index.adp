@@ -1,6 +1,6 @@
 <master>
 <property name="context">@context@</property>
-<property name="title">@page_title@</property>
+<property name="doc(title)">@page_title@</property>
 
 <if @show_member_list_p@ true>
   <table cellpadding="3" cellspacing="3">

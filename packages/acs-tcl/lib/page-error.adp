@@ -1,5 +1,5 @@
 <master>
-  <property name="title">#acs-tcl.Server#</property>
+  <property name="doc(title)">#acs-tcl.Server#</property>
 <p>
   #acs-tcl.There#
 </p>

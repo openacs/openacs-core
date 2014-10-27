@@ -45,7 +45,7 @@ ad_proc -private install_param_mandatory_p { param_name } {
 } {
     array set mandatory_params_array [install_mandatory_params]
     set mandatory_names [array names mandatory_params_array]
-    return [expr {[lsearch -exact $mandatory_names $param_name] != -1}]
+    return [expr {$param_name in $mandatory_names}]
 }
 
 ad_proc -private install_mandatory_params {} {
@@ -53,7 +53,7 @@ ad_proc -private install_mandatory_params {} {
     for OpenACS installation.
 
     @return An array list with variable names as values
-            and pretty names as keys.
+    and pretty names as keys.
 } {
     return {
         email "Email"
@@ -72,7 +72,7 @@ ad_proc -private install_optional_params {} {
     for OpenACS installation.
 
     @return An array list with variable names as values
-            and default values as keys.
+    and default values as keys.
 } {
     return  {
         username ""
@@ -90,9 +90,9 @@ ad_proc -private install_page_contract { mandatory_params optional_params } {
     more primitive proc instead.
 
     @param mandatory_params An array list where keys are param names and values
-                            are pretty names.
+    are pretty names.
     @param optional_params An array list with param names as keys and default
-                           values as keys.
+    values as keys.
 
     @author Peter Marklund
 } {
@@ -115,7 +115,7 @@ ad_proc -private install_page_contract { mandatory_params optional_params } {
                                  [array names optional_params_array]]
         foreach param_name $all_param_names {
             set param_value [ns_set iget $form $param_name]
-            set mandatory_p [expr {[lsearch -exact $mandatory_params $param_name] != -1}]
+            set mandatory_p [expr {$param_name in $mandatory_params}]
 
             if { $param_value ne "" } {
                 # Param in form - set value in callers scope
@@ -136,7 +136,7 @@ ad_proc -private install_page_contract { mandatory_params optional_params } {
     # If there are missing mandatory params - return a complaint
     # page and exit
     if { [llength $missing_params] > 0 } {
-        ns_write "[install_header 200 "Missing parameters"]
+        ns_write "[install_header 200 {Missing parameters}]
 
 The following mandatory parameters are missing:
 <ul>
@@ -195,17 +195,12 @@ $page
 [install_footer]"
 }
 
-# Write out a bullet item (suitable for use as a callback for, e.g., apm_register_new_packages).
-proc install_write_bullet_item { item } {
-    ns_write "$item<li>\n"
-}
-
 # Does the ACS kernel data model seem installed?
 proc install_good_data_model_p {} {
     foreach table_name { acs_objects sec_session_properties } {
-	if { ![db_table_exists $table_name] } {
-	    return 0
-	}
+        if { ![db_table_exists $table_name] } {
+            return 0
+        }
     }
     return 1
 }
@@ -218,27 +213,27 @@ proc install_next_button { url } {
 
 proc install_file_serve { path } {
     if {[file isdirectory $path] && [string index [ad_conn url] end] != "/" } {
-  	ad_returnredirect "[ad_conn url]/"
+        ad_returnredirect "[ad_conn url]/"
     } else {
-	ns_log Debug "Installer serving $path"
-	ad_try {
-	    rp_serve_abstract_file $path
-	} notfound val {
-	    install_return 404 "Not found" "
-	    The file you've requested, doesn't exist. Please check
-	    your URL and try again."
-	} redirect url {
-	    ad_returnredirect $url
-	} directory dir_index {
-	    set new_file [file join $path "index.html"]
-	    if {[file exists $new_file]} {
-		rp_serve_abstract_file $new_file
-	    } 
-	    set new_file [file join $path "index.adp"]
-	    if {[file exists $new_file]} {
-		rp_serve_abstract_file $new_file
-	    } 
-	}
+        ns_log Debug "Installer serving $path"
+        ad_try {
+            rp_serve_abstract_file $path
+        } notfound val {
+            install_return 404 "Not found" "
+        The file you've requested, doesn't exist. Please check
+        your URL and try again."
+        } redirect url {
+            ad_returnredirect $url
+        } directory dir_index {
+            set new_file [file join $path "index.html"]
+            if {[file exists $new_file]} {
+                rp_serve_abstract_file $new_file
+            } 
+            set new_file [file join $path "index.adp"]
+            if {[file exists $new_file]} {
+                rp_serve_abstract_file $new_file
+            } 
+        }
     }
 }
 
@@ -246,66 +241,69 @@ proc install_file_serve { path } {
 proc install_handler { conn arg why } {
     # Redirect requests to /doc appropriately.  Thus, the installer can reference the install guide.
     if { [regexp {/doc(.*)} [ad_conn url] "" doc_url] } {
-	set doc_urlv [split [string trimleft $doc_url] /]
-	set package_key [lindex $doc_urlv 1]
-	ns_log Debug "Scanning $doc_url with package_key $package_key..."
-	if {[file isfile "[acs_root_dir]/packages/acs-core-docs/www[join $doc_urlv /]"]} {
-	    install_file_serve "[acs_root_dir]/packages/acs-core-docs/www[join $doc_urlv /]"
-	} elseif {[file isdirectory \
-		"[acs_root_dir]/packages/acs-core-docs/www[join $doc_urlv /]"]} {
-	    install_file_serve "[acs_root_dir]/packages/acs-core-docs/www[join $doc_urlv /]"
-	} elseif {[file isdirectory "[acs_root_dir]/packages/$package_key/www/doc"]} {
-	    install_file_serve "[acs_root_dir]/packages/$package_key/www/doc[join [lrange $doc_urlv 2 end] /]"
-	} else {
-	    install_file_serve "[acs_root_dir]/packages/$package_key/doc[join $doc_url /]"
-	}
-	return "filter_return"
+        set doc_urlv [split [string trimleft $doc_url] /]
+        set package_key [lindex $doc_urlv 1]
+        ns_log Debug "Scanning $doc_url with package_key $package_key..."
+        if {[file isfile "$::acs::rootdir/packages/acs-core-docs/www[join $doc_urlv /]"]} {
+            install_file_serve "$::acs::rootdir/packages/acs-core-docs/www[join $doc_urlv /]"
+        } elseif {[file isdirectory \
+                       "$::acs::rootdir/packages/acs-core-docs/www[join $doc_urlv /]"]} {
+            install_file_serve "$::acs::rootdir/packages/acs-core-docs/www[join $doc_urlv /]"
+        } elseif {[file isdirectory "$::acs::rootdir/packages/$package_key/www/doc"]} {
+            install_file_serve "$::acs::rootdir/packages/$package_key/www/doc[join [lrange $doc_urlv 2 end] /]"
+        } else {
+            install_file_serve "$::acs::rootdir/packages/$package_key/doc[join $doc_url /]"
+        }
+        return "filter_return"
     }
 
     # Make sure any requests to /SYSTEM still get through.  This is useful if your server
     # is setting behind a load balancer that uses SYSTEM pages to verify that the server
     # is still working.
     if { [regexp {/SYSTEM/(.*)} [ad_conn url] "" system_file] } {
-	if {[string compare [string range $system_file \
-		[expr {[string length $system_file ] - 4}] end] ".tcl"
-	]} {
-	    set system_file "$system_file.tcl"
-	}
-	apm_source "[acs_root_dir]/www/SYSTEM/$system_file"
-	return "filter_return"
+        if {[string compare [string range $system_file \
+                                 [expr {[string length $system_file ] - 4}] end] ".tcl"
+            ]} {
+            set system_file "$system_file.tcl"
+        }
+        apm_source $::acs::rootdir/www/SYSTEM/$system_file
+        return "filter_return"
     }
 
     if { ![regexp {/([a-zA-Z0-9\-_]*)$} [ad_conn url] "" script] } {
-	ns_returnredirect "/"
-	return "filter_return"
+        ns_returnredirect "/"
+        return "filter_return"
     }
 
     if { $script eq "" } {
-	set script "index"
+        set script "index"
     }
 
     set path "[nsv_get acs_properties root_directory]/packages/acs-bootstrap-installer/installer/$script.tcl"
     if { ![info exists path] } {
-	install_return 404 "Not found" "
+        install_return 404 "Not found" "
 The installation script you've requested, <code>$script</code>, doesn't exist. Please check
 your URL and try again.
 "
     }
+
+    array set errors {}
+
     # Engage a mutex for double-click protection.
     ns_mutex lock [nsv_get acs_installer mutex]
     if { [catch {
-	# Source the page and then unlock the mutex.
-	apm_source $path
-	ns_mutex unlock [nsv_get acs_installer mutex]
+        # Source the page and then unlock the mutex.
+        apm_source $path errors
+        ns_mutex unlock [nsv_get acs_installer mutex]
     } error] } {
-	# In case of an error, don't forget to unlock the mutex.
-	ns_mutex unlock [nsv_get acs_installer mutex]
-	global errorInfo
-	install_return 500 "Error" "The following error occurred in an installation script:
-
-<blockquote><pre>[ns_quotehtml $errorInfo]</pre></blockquote>
-"
-
+        # In case of an error, don't forget to unlock the mutex.
+        ns_mutex unlock [nsv_get acs_installer mutex]
+        global errorInfo
+        install_return 500 "Error" "The following error occurred in an installation script:\n\
+        <blockquote><pre>[ns_quotehtml $errorInfo]</pre></blockquote>\n"
+    }
+    if {[array size errors] > 0} {
+        install_return 500 "Error" [install_load_errors_formatted errors]
     }
     return "filter_return"
 }
@@ -313,11 +311,11 @@ your URL and try again.
 proc install_admin_widget {} {
 
     return "
-	<form action=create-administrator>
-	<input type=hidden name=done_p value=1>
-	<center>
-	<input type=submit value=\"Create Administrator ->\">
-	</center>
+    <form action=create-administrator>
+    <input type=hidden name=done_p value=1>
+    <center>
+    <input type=submit value=\"Create Administrator ->\">
+    </center>
 "
 
 }
@@ -345,10 +343,31 @@ ad_proc -public ad_windows_p {} {
 } {
     set thisplatform [ns_info platform]
     if {$thisplatform eq "win32"} {
-       return 1
+        return 1
     } else {
-       return 0
+        return 0
     }
+}
+
+ad_proc -private install_load_errors_formatted {errorVarName} {
+    Report errors from load operations via ns_write
+
+    @param errorVarName variable name of the associative array keeping the error infos
+} {
+    upvar $errorVarName errors
+
+    set result ""
+    if {[array size errors] > 0} {
+        append result "<blockquote><pre>\n"
+        foreach {package errorInfos} [array get errors] {
+            append result "<h4>Error in Package $package:</h4>\n"
+            foreach {fileName backTrace} $errorInfos {
+                append result "<strong>Error in File $fileName</strong>\n\n[ad_quotehtml $backTrace]\n\n\n"
+            }
+        }
+        append result "</pre></blockquote>\n"
+    }
+    return $result
 }
 
 ad_proc -private install_do_data_model_install {} {
@@ -358,7 +377,7 @@ ad_proc -private install_do_data_model_install {} {
     Installing the OpenACS kernel data model...
     <blockquote><pre>
     "
-    cd [file join [acs_root_dir] packages acs-kernel sql [db_type]]
+    cd [file join $::acs::rootdir packages acs-kernel sql [db_type]]
     db_source_sql_file -callback apm_ns_write_callback acs-kernel-create.sql
 
     # DRB: Now initialize the APM's table of known database types.  This is
@@ -378,9 +397,9 @@ ad_proc -private install_do_data_model_install {} {
             set db_pretty_name [lindex $known_db_type 2]
             db_dml insert_apm_db_type {
                 insert into apm_package_db_types
-                    (db_type_key, pretty_db_name)
+                (db_type_key, pretty_db_name)
                 values
-                    (:db_type, :db_pretty_name)
+                (:db_type, :db_pretty_name)
             }
         }
     }
@@ -393,15 +412,23 @@ ad_proc -private install_do_data_model_install {} {
 
     # Some APM procedures use util_memoize, so initialize the cache 
     # before starting APM install
-    apm_source "[acs_package_root_dir acs-tcl]/tcl/20-memoize-init.tcl"
-    apm_source [acs_package_root_dir acs-tcl]/tcl/database-init.tcl
+    array set errors {}
+    apm_source [acs_package_root_dir acs-tcl]/tcl/20-memoize-init.tcl errors
+    apm_source [acs_package_root_dir acs-tcl]/tcl/database-init.tcl errors
 
-    apm_version_enable -callback apm_ns_write_callback [apm_package_install -callback apm_ns_write_callback "[file join [acs_root_dir] packages acs-kernel acs-kernel.info]"]
+    if {[array size errors] > 0} {
+        ns_write "<h3>Errors during initial load:</h3>"
+        ns_write [install_load_errors_formatted errors]
+    }
+
+    apm_version_enable -callback apm_ns_write_callback \
+        [apm_package_install -callback apm_ns_write_callback \
+             [file join $::acs::rootdir packages acs-kernel acs-kernel.info]]
 
     ns_write "<p>Loading package .info files.<p>"
 
     # Preload all the .info files so the next page is snappy.
-    apm_dependency_check -initial_install [apm_scan_packages -new [file join [acs_root_dir] packages]]
+    apm_dependency_check -initial_install [apm_scan_packages -new [file join $::acs::rootdir packages]]
 
     ns_write "Done loading package .info files<p>"    
 }
@@ -427,24 +454,39 @@ ad_proc -private install_do_packages_install {} {
     }
 
     ns_write "Installing OpenACS Core Services"
+    array set errors {}
 
     # Load the acs-tcl init files that might be needed when installing, instantiating and mounting packages
     # We shouldn't source request-processor-init.tcl as it might interfere with the installer request handler
     foreach { init_file } { utilities-init.tcl site-nodes-init.tcl } {
         ns_log Notice "Loading acs-tcl init file $init_file"
-        apm_source "[acs_package_root_dir acs-tcl]/tcl/$init_file"
+        apm_source "[acs_package_root_dir acs-tcl]/tcl/$init_file" errors
     }
-    apm_bootstrap_load_libraries -procs acs-subsite
+    apm_bootstrap_load_libraries -procs acs-subsite errors
     apm_bootstrap_load_queries acs-subsite
     install_redefine_ad_conn
 
+    if {[array size errors] > 0} {
+        ns_write "<h2>Errors during load of acs-tcl init or package acs-subsite</h2>\n"
+        ns_write [install_load_errors_formatted errors]
+        return
+    }
+
     # Attempt to install all packages.
-    set dependency_results [apm_dependency_check -initial_install [apm_scan_packages -new [file join [acs_root_dir] packages]]]
+    set dependency_results [apm_dependency_check -initial_install [apm_scan_packages -new [file join $::acs::rootdir packages]]]
     set dependencies_satisfied_p [lindex $dependency_results 0]
     set pkg_list [lindex $dependency_results 1]
 
     if { !$dependencies_satisfied_p } {
-        ns_write "<p><b><i>At least one core package has an unsatisifed dependency.  No packages have been installed.  Here's what the APM has computed:</i></b><blockquote>$pkg_list</blockquote>"
+        ns_write "<p><b><i>At least one core package has an unsatisifed dependency.\
+              No packages have been installed missing: [lindex $dependency_results 2]. \
+              Here's what the APM has computed:</i></b>"
+
+        ns_write "\n<ul>"
+        foreach dep $pkg_list {
+            lassign $dep _name _path _a _b _pkg _deps _flag _msg
+            ns_write "<li>[lindex $_pkg 0]: $_msg</li>"
+        }
         return
     }
 
@@ -457,7 +499,7 @@ ad_proc -private install_do_packages_install {} {
         <blockquote><pre>"
 
         # Mount the main site
-        cd [file join [acs_root_dir] packages acs-kernel sql [db_type]]
+        cd [file join $::acs::rootdir packages acs-kernel sql [db_type]]
         db_source_sql_file -callback apm_ns_write_callback acs-install.sql
 
         # Make sure the site-node cache is updated with the main site
@@ -470,9 +512,7 @@ ad_proc -private install_do_packages_install {} {
         apm_mount_core_packages
 
         ns_write "</pre></blockquote>"
-
     }
-
 
     ns_write "All Packages Installed."
 }
@@ -487,3 +527,9 @@ if {[ns_info name] eq "NaviServer"} {
     proc install_handler {why} { install_handler_conn _ _ $why }
 }
 
+#
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

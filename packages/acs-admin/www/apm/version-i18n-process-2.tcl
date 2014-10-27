@@ -5,7 +5,7 @@ ad_page_contract {
     @creation-date 8 October 2002
     @cvs-id $Id$  
 } {
-    version_id:integer,notnull    
+    version_id:naturalnum,notnull    
     {files:multiple,notnull}
     {file_action:multiple}
     {number_of_keys:integer,notnull ""}
@@ -32,7 +32,7 @@ if { [info exists skip_button] } {
 set message_key_list [list]
 for { set counter 1 } { $counter <= $number_of_keys } { incr counter } {
     if { [info exists replace_p($counter)] } {
-        if { [exists_and_not_null message_keys($counter)] } {
+        if { ([info exists message_keys($counter)] && $message_keys($counter) ne "") } {
             lappend message_key_list $message_keys($counter)
         } else {
             ad_return_complaint 1 "<li>Message key number $counter is empty. Cannot replace text with empty key</li>"
@@ -67,7 +67,7 @@ if { $replace_text_p } {
 
     ns_log Notice "Replacing text in file $text_file with message tags"
     append processing_html_result "<h3>Text replacements for $text_file</h3>"
-    set adp_text_result_list [lang::util::replace_adp_text_with_message_tags "[acs_root_dir]/$text_file" write $message_key_list]
+    set adp_text_result_list [lang::util::replace_adp_text_with_message_tags "$::acs::rootdir/$text_file" write $message_key_list]
     set text_replacement_list [lindex $adp_text_result_list 0]
     set text_untouched_list [lindex $adp_text_result_list 1]
 

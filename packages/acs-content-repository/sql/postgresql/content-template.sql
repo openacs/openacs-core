@@ -18,6 +18,9 @@ select -200 as c_root_folder_id;
 --
 -- procedure content_template__get_root_folder/0
 --
+
+select define_function_args('content_template__get_root_folder','');
+
 CREATE OR REPLACE FUNCTION content_template__get_root_folder(
 
 ) RETURNS integer AS $$

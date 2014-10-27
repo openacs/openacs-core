@@ -5,7 +5,7 @@ ad_page_contract {			#
 
     @cvs-id $Id$
 } {
-    user_id
+    user_id:naturalnum,notnull
     user_id_from_search
 } -properties {
     context:onevalue

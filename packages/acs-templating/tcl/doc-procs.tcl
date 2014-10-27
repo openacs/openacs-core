@@ -13,11 +13,8 @@
 
 # @datasource foo multirow
 # Output info about a foo.
-# @column name The name of the foo.
-# @column id   The ID of the foo.
-
-# @param id 
-# The ID of the foo passed with the request.
+# @param column name The name of the foo.
+# @param id The ID of the foo passed with the request.
 
 namespace eval template {}
 

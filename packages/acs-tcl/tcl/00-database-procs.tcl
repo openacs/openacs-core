@@ -143,7 +143,9 @@ ad_library {
 # --atp@piskorski.com, 2003/03/16 21:30 EST
 
 
-ad_proc -private db_state_array_name_is {{ -dbn "" }} {
+ad_proc -private db_state_array_name_is {
+    {-dbn ""}
+} {
     @return the name of the global db_state array for the given
     database name.
 
@@ -160,9 +162,10 @@ ad_proc -private db_state_array_name_is {{ -dbn "" }} {
 }
 
 
-ad_proc -private db_driverkey {{
-    -handle_p 0
-} dbn } {
+ad_proc -private db_driverkey {
+    {-handle_p 0} 
+    dbn 
+} {
     Normally, a dbn is passed to this proc.  Unfortunately, there are
     one or two cases where a proc that needs to call this one has only
     a db handle, not the dbn that handle came from.  Therefore, they
@@ -179,8 +182,8 @@ ad_proc -private db_driverkey {{
         set handle $dbn ; set dbn {}
         set pool [ns_db poolname $handle]
 
-        if { [nsv_exists {db_pool_to_dbn} $pool] } {
-            set dbn [nsv_get {db_pool_to_dbn} $pool]
+        if { [nsv_exists db_pool_to_dbn $pool] } {
+            set dbn [nsv_get db_pool_to_dbn $pool]
         } else {
             # db_pool_to_dbn_init runs on startup, so other than some
             # broken code deleting the nsv key (very unlikely), the
@@ -192,7 +195,7 @@ ad_proc -private db_driverkey {{
         }
     }
 
-    if { ![nsv_exists {db_driverkey} $dbn] } {
+    if { ![nsv_exists db_driverkey $dbn] } {
         # This ASSUMES that any overriding of this default value via
         # "ns_param driverkey_dbn" has already been done:
 
@@ -209,23 +212,23 @@ ad_proc -private db_driverkey {{
 
         if { [string match "Oracle*" $driver] } {
             set driverkey {oracle}
-        } elseif { [string equal $driver {PostgreSQL}] } {
-            set driverkey {postgresql}
-        } elseif { [string equal $driver {ODBC}] } {
-            set driverkey {nsodbc}
+        } elseif { $driver eq "PostgreSQL" } {
+            set driverkey "postgresql"
+        } elseif { $driver eq "ODBC" } {
+            set driverkey "nsodbc"
         } else {
             set driverkey {}
-            ns_log Error "$proc_name: Unknown driver '$driver_type'."
+            ns_log Error "$proc_name: Unknown driver '$driver'."
         }
 
-        nsv_set {db_driverkey} $dbn $driverkey
+        nsv_set db_driverkey $dbn $driverkey
     }
 
-    return [nsv_get {db_driverkey} $dbn]
+    return [nsv_get db_driverkey $dbn]
 }
 
 
-ad_proc -public db_type { } {
+ad_proc -public db_type {} {
     @return the RDBMS type (i.e. oracle, postgresql) this OpenACS installation is using.  The nsv ad_database_type is set up during the bootstrap process.
 } {
     # Currently this should always be either "oracle" or "postgresql":
@@ -268,20 +271,20 @@ ad_proc -private db_legacy_package_p { db_type_list } {
     return 0
 }
 
-ad_proc -public db_version { } {
+ad_proc -public db_version {} {
     @return the RDBMS version (i.e. 8.1.6 is a recent Oracle version; 7.1 a
     recent PostgreSQL version.
 } {
     return [nsv_get ad_database_version .]
 }
 
-ad_proc -public db_current_rdbms { } {
+ad_proc -public db_current_rdbms {} {
     @return the current rdbms type and version.
 } {
     return [db_rdbms_create [db_type] [db_version]]
 }
 
-ad_proc -public db_known_database_types { } {
+ad_proc -public db_known_database_types {} {
     @return a list of three-element lists describing the database engines known
     to OpenACS.  Each sublist contains the internal database name (used in file
     paths, etc), the driver name, and a "pretty name" to be used in selection
@@ -299,7 +302,7 @@ ad_proc -public db_known_database_types { } {
 # can't hurt anything to have them defined in when OpenACS is using
 # Postgres too.  --atp@piskorski.com, 2003/04/08 05:34 EDT
 
-ad_proc db_null { } {
+ad_proc db_null {} {
     @return an empty string, which Oracle thinks is null.  This routine was
     invented to provide an RDBMS-specific null value but doesn't actually
     work.  I (DRB) left it in to speed porting - we should really clean up
@@ -308,7 +311,9 @@ ad_proc db_null { } {
     return ""
 }
 
-ad_proc -public db_quote { string } { Quotes a string value to be placed in a SQL statement. } {
+ad_proc -public db_quote { string } { 
+    Quotes a string value to be placed in a SQL statement. 
+} {
     regsub -all {'} "$string" {''} result
     return $result
 }
@@ -334,7 +339,10 @@ ad_proc -public db_boolean { bool } {
     }
 }
 
-ad_proc -public db_nextval {{ -dbn "" } sequence } {
+ad_proc -public db_nextval {
+    { -dbn "" } 
+    sequence 
+} {
 
     Example:
 
@@ -448,9 +456,11 @@ ad_proc -public db_nextval {{ -dbn "" } sequence } {
     }
 }
 
-ad_proc -public db_nth_pool_name {{ -dbn "" } n } { 
+ad_proc -public db_nth_pool_name {
+    { -dbn "" } 
+    n 
+} { 
     @return the name of the pool used for the nth-nested selection (0-relative). 
-
     @param dbn The database name to use.  If empty_string, uses the default database.
 } {
     set available_pools [db_available_pools $dbn]
@@ -464,7 +474,10 @@ ad_proc -public db_nth_pool_name {{ -dbn "" } n } {
 }
 
 
-ad_proc -public db_with_handle {{ -dbn "" } db code_block } {
+ad_proc -public db_with_handle {
+    { -dbn "" } 
+    db code_block 
+} {
 
     Places a usable database handle in <i>db</i> and executes <i>code_block</i>.
 
@@ -482,7 +495,7 @@ ad_proc -public db_with_handle {{ -dbn "" } db code_block } {
     }
     if { $db_state(n_handles_used) >= [llength $db_state(handles)] } {
         set pool [db_nth_pool_name -dbn $dbn $db_state(n_handles_used)]
-        set start_time [clock clicks -milliseconds]
+        set start_time [expr {[clock clicks -microseconds]/1000.0}]
         set errno [catch {
             set db [ns_db gethandle $pool]
         } error]
@@ -525,7 +538,12 @@ ad_proc -public db_with_handle {{ -dbn "" } db code_block } {
 }
 
 
-ad_proc -public db_exec_plsql {{ -dbn "" } statement_name sql args } {
+ad_proc -public db_exec_plsql {
+    {-dbn ""} 
+    statement_name 
+    sql 
+    args 
+} {
 
     <strong>Oracle:</strong>  
     Executes a PL/SQL statement, and returns the variable of bind
@@ -709,14 +727,13 @@ ad_proc -public db_exec_plsql {{ -dbn "" } statement_name sql args } {
             if {[regexp -nocase -- {^\s*select} $test_sql match]} {
                 # ns_log Debug "PLPGSQL: bypassed anon function"
                 set selection [db_exec 0or1row $db $full_statement_name $sql]
-            } elseif {[regexp -nocase -- {^\s*create table} $test_sql match] || [regexp -nocase -- {^\s*drop table} $test_sql match]} {
+            } elseif {[regexp -nocase -- {^\s*(create|drop) table} $test_sql match]} {
                 ns_log Debug "PLPGSQL: bypassed anon function for create/drop table"
                 set selection [db_exec dml $db $full_statement_name $sql]
                 return ""
             } else {
                 # ns_log Debug "PLPGSQL: using anonymous function"
-                set selection [db_exec_plpgsql $db $full_statement_name $sql \
-                                   $statement_name]
+                set selection [db_exec_plpgsql $db $full_statement_name $sql $statement_name]
             }
             return [ns_set value $selection 0]
         }
@@ -751,7 +768,7 @@ ad_proc -private db_exec_plpgsql { db statement_name pre_sql fname } {
     @see db_exec_plsql
 
 } {
-    set start_time [clock clicks -milliseconds]
+    set start_time [expr {[clock clicks -microseconds]/1000.0}]
 
     set sql [db_qd_replace_sql $statement_name $pre_sql]
 
@@ -837,8 +854,7 @@ ad_proc -private db_get_quote_indices { sql } {
     set all_indices [regexp -inline -indices -all -- {(?:^|[^'])(')(?:[^']|'')+(')(?=$|[^'])} $sql]
 
     for {set i 0} { $i < [llength $all_indices] } { incr i 3 } {
-        lappend quote_indices [lindex [lindex $all_indices [expr {$i + 1}]] 0]
-        lappend quote_indices [lindex [lindex $all_indices [expr {$i + 2}]] 0]
+        lappend quote_indices [lindex $all_indices $i+1 0] [lindex $all_indices $i+2 0]
     }
 
     return $quote_indices
@@ -848,7 +864,7 @@ ad_proc -private db_bind_var_quoted_p { sql bind_start_idx bind_end_idx} {
 
 } {
     foreach {quote_start_idx quote_end_idx} [db_get_quote_indices $sql] {
-        if { [expr {$bind_start_idx > $quote_start_idx}] && [expr {$bind_end_idx < $quote_end_idx}]} {
+        if { $bind_start_idx > $quote_start_idx && $bind_end_idx < $quote_end_idx } {
             return 1
         }
     }
@@ -870,8 +886,8 @@ ad_proc -private db_bind_var_substitution { sql { bind "" } } {
         uplevel {            
             set __db_lst [regexp -inline -indices -all -- {:?:\w+} $__db_sql]
             for {set __db_i [expr {[llength $__db_lst] - 1}]} {$__db_i >= 0} {incr __db_i -1} {
-                set __db_ws [lindex [lindex $__db_lst $__db_i] 0]
-                set __db_we [lindex [lindex $__db_lst $__db_i] 1]
+                set __db_ws [lindex $__db_lst $__db_i 0]
+                set __db_we [lindex $__db_lst $__db_i 1]
                 set __db_bind_var [string range $__db_sql $__db_ws $__db_we]                
                 if {![string match "::*" $__db_bind_var] && ![db_bind_var_quoted_p $__db_sql $__db_ws $__db_we]} {
                     set __db_tcl_var [string range $__db_bind_var 1 end]
@@ -892,8 +908,8 @@ ad_proc -private db_bind_var_substitution { sql { bind "" } } {
         set lsql $sql
         set lst [regexp -inline -indices -all -- {:?:\w+} $sql]
         for {set i [expr {[llength $lst] - 1}]} {$i >= 0} {incr i -1} {
-            set ws [lindex [lindex $lst $i] 0]
-            set we [lindex [lindex $lst $i] 1]
+            set ws [lindex $lst $i 0]
+            set we [lindex $lst $i 1]
             set bind_var [string range $sql $ws $we]
             if {![string match "::*" $bind_var] && ![db_bind_var_quoted_p $lsql $ws $we]} {
                 set tcl_var [string range $bind_var 1 end]
@@ -912,7 +928,7 @@ ad_proc -private db_bind_var_substitution { sql { bind "" } } {
 }
 
 
-ad_proc -public db_release_unused_handles {{ -dbn "" }} {
+ad_proc -public db_release_unused_handles {{-dbn ""}} {
 
     Releases any database handles that are presently unused.
 
@@ -929,12 +945,13 @@ ad_proc -public db_release_unused_handles {{ -dbn "" }} {
             set db [lindex $db_state(handles) $index_to_examine]
 
             # Stop now if the handle is part of a transaction.
-            if { [info exists db_state(transaction_level,$db)] && \
-                     $db_state(transaction_level,$db) > 0 } {
+            if { [info exists db_state(transaction_level,$db)] 
+		 && $db_state(transaction_level,$db) > 0 
+	    } {
                 break
             }
 
-            set start_time [clock clicks -milliseconds]
+            set start_time [expr {[clock clicks -microseconds]/1000.0}]
             ns_db releasehandle $db
             ds_collect_db_call $db releasehandle "" "" $start_time 0 ""
             incr index_to_examine -1
@@ -950,7 +967,7 @@ ad_proc -private db_getrow { db selection } {
     routines as necessary.
 
 } {
-    set start_time [clock clicks -milliseconds]
+    set start_time [expr {[clock clicks -microseconds]/1000.0}]
     set errno [catch { return [ns_db getrow $db $selection] } error]
     ds_collect_db_call $db getrow "" "" $start_time $errno $error
     if { $errno == 2 } {
@@ -967,7 +984,7 @@ ad_proc -private db_exec { type db statement_name pre_sql {ulevel 2} args } {
     (if set).
 
 } {
-    set start_time [clock clicks -milliseconds]
+    set start_time [expr {[clock clicks -microseconds]/1000.0}]
     set start_time_fine [clock seconds]
     set driverkey [db_driverkey -handle_p 1 $db]
 
@@ -1063,7 +1080,7 @@ ad_proc -private db_exec { type db statement_name pre_sql {ulevel 2} args } {
 
     # JCD: we log the clicks, dbname, query time, and statement to catch long running queries.
     # If we took more than 5 seconds yack about it.
-    if { [expr {[clock clicks -milliseconds] - $start_time}] > 5000} {
+    if { [clock clicks -milliseconds] - $start_time > 5000 } {
         ns_log Warning "db_exec: longdb [expr {[clock seconds] - $start_time_fine}] seconds $db $type $statement_name"
     } else { 
         ns_log Debug "db_exec: timing [expr {[clock seconds] - $start_time_fine}] seconds $db $type $statement_name"
@@ -1079,7 +1096,7 @@ ad_proc -private db_exec { type db statement_name pre_sql {ulevel 2} args } {
 
 
 ad_proc -public db_string {
-    { -dbn "" }
+    {-dbn ""}
      -cache_key
     {-cache_pool db_cache_pool}
     statement_name
@@ -1135,7 +1152,7 @@ ad_proc -public db_string {
 
 
 ad_proc -public db_list {
-    { -dbn "" }
+    {-dbn ""}
     -cache_key
     {-cache_pool db_cache_pool}
     statement_name
@@ -1185,7 +1202,7 @@ ad_proc -public db_list {
 
 
 ad_proc -public db_list_of_lists {
-    { -dbn "" }
+    {-dbn ""}
     -cache_key
     {-cache_pool db_cache_pool}
     statement_name
@@ -1247,7 +1264,7 @@ ad_proc -public db_list_of_lists {
 
 
 ad_proc -public db_list_of_ns_sets {
-    { -dbn "" }
+    {-dbn ""}
     statement_name
     sql
     args
@@ -1282,7 +1299,12 @@ ad_proc -public db_list_of_ns_sets {
 }
 
 
-ad_proc -public db_foreach {{ -dbn "" } statement_name sql args } {
+ad_proc -public db_foreach {
+    {-dbn ""} 
+    statement_name 
+    sql 
+    args 
+} {
 
     Usage: 
     <blockquote>
@@ -1321,7 +1343,9 @@ ad_proc -public db_foreach {{ -dbn "" } statement_name sql args } {
         set code_block [lindex $args 0]
     } elseif { $arglength == 3 } {
         # Should have code block + if_no_rows + code block.
-        if { [lindex $args 1] ne "if_no_rows" && [lindex $args 1] ne "else" } {
+        if { [lindex $args 1] ne "if_no_rows" 
+	     && [lindex $args 1] ne "else" 
+	 } {
             return -code error "Expected if_no_rows as second-to-last argument"
         }
         set code_block [lindex $args 0]
@@ -1436,7 +1460,7 @@ proc db_multirow_helper {} {
                         set columns $local_columns
                     } else {
                         # Check that the columns match, if not throw an error
-                        if { ![string equal [join [lsort -ascii $local_columns]] [join [lsort -ascii $columns]]] } {
+                        if { [join [lsort -ascii $local_columns]] ne [join [lsort -ascii $columns]] } {
                             error "Appending to a multirow with differing columns.
     Original columns     : [join [lsort -ascii $columns] ", "].
     Columns in this query: [join [lsort -ascii $local_columns] ", "]" "" "ACS_MULTIROW_APPEND_COLUMNS_MISMATCH"
@@ -1714,8 +1738,9 @@ ad_proc -public db_multirow {
         set code_block [lindex $args 0]
     } elseif { $arglength == 3 } {
         # Should have code block + if_no_rows + code block.
-        if {   [lindex $args 1] ne "if_no_rows" \
-            && [lindex $args 1] ne "else" } {
+        if { [lindex $args 1] ne "if_no_rows" 
+	     && [lindex $args 1] ne "else" 
+	} {
             return -code error "Expected if_no_rows as second-to-last argument"
         }
         set code_block [lindex $args 0]
@@ -1727,8 +1752,10 @@ ad_proc -public db_multirow {
     upvar $level_up "$var_name:rowcount" counter
     upvar $level_up "$var_name:columns" columns
 
-    if { [info exists cache_key] && $append_p &&
-         [info exists counter] && $counter > 0 } {
+    if { [info exists cache_key] 
+	 && $append_p 
+	 && [info exists counter] && $counter > 0 
+     } {
         return -code error "Can't append and cache a non-empty multirow datasource simultaneously"
     }
 
@@ -1747,12 +1774,9 @@ ad_proc -public db_multirow {
             return [list $counter $columns $values]
         }]
 
-        set counter [lindex $value 0]
-        set columns [lindex $value 1]
-        set values [lindex $value 2]
+	lassign $value counter columns values
 
         set count 1
-
         foreach value $values {
            upvar $level_up "$var_name:[expr {$count}]" array_val
            array set array_val $value
@@ -1834,7 +1858,7 @@ ad_proc -public db_multirow_group_last_row_p {
 }
 
 
-ad_proc -public db_dml {{ -dbn "" } statement_name sql args } {
+ad_proc -public db_dml {{-dbn ""} statement_name sql args } {
     Do a DML statement.
 
     <p>
@@ -1949,7 +1973,7 @@ ad_proc -public db_dml {{ -dbn "" } statement_name sql args } {
 }
 
 
-ad_proc -public db_resultrows {{ -dbn "" }} {
+ad_proc -public db_resultrows {{-dbn ""}} {
     @return the number of rows affected by the last DML command.
 
     @param dbn The database name to use.  If empty_string, uses the default database.
@@ -2315,7 +2339,7 @@ ad_proc -public db_transaction {{ -dbn ""} transaction_code args } {
 }
 
 
-ad_proc -public db_abort_transaction {{ -dbn "" }} {
+ad_proc -public db_abort_transaction {{-dbn ""}} {
 
     Aborts all levels of a transaction. That is if this is called within 
     several nested transactions, all of them are terminated. Use this 
@@ -2332,7 +2356,7 @@ ad_proc -public db_abort_transaction {{ -dbn "" }} {
 }
 
 
-ad_proc -private db_abort_transaction_p {{ -dbn "" }} {
+ad_proc -private db_abort_transaction_p {{-dbn ""}} {
     @param dbn The database name to use.  If empty_string, uses the default database.
 } {
     upvar "#0" [db_state_array_name_is -dbn $dbn] db_state
@@ -2348,7 +2372,7 @@ ad_proc -private db_abort_transaction_p {{ -dbn "" }} {
 }
 
 
-ad_proc -public db_name {{ -dbn "" }} {
+ad_proc -public db_name {{-dbn ""}} {
 
     @return the name of the database as reported by the driver.
 
@@ -2361,7 +2385,7 @@ ad_proc -public db_name {{ -dbn "" }} {
 }
 
 
-ad_proc -public db_get_username {{ -dbn "" }} {
+ad_proc -public db_get_username {{-dbn ""}} {
     @return the username parameter from the driver section of the
     first database pool for the dbn.
 
@@ -2371,7 +2395,7 @@ ad_proc -public db_get_username {{ -dbn "" }} {
     return [ns_config "ns/db/pool/$pool" User]    
 }
 
-ad_proc -public db_get_password {{ -dbn "" }} {
+ad_proc -public db_get_password {{-dbn ""}} {
     @return the password parameter from the driver section of the
     first database pool for the dbn.
 
@@ -2381,7 +2405,7 @@ ad_proc -public db_get_password {{ -dbn "" }} {
     return [ns_config "ns/db/pool/$pool" Password]
 }
 
-ad_proc -public db_get_sql_user {{ -dbn "" }} {
+ad_proc -public db_get_sql_user {{-dbn ""}} {
     <strong>Oracle only.</strong>
 
     <p>
@@ -2403,7 +2427,7 @@ ad_proc -public db_get_sql_user {{ -dbn "" }} {
     }
 }
 
-ad_proc -public db_get_pgbin {{ -dbn "" }} {
+ad_proc -public db_get_pgbin {{-dbn ""}} {
     <strong>PostgreSQL only.</strong>
 
     <p>
@@ -2417,7 +2441,7 @@ ad_proc -public db_get_pgbin {{ -dbn "" }} {
 }
 
 
-ad_proc -public db_get_port {{ -dbn "" }} {
+ad_proc -public db_get_port {{-dbn ""}} {
     <strong>PostgreSQL only.</strong>
 
     <p>
@@ -2437,16 +2461,16 @@ ad_proc -public db_get_port {{ -dbn "" }} {
     }
     set first_colon_pos [string first ":" $datasource]
 
-    if { $first_colon_pos == $last_colon_pos || [expr {$last_colon_pos - $first_colon_pos}] == 1 } {
+    if { $first_colon_pos == $last_colon_pos || ($last_colon_pos - $first_colon_pos) == 1 } {
 	# No port specified
 	return ""
     }
 
-    return [string range $datasource [expr {$first_colon_pos + 1}] [expr {$last_colon_pos - 1}] ]
+    return [string range $datasource $first_colon_pos+1 $last_colon_pos-1]
 }
 
 
-ad_proc -public db_get_database {{ -dbn "" }} {
+ad_proc -public db_get_database {{-dbn ""}} {
     <strong>PostgreSQL only.</strong>
 
     <p>
@@ -2463,11 +2487,13 @@ ad_proc -public db_get_database {{ -dbn "" }} {
         ns_log Error "datasource contains no \":\"? datasource = $datasource"
         return ""
     }
-    return [string range $datasource [expr {$last_colon_pos + 1}] end]
+    return [string range $datasource $last_colon_pos+1 end]
 }
 
  
-ad_proc -public db_get_dbhost {{ -dbn "" }} {
+ad_proc -public db_get_dbhost {
+    {-dbn ""}
+} {
     <strong>PostgreSQL only.</strong>
 
     <p>
@@ -2484,13 +2510,14 @@ ad_proc -public db_get_dbhost {{ -dbn "" }} {
         ns_log Error "datasource contains no \":\"? datasource = $datasource"
         return ""
     }
-    return [string range $datasource 0 [expr {$first_colon_pos - 1}]]
+    return [string range $datasource 0 $first_colon_pos-1]
 }
 
-ad_proc -public db_source_sql_file {{
-    -dbn ""
-    -callback apm_ns_write_callback
-} file } {
+ad_proc -public db_source_sql_file {
+    {-dbn ""}
+    {-callback apm_ns_write_callback}
+    file
+} {
     Sources a SQL file into Oracle (SQL*Plus format file) or
     PostgreSQL (psql format file).
 
@@ -2538,19 +2565,18 @@ ad_proc -public db_source_sql_file {{
             # patch checked for a blank hostname, which fails in the driver.  Arguably the
             # driver's wrong but a lot of non-OpenACS folks use it, and even though I'm the
             # maintainer we shouldn't break existing code over such trivialities...
+            # GN: windows requires $pghost "-h ..."
 
-            if { [string equal [db_get_dbhost] "localhost"] || [string equal [db_get_dbhost] ""] } {
+            if { ([db_get_dbhost] eq "localhost" || [db_get_dbhost] eq "") 
+		 && $::tcl_platform(platform) ne "windows"  
+	     } {
                 set pghost ""
             } else {
                 set pghost "-h [db_get_dbhost]"
             }
 
             cd [file dirname $file]
-            if { $::tcl_platform(platform) eq "windows" } {
-                set fp [open "|[file join [db_get_pgbin] psql] $pghost $pgport $pguser -f $file_name [db_get_database] $pgpass" "r"]
-            } else {
-                set fp [open "|[file join [db_get_pgbin] psql] $pghost $pgport $pguser -f $file_name [db_get_database] $pgpass" "r"]
-            }
+            set fp [open "|[file join [db_get_pgbin] psql] $pghost $pgport $pguser -f $file [db_get_database] $pgpass" "r"]
 
             while { [gets $fp line] >= 0 } {
                 # Don't bother writing out lines which are purely whitespace.
@@ -2598,11 +2624,11 @@ ad_proc -public db_source_sql_file {{
     }
 }
 
-ad_proc -public db_load_sql_data {{
-    -dbn ""
-    -callback apm_ns_write_callback
-} file } {
-
+ad_proc -public db_load_sql_data {
+    {-dbn ""}
+    {-callback apm_ns_write_callback} 
+    file 
+} {
     Loads a CSV formatted file into a table using PostgreSQL's COPY command or
     Oracle's SQL*Loader utility.  The file name format consists of a sequence
     number used to control the order in which tables are loaded, and the table
@@ -2611,7 +2637,7 @@ ad_proc -public db_load_sql_data {{
     packages are installed.
 
     @param dbn The database name to use.  If empty_string, uses the default database.
-    @file Filename in the format dd-table-name.ctl where 'dd' is a sequence number
+    @param file Filename in the format dd-table-name.ctl where 'dd' is a sequence number
           used to control the order in which data is loaded.  This file is an
           RDBMS-specific data loader control file.
 
@@ -2621,7 +2647,7 @@ ad_proc -public db_load_sql_data {{
 
         oracle {
             set user_pass [db_get_sql_user -dbn $dbn]
-            set tmpnam [ns_tmpnam]
+            set tmpnam [ad_tmpnam]
 
             set fd [open $file r]
             set file_contents [read $fd]
@@ -2662,7 +2688,7 @@ ad_proc -public db_load_sql_data {{
                 set pgpass "<<$pgpass"
             }
 
-            if { [string equal [db_get_dbhost] "localhost"] || [string equal [db_get_dbhost] ""] } {
+            if { [db_get_dbhost] eq "localhost" || [db_get_dbhost] eq "" } {
                 set pghost ""
             } else {
                 set pghost "-h [db_get_dbhost]"
@@ -2731,10 +2757,11 @@ ad_proc -public db_load_sql_data {{
     }
 }
 
-ad_proc -public db_source_sqlj_file {{
-    -dbn ""
-    -callback apm_ns_write_callback
-} file } {
+ad_proc -public db_source_sqlj_file {
+    {-dbn ""}
+    {-callback apm_ns_write_callback} 
+    file 
+} {
     <strong>Oracle only.</strong>
     <p>
     Sources a SQLJ file using loadjava.
@@ -2829,7 +2856,7 @@ ad_proc -public db_tables {
 }
 
 
-ad_proc -public db_table_exists {{ -dbn "" } table_name } {
+ad_proc -public db_table_exists {{-dbn ""} table_name } {
     @return 1 if a table with the specified name exists in the database, otherwise 0.
 
     @param dbn The database name to use.  If empty_string, uses the default database.
@@ -2866,7 +2893,7 @@ ad_proc -public db_table_exists {{ -dbn "" } table_name } {
 }
 
 
-ad_proc -public db_columns {{ -dbn "" } table_name } {
+ad_proc -public db_columns {{-dbn ""} table_name } {
     @return a Tcl list of all the columns in the table with the given name.
 
     @param dbn The database name to use.  If empty_string, uses the default database.
@@ -2890,7 +2917,7 @@ ad_proc -public db_columns {{ -dbn "" } table_name } {
 }
 
 
-ad_proc -public db_column_exists {{ -dbn "" } table_name column_name } {
+ad_proc -public db_column_exists {{-dbn ""} table_name column_name } {
     @return 1 if the row exists in the table, 0 if not.
 
     @param dbn The database name to use.  If empty_string, uses the default database.
@@ -2911,7 +2938,7 @@ ad_proc -public db_column_exists {{ -dbn "" } table_name column_name } {
 }
 
 
-ad_proc -public db_column_type {{ -dbn "" } table_name column_name } {
+ad_proc -public db_column_type {{-dbn ""} table_name column_name } {
 
     @return the Oracle Data Type for the specified column.
     @return -1 if the table or column doesn't exist.
@@ -2941,7 +2968,7 @@ ad_proc -public db_column_type {{ -dbn "" } table_name column_name } {
 }
 
 
-ad_proc -public ad_column_type {{ -dbn "" } table_name column_name } {
+ad_proc -public ad_column_type {{-dbn ""} table_name column_name } {
 
     @return 'numeric' for number type columns, 'text' otherwise
     Throws an error if no such column exists.
@@ -2963,7 +2990,7 @@ ad_proc -public ad_column_type {{ -dbn "" } table_name column_name } {
 }
 
 
-ad_proc -public db_write_clob {{ -dbn "" } statement_name sql args } {
+ad_proc -public db_write_clob {{-dbn ""} statement_name sql args } {
     @param dbn The database name to use.  If empty_string, uses the default database.
 } {
     ad_arg_parser { bind } $args
@@ -2996,7 +3023,7 @@ ad_proc -public db_write_clob {{ -dbn "" } statement_name sql args } {
 }
 
 
-ad_proc -public db_write_blob {{ -dbn "" } statement_name sql args } {
+ad_proc -public db_write_blob {{-dbn ""} statement_name sql args } {
     @param dbn The database name to use.  If empty_string, uses the default database.
 } {
     ad_arg_parser { bind } $args
@@ -3007,7 +3034,7 @@ ad_proc -public db_write_blob {{ -dbn "" } statement_name sql args } {
 }
 
 
-ad_proc -public db_blob_get_file {{ -dbn "" } statement_name sql args } {
+ad_proc -public db_blob_get_file {{-dbn ""} statement_name sql args } {
     @param dbn The database name to use.  If empty_string, uses the default database.
 
     <p>
@@ -3048,7 +3075,7 @@ ad_proc -public db_blob_get_file {{ -dbn "" } statement_name sql args } {
 }
 
 
-ad_proc -public db_blob_get {{ -dbn "" } statement_name sql args } {
+ad_proc -public db_blob_get {{-dbn ""} statement_name sql args } {
     <strong>PostgreSQL only.</strong>
 
     @param dbn The database name to use.  If empty_string, uses the default database.
@@ -3089,10 +3116,14 @@ ad_proc -public db_blob_get {{ -dbn "" } statement_name sql args } {
 }
 
 
-ad_proc -private db_exec_lob {{
-    -ulevel 2
-} type db statement_name pre_sql { file "" } } {
-
+ad_proc -private db_exec_lob {
+    {-ulevel 2} 
+    type 
+    db 
+    statement_name 
+    pre_sql 
+    {file ""} 
+} {
     A helper procedure to execute a SQL statement, potentially binding
     depending on the value of the $bind variable in the calling environment
     (if set).
@@ -3133,15 +3164,19 @@ ad_proc -private db_exec_lob {{
 }
 
 
-ad_proc -private db_exec_lob_oracle {{
-    -ulevel 2
-} type db statement_name pre_sql { file "" } } {
-
+ad_proc -private db_exec_lob_oracle {
+    {-ulevel 2} 
+    type 
+    db 
+    statement_name 
+    pre_sql 
+    {file ""} 
+} {
     A helper procedure to execute a SQL statement, potentially binding
     depending on the value of the $bind variable in the calling environment
     (if set).
 } {
-    set start_time [clock clicks -milliseconds]
+    set start_time [expr {[clock clicks -microseconds]/1000.0}]
 
     set sql [db_qd_replace_sql $statement_name $pre_sql]
 
@@ -3249,10 +3284,14 @@ ad_proc -private db_exec_lob_oracle {{
 }
 
 
-ad_proc -private db_exec_lob_postgresql {{
-    -ulevel 2
-} type db statement_name pre_sql { file "" } } {
-
+ad_proc -private db_exec_lob_postgresql {
+    {-ulevel 2} 
+    type 
+    db 
+    statement_name 
+    pre_sql 
+    {file ""} 
+} {
     A helper procedure to execute a SQL statement, potentially binding
     depending on the value of the $bind variable in the calling environment
     (if set).
@@ -3260,7 +3299,7 @@ ad_proc -private db_exec_lob_postgresql {{
     Low level replacement for db_exec which emulates blob handling.
 
 } {
-    set start_time [clock clicks -milliseconds]
+    set start_time [expr {[clock clicks -microseconds]/1000.0}]
 
     # Query Dispatcher (OpenACS - ben)
     set sql [db_qd_replace_sql $statement_name $pre_sql]
@@ -3485,7 +3524,7 @@ ad_proc -public db_flush_cache {
     }
 }
 
-ad_proc -public db_bounce_pools {{ -dbn "" }} { 
+ad_proc -public db_bounce_pools {{-dbn ""}} { 
     @return Call ns_db bouncepool on all pools for the named database.
     @param dbn The database name to use.  Uses the default database if not supplied.
 } {

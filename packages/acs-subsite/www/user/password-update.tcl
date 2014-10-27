@@ -4,7 +4,7 @@ ad_page_contract {
     
     @cvs-id $Id$
 } {
-    {user_id {[ad_conn untrusted_user_id]}}
+    {user_id:naturalnum,notnull {[ad_conn untrusted_user_id]}}
     {return_url ""}
     {old_password ""}
     {message ""}
@@ -60,7 +60,7 @@ ad_form -name update -edit_buttons [list [list [_ acs-kernel.common_update] "ok"
         {message:text(hidden),optional}
     }
 
-if { [exists_and_not_null old_password] } {
+if { ([info exists old_password] && $old_password ne "") } {
     set focus "update.password_1"
 } else {
     ad_form -extend -name update -form {
@@ -89,7 +89,7 @@ ad_form -extend -name update -form {
     }
 } -on_submit {
     
-    if { [exists_and_not_null old_password] } {
+    if { ([info exists old_password] && $old_password ne "") } {
         set password_old $old_password
     }
     
@@ -103,7 +103,7 @@ ad_form -extend -name update -form {
             # Continue
         }
         old_password_bad {
-            if { ![exists_and_not_null old_password] } {
+            if { (![info exists old_password] || $old_password eq "") } {
                 form set_error update password_old $result(password_message)
             } else {
                 # This hack causes the form to reload as if submitted, but with the old password showing
@@ -119,7 +119,7 @@ ad_form -extend -name update -form {
     }
     
     # If old_password was supplied, handle authentication and log the user in
-    if { [exists_and_not_null old_password] } {
+    if { ([info exists old_password] && $old_password ne "") } {
         
         # We use full-scale auth::authenticate here, in order to be sure we also get account-status checked
         # Hm. What if there's a problem with timing, so the password update doesn't take effect immediately?
@@ -141,7 +141,7 @@ ad_form -extend -name update -form {
             }
         }
         
-        if { [exists_and_not_null auth_info(account_url)] } {
+        if { ([info exists auth_info(account_url)] && $auth_info(account_url) ne "") } {
             ad_returnredirect $auth_info(account_url)
             ad_script_abort
         }

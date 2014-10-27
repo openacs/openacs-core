@@ -89,6 +89,6 @@ ad_proc -public rel_segments_permission_p {
     @creation-date 12/2000
 
 } {
-    return [ad_permission_p -user_id $user_id $segment_id $privilege]
+    return [permission::permission_p -party_id $user_id -object_id $segment_id -privilege $privilege]
 }
 

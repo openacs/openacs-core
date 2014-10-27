@@ -9,7 +9,7 @@ ad_page_contract {
     @cvs-id $Id$
 
 } {
-    attribute_id:integer,notnull
+    attribute_id:naturalnum,notnull
     { return_url "" }
 } -properties {
     context:onevalue
@@ -49,8 +49,8 @@ db_1row select_attr_name {
      where a.attribute_id = :attribute_id
 }
 
-set context [list [list one?[export_url_vars attribute_id] "One attribute"] "Add values"]
+set context [list [list one?[export_vars -url {attribute_id}] "One attribute"] "Add values"]
 
-set export_vars [ad_export_vars -form {attribute_id return_url}]
+set export_vars [export_vars -form {attribute_id return_url}]
 
 ad_return_template

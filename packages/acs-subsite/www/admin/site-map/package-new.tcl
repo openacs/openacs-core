@@ -10,14 +10,14 @@ ad_page_contract {
     @cvs-id $Id$
 
 } {
-    {new_package_id:integer ""}
-    node_id:integer,notnull
+    {new_package_id:naturalnum ""}
+    node_id:naturalnum,notnull
     {new_node_p f}
     {node_name:trim ""}
     {instance_name ""}
     package_key:notnull
     {expand:integer,multiple ""}
-    root_id:integer,optional
+    root_id:naturalnum,optional
 }
 
 if {$package_key eq "/new"} {
@@ -67,4 +67,4 @@ db_transaction {
     }
 }
 
-ad_returnredirect ".?[export_url_vars expand:multiple root_id]"
+ad_returnredirect ".?[export_vars -url {expand:multiple root_id}]"

@@ -1,10 +1,10 @@
 ad_page_contract {} {
-    object_id
-    user_id:multiple,integer
+    object_id:naturalnum,notnull
+    user_id:multiple,naturalnum
     return_url
 }
 
-ad_require_permission $object_id admin
+permission::require_permission -object_id $object_id -privilege admin
 
 db_transaction {
     foreach one_user_id $user_id {

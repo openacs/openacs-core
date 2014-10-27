@@ -5,9 +5,7 @@ ad_page_contract {
 }
 
 set page_title "Install Software"
-
 set context [list $page_title]
-
 
 template::list::create \
     -name packages \
@@ -48,24 +46,21 @@ db_multirow -extend { package_type_pretty } packages packages "
     where  t.package_key = v.package_key
     and    v.enabled_p = 't'
     and    v.installed_p = 't'
-    [template::list::filter_where_clauses -and -name "packages"]
+    [template::list::filter_where_clauses -and -name packages]
     order  by t.package_type, t.pretty_name
 " {
     set package_type_pretty [string totitle [lindex [split $package_type "_"] 1]]
 }
 
+#set local_install_url [export_vars -base "install" { { package_type apm_application } }]
+#set local_service_install_url [export_vars -base "install" { { package_type apm_service } }]
+#set local_upgrade_url [export_vars -base "install" { { upgrade_p 1 } }]
 
-set local_install_url [export_vars -base "install" { { package_type apm_application } }]
+set local_install_url "[ad_conn package_url]/apm/packages-install"
 
-set local_service_install_url [export_vars -base "install" { { package_type apm_service } }]
-
-set local_upgrade_url [export_vars -base "install" { { upgrade_p 1 } }]
-
-
-set repository_url "http://openacs.org/repository/[apm_get_repository_channel]/"
-
-set remote_install_url [export_vars -base "install" { repository_url { package_type apm_application } }]
-
-set remote_service_install_url [export_vars -base "install" { { package_type apm_service } repository_url }]
-
-set remote_upgrade_url [export_vars -base "install" { { upgrade_p 1 } repository_url }]
+set repository_url "http://openacs.org/repository/"
+set head_channel [lindex [apm_get_repository_channels $repository_url] 0]
+set current_channel [apm_get_repository_channel]
+set channel $current_channel
+set remote_install_url [export_vars -base "install" { repository_url channel current_channel head_channel }]
+set remote_upgrade_url [export_vars -base "install" { { upgrade_p 1 } repository_url channel current_channel head_channel}]

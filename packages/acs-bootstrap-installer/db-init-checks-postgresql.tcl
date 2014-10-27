@@ -47,7 +47,7 @@ proc db_bootstrap_checks { errors error_p } {
 
 
     ## Make sure the __test__() function is dropped if it exists
-    if {![empty_string_p [ns_db 0or1row $db "select proname from pg_proc where proname = '__test__' and pronargs = 0"]]} {
+    if {[ns_db 0or1row $db "select proname from pg_proc where proname = '__test__' and pronargs = 0"] ne ""} {
 	catch { ns_db dml $db "drop function __test__();" }
     }
 

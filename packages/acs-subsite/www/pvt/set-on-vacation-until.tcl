@@ -20,7 +20,7 @@ if [catch { ns_dbformvalue [ns_getform] on_vacation_until date on_vacation_until
     return
 }
 
-set user_id [ad_get_user_id]
+set user_id [ad_conn user_id]
 
 db_transaction {
     # We update the users table to maintain compatibility with acs installations prior to user_vacations

@@ -10,9 +10,27 @@ aa_register_case -cats { api } spellcheck__get_element_formtext {
     Test the spell-check proc that does the actual spell-checking.
 } {    
     
+
+    set SpellcheckFormWidgets [parameter::get_from_package_key \
+				   -package_key acs-templating \
+				   -parameter SpellcheckFormWidgets]
+    set enabled 0
+    foreach {widget value} $SpellcheckFormWidgets {
+	if {!$value} continue
+	set enabled 1
+	break
+    }
+
+    if {!$enabled} {
+	aa_log "Spell checking is not enabled.\
+		If you want to enable it, specify it via package parameter SpellcheckFormWidgets"
+	return
+    }
+
     set base_command [list template::util::spellcheck::get_element_formtext \
 			  -var_to_spellcheck var_to_spellcheck \
 			  -error_num_ref error_num \
+			  -no_abort \
 			  -formtext_to_display_ref formtext_to_display \
 			  -just_the_errwords_ref just_the_errwords]
     
@@ -27,8 +45,12 @@ aa_register_case -cats { api } spellcheck__get_element_formtext {
     
     aa_log "--- Correct text --- $command"
 
-    eval $command
-    
+    if {[catch {eval $command} errorMsg]} {
+	aa_false $errorMsg 1
+	aa_log "Have you installed aspell and aspell-dict-en ?"
+	return
+    }
+
     aa_true "True statement: Text contains no misspelled words" [expr {$error_num == 0}]
     
     aa_log "Number of miss-spelled words found in text: $error_num"
@@ -59,8 +81,11 @@ aa_register_case -cats { api } spellcheck__get_element_formtext {
     
     aa_log "--- Incorrect text --- $command"
 
-    eval $command
-    
+    if {[catch {eval $command} errorMsg]} {
+	aa_false $errorMsg 1
+	return
+    }
+ 
     aa_true "True statement: Text contains misspelled words" [expr {$error_num > 0}]
     
     aa_log "Number of misspelled words found in text: $error_num"
@@ -91,7 +116,11 @@ aa_register_case -cats { api } spellcheck__get_element_formtext {
     
     aa_log "--- Correctly spelled HTML fragment --- $command"
 
-    eval $command
+    if {[catch {eval $command} errorMsg]} {
+	aa_false $errorMsg 1
+	aa_log "Maybe you have to install aspell and aspell-dict-en?"
+	return
+    }
     
     aa_true "True statement: HTML fragment contains no misspelled words" [expr {$error_num == 0}]
     
@@ -124,8 +153,11 @@ aa_register_case -cats { api } spellcheck__get_element_formtext {
     
     aa_log "--- Incorrectly spelled HTML fragment --- $command"
 
-    eval $command
-    
+    if {[catch {eval $command} errorMsg]} {
+	aa_false $errorMsg 1
+	return
+    }
+
     aa_true "True statement: HTML fragment contains misspelled words" [expr {$error_num > 0}]
     
     aa_log "Number of miss-spelled words found in HTML fragment: $error_num"

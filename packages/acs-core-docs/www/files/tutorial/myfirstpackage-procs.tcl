@@ -14,7 +14,7 @@ aa_register_case \
             -test_code  {
                 set name [ad_generate_random_string]
                 set new_id [mfp::note::add -title $name]
-                aa_true "Note add succeeded" [exists_and_not_null new_id]
+                aa_true "Note add succeeded" ([info exists new_id] && $new_id ne "")
                 
                 mfp::note::get -item_id $new_id -array note_array
                 aa_true "Note contains correct title" [string equal $note_array(title) $name]
@@ -39,7 +39,7 @@ aa_register_case \
                 set name {-Bad [BAD] \077 { $Bad}} 
                 append name [ad_generate_random_string]
                 set new_id [mfp::note::add -title $name]
-                aa_true "Note add succeeded" [exists_and_not_null new_id]
+                aa_true "Note add succeeded" ([info exists new_id] && $new_id ne "")
                 
                 mfp::note::get -item_id $new_id -array note_array
                 aa_true "Note contains correct title" [string equal $note_array(title) $name]

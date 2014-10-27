@@ -62,8 +62,7 @@ ad_proc -public subsite_callback {
     set package_id [ad_conn package_id]
 
     foreach row $callback_list {
-	set callback [lindex $row 0]
-	set type [lindex $row 1]
+	lassign $row callback type
 
 	switch -- $type {
 	    tcl { 

@@ -28,15 +28,17 @@ select package_key
 }]
 
 if { [llength $dependent_packages_list] > 0 } {
-    set dependency_warning_text "
-The following packages depend on package <code>$package_key</code> that you are about to delete: 
+    set dependency_warning_text "The following packages depend on package 
+       <code>$package_key</code> that you are about to delete:\n<ul>\n"
 
-<p>
-<code> 
-  [join $dependent_packages_list "<br>"]
-</code>
-</p>
-"
+    foreach pkg_key $dependent_packages_list {
+	set query [export_vars { {package_key $pkg_key}}]
+	append dependency_warning_text [subst {
+	    <li>$pkg_key (<a href="./version-view?$query">manage</a>)</li>
+	}]
+    }
+    append dependency_warning_text "</ul>\n"
+
 } else {
     set dependency_warning_text ""
 }
@@ -47,7 +49,7 @@ set initial_install_p [db_string initial_install_p {
     where package_key = :package_key
 }]
 
-if {$initial_install_p eq "t"} {
+if {$initial_install_p == "t"} {
     set kernel_deletion_warning "
 <p>
   You are about to delete package <code>$package_key</code> which is part of the <b>OpenACS core</b>
@@ -76,7 +78,7 @@ $dependency_warning_text
 }
 
 set file_list ""
-foreach file [apm_get_package_files -package_key $package_key -file_types data_model_drop] {
+foreach file [apm_get_package_files -package_key $package_key -file_types data_model_drop -include_data_model_files] {
     append file_list "  <tr>
     <td><input type=checkbox name=\"sql_drop_scripts\" value=$file checked></td>
     <td>$file</td>
@@ -92,22 +94,25 @@ $file_list
 </table>"
 } 
 
-set body "[apm_header -form "action=\"package-delete-2\" method=\"post\"" [list "version-view?version_id=$version_id" "$pretty_name $version_name"] "Delete"]
 
-$warning_text
+set title "Delete"
+set context [list [list "/acs-admin/apm/" "Package Manager"] \
+		 [list "version-view?version_id=$version_id" "$pretty_name $version_name"] \
+		 $title]
 
-<p>Deleting a package removes all record of it from the APM's database.</p>
+set body [subst {
+    <form action='package-delete-2' method='post'>
+    $warning_text
+    <p>Deleting a package removes all record of it from the APM's database.</p>
 
-<p>
+    [export_vars -form {version_id}]
+    $file_list
+   
+    <p>
+    <input type="submit" value="Delete Package">
+    </form>
+}]
 
-[export_form_vars version_id]
-$file_list
-
-<p>
-<input type=submit value=\"Delete Package\">
-</form>
-[ad_footer]"
-
-doc_return 200 text/html $body
+ad_return_template apm
 
 

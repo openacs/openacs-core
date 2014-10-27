@@ -33,8 +33,8 @@ info patchlevel
         tcl from source is optional.
       </para>
       <formalpara id="tcl-download">
-        <title>Retrieve TCL 8.4 (or higher)</title>
-        <para>Download and install TCL 8.4 from source</para>
+        <title>Retrieve Tcl 8.4 (or higher)</title>
+        <para>Download and install Tcl 8.4 from source</para>
       </formalpara>
         <para>Note for Debian users: you can apt-get install
       tcl8.4-dev if you have the right version (stable users will need
@@ -43,7 +43,7 @@ info patchlevel
       have to use /usr/lib/tcl8.4/ instead of /usr/local/lib when you
       try to find the tcl libraries, however.</para>
 
-      <para>If you have not installed TCL already, download the latest TCL version from Sourceforge</para>
+      <para>If you have not installed Tcl already, download the latest Tcl version from Sourceforge</para>
       <para><emphasis role="bold">Debian:</emphasis>
         <computeroutput><action>apt-get install
             tcl8.4 tcl8.4-dev</action></computeroutput> and proceed to

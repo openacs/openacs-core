@@ -13,7 +13,7 @@ ad_page_contract {
     @param target URL to return to
     @param passthrough Form variables to pass along from caller
     @param limit_to_users_in_group_id Limits search to users in the specified group id.  This can be a comma separated list to allow searches within multiple groups. (optional)
-    @param limit_to_user_id. This is useful is you don't want to show a list of user_ids. This could be a comma separated list. (optional)
+    @param limit_to_user_id This is useful is you don't want to show a list of user_ids. This could be a comma separated list. (optional)
     @param from_user_id is used if you want to merge the user_id with user_id_from_search (optional)
 
     @author Jin Choi (jsc@arsdigita.com)
@@ -23,10 +23,10 @@ ad_page_contract {
     keyword:optional
     target
     {passthrough ""}
-    {limit_users_in_group_id ""}
+    {limit_to_users_in_group_id:naturalnum ""}
     {only_authorized_p:integer 1}
-    {limit_to_user_id ""}
-    {from_user_id ""}
+    {limit_to_user_id:naturalnum ""}
+    {from_user_id:naturalnum ""}
 } -properties {
     group_name:onevalue
     search_type:onevalue
@@ -53,14 +53,12 @@ if {[info exists keyword]} {
     }
 } else {
     # from one of the user pages
-    if { (![info exists email] || $email eq "") && \
-	    (![info exists last_name] || $last_name eq "") } {
+    if { $email eq "" && $last_name eq "" } {
 	incr exception_count
 	append exception_text "<li>You must specify either an email address or last name to search for.\n"
     }
 
-    if { [info exists email] && [info exists last_name] && \
-	    $email ne "" && $last_name ne "" } {
+    if { $email ne ""  && $last_name ne "" } {
 	incr exception_count
 	append exception_text "<li>You can only specify either email or last name, not both.\n"
     }
@@ -73,7 +71,7 @@ and let them know what happened.\n"
     }
 }
 
-if { $exception_count != 00 } {
+if { $exception_count != 0 } {
     ad_return_complaint $exception_count $exception_text
     return
 }
@@ -86,7 +84,7 @@ if { [info exists keyword] } {
     set search_type "keyword"
     set sql_keyword "%[string tolower $keyword]%"
     lappend where_clause "(email like :sql_keyword or lower(first_names || ' ' || last_name) like :sql_keyword)"
-} elseif { [info exists email] && $email ne "" } {
+} elseif { $email ne "" } {
     set search_type "email"    
     set sql_email "%[string tolower $email]%"
     lappend where_clause "email like :sql_email"
@@ -106,12 +104,12 @@ if { ![info exists passthrough] } {
     set passthrough_parameters "[export_entire_form_as_url_vars $passthrough]"
 }
 
-if { [exists_and_not_null limit_to_user_id ] } {
+if { $limit_to_user_id ne "" } {
     set limit_to_user_id [join $limit_to_user_id ","]
     lappend where_clause "cc_users.user_id not in ($limit_to_user_id)"
 }
 
-if { [exists_and_not_null limit_to_users_in_group_id] } {
+if { $limit_to_users_in_group_id ne "" } {
 set query "select distinct first_names, last_name, email, member_state, email_verified_p, cu.user_id
 from cc_users cu, group_member_map gm, membership_rels mr
 where cu.user_id = gm.member_id
@@ -150,11 +148,11 @@ db_foreach user_search_admin $query {
     set user_search:[set rowcount](first_names) $first_names
     set user_search:[set rowcount](last_name) $last_name
     set user_search:[set rowcount](email) $email
-    set user_search:[set rowcount](export_vars) [export_url_vars user_id_from_search first_names_from_search last_name_from_search email_from_search]
+    set user_search:[set rowcount](export_vars) [export_vars -url {user_id_from_search first_names_from_search last_name_from_search email_from_search}]
     set user_search:[set rowcount](member_state) $member_state
     
     if { $member_state ne "approved" } {
-	set user_search:[set rowcount](user_finite_state_links) [join [ad_registration_finite_state_machine_admin_links $member_state $email_verified_p $user_id_from_search "search?[export_url_vars email last_name keyword target passthrough limit_users_in_group_id only_authorized_p]"] " | "]
+	set user_search:[set rowcount](user_finite_state_links) [join [ad_registration_finite_state_machine_admin_links $member_state $email_verified_p $user_id_from_search "search?[export_vars -url {email last_name keyword target passthrough limit_to_users_in_group_id only_authorized_p}]"] " | "]
     } else {
 	set user_search:[set rowcount](user_finite_state_links) ""
     }
@@ -163,8 +161,10 @@ db_foreach user_search_admin $query {
 set user_search:rowcount $rowcount
 
 # We are limiting the search to one group - display that group's name
-if { [exists_and_not_null limit_to_users_in_group_id] && ![regexp {[^0-9]} $limit_to_users_in_group_id] } {
-    set group_name [db_string user_group_name_from_id "select group_name from user_groups where group_id = :limit_to_users_in_group_id"]
+if { $limit_to_users_in_group_id ne "" 
+     && ![regexp {[^0-9]} $limit_to_users_in_group_id] } {
+    set group_name [db_string user_group_name_from_id \
+			"select group_name from user_groups where group_id = :limit_to_users_in_group_id"]
     set title "User search in $group_name"
 } else {
     set group_name ""

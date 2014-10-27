@@ -4,10 +4,9 @@
 
 
 create table email_images (
-	user_id		integer constraint email_images_user_id_fk
-			references users
-			constraint email_images_user_id_pk
-			primary key
+	user_id integer 
+		constraint email_images_user_id_fk references users 
+		constraint email_images_user_id_pk primary key
 );
 
 CREATE OR REPLACE FUNCTION inline_0 () RETURNS integer AS $$
@@ -39,3 +38,5 @@ $$ LANGUAGE plpgsql;
 select inline_0 ();
 
 drop function inline_0 ();
+
+

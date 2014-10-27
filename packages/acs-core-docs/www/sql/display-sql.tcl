@@ -31,11 +31,11 @@ ad_page_contract {
 # for example
 
 if { [string match "*..*" $url] || [string match "*..*" $package_key] } {
-    ad_return_error "Can't back up beyond the pageroot" "You can't use display-sql.tcl to look at files underneath the pageroot."
+    ad_return_warning "Can't back up beyond the pageroot" "You can't use display-sql.tcl to look at files underneath the pageroot."
     ad_script_abort
 }
 
-if {[exists_and_not_null package_key]} {
+if {$package_key ne ""} {
     set safe_p [regexp {/?(.*)} $url package_url]
 }
 
@@ -48,7 +48,7 @@ if {$db eq ""} {
     set files [glob -nocomplain "[acs_package_root_dir $package_key]/sql/*/$url" "[acs_package_root_dir $package_key]/sql/$url"]
     foreach f $files { 
         regexp {([^/]*)/([^/]*)$} $f match db url
-        append text "<li> <a href=\"display-sql?[export_url_vars db url package_key]\">$db</a></li>"
+        append text "<li> <a href=\"display-sql?[export_vars -url {db url package_key}]\">$db</a></li>"
     }
     if {$files eq ""} { 
         append text "<li> No sql file found."
@@ -70,7 +70,7 @@ if {$db eq ""} {
     if { $safe_p && [llength $files] > 0 } {
         ns_returnfile 200 text/plain $files
     } else {
-        ad_return_error "Invalid file location" "Can only display files in package or doc directory."
+        ad_return_warning "Invalid file location" "Can only display files in package or doc directory."
     }
     ad_script_abort
 }

@@ -9,7 +9,7 @@ ad_proc -public -callback search::index -impl intermedia-driver {} {
    
 } {
     # we want the datasource array reference in case we want to do something clever
-    if {![string equal "" $datasource]} {
+    if {$datasource ne ""} {
 	upvar $datasource _datasource 
     }
     set content "${title} ${content}"
@@ -44,7 +44,7 @@ ad_proc -public -callback search::update_index -impl intermedia-driver {} {
    @author Dave Bauer (dave@thedesignexperience.org
    @creation-date 2005-08-01
 } {
-    if {![string equal "" $datasource]} {
+    if {$datasource ne ""} {
 	upvar $datasource _datasource 
     }    
     if {![db_string index_exists "select 1 from site_wide_index where object_id=:object_id" -default 0]} {
@@ -99,9 +99,9 @@ ad_proc -public -callback search::search -impl intermedia-driver {} {
 	set package_ids_clause ""
     }
 
-    if {[info exists object_type] && [string equal $object_type "forums"]} {
+    if {[info exists object_type] && $object_type eq "forums"} {
 	set object_type_clause " and o.object_type in ('forums_forum', 'forums_message') "
-    } elseif {[info exists object_type] && ![string equal $object_type "all"]} {
+    } elseif {[info exists object_type] && $object_type ne "all" } {
 	set object_type_clause " and o.object_type = :object_type "
     } else {
 	set object_type_clause ""
@@ -126,7 +126,7 @@ ad_proc -public -callback search::search -impl intermedia-driver {} {
             end"
 
     set people_search_clause { o.object_type = 'phb_person' or }
-    if [apm_package_installed_p "dotlrn"] {
+    if {[apm_package_installed_p "dotlrn"]} {
         set is_guest_p [search::is_guest_p]
         if {$is_guest_p} {
             set people_search_clause { and }; # doesn't look like legal SQL

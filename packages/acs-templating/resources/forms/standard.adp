@@ -63,11 +63,13 @@
                </span><!-- form-label -->
 		     </if>
 		     <else>
-		       <if @elements.optional@ nil and @elements.mode@ ne "display" and @elements.widget@ ne "inform">
+                        <if @form_properties.show_required_p@ true>
+                           <if @elements.optional@ nil and @elements.mode@ ne "display" and @elements.widget@ ne "inform">
 			     <span class="form-label form-required-mark">
 			       #acs-templating.required#
 			     </span>
-			   </if>
+		           </if>
+		        </if>
 		     </else>
 
 		     <if @elements.widget@ in radio checkbox>

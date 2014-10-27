@@ -13,10 +13,10 @@ ad_library {
 
 
 
-ad_proc set_member? { s v } {
+ad_proc -deprecated set_member? { s v } {
     <p>Tests whether or not $v is a member of set $s.</p>
 } {
-    if { [lsearch -exact $s $v] == -1 } {
+    if {$v ni $s} {
 	return 0
     } else {
 	return 1
@@ -25,7 +25,7 @@ ad_proc set_member? { s v } {
 
 
 
-ad_proc set_append! { s-name v } {
+ad_proc -deprecated set_append! { s-name v } {
     <p>Adds the element v to the set named s-name in the calling
     environment, if it isn't already there.</p>
 } {
@@ -38,7 +38,7 @@ ad_proc set_append! { s-name v } {
 
 
 
-ad_proc set_union { u v } {
+ad_proc -deprecated set_union { u v } {
     <p>Returns the union of sets $u and $v.</p>
 } {
     set result $u
@@ -52,7 +52,7 @@ ad_proc set_union { u v } {
   return $result
 }
 
-ad_proc set_union! { u-name v } {
+ad_proc -deprecated set_union! { u-name v } {
     <p>Computes the union of the set stored in the variable
     named $u-name in the calling environment and the set v,
     sets the variable named $u-name in the calling environment
@@ -72,7 +72,7 @@ ad_proc set_union! { u-name v } {
 
 
 
-ad_proc set_intersection { u v } {
+ad_proc -deprecated set_intersection { u v } {
     <p>Returns the intersection of sets $u and $v.</p>
 } {
     set result [list]
@@ -86,7 +86,7 @@ ad_proc set_intersection { u v } {
     return $result
 }
 
-ad_proc set_intersection! { u-name v } {
+ad_proc -deprecated set_intersection! { u-name v } {
     <p>Computes the intersection of the set stored in the variable
     named $u-name in the calling environment and the set v,
     sets the variable named $u-name in the calling environment
@@ -109,7 +109,7 @@ ad_proc set_intersection! { u-name v } {
 
 
 
-ad_proc set_difference { u v } {
+ad_proc -deprecated set_difference { u v } {
     <p>Returns the difference of sets $u and $v.  (i.e. The set of all
     members of u that aren't also members of $v.)</p>
 } {
@@ -124,7 +124,7 @@ ad_proc set_difference { u v } {
     return $result    
 }
 
-ad_proc set_difference! { u-name v } {
+ad_proc -deprecated set_difference! { u-name v } {
     <p>Computes the difference of the set stored in the variable
     named $u-name in the calling environment and the set v,
     sets the variable named $u-name in the calling environment

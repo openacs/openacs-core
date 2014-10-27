@@ -149,35 +149,35 @@ ad_proc -public util_convert_line_breaks_to_html {
     Convert line breaks to <p> and <br> tags, respectively.
 } {
     # Remove any leading or trailing whitespace
-    regsub {^[\s]*} $text {} text
-    regsub {[\s]*$} $text {} text
+    regsub {^[\s]+} $text {} text
+    regsub {[\s]+$} $text {} text
 
     # Make sure all line breaks are single \n's
     regsub -all {\r\n} $text "\n" text
     regsub -all {\r} $text "\n" text
     
     # Remove whitespace before \n's
-    regsub -all {[ \t]*\n} $text "\n" text
+    regsub -all {[ \t]+\n} $text "\n" text
     
     # Wrap P's around paragraphs
-    regsub -all {([^\n\s])\n\n([^\n\s])} $text {\1<p>\2} text
-
-    # Convert _single_ CRLF's to <br>'s to preserve line breaks
-    # Lars: This must be done after we've made P tags, because otherwise the line
-    # breaks will already have been converted into BR's.
+    regsub -all {([^\n\s])\n\n+([^\n\s])} $text {\1<p>\2} text
 
     # remove line breaks right before and after HTML tags that will insert a paragraph break themselves
     if { $includes_html_p } {
-        foreach tag { ul ol li blockquote p div table tr td th } {
-            regsub -all -nocase "\\n\\s*(</?${tag}\\s*\[^>\]*>)" $text {\1} text
-            regsub -all -nocase "(</?${tag}\\s*\[^>\]*>)\\s*\\n" $text {\1} text
-        }
+	set tags [join { ul ol li blockquote p div table tr td th } |]
+        regsub -all -nocase "\\s*(</?($tags)\\s*\[^>\]*>)\\s*" $text {\1} text
+
+        #foreach tag { ul ol li blockquote p div table tr td th } {
+        #    regsub -all -nocase "\\n\\s*(</?${tag}\\s*\[^>\]*>)" $text {\1} text
+        #    regsub -all -nocase "(</?${tag}\\s*\[^>\]*>)\\s*\\n" $text {\1} text
+        #}
     }
 
+    # Convert _single_ CRLF's to <br>'s to preserve line breaks
     regsub -all {\n} $text "<br>\n" text
 
     # Add line breaks to P tags
-    regsub -all {</p>} $text "</p>\n" text
+    #regsub -all {</p>} $text "</p>\n" text
 
     return $text
 }
@@ -288,8 +288,7 @@ ad_proc -private util_close_html_tags {
       set frag [string map [list &# "&amp;#"] $html_fragment]
       if {[catch {dom parse -html <body>$frag doc} errorMsg]} {
         # we got an error, so do normal processing
-        ns_log notice "tdom can't parse the provided HTML, error=$errorMsg,\n\
-	  checking fragment without tdom"
+        #ns_log notice "tdom can't parse the provided HTML, error=$errorMsg,\nchecking fragment without tdom"
       } else {
         $doc documentElement root
         set html ""
@@ -404,7 +403,7 @@ ad_proc -private util_close_html_tags {
             if { ! $discard } {
                 # figure out if we can break with the pretag chunk 
                 if { $break_soft } {
-                    if {! $nobr && [expr {[string length $pretag] + $out_len}] > $break_soft } {
+                    if {! $nobr && [string length $pretag] + $out_len > $break_soft } {
                         # first chop pretag to the right length
                         set pretag [string range $pretag 0 [expr {$break_soft - $out_len - [string length $ellipsis]}]]
                         # clip the last word
@@ -412,12 +411,12 @@ ad_proc -private util_close_html_tags {
                         append out [string range $pretag 0 $break_soft]
                         set broken_p 1
                         break
-                    } elseif { $nobr &&  [expr {[string length $pretag] + $out_len}] > $break_hard } {
+                    } elseif { $nobr &&  [string length $pretag] + $out_len > $break_hard } {
                         # we are in a nonbreaking tag and are past the hard break
                         # so chop back to the point we got the nobr tag...
                         set tagptr $nobr_tagptr 
                         if { $nobr_out_point > 0 } { 
-                            set out [string range $out 0 [expr {$nobr_out_point - 1}]]
+                            set out [string range $out 0 $nobr_out_point-1]
                         } else { 
                             # here maybe we should decide if we should keep the tag anyway 
                             # if zero length result would be the result...
@@ -645,11 +644,11 @@ attribute_array(heres)='  something for   you to = "consider" '</pre>
     # Loop over the attributes.
     # We maintain counter is so that we don't accidentally enter an infinite loop
     set count 0
-    while { $i < [string length $html] && ![string equal [string index $html $i] {>}] } {
-        if { [incr count] > 1000 } {
-            error "There appears to be a programming bug in ad_parse_html_attributes_upvar: We've entered an infinite loop. We are here: \noffset $i: [string range $html $i [expr {$i + 60}]]"
+    while { $i < [string length $html] && [string index $html $i] ne ">" } {
+        if { [incr count] > 3000 } {
+            error "There appears to be a programming bug in ad_parse_html_attributes_upvar: We've entered an infinite loop. We are here: \noffset $i: [string range $html $i $i+60]"
         }
-        if { [string equal [string range $html $i [expr { $i + 1 }]] "/>"] } {
+        if { [string range $html $i $i+1] eq "/>" } {
             # This is an XML-style tag ending: <... />
             break
         }
@@ -670,7 +669,7 @@ attribute_array(heres)='  something for   you to = "consider" '</pre>
             # If there is an equal sign, we're expecting the next token to be a value
             if { [lindex $equal_sign_idx 1] - [lindex $equal_sign_idx 0] < 0 } {
                 # No equal sign, no value
-                lappend attributes $attr_name
+		lappend attributes [list $attr_name]
                 if { [info exists attribute_array] } {
                     set attribute_array_var($attr_name) {}
                 }
@@ -684,7 +683,7 @@ attribute_array(heres)='  something for   you to = "consider" '</pre>
                 }
                 if { ![regexp -indices -start $i $exp $html match attr_value_idx] } {
                     # No end quote.
-                    set attr_value [string range $html [expr {$i+1}] end]
+                    set attr_value [string range $html $i+1 end]
                     set i [string length $html]
                 } else {
                     set attr_value [string range $html [lindex $attr_value_idx 0] [lindex $attr_value_idx 1]]
@@ -781,16 +780,18 @@ ad_proc ad_html_security_check { html } {
                 set attr_count 0
                 foreach attribute $attr_list {
                     incr attr_count
-                    set attr_name [lindex $attribute 0]
-                    set attr_value [lindex $attribute 1]
+
+		    lassign $attribute attr_name attr_value
                     
-                    if { ![info exists allowed_attribute($attr_name)] && ![info exists allowed_attribute(*)] } {
+                    if { ![info exists allowed_attribute($attr_name)] 
+			 && ![info exists allowed_attribute(*)] } {
                         return "The attribute '$attr_name' is not allowed for $tagname tags"
                     }
             
                     if { [string tolower $attr_name] ne "style" } {
                         if { [regexp {^\s*([^\s:]+):\/\/} $attr_value match protocol] } {
-                            if { ![info exists allowed_protocol([string tolower $protocol])] && ![info exists allowed_protocol(*)] } {
+                            if { ![info exists allowed_protocol([string tolower $protocol])] 
+				 && ![info exists allowed_protocol(*)] } {
                                 return "Your URLs can only use these protocols: [join $allowed_protocols_list ", "].
                 You have a '$protocol' protocol in there."
                             }
@@ -849,7 +850,7 @@ ad_proc -public ad_html_to_text {
 
     for { set i [string first < $html] } { $i != -1 } { set i [string first < $html $i] } {
         # append everything up to and not including the tag-opening <
-        ad_html_to_text_put_text output [string range $html $last_tag_end [expr {$i - 1}]]
+        ad_html_to_text_put_text output [string range $html $last_tag_end $i-1]
 
         # Check that:
         #  - we're not past the end of the string
@@ -857,16 +858,17 @@ ad_proc -public ad_html_to_text {
         #     - alpha or
         #     - a slash, and then alpha
         # Otherwise, it's probably just a lone < character
-        if { $i >= [expr {$length-1}] || \
-                 (![string is alpha [string index $html [expr {$i + 1}]]] && \
-		      [string index $html [expr {$i + 1}]] ne "!" && \
-                      (![string equal "/" [string index $html [expr {$i + 1}]]] || \
-                           ![string is alpha [string index $html [expr {$i + 2}]]])) } {
+        if { $i >= $length - 1 || 
+	     (![string is alpha [string index $html $i+1]] 
+	      && [string index $html $i+1] ne "!" 
+	      && ("/" ne [string index $html $i+1] || 
+		  ![string is alpha [string index $html $i+2]])) 
+	 } {
             # Output the < and continue with next character
             ad_html_to_text_put_text output "<"
             set last_tag_end [incr i]
             continue
-        } elseif {[string match "!--*" [string range $html [expr {$i + 1}] end]]} {
+        } elseif {[string match "!--*" [string range $html $i+1 end]]} {
 	    # handle HTML comments, I can't beleive noone noticed this before.
 	    # this code maybe not be elegant but it works
 	    
@@ -891,7 +893,7 @@ ad_proc -public ad_html_to_text {
         
         set count 0
         while 1 {
-            if {[incr count] > 1000 } {
+            if {[incr count] > 3000 } {
                 # JCD: the programming bug is that an unmatched < in the input runs off forever looking for 
                 # it's closing > and in some long text like program listings you can have lots of quotes 
                 # before you find that >
@@ -941,7 +943,7 @@ ad_proc -public ad_html_to_text {
             incr i
         }
     
-        set full_tag [string range $html $tag_start [expr { $i - 1 }]]
+        set full_tag [string range $html $tag_start $i-1]
         
         if { ![regexp {^(/?)([^\s]+)[\s]*(\s.*)?$} $full_tag match slash tagname attributes] } {
             # A malformed tag -- just delete it
@@ -1000,7 +1002,7 @@ ad_proc -public ad_html_to_text {
                             }
                         } else {
                             if { [llength $href_stack] > 0 } {
-                                if { ![empty_string_p [lindex $href_stack end]] } {
+                                if { [lindex $href_stack end] ne "" } {
                                     ad_html_to_text_put_text output " [lindex $href_stack end]"
                                 }
                                 set href_stack [lreplace $href_stack end end]
@@ -1215,7 +1217,7 @@ ad_proc -private ad_html_to_text_put_text { output_var text } {
                 }
             }
             default {
-                if { [expr {$output(linelen) + $wordlen}] > $output(maxlen) && $output(maxlen) != 0 } {
+                if { $output(linelen) + $wordlen > $output(maxlen) && $output(maxlen) != 0 } {
                     ad_html_to_text_put_newline output
                 }
                 append output(text) "$word"
@@ -1283,9 +1285,9 @@ ad_proc util_expand_entities_ie_style { html } {
     for { set i [string first & $html] } { $i != -1 } { set i [string first & $html $i] } {
             
         set match_p 0
-        switch -regexp -- [string index $html [expr {$i+1}]] {
+        switch -regexp -- [string index $html $i+1]] {
             # {
-                switch -regexp -- [string index $html [expr {$i+2}]] {
+                switch -regexp -- [string index $html $i+2] {
                     [xX] {
                         regexp -indices -start [expr {$i+3}] {[0-9a-fA-F]*} $html hex_idx
                         set hex [string range $html [lindex $hex_idx 0] [lindex $hex_idx 1]]
@@ -1307,7 +1309,7 @@ ad_proc util_expand_entities_ie_style { html } {
                 }
             }
             [a-zA-Z] {
-                if { [regexp -indices -start [expr {$i}] {\A&([^\s;]+)} $html match entity_idx] } {
+                if { [regexp -indices -start $i {\A&([^\s;]+)} $html match entity_idx] } {
                     set entity [string tolower [string range $html [lindex $entity_idx 0] [lindex $entity_idx 1]]]
                     if { [info exists entities($entity)] } {
                         set html [string replace $html $i [lindex $match 1] $entities($entity)]
@@ -1319,7 +1321,7 @@ ad_proc util_expand_entities_ie_style { html } {
         incr i
         if { $match_p } {
             # remove trailing semicolon
-            if { [string equal [string index $html $i] {;}] } {
+            if {[string index $html $i] eq ";"} {
                 set html [string replace $html $i $i]
             }
         }
@@ -1353,7 +1355,7 @@ ad_proc wrap_string {input {threshold 80}} {
             set start_of_line_index [expr {$start_of_line_index + $first_new_line_pos + 1}]
             continue
         }
-        if { [expr {$start_of_line_index + $threshold + 1}] >= [string length $input] } {
+        if { $start_of_line_index + $threshold + 1 >= [string length $input] } {
             # we're on the last line and it is < threshold so just return it
             lappend result_rows $this_line
             return [join $result_rows "\n"]
@@ -1378,7 +1380,7 @@ ad_proc wrap_string {input {threshold 80}} {
         }
         # OK, we have a last space pos of some sort
         set real_index_of_space [expr {$start_of_line_index + $last_space_pos}]
-        lappend result_rows [string range $input $start_of_line_index [expr {$real_index_of_space - 1}]]
+        lappend result_rows [string range $input $start_of_line_index $real_index_of_space-1]
         set start_of_line_index [expr {$start_of_line_index + $last_space_pos + 1}]
     }
 }
@@ -1401,10 +1403,9 @@ ad_proc -public ad_html_text_convertable_p {
     set valid_froms { text/enhanced text/plain text/fixed-width text/html text/xml }
     set valid_tos { text/plain text/html }
     # Validate procedure input
-    set from [ad_decode $from "html" "text/html" "text" "text/plain" "plain" "text/plain" $from]
-    set to [ad_decode $to "html" "text/html" "text" "text/plain" "plain" "text/plain" $to]
-    return [expr {[lsearch $valid_froms $from] != -1 &&
-                  [lsearch $valid_tos $to] != -1}]
+    set from [ad_decode $from html text/html text text/plain plain text/plain pre text/plain $from]
+    set to   [ad_decode $to   html text/html text text/plain plain text/plain pre text/plain $to]
+    return [expr {$from in $valid_froms && $to in $valid_tos}]
 }
 
 ad_proc -public ad_html_text_convert {
@@ -1481,8 +1482,8 @@ ad_proc -public ad_html_text_convert {
     }
     
     # For backwards compatibility
-    set from [ad_decode $from "html" "text/html" "text" "text/plain" "plain" "text/plain" $from]
-    set to [ad_decode $to "html" "text/html" "text" "text/plain" "plain" "text/plain" $to]
+    set from [ad_decode $from html text/html text text/plain plain text/plain pre text/plain $from]
+    set to   [ad_decode $to   html text/html text text/plain plain text/plain pre text/plain $to]
 
     if { ![ad_html_text_convertable_p -from $from -to $to] } {
         error "Illegal mime types for conversion - from: $from to: $to"
@@ -1592,7 +1593,7 @@ ad_proc -public ad_convert_to_html {
     @author Lars Pind (lars@pinds.com)
     @creation-date 19 July 2000
 } {
-    if {$html_p eq "t"} {
+    if {$html_p == "t"} {
         set from "text/html"
     } else {
         set from "text/plain"
@@ -1613,7 +1614,7 @@ ad_proc -public ad_convert_to_text {
     @author Lars Pind (lars@pinds.com)
     @creation-date 19 July 2000
 } {
-    if {$html_p eq "t"} {
+    if {$html_p == "t"} {
         set from "text/html"
     } else {
         set from "text/plain"
@@ -1687,33 +1688,28 @@ ad_proc -public string_truncate {
     @author Lars Pind (lars@pinds.com)
     @creation-date September 8, 2002
 } {
-    if { $len > 0 } {
-        if { [string length $string] > $len } {
-            set end_index [expr $len-[string length $ellipsis]-1]
-            
-            # Back up to the nearest whitespace
-            if { ![string is space [string index $string [expr {$end_index + 1}]]] } {
-                while { $end_index >= 0 && ![string is space [string index $string $end_index]] } {
-                    incr end_index -1
-                }
-            }
-            
-            # If that laves us with an empty string, then ignore whitespace and just truncate mid-word
-            if { $end_index == -1 } {
-                set end_index [expr $len-[string length $ellipsis]-1]
-            }
-            
-            # Chop off extra whitespace at the end
-            while { $end_index >= 0 && [string is space [string index $string $end_index]] } {
-                incr end_index -1
-            } 
-                
-            set string [string range $string 0 $end_index]
-            
-            append string $ellipsis
-            append string $more
-        } 
-    }
+    if { $len > 0 & [string length $string] > $len } {
+	set end_index [expr {$len-[string length $ellipsis]-1}]
+	
+	# Back up to the nearest whitespace
+	if { ![string is space [string index $string $end_index+1]] } {
+	    while { $end_index >= 0 && ![string is space [string index $string $end_index]] } {
+		incr end_index -1
+	    }
+	}
+	
+	# If that leaves us with an empty string, then ignore
+	# whitespace and just truncate mid-word
+	if { $end_index == -1 } {
+	    set end_index [expr {$len - [string length $ellipsis] - 1}]
+	}
+	
+	# Chop off extra whitespace at the end
+	set string [string trimright [string range $string 0 $end_index]]
+
+	append string $ellipsis $more
+    } 
+
     return $string
 }
 
@@ -1769,10 +1765,10 @@ ad_proc -deprecated util_maybe_convert_to_html {raw_string html_p} {
     @see ad_convert_to_html
 
 }  {
-    if { $html_p eq "t" } {
+    if { $html_p == "t" } {
         return $raw_string
     } else {
-        return [util_convert_plaintext_to_html $raw_string]
+        return [ad_text_to_html $raw_string]
     }
 }
 

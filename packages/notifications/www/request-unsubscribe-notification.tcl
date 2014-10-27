@@ -2,12 +2,12 @@ ad_page_contract {
     
     Unsubscribe users.    
 
-    @author Natalia Pérez (nperper@it.uc3m.es)
+    @author Natalia PÃ©rez (nperper@it.uc3m.es)
     @create-date 2005-03-28
     
 } {
-    object_id:integer,notnull
-    type_id
+    object_id:naturalnum,notnull
+    type_id:naturalnum,notnull
 }
 
 set package_id [ad_conn package_id]

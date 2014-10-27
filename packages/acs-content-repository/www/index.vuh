@@ -30,13 +30,13 @@ if { [content::init the_url the_root $content_root $template_root public $revisi
   set file "$the_root/$the_url"
   rp_internal_redirect -absolute_path $file
 } else {
-  # ns_returnnotfound
-  set page "[ad_header {Content Item Not Found}]"
-  append page "<h3>Content Item Not Found</h3>"
-  append page "The requested item is not available for viewing.  "
-  append page "The item is either not available on this server or it is not in a publishable state  "
-  append page "Unpublished items can be viewed via the CMS interface if the CMS package is installed.<br>"
-  append page "[ad_footer]"
-  doc_return 200 text/html $page
+  ns_returnnotfound
+  #set page "[ad_header {Content Item Not Found}]"
+  #append page "<h3>Content Item Not Found</h3>"
+  #append page "The requested item is not available for viewing.  "
+  #append page "The item is either not available on this server or it is not in a publishable state  "
+  #append page "Unpublished items can be viewed via the CMS interface if the CMS package is installed.<br>"
+  #append page "[ad_footer]"
+  #doc_return 200 text/html $page
 }
 

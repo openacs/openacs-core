@@ -101,7 +101,7 @@ aa_register_case -cats {api db smoke} apm__test_info_file {
         array set parsed_callback_array $spec_array(callbacks)
     
         aa_true "Only one permissible callback should be returned, got array [array get parsed_callback_array]" \
-                [expr [llength [array names parsed_callback_array]] == 1]
+	    [expr {[array size parsed_callback_array] == 1}]
     
         aa_equals "Checking name of callback of allowed type $allowed_type" \
                 $parsed_callback_array($allowed_type) $callback_array($allowed_type)
@@ -289,7 +289,7 @@ aa_register_case -cats {api} -on_error {
 
     # nonexistent package_type
     aa_true "No nodes with package type 'foo'" \
-        [expr [llength [site_node::get_children -all -element node_id -node_id $node_id -package_type "foo"]] == 0]
+        [expr {[llength [site_node::get_children -all -element node_id -node_id $node_id -package_type "foo"]] == 0}]
 
     
 }
@@ -866,7 +866,7 @@ aa_register_case -cats {api} \
 	set string_with_img {<img src="http://test.test/foo.png">}
 	aa_log "Original string is $string_with_img"
 	set html_version [ad_enhanced_text_to_html $string_with_img]
-	aa_true "new: $html_version should be the same" [string equal $html_version $string_with_img] 
+	aa_equals "new: $html_version should be the same" $html_version $string_with_img
 }
 
 aa_register_case -cats {api db} db__caching { 
@@ -1035,18 +1035,21 @@ aa_register_case \
             set parameter_id [db_nextval "acs_object_id_seq"]
             apm_parameter_register -parameter_id $parameter_id -scope global x_test_x "" acs-tcl 0 number
             parameter::set_global_value -package_key acs-tcl -parameter x_test_x -value 3
-            aa_true "check global parameter value set/get" [string equal [parameter::get_global_value -package_key acs-tcl -parameter x_test_x] 3]
+            aa_equals "check global parameter value set/get" \
+		[parameter::get_global_value -package_key acs-tcl -parameter x_test_x]\
+		"3"
             apm_parameter_unregister $parameter_id
 
-	    db_foreach get_param {
+	    foreach tuple [db_list_of_lists get_param {
 		select ap.parameter_name, ap.package_key, ap.default_value, ap.parameter_id
 		from apm_parameters ap, apm_package_types apt
 		where
 		ap.package_key = apt.package_key
 		and apt.singleton_p ='t'
 		and ap.package_key <> 'acs-kernel'
-	    } {
+	    }] {
 
+		lassign $tuple parameter_name package_key default_value parameter_id
 		set value [random]
 		if {$parameter_name ne "PasswordExpirationDays" && $value > 0.7} {
 
@@ -1060,27 +1063,33 @@ aa_register_case \
 		    }]
 
 		    aa_log "$package_key $parameter_name $actual_value"
-		    aa_true "check parameter::get" [string equal [parameter::get -package_id $package_id -parameter $parameter_name] $actual_value]
-		    aa_true "check parameter::get_from_package_key" \
-			[string equal [parameter::get_from_package_key -package_key $package_key -parameter $parameter_name] $actual_value]
+		    aa_equals "check parameter::get" \
+			[parameter::get -package_id $package_id -parameter $parameter_name] \
+			$actual_value
+		    aa_equals "check parameter::get_from_package_key" \
+			[parameter::get_from_package_key -package_key $package_key -parameter $parameter_name] \
+			$actual_value
 
 		    parameter::set_default -package_key $package_key -parameter $parameter_name -value $value
 		    set value_db [db_string get_values {
 			select default_value from apm_parameters
 			where package_key = :package_key and parameter_name = :parameter_name
 		    }]
-		    aa_true "check parameter::set_default" \
-			[string equal $value $value_db]
-
+		    aa_equals "check parameter::set_default" $value $value_db
 		    set value [expr {$value + 10}]
+
 		    parameter::set_from_package_key -package_key $package_key -parameter $parameter_name -value $value
-		    aa_true "check parameter::set_from_package_key" \
-			[string equal $value [parameter::get -package_id $package_id -parameter $parameter_name]]
+		    aa_equals "check parameter::set_from_package_key" \
+			[parameter::get -package_id $package_id -parameter $parameter_name] \
+			$value
 
 		    set value [expr {$value + 10}]
 		    parameter::set_value -package_id $package_id -parameter $parameter_name -value $value
-		    aa_true "check parameter::set_value" \
-			[string equal $value [parameter::get -package_id $package_id -parameter $parameter_name]]
+		    aa_equals "check parameter::set_value" \
+			[parameter::get -package_id $package_id -parameter $parameter_name] \
+			$value
+
+		    ad_parameter_cache -delete $package_id $parameter_name
 
 		    break;
 		}
@@ -1096,7 +1105,7 @@ aa_register_case -cats {api smoke} acs_object__package_id {
     # Retrieve an objects_package_id
     set object_id [db_string get_object_id "select max(object_id) from acs_objects where package_id >0"]
     set package_id [db_string get_package_id "select package_id from acs_objects where object_id = :object_id"]
-    aa_true "package_id returned is correct" [string equal $package_id [acs_object::package_id -object_id $object_id]]
+    aa_equals "package_id returned is correct" $package_id [acs_object::package_id -object_id $object_id]
 }
 
 aa_register_case -cats {api smoke} acs_user__registered_user_p {

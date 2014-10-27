@@ -6,7 +6,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     {return_url "" }
-    {user_id ""}
+    {user_id:naturalnum ""}
 } -properties {
     context:onevalue
     export_vars:onevalue
@@ -21,7 +21,7 @@ if {$user_id eq ""} {
     set user_id $current_user_id
 }
 
-ad_require_permission $user_id "write"
+permission::require_permission -object_id $user_id -privilege "write"
 
 if {![db_0or1row user_info {}]} {
     ad_return_error "Account Unavailable" "We can't find you (user #$user_id) in the users table.  Probably your account was deleted for some reason."

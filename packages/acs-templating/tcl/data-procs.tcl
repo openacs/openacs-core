@@ -69,7 +69,7 @@ ad_proc -public template::data::validate::naturalnum {
 } {
   Validates natural numbers data types.
 
-  Will trim leading 0 in order to avoid TCL interpreting it as octal (code borrowed
+  Will trim leading 0 in order to avoid Tcl interpreting it as octal (code borrowed
   from ad_page_contract_filter_proc_naturalnum)
 
   @author Rocael Hernandez <roc@viaro.net>
@@ -79,7 +79,7 @@ ad_proc -public template::data::validate::naturalnum {
 
   @return True (1) if valid, false (0) if not
 } {
-  upvar 2 $message_ref message $value_ref value
+    upvar 2 $message_ref message $value_ref value
 
     set result [regexp {^(0*)(([1-9][0-9]*|0))$} $value match zeros value]
 
@@ -364,7 +364,7 @@ ad_proc -public template::data::validate::textdate {
     upvar 2 $message_ref message $value_ref textdate
     
     set error_msg [list]
-    if { [exists_and_not_null textdate] } {
+    if { ([info exists textdate] && $textdate ne "") } {
 	if { [regexp {^[0-9]{4}-[0-9]{2}-[0-9]{2}$} $textdate match] } {
 	    if { [catch { clock scan "${textdate}" }] } {
 		# the textdate is formatted properly the template::data::transform::textdate proc
@@ -380,7 +380,7 @@ ad_proc -public template::data::validate::textdate {
 		    set maxdays [template::util::date::get_property days_in_month $datelist]
 		    if { $day < 1 || $day > $maxdays } {
 			set month_pretty [template::util::date::get_property long_month_name $datelist]
-			if { $month == "2" } {
+			if { $month == 2 } {
 			    # February has a different number of days depending on the year
 			    append month_pretty " ${year}"
 			}
@@ -488,7 +488,7 @@ ad_proc -public template::data::validate::enumeration {
   
   # unique list
   set list [split $value ,]
-  set result [expr [llength $list] == [llength [lsort -unique $list]]]
+  set result [expr {[llength $list] == [llength [lsort -unique $list]]}]
   
   if { ! $result } {
     set message "Invalid enumeration. \"$value\" does not contain unique values."

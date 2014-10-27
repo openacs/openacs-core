@@ -3,7 +3,7 @@ ad_page_contract {
     
     @cvs-id $Id$
 } {
-    {message:allhtml ""}
+    {message:html ""}
     {return_url ""}
 }
 

@@ -45,7 +45,7 @@ proc ::template::util::write_from_template { template file_name} {
 set tcl_lvl [info level]
 set adp_lvl [adp_level]
 set file_list [list]
-set doc_root [get_server_root]/packages/acs-templating/www/doc
+set doc_root $::acs::rootdir/packages/acs-templating/www/doc
 
 #debugging:
 template::util::display_value doc_root
@@ -56,7 +56,7 @@ set namespace_template [template::util::read_file \
 set dir [ns_library private]
 
 # debugging
-set svr_root [get_server_root]
+set svr_root $::acs::rootdir
 
 
 set dir [list $svr_root/packages/cms/tcl $svr_root/packages/acs-templating/tcl]

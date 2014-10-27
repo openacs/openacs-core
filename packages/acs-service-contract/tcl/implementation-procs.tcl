@@ -45,7 +45,7 @@ ad_proc -public acs_sc::impl::delete {
     Delete a service contract implementation 
 } {
 
-    if { ![exists_and_not_null contract_name] || ![exists_and_not_null impl_name] } {
+    if { $contract_name eq "" || $impl_name eq "" } {
         error "You must supply contract_name and impl_name"
     }
 
@@ -102,7 +102,7 @@ ad_proc -public acs_sc::impl::new_from_spec {
     # Spec contains: contract_name, name, pretty_name, owner, aliases
     array set impl $spec
     
-    if { ![exists_and_not_null impl(pretty_name)] } {
+    if { ![info exists impl(pretty_name)] } {
         set impl(pretty_name) ""
     }
 
@@ -147,7 +147,7 @@ ad_proc -public acs_sc::impl::get_id {
     a service contract,
     if the contract is not specified.
 } {
-    if {[exists_and_not_null contract]} {
+    if {([info exists contract] && $contract ne "")} {
         return [db_string select_impl_id_with_contract {}]
     } else {
         return [db_string select_impl_id {}]
@@ -204,7 +204,7 @@ ad_proc -public acs_sc::impl::get_options {
         # There are exclude names
         foreach element $full_list {
             set impl_name [lindex $element 0]
-            if { [lsearch -exact $exclude_names $impl_name] == -1 } {
+            if {$impl_name ni $exclude_names} {
                 # Name is not in exclude list so add option
                 lappend impl_list $element
             }

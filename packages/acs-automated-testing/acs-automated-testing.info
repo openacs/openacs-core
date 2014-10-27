@@ -10,8 +10,7 @@
     <version name="5.9.0d1" url="http://openacs.org/repository/download/apm/acs-automated-testing-5.9.0d1.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>The interface to the automated testing facilities within OpenACS.</summary>
-        <release-date>2011-06-12</release-date>
-        <maturity>3</maturity>
+        <release-date>2013-09-08</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
         <maturity>3</maturity>
         <license url="http://www.gnu.org/copyleft/gpl.html">GPL version 2</license>

@@ -1,5 +1,5 @@
 <master>
-<property name=title>Add a batch of users</property>
+<property name="doc(title)">Add a batch of users</property>
 <property name="context">@context;noquote@</property>
 
 <form method="post" action="user-batch-add-2">

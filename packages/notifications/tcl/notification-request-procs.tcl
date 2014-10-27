@@ -28,7 +28,7 @@ namespace eval notification::request {
     } {
         set request_id [get_request_id -type_id $type_id -object_id $object_id -user_id $user_id]
 
-        if {[empty_string_p $request_id]} {
+        if {$request_id eq ""} {
             # Set up the vars
             set extra_vars [ns_set create]
             oacs_util::vars_to_ns_set -ns_set $extra_vars -var_list {request_id type_id user_id object_id interval_id delivery_method_id format dynamic_p}

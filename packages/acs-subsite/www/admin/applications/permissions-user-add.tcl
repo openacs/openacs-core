@@ -5,7 +5,7 @@ ad_page_contract {
     @creation-date 2003-06-13
     @cvs-id $Id$
 } {
-    object_id:integer
+    object_id:naturalnum,notnull
 }
 
 set page_title "Add User"

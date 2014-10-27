@@ -145,5 +145,4 @@ db_transaction {
     ad_script_abort
 }
 
-db_release_unused_handles
 ad_returnredirect "version-view?version_id=$version_id"

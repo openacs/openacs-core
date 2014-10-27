@@ -7,7 +7,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     {return_url "" }
-    {user_id ""}
+    {user_id:naturalnum ""}
 } -properties {
     first_names:onevalue
     last_name:onevalue
@@ -40,13 +40,13 @@ if {$user_id eq ""} {
 
 if { $current_user_id == $user_id } {
     set admin_p 1
-    ad_require_permission $user_id "write"
+    permission::require_permission -object_id $user_id -privilege "write"
 } else {
     set admin_p 0
 }
 
-set export_vars      [export_url_vars user_id]
-set export_edit_vars [export_url_vars user_id return_url]
+set export_vars      [export_vars -url {user_id}]
+set export_edit_vars [export_vars -url {user_id return_url}]
 
 if {![db_0or1row user_info "select 
   first_names, 

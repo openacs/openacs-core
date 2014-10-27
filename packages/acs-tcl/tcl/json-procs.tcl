@@ -464,7 +464,7 @@ ad_proc util::json::sql_values_to_json_values {row} {
 } {
     set new_row {}
     foreach value $row {
-        if { $value == "" } {
+        if { $value eq "" } {
             lappend new_row null
         } else {
             lappend new_row $value

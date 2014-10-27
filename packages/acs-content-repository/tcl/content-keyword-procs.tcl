@@ -1,5 +1,3 @@
-# 
-
 ad_library {
     
     Procedures for content_keywords
@@ -181,10 +179,10 @@ ad_proc -public content::keyword::new {
         [list creation_user $creation_user ] \
         [list creation_ip $creation_ip ] \
     ]
-    if {[exists_and_not_null creation_date]} {
+    if {[info exists creation_date] && $creation_date ne ""} {
         lappend var_list [list creation_date $creation_date ]
     }
-    if {[exists_and_not_null object_type]} {
+    if {[info exists object_type] && $object_type ne ""} {
         lappend var_list [list object_type $object_type ]
     }
     return [package_exec_plsql -var_list $var_list content_keyword new]
@@ -219,3 +217,101 @@ ad_proc -public content::keyword::set_heading {
         [list heading $heading ] \
     ] content_permission set_heading]
 }
+
+
+ad_proc -public content::keyword::get_children {
+    {-parent_id ""}
+} {
+    Returns the ids of the keywords having the given parent_id. Returns
+    an empty list if there are no children.
+
+    @author Peter Marklund
+} {
+    return [db_list select_child_keywords {
+        select keyword_id
+        from cr_keywords
+        where parent_id = :parent_id
+    }]
+}
+
+ad_proc -public content::keyword::get_keyword_id {
+    {-parent_id:required}
+    {-heading:required}
+} {
+    Get the keyword with the given heading under the given parent.
+    Returns the empty string if none exists.
+} {
+    return [db_string select_keyword_id {
+    select keyword_id 
+    from   cr_keywords
+    where  parent_id = :parent_id
+    and    heading = :heading
+    } -default {}]
+}
+
+ad_proc -public content::keyword::get_options_flat {
+    {-parent_id ""}
+} {
+    Returns a flat options list of the keywords with the given parent_id.
+} {
+    return [db_list_of_lists select_keyword_options [subst {
+    select heading, keyword_id
+    from   cr_keywords
+    where  [ad_decode $parent_id "" "parent_id is null" "parent_id = :parent_id"]
+    order  by lower(heading)}]]
+}
+
+ad_proc -public content::keyword::item_get_assigned {
+    {-item_id:required}
+    {-parent_id}
+} {
+    Returns a list of all keywords assigned to the given cr_item.
+
+    If parent_id is supplied, only keywords that are children of
+    parent_id are listed.
+} {
+    if {[info exists parent_id]} {
+        set keyword_list [db_list get_child_keywords {
+            select km.keyword_id
+            from cr_item_keyword_map km,
+                 cr_keywords kw
+            where km.item_id = :item_id
+            and   kw.parent_id = :parent_id
+            and   kw.keyword_id = km.keyword_id
+    }]
+    } else {
+        set keyword_list [db_list get_keywords {
+            select keyword_id from cr_item_keyword_map
+            where item_id = :item_id
+    }]
+    }
+
+    return $keyword_list
+}
+
+
+ad_proc -public content::keyword::item_unassign_children {
+    {-item_id:required}
+    {-parent_id:required}
+} {
+    Unassign all the keywords attached to a content item
+    that are children of keyword parent_id.
+
+    Returns the supplied item_id for convenience.
+} {
+    db_dml item_unassign_children {
+    delete from cr_item_keyword_map
+    where item_id = :item_id
+    and   keyword_id in (select p.keyword_id
+                         from   cr_keywords p
+                         where  p.parent_id = :parent_id)
+    }
+    return $item_id
+}
+
+#
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:
