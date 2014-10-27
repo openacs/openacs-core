@@ -352,7 +352,7 @@ ad_proc -private template::query::nestedlist { statement_name db result_name sql
       lappend group_values [ns_set get $row $group]
     }
 
-    eval template::util::lnest rows [list $values] $group_values
+    template::util::lnest rows $values {*}$group_values
   }
 
   if { [info exists opts(cache)] } {
@@ -978,7 +978,7 @@ ad_proc -public template::multirow {
             lappend sort_list [list $i $sortby]
         }
 
-        set sort_list [eval lsort $sort_args -index 1 [list $sort_list]]
+        set sort_list [lsort {*}$sort_args -index 1 $sort_list]
 
         
         # Now we have a list with two elms, (rownum, sort-by-value), sorted by sort-by-value

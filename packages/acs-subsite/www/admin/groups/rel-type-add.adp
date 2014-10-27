@@ -1,6 +1,6 @@
 <master>
 <property name="context">@context;noquote@</property>
-<property name="title">Add relation type</property>
+<property name="doc(title)">Add relation type</property>
 				   
 <if @primary_rels:rowcount@ eq "0">
   There are no other relationship types that you can add. You can

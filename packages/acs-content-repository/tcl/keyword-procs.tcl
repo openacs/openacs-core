@@ -54,14 +54,16 @@ ad_proc -public -deprecated cr::keyword::set_heading {
     db_exec_plsql set_heading { }
 }
 
-ad_proc -public cr::keyword::get_keyword_id {
+ad_proc -public -deprecated cr::keyword::get_keyword_id {
     {-parent_id:required}
     {-heading:required}
 } {
     Get the keyword with the given heading under the given parent.
     Returns the empty string if none exists.
+
+    @see content::keyword::get_keyword_id
 } {
-    return [db_string select_keyword_id {} -default {}]
+    return [content::keyword::get_keyword_id -parent_id $parent_id -heading $heading]
 }
 
 ad_proc -public -deprecated cr::keyword::item_unassign {
@@ -73,23 +75,20 @@ ad_proc -public -deprecated cr::keyword::item_unassign {
     Returns the supplied item_id for convenience.
     @see content::keyword::item_unassign
 } {
-    db_exec_plsql item_unassign {}
-
-    return $item_id
+    return [content::keyword::item_unassign -keyword_id $keyword_id -item_id $item_id]
 }
 
-ad_proc -public cr::keyword::item_unassign_children {
+ad_proc -deprecated -public cr::keyword::item_unassign_children {
     {-item_id:required}
     {-parent_id:required}
 } {
     Unassign all the keywords attached to a content item
     that are children of keyword parent_id.
 
-    Returns the supplied item_id for convenience.
+    @return the supplied item_id for convenience.
+    @see content::keyword::item_unassign_children
 } {
-    db_dml item_unassign_children {}
-
-    return $item_id
+    return [content::keyword::item_unassign_children -item_id $item_id -parent_id $parent_id]
 }
 
 ad_proc -public -deprecated cr::keyword::item_assign {
@@ -123,7 +122,7 @@ ad_proc -public -deprecated cr::keyword::item_assign {
     return $item_id
 }
 
-ad_proc -public cr::keyword::item_get_assigned {
+ad_proc -public -deprecated cr::keyword::item_get_assigned {
     {-item_id:required}
     {-parent_id}
 } {
@@ -132,35 +131,35 @@ ad_proc -public cr::keyword::item_get_assigned {
     If parent_id is supplied, only keywords that are children of
     parent_id are listed.
 } {
+
     if {[info exists parent_id]} {
-        set keyword_list [db_list get_child_keywords {}]
+	set keyword_list [content::keyword::item_get_assigned -parent_id $parent_id -item_id $item_id]
     } else {
-        set keyword_list [db_list get_keywords {}]
+	set keyword_list [content::keyword::item_get_assigned -parent_id $parent_id -item_id $item_id]
     }
 
     return $keyword_list
 }
 
-ad_proc -public cr::keyword::get_options_flat {
+ad_proc -deprecated -public cr::keyword::get_options_flat {
     {-parent_id ""}
 } {
     Returns a flat options list of the keywords with the given parent_id.
+
+    @see content::keyword::get_options_flat
 } {
-    return [db_list_of_lists select_keyword_options {}]
+    return [content::keyword::get_options_flat -parent_id $parent_id]
 }
 
-ad_proc -public cr::keyword::get_children {
+ad_proc -public -deprecated cr::keyword::get_children {
     {-parent_id ""}
 } {
     Returns the ids of the keywords having the given parent_id. Returns
     an empty list if there are no children.
 
     @author Peter Marklund
+    @see content::keyword::get_children 
 } {
-    return [db_list select_child_keywords {
-        select keyword_id
-        from cr_keywords
-        where parent_id = :parent_id
-    }]
+    return [content::keyword::get_children -parent_id $parent_id]
 }
     

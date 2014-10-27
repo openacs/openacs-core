@@ -1,5 +1,5 @@
 <master>
-<property name=title>Confirm privilege modification for user #@user_id;noquote@</property>
+<property name="doc(title)">Confirm privilege modification for user #@user_id;noquote@</property>
 <property name=context>@context;noquote@</property>
 
 Are you sure you wish to @action@ admin privileges for user #@user_id@?

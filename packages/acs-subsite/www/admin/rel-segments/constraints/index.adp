@@ -1,6 +1,6 @@
 <master>
 <property name="context">@context;noquote@</property>
-<property name="title">Relational Constraint Administration</property>
+<property name="doc(title)">Relational Constraint Administration</property>
 
 Currently, the system is able to handle the following relational constraints:
 

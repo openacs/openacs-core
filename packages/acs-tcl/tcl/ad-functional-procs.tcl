@@ -20,7 +20,6 @@ ad_library {
     
     @author Mark Dettinger (mdettinger@arsdigita.com)
     @creation-date March 29, 2000
-    @last-updated July 25, 2000
     @cvs-id $Id$
 
     This was part of ACS 3

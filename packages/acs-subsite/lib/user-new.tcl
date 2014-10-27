@@ -21,7 +21,7 @@ array set parameter_defaults {
     return_url {}
 }
 foreach parameter [array names parameter_defaults] { 
-    if { ![exists_and_not_null $parameter] } { 
+    if { (![info exists $parameter] || $parameter eq "") } { 
         set $parameter $parameter_defaults($parameter)
     }
 }
@@ -60,7 +60,7 @@ ad_form -name register -export {next_url user_id return_url} -form [auth::get_re
     }
 }
 
-if { [exists_and_not_null rel_group_id] } {
+if { ([info exists rel_group_id] && $rel_group_id ne "") } {
     ad_form -extend -name register -form {
         {rel_group_id:integer(hidden),optional}
     }
@@ -101,7 +101,7 @@ ad_form -extend -name register -on_request {
                                      -secret_question $secret_question \
                                      -secret_answer $secret_answer]
 	
-        if { $creation_info(creation_status) eq "ok" && [exists_and_not_null rel_group_id] } {
+        if { $creation_info(creation_status) eq "ok" && ([info exists rel_group_id] && $rel_group_id ne "") } {
             group::add_member \
                 -group_id $rel_group_id \
                 -user_id $user_id \
@@ -136,13 +136,23 @@ ad_form -extend -name register -on_request {
             # Continue below
         }
         default {
+
+	    if {[parameter::get -parameter RegistrationRequiresEmailVerificationP -default 0] &&
+		$creation_info(account_status) eq "closed"} {
+		ad_return_warning "Email Validation is required" $creation_info(account_message)
+		ad_script_abort
+	    }
+	    if {[parameter::get -parameter RegistrationRequiresApprovalP -default 0] &&
+		$creation_info(account_status) eq "closed"} {
+		ad_return_warning "Account approval is required" $creation_info(account_message)
+		ad_script_abort
+	    }
+
             # Display the message on a separate page
             ad_returnredirect \
                 -message $creation_info(account_message) \
                 -html \
-                [export_vars \
-                     -base "[subsite::get_element \
-                                -element url]register/account-closed"]
+		"[subsite::get_element -element url]register/account-closed"
             ad_script_abort
         }
     }
@@ -158,7 +168,7 @@ ad_form -extend -name register -on_request {
     
     
     # User is registered and logged in
-    if { ![exists_and_not_null return_url] } {
+    if { (![info exists return_url] || $return_url eq "") } {
         # Redirect to subsite home page.
         set return_url [subsite::get_element -element url]
     }

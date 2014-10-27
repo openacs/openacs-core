@@ -17,7 +17,7 @@ ad_page_contract {
     {max_n_values:integer 1}
 } -validate {
     datatype_type_ck {
-	if {$datatype != "number" && $datatype != "string" && $datatype != "text"} {
+	if {$datatype ne "number" && $datatype ne "string" && $datatype ne "text"} {
 	    ad_complain
 	}
     }
@@ -39,7 +39,7 @@ The database returned the following error:<p>
 } 
 
 # LARS hack
-set sections [lindex [lindex [apm_parameter_section_slider $package_key] 0] 3]
+set sections [lindex [apm_parameter_section_slider $package_key] 0 3]
 foreach section $sections {
     if {$section_name eq [lindex $section 1]} {
         set section_name [lindex $section 0]

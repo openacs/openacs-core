@@ -15,14 +15,14 @@ multirow create servers path admin_login_url local_url remote_url name descripti
 
 set xml_report_dir [aa_test::xml_report_dir]
 if { $xml_report_dir ne "" } {
-    foreach path [glob $xml_report_dir/*-installreport.xml] {
+    foreach path [glob -nocomplain $xml_report_dir/*-installreport.xml] {
         aa_test::parse_install_file -path $path -array service
 
         set test_path [aa_test::test_file_path -install_file_path $path]
         if { [file exists $test_path] } {
             aa_test::parse_test_file -path $test_path -array test
             array set testcase_failure $test(testcase_failure)
-            set service(num_errors) [llength [array names testcase_failure]]
+            set service(num_errors) [array size testcase_failure]
         } 
 	
 	set admin_login_url [export_vars -base "$service(url)/register/auto-login" {{email {$service(adminemail)}} {password {$service(adminpassword)}}}]

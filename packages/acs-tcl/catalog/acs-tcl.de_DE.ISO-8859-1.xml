@@ -43,11 +43,11 @@
   <msg key="lt_name_is_not_a_natural">%name% ist keine natürliche Zahl, die eine ganzzahlige Zahl größer oder gleich 0 ist.</msg>
   <msg key="lt_name_is_not_a_valid_S">%name% ist kein gültiger  SQL Identifikator</msg>
   <msg key="lt_name_is_not_an_intege">%name% ist keine ganzzahlige Zahl</msg>
-  <msg key="lt_name_is_not_in_the_ra">%name% ist nicht im Bereich von \[%min%, %max%\]</msg>
-  <msg key="lt_name_is_too_long__Ple">%name% ist zu lang. Bitte geben Sie einen Wert ein, der höchstens [lindex $range 1] Buchstaben hat. Der Wert, den Sie eingegeben haben war [string length $value] Buchstaben lang.</msg>
-  <msg key="lt_name_is_too_long__Ple_1">%name% ist zu lang. Bitte geben Sie einen Wert ein der mindestens [lindex $length 1] Zeichen lang ist. Der Wert den Sie eingeben haben war [string length $value] Zeichen lang.</msg>
-  <msg key="lt_name_is_too_short__Pl">%name% ist zu kurz. Bitte geben Sie einen Wert ein, der mindestens [lindex $range 0] Zeichen lang ist. Der Wert den Sie eingegeben haben war [string length $value] Zeichen lang.</msg>
-  <msg key="lt_name_is_too_short__Pl_1">%name% ist zu kurz. Bitte geben Sie einen Wert ein, der mindestens [lindex $length 1] Zeichen lang ist. Der Wert, den Sie eingegeben haben ist [string length $value] Zeichen lang.</msg>
+  <msg key="lt_name_is_not_in_the_ra">%name% ist nicht im Bereich von [%min%, %max%]</msg>
+  <msg key="lt_name_is_too_long__Ple">%name% ist zu lang. Bitte geben Sie einen Wert ein, der höchstens %max_length% Buchstaben hat. Der Wert, den Sie eingegeben haben, ist %actual_length% Buchstaben lang.</msg>
+  <msg key="lt_name_is_too_long__Ple_1">%name% ist zu lang. Bitte geben Sie einen Wert ein der mindestens %min_length% Zeichen lang  ist. Der Wert den Sie eingeben haben, ist %actual_length% Zeichen lang.</msg>
+  <msg key="lt_name_is_too_short__Pl">%name% ist zu kurz. Bitte geben Sie einen Wert ein, der mindestens %min_length% Zeichen lang  ist. Der Wert den Sie eingegeben haben, ist %actual_length% Zeichen lang.</msg>
+  <msg key="lt_name_is_too_short__Pl_1">%name% ist zu kurz. Bitte geben Sie einen Wert ein, der mindestens %min_length% Zeichen lang ist. Der Wert, den Sie eingegeben haben, ist %actual_length% Zeichen lang.</msg>
   <msg key="lt_NB_This_error_was_sub">Der Fehler wurde übermittelt</msg>
   <msg key="lt_Please_back_up_using_">Bitte gehen Sie mit Ihrem Browser zurück und korrigieren den oben stehenden</msg>
   <msg key="lt_Problem_with_a_Page_o">Problem mit Ihrer Seite (oder vielleicht mit Ihrer Eingabe)</msg>

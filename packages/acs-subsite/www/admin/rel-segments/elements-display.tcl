@@ -1,7 +1,7 @@
 # included from elements.
-ad_require_permission $segment_id "read"
+permission::require_permission -object_id $segment_id -privilege "read"
 
-set write_p [ad_permission_p $segment_id "write"]
+set write_p [permission::permission_p -object_id $segment_id -privilege "write"]
 
 set package_url [ad_conn package_url]
 set user_id [ad_conn user_id]

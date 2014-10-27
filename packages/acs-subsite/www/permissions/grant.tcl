@@ -6,20 +6,20 @@ ad_page_contract {
     @creation-date 2000-08-20
     @cvs-id $Id$
 } {
-    object_id:integer,notnull
+    object_id:naturalnum,notnull
     privileges:multiple,optional
     {application_url ""}
     {return_url ""}
 }
 
-ad_require_permission $object_id admin
+permission::require_permission -object_id $object_id -privilege admin
 
 # The object name is used in various localized messages below
 set name [acs_object_name $object_id]
 
 set title [_ acs-subsite.lt_Grant_Permission_on_n]
 
-set context [list [list one?[export_url_vars object_id] "[_ acs-subsite.Permissions_for_name]"] [_ acs-subsite.Grant]]
+set context [list [list one?[export_vars -url {object_id}] "[_ acs-subsite.Permissions_for_name]"] [_ acs-subsite.Grant]]
 
 
 # Compute a hierarchical tree representation of the contents of
@@ -53,13 +53,13 @@ db_foreach select_privileges_hierarchy { } {
     }
 
     # the level of the first privilege element that we move
-    set start_pos_level [lindex [lindex $hierarchy $start_pos] 0]
+    set start_pos_level [lindex $hierarchy $start_pos 0]
 
     # find the end position up to where the block extends that we have
     # to move
     set end_pos $start_pos
     for { set i [expr {$start_pos + 1}] } { $i <= [llength $hierarchy] } { incr i } {
-        set level [lindex [lindex $hierarchy $i] 0]
+        set level [lindex $hierarchy $i 0]
         if { $level <= $start_pos_level } {
             break
         }
@@ -71,7 +71,7 @@ db_foreach select_privileges_hierarchy { } {
     # Only cut out the block if it is on the toplevel, which means it
     # hasn't been moved yet. Otherwise the block will appear in two
     # places intentionally.
-    if { [lindex [lindex $hierarchy $start_pos] 0] == 0 } {
+    if { [lindex $hierarchy $start_pos 0] == 0 } {
         set hierarchy [lreplace $hierarchy $start_pos $end_pos]
     }
 
@@ -80,10 +80,10 @@ db_foreach select_privileges_hierarchy { } {
         # hierarchy. 
         continue
     }
-    set target_level [lindex [lindex $hierarchy $target_pos] 0]
+    set target_level [lindex $hierarchy $target_pos 0]
 
     # remember the starting level in the block
-    set offset [lindex [lindex $block_to_move 0] 0]
+    set offset [lindex $block_to_move 0 0]
 
     # insert the block to the new position, looping through the block
     foreach element $block_to_move {
@@ -102,8 +102,7 @@ incr maxlevel
 # The $hierarchy datastructure is ready, fill a select widget options list with it.
 
 foreach element $hierarchy {
-    set privilege [lindex $element 1]
-    set level [lindex $element 0]
+    lassign $element level privilege
 
     lappend select_list [list "[string repeat "&nbsp;&nbsp;&nbsp;" $level] $privilege" $privilege]
 }
@@ -161,7 +160,7 @@ if { [form is_valid grant] } {
         }
     }
     
-    if {[exists_and_not_null return_url]} {
+    if {([info exists return_url] && $return_url ne "")} {
         ad_returnredirect "$return_url"
     } else {
         ad_returnredirect "one?[export_vars [list object_id application_url]]"

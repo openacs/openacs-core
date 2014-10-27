@@ -31,7 +31,8 @@ if {![catch {set handler [ns_proxy get exec_proxy]}]} {
 	return $return_string
     }
 
-    # Now rename exec
-    rename exec real_exec
+    # Now rename exec; protect cases, where file is loaded multiple times
+    if {[info commands ::real_exec] eq ""} {rename exec real_exec}
+
     ad_proc exec {args} {This is the wrapped version of exec} {proxy::exec -call $args}
 }

@@ -10,7 +10,6 @@ ad_page_contract {
 
 } {
     package_id:naturalnum
-    {root_id ""}
 }
 db_transaction {
 
@@ -25,11 +24,10 @@ db_transaction {
     # will go to the deleted node's parent page which should either be the site map page
     # you were at when you clicked "delete" or its parent (the case mentioned above).
 
-    set parent \
-        [site_node::closest_ancestor_package \
-            -node_id $node_id \
-            -package_key acs-subsite \
-            -element url]
+    set parent [site_node::closest_ancestor_package \
+		    -node_id $node_id \
+		    -package_key acs-subsite \
+		    -element url]
 
     # node_id was null so we're not deleting a mounted subsite instance
     if {$parent eq "" } {

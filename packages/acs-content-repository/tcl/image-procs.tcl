@@ -220,7 +220,7 @@ ad_proc -public image::identify_binary {
     Find imagemagick identify binary
     
     @author Dave Bauer (dave@solutiongrove.com)
-    @creation_date 2006-08-27
+    @creation-date 2006-08-27
 } {
     # FIXME create parameter
     return [parameter::get \
@@ -234,7 +234,7 @@ ad_proc -public image::convert_binary {
     Find imagemagick convert binary
     
     @author Dave Bauer (dave@solutiongrove.com)
-    @creation_date 2006-08-27
+    @creation-date 2006-08-27
 } {
     #FIXME create parameter
     return [parameter::get \
@@ -254,7 +254,7 @@ ad_proc -public image::ns_size {
     @return List in array get format with names of width and height
 
     @author Dave Bauer (dave@solutiongrove.com)
-    @creation_date 2006-08-27
+    @creation-date 2006-08-27
 } {
     switch -- \
 	[image::filename_mime_type \
@@ -284,7 +284,7 @@ ad_proc -public image::filename_mime_type {
     @param mime_type If known, the mime type of the file
 
     @author Dave Bauer (dave@thedesignexperience.org)
-    @creation_date 2006-08-27
+    @creation-date 2006-08-27
 } {
     if {$mime_type eq ""} {
 	set mime_type [ns_guesstype $filename]
@@ -316,7 +316,7 @@ ad_proc -public image::resize {
     @return image item_id of the thumbnail
 
     @author Dave Bauer (dave@solutiongrove.com)
-    @cretion-date 2006-08-27
+    @creation-date 2006-08-27
 } {
     if {$revision_id eq ""} {
 	set revision_id [content::item::get_best_revision -item_id $item_id]
@@ -358,7 +358,7 @@ ad_proc -public image::get_size_item_id {
     Get the item_id of a resized version of an image
     
     @param item_id Original image item_id
-    @size_name Name of the size to get
+    @param size_name Name of the size to get
 
     @author Dave Bauer (dave@solutiongrove.com)
     @creation-date 2006-08-27

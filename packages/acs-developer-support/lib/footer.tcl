@@ -34,7 +34,7 @@ if { [ds_show_p] } {
     if { $user_switching_p } {
 
         set show_p 1
-        set fake_user_id [ad_get_user_id]
+        set fake_user_id [ad_conn user_id]
         set real_user_id [ds_get_real_user_id]
 
         if { $fake_user_id == 0 } {

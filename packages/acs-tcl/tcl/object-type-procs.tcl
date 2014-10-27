@@ -34,7 +34,7 @@ ad_proc -public acs_object_type_hierarchy {
 
     set result ""
 
-    if { [exists_and_not_null object_type] } {
+    if { [info exists object_type] && $object_type ne "" } {
         set sql [db_map object_type_not_null]
 	set join_string "&nbsp;&gt;&nbsp;"
     } else {
@@ -48,7 +48,7 @@ ad_proc -public acs_object_type_hierarchy {
 	    append result $join_string
 	}
 	incr i
-	append result [subst {\n    $indent<a href="./one?[export_url_vars object_type]">[lang::util::localize $pretty_name]</a>}]
+	append result [subst {\n    $indent<a href="./one?[export_vars -url {object_type}]">[lang::util::localize $pretty_name]</a>}]
 	append result $additional_html
 
     }

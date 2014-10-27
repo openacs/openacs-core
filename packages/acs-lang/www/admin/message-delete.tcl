@@ -31,7 +31,7 @@ set context [list [list "package-list?[export_vars { locale }]" $locale_label] \
 set form_export_vars [export_vars -form { locale package_key message_key show {confirm_p 1} }]
 
 
-if { [exists_and_not_null confirm_p] && [template::util::is_true $confirm_p] } {
+if { ([info exists confirm_p] && $confirm_p ne "") && [template::util::is_true $confirm_p] } {
     lang::message::delete \
         -package_key $package_key \
         -message_key $message_key \

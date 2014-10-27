@@ -19,7 +19,7 @@ namespace eval acs_mail_lite {
     } {
         set domain [parameter::get_from_package_key -package_key "acs-mail-lite" -parameter "BounceDomain"]
         if { $domain eq "" } {
-	    regsub {http://} [ns_config ns/server/[ns_info server]/module/nssock hostname] {} domain
+	    regsub {http://} [ns_config [ns_driversection -driver nssock] hostname] _ domain
 	}
 	return $domain
     }
@@ -29,21 +29,21 @@ namespace eval acs_mail_lite {
     ad_proc -private load_mails {
         -queue_dir:required
     } {
-        Scans for incoming email. You need
-
-        An incoming email has to comply to the following syntax rule:
-        [<SitePrefix>][-]<ReplyPrefix>-Whatever@<BounceDomain>
+        Scans for incoming email. The function requires
+        incoming emails that comply to the following syntax rule:
+<pre>
+        [&lt;SitePrefix&gt;][-]&lt;ReplyPrefix&gt;-Whatever@&lt;BounceDomain&gt;
 
         [] = optional
         <> = Package Parameters
-
+</pre>
         If no SitePrefix is set we assume that there is only one OpenACS installation. Otherwise
         only messages are dealt with which contain a SitePrefix.
-
+<p>
         ReplyPrefixes are provided by packages that implement the callback acs_mail_lite::incoming_email
         and provide a package parameter called ReplyPrefix. Only implementations are considered where the
         implementation name is equal to the package key of the package.
-
+<p>
         Also we only deal with messages that contain a valid and registered ReplyPrefix.
         These prefixes are automatically set in the acs_mail_lite_prefixes table.
 
@@ -237,7 +237,7 @@ namespace eval acs_mail_lite {
 		array set param $params
 
 		# Append the file if there exist a filename to use. Otherwise do not append
-		if {[exists_and_not_null param(name)]} {
+		if {([info exists param(name)] && $param(name) ne "")} {
 		    set filename $param(name)
 
 		    # Determine the content_type

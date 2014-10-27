@@ -35,7 +35,7 @@ ad_proc -public template::paginator { command args } {
     @see template::paginator::get_row_last
     @see template::paginator::reset
 } {
-  eval paginator::$command $args
+  paginator::$command {*}$args
 }
 
 ad_proc -public template::paginator::create { statement_name name query args } {
@@ -110,26 +110,31 @@ ad_proc -public template::paginator::create { statement_name name query args } {
     # recommended. Unfortunately, several places in OpenACS have this
     # problem.
     #
-    if { ($row_ids eq {} && ![::cache exists $cache_key]) || ([info exists opts(flush_p)] && $opts(flush_p) eq "t") } {
+    if { ($row_ids eq {} && ![::cache exists $cache_key]) || ([info exists opts(flush_p)] && $opts(flush_p) == "t") } {
       if { [info exists opts(printing_prefs)] && $opts(printing_prefs) ne "" } {
-	  ReturnHeaders "text/html"
-	  ns_write "
-<html>
-<head>"
 	  set title [lindex $opts(printing_prefs) 0]
-	  ns_write "<title>$title</title>
-          <meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\">"
 	  set stylesheet [lindex $opts(printing_prefs) 1]
 	  if { $stylesheet ne "" } {
-	      ns_write "<link rel=\"stylesheet\" href=\"$stylesheet\" type=\"text/css\">"
+	      set css_link "<link rel=\"stylesheet\" href=\"$stylesheet\" type=\"text/css\">"
+	  } else {
+	      set css_link ""
 	  }
-	  ns_write "</head>"
-	  ns_write "<body "
 	  set background [lindex $opts(printing_prefs) 2]
 	  if { $background ne "" } {
-	      ns_write "background=\"$background\""
+	      set bg "background=\"$background\""
+	  } else {
+	      set bg ""
 	  }
-	  ns_write ">"
+
+	  ad_return_top_of_page [subst {
+<html>
+<head>
+<title>$title</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+$css_link
+</head>
+<body $bg>
+	  }]
 	  set header_file [lindex $opts(printing_prefs) 3]
 	  if { $header_file ne "" } {
 	      ns_write [ns_adp_parse -file $header_file]
@@ -157,7 +162,6 @@ ad_proc -public template::paginator::create { statement_name name query args } {
           <a href=\"$return_url\">Click here to Continue</a>
           </noscript>"
 	  }
-	  ns_write [ad_footer]
 	  ad_script_abort
       } else {
 	  init $statement_name $name $query
@@ -224,12 +228,13 @@ ad_proc -private template::paginator::init { statement_name name query {print_p 
       set i 0
       set page_size $properties(pagesize)
       set context_ids [list]
-      
+      set row_ids ""
+
       foreach row $ids {
 
           lappend row_ids [lindex $row 0]
 
-          if { [expr {$i % $page_size}] == 0 } {
+          if { $i % $page_size == 0 } {
               lappend context_ids [lindex $row 1]
           }
           incr i
@@ -237,11 +242,6 @@ ad_proc -private template::paginator::init { statement_name name query {print_p 
 
       set properties(context_ids) $context_ids
       cache set $name:$query:context_ids $context_ids $properties(timeout)
-
-
-      if { [template::util::is_nil row_ids] } {
-          set row_ids ""
-      }
 
       set properties(row_ids) $row_ids
 
@@ -509,7 +509,7 @@ ad_proc -public template::paginator::get_context { name datasource pages } {
 
     set row(rownum) $rowcount
     set row(page) $page
-    set row(context) [lindex $context_ids [expr {$page - 1}]]
+    set row(context) [lindex $context_ids $page-1]
   }
 }
 
@@ -663,8 +663,8 @@ ad_proc -public template::paginator::get_display_info { name datasource page } {
   # If the paginator is contextual, set the context
   if { [info exists properties(context_ids)] } {
     foreach elm { next_page previous_page next_group previous_group } {
-      if { [exists_and_not_null info($elm)] } {
-        set info(${elm}_context) [lindex $properties(context_ids) [expr {$info($elm) -1}]]
+      if { ([info exists info($elm)] && $info($elm) ne "") } {
+        set info(${elm}_context) [lindex $properties(context_ids) $info($elm)-1]
       }
     }
   }

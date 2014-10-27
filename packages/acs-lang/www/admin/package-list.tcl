@@ -28,7 +28,7 @@ set default_locale_label [lang::util::get_label $default_locale]
 set page_title $locale_label
 set context [list $page_title]
 
-set locale_enabled_p [expr [lsearch [lang::system::get_locales] $current_locale] != -1]
+set locale_enabled_p [expr {[lsearch [lang::system::get_locales] $current_locale] != -1}]
 set site_wide_admin_p [acs_user::site_wide_admin_p]
 
 

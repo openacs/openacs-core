@@ -83,7 +83,7 @@ ad_proc twt::server_url {} {
 
     regexp {(:[0-9]*)?$} [util_current_location] match port
 
-    if { [exists_and_not_null port] } {
+    if { ([info exists port] && $port ne "") } {
         return "http://${ip_address}${port}"
     } else {
         return "http://$ip_address"
@@ -193,7 +193,7 @@ ad_proc twt::user::login { email password {username ""}}  {
     set response_url [tclwebtest::response url]
 
     if { ![string match "*${home_uri}*" $response_url] } {
-        if { [empty_string_p [cc_lookup_email_user $email]] } {
+        if { [cc_lookup_email_user $email] eq "" } {
             error "Failed to login user with email=\"$email\" and password=\"$password\". No user with such email in database."
         } else {
             ns_log Error "Failed to log in user with email=\"$email\" and password=\"$password\" eventhough email exists (password may be incorrect). response_body=[tclwebtest::response body]"

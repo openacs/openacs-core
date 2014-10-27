@@ -4,7 +4,7 @@ ad_page_contract {
 
     @author Peter Marklund
 } {
-    authority_id:integer
+    authority_id:naturalnum,notnull
 }
 
 auth::authority::get -authority_id $authority_id -array authority
@@ -39,7 +39,7 @@ foreach element_name [auth::authority::get_sc_impl_columns] {
     
 }
 
-set has_parameters_p [expr [llength [array names parameters]] > 0]
+set has_parameters_p [expr {[array size parameters] > 0}]
 
 set first_param_name ""
 if { $has_parameters_p } {

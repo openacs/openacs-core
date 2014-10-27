@@ -43,6 +43,9 @@ set servername                "New OpenACS Installation - Development"
 
 set serverroot                "/var/www/${server}"
 
+# Are we runnng behind a proxy? 
+set proxy_mode                false
+
 #---------------------------------------------------------------------
 # which database do you want? postgres or oracle
 set database              postgres 
@@ -109,6 +112,7 @@ ns_section ns/parameters
     ns_param   OutputCharset      utf-8
     ns_param   URLCharset         utf-8
 
+    ns_param   ReverseProxyMode   $proxy_mode
 #---------------------------------------------------------------------
 # Thread library (nsthread) parameters 
 #---------------------------------------------------------------------
@@ -623,7 +627,7 @@ ns_section ns/server/${server}/modules
     }
 
     # nsthread library which should become standard in 5.3
-    ns_param libthread  [lindex [glob ${homedir}/lib/thread*/libthread*[info sharedlibextension]] 0]
+    ns_param libthread  [lindex [glob ${homedir}/lib/thread*/libthread*[info sharedlibextension]] end]
 
     if {[ns_info version] >= 4.5} {
         ns_limits set default -maxupload [ns_config ns/server/${server}/module/nssock maxinput]

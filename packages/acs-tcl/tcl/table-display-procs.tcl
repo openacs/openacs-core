@@ -6,7 +6,12 @@ ad_library {
     
 # Dimensional selection bars.
 #
-ad_proc ad_dimensional {option_list {url {}} {options_set ""} {optionstype url}} {
+ad_proc ad_dimensional {
+    option_list 
+    {url {}} 
+    {options_set ""} 
+    {optionstype url}
+} {
     Generate an option bar as in the ticket system; 
     <ul>
       <li> option_list -- the structure with the option data provided 
@@ -100,7 +105,12 @@ ad_proc ad_dimensional {option_list {url {}} {options_set ""} {optionstype url}}
     append html "</tr>\n</table>\n"
 }
 
-ad_proc ad_dimensional_sql {option_list {what "where"} {joiner "and"} {options_set ""}} {
+ad_proc ad_dimensional_sql {
+    option_list 
+    {what "where"} 
+    {joiner "and"} 
+    {options_set ""}
+} {
     see ad_dimensional for the format of option_list
     <p>
     Given what clause we are asking for and the joiner this returns 
@@ -179,31 +189,29 @@ ad_proc ad_dimensional_set_variables {option_list {options_set ""}} {
 }
 
 ad_proc -deprecated ad_table { 
-    {
-        -Torder_target_url {}
-        -Torderby {}
-	-Tasc_order_img {^}
-	-Tdesc_order_img {v}
-        -Tmissing_text "<em>No data found.</em>"
-        -Tsuffix {}
-        -Tcolumns {}
-        -Taudit {}
-        -Trows_per_band 1
-        -Tband_colors {{} "#ececec"}
-        -Tband_classes {{even} {odd}}
-        -Trows_per_page 0
-        -Tmax_rows 0
-        -Ttable_extra_html {cellpadding=3 cellspacing=0 class="table-display"}
-        -Theader_row_extra {style="background-color:#f8f8f8" class="table-header"}
-        -Ttable_break_html "<br><br>"
-        -Tpre_row_code {}
-        -Trow_code {[subst $Trow_default]}
-        -Tpost_data_ns_sets {}
-        -Textra_vars {}
-	-Textra_rows {}
-	-bind {}
-        -dbn {}
-    }
+    {-Torder_target_url {}}
+    {-Torderby {}}
+    {-Tasc_order_img {^}}
+    {-Tdesc_order_img {v}}
+    {-Tmissing_text "<em>No data found.</em>"}
+    {-Tsuffix {}}
+    {-Tcolumns {}}
+    {-Taudit {}}
+    {-Trows_per_band 1}
+    {-Tband_colors {{} "#ececec"}}
+    {-Tband_classes {{even} {odd}}}
+    {-Trows_per_page 0}
+    {-Tmax_rows 0}
+    {-Ttable_extra_html {cellpadding=3 cellspacing=0 class="table-display"}}
+    {-Theader_row_extra {style="background-color:#f8f8f8" class="table-header"}}
+    {-Ttable_break_html "<br><br>"}
+    {-Tpre_row_code {}}
+    {-Trow_code {[subst $Trow_default]}}
+    {-Tpost_data_ns_sets {}}
+    {-Textra_vars {}}
+    {-Textra_rows {}}
+    {-bind {}}
+    {-dbn {}}
     statement_name sql_qry Tdatadef
 } {
 
@@ -336,10 +344,8 @@ ad_proc -deprecated ad_table {
 	foreach Ti $Tcolumn_list {
 	    set Tcol [lindex $Tdatadef $Ti]
 	    if { ( [ns_set find $selection [lindex $Tcol 0]] < 0
-		   && ([empty_string_p [lindex $Tcol 2]] || 
-	               ([lindex $Tcol 2] ne "sort_by_pos" )
-	              )
-	         )
+		   && ([lindex $Tcol 2] eq "" || [lindex $Tcol 2] ne "sort_by_pos")
+		   )
 		 || [lindex $Tcol 2] eq "no_sort" 
 	     } {
 		
@@ -382,7 +388,7 @@ ad_proc -deprecated ad_table {
 	    
 	    if { $Tpost_data && $Tpost_data <= [llength $Tpost_data_ns_sets] } { 
 		# bind the Tpost_data_ns_sets row of the passed in data
-		set_variables_after_query_not_selection [lindex $Tpost_data_ns_sets [expr {$Tpost_data - 1}]]
+		set_variables_after_query_not_selection [lindex $Tpost_data_ns_sets $Tpost_data-1]
 	    } elseif { $Tpost_data } { 
 		# past the end of the fake data drop out.
 		break
@@ -436,15 +442,15 @@ ad_proc -deprecated ad_table {
 	    # generate the row band color 
             if { $Tband_count >= $Trows_per_band } {
                 set Tband_count 0
-                set Tband_color [expr ($Tband_color + 1) % $Tn_bands ]
-                set Tband_class [expr ($Tband_class + 1) % $Tn_band_classes ]
+                set Tband_color [expr {($Tband_color + 1) % $Tn_bands} ]
+                set Tband_class [expr {($Tband_class + 1) % $Tn_band_classes} ]
             }
             # do this check since we would like the ability to band with
             # page background as well
-            if {$Tn_bands && ![empty_string_p [lindex $Tband_colors $Tband_color]]} {
+            if {$Tn_bands && [lindex $Tband_colors $Tband_color] ne ""} {
                 append Trow_default " style=\"background-color:[lindex $Tband_colors $Tband_color]\""
             }
-            if {$Tn_band_classes && ![empty_string_p [lindex $Tband_classes $Tband_class]]} {
+            if {$Tn_band_classes && [lindex $Tband_classes $Tband_class] ne ""} {
                 append Trow_default " class=\"[lindex $Tband_classes $Tband_class]\""
             }
 
@@ -485,7 +491,7 @@ ad_proc -deprecated ad_table {
 	    # so on next row we can say things like if $Pvar != $var not blank
 	    if { $Tpost_data && $Tpost_data <= [llength $Tpost_data_ns_sets] } { 
 		# bind the Tpost_data_ns_sets row of the passed in data
-		set_variables_after_query_not_selection [lindex $Tpost_data_ns_sets [expr {$Tpost_data - 1}]] P
+		set_variables_after_query_not_selection [lindex $Tpost_data_ns_sets $Tpost_data-1] P
 	    } else { 
 		set_variables_after_query_not_selection $selection P
 	    }
@@ -501,10 +507,8 @@ ad_proc -deprecated ad_table {
     return $Thtml
 }
 
-ad_proc ad_table_column_list {
-    { 
-        -sortable all
-    }
+ad_proc -deprecated ad_table_column_list {
+    { -sortable all }
     datadef columns
 } {
     build a list of pointers into the list of column definitions
@@ -517,8 +521,8 @@ ad_proc ad_table_column_list {
     if {$columns eq ""} {
         for {set i 0} {$i < [llength $datadef]} {incr i} {
             if {$sortable eq "all" 
-                || ($sortable eq "t" && [lindex [lindex $datadef $i] 2] != "no_sort")
-                || ($sortable eq "f" && [lindex [lindex $datadef $i] 2] == "no_sort")
+                || ($sortable == "t" && [lindex $datadef $i 2] ne "no_sort")
+                || ($sortable == "f" && [lindex $datadef $i 2] eq "no_sort")
             } {
                 lappend column_list $i
             } 
@@ -527,8 +531,8 @@ ad_proc ad_table_column_list {
         set colnames {}
         foreach col $datadef { 
             if {$sortable eq "all" 
-                || ($sortable eq "t" && [lindex $col 2] ne "no_sort")
-                || ($sortable eq "f" && [lindex $col 2] eq "no_sort")
+                || ($sortable == "t" && [lindex $col 2] ne "no_sort")
+                || ($sortable == "f" && [lindex $col 2] eq "no_sort")
             } {
                 lappend colnames [lindex $col 0]
             } else {
@@ -547,7 +551,7 @@ ad_proc ad_table_column_list {
     return $column_list
 }
 
-ad_proc ad_sort_primary_key orderby {
+ad_proc -deprecated ad_sort_primary_key {orderby} {
     return the primary (first) key of an order spec
     used by 
 } {
@@ -557,7 +561,7 @@ ad_proc ad_sort_primary_key orderby {
     return $orderby
 }
 
-ad_proc ad_table_same varname {
+ad_proc -deprecated ad_table_same varname {
     Called from inside ad_table.
 
     returns true if the variable has same value as
@@ -572,14 +576,22 @@ ad_proc ad_table_same varname {
     }
 }
         
-ad_proc ad_table_span {str {td_html "align=\"left\""}} {
+ad_proc -deprecated ad_table_span {str {td_html "align=\"left\""}} {
     given string the function generates a row which spans the 
     whole table.
 } {
     return "<tr><td colspan=\"[uplevel llength \$Tcolumn_list]\" $td_html>$str</td></tr>"
 }
 
-ad_proc ad_table_form {datadef {type select} {return_url {}} {item_group {}} {item {}} {columns {}} {allowed {}}} {
+ad_proc -deprecated ad_table_form {
+    datadef 
+    {type select} 
+    {return_url {}} 
+    {item_group {}} 
+    {item {}} 
+    {columns {}} 
+    {allowed {}}
+} {
     builds a form for chosing the columns to display 
     <p>
     columns is a list of the currently selected columns.
@@ -606,25 +618,25 @@ ad_proc ad_table_form {datadef {type select} {return_url {}} {item_group {}} {it
         append html "<form method=\"get\" action=\"/tools/table-custom\">"
         append html "<input type=\"submit\" value=\"Delete this view\">"
         append html "<input type=\"hidden\" name=\"delete_the_view\" value=\"1\">"
-        append html "[export_form_vars item_group item]"
+        append html "[export_vars -form {item_group item}]"
         if {$return_url ne ""} {
-            append html "[export_form_vars return_url]"
+            append html "[export_vars -form {return_url}]"
         }
         append html "</form>"
     }
 
     append html "<form method=get action=\"/tools/table-custom\">" 
     if {$return_url ne ""} {
-        append html "[export_form_vars return_url]"
+        append html "[export_vars -form {return_url}]"
     }
     if {$item_group eq ""} {
         set item_group [ad_conn url]
     }
 
-    append html "[export_form_vars item_group]"
+    append html "[export_vars -form {item_group}]"
     if {$item ne ""} {
         set item_original $item
-        append html "[export_form_vars item_original]"
+        append html "[export_vars -form {item_original}]"
         append html "<input type=\"submit\" value=\"Save changes\">"
     } else {
         append html "<input type=\"submit\" value=\"Save new view\">"
@@ -634,7 +646,7 @@ ad_proc ad_table_form {datadef {type select} {return_url {}} {item_group {}} {it
     append html "<tr><th>Name:</th><td><input type=\"text\" size=\"60\" name=\"item\" [export_form_value item]></td></tr>"
     if {$item ne ""} {
         set item_original item
-        append html "[export_form_vars item_original]"
+        append html "[export_vars -form {item_original}]"
         append html "<tr><td>&nbsp;</td><td><em>Editing the name will rename the view</em></td></tr>"
     }
 
@@ -642,12 +654,12 @@ ad_proc ad_table_form {datadef {type select} {return_url {}} {item_group {}} {it
         # select table
         set options "<option value=\"\">---</option>"
         foreach opt $sel_list { 
-            append options " <option value=\"[lindex [lindex $datadef $opt] 0]\">[lindex [lindex $datadef $opt] 1]</option>"
+            append options " <option value=\"[lindex $datadef $opt 0]\">[lindex $datadef $opt 1]</option>"
         }
     
         for {set i 0} { $i < $max_columns} {incr i} {
             if {$i < $n_sel_columns} {
-                set match [lindex [lindex $datadef [lindex $sel_columns $i]] 0]
+                set match [lindex $datadef [lindex $sel_columns $i] 0]
                 regsub "(<option )(value=\"$match\">)" $options "\\1 selected=\"selected\" \\2" out
             } else { 
                 set out $options
@@ -658,16 +670,16 @@ ad_proc ad_table_form {datadef {type select} {return_url {}} {item_group {}} {it
         # radio button table
         append html "<tr><th>Col \#</th>"
         foreach opt $sel_list { 
-            append html "<th>[lindex [lindex $datadef $opt] 1]</th>"
+            append html "<th>[lindex $datadef $opt 1]</th>"
         }
         append html "</tr>"
 
         foreach opt $sel_list { 
-            append options "<td><input name=\"col_@@\" type=\"radio\" value=\"[lindex [lindex $datadef $opt] 0]\"></td>"
+            append options "<td><input name=\"col_@@\" type=\"radio\" value=\"[lindex $datadef $opt 0]\"></td>"
         }
         for {set i 0} { $i < $max_columns} {incr i} {
             if {$i < $n_sel_columns} {
-                set match [lindex [lindex $datadef [lindex $sel_columns $i]] 0]
+                set match [lindex $datadef [lindex $sel_columns $i] 0]
                 regsub "( type=\"radio\" )(value=\"$match\">)" $options "\\1 checked=\"checked\" \\2" out
             } else { 
                 set out $options
@@ -681,7 +693,15 @@ ad_proc ad_table_form {datadef {type select} {return_url {}} {item_group {}} {it
     return $html
 }
 
-ad_proc ad_table_sort_form {datadef {type select} {return_url {}} {item_group {}} {item {}} {sort_spec {}} {allowed {}}} {
+ad_proc -deprecated ad_table_sort_form {
+    datadef 
+    {type select} 
+    {return_url {}} 
+    {item_group {}} 
+    {item {}} 
+    {sort_spec {}} 
+    {allowed {}}
+} {
     builds a form for setting up custom sorts.
     <p>
     <ul>
@@ -731,25 +751,25 @@ ad_proc ad_table_sort_form {datadef {type select} {return_url {}} {item_group {}
         append html "<form method=\"get\" action=\"/tools/sort-custom\">"
         append html "<input type=\"submit\" value=\"Delete this sort\">"
         append html "<input type=\"hidden\" name=\"delete_the_sort\" value=\"1\">"
-        append html "[export_form_vars item_group item]"
+        append html "[export_vars -form {item_group item}]"
         if {$return_url ne ""} {
-            append html "[export_form_vars return_url]"
+            append html "[export_vars -form {return_url}]"
         }
         append html "</form>"
     }
 
     append html "<form method=get action=\"/tools/sort-custom\">" 
     if {$return_url ne ""} {
-        append html "[export_form_vars return_url]"
+        append html "[export_vars -form {return_url}]"
     }
     if {$item_group eq ""} {
         set item_group [ad_conn url]
     }
 
-    append html "[export_form_vars item_group]"
+    append html "[export_vars -form {item_group}]"
     if {$item ne ""} {
         set item_original $item
-        append html "[export_form_vars item_original]"
+        append html "[export_vars -form {item_original}]"
         append html "<input type=\"submit\" value=\"Save changes\">"
     } else {
         append html "<input type=\"submit\" value=\"Save new sort\">"
@@ -759,13 +779,13 @@ ad_proc ad_table_sort_form {datadef {type select} {return_url {}} {item_group {}
     append html "<tr><th>Name:</th><td><input type=\"text\" size=\"60\" name=\"item\" [export_form_value item]></td></tr>"
     if {$item ne ""} {
         set item_original item
-        append html "[export_form_vars item_original]"
+        append html "[export_vars -form {item_original}]"
         append html "<tr><td>&nbsp;</td><td><em>Editing the name will rename the sort</em></td></tr>"
     }
 
     set options "<option value=\"\">---</option>"
     foreach opt $sel_list { 
-        append options " <option value=\"[lindex [lindex $datadef $opt] 0]\">[lindex [lindex $datadef $opt] 1]</option>"
+        append options " <option value=\"[lindex $datadef $opt 0]\">[lindex $datadef $opt 1]</option>"
     }
     
     for {set i 0} { $i < $max_columns} {incr i} {
@@ -816,7 +836,7 @@ ad_proc ad_order_by_from_sort_spec {sort_by tabledef} {
                     }
 
                     # tack on the order by clause 
-                    if {![empty_string_p [lindex $order_spec 2]] && ([lindex $order_spec 2] ne "sort_by_pos" )} {
+                    if {[lindex $order_spec 2] ne "" && [lindex $order_spec 2] ne "sort_by_pos"} {
                         append order_by_clause "[subst [lindex $order_spec 2]]"
                     } else { 
                         append order_by_clause "$sort_key $order"
@@ -829,7 +849,7 @@ ad_proc ad_order_by_from_sort_spec {sort_by tabledef} {
     return $order_by_clause
 }
 
-ad_proc ad_new_sort_by {key keys} {
+ad_proc -deprecated ad_new_sort_by {key keys} {
     Makes a new sort_by string, sorting by "key".
 
     If the key is followed by "*", that indicates the ordering should
@@ -929,7 +949,7 @@ ad_proc ad_custom_list {user_id item_group item_set item_type target_url custom_
 }
     
 
-ad_proc ad_custom_page_defaults defaults { 
+ad_proc ad_custom_page_defaults {defaults} { 
     set the page defaults. If the form is 
     empty do a returnredirect with the defaults set
 } {
@@ -962,13 +982,13 @@ ad_proc ad_custom_form {return_url item_group item} {
 } {
     append html "<form method=\"get\" action=\"/tools/form-custom\">\n" 
     if {$return_url ne ""} {
-        append html "[export_form_vars return_url]\n"
+        append html "[export_vars -form {return_url}]\n"
     }
     if {$item_group eq ""} {
         set item_group [ad_conn url]
     }
     set item_original $item
-    append html "[export_form_vars item_group item item_original]\n"
+    append html "[export_vars -form {item_group item item_original}]\n"
     append html "<input type=\"submit\" value=\"Save settings\">"
 }
 
@@ -990,9 +1010,9 @@ ad_proc ad_dimensional_settings {define current} {
 	}
         foreach val [lindex $opt 3] { 
             if {$picked eq [lindex $val 0] } { 
-                append html "<option selected=\"selected\" value=\"[philg_quote_double_quotes [lindex $val 0]]\">[lindex $val 1]</option>\n"
+                append html "<option selected=\"selected\" value=\"[ad_quotehtml [lindex $val 0]]\">[lindex $val 1]</option>\n"
             } else { 
-                append html "<option value=\"[philg_quote_double_quotes [lindex $val 0]]\">[lindex $val 1]</option>\n"
+                append html "<option value=\"[ad_quotehtml [lindex $val 0]]\">[lindex $val 1]</option>\n"
             }
         }
         append html "</select></td></tr>\n"
@@ -1000,14 +1020,14 @@ ad_proc ad_dimensional_settings {define current} {
     return $html
 }
 
-ad_proc ad_table_orderby_sql {datadef orderby order} {
+ad_proc -deprecated ad_table_orderby_sql {datadef orderby order} {
     create the order by clause consistent with the orderby and order variables
     and the datadef which built the table
 } {
     set orderclause "order by $orderby $order"
     foreach col $datadef {
         if {$orderby eq [lindex $col 0] } {
-            if {![empty_string_p [lindex $col 2]]} {
+            if {[lindex $col 2] ne ""} {
                 set orderclause [subst [lindex $col 2]]
             }
         }

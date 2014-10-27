@@ -13,4 +13,10 @@ select distinct crftd.path, crftd.storage_area_key
       </querytext>
 </fullquery>
 
+<fullquery name="cr_check_orphaned_files.fetch_path">
+      <querytext>
+   SELECT count(*) FROM cr_revisions WHERE content = :name
+      </querytext>
+</fullquery>
+
 </queryset>

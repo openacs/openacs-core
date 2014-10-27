@@ -1,6 +1,6 @@
 <master>
 <property name="context">@context;noquote@</property>
-<property name="title">Create relational segment</property>
+<property name="doc(title)">Create relational segment</property>
 <property name="focus">segment_new.segment_name</property>
 
 You are creating a segment to represent all @role_pretty_plural@ of 

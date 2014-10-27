@@ -6,7 +6,7 @@ ad_page_contract {
     @creation-date 17 Sept 2001
     @cvs-id $Id$
 } {
-    repository_id:integer,notnull
+    repository_id:naturalnum,notnull
 } -properties {
     context_bar:onevalue
     package_id:onevalue

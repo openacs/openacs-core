@@ -337,11 +337,11 @@ database updates when the form is submitted and validated:
 
 <programlisting>
 
-if [template::form is_valid new_note] {
+if {[template::form is_valid new_note]} {
   set user_id [ad_conn user_id]
   set peeraddr [ad_conn peeraddr]
 
-  if [info exists note_id] {
+  if {[info exists note_id]} {
     db_dml note_update {
       update notes
       set title = :title,

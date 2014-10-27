@@ -5,7 +5,7 @@ ad_page_contract {
     @creation-date 26 Sept 1999
     @cvs-id $Id$
 } {
-    user_id:integer
+    user_id:naturalnum,notnull
 }
 
 # NB: this really doesn't work! You can now pass a &size= parameter

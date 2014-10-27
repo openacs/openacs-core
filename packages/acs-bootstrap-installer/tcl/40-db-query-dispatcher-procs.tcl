@@ -86,7 +86,7 @@ ad_proc -public db_rdbms_compatible_p {rdbms_test rdbms_pattern} {
     # db_qd_log QDDebug "The RDBMS_PATTERN is [db_rdbms_get_type $rdbms_pattern] - [db_rdbms_get_version $rdbms_pattern]"
 
     # If the pattern is for all RDBMS, then yeah, compatible
-    if {[empty_string_p [db_rdbms_get_type $rdbms_test]]} {
+    if {[db_rdbms_get_type $rdbms_test] eq ""} {
 	return 1
     }
 
@@ -97,16 +97,16 @@ ad_proc -public db_rdbms_compatible_p {rdbms_test rdbms_pattern} {
     }
 
     # If the pattern has no version
-    if {[empty_string_p [db_rdbms_get_version $rdbms_pattern]]} {
+    if {[db_rdbms_get_version $rdbms_pattern] eq ""} {
 	return 1
     }
 
     # If the query being tested was written for a version that is older than 
     # the current RDBMS then we have compatibility. Otherwise we don't.
     foreach t [split [db_rdbms_get_version $rdbms_test   ] "\."] \
-            p [split [db_rdbms_get_version $rdbms_pattern] "\."] {
-                if {$t != $p} {return [expr {$t < $p}]}
-            }
+	p [split [db_rdbms_get_version $rdbms_pattern] "\."] {
+	    if {$t != $p} {return [expr {$t < $p}]}
+	}
     
     # Same version (though not strictly "older") is OK
     return 1
@@ -194,11 +194,11 @@ ad_proc -public db_qd_pick_most_specific_query {rdbms query_1 query_2} {
     # We ASSUME that both queries are at least compatible.
     # Otherwise this is a stupid exercise
 
-    if {[empty_string_p [db_rdbms_get_version $rdbms_1]]} {
+    if {[db_rdbms_get_version $rdbms_1] eq ""} {
 	return $query_2
     }
 
-    if {[empty_string_p [db_rdbms_get_version $rdbms_2]]} {
+    if {[db_rdbms_get_version $rdbms_2] eq ""} {
 	return $query_1
     }
 
@@ -217,13 +217,22 @@ ad_proc -public db_qd_pick_most_specific_query {rdbms query_1 query_2} {
 #
 ################################################
 
-ad_proc -public db_qd_load_query_file {file_path} {
+ad_proc -public db_qd_load_query_file {file_path {errorVarName ""}} {
     A procedure that is called from the outside world (APM) 
     to load a particular file
-} { 
-    if { [catch {db_qd_internal_load_cache $file_path} errmsg] } {
-        global errorInfo
-        ns_log Error "Error parsing queryfile $file_path:\n\n$errmsg\n\n$errorInfo"
+} {
+    if {$errorVarName ne ""} {
+	upvar $errorVarName errors
+    } else {
+	array set errors [list]
+    }
+    if { [catch {db_qd_internal_load_cache $file_path} errMsg] } {
+        set backTrace $::errorInfo
+        ns_log Error "Error parsing queryfile $file_path:\n\n$errMsg\n\n$backTrace"
+	set r_file [ad_make_relative_path $file_path]
+	set package_key ""
+	regexp {/packages/([^/]+)/} $file_path -> package_key
+	lappend errors($package_key) $r_file $backTrace
     }
 }
 
@@ -256,7 +265,7 @@ ad_proc -public db_qd_get_fullname {local_name {added_stack_num 1}} {
 
     # We check if we're running the special ns_ proc that tells us
     # whether this is an URL or a Tcl proc.
-    if {[lsearch $list_of_source_procs [lindex $proc_name 0]] != -1} {
+    if { [lindex $proc_name 0] in $list_of_source_procs } {
 
 	# Means we are running inside an URL
 
@@ -345,7 +354,7 @@ ad_proc -public db_qd_get_fullname {local_name {added_stack_num 1}} {
         # db_qd_log QDDebug "calling namespace = $calling_namespace"
 
         if {$calling_namespace ne "" && 
-            ![string match *::* $proc_name]} {
+            ![string match "*::*" $proc_name]} {
             set proc_name ${calling_namespace}::${proc_name}
         }
 	# db_qd_log QDDebug "proc_name is -$proc_name-"
@@ -523,12 +532,12 @@ ad_proc -private db_qd_internal_load_queries {file_pointer file_tag} {
 	    set new_name [db_qd_make_absolute_path $queryname_root [db_fullquery_get_name $one_query]]
 
 	    set new_fullquery [db_fullquery_create \
-		    $new_name \
-		    [db_fullquery_get_querytext $one_query] \
-		    [db_fullquery_get_bind_vars $one_query] \
-		    [db_fullquery_get_query_type $one_query] \
-		    [db_fullquery_get_rdbms $one_query] \
-		    [db_fullquery_get_load_location $one_query]]
+				   $new_name \
+				   [db_fullquery_get_querytext $one_query] \
+				   [db_fullquery_get_bind_vars $one_query] \
+				   [db_fullquery_get_query_type $one_query] \
+				   [db_fullquery_get_rdbms $one_query] \
+				   [db_fullquery_get_load_location $one_query]]
 
 	    set one_query $new_fullquery
 
@@ -540,7 +549,7 @@ ad_proc -private db_qd_internal_load_queries {file_pointer file_tag} {
     }
 
     set relative_path [string range $file_tag \
-        [expr { [string length [acs_root_dir]] + 1 }] end]
+			   [expr { [string length $::acs::rootdir] + 1 }] end]
     nsv_set apm_library_mtime $relative_path [file mtime $file_tag]
 }
 
@@ -802,7 +811,7 @@ ad_proc -private db_qd_relative_path_p {path} {
     set root_path_length [string length $root_path]
 
     # Check if the path starts with the root
-    if {[string range $path 0 [expr {$root_path_length - 1}]] == $root_path} {
+    if {[string range $path 0 $root_path_length-1] eq $root_path} {
 	return 0
     } else {
 	return 1
@@ -853,13 +862,13 @@ ad_proc -private db_qd_internal_prepare_queryfile_content {file_content} {
 	append new_file_content [string range $rest_of_file_content 0 [expr {$first_querytext_open + $querytext_open_len - 1}]]
 
 	# append quoted querytext
-	append new_file_content [ns_quotehtml [string range $rest_of_file_content [expr {$first_querytext_open + $querytext_open_len}] [expr {$first_querytext_close - 1}]]]
+	append new_file_content [ns_quotehtml [string range $rest_of_file_content $first_querytext_open+$querytext_open_len $first_querytext_close-1]]
 
 	# append close querytext
 	append new_file_content $querytext_close
 
 	# Set up the rest
-	set rest_of_file_content [string range $rest_of_file_content [expr {$first_querytext_close + $querytext_close_len}] end]
+	set rest_of_file_content [string range $rest_of_file_content $first_querytext_close+$querytext_close_len end]
     }
 
     # db_qd_log QDDebug "new massaged file content: \n $new_file_content \n"
@@ -885,3 +894,10 @@ ad_proc -private db_qd_log {level msg} {
 if { $remove_ad_proc_p } { 
     rename ad_proc {}
 }
+
+#
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

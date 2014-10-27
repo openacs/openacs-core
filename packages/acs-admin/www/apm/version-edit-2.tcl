@@ -29,7 +29,7 @@ foreach attribute_name [array names all_attributes] {
     set attribute_value [ns_set iget [rp_getform] $attribute_name]
 
     if { [info exists attribute(validation_proc)] } {
-        set attribute_error [eval $attribute(validation_proc) $attribute_value]
+        set attribute_error [$attribute(validation_proc) $attribute_value]
 
         if { $attribute_error ne "" } {
             ad_return_complaint 1 $attribute_error

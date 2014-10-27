@@ -263,7 +263,7 @@ rm -rf /var/tmp/openacs-4</action></screen>
           </listitem>
           <listitem>
             <para>
-              The files will be stored on the server's hard drive in the directory specified by the 'repository_dir' variable in the page script, by default "[acs_root_dir]/www/repository/".
+              The files will be stored on the server's hard drive in the directory specified by the 'repository_dir' variable in the page script, by default "$::acs::rootdir/www/repository/".
             </para>
           </listitem>
         </orderedlist>

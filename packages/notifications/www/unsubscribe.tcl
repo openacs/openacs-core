@@ -1,12 +1,12 @@
 ad_page_contract {
 
-    @author Natalia Pérez (nperper@it.uc3m.es) 
+    @author Natalia PÃ©rez (nperper@it.uc3m.es) 
     @creation_date 2005-03-28
     
 } {
-    object_id:notnull
-    request_id:multiple
-    type_id
+    object_id:naturalnum,notnull
+    request_id:naturalnum,multiple
+    type_id:naturalnum,notnull
     return_url         
 } 
 

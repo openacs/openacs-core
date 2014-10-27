@@ -5,7 +5,7 @@ ad_page_contract {
     @cvs-id $Id$
 
 } {
-    version_id:optional
+    version_id:naturalnum,optional
     type
 } -properties {
     title:onevalue
@@ -13,8 +13,9 @@ ad_page_contract {
     documentation:onevalue
 }
 
-if { ![info exists version_id] && \
-        [regexp {^([^ /]+)/} $type "" package_key] } {
+if { ![info exists version_id] 
+     && [regexp {^([^ /]+)/} $type "" package_key] 
+ } {
     db_0or1row version_id_from_package_key {
         select version_id 
           from apm_enabled_package_versions 
@@ -23,7 +24,7 @@ if { ![info exists version_id] && \
 }
  
 
-set public_p [api_set_public $version_id]
+set public_p [::apidoc::set_public $version_id]
 
 
 set context [list]

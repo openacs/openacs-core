@@ -8,7 +8,7 @@ ad_page_contract {
     @creation-date 2007-09-30
     @cvs-id $Id$
 } {
-    {revision_id:integer}
+    {revision_id:naturalnum,notnull}
     {file_location }
     {return_url_2 "/"}
 } -properties {

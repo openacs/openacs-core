@@ -1,5 +1,5 @@
 <master>
-<property name="title">Using the site-wide skin</property>
+<property name="doc(title)">Using the site-wide skin</property>
 
 <h1>Using the site-wide skin</h1>
 <p>

@@ -10,13 +10,12 @@
     <version name="5.9.0d1" url="http://openacs.org/repository/download/apm/acs-tcl-5.9.0d1.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>The Kernel Tcl API library.</summary>
-        <release-date>2009-11-26</release-date>
+        <release-date>2013-09-08</release-date>
         <maturity>3</maturity>
         <license url="http://www.gnu.org/copyleft/gpl.html">GPL version 2</license>
         <vendor url="http://openacs.org">OpenACS</vendor>
         <description format="text/html">Contains all the core Tcl API, including the request processor, security and session management, permissions, site-nodes, package management infrastructure, etc.</description>
         <license>GPL version 2</license>
-        <maturity>3</maturity>
 
         <provides url="acs-tcl" version="5.9.0d1"/>
         <requires url="acs-bootstrap-installer" version="5.9.0d1"/>

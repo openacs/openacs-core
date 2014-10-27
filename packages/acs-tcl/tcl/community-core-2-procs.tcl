@@ -12,11 +12,12 @@ ad_library {
 # The User Namespace
 namespace eval oacs::user {
 
-    ad_proc -public get {
+    ad_proc -deprecated -public get {
         {-user_id:required}
         {-array:required}
     } {
         Load up user information
+	@see acs_user::get
     } {
         # Upvar the Tcl Array
         upvar $array row

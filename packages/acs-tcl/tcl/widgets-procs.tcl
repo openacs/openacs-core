@@ -4,8 +4,13 @@ ad_library {
     @cvs-id $Id$
 }
 
-ad_proc state_widget { {default ""} {select_name "usps_abbrev"}} "Returns a state selection box" {
-
+ad_proc us_state_widget { 
+    {default ""} 
+    {select_name "usps_abbrev"}
+} {
+    Returns a state selection box.
+    This widget depends on the ref-us-states package.
+} {
     set widget_value "<select name=\"$select_name\">\n"
     if { $default eq "" } {
         append widget_value "<option value=\"\" selected=\"selected\">Choose a State</option>\n"
@@ -24,11 +29,17 @@ ad_proc state_widget { {default ""} {select_name "usps_abbrev"}} "Returns a stat
     return $widget_value
 }
 
-ad_proc country_widget { {default ""} {select_name "country_code"} {size_subtag "size=4"}} "Returns a country selection box" {
-
+ad_proc country_widget { 
+    {default ""} 
+    {select_name "country_code"} 
+    {size_subtag "size='4'"}
+} {
+    Returns a country selection box.
+    This widget depends on the ref-countries package.
+} {
     set widget_value "<select name=\"$select_name\" $size_subtag>\n"
     if { $default eq "" } {
-        if { [parameter::get -parameter SomeAmericanReadersP] } {
+        if { [parameter::get -parameter SomeAmericanReadersP -package_id [ad_conn subsite_id] -default 0] } {
 	    append widget_value "<option value=\"\">Choose a Country</option>
 <option value=\"us\" selected=\"selected\">United States</option>\n"
 	} else {
@@ -51,7 +62,14 @@ ad_proc country_widget { {default ""} {select_name "country_code"} {size_subtag 
 # teadams - It is usually more approprate to use html_select_options or
 # html_select_value_options. 
 
-ad_proc ad_generic_optionlist {items values {default ""}} "Use this to build select form fragments.  Given a list of items and a list of values, will return the option tags with default highlighted as appropriate." {
+ad_proc ad_generic_optionlist {
+    items 
+    values 
+    {default ""}
+} {
+    Use this to build select form fragments.  Given a list of items and a list of values, 
+    will return the option tags with default highlighted as appropriate.
+} {
 
     # items is a list of the items you would like the user to select from
     # values is a list of corresponding option values
@@ -74,11 +92,15 @@ proc day_list {} {
     return  {1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31}
 }
 
-ad_proc month_list {} "Returns list of month abbreviations" {
+ad_proc month_list {} {
+    Returns list of month abbreviations
+} {
     return  {Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec}
 }
 
-ad_proc long_month_list {} "Returns list of months" {
+ad_proc long_month_list {} {
+    Returns list of months
+} {
     return  {January February March April May June July August September October November December}
 }
 
@@ -87,7 +109,11 @@ proc month_value_list {} {
     return {1 2 3 4 5 6 7 8 9 10 11 12}
 } 
 
-ad_proc future_years_list {{num_year 10}} "Returns a list containing the next num_year years in the future." {
+ad_proc future_years_list {
+    {num_year 10}
+} {
+    Returns a list containing the next num_year years in the future.
+} {
     set year [ns_fmttime [ns_time] %Y] 
     set counter  0
     while {$counter < $num_year } {
@@ -103,7 +129,16 @@ ad_proc future_years_list {{num_year 10}} "Returns a list containing the next nu
 # if pad_to_two_p is 1, the option values will be 
 # padded to 2 digites with a leading 0
 
-ad_proc ad_integer_optionlist {start_value end_value {default ""} { pad_to_two_p 0} } "Produces an optionlist for a range of integers from start_value to end_value. If default matches one of the options, it is selection. If pad_to_two_p is 1, the option values will be padded to 2 digites with a leading 0." {
+ad_proc ad_integer_optionlist {
+    start_value 
+    end_value 
+    {default ""} 
+    { pad_to_two_p 0} 
+} {
+    Produces an optionlist for a range of integers from start_value to end_value. 
+    If default matches one of the options, it is selection. If pad_to_two_p is 1, 
+    the option values will be padded to 2 digites with a leading 0.
+} {
     # items is a list of the items you would like the user to select from
     # values is a list of corresponding option values
     # default is the value of the item to be selected
@@ -145,16 +180,14 @@ ad_proc ad_dateentrywidget {column { value 0 } } {
 	set value  [lindex [split [ns_localsqltimestamp] " "] 0]
     } 
 
-    set date_parts [split $value "-"]
     if { $value eq "" } {
 	set month ""
 	set day ""
 	set year ""
     } else {
-	set date_parts [split $value "-"]
-	set month [lindex $date_parts 1]
-	set year [lindex $date_parts 0]
-	set day [lindex $date_parts 2]
+	lassign [split $value "-"] year month day
+	# trim the day, in case we get as well a time stamp
+	regexp {^([0-9]+) } $day _ day
     }
 
     set output "<select name=\"$column.month\">\n"
@@ -162,29 +195,30 @@ ad_proc ad_dateentrywidget {column { value 0 } } {
     # take care of cases like 09 for month
     regsub "^0" $month "" month
     for {set i 0} {$i < 12} {incr i} {
-	if { $month ne "" && $i == [expr {$month - 1}] } {
+	if { $month ne "" && $i == $month - 1 } {
 	    append output "<option selected=\"selected\">[lindex $NS(months) $i]</option>\n"
 	} else {
 	    append output "<option>[lindex $NS(months) $i]</option>\n"
 	}
     }
 
-    append output "</select><input name=\"$column.day\" type=\"text\" size=\"3\" maxlength=\"2\" value=\"$day\">&nbsp;<input name=\"$column.year\" type=\"text\" size=\"5\" maxlength=\"4\" value=\"$year\">"
+    append output [subst {</select><input name="$column.day" type="text" size="2" maxlength="2" value="$day">&nbsp;
+	<input name="$column.year" type="text" size="4" maxlength="4" value="$year">}]
 
      return $output
 }
 
 ad_proc ad_db_select_widget {
-    { 
-        -size 0
-        -multiple 0
-        -default {}
-        -option_list {}
-        -blank_if_no_db 0
-        -hidden_if_one_db 0
-	-bind {}
-    } 
-    statement_name sql_qry name 
+    {-size 0}
+    {-multiple 0}
+    {-default {}}
+    {-option_list {}}
+    {-blank_if_no_db 0}
+    {-hidden_if_one_db 0}
+    {-bind {}}
+    statement_name 
+    sql_qry 
+    name 
 } { 
     given a sql query this generates a select group.  If there is only
     one value it returns the text and a hidden variable setting that value.
@@ -210,10 +244,10 @@ ad_proc ad_db_select_widget {
     if {$option_list ne ""} {
         foreach opt $option_list { 
             incr count
-            set item [lindex $opt 1]
-            set value [lindex $opt 0]
+	    lassign $opt value item
             if { (!$multiple && $value eq $default ) 
-                 || ($multiple && [lsearch -exact $default $value] > -1)} {
+                 || ($multiple && $value in $default) 
+	     } {
                 append retval "<option selected value=\"$value\">$item</option>\n"
             } else {
                 append retval "<option value=\"$value\">$item</option>\n"
@@ -234,14 +268,15 @@ ad_proc ad_db_select_widget {
 	    set item [ns_set value $selection 0]
 	    set value [ns_set value $selection 1]
 	    if { (!$multiple && $value eq $default ) 
-		 || ($multiple && [lsearch -exact $default $value] > -1)} {
+		 || ($multiple && $value in $default)
+	    } {
 		append retval "<option selected=\"selected\" value=\"$value\">$item</option>\n"
 	    } else {
 		append retval "<option value=\"$value\">$item</option>\n"
 	    }
 	} if_no_rows {
 	    if {$default ne ""} { 
-		return "<input type=\"hidden\" value=\"[philg_quote_double_quotes $default]\" name=\"$name\">\n"
+		return "<input type=\"hidden\" value=\"[ad_quotehtml $default]\" name=\"$name\">\n"
 	    } else { 
 		return {}            
 	    }
@@ -249,7 +284,7 @@ ad_proc ad_db_select_widget {
     }
 
     if { $count == 1 || ($dbcount == 1 && $hidden_if_one_db) } {
-        return "$item<input type=\"hidden\" value=\"[philg_quote_double_quotes $value]\" name=\"$name\">\n"
+        return "$item<input type=\"hidden\" value=\"[ad_quotehtml $value]\" name=\"$name\">\n"
     } elseif {!$count && !$dbcount && $blank_if_no_db} {
 	return {}
     } else { 
@@ -262,34 +297,6 @@ ad_proc ad_db_select_widget {
         }
         return "$select>\n$retval</select>"
     }
-}
-
-ad_proc currency_widget {{default ""} {select_name "currency_code"} {size_subtag "size=\"4\""}} "Returns a currency selection box" {
-
-    set widget_value "<select name=\"$select_name\" $size_subtag>\n"
-    if { $default eq "" } {
-        if { [parameter::get -parameter SomeAmericanReadersP] } {
-	    append widget_value "<option value=\"\">Currency</option>
-<option value=\"USD\" selected=\"selected\">United States Dollar</option>\n"
-	} else {
-	    append widget_value "<option value=\"\" selected=\"selected\">Currency</option>\n"
-	}
-    }
-    db_foreach currency_info {
-	select currency_name, iso 
-	from currency_codes 
-	where supported_p='t'
-	order by currency_name 
-    } {
-	if { $default == $iso } {
-	    append widget_value "<option value=\"$iso\" selected=\"selected\">$currency_name</option>\n" 
-        } else {            
-            append widget_value "<option value=\"$iso\">$currency_name</option>\n"
-        }
-    }
-    
-    append widget_value "</select>\n"
-    return $widget_value
 }
 
 ad_proc ad_html_colors {} "Returns an array of HTML colors and names." {
@@ -373,7 +380,13 @@ function adUpdateColorList(field) {
     }
 } 
 
-ad_proc ad_color_widget { name default { use_js 0 } } "Returns a color selection widget, optionally using JavaScript. Default is a string of the form '0,192,255'." {
+ad_proc ad_color_widget { 
+    name 
+    default 
+    { use_js 0 } 
+} {
+    Returns a color selection widget, optionally using JavaScript. Default is a string of the form '0,192,255'.
+} {
     set out "<table cellspacing=0 cellpadding=0><tr><td><select name=$name.list"
     if { $use_js != 0 } {
 	append out " onChange=\"adUpdateColorText('$name')\""
@@ -416,7 +429,9 @@ ad_proc ad_color_widget { name default { use_js 0 } } "Returns a color selection
     return $out
 }
 
-ad_proc ad_process_color_widgets args { Sets variables corresponding to the color widgets named in $args. } {
+ad_proc ad_process_color_widgets args { 
+    Sets variables corresponding to the color widgets named in $args. 
+} {
     foreach field $args {
 	upvar $field var
 	set var [ns_queryget "$field.list"]
@@ -429,7 +444,9 @@ ad_proc ad_process_color_widgets args { Sets variables corresponding to the colo
     }
 }
 
-ad_proc ad_color_to_hex { triplet } { Converts a string of the form 0,192,255 to a string of the form #00C0FF. } {
+ad_proc ad_color_to_hex { triplet } { 
+    Converts a string of the form 0,192,255 to a string of the form #00C0FF. 
+} {
     if { [regexp {^([0-9]+),([0-9]+),([0-9]+)$} $triplet all r g b] } {
 	return "#[format "%02x%02x%02x" $r $g $b]"
     } else {

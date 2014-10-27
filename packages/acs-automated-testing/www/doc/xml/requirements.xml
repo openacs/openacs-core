@@ -31,7 +31,7 @@
               <entry>1</entry>
               <entry>Done</entry>
               <entry>Done</entry>
-              <entry><emphasis role="strong">Execute TCL tests</emphasis>.  Execute a sequence of TCL code is executed and determine the correctness of the results.</entry>
+              <entry><emphasis role="strong">Execute Tcl tests</emphasis>.  Execute a sequence of Tcl code is executed and determine the correctness of the results.</entry>
             </row>
             <row>
               <entry>1.1</entry>
@@ -119,8 +119,8 @@
   security_risk
 Layer
   Web Page
-  TCL Page Contract
-  TCL API
+  Tcl Page Contract
+  Tcl API
   SQL  
 Severity (derives from ns_log values)
   Notice (use this for informational items that do not imply a problem)

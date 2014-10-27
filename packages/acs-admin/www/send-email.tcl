@@ -29,7 +29,7 @@ if {[catch {acs_mail_lite::send -send_immediately -to_addr $email -from_addr $em
     ad_script_abort
 }
 
-if { $show_sent_message_p ne "t" } {
+if { $show_sent_message_p != "t" } {
     # Do not show any message. Just go to return url
     ad_returnredirect $return_url
     ad_script_abort

@@ -24,7 +24,7 @@ if { ![db_0or1row select_pretty_name {
     return
 }
 
-if {$dynamic_p ne "t" } {
+if {$dynamic_p != "t" } {
     ad_return_error "Cannot administer group type" "Group type \"$group_type\" can only be administered by programmers"
 }
 
@@ -45,7 +45,7 @@ if {!$group_type_exists_p} {
 }
 
 if {$return_url eq ""} {
-    set return_url one?[ad_export_vars group_type]
+    set return_url one?[export_vars group_type]
 }
 
 ad_returnredirect $return_url

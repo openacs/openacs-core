@@ -29,7 +29,7 @@ foreach testcase [nsv_get aa_test cases] {
 
 set uncovered_procs [list]
 foreach proc_name $all_proc_names {
-    if { [lsearch -exact $tested_proc_names $proc_name] == -1 } {
+    if {$proc_name ni $tested_proc_names} {
 	lappend uncovered_procs $proc_name
     }
 }

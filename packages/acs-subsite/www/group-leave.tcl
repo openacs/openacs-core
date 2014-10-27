@@ -5,7 +5,7 @@ ad_page_contract {
     @creation-date 2003-08-07
     @cvs-id $Id$
 } {
-    {group_id:integer {[application_group::group_id_from_package_id]}}
+    {group_id:naturalnum,notnull {[application_group::group_id_from_package_id]}}
     return_url:optional
 }
 
@@ -30,7 +30,7 @@ if { $member_p } {
 
 }
 
-if { ![exists_and_not_null return_url] } {
+if { (![info exists return_url] || $return_url eq "") } {
     set return_url "../"
 }
 

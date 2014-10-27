@@ -11,7 +11,7 @@ ad_library {
 set compat_procs [list ns_startcontent ns_encodingfortype]
 
 foreach one_proc $compat_procs {
-    if {[llength [info command $one_proc]] == 0} {
+    if {[llength [info commands $one_proc]] == 0} {
 	proc $one_proc {args} { }
     }
 }

@@ -6,7 +6,7 @@ ad_page_contract {
   @creation-date 2000-10-23
   @cvs-id $Id$
 } {
-  template_demo_note_id:integer,notnull,multiple
+  template_demo_note_id:naturalnum,notnull,multiple
 }
 
 # Here, we delete all the notes being fed to us, which is all 
@@ -19,7 +19,7 @@ ad_page_contract {
 # and for each, deletes that note.
 
 foreach template_demo_note_id $template_demo_note_id {
-    ad_require_permission $template_demo_note_id delete
+    permission::require_permission -object_id $template_demo_note_id -privilege delete
 
     package_exec_plsql \
         -var_list \

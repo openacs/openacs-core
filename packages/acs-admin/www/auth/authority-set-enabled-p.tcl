@@ -6,13 +6,13 @@ ad_page_contract {
 
     @creation-date 2003-09-09
 } {
-    authority_id
+    authority_id:naturalnum,notnull
     enabled_p:boolean
 }
 
 # Make sure we are not shutting out all site-wide-admins from the system
 set allowed_p 1
-if { $enabled_p eq "f" && ![auth::can_admin_system_without_authority_p -authority_id $authority_id]} {
+if { $enabled_p == "f" && ![auth::can_admin_system_without_authority_p -authority_id $authority_id]} {
     set allowed_p 0
 }
 

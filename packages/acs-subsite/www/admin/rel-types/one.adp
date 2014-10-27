@@ -1,6 +1,6 @@
 <master>
 <property name="context">@context;noquote@</property>
-<property name="title">Relationship Type "@rel_type_pretty_name;noquote@"</property>
+<property name="doc(title)">Relationship Type "@rel_type_pretty_name;noquote@"</property>
 				   
 <h4>Relations of this type</h4>
 

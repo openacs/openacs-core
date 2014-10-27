@@ -53,7 +53,7 @@ ad_proc -public notification::delivery::send {
     set args [list $from_user_id $to_user_id $reply_object_id $notification_type_id $subject $content_text $content_html $file_ids]
 
     # Make the generic call
-    return [acs_sc_call NotificationDeliveryMethod Send $args $impl_key]
+    return [acs_sc::invoke -contract NotificationDeliveryMethod -operation Send -call_args $args -impl $impl_key]
 }
 
 ad_proc -public notification::delivery::scan_replies {
@@ -74,7 +74,7 @@ ad_proc -public notification::delivery::scan_replies {
     # ns_log Notice "NOTIF-DELIV-METHOD: about to call acs_sc on $impl_key"
 
     # Make the generic call
-    return [acs_sc_call NotificationDeliveryMethod ScanReplies $args $impl_key]
+    return [acs_sc::invoke -contract NotificationDeliveryMethod -operation ScanReplies -call_args $args -impl $impl_key]
 }
 
 ad_proc -public notification::delivery::new {

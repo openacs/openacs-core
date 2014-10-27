@@ -1,5 +1,5 @@
 <master>
-<property name="title">ACS Service Contract</property>
+<property name="doc(title)">ACS Service Contract</property>
 <property name="context">@context;noquote@</property>
 
 <h2>Defined Contracts</h2>

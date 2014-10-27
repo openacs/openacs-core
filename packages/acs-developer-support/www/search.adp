@@ -1,5 +1,5 @@
 <master>
-  <property name="title">Search</property>
+  <property name="doc(title)">Search</property>
   <property name="context">@context;noquote@</property>
 
   <p>

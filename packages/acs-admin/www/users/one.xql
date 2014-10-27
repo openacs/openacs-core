@@ -1,16 +1,6 @@
 <?xml version="1.0"?>
 <queryset>
 
-<fullquery name="user_is_admin">
-      <querytext>
-      select privilege
-      from acs_permissions
-      where object_id = :sec_context_root
-            and grantee_id = :user_id
-            and privilege = 'admin'
-      </querytext>
-</fullquery>
- 
 <fullquery name="get_item_id">      
       <querytext>
       select live_revision as revision_id,

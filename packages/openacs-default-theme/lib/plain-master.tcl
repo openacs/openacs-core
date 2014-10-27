@@ -32,7 +32,7 @@ if {[ad_conn url] eq "/"} {
     set system_url [ad_url]
 }
 
-if {[template::util::is_nil title]} {
+if {![info exists title]} {
     # TODO: decide how best to set the lang attribute for the title
     set title [ad_conn instance_name]
 }
@@ -47,7 +47,7 @@ if { [template::multirow exists navigation] } {
     }
     for {set i 1} {$i <= [template::multirow size navigation]} {incr i} {
         template::multirow get navigation $i
-        if { [lsearch -exact $navigation_groups $navigation(group)] < 0} {
+        if {$navigation(group) ni $navigation_groups} {
             lappend navigation_groups $navigation(group)
         }
     }

@@ -44,11 +44,11 @@
   <msg key="lt_name_is_not_a_natural">Ο %name% δεν είναι ένας φυσικός αριθμός, δηλαδή ένας ακέραιος ίσος ή μεγαλύτερος του 0. </msg>
   <msg key="lt_name_is_not_a_valid_S">Ο %name% είναι ένα άκυρο SQL identifier</msg>
   <msg key="lt_name_is_not_an_intege">Ο %name% δεν είναι ακέραιος</msg>
-  <msg key="lt_name_is_not_in_the_ra">Ο %name% δεν είναι εντός ορίων \[%min%, %max%\] </msg>
-  <msg key="lt_name_is_too_long__Ple">Ο %name% είναι πολύ μακρύς. Παρακαλούμε εισάγετε μια τιμή για το μέγιστο αριθμό χαρακτήρων [lindex $range 1]. Η τιμή που εισάγατε διαθέτει [string length $value] χαρακτήρες μήκος.</msg>
-  <msg key="lt_name_is_too_long__Ple_1">O %name% αποτελείται από πολλά ψηφία. Παρακαλούμε εισάγετε μια τιμή με το πολύ [lindex $length 1] ψηφία. Η τιμή που είχατε δώσει ήταν [string length $value] ψηφίων.</msg>
-  <msg key="lt_name_is_too_short__Pl">O %name% αποτελείται από πολύ λίγα ψηφία. Παρακαλούμε εισάγετε μια τιμή με το λιγότερο [lindex $range 0] ψηφία. Η τιμή που είχατε δώσει ήταν [string length $value] ψηφίων.</msg>
-  <msg key="lt_name_is_too_short__Pl_1">Ο %name% άποτελείται από πολύ λίγα ψηφία. Παρακαλούμε εισάγετε μια τιμή τουλάχιστον [lindex $length 1] ψηφίων. Η τιμλη που είχατε εισάγει ήταν [string length $value] ψηφίων. </msg>
+  <msg key="lt_name_is_not_in_the_ra">Ο %name% δεν είναι εντός ορίων [%min%, %max%] </msg>
+  <msg key="lt_name_is_too_long__Ple">Ο %name% είναι πολύ μακρύς. Παρακαλούμε εισάγετε μια τιμή για το μέγιστο αριθμό χαρακτήρων %max_length%. Η τιμή που εισάγατε διαθέτει %actual_length% χαρακτήρες μήκος.</msg>
+  <msg key="lt_name_is_too_long__Ple_1">O %name% αποτελείται από πολλά ψηφία. Παρακαλούμε εισάγετε μια τιμή με το πολύ %max_length% ψηφία. Η τιμή που είχατε δώσει ήταν %actual_length% ψηφίων.</msg>
+  <msg key="lt_name_is_too_short__Pl">O %name% αποτελείται από πολύ λίγα ψηφία. Παρακαλούμε εισάγετε μια τιμή με το λιγότερο %min_length% ψηφία. Η τιμή που είχατε δώσει ήταν %actual_length% ψηφίων.</msg>
+  <msg key="lt_name_is_too_short__Pl_1">Ο %name% άποτελείται από πολύ λίγα ψηφία. Παρακαλούμε εισάγετε μια τιμή τουλάχιστον %min_length% ψηφίων. Η τιμλη που είχατε εισάγει ήταν %actual_length% ψηφίων. </msg>
   <msg key="lt_NB_This_error_was_sub">Το σφάλμα έχει αποσταλλεί</msg>
   <msg key="lt_Please_back_up_using_">Παρακαλούμε επιστρέψετε πίσω με το λογισμικό πλοήγησης, διορθώστε τα παραπάνω</msg>
   <msg key="lt_Problem_with_a_Page_o">Σφάλμα σε μια σελίδα (ή ίσως στις πληροφορίες που δώσατε)</msg>

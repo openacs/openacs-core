@@ -2,7 +2,7 @@
 
 # sets up datasource for groups-list.adp
 
-if { ![exists_and_not_null group_type] } {
+if { (![info exists group_type] || $group_type eq "") } {
     error "Group type must be specified"
 }
 

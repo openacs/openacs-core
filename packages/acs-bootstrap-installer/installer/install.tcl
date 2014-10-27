@@ -8,7 +8,7 @@ install_page_contract [install_mandatory_params] [install_optional_params]
 
 # Default all system emails to the administrators email
 foreach var_name {system_owner admin_owner host_administrator outgoing_sender new_registrations} {
-    if { [empty_string_p [set $var_name]] } {
+    if { [set $var_name] eq "" } {
         set $var_name $email
     }
 }
@@ -61,26 +61,49 @@ if { ![db_string user_exists {
 
   db_transaction {
     
-    set user_id [ad_user_new \
-                     $email \
-                     $first_names \
-                     $last_name \
-                     $password \
-                     "" \
-                     "" \
-                     "" \
-                     "t" \
-                     "approved" \
-                     "" \
-                     $username]
+    # Can't use auth::create_user
+    # Operation GetParameters is not implemented in 'local' implementation of contract 'auth_registration'
+    # set user_id [auth::create_user \
+    # 		     -email $email \
+    # 		     -first_names $first_names \
+    # 		     -last_name $last_name \
+    # 		     -password $password \
+    # 		     -email_verified_p "t" \
+    # 		     -username $username ]
+    
+
+    # Can't use auth::create_local_account, account does not work
+    # array set user [list email $email first_names $first_names \
+    # 			last_name $last_name password $password email_verified_p "t"]
+    # array set creation_info [auth::create_local_account \
+    # 				 -authority_id [auth::authority::local] \
+    # 				 -username $username \
+    # 				 -array user]
+    # if {$creation_info(creation_status) eq "ok"} {
+    #   set user_id $creation_info(user_id)
+    # }
+
+    # .. so use the low level helper
+    set user_id [auth::create_local_account_helper \
+    		     $email \
+    		     $first_names \
+    		     $last_name \
+    		     $password \
+    		     "" \
+    		     "" \
+    		     "" \
+    		     "t" \
+    		     "approved" \
+    		     "" \
+    		     $username ]
+
     if { !$user_id } {
 
-	global errorInfo    
 	install_return 200 "Unable to Create Administrator" "
     
 Unable to create the site-wide administrator:
    
-<blockquote><pre>[ns_quotehtml $errorInfo]</pre></blockquote>
+<blockquote><pre>[ns_quotehtml $::errorInfo]</pre></blockquote>
     
 Please <a href=\"javascript:history.back()\">try again</a>.
     
@@ -101,7 +124,7 @@ Please <a href=\"javascript:history.back()\">try again</a>.
 
 # Now process the application bundle if an install.xml file was found.
 
-if { [file exists "[acs_root_dir]/install.xml"] } {
+if { [file exists "$::acs::rootdir/install.xml"] } {
     set output [apm::process_install_xml "/install.xml" {}]
     ns_write "<p>[join $output "</p><p>"]</p>"
 }

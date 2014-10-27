@@ -25,7 +25,7 @@ set title "Adding new users in bulk"
 while {[regexp {(.[^\n]+)} $userlist match_fodder row] } {
     # remove each row as it's handled
     set remove_count [string length $row]
-    set userlist [string range $userlist [expr {$remove_count + 1}] end]
+    set userlist [string range $userlist $remove_count+1 end]
     set row [split $row ,]
     set email [string trim [lindex $row 0]]
     set first_names [string trim [lindex $row 1]]

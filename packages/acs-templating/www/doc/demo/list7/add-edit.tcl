@@ -9,7 +9,7 @@ ad_page_contract {
   object type, using ad_form and package Tcl API tools.
 
 } -query {
-    note_id:integer,notnull,optional
+    note_id:naturalnum,notnull,optional
 } -properties {
     context:onevalue
     page_title:onevalue

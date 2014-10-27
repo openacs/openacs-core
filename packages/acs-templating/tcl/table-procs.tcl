@@ -87,7 +87,7 @@ ad_proc -public template::widget::table::default_column_def {
 
   upvar $level "tablewidget:${name}" widget
 
-  if { [template::util::is_nil widget(column_def)] } {
+  if { ![info exists widget(column_def)] } {
     # Get the column definition based on the first row of the datasource
     upvar $level "tw_${name}_rows:rowcount" rowcount
     if { $rowcount < 1 } {
@@ -113,8 +113,8 @@ ad_proc -public template::widget::table::prepare {
   upvar $level "tablewidget:${name}" widget
  
   # Get the rows
-  if { [template::util::is_nil widget(rows_data)] } {
-    if { [template::util::is_nil widget(query)] } {
+  if { ![info exists widget(rows_data)] } {
+    if { ![info exists widget(query)] } {
       error "No row datasource available for tablewidget $name"
     }
 
@@ -122,14 +122,14 @@ ad_proc -public template::widget::table::prepare {
     set sql_query $widget(query)
 
     # Append the order by clause, if any
-    if { ![template::util::is_nil widget(orderby)] } {
+    if { [info exists widget(orderby)] } {
       if { ![regexp -nocase "order +by" $sql_query match] } {
         append sql_query "\n order by"
       }
       append sql_query " $widget(orderby)"
     }
 
-    if { ![template::util::is_nil widget(column_def)] } {
+    if { [info exists widget(column_def)] } {
       # Convert the column def list to an array for extra speed 
       upvar $level "tablewidget:${name}_column_def" column_arr
       array set column_arr $widget(column_def)
@@ -164,7 +164,7 @@ ad_proc -public template::widget::table::prepare {
 
     }
 
-    if { ![template::util::is_nil widget(eval)] } {
+    if { [info exists widget(eval)] } {
       append eval_code $widget(eval)
     }
     uplevel $level "
@@ -173,7 +173,7 @@ ad_proc -public template::widget::table::prepare {
     "
   
     # Get the column definition if it does not exist
-    if { [template::util::is_nil widget(column_def)] } {
+    if { ![info exists widget(column_def)] } {
       template::widget::table::default_column_def widget \
         [expr {$level + 1}]
     }
@@ -185,7 +185,7 @@ ad_proc -public template::widget::table::prepare {
   }
 
   # Process the rows datasource and get the columns
-  if { [template::util::is_nil widget(columns_data)] } {
+  if { ![info exists widget(columns_data)] } {
     upvar $level "tw_${name}_columns:rowcount" rowcount 
 
     # Get the base url for the page
@@ -211,16 +211,15 @@ ad_proc -public template::widget::table::prepare {
       set row(name) $column_name
 
       set label [lindex $column 0]
-      if {$label eq {}} {
+      if {$label eq ""} {
         set label $column_name
       }
       set orderby_clause [lindex $column 1]
-      if {$orderby_clause eq {}} {
+      if {$orderby_clause eq ""} {
         set orderby_clause $column_name
       }
  
-      if { [info exists widget(orderby)] && \
-           [string equal $column_name $widget(orderby)] } {
+      if { [info exists widget(orderby)] && $column_name eq $widget(orderby) } {
         set row(html) "<b>$label</b>"
         set row(selected) "t"
       } else {
@@ -243,8 +242,8 @@ template_tag tablewidget { chunk params } {
   set style [ns_set iget $params style]
 
   # Use the style unless the template is specified in the tag
-  if { [template::util::is_nil chunk] } {
-    if { [template::util::is_nil style] } {
+  if { $chunk eq "" } {
+    if { $style eq "" } {
       template::adp_append_code "set __tablewidget_style \"$style\""
     } else {
       template::adp_append_code "set __tablewidget_style \"\$tablewidget:${name}(style)\""

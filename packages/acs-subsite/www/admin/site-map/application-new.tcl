@@ -27,8 +27,8 @@ ad_form -name application -cancel_url . -form {
         {help_text "This should be a short string, all lowercase, with hyphens instead of spaces, whicn will be used in the URL of the new application. If you leave this blank, we will generate one for you from name of the application."}
         {html {size 30}}
         {validate {
-            empty_or_not_exists 
-            {expr \[empty_string_p \$value\] || \[catch { site_node::get_from_url -url "[ad_conn package_url]\$value/" -exact }\]}
+            check_exists
+            {expr \[catch { site_node::get_from_url -url "[ad_conn package_url]\$value/" -exact }\]}
             {This folder name is already used.}
         }}
     }

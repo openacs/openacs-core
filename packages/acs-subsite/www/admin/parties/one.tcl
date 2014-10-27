@@ -9,7 +9,7 @@ ad_page_contract {
     @creation-date 2001-02-06
     @cvs-id $Id$
 } {
-    party_id:integer,notnull
+    party_id:naturalnum,notnull
 } -properties {
     context:onevalue
     party_id:onevalue
@@ -60,8 +60,8 @@ foreach {type url} $redirects_for_type {
 }
 
 set user_id [ad_conn user_id]
-set write_p [ad_permission_p $party_id "write"]
-set admin_p [ad_permission_p $party_id "admin"]
+set write_p [permission::permission_p -object_id $party_id -privilege "write"]
+set admin_p [permission::permission_p -object_id $party_id -privilege "admin"]
 
 set context [list [list "" "Parties"] "One Party"]
 

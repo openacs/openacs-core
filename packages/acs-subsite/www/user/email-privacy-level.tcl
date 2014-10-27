@@ -3,7 +3,7 @@ ad_page_contract {
     
     @author Miguel Marin (miguelmarin@viaro.net) Viaro Networks (www.viaro.net)
 } {
-    {user_id ""}
+    {user_id:naturalnum ""}
     {return_url ""}
 }
 

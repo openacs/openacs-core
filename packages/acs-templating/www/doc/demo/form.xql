@@ -4,7 +4,7 @@
 
   <fullquery name="get_user_id">      
     <querytext>
-      select ad_template_sample_users_seq.nextval
+      select nextval from ad_template_sample_users_sequence
     </querytext>
   </fullquery>
   

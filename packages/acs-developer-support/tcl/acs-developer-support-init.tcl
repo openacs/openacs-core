@@ -15,11 +15,11 @@ if { ![nsv_exists ds_properties enabled_p] } {
     # Take the IP list (space or comma seperated) and turn it into a tcl list.
     set IPs [list]
     foreach ip [lsort -unique [split [parameter::get -package_id [ds_instance_id] -parameter EnabledIPs -default *] { ,}]] { 
-        if {[string equal $ip "*"]} {
+        if {$ip eq "*"} {
             # a star means anything will match so just use the * instead
             set IPs "*"
             break
-        } elseif {![empty_string_p $ip]} {
+        } elseif {$ip ne ""} {
             lappend IPs $ip
         }
     }

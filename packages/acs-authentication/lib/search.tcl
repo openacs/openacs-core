@@ -21,7 +21,7 @@ ad_page_contract {
 }
 
 set authority_options [auth::authority::get_authority_options]
-set default_authority_id [lindex [lindex $authority_options 0] 1]
+set default_authority_id [lindex $authority_options 0 1]
 if {$authority_id eq ""} {
     set authority_id $default_authority_id
 }

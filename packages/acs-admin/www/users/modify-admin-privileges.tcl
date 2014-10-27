@@ -5,7 +5,7 @@ ad_page_contract {
     @cvs-id $Id$
 
 } {
-    user_id:notnull
+    user_id:naturalnum,notnull
     action:notnull
     confirmed_p:optional
 }

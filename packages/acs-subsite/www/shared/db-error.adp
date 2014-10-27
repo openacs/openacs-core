@@ -1,5 +1,5 @@
 <master>
-<property name="title">#acs-subsite.Database_Error#</property>
+<property name="doc(title)">#acs-subsite.Database_Error#</property>
 <property name="context">#acs-subsite.Database_Error#</property>
 
 <p><if @custom_message@ nil>

@@ -19,7 +19,7 @@ ad_proc -public subsite::after_mount {
     {-package_id:required}
     {-node_id:required}
 } {
-    This is the TCL proc that is called automatically by the APM
+    This is the Tcl proc that is called automatically by the APM
     whenever a new instance of the subsites application is mounted.
 
     @author Don Baccus (dhogaza@pacifier.com)
@@ -126,7 +126,7 @@ ad_proc -public subsite::default::create_app_group {
     </ul>
 
 } {
-    if { [empty_string_p [application_group::group_id_from_package_id -no_complain -package_id $package_id]] } {
+    if { [application_group::group_id_from_package_id -no_complain -package_id $package_id] eq "" } {
         array set node [site_node::get_from_object_id -object_id $package_id]
         set node_id $node(node_id)
 
@@ -328,14 +328,18 @@ ad_proc -public subsite::get_element {
 } {
     Return a single element from the information about a subsite.
 
-    @param subsite_id The node id of the subsite for which info is requested.
-    If no id is provided, then the id of the closest ancestor subsite will
-    be used.
-    @param element The element you want, one of:
-    directory_p object_type package_key package_id name pattern_p
-    instance_name node_id parent_id url object_id
-    @notrailing If true and the element requested is an url, then strip any
-    trailing slash ('/'). This means the empty string is returned for the root.
+    @param subsite_id The node id of the subsite for which info is
+       requested.  If no id is provided, then the id of the closest
+       ancestor subsite will be used.
+
+    @param element The element you want, one of: directory_p
+       object_type package_key package_id name pattern_p instance_name
+       node_id parent_id url object_id
+
+    @paramm notrailing If true and the element requested is an url,
+       then strip any trailing slash ('/'). This means the empty string
+       is returned for the root.
+
     @return The element you asked for
 
     @author Frank Nikolajsen (frank@warpspace.com)
@@ -903,12 +907,10 @@ ad_proc -public subsite::get_url {
 
         util_driver_info -array request
 
-        set headers [ns_conn headers]
-        set host_addr [split [ns_set iget $headers host] :]
-        set request(vhost) [lindex $host_addr 0]
+	lassign [split [ns_set iget [ns_conn headers] host] :] request(vhost) provided_port
 
-        if {[lindex $host_addr 1] ne "" } {
-            set request(port) [lindex $host_addr 1]
+        if {$provided_port ne "" } {
+            set request(port) $provided_port
         }
 
         set request_vhost_p [expr {$main_host ne $request(vhost) }]

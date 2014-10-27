@@ -146,8 +146,8 @@
  } {
     Appends adp start box if the show toggle is true
  } {
-     template::adp_append_code "if { \[::ds_show_p\] } {"
-     template::adp_append_code "    set __apidoc_path \[string range $stub \[string length \[::acs_root_dir\]\] end\].adp"
+     template::adp_append_code "if { \[info exists ::ds_show_p\] } {"
+     template::adp_append_code "    set __apidoc_path \[string range $stub \[string length \$::acs::rootdir\] end\].adp"
      template::adp_append_code "    set __stub_path \[join \[split $stub /\] \" / \"\]"
      template::adp_append_code "    append __adp_output \"<div class=\\\"\[::ds_adp_box_class\]\\\"><span class=\\\"\[::ds_adp_file_class\]\\\"><a href=\\\"/api-doc/content-page-view?source_p=1&path=\$__apidoc_path\\\" style=\\\"text-decoration: none;\\\">\$__stub_path</a></span><div class=\\\"\[::ds_adp_output_class\]\\\">\""
      template::adp_append_code "}"
@@ -159,7 +159,7 @@
  } {
     Appends adp end box if the show toggle is true
  } {
-     template::adp_append_code "if { \[::ds_show_p\] } {"
+     template::adp_append_code "if { \[info exists ::ds_show_p\] } {"
      template::adp_append_code "    append __adp_output \"</div></div><!-- END\n$stub (lvl \[info level\])-->\""
      template::adp_append_code "}"
  }
@@ -203,13 +203,13 @@
              set total 0
              set counter 0
              foreach { handle command statement_name sql start end errno error } [nsv_get ds_request $::ad_conn(request).db] {
-                 incr total [expr { $end - $start }]
-                 if { [lsearch { dml exec 1row 0or1row select } [lindex $command 0]] >= 0 } {
+                 set total [expr { $total + ($end - $start) }]
+                 if { [lindex $command 0] in { dml exec 1row 0or1row select } } {
                      incr counter
                  }
              }
              if { $counter > 0 } {
-                 append out "$counter database command[ad_decode $counter 1 " taking" "s totalling"] [format {%.f} [expr { $total }]] ms<br>"
+                 append out "$counter database command[ad_decode $counter 1 " taking" "s totalling"] [format {%.f} $total] ms<br>"
              }
          }
 
@@ -277,8 +277,8 @@
              set total 0
              set counter 0
              foreach { handle command statement_name sql start end errno error } [nsv_get ds_request $::ad_conn(request).db] {
-                 incr total [expr { $end - $start }]
-                 if { [lsearch { dml exec 1row 0or1row select } [lindex $command 0]] >= 0 } {
+                 set total [expr { $total + ($end - $start) }]
+                 if { [lindex $command 0] in { dml exec 1row 0or1row select } } {
                      incr counter
                  }
              }
@@ -343,7 +343,7 @@
              }
          }
 
-         ds_add db $db $command $statement_name $bound_sql $start_time [clock clicks -milliseconds] $errno $error
+         ds_add db $db $command $statement_name $bound_sql $start_time [expr {[clock clicks -microseconds]/1000.0}] $errno $error
      }
  }
 
@@ -382,7 +382,7 @@
      foreach name $names {
          if { [regexp {^([0-9]+)\.start$} $name match request] 
               && $now - [lindex [nsv_get ds_request $name] 0] > $lifetime } {
-             if {[expr {$request > $max_request}]} { 
+             if {$request > $max_request} { 
                  set max_request $request
              }
          }
@@ -404,7 +404,7 @@
 
  ad_proc -private ds_trace_filter { conn args why } { Adds developer-support information about the end of sessions.} {
      if { [ds_enabled_p] && [ds_collection_enabled_p] } {
-         ds_add conn end [ns_time] endclicks [clock clicks -milliseconds]
+         ds_add conn end [ns_time] endclicks [clock clicks -microseconds]
 
          for { set i 0 } { $i < [ns_set size [ad_conn outputheaders]] } { incr i } {
              ds_add oheaders [ns_set key [ad_conn outputheaders] $i] [ns_set value [ad_conn outputheaders] $i]
@@ -426,7 +426,7 @@
      expensive (returns a big file) for openacs instances with a large number of users,
      so perhaps best used on test instances.
  } {
-     set user_id [ad_get_user_id]
+     set user_id [ad_conn user_id]
      set real_user_id [ds_get_real_user_id]
 
      set return_url [ad_conn url]
@@ -474,7 +474,7 @@
          $you_are_really
          Change user: <select name=\"user_id\">
          $options
-         </select>[export_form_vars return_url]<input type=submit value=\"Go\"></form>"
+         </select>[export_vars -form {return_url}]<input type=submit value=\"Go\"></form>"
      } else {
          ns_log Error "ACS-Developer-Support: Unable to offer link to Developer Support \
                  because it is not mounted anywhere."
@@ -567,37 +567,37 @@ ad_proc -private ds_replace_get_user_procs { enabled_p } {
     Replace the ad_get_user procs with our own versions
 } {
     if { $enabled_p } {
-	if { [info commands orig_ad_get_user_id] eq ""} {
+	if { [info commands orig_ad_conn] eq ""} {
             #ds_comment "Enabling user-switching"
             # let the user stay who he is now (but ignore any error trying to do so)
 	    catch {
-		ad_set_client_property developer-support user_id [ad_get_user_id]
+		ad_set_client_property developer-support user_id [ad_conn user_id]
 	    }
             rename ad_conn orig_ad_conn
-	    rename ad_get_user_id orig_ad_get_user_id
-	    rename ad_verify_and_get_user_id orig_ad_verify_and_get_user_id
+	    #rename ad_get_user_id orig_ad_get_user_id
+	    #rename ad_verify_and_get_user_id orig_ad_verify_and_get_user_id
 	    
             proc ad_conn { args } {
 	        ds_conn {*}$args
             }
-	    proc ad_get_user_id {} {
-                ds_get_user_id
-	    }
-	    proc ad_verify_and_get_user_id {} {
-                ds_get_user_id
-	    }
+	    #proc ad_get_user_id {} {
+            #    ds_get_user_id
+	    #}
+	    #proc ad_verify_and_get_user_id {} {
+            #    ds_get_user_id
+	    #}
 	}
     } else {
         #ds_comment "Disabling user-switching"
-	if { [info commands orig_ad_get_user_id] ne ""} {
+	if { [info commands orig_ad_conn] ne ""} {
             rename ad_conn {}
             rename orig_ad_conn ad_conn
 
-	    rename ad_get_user_id {}
-	    rename orig_ad_get_user_id ad_get_user_id
+	    #rename ad_get_user_id {}
+	    #rename orig_ad_get_user_id ad_get_user_id
 
-	    rename ad_verify_and_get_user_id {}
-	    rename orig_ad_verify_and_get_user_id ad_verify_and_get_user_id
+	    #rename ad_verify_and_get_user_id {}
+	    #rename orig_ad_verify_and_get_user_id ad_verify_and_get_user_id
 	}
     }
 }
@@ -668,7 +668,7 @@ ad_proc -public ds_profile { command {tag {}} } {
             if { [info exists ::ds_profile__start_clock($tag)] 
                  && $::ds_profile__start_clock($tag) ne "" } {
                 ds_add prof $tag \
-                    [expr [clock clicks -milliseconds] - $::ds_profile__start_clock($tag)]
+                    [expr {[clock clicks -milliseconds] - $::ds_profile__start_clock($tag)}]
                 unset ::ds_profile__start_clock($tag)
             } else {
                 ns_log Warning "ds_profile stop called without a corresponding call to ds_profile start, with tag $tag"
@@ -677,5 +677,27 @@ ad_proc -public ds_profile { command {tag {}} } {
         default {
             error "Invalid command. Valid commands are 'start', 'stop', and 'log'."
         }
+    }
+}
+
+ad_proc -public ds_init { } {
+
+    Perform setup for the developer support for a single request.  We
+    save the state in global variables to avoid highly redundant
+    computations (up to 50 times per page on openacs.org)
+
+} {
+    #ns_log notice "ds_init called [::ds_enabled_p]"
+
+    if {[::ds_enabled_p] } {
+	#
+	# Save current setup for developer support in global
+	# variables, which are deleted automatically after every
+	# request.
+	#
+	set ::ds_enabled_p 1
+	if {[::ds_collection_enabled_p] } {set ::ds_collection_enabled_p 1}
+	if {[::ds_profiling_enabled_p] } {set ::ds_profiling_enabled_p 1}
+	if {[::ds_show_p]} {set ::ds_show_p 1}
     }
 }

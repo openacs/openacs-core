@@ -33,7 +33,7 @@ ad_proc -public ref_countries::get_country_code {
 
         template::util::list_of_lists_to_array $country_list countries
 
-        if {[exists_and_not_null countries($country)]} {
+        if {([info exists countries($country)] && $countries($country) ne "")} {
             set country_code $countries($country)
         }
     }

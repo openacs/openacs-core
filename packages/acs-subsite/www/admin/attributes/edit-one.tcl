@@ -19,7 +19,7 @@ ad_page_contract {
     attribute_pretty_name:onevalue    
 }
 
-ad_require_permission $id_column "write"
+permission::require_permission -object_id $id_column -privilege "write"
 
 set context [list "Edit attribute"]
 

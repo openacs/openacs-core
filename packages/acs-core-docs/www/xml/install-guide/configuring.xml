@@ -206,7 +206,7 @@
       <itemizedlist>
         <listitem>
           <para>
-          A templated page uses an ADP/TCL pair.  The first line in the ADP file is usually:
+          A templated page uses an ADP/Tcl pair.  The first line in the ADP file is usually:
           </para>
           <programlisting>&lt;master&gt;</programlisting>  
           <para>If it appears exactly like this, without any arguments, the template processer uses <computeroutput>default-master</computeroutput> for that subsite.  For pages in <computeroutput>/var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/www</computeroutput>, this is <computeroutput>/var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/www/default-master.adp</computeroutput> and the associated .tcl file.

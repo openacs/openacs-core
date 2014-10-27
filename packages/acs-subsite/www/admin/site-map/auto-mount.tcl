@@ -10,7 +10,7 @@ ad_page_contract {
 
 } {
     package_key:notnull
-    node_id:integer,notnull
+    node_id:naturalnum,notnull
     {return_url ""}
 }
 

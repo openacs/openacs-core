@@ -1,5 +1,5 @@
   <master>
-    <property name="title">Merge account system</property>
+    <property name="doc(title)">Merge account system</property>
     <property name="context">@context;noquote@</property>
 
     <h2>User Account Merge</h2>

@@ -1,5 +1,5 @@
 <master>
-<property name="title">#notifications.Manage_Notifications#</property>
+<property name="doc(title)">#notifications.Manage_Notifications#</property>
 
 <if @notice@>
 <h2>@notice;noquote@</h2>

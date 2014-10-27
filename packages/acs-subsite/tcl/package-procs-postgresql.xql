@@ -209,7 +209,7 @@ perform drop_package('${package_name}');
 perform define_function_args('${package_name}__new','[plpgsql_utility::define_function_args $attribute_list]');
 
 CREATE FUNCTION ${package_name}__new([plpgsql_utility::generate_function_signature $attribute_list])
-RETURNS [plpgsql_utility::table_column_type ${table_name} ${id_column}] AS \$\$
+RETURNS [plpgsql_utility::table_column_type ${table_name} ${id_column}] AS $$
 DECLARE
     [plpgsql_utility::generate_attribute_parameters $attribute_list];
     v_$id_column ${table_name}.${id_column}%TYPE;
@@ -230,11 +230,11 @@ BEGIN
     return v_$id_column;
 
 END; 
-\$\$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql;
 
 CREATE FUNCTION ${package_name}__delete (
     p_${id_column} [plpgsql_utility::table_column_type ${table_name} ${id_column}]
-) RETURNS integer AS \$\$
+) RETURNS integer AS $$
 DECLARE
 BEGIN
 
@@ -242,7 +242,7 @@ BEGIN
     return 1;
 
 END;
-\$\$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql;
 
 return null;
 end;

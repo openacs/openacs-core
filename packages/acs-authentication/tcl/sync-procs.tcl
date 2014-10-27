@@ -511,14 +511,16 @@ ad_proc -public auth::sync::purge_jobs {
 } {
     Purge jobs that are older than KeepBatchLogDays days.
 } {
-    if { ![exists_and_not_null num_days] } {
+    if { $num_days eq "" } {
         set num_days [parameter::get_from_package_key \
                           -parameter KeepBatchLogDays \
                           -package_key "acs-authentication" \
                           -default 0]
     }
     
-    validate_integer num_days $num_days
+    if {![string is integer -strict $num_days]} {
+	error "num_days ($num_days) has to be an integer"
+    }
 
     if { $num_days > 0 } { 
         db_dml purge_jobs {}
@@ -721,7 +723,7 @@ ad_proc -private auth::sync::get_doc::http::GetDocument {
     
     array set param $parameters
     
-    if { ($param(SnapshotURL) ne "" && [string equal [clock format [clock seconds] -format "%d"] "01"]) || \
+    if { ($param(SnapshotURL) ne "" && [clock format [clock seconds] -format "%d"] eq "01") || \
              $param(IncrementalURL) eq "" } {
 
         # On the first day of the month, we get a snapshot
@@ -736,7 +738,8 @@ ad_proc -private auth::sync::get_doc::http::GetDocument {
         error "You must specify at least one URL to get."
     }
 
-    set result(document) [util_httpget $url]
+    set dict [util::http::get -url $url]
+    set result(document) [dict get $dict page]
 
     set result(doc_status) "ok"
 
@@ -798,7 +801,7 @@ ad_proc -private auth::sync::get_doc::file::GetDocument {
     
     array set param $parameters
     
-    if { ($param(SnapshotPath) ne "" && [string equal [clock format [clock seconds] -format "%d"] "01"]) || \
+    if { ($param(SnapshotPath) ne "" && [clock format [clock seconds] -format "%d"] eq "01") || \
              $param(IncrementalPath) eq "" } {
 
         # On the first day of the month, we get a snapshot

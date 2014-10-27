@@ -1,13 +1,13 @@
 ad_page_contract {
 } {
-    object_id:integer,notnull
+    object_id:naturalnum,notnull
     return_url
-    page:integer,optional
+    page:naturalnum,optional
 }
 
 # check they have read permission on this file
 
-ad_require_permission $object_id admin
+permission::require_permission -object_id $object_id -privilege admin
 
 # TODO:
 # parties, select privilges, css, clean up
@@ -16,7 +16,7 @@ ad_require_permission $object_id admin
 
 set user_id [ad_conn user_id]
 
-set perm_url "[site_node_closest_ancestor_package_url]permissions/"
+set perm_url "[lindex [site_node::get_url_from_object_id -object_id [site_node::closest_ancestor_package -include_self -package_key [subsite::package_keys]]] 0]permissions/"
 
 list::create \
     -name users \

@@ -1,5 +1,5 @@
 <master>
-<property name=title>@action;noquote@</property>
+<property name="doc(title)">@action;noquote@</property>
 <property name="context">@context;noquote@</property>
 
 <p>Done.</p>

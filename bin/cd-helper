@@ -1,0 +1,15 @@
+#!/bin/bash
+#
+# Helper to exec commands in certain directory. 
+# This is needed e.g. for commands that do not allow 
+# to specify an output directory (e.g. cvs), when 
+# using external commands via ns_proxy
+#
+# Usage: cd-helper directory cmd args ....
+#
+# gustaf neumann, aug 2013
+#
+cd $1
+shift 
+eval $*
+

@@ -1,6 +1,6 @@
 <master>
 <property name="context">@context;noquote@</property>
-<property name="title">Constraints on relationship type</property>
+<property name="doc(title)">Constraints on relationship type</property>
 
 Relational segments allows you to treat all parties that have a
 @rel_type_pretty_name@ to @group_name@ as a party itself. This is

@@ -14,7 +14,7 @@ ad_page_contract {
     params:array
 }
 
-ad_require_permission $package_id admin
+permission::require_permission -object_id $package_id -privilege admin
 
 if { [catch {
     db_foreach apm_parameters_set {} {

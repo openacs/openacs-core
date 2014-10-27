@@ -21,17 +21,18 @@ aa_register_case -cats {smoke api} acs_content_repository_trivial_smoke_test {
             # so instead we have to create a child of another and then
             # retrieve the parent's child
 
-            set new_keyword_id [cr::keyword::new -heading $name]
-            aa_true "created a new cr_keyword" [exists_and_not_null new_keyword_id]
-            set new_keyword_id_2 [cr::keyword::new -heading $name_2 -parent_id $new_keyword_id]
-            aa_true "created a child cr_keyword" [exists_and_not_null new_keyword_id_2]
+            set new_keyword_id [content::keyword::new -heading $name]
+            aa_true "created a new content_keyword" [expr {[info exists new_keyword_id] && $new_keyword_id ne ""}]
 
-            set children [cr::keyword::get_children -parent_id $new_keyword_id ]
+            set new_keyword_id_2 [content::keyword::new -heading $name_2 -parent_id $new_keyword_id]
+            aa_true "created a child content_keyword" [expr {[info exists new_keyword_id_2] && $new_keyword_id_2 ne ""}]
+
+            set children [content::keyword::get_children -parent_id $new_keyword_id ]
             aa_true "child is returned" [string match "*$new_keyword_id_2*" $children]
 
             set delete_result [content::keyword::delete -keyword_id $new_keyword_id_2]
 
-            set children_after_delete [cr::keyword::get_children -parent_id $new_keyword_id ]
+            set children_after_delete [content::keyword::get_children -parent_id $new_keyword_id ]
             aa_true "child is not returned after deletion" ![string match "*$new_keyword_id_2*" $children_after_delete]
 
             # teardown doesn't seem to eliminate this:

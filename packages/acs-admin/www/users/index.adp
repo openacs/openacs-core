@@ -1,5 +1,5 @@
 <master>
-<property name=title>Users</property>
+<property name="doc(title)">Users</property>
 <property name="context">@context;noquote@</property>
 
 <ul>

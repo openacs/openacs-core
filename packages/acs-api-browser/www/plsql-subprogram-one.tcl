@@ -33,12 +33,12 @@ order by line" {
 switch $type {
     "PACKAGE" {
 	set type "PACKAGE BODY"
-	set package_slider_list [list "package" "<a href=\"[ad_conn url]?[export_url_vars type name]\">package body</a>"]
+	set package_slider_list [list "package" "<a href=\"[ad_conn url]?[export_vars -url {type name}]\">package body</a>"]
     }
 
     "PACKAGE BODY" {
 	set type "PACKAGE"
-	set package_slider_list [list "<a href=\"[ad_conn url]?[export_url_vars type name]\">package</a>" "package body"]
+	set package_slider_list [list "<a href=\"[ad_conn url]?[export_vars -url {type name}]\">package</a>" "package body"]
     }
 
     default {

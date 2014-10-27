@@ -4,8 +4,8 @@ ad_page_contract {
   @creation-date 13.10.2005
   @cvs-id $Id$
 } {	
-  {fs_package_id:integer,notnull,optional}
-  {folder_id:integer,optional}
+  {fs_package_id:naturalnum,notnull,optional}
+  {folder_id:naturalnum,optional}
   {orderby:optional}
   {selector_type "image"}
   {file_types "*"}
@@ -195,7 +195,7 @@ template::list::create \
       }
     }
 
-set order_by_clause [expr {[exists_and_not_null orderby] ?
+set order_by_clause [expr {([info exists orderby] && $orderby ne "") ?
 			   [template::list::orderby_clause -orderby -name contents] :
 			   " order by fs_objects.sort_key, fs_objects.name asc"}]
 

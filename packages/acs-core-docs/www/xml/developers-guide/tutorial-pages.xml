@@ -34,7 +34,7 @@
     <title>Build the "Index" page</title>
       <para>Each user-visible page in your package has, typically,
       three parts.  The  <computeroutput>tcl</computeroutput> file
-      holds the procedural logic for the page, including TCL and
+      holds the procedural logic for the page, including Tcl and
       database-independent SQL code, and does things like
       check permissions, invoke the database queries, and modify
       variables, and the <computeroutput>adp</computeroutput> page

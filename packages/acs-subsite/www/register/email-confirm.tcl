@@ -4,7 +4,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     token:notnull,trim
-    user_id:integer
+    user_id:naturalnum,notnull
     
     {return_url ""}
 }

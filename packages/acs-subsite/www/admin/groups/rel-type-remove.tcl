@@ -10,7 +10,7 @@ ad_page_contract {
     @cvs-id $Id$
 
 } {
-    group_rel_id:integer,notnull
+    group_rel_id:naturalnum,notnull
     { return_url "" }
 } -properties {
     context:onevalue
@@ -30,9 +30,9 @@ if { ![db_0or1row select_info {
     return
 }
 
-ad_require_permission $group_id admin
+permission::require_permission -object_id $group_id -privilege admin
 
-set export_vars [ad_export_vars -form {group_rel_id return_url}]
-set context [list [list "[ad_conn package_url]admin/groups/" "Groups"] [list one?[ad_export_vars {group_id}] "One group"] "Remove relation type"]
+set export_vars [export_vars -form {group_rel_id return_url}]
+set context [list [list "[ad_conn package_url]admin/groups/" "Groups"] [list one?[export_vars {group_id}] "One group"] "Remove relation type"]
 
 ad_return_template

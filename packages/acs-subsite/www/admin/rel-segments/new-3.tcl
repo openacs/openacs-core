@@ -10,7 +10,7 @@ ad_page_contract {
     @cvs-id $Id$
 
 } {
-    group_id:integer,notnull
+    group_id:naturalnum,notnull
     segment_name:notnull
     rel_type:notnull
     { return_url "" }
@@ -33,7 +33,7 @@ ad_page_contract {
 
 
 # Make sure we are creating a segment on a group we can actually see
-ad_require_permission $group_id "read"
+permission::require_permission -object_id $group_id -privilege "read"
 
 db_transaction {
     set segment_id [rel_segments_new -context_id $group_id $group_id $rel_type $segment_name]
@@ -66,7 +66,7 @@ if { ![db_string segments_exists_p {
 }
 
 
-set context [list [list "[ad_conn package_url]admin/rel-segments/" "Relational segments"] [list one?[ad_export_vars segment_id] "One segment"] "Create constraints"]
-set export_vars [ad_export_vars -form {segment_id return_url}]
+set context [list [list "[ad_conn package_url]admin/rel-segments/" "Relational segments"] [list one?[export_vars segment_id] "One segment"] "Create constraints"]
+set export_vars [export_vars -form {segment_id return_url}]
 
 ad_return_template

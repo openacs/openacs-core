@@ -31,7 +31,7 @@
       v.version_id dep_version_id, d.dependency_type as dep_type
     from apm_package_versions v, apm_package_dependencies d, apm_package_types t
     where d.service_uri = :service_uri
-      and d.dependency_type = in ($other_dependency_in)
+      and d.dependency_type in ($other_dependency_in)
       and d.version_id = v.version_id
       and t.package_key = v.package_key 
       and apm_package_version.sortable_version_name(d.service_version)

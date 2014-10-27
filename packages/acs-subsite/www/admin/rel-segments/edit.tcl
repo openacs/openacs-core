@@ -7,7 +7,7 @@ ad_page_contract {
     @cvs-id $Id$
 
 } {
-    segment_id:integer,notnull
+    segment_id:naturalnum,notnull
 } -validate {
     segment_exists_p -requires {segment_id:notnull} {
 	if { ![rel_segments_permission_p $segment_id] } {

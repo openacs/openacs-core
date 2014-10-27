@@ -61,13 +61,13 @@ switch -glob -- $switch {
     help    {set help_p true}
     version {set help_p true}
     switch  {set switch_p true}
-    demote  {if {[string length $arg1] >0 } {
+    demote  {if {$arg1 ne "" } {
                      set demote $arg1
                  } {
 		     set help_p true
 		 }
     }
-    promote  {if {[string length $arg1] >0 } {
+    promote  {if {$arg1 ne "" } {
                      set promote $arg1
                  } {
 		     set help_p true
@@ -91,7 +91,7 @@ if { ![catch {set balance_txt [exec $balance_bin -c show 80] } result] } {
     while {[regexp {(.[^\n]+)} $channel_fodder match_fodder row] } {
 	# remove each row as it's handled
 	set remove_count [string length $row]
-	set channel_fodder [string range $channel_fodder [expr $remove_count + 1] end]
+	set channel_fodder [string range $channel_fodder [expr {$remove_count + 1}] end]
 	set channel [string range $row 9 10]
 	set port [string range $row 33 37]
 	set status [string range $row 12 14]
@@ -131,7 +131,7 @@ foreach type {live standby} {
 	    close $fileId
 	}
 
-	if { ![string equal $file_contents ""]} {
+	if { $file_contents ne "" } {
 	    set channel_match [lsearch -regexp $channel_data $file_contents ]
 	    if { $channel_match >= 1 } {
 		set channel_info [lindex $channel_data $channel_match]
@@ -183,7 +183,7 @@ proc status {plus_p} {
 	    standby dis
 	} $type]
 
-	if { [string equal $balance_status $should_be] } {
+	if {$balance_status eq $should_be} {
 	    set status OK
 	} else {
 	    set status "PROBLEM: is $balance_status, should be $should_be"
@@ -220,7 +220,7 @@ proc demote {server} {
     global balance_bin
 
     set demote_server [lindex $server_list [lsearch -regexp $server_list $server]]
-    if { ![string equal [lindex $demote_server 4] live] } {
+    if { [lindex $demote_server 4] ne "live" } {
 	puts "$server is not a live server - cannot demote"
 	exit
     }
@@ -253,7 +253,7 @@ proc promote {server} {
     global balance_bin
 
     set promote_server [lindex $server_list [lsearch -regexp $server_list $server]]
-    if { ![string equal [lindex $promote_server 4] standby] } {
+    if { [lindex $promote_server 4] ne "standby" } {
 	puts "$server is not a standby server - cannot promote"
 	exit
     }
@@ -287,12 +287,12 @@ if { $status_p } {
     exit
 }
 
-if { [string length $demote] >0 } {
+if { $demote ne "" } {
     demote $demote
     exit
 }
 
-if { [string length $promote] >0 } {
+if { $promote ne "" } {
     promote $promote
     exit
 }

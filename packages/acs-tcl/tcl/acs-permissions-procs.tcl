@@ -32,7 +32,7 @@ ad_proc -public permission::grant {
     grant privilege Y to party X on object Z
 } {
     db_exec_plsql grant_permission {}
-    util_memoize_flush "permission::permission_p_not_cached -party_id $party_id -object_id $object_id -privilege $privilege"
+    util_memoize_flush [list permission::permission_p_not_cached -party_id $party_id -object_id $object_id -privilege $privilege]
     permission::permission_thread_cache_flush
 }
 
@@ -72,19 +72,41 @@ ad_proc -public permission::permission_p {
 } {
     if { $party_id eq "" } {
         set party_id [ad_conn user_id]
-    }    
-
-    if { $no_cache_p } {
-        permission::permission_thread_cache_flush
     }
 
-    if { $no_cache_p || ![permission::cache_p] } {
-        util_memoize_flush [list permission::permission_p_not_cached -party_id $party_id -object_id $object_id -privilege $privilege]
-        set permission_p [permission::permission_p_not_cached -party_id $party_id -object_id $object_id -privilege $privilege]
+    set caching_activated [permission::cache_p]
+
+    if { $no_cache_p || !$caching_activated } {
+
+	if { $no_cache_p } {
+	    permission::permission_thread_cache_flush
+	}
+
+	if {$caching_activated} {
+	    # If there is no caching activated, there is no need to
+	    # flush the memoize cache. Frequent momoize cache flushing
+	    # causes a flood of intra-server talk in a cluster
+	    # configuration (see bug #2398);
+	    # 
+	    util_memoize_flush [list permission::permission_p_not_cached \
+				    -party_id $party_id \
+				    -object_id $object_id \
+				    -privilege $privilege]
+	}
+
+        set permission_p [permission::permission_p_not_cached \
+			      -party_id $party_id \
+			      -object_id $object_id \
+			      -privilege $privilege]
     } else { 
         set permission_p [util_memoize \
-                              [list permission::permission_p_not_cached -party_id $party_id -object_id $object_id -privilege $privilege] \
-                              [parameter::get -package_id [ad_acs_kernel_id] -parameter PermissionCacheTimeout -default 300]]
+                              [list permission::permission_p_not_cached \
+				   -party_id $party_id \
+				   -object_id $object_id \
+				   -privilege $privilege] \
+                              [parameter::get -package_id [ad_acs_kernel_id] \
+				   -parameter PermissionCacheTimeout \
+				   -default 300]]
     }
 
     if { 
@@ -224,13 +246,13 @@ ad_proc -public permission::write_permission_p {
 
     @see permission::require_write_permission
 } {
-    if { [permission::permission_p -privilege write -object_id $object_id -party_id $party_id] } {
-        return 1
-    }
     if { $creation_user eq "" } {
         set creation_user [acs_object::get_element -object_id $object_id -element creation_user]
     }
     if { [ad_conn user_id] == $creation_user } {
+        return 1
+    }
+    if { [permission::permission_p -privilege write -object_id $object_id -party_id $party_id] } {
         return 1
     }
     return 0
@@ -306,12 +328,12 @@ ad_proc -deprecated ad_require_permission {
     permission::require_permission -object_id $object_id -privilege $privilege
 }
 
-ad_proc -private ad_admin_filter {} {
+ad_proc -private -deprecated ad_admin_filter {} {
     permission::require_permission -object_id [ad_conn object_id] -privilege "admin"
     return filter_ok
 }
 
-ad_proc -private ad_user_filter {} {
+ad_proc -private -deprecated  ad_user_filter {} {
     permission::require_permission -object_id [ad_conn object_id] -privilege "read"
     return filter_ok
 }

@@ -3,7 +3,7 @@ ad_page_contract {
 
     @author Peter Marklund
 } {
-    job_id:integer
+    job_id:naturalnum,notnull
 }
 
 set document [db_string select_document {

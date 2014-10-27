@@ -5,7 +5,7 @@ ad_page_contract {
     @author Tracy Adams (teadams@alum.mit.edu)
     @creation-date 2002-07-22
 } {
-    {user_id ""}
+    {user_id:naturalnum ""}
 }
 
 auth::require_login

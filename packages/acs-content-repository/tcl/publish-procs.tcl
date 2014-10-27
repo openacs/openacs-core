@@ -78,7 +78,7 @@ ad_proc -public publish::mkdirs { path } {
 } {
     set index [string last "/" $path]
     if { $index != -1 } {
-        file mkdir [string range $path 0 [expr {$index - 1}]]
+        file mkdir [string range $path 0 $index-1]
     } 
 }
 
@@ -199,7 +199,7 @@ ad_proc -public publish::proc_exists { namespace_name proc_name } {
 
 } {
 
-  return [expr {[namespace eval $namespace_name "info commands $proc_name"] ne ""}]
+    return [expr {[info commands ${namespace_name}::$proc_name] ne ""}]
 }
 
 ##########################################################
@@ -267,7 +267,7 @@ ad_proc -public publish::handle_binary_file {
   upvar $revision_id_ref revision_id
   set error_msg ""
 
-  if { [template::util::is_nil opts(revision_id)] } {
+  if { ![info exists opts(revision_id)] } {
     set revision_id [::content::item::get_live_revision -item_id $item_id]
   } else {
     set revision_id $opts(revision_id)
@@ -288,8 +288,7 @@ ad_proc -public publish::handle_binary_file {
 
     # Try to use the registered template for the image
     if { ![info exists opts(no_merge)] } {
-      set code "publish::merge_with_template $item_id $args"
-      set html [eval $code]
+      set html [publish::merge_with_template $item_id {*}$args]
       # Return the result of merging - could be ""
       return $html
     }
@@ -369,8 +368,8 @@ ad_proc -public publish::handle::image { item_id args } {
   template::util::get_opts $args
   
   # LARS TODO: Added -no_merge, verify how this is supposed to work
-  set html [eval publish::handle_binary_file \
-     $item_id revision_id url error_msg $args -no_merge]
+  set html [publish::handle_binary_file \
+		$item_id revision_id url error_msg {*}$args -no_merge]
 
   # If an error happened, abort
   if { ![template::util::is_nil error_msg] } {
@@ -389,7 +388,7 @@ ad_proc -public publish::handle::image { item_id args } {
   # Concatenate all the extra html arguments into a string
   if { [info exists opts(html)] } {
     set extra_html [publish::html_args $opts(html)]
-    set have_alt [expr [lsearch [string tolower $opts(html)] "alt"] >= 0]
+    set have_alt [expr {"alt" in [string tolower $opts(html)]}]
   } else {
     set extra_html ""
     set have_alt 0
@@ -445,7 +444,7 @@ ad_proc -private publish::merge_with_template { item_id args } {
   template::util::get_opts $args
 
   # Either auto-get the live revision or use the parameter
-  if { ![template::util::is_nil opts(revision_id)] } {
+  if { [info exists opts(revision_id)] } {
     set revision_id $opts(revision_id)
   } else {
     set revision_id [::content::item::get_live_revision -item_id $item_id]
@@ -466,7 +465,7 @@ ad_proc -private publish::merge_with_template { item_id args } {
   set file_stub [ns_normalizepath "$root_path/$::content::template_url"]
 
   # Set the passed-in variables
-  if { ![template::util::is_nil opts(html)] } {
+  if { [info exists opts(html)] } {
     set adp_args $opts(html)
   } else {
     set adp_args ""
@@ -475,7 +474,7 @@ ad_proc -private publish::merge_with_template { item_id args } {
   # Parse the template and return the result
   publish::push_id $item_id $revision_id
   ns_log debug "publish::merge_with_template: parsing $file_stub"
-  set html [eval "template::adp_parse \"$file_stub\" \[list $adp_args\]"]
+  set html [template::adp_parse $file_stub $adp_args]
   publish::pop_id
 
   return $html
@@ -491,7 +490,7 @@ ad_proc -public publish::handle::text { item_id args } {
 
   template::util::get_opts $args
 
-  if { [template::util::is_nil opts(revision_id)] } {
+  if { ![info exists opts(revision_id)] } {
     set revision_id [::content::item::get_live_revision -item_id $item_id]
   } else {
     set revision_id $opts(revision_id)
@@ -500,8 +499,7 @@ ad_proc -public publish::handle::text { item_id args } {
   if { [info exists opts(embed)] } {
     # Render the child item and embed it in the code
     if { ![info exists opts(no_merge)] } {
-      set code "publish::merge_with_template $item_id $args"
-      set html [eval $code]
+      set html [publish::merge_with_template $item_id {*}$args]
     } else {
 
         db_transaction {
@@ -679,7 +677,7 @@ ad_proc -private publish::handle_item { item_id args } {
   variable revision_html
 
   # Process options
-  if { [template::util::is_nil opts(revision_id)] } {
+  if { ![info exists opts(revision_id)] } {
     set revision_id [::content::item::get_live_revision -item_id $item_id]
   } else {
     set revision_id $opts(revision_id)
@@ -690,7 +688,7 @@ ad_proc -private publish::handle_item { item_id args } {
     return ""
   }
 
-  if { [template::util::is_nil opts(no_merge)] } {
+  if { ![info exists opts(no_merge)] } {
     set merge_str "merge"
   } else {
     set merge_str "no_merge"
@@ -698,14 +696,14 @@ ad_proc -private publish::handle_item { item_id args } {
 
   # Create a unique key
   set revision_key "$merge_str $revision_id"
-  if { ![template::util::is_nil opts(html)] } {
+  if { [info exists opts(html)] } {
     lappend revision_key $opts(html)
   }
 
   # Pull the item out of the cache
-  if { ![info exists opts(refresh)] && \
-        [info exists revision_html($revision_key)] } {
-
+  if { ![info exists opts(refresh)] 
+       && [info exists revision_html($revision_key)] 
+   } {
     ns_log debug "publish::handle_item: Fetching $item_id from cache"
     return $revision_html($revision_key)
 
@@ -713,10 +711,11 @@ ad_proc -private publish::handle_item { item_id args } {
 
     # Render the item and cache it
     ns_log debug "publish::handle_item: Rendering item $item_id"
-    item::get_mime_info $revision_id mime_info
-    set item_handler [get_mime_handler $mime_info(mime_type)]
+    
+    content::item::get -item_id $item_id -array_name item_info
+    set item_handler [get_mime_handler $item_info(mime_type)]
   
-    if { [template::util::is_nil item_handler] } {
+    if { $item_handler eq "" } {
       ns_log warning "publish::handle_item: No mime handler for mime type $mime_info(mime_type)"
       return ""
     }
@@ -730,7 +729,7 @@ ad_proc -private publish::handle_item { item_id args } {
       lappend code -revision_id $revision_id
     }
 
-    set html [eval $code]
+    set html [{*}$code]
     ns_log debug "publish::handle_item: Caching html for revision $revision_id"
     set revision_html($revision_key) $html
     
@@ -815,7 +814,7 @@ ad_proc -public publish::render_subitem {
       set subitems [db_list cs_get_subitems_related ""]
   }
 
-  set sub_item_id [lindex $subitems [expr {$index - 1}]]
+  set sub_item_id [lindex $subitems $index-1]
 
   if { [template::util::is_nil sub_item_id] } {
     ns_log notice "publish::render_subitem: No such subitem"
@@ -825,11 +824,11 @@ ad_proc -public publish::render_subitem {
   # Call the appropriate handler function
   set code [list handle_item $sub_item_id -html $extra_args]
 
-  if {$is_embed eq "t"} {
+  if {$is_embed == "t"} {
     lappend code -embed
   }
 
-  return [get_html_body [eval $code]]
+  return [get_html_body [{*}$code]]
 }
 
 #######################################################
@@ -907,7 +906,7 @@ ad_proc -private publish::foreach_publish_path { url code {root_path ""} } {
 
   @private foreach_publish_path
  
-  Execute some TCL code for each root path in the PublishRoots
+  Execute some Tcl code for each root path in the PublishRoots
   parameter
  
   @param url       Relative URL to append to the roots
@@ -1035,7 +1034,7 @@ ad_proc -public publish::write_content { revision_id args } {
 
   template::util::get_opts $args
 
-  if { [template::util::is_nil opts(root_path)] } {
+  if { ![info exists opts(root_path)] } {
     set root_path ""
   } else {
     set root_path $opts(root_path)
@@ -1044,7 +1043,7 @@ ad_proc -public publish::write_content { revision_id args } {
   db_transaction {
 
       # Get the item id if none specified
-      if { [template::util::is_nil opts(item_id)] } {
+      if { ![info exists opts(item_id)] } {
           set item_id [db_string get_one_revision ""]
 	  
 	  if { [template::util::is_nil item_id] } {
@@ -1056,7 +1055,14 @@ ad_proc -public publish::write_content { revision_id args } {
       }
  
   
-      set file_url [item::get_extended_url $item_id -revision_id $revision_id]
+      #set file_url [item::get_extended_url $item_id -revision_id $revision_id]
+      set base_path [content::item::get_virtual_path -item_id $item_id]
+      content::item::get -item_id $item_id -array_name item_info
+      set mime_type $item_info(mime_type)
+      set ext [db_string get_extension {
+	  select file_extension from cr_mime_types where mime_type = :mime_type
+      }]
+      set file_url $base_url.$ext
 
       # LARS HACK: Delete the file if it already exists
       # Not sure what we should really do here, since on the one hand, the below db commands
@@ -1087,7 +1093,7 @@ ad_proc -public publish::write_content { revision_id args } {
 
 	  # Determine if the blob is null. If it is, give up (or else the
 	  # ns_ora blob_get_file will crash).
-	  if { [item::content_is_null $revision_id] } {
+	  if { [content::item::content_is_null $revision_id] } {
 	      ns_log warning "publish::write_content: No content supplied for revision $revision_id"
 	      return ""
 	  }

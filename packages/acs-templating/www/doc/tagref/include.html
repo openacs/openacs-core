@@ -20,11 +20,11 @@ other properties to them.</p>
 
 <h3>Usage</h3>
 
-<pre>&lt;include src="subtemplate" attribute=value ...></pre>
+<pre>&lt;include src="subtemplate" attribute="value" ...></pre>
 
 or
 
-<pre>&lt;include src="/packages/packagename/www/lib/subtemplate" attribute=value ...></pre>
+<pre>&lt;include src="/packages/packagename/www/lib/subtemplate" attribute="value" ...></pre>
 
 <h3>Notes</h3>
     <ul>
@@ -38,8 +38,15 @@ or
 
 	<pre>&lt;include src="subtemplate" source_id="@source_id@" ...></pre>
 
-	To pass a datasource, e.g. <code>users</code>, by reference, use
-	this notation:
+	Note that passing an html string to a subtemplate via <code>@var@</code>
+	will result in passing an html-escaped string. To prevent this, use
+        <code>@var;noquote@</code> when passing html to subtemplates.
+
+        Alternatively the variable can by passed by name (similar to
+        call-by-reference) causing a variable alias to be created in
+        the scope of the subtemplate. This variant is necessary for
+        e.g. passing a Tcl array like a templating datasource. To pass
+        e.g. <code>users</code> by reference, use this notation:
 
 	<pre>&lt;include src="subtemplate" &persons="users" ...></pre>
 

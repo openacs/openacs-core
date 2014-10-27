@@ -281,8 +281,8 @@ ad_proc -public application_group::closest_ancestor_application_group_site_node 
     @author Peter Marklund, Dave Bauer
 } {
     # Make sure we have a url to work with
-    if { [empty_string_p $url] } {
-          if { [empty_string_p $node_id] } {
+    if { $url eq "" } {
+          if { $node_id eq "" } {
               set url "/"
           } else {
               set url [site_node::get_url -node_id $node_id]

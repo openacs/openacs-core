@@ -85,7 +85,7 @@ ad_proc -private doc_parse_property_string { properties } {
 
 
 
-ad_proc doc_init {} { Initializes the global environment for document handling. } {
+ad_proc -deprecated doc_init {} { Initializes the global environment for document handling. } {
     global doc_properties
     if { [info exists doc_properties] } {
 	unset doc_properties
@@ -93,17 +93,17 @@ ad_proc doc_init {} { Initializes the global environment for document handling. 
     array set doc_properties {}
 }
 
-ad_proc doc_set_property { name value } { Sets a document property. } {
+ad_proc -deprecated doc_set_property { name value } { Sets a document property. } {
     global doc_properties
     set doc_properties($name) $value
 }
 
-ad_proc doc_property_exists_p { name } { Return 1 if a property exists, or 0 if not. } {
+ad_proc -deprecated doc_property_exists_p { name } { Return 1 if a property exists, or 0 if not. } {
     global doc_properties
     return [info exists doc_properties($name)]
 }
 
-ad_proc doc_get_property { name } { Returns a property (or an empty string if no such property exists). } {
+ad_proc -deprecated doc_get_property { name } { Returns a property (or an empty string if no such property exists). } {
     global doc_properties
     if { [info exists doc_properties($name)] } {
 	return $doc_properties($name)
@@ -111,16 +111,16 @@ ad_proc doc_get_property { name } { Returns a property (or an empty string if no
     return ""
 }
 
-ad_proc doc_body_append { str } { Appends $str to the body property. } {
+ad_proc -deprecated doc_body_append { str } { Appends $str to the body property. } {
     global doc_properties
     append doc_properties(body) $str
 }
 
-ad_proc doc_set_mime_type { mime_type } { Sets the mime-type property. } {
+ad_proc -deprecated doc_set_mime_type { mime_type } { Sets the mime-type property. } {
     doc_set_property mime_type $mime_type
 }
 
-ad_proc doc_exists_p {} { Returns 1 if there is a document in the global environment. } {
+ad_proc -deprecated doc_exists_p {} { Returns 1 if there is a document in the global environment. } {
     global doc_properties
     if { [array size doc_properties] > 0 } {
 	return 1
@@ -128,12 +128,12 @@ ad_proc doc_exists_p {} { Returns 1 if there is a document in the global environ
     return 0
 }
 
-ad_proc doc_body_flush {} { Flushes the body (if possible). } {
+ad_proc -deprecated doc_body_flush {} { Flushes the body (if possible). } {
     # Currently a no-op.
 }
 
-ad_proc doc_find_template { filename } { Finds a master.adp file which can be used as a master template, looking in the directory containing $filename and working our way down the directory tree. } {
-    set path_root [acs_root_dir]
+ad_proc -deprecated doc_find_template { filename } { Finds a master.adp file which can be used as a master template, looking in the directory containing $filename and working our way down the directory tree. } {
+    set path_root $::acs::rootdir
 
     set start [clock clicks -milliseconds]
 
@@ -154,7 +154,7 @@ ad_proc doc_find_template { filename } { Finds a master.adp file which can be us
     return ""
 }
 
-ad_proc doc_serve_template { __template_path } { Serves the document in the environment using a particular template. } {
+ad_proc -deprecated doc_serve_template { __template_path } { Serves the document in the environment using a particular template. } {
     upvar #0 doc_properties __doc_properties
     foreach __name [array names __doc_properties] {
 	set $__name $__doc_properties($__name)
@@ -168,7 +168,7 @@ ad_proc doc_serve_template { __template_path } { Serves the document in the envi
     doc_return 200 $content_type $adp
 }
 
-ad_proc doc_serve_document {} { Serves the document currently in the environment. } {
+ad_proc -deprecated doc_serve_document {} { Serves the document currently in the environment. } {
     if { ![doc_exists_p] } {
 	error "No document has been built."
     }
@@ -201,15 +201,15 @@ ad_proc doc_serve_document {} { Serves the document currently in the environment
     }
 }
 
-proc doc_tag_ad_document { contents params } {
+ad_proc -deprecated doc_tag_ad_document { contents params } {} {
     for { set i 0 } { $i < [ns_set size $params] } { incr i } {
 	doc_set_property [ns_set key $params $i] [ns_set value $params $i]
     }
     doc_set_property _adp 1
-    return [ns_adp_parse -string $contents]
+    return [template::adp_parse_string $contents]
 }
 
-proc doc_tag_ad_property { contents params } {
+ad_proc -deprecated doc_tag_ad_property { contents params } {} {
     set name [ns_set iget $params name]
     if { $name eq "" } {
 	return "<em>No <tt>name</tt> property in <tt>AD-PROPERTY</tt> tag</em>"

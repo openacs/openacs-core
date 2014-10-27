@@ -29,6 +29,7 @@ XSL:
 	if [ ! -d XSL -a ! -L XSL ]; then \
 		echo -e "\n\nNo XSL directory here.  I am looking for one...\n"; \
 		for d in \
+			/opt/local/share/xsl/docbook-xsl \
 			/sw/share/xml/docbook-xsl \
 			/usr/share/sgml/docbook/xsl-stylesheets-* \
 			/usr/share/sgml/docbook/xsl-stylesheets \
@@ -54,11 +55,10 @@ see http://sourceforge.net/projects/docbook/ for the docbook-xsl stylesheets\n";
 
 prelim: images 
 	cp images/*.{pdf,png,gif,jpg} ../images/
-
-# all non-regenerated html is kept in a sub-dir so that we can delete html
-# in the main directory before regenerating
-# this helps avoid meaningless cvs conflicts in second-hand files
-	rm ../*html
+	# all non-regenerated html is kept in a sub-dir so that we can delete html
+	# in the main directory before regenerating
+	# this helps avoid meaningless cvs conflicts in second-hand files
+	rm -f ../*html
 
 target: non-xml
 # the dash u part of cp -u is redundant in the context of make/Makefile

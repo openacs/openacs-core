@@ -39,7 +39,8 @@ db_multirow -extend { admin_url global_param_url } packages installed_packages {
          $global_params == 0 } {
          set global_param_url ""
     } else {
-        set global_param_url [export_vars -base /shared/parameters {package_key {scope global}}]
+	set return_url [ad_conn url]
+        set global_param_url [export_vars -base /shared/parameters {package_key return_url {scope global}}]
     }
     if { $admin_url eq "" && $global_param_url eq "" } {
         continue

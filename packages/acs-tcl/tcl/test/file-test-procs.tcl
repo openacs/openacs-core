@@ -18,8 +18,8 @@ aa_register_case -cats {smoke production_safe} files__tcl_file_syntax_errors {
         return [expr {[string match {*.tcl} $file] || [file isdirectory $file]}]
     }
 
-    # if startdir is not [acs_root_dir]/packages, then somebody checked in the wrong thing by accident
-    set startdir [acs_root_dir]/packages
+    # if startdir is not $::acs::rootdir/packages, then somebody checked in the wrong thing by accident
+    set startdir $::acs::rootdir/packages
 
     aa_log "Checks starting from $startdir"
 
@@ -51,15 +51,15 @@ aa_register_case -cats {smoke production_safe} -error_level error files__tcl_fil
         return [expr {[string match {*.tcl} $file] || [file isdirectory $file]}]
     }
 
-    # if startdir is not [acs_root_dir]/packages, then somebody checked in the wrong thing by accident
-    set startdir [acs_root_dir]/packages
+    # if startdir is not $::acs::rootdir/packages, then somebody checked in the wrong thing by accident
+    set startdir $::acs::rootdir/packages
 
     aa_log "Checks starting from $startdir"
     set count 0
     #inspect every tcl file in the directory tree starting with $startdir
     foreach file [ad_find_all_files -check_file_func ::tcl_p $startdir] { 
 
-        if {[string match */acs-tcl/tcl/test/file-test-procs.tcl $file]} continue
+        if {[string match "*/acs-tcl/tcl/test/file-test-procs.tcl" $file]} continue
 
         set fp [open $file "r"]
         set data [read $fp]
@@ -80,14 +80,14 @@ aa_register_case -cats {smoke production_safe} files__check_info_files {
 
     @author Jeff Davis davis@xarg.net
 } {
-    foreach spec_file [glob -nocomplain "[acs_root_dir]/packages/*/*.info"] {
+    foreach spec_file [glob -nocomplain "$::acs::rootdir/packages/*/*.info"] {
         set errp 0
         if {  [catch {array set version [apm_read_package_info_file $spec_file]} errMsg] } {
             aa_log_result fail "$spec_file returned $errMsg"
             set errp 1
         } else {
             regexp {packages/([^/]*)/} $spec_file match key
-            if {![string equal $version(package.key) $key]} {
+            if {$version(package.key) ne $key } {
                 aa_log_result fail "MISMATCH DIRECTORY/PACKAGE KEY: $spec_file $version(package.key) != $key"
                 set errp 1
             }
@@ -97,11 +97,11 @@ aa_register_case -cats {smoke production_safe} files__check_info_files {
                 aa_log_result fail "$spec_file SERVICE MISSING PROVIDES: $key"
                 set errp 1
             } elseif { $version(provides) ne ""} {
-                if { ![string equal $version(name) [lindex [lindex $version(provides) 0] 1]]} {
+                if { $version(name) ne [lindex $version(provides) 0 1] } {
                     aa_log_result fail "$spec_file: MISMATCH PROVIDES VERSION: $version(provides) $version(name)"
                     set errp 1
                 }
-                if { ![string equal $key [lindex [lindex $version(provides) 0] 0]]} {
+                if { $key ne [lindex $version(provides) 0 0] } {
                     aa_log_result fail "$spec_file MISMATCH PROVIDES KEY: $key $version(provides)"
                     set errp 1
                 }
@@ -129,7 +129,7 @@ aa_register_case -cats {smoke production_safe} files__check_upgrade_ordering {
 
     @author Jeff Davis davis@xarg.net
 } {
-    foreach dir [lsort [glob -nocomplain -types f "[acs_root_dir]/packages/*/*.info"]] {
+    foreach dir [lsort [glob -nocomplain -types f "$::acs::rootdir/packages/*/*.info"]] {
 
         set error_p 0
 
@@ -201,8 +201,8 @@ aa_register_case -cats {smoke} files__check_xql_files {
         return [expr {[string match {*.xql} $file] || [file isdirectory $file]}]
     }
     
-    # if startdir is not [acs_root_dir]/packages, then somebody checked in the wrong thing by accident
-    set startdir [acs_root_dir]/packages
+    # if startdir is not $::acs::rootdir/packages, then somebody checked in the wrong thing by accident
+    set startdir $::acs::rootdir/packages
     
     aa_log "Checks starting from $startdir"
 

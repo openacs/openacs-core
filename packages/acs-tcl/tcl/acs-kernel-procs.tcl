@@ -39,7 +39,7 @@ ad_proc -public ad_verify_install {} {
     # define util_memoize with proc here to avoid error messages about multiple 
     # defines.
     if { ![db_table_exists apm_packages] || ![db_table_exists site_nodes] } {
-	proc util_memoize {script {max_age ""}} {eval $script}
+	proc util_memoize {script {max_age ""}} {{*}$script}
 	return 0
     }
     set kernel_install_p [apm_package_installed_p acs-kernel] 
@@ -51,7 +51,7 @@ ad_proc -public ad_verify_install {} {
     if { $kernel_install_p && $admin_exists_p} {
 	return 1 
     } else {
-	proc util_memoize {script {max_age ""}} {eval $script}
+	proc util_memoize {script {max_age ""}} {{*}$script}
 	return 0
     }
 }

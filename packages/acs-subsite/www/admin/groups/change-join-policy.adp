@@ -1,6 +1,6 @@
 <master>
 <property name="context">@context;noquote@</property>
-<property name="title">@group_name;noquote@</property>
+<property name="doc(title)">@group_name;noquote@</property>
 
 <blockquote>
 

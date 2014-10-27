@@ -5,7 +5,7 @@ ad_page_contract {
     @creation-date 2003-05-28
     @cvs-id $Id$
 } {
-    node_id:integer,optional
+    node_id:naturalnum,optional
     {return_url "."}
 }
 

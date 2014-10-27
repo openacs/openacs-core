@@ -1,14 +1,15 @@
 ad_page_contract {
     Simple image upload, attach image to object_id passed in, if no
     object_id, use the current package_id
+
     @author Guenter Ernst guenter.ernst@wu-wien.ac.at, 
     @author Gustaf Neumann neumann@wu-wien.ac.at
     @author Dave Bauer (dave@solutiongrove.com)
     @creation-date 13.07.2004
     @cvs-id $Id$
 } {
-    {parent_id:integer,optional}
-    {package_id ""}
+    {parent_id:naturalnum,optional}
+    {package_id:naturalnum ""}
     {selector_type "image"}
 }
 
@@ -172,7 +173,7 @@ if {$write_p} {
 	    } else {
 		# user chose an existing file
 		set item_id $choose_file 
-		set file_name [lindex [lindex $recent_images_options [util_search_list_of_lists $recent_images_options $item_id 1]] 0]
+		set file_name [lindex $recent_images_options [util_search_list_of_lists $recent_images_options $item_id 1] 0]
 	    }
 		set f_url "/image/${item_id}/${file_name}"			    
 	}

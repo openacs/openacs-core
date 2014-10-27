@@ -462,7 +462,7 @@ create table acs_attributes (
 	sort_order	integer not null,
 	datatype	varchar(50) not null
 			constraint acs_attributes_datatype_fk
-			references acs_datatypes (datatype),
+			references acs_datatypes (datatype) on update cascade,
 	default_value	text,
 	min_n_values	integer default 1 not null
 			constraint acs_attributes_min_n_values_ck

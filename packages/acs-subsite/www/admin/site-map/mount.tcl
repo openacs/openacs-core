@@ -6,9 +6,9 @@ ad_page_contract {
   @creation-date 2000-09-12
   @cvs-id $Id$
 } {
-  node_id:integer,notnull
+  node_id:naturalnum,notnull
   {expand:integer,multiple {}}
-  root_id:integer,optional
+  root_id:naturalnum,optional
 }
 
 set user_id [ad_conn user_id]

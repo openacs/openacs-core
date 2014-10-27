@@ -4,7 +4,7 @@ ad_page_contract {
 
     @author Peter Marklund
 } {
-    authority_id:integer
+    authority_id:naturalnum,notnull
 }
 
 # Check that the authority has a register implementation

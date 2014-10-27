@@ -25,7 +25,7 @@ ad_page_contract {
 }
 
 set context [list "Add attribute"]
-set export_vars [ad_export_vars -form {object_type return_url}]
+set export_vars [export_vars -form {object_type return_url}]
 
 set object_pretty_name [db_string object_pretty_name {
     select t.pretty_name 

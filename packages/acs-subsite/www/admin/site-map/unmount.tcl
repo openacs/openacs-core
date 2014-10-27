@@ -7,11 +7,11 @@ ad_page_contract {
     @cvs-id $Id$
 
 } {
-    node_id:integer,notnull
+    node_id:naturalnum,notnull
     {expand:integer,multiple ""}
-    root_id:integer,optional
+    root_id:naturalnum,optional
 }
 
 site_node::unmount -node_id $node_id
 
-ad_returnredirect ".?[export_url_vars expand:multiple root_id]"
+ad_returnredirect ".?[export_vars -url {expand:multiple root_id}]"

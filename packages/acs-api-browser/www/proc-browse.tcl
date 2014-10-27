@@ -50,9 +50,9 @@ foreach proc [nsv_array names api_proc_doc] {
 }
 
 if {$sort_by eq "file"} {
-    set matches [lsort -command ad_sort_by_second_string_proc $matches]    
+    set matches [lsort -command ::apidoc::ad_sort_by_second_string_proc $matches]    
 } else {
-    set matches [lsort -command ad_sort_by_first_string_proc $matches]
+    set matches [lsort -command ::apidoc::ad_sort_by_first_string_proc $matches]
 }
 
 multirow create proc_list file proc url

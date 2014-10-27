@@ -20,7 +20,7 @@ ad_page_contract {
 }
 set context [list "One attribute"]
 
-set url_vars [ad_export_vars {attribute_id return_url}]
+set url_vars [export_vars {attribute_id return_url}]
 
 # Note we really do want all the columns here for this generic display
 # Stuff it into a column array to avoid writing all these damn column

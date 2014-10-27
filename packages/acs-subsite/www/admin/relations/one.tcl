@@ -9,7 +9,7 @@ ad_page_contract {
     @cvs-id $Id$
 
 } {
-    rel_id:integer,notnull
+    rel_id:naturalnum,notnull
 } -properties {
     context:onevalue
     rel_id:onevalue
@@ -37,9 +37,9 @@ ad_page_contract {
     }
 }
 
-set admin_p [ad_permission_p $rel_id "admin"]
-set delete_p [ad_permission_p $rel_id "delete"]
-set write_p [ad_permission_p $rel_id "write"]
+set admin_p [permission::permission_p -object_id $rel_id -privilege "admin"]
+set delete_p [permission::permission_p -object_id $rel_id -privilege "delete"]
+set write_p [permission::permission_p -object_id $rel_id -privilege "write"]
 
 set context [list "One relation"]
 
@@ -91,9 +91,9 @@ set return_url [ad_conn url]?[ad_conn query]
 set QQreturn_url [ad_quotehtml $return_url]
 set possible_member_states [group::possible_member_states]
 
-set object_two_read_p  [ad_permission_p $rel(object_id_two) "read"]
+set object_two_read_p  [permission::permission_p -object_id $rel(object_id_two) -privilege "read"]
 if {$object_two_read_p} {
-    set object_two_write_p [ad_permission_p $rel(object_id_two) "write"]
+    set object_two_write_p [permission::permission_p -object_id $rel(object_id_two) -privilege "write"]
 
     attribute::multirow \
 	    -start_with party \

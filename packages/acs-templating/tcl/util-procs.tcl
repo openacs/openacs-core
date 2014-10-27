@@ -38,8 +38,8 @@ ad_proc -public template::util::get_opts { argv } {
     # Get the next arg
     set next [lindex $argv [incr i]]
 
-    if { [string index $next 0] ne "-" ||
-         ! [regexp {[a-zA-Z*]} [string index $next 1] match] } {
+    if { [string index $next 0] ne "-" 
+	 || ![regexp {[a-zA-Z*]} [string index $next 1] match] } {
       
       # the next arg was not a switch so assume it is a parameter 
       set opts($opt) $next
@@ -134,7 +134,7 @@ ad_proc -public template::util::is_true { x } {
     @return 0 if the variable can be interpreted as false; 
             1 for true if it can't.
 } {
-  expr [lsearch -exact {0 f false n no off ""} [string tolower $x]] == -1   
+    expr {[string tolower $x] ni {0 f false n no off ""}}
 }
 
 ad_proc -public template::util::lpop { ref } {
@@ -143,10 +143,8 @@ ad_proc -public template::util::lpop { ref } {
 
     @param ref The name of a list in the calling frame on which to operate.
 } {
-
   upvar $ref the_list
-
-  set the_list [lrange $the_list 0 [expr {[llength $the_list] - 2}]]
+  set the_list [lrange $the_list 0 end-1]
 }
 
 ad_proc -public template::util::lnest { listref value next args } {
@@ -229,7 +227,7 @@ ad_proc -public template::util::set_to_list { set args } {
   for { set i 0 } { $i < [ns_set size $set] } { incr i } {
 
     set key [ns_set key $set $i]
-    if { [lsearch -exact $args $key] != -1 } { continue }
+    if { $key in $args } { continue }
 
     lappend result $key [ns_set value $set $i]
   }
@@ -452,7 +450,7 @@ ad_proc -public template::util::read_file { path } {
 
 ad_proc -public template::util::set_file_encoding { file_channel_id } {
     Set encoding of the given file channel based on the OutputCharset
-    parameter of AOLserver. All adp, tcl, and txt files are assumed
+    parameter of AOLserver. All ADP, Tcl, and txt files are assumed
     to be in the same charset.
 
     @param file_channel_id The id of the file to set encoding for.
@@ -494,7 +492,7 @@ ad_proc -public template::util::url_to_file { url {reference_url ""} } {
 
   } else {
 
-    set path [get_server_root]/$url
+    set path $::acs::rootdir/$url
   }
 
   return [ns_normalizepath $path]
@@ -518,7 +516,7 @@ ad_proc -public template::util::get_url_directory { url } {
 } {
   set directory $url
 
-  set lastchar [string range $url [expr {[string length $url]-1}] end]
+  set lastchar [string range $url [string length $url]-1 end]
 
   if {$lastchar ne "/" } {
 
@@ -533,9 +531,11 @@ ad_proc -public template::util::get_url_directory { url } {
   return $directory
 }
 
-ad_proc -public template::util::get_cookie { name {default_value ""} } {
+ad_proc -public -deprecated template::util::get_cookie { name {default_value ""} } {
     Retrieve the value of a cookie and return it
     Return the default if no such cookie exists
+    
+    @see ad_get_cookie
 } {
   set headers [ns_conn headers]    
 
@@ -548,10 +548,12 @@ ad_proc -public template::util::get_cookie { name {default_value ""} } {
   return $default_value
 }
 
-ad_proc -public template::util::set_cookie { expire_state name value { domain "" } } {
+ad_proc -public -deprecated template::util::set_cookie { expire_state name value { domain "" } } {
     Create a cookie with specified parameters.  The expiration state 
     may be persistent, session, or a number of minutes from the current
     time.
+
+    @see ad_set_cookie
 } {
 
   if { [string match $domain {}] } { 
@@ -581,8 +583,11 @@ ad_proc -public template::util::set_cookie { expire_state name value { domain ""
   ns_set put [ns_conn outputheaders] "Set-Cookie" $cookie
 }
 
-ad_proc -public template::util::clear_cookie { name { domain "" } } { 
+ad_proc -public -deprecated template::util::clear_cookie { name { domain "" } } { 
     Expires an existing cookie.
+
+    @see ad_get_cookie
+
 } {
   if { [string match $domain {}] } { 
     set path "ns/server/[ns_info server]/module/nssock"
@@ -595,15 +600,13 @@ ad_proc -public template::util::clear_cookie { name { domain "" } } {
   ns_set put [ns_conn outputheaders] "Set-Cookie" $cookie
 } 
 
-ad_proc -public template::util::quote_html {
+ad_proc -deprecated -public template::util::quote_html {
   html
 } {
   Quote possible HTML tags in the contents of the html parameter.  
 } {
 
-  regsub -all \" [ns_quotehtml $html] \\&quot\; html
-
-  return $html
+  return [ad_quotehtml $html]
 }
 
 ad_proc -public template::util::multirow_quote_html {multirow_ref column_ref} {
@@ -619,7 +622,7 @@ ad_proc -public template::util::multirow_quote_html {multirow_ref column_ref} {
 
     for { set i 1 } { $i <= $rowcount } { incr i} {
         upvar $multirow_ref:$i arr
-        set arr($column_ref) [template::util::quote_html [set arr($column_ref)]]
+        set arr($column_ref) [ad_quotehtml [set arr($column_ref)]]
     }
 
 }
@@ -673,7 +676,11 @@ ad_proc -deprecated -public template::util::multirow_foreach { name code_text } 
   
 }
 
-ad_proc -public template::util::get_param { name {section {}} {key {}} } {
+ad_proc -deprecated -public template::util::get_param { 
+    name 
+    {section ""} 
+    {key ""} 
+} {
     Retreive a stored parameter, or "" if no such parameter
     If section/key are present, read the parameter from the specified
     section.key in the INI file, and cache them under the given name
@@ -682,10 +689,10 @@ ad_proc -public template::util::get_param { name {section {}} {key {}} } {
   if { ![nsv_exists __template_config $name] } {
 
     # Extract the parameter from the ini file if possible
-    if { ![template::util::is_nil section] } {
+    if { $section ne "" } {
 
       # Use the name if no key is specified
-      if { [template::util::is_nil key] } {
+      if { $key ne "" } {
         set key $name
       }
 
@@ -707,7 +714,7 @@ ad_proc -public template::util::get_param { name {section {}} {key {}} } {
   }
 }
 
-ad_proc -public template::util::set_param { name value } {
+ad_proc -public -deprecated  template::util::set_param { name value } {
     Set a stored parameter
 } {
   nsv_set __template_config $name $value
@@ -717,10 +724,10 @@ ad_proc -public template::util::nvl { value value_if_null } {
     Analogous to SQL NVL
 } {
 
-  if { [template::util::is_nil value] } {
+  if { $value ne "" } {
     return $value_if_null
   } else {
-    return $value
+    return $valuenumber_l
   }
 }
 
@@ -736,7 +743,7 @@ ad_proc -public template::util::number_list { last_number {start_at 0} } {
 }
 
 ad_proc -public template::util::tcl_to_sql_list { lst } {
-    Convert a TCL list to a SQL list, for use with the "in" statement.
+    Convert a Tcl list to a SQL list, for use with the "in" statement.
     Uses DoubleApos (similar to ns_dbquotevalue) functionality to escape single quotes
 } {
 
@@ -756,7 +763,7 @@ ad_proc -public template::get_resource_path {} {
     Get the template directory
     The body is doublequoted, so it is interpreted when this file is read
 } "
-  return \"[file dir [file dir [info script]]]/resources\"
+  return \"[file dirname [file dirname [info script]]]/resources\"
 "
 
 

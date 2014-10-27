@@ -27,7 +27,7 @@ if { $current_page_group < $last_page_group } {
 }
 
 if { $current_result_page > 0 } { 
-    set offset [expr ($current_result_page - 1) * $limit]
+    set offset [expr {($current_result_page - 1) * $limit}]
     set url_previous [export_vars -base search {{q $urlencoded_query} search_package_id offset num}]
 } else {
     set url_previous ""

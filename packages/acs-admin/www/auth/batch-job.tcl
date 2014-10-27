@@ -4,8 +4,8 @@ ad_page_contract {
     @author Peter Marklund
     @creation-date 2003-09-09
 } {
-    job_id
-    page:optional
+    job_id:naturalnum,notnull
+    page:naturalnum,optional
     success_p:boolean,optional
 }
 

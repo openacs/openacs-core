@@ -1,7 +1,7 @@
 ad_page_contract {
   @cvs-id $Id$
 } {
-  user_id:integer
+  user_id:naturalnum,notnull
 } -properties {
   users:onerow
 }

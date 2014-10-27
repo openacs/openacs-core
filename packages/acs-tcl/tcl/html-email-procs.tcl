@@ -100,7 +100,10 @@ ad_proc parse_incoming_email {
     To make our lives simpler we support only text/html as a special case;
     in all other cases the plain text is returned.
 } {
-    set mime [mime::initialize -string $message]
+    if { [catch {set mime [mime::initialize -string $message]} err ] } {
+        ns_log error "parse_incoming_email: could not parse message; error was $err"
+        return ""
+    }
     set content [mime::getproperty $mime content]
 
     if { [string first "multipart" $content] != -1 } {

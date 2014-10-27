@@ -42,7 +42,7 @@ ad_proc -public lang::system::site_wide_locale {
 
     # Check validity of parameter setting
     set valid_locales [lang::system::get_locales]
-    if { [lsearch -exact $valid_locales $parameter_locale] == -1 } {
+    if {$parameter_locale ni $valid_locales} {
         ns_log Error "The parameter setting acs-lang.SiteWideLocale=\"$parameter_locale\" is invalid. Valid locales are: \"$valid_locales\". Defaulting to en_US locale"
         return en_US
     }
@@ -570,9 +570,9 @@ ad_proc -private lang::conn::browser_locale {} {
     foreach locale $conn_locales {       
         regexp {^([^_]+)(?:_([^_]+))?$} $locale locale language region 
 
-        if { [exists_and_not_null region] } {
+        if { ([info exists region] && $region ne "") } {
             # We have both language and region, e.g. en_US
-            if { [lsearch -exact $system_locales $locale] != -1 } {
+            if {$locale in $system_locales} {
                 # The locale was found in the system, a perfect match           
                 set perfect_match $locale
                 break
@@ -601,9 +601,9 @@ ad_proc -private lang::conn::browser_locale {} {
         }
     }
 
-    if { [exists_and_not_null perfect_match] } {
+    if { ([info exists perfect_match] && $perfect_match ne "") } {
         return $perfect_match
-    } elseif { [exists_and_not_null tentative_match] } {
+    } elseif { ([info exists tentative_match] && $tentative_match ne "") } {
         return $tentative_match
     } else {
         # We didn't find a match

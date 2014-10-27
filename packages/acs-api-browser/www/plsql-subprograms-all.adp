@@ -1,5 +1,5 @@
 <master>
-<property name=title>All PL/SQL Subprograms</property>
+<property name="doc(title)">All PL/SQL Subprograms</property>
 <property name="context">@context;noquote@</property>
 
 <multiple name="all_subprograms">

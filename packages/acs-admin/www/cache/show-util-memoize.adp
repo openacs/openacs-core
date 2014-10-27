@@ -1,5 +1,5 @@
   <master>
-    <property name="title">@page_title;noquote@</property>
+    <property name="doc(title)">@page_title;noquote@</property>
     <property name="context">@context;noquote@</property>
 
     Search for <b><code>@pattern@</code></b>:
@@ -48,7 +48,7 @@
 	    <tr bgcolor="@bg@">
 	      <td align="right" colspan="2">
 		<font color="#666666">
-		  Cached @matches.date@ -	@matches.value_size@ bytes
+		  @matches.date@ - @matches.value_size@ bytes
 		</font>
 	      </td>
 	    </tr>

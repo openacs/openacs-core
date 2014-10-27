@@ -3,9 +3,10 @@ ad_page_contract {
 
     @cvs-id $Id$
 } {
-    version_id:optional
+    version_id:naturalnum,optional
     { public_p "" }
-    path
+    path:trim
+    source_p:integer,optional,trim
 } -properties {
     title:onevalue
     context:onevalue
@@ -15,19 +16,42 @@ ad_page_contract {
     proc_doc_list:multirow
 }
 
-if { ![info exists version_id] && \
-        [regexp {^packages/([^ /]+)/} $path "" package_key] } {
+set url_vars [export_vars -url {path version_id}]
+set return_url [ns_urlencode [ad_conn url]?][ns_urlencode $url_vars]
+set default_source_p [ad_get_client_property -default 0 acs-api-browser api_doc_source_p]
+if { ![info exists source_p] } {
+    set source_p $default_source_p
+}
+if { ![info exists version_id] && 
+     [regexp {^packages/([^ /]+)/} $path "" package_key] } {
     db_0or1row version_id_from_package_key {
         select version_id 
-          from apm_enabled_package_versions 
-         where package_key = :package_key
+	from apm_enabled_package_versions 
+	where package_key = :package_key
     }
 }
 
+set path [apidoc::sanitize_path $path]
+if {![file readable $::acs::rootdir/$path] || [file isdirectory $::acs::rootdir/$path]} {
+    if {[info exists version_id]} {
+	set kind procs
+	set href [ad_conn package_url]/package-view?[export_vars {version_id {kind procs}}]
+	set link [subst {<p>Go back to <a href="$href">Package Documentation</a>.}]
+    } else {
+	set link [subst {<p>Go back to <a href="[ad_conn package_url]">API Browser</a>.}]
+    }
+    ad_return_warning "No such library file" [subst {
+	The file '$path' was not found. Maybe the url contains a typo.
+	$link
+    }]
+    return
+}
+
+
 if {[info exists version_id]} {
-    set public_p [api_set_public $version_id $public_p]
+    set public_p [::apidoc::set_public $version_id $public_p]
 } else {
-    set public_p [api_set_public "" $public_p]
+    set public_p [::apidoc::set_public "" $public_p]
 }
 
 set dimensional_list {
@@ -41,12 +65,15 @@ set dimensional_list {
 
 set context [list]
 if { [info exists version_id] } {
-    db_1row package_info_from_package_id {
+    db_0or1row package_info_from_package_id {
         select pretty_name, package_key, version_name
           from apm_package_version_info
          where version_id = :version_id
     }
-    lappend context [list "package-view?version_id=$version_id" "$pretty_name $version_name"]
+    if {[info exists pretty_name]} {
+	lappend context [list "package-view?version_id=$version_id" "$pretty_name $version_name"]
+    }
+
 }
 
 lappend context [file tail $path]
@@ -78,4 +105,9 @@ if { [nsv_exists api_proc_doc_scripts $path] } {
         }
         multirow append proc_doc_list [api_proc_documentation $proc]
     }
+}
+
+if { $source_p } {
+   set file_contents [template::util::read_file $::acs::rootdir/$path]
+   set file_contents [apidoc::tclcode_to_html $file_contents]
 }

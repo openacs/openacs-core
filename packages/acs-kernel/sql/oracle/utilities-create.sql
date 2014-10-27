@@ -18,6 +18,23 @@ as
     function logical_negation (
         true_or_false IN varchar2)
 	return varchar2;
+    
+    function table_exists (
+	name in varchar2)
+	return boolean;
+	
+    function table_column_exists (
+	t_name  in varchar2,
+	c_name in varchar2)
+	return boolean;
+    
+    function view_exists (
+	name in varchar2)
+	return boolean;
+	
+    function index_exists (
+	name in varchar2)
+	return boolean;
 end util;
 /
 show errors
@@ -60,6 +77,39 @@ as
         return 'f';   
       END IF;
     END logical_negation;
+    
+    function table_exists (
+        name IN varchar2)
+    return boolean
+    as
+    begin
+      return exists (select 1 from user_tables where table_name = t_name);
+    END table_exists;
+    
+    function table_column_exists (
+        t_name  IN varchar2,
+        c_name IN varchar2)
+    return boolean
+    as
+    begin
+      return exists (select 1 from user_tab_columns where c.table_name = t_name and c.column_name = c_name);
+    END table_column_exists;
+    
+    function view_exists (
+        name IN varchar2)
+    return boolean
+    as
+    begin
+      return exists (select 1 from user_views where view_name = name);
+    END view_exists;
+    
+    function index_exists (
+        name IN varchar2)
+    return boolean
+    as
+    begin
+      return exists (select 1 from user_indexes where index_name = name);
+    END index_exists;
 
 end util;
 /

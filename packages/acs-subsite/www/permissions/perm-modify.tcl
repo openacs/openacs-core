@@ -1,12 +1,12 @@
 ad_page_contract {} {
-    object_id:integer
+    object_id:naturalnum,notnull
     {perm:multiple {[list]}}
     {privs:optional}
     return_url
 }
 
 
-ad_require_permission $object_id admin
+permission::require_permission -object_id $object_id -privilege admin
 
 # entried in 'perm' have the form "${party_id}_${privilege}"
 

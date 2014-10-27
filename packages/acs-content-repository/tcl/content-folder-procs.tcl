@@ -60,7 +60,7 @@ ad_proc -public ::content::folder::new {
     foreach var [list folder_id name label description parent_id context_id package_id] {
 	lappend var_list [list $var [set $var]]
     }
-    if {[exists_and_not_null creation_date]} {
+    if {[info exists creation_date] && $creation_date ne ""} {
         lappend var_list [list creation_date $creation_date]
     }
     set folder_id [package_instantiate_object \

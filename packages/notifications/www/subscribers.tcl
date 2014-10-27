@@ -9,7 +9,7 @@ ad_page_contract {
     @creation-date 2008-01-13
     @cvs-id $Id$
 } {
-    object_id:notnull
+    object_id:naturalnum,notnull
 }
 
 permission::require_permission -object_id $object_id -privilege "admin"

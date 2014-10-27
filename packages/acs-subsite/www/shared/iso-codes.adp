@@ -1,5 +1,5 @@
 <master>
-<property name="title">#acs-subsite.lt_Complete_List_of_ISO_#</property>
+<property name="doc(title)">#acs-subsite.lt_Complete_List_of_ISO_#</property>
 <property name="context">#acs-subsite.ISO_Code_List#</property>
  
 <h2>#acs-subsite.lt_Complete_List_of_ISO_#</h2>

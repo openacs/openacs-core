@@ -5,7 +5,7 @@ ad_page_contract {
     @creation-date 2003-06-13
     @cvs-id $Id$
 } {
-    package_id:integer
+    package_id:naturalnum,notnull
 }
 
 set page_title "[apm_instance_name_from_id $package_id] Permissions"

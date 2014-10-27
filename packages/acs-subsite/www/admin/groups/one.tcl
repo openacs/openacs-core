@@ -8,7 +8,7 @@ ad_page_contract {
     @creation-date 2000-12-05
     @cvs-id $Id$
 } {
-    group_id:integer,notnull
+    group_id:naturalnum,notnull
 } -properties {
     context:onevalue
     group_id:onevalue
@@ -33,8 +33,8 @@ ad_page_contract {
 }
 
 set user_id [ad_conn user_id]
-set write_p [ad_permission_p $group_id "write"]
-set admin_p [ad_permission_p $group_id "admin"]
+set write_p [permission::permission_p -object_id $group_id -privilege "write"]
+set admin_p [permission::permission_p -object_id $group_id -privilege "admin"]
 
 set return_url "[ad_conn url]?[ad_conn query]"
 set return_url_enc [ad_urlencode $return_url]
@@ -64,7 +64,7 @@ if {[apm_package_installed_p categories]} {
 
     set mapped_trees [category_tree::get_mapped_trees $group_id]
     foreach mapped_tree $mapped_trees {
-	util_unlist $mapped_tree tree_id tree_name subtree_id
+	lassign $mapped_tree tree_id tree_name subtree_id
 	if {$subtree_id ne ""} {
 	    set tree_name "${tree_name}::[category::get_name $subtree_id]"
 	}

@@ -4,7 +4,7 @@ ad_page_contract {
     @creation-date 28 January 2003
     @cvs-id $Id$  
 } {
-    version_id:integer,notnull    
+    version_id:naturalnum,notnull    
 }
 
 db_1row package_version_info "select pretty_name, version_name from apm_package_version_info where version_id = :version_id"

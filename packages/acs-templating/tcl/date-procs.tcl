@@ -27,7 +27,7 @@ namespace eval template::data::from_sql {}
 ad_proc -public template::util::date { command args } {
     Dispatch procedure for the date object
 } {
-  eval template::util::date::$command $args
+  template::util::date::$command {*}$args
 }
 
 ad_proc -public template::util::date::init {} {
@@ -119,7 +119,7 @@ ad_proc -public template::util::date::create {
 } {
     Create a new Date object
     I chose to implement the date objects as lists instead of 
-    arrays, because arrays are not first-class in TCL
+    arrays, because arrays are not first-class in Tcl
 } {
   return [list $year $month $day $hours $minutes $seconds $format]
 }
@@ -144,7 +144,7 @@ ad_proc -public template::util::date::today {} {
     lappend today [template::util::leadingTrim $v]
   }
 
-  return [eval create $today]
+  return [create {*}$today]
 }
 
 ad_proc -public template::util::date::now {} {
@@ -157,7 +157,7 @@ ad_proc -public template::util::date::now {} {
     lappend today [template::util::leadingTrim $v]
   }
 
-  return [eval create $today]
+    return [create {*}$today]
 }
 
 ad_proc -public template::util::date::from_ansi {
@@ -218,37 +218,35 @@ ad_proc -public template::util::date::get_property { what date } {
     seconds    { return [lindex $date 5] }
     format     { return [lindex $date 6] }
     long_month_name {
-      if {[lindex $date 1] eq {}} {
+      if {[lindex $date 1] eq ""} {
         return {}
       } else {
         return [monthName [lindex $date 1] long]
       }
     }
     short_month_name {
-      if {[lindex $date 1] eq {}} {
+      if {[lindex $date 1] eq ""} {
         return {}
       } else {
         return [monthName [lindex $date 1] short]
       }
     }
     days_in_month {
-      if { [string equal [lindex $date 1] {}] || \
-           [string equal [lindex $date 0] {}]} {
+      if { [lindex $date 1] eq "" || [lindex $date 0] eq "" } {
         return 31
       } else {
-        return [daysInMonth \
-               [lindex $date 1] [lindex $date 0]]
+        return [daysInMonth [lindex $date 1] [lindex $date 0]]
       }
     }
     short_year {
-      if {[lindex $date 0] eq {}} {
+      if {[lindex $date 0] eq ""} {
         return {}
       } else {
 	  return [expr {[lindex $date 0] % 100}]
       }
     }
     short_hours {
-      if {[lindex $date 3] eq {}} {
+      if {[lindex $date 3] eq ""} {
         return {}
       } else {    
         set value [expr {[lindex $date 3] % 12}]
@@ -260,7 +258,7 @@ ad_proc -public template::util::date::get_property { what date } {
       }
     }
     ampm {
-      if {[lindex $date 3] eq {}} {
+      if {[lindex $date 3] eq ""} {
         return {}
       } else { 
         if { [lindex $date 3] > 11 } {
@@ -303,7 +301,7 @@ ad_proc -public template::util::date::get_property { what date } {
       # DEDS: revert this first as to_timestamp is only for
       # oracle9i. no clear announcement that openacs has dropped
       # support for 8i
-      if { [llength $date] <= 3 || ([string equal [db_type] "oracle"] && [string match "8.*" [db_version]]) } {
+      if { [llength $date] <= 3 || ([db_type] eq "oracle" && [string match "8.*" [db_version]]) } {
           return "to_date('$value', '$format')"
       } else { 	 
           return "to_timestamp('$value', '$format')"
@@ -371,8 +369,7 @@ ad_proc -public template::util::date::get_property { what date } {
       }
       set value [lc_time_fmt [join $date_list "-"] "%q"]
       unpack $date
-      if { $hours ne {} && \
-           $minutes ne {} } {
+      if { $hours ne "" && $minutes ne "" } {
 	  append value " [string range $pad [string length $hours] end]${hours}:[string range $pad [string length $minutes] end]$minutes"
 	  if { $seconds ne {} } {
 	      append value ":[string range $pad [string length $seconds] end]$seconds"
@@ -384,15 +381,12 @@ ad_proc -public template::util::date::get_property { what date } {
       set value ""
       # Unreliable !
       unpack $date
-      if { $year ne {} && \
-           $month ne {} && \
-           $day ne {} } {
+      if { $year ne "" && $month ne "" && $day ne "" } {
         append value "$month/$day/$year"
       }
-      if { $hours ne {} && \
-           $minutes ne {} } {
+      if { $hours ne "" && $minutes ne "" } {
         append value " ${hours}:${minutes}"
-        if { $seconds ne {} } {
+        if { $seconds ne "" } {
           append value ":$seconds"
 	}
       }
@@ -466,14 +460,14 @@ ad_proc -public template::util::date::set_property { what date value } {
       return [lreplace $date 3 3 $value]
     }
     ampm {
-      if {[lindex $date 3] eq {}} {
+      if {[lindex $date 3] eq ""} {
         return $date
       } else { 
         set hours [lindex $date 3]
 
         # robustness check: make sure we handle form of 08:00am  --jfr
         regexp {0([0-9])} $hours match trimmed_hours
-        if {[exists_and_not_null trimmed_hours]} {
+        if {([info exists trimmed_hours] && $trimmed_hours ne "")} {
             set hours $trimmed_hours
         }
 
@@ -590,7 +584,7 @@ ad_proc -public template::util::date::now_min_interval {} {
   # replace the minute value in the now list with new value
   set now [lreplace $now 4 4 $minute]
 
-  return [eval create $now]
+  return [create {*}$now]
 }
 
 ad_proc -public template::util::date::now_min_interval_plus_hour {} {
@@ -626,7 +620,7 @@ ad_proc -public template::util::date::now_min_interval_plus_hour {} {
   # replace the hour and minute values in the now list with new values
   set now [lreplace $now 3 4 [incr hour $minute]]
 
-  return [eval create $now]
+  return [create {*}$now]
 }
 
 ad_proc -public template::util::date::add_time { {-time_array_name:required} {-date_array_name:required} } {
@@ -702,11 +696,10 @@ ad_proc -public template::util::negative { value } {
     Check if a value is less than zero, but return false
     if the value is an empty string
 } {
-  if {$value eq {}} {
+  if {$value eq ""} {
     return 0
   } else {
     return [expr {[template::util::leadingTrim $value] < 0}]
-    return [expr {$value < 0}]
   }
 }
 
@@ -732,7 +725,7 @@ ad_proc -public template::util::date::validate { date error_ref } {
                       hours "HH24|HH12" minutes "MI" seconds "SS" } {
 
     # If the field is required, but missing, report an error
-    if {[set $field] eq {}} {
+    if {[set $field] eq ""} {
 	if { [regexp $exp $format match] } {
 	    set field_pretty [_ acs-templating.${field}]
 	    lappend error_msg [_ acs-templating.lt_No_value_supplied_for_-field_pretty-]
@@ -760,7 +753,7 @@ ad_proc -public template::util::date::validate { date error_ref } {
           set maxdays [get_property days_in_month $date]
           if { [string trimleft $day "0"] < 1 || [string trimleft $day "0"] > $maxdays } {
             set month_pretty [template::util::date::get_property long_month_name $date]
-	      if { $month == "2" } {
+	      if { $month == 2 } {
 		  # February has a different number of days depending on the year
 		  append month_pretty " ${year}"
 	      }
@@ -796,8 +789,8 @@ ad_proc -public template::util::leadingPad { string size } {
     Pad a string with leading zeroes
 } {
   
-  if {$string eq {}} {
-    return {}
+  if {$string eq ""} {
+    return ""
   }
 
   set ret [string repeat "0" [expr {$size - [string length $string]}]]
@@ -810,9 +803,9 @@ ad_proc -public template::util::leadingTrim { value } {
     Trim the leading zeroes from the value, but preserve the value
     as "0" if it is "00"
 } {
-  set empty [string equal $value {}]
+  set empty [string equal $value ""]
   set value [string trimleft $value 0]
-  if { !$empty && $value eq {} } {
+  if { !$empty && $value eq "" } {
     set value 0
   }
   return $value
@@ -883,13 +876,14 @@ ad_proc -public template::widget::dateFragment {
       set interval $element(${fragment}_interval)
     } else {
        # Display text entry for some elements, or if the type is text
-       if { $type eq "t" ||
-            [regexp "year|short_year" $fragment] } {
+       if { $type == "t" 
+	    || [regexp "year|short_year" $fragment] 
+	} {
          set output "<input type=\"text\" name=\"$element(name).$fragment\" id=\"$element(name).$fragment\" size=\"$size\""
          append output " maxlength=\"$size\" value=\"[template::util::leadingPad $value $size]\""
          array set attributes $tag_attributes
          foreach attribute_name [array names attributes] {
-           if {$attributes($attribute_name) eq {}} {
+           if {$attributes($attribute_name) eq ""} {
              append output " $attribute_name"
            } else {
              append output " $attribute_name=\"$attributes($attribute_name)\""
@@ -942,7 +936,7 @@ ad_proc -public template::widget::monthFragment {
 
   if { $mode ne "edit" } {
     set output {}
-    if { [exists_and_not_null value] } {
+    if { ([info exists value] && $value ne "") } {
       append output "<input type=\"hidden\" name=\"$element(name).$fragment\" value=\"$value\">"
       append output [template::util::date::monthName $value $size]
     }
@@ -1021,8 +1015,9 @@ ad_proc -public template::widget::date { element_reference tag_attributes } {
   append output "value=\"$element(format)\" >\n"
 
   # Prepare the value to set defaults on the form
-  if { [info exists element(value)] && 
-       [template::util::date::get_property not_null $element(value)] } {
+  if { [info exists element(value)] 
+       && [template::util::date::get_property not_null $element(value)] 
+   } {
     set value $element(value)
     foreach v $value {
       lappend trim_value [template::util::leadingTrim $v]
@@ -1057,7 +1052,7 @@ ad_proc -public template::widget::date { element_reference tag_attributes } {
     set fragment_def $template::util::date::fragment_widgets([string toupper $token])
     set fragment [lindex $fragment_def 1]
 
-    if {[exists_and_not_null id_attr_name]} {
+    if {([info exists id_attr_name] && $id_attr_name ne "")} {
 	  set attributes(id) "${id_attr_name}.${fragment}"
     }
 
@@ -1135,7 +1130,7 @@ ad_proc -public template::data::transform::date { element_ref } {
 ad_proc -public template::util::textdate { command args } {
     Dispatch procedure for the textdate object
 } {
-    eval template::util::textdate::$command $args
+    template::util::textdate::$command {*}$args
 }
 
 ad_proc -public template::util::textdate_localized_format {} {
@@ -1154,7 +1149,9 @@ ad_proc -public template::util::textdate_localized_format {} {
     set format [string tolower $format]
     # this format key must now be at max five characters, and contain one y, one m and one d
     # as well as two punction marks ( - . / )
-    if { [regexp {^([y|m|d])([\-|\.|/])([y|m|d])([\-|\.|/])([y|m|d])} $format match first first_punct second second_punct third] && [string length $format] eq "5" } {
+    if { [regexp {^([y|m|d])([\-|\.|/])([y|m|d])([\-|\.|/])([y|m|d])} $format match first first_punct second second_punct third] 
+	 && [string length $format] == 5
+     } {
 	if { [lsort [list $first $second $third]] eq "d m y" } {
 	    # we have a valid format from acs-lang.localization-d_fmt with all 3 necessary elements
             # and only two valid punctuation marks
@@ -1182,7 +1179,7 @@ ad_proc -public template::data::transform::textdate { element_ref } {
     Collect a textdate from the form, it automatically
     reformats it from the users locale to the iso standard
     YYYY-MM-DD this is useful because it doesn't need
-    reformatting in tcl code
+    reformatting in Tcl code
 } {
 
     upvar $element_ref element
@@ -1218,8 +1215,7 @@ ad_proc -public template::data::transform::textdate { element_ref } {
         # de_DE which is dd.mm.yyyy)
 
 	# we check if adding the year and punctuation makes it a valid date
-	set command "regexp {$exp} \"\${value}\${year_punctuation}\[dt_sysdate -format %Y\]\" match $results"
-	if { [eval $command] } {
+	if { [regexp $exp "${value}${year_punctuation}[dt_sysdate -format %Y]" match {*}$results] } {
 	    if { ![catch { clock scan "${year}-${month}-${day}" }] } {
 		# we add the missing year and punctuation to the value
                 # we don't return it here because formatting is done
@@ -1231,8 +1227,7 @@ ad_proc -public template::data::transform::textdate { element_ref } {
 
     # now we verify that we have a valid date
     # and adding leading/trailing zeros if needed
-    set command "regexp {$exp} \"\${value}\" match $results"
-    if { [eval $command] } {
+    if { [regexp $exp $value match {*}$results] } {
 	# the regexp will have given us: year month day format_one format_two
 	if { [string length $month] eq "1" } {
 	    set month "0$month"

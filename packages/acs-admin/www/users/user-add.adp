@@ -1,5 +1,5 @@
 <master>
-<property name=title>Add a user</property>
+<property name="doc(title)">Add a user</property>
 <property name="focus">register.email</property>
 <property name="context">@context;noquote@</property>
 

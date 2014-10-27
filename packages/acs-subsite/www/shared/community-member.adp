@@ -1,5 +1,5 @@
 <master>
-  <property name="title">@page_title;noquote@</property>
+  <property name="doc(title)">@page_title;noquote@</property>
   <property name="context">@context;noquote@</property>
   <property name="displayed_object_id">@user_id;noquote@</property>
 
@@ -47,7 +47,8 @@
 
 <if @url@ not nil>
   <p>
-    <b>#acs-subsite.Home_page#:</b><a href="@url@">@url@</a>
+    <b>#acs-subsite.Home_page#:</b> 
+    <a href="@url@">@url@</a>
   </p>
 </if>
 
