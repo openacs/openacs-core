@@ -241,6 +241,12 @@ ad_proc -public ::content::item::get {
         return [db_0or1row get_item_folder "" -column_array local_array]
     }
     set table_name [db_string get_table_name "select table_name from acs_object_types where object_type=:content_type"]
+    while {$table_name eq ""} {
+        acs_object_type::get -object_type $content_type -array typeInfo
+        ns_log notice "no table for $content_type registered, trying '$typeInfo(supertype)' instead"
+        set content_type $typeInfo(supertype)
+        set table_name [db_string get_table_name "select table_name from acs_object_types where object_type=:content_type"]
+    }
     set table_name "${table_name}x"
     # get attributes of the content_item use the content_typex view
     return [db_0or1row get_item "" -column_array local_array]
