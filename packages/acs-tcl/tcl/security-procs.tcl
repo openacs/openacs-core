@@ -1393,7 +1393,7 @@ ad_proc -public security::https_available_p {} {
 
     @author Peter Marklund
 } {
-    return [expr {[get_https_port] ne ""}]
+    return [expr {[get_https_port] ni {"" 0}}]
 }
 
 ad_proc -public security::secure_conn_p {} { 
