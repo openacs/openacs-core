@@ -75,7 +75,6 @@ if { $dts ne "" } {
 #set q [string tolower $q]
 set urlencoded_query [ad_urlencode $q]
 
-if { $offset < 0 } { set offset 0 }
 set params [list $q $offset $limit $user_id $df]
 if {$search_package_id eq "" && [parameter::get -package_id $package_id -parameter SubsiteSearchP -default 1]
     && [subsite::main_site_id] != [ad_conn subsite_id]} {
@@ -128,10 +127,15 @@ if { $t eq [_ search.Feeling_Lucky] && $result(count) > 0} {
 }
 
 set elapsed [format "%.02f" [expr {double(abs($tend - $t0)) / 1000.0}]]
-if { $offset >= $result(count) } { set offset [expr {($result(count) / $limit) * $limit}] }
+set count $result(count)
+if {$count < [llength $result(ids)]} {
+    ns_log notice "returned count $count is less than number of returned ids: [llength $result(ids)]; reset count to that value"
+    set count [llength $result(ids)]
+}
+if { $offset >= $count } { set offset [expr {$count / $limit) * $limit}] }
 set low  [expr {$offset + 1}]
 set high [expr {$offset + $limit}]
-if { $high > $result(count) } { set high $result(count) }
+if { $high > $count } { set high $count }
 if { $info(automatic_and_queries_p) && "and" in $q } {
     set and_queries_notice_p 1
 } else {
@@ -147,7 +151,6 @@ set query $q
 set nquery [llength [split $q]]
 set stopwords $result(stopwords)
 set nstopwords [llength $result(stopwords)] 
-set count $result(count)
 
 template::multirow create searchresult title_summary txt_summary url_one object_id
 
