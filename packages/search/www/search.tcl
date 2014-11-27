@@ -127,12 +127,13 @@ if { $t eq [_ search.Feeling_Lucky] && $result(count) > 0} {
 }
 
 set elapsed [format "%.02f" [expr {double(abs($tend - $t0)) / 1000.0}]]
-set count $result(count)
-if {$count < [llength $result(ids)]} {
-    ns_log notice "returned count $count is less than number of returned ids: [llength $result(ids)]; reset count to that value"
-    set count [llength $result(ids)]
-}
-if { $offset >= $count } { set offset [expr {$count / $limit) * $limit}] }
+#
+# $count is the number of results to be displayed, while
+# $result(count) is the total number of results (without taking
+# permissions into account)
+#
+set count [llength $result(ids)]
+if { $offset >= $count } { set offset [expr {($count / $limit) * $limit}] }
 set low  [expr {$offset + 1}]
 set high [expr {$offset + $limit}]
 if { $high > $count } { set high $count }
@@ -158,7 +159,7 @@ for { set __i 0 } { $__i < $high - $low + 1 } { incr __i } {
     if {[catch {
         set object_id [lindex $result(ids) $__i]
         if {$object_id eq ""} {
-            ns_log warning "Search object_id is empty, this should never happen query was '${q}'"
+            ns_log warning "Search object_id is empty, this should never happen query was '$q'"
             continue
         }
         set object_type [acs_object_type $object_id]
