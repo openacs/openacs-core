@@ -1115,7 +1115,14 @@ ad_proc -private util::http::curl::request {
         lappend cmd --compressed
     }
     
-    lappend cmd --data-binary $body
+    # Unfortunately, as we are interacting with a shell, there 
+    # is no way to escape content in an easy and safe way. We 
+    # just spool body content to a file and let it be read by curl.
+    set data_binary_tmpfile [ns_tmpnam]
+    set wfd [open $data_binary_tmpfile w]
+    puts -nonewline $wfd $body
+    close $wfd
+    lappend cmd --data-binary "@${data_binary_tmpfile}"
     
     # Return response code toghether with webpage
     lappend cmd -w " %\{http_code\}"
@@ -1148,7 +1155,6 @@ ad_proc -private util::http::curl::request {
         ns_set put $resp_headers $key $value
     }
     close $rfd
-    file delete $resp_headers_tmpfile
     
     # Get values from response headers, then remove them
     set content_type     [ns_set iget $resp_headers content-type]
@@ -1167,6 +1173,10 @@ ad_proc -private util::http::curl::request {
     if {$enc ne "binary"} {
         set page [encoding convertfrom $enc $page]
     }
+    
+    # Delete temp files
+    file delete $resp_headers_tmpfile
+    file delete $data_binary_tmpfile
     
     return [list \
                 page     $page \
