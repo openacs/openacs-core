@@ -1118,7 +1118,7 @@ ad_proc -private util::http::curl::request {
     # Unfortunately, as we are interacting with a shell, there 
     # is no way to escape content in an easy and safe way. We 
     # just spool body content to a file and let it be read by curl.
-    set data_binary_tmpfile [ns_tmpnam]
+    set data_binary_tmpfile [ad_tmpnam]
     set wfd [open $data_binary_tmpfile w]
     puts -nonewline $wfd $body
     close $wfd
@@ -1139,7 +1139,7 @@ ad_proc -private util::http::curl::request {
     }
     
     # Dump response headers into a tempfile to get them
-    set resp_headers_tmpfile [ns_tmpnam]
+    set resp_headers_tmpfile [ad_tmpnam]
     lappend cmd -D $resp_headers_tmpfile
     lappend cmd $url
      
