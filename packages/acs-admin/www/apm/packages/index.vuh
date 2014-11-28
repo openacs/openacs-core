@@ -18,7 +18,7 @@ if { [db_string apm_archive_exist_p {
 			 where version_id = :version_id)
 } -default 0] } {
 
-    set file [ns_tmpnam]
+    set file [ad_tmpnam]
 
     db_blob_get_file apm_archive_serve {
 	select content 
