@@ -4426,3 +4426,9 @@ ad_proc ad_tmpnam {{template ""}} {
     }
     ns_mktemp $template
 }
+
+ad_proc ad_tmpdir {} {
+    conveniece function to return the tmp directory
+} {
+    return [ns_config ns/parameters tmpdir]
+}
