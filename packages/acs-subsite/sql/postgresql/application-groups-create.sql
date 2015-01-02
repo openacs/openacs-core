@@ -27,7 +27,7 @@ select acs_object_type__create_type (
 
 create table application_groups (
 	group_id		integer constraint application_groups_group_id_fk
-				references groups (group_id)
+				references groups (group_id) on delete cascade
 				constraint application_groups_group_id_pk
 				primary key,
         package_id              integer constraint application_groups_package_id_fk
