@@ -723,12 +723,10 @@ ad_proc -public -deprecated  template::util::set_param { name value } {
 ad_proc -public template::util::nvl { value value_if_null } {
     Analogous to SQL NVL
 } {
-
-  if { $value ne "" } {
+  if {$value eq ""} {
     return $value_if_null
-  } else {
-    return $valuenumber_l
   }
+  return $value
 }
 
 ad_proc -public template::util::number_list { last_number {start_at 0} } {
