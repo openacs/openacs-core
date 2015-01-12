@@ -117,13 +117,13 @@ ad_proc -public template_tag_if_interp_expr {} {
 
     if { $op eq "not" } {
         #
-        # Optimize common case "@arg@ no nil"
+        # Optimize common case "@arg@ not nil"
         #
         set op [lindex $args 2]
         set arg1 \"[lindex $args 0]\"
         if {$op eq "nil" && [string first @ $arg1] > -1} {
             set arg1 [template_tag_subst_reference $arg1]
-            append condition "\[info exists $arg1\] && \${$arg1} ne {}"
+            append condition "(\[info exists $arg1\] && \${$arg1} ne {})"
             set args [lrange $args 3 end]
             return
         } else {
@@ -190,7 +190,7 @@ ad_proc -public template_tag_if_interp_expr {} {
                     error "IF tag nil test uses string not variable for $arg1"
                 }
                 #append condition "\[template::util::is_nil $arg\]"
-                append condition "!\[info exists $arg\] || \${$arg} eq {}"
+                append condition "(!\[info exists $arg\] || \${$arg} eq {})"
             }
             set next $i
         }
