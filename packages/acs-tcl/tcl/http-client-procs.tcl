@@ -686,7 +686,7 @@ ad_proc -private util::http::native::request {
     @param timeout Timeout in seconds. The value can be an integer,
     a floating point number or an ns_time value.
     
-    @return Returns the data as dict with elements <code>page</code>,
+    @return Returns the data as dict with elements <code>headers</code>, <code>page</code>,
     <code>file</code>, <code>status</code>, and <code>modified</code>.
 
 } {
@@ -802,6 +802,8 @@ ad_proc -private util::http::native::request {
     set content_encoding [ns_set iget $resp_headers content-encoding]
     set location         [ns_set iget $resp_headers location]
     set last_modified    [ns_set iget $resp_headers last-modified]
+    # Move in a list to be returned to the caller
+    set r_headers [ns_set array $resp_headers]
     ns_set free $resp_headers
     
     
@@ -902,6 +904,7 @@ ad_proc -private util::http::native::request {
     
     
     return [list \
+                headers  $r_headers \
                 page     $page \
                 file     $spool_file \
                 status   $status \
@@ -1022,7 +1025,7 @@ ad_proc -private util::http::curl::request {
     before 7.32.0 just accept integer, the granularity is set to
     seconds.
     
-    @return Returns the data as dict with elements <code>page</code>,
+    @return Returns the data as dict with elements <code>headers</code>, <code>page</code>,
     <code>file</code>, <code>status</code>, and <code>modified</code>.
 
 } {
@@ -1152,13 +1155,15 @@ ad_proc -private util::http::curl::request {
         set line [split $line ":"]
         set key [lindex $line 0]
         set value [join [lrange $line 1 end] ":"]
-        ns_set put $resp_headers $key $value
+        ns_set put $resp_headers $key [string trim $value]
     }
     close $rfd
     
     # Get values from response headers, then remove them
     set content_type     [ns_set iget $resp_headers content-type]
     set last_modified    [ns_set iget $resp_headers last-modified]
+    # Move in a list to be returned to the caller
+    set r_headers [ns_set array $resp_headers]
     ns_set free $resp_headers
     
     set status [string range $response end-2 end]
@@ -1179,6 +1184,7 @@ ad_proc -private util::http::curl::request {
     file delete $data_binary_tmpfile
     
     return [list \
+		headers  $r_headers \
                 page     $page \
                 file     $spool_file \
                 status   $status \
