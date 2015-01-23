@@ -6,9 +6,10 @@ create index cr_item_publish_audit_orev_idx on cr_item_publish_audit(old_revisio
 create index cr_item_publish_audit_nrev_idx on cr_item_publish_audit(new_revision);
 
 -- make sure, we can add the foreign keys
-delete from cr_item_publish_audit where item_id not in (select item_id from cr_items);
-delete from cr_item_publish_audit where old_revision not in (select revision_id from cr_revisions);
-delete from cr_item_publish_audit where new_revision not in (select revision_id from cr_revisions);
+DELETE FROM cr_item_publish_audit a WHERE NOT EXISTS (SELECT 1 FROM cr_items i WHERE a.item_id = i.item_id);
+DELETE FROM cr_item_publish_audit a WHERE NOT EXISTS (SELECT 1 FROM cr_revisions r WHERE a.old_revision = r.revision_id);
+DELETE FROM cr_item_publish_audit a WHERE NOT EXISTS (SELECT 1 FROM cr_revisions r WHERE a.new_revision = r.revision_id);
+
 
 -- add the foreign keys
 alter table cr_item_publish_audit add constraint cr_item_publish_audit_item_fk foreign key (item_id) references cr_items (item_id);
