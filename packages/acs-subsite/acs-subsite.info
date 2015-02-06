@@ -9,7 +9,7 @@
     <implements-subsite-p>t</implements-subsite-p>
     <inherit-templates-p>t</inherit-templates-p>
     
-    <version name="5.8.2" url="http://openacs.org/repository/download/apm/acs-subsite-5.8.2.apm">
+    <version name="5.8.3d1" url="http://openacs.org/repository/download/apm/acs-subsite-5.8.3d1.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Subsite</summary>
         <release-date>2014-09-09</release-date>
@@ -18,7 +18,7 @@
         <license>GPL</license>
         <maturity>3</maturity>
 
-        <provides url="acs-subsite" version="5.8.2"/>
+        <provides url="acs-subsite" version="5.8.3d1"/>
         <requires url="acs-authentication" version="5.8.1"/>
         <requires url="acs-content-repository" version="5.8.1"/>
         <requires url="acs-kernel" version="5.8.1"/>
