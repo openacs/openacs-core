@@ -1061,20 +1061,20 @@ ad_proc -public content::item::get_revision_content { -revision_id:required -ite
       }
   }
 
-  # Get the mime type, decide if we want the text
-  content::item::get -item_id $item_id -array_name item_info
-
-  if { [info exists item_info(mime_type)]
-       && $item_info(mime_type) ne ""
-       && [string match "text/*" $item_info(mime_type)]
-   } {
+  # Get the "mime_type" from the revision to decide if we want the
+  # "text" in the result.  The "content_type" is needed for obtaining
+  # the table_name later.
+  db_1row get_mime_and_content_type_from_revision {
+      select mime_type, object_type as content_type
+      from cr_revisionsx
+      where revision_id = :revision_id
+  }
+  
+  if { $mime_type ne "" && [string match "text/*" $mime_type]} {
       set text_sql [db_map grc_get_all_content_1]
   } else {
       set text_sql ""
   }
-
-  # Get the content type
-  set content_type $item_info(content_type)
 
   # Get the table name
   set table_name [db_string grc_get_table_names {
