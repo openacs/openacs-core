@@ -276,7 +276,7 @@ ad_proc -public ad_user_login {
     } elseif { $prev_user_id != $user_id } {
         # Hose the secure login token if this user is different 
         # from the previous one.
-        ad_set_cookie -max_age 0 ad_user_login_secure ""
+        ad_unset_cookie -secure t ad_user_login_secure
     }
     
     ns_log Debug "ad_user_login: Setting new ad_user_login cookie with max_age $max_age"
@@ -331,10 +331,10 @@ ad_proc -public ad_user_logout {} {
 } {
     set domain [parameter::get -parameter CookieDomain -package_id [ad_acs_kernel_id]]
 
-    ad_set_cookie -replace t -max_age 0 -domain $domain ad_session_id ""
-    ad_set_cookie -replace t -max_age 0 -domain $domain ad_secure_token ""
-    ad_set_cookie -replace t -max_age 0 -domain $domain ad_user_login ""
-    ad_set_cookie -replace t -max_age 0 -domain $domain ad_user_login_secure ""
+    ad_unset_cookie -domain $domain -secure t ad_session_id
+    ad_unset_cookie -domain $domain -secure t ad_secure_token
+    ad_unset_cookie -domain $domain -secure t ad_user_login
+    ad_unset_cookie -domain $domain -secure t ad_user_login_secure
 }
 
 ad_proc -public ad_check_password { 
@@ -1027,7 +1027,9 @@ ad_proc -public ad_get_signed_cookie_with_expr {
 ad_proc -public ad_set_signed_cookie {
     {-replace f}
     {-secure f}
+    {-expire f}    
     {-discard f}
+    {-scriptable f}
     {-max_age ""}
     {-signature_max_age ""}
     {-domain ""}
@@ -1055,6 +1057,8 @@ ad_proc -public ad_set_signed_cookie {
 
     @param token_id allows the caller to specify a token_id.
 
+    @param scriptable allow access to the cookie from JavaScript
+
     @param value the value for the cookie. This is automatically
     url-encoded.
 
@@ -1075,10 +1079,18 @@ ad_proc -public ad_set_signed_cookie {
     }
 
     set cookie_value [ad_sign -secret $secret -token_id $token_id -max_age $signature_max_age $value]
-
     set data [ns_urlencode [list $value $cookie_value]]
 
-    ad_set_cookie -replace $replace -secure $secure -discard $discard -max_age $max_age -domain $domain -path $path $name $data
+    ad_set_cookie \
+        -replace $replace \
+        -secure $secure \
+        -discard $discard \
+        -scriptable $scriptable \
+        -expire $expire \
+        -max_age $max_age \
+        -domain $domain \
+        -path $path \
+        $name $data    
 }
 
 

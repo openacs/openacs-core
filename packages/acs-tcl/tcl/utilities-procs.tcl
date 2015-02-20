@@ -1772,140 +1772,317 @@ if {[ns_info name] eq "NaviServer"} {
 }
 
 
-ad_proc -public ad_get_cookie {
-    { -include_set_cookies t }
-    name 
-    { default "" }
-} { 
-    Returns the value of a cookie, or $default if none exists.
-} {
 
-    if { $include_set_cookies == "t" } {
-	set headers [ns_conn outputheaders]
-	set nr_headers [ns_set size $headers]
-	for { set i 0 } { $i < $nr_headers } { incr i } {
-	    if { [string tolower [ns_set key $headers $i]] eq "set-cookie" 
-		 && [regexp "^$name=(\[^;\]*)" [ns_set value $headers $i] match value] 
-	     } {
-		return $value
+if {[ns_info name] eq "NaviServer"} {
+    #
+    # Use NaviServer primitives
+    #
+    ad_proc -public ad_unset_cookie {
+	{-secure f}
+	{-domain ""}
+	{-path "/"}
+	name
+    } {
+	Un-sets a cookie.
+	
+	@see ad_get_cookie
+	@see ad_set_cookie
+    } {
+	ns_deletecookie -domain $domain -path $path -replace t -secure $secure -- $name
+    }
+
+    #
+    # Get Cookie
+    #
+    ad_proc -public ad_get_cookie {
+	{ -include_set_cookies t }
+	name 
+	{ default "" }
+    } { 
+	Returns the value of a cookie, or $default if none exists.
+
+	@see ad_set_cookie
+	@see ad_unset_cookie
+    } {
+	ns_getcookie -include_set_cookie $include_set_cookies -- $name $default
+    }
+    #
+    # Set Cookie
+    #
+    ad_proc -public ad_set_cookie {
+	{-replace f}
+	{-secure f}
+	{-expire f}
+	{-max_age ""}
+	{-domain ""}
+	{-path "/"}
+	{-discard f}
+	{-scriptable t}	
+	name 
+	{value ""}
+    } { 
+
+	Sets a cookie.  Cookies are name/value pairs stored in a client's
+	browser and are typically sent back to the server of origin with
+	each request.
+
+	@param max_age specifies the maximum age of the cookies in
+	seconds (consistent with RFC 2109). max_age "inf" specifies cookies
+	that never expire. The default behavior is to issue session
+	cookies.
+	
+	@param expire specifies whether we should expire (clear) the cookie. 
+	Setting Max-Age to zero ought to do this, but it doesn't in some browsers
+	(tested on IE 6).
+
+	@param path specifies a subset of URLs to which this cookie
+	applies. It must be a prefix of the URL being accessed.
+
+	@param domain specifies the domain(s) to which this cookie
+	applies. See RFC2109 for the semantics of this cookie attribute.
+
+	@param secure specifies to the user agent that the cookie should
+	only be transmitted back to the server of secure transport.
+	
+	@param replace forces the current output headers to be checked for
+	the same cookie. If the same cookie is set for a second time
+	without the replace option being specified, the client will
+	receive both copies of the cookie.
+
+	@param discard instructs the user agent to discard the
+	cookie when when the user agent terminates.
+
+	@param scriptable If the scriptable option is false or not
+	given the cookie is unavailable to javascript on the
+	client. This can prevent cross site scripting attacks (XSS) on
+	clients which support the HttpOnly option. Set -scriptable to
+	true if you need to access the cookie via javascript. For
+	compatibility reasons with earlier versions, OpenACS 5.8 has
+	the default set to "true". OpenACS 5.9 will have the flag per
+	default set to "false".
+
+	@param value is autmatically URL encoded.
+
+	@see ad_get_cookie
+	@see ad_unset_cookie    
+    } {
+
+
+	if { $expire == "f"} {
+	    set expire -1
+	} elseif {$max_age ne ""} {
+	    if {$max_age eq "inf"} {
+		set expire -1
+	    } else {
+		set expire [expr {[ns_time] + $max_age}]
 	    }
 	}
+
+	ns_setcookie -discard $discard -domain $domain -expires $expire -path $path \
+	    -replace $replace -scriptable $scriptable -secure $secure -- \
+	    $name $value
+    }
+    
+} else {
+    #
+    # Use plain AOLserver
+    #
+
+    #
+    # Unset Cookie
+    #
+    ad_proc -public ad_unset_cookie {
+	{-secure f}
+	{-domain ""}
+	{-path "/"}
+	name
+    } {
+	Un-sets a cookie.
+	
+	@see ad_get_cookie
+	@see ad_set_cookie
+    } {
+	ad_set_cookie -replace t -expire t -max_age 0 \
+	    -secure $secure -domain $domain -path $path \
+	    $name ""
     }
 
-    set headers [ns_conn headers]
-    set cookie [ns_set iget $headers Cookie]
+    #
+    # Get Cookie
+    #
+    ad_proc -public ad_get_cookie {
+	{ -include_set_cookies t }
+	name 
+	{ default "" }
+    } { 
+	Returns the value of a cookie, or $default if none exists.
 
-    if { [regexp " $name=(\[^;\]*)" " $cookie" match value] } {
+	@see ad_set_cookie
+	@see ad_unset_cookie
+    } {
 
-        # If the cookie was set to a blank value we actually stored two quotes.  We need
-        # to undo the kludge on the way out.
-
-        if { $value eq "\"\"" } {
-              set value ""
-        }
-	return $value
-    }
-
-    return $default
-}
-
-ad_proc -public ad_set_cookie {
-    {-replace f}
-    {-secure f}
-    {-expire f}
-    {-max_age ""}
-    {-domain ""}
-    {-path "/"}
-    {-discard f}
-    name 
-    {value ""}
-} { 
-
-    Sets a cookie. This function can be used as well to clear a cookie via:
-<pre>
-    ad_set_cookie -replace t -max_age 0 -domain $domain ad_session_id ""
-</pre>
-
-    @param max_age specifies the maximum age of the cookies in
-    seconds (consistent with RFC 2109). max_age inf specifies cookies
-    that never expire. The default behavior is to issue session
-    cookies.
-    
-    @param expire specifies whether we should expire (clear) the cookie. 
-    Setting Max-Age to zero ought to do this, but it doesn't in some browsers
-    (tested on IE 6).
-
-    @param path specifies a subset of URLs to which this cookie
-    applies. It must be a prefix of the URL being accessed.
-
-    @param domain specifies the domain(s) to which this cookie
-    applies. See RFC2109 for the semantics of this cookie attribute.
-
-    @param secure specifies to the user agent that the cookie should
-    only be transmitted back to the server of secure transport.
-    
-    @param replace forces the current output headers to be checked for
-    the same cookie. If the same cookie is set for a second time
-    without the replace option being specified, the client will
-    receive both copies of the cookie.
-
-    @param discard instructs the user agent to discard the
-    cookie when when the user agent terminates.
-
-    @param value is autmatically URL encoded.
-
-    @see ad_get_cookie
-} {
-    set headers [ad_conn outputheaders]
-    if { $replace } {
-	# Try to find an already-set cookie named $name.
-	for { set i 0 } { $i < [ns_set size $headers] } { incr i } {
-	    if { [string tolower [ns_set key $headers $i]] eq "set-cookie" 
-		 && [string match "$name=*" [ns_set value $headers $i]] 
-	     } {
-		ns_set delete $headers $i
+	if { $include_set_cookies == "t" } {
+	    set headers [ns_conn outputheaders]
+	    set nr_headers [ns_set size $headers]
+	    for { set i 0 } { $i < $nr_headers } { incr i } {
+		if { [string tolower [ns_set key $headers $i]] eq "set-cookie" 
+		     && [regexp "^$name=(\[^;\]*)" [ns_set value $headers $i] match value] 
+		 } {
+		    return $value
+		}
 	    }
 	}
+
+	set headers [ns_conn headers]
+	set cookie [ns_set iget $headers Cookie]
+
+	if { [regexp " $name=(\[^;\]*)" " $cookie" match value] } {
+
+	    # If the cookie was set to a blank value we actually stored two quotes.  We need
+	    # to undo the kludge on the way out.
+
+	    if { $value eq "\"\"" } {
+		set value ""
+	    }
+	    return $value
+	}
+
+	return $default
     }
 
-    # need to set some value, so we put "" as the cookie value
-    if { $value eq "" } {
-	set cookie "$name=\"\""
-    } else {
-	set cookie "$name=$value"
+    #
+    # Set Cookie
+    #
+    ad_proc -public ad_set_cookie {
+	{-replace f}
+	{-secure f}
+	{-expire f}
+	{-max_age ""}
+	{-domain ""}
+	{-path "/"}
+	{-discard f}
+	{-scriptable t}	
+	name 
+	{value ""}
+    } { 
+
+	Sets a cookie.  Cookies are name/value pairs stored in a client's
+	browser and are typically sent back to the server of origin with
+	each request.
+
+	@param max_age specifies the maximum age of the cookies in
+	seconds (consistent with RFC 2109). max_age "inf" specifies cookies
+	that never expire. The default behavior is to issue session
+	cookies.
+	
+	@param expire specifies whether we should expire (clear) the cookie. 
+	Setting Max-Age to zero ought to do this, but it doesn't in some browsers
+	(tested on IE 6).
+
+	@param path specifies a subset of URLs to which this cookie
+	applies. It must be a prefix of the URL being accessed.
+
+	@param domain specifies the domain(s) to which this cookie
+	applies. See RFC2109 for the semantics of this cookie attribute.
+
+	@param secure specifies to the user agent that the cookie should
+	only be transmitted back to the server of secure transport.
+	
+	@param replace forces the current output headers to be checked for
+	the same cookie. If the same cookie is set for a second time
+	without the replace option being specified, the client will
+	receive both copies of the cookie.
+
+	@param discard instructs the user agent to discard the
+	cookie when when the user agent terminates.
+
+	@param scriptable If the scriptable option is false or not
+	given the cookie is unavailable to javascript on the
+	client. This can prevent cross site scripting attacks (XSS) on
+	clients which support the HttpOnly option. Set -scriptable to
+	true if you need to access the cookie via javascript. For
+	compatibility reasons with earlier versions, OpenACS 5.8 has
+	the default set to "true". OpenACS 5.9 will have the flag per
+	default set to "false".
+
+	@param value is autmatically URL encoded.
+
+	@see ad_get_cookie
+	@see ad_unset_cookie    
+    } {
+	set headers [ad_conn outputheaders]
+	if { $replace } {
+	    # Try to find an already-set cookie named $name.
+	    for { set i 0 } { $i < [ns_set size $headers] } { incr i } {
+		if { [string tolower [ns_set key $headers $i]] eq "set-cookie" 
+		     && [string match "$name=*" [ns_set value $headers $i]] 
+		 } {
+		    ns_set delete $headers $i
+		}
+	    }
+	}
+
+	# need to set some value, so we put "" as the cookie value
+	if { $value eq "" } {
+	    set cookie "$name=\"\""
+	} else {
+	    set cookie "$name=$value"
+	}
+
+	if { $path ne "" } {
+	    append cookie "; Path=$path"
+	}
+
+	if { $discard != "f" } {
+	    append cookie "; Discard"
+	} elseif { $max_age eq "inf" } {
+	    if { $expire == "f"} {
+		#
+		# netscape seemed unhappy with huge max-age, so we use
+		# expires which seems to work on both netscape and IE
+		#
+		append cookie "; Expires=Mon, 01-Jan-2035 01:00:00 GMT"
+	    }
+	} elseif { $max_age ne "" } {
+	    #
+	    # We know $max_age is also not "inf"
+	    #
+	    append cookie "; Max-Age=$max_age"
+	    if {$expire == "f"} {
+		# Reinforce Max-Age via "Expires", unless user required
+		# immediate expiration
+		set expire_time [util::cookietime [expr {[ns_time] + $max_age}]]
+		append cookie "; Expires=$expire_time"
+	    }
+	}
+
+	if {$expire != "f"} {
+	    append cookie "; Expires=Tue, 01-Jan-1980 01:00:00 GMT"
+	}
+
+	if { $domain ne "" } {
+	    append cookie "; Domain=$domain"
+	}
+
+	if { $secure == "t" } {
+	    append cookie "; Secure"
+	}
+
+	if { $scriptable == "t" } {
+	    # Prevent access to this cookie via JavaScript
+	    append cookie "; HttpOnly"
+	}
+
+	ns_log Debug "OACS Set-Cookie: $cookie"
+	ns_set put $headers "Set-Cookie" $cookie
     }
 
-    if { $path ne "" } {
-	append cookie "; Path=$path"
-    }
 
-    if { $discard != "f" } {
-	append cookie "; Discard"
-    } elseif { $max_age eq "inf" } {
-        if { !$expire } {
-            # netscape seemed unhappy with huge max-age, so we use
-            # expires which seems to work on both netscape and IE
-            append cookie "; Expires=Mon, 01-Jan-2035 01:00:00 GMT"
-        }
-    } elseif { $max_age ne "" } {
-        append cookie "; Max-Age=$max_age; Expires=[util::cookietime [expr {[ns_time] + $max_age}]]"
-    }
-
-    if {$expire} {
-        append cookie "; Expires=Tue, 01-Jan-1980 01:00:00 GMT"
-    }
-
-    if { $domain ne "" } {
-	append cookie "; Domain=$domain"
-    }
-
-    if { $secure } {
-	append cookie "; Secure"
-    }
-
-    ns_log Debug "OACS Set-Cookie: $cookie"
-    ns_set put $headers "Set-Cookie" $cookie
 }
+
+
+
+
 
 ad_proc -private ad_run_scheduled_proc { proc_info } { 
     Runs a scheduled procedure and updates monitoring information in the shared variables. 
