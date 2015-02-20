@@ -2703,7 +2703,7 @@ ad_proc -public db_load_sql_data {
             close $fd
             
             if { $::tcl_platform(platform) eq "windows" } {
-                set fp [open "|[file join [db_get_pgbin] psql] -f $copy_file $pghost $pgport $pguser  [db_get_database]" "r"]
+                set fp [open "|[file join [db_get_pgbin] psql] -f $copy_file $pghost $pgport $pguser [db_get_database]" "r"]
             } else {
                 set fp [open "|[file join [db_get_pgbin] psql] -f $copy_file $pghost $pgport $pguser [db_get_database] $pgpass" "r"]
             }
