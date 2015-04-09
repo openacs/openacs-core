@@ -820,6 +820,13 @@ ad_proc -private util::http::native::request {
                 set method "GET"
             }
         }
+
+        #
+        # A redirect from http might point to https, which in turn
+        # might not be configured. So we have to go through
+        # util::http::request again.
+        #
+        set this_proc ::util::http::request
         
         set urlvars [list]
         
