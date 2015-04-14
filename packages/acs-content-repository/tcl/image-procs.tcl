@@ -141,9 +141,8 @@ ad_proc -public image::get_file_dimensions {
     Get the width and height of an image from
     a file in the filesystem. 
 
-    This uses for an imagemagick binary, if that is not available,
-    it tries ns_gifsize, ns_jpgsize AOLserver commands. We use imagemagick
-    first since it supports many more image formats.
+    This tries first to use built-in ns_*-support, and if not available, if talls back to 
+    imagemagick. We use imagemagick first since it supports many more image formats.
 
     @param filename full path to file in the filesystem
     
