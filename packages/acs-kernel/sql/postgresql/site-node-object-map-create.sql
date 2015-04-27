@@ -21,10 +21,10 @@ create table site_node_object_mappings (
                                     constraint snom_node_id_nn
                                     not null
 );
+create index site_node_object_mappings_node_id_idx on site_node_object_mappings(node_id);
+
 
 select define_function_args('site_node_object_map__new', 'object_id,node_id');
-
-
 
 --
 -- procedure site_node_object_map__new/2

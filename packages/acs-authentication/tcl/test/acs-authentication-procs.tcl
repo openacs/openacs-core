@@ -221,13 +221,13 @@ aa_register_case \
                 array set elm_msgs $user_info(element_messages)
 
                 if { [aa_true "element_message(email) exists" \
-			  [expr {[info exists elm_msgs(email)] && $elm_msgs(email) ne ""}]
+			  [expr {[info exists elm_msgs(email)] && $elm_msgs(email) ne ""}] ]} {
                     aa_log "element_message(email) = $elm_msgs(email)"
                 }
-                if { [aa_true "element_message(first_names) exists" [info exists elm_msgs(first_names)]
+                if { [aa_true "element_message(first_names) exists" [info exists elm_msgs(first_names)] ]} {
                     aa_log "element_message(first_names) = $elm_msgs(first_names)"
                 }
-                if { [aa_true "element_message(last_name) exists" [info exists elm_msgs(last_name)]
+                if { [aa_true "element_message(last_name) exists" [info exists elm_msgs(last_name)] ]} {
                     aa_log "element_message(last_name) = $elm_msgs(last_name)"
                 }
             }

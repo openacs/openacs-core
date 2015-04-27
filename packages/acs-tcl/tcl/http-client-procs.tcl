@@ -686,7 +686,7 @@ ad_proc -private util::http::native::request {
     @param timeout Timeout in seconds. The value can be an integer,
     a floating point number or an ns_time value.
     
-    @return Returns the data as dict with elements <code>page</code>,
+    @return Returns the data as dict with elements <code>headers</code>, <code>page</code>,
     <code>file</code>, <code>status</code>, and <code>modified</code>.
 
 } {
@@ -802,6 +802,8 @@ ad_proc -private util::http::native::request {
     set content_encoding [ns_set iget $resp_headers content-encoding]
     set location         [ns_set iget $resp_headers location]
     set last_modified    [ns_set iget $resp_headers last-modified]
+    # Move in a list to be returned to the caller
+    set r_headers [ns_set array $resp_headers]
     ns_set free $resp_headers
     
     
@@ -818,6 +820,13 @@ ad_proc -private util::http::native::request {
                 set method "GET"
             }
         }
+
+        #
+        # A redirect from http might point to https, which in turn
+        # might not be configured. So we have to go through
+        # util::http::request again.
+        #
+        set this_proc ::util::http::request
         
         set urlvars [list]
         
@@ -902,6 +911,7 @@ ad_proc -private util::http::native::request {
     
     
     return [list \
+                headers  $r_headers \
                 page     $page \
                 file     $spool_file \
                 status   $status \
@@ -1022,7 +1032,7 @@ ad_proc -private util::http::curl::request {
     before 7.32.0 just accept integer, the granularity is set to
     seconds.
     
-    @return Returns the data as dict with elements <code>page</code>,
+    @return Returns the data as dict with elements <code>headers</code>, <code>page</code>,
     <code>file</code>, <code>status</code>, and <code>modified</code>.
 
 } {
@@ -1115,7 +1125,14 @@ ad_proc -private util::http::curl::request {
         lappend cmd --compressed
     }
     
-    lappend cmd --data-binary $body
+    # Unfortunately, as we are interacting with a shell, there 
+    # is no way to escape content in an easy and safe way. We 
+    # just spool body content to a file and let it be read by curl.
+    set data_binary_tmpfile [ad_tmpnam]
+    set wfd [open $data_binary_tmpfile w]
+    puts -nonewline $wfd $body
+    close $wfd
+    lappend cmd --data-binary "@${data_binary_tmpfile}"
     
     # Return response code toghether with webpage
     lappend cmd -w " %\{http_code\}"
@@ -1132,7 +1149,7 @@ ad_proc -private util::http::curl::request {
     }
     
     # Dump response headers into a tempfile to get them
-    set resp_headers_tmpfile [ns_tmpnam]
+    set resp_headers_tmpfile [ad_tmpnam]
     lappend cmd -D $resp_headers_tmpfile
     lappend cmd $url
      
@@ -1145,14 +1162,15 @@ ad_proc -private util::http::curl::request {
         set line [split $line ":"]
         set key [lindex $line 0]
         set value [join [lrange $line 1 end] ":"]
-        ns_set put $resp_headers $key $value
+        ns_set put $resp_headers $key [string trim $value]
     }
     close $rfd
-    file delete $resp_headers_tmpfile
     
     # Get values from response headers, then remove them
     set content_type     [ns_set iget $resp_headers content-type]
     set last_modified    [ns_set iget $resp_headers last-modified]
+    # Move in a list to be returned to the caller
+    set r_headers [ns_set array $resp_headers]
     ns_set free $resp_headers
     
     set status [string range $response end-2 end]
@@ -1168,7 +1186,12 @@ ad_proc -private util::http::curl::request {
         set page [encoding convertfrom $enc $page]
     }
     
+    # Delete temp files
+    file delete $resp_headers_tmpfile
+    file delete $data_binary_tmpfile
+    
     return [list \
+		headers  $r_headers \
                 page     $page \
                 file     $spool_file \
                 status   $status \

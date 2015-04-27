@@ -52,8 +52,7 @@
         from
         [join $from_clauses ","]
         $base_query
-        [expr {[llength $where_clauses] > 0 ? " and " : ""}]
-        [join $where_clauses " and "]
+        [expr {[llength $where_clauses] > 0 ? " and [join $where_clauses { and }]" : ""}]
         order by ts_rank(fti,to_tsquery(:query)) desc
         ), :user_id, 'read')
         $limit_clause $offset_clause
@@ -67,8 +66,7 @@
       from
       [join $from_clauses ","]
       $base_query
-      [expr {[llength $where_clauses] > 0 ? " and " : ""}]
-      [join $where_clauses " and "]
+      [expr {[llength $where_clauses] > 0 ? " and [join $where_clauses { and }]" : ""}]
     </querytext>
   </fullquery>
 

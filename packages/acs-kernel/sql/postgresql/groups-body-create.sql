@@ -1157,10 +1157,6 @@ BEGIN
        PERFORM rel_segment__delete(row.segment_id);
    end loop;
 
-   --Lets clear the groups table first
-   delete from groups
-   where group_id = delete__group_id;
-
    PERFORM party__delete(delete__group_id);
 
    return 0; 
