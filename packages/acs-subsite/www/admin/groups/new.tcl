@@ -13,7 +13,7 @@ ad_page_contract {
     { group_type_exact_p t }
     { group_name "" }
     { group_id:naturalnum "" }
-    {add_to_group_id:naturalnum ""}
+    {add_to_group_id:integer ""}
     {add_with_rel_type "composition_rel"}
     { return_url "" }
     {group_rel_type_list ""}

@@ -133,6 +133,10 @@ ad_proc -callback search::search -impl tsearch2-driver {
     # clean up query for tsearch2
     set query [tsearch2::build_query -query $query]
 
+    set where_clauses ""
+    set from_clauses ""
+    if {![info exists user_id]} {set user_id 0}
+
     # don't use bind vars since pg7.3 yacks for '1' (which is what comes out of bind vars)
     set limit_clause ""
     set offset_clause ""

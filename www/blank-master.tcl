@@ -73,7 +73,12 @@ template::head::add_meta \
     
 # Add standard javascript
 #
-template::head::add_javascript -src "/resources/acs-subsite/core.js"
+# Antonio Pisano 2015-03-27: current web guidelines discourage references to
+# 'big' libraries into head, as they block page rendering until they are downloaded.
+# Move core.js inclusion to the bottom of the body.
+# See http://www.openacs.org/forums/message-view?message_id=4266252
+template::add_body_script -type "text/javascript" -src "/resources/acs-subsite/core.js"
+# template::head::add_javascript -src "/resources/acs-subsite/core.js"
 
 # The following (forms, list and xinha) should
 # be done in acs-templating.
@@ -83,7 +88,7 @@ template::head::add_javascript -src "/resources/acs-subsite/core.js"
 # hard-wired in previous versions of OpenACS.
 
 set css [parameter::get -package_id [ad_conn subsite_id] -parameter ThemeCSS -default ""]
-if { $css ne "" } {
+if {$css ne "" } {
 
     # DRB: Need to handle two cases, the lame first attempt and the more complete current
     # attempt which allows you to specify all of the parameters to template::head::add_css
@@ -159,11 +164,15 @@ if {[info exists ::acs_blank_master(xinha)]} {
       "
 
   template::add_body_handler -event onload -script "xinha_init();"
+  # Antonio Pisano 2015-03-27: including big javascripts in head is discouraged by current best practices for web.
+  # We should consider moving every inclusion like this in the body. As consequences are non-trivial, just warn for now. 
   template::head::add_javascript -src ${::xinha_dir}XinhaCore.js
 }
 
 if { [info exists ::acs_blank_master(tinymce)] } {
     # we are using TinyMCE
+    # Antonio Pisano 2015-03-27: including big javascripts in head is discouraged by current best practices for web.
+    # We should consider moving every inclusion like this in the body. As consequences are non-trivial, just warn for now. 
     template::head::add_javascript -src "/resources/acs-templating/tinymce/jscripts/tiny_mce/tiny_mce_src.js" -order tinymce0
     # get the textareas where we apply tinymce
     set tinymce_elements [list]
@@ -187,6 +196,8 @@ if { [info exists ::acs_blank_master(tinymce)] } {
     }
 
     # TODO : each element should have it's own init
+    # Antonio Pisano 2015-03-27: including big javascripts in head is discouraged by current best practices for web.
+    # We should consider moving every inclusion like this in the body. As consequences are non-trivial, just warn for now. 
     template::head::add_javascript -script "
         tinyMCE.init(\{language: \"$tinymce_lang\", $tinymce_config\});
 	" -order tinymceZ

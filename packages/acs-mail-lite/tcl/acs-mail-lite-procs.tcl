@@ -474,8 +474,8 @@ namespace eval acs_mail_lite {
 	    set filesystem_attachments_root [parameter::get -parameter "FilesystemAttachmentsRoot" \
                               -package_id $mail_package_id -default ""]
 	    if {$filesystem_attachments_root eq ""} {
-		# on a unix system this should be '/tmp'
-		set filesystem_attachments_root [file dirname [ns_tmpnam]]
+		# on a unix system this could be '/tmp'
+		set filesystem_attachments_root [ad_tmpdir]
 	    }
             foreach f $filesystem_files {
 		# make the file name absolute

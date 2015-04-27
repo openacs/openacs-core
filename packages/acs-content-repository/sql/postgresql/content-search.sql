@@ -138,7 +138,7 @@ BEGIN
     if old.live_revision is not null and old.live_revision <> coalesce(new.live_revision,0) then
         perform search_observer__enqueue(old.live_revision,'DELETE');
     end if;
-    if new.publish_status = 'expired' then
+    if old.live_revision is not null and new.publish_status = 'expired' then
         perform search_observer__enqueue(old.live_revision,'DELETE');
     end if;
 

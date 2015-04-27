@@ -66,17 +66,16 @@ create table site_nodes (
 );
 
 create index site_nodes_object_id_idx on site_nodes (object_id);
-create index site_nodes_parent_id_idx on site_nodes(parent_id,object_id,node_id);
+create index site_nodes_parent_object_node_id_idx on site_nodes(parent_id, object_id, node_id);
 create index site_nodes_tree_skey_idx on site_nodes (tree_sortkey);
+create index site_nodes_parent_id_idx on site_nodes(parent_id);
 
-
-
--- added
-select define_function_args('site_node_get_tree_sortkey','node_id');
 
 --
 -- procedure site_node_get_tree_sortkey/1
 --
+select define_function_args('site_node_get_tree_sortkey','node_id');
+
 CREATE OR REPLACE FUNCTION site_node_get_tree_sortkey(
    p_node_id integer
 ) RETURNS varbit AS $$
