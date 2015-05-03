@@ -405,13 +405,9 @@ END;
 $$ LANGUAGE plpgsql;
 
 
+
 -- function copy
-
--- old define_function_args('content_revision__copy','revision_id,copy_id,target_item_id,creation_user,creation_ip')
--- new
 select define_function_args('content_revision__copy','revision_id,copy_id;null,target_item_id;null,creation_user;null,creation_ip;null');
-
-
 
 --
 -- procedure content_revision__copy/5
@@ -516,80 +512,67 @@ END;
 $$ LANGUAGE plpgsql;
 
 
--- procedure delete
-select define_function_args('content_revision__del','revision_id');
-
-
+--
+-- Delete a content revisions
 --
 -- procedure content_revision__del/1
 --
+select define_function_args('content_revision__del','revision_id');
+
 CREATE OR REPLACE FUNCTION content_revision__del(
    delete__revision_id integer
 ) RETURNS integer AS $$
 DECLARE
   v_item_id              cr_items.item_id%TYPE;
   v_latest_revision      cr_revisions.revision_id%TYPE;
-  v_live_revision        cr_revisions.revision_id%TYPE;
-  v_rec                  record;                                      
 BEGIN
+  --
+  -- Get item_id and the latest revision
+  --
+  select item_id
+  into   v_item_id
+  from   cr_revisions 
+  where  revision_id = delete__revision_id;
 
-  -- Get item id and latest/live revisions
-  select item_id into v_item_id from cr_revisions 
-    where revision_id = delete__revision_id;
+  select latest_revision
+  into   v_latest_revision
+  from   cr_items
+  where  item_id = v_item_id;
 
-  select 
-    latest_revision, live_revision
-  into 
-    v_latest_revision, v_live_revision
-  from 
-    cr_items
-  where 
-    item_id = v_item_id;
-
-  -- Recalculate latest revision
+  --
+  -- Recalculate latest revision in case it was deleted
+  --
   if v_latest_revision = delete__revision_id then
-      for v_rec in 
-          select r.revision_id
-            from cr_revisions r, acs_objects o
-           where o.object_id = r.revision_id
-             and r.item_id = v_item_id
-             and r.revision_id <> delete__revision_id
-        order by o.creation_date desc 
-      LOOP
 
-          v_latest_revision := v_rec.revision_id;
-          exit;
-      end LOOP;
+      select r.revision_id
+       into v_latest_revision
+       from cr_revisions r, acs_objects o
+      where o.object_id = r.revision_id
+        and r.item_id = v_item_id
+        and r.revision_id <> delete__revision_id
+      order by o.creation_date desc limit 1;
+
       if NOT FOUND then
-         v_latest_revision := null;        
+         v_latest_revision := null;
       end if;
-      
+
       update cr_items set latest_revision = v_latest_revision
-      where item_id = v_item_id;    
-  end if; 
- 
-  -- Clear live revision
-  if v_live_revision = delete__revision_id then
-    update cr_items set live_revision = null
-      where item_id = v_item_id;   
+      where item_id = v_item_id;
+      
   end if; 
 
-  -- Clear the audit
-  delete from cr_item_publish_audit
-    where old_revision = delete__revision_id
-       or new_revision = delete__revision_id;
-
+  --
   -- Delete the revision
+  --
   PERFORM acs_object__delete(delete__revision_id);
 
   return 0; 
 END;
 $$ LANGUAGE plpgsql;
 
+
+
 select define_function_args('content_revision__delete','revision_id');
-
-
-
 --
 -- procedure content_revision__delete/1
 --
@@ -598,15 +581,14 @@ CREATE OR REPLACE FUNCTION content_revision__delete(
 ) RETURNS integer AS $$
 DECLARE
 BEGIN
-        PERFORM content_revision__del(delete__revision_id);
+  PERFORM content_revision__del(delete__revision_id);
   return 0; 
 END;
 $$ LANGUAGE plpgsql;
 
+
 -- function get_number
 select define_function_args('content_revision__get_number','revision_id');
-
-
 --
 -- procedure content_revision__get_number/1
 --
@@ -660,10 +642,10 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql stable strict;
 
+
+
 -- procedure to_html
 select define_function_args('content_revision__to_html','revision_id');
-
-
 --
 -- procedure content_revision__to_html/1
 --

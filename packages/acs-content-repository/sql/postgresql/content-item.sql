@@ -1337,17 +1337,21 @@ END;
 $$ LANGUAGE plpgsql stable;
 
 
-/* delete a content item
- 1) delete all associated workflows
- 2) delete all symlinks associated with this object
- 3) delete any revisions for this item
- 4) unregister template relations
- 5) delete all permissions associated with this item
- 6) delete keyword associations
- 7) delete all associated comments */
+--
+-- Delete a content item
+--
+-- Technically, the following steps are necessary, some of these are
+-- achieved via cascading operations:
+--
+-- 1) delete all associated workflows
+-- 2) delete all symlinks associated with this object
+-- 3) delete any revisions for this item
+-- 4) unregister template relations
+-- 5) delete all permissions associated with this item
+-- 6) delete keyword associations
+-- 7) delete all associated comments
 
 select define_function_args('content_item__del','item_id');
-
 
 --
 -- procedure content_item__del/1
@@ -1356,120 +1360,77 @@ CREATE OR REPLACE FUNCTION content_item__del(
    delete__item_id integer
 ) RETURNS integer AS $$
 DECLARE
-  -- v_wf_cases_val                 record;
   v_symlink_val                  record;
   v_revision_val                 record;
   v_rel_val                      record;
 BEGIN
-
-  -- Removed this as having workflow stuff in the CR is just plain wrong.
-  -- DanW, Aug 25th, 2001.
-
-  --   raise NOTICE 'Deleting associated workflows...';
-  -- 1) delete all workflow cases associated with this item
-  --   for v_wf_cases_val in select
-  --                           case_id
-  --                         from
-  --                           wf_cases
-  --                         where
-  --                           object_id = delete__item_id 
-  --   LOOP
-  --     PERFORM workflow_case__delete(v_wf_cases_val.case_id);
-  --   end loop;
-
-  -- 2) delete all symlinks to this item
-  for v_symlink_val in select 
-                         symlink_id
-                       from 
-                         cr_symlinks
-                       where 
-                         target_id = delete__item_id 
+  --
+  -- Delete all symlinks to this item
+  --
+  for v_symlink_val in select symlink_id
+                       from   cr_symlinks
+                       where  target_id = delete__item_id 
   LOOP
     PERFORM content_symlink__delete(v_symlink_val.symlink_id);
   end loop;
 
-  delete from cr_release_periods
-    where item_id = delete__item_id;
-
-  update cr_items set live_revision = null, latest_revision = null where item_id = delete__item_id;
-
-  -- 3) delete all revisions of this item
-  delete from cr_item_publish_audit
-    where item_id = delete__item_id;
-
-  for v_revision_val in select
-                          revision_id 
-                        from
-                          cr_revisions
-                        where
-                          item_id = delete__item_id 
+  --
+  -- Delete all revisions of this item
+  --
+  -- The following loop could be dropped / replaced by a cascade
+  -- operation, when proper foreign keys are used along the
+  -- inheritence path.
+  --
+  for v_revision_val in select revision_id 
+                        from   cr_revisions
+                        where  item_id = delete__item_id 
   LOOP
     PERFORM acs_object__delete(v_revision_val.revision_id);
   end loop;
-  
-  -- 4) unregister all templates to this item
-  delete from cr_item_template_map
-    where item_id = delete__item_id; 
 
+  --
   -- Delete all relations on this item
-  for v_rel_val in select
-                     rel_id
-                   from
-                     cr_item_rels
-                   where
-                     item_id = delete__item_id
-                   or
-                     related_object_id = delete__item_id 
+  --
+  for v_rel_val in select rel_id
+                   from   cr_item_rels
+                   where  item_id = delete__item_id
+                   or     related_object_id = delete__item_id 
   LOOP
     PERFORM acs_rel__delete(v_rel_val.rel_id);
   end loop;  
 
-  for v_rel_val in select
-                     rel_id
-                   from
-                     cr_child_rels
-                   where
-                     child_id = delete__item_id 
+  for v_rel_val in select rel_id
+                   from   cr_child_rels
+                   where  child_id = delete__item_id 
   LOOP
     PERFORM acs_rel__delete(v_rel_val.rel_id);
   end loop;  
 
-  for v_rel_val in select
-                     rel_id, child_id
-                   from
-                     cr_child_rels
-                   where
-                     parent_id = delete__item_id 
+  for v_rel_val in select rel_id, child_id
+                   from   cr_child_rels
+                   where  parent_id = delete__item_id 
   LOOP
     PERFORM acs_rel__delete(v_rel_val.rel_id);
     PERFORM content_item__delete(v_rel_val.child_id);
   end loop;  
 
-  -- 5) delete associated permissions
-  delete from acs_permissions
-    where object_id = delete__item_id;
-
-  -- 6) delete keyword associations
-  delete from cr_item_keyword_map
-    where item_id = delete__item_id;
-
-  -- 7) delete associated comments
+  --
+  -- Delete associated comments
+  --
   PERFORM journal_entry__delete_for_object(delete__item_id);
 
-  -- context_id debugging loop
-  --for v_error_val in c_error_cur loop
-  --    || v_error_val.object_type);
-  --end loop;
-
+  --
+  -- Finally, delete the acs_object of the item.
+  --
   PERFORM acs_object__delete(delete__item_id);
 
   return 0; 
 END;
 $$ LANGUAGE plpgsql;
 
+
+
 select define_function_args('content_item__delete','item_id');
-
-
 --
 -- procedure content_item__delete/1
 --
@@ -1478,14 +1439,14 @@ CREATE OR REPLACE FUNCTION content_item__delete(
 ) RETURNS integer AS $$
 DECLARE
 BEGIN
-        PERFORM content_item__del (delete__item_id);
-  return 0; 
+   PERFORM content_item__del (delete__item_id);
+   return 0; 
 END;
 $$ LANGUAGE plpgsql;
 
+
+
 select define_function_args('content_item__edit_name','item_id,name');
-
-
 --
 -- procedure content_item__edit_name/2
 --
