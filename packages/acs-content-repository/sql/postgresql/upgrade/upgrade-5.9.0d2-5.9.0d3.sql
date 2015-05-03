@@ -57,12 +57,13 @@ ALTER TABLE cr_items DROP CONSTRAINT cr_items_latest_fk;
 ALTER TABLE cr_items ADD CONSTRAINT cr_items_latest_fk
 FOREIGN KEY (latest_revision) REFERENCES cr_revisions(revision_id) on delete set null;
 
-ALTER TABLE cr_items DROP CONSTRAINT cr_items_live_fk
+ALTER TABLE cr_items DROP CONSTRAINT cr_items_live_fk;
 ALTER TABLE cr_items ADD CONSTRAINT cr_items_live_fk
 FOREIGN KEY (live_revision) REFERENCES cr_revisions(revision_id) on delete set null;
 
 
 DROP INDEX if exists CR_CHILD_RELS_kids_IDx;
+DROP INDEX if exists cr_child_rels_child_id_idx;
 CREATE INDEX cr_child_rels_child_id_idx on cr_child_rels(child_id);
 
 --
