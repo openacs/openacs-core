@@ -400,7 +400,8 @@ create table cr_child_rels (
 
 create index cr_child_rels_by_parent on cr_child_rels(parent_id);
 create unique index cr_child_rels_unq_id on cr_child_rels(parent_id, child_id);
-CREATE UNIQUE INDEX CR_CHILD_RELS_kids_IDx ON CR_CHILD_RELS(CHILD_ID);
+create unique index cr_child_rels_child_id_idx on cr_child_rels(child_id);
+
 
 comment on table cr_child_rels is '
   Provides for richer parent-child relationships than the simple
@@ -507,10 +508,10 @@ comment on column cr_revisions.nls_language  is '
 ';
 
 alter table cr_items add constraint cr_items_live_fk 
-      foreign key (live_revision) references cr_revisions(revision_id);
+      foreign key (live_revision) references cr_revisions(revision_id) on delete set null;
 
 alter table cr_items add constraint cr_items_latest_fk 
-     foreign key (latest_revision) references cr_revisions(revision_id);
+     foreign key (latest_revision) references cr_revisions(revision_id) on delete set null;
 
 
 
@@ -740,11 +741,11 @@ comment on table cr_content_text is '
 
 create table cr_item_publish_audit (
   item_id            integer 
-                     constraint cr_item_publish_audit_item_fk references cr_items,
+                     constraint cr_item_publish_audit_item_fk references cr_items (item_id) on delete cascade,
   old_revision       integer
-                     constraint cr_item_publish_audit_orev_fk references cr_revisions (revision_id),
+                     constraint cr_item_publish_audit_orev_fk references cr_revisions (revision_id) on delete cascade,
   new_revision       integer
-                     constraint cr_item_publish_audit_nrev_fk references cr_revisions (revision_id),
+                     constraint cr_item_publish_audit_nrev_fk references cr_revisions (revision_id) on delete cascade,
   old_status         varchar(40),
   new_status         varchar(40),
   publish_date       timestamptz
@@ -764,7 +765,7 @@ comment on table cr_item_publish_audit is '
 create table cr_release_periods (
   item_id          integer
                    constraint cr_release_periods_item_id_fk
-		   references cr_items
+		   references cr_items on delete cascade
                    constraint cr_release_periods_item_id_pk
 		   primary key,
   start_when	   timestamptz default current_timestamp,
@@ -913,7 +914,7 @@ comment on column cr_type_template_map.use_context is '
 create table cr_item_template_map (
   item_id          integer
                    constraint cr_item_template_map_item_fk
-                   references cr_items
+                   references cr_items (item_id) on delete cascade
                    constraint cr_item_template_map_item_nn
                    not null,
   template_id      integer
@@ -1151,7 +1152,7 @@ comment on column cr_keywords.description is '
 create table cr_item_keyword_map (
   item_id          integer
                    constraint cr_item_keyword_map_item_id_fk
-                   references cr_items
+                   references cr_items (item_id) on delete cascade
                    constraint cr_item_keyword_map_item_id_nn
                    not null,
   keyword_id       integer
