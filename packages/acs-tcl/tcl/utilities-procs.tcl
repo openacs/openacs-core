@@ -1804,7 +1804,7 @@ if {[ns_info name] eq "NaviServer"} {
 	@see ad_set_cookie
 	@see ad_unset_cookie
     } {
-	ns_getcookie -include_set_cookie $include_set_cookies -- $name $default
+	ns_getcookie -include_set_cookies $include_set_cookies -- $name $default
     }
     #
     # Set Cookie
