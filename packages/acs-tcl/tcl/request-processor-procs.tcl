@@ -488,6 +488,22 @@ ad_proc -private rp_serve_resource_file { path } {
     if { ![rp_file_can_be_public_p $path] } {
         ad_raise notfound
     }
+    set expireTime [parameter::get -package_id [ad_acs_kernel_id] -parameter ResourcesExpireInterval -default 0]
+    if {$expireTime != 0} {
+        if {![string is integer -strict $expireTime]} {
+            if {[regexp {^(\d)+d} $expireTime _ t]} {
+                set expireTime [expr {60*60*24*$t}]
+            } elseif {[regexp {^(\d)+h} $expireTime _ t]} {
+                set expireTime [expr {60*60*$t}]
+            } elseif {[regexp {^(\d)+m} $expireTime _ t]} {
+                set expireTime [expr {60*$t}]
+            } else {
+                ns_log error "invalid expire time '$expireTime' specified"
+                set expireTime 0
+            }
+        }
+        ns_setexpires $expireTime
+    }
     ns_returnfile 200 [ns_guesstype $path] $path
     return filter_return
 }
