@@ -101,11 +101,11 @@ comment on column rel_segments.rel_type is '
 create view rel_segment_party_map
 as select rs.segment_id, gem.element_id as party_id, gem.rel_id, gem.rel_type, 
           gem.group_id, gem.container_id, gem.ancestor_rel_type
-   from rel_segments rs, group_element_map gem, acs_object_types o1, acs_object_types o2
+   from rel_segments rs, group_element_map gem, acs_object_types ot1, acs_object_types ot2
    where gem.group_id = rs.group_id
-     and o1.object_type = gem.rel_type
-     and o2.object_type = rs.rel_type
-     and o1.tree_sortkey between o2.tree_sortkey and tree_right(o2.tree_sortkey);
+     and ot1.object_type = gem.rel_type
+     and ot2.object_type = rs.rel_type
+     and ot1.tree_sortkey between ot2.tree_sortkey and tree_right(ot2.tree_sortkey);
 
 create view rel_segment_distinct_party_map
 as select distinct segment_id, party_id, ancestor_rel_type
@@ -121,11 +121,11 @@ create view rel_seg_approved_member_map
 as select rs.segment_id, gem.element_id as member_id, gem.rel_id, 
           gem.rel_type, gem.group_id, gem.container_id
     from membership_rels mr, group_element_map gem, rel_segments rs,
-         acs_object_types o1, acs_object_types o2
+         acs_object_types ot1, acs_object_types ot2
    where rs.group_id = gem.group_id 
-     and rs.rel_type = o2.object_type
-     and o1.object_type = gem.rel_type 
-     and o1.tree_sortkey between o2.tree_sortkey and tree_right(o2.tree_sortkey)
+     and rs.rel_type = ot2.object_type
+     and ot1.object_type = gem.rel_type 
+     and ot1.tree_sortkey between ot2.tree_sortkey and tree_right(ot2.tree_sortkey)
      and mr.rel_id = gem.rel_id and mr.member_state = 'approved';
 
 create view rel_seg_distinct_member_map
@@ -231,11 +231,11 @@ BEGIN
   -- if the relation type is mapped to relational segments map them too
 
   for v_segments in select segment_id
-                  from rel_segments s, acs_object_types o1, acs_object_types o2
+                  from rel_segments s, acs_object_types ot1, acs_object_types ot2
                   where 
-                    o1.object_type = p_rel_type
-                    and o1.tree_sortkey between o2.tree_sortkey and tree_right(o2.tree_sortkey)
-                    and s.rel_type = o2.object_type
+                    ot1.object_type = p_rel_type
+                    and ot1.tree_sortkey between ot2.tree_sortkey and tree_right(ot2.tree_sortkey)
+                    and s.rel_type = ot2.object_type
                     and s.group_id = p_party_id
   loop
     perform party_approved_member__add_one(v_segments.segment_id, p_member_id, p_rel_id);
@@ -296,11 +296,11 @@ BEGIN
   -- if the relation type is mapped to relational segments unmap them too
 
   for v_segments in select segment_id
-                  from rel_segments s, acs_object_types o1, acs_object_types o2
+                  from rel_segments s, acs_object_types ot1, acs_object_types ot2
                   where 
-                    o1.object_type = p_rel_type
-                    and o1.tree_sortkey between o2.tree_sortkey and tree_right(o2.tree_sortkey)
-                    and s.rel_type = o2.object_type
+                    ot1.object_type = p_rel_type
+                    and ot1.tree_sortkey between ot2.tree_sortkey and tree_right(ot2.tree_sortkey)
+                    and s.rel_type = ot2.object_type
                     and s.group_id = p_party_id
   loop
     perform party_approved_member__remove_one(v_segments.segment_id, p_member_id, p_rel_id);
@@ -408,9 +408,9 @@ from rel_segments s,
       select group_id, group_id as component_id
       from groups) gcm,
      acs_rel_types,
-     acs_object_types o1, acs_object_types o2
+     acs_object_types ot1, acs_object_types ot2
 where s.group_id = gcm.group_id
-  and s.rel_type = o2.object_type
-  and o1.object_type = acs_rel_types.rel_type
-  and o1.tree_sortkey between o2.tree_sortkey and tree_right(o2.tree_sortkey);
+  and s.rel_type = ot2.object_type
+  and ot1.object_type = acs_rel_types.rel_type
+  and ot1.tree_sortkey between ot2.tree_sortkey and tree_right(ot2.tree_sortkey);
  
