@@ -73,12 +73,7 @@ template::head::add_meta \
     
 # Add standard javascript
 #
-# Antonio Pisano 2015-03-27: current web guidelines discourage references to
-# 'big' libraries into head, as they block page rendering until they are downloaded.
-# Move core.js inclusion to the bottom of the body.
-# See http://www.openacs.org/forums/message-view?message_id=4266252
-template::add_body_script -type "text/javascript" -src "/resources/acs-subsite/core.js"
-# template::head::add_javascript -src "/resources/acs-subsite/core.js"
+template::head::add_javascript -src "/resources/acs-subsite/core.js"
 
 # The following (forms, list and xinha) should
 # be done in acs-templating.
