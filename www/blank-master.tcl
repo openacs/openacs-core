@@ -73,12 +73,21 @@ template::head::add_meta \
     
 # Add standard javascript
 #
-# Antonio Pisano 2015-03-27: current web guidelines discourage references to
-# 'big' libraries into head, as they block page rendering until they are downloaded.
-# Move core.js inclusion to the bottom of the body.
-# See http://www.openacs.org/forums/message-view?message_id=4266252
+# Include core.js inclusion to the bottom of the body.
+# The only function needed alread onload is acs_Focus()
+#
 template::add_body_script -type "text/javascript" -src "/resources/acs-subsite/core.js"
-# template::head::add_javascript -src "/resources/acs-subsite/core.js"
+
+template::head::add_javascript -script {
+  function acs_Focus(form_name, element_name) {
+    if (document.forms == null) return;
+    if (document.forms[form_name] == null) return;
+    if (document.forms[form_name].elements[element_name] == null) return;
+    if (document.forms[form_name].elements[element_name].type == 'hidden') return;
+
+    document.forms[form_name].elements[element_name].focus();
+  }
+}
 
 # The following (forms, list and xinha) should
 # be done in acs-templating.
@@ -255,6 +264,5 @@ if {[info exists focus] && $focus ne ""} {
 # Retrieve headers and footers
 set header [template::get_header_html]
 set footer [template::get_footer_html]
-
 template::head::prepare_multirows
 set event_handlers [template::get_body_event_handlers]
