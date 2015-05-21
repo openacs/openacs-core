@@ -1,13 +1,5 @@
-/* Emulate getElementById on document.all only browsers. Requires
-   that IDs are unique to the page and do not coincide with NAME
-   attributes on other elements:-
-   Source: http://www.litotes.demon.co.uk/js_info/faq_notes/alt_dynwrite.html#getEl
-*/
-if((!document.getElementById) && document.all){
-    document.getElementById = function(id){return document.all[id];};
-}
 
-
+/* The function acs_Focus is included in blank-master.tcl
 function acs_Focus(form_name, element_name) {
     if (document.forms == null) return;
     if (document.forms[form_name] == null) return;
@@ -15,8 +7,7 @@ function acs_Focus(form_name, element_name) {
     if (document.forms[form_name].elements[element_name].type == 'hidden') return;
 
     document.forms[form_name].elements[element_name].focus();
-}
-
+} */
 
 function acs_FormRefresh(form_name) {
     if (document.forms == null) return;
