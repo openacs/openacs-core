@@ -15,8 +15,6 @@ set user_agent_p 1
 set error_info $stacktrace
 set comment_action 0
 
-
-
 set return_url $prev_url
 
 if {$user_id eq 0} {
@@ -37,12 +35,12 @@ set error_desc_email "
  --------------------------------------------------------<br>
                    [_ acs-tcl.Error_Report]<br>
  --------------------------------------------------------<br>
-<strong>[_ acs-tcl.Previus]</strong> $return_url<br>
-<strong>[_ acs-tcl.Page]</strong> $error_url<br>
-<strong>[_ acs-tcl.File]</strong> $error_file<br>
-<strong>[_ acs-tcl.User_Name]</strong> $user_name<br>
-<strong>[_ acs-tcl.lt_User_Id_of_the_user_t]</strong> $user_id<br>
-<strong>IP:</strong> [ns_conn peeraddr]<br>
+<strong>[_ acs-tcl.Previus]</strong> [ad_quotehtml $return_url]<br>
+<strong>[_ acs-tcl.Page]</strong> [ad_quotehtml $error_url]<br>
+<strong>[_ acs-tcl.File]</strong> [ad_quotehtml $error_file]<br>
+<strong>[_ acs-tcl.User_Name]</strong> [ad_quotehtml $user_name]<br>
+<strong>[_ acs-tcl.lt_User_Id_of_the_user_t]</strong> [ad_quotehtml $user_id]<br>
+<strong>IP:</strong> [ad_quotehtml [ns_conn peeraddr]]<br>
 <strong>[_ acs-tcl.Browser_of_the_user]</strong> [ad_quotehtml [ns_set get [ns_conn headers] User-Agent]]<br>
 <br>
 -----------------------------<br>
@@ -56,7 +54,10 @@ set error_desc_email "
 [_ acs-tcl.lt_NB_This_error_was_sub]"
 
 if { $bug_number eq "" && $send_email_p} {
-    acs_mail_lite::send -send_immediately -to_addr $send_to -from_addr $public_userm_email -subject $subject -body $error_desc_email
+    acs_mail_lite::send -send_immediately \
+	-to_addr $send_to -from_addr $public_userm_email \
+	-subject $subject \
+	-body $error_desc_email
 }
 set bt_instance [parameter::get -package_id [ad_acs_kernel_id] \
 		     -parameter BugTrackerInstance -default ""]
@@ -256,29 +257,20 @@ if {$auto_submit_p && $user_id > 0} {
 
 	array set row [list]
 	
-#	if { $enabled_action_id ne "" } {
-#	    foreach field [workflow::action::get_element -action_id $action_id -element edit_fields] {
-#		set row($field) [element get_value bug_edit $field]
-#	    }
-#	    foreach {category_id category_name} [bug_tracker::category_types] {
-#		set row($category_id) [element get_value bug_edit $category_id]
-#	    }
-#	}
-	
 	set description [element get_value bug_edit description]
 	set error_desc_html "
  -------------------------------------------------------- <br>
                    [_ acs-tcl.Error_Report] <br>
  -------------------------------------------------------- <br>
-<br><strong>[_ acs-tcl.Previus]</strong> $prev_url
-<br><strong>[_ acs-tcl.Page]</strong> $error_url
-<br><strong>[_ acs-tcl.File]</strong> $error_file
-<br><strong>[_ acs-tcl.User_Name]</strong> $user_name
-<br><strong>[_ acs-tcl.lt_User_Id_of_the_user_t]</strong> $user_id
+<br><strong>[_ acs-tcl.Previus]</strong> [ad_quotehtml $prev_url]
+<br><strong>[_ acs-tcl.Page]</strong> [ad_quotehtml $error_url]
+<br><strong>[_ acs-tcl.File]</strong> [ad_quotehtml $error_file]
+<br><strong>[_ acs-tcl.User_Name]</strong> [ad_quotehtml $user_name]
+<br><strong>[_ acs-tcl.lt_User_Id_of_the_user_t]</strong> [ad_quotehtml $user_id]
 <br>[_ acs-tcl.Browser_of_the_user]</strong> [ad_quotehtml [ns_set get [ns_conn headers] User-Agent]]
 <br><br><strong>[_ acs-tcl.User_comments]</strong>  
 <br>
-[template::util::richtext::get_property contents $description] <br>
+[ad_quotehtml [template::util::richtext::get_property contents $description]]<br>
 <br>"
  
   foreach available_enabled_action_id [workflow::case::get_available_enabled_action_ids -case_id $case_id] {
