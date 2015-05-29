@@ -2,41 +2,36 @@
   <property name="doc(title)">@page_title;noquote@</property>
   <property name="context">@context;noquote@</property>
 
-<table bgcolor="#cccccc" cellpadding="0" cellspacing="0" border="0" align="right">
-  <tr>
-    <td>
-      <table cellspacing="1" cellpadding="4" border="0">
-        <tr bgcolor="#ccccff">
+<div style="float: right;">
+  <table style="border: 1px solid #cccccc; border-collapse: collapse; background-color: #eeeeee;">
+    <tr style="background-color: #ccccff">
           <th>
             Quick Links
           </th>
-        </tr>
-        <tr bgcolor="#eeeeee">
+    </tr>
+    <tr>
           <td>
             <a href="http://openacs.org/">Developer Community</a>
           </td>
-        </tr>
-        <tr bgcolor="#eeeeee">
+    </tr>
+    <tr>
           <td>
             <a
                href="http://openacs.org/forums/forum-view?forum_id=14013">OpenACS Q&amp;A forum</a>
           </td>
-        </tr>
-        <tr bgcolor="#eeeeee">
+    </tr>
+    <tr>
           <td>
             <a href="http://openacs.org/forums/">Other OpenACS forums</a>
           </td>
-        </tr>
-       <tr bgcolor="#eeeeee">
+    </tr>
+    <tr>
           <td>
             <a href="http://openacs.org/bugtracker/openacs/">Report a bug</a>
           </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
-
+    </tr>
+  </table>
+</div>
 
 <h3>Tools For Developers</h3>
 
