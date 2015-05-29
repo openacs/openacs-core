@@ -2,19 +2,14 @@
 <property name="doc(title)">@page_title;noquote@</property>
 <property name="context">@context;noquote@</property>
 
-<center>
-    <table>
-        <tr>
-            <td>@dimensional_list;noquote@</td>
-        </tr>
-    </table>
-</center>
+<div style="margin: 0 auto;">
+     @dimensional_list;noquote@
+</div>
 
 <h3>Packages</h3>
-
-<table width="100%">
-    <tr><td align="right">@reload_filter;noquote@</td</tr>
-</table>
+<div style='text-align: right;'>
+  @reload_filter;noquote@
+</div>
 
 <listtemplate name="package_list"></listtemplate>
 
@@ -30,9 +25,9 @@
 <h3>Help</h3>
 
 <blockquote>
-A package is <b>enabled</b> if it is scheduled to run at server startup
+<p>A package is <b>enabled</b> if it is scheduled to run at server startup
 and is deliverable by the request processor.
-
+</p>
 <p>If a Tcl library file (<tt>*-procs.tcl</tt>) or query file (<tt>*.xql</tt>) is being
 <b>watched</b>, the request processor monitors it, reloading it into running interpreters
 whenever it is changed. This is useful during development
