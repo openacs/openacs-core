@@ -203,7 +203,7 @@ if { [template::form is_valid add_user] } {
     foreach group_rel_type $group_rel_type_list {
 	lassign $group_rel_type next_group_id next_rel_type
 	lappend return_url_list \
-		"../relations/add?group_id=$next_group_id&rel_type=[ad_urlencode $next_rel_type]&party_id=$user_id&allow_out_of_scope_p=t"
+	    [export_vars -base "../relations/add" {{group_id $next_group_id} {rel_type $next_rel_type} {party_id $user_id} {allow_out_of_scope_p t}}]
     }
 
     # Add the original return_url as the last one in the list
@@ -212,7 +212,7 @@ if { [template::form is_valid add_user] } {
     set return_url_stacked [subsite::util::return_url_stack $return_url_list]
 
     if {$return_url_stacked eq ""} {
-	set return_url_stacked "../parties/one?party_id=$user_id"
+	set return_url_stacked [export_vars -base ../parties/one {{party_id $user_id}}]
     }
     ad_returnredirect $return_url_stacked
 

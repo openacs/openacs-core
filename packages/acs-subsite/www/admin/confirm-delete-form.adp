@@ -1,4 +1,4 @@
-<form method=get action=@action@>
+<form method="get" action="@action@">
 @export_vars;noquote@
 
 <table>

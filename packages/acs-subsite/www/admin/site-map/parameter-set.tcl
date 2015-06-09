@@ -46,8 +46,8 @@ set display_warning_p 0
 
 lappend table_def [list attr_value "Value" no_sort \
 	{<td>
-	   <input name=params.$parameter_id value=\"$attr_value\" size=50>
-	    <font color=red><strong>[if { [ad_parameter_from_file $parameter_name [uplevel set package_key]] ne "" } { uplevel set display_warning_p 1 } ; ad_parameter_from_file $parameter_name [uplevel set package_key]]</strong></font>
+	   <input name="params.$parameter_id" value="$attr_value" size="50">
+	    <font color="red"><strong>[if { [ad_parameter_from_file $parameter_name [uplevel set package_key]] ne "" } { uplevel set display_warning_p 1 } ; ad_parameter_from_file $parameter_name [uplevel set package_key]]</strong></font>
 	    </td>}]
 
 append additional_sql [ad_order_by_from_sort_spec $orderby $table_def]
@@ -74,7 +74,7 @@ set table [ad_table -Torderby $orderby \
      -Tmissing_text "No parameters registered in this section." \
      -Textra_rows "<tr>
 <td></td><td></td>
-<td><input type=submit value=\"Set Parameters\">
+<td><input type='submit' value=\"Set Parameters\">
 </td></tr>" parameter_table $table_sql $table_def]
 
 
@@ -91,7 +91,7 @@ if { $display_warning_p } {
 
 append body [subst {
     <blockquote>
-    <form method=post action=parameter-set-2>
+    <form method="post" action="parameter-set-2">
     [export_vars -form {package_key package_id instance_name return_url}]
     $table
     </blockquote>

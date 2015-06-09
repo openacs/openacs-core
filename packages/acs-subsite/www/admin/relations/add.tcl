@@ -130,11 +130,15 @@ set add_party_url "[ad_conn package_url]admin/parties/new?[export_vars {add_to_g
 
 # Build a url used to select an existing party from the system (as opposed
 # to limiting the selection to parties on the current subsite).
-set add_out_of_scope_url "[ad_conn url]?[export_vars -exclude allow_out_of_scope_p $export_var_list]&allow_out_of_scope_p=t"
+set saved_allow_out_of_scope_p $allow_out_of_scope_p
+set allow_out_of_scope_p t
+set add_out_of_scope_url [export_vars -base [ad_conn url] $export_var_list]
 
 # Build a url used to select an existing party from the current subsite
-set add_in_scope_url "[ad_conn url]?[export_vars -exclude allow_out_of_scope_p $export_var_list]&allow_out_of_scope_p=f"
+set allow_out_of_scope_p f
+set add_in_scope_url [export_vars -base [ad_conn url] $export_var_list]
 
+set allow_out_of_scope_p $saved_allow_out_of_scope_p
 
 # We select out all parties that are to not already belong to the
 # specified group with the specified rel_type. Note that we take

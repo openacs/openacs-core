@@ -22,12 +22,12 @@ set context [list [list index "Object Type Index"] "Details for type $pretty_nam
 
 set page "[acs_object_type_hierarchy -object_type $object_type]"
 
-append page "
+append page [subst {
 <p>
 <b>Information</b>:
- <ul>
-<li>Pretty Name: [lang::util::localize $pretty_name]</li>
-<li>Pretty Plural: [lang::util::localize $pretty_plural]</li>
+<ul>
+  <li>Pretty Name: [lang::util::localize $pretty_name]</li>
+  <li>Pretty Plural: [lang::util::localize $pretty_plural]</li>
   <li>Abstract: [ad_decode $abstract_p "f" "False" "True"]</li>
   <li>Dynamic: [ad_decode $dynamic_p "f" "False" "True"]</li>
   [ad_decode $table_name "" "" "<li>Table Name: $table_name</li>"]
@@ -35,23 +35,25 @@ append page "
   [ad_decode $name_method "" "" "<li>Name Method: $name_method</li>"]
   [ad_decode $type_extension_table "" "" "<li>Helper Table: $type_extension_table</li>"]
   [ad_decode $package_name "" "" "<li>Package Name: $package_name</li>"]
- </ul>"
+</ul>
+}]
 
 set i 0
-set body "
-    <table border=0 cellpadding=5 cellspacing=5>
+set body [subst {
+    <table border="0" cellpadding="5" cellspacing="5">
      <tr>
-      <th align=left>Attribute Name</th>
-      <th align=left>Pretty Name</th>
-      <th align=left>Pretty Plural</th>
-      <th align=left>Datatype</th>
-      <th align=left>Default Value</th>
-      <th align=left>Minimum Number of Values</th>
-      <th align=left>Maximum Number of Values</th>
-      <th align=left>Storage</th>
-      <th align=left>Table Name</th>
-      <th align=left>Column Name</th>
-     </tr>"
+      <th align="left">Attribute Name</th>
+      <th align="left">Pretty Name</th>
+      <th align="left">Pretty Plural</th>
+      <th align="left">Datatype</th>
+      <th align="left">Default Value</th>
+      <th align="left">Minimum Number of Values</th>
+      <th align="left">Maximum Number of Values</th>
+      <th align="left">Storage</th>
+      <th align="left">Table Name</th>
+      <th align="left">Column Name</th>
+    </tr>
+}]    
 
 db_foreach attribute {
     select attribute_name,
@@ -99,13 +101,14 @@ if { ([info exists table_name] && $table_name ne "") } {
 
     set body [db_string table_comment "select comments from user_tab_comments where table_name = '[string toupper $table_name]'" -default ""]
 
-    append body "
-    <table border=0 cellpadding=5 cellspacing=5>
+    append body [subst {
+    <table border="0" cellpadding="5" cellspacing="5">
      <tr>
-      <th align=left>Type</th>
-      <th align=left>Name</th>
-      <th align=left>Comment</th>
-     </tr>"
+      <th align="left">Type</th>
+      <th align="left">Name</th>
+      <th align="left">Comment</th>
+     </tr>
+    }]
 
     set i 0
     db_foreach attribute_comment "
