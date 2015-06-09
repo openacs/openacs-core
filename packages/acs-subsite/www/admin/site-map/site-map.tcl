@@ -127,11 +127,11 @@ template::list::create \
                 </if>
 		<if @nodes.action_type@ eq "new_folder">
 		<a name="add" />
-		<form name=new_parent action=new>
+		<form name="new_parent" action="new">
 		@nodes.tree_indent;noquote@
 		@nodes.action_form_part;noquote@
-		<input name=name type=text size=8 value=Untitled>
-		<input type=submit value=New>
+		<input name="name" type="text" size="8" value="Untitled">
+		<input type="submit" value="New">
 		</form>
 		</if>
 	    }
@@ -141,18 +141,18 @@ template::list::create \
 	    display_template {
 		<if @nodes.action_type@ eq "new_app">
 		<a name="new" />
-		<form name=new_application action=package-new>
-		<input name=instance_name type=text size=8 value="">
+		<form name="new_application" action="package-new">
+		<input name="instance_name" type="text" size="8" value="">
 		@nodes.action_form_part;noquote@
-		<input type=submit value=New>
+		<input type="submit" value="New">
 		</form>
 		</if>
 		<if @nodes.action_type@ eq "rename_app">
 		<a name="rename" />
-		<form name=rename_application action=rename>
-		<input name=instance_name type=text value="@nodes.instance@">
+		<form name="rename_application" action="rename">
+		<input name="instance_name" type="text" value="@nodes.instance@">
 		@nodes.action_form_part;noquote@
-		<input type=submit value=Rename>
+		<input type="submit" value=Rename>
 		</form>
 		</if>
 		<else>
@@ -280,10 +280,10 @@ db_foreach nodes_select {} {
 
 }
 
-#set new_app_form_part_1 "<p align=\"top\"><form name=new_application action=package-new><input type=hidden name=node_id value=$node(node_id)><input type=hidden name=root_id value=$node(node_id) /><input type=hidden name=new_node_p value=t>[export_vars -form {expand:multiple}]<input name=node_name type=text size=8></p>"
+#set new_app_form_part_1 "<p align=\"top\"><form name='new_application' action='package-new'><input type='hidden' name='node_id' value='$node(node_id)'><input type='hidden' name='root_id' value='$node(node_id)' /><input type='hidden' name='new_node_p' value='t'>[export_vars -form {expand:multiple}]<input name='node_name' type='text' size='8'></p>"
 
 #set new_app_form_part_2 "<p align=\"top\">[apm_application_new_checkbox]</p>"
-#set new_app_form_part_3 "<p align=\"top\"><input type=submit value=\"Mount Package\"></form></p>"
+#set new_app_form_part_3 "<p align=\"top\"><input type='submit' value=\"Mount Package\"></form></p>"
 #    multirow append nodes "" "" "" "" $new_app_form_part_1 "" "" "" $new_app_form_part_2 "" "" "" "" "" "" "" "" "" "" $new_app_form_part_3
 
 set services ""
