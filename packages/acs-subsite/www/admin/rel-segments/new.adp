@@ -11,19 +11,19 @@
 
 You are creating a segment for 
 <if @subsite_group_id@ eq @group_id@>
-    <a href=../groups/index?view_by=rel_type>@group_name@</a>
+    <a href="../groups/index?view_by=rel_type">@group_name@</a>
 </if>
 <else>
-    <a href=../groups/one?group_id=@group_id@>@group_name@</a>
+    <a href="../groups/one?group_id=@group_id@">@group_name@</a>
 </else>
 
 <p>
 
-<form name=segment_new method=get action=new-3>
+<form name="segment_new" method="get" action="new-3">
 @export_vars;noquote@
 
 Segment Name:
-  <input type=text name=segment_name maxlength=230>
+  <input type="text" name="segment_name" maxlength="230">
 
 <p> Relationship type for which to create the segment:
   <select name="rel_type">
@@ -36,7 +36,7 @@ Segment Name:
 
 <p>
 
-<center><input type=submit value="Create"></center>
+<center><input type="submit" value="Create"></center>
 
 </form>
 

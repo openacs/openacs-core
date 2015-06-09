@@ -29,7 +29,7 @@
 <if @admin_p@ eq "1">
   <h4>Administration</h4>
   <ul>
-    <li> <a href=delete?segment_id=@props.segment_id@>Delete this segment</a> </li>
+    <li> <a href="delete?segment_id=@props.segment_id@">Delete this segment</a> </li>
   </ul>
 </if>
 

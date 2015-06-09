@@ -28,6 +28,6 @@
 <if @admin_p@ eq 1>
   <h3>Extreme Actions</h3>
   <ul>
-    <li> <a href=delete?party_id=@party_id@>Nuke this party</a>
+    <li> <a href="delete?party_id=@party_id@">Nuke this party</a>
   </ul>
 </if>

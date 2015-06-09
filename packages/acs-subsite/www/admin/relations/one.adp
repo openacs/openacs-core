@@ -62,7 +62,7 @@
       </li>
       </form>
   </if>
-  <li> <a href=remove?rel_id=@rel_id@>Remove this relation</a> </li>
+  <li> <a href="remove?rel_id=@rel_id@">Remove this relation</a> </li>
  </ul>
 </if>
 

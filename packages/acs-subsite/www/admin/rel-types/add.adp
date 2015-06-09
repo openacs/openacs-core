@@ -4,7 +4,7 @@
 				   
 <if primary_rels:rowcount eq 0> 
 
-<form method=post action=add-2>
+<form method="post" action="add-2">
 @export_form_vars@
 
 Select relation type:
@@ -18,7 +18,7 @@ Select relation type:
 </select>
 
 <center>
-<input type=submit>
+<input type="submit">
 </center>
 
 </form>
@@ -26,5 +26,5 @@ Select relation type:
 </if>
 
 <ul>
-  <li> <a href=new?@export_url_vars@>Create your own relation type</a>
+  <li> <a href="new?@export_url_vars@">Create your own relation type</a>
 </ul>

@@ -11,7 +11,7 @@
   <multiple name="rels">
    <if @rels.rownum@ eq 26>
     <br> ... ...
-    <li> <a href=rels-list?rel_type=@rel_type_enc@>Display all relations</a>
+    <li> <a href="rels-list?rel_type=@rel_type_enc@">Display all relations</a>
    </if>
    <else>
     <li> <a href="../relations/one?rel_id=@rels.rel_id@">@rels.name@</a>
@@ -47,7 +47,7 @@
   <li> <b>Side One:</b>
   <ul>
     <li> Object Type: <a href=../object-types/one?object_type=@properties.object_type_one@>@properties.object_type_one_pretty_name@</a>
-    <li> Role: <a href=roles/one?role=<%=[ad_urlencode $properties(role_one)]%>>@properties.role_one_pretty_name@</a>
+    <li> Role: <a href="roles/one?role=<%=[ad_urlencode $properties(role_one)]%>">@properties.role_one_pretty_name@</a>
 
 <if @properties.min_n_rels_one@ nil>
     <li> Min number of relations: Unspecified
@@ -65,7 +65,7 @@
   <p><li> <b>Side Two:</b>
   <ul>
     <li> Object Type: <a href=../object-types/one?object_type=@properties.object_type_two@>@properties.object_type_two_pretty_name@</a>
-    <li> Role: <a href=roles/one?role=<%=[ad_urlencode $properties(role_two)]%>>@properties.role_two_pretty_name@</a>
+    <li> Role: <a href="roles/one?role=<%=[ad_urlencode $properties(role_two)]%>">@properties.role_two_pretty_name@</a>
 
 <if @properties.min_n_rels_one@ nil>
     <li> Min number of relations: Unspecified
@@ -88,10 +88,10 @@
 
 <ul>
 
-  <li> <a href=new-2?supertype=@rel_type_enc@>Create subtype</a>
+  <li> <a href="new-2?supertype=@rel_type_enc@">Create subtype</a>
 
 <if @dynamic_p@ eq "t"> 
-  <li> <a href=delete?rel_type=@rel_type_enc@>Delete this relationship type</a>
+  <li> <a href="delete?rel_type=@rel_type_enc@">Delete this relationship type</a>
 </if>
 
 </ul>

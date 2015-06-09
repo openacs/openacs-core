@@ -13,13 +13,13 @@ You are creating a segment to represent all @role_pretty_plural@ of
 
 <p>
 
-<form name=segment_new method=get action=new-3>
+<form name="segment_new" method="get" action="new-3">
 @export_vars;noquote@
 
 Segment Name:
-  <input type=text name=segment_name maxlength=230>
+  <input type="text" name="segment_name" maxlength="230">
 
-<p><center><input type=submit value="Create"></center>
+<p><center><input type="submit" value="Create"></center>
 
 </form>
 

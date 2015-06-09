@@ -1,6 +1,6 @@
 <if @admin_p@ eq 1>
 <if @ancestor_rel_type@ eq membership_rel>
-    <multiple name=possible_member_states>
+    <multiple name="possible_member_states">
 
         <if @possible_member_states.rownum@ gt 1>
             &nbsp;|&nbsp;
