@@ -196,7 +196,12 @@ if { [template::form is_valid add_party] } {
     foreach group_rel_type $group_rel_type_list {
 	lassign $group_rel_type next_group_id next_rel_type
 	lappend return_url_list \
-		"../relations/add?group_id=$next_group_id&rel_type=[ad_urlencode $next_rel_type]&party_id=$party_id&allow_out_of_scope_p=t"
+	    [export_vars -base "../relations/add" {
+		{group_id $next_group_id}
+		{rel_type $next_rel_type}
+		party_id
+		{allow_out_of_scope_p t}
+	    }]
     }
 
     # Add the original return_url as the last one in the list
