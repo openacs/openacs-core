@@ -42,7 +42,7 @@
 <if @admin_p@ eq 1>
   <h3>Extreme Actions</h3>
   <ul>
-    <li> <a href=delete?group_id=@group_id@>Nuke this group</a>
+    <li> <a href="delete?group_id=@group_id@">Nuke this group</a>
   </ul>
 </if>
 

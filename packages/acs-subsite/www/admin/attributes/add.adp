@@ -10,17 +10,17 @@
 
  <tr>
   <td>Attribute pretty name:</td>
-  <td><input type="text" name="pretty_name" maxlength=100></td>
+  <td><input type="text" name="pretty_name" maxlength="100"></td>
  </tr>
 
  <tr>
   <td>Attribute pretty plural:</td>
-  <td><input type="text" name="pretty_plural" maxlength=100></td>
+  <td><input type="text" name="pretty_plural" maxlength="100"></td>
  </tr>
 
  <tr>
   <td>Default value:</td>
-  <td><input type="text" name="default_value" maxlength=100></td>
+  <td><input type="text" name="default_value" maxlength="100"></td>
  </tr>
 
  <tr>
@@ -46,7 +46,7 @@
 <p>
 
 <center>
-<input type=submit>
+<input type="submit">
 </center>
 
 </form>

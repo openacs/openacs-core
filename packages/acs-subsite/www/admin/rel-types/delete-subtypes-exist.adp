@@ -11,7 +11,7 @@ The following subtypes currently exist:
 
 <ul>
   <multiple name="subtypes">
-    <li> @subtypes.pretty_name@ (<a href=delete?@subtypes.export_vars@>delete</a>)
+    <li> @subtypes.pretty_name@ (<a href="delete?@subtypes.export_vars@">delete</a>)
   </multiple>
 </ul>
 

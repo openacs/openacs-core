@@ -6,7 +6,7 @@
 
 <p>#acs-subsite.First_select_the_supertype#</p>
 
-<form method=get action=new-2>
+<form method="get" action="new-2">
 <div>@export_vars;noquote@</div>
 
 <div>

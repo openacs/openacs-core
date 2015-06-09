@@ -9,7 +9,7 @@
 
     <li><strong>@rels.role_pretty_plural@ (@rels.rel_type_pretty_name@)</strong>
 
-      <group column=rel_type>
+      <group column="rel_type">
         <if @rels.num_rels@ nil>
           <ul>
             <li> There are currently no @rels.role_pretty_plural@ </li>

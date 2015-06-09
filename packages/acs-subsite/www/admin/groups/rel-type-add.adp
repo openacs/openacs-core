@@ -4,10 +4,10 @@
 				   
 <if @primary_rels:rowcount@ eq "0">
   There are no other relationship types that you can add. You can
-  <a href=../rel-types/new?return_url=@return_url_enc@>create a new relationship type</a> if you like.
+  <a href="../rel-types/new?return_url=@return_url_enc@">create a new relationship type</a> if you like.
 </if>
 <else>
-<form method=get action=rel-type-add-2>
+<form method="get" action="rel-type-add-2">
 @export_vars;noquote@
 
 Select relation type:
@@ -20,14 +20,14 @@ Select relation type:
 </select>
 
 <center>
-<input type=submit>
+<input type="submit">
 </center>
 
 </form>
 
 <ul>
 
-  <li> <a href=../rel-types/new?return_url=@return_url_enc@>create a new relationship type</a> </li>
+  <li> <a href="../rel-types/new?return_url=@return_url_enc@">create a new relationship type</a> </li>
 
 </ul>
 
