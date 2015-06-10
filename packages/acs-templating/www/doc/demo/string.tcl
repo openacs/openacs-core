@@ -1,7 +1,7 @@
 # suppose this template was obtained from a database query
 set template "
   @name@ ordered
-  <ul><list name=food><li>@food:item@</list></li>\n</ul>"
+  <ul><list name='food'><li>@food:item@</list></li>\n</ul>"
 
 set code [adp_compile -string $template]; 	# compile the template
 

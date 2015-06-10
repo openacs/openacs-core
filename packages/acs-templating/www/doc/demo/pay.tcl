@@ -25,7 +25,7 @@ if { [form is_valid pay_bill] } {
   set confirm_data [form export]
 
   # add the form:confirm element
-  append confirm_data "<input type=hidden name=\"form:confirm\" value=confirm>"
+  append confirm_data "<input type='hidden' name='form:confirm' value='confirm'>"
 
   template::set_file "[file dirname $__adp_stub]/pay-confirm"
 }
