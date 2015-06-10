@@ -32,7 +32,7 @@ list::create \
             html { align center }
             display_template {
                 <if @authorities.enabled_p@ true>
-                <a href="@authorities.enabled_p_url@" title="\#acs-admin.Disable_this_authority\#"><img src="/shared/images/checkboxchecked" alt="enabled" height="13" width="13" style="background-color: white; border: 0;"></a>
+                <a href="@authorities.enabled_p_url@" title="\#acs-admin.Disable_this_authority\#"><img src="/shared/images/checkboxchecked.gif" alt="enabled" height="13" width="13" style="background-color: white; border: 0;"></a>
                 </if>
                 <else>
                 <a href="@authorities.enabled_p_url@" title="\#acs-admin.Enable_this_authority\#"><img src="/shared/images/checkbox" height="13" width="13" style="background-color: white; border: 0;" alt="disabled"></a>
