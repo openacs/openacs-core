@@ -51,7 +51,7 @@ util::list_to_multirow options [lindex $data 2]
 
 util::list_to_multirow see [lindex $data 3]
 
-set required_marker "<font color=red>*</font>"
+set required_marker "<font color='red'>*</font>"
 
 
 

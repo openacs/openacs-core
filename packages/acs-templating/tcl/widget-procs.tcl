@@ -926,7 +926,7 @@ ad_proc -public template::widget::block {
     foreach option $options {
 	if {$count == 0} {
 	    # answer descriptions in a list: {{desc1 no_of_answers} {desc2 no_of_answers} ...}
-	    append output "<tr align=center><td></td><td></td>"
+	    append output "<tr align='center'><td></td><td></td>"
 	    foreach answer_desc $option {
 		set answer_description [lindex $answer_desc 0]
 		set no_of_answers [lindex $answer_desc 1]
@@ -1168,7 +1168,7 @@ ad_proc -public template::widget::radio_text {
     set output {}
 
     # edit mode
-    set radio_text "<input type=radio name=$element(name)"
+    set radio_text "<input type='radio' name='$element(name)'"
 
     foreach name [array names attributes] {
         if {$attributes($name) eq {}} {

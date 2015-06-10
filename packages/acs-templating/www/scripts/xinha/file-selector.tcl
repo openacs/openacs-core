@@ -169,7 +169,7 @@ template::list::create \
 	  <input type="hidden" name="@contents.object_id@_file_title" 
              id="@contents.object_id@_file_title" value="@contents.title@" />
 	  </if>
-	  <img src="@contents.icon@"  border=0 
+	  <img src="@contents.icon@"  border="0" 
 	  alt="#file-storage.@contents.type@#" /> 
 	  <a href="@contents.file_url@" <if @contents.folder_p@ eq 0>onclick="selectImage('@contents.object_id@','@contents.file_url@','@contents.type@');return false;"</if>>@contents.name@</a>
 	}

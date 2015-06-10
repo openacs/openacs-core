@@ -8,7 +8,7 @@ form create add_entry -elements {
     address -html { size 40 } -label "Address" -optional -datatype text
     city -html { size 30 } -label "City" -optional -datatype text
     state -html { size 3 maxlength 2 } -label "State" -optional -datatype keyword \
-	-validate { {expr [string length $value ] ==2 } {Entry for tate must be two characters in length } }
+	-validate { {expr [string length $value ] == 2 } {Entry for tate must be two characters in length } }
     zip -html { size 10 } -label "Zip" -optional -datatype text
     country  -html { size 30 } -label "Country" -optional -datatype text
     email -html { size 30 } -label "Email" -optional -datatype text

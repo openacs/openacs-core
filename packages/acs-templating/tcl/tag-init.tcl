@@ -20,7 +20,7 @@
 template_tag tcl { chunk params } {
 
   # if the chunk begins with = then add our own append
-  if { [string index $chunk 0] == "=" } {
+  if { [string index $chunk 0] eq "=" } {
     template::adp_append_code "append __adp_output [string range $chunk 1 end]"
   } else {
     template::adp_append_code $chunk
@@ -36,9 +36,11 @@ template_tag property { chunk params } {
   set name [ns_set iget $params name]
 
   # quote dollar signs, square bracket and quotes
-  regsub -all {[\]\[""\\$]} $chunk {\\&} quoted_chunk
+  regsub -all {[\]\[\"\\$]} $chunk {\\&} quoted_chunk
+  regsub -all {<tcl>} $quoted_chunk {<%} quoted_chunk
+  regsub -all {</tcl>} $quoted_chunk {%>} quoted_chunk
 
-  template::adp_append_code "set __adp_properties($name) \"$quoted_chunk\""
+  template::adp_append_code "set __adp_properties($name) \[ns_adp_parse -string \"$quoted_chunk\"\]"
 }
 
 # Set the master template.
