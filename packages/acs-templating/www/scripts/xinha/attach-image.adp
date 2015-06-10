@@ -20,10 +20,10 @@
                   <if @ajaxhelper_p@>
                  <fieldset>
         <legend>#acs-templating.Choose_Image#</legend>
-        	<table border=0 cellpadding=0 cellspacing=0 width="100%">
+        	<table border="0" cellpadding="0" cellspacing="0" width="100%">
         	<tr>
         	<td>
-        	<table border=0 cellpadding=0 cellspacing=0 width="330px">
+        	<table border="0" cellpadding="0" cellspacing="0" width="330px">
         	<tr><td>
 			<div id="prev-arrow-container">
 				<img id="prev-arrow" class="left-button-image" src="/resources/ajaxhelper/carousel/left-disabled.gif"/>

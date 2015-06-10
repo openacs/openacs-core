@@ -1,22 +1,22 @@
-<table bgcolor=#6699CC cellspacing=0 cellpadding=4 border=0 width="95%">
+<table bgcolor="#6699CC" cellspacing="0" cellpadding="4" border="0" width="95%">
 <tr bgcolor="#FFFFFF">
-  <td align=left><b>@form_properties.title@</b></td>
-  <td align=right>&nbsp;</td>
+  <td align="left"><b>@form_properties.title@</b></td>
+  <td align="right">&nbsp;</td>
 </tr>
 
 <if @elements:rowcount@ le 0>
-  <tr><td colspan=2><i>No items</i></td></tr>
+  <tr><td colspan="2"><i>No items</i></td></tr>
 </if>
 <else>
 
 <tr>
-<td colspan=2>
+<td colspan="2">
 
-<table bgcolor=#99CCFF cellspacing=0 cellpadding=2 border=0 width="100%">
+<table bgcolor="#99CCFF" cellspacing="0" cellpadding="2" border="0" width="100%">
   <tr bgcolor="#99CCFF">
     <% set list_tag $form_properties(headers) %>
-    <list name=list_tag>
-      <th align=left>@list_tag:item@</th>
+    <list name="list_tag">
+      <th align="left">@list_tag:item@</th>
     </list>
   </tr>
   
@@ -25,34 +25,34 @@
   <if @elements.rownum@ le @elements:rowcount@>
 
     <if @elements.col@ eq 1>
-      <if @elements.row@ odd><tr bgcolor=#ffffff></if>
-      <else><tr bgcolor=#dddddd></else>
+      <if @elements.row@ odd><tr bgcolor="#ffffff"></if>
+      <else><tr bgcolor="#dddddd"></else>
     </if>
 
    <if @elements.widget@ not in "hidden" "submit"> 
       <td nowrap>     
 
         <if @elements.widget@ eq radio or @elements.widget@ eq checkbox>
-          <table cellpadding=4 cellspacing=0 border=0>
+          <table cellpadding="4" cellspacing="0" border="0">
             <tr>
               <noparse>
-                <formgroup id=@elements.id@>
+                <formgroup id="@elements.id@">
                   <td>\@formgroup.widget;noquote\@</td><td><label for="@elements.form_id@:elements:@elements.id@:\@formgroup.option\@">\@formgroup.label\@</label></td>
                 </formgroup>
               </noparse>
             </tr>
           </table>
-          <noparse><formerror id=@elements.id@><br><font color="red"><b>\@formerror.@elements.id@\@<b></font></formerror></noparse>
+          <noparse><formerror id="@elements.id@"><br><font color="red"><b>\@formerror.@elements.id@\@<b></font></formerror></noparse>
         </if>
           
         <else>         
           <if @elements.widget@ eq inform>
-            <noparse><formwidget id=@elements.id@></noparse>
+            <noparse><formwidget id="@elements.id@"></noparse>
           </if>
           <else>
             <noparse>
-              <formwidget id=@elements.id@>
-              <formerror id=@elements.id@><br><font color="red"><b>
+              <formwidget id="@elements.id@">
+              <formerror id="@elements.id@"><br><font color="red"><b>
                 \@formerror.@elements.id@\@<b></font></formerror>
             </noparse>
           </else>
@@ -75,7 +75,7 @@
 <multiple name=elements>
   <if @elements.widget@ eq "submit">
     <tr bgcolor="#FFFFFF">
-      <td align=right colspan=2><input type=submit name=@elements.id@ value="@elements.label@"></td>
+      <td align="right" colspan="2"><input type="submit" name="@elements.id@" value="@elements.label@"></td>
     </tr>  
   </if>
 </multiple>
@@ -87,6 +87,6 @@
 
 <multiple name=elements>
   <if @elements.widget@ eq "hidden">
-     <noparse><formwidget id=@elements.id@></noparse>
+     <noparse><formwidget id="@elements.id@"></noparse>
   </if>
 </multiple> 

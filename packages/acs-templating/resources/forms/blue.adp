@@ -1,19 +1,19 @@
 
 <!-- Dark blue frame -->
-<table bgcolor=#6699CC cellspacing=0 cellpadding=4 border=0>
+<table bgcolor="#6699CC" cellspacing="0" cellpadding="4" border="0">
 <tr><td>
 
 <!-- Light blue pad -->
-<table bgcolor=#99CCFF cellspacing=0 cellpadding=6 border=0 width="100%">
+<table bgcolor="#99CCFF" cellspacing="0" cellpadding="6" border="0" width="100%">
 <tr><td>
 
 <!-- Form elements -->
-<table bgcolor=#99CCFF cellspacing=0 cellpadding=2 border=0 width="100%">
+<table bgcolor="#99CCFF" cellspacing="0" cellpadding="2" border="0" width="100%">
 
   <multiple name=elements>
 
     <if @elements.section@ not nil>
-      <tr><td colspan=2 bgcolor=#eeeeee><b>@elements.section@</b></td></tr>
+      <tr><td colspan="2" bgcolor="#eeeeee"><b>@elements.section@</b></td></tr>
     </if>
 
     <group column="section">
@@ -43,7 +43,7 @@
 	  </td>
         </if>
         <if @elements.widget@ eq radio or @elements.widget@ eq checkbox>
-            <if @elements.label@ nil><td colspan=2>></if>
+            <if @elements.label@ nil><td colspan="2">></if>
 	    <else><td></else>
 	    <noparse>
             <table cellpadding="4" cellspacing="0" border="0">
@@ -69,7 +69,7 @@
 	      </td>
 	    </if>
 	    <else>
-              <if @elements.label@ nil><td nowrap colspan=2></if>
+              <if @elements.label@ nil><td nowrap colspan="2"></if>
                 <else><td nowrap></else>
 		<noparse><formwidget id=@elements.id@>
 		<formerror id=@elements.id@><br><font 
