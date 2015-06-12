@@ -5,7 +5,7 @@
 
     <blockquote>
       <table cellpadding=3>
-	  <tr bgcolor="#eeeeee">
+	  <tr style="background-color:#eeeeee">
 	    <th>Name</th>
 	    <th>Entries</th>
 	    <th>Flushed</th>
@@ -16,10 +16,10 @@
 	  </tr>
 	  <multiple name="caches">
 	    <if @caches.rownum@ odd>
-	      <tr bgcolor="#eef8f8">
+	      <tr style="background-color:#eef8f8">
 	    </if>
 	    <else>
-	      <tr bgcolor="#f8f8ee">
+	      <tr style="background-color:#f8f8ee">
 	    </else>
 	      <td><b>@caches.name@</b></td>
 	      <td align=right>@caches.entries@</td>
@@ -36,21 +36,22 @@
       </table>
 
       <form action="show-util-memoize" method=get>
-	Show names that contain
+	<div>Show names that contain
 	<%
 	#<input name="pattern_type" type="radio" value="start">start with
 	#<input name="pattern_type" type="radio" value="contain">contain
 	%>
 	<input name="pattern" type="text" value="">
 	<input type="submit" value="Search">
+	</div>
       </form>
 
       <blockquote>
-	<font color="#994444">Notes:
+	<div style="color:#994444">Notes:
 	<ul>
 	  <li>This currently only searches the primary "util_memoize" cache
 	</ul>
-	</font> 
+	</div> 
       </blockquote>
 
     </blockquote>
