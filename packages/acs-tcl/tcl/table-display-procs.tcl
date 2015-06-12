@@ -95,9 +95,9 @@ ad_proc ad_dimensional {
             } 
             
             if {$option_val eq $thisoption } {
-                append html "<strong>[lindex $option_value 1]</strong>"
+                append html "<strong>[ns_quotehtml [lindex $option_value 1]]</strong>"
             } else {
-                append html "<a href=\"$url?[export_ns_set_vars "url" $option_key $options_set][ad_quotehtml &][ns_urlencode $option_key]=[ns_urlencode $thisoption]\">[lindex $option_value 1]</a>"
+                append html "<a href=\"[ns_quotehtml $url?[export_ns_set_vars "url" $option_key $options_set]&[ns_urlencode $option_key]=[ns_urlencode $thisoption]]\">[ns_quotehtml [lindex $option_value 1]]</a>"
             }
         }
         append html "\]</td>\n"
