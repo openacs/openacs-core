@@ -1288,7 +1288,7 @@ ad_proc -public export_entire_form_as_url_vars {
 		$vars_to_passthrough eq "" 
 		|| ($varname in $vars_to_passthrough)
 	    } {
-		lappend params "[ns_urlencode $varname]=[ns_urlencode $varvalue]" 
+		lappend params "[ns_urlencode $varname]=[ad_urlencode_query $varvalue]" 
 	    }
 	}
 	return [join $params "&"]
@@ -1749,12 +1749,22 @@ if {[ns_info name] eq "NaviServer"} {
     ad_proc -public ad_urlencode_path { string } {
 	encode provided string with url-encoding for paths (instead of queries) as defined in RFC 3986
     } { 
-	return [ns_urlencode -part path $string]
+	return [ns_urlencode -part path -- $string]
     }
     ad_proc -public ad_urldecode_path { string } {
 	decode provided string with url-encoding for paths (instead of queries) as defined in RFC 3986
     } {
-	return [ns_urldecode -part path $string]
+	return [ns_urldecode -part path -- $string]
+    }
+    ad_proc -public ad_urlencode_query { string } {
+	encode provided string with url-encoding for query (instead of paths) as defined in RFC 3986
+    } { 
+	return [ns_urlencode -part query -- $string]
+    }
+    ad_proc -public ad_urldecode_query { string } {
+	decode provided string with url-encoding for query (instead of paths) as defined in RFC 3986
+    } {
+	return [ns_urldecode -part query -- $string]
     }
 } else {
     ad_proc -public ad_urlencode_path { string } {
@@ -1769,6 +1779,18 @@ if {[ns_info name] eq "NaviServer"} {
     } {
 	return [ns_urldecode $string]
     }
+    ad_proc -public ad_urlencode_query { string } {
+	encode provided string with url-encodingfor paths; 
+	same as ad_urlencode, since aolserver does not support this difference
+    } {
+	return [ad_urlencode $string]
+    }
+    ad_proc -public ad_urldecode_query { string } {
+	decode provided string with url-encoding for paths; 
+	same as ns_urldecode, since aolserver does not support this difference
+    } {
+	return [ns_urldecode $string]
+    }    
 }
 
 
