@@ -86,7 +86,7 @@
       title="OpenACS Discussion Forums">discussion forums</a> on
       openacs.org, including the <a
       href="http://openacs.org/forums/forum-view?forum_id=14013"
-      title="OpenACS discussion forum on openacs.org">OpenACS Q&A
+      title="OpenACS discussion forum on openacs.org">OpenACS Q&amp;A
       forum</a>.</li>
       <li>Post <b>bugs</b> and <b>feature requests</b> in the <a href="http://openacs.org/bugtracker/openacs/" 
       title="Software Development Manager on openacs.org">Bug
