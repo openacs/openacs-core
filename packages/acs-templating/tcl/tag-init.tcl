@@ -127,7 +127,7 @@ template_tag include { params } {
   template::adp_append_code "    if { \[lindex \$errorCode 0\] eq \"AD\" && \[lindex \$errorCode 1\] eq \"EXCEPTION\" && \[lindex \$errorCode 2\] eq \"ad_script_abort\" } {"
   template::adp_append_code "        ad_script_abort"
   template::adp_append_code "    } else {"
-  template::adp_append_code "        append __adp_output \"Error in include template \\\"\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]\\\": \$errmsg\""
+  template::adp_append_code "        append __adp_output \"Error in include template \\\"\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]\\\": \[ns_quotehtml \$errmsg\]\""
   # JCD: If we have the ds_page_bits cache maybe save the error for later
   if { [info commands ::ds_enabled_p] ne "" && [info commands ::ds_page_fragment_cache_enabled_p] ne "" } {
       template::adp_append_code "        if {\[info exists ::ds_enabled_p\]"
@@ -667,7 +667,7 @@ template_tag include-optional { chunk params } {
 
   template::adp_append_code "if { \[catch { ad_try { lappend __adp_include_optional_output \[$command\] } ad_script_abort val { } } errmsg\] } {"
   template::adp_append_code "    global errorInfo"
-  template::adp_append_code "    append __adp_output \"Error in include template \\\"\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]\\\": \$errmsg\""
+  template::adp_append_code "    append __adp_output \"Error in include template \\\"\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]\\\": \[ns_quotehtml \$errmsg\]\""
   template::adp_append_code "    ns_log Error \"Error in include template \\\"\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]\\\": \$errmsg\n\$errorInfo\""
   template::adp_append_code "} else {"
   template::adp_append_code "if { \[string trim \[lindex \$__adp_include_optional_output end\]\] ne {} } {"
