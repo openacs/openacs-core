@@ -70,7 +70,7 @@
 <li>announcement tools (news, notifications, faq), 
 <li>and the community based e-learning platform DotLRN. 
 </ul>
-The packages can be installed online from the <a href="/acs-admin/install/" title="Install Packages">OpenACS repository</a>.</p>
+<p>The packages can be installed online from the <a href="/acs-admin/install/" title="Install Packages">OpenACS repository</a>.</p>
 </if>
   
 
