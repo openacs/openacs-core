@@ -10,7 +10,7 @@ ad_page_contract {
 
 } {
     party_type:notnull
-    { party_type_exact_p t }
+    { party_type_exact_p:boolean t }
     { party_id:naturalnum "" }
     { party.email ""}
     { return_url "" }

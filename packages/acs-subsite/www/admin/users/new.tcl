@@ -10,7 +10,7 @@ ad_page_contract {
 
 } {
     { user_type:notnull "user" }
-    { user_type_exact_p t }
+    { user_type_exact_p:boolean t }
     { user_id:naturalnum "" }
     { return_url "" }
     {add_to_group_id:naturalnum ""}

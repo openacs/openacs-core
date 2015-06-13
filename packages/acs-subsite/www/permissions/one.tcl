@@ -9,7 +9,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     object_id:naturalnum,notnull
-    {children_p "f"}
+    {children_p:boolean "f"}
     {application_url ""}
 }
 

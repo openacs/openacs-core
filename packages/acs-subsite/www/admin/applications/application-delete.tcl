@@ -10,7 +10,7 @@ ad_page_contract {
     {node_id:naturalnum,multiple ""}
     {package_id:naturalnum,multiple ""}
     {return_url .}
-    {confirm_p 0}
+    {confirm_p:boolean 0}
 }
 
 foreach id $package_id {

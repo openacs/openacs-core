@@ -9,7 +9,7 @@ ad_page_contract {
     {files:multiple,notnull}
     {file_action:multiple}
     {number_of_keys:integer,notnull ""}
-    {replace_p:array ""}
+    {replace_p:boolean,array ""}
     {message_keys:array ""}
     skip_button:optional
 }

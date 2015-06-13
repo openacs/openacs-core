@@ -14,7 +14,7 @@ ad_page_contract {
     pretty_plural:notnull,trim
     default_value:trim
     datatype:notnull,trim
-    required_p:notnull
+    required_p:boolean,notnull
     { return_url "" }
 } -properties {
     context:onevalue

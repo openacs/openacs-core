@@ -12,9 +12,9 @@ ad_page_contract {
     group_id:naturalnum,notnull
     rel_type:notnull
     {party_id:naturalnum ""}
-    { exact_p "f" }
+    { exact_p:boolean "f" }
     { return_url "" }
-    { allow_out_of_scope_p "f" }
+    { allow_out_of_scope_p:boolean "f" }
 } -properties {
     context:onevalue
     role_pretty_name:onevalue
