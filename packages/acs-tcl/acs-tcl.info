@@ -6,16 +6,17 @@
     <pretty-plural>Tcl Libraries</pretty-plural>
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
+    <implements-subsite-p>f</implements-subsite-p>
+    <inherit-templates-p>t</inherit-templates-p>
     
     <version name="5.9.0d1" url="http://openacs.org/repository/download/apm/acs-tcl-5.9.0d1.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>The Kernel Tcl API library.</summary>
         <release-date>2013-09-08</release-date>
-        <maturity>3</maturity>
-        <license url="http://www.gnu.org/copyleft/gpl.html">GPL version 2</license>
         <vendor url="http://openacs.org">OpenACS</vendor>
         <description format="text/html">Contains all the core Tcl API, including the request processor, security and session management, permissions, site-nodes, package management infrastructure, etc.</description>
         <license>GPL version 2</license>
+        <maturity>3</maturity>
 
         <provides url="acs-tcl" version="5.9.0d1"/>
         <requires url="acs-bootstrap-installer" version="5.9.0d1"/>
@@ -24,11 +25,18 @@
         <callbacks>
         </callbacks>
         <parameters>
-            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="HtmlDocBin"  default="/usr/bin/htmldoc" description="path to the executable of htmldoc"/>
-            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="ReturnComplaint"  default="/packages/acs-tcl/lib/ad-return-complaint" description="Template to use for the complaint page."/>
-            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="ReturnError"  default="/packages/acs-tcl/lib/ad-return-error" description="Template to use for the complaint page."/>
-            <parameter datatype="string"  min_n_values="1"  max_n_values="1"  name="SuppressHttpPort"  default="0" description="Set to 1 to suppress the server's configured port --useful for example, when server is behind a proxy and: connection is switching from https to http or kernel's parameter ForceHostP is set to 1."/>
-        <parameter datatype="string" min_n_values="1" max_n_values="1" name="UseHostnameDomainforReg" default="0" description="Set to 1 if website uses domains mapped in host_nodes for public users and the hostname's domain as defined in config.tcl for registering users and their sessions."/>
+            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="HtmlDocBin"  default="/usr/bin/htmldoc" description="path to the executable of htmldoc"/>
+            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="ReturnComplaint"  default="/packages/acs-tcl/lib/ad-return-complaint" description="Template to use for the complaint page."/>
+            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="ReturnError"  default="/packages/acs-tcl/lib/ad-return-error" description="Template to use for the complaint page."/>
+            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="SuppressHttpPort"  default="0" description="Set to 1 to suppress the server's configured port --useful for example, when server is behind a proxy and: connection is switching from https to http or kernel's parameter ForceHostP is set to 1."/>
+            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="TclTraceLogServerities"  description="If this parameter is set to a value different from empty then the value is expected to be a list of log severities (such as &quot;Notice Warning Error Bug Dev&quot;). If the command ns_log is issued with one of the configured severity the line is displayed via the developer support debug messsage (via ds_comment).
+
+Activating this trace requires a new start of the server." section_name="tcltrace"/>
+            <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="TclTraceSaveNsReturn"  default="0" description="When this parameter is set to 1, the content pages returned by the server via ns_return with status code 200 and type text/html are saved in the configured tmp directory. The exact full path is logged in the error.log.
+
+Activating this trace requires a new start of the server." section_name="tcltrace"/>
+            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="UseHostnameDomainforReg"  default="0" description="Set to 1 if website uses domains mapped in host_nodes for public users and the hostname's domain as defined in config.tcl for registering users and their sessions."/>
         </parameters>
+
     </version>
 </package>
