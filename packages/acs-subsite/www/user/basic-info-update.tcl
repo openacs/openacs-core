@@ -8,7 +8,7 @@ ad_page_contract {
 } {
     {return_url ""}
     {user_id:naturalnum ""}
-    {edit_p 0}
+    {edit_p:boolean 0}
     {message ""}
 }
 

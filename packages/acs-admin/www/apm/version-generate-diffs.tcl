@@ -9,7 +9,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     {version_id:integer}
-    {context_p 1}
+    {context_p:boolean 1}
 }
 
 db_1row apm_package_by_version_id {}

@@ -24,7 +24,7 @@ ad_page_contract {
     target
     {passthrough ""}
     {limit_to_users_in_group_id:naturalnum ""}
-    {only_authorized_p:integer 1}
+    {only_authorized_p:boolean 1}
     {limit_to_user_id:naturalnum ""}
     {from_user_id:naturalnum ""}
 } -properties {

@@ -8,7 +8,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     {version_id:naturalnum,notnull}
-    {write_p 0}
+    {write_p:boolean 0}
 }
 
 if { $write_p } {

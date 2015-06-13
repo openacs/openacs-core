@@ -2,7 +2,7 @@ ad_page_contract {
     Install from local file system
 } {
     {repository_url ""}
-    {success_p 0}
+    {success_p:boolean 0}
 }
 
 if { $repository_url ne "" } {

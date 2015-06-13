@@ -17,7 +17,7 @@ ad_page_contract {
     vendor_uri
     {auto_mount ""}
     {release_date ""}
-    { upgrade_p 0 }
+    { upgrade_p:boolean 0 }
 }
 
 # Validate dynamic package version attributes

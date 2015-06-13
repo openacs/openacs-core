@@ -7,7 +7,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     {sql_file:multiple ""}
-    {mount_p:multiple ""} 
+    {mount_p:boolean,multiple ""} 
     {mount_path:array ""}
 }
 

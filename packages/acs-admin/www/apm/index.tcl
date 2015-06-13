@@ -9,7 +9,7 @@ ad_page_contract {
     { orderby "package_key" }
     { owned_by "everyone" }
     { supertype "all" }
-    { reload_links_p 0 }
+    { reload_links_p:boolean 0 }
 }
 
 set page_title "Package Manager"

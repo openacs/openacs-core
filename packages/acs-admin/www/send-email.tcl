@@ -10,7 +10,7 @@ ad_page_contract {
     subject
     message
     return_url
-    {show_sent_message_p "f"}
+    {show_sent_message_p:boolean "f"}
     {sent_title "Email sent"}
     {sent_subject "Email sent"}
     {sent_message "Email was successfully sent"}
