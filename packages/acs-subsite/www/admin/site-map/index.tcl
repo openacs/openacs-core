@@ -262,7 +262,7 @@ db_foreach nodes_select {} {
 	
 	lappend urlvars "root_id=$root_id"
 	
-	set expand_url "[join $urlvars "&"]"
+	set expand_url [join $urlvars "&"]
     } else {
 	set expand_url ""
     }
@@ -300,17 +300,39 @@ db_foreach nodes_select {} {
 
 }
 
-set new_app_form_part_1 [subst {<form name="new_application" action="package-new"><div><input type="hidden" name="node_id" value="$node(node_id)"><input type="hidden" name="root_id" value="$node(node_id)"><input type="hidden" name="new_node_p" value="t">[export_vars -form {expand:multiple}]<input name="node_name" type="text" size="8">}]
+set new_app_form_part_1 [subst {
+    <form name="new_application" action="package-new">
+    <div>
+        <input type="hidden" name="node_id" value="$node(node_id)">
+        <input type="hidden" name="root_id" value="$node(node_id)">
+        <input type="hidden" name="new_node_p" value="t">[export_vars -form {expand:multiple}]
+        <input name="node_name" type="text" size="8">
+    </div>
+}]
 
-set new_app_form_part_2 "[apm_application_new_checkbox]"
-set new_app_form_part_3 "<input type=\"submit\" value=\"Mount Package\"></div></form>"
-    multirow append nodes -99999 "" "" "" $new_app_form_part_1 "" "" "" $new_app_form_part_2 "" "" "" "" "" "" "" "" "" "" $new_app_form_part_3
+set new_app_form_part_2 <div>[apm_application_new_checkbox]</div>
+set new_app_form_part_3 {
+    <div><input type="submit" value="Mount Package"></div>
+    </form>
+}
+
+append new_app_form  $new_app_form_part_1 $new_app_form_part_2 $new_app_form_part_3
+
+#multirow append nodes -99999 \
+    "" "" "" $new_app_form_part_1 \
+    "" "" "" $new_app_form_part_2 \
+    "" "" "" "" "" "" "" "" "" "" $new_app_form_part_3
+
+multirow append nodes -99999 \
+    "" "" "" "Mount an additional package at: $new_app_form"
+
 
 set services ""
 
 db_foreach services_select {} {
     if {$parameter_count > 0} {
-        append services "<li><a href=\"[export_vars -base /shared/parameters { package_id { return_url {[ad_return_url]} } }]\">$instance_name</a>"
+	set href [export_vars -base /shared/parameters { package_id { return_url {[ad_return_url]} } }]
+        append services "<li><a href=\"[ns_quotehtml $href]\">[ns_quotehtml $instance_name]</a>"
     }
 } if_no_rows {
     append services "  <li>(none)\n"
