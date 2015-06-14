@@ -18,8 +18,8 @@ ad_page_contract {
     {param_weight:optional 0}
     {source_weight:optional 0}
     {search_type:optional 0}
-    {show_deprecated_p 0}
-    {show_private_p 0}
+    {show_deprecated_p:boolean 0}
+    {show_private_p:boolean 0}
     query_string
 } -properties {
     title:onevalue

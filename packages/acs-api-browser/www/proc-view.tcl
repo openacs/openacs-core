@@ -4,7 +4,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     proc:trim
-    source_p:optional,integer,trim
+    source_p:boolean,optional,trim
     {version_id:naturalnum,optional ""}
 } -properties {
     title:onevalue

@@ -12,7 +12,7 @@ ad_page_contract {
     package_key
     message_key
     show:optional
-    confirm_p:optional
+    confirm_p:boolean,optional
 }
 
 

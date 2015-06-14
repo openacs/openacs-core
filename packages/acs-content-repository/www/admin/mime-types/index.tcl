@@ -5,7 +5,7 @@ ad_page_contract {
     @cvs-id $Id$
 
 } {
-    { extension_p 0 }
+    { extension_p:boolean 0 }
     { orderby "mime_type" }
 }
 
