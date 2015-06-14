@@ -9,7 +9,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     locale
-    confirm_p:optional
+    confirm_p:boolean,optional
 }
 
 

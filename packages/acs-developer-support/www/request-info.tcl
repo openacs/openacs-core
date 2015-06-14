@@ -7,7 +7,7 @@
 ad_page_contract {
 } {
     request
-    {rp_show_debug_p 0}
+    {rp_show_debug_p:boolean 0}
     {getrow_p:boolean "f"}
 }
 

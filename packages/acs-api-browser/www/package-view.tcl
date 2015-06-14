@@ -10,7 +10,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     version_id:naturalnum,notnull
-    { public_p "" }
+    { public_p:boolean "" }
     { kind "procs_files" }
     { about_package_key ""}
 } -properties {

@@ -4,9 +4,9 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     version_id:naturalnum,optional
-    { public_p "" }
+    { public_p:boolean "" }
     path:trim
-    source_p:integer,optional,trim
+    source_p:boolean,optional,trim
 } -properties {
     title:onevalue
     context:onevalue

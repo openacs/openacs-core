@@ -13,7 +13,7 @@ ad_page_contract {
     package_key
     message_key
     show:optional
-    {usage_p "f"}
+    {usage_p:boolean "f"}
     {return_url {}}
 }
 

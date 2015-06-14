@@ -1,7 +1,7 @@
 ad_page_contract {
     Set user preferences for API browsing.
 } {
-    source_p:integer,optional,notnull
+    source_p:boolean,optional,notnull
     return_url
 }
 
