@@ -41,7 +41,7 @@
 <ul>
   <multiple name="direct_group_membership">
     <li>@direct_group_membership.group_name@
-        (<a href="/admin/relations/remove?rel_id=@direct_group_membership.rel_id@&return_url=@return_url@">Remove</a>)</li>
+        (<a href="/admin/relations/remove?rel_id=@direct_group_membership.rel_id@&amp;return_url=@return_url@">Remove</a>)</li>
   </multiple>
 </ul>
 <p>
@@ -72,20 +72,22 @@ above.
 
 <ul>
 <if @site_wide_admin_p@ true>
-  <li><a href="modify-admin-privileges?user_id=@user_id@&action=revoke">Revoke site-wide administration privileges</a></li>
+  <li><a href="modify-admin-privileges?user_id=@user_id@&amp;action=revoke">Revoke site-wide administration privileges</a></li>
 </if>
 <else>
-  <li><a href="modify-admin-privileges?user_id=@user_id@&action=grant">Grant site-wide administration privileges</a></li>
+  <li><a href="modify-admin-privileges?user_id=@user_id@&amp;action=grant">Grant site-wide administration privileges</a></li>
 </else>
 
 <li>Merge this user with:
    <form method=get action=search>
-    <input type="hidden" name="target" value="merge">
+   <div>
+   <input type="hidden" name="target" value="merge">
     <input type="hidden" name="limit_to_user_id" value="@user_id@">
     <input type="hidden" name="from_user_id" value="@user_id@">
     <input type="hidden" name="only_authorized_p" value="0">
     <input type="text" size="15" name="keyword">
     <input type="submit" value="Find User">
+    </div>
   </form>
  </li>
 
