@@ -9,9 +9,9 @@ ad_page_contract {
     @creation-date 2000-12-11
     @cvs-id $Id$
 } {
-    group_id:naturalnum,notnull
+    group_id:integer,notnull
     rel_type:notnull
-    {party_id:naturalnum ""}
+    { party_id:naturalnum "" }
     { exact_p:boolean "f" }
     { return_url "" }
     { allow_out_of_scope_p:boolean "f" }

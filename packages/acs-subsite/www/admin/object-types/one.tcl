@@ -92,9 +92,8 @@ append body "
 	append page "
 <p>
 <b>Attributes</b>:
- <ul>
 $body
- </ul>"
+"
     }
 
 if { ([info exists table_name] && $table_name ne "") } {
@@ -137,9 +136,8 @@ if { ([info exists table_name] && $table_name ne "") } {
 	append page "
 <p>
 <b>Table Attributes</b>:
- <ul>
 $body
- </ul>"
+"
     }
 }
 
@@ -160,15 +158,10 @@ if { $i > 0 } {
     append page "
 <p>
 <b>Methods</b>:
- <ul>
   <pre>
    <code>
-$body
+[ns_quotehtml $body]
    </code>
   </pre>
- </ul>"
-}
+"}
 
-append page "
-</ul>
-"

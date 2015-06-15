@@ -20,6 +20,6 @@ group? Removing this group will:
 
 <p>
 
-<center>
+<div>
 <include src="../confirm-delete-form" action="delete-2" export_vars="@export_form_vars;noquote@" no_button="No, I want to cancel my request" yes_button="Yes, I really want to delete this group">
-</center>
+</div>

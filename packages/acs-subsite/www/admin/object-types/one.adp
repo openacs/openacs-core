@@ -5,6 +5,6 @@
 <ul class="action-links">
  <li><a href="index">View Hierarchical Index</a> | <a href="alphabetical-index">View Alphabetical Index</a></li>
 </ul>
-<p/>
+<p>
 
 @page;noquote@

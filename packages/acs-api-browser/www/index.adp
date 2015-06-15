@@ -21,7 +21,7 @@
   <h3>Disabled Packages</h3>
   <ul>
    <multiple name="disabled_packages">
-   <li>@disabled_packages.pretty_name@ @disabled_packages.version_name@</a></li>
+   <li>@disabled_packages.pretty_name@ @disabled_packages.version_name@</li>
    </multiple>
   </ul>
 </if>
@@ -31,10 +31,10 @@
   <h3>Uninstalled Packages</h3>
   <ul>
    <multiple name="uninstalled_packages">
-   <li>@uninstalled_packages.pretty_name@ @uninstalled_packages.version_name@</a></li>
+   <li>@uninstalled_packages.pretty_name@ @uninstalled_packages.version_name@</li>
    </multiple>
   </ul>
 </if>
 
-<br clear="both">
+<br style="clear:both">
 </div>

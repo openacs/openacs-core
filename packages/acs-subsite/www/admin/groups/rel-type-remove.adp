@@ -13,8 +13,6 @@ allowable relations for the group @group_name@? Doing so will permanently:
 
 </ul>
 
-<p>
-
-<center>
+<div>
 <include src="../confirm-delete-form" action="rel-type-remove-2" export_vars="@export_vars;noquote@" no_button="No, I want to cancel my request" yes_button="Yes, I really want to delete this relationship type">
-</center>
+</div>

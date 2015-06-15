@@ -116,7 +116,7 @@ template::element create rel_type object_type_one \
 set role_return_url_enc [ad_urlencode "[ad_conn url]?[ad_conn query]"]
 
 template::element create rel_type role_one \
-	-label "Role one<br><font size='-1'>(<a href=\"roles/new?return_url=$role_return_url_enc\">create new role</a>)</font>" \
+	-label "Role one<br><small>(<a href=\"roles/new?return_url=$role_return_url_enc\">create new role</a>)</small>" \
 	-datatype text \
 	-widget select \
 	-options $roles_list_i18n
@@ -141,7 +141,7 @@ template::element create rel_type object_type_two \
 
 
 template::element create rel_type role_two \
-	-label "Role two<br><font size='-1'>(<a href=\"roles/new?return_url=$role_return_url_enc\") >create new role</a>)</font>" \
+	-label "Role two<br><small>(<a href=\"roles/new?return_url=$role_return_url_enc\">create new role</a>)</small>" \
 	-datatype text \
 	-widget select \
 	-options $roles_list_i18n

@@ -1,14 +1,14 @@
 # /packages/acs-subsite/www/admin/groups/elements-display.tcl
 
-if { (![info exists group_id] || $group_id eq "") } {
+if { ![info exists group_id] || $group_id eq "" } {
     error "Group must be specified"
 }
 
-if { (![info exists rel_type] || $rel_type eq "") } {
+if { ![info exists rel_type] || $rel_type eq "" } {
     error "Rel type must be specified"
 }
 
-if { (![info exists return_url_enc] || $return_url_enc eq "") } {
+if { ![info exists return_url_enc] || $return_url_enc eq "" } {
     # Default return url to the current page
     set return_url_enc [ad_urlencode "[ad_conn url]?[ad_conn query]"]
 }
