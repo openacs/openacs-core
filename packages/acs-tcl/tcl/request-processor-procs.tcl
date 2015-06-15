@@ -427,14 +427,14 @@ ad_proc -private rp_html_directory_listing { dir } {
     # Create the table header.
     set list "
 <table>
-<tr align=left><th>File</th><th>Size</th><th>Date</th></tr>
-<tr align=left><td colspan=3><a href=../>..</a></td></tr>
+<tr align='left'><th>File</th><th>Size</th><th>Date</th></tr>
+<tr align='left'><td colspan='3'><a href='../'>..</a></td></tr>
 "
 
     # Loop through the files, adding a row to the table for each.
     foreach file [lsort [glob -nocomplain $dir/*]] {
         set tail [file tail $file]
-        set link "<a href=$tail>$tail</a>"
+        set link "<a href=\"$tail\">[ns_quotethml $tail]</a>"
 
         # Build the stat array containing information about the file.
         file stat $file stat
@@ -443,7 +443,7 @@ ad_proc -private rp_html_directory_listing { dir } {
         set time [clock format $mtime -format "%d-%h-%Y %H:%M"]
 
         # Write out the row.
-        append list "<tr align=left><td>$link</td><td>$size</td><td>$time</td></tr>\n"
+        append list "<tr align='left'><td>$link</td><td>$size</td><td>$time</td></tr>\n"
     }
     append list "</table>"
     return $list
