@@ -145,7 +145,7 @@ if { $spec_files eq "" } {
 
     append body $widget
     append body [subst {
-        <input type="submit" value="Next -->">
+        <div><input type="submit" value="Next -->"></div>
         </form>
     }]
     

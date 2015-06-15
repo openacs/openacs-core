@@ -29,7 +29,7 @@ list::create \
         edit {
             label ""
             display_template {
-                <img src="/shared/images/Edit16.gif" border="0" width="16" height="16">
+                <img src="/shared/images/Edit16.gif" alt="edit" width="16" height="16">
             }
             link_url_col edit_url
         }

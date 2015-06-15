@@ -36,7 +36,7 @@ ad_page_contract {
     keyword:optional
     target
     {passthrough ""}
-    {limit_to_users_in_group_id:naturalnum ""}
+    {limit_to_users_in_group_id:integer ""}
     {only_authorized_p:boolean 1}
     {only_needs_approval_p:boolean 0}
     {registration_before_days:integer -1}
@@ -233,7 +233,12 @@ db_foreach user_search_admin $query {
     set user_search:[set rowcount](member_state) $member_state
     
     if { $member_state ne "approved" } {
-	set user_search:[set rowcount](user_finite_state_links) [join [ad_registration_finite_state_machine_admin_links $member_state $email_verified_p $user_id_from_search "complex-search?[export_vars -url {email last_name keyword target passthrough limit_to_users_in_group_id only_authorized_p}]"] " | "]
+	set user_search:[set rowcount](user_finite_state_links) \
+	    [join [ad_registration_finite_state_machine_admin_links \
+		       $member_state $email_verified_p $user_id_from_search \
+		       [export_vars -base -url {
+			   email last_name keyword target passthrough limit_to_users_in_group_id only_authorized_p
+		       }]] " | "]
     } else {
 	set user_search:[set rowcount](user_finite_state_links) ""
     }
