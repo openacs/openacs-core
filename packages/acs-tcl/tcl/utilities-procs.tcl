@@ -2068,7 +2068,7 @@ if {[ns_info name] eq "NaviServer"} {
 	    append cookie "; Secure"
 	}
 
-	if { $scriptable == "t" } {
+	if { $scriptable == "f" } {
 	    # Prevent access to this cookie via JavaScript
 	    append cookie "; HttpOnly"
 	}
