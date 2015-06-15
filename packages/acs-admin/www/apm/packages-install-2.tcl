@@ -128,7 +128,7 @@ if {$package_key eq ""} {
 
         append body [apm_package_selection_widget $pkg_info_list $result(install)]
         append body [subst {
-            <input type=submit value="Select Data Model Scripts">
+            <div><input type="submit" value="Select Data Model Scripts"></div>
             </form>
         }]
         

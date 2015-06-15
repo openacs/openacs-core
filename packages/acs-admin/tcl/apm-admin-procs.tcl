@@ -133,24 +133,24 @@ ad_proc -private apm_package_selection_widget {
                 <td align='center'><input type='checkbox' name='package_key' value='$package_key' "
             }
             
-            append widget "></td>
-            <td>$package(package-name) $package(name)</td>
-            <td>$package_key</td>
-            <td><font color='green'>Dependencies satisfied.</font></td>
-            </tr> "
+            append widget [subst {></td>
+                <td>$package(package-name) $package(name)</td>
+                <td>$package_key</td>
+                <td><span style='color:green'>Dependencies satisfied.</span></td>
+                </tr> }]
         } elseif { [pkg_info_dependency_p $pkg_info] == "f" } {
             #Dependency failed.
-            append widget "
-            <td align=center><input type='checkbox' name='package_key' value='$package_key' ></td>
-            <td>$package(package-name) $package(name)</td>
-            <td>$package_key</td>
-            <td><font color='red'>
-            "
+            append widget [subst {
+                <td align=center><input type='checkbox' name='package_key' value='$package_key' ></td>
+                <td>$package(package-name) $package(name)</td>
+                <td>$package_key</td>
+                <td><span style='color:red'>
+            }]
             foreach comment [pkg_info_comment $pkg_info] {
                 append widget "$comment<br>"
             }
             append widget "
-            </font></td>
+            </span></td>
             </tr>
             "
         } else {

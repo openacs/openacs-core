@@ -3,7 +3,7 @@
  <property name="context">@context;noquote@</property>
 
 <formtemplate id="search">
-Search <formwidget id="search_locale"> for <formwidget id="q"> <input type="submit" value="Search">
+<p>Search <formwidget id="search_locale"> for <formwidget id="q"> <input type="submit" value="Search">
 </formtemplate>
 
 <include src="/packages/acs-lang/lib/conflict-link" locale="@current_locale@" />
@@ -30,7 +30,7 @@ Search <formwidget id="search_locale"> for <formwidget id="q"> <input type="subm
         <multiple name="packages">
           <tr style="background: #EEEEEE">
             <td>
-              <a href="@packages.batch_edit_url@" title="Batch edit all messages in this @packages.package_key@"><img src="/shared/images/Edit16.gif" border="0" width="16" height="16"></a>
+              <a href="@packages.batch_edit_url@" title="Batch edit all messages in this @packages.package_key@"><img src="/shared/images/Edit16.gif" alt="edit" width="16" height="16"></a>
             </td>
             <td>
               <a href="@packages.view_messages_url@" title="View all messages in package">@packages.package_key@</a>

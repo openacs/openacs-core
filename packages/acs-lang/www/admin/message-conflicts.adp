@@ -11,7 +11,7 @@
 
   <tr>
 
-    <td class="list-filter-pane" valign="top" width="200">
+    <td style="width:200px" class="list-filter-pane" valign="top">
 
       <listfilters name="messages"></listfilters>
 

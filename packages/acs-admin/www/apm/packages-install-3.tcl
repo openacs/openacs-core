@@ -78,7 +78,7 @@ foreach pkg_info [ad_get_client_property apm pkg_install_list] {
             set mount_html ""
         }
         append body [subst {
-            Select what data files to load for $version(package-name) $final_version_name
+            <p>Select what data files to load for $version(package-name) $final_version_name
             <blockquote>
             <table cellpadding='3' cellspacing='3' class='list-table'>
             <tr>
