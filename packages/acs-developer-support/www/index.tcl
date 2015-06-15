@@ -31,7 +31,7 @@ append body "
 
 <li>Developer support information is currently
 restricted to the following IP addresses:
-<ul type=disc>
+<ul>
 "
 
 set enabled_ips [nsv_get ds_properties enabled_ips]
@@ -51,18 +51,19 @@ if { [llength $enabled_ips] == 0 } {
     }
 }
 if { !$includes_this_ip_p } {
-    append body "<li><a href=\"add-ip?ip=[ad_conn peeraddr]\">add your IP, [ad_conn peeraddr]</a>\n"
+    append body "<li><a href='[ns_quotehtml add-ip?ip=[ad_conn peeraddr]'>add your IP, [ad_conn peeraddr]</a>\n"
 }
 
 set requests [nsv_array names ds_request]
 
+set parameterHref [export_vars -base /shared/parameters { package_id { return_url {[ad_return_url]} } }]
 append body "
 </ul>
 
 <li>Information is being swept every [parameter::get -parameter DataSweepInterval -default 900] sec
 and has a lifetime of [parameter::get -parameter DataLifetime -default 900] sec
 
-<li><a href=\"/shared/parameters?[export_vars { package_id { return_url {[ad_return_url]} } }]\">Set package parameters</a>
+<li><a href='[ns_quotehtml $parameterHref]'>Set package parameters</a>
 
 <p>
 
@@ -87,7 +88,7 @@ and has a lifetime of [parameter::get -parameter DataLifetime -default 900] sec
      "off (<a href=\"set?field=adp&amp;enabled_p=1\">turn it on</a>)"]
 
 <p>
-<li> Help on <a href=\"doc/editlocal\">edit and code links</a>.
+<li> Help on <a href='doc/editlocal'>edit and code links</a>.
 </ul>
 
 <h3>Available Request Information</h3>
@@ -97,15 +98,15 @@ and has a lifetime of [parameter::get -parameter DataLifetime -default 900] sec
 if { [llength $requests] == 0 } {
     append body "There is no request information available."
 } else {
-    append body "
-<table cellspacing=0 cellpadding=0>
-<tr bgcolor=#AAAAAA>
+    append body [subst {
+<table cellspacing="0" cellpadding="0">
+<tr style="background:#AAAAAA">
 <th>Time</th>
 <th>Duration</th>
 <th>IP</th>
 <th>Request</th>
 </tr>
-"
+    }]
 
     set colors {white #EEEEEE}
     set counter 0
@@ -167,23 +168,27 @@ if { [llength $requests] == 0 } {
 		set query ""
 	    }
             if {[ns_cache get ds_page_bits $id:error dummy]} {
-                set elink " <a href=\"send?output=$id:error\" style=\"color: red\">Errors</span></a>"
+                set elink [subst { <a href="send?output=$id:error" style="color: red">Errors</span></a>}]
             } else { 
                 set elink {}
             }
-	    append body "
-<tr bgcolor=[lindex $colors [expr { $counter % [llength $colors] }]]>
+	    append body [subst {
+<tr style="background:[lindex $colors [expr { $counter % [llength $colors] }]]">
 <td align=center>&nbsp;$start&nbsp;</td>
 <td align=right>&nbsp;$duration&nbsp;</td>
 <td>&nbsp;$peeraddr&nbsp;</td>
-<td><a href=\"request-info?request=$id\">[ns_quotehtml "$method $url$query"]</a>$elink</td>
+		<td><a href="request-info?request=[ns_quotehtml $id]">[ns_quotehtml "$method $url$query"]</a>$elink</td>
 </tr>
-"
+	    }]
             incr counter
         }
     }
     if { $show_more > 0 } {
-	append body "<tr><td colspan=4 align=right><a href=\"index?request_limit=0\"><i>show $show_more more requests</i></td></tr>\n"
+	append body [subst {
+	    <tr><td colspan="4" align="right"><a href="index?request_limit=0">
+	    <i>show $show_more more requests</i></td>
+	    </tr>
+	}]
     }
 
     append body "</table>\n"
