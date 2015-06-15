@@ -1,7 +1,6 @@
 <master>
 <property name="doc(title)">OpenACS Documentation</property>
-<center>
-<table border="0" cellpadding="8" cellspacing="0" width="80%">
+<table style="margin: 0 auto;" border="0" cellpadding="8" cellspacing="0" width="80%">
 
 <tr><td valign="top" align="left">
 <h3>OpenACS Core Documentation</h3>
@@ -99,4 +98,3 @@ Please visit the
 <a href="http://openacs.org/forums/">OpenACS forums</a> or send email to <a href="mailto:docs@openacs.org">docs@openacs.org</a>.
 </p>
 
-</center>
