@@ -1,15 +1,16 @@
 <table border="0" cellspacing="12" cellpadding="4"> 
- <tr bgcolor="#DDDDDD">
+ <tr style="background:#DDDDDD">
   <td>
-   <table>
-
     <form action="@openacs_search_url@" method="get">
+     <table>
      <tr>
       <td valign="top">
        <h4>OpenACS Tcl API Search</h4>
+       <div>
        <input type="text" name="query_string" value="@query_string@"><br>
        <input type="submit" value="All matches" name="search_type">
        <input type="submit" value="Only best match" name="search_type">
+       </div>
        <p><a href="@openacs_browse_url@">Browse OpenACS Tcl API</a></p>
       </td>
       <td>       
@@ -33,64 +34,69 @@
        </table>
       </td>
      </tr>
-    </form>
-   </table>
+    </table>
+   </form>
   </td>
  </tr>
  
- <tr bgcolor="#DDDDDD">
+ <tr style="background:#DDDDDD">
   <td colspan="2">
    <h4>OpenACS PL/SQL API Search</h4>
    <p><a href="@openacs_plsql_browse_url@">Browse OpenACS PL/SQL API</a></p>
   </td>
  </tr>
 
- <form action="@aolserver_search_url@" method="get">
-  <tr bgcolor="#DDDDDD">
+  <tr style="background:#DDDDDD">
    <td colspan="2">
+    <form action="@aolserver_search_url@" method="get">
     <h4>AOLserver Tcl API Search</h4>
+    <div>
     <input type="text" name="tcl_proc">
     <input type="submit" value="Go"><br>
     (enter <em>exact</em> procedure name)<br>
     <a href="@aolserver_tcl_api_root@">Browse AOLserver Tcl API</a>
+    </div>
+     </form>
    </td>
   </tr>
- </form>
 
- <form action="@tcl_search_url@" method="get">
-  <tr bgcolor="#DDDDDD">
+  <tr style="background:#DDDDDD">
    <td colspan="2">
+    <form action="@tcl_search_url@" method="get">
     <h4>Tcl Documentation Search</h4>
+    <div>
     <input type="text" name="tcl_proc">
     <input type="submit" value="Go"><br>
     (enter <em>exact</em> procedure name)<br>
     <a href="@tcl_docs_root@">Browse the Tcl documentation</a>
+    </div>
+     </form>
    </td>
   </tr>
- </form>
 
- <if @db_doc_search_url@ not nil>
-  <form action="@db_doc_search_url@" method="get">
-   @db_doc_search_export;noquote@
- </if>
-   <tr bgcolor="#DDDDDD">
+
+   <tr style="background:#DDDDDD">
     <td colspan="2">
      <if @db_doc_search_url@ not nil>
+     <form action="@db_doc_search_url@" method="get">
+   	@db_doc_search_export;noquote@
        <h4>@db_pretty@ Search</h4>
+       <div>
        <input type="text" name="@db_doc_search_query_name@">
        <input type="submit" value="Go"><br>
+       </div>
      </if>
      <else>
        <h4>@db_pretty@ Documentation</h4>
      </else>
-     <a href="@db_doc_url@">Browse the @db_pretty@ documentation</a>
+     <p><a href="@db_doc_url@">Browse the @db_pretty@ documentation</a>
+      <if @db_doc_search_url@ not nil>
+      </form>
     </td>
    </tr>
- <if @db_doc_search_url@ not nil>
-  </form>
  </if>
 
-  <tr bgcolor="#DDDDDD">
+  <tr style="background:#DDDDDD">
    <td colspan="2">
     <h4>OpenACS and Package Documentation</h4>
     <a href="/doc">Browse OpenACS documentation</a>

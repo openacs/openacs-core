@@ -1,16 +1,9 @@
 <form method="get" action="@action@">
 @export_vars;noquote@
 
-<table>
- <tr>
-  <td>
+<div>
     <input type="submit" name="operation" value="@no_button@">
-  </td>
-  <td width="25">&nbsp;</td>
-  <td>
     <input type="submit" name="operation" value="@yes_button@">
-  </td>
- </tr>
-</table>
+</div>
 
 </form>

@@ -7,7 +7,7 @@
 <if @member_state@ eq approved or @member_state@ eq "">
     <if @create_p@ eq 1>
       <ul>
-        <li> <a href=../relations/add?group_id=@group_id@&rel_type=@rel_type_enc@&return_url=@return_url_enc@>
+        <li> <a href="../relations/add?group_id=@group_id@"&amp;rel_type=@rel_type_enc@&amp;return_url=@return_url_enc@">
         Add a @role_pretty_name@</a>
         </li>
       </ul>

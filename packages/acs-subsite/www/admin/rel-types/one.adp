@@ -34,9 +34,9 @@
    </multiple>
   </else>
   <if @dynamic_p@ eq "t"> 
-    <p><li> <a href="../attributes/add?object_type=@rel_type_enc@&return_url=@return_url_enc@">Add an attribute</a>
+    <li> <a href="../attributes/add?object_type=@rel_type_enc@&return_url=@return_url_enc@">Add an attribute</a></li>
   </if><else>
-    <p><li> Attributes can only be added by programmers since this object type is not dynamically created
+    <li> Attributes can only be added by programmers since this object type is not dynamically created</li>
   </else>
 </ul>
 
@@ -46,7 +46,7 @@
 <ul>
   <li> <b>Side One:</b>
   <ul>
-    <li> Object Type: <a href=../object-types/one?object_type=@properties.object_type_one@>@properties.object_type_one_pretty_name@</a>
+    <li> Object Type: <a href="../object-types/one?object_type=@properties.object_type_one@">@properties.object_type_one_pretty_name@</a>
     <li> Role: <a href="roles/one?role=<%=[ad_urlencode $properties(role_one)]%>">@properties.role_one_pretty_name@</a>
 
 <if @properties.min_n_rels_one@ nil>
@@ -64,7 +64,7 @@
 
   <p><li> <b>Side Two:</b>
   <ul>
-    <li> Object Type: <a href=../object-types/one?object_type=@properties.object_type_two@>@properties.object_type_two_pretty_name@</a>
+    <li> Object Type: <a href="../object-types/one?object_type=@properties.object_type_two@">@properties.object_type_two_pretty_name@</a>
     <li> Role: <a href="roles/one?role=<%=[ad_urlencode $properties(role_two)]%>">@properties.role_two_pretty_name@</a>
 
 <if @properties.min_n_rels_one@ nil>

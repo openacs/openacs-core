@@ -41,6 +41,7 @@ set controlsUrl [export_vars -base grant {application_url object_id}]
 lappend controls "<a href=\"[ns_quotehtml $controlsUrl]\">[ns_quotehtml [_ acs-subsite.Grant_Permission]]</a>"
 
 db_1row context { *SQL* }
+set context_name [lang::util::localize $context_name]
 
 set toggleUrl [export_vars -base toggle-inherit {application_url object_id}]
 if { $security_inherit_p == "t" && $context_id ne "" } {
@@ -53,8 +54,8 @@ set controls "\[ [join $controls " | "] \]"
 
 set export_form_vars [export_vars -form {object_id application_url}]
 
-set show_children_url "one?[export_vars {object_id application_url {children_p t}}]"
-set hide_children_url "one?[export_vars {object_id application_url {children_p f}}]"
+set show_children_url [export_vars -base one {object_id application_url {children_p t}}]
+set hide_children_url [export_vars -base one {object_id application_url {children_p f}}]
 
 if {$children_p == "t"} {
     db_multirow children children { *SQL* } {

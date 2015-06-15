@@ -36,7 +36,7 @@
             </if>
             <li>Relational segment: 
               <if @rels.segment_id@ nil>
-                <em>#acs-subsite.none#</em> (<a href="../rel-segments/new?group_id=@group_id@&rel_type=@rels.rel_type@&return_url=@return_url_enc@">create segment</a>)
+                <em>#acs-subsite.none#</em> (<a href="../rel-segments/new?group_id=@group_id@&amp;rel_type=@rels.rel_type@&amp;return_url=@return_url_enc@">create segment</a>)
               </if>
               <else>
                 <a href="../rel-segments/one?segment_id=@rels.segment_id@">@rels.segment_name@</a>

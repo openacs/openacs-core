@@ -24,9 +24,9 @@
 <else>
 <ol>
  <multiple name="rels">
-  <li> <a href=../relations/one?rel_id=@rels.rel_id@>@rels.element_name@</a>
+  <li> <a href="../relations/one?rel_id=@rels.rel_id@">@rels.element_name@</a>
   <if @delete_p@ eq 1>
-    (<a href="../relations/remove?rel_id=@rels.rel_id@&return_url=@return_url_enc@">remove</a>)
+    (<a href="../relations/remove?rel_id=@rels.rel_id@&amp;return_url=@return_url_enc@">remove</a>)
   </if>
   </li>
  </multiple>

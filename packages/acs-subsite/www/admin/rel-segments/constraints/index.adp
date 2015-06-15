@@ -17,4 +17,4 @@ Currently, the system is able to handle the following relational constraints:
 
 </ul>
 
-Note: Relational constraints are created from the <a href=../>relational segment administration pages</a>
+Note: Relational constraints are created from the <a href="../">relational segment administration pages</a>

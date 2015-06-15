@@ -9,7 +9,7 @@ ad_page_contract {
     @cvs-id $Id$
 
 } {
-    group_id:naturalnum,notnull
+    group_id:integer,notnull
 } -properties {
     context:onevalue
     group_name:onevalue

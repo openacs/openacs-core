@@ -44,8 +44,9 @@
 <p><h3>Administration</h3>
  <ul>
   <if @admin_p@ eq "1" and @member_state@ ne "">
+        <li> Member State:
       <form method="post" action="change-member-state">
-      <li> Member State:
+    	<div>
       <input type="hidden" name="return_url" value="@QQreturn_url@">
       <input type="hidden" name="rel_id" value="@rel_id@">
       <select name="member_state">
@@ -59,8 +60,9 @@
       </list>
       </select>
       <input type="submit" value="Change Status">
-      </li>
+      </div>
       </form>
+      </li>
   </if>
   <li> <a href="remove?rel_id=@rel_id@">Remove this relation</a> </li>
  </ul>

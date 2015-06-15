@@ -441,7 +441,7 @@ ad_proc -public api_proc_documentation {
     append out [util_wrap_list $command_line] "\n<blockquote>\n"
     
     if { $script_p } {
-        append out [subst {Defined in 
+        append out [subst {<p>Defined in 
             <a href="/api-doc/procs-file-view?path=[ns_urlencode $doc_elements(script)]">$doc_elements(script)</a>
             <p>}]
     }
@@ -544,12 +544,12 @@ ad_proc -public api_proc_documentation {
                  -default 1]} {
             append out [subst {<dt><b>Source code:</b></dt><dd>
                 <pre class="code">[::apidoc::tcl_to_html $proc_name]</pre>
-                </dd><p>
+                </dd>
             }]
         } else {
             append out [subst {<dt><b>Source code:</b></dt><dd>
                 <pre class="code">[ns_quotehtml [api_get_body $proc_name]]</pre>
-                </dd><p>
+                </dd>
             }]
         }
     }
@@ -563,11 +563,12 @@ ad_proc -public api_proc_documentation {
         if { [file exists $::acs::rootdir/$xql_fn] } {
             set content [apidoc::get_xql_snippet -proc_name $proc_name -xql_file $xql_fn]
             if {$content ne ""} {set content "<pre class='code'>$content</pre>"}
-            append there [subst {<dt><b>Generic XQL file:</b> <dt>
-                <blockquote>$content
-                <a href="content-page-view?[export_vars {{source_p 1} {path $xql_fn}}]">$xql_fn</a>
-                </blockquote>
+            append there [subst {<dt><b>Generic XQL file:</b> </dt>
+                <dd>$content
+                <a href="[ns_quotehtml [export_vars -base content-page-view {{source_p 1} {path $xql_fn}}]]">$xql_fn</a>
                 <p>
+                </dd>
+
             }]
         } else {
             lappend missing Generic
@@ -577,10 +578,10 @@ ad_proc -public api_proc_documentation {
             set content [apidoc::get_xql_snippet -proc_name $proc_name -xql_file $xql_fn]
             if {$content ne ""} {set content "<pre class='code'>$content</pre>"}
             append there [subst {<dt><b>PostgreSQL XQL file:</b></dt>
-                <blockquote>$content
-                <a href="content-page-view?[export_vars {{source_p 1} {path $xql_fn}}]">$xql_fn</a>
-                </blockquote>
+                <dd>$content
+                <a href="[ns_quotehtml [export_vars -base content-page-view {{source_p 1} {path $xql_fn}}]]">$xql_fn</a>
                 <p>
+                </dd>
             }]
         } else {
             lappend missing PostgreSQL
@@ -591,10 +592,10 @@ ad_proc -public api_proc_documentation {
             set content [apidoc::get_xql_snippet -proc_name $proc_name -xql_file $xql_fn]
             if {$content ne ""} {set content "<pre class='code'>$content</pre>"}
             append there [subst {<dt><b>Oracle XQL file:</b></dt>
-                <blockquote>$content
-                <a href="content-page-view?[export_vars {{source_p 1} {path $xql_fn}}]">$xql_fn</a>
-                </blockquote>
+                <dd>$content
+                <a href="[ns_quotehtml [export_vars -base content-page-view {{source_p 1} {path $xql_fn}}]]">$xql_fn</a>
                 <p>
+                </dd>
             }]
         } else {
             lappend missing Oracle
@@ -625,7 +626,7 @@ ad_proc api_proc_pretty_name {
         set label $proc
     }
     if { $link_p } {
-        append out "<a href=\"[api_proc_url $proc]\">$label</a>"
+        append out "<a href=\"[ns_quotehtml [api_proc_url $proc]]\">$label</a>"
     } else {    
         append out "$label"
     }
@@ -744,14 +745,14 @@ namespace eval ::apidoc {
         regsub -all {proc *} $see {} see
         set see [string trim $see]
         if {[nsv_exists api_proc_doc $see]} {
-            return "<a href=\"proc-view?proc=[ns_urlencode ${see}]\">$see</a>"
+            return "<a href=\"[ns_quotehtml proc-view?proc=[ns_urlencode ${see}]]\">$see</a>"
         }
         if {[string match "/doc/*.html" $see]
             || [util_url_valid_p $see]} { 
-            return "<a href=\"${see}]\">$see</a>"
+            return "<a href=\"[ns_quotehtml $see]\">$see</a>"
         }
         if {[file exists "$::acs::rootdir${see}"]} {
-            return "<a href=\"content-page-view?source_p=1&path=[ns_urlencode $see]\">$see</a>"
+            return "<a href=\"[ns_quotehtml content-page-view?source_p=1&path=[ns_urlencode $see]]\">$see</a>"
         }
         return ${see}
     }
@@ -1212,7 +1213,7 @@ namespace eval ::apidoc {
                              && $had_colons in $::apidoc::KEYWORDS)} {
 
                             set url "/api-doc/proc-view?proc=$proc_name"
-                            append html "<a href='$url' title='Tcl command'>" \
+                            append html "<a href='[ns_quotehtml $url]' title='Tcl command'>" \
                                 [pretty_token keyword $proc_name] </a>
 
                             #append html [pretty_token keyword $proc_name]
@@ -1224,12 +1225,12 @@ namespace eval ::apidoc {
                             set url [::xotcl::api object_url \
                                          -show_source 1 -show_methods 2 \
                                          $scope $proc_name]
-                            append html "<a href='$url' title='XOTcl object'>" \
+                            append html "<a href='[ns_quotehtml $url]' title='XOTcl object'>" \
                                 [pretty_token object $proc_name] </a>
 
                         } elseif {[string match "ns*" $proc_name]} {
                             set url "/api-doc/tcl-proc-view?tcl_proc=$proc_name"
-                            append html "<a href='$url' title='[ns_info name] command'>" \
+                            append html "<a href='[ns_quotehtml $url]' title='[ns_info name] command'>" \
                                 [pretty_token proc $proc_name] </a>
 
                         } elseif {[string match "*__arg_parser" $proc_name]} {
@@ -1238,12 +1239,12 @@ namespace eval ::apidoc {
                         } elseif {$proc_namespace ne "" 
                                   && [info commands ::${proc_namespace}::${proc_name}] ne ""}  {
                             set url [api_proc_url ${proc_namespace}::${proc_name}]
-                            append html "<a href='$url' title='API command'>" \
+                            append html "<a href='[ns_quotehtml $url]' title='API command'>" \
                                 [pretty_token proc $proc_name] </a>
 
                         } elseif {[info commands ::$proc_name] ne ""}  {
                             set url [api_proc_url $proc_name]
-                            append html "<a href='$url' title='API command'>" \
+                            append html "<a href='[ns_quotehtml $url]' title='API command'>" \
                                 [pretty_token proc $proc_name] </a>
 
                         } else {
@@ -1374,7 +1375,7 @@ ad_proc api_proc_link { proc } {
     @author Lars Pind (lars@pinds.com)
     @creation-date 14 July 2000
 } {
-    return "<a href=\"[api_proc_url $proc]\">$proc</a>"
+    return "<a href=\"[ns_htmlencode [api_proc_url $proc]]\">$proc</a>"
 }
 
 

@@ -10,7 +10,7 @@
 <h3>Procedure Matches</h3>
 <ul>
   <multiple name="results">
-  <li> <if @results.score@ lt 10>&nbsp;&nbsp;</if>@results.score@: <a href=@results.url@>@results.proc@</a>
+  <li> <if @results.score@ lt 10>&nbsp;&nbsp;</if>@results.score@: <a href="@results.url@">@results.proc@</a>
    <i>@results.args;noquote@</i>
    </multiple>
 </ul>
@@ -27,7 +27,7 @@ No results found
     </p>
     <ul>
       <multiple name="private_results">
-        <li><if @private_results.score@ lt 10>&nbsp;&nbsp;</if>@private_results.score@: <a href=@private_results.url@>@private_results.proc@</a>
+        <li><if @private_results.score@ lt 10>&nbsp;&nbsp;</if>@private_results.score@: <a href="@private_results.url@">@private_results.proc@</a>
          <i>@private_results.args;noquote@</i>
        </multiple>
     </ul>
@@ -47,7 +47,7 @@ No results found
     </p>
     <ul>
       <multiple name="deprecated_results">
-        <li><if @deprecated_results.score@ lt 10>&nbsp;&nbsp;</if>@deprecated_results.score@: <a href=@deprecated_results.url@>@deprecated_results.proc@</a>
+        <li><if @deprecated_results.score@ lt 10>&nbsp;&nbsp;</if>@deprecated_results.score@: <a href="@deprecated_results.url@">@deprecated_results.proc@</a>
          <i>@deprecated_results.args;noquote@</i>
        </multiple>
     </ul>
@@ -58,7 +58,7 @@ No results found
     </p>
   </else>
 </if>
-<br clear="both">
+<br style="clear:both">
 </div>
 
 

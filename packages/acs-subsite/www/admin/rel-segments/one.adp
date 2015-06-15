@@ -22,7 +22,7 @@
     </li>
    </multiple>
   </else>
-  <p><li> <a href="constraints/new?rel_segment=@segment_id@">Add a constraint</a> </li>
+  <li> <a href="constraints/new?rel_segment=@segment_id@">Add a constraint</a> </li>
 </ul>
 
 

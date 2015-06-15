@@ -11,7 +11,7 @@ The following relationship types currently depend on this group type:
 
 <ul>
   <multiple name="rel_types">
-    <li> @rel_types.pretty_name@ (<a href=../rel-types/delete?@rel_types.export_vars@>delete</a>)
+    <li> @rel_types.pretty_name@ (<a href="../rel-types/delete?@rel_types.export_vars@">delete</a>)
   </multiple>
 </ul>
 

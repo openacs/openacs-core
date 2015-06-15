@@ -8,6 +8,6 @@ constraint:
 
 <ul>
 <multiple name="violations">
-  <li> @violations.name@ (<a href=../../relations/remove?rel_id=@violations.rel_id@&return_url=@return_url_enc@>remove</a>) </li>
+  <li> @violations.name@ (<a href="../../relations/remove?rel_id=@violations.rel_id@&amp;return_url=@return_url_enc@">remove</a>) </li>
 </multiple>
 </ul>
