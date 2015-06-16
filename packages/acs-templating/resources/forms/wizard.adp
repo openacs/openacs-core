@@ -11,7 +11,7 @@
   <multiple name=elements>
   
     <if @elements.section@ not nil>
-      <tr><td colspan="2" bgcolor=#eeeeee><b>@elements.section;noquote@</b></td></tr>
+      <tr><td colspan="2" bgcolor="#eeeeee"><b>@elements.section;noquote@</b></td></tr>
     </if>
 
     <group column="section">
@@ -27,7 +27,7 @@
       <else>
         <!-- If the widget is wide, display it in its own section -->
         <if @elements.wide@ not nil>
-          <tr><td colspan="2" bgcolor=#eeeeee><b>@elements.label;noquote@</b></td></tr>
+          <tr><td colspan="2" bgcolor="#eeeeee"><b>@elements.label;noquote@</b></td></tr>
           <tr><td colspan="2">
         </if>
         <else>
@@ -75,7 +75,7 @@
                     <font color="red"><b>\@formerror.@elements.id@;noquote\@</b></font><br>
                   </formerror>
                 </noparse>
-              </if><else><td bgcolor=#EEEEEE></else>
+              </if><else><td bgcolor="#EEEEEE"></else>
 		<noparse><formwidget id="@elements.id;noquote@"></noparse>
 	      </td>
 	    </if>

@@ -13,7 +13,7 @@
   <table>
   <tr><th>First Name</th><th>Last Name</th></tr>
   <multiple name=users>
-  <if @users.rownum@ odd><tr></if><else><tr bgcolor=#eeeeee></else>
+  <if @users.rownum@ odd><tr></if><else><tr bgcolor="#eeeeee"></else>
     <td>@users.first_name@</td><td>@users.last_name@</td>
   </tr>
   </multiple>
