@@ -6,7 +6,7 @@
           <multiple name=elements>
             <if @elements.current@ eq 1><td bgcolor="#FFFFFF"></if>
             <else>
-              <td bgcolor=#99CCFF>
+              <td bgcolor="#99CCFF">
               <table border="0" cellpadding="2" cellspacing="1" width="100%" 
                  bgcolor="#6699cc">
               <tr align="center" bgcolor="#99ccff"><td>

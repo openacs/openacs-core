@@ -64,7 +64,7 @@
 	</if>
 	<else> 
 	    <if @elements.widget@ eq inform>
-	      <td bgcolor=#EEEEEE>
+	      <td bgcolor="#EEEEEE">
 		<noparse><formwidget id=@elements.id@></noparse>
 	      </td>
 	    </if>

@@ -16,7 +16,7 @@
 
     <table border="0" >
       <tr><td>
-        <table bgcolor=#99CCFF cellpadding="4" cellspacing="0" border="1" >
+        <table bgcolor="#99CCFF" cellpadding="4" cellspacing="0" border="1" >
           <tr>
             <td><b>Sandwich Name</b>&nbsp;&nbsp;</td>
 	    <td><formwidget id=nickname>

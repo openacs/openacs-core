@@ -14,7 +14,7 @@
     <% foreach creature [list giraffe lion antelope fly] { %>
     
       <% if [regexp {a} $creature] { %> 
-        <tr bgcolor=#eeeeee>
+        <tr bgcolor="#eeeeee">
       <% } else { %>
         <tr>
       <% } %>
