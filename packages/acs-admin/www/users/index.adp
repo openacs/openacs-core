@@ -23,7 +23,7 @@
     <input type='hidden' name='target' value="one">
     <input type='hidden' name='only_authorized_p' value="0">
     Complex search:
-    <table cellspacing=1 border=0>
+    <table cellspacing="1" border="0">
       <tr>
         <td align='right'>Group:</td>
         <td>
@@ -36,7 +36,7 @@
       <tr>
         <td align='right'>Registration date:</td>
         <td>
-          <table border=0 cellpadding=2 cellspacing=0>
+          <table border="0" cellpadding="2" cellspacing="0">
             <tr>
               <td align='right'>over</td>
               <td>
@@ -58,7 +58,7 @@
       <tr>
         <td align='right'>Last login:</td>
         <td>
-          <table border=0 cellpadding=2 cellspacing=0>
+          <table border="0" cellpadding="2" cellspacing="0">
             <tr>
               <td align='right'>over</td>
               <td>
@@ -80,7 +80,7 @@
       <tr>
         <td align='right'>Number of visits:</td>
         <td>
-          <table border=0 cellpadding=2 cellspacing=0>
+          <table border="0" cellpadding="2" cellspacing="0">
             <tr>
               <td align='right'>less than</td>
               <td><input type='text' size=3 name='number_visits_below'></td>
@@ -122,7 +122,7 @@
       </tr>
 
       <tr>
-        <td colspan=2 align='center'>
+        <td colspan="2" align='center'>
           <input type=submit name='Submit' value=Submit>
         </td>
       </tr>

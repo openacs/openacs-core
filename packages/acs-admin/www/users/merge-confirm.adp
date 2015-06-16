@@ -42,7 +42,7 @@
 	  </td>
 	</tr>
 	<tr>
-	  <td colspan=2 align=center>
+	  <td colspan="2" align="center">
             <input type=hidden name=from_user_id value="@from_user_id@">
             <input type=hidden name=to_user_id value="@to_user_id@">
 	    <input type=submit value="OK">
