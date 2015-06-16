@@ -1303,7 +1303,7 @@ ad_proc -private auth::get_local_account {
     if { $authority_id eq "" } {
         set authority_id [auth::authority::local]
     }
-    ns_log notice "auth::get_local_account authority_id = '${authority_id}' local = [auth::authority::local]"
+    #ns_log notice "auth::get_local_account authority_id = '${authority_id}' local = [auth::authority::local]"
     with_catch errmsg {
         acs_user::get -authority_id $authority_id -username $username -array user
         set account_found_p 1

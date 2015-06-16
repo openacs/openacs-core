@@ -1257,7 +1257,7 @@ ad_proc -private auth::local::registration::Register {
     }
     # Send password/confirmail email to user
     if { [parameter::get -parameter RegistrationProvidesRandomPasswordP -default 0] || \
-             [parameter::get -parameter EmailRegistrationConfirmationToUserP -default 0] } {
+             [parameter::get -parameter EmailRegistrationConfirmationToUserP -default 1] } {
         with_catch errmsg {
             acs_mail_lite::send \
                 -to_addr $email \

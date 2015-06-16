@@ -501,7 +501,7 @@ ad_proc -private auth::local::registration::Register {
 
     # LARS TODO: Move this out of the local driver and into the auth framework
     # Send password confirmation email to user
-    if { [set email_reg_confirm_p [parameter::get -parameter EmailRegistrationConfirmationToUserP -package_id [ad_conn subsite_id] -default 0]] != -1 } {
+    if { [set email_reg_confirm_p [parameter::get -parameter EmailRegistrationConfirmationToUserP -package_id [ad_conn subsite_id] -default 1]] != 0 } {
 	if { $generated_pwd_p || \
 		 [parameter::get -parameter RegistrationProvidesRandomPasswordP -package_id [ad_conn subsite_id] -default 0] || \
 		 $email_reg_confirm_p } {
