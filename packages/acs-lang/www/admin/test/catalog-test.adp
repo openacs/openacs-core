@@ -19,7 +19,7 @@
 <em>Verify that the message catalog loader ran
 successfully at server startup.</em>
 <p>
-<table cellspacing=0 cellpadding=4 border=1>
+<table cellspacing="0" cellpadding="4" border="1">
 <tr><th>Word to lookup</th><th>Language</th><th>Results of catalog lookup</th></tr>
 <tr><td>English</td><td>English</td><td>@english@</td></tr>
 <tr><td>French</td><td>French</td><td>@french@</td></tr>
@@ -39,7 +39,7 @@ or <a href="locale-set?locale=de_DE">German</a></em>.
 <p>
 
 Test of inline  adp tags:
-<table cellspacing=0 cellpadding=4 border=1>
+<table cellspacing="0" cellpadding="4" border="1">
   <tr>
     <th>Word to lookup</th>
     <th>&lt;TRN&gt;</th>

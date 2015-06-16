@@ -14,7 +14,7 @@
   </tr>
   <tr style="background: #333366;">
     <td colspan="<%=[expr {${tabs:rowcount}+2}]%>">
-      <table border=0 cellspacing=0 cellpadding=0>
+      <table border="0" cellspacing="0" cellpadding="0">
         <tr>
           <td height="5">
           </td>

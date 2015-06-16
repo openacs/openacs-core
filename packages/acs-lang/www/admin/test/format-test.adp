@@ -11,7 +11,7 @@
 <p>
 <em>Verify the results of localization routines.</em>
 <p>
-<table cellspacing=0 cellpadding=4 border=1>
+<table cellspacing="0" cellpadding="4" border="1">
             <tr><th>Routine</th><th>en_US locale</th>
                 <th>en_FR locale</th></tr>
             <tr><td>Displaying a number</td>
@@ -20,7 +20,7 @@
             <tr><td>Parsing a number</td>
                 <td>@us_parse@</td>
                 <td>@fr_parse@</td></tr>
-            <tr><td rowspan=2 valign=top>Displaying a monetary amount</td>
+            <tr><td rowspan="2" valign="top">Displaying a monetary amount</td>
                 <td>@us_currency@</td>
                 <td>@fr_currency@</td></tr>
             <tr><td>@us_label@</td>
