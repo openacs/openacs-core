@@ -7,10 +7,10 @@ in the master page -->
 
 
 
-<p align=center>
+<p align="center">
 <b>The point of all this clicking about is just to show how this text area can be varied...</b>
 
-<p align=center>
+<p align="center">
 
 <a href="slave-sample-2.acs">next</a>
 

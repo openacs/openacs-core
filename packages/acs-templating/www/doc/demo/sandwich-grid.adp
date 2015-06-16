@@ -14,9 +14,9 @@
 
     <formwidget id="grid">
 
-    <table border=0 >
+    <table border="0" >
       <tr><td>
-        <table bgcolor=#99CCFF cellpadding=4 cellspacing=0 border=1 >
+        <table bgcolor=#99CCFF cellpadding="4" cellspacing="0" border="1" >
           <tr>
             <td><b>Sandwich Name</b>&nbsp;&nbsp;</td>
 	    <td><formwidget id=nickname>
@@ -27,7 +27,7 @@
           <tr>
 	    <td><b>Protein</b>&nbsp;&nbsp;</td>
 	    <td>
-	      <table cellpadding=4 cellspacing=0 border=0>
+	      <table cellpadding="4" cellspacing="0" border="0">
                 <formgroup id=protein cols=2>
                   <if @formgroup.col@ eq "1">
                     <tr>
@@ -51,7 +51,7 @@
 	  <tr>
 	    <td><b>Vitamins</b>&nbsp;&nbsp;</td>
 	    <td> 
-	      <table cellpadding=4 cellspacing=0 border=0>
+	      <table cellpadding="4" cellspacing="0" border="0">
                <formgroup id=vitamins cols=2>
                   <if @formgroup.col@ eq "1">
                     <tr>
@@ -75,7 +75,7 @@
         </table>
       </td></tr>
       <tr>
-        <td align=center><br><input type=submit value=Submit></td>
+        <td align="center"><br><input type=submit value=Submit></td>
       </tr>
     </table>
 

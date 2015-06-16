@@ -387,15 +387,15 @@ if { [db_table_exists "bboard_email_alerts"] } {
      <font color="#999999"># alert has been disabled </font>
      set status "<font color="#999999">Disabled</font>"
      set action "
-     <font color="#999999">&lt;a href=\"/bboard/alert-reenable\"&gt;
-     Re-enable&lt;/a&gt;</font>"
+     <font color="#999999">&lt;a href="\"/bboard/alert-reenable\"&gt;
+"     Re-enable&lt;/a&gt;</font>"
    } else {
      <font color="#999999"># alert is enabled</font>
      set status "
      <font color="#999999">&lt;font color=red&gt;Enabled&lt;/font&gt;</font>"
      set action "
-     <font color="#999999">&lt;a href=\"/bboard/alert-disable\"&gt;
-     Disable&lt;/a&gt;</font>"
+     <font color="#999999">&lt;a href="\"/bboard/alert-disable\"&gt;
+"     Disable&lt;/a&gt;</font>"
    }
 
    append existing_alert_rows "<font color="#999999">&lt;tr&gt;

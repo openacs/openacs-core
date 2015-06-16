@@ -12,7 +12,7 @@
       <td>(optional)</td>
     </tr>
     <tr>
-      <th colspan=2><input type=submit value="Go"></th>
+      <th colspan="2"><input type=submit value="Go"></th>
     </tr>
   </table>
 </form>

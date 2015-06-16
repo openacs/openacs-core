@@ -10,7 +10,7 @@
     The value of bool_f_p is <b>@bool_f_p@</b><br>
     The value of bool_0_p is <b>@bool_0_p@</b><p>
 
-<table cellpadding=2 cellspacing=0 border=1>
+<table cellpadding="2" cellspacing="0" border="1">
 <tr bgcolor=#eeeeee>
 <th>Operator</th>
 <th>Test</th>

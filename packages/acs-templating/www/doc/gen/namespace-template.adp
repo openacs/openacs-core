@@ -38,7 +38,7 @@ The namespace @info.name@ currently contains no public methods.
 </blockquote>
 
 <h3>Method Detail</h3>
-<p align=right>
+<p align="right">
 <font color=red>*</font> indicates required
 </p>
 
@@ -61,7 +61,7 @@ The namespace @info.name@ currently contains no public methods.
 <p>
 </multiple>
 
-<p align=right>
+<p align="right">
 <font color=red>*</font> indicates required
 </p>
 

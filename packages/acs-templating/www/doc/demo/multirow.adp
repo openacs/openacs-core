@@ -9,9 +9,9 @@
   <tr>
 	  <td>@body.rownum@</td>
 	  <td>@body.name@</td>
-	  <td align=right>@body.diameter@</td>
-	  <td align=right>@body.mass@</td>
-	  <td align=right>@body.r_orbit@</td>
+	  <td align="right">@body.diameter@</td>
+	  <td align="right">@body.mass@</td>
+	  <td align="right">@body.r_orbit@</td>
   </tr>
   </multiple>
   </table>
