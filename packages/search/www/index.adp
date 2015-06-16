@@ -3,7 +3,7 @@
 
 <div style="text-align:center">
 <form method=GET action=search>
-  <div><small><a href=advanced-search>#search.Advanced_Search#</a></small></div>
+  <div><small><a href="advanced-search">#search.Advanced_Search#</a></small></div>
   <div>
   <input type=text name=q size=80 maxlength=256>
   <br>

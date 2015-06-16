@@ -4,7 +4,7 @@
     <h4>util_memoize caches</h4>
 
     <blockquote>
-      <table cellpadding=3>
+      <table cellpadding="3">
 	  <tr style="background-color:#eeeeee">
 	    <th>Name</th>
 	    <th>Entries</th>
@@ -22,12 +22,12 @@
 	      <tr style="background-color:#f8f8ee">
 	    </else>
 	      <td><b>@caches.name@</b></td>
-	      <td align=right>@caches.entries@</td>
-	      <td align=right>@caches.flushed@</td>
-	      <td align=right>@caches.hit_rate@%</td>
-	      <td align=right>@caches.size@</td>
-	      <td align=right>@caches.max@</td>
-	      <td align=center>&nbsp;
+	      <td align="right">@caches.entries@</td>
+	      <td align="right">@caches.flushed@</td>
+	      <td align="right">@caches.hit_rate@%</td>
+	      <td align="right">@caches.size@</td>
+	      <td align="right">@caches.max@</td>
+	      <td align="center">&nbsp;
 	      <a href="flush-cache?suffix=@caches.name@">flush</a>&nbsp;
 	      </td>
 	    </tr>

@@ -34,9 +34,9 @@
 	      <% set bg "#f8f8ee" %>
 	    </else>
 	    <tr bgcolor="@bg@">
-	      <td valign=top>@matches.key@</td>
-	      <td valign=top>@matches.value;noquote@</td>
-	      <td valign=middle rowspan=2>
+	      <td valign="top">@matches.key@</td>
+	      <td valign="top">@matches.value;noquote@</td>
+	      <td valign="middle" rowspan="2">
 		<form action=one method=post>
 		  <input type=hidden name=key value="@matches.full_key@">
 		  <input type=hidden name="raw_date" value="@matches.raw_date@">

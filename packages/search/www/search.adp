@@ -5,19 +5,19 @@
 <if @and_queries_notice_p@ eq 1>
   <font color="6f6f6f">
     #search.The#
-    [<a href=help/basics#and>#search.details#</a>]<br>
+    [<a href="help/basics#and">#search.details#</a>]<br>
   </font>
 </if>
 <if @nstopwords@ eq 1>
   <font color="6f6f6f">
     #search.lt_bstopwordsb_is_a_very#
-    [<a href=help/basics#stopwords>#search.details#</a>]<br>
+    [<a href="help/basics#stopwords">#search.details#</a>]<br>
   </font>
 </if>
 <if @nstopwords@ gt 1>
   <font color="6f6f6f">
     #search.lt_The_following_words_a# <b>@stopwords@</b>.
-    [<a href=help/basics#stopwords>#search.details#</a>]<br>
+    [<a href="help/basics#stopwords">#search.details#</a>]<br>
   </font>
 </if>
 
