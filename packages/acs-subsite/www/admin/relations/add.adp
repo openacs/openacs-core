@@ -11,17 +11,17 @@
     If the @object_type_two_name@ that you want to add as @role_pretty_name@
     to @group_name@ is not listed below, then you can either
     <ul>
-    <li><a href=@add_out_of_scope_url@>select an existing @object_type_two_name@ from the system</a>, or
-    <li><a href=@add_party_url@>add a new @object_type_two_name@ to the system</a>.
+    <li><a href="@add_out_of_scope_url@">select an existing @object_type_two_name@ from the system</a>, or
+    <li><a href="@add_party_url@">add a new @object_type_two_name@ to the system</a>.
     </ul>
   </if><else>
     You can select an existing @object_type_two_name@ from the system below.
     <br>
     If there are too many options, then you can
-    <a href=@add_in_scope_url@>select an existing @object_type_two_name@ from this subsite</a>. 
+    <a href="@add_in_scope_url@">select an existing @object_type_two_name@ from this subsite</a>. 
     <br>
     You can also 
-    <a href=@add_party_url@>add a new @object_type_two_name@ to the system</a>.
+    <a href="@add_party_url@">add a new @object_type_two_name@ to the system</a>.
   </else>
 </if>
 <else>
