@@ -29,12 +29,12 @@
     <li>(none)</li>
   </if><else>
    <multiple name="attributes">
-    <li> <a href="../attributes/one?attribute_id=@attributes.attribute_id@&return_url=@return_url_enc@">@attributes.pretty_name@</a> 
+    <li> <a href="../attributes/one?attribute_id=@attributes.attribute_id@&amp;return_url=@return_url_enc@">@attributes.pretty_name@</a> 
     </li>
    </multiple>
   </else>
   <if @dynamic_p@ eq "t"> 
-    <li> <a href="../attributes/add?object_type=@rel_type_enc@&return_url=@return_url_enc@">Add an attribute</a></li>
+    <li> <a href="../attributes/add?object_type=@rel_type_enc@&amp;return_url=@return_url_enc@">Add an attribute</a></li>
   </if><else>
     <li> Attributes can only be added by programmers since this object type is not dynamically created</li>
   </else>

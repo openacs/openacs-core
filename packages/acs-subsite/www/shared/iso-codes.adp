@@ -8,11 +8,11 @@
 
 <hr>
 <table>
-<tr><th align=left>#acs-subsite.Country_Name#<th>#acs-subsite.ISO_Code#</tr>
+<tr><th align="left">#acs-subsite.Country_Name#<th>#acs-subsite.ISO_Code#</tr>
 
 <multiple name="ccodes">
 
-  <tr><td>@ccodes.country_name@<td align=center>@ccodes.iso@</tr>
+  <tr><td>@ccodes.country_name@<td align="center">@ccodes.iso@</tr>
 
 </multiple>
 

@@ -18,7 +18,7 @@
   <else>
   <multiple name="enum_values">
     <li> @enum_values.pretty_name@ 
-         (<a href="value-delete?attribute_id=@attribute_id@&enum_value=<%=[ad_urlencode $enum_values(enum_value)]%>">delete</a>)
+         (<a href="value-delete?attribute_id=@attribute_id@&amp;enum_value=<%=[ad_urlencode $enum_values(enum_value)]%>">delete</a>)
   </multiple
   </else>
     <p><li><a href="enum-add?@url_vars@">Add value</a>
