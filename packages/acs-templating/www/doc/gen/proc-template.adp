@@ -1,4 +1,4 @@
-<table width="100%"><tr><td width=100% bgcolor="#CCCCFF">
+<table width="100%"><tr><td width="100%" bgcolor="#CCCCFF">
   <a name="@info.proc_name@"><font size="+1" weight=bold>@info.proc_name@</font></a>
   <if @info.author@ not nil><br><small><i>&nbsp;&nbsp;by @info.author@</i></small></if>
 </td>
@@ -13,13 +13,13 @@
   <table>
   <multiple name=params>
   <tr>
-  <td align=right><code>@params.name@</code>
+  <td align="right"><code>@params.name@</code>
   <if @params.default@ not nil>
     <if @params.default@ in required>@required_marker@</td>
-       <td align=left>
+       <td align="left">
     </if>
     <else>
-     </td><td align=left> <i>default</i> @params.default@; 
+     </td><td align="left"> <i>default</i> @params.default@; 
     </else>
   </if>
   @params.description@</td></tr>
@@ -35,8 +35,8 @@
   <dt><b>Options:</b>
   <table>
   <multiple name=options>
-  <tr><td align=right><code>@options.name@</code></td>
-  <td align=left>
+  <tr><td align="right"><code>@options.name@</code></td>
+  <td align="left">
   <if @options.default@ not nil>
     <i>default</i> @options.default@;
   </if>

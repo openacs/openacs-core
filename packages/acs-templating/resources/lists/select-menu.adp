@@ -24,7 +24,7 @@
 #  }
 #  - The recieving page variable must be of the type :multiple
 #    since the filter sends the values in the following way:
-#    filter_name=filter_value&filter_name=filter_value&....&extra_variables=extra_values
+#    filter_name=filter_value&amp;filter_name=filter_value&....&amp;extra_variables=extra_values
 %>
 
 

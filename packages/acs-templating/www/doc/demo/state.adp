@@ -17,7 +17,7 @@
 
 <else>
 
-<table cellpadding=4 cellspacing=0 border=1 bgcolor=#CCFFCC>
+<table cellpadding="4" cellspacing="0" border="1" bgcolor=#CCFFCC>
 
 <tr bgcolor=#eeeeee><td>@state_abbrev@</td></tr> 
 

@@ -17,7 +17,7 @@ this web page stands as a monument to the singular and inimitable mind that is <
 
 Now, for some basic contact information:
 <table>
-<tr><td align=left>Name:</td><td><a href="mailto:@email@">@name@</a></td></tr>
+<tr><td align="left">Name:</td><td><a href="mailto:@email@">@name@</a></td></tr>
 <tr><td>Address:</td><td>@address@</td></tr>
 <tr><td>Email:</td><td>@email</td></tr>
 </table>

@@ -5,7 +5,7 @@
 
 <body>
 <h2>The Input Widgets</h2><h3>Overview</h3><p>These widgets provide a variety of HTML controls, all of which
-are based on <code>&lt;input type=...&gt;</code>. In particular,
+are based on <code>&lt;input type="..."&gt;</code>. In particular,
 the hidden, text, radio and checkbox widgets are currently
 implemented; their use is demonstrated in the <a href="../demo/index.html">acs-templating demo</a>.</p><h3>The Hidden Widget</h3><p>This is simply an <code>&lt;input type=hidden&gt;</code> widget,
 which is used for passing pre-set variables along with the

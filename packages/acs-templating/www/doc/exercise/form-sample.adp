@@ -35,7 +35,7 @@
 	          <td><formwidget id="@formgroup.label@"></td></tr>
 		</formgroup></table><small><i>please indicate your primary telephone</i></small>
 	  </td></tr>
-	  <tr><td colspan=2 align=center><br><input type=submit value="Enter"></td></tr>
+	  <tr><td colspan="2" align="center"><br><input type=submit value="Enter"></td></tr>
 	</table>
 	</formtemplate>
 
@@ -68,7 +68,7 @@
 
 </multiple>
   <if @address:rowcount@ eq 0>
-    <tr><th align=center colspan=4><i>You currently have no entries in your addressbook</i></th></tr>
+    <tr><th align="center" colspan="4"><i>You currently have no entries in your addressbook</i></th></tr>
   </if>
 
 </table>
