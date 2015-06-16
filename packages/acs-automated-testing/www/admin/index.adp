@@ -55,7 +55,7 @@
 </p>
     </td>
 
-    <td align=center valign="top"> [
+    <td align="center" valign="top"> [
       <if @quiet@ eq "1">
          <strong> quiet </strong> | 
          <a href="index?stress=@stress@&amp;security_risk=@security_risk@&amp;by_package_key=@by_package_key@&amp;view_by=@view_by@&amp;by_category=@by_category@&amp;quiet=0">verbose</a>
@@ -69,7 +69,7 @@
                 </div>
     </td>
 
-    <td align=center valign="top"> [
+    <td align="center" valign="top"> [
       <if @view_by@ eq "" or @view_by@ eq "package">
          <strong> package </strong> | 
          <a href="index?stress=@stress@&amp;security_risk=@security_risk@&amp;by_package_key=@by_package_key@&amp;view_by=testcase&amp;by_category=@by_category@&amp;quiet=@quiet@">testcase</a>
@@ -147,7 +147,7 @@
     </tr>
     <multiple name="tests">
       <if @tests.marker@ eq 1>
-        <tr><td colspan=8 align=centre bgcolor=#c0f0c0><strong>@tests.package_key@</strong></td></tr>
+        <tr><td colspan="8" align="center" bgcolor="#c0f0c0"><strong>@tests.package_key@</strong></td></tr>
       </if>
         <if @tests.rownum@ odd>
           <tr class="odd">
