@@ -25,7 +25,8 @@ if { ![db_0or1row select_name {}] } {
 # if objects have multiple types we may need to separate them
 # with different links to their respective objects.
 
-set notice "<a href=\"[export_vars -base object-goto -url {object_id type_id}]\">$name</a> - [_ notifications.Notifications]"
+set url [export_vars -base object-goto -url {object_id type_id}]
+set notice "<a href=\"[ns_quotehtml $url]\">$name</a> - [_ notifications.Notifications]"
 
 
 
