@@ -5,8 +5,8 @@
 <div>
 <form method=GET action=search>
 <p>
-<input type=text name=q size=41 maxlength=256 value="@q@">
-<input type=submit value="Search" name=t>
+<input type="text" name="q" size="41" maxlength="256" value="@q@">
+<input type="submit" value="Search" name="t">
 </p>
 <p>
 <label for="dfs">#search.Date_Range#</label>
