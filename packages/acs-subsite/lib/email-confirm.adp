@@ -9,7 +9,7 @@
     <p>
     <form action="index" method=post>
     @export_vars;noquote@
-    <input type=submit value="#acs-kernel.common_continue#">
+    <input type="submit" value="#acs-kernel.common_continue#">
     </form>
 
   </if>

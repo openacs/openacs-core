@@ -32,7 +32,7 @@
     <p><em>#acs-subsite.none#</em></p>
   </else>
   <if @acl:rowcount@ gt 0>
-    <div><input type=submit value="#acs-subsite.Revoke_Checked#"></div>
+    <div><input type="submit" value="#acs-subsite.Revoke_Checked#"></div>
     </form>
   </if>
   @controls;noquote@
