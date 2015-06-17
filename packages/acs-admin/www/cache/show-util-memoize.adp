@@ -38,10 +38,10 @@
 	      <td valign="top">@matches.value;noquote@</td>
 	      <td valign="middle" rowspan="2">
 		<form action=one method=post>
-		  <input type=hidden name=key value="@matches.full_key@">
-		  <input type=hidden name="raw_date" value="@matches.raw_date@">
-		  <input type=hidden name=pattern value="@pattern@">
-		  <input type=submit value="Show">
+		  <input type="hidden" name="key" value="@matches.full_key@">
+		  <input type="hidden" name="raw_date" value="@matches.raw_date@">
+		  <input type="hidden" name="pattern" value="@pattern@">
+		  <input type="submit" value="Show">
 		</form>
 	      </td>
 	    </tr>
