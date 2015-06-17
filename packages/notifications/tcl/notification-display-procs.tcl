@@ -41,22 +41,24 @@ ad_proc -public notification::display::request_widget {
     if {$request_id ne ""} {
         set icon /resources/acs-subsite/email_delete.gif
         set icon_alt [_ acs-subsite.icon_of_envelope]
-        set sub_url [ad_quotehtml [unsubscribe_url -request_id $request_id -url $url]]
+        set sub_url [unsubscribe_url -request_id $request_id -url $url]
         set pretty_name [ad_quotehtml $pretty_name]
         set title [_ notifications.lt_Ubsubscribe_Notification_]
-        set sub_chunk "[_ notifications.lt_You_have_requested_no]"
+        set sub_chunk [_ notifications.lt_You_have_requested_no]
     } else {
         set icon /resources/acs-subsite/email_add.gif
         set icon_alt [_ acs-subsite.icon_of_envelope]
-        set sub_url [ad_quotehtml [subscribe_url -type $type -object_id $object_id -url $url -user_id $user_id -pretty_name $pretty_name]]
+        set sub_url [subscribe_url -type $type -object_id $object_id -url $url -user_id $user_id -pretty_name $pretty_name]
         set pretty_name [ad_quotehtml $pretty_name]
         set title [_ notifications.lt_Request_Notification_]
-        set sub_chunk "[_ notifications.lt_You_may_a_hrefsub_url]"
+        set sub_chunk [_ notifications.lt_You_may_a_hrefsub_url]
     }
-    set notif_chunk "<a href=\"$sub_url\" title=\"$title\"><img src=\"$icon\" alt=\"$icon_alt\" style=\"border:0\"> $sub_chunk</a>"
+    set notif_chunk "<a href=\"[ns_quotehtml $sub_url]\" title=\"[ns_quotehtml $title]\">\
+       <img src=\"$icon\" alt=\"$icon_alt\" style=\"border:0\">$sub_chunk</a>"
     # if they are an admin give them to view all subscribers
     if { [permission::permission_p -object_id $object_id -privilege admin] } {
-        append notif_chunk " \[<a href=\"[export_vars -base /notifications/subscribers -url {object_id}]\">[_ notifications.Subscribers]</a>\]"
+	set href [export_vars -base /notifications/subscribers -url {object_id}]
+        append notif_chunk " \[<a href=\"[ns_quotehtml $href]\">[_ notifications.Subscribers]</a>\]"
     }
 
     if { $sub_url ne "" } {

@@ -15,12 +15,11 @@
   <msg key="lt_Notification_Delivery">Benachrichtigungsmethode</msg>
   <msg key="lt_Notification_Delivery_1">Benachrichtigungsmethoden</msg>
   <msg key="lt_Notification_Interval">Benachrichtigungsintervall</msg>
-  <msg key="lt_Notification_Interval_1">Benachrichtigunsintervale</msg>
-  <msg key="lt_Notification_Requests">Benachrichtigungen</msg>
   <msg key="lt_Request_Notification_">Benachrichtigungsfunktion für %pretty_name% aktivieren</msg>
   <msg key="lt_system_name_-_Batched">[%system_name% - Batched Notification]</msg>
   <msg key="lt_You_have_no_notificat">Sie haben keine Benachrichtigungsfunktion aktiviert.</msg>
-  <msg key="lt_You_have_requested_no">Sie haben für &quot;%pretty_name%&quot; die Benachrichtigungsfunktion aktiviert. Sie können diese &lt;a href=&quot;%sub_url%&quot;&gt;deaktivieren&lt;/a&gt;. </msg>
+  <msg key="lt_You_have_requested_no">Deaktiviere Benachrichtigungsfunktion. </msg>
+  <msg key="lt_You_may_a_hrefsub_url">Aktiviere Benachrichtungungsfunktion</msg>
   <msg key="Manage_Notifications">Benachrichtigungsoptionen verwalten</msg>
   <msg key="Notification">Benachrichtigung</msg>
   <msg key="Notification_Replies">Antworten auf Benachrichtigungen</msg>
