@@ -173,7 +173,7 @@
      @return A link to the first instance of the developer-support information available in the site node, \
              the empty_string if none are available.
  } {
-     return "[ad_url][apm_package_url_from_key "acs-developer-support"]"
+     return "[ad_url][apm_package_url_from_key acs-developer-support]"
  }
 
  ad_proc ds_link {} { 
@@ -188,12 +188,15 @@
          return ""
      }
 
-     set out "<div class=\"developer-support\">"
+     set out "<div class='developer-support'>"
      if { [ds_enabled_p] && [ds_collection_enabled_p] } {
 
          set ds_url [ds_support_url]
          if {$ds_url ne ""} {
-             append out "<a href=\"${ds_url}\">Developer Support Home</a> - <a href=\"${ds_url}request-info?request=$::ad_conn(request)\">Request Information</a><br>"
+             append out [subst {
+		 <a href="$ds_url">Developer Support Home</a> -
+		 <a href="$ds_urlrequest-info?request=$::ad_conn(request)">Request Information</a><br>
+	     }]
          } else {
              ns_log Error "ACS-Developer-Support: Unable to offer link to Developer Support \
                      because it is not mounted anywhere."
@@ -221,19 +224,25 @@
          }
 
          if { [parameter::get -package_id [ds_instance_id] -parameter ShowCommentsInlineP -default 0] } {
-             append out "Comments: <b>On</b> | <a href=\"[export_vars -base ${ds_url}comments-toggle { { return_url [ad_return_url] } }]\">Off</a><br>"
+	     set href [export_vars -base ${ds_url}comments-toggle { { return_url [ad_return_url] } }]
+             append out [subst {
+		 Comments: <b>On</b> | <a href="[ns_quotehtml $href]">Off</a><br>
+	     }]
              if { [nsv_exists ds_request $::ad_conn(request).comment] } {
                  foreach comment [nsv_get ds_request $::ad_conn(request).comment] {
                      append out "<b>Comment:</b> $comment<br>\n"
                  }
              }
          } else {
-             append out "Comments: <a href=\"[export_vars -base ${ds_url}comments-toggle { { return_url [ad_return_url] } }]\">On</a> | <b>Off</b><br>"
+	     set href [export_vars -base ${ds_url}comments-toggle { { return_url [ad_return_url] } }]
+             append out [subst {
+		 Comments: <a href="[ns_quotehtml $href]">On</a> | <b>Off</b><br>
+	     }]
          }
      }
 
      if { [ds_user_switching_enabled_p] } {
-         append out "[ds_user_select_widget]<br>"
+         append out [ds_user_select_widget] "<br>"
      }
 
      return $out
@@ -469,12 +478,15 @@
 
      set ds_url [ds_support_url]
      if {$ds_url ne ""} {
-         return "<form action=\"${ds_url}/set-user\" method=\"get\">
-         $you_are
-         $you_are_really
-         Change user: <select name=\"user_id\">
-         $options
-         </select>[export_vars -form {return_url}]<input type=submit value=\"Go\"></form>"
+         return [subst {
+	     <form action="$ds_url/set-user" method="get">
+	     $you_are
+	     $you_are_really
+	     Change user: <select name="user_id">
+	     $options
+	     </select>[export_vars -form {return_url}]
+	     <input type="submit" value="Go"></form>
+	 }]
      } else {
          ns_log Error "ACS-Developer-Support: Unable to offer link to Developer Support \
                  because it is not mounted anywhere."
@@ -574,30 +586,15 @@ ad_proc -private ds_replace_get_user_procs { enabled_p } {
 		ad_set_client_property developer-support user_id [ad_conn user_id]
 	    }
             rename ad_conn orig_ad_conn
-	    #rename ad_get_user_id orig_ad_get_user_id
-	    #rename ad_verify_and_get_user_id orig_ad_verify_and_get_user_id
-	    
             proc ad_conn { args } {
 	        ds_conn {*}$args
             }
-	    #proc ad_get_user_id {} {
-            #    ds_get_user_id
-	    #}
-	    #proc ad_verify_and_get_user_id {} {
-            #    ds_get_user_id
-	    #}
 	}
     } else {
         #ds_comment "Disabling user-switching"
 	if { [info commands orig_ad_conn] ne ""} {
             rename ad_conn {}
             rename orig_ad_conn ad_conn
-
-	    #rename ad_get_user_id {}
-	    #rename orig_ad_get_user_id ad_get_user_id
-
-	    #rename ad_verify_and_get_user_id {}
-	    #rename orig_ad_verify_and_get_user_id ad_verify_and_get_user_id
 	}
     }
 }
