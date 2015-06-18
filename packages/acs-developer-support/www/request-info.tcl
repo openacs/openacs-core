@@ -32,8 +32,8 @@ if { [info exists property(start)] } {
 
        <blockquote>
        <table cellspacing=0 cellpadding=0>
-       <tr><th align=left>Request Start Time:&nbsp;</th><td>[clock format [lindex $property(start) 0] \
-           -format "%Y-%m-%d %H:%M:%S"]
+	<tr><th align="left">Request Start Time:&nbsp;</th>
+	<td>[clock format [lindex $property(start) 0] -format "%Y-%m-%d %H:%M:%S"]
     }]
 } else {
     set expired_p 1
@@ -92,7 +92,9 @@ if { [info exists property(conn)] } {
 	    }
 
 	    append body [subst {
-		<tr valign=top><th align=left nowrap>$name:&nbsp;</th><td>[ad_decode $value "" "(empty)" $value]</td></tr>
+		<tr valign="top"><th style="white-space: nowrap; text-align:left">$name:&nbsp;</th>
+		<td>[ad_decode $value "" "(empty)" $value]</td>
+		</tr>
 	    }]
 	}
     }
@@ -162,7 +164,10 @@ if { [info exists property(rp)] } {
 	}
     }
     if { !$rp_show_debug_p } {
-	append body "<p><a href=\"request-info?[export_ns_set_vars url]&rp_show_debug_p=1\">show RP debugging information</a>"
+	set href "./request-info?[export_ns_set_vars url]&rp_show_debug_p=1"
+	append body [subst {
+	    <p><a href="[ns_quotehtml $href]">show RP debugging information</a>
+	}]
     }
     append body "</ul>\n"
 }
@@ -170,25 +175,37 @@ if { [info exists property(rp)] } {
 if { [info exists property(comment)] } {
     append body "<h3>Comments</h3><ul>\n"
     foreach comment $property(comment) {
-	append body "<li>$comment\n"
+	append body "<li>[ns_quotehtml $comment]\n"
     }
     append body "</ul>\n"
 }
 
 if { [info exists property(headers)] } {
-    append body "<h3>Headers</h3>
-<blockquote><table cellspacing=0 cellpadding=0>\n"
+    append body {<h3>Headers</h3>
+	<blockquote><table cellspacing="0" cellpadding="0">
+    }
     foreach { name value } $property(headers) {
-	append body "<tr valign=top><th align=left>$name:&nbsp;</td><td>[ns_quotehtml $value]</td></tr>\n"
+	append body [subst {
+	    <tr valign="top">
+	    <th align="left">$name:&nbsp;</th>
+	    <td>[ns_quotehtml $value]</td>
+	    </tr>
+	}]
     }
     append body "</table></blockquote>\n"
 }
 
 if { [info exists property(oheaders)] } {
-    append body "<h3>Output Headers</h3>
-<blockquote><table cellspacing=0 cellpadding=0>\n"
+    append body {<h3>Output Headers</h3>
+	<blockquote><table cellspacing="0" cellpadding="0">
+    }
     foreach { name value } $property(oheaders) {
-	append body "<tr valign=top><th align=left>$name:&nbsp;</td><td>[ns_quotehtml $value]</td></tr>\n"
+	append body [subst {
+	    <tr valign="top">
+	    <th align="left">$name:&nbsp;</th>
+	    <td>[ns_quotehtml $value]</td>
+	    </tr>
+	}]
     }
     append body "</table></blockquote>\n"
 }
