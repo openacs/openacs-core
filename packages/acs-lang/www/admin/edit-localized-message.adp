@@ -4,7 +4,7 @@
  <property name="focus">message.message</property>
 
 <!-- TODO: Remove 'style' when we've merged 4.6.4 back onto HEAD -->
-<formtemplate id="message"></formtemplate>
+<formtemplate id="message_form"></formtemplate>
 
 <h2>Audit Trail</h2>
 

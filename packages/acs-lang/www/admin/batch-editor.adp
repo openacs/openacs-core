@@ -1,6 +1,14 @@
 <master>
   <property name="doc(title)">@page_title@</property>
   <property name="context">@context;noquote@</property>
+  <property name="head">
+  <style type="text/css">
+  table.plain {background: #dddddd; border-spacing: 1px; border-collapse: separate;}
+  table.plain tr {background: white;}
+  table.plain td.high {text-align: left; padding: 2px; background: #ffffaa;}
+  table.plain th, table.plain td {text-align: left; padding: 2px;}
+  </style>
+  </property>
 
 <p>
   Show: 
@@ -16,16 +24,15 @@
 </if>
 <else>
   <if @pagination:rowcount@ ne "1">
-    <p>
-      <table cellspacing="1" cellpadding="2" bgcolor="#dddddd">
+      <table class="plain">
         <multiple name="pagination">
-          <tr bgcolor="white">
+          <tr>
             <group column="group">    
               <if @pagination.selected@ eq "1">
-                <td align="left" bgcolor="#ffffa"><b>@pagination.text@</b>
+                <td class="high"><b>@pagination.text@</b>
               </if>
               <else>
-                <td align="left">
+                <td>
                 <a href="@pagination.url@" title="@pagination.hint@">@pagination.text@</a>
               </else>
               </td>
@@ -33,23 +40,21 @@
           </tr>
         </multiple>
       </table>
-    </p>
   </if>
 
   <!-- TODO: Remove 'style' when we've merged 4.6.4 back onto HEAD -->
   <formtemplate id="batch_editor"></formtemplate>
 
   <if @pagination:rowcount@ ne "1">
-    <p>
-      <table cellspacing="1" cellpadding="2" bgcolor="#dddddd">
+      <table class="plain">
         <multiple name="pagination">
-          <tr bgcolor="white">
+          <tr>
             <group column="group">    
               <if @pagination.selected@ eq "1">
-                <td align="left" bgcolor="#ffffa"><b>@pagination.text@</b>
+                <td class="high"><b>@pagination.text@</b>
               </if>
               <else>
-                <td align="left">
+                <td>
                 <a href="@pagination.url@" title="@pagination.hint@">@pagination.text@</a>
               </else>
               </td>
@@ -57,6 +62,5 @@
           </tr>
         </multiple>
       </table>
-    </p>
   </if>
 </else>
