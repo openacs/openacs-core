@@ -65,42 +65,42 @@ function checkMailto(element) {
 <table>
 
 <tr>
-  <th align="right" nowrap>Package Key:</th>
+  <th style="text-align:right; white-space: nowrap">Package Key:</th>
   <td><tt>$package_key</tt></td>
 </tr>
 <tr>
-  <th align="right" nowrap>Package URL:</th>
+  <th style="text-align:right; white-space: nowrap">Package URL:</th>
   <td>$package_uri</td>
 </tr>
 
 <tr>
-  <th align="right" nowrap>Package Name:</th>
+  <th style="text-align:right; white-space: nowrap">Package Name:</th>
   <td>$pretty_name</td>
 </tr>
 
 <tr>
-  <th align="right" nowrap>OpenACS Core:</th>
+  <th style="text-align:right; white-space: nowrap">OpenACS Core:</th>
   <td>[ad_decode $initial_install_p t Yes No]</td>
 </tr>
 
 <tr>
-  <th align="right" nowrap>Singleton:</th>
+  <th style="text-align:right; white-space: nowrap">Singleton:</th>
   <td>[ad_decode $singleton_p t Yes No]</td>
 </tr>
 
 <tr>
-  <th align="right" nowrap>Implements Subsite:</th>
+  <th style="text-align:right; white-space: nowrap">Implements Subsite:</th>
   <td>[ad_decode $implements_subsite_p t Yes No]</td>
 </tr>
 
 <tr>
-  <th align="right" nowrap>Inherit Templates:</th>
+  <th style="text-align:right; white-space: nowrap">Inherit Templates:</th>
   <td>[ad_decode $inherit_templates_p t Yes No]</td>
 </tr>
 
 <tr>
-  <th align="right" nowrap>Auto-mount:</th>
-  <td><input name=auto_mount size=30 value="$auto_mount"></td>
+  <th style="text-align:right; white-space: nowrap">Auto-mount:</th>
+  <td><input name="auto_mount" size="30" value="$auto_mount"></td>
 </tr>
 
 <tr>
@@ -111,24 +111,24 @@ edit the information regarding existing version of the package.</td>
 </tr>
 
 <tr>
-  <th align="right" nowrap>Version:</th>
+  <th style="text-align:right; white-space: nowrap">Version:</th>
   <td><input name="version_name" size="10" value="$version_name" $version_name_on_change>
 </td>
 </tr>
 
 <tr>
-  <th align="right" nowrap>Version URL:</th>
+  <th style="text-align:right; white-space: nowrap">Version URL:</th>
   <td><input name="version_uri" size="80" value="$version_uri"></td>
 </tr>
 
 <tr valign="top">
-  <th align="right"><br>Summary:</th>
-  <td><textarea name="summary" cols="60" rows="2" required="required" wrap="soft">[ns_quotehtml $summary]</textarea></td>
+  <th style="text-align:right"><br>Summary:</th>
+  <td><textarea name="summary" cols="60" rows="2">[ns_quotehtml $summary]</textarea></td>
 </tr>
 
-<tr valign=top>
-  <th align="right"><br>Description:</th>
-  <td><textarea name="description" cols="60" rows="5" wrap="soft">[ns_quotehtml $description]</textarea><br>
+<tr valign="top">
+  <th style="text-align:right"><br>Description:</th>
+  <td><textarea name="description" cols="60" rows="5">[ns_quotehtml $description]</textarea><br>
 This description is <select name="description_format">
 <option value="text/html" [ad_decode $description_format "text/plain" "" "selected"]>HTML-formatted.
 <option value="text/plain" [ad_decode $description_format "text/plain" "selected" ""]>plain text.
@@ -158,7 +158,7 @@ foreach attribute_name [array names all_attributes] {
     }
     append body [subst {
 <tr>
-  <th align=right nowrap>[dict get $attribute pretty_name]:</th>
+  <th style="text-align:right; white-space: nowrap">[dict get $attribute pretty_name]:</th>
   <td><input name="$attribute_name" size="[dict get $attribute size]" value="$attribute_value"></td>
 </tr>
     }]
@@ -189,24 +189,24 @@ foreach owner_info $owners {
 
     append body [subst {
 <tr>
-  <th align=right nowrap>$prompt:</th>
-  <td><input name=owner_name size=30 value="$owner_name"></td>
+  <th style="text-align:right; white-space: nowrap">$prompt:</th>
+  <td><input name="owner_name" size="30" value="$owner_name"></td>
 </tr>
 <tr>
-  <th align=right nowrap>$prompt URL:</th>
-  <td><input name=owner_uri size=30 value="$owner_uri" onChange="checkMailto(this)"></td>
+  <th style="text-align:right; white-space: nowrap">$prompt URL:</th>
+  <td><input name="owner_uri" size="30" value="$owner_uri" onChange="checkMailto(this)"></td>
 </tr>
     }]
 }
 
 append body [subst {
 <tr>
-  <th align=right nowrap>Vendor:</th>
-  <td><input name=vendor size=30 value="$vendor"></td>
+  <th style="text-align:right; white-space: nowrap">Vendor:</th>
+  <td><input name="vendor" size="30" value="$vendor"></td>
 </tr>
 <tr>
-  <th align=right nowrap>Vendor URL:</th>
-  <td><input name=vendor_uri size=60 value="$vendor_uri"></td>
+  <th style="text-align:right; white-space: nowrap">Vendor URL:</th>
+  <td><input name="vendor_uri" size="60" value="$vendor_uri"></td>
 </tr>
 }]
 
@@ -214,16 +214,19 @@ append body [subst {
 <tr>
   <td></td>
   <td>
-    <table><tr valign=baseline><td><input type=checkbox name=upgrade_p value=1 checked></td><td>
-Upgrade the local package $pretty_name to this version and supersede older versions.
-  </td></tr></table>
+    <table>
+    <tr valign="baseline">
+    <td><input type="checkbox" name="upgrade_p" value="1" checked></td>
+    <td>Upgrade the local package $pretty_name to this version and supersede older versions.</td>
+    </tr>
+    </table>
   </td>
 </tr>
 
 <tr>
-  <td colspan=2 align=center><br>
-<input type=submit value="Save Information">
-</td>
+  <td colspan="2" align="center"><br>
+  <input type="submit" value="Save Information">
+  </td>
 </tr>
 
 </table>

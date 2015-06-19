@@ -77,18 +77,21 @@ set prompts [list]
 
 if { ![info exists installed_version_id] } {
     if { !$downloaded_p } {
+        set href [export_vars -base version-generate-info {version_id {write_p 1}}]
         set status [subst {
             No version of this package is installed: there is no <tt>.info</tt> file in the
             <tt>packages/$package_key</tt> directory. If you're building the package now, you probably
-            want to <a href="version-generate-info?version_id=$version_id&write_p=1">generate one</a>.
+            want to <a href="[ns_quotehtml $href]">generate one</a>.
         }]
     } else {
+        set href [export_vars -base version-install {version_id}]
         set status [subst {
             No version of this package is installed. You may 
-            <a href="version-install?version_id=$version_id">install this package now</a>.
+            <a href="[ns_quotehtml $href]">install this package now</a>.
         }]
     }
     lappend prompts $status
+    
 } elseif { $installed_version_id == $version_id } {
     set status "This version of the package is installed"
     if { $enabled_p == "t" } {
@@ -104,8 +107,9 @@ if { ![info exists installed_version_id] } {
         version $installed_version_name, is installed and [ad_decode $installed_enabled_p "t" "enabled" "disabled"].
     }]
     if { $version_name_greater < 0 } {
+        set href [export_vars -base version-upgrade {version_id}]
         append body [subst {
-            You may <a href="version-upgrade?version_id=$version_id">upgrade to this version now</a>.
+            You may <a href="[ns_quotehtml $href]">upgrade to this version now</a>.
         }]
     }
 }
@@ -133,7 +137,7 @@ db_foreach apm_all_owners {
     if { $owner_uri eq "" } {
         lappend owners $owner_name
     } else {
-        lappend owners "$owner_name (<a href=\"$owner_uri\">$owner_uri</a>)"
+        lappend owners [subst {$owner_name (<a href="[ns_quotehtml $owner_uri]">$owner_uri</a>)}]
     }
 }
 
@@ -200,7 +204,7 @@ foreach attribute_name [array names attributes] {
     }]
 }
 
-set vendorHTML [ad_decode $vendor_uri "" $vendor "<a href=\"$vendor_uri\">$vendor</a>"]
+set vendorHTML [ad_decode $vendor_uri "" $vendor [subst {<a href="[ns_quotehtml $vendor_uri]">$vendor</a>}]]
 append body [subst {
     <tr valign="baseline"><th align="left">Vendor:</th><td>$vendorHTML</td></tr>
     <tr valign="baseline"><th align="left">Package URL:</th><td><a href="$package_uri">$package_uri</a></td></tr>
@@ -209,8 +213,9 @@ append body [subst {
 }]
 
 if { $tarball_length ne "" && $tarball_length > 0 } {
+    set href [export_vars -base packages/[file tail $version_uri] {version_id}]
     append body [subst {
-        <a href="packages/[file tail $version_uri]?version_id=$version_id">[format "%.1f" [expr { $tarball_length / 1024.0 }]]KB</a> 
+        <a href="[ns_quotehtml $href]">[format "%.1f" [expr { $tarball_length / 1024.0 }]]KB</a> 
     }]
     if { $distribution_uri eq "" } {
         append body "(generated on this system"
@@ -218,14 +223,15 @@ if { $tarball_length ne "" && $tarball_length > 0 } {
             append body " on $distribution_date"
         }
         append body ")"
-        set params [export_vars { {m create-new} {p.description $summary} {title "[file tail $version_uri]"}}]
+        set href [export_vars -base "http://openacs.org/xowf/package-submissions/PackageSubmit.wf" \
+                      {{m create-new} {p.description $summary} {title "[file tail $version_uri]"}}]
         append body [subst {
             <p>
             In order to contribute this package back to the OpenACS community, 
             <ol>
             <li>download the .apm-file to your file system and</li>
             <li>submit the .apm-file 
-            <a href="http://openacs.org/xowf/package-submissions/PackageSubmit.wf?$params" target="_blank">to 
+            <a href="[ns_quotehtml $href]" target="_blank">to 
             the package repository of OpenACS</a>.</li>
             </ol>
         }]
@@ -239,8 +245,9 @@ if { $tarball_length ne "" && $tarball_length > 0 } {
 } else {
     append body "None available"
     if { $installed_p == "t" } {
+        set href [export_vars -base version-generate-tarball {version_id}]
         append body [subst {
-            (<a href="version-generate-tarball?version_id=$version_id">generate one now</a> from the filesystem)
+            (<a href="[ns_quotehtml $href]">generate one now</a> from the filesystem)
         }]
     }
 }
@@ -250,15 +257,15 @@ set nr_instances [apm_num_instances $package_key]
 if {$nr_instances > 0} {
     set instances [subst {
         Installed instances of this package:
-        <a href="package-instances?[export_vars { package_key }]">$nr_instances</a>
+        <a href="[ns_quotehtml [export_vars -base package-instances { package_key }]]">$nr_instances</a>
     }]
 } else {
     set instances "No installed instance of this package\n"
 }
 if {$nr_instances == 0 || ($nr_instances > 0 && !$singleton_p)} {
-    set query [export_vars { package_key {return_url [ad_return_url]}}]
+    set href [export_vars -base package-instance-create { package_key {return_url [ad_return_url]}}]
     set instance_create [subst {
-        <li><a href="package-instance-create?$query">Create 
+        <li><a href="[ns_quotehtml $href]">Create 
         (unmounted) instance of this package</a></li>
     }]
 } else {
@@ -271,26 +278,30 @@ append body [subst {
     </blockquote>
 
     <ul>
-    <li><a href="version-edit?[export_vars { version_id }]">Edit above information</a> (Also use this to create a new version)
+    <li><a href="[ns_quotehtml [export_vars -base version-edit {version_id}]]">Edit
+    above information</a> (Also use this to create a new version)</li>
     </ul>
     <h4>Manage</h4>
     <ul>
-    <li><a href="version-files?[export_vars { version_id }]">Files</a></li>
-    <li><a href="version-dependencies?[export_vars { version_id }]">Dependencies and Provides</a></li>
-    <li><a href="version-parameters?[export_vars { version_id }]">Parameters</a></li>
-    <li><a href="version-callbacks?[export_vars { version_id }]">Tcl Callbacks (install, instantiate, mount)</a></li>
-    <li><a href="version-i18n-index?[export_vars { version_id }]">Internationalization</a></li>
+    <li><a href="[ns_quotehtml [export_vars -base version-files        {version_id}]]">Files</a></li>
+    <li><a href="[ns_quotehtml [export_vars -base version-dependencies {version_id}]]">Dependencies and Provides</a></li>
+    <li><a href="[ns_quotehtml [export_vars -base version-parameters   {version_id}]]">Parameters</a></li>
+    <li><a href="[ns_quotehtml [export_vars -base version-callbacks    {version_id}]]">Tcl Callbacks (install, instantiate, mount)</a></li>
+    <li><a href="[ns_quotehtml [export_vars -base version-i18n-index   {version_id}]]">Internationalization</a></li>
     <li>$instances</li>
     $instance_create
     </ul>
     <h4>Reload</h4>
     <ul>
-    <li><a href="[export_vars -base version-reload { version_id {return_url [ad_return_url]}}]">Reload this package</a></li>
-    <li><a href="[export_vars -base package-watch { package_key {return_url [ad_return_url]}}]">Watch all files in package</a></li>
+    <li><a href="[ns_quotehtml [export_vars -base version-reload {version_id  {return_url [ad_return_url]}}]]">Reload
+    this package</a></li>
+    <li><a href="[ns_quotehtml [export_vars -base package-watch  {package_key {return_url [ad_return_url]}}]]">Watch
+    all files in package</a></li>
     </ul>
     <h4>XML .info package specification file</h4>
     <ul>
-    <li><a href="version-generate-info?[export_vars { version_id }]">Display an XML package specification file for this version</a></li>
+    <li><a href="[ns_quotehtml [export_vars -base version-generate-info {version_id}]]">Display an
+    XML package specification file for this version</a></li>
 }]
 
 if { ![info exists installed_version_id] || $installed_version_id == $version_id && 
@@ -299,7 +310,7 @@ if { ![info exists installed_version_id] || $installed_version_id == $version_id
     # generated locally, allow the user to write a specification file for this version
     # of the package.
     append body [subst {
-        <li><a href="version-generate-info?[export_vars { version_id }]&write_p=1">Write 
+        <li><a href="[ns_quotehtml [export_vars -base version-generate-info {version_id {write_p 1}}]]">Write 
         an XML package specification to the <tt>packages/$package_key/$package_key.info</tt> file</a></li>
     }]
 }
@@ -309,7 +320,7 @@ if { $installed_p == "t" } {
         # The distribution tarball was either (a) never generated, or (b) generated on this
         # system. Allow the user to make a tarball based on files in the filesystem.
         append body [subst {
-            <li><a href="version-generate-tarball?[export_vars { version_id }]">Generate 
+            <li><a href="[ns_quotehtml [export_vars -base version-generate-tarball {version_id}]]">Generate 
             a distribution file for this package from the filesystem</a></li>
         }]
     }
@@ -318,20 +329,20 @@ if { $installed_p == "t" } {
 
     if { [info exists can_disable_p] } {
         append body [subst {
-            <li><a href="version-disable?[export_vars { version_id }]">Disable 
+            <li><a href="[ns_quotehtml [export_vars -base version-disable {version_id}]]">Disable 
             this version of the package</a></li>
         }]
     }
     if { [info exists can_enable_p] } {
         append body [subst {
-            <li><a href="version-enable?[export_vars { version_id }]">Enable 
+            <li><a href="[ns_quotehtml [export_vars -base version-enable {version_id}]]">Enable 
             this version of the package</a></li>
         }]
     }
     
     if { $installed_p == "t" } {    
         append body [subst {
-            <li><a href="package-delete?[export_vars { version_id }]">Uninstall 
+            <li><a href="[ns_quotehtml [export_vars -base package-delete {version_id}]]">Uninstall 
             this package from your system</a> (be very careful!)</li>
         }]
     }

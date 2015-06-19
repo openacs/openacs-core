@@ -68,9 +68,10 @@ set parent_package_keys [lrange [apm_one_package_inherit_order $package_key] 0 e
 append sql_clauses " [template::list::orderby_clause -orderby -name parameters_list]"
 
 db_multirow -extend {actions} parameters parameter_table {} {
-    set actions "\[<font size=-1>
-        <a href=parameter-delete?[export_vars -url {parameter_id version_id section_name}]>delete</a> | 
-        <a href=parameter-edit?[export_vars -url {version_id parameter_id}]>edit</a></font>\]"
+    set actions [subst {\[<font size="-1">
+        <a href="[ns_quotehtml [export_vars -base parameter-delete {parameter_id version_id section_name}]]">delete</a> | 
+        <a href="[ns_quotehtml [export_vars -base parameter-edit {version_id parameter_id}]]">edit</a></font>\]
+    }]
 }
 
 

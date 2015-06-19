@@ -19,15 +19,19 @@ ad_page_contract {
 set admin_user_id [ad_conn user_id]
 
 set context [list [list "./" "Users"] "New user notified"]
-set export_vars [export_vars -url {user_id}]
+set export_vars [export_vars {user_id}]
 
 set admin_email [db_string get_admin_email {}]
 set subject "You have been added as a user to [ad_system_name] at [ad_url]"
 
 if {[catch {acs_mail_lite::send -send_immediately -to_addr $email -from_addr $admin_email -subject $subject -body $message} errmsg]} {
-    ad_return_error "Mail Failed" "<p>The system was unable to send email.  Please notify the user personally.  This problem is probably caused by a misconfiguration of your email system.  Here is the error:</p>
+    ad_return_error "Mail Failed" [subst {
+	<p>The system was unable to send email.  Please notify the user personally.
+	This problem is probably caused by a misconfiguration of your email system.
+	Here is the error message:</p>
 <div><code>
-[ad_quotehtml $errmsg]
-</code></div>"
+[ns_quotehtml $errmsg]
+</code></div>
+}]
     return
 }

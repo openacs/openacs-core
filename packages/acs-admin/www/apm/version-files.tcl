@@ -22,9 +22,9 @@ set body {
     <blockquote>
     <table cellspacing="0" cellpadding="0">
     <tr>
-    <th align="left">Path</th><th width="40"></th>
-    <th align="left">File type</th><th width="40"></th>
-    <th align="left">Database support</th><th width="40"></th>
+    <th align="left">Path</th><th style="width:40px"></th>
+    <th align="left">File type</th><th style="width:40px"></th>
+    <th align="left">Database support</th><th style="width:40px"></th>
     </tr>
 }
 
@@ -75,9 +75,9 @@ foreach path [apm_get_package_files -package_key $package_key] {
 	} else {
 	    append body [subst {
 		</td>
-		<td width="40">&nbsp;</td><td>$file_pretty_name</td>
-		<td width="40">&nbsp</td><td>$db_pretty_name</td>
-		<td width="40">&nbsp;</td>
+		<td>&nbsp;</td><td>$file_pretty_name</td>
+		<td>&nbsp</td><td>$db_pretty_name</td>
+		<td>&nbsp;</td>
 	    }]
 
 	    if { $installed_p == "t" } {
@@ -90,8 +90,9 @@ foreach path [apm_get_package_files -package_key $package_key] {
 			if {![parameter::get -package_id [ad_acs_kernel_id] \
 				  -parameter PerformanceModeP -default 1]} {
 			    # Provide a link to watch the procs file.
+			    set href [export_vars -base file-watch {version_id {paths $path} return_url}]
 			    append body [subst {
-				<td>&nbsp;<a href="file-watch?[export_vars -url {version_id {paths $path} return_url}]">watch</a>
+				<td>&nbsp;<a href="[ns_quotehtml $href]">watch</a>
 				&nbsp;</td>
 			    }]
 			} else {
@@ -120,13 +121,14 @@ append body {</table>
 
 if { $installed_p == "t" } {
     append body [subst {<ul>
-	<li><a href="package-watch?[export_vars -url {package_key return_url}]">watch all files</a></li>
-	<li><a href="package-watch-cancel?[export_vars -url {package_key return_url}]">cancel all watches</a></li>
+	<li><a href="[ns_quotehtml [export_vars -base package-watch {package_key return_url}]]">watch all files</a></li>
+	<li><a href="[ns_quotehtml [export_vars -base package-watch-cancel {package_key return_url}]]">cancel all watches</a></li>
     }]
 
     if {$tagged_p == "t"} {
 	append body [subst {
-	    <li><a href="archive/[file tail $version_uri]?version_id=$version_id">Download a tarball from the package archive</a>
+	    <li><a href="[ns_quotehtml [export_vars -base archive/[file tail $version_uri] {version_id}]">Download
+	    a tarball from the package archive</a>
 	}]
     }
 
@@ -135,7 +137,8 @@ if { $installed_p == "t" } {
 } elseif { [info exists tagged_p] } {
     if { $tagged_p == "t" } {
 	append body [subst {<ul>
-	    <li><a href="archive/[file tail $version_uri]?version_id=$version_id">Download a tarball from the package archive</a>
+	    <li><a href="[ns_quotehtml [export_vars -base archive/[file tail $version_uri] {version_id}]]">Download
+	    a tarball from the package archive</a>
         </ul>
 	}]
     }

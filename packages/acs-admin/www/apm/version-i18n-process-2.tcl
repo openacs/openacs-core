@@ -19,9 +19,9 @@ if { [info exists skip_button] } {
     # to processing the next one
     set remaining_files [lrange $files 1 end]
     if { [llength $remaining_files] > 0 } {
-        ad_returnredirect "version-i18n-process?[export_vars -url {version_id {files:multiple $remaining_files} file_action:multiple}]"    
+        ad_returnredirect [export_vars -base version-i18n-process {version_id {files:multiple $remaining_files} file_action:multiple}]
     } else {
-        ad_returnredirect "version-i18n?[export_vars -url {version_id}]"
+        ad_returnredirect [export_vars -base version-i18n {version_id}]
     }
     ad_script_abort
 }
@@ -115,7 +115,7 @@ set files [lrange $files $number_of_processed_files end]
 
 # The proceed link will be to the next adp file if there is one and back to the I18N page
 # if we're done
-set proceed_url_export_vars [export_vars -url {version_id files:multiple file_action:multiple}]
+set proceed_url_export_vars [export_vars {version_id files:multiple file_action:multiple}]
 if { [llength $files] > 0 } {
     # There are no more files to process so present a link back to the i18n page for this version
     set proceed_url "version-i18n-process?${proceed_url_export_vars}"

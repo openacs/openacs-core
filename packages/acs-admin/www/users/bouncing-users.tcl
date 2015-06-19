@@ -47,7 +47,7 @@ template::list::create \
 
 db_multirow -extend {unbounce_link} bouncing_users select_bouncing_users {} {
     set return_url [ad_return_url]
-    set unbounce_link [export_vars -base "/register/restore-bounce" -url {user_id return_url}]
+    set unbounce_link [export_vars -base /register/restore-bounce {user_id return_url}]
 }
 
-set context [list [list "." "Users"] "[_ acs_mail_lite.Bouncing_users]"]
+set context [list [list "." "Users"] "[_ acs-mail-lite.Bouncing_users]"]
