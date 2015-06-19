@@ -167,12 +167,12 @@ ad_proc -public api_script_documentation {
         } else {
             set preview ""
         }
-        append out "<blockquote><i>Delivered as $mime_type</i>$preview</blockquote>\n"
+        append out "<blockquote><p><i>Delivered as $mime_type</i>$preview</blockquote>\n"
         return $out
     }
 
     if { [catch { array set doc_elements [api_read_script_documentation $path] } error] } {
-        append out "<blockquote><i>Unable to read $path: [ns_quotehtml $error]</i></blockquote>\n"
+        append out "<blockquote><p><i>Unable to read $path: [ns_quotehtml $error]</i></blockquote>\n"
         return $out
     }
 
@@ -188,9 +188,9 @@ ad_proc -public api_script_documentation {
     
     append out "<blockquote>"
     if { [info exists doc_elements(main)] } {
-        append out [lindex $doc_elements(main) 0]
+        append out <p>[lindex $doc_elements(main) 0]
     } else {
-        append out "<i>Does not contain a contract.</i>"
+        append out "<p><i>Does not contain a contract.</i>"
     }
     append out "<dl>\n"
     # XXX: This does not work at the moment. -bmq
@@ -250,15 +250,15 @@ ad_proc -public api_library_documentation {
         return -code error "Only text/html documentation is currently supported"
     }
 
-    set out "<h3>[file tail $path]</h3>"
+    set out "<h3>[ns_quotehtml [file tail $path]]</h3>"
     
     if { [nsv_exists api_library_doc $path] } {
         array set doc_elements [nsv_get api_library_doc $path]
-        append out "<blockquote>\n"
+        append out "<blockquote><p>\n"
         append out [lindex $doc_elements(main) 0]
 
         append out "<dl>\n"
-        append out "<dt><b>Location:</b>\n<dd>$path\n"
+        append out "<dt><b>Location:</b>\n<dd>[ns_quotehtml $path]\n"
         if { [info exists doc_elements(creation-date)] } {
             append out "<dt><b>Created:</b>\n<dd>[lindex $doc_elements(creation-date) 0]\n"
         }
@@ -269,7 +269,10 @@ ad_proc -public api_library_documentation {
             }
         }
         if { [info exists doc_elements(cvs-id)] } {
-            append out "<dt><b>CVS Identification:</b>\n<dd><code>[ns_quotehtml [lindex $doc_elements(cvs-id) 0]]</code>\n"
+            append out [subst {
+                <dt><b>CVS Identification:</b>
+                <dd><code>[ns_quotehtml [lindex $doc_elements(cvs-id) 0]]</code>
+            }]
         }
         append out "</dl>\n"
         append out "</blockquote>\n"
@@ -454,89 +457,109 @@ ad_proc -public api_proc_documentation {
         append out "</i></b><p>\n"
     }
 
-    append out "[lindex $doc_elements(main) 0]\n<p>\n<dl>\n"
+    append out "<p>[lindex $doc_elements(main) 0]\n<p>\n"
+    set haveBlocks [expr {
+                          [info exists doc_elements(param)]
+                          || [llength $doc_elements(switches)] > 0
+                          || [llength $doc_elements(positionals)] > 0
+                          || [info exists doc_elements(option)]
+                          || [info exists doc_elements(return)]
+                          || [info exists doc_elements(error)]
+                          || [info exists doc_elements(author)]
+                          || [info exists doc_elements(creation-date)]
+                          || [info exists doc_elements(change-log)]
+                          || [info exists doc_elements(cvs-id)]
+                          || [info exists doc_elements(see)]
+                      }]
+    if {$haveBlocks} {
+        append out "<dl>\n"
 
-    if { [info exists doc_elements(param)] } {
-        foreach param $doc_elements(param) {
-            if { [regexp {^([^ \t\n]+)[ \t\n]+(.*)$} $param "" name value] } {
-                set params($name) $value
-            }
-        }
-    }
-    
-    if { [llength $doc_elements(switches)] > 0 } {
-        append out "<dt><b>Switches:</b></dt><dd><dl>\n"
-        foreach switch $doc_elements(switches) {
-            append out "<dt><b>-$switch</b>"
-            if {"boolean" in $flags($switch)} {
-                append out " (boolean)"
-            } 
-            
-            if { [info exists default_values($switch)]
-                 && $default_values($switch) ne "" 
-             } {
-                append out " (defaults to <code>\"[ns_quotehtml $default_values($switch)]\"</code>)"
-            } 
-            
-            if {"required" in $flags($switch)} {
-                append out " (required)"
-            } else {
-                append out " (optional)"
-            }
-            append out "</dt>"
-            if { [info exists params($switch)] } {
-                append out "<dd>$params($switch)</dd>"
-            }
-        }
-        append out "</dl></dd>\n"
-    }
-    
-    if { [llength $doc_elements(positionals)] > 0 } {
-        append out "<dt><b>Parameters:</b></dt><dd>\n"
-        foreach positional $doc_elements(positionals) {
-            append out "<b>$positional</b>"
-            if { [info exists default_values($positional)] } {
-                if { $default_values($positional) eq "" } {
-                    append out " (optional)"
-                } else {
-                    append out " (defaults to <code>\"$default_values($positional)\"</code>)"
+        if { [info exists doc_elements(param)] } {
+            foreach param $doc_elements(param) {
+                if { [regexp {^([^ \t\n]+)[ \t\n]+(.*)$} $param "" name value] } {
+                    set params($name) $value
                 }
             }
-            if { [info exists params($positional)] } {
-                append out " - $params($positional)"
-            }
-            append out "<br>\n"
         }
-        append out "</dd>\n"
-    }
     
-
-    # @option is used in  template:: and cms:: (and maybe should be used in some other 
-    # things like ad_form which have internal arg parsers.  although an option 
-    # and a switch are the same thing, just one is parsed in the proc itself rather than 
-    # by ad_proc.
-
-    if { [info exists doc_elements(option)] } {
-        append out "<b>Options:</b><dl>"
-        foreach param $doc_elements(option) {
-            if { [regexp {^([^ \t]+)[ \t](.+)$} $param "" name value] } {
-                append out "<dt><b>-$name</b></dt><dd>$value<br></dd>"
+        if { [llength $doc_elements(switches)] > 0 } {
+            append out "<dt><b>Switches:</b></dt><dd><dl>\n"
+            foreach switch $doc_elements(switches) {
+                append out "<dt><b>-$switch</b>"
+                if {"boolean" in $flags($switch)} {
+                    append out " (boolean)"
+                } 
+                
+                if { [info exists default_values($switch)]
+                     && $default_values($switch) ne "" 
+                 } {
+                    append out " (defaults to <code>\"[ns_quotehtml $default_values($switch)]\"</code>)"
+                } 
+                
+                if {"required" in $flags($switch)} {
+                    append out " (required)"
+                } else {
+                    append out " (optional)"
+                }
+                append out "</dt>"
+                if { [info exists params($switch)] } {
+                    append out "<dd>$params($switch)</dd>"
+                }
             }
+            append out "</dl></dd>\n"
         }
-        append out "</dl>"
-    }
-    
+        
+        if { [llength $doc_elements(positionals)] > 0 } {
+            append out "<dt><b>Parameters:</b></dt><dd>\n"
+            foreach positional $doc_elements(positionals) {
+                append out "<b>$positional</b>"
+                if { [info exists default_values($positional)] } {
+                    if { $default_values($positional) eq "" } {
+                        append out " (optional)"
+                    } else {
+                        append out " (defaults to <code>\"$default_values($positional)\"</code>)"
+                    }
+                }
+                if { [info exists params($positional)] } {
+                    append out " - $params($positional)"
+                }
+                append out "<br>\n"
+            }
+            append out "</dd>\n"
+        }
+        
 
-    if { [info exists doc_elements(return)] } {
-        append out "<dt><b>Returns:</b></dt><dd>[join $doc_elements(return) "<br>"]</dd>\n"
+        # @option is used in  template:: and cms:: (and maybe should be used in some other 
+        # things like ad_form which have internal arg parsers.  although an option 
+        # and a switch are the same thing, just one is parsed in the proc itself rather than 
+        # by ad_proc.
+
+        if { [info exists doc_elements(option)] } {
+            append out "<b>Options:</b><dl>"
+            foreach param $doc_elements(option) {
+                if { [regexp {^([^ \t]+)[ \t](.+)$} $param "" name value] } {
+                    append out "<dt><b>-$name</b></dt><dd>$value<br></dd>"
+                }
+            }
+            append out "</dl>"
+        }
+        
+
+        if { [info exists doc_elements(return)] } {
+            append out "<dt><b>Returns:</b></dt><dd>[join $doc_elements(return) "<br>"]</dd>\n"
+        }
+    
+        if { [info exists doc_elements(error)] } {
+            append out "<dt><b>Error:</b></dt><dd>[join $doc_elements(error) "<br>"]</dd>\n"
+        }
+
+        append out [::apidoc::format_common_elements doc_elements]
+
+        append out "</dl>\n"
     }
-    
-    if { [info exists doc_elements(error)] } {
-        append out "<dt><b>Error:</b></dt><dd>[join $doc_elements(error) "<br>"]</dd>\n"
-    }
-    
-    append out [::apidoc::format_common_elements doc_elements]
-    
+
+
+
     if { $source_p } {
         if {[parameter::get_from_package_key \
                  -package_key acs-api-browser \
@@ -607,8 +630,7 @@ ad_proc -public api_proc_documentation {
     }
 
     # No "see also" yet.
-    
-    append out "</dl></blockquote>"
+    append out "</blockquote>"
     
     return $out
 }
@@ -1296,7 +1318,7 @@ namespace eval ::apidoc {
     } {
         
         set linkList [list]
-        set filename "$::acs::rootdir/$path"
+        set filename $::acs::rootdir/$path
         set path_dirname [file dirname $path]
         set file_dirname [file dirname $filename]
         set file_rootname [file rootname [file tail $filename]]
@@ -1310,7 +1332,7 @@ namespace eval ::apidoc {
         foreach file $files {
             lappend linkList [list \
                                   filename $file \
-                                  link "content-page-view?source_p=1&path=[ns_urlencode "$path_dirname/[file tail $file]"]" \
+                                  link "content-page-view?source_p=1&path=[ns_urlencode $path_dirname/[file tail $file]]" \
                                  ]
             
         }
