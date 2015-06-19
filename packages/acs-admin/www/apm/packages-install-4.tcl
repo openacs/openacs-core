@@ -7,7 +7,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     {sql_file:multiple ""}
-    {mount_p:boolean,multiple ""} 
+    {mount_packages:multiple ""} 
     {mount_path:array ""}
 }
 
@@ -71,7 +71,7 @@ foreach pkg_info $pkg_install_list {
     }
 
     # Mount path of package
-    if { $package_key in $mount_p 
+    if { $package_key in $mount_packages
 	 && [info exists mount_path($package_key)] 
 	 && $mount_path($package_key) ne "" 
      } {
