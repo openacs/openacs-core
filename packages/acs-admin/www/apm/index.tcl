@@ -120,8 +120,8 @@ db_multirow -extend {package_url maintained status action_html} packages apm_tab
 }
 
 # The reload links make the page slow, so make them optional
-set page_url [export_vars -base [ad_conn url] -url {orderby owned_by supertype}]
-set href [export_vars -base [ad_conn url] -url {orderby owned_by supertype reload_links_p}]
+set page_url [export_vars -base [ad_conn url] {orderby owned_by supertype}]
+set href     [export_vars -base [ad_conn url] {orderby owned_by supertype reload_links_p}]
 if { $reload_links_p } {
     set reload_filter "<a href=\"[ns_quotehtml $href]\">Do not check for changed files</a>"
 } else {

@@ -32,5 +32,5 @@ db_transaction {
 	<blockquote><pre>[ad_quotehtml $errmsg]</pre></blockquote>"
 }
 
-ad_returnredirect "version-dependencies?[export_vars -url {version_id}]"
+ad_returnredirect "version-dependencies?[export_vars {version_id}]"
 

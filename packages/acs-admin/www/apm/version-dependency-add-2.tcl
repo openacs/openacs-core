@@ -50,4 +50,4 @@ db_transaction {
     }
 }
 
-ad_returnredirect "version-dependencies?[export_vars -url {version_id}]"
+ad_returnredirect "version-dependencies?[export_vars {version_id}]"

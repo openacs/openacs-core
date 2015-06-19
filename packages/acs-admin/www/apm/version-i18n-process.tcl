@@ -22,7 +22,7 @@ set replace_tags_p [ad_decode [lsearch -exact $file_action replace_tags] "-1" "0
 
 # If no texts should be replaced we need not give the user a choice of keys to use and
 # can go straight to the processing
-set redirect_url "version-i18n-process-2?[export_vars -url {version_id files:multiple file_action:multiple}]"
+set redirect_url [export_vars -base version-i18n-process-2 {version_id files:multiple file_action:multiple}]
 if { ! $replace_text_p } {
 
     ad_returnredirect $redirect_url

@@ -3,7 +3,7 @@
 <property name="context">@context;noquote@</property>
 
 
-<p><listtemplate name="callbacks"></listtemplate></p>
+<p><listtemplate name="callbacks"></listtemplate>
 
 <h3>Help</h3>
 
@@ -24,13 +24,13 @@
   process depending on which version you're upgrading from and to.
 </p>
 
-<table cellspacing="1" cellpadding="4" bgcolor="#999999">
-  <tr bgcolor="white">
+<table cellspacing="1" cellpadding="4" style="background: #999999">
+  <tr style="background: white">
     <th>Callback</th>
     <th>Parameters</th>
   </tr>
 
-  <tr bgcolor="white">
+  <tr style="background: white">
     <td>
       before-install
     </td>
@@ -39,7 +39,7 @@
     </td>
   </tr>
 
-  <tr bgcolor="white">
+  <tr style="background: white">
     <td>
       after-install
     </td>
@@ -48,7 +48,7 @@
     </td>
   </tr>
 
-  <tr bgcolor="white">
+  <tr style="background: white">
     <td>
       before-upgrade
     </td>
@@ -58,7 +58,7 @@
     </td>
   </tr>
 
-  <tr bgcolor="white">
+  <tr style="background: white">
     <td>
       after-upgrade
     </td>
@@ -68,7 +68,7 @@
     </td>
   </tr>
 
-  <tr bgcolor="white">
+  <tr style="background: white">
     <td>
       before-uninstall
     </td>
@@ -77,7 +77,7 @@
     </td>
   </tr>
 
-  <tr bgcolor="white">
+  <tr style="background: white">
     <td>
       after-instantiate
     </td>
@@ -86,7 +86,7 @@
     </td>
   </tr>
 
-  <tr bgcolor="white">
+  <tr style="background: white">
     <td>
       before-uninstantiate
     </td>
@@ -95,7 +95,7 @@
     </td>
   </tr>
 
-  <tr bgcolor="white">
+  <tr style="background: white">
     <td>
       after-mount
     </td>
@@ -105,7 +105,7 @@
     </td>
   </tr>
 
-  <tr bgcolor="white">
+  <tr style="background: white">
     <td>
       before-unmount
     </td>

@@ -23,7 +23,7 @@ set body [subst {
     <form action='version-dependency-add-2' method='post'>
     [export_vars -form {version_id dependency_type dependency_id {our_package_key $package_key}}]
 
-    $pretty_name ${dependency_type}s the following service:
+    <p>$pretty_name ${dependency_type}s the following service:
     <p>
     <select name="service" size="20">
 }]
@@ -38,6 +38,7 @@ append body [subst {
     </select>
     <br>
     <input type="submit" value="Add Dependency">
+    </form>
 }]
 
 ad_return_template apm

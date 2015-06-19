@@ -24,14 +24,17 @@ foreach dependency_type { provide require extend embed } {
     } else {
         set dependency_type_prep_2 ${dependency_type}ed
     }
-    append body "<h3>Services [string totitle $dependency_type_prep_2]</h3><ul>\n"
 
+    append body [subst {
+	<h3>Services [string totitle $dependency_type_prep_2]</h3>
+	<ul>
+    }]
     db_foreach apm_all_dependencies {} {
 	append body "<li>[string totitle $dependency_type_prep] service $service_uri, version $service_version "
 	
         if { $dependency_type ne "provide" } {
-	    set qvars [export_vars -url {package_key dependency_id version_id dependency_type}]
-            append body "(<a href=\"version-dependency-remove?$qvars\">remove</a>)\n"
+	    set href [export_vars -base version-dependency-remove {package_key dependency_id version_id dependency_type}]
+            append body [subst {(<a href="[ns_quotehtml $href]">remove</a>)}]
         }
 	
 	# If this package provides a service, show a list of all packages that require it,
@@ -53,9 +56,10 @@ foreach dependency_type { provide require extend embed } {
                 requires { set dep_d required }
                 extends { set dep_d extended }
                 embeds { set dep_d embeds }
-            } 
+            }
+	    set href [export_vars -base version-view {{version_id $dep_version_id}}]
 	    append body [subst {
-		<li>[string totitle $dep_d] by <a href="version-view?version_id=$dep_version_id">$dep_pretty_name, 
+		<li>[string totitle $dep_d] by <a href="[ns_quotehtml $href]">$dep_pretty_name, 
 		version $dep_version_name</a>
 	    }]
 	}
@@ -67,14 +71,12 @@ foreach dependency_type { provide require extend embed } {
     }
     if { $installed_p == "t" && $dependency_type ne "provide"} {
 	append body [subst {
-	    <li><a href="version-dependency-add?[export_vars -url {version_id dependency_type}]">Add a 
-	    service $dependency_type_prep_2 by this package</a>
+	    <li><a href="[ns_quotehtml [export_vars -base version-dependency-add {version_id dependency_type}]]">Add
+	    a service $dependency_type_prep_2 by this package</a>
 	}]
     }
     append body "</ul>\n"
 }
-
-append body "</ul>\n"
 
 ad_return_template apm
 
