@@ -70,9 +70,11 @@ foreach pkg_info [ad_get_client_property apm pkg_install_list] {
              && $version(package.type) eq "apm_application" 
          } {
             set mount_html [subst {
-                <input type="checkbox" name="mount_p" value="$version(package.key)" checked> 
+                <div>
+                <input type="checkbox" name="mount_packages" value="$version(package.key)" checked> 
                 Mount package under the main site at path 
                 <input type="text" name="mount_path.$version(package.key)" value="$version(package.key)">
+                </div>
             }]
         } else {
             set mount_html ""
