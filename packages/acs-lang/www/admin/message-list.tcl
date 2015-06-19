@@ -38,7 +38,7 @@ set import_messages_url [export_vars -base "import-messages" { package_key local
 # We let you create new messages keys if you're in the default locale
 set create_p [string equal $current_locale $default_locale]
 
-set new_message_url "localized-message-new?[export_vars { locale package_key }]"
+set new_message_url [export_vars -base localized-message-new { locale package_key }]
 
 
 
