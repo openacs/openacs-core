@@ -35,10 +35,10 @@ set path [apidoc::sanitize_path $path]
 if {![file readable $::acs::rootdir/$path] || [file isdirectory $::acs::rootdir/$path]} {
     if {[info exists version_id]} {
 	set kind procs
-	set href [ad_conn package_url]/package-view?[export_vars {version_id {kind procs}}]
-	set link [subst {<p>Go back to <a href="$href">Package Documentation</a>.}]
+	set href [export_vars -base [ad_conn package_url]/package-view {version_id {kind procs}}]
+	set link [subst {<p>Go back to <a href="[ns_quotehrml $href]">Package Documentation</a>.}]
     } else {
-	set link [subst {<p>Go back to <a href="[ad_conn package_url]">API Browser</a>.}]
+	set link [subst {<p>Go back to <a href="[ns_quotehrml [ad_conn package_url]]">API Browser</a>.}]
     }
     ad_return_warning "No such library file" [subst {
 	The file '$path' was not found. Maybe the url contains a typo.
@@ -71,7 +71,7 @@ if { [info exists version_id] } {
          where version_id = :version_id
     }
     if {[info exists pretty_name]} {
-	lappend context [list "package-view?version_id=$version_id" "$pretty_name $version_name"]
+	lappend context [list [export_vars -base package-view {version_id}] "$pretty_name $version_name"]
     }
 
 }

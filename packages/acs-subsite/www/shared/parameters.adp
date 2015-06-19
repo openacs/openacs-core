@@ -6,7 +6,7 @@
 <if @global_param_url@ defined>
 <h2>Global parameters</h2> 
 <blockquote>
-<a href='@global_param_url;literal@'>@global_parameter_label@</a><br>
+<p><a href='@global_param_url@'>@global_parameter_label@</a></p>
 </blockquote>
 <h2>Instance parameters</h2>
 </if>

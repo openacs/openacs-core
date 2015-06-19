@@ -1,11 +1,16 @@
 <master>
   <property name="doc(title)">@title;noquote@</property>
   <property name="context">@context;noquote@</property>
+  <property name="head">
+  <style type="text/css">
+  td.doc {background: #e4e4e4;}
+  </style>
+  </property>
 
   @dimensional_slider;noquote@
   @library_documentation;noquote@
 
-  <br clear="all"/>
+  <br style="clear:both">
 
   <h3>Procedures in this file</h3>
 
@@ -19,7 +24,7 @@
 
   <multiple name="proc_doc_list">
     <table width="100%">
-      <tr><td bgcolor="#e4e4e4">@proc_doc_list.doc;noquote@</td></tr>
+      <tr><td class="doc">@proc_doc_list.doc;noquote@</td></tr>
     </table>
     &nbsp;<p>
   </multiple>
