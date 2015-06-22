@@ -223,7 +223,7 @@ ad_proc -public template::widget::table::prepare {
         set row(html) "<b>$label</b>"
         set row(selected) "t"
       } else {
-        set row(html)    "<a href=\"${url}${the_joiner}tablewidget:${name}_orderby\=$row(name)\">"
+	set row(html)    "<a href=\"[ns_quotehtml ${url}${the_joiner}tablewidget:${name}_orderby\=$row(name)]\">"
         append row(html) "$label</a>"
         set row(selected) "f"
       }

@@ -60,18 +60,18 @@ ad_proc -public email_image::get_user_email {
         # We use the privacy level that the user select
         set priv_level $user_level
     }
-    set send_email_url [ad_quotehtml "/shared/send-email?sendto=$user_id&return_url=$return_url"]
+    set send_email_url [ns_quotehtml "/shared/send-email?sendto=$user_id&return_url=$return_url"]
     switch $priv_level {
         "4" {
-            return "<a href=\"mailto:$email\" title=\"#acs-subsite.Send_email_to_this_user#\">$email</a>"
+            return [subsr {<a href="mailto:$email" title="#acs-subsite.Send_email_to_this_user#">$email</a>}]
         }
         "3" {
             set email_image_id [email_image::get_related_item_id -user_id $user_id]
             if { $email_image_id != "-1" } {
                 # The user has an email image stored in the content repository
                 set revision_id [content::item::get_latest_revision -item_id $email_image_id]
-                set img_src [ad_quotehtml "/shared/email-image-bits.tcl?user_id=$user_id&revision_id=$revision_id"]
-                set email_image "<a href=\"$send_email_url\"><img style=\"border:0\" src=\"$img_src\" alt=\"#acs-subsite.Email#\"></a>"
+                set img_src [ns_quotehtml "/shared/email-image-bits.tcl?user_id=$user_id&revision_id=$revision_id"]
+		return [subst {<a href="$send_email_url"><img style="border:0" src="$img_src" alt="#acs-subsite.Email#"></a>}]
             } else {
                 # Create a new email_image
                 if { [catch { set email_image [email_image::new_item -user_id $user_id -return_url $return_url -bgcolor $bgcolor -transparent $transparent] } errmsg ] } {
@@ -80,13 +80,13 @@ ad_proc -public email_image::get_user_email {
                     # an image replacing the "@" symbol
                     set email_user [lindex [split $email '@'] 0]
                     set email_domain [lindex [split $email '@'] 1]
-                    set email_image "<a href=\"$send_email_url\">${email_user}<img style=\"border:0\" src=\"/shared/images/at.gif\" alt=\"@\">${email_domain}</a>"
+                    set email_image [subst {<a href="$send_email_url">$email_user<img style="border:0" src="/shared/images/at.gif" alt="@">$email_domain</a>}]
                 }
             }
             return $email_image
         }
         "2" {
-            return "<a href=\"$send_email_url\">\#acs-subsite.Send_email_to_this_user\#</a>"
+            return [subst {<a href="$send_email_url">#acs-subsite.Send_email_to_this_user#</a>}]
         }
         "1" { 
             #Do not show e-mail
@@ -183,7 +183,7 @@ ad_proc -public email_image::new_item {
     
     set img_src [ad_quotehtml "/shared/email-image-bits.tcl?user_id=$user_id&revision_id=$revision_id"]
     set send_email_url [ad_quotehtml "/shared/send-email?sendto=$user_id&return_url=$return_url"]
-    set email_image "<a href=\"$send_email_url\"><img style=\"border:0\" src=\"$img_src\" alt=\"#acs-subsite.Email#\"></a>"
+    set email_image [subst {<a href="$send_email_url"><img style="border:0" src="$img_src" alt="#acs-subsite.Email#"></a>}
 
     return "$email_image"
 }

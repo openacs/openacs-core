@@ -1181,7 +1181,7 @@ ad_proc export_ns_set_vars {
                 if {$format eq "url"} {
                     lappend return_list "[ns_urlencode $name]=[ns_urlencode $value]"
                 } else {
-                    lappend return_list " name=\"[ad_quotehtml $name]\" value=\"[ad_quotehtml $value]\""
+                    lappend return_list " name=\"[ns_quotehtml $name]\" value=\"[ns_quotehtml $value]\""
                 }
             }
             incr set_counter_i
@@ -1190,7 +1190,7 @@ ad_proc export_ns_set_vars {
     if {$format eq "url"} {
         return [join $return_list "&"]
     } else {
-        return "<div><input type=\"hidden\" [join $return_list " ></div>\n <div><input type=\"hidden\" "] ></div>"
+        return "<div><input type='hidden' [join $return_list " ></div>\n <div><input type='hidden' "] ></div>"
     }
 }
 
@@ -2228,17 +2228,17 @@ ad_proc -deprecated util_ReturnMetaRefresh {
     Meta Refresh page instead of a redirect.                                                                                                                   
     
 } {
-    ad_return_top_of_page "
+    ad_return_top_of_page [subst {
     <head>
-    <meta http-equiv=\"refresh\" content=\"$seconds_delay;URL=$url\">
-    <script type=\"text/javascript\">
-    window.location.href=\"$url\";
+    <meta http-equiv="refresh" content="$seconds_delay;URL=[ns_quotehtml $url]">
+    <script type="text/javascript">
+    window.location.href = "[ns_quotehtml $url]";
     </script>
     </head>
     <body>
     <h2>Loading...</h2>
-    If your browser does not automatically redirect you, <a href=\"$url\">please click here</a>.
-    </body>"
+    If your browser does not automatically redirect you, <a href="[ns_quotethml $url]">please click here</a>.
+    </body>}]
 }
 
 # Brad Duell (bduell@ncacasi.org) 07/10/2003

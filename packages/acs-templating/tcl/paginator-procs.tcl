@@ -117,12 +117,13 @@ ad_proc -public template::paginator::create { statement_name name query count_qu
     # recommended. Unfortunately, several places in OpenACS have this
     # problem.
     #
-    if { ($row_ids eq {} && ![::cache exists $cache_key]) || ([info exists opts(flush_p)] && $opts(flush_p) == "t") } {
+    if { ($row_ids eq {} && ![::cache exists $cache_key])
+	 || ([info exists opts(flush_p)] && $opts(flush_p) == "t") } {
       if { [info exists opts(printing_prefs)] && $opts(printing_prefs) ne "" } {
 	  set title [lindex $opts(printing_prefs) 0]
 	  set stylesheet [lindex $opts(printing_prefs) 1]
 	  if { $stylesheet ne "" } {
-	      set css_link "<link rel=\"stylesheet\" href=\"$stylesheet\" type=\"text/css\">"
+	      set css_link [subst {<link rel="stylesheet" href="[ns_quotehtml $stylesheet]" type="text/css">}]
 	  } else {
 	      set css_link ""
 	  }
@@ -159,15 +160,14 @@ $css_link
 	      #if { [llength $opts(row_ids)]==0 } {
 	      #	  nsv_set __template_cache_timeout $cache_key $opts(timeout)
 	      #}
-	      ns_write "
-          <SCRIPT type=\"text/javascript\">
+	      ns_write [subst {
+          <script type="text/javascript">
           <!-- Begin
-          document.location.href=\"$return_url\";
+	  document.location.href="[ns_quotehtml $return_url]";
           // End -->
           </script>
-          <noscript>
-          <a href=\"$return_url\">Click here to Continue</a>
-          </noscript>"
+	  <noscript><a href="[ns_quotehtml $return_url]">Click here to continue.</a></noscript>
+	      }]
 	  }
 	  ad_script_abort
       } else {

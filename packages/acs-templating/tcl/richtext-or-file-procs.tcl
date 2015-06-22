@@ -238,7 +238,7 @@ ad_proc -public template::util::richtext_or_file::get_property { what richtext_o
                     return [ad_html_text_convert -from $mime_type -to "text/html" -- $text]
                 }
                 file {
-                    return "<a href=\"$content_url\">Download file</a>"
+                    return "<a href=\"[ns_quotehtml $content_url]\">Download file</a>"
                 }
             }
             return {}

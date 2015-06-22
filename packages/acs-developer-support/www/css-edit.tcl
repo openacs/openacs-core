@@ -28,8 +28,8 @@ if {[file exists $file_location] && [file extension $file_location] eq ".css"} {
     } -on_request {
 
 	set package_id [ad_conn package_id]
-	set css_path "<a href='$css_location'>$css_location</a>"
-	set fp [open "$file_location" "r"]
+	set css_path "<a href='[ns_quotehtml $css_location]'>$css_location</a>"
+	set fp [open $file_location "r"]
 	set css_content ""
 	while { [gets $fp line] >= 0 } {
 	    append css_content "$line \n"
@@ -40,12 +40,15 @@ if {[file exists $file_location] && [file extension $file_location] eq ".css"} {
 	set revision_html ""
 	if {$item_id ne ""} {
 	    append revision_html "<ol>"
-	    db_foreach revision {select revision_id, publish_date, description from cr_revisions where item_id = :item_id order by publish_date desc} {
+	    db_foreach revision {select revision_id, publish_date, description
+		from cr_revisions where item_id = :item_id order by publish_date desc
+	    } {
 		if { [content::revision::is_live -revision_id $revision_id] == "t" } {
 		    set make_live "<strong>that's live!</strong>"
 		} else {
 		    set return_url_2 [ad_return_url]
-		    set make_live "<a href=\"[export_vars -base "css-make-live" -url {revision_id return_url_2 file_location}]\">make live!</a>"
+		    set href [export_vars -base css-make-live -url {revision_id return_url_2 file_location}]
+		    set make_live [subst {<a href="[ns_quotehtml $href]">make live!</a>]
 		}
 		set return_url ""
 		append revision_html "<li><a href='/o/$revision_id'>$publish_date</a> \[$make_live\]: [string range $description 0 50]</li>"
@@ -75,7 +78,11 @@ if {[file exists $file_location] && [file extension $file_location] eq ".css"} {
             set old_css_content [read $fp]
 	    close $fp
 
-	    set item_id [content::item::new -name $file_location -parent_id $package_id -title "$css_location" -description "First revision" -text $old_css_content]
+	    set item_id [content::item::new -name $file_location \
+			     -parent_id $package_id \
+			     -title "$css_location" \
+			     -description "First revision" \
+			     -text $old_css_content]
 	}
 
 	
