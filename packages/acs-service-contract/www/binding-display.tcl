@@ -52,7 +52,7 @@ db_multirow -extend {check} binding binding {
         regsub {^::} $impl_alias {} impl_alias
         if {[info commands ::$impl_alias] ne ""} {
             append impl_alias "</b> {[info args ::$impl_alias]}"
-        } elseif {[llength $impl_alias]>1 
+        } elseif {[llength $impl_alias] > 1 
 		  && [info commands ::xotcl::Object] ne "" 
 		  && [::xotcl::Object isobject [lindex $impl_alias 0]]
 		  && [[lindex $impl_alias 0] info methods [lindex $impl_alias 1]] ne ""} {
@@ -62,7 +62,7 @@ db_multirow -extend {check} binding binding {
 	    # - the second word is a method for the object, 
 	    # ... so provide a link to the XOTcl api browser
 	    set href "/xotcl/show-object?object=[lindex $impl_alias 0]&show_methods=2"
-	    append impl_alias "<a href='$href'>" \
+	    append impl_alias "<a href='[ns_quotehtml $href]'>" \
 		"<img border='0' src='/resources/acs-subsite/ZoomIn16.gif'></a>"
 	} else {
             append impl_alias {</b> - <b style="color: red">NOT FOUND!</b>}

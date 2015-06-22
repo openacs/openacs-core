@@ -2219,22 +2219,22 @@ ad_proc -private template::list::element::render {
     set link_url {}
     set link_html {}
 
-    if { ([info exists element_properties(link_url_col)] && $element_properties(link_url_col) ne "") } {
+    if { [info exists element_properties(link_url_col)] && $element_properties(link_url_col) ne "" } {
         set link_url "@$multirow.$element_properties(link_url_col)@"
-    } elseif { ([info exists element_properties(link_url)] && $element_properties(link_url) ne "") } {
+    } elseif { [info exists element_properties(link_url)] && $element_properties(link_url) ne "" } {
         set link_url $element_properties(link_url)
     }
     
-    if { ([info exists element_properties(link_html_col)] && $element_properties(link_html_col) ne "") } {
+    if { [info exists element_properties(link_html_col)] && $element_properties(link_html_col) ne "" } {
         set link_html "@$multirow.$element_properties(link_html_col)@"
-    } elseif { ([info exists element_properties(link_html)] && $element_properties(link_html) ne "") } {
+    } elseif { [info exists element_properties(link_html)] && $element_properties(link_html) ne "" } {
         set link_html $element_properties(link_html)
     }
     
     if { $link_url ne "" } {
         set old_output $output
 
-        set output "<if \"$link_url\" not nil><a href=\"$link_url\"[template::list::util_html_to_attributes_string $link_html]>$old_output</a></if><else>$old_output</else>"
+        set output [subst {<if "$link_url" not nil><a href="$link_url"[template::list::util_html_to_attributes_string $link_html]>$old_output</a></if><else>$old_output</else>}]
     }
 
     return $output

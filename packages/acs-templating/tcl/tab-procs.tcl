@@ -41,7 +41,7 @@ ad_proc -public template::widget::tab {
     }
 
     set id $element(form_id)
-    set output "<a href=\"${url}${joiner}${id}_tab=$element(name)\">"
+    set output "<a href=\"[ns_quotehtml ${url}${joiner}${id}_tab=$element(name)]\">"
     append output "$element(label)</a>"
   } else {  
     append output "<b>$element(label)</b>"

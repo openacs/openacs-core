@@ -77,10 +77,10 @@ application after the basic OpenACS tookit has been installed.
 "
 
     if { $acs_application(home) ne "" } {
-        append body "<p>
+        append body [subst {<p>
 For more information about the $acs_application(pretty_name) application visit the
-<a href=\"$acs_application(home)\">$acs_application(pretty_name) home page</a>
-"
+<a href="[ns_quotehtml $acs_application(home)]">$acs_application(pretty_name) home page</a>
+	}
     }
 } else {
     set acs_application(name) openacs

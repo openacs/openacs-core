@@ -93,7 +93,7 @@ if {[llength $testcase_bodys] == 0} {
         # <component_id> element is a link.
         #
         regsub -all {aa_call_component\s+(["]?)([^\s]*)(["]?)} $body \
-            "aa_call_component <a href=\"${url}\\&component_id=\\2\">\\1\\2\\3</a>" body
+            "aa_call_component <a href='$url\\&component_id=\\2'>\\1\\2\\3</a>" body
         template::multirow append bodys $body_count $body
         incr body_count
     }

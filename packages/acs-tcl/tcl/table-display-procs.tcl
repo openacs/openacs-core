@@ -72,7 +72,7 @@ ad_proc ad_dimensional {
     append html "<tr>\n"
 
     foreach option $option_list { 
-        append html " <td align=\"center\">\["
+        append html " <td align='center'>\["
 
         # find out what the current option value is.
         # check if a default is set otherwise the first value is used
@@ -97,7 +97,8 @@ ad_proc ad_dimensional {
             if {$option_val eq $thisoption } {
                 append html "<strong>[ns_quotehtml [lindex $option_value 1]]</strong>"
             } else {
-                append html "<a href=\"[ns_quotehtml $url?[export_ns_set_vars "url" $option_key $options_set]&[ns_urlencode $option_key]=[ns_urlencode $thisoption]]\">[ns_quotehtml [lindex $option_value 1]]</a>"
+		set href $url?[export_ns_set_vars url $option_key $options_set]&[ns_urlencode $option_key]=[ns_urlencode $thisoption]
+                append html [subst {<a href="[ns_quotehtml $href]">[ns_quotehtml [lindex $option_value 1]]</a>}]
             }
         }
         append html "\]</td>\n"
@@ -362,8 +363,10 @@ ad_proc -deprecated ad_table {
 		} else {
 		    set Tasord {}
 		}
-		append Theader " <th><a href=\"$Tsort_url[ns_urlencode [ad_new_sort_by [lindex $Tcol 0] $Torderby]]\">\n"
-		append Theader "[lindex $Tcol 1]</a>&nbsp;$Tasord</th>\n"
+		set href $Tsort_url[ns_urlencode [ad_new_sort_by [lindex $Tcol 0] $Torderby]]
+		append Theader \
+		    [subst { <th><a href="[ns_urlencode $href]">}] \
+		    "\n[lindex $Tcol 1]</a>&nbsp;$Tasord</th>\n"
 	    }
 	}
 	append Theader "</tr>\n"
@@ -887,7 +890,8 @@ ad_proc ad_same_page_link {variable value text {form ""}} {
         set form [ns_getform]
     }
     set url_vars [export_ns_set_vars url $variable $form]
-    return "<a href=\"[ad_conn url]?$variable=[ns_urlencode $value]$url_vars\">$text</a>"
+    set href "[ad_conn url]?$variable=[ns_urlencode $value]$url_vars"
+    return [subst {<a href="[ns_quotehtml $href]">[ns_quotehtml $text]</a>}]
 }
 
 ad_proc ad_reverse order { 
@@ -935,15 +939,15 @@ ad_proc ad_custom_list {user_id item_group item_set item_type target_url custom_
     }]
     
     set break {}
-    foreach item $items { 
+    foreach item $items {
         if {$item_set eq $item } {
-            append html "$break<strong>$item</strong>&nbsp;(<a href=\"$custom_url$item\">edit</a>)"
+            append html "$break<strong>$item</strong>&nbsp;(<a href=\"[ns_quotehtml $custom_url$item]\">edit</a>)"
         } else { 
-            append html "$break<a href=\"$target_url$item\">$item</a>"
+            append html "$break<a href=\"[ns_quotehtml $target_url$item]\">$item</a>"
         }
         set break " | "
     }
-    append html "$break (<a href=\"${custom_url}CreateNewCustom\">$new_string</a>)\n"
+    append html "$break (<a href=\"[ns_quotehtml ${custom_url}CreateNewCustom]\">$new_string</a>)\n"
     
     return $html
 }
