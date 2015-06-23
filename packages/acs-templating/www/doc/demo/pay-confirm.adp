@@ -14,7 +14,7 @@
 
 <form action="pay" method=post>
 @confirm_data@
-<input type=submit value="Confirm Payment">
+<input type="submit" value="Confirm Payment">
 </form>
 
 <hr>

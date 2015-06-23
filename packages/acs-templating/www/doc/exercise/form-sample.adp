@@ -20,7 +20,7 @@
 	  <tr><td><b><i>Birthday</i>:</b></td><td><formwidget id="birthday"></td></tr>
 	  <tr><td><b><i>Address</i>:</b></td><td><formwidget id="address"></td></tr>
 	  <tr><td><b><i>City</i>:</b></td>
-	      <td><formwidget id="city" size=29> <b> <i>State</i>:</b><formwidget id="state"></td>
+	      <td><formwidget id="city" size="29"> <b> <i>State</i>:</b><formwidget id="state"></td>
 	  </tr>
 	  <tr><td><b><i>Zip</i>:</b></td>
 	      <td><formwidget id="zip"> <b><i>Country</i>:</b><formwidget id="country"></td>
@@ -35,7 +35,7 @@
 	          <td><formwidget id="@formgroup.label@"></td></tr>
 		</formgroup></table><small><i>please indicate your primary telephone</i></small>
 	  </td></tr>
-	  <tr><td colspan="2" align="center"><br><input type=submit value="Enter"></td></tr>
+	  <tr><td colspan="2" align="center"><br><input type="submit" value="Enter"></td></tr>
 	</table>
 	</formtemplate>
 

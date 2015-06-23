@@ -183,7 +183,7 @@ passes some text. Here is an example:</p><blockquote>
 &lt;form action="do-kick" method=POST&gt;
   Kick user \@name\@.&lt;br&gt;
   Reason: &lt;textarea name=reason&gt;\@reason\@&lt;/textarea&gt;&lt;br&gt;
-  &lt;input type=submit value="Kick"&gt;
+  &lt;input type="submit" value="Kick"&gt;
 &lt;/form&gt;
       
 </pre>
