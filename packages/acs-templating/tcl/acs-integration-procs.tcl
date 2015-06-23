@@ -149,8 +149,9 @@ ad_proc adp_parse_ad_conn_file {} {
                     } else {
                         # Message key missing entirely
                         set new_url [export_vars -base "${apm_package_url}admin/localized-message-new" { 
-                            { locale en_US } package_key message_key { return_url [ad_return_url] } }]
-                        set edit_link [subst {<a href="[ns_quotehtml $new_url]" title="$key" style="background-color: red; color: white;"><b>@</b></a>"
+                            { locale en_US } package_key message_key { return_url [ad_return_url] }
+                        }]
+                        set edit_link [subst {<a href="[ns_quotehtml $new_url]" title="$key" style="background-color: red; color: white;"><b>@</b></a>}]
                     }
                 }
 
