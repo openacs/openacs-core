@@ -1961,7 +1961,7 @@ ad_page_contract_filter usphone { name value } {
 } {
     if { [string trim $value] ne "" 
 	 && ![regexp {[1-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]} $value]} {
-	ad_complain "[_ acs-tcl.lt_name_does_not_appear__1]"
+	ad_complain [_ acs-tcl.lt_name_does_not_appear__1]
 	return 0
     }
     return 1
@@ -1979,19 +1979,24 @@ ad_page_contract_filter boolean { name value } {
     if {[string is boolean -strict $value]} {
 	return 1
     }
-    # set lcase_value [string tolower $value]
-    # if {$value eq "0" || $value eq "1" 
-    # 	|| $lcase_value eq "f" || $lcase_value eq "t" 
-    # 	|| $lcase_value eq "y" || $lcase_value eq "n" ||
-    # 	|| $lcase_value eq "true" || $lcase_value eq "false"
-    # 	|| $lcase_value eq "yes"  || $lcase_value eq "no" 
-    # } {
-    # 	return 1
-    # } 
-    ad_complain "[_ acs-tcl.lt_name_does_not_appear__2]"
+    ad_complain [_ acs-tcl.lt_name_does_not_appear__2]
     return 0
 }
 
+ad_page_contract_filter word { name value } {
+    Checks whether the value is a Tcl word, i.e. it consists of just
+    characters, digits and underscore.
+
+    @author Gustaf Neumann
+    @creation-date 24 June 2015
+} {
+
+    if {[regexp {^\w+$} $value]} {
+	return 1
+    }
+    ad_complain [_ acs-tcl.lt_name_is_not_a_word]
+    return 0
+}
 
 
 
@@ -2027,8 +2032,6 @@ ad_page_contract_filter_rule tmpfile { name filters } {
 	lappend filters tmpfile
     }
 }
-
-
 
 
 ####################
