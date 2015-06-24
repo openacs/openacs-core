@@ -15,7 +15,7 @@ ad_page_contract {
 } {
     {name_weight:optional 0}
     {doc_weight:integer,optional 0}
-    {param_weight:interger,optional 0}
+    {param_weight:integer,optional 0}
     {source_weight:integer,optional 0}
     {search_type:optional 0}
     {show_deprecated_p 0}
