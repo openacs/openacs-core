@@ -1998,9 +1998,9 @@ ad_page_contract_filter word { name value } {
     return 0
 }
 
-ad_page_contract_filter wordplus { name value } {
-    Checks whether the value is a Tcl word, or some more
-    rather safe characters.
+ad_page_contract_filter token { name value } {
+    Checks whether the value is a Tcl word, or contains a few 
+    rather safe other characters (",", "-") used e.g. in orderby.
 
     @author Gustaf Neumann
     @creation-date 24 June 2015
