@@ -102,5 +102,11 @@
     <a href="/doc">Browse OpenACS documentation</a>
    </td>
   </tr>
-
+  
+  <tr style="background:#DDDDDD">
+   <td colspan="2">
+    <h4>Deprecated Functions</h4>
+    <a href="@package_url@/deprecated">List Deprecated Functions</a>
+   </td>
+  </tr>
 </table>
