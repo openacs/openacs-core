@@ -20,7 +20,7 @@ set context [list "Deprecated Procedures"]
 
 multirow create deprecated proc args
 
-foreach proc [nsv_array names api_proc_doc] { 
+foreach proc [lsort [nsv_array names api_proc_doc]] { 
     array set doc_elements [nsv_get api_proc_doc $proc]
  
     if {$doc_elements(deprecated_p) == 1} {
