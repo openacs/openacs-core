@@ -1998,7 +1998,20 @@ ad_page_contract_filter word { name value } {
     return 0
 }
 
+ad_page_contract_filter word+ { name value } {
+    Checks whether the value is a Tcl word, or some more
+    rather safe characters.
 
+    @author Gustaf Neumann
+    @creation-date 24 June 2015
+} {
+
+    if {[regexp {^[\w,-]+$} $value]} {
+	return 1
+    }
+    ad_complain [_ acs-tcl.lt_name_contains_invalid]
+    return 0
+}
 
 
 
