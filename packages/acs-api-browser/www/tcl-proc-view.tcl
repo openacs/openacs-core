@@ -2,11 +2,11 @@ ad_page_contract {
     Will redirect you to the server containing the documentation if it can be found
     @cvs-id $Id$
 } {
-    tcl_proc
+    tcl_proc:notnull
 } -properties {
     title:onevalue
     context:onevalue
-    tcl_proc:onevalue,notnull
+    tcl_proc:onevalue
 }
 
 set ns_api_index_result [util_memoize [list ::util::http::get -url $::apidoc::ns_api_html_index]]
