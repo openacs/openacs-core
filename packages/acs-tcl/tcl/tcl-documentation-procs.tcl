@@ -1998,7 +1998,7 @@ ad_page_contract_filter word { name value } {
     return 0
 }
 
-ad_page_contract_filter word+ { name value } {
+ad_page_contract_filter wordplus { name value } {
     Checks whether the value is a Tcl word, or some more
     rather safe characters.
 
