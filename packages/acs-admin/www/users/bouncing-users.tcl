@@ -9,7 +9,7 @@ ad_page_contract {
 } {
     {page ""}
     {page_size 25}
-    {orderby "username,asc"}
+    {orderby:token "username,asc"}
 }
 
 

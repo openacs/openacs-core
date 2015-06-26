@@ -1,7 +1,7 @@
 ad_page_contract {
   @cvs-id $Id$
 } {
-  component_id:notnull
+  component_id:naturalnum,notnull
   package_key:nohtml
 } -properties {
   title:onevalue

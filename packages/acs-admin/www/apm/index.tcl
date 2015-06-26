@@ -6,8 +6,8 @@ ad_page_contract {
     @author Jon Salz (jsalz@arsdigita.com)
     @cvs-id $Id$
 } {
-    { orderby "package_key" }
-    { owned_by "everyone" }
+    { orderby:token "package_key" }
+    { owned_by:word "everyone" }
     { supertype "all" }
     { reload_links_p:boolean 0 }
 }
