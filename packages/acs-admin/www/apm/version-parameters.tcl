@@ -7,7 +7,7 @@ ad_page_contract {
     @creation-date 12 September 2000
     @cvs-id $Id$
 } {
-    {orderby "parameter_name"}
+    {orderby:token "parameter_name"}
     {version_id:naturalnum,notnull}
     {section_name ""}
 }

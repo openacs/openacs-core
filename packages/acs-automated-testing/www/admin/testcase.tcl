@@ -1,7 +1,7 @@
 ad_page_contract {
     @cvs-id $Id$
 } {
-    testcase_id:notnull
+    testcase_id:naturalnum,notnull
     package_key:nohtml
     {showsource:boolean 0}
     {quiet:boolean 1}

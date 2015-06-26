@@ -16,8 +16,8 @@ ad_page_contract {
 
 } {
     {search_text ""}
-    {authority_id ""}
-    orderby:optional
+    {authority_id:naturalnum,notnull ""}
+    orderby:token,optional
 }
 
 set authority_options [auth::authority::get_authority_options]
