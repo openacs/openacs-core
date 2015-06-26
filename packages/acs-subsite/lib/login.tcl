@@ -91,12 +91,17 @@ if { $authority_id eq [auth::get_register_authority] || [auth::UseEmailForLoginP
 }
 
 set login_button [list [list [_ acs-subsite.Log_In] ok]]
-ad_form -name login -html { style "margin: 0px;" } -show_required_p 0 -edit_buttons $login_button -action "[subsite::get_url]register/" -form {
-    {return_url:text(hidden)}
-    {time:text(hidden)}
-    {token_id:text(hidden)}
-    {hash:text(hidden)}
-} 
+ad_form \
+    -name login \
+    -html { style "margin: 0px;" } \
+    -show_required_p 0 \
+    -edit_buttons $login_button \
+    -action "[subsite::get_url]register/" -form {
+	{return_url:text(hidden)}
+	{time:text(hidden)}
+	{token_id:integer(hidden)}
+	{hash:text(hidden)}
+    }
 
 set username_widget text
 if { [parameter::get -parameter UsePasswordWidgetForUsername -package_id [ad_acs_kernel_id]] } {
@@ -177,7 +182,7 @@ ad_form -extend -name login -on_request {
         set expiration_time 30
     }
 
-    if { $hash ne $computed_hash  || \
+    if { $hash ne $computed_hash  || 
              $time < [ns_time] - $expiration_time } {
         ad_returnredirect -message [_ acs-subsite.Login_has_expired] -- [export_vars -base [ad_conn url] { return_url }]
         ad_script_abort
