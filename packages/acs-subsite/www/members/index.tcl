@@ -6,7 +6,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     {member_state "approved"}
-    {orderby "name,asc"}
+    {orderby:token "name,asc"}
     page:naturalnum,optional
 } -validate {
     member_state_valid -requires { member_state } {

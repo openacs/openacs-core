@@ -8,7 +8,7 @@ ad_page_contract {
 
 } {
     package_id:naturalnum,notnull
-    {orderby ""}
+    {orderby:token ""}
     {return_url "."}
 }
 

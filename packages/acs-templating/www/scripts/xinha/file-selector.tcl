@@ -6,7 +6,7 @@ ad_page_contract {
 } {	
   {fs_package_id:naturalnum,notnull,optional}
   {folder_id:naturalnum,optional}
-  {orderby:optional}
+  {orderby:token,optional}
   {selector_type "image"}
   {file_types "*"}
 } 

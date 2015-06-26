@@ -1,7 +1,7 @@
 ad_page_contract {
 	
 } {
-	textarea_id:notnull
+	textarea_id:naturalnum,notnull
 	community_id:naturalnum,notnull
 } 
 
