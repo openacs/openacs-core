@@ -138,9 +138,14 @@ ad_proc -public content::get_template_url {} {
 }
 
 
-ad_proc -public content::get_folder_labels { { varname "folders" } } {
+ad_proc -deprecated public content::get_folder_labels { { varname "folders" } } {
     Set a data source in the calling frame with folder URL and label
-    Useful for generating a context bar
+    Useful for generating a context bar.
+
+    This function returns a hard-coded name for the root level. One should use for path generation for items the
+    appropriate API, such as e.g. content::item::get_virtual_path
+
+    @see content::item::get_virtual_path 
 } {
 
     variable item_id
