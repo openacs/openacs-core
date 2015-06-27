@@ -162,7 +162,7 @@ foreach channel [lsort -decreasing [array names channel_tag]] {
             set package_key [lindex [file split $spec_file] end-1]
             set version_id [apm_version_id_from_package_key $package_key]
 
-            if { [lsearch -exact $exclude_package_list $package_key] != -1 } {
+            if {$package_key in $exclude_package_list} {
                 ns_write "Package $package_key is on list of packages to exclude - skipping"
                 continue
             }
@@ -177,7 +177,7 @@ foreach channel [lsort -decreasing [array names channel_tag]] {
             with_catch errmsg {
                 array set version [apm_read_package_info_file $spec_file]
                 
-                if { [lsearch -exact $packages $version(package.key)] != -1 } {
+                if {$version(package.key) in $packages} {
                     ns_write "<li>Skipping package $package_key, because we already have another version of it"
                 } else {
                     lappend packages $version(package.key)
@@ -224,7 +224,7 @@ foreach channel [lsort -decreasing [array names channel_tag]] {
 
                         # The path to the 'packages' directory in the checkout
                         set packages_root_path [eval file join [lrange [file split $spec_file] 0 end-2]]
-                        set tmp_filename [ns_tmpnam]
+                        set tmp_filename [ad_tmpnam]
                         lappend cmd  --files-from $tmp_filename -C $packages_root_path
 
                         set fp [open $tmp_filename w]

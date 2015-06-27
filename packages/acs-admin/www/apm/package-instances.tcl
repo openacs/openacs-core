@@ -4,7 +4,7 @@ ad_page_contract {
     @creation-date 3 Sept 2014
     @cvs-id $Id$
 } {
-    {package_key:notnull}
+    {package_key:token,notnull}
 }
 
 set version_id [apm_highest_version $package_key]
@@ -16,7 +16,7 @@ set context [list \
                  [list "/acs-admin/apm/" "Package Manager"] \
                  [list "/acs-admin/apm/version-view?version_id=$version_id" "Package $pretty_name"] \
                  $title]
-set return_url [ad_conn url]?[export_vars { package_key }]
+set return_url [export_vars -base [ad_conn url] { package_key }]
 
 append body <h3>$title</h3><ul>
 
@@ -28,17 +28,20 @@ db_foreach get_version_info {
     if {[llength $urls] > 0} {
         foreach url $urls {
             set node_id [dict get [site_node::get -url $url] node_id]
+            set delete_href [export_vars -base /admin/applications/application-delete { node_id return_url }]
+            set smap_href [export_vars -base /admin/site-map { {root_id $node_id} return_url }]
             append body [subst {
                 <li>$package_id $instance_name <a href="$url">$url</a> (node_id $node_id): 
-                \[<a href="/admin/applications/application-delete?[export_vars { node_id return_url }]">delete</a>,
-                <a href="/admin/site-map?[export_vars { {root_id $node_id} return_url }]">Site Map</a>\]
+                \[<a href="[ns_quotehtml $delete_href]">delete</a>,
+                <a href="[ns_quotehtml $smap_href]">Site Map</a>\]
                 </li>
             }]
         }
     } else {
+        set delete_href [export_vars -base /admin/applications/application-delete { package_id return_url }]
         append body [subst {
             <li>$package_id $instance_name (unmounted): 
-            \[<a href="/admin/applications/application-delete?[export_vars { package_id return_url }]">delete</a>\]
+            \[<a href="[ns_quotehtml $delete_href]">delete</a>\]
             </li>
         }]
     }
