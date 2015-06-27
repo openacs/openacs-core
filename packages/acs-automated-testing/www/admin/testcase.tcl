@@ -62,14 +62,16 @@ foreach testcase [nsv_get aa_test cases] {
 
 set bug_list [list]
 foreach bug $testcase_bugs {
-    lappend bug_list "<a href=\"[export_vars -base "http://openacs.org/bugtracker/openacs/bug" [list [list bug_number $bug]]]\">$bug</a>"
+    set href [export_vars -base "http://openacs.org/bugtracker/openacs/bug" {{bug_number $bug}}]
+    lappend bug_list [subst {<a href="[ns_quotehtml $href]">$bug</a>}]
 }
 set bug_blurb [join $bug_list ", "]
 
 set proc_list [list]
-foreach proc $testcase_procs {                             
-                              lappend proc_list "<a href=\"[export_vars -base "/api-doc/proc-view" { proc }]\">$proc</a>"
-                          }
+foreach p $testcase_procs {
+    set href [export_vars -base "/api-doc/proc-view" { {proc $p} }]
+    lappend proc_list [subst {<a href="[ns_quotehtml $href]">$p</a>}]
+}
 set proc_blurb [join $proc_list ", "]
 
 
@@ -99,7 +101,10 @@ if {[llength $testcase_bodys] == 0} {
     }
 }
 
-set resource_file_url "init-file-resource?[export_vars -url { {return_url {[ad_return_url]} } {absolute_file_path $testcase_file}}]"
+set resource_file_url [export_vars -base init-file-resource {
+    {return_url [ad_return_url]}
+    {absolute_file_path $testcase_file}
+}]
 
 set return_url [export_vars -base . { { view_by testcase } quiet { by_package_key $package_key } }]
 

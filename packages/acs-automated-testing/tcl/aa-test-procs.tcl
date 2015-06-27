@@ -1103,10 +1103,11 @@ ad_proc -public aa_test::parse_install_file {
     }
 
     # TODO: Not working
-    set service(admin_login_url) "$service(url)register/?[export_vars { { email $service(adminemail) } { password $service(adminpassword) } }]"
-
+    set service(admin_login_url) [export_vars -base $service(url)register/ {
+	{ email $service(adminemail) }
+	{ password $service(adminpassword) }
+    }]
     set service(auto_test_url) "$service(url)test/admin"
-
     set service(rebuild_cmd) "sh [file join $service(script_path) recreate.sh]"
 }
 
