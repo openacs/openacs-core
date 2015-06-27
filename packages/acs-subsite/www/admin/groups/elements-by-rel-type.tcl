@@ -67,7 +67,7 @@ db_multirow -extend {elements_display_url relations_add_url} rels relations_quer
     set role_pretty_name [lang::util::localize $role_pretty_name]
     set role_pretty_plural [lang::util::localize $role_pretty_plural]    
 
-    set elements_display_url [export_vars -url -base "elements-display" {group_id rel_type}]
-    set relations_add_url [export_vars -url -base "../relations/add" {group_id rel_type {return_url $return_url}}]
+    set elements_display_url [export_vars -base "elements-display" {group_id rel_type}]
+    set relations_add_url [export_vars -base "../relations/add" {group_id rel_type {return_url $return_url}}]
 
 }
