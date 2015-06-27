@@ -20,8 +20,8 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     url:notnull
-    {package_key ""}
-    {db ""}
+    {package_key:token ""}
+    {db:word ""}
 }
 
 # This is normally a password-protected page, but to be safe let's
@@ -48,7 +48,9 @@ if {$db eq ""} {
     set files [glob -nocomplain "[acs_package_root_dir $package_key]/sql/*/$url" "[acs_package_root_dir $package_key]/sql/$url"]
     foreach f $files { 
         regexp {([^/]*)/([^/]*)$} $f match db url
-        append text "<li> <a href=\"display-sql?[export_vars -url {db url package_key}]\">$db</a></li>"
+        append text [subst {
+	    <li> <a href="[ns_quotentml [export_vars -base display-sql {db url package_key}]]">$db</a></li>
+	}]
     }
     if {$files eq ""} { 
         append text "<li> No sql file found."
