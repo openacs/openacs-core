@@ -20,7 +20,7 @@ ad_page_contract {
 }
 
 set context [list]
-set url_vars [export_vars -url {path version_id}]
+set url_vars [export_vars {path version_id}]
 set return_url [ns_urlencode [ad_conn url]?][ns_urlencode $url_vars]
 set default_source_p [ad_get_client_property -default 0 acs-api-browser api_doc_source_p]
 
