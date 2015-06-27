@@ -61,9 +61,9 @@ db_release_unused_handles
 
 if {$operation eq "Add more values"} {
     # redirect to add more values
-    set return_url enum-add?[export_vars {attribute_id return_url}]
+    set return_url [export_vars -base enum-add {attribute_id return_url}]
 } elseif { $return_url eq "" } {
-    set return_url one?[export_vars attribute_id]
+    set return_url [export_vars -base one attribute_id]
 }
 
 ad_returnredirect $return_url

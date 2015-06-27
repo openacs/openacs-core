@@ -14,7 +14,7 @@ ad_page_contract {
 permission::require_permission -object_id $object_id -privilege admin
 
 if {[llength $revoke_list] == 0} {
-  ad_returnredirect "./?[export_vars -url {object_id}]"
+  ad_returnredirect [export_vars -base ./ {object_id}]
   ad_script_abort
 }
 

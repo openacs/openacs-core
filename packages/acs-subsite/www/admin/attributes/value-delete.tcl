@@ -11,7 +11,7 @@ ad_page_contract {
 } {
     attribute_id:naturalnum,notnull
     enum_value:trim,notnull
-    { return_url "one?[export_vars attribute_id]" }    
+    { return_url [export_vars -base one attribute_id] }    
 } -properties {
     context:onevalue
     export_vars:onevalue
@@ -29,7 +29,7 @@ if { ![db_0or1row select_pretty_name {
     ad_script_abort
 }
 
-set context [list [list one?[export_vars attribute_id] "One attribute"] "Delete value"]
+set context [list [list [export_vars -base one attribute_id] "One attribute"] "Delete value"]
 set export_vars [export_vars -form {attribute_id enum_value return_url}]
 
 ad_return_template

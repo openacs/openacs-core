@@ -20,15 +20,15 @@ set context [list [list . "Site Map"] $page_title]
 set site_node_url [site_node::get_url -node_id $node_id]
 
 db_multirow -extend { url } unmounted packages_unmounted_select {} {
-    set url "mount-2?[export_vars { expand:multiple root_id node_id package_id }]"
+    set url [export_vars -base mount-2 { expand:multiple root_id node_id package_id }]
 }
 
 db_multirow -extend { url } mounted packages_mounted_select {} {
-    set url "mount-2?[export_vars { expand:multiple root_id node_id package_id}]"
+    set url [export_vars -base mount-2 { expand:multiple root_id node_id package_id}]
 }
 
 db_multirow -extend { url } singleton packages_singleton_select {} {
-    set url "mount-2?[export_vars { expand:multiple root_id node_id package_id}]"
+    set url [export_vars -base mount-2 { expand:multiple root_id node_id package_id}]
 }
 
 

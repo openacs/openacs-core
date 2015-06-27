@@ -71,7 +71,7 @@ if { (![info exists user_add_url] || $user_add_url eq "") } {
 set user_add_url [export_vars -base $user_add_url { object_id expanded {return_url "[ad_return_url]"}}]
 
 set actions [list \
-                 [_ acs-subsite.Grant_Permission] "${perm_url}grant?[export_vars {return_url application_url object_id}]" [_ acs-subsite.Grant_Permission] \
+                 [_ acs-subsite.Grant_Permission] [export_vars -base "${perm_url}grant" {return_url application_url object_id}] [_ acs-subsite.Grant_Permission] \
                  [_ acs-subsite.Search_For_Exist_User] $user_add_url [_ acs-subsite.Search_For_Exist_User]]
 
 if { $context_id ne "" } {

@@ -47,12 +47,12 @@ if { $return_url eq "" } {
 
 if {$admin_p} {
     set context [list \
-                     [list "./?[export_vars user_id]" [_ acs-subsite.User_Portrait]] \
+                     [list [export_vars -base ./ user_id] [_ acs-subsite.User_Portrait]] \
                      $doc(title)]
 } else {
     set context [list \
                      [list [ad_pvt_home] [ad_pvt_home_name]] \
-                     [list "./?[export_vars return_url]" [_ acs-subsite.Your_Portrait]] \
+                     [list [export_vars -base ./ return_url] [_ acs-subsite.Your_Portrait]] \
                      $doc(title)]
 }
 
