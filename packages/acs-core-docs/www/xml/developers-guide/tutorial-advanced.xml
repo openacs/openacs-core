@@ -343,11 +343,11 @@ done
      show them.</para>
      <para>First, we need to generate a url for adding comments.  In note-edit.tcl:</para>
      <programlisting>
- set comment_add_url "[general_comments_package_url]comment-add?[export_vars {
+ set comment_add_url [export_vars -base [general_comments_package_url]comment-add {
   { object_id $note_id } 
   { object_name $title } 
   { return_url "[ad_conn url]?[ad_conn query]"} 
- }]"
+ }]
  </programlisting>
      <para>This calls a global, public tcl function that the
      general_comments package registered, to get its url. You then

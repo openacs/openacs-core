@@ -1241,7 +1241,7 @@ ad_proc -private auth::local::registration::Register {
             select rowid from users where user_id = :user_id
         }]
         # Send email verification email to user
-        set confirmation_url "[ad_url]/register/email-confirm?[export_vars { row_id }]"
+        set confirmation_url [export_vars -base [ad_url]/register/email-confirm { row_id }]
         with_catch errmsg {
             acs_mail_lite::send \
                 -to_addr $email \
