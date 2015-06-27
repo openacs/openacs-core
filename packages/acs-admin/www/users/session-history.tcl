@@ -37,12 +37,12 @@ while { [ns_db getrow $db $selection] } {
 	}
 	set last_year $pretty_year
     }
-    append whole_page "<tr>
-<td><a href=\"sessions-one-month?[export_url_vars pretty_month pretty_year]\">$pretty_month $pretty_year</a>
-<td align=right>[util_commify_number $total_sessions]</td>
-<td align=right>[util_commify_number $total_repeats]</td>
-</tr>
-"
+    set href [export_vars -base sessions-one-month {pretty_month pretty_year}]
+    append whole_page [subst {<tr>
+<td><a href="[ns_quotehtml $href]">$pretty_month $pretty_year</a>
+<td align="right">[util_commify_number $total_sessions]</td>
+<td align="right">[util_commify_number $total_repeats]</td>
+</tr>\n}]
 }
 
 append whole_page "

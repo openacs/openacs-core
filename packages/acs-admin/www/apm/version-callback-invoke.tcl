@@ -11,7 +11,7 @@ ad_page_contract {
 
 db_1row package_version_info "select pretty_name, version_name from apm_package_version_info where version_id = :version_id"
 
-set return_url "version-callbacks?[export_vars { version_id }]"
+set return_url [export_vars -base version-callbacks { version_id }]
 
 # Set default values for type and proc name
 set proc_value [apm_get_callback_proc -type $type -version_id $version_id]
