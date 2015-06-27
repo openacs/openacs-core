@@ -1595,7 +1595,7 @@ ad_page_contract_filter nohtml { name value } {
     @creation-date 25 July 2000
 } {
     if { [string first < $value] >= 0 } {
-	ad_complain "[_ acs-tcl.lt_Value_for_name_contai]"
+	ad_complain [_ acs-tcl.lt_Value_for_name_contai]
 	return 0
     }
     return 1
@@ -2076,7 +2076,7 @@ ad_proc ad_page_contract_handle_datasource_error {error} {
     set complaint_template [parameter::get_from_package_key \
 				-package_key "acs-tcl" \
 				-parameter "ReturnComplaint" \
-				-default "/packages/acs-admin/www/apm/apm.adpacs-tcl/lib/ad-return-complaint"]
+				-default "/packages/acs-tcl/lib/ad-return-complaint"]
     set exception_count 1
     set exception_text $error
     ns_return 200 text/html [ad_parse_template \

@@ -566,7 +566,7 @@ ad_proc -public export_vars {
 
     <p>
 
-    Example usage: <code>[export_vars -url -sign -override {{foo "new value"}} -exclude { bar } { foo bar baz }]</code>
+    Example usage: <code>[export_vars -sign -override {{foo "new value"}} -exclude { bar } { foo bar baz }]</code>
 
     <p>
 

@@ -48,9 +48,9 @@ ad_proc -public acs_object_type_hierarchy {
 	    append result $join_string
 	}
 	incr i
-	append result [subst {\n    $indent<a href="./one?[export_vars -url {object_type}]">[lang::util::localize $pretty_name]</a>}]
+	set href [export_vars -base ./one {object_type}]
+	append result [subst {\n    $indent<a href="[ns_quotehtml $href]">[lang::util::localize $pretty_name]</a>}]
 	append result $additional_html
-
     }
 
     return $result

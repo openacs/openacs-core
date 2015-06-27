@@ -35,13 +35,13 @@ set error_desc_email "
  --------------------------------------------------------<br>
                    [_ acs-tcl.Error_Report]<br>
  --------------------------------------------------------<br>
-<strong>[_ acs-tcl.Previus]</strong> [ad_quotehtml $return_url]<br>
-<strong>[_ acs-tcl.Page]</strong> [ad_quotehtml $error_url]<br>
-<strong>[_ acs-tcl.File]</strong> [ad_quotehtml $error_file]<br>
-<strong>[_ acs-tcl.User_Name]</strong> [ad_quotehtml $user_name]<br>
-<strong>[_ acs-tcl.lt_User_Id_of_the_user_t]</strong> [ad_quotehtml $user_id]<br>
+<strong>[_ acs-tcl.Previus]</strong> [ns_quotehtml $return_url]<br>
+<strong>[_ acs-tcl.Page]</strong> [ns_quotehtml $error_url]<br>
+<strong>[_ acs-tcl.File]</strong> [ns_quotehtml $error_file]<br>
+<strong>[_ acs-tcl.User_Name]</strong> [ns_quotehtml $user_name]<br>
+<strong>[_ acs-tcl.lt_User_Id_of_the_user_t]</strong> [ns_quotehtml $user_id]<br>
 <strong>IP:</strong> [ad_quotehtml [ns_conn peeraddr]]<br>
-<strong>[_ acs-tcl.Browser_of_the_user]</strong> [ad_quotehtml [ns_set get [ns_conn headers] User-Agent]]<br>
+<strong>[_ acs-tcl.Browser_of_the_user]</strong> [ns_quotehtml [ns_set get [ns_conn headers] User-Agent]]<br>
 <br>
 -----------------------------<br>
 [_ acs-tcl.Error_details]<br>
@@ -319,7 +319,11 @@ if { ![form is_valid bug_edit] } {
         }
     }
     # Display value for patches
-    set bug(patches_display) "[bug_tracker::get_patch_links -bug_id $bug(bug_id) -show_patch_status $show_patch_status] &nbsp; \[ <a href=\"patch-add?[export_vars { { bug_number $bug(bug_number) } { component_id $bug(component_id) } }]\">[_ bug-tracker.Upload_Patch]</a> \]"
+    set href [export_vars -base patch-add { { bug_number $bug(bug_number) } { component_id $bug(component_id) } }]
+    set bug(patches_display) [subst {
+	[bug_tracker::get_patch_links -bug_id $bug(bug_id) -show_patch_status $show_patch_status]
+	&nbsp; \[ <a href="[ns_quotehtml $href]">[_ bug-tracker.Upload_Patch]</a> \]
+    }]
     
     # Hide elements that should be hidden depending on the bug status
     foreach element $bug(hide_fields) {

@@ -139,7 +139,7 @@ ad_proc -public acs_community_member_url {
 } {
     @return the url for the community member page of a particular user
 } {
-    return "[acs_community_member_page]?[export_vars user_id]"
+    return [export_vars -base [acs_community_member_page] user_id]
 }
 
 ad_proc -public acs_community_member_link {
@@ -153,8 +153,8 @@ ad_proc -public acs_community_member_link {
         acs_user::get -user_id $user_id -array user
         set label "$user(first_names) $user(last_name)"
     }
-
-    return "<a href=\"[acs_community_member_url -user_id $user_id]\">$label</a>"
+    set href [acs_community_member_url -user_id $user_id]
+    return [subst {<a href="[ns_quotehtml $href]">$label</a>}]
 }
 
 ad_proc -deprecated ad_present_user {
@@ -196,8 +196,8 @@ ad_proc -public acs_community_member_admin_link {
             where person_id = :user_id
         } -default $user_id]
     }
-
-    return "<a href=\"[acs_community_member_admin_url -user_id $user_id]\">$label</a>"
+    set href [acs_community_member_admin_url -user_id $user_id]
+    return [subst {<a href="[ns_quotehtml $href]">$label</a>}]
 }
 
 ad_proc -deprecated ad_admin_present_user {
@@ -766,7 +766,7 @@ ad_proc -public ad_return_url {
 
     <pre>
     set return_url [ad_return_url]
-    set edit_link "edit?[export_vars item_id return_url]"
+    set edit_link [export_vars -base edit item_id return_url]
     </pre>
 
     Example setting a variable with extra_vars:
