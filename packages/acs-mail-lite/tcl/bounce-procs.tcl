@@ -129,8 +129,8 @@ namespace eval acs_mail_lite {
             set notification_list [util_ns_set_to_list -set $notification]
             array set user $notification_list
             set user_id $user(user_id)
-
-            set body "Dear $user(name),\n\nDue to returning mails from your email account, we currently do not send you any email from our system. To reenable your email account, please visit\n[ad_url]/register/restore-bounce?[export_vars -url {user_id}]"
+	    set href [export_vars -base [ad_url]/register/restore-bounce {user_id}]
+            set body "Dear $user(name),\n\nDue to returning mails from your email account, we currently do not send you any email from our system. To reenable your email account, please visit\n$href"
 
             send -to_addr $notification_list -from_addr $notification_sender -subject $subject -body $body -valid_email
             ns_log Notice "Bounce notification send to user $user_id"
