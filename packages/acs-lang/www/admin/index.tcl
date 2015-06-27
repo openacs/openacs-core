@@ -67,12 +67,12 @@ db_multirow -extend {
     order  by locale_label
 } {
     set escaped_locale [ns_urlencode $locale]
-    set msg_edit_url "package-list?[export_vars { locale }]"
-    set locale_edit_url "locale-edit?[export_vars { locale }]"
-    set locale_delete_url "locale-delete?[export_vars { locale }]"
-    set locale_make_default_url "locale-make-default?[export_vars { locale }]"
+    set msg_edit_url [export_vars -base package-list { locale }]
+    set locale_edit_url [export_vars -base locale-edit { locale }]
+    set locale_delete_url [export_vars -base locale-delete { locale }]
+    set locale_make_default_url [export_vars -base locale-make-default { locale }]
     set toggle_enabled_p [ad_decode $enabled_p "t" "f" "t"]
-    set locale_enabled_p_url "locale-set-enabled-p?[export_vars { locale {enabled_p $toggle_enabled_p} }]"
+    set locale_enabled_p_url [export_vars -base locale-set-enabled-p { locale {enabled_p $toggle_enabled_p} }]
     
     set num_translated_pretty [lc_numeric $num_translated]
     set num_untranslated [expr {$num_messages - $num_translated}]

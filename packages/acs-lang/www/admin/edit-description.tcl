@@ -19,9 +19,9 @@ set locale_label [lang::util::get_label $current_locale]
 set default_locale_label [lang::util::get_label $default_locale]
 
 set page_title "Edit description"
-set context [list [list "package-list?[export_vars { locale }]" $locale_label] \
-                 [list "message-list?[export_vars { locale package_key message_key show }]" $package_key] \
-                 [list "edit-localized-message?[export_vars { locale package_key message_key show }]" "$package_key.$message_key"] \
+set context [list [list [export_vars -base package-list { locale }] $locale_label] \
+                 [list [export_vars -base message-list { locale package_key message_key show }] $package_key] \
+                 [list [export_vars -base edit-localized-message { locale package_key message_key show }] "$package_key.$message_key"] \
                  $page_title]
 
 
@@ -55,6 +55,6 @@ ad_form -name description -form {
         -message_key $message_key \
         -description $description
 
-    ad_returnredirect "edit-localized-message?[export_vars { locale package_key message_key show }]"
+    ad_returnredirect [export_vars -base edit-localized-message { locale package_key message_key show }]
     ad_script_abort
 }

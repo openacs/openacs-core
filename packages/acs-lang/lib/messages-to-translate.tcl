@@ -50,7 +50,12 @@ if { $display_p } {
         set key_split [split $message_key "."]
         set package_key_part [lindex $key_split 0]
         set message_key_part [lindex $key_split 1]
-        set translate_url "/acs-lang/admin/edit-localized-message?[export_vars {{message_key $message_key_part} {package_key $package_key_part} locale { return_url [ad_return_url] } }]"
+        set translate_url [export_vars -base /acs-lang/admin/edit-localized-message {
+	    {message_key $message_key_part}
+	    {package_key $package_key_part}
+	    locale
+	    {return_url [ad_return_url]}
+	}]
 
         set translated_p [lang::message::message_exists_p [ad_conn locale] $message_key]
         

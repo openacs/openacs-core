@@ -24,8 +24,8 @@ set locale_label [lang::util::get_label $current_locale]
 set default_locale_label [lang::util::get_label $default_locale]
 
 set page_title "Delete Message"
-set context [list [list "package-list?[export_vars { locale }]" $locale_label] \
-                 [list "message-list?[export_vars { locale package_key show }]" $package_key] \
+set context [list [list [export_vars -base package-list { locale }] $locale_label] \
+                 [list [export_vars -base message-list { locale package_key show }] $package_key] \
                  $page_title]
 
 set form_export_vars [export_vars -form { locale package_key message_key show {confirm_p 1} }]
@@ -37,6 +37,6 @@ if { ([info exists confirm_p] && $confirm_p ne "") && [template::util::is_true $
         -message_key $message_key \
         -locale $locale
 
-    ad_returnredirect "message-list?[export_vars { locale package_key show }]"
+    ad_returnredirect [export_vars -base message-list { locale package_key show }]
     ad_script_abort
 }
