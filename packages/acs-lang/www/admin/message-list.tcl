@@ -114,8 +114,8 @@ db_multirow -extend {
     delete_url
     message_key_pretty
 } messages select_messages {} {
-    set edit_url "edit-localized-message?[export_vars { locale package_key message_key show {return_url {[ad_return_url]}} }]"
-    set delete_url "message-delete?[export_vars { locale package_key message_key show {return_url {[ad_return_url]}} }]"
+    set edit_url [export_vars -base { locale package_key message_key show {return_url [ad_return_url]} }]
+    set delete_url [export_vars -base message-delete { locale package_key message_key show {return_url [ad_return_url]} }]
     set message_key_pretty "$package_key.$message_key"
 }
 
@@ -123,7 +123,7 @@ db_multirow -extend {
 # TODO: Create message
 
 
-set batch_edit_url "batch-editor?[export_vars { locale package_key show }]"
+set batch_edit_url [export_vars -base batch-editor { locale package_key show }]
 
 
 #####
@@ -144,9 +144,9 @@ multirow extend show_opts url selected_p
 multirow foreach show_opts {
     set selected_p [string equal $show $value]
     if {$value eq "all"} {
-        set url "[ad_conn url]?[export_vars { locale package_key }]"
+        set url [export_vars -base [ad_conn url] { locale package_key }]
     } else { 
-        set url "[ad_conn url]?[export_vars { locale package_key {show $value} }]"
+        set url [export_vars -base [ad_conn url] { locale package_key {show $value} }]
     }
 }
 

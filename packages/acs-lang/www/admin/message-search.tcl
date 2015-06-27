@@ -17,7 +17,7 @@ set locale_label [lang::util::get_label $current_locale]
 set default_locale_label [lang::util::get_label $default_locale]
 
 set page_title "Search Messages"
-set context [list [list "package-list?[export_vars { locale }]" $locale_label] $page_title]
+set context [list [list [export_vars -base package-list { locale }] $locale_label] $page_title]
 
 set default_locale en_US
 
@@ -64,18 +64,18 @@ if { ([info exists search_locale] && $search_locale ne "") && ([info exists q] &
         edit_url
         message_key_pretty
     } messages select_messages {} {
-        set edit_url "edit-localized-message?[export_vars { locale package_key message_key {return_url {[ad_return_url]} } }]"
-        set package_url "message-list?[export_vars { locale package_key }]"
+        set edit_url [export_vars -base edit-localized-message { locale package_key message_key {return_url [ad_return_url]} }]
+        set package_url [export_vars -base message-list { locale package_key }]
         set message_key_pretty "$package_key.$message_key"
     }
 
     if { $current_locale ne $default_locale } {
         if {$default_locale eq $search_locale} {
             set other_locale $locale_label
-            set other_search_url "[ad_conn url]?[export_vars { locale q {search_locale $current_locale} }]"
+            set other_search_url [export_vars -base [ad_conn url] { locale q {search_locale $current_locale} }]
         } else {
             set other_locale $default_locale_label
-            set other_search_url "[ad_conn url]?[export_vars { locale q {search_locale $default_locale} }]"
+            set other_search_url [export_vars -base [ad_conn url] { locale q {search_locale $default_locale} }]
         }
     }
 }

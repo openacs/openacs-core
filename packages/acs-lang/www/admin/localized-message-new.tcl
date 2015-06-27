@@ -24,8 +24,8 @@ set locale_label [lang::util::get_label $current_locale]
 set default_locale_label [lang::util::get_label $default_locale]
 
 set page_title "Create New Message"
-set context [list [list "package-list?[export_vars { locale }]" $locale_label] \
-                 [list "message-list?[export_vars { locale package_key show }]" $package_key] \
+set context [list [list [export_vars -base package-list { locale }] $locale_label] \
+                 [list [export_vars -base message-list { locale package_key show }] $package_key] \
                  $page_title]
 
 

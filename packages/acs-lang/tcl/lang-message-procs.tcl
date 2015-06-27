@@ -705,7 +705,7 @@ ad_proc -public lang::message::message_exists_p { locale key } {
     @author Peter Marklund
 } {
     # Make sure messages are in the cache
-    cache
+    lang::message::cache
 
     return [nsv_exists lang_message_$locale $key]        
 }
@@ -775,7 +775,7 @@ ad_proc -public lang::message::lookup {
     @return A localized piece of text.
 } { 
     # Make sure messages are in the cache
-    cache
+    lang::message::cache
 
     # Make sure that a default of "" is transformed into Translation Missing
     # As per discussion on IRC on 2008-03-06
