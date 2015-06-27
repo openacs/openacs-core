@@ -21,7 +21,7 @@ ad_page_contract {
 
 set context [list]
 set url_vars [export_vars {path version_id}]
-set return_url [ns_urlencode [ad_conn url]?][ns_urlencode $url_vars]
+set return_url [export_vars -base [ad_conn url] {path version_id}]
 set default_source_p [ad_get_client_property -default 0 acs-api-browser api_doc_source_p]
 
 if { ![info exists source_p] } {
@@ -54,10 +54,10 @@ set path [apidoc::sanitize_path $path]
 if {![file readable $::acs::rootdir/$path] || [file isdirectory $::acs::rootdir/$path]} {
     if {[info exists version_id]} {
 	set kind content
-	set href [ad_conn package_url]/package-view?[export_vars {version_id {kind procs}}]
-	set link [subst {<p>Go back to <a href="$href">Package Documentation</a>.}]
+	set href [export_vars -base [ad_conn package_url]/package-view {version_id {kind procs}}]
+	set link [subst {<p>Go back to <a href="[ns_quotehtml $href]">Package Documentation</a>.}]
     } else {
-	set link [subst {<p>Go back to <a href="[ad_conn package_url]">API Browser</a>.}]
+	set link [subst {<p>Go back to <a href="[ns_quotehtml [ad_conn package_url]]">API Browser</a>.}]
     }
     ad_return_warning "No such content page" [subst {
 	The file '$path' was not found. Maybe the url contains a typo.
