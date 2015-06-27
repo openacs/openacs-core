@@ -912,6 +912,9 @@ ad_proc -private __ad_verify_signature {
         if { $token_id eq "" } {
             ns_log Debug "__ad_verify_signature: Neither secret, nor token_id supplied"
             return 0
+        } elseif {![string is integer -strict $token_id]} {
+            ns_log Warning "__ad_verify_signature: token_id <$token_id> is not an integer"
+            return 0
         }
         set secret_token [sec_get_token $token_id]
 
