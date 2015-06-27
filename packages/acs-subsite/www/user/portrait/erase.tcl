@@ -26,7 +26,7 @@ set doc(title) [_ acs-subsite.Erase]
 if {$admin_p} {
     set context [list \
                      [list [ad_pvt_home] [ad_pvt_home_name]] \
-                     [list "./?[export_vars user_id]" [_ acs-subsite.User_Portrait]] \
+                     [list [export_vars -base ./ user_id] [_ acs-subsite.User_Portrait]] \
                      $doc(title)]
 } else {
     set context [list \

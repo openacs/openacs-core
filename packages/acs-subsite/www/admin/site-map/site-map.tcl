@@ -44,7 +44,7 @@ if {$new_parent ne ""} {
 set javascript "onload=\"javascript:document.check_checkbox()\""
 
 
-set parent_link ".?[export_vars -url {expand:multiple {root_id $parent_id}}]"
+set parent_link [export_vars -base . {expand:multiple {root_id $parent_id}}]
 
 set page_title "Build Your Site Map "
 set context [list [list "." "Site Map"] $page_title]
@@ -53,7 +53,8 @@ set user_id [ad_conn user_id]
 
 db_foreach path_select {} {
     if {$node_id != $root_id && $admin_p == "t"} {
-	append head "<a href=.?[export_vars -url {expand:multiple {root_id $node_id}}]>"
+	set href [export_vars -base . {expand:multiple {root_id $node_id}}]
+	append head [subst {<a href="[ns_quotehtml $href]">}]
     }
     if {$name eq ""} {
 	append head "$obj_name:"
@@ -185,31 +186,31 @@ db_foreach nodes_select {} {
     if {$directory_p == "t"} {
 	set add_folder_url "?[export_vars -url {expand:multiple root_id node_id {new_parent $node_id} {new_type folder}}]"
 	if {$object_id eq ""} {
-	    set mount_url "mount?[export_vars -url {expand:multiple root_id node_id}]"
+	    set mount_url [export_vars -base mount {expand:multiple root_id node_id}]
 	    set new_app_url "?[export_vars -url {expand:multiple root_id {new_application $node_id}}]"
 	} else {
 	    # This makes sure you can't unmount the thing that is serving the page you're looking at.
 	    if {[ad_conn node_id] != $node_id} {
-		set unmount_url "unmount?[export_vars -url {expand:multiple root_id node_id}]"
+		set unmount_url [export_vars -base unmount {expand:multiple root_id node_id}]
 	    }
 	    
 	    # Add a link to control permissioning
 	    if {$object_admin_p} {
-		set permissions_url "../../permissions/one?[export_vars -url {object_id}]"
+		set permissions_url [export_vars -base ../../permissions/one {object_id}]
 		set rename_url "?[export_vars -url {expand:multiple root_id {rename_application $node_id}}]"
 		set delete_url "instance-delete?package_id=$object_id&root_id=$root_id"
 	    }
 	    # Is the object a package?
 	    if {$package_id ne ""} {
 		if {$object_admin_p && ($parameter_count > 0)} {
-		    set parameters_url "[export_vars -base "/shared/parameters" { package_id {return_url {[ad_return_url]} } }]"
+		    set parameters_url [export_vars -base "/shared/parameters" { package_id {return_url {[ad_return_url]} } }]
 		}
 	    }
 	}
     }
     
     if {[ad_conn node_id] != $node_id && $n_children == 0 && $object_id eq ""} {
-	set delete_url "delete?[export_vars -url {expand:multiple root_id node_id}]"
+	set delete_url [export_vars -base delete {expand:multiple root_id node_id}]
     }
     
     # use the indent variable to hold current indent level we'll use it later to indent stuff at the end by the amount of the last node
@@ -247,7 +248,7 @@ db_foreach nodes_select {} {
 	set expand_url ""
     }
     
-    set name_url [export_vars -url {expand:multiple {root_id $node_id}}]
+    set name_url [export_vars {expand:multiple {root_id $node_id}}]
         
     set action_type 0
     set action_form_part ""
@@ -265,7 +266,7 @@ db_foreach nodes_select {} {
 	}
     } elseif {$rename_application == $node_id} {
 	set action_type "rename_app"
-	set action_form_part "[export_vars -form {expand:multiple root_id node_id rename_package_id}]"
+	set action_form_part [export_vars -form {expand:multiple root_id node_id rename_package_id}]
 	
     } else {}
     
@@ -273,7 +274,7 @@ db_foreach nodes_select {} {
 	set parent_id $new_parent
 	set node_type $new_type	
 	set action_type "new_folder"
-	set action_form_part "[export_vars -form {expand:multiple parent_id node_type root_id}]"
+	set action_form_part [export_vars -form {expand:multiple parent_id node_type root_id}]
     }
 
     multirow append nodes $node_id $expand_mode $expand_url $indent $name $name_url $object_name $url $package_pretty_name $action_type $action_form_part $add_folder_url $new_app_url $unmount_url $mount_url $rename_url $delete_url $parameters_url $permissions_url "" $view_p
@@ -290,7 +291,8 @@ set services ""
 
 db_foreach services_select {} {
     if {$parameter_count > 0} {
-        append services "<li><a href=\"[export_vars -base "/shared/parameters" { package_id { return_url {[ad_return_url]} } }]\">$instance_name</a>"
+	set href [export_vars -base "/shared/parameters" { package_id { return_url {[ad_return_url]} } }]
+        append services [subst {<li><a href="[ns_quotehtml $href]">$instance_name</a>}]
     }
 } if_no_rows {
     append services "  <li>(none)\n"

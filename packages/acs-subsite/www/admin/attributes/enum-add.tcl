@@ -49,7 +49,7 @@ db_1row select_attr_name {
      where a.attribute_id = :attribute_id
 }
 
-set context [list [list one?[export_vars -url {attribute_id}] "One attribute"] "Add values"]
+set context [list [list [export_vars -base one {attribute_id}] "One attribute"] "Add values"]
 
 set export_vars [export_vars -form {attribute_id return_url}]
 

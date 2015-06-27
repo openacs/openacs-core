@@ -57,9 +57,9 @@ db_transaction {
 
 # If we're an enumeration, redirect to start adding possible values.
 if {$datatype eq "enumeration"} {
-    ad_returnredirect enum-add?[export_vars {attribute_id return_url}]
+    ad_returnredirect [export_vars -base enum-add {attribute_id return_url}]
 } elseif { $return_url eq "" } {
-    ad_returnredirect add?[export_vars {object_type}]
+    ad_returnredirect [export_vars -base add {object_type}]
 } else {
     ad_returnredirect $return_url
 }

@@ -67,4 +67,4 @@ db_transaction {
     }
 }
 
-ad_returnredirect ".?[export_vars -url {expand:multiple root_id}]"
+ad_returnredirect [export_vars -base . {expand:multiple root_id}]

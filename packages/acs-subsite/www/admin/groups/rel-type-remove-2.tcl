@@ -65,7 +65,7 @@ if {$operation eq "Yes, I really want to delete this relationship type"} {
 
 
 if { $return_url eq "" } {
-    set return_url one?[export_vars {group_id}]
+    set return_url [export_vars -base one {group_id}]
 }
 
 ad_returnredirect $return_url

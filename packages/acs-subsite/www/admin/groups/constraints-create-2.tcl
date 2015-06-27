@@ -22,12 +22,12 @@ if {$operation eq "yes"} {
     if { $return_url eq "" } {
 	# Setup return_url to send up back to the group admin page
 	# when we're all done
-	set return_url "[ad_conn package_url]/admin/groups/one?[export_vars group_id]"
+	set return_url [export_vars -base [ad_conn package_url]/admin/groups/one group_id]
     }
-    ad_returnredirect "../rel-segments/new?[export_vars {group_id rel_type return_url}]"
+    ad_returnredirect [export_vars -base ../rel-segments/new {group_id rel_type return_url}]
 } else {
     if { $return_url eq "" } {
-	set return_url "one?[export_vars group_id]"
+	set return_url [export_vars -base one group_id]
     }
     ad_returnredirect $return_url
 }

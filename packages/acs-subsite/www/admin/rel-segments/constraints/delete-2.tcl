@@ -25,7 +25,7 @@ if {$operation eq "Yes, I really want to delete this constraint"} {
 	if { [db_0or1row select_segment_id {
 	    select c.rel_segment as segment_id from rel_constraints c where c.constraint_id = :constraint_id
 	}] } {
-	    set return_url "../one?[export_vars {segment_id}]"
+	    set return_url [export_vars -base ../one {segment_id}]
 	}
     }
 
@@ -51,7 +51,7 @@ if {$operation eq "Yes, I really want to delete this constraint"} {
 
 } elseif { $return_url eq "" } {
     # if we're not deleting, redirect to the constraint page
-    set return_url one?[export_vars constraint_id]
+    set return_url [export_vars -base one constraint_id]
 }
 
 

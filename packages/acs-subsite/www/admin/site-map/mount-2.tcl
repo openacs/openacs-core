@@ -16,4 +16,4 @@ permission::require_permission -object_id $package_id -privilege read
 
 site_node::mount -node_id $node_id -object_id $package_id
 
-ad_returnredirect ".?[export_vars -url {expand:multiple root_id}]"
+ad_returnredirect [export_vars -base . {expand:multiple root_id}]

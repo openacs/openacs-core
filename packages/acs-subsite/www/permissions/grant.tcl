@@ -19,7 +19,7 @@ set name [acs_object_name $object_id]
 
 set title [_ acs-subsite.lt_Grant_Permission_on_n]
 
-set context [list [list one?[export_vars -url {object_id}] "[_ acs-subsite.Permissions_for_name]"] [_ acs-subsite.Grant]]
+set context [list [list [export_vars -base one {object_id}] "[_ acs-subsite.Permissions_for_name]"] [_ acs-subsite.Grant]]
 
 
 # Compute a hierarchical tree representation of the contents of
@@ -161,9 +161,9 @@ if { [form is_valid grant] } {
     }
     
     if {([info exists return_url] && $return_url ne "")} {
-        ad_returnredirect "$return_url"
+        ad_returnredirect $return_url
     } else {
-        ad_returnredirect "one?[export_vars [list object_id application_url]]"
+        ad_returnredirect [export_vars -base one {object_id application_url}]
     }
 
     ad_script_abort

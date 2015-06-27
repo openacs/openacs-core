@@ -126,7 +126,7 @@ set party_type $object_type_two
 set party_type_exact_p f
 set add_to_group_id $group_id
 set add_with_rel_type $rel_type
-set add_party_url "[ad_conn package_url]admin/parties/new?[export_vars {add_to_group_id add_with_rel_type party_type party_type_exact_p return_url}]"
+set add_party_url [export_vars -base [ad_conn package_url]admin/parties/new {add_to_group_id add_with_rel_type party_type party_type_exact_p return_url}]
 
 # Build a url used to select an existing party from the system (as opposed
 # to limiting the selection to parties on the current subsite).
@@ -163,7 +163,7 @@ if { [template::form is_valid add_relation] } {
 	ad_script_abort
     }
     if { $return_url eq "" } { 
-	set return_url one?[export_vars rel_id]
+	set return_url [export_vars -base one rel_id]
     }
     ad_returnredirect $return_url
     ad_script_abort

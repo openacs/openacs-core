@@ -18,7 +18,7 @@ ad_page_contract {
     counts:onerow
 }
 
-set context [list [list "" "Relationship types"] [list one?[export_vars rel_type] "One type"] "Delete type"]
+set context [list [list "" "Relationship types"] [[export_vars -base one rel_type] "One type"] "Delete type"]
 
 set rel_type_pretty_name [db_string select_pretty_name {
     select t.pretty_name

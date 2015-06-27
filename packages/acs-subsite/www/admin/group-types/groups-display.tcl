@@ -18,7 +18,7 @@ ad_page_contract {
 }
 
 set user_id [ad_conn user_id]
-set context [list [list "[ad_conn package_url]admin/group-types/" "Group types"] [list one?[export_vars group_type] "One type"] "Groups"]
+set context [list [list "[ad_conn package_url]admin/group-types/" "Group types"] [list [export_vars -base one group_type] "One type"] "Groups"]
 set group_type_enc [ad_urlencode $group_type]
 
 if { ![db_0or1row select_type_info {

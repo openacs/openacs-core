@@ -30,7 +30,7 @@ ad_page_contract {
 
 set context [list \
          [list "[ad_conn package_url]admin/group-types/" "Group types"] \
-         [list one?[export_vars -url {group_type}] "One group type"] \
+         [list [export_vars -base one {group_type}] "One group type"] \
          "Delete group type"]
 
 if { ![db_0or1row select_pretty_name {

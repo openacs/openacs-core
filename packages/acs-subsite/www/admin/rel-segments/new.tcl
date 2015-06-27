@@ -31,7 +31,7 @@ set subsite_group_id [application_group::group_id_from_package_id]
 
 # If the user has specified a rel_type, redirect to new-2
 if { $rel_type ne "" } {
-    ad_returnredirect new-2?[export_vars {group_id rel_type return_url}]
+    ad_returnredirect [export_vars -base new-2 {group_id rel_type return_url}]
     ad_script_abort
 } 
 

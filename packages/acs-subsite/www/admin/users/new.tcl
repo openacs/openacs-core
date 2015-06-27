@@ -248,11 +248,13 @@ The user was added by $creation_name from [ad_conn url]."
 	    set row_id [db_string user_new_2_rowid_for_email "select rowid from users where user_id = :user_id"]
 	    # the user has to come back and activate their account
 
+            set href [export_vars \
+                -base [parameter::get -package_id [ad_acs_kernel_id] -parameter SystemURL]/register/email-confirm {row_id}]
 	    acs_mail_lite::send \
 		-to_addr [template::element::get_value add_user email] \
 		-from_addr $notification_address \
 		-subject "Welcome to [ad_system_name]" \
-		-body "To confirm your registration, please go to [parameter::get -package_id [ad_acs_kernel_id] -parameter SystemURL]/register/email-confirm?[export_vars -url {row_id}]
+		-body "To confirm your registration, please go to $href
 
 After confirming your email, here's how you can log in at [ad_url]:
 

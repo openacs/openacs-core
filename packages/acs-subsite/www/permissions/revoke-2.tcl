@@ -24,4 +24,4 @@ if {$operation eq "Yes"} {
     }
 }
 
-ad_returnredirect "one?[export_vars {object_id application_url}]"
+ad_returnredirect [export_vars -base one {object_id application_url}]
