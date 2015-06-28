@@ -1164,7 +1164,7 @@ ad_proc -public ad_form {
 
 		    upvar #$level __new_p __new_p
 
-		    if {![string is boolean -strict $__new_p]} {
+		    if {[info exists __new_p] && ![string is boolean -strict $__new_p]} {
 			ad_return_complaint 1 "Your request is invalid."
 			ns_log Warning "Validation error in hidden form element.\
 		This may be part of a vulnerability scan or attack reconnaissance: fish values __new_p"
