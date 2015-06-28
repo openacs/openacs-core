@@ -570,7 +570,7 @@ ad_proc -public ad_form {
             # and validation block to be extended, for now at least until I get more experience
             # with this ...
 
-            if { [lsearch { name form method action html validate export mode cancel_url has_edit has_submit actions edit_buttons display_buttons fieldset on_validation_error} $valid_arg ] == -1 } {
+            if {$valid_arg ni { name form method action html validate export mode cancel_url has_edit has_submit actions edit_buttons display_buttons fieldset on_validation_error}} {
                 set af_parts(${form_name}__extend) ""
             }
         }
@@ -1162,7 +1162,14 @@ ad_proc -public ad_form {
                         uplevel #$level $on_submit
                     }
 
-                     upvar #$level __new_p __new_p
+		    upvar #$level __new_p __new_p
+
+		    if {![string is boolean -strict $__new_p]} {
+			ad_return_complaint 1 "Your request is invalid."
+			ns_log Warning "Validation error in hidden form element.\
+		This may be part of a vulnerability scan or attack reconnaissance: fish values __new_p"
+			ad_script_abort
+		    }
 
                     if { [info exists new_data] && $__new_p } {
                         uplevel #$level $new_data
