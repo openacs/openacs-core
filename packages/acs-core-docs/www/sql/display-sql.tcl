@@ -49,7 +49,7 @@ if {$db eq ""} {
     foreach f $files { 
         regexp {([^/]*)/([^/]*)$} $f match db url
         append text [subst {
-	    <li> <a href="[ns_quotentml [export_vars -base display-sql {db url package_key}]]">$db</a></li>
+	    <li> <a href="[ns_quotehtml [export_vars -base display-sql {db url package_key}]]">$db</a></li>
 	}]
     }
     if {$files eq ""} { 
