@@ -151,11 +151,11 @@ ad_proc -callback search::search -impl tsearch2-driver {
     set base_query [db_map base_query]
     if {$df ne ""} {
         set need_acs_objects 1
-        lappend where_clauses " and o.creation_date > :df"
+        lappend where_clauses "o.creation_date > :df"
     }
     if {$dt ne ""} {
         set need_acs_objects 1
-        lappend where_clauses " and o.creation_date < :dt"
+        lappend where_clauses "o.creation_date < :dt"
     }
 
     foreach {arg value} $extra_args {
@@ -164,7 +164,7 @@ ad_proc -callback search::search -impl tsearch2-driver {
 	    lappend from_clauses $arg_clauses(from_clause)
 	}
 	if {[info exists arg_clauses(where_clause)] && $arg_clauses(where_clause) ne ""} {
-	    lappend where_clauses "$arg_clauses(where_clause)"
+	    lappend where_clauses $arg_clauses(where_clause)
 	}
     }
     if {[llength $extra_args]} {
