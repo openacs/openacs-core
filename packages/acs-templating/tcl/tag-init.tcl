@@ -217,8 +217,8 @@ template_tag list { chunk params } {
       set name "__ats_list_value"
     }
 
-    template::adp_append_code "\nset $name \[eval list $value\]\n"
-    template::adp_append_code "\nset $name:rowcount \[llength \$$name\]\n"
+    template::adp_append_code [list set $name $value]
+    template::adp_append_code "set $name:rowcount \[llength \$$name\]\n"
 
   } else {
 
@@ -231,7 +231,7 @@ template_tag list { chunk params } {
 
   for { set __ats_${name}_i 0 } { \$__ats_${name}_i < \${$name:rowcount} } { incr __ats_${name}_i } {
     set $name:item \[lindex \${$name} \$__ats_${name}_i\]
-    set $name:rownum \[expr \$__ats_${name}_i + 1\]
+    set $name:rownum \[expr {\$__ats_${name}_i + 1}\]
   "
   template::adp_compile_chunk $chunk
 
@@ -410,7 +410,7 @@ template_tag formwidget { params } {
   set tag_attributes [template::util::set_to_list $params id]
 
   template::adp_append_string \
-    "\[template::element render \${form:id} $id { $tag_attributes } \]"
+      "\[template::element render \${form:id} [list $id] { $tag_attributes } \]"
 }
 
 # Display the help information for an element
@@ -423,7 +423,7 @@ template_tag formhelp { params } {
   set tag_attributes [template::util::set_to_list $params id]
 
   template::adp_append_string \
-    "\[template::element render_help \${form:id} $id { $tag_attributes } \]"
+      "\[template::element render_help \${form:id} [list $id] { $tag_attributes } \]"
 }
 
 # Report a form error if one is specified.
@@ -468,7 +468,7 @@ template_tag formgroup { chunk params } {
   # generate a list of options and option labels as a data source
 
   template::adp_append_code \
-    "template::element options \${form:id} $id { $tag_attributes }"
+      "template::element options \${form:id} [list $id] { $tag_attributes }"
 
   # make sure name is a parameter to pass to the rendering tag handler
   ns_set update $params name formgroup
@@ -494,13 +494,12 @@ template_tag formgroup-widget { chunk params } {
 
     # generate a list of options and option labels as a data source
 
-
     template::adp_append_code \
-        "template::element options \${form:id} $id { $tag_attributes }"
+        "template::element options \${form:id} [list $id] { $tag_attributes }"
     
-  # make sure name is a parameter to pass to the rendering tag handler
-  ns_set update $params name formgroup
-  ns_set update $params id formgroup
+    # make sure name is a parameter to pass to the rendering tag handler
+    ns_set update $params name formgroup
+    ns_set update $params id formgroup
     template::adp_append_code "append __adp_output \"\$\{formgroup:${row}(widget)\} \$\{formgroup:${row}(label)\}\""
 
 }
@@ -512,24 +511,21 @@ template_tag formgroup-widget { chunk params } {
 template_tag formtemplate { chunk params } {
 
   set level [template::adp_level]
-
   set id [template::get_attribute formtemplate $params id]
 
   upvar #$level $id:properties form_properties
 
-  template::adp_append_code "set form:id \"$id\""
+  template::adp_append_code [list set form:id $id]
 
   # Set optional attributes for the grid template
-  template::adp_append_code "
-    upvar 0 \"$id:properties\" form_properties"
+  template::adp_append_code \
+      [list upvar 0 $id:properties form_properties]
 
   foreach varname {headers title cols} {
 
     set form_properties($varname) [ns_set iget $params $varname]
-
-    template::adp_append_code "
-      set form_properties($varname) \"$form_properties($varname)\"
-    "
+    template::adp_append_code \
+	[list set form_properties($varname) $form_properties($varname)]
   }
 
   # get any additional HTML attributes specified by the designer
@@ -552,7 +548,7 @@ template_tag formtemplate { chunk params } {
    
     # Render any hidden variables that have not been rendered yet
     template::adp_append_string \
-    "\[template::form check_elements $id\]"
+	"\[template::form check_elements $id\]"
   }
 
   if { [info exists form_properties(fieldset)] } {

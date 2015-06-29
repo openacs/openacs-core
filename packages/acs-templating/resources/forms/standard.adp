@@ -1,16 +1,16 @@
 <multiple name=elements>
 	<if @elements.section@ not nil>
-		<fieldset id="@elements.form_id@:@elements.section@" @elements.sec_fieldset;noquote@><!-- section fieldset -->
+		<fieldset id="@elements.form_id;noi18n@:@elements.section;noi18n@" @elements.sec_fieldset;noquote@><!-- section fieldset -->
         <legend @elements.sec_legend;noquote@><span>@elements.sec_legendtext@</span></legend>
 	</if>
 	
 	<group column="section">
-      <if @elements.widget@ eq "hidden"> 
-		<noparse><div><formwidget id=@elements.id@></div></noparse>
+      <if @elements.widget;literal@ eq "hidden"> 
+		<noparse><div><formwidget id="@elements.id@"></div></noparse>
 	  </if>
   
 	  <else>
-		<if @elements.widget@ eq "submit"><!-- if form submit button wrap it in the form-button class -->
+		<if @elements.widget;literal@ eq "submit"><!-- if form submit button wrap it in the form-button class -->
   		 <div class="form-button">
            <group column="widget">
              <noparse><formwidget id="@elements.id@">&nbsp;</noparse>
@@ -28,17 +28,17 @@
 			 </formerror>
 		   </noparse>
 
-		   <if @elements.widget@ in radio checkbox> 
+		   <if @elements.widget;literal@ in radio checkbox> 
              <if @elements.legendtext@ defined>
-			   <fieldset @elements.fieldset;noquote@>
+			   <fieldset @elements.fieldset;noi18n@>
                  <!-- radio button groups and checkbox groups get their own fieldsets -->
-				 <legend @elements.legend;noquote@><span>@elements.legendtext@</span></legend>
+				 <legend @elements.legend;oni18n@><span>@elements.legendtext@</span></legend>
              </if>
 		   </if>
 
              <if @elements.label@ not nil>
 			   <noparse>
-                 <if @form_properties.mode@ eq display or @elements.widget@ in radio checkbox date inform>
+                 <if @form_properties.mode;literal@ eq display or @elements.widget;literal@ in radio checkbox date inform>
                    <!-- no label tag -->
                  </if>
                  <else>
@@ -55,16 +55,16 @@
 
                @elements.label;noquote@
 
-               <if @form_properties.show_required_p@ true>
-                 <if @elements.optional@ nil and @elements.mode@ ne "display" and @elements.widget@ ne "inform">
+               <if @form_properties.show_required_p;literal@ true>
+                 <if @elements.optional@ nil and @elements.mode;literal@ ne "display" and @elements.widget;literal@ ne "inform">
                    <strong class="form-required-mark">(#acs-templating.required#)</strong>
                  </if>
                </if>
                </span><!-- form-label -->
 		     </if>
 		     <else>
-                        <if @form_properties.show_required_p@ true>
-                           <if @elements.optional@ nil and @elements.mode@ ne "display" and @elements.widget@ ne "inform">
+                        <if @form_properties.show_required_p;literal@ true>
+                           <if @elements.optional@ nil and @elements.mode;literal@ ne "display" and @elements.widget;literal@ ne "inform">
 			     <span class="form-label form-required-mark">
 			       #acs-templating.required#
 			     </span>
@@ -72,7 +72,7 @@
 		        </if>
 		     </else>
 
-		     <if @elements.widget@ in radio checkbox>
+		     <if @elements.widget;literal@ in radio checkbox>
 			   <noparse>
                  <span class="form-widget">
                  <formgroup id="@elements.id@">			
@@ -90,7 +90,7 @@
                    <formwidget id="@elements.id@">
                  </span>
 			   </noparse>
-               <if @form_properties.mode@ eq display or @elements.widget@ in radio checkbox date inform><!-- no label tag --></if>
+               <if @form_properties.mode;literal@ eq display or @elements.widget;literal@ in radio checkbox date inform><!-- no label tag --></if>
                <else>
                  <if @elements.label@ not nil></label></if>
                </else>
@@ -103,7 +103,7 @@
              </span> <!-- /form-help-text -->
            </if>
 
-		   <if @elements.widget@ in radio checkbox> 
+		   <if @elements.widget;literal@ in radio checkbox> 
              <if @elements.legendtext@ defined>
                <!-- radio button groups and checkbox groups get their own fieldsets -->
 			   </fieldset>

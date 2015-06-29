@@ -518,6 +518,8 @@ ad_proc -public template::adp_compile { source_type source } {
     # the parse list now contains the code
     set code [join $parse_list "\n"]
 
+    #ns_log notice "CODE before i18n\n$code\n"
+
     # Substitute #foo# message keys with values from the message catalog
 
     # Since messages may read the variables of the adp page they go trough
