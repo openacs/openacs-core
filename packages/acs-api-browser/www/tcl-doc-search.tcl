@@ -2,7 +2,7 @@ ad_page_contract {
     Will redirect you to dev.scriptics.com if documentation can be found
     @cvs-id $Id$
 } {
-    tcl_proc
+    tcl_proc:token,notnull
 } -properties {
     title:onevalue
     context:onevalue

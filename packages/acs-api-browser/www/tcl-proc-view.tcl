@@ -2,7 +2,7 @@ ad_page_contract {
     Will redirect you to the server containing the documentation if it can be found
     @cvs-id $Id$
 } {
-    tcl_proc:notnull
+    tcl_proc:token,notnull
 } -properties {
     title:onevalue
     context:onevalue
