@@ -138,7 +138,7 @@ ad_proc -public content::get_template_url {} {
 }
 
 
-ad_proc -deprecated public content::get_folder_labels { { varname "folders" } } {
+ad_proc -deprecated -public content::get_folder_labels { { varname "folders" } } {
     Set a data source in the calling frame with folder URL and label
     Useful for generating a context bar.
 
