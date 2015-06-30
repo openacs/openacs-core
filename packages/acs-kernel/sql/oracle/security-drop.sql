@@ -7,6 +7,7 @@
 -- @creation-date 2000-07-27
 -- @cvs-id $Id$
 --
+drop package sec_session_property;
 
 drop sequence sec_id_seq;
 drop sequence sec_security_token_id_seq;
