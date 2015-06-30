@@ -78,7 +78,16 @@
            property_name = :name
       </querytext>
 </fullquery>
- 
+
+<fullquery name="ad_set_client_property.prop_upsert">      
+  <querytext>
+      begin
+         sec_session_property.upsert(:session_id, :module, :name, :value, :secure, :last_hit);
+      end;
+      </querytext>
+</fullquery>
+
+
 <fullquery name="ad_change_password.password_update">      
       <querytext>
         update users 

@@ -1364,30 +1364,38 @@ ad_proc -public ad_set_client_property {
         
         set last_hit [ns_time]
 
-        db_transaction {
+        if { $clob == "t" } {
 
-            # DRB: Older versions of this code did a delete/insert pair in an attempt
-            # to guard against duplicate insertions.  This didn't work if there was
-            # no value for this property in the table and two transactions ran in
-            # parallel.  The problem is that without an existing row the delete had
-            # nothing to lock on, thus allowing the two inserts to conflict.  This
-            # was discovered on a page built of frames, where the two requests from
-            # the browser spawned two AOLserver threads to service them.
+            db_transaction {
 
-            # Oracle doesn't allow a RETURNING clause on an insert with a
-            # subselect, so this code first inserts a dummy value if none exists
-            # (ensuring it does exist afterwards) then updates it with the real
-            # value.  Ugh.  
+                # DRB: Older versions of this code did a delete/insert pair in an attempt
+                # to guard against duplicate insertions.  This didn't work if there was
+                # no value for this property in the table and two transactions ran in
+                # parallel.  The problem is that without an existing row the delete had
+                # nothing to lock on, thus allowing the two inserts to conflict.  This
+                # was discovered on a page built of frames, where the two requests from
+                # the browser spawned two AOLserver threads to service them.
 
-            set clob_update_dml [db_map prop_update_dml_clob]
+                # Oracle doesn't allow a RETURNING clause on an insert with a
+                # subselect, so this code first inserts a dummy value if none exists
+                # (ensuring it does exist afterwards) then updates it with the real
+                # value.  Ugh.  
 
-            db_dml prop_insert_dml ""
+                set clob_update_dml [db_map prop_update_dml_clob]
 
-            if { $clob == "t" && $clob_update_dml ne "" } {
-                db_dml prop_update_dml_clob "" -clobs [list $value]
-            } else {
-                db_dml prop_update_dml ""
+                db_dml prop_insert_dml ""
+                
+                if { $clob_update_dml ne "" } {
+                    db_dml prop_update_dml_clob "" -clobs [list $value]
+                } else {
+                    db_dml prop_update_dml ""
+                }
             }
+        } else {
+            #
+            # Perform an upsert operation via stored procedure
+            #
+            db_exec_plsql prop_upsert {}
         }
     }
 
