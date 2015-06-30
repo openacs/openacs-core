@@ -387,7 +387,7 @@ ad_proc -public ad_return_complaint {
 				 $complaint_template]
 				 
     # raise abortion flag, e.g., for templating
-    set ::request_aborted [list 200 "Problem with Your Input"]
+    set ::request_aborted [list 422 "Problem with Your Input"]
 }
 
 
