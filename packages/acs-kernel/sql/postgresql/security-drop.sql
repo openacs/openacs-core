@@ -15,3 +15,7 @@ drop sequence t_sec_security_token_id_seq;
 drop table sec_session_properties;
 drop index sec_sessions_by_server;
 drop table secret_tokens;
+
+drop FUNCTION sec_session_property__upsert(bigint,varchar,varchar,varchar,boolean,integer);
+
+
