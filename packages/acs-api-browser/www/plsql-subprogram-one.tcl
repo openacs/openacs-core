@@ -10,8 +10,8 @@ ad_page_contract {
     @creation-date 2000-03-05
     @cvs-id $Id$
 } {
-    name
-    type
+    name:token
+    type:token
 } -properties {
     title:onevalue
     context:onevalue
