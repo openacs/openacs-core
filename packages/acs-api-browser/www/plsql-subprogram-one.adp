@@ -3,9 +3,9 @@
 <property name="context">@context;noquote@</property>
 
 <if @package_slider_list@ ne "">
-<table align="right"><tr><td>
+<div style='float: right;'>
 [ <%= [join $package_slider_list " | "] %> ]
-</td></tr></table>
+</div>
 </if>
 
 <blockquote>

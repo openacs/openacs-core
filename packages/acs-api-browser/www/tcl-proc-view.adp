@@ -10,13 +10,10 @@ You can try searching the <a href="@apidoc::ns_api_html_index@"><%= [ns_info nam
 
 <p>
 
-<table cellpadding="5">
-  <tr>
-    <td bgcolor="#dddddd">
+<div style="background: #dddddd; display: inline-block; padding: 5px;">
      <form action=tcl-proc-view method=get>
-     <b>Tcl Api Search:</b><br>
+     <div><b>Tcl Api Search:</b><br>
      <input type="text" name="tcl_proc" value="@tcl_proc@"> <input type="submit" value="Go"><br>
+     </div>
      </form>
-     </td>
-  </tr>
-</table>
+</div>
