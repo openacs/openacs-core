@@ -467,7 +467,7 @@ ad_proc -public template::expand_percentage_signs { message } {
             }
         }
 
-        append formatted_message $substitution
+        append formatted_message [ns_quotehtml $substitution]
     }
 
     append formatted_message $remaining_message
