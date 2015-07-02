@@ -13,7 +13,8 @@
    <include src="../group-types/groups-list" group_type=@group_types.group_type;noquote@>
  </if>
  <else>
-   <li> <a href="../group-types/groups-display?group_type=@group_types.group_type_enc@">View all @group_types.number_groups@ groups</a></li> </else>
+   <li> <a href="../group-types/groups-display?group_type=@group_types.group_type_enc@">View all @group_types.number_groups@ groups</a></li>
+   </else>
  </ul>
  </li>  
 </multiple>
