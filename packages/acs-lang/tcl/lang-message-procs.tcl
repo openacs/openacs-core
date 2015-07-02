@@ -627,7 +627,7 @@ ad_proc -private lang::message::format {
     set localized_message "The %animal% jumped across the %barrier%. About 50% of the time, he stumbled, or maybe it was %%20 %times%."
     set value_list { animal "frog" barrier "fence" }
 
-    puts "[format $localized_message $value_list]"
+    ns_log notice formatted=[format $localized_message $value_list]
     
     The output from the example is:
 
@@ -677,7 +677,8 @@ ad_proc -private lang::message::format {
                         append formated_message $local_variable($array_key)
                     }
                 } else {
-                    error "Message contains a variable named '$variable_name' which doesn't exist in the caller's environment: message $localized_message"
+                    ns_log warning "Message contains a variable named '$variable_name' which doesn't exist in the caller's environment: message $localized_message"
+		    append formated_message "MISSING: variable '$variable_name' is not available"
                 }
             }
         }
