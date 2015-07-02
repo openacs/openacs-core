@@ -1138,7 +1138,7 @@ ad_proc -public ad_page_contract {
             foreach elm [ad_complaints_get_list] {
                 template::multirow append complaints $elm
             }
-            ns_return 200 text/html [ad_parse_template -params [list complaints] "/packages/acs-tcl/lib/complain"]
+            ns_return 422 text/html [ad_parse_template -params [list complaints] "/packages/acs-tcl/lib/complain"]
 	    ad_script_abort
 	}
     }
@@ -2006,7 +2006,7 @@ ad_page_contract_filter token { name value } {
     @creation-date 24 June 2015
 } {
 
-    if {[regexp {^[\w,-]+$} $value]} {
+    if {[regexp {^[\w,:-]+$} $value]} {
 	return 1
     }
     ad_complain [_ acs-tcl.lt_name_contains_invalid]
