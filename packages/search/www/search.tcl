@@ -7,11 +7,11 @@ ad_page_contract {
     {t:trim ""}
     {offset:naturalnum 0}
     {num:naturalnum 0}
-    {dfs:trim ""}
-    {dts:trim ""}
+    {dfs:word,trim ""}
+    {dts:word,trim ""}
     {search_package_id:naturalnum ""}
     {scope ""}
-    {object_type ""}
+    {object_type:token ""}
 } -validate {
     keywords_p {
         if {![info exists q] || $q eq ""} {

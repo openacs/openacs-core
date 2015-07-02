@@ -3,7 +3,7 @@ ad_page_contract {
     
     @cvs-id $Id$
 } {
-    proc:trim
+    proc:token,trim
     source_p:boolean,optional,trim
     {version_id:naturalnum,optional ""}
 } -properties {
@@ -26,7 +26,7 @@ if { $version_id ne "" } {
         where version_id = :version_id
     }
     if {[info exists package_id]} {
-        lappend context [list "package-view?version_id=$version_id&kind=procs" \
+        lappend context [list [export_vars -base package-view {version_id {kind procs}}] \
                              "$pretty_name $version_name"]
     }
 }
@@ -87,7 +87,7 @@ proc $proc {[info args $proc]} {
                      -proc $relative_proc]
         
         if {$url ne ""} {
-            ns_log notice "got URL <$url>"
+            ns_log notice "api-doc/www/proc-view got URL <$url>"
             ad_returnredirect -allow_complete_url $url
             ad_script_abort
         }
