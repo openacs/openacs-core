@@ -1,6 +1,6 @@
 <master>
-<property name="context">@context@</property>
-<property name="doc(title)">@page_title@</property>
+<property name="context">@context;literal@</property>
+<property name="doc(title)">@page_title;literal@</property>
 
 <if @and_queries_notice_p@ eq 1>
   <font color="6f6f6f">
