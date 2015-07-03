@@ -1,6 +1,6 @@
 <master>
-  <property name="doc(title)">@instance_name;noquote@</property>
-  <property name="context_bar">@context_bar;noquote@</property>
+  <property name="doc(title)">@instance_name;literal@</property>
+  <property name="context_bar">@context_bar;literal@</property>
 
 <if @admin_p@>
   <div style="float: right;">

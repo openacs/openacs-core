@@ -1,5 +1,5 @@
 <master>
-<property name="context">@context;noquote@</property>
+<property name="context">@context;literal@</property>
 <property name="doc(title)">Dependent relations exist</property>
 
 You must remove the following dependent relations before you can

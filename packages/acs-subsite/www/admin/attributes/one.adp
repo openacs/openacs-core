@@ -1,6 +1,6 @@
 <master>
-<property name="context">@context;noquote@</property>
-<property name="doc(title)">@attribute.pretty_name;noquote@</property>
+<property name="context">@context;literal@</property>
+<property name="doc(title)">@attribute.pretty_name;literal@</property>
 	
 <b>Properties:</b>			   
 <ul>

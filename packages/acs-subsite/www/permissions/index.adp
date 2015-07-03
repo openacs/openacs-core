@@ -1,6 +1,6 @@
   <master>
     <property name="doc(title)">#acs-subsite.Permissions#</property>
-    <property name="context">@context;noquote@</property>
+    <property name="context">@context;literal@</property>
 
     <if @objects:rowcount@ gt 0> 
       #acs-subsite.You_have_admin_rights_on#

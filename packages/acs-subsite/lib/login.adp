@@ -1,4 +1,4 @@
-<property name="focus">@focus;noquote@</property>
+<property name="focus">@focus;literal@</property>
 
 <div id="register-login">
 <formtemplate id="login"></formtemplate>

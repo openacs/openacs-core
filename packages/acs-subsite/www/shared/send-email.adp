@@ -1,6 +1,6 @@
 <master>
-  <property name="doc(title)">@page_title;noquote@</property>
-  <property name="context">@context;noquote@</property>
+  <property name="doc(title)">@page_title;literal@</property>
+  <property name="context">@context;literal@</property>
 
 	
 <h4>#acs-subsite.mail_a_message_to# @first_names@ @last_name@</h4>

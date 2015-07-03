@@ -1,6 +1,6 @@
 <master>
 <property name="doc(title)">Notes</property>
-<property name="context">@context;noquote@</property>
+<property name="context">@context;literal@</property>
 
 <table cellpadding="3" cellspacing="3">
   <tr>

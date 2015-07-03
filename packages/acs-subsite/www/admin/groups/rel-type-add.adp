@@ -1,5 +1,5 @@
 <master>
-<property name="context">@context;noquote@</property>
+<property name="context">@context;literal@</property>
 <property name="doc(title)">Add relation type</property>
 				   
 <if @primary_rels:rowcount@ eq "0">

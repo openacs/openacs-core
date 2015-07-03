@@ -1,5 +1,5 @@
 <master>
-<property name="context">@context;noquote@</property>
+<property name="context">@context;literal@</property>
 <property name="doc(title)">Select specific @object_type_pretty_name;noquote@ type</property>
 
 <blockquote>

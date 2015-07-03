@@ -1,6 +1,6 @@
 <master>
 <property name="doc(title)">Users</property>
-<property name="context">@context;noquote@</property>
+<property name="context">@context;literal@</property>
 
 <ul>
   <li>total users: <a href="complex-search?target=one&amp;only_authorized_p=0">@n_users@</a> (@n_deleted_users@ deleted).  Last registration on @last_registration@ (<a href="registration-history">history</a>).

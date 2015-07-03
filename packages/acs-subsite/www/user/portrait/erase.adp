@@ -1,6 +1,6 @@
 <master>
 <property name="&doc">doc</property>
-<property name="context">@context;noquote@</property>
+<property name="context">@context;literal@</property>
 
 <if @admin_p@ eq 0>
   <p>#acs-subsite.lt_Sure_erase_your_por#</p>

@@ -1,5 +1,5 @@
 <master>
-<property name="context">@context;noquote@</property>
+<property name="context">@context;literal@</property>
 <property name="doc(title)">Remove segment</property>
 
 Are you sure you want to remove the relational segment @segment_name@?

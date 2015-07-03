@@ -1,5 +1,5 @@
 <master>
-  <property name="doc(title)">@page_title;noquote@</property>
+  <property name="doc(title)">@page_title;literal@</property>
 
 <p>#acs-lang.Export_results_for#</p>
 

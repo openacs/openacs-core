@@ -1,6 +1,6 @@
 <master>
  <property name="doc(title)">Edit a message</property>
- <property name="context">@context;noquote@</property>
+ <property name="context">@context;literal@</property>
  <property name="focus">message.message</property>
 
 <!-- TODO: Remove 'style' when we've merged 4.6.4 back onto HEAD -->

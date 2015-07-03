@@ -1,6 +1,6 @@
 <master>
-<property name="context">@context;noquote@</property>
-<property name="doc(title)">@doc.title@</property>
+<property name="context">@context;literal@</property>
+<property name="doc(title)">@doc.title;literal@</property>
 <property name="focus">group_type.object_type</property>
 
 <h1>@doc.title@</h1>

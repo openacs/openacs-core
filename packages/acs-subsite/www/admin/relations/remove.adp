@@ -1,5 +1,5 @@
 <master>
-<property name="context">@context;noquote@</property>
+<property name="context">@context;literal@</property>
 <property name="doc(title)">Remove relation</property>
 
 Are you sure you want to remove the @rel.rel_type_pretty_name@

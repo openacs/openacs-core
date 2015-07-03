@@ -1,6 +1,6 @@
 <master>
   <property name="doc(title)">Search</property>
-  <property name="context">@context;noquote@</property>
+  <property name="context">@context;literal@</property>
 
   <p>
       <form name="searchfrags" action="search">

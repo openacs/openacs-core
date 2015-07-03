@@ -1,6 +1,6 @@
 <master>
-  <property name="doc(title)">@page_title@</property>
-  <property name="context">@context@</property>
+  <property name="doc(title)">@page_title;literal@</property>
+  <property name="context">@context;literal@</property>
 
 <if @servers:rowcount@ gt 0>
   <table border="1" cellspacing="0" cellpadding="3">

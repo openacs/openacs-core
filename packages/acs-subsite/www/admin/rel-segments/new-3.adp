@@ -1,5 +1,5 @@
 <master>
-<property name="context">@context;noquote@</property>
+<property name="context">@context;literal@</property>
 <property name="doc(title)">Add Constraint on @segment_name;noquote@</property>
 
 Now that you have created a relational segment, you can create
