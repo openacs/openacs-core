@@ -1,5 +1,5 @@
 <master>
-<property name="context">@context;noquote@</property>
+<property name="context">@context;literal@</property>
 <property name="doc(title)">Add @role_pretty_name;noquote@ to @group_name;noquote@</property>
 
 <blockquote>

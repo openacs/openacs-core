@@ -1,5 +1,5 @@
 <master>
- <property name="doc(title)">@page_title;noquote@</property>
+ <property name="doc(title)">@page_title;literal@</property>
 
 Import results for
 <if @package_key@ nil>

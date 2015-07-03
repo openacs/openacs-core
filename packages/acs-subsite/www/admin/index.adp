@@ -1,5 +1,5 @@
 <master>
-<property name="doc(title)">@title;noquote@</property>
+<property name="doc(title)">@title;literal@</property>
 
 <h1>@title;noquote@</h1>
 <ul>

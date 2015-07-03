@@ -1,5 +1,5 @@
 <master>
-<property name="context">@context;noquote@</property>
+<property name="context">@context;literal@</property>
 <property name="doc(title)">Add attribute to @object_pretty_name;noquote@</property>
 <property name="focus">main_form.pretty_name</property>
 

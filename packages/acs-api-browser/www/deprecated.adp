@@ -1,6 +1,6 @@
 <master>
-<property name="doc(title)">@title;noquote@</property>
-<property name="context">@context;noquote@</property>
+<property name="doc(title)">@title;literal@</property>
+<property name="context">@context;literal@</property>
 
 <h3>Deprecated Procedures:</h3>
 <ul>

@@ -1,5 +1,5 @@
 <master>
-<property name="context">@context;noquote@</property>
+<property name="context">@context;literal@</property>
 <property name="doc(title)">Edit @role;noquote@</property>
 <property name="focus">role_form.role</property>
 

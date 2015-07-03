@@ -1,6 +1,6 @@
 <master>
-<property name="context_bar">@context_bar;noquote@</property>
-<property name="doc(title)">@title;noquote@</property>
+<property name="context_bar">@context_bar;literal@</property>
+<property name="doc(title)">@title;literal@</property>
 
 <table>
 <tr><th valign="top" align="right">Table Name</th>

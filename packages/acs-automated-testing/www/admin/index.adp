@@ -1,5 +1,5 @@
 <master>
-<property name="doc(title)">@title;noquote@</property>
+<property name="doc(title)">@title;literal@</property>
   <table border="0" cellspacing="0" cellpadding="3" width="100%">
     <tr>
       <th style="background-color:#ECECEC">Category</th>

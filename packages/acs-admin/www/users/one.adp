@@ -1,6 +1,6 @@
 <master>
 <property name="doc(title)">@user_info.first_names;noquote@ @user_info.last_name;noquote@</property>
-<property name="context">@context;noquote@</property>
+<property name="context">@context;literal@</property>
 
 <h2>Basic Information</h2>
 

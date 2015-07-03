@@ -1,5 +1,5 @@
 <master>
-<property name="context">@context;noquote@</property>
+<property name="context">@context;literal@</property>
 <property name="doc(title)">#acs-subsite.Relationship_types_administration#</property>
 
 <h1>#acs-subsite.Relationship_types_administration#</h1>

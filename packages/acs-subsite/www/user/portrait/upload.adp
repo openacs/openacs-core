@@ -1,6 +1,6 @@
 <master>
 <property name="&doc">doc</property>
-<property name="context">@context;noquote@</property>
+<property name="context">@context;literal@</property>
 
 
 <p>#acs-subsite.lt_How_would_you_like_the#</p>

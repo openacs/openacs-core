@@ -1,5 +1,5 @@
 <master>
-<property name="context">@context;noquote@</property>
+<property name="context">@context;literal@</property>
 <property name="doc(title)">Create relational segment</property>
 <property name="focus">segment_new.segment_name</property>
 
