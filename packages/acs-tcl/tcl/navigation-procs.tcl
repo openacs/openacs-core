@@ -40,9 +40,9 @@ ad_proc -public ad_context_bar_html {
 
     set out {}
     foreach element [lrange $context 0 [llength $context]-2] { 
-        append out "<a href=\"[lindex $element 0]\">[lindex $element 1]</a> $separator "
+        append out [subst {<a href="[ns_quotehtml [lindex $element 0]]">[ns_quotehtml [lindex $element 1]]</a> $separator }]
     }
-    append out [lindex $context end]
+    append out [ns_quotehtml [lindex $context end]]
 
     return $out
 }
@@ -246,7 +246,7 @@ ad_proc -public ad_navbar args {
 } {
     set counter 0
     foreach arg $args {
-	lappend link_list "<a href=\"[lindex $arg 0]\">[lindex $arg 1]</a>"
+        lappend link_list [subst {<a href="[ns_quotehtml [lindex $element 0]]">[ns_quotehtml [lindex $element 1]]</a>}]
 	incr counter
     }
     if { $counter } {
@@ -267,9 +267,9 @@ ad_proc -public ad_choice_bar { items links values {default ""} } {
 
     foreach value $values {
 	if { $default eq $value  } {
-	        lappend return_list "<strong>[lindex $items $count]</strong>"
+	    lappend return_list "<strong>[lindex $items $count]</strong>"
 	} else {
-	        lappend return_list "<a href=\"[lindex $links $count]\">[lindex $items $count]</a>"
+	    lappend return_list [subst {<a href="[ns_quotehtml [lindex $links $count]]">[ns_quotehtml [lindex $items $count]]</a>}]
 	}
 
 	incr count
