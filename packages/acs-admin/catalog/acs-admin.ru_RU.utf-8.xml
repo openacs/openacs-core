@@ -10,13 +10,13 @@
   <msg key="Administration">Администрирование</msg>
   <msg key="Are_you_sure_you_want_to_delete_authority_authorities_pretty_name">Вы уверены, что хотите удалить полномочия для %authorities.pretty_name%?</msg>
   <msg key="Authentication">Аутентификация </msg>
-  <msg key="Authority_name">Имя уполномоченного представителя </msg>
+  <msg key="Authority_name">Имя уполномоченного лица</msg>
   <msg key="Authority_short_name_help_text">Используется в случаях, касающихся полномочий в параметрах и т.д.Даже если необходимо изменить имя, отображенное выше, эта часть должна остаться без изменений.</msg>
   <msg key="Batch_sync_enabled">Пакетная синхронизация включена</msg>
   <msg key="Batch_Synchronization">Пакетная синхронизация</msg>
   <msg key="Change_password_URL">Изменить URL пароль</msg>
   <msg key="Change_password_URL_help_text">Вместо драйвера управления паролями вы можете предоставить  URL, к которому будут отсылаться пользователи, желающие сменить свои пароли. Синтаксис любого имени пользователя данного URL foo={username} и {username} заменяется настоящим именем пользователя.</msg>
-  <msg key="Creation_user">Создать пользователя</msg>
+  <msg key="Creation_user">Создание пользователя</msg>
   <msg key="Delete">Удалить</msg>
   <msg key="Delete_callback">Удалить обратный вызов</msg>
   <msg key="Disable_this_authority">Удалить эти полномочия</msg>
@@ -29,10 +29,10 @@
   <msg key="Edit_callback">Редактировать обратный вызов</msg>
   <msg key="Enable_this_authority">Активировать эти полномочия</msg>
   <msg key="Enabled">Включено</msg>
-  <msg key="End_time">Конец</msg>
+  <msg key="End_time">Время окончания работы</msg>
   <msg key="General">Общий</msg>
   <msg key="GetDocument_implementation">Получить реализацию документа</msg>
-  <msg key="Help_contact_help_text">В случае проблем с полномочиями в качестве последнего средства помощи будет отображена контактная информация (телефон, адрес электронной почта и т.д.)</msg>
+  <msg key="Help_contact_help_text">В случае проблем с полномочиями в качестве последнего средства помощи будет отображена контактная информация (телефон, адрес электронной почты и т.д.)</msg>
   <msg key="Help_contact_text">Текст с контактными данными службы поддержки</msg>
   <msg key="Interactive">Интерактивный</msg>
   <msg key="Invoke">Вызывать</msg>
@@ -67,7 +67,7 @@
   <msg key="Service_parameters">Параметры службы</msg>
   <msg key="Short_Name">Краткое имя</msg>
   <msg key="Site-Wide_Admin">Администрирование всего сайта</msg>
-  <msg key="Snapshot">Snapshot (моментальная копия видеопамяти компьютера (редко ОЗУ), получаемая с помощью специальной программы)</msg>
+  <msg key="Snapshot">Моментальный снимок</msg>
   <msg key="Start_time">Время начала</msg>
   <msg key="Success">Успех</msg>
   <msg key="Tcl_Callbacks">Обратный вызов Tcl</msg>
@@ -75,7 +75,7 @@
   <msg key="Timestamp">Временная метка</msg>
   <msg key="Type">Тип</msg>
   <msg key="User_Info">Информация о пользователе</msg>
-  <msg key="User_Info_help_text">Решение для получения информации о пользователе от authorityв реальном времени  </msg>
+  <msg key="User_Info_help_text">Решение для получения информации о пользователе от уполномоченного лица в реальном времени  </msg>
   <msg key="Username">Имя пользователя</msg>
   <msg key="View_log_entry">Просмотр журнального(log) файла</msg>
   <msg key="Visit_service_pages">Посетить страницы служб</msg>
