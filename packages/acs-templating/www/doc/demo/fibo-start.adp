@@ -1,5 +1,5 @@
 <html>
   <body>
-    <include src="fibo" n = @m;noquote@ >
+    <include src="fibo" n=@m;noquote@ >
   </body>
 </html>
