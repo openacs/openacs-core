@@ -1,4 +1,12 @@
-set file [ns_queryget file]
+ad_page_contract {
+    small demp
+
+    @author unknown
+    @creation-date unknown
+    @cvs-id $Id$
+} {
+    {file:token ""}
+}
 
 if { $file eq "" } {
 

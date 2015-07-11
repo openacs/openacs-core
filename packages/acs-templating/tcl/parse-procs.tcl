@@ -465,9 +465,12 @@ ad_proc -public template::expand_percentage_signs { message } {
                 set command "set $var"
                 set substitution [uplevel $command]
             }
+            if {$quote_p} {
+                set substitution [ns_quotehtml $substitution]
+            }
         }
 
-        append formatted_message [ns_quotehtml $substitution]
+        append formatted_message $substitution
     }
 
     append formatted_message $remaining_message
