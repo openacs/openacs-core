@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<message_catalog package_key="acs-mail-lite" locale="ru_RU" charset="utf-8">
+
+  <msg key="Associated_files">Связанные файлы:</msg>
+  <msg key="BCC">&quot;Слепая копия&quot;</msg>
+  <msg key="Bounce_disabled">Повторные ошибочные электронные почтовые сообщения записаны как отключенные. Вы будете получать электронные почтовые сообщения снова.</msg>
+  <msg key="Bouncing_users">Адресаты повторных ошибочных электронных почтовых сообщений</msg>
+  <msg key="CC">Копия</msg>
+  <msg key="cc_help">Отправить копию по нескольким адресам, разделённым с помощью &quot;;&quot;</msg>
+  <msg key="check_uncheck">Проверять/Не проверять</msg>
+  <msg key="lt_there_was_an_error_processing">Произошла ошибка в обработке этого запроса.</msg>
+  <msg key="Message">Сообщение</msg>
+  <msg key="Queue_server">Сервер очереди</msg>
+  <msg key="Queueing_time">Время очереди</msg>
+  <msg key="Recipients">Получатели</msg>
+  <msg key="Send">Отправить</msg>
+  <msg key="Sender">Отправитель</msg>
+  <msg key="Subject">Тема</msg>
+  <msg key="Unbounce">Не доставленное из-за ошибки</msg>
+  <msg key="Untitled">Без темы</msg>
+  <msg key="Upload_file">Загрузить файл</msg>
+  <msg key="Your_message_was_sent_to">Ваше сообщение было отправлено: &amp;lt;strong&amp;gt;%recipients%&amp;lt;/strong&amp;gt;</msg>
+</message_catalog>
