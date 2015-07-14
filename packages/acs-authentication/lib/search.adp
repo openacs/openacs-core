@@ -59,7 +59,7 @@ html>body #navbar { bottom: 0px }
 </style>
 <multiple name="authorities">
 <if @authorities.authority_id@ eq @selected_authority_id@>
-<include src="@authorities.form_include@" authority_id="@authorities.authority_id@" search_text="@search_text@" return_url="@return_url@" orderby="@orderby@" member_url="@member_url@" group_id="@group_id@" &="rel_type" &="object_id" &="privilege"></if>
+<include src="@authorities.form_include;literal@" authority_id="@authorities.authority_id;literal@" search_text="@search_text;literal@" return_url="@return_url;literal@" orderby="@orderby;literal@" member_url="@member_url;literal@" group_id="@group_id;literal@" &="rel_type" &="object_id" &="privilege"></if>
 </multiple>
 
 <div id="navbar-div">

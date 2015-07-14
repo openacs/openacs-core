@@ -10,14 +10,14 @@
 
 @first_translated_message;noquote@
 
-<include src="audit-include" current_locale="@current_locale;noquote@" message_key="@message_key;noquote@" package_key="@package_key;noquote@">
+<include src="audit-include" current_locale="@current_locale;literal@" message_key="@message_key;literal@" package_key="@package_key;literal@">
 
 <h2>Files that use this message</h2>
 <if @usage_p@ true>
   <p>
     <b>Show</b> | <a href="@usage_hide_url@">Hide</a> files that use this message.
   </p>
-  <include src="message-usage-include" message_key="@message_key;noquote@" package_key="@package_key;noquote@">
+  <include src="message-usage-include" message_key="@message_key;literal@" package_key="@package_key;literal@">
 </if>
 <else>
   <p>

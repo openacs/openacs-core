@@ -3,7 +3,7 @@
 <property name="context">@context;literal@</property>
 
 <div style="float: right;">
-  <include src="/packages/acs-api-browser/lib/search" query_string="@query_string@">
+  <include src="/packages/acs-api-browser/lib/search" query_string="@query_string;literal@">
 </div>
 
 <div style="float: left; width: 60%;">

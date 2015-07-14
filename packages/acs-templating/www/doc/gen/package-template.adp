@@ -17,7 +17,7 @@
 <list name=info_list>
   <tr bgcolor=white>
     <td>
-      <include src="namespace_block" data="@info_list:item;noquote@">
+      <include src="namespace_block" data="@info_list:item;literal@">
     </td>
 </tr>
 </list>
