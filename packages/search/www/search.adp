@@ -60,7 +60,7 @@
 </else>
 
 <include src="/packages/search/lib/navbar" &="urlencoded_query"
-    paginator_class="list-paginator-bottom" count="@result.count@" &="low" &="high"
+    paginator_class="list-paginator-bottom" count="@result.count;literal@" &="low" &="high"
     &="offset" &="num" &="search_package_id">
 
 <if @count@ gt 0>
