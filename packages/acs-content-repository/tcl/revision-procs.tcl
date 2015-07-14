@@ -72,6 +72,9 @@ ad_proc -public cr_write_content {
 	    if {$filename eq ""} {
 		error "No content for the revision $revision_id.\
 		This seems to be an error which occured during the upload of the file"
+	    } elseif {![file readable $filename]} {
+	      ns_log Error "Could not read file $filename. Maybe the content repository is (partially) missing?"
+	      ns_return 404 text/plain {}
 	    } else {
 		if { $string_p } {
 		    set fd [open $filename "r"]
