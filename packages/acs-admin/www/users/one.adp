@@ -4,7 +4,7 @@
 
 <h2>Basic Information</h2>
 
-<include src="/packages/acs-subsite/lib/user-info" user_id="@user_id@" return_url="@return_url;noquote@">
+<include src="/packages/acs-subsite/lib/user-info" user_id="@user_id;literal@" return_url="@return_url;literal@">
 
 <ul>
 <li>User ID:  @user_id@</li>

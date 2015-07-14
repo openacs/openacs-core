@@ -7,6 +7,6 @@ Are you sure you want to remove @rel_pretty_name@ from the list of allowable rel
 <p>
 
 <center>
-<include src="../confirm-delete-form" action="rel-type-remove-2" export_vars="@export_vars;noquote@" no_button="No, I want to cancel my request" yes_button="Yes, I really want to remove this relationship type">
+<include src="../confirm-delete-form" action="rel-type-remove-2" export_vars="@export_vars;literal@" no_button="No, I want to cancel my request" yes_button="Yes, I really want to remove this relationship type">
 </center>
 

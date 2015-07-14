@@ -22,5 +22,5 @@ Are you sure you want to delete this relationship type? Doing so will:
 <p>
 
 <center>
-<include src="../confirm-delete-form" action="delete-2" export_vars="@export_vars;noquote@" no_button="No, I want to cancel my request" yes_button="Yes, I really want to delete this relationship type">
+<include src="../confirm-delete-form" action="delete-2" export_vars="@export_vars;literal@" no_button="No, I want to cancel my request" yes_button="Yes, I really want to delete this relationship type">
 </center>

@@ -60,7 +60,7 @@
           </div>
         </div>
         <div class="portlet">
-          <include src="@user_info_template@" />
+          <include src="@user_info_template;literal@" />
           <if @account_status@ eq "closed">
             #acs-subsite.Account_closed_workspace_msg#
            </if>

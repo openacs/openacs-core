@@ -23,7 +23,7 @@
           </if>
           <else>
             <br>
-	        <include src="elements-display-list" group_id="@group_id;noquote@" rel_type="@rels.rel_type;noquote@" return_url_enc="@return_url_enc;noquote@" member_state="approved">
+	        <include src="elements-display-list" group_id="@group_id;literal@" rel_type="@rels.rel_type;literal@" return_url_enc="@return_url_enc;literal@" member_state="approved">
           </else>
         </else>
       </group>

@@ -13,5 +13,5 @@ Would you like to create a constraint now?
 <p>
 
 <center>
-<include src="../confirm-delete-form" action="constraints-redirect" export_vars="@export_vars;noquote@" no_button=" No " yes_button=" Yes ">
+<include src="../confirm-delete-form" action="constraints-redirect" export_vars="@export_vars;literal@" no_button=" No " yes_button=" Yes ">
 </center>

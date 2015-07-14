@@ -13,7 +13,7 @@
     <a href="@this_url@?view_by=rel_type">#acs-subsite.relationship_to_site#</a>
     </strong>
 
-    <include src="elements-by-group-type" group_id=@subsite_group_id;noquote@>
+    <include src="elements-by-group-type" group_id="@subsite_group_id;literal@">
 </if>
 <else>
     <strong>
@@ -22,7 +22,7 @@
     #acs-subsite.relationship_to_site#
     </strong>
 
-    <include src="elements-by-rel-type" group_id=@subsite_group_id;noquote@>
+    <include src="elements-by-rel-type" group_id="@subsite_group_id;literal@">
 </else>
 
 <p>#acs-subsite.To_add_a_group_first_select_a_group_type_above_or_go_to_the#</p>

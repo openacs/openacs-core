@@ -22,7 +22,7 @@
   </multiple>
 </p>
 
-<include src="/packages/acs-lang/lib/conflict-link" locale="@current_locale@" package_key="@package_key@"/>
+<include src="/packages/acs-lang/lib/conflict-link" locale="@current_locale;literal@" package_key="@package_key;literal@"/>
 
 <ul class="action-links">
   <if @create_p@ true>
