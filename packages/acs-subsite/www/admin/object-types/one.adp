@@ -4,12 +4,12 @@
   <property name="head">
   <style type="text/css" >
         th {text-align: left;}
-	table {
+	#main-content table {
 	      border-collapse: collapse;
       	      background-color: #eeeeee;
 	      margin: 20px 20px 20px 20px;
         }
-      	table, th, td {
+      	#main-content table, #main-content th, #main-content td {
 	      border: 1px solid #dddddd;
 	}
         pre.code        {
