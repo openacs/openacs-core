@@ -875,8 +875,7 @@ BEGIN
  acs_objects.last_modified,
  acs_objects.modifying_user,
  acs_objects.modifying_ip,
- acs_objects.tree_sortkey,
- acs_objects.max_child_sortkey, cr.revision_id, cr.title, cr.item_id,
+ cr.revision_id, cr.title, cr.item_id,
     content_revision__get_content(cr.revision_id) as data, 
     cr_text.text_data as text,
     cr.description, cr.publish_date, cr.mime_type, cr.nls_language' || 
@@ -903,8 +902,7 @@ BEGIN
  acs_objects.last_modified,
  acs_objects.modifying_user,
  acs_objects.modifying_ip,
- acs_objects.tree_sortkey,
- acs_objects.max_child_sortkey, cr.revision_id, cr.title, cr.item_id,
+ cr.revision_id, cr.title, cr.item_id,
     cr.description, cr.publish_date, cr.mime_type, cr.nls_language,
     i.name, i.parent_id' || 
     cols || 
