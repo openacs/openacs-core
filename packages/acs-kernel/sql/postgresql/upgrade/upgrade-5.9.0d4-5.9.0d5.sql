@@ -256,3 +256,12 @@ $inline_0$ LANGUAGE plpgsql;
 
 select inline_0();
 drop function inline_0();
+
+-- the triggers are deleted automatically
+--
+--    drop trigger acs_objects_insert_tr on acs_objects;
+--    drop trigger acs_objects_update_tr on acs_objects;
+
+drop function acs_objects_get_tree_sortkey(integer);
+drop function acs_objects_insert_tr();
+drop function acs_objects_update_tr();
