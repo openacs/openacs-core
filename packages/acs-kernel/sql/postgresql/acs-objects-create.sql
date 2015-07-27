@@ -244,18 +244,12 @@ create table acs_objects (
 	last_modified		timestamptz default current_timestamp not null,
 	modifying_user		integer,
 	modifying_ip		varchar(50),
-        tree_sortkey            varbit
-				constraint acs_objects_tree_sortkey_un unique
-				constraint acs_objects_tree_sortkey_nn not null,
-        max_child_sortkey       varbit,
         constraint acs_objects_context_object_un
 	unique (context_id, object_id)
 );
 
 -- The unique constraint above will force create of this index...
 -- create index acs_objects_context_object_idx onacs_objects (context_id, object_id);
--- The unique constraint should generate an index automatically so this is not needed
--- create index acs_objs_tree_skey_idx on acs_objects (tree_sortkey);
 
 create index acs_objects_creation_user_idx on acs_objects (creation_user);
 create index acs_objects_modify_user_idx on acs_objects (modifying_user);
@@ -292,118 +286,6 @@ $$ LANGUAGE plpgsql;
 
 create trigger acs_objects_last_mod_update_tr before update on acs_objects
 for each row execute procedure acs_objects_last_mod_update_tr ();
-
--- tree query support for acs_objects
-
-
-
--- added
-select define_function_args('acs_objects_get_tree_sortkey','object_id');
-
---
--- procedure acs_objects_get_tree_sortkey/1
---
-CREATE OR REPLACE FUNCTION acs_objects_get_tree_sortkey(
-   p_object_id integer
-) RETURNS varbit AS $$
-DECLARE
-BEGIN
-  return tree_sortkey from acs_objects where object_id = p_object_id;
-END;
-$$ LANGUAGE plpgsql stable strict;
-
-
-
---
--- procedure acs_objects_insert_tr/0
---
-CREATE OR REPLACE FUNCTION acs_objects_insert_tr(
-
-) RETURNS trigger AS $$
-DECLARE
-        v_parent_sk    		varbit default null;
-        v_max_child_sortkey	varbit;
-BEGIN
-        if new.context_id is null then
- 	    new.tree_sortkey := int_to_tree_key(new.object_id+1000);
-        else
-            SELECT tree_sortkey, tree_increment_key(max_child_sortkey)
-	    INTO v_parent_sk, v_max_child_sortkey
-            FROM acs_objects
-            WHERE object_id = new.context_id 
-            FOR UPDATE;
-
-	    UPDATE acs_objects 
-	    SET max_child_sortkey = v_max_child_sortkey
-	    WHERE object_id = new.context_id;
-
-            new.tree_sortkey := v_parent_sk || v_max_child_sortkey;
-        end if;
-
-	new.max_child_sortkey := null;
-        return new;
-END;
-$$ LANGUAGE plpgsql;
-
-create trigger acs_objects_insert_tr before insert 
-on acs_objects for each row 
-execute procedure acs_objects_insert_tr ();
-
-
-
-
---
--- procedure acs_objects_update_tr/0
---
-CREATE OR REPLACE FUNCTION acs_objects_update_tr(
-
-) RETURNS trigger AS $$
-DECLARE
-        v_parent_sk     varbit default null;
-        v_max_child_sortkey	varbit;
-        v_old_parent_length	integer;
-BEGIN
-        if new.object_id = old.object_id
-           and ((new.context_id = old.context_id)
-                or (new.context_id is null 
-	            and old.context_id is null)) then
-
-           return new;
-
-        end if;
-
-	-- the tree sortkey is going to change so get the new one and update it and all its
-	-- children to have the new prefix...
-	v_old_parent_length := length(new.tree_sortkey) + 1;
-
-	if new.context_id is null then
-            v_parent_sk := int_to_tree_key(new.object_id+1000);
-        else
-	    SELECT tree_sortkey, tree_increment_key(max_child_sortkey)
-	    INTO v_parent_sk, v_max_child_sortkey
-            FROM acs_objects
-            WHERE object_id = new.context_id
-            FOR UPDATE;
-
-	    UPDATE acs_objects
-            SET max_child_sortkey = v_max_child_sortkey
-  	    WHERE object_id = new.context_id;
-
-  	    v_parent_sk := v_parent_sk || v_max_child_sortkey;
-	end if;
-
-	UPDATE acs_objects
-	SET tree_sortkey = v_parent_sk || substring(tree_sortkey, v_old_parent_length)
-        WHERE tree_sortkey between new.tree_sortkey and tree_right(new.tree_sortkey);
-
-        return new;
-END;
-$$ LANGUAGE plpgsql;
-
-create trigger acs_objects_update_tr after update
-on acs_objects
-for each row
-execute procedure acs_objects_update_tr ();
 
 -- show errors
 
@@ -959,13 +841,13 @@ BEGIN
   -- cascade" for the id_columns.
 
   for obj_type
-  in select o2.table_name, o2.id_column
-       from acs_object_types o1, acs_object_types o2
-       where o1.object_type = (select object_type
+  in select ot2.table_name, ot2.id_column
+       from acs_object_types ot1, acs_object_types ot2
+       where ot1.object_type = (select object_type
                                from acs_objects o
                                where o.object_id = delete__object_id)
-         and o1.tree_sortkey between o2.tree_sortkey and tree_right(o2.tree_sortkey)
-    order by o2.tree_sortkey desc
+         and ot1.tree_sortkey between ot2.tree_sortkey and tree_right(ot2.tree_sortkey)
+    order by ot2.tree_sortkey desc
   loop
     -- Delete from the table.
 
@@ -1027,13 +909,13 @@ BEGIN
   end if;
 
   for obj_type
-  in select o2.name_method
-        from acs_object_types o1, acs_object_types o2
-       where o1.object_type = (select object_type
+  in select ot2.name_method
+        from acs_object_types ot1, acs_object_types ot2
+       where ot1.object_type = (select object_type
                                  from acs_objects o
                                 where o.object_id = name__object_id)
-         and o1.tree_sortkey between o2.tree_sortkey and tree_right(o2.tree_sortkey)
-    order by o2.tree_sortkey desc
+         and ot1.tree_sortkey between ot2.tree_sortkey and tree_right(ot2.tree_sortkey)
+    order by ot2.tree_sortkey desc
   loop
    if obj_type.name_method != '' and obj_type.name_method is NOT null then
 
@@ -1160,12 +1042,12 @@ BEGIN
      v_object_type, v_column, v_id_column
    from 
      acs_attributes a,
-     (select o2.object_type, o2.id_column
-       from acs_object_types o1, acs_object_types o2
-      where o1.object_type = (select object_type
+     (select ot2.object_type, ot2.id_column
+       from acs_object_types ot1, acs_object_types ot2
+      where ot1.object_type = (select object_type
                                 from acs_objects o
                                where o.object_id = object_id_in)
-        and o1.tree_sortkey between o2.tree_sortkey and tree_right(o2.tree_sortkey)
+        and ot1.tree_sortkey between ot2.tree_sortkey and tree_right(ot2.tree_sortkey)
      ) t
    where   
      a.attribute_name = attribute_name_in
