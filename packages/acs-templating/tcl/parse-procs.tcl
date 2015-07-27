@@ -600,7 +600,7 @@ ad_proc -public template::adp_array_variable_regexp_literal {} {
 }
 
 ad_proc -public template::adp_array_variable_regexp_noi18n {} {
-    adp_array_variable_regexp's pattern augmented by "literal"
+    adp_array_variable_regexp's pattern augmented by "noi18n"
 
     @author Gustaf Neumann
     @creation-date June 2015
@@ -639,7 +639,7 @@ ad_proc -public template::adp_variable_regexp_literal {} {
 }
 
 ad_proc -public template::adp_variable_regexp_noi18n {} {
-    adp_variable_regexp augmented by "literal"
+    adp_variable_regexp augmented by "noi18n"
 
     @author Gustaf Neumann
     @creation-date June 2015
