@@ -18,5 +18,16 @@
       </querytext>
 </fullquery>
 
+<fullquery name="package_index">      
+      <querytext>
+      
+    select replace (replace (text, ' ', '&nbsp;'), chr(9), '&nbsp;&nbsp;&nbsp;&nbsp;') as text
+      from user_source
+     where lower(name) = :package_name
+       and type = 'PACKAGE BODY'
+     order by line
+
+      </querytext>
+</fullquery>
  
 </queryset>
