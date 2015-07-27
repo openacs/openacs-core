@@ -116,6 +116,13 @@ div.developer-support-adp-output-off {
   text-align: left;
 }
 
+div.developer-support-footer pre {
+    display: inline;
+    background-color: inherit;
+    border: 0px;
+    padding: 2px 2px 2px 2px;
+}
+
 .developer-support-footer-off {
         display: none;
 }

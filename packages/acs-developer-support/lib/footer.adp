@@ -5,7 +5,7 @@
     </if>
     <if @comments:rowcount@ gt 0>
       <multiple name="comments">
-        <b>Comment:</b> <pre style="display: inline;">@comments.text@</pre><br>
+        <b>Comment:</b> <pre>@comments.text;noi18n@</pre><br>
       </multiple>
       <hr>
     </if>
