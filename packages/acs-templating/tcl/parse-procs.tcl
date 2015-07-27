@@ -534,7 +534,7 @@ ad_proc -public template::adp_compile { source_type source } {
 
     # substitute array variable references
     while {[regsub -all [template::adp_array_variable_regexp_noquote] $code {\1[lang::util::localize $\2(\3)]} code]} {}
-    while {[regsub -all [template::adp_array_variable_regexp_noi18n] $code {\1$[ns_quotehtml \2(\3)]} code]} {}
+    while {[regsub -all [template::adp_array_variable_regexp_noi18n] $code {\1[ns_quotehtml $\2(\3)]} code]} {}
     while {[regsub -all [template::adp_array_variable_regexp_literal] $code {\1$\2(\3)} code]} {}
     # 
     # Some aolservers have broken implementations of ns_quotehtml
@@ -597,7 +597,7 @@ ad_proc -public template::adp_array_variable_regexp_literal {} {
 }
 
 ad_proc -public template::adp_array_variable_regexp_noi18n {} {
-    adp_array_variable_regexp's pattern augmented by "literal"
+    adp_array_variable_regexp's pattern augmented by "noi18n"
 
     @author Gustaf Neumann
     @creation-date June 2015
@@ -636,7 +636,7 @@ ad_proc -public template::adp_variable_regexp_literal {} {
 }
 
 ad_proc -public template::adp_variable_regexp_noi18n {} {
-    adp_variable_regexp augmented by "literal"
+    adp_variable_regexp augmented by "noi18n"
 
     @author Gustaf Neumann
     @creation-date June 2015
