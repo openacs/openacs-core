@@ -504,31 +504,17 @@ CREATE OR REPLACE FUNCTION acs_permission__grant_permission(
    grant_permission__privilege varchar
 ) RETURNS integer AS $$
 DECLARE
-    exists_p                            boolean;
 BEGIN
-    lock table acs_permissions_lock;
-
-    select count(*) > 0 into exists_p
-      from acs_permissions
-     where object_id = grant_permission__object_id
-       and grantee_id = grant_permission__grantee_id
-       and privilege = grant_permission__privilege;
-
-    if not exists_p then
-
-        insert into acs_permissions
-          (object_id, grantee_id, privilege)
-          values
-          (grant_permission__object_id, grant_permission__grantee_id, 
-          grant_permission__privilege);
-
-    end if;
-
-    -- exception
-    --  when dup_val_on_index then
-    --    return;
-
-    return 0; 
+    insert into acs_permissions
+      (object_id, grantee_id, privilege)
+      values
+      (grant_permission__object_id, grant_permission__grantee_id, 
+      grant_permission__privilege);
+    
+    return 0;
+EXCEPTION 
+    when unique_violation then
+      return 0;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -549,8 +535,6 @@ CREATE OR REPLACE FUNCTION acs_permission__revoke_permission(
 ) RETURNS integer AS $$
 DECLARE
 BEGIN
-    lock table acs_permissions_lock;
-
     delete from acs_permissions
     where object_id = revoke_permission__object_id
     and grantee_id = revoke_permission__grantee_id
