@@ -537,7 +537,7 @@ ad_proc -public template::adp_compile { source_type source } {
 
     # substitute array variable references
     while {[regsub -all [template::adp_array_variable_regexp_noquote] $code {\1[lang::util::localize $\2(\3)]} code]} {}
-    while {[regsub -all [template::adp_array_variable_regexp_noi18n] $code {\1$[ns_quotehtml \2(\3)]} code]} {}
+    while {[regsub -all [template::adp_array_variable_regexp_noi18n] $code {\1[ns_quotehtml $\2(\3)]} code]} {}
     while {[regsub -all [template::adp_array_variable_regexp_literal] $code {\1$\2(\3)} code]} {}
     # 
     # Some aolservers have broken implementations of ns_quotehtml
