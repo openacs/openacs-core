@@ -40,18 +40,18 @@ append page [subst {
 
 set i 0
 set body [subst {
-    <table border="0" cellpadding="5" cellspacing="5">
+    <table cellpadding="5" cellspacing="5">
      <tr>
-      <th align="left">Attribute Name</th>
-      <th align="left">Pretty Name</th>
-      <th align="left">Pretty Plural</th>
-      <th align="left">Datatype</th>
-      <th align="left">Default Value</th>
-      <th align="left">Minimum Number of Values</th>
-      <th align="left">Maximum Number of Values</th>
-      <th align="left">Storage</th>
-      <th align="left">Table Name</th>
-      <th align="left">Column Name</th>
+      <th>Attribute Name</th>
+      <th>Pretty Name</th>
+      <th>Pretty Plural</th>
+      <th>Datatype</th>
+      <th>Default Value</th>
+      <th>Minimum Number of Values</th>
+      <th>Maximum Number of Values</th>
+      <th>Storage</th>
+      <th>Table Name</th>
+      <th>Column Name</th>
     </tr>
 }]    
 
@@ -98,28 +98,19 @@ $body
 
 if { ([info exists table_name] && $table_name ne "") } {
 
-    set body [db_string table_comment "select comments from user_tab_comments where table_name = '[string toupper $table_name]'" -default ""]
+    set body [db_string table_comment {} -default ""]
 
     append body [subst {
     <table border="0" cellpadding="5" cellspacing="5">
      <tr>
-      <th align="left">Type</th>
-      <th align="left">Name</th>
-      <th align="left">Comment</th>
+      <th>Type</th>
+      <th>Name</th>
+      <th>Comment</th>
      </tr>
     }]
 
     set i 0
-    db_foreach attribute_comment "
-	select utc.column_name,
-	       utc.data_type,
-               ucc.comments
-	  from user_tab_columns utc,
-               user_col_comments ucc
-	 where utc.table_name = '[string toupper $table_name]'
-           and utc.table_name = ucc.table_name(+)
-           and utc.column_name = ucc.column_name(+)
-    " {
+    db_foreach attribute_comment {} {
 	incr i
 	append body "
      <tr>
@@ -133,35 +124,21 @@ if { ([info exists table_name] && $table_name ne "") } {
     </table>"
 
     if { $i > 0 } {
-	append page "
-<p>
-<b>Table Attributes</b>:
-$body
-"
+	append page [subst {<p><b>Table Attributes</b>:<p>$body\n}]
     }
 }
 
 set i 0
 set body ""
-db_foreach package_index {
-    select replace (replace (text, ' ', '&nbsp;'), chr(9), '&nbsp;&nbsp;&nbsp;&nbsp;') as text
-      from user_source
-     where lower(name) = :package_name
-       and type = 'PACKAGE BODY'
-     order by line
-} {
+db_foreach package_index {} {
     incr i
-    append body "$text"
+    append body [subst {
+	<pre class="code">[ns_quotehtml $text]</pre>
+	<p>
+    }]
 }
 
 if { $i > 0 } {
-    append page "
-<p>
-<b>Methods</b>:
-  <pre>
-   <code>
-[ns_quotehtml $body]
-   </code>
-  </pre>
-"}
+    append page [subst {<p><b>SQL Functions</b>:<p>$body}]
+}
 

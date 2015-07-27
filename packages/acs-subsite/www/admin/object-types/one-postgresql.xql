@@ -5,7 +5,7 @@
 <fullquery name="package_index">      
       <querytext>
 
-	select definition || '\n' as text
+	select definition as text
 	  from acs_func_defs
 	 where fname ilike :package_name || '__%'
 	 order by fname
