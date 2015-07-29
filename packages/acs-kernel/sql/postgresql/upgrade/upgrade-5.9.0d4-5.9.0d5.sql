@@ -1,8 +1,8 @@
-ALTER TABLE acs_objects drop column tree_sortkey cascade;
-ALTER TABLE acs_objects drop column max_child_sortkey cascade;
+ALTER TABLE acs_objects drop column IF EXISTS tree_sortkey cascade;
+ALTER TABLE acs_objects drop column IF EXISTS max_child_sortkey cascade;
 
-DROP TRIGGER  IF EXISTS acs_objects_insert_tr on acs_objects;
-DROP TRIGGER  IF EXISTS acs_objects_update_tr on acs_objects;
+DROP TRIGGER IF EXISTS acs_objects_insert_tr on acs_objects;
+DROP TRIGGER IF EXISTS acs_objects_update_tr on acs_objects;
 
 -- 
 -- procedure content_type__refresh_view/1
@@ -229,7 +229,7 @@ begin
      --
      -- now the same with download_arch_revisions_obj
      --
-     select 1 from pg_class into success where relname = 'download_repository_obj';
+     select 1 from pg_class into success where relname = 'download_arch_revisions_obj';
      IF found THEN
         drop view download_arch_revisions_obj;
      END if;
@@ -262,6 +262,6 @@ drop function inline_0();
 --    drop trigger acs_objects_insert_tr on acs_objects;
 --    drop trigger acs_objects_update_tr on acs_objects;
 
-drop function acs_objects_get_tree_sortkey(integer);
-drop function acs_objects_insert_tr();
-drop function acs_objects_update_tr();
+drop function IF EXISTS acs_objects_get_tree_sortkey(integer);
+drop function IF EXISTS acs_objects_insert_tr();
+drop function IF EXISTS acs_objects_update_tr();
