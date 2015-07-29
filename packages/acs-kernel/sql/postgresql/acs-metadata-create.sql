@@ -595,12 +595,8 @@ where attr.object_type = all_types.ancestor_type;
 -- METADATA PACKAGES --
 -----------------------
 
--- old define_function_args('acs_object_type__create_type','object_type,pretty_name,pretty_plural,supertype,table_name,id_column,package_name,abstract_p;f,type_extension_table,name_method,create_table_p;f,dynamic_p;f')
--- new
+
 select define_function_args('acs_object_type__create_type','object_type,pretty_name,pretty_plural,supertype,table_name;null,id_column;null,package_name;null,abstract_p;f,type_extension_table;null,name_method;null,create_table_p;f,dynamic_p;f');
-
-
-
 
 --
 -- procedure acs_object_type__create_type/12
