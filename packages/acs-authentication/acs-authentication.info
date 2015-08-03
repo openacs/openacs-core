@@ -7,7 +7,7 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.9.0d2" url="http://openacs.org/repository/download/apm/acs-authentication-5.9.0d2.apm">
+    <version name="5.10.0d1" url="http://openacs.org/repository/download/apm/acs-authentication-5.10.0d1.apm">
         <owner url="mailto:lars@collaboraid.biz">Lars Pind</owner>
         <summary>Authentication, account management, and related functionality.</summary>
         <release-date>2013-09-08</release-date>
@@ -16,10 +16,10 @@
         <license url="http://www.gnu.org/copyleft/gpl.html">GPL version 2</license>
         <description format="text/html">Implements authentication-related security functions for OpenACS, including password, account and session management, bulk account creation etc.  Provides a contract based interface for different authentication methods such as PAM or LDAP based authentication.</description>
 
-        <provides url="acs-authentication" version="5.9.0d2"/>
-        <requires url="acs-kernel" version="5.9.0d1"/>
-        <requires url="acs-service-contract" version="5.9.0d1"/>
-        <requires url="acs-mail-lite" version="5.9.0d1"/>
+        <provides url="acs-authentication" version="5.10.0d1"/>
+        <requires url="acs-kernel" version="5.10.0d1"/>
+        <requires url="acs-service-contract" version="5.10.0d1"/>
+        <requires url="acs-mail-lite" version="5.10.0d1"/>
 
         <callbacks>
             <callback type="after-install"  proc="auth::package_install"/>

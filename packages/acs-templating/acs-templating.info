@@ -9,7 +9,7 @@
     <implements-subsite-p>f</implements-subsite-p>
     <inherit-templates-p>t</inherit-templates-p>
     
-    <version name="5.9.0d2" url="http://openacs.org/repository/download/apm/acs-templating-5.9.0d2.apm">
+    <version name="5.10.0d1" url="http://openacs.org/repository/download/apm/acs-templating-5.10.0d1.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Templating library.</summary>
         <release-date>2013-09-24</release-date>
@@ -27,8 +27,8 @@ layout of a site can be more easily administered.
         <license>GPL version 2</license>
         <maturity>3</maturity>
 
-        <provides url="acs-templating" version="5.9.0d2"/>
-        <requires url="acs-kernel" version="5.9.0d1"/>
+        <provides url="acs-templating" version="5.10.0d1"/>
+        <requires url="acs-kernel" version="5.10.0d1"/>
 
         <callbacks>
             <callback type="before-upgrade"  proc="template::apm::before_upgrade"/>

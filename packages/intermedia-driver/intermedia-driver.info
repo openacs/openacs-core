@@ -7,7 +7,7 @@
     <initial-install-p>f</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.9.0d1" url="http://openacs.org/repository/download/apm/intermedia-driver-5.9.0d1.apm">
+    <version name="5.10.0d1" url="http://openacs.org/repository/download/apm/intermedia-driver-5.10.0d1.apm">
         <owner url="mailto:dave@thedesignexperience.org">David Bauer</owner>
         <owner url="mailto:dirk@dirkgomez.de">Dirk Gomez</owner>
         <summary>Search package callback implementation for Oracle Intermedia.</summary>
@@ -15,8 +15,8 @@
         <description format="text/html">Implemented the search package callback interface for search engine driver using Oracle Intermedia.</description>
         <maturity>3</maturity>
 
-        <provides url="intermedia-driver" version="5.9.0d1"/>
-        <requires url="search" version="5.9.0d1"/>
+        <provides url="intermedia-driver" version="5.10.0d1"/>
+        <requires url="search" version="5.10.0d1"/>
 
         <callbacks>
         </callbacks>
