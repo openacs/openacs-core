@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<message_catalog package_key="openacs-default-theme" locale="ru_RU" charset="utf-8">
+
+  <msg key="plain">Простой OpenACS по умолчанию</msg>
+  <msg key="tabbed">OpenACS с закладками по умолчанию</msg>
+</message_catalog>
