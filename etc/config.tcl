@@ -1,33 +1,18 @@
-# Changes in 5.6.0
-# ================
-#
-# - ROLLOUT SUPPORT
-#
-# ns_sendmail and its rollout support are now DEPRECATED in
-# OpenACS. Use acs_mail_lite::send instead.
-#
-# acs-mail-lite provides rollout support for acs_mail_lite::send and
-# implements ns_sendmail as a wrapper to it for backward
-# compatibility. See acs-mail-lite package parameters to set rollout
-# support.
-#
-
-ns_log notice "nsd.tcl: starting to read config file..."
-
 ###################################################################### 
 #
-# Instance-specific settings 
-# These default settings will only work in limited circumstances
+# Config parameter for an OpenACS site using AOLserver/NaviServer.
+#
+# These default settings will only work in limited circumstances.
 # Two servers with default settings cannot run on the same host
 #
 ###################################################################### 
+
+ns_log notice "nsd.tcl: starting to read config file..."
 
 #---------------------------------------------------------------------
 # change to 80 and 443 for production use
 set httpport                  8000
 set httpsport                 8443 
-# If setting port below 1024 with AOLServer 4, read comments in file:
-#  /var/lib/aolserver/service0/packages/etc/daemontools/run
 
 # The hostname and address should be set to actual values.
 # setting the address to 0.0.0.0 means aolserver listens on all interfaces
@@ -35,13 +20,25 @@ set hostname                  localhost
 set address                   127.0.0.1
 
 # Note: If port is privileged (usually < 1024), OpenACS must be
-# started by root, and, in AOLserver 4, the run script have a 
-# '-b address' flag which matches the address according to settings (above)
+# started by root, and the run script must contain the flag 
+# '-b address:port' which matches the address and port 
+# as specified above.
 
 set server                    "service0" 
 set servername                "New OpenACS Installation - Development"
 
 set serverroot                "/var/www/${server}"
+set logroot		      $serverroot/log/
+
+# Choose between NaviServer and AOLserver
+#
+# When using NaviServer it is recommended to use the config file
+# generated from "install-ns" from https://github.com/gustafn/install-ns
+#
+set homedir                   /usr/lib/aolserver4
+#set homedir		      /usr/local/ns
+
+set bindir		      $homedir/bin
 
 # Are we runnng behind a proxy? 
 set proxy_mode                false
@@ -49,7 +46,6 @@ set proxy_mode                false
 #---------------------------------------------------------------------
 # which database do you want? postgres or oracle
 set database              postgres 
-
 set db_name               $server
 
 if { $database eq "oracle" } {
@@ -63,13 +59,15 @@ if { $database eq "oracle" } {
 #---------------------------------------------------------------------
 # if debug is false, all debugging will be turned off
 set debug false
-
-set homedir                   /usr/lib/aolserver4
-set bindir                    ${homedir}/bin
-
+set dev   false
 
 set max_file_upload_mb        20
 set max_file_upload_min        5
+
+#---------------------------------------------------------------------
+# set environment variables HOME and LANG
+set env(HOME) $homedir
+set env(LANG) en_US.UTF-8
 
 ###################################################################### 
 #
@@ -94,7 +92,7 @@ set directoryfile             index.tcl,index.adp,index.html,index.htm
 # Global server parameters 
 #---------------------------------------------------------------------
 ns_section ns/parameters 
-    ns_param   serverlog          ${serverroot}/log/error.log 
+    ns_param   serverlog          ${logroot}/error.log 
     ns_param   home               $homedir 
     # maxkeepalive is ignored in aolserver4.x
     ns_param   maxkeepalive       0
@@ -270,10 +268,10 @@ ns_section ns/server/${server}/module/nssock
 # 
 #---------------------------------------------------------------------
 ns_section ns/server/${server}/module/nslog 
-    ns_param   debug              false
-    ns_param   dev                false
+    ns_param   debug              $debug
+    ns_param   dev                $dev
     ns_param   enablehostnamelookup false
-    ns_param   file               ${serverroot}/log/${server}.log
+    ns_param   file               ${logroot}/${server}.log
     ns_param   logcombined        true
     ns_param   extendedheaders    COOKIE
 #    ns_param   logrefer           false
