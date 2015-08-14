@@ -295,8 +295,9 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
     <p>
     Implements the richtext widget, which offers rich text editing options.
 
-    This version supports the <strong>xinha</strong> and <strong>tinymce</strong>
-    editors.
+    This version integrates support for the <strong>xinha</strong> and 
+    <strong>tinymce</strong> editors out of the box, but other richtext editors
+    can be used including and configuring them in your custom template.
 
     If the acs-templating.UseHtmlAreaForRichtextP parameter is set to true (1), 
     this will use the WYSIWYG editor widget set in the acs-templating.RichTextEditor 
@@ -318,9 +319,9 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
     You can also parameterize the richtext widget with a 'htmlarea_p' attribute, 
     which can be true or false, and which will override the parameter setting.
     <p>
-    The available editors in wysigwig mode are xinha and tinymce. In order to 
-    use xinha, one has to use 'editor xinha' in the options of the form field. 
-    The following options for xinha may be specified:
+    The available integrated editors in wysigwig mode are xinha and tinymce. In 
+    order to use xinha, one has to use 'editor xinha' in the options of the form 
+    field. The following options for xinha may be specified:
     <ul>
     <li> <em>editor</em>: xinha
     <li> <em>height</em>: height of the xinha widget (e.g. 350px)
@@ -395,6 +396,21 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
     Caveat: the scripts needed for the oacsimage and oacslink plugins require 
     acs-templating to be mounted. This is a temporary situation until we find 
     a better way to handle plugins.
+    
+    <p>
+    Example for the use of a custom editor widget: 
+    <pre>
+    text:richtext(richtext),nospell,optional 
+    {label #acs-subsite.Biography#} 
+    {options {editor custom ...custom configuration...}}
+    {html {rows 15 cols 50 style {width: 100%}}}
+    </pre>
+    <p>
+    If provided with a WYSIWYG editor different than 'xinha' or 'tinymce',
+    system will just collect formfield ids and supplied options for the 
+    richtext field and will provide them as-is to the blank-master environment.
+    When using a custom editor, funcional meaning of the options is totally up 
+    to the user.
 
     <p>
     Note that the richtext editors interact with <code>blank-master.tcl</code> and 
@@ -431,15 +447,7 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
 
         set user_agent [string tolower [ns_set get [ns_conn headers] User-Agent]]
 
-        if {[string first "chrome" $user_agent] != -1} {
-            # vguerra: google chrome browser
-            # needs more testing in order to check if chrome fully
-            # supports xinha
-            # roc: this check has to go first since safari use applewebkit, 
-            # so the agent always contain safari word
-            # once xinha officially support chrome (already supports safari), we 
-            # can remove this if and add the check at the next if.
-        } elseif {[string first "safari" $user_agent] != -1} {
+	if {[string first "safari" $user_agent] != -1} {
             regexp {version/([0-9]+)[.]} $user_agent _ user_agent_version
             if {$user_agent_version < 3} {
                 set element(htmlarea_p) false
@@ -477,10 +485,18 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
             # Tell the blank-master to include the special stuff 
             # for the richtext widget in the page header
             set ::acs_blank_master($richtextEditor) 1
+            
+            # Collect ids of richtext form fields
+	    lappend ::acs_blank_master__htmlareas $attributes(id)
+
+	    set postTextArea ""
 
             if {$richtextEditor eq "xinha"} {
-                
-                # we have a xinha richtext widget, specified by "options {editor xinha}"
+		# Xinha is integrated in OpenACS:
+		# build speific javascript configurations from 
+		# widget options and system parameters
+                #
+                # The richtext widget is specified by "options {editor xinha}"
                 # The following options are supported: 
                 #      editor plugins width height folder_id fs_package_id
                 #
@@ -505,24 +521,23 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
                         append xinha_options "xinha_config.$e = '$options($e)';\n"
                     }
                 }
-                # DAVEB add package_id
                 append xinha_options "xinha_config.package_id = '[ad_conn package_id]';\n"
                 # DAVEB find out if there is a key datatype in the form
 
-                global af_key_name
-                if {[info exists af_key_name(${element(form_id)})]} {
-                    append xinha_options "xinha_config.key = '[template::element get_value $element(form_id) $af_key_name(${element(form_id)})]';\n"
+                if {[info exists ::af_key_name(${element(form_id)})]} {
+                    append xinha_options "xinha_config.key = '[template::element get_value $element(form_id) $::af_key_name(${element(form_id)})]';\n"
                 }
                 if {[info exists options(javascript)]} {
                     append xinha_options $options(javascript) \n
                 }
                 set ::acs_blank_master(xinha.options) $xinha_options
-                lappend ::acs_blank_master__htmlareas $attributes(id)
 
             } elseif {$richtextEditor eq "tinymce"} {
-
-                lappend ::acs_blank_master__htmlareas $attributes(id)
-
+		
+		# TinyMCE is integrated in OpenACS:
+		# build speific javascript configurations from 
+		# widget options and system parameters
+		
                 # get default configs
                 set tinymce_default_config {
                     {mode "exact" } 
@@ -584,13 +599,46 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
                 lappend pairslist "elements : \"[join $::acs_blank_master__htmlareas ","]\""
                 set tinymce_configs_js [join $pairslist ","]
                 set ::acs_blank_master(tinymce.config) $tinymce_configs_js
-            }
 
-            append output "</span></label>\n<script type='text/javascript'>document.write(\"<input name='$element(id).format' value='text/html' type='hidden'>\");</script>\n"
-            append output "<noscript><div><label for=\"$element(id).format\"><span class=\"form-widget\">[_ acs-templating.Format]: $format_menu</span></label></div></noscript>"
+	    } elseif {$richtextEditor eq "ckeditor4"} {
+		# Editor is ckeditor4
+
+		# handled options: plugins skin customConfig
+		set ckOptionsList {}
+		if {[info exists options(plugins)]} {
+                    lappend ckOptionsList "extraPlugins: '$options(plugins)'"
+		}
+		if {[info exists options(skin)]} {
+                    lappend ckOptionsList "skin: '$options(skin)'"
+		}
+		if {[info exists options(customConfig)]} {
+                    lappend ckOptionsList "customConfig: '$options(skin)'"
+		}
+
+		set ckOptions [join $ckOptionsList ", "]
+		append postTextArea [subst {<script>CKEDITOR.replace( '$attributes(id)', \[$ckOptions\] );</script>\n}]
+		
+            } else {
+		# Editor is custom.
+		# Options will be passed as-is to the blank master
+		# and their meaning will be defined in the template
+		
+		set ::acs_blank_master(${richtextEditor}.options) [array get options]
+	    }
+		      
+            append output \
+		"</span></label>\n<script type='text/javascript'>" \n \
+		[subst {document.write("<input name='$element(id).format' value='text/html' type='hidden'>");}] \
+		"</script>\n<noscript><div>" \
+		[subst {<label for="$element(id).format"><span class="form-widget">}] \
+		[_ acs-templating.Format] \
+		": $format_menu</span></label></div></noscript>\n" \
+		$postTextArea
 
             if { $spellcheck(render_p) } {
-                append output "<label for=\"$element(id).spellcheck\"><span class=\"form-widget\">[_  acs-templating.Spellcheck]: " \
+                append output \
+		    [subst {<label for="$element(id).spellcheck"><span class="form-widget">}] \
+		    [_  acs-templating.Spellcheck] ": " \
                     [menu "$element(id).spellcheck" [nsv_get spellchecker lang_options] \
                          $spellcheck(selected_option) {}]
             }

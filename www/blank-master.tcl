@@ -212,6 +212,10 @@ if { [info exists ::acs_blank_master(tinymce)] } {
 	" -order tinymceZ
 }
 
+if { [info exists ::acs_blank_master(ckeditor4)] } {
+    template::head::add_javascript -src "//cdn.ckeditor.com/4.5.2/standard/ckeditor.js"
+}
+
 if {![info exists doc(title)]} {
     set doc(title) "[ad_conn instance_name]"
     ns_log warning "[ad_conn url] has no doc(title) set."
