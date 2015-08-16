@@ -147,7 +147,7 @@ BEGIN
 
     execute 'alter table cr_items add 
       latest_revision integer
-                      constraint cr_items_latest_fk
+                      constraint cr_items_latest_revision_fk
                       references cr_revisions';
 
     execute 'update cr_items 
