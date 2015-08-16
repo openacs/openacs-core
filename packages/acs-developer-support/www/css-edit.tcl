@@ -26,7 +26,7 @@ if {[file exists $file_location] && [file extension $file_location] eq ".css"} {
 	}
 	{css_description:text(text),optional }
     } -on_request {
-
+	
 	set package_id [ad_conn package_id]
 	set css_path "<a href='[ns_quotehtml $css_location]'>$css_location</a>"
 	set fp [open $file_location "r"]
@@ -48,10 +48,13 @@ if {[file exists $file_location] && [file extension $file_location] eq ".css"} {
 		} else {
 		    set return_url_2 [ad_return_url]
 		    set href [export_vars -base css-make-live -url {revision_id return_url_2 file_location}]
-		    set make_live [subst {<a href="[ns_quotehtml $href]">make live!</a>]
+		    set make_live [subst {<a href="[ns_quotehtml $href]">make live!</a>}]
 		}
 		set return_url ""
-		append revision_html "<li><a href='/o/$revision_id'>$publish_date</a> \[$make_live\]: [string range $description 0 50]</li>"
+		append revision_html [subst {
+		    <li><a href="/o/$revision_id">$publish_date</a>
+		    \[$make_live\]: [string range $description 0 50]</li>
+		}]
 	    }
 	    append revision_html "</ol>"
 	    file stat $file_location file_stat_arr
@@ -75,7 +78,7 @@ if {[file exists $file_location] && [file extension $file_location] eq ".css"} {
 
 	    # Get the old version to initialize the item with
 	    set fp [open "$file_location" "r"]
-            set old_css_content [read $fp]
+	    set old_css_content [read $fp]
 	    close $fp
 
 	    set item_id [content::item::new -name $file_location \
