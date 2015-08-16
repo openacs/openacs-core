@@ -764,26 +764,32 @@ namespace eval ::apidoc {
     }
 
     ad_proc -public format_see { see } {
+        Format "see" information
+    } {
         regsub -all {proc *} $see {} see
         set see [string trim $see]
         if {[nsv_exists api_proc_doc $see]} {
-            return "<a href=\"[ns_quotehtml proc-view?proc=[ns_urlencode ${see}]]\">$see</a>"
+            set href [export_vars -base proc-view {{proc $see}}]
+            return [subst {<a href="[ns_quotehtml $href]">$see</a>}]
         }
         if {[string match "/doc/*.html" $see]
             || [util_url_valid_p $see]} { 
-            return "<a href=\"[ns_quotehtml $see]\">$see</a>"
+            return [subst {<a href="[ns_quotehtml $see]">$see</a>}]
         }
         if {[file exists "$::acs::rootdir${see}"]} {
-            return "<a href=\"[ns_quotehtml content-page-view?source_p=1&path=[ns_urlencode $see]]\">$see</a>"
+            set href [export_vars -base content-page-view {{source_p 1} {path $see}}]
+            return [subst {<a href="[ns_quotehtml $href]">$see</a>}]
         }
         return ${see}
     }
 
     ad_proc -public format_author { author_string } {
+        Format author information
+    } {
         if { [regexp {^[^ \n\r\t]+$} $author_string] 
              && [string first "@" $author_string] >= 0 
              && [string first ":" $author_string] < 0 } {
-            return "<a href=\"mailto:$author_string\">$author_string</a>"
+            return [subst {<a href="mailto:$author_string">$author_string</a>}]
         } elseif { [regexp {^([^\(\)]+)\s+\((.+)\)$} [string trim $author_string] {} name email] } {
             return "$name &lt;<a href=\"mailto:$email\">$email</a>&gt;"
         }
