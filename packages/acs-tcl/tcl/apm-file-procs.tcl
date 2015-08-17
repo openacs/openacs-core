@@ -603,8 +603,7 @@ ad_proc -private apm_load_apm_file {
         apm_callback_and_log $callback "The follow error occured during the uncompression process:
     <blockquote><pre>[ad_quotehtml $errmsg]</pre></blockquote><br>
     "
-        global errorInfo
-        ns_log Error "Error loading APM file form url $url: $errmsg\n$errorInfo"
+                ns_log Error "Error loading APM file form url $url: $errmsg\n$::errorInfo"
         return
     }
     
@@ -662,8 +661,7 @@ ad_proc -private apm_load_apm_file {
     <p>
     The package cannot be installed.
     </ul>\n"
-        global errorInfo
-        ns_log Error "Error loading APM file form url $url: Bad package .info file. $errmsg\n$errorInfo"
+                ns_log Error "Error loading APM file form url $url: Bad package .info file. $errmsg\n$::errorInfo"
         return
     }
     file delete -force $tmpdir

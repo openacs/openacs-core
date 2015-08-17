@@ -1320,12 +1320,11 @@ ad_proc -public with_catch {error_var body on_error} {
     execute the on_error block.
 } { 
     upvar 1 $error_var $error_var 
-    global errorInfo errorCode 
     if { [catch { uplevel $body } $error_var] } { 
         set code [catch {uplevel $on_error} string] 
         # Return out of the caller appropriately. 
         if { $code == 1 } { 
-            return -code error -errorinfo $errorInfo -errorcode $errorCode $string 
+            return -code error -errorinfo $::errorInfo -errorcode $::errorCode $string 
         } elseif { $code == 2 } { 
             return -code return $string 
         } elseif { $code == 3 } { 
@@ -3580,14 +3579,13 @@ ad_proc util_background_exec {
         set errinfo {}
         set errcode {}
         if { \$errno == 1 } {
-            global errorInfo errorCode
-            set errinfo \$errorInfo
-            set errcode \$errorCode
+            set errinfo \$::errorInfo
+            set errcode \$::errorCode
         }
 
         if { \$errno == 1 } {
             \# This is an error
-            ns_log Error \"util_background_exec: Error in thread named '$name': \$errorInfo\"
+            ns_log Error \"util_background_exec: Error in thread named '$name': \$::errorInfo\"
         }
 
         \# errno = 0 (TCL_OK) or 2 (TCL_RETURN) is considered normal, i.e. first elm is true
