@@ -602,7 +602,7 @@ ad_proc apm_bootstrap_upgrade {
     acs-bootstrap-installer package (rather than a full tar file
     install as in eralier versions). 
 
-    Caveat: don't modify these files in your local installation, addin
+    Caveat: don't modify these files in your local installation, adding
     extra files to $::acs::rootdir/tcl is fine.
 } {
     set source $::acs::rootdir/packages/acs-bootstrap-installer/installer/tcl

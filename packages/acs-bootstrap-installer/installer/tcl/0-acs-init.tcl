@@ -7,11 +7,15 @@
 #
 # $Id$
 
-# handling NaviServer deprecated ns_info subcommands. 
 namespace eval acs {
+    #
+    # Handling NaviServer deprecated ns_info subcommands. 
+    #
     set ::acs::pageroot [expr {[catch {ns_server pagedir}] ? [ns_info pageroot] : [ns_server pagedir]}]
-    set ::acs::tcllib [expr {[catch {ns_server tcllib}] ? [ns_info tcllib] : [ns_server tcllib]}]
-    set ::acs::rootdir [file dirname [string trimright $::acs::tcllib "/"]]
+    set ::acs::tcllib   [expr {[catch {ns_server tcllib}] ? [ns_info tcllib] : [ns_server tcllib]}]
+    set ::acs::rootdir  [file dirname [string trimright $::acs::tcllib "/"]]
+    #
+    set ::acs::useNsfProc [expr {[info commands ::nsf::proc] ne ""}]
 }
 
 # Determine the OpenACS root directory, which is the directory right above the
