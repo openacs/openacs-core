@@ -123,8 +123,7 @@ template_tag include { params } {
   # We explicitly test for ad_script_abort, so we don't dump that as an error, and don't catch it, either
   # (We do catch it, but then we re-throw it)
   template::adp_append_code "if { \[catch { append __adp_output \[$command\] } errmsg\] } {"
-  template::adp_append_code "    global errorInfo errorCode"
-  template::adp_append_code "    if { \[lindex \$errorCode 0\] eq \"AD\" && \[lindex \$errorCode 1\] eq \"EXCEPTION\" && \[lindex \$errorCode 2\] eq \"ad_script_abort\" } {"
+  template::adp_append_code "    if { \[lindex \$::errorCode 0\] eq \"AD\" && \[lindex \$::errorCode 1\] eq \"EXCEPTION\" && \[lindex \$::errorCode 2\] eq \"ad_script_abort\" } {"
   template::adp_append_code "        ad_script_abort"
   template::adp_append_code "    } else {"
   template::adp_append_code "        append __adp_output \"Error in include template \\\"\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]\\\": \[ns_quotehtml \$errmsg\]\""
@@ -134,10 +133,10 @@ template_tag include { params } {
       template::adp_append_code "            && \[info exists ::ds_collection_enabled_p\] } {"
       template::adp_append_code "            set __include_errors {}"
       template::adp_append_code "            ns_cache get ds_page_bits \[ad_conn request\]:error __include_errors"
-      template::adp_append_code "            ns_cache set ds_page_bits \[ad_conn request\]:error \[lappend __include_errors \[list \"$src\" \$errorInfo\]\]"
+      template::adp_append_code "            ns_cache set ds_page_bits \[ad_conn request\]:error \[lappend __include_errors \[list \"$src\" \$::errorInfo\]\]"
       template::adp_append_code "        }"
   }
-  template::adp_append_code "        ns_log Error \"Error in include template \\\"\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]\\\": \$errmsg\n\$errorInfo\""
+  template::adp_append_code "        ns_log Error \"Error in include template \\\"\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]\\\": \$errmsg\n\$::errorInfo\""
   template::adp_append_code "    }"
   template::adp_append_code "}"
 
@@ -662,9 +661,8 @@ template_tag include-optional { chunk params } {
   # Finally, we pop the output off of the __adp_include_optional_output stack.
 
   template::adp_append_code "if { \[catch { ad_try { lappend __adp_include_optional_output \[$command\] } ad_script_abort val { } } errmsg\] } {"
-  template::adp_append_code "    global errorInfo"
   template::adp_append_code "    append __adp_output \"Error in include template \\\"\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]\\\": \[ns_quotehtml \$errmsg\]\""
-  template::adp_append_code "    ns_log Error \"Error in include template \\\"\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]\\\": \$errmsg\n\$errorInfo\""
+  template::adp_append_code "    ns_log Error \"Error in include template \\\"\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]\\\": \$errmsg\n\$::errorInfo\""
   template::adp_append_code "} else {"
   template::adp_append_code "if { \[string trim \[lindex \$__adp_include_optional_output end\]\] ne {} } {"
 

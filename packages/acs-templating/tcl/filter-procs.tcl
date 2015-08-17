@@ -77,7 +77,6 @@ ad_proc -public cmp_page_filter { why } {
         regsub {.cmp} $url {} url_stub
         regexp {^/([^/]*)(.*)} $url_stub all package_key rest
         set file_stub "$::acs::rootdir/packages/$package_key/www$rest"
-
         set beginTime [clock clicks -milliseconds]
 
         set output "<pre>[ns_quotehtml [template::adp_compile -file $file_stub.adp]]</pre>"
@@ -86,8 +85,7 @@ ad_proc -public cmp_page_filter { why } {
         ns_log debug "cmp_page_filter: Time elapsed: $timeElapsed"
 
     } errMsg] } {
-        global errorInfo
-        set output <html><body><pre>[ad_quotehtml $errorInfo]</pre></body></html>
+        set output <html><body><pre>[ad_quotehtml $::errorInfo]</pre></body></html>
     }
 
     ns_return 200 text/html $output
@@ -103,7 +101,6 @@ ad_proc -public dat_page_filter { why } {
         regsub {.dat} $url {} url_stub
         regexp {^/([^/]*)(.*)} $url_stub all package_key rest
         set code_stub "$::acs::rootdir/packages/$package_key/www$rest"
-
         set beginTime [clock clicks -milliseconds]
 
         set file_stub [template::get_resource_path]/messages/datasources
@@ -114,8 +111,7 @@ ad_proc -public dat_page_filter { why } {
         ns_log debug " dat_page_filter: Time elapsed: $timeElapsed"
 
     } errMsg] } {
-        global errorInfo
-        set output <html><body><pre>$errorInfo</pre></body></html>
+        set output <html><body><pre>$::errorInfo</pre></body></html>
     }
 
     ns_return 200 text/html $output
@@ -153,7 +149,6 @@ ad_proc -private frm_page_filter { why } {
     Return the form data for a request for .frm
 } {
     if { [catch {
-
         set beginTime [clock clicks -milliseconds]
 
         set output [template::frm_page_handler]
@@ -162,8 +157,7 @@ ad_proc -private frm_page_filter { why } {
         ns_log debug "frm_page_filter: Time elapsed: $timeElapsed"
 
     } errMsg] } {
-        global errorInfo
-        set output $errorInfo
+        set output $::errorInfo
     }
 
     ns_return 200 text/html "<html><body><pre>[ns_quotehtml $output]</pre></body></html>"
