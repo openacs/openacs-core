@@ -917,8 +917,7 @@ ad_proc -private apm_package_install {
 
         apm_callback_and_log $callback "<p>Installed $version(package-name), version $version(name).</p>"
     } {
-        global errorInfo
-        ns_log Error "apm_package_install: Error installing $version(package-name) version $version(name): $errmsg\n$errorInfo"
+        ns_log Error "apm_package_install: Error installing $version(package-name) version $version(name): $errmsg\n$::errorInfo"
 
         apm_callback_and_log -severity Error $callback [subst {<p>Failed to install $version(package-name), version $version(name).  The following error was generated:
             <pre><blockquote>
@@ -977,9 +976,8 @@ ad_proc -private apm_package_install {
                 apm_callback_and_log $callback "<p> Mounted an instance of the package at /${priority_mount_path} </p>"
             } {
                 # Another package is mounted at the path so we cannot mount
-                global errorInfo
-                set error_text "Package $version(package-name) could not be mounted at /$version(auto-mount) , there may already be a package mounted there, the error is: $error"
-                ns_log Error "apm_package_install: $error_text \n\n$errorInfo"
+                                set error_text "Package $version(package-name) could not be mounted at /$version(auto-mount) , there may already be a package mounted there, the error is: $error"
+                ns_log Error "apm_package_install: $error_text \n\n$::errorInfo"
                 apm_callback_and_log $callback "<p> $error_text </p>"
             } 
 
@@ -1630,10 +1628,9 @@ ad_proc -private apm_packages_full_install {
                 $spec_file
 
         } errmsg] } {
-            global errorInfo
-            apm_callback_and_log -severity Error $callback "<p><font color=red>[string totitle $package_key] not installed.</font>
+                        apm_callback_and_log -severity Error $callback "<p><font color=red>[string totitle $package_key] not installed.</font>
 <p> Error:
-<pre><blockquote>[ad_quotehtml $errmsg]</blockquote><blockquote>[ad_quotehtml $errorInfo]</blockquote></pre>"
+<pre><blockquote>[ad_quotehtml $errmsg]</blockquote><blockquote>[ad_quotehtml $::errorInfo]</blockquote></pre>"
         } 
     }
 }
@@ -2172,8 +2169,7 @@ ad_proc -private apm_get_package_repository {
             } {
                 # We don't error hard here, because we don't want the whole process to fail if there's just one
                 # package with a bad .info file
-                global errorInfo
-                ns_log Error "apm_get_package_repository: Error while checking package info file $spec_file: $errmsg\n$errorInfo"
+                ns_log Error "apm_get_package_repository: Error while checking package info file $spec_file: $errmsg\n$::errorInfo"
             }
         }
     }

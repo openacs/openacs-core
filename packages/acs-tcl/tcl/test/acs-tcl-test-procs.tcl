@@ -123,8 +123,7 @@ aa_register_case -cats {api db smoke} apm__test_info_file {
 
 
     if { $error_p } {
-        global errorInfo
-        error "$error - $errorInfo"
+	error "$error - $::errorInfo"
     }
 }
 
@@ -163,8 +162,7 @@ aa_register_case -cats {api db smoke} apm__test_callback_get_set {
     apm_remove_callback_proc -package_key $package_key -type $callback_type
 
     if { $error_p } {
-        global errorInfo
-        error "$error - $errorInfo"
+	error "$error - $::errorInfo"
     }
 }
 
@@ -200,8 +198,7 @@ aa_register_case -cats {db api smoke} apm__test_callback_invoke {
     apm_remove_callback_proc -package_key $package_key -type $type
 
     if { $error_p } {
-        global errorInfo
-        error "$error - $errorInfo"
+	error "$error - $::errorInfo"
     }
 }
 
@@ -304,9 +301,8 @@ aa_register_case -cats {api smoke} text_to_html {
     set errno [catch { set text_version [ad_html_to_text -- $offending_post] } errmsg]
 
     if { ![aa_equals "Does not bomb" $errno 0] } {
-        global errorInfo
-        aa_log "errmsg: $errmsg"
-        aa_log "errorInfo: $errorInfo"
+                aa_log "errmsg: $errmsg"
+        aa_log "errorInfo: $::errorInfo"
     } else {
         aa_equals "Expected identical result" $text_version $offending_post
     }
@@ -368,9 +364,8 @@ anybody have any ideas?
     set errno [catch { set text_version [ad_html_to_text -- $offending_post] } errmsg]
 
     if { ![aa_equals "Does not bomb" $errno 0] } {
-        global errorInfo
         aa_log "errmsg: $errmsg"
-        aa_log "errorInfo: $errorInfo"
+        aa_log "errorInfo: $::errorInfo"
     } else {
         aa_log "Text version: $text_version"
     }

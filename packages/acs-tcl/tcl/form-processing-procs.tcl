@@ -1192,8 +1192,7 @@ ad_proc -public ad_form {
                     }
                     1 {
                         # TCL_ERROR
-                        global errorInfo errorCode
-                        error $error $errorInfo $errorCode
+                        error $error $::errorInfo $::errorCode
                     }
                     2 {
                         # TCL_RETURN

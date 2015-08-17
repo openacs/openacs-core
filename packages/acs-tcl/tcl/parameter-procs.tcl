@@ -98,8 +98,7 @@ ad_proc -public parameter::get_global_value {
                 set value 0
             }
         } errmsg] } {
-            global errorInfo
-            ns_log Error "Parameter $parameter not a boolean:\n$errorInfo"
+                        ns_log Error "Parameter $parameter not a boolean:\n$::errorInfo"
             set value $default
         }
     }
@@ -195,8 +194,7 @@ ad_proc -public parameter::get {
                 set value 0
             }
         } errmsg] } {
-            global errorInfo
-            ns_log Error "Parameter $parameter not a boolean:\n$errorInfo"
+                        ns_log Error "Parameter $parameter not a boolean:\n$::errorInfo"
             set value $default
         }
     }

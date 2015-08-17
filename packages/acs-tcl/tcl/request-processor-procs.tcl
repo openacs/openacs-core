@@ -775,13 +775,12 @@ ad_proc rp_report_error {
 
     Writes an error to the connection.
 
-    @param message The message to write (pulled from <code>$errorInfo</code> if none is specified).
+    @param message The message to write (pulled from <code>$::errorInfo</code> if none is specified).
 
 } {
     if { ![info exists message] } {
-        global errorInfo
-        # We need 'message' to be a copy, because errorInfo will get overridden by some of the template parsing below
-        set message $errorInfo
+                # We need 'message' to be a copy, because errorInfo will get overridden by some of the template parsing below
+        set message $::errorInfo
     }
     set error_url "[ad_url][ad_conn url]?[export_entire_form_as_url_vars]"
     #    set error_file [template::util::url_to_file $error_url]
