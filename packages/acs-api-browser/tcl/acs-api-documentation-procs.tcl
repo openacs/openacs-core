@@ -764,7 +764,12 @@ namespace eval ::apidoc {
     }
 
     ad_proc -public format_see { see } {
-        Format "see" information
+        Takes the value in the argument "see" and possibly formats it
+        into a link that will give the user more info about that
+        resource
+
+        @param see a string expected to comtain the resource to format
+        @return the html string representing the resource
     } {
         regsub -all {proc *} $see {} see
         set see [string trim $see]
@@ -784,7 +789,12 @@ namespace eval ::apidoc {
     }
 
     ad_proc -public format_author { author_string } {
-        Format author information
+
+        Extracts information about the author and formats it into an
+        HTML string.
+
+        @param author_string author information to format
+        @return the formatted result
     } {
         if { [regexp {^[^ \n\r\t]+$} $author_string] 
              && [string first "@" $author_string] >= 0 
