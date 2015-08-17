@@ -130,6 +130,8 @@ ad_proc -public -deprecated cr::keyword::item_get_assigned {
 
     If parent_id is supplied, only keywords that are children of
     parent_id are listed.
+    
+    @see content::keyword::item_get_assigned
 } {
 
     if {[info exists parent_id]} {
