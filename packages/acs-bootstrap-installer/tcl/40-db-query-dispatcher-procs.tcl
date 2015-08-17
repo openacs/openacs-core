@@ -236,6 +236,13 @@ ad_proc -public db_qd_load_query_file {file_path {errorVarName ""}} {
     }
 }
 
+# small compatibility function to avoid existence checks at runtime
+if {[info commands ::nsf::strip_proc_name] eq ""} {
+    namespace eval ::nsf {
+        proc ::nsf::strip_proc_name {name} {return $name}
+    }
+}
+
 
 ad_proc -public db_qd_get_fullname {local_name {added_stack_num 1}} {
     Find the fully qualified name of the query
@@ -252,7 +259,7 @@ ad_proc -public db_qd_get_fullname {local_name {added_stack_num 1}} {
     # (eg. from bootstrap.tcl), in which case we return what we
     # were given
     if { [catch {string trimleft [info level [expr {-1 - $added_stack_num}]] ::} proc_name] } {
-	return $local_name
+	return [::nsf::strip_proc_name $local_name]
     }
 
     # If util_memoize, we have to go back up one in the stack
@@ -261,6 +268,7 @@ ad_proc -public db_qd_get_fullname {local_name {added_stack_num 1}} {
 	set proc_name [info level [expr {-2 - $added_stack_num}]]
     }
 
+    set proc_name [::nsf::strip_proc_name $proc_name]
     set list_of_source_procs {ns_sourceproc apm_source template::adp_parse template::frm_page_handler rp_handle_tcl_request}
 
     # We check if we're running the special ns_ proc that tells us

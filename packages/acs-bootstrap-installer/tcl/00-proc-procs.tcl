@@ -6,22 +6,21 @@ nsv_array set api_library_doc [list]
 nsv_array set proc_doc [list]
 nsv_array set proc_source_file [list]
 
-proc number_p { str } {
-  return [regexp {^[-+]?[0-9]*(.[0-9]+)?$} $str]
 
-  # Note that this will return true for empty string!
-  # TODO: Presumably this is by design?  Probably better to use
-  # ad_var_type_check_number_p anyway.
-  #
-  # Note that ACS 3.2 defined number_p like this:
-  #
-  #   if { $var eq "" } {
-  #       return 0
-  #   } else {
-  #       return [regexp {^-?[0-9]*\.?[0-9]*$} $var match]
-  #   }
-  #
-  # --atp@piskorski.com, 2003/03/16 21:09 EST
+#
+# Safetybelt for ::acs::useNsfProc for upgrade phase
+#
+if {![info exists ::acs::useNsfProc]} {
+    ns_log notice "use fallback value for ::acs::useNsfProc"
+    set ::acs::useNsfProc 0
+}
+
+proc number_p { str } {
+    return [regexp {^[-+]?[0-9]*(.[0-9]+)?$} $str]
+
+    # Note that this will return true for empty string!
+    #
+    # TODO: Why not use Tcl's "string is double" ? 
 }
 
 proc empty_string_p { query_string } {
@@ -175,7 +174,10 @@ proc ad_proc args {
     set n_args_remaining [expr { [llength $args] - $i }]
 
     if {$callback eq ""} {
-        # We are creating a normal proc so the proc name is an argument
+	#
+        # We are creating an ordinary proc so the proc name is an
+        # argument
+	#
         if { $n_args_remaining < 3 || $n_args_remaining > 4} {
             return -code error "Wrong number of arguments passed to ad_proc"
         }
@@ -184,13 +186,17 @@ proc ad_proc args {
         set proc_name [lindex $args $i]
     } else {
         if {$impl ne "" } {
-            # We are creating an implementation...
+	    #
+            # We are creating a callback implementation
+	    #
             if {$n_args_remaining != 3} {
                 return -code error "ad_proc callback implementation must have: arguments (can be empty) docs code_body"
             }
         }
         if {$impl eq ""} {
-            # We are creating an callback contract...
+	    #
+	    # We are creating a contract for a callback
+	    #
             if {!( $n_args_remaining == 3 || $n_args_remaining == 2 ) } {
                 return -code error "ad_proc callback contract must have: arguments docs \[empty_code_body\]"
             } elseif {$n_args_remaining == 3
@@ -242,8 +248,7 @@ proc ad_proc args {
 
     if { $callback ne "" } {
         # Do a namespace eval of each namespace to ensure it exists
-        set namespaces [split $proc_name ::]
-        set namespaces [lrange $namespaces 0 end-1]
+        set namespaces [lrange [split $proc_name ::] 0 end-1]
 
         set curr_ns ""
         foreach ns $namespaces {
@@ -265,8 +270,7 @@ proc ad_proc args {
     }
     set code_block [lindex $args end]
 
-    if {$callback ne "" 
-        && $impl ne "" } {
+    if {$callback ne "" && $impl ne "" } {
         if {[info exists doc_elements(see)]} {
             lappend doc_elements(see) "callback::${callback}::contract"
         } else {
@@ -428,7 +432,9 @@ proc ad_proc args {
             return
         } else {
             # we are creating a callback so create an empty body
-            set code_block { # this is a callback contract which only invokes its arg parser for input validation }
+            set code_block {
+		# this is a callback contract which only invokes its arg parser for input validation
+	    }
         }
     }
 
@@ -438,6 +444,7 @@ proc ad_proc args {
     }
 
     if { $callback ne "" && $impl ne "" } {
+
         if { [info commands "::callback::${callback}::contract__arg_parser"] eq "" } {
             # We create a dummy arg parser for the contract in case
             # the contract hasn't been defined yet.  We need this
@@ -448,12 +455,55 @@ proc ad_proc args {
 
         # We are creating a callback implementation so we invoke the
         # arg parser of the contract proc
-        uplevel [::list proc $proc_name_as_passed args "    ::callback::${callback}::contract__arg_parser\n${log_code}$code_block"]
-    } elseif { $callback eq "" && [llength $switches] == 0 } {
-        uplevel [::list proc $proc_name_as_passed $arg_list "${log_code}$code_block"]
-    } else {
-        set parser_code "    ::upvar args args\n"
 
+        if {$::acs::useNsfProc} {
+            uplevel [::list proc $proc_name_as_passed args \
+			 "    ::callback::${callback}::contract__arg_parser {*}\$args\n${log_code}$code_block"]
+        } else {
+            uplevel [::list proc $proc_name_as_passed args \
+			 "    ::callback::${callback}::contract__arg_parser\n${log_code}$code_block"]
+        }
+
+    } elseif { $callback eq "" && [llength $switches] == 0 } {
+	#
+	# Nothing special is used in the argument definiton, create a
+	# plain proc
+	#
+        uplevel [::list proc $proc_name_as_passed $arg_list "${log_code}$code_block"]
+
+    } else {
+	#
+	# Default case, plain Tcl can't handle these cases
+	#
+
+        if {$::acs::useNsfProc} {
+	    #
+	    # nsf::proc can handle these cases. Just in case of the
+	    # callback implementations we have to provide an
+	    # arg_parser of the contract, since OpenACS uses always
+	    # the argument definition of the contract to pass
+	    # arguments in the implementation (which can be very
+	    # confusing).
+	    #
+	    if {$callback ne ""} {
+                uplevel [::list ::nsf::proc -ad ::callback::${callback}::contract__arg_parser $arg_list { 
+                    foreach _ [info vars] {
+                        uplevel [::list set $_ [set $_]]
+                    }
+                }]
+            }
+	    #ns_log notice "---- define nsf::proc for [::list proc $proc_name_as_passed $arg_list $code_block]"
+	    uplevel [::list ::nsf::proc -ad $proc_name_as_passed $arg_list ${log_code}$code_block]
+	    return
+	}
+
+	#
+	# There is no nsf::proc available. Define for every remaining
+	# function two procs, one for argument parsing, and one for
+	# the invocation. The latter one is defined with "args" and
+	# calls as first step the argument parser.
+	#
+        set parser_code "    ::upvar args args\n"
         foreach { name value } [array get default_values] {
             append parser_code "    ::upvar $name val ; ::set val [::list $value]\n"
         }
@@ -508,6 +558,12 @@ $switch_code
             ns_write "PARSER CODE:\n\n$parser_code\n\n"
         }
 
+	#
+	# old style proc
+	# for a function foo, define "foo $args" and "foo__arg_parser"
+	#
+	#ns_log notice "=== old style proc $proc_name_as_passed"
+	
         uplevel [::list proc ${proc_name_as_passed}__arg_parser {} $parser_code]
         uplevel [::list proc $proc_name_as_passed args "    ${proc_name_as_passed}__arg_parser\n${log_code}$code_block"]
     }
@@ -788,7 +844,7 @@ ad_proc -public callback {
 
     set base ::callback::${callback}::impl
     foreach procname [lsort [info commands ${base}::$impl]] {
-        set c [catch {::uplevel 1 $procname $args} ret]
+        set c [catch {::uplevel 1 [::list $procname {*}$args]} ret]
         switch -exact $c {
             0 { # code ok
                 if { $ret ne "" } {

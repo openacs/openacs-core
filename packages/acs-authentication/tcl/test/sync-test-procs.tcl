@@ -501,7 +501,6 @@ aa_register_case -cats {api} sync_batch_ims_example_doc {
     Test IMS Enterprise 1.1 batch sync with the XML document from the specification.
 } {
     aa_stub acs_sc::invoke {
-        acs_sc::invoke__arg_parser
 
         if { $contract eq "auth_sync_retrieve" && $operation eq "GetDocument" } {
             array set result {
@@ -684,7 +683,6 @@ aa_register_case -cats {api} sync_batch_ims_test {
     Test IMS Enterprise 1.1 batch sync with a constructed document which actually works
 } {
     aa_stub acs_sc::invoke {
-        acs_sc::invoke__arg_parser
 
         if { $contract eq "auth_sync_retrieve" && $operation eq "GetDocument" } {
             array set result {
