@@ -218,7 +218,7 @@ ad_proc -private apm_higher_version_installed_p {
 ad_proc -private apm_build_repository {
     {-debug:boolean 0} 
     {-channels *} 
-    {-head_channel 5-9} 
+    {-head_channel 5-10} 
 } {    
 
     Rebuild the repository on the local machine.  
