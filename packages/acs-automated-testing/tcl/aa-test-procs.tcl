@@ -513,8 +513,7 @@ ad_proc -public aa_register_case {
       aa_log \"Running testcase body \$body_count\"
       set catch_val \[catch \"eval \[list \$testcase_body\]\" msg\]
       if {\$catch_val != 0 && \$catch_val != 2} {
-        global errorInfo
-          aa_log_result \"fail\" \"$testcase_id (body \$body_count): Error during execution: \${msg}, stack trace: \n\$errorInfo\"
+          aa_log_result \"fail\" \"$testcase_id (body \$body_count): Error during execution: \${msg}, stack trace: \n\$::errorInfo\"
       }
       incr body_count
     }
@@ -976,23 +975,20 @@ ad_proc -public aa_run_with_teardown {
             aa_execute_rollback_tests
 
             if { \$errmsg ne {} && \$errmsg ne \"rollback tests\"\ } {
-                global errorInfo
-                error \"\$errmsg \n\n \$errorInfo\"
+                error \"\$errmsg \n\n \$::errorInfo\"
             }
         "
     }
 
     # Testing
     set setup_error_p [catch {uplevel $test_code} setup_error]
-    global errorInfo
-    set setup_error_stack $errorInfo
+    set setup_error_stack $::errorInfo
 
     # Teardown
     set teardown_error_p 0
     if { $teardown_code ne "" } {
         set teardown_error_p [catch {uplevel $teardown_code} teardown_error]
-        global errorInfo
-        set teardown_error_stack $errorInfo
+        set teardown_error_stack $::errorInfo
     }
 
     # Provide complete error message and stack trace
