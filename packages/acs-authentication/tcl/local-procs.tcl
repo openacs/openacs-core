@@ -278,8 +278,7 @@ ad_proc -private auth::local::password::ChangePassword {
 
     if { [catch { ad_change_password $user_id $new_password } errmsg] } {
         set result(password_status) "change_error"
-        global errorInfo
-        ns_log Error "Error changing local password for username $username, user_id $user_id: \n$errorInfo"
+        ns_log Error "Error changing local password for username $username, user_id $user_id: \n$::errorInfo"
         return [array get result]
     }
 
@@ -311,8 +310,7 @@ ad_proc -private auth::local::password::ChangePassword {
             -subject $subject \
             -body $body
 	} {
-            global errorInfo
-            ns_log Error "Error sending out password changed notification to account owner with user_id $user(user_id), email $user(email): $errmsg\n$errorInfo"
+            ns_log Error "Error sending out password changed notification to account owner with user_id $user(user_id), email $user(email): $errmsg\n$::errorInfo"
 	}
     }
     
@@ -516,8 +514,7 @@ ad_proc -private auth::local::registration::Register {
 		    -body_msg_key "acs-subsite.email_body_Registration_password" 
 	    } {
 		# We don't fail hard here, just log an error
-		global errorInfo
-		ns_log Error "Error sending registration confirmation to $email.\n$errorInfo"
+		ns_log Error "Error sending registration confirmation to $email.\n$::errorInfo"
 	    }
 	}
     }
@@ -547,8 +544,7 @@ ad_proc -private auth::local::registration::Register {
                 -body [lang::message::lookup $admin_locale acs-subsite.lt_first_names_last_name]
         } {
             # We don't fail hard here, just log an error
-            global errorInfo
-            ns_log Error "Error sending admin notification to $admin_email.\n$errorInfo"
+            ns_log Error "Error sending admin notification to $admin_email.\n$::errorInfo"
         }
     }
 

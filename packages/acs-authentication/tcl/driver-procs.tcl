@@ -37,8 +37,7 @@ ad_proc -public auth::driver::get_parameters {
                             -impl_id $impl_id \
                             -operation GetParameters]
     } {
-        global errorInfo
-        ns_log Error "Error getting parameters for impl_id $impl_id: $errmsg\n$errorInfo"
+        ns_log Error "Error getting parameters for impl_id $impl_id: $errmsg\n$::errorInfo"
     }
     return $parameters
 }
