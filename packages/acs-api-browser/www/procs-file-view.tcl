@@ -5,7 +5,7 @@ ad_page_contract {
 } {
     version_id:naturalnum,optional
     { public_p:boolean "" }
-    path:token,trim
+    path:path,trim
     source_p:boolean,optional,trim
 } -properties {
     title:onevalue
