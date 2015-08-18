@@ -230,12 +230,15 @@ if {![info exists doc(charset)]} {
 template::head::add_meta \
     -content "text/html; charset=$doc(charset)" \
     -http_equiv "content-type"
-template::head::add_meta \
-    -content "text/css" \
-    -http_equiv "Content-Style-Type"
-template::head::add_meta \
-    -content "text/javascript" \
-    -http_equiv "Content-Script-Type"
+#
+# The following meta tags are unknwon for HTML5, therefore discouraged
+#
+# template::head::add_meta \
+#     -content "text/css" \
+#     -http_equiv "Content-Style-Type"
+# template::head::add_meta \
+#     -content "text/javascript" \
+#     -http_equiv "Content-Script-Type"
 
 # The document language is always set from [ad_conn lang] which by default 
 # returns the language setting for the current user.  This is probably
