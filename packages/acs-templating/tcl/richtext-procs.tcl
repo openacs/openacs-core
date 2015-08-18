@@ -638,11 +638,11 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
 		$postTextArea "<span>"
 
             if { $spellcheck(render_p) } {
-                append output \
-		    [subst {<label for="$element(id).spellcheck"><span class="form-widget">}] \
-		    [_  acs-templating.Spellcheck] ": " \
+                append output [subst {</span>
+		    <span class="form-widget"><label for="$element(id).spellcheck">[_  acs-templating.Spellcheck]: </label>
                     [menu "$element(id).spellcheck" [nsv_get spellchecker lang_options] \
                          $spellcheck(selected_option) {}]
+		}]
             }
 
         } else {
