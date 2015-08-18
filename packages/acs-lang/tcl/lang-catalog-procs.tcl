@@ -606,8 +606,7 @@ ad_proc -private lang::catalog::import_from_file {
                     -message_key $message_key \
                     -description $descriptions_array($message_key)
             } {
-                global errorInfo
-                ns_log Error "Registering description for key ${package_key}.${message_key} in locale $locale failed with error message \"$errmsg\"\n\n$errorInfo"
+                ns_log Error "Registering description for key ${package_key}.${message_key} in locale $locale failed with error message \"$errmsg\"\n\n$::errorInfo"
             }
         }    
     }
@@ -1023,9 +1022,8 @@ ad_proc -public lang::catalog::import {
             # Use a catch so that parse failure of one file doesn't cause the import of all files to fail
             array unset loop_message_count
             if { [catch { array set loop_message_count [lang::catalog::import_from_file $file_path] } errMsg] } {
-                global errorInfo
                 
-                ns_log Error "The import of file $file_path failed, error message is:\n\n${errMsg}\n\nstack trace:\n\n$errorInfo\n\n"
+                ns_log Error "The import of file $file_path failed, error message is:\n\n${errMsg}\n\nstack trace:\n\n$::errorInfo\n\n"
             } else {
                 foreach action [array names loop_message_count] {
                     if { $action ne "errors" } {

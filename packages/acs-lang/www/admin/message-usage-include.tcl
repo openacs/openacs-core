@@ -21,7 +21,6 @@ with_catch errmsg {
     exec find $::acs::rootdir -type f -regex ".*\\.\\(info\\|adp\\|sql\\|tcl\\)" -follow | xargs egrep "$grepfor" 2>/dev/null
 } {
     #error "find $::acs::rootdir -type f -regex \".*\\.\\(info\\|adp\\|sql\\|tcl\\)\" -follow | xargs egrep \"${full_key_pattern}\""
-    global errorInfo
 
     foreach line [split $errmsg "\n"] {
         if { [string first "child process exited abnormally" $line] == -1 } {

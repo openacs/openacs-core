@@ -38,8 +38,7 @@ ad_form -name application -cancel_url . -export { return_url } -form {
 		-package_key $one_package_key
 	}
     } errmsg] } {
-	global errorInfo
-	ns_log Error "Error creating application: $errmsg\n$errorInfo"
+	ns_log Error "Error creating application: $errmsg\n$::errorInfo"
 	ad_return_error "Problem Creating Application" "We had a problem creating the application."
     }
 } -after_submit {

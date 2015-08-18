@@ -41,7 +41,6 @@ if { [catch {
     # Ignore simple i/o errors, which probably just mean that the user surfed on 
     # to some other page before we finished serving 
     if { ![string equal $errMsg {i/o failed}] } {
-        global errorInfo
-        ns_log Error "$errMsg\n$errorInfo"
+        ns_log Error "$errMsg\n$::errorInfo"
     }
 }

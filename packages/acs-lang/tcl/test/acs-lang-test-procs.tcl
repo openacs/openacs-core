@@ -765,9 +765,7 @@ aa_register_case \
         
     } {
         parameter::set_value -parameter UsePackageLevelLocalesP -package_id [apm_package_id_from_key "acs-lang"] -value $use_package_level_locales_p_org
-        
-        global errorInfo
-        error $errmsg $errorInfo
+        error $errmsg $::errorInfo
     }
 
     parameter::set_value -parameter UsePackageLevelLocalesP -package_id [apm_package_id_from_key "acs-lang"] -value $use_package_level_locales_p_org
@@ -902,8 +900,7 @@ aa_register_case \
 
         if { $error_p } {
             # rethrow the error
-            global errorInfo
-            error $errmsg $errorInfo
+            error $errmsg $::errorInfo
         }
     }
 }
@@ -967,8 +964,7 @@ aa_register_case \
             $gb_message
     } {
         set error_p 1
-        global errorInfo
-        set saved_errorInfo $errorInfo
+        set saved_errorInfo $::errorInfo
     }
 
     # Clean up
