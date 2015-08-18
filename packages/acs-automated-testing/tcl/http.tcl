@@ -198,9 +198,8 @@ proc http::config {args} {
 proc http::Finish { token {errormsg ""} {skipCB 0}} {
     variable $token
     upvar 0 $token state
-    global errorInfo errorCode
     if {[string length $errormsg] != 0} {
-	set state(error) [list $errormsg $errorInfo $errorCode]
+	set state(error) [list $errormsg $::errorInfo $::errorCode]
 	set state(status) error
     }
     if {[info exists state(connection)] && $state(connection) eq "close"} {
@@ -210,7 +209,7 @@ proc http::Finish { token {errormsg ""} {skipCB 0}} {
     if {[info exists state(-command)] && !$skipCB} {
 	if {[catch {eval $state(-command) {$token}} err]} {
 	    if {$errormsg eq ""} {
-		set state(error) [list $err $errorInfo $errorCode]
+		set state(error) [list $err $::errorInfo $::errorCode]
 		set state(status) error
 	    }
 	}

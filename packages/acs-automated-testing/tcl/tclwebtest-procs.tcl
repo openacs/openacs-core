@@ -57,8 +57,7 @@ ad_proc twt::do_request { page_url } {
         # $retry_max times. Propagate the error while retaining the stack trace
         aa_log "twt::do_request failed with error=\"$errmsg\" response_url=\"[tclwebtest::response url]\". See error log for the HTML response body"
         ns_log Error "twt::do_request failed with error=\"$errmsg\" response_url=\"[tclwebtest::response url]\" response_body=\"[tclwebtest::response body]\""
-        global errorInfo
-        error $errmsg $errorInfo
+        error $errmsg $::errorInfo
     }
 }
 
