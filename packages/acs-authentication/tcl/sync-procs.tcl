@@ -194,8 +194,7 @@ Job message       : $job(message)
 To view the complete log, please visit\n$job(log_url)"
         } {
             # We don't fail hard here, just log an error
-            global errorInfo
-            ns_log Error "Error sending registration confirmation to [ad_system_owner].\n$errorInfo"
+            ns_log Error "Error sending registration confirmation to [ad_system_owner].\n$::errorInfo"
         }
     }
     
@@ -455,10 +454,9 @@ ad_proc -public auth::sync::job::action {
                 }
             } {
                 # Get errorInfo and log it
-                global errorInfo
-                ns_log Error "Error during batch syncrhonization job:\n$errorInfo"
+                ns_log Error "Error during batch syncrhonization job:\n$::errorInfo"
                 set success_p 0
-                set result(message) $errorInfo
+                set result(message) $::errorInfo
             }
         }
 

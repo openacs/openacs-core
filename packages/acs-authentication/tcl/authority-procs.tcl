@@ -326,8 +326,7 @@ ad_proc -public auth::authority::batch_sync {
         with_catch errmsg {
             array set doc_result [auth::sync::GetDocument -authority_id $authority_id]
         } {
-            global errorInfo
-            ns_log Error "Error getting sync document:\n$errorInfo"
+            ns_log Error "Error getting sync document:\n$::errorInfo"
             set doc_result(doc_status) failed_to_connect
             set doc_result(doc_message) $errmsg
         }
@@ -373,8 +372,7 @@ ad_proc -public auth::authority::batch_sync {
                         $ack_doc
                 }
             } {
-                global errorInfo
-                ns_log Error "Error processing sync document:\n$errorInfo"
+                ns_log Error "Error processing sync document:\n$::errorInfo"
                 set message "Error processing sync document: $errmsg"
             }
         } else {

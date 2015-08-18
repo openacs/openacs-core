@@ -241,8 +241,7 @@ ad_proc -public auth::authenticate {
     } {
         set result(auth_status) failed_to_connect
         set result(auth_message) $errmsg
-        global errorInfo
-        ns_log Error "auth::authenticate: error invoking authentication driver for authority_id = $authority_id: $errorInfo"
+        ns_log Error "auth::authenticate: error invoking authentication driver for authority_id = $authority_id: $::errorInfo"
     }
 
     # Returns:
@@ -1061,8 +1060,7 @@ ad_proc -private auth::create_local_account_helper {
 
     } on_error {
         # we got an error.  log it and signal failure.
-        global errorInfo
-        ns_log Error "Problem creating a new user: $errorInfo"
+        ns_log Error "Problem creating a new user: $::errorInfo"
         set error_p 1
     }
     
@@ -1197,8 +1195,7 @@ ad_proc -public auth::update_local_account {
     if { $error_p } {
         set result(update_status) "failed_to_connect"
         set result(update_message) [_ acs-subsite.Error_update_account_info]
-        global errorInfo
-        ns_log Error "Error updating local account.\n$errorInfo"
+        ns_log Error "Error updating local account.\n$::errorInfo"
         return [array get result]
     }
 
@@ -1434,8 +1431,7 @@ ad_proc -private auth::check_local_account_status {
                     with_catch errmsg {
                         auth::send_email_verification_email -user_id $user_id
                     } {
-                        global errorInfo
-                        ns_log Error "auth::check_local_account_status: Error sending out email verification email to email $email:\n$errorInfo"
+                        ns_log Error "auth::check_local_account_status: Error sending out email verification email to email $email:\n$::errorInfo"
                         set result(account_message) [_ acs-subsite.Error_sending_verification_mail]
                     }
                 }
