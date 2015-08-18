@@ -170,8 +170,7 @@ if { $not_hidden == 0 || [template::form is_valid join] } {
             -member_state $member_state
 
     } on_error {
-        global errorInfo
-        ns_log Error "user-join: Error when adding user to group: $errmsg\n$errorInfo"
+        ns_log Error "user-join: Error when adding user to group: $errmsg\n$::errorInfo"
         
         ad_return_error "Error Joining" "We experienced an error adding you to the group."
         ad_script_abort

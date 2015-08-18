@@ -72,8 +72,7 @@ db_transaction {
         }
     }
 } on_error {
-    global errorInfo
-    ad_return_complaint 1 "Ooops, looks like we screwed up. Sorry. $errmsg<p> $errorInfo"
+    ad_return_complaint 1 "Ooops, looks like we screwed up. Sorry. $errmsg<p> $::errorInfo"
 }
 
 append page "</ul>"

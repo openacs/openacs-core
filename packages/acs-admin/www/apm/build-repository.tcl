@@ -253,8 +253,7 @@ foreach channel [lsort -decreasing [array names channel_tag]] {
                     append manifest {  } {</package>} \n
                 } 
             } {
-                global errorInfo
-                ns_write "<li> Error on spec_file $spec_file: [ad_quotehtml $errmsg]<br>[ad_quotehtml $errorInfo]\n"
+                ns_write "<li> Error on spec_file $spec_file: [ad_quotehtml $errmsg]<br>[ad_quotehtml $::errorInfo]\n"
             }
         }
     }

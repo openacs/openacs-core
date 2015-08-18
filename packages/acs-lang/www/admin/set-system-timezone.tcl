@@ -129,7 +129,6 @@ if { [info exists utc_epoch] } {
         }
     } {
         # Didn't work, too bad
-        global errorInfo
-        error $errmsg $errorInfo
+        error $errmsg $::errorInfo
     }
 }

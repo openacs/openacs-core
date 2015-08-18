@@ -298,9 +298,8 @@ your URL and try again.
     } error] } {
         # In case of an error, don't forget to unlock the mutex.
         ns_mutex unlock [nsv_get acs_installer mutex]
-        global errorInfo
         install_return 500 "Error" "The following error occurred in an installation script:\n\
-        <blockquote><pre>[ns_quotehtml $errorInfo]</pre></blockquote>\n"
+        <blockquote><pre>[ns_quotehtml $::errorInfo]</pre></blockquote>\n"
     }
     if {[array size errors] > 0} {
         install_return 500 "Error" [install_load_errors_formatted errors]
@@ -359,9 +358,9 @@ ad_proc -private install_load_errors_formatted {errorVarName} {
     set result ""
     if {[array size errors] > 0} {
         append result "<blockquote><pre>\n"
-        foreach {package errorInfos} [array get errors] {
+        foreach {package error_infos} [array get errors] {
             append result "<h4>Error in Package $package:</h4>\n"
-            foreach {fileName backTrace} $errorInfos {
+            foreach {fileName backTrace} $error_infos {
                 append result "<strong>Error in File $fileName</strong>\n\n[ad_quotehtml $backTrace]\n\n\n"
             }
         }

@@ -186,7 +186,7 @@ if { $errno && $errno != 2 } {
     # to display the error message, rather than leaving the site administrator
     # to guess what broke.
 
-    # If the $errorCode is "bootstrap_fatal_error", then the error was explicitly
+    # If the $::errorCode is "bootstrap_fatal_error", then the error was explicitly
     # thrown by a call to bootstrap_fatal_error. If not, bootstrap_fatal_error was
     # never called, so we need to call it now.
     if {$::errorCode ne "bootstrap_fatal_error"  } {

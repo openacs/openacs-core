@@ -24,8 +24,7 @@ set context [list \
                  [list $return_url "Tcl Callbacks"] $page_title]
 
 if { [catch $proc_value result] } {
-    global errorInfo
-    ns_log Error "Error invoking callback $proc_value: $result\n$errorInfo"
+    ns_log Error "Error invoking callback $proc_value: $result\n$::errorInfo"
 }
 
 
