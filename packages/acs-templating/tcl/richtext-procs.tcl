@@ -616,7 +616,10 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
 		}
 
 		set ckOptions [join $ckOptionsList ", "]
-		append postTextArea [subst {<script>CKEDITOR.replace( '$attributes(id)', \[$ckOptions\] );</script>\n}]
+		append postTextArea [subst {
+		    <script type="text/javascript">CKEDITOR.replace( '$attributes(id)', \[$ckOptions\] );
+		    </script>
+		}]
 		
             } else {
 		# Editor is custom.
@@ -627,13 +630,12 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
 	    }
 		      
             append output \
-		"</span></label>\n<script type='text/javascript'>" \n \
+		"</span>\n<script type='text/javascript'>" \n \
 		[subst {document.write("<input name='$element(id).format' value='text/html' type='hidden'>");}] \
 		"</script>\n<noscript><div>" \
-		[subst {<label for="$element(id).format"><span class="form-widget">}] \
-		[_ acs-templating.Format] \
-		": $format_menu</span></label></div></noscript>\n" \
-		$postTextArea
+		[subst {<span class="form-widget"><label for="$element(id).format">[_ acs-templating.Format]: </label>}] \
+		$format_menu "</span></div></noscript>\n" \
+		$postTextArea "<span>"
 
             if { $spellcheck(render_p) } {
                 append output \
@@ -646,12 +648,16 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
         } else {
             # htmlarea_p is false
 
-            append output "</span></label>\n<label for=\"$element(id).format\"><span class=\"form-widget\">[_ acs-templating.Format]: $format_menu"
+	    append output [subst {</span>
+		<span class="form-widget"><label for="$element(id).format">[_ acs-templating.Format]: </label>$format_menu
+	    }]
 
             if { $spellcheck(render_p) } {
-                append output "</span></label>\n<label for=\"$element(id).spellcheck\"><span class=\"form-widget\">[_  acs-templating.Spellcheck]: " \
+                append output [subst {</span>
+		    <span class="form-widget"><label for="$element(id).spellcheck">[_  acs-templating.Spellcheck]: </label>
                     [menu "$element(id).spellcheck" [nsv_get spellchecker lang_options] \
                          $spellcheck(selected_option) {}]
+		}]
             }
 
         }
@@ -664,7 +670,7 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
             append output "<input type=\"hidden\" name=\"$element(id).format\" value=\"[ad_quotehtml $format]\">"
         }
     }
-    
+
     return $output
 }
 

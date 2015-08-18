@@ -37,7 +37,7 @@
 		   </if>
 
              <if @elements.label@ not nil>
-			   <noparse>
+	       <noparse>
                  <if @form_properties.mode;literal@ eq display or @elements.widget;literal@ in radio checkbox date inform>
                    <!-- no label tag -->
                  </if>
@@ -61,6 +61,13 @@
                  </if>
                </if>
                </span><!-- form-label -->
+                 <if @form_properties.mode;literal@ eq display or @elements.widget;literal@ in radio checkbox date inform>
+                   <!-- no label tag -->
+                 </if>
+                 <else>
+                                   </label>
+                 </else>
+
 		     </if>
 		     <else>
                         <if @form_properties.show_required_p;literal@ true>
@@ -73,7 +80,7 @@
 		     </else>
 
 		     <if @elements.widget;literal@ in radio checkbox>
-			   <noparse>
+                           <noparse>
                  <span class="form-widget">
                  <formgroup id="@elements.id@">			
 				   <label for="@elements.form_id@:elements:@elements.id@:\@formgroup.option@">
@@ -90,10 +97,6 @@
                    <formwidget id="@elements.id@">
                  </span>
 			   </noparse>
-               <if @form_properties.mode;literal@ eq display or @elements.widget;literal@ in radio checkbox date inform><!-- no label tag --></if>
-               <else>
-                 <if @elements.label@ not nil></label></if>
-               </else>
              </else>							
 							
            <if @elements.help_text@ not nil>
