@@ -1560,8 +1560,7 @@ ad_page_contract_filter range { name value range } {
 	error "[_ acs-tcl.lt_Invalid_number_of_par]"
 	ad_script_abort
     }
-    set min [lindex $range 0]
-    set max [lindex $range 1]
+    lassign $range min max
     if { $value < $min || $value > $max } {
 	ad_complain "[_ acs-tcl.lt_name_is_not_in_the_ra]"
 	return 0
@@ -1637,7 +1636,7 @@ ad_page_contract_filter tmpfile { name value } {
     # Log details about this filter failing, to make it easier to debug.
     ns_log Notice "ad_page_contract tmpfile filter on variable '$name' at URL '[ad_conn url]': The tmpfile given was '$value', and the list of valid directories is '$tmpdir_list'."
 
-    ad_complain "[_ acs-tcl.lt_You_specified_a_path_]"
+    ad_complain [_ acs-tcl.lt_You_specified_a_path_]
     return 0
 }
 
@@ -2007,6 +2006,22 @@ ad_page_contract_filter token { name value } {
 } {
 
     if {[regexp {^[\w,:-]+$} $value]} {
+	return 1
+    }
+    ad_complain [_ acs-tcl.lt_name_contains_invalid]
+    return 0
+}
+
+ad_page_contract_filter path { name value } {
+    Checks whether the value is a Tcl word, or contains a few 
+    rather safe other characters ("-", "/", ".") used
+    in (file-system) paths
+
+    @author Gustaf Neumann
+    @creation-date 24 June 2015
+} {
+
+    if {[regexp {^[\w/.-]+$} $value]} {
 	return 1
     }
     ad_complain [_ acs-tcl.lt_name_contains_invalid]
