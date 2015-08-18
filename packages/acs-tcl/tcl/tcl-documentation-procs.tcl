@@ -340,7 +340,7 @@ ad_proc -public ad_page_contract {
     <dt><a href="proc-view?proc=ad_page_contract_filter_proc_date"><b>date</b></a>
     <dd>Pluggable filter, installed by default, that makes sure the array validates as a date.
     Use this filter with :array to do automatic date filtering.  To use it, set up in your HTML form
-    a call to \[ad_dateentrywidget varname\].  Then on the receiving page, specify the filter using
+    a call to [ad_dateentrywidget varname].  Then on the receiving page, specify the filter using
     <code>varname:array,date</code>.  If the date validates, there will be a variable set in your
     environment <code>varname</code> with four keys: <code>day, month, year,</code> and <code>date</code>.
     You can safely pass <code>$varname(date)</code> to Oracle.
@@ -349,7 +349,7 @@ ad_proc -public ad_page_contract {
     <dd>Pluggable filter, installed by default, that makes sure the array validates as a time in 
     am/pm format. That is that it has two fields: <code>time</code> and <code>ampm</code> that have 
     valid values. Use this filter with :array to do automoatic time filtering. To use it, set up 
-    in you HTML form using \[ec_timeentrywidget varname\] or equivalent. Then on the processing page
+    in you HTML form using [ec_timeentrywidget varname] or equivalent. Then on the processing page
     specify the filter using <code>varname:array,time</code>. If the time validates, there will be
     a variable set in your environment <code>varname</code> with five keys: <code>time, ampm,
     hours, minutes,</code> and <code>seconds</code>.
@@ -373,7 +373,7 @@ ad_proc -public ad_page_contract {
 
     <dt><a href="proc-view?proc=ad_page_contract_filter_proc_range"><b>range</b></a>
     <dd>Pluggable filter, installed by default, that makes sure the value X is in range
-    \[Y, Z\]. To use it say something like: <code>foo:(1|100)</code>
+    [Y, Z]. To use it say something like: <code>foo:(1|100)</code>
 
     <dt><a href="proc-view?proc=ad_page_contract_filter_proc_nohtml"><b>nohtml</b></a>
     <dd>Pluggable filter, installed by default, that disallows any and all html.
@@ -394,6 +394,18 @@ ad_proc -public ad_page_contract {
 
     <dt><a href="proc-view?proc=ad_page_contract_filter_proc_sql_identifier"><b>sql_identifier</b></a> 
     <dd>Pluggable filter, installed by default, that makes sure the value is a valid SQL identifier.
+
+    <dt><a href="proc-view?proc=ad_page_contract_filter_proc_path"><b>path</b></a>
+    <dd>Pluggable filter, installed by default, that makes sure hat argument contains only Tcl word
+    characters or a few addional safe characters used in paths ("/", ".", "-")
+    
+    <dt><a href="proc-view?proc=ad_page_contract_filter_proc_token"><b>token</b></a>
+    <dd>Pluggable filter, installed by default, that makes sure hat argument contains only Tcl word
+    characters or a few addional safe characters (",", ":", "-").
+    
+    <dt><a href="proc-view?proc=ad_page_contract_filter_proc_word"><b>word</b></a>
+    <dd>Pluggable filter, installed by default, that makes sure hat argument contains only Tcl word
+    characters (as defined by \w in Tcl regular expressions, i.e. characers, digits and underscore).
 
     </dl>
 
