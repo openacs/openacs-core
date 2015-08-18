@@ -156,9 +156,9 @@ namespace eval acs_mail_lite {
 	}
 
         ns_log Debug "send cmd: $cmd"
-        if {[catch $cmd errorInfo]} {
-	    ns_log Error "acs-mail-lite::smtp: error $errorInfo while executing\n$cmd"
-	    error $errorInfo
+        if {[catch $cmd errorMsg]} {
+	    ns_log Error "acs-mail-lite::smtp: error $errorMsg while executing\n$cmd"
+	    error $errorMsg
 	}
     }
 
