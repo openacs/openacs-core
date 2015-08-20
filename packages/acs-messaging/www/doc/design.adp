@@ -58,5 +58,5 @@ the primary mechanism for message queries.
   </code></pre></blockquote>
 ACS Messaging provides the PL/SQL function acs_message.post to add
 new messages.
-<hr><address>akk@arsdigita.com</address>
+<hr><address>akk\@arsdigita.com</address>
 </body>

@@ -31,13 +31,20 @@
 
     <blockquote>
       All variables are now quoted by default, except those explicitly
-      protected by <tt>;noquote</tt>.
+      protected by <tt>;noquote</tt> or <tt>;literal;</tt>.
     </blockquote>
 
     This means that the only way your code can fail is if the new code
     quotes a variable which is not meant to be quoted.  Which is where
     <tt>;noquote</tt> needs to be added.  That's all porting effort
-    that is required.
+that is required. Actually, the variables are subject to
+HTML-quoting and internationalization. The suffix <tt>;noquote</tt>
+means that the variable's content will be internationalized, but not
+HTML-quoted, while <tt>;no18n</tt> means quote, but don't
+    internationalize. Finally <tt>;literal</tt> means: don't quote and
+    don't internationalize.
+
+
 
     <p>
       This is not hard because most variables will not be affected by
@@ -225,7 +232,7 @@ set form_vars [export_vars -form {var1 var2}]
     <p>
       Over-quoting is resolved by adding <tt>;noquote</tt> to one of
       the variables.  We strongly recommend that you add
-      <tt>;noquote</tt> inside the <tt>property</tt> tag rather than
+      <tt>;literal</tt> inside the <tt>property</tt> tag rather than
       in the master.  The reason is that, first, it makes sense to do
       so because conceptually the master is the one that "shows" the
       variable, so it makes sense that it gets to quote it.  Secondly,
@@ -244,8 +251,8 @@ set form_vars [export_vars -form {var1 var2}]
       <b>slave sans over-quoting:</b>
       <pre>
 &lt;master&gt;
-&lt;property name="title"&gt;@title;noquote@&lt;/property&gt;
-&lt;property name="heading"&gt;@title;noquote@&lt;/property&gt;
+&lt;property name="doc(title)"&gt;@title;literal@&lt;/property&gt;
+&lt;property name="heading"&gt;@title;literal@&lt;/property&gt;
 ...
       </pre>
     </blockquote>
@@ -280,12 +287,12 @@ set form_vars [export_vars -form {var1 var2}]
       in the last example: it gets quoted once by the includer, and
       the second time by the included page.  The fix is also similar:
       when you transfer non-constant text to an included page, make
-      sure to add <tt>;noquote</tt>.
+      sure to add <tt>;literal</tt>.
 
     <blockquote>
       <b>Including template, sans over-quoting:</b>
       <pre>
-&lt;include src="user-kick-form" id=@kicked_id@ reason=@default_reason;noquote@&gt;
+&lt;include src="user-kick-form" id=@kicked_id;literal@ reason=@default_reason;literal@&gt;
       </pre>
     </blockquote>
 
@@ -308,7 +315,7 @@ set form_vars [export_vars -form {var1 var2}]
 	content provided by the user.  Add <tt>;noquote</tt> to them.
 	<p>
       <li>
-	Add <tt>;noquote</tt> to variables used inside the
+	Add <tt>;literal</tt> to variables used inside the
 	<tt>property</tt> tag.
 	<p>
       <li>
@@ -317,11 +324,11 @@ set form_vars [export_vars -form {var1 var2}]
 	<p>
       <li>
 	Audit the template for occurrences of
-	<tt>&lt;%=&nbsp;[ad_quotehtml&nbsp;@<var>variable</var>@]&nbsp;=></tt>
+	<tt>&lt;%=&nbsp;[ns_quotehtml&nbsp;@<var>variable</var>@]&nbsp;=></tt>
 	and replace them with <tt>@<var>variable</var>@</tt>.
 	<p>
       <li>
-	Audit the Tcl code for occurrences of <tt>ad_quotehtml</tt>.
+	Audit the Tcl code for occurrences of <tt>ns_quotehtml</tt>.
 	If it is used to build an HTML component, leave it, but take
 	note of the variable the result gets saved to.  Otherwise,
 	remove the quoting.
@@ -386,8 +393,6 @@ set form_vars [export_vars -form {var1 var2}]
     <hr>
     <address><a href="mailto:hniksic@xemacs.org">Hrvoje Niksic</a></address>
 <!-- Created: Mon Feb 26 12:12:00 CET 2001 -->
-<!-- hhmts start -->
-Last modified: Mon Oct  7 12:27:47 CEST 2002
-<!-- hhmts end -->
+<!-- hhmts start -->Last modified: Thu Aug 20 18:38:05 CEST 2015 <!-- hhmts end -->
   </body>
 </html>

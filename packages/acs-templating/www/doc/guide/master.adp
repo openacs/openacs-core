@@ -37,24 +37,24 @@ their name and access to restricted areas of the site. Special
 formatting preferences may also be applied for registered
 users.</p><h3>Write the Master Template</h3><p>A master template to implement the page layout shown above would
 have this basic structure:</p><blockquote><pre>
-&lt;html&gt;&lt;body&gt;&lt;table width="100%" cellspacing="0" cellpadding="0" border="0"&gt;
+&lt;html&gt;&lt;body&gt;&lt;table width=100% cellspacing=0 cellpadding=0 border=0&gt;
 
 &lt;tr&gt;
   &lt;td&gt;&lt;!-- LOGO --&gt;&lt;/td&gt;
-  &lt;td colspan="2"&gt;&lt;!-- AD BANNER --&gt;&lt;/td&gt;
+  &lt;td colspan=2&gt;&lt;!-- AD BANNER --&gt;&lt;/td&gt;
 &lt;/tr&gt;
 
-&lt;tr&gt;&lt;td colspan="3"&gt;&lt;!-- NAVIGATION/CONTEXT BAR --&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td colspan=3&gt;&lt;!-- NAVIGATION/CONTEXT BAR --&gt;&lt;/td&gt;&lt;/tr&gt;
 
 &lt;tr&gt;
   &lt;td&gt;&lt;!-- SECTION LINKS --&gt;&lt;/td&gt;
-  &lt;td colspan="2"&gt;
+  &lt;td colspan=2&gt;
     &lt;!-- CONTENT --&gt;
     <b>&lt;slave&gt;</b>
   &lt;/td&gt;
 &lt;/tr&gt;
 
-&lt;tr&gt;&lt;td colspan="3"&gt;&lt;!-- FOOTER --&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td colspan=3&gt;&lt;!-- FOOTER --&gt;&lt;/td&gt;&lt;/tr&gt;
 
 &lt;/table&gt;&lt;/body&gt;&lt;/html&gt;
 </pre></blockquote><p>The only special feature of this master template is the

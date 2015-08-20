@@ -121,9 +121,9 @@ This document is primarily the result of discussions between Oumi
 Mehrotra and Michael Bryzek. Bryan Quinn and Rafi Schloming
 provided key insights early in the development process.
 <ul>
-<li>System creator: <a href="mailto:mbryzek@arsdigita.com">mbryzek@arsdigita.com</a>
-</li><li>System owner: <a href="mailto:mbryzek@arsdigita.com">mbryzek@arsdigita.com</a>
-</li><li>Documentation author <a href="mailto:mbryzek@arsdigita.com">mbryzek@arsdigita.com</a>
+<li>System creator: <a href="mailto:mbryzek\@arsdigita.com">mbryzek\@arsdigita.com</a>
+</li><li>System owner: <a href="mailto:mbryzek\@arsdigita.com">mbryzek\@arsdigita.com</a>
+</li><li>Documentation author <a href="mailto:mbryzek\@arsdigita.com">mbryzek\@arsdigita.com</a>
 </li>
 </ul><h3>XII. Revision History</h3><table cellspacing="2" cellpadding="2" width="90%" bgcolor="#EFEFEF"><tbody>
 <tr bgcolor="#E0E0E0">
@@ -133,7 +133,7 @@ provided key insights early in the development process.
 </tr><tr>
 <td>1.0</td><td>Major Revision</td><td>1/11/2001</td><td>Michael Bryzek</td>
 </tr>
-</tbody></table><hr><address><a href="mailto:mbryzek@arsdigita.com">Michael
+</tbody></table><hr><address><a href="mailto:mbryzek\@arsdigita.com">Michael
 Bryzek</a></address><br><font size="-1">group-admin-pages-design.html,v 1.1.4.1 2001/01/12
 22:43:33 mbryzek Exp</font>
 </body>

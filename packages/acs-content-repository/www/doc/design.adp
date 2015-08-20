@@ -60,7 +60,7 @@ to scan and read it more efficiently.</p><h3>VI. Further Reading</h3><p>The <a h
 graphic overview of the the how the content repository is designed.
 The model links to pages of the API Guide that describe individual
 objects. The Developer Guide describes how to address common
-development tasks using the content repository.</p><hr><a href="mailto:karlg@arsdigita.com">karlg@arsdigita.com</a><br>
+development tasks using the content repository.</p><hr><a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a><br>
 Last Modified: $Id: design.html,v 1.1.1.1 2001/03/13 22:59:26 ben
 Exp $
 </body>

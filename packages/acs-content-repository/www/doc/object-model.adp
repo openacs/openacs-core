@@ -21,7 +21,7 @@ attributes, which are stored at the revision level to make changes
 easy to audit. Custom content types typically do not require
 additional unaudited attributes or methods beyond those already
 provided by the Content Item type. It is thereful almost never
-necessary to create a custom subtype of Content Item itself.</p><hr><a href="mailto:karlg@arsdigita.com">karlg@arsdigita.com</a><br>
+necessary to create a custom subtype of Content Item itself.</p><hr><a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a><br>
 Last revised: $Id: object-model.html,v 1.1.1.1 2001/03/13 22:59:26
 ben Exp $
 </body>

@@ -94,6 +94,6 @@ function:</p><pre>
 latest_revision_id := content_item.get_latest_revision(
     item_id =&gt; :item_id
 );
-</pre><hr><a href="mailto:karlg@arsdigita.com">karlg@arsdigita.com</a><p>Last Modified: $Id: revisions.html,v 1.1.1.1 2001/03/13 22:59:26
+</pre><hr><a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a><p>Last Modified: $Id: revisions.html,v 1.1.1.1 2001/03/13 22:59:26
 ben Exp $</p>
 </body>

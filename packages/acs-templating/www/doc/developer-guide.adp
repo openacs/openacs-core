@@ -80,6 +80,6 @@ complaint, <code>ad_page_contract</code> won't touch the variable;
 typically it will stay undefined.
 <hr><address><a href="mailto:christian\@arsdigita.com">Christian
 Brechbühler</a></address><!-- Created: Mon Aug 14 11:53:07 EDT 2000 -->
-Last modified: $Id: developer-guide.html,v 1.3 2004/02/10 12:16:40
-joela Exp $
+Last modified: $Id: developer-guide.html,v 1.4 2015/06/16 08:53:38
+gustafn Exp $
 </body>

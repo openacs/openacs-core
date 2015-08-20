@@ -146,6 +146,6 @@ procedure delete (
 <th align="left" valign="top">See Also:</th><td>content_symlink.new, acs_object.delete</td>
 </tr>
 </table><p> </p>
-Last Modified: $Id: symlink.html,v 1.1.1.1.28.1 2014/09/16 20:43:09
-gustafn Exp $
+Last Modified: $Id: symlink.html,v 1.2 2014/10/27 16:39:14 victorg
+Exp $
 </body>

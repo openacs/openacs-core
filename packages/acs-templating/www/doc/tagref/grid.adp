@@ -60,11 +60,11 @@ order:</p><table cellpadding="2" cellspacing="0" border="1" bgcolor="#EEEEEE">
 <p>The <tt>\@datasource.row\@</tt> variable can be used to band grid
 rows:</p><pre>
   &lt;if \@datasource.col\@ eq 1 and \@datasource.row\@ odd&gt;
-    &lt;tr bgcolor="#eeeeee"&gt;
+    &lt;tr bgcolor=#eeeeee&gt;
   &lt;/if&gt;
 
   &lt;if \@datasource.col\@ eq 1 and \@datasource.row\@ even&gt;
-    &lt;tr bgcolor="#ffffff"&gt;
+    &lt;tr bgcolor=#ffffff&gt;
   &lt;/if&gt;
 </pre><p>Note that this is different from the <a href="multiple"><tt>multiple</tt></a> tag, where the
 <tt>\@datasource.rownum\@</tt> is used for this effect.</p>

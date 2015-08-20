@@ -99,20 +99,20 @@ the commerical at sign (<tt>\@</tt>) are interpreted literally.</p></li><li>
 <p>Phrases with spaces in them must be enclosed in quotes to be
 grouped correctly:</p><pre>
   &lt;if \@datasource.variable\@ eq "blue sky"&gt;
-    &lt;td bgcolor="#0000ff"&gt;
+    &lt;td bgcolor=#0000ff&gt;
   &lt;/if&gt;
 </pre>
 </li><li>
 <p>The <tt>elseif</tt> tag may be used following an <tt>if</tt>
 block to specify an alternate conditional template section.</p><pre>
   &lt;if \@datasource.variable\@ eq "blue"&gt;
-    &lt;td bgcolor="#0000ff"&gt;
+    &lt;td bgcolor=#0000ff&gt;
   &lt;/if&gt;
   &lt;elseif \@datasource.variable\@ eq "red"&gt;
     &lt;td bgcolor=red&gt;
   &lt;/elseif&gt;
   &lt;else&gt;
-    &lt;td bgcolor="#ffffff"&gt;
+    &lt;td bgcolor=#ffffff&gt;
   &lt;/else&gt;
 </pre>
 </li><li>
@@ -120,10 +120,10 @@ block to specify an alternate conditional template section.</p><pre>
 to specify an alternate template section when a condition is not
 true:</p><pre>
   &lt;if \@datasource.variable\@ eq "blue"&gt;
-    &lt;td bgcolor="#0000ff"&gt;
+    &lt;td bgcolor=#0000ff&gt;
   &lt;/if&gt;
   &lt;else&gt;
-    &lt;td bgcolor="#ffffff"&gt;
+    &lt;td bgcolor=#ffffff&gt;
   &lt;/else&gt;
 </pre>
 </li><li><p>Compound expressions can be created by combining terms with the

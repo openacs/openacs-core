@@ -5,7 +5,7 @@
 
 <body>
 <h2>Developer Support</h2>
-part of the <a href="">ArsDigita Community System</a>, by <a href="mailto:jsalz@mit.edu">Jon Salz</a><ul>
+part of the <a href="">ArsDigita Community System</a>, by <a href="mailto:jsalz\@mit.edu">Jon Salz</a><ul>
 <li>Admin interface: /www/admin/monitoring/request-info.tcl</li><li>Procedures: /packages/developer-support-procs.tcl, with support
 in:
 <ul>
@@ -71,6 +71,6 @@ store relevant connection information in shared variables
 (<tt>nsv</tt>s). The security subsystem also renames the AOLserver
 <tt>ns_db</tt> procedure and registers a wrapper which aggregates
 information about database queries.
-<hr><address><a href="mailto:jsalz@mit.edu">jsalz@mit.edu</a></address><p>Last Modified: $Id: index.html,v 1.1.1.1 2001/04/20 20:51:09
+<hr><address><a href="mailto:jsalz\@mit.edu">jsalz\@mit.edu</a></address><p>Last Modified: $Id: index.html,v 1.1.1.1 2001/04/20 20:51:09
 donb Exp $</p>
 </body>

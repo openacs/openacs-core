@@ -20,11 +20,17 @@ you will find it useful.</p><h3>Recap of the Theory.</h3>
 The change to the templating system can be expressed in one
 sentence:
 <blockquote>All variables are now quoted by default, except those
-explicitly protected by <tt>;noquote</tt>.</blockquote>
+explicitly protected by <tt>;noquote</tt> or
+<tt>;literal;</tt>.</blockquote>
 This means that the only way your code can fail is if the new code
 quotes a variable which is not meant to be quoted. Which is where
 <tt>;noquote</tt> needs to be added. That's all porting effort that
-is required.
+is required. Actually, the variables are subject to HTML-quoting
+and internationalization. The suffix <tt>;noquote</tt> means that
+the variable's content will be internationalized, but not
+HTML-quoted, while <tt>;no18n</tt> means quote, but don't
+internationalize. Finally <tt>;literal</tt> means: don't quote and
+don't internationalize.
 <p>This is not hard because most variables will not be affected by
 this change. Most variables either need to be quoted (those
 containing textual data that comes from the database or from the
@@ -156,7 +162,7 @@ work fine in most cases. To notice the problem in the example above
 one of the characters <tt>&lt;</tt>, <tt>&gt;</tt> or
 <tt>&amp;</tt>. If it does, they will appear quoted to the user
 instead of appearing as-is.</p><p>Over-quoting is resolved by adding <tt>;noquote</tt> to one of
-the variables. We strongly recommend that you add <tt>;noquote</tt>
+the variables. We strongly recommend that you add <tt>;literal</tt>
 inside the <tt>property</tt> tag rather than in the master. The
 reason is that, first, it makes sense to do so because conceptually
 the master is the one that "shows" the variable, so it makes sense
@@ -169,8 +175,8 @@ the package and one for the whole site.</p><p>To reiterate, a bug-free version o
 like this:</p><blockquote>
 <b>slave sans over-quoting:</b><pre>
 &lt;master&gt;
-&lt;property name="title"&gt;\@title;noquote\@&lt;/property&gt;
-&lt;property name="heading"&gt;\@title;noquote\@&lt;/property&gt;
+&lt;property name="doc(title)"&gt;\@title;literal\@&lt;/property&gt;
+&lt;property name="heading"&gt;\@title;literal\@&lt;/property&gt;
 ...
       
 </pre>
@@ -183,7 +189,7 @@ passes some text. Here is an example:</p><blockquote>
 &lt;form action="do-kick" method=POST&gt;
   Kick user \@name\@.&lt;br&gt;
   Reason: &lt;textarea name=reason&gt;\@reason\@&lt;/textarea&gt;&lt;br&gt;
-  &lt;input type="submit" value="Kick"&gt;
+  &lt;input type=submit value="Kick"&gt;
 &lt;/form&gt;
       
 </pre>
@@ -197,9 +203,9 @@ database.
 the last example: it gets quoted once by the includer, and the
 second time by the included page. The fix is also similar: when you
 transfer non-constant text to an included page, make sure to add
-<tt>;noquote</tt>.</p><blockquote>
+<tt>;literal</tt>.</p><blockquote>
 <b>Including template, sans over-quoting:</b><pre>
-&lt;include src="user-kick-form" id=\@kicked_id\@ reason=\@default_reason;noquote\@&gt;
+&lt;include src="user-kick-form" id=\@kicked_id;literal\@ reason=\@default_reason;literal\@&gt;
       
 </pre>
 </blockquote><h3>Upgrade Overview.</h3>
@@ -212,11 +218,11 @@ frequency of occurrence of the problem.
 <li>Audit the template for variables that export form variables and
 add <tt>;noquote</tt> to them.</li><li>More generally, audit the template for variables that are known
 to contain HTML, e.g. those that contain widgets or HTML content
-provided by the user. Add <tt>;noquote</tt> to them.</li><li>Add <tt>;noquote</tt> to variables used inside the
+provided by the user. Add <tt>;noquote</tt> to them.</li><li>Add <tt>;literal</tt> to variables used inside the
 <tt>property</tt> tag.</li><li>Add <tt>;noquote</tt> to textual variables whose values are
 attributes to the <tt>include</tt> tag.</li><li>Audit the template for occurrences of
-<tt>&lt;%= [ad_quotehtml \@<var>variable</var>\@] =&gt;</tt>
-and replace them with <tt>\@<var>variable</var>\@</tt>.</li><li>Audit the Tcl code for occurrences of <tt>ad_quotehtml</tt>. If
+<tt>&lt;%= [ns_quotehtml \@<var>variable</var>\@] =&gt;</tt>
+and replace them with <tt>\@<var>variable</var>\@</tt>.</li><li>Audit the Tcl code for occurrences of <tt>ns_quotehtml</tt>. If
 it is used to build an HTML component, leave it, but take note of
 the variable the result gets saved to. Otherwise, remove the
 quoting.</li><li>Add <tt>;noquote</tt> to the "HTML component" variables noted
@@ -263,6 +269,6 @@ such as a context bar, from strings that come from the database or
 from the user.</p>
 </li>
 </ul><hr><address><a href="mailto:hniksic\@xemacs.org">Hrvoje
-Niksic</a></address><!-- Created: Mon Feb 26 12:12:00 CET 2001 --><!-- hhmts start -->
-Last modified: Mon Oct 7 12:27:47 CEST 2002 <!-- hhmts end -->
+Niksic</a></address><!-- Created: Mon Feb 26 12:12:00 CET 2001 --><!-- hhmts start -->Last modified: Thu Aug 20 18:38:05 CEST 2015 
+<!-- hhmts end -->
 </body>

@@ -90,7 +90,7 @@ objects not described directly in attribute tables. The setup code
 associated with a template typically performs these queries after
 the initial query for any needed attributes.</p><h3>Merging Data with Templates</h3><h3>Returning Output</h3><ol>
 <li>Write to the file system</li><li>Service public requests directly</li>
-</ol><hr><a href="mailto:karlg@arsdigita.com">karlg@arsdigita.com</a><br>
+</ol><hr><a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a><br>
 Last Modified: $Id: publish.html,v 1.4 2013/04/12 16:12:56 gustafn
 Exp $
 </body>

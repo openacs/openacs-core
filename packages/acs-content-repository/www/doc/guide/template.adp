@@ -105,6 +105,6 @@ content_item.unregister_template(
     template_id =&gt; :template_id,
     use_context =&gt; 'admin'
 );
-</pre><hr><a href="mailto:karlg@arsdigita.com">karlg@arsdigita.com</a><p>Last Modified: $Id: template.html,v 1.1.1.1 2001/03/13 22:59:26
+</pre><hr><a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a><p>Last Modified: $Id: template.html,v 1.1.1.1 2001/03/13 22:59:26
 ben Exp $</p>
 </body>

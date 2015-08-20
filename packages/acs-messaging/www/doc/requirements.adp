@@ -5,8 +5,8 @@
 
 <body>
 <h1>ACS Messaging Requirements</h1>
-by <a href="mailto:akk@arsdigita.com">Anukul Kapoor</a> and
-<a href="mailto:akk@arsdigita.com">Pete Su</a><i>This is only a DRAFT</i><h3>I. Introduction</h3><p>In ACS 3.x, each messaging application (e.g. bboard, general
+by <a href="mailto:akk\@arsdigita.com">Anukul Kapoor</a> and
+<a href="mailto:akk\@arsdigita.com">Pete Su</a><i>This is only a DRAFT</i><h3>I. Introduction</h3><p>In ACS 3.x, each messaging application (e.g. bboard, general
 comments, spam, ticket tracker and so on) used its own specialized
 data model for representing and manipulating messages. ACS Messages
 provides a common data model and API for these applications. The
@@ -104,7 +104,7 @@ bboard thread could be sent to a user as a digest.</p>
 </tr><tr>
 <td>0.2</td><td>Edited and extended for more general data model</td><td>11/07/2000</td><td>Pete Su</td>
 </tr>
-</table><hr><address><a href="mailto:kapoor@maya.com"></a></address>
+</table><hr><address><a href="mailto:kapoor\@maya.com"></a></address>
 Last modified: $Id: requirements.html,v 1.1.1.1 2001/03/13 22:59:26
 ben Exp $
 </body>

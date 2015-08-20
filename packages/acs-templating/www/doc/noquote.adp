@@ -1,7 +1,8 @@
 
 <property name="context">{/doc/acs-templating {Templating}} {HTMLQuoting as Part of the Templating System -
 Requirements}</property>
-<property name="doc(title)">HTMLQuoting as Part of the Templating System - Requirements</property>
+<property name="doc(title)">HTMLQuoting as Part of the Templating System -
+Requirements</property>
 <master>
 
 <body>
@@ -134,33 +135,21 @@ This is not exaggeration; it has been proven by auditing the ACS
 Strangely, this otherwise sad fact allows us to deploy a very
 radical but much more robust solution to the problem.</p>
 </div><div class="sect2" lang="en">
-<div class="titlepage"><div>
-
-<h3 class="title"><a name="Quote_Always,_Except_When_Told_Not_to"></a>Quote Always, Except
-When Told Not to.</h3>
-</div></div
-
-><p>At the time when we came to realize how serious the quoting
+<div class="titlepage"><div><h3 class="title">
+<a name="Quote_Always,_Except_When_Told_Not_to"></a>Quote Always, Except
+When Told Not to.</h3></div></div><p>At the time when we came to realize how serious the quoting
 deficiencies of ACS 4.0 were, we were about two weeks away from the
 release of a project for the German Bank. There was simply no time
 to hunt all the places where a variable needs to be quoted and
-implement one of the above quoting tricks.</p>
-<p>While examining the ADPs, we noticed that most substituted
-variable fall into one of three categories:</p>
-
-<div class="orderedlist">
-<ol type="1">
+implement one of the above quoting tricks.</p><p>While examining the ADPs, we noticed that most substituted
+variable fall into one of three categories:</p><div class="orderedlist"><ol type="1">
 <li><p>Those that need to be quoted -- names and descriptions of
-objects, and in general stuff that ultimately comes from the user.</p></li>
-<li><p>Those for which it doesn't make a difference whether they are
-quoted or not -- e.g. all the database IDs.</p></li>
-<li><p>Those that must not be quoted -- e.g. exported form vars stored
-to a variable.</p></li>
-<li><p>Finally we also remembered the fact that almost none of the
+objects, and in general stuff that ultimately comes from the
+user.</p></li><li><p>Those for which it doesn't make a difference whether they are
+quoted or not -- e.g. all the database IDs.</p></li><li><p>Those that must not be quoted -- e.g. exported form vars stored
+to a variable.</p></li><li><p>Finally we also remembered the fact that almost none of the
 variables are quoted in the current source base.</p></li>
-</ol></div>
-
-<p>Our reasoning went further: if it is a fact that most variables
+</ol></div><p>Our reasoning went further: if it is a fact that most variables
 are not quoted, and if the majority of variables either require
 quoting or are not harmed by it, then we are in a much better
 position if we make the templating system <span class="emphasis"><em>quote all variables</em></span> by default! That way
@@ -169,9 +158,7 @@ handled correctly, and the variables from the third category will
 need to be marked as noquote to function correctly. But even those
 should not be a problem, because HTML code that ends up quoted in
 the page is immediately visible, and all you need to do to fix it
-is add the marker.</p>
-
-<p>We decided to test whether the idea will work by attempting to
+is add the marker.</p><p>We decided to test whether the idea will work by attempting to
 convert our system to work that way. I spent several minutes making
 the change to the templating system. Then we went through all the
 ADPs and replaced the instances of \@foo\@ where foo contained HTML

@@ -10,7 +10,7 @@ Templating System
 <tr>
 <td colspan="2"><a href="requirements">Requirements</a></td><td>What the template system should do for you.</td>
 </tr><tr>
-<td></td><td><a href="noquote">Noquote</a></td><td>A revision in 5.0 that escapes all html codes by default.</td>
+<td></td><td><a href="noquote">Quoting</a></td><td>A revision in 5.0 that escapes all html codes by default.</td>
 </tr><tr>
 <td colspan="2"><a href="design">Design</a></td><td>Gets more specific and discusses the way the templating system
 integrates with ACS. Gory details.</td>
@@ -39,6 +39,6 @@ parts.</td>
 </tr>
 </table><hr><address><a href="mailto:christian\@arsdigita.com">Christian
 Brechbühler</a></address><!-- Created: Mon Aug 14 11:53:07 EDT 2000 -->
-Last modified: $Id: index.html,v 1.4.20.1 2014/09/09 08:32:02
-gustafn Exp $
+Last modified: $Id: index.html,v 1.6 2015/06/16 08:53:38 gustafn
+Exp $
 </body>

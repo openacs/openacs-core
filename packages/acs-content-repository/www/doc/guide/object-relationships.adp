@@ -87,7 +87,7 @@ developer.</li>
 sufficient for some applications. However, because both
 relationships defined by the content repository are
 <em>themselves</em> objects, you have the option to extend their
-types as you would for any other ACS object.</p><hr><a href="mailto:karlg@arsdigita.com">karlg@arsdigita.com</a><br>
+types as you would for any other ACS object.</p><hr><a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a><br>
 Last modified: <tt>$Id: object-relationships.html,v 1.1.1.1
 2001/03/13 22:59:26 ben Exp $</tt>
 </body>

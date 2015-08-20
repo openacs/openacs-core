@@ -45,11 +45,11 @@ for each repetition and can be used in conjunction with the
   &lt;multiple&gt;
 
   &lt;if \@datasource.rownum\@ odd&gt;
-    &lt;tr bgcolor="#eeeeee"&gt;
+    &lt;tr bgcolor=#eeeeee&gt;
   &lt;/if&gt;
 
   &lt;if \@datasource.rownum\@ even&gt;
-    &lt;tr bgcolor="#ffffff"&gt;
+    &lt;tr bgcolor=#ffffff&gt;
   &lt;/if&gt;
 
   ...

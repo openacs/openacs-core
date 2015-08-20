@@ -129,7 +129,7 @@ intra-party relations.</font></p></dd>
 </tr><tr>
 <td>1.0</td><td>Final Revisions</td><td>1/11/2001</td><td>Michael Bryzek</td>
 </tr>
-</table><hr><address><a href="mailto:mbryzek@arsdigita.com">Michael
+</table><hr><address><a href="mailto:mbryzek\@arsdigita.com">Michael
 Bryzek</a></address><br><font size="-1">$Id: group-admin-pages-requirements.html,v 1.2
 2001/08/11 21:31:03 ben Exp $</font>
 </body>

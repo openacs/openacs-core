@@ -196,6 +196,6 @@ HTML.</p>
 <td>0.3</td><td>Edited, reviewed, pending freeze</td><td>8/28/2000</td><td>Kai Wu</td>
 </tr>
 </table><hr><address><a href="mailto:yon\@arsdigita.com">yon\@arsdigita.com</a></address>
-Last modified: $Id: requirements.html,v 1.1.1.1.28.1 2014/09/09
-08:32:02 gustafn Exp $
+Last modified: $Id: requirements.html,v 1.2 2014/10/27 16:40:14
+victorg Exp $
 </body>
