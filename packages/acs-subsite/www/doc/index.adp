@@ -26,7 +26,7 @@ administration</td>
 <td colspan="2"><a href="images">Subsite images</a></td><td>Shows all (hopefully) images available from the subsite
 package</td>
 </tr>
-</table><hr><address><a href="mailto:mbryzek@arsdigita.com">Michael
-Bryzek</a></address><br><font size="-1">$Id: index.html,v 1.2 2005/01/13 13:55:49 jeffd Exp
-$</font><!-- Created: 1/11/2001 -->
+</table><hr><address><a href="mailto:mbryzek\@arsdigita.com">Michael
+Bryzek</a></address><br><font size="-1">$Id: index.html,v 1.3 2015/06/15 11:14:18 gustafn
+Exp $</font><!-- Created: 1/11/2001 -->
 </body>

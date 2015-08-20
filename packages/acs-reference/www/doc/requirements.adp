@@ -4,7 +4,7 @@
 <master>
 
 <body>
-<h2>ACS Reference Requirements</h2><p>by <a href="mailto:jon@jongriffin.com">Jon Griffin</a>
+<h2>ACS Reference Requirements</h2><p>by <a href="mailto:jon\@jongriffin.com">Jon Griffin</a>
 </p><hr><h3>I. Introduction</h3><p>This document describes the requirements for the ACS Reference
 service package. This package has the following primary
 functions:</p><ul>
@@ -83,9 +83,6 @@ dates. This will not be implemented in the first version, but
 should be recognized and accomodated throughout the development
 process for the service package.</p><h3>VIII. Pre-CVS Revision History</h3><pre>
 $Log$
-Revision 1.1.2.1  2014/09/17 18:35:54  gustafn
-- prettify documentation (use master templates)
-
 Revision 1.3  2006/08/06 20:40:20  torbenb
 upgrading html, closing li p tags, adding quotes to tag attributes
 

@@ -92,6 +92,6 @@ type. This view may be used to query attributes when serving
 content.</p><h3>Creating compund items</h3><p>In many cases your content items will serve as containers for
 other items. You can include the set of allowable components as
 part of a content type definition. See <a href="object-relationships">Object Relationships</a> for
-details.</p><hr><a href="mailto:templating@arsdigita.com">templating@arsdigita.com</a><p>Last Modified: $Id: types.html,v 1.1.1.1 2001/03/13 22:59:26 ben
+details.</p><hr><a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a><p>Last Modified: $Id: types.html,v 1.1.1.1 2001/03/13 22:59:26 ben
 Exp $</p>
 </body>

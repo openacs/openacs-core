@@ -98,6 +98,6 @@ portrait upload form would look like this:</p><pre>
     :rel_id := acs_rel.new(...)
 </pre><h3>Retrieve Objects</h3><pre>
   ns_ora write_blob ...
-</pre><hr><a href="mailto:karlg@arsdigita.com">karlg@arsdigita.com</a><p>Last Modified: $Id: storage.html,v 1.1.1.1 2001/03/13 22:59:26
+</pre><hr><a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a><p>Last Modified: $Id: storage.html,v 1.1.1.1 2001/03/13 22:59:26
 ben Exp $</p>
 </body>

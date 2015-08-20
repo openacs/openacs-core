@@ -20,7 +20,7 @@ of a form validation error.</p><h3>Usage</h3><pre>
     &lt;/td&gt;
   &lt;/tr&gt;
   &lt;/table&gt;&lt;br&gt;
-  &lt;input type="submit" value="Submit"&gt;
+  &lt;input type=submit value="Submit"&gt;
   &lt;/formtemplate&gt;
 </pre><p>Another example:</p><pre>
   &lt;formtemplate id="add_user"&gt;
@@ -37,7 +37,7 @@ of a form validation error.</p><h3>Usage</h3><pre>
   &lt;/tr&gt;
   &lt;/formerror&gt;
   &lt;/table&gt;&lt;br&gt;
-  &lt;input type="submit" value="Submit"&gt;
+  &lt;input type=submit value="Submit"&gt;
   &lt;/formtemplate&gt;
 </pre><p>This adds another table row which contains the error message for
 that widget in red color. If there is no error then the table row

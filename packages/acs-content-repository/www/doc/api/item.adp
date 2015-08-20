@@ -648,9 +648,9 @@ content_item.unset_live_revision</li></ul><table cellpadding="3" cellspacing="0"
 <tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><i>Not yet documented</i></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
 procedure unset_live_revision (
   --/** Set the live revision to null for the item
-  --    @author Michael Pih
-  --    @param item_id The id of the item for which to unset the live revision
-  --    @see {content_item.set_live_revision}
+  --    \@author Michael Pih
+  --    \@param item_id The id of the item for which to unset the live revision
+  --    \@see {content_item.set_live_revision}
   item_id      in cr_items.item_id%TYPE
 );
 

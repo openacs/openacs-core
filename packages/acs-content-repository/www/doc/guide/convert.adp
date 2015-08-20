@@ -34,7 +34,7 @@ begin
 end;
 /
 </pre><p>Once the transaction is committed, the uploaded document is
-automatically deleted from the <tt>cr_doc_filter</tt> table.</p><hr><a href="mailto:karlg@arsdigita.com">karlg@arsdigita.com</a><br>
+automatically deleted from the <tt>cr_doc_filter</tt> table.</p><hr><a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a><br>
 Last Modified: $Id: convert.html,v 1.1.1.1 2001/03/13 22:59:26 ben
 Exp $
 </body>

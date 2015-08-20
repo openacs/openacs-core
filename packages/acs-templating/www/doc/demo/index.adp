@@ -78,7 +78,7 @@ Template</th><th width="15%">Output</th>
 </tr><tr>
 <td>Repeating template chunks for each row of a query result</td><td align="center"><a href="show.tcl?file=multiple.tcl">View</a></td><td align="center"><a href="show.tcl?file=multiple.adp">View</a></td><td align="center"><a href="compile.tcl?file=multiple.adp">View</a></td><td align="center"><a href="multiple">View</a></td>
 </tr><tr>
-<td>Generating the multirow datasource in Tcl</td><td align="center"><a href="show.tcl?file=multirow.tcl">View</a></td><td align="center"><a href="show.tcl?file=multirow.adp">View</a></td><td align="center"><a href="compile.tcl?file=multirow.adp">View</a></td><td align="center"><a href="multirow">View</a></td>
+<td>Generating the multirow datasource in TCL</td><td align="center"><a href="show.tcl?file=multirow.tcl">View</a></td><td align="center"><a href="show.tcl?file=multirow.adp">View</a></td><td align="center"><a href="compile.tcl?file=multirow.adp">View</a></td><td align="center"><a href="multirow">View</a></td>
 </tr><tr>
 <td>Repeating template chunks for each row of a query result, with
 custom manipulation of data</td><td align="center"><a href="show.tcl?file=multiaccess.tcl">View</a></td><td align="center"><a href="show.tcl?file=multiaccess.adp">View</a></td><td align="center"><a href="compile.tcl?file=multiaccess.adp">View</a></td><td align="center"><a href="multiaccess">View</a></td>

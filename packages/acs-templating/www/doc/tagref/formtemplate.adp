@@ -17,7 +17,7 @@ script associated with the template.</p><h3>Usage</h3><pre>
     &lt;td&gt;Last Name&lt;/td&gt;&lt;td&gt;&lt;formwidget id="last_name"&gt;&lt;/td&gt;
   &lt;/tr&gt;
   &lt;/table&gt;&lt;br&gt;
-  &lt;input type="submit" value="Submit"&gt;
+  &lt;input type=submit value="Submit"&gt;
   &lt;/formtemplate&gt;
 </pre><h3>Notes</h3><ul>
 <li><p>The <tt>formtemplate</tt> tag takes the place of the

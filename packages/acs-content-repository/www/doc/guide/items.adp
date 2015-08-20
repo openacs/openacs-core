@@ -39,6 +39,6 @@ revision using the Content Revision API.</p><h3>Publishing a content item</h3><p
 published by calling the <tt>content_item.set_live_revision</tt>
 procedure, which takes as input a <tt>revision_id</tt>:</p><pre>
 content_item.set_live_revision( revision_id =&gt; :revision_id );
-</pre><hr><a href="mailto:karlg@arsdigita.com">karlg@arsdigita.com</a><p>Last Modified: $Id: items.html,v 1.1.1.1 2001/03/13 22:59:26 ben
+</pre><hr><a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a><p>Last Modified: $Id: items.html,v 1.1.1.1 2001/03/13 22:59:26 ben
 Exp $</p>
 </body>

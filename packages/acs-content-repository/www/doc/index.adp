@@ -32,6 +32,6 @@ items</a></li>
 </ul>
 </li><li><a href="uninstall">Uninstalling the content
 repository</a></li>
-</ul><hr><a href="mailto:karlg@arsdigita.com">karlg@arsdigita.com</a><br>
+</ul><hr><a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a><br>
 Last Revised: $Id$
 </body>

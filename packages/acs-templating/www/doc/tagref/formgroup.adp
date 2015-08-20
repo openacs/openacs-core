@@ -16,7 +16,7 @@ with the template.</p><h3>Usage</h3><pre>
          &lt;tr&gt;&lt;td&gt;\@formgroup.widget\@&lt;/td&gt;&lt;td&gt;\@formgroup.label\@&lt;/td&gt;&lt;/tr&gt;
       &lt;/formgroup&gt;
     &lt;/table&gt;&lt;br&gt;
-  &lt;input type="submit" value="Submit"&gt;
+  &lt;input type=submit value="Submit"&gt;
   &lt;/formtemplate&gt;
 </pre><h3>Notes</h3><ul>
 <li><p>The <tt>formgroup</tt> tag contains a template for formatting

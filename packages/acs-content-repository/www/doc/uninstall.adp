@@ -21,7 +21,7 @@ only appropriate for removing the content repository <em>in
 preparation for removing the entire ACS Objects data model</em>. If
 you wish to upgrade an existing installation and cannot afford to
 lose your data, you must run an upgrade script rather than
-uninstalling the entire data model.</p><hr><a href="mailto:karlg@arsdigita.com">karlg@arsdigita.com</a><br>
+uninstalling the entire data model.</p><hr><a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a><br>
 Last revised: $Id: uninstall.html,v 1.1.1.1 2001/03/13 22:59:26 ben
 Exp $
 </body>

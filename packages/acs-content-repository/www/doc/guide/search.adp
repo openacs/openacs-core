@@ -86,7 +86,7 @@ also be able implement custom handlers, to allow the XML document
 to reflect one-to-many relationships or special formatting of
 attributes as well. The handler should specify a java class and
 method, which a dispatch method can call by reflection.</li>
-</ol><hr><a href="mailto:karlg@arsdigita.com">karlg@arsdigita.com</a><br>
+</ol><hr><a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a><br>
 Last Modified: $Id: search.html,v 1.1.1.1 2001/03/13 22:59:26 ben
 Exp $
 </body>

@@ -87,7 +87,7 @@ the content repository which root you are talking about. For
 example, to retrieve content through <tt>content_item.get_id</tt>,
 you pass the id of your content root as the <tt>root_folder_id</tt>
 parameter to specify the content root under which the
-<tt>item_path</tt> should be resolved.</p><hr><a href="mailto:karlg@arsdigita.com">karlg@arsdigita.com</a><br>
+<tt>item_path</tt> should be resolved.</p><hr><a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a><br>
 Last Modified: $Id: file-system.html,v 1.1.1.1 2001/03/13 22:59:26
 ben Exp $
 </body>

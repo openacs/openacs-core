@@ -17,7 +17,7 @@ the Tcl script associated with the template.</p><h3>Usage</h3><pre>
     &lt;td&gt;First Name&lt;/td&gt;&lt;td&gt;<b>&lt;formwidget id="first_name"&gt;</b>&lt;/td&gt;
   &lt;/tr&gt;
   &lt;/table&gt;&lt;br&gt;
-  &lt;input type="submit" value="Submit"&gt;
+  &lt;input type=submit value="Submit"&gt;
   &lt;/formtemplate&gt;
 </pre><h3>Notes</h3><ul>
 <li><p>The <tt>formwidget</tt> tag takes the place of <tt>input</tt>

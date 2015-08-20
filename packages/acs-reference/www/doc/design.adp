@@ -38,9 +38,6 @@ xml/csv from the reference data would be a nice service to the
 community (allowing legacy applications a way to import this
 data).</p><h3>IX. Authors</h3><p>Jon Griffin</p><h3>X. Pre-CVS Revision History</h3><pre>
 $Log$
-Revision 1.1.2.1  2014/09/17 18:35:54  gustafn
-- prettify documentation (use master templates)
-
 Revision 1.4  2006/08/06 20:40:20  torbenb
 upgrading html, closing li p tags, adding quotes to tag attributes
 
