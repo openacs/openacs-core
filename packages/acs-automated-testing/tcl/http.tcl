@@ -712,7 +712,6 @@ proc http::cleanup {token} {
 proc http::Connect {token} {
     variable $token
     upvar 0 $token state
-    global errorInfo errorCode
     if {[eof $state(sock)] ||
 	[string length [fconfigure $state(sock) -error]]} {
 	    Finish $token "connect failed [fconfigure $state(sock) -error]" 1
