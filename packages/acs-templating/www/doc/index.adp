@@ -39,6 +39,6 @@ parts.</td>
 </tr>
 </table><hr><address><a href="mailto:christian\@arsdigita.com">Christian
 Brechbühler</a></address><!-- Created: Mon Aug 14 11:53:07 EDT 2000 -->
-Last modified: $Id: index.html,v 1.6 2015/06/16 08:53:38 gustafn
-Exp $
+Last modified: $Id: index.html,v 1.6.2.1 2015/08/20 17:19:52
+gustafn Exp $
 </body>
