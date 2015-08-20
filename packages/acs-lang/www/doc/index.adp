@@ -6,6 +6,6 @@
 <body>
 This is now documented within ACS Core Documentation at:
 <ul>
-<li><a href="i18n-requirements">Requirements</a></li><li><a href="i18n">Design</a></li>
+<li><a href="i18n-requirements">Requirements</a></li><li><a href="i18n-design">Design</a></li>
 </ul>
 </body>
