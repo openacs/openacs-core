@@ -8,11 +8,15 @@ nsv_array set proc_source_file [list]
 
 
 #
-# Safetybelt for ::acs::useNsfProc for upgrade phase
+# Safetybelt for ::acs::useNsfProc for upgrade phase to oacs-5-9
 #
 if {![info exists ::acs::useNsfProc]} {
     ns_log notice "use fallback value for ::acs::useNsfProc"
     set ::acs::useNsfProc 0
+}
+if {![info exists ::acs::useNaviServer]} {
+    ns_log notice "use fallback value for ::acs::useNaviServer"
+    set ::acs::useNaviServer [expr {[ns_info name] eq "NaviServer"}]
 }
 
 proc number_p { str } {
