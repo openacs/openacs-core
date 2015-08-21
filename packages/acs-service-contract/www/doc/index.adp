@@ -65,6 +65,6 @@ whether a binding exists between a given contract name and
 implmentation.</li></ul><h3>Dispatching</h3><ul><li>(tcl) acs_sc::invoke (contract, operation, [arguments, impl]):
 calls an operation</li></ul><h2>Examples</h2><p>Included in the service contract package are examples for oracle
 and postgresql of a trivial contract.</p><p>Also the search contract functions as a non-trivial core
-contract used by openacs4.</p><h2>Further Reading</h2><p>Abstract Factory Pattern - GOF</p><p>Component Systems - Clemens Syzperski</p><p>WSDL Spec</p><h2>Credits</h2><p>Most content was provided by Neophytos Demetriou. Most of the
+contract used by openacs4.</p><h2>Further Reading</h2><p>Abstract Factory Pattern - GOF</p><p>Component Systems - Clemens Syzperski</p><p>WSDL Spec</p><h2>Release Notes</h2><p>Please file bugs in the <a href="http://openacs.org/bugtracker/openacs/">Bug Tracker</a>.</p><h2>Credits</h2><p>Most content was provided by Neophytos Demetriou. Most of the
 errors were provided by Kapil Thangavelu.</p>
 </body>

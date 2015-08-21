@@ -1,11 +1,10 @@
 
-<property name="context">{/doc/acs-lang {Localization}} {ACS 4 Localization}</property>
-<property name="doc(title)">ACS 4 Localization</property>
+<property name="context">{/doc/acs-lang {Localization}} {ACS Localization Documentation}</property>
+<property name="doc(title)">ACS Localization Documentation</property>
 <master>
 
 <body>
-This is now documented within ACS Core Documentation at:
-<ul>
+<h1>ACS Localization Documentation</h1><h2>Engineering Documentation</h2><ul>
 <li><a href="i18n-requirements">Requirements</a></li><li><a href="i18n-design">Design</a></li>
-</ul>
+</ul><h2>Release Notes</h2><p>Please file bugs in the <a href="http://openacs.org/bugtracker/openacs/">Bug Tracker</a>.</p>
 </body>

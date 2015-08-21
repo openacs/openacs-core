@@ -4,7 +4,7 @@
 </head>
 
 <body bgcolor=white text=black>
-<h2>Developer Support</h2>
+<h1>Developer Support</h1>
 
 part of the <a href="">ArsDigita Community System</a>, by <a href="mailto:jsalz@mit.edu">Jon Salz</a>
 
@@ -20,14 +20,14 @@ part of the <a href="">ArsDigita Community System</a>, by <a href="mailto:jsalz@
 </ul>
 </ul>
 
-<h3>The Big Picture</h3>
+<h2>The Big Picture</h2>
 
 Software development is a big feedback loop: a developer writes something, tests it, and
 then repeats until the results are satisfactory. It's important to streamline this cycle
 by having a development environment which makes it easy to analyze what the software is
 doing under the hood.
 
-<h3>Peeking Under the Hood</h3>
+<h2>Peeking Under the Hood</h2>
 
 <p>Our development environment previously consisted largely of Emacs, and <tt>tail -f
 /web/servername/log/servername-error.log</tt>. Now this has been augmented:
@@ -52,7 +52,7 @@ If an error occurs while serving a page, a stack trace is printed out.
 administrator! Revealing this information to anyone else would pose a huge security
 risk.
 
-<h3>Comments</h3>
+<h2>Comments</h2>
 
 Tired of using <tt>ns_log</tt> to instrument your code, then grokking the error log
 to see what's wrong with your page? Use the <tt>ds_comment</tt> routine instead:
@@ -84,13 +84,16 @@ DataSweepInterval=900</pre></blockquote>
 Note that you may not want to enable this stuff for production systems - they probably
 incur a slight performance hit (although this hasn't been benchmarked).
 
-<h3>How It Works</h3>
+<h2>How It Works</h2>
 
 The security subsystem registers preauth and trace filters which store relevant
 connection information in shared variables (<tt>nsv</tt>s). The security subsystem
 also renames the AOLserver <tt>ns_db</tt> procedure and registers a wrapper
 which aggregates information about database queries.
 
+<h2>Release Notes</h2>
+
+<p>Please file bugs in the <a href="http://openacs.org/bugtracker/openacs/">Bug Tracker</a>.</p>
 <hr>
 <address><a href="mailto:jsalz@mit.edu">jsalz@mit.edu</a></address>
 

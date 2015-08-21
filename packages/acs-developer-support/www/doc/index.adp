@@ -4,7 +4,7 @@
 <master>
 
 <body>
-<h2>Developer Support</h2>
+<h1>Developer Support</h1>
 part of the <a href="">ArsDigita Community System</a>, by <a href="mailto:jsalz\@mit.edu">Jon Salz</a><ul>
 <li>Admin interface: /www/admin/monitoring/request-info.tcl</li><li>Procedures: /packages/developer-support-procs.tcl, with support
 in:
@@ -12,13 +12,13 @@ in:
 <li>/tcl/ad-abstract-url.tcl</li><li>/tcl/ad-defs.tcl.preload</li><li>/tcl/ad-security.tcl.preload</li>
 </ul>
 </li>
-</ul><h3>The Big Picture</h3>
+</ul><h2>The Big Picture</h2>
 Software development is a big feedback loop: a developer writes
 something, tests it, and then repeats until the results are
 satisfactory. It's important to streamline this cycle by having a
 development environment which makes it easy to analyze what the
 software is doing under the hood.
-<h3>Peeking Under the Hood</h3><p>Our development environment previously consisted largely of
+<h2>Peeking Under the Hood</h2><p>Our development environment previously consisted largely of
 Emacs, and <tt>tail -f
 /web/servername/log/servername-error.log</tt>. Now this has been
 augmented: <tt>ad_footer</tt> and <tt>ad_admin_footer</tt> now
@@ -36,7 +36,7 @@ re-implemented in the abstract URL system (which serves nearly all
 non-static pages). If an error occurs while serving a page, a stack
 trace is printed out.</p><p>Note that these nifty features pop up only when you are logged
 in as a site-wide administrator! Revealing this information to
-anyone else would pose a huge security risk.</p><h3>Comments</h3>
+anyone else would pose a huge security risk.</p><h2>Comments</h2>
 Tired of using <tt>ns_log</tt> to instrument your code, then
 grokking the error log to see what's wrong with your page? Use the
 <tt>ds_comment</tt> routine instead:
@@ -65,12 +65,12 @@ DataSweepInterval=900
 Note that you may not want to enable this stuff for production
 systems - they probably incur a slight performance hit (although
 this hasn't been benchmarked).
-<h3>How It Works</h3>
+<h2>How It Works</h2>
 The security subsystem registers preauth and trace filters which
 store relevant connection information in shared variables
 (<tt>nsv</tt>s). The security subsystem also renames the AOLserver
 <tt>ns_db</tt> procedure and registers a wrapper which aggregates
 information about database queries.
-<hr><address><a href="mailto:jsalz\@mit.edu">jsalz\@mit.edu</a></address><p>Last Modified: $Id: index.html,v 1.1.1.1 2001/04/20 20:51:09
+<h2>Release Notes</h2><p>Please file bugs in the <a href="http://openacs.org/bugtracker/openacs/">Bug Tracker</a>.</p><hr><address><a href="mailto:jsalz\@mit.edu">jsalz\@mit.edu</a></address><p>Last Modified: $Id: index.html,v 1.1.1.1 2001/04/20 20:51:09
 donb Exp $</p>
 </body>
