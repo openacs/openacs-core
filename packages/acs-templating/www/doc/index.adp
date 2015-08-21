@@ -38,6 +38,6 @@ parts.</td>
 </tr>
 </table><h2>Release Notes</h2><p>Please file bugs in the <a href="http://openacs.org/bugtracker/openacs/">Bug Tracker</a>.</p><hr><address><a href="mailto:christian\@arsdigita.com">Christian
 Brechbühler</a></address><!-- Created: Mon Aug 14 11:53:07 EDT 2000 -->
-Last modified: $Id: index.html,v 1.6.2.1 2015/08/20 17:19:52
+Last modified: $Id: index.html,v 1.6.2.2 2015/08/21 10:28:47
 gustafn Exp $
 </body>

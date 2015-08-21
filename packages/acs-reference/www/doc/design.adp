@@ -36,21 +36,5 @@ allow for tables to be updated (and preferably diffed) instead of
 being reloaded with a package upgrade. An interface to produce
 xml/csv from the reference data would be a nice service to the
 community (allowing legacy applications a way to import this
-data).</p><h3>IX. Authors</h3><p>Jon Griffin</p><h3>X. Pre-CVS Revision History</h3><pre>
-$Log$
-Revision 1.4  2006/08/06 20:40:20  torbenb
-upgrading html, closing li p tags, adding quotes to tag attributes
-
-Revision 1.3  2006/08/06 18:54:02  torbenb
-added documentation commentary, applied bs filter, renumbered sections
-
-Revision 1.2  2006/08/06 18:30:57  torbenb
-removing c-Ms, wrapping text with p tags, added link to api-browser in api section
-
-Revision 1.1  2001/04/22 00:53:12  jong
-initial openacs import
-
-Revision 1.2  2000/12/13 04:39:00  jong
-Added Revision History and corrected typo in reference link
-</pre>
+data).</p><h3>IX. Authors</h3><p>Jon Griffin</p>
 </body>
