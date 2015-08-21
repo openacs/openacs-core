@@ -18,10 +18,12 @@ DROP FUNCTION IF EXISTS cr_folder_ins_up_ri_trg();
 
 -- 
 -- Handle latest_revision and live_revision via foreign keys
--- 
+--
+ALTER TABLE cr_items DROP CONSTRAINT IF EXISTS cr_items_latest_fk;
 ALTER TABLE cr_items ADD CONSTRAINT cr_items_latest_fk
 FOREIGN KEY (latest_revision) REFERENCES cr_revisions(revision_id);
 
+ALTER TABLE cr_items DROP CONSTRAINT IF EXISTS cr_items_live_fk;
 ALTER TABLE cr_items ADD CONSTRAINT cr_items_live_fk
 FOREIGN KEY (live_revision) REFERENCES cr_revisions(revision_id);
 
