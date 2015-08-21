@@ -99,5 +99,5 @@ reindex:</p><pre>
 are possible by adding admin configurable parameters. The current
 service contract definitions are not flexible enough to work well
 with every possible search driver, so some features may require
-making some improvements to the search package also.</p><p>Dave Bauer dave\@thedesignexperience.org 2004-06-05</p>
+making some improvements to the search package also.</p><h2>Release Notes</h2><p>Please file bugs in the <a href="http://openacs.org/bugtracker/openacs/">Bug Tracker</a>.</p><p>Dave Bauer dave\@thedesignexperience.org 2004-06-05</p>
 </body>

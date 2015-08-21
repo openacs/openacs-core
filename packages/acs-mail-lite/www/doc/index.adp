@@ -4,7 +4,7 @@
 <master>
 
 <body>
-<h2>User Documentation for ACS Mail Lite</h2>
+<h1>User Documentation for ACS Mail Lite</h1>
 Acs Mail Lite handles sending of email via sendmail or smtp and
 includes a bounce management system for invalid email accounts.
 <p>When called to send a mail, the mail will either get sent
@@ -62,4 +62,5 @@ In case of multiple services on one system, create a bounce email
 for each of them (e.g. changeing "bounce" to "bounce_service1") and
 create a new user that runs the aolserver process for each of them.
 You do not want to have service1 deal with bounces for service2.
+<h2>Release Notes</h2><p>Please file bugs in the <a href="http://openacs.org/bugtracker/openacs/">Bug Tracker</a>.</p>
 </body>

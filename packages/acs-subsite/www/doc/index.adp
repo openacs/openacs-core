@@ -4,9 +4,9 @@
 <master>
 
 <body>
-<h2>ACS Subsite Documentation</h2>
+<h1>ACS Subsite Documentation</h1>
 ACS subsite docs
-<h3>Document overview</h3><table cellpadding="0" cellspacing="0">
+<h2>Document overview</h2><table cellpadding="0" cellspacing="0">
 <tr>
 <td colspan="2"><a href="/doc/subsites-requirements">Overall
 requirements</a></td><td>Overview of the requirements that motivated the design of
@@ -26,7 +26,7 @@ administration</td>
 <td colspan="2"><a href="images">Subsite images</a></td><td>Shows all (hopefully) images available from the subsite
 package</td>
 </tr>
-</table><hr><address><a href="mailto:mbryzek\@arsdigita.com">Michael
+</table><h2>Release Notes</h2><p>Please file bugs in the <a href="http://openacs.org/bugtracker/openacs/">Bug Tracker</a>.</p><hr><address><a href="mailto:mbryzek\@arsdigita.com">Michael
 Bryzek</a></address><br><font size="-1">$Id: index.html,v 1.3 2015/06/15 11:14:18 gustafn
 Exp $</font><!-- Created: 1/11/2001 -->
 </body>
