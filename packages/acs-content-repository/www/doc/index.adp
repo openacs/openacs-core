@@ -32,6 +32,7 @@ items</a></li>
 </ul>
 </li><li><a href="uninstall">Uninstalling the content
 repository</a></li>
-</ul><hr><a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a><br>
-Last Revised: $Id$
+</ul><h2>Release Notes</h2><p>Please file bugs in the <a href="http://openacs.org/bugtracker/openacs/">Bug Tracker</a>.</p><hr><a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a><br>
+Last Revised: $Id: index.html,v 1.2.18.1 2015/08/21 10:28:44
+gustafn Exp $
 </body>

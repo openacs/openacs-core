@@ -81,33 +81,5 @@ those applications that need to use the old data</li>
 </ul><p>Note also that it is possible to have overlapping effective
 dates. This will not be implemented in the first version, but
 should be recognized and accomodated throughout the development
-process for the service package.</p><h3>VIII. Pre-CVS Revision History</h3><pre>
-$Log$
-Revision 1.3  2006/08/06 20:40:20  torbenb
-upgrading html, closing li p tags, adding quotes to tag attributes
-
-Revision 1.2  2006/08/06 18:41:43  torbenb
-removed c-Ms, added p tags, added a comment to unimplemented requirements / feature request
-
-Revision 1.1  2001/04/22 00:53:12  jong
-initial openacs import
-
-Revision 1.7  2000/12/15 04:09:25  jfinkler
-fixed numbering scheme
-
-Revision 1.6  2000/12/13 04:33:47  jong
-Updated doc for alpha release
-
-Revision 1.5  2000/12/12 06:29:21  jfinkler
-spelling error, my fault
-
-Revision 1.4  2000/12/12 06:28:05  jfinkler
-fixed a few formatting errors
-
-Revision 1.3  2000/12/12 06:26:20  jfinkler
-reorganized content, edited for clarity
-
-Revision 1.2  2000/12/08 02:41:31  ron
-initial version
-</pre>
+process for the service package.</p>
 </body>

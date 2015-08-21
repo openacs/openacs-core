@@ -71,6 +71,6 @@ store relevant connection information in shared variables
 (<tt>nsv</tt>s). The security subsystem also renames the AOLserver
 <tt>ns_db</tt> procedure and registers a wrapper which aggregates
 information about database queries.
-<h2>Release Notes</h2><p>Please file bugs in the <a href="http://openacs.org/bugtracker/openacs/">Bug Tracker</a>.</p><hr><address><a href="mailto:jsalz\@mit.edu">jsalz\@mit.edu</a></address><p>Last Modified: $Id: index.html,v 1.1.1.1 2001/04/20 20:51:09
-donb Exp $</p>
+<h2>Release Notes</h2><p>Please file bugs in the <a href="http://openacs.org/bugtracker/openacs/">Bug Tracker</a>.</p><hr><address><a href="mailto:jsalz\@mit.edu">jsalz\@mit.edu</a></address><p>Last Modified: $Id: index.html,v 1.1.1.1.28.1 2015/08/21
+10:28:44 gustafn Exp $</p>
 </body>

@@ -8,5 +8,5 @@
 <div class="titlepage"><h1 class="title">Automated Testing</h1></div><dl>
 <dt><span class="sect1"><a href="install">Installation</a></span></dt><dt><span class="sect1"><a href="usage">Usage</a></span></dt><dt><span class="sect1"><a href="requirements">Requirements</a></span></dt>
 </dl>
-</div><address><a href="mailto:docs\@openacs.org">docs\@openacs.org</a></address>
+</div><h2>Release Notes</h2><p>Please file bugs in the <a href="http://openacs.org/bugtracker/openacs/">Bug Tracker</a>.</p><address><a href="mailto:docs\@openacs.org">docs\@openacs.org</a></address>
 </body>
