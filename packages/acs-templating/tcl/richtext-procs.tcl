@@ -612,7 +612,7 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
                     lappend ckOptionsList "skin: '$options(skin)'"
 		}
 		if {[info exists options(customConfig)]} {
-                    lappend ckOptionsList "customConfig: '$options(skin)'"
+                    lappend ckOptionsList "customConfig: '$options(customConfig)'"
 		}
 
 		set ckOptions [join $ckOptionsList ", "]
