@@ -45,14 +45,14 @@
  	@email_image;noquote@
 </if>
 
-<if @url@ not nil>
+<if @verified_user_id@ ne 0 and @url@ not nil>
   <p>
     <b>#acs-subsite.Home_page#:</b> 
     <a href="@url@">@url@</a>
   </p>
 </if>
 
-<if @bio@ not nil>
+<if @verified_user_id@ ne 0 and @bio@ not nil>
   <p>
     <b>#acs-subsite.Biography#:</b>
    </p>
