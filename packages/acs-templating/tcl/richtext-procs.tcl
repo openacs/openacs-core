@@ -617,7 +617,7 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
 
 		set ckOptions [join $ckOptionsList ", "]
 		append postTextArea [subst {
-		    <script type="text/javascript">CKEDITOR.replace( '$attributes(id)', \[$ckOptions\] );
+		    <script type="text/javascript">CKEDITOR.replace( '$attributes(id)', {$ckOptions} );
 		    </script>
 		}]
 		
