@@ -4,11 +4,11 @@ Requirements}</property>
 <property name="doc(title)">HTMLQuoting as Part of the Templating System -
 Requirements</property>
 <master>
-
-<body>
-<div class="navheader"><table width="100%" summary="Navigation header" border="0"><tr>
-<td width="20%" align="left"></td><th width="60%" align="center"></th><td width="20%" align="right"></td>
-</tr></table></div><div class="sect1" lang="en">
+<include src="/packages/acs-core-docs/lib/navheader"
+		    leftLink="openacs" leftLabel="Prev"
+		    title=""
+		    rightLink="mac-installation" rightLabel="Next">
+		<div class="sect1" lang="en">
 <div class="titlepage">
 <div><h2 class="title" style="clear: both">
 <a name="noquote-requirements" id="noquote-requirements"></a>HTMLQuoting as
@@ -182,14 +182,10 @@ document</a> .</p><p>The discussion about speed, i.e. benchmarking results befor
 after the change, is <a href="speed" target="_top">also
 available</a> .</p><p><span class="emphasis"><em><a href="mailto:hniksic\@xemacs.org" target="_top">Hrvoje Niksic</a></em></span></p>
 </div>
-</div><div class="navfooter">
-<hr><table width="100%" summary="Navigation footer">
-<tr>
-<td width="40%" align="left"></td><td width="20%" align="center"></td><td width="40%" align="right"></td>
-</tr><tr>
-<td width="40%" align="left"></td><td width="20%" align="center"></td><td width="40%" align="right"></td>
-</tr>
-</table><hr><address><a href="mailto:docs\@openacs.org">docs\@openacs.org</a></address>
-</div><a name="comments" id="comments"></a><center><a href="http://openacs.org/doc/index.html#comments">View
-comments on this page at openacs.org</a></center>
-</body>
+</div>
+<include src="/packages/acs-core-docs/lib/navfooter"
+		    leftLink="openacs" leftLabel="Prev" leftTitle=""
+		    rightLink="mac-installation" rightLabel="Next" rightTitle=""
+		    homeLink="index" homeLabel="Home" 
+		    upLink="complete-install" upLabel="Up"> 
+		

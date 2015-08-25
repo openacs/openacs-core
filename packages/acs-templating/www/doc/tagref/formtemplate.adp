@@ -2,12 +2,17 @@
 <property name="context">{/doc/acs-templating {Templating}} {Templating System Tag Reference: Formtemplate}</property>
 <property name="doc(title)">Templating System Tag Reference: Formtemplate</property>
 <master>
-
-<body>
-<h2>Formtemplate</h2><a href="..">Templating System</a> : <a href="../designer-guide.html">Designer Guide</a> : <a href="index">Tag Reference</a> : Formtemplate
-<h3>Summary</h3><p>The <tt>formtemplate</tt> tag is used to embed a dynamic form in
+<h2>Formtemplate</h2>
+<a href="..">Templating System</a>
+ : <a href="../designer-guide.html">Designer Guide</a>
+ : <a href="index">Tag Reference</a>
+ : Formtemplate
+<h3>Summary</h3>
+<p>The <tt>formtemplate</tt> tag is used to embed a dynamic form in
 a template. The elements of the form must be created in the Tcl
-script associated with the template.</p><h3>Usage</h3><pre>
+script associated with the template.</p>
+<h3>Usage</h3>
+<pre>
   &lt;formtemplate id="add_user"&gt;
   &lt;table&gt;
   &lt;tr&gt;
@@ -19,7 +24,9 @@ script associated with the template.</p><h3>Usage</h3><pre>
   &lt;/table&gt;&lt;br&gt;
   &lt;input type=submit value="Submit"&gt;
   &lt;/formtemplate&gt;
-</pre><h3>Notes</h3><ul>
+</pre>
+<h3>Notes</h3>
+<ul>
 <li><p>The <tt>formtemplate</tt> tag takes the place of the
 <tt>form</tt> tag in a static HTML form. Explicit form tags in the
 template should <em>not</em> be used to enclose dynamic forms.</p></li><li>
@@ -45,5 +52,6 @@ forms.</p>
 </li><li><p>See the <a href="formwidget"><tt>formwidget</tt></a> and
 <a href="formgroup"><tt>formgroup</tt></a> tags for more
 information on writing the body of a dynamic form template.</p></li>
-</ul><hr><a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>
-</body>
+</ul>
+<hr>
+<a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>

@@ -2,9 +2,8 @@
 <property name="context">{/doc/acs-content-repository {Content Repository}} {}</property>
 <property name="doc(title)"></property>
 <master>
-
-<body>
-<h2>To Do List for Content Management System</h2><pre>
+<h2>To Do List for Content Management System</h2>
+<pre>
 
 Documentation
 
@@ -70,6 +69,6 @@ Clipboard
 
 --think about improving UI for this. 2
 
-</pre><p>Last Modified: $Id: todo.html,v 1.1.1.1 2001/03/13 22:59:26 ben
+</pre>
+<p>Last Modified: $Id: todo.html,v 1.1.1.1 2001/03/13 22:59:26 ben
 Exp $</p>
-</body>

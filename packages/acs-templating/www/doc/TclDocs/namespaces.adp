@@ -2,11 +2,10 @@
 <property name="context">{/doc/acs-templating {Templating}} {}</property>
 <property name="doc(title)"></property>
 <master>
-
-<body>
 <h2 class="title" align="center">ATS and CMS Tcl Procedure
-Specifications</h2><table border="1" cellpadding="3" cellspacing="0" width="100%">
-<tr bgcolor="#CCCCFF"><td width="100%"><font size="+2">Namespaces</font></td></tr><tr bgcolor="white"><td><a href="doc">doc</a></td></tr><tr bgcolor="white"><td><a href="doc__util.html">doc::util</a></td></tr><tr bgcolor="white"><td>
+Specifications</h2>
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+<tr bgcolor="#CCCCFF"><td width="100%"><font size="+2">Namespaces</font></td></tr><tr bgcolor="white"><td><a href="doc">doc</a></td></tr><tr bgcolor="white"><td><a href="doc__util">doc::util</a></td></tr><tr bgcolor="white"><td>
 <a href="form">form</a><blockquote>Commands for managing dynamic templated
 forms.</blockquote>
 </td></tr><tr bgcolor="white"><td>
@@ -21,4 +20,3 @@ via a form.
 </blockquote>
 </td></tr><tr bgcolor="white"><td><a href="util">util</a></td></tr>
 </table>
-</body>

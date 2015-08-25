@@ -2,22 +2,33 @@
 <property name="context">{/doc/acs-content-repository {Content Repository}} {Package: content_permission}</property>
 <property name="doc(title)">Package: content_permission</property>
 <master>
-
-<body>
-<h2>content_permission</h2><p>
+<h2>content_permission</h2>
+<p>
 <a href="../index.html">Content Repository</a> :
-content_permission</p><hr><ul>
+content_permission</p>
+<hr>
+<ul>
 <li><a href="#overview">Overview</a></li><li><a href="#related">Related Objects</a></li><li><a href="#api">API</a></li>
-</ul><p> </p><h3><a name="overview">Overview</a></h3><p>Permissions can be set to allow certain users certain things. -
+</ul>
+<p> </p>
+<h3><a name="overview">Overview</a></h3>
+<p>Permissions can be set to allow certain users certain things. -
 They can be compared with the Unix filesystem permission: read,
-write ...</p><p> </p><h3><a name="related">Related Objects</a></h3>
+write ...</p>
+<p> </p>
+<h3><a name="related">Related Objects</a></h3>
+
 See also: {content_item }
-<p> </p><h3><a name="api">API</a></h3><ul><li>
+<p> </p>
+<h3><a name="api">API</a></h3>
+<ul><li>
 <font size="+1">Function:</font>
-content_permission.has_grant_authority</li></ul><p>Determine if the user may grant a certain permission to another
+content_permission.has_grant_authority</li></ul>
+<p>Determine if the user may grant a certain permission to another
 user. The permission may only be granted if the user has the
 permission himself and posesses the cm_perm access, or if the user
-posesses the cm_perm_admin access.</p><table cellpadding="3" cellspacing="0" border="0">
+posesses the cm_perm_admin access.</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr>
@@ -43,13 +54,17 @@ otherwise</td>
 content_permission.is_has_revoke_authority,
 acs_permission.grant_permission</td>
 </tr>
-</table><p> </p><ul><li>
+</table>
+<p> </p>
+<ul><li>
 <font size="+1">Function:</font>
-content_permission.has_revoke_authority</li></ul><p>Determine if the user may take a certain permission away from
+content_permission.has_revoke_authority</li></ul>
+<p>Determine if the user may take a certain permission away from
 another user. The permission may only be revoked if the user has
 the permission himself and posesses the cm_perm access, while the
 other user does not, or if the user posesses the cm_perm_admin
-access.</p><table cellpadding="3" cellspacing="0" border="0">
+access.</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr>
@@ -78,12 +93,16 @@ otherwise</td>
 content_permission.revoke_permission,
 acs_permission.revoke_permission</td>
 </tr>
-</table><p> </p><ul><li>
+</table>
+<p> </p>
+<ul><li>
 <font size="+1">Function:</font>
-content_permission.permission_p</li></ul><p>Determine if the user has the specified permission on the
+content_permission.permission_p</li></ul>
+<p>Determine if the user has the specified permission on the
 specified object. Does NOT check objects recursively: that is, if
 the user has the permission on the parent object, he does not
-automatically gain the permission on all the child objects.</p><table cellpadding="3" cellspacing="0" border="0">
+automatically gain the permission on all the child objects.</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr>
@@ -109,12 +128,17 @@ the object, 'f' otherwise</td>
 content_permission.revoke_permission,
 acs_permission.permission_p</td>
 </tr>
-</table><p> </p><ul><li>
+</table>
+<p> </p>
+<ul><li>
 <font size="+1">Procedure:</font>
-content_permission.grant_permission</li></ul><p>This is a helper function for
+content_permission.grant_permission</li></ul>
+<p>This is a helper function for
 content_permission.grant_permission and should not be called
-individually.</p><p>Grants a permission and revokes all descendants of the
-permission, since they are no longer relevant.</p><table cellpadding="3" cellspacing="0" border="0">
+individually.</p>
+<p>Grants a permission and revokes all descendants of the
+permission, since they are no longer relevant.</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1">
@@ -135,12 +159,17 @@ permission, since they are no longer relevant.</p><table cellpadding="3" cellspa
 </tt></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_permission.grant_permission</td>
 </tr>
-</table><p> </p><ul><li>
+</table>
+<p> </p>
+<ul><li>
 <font size="+1">Procedure:</font>
-content_permission.grant_permission_h</li></ul><p>This is a helper function for
+content_permission.grant_permission_h</li></ul>
+<p>This is a helper function for
 content_permission.grant_permission and should not be called
-individually.</p><p>Grants a permission and revokes all descendants of the
-permission, since they are no longer relevant.</p><table cellpadding="3" cellspacing="0" border="0">
+individually.</p>
+<p>Grants a permission and revokes all descendants of the
+permission, since they are no longer relevant.</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1">
@@ -161,11 +190,15 @@ permission, since they are no longer relevant.</p><table cellpadding="3" cellspa
 </tt></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_permission.grant_permission</td>
 </tr>
-</table><p> </p><ul><li>
+</table>
+<p> </p>
+<ul><li>
 <font size="+1">Procedure:</font>
-content_permission.inherit_permissions</li></ul><p>Make the child object inherit all of the permissions of the
+content_permission.inherit_permissions</li></ul>
+<p>Make the child object inherit all of the permissions of the
 parent object. Typically, this function is called whenever a new
-object is created under a given parent</p><table cellpadding="3" cellspacing="0" border="0">
+object is created under a given parent</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1">
@@ -184,12 +217,17 @@ object is created under a given parent</p><table cellpadding="3" cellspacing="0"
 </tt></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_permission.grant, acs_permission.grant_permission</td>
 </tr>
-</table><p> </p><ul><li>
+</table>
+<p> </p>
+<ul><li>
 <font size="+1">Procedure:</font>
-content_permission.revoke_permission</li></ul><p>This is a helper function for
+content_permission.revoke_permission</li></ul>
+<p>This is a helper function for
 content_permission.revoke_permission and should not be called
-individually.</p><p>Revokes a permission but grants all child permissions to the
-holder, to ensure that the permission is not permanently lost</p><table cellpadding="3" cellspacing="0" border="0">
+individually.</p>
+<p>Revokes a permission but grants all child permissions to the
+holder, to ensure that the permission is not permanently lost</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1">
@@ -210,12 +248,17 @@ holder, to ensure that the permission is not permanently lost</p><table cellpadd
 </tt></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_permission.revoke_permission</td>
 </tr>
-</table><p> </p><ul><li>
+</table>
+<p> </p>
+<ul><li>
 <font size="+1">Procedure:</font>
-content_permission.revoke_permission_h</li></ul><p>This is a helper function for
+content_permission.revoke_permission_h</li></ul>
+<p>This is a helper function for
 content_permission.revoke_permission and should not be called
-individually.</p><p>Revokes a permission but grants all child permissions to the
-holder, to ensure that the permission is not permanently lost</p><table cellpadding="3" cellspacing="0" border="0">
+individually.</p>
+<p>Revokes a permission but grants all child permissions to the
+holder, to ensure that the permission is not permanently lost</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1">
@@ -236,7 +279,8 @@ holder, to ensure that the permission is not permanently lost</p><table cellpadd
 </tt></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_permission.revoke_permission</td>
 </tr>
-</table><p> </p>
+</table>
+<p> </p>
+
 Last Modified: $Id: permission.html,v 1.1.1.1 2001/03/13 22:59:26
 ben Exp $
-</body>

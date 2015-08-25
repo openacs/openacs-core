@@ -4,9 +4,11 @@ Styles and Formats}</property>
 <property name="doc(title)">Templating System User Guide: Presenting Data in Multiple
 Styles and Formats</property>
 <master>
-
-<body>
-<h2>Presenting Data in Multiple Styles and Formats</h2><a href="..">Templating System</a> : <a href="../developer-guide.html">Developer Guide</a> : User Guide
+<h2>Presenting Data in Multiple Styles and Formats</h2>
+<a href="..">Templating System</a>
+ : <a href="../developer-guide.html">Developer Guide</a>
+ : User Guide
 <p>(Discussion of how to do cobranding, syndication of data in XML,
-etc.).</p><hr><a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>
-</body>
+etc.).</p>
+<hr>
+<a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>

@@ -2,13 +2,20 @@
 <property name="context">{/doc/acs-templating {Templating}} {}</property>
 <property name="doc(title)"></property>
 <master>
+<h2>Namespace content_method</h2>
+<blockquote>Procedures regarding content methods</blockquote>
+<h3>Method Summary</h3>
 
-<body>
-<h2>Namespace content_method</h2><blockquote>Procedures regarding content methods</blockquote><h3>Method Summary</h3>
-Listing of public methods:<br><blockquote>
+Listing of public methods:<br>
+<blockquote>
 <a href="#content_method::flush_content_methods_cache">content_method::flush_content_methods_cache</a><br><a href="#content_method::get_content_methods">content_method::get_content_methods</a><br>
-</blockquote><h3>Method Detail</h3><p align="right">
-<font color="red">*</font> indicates required</p><b>Public Methods:</b><br><table width="100%">
+</blockquote>
+<h3>Method Detail</h3>
+<p align="right">
+<font color="red">*</font> indicates required</p>
+<b>Public Methods:</b>
+<br>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF">
 <a name="content_method::flush_content_methods_cache" id="content_method::flush_content_methods_cache"><font size="+1" weight="bold">content_method::flush_content_methods_cache</font></a><br><small><i>  by Michael Pih</i></small>
 </td></tr><tr><td>
@@ -22,7 +29,8 @@ content_method_types cache is flushed</blockquote><dl><dd>
 </tr></table>
 </dd></dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF">
 <a name="content_method::get_content_methods" id="content_method::get_content_methods"><font size="+1" weight="bold">content_method::get_content_methods</font></a><br><small><i>  by Michael Pih</i></small>
 </td></tr><tr><td>
@@ -45,9 +53,11 @@ content_method::text_entry_filter_sql - <a href=""></a><br>
 </dd>
 </dl>
 </td></tr>
-</table><p>
+</table>
+<p>
 <b>Private Methods</b>:<br>
-</p><table width="100%">
+</p>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF">
 <a name="content_method::get_content_method_options" id="content_method::get_content_method_options"><font size="+1" weight="bold">content_method::get_content_method_options</font></a><br><small><i>  by Michael Pih</i></small>
 </td></tr><tr><td>
@@ -66,7 +76,8 @@ content_method::text_entry_filter_sql - <a href=""></a><br>
 </dd>
 </dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF">
 <a name="content_method::text_entry_filter_sql" id="content_method::text_entry_filter_sql"><font size="+1" weight="bold">content_method::text_entry_filter_sql</font></a><br><small><i>  by Michael Pih</i></small>
 </td></tr><tr><td>
@@ -82,6 +93,6 @@ content method</blockquote><dl>
 method</dd>
 </dl>
 </td></tr>
-</table><p align="right">
+</table>
+<p align="right">
 <font color="red">*</font> indicates required</p>
-</body>

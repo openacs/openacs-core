@@ -2,23 +2,25 @@
 <property name="context">{/doc/acs-mail-lite {Mail Services Lite}} {User Documentation for ACS Mail Lite}</property>
 <property name="doc(title)">User Documentation for ACS Mail Lite</property>
 <master>
-
-<body>
 <h1>User Documentation for ACS Mail Lite</h1>
+
 Acs Mail Lite handles sending of email via sendmail or smtp and
 includes a bounce management system for invalid email accounts.
 <p>When called to send a mail, the mail will either get sent
 immediately or placed in an outgoing queue (changeable via
-parameter) which will be processed every few minutes.</p><p>ACS Mail Lite uses either sendmail (you have to provide the
+parameter) which will be processed every few minutes.</p>
+<p>ACS Mail Lite uses either sendmail (you have to provide the
 location of the binary as a parameter) or SMTP to send the mail. If
 the sending fails, the mail will be placed in the outgoing queue
 again and be given another try a few minutes later when processing
-the queue again.</p><p>Each email contains an X-Envelope-From adress constructed as
+the queue again.</p>
+<p>Each email contains an X-Envelope-From adress constructed as
 follows:<br>
 The adress starts with "bounce" (can be changed by a parameter)
 followed by the user_id, a hashkey and the package_id of the
 package instance that sent the email, separated by "-". The domain
-name of this adress can be changed with a parameter.</p><p>The system checks every 2 minutes (configurable) in a certain
+name of this adress can be changed with a parameter.</p>
+<p>The system checks every 2 minutes (configurable) in a certain
 maildirectory (configurable) for newly bounced emails, so the
 mailsystem will have to place every mail to an address beginning
 with "bounce" (or whatever the appropriate parameter says) in that
@@ -31,9 +33,11 @@ callback procedure via a service contract if one is registered for
 that particular package-key. This enables each package to deal with
 bouncing mails on their own - probably logging this in special
 tables. ACS Mail Lite then logs the event of a bounced mail of that
-user.</p><p>Every day a procedure is run that checks if an email account has
+user.</p>
+<p>Every day a procedure is run that checks if an email account has
 to be disabled from receiving any more mail. This is done the
-following way:</p><ul>
+following way:</p>
+<ul>
 <li>If a user received his last mail X days ago without any further
 bounced mail then his bounce-record gets deleted since it can be
 assumed that his email account is working again and no longer
@@ -47,6 +51,7 @@ a notification email gets sent every 7 days (configurable) up to 4
 times (configurable) that contains a link to reenable the email
 account.</li>
 </ul>
+
 To use this system here is a quick guide how to do it with postfix.
 <ul>
 <li>Edit /etc/postfix/main.cf
@@ -58,9 +63,10 @@ database</li>
 you leave the parameter as it was) to "nsadmin" (in case you only
 run one server).</li>
 </ul>
+
 In case of multiple services on one system, create a bounce email
 for each of them (e.g. changeing "bounce" to "bounce_service1") and
 create a new user that runs the aolserver process for each of them.
 You do not want to have service1 deal with bounces for service2.
-<h2>Release Notes</h2><p>Please file bugs in the <a href="http://openacs.org/bugtracker/openacs/">Bug Tracker</a>.</p>
-</body>
+<h2>Release Notes</h2>
+<p>Please file bugs in the <a href="http://openacs.org/bugtracker/openacs/">Bug Tracker</a>.</p>

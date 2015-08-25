@@ -2,17 +2,26 @@
 <property name="context">{/doc/acs-templating {Templating}} {}</property>
 <property name="doc(title)"></property>
 <master>
-
-<body>
-<h2>Namespace item</h2><blockquote>The item commands allow easy access to properties of
+<h2>Namespace item</h2>
+<blockquote>The item commands allow easy access to properties of
 the content_item object. In the future, a unified API for caching
-item properties will be developed here.</blockquote><p>Also see:</p><dl>
+item properties will be developed here.</blockquote>
+<p>Also see:</p>
+<dl>
 <dt>namespace</dt><dd><a href="publish">publish</a></dd>
-</dl><h3>Method Summary</h3>
-Listing of public methods:<br><blockquote>
+</dl>
+<h3>Method Summary</h3>
+
+Listing of public methods:<br>
+<blockquote>
 <a href="#item::content_is_null">item::content_is_null</a><br><a href="#item::content_methods_by_type">item::content_methods_by_type</a><br><a href="#item::get_best_revision">item::get_best_revision</a><br><a href="#item::get_content_type">item::get_content_type</a><br><a href="#item::get_extended_url">item::get_extended_url</a><br><a href="#item::get_id">item::get_id</a><br><a href="#item::get_item_from_revision">item::get_item_from_revision</a><br><a href="#item::get_live_revision">item::get_live_revision</a><br><a href="#item::get_mime_info">item::get_mime_info</a><br><a href="#item::get_publish_status">item::get_publish_status</a><br><a href="#item::get_revision_content">item::get_revision_content</a><br><a href="#item::get_template_id">item::get_template_id</a><br><a href="#item::get_template_url">item::get_template_url</a><br><a href="#item::get_title">item::get_title</a><br><a href="#item::get_url">item::get_url</a><br><a href="#item::is_publishable">item::is_publishable</a><br>
-</blockquote><h3>Method Detail</h3><p align="right">
-<font color="red">*</font> indicates required</p><b>Public Methods:</b><br><table width="100%">
+</blockquote>
+<h3>Method Detail</h3>
+<p align="right">
+<font color="red">*</font> indicates required</p>
+<b>Public Methods:</b>
+<br>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="item::content_is_null" id="item::content_is_null"><font size="+1" weight="bold">item::content_is_null</font></a></td></tr><tr><td>
 <blockquote>Determines if the content for the revision is null (not
 mereley zero-length)</blockquote><dl>
@@ -25,7 +34,8 @@ mereley zero-length)</blockquote><dl>
 </dd><dt><b>Returns:</b></dt><dd>1 if the content is null, 0 otherwise</dd>
 </dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="item::content_methods_by_type" id="item::content_methods_by_type"><font size="+1" weight="bold">item::content_methods_by_type</font></a></td></tr><tr><td>
 <blockquote>Determines all the valid content methods for
 instantiating a content type. Possible choices are text_entry,
@@ -46,7 +56,8 @@ widgets</td>
 </tr></table></dd>
 </dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="item::get_best_revision" id="item::get_best_revision"><font size="+1" weight="bold">item::get_best_revision</font></a></td></tr><tr><td>
 <blockquote>Attempts to retrieve the live revision for the item. If
 no live revision exists, attempts to retrieve the latest revision.
@@ -62,7 +73,8 @@ revisions exist</dd><dt><b>See Also:</b></dt><dd>proc - <a href="item">item::get
 </dd>
 </dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="item::get_content_type" id="item::get_content_type"><font size="+1" weight="bold">item::get_content_type</font></a></td></tr><tr><td>
 <blockquote>Retrieves the content type of tyhe item. If the item
 does not exist, returns an empty string.</blockquote><dl>
@@ -76,7 +88,8 @@ does not exist, returns an empty string.</blockquote><dl>
 item exists</dd>
 </dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="item::get_extended_url" id="item::get_extended_url"><font size="+1" weight="bold">item::get_extended_url</font></a></td></tr><tr><td>
 <blockquote>Retrieves the relative URL of the item with a file
 extension based on the item's mime_type (Example: {
@@ -107,7 +120,8 @@ specified.</td>
 </dd>
 </dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="item::get_id" id="item::get_id"><font size="+1" weight="bold">item::get_id</font></a></td></tr><tr><td>
 <blockquote>Looks up the URL and gets the item id at that URL, if
 any.</blockquote><dl>
@@ -128,7 +142,8 @@ failure</dd><dt><b>See Also:</b></dt><dd>proc - <a href="item">item::get_url</a>
 </dd>
 </dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="item::get_item_from_revision" id="item::get_item_from_revision"><font size="+1" weight="bold">item::get_item_from_revision</font></a></td></tr><tr><td>
 <blockquote>Gets the item_id of the item to which the revision
 belongs.</blockquote><dl>
@@ -142,7 +157,8 @@ belongs.</blockquote><dl>
 </dd>
 </dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="item::get_live_revision" id="item::get_live_revision"><font size="+1" weight="bold">item::get_live_revision</font></a></td></tr><tr><td>
 <blockquote>Retrieves the live revision for the item. If the item
 has no live revision, returns an empty string.</blockquote><dl>
@@ -157,7 +173,8 @@ live revision exists</dd><dt><b>See Also:</b></dt><dd>proc - <a href="item">item
 </dd>
 </dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="item::get_mime_info" id="item::get_mime_info"><font size="+1" weight="bold">item::get_mime_info</font></a></td></tr><tr><td>
 <blockquote>Creates a onerow datasource in the calling frame which
 holds the mime_type and file_extension of the specified revision.
@@ -181,7 +198,8 @@ exists, 0 (zero) otherwise.</td>
 </dd>
 </dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="item::get_publish_status" id="item::get_publish_status"><font size="+1" weight="bold">item::get_publish_status</font></a></td></tr><tr><td>
 <blockquote>Get the publish status of the item. The publish status
 will be one of the following:
@@ -207,7 +225,8 @@ failure</dd><dt><b>See Also:</b></dt><dd>proc - <a href="item">item::is_publisha
 </dd>
 </dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="item::get_revision_content" id="item::get_revision_content"><font size="+1" weight="bold">item::get_revision_content</font></a></td></tr><tr><td>
 <blockquote>Create a onerow datasource called content in the
 calling frame which contains all attributes for the revision
@@ -232,7 +251,8 @@ of the corresponding item.</td>
 </dd>
 </dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="item::get_template_id" id="item::get_template_id"><font size="+1" weight="bold">item::get_template_id</font></a></td></tr><tr><td>
 <blockquote>Retrieves the template which can be used to render the
 item. If there is a template registered directly to the item,
@@ -256,7 +276,8 @@ item, or an empty string on failure</dd><dt><b>See Also:</b></dt><dd>proc - <a h
 </dd>
 </dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="item::get_template_url" id="item::get_template_url"><font size="+1" weight="bold">item::get_template_url</font></a></td></tr><tr><td>
 <blockquote>Retrieves the relative URL of the template which can be
 used to render the item. The URL is relative to the TemplateRoot as
@@ -278,7 +299,8 @@ item, or an empty string on failure</dd><dt><b>See Also:</b></dt><dd>proc - <a h
 </dd>
 </dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="item::get_title" id="item::get_title"><font size="+1" weight="bold">item::get_title</font></a></td></tr><tr><td>
 <blockquote>Get the title for the item. If a live revision for the
 item exists, use the live revision. Otherwise, use the latest
@@ -293,7 +315,8 @@ revision.</blockquote><dl>
 </dd>
 </dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="item::get_url" id="item::get_url"><font size="+1" weight="bold">item::get_url</font></a></td></tr><tr><td>
 <blockquote>Retrieves the relative URL stub to th item. The URL is
 relative to the page root, and has no extension (Example: {
@@ -309,7 +332,8 @@ failure</dd><dt><b>See Also:</b></dt><dd>proc - <a href="item">item::get_extende
 </dd>
 </dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="item::is_publishable" id="item::is_publishable"><font size="+1" weight="bold">item::is_publishable</font></a></td></tr><tr><td>
 <blockquote>Determine if the item is publishable. The item is
 publishable only if:
@@ -327,6 +351,6 @@ publishable only if:
 </dd><dt><b>Returns:</b></dt><dd>1 if the item is publishable, 0 otherwise</dd>
 </dl>
 </td></tr>
-</table><p align="right">
+</table>
+<p align="right">
 <font color="red">*</font> indicates required</p>
-</body>

@@ -2,12 +2,14 @@
 <property name="context">{/doc/acs-templating {Templating}} {Timing a Templated Page}</property>
 <property name="doc(title)">Timing a Templated Page</property>
 <master>
-
-<body>
 <h2>Timing a Templated Page</h2>
+
 by <a href="mailto:christian\@arsdigita.com">Christian
-Brechbühler</a><h3>I. Introduction</h3>
-One of the <a href="requirements">requirements</a> for the
+Brechbühler</a>
+<h3>I. Introduction</h3>
+
+One of the <a href="requirements">requirements</a>
+ for the
 template system asks for efficiency:
 <blockquote><ul><li>
 <a name="110.0"><strong>110.0 Performance</strong></a><p>The Templating System must not cause any performance problems to
@@ -15,9 +17,12 @@ a site. It must be fast and efficient, and it must not slow down
 page load speed by more than 10% versus a Tcl page with inline
 HTML.</p>
 </li></ul></blockquote>
+
 This page documents the attempt to verify this requirement.
-<h3>II. Methods</h3><p>I wrote a sample page for this test. It expands four real
-numbers into continued fractions. I created three versions:</p><ul>
+<h3>II. Methods</h3>
+<p>I wrote a sample page for this test. It expands four real
+numbers into continued fractions. I created three versions:</p>
+<ul>
 <li>
 <a href="/acs-templating/admin/test/chain-frac-0?x=3.14159265358979323846">chain-frac-0</a>,
 a Tcl page with inline HTML,</li><li>
@@ -26,10 +31,12 @@ a templated page, i.e. a Tcl and an HTML file, and</li><li>
 <a href="/acs-templating/admin/test/chain-frac-2?x=3.14159265358979323846">chain-frac-2</a>,
 an ADP page that simply <code>&lt;include&gt;</code>s
 chain-frac-1.</li>
-</ul><p>The reason for creating <code>chain-frac-2.adp</code> is that in
+</ul>
+<p>The reason for creating <code>chain-frac-2.adp</code> is that in
 this way, the script <code>chain-frac-1.tcl</code> is handled
 inside the templating system, and hence loaded once and cached.
-There is hope that this might be faster.</p><p>Normally, the templating system re-reads a file whenever the
+There is hope that this might be faster.</p>
+<p>Normally, the templating system re-reads a file whenever the
 version on disk is out of date. ADP pages are compiled to TCL, and
 both ADP and Tcl pages are cached as Tcl procs. The parameter
 <code>RefreshCache</code> in section <code>template</code> can be
@@ -37,14 +44,16 @@ set to <code>always</code> or <code>never</code> to affect the
 cacheing strategy; the latter may be useful for a production site.
 All timing is carried out for the three settings
 <code>always</code>, <code>normal</code>, and <code>never</code>;
-the associated variable is called <code>check</code>.</p><p>I created a script in e-Tester that requests the three pages
+the associated variable is called <code>check</code>.</p>
+<p>I created a script in e-Tester that requests the three pages
 from my development server on dev0103-001. One timing of requesting
 a page isn't very expressive. A lot of factors affect the page load
 time. To offset these and get better results, I repeatedly request
 the pages. For the timing, I have e-Tester iterate this script 200
 times. To compesate for varying load on the machine, i ran the
 iteration twice for each setting of <code>RefreshCache</code> at
-different times of the day.</p><p>The timing information is taken from the error log file entries
+different times of the day.</p>
+<p>The timing information is taken from the error log file entries
 that the request processor produces with parameter
 <code>LogDebugP=1</code>. For finer granularity I changed rp_debug
 to divide the clock clicks (microsecond) difference by 1000.0
@@ -54,8 +63,10 @@ no other page requests from this AOLserver during the measurement.
 I note the length of the error log before and after one run of the
 script. Afterwards I cut out the error log sections indicated by
 these positions into files <code>never</code>, <code>normal</code>,
-and <code>always</code>.</p><p>The following steps extract the relevant information and bring
-it in a form suitable for gnuplot.</p><ul>
+and <code>always</code>.</p>
+<p>The following steps extract the relevant information and bring
+it in a form suitable for gnuplot.</p>
+<ul>
 <li>
 <em>Extract time from log file sections</em>. This is done in
 tcsh.
@@ -162,4 +173,3 @@ Brechbühler</a></address><!-- Created: Fri Oct  6 15:45:48 EDT 2000 --><!-- hhm
 Last modified: Tue Oct 17 20:11:49 EDT 2000 <!-- hhmts end -->
 </li>
 </ul>
-</body>

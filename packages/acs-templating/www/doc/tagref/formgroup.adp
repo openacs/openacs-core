@@ -2,14 +2,19 @@
 <property name="context">{/doc/acs-templating {Templating}} {Templating System Tag Reference: Formgroup}</property>
 <property name="doc(title)">Templating System Tag Reference: Formgroup</property>
 <master>
-
-<body>
-<h2>Formgroup</h2><a href="..">Templating System</a> : <a href="../designer-guide.html">Designer Guide</a> : <a href="index">Tag Reference</a> : Formgroup
-<h3>Summary</h3><p>The <tt>formgroup</tt> tag is used to lay out a set of check
+<h2>Formgroup</h2>
+<a href="..">Templating System</a>
+ : <a href="../designer-guide.html">Designer Guide</a>
+ : <a href="index">Tag Reference</a>
+ : Formgroup
+<h3>Summary</h3>
+<p>The <tt>formgroup</tt> tag is used to lay out a set of check
 boxes or radio buttons in a dynamic form template. All the check
 boxes or radio buttons in a group share the same name. A button
 group must be created as an element in the Tcl script associated
-with the template.</p><h3>Usage</h3><pre>
+with the template.</p>
+<h3>Usage</h3>
+<pre>
   &lt;formtemplate id="choose_services"&gt;
     &lt;table&gt;
       &lt;formgroup id=services&gt;
@@ -18,7 +23,9 @@ with the template.</p><h3>Usage</h3><pre>
     &lt;/table&gt;&lt;br&gt;
   &lt;input type=submit value="Submit"&gt;
   &lt;/formtemplate&gt;
-</pre><h3>Notes</h3><ul>
+</pre>
+<h3>Notes</h3>
+<ul>
 <li><p>The <tt>formgroup</tt> tag contains a template for formatting
 each check box or radio button in the group. The tag makes a
 special multirow data source named <tt>formgroup</tt> available in
@@ -39,5 +46,6 @@ radio button or check box in the group.</p><pre>
 </li><li><p>See the <a href="formtemplate"><tt>formtemplate</tt></a>
 and <a href="formwidget"><tt>formwidget</tt></a> tags for more
 information on writing the body of a dynamic form template.</p></li>
-</ul><hr><a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>
-</body>
+</ul>
+<hr>
+<a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>

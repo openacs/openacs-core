@@ -2,16 +2,25 @@
 <property name="context">{/doc/acs-templating {Templating}} {Templating System Samples}</property>
 <property name="doc(title)">Templating System Samples</property>
 <master>
-
-<body>
-<h2>Samples</h2><a href="..">Templating System</a> : Demo
+<h2>Samples</h2>
+<a href="..">Templating System</a>
+ : Demo
 
 As the links reveal, the "Data" files have the extension
-<code>.tcl</code> and the "Template" files have <code>.adp</code>.
+<code>.tcl</code>
+ and the "Template" files have <code>.adp</code>
+.
 If you want to see a little behind the scenes, you can look at the
 tcl code into which we compile the template. The last column will
 deliver the resulting page to your browser.
-<p>Mechanisms underlaid in red are known to not work.</p><h3>General</h3><a name="hello" id="hello"></a><a name="bind" id="bind"></a><a name="legacy" id="legacy"></a><a name="if" id="if"></a><a name="comment" id="comment"></a><table cellpadding="6" cellspacing="0" border="1" width="95%">
+<p>Mechanisms underlaid in red are known to not work.</p>
+<h3>General</h3>
+<a name="hello" id="hello"></a>
+<a name="bind" id="bind"></a>
+<a name="legacy" id="legacy"></a>
+<a name="if" id="if"></a>
+<a name="comment" id="comment"></a>
+<table cellpadding="6" cellspacing="0" border="1" width="95%">
 <tr bgcolor="#CCCCCC">
 <th>Description</th><th width="15%">Data</th><th width="15%">Template</th><th width="15%">Compiled<br>
 Template</th><th width="15%">Output</th>
@@ -26,7 +35,11 @@ Template</th><th width="15%">Output</th>
 </tr><tr>
 <td>Comments</td><td align="center">None</td><td align="center"><a href="show.tcl?file=comment.adp">View</a></td><td align="center"><a href="compile.tcl?file=comment.adp">View</a></td><td align="center"><a href="comment">View</a></td>
 </tr>
-</table><h3>Combining templates</h3><a name="include" id="include"></a><a name="slave-default" id="slave-default"></a><table cellpadding="6" cellspacing="0" border="1" width="95%">
+</table>
+<h3>Combining templates</h3>
+<a name="include" id="include"></a>
+<a name="slave-default" id="slave-default"></a>
+<table cellpadding="6" cellspacing="0" border="1" width="95%">
 <tr bgcolor="#CCCCCC">
 <th rowspan="">Description</th><th width="15%">Data</th><th width="15%">Template</th><th width="15%">Compiled<br>
 Template</th><th width="15%">Output</th>
@@ -54,7 +67,13 @@ Remember Fibonacci from pset 1, exercise 1?</td><td align="center">
 <a href="compile.tcl?file=fibo-start.adp">Start</a><br><a href="compile.tcl?file=fibo.adp">Included</a><br><a href="compile.tcl?file=fibo-master.adp">Master</a>
 </td><td align="center"><a href="fibo-start?m=7">View</a></td>
 </tr>
-</table><h3>Embedded Tcl</h3><a name="implicit_escape" id="implicit_escape"></a><a name="explicit_escape" id="explicit_escape"></a><a name="embed_escape" id="embed_escape"></a><a name="puts" id="puts"></a><table cellpadding="6" cellspacing="0" border="1" width="95%">
+</table>
+<h3>Embedded Tcl</h3>
+<a name="implicit_escape" id="implicit_escape"></a>
+<a name="explicit_escape" id="explicit_escape"></a>
+<a name="embed_escape" id="embed_escape"></a>
+<a name="puts" id="puts"></a>
+<table cellpadding="6" cellspacing="0" border="1" width="95%">
 <tr bgcolor="#CCCCCC">
 <th>Description</th><th width="15%">Data</th><th width="15%">Template</th><th width="15%">Compiled<br>
 Template</th><th width="15%">Output</th>
@@ -67,11 +86,19 @@ Template</th><th width="15%">Output</th>
 </tr><tr>
 <td>Puts (if you absolutely must)</td><td align="center"><a href="show.tcl?file=puts.tcl">View</a></td><td align="center"><a href="show.tcl?file=puts.adp">View</a></td><td align="center"><a href="compile.tcl?file=puts.adp">View</a></td><td align="center"><a href="puts">View</a></td>
 </tr>
-</table><h3>Iteration</h3>
+</table>
+<h3>Iteration</h3>
+
 To see the following examples with different data, you can enter
 additional users into the sample table with "a simple form" or
 change them with "editing: several pages in one" in section
-<a href="#formmgr">Using the Form Manager</a> below. <a name="multiple" id="multiple"></a><a name="multirow" id="multirow"></a><a name="multiaccess" id="multiaccess"></a><a name="grid" id="grid"></a><a name="list" id="list"></a><table cellpadding="6" cellspacing="0" border="1" width="95%">
+<a href="#formmgr">Using the Form Manager</a>
+ below. <a name="multiple" id="multiple"></a>
+<a name="multirow" id="multirow"></a>
+<a name="multiaccess" id="multiaccess"></a>
+<a name="grid" id="grid"></a>
+<a name="list" id="list"></a>
+<table cellpadding="6" cellspacing="0" border="1" width="95%">
 <tr bgcolor="#CCCCCC">
 <th>Description</th><th width="15%">Data</th><th width="15%">Template</th><th width="15%">Compiled<br>
 Template</th><th width="15%">Output</th>
@@ -90,7 +117,12 @@ custom manipulation of data</td><td align="center"><a href="show.tcl?file=multia
 </tr><tr>
 <td>Repeating template chunks for each element of a list</td><td align="center"><a href="show.tcl?file=list.tcl">View</a></td><td align="center"><a href="show.tcl?file=list.adp">View</a></td><td align="center"><a href="compile.tcl?file=list.adp">View</a></td><td align="center"><a href="list">View</a></td>
 </tr>
-</table><h3>Both Iteration and Composition</h3><a name="skin" id="skin"></a><a name="reference" id="reference"></a><a name="string" id="string"></a><table cellpadding="6" cellspacing="0" border="1" width="95%">
+</table>
+<h3>Both Iteration and Composition</h3>
+<a name="skin" id="skin"></a>
+<a name="reference" id="reference"></a>
+<a name="string" id="string"></a>
+<table cellpadding="6" cellspacing="0" border="1" width="95%">
 <tr bgcolor="#CCCCCC">
 <th>Description</th><th width="15%">Data</th><th width="15%">Template</th><th width="15%">Compiled<br>
 Template</th><th width="15%">Output</th>
@@ -111,7 +143,18 @@ Template</th><th width="15%">Output</th>
 </tr><tr>
 <td>Processing a template from a string (not file)</td><td align="center"><a href="show.tcl?file=string.tcl">View</a></td><td align="center"><a href="show.tcl?file=string.adp">View</a></td><td align="center"><a href="compile.tcl?file=string.adp">View</a></td><td align="center"><a href="string">View</a></td>
 </tr>
-</table><h3>Using ListBuilder</h3><a name="string" id="string"></a><a name="string" id="string"></a><a name="string" id="string"></a><a name="string" id="string"></a><a name="string" id="string"></a><a name="string" id="string"></a><a name="string" id="string"></a><a name="string" id="string"></a><a name="string" id="string"></a><table cellpadding="6" cellspacing="0" border="1" width="95%">
+</table>
+<h3>Using ListBuilder</h3>
+<a name="string" id="string"></a>
+<a name="string" id="string"></a>
+<a name="string" id="string"></a>
+<a name="string" id="string"></a>
+<a name="string" id="string"></a>
+<a name="string" id="string"></a>
+<a name="string" id="string"></a>
+<a name="string" id="string"></a>
+<a name="string" id="string"></a>
+<table cellpadding="6" cellspacing="0" border="1" width="95%">
 <tr bgcolor="#CCCCCC">
 <th>Description</th><th width="15%">Data</th><th width="15%">Template</th><th width="15%">Compiled<br>
 Template</th><th width="15%">Output</th>
@@ -195,7 +238,11 @@ query</a>
 <a href="compile.tcl?file=list9/index.adp">index</a><br>
 </td><td align="center"><a href="list9">View</a></td>
 </tr>
-</table><h3>Forms</h3><a name="contract" id="contract"></a><a name="error" id="error"></a><table cellpadding="6" cellspacing="0" border="1" width="95%">
+</table>
+<h3>Forms</h3>
+<a name="contract" id="contract"></a>
+<a name="error" id="error"></a>
+<table cellpadding="6" cellspacing="0" border="1" width="95%">
 <tr bgcolor="#CCCCCC">
 <th>Description</th><th width="15%">Data</th><th width="15%">Template</th><th width="15%">Compiled<br>
 Template</th><th width="15%">Output</th>
@@ -210,7 +257,19 @@ Template</th><th width="15%">Output</th>
 </tr><tr>
 <td>Report an error related to a request.</td><td align="center"><a href="show.tcl?file=error.tcl">View</a></td><td align="center"><a href="show.tcl?file=error.adp">View</a></td><td align="center"><a href="compile.tcl?file=error.adp">Plain</a></td><td align="center"><a href="error">View</a></td>
 </tr>
-</table><h3>Using the Form Manager.</h3><a name="formmgr" id="formmgr"></a><a name="form" id="form"></a><a name="sandwich" id="sandwich"></a><a name="select" id="select"></a><a name="state" id="state"></a><a name="date-test" id="date-test"></a><a name="user-edit" id="user-edit"></a><a name="pay" id="pay"></a><a name="display-edit-form" id="display-edit-form"></a><a name="submit-test-form" id="submit-test-form"></a><table cellpadding="6" cellspacing="0" border="1" width="95%">
+</table>
+<h3>Using the Form Manager.</h3>
+<a name="formmgr" id="formmgr"></a>
+<a name="form" id="form"></a>
+<a name="sandwich" id="sandwich"></a>
+<a name="select" id="select"></a>
+<a name="state" id="state"></a>
+<a name="date-test" id="date-test"></a>
+<a name="user-edit" id="user-edit"></a>
+<a name="pay" id="pay"></a>
+<a name="display-edit-form" id="display-edit-form"></a>
+<a name="submit-test-form" id="submit-test-form"></a>
+<table cellpadding="6" cellspacing="0" border="1" width="95%">
 <tr bgcolor="#CCCCCC">
 <th>Description</th><th width="15%">Data</th><th width="15%">Template</th><th width="15%">Compiled<br>
 Template</th><th width="15%">Output</th>
@@ -245,5 +304,7 @@ Request</a></td></tr><tr>
 </tr><tr>
 <td>A form with multiple submit buttons</td><td align="center"><a href="show.tcl?file=submit-test.tcl">View</a></td><td align="center"><a href="show.tcl?file=submit-test.adp">View</a></td><td align="center"><a href="compile.tcl?file=submit-test.adp">View</a></td><td align="center"><a href="submit-test">View</a></td>
 </tr>
-</table><br><hr><a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>
-</body>
+</table>
+<br>
+<hr>
+<a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>

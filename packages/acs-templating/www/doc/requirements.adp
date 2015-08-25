@@ -2,18 +2,26 @@
 <property name="context">{/doc/acs-templating {Templating}} {ACS Templating Requirements}</property>
 <property name="doc(title)">ACS Templating Requirements</property>
 <master>
-
-<body>
 <h2>ACS Templating Requirements</h2>
-by <a href="mailto:karlg\@arsdigita.com">Karl Goldstein</a>,
+
+by <a href="mailto:karlg\@arsdigita.com">Karl Goldstein</a>
+,
 <a href="mailto:christian\@arsdigita.com">Christian
-Brechbühler</a>, <a href="mailto:psu\@arsdigita.com">Peter
-Su</a>, and <a href="mailto:yon\@arsdigita.com">Yonatan Feldman</a><a name="introduction" id="introduction"></a><h3>I. Introduction</h3>
+Brechbühler</a>
+, <a href="mailto:psu\@arsdigita.com">Peter
+Su</a>
+, and <a href="mailto:yon\@arsdigita.com">Yonatan Feldman</a>
+<a name="introduction" id="introduction"></a>
+<h3>I. Introduction</h3>
+
 The following is a requirements document for the ACS Templating
 System version 0.5. It has also been called Karl's Templates, the
 Dynamic Publishing System (DPS), and Stencil. The official package
-name for the system is now <code><b>acs-templating</b></code>.
-<a name="vision" id="vision"></a><h3>II. Vision Statement</h3>
+name for the system is now <code><b>acs-templating</b></code>
+.
+<a name="vision" id="vision"></a>
+<h3>II. Vision Statement</h3>
+
 On websites of sufficient size, a consistent look and feel (the UI,
 or user interface) for users is important, while for site
 publishers and administrators, de-coupling the UI from programming
@@ -27,7 +35,9 @@ on a script or program that generates the dynamic content that
 fills the blanks in the template. In addition, the templating
 system provides a way to use a single layout specification for the
 majority - if not all - of a website's pages, so the overall layout
-of a site can be more easily administered. <a name="system" id="system"></a><h3>III. System Overview</h3>
+of a site can be more easily administered. <a name="system" id="system"></a>
+<h3>III. System Overview</h3>
+
 The templating system provides:
 <ul>
 <li>A set of custom markup tags (using ADP, AOLserver Dynamic
@@ -38,7 +48,10 @@ content in a page.</li><li>A mechanism for combining the data (from a data sourc
 the layout (from a layout template) into a single dynamically
 generated HTML page.</li><li>A mechanism for specifying a single master template to be used
 for multiple pages.</li>
-</ul><a name="usercases" id="usercases"></a><h3>IV. Use-cases and User-scenarios</h3><p>The template system is designed to be used by two classes of
+</ul>
+<a name="usercases" id="usercases"></a>
+<h3>IV. Use-cases and User-scenarios</h3>
+<p>The template system is designed to be used by two classes of
 users: programmers and designers. In bulding a web site,
 programmers are generally responsible for defining and implementing
 the <i>application logic</i> of the site, while designers are more
@@ -47,10 +60,13 @@ application logic generates data for the presentation to display to
 the user. The template system must provide mechanisms that supports
 both of these tasks and allows the designer and programmer to work
 seperately, but for their work to be combined at runtime into
-something that the user sees as a single page.</p><p>Thus, pages are naturally split into two parts. The <i>logic
+something that the user sees as a single page.</p>
+<p>Thus, pages are naturally split into two parts. The <i>logic
 part</i> executes application logic and generates data, and the
 <i>presentation</i> part that specifies the layout of the page and
-so on.</p><p>What is needed is:</p><ol>
+so on.</p>
+<p>What is needed is:</p>
+<ol>
 <li>A notation and API for the programmer specify the application
 logic and to generate the data to be displayed. In ACS, we call the
 data that we wish to display a <i>data source</i> or <i>page
@@ -65,16 +81,23 @@ sources and page properties will be presented to the user. This
 notation will generally take the form of some kind extended
 HTML.</li><li>A mechanism for communicating the data sources and page
 properties from the logic part of the page</li>
-</ol><p>Jane Programmer writes a page contract and a draft template,
+</ol>
+<p>Jane Programmer writes a page contract and a draft template,
 that uses the promised page properties. Joe Designer takes that
 template and makes it look nice, using his design skills and HTML
 literacy. Meanwhile Jane Programmer writes code to generate the
 page properties, typically by querying the database. When both are
 done, the page is ready for Jim User, who requests it using his web
-browser.</p><p>
+browser.</p>
+<p>
 <em>Alternate scenario:</em> Judy Designer is familiar with the
 template system. She starts directly from a defined page contract,
-so Jane Programmer doesn't need to write the draft template.</p><h3>V. Related Links</h3><ul><li>Design document</li></ul><a name="functional" id="functional"></a><h3>VI.A Functional Requirements</h3><ul>
+so Jane Programmer doesn't need to write the draft template.</p>
+<h3>V. Related Links</h3>
+<ul><li>Design document</li></ul>
+<a name="functional" id="functional"></a>
+<h3>VI.A Functional Requirements</h3>
+<ul>
 <li>
 <a name="10.0"></a><strong>10.0 A Common Solution</strong><p>Programmers and designers should only have to learn a single
 system that serves as a UI substrate for all the functionally
@@ -172,7 +195,10 @@ server. HTML authors should be able to access information about
 template specifications and work on templates remotely without
 needing shell access to the server.</p>
 </li>
-</ul><a name="nonfunctional" id="nonfunctional"></a><h3>VI.B Non-functional Requirements</h3><ul>
+</ul>
+<a name="nonfunctional" id="nonfunctional"></a>
+<h3>VI.B Non-functional Requirements</h3>
+<ul>
 <li>
 <a name="100.0"></a><strong>100.0 Distribution</strong><p>The Templating System must be releasable as part of the ACS and
 as a separate product. When distributed as part of the ACS all
@@ -185,7 +211,9 @@ a site. It must be fast and efficient, and it must not slow down
 page load speed by more than 10% versus a Tcl page with inline
 HTML.</p>
 </li>
-</ul><h3>VII. Revision History</h3><table cellpadding="2" cellspacing="2" width="90%" bgcolor="#EFEFEF">
+</ul>
+<h3>VII. Revision History</h3>
+<table cellpadding="2" cellspacing="2" width="90%" bgcolor="#EFEFEF">
 <tr bgcolor="#E0E0E0">
 <th width="10%">Document Revision #</th><th width="50%">Action Taken, Notes</th><th>When?</th><th>By Whom?</th>
 </tr><tr>
@@ -195,7 +223,9 @@ HTML.</p>
 </tr><tr>
 <td>0.3</td><td>Edited, reviewed, pending freeze</td><td>8/28/2000</td><td>Kai Wu</td>
 </tr>
-</table><hr><address><a href="mailto:yon\@arsdigita.com">yon\@arsdigita.com</a></address>
+</table>
+<hr>
+<address><a href="mailto:yon\@arsdigita.com">yon\@arsdigita.com</a></address>
+
 Last modified: $Id: requirements.html,v 1.2 2014/10/27 16:40:14
 victorg Exp $
-</body>

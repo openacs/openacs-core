@@ -2,13 +2,15 @@
 <property name="context">{/doc/acs-templating {Templating}} {Upgrading existing ADPs to noquote templating}</property>
 <property name="doc(title)">Upgrading existing ADPs to noquote templating</property>
 <master>
+<h2>Upgrading existing ADPs to noquote templating</h2>
+<h3>Introduction.</h3>
 
-<body>
-<h2>Upgrading existing ADPs to noquote templating</h2><h3>Introduction.</h3>
 The variable substitution in the templating has been changed to
 become more friendly towards quoting. The rationale for the change
-and the definition of terms like <i>quoting</i> are present in
-<a href="no-quote">the quoting article</a>. As it discusses
+and the definition of terms like <i>quoting</i>
+ are present in
+<a href="no-quote">the quoting article</a>
+. As it discusses
 these concepts in some depths, we see no reason to repeat them
 here. Instead, we will assume that you have read the previous
 article and focus on the topic of this one: the changes you need to
@@ -16,20 +18,27 @@ apply to make your module conformant to the new quoting rules.
 <p>This text is written as a result of our efforts to make the ACS
 installation for the German Bank project work, therefore it is
 based on field experience rather than academic discussion. We hope
-you will find it useful.</p><h3>Recap of the Theory.</h3>
+you will find it useful.</p>
+<h3>Recap of the Theory.</h3>
+
 The change to the templating system can be expressed in one
 sentence:
 <blockquote>All variables are now quoted by default, except those
 explicitly protected by <tt>;noquote</tt> or
 <tt>;literal;</tt>.</blockquote>
+
 This means that the only way your code can fail is if the new code
 quotes a variable which is not meant to be quoted. Which is where
-<tt>;noquote</tt> needs to be added. That's all porting effort that
+<tt>;noquote</tt>
+ needs to be added. That's all porting effort that
 is required. Actually, the variables are subject to HTML-quoting
-and internationalization. The suffix <tt>;noquote</tt> means that
+and internationalization. The suffix <tt>;noquote</tt>
+ means that
 the variable's content will be internationalized, but not
-HTML-quoted, while <tt>;no18n</tt> means quote, but don't
-internationalize. Finally <tt>;literal</tt> means: don't quote and
+HTML-quoted, while <tt>;no18n</tt>
+ means quote, but don't
+internationalize. Finally <tt>;literal</tt>
+ means: don't quote and
 don't internationalize.
 <p>This is not hard because most variables will not be affected by
 this change. Most variables either need to be quoted (those
@@ -39,8 +48,11 @@ The variables where this behavior is undesired are <b>those that
 contain HTML</b> which is expected to be included as part of the
 page, and <b>those that are already quoted</b> by Tcl code. Such
 variables should be protected from quoting by the <tt>;noquote</tt>
-modifier.</p><h3>The Most Common Cases.</h3>
-The most common cases where you need to add <tt>;noquote</tt> to
+modifier.</p>
+<h3>The Most Common Cases.</h3>
+
+The most common cases where you need to add <tt>;noquote</tt>
+ to
 the variable name are easy to recognize and identify.
 <p>
 <b>Hidden form variables.</b><br>
@@ -48,7 +60,8 @@ Also known as "hidden input fields", hidden form variables are form
 fields with pre-defined values which are not shown to the user.
 These days they are used for transferring internal state across
 several form pages. In HTML, hidden form variables look like
-this:</p><blockquote><pre>
+this:</p>
+<blockquote><pre>
 &lt;form&gt;
   &lt;input name=var1 value="value1"&gt;
   &lt;input name=var2 value="value2"&gt;
@@ -56,8 +69,10 @@ this:</p><blockquote><pre>
 &lt;/form&gt;
       
 </pre></blockquote>
+
 ACS has a convenience function for creating hidden form variables,
-<tt>export_form_vars</tt>. It accepts a list of variables and
+<tt>export_form_vars</tt>
+. It accepts a list of variables and
 returns the HTML code containing the hidden input tags that map
 variable names to variable values, as found in the Tcl environment.
 In that case, the Tcl code would set the HTML code to a variable:
@@ -65,7 +80,9 @@ In that case, the Tcl code would set the HTML code to a variable:
 set form_vars [export_vars -form {var1 var2}]
       
 </pre></blockquote>
-The ADP will simply refer to the <tt>form_vars</tt> variable:
+
+The ADP will simply refer to the <tt>form_vars</tt>
+ variable:
 <blockquote><pre>
 &lt;form&gt;
   \@form_vars\@              &lt;!-- WRONG!  Needs noquote --&gt;
@@ -73,11 +90,14 @@ The ADP will simply refer to the <tt>form_vars</tt> variable:
 &lt;/form&gt;
       
 </pre></blockquote>
+
 This will no longer work as intended because <tt>form_vars</tt>
+
 will be, like any other variable, quoted, and the user will end up
 seeing raw HTML text of the hidden variables. Even worse, the
 browser will not be aware of these form fields, and the page will
-not work. After protecting the variable with <tt>;noquote</tt>,
+not work. After protecting the variable with <tt>;noquote</tt>
+,
 everything works as expected:
 <blockquote><pre>
 &lt;form&gt;
@@ -85,7 +105,8 @@ everything works as expected:
   ... real form stuff ...
 &lt;/form&gt;
       
-</pre></blockquote><p>
+</pre></blockquote>
+<p>
 <b>Snippets of HTML produced by Tcl code, aka
 <i>widgets</i>
 </b>.<br>
@@ -96,26 +117,33 @@ templates. In such cases, it makes sense to generate the
 <i>widget</i> programmatically and include it into the template as
 a variable. A typical widget is a date entry widget which provides
 the user the input and selection boxes for year, month, and day,
-all of which default to the current date.</p><p>Another example of widgets is the <i>context bar</i> often found
-on top of ACS pgages.</p><p>Obviously, all widgets should be treated as HTML and therefore
+all of which default to the current date.</p>
+<p>Another example of widgets is the <i>context bar</i> often found
+on top of ACS pgages.</p>
+<p>Obviously, all widgets should be treated as HTML and therefore
 adorned with the <tt>;noquote</tt> qualifier. This also assumes
 that the routines that <em>build</em> the widget are correctly
 written and that they will quote the <i>components</i> used to
-build the widget.</p><p>
+build the widget.</p>
+<p>
 <b>Pieces of text that are already quoted.</b><br>
 This quoting is usually part of a more general preparation for HTML
 rendering of the text. For instance, a bboard posting can be either
 HTML or text. If it is HTML, we transmit it as is; if not, we
 perform quoting, word-wrapping, etc. In both cases it is obvious
 that quoting performed by the templating system would be redundant,
-so we must be careful to add <tt>;noquote</tt> to the ADP.</p><h3>The <tt>property</tt> and <tt>include</tt> Gotchas.</h3>
+so we must be careful to add <tt>;noquote</tt> to the ADP.</p>
+<h3>The <tt>property</tt> and <tt>include</tt> Gotchas.</h3>
+
 Transfer of parameters between included ADPs often requires manual
-addition of <tt>;noquote</tt>. Let's review why.
+addition of <tt>;noquote</tt>
+. Let's review why.
 <p>The <tt>property</tt> tag is used to pass a piece of information
 to the master template. This is used by the ADP whose writer
 consciously chose to let the master template handle a variable
 given by the Tcl code. Typically page titles, headings, and context
-bars are handled this way. For example:</p><blockquote>
+bars are handled this way. For example:</p>
+<blockquote>
 <b>master:</b><pre>
 &lt;head&gt;
   &lt;title&gt;\@title\@&lt;/title&gt;
@@ -133,11 +161,13 @@ bars are handled this way. For example:</p><blockquote>
       
 </pre>
 </blockquote>
+
 The obvious intention of the master is to allow its slave templates
 to provide a "title" and a "heading" of the page in a standardized
 fashion. The obvious intention of our slave template is to allow
 its corresponding Tcl code to set a single variable,
-<tt>title</tt>, which will be used for both title and heading.
+<tt>title</tt>
+, which will be used for both title and heading.
 What's wrong with this code?
 <p>The problem is that title gets quoted <em>twice</em>, once by
 the slave template, and once by the master template. This is the
@@ -145,7 +175,8 @@ result of how the templating system works: <em>every</em>
 occurrence of <tt>\@<var>variable</var>\@</tt> is converted to
 <tt>[ad_quotehtml $<var>variable</var>]</tt>, even when it is
 used only to set a property and you would expect the quoting to be
-suppressed.</p><blockquote><font size="-1">Implementation note: Ideally, the
+suppressed.</p>
+<blockquote><font size="-1">Implementation note: Ideally, the
 templating system should avoid this pitfall by quoting the variable
 (or not) only once, at the point where the value is passed from the
 Tcl code to the templating system. However, no such point in time
@@ -155,13 +186,15 @@ environment and <i>then</i> does the quoting. Properties are passed
 to the master so that all the property variables are shoved into an
 environment; by the time the master template is executed, all
 information on which variable came from where and whether it might
-have already been quoted is lost.</font></blockquote><p>This occurrence is often referred to as <i>over-quoting</i>.
+have already been quoted is lost.</font></blockquote>
+<p>This occurrence is often referred to as <i>over-quoting</i>.
 Over-quoting is sometimes hard to detect because things seem to
 work fine in most cases. To notice the problem in the example above
 (and in any other over-quoting example), the title needs to contain
 one of the characters <tt>&lt;</tt>, <tt>&gt;</tt> or
 <tt>&amp;</tt>. If it does, they will appear quoted to the user
-instead of appearing as-is.</p><p>Over-quoting is resolved by adding <tt>;noquote</tt> to one of
+instead of appearing as-is.</p>
+<p>Over-quoting is resolved by adding <tt>;noquote</tt> to one of
 the variables. We strongly recommend that you add <tt>;literal</tt>
 inside the <tt>property</tt> tag rather than in the master. The
 reason is that, first, it makes sense to do so because conceptually
@@ -171,8 +204,10 @@ supposed to merely <em>transfer</em> a piece of text to the master;
 it is much cleaner and more maintainable if this transfer is
 defined to be non-lossy. This becomes important in practice when
 there is a hierarchy of <tt>master</tt> templates -- e.g. one for
-the package and one for the whole site.</p><p>To reiterate, a bug-free version of the slave template looks
-like this:</p><blockquote>
+the package and one for the whole site.</p>
+<p>To reiterate, a bug-free version of the slave template looks
+like this:</p>
+<blockquote>
 <b>slave sans over-quoting:</b><pre>
 &lt;master&gt;
 &lt;property name="doc(title)"&gt;\@title;literal\@&lt;/property&gt;
@@ -180,8 +215,10 @@ like this:</p><blockquote>
 ...
       
 </pre>
-</blockquote><p>The exact same problems when the <tt>include</tt> statement
-passes some text. Here is an example:</p><blockquote>
+</blockquote>
+<p>The exact same problems when the <tt>include</tt> statement
+passes some text. Here is an example:</p>
+<blockquote>
 <b>Including template:</b><pre>
 &lt;include src="user-kick-form" id=\@kicked_id\@ reason=\@default_reason\@&gt;
       
@@ -194,21 +231,27 @@ passes some text. Here is an example:</p><blockquote>
       
 </pre>
 </blockquote>
+
 Here an include statement is used to include an HTML form widget
-parts of which are defined with Tcl variables <tt>$id</tt> and
-<tt>$default_reason</tt> whose values presumably come from the
+parts of which are defined with Tcl variables <tt>$id</tt>
+ and
+<tt>$default_reason</tt>
+ whose values presumably come from the
 database.
 <p>What happens is that <var>reason</var> that prefills the
 <tt>textarea</tt> is over-quoted. The reasons are the same as in
 the last example: it gets quoted once by the includer, and the
 second time by the included page. The fix is also similar: when you
 transfer non-constant text to an included page, make sure to add
-<tt>;literal</tt>.</p><blockquote>
+<tt>;literal</tt>.</p>
+<blockquote>
 <b>Including template, sans over-quoting:</b><pre>
 &lt;include src="user-kick-form" id=\@kicked_id;literal\@ reason=\@default_reason;literal\@&gt;
       
 </pre>
-</blockquote><h3>Upgrade Overview.</h3>
+</blockquote>
+<h3>Upgrade Overview.</h3>
+
 Upgrading a module to handle the new quoting rules consists of
 applying the process mentioned above to every ADP in the module.
 Using the knowledge gained above, we can specify exactly what needs
@@ -228,9 +271,11 @@ the variable the result gets saved to. Otherwise, remove the
 quoting.</li><li>Add <tt>;noquote</tt> to the "HTML component" variables noted
 in the previous step.</li>
 </ol>
+
 After that, test that the template behaves as it should, and you're
 done.
 <h3>Testing.</h3>
+
 Fortunately, most of the problems with automatic quoting are very
 easy to diagnose. The most important point for testing is that it
 covers as many cases as possible: ideally testing should cover all
@@ -268,7 +313,9 @@ from Tcl. The latter is necessary when building HTML components,
 such as a context bar, from strings that come from the database or
 from the user.</p>
 </li>
-</ul><hr><address><a href="mailto:hniksic\@xemacs.org">Hrvoje
-Niksic</a></address><!-- Created: Mon Feb 26 12:12:00 CET 2001 --><!-- hhmts start -->Last modified: Thu Aug 20 18:38:05 CEST 2015 
+</ul>
+<hr>
+<address><a href="mailto:hniksic\@xemacs.org">Hrvoje
+Niksic</a></address>
+<!-- Created: Mon Feb 26 12:12:00 CET 2001 --><!-- hhmts start -->Last modified: Thu Aug 20 18:38:05 CEST 2015 
 <!-- hhmts end -->
-</body>

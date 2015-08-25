@@ -2,11 +2,11 @@
 <property name="context">{/doc/acs-templating {Templating}} {Templating System: Goals}</property>
 <property name="doc(title)">Templating System: Goals</property>
 <master>
-
-<body>
-<h2>Goals</h2><p>The overall goal of the templating system is to provide the
+<h2>Goals</h2>
+<p>The overall goal of the templating system is to provide the
 publishing team with a set of tools for simplifying the development
-and maintenance of the user interface. In particular:</p><ul>
+and maintenance of the user interface. In particular:</p>
+<ul>
 <li><p>
 <b>A common solution.</b> Programmers and designers should only
 have to learn a single system that serves as a UI substrate for all
@@ -43,5 +43,6 @@ specifications using their standard tools for writing and
 maintaining code on the server. HTML authors should be able to
 access information about template specifications and work on
 templates remotely without needing shell access to the server.</p></li>
-</ul><hr><a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>
-</body>
+</ul>
+<hr>
+<a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>

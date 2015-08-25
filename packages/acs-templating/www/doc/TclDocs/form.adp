@@ -2,14 +2,21 @@
 <property name="context">{/doc/acs-templating {Templating}} {}</property>
 <property name="doc(title)"></property>
 <master>
+<h2>Namespace form</h2>
+<blockquote>Commands for managing dynamic templated
+forms.</blockquote>
+<h3>Method Summary</h3>
 
-<body>
-<h2>Namespace form</h2><blockquote>Commands for managing dynamic templated
-forms.</blockquote><h3>Method Summary</h3>
-Listing of public methods:<br><blockquote>
+Listing of public methods:<br>
+<blockquote>
 <a href="#"></a><br><a href="#"></a><br><a href="#"></a><br><a href="#"></a><br><a href="#"></a><br><a href="#"></a><br><a href="#"></a><br><a href="#"></a><br><a href="#"></a><br><a href="#"></a><br><a href="#"></a><br>
-</blockquote><h3>Method Detail</h3><p align="right">
-<font color="red">*</font> indicates required</p><b>Public Methods:</b><br><table width="100%">
+</blockquote>
+<h3>Method Detail</h3>
+<p align="right">
+<font color="red">*</font> indicates required</p>
+<b>Public Methods:</b>
+<br>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name=""></a></td></tr><tr><td>
 <blockquote>Convenience procedure to set individual values of a
 form (useful for simple update forms). Typical usage is to query a
@@ -30,7 +37,8 @@ correspond to element identifiers in the form</td>
 </table>
 </dd></dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name=""></a></td></tr><tr><td>
 <blockquote>Determine whether a form exists by checking for its
 data structures.</blockquote><dl>
@@ -44,7 +52,8 @@ data structures.</blockquote><dl>
 not.</dd>
 </dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name=""></a></td></tr><tr><td>
 <blockquote>Generates hidden input tags for all values in a form
 submission. Typically used to create a confirmation page following
@@ -53,7 +62,8 @@ an initial submission.</blockquote><dl>
 form.</dd>
 </dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name=""></a></td></tr><tr><td>
 <blockquote>Initialize the data structures for a form.</blockquote><dl>
 <dd>
@@ -81,7 +91,8 @@ onSubmit validate() } }</td>
 </table></dd>
 </dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name=""></a></td></tr><tr><td>
 <blockquote>Return a list which represents the result of getting
 combined values from multiple form elements</blockquote><dl><dd>
@@ -104,7 +115,8 @@ combine the values of all elements starting with { foo}</td>
 </table>
 </dd></dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name=""></a></td></tr><tr><td>
 <blockquote>Return the number of elements in a form</blockquote><dl><dd>
 <b>Parameters:</b><table><tr>
@@ -114,7 +126,8 @@ combine the values of all elements starting with { foo}</td>
 </tr></table>
 </dd></dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name=""></a></td></tr><tr><td>
 <blockquote>Return true if a submission in progress. The submission
 may or may not be valid.</blockquote><dl>
@@ -127,7 +140,8 @@ may or may not be valid.</blockquote><dl>
 </dd><dt><b>Returns:</b></dt><dd>1 if true or 0 if false</dd>
 </dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name=""></a></td></tr><tr><td>
 <blockquote>Return true if preparing a form for an initial request
 (as opposed to repreparing a form that is returned to the user due
@@ -142,7 +156,8 @@ default values for form elements.</blockquote><dl>
 </dd><dt><b>Returns:</b></dt><dd>1 if true or 0 if false</dd>
 </dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name=""></a></td></tr><tr><td>
 <blockquote>Return true if submission in progress and submission
 was valid. Typically used to conditionally execute DML and redirect
@@ -157,7 +172,8 @@ to report validation errors.</blockquote><dl>
 </dd><dt><b>Returns:</b></dt><dd>1 if true or 0 if false</dd>
 </dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name=""></a></td></tr><tr><td>
 <blockquote>Set local variables for form variables (assume they are
 all single values). Typically used when processing the form
@@ -177,7 +193,8 @@ empty, retreive all form elements</td>
 </table>
 </dd></dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name=""></a></td></tr><tr><td>
 <blockquote>Set the name of the current section of the form. A form
 may be divided into any number of sections for layout purposes.
@@ -197,9 +214,11 @@ whenever the section name changes.</blockquote><dl><dd>
 </table>
 </dd></dl>
 </td></tr>
-</table><p>
+</table>
+<p>
 <b>Private Methods</b>:<br>
-</p><table width="100%">
+</p>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name=""></a></td></tr><tr><td>
 <blockquote>Auto-generate the template for a form</blockquote><dl>
 <dd>
@@ -219,11 +238,13 @@ of the ATS resources directory.</td>
 </dd><dt><b>Returns:</b></dt><dd>A string containing a template for the body of the form.</dd>
 </dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name=""></a></td></tr><tr><td><blockquote>Helper procedure used to access the basic data
 structures of a form object. Called by several of the form
 commands.</blockquote></td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name=""></a></td></tr><tr><td>
 <blockquote>Iterates over all declared elements, checking for
 hidden widgets and rendering those that have not been rendered yet.
@@ -236,7 +257,8 @@ aid.</blockquote><dl><dd>
 </tr></table>
 </dd></dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name=""></a></td></tr><tr><td>
 <blockquote>Render the HTML FORM tag along with a hidden element
 that identifies the form object.</blockquote><dl>
@@ -256,7 +278,8 @@ the FORM tag, such as JavaScript event handlers.</td>
 </dd><dt><b>Returns:</b></dt><dd>A string containing the rendered tags.</dd>
 </dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name=""></a></td></tr><tr><td>
 <blockquote>Render the finished HTML output for a dynamic
 form.</blockquote><dl>
@@ -277,6 +300,6 @@ of the ATS resources directory.</td>
 </dd><dt><b>Returns:</b></dt><dd>A string containing the HTML for the body of the form.</dd>
 </dl>
 </td></tr>
-</table><p align="right">
+</table>
+<p align="right">
 <font color="red">*</font> indicates required</p>
-</body>

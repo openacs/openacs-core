@@ -2,14 +2,21 @@
 <property name="context">{/doc/acs-templating {Templating}} {}</property>
 <property name="doc(title)"></property>
 <master>
+<h2>Namespace widget</h2>
+<blockquote>Procedures for generating and processing metadata form
+widgets, editing attribute widgets</blockquote>
+<h3>Method Summary</h3>
 
-<body>
-<h2>Namespace widget</h2><blockquote>Procedures for generating and processing metadata form
-widgets, editing attribute widgets</blockquote><h3>Method Summary</h3>
-Listing of public methods:<br><blockquote>
+Listing of public methods:<br>
+<blockquote>
 <a href="#widget::param_element_create">widget::param_element_create</a><br>
-</blockquote><h3>Method Detail</h3><p align="right">
-<font color="red">*</font> indicates required</p><b>Public Methods:</b><br><table width="100%">
+</blockquote>
+<h3>Method Detail</h3>
+<p align="right">
+<font color="red">*</font> indicates required</p>
+<b>Public Methods:</b>
+<br>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="widget::param_element_create" id="widget::param_element_create"><font size="+1" weight="bold">widget::param_element_create</font></a></td></tr><tr><td>
 <blockquote>Dipatches subprocs to generate the form elements for
 setting an attribute widget param</blockquote><dl><dd>
@@ -51,9 +58,11 @@ param. One of literal, eval, query</td>
 </table>
 </dd></dl>
 </td></tr>
-</table><p>
+</table>
+<p>
 <b>Private Methods</b>:<br>
-</p><table width="100%">
+</p>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF">
 <a name="widget::create_options_param" id="widget::create_options_param"><font size="+1" weight="bold">widget::create_options_param</font></a><br><small><i>  by Michael Pih</i></small>
 </td></tr><tr><td>
@@ -88,7 +97,8 @@ value (literal, query, eval)</td>
 </table>
 </dd></dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF">
 <a name="widget::create_param_source" id="widget::create_param_source"><font size="+1" weight="bold">widget::create_param_source</font></a><br><small><i>  by Michael Pih</i></small>
 </td></tr><tr><td>
@@ -113,7 +123,8 @@ the form</td>
 </table>
 </dd></dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF">
 <a name="widget::create_param_type" id="widget::create_param_type"><font size="+1" weight="bold">widget::create_param_type</font></a><br><small><i>  by Michael Pih</i></small>
 </td></tr><tr><td>
@@ -133,7 +144,8 @@ the form</td>
 </table>
 </dd></dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF">
 <a name="widget::create_param_value" id="widget::create_param_value"><font size="+1" weight="bold">widget::create_param_value</font></a><br><small><i>  by Michael Pih</i></small>
 </td></tr><tr><td>
@@ -158,7 +170,8 @@ widget param is mandatory</td>
 </table>
 </dd></dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF">
 <a name="widget::create_text_param" id="widget::create_text_param"><font size="+1" weight="bold">widget::create_text_param</font></a><br><small><i>  by Michael Pih</i></small>
 </td></tr><tr><td>
@@ -188,7 +201,8 @@ value (literal, query, eval)</td>
 </table>
 </dd></dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF">
 <a name="widget::create_values_param" id="widget::create_values_param"><font size="+1" weight="bold">widget::create_values_param</font></a><br><small><i>  by Michael Pih</i></small>
 </td></tr><tr><td>
@@ -223,7 +237,8 @@ value (literal, query, eval)</td>
 </table>
 </dd></dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF">
 <a name="widget::process_param" id="widget::process_param"><font size="+1" weight="bold">widget::process_param</font></a><br><small><i>  by Michael Pih</i></small>
 </td></tr><tr><td>
@@ -256,6 +271,6 @@ belongs</td>
 </table>
 </dd></dl>
 </td></tr>
-</table><p align="right">
+</table>
+<p align="right">
 <font color="red">*</font> indicates required</p>
-</body>

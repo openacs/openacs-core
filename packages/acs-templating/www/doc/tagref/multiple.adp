@@ -2,13 +2,18 @@
 <property name="context">{/doc/acs-templating {Templating}} {Templating System Tag Reference: Multiple}</property>
 <property name="doc(title)">Templating System Tag Reference: Multiple</property>
 <master>
-
-<body>
-<h2>Multiple</h2><a href="..">Templating System</a> : <a href="../designer-guide.html">Designer Guide</a> : <a href="index">Tag Reference</a> : Multiple
-<h3>Summary</h3><p>The <tt>multiple</tt> tag is used to repeat a template section
+<h2>Multiple</h2>
+<a href="..">Templating System</a>
+ : <a href="../designer-guide.html">Designer Guide</a>
+ : <a href="index">Tag Reference</a>
+ : Multiple
+<h3>Summary</h3>
+<p>The <tt>multiple</tt> tag is used to repeat a template section
 for each row of a multirow data source. Column variables are reset
 with each repetition to the values of the next row of the data
-source.</p><h3>Usage</h3><pre>
+source.</p>
+<h3>Usage</h3>
+<pre>
 &lt;!-- Begin multiple layout, i.e. &lt;table&gt; --&gt;
 &lt;table&gt;
 
@@ -35,7 +40,10 @@ source.</p><h3>Usage</h3><pre>
 
 &lt;!-- End multiple layout, i.e. &lt;/table&gt; --&gt;
 &lt;/table&gt;
-</pre><pre></pre><h3>Notes</h3><ul>
+</pre>
+<pre></pre>
+<h3>Notes</h3>
+<ul>
 <li><p>The special variable <tt>datasource:rowcount</tt> may be used to
 check for no rows in a data source (or any other special condition
 related to the number of rows in the data source).</p></li><li>
@@ -83,5 +91,6 @@ used together to output any range from the data source.</p></li><li><p>See the <
 formatting subsets of a multirow data source. In the current
 implementation, the <code>&lt;multiple&gt;</code> tag does not
 nest.</p></li>
-</ul><hr><a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>
-</body>
+</ul>
+<hr>
+<a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>

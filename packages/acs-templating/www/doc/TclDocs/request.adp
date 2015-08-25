@@ -2,20 +2,29 @@
 <property name="context">{/doc/acs-templating {Templating}} {}</property>
 <property name="doc(title)"></property>
 <master>
-
-<body>
-<h2>Namespace request</h2><blockquote>The request commands provide a mechanism for managing
+<h2>Namespace request</h2>
+<blockquote>The request commands provide a mechanism for managing
 the query parameters to a page. The request is simply a special
 instance of a form object, and is useful for the frequent cases
 when data must be passed from page to page to determine display or
 page flow, rather than perform a transaction based on user input
-via a form.</blockquote><p>Also see:</p><dl>
+via a form.</blockquote>
+<p>Also see:</p>
+<dl>
 <dt>form</dt><dd><a href="">element</a></dd>
-</dl><h3>Method Summary</h3>
-Listing of public methods:<br><blockquote>
+</dl>
+<h3>Method Summary</h3>
+
+Listing of public methods:<br>
+<blockquote>
 <a href="#"></a><br><a href="#"></a><br><a href="#"></a><br><a href="#"></a><br><a href="#"></a><br>
-</blockquote><h3>Method Detail</h3><p align="right">
-<font color="red">*</font> indicates required</p><b>Public Methods:</b><br><table width="100%">
+</blockquote>
+<h3>Method Detail</h3>
+<p align="right">
+<font color="red">*</font> indicates required</p>
+<b>Public Methods:</b>
+<br>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name=""></a></td></tr><tr><td>
 <blockquote>Checks for any param errors. If errors are found, sets
 the display template to the specified URL (a system-wide request
@@ -32,7 +41,8 @@ error conditions.</td>
 </dd><dt><b>Returns:</b></dt><dd>1 if no error conditions exist, 0 otherwise.</dd>
 </dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name=""></a></td></tr><tr><td>
 <blockquote>Create the request data structure. Typically called at
 the beginning of the code for any page that accepts query
@@ -44,7 +54,8 @@ requiring slightly less typing.</td>
 </tr></table></dd>
 </dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name=""></a></td></tr><tr><td>
 <blockquote>Declares a query parameter as part of the page request.
 Validates the values associated with the parameter, in the same
@@ -82,7 +93,8 @@ fails.</td>
 </dd>
 </dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name=""></a></td></tr><tr><td>
 <blockquote>Manually report request error(s) by setting error
 messages and then calling is_valid to handle display. Useful for
@@ -104,7 +116,8 @@ condition.</td>
 </table>
 </dd></dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name=""></a></td></tr><tr><td>
 <blockquote>Retrieves the value(s) of the specified
 parameter.</blockquote><dl>
@@ -117,6 +130,6 @@ parameter.</blockquote><dl>
 </dd><dt><b>Returns:</b></dt><dd>The value of the specified parameter.</dd>
 </dl>
 </td></tr>
-</table><p align="right">
+</table>
+<p align="right">
 <font color="red">*</font> indicates required</p>
-</body>

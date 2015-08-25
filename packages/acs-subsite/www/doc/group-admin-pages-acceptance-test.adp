@@ -2,13 +2,16 @@
 <property name="context">{/doc/acs-subsite {Subsite}} {Group Admin Pages - Acceptance test}</property>
 <property name="doc(title)">Group Admin Pages - Acceptance test</property>
 <master>
-
-<body>
 <h2><font><font>Group Admin Pages - Acceptance
-test</font></font></h2><font>
+test</font></font></h2>
+<font>
 <a href="">ACS subsite docs</a> : Group Admin Pages -
-Acceptance test</font><h3><font>DEVELOPER DEFINED GROUP TYPES TEST</font></h3><font>The first thing we have to test is developer defined group
-types working in conjunction with the user defined ones.</font><p><font>Create the following object type in SQL*Plus.</font></p><pre><font>begin
+Acceptance test</font>
+<h3><font>DEVELOPER DEFINED GROUP TYPES TEST</font></h3>
+<font>The first thing we have to test is developer defined group
+types working in conjunction with the user defined ones.</font>
+<p><font>Create the following object type in SQL*Plus.</font></p>
+<pre><font>begin
  acs_object_type.create_type (
    supertype =&gt; 'group',
    object_type =&gt; 'developer_defined_test_type',
@@ -87,11 +90,15 @@ end developer_defined_test_type;
 /
 show errors
 
-</font></pre><ol>
+</font></pre>
+<ol>
 <li><font>Go to /admin/group-types and select "Developer defined
 test types"</font></li><li><font>Add a permissible rel type of Membership
 Relation</font></li><li><font>Add a group named "Test group"</font></li>
-</ol><h3><font>GROUP TYPE PAGES BASIC FUNCTIONALITY</font></h3><font><b>(Start at /admin)</b></font><ol>
+</ol>
+<h3><font>GROUP TYPE PAGES BASIC FUNCTIONALITY</font></h3>
+<font><b>(Start at /admin)</b></font>
+<ol>
 <li><font>Click on group types</font></li><li><font>Click on Groups</font></li><li><font>Click on "Group name" under "Attributes of this type of
 group"</font></li><li><font>Ensure that you see the properties of the attribute and
 that you are offered no administrative links</font></li><li><font>Make sure you cannot add attributes or do anything under
@@ -101,7 +108,10 @@ appears after adding the group</font></li><li><font>Click on Foobar</font></li><
 not deleted</font></li><li><font>Click on nuke this group then click yes. Group should no
 longer show up</font></li><li><font>Recreate the group Foobar</font></li><li><font>Click on foobar, then change the name to
 "ArsDigita"</font></li><li><font>Change ArsDigita's join policy to closed</font></li>
-</ol><h3><font>DYNAMICALLY EXTENDING GROUPS</font></h3><font><b>(Start at /admin/group-types/)</b></font><ol>
+</ol>
+<h3><font>DYNAMICALLY EXTENDING GROUPS</font></h3>
+<font><b>(Start at /admin/group-types/)</b></font>
+<ol>
 <li><font>Click on "Define a new group type" and create a new group
 type called "Project" with type "project". Ensure that all the
 fields you see are required (try submitting without entering in
@@ -136,7 +146,9 @@ package</font></li><li><font>Now go back to the group type admin page for the
 you get a link back to add a relationship type. Add back the
 composition relation.</font></li><li><font>Add a group of type project named
 GuideStar.org</font></li>
-</ol><h3><font>RELATIONSHIP TYPE PAGES BASIC FUNCTIONALITY</font></h3><ol>
+</ol>
+<h3><font>RELATIONSHIP TYPE PAGES BASIC FUNCTIONALITY</font></h3>
+<ol>
 <li><font>Create a new relationship type, Employment relation, that
 is a subtype of Membership relation, between group and person.
 Group has role of employer, person role of employee.</font></li><li><font>Select the employment relation and add an attribute age
@@ -150,7 +162,9 @@ Relation. Make sure the only things in object type one are project
 and subproject</font></li><li><font>Select the dummy relationship type and then delete
 it.</font></li><li><font>Select the Employment relation and add a required
 attribute "salary" (type integer)</font></li>
-</ol><h3><font>SEGMENTS, CONSTRAINTS AND RELATIONS</font></h3><ol>
+</ol>
+<h3><font>SEGMENTS, CONSTRAINTS AND RELATIONS</font></h3>
+<ol>
 <li><font>Go back to the admin page (/admin)</font></li><li><font>Click on the Groups -&gt; GuideStar.org. Add ArsDigita as
 a component</font></li><li><font>Remove the composition rel type from this
 group</font></li><li><font>Readd the composition rel type. Make sure arsdigita
@@ -175,8 +189,11 @@ site." Remove your membership relation. You should get prompted to
 remove relation to arsdigita, then to guidestar. Remove all of
 these relations.</font></li><li><font>Make yourself a project lead of guidestar
 again.</font></li>
-</ol><h3><font>Testing with more Users</font></h3><font>Now we're going to test that the user interface remains
-consistent if there are a few more users.</font><ol>
+</ol>
+<h3><font>Testing with more Users</font></h3>
+<font>Now we're going to test that the user interface remains
+consistent if there are a few more users.</font>
+<ol>
 <li><font>Go to /acs-admin/users and add 4 users</font></li><li><font>Go to /admin/groups and click on "relationship to site."
 You should see all of the people you just entered listed as members
 of the subsite.</font></li><li><font>Try to remove your Membership relation. You should see
@@ -184,7 +201,9 @@ only one constraint violation.</font></li><li><font>Remove one of the other peop
 group. You should be allowed to do it immediately.</font></li><li><font>Add back the person you removed.</font></li><li><font>Remove yourself from the registered users group. Make
 yourself a project lead on guidestar again.</font></li><li><font>Make another user a project lead on
 guidestar.</font></li>
-</ol><h3><font>CLEANING UP</font></h3><ol>
+</ol>
+<h3><font>CLEANING UP</font></h3>
+<ol>
 <li><font>Go to /admin/group-types</font></li><li><font>Select the project group type</font></li><li><font>Delete this group type. Should get prompted to delete sub
 projects group type.</font></li><li><font>Delete the sub projects group type.</font></li><li><font>Should get prompt to delete the project lead rel
 type</font></li><li><font>Delete the project lead rel type. Continue until you
@@ -197,9 +216,11 @@ drop table developer_defined_test_types;
 drop package developer_defined_test_type;
 </font></pre>
 </li>
-</ol><hr><address><font><a href="mailto:mbryzek\@arsdigita.com">Michael
-Bryzek</a></font></address><font>
+</ol>
+<hr>
+<address><font><a href="mailto:mbryzek\@arsdigita.com">Michael
+Bryzek</a></font></address>
+<font>
 <br><font size="-1">$Id: group-admin-pages-acceptance-test.html,v 1.3
 2003/09/30 12:10:03 mohanp Exp $</font>
 </font>
-</body>

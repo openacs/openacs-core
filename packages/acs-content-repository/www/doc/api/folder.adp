@@ -2,24 +2,35 @@
 <property name="context">{/doc/acs-content-repository {Content Repository}} {Package: content_folder}</property>
 <property name="doc(title)">Package: content_folder</property>
 <master>
-
-<body>
-<h2>content_folder</h2><p>
+<h2>content_folder</h2>
+<p>
 <a href="../index.html">Content Repository</a> :
-content_folder</p><hr><ul>
+content_folder</p>
+<hr>
+<ul>
 <li><a href="#overview">Overview</a></li><li><a href="#related">Related Objects</a></li><li><a href="#api">API</a></li>
-</ul><p> </p><h3><a name="overview">Overview</a></h3><p>Content folders contain related content items and allow content
+</ul>
+<p> </p>
+<h3><a name="overview">Overview</a></h3>
+<p>Content folders contain related content items and allow content
 managers to group content as they see fit. Within a content folder,
 content items must have unique names since this is where they will
 be served from. For example within the folder "movies" (served from
 "/movies") all items must have unique names, such as: "terminator,"
 "terminator2" (served from "/movies/terminator,
-"/movies/terminator2" respectively).</p><p> </p><h3><a name="related">Related Objects</a></h3>
+"/movies/terminator2" respectively).</p>
+<p> </p>
+<h3><a name="related">Related Objects</a></h3>
+
 See also: Content Item
-<p> </p><h3><a name="api">API</a></h3><ul><li>
+<p> </p>
+<h3><a name="api">API</a></h3>
+<ul><li>
 <font size="+1">Function:</font>
-content_folder.get_index_page</li></ul><p>Returns the item ID of the index page of the folder, null
-otherwise</p><table cellpadding="3" cellspacing="0" border="0">
+content_folder.get_index_page</li></ul>
+<p>Returns the item ID of the index page of the folder, null
+otherwise</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Michael Pih</td>
 </tr><tr>
@@ -32,9 +43,13 @@ function get_index_page (
 ) return cr_items.item_id%TYPE;
 
 </tt></pre></td></tr>
-</table><p> </p><ul><li>
-<font size="+1">Function:</font> content_folder.get_label</li></ul><p>Returns the label for the folder. This function is the default
-name method for the folder object.</p><table cellpadding="3" cellspacing="0" border="0">
+</table>
+<p> </p>
+<ul><li>
+<font size="+1">Function:</font> content_folder.get_label</li></ul>
+<p>Returns the label for the folder. This function is the default
+name method for the folder object.</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr>
@@ -50,8 +65,12 @@ function get_label (
 <th align="left" valign="top">See Also:</th><td>acs_object_type.create_type, the docs for the name_method
 parameter</td>
 </tr>
-</table><p> </p><ul><li>
-<font size="+1">Function:</font> content_folder.is_empty</li></ul><p>Determine if the folder is empty</p><table cellpadding="3" cellspacing="0" border="0">
+</table>
+<p> </p>
+<ul><li>
+<font size="+1">Function:</font> content_folder.is_empty</li></ul>
+<p>Determine if the folder is empty</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr>
@@ -67,8 +86,12 @@ function is_empty (
 </tt></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_folder.is_folder</td>
 </tr>
-</table><p> </p><ul><li>
-<font size="+1">Function:</font> content_folder.is_folder</li></ul><p>Determine if the item is a folder</p><table cellpadding="3" cellspacing="0" border="0">
+</table>
+<p> </p>
+<ul><li>
+<font size="+1">Function:</font> content_folder.is_folder</li></ul>
+<p>Determine if the item is a folder</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr>
@@ -83,11 +106,15 @@ function is_folder (
 </tt></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_folder.new, content_folder.is_sub_folder</td>
 </tr>
-</table><p> </p><ul><li>
+</table>
+<p> </p>
+<ul><li>
 <font size="+1">Function:</font>
-content_folder.is_registered</li></ul><p>change this to is_type_registered Determines if a content type
+content_folder.is_registered</li></ul>
+<p>change this to is_type_registered Determines if a content type
 is registered to the folder Only items of the registered type(s)
-may be added to the folder.</p><table cellpadding="3" cellspacing="0" border="0">
+may be added to the folder.</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr>
@@ -114,11 +141,15 @@ function is_registered (
 <th align="left" valign="top">See Also:</th><td>content_folder.register_content_type,
 content_folder.unregister_content_type,</td>
 </tr>
-</table><p> </p><ul><li>
+</table>
+<p> </p>
+<ul><li>
 <font size="+1">Function:</font>
-content_folder.is_sub_folder</li></ul><p>Determine if the item <tt>target_folder_id</tt> is a subfolder
+content_folder.is_sub_folder</li></ul>
+<p>Determine if the item <tt>target_folder_id</tt> is a subfolder
 of the item <tt>folder_id</tt>
-</p><table cellpadding="3" cellspacing="0" border="0">
+</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr>
@@ -139,8 +170,12 @@ function is_sub_folder (
 </tt></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_folder.is_folder</td>
 </tr>
-</table><p> </p><ul><li>
-<font size="+1">Function:</font> content_folder.new</li></ul><p>Create a new folder</p><table cellpadding="3" cellspacing="0" border="0">
+</table>
+<p> </p>
+<ul><li>
+<font size="+1">Function:</font> content_folder.new</li></ul>
+<p>Create a new folder</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr>
@@ -185,11 +220,15 @@ function new (
 </tt></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>acs_object.new, content_item.new</td>
 </tr>
-</table><p> </p><ul><li>
-<font size="+1">Procedure:</font> content_folder.copy</li></ul><p>Recursively copy the folder and all items in into a new
+</table>
+<p> </p>
+<ul><li>
+<font size="+1">Procedure:</font> content_folder.copy</li></ul>
+<p>Recursively copy the folder and all items in into a new
 location. An error is thrown if either of the parameters is not a
 folder. The root folder of the sitemap and the root folder of the
-templates cannot be copied</p><table cellpadding="3" cellspacing="0" border="0">
+templates cannot be copied</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1">
@@ -207,9 +246,13 @@ procedure copy (
 </tt></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_folder.new, content_folder.copy</td>
 </tr>
-</table><p> </p><ul><li>
-<font size="+1">Procedure:</font> content_folder.delete</li></ul><p>Delete a folder. An error is thrown if the folder is not
-empty</p><table cellpadding="3" cellspacing="0" border="0">
+</table>
+<p> </p>
+<ul><li>
+<font size="+1">Procedure:</font> content_folder.delete</li></ul>
+<p>Delete a folder. An error is thrown if the folder is not
+empty</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1"><tr>
@@ -222,11 +265,15 @@ procedure delete (
 </tt></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>acs_object.delete, content_item.delete</td>
 </tr>
-</table><p> </p><ul><li>
-<font size="+1">Procedure:</font> content_folder.move</li></ul><p>Recursively move the folder and all items in into a new
+</table>
+<p> </p>
+<ul><li>
+<font size="+1">Procedure:</font> content_folder.move</li></ul>
+<p>Recursively move the folder and all items in into a new
 location. An error is thrown if either of the parameters is not a
 folder. The root folder of the sitemap and the root folder of the
-templates cannot be moved.</p><table cellpadding="3" cellspacing="0" border="0">
+templates cannot be moved.</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1">
@@ -244,11 +291,15 @@ procedure move (
 </tt></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_folder.new, content_folder.copy</td>
 </tr>
-</table><p> </p><ul><li>
+</table>
+<p> </p>
+<ul><li>
 <font size="+1">Procedure:</font>
-content_folder.register_content_type</li></ul><p>Register a content type to the folder, if it is not already
+content_folder.register_content_type</li></ul>
+<p>Register a content type to the folder, if it is not already
 registered. Only items of the registered type(s) may be added to
-the folder.</p><table cellpadding="3" cellspacing="0" border="0">
+the folder.</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1">
@@ -268,8 +319,12 @@ procedure register_content_type (
 <th align="left" valign="top">See Also:</th><td>content_folder.unregister_content_type,
 content_folder.is_registered</td>
 </tr>
-</table><p> </p><ul><li>
-<font size="+1">Procedure:</font> content_folder.edit_name</li></ul><p>Change the name, label and/or description of the folder</p><table cellpadding="3" cellspacing="0" border="0">
+</table>
+<p> </p>
+<ul><li>
+<font size="+1">Procedure:</font> content_folder.edit_name</li></ul>
+<p>Change the name, label and/or description of the folder</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1">
@@ -297,12 +352,16 @@ procedure rename (
 </tt></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_folder.new</td>
 </tr>
-</table><p> </p><ul><li>
+</table>
+<p> </p>
+<ul><li>
 <font size="+1">Procedure:</font>
-content_folder.unregister_content_type</li></ul><p>Unregister a content type from the folder, if it has been
+content_folder.unregister_content_type</li></ul>
+<p>Unregister a content type from the folder, if it has been
 registered. Only items of the registered type(s) may be added to
 the folder. If the folder already contains items of the type to be
-unregistered, the items remain in the folder.</p><table cellpadding="3" cellspacing="0" border="0">
+unregistered, the items remain in the folder.</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1">
@@ -325,7 +384,8 @@ procedure unregister_content_type (
 <th align="left" valign="top">See Also:</th><td>content_folder.register_content_type,
 content_folder.is_registered</td>
 </tr>
-</table><p> </p>
+</table>
+<p> </p>
+
 Last Modified: $Id: folder.html,v 1.2 2004/06/01 22:54:18 donb Exp
 $
-</body>

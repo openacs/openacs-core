@@ -2,11 +2,11 @@
 <property name="context">{/doc/acs-authentication {Authentication}} {IMS Sync driver design}</property>
 <property name="doc(title)">IMS Sync driver design</property>
 <master>
-
-<body>
-<div class="navheader"><table width="100%" summary="Navigation header" border="0"><tr>
-<td width="20%" align="left"><a accesskey="p" href="ext-auth-design">Prev</a></td><th width="60%" align="center">Design</th><td width="20%" align="right"></td>
-</tr></table></div><div class="sect1" lang="en">
+<include src="/packages/acs-core-docs/lib/navheader"
+		    leftLink="ext-auth-design" leftLabel="Prev"
+		    title="Design"
+		    rightLink="ext-auth-ldap-install" rightLabel="Next">
+		<div class="sect1" lang="en">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="ims-sync-driver-design" id="ims-sync-driver-design"></a>IMS Sync
 driver design</h2></div></div></div><div class="authorblurb">by <a href="mailto:lars\@collaboraid.biz" target="_top">Lars Pind</a> OpenACS docs are written by the named
@@ -196,14 +196,10 @@ this, but Blackboard, who's influential in the IMS committee, is
 adopting OKI's programming interrfaces for this.</p></li><li><p><a href="http://www.cetis.ac.uk/content/20030717185453" target="_top">IMS and OKI, the wire and the socket</a></p></li>
 </ul></div>
 </div>
-</div><div class="navfooter">
-<hr><table width="100%" summary="Navigation footer">
-<tr>
-<td width="40%" align="left"><a accesskey="p" href="ext-auth-design">Prev</a></td><td width="20%" align="center"><a accesskey="h" href="index">Home</a></td><td width="40%" align="right"></td>
-</tr><tr>
-<td width="40%" align="left">Design</td><td width="20%" align="center"><a accesskey="u" href="ext-auth-design">Up</a></td><td width="40%" align="right"></td>
-</tr>
-</table><hr><address><a href="mailto:docs\@openacs.org">docs\@openacs.org</a></address>
-</div><a name="comments" id="comments"></a><center><a href="http://openacs.org/doc/ims-sync-driver-design.html#comments">View
-comments on this page at openacs.org</a></center>
-</body>
+</div>
+<include src="/packages/acs-core-docs/lib/navfooter"
+		    leftLink="ext-auth-design" leftLabel="Prev" leftTitle="Design"
+		    rightLink="ext-auth-ldap-install" rightLabel="Next" rightTitle=""
+		    homeLink="index" homeLabel="Home" 
+		    upLink="ext-auth-design" upLabel="Up"> 
+		

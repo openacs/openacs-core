@@ -2,13 +2,18 @@
 <property name="context">{/doc/acs-templating {Templating}} {Templating System Tag Reference: Switch}</property>
 <property name="doc(title)">Templating System Tag Reference: Switch</property>
 <master>
-
-<body>
-<h2>Switch</h2><a href="..">Templating System</a> : <a href="../designer-guide.html">Designer Guide</a> : <a href="index">Tag Reference</a> : Switch
-<h3>Summary</h3><p>The <tt>switch</tt> tag is used to output one of n-sections when
+<h2>Switch</h2>
+<a href="..">Templating System</a>
+ : <a href="../designer-guide.html">Designer Guide</a>
+ : <a href="index">Tag Reference</a>
+ : Switch
+<h3>Summary</h3>
+<p>The <tt>switch</tt> tag is used to output one of n-sections when
 the switch variable matches one of the n-case statements. A default
 section can also be output if none of the n-case statements matches
-the switch variable.</p><h3>Usage Examples</h3><pre>
+the switch variable.</p>
+<h3>Usage Examples</h3>
+<pre>
 &lt;switch \@x\@&gt;
     &lt;case value="Fred"&gt;
          Hello Fred.
@@ -23,8 +28,10 @@ the switch variable.</p><h3>Usage Examples</h3><pre>
          I don't recognize your name.
     &lt;/default&gt;
 &lt;/switch&gt;
-</pre><p>Tcl-equivalent flags have the same meaning as in the tcl-switch
-statement. Supported flags include exact, glob, and regexp.</p><pre>
+</pre>
+<p>Tcl-equivalent flags have the same meaning as in the tcl-switch
+statement. Supported flags include exact, glob, and regexp.</p>
+<pre>
 &lt;switch flag=glob \@x\@&gt;
     &lt;case value="F*"&gt;
          Hello Fred.
@@ -39,8 +46,10 @@ statement. Supported flags include exact, glob, and regexp.</p><pre>
          You are in the section for people whose names start with F, G, or H.
     &lt;/default&gt;
 &lt;/switch&gt;
-</pre><p>Case tags also have an alternative form for matching a list of
-items.</p><pre>
+</pre>
+<p>Case tags also have an alternative form for matching a list of
+items.</p>
+<pre>
 &lt;switch \@x\@&gt;
     &lt;case in "Fred" "Greta" "Sam"&gt;
          Your must be Fred Greta or Sam, but I'm not sure which one.
@@ -49,7 +58,9 @@ items.</p><pre>
          I don't recognize your name.
     &lt;/default&gt;
 &lt;/switch&gt;
-</pre><h3>Notes</h3><ul>
+</pre>
+<h3>Notes</h3>
+<ul>
 <li><p>Any legal variables that may be referenced in the template may
 also be used in <tt>switch</tt> statements.</p></li><li>
 <p>Phrases with spaces in them must be enclosed in double quotes
@@ -60,5 +71,6 @@ with spaces correctly results in an error.</p><pre>
   &lt;/case&gt;
 </pre>
 </li>
-</ul><hr><a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>
-</body>
+</ul>
+<hr>
+<a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>

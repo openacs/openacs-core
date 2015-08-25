@@ -4,11 +4,11 @@ OpenACS}</property>
 <property name="doc(title)">Using Pluggable Authentication Modules (PAM) with
 OpenACS</property>
 <master>
-
-<body>
-<div class="navheader"><table width="100%" summary="Navigation header" border="0"><tr>
-<td width="20%" align="left"><a accesskey="p" href="ext-auth-install">Prev</a></td><th width="60%" align="center">Installation</th><td width="20%" align="right"><a accesskey="n" href="ext-auth-ldap-install">Next</a></td>
-</tr></table></div><div class="sect1" lang="en">
+<include src="/packages/acs-core-docs/lib/navheader"
+		    leftLink="ext-auth-install" leftLabel="Prev"
+		    title="Installation"
+		    rightLink="ext-auth-ldap-install" rightLabel="Next">
+		<div class="sect1" lang="en">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="ext-auth-pam-install" id="ext-auth-pam-install"></a>Using
 Pluggable Authentication Modules (PAM) with OpenACS</h2></div></div></div><p>OpenACS supports PAM authetication via the ns_pam module in
@@ -128,15 +128,11 @@ Synchronization</a></p></li>
 </ol></div>
 </li>
 </ol></div>
-</div><div class="navfooter">
-<hr><table width="100%" summary="Navigation footer">
-<tr>
-<td width="40%" align="left"><a accesskey="p" href="ext-auth-install">Prev</a></td><td width="20%" align="center"><a accesskey="h" href="index">Home</a></td><td width="40%" align="right"><a accesskey="n" href="ext-auth-ldap-install">Next</a></td>
-</tr><tr>
-<td width="40%" align="left">Installation</td><td width="20%" align="center"><a accesskey="u" href="ext-auth-install">Up</a></td><td width="40%" align="right">Using LDAP/Active Directory with
-OpenACS</td>
-</tr>
-</table><hr><address><a href="mailto:docs\@openacs.org">docs\@openacs.org</a></address>
-</div><a name="comments" id="comments"></a><center><a href="http://openacs.org/doc/current/ext-auth-pam-install.html#comments">
-View comments on this page at openacs.org</a></center>
-</body>
+</div>
+<include src="/packages/acs-core-docs/lib/navfooter"
+		    leftLink="ext-auth-install" leftLabel="Prev" leftTitle="Installation"
+		    rightLink="ext-auth-ldap-install" rightLabel="Next" rightTitle="Using LDAP/Active Directory with
+OpenACS"
+		    homeLink="index" homeLabel="Home" 
+		    upLink="ext-auth-install" upLabel="Up"> 
+		

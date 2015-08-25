@@ -2,31 +2,40 @@
 <property name="context">{/doc/acs-templating {Templating}} {Templating an Existing Tcl Page}</property>
 <property name="doc(title)">Templating an Existing Tcl Page</property>
 <master>
-
-<body>
-<h2>Templating an Existing Tcl Page</h2><a href="">Templating System</a> : Migration
+<h2>Templating an Existing Tcl Page</h2>
+<a href="">Templating System</a>
+ : Migration
 <h3>In a Nutshell</h3>
+
 When templatizing a legacy tcl page, your task is to
-<b>separate</b> code and graphical presentation. The latter goes
+<b>separate</b>
+ code and graphical presentation. The latter goes
 into an ADP file; it contains essentially HTML, augmented by a few
-special tags and the <code>\@<i>variable</i>\@</code> construct. The
+special tags and the <code>\@<i>variable</i>\@</code>
+ construct. The
 code goes into a Tcl script. In other words, a templated page
 consists of two files, a Tcl part that puts its results in data
 sources, and an ADP page (the template), into which these data
 sources will be interpolated to yield a complete HTML page.
-<h3>General</h3><p>As usual, the Tcl page should start with a call to
+<h3>General</h3>
+<p>As usual, the Tcl page should start with a call to
 <code>ad_page_contract</code>. In its <code>-properties</code>
 block you promise the data sources that your script will provide;
 they were earlier called <em>page properties</em>, hence the name
 of the option. Then your script performs all the computations and
 queries needed to define these data sources. There are special
-mechanisms for handling multirow data sources; see below.</p><p>At the end of the Tcl script, you should call
+mechanisms for handling multirow data sources; see below.</p>
+<p>At the end of the Tcl script, you should call
 <code>ad_return_template</code>. The template runs after the tcl
-script, and can use these data sources.</p><p>Make sure that the fancy adp parser is enabled in your AOL ini
-file.</p><pre>
+script, and can use these data sources.</p>
+<p>Make sure that the fancy adp parser is enabled in your AOL ini
+file.</p>
+<pre>
       [ns/server/myserver/adp]
       DefaultParser=fancy
-</pre><p>A few more hints</p><ul>
+</pre>
+<p>A few more hints</p>
+<ul>
 <li>Do not write to the connection directly. Avoid
 <code>ns_puts</code>, <code>ns_write</code> etc., which don't wait
 till the headers are written or the page is completed; they may act
@@ -41,14 +50,19 @@ Nuts  <font color="red">\</font>$2.70 <font color="red">\</font>[&lt;a href=<fon
           
 </pre></blockquote>
 </li>
-</ul><h3>Forms</h3>
+</ul>
+<h3>Forms</h3>
+
 There is nothing special about building forms; just use the
-<code>&lt;form&gt;</code> tag as always. All HTML tags can be used
+<code>&lt;form&gt;</code>
+ tag as always. All HTML tags can be used
 in the ADP file (template).
-<h3>A simple page</h3><p>First I take a page from the news package as an example. For
+<h3>A simple page</h3>
+<p>First I take a page from the news package as an example. For
 simplicity, I pick <code>item-view</code>, which does not use a
 <code>&lt;form&gt;</code>. I reformatted it a bit to make three
-panes fit next to each other and to line up corresponding code.</p><table cellspacing="5" bgcolor="#CCDDFF">
+panes fit next to each other and to line up corresponding code.</p>
+<table cellspacing="5" bgcolor="#CCDDFF">
 <tr bgcolor="#CCCCCC">
 <th rowspan="2">old tcl code</th><th colspan="2">new</th>
 </tr><tr bgcolor="#CCCCCC">
@@ -186,12 +200,17 @@ ad_return_template
           
 </pre></td>
 </tr>
-</table><h3>Multi-Row Data Sources</h3>
+</table>
+<h3>Multi-Row Data Sources</h3>
+
 Technically, the result of a query that may return multiple rows is
 stored in several arrays. This datasource is filled by a call to
-<code>db_multirow</code>, and the repeating part of the HTML output
-is produced by the <code>&lt;multiple&gt;</code> tag. The following
-example shows the part of the <code>index</code> page of the News
+<code>db_multirow</code>
+, and the repeating part of the HTML output
+is produced by the <code>&lt;multiple&gt;</code>
+ tag. The following
+example shows the part of the <code>index</code>
+ page of the News
 module that uses the mechanism, not a whole page.
 <table cellspacing="5" bgcolor="#CCDDFF">
 <tr bgcolor="#CCCCCC">
@@ -316,6 +335,7 @@ append body "
 </pre></td>
 </tr>
 </table>
+
 Notes:
 <ul>
 <li>I use the general <code>&lt;if&gt;</code> construct to handle
@@ -326,13 +346,15 @@ short.</li><li>The proc <code>db_multirow</code> does have a code block and an
 optional <code>if_no_rows</code> block, just like
 <code>db_foreach</code>. They aren't used in the example,
 though.</li>
-</ul><p>If you have a more complicated db_foreach, where logic is
+</ul>
+<p>If you have a more complicated db_foreach, where logic is
 performed inside the body, then it might be helpful to build your
 own multirow variable. In the excert below, taken from
 /pvt/alerts.tcl and /pvt/alerts.adp, the foreach logic made it hard
 to use the db_multirow because it needed a combination of the
 output from sql and also the output of tcl procedures using that
-value.</p><table cellspacing="5" bgcolor="#CCDDFF">
+value.</p>
+<table cellspacing="5" bgcolor="#CCDDFF">
 <tr bgcolor="#CCCCCC">
 <th rowspan="2">old tcl code</th><th colspan="2">new</th>
 </tr><tr bgcolor="#CCCCCC">
@@ -540,11 +562,13 @@ if { [db_table_exists "bboard_email_alerts"] } {
           
 </pre></td>
 </tr>
-</table><hr><address>
+</table>
+<hr>
+<address>
 <a href="mailto:christian\@arsdigita.com">Christian
 Brechbühler</a>, <a href="mailto:iwashima\@mit.edu">Hiro
 Iwashima</a>
 </address>
+
 Last modified: $Id: migration.html,v 1.3 2014/10/27 16:40:14
 victorg Exp $
-</body>

@@ -2,11 +2,16 @@
 <property name="context">{/doc/acs-templating {Templating}} {Templating System Tag Reference: formerror}</property>
 <property name="doc(title)">Templating System Tag Reference: formerror</property>
 <master>
-
-<body>
-<h2>formerror</h2><a href="..">Templating System</a> : <a href="../designer-guide.html">Designer Guide</a> : <a href="index">Tag Reference</a> : formerror
-<h3>Summary</h3><p>The <tt>formerror</tt> tag is used to specify the presentation
-of a form validation error.</p><h3>Usage</h3><pre>
+<h2>formerror</h2>
+<a href="..">Templating System</a>
+ : <a href="../designer-guide.html">Designer Guide</a>
+ : <a href="index">Tag Reference</a>
+ : formerror
+<h3>Summary</h3>
+<p>The <tt>formerror</tt> tag is used to specify the presentation
+of a form validation error.</p>
+<h3>Usage</h3>
+<pre>
   &lt;formtemplate id="add_user"&gt;
   &lt;table&gt;
   &lt;tr&gt;
@@ -22,7 +27,9 @@ of a form validation error.</p><h3>Usage</h3><pre>
   &lt;/table&gt;&lt;br&gt;
   &lt;input type=submit value="Submit"&gt;
   &lt;/formtemplate&gt;
-</pre><p>Another example:</p><pre>
+</pre>
+<p>Another example:</p>
+<pre>
   &lt;formtemplate id="add_user"&gt;
   &lt;table&gt;
   &lt;tr&gt;
@@ -39,9 +46,12 @@ of a form validation error.</p><h3>Usage</h3><pre>
   &lt;/table&gt;&lt;br&gt;
   &lt;input type=submit value="Submit"&gt;
   &lt;/formtemplate&gt;
-</pre><p>This adds another table row which contains the error message for
+</pre>
+<p>This adds another table row which contains the error message for
 that widget in red color. If there is no error then the table row
-will not be added.</p><h3>Notes</h3><ul>
+will not be added.</p>
+<h3>Notes</h3>
+<ul>
 <li><p>The contents of the <tt>formerror</tt> tag may appear on the
 form when a submission is returned to the user for correction.</p></li><li><p>The contents of the tag may use the special variables
 <tt>label</tt> and <tt>value</tt> to refer to the element label and
@@ -60,5 +70,6 @@ contents of the tag are empty, all appropriate messages are
 inserted (separated by &lt;,br&gt; tags).</p></li><li><p>See the <a href="formwidget"><tt>formwidget</tt></a> and
 <a href="formgroup"><tt>formgroup</tt></a> tags for more
 information on writing the body of a dynamic form template.</p></li>
-</ul><hr><a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>
-</body>
+</ul>
+<hr>
+<a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>

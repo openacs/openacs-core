@@ -2,21 +2,32 @@
 <property name="context">{/doc/acs-content-repository {Content Repository}} {Package: content_template}</property>
 <property name="doc(title)">Package: content_template</property>
 <master>
-
-<body>
-<h2>content_template</h2><p>
+<h2>content_template</h2>
+<p>
 <a href="../index.html">Content Repository</a> :
-content_template</p><hr><ul>
+content_template</p>
+<hr>
+<ul>
 <li><a href="#overview">Overview</a></li><li><a href="#related">Related Objects</a></li><li><a href="#api">API</a></li>
-</ul><p> </p><h3><a name="overview">Overview</a></h3><p>Templates are a special class of text objects that are used for
+</ul>
+<p> </p>
+<h3><a name="overview">Overview</a></h3>
+<p>Templates are a special class of text objects that are used for
 specifying the layout of a content item. They may be mapped to
 content types, meaning that every item of that type will display
 using that template unless a specific item overrides the default by
-mapping to a template itself.</p><p> </p><h3><a name="related">Related Objects</a></h3>
+mapping to a template itself.</p>
+<p> </p>
+<h3><a name="related">Related Objects</a></h3>
+
 See also: content_item, content_folder
-<p> </p><h3><a name="api">API</a></h3><ul><li>
-<font size="+1">Function:</font> content_template.get_path</li></ul><p>Retrieves the full path to the template, as described in
-content_item.get_path</p><table cellpadding="3" cellspacing="0" border="0">
+<p> </p>
+<h3><a name="api">API</a></h3>
+<ul><li>
+<font size="+1">Function:</font> content_template.get_path</li></ul>
+<p>Retrieves the full path to the template, as described in
+content_item.get_path</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr>
@@ -38,16 +49,23 @@ function get_path (
 </tt></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_item.get_path</td>
 </tr>
-</table><p> </p><ul><li>
+</table>
+<p> </p>
+<ul><li>
 <font size="+1">Function:</font>
-content_template.get_root_folder</li></ul><table cellpadding="3" cellspacing="0" border="0">
+content_template.get_root_folder</li></ul>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><i>Not yet documented</i></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
 function get_root_folder return cr_folders.folder_id%TYPE;
 
 </tt></pre></td></tr>
-</table><p> </p><ul><li>
+</table>
+<p> </p>
+<ul><li>
 <font size="+1">Function:</font>
-content_template.is_template</li></ul><p>Determine if an item is a template.</p><table cellpadding="3" cellspacing="0" border="0">
+content_template.is_template</li></ul>
+<p>Determine if an item is a template.</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr>
@@ -62,9 +80,13 @@ function is_template (
 </tt></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_template.new</td>
 </tr>
-</table><p> </p><ul><li>
-<font size="+1">Function:</font> content_template.new</li></ul><p>Creates a new content template which can be used to render
-content items.</p><table cellpadding="3" cellspacing="0" border="0">
+</table>
+<p> </p>
+<ul><li>
+<font size="+1">Function:</font> content_template.new</li></ul>
+<p>Creates a new content template which can be used to render
+content items.</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr>
@@ -105,10 +127,14 @@ function new (
 <th align="left" valign="top">See Also:</th><td>acs_object.new, content_item.new,
 content_item.register_template, content_type.register_template</td>
 </tr>
-</table><p> </p><ul><li>
-<font size="+1">Procedure:</font> content_template.delete</li></ul><p>Deletes the specified template, and unregisters the template
+</table>
+<p> </p>
+<ul><li>
+<font size="+1">Procedure:</font> content_template.delete</li></ul>
+<p>Deletes the specified template, and unregisters the template
 from all content types and content items. Use with caution - this
-operation cannot be undone.</p><table cellpadding="3" cellspacing="0" border="0">
+operation cannot be undone.</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1"><tr>
@@ -122,7 +148,8 @@ procedure delete (
 <th align="left" valign="top">See Also:</th><td>acs_object.delete, content_item.unregister_template,
 content_type.unregister_template,</td>
 </tr>
-</table><p> </p>
+</table>
+<p> </p>
+
 Last Modified: $Id: template.html,v 1.1.1.1 2001/03/13 22:59:26 ben
 Exp $
-</body>

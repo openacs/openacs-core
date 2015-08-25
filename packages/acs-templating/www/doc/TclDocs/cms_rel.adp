@@ -2,14 +2,21 @@
 <property name="context">{/doc/acs-templating {Templating}} {}</property>
 <property name="doc(title)"></property>
 <master>
+<h2>Namespace cms_rel</h2>
+<blockquote>Procedures for managing relation items and child
+items</blockquote>
+<h3>Method Summary</h3>
 
-<body>
-<h2>Namespace cms_rel</h2><blockquote>Procedures for managing relation items and child
-items</blockquote><h3>Method Summary</h3>
-Listing of public methods:<br><blockquote>
+Listing of public methods:<br>
+<blockquote>
 <a href="#cms_rel::sort_child_item_order">cms_rel::sort_child_item_order</a><br><a href="#cms_rel::sort_related_item_order">cms_rel::sort_related_item_order</a><br>
-</blockquote><h3>Method Detail</h3><p align="right">
-<font color="red">*</font> indicates required</p><b>Public Methods:</b><br><table width="100%">
+</blockquote>
+<h3>Method Detail</h3>
+<p align="right">
+<font color="red">*</font> indicates required</p>
+<b>Public Methods:</b>
+<br>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF">
 <a name="cms_rel::sort_child_item_order" id="cms_rel::sort_child_item_order"><font size="+1" weight="bold">cms_rel::sort_child_item_order</font></a><br><small><i>  by Michael Pih</i></small>
 </td></tr><tr><td>
@@ -24,7 +31,8 @@ related)</blockquote><dl><dd>
 </tr></table>
 </dd></dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF">
 <a name="cms_rel::sort_related_item_order" id="cms_rel::sort_related_item_order"><font size="+1" weight="bold">cms_rel::sort_related_item_order</font></a><br><small><i>  by Michael Pih</i></small>
 </td></tr><tr><td>
@@ -39,6 +47,6 @@ was related)</blockquote><dl><dd>
 </tr></table>
 </dd></dl>
 </td></tr>
-</table><p align="right">
+</table>
+<p align="right">
 <font color="red">*</font> indicates required</p>
-</body>
