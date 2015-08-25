@@ -2,14 +2,19 @@
 <property name="context">{/doc/acs-templating {Templating}} {}</property>
 <property name="doc(title)"></property>
 <master>
+<h2>Namespace doc</h2>
+<h3>Method Summary</h3>
 
-<body>
-<h2>Namespace doc</h2><h3>Method Summary</h3>
-Listing of public methods:<br><blockquote>The namespace doc currently contains no public
-methods.</blockquote><h3>Method Detail</h3><p align="right">
-<font color="red">*</font> indicates required</p><p>
+Listing of public methods:<br>
+<blockquote>The namespace doc currently contains no public
+methods.</blockquote>
+<h3>Method Detail</h3>
+<p align="right">
+<font color="red">*</font> indicates required</p>
+<p>
 <b>Private Methods</b>:<br>
-</p><table width="100%">
+</p>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF">
 <a name=""></a><br><small><i>  by simon</i></small>
 </td></tr><tr><td>
@@ -23,7 +28,8 @@ parses out procedure source and comments</blockquote><dl><dd>
 </tr></table>
 </dd></dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name=""></a></td></tr><tr><td><blockquote>Parse API documentation from a Tcl page API
 documentation is parsed as follows: Document is scanned until a
 \@namespace directive is encountered. The remainder of the file is
@@ -39,7 +45,8 @@ namespace should be namespace::. By convention the API for each
 namespace should be in a file of the same name, so that a link can
 be generated automatically). - \@option (for switches such as -foo)
 - \@return</blockquote></td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name=""></a></td></tr><tr><td>
 <blockquote>called by parse_comment_text</blockquote><dl><dd>
 <b>Parameters:</b><table><tr>
@@ -49,7 +56,8 @@ be generated automatically). - \@option (for switches such as -foo)
 </tr></table>
 </dd></dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name=""></a></td></tr><tr><td>
 <blockquote>called by parse_namespace</blockquote><dl><dd>
 <b>Parameters:</b><table>
@@ -65,7 +73,8 @@ be generated automatically). - \@option (for switches such as -foo)
 </table>
 </dd></dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name=""></a></td></tr><tr><td>
 <blockquote>takes the absolute path of the tcl library directory
 and parses through it</blockquote><dl>
@@ -76,6 +85,6 @@ listing } {private procedures listing} }</dd><dt><b>See Also:</b></dt><dd>namesp
 </dd>
 </dl>
 </td></tr>
-</table><p align="right">
+</table>
+<p align="right">
 <font color="red">*</font> indicates required</p>
-</body>

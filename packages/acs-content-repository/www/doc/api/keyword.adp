@@ -2,19 +2,30 @@
 <property name="context">{/doc/acs-content-repository {Content Repository}} {Package: content_keyword}</property>
 <property name="doc(title)">Package: content_keyword</property>
 <master>
-
-<body>
-<h2>content_keyword</h2><p>
+<h2>content_keyword</h2>
+<p>
 <a href="../index.html">Content Repository</a> :
-content_keyword</p><hr><ul>
+content_keyword</p>
+<hr>
+<ul>
 <li><a href="#overview">Overview</a></li><li><a href="#related">Related Objects</a></li><li><a href="#api">API</a></li>
-</ul><p> </p><h3><a name="overview">Overview</a></h3><p>Keyword cassify a content_item. For example: If you have some
+</ul>
+<p> </p>
+<h3><a name="overview">Overview</a></h3>
+<p>Keyword cassify a content_item. For example: If you have some
 press releases about dogs. You might want assigning the Keyword dog
-to every single content_item.</p><p> </p><h3><a name="related">Related Objects</a></h3>
+to every single content_item.</p>
+<p> </p>
+<h3><a name="related">Related Objects</a></h3>
+
 See also: content_item
-<p> </p><h3><a name="api">API</a></h3><ul><li>
+<p> </p>
+<h3><a name="api">API</a></h3>
+<ul><li>
 <font size="+1">Function:</font>
-content_keyword.get_description</li></ul><p>Retrieves the description of the content keyword</p><table cellpadding="3" cellspacing="0" border="0">
+content_keyword.get_description</li></ul>
+<p>Retrieves the description of the content keyword</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr>
@@ -30,9 +41,13 @@ function get_description (
 <th align="left" valign="top">See Also:</th><td>content_keyword.get_heading,
 content_keyword.set_description</td>
 </tr>
-</table><p> </p><ul><li>
+</table>
+<p> </p>
+<ul><li>
 <font size="+1">Function:</font>
-content_keyword.get_heading</li></ul><p>Retrieves the heading of the content keyword</p><table cellpadding="3" cellspacing="0" border="0">
+content_keyword.get_heading</li></ul>
+<p>Retrieves the heading of the content keyword</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr>
@@ -48,9 +63,13 @@ function get_heading (
 <th align="left" valign="top">See Also:</th><td>content_keyword.set_heading,
 content_keyword.get_description</td>
 </tr>
-</table><p> </p><ul><li>
-<font size="+1">Function:</font> content_keyword.get_path</li></ul><p>Retreives a path to the keyword/subject category, with the most
-general category at the root of the path</p><table cellpadding="3" cellspacing="0" border="0">
+</table>
+<p> </p>
+<ul><li>
+<font size="+1">Function:</font> content_keyword.get_path</li></ul>
+<p>Retreives a path to the keyword/subject category, with the most
+general category at the root of the path</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr>
@@ -66,9 +85,13 @@ function get_path (
 </tt></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_keyword.new</td>
 </tr>
-</table><p> </p><ul><li>
+</table>
+<p> </p>
+<ul><li>
 <font size="+1">Function:</font>
-content_keyword.is_assigned</li></ul><p>Determines if the keyword is assigned to the item</p><table cellpadding="3" cellspacing="0" border="0">
+content_keyword.is_assigned</li></ul>
+<p>Determines if the keyword is assigned to the item</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr>
@@ -104,9 +127,13 @@ function is_assigned (
 </tt></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_keyword.item_assign</td>
 </tr>
-</table><p> </p><ul><li>
-<font size="+1">Function:</font> content_keyword.is_leaf</li></ul><p>Determines if the keyword has no sub-keywords associated with
-it</p><table cellpadding="3" cellspacing="0" border="0">
+</table>
+<p> </p>
+<ul><li>
+<font size="+1">Function:</font> content_keyword.is_leaf</li></ul>
+<p>Determines if the keyword has no sub-keywords associated with
+it</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr>
@@ -122,8 +149,12 @@ function is_leaf (
 </tt></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_keyword.new</td>
 </tr>
-</table><p> </p><ul><li>
-<font size="+1">Function:</font> content_keyword.new</li></ul><p>Creates a new keyword (also known as "subject category").</p><table cellpadding="3" cellspacing="0" border="0">
+</table>
+<p> </p>
+<ul><li>
+<font size="+1">Function:</font> content_keyword.new</li></ul>
+<p>Creates a new keyword (also known as "subject category").</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr>
@@ -170,10 +201,14 @@ function new (
 <th align="left" valign="top">See Also:</th><td>acs_object.new, content_item.new, content_keyword.item_assign,
 content_keyword.delete</td>
 </tr>
-</table><p> </p><ul><li>
-<font size="+1">Procedure:</font> content_keyword.delete</li></ul><p>Deletes the specified keyword, which must be a leaf. Unassigns
+</table>
+<p> </p>
+<ul><li>
+<font size="+1">Procedure:</font> content_keyword.delete</li></ul>
+<p>Deletes the specified keyword, which must be a leaf. Unassigns
 the keyword from all content items. Use with caution - this
-operation cannot be undone.</p><table cellpadding="3" cellspacing="0" border="0">
+operation cannot be undone.</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1"><tr>
@@ -186,10 +221,14 @@ procedure delete (
 </tt></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>acs_object.delete, content_keyword.item_unassign</td>
 </tr>
-</table><p> </p><ul><li>
+</table>
+<p> </p>
+<ul><li>
 <font size="+1">Procedure:</font>
-content_keyword.item_assign</li></ul><p>Assigns this keyword to a content item, creating a relationship
-between them</p><table cellpadding="3" cellspacing="0" border="0">
+content_keyword.item_assign</li></ul>
+<p>Assigns this keyword to a content item, creating a relationship
+between them</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1">
@@ -216,10 +255,14 @@ procedure item_assign (
 </tt></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>acs_rel.new, content_keyword.item_unassign</td>
 </tr>
-</table><p> </p><ul><li>
+</table>
+<p> </p>
+<ul><li>
 <font size="+1">Procedure:</font>
-content_keyword.item_unassign</li></ul><p>Unassigns this keyword to a content item, removing a
-relationship between them</p><table cellpadding="3" cellspacing="0" border="0">
+content_keyword.item_unassign</li></ul>
+<p>Unassigns this keyword to a content item, removing a
+relationship between them</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1">
@@ -237,9 +280,13 @@ procedure item_unassign (
 </tt></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>acs_rel.delete, content_keyword.item_assign</td>
 </tr>
-</table><p> </p><ul><li>
+</table>
+<p> </p>
+<ul><li>
 <font size="+1">Procedure:</font>
-content_keyword.set_description</li></ul><p>Sets a new description for the keyword</p><table cellpadding="3" cellspacing="0" border="0">
+content_keyword.set_description</li></ul>
+<p>Sets a new description for the keyword</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1">
@@ -258,9 +305,13 @@ procedure set_description (
 <th align="left" valign="top">See Also:</th><td>content_keyword.set_heading,
 content_keyword.get_description</td>
 </tr>
-</table><p> </p><ul><li>
+</table>
+<p> </p>
+<ul><li>
 <font size="+1">Procedure:</font>
-content_keyword.set_heading</li></ul><p>Sets a new heading for the keyword</p><table cellpadding="3" cellspacing="0" border="0">
+content_keyword.set_heading</li></ul>
+<p>Sets a new heading for the keyword</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1">
@@ -279,7 +330,8 @@ procedure set_heading (
 <th align="left" valign="top">See Also:</th><td>content_keyword.get_heading,
 content_keyword.set_description</td>
 </tr>
-</table><p> </p>
+</table>
+<p> </p>
+
 Last Modified: $Id: keyword.html,v 1.1.1.1 2001/03/13 22:59:26 ben
 Exp $
-</body>

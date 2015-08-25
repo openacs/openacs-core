@@ -2,18 +2,23 @@
 <property name="context">{/doc/acs-content-repository {Content Repository}} {}</property>
 <property name="doc(title)"></property>
 <master>
-
-<body>
-<h2>Storing Data in the Content Repository</h2><p>This document provides an introduction to using the content
+<h2>Storing Data in the Content Repository</h2>
+<p>This document provides an introduction to using the content
 repository for storing data (binary or text files) and associated
 attributes. It describes how to store user portraits as an
-example.</p><h3>Define an Item Type</h3><p>The first step towards using the content repository is to define
+example.</p>
+<h3>Define an Item Type</h3>
+<p>The first step towards using the content repository is to define
 one or more <em>content types</em> for the data you wish to
-manage.</p><p>The basic content item includes the following attributes:</p><ul>
+manage.</p>
+<p>The basic content item includes the following attributes:</p>
+<ul>
 <li>Title</li><li>Description</li><li>Publication or Posting Date</li><li>Author or Contributor</li><li>MIME Type</li><li>Binary or Text Data</li>
-</ul><p>Most types of content require additional attributes. For a
+</ul>
+<p>Most types of content require additional attributes. For a
 photo, we probably also want to store the pixel width and height at
-the very least:</p><pre>
+the very least:</p>
+<pre>
   create table images (
     image_id       integer
                    constraint images_image_id_fk
@@ -23,8 +28,10 @@ the very least:</p><pre>
     width          integer,
     height         integer
   );
-</pre><p>Content types are nothing more than standard ACS Objects that
-inherit from <tt>content_revision</tt>:</p><pre>
+</pre>
+<p>Content types are nothing more than standard ACS Objects that
+inherit from <tt>content_revision</tt>:</p>
+<pre>
 begin
 
  acs_object_type.create_type (
@@ -56,17 +63,22 @@ begin
 end;
 /
 show errors
-</pre><p>Note that content types always extend <tt>content_revision</tt>,
+</pre>
+<p>Note that content types always extend <tt>content_revision</tt>,
 rather than <tt>content_item</tt>. This is because we want to store
 multiple revisions of both the actual data (in this case the image)
 as well as associated attributes (the width and height of the image
-may vary among revisions).</p><h3>Define a Relationship to a Target Object</h3><p>The content repository implements a flexible mechanism for
+may vary among revisions).</p>
+<h3>Define a Relationship to a Target Object</h3>
+<p>The content repository implements a flexible mechanism for
 organizing data in a hierarchical fashion in a manner similar to a
 file system. This would be useful if we ever decided to allow each
 user to manage an entire personal photo gallery rather than a
-single portrait.</p><p>In the simple case where each user is allowed a single portrait,
+single portrait.</p>
+<p>In the simple case where each user is allowed a single portrait,
 we can simply define a relationship between user and image as ACS
-Objects:</p><pre>
+Objects:</p>
+<pre>
   acs_rel_type.create_role('user');
   acs_rel_type.create_role('portrait');
 
@@ -81,13 +93,17 @@ Objects:</p><pre>
      min_n_rels_two =&gt; 0,
      max_n_rels_two =&gt; 1
   );
-</pre><p>Note that the <tt>user</tt> object is related to a
+</pre>
+<p>Note that the <tt>user</tt> object is related to a
 <tt>content_item</tt> object rather than an <tt>image</tt> object
 directly. Each <tt>image</tt> object represents only a single
 revision of a portrait. Revisions always exist in the context of an
-item.</p><h3>Store Objects</h3><p>Now we have defined both a content type and relationship type,
+item.</p>
+<h3>Store Objects</h3>
+<p>Now we have defined both a content type and relationship type,
 we can start storing portraits. The DML for processing a new
-portrait upload form would look like this:</p><pre>
+portrait upload form would look like this:</p>
+<pre>
   begin transaction
     :item_id := content_item.new(:name, :item_id, sysdate, NULL,                           '[ns_conn peeraddr]'); 
     # maybe have content_revision return the LOB locator so that it can
@@ -96,8 +112,12 @@ portrait upload form would look like this:</p><pre>
                                :item_id, :revision_id);
     blob_dml_file update cr_revisions set content = empty_blob() ...
     :rel_id := acs_rel.new(...)
-</pre><h3>Retrieve Objects</h3><pre>
+</pre>
+<h3>Retrieve Objects</h3>
+<pre>
   ns_ora write_blob ...
-</pre><hr><a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a><p>Last Modified: $Id: storage.html,v 1.1.1.1 2001/03/13 22:59:26
+</pre>
+<hr>
+<a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a>
+<p>Last Modified: $Id: storage.html,v 1.1.1.1 2001/03/13 22:59:26
 ben Exp $</p>
-</body>

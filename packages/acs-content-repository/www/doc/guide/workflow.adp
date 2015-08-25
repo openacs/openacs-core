@@ -2,11 +2,13 @@
 <property name="context">{/doc/acs-content-repository {Content Repository}} {Content Repository Developer Guide: Workflow}</property>
 <property name="doc(title)">Content Repository Developer Guide: Workflow</property>
 <master>
-
-<body>
-<h2>Applying Workflow to Content Items</h2><p>This document describes the workflow API calls necessary to
-apply a simple workflow to a content item.</p><h3>Workflow Description</h3><p>Most publishers wish to follow some variation of the following
-workflow:</p><table border="1" cellspacing="0" cellpadding="4">
+<h2>Applying Workflow to Content Items</h2>
+<p>This document describes the workflow API calls necessary to
+apply a simple workflow to a content item.</p>
+<h3>Workflow Description</h3>
+<p>Most publishers wish to follow some variation of the following
+workflow:</p>
+<table border="1" cellspacing="0" cellpadding="4">
 <tr bgcolor="#CCCCCC">
 <th>State</th><th>Task</th><th>Description</th>
 </tr><tr>
@@ -18,10 +20,12 @@ workflow:</p><table border="1" cellspacing="0" cellpadding="4">
 </tr><tr>
 <td>Published</td><td>None</td><td>The publisher has approved the item.</td>
 </tr>
-</table><p>At any point in the workflow, an assigned user should be able to
+</table>
+<p>At any point in the workflow, an assigned user should be able to
 check out an item, such that other users are advised that someone
 is working on it. When checking an item in, a user should have up
-to three options:</p><ol>
+to three options:</p>
+<ol>
 <li>Check the item in but do not mark the task as finished
 (allowing someone else to work on the task. The currently enabled
 task (whether it is authoring, editing or approving) does not
@@ -29,12 +33,16 @@ change.</li><li>Check the item in and move to the next task. For the authoring
 task, this signifies that the authoring is complete. For subsequent
 tasks, this signifies approval.</li><li>Check the item in and move to a previous task, indicating
 rejection.</li>
-</ol><p>This simple workflow is defined in
-<tt>sql/workflows/author-edit-publish.sql</tt>.</p><h3>Workflow Creation</h3><p>Production of a content item frequently begins with a concept
+</ol>
+<p>This simple workflow is defined in
+<tt>sql/workflows/author-edit-publish.sql</tt>.</p>
+<h3>Workflow Creation</h3>
+<p>Production of a content item frequently begins with a concept
 which is initiated by the publisher and then executed by the staff.
 In this scenario, the publisher creates the workflow and then
 assigns each task in the workflow to one or more people. The API
-calls to initialize a new workflow are as follows:</p><pre>
+calls to initialize a new workflow are as follows:</p>
+<pre>
 declare
   v_case_id integer;
   sample_object_id integer := 9;
@@ -53,17 +61,23 @@ begin
 
 end;
 /
-</pre><p>In this case, only one assignment is made per task. You can make
+</pre>
+<p>In this case, only one assignment is made per task. You can make
 as many assignments per task as desired. There is currently no
 workflow API to set deadlines, so you must write your own DML to
 insert a row into <tt>wf_case_deadlines</tt> if you wish to allow
-the publisher to set deadlines ahead of time.</p><p>The above workflow is created in the <b>Default</b> context. In
+the publisher to set deadlines ahead of time.</p>
+<p>The above workflow is created in the <b>Default</b> context. In
 practice, you may wish to create one or more contexts in which to
 create your workflows. Contexts may be used to represent different
-departments within an organization.</p><p>The <tt>start_case</tt> enables the first task in the workflow,
-in this case <b>Authoring</b>.</p><h3>Check Out Item</h3><p>If multiple persons are assigned to the same task, it is useful
+departments within an organization.</p>
+<p>The <tt>start_case</tt> enables the first task in the workflow,
+in this case <b>Authoring</b>.</p>
+<h3>Check Out Item</h3>
+<p>If multiple persons are assigned to the same task, it is useful
 to allow a single person to "check out" or lock an item while they
-are working. This is accomplished with the following API calls:</p><pre>
+are working. This is accomplished with the following API calls:</p>
+<pre>
 declare
   v_journal_id integer;
   sample_task_id := 1000;
@@ -77,14 +91,18 @@ begin
 
 end;
 /
-</pre><p>A mininum of two calls are required to perform any action
+</pre>
+<p>A mininum of two calls are required to perform any action
 related to a task. In this case we are simply notifying the
 workflow engine that someone has started the task. You may specify
 NULL for the journal message if the user does not wish to comment
-on the check out.</p><h3>Check In Item</h3><p>Unless given a timeout period, a lock on a content item will
+on the check out.</p>
+<h3>Check In Item</h3>
+<p>Unless given a timeout period, a lock on a content item will
 persist until the holding user checks the item back in. This
 involves notifying the workflow engine that the user has finished
-the task:</p><pre>
+the task:</p>
+<pre>
 declare
   v_journal_id integer;
   sample_task_id integer := 1000;
@@ -99,14 +117,18 @@ begin
 
 end;
 /
-</pre><p>Upon finishing a task, you must notify the workflow engine where
+</pre>
+<p>Upon finishing a task, you must notify the workflow engine where
 to go next. In this case, an author wishes to simply check an item
 back in without actually completing the authoring task. The
 <tt>set_attribute_value</tt> procedure must thus be used to set
-<tt>next_place</tt> to the starting place of the workflow.</p><h3>Finish Task</h3><p>The process to finish a task varies slightly depending on
+<tt>next_place</tt> to the starting place of the workflow.</p>
+<h3>Finish Task</h3>
+<p>The process to finish a task varies slightly depending on
 whether the user has previously checked out the item out or not. If
 the user has not already checked it out (has been working on the
-item without locking it, the code looks like this:</p><pre>
+item without locking it, the code looks like this:</p>
+<pre>
 declare
   v_journal_id integer;
   sample_task_id integer := 1002;
@@ -127,13 +149,17 @@ begin
 
 end;
 /
-</pre><p>In this case an author is finishing the <b>Authoring</b> task,
+</pre>
+<p>In this case an author is finishing the <b>Authoring</b> task,
 upon which the workflow engine will move the workflow to the
 <b>Authored</b> state (as indicated by the <tt>next_place</tt>
 attribute). If the author had previously checked out the item, then
-only the second step is required.</p><h3>Approve or Reject</h3><p>Approval steps more commonly do not involve an explicit
+only the second step is required.</p>
+<h3>Approve or Reject</h3>
+<p>Approval steps more commonly do not involve an explicit
 check-out process. The code is thus virtually identical to that
-above:</p><pre>
+above:</p>
+<pre>
 declare
   v_journal_id integer;
   sample_task_id integer := 1003;
@@ -152,8 +178,12 @@ begin
 
 end;
 /
-</pre><p>Note the distinction between approval or rejection is determined
-solely by the value of the <tt>next_place</tt> attribute.</p><hr><a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a><br>
+</pre>
+<p>Note the distinction between approval or rejection is determined
+solely by the value of the <tt>next_place</tt> attribute.</p>
+<hr>
+<a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a>
+<br>
+
 Last Modified: <tt>$Id: workflow.html,v 1.1.1.1 2001/03/13 22:59:26
 ben Exp $</tt>
-</body>

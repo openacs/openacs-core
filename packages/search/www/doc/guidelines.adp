@@ -2,8 +2,7 @@
 <property name="context">{/doc/search {Search}} {How to make an object type searchable?}</property>
 <property name="doc(title)">How to make an object type searchable?</property>
 <master>
-
-<body><blockquote>
+<blockquote>
 <h2>How to make an object type searchable?</h2>
 by Neophytos Demetriou (<a href="mailto:k2pts\@cytanet.com.cy">k2pts\@cytanet.com.cy</a>)
 <hr>
@@ -143,4 +142,4 @@ to use while writing the implementation of datasource:<br><br><ul>
 </ul>
 </li>
 </ol>
-</blockquote></body>
+</blockquote>

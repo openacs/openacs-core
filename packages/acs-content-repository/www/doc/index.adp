@@ -2,9 +2,8 @@
 <property name="context">{/doc/acs-content-repository {Content Repository}} {ACS Content Repository}</property>
 <property name="doc(title)">ACS Content Repository</property>
 <master>
-
-<body>
-<h1>ACS Content Repository</h1><ul>
+<h1>ACS Content Repository</h1>
+<ul>
 <li><a href="design">Introduction</a></li><li><a href="install">Installation</a></li><li><a href="tutorial">Tutorial</a></li><li><a href="object-model">Object Model</a></li><li>
 <p>Developer Guide</p><ul>
 <li><a href="guide/types">Designing content types</a></li><li><a href="guide/items">Creating content items</a></li><li><a href="guide/revisions">Adding revisions to content
@@ -32,7 +31,12 @@ items</a></li>
 </ul>
 </li><li><a href="uninstall">Uninstalling the content
 repository</a></li>
-</ul><h2>Release Notes</h2><p>Please file bugs in the <a href="http://openacs.org/bugtracker/openacs/">Bug Tracker</a>.</p><hr><a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a><br>
-Last Revised: $Id: index.html,v 1.2.18.1 2015/08/21 10:28:44
+</ul>
+<h2>Release Notes</h2>
+<p>Please file bugs in the <a href="http://openacs.org/bugtracker/openacs/">Bug Tracker</a>.</p>
+<hr>
+<a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a>
+<br>
+
+Last Revised: $Id: index.html,v 1.2.18.2 2015/08/21 10:49:20
 gustafn Exp $
-</body>

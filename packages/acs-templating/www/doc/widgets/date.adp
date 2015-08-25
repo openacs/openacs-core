@@ -2,42 +2,51 @@
 <property name="context">{/doc/acs-templating {Templating}} {Templating System Widget Reference: Date}</property>
 <property name="doc(title)">Templating System Widget Reference: Date</property>
 <master>
-
-<body>
-<h2>The Date Widget</h2><h3>Overview</h3><p>The date widget provides a versatile HTML control for entering
+<h2>The Date Widget</h2>
+<h3>Overview</h3>
+<p>The date widget provides a versatile HTML control for entering
 dates in a variety of formats. The widget operates in conjunction
 with various <code>template::util::date</code> functions in order
 to validate and manipulate the user's input. Please see the
 <a href="../demo/index.html">demo</a> pages for some examples of
-the widget's behavior.</p><h3>The Date Object</h3><p>The widget's value is a Date object, defined in
+the widget's behavior.</p>
+<h3>The Date Object</h3>
+<p>The widget's value is a Date object, defined in
 <code>template::util::date</code>. The date object stores 7 fields:
 the year, month, day, hours, minutes, seconds, and the format in
 which these values should be displayed. The function
 <code>template::util::date::create</code> can be used to
-instantiate a blank date:</p><blockquote><pre>
+instantiate a blank date:</p>
+<blockquote><pre>
 proc template::util::date::create {
   {year {}} {month {}} {day {}} {hours {}} 
   {minutes {}} {seconds {}} {format "YYYY/MM/DD"}
 } {
   return [list $year $month $day $hours $minutes $seconds $format]
 }
-</pre></blockquote><p>The two functions
+</pre></blockquote>
+<p>The two functions
 <code>template::util::date::get_property</code> and
 <code>template::util::date::set_property</code> are used to get or
 set the fields of a Date object. The <code>get_property</code>
 function accepts the desired field and the Date object, and returns
-the value of the field:</p><blockquote><pre>
+the value of the field:</p>
+<blockquote><pre>
 proc template::util::date::get_property { what date } {
 ...
 }
-</pre></blockquote><p>The <code>set_property</code> function accepts the field, the
+</pre></blockquote>
+<p>The <code>set_property</code> function accepts the field, the
 Date object and the new value, and returns the modified Date
-object:</p><blockquote><pre>
+object:</p>
+<blockquote><pre>
 proc template::util::date::set_property { what date value } {
 ...
 }
-</pre></blockquote><p>The fields which can be accessed or changed are summarized
-below:</p><table border="1" cellspacing="0" cellpadding="4">
+</pre></blockquote>
+<p>The fields which can be accessed or changed are summarized
+below:</p>
+<table border="1" cellspacing="0" cellpadding="4">
 <tr>
 <th>Field</th><th>Get ?</th><th>Set ?</th><th>Meaning</th><th>Sample Value</th>
 </tr><tr>
@@ -90,8 +99,10 @@ however, manipulating the clock value with <code>clock scan</code>
 is currently the only way to perform arithmetic operations on
 dates, such as adding a day, comparing two dates, etc.</td><td>(An integer representing the number of elapsed seconds)</td>
 </tr>
-</table><p>For example, the following code produces the tomorrow's date in
-SQL:</p><blockquote><pre>
+</table>
+<p>For example, the following code produces the tomorrow's date in
+SQL:</p>
+<blockquote><pre>
 
 # Create a blank date
 set today_date [template::util::date::create]
@@ -105,11 +116,14 @@ set tomorrow_date [template::util::date::set_property \
 set tomorrow_sql [template::util::date::get_property \
   sql_date $tomorrow_date]
 
-</pre></blockquote><h3>The Date Element</h3><p>The widget is created with the usual <code>template::element
+</pre></blockquote>
+<h3>The Date Element</h3>
+<p>The widget is created with the usual <code>template::element
 create</code> statement, with the datatype and widget set to
 <code>date</code>. In addition, the element requires a
 <code>-format</code> switch, which specifies the format for the
-date, as follows:</p><table border="1" cellpadding="4" cellspacing="0">
+date, as follows:</p>
+<table border="1" cellpadding="4" cellspacing="0">
 <tr>
 <th>Option</th><th>Format</th><th>Meaning</th>
 </tr><tr>
@@ -129,10 +143,12 @@ date</td>
 <code>-format</code><em>custom string</em>
 </td><td>Custom format</td><td>See below</td>
 </tr>
-</table><p>Any other value for the <code>format</code> flag is interpreted
+</table>
+<p>Any other value for the <code>format</code> flag is interpreted
 as a custom format string. The custom format string should consist
 of format specifiers separated by any of <code>/\-.:</code> or
-spaces. The valid format specifiers are as follows:</p><table border="1" cellpadding="4" cellspacing="0">
+spaces. The valid format specifiers are as follows:</p>
+<table border="1" cellpadding="4" cellspacing="0">
 <tr>
 <th>Format Specifier</th><th>Field</th><th>Default Widget</th><th></th>
 </tr><tr>
@@ -158,11 +174,14 @@ spaces. The valid format specifiers are as follows:</p><table border="1" cellpad
 </tr><tr>
 <td><code>AM</code></td><td><code>ampm</code></td><td>Selection list of "A.M." and "P.M."</td>
 </tr>
-</table><p>Any format specifier may be followed by a lowercase
+</table>
+<p>Any format specifier may be followed by a lowercase
 <code>t</code>, in order to force the widget to use an input box
 (instead of a selection list) for entering the specified date
-fragment.</p><p>The <code>-format</code> switch is required, but the date widget
-also supports the following optional switches:</p><table border="1" cellpadding="4" cellspacing="0">
+fragment.</p>
+<p>The <code>-format</code> switch is required, but the date widget
+also supports the following optional switches:</p>
+<table border="1" cellpadding="4" cellspacing="0">
 <tr>
 <th>Switch</th><th>Meaning</th><th>Example</th>
 </tr><tr>
@@ -176,5 +195,7 @@ step</td><td nowrap="nowrap"><code>-minute_interval {0 59 5}</code></td>
 fragment widget showing the purpose of the widget, such as "Year"
 or "24-Hour"</td><td><code>-help</code></td>
 </tr>
-</table><p>Examples of various Date widgets can be found on the <a href="/ats/demo/index">demo</a> pages.</p><hr><a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>
-</body>
+</table>
+<p>Examples of various Date widgets can be found on the <a href="/ats/demo/index">demo</a> pages.</p>
+<hr>
+<a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>

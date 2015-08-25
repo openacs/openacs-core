@@ -4,9 +4,10 @@
 <property name="doc(title)">Content Repository Developer Guide: Subject Keywords
 (Categories)</property>
 <master>
-
-<body>
-<h2>Subject Keywords (Categories)</h2><hr><h3>Overview</h3><p>
+<h2>Subject Keywords (Categories)</h2>
+<hr>
+<h3>Overview</h3>
+<p>
 <em>Subject Keywords</em> are used to implement categorization
 for the Content Management system. A Subject Keyword is a small
 label, such as "Oracle Documentation" or "My Favorite Foods", which
@@ -16,22 +17,29 @@ assigning the Subject Keyword "My Favorite Foods" to the content
 items "Potstickers", "Strawberries" and "Ice Cream" would indicate
 that all the three items belong in the same category - namely, the
 category of the user's favorite foods. The actual physical location
-of these items within the repository is irrelevant.</p><p>Subject Keywords may be nested to provide more detailed control
+of these items within the repository is irrelevant.</p>
+<p>Subject Keywords may be nested to provide more detailed control
 over categorization; for example, "My Favorite Foods" may be
 further subdivided into "Healthy" and "Unhealthy". Subject Keywords
 which have descendants are referred to as "<em>Subject
-Categories</em>".</p><h3>Data Model</h3><p>The <tt>content_keyword</tt> object type is used to represent
+Categories</em>".</p>
+<h3>Data Model</h3>
+<p>The <tt>content_keyword</tt> object type is used to represent
 Subject Keywords (see <tt>content_keyword.sql</tt>) The
 <tt>content_keyword</tt> type inherits from
-<tt>acs_object</tt>:</p><pre>
+<tt>acs_object</tt>:</p>
+<pre>
  acs_object_type.create_type ( supertype =&gt; 'acs_object', object_type
    =&gt; 'content_keyword', pretty_name =&gt; 'Content Keyword',
    pretty_plural =&gt; 'Content Keywords', table_name =&gt; 'cr_keywords',
    id_column =&gt; 'keyword_id', name_method =&gt; 'acs_object.default_name'
    ); 
 </pre>
-In addition, the <tt>cr_keywords</tt> table (see
-<tt>content-create.sql</tt>) contains extended attributes of
+
+In addition, the <tt>cr_keywords</tt>
+ table (see
+<tt>content-create.sql</tt>
+) contains extended attributes of
 Subject Keywords:
 <pre>
 create table cr_keywords (
@@ -44,7 +52,9 @@ create table cr_keywords (
   description            varchar2(4000)
 );
 </pre>
-In <tt>content-keyword.sql</tt>:
+
+In <tt>content-keyword.sql</tt>
+:
 <pre>
 attr_id := acs_attribute.create_attribute (
   object_type    =&gt; 'acs_object',
@@ -61,11 +71,14 @@ attr_id := acs_attribute.create_attribute (
   pretty_name    =&gt; 'Description',
   pretty_plural  =&gt; 'Descriptions'
 );
-</pre><p>Thus, each Subject Keyword has a <tt>heading</tt>, which is a
+</pre>
+<p>Thus, each Subject Keyword has a <tt>heading</tt>, which is a
 user-readable heading for the keyword, and a <tt>description</tt>,
-which is a somewhat longer description of the keyword.</p><p>The <tt>cr_item_keyword_map</tt> table (see
+which is a somewhat longer description of the keyword.</p>
+<p>The <tt>cr_item_keyword_map</tt> table (see
 <tt>content-create.sql</tt>) is used to relate content items to
-keywords:</p><pre>
+keywords:</p>
+<pre>
 create table cr_item_keyword_map (
   item_id          integer
                    constraint cr_item_keyword_map_item_fk
@@ -80,10 +93,13 @@ create table cr_item_keyword_map (
   constraint cr_item_keyword_map_pk
   primary key (item_id, keyword_id)
 );
-</pre><h3><a href="/api-doc/procs-file-view?path=packages/acs-content-repository/tcl/content-keyword-procs.tcl">
-API Access</a></h3><p>The API used to access and modify content keywords are outlined
+</pre>
+<h3><a href="/api-doc/procs-file-view?path=packages/acs-content-repository/tcl/content-keyword-procs.tcl">
+API Access</a></h3>
+<p>The API used to access and modify content keywords are outlined
 below. The function names are links that will take you to a more
-detailed description of the function and its parameters.</p><table border="1" cellpadding="4" cellspacing="0">
+detailed description of the function and its parameters.</p>
+<table border="1" cellpadding="4" cellspacing="0">
 <tr>
 <th>Function/Procedure</th><th>Purpose</th><th>Description</th>
 </tr><tr>
@@ -127,4 +143,3 @@ Category is assigned to the item. For example, a query whether
 </td>
 </tr>
 </table>
-</body>

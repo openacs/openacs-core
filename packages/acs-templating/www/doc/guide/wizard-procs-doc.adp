@@ -2,9 +2,8 @@
 <property name="context">{/doc/acs-templating {Templating}} {Using the Wizard}</property>
 <property name="doc(title)">Using the Wizard</property>
 <master>
-
-<body>
-<h2>Overview Of How To Make A Wizard</h2><ol>
+<h2>Overview Of How To Make A Wizard</h2>
+<ol>
 <li>Create a wizard file (ex. wizard.tcl) that contains the
 "template::wizard create" code.
 <pre>
@@ -62,7 +61,9 @@ finish. Back buttons are not rendered if the step is the first
 step, like wise next buttons are not displayed if its the last
 step. Finish can appear on any step and will finish the current
 wizard even if not all steps are done.</li>
-</ol><h2>Tips And How To Use The Wizard</h2><ul>
+</ol>
+<h2>Tips And How To Use The Wizard</h2>
+<ul>
 <li>
 <h3>How do you display the steps in the wizard to serve as an
 indicator?</h3>
@@ -172,4 +173,3 @@ a param called "name" for the user name. And on on sub wizard we
 have the param again called "name" but used for the file name.</p>
 </li>
 </ul>
-</body>

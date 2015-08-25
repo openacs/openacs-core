@@ -2,9 +2,8 @@
 <property name="context">{/doc/acs-subsite {Subsite}} {ACS Subsite Documentation}</property>
 <property name="doc(title)">ACS Subsite Documentation</property>
 <master>
-
-<body>
 <h2>Images available from the acs-subsite package</h2>
+
 Image can be included with a link of the form &lt;img
 src="/resources/acs-subsite/FILENAME\" /&gt;
 <table border="0">
@@ -134,4 +133,3 @@ src="/resources/acs-subsite/FILENAME\" /&gt;
 <td><img src="/resources/acs-subsite/ZoomOut24.gif"></td><td>ZoomOut24.gif</td>
 </tr>
 </table>
-</body>

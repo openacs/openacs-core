@@ -2,9 +2,11 @@
 <property name="context">{/doc/acs-templating {Templating}} {Commenting Tcl procedures for parsing}</property>
 <property name="doc(title)">Commenting Tcl procedures for parsing</property>
 <master>
-
-<body>
-<h2>Using comments to document Tcl procedures</h2><b>Templating System</b><h3>Text divisions, grouping</h3><i>&lt; blah blah &gt;</i> The Tcl proc parser relies on three main
+<h2>Using comments to document Tcl procedures</h2>
+<b>Templating System</b>
+<h3>Text divisions, grouping</h3>
+<i>&lt; blah blah &gt;</i>
+ The Tcl proc parser relies on three main
 text markers to divvy the Tcl library file into neat compartments:
 namespace, procedure and directive. Each of these divisions has its
 own text marker(s). In the end, your Tcl file should look somthing
@@ -52,12 +54,14 @@ like this:
 
 # <font color="red">\@namespace</font> ... <i>&lt;other namespaces&gt;</i>
 </tt></code></pre></blockquote>
+
 Note that comment lines are indented to indicate the manner in
 which they should be grouped only, and that there is no required
 spacing scheme for comments.
 <p>Use of these directive markers is largely straightforward, but a
 more in depth guideline of how the markers guide parsing may help
-those documenting their own work:</p><blockquote>
+those documenting their own work:</p>
+<blockquote>
 <b>the \@namespace marker</b><ul>
 <li>
 <code><b>\@namespace</b></code> is used to indicate the starting
@@ -145,5 +149,6 @@ and all procedure information is anchor-referenced:
 If you are referring to a namespace or procedure (use
 <code>proc</code> for the reference type), the url value is
 optional as long as you use the <b>full</b> and <b>completely
-qualified</b> name of the namespace or procedure.</blockquote><hr><a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>
-</body>
+qualified</b> name of the namespace or procedure.</blockquote>
+<hr>
+<a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>

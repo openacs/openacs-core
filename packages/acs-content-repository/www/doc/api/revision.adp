@@ -2,21 +2,32 @@
 <property name="context">{/doc/acs-content-repository {Content Repository}} {Package: content_revision}</property>
 <property name="doc(title)">Package: content_revision</property>
 <master>
-
-<body>
-<h2>content_revision</h2><p>
+<h2>content_revision</h2>
+<p>
 <a href="../index.html">Content Repository</a> :
-content_revision</p><hr><ul>
+content_revision</p>
+<hr>
+<ul>
 <li><a href="#overview">Overview</a></li><li><a href="#related">Related Objects</a></li><li><a href="#api">API</a></li>
-</ul><p> </p><h3><a name="overview">Overview</a></h3><p>Content revisions contain the data for content items. There is a
+</ul>
+<p> </p>
+<h3><a name="overview">Overview</a></h3>
+<p>Content revisions contain the data for content items. There is a
 many to one relationship between content revisions and content
 items. There is at most one "live" revision for every content item
 though. For example, there may be 5 revisions of the review for the
 movie "Terminator," yet only one of these may be live on the
-website at a given time.</p><p> </p><h3><a name="related">Related Objects</a></h3>
+website at a given time.</p>
+<p> </p>
+<h3><a name="related">Related Objects</a></h3>
+
 See also: {content_item }
-<p> </p><h3><a name="api">API</a></h3><ul><li>
-<font size="+1">Function:</font> content_revision.copy</li></ul><p>Creates a new copy of an attribute, including all attributes</p><table cellpadding="3" cellspacing="0" border="0">
+<p> </p>
+<h3><a name="api">API</a></h3>
+<ul><li>
+<font size="+1">Function:</font> content_revision.copy</li></ul>
+<p>Creates a new copy of an attribute, including all attributes</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1"><tr>
@@ -30,20 +41,27 @@ function copy (
 </tt></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_revision.new</td>
 </tr>
-</table><p> </p><ul><li>
+</table>
+<p> </p>
+<ul><li>
 <font size="+1">Function:</font>
-content_revision.export_xml</li></ul><table cellpadding="3" cellspacing="0" border="0">
+content_revision.export_xml</li></ul>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><i>Not yet documented</i></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
 function export_xml (
   revision_id IN cr_revisions.revision_id%TYPE
 ) return cr_xml_docs.doc_id%TYPE;
 
 </tt></pre></td></tr>
-</table><p> </p><ul><li>
+</table>
+<p> </p>
+<ul><li>
 <font size="+1">Function:</font>
-content_revision.get_number</li></ul><p>Return the revision number of the specified revision, according
+content_revision.get_number</li></ul>
+<p>Return the revision number of the specified revision, according
 to the chronological order in which revisions have been added for
-this item.</p><table cellpadding="3" cellspacing="0" border="0">
+this item.</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr>
@@ -58,9 +76,12 @@ function get_number (
 </tt></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_revision.new</td>
 </tr>
-</table><p> </p><ul><li>
+</table>
+<p> </p>
+<ul><li>
 <font size="+1">Function:</font>
-content_revision.import_xml</li></ul><table cellpadding="3" cellspacing="0" border="0">
+content_revision.import_xml</li></ul>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><i>Not yet documented</i></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
 function import_xml (
   item_id IN cr_items.item_id%TYPE,
@@ -69,8 +90,12 @@ function import_xml (
 ) return cr_revisions.revision_id%TYPE;
 
 </tt></pre></td></tr>
-</table><p> </p><ul><li>
-<font size="+1">Function:</font> content_revision.new</li></ul><p>Create a new revision for an item.</p><table cellpadding="3" cellspacing="0" border="0">
+</table>
+<p> </p>
+<ul><li>
+<font size="+1">Function:</font> content_revision.new</li></ul>
+<p>Create a new revision for an item.</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr>
@@ -126,8 +151,11 @@ function new (
 </tt></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>acs_object.new, content_item.new</td>
 </tr>
-</table><p> </p><ul><li>
-<font size="+1">Function:</font> content_revision.read_xml</li></ul><table cellpadding="3" cellspacing="0" border="0">
+</table>
+<p> </p>
+<ul><li>
+<font size="+1">Function:</font> content_revision.read_xml</li></ul>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><i>Not yet documented</i></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
 function read_xml (
   item_id IN number,
@@ -141,9 +169,12 @@ name
   ) return int';
 
 </tt></pre></td></tr>
-</table><p> </p><ul><li>
+</table>
+<p> </p>
+<ul><li>
 <font size="+1">Function:</font>
-content_revision.write_xml</li></ul><table cellpadding="3" cellspacing="0" border="0">
+content_revision.write_xml</li></ul>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><i>Not yet documented</i></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
 function write_xml (
   revision_id IN number,
@@ -156,8 +187,12 @@ name
   ) return int';
 
 </tt></pre></td></tr>
-</table><p> </p><ul><li>
-<font size="+1">Procedure:</font> content_revision.delete</li></ul><p>Deletes the revision.</p><table cellpadding="3" cellspacing="0" border="0">
+</table>
+<p> </p>
+<ul><li>
+<font size="+1">Procedure:</font> content_revision.delete</li></ul>
+<p>Deletes the revision.</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1"><tr>
@@ -170,11 +205,15 @@ procedure delete (
 </tt></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_revision.new, acs_object.delete</td>
 </tr>
-</table><p> </p><ul><li>
+</table>
+<p> </p>
+<ul><li>
 <font size="+1">Procedure:</font>
-content_revision.index_attributes</li></ul><p>Generates an XML document for insertion into
+content_revision.index_attributes</li></ul>
+<p>Generates an XML document for insertion into
 cr_revision_attributes, which is indexed by Intermedia for
-searching attributes.</p><table cellpadding="3" cellspacing="0" border="0">
+searching attributes.</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1"><tr>
@@ -187,8 +226,11 @@ procedure index_attributes(
 </tt></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_revision.new</td>
 </tr>
-</table><p> </p><ul><li>
-<font size="+1">Procedure:</font> content_revision.replace</li></ul><table cellpadding="3" cellspacing="0" border="0">
+</table>
+<p> </p>
+<ul><li>
+<font size="+1">Procedure:</font> content_revision.replace</li></ul>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><i>Not yet documented</i></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
 procedure replace(
   revision_id number, search varchar2, replace varchar2)
@@ -200,8 +242,12 @@ name
    )';
 
 </tt></pre></td></tr>
-</table><p> </p><ul><li>
-<font size="+1">Procedure:</font> content_revision.to_html</li></ul><p>Converts a revision uploaded as a binary document to html</p><table cellpadding="3" cellspacing="0" border="0">
+</table>
+<p> </p>
+<ul><li>
+<font size="+1">Procedure:</font> content_revision.to_html</li></ul>
+<p>Converts a revision uploaded as a binary document to html</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1"><tr>
@@ -212,7 +258,8 @@ procedure to_html (
 );
 
 </tt></pre></td></tr>
-</table><p> </p>
+</table>
+<p> </p>
+
 Last Modified: $Id: revision.html,v 1.1.1.1 2001/03/13 22:59:26 ben
 Exp $
-</body>

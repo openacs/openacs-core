@@ -2,11 +2,11 @@
 <property name="context">{/doc/acs-authentication {Authentication}} {Installation}</property>
 <property name="doc(title)">Installation</property>
 <master>
-
-<body>
-<div class="navheader"><table width="100%" summary="Navigation header" border="0"><tr>
-<td width="20%" align="left"><a accesskey="p" href="index">Prev</a></td><th width="60%" align="center"></th><td width="20%" align="right"><a accesskey="n" href="ext-auth-pam-install">Next</a></td>
-</tr></table></div><div class="article" lang="en">
+<include src="/packages/acs-core-docs/lib/navheader"
+		    leftLink="index" leftLabel="Prev"
+		    title=""
+		    rightLink="ext-auth-pam-install" rightLabel="Next">
+		<div class="article" lang="en">
 <div class="titlepage">
 <div><div><h2 class="title">
 <a name="ext-auth-install" id="ext-auth-install"></a>Installation</h2></div></div><hr>
@@ -22,15 +22,11 @@ Synchronization</a></span></dt>
 </p>
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div>
-</div><div class="navfooter">
-<hr><table width="100%" summary="Navigation footer">
-<tr>
-<td width="40%" align="left"><a accesskey="p" href="index">Prev</a></td><td width="20%" align="center"><a accesskey="h" href="index">Home</a></td><td width="40%" align="right"><a accesskey="n" href="ext-auth-pam-install">Next</a></td>
-</tr><tr>
-<td width="40%" align="left">External Authentication</td><td width="20%" align="center"><a accesskey="u" href="index">Up</a></td><td width="40%" align="right">Using Pluggable Authentication
-Modules (PAM) with OpenACS</td>
-</tr>
-</table><hr><address><a href="mailto:docs\@openacs.org">docs\@openacs.org</a></address>
-</div><a name="comments" id="comments"></a><center><a href="http://openacs.org/doc/current/ext-auth-install.html#comments">View
-comments on this page at openacs.org</a></center>
-</body>
+</div>
+<include src="/packages/acs-core-docs/lib/navfooter"
+		    leftLink="index" leftLabel="Prev" leftTitle="External Authentication"
+		    rightLink="ext-auth-pam-install" rightLabel="Next" rightTitle="Using Pluggable Authentication
+Modules (PAM) with OpenACS"
+		    homeLink="index" homeLabel="Home" 
+		    upLink="index" upLabel="Up"> 
+		

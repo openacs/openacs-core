@@ -2,19 +2,29 @@
 <property name="context">{/doc/acs-templating {Templating}} {}</property>
 <property name="doc(title)"></property>
 <master>
-
-<body>
 <h2>Namespace publish</h2>
+
   <i>by Stanislav Freidin The procs in this namespace are
 useful for publishing items, including items inside other items,
-and writing items to the filesystem.</i><p><i>Specifically, the <tt>content</tt>, <tt>child</tt> and
-<tt>relation</tt> tags are defined here.</i></p><p>Also see:</p><dl>
+and writing items to the filesystem.</i>
+<p><i>Specifically, the <tt>content</tt>, <tt>child</tt> and
+<tt>relation</tt> tags are defined here.</i></p>
+<p>Also see:</p>
+<dl>
 <dt>namespace</dt><dd><a href="item">item</a></dd>
-</dl><h3>Method Summary</h3>
-Listing of public methods:<br><blockquote>
+</dl>
+<h3>Method Summary</h3>
+
+Listing of public methods:<br>
+<blockquote>
 <a href="#publish::get_html_body">publish::get_html_body</a><br><a href="#publish::get_mime_handler">publish::get_mime_handler</a><br><a href="#publish::get_page_root">publish::get_page_root</a><br><a href="#publish::get_publish_roots">publish::get_publish_roots</a><br><a href="#publish::get_template_root">publish::get_template_root</a><br><a href="#publish::handle_binary_file">publish::handle_binary_file</a><br><a href="#publish::item_include_tag">publish::item_include_tag</a><br><a href="#publish::mkdirs">publish::mkdirs</a><br><a href="#publish::proc_exists">publish::proc_exists</a><br><a href="#publish::publish_revision">publish::publish_revision</a><br><a href="#publish::schedule_status_sweep">publish::schedule_status_sweep</a><br><a href="#publish::set_publish_status">publish::set_publish_status</a><br><a href="#publish::unpublish_item">publish::unpublish_item</a><br><a href="#publish::unschedule_status_sweep">publish::unschedule_status_sweep</a><br><a href="#publish::write_content">publish::write_content</a><br>
-</blockquote><h3>Method Detail</h3><p align="right">
-<font color="red">*</font> indicates required</p><b>Public Methods:</b><br><table width="100%">
+</blockquote>
+<h3>Method Detail</h3>
+<p align="right">
+<font color="red">*</font> indicates required</p>
+<b>Public Methods:</b>
+<br>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="publish::get_html_body" id="publish::get_html_body"><font size="+1" weight="bold">publish::get_html_body</font></a></td></tr><tr><td>
 <blockquote>Strip the {&lt;body&gt;} tags from the HTML, leaving
 just the body itself. Useful for including templates in each
@@ -29,7 +39,8 @@ other.</blockquote><dl>
 if they exist; the unchanged HTML if they do not</dd>
 </dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="publish::get_mime_handler" id="publish::get_mime_handler"><font size="+1" weight="bold">publish::get_mime_handler</font></a></td></tr><tr><td>
 <blockquote>Return the name of a proc that should be used to render
 items with the given mime-type. The mime type handlers should all
@@ -57,7 +68,8 @@ mime-type, or an empty string on failure.</dd><dt><b>See Also:</b></dt><dd>proc 
 </dd>
 </dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="publish::get_page_root" id="publish::get_page_root"><font size="+1" weight="bold">publish::get_page_root</font></a></td></tr><tr><td>
 <blockquote>Get the page root. All items will be published to the
 filesystem with their URLs relative to this root. The page root is
@@ -68,7 +80,8 @@ pageroot\]</blockquote><dl>
 </dd>
 </dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="publish::get_publish_roots" id="publish::get_publish_roots"><font size="+1" weight="bold">publish::get_publish_roots</font></a></td></tr><tr><td>
 <blockquote>Get a list of all page roots to which files may be
 published. The publish roots are controlled by the PublishRoots
@@ -79,7 +92,8 @@ default is {[list} {[publish::get_page_root]]}</blockquote><dl>
 </dd>
 </dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="publish::get_template_root" id="publish::get_template_root"><font size="+1" weight="bold">publish::get_template_root</font></a></td></tr><tr><td>
 <blockquote>Get the template root. All templates are assumed to
 exist in the filesystem with their URLs relative to this root. The
@@ -89,7 +103,8 @@ default is /web/yourserver/templates</blockquote><dl>
 </dd>
 </dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="publish::handle_binary_file" id="publish::handle_binary_file"><font size="+1" weight="bold">publish::handle_binary_file</font></a></td></tr><tr><td>
 <blockquote>Helper procedure for writing handlers for binary files.
 It will write the blob of the item to the filesystem, but only if
@@ -141,11 +156,12 @@ revision whose content is to be used</td>
 order to prevent infinite recursion in the {&lt;content&gt;} tag.
 In this case, the proc will return the empty string { }</td>
 </tr>
-</table></dd><dt><b>See Also:</b></dt><dd>proc - <a href="publish__handle.html#publish::handle::image">publish::handle::image</a><br>
+</table></dd><dt><b>See Also:</b></dt><dd>proc - <a href="publish__handle">publish::handle::image</a><br>
 </dd>
 </dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="publish::item_include_tag" id="publish::item_include_tag"><font size="+1" weight="bold">publish::item_include_tag</font></a></td></tr><tr><td>
 <blockquote>Create an include tag to include an item, in the form
 <blockquote><tt>include src=/foo/bar/baz item_id=<i>item_id</i>
@@ -168,7 +184,8 @@ param=value param=value ...</tt></blockquote>
 </dd>
 </dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="publish::mkdirs" id="publish::mkdirs"><font size="+1" weight="bold">publish::mkdirs</font></a></td></tr><tr><td>
 <blockquote>Create all the directories neccessary to save the
 specified file</blockquote><dl><dd>
@@ -180,7 +197,8 @@ saved</td>
 </tr></table>
 </dd></dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="publish::proc_exists" id="publish::proc_exists"><font size="+1" weight="bold">publish::proc_exists</font></a></td></tr><tr><td>
 <blockquote>Determine if a procedure exists in the given
 namespace</blockquote><dl>
@@ -200,7 +218,8 @@ template::util}</td>
 </dd><dt><b>Returns:</b></dt><dd>1 if the proc exists in the given namespace, 0 otherwise</dd>
 </dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="publish::publish_revision" id="publish::publish_revision"><font size="+1" weight="bold">publish::publish_revision</font></a></td></tr><tr><td>
 <blockquote>Render a revision for an item and write it to the
 filesystem. The revision is always rendered with the
@@ -219,7 +238,8 @@ parameter; Write the content to this path only.</td>
 </dd>
 </dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="publish::schedule_status_sweep" id="publish::schedule_status_sweep"><font size="+1" weight="bold">publish::schedule_status_sweep</font></a></td></tr><tr><td>
 <blockquote>Schedule a proc to keep track of the publish status.
 Resets the publish status to { expired} if the expiration date has
@@ -240,7 +260,8 @@ is used (if it exists).</td>
 </dd>
 </dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="publish::set_publish_status" id="publish::set_publish_status"><font size="+1" weight="bold">publish::set_publish_status</font></a></td></tr><tr><td>
 <blockquote>Set the publish status of the item. If the status is
 live, publish the live revision of the item to the filesystem.
@@ -270,7 +291,8 @@ to be used when publishing the item to the filesystem.</td>
 </dd>
 </dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="publish::unpublish_item" id="publish::unpublish_item"><font size="+1" weight="bold">publish::unpublish_item</font></a></td></tr><tr><td>
 <blockquote>Delete files which were created by
 <tt>publish_revision</tt>
@@ -295,7 +317,8 @@ parameter; Write the content to this path only.</td>
 </dd>
 </dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="publish::unschedule_status_sweep" id="publish::unschedule_status_sweep"><font size="+1" weight="bold">publish::unschedule_status_sweep</font></a></td></tr><tr><td>
 <blockquote>Unschedule the proc which keeps track of the publish
 status.</blockquote><dl>
@@ -303,7 +326,8 @@ status.</blockquote><dl>
 </dd>
 </dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="publish::write_content" id="publish::write_content"><font size="+1" weight="bold">publish::write_content</font></a></td></tr><tr><td>
 <blockquote>Write the content (blob) of a revision into a binary
 file in the filesystem. The file will be published at the relative
@@ -339,9 +363,11 @@ parameter; Write the content to this path only.</td>
 </dd>
 </dl>
 </td></tr>
-</table><p>
+</table>
+<p>
 <b>Private Methods</b>:<br>
-</p><table width="100%">
+</p>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="publish::delete_multiple_files" id="publish::delete_multiple_files"><font size="+1" weight="bold">publish::delete_multiple_files</font></a></td></tr><tr><td>
 <blockquote>Delete the specified URL from the filesystem, for all
 revisions</blockquote><dl>
@@ -355,7 +381,8 @@ revisions</blockquote><dl>
 </dd>
 </dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="publish::foreach_publish_path" id="publish::foreach_publish_path"><font size="+1" weight="bold">publish::foreach_publish_path</font></a></td></tr><tr><td>
 <blockquote>Execute some Tcl code for each root path in the
 PublishRoots parameter</blockquote><dl>
@@ -379,7 +406,8 @@ path instead of the paths specified in the INI file</td>
 </dd>
 </dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="publish::get_main_item_id" id="publish::get_main_item_id"><font size="+1" weight="bold">publish::get_main_item_id</font></a></td></tr><tr><td>
 <blockquote>Get the main item id from the top of the
 stack</blockquote><dl>
@@ -387,7 +415,8 @@ stack</blockquote><dl>
 </dd>
 </dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="publish::get_main_revision_id" id="publish::get_main_revision_id"><font size="+1" weight="bold">publish::get_main_revision_id</font></a></td></tr><tr><td>
 <blockquote>Get the main item revision from the top of the
 stack</blockquote><dl>
@@ -395,7 +424,8 @@ stack</blockquote><dl>
 </dd>
 </dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="publish::handle_item" id="publish::handle_item"><font size="+1" weight="bold">publish::handle_item</font></a></td></tr><tr><td>
 <blockquote>Render an item either by looking it up in the the
 temporary cache, or by using the appropriate mime handler. Once the
@@ -438,11 +468,12 @@ item may be dynamically referenced, f.ex. using the
 <td align="right"><code>html</code></td><td align="left">Extra HTML parameters to be passed to the item
 handler, in format {name value name value ...}</td>
 </tr>
-</table></dd><dt><b>See Also:</b></dt><dd>proc - <a href="publish__handle.html#publish::handle::image">publish::handle::image</a><br><a href="publish__handle.html#publish::handle::text">publish::handle::text</a><br><a href="publish">publish::handle_binary_file</a><br>
+</table></dd><dt><b>See Also:</b></dt><dd>proc - <a href="publish__handle">publish::handle::image</a><br><a href="publish__handle">publish::handle::text</a><br><a href="publish">publish::handle_binary_file</a><br>
 </dd>
 </dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="publish::html_args" id="publish::html_args"><font size="+1" weight="bold">publish::html_args</font></a></td></tr><tr><td>
 <blockquote>Concatenate a list of name-value pairs as returned by
 <tt>set_to_pairs</tt> into a list of { name=value}
@@ -457,7 +488,8 @@ pairs</blockquote><dl>
 </dd>
 </dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="publish::merge_with_template" id="publish::merge_with_template"><font size="+1" weight="bold">publish::merge_with_template</font></a></td></tr><tr><td>
 <blockquote>Merge the item with its template and return the
 resulting HTML. This proc is simlar to
@@ -482,7 +514,8 @@ parser, in format {name value name value ...}</td>
 </dd>
 </dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="publish::pop_id" id="publish::pop_id"><font size="+1" weight="bold">publish::pop_id</font></a></td></tr><tr><td>
 <blockquote>Pop the item_id and the revision_id off the top of the
 stack. Clear the temporary item cache if the stack becomes
@@ -492,7 +525,8 @@ already empty</dd><dt><b>See Also:</b></dt><dd>proc - <a href="publish">publish:
 </dd>
 </dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="publish::process_tag" id="publish::process_tag"><font size="+1" weight="bold">publish::process_tag</font></a></td></tr><tr><td>
 <blockquote>Process a <tt>child</tt> or <tt>relation</tt> tag. This
 is a helper proc for the tags, which acts as a wrapper for
@@ -514,7 +548,8 @@ is a helper proc for the tags, which acts as a wrapper for
 </dd>
 </dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="publish::push_id" id="publish::push_id"><font size="+1" weight="bold">publish::push_id</font></a></td></tr><tr><td>
 <blockquote>Push an item id on top of stack. This proc is used to
 store state between <tt>child</tt>, <tt>relation</tt> and
@@ -535,7 +570,8 @@ If missing, live revision will most likely be used</td>
 </dd>
 </dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="publish::render_subitem" id="publish::render_subitem"><font size="+1" weight="bold">publish::render_subitem</font></a></td></tr><tr><td>
 <blockquote>Render a child/related item and return the resulting
 HTML, stripping off the headers.</blockquote><dl>
@@ -588,7 +624,8 @@ order to prevent infinite recursion.</td>
 </dd>
 </dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="publish::set_to_pairs" id="publish::set_to_pairs"><font size="+1" weight="bold">publish::set_to_pairs</font></a></td></tr><tr><td>
 <blockquote>Convert an ns_set into a list of name-value pairs, in
 form {name value name value ...}</blockquote><dl>
@@ -608,7 +645,8 @@ form {name value name value ...}</blockquote><dl>
 ns_set</dd>
 </dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="publish::track_publish_status" id="publish::track_publish_status"><font size="+1" weight="bold">publish::track_publish_status</font></a></td></tr><tr><td>
 <blockquote>Scheduled proc which keeps the publish status
 updated</blockquote><dl>
@@ -616,7 +654,8 @@ updated</blockquote><dl>
 </dd>
 </dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="publish::write_multiple_blobs" id="publish::write_multiple_blobs"><font size="+1" weight="bold">publish::write_multiple_blobs</font></a></td></tr><tr><td>
 <blockquote>Write the content of some revision to multiple
 publishing roots.</blockquote><dl>
@@ -640,7 +679,8 @@ publishing roots.</blockquote><dl>
 </dd>
 </dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="publish::write_multiple_files" id="publish::write_multiple_files"><font size="+1" weight="bold">publish::write_multiple_files</font></a></td></tr><tr><td>
 <blockquote>Write a relative URL to the multiple publishing
 roots.</blockquote><dl>
@@ -656,11 +696,12 @@ roots.</blockquote><dl>
 </td><td align="left">A string of text to be written to the URL</td>
 </tr>
 </table>
-</dd><dt><b>See Also:</b></dt><dd>proc - <a href="publish">publish::get_publish_roots</a><br><a href="publish">publish::write_multiple_blobs</a><br><a href="template__util.html#template::util::write_file">template::util::write_file</a><br>
+</dd><dt><b>See Also:</b></dt><dd>proc - <a href="publish">publish::get_publish_roots</a><br><a href="publish">publish::write_multiple_blobs</a><br><a href="template__util">template::util::write_file</a><br>
 </dd>
 </dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name=""></a></td></tr><tr><td>
 <blockquote>Implements the <tt>child</tt> tag which renders a child
 item. See the Developer Guide for more information.<br>
@@ -675,7 +716,8 @@ The child tag format is
 </tr></table>
 </dd></dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name=""></a></td></tr><tr><td>
 <blockquote>Implements the <tt>content</tt> tag which renders the
 content of the current item. See the Developer Guide for more
@@ -690,7 +732,8 @@ tag.</blockquote><dl><dd>
 </tr></table>
 </dd></dl>
 </td></tr>
-</table><table width="100%">
+</table>
+<table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name=""></a></td></tr><tr><td>
 <blockquote>Implements the <tt>relation</tt> tag which renders a
 related item. See the Developer Guide for more information.<br>
@@ -705,6 +748,6 @@ The relation tag format is
 </tr></table>
 </dd></dl>
 </td></tr>
-</table><p align="right">
+</table>
+<p align="right">
 <font color="red">*</font> indicates required</p>
-</body>

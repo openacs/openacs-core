@@ -3,7 +3,6 @@
 <property name="doc(title)"></property>
 <master>
 
-<body>
 ACS Service Contract Overview by Neophytos Demetriou
 (k2pts\@yahoo.com) and Kapil Thangavelu (k_vertigo\@yahoo.com) Goals
 - To increase inter-application code reuse by designating
@@ -21,4 +20,3 @@ An entity that defines the specification of a contract and
 registers it with the repository. Provider - Provides an
 implementation of the contract. Dependant - Something that uses a
 contract.
-</body>

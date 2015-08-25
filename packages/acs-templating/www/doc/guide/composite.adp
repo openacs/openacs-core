@@ -2,25 +2,32 @@
 <property name="context">{/doc/acs-templating {Templating}} {Templating System User Guide: Composite Page}</property>
 <property name="doc(title)">Templating System User Guide: Composite Page</property>
 <master>
-
-<body>
-<h2>Assembling a Page from Components</h2><a href="..">Templating System</a> : <a href="../developer-guide.html">Developer Guide</a> : <a href="">User
-Guide</a> : Composite
+<h2>Assembling a Page from Components</h2>
+<a href="..">Templating System</a>
+ : <a href="../developer-guide.html">Developer Guide</a>
+ : <a href="">User
+Guide</a>
+ : Composite
 <p>A typical page served to a browser is made up from several
 component pages. The idea is to have reusable parts (widgets,
 skins), a bit like in a programming language where code that may be
 used more than once makes up a procedure. The complete page may
-have the following structure.</p><center><table cellpadding="5" cellspacing="0"><tr><td bgcolor="#FFCCCC">
+have the following structure.</p>
+<center><table cellpadding="5" cellspacing="0"><tr><td bgcolor="#FFCCCC">
 <b>master</b><table cellpadding="5" cellspacing="8">
 <tr><td bgcolor="#CCCCFF" valign="top"><b>top</b></td></tr><tr><td height="120" bgcolor="#CCCC99" valign="top">
 <b>root (main)</b><p> </p><table cellpadding="5" cellspacing="8"><tr><td width="120" bgcolor="#CCFFCC" valign="top"><b>widget</b></td></tr></table>
 </td></tr><tr><td bgcolor="#99CCFF" valign="top"><b>bottom</b></td></tr>
 </table>
-</td></tr></table></center><p>The "root" page includes the "widget" and wraps itself in the
-"master". That page in turn includes the "top" and "bottom".</p><h3>Overall structure</h3><p>The parts are put together with the <code>&lt;<a href="../tagref/include.html">include</a>&gt;</code> tag (in the diagram
+</td></tr></table></center>
+<p>The "root" page includes the "widget" and wraps itself in the
+"master". That page in turn includes the "top" and "bottom".</p>
+<h3>Overall structure</h3>
+<p>The parts are put together with the <code>&lt;<a href="../tagref/include.html">include</a>&gt;</code> tag (in the diagram
 below, black links going right) and the <code>&lt;<a href="../tagref/master.html">master</a>&gt;</code> tag (brown link going
 left); and the concept is similar to a procedure call. The
-structure of the composite page looks like this as a graph.</p><center><table cellpadding="0" cellspacing="0" border="0">
+structure of the composite page looks like this as a graph.</p>
+<center><table cellpadding="0" cellspacing="0" border="0">
 <tr>
 <td colspan="10" rowspan="3"></td><th colspan="7">root</th>
 </tr><tr><td><img src="/image/clear.gif" width="1" height="5"></td></tr><tr>
@@ -46,19 +53,23 @@ structure of the composite page looks like this as a graph.</p><center><table ce
 </tr><tr><td><img src="/image/clear.gif" width="1" height="5"></td></tr><tr>
 <th colspan="7">top</th><th colspan="3">bottom</th>
 </tr>
-</table></center><p>Any (sub)page can have 0 or 1 master and 0 or more included
+</table></center>
+<p>Any (sub)page can have 0 or 1 master and 0 or more included
 pages. Each page has its own <em>separate</em> scope for variables.
 Arguments can be passed to dependent pages as attributes to
 <code>&lt;inlcude&gt;</code>, or as properties to
 <code>&lt;master&gt;</code>. The directed graph of pages will often
-be be acyclic, as in the example, but this is not required.</p><h3>Evaluation Order</h3><p>Sometimes it is of interest in which order the different parts
+be be acyclic, as in the example, but this is not required.</p>
+<h3>Evaluation Order</h3>
+<p>Sometimes it is of interest in which order the different parts
 are evaluated. The "code" always runs first, followed by the
 template. The <code>&lt;inlcude&gt;</code> tag causes the subpage
 to be evaluated at this point of the template, and the rest of the
 including template is evaluated after that's done. This is like a
 procedure call. In contrast, the <code>&lt;master&gt;</code> tag is
 deferred until the whole slave page ("root" in the example) is
-done. For our example, the following order results.</p><center><table>
+done. For our example, the following order results.</p>
+<center><table>
 <tr>
 <td colspan="3" bgcolor="#CCCC99"><b>root.tcl</b></td><td></td>
 </tr><tr>
@@ -86,12 +97,16 @@ done. For our example, the following order results.</p><center><table>
 </tr><tr>
 <td colspan="2" bgcolor="#FFCCCC"><b>master.adp</b></td><td>(end)</td>
 </tr>
-</table></center><p>Here we assume the ACS/Tcl situation, where the "code" is a tcl
-script in a .tcl file. The template is a .adp file.</p><h3>Variants of Page Nodes</h3><p>The graph of the overall structure has five nodes, shown as a
+</table></center>
+<p>Here we assume the ACS/Tcl situation, where the "code" is a tcl
+script in a .tcl file. The template is a .adp file.</p>
+<h3>Variants of Page Nodes</h3>
+<p>The graph of the overall structure has five nodes, shown as a
 code/template pair. This is the standard situation, where the
 "code" part sets up datasources and the template uses them. In some
 situations, the following facility can help to reduce duplication
-or to handle special situations more effectively.</p><p>The "code" part can divert to another page by calling
+or to handle special situations more effectively.</p>
+<p>The "code" part can divert to another page by calling
 <code>template::set_file</code> to modify the file name stub of the
 page being processed. For convenience,
 <code>ad_return_template</code> can be used with the same effect;
@@ -101,7 +116,8 @@ the flow of control; the script runs to completion. If at the end
 the name is changed, the template of the original page is not used;
 instead the new page is processed, code first, then template. As
 that page's code can call <code>set_file</code> again, we get the
-following picure.</p><center><table cellspacing="0" cellpadding="0" border="0">
+following picure.</p>
+<center><table cellspacing="0" cellpadding="0" border="0">
 <tr>
 <td bgcolor="#FFCC99">code A</td><td width="1"><img src="/images/clear.gif"></td><td align="right"><font color="gray">(template A
 ignored)</font></td>
@@ -111,12 +127,15 @@ ignored)</font></td>
 </tr><tr><td align="center"><img src="down.gif" width="7" height="15"></td></tr><tr><td align="center">...</td></tr><tr><td align="center"><img src="down.gif" width="7" height="15"></td></tr><tr>
 <td bgcolor="#FFCC99" align="center">code Z</td><td></td><td bgcolor="#FFCC99" align="center">template Z</td>
 </tr>
-</table></center><p>This assumes page "A" was originally wanted. An arrow (<img src="down.gif" width="7" height="15" align="top">) exits from code
+</table></center>
+<p>This assumes page "A" was originally wanted. An arrow (<img src="down.gif" width="7" height="15" align="top">) exits from code
 which calls <code>template::set_file</code> (directly or through
 <code>ad_return_template</code>). All scripts and the template are
 executed in the <em>same</em> scope, i.e., they share
-variables.</p><p>Furthermore either of the final files can be omitted if it is
-not needed, giving three basic possibilities.</p><center><table cellspacing="0" cellpadding="0" border="0">
+variables.</p>
+<p>Furthermore either of the final files can be omitted if it is
+not needed, giving three basic possibilities.</p>
+<center><table cellspacing="0" cellpadding="0" border="0">
 <tr>
 <td width="50">a)</td><td bgcolor="#FFCC99" align="center">code</td><td width="1"><img src="/images/clear.gif"></td><td bgcolor="#FFCC99" align="center">template</td>
 </tr><tr><td> </td></tr><tr>
@@ -124,6 +143,8 @@ not needed, giving three basic possibilities.</p><center><table cellspacing="0" 
 </tr><tr><td> </td></tr><tr>
 <td>c)</td><td bgcolor="#FFCC99" align="center">code</td><td></td><td><font color="gray">(no template)</font></td>
 </tr>
-</table></center><p>It is an error to omit both parts; this is a special case
-intended to speed up debugging.</p><hr><a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>
-</body>
+</table></center>
+<p>It is an error to omit both parts; this is a special case
+intended to speed up debugging.</p>
+<hr>
+<a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>

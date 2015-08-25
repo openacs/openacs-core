@@ -2,18 +2,29 @@
 <property name="context">{/doc/acs-content-repository {Content Repository}} {Package: content_symlink}</property>
 <property name="doc(title)">Package: content_symlink</property>
 <master>
-
-<body>
-<h2>content_symlink</h2><p>
+<h2>content_symlink</h2>
+<p>
 <a href="../index.html">Content Repository</a> :
-content_symlink</p><hr><ul>
+content_symlink</p>
+<hr>
+<ul>
 <li><a href="#overview">Overview</a></li><li><a href="#related">Related Objects</a></li><li><a href="#api">API</a></li>
-</ul><p> </p><h3><a name="overview">Overview</a></h3><p>Symlinks are pointers to items within the content repository.
-They are simply used to create links between content items.</p><p> </p><h3><a name="related">Related Objects</a></h3>
+</ul>
+<p> </p>
+<h3><a name="overview">Overview</a></h3>
+<p>Symlinks are pointers to items within the content repository.
+They are simply used to create links between content items.</p>
+<p> </p>
+<h3><a name="related">Related Objects</a></h3>
+
 See also: content_item, content_folder
-<p> </p><h3><a name="api">API</a></h3><ul><li>
+<p> </p>
+<h3><a name="api">API</a></h3>
+<ul><li>
 <font size="+1">Function:</font>
-content_symlink.is_symlink</li></ul><p>Determines if the item is a symlink</p><table cellpadding="3" cellspacing="0" border="0">
+content_symlink.is_symlink</li></ul>
+<p>Determines if the item is a symlink</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr>
@@ -28,8 +39,12 @@ function is_symlink (
 </tt></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_symlink.new, content_symlink.resolve</td>
 </tr>
-</table><p> </p><ul><li>
-<font size="+1">Function:</font> content_symlink.new</li></ul><p>Create a new symlink, linking two items</p><table cellpadding="3" cellspacing="0" border="0">
+</table>
+<p> </p>
+<ul><li>
+<font size="+1">Function:</font> content_symlink.new</li></ul>
+<p>Create a new symlink, linking two items</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr>
@@ -76,8 +91,12 @@ function new (
 </tt></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>acs_object.new, content_item.new, content_symlink.resolve</td>
 </tr>
-</table><p> </p><ul><li>
-<font size="+1">Function:</font> content_symlink.resolve</li></ul><p>Resolves the symlink and returns the target item id.</p><table cellpadding="3" cellspacing="0" border="0">
+</table>
+<p> </p>
+<ul><li>
+<font size="+1">Function:</font> content_symlink.resolve</li></ul>
+<p>Resolves the symlink and returns the target item id.</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr>
@@ -93,9 +112,13 @@ function resolve (
 </tt></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_symlink.new, content_symlink.is_symlink</td>
 </tr>
-</table><p> </p><ul><li>
+</table>
+<p> </p>
+<ul><li>
 <font size="+1">Function:</font>
-content_symlink.resolve_content_type</li></ul><p>Gets the content type of the target item.</p><table cellpadding="3" cellspacing="0" border="0">
+content_symlink.resolve_content_type</li></ul>
+<p>Gets the content type of the target item.</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Michael Pih</td>
 </tr><tr>
@@ -111,9 +134,13 @@ function resolve_content_type (
 </tt></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_symlink.resolve</td>
 </tr>
-</table><p> </p><ul><li>
-<font size="+1">Procedure:</font> content_symlink.copy</li></ul><p>Copies the symlink itself to another folder, without resolving
-the symlink</p><table cellpadding="3" cellspacing="0" border="0">
+</table>
+<p> </p>
+<ul><li>
+<font size="+1">Procedure:</font> content_symlink.copy</li></ul>
+<p>Copies the symlink itself to another folder, without resolving
+the symlink</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1">
@@ -131,8 +158,12 @@ procedure copy (
 </tt></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_symlink.new, content_item.copy</td>
 </tr>
-</table><p> </p><ul><li>
-<font size="+1">Procedure:</font> content_symlink.delete</li></ul><p>Deletes the symlink</p><table cellpadding="3" cellspacing="0" border="0">
+</table>
+<p> </p>
+<ul><li>
+<font size="+1">Procedure:</font> content_symlink.delete</li></ul>
+<p>Deletes the symlink</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1"><tr>
@@ -145,7 +176,8 @@ procedure delete (
 </tt></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_symlink.new, acs_object.delete</td>
 </tr>
-</table><p> </p>
+</table>
+<p> </p>
+
 Last Modified: $Id: symlink.html,v 1.2 2014/10/27 16:39:14 victorg
 Exp $
-</body>

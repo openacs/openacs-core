@@ -2,36 +2,47 @@
 <property name="context">{/doc/acs-templating {Templating}} {The ACS Templating System for Web Designers}</property>
 <property name="doc(title)">The ACS Templating System for Web Designers</property>
 <master>
-
-<body>
-<h2>The ACS Templating System for Web Designers</h2><h3>Reading</h3><ul>
+<h2>The ACS Templating System for Web Designers</h2>
+<h3>Reading</h3>
+<ul>
 <li>ACS Templating System <a href="../index.html">documents</a>
 </li><li>Templating System <a href="../../demo/">demo</a>
 </li><li>Read beginning and end of <a href="http://acs40.arsdigita.com/doc/developer-guide/templates.html">Using
 Templates in ACS 4</a>
 </li>
-</ul><h3>Sections</h3><ol>
+</ul>
+<h3>Sections</h3>
+<ol>
 <li><a href="#overview">Overview</a></li><li><a href="#exercises">Exercises</a></li>
-</ol><h3><a name="overview" id="overview">Overview</a></h3><p>This series of exercises is meant as a learning tool for any web
+</ol>
+<h3><a name="overview" id="overview">Overview</a></h3>
+<p>This series of exercises is meant as a learning tool for any web
 graphic designer wanting or needing to understand how the ACS
 Templating System, or ATS, works, and how to use it in building web
-pages.</p><p>First, perhaps an explanation of what the templating system does
+pages.</p>
+<p>First, perhaps an explanation of what the templating system does
 will help us understand how it works. An ATS template itself serves
 as a reusable, unchanging framework that delivers dynamic data. The
 advantage to this is something you probably already realize: you
 need only build and edit a few pages to maintain a consistent
 presentation style while accomodating numerous permutaions of
-changing data.</p><p>This training module will teach largely by exercise and example,
+changing data.</p>
+<p>This training module will teach largely by exercise and example,
 but you should also refer regularly to the <a href="../index.html">ATS documents</a> provided and more specific
-pointers will be given to help you out along the way.</p><p>Okay, let's get to the nitty gritty.</p><h3><a name="exercises" id="exercises">Exercises</a></h3><p>The basic building block of dynamic data in a template is the
+pointers will be given to help you out along the way.</p>
+<p>Okay, let's get to the nitty gritty.</p>
+<h3><a name="exercises" id="exercises">Exercises</a></h3>
+<p>The basic building block of dynamic data in a template is the
 onevalue variable. A <a href="../tags/variable.html">variable</a>
 is simply a tag used in your <code>.adp</code> file that holds data
 supplied by another source file; that source will probably be
 another file of the same name with a <code>.tcl</code> extension.
-Variable tags come in three basic formats, as <a href="../tags/list.html">lists</a>, <a href="../tags/multiple.html">multiples</a> and onevalues.</p><p>
+Variable tags come in three basic formats, as <a href="../tags/list.html">lists</a>, <a href="../tags/multiple.html">multiples</a> and onevalues.</p>
+<p>
 <b>Exercise 1: Onevalues, onelists, multilists and
 multirows</b><br>
-(nestedlists, too?)</p><p>Let's first take a look at some list and variable tags in
+(nestedlists, too?)</p>
+<p>Let's first take a look at some list and variable tags in
 action. Open up another browser and look at <a href="list-and-var-sample.txt">this page</a>, which is a text rendition
 of the <code>/ats/doc/exercise/list-and-var-sample.tcl</code> page
 we'll be sourcing our data from; at the top of the page you'll find
@@ -46,7 +57,8 @@ which supplies the data to be shown, and one .adp file specifying
 the format of it's presentation. Compare what you see in
 <code>list-and-var-sample.acs</code> with its supporting .adp file
 and make note of the textual and structural differences between the
-two, specifically:</p><ul>
+two, specifically:</p>
+<ul>
 <li>
 <a href="../tags/variable.html">variables</a> in the
 <code>.adp</code> file are designated with "\@" markers, like the
@@ -68,8 +80,10 @@ name for each row contained in the multirow
 of the multirow&gt;.&lt;name of a field in the multirow&gt;\@, and
 can only be called within their respective
 <code>&lt;multiple&gt;</code> tags</li>
-</ul><p>You probably noticed some other funky looking tags, too, but
-ignore those for now.</p><p>Now since the variable marker <code>\@name\@</code> is set in
+</ul>
+<p>You probably noticed some other funky looking tags, too, but
+ignore those for now.</p>
+<p>Now since the variable marker <code>\@name\@</code> is set in
 <code>list-and-var-sample.tcl</code>, you can go ahead and edit
 that file to replace "<code>(Your Name)</code>" with whatever your
 name really is (be sure to leave the quotes); if you wish,edit some
@@ -77,7 +91,8 @@ of the other values to personalize the page. You'll see your
 changes take effect upon saving the .tcl file and reloading
 <code>list-and-var-sample.acs</code>. In general, though, you
 should probably not be editing .tcl files unless you have a pretty
-good sense of their innerworkings.</p><p>Okay, now go back to the web browser in which you are viewing
+good sense of their innerworkings.</p>
+<p>Okay, now go back to the web browser in which you are viewing
 <code>list-and-var-sample.acs</code> and change the ".acs"
 extension to "<a href="list-and-var-sample.dat">.dat</a>". This
 page displays a view of datasources generated in the .tcl file that
@@ -87,16 +102,20 @@ so you can view this information in either the .dat page or
 straight from the .tcl file). Go ahead and make use of the
 datasource variables not already included in the .adp file;
 specifically, change <code>list-and-var-sample.adp</code> so
-that:</p><ul>
+that:</p>
+<ul>
 <li>your personal phone number information is included</li><li>each of your friends' names serves as a hyperlink that allows
 the viewer to email your friend</li><li>a listing of recently watched movies and your reactions to them
 follows after the information about your friends</li><li>also, note that the use of any variable tags referring to
 variables not declared in the .tcl file will break the .acs
 page</li>
-</ul><p>Congratulations! You've just created a personalized web page
+</ul>
+<p>Congratulations! You've just created a personalized web page
 describing friends you've never met and movies you've possibly
-never seen.</p><p><b>Exercise Two: &lt;if&gt; and &lt;else&gt;, the conditional
-tags</b></p><p>Dynamic data implies a changing page, and also changing
+never seen.</p>
+<p><b>Exercise Two: &lt;if&gt; and &lt;else&gt;, the conditional
+tags</b></p>
+<p>Dynamic data implies a changing page, and also changing
 presentation. The <a href="../tags/if.html">&lt;if&gt;</a> and
 &lt;else&gt; tags allow you to alter the format of your page to
 accomodate data changes. The function of &lt;if&gt; is
@@ -105,7 +124,8 @@ straightforward enough: given a condition -- such as \@x\@ equals 5
 closing &lt;if&gt; tags will be displayed if and only if \@x\@ does
 in fact equal 5. A complete listing of currently supported
 conditions and some brief explanatory notes can be found <a href="../tags/if.html">here</a>. Also, a few more things to keep in
-mind:</p><ul>
+mind:</p>
+<ul>
 <li>in Tcl all variables, even numbers, are stored as text strings
 with quantitative values, so conditions like less than, greater
 than, and (not) between can also be used with text to determine
@@ -118,7 +138,8 @@ between 2 6&gt; will test true</li><li>
 <code>\@a\@</code> is greater than or equal to <code>\@b\@</code><i>and</i> less than or equal to <code>\@c\@</code>; so <code>&lt;if
 \@x\@ between 4 2&gt;</code> will always test false</li><li>the "in" condition uses a regular expression check (or will it?
 <font color="red">come back here and revise</font>)</li>
-</ul><p>Now, alter a few of the &lt;if&gt; tags in
+</ul>
+<p>Now, alter a few of the &lt;if&gt; tags in
 <code>list-and-var-samle.adp</code> and add a few of your own.
 Specifically, add one &lt;if&gt; and &lt;else&gt; combination so
 that the friend description reads "likes chocolate" when
@@ -127,21 +148,26 @@ when <code>likes_chocolate_p</code> is "f", or "probably like
 chocolate" if <code>likes_chocolate_p</code> is an empty string.
 Also, add one &lt;if&gt;, and one &lt;if&gt; only, so that <i>a</i>
 is appropriately changed to <i>an</i> for any 11-, 18- or 80- to
-89-year olds.</p><p><b>Exercise Three: The &lt;master&gt; and &lt;slave&gt; tags --
-a call to the dominatrix in you</b></p><p>The <a href="../tags/master.html">&lt;master&gt;</a> and
+89-year olds.</p>
+<p><b>Exercise Three: The &lt;master&gt; and &lt;slave&gt; tags --
+a call to the dominatrix in you</b></p>
+<p>The <a href="../tags/master.html">&lt;master&gt;</a> and
 <a href="../tags/slave.html">&lt;slave&gt;</a> tags allow you to
 maintain a consistent style and format among pages without having
 to edit each page individually. To get a sense of what these tags
 do and how they work, go ahead and run through this short <a href="slave-sample.acs">demonstration</a>, and then use a text editor to
 view the related .adp files. Also, read <a href="../guide/master.html">this discussion</a> on the use of master
-pages.</p><p>One thing you may have noticed earlier about
+pages.</p>
+<p>One thing you may have noticed earlier about
 <code>list-and-var-sample.adp</code> is that it lacks the standard
 &lt;html&gt;, &lt;head&gt;, &lt;title&gt; and &lt;body&gt; tags.
 This is because <code>list-and-var-sample.adp</code> is, as
 indicated by the &lt;master&gt; tag at the top of the file, also a
-slave section, contained within <code>master-sample.adp</code>.</p><p>Let me stress a few key points you might have already picked up
+slave section, contained within <code>master-sample.adp</code>.</p>
+<p>Let me stress a few key points you might have already picked up
 on from the demonstration and upon examining the .adp files, and
-add a few pointers:</p><ul>
+add a few pointers:</p>
+<ul>
 <li>the &lt;slave&gt; tag indicates where on the master page the
 slave section is inserted</li><li>slave pages indicate the source of the master file with the
 &lt;master&gt; tag, referring by the file name only, and not
@@ -162,24 +188,30 @@ page</li><li>if a variable set in the Tcl file of a master page shares the
 same name as a variable declared within the slave section's
 &lt;property&gt; tag, the master value overrides the slave's
 (unless the Tcl code checks for pre-existing information)</li>
-</ul><p>Now that the secrets of &lt;master&gt; and &lt;slave&gt; have
+</ul>
+<p>Now that the secrets of &lt;master&gt; and &lt;slave&gt; have
 been revealed, it's time to put a little of your newfound knowledge
 to use. Open up <a href="form-sample.acs"><code>form-sample.adp</code></a>, a standalone,
 independently formatted html page, and enslave it to the mastery of
 of your personal web page. It would also be nice if you were to
-label the newly inserted form with some slave-specific title.</p><p>
+label the newly inserted form with some slave-specific title.</p>
+<p>
 <b>Exercise Four: The functions of
 &lt;formtemplate&gt;</b><br>
-</p><p>Creating forms with ATS can be as simple as inserting two tags
+</p>
+<p>Creating forms with ATS can be as simple as inserting two tags
 into a page. Try this: open <code>form-sample.adp</code> and add
-the two following ATS tags:</p><blockquote><code><tt><a href="../tags/formtemplate.html">&lt;formtemplate
-id="add_entry"&gt;&lt;/formtemplate&gt;</a></tt></code></blockquote><p>Save the page and reload it. You should see now see a big
+the two following ATS tags:</p>
+<blockquote><code><tt><a href="../tags/formtemplate.html">&lt;formtemplate
+id="add_entry"&gt;&lt;/formtemplate&gt;</a></tt></code></blockquote>
+<p>Save the page and reload it. You should see now see a big
 baby-blue form block; this is the ATS default style for form
 presentation. Aside from requiring no HTML code, the
 &lt;formtemplate&gt; default has the added convenience of automated
 entry validation with appropriate correction requests. Test this
 out by trying to submit a form without including first or last name
-or gender information.</p><p>However, if ever you wish to build a form according to the
+or gender information.</p>
+<p>However, if ever you wish to build a form according to the
 mandates of your own taste, &lt;formtemplate&gt; also leaves you
 this option. Manually stylizing forms with ATS requires you to
 learn only two more tags, <a href="../tags/formwidget.html">&lt;formwidget&gt;</a> and <a href="../tags/formgroup.html">&lt;formgroup&gt;</a>. Browse through the
@@ -190,12 +222,14 @@ used &lt;select&gt; or &lt;input&gt; in plain HTML, save for
 &lt;input&gt; checkboxes and radio buttons, which should be
 replaced with the &lt;formgroup&gt; tag. When working with ATS you
 should probably refrain from using plain &lt;input&gt; and
-&lt;select&gt; tags altogether.</p><p>You may have already noticed a few &lt;formwidget&gt; and
+&lt;select&gt; tags altogether.</p>
+<p>You may have already noticed a few &lt;formwidget&gt; and
 &lt;formgroup&gt; in use within the block of HTML and ATS text
 commented out in <code>form-sample.adp</code>. Go ahead and put
 that block of HTML/ATS code into action by removing the comment tag
 wrapper and deleting the <code>&lt;/formtemplate&gt;</code> tag;
-you should now see a hand-built version of the same form.</p><p>There are noticeable differences between the two form templates,
+you should now see a hand-built version of the same form.</p>
+<p>There are noticeable differences between the two form templates,
 most obviously the lack of background color and a few missing entry
 fields in the manually constructed one. Maybe not so noticeable is
 the grouping of entry widgets into one HTML table row (check out
@@ -206,15 +240,19 @@ is constructed in <code>form-sample.adp</code>. Note specifically:
 &lt;formgroup&gt; is somewhat similar to the &lt;multiple&gt; tag
 in that the block of ATS code contained within the
 &lt;formgroup&gt; tags will be parsed into plain HTML once for each
-&lt;formgroup&gt; value option.</p><p>Practice using &lt;formwidget&gt; and &lt;formgroup&gt; by
+&lt;formgroup&gt; value option.</p>
+<p>Practice using &lt;formwidget&gt; and &lt;formgroup&gt; by
 adding the missing entry fields manually into the form. Make free
 use of any HTML properties to streamline the form to your liking.
 If you can't remember what those fields were you can replace the
 closing &lt;/formtemplate&gt; tag to recover the default format, or
 make use of the .dat datasource page to view your developer's
-description and comments about the form.</p><p>Also, try customizing your form's error response/correction
+description and comments about the form.</p>
+<p>Also, try customizing your form's error response/correction
 request text. You'll need to use the <a href="../tags/formerror.html">&lt;formerror&gt;</a> tag, an example of
-which can be found under the gender formwidget.</p><p><b>Exercise Five: more fun with multirows</b></p><p>Now that you've confidently added the conditional &lt;if&gt; and
+which can be found under the gender formwidget.</p>
+<p><b>Exercise Five: more fun with multirows</b></p>
+<p>Now that you've confidently added the conditional &lt;if&gt; and
 &lt;else&gt; tags to your ATS toolbelt, it's time to put those
 tools to good use in formatting multirow data. First, read the
 <a href="../tags/multiple.html">docs</a> to learn about the
@@ -229,7 +267,8 @@ so it need not be used within &lt;multiple&gt; tags and in many
 cases should not be used within &lt;multiple&gt; tags. Why is this?
 (Take a look at how <code>\@address:rowcount\@</code> is used.) Now
 make the following improvements to the address book listing you
-found in <code>form-sample.acs</code>:</p><ul>
+found in <code>form-sample.acs</code>:</p>
+<ul>
 <li>stripe the table with banded rows of alternating grey and
 white, or some other color scheme of your preference</li><li>use the <code>startrow</code> attribute so that the address
 book listing begins at a rownumber determined by the Tcl file code
@@ -241,6 +280,8 @@ row of the set to be displayed</li><li>the links should only appear when necessa
 pointing towards the next set of rows should not appear if the user
 is already viewing rows 1-5 of 5 total rows.</li>
 </ul></li>
-</ul><hr><address><a href="mailto:shuynh\@arsdgita.com">shuynh\@arsdigita.com</a></address><!-- hhmts start -->
+</ul>
+<hr>
+<address><a href="mailto:shuynh\@arsdgita.com">shuynh\@arsdigita.com</a></address>
+<!-- hhmts start -->
 Last modified: Fri Nov 17 10:14:44 EST 2000 <!-- hhmts end -->
-</body>

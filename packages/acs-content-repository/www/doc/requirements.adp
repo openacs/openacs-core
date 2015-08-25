@@ -2,20 +2,28 @@
 <property name="context">{/doc/acs-content-repository {Content Repository}} {Content Repository Requirements}</property>
 <property name="doc(title)">Content Repository Requirements</property>
 <master>
-
-<body>
 <h2>Content Repository Requirements</h2>
-Karl Goldstein (<a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a>)<br><a href="#history">Revision History</a><h3>VI.A Requirements: Data Model</h3><p><a name="item" id="item"><b>5.0 MIME Types</b></a></p><p>The content repository must be able to store objects in any
+
+Karl Goldstein (<a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a>
+)<br>
+<a href="#history">Revision History</a>
+<h3>VI.A Requirements: Data Model</h3>
+<p><a name="item" id="item"><b>5.0 MIME Types</b></a></p>
+<p>The content repository must be able to store objects in any
 format, both text and binary. MIME types provide a standard set of
 codes for identifying the file format of each content item. For the
 purpose of data integrity, the repository must have a canonical
-list of MIME types that may be assigned to content items.</p><p><a name="type" id="type"><b>10.0 Content Types</b></a></p><p>A <em>content type</em> is characterized by a set of attributes
+list of MIME types that may be assigned to content items.</p>
+<p><a name="type" id="type"><b>10.0 Content Types</b></a></p>
+<p>A <em>content type</em> is characterized by a set of attributes
 that may be associated with a text or binary content object.
 Attributes are stored separately from their associated content
 object, and as such may be indexed, searched, sorted and retrieved
 independently. For example, attributes of a press release may
-include a title, byline, and publication date.</p><p>The data model must support storage of descriptive information
-for each content type:</p><blockquote>
+include a title, byline, and publication date.</p>
+<p>The data model must support storage of descriptive information
+for each content type:</p>
+<blockquote>
 <p>
 <b>10.10</b> Content types must be associated with unique
 keyword identifiers, such as <tt>press_release</tt>, so they can be
@@ -45,13 +53,17 @@ manual may include the tokens <b>next</b>, <b>previous</b> and
 <b>see_also</b>. Each type of relationship may include a minimum
 and/or maximum number of relationships of this type that are
 required for an item to be published.</p>
-</blockquote><p><a name="item" id="item"><b>20.0 Content Items</b></a></p><p>Items are the fundamental building blocks of the content
+</blockquote>
+<p><a name="item" id="item"><b>20.0 Content Items</b></a></p>
+<p>Items are the fundamental building blocks of the content
 repository. Each item represents a distinct text or binary content
 object that is publishable to the web, such as an article, report,
 message or photograph. An item my also include any number of
 attributes with more structured data, such as title, source, byline
-and publication date.</p><p>Content items have the following persistent characteristics
-which the data model must support:</p><blockquote>
+and publication date.</p>
+<p>Content items have the following persistent characteristics
+which the data model must support:</p>
+<blockquote>
 <p>
 <b>20.10</b> Content items must have a simple unique identifier
 so they can be related to other objects in the system.</p><p>
@@ -91,10 +103,13 @@ may contain multiple <b>Sections</b>.</p><p>
 <b>20.95</b> Each item may be associated with any number of
 related objects. The type and number of relationships must be
 constrained by the content type of the item (See 10.70 above).</p>
-</blockquote><p><a name="revision" id="revision"><b>30.0 Content
-Revision</b></a></p><p>As mentioned above, each content item may be associated with any
+</blockquote>
+<p><a name="revision" id="revision"><b>30.0 Content
+Revision</b></a></p>
+<p>As mentioned above, each content item may be associated with any
 number of revisions. The data model for revisions must support the
-following:</p><blockquote>
+following:</p>
+<blockquote>
 <p>
 <b>30.10</b>. A revision consists of the complete state of the
 item as it existed at a certain point in time. This includes the
@@ -103,8 +118,10 @@ attributes.</p><p>
 <b>30.20</b>. The data model must be extensible so that
 revisions for all content types (with any number of attributes) may
 be stored and retrieved efficiently.</p>
-</blockquote><p><a name="organization" id="organization"><b>40.0 Organization of
-the Repository</b></a></p><blockquote>
+</blockquote>
+<p><a name="organization" id="organization"><b>40.0 Organization of
+the Repository</b></a></p>
+<blockquote>
 <p>
 <b>40.10</b>. The data model must support the hierarchical
 organization of content items in a manner similar to a file
@@ -148,19 +165,26 @@ target item which the symbolic link references..</a></p><p><a name="folder" id="
 label, which may be different from the title or label of the target
 item.</a></p>
 </blockquote>
-</blockquote><p>
-<a name="folder" id="folder"></a><a name="template" id="template"><b>50.0 Content Template</b></a>.</p><p>The content repository should provide a means of storing and
+</blockquote>
+<p>
+<a name="folder" id="folder"></a><a name="template" id="template"><b>50.0 Content Template</b></a>.</p>
+<p>The content repository should provide a means of storing and
 managing the templates that are merged with content items to render
 output in HTML or other formats. Templates are assumed to be text
 files containing static markup with embedded tags or code to
 incorporate dynamic content in appropriate places. The data model
 requirements for templates are a subset of those for content
-items.</p><p>Because they typically need to reference a specific attributes,
+items.</p>
+<p>Because they typically need to reference a specific attributes,
 a template is typically specific to a particular content types and
-its subtypes.</p><h3>VI.B Requirements: Stored Procedure API</h3><p><b>100.10 MIME Types</b></p><p>Since a MIME type is a required attribute of each content item,
+its subtypes.</p>
+<h3>VI.B Requirements: Stored Procedure API</h3>
+<p><b>100.10 MIME Types</b></p>
+<p>Since a MIME type is a required attribute of each content item,
 the repository must be capable of managing a list of recognized
 MIME types for ensuring appropriate delivery and storage of
-content.</p><blockquote>
+content.</p>
+<blockquote>
 <p>
 <b>100.10.10</b>. Register a MIME type</p><p>
 <b>100.10.20</b>. Set the description of a MIME type</p><p>
@@ -169,22 +193,29 @@ content.</p><blockquote>
 binary</p><p>
 <b>100.10.50</b>. Get a list of registered MIME types</p><p>
 <b>100.10.60</b>. Unregister a MIME type</p>
-</blockquote><p>It is important to note that the role of MIME types in the
+</blockquote>
+<p>It is important to note that the role of MIME types in the
 content repository is simply to describe the general file format of
 each content item. Neither the data model nor the API support the
 full range of allowed parameters for the general MIME types such as
-<tt>text/plain</tt>.</p><p id="100-20"><b>100.20 Locales</b></p><p>The repository must have access to a list of recognized locales
+<tt>text/plain</tt>.</p>
+<p id="100-20"><b>100.20 Locales</b></p>
+<p>The repository must have access to a list of recognized locales
 for the purpose of publishing content items in multiple languages
-and character sets.</p><p>All content in the repository is stored in UTF-8 to facilitate
+and character sets.</p>
+<p>All content in the repository is stored in UTF-8 to facilitate
 searching and uniform handling of content. Locales may be specified
 as user preferences to configure the user interface in the
-following ways:</p><ul>
+following ways:</p>
+<ul>
 <li>language of content (when items are available in multiple
 languages).</li><li>language of system messages (form labels, warnings, menu links,
 etc.).</li><li>character set (text content converted from UTF-8 to the
 specified character set).</li><li>number, date and currency format.</li><li>choice of layout, including templates, graphics and other
 resources.</li>
-</ul><p>Functional requirements for locales include:</p><blockquote>
+</ul>
+<p>Functional requirements for locales include:</p>
+<blockquote>
 <p>
 <b>100.20.10</b>. Register a locale, including language,
 territory and character set.</p><p>
@@ -197,7 +228,9 @@ specified locale.</p><p>
 locale (character set).</p><p>
 <b>100.20.50</b>. Get a list of registered locales.</p><p>
 <b>100.20.60</b>. Unregister a locale.</p>
-</blockquote><p><b>100.30 Content Types</b></p><blockquote>
+</blockquote>
+<p><b>100.30 Content Types</b></p>
+<blockquote>
 <p>
 <b>100.30.10</b>. Create a content type, optionally specifying
 that it inherits the attributes of another content type. Multiple
@@ -226,7 +259,9 @@ and JPEG file formats.</p><p>
 object, specifying a token or name for the relationship type as
 well as a minimum and/or maximum number of relationships of this
 type that are required for the item to be published.</p>
-</blockquote><p><b>100.40 Content Items</b></p><blockquote>
+</blockquote>
+<p><b>100.40 Content Items</b></p>
+<blockquote>
 <p>
 <b>100.40.10</b>. Create a new item, specifying a parent context
 or the root of the repository by default.</p><p>
@@ -261,9 +296,12 @@ effectively removing it from public view.</p><p>
 modifying user, date modified and comments.</p><p>
 <b>100.40.95</b>. Revert to an older revision (create a new
 revision based on an older revision).</p>
-</blockquote><p><b>100.50 Content Folders</b></p><p>The repository should allow for hierarchical arrangement of
+</blockquote>
+<p><b>100.50 Content Folders</b></p>
+<p>The repository should allow for hierarchical arrangement of
 content items in a manner similar to a file system. The API to meet
-this general requirement focuses primarily on <a href="#folder">content folders</a>:</p><blockquote>
+this general requirement focuses primarily on <a href="#folder">content folders</a>:</p>
+<blockquote>
 <p>
 <b>100.50.10</b>. Create a <b>folder</b> for logical groups of
 content items and other folders. The folder name becomes part of
@@ -286,13 +324,19 @@ site. Folder objects themselves are <b>not</b> eligible for
 versioning, since they are solely containers and do not have any
 content other than the items they contain.</p><p>
 <b>100.50.90</b>. Delete a folder if it is empty.</p>
-</blockquote><p>Note that folders are simply a special type of content item, and
+</blockquote>
+<p>Note that folders are simply a special type of content item, and
 as such may receive the same object services as items, (namely
 access control and workflow). In addition to the file-system
 analogy afforded by folders, any type of content item may serve as
-a contain for other content items (see below).</p><h3>Workflow</h3><p>The repository must offer integration with a workflow package
-for managing the content production process.</p><p><b>100.60 Categorization</b></p><p>The repository must support a common hierarchical taxonomy of
-subject classifications that may be applied to content items.</p><blockquote>
+a contain for other content items (see below).</p>
+<h3>Workflow</h3>
+<p>The repository must offer integration with a workflow package
+for managing the content production process.</p>
+<p><b>100.60 Categorization</b></p>
+<p>The repository must support a common hierarchical taxonomy of
+subject classifications that may be applied to content items.</p>
+<blockquote>
 <p>
 <b>100.60.10</b>. Create a new subject category.</p><p>
 <b>100.60.20</b>. Create a new subject category as the child of
@@ -302,11 +346,19 @@ item.</p><p>
 <b>100.60.40</b>. Remove a subject category from an item.</p><p>
 <b>100.60.50</b>. Get the subject categories assigned to a
 content item.</p>
-</blockquote><h3>Search</h3><p>The repository must have a standard means of indexing and
-searching all content.</p><h3>Access Control</h3><p>The repository must have a means of restricting access on an
-item-by-item basis.</p><h3>VI.C Requirements: Presentation Layer API</h3><p>The presentation layer must have access to a subset of the
+</blockquote>
+<h3>Search</h3>
+<p>The repository must have a standard means of indexing and
+searching all content.</p>
+<h3>Access Control</h3>
+<p>The repository must have a means of restricting access on an
+item-by-item basis.</p>
+<h3>VI.C Requirements: Presentation Layer API</h3>
+<p>The presentation layer must have access to a subset of the
 stored procedure API in order to search and retrieve content
-directly from the repository if desired.</p><h3><a name="history" id="history">Revision History</a></h3><table cellspacing="0" cellpadding="4" border="1">
+directly from the repository if desired.</p>
+<h3><a name="history" id="history">Revision History</a></h3>
+<table cellspacing="0" cellpadding="4" border="1">
 <tr>
 <th>Author</th><th>Date</th><th>Description</th>
 </tr><tr>
@@ -320,7 +372,10 @@ numbered all items.</td>
 <td nowrap="nowrap">Karl Goldstein</td><td nowrap="nowrap">21 September 2000</td><td>Add requirements for relationships among content items and
 other objects.</td>
 </tr>
-</table><hr><a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a><br>
+</table>
+<hr>
+<a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a>
+<br>
+
 Last Modified: $Id: requirements.html,v 1.2 2003/12/11 21:39:47
 jeffd Exp $
-</body>

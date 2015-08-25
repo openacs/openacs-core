@@ -4,16 +4,19 @@ Sources}</property>
 <property name="doc(title)">Templating System User Guide: Documenting Data
 Sources</property>
 <master>
-
-<body>
-<h2>Documenting Data Sources</h2><a href="..">Templating System</a> : <a href="../developer-guide.html">Developer Guide</a> : User Guide
+<h2>Documenting Data Sources</h2>
+<a href="..">Templating System</a>
+ : <a href="../developer-guide.html">Developer Guide</a>
+ : User Guide
 <p>Effective coordination between the developer and designer is one
 of the major challenges of any publishing team. The templating
 system provides a set of simple documentation directives so that
 developer comments on data sources can be extracted from Tcl
 scripts and summarized for non-technical members of the publishing
-team automatically.</p><p>To take advantage of this capability, the developer must
-structure comments on a datasource in the following way:</p><pre>
+team automatically.</p>
+<p>To take advantage of this capability, the developer must
+structure comments on a datasource in the following way:</p>
+<pre>
   # \@datasource cars multirow
   # The cars owned by a user.
   # \@column make The make of the car, i.e. Toyota
@@ -33,7 +36,9 @@ structure comments on a datasource in the following way:</p><pre>
   # \@input gender radio
   # either "m" for male or "f" for female
     
-</pre><p>A few formatting guidelines:</p><ul>
+</pre>
+<p>A few formatting guidelines:</p>
+<ul>
 <li>all datasources (onevalues, onelists, multilists, multirows)
 are documented with the datasource directive, their name, the type
 of datasource, and then necessary comments:</li><li style="list-style: none"><blockquote><code># \@datasource <i>name</i> &lt;<i>type of
@@ -49,7 +54,9 @@ type of input widgets, and necessary comments:</li><li style="list-style: none">
 </code></blockquote>
 Possible form entry types include text (or textentry), date,
 checkbox, radio, select, multiselect and textbox</li>
-</ul><p>Once the templates have been enabled, the designer can simply
+</ul>
+<p>Once the templates have been enabled, the designer can simply
 visit the URL from which the page will be served, substituting
-<tt>acs</tt> with the <tt>dat</tt> extension.</p><hr><a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>
-</body>
+<tt>acs</tt> with the <tt>dat</tt> extension.</p>
+<hr>
+<a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>

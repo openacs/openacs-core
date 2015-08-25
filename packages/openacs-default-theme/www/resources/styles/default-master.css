@@ -407,7 +407,7 @@ a.subsite-name:hover {
 #content-wrapper {
   clear: both;
   border-top: 1px solid #fff;
-  padding-bottom: 75px;
+  /*padding-bottom: 10px;*/
 }
 
 

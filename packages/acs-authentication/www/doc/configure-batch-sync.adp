@@ -2,11 +2,11 @@
 <property name="context">{/doc/acs-authentication {Authentication}} {Configure Batch Synchronization}</property>
 <property name="doc(title)">Configure Batch Synchronization</property>
 <master>
-
-<body>
-<div class="navheader"><table width="100%" summary="Navigation header" border="0"><tr>
-<td width="20%" align="left"><a accesskey="p" href="ext-auth-ldap-install">Prev</a></td><th width="60%" align="center">Installation</th><td width="20%" align="right"><a accesskey="n" href="ext-auth-design">Next</a></td>
-</tr></table></div><div class="sect1" lang="en">
+<include src="/packages/acs-core-docs/lib/navheader"
+		    leftLink="ext-auth-ldap-install" leftLabel="Prev"
+		    title="Installation"
+		    rightLink="ext-auth-design" rightLabel="Next">
+		<div class="sect1" lang="en">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="configure-batch-sync" id="configure-batch-sync"></a>Configure
 Batch Synchronization</h2></div></div></div><div class="orderedlist"><ol type="1">
@@ -61,14 +61,10 @@ design”</a>, <a href="http://www.imsproject.org/enterprise/" target="_top">The
 </li>
 </ol></div><div class="cvstag">($Id: configure-batch-sync.html,v 1.2
 2004/02/19 14:59:42 joela Exp $)</div>
-</div><div class="navfooter">
-<hr><table width="100%" summary="Navigation footer">
-<tr>
-<td width="40%" align="left"><a accesskey="p" href="ext-auth-ldap-install">Prev</a></td><td width="20%" align="center"><a accesskey="h" href="index">Home</a></td><td width="40%" align="right"><a accesskey="n" href="ext-auth-design">Next</a></td>
-</tr><tr>
-<td width="40%" align="left">Installing LDAP support</td><td width="20%" align="center"><a accesskey="u" href="ext-auth-install">Up</a></td><td width="40%" align="right">Design</td>
-</tr>
-</table><hr><address><a href="mailto:docs\@openacs.org">docs\@openacs.org</a></address>
-</div><a name="comments" id="comments"></a><center><a href="http://openacs.org/doc/configure-batch-sync.html#comments">View
-comments on this page at openacs.org</a></center>
-</body>
+</div>
+<include src="/packages/acs-core-docs/lib/navfooter"
+		    leftLink="ext-auth-ldap-install" leftLabel="Prev" leftTitle="Installing LDAP support"
+		    rightLink="ext-auth-design" rightLabel="Next" rightTitle="Design"
+		    homeLink="index" homeLabel="Home" 
+		    upLink="ext-auth-install" upLabel="Up"> 
+		

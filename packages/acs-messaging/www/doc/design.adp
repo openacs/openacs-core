@@ -2,9 +2,8 @@
 <property name="context">{/doc/acs-messaging {Messaging}} {ACS Messaging Design}</property>
 <property name="doc(title)">ACS Messaging Design</property>
 <master>
-
-<body>
 <h2>ACS Messaging Design</h2>
+
 ACS Messaging was born out of the design of the new bboard. One
 thing we discovered when researching requirements for bboard and
 discussion software in general was that there are a variety of ways
@@ -49,14 +48,17 @@ implemented as content repository items that are children of the
 message), extensible headers (just like the webmail datamodel), and
 versioning as provided by the content repository.
 <h2>API</h2>
-ACS Messaging provides the <code>acs_messages_all</code> view as
+
+ACS Messaging provides the <code>acs_messages_all</code>
+ view as
 the primary mechanism for message queries.
 <blockquote><pre><code>create or replace view acs_messages_all as
     select m.message_id, m.reply_to, o.context_id, r.title, r.publish_date,
            r.mime_type, r.content, o.creation_user
     ...
   </code></pre></blockquote>
+
 ACS Messaging provides the PL/SQL function acs_message.post to add
 new messages.
-<hr><address>akk\@arsdigita.com</address>
-</body>
+<hr>
+<address>akk\@arsdigita.com</address>

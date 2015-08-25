@@ -2,11 +2,11 @@
 <property name="context">{/doc/acs-authentication {Authentication}} {Using LDAP/Active Directory with OpenACS}</property>
 <property name="doc(title)">Using LDAP/Active Directory with OpenACS</property>
 <master>
-
-<body>
-<div class="navheader"><table width="100%" summary="Navigation header" border="0"><tr>
-<td width="20%" align="left"><a accesskey="p" href="ext-auth-pam-install">Prev</a></td><th width="60%" align="center">Installation</th><td width="20%" align="right"><a accesskey="n" href="configure-batch-sync">Next</a></td>
-</tr></table></div><div class="sect1" lang="en">
+<include src="/packages/acs-core-docs/lib/navheader"
+		    leftLink="ext-auth-pam-install" leftLabel="Prev"
+		    title="Installation"
+		    rightLink="configure-batch-sync" rightLabel="Next">
+		<div class="sect1" lang="en">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="ext-auth-ldap-install" id="ext-auth-ldap-install"></a>Using
 LDAP/Active Directory with OpenACS</h2></div></div></div><div class="authorblurb">by <a href="http://openacs.org/shared/community-member?user_id=8551" target="_top">John Sequeira</a>, <a href="http://openacs.org/shared/community-member?user_id=8263" target="_top">Michael Steigman</a>, and <a href="http://openacs.org/shared/community-member?user_id=12805" target="_top">Carl Blesius</a>. OpenACS docs are written by the named
@@ -142,15 +142,11 @@ LD_LIBRARY_PATH (e.g. /usr/local/openldap/lib)</p><p>
 <b>Credits. </b>Thanks to Malte Sussdorf for his help and
 the <a href="http://www.lcs.mgh.harvard.edu/" target="_top">Laboratory of Computer Science at Massachusetts General
 Hospital</a> for underwriting this work.</p>
-</div><div class="navfooter">
-<hr><table width="100%" summary="Navigation footer">
-<tr>
-<td width="40%" align="left"><a accesskey="p" href="ext-auth-pam-install">Prev</a></td><td width="20%" align="center"><a accesskey="h" href="index">Home</a></td><td width="40%" align="right"><a accesskey="n" href="configure-batch-sync">Next</a></td>
-</tr><tr>
-<td width="40%" align="left">Using Pluggable Authentication Modules
-(PAM) with OpenACS</td><td width="20%" align="center"><a accesskey="u" href="ext-auth-install">Up</a></td><td width="40%" align="right">Configure Batch Synchronization</td>
-</tr>
-</table><hr><address><a href="mailto:docs\@openacs.org">docs\@openacs.org</a></address>
-</div><a name="comments" id="comments"></a><center><a href="http://openacs.org/doc/current/ext-auth-ldap-install.html#comments">
-View comments on this page at openacs.org</a></center>
-</body>
+</div>
+<include src="/packages/acs-core-docs/lib/navfooter"
+		    leftLink="ext-auth-pam-install" leftLabel="Prev" leftTitle="Using Pluggable Authentication Modules
+(PAM) with OpenACS"
+		    rightLink="configure-batch-sync" rightLabel="Next" rightTitle="Configure Batch Synchronization"
+		    homeLink="index" homeLabel="Home" 
+		    upLink="ext-auth-install" upLabel="Up"> 
+		

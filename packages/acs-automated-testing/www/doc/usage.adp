@@ -2,11 +2,11 @@
 <property name="context">{/doc/acs-automated-testing {Automated Testing}} {Usage}</property>
 <property name="doc(title)">Usage</property>
 <master>
-
-<body>
-<div class="navheader"><table width="100%" summary="Navigation header" border="0"><tr>
-<td width="20%" align="left"><a accesskey="p" href="install">Prev</a></td><th width="60%" align="center"></th><td width="20%" align="right"><a accesskey="n" href="requirements">Next</a></td>
-</tr></table></div><div class="sect1" lang="en">
+<include src="/packages/acs-core-docs/lib/navheader"
+		    leftLink="install" leftLabel="Prev"
+		    title=""
+		    rightLink="requirements" rightLabel="Next">
+		<div class="sect1" lang="en">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="usage" id="usage"></a>Usage</h2></div></div></div><div class="authorblurb">
 <p>by <a href="mailto:joel\@aufrecht.org" target="_top">Joel
@@ -75,14 +75,10 @@ master ALL = NOPASSWD: /usr/local/bin/rebuild-server.sh
 </pre>
 </li>
 </ul></div>
-</div><div class="navfooter">
-<hr><table width="100%" summary="Navigation footer">
-<tr>
-<td width="40%" align="left"><a accesskey="p" href="install">Prev</a></td><td width="20%" align="center"><a accesskey="h" href="index">Home</a></td><td width="40%" align="right"><a accesskey="n" href="requirements">Next</a></td>
-</tr><tr>
-<td width="40%" align="left">Installation</td><td width="20%" align="center"><a accesskey="u" href="index">Up</a></td><td width="40%" align="right">Requirements</td>
-</tr>
-</table><hr><address><a href="mailto:docs\@openacs.org">docs\@openacs.org</a></address>
-</div><a name="comments" id="comments"></a><center><a href="http://openacs.org/doc/usage.html#comments">View
-comments on this page at openacs.org</a></center>
-</body>
+</div>
+<include src="/packages/acs-core-docs/lib/navfooter"
+		    leftLink="install" leftLabel="Prev" leftTitle="Installation"
+		    rightLink="requirements" rightLabel="Next" rightTitle="Requirements"
+		    homeLink="index" homeLabel="Home" 
+		    upLink="index" upLabel="Up"> 
+		

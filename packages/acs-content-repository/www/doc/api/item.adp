@@ -2,13 +2,17 @@
 <property name="context">{/doc/acs-content-repository {Content Repository}} {Package: content_item}</property>
 <property name="doc(title)">Package: content_item</property>
 <master>
-
-<body>
-<h2>content_item</h2><p>
+<h2>content_item</h2>
+<p>
 <a href="../index.html">Content Repository</a> :
-content_item</p><hr><ul>
+content_item</p>
+<hr>
+<ul>
 <li><a href="#overview">Overview</a></li><li><a href="#related">Related Objects</a></li><li><a href="#api">API</a></li>
-</ul><p> </p><h3><a name="overview">Overview</a></h3><p>Content items store the overview of the content published on a
+</ul>
+<p> </p>
+<h3><a name="overview">Overview</a></h3>
+<p>Content items store the overview of the content published on a
 website. The actual content is stored in content revisions. It is
 implemented this way so that there can be mulitple versions of the
 actual content while the main idea remains constant. For example:
@@ -16,12 +20,19 @@ If there is a review for the movie "Terminator," there will exist a
 content item by the name "terminator" with all the right parameters
 (supertype, parent, etc), there will also exist at least one
 content revision pointing to this item with the actual review
-content.</p><p> </p><h3><a name="related">Related Objects</a></h3>
+content.</p>
+<p> </p>
+<h3><a name="related">Related Objects</a></h3>
+
 See also: content_revision, content_folder
-<p> </p><h3><a name="api">API</a></h3><ul><li>
+<p> </p>
+<h3><a name="api">API</a></h3>
+<ul><li>
 <font size="+1">Function:</font>
-content_item.get_content_type</li></ul><p>Retrieve the content type of this item. Only objects of this
-type may be used as revisions for the item.</p><table cellpadding="3" cellspacing="0" border="0">
+content_item.get_content_type</li></ul>
+<p>Retrieve the content type of this item. Only objects of this
+type may be used as revisions for the item.</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr>
@@ -34,8 +45,12 @@ function get_content_type (
 ) return cr_items.content_type%TYPE;
 
 </tt></pre></td></tr>
-</table><p> </p><ul><li>
-<font size="+1">Function:</font> content_item.get_context</li></ul><p>Retrieve the parent of the given item</p><table cellpadding="3" cellspacing="0" border="0">
+</table>
+<p> </p>
+<ul><li>
+<font size="+1">Function:</font> content_item.get_context</li></ul>
+<p>Retrieve the parent of the given item</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr>
@@ -48,11 +63,15 @@ function get_context (
 ) return acs_objects.context_id%TYPE;
 
 </tt></pre></td></tr>
-</table><p> </p><ul><li>
-<font size="+1">Function:</font> content_item.get_id</li></ul><p>Takes in a path, such as "/tv/programs/star_trek/episode_203"
+</table>
+<p> </p>
+<ul><li>
+<font size="+1">Function:</font> content_item.get_id</li></ul>
+<p>Takes in a path, such as "/tv/programs/star_trek/episode_203"
 and returns the id of the item with this path. Note: URLs are
 abstract (no extensions are allowed in content item names and
-extensions are stripped when looking up content items)</p><table cellpadding="3" cellspacing="0" border="0">
+extensions are stripped when looking up content items)</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr>
@@ -74,10 +93,14 @@ function get_id (
 </tt></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_item.get_path</td>
 </tr>
-</table><p> </p><ul><li>
+</table>
+<p> </p>
+<ul><li>
 <font size="+1">Function:</font>
-content_item.get_latest_revision</li></ul><p>Retrieves the id of the latest revision for the item (as opposed
-to the live revision)</p><table cellpadding="3" cellspacing="0" border="0">
+content_item.get_latest_revision</li></ul>
+<p>Retrieves the id of the latest revision for the item (as opposed
+to the live revision)</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr>
@@ -93,12 +116,17 @@ function get_latest_revision (
 </tt></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_item.get_live_revision</td>
 </tr>
-</table><p> </p><ul><li>
+</table>
+<p> </p>
+<ul><li>
 <font size="+1">Function:</font>
-content_item.get_live_revision</li></ul><p>Retrieves the id of the live revision for the item</p><p>Note that this function does nothing else besides retrieving the
+content_item.get_live_revision</li></ul>
+<p>Retrieves the id of the live revision for the item</p>
+<p>Note that this function does nothing else besides retrieving the
 value of the column <code>cr_items.live_revision</code>. It is thus
 more efficient in many cases to join against <code>cr_items</code>
-and retrieve the value directly.</p><table cellpadding="3" cellspacing="0" border="0">
+and retrieve the value directly.</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Returns:</th><td align="left">The id of the live revision for this item, or null
 if no live revision exists</td>
@@ -113,9 +141,13 @@ function get_live_revision (
 <th align="left" valign="top">See Also:</th><td>content_item.set_live_revision,
 content_item.get_latest_revision</td>
 </tr>
-</table><p> </p><ul><li>
+</table>
+<p> </p>
+<ul><li>
 <font size="+1">Function:</font>
-content_item.get_parent_folder</li></ul><p>Get the parent folder.</p><table cellpadding="3" cellspacing="0" border="0">
+content_item.get_parent_folder</li></ul>
+<p>Get the parent folder.</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Michael Pih</td>
 </tr><tr>
@@ -129,9 +161,13 @@ function get_parent_folder (
 ) return cr_folders.folder_id%TYPE;
 
 </tt></pre></td></tr>
-</table><p> </p><ul><li>
-<font size="+1">Function:</font> content_item.get_path</li></ul><p>Retrieves the full path to an item, in the form of
-"/tv/programs/star_trek/episode_203"</p><table cellpadding="3" cellspacing="0" border="0">
+</table>
+<p> </p>
+<ul><li>
+<font size="+1">Function:</font> content_item.get_path</li></ul>
+<p>Retrieves the full path to an item, in the form of
+"/tv/programs/star_trek/episode_203"</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr>
@@ -152,9 +188,13 @@ function get_path (
 </tt></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_item.get_id, content_item.write_to_file</td>
 </tr>
-</table><p> </p><ul><li>
+</table>
+<p> </p>
+<ul><li>
 <font size="+1">Function:</font>
-content_item.get_publish_date</li></ul><p>Retrieves the publish date for the item</p><table cellpadding="3" cellspacing="0" border="0">
+content_item.get_publish_date</li></ul>
+<p>Retrieves the publish date for the item</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr>
@@ -177,9 +217,13 @@ function get_publish_date (
 <th align="left" valign="top">See Also:</th><td>content_item.get_live_revision,
 content_item.get_latest_revision,</td>
 </tr>
-</table><p> </p><ul><li>
+</table>
+<p> </p>
+<ul><li>
 <font size="+1">Function:</font>
-content_item.get_revision_count</li></ul><p>Return the total count of revisions for this item</p><table cellpadding="3" cellspacing="0" border="0">
+content_item.get_revision_count</li></ul>
+<p>Return the total count of revisions for this item</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr>
@@ -194,18 +238,25 @@ function get_revision_count (
 </tt></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_revision.new</td>
 </tr>
-</table><p> </p><ul><li>
+</table>
+<p> </p>
+<ul><li>
 <font size="+1">Function:</font>
-content_item.get_root_folder</li></ul><table cellpadding="3" cellspacing="0" border="0">
+content_item.get_root_folder</li></ul>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><i>Not yet documented</i></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
 function get_root_folder return cr_folders.folder_id%TYPE;
 
 </tt></pre></td></tr>
-</table><p> </p><ul><li>
-<font size="+1">Function:</font> content_item.get_template</li></ul><p>Retrieves the template which should be used to render this item.
+</table>
+<p> </p>
+<ul><li>
+<font size="+1">Function:</font> content_item.get_template</li></ul>
+<p>Retrieves the template which should be used to render this item.
 If no template is registered to specifically render the item in the
 given context, the default template for the item's type is
-returned.</p><table cellpadding="3" cellspacing="0" border="0">
+returned.</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr>
@@ -228,11 +279,15 @@ function get_template (
 <th align="left" valign="top">See Also:</th><td>content_type.register_template,
 content_item.register_template,</td>
 </tr>
-</table><p> </p><ul><li>
-<font size="+1">Function:</font> content_item.get_title</li></ul><p>Retrieves the title for the item, using either the latest or the
+</table>
+<p> </p>
+<ul><li>
+<font size="+1">Function:</font> content_item.get_title</li></ul>
+<p>Retrieves the title for the item, using either the latest or the
 live revision. If the specified item is in fact a folder, return
 the folder's label. In addition, this function will automatically
-resolve symlinks.</p><table cellpadding="3" cellspacing="0" border="0">
+resolve symlinks.</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr>
@@ -254,10 +309,14 @@ function get_title (
 <th align="left" valign="top">See Also:</th><td>content_item.get_live_revision,
 content_item.get_latest_revision, content_symlink.resolve</td>
 </tr>
-</table><p> </p><ul><li>
+</table>
+<p> </p>
+<ul><li>
 <font size="+1">Function:</font>
-content_item.get_virtual_path</li></ul><p>Retrieves the virtual path to an item, in the form of
-"/tv/programs/star_trek/episode_203"</p><table cellpadding="3" cellspacing="0" border="0">
+content_item.get_virtual_path</li></ul>
+<p>Retrieves the virtual path to an item, in the form of
+"/tv/programs/star_trek/episode_203"</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Michael Pih</td>
 </tr><tr>
@@ -279,11 +338,15 @@ function get_virtual_path (
 <th align="left" valign="top">See Also:</th><td>content_item.get_id, content_item.write_to_file,
 content_item.get_path</td>
 </tr>
-</table><p> </p><ul><li>
+</table>
+<p> </p>
+<ul><li>
 <font size="+1">Function:</font>
-content_item.is_index_page</li></ul><p>Determine if the item is an index page for the specified folder.
+content_item.is_index_page</li></ul>
+<p>Determine if the item is an index page for the specified folder.
 The item is an index page for the folder if it exists in the folder
-and its item name is "index".</p><table cellpadding="3" cellspacing="0" border="0">
+and its item name is "index".</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr>
@@ -304,13 +367,17 @@ function is_index_page (
 </tt></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_folder.get_index_page</td>
 </tr>
-</table><p> </p><ul><li>
+</table>
+<p> </p>
+<ul><li>
 <font size="+1">Function:</font>
-content_item.is_publishable</li></ul><p>Determines if an item is publishable. Publishable items must
+content_item.is_publishable</li></ul>
+<p>Determines if an item is publishable. Publishable items must
 meet the following criteria: 1) for each child type, the item has n
 children, min_n &lt; n &lt; max_n 2) for each relation type, the
 item has n relations, min_n &lt; n &lt; max_n 3) any
-'publishing_wf' workflows are finished</p><table cellpadding="3" cellspacing="0" border="0">
+'publishing_wf' workflows are finished</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Michael Pih</td>
 </tr><tr>
@@ -324,9 +391,13 @@ function is_publishable (
 ) return char;
 
 </tt></pre></td></tr>
-</table><p> </p><ul><li>
-<font size="+1">Function:</font> content_item.is_subclass</li></ul><p>Determines if one type is a subclass of another. A class is
-always a subclass of itself.</p><table cellpadding="3" cellspacing="0" border="0">
+</table>
+<p> </p>
+<ul><li>
+<font size="+1">Function:</font> content_item.is_subclass</li></ul>
+<p>Determines if one type is a subclass of another. A class is
+always a subclass of itself.</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr>
@@ -347,12 +418,16 @@ function is_subclass (
 </tt></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>acs_object_type.create_type</td>
 </tr>
-</table><p> </p><ul><li>
+</table>
+<p> </p>
+<ul><li>
 <font size="+1">Function:</font>
-content_item.is_valid_child</li></ul><p>Determines if an item would be a valid child of another item by
+content_item.is_valid_child</li></ul>
+<p>Determines if an item would be a valid child of another item by
 checking if the parent allows children of the would-be child's
 content type and if the parent already has n_max children of that
-content type.</p><table cellpadding="3" cellspacing="0" border="0">
+content type.</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Michael Pih</td>
 </tr><tr>
@@ -371,10 +446,14 @@ function is_valid_child (
 ) return char;
 
 </tt></pre></td></tr>
-</table><p> </p><ul><li>
-<font size="+1">Function:</font> content_item.new</li></ul><p>Creates a new content item. If the <tt>data</tt>, <tt>title</tt>
+</table>
+<p> </p>
+<ul><li>
+<font size="+1">Function:</font> content_item.new</li></ul>
+<p>Creates a new content item. If the <tt>data</tt>, <tt>title</tt>
 or <tt>text</tt> parameters are specified, also creates a revision
-for the item.</p><table cellpadding="3" cellspacing="0" border="0">
+for the item.</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr>
@@ -460,8 +539,11 @@ function new (
 </tt></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>acs_object.new</td>
 </tr>
-</table><p> </p><ul><li>
-<font size="+1">Function:</font> content_item.relate</li></ul><table cellpadding="3" cellspacing="0" border="0">
+</table>
+<p> </p>
+<ul><li>
+<font size="+1">Function:</font> content_item.relate</li></ul>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><i>Not yet documented</i></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
 function relate (
   item_id       in cr_items.item_id%TYPE,
@@ -472,11 +554,15 @@ function relate (
 ) return cr_item_rels.rel_id%TYPE;
 
 </tt></pre></td></tr>
-</table><p> </p><ul><li>
-<font size="+1">Procedure:</font> content_item.copy</li></ul><p>Copies the item to a new location, creating an identical item
+</table>
+<p> </p>
+<ul><li>
+<font size="+1">Procedure:</font> content_item.copy</li></ul>
+<p>Copies the item to a new location, creating an identical item
 with no revisions or associated workflow. If the target folder does
 not exist, or if the folder already contains an item with the same
-name as the given item, an error will be thrown.</p><table cellpadding="3" cellspacing="0" border="0">
+name as the given item, an error will be thrown.</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1">
@@ -494,10 +580,14 @@ procedure copy (
 </tt></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_item.new, content_folder.new, content_item.move</td>
 </tr>
-</table><p> </p><ul><li>
-<font size="+1">Procedure:</font> content_item.delete</li></ul><p>Deletes the specified content item, along with any revisions,
+</table>
+<p> </p>
+<ul><li>
+<font size="+1">Procedure:</font> content_item.delete</li></ul>
+<p>Deletes the specified content item, along with any revisions,
 symlinks, workflows, and template relations for the item. Use with
-caution - this operation cannot be undone.</p><table cellpadding="3" cellspacing="0" border="0">
+caution - this operation cannot be undone.</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1"><tr>
@@ -510,10 +600,14 @@ procedure delete (
 </tt></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>acs_object.delete</td>
 </tr>
-</table><p> </p><ul><li>
-<font size="+1">Procedure:</font> content_item.move</li></ul><p>Move the specified item to a different folder. If the target
+</table>
+<p> </p>
+<ul><li>
+<font size="+1">Procedure:</font> content_item.move</li></ul>
+<p>Move the specified item to a different folder. If the target
 folder does not exist, or if the folder already contains an item
-with the same name as the given item, an error will be thrown.</p><table cellpadding="3" cellspacing="0" border="0">
+with the same name as the given item, an error will be thrown.</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1">
@@ -531,9 +625,13 @@ procedure move (
 </tt></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_item.new, content_folder.new, content_item.copy</td>
 </tr>
-</table><p> </p><ul><li>
+</table>
+<p> </p>
+<ul><li>
 <font size="+1">Procedure:</font>
-content_item.register_template</li></ul><p>Registers a template which will be used to render this item.</p><table cellpadding="3" cellspacing="0" border="0">
+content_item.register_template</li></ul>
+<p>Registers a template which will be used to render this item.</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1">
@@ -556,9 +654,13 @@ procedure register_template (
 <th align="left" valign="top">See Also:</th><td>content_type.register_template,
 content_item.unregister_template, content_item.get_template</td>
 </tr>
-</table><p> </p><ul><li>
-<font size="+1">Procedure:</font> content_item.edit_name</li></ul><p>Renames the item. If an item with the specified name already
-exists under this item's parent, an error is thrown</p><table cellpadding="3" cellspacing="0" border="0">
+</table>
+<p> </p>
+<ul><li>
+<font size="+1">Procedure:</font> content_item.edit_name</li></ul>
+<p>Renames the item. If an item with the specified name already
+exists under this item's parent, an error is thrown</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1">
@@ -576,9 +678,13 @@ procedure rename (
 </tt></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_item.new</td>
 </tr>
-</table><p> </p><ul><li>
+</table>
+<p> </p>
+<ul><li>
 <font size="+1">Procedure:</font>
-content_item.set_live_revision</li></ul><p>Make the specified revision the live revision for the item</p><table cellpadding="3" cellspacing="0" border="0">
+content_item.set_live_revision</li></ul>
+<p>Make the specified revision the live revision for the item</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1"><tr>
@@ -593,11 +699,15 @@ procedure set_live_revision (
 </tt></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_item.get_live_revision</td>
 </tr>
-</table><p> </p><ul><li>
+</table>
+<p> </p>
+<ul><li>
 <font size="+1">Procedure:</font>
-content_item.set_release_period</li></ul><p>Sets the release period for the item. This information may be
+content_item.set_release_period</li></ul>
+<p>Sets the release period for the item. This information may be
 used by applications to update the publishing status of items at
-periodic intervals.</p><table cellpadding="3" cellspacing="0" border="0">
+periodic intervals.</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1">
@@ -616,10 +726,14 @@ procedure set_release_period (
 );
 
 </tt></pre></td></tr>
-</table><p> </p><ul><li>
+</table>
+<p> </p>
+<ul><li>
 <font size="+1">Procedure:</font>
-content_item.unregister_template</li></ul><p>Unregisters a template which will be used to render this
-item.</p><table cellpadding="3" cellspacing="0" border="0">
+content_item.unregister_template</li></ul>
+<p>Unregisters a template which will be used to render this
+item.</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1">
@@ -642,9 +756,12 @@ procedure unregister_template (
 <th align="left" valign="top">See Also:</th><td>content_type.register_template, content_item.register_template,
 content_item.get_template</td>
 </tr>
-</table><p> </p><ul><li>
+</table>
+<p> </p>
+<ul><li>
 <font size="+1">Procedure:</font>
-content_item.unset_live_revision</li></ul><table cellpadding="3" cellspacing="0" border="0">
+content_item.unset_live_revision</li></ul>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><i>Not yet documented</i></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
 procedure unset_live_revision (
   --/** Set the live revision to null for the item
@@ -655,10 +772,14 @@ procedure unset_live_revision (
 );
 
 </tt></pre></td></tr>
-</table><p> </p><ul><li>
+</table>
+<p> </p>
+<ul><li>
 <font size="+1">Procedure:</font>
-content_item.write_to_file</li></ul><p>Writes the content of the live revision of this item to a file,
-creating all the neccessary directories in the process</p><table cellpadding="3" cellspacing="0" border="0">
+content_item.write_to_file</li></ul>
+<p>Writes the content of the live revision of this item to a file,
+creating all the neccessary directories in the process</p>
+<table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1">
@@ -677,6 +798,7 @@ procedure write_to_file (
 </tt></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_item.get_path</td>
 </tr>
-</table><p> </p>
+</table>
+<p> </p>
+
 Last Modified: $Id$
-</body>

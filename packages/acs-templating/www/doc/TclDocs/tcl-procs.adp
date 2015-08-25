@@ -4,5 +4,3 @@ Procedure Specifications}</property>
 <property name="doc(title)">ArsDigita Templating System, Content Management Tcl
 Procedure Specifications</property>
 <master>
-
-<body></body>

@@ -2,16 +2,21 @@
 <property name="context">{/doc/acs-templating {Templating}} {Templating System API: Database Query}</property>
 <property name="doc(title)">Templating System API: Database Query</property>
 <master>
-
-<body>
-<h2>Database Query</h2><h3>Summary</h3><p>Utilize the results of a database query as a template data
-source.</p><h3>Method</h3><pre>
+<h2>Database Query</h2>
+<h3>Summary</h3>
+<p>Utilize the results of a database query as a template data
+source.</p>
+<h3>Method</h3>
+<pre>
 query <em>name structure sql -db dbhandle 
                              -startrow n 
                              -maxrows n
                              -bind (set|list)
                              -eval { code }</em>
-</pre><p>Perform a query and store the results in a local variable.</p><h3>Examples</h3><pre>
+</pre>
+<p>Perform a query and store the results in a local variable.</p>
+<h3>Examples</h3>
+<pre>
 set db [ns_db gethandle]
 
 # this will set a scalar named current_time
@@ -38,7 +43,9 @@ template::query user_info multilist "select * from users" -db $db
 template::query persons nestedlist "
   select state, city, first_name, last_name from users" \
   -db $db -groupby { state city }
-</pre><h3>Note(s)</h3><ul>
+</pre>
+<h3>Note(s)</h3>
+<ul>
 <li>Valid values for <tt>structure</tt> are <tt>onevalue, onerow,
 multirow, onelist, nestedlist and multilist.</tt>
 </li><li>
@@ -52,5 +59,6 @@ from the query result that are included in the data source.</li><li>The <tt>eval
 perform on each row of a multirow query as it is fetched from the
 database. The code may refer to the <tt>row</tt> array to get and
 set column values.</li><li>The <tt>bind</tt> option is valid only when using Oracle.</li>
-</ul><hr><a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>
-</body>
+</ul>
+<hr>
+<a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>

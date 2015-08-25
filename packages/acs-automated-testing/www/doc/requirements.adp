@@ -2,11 +2,11 @@
 <property name="context">{/doc/acs-automated-testing {Automated Testing}} {Requirements}</property>
 <property name="doc(title)">Requirements</property>
 <master>
-
-<body>
-<div class="navheader"><table width="100%" summary="Navigation header" border="0"><tr>
-<td width="20%" align="left"><a accesskey="p" href="usage">Prev</a></td><th width="60%" align="center"></th><td width="20%" align="right"></td>
-</tr></table></div><div class="sect1" lang="en">
+<include src="/packages/acs-core-docs/lib/navheader"
+		    leftLink="usage" leftLabel="Prev"
+		    title=""
+		    rightLink="usage" rightLabel="Next">
+		<div class="sect1" lang="en">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="requirements" id="requirements"></a>Requirements</h2></div></div></div><div class="authorblurb">
 <p>by <a href="mailto:joel\@aufrecht.org" target="_top">Joel
@@ -41,7 +41,7 @@ submitting forms. (This is partially done in the sense that we can
 make http calls from tcl api, but there is no framework for doing
 anything complicated.)</td>
 </tr><tr>
-<td>1.1.1</td><td>Â </td><td>Done</td><td>
+<td>1.1.1</td><td> </td><td>Done</td><td>
 <span class="strong">Execute tclwebtest scripts</span>. A test
 can contain tclwebtest commands. If tclwebtest is not installed,
 those commands fail gracefully.</td>
@@ -60,11 +60,11 @@ categories. The UI provides for running only tests in selected
 categories, and for viewing only results of tests in selected
 categories.</td>
 </tr><tr>
-<td>2.1</td><td>Â </td><td>A</td><td>Each test can be associated with a single OpenACS.org bug (ie,
+<td>2.1</td><td> </td><td>A</td><td>Each test can be associated with a single OpenACS.org bug (ie,
 store bug id as in integer, or store full url so that this can
 point to other bugs)</td>
 </tr><tr>
-<td>3</td><td>Â </td><td>B</td><td>
+<td>3</td><td> </td><td>B</td><td>
 <span class="strong">Tests can be ordered lists of other
 tests</span>. minimal: verify that a test proc can call other test
 procs. Better: A test can be created within the GUI by selecting
@@ -72,7 +72,7 @@ other tests. This test is stored in the database and can be
 exported. (This is related to a bigger issue of storing test
 scripts in some format other than tcl procs.)</td>
 </tr><tr>
-<td>4</td><td>Â </td><td>C</td><td>
+<td>4</td><td> </td><td>C</td><td>
 <span class="strong">Test scripts can be imported and
 exported</span>. It should be possible to import a test into the
 database from a file, and to export it to a file. These files
@@ -81,7 +81,7 @@ possible to import/export directly between running OpenACS sites.
 (We should look at what did and didn't work in acs-lang catalog
 files and work from there.)</td>
 </tr><tr>
-<td>5</td><td>Â </td><td>B</td><td>
+<td>5</td><td> </td><td>B</td><td>
 <span class="strong">Macro Recording</span>. End users can
 create and run tests from the web interface without writing code.
 <p>1) UI to turn on macro mode.</p><p>2) basic recording: when you fill out a form while macro mode is
@@ -92,11 +92,11 @@ page must contain [ type regexp here] that spits out aa_true "test
 X" [string regexp blah blah]</p>
 </td>
 </tr><tr>
-<td>6</td><td>Â </td><td>A</td><td>Notification subscriptions are available for "email me whenever
+<td>6</td><td> </td><td>A</td><td>Notification subscriptions are available for "email me whenever
 this test fails" and "notify me whenever a test in this category
 fails"</td>
 </tr><tr>
-<td>7</td><td>Â </td><td>A</td><td>The results of an automated test are optionally written to an
+<td>7</td><td> </td><td>A</td><td>The results of an automated test are optionally written to an
 xml file.</td>
 </tr>
 </tbody>
@@ -156,14 +156,11 @@ started</a>
 </tbody>
 </table></div>
 </div>
-</div><div class="navfooter">
-<hr><table width="100%" summary="Navigation footer">
-<tr>
-<td width="40%" align="left"><a accesskey="p" href="usage">Prev</a></td><td width="20%" align="center"><a accesskey="h" href="index">Home</a></td><td width="40%" align="right"></td>
-</tr><tr>
-<td width="40%" align="left">Usage</td><td width="20%" align="center"><a accesskey="u" href="index">Up</a></td><td width="40%" align="right"></td>
-</tr>
-</table><hr><address><a href="mailto:docs\@openacs.org">docs\@openacs.org</a></address>
-</div><a name="comments" id="comments"></a><center><a href="http://openacs.org/doc/requirements.html#comments">View comments
+</div>
+<include src="/packages/acs-core-docs/lib/navfooter"
+		    leftLink="usage" leftLabel="Prev" leftTitle="Usage"
+		    rightLink="usage" rightLabel="Next" rightTitle=""
+		    homeLink="index" homeLabel="Home" 
+		    upLink="index" upLabel="Up"> 
+		<center><a href="http://openacs.org/doc/requirements.html#comments">View comments
 on this page at openacs.org</a></center>
-</body>
