@@ -80,7 +80,7 @@ switch $kind {
                 set view procs-file-view
             } else {
                 set first_sentence ""
-                set view content-page-view
+		set view procs-file-view
             }
 
             multirow append procs_files $path $full_path $first_sentence $view
