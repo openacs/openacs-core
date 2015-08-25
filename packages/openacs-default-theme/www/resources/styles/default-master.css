@@ -714,6 +714,14 @@ ul.compact li, .action-list ul li {
   clear:left;
 }
 
+.dimensional-table tr th {
+    background-color: #ECECEC;
+}
+.dimensional-table tr td {
+    text-align: center;
+}
+
+
 /**********************************************************************
 /* DEPRECATED CLASSES
 /**********************************************************************/
