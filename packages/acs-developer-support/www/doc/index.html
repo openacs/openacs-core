@@ -1,12 +1,12 @@
 <html>
 <head>
-<title>Developer Support</title>
+<title>ACS Developer Support</title>
 </head>
 
 <body bgcolor=white text=black>
-<h1>Developer Support</h1>
+<h1>ACS Developer Support</h1>
 
-part of the <a href="">ArsDigita Community System</a>, by <a href="mailto:jsalz@mit.edu">Jon Salz</a>
+<p>part of the <a href="">ArsDigita Community System</a>, by <a href="mailto:jsalz@mit.edu">Jon Salz</a>
 
 <hr>
 
@@ -21,7 +21,7 @@ part of the <a href="">ArsDigita Community System</a>, by <a href="mailto:jsalz@
 </ul>
 
 <h2>The Big Picture</h2>
-
+<p>
 Software development is a big feedback loop: a developer writes something, tests it, and
 then repeats until the results are satisfactory. It's important to streamline this cycle
 by having a development environment which makes it easy to analyze what the software is
@@ -66,30 +66,22 @@ Developer Information page itself.
 <p>Comments are displayed even if an error occurs in the page!
 
 <h3>Enabling It</h3>
-
-Add the following to your
-<tt>parameters/yourservername.ini</tt> file:
-
-<blockquote><pre>[ns/server/yourservername/acs/developer-support]
-; remember information about connections, for developers' benefit?
-EnabledP=1
-; remember information about every database request?
-DatabaseEnabledP=1
-; remember information for which client hosts?
-EnabledIPs=*
-; remember this information for how long? sweep how often? (in seconds)
-DataLifetime=900
-DataSweepInterval=900</pre></blockquote>
-
-Note that you may not want to enable this stuff for production systems - they probably
-incur a slight performance hit (although this hasn't been benchmarked).
+<p>
+Load the packate acs-developer-support via package manager,
+browse to /ds and enable the desired options.
+<p>
+Be careful of you enable developer support on busy production systems - they probably
+incur a performance hit.
 
 <h2>How It Works</h2>
-
+<p>
 The security subsystem registers preauth and trace filters which store relevant
 connection information in shared variables (<tt>nsv</tt>s). The security subsystem
 also renames the AOLserver <tt>ns_db</tt> procedure and registers a wrapper
 which aggregates information about database queries.
+<p>
+<a href="developer-support-example">Example</a> output of ACS
+Developer Support.
 
 <h2>Release Notes</h2>
 
