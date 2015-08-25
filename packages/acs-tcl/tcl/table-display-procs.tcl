@@ -5,58 +5,9 @@ ad_library {
 }
     
 
-ad_proc ad_dimensional_sql {
-    option_list 
-    {what "where"} 
-    {joiner "and"} 
-    {options_set ""}
-} {
-    see ad_dimensional for the format of option_list
-    <p>
-    Given what clause we are asking for and the joiner this returns 
-    the sql fragment
-} {
-    set out {}
 
-    if {$option_list eq ""} {
-        return
-    }
 
-    if {$options_set eq ""} {
-        set options_set [ns_getform]
-    }
-
-    foreach option $option_list { 
-        # find out what the current option value is.
-        # check if a default is set otherwise the first value is used
-        set option_key [lindex $option 0]
-        set option_val {}
-        # get the option from the form
-        if { $options_set ne ""} {
-            set option_val [ns_set get $options_set $option_key]
-        }
-        #otherwise get from default
-        if { $option_val eq "" } {
-            set option_val [lindex $option 2]
-        }
-        
-        foreach option_value [lindex $option 3] { 
-            set thisoption [lindex $option_value 0]
-            if {$option_val eq $thisoption } {
-                set code [lindex $option_value 2]
-                if {$code ne ""} {
-                    if {[lindex $code 0] eq $what } {
-                        append out " $joiner [uplevel [list subst [lindex $code 1]]]"
-                    }
-                }
-            }
-        }
-    }
-
-    return $out
-}
-
-ad_proc ad_dimensional_set_variables {option_list {options_set ""}} {
+ad_proc -deprecated ad_dimensional_set_variables {option_list {options_set ""}} {
     set the variables defined in option_list from the form provided 
     (form defaults to ad_conn form) or to default value from option_list if 
     not in the form data.
@@ -714,7 +665,7 @@ ad_proc -deprecated ad_table_sort_form {
     return $html
 }
 
-ad_proc ad_order_by_from_sort_spec {sort_by tabledef} {
+ad_proc -deprecated ad_order_by_from_sort_spec {sort_by tabledef} {
     Takes a sort_by spec, and translates it into into an "order by" clause
     with each sort_by key dictated by the sort info in tabledef
 } {
@@ -782,7 +733,7 @@ ad_proc -deprecated ad_new_sort_by {key keys} {
     }
 }
 
-ad_proc ad_same_page_link {variable value text {form ""}} {
+ad_proc -deprecated ad_same_page_link {variable value text {form ""}} {
     Makes a link to this page, with a new value for "variable".
 } {
     if { $form eq "" } {
@@ -793,7 +744,7 @@ ad_proc ad_same_page_link {variable value text {form ""}} {
     return [subst {<a href="[ns_quotehtml $href]">[ns_quotehtml $text]</a>}]
 }
 
-ad_proc ad_reverse order { 
+ad_proc -deprecated ad_reverse order { 
     returns the opposite sort order from the
     one it is given.  Mostly for columns whose natural 
     sort order is not the default.
@@ -805,7 +756,7 @@ ad_proc ad_reverse order {
     return $order
 }
 
-ad_proc ad_custom_load {user_id item_group item item_type} {
+ad_proc -deprecated ad_custom_load {user_id item_group item item_type} {
     load a persisted user customization as saved by 
     for example table-custom.tcl.
 } { 
@@ -825,7 +776,7 @@ ad_proc ad_custom_load {user_id item_group item item_type} {
     return $value
 }
     
-ad_proc ad_custom_list {user_id item_group item_set item_type target_url custom_url {new_string "new view"}} {
+ad_proc -deprecated ad_custom_list {user_id item_group item_set item_type target_url custom_url {new_string "new view"}} {
     Generates the html fragment for choosing, editing and creating
     user customized data
 } {
@@ -852,7 +803,7 @@ ad_proc ad_custom_list {user_id item_group item_set item_type target_url custom_
 }
     
 
-ad_proc ad_custom_page_defaults {defaults} { 
+ad_proc -deprecated ad_custom_page_defaults {defaults} { 
     set the page defaults. If the form is 
     empty do a returnredirect with the defaults set
 } {
@@ -880,7 +831,7 @@ ad_proc ad_custom_page_defaults {defaults} {
     }
 }
 
-ad_proc ad_custom_form {return_url item_group item} { 
+ad_proc -deprecated ad_custom_form {return_url item_group item} { 
     sets up the head of a form to feed to /tools/form-custom.tcl
 } {
     append html "<form method=\"get\" action=\"/tools/form-custom\">\n" 
@@ -895,7 +846,7 @@ ad_proc ad_custom_form {return_url item_group item} {
     append html "<input type=\"submit\" value=\"Save settings\">"
 }
 
-ad_proc ad_dimensional_settings {define current} {
+ad_proc -deprecated ad_dimensional_settings {define current} {
     given a dimensional slider definition this routine returns a form to set the 
     defaults for the given slider.
 

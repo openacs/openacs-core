@@ -1,25 +1,9 @@
 ad_library {
-    Definition of dimensional selection bar widget
+    Definition of dimensional selection bar widget and helper functions.
 
     @cvs-id $Id$
 }
 
-# TODOS:
-# May be deprecate the following functions of table-display-procs.
-#
-#   ad_dimensional_sql
-#   ad_dimensional_set_variables
-#   ad_order_by_from_sort_spec
-#   ad_same_page_link
-#   ad_reverse
-#   ad_custom_load
-#   ad_custom_list
-#   ad_custom_page_defaults
-#   ad_custom_form
-#   ad_dimensional_settings
-#
-# Add Package Parameter DefaultDimensionalStyle to acs-subsite
-# Check style-switcher callback in theme package
 #
 # Dimensional selection bars.
 #
@@ -31,7 +15,31 @@ ad_proc ad_dimensional {
     {options_set ""}
     {optionstype url}
 } {
-    Generate an option bar:
+    Generate an option bar from an option_list, which has the structure:
+    <pre>
+    { 
+        {variable "Title" defaultvalue
+            {
+                {value "Label" {key sql-clause}}
+                ...
+            }
+        }
+        ...
+    }
+    </pre>
+
+    Here is an example of the option_list:
+    <pre>
+    set dimensional_list {
+        {visited "Last Visit" 1w {
+            {never "Never" {where "last_visit is null"}}
+            {1m "Last Month" {where "last_visit + 30 > sysdate"}}
+            {1w "Last Week" {where "last_visit + 7 > sysdate"}}
+            {1d "Today" {where "last_visit > trunc(sysdate)"}}
+        }}
+        ..(more of the same)..
+    }
+    </pre>
 
     @param style name of the adp file (without extension)
     @param option_list the structure with the option data provided 
@@ -41,32 +49,6 @@ ad_proc ad_dimensional {
             so we get radio buttons and a form since with a slow select updating one 
             thing at a time would be stupid.
     @return HTML rendering
-    
-    <p>
-    option_list structure is 
-    <pre>
-    { 
-        {variable "Title" defaultvalue
-            {
-                {value "Label"}
-                ...
-            }
-        }
-        ...
-    }
-
-    an example:
-
-    set dimensional_list {
-        {visited "Last Visit" 1w {
-            {never "Never"}
-            {1m "Last Month"}
-            {1w "Last Week"}
-            {1d "Today"}
-        }}
-        ..(more of the same)..
-    }
-    </pre>
 } {
     if {$option_list eq ""} {
         return
@@ -145,3 +127,60 @@ ad_proc ad_dimensional {
     return [template::adp_include -uplevel 2 -- $adp_stub [list &dimensional dimensional {*}$arrays]]
 }
 
+ad_proc ad_dimensional_sql {
+    option_list 
+    {what "where"} 
+    {joiner "and"} 
+    {options_set ""}
+} {
+    
+    Given what clause we are asking for and the joiner this returns 
+    the sql fragment
+
+    @param option_list the structure with the option data provided 
+    @param what look for such keys in the option_list
+    @param joiner join string for combining multiple clases
+    @param options_set ns_set for reading variables
+    @return SQL clause
+
+    @see ad_dimensional
+} {
+    set out {}
+
+    if {$option_list eq ""} {
+        return
+    }
+
+    if {$options_set eq ""} {
+        set options_set [ns_getform]
+    }
+
+    foreach option $option_list { 
+        # find out what the current option value is.
+        # check if a default is set otherwise the first value is used
+        set option_key [lindex $option 0]
+        set option_val {}
+        # get the option from the form
+        if { $options_set ne ""} {
+            set option_val [ns_set get $options_set $option_key]
+        }
+        #otherwise get from default
+        if { $option_val eq "" } {
+            set option_val [lindex $option 2]
+        }
+        
+        foreach option_value [lindex $option 3] { 
+            set thisoption [lindex $option_value 0]
+            if {$option_val eq $thisoption } {
+                set code [lindex $option_value 2]
+                if {$code ne ""} {
+                    if {[lindex $code 0] eq $what } {
+                        append out " $joiner [uplevel [list subst [lindex $code 1]]]"
+                    }
+                }
+            }
+        }
+    }
+
+    return $out
+}
