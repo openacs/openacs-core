@@ -21,7 +21,8 @@ create table subsite_themes (
     css           text,
     form_template text,
     list_template text,
-    list_filter_template text
+    list_filter_template text,
+    dimensional_template text
 );
 
 -- Insert the old themes that were hard-wired into earlier versions of acs-subsite.

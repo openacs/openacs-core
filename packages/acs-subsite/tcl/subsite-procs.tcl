@@ -827,6 +827,7 @@ ad_proc -public subsite::new_subsite_theme {
     {-form_template ""}
     {-list_template ""}
     {-list_filter_template ""}
+    {-dimensional_template ""}
 } {
     Add a new subsite theme, making it available to the theme configuration code.
 } {
