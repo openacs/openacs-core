@@ -85,9 +85,11 @@
   <fullquery name="subsite::new_subsite_theme.insert_subsite_theme">
     <querytext>
       insert into subsite_themes
-        (key, name, template, css, form_template, list_template, list_filter_template)
+        (key, name, template, css, form_template, list_template,
+	list_filter_template, dimensional_template)
       values
-        (:key, :name, :template, :css, :form_template, :list_template, :list_filter_template)
+        (:key, :name, :template, :css, :form_template, :list_template,
+	:list_filter_template, :dimensional_template)
     </querytext>
   </fullquery>
   
