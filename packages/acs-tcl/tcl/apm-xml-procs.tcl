@@ -202,7 +202,9 @@ ad_proc -public apm_read_package_info_file { path } {
     <code>vendor</code>,
     <code>group</code>,
     <code>vendor.url</code>, and
-    <code>description.format</code>.
+    <code>description.format</code>,
+    <code>maturity</code>,
+    <code>maturity_text</code>.
 
     </ul>
     
@@ -276,9 +278,11 @@ ad_proc -public apm_read_package_info_file { path } {
     set properties(url)  [apm_required_attribute_value $version url]
 
     # Set an entry in the properties array for each of these tags.
-    foreach property_name { summary description release-date vendor } {
+    set properties(maturity) ""
+    foreach property_name { summary description release-date vendor maturity } {
 	set properties($property_name) [apm_tag_value $version $property_name]
     }
+    set properties(maturity_text) [apm::package_version::attributes::maturity_int_to_text $properties(maturity)]
 
     apm::package_version::attributes::parse_xml \
         -parent_node $version \
