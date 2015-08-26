@@ -896,7 +896,7 @@ ad_proc -public export_vars {
 	    append export_string [subst {<div><input type="hidden"
 		name="[ns_quotehtml [ns_set key $export_set $i]]"
 		value="[ns_quotehtml [ns_set value $export_set $i]]"></div>
-	    }
+	    }]
 	}
     }
 
