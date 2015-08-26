@@ -761,8 +761,7 @@ ad_proc -public export_vars {
 
 		if { $precedence_type ne "exclude" } {
 
-		    set flags [split [lindex $name_spec 1] ","]
-		    foreach flag $flags {
+		    foreach flag [split [lindex $name_spec 1] ","] {
 			set exp_flag($name:$flag) 1
 		    }
 		    
@@ -889,17 +888,20 @@ ad_proc -public export_vars {
     if { $url_p } {
 	set export_list [list]
 	for { set i 0 } { $i < $export_size } { incr i } {
-	    lappend export_list "[ns_urlencode [ns_set key $export_set $i]]=[ns_urlencode [ns_set value $export_set $i]]"
+	    lappend export_list [ns_urlencode [ns_set key $export_set $i]]=[ns_urlencode [ns_set value $export_set $i]]
 	}
 	set export_string [join $export_list "&"]
     } else {
 	for { set i 0 } { $i < $export_size } { incr i } {
-	    append export_string "<div><input type=\"hidden\" name=\"[ad_quotehtml [ns_set key $export_set $i]]\" value=\"[ad_quotehtml "[ns_set value $export_set $i]"]\" ></div>\n"
+	    append export_string [subst {<div><input type="hidden"
+		name="[ns_quotehtml [ns_set key $export_set $i]]"
+		value="[ns_quotehtml [ns_set value $export_set $i]]"></div>
+	    }
 	}
     }
 
     if { $quotehtml_p } {
-	set export_string [ad_quotehtml $export_string]
+	set export_string [ns_quotehtml $export_string]
     }
 
     # Prepend with the base URL
@@ -907,7 +909,7 @@ ad_proc -public export_vars {
         if { $export_string ne "" } {
             if { [string first ? $base] > -1 } {
                 # The base already has query vars
-                set export_string "${base}&${export_string}"
+                set export_string "$base&$export_string"
             } else { 
                 # The base has no query vars
                 set export_string "$base?$export_string"
@@ -918,7 +920,7 @@ ad_proc -public export_vars {
     }
     
     # Append anchor
-    if { ([info exists anchor] && $anchor ne "") } {
+    if { [info exists anchor] && $anchor ne "" } {
         append export_string "\#$anchor"
     }
     
