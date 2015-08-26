@@ -89,3 +89,7 @@ legend span {
 .margin-form-div h1 {
 	margin-left: 13.5em;
 }
+
+div.form-item-wrapper label {
+  display:inline;
+}
