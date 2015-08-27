@@ -1146,12 +1146,7 @@ ad_proc -private template::list::template {
                                      -default "table"]]
     }
 
-    # Added support for storing form templates outside acs-templating
-    if {[regexp {^/(.*)} $style path]} {
-        set file_stub "$::acs::rootdir$path"
-    } else {
-        set file_stub [template::get_resource_path]/lists/$style
-    }
+    set file_stub [template::resource_path -type lists -style $style]
 
     # ensure that the style template has been compiled and is up-to-date
     template::adp_init adp $file_stub
@@ -1805,12 +1800,8 @@ ad_proc -private template::list::render_filters {
                        -parameter DefaultListFilterStyle \
                        -default "filters"]
     }
-    # Added support for storing form templates outside acs-templating
-    if {[regexp {^/(.*)} $style path]} {
-        set file_stub "$::acs::rootdir$path"
-    } else {
-        set file_stub [template::get_resource_path]/lists/$style
-    }
+    
+    set file_stub [template::resource_path -type lists -style $style]
 
     # ensure that the style template has been compiled and is up-to-date
     template::adp_init adp $file_stub
@@ -3100,13 +3091,13 @@ ad_proc -private template::list::render_form_filters {
 
     ############################################################
     ############################################################
-    if {$style eq {}} {
+    if {$style eq ""} {
         set style [parameter::get \
                        -package_id [apm_package_id_from_key "acs-templating"] \
                        -parameter DefaultListFilterStyle \
                        -default "filters"]
     }
-    set file_stub "[template::get_resource_path]/lists/$style"
+    set file_stub [template::resource_path -type lists -style $style]
 
     # ensure that the style template has been compiled and is up-to-date
     template::adp_init adp $file_stub

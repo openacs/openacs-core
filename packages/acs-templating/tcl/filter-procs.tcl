@@ -103,7 +103,7 @@ ad_proc -public dat_page_filter { why } {
         set code_stub "$::acs::rootdir/packages/$package_key/www$rest"
         set beginTime [clock clicks -milliseconds]
 
-        set file_stub [template::get_resource_path]/messages/datasources
+	set file_stub [template::resource_path -type messages -style $datasources]
 
         set output [template::adp_parse $file_stub [list code_stub $code_stub]]
 

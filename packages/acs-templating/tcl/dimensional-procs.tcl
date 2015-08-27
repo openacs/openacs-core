@@ -69,11 +69,10 @@ ad_proc ad_dimensional {
 		       -default "dimensional-table"]
     }
 
-    if {[regexp {^/(.*)} $style path]} {
-        set adp_stub $path
-    } else {
-        set adp_stub /packages/acs-templating/resources/dimensional/$style
-    }
+    #
+    # Get the path. template::include needs a relative path.
+    #
+    set adp_stub [template::resource_path -type dimensional -style $style -relative]
 
     #
     # Create nested adp-arrays. Since the templating system does not

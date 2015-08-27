@@ -757,14 +757,62 @@ ad_proc -public template::util::tcl_to_sql_list { lst } {
     }
 }
 
-ad_proc -public template::get_resource_path {} {
+ad_proc -deprecated template::get_resource_path {} {
     Get the template directory
     The body is doublequoted, so it is interpreted when this file is read
+    @see template::resource_path
 } "
   return \"[file dirname [file dirname [info script]]]/resources\"
 "
 
+ad_proc -public template::resource_path {
+    -type:required
+    -style:required
+    -relative:boolean
+    -subsite_id
+    -theme_dir
+} {
+    
+    Process the templating "style" and return the stub (path without
+    extensions). When the style is not an abolute path, check if the
+    resource can be obtained from the theme, if not fallback to the
+    resources directory of acs-templating.
 
+    @param type type of resource (e.g. "forms" or "lists")
+    @param style name of the resource within the type (e.g. "standard")
+    @param relative return optionally the path relative to the OpenACS root directory
+    @param theme_dir theming directory (alternative to determination via subsite), higher priority
+    @param subsite_id subsite_id to determine theming information
+
+    @return path of the resource (without extension)
+} {
+    
+    if {![regexp {^/(.*)} $style path]} {
+
+	if { ![info exists theme_dir] } {
+	    if { ![info exists subsite_id] } {
+		set subsite_id [ad_conn subsite_id]
+	    }
+	    set theme_dir [parameter::get -parameter ResourceDir -package_id $subsite_id]
+	}
+
+	if {$theme_dir ne ""} {
+	    set path $theme_dir/$type/$style
+	    if {![file exists $::acs::rootdir/$path.adp]} {
+		unset path
+	    }
+	}
+	if {![info exists path]} {
+	    set path /packages/acs-templating/resources/$type/$style
+	}
+    }
+    
+    if {$relative_p} {
+	return $path
+    } else {
+	return $::acs::rootdir/$path
+    }
+}
 
 ad_proc -public stack_frame_values {level} {
     return the variables and arrays of one frame as HTML
