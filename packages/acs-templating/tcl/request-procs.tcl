@@ -157,29 +157,29 @@ ad_proc -public template::request::is_valid { { url "" } } {
 
     @return 1 if no error conditions exist, 0 otherwise.
 } {
-  set level [template::adp_level]
-  upvar #$level request:error requesterror
+    set level [template::adp_level]
+    upvar #$level request:error requesterror
 
-  if { [info exists requesterror] } {
+    if { [info exists requesterror] } {
 
-    # set requesterror as a data source
-    uplevel #$level "upvar 0 request:error requesterror"
+	# set requesterror as a data source
+	uplevel #$level "upvar 0 request:error requesterror"
 
-    if { $url ne "self" } {
+	if { $url ne "self" } {
 
-      if {$url eq {}} { 
-	set file_stub [template::get_resource_path]/messages/request-error
-      } else {
-	set file_stub [ns_url2file $url]
-      }
-      template::set_file $file_stub
+	    if {$url eq {}} { 
+		set file_stub [template::resource_path -type messages -style request-error]
+	    } else {
+		set file_stub [ns_url2file $url]
+	    }
+	    template::set_file $file_stub
+	}
+
+	return 0
+
+    } else {
+
+	return 1
     }
-
-    return 0
-
-  } else {
-
-    return 1
-  }
 }
 

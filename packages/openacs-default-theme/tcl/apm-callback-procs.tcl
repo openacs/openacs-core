@@ -19,7 +19,7 @@ ad_proc openacs_default_theme::install::after_install {} {
             -form_template /packages/acs-templating/resources/forms/standard \
             -list_template /packages/acs-templating/resources/lists/table \
             -list_filter_template /packages/acs-templating/resources/lists/filters \
-	    -dimensional_template /packages/acs-templating/resources/dimensional/dimensional-table
+	    -dimensional_template /packages/acs-templating/resources/dimensional/dimensional-table 
 
         subsite::new_subsite_theme \
             -key default_tabbed \

@@ -6,9 +6,8 @@ ad_page_contract {
     @cvs-id $Id$
 }
 
-set page_title "[_ acs-subsite.Subsite_Configuration]"
-
-set context [list "[_ acs-subsite.Configuration]"]
+set page_title [_ acs-subsite.Subsite_Configuration]
+set context [list [_ acs-subsite.Configuration]]
 
 set group_id [application_group::group_id_from_package_id]
 

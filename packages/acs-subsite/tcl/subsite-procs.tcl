@@ -796,8 +796,13 @@ ad_proc -public subsite::set_theme {
     -subsite_id
     {-theme:required}
 } {
-    Set the theme for the given subsite.  This will change the subsite's ThemeKey,
-    DefaultMaster, and ThemeCSS parameters.
+    Set the theme for the given or current subsite.  This will change
+    the subsite's ThemeKey, DefaultMaster, and ThemeCSS,
+    DefaultFormStyle, DefaultListStyle, DefaultListFilterStyle,
+    DefaultDimensionalStyle, and ResourceDir parameters.
+
+    @param subsite_id id of the subsite
+    @param theme Name of the theme (theme key)x
 } {
     if { ![info exists subsite_id] } {
         set subsite_id [ad_conn subsite_id]
@@ -817,6 +822,24 @@ ad_proc -public subsite::set_theme {
         -value $list_template
     parameter::set_value -parameter DefaultListFilterStyle -package_id $subsite_id \
         -value $list_filter_template
+    parameter::set_value -parameter DefaultDimensionalStyle -package_id $subsite_id \
+        -value $dimensional_template
+    parameter::set_value -parameter ResourceDir -package_id $subsite_id \
+        -value $resource_dir
+}
+
+ad_proc -public subsite::get_theme {
+    -subsite_id
+} {
+    Get the theme for the given (or current) subsite.
+
+    @param subsite_id id of the subsite
+    @return Name of the theme (theme key)
+} {
+    if { ![info exists subsite_id] } {
+        set subsite_id [ad_conn subsite_id]
+    }
+    parameter::get -parameter ThemeKey -package_id $subsite_id 
 }
 
 ad_proc -public subsite::new_subsite_theme {
@@ -828,6 +851,7 @@ ad_proc -public subsite::new_subsite_theme {
     {-list_template ""}
     {-list_filter_template ""}
     {-dimensional_template ""}
+    {-resource_dir ""}
 } {
     Add a new subsite theme, making it available to the theme configuration code.
 } {
