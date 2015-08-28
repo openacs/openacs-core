@@ -816,6 +816,8 @@ ad_proc -public subsite::set_theme {
         -value $template
     parameter::set_value -parameter ThemeCSS -package_id $subsite_id \
         -value $css
+    parameter::set_value -parameter ThemeJS -package_id $subsite_id \
+        -value $js
     parameter::set_value -parameter DefaultFormStyle -package_id $subsite_id \
         -value $form_template
     parameter::set_value -parameter DefaultListStyle -package_id $subsite_id \
@@ -847,6 +849,7 @@ ad_proc -public subsite::new_subsite_theme {
     -name:required
     -template:required
     {-css ""}
+    {-js ""}
     {-form_template ""}
     {-list_template ""}
     {-list_filter_template ""}
