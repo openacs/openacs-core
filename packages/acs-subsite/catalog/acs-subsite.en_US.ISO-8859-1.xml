@@ -114,6 +114,7 @@ logging in again. &lt;/p&gt;
   <msg key="confirmation_password_changed">You have successfully chosen a new password.</msg>
   <msg key="Continue">Continue</msg>
   <msg key="Continue_to_your_account">Continue to %pvt_home_name%</msg>
+  <msg key="Convert_to_descendent_subsite_type'">Convert to descendent subsite type</msg>
   <msg key="Core_Services">Core Services</msg>
   <msg key="Country_Name">Country Name</msg>
   <msg key="create">Create</msg>
