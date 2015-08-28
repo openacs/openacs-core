@@ -4,27 +4,27 @@ ad_page_contract {
     @author Lars Pind (lars@collaboraid.biz)
     @creation-date 2003-06-02
     @cvs-id $Id$
+} {
+    page:naturalnum,optional
 }
 
-set page_title "[_ acs-subsite.Applications]"
+set page_title [_ acs-subsite.Applications]
 set context [list $page_title]
 
 # Get the subsite node ID
-set subsite_url [lindex [site_node::get_url_from_object_id -object_id [site_node::closest_ancestor_package -include_self -package_key [subsite::package_keys]]] 0]
+set subsite_url [lindex [site_node::get_url_from_object_id \
+			     -object_id [site_node::closest_ancestor_package \
+					     -include_self \
+					     -package_key [subsite::package_keys]]] 0]
 array set subsite_sitenode [site_node::get -url $subsite_url]
 set subsite_node_id $subsite_sitenode(node_id)
-
-db_multirow -extend { parameter_url } applications select_applications {} {
-    set instance_name "[string repeat .. $treelevel]$instance_name"
-    if { $num_parameters > 0 } {
-        set parameter_url [export_vars -base ../../shared/parameters { package_id { return_url [ad_return_url] } }]
-    }
-}
 
 list::create \
     -name applications \
     -multirow applications \
     -key node_id \
+    -page_size 250 \
+    -page_query_name select_applications \
     -actions { 
         "#acs-subsite.Add_application#" application-add "#acs-subsite.Add_new_app#"
     } \
@@ -74,3 +74,9 @@ list::create \
 
 
 
+db_multirow -extend { parameter_url } applications select_applications_page {} {
+    set instance_name [string repeat "- " $treelevel]$instance_name
+    if { $num_parameters > 0 } {
+        set parameter_url [export_vars -base ../../shared/parameters { package_id { return_url [ad_return_url] } }]
+    }
+}

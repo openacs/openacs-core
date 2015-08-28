@@ -6,6 +6,21 @@
 <fullquery name="select_applications">      
       <querytext>
 
+    select n.node_id
+    from   site_nodes n,
+           apm_packages p,
+           apm_package_types pt
+    where  n.parent_id = :subsite_node_id
+    and    p.package_id = n.object_id
+    and    pt.package_key = p.package_key
+    order  by lower(p.instance_name)
+
+      </querytext>
+</fullquery>
+
+<fullquery name="select_applications_page">      
+      <querytext>
+
     select n.node_id, 
            n.name, 
            p.package_id,
@@ -19,10 +34,11 @@
     where  n.parent_id = :subsite_node_id
     and    p.package_id = n.object_id
     and    pt.package_key = p.package_key
+    and [template::list::page_where_clause -name applications -key n.node_id]
+    [template::list::filter_where_clauses -and -name applications]
+    
     order  by lower(p.instance_name)
-
       </querytext>
-</fullquery>
-
+</fullquery
  
 </queryset>
