@@ -2199,9 +2199,9 @@ ad_proc -private template::list::element::render {
     # We ignore if the element doesn't exist, 'cause then we'll just hope it exists in the multirow and display the value directly
     get_reference -create -list_name $list_name -element_name $element_name
 
-    if { ([info exists element_properties(display_template)] && $element_properties(display_template) ne "") } {
+    if { [info exists element_properties(display_template)] && $element_properties(display_template) ne "" } {
         set output $element_properties(display_template)
-    } elseif { ([info exists element_properties(display_col)] && $element_properties(display_col) ne "") } {
+    } elseif { [info exists element_properties(display_col)] && $element_properties(display_col) ne "" } {
         set output "@$multirow.$element_properties(display_col)@"
     } else {
         set output "@$multirow.$element_name@"
