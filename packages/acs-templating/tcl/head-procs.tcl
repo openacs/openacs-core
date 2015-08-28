@@ -37,8 +37,47 @@ ad_proc -private template::reset_request_vars {} {
     set ::template::footers [list]
 }
 
+ad_proc -public template::add_script {
+    {-type "text/javascript"}
+    {-defer:boolean}
+    {-async:boolean}
+    {-src ""}
+    {-charset ""}
+    {-script ""}
+    {-order "0"}
+    {-section "head"}
+} {
+    @param type    the type attribute of the script tag, eg. 'text/javascript'
+    @param defer   whether execution of the script should be defered until after
+                   the page has been loaded
+    @param async   whether execution of the script should be executed asynchronously
+                   as soon as it is available
+    @param src     the src attribute of the script tag, ie. the source url of the
+                   script
+    @param charset the charset attribute of the script tag, ie. the character 
+                   set of the script if it differs from the main document
+    @param script  the inline script for the body of the script tag.  This 
+                   parameter will be ignored if a value has been supplied for src
+    @param order   specify inclusion order
+    @param section section, where script is added ("head" or "body")
+} {
+    if {$section eq "head"} {
+	#
+	# A head script
+	#
+	::template::head::add_script -type $type -defer=$defer_p -async=$async_p \
+	    -src $src -charset $charset -script $script -order $order
+    } else {
+	#
+	# A body script. The order is ignored.
+	#
+	::template::add_body_script -type $type -defer=$defer_p -async=$async_p \
+	    -src $src -charset $charset -script $script
+    }
+}
+
 ad_proc -public template::head::add_script {
-    {-type:required}
+    {-type "text/javascript"}
     {-defer:boolean}
     {-async:boolean}
     {-src ""}
@@ -63,8 +102,9 @@ ad_proc -public template::head::add_script {
     @param charset the charset attribute of the script tag, ie. the character 
                    set of the script if it differs from the main document
     @param script  the inline script for the body of the script tag.  This 
-                   parameter will be ignored if a value has been supplied for
-                   src
+                   parameter will be ignored if a value has been supplied for src
+    @param order   specify inclusion order
+    
 } {
     variable ::template::head::scripts
 
@@ -318,7 +358,7 @@ ad_proc -public template::add_body_handler {
 }
 
 ad_proc -public template::add_body_script {
-    {-type:required}
+    {-type "text/javascript"}
     {-defer:boolean}
     {-async:boolean}
     {-src ""}

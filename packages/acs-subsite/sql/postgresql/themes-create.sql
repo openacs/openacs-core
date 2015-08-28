@@ -19,6 +19,7 @@ create table subsite_themes (
                   constraint subsite_themes_template_nn
                   not null,
     css           text,
+    js            text,
     form_template text,
     list_template text,
     list_filter_template text,
