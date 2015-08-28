@@ -6,6 +6,21 @@
 <fullquery name="select_applications">      
       <querytext>
 
+    select n.node_id
+    from   site_nodes n,
+           site_nodes np,
+           apm_packages p
+    where  np.node_id = :subsite_node_id
+    and    n.tree_sortkey between np.tree_sortkey and tree_right(np.tree_sortkey)
+    and    p.package_id = n.object_id
+    order  by n.tree_sortkey
+
+      </querytext>
+</fullquery>
+
+<fullquery name="select_applications_page">      
+      <querytext>
+
     select n.node_id, 
            n.name, 
            p.package_id,
@@ -21,6 +36,8 @@
     and    n.tree_sortkey between np.tree_sortkey and tree_right(np.tree_sortkey)
     and    p.package_id = n.object_id
     and    pt.package_key = p.package_key
+    and [template::list::page_where_clause -name applications -key n.node_id]
+    [template::list::filter_where_clauses -and -name applications]
     order  by n.tree_sortkey
 
       </querytext>
