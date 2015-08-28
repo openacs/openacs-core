@@ -55,7 +55,7 @@ ad_proc -public subsite_navigation::define_pageflow {
 
     if { ![template::multirow exists $navigation_multirow] } {
         template::multirow create $navigation_multirow group label href target \
-            title lang accesskey class id tabindex 
+            title lang accesskey class id tabindex display_template
     }
 
     foreach { section_name section_spec } $pageflow {
@@ -67,6 +67,7 @@ ad_proc -public subsite_navigation::define_pageflow {
             folder {}
             selected_patterns {}
             accesskey {}
+	    display_template {}
         }
 
         array set section_a $section_spec
@@ -88,6 +89,7 @@ ad_proc -public subsite_navigation::define_pageflow {
                     url {}
                     selected_patterns {}
                     accesskey {}
+		    display_template {}
                 }
                 array set subsection_a $subsection_spec
                 set subsection_a(name) $subsection_name
@@ -105,7 +107,7 @@ ad_proc -public subsite_navigation::define_pageflow {
 }
 
 
-ad_proc -public subsite_navigation::add_section_row {
+ad_proc -private subsite_navigation::add_section_row {
     {-subsite_id ""}
     {-array:required}
     {-base_url:required}
@@ -119,8 +121,11 @@ ad_proc -public subsite_navigation::add_section_row {
 } {
     upvar $array info
     # the folder index page is called .
-    if { $info(url) eq "" || $info(url) eq "index" || \
-             [string match "*/" $info(url)] || [string match "*/index" $info(url)] } {
+    if { $info(url) eq ""
+	 || $info(url) eq "index"
+	 || [string match "*/" $info(url)]
+	 || [string match "*/index" $info(url)]
+     } {
         set info(url) "[string range $info(url) 0 [string last / $info(url)]]."
     }
     
@@ -165,8 +170,10 @@ ad_proc -public subsite_navigation::add_section_row {
         set navigation_id ""
     }
 
-    template::multirow append $multirow $group $info(label) [file join $base_url $info(url)] \
-        "" $info(title) "" $info(accesskey) "" $navigation_id [template::multirow size $multirow]
+    template::multirow append $multirow \
+	$group $info(label) [file join $base_url $info(url)] \
+        "" $info(title) "" $info(accesskey) "" $navigation_id [template::multirow size $multirow] \
+	$info(display_template)
 
     return $selected_p
 }
@@ -188,12 +195,28 @@ ad_proc -public subsite_navigation::get_section_info {
 
     template::multirow foreach $navigation_multirow {
         if { [template::util::is_true $selected_p] } {
-            set row(label) $label
-            set row(url) $url
+            array set row [list label $label url $url]
             break
         }
     }
 }
+
+ad_proc -private subsite_navigation::get_pageflow_from_parameter {
+    -parameter:required
+    -subsite_id:required
+} {
+    @param parameter subsite parameter name
+    @param subsite_id package_id of subsite
+    @return pageflow
+} {
+    set pageflow [parameter::get -package_id $subsite_id -parameter $parameter -default ""]
+    if { ![string is list $pageflow]} {
+	ns_log Warning "subsite_navigation: ignoring invalid $parameter: $pageflow"
+	set pageflow ""
+    }
+    return $pageflow
+}
+
 
 ad_proc -public subsite_navigation::get_pageflow_struct {
     {-subsite_id ""}
@@ -210,6 +233,18 @@ ad_proc -public subsite_navigation::get_pageflow_struct {
     @param no_tab_application_list A list of application package keys to ignore when
            autogenerating tabs for applications
 } {
+    if { ![string is list $initial_pageflow]} {
+	ns_log Warning "subsite_navigation: ignoring invalid initial_pageflow: $initial_pageflow"
+	set initial_pageflow ""
+    }
+    if { ![string is list $no_tab_application_list]} {
+	ns_log Warning "subsite_navigation: ignoring invalid no_tab_application_list: $no_tab_application_list"
+	set no_tab_application_list ""
+    }
+    if {$subsite_id eq ""} {
+	set subsite_id [ad_conn subsite_id]
+    }
+    
     set pageflow $initial_pageflow
     set subsite_node_id [site_node::get_node_id_from_object_id -object_id $subsite_id]
     set subsite_url [site_node::get_element -node_id $subsite_node_id -element url]
@@ -224,24 +259,29 @@ ad_proc -public subsite_navigation::get_pageflow_struct {
                      -party_id [ad_conn untrusted_user_id]]
     set show_member_list_to [parameter::get -parameter "ShowMembersListTo" -package_id $subsite_id -default 2]
 
-    if { $admin_p || ($user_id != 0 && $show_member_list_to == 1) || \
-	$show_member_list_to == 0 } {
-        set pageflow [concat $pageflow [parameter::get -package_id [ad_conn subsite_id] \
-                                           -parameter MembersViewNavbarTabsList -default ""]]
+    if { $admin_p
+	 || ($user_id != 0 && $show_member_list_to == 1)
+	 || $show_member_list_to == 0
+     } {
+        lappend pageflow {*}[subsite_navigation::get_pageflow_from_parameter \
+				 -subsite_id $subsite_id \
+				 -parameter MembersViewNavbarTabsList]
     }
 
-    set index_redirect_url [parameter::get -parameter "IndexRedirectUrl" -package_id $subsite_id]
-    set index_internal_redirect_url [parameter::get -parameter "IndexInternalRedirectUrl" -package_id $subsite_id]
-    regsub {(.*)/packages} $index_internal_redirect_url "" index_internal_redirect_url
-    regexp {(/[-[:alnum:]]+/)(.*)$} $index_internal_redirect_url dummy index_internal_redirect_url
-    set child_urls [lsort -ascii [site_node::get_children -node_id $subsite_node_id -package_type apm_application]]
-
     if { $show_applications_p } {
+	
+	set index_redirect_url [parameter::get -parameter "IndexRedirectUrl" -package_id $subsite_id]
+	set index_internal_redirect_url [parameter::get -parameter "IndexInternalRedirectUrl" -package_id $subsite_id]
+	regsub {(.*)/packages} $index_internal_redirect_url "" index_internal_redirect_url
+	regexp {(/[-[:alnum:]]+/)(.*)$} $index_internal_redirect_url dummy index_internal_redirect_url
+	set child_urls [lsort -ascii [site_node::get_children -node_id $subsite_node_id -package_type apm_application]]
+	
         foreach child_url $child_urls {
             array set child_node [site_node::get_from_url -exact -url $child_url]
             if { $child_url ne $index_redirect_url  &&
                  $child_url ne $index_internal_redirect_url &&
-                 [lsearch -exact $no_tab_application_list $child_node(package_key)] == -1 } {
+                 $child_node(package_key) ni $no_tab_application_list
+	     } {
                 lappend pageflow $child_node(name) [list \
                                                         label $child_node(instance_name) \
                                                         folder $child_node(name) \
@@ -252,8 +292,9 @@ ad_proc -public subsite_navigation::get_pageflow_struct {
     }
 
     if { $admin_p } {
-        set pageflow [concat $pageflow [parameter::get -package_id [ad_conn subsite_id] \
-                                           -parameter AdminNavbarTabsList -default ""]]
+	lappend pageflow {*}[subsite_navigation::get_pageflow_from_parameter \
+				-subsite_id $subsite_id \
+				-parameter AdminNavbarTabsList]
     }
 
     return $pageflow

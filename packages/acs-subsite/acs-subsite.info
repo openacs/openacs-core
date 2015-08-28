@@ -9,7 +9,7 @@
     <implements-subsite-p>t</implements-subsite-p>
     <inherit-templates-p>t</inherit-templates-p>
     
-    <version name="5.9.0d5" url="http://openacs.org/repository/download/apm/acs-subsite-5.9.0d5.apm">
+    <version name="5.9.0d6" url="http://openacs.org/repository/download/apm/acs-subsite-5.9.0d6.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Subsite</summary>
         <release-date>2015-06-16</release-date>
@@ -18,7 +18,7 @@
         <license>GPL</license>
         <maturity>3</maturity>
 
-        <provides url="acs-subsite" version="5.9.0d5"/>
+        <provides url="acs-subsite" version="5.9.0d6"/>
         <requires url="acs-authentication" version="5.9.0d1"/>
         <requires url="acs-content-repository" version="5.9.0d1"/>
         <requires url="acs-kernel" version="5.8.0d4"/>
@@ -128,9 +128,11 @@ admin {
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="SolicitPortraitP"  default="1" description="Set this to 1 if you want users to be asked to submit a portrait." section_name="user-info"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="SomeAmericanReadersP"  default="1" description="is it even worth bothering asking for state and zip code?"/>
             <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="StreamingHead"  default="/packages/openacs-default-theme/lib/plain-streaming-head" description="Path to the head template (skin) for streaming HTML-output. " section_name="theming"/>
-            <parameter scope="instance" datatype="text"  min_n_values="1"  max_n_values="1"  name="ThemeCSS"  default="{{href /resources/openacs-default-theme/styles/default-master.css} {media all}}
-               {{href /resources/acs-templating/forms.css} {media all}}
-               {{href /resources/acs-templating/lists.css} {media all}}" description="A list of lists of CSS/media pairs to use with this theme.  Set by the admin theme-switching UI.  If non defined, the default list and form CSS files are used, and the subsite master is expected to provide any CSS it needs itself." section_name="theming"/>
+            <parameter scope="instance" datatype="text"  min_n_values="1"  max_n_values="1"  name="ThemeCSS"  default="{-href /resources/openacs-default-theme/styles/default-master.css -media all}
+               {-href /resources/acs-templating/forms.css -media all}
+               {-href /resources/acs-templating/lists.css -media all}" description="A list of the form '-attribute value' pairs for use with this theme. The valid attributes are defined by template::head::add_css. Set by the admin theme-switching UI.  If non defined, the default list and form CSS files are used, and the subsite master is expected to provide any CSS it needs itself." section_name="theming"/>
+            <parameter scope="instance" datatype="text"  min_n_values="1"  max_n_values="1"  name="ThemeJS"  default=""
+		       description="A list of lists of JS specifications of the form '-attribute value' pairs to use with this theme. The allowed attributes are defined by the arguments of template::add_script.  Set by the admin theme-switching UI." section_name="theming"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="ThemeKey"  default="default_plain" description="Key of the acs-templating theme for this subsite.  Set by the admin theme-switching UI." section_name="theming"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="TmpDir"  default="/tmp /var/tmp" description="What tmp directories are used on this system? Note the leading / character."/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="UserHomeTemplate"  default="/packages/acs-subsite/lib/home" description="Name of the template used for the user home page" section_name="Templates"/>

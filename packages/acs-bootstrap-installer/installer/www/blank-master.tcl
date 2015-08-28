@@ -96,24 +96,43 @@ template::head::add_javascript -script {
 # Add css for the current subsite, defaulting to the old list/form css which was
 # hard-wired in previous versions of OpenACS.
 
-set css [parameter::get -package_id [ad_conn subsite_id] -parameter ThemeCSS -default ""]
-if {$css ne "" } {
+set cssList [parameter::get -package_id [ad_conn subsite_id] -parameter ThemeCSS -default ""]
+if {![string is list $cssList]} {
+    ns_log error "ignore value in ThemeCSS, since it is not a valid list: $cssList"
+} elseif { [llength $cssList] > 0 } {
 
     # DRB: Need to handle two cases, the lame first attempt and the more complete current
     # attempt which allows you to specify all of the parameters to template::head::add_css
     # (sigh, remove this kludge for 5.5.1).  We need to handle the old case so upgrades
     # to 5.5 for mgh and various of my sites work correctly.
+    #
+    # The following syntaxes are supported
+    #
+    # 1) pairs:                       {/resources/acs-templating/lists.css all} ...
+    # 2) nested list of pairs:        {{href /resources/acs-templating/lists.css} {media all} ... } ...
+    # 3) flat list of -att val pairs: {-href /resources/acs-templating/lists.css -media all ... } ...
+    #
 
-    foreach css $css {
-        if { [llength $css] == 2 && [llength [lindex $css 0]] == 1 } {
-            template::head::add_css -href [lindex $css 0] -media [lindex $css 1]
-        } else {
+    foreach css $cssList {
+	set first [lindex $css 0]
+        if { [llength $css] == 2 && [llength $first] == 1 && [string range $first 0 0] ne "-"} {
+            template::head::add_css -href $first -media [lindex $css 1]
+        } elseif {[llength $first] == 2} {
 	    set params [list]
             foreach param $css {
                 lappend params -[lindex $param 0] [lindex $param 1]
             }
-            template::head::add_css {*}$params
-        }
+	    if {[catch {template::head::add_css {*}$params} errorMsg]} {
+		ns_log error $errorMsg
+	    }
+        } else {
+	    if {![string match -* [lindex $css 0]]} {
+		error "CSS specification '$css' is incorrect"
+	    }
+	    if {[catch {template::head::add_css {*}$css} errorMsg]} {
+		ns_log error $errorMsg
+	    }
+	}	    
     }
 
 } else {
@@ -125,6 +144,22 @@ if {$css ne "" } {
         -media "all"
 }
 
+#
+# Add js files via ThemeJS for the current subsite, similar to
+# ThemeCSS.  Syntax is the flat list syntax (3) from ThemeCSS, valid
+# parameters are determined by template::add_script. It is possible to
+# add head and body scripts.
+
+set jsSpecs [parameter::get -package_id [ad_conn subsite_id] -parameter ThemeJS -default ""]
+if {![string is list $jsSpecs]} {
+    ns_log error "ignore value in ThemeJS since it is not a valid list: $jsSpecs"
+} else {
+    foreach jsSpec $jsSpecs {
+	if {[catch {template::add_script {*}$jsSpec} errorMsg]} {
+	    ns_log error $errorMsg
+	}
+    }
+}
 #
 # Temporary (?) fix to get xinha working
 #
@@ -221,7 +256,7 @@ if {![info exists doc(title)]} {
     ns_log warning "[ad_conn url] has no doc(title) set."
 }
 # AG: Markup in <title> tags doesn't render well.
-set doc(title) [ns_striphtml $doc(title)]
+#set doc(title) [ns_striphtml $doc(title)]
 
 if {![info exists doc(charset)]} {
     set doc(charset) [ns_config ns/parameters OutputCharset [ad_conn charset]]
