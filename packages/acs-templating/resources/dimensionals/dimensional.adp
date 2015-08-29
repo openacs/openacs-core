@@ -4,6 +4,6 @@
 </multiple></tr>
 <tr>
 <multiple name="dimensional">
-<include src="dimensional-option" &opt="opt_@dimensional.key;literal@" key="@dimensional.key;literal@" label="@dimensional.label;literal@">
+<include ds="0" src="dimensional-option" &opt="opt_@dimensional.key;literal@" key="@dimensional.key;literal@" label="@dimensional.label;literal@">
 </multiple>
 </table>
