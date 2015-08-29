@@ -97,9 +97,10 @@ template_tag slave { params } {
 template_tag include { params } {
 
   set src [ns_set iget $params src]
-
+  set ds [ns_set iget $params ds 1]
+  
   #Start developer support frame around subordinate template.
-  if { [info commands ::ds_enabled_p] ne "" && [info commands ::ds_adp_start_box] ne "" } {
+  if { $ds && [info commands ::ds_enabled_p] ne "" && [info commands ::ds_adp_start_box] ne "" } {
       ::ds_adp_start_box -stub "\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]"
   }
 
@@ -632,9 +633,10 @@ template_tag content { params } {
 template_tag include-optional { chunk params } {
 
   set src [ns_set iget $params src]
+  set ds [ns_set iget $params ds 1]
 
   #Start developer support frame around subordinate template.
-  if { [info commands ::ds_enabled_p] ne "" && [info commands ::ds_adp_start_box] ne ""} {
+  if { $ds && [info commands ::ds_enabled_p] ne "" && [info commands ::ds_adp_start_box] ne ""} {
       ::ds_adp_start_box -stub "\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]"
   }
 
