@@ -142,7 +142,7 @@ template_tag include { params } {
   template::adp_append_code "}"
 
   #End developer support frame around subordinate template.
-  if { [info commands ::ds_enabled_p] ne "" && [info commands ::ds_adp_end_box] ne "" } {
+  if { $ds && [info commands ::ds_enabled_p] ne "" && [info commands ::ds_adp_end_box] ne "" } {
       ::ds_adp_end_box -stub "\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]"
   }
 
@@ -677,7 +677,7 @@ template_tag include-optional { chunk params } {
   "
 
   #End developer support frame around subordinate template.
-  if { [info commands ::ds_enabled_p] ne "" && [info commands ::ds_adp_end_box] ne "" } {
+  if { $ds && [info commands ::ds_enabled_p] ne "" && [info commands ::ds_adp_end_box] ne "" } {
       ::ds_adp_end_box -stub "\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]"
   }
 
