@@ -92,61 +92,79 @@ template_tag slave { params } {
 
 }
 
+#
 # Include another template in the current template
+#
+ad_proc -private template:template_tag_helper {params} {
+    set src [ns_set iget $params src]
+    set ds [ns_set iget $params ds 1]
+    
+    #Start developer support frame around subordinate template.
+    if { $ds && [info commands ::ds_enabled_p] ne "" && [info commands ::ds_adp_start_box] ne "" } {
+	::ds_adp_start_box -stub "\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]"
+    }
+
+    # pass additional arguments as key-value pairs
+
+    set command "template::adp_parse"
+    append command " \[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]"
+    append command " \[list"
+
+    for { set i 0 } { $i < [ns_set size $params] } { incr i } {
+
+	set key [ns_set key $params $i]
+	if {$key in {src ds}} { continue }
+	
+	set value [ns_set value $params $i]
+	append command " $key \"$value\"";	# is $value quoted sufficiently?
+    }
+    append command "\]"
+
+    # We explicitly test for ad_script_abort, so we don't dump that as an error, and don't catch it, either
+    # (We do catch it, but then we re-throw it)
+    template::adp_append_code "if { \[catch { append __adp_output \[$command\] } errmsg\] } {"
+    template::adp_append_code "    if { \[lindex \$::errorCode 0\] eq \"AD\" && \[lindex \$::errorCode 1\] eq \"EXCEPTION\" && \[lindex \$::errorCode 2\] eq \"ad_script_abort\" } {"
+    template::adp_append_code "        ad_script_abort"
+    template::adp_append_code "    } else {"
+    template::adp_append_code "        append __adp_output \"Error in include template \\\"\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]\\\": \[ns_quotehtml \$errmsg\]\""
+    # JCD: If we have the ds_page_bits cache maybe save the error for later
+    if { [info commands ::ds_enabled_p] ne "" && [info commands ::ds_page_fragment_cache_enabled_p] ne "" } {
+	template::adp_append_code "        if {\[info exists ::ds_enabled_p\]"
+	template::adp_append_code "            && \[info exists ::ds_collection_enabled_p\] } {"
+	template::adp_append_code "            set __include_errors {}"
+	template::adp_append_code "            ns_cache get ds_page_bits \[ad_conn request\]:error __include_errors"
+	template::adp_append_code "            ns_cache set ds_page_bits \[ad_conn request\]:error \[lappend __include_errors \[list \"$src\" \$::errorInfo\]\]"
+	template::adp_append_code "        }"
+    }
+    template::adp_append_code "        ns_log Error \"Error in include template \\\"\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]\\\": \$errmsg\n\$::errorInfo\""
+    template::adp_append_code "    }"
+    template::adp_append_code "}"
+
+    #End developer support frame around subordinate template.
+    if { $ds && [info commands ::ds_enabled_p] ne "" && [info commands ::ds_adp_end_box] ne "" } {
+	::ds_adp_end_box -stub "\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]"
+    }
+}
 
 template_tag include { params } {
-
-  set src [ns_set iget $params src]
-  set ds [ns_set iget $params ds 1]
-  
-  #Start developer support frame around subordinate template.
-  if { $ds && [info commands ::ds_enabled_p] ne "" && [info commands ::ds_adp_start_box] ne "" } {
-      ::ds_adp_start_box -stub "\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]"
-  }
-
-  # pass additional arguments as key-value pairs
-
-  set command "template::adp_parse"
-  append command " \[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]"
-  append command " \[list"
-
-  for { set i 0 } { $i < [ns_set size $params] } { incr i } {
-
-    set key [ns_set key $params $i]
-    if {$key eq "src"} { continue }
-    
-    set value [ns_set value $params $i]
-
-    append command " $key \"$value\"";	# is $value quoted sufficiently?
-  }
-  append command "\]"
-
-  # We explicitly test for ad_script_abort, so we don't dump that as an error, and don't catch it, either
-  # (We do catch it, but then we re-throw it)
-  template::adp_append_code "if { \[catch { append __adp_output \[$command\] } errmsg\] } {"
-  template::adp_append_code "    if { \[lindex \$::errorCode 0\] eq \"AD\" && \[lindex \$::errorCode 1\] eq \"EXCEPTION\" && \[lindex \$::errorCode 2\] eq \"ad_script_abort\" } {"
-  template::adp_append_code "        ad_script_abort"
-  template::adp_append_code "    } else {"
-  template::adp_append_code "        append __adp_output \"Error in include template \\\"\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]\\\": \[ns_quotehtml \$errmsg\]\""
-  # JCD: If we have the ds_page_bits cache maybe save the error for later
-  if { [info commands ::ds_enabled_p] ne "" && [info commands ::ds_page_fragment_cache_enabled_p] ne "" } {
-      template::adp_append_code "        if {\[info exists ::ds_enabled_p\]"
-      template::adp_append_code "            && \[info exists ::ds_collection_enabled_p\] } {"
-      template::adp_append_code "            set __include_errors {}"
-      template::adp_append_code "            ns_cache get ds_page_bits \[ad_conn request\]:error __include_errors"
-      template::adp_append_code "            ns_cache set ds_page_bits \[ad_conn request\]:error \[lappend __include_errors \[list \"$src\" \$::errorInfo\]\]"
-      template::adp_append_code "        }"
-  }
-  template::adp_append_code "        ns_log Error \"Error in include template \\\"\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]\\\": \$errmsg\n\$::errorInfo\""
-  template::adp_append_code "    }"
-  template::adp_append_code "}"
-
-  #End developer support frame around subordinate template.
-  if { $ds && [info commands ::ds_enabled_p] ne "" && [info commands ::ds_adp_end_box] ne "" } {
-      ::ds_adp_end_box -stub "\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]"
-  }
-
+    template:template_tag_helper $params
 }
+
+#
+# <widget> is very similar to <include>, but uses name resolution
+# based on themes.  If the theme package contains
+# resources/widgets/$specifiedName it is used from there. Otherwise it
+# behaves exactly like <include>
+#
+template_tag widget { params } {
+    set src [ns_set iget $params src]
+    set adp_stub [template::resource_path -type widgets -style $src -relative]
+    if {[file exists $adp_stub.adp]} {
+	ns_set update $params src $adp_stub
+    }
+    template:template_tag_helper $params 
+}
+
 
 # Repeat a template chunk for each row of a multirow data source
 
