@@ -482,16 +482,35 @@ ad_proc -public template::util::write_file { path text } {
   close $fd
 }
 
+ad_proc -public template::util::master_to_file { url {reference_url ""} } {
+    
+    Resolve a URL into an absolute file path, but respect styled
+    master configuration for named masters
+    (e.g. acs-templating/resources/masters/... containing 2cols.adp)
+    
+} {
+    if { [string index $url 0] ne "/" } {
+	set master_stub [template::resource_path -type masters -style $url]
+
+	if {[file exists $master_stub.adp]} {
+	    set path $master_stub
+	} else {
+	    set path [file dirname $reference_url]/$url
+	}
+	
+    } else {
+	set path $::acs::rootdir/$url
+    }
+    return [ns_normalizepath $path]
+}
+
 ad_proc -public template::util::url_to_file { url {reference_url ""} } {
     Resolve a URL into an absolute file path.
 } {
 
   if { [string index $url 0] ne "/" } {
-
     set path [file dirname $reference_url]/$url
-
   } else {
-
     set path $::acs::rootdir/$url
   }
 
