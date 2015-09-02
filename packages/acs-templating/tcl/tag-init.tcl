@@ -67,7 +67,7 @@ template_tag master { params } {
   }
   
   template::adp_append_code "
-    set __adp_master \[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]"
+    set __adp_master \[template::util::master_to_file \"$src\" \"\$__adp_stub\"\]"
 }
 
 # Insert the slave template
