@@ -976,7 +976,7 @@ ad_proc -private apm_package_install {
                 apm_callback_and_log $callback "<p> Mounted an instance of the package at /${priority_mount_path} </p>"
             } {
                 # Another package is mounted at the path so we cannot mount
-                                set error_text "Package $version(package-name) could not be mounted at /$version(auto-mount) , there may already be a package mounted there, the error is: $error"
+                set error_text "Package $version(package-name) could not be mounted at /$version(auto-mount) , there may already be a package mounted there, the error is: $error"
                 ns_log Error "apm_package_install: $error_text \n\n$::errorInfo"
                 apm_callback_and_log $callback "<p> $error_text </p>"
             } 
@@ -990,7 +990,8 @@ ad_proc -private apm_package_install {
         }
     } else {
         # After upgrade Tcl proc callback
-        apm_invoke_callback_proc -version_id $version_id -type after-upgrade -arg_list [list from_version_name $upgrade_from_version_name to_version_name $version(name)]
+        apm_invoke_callback_proc -version_id $version_id -type after-upgrade \
+            -arg_list [list from_version_name $upgrade_from_version_name to_version_name $version(name)]
     }
 
     # Flush the installed_p cache
@@ -1002,7 +1003,7 @@ ad_proc -private apm_package_install {
 ad_proc apm_unregister_disinherited_params { package_key dependency_id } {
 
     Remove parameters for package_key that have been disinherited (i.e., the
-                                                                   dependency that caused them to be inherited have been removed).  Called only
+    dependency that caused them to be inherited have been removed).  Called only
     by the APM and keep it that way, please.
 
 } {

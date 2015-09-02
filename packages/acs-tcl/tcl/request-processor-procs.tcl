@@ -225,8 +225,8 @@ ad_proc -public ad_register_proc {
         # Shortcut to allow registering filter for all methods. Just
         # call ad_register_proc again, with each of the three methods.
         foreach method { GET POST HEAD } {
-                                          ad_register_proc -debug $debug -noinherit $noinherit $method $path $proc $arg
-                                      }
+            ad_register_proc -debug $debug -noinherit $noinherit $method $path $proc $arg
+        }
         return
     }
 
