@@ -114,7 +114,7 @@ db_multirow -extend {
     delete_url
     message_key_pretty
 } messages select_messages {} {
-    set edit_url [export_vars -base { locale package_key message_key show {return_url [ad_return_url]} }]
+    set edit_url [export_vars -base edit-localized-message { locale package_key message_key show {return_url [ad_return_url]} }]
     set delete_url [export_vars -base message-delete { locale package_key message_key show {return_url [ad_return_url]} }]
     set message_key_pretty "$package_key.$message_key"
 }
