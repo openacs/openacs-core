@@ -1911,6 +1911,18 @@ ad_proc -public template::list::element::create {
     specified in the 'pass_properties' argument to the template::list::create.
     </li>
     <li>
+    <b>display_template_name</b>: theme-able template. If a
+    display_template_name is specified, and a file with this name is
+    available from the ressource directory in the display_templates
+    section, then take its countent as display_template. The resouce
+    directory is taken from the ResourceDir of the theme (parameter of
+    acs-sub-site) or from the "resources" directory in acs-templating.
+    The display_template_name acts similar to the query names in
+    the database interface: When display_template_name is specified
+    and the file is available, it overrules display_template, which
+    acts as a default.
+    </li>
+    <li>
     <b>link_url_col</b>: Name of column in the multirow which contains the URL to which the cell contents should point.
     If either link_url_col or link_url_eval is specified, the cell's contents will be made a link to the specified URL, if that
     URL is non-empty.
@@ -1983,6 +1995,7 @@ ad_proc -public template::list::element::create {
         html {}
         display_col {}
         display_template {}
+        display_template_name {}
         link_url_col {}
         link_url_eval {}
         link_html {}
@@ -2199,8 +2212,14 @@ ad_proc -private template::list::element::render {
     # We ignore if the element doesn't exist, 'cause then we'll just hope it exists in the multirow and display the value directly
     get_reference -create -list_name $list_name -element_name $element_name
 
-    if { [info exists element_properties(display_template)] && $element_properties(display_template) ne "" } {
-        set output $element_properties(display_template)
+    if { [info exists element_properties(display_template_name)] && $element_properties(display_template_name) ne "" } {
+        set stub [template::resource_path -type display_templates -style $element_properties(display_template_name)]
+        if {[file readable $stub.adp]} {
+            set output [template::util::read_file $stub.adp]
+        }
+    }
+    if { ![info exists output] && [info exists element_properties(display_template)] && $element_properties(display_template) ne "" } {
+	set output $element_properties(display_template)
     } elseif { [info exists element_properties(display_col)] && $element_properties(display_col) ne "" } {
         set output "@$multirow.$element_properties(display_col)@"
     } else {
