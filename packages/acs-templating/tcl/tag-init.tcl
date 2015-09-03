@@ -159,7 +159,7 @@ template_tag include { params } {
 template_tag widget { params } {
     set src [ns_set iget $params src]
     set adp_stub [template::resource_path -type widgets -style $src -relative]
-    if {[file exists $adp_stub.adp]} {
+    if {[file exists $::acs::rootdir/$adp_stub.adp]} {
 	ns_set update $params src $adp_stub
     }
     template:template_tag_helper $params 
