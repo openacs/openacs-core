@@ -2218,14 +2218,15 @@ ad_proc -private template::list::element::render {
             set output [template::util::read_file $stub.adp]
         }
     }
-    if { ![info exists output] && [info exists element_properties(display_template)] && $element_properties(display_template) ne "" } {
-	set output $element_properties(display_template)
-    } elseif { [info exists element_properties(display_col)] && $element_properties(display_col) ne "" } {
-        set output "@$multirow.$element_properties(display_col)@"
-    } else {
-        set output "@$multirow.$element_name@"
+    if { ![info exists output] } {
+        if { [info exists element_properties(display_template)] && $element_properties(display_template) ne "" } {
+            set output $element_properties(display_template)
+        } elseif { [info exists element_properties(display_col)] && $element_properties(display_col) ne "" } {
+            set output "@$multirow.$element_properties(display_col)@"
+        } else {
+            set output "@$multirow.$element_name@"
+        }
     }
-
     # We have support for making the cell contents a hyperlink right here, because it's so common
     set link_url {}
     set link_html {}
