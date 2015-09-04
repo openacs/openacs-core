@@ -784,6 +784,31 @@ ad_proc -deprecated template::get_resource_path {} {
   return \"[file dirname [file dirname [info script]]]/resources\"
 "
 
+ad_proc -public template::themed_template {
+    path
+} {
+    
+    Given a path like /packages/acs-admin/www/index pointing to an
+    .adp file, this function tries to locate this path in the
+    ResourceDir of the subsite (determined by the theme). If found the
+    themed template is returned, otherwse the passed template path.
+
+    @param path absolute path within the open acs tree (without extension)
+    @return path to themed template or input value (without extension)
+    
+} {
+    if {[string index $path 0] eq "/"} {
+	set style [string range $path 1 end]
+    } else {
+	set style $path
+    }
+    set stub [template::resource_path -type templates -style $style -relative]
+    if {[file readable $::acs::rootdir/$stub.adp]} {
+	return $stub
+    }
+    return $path
+}
+
 ad_proc -public template::resource_path {
     -type:required
     -style:required

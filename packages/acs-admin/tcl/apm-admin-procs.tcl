@@ -251,6 +251,9 @@ ad_proc -private apm_build_repository {
 
     set exclude_package_list {}
 
+    set channel_index_template [template::themed_template /packages/acs-admin/www/apm/repository-channel-index]
+    set index_template         [template::themed_template /packages/acs-admin/www/apm/repository-index]
+
     #----------------------------------------------------------------------
     # Prepare output
     #----------------------------------------------------------------------
