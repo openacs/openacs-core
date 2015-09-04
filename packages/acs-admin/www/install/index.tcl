@@ -7,6 +7,15 @@ ad_page_contract {
 set page_title "Install Software"
 set context [list $page_title]
 
+set local_install_url "[ad_conn package_url]/apm/packages-install"
+
+set repository_url "http://openacs.org/repository/"
+set head_channel [lindex [apm_get_repository_channels $repository_url] 0]
+set current_channel [apm_get_repository_channel]
+set channel $current_channel
+set remote_install_url [export_vars -base "install" { repository_url channel current_channel head_channel }]
+set remote_upgrade_url [export_vars -base "install" { { upgrade_p 1 } repository_url channel current_channel head_channel}]
+
 template::multirow create install repository local
 
 multirow append install \
@@ -15,20 +24,20 @@ multirow append install \
 	<a href="/doc/upgrade">Help</a>}
 
 multirow append install \
-    { <a href="@remote_install_url@">Install</a> or <a href="@remote_upgrade_url@">upgrade</a> 
-	from repository.} \
-    {<a href="@local_install_url@">Install or upgrade</a> from local file system.}
+    [subst { <a href="$remote_install_url">Install</a> or <a href="$remote_upgrade_url">upgrade</a> 
+	from repository.}] \
+    [subst  {<a href="$local_install_url">Install or upgrade</a> from local file system.}]
 
 template::list::create \
     -name install \
     -multirow install \
     -elements {
         repository {
-            label "From Repository"
+            label "Install from Repository"
 	    display_template @install.repository;noquote@
         }
         local {
-            label "Local Files"
+            label "Install from Local Files"
 	    display_template @install.local;noquote@
         }
     }
@@ -83,15 +92,5 @@ db_multirow -extend { package_type_pretty } packages packages "
     set package_type_pretty [string totitle [lindex [split $package_type "_"] 1]]
 }
 
-#set local_install_url [export_vars -base "install" { { package_type apm_application } }]
-#set local_service_install_url [export_vars -base "install" { { package_type apm_service } }]
-#set local_upgrade_url [export_vars -base "install" { { upgrade_p 1 } }]
 
-set local_install_url "[ad_conn package_url]/apm/packages-install"
 
-set repository_url "http://openacs.org/repository/"
-set head_channel [lindex [apm_get_repository_channels $repository_url] 0]
-set current_channel [apm_get_repository_channel]
-set channel $current_channel
-set remote_install_url [export_vars -base "install" { repository_url channel current_channel head_channel }]
-set remote_upgrade_url [export_vars -base "install" { { upgrade_p 1 } repository_url channel current_channel head_channel}]
