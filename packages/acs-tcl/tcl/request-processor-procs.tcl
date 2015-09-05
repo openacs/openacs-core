@@ -1244,7 +1244,7 @@ ad_proc -public ad_acs_kernel_id {} {
 ad_proc -public ad_conn {args} {
 
     Returns a property about the connection. See the <a
-    href="/doc/request-processor.html">request
+    href="/doc/request-processor">request
     processor documentation</a> for an (almost complete) list of allowable values. 
 
     <p>
