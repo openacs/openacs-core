@@ -395,18 +395,18 @@ ad_proc -private apm_build_repository {
                         
                         append manifest \
                             "  <package>" \n \
-                            "    <package-key>[ad_quotehtml $pkg_info(package.key)]</package-key>\n" \
-                            "    <version>[ad_quotehtml $pkg_info(name)]</version>\n" \
-                            "    <pretty-name>[ad_quotehtml $pkg_info(package-name)]</pretty-name>\n" \
-                            "    <package-type>[ad_quotehtml $pkg_info(package.type)]</package-type>\n" \
-                            "    <summary>[ad_quotehtml $pkg_info(summary)]</summary>\n" \
-                            "    <description format=\"[ad_quotehtml $pkg_info(description.format)]\">" \
-                            [ad_quotehtml $pkg_info(description)] "</description>\n" \
-                            "    <release-date>[ad_quotehtml $pkg_info(release-date)]</release-date>\n" \
-                            "    <vendor url=\"[ad_quotehtml $pkg_info(vendor.url)]\">" \
-                            [ad_quotehtml $pkg_info(vendor)] "</vendor>\n" \
-                            "    <license url=\"[ad_quotehtml $pkg_info(license.url)]\">" \
-                            [ad_quotehtml $pkg_info(license)] "</license>\n" \
+                            "    <package-key>[ns_quotehtml $pkg_info(package.key)]</package-key>\n" \
+                            "    <version>[ns_quotehtml $pkg_info(name)]</version>\n" \
+                            "    <pretty-name>[ns_quotehtml $pkg_info(package-name)]</pretty-name>\n" \
+                            "    <package-type>[ns_quotehtml $pkg_info(package.type)]</package-type>\n" \
+                            "    <summary>[ns_quotehtml $pkg_info(summary)]</summary>\n" \
+                            "    <description format=\"[ns_quotehtml $pkg_info(description.format)]\">" \
+                            [ns_quotehtml $pkg_info(description)] "</description>\n" \
+                            "    <release-date>[ns_quotehtml $pkg_info(release-date)]</release-date>\n" \
+                            "    <vendor url=\"[ns_quotehtml $pkg_info(vendor.url)]\">" \
+                            [ns_quotehtml $pkg_info(vendor)] "</vendor>\n" \
+                            "    <license url=\"[ns_quotehtml $pkg_info(license.url)]\">" \
+                            [ns_quotehtml $pkg_info(license)] "</license>\n" \
                             "    <maturity>$pkg_info(maturity)</maturity>\n"
 
                         foreach e $pkg_info(install) {
@@ -463,14 +463,14 @@ ad_proc -private apm_build_repository {
                         append manifest "    <download-url>$apm_url</download-url>\n"
                         foreach elm $pkg_info(provides) {
                             append manifest "    <provides " \
-                                "url=\"[ad_quotehtml [lindex $elm 0]]\" " \
-                                "version=\"[ad_quotehtml [lindex $elm 1]]\" />\n"
+                                "url=\"[ns_quotehtml [lindex $elm 0]]\" " \
+                                "version=\"[ns_quotehtml [lindex $elm 1]]\" />\n"
                         }
                         
                         foreach elm $pkg_info(requires) {
                             append manifest "    <requires " \
-                                "url=\"[ad_quotehtml [lindex $elm 0]]\" " \
-                                "version=\"[ad_quotehtml [lindex $elm 1]]\" />\n"
+                                "url=\"[ns_quotehtml [lindex $elm 0]]\" " \
+                                "version=\"[ns_quotehtml [lindex $elm 1]]\" />\n"
                         }
                         append manifest "  </package>\n"
                     }
@@ -574,11 +574,19 @@ ad_proc -private apm_build_repository {
 
     ns_log Notice "Repository: Finishing Repository"
 
+    foreach channel [array names channel_tag] {
+        regexp {^([1-9][0-9]*)-([0-9]+)$} $channel . major minor
+        set tag_order([format %.3d $major]-[format %.3d $minor]) $channel
+        set tag_label($channel) "OpenACS $major.$minor"
+    }
+
+    
     # Write the index page
     ns_log Notice "Repository: Writing repository index page to ${work_dir}repository/index.adp"
-    template::multirow create channels name tag
-    foreach channel [lsort -decreasing [array names channel_tag]] {
-        template::multirow append channels $channel $channel_tag($channel)
+    template::multirow create channels name tag label
+    foreach key [lsort -decreasing [array names tag_order]] {
+        set channel $tag_order($key)
+        template::multirow append channels $channel $channel_tag($channel) $tag_label($channel)
     }
     set fw [open "${work_dir}repository/index.adp" w]
     puts $fw "<master>\n<property name=\"doc(title)\">OpenACS Package Repository</property>\n\n"
