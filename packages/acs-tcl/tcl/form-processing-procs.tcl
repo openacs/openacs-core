@@ -16,7 +16,7 @@ ad_proc -public ad_form {
     data is to be added, or existing data modified.   You can declare form validation blocks that
     are similar in spirit to those found in ad_page_contract.
 
-    <p><a href="/doc/form-builder.html">Developer's Guide fo ad_form</a>
+    <p><a href="/doc/form-builder">Developer's Guide fo ad_form</a>
     <p>
 
     We use the standard OpenACS Templating System (ATS) form builder's form and element create 

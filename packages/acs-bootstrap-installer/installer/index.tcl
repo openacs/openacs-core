@@ -53,7 +53,7 @@ a suite of fully-integrated enterprise-class solutions
 for collaborative commerce.
 This is the OpenACS Installer which performs all the steps necessary
 to get the OpenACS Community System running on your server.<p>
-Please read the <a href=\"/doc/release-notes.html\">Release Notes</a> 
+Please read the <a href=\"/doc/release-notes\">Release Notes</a> 
 before proceeding to better understand what is contained in this release.
 
 "

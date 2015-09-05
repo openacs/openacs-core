@@ -68,7 +68,7 @@ ad_library {
 
 # (JoelA, 27 Dec 2004 - replaced example config.tcl with link)
 #
-# see http://openacs.org/doc/openacs-5-1/tutorial-second-database.html
+# see http://openacs.org/doc/openacs-5-1/tutorial-second-database
 # for config and usage examples
 
 # TODO: The "driverkey_" overrides in the config file are NOT
@@ -357,7 +357,7 @@ ad_proc -public db_nextval {
 
     @param dbn The database name to use.  If empty_string, uses the default database.
 
-    @see <a href="/doc/db-api-detailed.html">/doc/db-api-detailed.html</a>
+    @see <a href="/doc/db-api-detailed">/doc/db-api-detailed</a>
 } {
     set driverkey [db_driverkey $dbn]
 
@@ -663,7 +663,7 @@ ad_proc -public db_exec_plsql {
 
     @param dbn The database name to use.  If empty_string, uses the default database.
 
-    @see <a href="/doc/db-api-detailed.html">/doc/db-api-detailed.html</a>
+    @see <a href="/doc/db-api-detailed">/doc/db-api-detailed</a>
 } {
     ad_arg_parser { bind_output bind } $args
 
@@ -1867,7 +1867,7 @@ ad_proc -public db_dml {{-dbn ""} statement_name sql args } {
 
     @param dbn The database name to use.  If empty_string, uses the default database.
 
-    @see <a href="/doc/db-api-detailed.html">/doc/db-api-detailed.html</a>
+    @see <a href="/doc/db-api-detailed">/doc/db-api-detailed</a>
 } {
     ad_arg_parser { clobs blobs clob_files blob_files bind } $args
     set driverkey [db_driverkey $dbn]
