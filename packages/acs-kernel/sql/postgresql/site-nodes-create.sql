@@ -501,8 +501,6 @@ BEGIN
 
     END IF;
     
-    raise notice 'done doing the recursive part -- vguerra';
-
     return null;
 END; 
 $inline_0$ LANGUAGE plpgsql;
