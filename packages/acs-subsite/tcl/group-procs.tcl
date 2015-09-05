@@ -440,6 +440,7 @@ ad_proc -public group::get_member_state_pretty {
         banned #acs-kernel.member_state_banned#
         rejected #acs-kernel.member_state_rejected#
         deleted #acs-kernel.member_state_deleted#
+        merged #acs-kernel.member_state_merged#
     }
 
     return [lang::util::localize $message_key_array($member_state)]

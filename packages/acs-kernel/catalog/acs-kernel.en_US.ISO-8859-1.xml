@@ -125,6 +125,8 @@
   <msg key="member_state_banned">banned</msg>
   <msg key="member_state_Deleted">Deleted</msg>
   <msg key="member_state_deleted">deleted</msg>
+  <msg key="member_state_Merged">Merged</msg>
+  <msg key="member_state_merged">merged</msg>
   <msg key="member_state_Needs_Approval">Needs Approval</msg>
   <msg key="member_state_needs_approval">needs approval</msg>
   <msg key="member_state_Rejected">Rejected</msg>
