@@ -10,7 +10,7 @@ ad_page_contract {
     page:naturalnum,optional
 } -validate {
     member_state_valid -requires { member_state } {
-        if { [lsearch [group::possible_member_states] $member_state] == -1 } {
+        if { $member_state ni [group::possible_member_states] } {
             ad_complain "Invalid member_state"
         }
     }

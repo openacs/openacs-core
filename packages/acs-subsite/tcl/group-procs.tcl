@@ -424,9 +424,9 @@ ad_proc -public group::update {
 }
 
 ad_proc -public group::possible_member_states {} {
-    Returns the list of possible member states: approved, needs approval, banned, rejected, deleted.
+    Returns the list of possible member states: approved, needs approval, banned, merged, rejected, deleted.
 } {
-    return [list approved "needs approval" banned rejected deleted]
+    return [list approved "needs approval" banned merged rejected deleted]
 }
 
 ad_proc -public group::get_member_state_pretty {
