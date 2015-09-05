@@ -335,7 +335,7 @@ ad_proc -public aa_register_case {
 } {
     Registers a testcase with the acs-automated-testing system.  Whenever possible, cases that fail to register are replaced with 'metatest' log cases, so that the register-time errors are visible at test time.
 
-    See <a href="/doc/tutorial-debug.html">the tutorial</a> for examples.
+    See <a href="/doc/tutorial-debug">the tutorial</a> for examples.
 
     @param libraries A list of keywords of additional code modules to load.  The entire test case will fail if any package is missing.  Currently includes <b>tclwebtest</b>.
 

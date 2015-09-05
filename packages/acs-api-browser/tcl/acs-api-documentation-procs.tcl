@@ -777,7 +777,7 @@ namespace eval ::apidoc {
             set href [export_vars -base proc-view {{proc $see}}]
             return [subst {<a href="[ns_quotehtml $href]">$see</a>}]
         }
-        if {[string match "/doc/*.html" $see]
+        if {[string match "/doc/*" $see]
             || [util_url_valid_p $see]} { 
             return [subst {<a href="[ns_quotehtml $see]">$see</a>}]
         }
