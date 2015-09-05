@@ -47,3 +47,5 @@ for { set __i $from_result_page } { $__i <= $to_result_page} { incr __i } {
     append link "&num=$num"
     template::multirow append results_paginator [expr {$__i + 1}] $link [expr {$__i == $current_result_page}]
 }
+
+ad_return_template [template::themed_template /packages/search/lib/navbar]
