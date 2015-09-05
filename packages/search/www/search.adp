@@ -38,7 +38,7 @@
   <div id="search-info">
     <p class="subtitle">#search.Searched_for_query#</p>
     <p class="times">
-      #search.Results# <strong>@low@-@high@</strong> #search.of_about# <strong>@count@</strong>#search.________Search_took# <strong>@elapsed@</strong> #search.seconds# 
+      #search.Results# <strong>@low@-@high@</strong> #search.of_about# <strong>@result.count@</strong>#search.________Search_took# <strong>@elapsed@</strong> #search.seconds# 
     </p>
   </div>
   <div id="search-results">
