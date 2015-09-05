@@ -246,9 +246,6 @@ ad_proc -private apm_build_repository {
     set repository_dir         $::acs::rootdir/www/repository/
     set repository_url         http://openacs.org/repository/
 
-    set channel_index_template /packages/acs-admin/www/apm/repository-channel-index
-    set index_template         /packages/acs-admin/www/apm/repository-index
-
     set exclude_package_list {}
 
     set channel_index_template [template::themed_template /packages/acs-admin/www/apm/repository-channel-index]
@@ -490,7 +487,7 @@ ad_proc -private apm_build_repository {
         set fw [open "${channel_dir}index.adp" w]
         set packages [lsort $packages]
         puts $fw "<master>\n<property name=\"doc(title)\">OpenACS $channel Compatible Packages</property>\n\n"
-        puts $fw "<h2>OpenACS $channel Core and compatibile packages</h2>
+        puts $fw "<h1>OpenACS $channel Core and compatibile packages</h1>
            <p>Packages can be installed with the OpenACS Automated Installer on
            your OpenACS site at <code>/acs-admin/install</code>.  Only packages
            designated compatible with your OpenACS kernel will be shown.</p>
