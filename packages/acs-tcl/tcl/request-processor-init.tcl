@@ -174,7 +174,7 @@ ad_after_server_initialization procs_register {
 
 	ns_log Notice "ns_register_proc $noinherit_switch [list $method $path rp_invoke_proc [list $proc_index $debug_p $arg_count $proc $arg]]"
 	ns_register_proc {*}$noinherit_switch \
-		[list $method $path rp_invoke_proc [list $proc_index $debug_p $arg_count $proc $arg]]
+	    $method $path rp_invoke_proc [list $proc_index $debug_p $arg_count $proc $arg]
     }
 }
 
