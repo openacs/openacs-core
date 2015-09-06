@@ -86,7 +86,7 @@
     <querytext>
       insert into subsite_themes
         (key, name, template, css, js, form_template, list_template,
-	list_filter_template, dimensional_template resource_dir)
+	list_filter_template, dimensional_template, resource_dir)
       values
         (:key, :name, :template, :css, :js, :form_template, :list_template,
 	:list_filter_template, :dimensional_template, :resource_dir)
