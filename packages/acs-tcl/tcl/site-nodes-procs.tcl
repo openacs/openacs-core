@@ -65,8 +65,8 @@ set UseXotclSiteNodes 0
 # oracle, the implementation does not distinguish btw. AOLserver and
 # NaviServer (uses simply ns_cache_eval for speed and simplicity).
 #
-if {[info command ::nx::Object] ne "" 
-    && [apm_package_version_count xotcl-core] > 0
+if {[info command ::nx::Object] ne ""
+    && [info commands bootstrap::xo::dc] ne ""
     && [db_driverkey ""] ne "oracle"
     && [ns_info name] eq "NaviServer"
 } {
