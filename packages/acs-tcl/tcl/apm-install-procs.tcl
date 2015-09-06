@@ -1629,7 +1629,7 @@ ad_proc -private apm_packages_full_install {
                 $spec_file
 
         } errmsg] } {
-                        apm_callback_and_log -severity Error $callback "<p><font color=red>[string totitle $package_key] not installed.</font>
+            apm_callback_and_log -severity Error $callback "<p><font color=red>[string totitle $package_key] not installed.</font>
 <p> Error:
 <pre><blockquote>[ad_quotehtml $errmsg]</blockquote><blockquote>[ad_quotehtml $::errorInfo]</blockquote></pre>"
         } 
@@ -2487,7 +2487,12 @@ ad_proc -private apm::package_version::attributes::maturity_int_to_text { maturi
         set maturity_key(3) "#acs-tcl.maturity_mature_and_standard#"
         set maturity_key(4) "#acs-tcl.maturity_deprecated#"
 
-        set result [lang::util::localize $maturity_key($maturity)]
+        if {[catch {
+            set result [lang::util::localize $maturity_key($maturity)]
+        } errorMsg]} {
+            ns_log warning "Couldn't localize maturity key $maturity: $errorMsg"
+            set result $maturity
+        }
 
     } else {
 
