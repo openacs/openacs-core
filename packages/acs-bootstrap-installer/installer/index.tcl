@@ -112,6 +112,11 @@ Once you're sure everything is installed and configured correctly, restart AOLse
     return
 } 
 
+#
+# Unset array errors, in case it exists
+#
+if {[array exists errors]} {array unset errors}
+
 # Perform database-specific checks
 db_installer_checks errors error_p
 
@@ -195,8 +200,8 @@ the user executing the web server, normally <code>nsadmin</code>, and the owner 
 on this directory.  You can correct this by running the following script as root.
 To give another user access to the files, add them to <code>web</code> group.
 <blockquote><pre>
-groupadd web
-chown -R nsadmin:web $::acs::rootdir
+groupadd nsadmin
+chown -R nsadmin:nsadmin $::acs::rootdir
 chmod -R ug+rw $::acs::rootdir
 </pre></blockquote>
 </strong></p>"
@@ -211,8 +216,8 @@ if { ![file writable [file join $::acs::rootdir packages]] } {
     script as root.
     To give another user access to the files, add them to <code>web</code> group.
     <blockquote><pre>
-groupadd web
-chown -R nsadmin:web $::acs::rootdir/packages
+groupadd nsadmin
+chown -R nsadmin:nsadmin $::acs::rootdir/packages
 chmod -R ug+rw $::acs::rootdir/packages
     </pre></blockquote></strong></p>"
     set error_p 1
