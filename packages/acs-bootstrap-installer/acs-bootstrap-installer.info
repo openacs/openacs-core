@@ -20,7 +20,6 @@
 
         <provides url="acs-bootstrap-installer" version="5.9.0d6"/>
         <requires url="acs-kernel" version="5.9.0d1"/>
-        <requires url="acs-subsite" version="5.9.0d6"/>
         <requires url="acs-templating" version="5.9.0d4"/>
 
         <callbacks>
