@@ -1,1 +1,1 @@
-<listtemplate name="packages"></listtemplate>
+<listtemplate name="packages" style="table-2third"></listtemplate>

@@ -22,8 +22,8 @@
   <li><a href="group-types/">#acs-subsite.Group_Types#</a></li>
   <li><a href="rel-segments/">#acs-subsite.Relational_Segments#</a></li>
   <li><a href="rel-types/">#acs-subsite.Relationship_Types#</a></li>
-  <li><a href="host-node-map/">#acs-subsite.Host_Node_Map#</a></li>
   <li><a href="object-types/">#acs-subsite.Object_Types#</a></li>
+  <!-- <li><a href="host-node-map/">#acs-subsite.Host_Node_Map#</a></li> -->
 </ul>
 
 <if @sw_admin_p@ true>
@@ -31,7 +31,6 @@
   <ul>
     <li>
       <a href="@acs_admin_url@">@acs_admin_name@</a>
-      <include src="/packages/acs-admin/lib/site-wide-services">
     </li>
   </ul>
 </if>

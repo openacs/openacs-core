@@ -1,34 +1,25 @@
 <master>
   <property name="doc(title)">@page_title;literal@</property>
 
-<div style="float: right;">
-  <a href="developer" class="button">Developer's Admin</a>
-</div>
+<h1>Site-Wide Administration</h1>
 
-<h1>Core Administration</h1>
-
-<include src="/packages/acs-admin/lib/site-wide-services">
+<include src="/packages/acs-admin/lib/site-wide-services"
+    nr_subsites="@subsite_number;literal@" >
 
 <if @packages:rowcount@ gt 0>
   <h1>Site-Wide Package Administration</h1>
-  <listtemplate name="packages"></listtemplate>
+
+  <p>The following packages provide site-wide administration
+  facilities.  These packages have either site-wide parameters (package
+  parameters valid for every instance of the package) or they have an
+  own web interface for site-wide administration (www/site-wide-admin).
+  
+  <listtemplate name="packages" style="table-2third"></listtemplate>
+  <p>
 </if>
 
-<if @too_many_subsites_p@ gt 0>
-  <h1>Subsite Administration</h1>
-  <p>Too many subsites to display: @subsite_number@</p>
-</if>
-<else>
 
-<if @subsites:rowcount@ gt 0>
-  <h1>Subsite Administration</h1>
-  <ul>
-    <multiple name="subsites">
-      <li><a href="@subsites.admin_url@">@subsites.path_pretty@</a></li>
-    </multiple>
-  </ul>
-</if>
-</else>
-
-<h1>Service Administration</h1>
+<h1>Site-Wide Service Administration</h1>
+<p>Manage service packages and singleton packages (packages which can be mounted only once).
+</p>
 <include src="/packages/acs-admin/lib/service-parameters">
