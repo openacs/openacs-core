@@ -7,7 +7,7 @@
     nr_subsites="@subsite_number;literal@" >
 
 <if @packages:rowcount@ gt 0>
-  <h1>Site-Wide Package Administration</h1>
+  <h3>Site-Wide Package Administration</h3>
 
   <p>The following packages provide site-wide administration
   facilities.  These packages have either site-wide parameters (package
@@ -19,7 +19,7 @@
 </if>
 
 
-<h1>Site-Wide Service Administration</h1>
+<h3>Site-Wide Service Administration</h3>
 <p>Manage service packages and singleton packages (packages which can be mounted only once).
 </p>
 <include src="/packages/acs-admin/lib/service-parameters">
