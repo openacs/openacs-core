@@ -1,14 +1,6 @@
 <?xml version="1.0"?>
 <queryset>
 
-  <fullquery name="count_subsites">
-    <querytext>
-      select count(*)
-      from apm_packages
-      where package_key in ($package_keys)
-    </querytext>
-  </fullquery>
-
   <fullquery name="installed_packages">
     <querytext>
       select package_key,

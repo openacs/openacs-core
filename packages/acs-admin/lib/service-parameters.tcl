@@ -2,7 +2,6 @@
 # Service parameters list
 #
 
-
 if { ![acs_user::site_wide_admin_p] } {
     ad_return_forbidden \
         "Permission Denied" \
