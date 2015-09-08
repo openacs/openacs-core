@@ -21,6 +21,7 @@ ad_proc -public subsite_navigation::define_pageflow {
     {-navigation_multirow navigation}
     {-group main}
     {-subgroup sub}
+    {-include_all:boolean false}
 } {
     Defines the page flow of the subsite.
 
@@ -40,6 +41,9 @@ ad_proc -public subsite_navigation::define_pageflow {
     @param navigation_multirow The name of the multirow used to build the nav bars
     @param group Group name for the primary section
     @param subgroup Group name for the subsection (opened under a selected tab)
+    @include_all Per default, only the subgroup of the currently selected top menu is return.
+        When -include_all is specified, the resulting multirow contains all subgroups
+        (useful for pull-down menus)
 
 } {
     if { $subsite_id eq "" } {
@@ -55,7 +59,7 @@ ad_proc -public subsite_navigation::define_pageflow {
 
     if { ![template::multirow exists $navigation_multirow] } {
         template::multirow create $navigation_multirow group label href target \
-            title lang accesskey class id tabindex display_template
+            title lang accesskey class id tabindex name parent display_template
     }
 
     foreach { section_name section_spec } $pageflow {
@@ -67,7 +71,7 @@ ad_proc -public subsite_navigation::define_pageflow {
             folder {}
             selected_patterns {}
             accesskey {}
-	    display_template {}
+        display_template {}
         }
 
         array set section_a $section_spec
@@ -80,7 +84,7 @@ ad_proc -public subsite_navigation::define_pageflow {
                             -group $group \
                             -multirow $navigation_multirow]
 
-        if { $selected_p } {
+        if { $include_all_p || $selected_p } {
             foreach { subsection_name subsection_spec } $section_a(subsections) {
                 array set subsection_a {
                     label {}
@@ -89,7 +93,7 @@ ad_proc -public subsite_navigation::define_pageflow {
                     url {}
                     selected_patterns {}
                     accesskey {}
-		    display_template {}
+                    display_template {}
                 }
                 array set subsection_a $subsection_spec
                 set subsection_a(name) $subsection_name
@@ -100,7 +104,8 @@ ad_proc -public subsite_navigation::define_pageflow {
                     -array subsection_a \
                     -base_url $base_url \
                     -group $subgroup \
-                    -multirow $navigation_multirow
+                    -multirow $navigation_multirow \
+                    -parent $section_a(name)
             }
         }
     }
@@ -114,6 +119,7 @@ ad_proc -private subsite_navigation::add_section_row {
     {-multirow:required}
     {-group:required}
     {-section {}}
+    {-parent {}}
 } {
     Helper proc for adding rows of sections to the page flow of the subsite.
 
@@ -122,9 +128,9 @@ ad_proc -private subsite_navigation::add_section_row {
     upvar $array info
     # the folder index page is called .
     if { $info(url) eq ""
-	 || $info(url) eq "index"
-	 || [string match "*/" $info(url)]
-	 || [string match "*/index" $info(url)]
+     || $info(url) eq "index"
+     || [string match "*/" $info(url)]
+     || [string match "*/index" $info(url)]
      } {
         set info(url) "[string range $info(url) 0 [string last / $info(url)]]."
     }
@@ -150,7 +156,6 @@ ad_proc -private subsite_navigation::add_section_row {
     if { $info(accesskey) eq "" } {
         set info(accesskey) $info(tabindex)
     }
-    
     if { $current_url eq $info(url) || $info(name) eq $section } {
         set selected_p 1
     } else {
@@ -171,9 +176,9 @@ ad_proc -private subsite_navigation::add_section_row {
     }
 
     template::multirow append $multirow \
-	$group $info(label) [file join $base_url $info(url)] \
+    $group $info(label) [file join $base_url $info(url)] \
         "" $info(title) "" $info(accesskey) "" $navigation_id [template::multirow size $multirow] \
-	$info(display_template)
+    $info(name) $parent $info(display_template)
 
     return $selected_p
 }
@@ -211,8 +216,8 @@ ad_proc -private subsite_navigation::get_pageflow_from_parameter {
 } {
     set pageflow [parameter::get -package_id $subsite_id -parameter $parameter -default ""]
     if { ![string is list $pageflow]} {
-	ns_log Warning "subsite_navigation: ignoring invalid $parameter: $pageflow"
-	set pageflow ""
+    ns_log Warning "subsite_navigation: ignoring invalid $parameter: $pageflow"
+    set pageflow ""
     }
     return $pageflow
 }
@@ -234,15 +239,15 @@ ad_proc -public subsite_navigation::get_pageflow_struct {
            autogenerating tabs for applications
 } {
     if { ![string is list $initial_pageflow]} {
-	ns_log Warning "subsite_navigation: ignoring invalid initial_pageflow: $initial_pageflow"
-	set initial_pageflow ""
+    ns_log Warning "subsite_navigation: ignoring invalid initial_pageflow: $initial_pageflow"
+    set initial_pageflow ""
     }
     if { ![string is list $no_tab_application_list]} {
-	ns_log Warning "subsite_navigation: ignoring invalid no_tab_application_list: $no_tab_application_list"
-	set no_tab_application_list ""
+    ns_log Warning "subsite_navigation: ignoring invalid no_tab_application_list: $no_tab_application_list"
+    set no_tab_application_list ""
     }
     if {$subsite_id eq ""} {
-	set subsite_id [ad_conn subsite_id]
+    set subsite_id [ad_conn subsite_id]
     }
     
     set pageflow $initial_pageflow
@@ -260,28 +265,28 @@ ad_proc -public subsite_navigation::get_pageflow_struct {
     set show_member_list_to [parameter::get -parameter "ShowMembersListTo" -package_id $subsite_id -default 2]
 
     if { $admin_p
-	 || ($user_id != 0 && $show_member_list_to == 1)
-	 || $show_member_list_to == 0
+     || ($user_id != 0 && $show_member_list_to == 1)
+     || $show_member_list_to == 0
      } {
         lappend pageflow {*}[subsite_navigation::get_pageflow_from_parameter \
-				 -subsite_id $subsite_id \
-				 -parameter MembersViewNavbarTabsList]
+                 -subsite_id $subsite_id \
+                 -parameter MembersViewNavbarTabsList]
     }
 
     if { $show_applications_p } {
-	
-	set index_redirect_url [parameter::get -parameter "IndexRedirectUrl" -package_id $subsite_id]
-	set index_internal_redirect_url [parameter::get -parameter "IndexInternalRedirectUrl" -package_id $subsite_id]
-	regsub {(.*)/packages} $index_internal_redirect_url "" index_internal_redirect_url
-	regexp {(/[-[:alnum:]]+/)(.*)$} $index_internal_redirect_url dummy index_internal_redirect_url
-	set child_urls [lsort -ascii [site_node::get_children -node_id $subsite_node_id -package_type apm_application]]
-	
+    
+    set index_redirect_url [parameter::get -parameter "IndexRedirectUrl" -package_id $subsite_id]
+    set index_internal_redirect_url [parameter::get -parameter "IndexInternalRedirectUrl" -package_id $subsite_id]
+    regsub {(.*)/packages} $index_internal_redirect_url "" index_internal_redirect_url
+    regexp {(/[-[:alnum:]]+/)(.*)$} $index_internal_redirect_url dummy index_internal_redirect_url
+    set child_urls [lsort -ascii [site_node::get_children -node_id $subsite_node_id -package_type apm_application]]
+    
         foreach child_url $child_urls {
             array set child_node [site_node::get_from_url -exact -url $child_url]
             if { $child_url ne $index_redirect_url  &&
                  $child_url ne $index_internal_redirect_url &&
                  $child_node(package_key) ni $no_tab_application_list
-	     } {
+         } {
                 lappend pageflow $child_node(name) [list \
                                                         label $child_node(instance_name) \
                                                         folder $child_node(name) \
@@ -292,10 +297,17 @@ ad_proc -public subsite_navigation::get_pageflow_struct {
     }
 
     if { $admin_p } {
-	lappend pageflow {*}[subsite_navigation::get_pageflow_from_parameter \
-				-subsite_id $subsite_id \
-				-parameter AdminNavbarTabsList]
+        lappend pageflow {*}[subsite_navigation::get_pageflow_from_parameter \
+                                 -subsite_id $subsite_id \
+                                 -parameter AdminNavbarTabsList]
     }
 
     return $pageflow
 }
+
+#
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:
