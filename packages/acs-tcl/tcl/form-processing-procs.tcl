@@ -80,7 +80,7 @@ ad_proc -public ad_form {
 
     <p>
 
-    Here's an example of a simple page implementing an add/edit form:
+    Here's an example of a simple page implementing an add/edit form and exporting different kinds of values:
 
     <blockquote><pre>
 
@@ -90,15 +90,29 @@ ad_proc -public ad_form {
         Simple add/edit form
 
     } {
+        {foo ""}
         my_table_key:optional
+        many_values:multiple
+        signed_var:verify
+        big_array:array
     }
 
-    ad_form -name form_name -export {foo {bar none}} -form {
+    ad_form -name form_name \
+     -export {
+        foo 
+        {bar none} 
+        many_values:multiple
+        signed_var:sign
+        big_array:array
+      } -form {
 
         my_table_key:key(my_table_sequence)
-
-        {value:text(textarea)             {label "Enter text"}
-                                           {html {rows 4 cols 50}}}
+        
+        {value:text(textarea)             
+            {label "Enter text"}
+            {html {rows 4 cols 50}}
+        }
+        
     } -select_query {
         select value from my_table where my_table_key = :my_table_key
     } -validate {
@@ -106,6 +120,18 @@ ad_proc -public ad_form {
          {[string length $value] >= 3}
          "\"value\" must be a string containing three or more characters"
         }
+    } -on_submit {
+        
+        foreach val $many_values {
+          # do stuff
+        }
+        
+        if {[info exists big_array(some_key)]} {
+            set some_value $big_array(some_key)
+        }
+        
+        set safe_verified_value $signed_var
+        
     } -new_data {
         db_dml do_insert "
             insert into my_table
@@ -185,16 +211,16 @@ ad_proc -public ad_form {
     <p><dt><b>-actions</b></dt><p>
     <dd>A list of lists of actions (e.g. {{"  Delete  " delete} {"  Resolve " resolve}} ), which gets 
         translated to buttons at the bottom of the form. You can find out what button was pressed 
-	with [template::form get_action form_id], usually in the -edit_request block to perform whatever
-	actions you deem appropriate. When the form is loaded the action will be empty.
+        with [template::form get_action form_id], usually in the -edit_request block to perform whatever
+        actions you deem appropriate. When the form is loaded the action will be empty.
     </dd>
     
     <p><dt><b>-mode { display | edit }</b></dt><p>
     <dd>If set to 'display', the form is shown in display-only mode, where the user cannot edit the fields. 
         Each widget knows how to display its contents appropriately, e.g. a select widget will show 
-	the label, not the value. If set to 'edit', the form is displayed as normal, for editing. 
-	Defaults to 'edit'. Switching to edit mode when a button is clicked in display mode is handled 
-	automatically
+        the label, not the value. If set to 'edit', the form is displayed as normal, for editing. 
+        Defaults to 'edit'. Switching to edit mode when a button is clicked in display mode is handled 
+        automatically
     </dd>
     
     <p><dt><b>-has_edit { 0 | 1 }</b></dt><p>
@@ -231,10 +257,15 @@ ad_proc -public ad_form {
     </dd>
 
     <p><dt><b>-export</b></dt><p>
-    <dd>Similar to the utility <b>export_vars</b>.  Takes a list of values to insert in the form as 
-        "hidden" elements.   Each value is either a name, in which case the Tcl variable at the caller's
-        level is passed to the form if it exists, or a name-value pair.   "multiple", "array", "sign" and
-        similar flags are not allowed though it would be good to do so in the future.
+    <dd>This options allows to export data in current page environment to the page receiving the form.
+        Variables are treated as "hidden" form elements which will be automatically generated. Each value is 
+        either a name, in which case the Tcl variable at the caller's level is passed to the form if it exists, 
+        or a name-value pair.
+        The behavior of this option replicates that for <code>vars</code> argument in proc 
+        <a href='/api-doc/proc-view?proc=export_vars&source_p=1'>export_vars</a>, which in turn follows specification 
+        for input page variables in <a href='/api-doc/proc-view?proc=ad_page_contract&source_p=1'>ad_page_contract</a>.
+        In particular, flags <code>:multiple</code>, <code>:sign</code> and <code>:array</code> are allowed and 
+        their meaning is the same as in <code>export_vars</code>.
     </dd>
         
     <p><dt><b>-select_query</b></dt><p>
@@ -264,9 +295,9 @@ ad_proc -public ad_form {
     <dd>A code block which sets the values for each element of the form meant to be modifiable by
         the user when the built-in key management feature is being used or to define options for
         select lists etc. Set the values as local variables in the code block, and they'll get 
-	fetched and used as element values for you. This block is executed <i>everytime</i> the
-	form is loaded <i>except</i> when the form is being submitted (in which case the -on_submit
-	block is executed.)
+        fetched and used as element values for you. This block is executed <i>everytime</i> the
+        form is loaded <i>except</i> when the form is being submitted (in which case the -on_submit
+        block is executed.)
     </dd>
 
     <p><dt><b>-edit_request</b></dt><p>
@@ -559,8 +590,8 @@ ad_proc -public ad_form {
     foreach valid_arg $valid_args {
         if { [info exists $valid_arg] } {
             if { [info exists af_parts(${form_name}__$valid_arg)] 
-		 && [lsearch { form name validate export } $valid_arg] == -1 
-	     } {
+                 && $valid_arg ni { form name validate export }
+             } {
                 return -code error "Form \"$form_name\" already has a \"$valid_arg\" section"
             }
 
@@ -599,17 +630,17 @@ ad_proc -public ad_form {
     array set af_element_parameters [list] 
 
     if { [info exists form] } {
-	
+        
         # Remove comment lines in form section (DanW)
         regsub -all -line -- {^\s*\#.*$} $form "" form
-	
+        
         foreach element $form {
             set element_name_part [lindex $element 0]
 
             # This can easily be generalized if we add more embeddable form commands ...
 
             if {$element_name_part eq "-section"} {
-                lappend af_element_names($form_name) "[concat "-section" [uplevel [list subst [lrange $element 1 end]]]]"
+                lappend af_element_names($form_name) [concat -section [uplevel [list subst [lrange $element 1 end]]]]
             } else {
                 set element_name_part [uplevel [list subst $element_name_part]]
                 if { ![regexp {^([^ \t:]+)(?::([a-zA-Z0-9_,(|)]*))?$} $element_name_part match element_name flags] } {
@@ -631,7 +662,7 @@ ad_proc -public ad_form {
                         }
                         set flag_stem [string range $flag 0 $left_paren-1]
                         lappend af_element_parameters($element_name:$flag_stem) \
-			    [string range $flag $left_paren+1 [string length $flag]-2]
+                            [string range $flag $left_paren+1 [string length $flag]-2]
                         lappend af_flag_list(${form_name}__$element_name) $flag_stem
                     } else {
                         lappend af_flag_list(${form_name}__$element_name) $flag
@@ -661,9 +692,11 @@ ad_proc -public ad_form {
                 return -code error "Validate block must have three arguments: element name, expression, error message"
             }
 
-            if {[lsearch $af_element_names($form_name) [lindex $validate_element 0]] == -1
-                && ![template::element::exists $form_name [lindex $validate_element 0]]} { 
-                return -code error "Element \"[lindex $validate_element 0]\" is not a form element"
+            set element_name [lindex $validate_element 0]
+            if {$element_name ni $af_element_names($form_name) 
+                && ![template::element::exists $form_name $element_name]
+            } {
+                return -code error "Element \"$element_name\" is not a form element"
             }
             lappend af_validate_elements($form_name) $validate_element
         }
@@ -743,20 +776,86 @@ ad_proc -public ad_form {
 
         template::element create $form_name __refreshing_p -datatype integer -widget hidden -value 0
 
-	# add the hidden button element
-	template::element create $form_name "__submit_button_name" -datatype text -widget hidden -value ""
-	template::element create $form_name "__submit_button_value" -datatype text -widget hidden -value ""
+        # add the hidden button element
+        template::element create $form_name "__submit_button_name" -datatype text -widget hidden -value ""
+        template::element create $form_name "__submit_button_value" -datatype text -widget hidden -value ""
     }
 
+    # Antonio Pisano: now ad_form supports :multiple, 
+    # :array and :sign flags in exported variables.
     if { [info exists export] } {
         foreach value $export {
-            set name [lindex $value 0]
-            if { [llength $value] == 1 } {
-                if { [uplevel [list info exists $name]] } {
-                    template::element create $form_name $name -datatype text -widget hidden -value [uplevel [list set $name]]
+            lassign $value name value
+            lassign [split $name ":"] name mode
+            set modes [split $mode ,]
+            # recognize supported flags
+            set sign_p     [expr {"sign"     in $modes}]
+            set array_p    [expr {"array"    in $modes}]
+            set multiple_p [expr {"multiple" in $modes}]
+            set is_array_p [uplevel [list array exists $name]]
+            # var is array and will be exported as such even if not said explicitly
+            if {$is_array_p} {set array_p t}
+            set is_var_p [expr {!$is_array_p && [uplevel [list info exists $name]]}]
+            
+            if {$array_p} {
+              if {$is_var_p} {
+                  error "variable \"$name\" should be an array"
+              }
+              # no explicit value...
+              if {$value eq ""} {
+                # ...take it from caller stack...
+                if {$is_array_p} {
+                  set value [uplevel [list array get $name]]
+                # ...or ignore this field.
+                } else {
+                  continue
                 }
+              }
+              # arrays generate one hidden formfield for each key
+              foreach {key val} $value {
+                set val [uplevel [list subst $val]]
+                # field is multiple: use '-values' instead of '-value'
+                if {$multiple_p} {
+                  template::element create $form_name ${name}.${key} \
+                      -datatype text -widget hidden \
+                      -values $val
+                } else {
+                  template::element create $form_name ${name}.${key} \
+                      -datatype text -widget hidden \
+                      -value $val
+                }
+              }
             } else {
-                template::element create $form_name $name -datatype text -widget hidden -value [uplevel [list subst [lindex $value 1]]]
+              # no explicit value...
+              if {$value eq ""} {
+                # ...take it from caller stack...
+                if {$is_var_p} {
+                  set value [uplevel [list set $name]]
+                # ...or ignore this field.
+                } else {
+                    continue
+                }
+              }
+              set value [uplevel [list subst $value]]
+              # field is multiple: use '-values' instead of '-value'
+              if {$multiple_p} {
+                template::element create $form_name $name \
+                    -datatype text -widget hidden \
+                    -values $value
+              } else {
+                template::element create $form_name $name \
+                    -datatype text -widget hidden \
+                    -value $value
+              }
+            }
+            if {$sign_p} {
+                # value is signed and its signature sent as another hidden field.
+                # lsort is required for arrays, as 'array get' doesn't specify
+                # the order of extraction of elements and we could have different
+                # signature for the same array
+                template::element create $form_name $name:sig \
+                  -datatype text -widget hidden \
+                  -value [ad_sign [lsort $value]]
             }
         }
     }
@@ -770,21 +869,18 @@ ad_proc -public ad_form {
     foreach element_name $element_names {
         if { [lindex $element_name 0] eq "-section" } {
             set command [list template::form section]
-            foreach {option} [lrange $element_name 2 end] {
-                set switch [lindex $option 0]
-                set args [lindex $option 1]
+            foreach option [lrange $element_name 2 end] {
+                lassign $option switch args
                 switch $switch {
                     fieldset -
                     legendtext -
                     legend {
-                        lappend command -$switch
-                        lappend command $args
+                        lappend command -$switch $args
                     }
                     default {return -code error "\"$switch\" is not a legal -section option"}
                 }
             }
-            lappend command $form_name
-            lappend command [lindex $element_name 1]
+            lappend command $form_name [lindex $element_name 1]
             {*}$command
         } else {
             set form_command [list template::element create $form_name $element_name]
@@ -816,7 +912,7 @@ ad_proc -public ad_form {
                     }
 
                     nospell -
-		    optional {
+                    optional {
                         if { $af_element_parameters($element_name:$flag) ne "" } {
                             return -code error "element $element_name: $flag attribute can not have a parameter"
                         }
@@ -842,8 +938,7 @@ ad_proc -public ad_form {
                         if { [info commands "::template::data::validate::$flag"] eq "" } {
                            return -code error "element $element_name: data type \"$flag\" is not valid"
                         }
-                        lappend form_command "-datatype"
-                        lappend form_command $flag
+                        lappend form_command "-datatype" $flag
                         set af_type(${form_name}__$element_name) $flag
                         if { $af_element_parameters($element_name:$flag) eq "" } {
                             if { [info commands "::template::widget::$flag"] ne "" } {
@@ -860,8 +955,7 @@ ad_proc -public ad_form {
             }
               
             foreach extra_arg $af_extra_args($element_name) {
-                lappend form_command "-[lindex $extra_arg 0]"
-                lappend form_command [uplevel [list subst [lindex $extra_arg 1]]]
+                lappend form_command "-[lindex $extra_arg 0]" [uplevel [list subst [lindex $extra_arg 1]]]
             }
             {*}$form_command
 
@@ -927,7 +1021,7 @@ ad_proc -public ad_form {
                         }
                     }
                 }
-            }            
+            }
         }
 
         if { [info exists af_key_name($form_name)] } {
@@ -999,7 +1093,7 @@ ad_proc -public ad_form {
                     return -code error "Couldn't get the next value from sequence: $errmsg\""
                 }
                 set values(__new_p) 1
-		
+                
                 if { [info exists new_request] } {
                     ad_page_contract_eval uplevel #$level $new_request
                     # LARS: Set form values based on local vars in the new_request block
@@ -1018,8 +1112,8 @@ ad_proc -public ad_form {
         foreach element_name $properties(element_names) {
             if { [info exists values($element_name)] } {
                 if { [info exists af_flag_list(${form_name}__$element_name)] 
-		     && [lsearch $af_flag_list(${form_name}__$element_name) multiple] >= 0 
-		 } {
+                     && "multiple" in $af_flag_list(${form_name}__$element_name)
+                 } {
                     template::element set_values $form_name $element_name $values($element_name)
                 } else {
                     template::element set_value $form_name $element_name $values($element_name)
@@ -1037,22 +1131,23 @@ ad_proc -public ad_form {
 
         foreach element_name $properties(element_names) {
             if { [info exists af_flag_list(${form_name}__$element_name)] 
-		 && [lsearch $af_flag_list(${form_name}__$element_name) multiple] >= 0 
-	     } {
+                 && "multiple" in $af_flag_list(${form_name}__$element_name)
+             } {
                 set values [uplevel #$level [list template::element get_values $form_name $element_name]]
                 uplevel #$level [list set $element_name $values]
+#                 "get_values $values"
             } else {
                 set value [uplevel #$level [list template::element get_value $form_name $element_name]]
                 uplevel #$level [list set $element_name $value]
             }
         }
 
-	# Update the clicked button if it does not already exist
-	uplevel #$level {
-		if {![exists_and_not_null ${__submit_button_name}]} {
-		    set ${__submit_button_name} ${__submit_button_value}
-		}
-	    }
+        # Update the clicked button if it does not already exist
+        uplevel #$level {
+                if {![exists_and_not_null ${__submit_button_name}]} {
+                    set ${__submit_button_name} ${__submit_button_value}
+                }
+            }
 
         if { [info exists key_name] } {
             upvar #$level $key_name __key
@@ -1069,8 +1164,8 @@ ad_proc -public ad_form {
         foreach validate_element $af_validate_elements($form_name) {
             foreach {element_name validate_expr error_message} $validate_element {
                 if { ![template::element error_p $form_name $element_name] 
-		     && ![uplevel #$level [list expr $validate_expr]] 
-		 } {
+                     && ![uplevel #$level [list expr $validate_expr]] 
+                 } {
                     template::element set_error $form_name $element_name [uplevel [list subst $error_message]]
                 }
             }
@@ -1079,20 +1174,20 @@ ad_proc -public ad_form {
 
     if { [template::form is_submission $form_name] } {
         upvar #$level __refreshing_p __refreshing_p __confirmed_p __confirmed_p
-	#
-	# The values for __refreshing_p and __confirmed_p are returend
-	# from the client.  Since Submitting invalid data to hidden
-	# elements is a common attack vector, we react harsh if we see
-	# an invalid input here.
-	#
-	if {![string is boolean -strict $__refreshing_p] 
-	    || ![string is boolean -strict $__confirmed_p] } {
-	    ad_return_complaint 1 "Your request is invalid."
-	    ns_log Warning "Validation error in hidden form element.\
-		This may be part of a vulnerability scan or attack reconnaissance: \
-		fish values __refreshing_p '$__refreshing_p' or __confirmed_p '$__confirmed_p'"
-	    ad_script_abort
-	}
+        #
+        # The values for __refreshing_p and __confirmed_p are returend
+        # from the client.  Since Submitting invalid data to hidden
+        # elements is a common attack vector, we react harsh if we see
+        # an invalid input here.
+        #
+        if {![string is boolean -strict $__refreshing_p] 
+            || ![string is boolean -strict $__confirmed_p] } {
+            ad_return_complaint 1 "Your request is invalid."
+            ns_log Warning "Validation error in hidden form element.\
+                This may be part of a vulnerability scan or attack reconnaissance: \
+                fish values __refreshing_p '$__refreshing_p' or __confirmed_p '$__confirmed_p'"
+            ad_script_abort
+        }
         if { $__refreshing_p } {
             uplevel array unset ${form_name}:error
 
@@ -1162,14 +1257,14 @@ ad_proc -public ad_form {
                         uplevel #$level $on_submit
                     }
 
-		    upvar #$level __new_p __new_p
+                    upvar #$level __new_p __new_p
 
-		    if {[info exists __new_p] && ![string is boolean -strict $__new_p]} {
-			ad_return_complaint 1 "Your request is invalid."
-			ns_log Warning "Validation error in hidden form element.\
-		This may be part of a vulnerability scan or attack reconnaissance: fish values __new_p"
-			ad_script_abort
-		    }
+                    if {[info exists __new_p] && ![string is boolean -strict $__new_p]} {
+                        ad_return_complaint 1 "Your request is invalid."
+                        ns_log Warning "Validation error in hidden form element.\
+                This may be part of a vulnerability scan or attack reconnaissance: fish values __new_p"
+                        ad_script_abort
+                    }
 
                     if { [info exists new_data] && $__new_p } {
                         uplevel #$level $new_data
@@ -1301,3 +1396,11 @@ ad_proc -public ad_form_new_p {
     return [expr {$form eq "" || [ns_set find $form $key] == -1 || [ns_set get $form __new_p] == 1 }]
 
 }
+
+#
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:
+

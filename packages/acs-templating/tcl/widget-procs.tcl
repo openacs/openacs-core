@@ -387,7 +387,7 @@ ad_proc -public template::widget::input {
 
     
     # Handle display mode of visible normal form elements, i.e. not hidden, not submit, not button, not clear
-    if { $element(mode) ne "edit" && [lsearch -exact { hidden submit button clear checkbox radio } $type] == -1 } {
+    if { $element(mode) ne "edit" && $type ni { hidden submit button clear checkbox radio } } {
         set output ""
         if { [info exists element(value)] } {
             append output [ad_quotehtml $element(value)]
@@ -396,7 +396,7 @@ ad_proc -public template::widget::input {
     } else {
         set output "<input type=\"$type\" name=\"$element(name)\""
 
-        if { $element(mode) ne "edit" && [lsearch -exact { hidden submit button clear } $type] == -1 } {
+        if { $element(mode) ne "edit" && $type ni { hidden submit button clear } } {
             append output " disabled"
 		}
 
@@ -498,12 +498,13 @@ ad_proc -public template::widget::hidden {
 } {
     upvar $element_reference element
 
-    #
-    # If there is a "values" element provided, but no "value", treat
-    # this a multivalued (multiple) entry.
-    #
-
-    if { [info exists element(values)] && ![info exists element(value)] } {
+    # Antonio Pisano: 
+    # before 2015-09-03 we didn't enter this 'if' when element(value) existed.
+    # This means that even if we had multiple values in element(values) those
+    # were ignored, preventing the export of multiple values by hidden formfields.
+    # I changed this by saying that field is multiple whenever element(values) 
+    # exists and is not null.
+    if { [info exists element(values)] && $element(values) ne "" } {
       ns_log notice "hidden form element with multiple values: <$element(values)>"
       set output {}
       set count 0
