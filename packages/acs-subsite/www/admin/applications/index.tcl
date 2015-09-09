@@ -11,18 +11,13 @@ ad_page_contract {
 set page_title [_ acs-subsite.Applications]
 set context [list $page_title]
 
-# Get the subsite node ID
-set subsite_url [lindex [site_node::get_url_from_object_id \
-			     -object_id [site_node::closest_ancestor_package \
-					     -include_self \
-					     -package_key [subsite::package_keys]]] 0]
-array set subsite_sitenode [site_node::get -url $subsite_url]
-set subsite_node_id $subsite_sitenode(node_id)
+set subsite_node_id [ad_conn subsite_node_id]
 
 list::create \
     -name applications \
     -multirow applications \
     -key node_id \
+    -page_flush_p 1 \
     -page_size 250 \
     -page_query_name select_applications \
     -actions { 
