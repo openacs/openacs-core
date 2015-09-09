@@ -14,7 +14,7 @@
 </else>
 
 <p>
-<a href="subsite-add">#acs-subsite.Create_new_subsite#</a>
+<a class="button" href="/admin/subsite-add">#acs-subsite.Create_new_subsite#</a>
 </p>
 
 
