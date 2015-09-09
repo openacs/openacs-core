@@ -802,7 +802,7 @@ ad_proc -public subsite::set_theme {
     DefaultDimensionalStyle, and ResourceDir parameters.
 
     @param subsite_id id of the subsite
-    @param theme Name of the theme (theme key)x
+    @param theme Name of the theme (theme key)
 } {
     if { ![info exists subsite_id] } {
         set subsite_id [ad_conn subsite_id]
