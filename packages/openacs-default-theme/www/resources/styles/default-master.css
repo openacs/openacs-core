@@ -630,7 +630,7 @@ ul.action-links li {
 /* CONTEXT BAR ---- */
 
 #breadcrumbs {
-  clear: right;
+  clear: both;
   padding-left: 0.4em;
 }
 
