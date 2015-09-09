@@ -124,7 +124,10 @@ ad_proc -public apm_dependency_provided_p {
     }
 }
 
-ad_proc -private pkg_info_new { package_key spec_file_path embeds extends provides requires {dependency_p ""} {comment ""}} {
+ad_proc -private pkg_info_new {
+    package_key spec_file_path embeds extends provides requires
+    {dependency_p ""} {comment ""}
+} {
 
     Returns a datastructure that maintains information about a package.
     @param package_key The key of the package.
@@ -767,11 +770,17 @@ ad_proc -private apm_package_install {
     array set version [apm_read_package_info_file $spec_file_path]
     set package_key $version(package.key)
 
-    apm_callback_and_log $callback "<h3>Installing $version(package-name) $version(name)</h3>"
-
     # Determine if we are upgrading or installing.
     set upgrade_from_version_name [apm_package_upgrade_from $package_key $version(name)]
     set upgrade_p [expr {$upgrade_from_version_name ne ""}] 
+
+    if {$upgrade_p} {
+        set operations {Upgrading Upgraded}
+    } else {
+        set operations {Installing Installed}
+    }
+    
+    apm_callback_and_log $callback "<h3>[lindex $operations 0] $version(package-name) $version(name)</h3>"
 
     if { [string match "[apm_workspace_install_dir]*" $package_path] } {
         # Package is being installed from the apm_workspace dir (expanded from .apm file)
@@ -914,8 +923,8 @@ ad_proc -private apm_package_install {
         apm_package_install_owners -callback $callback $version(owners) $version_id
         apm_package_install_callbacks -callback $callback $version(callbacks) $version_id
         apm_build_subsite_packages_list
-
-        apm_callback_and_log $callback "<p>Installed $version(package-name), version $version(name).</p>"
+        
+        apm_callback_and_log $callback "<p>[lindex $operations 1] $version(package-name), version $version(name).</p>"
     } {
         ns_log Error "apm_package_install: Error installing $version(package-name) version $version(name): $errmsg\n$::errorInfo"
 
@@ -988,6 +997,14 @@ ad_proc -private apm_package_install {
             apm_package_instance_new -instance_name $version(package-name) \
                 -package_key $package_key
         }
+
+        
+        if {[file exists $::acs::rootdir/packages/$package_key/install.xml]} {
+            # Run install.xml only for new installs
+            ns_log notice "===== RUN /packages/$package_key/install.xml"
+            apm::process_install_xml /packages/$package_key/install.xml ""
+        }
+
     } else {
         # After upgrade Tcl proc callback
         apm_invoke_callback_proc -version_id $version_id -type after-upgrade \

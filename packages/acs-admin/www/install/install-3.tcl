@@ -141,7 +141,8 @@ foreach package_key $install_order {
 	<p>Installing $package_key ...<br>
 	<script>window.scrollTo(0,document.body.scrollHeight);</script>
     }]
-    # Install the packages -- this actually copies the files into the
+    
+    # Install the package -- this actually copies the files into the
     # right place in the file system and backs up any old files
     set version_id [apm_package_install \
                         -enable \
@@ -155,11 +156,6 @@ foreach package_key $install_order {
         # as there might be packages depending on the failed package. Ideally we should
         # probably check for such dependencies and continue if there are none.
         set success_p 0
-    } elseif {[file exists $::acs::rootdir/packages/$package_key/install.xml]} {
-	ns_write "... configure $package_key<br>\n"
-	#ns_log notice "===== RUN /packages/$package_key/install.xml"
-	apm::process_install_xml /packages/$package_key/install.xml ""
-	ns_write "... installation OK <br>\n"
     } else {
 	ns_write "... installation OK <br>\n"
     }
