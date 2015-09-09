@@ -64,16 +64,18 @@ set UseXotclSiteNodes 0
 # 05-db-procs.tcl). The current implementation does not support
 # oracle, the implementation does not distinguish btw. AOLserver and
 # NaviServer (uses simply ns_cache_eval for speed and simplicity).
+# We can't use e.g.     && [ds_string check_package {select 1 from apm_package_versions where package_key = 'xotcl-core' and installed_p = 't'}]
+
 #
+
 if {[info command ::nx::Object] ne ""
-    && [info commands bootstrap::xo::dc] ne ""
-    && [db_driverkey ""] ne "oracle"
+    && [db_driverkey ""] eq "postgresql"
+    && [apm_package_installed_p xotcl-core]
     && [ns_info name] eq "NaviServer"
 } {
     set UseXotclSiteNodes 1
     ns_log notice "use XOTcl Site Nodes"
 }
-
 
 #----------------------------------------------------------------------
 # site_nodes data structure
