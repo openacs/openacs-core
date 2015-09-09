@@ -96,11 +96,6 @@ foreach pkg_info $pkg_install_list {
 			    -data_model_files $data_model_files \
 			    -mount_path $selected_mount_path \
 			    $spec_file]
-
-	if {[file exists $::acs::rootdir/packages/$version(package.key)/install.xml]} {
-	    ns_log notice "===== RUN /packages/$version(package.key)/install.xml"
-	    apm::process_install_xml /packages/$version(package.key)/install.xml ""
-	}
 	ns_log notice "===== INSTALL $version(package.key) DONE"
 
     } errorMsg]} {
