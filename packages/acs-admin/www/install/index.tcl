@@ -24,9 +24,9 @@ multirow append install \
 	<a href="/doc/upgrade">Help</a>}
 
 multirow append install \
-    [subst { <a href="$remote_install_url">Install</a> or <a href="$remote_upgrade_url">upgrade</a> 
-	from repository.}] \
-    [subst  {<a href="$local_install_url">Install or upgrade</a> from local file system.}]
+    [subst { <a href="$remote_install_url" class="button">Install</a> or
+	<a href="$remote_upgrade_url" class="button">upgrade</a> from repository.}] \
+    [subst  {<a href="$local_install_url" class="button">Install or upgrade</a> from local file system.}]
 
 template::list::create \
     -name install \
