@@ -1,6 +1,6 @@
 <ul>
   <li><a href="@acs_admin_url@users">Users</a>
-  <li><a href="subsites">Subsites</a> (<span class="badge">@nr_subsites@</span>)</li>
+  <li><a href="subsites">Subsites</a> (@nr_subsites@)</li>
   <li><a href="@acs_admin_url@install">Install software</a>
   <li><a href="developer">Developer Tools</a>
   <if @acs_lang_admin_url@ not nil>
