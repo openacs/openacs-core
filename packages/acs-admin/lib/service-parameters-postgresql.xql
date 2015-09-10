@@ -7,7 +7,8 @@
         <querytext>
                     select package_id,
                            ap.package_key,
-                           acs_object__name(package_id) as instance_name,
+                           -- acs_object__name(package_id) as instance_name,
+			   pretty_name as instance_name,
                            apm_package_type__num_parameters(ap.package_key) as parameter_count
                     from apm_packages ap,
                          apm_package_types
