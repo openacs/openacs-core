@@ -9,7 +9,7 @@
     <implements-subsite-p>t</implements-subsite-p>
     <inherit-templates-p>t</inherit-templates-p>
     
-    <version name="5.9.0d7" url="http://openacs.org/repository/download/apm/acs-subsite-5.9.0d7.apm">
+    <version name="5.9.0d8" url="http://openacs.org/repository/download/apm/acs-subsite-5.9.0d8.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Subsite</summary>
         <release-date>2015-06-16</release-date>
@@ -18,7 +18,7 @@
         <license>GPL</license>
         <maturity>3</maturity>
 
-        <provides url="acs-subsite" version="5.9.0d7"/>
+        <provides url="acs-subsite" version="5.9.0d8"/>
         <requires url="acs-authentication" version="5.9.0d1"/>
         <requires url="acs-content-repository" version="5.9.0d1"/>
         <requires url="acs-kernel" version="5.8.0d4"/>
@@ -86,7 +86,7 @@ admin {
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="AllowPersistentLoginP"  default="1" description="do we allow persistent logins?" section_name="user-login"/>
             <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="AsmForRegisterId"  default="1" description="Assessment used in the registration process." section_name="user-login"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="ContextBarSeparator"  default=":" description="Default character to use as separator in context bar"/>
-            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="DefaultFormStyle"  description="The default form template to use if a particular form doesn't have something more specific defined already." section_name="theming"/>
+            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="DefaultFormStyle"  description="The default form template to use if a particular form doesn't have something more specific defined already.  Set by the admin theme-switching UI." section_name="theming"/>
 	    <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="DefaultDimensionalStyle"  description="The default dimensional template to use if a particular ad_dimensional doesn't have -style set already.  Set by the admin theme-switching UI." section_name="theming"/>
 	    <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="ResourceDir"  description="The directory, from which the resources of acs-templating are loaded. If not set, or the required resource is not found, the default is taken from /packages/acs-templating/resources/.   Set by the admin theme-switching UI." section_name="theming"/>	    
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="DefaultListFilterStyle"  description="The default list filter template to use if a particular listfilter tag does not explicitly specify the list filter style to use.  Set by the admin theme-switching UI." section_name="theming"/>
