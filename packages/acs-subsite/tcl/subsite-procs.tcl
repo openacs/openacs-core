@@ -152,7 +152,7 @@ ad_proc -public subsite::default::create_app_group {
 
             # Create a constraint that says "to be a member of this subsite you must be a member
             # of the parent subsite.
-	    set subsite_id [site_node::closest_ancestor_package \
+            set subsite_id [site_node::closest_ancestor_package \
                                 -node_id $node_id \
                                 -package_key [subsite::package_keys]]
 
@@ -207,10 +207,8 @@ ad_proc -private subsite::instance_name_exists_p {
 
 } {
     return [db_string select_name_exists_p {
-	select count(*) 
-	  from site_nodes
-	 where parent_id = :node_id
-	   and name = :instance_name
+        select count(*)  from site_nodes
+        where parent_id = :node_id and name = :instance_name
     }]
 }
 
@@ -244,33 +242,33 @@ ad_proc -public subsite::auto_mount_application {
 
 } {
     if { $node_id eq "" } {
-	set node_id [ad_conn node_id]
+        set node_id [ad_conn node_id]
     }
 
     set ctr 2
     if { $instance_name eq "" } {
-	# Default the instance name to the package key. Add a number,
-	# if necessary, until we find a unique name
-	set instance_name $package_key
-	while { [subsite::instance_name_exists_p $node_id $instance_name] } {
-	    set instance_name "$package_key-$ctr"
-	    incr ctr
-	}
+        # Default the instance name to the package key. Add a number,
+        # if necessary, until we find a unique name
+        set instance_name $package_key
+        while { [subsite::instance_name_exists_p $node_id $instance_name] } {
+            set instance_name "$package_key-$ctr"
+            incr ctr
+        }
     }
 
     if { $pretty_name eq "" } {
-	# Get the name of the object mounted at this node
-	db_1row select_package_object_names {
-	    select t.pretty_name as package_name, acs_object.name(s.object_id) as object_name
-	      from site_nodes s, apm_package_types t
-	     where s.node_id = :node_id
-	       and t.package_key = :package_key
-	}
-	set pretty_name "$object_name $package_name"
-	if { $ctr > 2 } {	    
-	    # This was a duplicate pkg name... append the ctr used in the instance name
-	    append pretty_name " [expr {$ctr - 1}]"
-	}
+        # Get the name of the object mounted at this node
+        db_1row select_package_object_names {
+            select t.pretty_name as package_name, acs_object.name(s.object_id) as object_name
+              from site_nodes s, apm_package_types t
+            where s.node_id = :node_id
+              and t.package_key = :package_key
+        }
+        set pretty_name "$object_name $package_name"
+        if { $ctr > 2 } {
+            # This was a duplicate pkg name... append the ctr used in the instance name
+            append pretty_name " [expr {$ctr - 1}]"
+        }
     }
 
     return [site_node::instantiate_and_mount -parent_node_id $node_id \
@@ -308,7 +306,7 @@ ad_proc -public subsite::get {
     upvar $array subsite_info
 
     if { $subsite_id eq "" } {
-	set subsite_id [ad_conn subsite_id]
+        set subsite_id [ad_conn subsite_id]
     }
 
     if { ![ad_conn isconnected] } {
@@ -346,7 +344,7 @@ ad_proc -public subsite::get_element {
     @creation-date 2003-03-08
 } {
     if { $subsite_id eq "" } {
-	set subsite_id [ad_conn subsite_id]
+        set subsite_id [ad_conn subsite_id]
     }
 
     subsite::get -subsite_id $subsite_id -array subsite_info
@@ -377,7 +375,7 @@ ad_proc -public subsite::upload_allowed {} {
                "<blockquote>
                 You don't have permission to see this page.
                </blockquote>"
-	}
+        }
     }
 }
 
@@ -393,7 +391,7 @@ ad_proc -public subsite::util::sub_type_exists_p {
 } {
 
     return [db_string sub_type_exists_p {
-	select case 
+        select case 
                  when exists (select 1 from acs_object_types 
                               where supertype = :object_type)
                  then 1 
@@ -414,17 +412,16 @@ ad_proc -public subsite::util::object_type_path_list {
     set path_list [list]
 
     set type_list [db_list select_object_type_path {
-	select object_type
-	from acs_object_types
-	start with object_type = :object_type
-	connect by object_type = prior supertype
+        select object_type from acs_object_types
+        start with object_type = :object_type
+        connect by object_type = prior supertype
     }]
 
     foreach type $type_list {
-	lappend path_list $type
-	if {$type eq $ancestor_type} {
-	    break
-	}
+        lappend path_list $type
+        if {$type eq $ancestor_type} {
+            break
+        }
     }
 
     return $path_list
@@ -443,8 +440,8 @@ ad_proc -public subsite::util::object_type_pretty_name {
     @param object_type
 } {
     return [db_string select_pretty_name {
-	select pretty_name from acs_object_types 
-	where object_type = :object_type
+        select pretty_name from acs_object_types 
+          where object_type = :object_type
     }]
 }
 
@@ -458,7 +455,7 @@ ad_proc -public subsite::util::return_url_stack {
 } {
 
     if {[llength $return_url_list] == 0} {
-	error "subsite::util::return_url_stack - \$return_url_list is empty"
+        error "subsite::util::return_url_stack - \$return_url_list is empty"
     }
 
     set first_url [lindex $return_url_list 0]
@@ -466,12 +463,12 @@ ad_proc -public subsite::util::return_url_stack {
 
     # Base Case
     if {[llength $rest] == 0} {
-	return $first_url
+        return $first_url
     }
 
     # More than 1 url was in the list, so recurse
     if {[string first ? $first_url] == -1} {
-	append first_url ?
+        append first_url ?
     }
     append first_url "&return_url=[ad_urlencode [return_url_stack $rest]]"
 
@@ -492,9 +489,9 @@ ad_proc -public subsite::define_pageflow {
 } {
     set pageflow [get_pageflow_struct -url $url]
     if {$url eq ""} {
-	set base_url [subsite::get_element -element url]
+        set base_url [subsite::get_element -element url]
     } else {
-	set base_url $url
+        set base_url $url
     }
 
     template::multirow create $sections_multirow name label title url selected_p link_p
@@ -645,9 +642,9 @@ ad_proc -public subsite::get_pageflow_struct {
     set pageflow [list]
 
     if {$url eq ""} {
-	set subsite_url [subsite::get_element -element url]
+        set subsite_url [subsite::get_element -element url]
     } else {
-	set subsite_url $url
+        set subsite_url $url
     }
 
     set subsite_id [ad_conn subsite_id]
@@ -695,13 +692,15 @@ ad_proc -public subsite::get_pageflow_struct {
                      -party_id [ad_conn untrusted_user_id]]
     set show_member_list_to [parameter::get -parameter "ShowMembersListTo" -package_id $subsite_id -default 2]
 
-    if { $admin_p || ($user_id != 0 && $show_member_list_to == 1) || \
-	$show_member_list_to == 0 } {
-	lappend pageflow members {
-	    label "Members"
-	    folder "members"
-	    selected_patterns {*}
-	}
+    if { $admin_p
+         || ($user_id != 0 && $show_member_list_to == 1)
+         || $show_member_list_to == 0
+     } {
+        lappend pageflow members {
+            label "Members"
+            folder "members"
+            selected_patterns {*}
+        }
     }
 
 
@@ -935,7 +934,7 @@ ad_proc -public subsite::get_url {
 
         util_driver_info -array request
 
-	lassign [split [ns_set iget [ns_conn headers] host] :] request(vhost) provided_port
+        lassign [split [ns_set iget [ns_conn headers] host] :] request(vhost) provided_port
 
         if {$provided_port ne "" } {
             set request(port) $provided_port
