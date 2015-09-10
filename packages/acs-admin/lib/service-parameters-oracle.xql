@@ -14,7 +14,7 @@
                          apm_package_types
                     where ap.package_key = apm_package_types.package_key
                     and package_type = 'apm_service'
-                    and   (ap.package_key != 'acs-subsite' or (select parent_id from site_nodes where object_id = package_id) is null)
+                    and   (ap.package_key != 'acs-subsite')
                     order by instance_name
         </querytext>
     </fullquery>
