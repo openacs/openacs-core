@@ -1162,6 +1162,8 @@ ad_proc -public cache { command cache_key args } {
   return $result
 }
 
-# Local Variables:
-# tcl-indent-level: 2
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
 # End:
