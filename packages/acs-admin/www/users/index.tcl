@@ -32,9 +32,9 @@ set groups [db_html_select_value_options groups_select {
             from group_member_map group by group_id) m, 
            (select group_id, count(*) as num 
             from group_component_map group by group_id) c 
-    where  groups.group_id=m.group_id 
+    where  groups.group_id = m.group_id 
     and    groups.group_id = c.group_id
-    order  by group_name
+    order  by group_id
 } ]
 
 # Local variables:
