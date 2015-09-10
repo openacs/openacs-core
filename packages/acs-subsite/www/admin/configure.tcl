@@ -31,7 +31,7 @@ ad_form -name name -cancel_url [ad_conn url] -mode display -form {
     }
     {description:text(textarea),optional
         {label "[_ acs-subsite.Description]"}
-	{html { rows 6 cols 80 }}
+        {html { rows 6 cols 80 }}
     }
 } -on_request {
     set instance_name [ad_conn instance_name]
