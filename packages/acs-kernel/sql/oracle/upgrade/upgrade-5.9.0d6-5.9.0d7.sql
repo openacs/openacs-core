@@ -57,3 +57,11 @@ where package_key = 'acs-messaging';
 update  apm_package_types
 set pretty_name = 'ACS Core Documentation', pretty_plural = 'ACS Core Documentation'
 where package_key = 'acs-core-docs';
+
+update  apm_package_types
+set pretty_name = 'ACS Tcl Library', pretty_plural = 'ACS Tcl Libraries'
+where package_key = 'acs-tcl';
+
+update  apm_package_types
+set pretty_name = 'ACS Site-Wide Administration', pretty_plural = 'ACS Site-Wide Administration'
+where package_key = 'acs-admin';
