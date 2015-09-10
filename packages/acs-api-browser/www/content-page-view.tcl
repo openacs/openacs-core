@@ -84,3 +84,9 @@ template::util::list_to_multirow xql_links [::apidoc::xql_links_list $path]
 set title [file tail $path]
 set script_documentation [api_script_documentation $path]
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

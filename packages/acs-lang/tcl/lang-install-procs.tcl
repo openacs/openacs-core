@@ -35,3 +35,9 @@ ad_proc -private ::install::xml::action::disable-locale { node } {
     set locale [apm_required_attribute_value $node locale]
     lang::system::locale_set_enabled -locale $locale -enabled_p f
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

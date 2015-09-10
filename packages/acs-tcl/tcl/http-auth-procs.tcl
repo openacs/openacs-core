@@ -114,3 +114,9 @@ ad_proc http_auth::site_node_authorize {
     return filter_return
 }
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

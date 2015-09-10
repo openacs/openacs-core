@@ -29,3 +29,9 @@ set source [content::revision::get_cr_file_path -revision_id $revision_id]
 file copy -force $source $target
 
 ad_returnredirect $return_url_2
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

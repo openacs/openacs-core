@@ -22,3 +22,9 @@ set user_id [ad_conn user_id]
 db_1row get_table { *SQL* } -column_array table_info
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

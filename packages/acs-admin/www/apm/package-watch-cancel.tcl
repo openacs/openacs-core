@@ -11,3 +11,9 @@ ad_page_contract {
 apm_cancel_all_watches $package_key
 
 ad_returnredirect $return_url
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

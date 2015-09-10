@@ -148,3 +148,9 @@ if { $use_watches_p } {
 Watching of files is not enabled in performance mode (see the PerformanceModeP parameter on the <a href=\"/shared/parameters?package_id=$kernel_id&return_url=$page_url\">ACS Kernel parameter page</a>)"
 }
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

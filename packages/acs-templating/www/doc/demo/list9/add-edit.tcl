@@ -142,3 +142,9 @@ set context [list $page_title]
 # processing an "edit" request or a submitted form that contains errors.
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

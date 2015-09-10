@@ -267,3 +267,9 @@ ad_proc db_bootstrap_set_db_type { errors } {
         }
     }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

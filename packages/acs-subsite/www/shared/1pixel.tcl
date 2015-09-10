@@ -44,3 +44,9 @@ if { [catch {
         ns_log Error "$errMsg\n$::errorInfo"
     }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

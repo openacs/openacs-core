@@ -30,3 +30,9 @@ if { [form is_valid pay_bill] } {
 
   template::set_file "[file dirname $__adp_stub]/pay-confirm"
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -773,3 +773,9 @@ proc multiplication_table {x} {
 namespace export *
 
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

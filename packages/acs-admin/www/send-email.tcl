@@ -34,3 +34,9 @@ if { $show_sent_message_p != "t" } {
     ad_returnredirect $return_url
     ad_script_abort
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

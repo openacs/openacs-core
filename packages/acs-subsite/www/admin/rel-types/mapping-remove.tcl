@@ -35,3 +35,9 @@ set export_vars [export_vars -form {group_rel_type_id return_url}]
 set context [list [list "" "Group types"] [[export_vars -base one {group_type}] "One type"] "Remove relation type"]
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

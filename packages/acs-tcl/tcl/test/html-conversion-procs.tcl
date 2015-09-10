@@ -297,3 +297,9 @@ aa_register_case -cats {api smoke} -procs {ad_html_text_convert} ad_text_html_co
 
 
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

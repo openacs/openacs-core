@@ -10,3 +10,9 @@ ad_library {
 
 ns_adp_registerscript ad-document "/ad-document" doc_tag_ad_document
 ns_adp_registerscript ad-property "/ad-property" doc_tag_ad_property
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

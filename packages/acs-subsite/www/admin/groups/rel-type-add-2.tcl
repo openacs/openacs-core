@@ -74,3 +74,9 @@ if { [db_string segment_exists_p {
     ad_returnredirect [export_vars -base constraints-create {group_id rel_type return_url}]
 }
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

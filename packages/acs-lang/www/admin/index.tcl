@@ -78,3 +78,9 @@ db_multirow -extend {
     set num_untranslated [expr {$num_messages - $num_translated}]
     set num_untranslated_pretty [lc_numeric $num_untranslated]
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

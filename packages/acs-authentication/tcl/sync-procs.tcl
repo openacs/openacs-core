@@ -986,3 +986,9 @@ ad_proc -public auth::sync::process_doc::ims::GetAcknowledgementDocument {
     
     return $doc
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

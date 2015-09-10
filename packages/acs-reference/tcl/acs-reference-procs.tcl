@@ -13,3 +13,9 @@ ad_proc -private acs_reference_get_db_structure {
 } {
 
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

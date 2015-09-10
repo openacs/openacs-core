@@ -424,3 +424,9 @@ ad_proc -public apm_read_package_info_file { path } {
 
     return $return_value
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

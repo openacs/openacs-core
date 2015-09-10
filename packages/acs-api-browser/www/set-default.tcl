@@ -17,3 +17,9 @@ if { $found_p } {
 } else {
     ad_return_error "Unknown Property" "Couldn't find any property to set"
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

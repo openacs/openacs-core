@@ -454,3 +454,9 @@ ad_proc ad_color_to_hex { triplet } {
     }
 }
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

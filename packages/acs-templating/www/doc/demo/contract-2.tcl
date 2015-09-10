@@ -31,3 +31,9 @@ if {[info exists error_list]} {
     append phrase "$count $plural"
   }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

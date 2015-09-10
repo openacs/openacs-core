@@ -80,3 +80,9 @@ foreach dependency_type { provide require extend embed } {
 
 ad_return_template apm
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

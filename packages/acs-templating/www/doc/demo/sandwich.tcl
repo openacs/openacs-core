@@ -34,3 +34,9 @@ if { [form is_request sandwich] } {
 if {[element get_value sandwich grid] == "t"} {
   ad_return_template sandwich-grid
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

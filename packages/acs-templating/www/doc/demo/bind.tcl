@@ -15,3 +15,9 @@ set query "select
            where user_id = :user_id"
 
 db_1row users_query $query -column_array users
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

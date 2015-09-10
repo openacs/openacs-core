@@ -112,3 +112,9 @@ ad_proc -public -callback acs_mail_lite::incoming_email -impl acs-mail-lite {
     }
 }
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

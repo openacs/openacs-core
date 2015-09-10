@@ -156,3 +156,9 @@ template::util::write_from_template \
     $doc_root/gen/namespace-list.adp $doc_root/TclDocs/namespace-list.html
 
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

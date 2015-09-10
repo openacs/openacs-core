@@ -99,3 +99,9 @@ set add_group_url [export_vars -base "../parties/new" {{party_type $group_type} 
 set add_attribute_url [export_vars -base "../attributes/add" {{object_type $group_type} return_url}]
 
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

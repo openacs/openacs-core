@@ -166,3 +166,9 @@ ad_proc -public oacs_util::vars_to_ns_set {
         ns_set put $ns_set $var $one_var
     }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

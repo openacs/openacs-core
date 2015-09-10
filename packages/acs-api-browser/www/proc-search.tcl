@@ -186,3 +186,9 @@ foreach output $private_matches {
 set show_private_url [export_vars -base [ad_conn url] -override { { show_private_p 1 } } { name_weight doc_weight param_weight source_weight search_type query_string show_deprecated_p }]
 
 set hide_private_url [export_vars -base [ad_conn url] -override { { show_private_p 0 } } { name_weight doc_weight param_weight source_weight search_type query_string show_deprecated_p }]
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -71,3 +71,8 @@ aa_register_case -cats {api smoke} ad_proc_change_state_member  {
 
     }
 }
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

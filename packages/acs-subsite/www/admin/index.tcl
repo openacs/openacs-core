@@ -25,3 +25,9 @@ set acs_admin_name $acs_admin_node(instance_name)
 set sw_admin_p [permission::permission_p -party_id [ad_conn user_id] -object_id $acs_admin_node(object_id) -privilege admin]
 
 set convert_subsite_p [expr { [llength [apm::get_package_descendent_options [ad_conn package_key]]] > 0 }]
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

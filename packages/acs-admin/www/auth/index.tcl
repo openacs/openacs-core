@@ -143,3 +143,9 @@ db_multirow -extend {
 
 set auth_package_id [apm_package_id_from_key "acs-authentication"]
 set parameter_url [export_vars -base /shared/parameters { { package_id $auth_package_id } { return_url [ad_return_url] } }]
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

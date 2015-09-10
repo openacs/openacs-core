@@ -204,3 +204,9 @@ if { $post_installation_message ne "" } {
 }
 
 ns_write [install_footer]
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

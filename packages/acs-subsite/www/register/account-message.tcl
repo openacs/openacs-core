@@ -12,3 +12,9 @@ set context [list $page_title]
 
 set system_name [ad_system_name]
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

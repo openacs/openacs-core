@@ -20,3 +20,9 @@ if { [parameter::get -package_id $pkg_id -parameter ShowDataDictionariesP -defau
   ad_register_filter postauth GET *.dat dat_page_filter
   ad_register_filter postauth GET *.frm frm_page_filter
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

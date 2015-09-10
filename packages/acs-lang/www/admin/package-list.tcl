@@ -118,3 +118,9 @@ ad_form -extend -name search -form {
 
 set import_all_url [export_vars -base import-messages { { locale $current_locale } {return_url {[ad_return_url]}} }]
 set export_all_url [export_vars -base export-messages { { locale $current_locale } {return_url {[ad_return_url]}} }]
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

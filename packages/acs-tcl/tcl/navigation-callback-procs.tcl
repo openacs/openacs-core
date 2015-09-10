@@ -59,3 +59,9 @@ ad_proc -public -callback navigation::package_admin {
 
     @author Jeff Davis (davis@xarg.net)
 } -
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

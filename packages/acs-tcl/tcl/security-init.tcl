@@ -39,3 +39,9 @@ proc sec_login_timeout {} "
     return \"[parameter::get -package_id [ad_acs_kernel_id] -parameter LoginTimeout -default 28800]\"
 "
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

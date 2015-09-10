@@ -225,3 +225,9 @@ if { ![form is_valid user_info] } {
 		"<a href=\"[element get_value user_info url]\">[element get_value user_info url]</a>"
     }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -374,3 +374,9 @@ ad_proc -public application_group::child_application_groups {
     }
     return $group_list
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

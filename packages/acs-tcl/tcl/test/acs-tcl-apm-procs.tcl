@@ -71,3 +71,9 @@ aa_register_case -cats {api smoke} -procs {apm_package_instance_new} test_apm_pa
      
     }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

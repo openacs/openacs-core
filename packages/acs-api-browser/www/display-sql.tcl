@@ -74,3 +74,9 @@ if { $safe_p } {
 } else {
     ad_return_warning "Invalid file location" "Can only display files in package or doc directory"
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

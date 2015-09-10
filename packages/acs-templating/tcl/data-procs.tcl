@@ -513,3 +513,9 @@ ad_proc -public template::data::validate::time_of_day {
 
   return [template::util::date::validate $value message]
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

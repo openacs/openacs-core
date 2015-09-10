@@ -13,3 +13,9 @@ ad_page_contract {
 
 ad_returnredirect ../rel-types/
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

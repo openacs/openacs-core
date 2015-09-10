@@ -112,3 +112,9 @@ ad_proc -public -callback subsite::url {
 
     The type let's you define what kind of URL you are looking for (e.g. admin/edit/display)
 } -
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

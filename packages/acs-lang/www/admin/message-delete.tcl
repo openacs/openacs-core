@@ -40,3 +40,9 @@ if { ([info exists confirm_p] && $confirm_p ne "") && [template::util::is_true $
     ad_returnredirect [export_vars -base message-list { locale package_key show }]
     ad_script_abort
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

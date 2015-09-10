@@ -63,3 +63,9 @@ if {$children_p == "t"} {
 } else {
     db_1row children_count { *SQL* } 
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

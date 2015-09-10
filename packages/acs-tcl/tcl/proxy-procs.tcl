@@ -36,3 +36,9 @@ if {![catch {set handler [ns_proxy get exec_proxy]}]} {
 
     ad_proc exec {args} {This is the wrapped version of exec} {proxy::exec -call $args}
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

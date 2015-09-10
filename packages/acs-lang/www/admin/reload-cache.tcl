@@ -9,3 +9,9 @@ ad_page_contract {
 lang::message::cache
 
 ad_returnredirect "index"
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

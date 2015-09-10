@@ -393,3 +393,9 @@ The email address to send New registration notifications.<br><br>
 }
 
 install_return 200 "Welcome" $body
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

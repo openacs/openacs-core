@@ -44,3 +44,9 @@ ad_proc -public core_docs_uninstalled_packages {} {
 } { 
     return [util_memoize core_docs_uninstalled_packages_internal]
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

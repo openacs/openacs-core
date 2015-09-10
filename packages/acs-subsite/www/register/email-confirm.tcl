@@ -15,3 +15,9 @@ set email_confirm_template [parameter::get -parameter "EmailConfirmTemplate" -pa
 if {$email_confirm_template eq ""} {
     set email_confirm_template "/packages/acs-subsite/lib/email-confirm"
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

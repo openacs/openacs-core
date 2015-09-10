@@ -17,3 +17,9 @@ if {$suffix eq "util_memoize"} {
 }
 
 ad_returnredirect $return_url
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

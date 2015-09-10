@@ -358,3 +358,9 @@ if { [info exists property(prof)] } {
         multirow append profiling $tag $total_ms $file_links $size
     }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

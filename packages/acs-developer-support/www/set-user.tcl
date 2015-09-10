@@ -11,3 +11,9 @@ permission::require_permission -object_id [ad_conn package_id] -privilege "read"
 ad_set_client_property developer-support user_id $user_id
 
 ad_returnredirect $return_url
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -297,3 +297,9 @@ db_foreach services_select {} {
 } if_no_rows {
     append services "  <li>(none)\n"
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

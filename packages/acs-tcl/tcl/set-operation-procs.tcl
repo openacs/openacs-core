@@ -143,3 +143,9 @@ ad_proc -deprecated set_difference! { u-name v } {
     return $result
 }
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

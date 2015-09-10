@@ -16,3 +16,9 @@ mfp::note::delete -item_id $item_id
 ad_returnredirect "."
 # stop running this code, since we're redirecting
 abort
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

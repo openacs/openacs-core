@@ -174,3 +174,9 @@ if { [form is_valid locale_editing] } {
     forward "index?tab=locales"
 
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

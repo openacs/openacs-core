@@ -142,3 +142,9 @@ if { $i > 0 } {
     append page [subst {<p><b>SQL Functions</b>:<p>$body}]
 }
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -665,3 +665,9 @@ ad_proc -private auth::search::delete_contract {} {
 } {
     acs_sc::contract::delete -name "auth_search"
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -51,3 +51,9 @@ aa_register_case -cats {api smoke} ad_proc_flush {
     aa_equals "proc was flushed succesful" $success_p 0
 }
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

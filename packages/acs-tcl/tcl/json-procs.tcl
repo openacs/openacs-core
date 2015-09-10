@@ -652,3 +652,9 @@ ad_proc util::json::indent {
     }
     return [join $output \n]
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

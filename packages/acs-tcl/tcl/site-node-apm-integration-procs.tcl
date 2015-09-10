@@ -72,3 +72,9 @@ namespace eval site_node_apm_integration {
     }
 
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

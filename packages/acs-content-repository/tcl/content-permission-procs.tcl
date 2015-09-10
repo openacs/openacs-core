@@ -184,3 +184,9 @@ ad_proc -public content::permission::revoke_permission_h {
         [list privilege $privilege ] \
     ] content_permission revoke_permission_h]
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -978,3 +978,9 @@ aa_register_case -cats {api web} sync_file_get_document {
     aa_true "result.doc_message is empty" [expr {$result(doc_message) eq ""}]
     aa_equals "result.document is 'success'" $result(document) [template::util::read_file $path]
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

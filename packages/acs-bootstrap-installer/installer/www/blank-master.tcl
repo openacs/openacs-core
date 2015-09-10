@@ -314,3 +314,9 @@ set header [template::get_header_html]
 set footer [template::get_footer_html]
 template::head::prepare_multirows
 set event_handlers [template::get_body_event_handlers]
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

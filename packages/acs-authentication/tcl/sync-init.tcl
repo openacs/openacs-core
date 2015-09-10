@@ -21,3 +21,9 @@ ad_schedule_proc \
     -schedule_proc ns_schedule_daily \
     [list 1 0] \
     auth::sync::sweeper
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

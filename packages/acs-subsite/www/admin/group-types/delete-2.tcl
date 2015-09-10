@@ -115,3 +115,9 @@ db_transaction {
 package_object_view_reset $group_type
 
 ad_returnredirect $return_url 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

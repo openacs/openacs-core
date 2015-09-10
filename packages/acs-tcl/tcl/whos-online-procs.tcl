@@ -197,3 +197,9 @@ ad_proc -public whos_online::all_invisible_user_ids {} {
 } {   
     return [nsv_array names invisible_users]
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -58,3 +58,9 @@ ad_form -name description -form {
     ad_returnredirect [export_vars -base edit-localized-message { locale package_key message_key show }]
     ad_script_abort
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

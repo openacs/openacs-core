@@ -55,3 +55,9 @@ ad_proc -private ad_try {code args} {
     return -code $errno -errorcode $::errorCode -errorinfo $::errorInfo $result
   }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

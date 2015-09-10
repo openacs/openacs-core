@@ -114,3 +114,9 @@ set relations_to_this_type [util_commify_number [db_string relations_to_this_typ
 }]]
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

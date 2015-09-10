@@ -1169,3 +1169,9 @@ ad_proc -public install::xml::util::get_id { id } {
     
     return $result
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

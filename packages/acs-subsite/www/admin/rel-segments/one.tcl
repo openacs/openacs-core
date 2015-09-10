@@ -67,3 +67,9 @@ set number_elements [util_commify_number $number_elements]
 set admin_p [permission::permission_p -object_id $segment_id -privilege "admin"]
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

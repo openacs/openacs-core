@@ -49,3 +49,9 @@ foreach section $sections {
 
 ad_returnredirect [export_vars -base "version-parameters" { version_id section_name }]
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -66,3 +66,9 @@ ad_proc -public template::util::file::get_property {
 
 }
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

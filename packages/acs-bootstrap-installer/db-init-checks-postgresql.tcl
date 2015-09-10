@@ -76,3 +76,9 @@ proc db_installer_checks { errors error_p } {
 proc db_helper_checks { errors error_p } {
 }
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

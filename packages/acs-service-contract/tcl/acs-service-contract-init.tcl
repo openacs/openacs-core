@@ -17,3 +17,9 @@ db_foreach impl_operation {
 	acs_sc_proc $impl_contract_name $impl_operation_name $impl_name $impl_alias $impl_pl" 
     }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

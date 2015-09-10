@@ -92,3 +92,9 @@ ad_proc -public rel_segments_permission_p {
     return [permission::permission_p -party_id $user_id -object_id $segment_id -privilege $privilege]
 }
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

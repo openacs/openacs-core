@@ -64,3 +64,9 @@ ad_form -name batch_action_form \
                 }
             }
         }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

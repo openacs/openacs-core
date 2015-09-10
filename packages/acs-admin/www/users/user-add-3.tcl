@@ -35,3 +35,9 @@ if {[catch {acs_mail_lite::send -send_immediately -to_addr $email -from_addr $ad
 }]
     return
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

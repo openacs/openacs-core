@@ -29,3 +29,9 @@ set admin_login_url [export_vars -base "$service(url)/register/auto-login" {{ema
 
 set rebuild_url [export_vars -base rebuild-server { { server $service(name) } }]
 set rebuild_log_url "/rebuild-$service(name).log"
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

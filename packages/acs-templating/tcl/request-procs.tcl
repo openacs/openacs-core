@@ -183,3 +183,9 @@ ad_proc -public template::request::is_valid { { url "" } } {
     }
 }
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

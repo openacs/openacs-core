@@ -107,3 +107,9 @@ proc xml_doc_render {doc_id {indent_p f}} {
 proc xml_node_get_children_by_select {parent_node xpath} {
     return [$parent_node selectNodes $xpath]
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -165,3 +165,9 @@ ad_proc -public -deprecated cr::keyword::get_children {
     return [content::keyword::get_children -parent_id $parent_id]
 }
     
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

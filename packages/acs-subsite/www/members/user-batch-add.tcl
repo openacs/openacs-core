@@ -23,3 +23,9 @@ set export_vars [export_vars -form {email first_names last_name user_id}]
 set system_url [parameter::get -package_id [ad_acs_kernel_id] -parameter SystemURL -default ""].
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

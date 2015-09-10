@@ -236,3 +236,9 @@ ad_proc -private ad_registration_finite_state_machine_admin_links {
 
     }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

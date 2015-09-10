@@ -18,3 +18,9 @@ db_multirow elements elements_select {
 
 
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

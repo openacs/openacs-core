@@ -28,3 +28,9 @@ foreach proc [lsort [nsv_array names api_proc_doc]] {
     } 
 }
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

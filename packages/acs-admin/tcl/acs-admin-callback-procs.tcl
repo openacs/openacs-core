@@ -21,3 +21,9 @@ ad_proc -public -callback acs_admin::member_state_change {
     @param member_state New state of the user
 } -
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

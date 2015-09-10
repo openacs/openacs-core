@@ -34,3 +34,9 @@ auth::verify_account_status
 
 # Used in a message key
 set system_name [ad_system_name]
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -36,3 +36,8 @@ if {$return_url eq ""} {
     set return_url "one?rel_id=$rel_id"
 }
 ad_returnredirect $return_url
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

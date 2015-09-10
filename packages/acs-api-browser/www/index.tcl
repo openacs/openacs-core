@@ -61,3 +61,9 @@ if  { [info exists about_package_key] } {
     }
 
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

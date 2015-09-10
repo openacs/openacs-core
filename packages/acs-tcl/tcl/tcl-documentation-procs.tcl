@@ -2111,3 +2111,9 @@ ad_proc ad_page_contract_handle_datasource_error {error} {
                                               [list exception_text $exception_text]] \
 				 $complaint_template]
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -205,3 +205,9 @@ ln -s /usr/bin/ksh /bin/ksh
         set my_error_p 1
     }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

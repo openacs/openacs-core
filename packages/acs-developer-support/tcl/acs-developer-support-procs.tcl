@@ -698,3 +698,9 @@ ad_proc -public ds_init { } {
 	if {[::ds_show_p]} {set ::ds_show_p 1}
     }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

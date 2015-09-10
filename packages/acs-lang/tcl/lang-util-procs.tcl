@@ -905,3 +905,9 @@ ad_proc -public lang::util::language_label {
 
     return $lang_label
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

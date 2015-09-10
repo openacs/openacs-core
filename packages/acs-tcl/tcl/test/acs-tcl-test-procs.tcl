@@ -1132,3 +1132,9 @@ aa_register_case -cats {api smoke} acs_user__registered_user_p {
     aa_true "registered_user_p works correct" $works_p
 }
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

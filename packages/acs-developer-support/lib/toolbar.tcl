@@ -113,3 +113,9 @@ if {$rm_package_id > 0} {
 } else {
     set rm_url ""
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

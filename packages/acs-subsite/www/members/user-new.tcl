@@ -81,3 +81,9 @@ set user_new_template [parameter::get -parameter "UserNewTemplate" -package_id $
 if {$user_new_template eq ""} {
     set user_new_template "/packages/acs-subsite/lib/user-new"
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

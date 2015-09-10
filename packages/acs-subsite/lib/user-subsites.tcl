@@ -8,3 +8,9 @@ db_multirow -extend {url admin_p} groups groups {
     set admin_p [permission::permission_p -party_id $user_id -object_id $group_id -privilege "admin"]
     set url [apm_package_url_from_id $package_id]
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

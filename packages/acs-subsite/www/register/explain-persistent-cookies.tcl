@@ -14,3 +14,9 @@ ad_page_contract {
 set home_link [ad_site_home_link]
 ad_return_template
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

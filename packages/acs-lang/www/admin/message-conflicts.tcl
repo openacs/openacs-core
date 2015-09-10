@@ -124,3 +124,9 @@ db_multirow -unclobber -extend { edit_url accept_url revert_url message_truncate
     set message_truncated [string_truncate -len 150 -- $message]
     set old_message_truncated [string_truncate -len 150 -- $old_message]
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

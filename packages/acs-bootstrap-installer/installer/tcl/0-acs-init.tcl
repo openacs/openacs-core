@@ -57,3 +57,9 @@ if { [file isfile $bootstrap_file] } {
 } else {
     ns_log "Error" "$bootstrap_file does not exist. Aborting the OpenACS load process."
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

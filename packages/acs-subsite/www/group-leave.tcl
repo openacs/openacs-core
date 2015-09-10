@@ -35,3 +35,9 @@ if { (![info exists return_url] || $return_url eq "") } {
 }
 
 ad_returnredirect -message "You have left the group \"$group_info(group_name)\"." $return_url
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

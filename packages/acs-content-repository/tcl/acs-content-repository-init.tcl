@@ -51,3 +51,9 @@ if {![nsv_exists CR_LOCATIONS CR_FILES]} {
 ##
 
 cr_scan_mime_types
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -45,3 +45,9 @@ ad_proc -callback subsite::header_onload {
     return {your_function(params);}
 } -
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

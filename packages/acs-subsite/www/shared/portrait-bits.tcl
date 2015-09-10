@@ -25,3 +25,9 @@ if { $size eq "" } {
 } else {	
     ad_returnredirect "/image/${item_id}/${size}"
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

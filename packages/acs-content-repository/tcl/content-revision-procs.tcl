@@ -481,3 +481,9 @@ ad_proc -public content::revision::get_cr_file_path {
     return [cr_fs_path $storage_area_key]${filename}
 }
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

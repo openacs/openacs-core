@@ -702,3 +702,9 @@ namespace eval acs_mail_lite {
     }
 
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

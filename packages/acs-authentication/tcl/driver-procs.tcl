@@ -110,3 +110,9 @@ ad_proc -public auth::driver::GetParameters {
                 -operation GetParameters]
 }
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

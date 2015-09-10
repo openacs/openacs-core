@@ -36,3 +36,9 @@ if {![ns_cache get ds_page_bits $request pages]} {
         }
     }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

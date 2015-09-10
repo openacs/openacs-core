@@ -134,3 +134,9 @@ if {$installed_count < 1} {
 ns_write {
     <script>window.scrollTo(0,document.body.scrollHeight);clearInterval(myInterval);</script>
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

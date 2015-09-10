@@ -76,3 +76,8 @@ set us_time [lc_time_fmt $system_time "%c" en_US]
 set fr_time [lc_time_fmt $system_time "%c" fr_FR]
 
 ad_return_template
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

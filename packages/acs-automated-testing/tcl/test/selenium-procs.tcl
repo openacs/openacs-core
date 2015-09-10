@@ -12,3 +12,8 @@ aa_register_case \
     aa_false "Open [ad_url]" [catch {Se open [ad_url]} errmsg]
     aa_log $errmsg
 }
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

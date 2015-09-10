@@ -178,3 +178,9 @@ proc _ns_timeentrywidget {column} {
 
     return [ns_dbformvalueput $output $column time [lindex [split [ns_localsqltimestamp] " "] 1]]
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

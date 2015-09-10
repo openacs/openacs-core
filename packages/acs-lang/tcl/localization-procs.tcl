@@ -582,3 +582,9 @@ ad_proc -private lc_leading_zeros {
 } {
     return [format "%0${n_desired_digits}d" $the_integer]
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

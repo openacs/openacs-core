@@ -368,3 +368,9 @@ ad_proc -public relation::get_objects {
 	return [relation::get_object_two -object_id_one $object_id_one -rel_type $rel_type -multiple]
     }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

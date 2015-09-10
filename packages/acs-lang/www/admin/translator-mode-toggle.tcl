@@ -12,3 +12,9 @@ lang::util::translator_mode_set [expr {![lang::util::translator_mode_p]}]
 
 ad_returnredirect $return_url
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

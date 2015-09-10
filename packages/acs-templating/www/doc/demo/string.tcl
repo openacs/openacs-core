@@ -14,3 +14,9 @@ set name Jill
 set food [list "chilled sea food" "soup"]
 adp_eval code;			        	# run compiled template again
 lappend body $__adp_output
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

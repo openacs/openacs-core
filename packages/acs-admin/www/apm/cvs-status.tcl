@@ -96,3 +96,8 @@ doc_body_append "<a href=\"./\">Return to the Package Manager</a>
 [ad_footer]"
 
     
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

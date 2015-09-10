@@ -309,3 +309,9 @@ ad_proc -public util_memoize_flush_regexp {
 	}
     }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

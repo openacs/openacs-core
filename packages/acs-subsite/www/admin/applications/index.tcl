@@ -75,3 +75,9 @@ db_multirow -extend { parameter_url } applications select_applications_page {} {
         set parameter_url [export_vars -base ../../shared/parameters { package_id { return_url [ad_return_url] } }]
     }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

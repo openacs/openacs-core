@@ -19,3 +19,8 @@ if { $result eq "MyValue"  } {
 ns_write "
 </ul>
 [ad_footer]"
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

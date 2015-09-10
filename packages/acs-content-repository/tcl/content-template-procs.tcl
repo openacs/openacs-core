@@ -102,3 +102,9 @@ ad_proc -public content::template::is_template {
 }
 
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

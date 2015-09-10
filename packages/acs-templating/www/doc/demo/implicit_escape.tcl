@@ -6,3 +6,9 @@ ad_page_contract {
 
 
 set x "Qui Me Amat, Amat Et Cattum Meum!"
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -160,3 +160,8 @@ if {[ad_conn url] eq $subsite_url} {
 if {![info exists skip_link]} {
     set skip_link "#content-wrapper"
 }
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

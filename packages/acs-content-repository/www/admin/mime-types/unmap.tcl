@@ -17,3 +17,9 @@ if { $return_url eq "" } {
 db_dml extension_unmap {}
 
 ad_returnredirect $return_url
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

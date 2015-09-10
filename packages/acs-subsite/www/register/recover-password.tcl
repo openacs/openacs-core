@@ -90,3 +90,9 @@ if { [form is_valid recover] || (![form is_submission recover] && (([info exists
 }
 
 set system_owner [ad_system_owner]
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

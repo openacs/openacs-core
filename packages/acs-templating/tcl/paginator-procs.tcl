@@ -840,3 +840,9 @@ ad_proc -private template::paginator::get_reference {} {
   }
 }
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

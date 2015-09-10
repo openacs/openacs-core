@@ -109,3 +109,9 @@ db_transaction {
 nsv_set spellchecker path $bin
 nsv_set spellchecker lang_options $wanted_dicts
 nsv_set spellchecker default_lang $default_lang
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

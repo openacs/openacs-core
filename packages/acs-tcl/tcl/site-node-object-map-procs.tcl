@@ -49,3 +49,9 @@ ad_proc -public site_node_object_map::get_url {
     return [site_node::get_url -node_id $node_id]
 }
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

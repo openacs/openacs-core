@@ -66,3 +66,9 @@ ad_form -name name -cancel_url [ad_conn url] -mode display -form {
     ad_returnredirect [ad_conn url]
     ad_script_abort
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -15,3 +15,9 @@ set file_selector_link [export_vars -base file-selector \
 set fs_found 1
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

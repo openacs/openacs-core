@@ -51,3 +51,9 @@ db_foreach select_group_types {
 } {
     template::multirow append group_types $object_type [ad_urlencode $object_type] $pretty_name $number_groups
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

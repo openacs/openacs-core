@@ -36,3 +36,8 @@ db_multirow \
 	set edit_url [export_vars -base "note-edit" {item_id}]
 	set delete_url [export_vars -base "note-delete" {item_id}]
     }
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

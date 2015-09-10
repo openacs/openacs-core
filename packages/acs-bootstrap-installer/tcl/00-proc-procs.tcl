@@ -1006,3 +1006,9 @@ ad_proc -public ad_assert_arg_value_in_list {
 
     return 1
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -53,3 +53,9 @@ foreach key_pair $adp_replace_list {
 set hidden_form_vars [export_vars -form {version_id files:multiple file_action:multiple}]
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

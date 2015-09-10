@@ -16,3 +16,8 @@ if { $authority(register_impl_id) eq "" } {
 parameter::set_value -package_id [apm_package_id_from_key acs-authentication] -parameter RegisterAuthority -value $authority(short_name)
 
 ad_returnredirect [export_vars -base "." { authority_id }]
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

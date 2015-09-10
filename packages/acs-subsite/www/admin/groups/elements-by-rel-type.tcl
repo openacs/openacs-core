@@ -71,3 +71,9 @@ db_multirow -extend {elements_display_url relations_add_url} rels relations_quer
     set relations_add_url [export_vars -base "../relations/add" {group_id rel_type {return_url $return_url}}]
 
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -124,3 +124,9 @@ aa_register_case -cats {api smoke} expand_percentage_signs {
     aa_equals "square brackets in array key safe" $expanded_message "Test message \$two(\$three(\[__does_not_exist\]))"
    
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

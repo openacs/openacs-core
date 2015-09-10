@@ -1851,3 +1851,9 @@ ad_proc -private auth::user_info::GetUserInfo {
                 -operation GetUserInfo \
                 -call_args [list $username $parameters]]
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -30,3 +30,9 @@ namespace eval lang::audit {
         db_dml lang_message_audit {} -clobs [list $old_message $comment]
     }    
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

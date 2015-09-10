@@ -101,3 +101,9 @@ set context [list [list "./" "Users"] "$action"]
 set export_vars [export_vars {email email_from subject message return_url}]
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

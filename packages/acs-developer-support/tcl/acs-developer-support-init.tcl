@@ -40,3 +40,9 @@ if { ![nsv_exists ds_properties enabled_p] } {
 }
 
 ds_watch_packages
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

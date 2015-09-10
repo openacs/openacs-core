@@ -634,3 +634,9 @@ ad_proc -private doc::parse_tcl_library { dir_list } {
 
 
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

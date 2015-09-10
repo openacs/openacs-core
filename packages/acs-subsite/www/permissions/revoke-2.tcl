@@ -25,3 +25,9 @@ if {$operation eq "Yes"} {
 }
 
 ad_returnredirect [export_vars -base one {object_id application_url}]
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

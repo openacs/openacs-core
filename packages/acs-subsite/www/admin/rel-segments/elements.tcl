@@ -41,3 +41,9 @@ set context [list [list "[ad_conn package_url]admin/rel-segments/" "Relational s
 # Expects segment_id, segment_name, group_id, role to be passed in 
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

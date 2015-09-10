@@ -219,3 +219,9 @@ aa_register_case -cats {db smoke production_safe} datamodel__acs_attribute_check
         }
     }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

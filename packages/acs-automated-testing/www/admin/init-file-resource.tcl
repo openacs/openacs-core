@@ -14,3 +14,9 @@ ns_log Notice "Sourcing test definition file $absolute_file_path"
 apm_source $absolute_file_path
 
 ad_returnredirect $return_url
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

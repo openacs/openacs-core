@@ -683,3 +683,9 @@ ad_proc template::data::to_sql::richtext { value } {
                                [template::util::richtext::get_property format $value]]]'"
 }
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

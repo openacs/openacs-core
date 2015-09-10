@@ -98,3 +98,9 @@ ad_form -extend -name reset -form {
 
     ad_return_template /packages/acs-subsite/www/register/display-message
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

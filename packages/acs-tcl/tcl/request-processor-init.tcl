@@ -179,3 +179,9 @@ ad_after_server_initialization procs_register {
 }
 
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

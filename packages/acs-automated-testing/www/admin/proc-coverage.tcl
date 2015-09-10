@@ -35,3 +35,8 @@ foreach proc_name $all_proc_names {
 }
 
 set uncovered_procs [join $uncovered_procs "<br>"]
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -21,3 +21,8 @@ ns_return 200 text/html "
 cookies set. <a href=\"signed-cookies-test-2\">test it out</a>.
 
 [ad_footer]"
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:
