@@ -29,3 +29,9 @@ if {$user_info_template eq ""} {
     set user_info_template "/packages/acs-subsite/lib/user-info"
 }
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

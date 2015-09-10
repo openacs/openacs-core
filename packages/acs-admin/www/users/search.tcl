@@ -174,3 +174,9 @@ if { $limit_to_users_in_group_id ne ""
 set export_authorize [export_ns_set_vars {url} {only_authorized_p}]
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

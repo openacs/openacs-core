@@ -62,3 +62,9 @@ if { $display_p } {
         multirow append messages $message_key $orig_text $translated_text $translate_url $translated_p
     }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

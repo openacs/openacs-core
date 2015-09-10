@@ -27,3 +27,8 @@ db_multirow all_subprograms all_subprograms {
 
 db_release_unused_handles
 ad_return_template
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

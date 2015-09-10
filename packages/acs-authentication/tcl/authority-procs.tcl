@@ -562,3 +562,9 @@ ad_proc -public auth::authority::local {} {
 } {
     return [auth::authority::get_id -short_name "local"]
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

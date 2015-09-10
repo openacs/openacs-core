@@ -151,3 +151,9 @@ ad_proc -public acs_object::set_context_id {
 } {
     db_dml update_context_id {}
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

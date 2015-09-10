@@ -54,3 +54,9 @@ set safe_key [ad_quotehtml $key]
 regsub -all -nocase -- $pattern $key \
 	"<font color=\"#990000\"><b>$pattern</b></font>" key
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

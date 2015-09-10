@@ -59,3 +59,9 @@ ad_proc -public template::get_mime_type {} {
 
     return $mime_type
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

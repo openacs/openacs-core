@@ -20,3 +20,9 @@ lang::catalog::export \
     -locales $locale
 
 set catalog_dir [lang::catalog::package_catalog_dir $package_key]
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

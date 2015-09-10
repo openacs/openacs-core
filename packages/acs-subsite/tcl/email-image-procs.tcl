@@ -318,3 +318,9 @@ ad_proc -public email_image::create_type_folder_rel { } {
 
     rel_types::new email_image_rel "Email Image" "Email Images" user 0 1 content_item 0 1
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

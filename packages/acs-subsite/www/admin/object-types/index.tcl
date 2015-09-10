@@ -12,3 +12,9 @@ set doc(title) "Object Type Hierarchical Index"
 set context [list "Object Type Hierarchical Index"]
 
 set object_type_hierarchy [acs_object_type_hierarchy]
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

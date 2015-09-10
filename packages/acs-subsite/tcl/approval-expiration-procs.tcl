@@ -35,3 +35,9 @@ ad_proc -private subsite::sweep_expired_approvals {
         # We could've sent an email to the user, but we don't
     }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

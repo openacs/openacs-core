@@ -124,3 +124,8 @@ aa_register_case -cats {api smoke} ad_proc_permission_permission_p {
 	permission::revoke -party_id $user_id -object_id $new_package_id -privilege "admin"
     }
 }
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

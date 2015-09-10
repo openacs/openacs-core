@@ -8,3 +8,9 @@ if { [catch {set message_key_context [exec find $::acs::rootdir -type f -regex "
     set message_key_context [ad_quotehtml $message_key_context]
     regsub -all "${full_key_pattern}" $message_key_context {<b>\0</b>} message_key_context
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

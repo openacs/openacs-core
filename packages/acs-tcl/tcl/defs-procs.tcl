@@ -853,3 +853,9 @@ ad_proc -public ad_progress_bar_end {
     ns_write "<script type=\"text/javascript\">window.location='$url';</script>"
     ns_conn close
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

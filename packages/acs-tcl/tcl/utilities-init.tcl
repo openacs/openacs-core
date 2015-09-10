@@ -20,3 +20,9 @@ if { $logmaxbackup } {
     ad_schedule_proc -all_servers t -schedule_proc ns_schedule_daily \
 	[list 00 00] util::roll_server_log
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

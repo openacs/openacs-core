@@ -305,3 +305,9 @@ if { [file exists $repository_dirname] } {
 file rename $work_repository_dirname  $repository_dirname
 
 ns_write "</ul> <h2>DONE</h2>\n"
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

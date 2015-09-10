@@ -131,3 +131,9 @@ ad_proc -private text_templates::create_html_content {
 
     return $final_content
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

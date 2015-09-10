@@ -152,3 +152,9 @@ foreach category [nsv_get aa_test categories] {
 
 set record_url [export_vars -base "record-test" -url {{return_url [ad_return_url]} package_key}]
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

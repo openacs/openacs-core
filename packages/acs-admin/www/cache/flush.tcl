@@ -34,3 +34,9 @@ if {[catch {set pair [ns_cache get util_memoize $key]} errmsg]} {
 ns_cache flush util_memoize $key
 
 ad_returnredirect $return_url
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

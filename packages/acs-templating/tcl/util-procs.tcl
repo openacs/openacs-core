@@ -906,3 +906,9 @@ ad_proc -public stack_dump {} {
   <h2>Globals</h2>
   <ul> [stack_frame_values 0] </ul>\n"
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

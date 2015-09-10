@@ -3532,3 +3532,9 @@ ad_proc -public db_bounce_pools {{-dbn ""}} {
         ns_db bouncepool $pool
     }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

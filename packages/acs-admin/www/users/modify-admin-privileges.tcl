@@ -33,3 +33,9 @@ if {$confirmed_p} {
     # this is expensive so maybe we should check if we in fact are cacheing.
     util_memoize_flush_regexp "^permission::.*-party_id $user_id"
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

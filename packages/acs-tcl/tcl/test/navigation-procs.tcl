@@ -200,3 +200,9 @@ aa_register_case -cats {
     set response_body [::tclwebtest::response body]
     aa_equals "Context bar $context_barp" $response_body $context_barp
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

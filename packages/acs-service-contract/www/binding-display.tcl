@@ -70,3 +70,9 @@ db_multirow -extend {check} binding binding {
         set impl_alias "<b>$impl_alias"
     }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

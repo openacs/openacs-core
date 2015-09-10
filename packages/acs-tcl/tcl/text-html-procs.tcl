@@ -1798,3 +1798,9 @@ ad_proc -deprecated philg_quote_double_quotes {arg} {
 } {
     return [ad_quotehtml $arg]
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

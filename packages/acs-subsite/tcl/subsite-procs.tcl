@@ -1102,3 +1102,9 @@ ad_proc -public subsite::util::get_package_options {
 } {
     return [db_list_of_lists get {}]
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

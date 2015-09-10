@@ -66,3 +66,9 @@ ad_proc -public template_tag { name arglist body } {
     default { error [_ acs-templating.Tag_handler_invalid_number_of_args] }
   }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -38,3 +38,9 @@ if { ![db_0or1row select_constraint_props {
 }
 
 set export_vars [export_vars -form {constraint_id return_url}]
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

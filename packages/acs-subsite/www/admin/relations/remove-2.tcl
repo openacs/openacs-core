@@ -35,3 +35,9 @@ if {$operation eq "Yes, I really want to remove this relation"} {
 db_release_unused_handles
 
 ad_returnredirect $return_url
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

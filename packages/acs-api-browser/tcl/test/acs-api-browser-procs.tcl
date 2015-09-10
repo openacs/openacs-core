@@ -20,3 +20,8 @@ aa_register_case \
                 [ string match "*packages/acs-api-browser/tcl/acs-api-documentation-procs.tcl*" $result]
         }
 }
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

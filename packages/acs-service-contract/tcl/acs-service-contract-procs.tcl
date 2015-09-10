@@ -278,3 +278,9 @@ proc acs_sc_log {level msg} {
         # ns_log Debug "$msg"
     }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

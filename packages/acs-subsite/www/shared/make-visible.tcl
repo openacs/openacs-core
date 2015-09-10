@@ -14,3 +14,9 @@ if { $return_url eq "" } {
 
 ad_returnredirect -message [_ acs-subsite.Online_status_set_visible] -- $return_url
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

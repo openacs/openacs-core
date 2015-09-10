@@ -29,3 +29,9 @@ aa_register_case -cats {api smoke} parameter_register_test {
     aa_log "Unregistering an global parameter"
     apm_parameter_unregister $parameter_id
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

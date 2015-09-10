@@ -39,3 +39,9 @@ if { $xml_report_dir ne "" } {
             $service(parse_errors)
     }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

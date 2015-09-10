@@ -53,3 +53,9 @@ db_1row select_basic_info {
 set role_pretty_plural [lang::util::localize $role_pretty_plural]    
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

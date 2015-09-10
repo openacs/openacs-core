@@ -53,3 +53,9 @@ if { ($total == 0) || [string is true $finish] } {
     set percentage_done [expr {round(($current - 1) * 100.0 / $total)}]
 }
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -29,3 +29,9 @@ db_transaction {
 util_memoize_flush_regexp {^lang::util::default_locale_from_lang_not_cached}
 
 template::forward "index?tab=locales"
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

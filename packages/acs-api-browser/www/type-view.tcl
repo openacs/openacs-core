@@ -42,3 +42,9 @@ lappend context $type
 
 set title $type
 set documentation [api_type_documentation $type]
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

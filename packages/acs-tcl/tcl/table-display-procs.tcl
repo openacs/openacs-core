@@ -889,3 +889,9 @@ ad_proc -deprecated ad_table_orderby_sql {datadef orderby order} {
     return $orderclause
 }        
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

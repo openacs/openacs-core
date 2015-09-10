@@ -81,3 +81,9 @@ if { ([info exists search_locale] && $search_locale ne "") && ([info exists q] &
 }
 
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

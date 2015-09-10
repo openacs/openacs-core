@@ -216,3 +216,9 @@ ad_proc -deprecated doc_tag_ad_property { contents params } {} {
     }
     doc_set_property $name $contents
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -36,3 +36,9 @@ set groups [db_html_select_value_options groups_select {
     and    groups.group_id = c.group_id
     order  by group_name
 } ]
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

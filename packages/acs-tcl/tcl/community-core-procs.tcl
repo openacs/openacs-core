@@ -703,3 +703,9 @@ ad_proc -public acs_user::get_portrait_id_not_cached {
 } {
     return [db_string get_item_id "" -default 0]
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

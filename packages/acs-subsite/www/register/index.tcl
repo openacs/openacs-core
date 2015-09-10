@@ -15,3 +15,9 @@ if {$login_template eq ""} {
     set login_template "/packages/acs-subsite/lib/login"
 }
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

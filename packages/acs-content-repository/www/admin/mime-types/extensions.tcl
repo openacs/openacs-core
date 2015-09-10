@@ -38,3 +38,9 @@ db_multirow -extend {action action_url} extensions get_extensions {} {
     set action_url [export_vars -base "unmap" {mime_type extension return_url}]
     set action "Unmap"
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

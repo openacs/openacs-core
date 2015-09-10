@@ -7,3 +7,9 @@ ad_library {
 }
 
 # LARS: Moved to aa-test-procs.tcl file. See comment there.
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

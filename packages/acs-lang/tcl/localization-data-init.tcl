@@ -132,3 +132,9 @@ namespace eval ::lang::util {
     set percent_match(n) {\n}
     set percent_match(%) {%}
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

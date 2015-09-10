@@ -18,3 +18,9 @@ foreach cache [lsort -dictionary [ns_cache_names]] {
     template::multirow append caches $cache $entries $size $max \
         $flushed $hit_rate
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

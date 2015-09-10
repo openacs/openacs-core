@@ -317,3 +317,9 @@ ad_proc -public acs_sc::contract::operation::parse_spec {
 	    -is_cachable_p $attributes(is_cachable_p) 
 }
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

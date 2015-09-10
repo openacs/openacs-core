@@ -112,3 +112,9 @@ set login_export_vars "return_url=[ns_urlencode [acs_community_member_url -user_
 set login_url [export_vars -base "/register/." { { return_url [ad_return_url]} }]
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

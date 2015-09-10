@@ -405,3 +405,9 @@ if { ![form is_valid bug_edit] } {
 }    
     
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

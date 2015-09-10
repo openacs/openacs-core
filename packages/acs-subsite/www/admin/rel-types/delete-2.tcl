@@ -82,3 +82,9 @@ if { $operation ne "Yes, I really want to delete this relationship type" } {
 package_object_view_reset $rel_type
 
 ad_returnredirect $return_url
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

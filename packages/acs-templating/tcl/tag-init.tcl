@@ -935,3 +935,9 @@ template_tag box { chunk params } {
     template::adp_compile_chunk $chunk
     template::adp_append_code "append __adp_output {</div></div>}"
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

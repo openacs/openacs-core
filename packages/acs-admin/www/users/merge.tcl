@@ -88,3 +88,9 @@ if { $user_id_two_items ne "" } {
 template::head::add_css \
     -href "/resources/acs-admin/um-more-info.css" \
     -media all
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

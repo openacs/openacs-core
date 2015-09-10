@@ -12,3 +12,9 @@ set context [list [list [ad_pvt_home] [ad_pvt_home_name]] $page_title]
 
 set pvt_home [ad_pvt_home]
 set pvt_home_name [ad_pvt_home_name]
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

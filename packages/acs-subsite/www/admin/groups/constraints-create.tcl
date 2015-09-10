@@ -33,3 +33,9 @@ db_1row select_props {
 ad_return_template
 
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

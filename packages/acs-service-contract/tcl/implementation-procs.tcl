@@ -355,3 +355,9 @@ ad_proc -private acs_sc::impl::binding::init_procs {
 }
 
     
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

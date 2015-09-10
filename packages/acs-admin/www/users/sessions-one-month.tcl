@@ -53,3 +53,9 @@ append whole_page "
 "
 db_release_unused_handles
 ns_return 200 text/html $whole_page
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

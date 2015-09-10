@@ -117,3 +117,9 @@ set system_name [ad_system_name]
 set pretty_date [lc_time_fmt $publish_date "%q"]
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

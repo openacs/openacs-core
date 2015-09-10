@@ -83,3 +83,9 @@ ad_proc -public mfp::note::delete {
 	select content_item__delete(:item_id)
     }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

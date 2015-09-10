@@ -80,3 +80,9 @@ ad_proc -public template::widget::select_locales {
     return $output
 
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -15,3 +15,9 @@ ad_page_contract {
 site_node::unmount -node_id $node_id
 
 ad_returnredirect [export_vars -base . {expand:multiple root_id}]
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

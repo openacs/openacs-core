@@ -54,3 +54,9 @@ aa_register_case -cats {smoke production_safe} -error_level warning documentatio
     aa_log "Found $good of $count procs checked"
 }
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

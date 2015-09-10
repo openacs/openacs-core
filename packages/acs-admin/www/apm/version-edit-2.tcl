@@ -92,3 +92,9 @@ I was unable to update your version for the following reason:
 }
 
 ad_returnredirect "version-generate-info?version_id=$version_id&write_p=1"
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

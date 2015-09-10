@@ -11,3 +11,9 @@ set page_title "[ad_conn instance_name] Permissions"
 set context [list "Permissions"]
 
 set subsite_id [ad_conn subsite_id]
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

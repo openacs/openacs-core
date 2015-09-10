@@ -13,3 +13,9 @@ membership_rel::change_state \
 
 ad_returnredirect [export_vars -base . { member_state }]
 ad_script_abort
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

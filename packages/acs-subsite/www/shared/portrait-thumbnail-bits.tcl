@@ -37,3 +37,9 @@ ns_ora write_blob $db "select $column
 from users
 where user_id = $user_id"
     
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

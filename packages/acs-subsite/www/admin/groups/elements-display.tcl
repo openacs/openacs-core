@@ -57,3 +57,9 @@ set role_pretty_plural [lang::util::localize $role_pretty_plural]
 set context [list [list "[ad_conn package_url]admin/groups/" "Groups"] [list [export_vars -base one group_id] "One Group"] "All $role_pretty_plural"]
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

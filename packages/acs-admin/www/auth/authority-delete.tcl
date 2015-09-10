@@ -20,3 +20,9 @@ if { [auth::can_admin_system_without_authority_p -authority_id $authority_id] } 
 } else {
     ad_return_error "Cannot delete authority" "Deleting this authority would mean that all site-wide administrator users are shut out from the system, meaning the system could no longer be adminstered."    
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

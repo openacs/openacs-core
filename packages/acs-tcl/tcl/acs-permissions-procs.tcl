@@ -337,3 +337,9 @@ ad_proc -private -deprecated  ad_user_filter {} {
     permission::require_permission -object_id [ad_conn object_id] -privilege "read"
     return filter_ok
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

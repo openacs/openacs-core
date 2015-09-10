@@ -36,3 +36,9 @@ set export_vars_yes [export_ns_set_vars form {} $yes_args_set]
 set export_vars_no [export_ns_set_vars form {} $no_args_set]
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

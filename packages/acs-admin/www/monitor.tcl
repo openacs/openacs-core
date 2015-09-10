@@ -72,3 +72,9 @@ if [catch { set uptime_output [exec /usr/bin/uptime] } errmsg] {
    # whoops something wrong with uptime (check path)
    set uptime_output "ERROR running uptime, check path in script"
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

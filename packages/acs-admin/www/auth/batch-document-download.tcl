@@ -13,3 +13,9 @@ set document [db_string select_document {
 }]
 
 ns_return 200 text/plain $document
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

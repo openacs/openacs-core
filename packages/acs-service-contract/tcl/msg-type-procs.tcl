@@ -122,3 +122,9 @@ ad_proc -public acs_sc::msg_type::element::new {
     db_exec_plsql insert_msg_type_element {}
 }
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

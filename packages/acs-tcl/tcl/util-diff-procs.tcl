@@ -256,3 +256,9 @@ ad_proc -public util::html_diff {
 
     return "$output"
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

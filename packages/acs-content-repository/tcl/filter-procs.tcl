@@ -326,3 +326,9 @@ ad_proc -public content::deploy { url_stub } {
 
     template::util::write_file $output_path $output
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

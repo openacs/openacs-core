@@ -72,3 +72,9 @@ aa_register_case -cats {api smoke} -procs {oacs_util::process_objects_csv} proce
         file delete -force $file_loc
     }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

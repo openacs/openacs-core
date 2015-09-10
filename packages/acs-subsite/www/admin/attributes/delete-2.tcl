@@ -33,3 +33,9 @@ if {$operation eq "Yes, I really want to delete this attribute"} {
 }
 
 ad_returnredirect $return_url
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -46,3 +46,8 @@ db_1row group_info {
 set possible_join_policies [list open "needs approval" closed]
 set QQreturn_url [ad_quotehtml $return_url]
 ad_return_template
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

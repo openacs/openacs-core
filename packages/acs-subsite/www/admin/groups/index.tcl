@@ -41,3 +41,9 @@ db_1row subsite_info {
 set intro_text [lang::util::localize [_ acs-subsite.Currently_the_instance_name_has_the_following_groups]]
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

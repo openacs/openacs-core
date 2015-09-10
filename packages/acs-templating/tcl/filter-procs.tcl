@@ -164,3 +164,9 @@ ad_proc -private frm_page_filter { why } {
 
     return filter_return
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -117,3 +117,8 @@ ad_proc -public tdom::get_node_xml {
 
     return [string trim $node_xml]
 }
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

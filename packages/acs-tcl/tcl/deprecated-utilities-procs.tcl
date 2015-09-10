@@ -177,3 +177,9 @@ ad_proc -public -deprecated proc_doc { args } {
 } {
     ad_proc {*}$args
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

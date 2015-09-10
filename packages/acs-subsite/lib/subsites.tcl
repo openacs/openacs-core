@@ -52,3 +52,9 @@ db_multirow -extend { url join_url request_url } subsites select_subsites {*SQL*
     set join_url [export_vars -base "${subsite_url}register/user-join" { group_id { return_url [ad_return_url] } }]
     set url $subsite_url$name
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

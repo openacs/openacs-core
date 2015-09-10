@@ -431,3 +431,9 @@ ad_proc -private image::resize_existing_images {
     }
 }
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

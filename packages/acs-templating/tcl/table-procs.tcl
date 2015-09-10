@@ -255,3 +255,9 @@ template_tag tablewidget { chunk params } {
     template::adp_compile $chunk
   }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

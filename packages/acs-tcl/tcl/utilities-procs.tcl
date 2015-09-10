@@ -4631,3 +4631,9 @@ ad_proc ad_tmpdir {} {
 } {
     return [ns_config ns/parameters tmpdir]
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

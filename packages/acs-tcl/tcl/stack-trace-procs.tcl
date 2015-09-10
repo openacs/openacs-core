@@ -45,3 +45,9 @@ ad_proc -public ad_log_stack_trace {} {
 } {
     ns_log Error [ad_print_stack_trace]
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -173,3 +173,9 @@ foreach package_key $install_order {
 ad_progress_bar_end -url [export_vars -base install-4 { repository_url success_p }]
 
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

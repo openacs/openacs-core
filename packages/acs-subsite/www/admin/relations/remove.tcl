@@ -67,3 +67,9 @@ if { [relation_segment_has_dependant -rel_id $rel_id] } {
 set export_vars [export_vars -form {rel_id return_url}]
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

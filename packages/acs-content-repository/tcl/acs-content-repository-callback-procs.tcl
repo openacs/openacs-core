@@ -53,3 +53,9 @@ ad_proc -public -callback subsite::parameter_changed -impl acs-content-repositor
 	ns_log Debug "subsite::parameter_changed -impl acs-content-repository don't care about $parameter"
     }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

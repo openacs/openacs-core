@@ -9,3 +9,9 @@ ad_page_contract {
 }
 apm_package_instance_new -package_key $package_key
 ad_returnredirect $return_url
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -385,3 +385,9 @@ if {$richtextEditor eq "tinymce"} {
 template::add_body_handler \
     -event onload \
     -script "attachFileInit()"
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

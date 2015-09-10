@@ -34,3 +34,9 @@ if {$url ne ""} {
 
 set title "[ns_info name] Tcl API Search for: \"$tcl_proc\""
 set context [list "Tcl API Search: $tcl_proc"]
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

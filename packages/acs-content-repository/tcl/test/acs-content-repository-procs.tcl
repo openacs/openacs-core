@@ -41,3 +41,9 @@ aa_register_case -cats {smoke api} acs_content_repository_trivial_smoke_test {
             # would test that delete works but there's no relevant function in the API 
         }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -173,3 +173,9 @@ ad_proc -public acs_mail_lite::utils::valid_email_p {
         return 1
     }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

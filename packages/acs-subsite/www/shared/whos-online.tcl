@@ -53,3 +53,9 @@ foreach elm $users {
         [lindex $elm 1] \
         [lindex $elm 2]
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

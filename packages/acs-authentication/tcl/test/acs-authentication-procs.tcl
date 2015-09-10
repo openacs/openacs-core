@@ -819,3 +819,9 @@ ad_proc -private auth::test::get_password_vars {
 
     db_1row select_vars {} -column_array test_vars
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

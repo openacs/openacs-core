@@ -636,3 +636,9 @@ ad_proc -private auth::local::search::GetParameters {} {
     # No parameters
     return [list]
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

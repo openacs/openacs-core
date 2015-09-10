@@ -36,3 +36,9 @@ if { [set __form__ [ns_getform]] ne "" } {
     }
 
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

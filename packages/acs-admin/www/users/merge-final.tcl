@@ -72,3 +72,9 @@ if { !$merge_p } {
     ns_log Notice $msg
 }
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

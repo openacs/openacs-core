@@ -159,3 +159,9 @@ ad_form -name locale_form -action [ad_conn url] -export { tree_id category_id } 
 }
 
 set form_vars [export_ns_set_vars form {locale form:mode form:id __confirmed_p __refreshing_p formbutton:ok} [ad_conn form]]
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

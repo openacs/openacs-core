@@ -760,3 +760,9 @@ ad_proc -private template::element::copy_value_to_values_if_defined {} {
     }
   }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

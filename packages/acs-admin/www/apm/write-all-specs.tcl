@@ -41,3 +41,9 @@ db_foreach apm_get_all_packages {
 ns_write [subst {</ul>
 <a href="./">Return to the Package Manager</a>
 }]
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

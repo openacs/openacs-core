@@ -94,3 +94,9 @@ db_multirow -extend { view_url } template_demo_notes template_demo_notes {} {
 }
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

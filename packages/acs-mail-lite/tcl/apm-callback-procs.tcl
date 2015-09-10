@@ -32,3 +32,9 @@ ad_proc -private acs_mail_lite::after_upgrade {
         }
 }
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

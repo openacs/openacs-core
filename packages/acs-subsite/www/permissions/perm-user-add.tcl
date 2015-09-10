@@ -7,3 +7,9 @@ ad_page_contract {
 set context [list [list $return_url "Permissions"] "[_ acs-subsite.Add_User]"]
 set title "[_ acs-subsite.Add_User]"
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

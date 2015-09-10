@@ -71,3 +71,9 @@ attribute::multirow \
 	-object_type $party_type \
 	$party_id
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -337,3 +337,9 @@ ad_proc content::folder::get_folder_from_package_not_cached {
 } {
     return [db_string get_folder_id "select folder_id from cr_folders where package_id=:package_id"]
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

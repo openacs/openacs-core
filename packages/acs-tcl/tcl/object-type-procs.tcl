@@ -160,3 +160,9 @@ ad_proc -private acs_object_type::get_table_name_not_cached {
 } {
     return [db_string get_table_name ""]
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

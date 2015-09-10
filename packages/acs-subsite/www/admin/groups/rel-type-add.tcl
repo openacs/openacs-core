@@ -52,3 +52,9 @@ db_multirow primary_rels select_primary_relations {
 set export_vars [export_vars -form {group_id return_url}]
 
 ad_return_template
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -84,3 +84,9 @@ foreach state [group::possible_member_states] {
 	    $state $state $base_url&member_state=[ad_urlencode $state]
 }
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

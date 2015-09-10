@@ -11,3 +11,9 @@ ad_library {
 # Schedule every 15 minutes
 ad_schedule_proc -thread t 907 acs_messaging_process_queue
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

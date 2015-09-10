@@ -8,3 +8,9 @@ ad_page_contract {
 for {set f 1; set n 1} {$n < 12} {incr n} {
     lappend factorial [set f [expr {$f*$n}]]
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

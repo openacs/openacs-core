@@ -175,3 +175,9 @@ db_multirow -extend { entry_url short_message entry_time_pretty user_url } batch
     
     set entry_time_pretty [lc_time_fmt $entry_time_ansi "%x %X"]
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

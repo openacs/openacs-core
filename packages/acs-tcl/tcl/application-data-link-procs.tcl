@@ -393,3 +393,9 @@ ad_proc -public application_data_link::relation_tag_where_clause {
         return [db_map where_clause]
     }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

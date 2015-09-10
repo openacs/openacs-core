@@ -49,3 +49,9 @@ template::list::create \
     }
 
 db_multirow valid_installed_binding valid_installed_binding {}
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

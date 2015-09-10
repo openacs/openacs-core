@@ -31,3 +31,9 @@ if {$testcase_id eq ""} {
     ad_returnredirect "testcase?testcase_id=$testcase_id&package_key=$package_key&quiet=$quiet"
 }
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

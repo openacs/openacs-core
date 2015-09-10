@@ -716,3 +716,9 @@ ad_proc -public template::wizard::save_last_visited_step {
 
 }
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

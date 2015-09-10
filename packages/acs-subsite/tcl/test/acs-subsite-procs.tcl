@@ -104,3 +104,9 @@ aa_register_case -cats smoke acs_subsite_unregistered_visitor {
 	      and g.group_id <> a.object_id
 	      and a.name = 'the_pubic'" -default 0] 0
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

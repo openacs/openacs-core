@@ -147,3 +147,9 @@ set authority_id $selected_authority_id
 if {![info exists orderby]} {
     set orderby ""
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

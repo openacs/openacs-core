@@ -49,3 +49,9 @@ db_multirow -extend { key_url } history german_edit_history "
 " {
     set key_url [export_vars -base /acs-lang/admin/edit-localized-message {package_key message_key locale}]
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

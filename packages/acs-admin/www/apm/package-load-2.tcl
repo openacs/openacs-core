@@ -86,3 +86,9 @@ ns_write [subst {
 The package(s) are now extracted into your filesystem.  You can <a href="package-load">load 
 another new package</a> from a URL or proceed to <a href="packages-install">install</a> the package(s).
 }]
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

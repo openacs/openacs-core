@@ -17,3 +17,9 @@ template::multirow append body "Mercury"    4866 3.30e23    57950000
 template::multirow append body "Venus"     12106 4.869e24  108110000
 template::multirow append body "Earth"     12742 5.9736e24 149570000
 template::multirow append body "Mars"       6760 6.4219e23 227840000
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

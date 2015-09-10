@@ -62,3 +62,9 @@ append whole_page "$table_rows
 [ad_admin_footer]
 "
 ns_return 200 text/html $whole_page
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

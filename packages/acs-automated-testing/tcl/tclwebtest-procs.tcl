@@ -207,3 +207,9 @@ ad_proc twt::user::logout {} {
 } {
     twt::do_request "[twt::server_url]/register/logout"
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

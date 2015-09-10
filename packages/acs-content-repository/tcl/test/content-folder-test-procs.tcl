@@ -68,3 +68,8 @@ aa_register_case content_folder {
             
         }
 }
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

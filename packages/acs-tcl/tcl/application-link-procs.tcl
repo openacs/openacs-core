@@ -119,3 +119,9 @@ ad_proc -private ::install::xml::action::application-link { node } {
     }
 }
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

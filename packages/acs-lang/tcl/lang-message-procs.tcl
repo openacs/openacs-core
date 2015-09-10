@@ -1031,3 +1031,9 @@ ad_proc -public lang::message::update_description {
         db_dml update_description {} -clobs [list $description]
     }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -62,3 +62,9 @@ ad_proc -public ad_find_all_files {
     }
     return $files
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

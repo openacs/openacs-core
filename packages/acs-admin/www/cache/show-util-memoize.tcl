@@ -69,3 +69,9 @@ if {[ns_info name] eq "NaviServer"} {
     }
 }
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

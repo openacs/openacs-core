@@ -19,3 +19,9 @@ db_multirow -extend {instance_delete_url} packages_normal packages_normal_select
 db_multirow -extend {instance_delete_url} packages_singleton packages_singleton_select {} {
     set instance_delete_url [export_vars -base instance-delete package_id]
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

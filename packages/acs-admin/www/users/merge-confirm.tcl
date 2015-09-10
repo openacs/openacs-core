@@ -45,3 +45,8 @@ if { [db_0or1row to_user_portrait { *SQL* }] } {
 } else {
     set to_img_src "/resources/acs-admin/not_available.gif"
 }
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:
