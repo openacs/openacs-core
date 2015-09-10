@@ -26,38 +26,38 @@
 
 -- constraints from acs-content-repository/sql/postgresql/content-revision.sql
 
-ALTER TABLE cr_item_publish_audit DROP CONSTRAINT cr_item_publish_audit_orev_fk;
+ALTER TABLE cr_item_publish_audit DROP CONSTRAINT IF EXISTS cr_item_publish_audit_orev_fk;
 ALTER TABLE cr_item_publish_audit ADD CONSTRAINT cr_item_publish_audit_orev_fk
 FOREIGN KEY (old_revision) REFERENCES cr_revisions(revision_id) ON DELETE CASCADE;
 
-ALTER TABLE cr_item_publish_audit DROP CONSTRAINT cr_item_publish_audit_nrev_fk;
+ALTER TABLE cr_item_publish_audit DROP CONSTRAINT IF EXISTS cr_item_publish_audit_nrev_fk;
 ALTER TABLE cr_item_publish_audit ADD CONSTRAINT cr_item_publish_audit_nrev_fk
 FOREIGN KEY (new_revision) REFERENCES cr_revisions(revision_id) ON DELETE CASCADE;
 
 
 -- constraints from acs-content-repository/sql/postgresql/content-item.sql
 
-ALTER TABLE cr_release_periods DROP CONSTRAINT cr_release_periods_item_id_fk;
+ALTER TABLE cr_release_periods DROP CONSTRAINT IF EXISTS cr_release_periods_item_id_fk;
 ALTER TABLE cr_release_periods ADD CONSTRAINT cr_release_periods_item_id_fk
 FOREIGN KEY (item_id) REFERENCES cr_items(item_id) ON DELETE CASCADE;
 
-ALTER TABLE cr_item_publish_audit DROP CONSTRAINT cr_item_publish_audit_item_fk;
+ALTER TABLE cr_item_publish_audit DROP CONSTRAINT IF EXISTS  cr_item_publish_audit_item_fk;
 ALTER TABLE cr_item_publish_audit ADD CONSTRAINT cr_item_publish_audit_item_fk
 FOREIGN KEY (item_id) REFERENCES cr_items(item_id) ON DELETE CASCADE;
 
-ALTER TABLE cr_item_template_map DROP CONSTRAINT cr_item_template_map_item_fk;
+ALTER TABLE cr_item_template_map DROP CONSTRAINT IF EXISTS cr_item_template_map_item_fk;
 ALTER TABLE cr_item_template_map ADD CONSTRAINT cr_item_template_map_item_fk
 FOREIGN KEY (item_id) REFERENCES cr_items(item_id) ON DELETE CASCADE;
 
-ALTER TABLE cr_item_keyword_map DROP CONSTRAINT cr_item_keyword_map_item_id_fk;
+ALTER TABLE cr_item_keyword_map DROP CONSTRAINT IF EXISTS cr_item_keyword_map_item_id_fk;
 ALTER TABLE cr_item_keyword_map ADD CONSTRAINT cr_item_keyword_map_item_id_fk
 FOREIGN KEY (item_id) REFERENCES cr_items(item_id) ON DELETE CASCADE;
 
-ALTER TABLE cr_items DROP CONSTRAINT cr_items_latest_fk;
+ALTER TABLE cr_items DROP CONSTRAINT IF EXISTS cr_items_latest_fk;
 ALTER TABLE cr_items ADD CONSTRAINT cr_items_latest_fk
 FOREIGN KEY (latest_revision) REFERENCES cr_revisions(revision_id) on delete set null;
 
-ALTER TABLE cr_items DROP CONSTRAINT cr_items_live_fk;
+ALTER TABLE cr_items DROP CONSTRAINT IF EXISTS cr_items_live_fk;
 ALTER TABLE cr_items ADD CONSTRAINT cr_items_live_fk
 FOREIGN KEY (live_revision) REFERENCES cr_revisions(revision_id) on delete set null;
 
