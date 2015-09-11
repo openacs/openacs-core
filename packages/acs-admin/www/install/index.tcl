@@ -4,7 +4,7 @@ ad_page_contract {
     package_type:optional
 }
 
-set page_title "Install Software"
+set page_title "Install Packages"
 set context [list $page_title]
 
 set local_install_url "[ad_conn package_url]/apm/packages-install"
