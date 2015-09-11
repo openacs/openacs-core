@@ -9,8 +9,8 @@
 <if @packages:rowcount@ gt 0>
   <h3>Site-Wide Package Administration</h3>
 
-  <p>The following packages provide site-wide administration
-  facilities.  These packages have either site-wide parameters (package
+  <p>Manage application packages with site-wide administration facilities.
+  These packages have either site-wide parameters (package
   parameters valid for every instance of the package) or they have an
   own web interface for site-wide administration (www/site-wide-admin).
   
@@ -20,6 +20,6 @@
 
 
 <h3>Site-Wide Service Administration</h3>
-<p>Manage service packages and singleton packages (packages which can be mounted only once).
+<p>Manage service packages having either parameters or pages (for admins or users):
 </p>
 <include src="/packages/acs-admin/lib/service-parameters">
