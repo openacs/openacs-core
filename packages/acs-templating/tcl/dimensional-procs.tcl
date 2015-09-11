@@ -74,19 +74,11 @@ ad_proc ad_dimensional {
     #
     set adp_stub [template::resource_path -type dimensionals -style $style -relative]
 
-    #
-    # Create nested adp-arrays. Since the templating system does not
-    # support this (we need an oo-templating) this is emulated here
-    # via multiple multirows, where the names of the inner multirows
-    # are dynamically generated.
-    #
-    template::multirow create dimensional key label
-    set arrays {}
+    template::multirow create dimensional key label group_key group_label selected href
 
     foreach option $option_list {
         lassign $option option_key option_label option_default option_values
 
-        template::multirow append dimensional $option_key $option_label
         #
         # Find out what the current option value is.
         # check if a default is set otherwise the first value is used
@@ -98,32 +90,22 @@ ad_proc ad_dimensional {
         if { $option_val eq "" } {
             set option_val $option_default
         }
-        #
-        # Manage the names of the innner multirows, and pass all inner
-        # multirows to the outer template such it becomes visible in
-        # the inner template.
-        #
-        set array opt_$option_key
-        lappend arrays &$array $array
-
-        template::multirow create $array key label current count href
-        set count 0
 
         foreach option_value $option_values {
-            lassign $option_value key label clause
+            lassign $option_value group_key group_label clause
 
-            template::multirow append $array \
-                $key $label [expr {$option_val eq $key}] [incr count] \
-                $url?[export_ns_set_vars url $option_key $options_set]&[ns_urlencode $option_key]=[ns_urlencode $key]
+            set selected [expr {$option_val eq $group_key}]
+            set href $url?[export_ns_set_vars url $option_key $options_set]&[ns_urlencode $option_key]=[ns_urlencode $group_key]
+
+            template::multirow append dimensional $option_key $option_label $group_key $group_label $selected $href
         }
 
     }
 
     #
-    # Finally, pass everything to the templating engine. The outer
-    # template contains an "<include...>" for the inner template.
+    # Finally, pass everything to the templating engine.
     #
-    return [template::adp_include -uplevel 2 -- $adp_stub [list &dimensional dimensional {*}$arrays]]
+    return [template::adp_include -uplevel 2 -- $adp_stub {&dimensional dimensional}]
 }
 
 ad_proc ad_dimensional_sql {
