@@ -14,7 +14,7 @@
   </if>
 </ul>
 
-<h1>#acs-subsite.Advanced_Features#</h1>
+<h3>#acs-subsite.Advanced_Features#</h3>
 
 <ul>
   <li><a href="site-map/">#acs-subsite.Site_Map#</a></li>
@@ -27,10 +27,10 @@
 </ul>
 
 <if @sw_admin_p@ true>
-  <h1>#acs-subsite.Core_Services#</h1>
+  <h1>#acs-subsite.lt_For_Site-Wide_Adminis#</h1>
   <ul>
     <li>
-      <a href="@acs_admin_url@">@acs_admin_name@</a>
+    <a href="@acs_admin_url@">@acs_admin_name@</a> <span style="font-style:italic;color:#666;">(#acs-subsite.Site_wide_administration#)</span>
     </li>
   </ul>
 </if>
