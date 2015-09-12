@@ -827,6 +827,8 @@ ad_proc -public subsite::set_theme {
         -value $dimensional_template
     parameter::set_value -parameter ResourceDir -package_id $subsite_id \
         -value $resource_dir
+    parameter::set_value -parameter StreamingHead -package_id $subsite_id \
+        -value $streaming_head
 }
 
 ad_proc -public subsite::get_theme {
@@ -854,6 +856,7 @@ ad_proc -public subsite::new_subsite_theme {
     {-list_filter_template ""}
     {-dimensional_template ""}
     {-resource_dir ""}
+    {-streaming_head ""}
 } {
     Add a new subsite theme, making it available to the theme configuration code.
 } {
