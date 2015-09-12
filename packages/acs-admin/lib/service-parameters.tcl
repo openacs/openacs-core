@@ -39,19 +39,22 @@ template::list::create \
     -multirow packages \
     -elements {
         instance_name {
-            label {#acs-admin.Service#}
+            label {\#acs-admin.Service#}
+            html {align left}
         }
         www {
             label "\#acs-admin.Pages\#"
             link_url_col url
             link_html { title "\#acs-admin.Visit_service_pages\#" }
             display_template {<if @packages.url@ not nil>\#acs-admin.Pages\#</if>}
+            html {align left}
         }
         admin {
             label "\#acs-admin.Administration\#"
             link_url_col admin_url
             link_html { title "\#acs-admin.Service_administration\#" }
             display_template {<if @packages.admin_url@ not nil>\#acs-admin.Administration\#</if>}
+            html {align left}
         }
         sitewide_admin {
             label "\#acs-admin.Site-Wide_Admin\#"
@@ -59,12 +62,14 @@ template::list::create \
             link_html { title "\#acs-admin.Service_administration\#" }
             display_template {<if @packages.sitewide_admin_url@ not nil>\#acs-admin.Administration\#</if>}
             hide_p {[ad_decode $swadmin_p 1 0 1]}
+            html {align left}
         }
         parameters {
             label "\#acs-admin.Parameters\#"
             link_url_col param_url
             link_html { title "\#acs-admin.Service_parameters\#" }
             display_template {<if @packages.param_url@ not nil>\#acs-admin.Parameters\#</if>}
+            html {align left}
         }
     }
 
