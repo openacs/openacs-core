@@ -121,3 +121,9 @@ ad_proc -public notification::delivery::get_id {
     return [db_string select_delivery_method_id {}]
 }
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

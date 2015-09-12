@@ -34,3 +34,9 @@ foreach interval [notification::get_all_intervals] {
         ad_schedule_proc -thread t 60 notification::sweep::sweep_notifications -interval_id [lindex $interval 1] -batched_p $batched_p
     }        
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

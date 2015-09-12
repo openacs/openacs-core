@@ -151,3 +151,9 @@ ad_proc -public notification::display::get_urls {
     }
 }
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

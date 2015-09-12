@@ -52,3 +52,9 @@ ad_proc -public notification::reply::sweep::process_all_replies {} {
         }
     }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

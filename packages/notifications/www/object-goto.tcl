@@ -22,3 +22,9 @@ set sc_impl_name [db_string get_notif_type {}]
 set url [acs_sc::invoke -contract NotificationType -operation GetURL -call_args [list $object_id] -impl $sc_impl_name]
 
 ad_returnredirect $url
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:
