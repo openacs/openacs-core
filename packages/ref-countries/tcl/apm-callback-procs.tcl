@@ -19,17 +19,17 @@ ad_proc -private ref_countries::apm::after_upgrade {
         -spec {  
             5.6.0d1 5.6.0d2 {
 
-                set new_countries {"ÅLAND ISLANDS" AX
+                set new_countries {"Ã…LAND ISLANDS" AX
                     "BOLIVIA, PLURINATIONAL STATE OF" BO
-                    "CÔTE D'IVOIRE" CI
+                    "CÃ”TE D'IVOIRE" CI
                     "GUERNSEY" GG
                     "ISLE OF MAN" IM
                     "JERSEY" JE
                     "KAZAKHSTAN" KZ
                     "MACAO" MO
                     "MONTENEGRO" ME
-                    "RÉUNION" RE
-                    "SAINT BARTHÉLEMY" BL
+                    "RÃ‰UNION" RE
+                    "SAINT BARTHÃ‰LEMY" BL
                     "SAINT MARTIN" MF
                     "SERBIA" RS
                     "TIMOR-LESTE" TL
@@ -53,3 +53,9 @@ ad_proc -private ref_countries::apm::after_upgrade {
             }
         }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

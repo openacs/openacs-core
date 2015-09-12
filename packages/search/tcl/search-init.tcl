@@ -24,3 +24,9 @@ ad_proc -private search::init::schedule_indexer {} {
 }
 
 search::init::schedule_indexer
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

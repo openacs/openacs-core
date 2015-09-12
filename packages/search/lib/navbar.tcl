@@ -49,3 +49,9 @@ for { set __i $from_result_page } { $__i <= $to_result_page} { incr __i } {
 }
 
 ad_return_template [template::themed_template /packages/search/lib/navbar]
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

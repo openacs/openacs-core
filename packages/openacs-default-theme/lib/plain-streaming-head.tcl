@@ -16,3 +16,9 @@ set whos_online_url [subsite::get_element -element url]shared/whos-online
 set num_users_online [lc_numeric [whos_online::num_users]]
 
 ad_context_bar_multirow -- $context
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

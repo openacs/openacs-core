@@ -197,3 +197,9 @@ if {$search_the_web ne ""} {
 template::head::add_css \
     -href "/resources/search/search.css" \
     -media "all"
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:
