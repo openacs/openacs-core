@@ -820,7 +820,7 @@ ad_proc -public template::streaming_template {
         set subsite_id [ad_conn subsite_id]
     }
     set template [parameter::get -package_id $subsite_id -parameter StreamingHead]
-    return [template::resource_path -type master -style $template -relative]
+    return [template::resource_path -type masters -style $template -relative]
 }
 
 ad_proc -public template::resource_path {
