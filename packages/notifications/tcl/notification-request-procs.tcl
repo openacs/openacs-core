@@ -117,3 +117,9 @@ namespace eval notification::request {
         db_exec_plsql delete_all_for_user {}
     }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

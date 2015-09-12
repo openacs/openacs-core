@@ -19,3 +19,9 @@ for { set i 0} { $i < $request_count } { incr i } {
 }
 
 ad_returnredirect $return_url
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

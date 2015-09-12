@@ -135,3 +135,9 @@ ad_proc -public -callback notifications::incoming_email {
     -array:required
 } {
 } -
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

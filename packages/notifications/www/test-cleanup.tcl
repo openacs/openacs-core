@@ -11,3 +11,9 @@ ad_page_contract {
 
 notification::sweep::cleanup_notifications
 ns_return 200 text/html "done"
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

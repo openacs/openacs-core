@@ -367,3 +367,9 @@ namespace eval notification {
         db_dml insert_notification_user_map {}
     }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:
