@@ -478,25 +478,28 @@ ad_proc -public template::expand_percentage_signs { message } {
     return $formatted_message
 }
 
-ad_proc -public template::adp_compile { source_type source } {
+ad_proc -public template::adp_compile { {-file ""} {-string ""} } {
     Converts an ADP template into a chunk of Tcl code.  Caching this code
     avoids the need to reparse the ADP template with each request.
 
-    @param source_type Indicates the source of the Tcl code to compile.
-    Valid options are -string or -file
-    @param source      A string containing either the template itself 
-                      (for -string) or the path to the file containing the template (for -file)
-
+    @param file The file name of the source
+    @param string string to be compliled
     @return The compiled code.
+
+    Valid options are either -string or -file
 } {
     variable parse_list
     # initialize the compiled code
     set parse_list [list "set __adp_output {}; set __ad_conn_locale \[ad_conn locale\]"]
 
-    switch -exact -- $source_type {
-        -file { set chunk [template::util::read_file $source] }
-        -string { set chunk $source }
-        default { error "Source type must be -string or -file" } 
+    if {($file ne "" && $string ne "")
+        || ($file eq "" && $string eq "")
+    } {
+        error "you must specify either -file or -string"
+    } elseif {$file ne ""} {
+        set chunk [template::util::read_file $file]
+    } else {
+        set chunk $string
     }
 
     # substitute <% ... %> blocks with registered tags so they can be handled 
