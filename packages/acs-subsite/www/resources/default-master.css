@@ -178,3 +178,10 @@ div.calendar { position: relative; }
   background: #eef;
   font-weight: bold;
 }
+
+.dimensional-table tr th {
+    background-color: #ECECEC;
+}
+.dimensional-table tr td {
+    text-align: center;
+}
