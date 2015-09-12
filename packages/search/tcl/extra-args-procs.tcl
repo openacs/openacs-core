@@ -34,3 +34,8 @@ ad_proc -callback search::extra_arg -impl package_ids {
     }
     return [list from_clause {} where_clause "$object_table_alias.package_id in ([template::util::tcl_to_sql_list $value])"]
 }
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

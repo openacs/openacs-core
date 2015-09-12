@@ -92,3 +92,9 @@ ad_proc -public search::convert::binary_to_text {
 }
 
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

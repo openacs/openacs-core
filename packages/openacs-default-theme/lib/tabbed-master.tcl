@@ -8,3 +8,9 @@ subsite_navigation::define_pageflow \
                                  -parameter NoTabApplicationList -default ""] \
     -initial_pageflow [parameter::get -package_id [ad_conn subsite_id] \
                           -parameter UserNavbarTabsList -default ""]
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

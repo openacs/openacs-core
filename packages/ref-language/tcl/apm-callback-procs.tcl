@@ -158,7 +158,7 @@ ad_proc -private ref_language::apm::lang_list_for_5_6_0d2 {
         lu "Luba-Katanga"
         lv "Latvian"
         mh "Marshallese"
-        nb "Bokmål, Norwegian; Norwegian Bokmål"
+        nb "BokmÃ¥l, Norwegian; Norwegian BokmÃ¥l"
         nd "Ndebele, North; North Ndebele"
         ng "Ndonga"
         nl "Dutch; Flemish"
@@ -166,7 +166,7 @@ ad_proc -private ref_language::apm::lang_list_for_5_6_0d2 {
         nr "Ndebele, South; South Ndebele"
         nv "Navajo; Navaho"
         ny "Chichewa; Chewa; Nyanja"
-        oc "Occitan (post 1500); Provençal"
+        oc "Occitan (post 1500); ProvenÃ§al"
         oj "Ojibwa"
         om "Oromo"
         os "Ossetian; Ossetic"
@@ -187,10 +187,16 @@ ad_proc -private ref_language::apm::lang_list_for_5_6_0d2 {
         ty "Tahitian"
         ug "Uighur; Uyghur"
         ve "Venda"
-        vo "Volapük"
+        vo "VolapÃ¼k"
         wa "Walloon"
         yi "Yiddish"
         yo "Yoruba"
         za "Zhuang; Chuang"
     }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

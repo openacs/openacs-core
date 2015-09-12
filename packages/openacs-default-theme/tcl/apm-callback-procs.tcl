@@ -62,3 +62,9 @@ ad_proc openacs_default_theme::install::after_install {} {
 
     parameter::set_default -package_key acs-subsite -parameter ThemeKey -value default_plain
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

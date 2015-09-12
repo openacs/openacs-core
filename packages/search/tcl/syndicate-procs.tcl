@@ -58,3 +58,9 @@ ad_proc -public -callback search::action -impl syndicate {} {
         db_dml insert {insert into syndication(object_id, rss_xml_frag, body, url) values (:object_id, :rss_xml_frag, :body, :url)}
     }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

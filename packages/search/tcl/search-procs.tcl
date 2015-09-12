@@ -481,3 +481,9 @@ ad_proc search::extra_args {
 }
 
 
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:
