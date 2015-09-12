@@ -809,6 +809,20 @@ ad_proc -public template::themed_template {
     return $path
 }
 
+ad_proc -public template::streaming_template {
+    -subsite_id
+} {
+    Return the path of the streaming template
+    @param subsite_id id of the subsite. Defaults to [ad_conn subsite_id]
+    @return path to themed template
+} {
+    if { ![info exists subsite_id] } {
+        set subsite_id [ad_conn subsite_id]
+    }
+    set template [parameter::get -package_id $subsite_id -parameter StreamingHead]
+    return [template::resource_path -type master -style $template -relative]
+}
+
 ad_proc -public template::resource_path {
     -type:required
     -style:required

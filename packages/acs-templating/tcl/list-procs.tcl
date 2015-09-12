@@ -353,8 +353,10 @@ ad_proc -public template::list::create {
             -list_name $name \
             -element_name $checkbox_name \
             -spec {
-                label {<input type="checkbox" name="_dummy" onclick="acs_ListCheckAll('$name', this.checked)" onkeypress="acs_ListCheckAll('$name', this.checked)" title="[_ acs-templating.lt_Checkuncheck_all_rows]">}
-                display_template {<input type="checkbox" name="$key" value="@$list_properties(multirow).$key@" id="$name.@$list_properties(multirow).$key@" title="[_ acs-templating.lt_Checkuncheck_this_row]">}
+                label {<input type="checkbox" name="_dummy" onclick="acs_ListCheckAll('$name', this.checked)"
+                    onkeypress="acs_ListCheckAll('$name', this.checked)" title="[_ acs-templating.lt_Checkuncheck_all_rows]">}
+                display_template {<input type="checkbox" name="$key" value="@$list_properties(multirow).$key@"
+                    id="$name.@$list_properties(multirow).$key@" title="[_ acs-templating.lt_Checkuncheck_this_row]">}
                 sub_class {narrow}
                 html { align center }
             }
@@ -2246,7 +2248,8 @@ ad_proc -private template::list::element::render {
     if { $link_url ne "" } {
         set old_output $output
 
-        set output [subst {<if "$link_url" not nil><a href="$link_url"[template::list::util_html_to_attributes_string $link_html]>$old_output</a></if><else>$old_output</else>}]
+        set output [subst {<if "$link_url" not nil><a
+            href="$link_url"[template::list::util_html_to_attributes_string $link_html]>$old_output</a></if><else>$old_output</else>}]
     }
 
     return $output

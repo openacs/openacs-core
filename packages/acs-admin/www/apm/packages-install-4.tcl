@@ -17,11 +17,10 @@ set sql_file_paths [ad_get_client_property apm sql_file_paths]
 
 set title "Package Installation"
 set context [list [list "/acs-admin/apm/" "Package Manager"] $title]
-set template [parameter::get -package_id [ad_conn subsite_id] \
-		  -parameter StreamingHead \
-		  -default /packages/openacs-default-theme/lib/plain-streaming-head]
 
-ad_return_top_of_page [ad_parse_template -params [list context title] $template]
+ad_return_top_of_page [ad_parse_template \
+                           -params [list context title] \
+                           [template::streaming_template]]
 
 ns_write {
     <h2>Installing packages...</h2>
