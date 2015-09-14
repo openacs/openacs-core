@@ -7,7 +7,7 @@
   <li><a href="configure">#acs-subsite.Configure#</a></li>
   <li><a href="permissions">#acs-subsite.Permissions#</a></li>
   <li><a href="../members/">#acs-subsite.Members#</a></li>
-  <li><a href="../shared/parameters">#acs-subsite.Parameters#</a></li>
+  <li><a href="../shared/parameters?return_url=../admin">#acs-subsite.Parameters#</a></li>
   <li><a href="subsite-add">#acs-subsite.Create_new_subsite#</a></li>
   <if @convert_subsite_p@>
     <li><a href="subsite-convert-type">#acs-subsite.Convert_to_descendent_subsite_type#</a></li>
