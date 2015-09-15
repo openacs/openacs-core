@@ -173,7 +173,7 @@
      @return A link to the first instance of the developer-support information available in the site node, \
              the empty_string if none are available.
  } {
-     return "[ad_url][apm_package_url_from_key acs-developer-support]"
+     return [apm_package_url_from_key acs-developer-support]
  }
 
  ad_proc ds_link {} { 
