@@ -59,7 +59,7 @@ ad_proc -public subsite_navigation::define_pageflow {
 
     if { ![template::multirow exists $navigation_multirow] } {
         template::multirow create $navigation_multirow group label href target \
-            title lang accesskey class id tabindex name parent display_template
+            title lang accesskey class id tabindex name parent display_template display_template_sm
     }
 
     foreach { section_name section_spec } $pageflow {
@@ -71,7 +71,8 @@ ad_proc -public subsite_navigation::define_pageflow {
             folder {}
             selected_patterns {}
             accesskey {}
-        display_template {}
+            display_template {}
+            display_template_sm {}
         }
 
         array set section_a $section_spec
@@ -94,6 +95,7 @@ ad_proc -public subsite_navigation::define_pageflow {
                     selected_patterns {}
                     accesskey {}
                     display_template {}
+                    display_template_sm {}
                 }
                 array set subsection_a $subsection_spec
                 set subsection_a(name) $subsection_name
@@ -176,9 +178,9 @@ ad_proc -private subsite_navigation::add_section_row {
     }
 
     template::multirow append $multirow \
-    $group $info(label) [file join $base_url $info(url)] \
+        $group $info(label) [file join $base_url $info(url)] \
         "" $info(title) "" $info(accesskey) "" $navigation_id [template::multirow size $multirow] \
-    $info(name) $parent $info(display_template)
+        $info(name) $parent $info(display_template) $info(display_template_sm)
 
     return $selected_p
 }
@@ -239,15 +241,15 @@ ad_proc -public subsite_navigation::get_pageflow_struct {
            autogenerating tabs for applications
 } {
     if { ![string is list $initial_pageflow]} {
-    ns_log Warning "subsite_navigation: ignoring invalid initial_pageflow: $initial_pageflow"
-    set initial_pageflow ""
+        ns_log Warning "subsite_navigation: ignoring invalid initial_pageflow: $initial_pageflow"
+        set initial_pageflow ""
     }
     if { ![string is list $no_tab_application_list]} {
-    ns_log Warning "subsite_navigation: ignoring invalid no_tab_application_list: $no_tab_application_list"
-    set no_tab_application_list ""
+        ns_log Warning "subsite_navigation: ignoring invalid no_tab_application_list: $no_tab_application_list"
+        set no_tab_application_list ""
     }
     if {$subsite_id eq ""} {
-    set subsite_id [ad_conn subsite_id]
+        set subsite_id [ad_conn subsite_id]
     }
     
     set pageflow $initial_pageflow
