@@ -21,7 +21,7 @@
           <span>|</span></li>
           <li><a href="/acs-admin/apm/" title="Modify/reload packages">APM</a>
           <span>|</span></li>
-          <li><a href="/admin/site-map/" title="Manage your package instances">Site&nbsp;Map</a>
+          <li><a href="/admin/site-map/?root_id=@this_side_node@" title="Configure current package via Site Map">Site&nbsp;Map</a>
           <span>|</span></li>
           <li><a href="/acs-admin/apm/?reload_links_p=1" title="Scan for changed library files">Changed</a>
           <span>|</span></li>
@@ -35,9 +35,12 @@
           <span>|</span></li>
           <li><a href="/doc/" title="View system documentation">Docs</a>
           <span>|</span></li>
-          <li><a href="/api-doc/" title="View/search OpenACS Tcl API documentation">API&nbsp;doc</a>
-          <if @rm_url@ ne ""><span>|</span></li>
-	  <li><a href="@rm_url@" title="View requests in the request monitor">Requests</a></li>
+          <li><a href="/api-doc/" title="View/search OpenACS Tcl API documentation">API&nbsp;doc</a></li>
+          <if @xocore_url@ ne ""><span>|</span>
+           <li><a href="@xocore_url@" title="XoTcl Documentation Browser">XoTcl</a></li>
+          </if>
+          <if @rm_url@ ne ""><span>|</span>
+           <li><a href="@rm_url@" title="View requests in the request monitor">Requests</a></li>
 	  </if><else>
            </li>
           </else>

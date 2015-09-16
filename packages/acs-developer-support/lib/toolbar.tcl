@@ -101,12 +101,17 @@ if {$css_list ne ""} {
         off
 }
 
-set rm_package_id [apm_package_id_from_key xotcl-request-monitor]
-if {$rm_package_id > 0} {
-    set rm_url [apm_package_url_from_id $rm_package_id]
-} else {
-    set rm_url ""
+#get url for xotcl-core and xotcl-request-monitor
+foreach {package_name package_url} {xotcl-core xocore_url xotcl-request-monitor rm_url} {
+    set package_id [apm_package_id_from_key $package_name]
+    if {$package_id > 0} {
+        set $package_url [apm_package_url_from_id $package_id]
+    } else {
+        set $package_url ""
+    }
 }
+
+set this_side_node [site_node_id [ad_conn url]]
 
 # Local variables:
 #    mode: tcl
