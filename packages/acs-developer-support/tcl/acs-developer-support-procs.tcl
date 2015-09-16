@@ -278,7 +278,7 @@
  ad_proc -public ds_get_db_command_info {} {
      Get a Tcl list with { num_commands total_ms } for the database commands for the request.
 
-     Returns the empty string if the information is not available.
+     @return list containing num_commands and total_ms, or empty string if the information is not available.
  } { 
      set result {}
      if { [ds_enabled_p] && [ds_collection_enabled_p] } {
