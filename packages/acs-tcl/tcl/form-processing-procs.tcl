@@ -262,8 +262,8 @@ ad_proc -public ad_form {
         either a name, in which case the Tcl variable at the caller's level is passed to the form if it exists, 
         or a name-value pair.
         The behavior of this option replicates that for <code>vars</code> argument in proc 
-        <a href='/api-doc/proc-view?proc=export_vars&source_p=1'>export_vars</a>, which in turn follows specification 
-        for input page variables in <a href='/api-doc/proc-view?proc=ad_page_contract&source_p=1'>ad_page_contract</a>.
+        <a href='/api-doc/proc-view?proc=export_vars&amp;source_p=1'>export_vars</a>, which in turn follows specification 
+    for input page variables in <a href='/api-doc/proc-view?proc=ad_page_contract&amp;source_p=1'>ad_page_contract</a>.
         In particular, flags <code>:multiple</code>, <code>:sign</code> and <code>:array</code> are allowed and 
         their meaning is the same as in <code>export_vars</code>.
     </dd>
