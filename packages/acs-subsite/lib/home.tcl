@@ -48,15 +48,7 @@ set portrait_upload_url [export_vars -base "../user/portrait/upload" { { return_
 
 if {[parameter::get -parameter SolicitPortraitP -default 0]} {
     # we have portraits for some users 
-    if {![db_0or1row get_portrait_info "
-    select cr.publish_date, nvl(cr.title,'your portrait') as portrait_title,
-    nvl(cr.description,'no description') as portrait_description 
-    from cr_revisions cr, cr_items ci, acs_rels a
-    where cr.revision_id = ci.live_revision
-    and  ci.item_id = a.object_id_two
-    and a.object_id_one = :user_id
-    and a.rel_type = 'user_portrait_rel'
-    "]} {
+    if {![db_0or1row get_portrait_info {}]} {
 	set portrait_state "upload"
     } else {
         if { $portrait_title eq "" } {
