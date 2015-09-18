@@ -147,14 +147,20 @@ ad_proc -private template:template_tag_helper {params} {
 }
 
 template_tag include { params } {
+    #
+    # Check, if the src can be resolved against resources/templates in
+    # the theme package
+    #
+    ns_set update $params src [template::themed_template [ns_set iget $params src]]
     template:template_tag_helper $params
 }
 
 #
-# <widget> is very similar to <include>, but uses name resolution
-# based on themes.  If the theme package contains
+# <widget> is very similar to <include>, but uses widget specific name
+# resolution based on themes.  If the theme package contains
 # resources/widgets/$specifiedName it is used from there. Otherwise it
-# behaves exactly like <include>
+# behaves exactly like <include> (without the resources/templates/
+# theming)
 #
 template_tag widget { params } {
     set src [ns_set iget $params src]
@@ -650,7 +656,11 @@ template_tag content { params } {
 
 template_tag include-optional { chunk params } {
 
-  set src [ns_set iget $params src]
+  #
+  # Check, if the src can be resolved against resources/templates in
+  # the theme package
+  #
+  set src [template::themed_template [ns_set iget $params src]]
   set ds [ns_set iget $params ds 1]
 
   #Start developer support frame around subordinate template.
