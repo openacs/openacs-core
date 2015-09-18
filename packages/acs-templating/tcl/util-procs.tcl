@@ -514,7 +514,7 @@ ad_proc -public template::util::url_to_file { url {reference_url ""} } {
         set path $::acs::rootdir/$url
     }
 
-    return [template::themed_template [ns_normalizepath $path]]
+    return [ns_normalizepath $path]
 }
 
 ad_proc -public template::util::resolve_directory_url { url } {
