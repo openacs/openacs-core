@@ -59,7 +59,7 @@ ad_proc -public subsite_navigation::define_pageflow {
 
     if { ![template::multirow exists $navigation_multirow] } {
         template::multirow create $navigation_multirow group label href target \
-            title lang accesskey class id tabindex name parent display_template display_template_sm
+            title lang accesskey class id tabindex name parent display_template
     }
 
     foreach { section_name section_spec } $pageflow {
@@ -72,7 +72,6 @@ ad_proc -public subsite_navigation::define_pageflow {
             selected_patterns {}
             accesskey {}
             display_template {}
-            display_template_sm {}
         }
 
         array set section_a $section_spec
@@ -95,7 +94,6 @@ ad_proc -public subsite_navigation::define_pageflow {
                     selected_patterns {}
                     accesskey {}
                     display_template {}
-                    display_template_sm {}
                 }
                 array set subsection_a $subsection_spec
                 set subsection_a(name) $subsection_name
@@ -180,7 +178,7 @@ ad_proc -private subsite_navigation::add_section_row {
     template::multirow append $multirow \
         $group $info(label) [file join $base_url $info(url)] \
         "" $info(title) "" $info(accesskey) "" $navigation_id [template::multirow size $multirow] \
-        $info(name) $parent $info(display_template) $info(display_template_sm)
+        $info(name) $parent $info(display_template)
 
     return $selected_p
 }
