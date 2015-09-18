@@ -29,7 +29,7 @@ db_transaction {
     apm_package_install_spec $version_id
 } on_error {
     ad_return_complaint 1 "Database Error: The database returned the following error:
-	<blockquote><pre>[ad_quotehtml $errmsg]</pre></blockquote>"
+	<blockquote><pre>[ns_quotehtml $errmsg]</pre></blockquote>"
 }
 
 ad_returnredirect [export_vars -base version-dependencies {version_id}]

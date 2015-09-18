@@ -460,7 +460,7 @@ namespace eval acs_mail_lite {
 
             db_foreach get_file_info {} {
                 lappend tokens [mime::initialize \
-                                    -param [list name [ad_quotehtml $title]] \
+                                    -param [list name [ns_quotehtml $title]] \
                                     -header [list "Content-Disposition" "attachment; filename=\"$name\""] \
                                     -header [list Content-Description $title] \
                                     -canonical $mime_type \

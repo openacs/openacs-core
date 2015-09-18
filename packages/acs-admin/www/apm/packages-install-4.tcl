@@ -47,7 +47,7 @@ foreach pkg_info $pkg_install_list {
 	array set version [apm_read_package_info_file $spec_file]
     } errmsg] } {
 	ns_write "<li> Unable to install the [pkg_info_key $pkg_info] package because its specification
-	file is invalid: <blockquote><pre>[ad_quotehtml $errmsg]</pre></blockquote>"
+	file is invalid: <blockquote><pre>[ns_quotehtml $errmsg]</pre></blockquote>"
 	continue
     }
 

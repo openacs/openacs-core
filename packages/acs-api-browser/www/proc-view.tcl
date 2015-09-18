@@ -71,7 +71,7 @@ if { !$documented_call } {
             a private interface.</p><p>The procedure is defined as:
 <pre class='code'>
 proc $proc {[info args $proc]} {
-    [ad_quotehtml [info body $proc]]
+    [ns_quotehtml [info body $proc]]
 }
 </pre></p>
         }]

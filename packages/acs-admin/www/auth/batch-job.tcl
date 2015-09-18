@@ -75,7 +75,7 @@ ad_form \
             } elseif { $element_name eq "creation_user" && $batch_job($element_name) ne "" } {
                 set $element_name [acs_community_member_link -user_id $batch_job($element_name)]
             } else {
-                set $element_name [ad_quotehtml $batch_job($element_name)]
+                set $element_name [ns_quotehtml $batch_job($element_name)]
             }               
         }
 

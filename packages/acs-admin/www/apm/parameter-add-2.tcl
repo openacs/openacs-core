@@ -45,7 +45,7 @@ db_transaction {
 	select 1 from apm_parameters where parameter_id = :parameter_id
     } -default 0]} {
 	ad_return_error "Database Error" "The database is complaining about the parameter you entered:<p>
-<blockquote><pre>[ad_quotehtml $errmsg]</pre></blockquote>"
+<blockquote><pre>[ns_quotehtml $errmsg]</pre></blockquote>"
 	ad_script_abort
     }
 }

@@ -21,7 +21,7 @@ if {[ns_info name] eq "NaviServer"} {
     if {[catch {set value [ns_cache get util_memoize $key]} errmsg]} {
 	set value "<i>could not retrieve</i>"
     }
-    set value [ad_quotehtml $value]
+    set value [ns_quotehtml $value]
 
 } else {
     if {[catch {set pair [ns_cache get util_memoize $key]} errmsg]} {
@@ -33,7 +33,7 @@ if {[ns_info name] eq "NaviServer"} {
 		set pair [ns_cache get util_memoize $name]
 		set raw_time [lindex $pair 0]
 		if {$raw_time == $raw_date} {
-		    set value [ad_quotehtml [lindex $pair 1]]
+		    set value [ns_quotehtml [lindex $pair 1]]
 		    set time [clock format $raw_time]
 		    set key $name
 		    break
@@ -45,11 +45,11 @@ if {[ns_info name] eq "NaviServer"} {
 	    set time "?"
 	}
     } else {
-	set value [ad_quotehtml [lindex $pair 1]]
+	set value [ns_quotehtml [lindex $pair 1]]
 	set time [clock format [lindex $pair 0]]
     }
 }
-set safe_key [ad_quotehtml $key]
+set safe_key [ns_quotehtml $key]
 
 regsub -all -nocase -- $pattern $key \
 	"<font color=\"#990000\"><b>$pattern</b></font>" key

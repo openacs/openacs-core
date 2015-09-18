@@ -20,7 +20,7 @@ if {[ns_info name] eq "NaviServer"} {
 
     foreach name $cached_names {size time} $stats {
 	if {[regexp -nocase -- $pattern $name match]} {
-	    set key [ad_quotehtml $name]
+	    set key [ns_quotehtml $name]
 	    set safe_key $key ;# why twice?
 	    set raw_date [ns_time seconds $time]
 	    if {$raw_date eq 0} {
@@ -33,7 +33,7 @@ if {[ns_info name] eq "NaviServer"} {
 		continue
 	    }
 	    set value_size [string length $value]
-	    set value [ad_quotehtml $value]
+	    set value [ns_quotehtml $value]
 	    if {$full} {
 		template::multirow append matches $key $value $value_size \
 		    $safe_key $expires $raw_date
@@ -48,14 +48,14 @@ if {[ns_info name] eq "NaviServer"} {
 
     foreach name $cached_names {
 	if {[regexp -nocase -- $pattern $name match]} {
-	    set key [ad_quotehtml $name]
-	    set safe_key [ad_quotehtml $name]
+	    set key [ns_quotehtml $name]
+	    set safe_key [ns_quotehtml $name]
 	    if {[catch {set pair [ns_cache get util_memoize $name]} errmsg]} {
 		continue
 	    }
 	    set raw_date [lindex $pair 0]
 	    set date [clock format $raw_date -format "%d %b %H:%M:%S"]  
-	    set value [ad_quotehtml [lindex $pair 1]]
+	    set value [ns_quotehtml [lindex $pair 1]]
 	    set value_size [string length $value]
 	    if {$full} {
 		template::multirow append matches $key $value $value_size \

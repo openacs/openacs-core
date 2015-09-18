@@ -44,7 +44,7 @@ plain text string that identifies the parameter.
 
 <tr>
   <th aligh="right" nowrap>Parameter Name:</th>
-  <td><input name="parameter_name" size="50" value="[ad_quotehtml $parameter_name]"></td>
+  <td><input name="parameter_name" size="50" value="[ns_quotehtml $parameter_name]"></td>
 </tr>
 
 <tr>
@@ -54,7 +54,7 @@ plain text string that identifies the parameter.
 
 <tr valign=top>
   <th aligh="right"><br>Description:</th>
-  <td><textarea name="description" cols="60" rows="8">[ad_quotehtml $description]</textarea>
+  <td><textarea name="description" cols="60" rows="8">[ns_quotehtml $description]</textarea>
 </td>
 </tr>
 
@@ -66,7 +66,7 @@ to indicate which parameters pertain to security.
 
 <tr valign=top>
   <th aligh="right"><br>Section Name:</th>
-  <td><input name="section_name" value="[ad_quotehtml $section_name]" size=50><br>
+  <td><input name="section_name" value="[ns_quotehtml $section_name]" size=50><br>
 </td>
 </tr>
 
@@ -93,7 +93,7 @@ to indicate which parameters pertain to security.
 
 <tr>
   <th aligh="right" nowrap>Default:</th>
-<td><textarea name="default_value" cols="60" rows="[expr {$datatype eq "text" ? 8 : 1}]">[ad_quotehtml $default_value]</textarea>
+<td><textarea name="default_value" cols="60" rows="[expr {$datatype eq "text" ? 8 : 1}]">[ns_quotehtml $default_value]</textarea>
 </tr>
 
 <tr><th colspan=2><input type="submit" value="Edit Parameter"></th>

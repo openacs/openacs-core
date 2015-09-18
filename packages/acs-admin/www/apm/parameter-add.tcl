@@ -64,7 +64,7 @@ plain text string that identifies the parameter.
 
 <tr valign="top">
   <th align="right"><br>Section Name:</th>
-<td><input name="section_name" size="50" value="[ad_quotehtml $section_name]"><br>
+<td><input name="section_name" size="50" value="[ns_quotehtml $section_name]"><br>
 </td>
 </tr>
 
