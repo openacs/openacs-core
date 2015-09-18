@@ -508,13 +508,13 @@ ad_proc -public template::util::url_to_file { url {reference_url ""} } {
     Resolve a URL into an absolute file path.
 } {
 
-  if { [string index $url 0] ne "/" } {
-    set path [file dirname $reference_url]/$url
-  } else {
-    set path $::acs::rootdir/$url
-  }
+    if { [string index $url 0] ne "/" } {
+        set path [file dirname $reference_url]/$url
+    } else {
+        set path $::acs::rootdir/$url
+    }
 
-  return [ns_normalizepath $path]
+    return [template::themed_template [ns_normalizepath $path]]
 }
 
 ad_proc -public template::util::resolve_directory_url { url } {
@@ -557,7 +557,6 @@ ad_proc -public -deprecated template::util::get_cookie { name {default_value ""}
     @see ad_get_cookie
 } {
   set headers [ns_conn headers]    
-
   set cookie [ns_set iget $headers Cookie]
 
   if { [regexp "$name=(\[^;\]+)" $cookie match value] } {
