@@ -123,7 +123,7 @@ if { $spec_files eq "" } {
             array set package [apm_read_package_info_file $spec_file]
         } errmsg] } {
             lappend errors "<li>Unable to parse $spec_file.  The following error was generated:
-        <blockquote><pre>[ad_quotehtml $errmsg]</pre></blockquote><p>"
+        <blockquote><pre>[ns_quotehtml $errmsg]</pre></blockquote><p>"
         } else {
             apm_log APMDebug "APM: Adding $package(package.key) to list for installation." 
             lappend pkg_info_list [pkg_info_new $package(package.key) $spec_file \

@@ -356,9 +356,9 @@ ad_proc -private lang::catalog::export_to_file {
    # Loop over and write the messages to the file
    set message_count "0"
    foreach message_key $message_key_list {
-       puts $catalog_file_id "  <msg key=\"[ad_quotehtml $message_key]\">[ad_quotehtml $messages_array($message_key)]</msg>"
+       puts $catalog_file_id "  <msg key=\"[ns_quotehtml $message_key]\">[ns_quotehtml $messages_array($message_key)]</msg>"
        if { ([info exists descriptions_array($message_key)] && $descriptions_array($message_key) ne "") && $filename_info(locale) eq "en_US" } {
-           puts $catalog_file_id "  <description key=\"[ad_quotehtml $message_key]\">[ad_quotehtml $descriptions_array($message_key)]</description>\n"
+           puts $catalog_file_id "  <description key=\"[ns_quotehtml $message_key]\">[ns_quotehtml $descriptions_array($message_key)]</description>\n"
        }
        incr message_count
    }

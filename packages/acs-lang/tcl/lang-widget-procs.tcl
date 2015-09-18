@@ -42,7 +42,7 @@ ad_proc -public template::widget::select_locales {
 
             if { [info exists values($value)] } {
                 lappend selected_list $label
-                append output "<input type=\"hidden\" name=\"$element(name)\" value=\"[ad_quotehtml $value]\">"
+                append output "<input type=\"hidden\" name=\"$element(name)\" value=\"[ns_quotehtml $value]\">"
             }
         }
 
@@ -66,7 +66,7 @@ ad_proc -public template::widget::select_locales {
             set label [lindex $option 0]
             set value [lindex $option 1]
 
-            set value [ad_quotehtml $value]
+            set value [ns_quotehtml $value]
             append output " <option lang=\"[string range $value 0 1]\" value=\"$value\""
             if { [info exists values($value)] } {
                 append output " selected=\"selected\""

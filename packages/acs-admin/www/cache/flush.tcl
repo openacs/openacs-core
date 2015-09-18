@@ -17,7 +17,7 @@ if {[catch {set pair [ns_cache get util_memoize $key]} errmsg]} {
 	    set pair [ns_cache get util_memoize $name]
 	    set raw_time [lindex $pair 0]
 	    if {$raw_time == $raw_date} {
-		set value [ad_quotehtml [lindex $pair 1]]
+		set value [ns_quotehtml [lindex $pair 1]]
 		set time [clock format $raw_time]
 		set key $name
 		break

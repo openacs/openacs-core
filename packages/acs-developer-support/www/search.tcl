@@ -28,7 +28,7 @@ if {![ns_cache get ds_page_bits $request pages]} {
                 append file_links " <a href=\"send?code=[ns_urlencode $page]\" title=\"compiled code\">c</a>"
                 append file_links " <a href=\"send?output=$request:[ns_urlencode $page]\" title=\"output\">o</a>"
                 set size [string length $content]
-                set highlight "...[ad_quotehtml [string trimleft [string range $content [expr {[lindex $offset 0] - 50}] [expr {[lindex $offset 0] - 1}]]]]<b>[ad_quotehtml [string range $content [lindex $offset 0] [lindex $offset 1]]]</b>[ad_quotehtml [string trimright [string range $content [expr {[lindex $offset 1] + 1}] [expr {[lindex $offset 1] + 50}]]]]..."
+                set highlight "...[ns_quotehtml [string trimleft [string range $content [expr {[lindex $offset 0] - 50}] [expr {[lindex $offset 0] - 1}]]]]<b>[ns_quotehtml [string range $content [lindex $offset 0] [lindex $offset 1]]]</b>[ns_quotehtml [string trimright [string range $content [expr {[lindex $offset 1] + 1}] [expr {[lindex $offset 1] + 50}]]]]..."
 
                 multirow append matches $page $highlight $file_links $size
             } 

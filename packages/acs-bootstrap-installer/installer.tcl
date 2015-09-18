@@ -25,7 +25,7 @@ ad_proc -private install_input_widget {
     set type_attribute [ad_decode $type "" "" "type=\"$type\""]
 
     if { $value ne "" } {
-        append extra_attributes " value=\"[ad_quotehtml $value]\""
+        append extra_attributes " value=\"[ns_quotehtml $value]\""
     }
     
     set input_widget "<input name=\"$param_name\" size=\"$size\" $type_attribute $extra_attributes>"
@@ -361,7 +361,7 @@ ad_proc -private install_load_errors_formatted {errorVarName} {
         foreach {package error_infos} [array get errors] {
             append result "<h4>Error in Package $package:</h4>\n"
             foreach {fileName backTrace} $error_infos {
-                append result "<strong>Error in File $fileName</strong>\n\n[ad_quotehtml $backTrace]\n\n\n"
+                append result "<strong>Error in File $fileName</strong>\n\n[ns_quotehtml $backTrace]\n\n\n"
             }
         }
         append result "</pre></blockquote>\n"

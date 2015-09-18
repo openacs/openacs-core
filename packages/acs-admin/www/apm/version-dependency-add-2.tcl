@@ -46,7 +46,7 @@ db_transaction {
 	where dependency_id = :dependency_id
     } -default 0] } {
 	ad_return_complaint 1 "The database returned the following error:
-	<blockquote><pre>[ad_quotehtml $errmsg]</pre></blockquote>"
+	<blockquote><pre>[ns_quotehtml $errmsg]</pre></blockquote>"
     }
 }
 
