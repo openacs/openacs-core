@@ -2536,7 +2536,7 @@ ad_proc -public db_source_sql_file {
             while { [gets $fp line] >= 0 } {
                 # Don't bother writing out lines which are purely whitespace.
                 if { ![string is space $line] } {
-                    apm_callback_and_log $callback "[ad_quotehtml $line]\n"
+                    apm_callback_and_log $callback "[ns_quotehtml $line]\n"
                 }
             }
             close $fp
@@ -2581,7 +2581,7 @@ ad_proc -public db_source_sql_file {
             while { [gets $fp line] >= 0 } {
                 # Don't bother writing out lines which are purely whitespace.
                 if { ![string is space $line] } {
-                    apm_callback_and_log $callback "[ad_quotehtml $line]\n"
+                    apm_callback_and_log $callback "[ns_quotehtml $line]\n"
                 }
             }
 
@@ -2666,7 +2666,7 @@ ad_proc -public db_load_sql_data {
             while { [gets $fd line] >= 0 } {
                 # Don't bother writing out lines which are purely whitespace.
                 if { ![string is space $line] } {
-                    apm_callback_and_log $callback "[ad_quotehtml $line]\n"
+                    apm_callback_and_log $callback "[ns_quotehtml $line]\n"
                 }
             }
             close $fd
@@ -2711,7 +2711,7 @@ ad_proc -public db_load_sql_data {
             while { [gets $fp line] >= 0 } {
                 # Don't bother writing out lines which are purely whitespace.
                 if { ![string is space $line] } {
-                    apm_callback_and_log $callback "[ad_quotehtml $line]\n"
+                    apm_callback_and_log $callback "[ns_quotehtml $line]\n"
                 }
             }
 
@@ -2777,13 +2777,13 @@ ad_proc -public db_source_sqlj_file {
     while { [gets $fp line] >= 0 } {
 	# Don't bother writing out lines which are purely whitespace.
 	if { ![string is space $line] } {
-	    apm_callback_and_log $callback "[ad_quotehtml $line]\n"
+	    apm_callback_and_log $callback "[ns_quotehtml $line]\n"
 	}
     }
     if { [catch {
 	close $fp
     } errmsg] } {
-	apm_callback_and_log $callback "[ad_quotehtml $errmsg]\n"
+	apm_callback_and_log $callback "[ns_quotehtml $errmsg]\n"
     }
 }
 

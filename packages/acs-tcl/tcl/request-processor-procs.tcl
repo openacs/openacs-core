@@ -339,7 +339,7 @@ ad_proc -private rp_invoke_proc { conn argv } {
 ad_proc -private rp_finish_serving_page {} {
     global doc_properties
     if { [info exists doc_properties(body)] } {
-        rp_debug "Returning page:[info level [expr {[info level] - 1}]]: [ad_quotehtml [string range $doc_properties(body) 0 100]]"
+        rp_debug "Returning page:[info level [expr {[info level] - 1}]]: [ns_quotehtml [string range $doc_properties(body) 0 100]]"
         doc_return 200 text/html $doc_properties(body)
     }
 }

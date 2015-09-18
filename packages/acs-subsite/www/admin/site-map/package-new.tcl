@@ -62,7 +62,7 @@ db_transaction {
 	ad_return_complaint 1 "Error Creating Package: The following error was generated
 		when attempting to create the package
 	<blockquote><pre>
-		[ad_quotehtml $errmsg]
+		[ns_quotehtml $errmsg]
 	</pre></blockquote>"
     }
 }

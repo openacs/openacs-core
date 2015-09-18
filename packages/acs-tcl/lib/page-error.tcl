@@ -40,13 +40,13 @@ set error_desc_email "
 <strong>[_ acs-tcl.File]</strong> [ns_quotehtml $error_file]<br>
 <strong>[_ acs-tcl.User_Name]</strong> [ns_quotehtml $user_name]<br>
 <strong>[_ acs-tcl.lt_User_Id_of_the_user_t]</strong> [ns_quotehtml $user_id]<br>
-<strong>IP:</strong> [ad_quotehtml [ns_conn peeraddr]]<br>
+<strong>IP:</strong> [ns_quotehtml [ns_conn peeraddr]]<br>
 <strong>[_ acs-tcl.Browser_of_the_user]</strong> [ns_quotehtml [ns_set get [ns_conn headers] User-Agent]]<br>
 <br>
 -----------------------------<br>
 [_ acs-tcl.Error_details]<br>
 -----------------------------<br>
-<pre>[ad_quotehtml $error_info]</pre>
+<pre>[ns_quotehtml $error_info]</pre>
 <br>
 ------------------------------<br>
 <br>
@@ -262,15 +262,15 @@ if {$auto_submit_p && $user_id > 0} {
  -------------------------------------------------------- <br>
                    [_ acs-tcl.Error_Report] <br>
  -------------------------------------------------------- <br>
-<br><strong>[_ acs-tcl.Previus]</strong> [ad_quotehtml $prev_url]
-<br><strong>[_ acs-tcl.Page]</strong> [ad_quotehtml $error_url]
-<br><strong>[_ acs-tcl.File]</strong> [ad_quotehtml $error_file]
-<br><strong>[_ acs-tcl.User_Name]</strong> [ad_quotehtml $user_name]
-<br><strong>[_ acs-tcl.lt_User_Id_of_the_user_t]</strong> [ad_quotehtml $user_id]
-<br>[_ acs-tcl.Browser_of_the_user]</strong> [ad_quotehtml [ns_set get [ns_conn headers] User-Agent]]
+<br><strong>[_ acs-tcl.Previus]</strong> [ns_quotehtml $prev_url]
+<br><strong>[_ acs-tcl.Page]</strong> [ns_quotehtml $error_url]
+<br><strong>[_ acs-tcl.File]</strong> [ns_quotehtml $error_file]
+<br><strong>[_ acs-tcl.User_Name]</strong> [ns_quotehtml $user_name]
+<br><strong>[_ acs-tcl.lt_User_Id_of_the_user_t]</strong> [ns_quotehtml $user_id]
+<br>[_ acs-tcl.Browser_of_the_user]</strong> [ns_quotehtml [ns_set get [ns_conn headers] User-Agent]]
 <br><br><strong>[_ acs-tcl.User_comments]</strong>  
 <br>
-[ad_quotehtml [template::util::richtext::get_property contents $description]]<br>
+[ns_quotehtml [template::util::richtext::get_property contents $description]]<br>
 <br>"
  
   foreach available_enabled_action_id [workflow::case::get_available_enabled_action_ids -case_id $case_id] {

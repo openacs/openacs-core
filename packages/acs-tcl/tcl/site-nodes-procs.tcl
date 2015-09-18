@@ -68,7 +68,7 @@ set UseXotclSiteNodes 0
 
 #
 
-if {[info command ::nx::Object] ne ""
+if {[info commands ::nx::Object] ne ""
     && [db_driverkey ""] eq "postgresql"
     && [apm_package_installed_p xotcl-core]
     && [ns_info name] eq "NaviServer"
@@ -1505,7 +1505,7 @@ if {$UseXotclSiteNodes} {
             $limit_clause
           "]
                     foreach entry $tree {
-                        foreach {url node_id object_id} $entry break
+                        lassign $entry url node_id object_id
                         foreach key [list p-$node_id url-$node_id urls-$object_id] {
                             ::xo::clusterwide ns_cache flush xo_site_nodes $key
                         }
@@ -1596,7 +1596,7 @@ if {$UseXotclSiteNodes} {
             # If we are called during the *-init procs, the database
             # interface might not be initialized yet. However, in this
             # situation, there is nothing to flush yet.
-            if {[info command ::xo::db::sql::site_node] ne ""} {
+            if {[info commands ::xo::db::sql::site_node] ne ""} {
                 ::xo::site_node flush_cache -node_id $root_node_id
             }
         }
@@ -1767,7 +1767,7 @@ if {$UseXotclSiteNodes} {
 
         <pre>
         # Pull out the package_id of the subsite closest to our current node
-        set pkg_id [site_node_closest_ancestor_package "acs-subsite"]
+        set pkg_id [site_node::closest_ancestor_package -include_self -package_key "acs-subsite"]
         </pre>
 
         @param default The value to return if no package can be found

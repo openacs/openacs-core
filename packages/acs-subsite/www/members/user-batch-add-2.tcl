@@ -102,7 +102,7 @@ while {[regexp {(.[^\n]+)} $userlist match_fodder row] } {
     if {[catch {acs_mail_lite::send -send_immediately -to_addr $email -from_addr $from -subject $subject -body $sub_message} errmsg]} {
         ad_return_error "Mail Failed" "<p>The system was unable to send email.  Please notify the user personally.  This problem is probably caused by a misconfiguration of your email system.  Here is the error:</p>
 <div><code>
-[ad_quotehtml $errmsg]
+[ns_quotehtml $errmsg]
 </code></div>"
         return
     }

@@ -85,7 +85,7 @@ ad_proc -public cmp_page_filter { why } {
         ns_log debug "cmp_page_filter: Time elapsed: $timeElapsed"
 
     } errMsg] } {
-        set output <html><body><pre>[ad_quotehtml $::errorInfo]</pre></body></html>
+        set output <html><body><pre>[ns_quotehtml $::errorInfo]</pre></body></html>
     }
 
     ns_return 200 text/html $output

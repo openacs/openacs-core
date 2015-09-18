@@ -28,7 +28,7 @@ if {$object_id eq [subsite::main_site_id]} {
 
 set name [db_string name {}]
 
-set context [list [list "./" [_ acs-subsite.Permissions]] [ad_quotehtml [_ acs-subsite.Permissions_for_name]]]
+set context [list [list "./" [_ acs-subsite.Permissions]] [ns_quotehtml [_ acs-subsite.Permissions_for_name]]]
 
 db_multirow inherited inherited_permissions { *SQL* } { 
 }
@@ -45,7 +45,7 @@ set context_name [lang::util::localize $context_name]
 
 set toggleUrl [export_vars -base toggle-inherit {application_url object_id}]
 if { $security_inherit_p == "t" && $context_id ne "" } {
-    lappend controls "<a href=\"[ns_quotehtml $toggleUrl]\">Don't Inherit Permissions from [ad_quotehtml $context_name]</a>"
+    lappend controls "<a href=\"[ns_quotehtml $toggleUrl]\">Don't Inherit Permissions from [ns_quotehtml $context_name]</a>"
 } else {
     lappend controls "<a href=\"[ns_quotehtml $toggleUrl]\">Inherit Permissions from [ns_quotehtml $context_name]</a>"
 }

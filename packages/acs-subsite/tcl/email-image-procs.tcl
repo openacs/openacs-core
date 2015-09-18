@@ -181,8 +181,8 @@ ad_proc -public email_image::new_item {
     # Delete the temporary file created by ImageMagick
     catch { file delete  $dest_path } errMsg
     
-    set img_src [ad_quotehtml "/shared/email-image-bits.tcl?user_id=$user_id&revision_id=$revision_id"]
-    set send_email_url [ad_quotehtml "/shared/send-email?sendto=$user_id&return_url=$return_url"]
+    set img_src [ns_quotehtml "/shared/email-image-bits.tcl?user_id=$user_id&revision_id=$revision_id"]
+    set send_email_url [ns_quotehtml "/shared/send-email?sendto=$user_id&return_url=$return_url"]
     set email_image [subst {<a href="$send_email_url"><img style="border:0" src="$img_src" alt="#acs-subsite.Email#"></a>}
 
     return "$email_image"
