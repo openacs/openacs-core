@@ -930,7 +930,7 @@ ad_proc -private apm_package_install {
 
         apm_callback_and_log -severity Error $callback [subst {<p>Failed to install $version(package-name), version $version(name).  The following error was generated:
             <pre><blockquote>
-            [ad_quotehtml $errmsg]
+            [ns_quotehtml $errmsg]
             </blockquote></pre>
 
             <p>
@@ -1648,7 +1648,7 @@ ad_proc -private apm_packages_full_install {
         } errmsg] } {
             apm_callback_and_log -severity Error $callback "<p><font color=red>[string totitle $package_key] not installed.</font>
 <p> Error:
-<pre><blockquote>[ad_quotehtml $errmsg]</blockquote><blockquote>[ad_quotehtml $::errorInfo]</blockquote></pre>"
+<pre><blockquote>[ns_quotehtml $errmsg]</blockquote><blockquote>[ns_quotehtml $::errorInfo]</blockquote></pre>"
         } 
     }
 }
@@ -2250,7 +2250,7 @@ ad_proc -private apm_load_install_xml {filename binds} {
     # Interpolate the vars.
     if {$binds ne ""} { 
         foreach {var val} $binds {
-            set $var [ad_quotehtml $val]
+            set $var [ns_quotehtml $val]
         }
         if {![info exists Id]} { 
             set Id {$Id}
@@ -2652,9 +2652,9 @@ ad_proc -private apm::package_version::attributes::generate_xml_element {
         }
     } else {
         if {$attribute_name eq ""} {
-            set xml_string "${indentation}<${element_name}>[ad_quotehtml $value]</${element_name}>\n"
+            set xml_string "${indentation}<${element_name}>[ns_quotehtml $value]</${element_name}>\n"
         } else {
-            set xml_string "${indentation}<$element_name $attribute_name=\"[ad_quotehtml $value]\"/>\n"
+            set xml_string "${indentation}<$element_name $attribute_name=\"[ns_quotehtml $value]\"/>\n"
         }
     }
     return $xml_string 

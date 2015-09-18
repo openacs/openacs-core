@@ -534,7 +534,7 @@ ad_proc -public template::adp_compile { {-file ""} {-string ""} } {
 
     # We do each substitution set in two pieces, separately for normal
     # variables and for variables with ";noquote" attached to them.
-    # Specifically, @x@ gets translated to [ad_quotehtml ${x}], whereas
+    # Specifically, @x@ gets translated to [ns_quotehtml ${x}], whereas
     # @x;noquote@ gets translated to ${x}.  The same goes for array
     # variable references.
 
@@ -553,7 +553,7 @@ ad_proc -public template::adp_compile { {-file ""} {-string ""} } {
     if {[ns_quotehtml ""] eq ""} {
         while {[regsub -all [template::adp_array_variable_regexp] $code {\1[ns_quotehtml [lang::util::localize $\2(\3)]]} code]} {}
     } else {
-        while {[regsub -all [template::adp_array_variable_regexp] $code {\1[ad_quotehtml [lang::util::localize $\2(\3)]]} code]} {}
+        while {[regsub -all [template::adp_array_variable_regexp] $code {\1[ns_quotehtml [lang::util::localize $\2(\3)]]} code]} {}
     }
 
     # substitute simple variable references
@@ -563,7 +563,7 @@ ad_proc -public template::adp_compile { {-file ""} {-string ""} } {
     if {[ns_quotehtml ""] eq ""} {
         while {[regsub -all [template::adp_variable_regexp] $code {\1[ns_quotehtml [lang::util::localize ${\2}]]} code]} {}
     } else {
-        while {[regsub -all [template::adp_variable_regexp] $code {\1[ad_quotehtml [lang::util::localize ${\2}]]} code]} {}
+        while {[regsub -all [template::adp_variable_regexp] $code {\1[ns_quotehtml [lang::util::localize ${\2}]]} code]} {}
     }
 
     # unescape protected # references

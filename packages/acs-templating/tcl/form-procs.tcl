@@ -861,7 +861,7 @@ ad_proc -public template::form::export {} {
     set value [ns_set value $form $i]
 
     append export_data "
-      <div><input type=\"hidden\" name=\"$key\" value=\"[ad_quotehtml $value]\"></div>"
+      <div><input type=\"hidden\" name=\"$key\" value=\"[ns_quotehtml $value]\"></div>"
   }
 
   return $export_data

@@ -76,7 +76,7 @@ ad_proc -public ad_text_to_html {
     # At this point, before inserting some of our own <, >, and "'s
     # we quote the ones entered by the user:
     if { !$no_quote_p } {
-        set text [ad_quotehtml $text]
+        set text [ns_quotehtml $text]
     }
 
     if { $encode_p} {
@@ -1778,7 +1778,7 @@ ad_proc -deprecated -warn util_quotehtml { arg } {
 
     @see ad_quotehtml
 } {
-    return [ad_quotehtml $arg]
+    return [ns_quotehtml $arg]
 }
 
 ad_proc -deprecated util_quote_double_quotes {arg} {
@@ -1787,7 +1787,7 @@ ad_proc -deprecated util_quote_double_quotes {arg} {
 
     @see ad_quotehtml
 } {
-    return [ad_quotehtml $arg]
+    return [ns_quotehtml $arg]
 }
 
 ad_proc -deprecated philg_quote_double_quotes {arg} {
@@ -1796,7 +1796,7 @@ ad_proc -deprecated philg_quote_double_quotes {arg} {
 
     @see ad_quotehtml
 } {
-    return [ad_quotehtml $arg]
+    return [ns_quotehtml $arg]
 }
 
 # Local variables:

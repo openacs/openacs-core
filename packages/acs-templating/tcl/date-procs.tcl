@@ -1287,11 +1287,11 @@ ad_proc -public template::widget::textdate { element_reference tag_attributes } 
   }
 
   if {$element(mode) eq "edit"} {
-      append output "<input type=\"text\" name=\"$element(id)\" size=\"10\" maxlength=\"10\" id=\"$element(id)_input_field\" value=\"[ad_quotehtml $textdate]\" >"
+      append output "<input type=\"text\" name=\"$element(id)\" size=\"10\" maxlength=\"10\" id=\"$element(id)_input_field\" value=\"[ns_quotehtml $textdate]\" >"
       append output "<input type=\"button\" style=\"border-width: 0px; height: 17px; width: 19px; background-image: url('/resources/acs-templating/calendar.gif'); background-repeat: no-repeat; cursor: pointer;\" onclick=\"return showCalendarWithDefault('$element(id)_input_field', '$javascriptdate', '[template::util::textdate_localized_format]');\" >"
   } else {
       append output $textdate
-      append output "<input type=\"hidden\" name=\"$element(id)\" value=\"[ad_quotehtml $textdate]\">"
+      append output "<input type=\"hidden\" name=\"$element(id)\" value=\"[ns_quotehtml $textdate]\">"
   }
       
   return $output

@@ -342,7 +342,7 @@ ad_proc -public template::util::spellcheck::get_element_formtext {
     regsub -all {<a [^<]*>} $formtext_to_display "<u>" formtext_to_display
     regsub -all {</a>} $formtext_to_display "</u>" formtext_to_display
 
-    append formtext_to_display "<input type=\"hidden\" name=\"${var_to_spellcheck}.merge_text\" value=\"[ad_quotehtml $processed_text]\" >"
+    append formtext_to_display "<input type=\"hidden\" name=\"${var_to_spellcheck}.merge_text\" value=\"[ns_quotehtml $processed_text]\" >"
 
 
     ####

@@ -1837,13 +1837,13 @@ ad_proc -public template::list::util_html_to_attributes_string {
         if { $key eq "summary" } {
             if { $value ne "" } {
                 set summary_exists_p 1
-                append output " summary=\"[ad_quotehtml $value]\""
+                append output " summary=\"[ns_quotehtml $value]\""
             }
         } else {
             if { $value ne "" } {
-                append output " [ad_quotehtml $key]=\"[ad_quotehtml $value]\""
+                append output " [ns_quotehtml $key]=\"[ns_quotehtml $value]\""
             } else {
-                append output " [ad_quotehtml $key]"
+                append output " [ns_quotehtml $key]"
             }
         }
     }

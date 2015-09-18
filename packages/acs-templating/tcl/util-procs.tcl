@@ -625,7 +625,7 @@ ad_proc -deprecated -public template::util::quote_html {
   Quote possible HTML tags in the contents of the html parameter.  
 } {
 
-  return [ad_quotehtml $html]
+  return [ns_quotehtml $html]
 }
 
 ad_proc -public template::util::multirow_quote_html {multirow_ref column_ref} {
@@ -641,7 +641,7 @@ ad_proc -public template::util::multirow_quote_html {multirow_ref column_ref} {
 
     for { set i 1 } { $i <= $rowcount } { incr i} {
         upvar $multirow_ref:$i arr
-        set arr($column_ref) [ad_quotehtml [set arr($column_ref)]]
+        set arr($column_ref) [ns_quotehtml [set arr($column_ref)]]
     }
 
 }

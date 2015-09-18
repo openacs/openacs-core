@@ -42,8 +42,8 @@ if {$dynamic_p != "t" } {
 }
 
 set possible_join_policies [list open "needs approval" closed]
-set QQreturn_url [ad_quotehtml $return_url]
-set QQgroup_type [ad_quotehtml $group_type]
+set QQreturn_url [ns_quotehtml $return_url]
+set QQgroup_type [ns_quotehtml $group_type]
 ad_return_template
 # Local variables:
 #    mode: tcl

@@ -217,7 +217,7 @@ aa_register_case -cats {smoke} files__check_xql_files {
 
         if { [catch {set parse [xml_parse $data]} errMsg] } {
             ns_log warning "acs_tcl__check_xql_files: failed parse $file $errMsg"
-            aa_log_result fail "XML Parse Error: $file [ad_quotehtml $errMsg]"
+            aa_log_result fail "XML Parse Error: $file [ns_quotehtml $errMsg]"
         } else {
             # lets walk the nodes and check they are what we want to see.
 

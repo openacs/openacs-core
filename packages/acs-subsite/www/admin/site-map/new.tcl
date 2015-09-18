@@ -57,7 +57,7 @@ db_transaction {
         "Error Creating Site Node" \
         "The following error was generated when attempting to create the site node:
         <blockquote><pre>
-                [ad_quotehtml $errmsg]
+                [ns_quotehtml $errmsg]
         </pre></blockquote>"
 }
 

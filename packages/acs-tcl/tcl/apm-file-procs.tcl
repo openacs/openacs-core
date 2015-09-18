@@ -580,7 +580,7 @@ ad_proc -private apm_load_apm_file {
         apm_callback_and_log $callback "<li>Downloading $url..."
         if { [catch {apm_transfer_file -url $url -output_file_name $file_path} errmsg] } {
             apm_callback_and_log $callback "Unable to download. Please check your URL.</ul>.
-            The following error was returned: <blockquote><pre>[ad_quotehtml $errmsg]
+            The following error was returned: <blockquote><pre>[ns_quotehtml $errmsg]
             </pre></blockquote>"
             return
         }    
@@ -601,7 +601,7 @@ ad_proc -private apm_load_apm_file {
         apm_callback_and_log $callback  "<li>Done. Archive is [format %.1f [expr { [file size $file_path] / 1024.0 }]]KB, with [llength $files] files.<li>"
     } errmsg] } {
         apm_callback_and_log $callback "The follow error occured during the uncompression process:
-    <blockquote><pre>[ad_quotehtml $errmsg]</pre></blockquote><br>
+    <blockquote><pre>[ns_quotehtml $errmsg]</pre></blockquote><br>
     "
                 ns_log Error "Error loading APM file form url $url: $errmsg\n$::errorInfo"
         return
@@ -657,7 +657,7 @@ ad_proc -private apm_load_apm_file {
         file delete -force $tmpdir
         apm_callback_and_log $callback  "The archive contains an unparseable package specification file: 
     <code>$info_file</code>.  The following error was produced while trying to 
-    parse it: <blockquote><pre>[ad_quotehtml $errmsg]</pre></blockquote>.
+    parse it: <blockquote><pre>[ns_quotehtml $errmsg]</pre></blockquote>.
     <p>
     The package cannot be installed.
     </ul>\n"

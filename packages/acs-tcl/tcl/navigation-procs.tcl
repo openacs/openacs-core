@@ -72,7 +72,7 @@ ad_proc ad_context_node_list {
             set node(instance_name) $node(name)
         }
 
-        set context [concat [list [list $node(url) [ad_quotehtml $node(instance_name)]]] $context]
+        set context [concat [list [list $node(url) [ns_quotehtml $node(instance_name)]]] $context]
 
         # We have the break here, so that 'from_node' itself is included
         if {$node_id eq $from_node} {

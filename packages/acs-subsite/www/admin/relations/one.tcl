@@ -88,7 +88,7 @@ db_0or1row select_member_state {
 
 # Data used to build the "toggle member state" widget.
 set return_url [ad_conn url]?[ad_conn query]
-set QQreturn_url [ad_quotehtml $return_url]
+set QQreturn_url [ns_quotehtml $return_url]
 set possible_member_states [group::possible_member_states]
 
 set object_two_read_p  [permission::permission_p -object_id $rel(object_id_two) -privilege "read"]

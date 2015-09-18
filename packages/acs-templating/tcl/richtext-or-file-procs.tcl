@@ -294,7 +294,7 @@ ad_proc -public template::widget::richtext_or_file {
           append output "onclick=\"javascript:acs_RichText_Or_File_InputMethodChanged('$element(form_id)', '$element(id)', this);\">"
           append output "<label for=\"$element(id).storage_type_text\">Enter text</label><blockquote>"
       } else {
-          append output "<input type=\"hidden\" name=\"$element(id).storage_type\" value=\"[ad_quotehtml $storage_type]\">"
+          append output "<input type=\"hidden\" name=\"$element(id).storage_type\" value=\"[ns_quotehtml $storage_type]\">"
       }
 
       if { $storage_type eq "" || $storage_type eq "text" } {
@@ -329,9 +329,9 @@ ad_proc -public template::widget::richtext_or_file {
       # Display mode
       if { [info exists element(value)] } {
           append output [template::util::richtext_or_file::get_property html_value $element(value)]
-          append output "<input type=\"hidden\" name=\"$element(id).mime_type\" value=\"[ad_quotehtml $mime_type]\">"
-          append output "<input type=\"hidden\" name=\"$element(id).storage_type\" value=\"[ad_quotehtml $storage_type]\">"
-          append output "<input type=\"hidden\" name=\"$element(id).text\" value=\"[ad_quotehtml $text]\">"
+          append output "<input type=\"hidden\" name=\"$element(id).mime_type\" value=\"[ns_quotehtml $mime_type]\">"
+          append output "<input type=\"hidden\" name=\"$element(id).storage_type\" value=\"[ns_quotehtml $storage_type]\">"
+          append output "<input type=\"hidden\" name=\"$element(id).text\" value=\"[ns_quotehtml $text]\">"
       }
   }
       

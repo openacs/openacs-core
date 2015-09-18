@@ -864,9 +864,9 @@ ad_proc -deprecated ad_dimensional_settings {define current} {
 	}
         foreach val [lindex $opt 3] { 
             if {$picked eq [lindex $val 0] } { 
-                append html "<option selected=\"selected\" value=\"[ad_quotehtml [lindex $val 0]]\">[lindex $val 1]</option>\n"
+                append html "<option selected=\"selected\" value=\"[ns_quotehtml [lindex $val 0]]\">[lindex $val 1]</option>\n"
             } else { 
-                append html "<option value=\"[ad_quotehtml [lindex $val 0]]\">[lindex $val 1]</option>\n"
+                append html "<option value=\"[ns_quotehtml [lindex $val 0]]\">[lindex $val 1]</option>\n"
             }
         }
         append html "</select></td></tr>\n"
