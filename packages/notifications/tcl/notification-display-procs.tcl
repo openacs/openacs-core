@@ -42,14 +42,14 @@ ad_proc -public notification::display::request_widget {
         set icon /resources/acs-subsite/email_delete.gif
         set icon_alt [_ acs-subsite.icon_of_envelope]
         set sub_url [unsubscribe_url -request_id $request_id -url $url]
-        set pretty_name [ad_quotehtml $pretty_name]
+        set pretty_name [ns_quotehtml $pretty_name]
         set title [_ notifications.lt_Ubsubscribe_Notification_]
         set sub_chunk [_ notifications.lt_You_have_requested_no]
     } else {
         set icon /resources/acs-subsite/email_add.gif
         set icon_alt [_ acs-subsite.icon_of_envelope]
         set sub_url [subscribe_url -type $type -object_id $object_id -url $url -user_id $user_id -pretty_name $pretty_name]
-        set pretty_name [ad_quotehtml $pretty_name]
+        set pretty_name [ns_quotehtml $pretty_name]
         set title [_ notifications.lt_Request_Notification_]
         set sub_chunk [_ notifications.lt_You_may_a_hrefsub_url]
     }
