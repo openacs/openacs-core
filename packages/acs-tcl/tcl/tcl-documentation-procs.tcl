@@ -144,8 +144,7 @@ ad_proc -private ad_complaints_parse_error_strings { errorstrings } {
 	    if { [llength $errorkeyv] > 2 } {
 		return -code error "Error name '$error' doesn't have the right format. It must be var\[:flag\]"
 	    }
-	    set name [lindex $errorkeyv 0]
-	    set flags [lindex $errorkeyv 1]
+            lassign $errorkeyv name flags
 	    if { $flags eq "" } {
 		set ::ad_page_contract_error_string($name) $text
 	    } else {
@@ -1079,8 +1078,7 @@ ad_proc -public ad_page_contract {
 
 	set done_p 1
 	foreach validation_name [array names apc_validation_blocks] {
-	    set dependencies [lindex $apc_validation_blocks($validation_name) 0]
-	    set code [lindex $apc_validation_blocks($validation_name) 1]
+            lassign $apc_validation_blocks($validation_name) dependencies code
 
 	    set dependencies_met_p 1
 	    #
@@ -1341,12 +1339,10 @@ ad_proc -public ad_page_contract_filter {
     # so that when the filtger proc is passed the name of a variable, the body of the proc
     # will have access to that variable as if the value had been passed.
 
-    set arg0 [lindex $proc_args 0]
-    set arg1 [lindex $proc_args 1]
+    lassign $proc_args arg0 arg1 arg2
     if { $proc_args_len == 2 } {
 	ad_proc -public $proc_name [list $arg0 ${arg1}_varname] $doc_string "upvar \$${arg1}_varname $arg1\n$body"
     } else {
-	set arg2 [lindex $proc_args 2]
 	ad_proc -public $proc_name [list $arg0 ${arg1}_varname $arg2] $doc_string "upvar \$${arg1}_varname $arg1\n$body"
     }
 }
@@ -1488,8 +1484,7 @@ ad_proc ad_page_contract_filter_rule {
 
     # same trick as ad_page_contract_filter does.
 
-    set arg0 [lindex $proc_args 0]
-    set arg1 [lindex $proc_args 1]
+    lassign $proc_args arg0 arg1
     ad_proc $proc_name [list $arg0 ${arg1}_varname] $doc_string "upvar \$${arg1}_varname $arg1\n$body"
 }
 
@@ -1831,15 +1826,16 @@ ad_page_contract_filter string_length { name value length } {
     @creation-date August 2000
 } {
     set actual_length [string length $value]
-    if { [lindex $length 0] eq "min" } {
-	if { $actual_length < [lindex $length 1] } {
-	    set binding [list name $name actual_length $actual_length min_length [lindex $length 1]]
+    lassign $length op nr
+    if { $op eq "min" } {
+	if { $actual_length < $nr } {
+	    set binding [list name $name actual_length $actual_length min_length $nr]
 	    ad_complain [_ acs-tcl.lt_name_is_too_short__Pl_1]
 	    return 0
 	}
     } else {
-	if { $actual_length > [lindex $length 1] } {
-	    set binding [list name $name actual_length $actual_length max_length [lindex $length 1]]
+	if { $actual_length > $nr } {
+	    set binding [list name $name actual_length $actual_length max_length $nr]
 	    ad_complain [_ acs-tcl.lt_name_is_too_long__Ple_1 $binding]
 	    return 0
 	}
