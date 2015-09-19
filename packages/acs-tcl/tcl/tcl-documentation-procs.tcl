@@ -224,6 +224,7 @@ ad_proc ad_page_contract_eval { args } {
 
 ad_proc -public ad_page_contract {
     {-form {}}
+    {-level 1}
     -properties
     docstring
     args
@@ -254,14 +255,13 @@ ad_proc -public ad_page_contract {
 	}
     }
     greble_exists -requires { greble_is_in_range } {
-        global greble_values
-	if { ![info exists greble_values($greble)] } {
-	    ad_complain "[_ acs-tcl.lt_Theres_no_greble_with]"
+	if { ![info exists ::greble_values($greble)] } {
+	    ad_complain [_ acs-tcl.lt_Theres_no_greble_with]
 	}
     }
 } -errors {
     foo {error message goes here}
-    bar:,integer,notnull {another error message}
+    bar:integer,notnull {another error message}
     greble_is_in_range {Greble must be between 1 and 100}
 }</pre></blockquote>
 
@@ -535,10 +535,10 @@ ad_proc -public ad_page_contract {
 	set query [list]
     } else {
 	
-	set valid_args { validate errors return_errors properties }; 	# add type later
+	set valid_args { validate errors return_errors properties }   ;# add type later
 
 	# If the first arg isn't a switch, it should be the query
-	if { [string index [lindex $args 0] 0] != "-" } {
+	if { [string index [lindex $args 0] 0] ne "-" } {
 	    set query [lindex $args 0]
 	    set args [lrange $args 1 end]
 	} else {
@@ -579,7 +579,7 @@ ad_proc -public ad_page_contract {
     # array apc_internal_filter($name:$flag):        1 if the given flag is set, undefined
     # array apc_filters($name):                      contains a list of the filters to apply
     # array apc_post_filters($name):                 contains a list of the post filters to apply
-    # array apc_filter_parameters($name:$flag:):      contains a list of the parameters for a filter
+    # array apc_filter_parameters($name:$flag):      contains a list of the parameters for a filter
     #
     # DOCUMENTATION:
     # array apc_flags($name):         contains a list of the flags that apply
@@ -975,7 +975,7 @@ ad_proc -public ad_page_contract {
 
     foreach formal_name $apc_formals {
 	
-	upvar 1 $formal_name var
+	upvar $level $formal_name var
 
 	if { [info exists apc_internal_filter($formal_name:cached)] } {
 	    if { ![ad_page_contract_get_validation_passed_p $formal_name] 
@@ -1173,6 +1173,21 @@ ad_proc -public ad_page_contract_get_variables { } {
 	return $::ad_page_contract_variables
     } 
     return [list]
+}
+
+ad_proc ad_include_contract {docstring args} {
+    Define interface between a page and an <include> similar to the
+    page_contract.
+    @param docstring documentation of the include
+    @param args passed parameter
+    @see ad_page_contract
+} {
+    set __cmd {ns_set create include}
+    foreach __v [uplevel {info vars}] {
+        if {[string match __* $__v]} {continue}
+        lappend __cmd $__v [uplevel [list set $__v]]
+    }
+    ad_page_contract -level 2 -form [{*}$__cmd] $docstring {*}$args
 }
 
 ####################
