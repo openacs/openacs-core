@@ -57,7 +57,7 @@ ad_proc -public notification::display::request_widget {
        <img src=\"$icon\" alt=\"$icon_alt\" style=\"border:0\">$sub_chunk</a>"
     # if they are an admin give them to view all subscribers
     if { [permission::permission_p -object_id $object_id -privilege admin] } {
-	set href [export_vars -base /notifications/subscribers -url {object_id}]
+        set href [export_vars -base /notifications/subscribers -url {object_id}]
         append notif_chunk " \[<a href=\"[ns_quotehtml $href]\">[_ notifications.Subscribers]</a>\]"
     }
 
@@ -96,7 +96,7 @@ ad_proc -public notification::display::unsubscribe_url {
     {-request_id:required}
     {-url:required}
 } {
-    Returns the URL that allows one to unsubscribe from a particular request.	
+    Returns the URL that allows one to unsubscribe from a particular request.
 } {
     set root_path [apm_package_url_from_key [notification::package_key]]
 
