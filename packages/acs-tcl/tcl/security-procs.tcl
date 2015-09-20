@@ -1287,7 +1287,7 @@ ad_proc -public ad_get_client_property {
     Looks up a property for a session. If $cache is true, will use the
     cached value if available. If $cache_only is true, will never
     incur a database hit (i.e., will only return a value if
-                          cached). If the property is secure, we must be on a validated session
+    cached). If the property is secure, we must be on a validated session
     over SSL.
 
     @param session_id controls which session is used
@@ -1308,7 +1308,7 @@ ad_proc -public ad_get_client_property {
     set cmd [list sec_lookup_property $id $module $name]
 
     if { $cache_only == "t" && ![util_memoize_cached_p $cmd] } {
-        return ""
+        return $default
     }
 
     if { $cache != "t" } {
@@ -1322,7 +1322,7 @@ ad_proc -public ad_get_client_property {
     lassign $property value secure_p
     
     if { $secure_p != "f" && ![security::secure_conn_p] } {
-        return ""
+        return $default
     }
 
     return $value
