@@ -3,9 +3,9 @@
 
 <p>
   #acs-tcl.We_had#
-  <if @complaints:rowcount@ gt 1>#acs-tcl.some_problems#</if>
-  <else>#acs-tcl.a_problem#</else>
+  <if @complaints:rowcount@ gt 1>#acs-tcl.some_problems#</if><else>#acs-tcl.a_problem#</else>
   #acs-tcl.with_your_input#
+  <if @context;literal@ ne "">(@context@)</if>
 </p>
 
 <ul>

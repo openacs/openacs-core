@@ -79,8 +79,13 @@ switch $kind {
                 set first_sentence [::apidoc::first_sentence [lindex $doc_elements(main) 0]]
                 set view procs-file-view
             } else {
-                set first_sentence ""
-		set view procs-file-view
+                array set doc_elements [api_read_script_documentation $full_path]
+                if { [info exists doc_elements(main)] } {
+                    set first_sentence [::apidoc::first_sentence [lindex $doc_elements(main) 0]]
+                } else {
+                    set first_sentence ""
+                }
+                set view content-page-view
             }
 
             multirow append procs_files $path $full_path $first_sentence $view

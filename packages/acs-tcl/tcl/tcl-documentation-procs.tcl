@@ -52,13 +52,12 @@ ad_proc doc_set_page_documentation_mode { page_documentation_mode_p } {
 
 # global: 
 # ad_page_contract_complaints: list of error messages reported using ad_complain
-# 
 # ad_page_contract_errorkeys: [list] is a stack of errorkeys
-#
 # ad_page_contract_error_string(name:flag) "the string"
+# ad_page_contract_context context for error message
 # 
 
-ad_proc -private ad_complaints_init {} {
+ad_proc -private ad_complaints_init {context} {
     Initializes the complaints system.
     
     @author Lars Pind (lars@pinds.com)
@@ -66,6 +65,7 @@ ad_proc -private ad_complaints_init {} {
 } {
     set ::ad_page_contract_complaints [list]
     set ::ad_page_contract_errorkeys [list]
+    set ::ad_page_contract_context $context
 }
 
 ad_proc -public ad_complain { 
@@ -225,6 +225,7 @@ ad_proc ad_page_contract_eval { args } {
 ad_proc -public ad_page_contract {
     {-form {}}
     {-level 1}
+    {-context ""}
     -properties
     docstring
     args
@@ -522,7 +523,7 @@ ad_proc -public ad_page_contract {
     @author Bryan Quinn (bquinn@arsdigita.com)
     @creation-date 16 June 2000
 } {
-    ad_complaints_init
+    ad_complaints_init $context
 
     ####################
     #
@@ -766,30 +767,30 @@ ad_proc -public ad_page_contract {
 	set name [lindex $validate $i]
 
 	if { [string first : $name] != -1 } {
-	    return -code error "[_ acs-tcl.lt_Validation_block_name]"
+	    return -code error [_ acs-tcl.lt_Validation_block_name]
 	}
 	if { [info exists apc_formal($name)] } {
-	    return -code error "[_ acs-tcl.lt_You_cant_name_your_va]"
+	    return -code error [_ acs-tcl.lt_You_cant_name_your_va]
 	}
 	if { [info exists apc_validation_blocks($name)] } {
-	    return -code error "[_ acs-tcl.lt_You_cant_have_two_val]"
+	    return -code error [_ acs-tcl.lt_You_cant_have_two_val]
 	}
 
 	incr i
 	if { [string index [lindex $validate $i] 0] == "-" } {
 	    if { [lindex $validate $i] ne "-requires" } {
-		return -code error "[_ acs-tcl.lt_Valid_switches_are_-r]"
+		return -code error [_ acs-tcl.lt_Valid_switches_are_-r]
 	    }
 	    set requires [lindex $validate [incr i]]
 
 	    foreach element $requires {
 		if { [string first , $element] != -1 } {
-		    return -code error "[_ acs-tcl.lt_The_-requires_element]"
+		    return -code error [_ acs-tcl.lt_The_-requires_element]
 		}
 		set parts_v [split $element ":"]
 		set parts_c [llength $parts_v]
 		if { $parts_c > 2 }  {
-		    return -code error "[_ acs-tcl.lt_The_-requires_element_1]"
+		    return -code error [_ acs-tcl.lt_The_-requires_element_1]
 		}
 		set req_filter [lindex $parts_v 1]
 		if { $req_filter in {array multiple} } {
@@ -843,126 +844,126 @@ ad_proc -public ad_page_contract {
 
 	# Check the name of the argument to passed in the form, ignore if not valid
         if { [regexp -nocase -- {^[a-z0-9_\-\.\:]*$}  [ns_set key $form $form_counter_i] ] } {
-        set actual_name [ns_set key $form $form_counter_i]
+            set actual_name [ns_set key $form $form_counter_i]
 
-        # The name of the formal argument in the page
-        set formal_name $actual_name
+            # The name of the formal argument in the page
+            set formal_name $actual_name
 
-        # This will be var(key) for an array
-        set variable_to_set var
+            # This will be var(key) for an array
+            set variable_to_set var
 
-        # This is the value	
-        set actual_value [ns_set value $form $form_counter_i]
+            # This is the value	
+            set actual_value [ns_set value $form $form_counter_i]
 
-        # This is needed for double click protection so we can access the two variables down below.
-        if {$actual_name eq "__submit_button_name" || $actual_name eq "__submit_button_value"} {
-            set $actual_name $actual_value
-        }
-
-        # It may be a signature for another variable
-        if { [regexp {^(.*):sig$} $actual_name match formal_name] } {
-            set apc_signatures($formal_name) $actual_value
-            # We're done with this variable
-            continue
-        }
-        
-        # If there is no formal with this name, _or_ the formal that has this name is an array, 
-        # in which case it can't be the right formal, since we'd have to have a dot and then the key
-        if { ![info exists apc_formal($formal_name)] || [info exists apc_internal_filter($formal_name:array)] } {
+            # This is needed for double click protection so we can access the two variables down below.
+            if {$actual_name eq "__submit_button_name" || $actual_name eq "__submit_button_value"} {
+                set $actual_name $actual_value
+            }
             
-            # loop over all the occurrences of dot in the argument name
-            # and search for a variable spec with that name, e.g.
-            # foo.bar.greble can be interpreted as foo(bar.greble) or foo.bar(greble)
-            set found_p 0
-            set actual_name_v [split $actual_name "."]
-            set actual_name_c [expr { [llength $actual_name_v] - 1 }]
-            for { set i 0 } { $i < $actual_name_c } { incr i } {
-                set formal_name [join [lrange $actual_name_v 0 $i] "."]
-                if { [info exists apc_internal_filter($formal_name:array)] } {
-                    set found_p 1
-                    set variable_to_set var([join [lrange $actual_name_v $i+1 end] "."])
-                    break
-                }
-            }
-            if { !$found_p } {
-                # The user supplied a value for which we didn't have any arg_spec
-                # It might be safest to fail completely in this case, but for now, 
-                # we just ignore it and go on with the next arg
+            # It may be a signature for another variable
+            if { [regexp {^(.*):sig$} $actual_name match formal_name] } {
+                set apc_signatures($formal_name) $actual_value
+                # We're done with this variable
                 continue
             }
-        }
-        
-        if { [info exists apc_internal_filter($formal_name:multiple)] 
-	     && $actual_value eq "" 
-	 } {
-            # LARS:
-            # If you lappend an emptry_string, it'll actually add the empty string to the list as an element
-            # which is not what we want
-            continue
-        }
-        
-        
-        # Remember that we've found the spec so we don't complain that this argument is missing
-        ad_page_contract_set_validation_passed $formal_name
-        
-        #
-        # Apply filters
-        #
-        
-        if { [info exists apc_internal_filter($formal_name:trim)] } {
-            set actual_value [string trim $actual_value]
-            ad_page_contract_set_validation_passed $formal_name:trim
-        }
-
-        if { $actual_value eq "" } {
-            if { [info exists apc_internal_filter($formal_name:notnull)] } {
-                ad_complain -key $formal_name:notnull "[_ acs-tcl.lt_You_must_specify_some]"
-                continue
-            } else { 
-                ad_page_contract_set_validation_passed $formal_name:notnull
-            }
-        } else {
-            set ::ad_page_contract_validations_passed($formal_name:notnull) 1
             
-            foreach filter $apc_filters($formal_name) {
-                set ::ad_page_contract_errorkeys [concat $formal_name:$filter $::ad_page_contract_errorkeys]
-                if { ![info exists apc_filter_parameters($formal_name:$filter)] } {
-                    set filter_ok_p [[ad_page_contract_filter_proc $filter] $formal_name actual_value]
-                } else {
-                    set filter_ok_p [[ad_page_contract_filter_proc $filter] $formal_name actual_value \
-                                         $apc_filter_parameters($formal_name:$filter)]
+            # If there is no formal with this name, _or_ the formal that has this name is an array, 
+            # in which case it can't be the right formal, since we'd have to have a dot and then the key
+            if { ![info exists apc_formal($formal_name)] || [info exists apc_internal_filter($formal_name:array)] } {
+            
+                # loop over all the occurrences of dot in the argument name
+                # and search for a variable spec with that name, e.g.
+                # foo.bar.greble can be interpreted as foo(bar.greble) or foo.bar(greble)
+                set found_p 0
+                set actual_name_v [split $actual_name "."]
+                set actual_name_c [expr { [llength $actual_name_v] - 1 }]
+                for { set i 0 } { $i < $actual_name_c } { incr i } {
+                    set formal_name [join [lrange $actual_name_v 0 $i] "."]
+                    if { [info exists apc_internal_filter($formal_name:array)] } {
+                        set found_p 1
+                        set variable_to_set var([join [lrange $actual_name_v $i+1 end] "."])
+                        break
+                    }
                 }
-                set ::ad_page_contract_errorkeys [lrange $::ad_page_contract_errorkeys 1 end]
-                
-                if { $filter_ok_p } {
-                    set ::ad_page_contract_validations_passed($formal_name:$filter) 1
-                } else {
-                    break
+                if { !$found_p } {
+                    # The user supplied a value for which we didn't have any arg_spec
+                    # It might be safest to fail completely in this case, but for now, 
+                    # we just ignore it and go on with the next arg
+                    continue
                 }
             }
-        }
         
-        #
-        # Set the variable in the caller's environment
-        #
-        
-        upvar 1 $formal_name var
-        
-        if { [info exists apc_internal_filter($formal_name:multiple)] } {
-            lappend $variable_to_set $actual_value
-        } else {
-            if { [info exists $variable_to_set] } {
-                ad_complain -key $formal_name:-doublevalue "[_ acs-tcl.lt_Youve_supplied_two_va]"
-                ns_log Warning "User experienced Youve_supplied_two_va when submitting a form related to path_info: [ad_conn path_info]"
+            if { [info exists apc_internal_filter($formal_name:multiple)] 
+                 && $actual_value eq "" 
+             } {
+                # LARS:
+                # If you lappend an emptry_string, it'll actually add the empty string to the list as an element
+                # which is not what we want
                 continue
+            }
+            
+            
+            # Remember that we've found the spec so we don't complain that this argument is missing
+            ad_page_contract_set_validation_passed $formal_name
+            
+            #
+            # Apply filters
+            #
+            
+            if { [info exists apc_internal_filter($formal_name:trim)] } {
+                set actual_value [string trim $actual_value]
+                ad_page_contract_set_validation_passed $formal_name:trim
+            }
+
+            if { $actual_value eq "" } {
+                if { [info exists apc_internal_filter($formal_name:notnull)] } {
+                    ad_complain -key $formal_name:notnull "[_ acs-tcl.lt_You_must_specify_some]"
+                    continue
+                } else { 
+                    ad_page_contract_set_validation_passed $formal_name:notnull
+                }
             } else {
-                set $variable_to_set $actual_value
+                set ::ad_page_contract_validations_passed($formal_name:notnull) 1
+                
+                foreach filter $apc_filters($formal_name) {
+                    set ::ad_page_contract_errorkeys [concat $formal_name:$filter $::ad_page_contract_errorkeys]
+                    if { ![info exists apc_filter_parameters($formal_name:$filter)] } {
+                        set filter_ok_p [[ad_page_contract_filter_proc $filter] $formal_name actual_value]
+                    } else {
+                        set filter_ok_p [[ad_page_contract_filter_proc $filter] $formal_name actual_value \
+                                             $apc_filter_parameters($formal_name:$filter)]
+                    }
+                    set ::ad_page_contract_errorkeys [lrange $::ad_page_contract_errorkeys 1 end]
+                    
+                    if { $filter_ok_p } {
+                        set ::ad_page_contract_validations_passed($formal_name:$filter) 1
+                    } else {
+                        break
+                    }
+                }
             }
+        
+            #
+            # Set the variable in the caller's environment
+            #
+        
+            upvar 1 $formal_name var
+        
+            if { [info exists apc_internal_filter($formal_name:multiple)] } {
+                lappend $variable_to_set $actual_value
+            } else {
+                if { [info exists $variable_to_set] } {
+                    ad_complain -key $formal_name:-doublevalue [_ acs-tcl.lt_Youve_supplied_two_va]
+                    ns_log Warning "User experienced Youve_supplied_two_va when submitting a form related to path_info: [ad_conn path_info]"
+                    continue
+                } else {
+                    set $variable_to_set $actual_value
+                }
+            }
+        } else {
+            ns_log Error "ad_page_contract: attempt to use a nonstandard variable name in form.  [ns_set key $form $form_counter_i]  "
         }
-    } else {
-        ns_log Error "ad_page_contract: attempt to use a nonstandard variable name in form.  [ns_set key $form $form_counter_i]  "
     }
-}
     
 
     ####################
@@ -1148,7 +1149,9 @@ ad_proc -public ad_page_contract {
             foreach elm [ad_complaints_get_list] {
                 template::multirow append complaints $elm
             }
-            ns_return 422 text/html [ad_parse_template -params [list complaints] "/packages/acs-tcl/lib/complain"]
+            ns_return 422 text/html [ad_parse_template \
+                                         -params [list complaints [list context $::ad_page_contract_context]] \
+                                         "/packages/acs-tcl/lib/complain"]
 	    ad_script_abort
 	}
     }
@@ -1178,6 +1181,7 @@ ad_proc -public ad_page_contract_get_variables { } {
 ad_proc ad_include_contract {docstring args} {
     Define interface between a page and an <include> similar to the
     page_contract.
+    
     @param docstring documentation of the include
     @param args passed parameter
     @see ad_page_contract
@@ -1187,7 +1191,15 @@ ad_proc ad_include_contract {docstring args} {
         if {[string match __* $__v]} {continue}
         lappend __cmd $__v [uplevel [list set $__v]]
     }
-    ad_page_contract -level 2 -form [{*}$__cmd] $docstring {*}$args
+
+    if {[uplevel {info exists __adp_remember_stub}]} {
+        set path [string range [uplevel {set __adp_remember_stub}] [string length $::acs::rootdir]+1 end]
+        set context "include path"
+    } else {
+        set context ""
+    }
+    
+    ad_page_contract -level 2 -context $context -form [{*}$__cmd] $docstring {*}$args
 }
 
 ####################

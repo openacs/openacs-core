@@ -105,7 +105,7 @@ ad_proc -public api_read_script_documentation {
         regsub -all {\#.*$} $line "" line
         set line [string trim $line]
         if { $line ne "" } {
-            set has_contract_p [regexp {(^ad_page_contract\s)|( initialize )} $line match]
+            set has_contract_p [regexp {(^ad_(page|include)_contract\s)|( initialize )|} $line]
             break
         }
     }
@@ -128,7 +128,7 @@ ad_proc -public api_read_script_documentation {
         if {[regexp {^ad_page_contract documentation} $::errorInfo] } {
             array set doc_elements $error
         }
-        if { [info exists doc_elements] } {
+        if { [array exists doc_elements] } {
             return [array get doc_elements]
         }
         return [list]
