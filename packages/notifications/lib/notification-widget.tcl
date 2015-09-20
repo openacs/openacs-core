@@ -4,12 +4,15 @@ ad_include_contract {
     {type:token}
     {object_id:naturalnum}
     {pretty_name}
-    {url}
+    {url ""}
     {user_id:naturalnum ""}
 }
 
 if {$user_id eq ""} {
     set user_id [ad_conn user_id]
+}
+if {$url eq ""} {
+    set url [ad_conn url]
 }
 
 set type_id [notification::type::get_type_id -short_name $type]
