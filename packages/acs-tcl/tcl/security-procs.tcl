@@ -1248,8 +1248,9 @@ ad_proc -private sec_lookup_property {
 } { 
 
     Used as a helper procedure for util_memoize to look up a
-    particular property from the database. Returns
-    [list $property_value $secure_p].
+    particular property from the database.
+
+    @return empty, when no property is recorded or a list containing property_value and secure_p
 
 } {
     if {
