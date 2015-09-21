@@ -1194,7 +1194,7 @@ ad_proc ad_include_contract {docstring args} {
 
     if {[uplevel {info exists __adp_remember_stub}]} {
         set path [string range [uplevel {set __adp_remember_stub}] [string length $::acs::rootdir]+1 end]
-        set context "include path"
+        set context "include $path"
     } else {
         set context ""
     }
