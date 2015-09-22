@@ -1189,12 +1189,20 @@ ad_proc -public ad_page_contract_get_variables { } {
 }
 
 ad_proc ad_include_contract {docstring args} {
+    
     Define interface between a page and an <include> similar to the
-    page_contract.
+    page_contract. This is a light-weight implementation based on the
+    ad_page_contract. It allows to check the passed arguments (types,
+    optionality) and can be used for setting defaults the usual way.
+    Using ad_include_contracts helps to improve documentation of
+    included content.
     
     @param docstring documentation of the include
     @param args passed parameter
     @see ad_page_contract
+    
+    @author gustaf neumann (neumann@wu-wien.ac.at)
+    @creation-date Sept 2015
 } {
     set __cmd {ns_set create include}
     foreach __v [uplevel {info vars}] {
@@ -1222,7 +1230,7 @@ ad_proc ad_include_contract {docstring args} {
         lappend __cmd $__v [uplevel [list set $__v]]
     }
     
-    ns_log notice "final command: $__cmd"
+    #ns_log notice "final command: $__cmd"
 
     if {[uplevel {info exists __adp_remember_stub}]} {
         set path [string range [uplevel {set __adp_remember_stub}] [string length $::acs::rootdir]+1 end]
