@@ -61,8 +61,7 @@ ad_proc -private lang::util::get_hash_indices { multilingual_string } {
 
     @author Peter marklund (peter@collaboraid.biz)
 } {
-    set regexp_pattern {(?:^|[^\\])(\#[-a-zA-Z0-9_:]+\.[-a-zA-Z0-9_:]+\#)}
-    return [get_regexp_indices $multilingual_string $regexp_pattern]
+    return [regexp -inline -indices -all {\#[a-zA-Z0-9_:-]+\.[a-zA-Z0-9_:-]+\#} $multilingual_string]
 }
 
 ad_proc lang::util::message_tag_regexp {} {
