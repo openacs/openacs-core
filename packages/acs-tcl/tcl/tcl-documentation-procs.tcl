@@ -1061,9 +1061,19 @@ ad_proc -public ad_page_contract {
 			set var [uplevel subst \{$apc_default_value($formal_name)\}]
 		    }
 		}
-		
-	    } elseif { ![info exists apc_internal_filter($formal_name:optional)] } {
-		ad_complain -key $formal_name "[_ acs-tcl.lt_You_must_supply_a_val]"
+	
+	    } elseif { ![info exists apc_internal_filter($formal_name:optional)]} {
+                #
+                # The element is not optional. Finally check, if there
+                # is a multirow with the name already defined. This is
+                # just used for cases, where multirows are passed to
+                # an ad_include contract. No further checking other than
+                # check for existence is performed in this case.
+                #
+                set multirow_name $formal_name:rowcount
+                if {![uplevel $level [list info exists $multirow_name]]} {
+                    ad_complain -key $formal_name [_ acs-tcl.lt_You_must_supply_a_val]
+                }
 	    }
 	}
     }
@@ -1188,9 +1198,31 @@ ad_proc ad_include_contract {docstring args} {
 } {
     set __cmd {ns_set create include}
     foreach __v [uplevel {info vars}] {
-        if {[string match __* $__v]} {continue}
+        if {[string match __* $__v]
+            || [regexp {[a-zA-Z]:[a-z0-9]} $__v]
+            || ![uplevel [list info exists $__v]]
+        } {
+            #
+            # Don't add internal variables (starting with __*),
+            # multirow variables, or vars without values into the
+            # ns_set used for checking
+            #
+            continue
+        }
+        if {[uplevel [list array exists $__v]]} {
+            #
+            # For the time being, do nothing with arrays
+            #
+            #ns_log notice "$__v is an array"
+            #lappend __cmd $__v [uplevel [list array get $__v]]
+            continue
+        }
+        
+        #ns_log notice "V=$__v exists: [uplevel [list info exists $__v]]"
         lappend __cmd $__v [uplevel [list set $__v]]
     }
+    
+    ns_log notice "final command: $__cmd"
 
     if {[uplevel {info exists __adp_remember_stub}]} {
         set path [string range [uplevel {set __adp_remember_stub}] [string length $::acs::rootdir]+1 end]
@@ -1198,7 +1230,7 @@ ad_proc ad_include_contract {docstring args} {
     } else {
         set context ""
     }
-    
+
     ad_page_contract -level 2 -context $context -form [{*}$__cmd] $docstring {*}$args
 }
 
