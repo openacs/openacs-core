@@ -1,6 +1,5 @@
 ad_page_contract {
-    Displays form for currently logged in user to update his/her
- personal information
+    Displays form for currently logged in user to update his/her personal information
 
     @author Unknown
     @creation-date Unknown
