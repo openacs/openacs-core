@@ -218,8 +218,8 @@ indicating when the script was first created.</p></li><li class="listitem"><p>A 
 page's CVS identification string. Just use <code class="computeroutput">$Id: tcl-documentation.html,v 1.2 2000/09/19
 07:22:35 ron Exp $</code> when creating the file, and CVS will
 substitute an appropriate string when you check the file in.</p></li>
-</ul></div><div class="cvstag">($Id: tcl-doc.xml,v 1.7 2006/07/17 05:38:38
-torbenb Exp $)</div>
+</ul></div><div class="cvstag">($Id: tcl-doc.html,v 1.49.2.1 2015/09/23
+11:54:55 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

@@ -123,8 +123,8 @@ the above naming standard. But, naming not null constraints is not
 a requirement.</p><div>About Naming the not null constraints</div><p>Though naming "not null" constraints doesn't help immeditately
 in error debugging (e.g. the error will say something like "Cannot
 insert null value into column"), we recommend naming not null
-constraints to be consistent in our naming of all constraints.</p><div class="cvstag">($Id: constraint-naming.xml,v 1.6 2006/07/17
-05:38:37 torbenb Exp $)</div>
+constraints to be consistent in our naming of all constraints.</p><div class="cvstag">($Id: eng-standards-constraint-naming.html,v
+1.48.2.1 2015/09/23 11:54:28 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

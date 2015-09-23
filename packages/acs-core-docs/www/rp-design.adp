@@ -89,7 +89,7 @@ on a live site, therefore this mapping is stored in the
 database.</p><p><span class="strong"><strong>Authentication and
 Authorization</strong></span></p><p>Once the request processor has located both the package_id and
 concrete file associated with the request, authentication is
-performed by the <a class="ulink" href="../sessions.html" target="_top">session</a> security system. After authentication has been
+performed by the <a class="ulink" href="../sessions" target="_top">session</a> security system. After authentication has been
 performed the user is authorized to have read access for the given
 package by the <a class="xref" href="permissions-design" title="Permissions Design">OpenACS 4 Permissions Design</a>. If
 authorization succeeds then the request is served, otherwise it is

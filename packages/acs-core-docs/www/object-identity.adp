@@ -50,8 +50,8 @@ even capable of fully tracking the history of membership state.</p><p>The design
 with an integer primary key that is derived from a globally unique
 sequence is the key to eliminating redundant code and replacing it
 with generic <span class="emphasis"><em>object level
-services</em></span>.</p><div class="cvstag">($Id: object-identity.xml,v 1.7 2006/07/17
-05:38:37 torbenb Exp $)</div>
+services</em></span>.</p><div class="cvstag">($Id: object-identity.html,v 1.49.2.1
+2015/09/23 11:54:42 gustafn Exp $)</div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 		    leftLink="permissions-tediously-explained" leftLabel="Prev" leftTitle="OpenACS Permissions Tediously

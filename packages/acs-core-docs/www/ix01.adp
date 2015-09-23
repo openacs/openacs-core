@@ -119,7 +119,7 @@ distribution.</a>
 <h3>U</h3><dl>
 <dt>ulink, <a class="indexterm" href="docbook-primer">Links</a>
 </dt><dt>upgrade</dt><dd><dl>
-<dt>OpenACS 4.5 to 4.6.x</dt><dd><dl><dt>Linux/Unix, <a class="indexterm" href="upgrade-4.5-to-4.6.html">Upgrading 4.5 or higher to 4.6.3</a>
+<dt>OpenACS 4.5 to 4.6.x</dt><dd><dl><dt>Linux/Unix, <a class="indexterm" href="upgrade-4.5-to-4.6">Upgrading 4.5 or higher to 4.6.3</a>
 </dt></dl></dd>
 </dl></dd>
 </dl>

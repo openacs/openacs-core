@@ -11,8 +11,8 @@ Chapter 6. Production Environments"
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="maintenance-deploy" id="maintenance-deploy"></a>Staged Deployment for Production
 Networks</h2></div></div></div><div class="authorblurb">
-<div class="cvstag">($Id: maintenance.xml,v 1.30 2010/12/11
-23:36:32 ryang Exp $)</div><p>By <a class="ulink" href="mailto:joel\@aufrecht.org" target="_top">Joel Aufrecht</a>
+<div class="cvstag">($Id: maintenance-deploy.html,v 1.24.2.1
+2015/09/23 11:54:41 gustafn Exp $)</div><p>By <a class="ulink" href="mailto:joel\@aufrecht.org" target="_top">Joel Aufrecht</a>
 </p>
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><p>This section describes two minimal-risk methods for deploying

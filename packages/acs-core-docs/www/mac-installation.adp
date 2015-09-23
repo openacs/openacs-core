@@ -11,8 +11,8 @@ Chapter 3. Complete Installation"
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="mac-installation" id="mac-installation"></a>OpenACS Installation Guide for Mac OS
 X</h2></div></div></div><p>See the wiki for an actual guideline: <a class="ulink" href="http://openacs.org/xowiki/openacs-system-install-osx/" target="_top">Installing OpenACS on Mac OS X</a>
-</p><div class="cvstag">($Id: macinstall.xml,v 1.7 2014/10/27 16:39:31
-victorg Exp $)</div>
+</p><div class="cvstag">($Id: mac-installation.html,v 1.42.2.1
+2015/09/23 11:54:40 gustafn Exp $)</div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 		    leftLink="win2k-installation" leftLabel="Prev" leftTitle="OpenACS Installation Guide for

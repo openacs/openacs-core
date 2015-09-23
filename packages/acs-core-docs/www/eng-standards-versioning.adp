@@ -10,8 +10,8 @@ Chapter 12. Engineering Standards"
 		<div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="eng-standards-versioning" id="eng-standards-versioning"></a>Release Version Numbering</h2></div></div></div><div class="authorblurb">
-<div class="cvstag">($Id: eng-standards-versioning.xml,v 1.10
-2006/07/17 05:38:37 torbenb Exp $)</div><p>By Ron Henderson, Revised by Joel Aufrecht</p>
+<div class="cvstag">($Id: eng-standards-versioning.html,v 1.51.2.1
+2015/09/23 11:54:29 gustafn Exp $)</div><p>By Ron Henderson, Revised by Joel Aufrecht</p>
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><p>OpenACS version numbers help identify at a high-level what is in
 a particular release and what has changed since the last

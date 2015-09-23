@@ -297,8 +297,8 @@ bin\nsd -I -s lintcollectors -t lintcollectors.tcl
 bin\nsd -I -s iguanasdirect -t iguanasdirect.tcl
 </pre><p>In the services control panel you should see two services:
 <code class="computeroutput">AOLserver-lintcollectors</code> and
-<code class="computeroutput">AOLserver-iguanasdirect</code>.</p><div class="cvstag">($Id: win2kinstall.xml,v 1.10 2006/07/17
-05:38:38 torbenb Exp $)</div>
+<code class="computeroutput">AOLserver-iguanasdirect</code>.</p><div class="cvstag">($Id: win2k-installation.html,v 1.49.2.1
+2015/09/23 11:55:07 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

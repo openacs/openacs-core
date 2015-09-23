@@ -350,8 +350,8 @@ styles still using these mechanisms will break.</p></li><li class="listitem"><p>
 turned off by default via the acs-kernel parameter ExcludedFiles in
 section request-processor (The variable provides a string match
 glob list of files and is defaulted to "*/CVS/* *~")</p></li>
-</ul></div><div class="cvstag">($Id: release-notes.xml,v 1.30 2014/10/27
-16:39:31 victorg Exp $)</div>
+</ul></div><div class="cvstag">($Id: release-notes.html,v 1.55.2.1 2015/09/23
+11:54:49 gustafn Exp $)</div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="idp140480060047968" id="idp140480060047968"></a>Release 4.6.3</h3></div></div></div><p><a class="ulink" href="release-notes-4-6-3" target="_top">Release Notes for 4.6.3</a></p>

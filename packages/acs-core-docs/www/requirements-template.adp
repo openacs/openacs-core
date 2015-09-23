@@ -127,8 +127,8 @@ programmers.</em></span></p>
 <td>0.1</td><td>Created</td><td>8/21/2000</td><td>Josh Finkler, Audrey McLoghlin</td>
 </tr>
 </tbody>
-</table></div><div class="cvstag">($Id: requirements-template.xml,v 1.6
-2006/07/17 05:38:37 torbenb Exp $)</div>
+</table></div><div class="cvstag">($Id: requirements-template.html,v 1.49.2.1
+2015/09/23 11:54:52 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

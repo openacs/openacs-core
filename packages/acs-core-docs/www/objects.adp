@@ -361,8 +361,8 @@ PL/SQL procedures defined above.</p></li><li class="listitem" style="list-style-
 <code class="computeroutput">acs_objects</code>. This means you
 should never use the fields in <code class="computeroutput">acs_objects</code> for application-specific
 purposes. This is especially true for the <code class="computeroutput">context_id</code> field.</p></li>
-</ul></div><div class="cvstag">($Id: objects.xml,v 1.9 2006/07/17 05:38:37
-torbenb Exp $)</div>
+</ul></div><div class="cvstag">($Id: objects.html,v 1.52.2.1 2015/09/23
+11:54:43 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
