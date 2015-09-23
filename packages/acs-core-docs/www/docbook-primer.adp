@@ -386,7 +386,7 @@ criteria</p></li>
 <a name="doc-strategy" id="doc-strategy"></a>OpenACS Documentation Strategy</h3></div></div></div><p>OpenACS documentation development is subject to the constraints
 of the software project development and release methods and cycles
 (<a class="xref" href="cvs-guidelines" title="Using CVS with OpenACS">the section called
-â€œUsing CVS with OpenACSâ€</a>).
+&ldquo;Using CVS with OpenACS&rdquo;</a>).
 Essentially, all phases of work may be active to accommodate the
 asynchronous nature of multiple subprojects evolving by the efforts
 of a global base of participants with culturally diverse time
@@ -520,7 +520,7 @@ attribute, <code class="computeroutput">id</code>, is standard and
 can be used with all elements. It comes in very handy when
 interlinking between documents (more about this when talking about
 links in <a class="xref" href="docbook-primer" title="Links">the section called
-â€œLinksâ€</a>). The value of
+&ldquo;Links&rdquo;</a>). The value of
 <code class="computeroutput">id</code> has to be unique throughout
 the book you're making since the <code class="computeroutput">id</code>'s in your <code class="computeroutput">sect1</code>'s will turn into filenames when the
 book is parsed into HTML.</p><p>
@@ -584,7 +584,7 @@ look like this:</p><p>Put this in your XML:</p><pre class="programlisting">
 &lt;xref linkend="packages-looks"&gt;&lt;/xref&gt;.
 </pre><p>And the output is:</p><pre class="programlisting">
 - Find information about what a package looks like in 
-<a class="xref" href="packages" title="What a Package Looks Like">the section called â€œWhat a Package Looks Likeâ€</a>.
+<a class="xref" href="packages" title="What a Package Looks Like">the section called &ldquo;What a Package Looks Like&rdquo;</a>.
 </pre><p>Note that since I haven't provided an <code class="computeroutput">xreflabel</code> for the subsection, <code class="computeroutput">packages-looks</code>, the parser will try its
 best to explain where the link takes you.</p>
 </dd><dt><span class="term"><span class="strong"><strong>2. Linking

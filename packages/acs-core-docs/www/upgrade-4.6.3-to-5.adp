@@ -18,15 +18,15 @@ Chapter 5. Upgrading"
 <b>PostGreSQL. </b>You must use PostGreSQL 7.3.x or
 newer to upgrade OpenACS beyond 4.6.3. See <a class="link" href="upgrade-supporting" title="Upgrading from PostGreSQL 7.2 to 7.3">Upgrade PostGreSQL to
 7.3</a>; <a class="xref" href="individual-programs" title="Table 2.2. Version Compatibility Matrix">Table 2.2,
-â€œVersion Compatibility
-Matrixâ€</a>
+&ldquo;Version Compatibility
+Matrix&rdquo;</a>
 </p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem"><p><a class="link" href="snapshot-backup" title="Manual backup and recovery">Back up the database and file
 system.</a></p></li><li class="listitem"><p>
 <b>Upgrade the file system for
 packages/acs-kernel. </b><a class="xref" href="upgrade-openacs-files" title="Upgrading the OpenACS files">the section called
-â€œUpgrading the OpenACS
-filesâ€</a>
+&ldquo;Upgrading the OpenACS
+files&rdquo;</a>
 </p></li><li class="listitem">
 <p>Upgrade the kernel manually. (There is a script to do most of
 the rest: <a class="ulink" href="http://cvs.openacs.org/cvs/openacs-4/contrib/misc/upgrade_4.6_to_5.0.sh?only_with_tag=HEAD" target="_top">/contrib/misc/upgrade_4.6_to_5.0.sh on HEAD</a>).

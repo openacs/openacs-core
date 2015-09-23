@@ -71,7 +71,7 @@ unless you know what you are doing. Subsequent documents will
 expect that you used the defaults, so a change made here will
 necessitate further changes later. For a guide to the defaults,
 please see <a class="xref" href="oracle" title="Defaults">the section
-called â€œDefaultsâ€</a>.</p><p>In order for OpenACS to work properly you need to set the
+called &ldquo;Defaults&rdquo;</a>.</p><p>In order for OpenACS to work properly you need to set the
 environment appropriately.</p><pre class="programlisting">
 export ORACLE_BASE=/ora8/m01/app/oracle
 export ORACLE_HOME=$ORACLE_BASE/product/8.1.7
@@ -263,7 +263,7 @@ mounted the CDROM)<code class="computeroutput">/stage/products.jar</code>"</p></
 <p>"destination" path says "<code class="computeroutput">/ora8/m01/app/oracle/product/8.1.7</code>"</p><p>If the destination is not correct it is because your environment
 variables are not set properly. Make sure you logged on as
 <code class="computeroutput">oracle</code> using <code class="computeroutput">su - oracle</code>. If so, edit the <code class="computeroutput">~/.bash_profile</code> as you did in <a class="xref" href="oracle" title="Pre-Installation Tasks">the section called
-â€œPre-Installation Tasksâ€</a>
+&ldquo;Pre-Installation Tasks&rdquo;</a>
 </p>
 </li><li class="listitem"><p>Click "Next" (a pop up window will display Loading Product
 information).</p></li>
@@ -560,8 +560,8 @@ SQL&gt; alter user ctxsys identified by alexisahunk;
 <p>Verify that your date settings are correct.</p><pre class="programlisting">
 SQL&gt; select sysdate from dual;
 </pre><p>If you don't see a date that fits the format <code class="computeroutput">YYYY-MM-DD</code>, please read <a class="xref" href="oracle" title="Troubleshooting Oracle Dates">the section called
-â€œTroubleshooting Oracle
-Datesâ€</a>.</p>
+&ldquo;Troubleshooting Oracle
+Dates&rdquo;</a>.</p>
 </li><li class="listitem">
 <p>At this point we are going to hammer your database with an
 intense acceptance test. This usually takes around 30 minutes.</p><pre class="programlisting">
@@ -583,7 +583,7 @@ usually suffered by people trying to load OpenACS into a
 pre-existing database. Unfortunately, the only solution is to
 create a new database with a block size of at least <code class="computeroutput">4096</code>. For instructions on how to do this,
 see <a class="xref" href="oracle" title="Creating the First Database">the section called
-â€œCreating the First Databaseâ€</a>
+&ldquo;Creating the First Database&rdquo;</a>
 above. You can set the parameter using the <code class="computeroutput">dbassist</code> program or by setting the
 <code class="computeroutput">DB_BLOCK_SIZE</code> parameter in your
 database's creation script.</p><p>If there were no errors, then consider yourself fortunate. Your
@@ -935,8 +935,8 @@ SQL&gt; drop tablespace <span class="emphasis"><em>table_space_name</em></span> 
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="oracle-next-steps" id="oracle-next-steps"></a>Oracle Next Steps</h3></div></div></div><p><a class="xref" href="maint-performance" title="Creating an appropriate tuning and monitoring environment">the
-section called â€œCreating an appropriate tuning
-and monitoring environmentâ€</a></p>
+section called &ldquo;Creating an appropriate tuning
+and monitoring environment&rdquo;</a></p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="install-oracle-defaults" id="install-oracle-defaults"></a>Defaults</h3></div></div></div><p>We used the following defaults while installing Oracle.</p><div class="informaltable"><table cellspacing="0" border="1">

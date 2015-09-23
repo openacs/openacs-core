@@ -32,8 +32,8 @@ make
 cd ..
 mv analog-5.32 /usr/share/</span></span>
 </pre><p>See also <a class="xref" href="analog-setup" title="Set up Log Analysis Reports">the section called
-â€œSet up Log Analysis
-Reportsâ€</a>
+&ldquo;Set up Log Analysis
+Reports&rdquo;</a>
 </p>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

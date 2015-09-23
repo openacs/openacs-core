@@ -17,7 +17,7 @@ constantly?</p></li><li class="listitem">
 <p>Isolating and solving database problems.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
 <li class="listitem"><p>Without daily internal maintenance, most databases slowly
 degrade in performance. For PostGreSQL, see <a class="xref" href="install-next-nightly-vacuum" title="Vacuum Postgres nightly">the section called
-â€œVacuum Postgres nightlyâ€</a>. For
+&ldquo;Vacuum Postgres nightly&rdquo;</a>. For
 Oracle, use <code class="computeroutput">exec
 dbms_stats.gather_schema_stats('SCHEMA_NAME')</code> (<a class="ulink" href="http://www.piskorski.com/docs/oracle.html" target="_top">Andrew Piskorski's Oracle notes</a>).</p></li><li class="listitem">
 <p>You can track the exact amount of time each database query on a

@@ -99,12 +99,12 @@ conventions for setting environment variables when appropriate, and
 install bash to work with the scripts. Substitute <strong class="userinput"><code>fetch</code></strong> when the instructions
 suggest you use <strong class="userinput"><code>wget</code></strong> to download software.</p></li><li class="listitem"><p>
 <b>Mac OS X. </b><a class="xref" href="mac-installation" title="OpenACS Installation Guide for Mac OS X">the section called
-â€œOpenACS Installation Guide for Mac OS
-Xâ€</a>
+&ldquo;OpenACS Installation Guide for Mac OS
+X&rdquo;</a>
 </p></li><li class="listitem"><p>
 <b>Windows/VMWare. </b><a class="xref" href="win2k-installation" title="OpenACS Installation Guide for Windows2000">the section called
-â€œOpenACS Installation Guide for
-Windows2000â€</a> The only way to run OpenACS on Windows
+&ldquo;OpenACS Installation Guide for
+Windows2000&rdquo;</a> The only way to run OpenACS on Windows
 is through the VMWare emulator. (Please let me know if you have
 OpenACS running directly in Windows.)</p></li>
 </ul></div>

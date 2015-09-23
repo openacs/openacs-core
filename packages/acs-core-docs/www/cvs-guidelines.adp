@@ -238,8 +238,8 @@ commit rights. You can then commit code directly to the
 repository:</p><div class="orderedlist"><ol class="orderedlist" type="a">
 <li class="listitem"><p>Use one of the checkout methods described above to get files to
 your system. This takes the place of steps 1 and 2 in <a class="xref" href="openacs" title="Installation Option 2: Install from tarball">the section called
-â€œInstallation Option 2: Install from
-tarballâ€</a>. Continue setting up the site as described
+&ldquo;Installation Option 2: Install from
+tarball&rdquo;</a>. Continue setting up the site as described
 there.</p></li><li class="listitem"><p>Fix bugs and add features.</p></li><li class="listitem">
 <p>Commit that file (or files):</p><pre class="screen"><span class="action"><span class="action">cvs commit -m "what I did and why" filename</span></span></pre><p>Because this occurs in your personal checkout and not an
 anonymous one, this commit automagically moves back upstream to the
@@ -286,8 +286,8 @@ cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">servic
 cvs tag -b <span class="replaceable"><span class="replaceable">oacs-5-1</span></span>
 </pre>
 </li><li class="listitem"><p>See <a class="xref" href="releasing-package" title="How to package and release an OpenACS Package">the section called
-â€œHow to package and release an OpenACS
-Packageâ€</a>
+&ldquo;How to package and release an OpenACS
+Package&rdquo;</a>
 </p></li>
 </ol></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
 <h3 class="title">Note</h3><p>Some packages are already in cvs at <code class="computeroutput">openacs-4/contrib/packages</code>. Starting with
