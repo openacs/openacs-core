@@ -3,13 +3,13 @@
 <property name="doc(title)">OpenACS Core Documentation</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="requirements-template" leftLabel="Prev"
+		    leftLink="" leftLabel=""
 		    title=""
 		    rightLink="for-everyone" rightLabel="Next">
 		<div class="book">
 <div class="titlepage">
 <div><div><h1 class="title">
-<a name="idp140717547632592" id="idp140717547632592"></a>OpenACS Core Documentation</h1></div></div><hr>
+<a name="idp140480052053568" id="idp140480052053568"></a>OpenACS Core Documentation</h1></div></div><hr>
 </div><div class="toc">
 <p><b>Table of Contents</b></p><dl class="toc">
 <dt><span class="part"><a href="for-everyone">I. OpenACS For
@@ -111,7 +111,8 @@ Tutorial</a></span></dt><dd><dl>
 <dt><span class="sect1"><a href="tutorial-newpackage">Creating
 an Application Package</a></span></dt><dt><span class="sect1"><a href="tutorial-database">Setting Up
 Database Objects</a></span></dt><dt><span class="sect1"><a href="tutorial-pages">Creating Web
-Pages</a></span></dt>
+Pages</a></span></dt><dt><span class="sect1"><a href="tutorial-debug">Debugging and
+Automated Testing</a></span></dt>
 </dl></dd><dt><span class="chapter"><a href="tutorial-advanced">10.
 Advanced Topics</a></span></dt><dd><dl>
 <dt><span class="sect1"><a href="tutorial-specs">Write the
@@ -143,7 +144,8 @@ Application Pages</a></span></dt><dt><span class="sect1"><a href="parties">Parti
 OpenACS</a></span></dt><dt><span class="sect1"><a href="permissions-tediously-explained">OpenACS Permissions
 Tediously Explained</a></span></dt><dt><span class="sect1"><a href="object-identity">Object
 Identity</a></span></dt><dt><span class="sect1"><a href="programming-with-aolserver">Programming with
-AOLserver</a></span></dt>
+AOLserver</a></span></dt><dt><span class="sect1"><a href="form-builder">Using Form
+Builder: building html forms dynamically</a></span></dt>
 </dl></dd><dt><span class="chapter"><a href="eng-standards">12.
 Engineering Standards</a></span></dt><dd><dl>
 <dt><span class="sect1"><a href="style-guide">OpenACS Style
@@ -279,10 +281,10 @@ datetime from the database ANSI-style</a>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="requirements-template" leftLabel="Prev" leftTitle=""
+		    leftLink="" leftLabel="" leftTitle=""
 		    rightLink="for-everyone" rightLabel="Next" rightTitle="
 Part I. OpenACS For Everyone"
-		    homeLink="index" homeLabel="Home" 
-		    upLink="acs-package-dev" upLabel="Up"> 
+		    homeLink="" homeLabel="" 
+		    upLink="" upLabel=""> 
 		<center><a href="http://openacs.org/doc/current/index.html#comments">View comments
 on this page at openacs.org</a></center>

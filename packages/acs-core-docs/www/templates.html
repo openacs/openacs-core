@@ -112,10 +112,10 @@ and insert this text:
 </p><pre class="programlisting">
 
 &lt;master src="master"&gt;
-&lt;property name="title"&gt;@page_title@&lt;/property&gt;
-&lt;property name="context_bar"&gt;@context_bar@&lt;/property&gt;
+&lt;property name="title"&gt;@page_title;literal@&lt;/property&gt;
+&lt;property name="context_bar"&gt;@context_bar;literal@&lt;/property&gt;
 
-&lt;form action=@target@&gt;
+&lt;form action="@target@"&gt;
 &lt;p&gt;Title: 
 &lt;input type="text" name="title" value=""&gt;
 &lt;/p&gt;
@@ -124,7 +124,7 @@ and insert this text:
 &lt;/p&gt;
 &lt;p&gt;
 &lt;center&gt;
-&lt;input type=submit value="@submit_label@"&gt;
+&lt;input type="submit" value="@submit_label@"&gt;
 &lt;/center&gt;
 &lt;/p&gt;
 &lt;/form&gt;

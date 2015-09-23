@@ -39,6 +39,155 @@ linkend="changelog-latest"></xref>) since the last release and in the
 entire &majorversion;.&minorversion; release sequence <xref linkend="changelog"></xref>.</para>
 -->
 
+<sect2  id="release-notes-5-9-0">
+  <title>Release 5.9.0 beta</title>
+  <itemizedlist>
+    <listitem><para>
+      The release contains the 78 packages of the oacs-5-9 branch.
+      These packages contain the OpenACS core packages, major
+      application packages (e.g. most the ones used on OpenACS.org), and
+      DotLRN.
+    </para></listitem>
+
+    <listitem><para>
+      Changes for all packages:
+      <itemizedlist>
+	<listitem><para>SQL:
+	<itemizedlist>
+
+	  <listitem><para>
+            Improved performance of acs-object deletion.
+	  </para></listitem>
+
+	  <listitem><para>
+            Replaced many manual referential integrity calls by
+	    built-in handing in PostgreSQL.
+	  </para></listitem>
+
+	  <listitem><para>
+            Removed various manual bookeeping and deletion operations
+	    in the content repository by built-in handing in PostgreSQL.
+	  </para></listitem>
+
+	  <listitem><para>
+            Removed tree_sortkey on acs-objects to reduce its size and
+	    to speedup operations, where the context-id is changed
+	    (could take on large installation several minutes)
+	  </para></listitem>
+
+	  <listitem><para>
+            Remove several uncalled / redundant SQL statements and functions.
+	  </para></listitem>
+	</itemizedlist>	    
+	</para></listitem>
+
+	<listitem><para>Web Interface:
+	<itemizedlist>
+
+ 	  <listitem><para>
+            Improve Performance of WebSites created with OpenACS:
+	    e.g. move core.js to a body requests, provide kernel
+	    parameter ResourcesExpireInterval to specify expiration
+	    times for resources.
+	  </para></listitem>
+
+ 	  <listitem><para>
+            Much better protection against XSS attacks.
+	  </para></listitem>
+	  
+ 	  <listitem><para>
+            Improved HTML validity (especially for admin pages)
+	  </para></listitem>
+
+ 	  <listitem><para> Add lightweight support for ckeditor4 for
+ 	  templating::richtext widget (configurable via package
+ 	  parameter "RichTextEditor" of acs-templating. ckeditor4
+ 	  supports mobile devices (such as iPad, ...)
+ 	  </para></listitem>
+	</itemizedlist>
+	</para></listitem>
+
+	<listitem><para>Templating:
+	<itemizedlist>
+
+ 	  <listitem><para>
+            Improved theme-ability: Moved more information into theme
+	    packages in order to create responsive designs, reduce
+	    hard-coding of paths, HTML etc.
+	  </para></listitem>
+
+ 	  <listitem><para>
+            Improved include-handling: All includes are now
+	    theme-able, interfaces of includes can be defined with
+	    ad_include_contract (similar to ad_page_contract).
+	  </para></listitem>
+
+	  <listitem><para>
+            Improved themability for display_templates. One can now
+	    provide a display_template_name (similar to the sql
+	    statement name) to refer to display templates. This
+	    enables resuabilit and is theme-able.
+	  </para></listitem>
+
+	  <listitem><para> Dimensional slider reform (ad_dimensional):
+ 	  Removed hard-coded table layout from dimensional slider Add
+ 	  backwards compatible templates Move hard-coded styles into
+ 	  theme styling </para></listitem>
+
+	  <listitem><para>
+	    Notification chunks are now theme-able as well (using ad_include_contrat)
+	  </para></listitem>
+
+	  <listitem><para>
+            Complete template variable controls (adding noi18n)
+	  </para></listitem>
+	</itemizedlist>
+	</para></listitem>
+
+	<listitem><para>Misc:
+	<itemizedlist>
+ 	  <listitem><para>
+            Improved Documentation templating (uniform appearance)
+	  </para></listitem>
+
+ 	  <listitem><para>
+            Make pretty-naming of acs-core packages more consistent
+	  </para></listitem>
+
+	  <listitem><para>
+            Mark unused functions of acs-tcl/tcl/table-display-procs.tcl as deprecated
+	  </para></listitem>
+
+ 	  <listitem><para>
+	    Version numbers:
+	    <itemizedlist>
+	      <listitem><para>
+		Require PG 9.0 (End Of Life of PostgreSQL 8.4 was July 2014)
+	      </para></listitem>
+
+	      <listitem><para>
+		require XOTcl 2.0 (presented at the Tcl conference in 2011). 
+	      </para></listitem>
+
+	      <listitem><para>
+		Significant performance improvement for large
+		installations
+	      </para></listitem>
+	    </itemizedlist>
+ 	  </para></listitem>
+	</itemizedlist>
+	</para></listitem>
+      </itemizedlist>
+    </para> </listitem>
+  </itemizedlist>
+  <para> Altogether, OpenACS 5.9.0 differs from OpenACS 5.8.1 in
+  about xxxx modifications (yyyy commits) contributed by zzzz
+  committers.
+  </para>
+</sect2>
+
+
+
 <sect2  id="release-notes-5-8-1">
   <title>Release 5.8.1</title>
   <itemizedlist>
@@ -134,7 +283,7 @@ entire &majorversion;.&minorversion; release sequence <xref linkend="changelog">
 	  </para></listitem>
 
  	  <listitem><para>
-            Packages can be equipped with configuration files
+            Packages can be equipped with xml-based configuration files
             (e.g. changing parameters for style packages)
 	  </para></listitem>
 
