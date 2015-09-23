@@ -47,8 +47,8 @@ server error is not reasonable).</p></li><li class="listitem"><p>
 <b>Duplicate names. </b> Make sure that if a
 duplicate name is entered that there is a reasonable error rather
 than a server error. Check for insert, move, copy, and rename.</p></li>
-</ul></div><div class="cvstag">($Id: auto-testing.xml,v 1.3 2006/07/17
-05:38:37 torbenb Exp $)</div>
+</ul></div><div class="cvstag">($Id: automated-testing-best-practices.html,v
+1.28.2.1 2015/09/23 11:54:21 gustafn Exp $)</div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 		    leftLink="variables" leftLabel="Prev" leftTitle="Variables"

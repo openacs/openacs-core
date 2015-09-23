@@ -21,8 +21,8 @@ Backup</a></span></dt><dt><span class="sect1"><a href="backups-with-cvs">Using C
 for backup-recovery</a></span></dt>
 </dl>
 </div><div class="authorblurb">
-<div class="cvstag">($Id: recovery.xml,v 1.17 2010/12/11 23:36:32
-ryang Exp $)</div><p>By <a class="ulink" href="mailto:dhogaza\@pacifier.com" target="_top">Don Baccus</a> with additions by <a class="ulink" href="mailto:joel\@aufrecht.org" target="_top">Joel Aufrecht</a>
+<div class="cvstag">($Id: backup-recovery.html,v 1.43.2.1
+2015/09/23 11:54:22 gustafn Exp $)</div><p>By <a class="ulink" href="mailto:dhogaza\@pacifier.com" target="_top">Don Baccus</a> with additions by <a class="ulink" href="mailto:joel\@aufrecht.org" target="_top">Joel Aufrecht</a>
 </p><p>We will cover some basic backup and recovery strategies. These
 are intended to be robust but simple enough to set up. For a large
 scale production site you would probably need to create your own

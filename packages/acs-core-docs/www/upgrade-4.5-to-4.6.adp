@@ -6,7 +6,7 @@
 		    leftLink="upgrade-overview" leftLabel="Prev"
 		    title="
 Chapter 5. Upgrading"
-		    rightLink="upgrade-4.6.3-to-5.html" rightLabel="Next">
+		    rightLink="upgrade-4.6.3-to-5" rightLabel="Next">
 		<div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="upgrade-4.5-to-4.6" id="upgrade-4.5-to-4.6"></a>Upgrading 4.5 or higher to 4.6.3</h2></div></div></div><a class="indexterm" name="idp140480063369056" id="idp140480063369056"></a><p>The required platform for OpenACS 4.6 is the same as 4.5, with
@@ -71,7 +71,7 @@ back</a> to the backup snapshot.</p></li>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 		    leftLink="upgrade-overview" leftLabel="Prev" leftTitle="Overview"
-		    rightLink="upgrade-4.6.3-to-5.html" rightLabel="Next" rightTitle="Upgrading OpenACS 4.6.3 to 5.0"
+		    rightLink="upgrade-4.6.3-to-5" rightLabel="Next" rightTitle="Upgrading OpenACS 4.6.3 to 5.0"
 		    homeLink="index" homeLabel="Home" 
 		    upLink="upgrade" upLabel="Up"> 
 		

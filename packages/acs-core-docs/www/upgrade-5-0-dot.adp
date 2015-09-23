@@ -3,7 +3,7 @@
 <property name="doc(title)">Upgrading an OpenACS 5.0.0 or greater installation</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="upgrade-4.6.3-to-5.html" leftLabel="Prev"
+		    leftLink="upgrade-4.6.3-to-5" leftLabel="Prev"
 		    title="
 Chapter 5. Upgrading"
 		    rightLink="upgrade-openacs-files" rightLabel="Next">
@@ -42,7 +42,7 @@ translations.</p></li>
 </ul></div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="upgrade-4.6.3-to-5.html" leftLabel="Prev" leftTitle="Upgrading OpenACS 4.6.3 to 5.0"
+		    leftLink="upgrade-4.6.3-to-5" leftLabel="Prev" leftTitle="Upgrading OpenACS 4.6.3 to 5.0"
 		    rightLink="upgrade-openacs-files" rightLabel="Next" rightTitle="Upgrading the OpenACS files"
 		    homeLink="index" homeLabel="Home" 
 		    upLink="upgrade" upLabel="Up"> 

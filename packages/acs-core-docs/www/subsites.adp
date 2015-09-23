@@ -242,8 +242,8 @@ how it makes it possible to easily turn Notes into an application
 that appears to provide each user in a system with their own
 private notes database.</p><p>We also saw how to use the templating system's forms API in a
 simple way, to create forms based pages with minimal duplication of
-code.</p><div class="cvstag">($Id: subsites.xml,v 1.9 2014/10/27 16:39:30
-victorg Exp $)</div>
+code.</p><div class="cvstag">($Id: subsites.html,v 1.48.2.1 2015/09/23
+11:54:55 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

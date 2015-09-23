@@ -140,8 +140,8 @@ viewable in the SQL files but also through our SQL and PL/SQL
 browsers. This means that we should try to make it as consistent as
 possible to all source code readers.</p></li><li class="listitem"><p>Lowercase everything, with the exception of %TYPE and
 %ROWTYPE.</p></li>
-</ol></div><div class="cvstag">($Id: plsql.xml,v 1.6 2006/07/17 05:38:37
-torbenb Exp $)</div>
+</ol></div><div class="cvstag">($Id: eng-standards-plsql.html,v 1.49.2.1
+2015/09/23 11:54:28 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

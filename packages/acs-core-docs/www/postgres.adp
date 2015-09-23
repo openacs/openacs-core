@@ -510,8 +510,8 @@ This information may be experimental.</p></li><li class="listitem"><p><a class="
 <a name="install-postgres-moreinfo" id="install-postgres-moreinfo"></a>more information about
 PostgreSQL</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p><a class="ulink" href="http://www.postgresql.org/idocs/" target="_top">Official PostgreSQL Docs</a></p></li><li class="listitem"><p><a class="ulink" href="http://pascal.scheffers.net/openacs/pgupdate/" target="_top">Migrating from 7.0 to 7.1</a></p></li><li class="listitem"><p><a class="ulink" href="http://techdocs.postgresql.org" target="_top">techdocs.postgresql.org</a></p></li><li class="listitem"><p><a class="ulink" href="http://www.linuxjournal.com/article.php?sid=4791" target="_top">PostgreSQL Performance Tuning</a></p></li>
-</ul></div><div class="cvstag">($Id: postgres.xml,v 1.35 2006/07/17 05:38:38
-torbenb Exp $)</div>
+</ul></div><div class="cvstag">($Id: postgres.html,v 1.51.2.1 2015/09/23
+11:54:47 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

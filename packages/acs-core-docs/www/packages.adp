@@ -400,8 +400,8 @@ download and install. We'll cover this later.</p></li>
 <a name="packages-add-reading" id="packages-add-reading"></a>Additional Reading</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p><a class="xref" href="apm-design" title="Package Manager Design">Package Manager Design</a></p></li><li class="listitem"><p><a class="xref" href="apm-requirements" title="Package Manager Requirements">Package Manager Requirements</a></p></li><li class="listitem"><p><a class="link" href="tutorial-newpackage" title="Creating an Application Package">package development
 tutorial</a></p></li>
-</ul></div><div class="cvstag">($Id: packages.xml,v 1.9 2006/07/17 05:38:37
-torbenb Exp $)</div>
+</ul></div><div class="cvstag">($Id: packages.html,v 1.51.2.1 2015/09/23
+11:54:45 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

@@ -179,8 +179,8 @@ your setup information (OS, etc) as well as the exact commands that
 are failing with the accompanying error. If there's a SQL error in
 the Tcl error or in the log, post that too.</p></li><li class="listitem"><p>If you find errors in this document or if you have ideas about
 making it better, please post them in our <a class="ulink" href="http://openacs.org/bugtracker/openacs/" target="_top">BugTracker</a>.</p></li>
-</ul></div><div class="cvstag">($Id: overview.xml,v 1.29 2014/10/27 16:39:31
-victorg Exp $)</div>
+</ul></div><div class="cvstag">($Id: install-steps.html,v 1.35.2.1 2015/09/23
+11:54:39 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

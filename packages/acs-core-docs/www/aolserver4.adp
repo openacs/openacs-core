@@ -233,8 +233,8 @@ script according to the documentation found there (namely: Add the
 -b <span class="replaceable"><span class="replaceable">yourip:yourport</span></span> switch)</p></li><li class="listitem"><p>
 <a class="link" href="aolserver">Test
 AOLserver</a>.</p></li>
-</ol></div><div class="cvstag">($Id: aolserver4.xml,v 1.31 2014/10/27 16:39:31
-victorg Exp $)</div>
+</ol></div><div class="cvstag">($Id: aolserver4.html,v 1.27.2.1 2015/09/23
+11:54:20 gustafn Exp $)</div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 		    leftLink="postgres" leftLabel="Prev" leftTitle="Install PostgreSQL"

@@ -37,8 +37,8 @@ emacs keybindings for DocBook SGML)</p></li><li class="listitem"><p>daemontools 
 must first do <a class="xref" href="install-steps" title="Setting a global shell variable for cut and paste">Setting a
 global shell variable for cut and paste</a>.</p><p>To install a machine to the specifications of the Reference
 Platform, do the <a class="link" href="install-redhat" title="Appendix A. Install Red Hat 8/9">walkthrough
-of the Red Hat 8.0 Install for OpenACS</a>.</p><div class="cvstag">($Id: os.xml,v 1.15 2006/07/17 05:38:37 torbenb
-Exp $)</div>
+of the Red Hat 8.0 Install for OpenACS</a>.</p><div class="cvstag">($Id: unix-installation.html,v 1.33.2.1
+2015/09/23 11:55:03 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

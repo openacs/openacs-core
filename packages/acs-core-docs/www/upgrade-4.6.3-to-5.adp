@@ -3,7 +3,7 @@
 <property name="doc(title)">Upgrading OpenACS 4.6.3 to 5.0</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="upgrade-4.5-to-4.6.html" leftLabel="Prev"
+		    leftLink="upgrade-4.5-to-4.6" leftLabel="Prev"
 		    title="
 Chapter 5. Upgrading"
 		    rightLink="upgrade-5-0-dot" rightLabel="Next">
@@ -94,7 +94,7 @@ parameter::set_value -package_id [ad_acs_kernel_id] -parameter UsePasswordWidget
 </li><li class="listitem"><p>If you can login, visit /acs-admin/apm and upgrade acs-kernel
 and acs-service-contract and uncheck the data model scripts.
 Restart. If everything is still working, make another backup of the
-database.</p></li><li class="listitem"><p>Upgrade other packages <a class="link" href="upgrade-4.5-to-4.6.html#upgrade-with-apm" title="Use APM to upgrade the database">via the APM</a>
+database.</p></li><li class="listitem"><p>Upgrade other packages <a class="link" href="upgrade-4.5-to-4.6" title="Use APM to upgrade the database">via the APM</a>
 </p></li>
 </ol></div><p>See also these forum posts: <a class="ulink" href="http://openacs.org/forums/message-view?message_id=143497" target="_top">Forum OpenACS Development: 4.6.3 upgrade to 5-HEAD: final
 results</a>, <a class="ulink" href="http://openacs.org/forums/message-view?message_id=152200" target="_top">OpenACS 5.0 Upgrade Experiences</a>.</p><p>There are a few things you might want to do once you've
@@ -107,7 +107,7 @@ Upgrade Experiences for details.</p>
 </ul></div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="upgrade-4.5-to-4.6.html" leftLabel="Prev" leftTitle="Upgrading 4.5 or higher to 4.6.3"
+		    leftLink="upgrade-4.5-to-4.6" leftLabel="Prev" leftTitle="Upgrading 4.5 or higher to 4.6.3"
 		    rightLink="upgrade-5-0-dot" rightLabel="Next" rightTitle="Upgrading an OpenACS 5.0.0 or greater
 installation"
 		    homeLink="index" homeLabel="Home" 

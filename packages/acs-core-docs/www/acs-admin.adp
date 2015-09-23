@@ -37,8 +37,8 @@ an OpenACS package</a></span></dt><dt><span class="sect1"><a href="how-do-I">How
 I?</a></span></dt>
 </dl></dd><dt><span class="chapter"><a href="upgrade">5.
 Upgrading</a></span></dt><dd><dl>
-<dt><span class="sect1"><a href="upgrade-overview">Overview</a></span></dt><dt><span class="sect1"><a href="upgrade-4.5-to-4.6.html">Upgrading
-4.5 or higher to 4.6.3</a></span></dt><dt><span class="sect1"><a href="upgrade-4.6.3-to-5.html">Upgrading
+<dt><span class="sect1"><a href="upgrade-overview">Overview</a></span></dt><dt><span class="sect1"><a href="upgrade-4.5-to-4.6">Upgrading
+4.5 or higher to 4.6.3</a></span></dt><dt><span class="sect1"><a href="upgrade-4.6.3-to-5">Upgrading
 OpenACS 4.6.3 to 5.0</a></span></dt><dt><span class="sect1"><a href="upgrade-5-0-dot">Upgrading an
 OpenACS 5.0.0 or greater installation</a></span></dt><dt><span class="sect1"><a href="upgrade-openacs-files">Upgrading the OpenACS
 files</a></span></dt><dt><span class="sect1"><a href="upgrade-supporting">Upgrading

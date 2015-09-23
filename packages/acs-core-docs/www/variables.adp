@@ -12,8 +12,8 @@ Chapter 12. Engineering Standards"
 <a name="variables" id="variables"></a>Variables</h2></div></div></div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="variables-datetime" id="variables-datetime"></a>Date and Time Variables</h3></div></div></div><div class="authorblurb">
-<div class="cvstag">($Id: variables.xml,v 1.3 2006/07/17 05:38:37
-torbenb Exp $)</div><p>By <a class="ulink" href="mailto:joel\@aufrecht.org" target="_top">joel\@aufrecht.org</a>
+<div class="cvstag">($Id: variables.html,v 1.30.2.1 2015/09/23
+11:55:06 gustafn Exp $)</div><p>By <a class="ulink" href="mailto:joel\@aufrecht.org" target="_top">joel\@aufrecht.org</a>
 </p>
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><p>Starting with OpenACS 5.0 and the introduction of acs-lang, we

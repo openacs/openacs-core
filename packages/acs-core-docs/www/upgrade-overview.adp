@@ -6,7 +6,7 @@
 		    leftLink="upgrade" leftLabel="Prev"
 		    title="
 Chapter 5. Upgrading"
-		    rightLink="upgrade-4.5-to-4.6.html" rightLabel="Next">
+		    rightLink="upgrade-4.5-to-4.6" rightLabel="Next">
 		<div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="upgrade-overview" id="upgrade-overview"></a>Overview</h2></div></div></div><p>Starting with Version 4.5, all OpenACS core packages support
@@ -51,7 +51,7 @@ in this section</b></p><div class="table-contents"><table summary="Assumptions i
 <include src="/packages/acs-core-docs/lib/navfooter"
 		    leftLink="upgrade" leftLabel="Prev" leftTitle="
 Chapter 5. Upgrading"
-		    rightLink="upgrade-4.5-to-4.6.html" rightLabel="Next" rightTitle="Upgrading 4.5 or higher to 4.6.3"
+		    rightLink="upgrade-4.5-to-4.6" rightLabel="Next" rightTitle="Upgrading 4.5 or higher to 4.6.3"
 		    homeLink="index" homeLabel="Home" 
 		    upLink="upgrade" upLabel="Up"> 
 		

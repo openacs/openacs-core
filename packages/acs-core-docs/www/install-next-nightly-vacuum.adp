@@ -26,8 +26,8 @@ described above, you don't need to do this extra step.</p><p>Edit your crontab:<
 </pre><p>We'll set vacuum up to run nightly at 1 AM. Add the following
 line:</p><pre class="programlisting">
 0 1 * * * /usr/local/pgsql/bin/vacuumdb <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
-</pre><div class="cvstag">($Id: database-maintenance.xml,v 1.8 2006/07/17
-05:38:37 torbenb Exp $)</div>
+</pre><div class="cvstag">($Id: install-next-nightly-vacuum.html,v
+1.23.2.1 2015/09/23 11:54:36 gustafn Exp $)</div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 		    leftLink="install-openacs-delete-tablespace" leftLabel="Prev" leftTitle="Deleting a tablespace"

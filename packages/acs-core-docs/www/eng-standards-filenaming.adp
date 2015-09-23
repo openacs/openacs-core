@@ -219,8 +219,8 @@ rarely, only when they are exceedingly useful.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="eng-standards-filenaming-tcllib" id="eng-standards-filenaming-tcllib"></a>Tcl Library Files</h3></div></div></div><p>Further standards for Tcl library files are under discussion; we
-plan to include naming conventions for procs.</p><div class="cvstag">($Id: filenaming.xml,v 1.7 2014/10/27 16:39:31
-victorg Exp $)</div>
+plan to include naming conventions for procs.</p><div class="cvstag">($Id: eng-standards-filenaming.html,v 1.48.2.1
+2015/09/23 11:54:28 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

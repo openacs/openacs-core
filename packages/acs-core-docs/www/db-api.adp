@@ -601,8 +601,8 @@ db_dml foo_insert "insert into foo(baz) values(:1)" {[db_nullify_empty_string $b
           
 </pre>
 </dd>
-</dl></div><div class="cvstag">($Id: db-api.xml,v 1.13 2009/07/12 01:08:30
-donb Exp $)</div>
+</dl></div><div class="cvstag">($Id: db-api.html,v 1.50.2.1 2015/09/23
+11:54:26 gustafn Exp $)</div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="db-api-caching" id="db-api-caching"></a>Caching Database API Results</h3></div></div></div><p>The database API allows for direct caching of query results.
