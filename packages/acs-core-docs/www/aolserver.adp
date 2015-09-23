@@ -44,8 +44,8 @@ wget --passive http://uptime.openacs.org/aolserver-openacs/aolserver3.3oacs1.tar
 tar xzf aolserver3.3oacs1.tar.gz</span></span>
 </pre><p>This section also relies on some OpenACS files, which you can
 get with <a class="xref" href="openacs-unpack" title="Unpack the OpenACS tarball">the section called
-â€œUnpack the OpenACS
-tarballâ€</a>.</p>
+&ldquo;Unpack the OpenACS
+tarball&rdquo;</a>.</p>
 </li><li class="listitem">
 <a name="install-aolserver-compile" id="install-aolserver-compile"></a><p>
 <b>Compile AOLserver. </b>Compile and install

@@ -284,8 +284,8 @@ your index page:</p><pre class="programlisting">
           
 </pre><p>Finally you need a an <code class="computeroutput">index.vuh</code> in your www folder to rewrite the
 URLs correctly, <a class="xref" href="tutorial-vuh" title="Using .vuh files for pretty urls">the section called
-â€œUsing .vuh files for pretty
-urlsâ€</a>:</p><pre class="programlisting">
+&ldquo;Using .vuh files for pretty
+urls&rdquo;</a>:</p><pre class="programlisting">
                 set url /[ad_conn extra_url]
 
                 if {[regexp {^/+cat/+([^/]+)/*} $url \

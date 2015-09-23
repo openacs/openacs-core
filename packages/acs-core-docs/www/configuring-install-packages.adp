@@ -36,8 +36,8 @@ you have all necessary packages that the package you want depends
 on. If you're installing from Local Files, and you are missing any
 packages, you may have to add the packages your desired package
 depends on: <a class="xref" href="upgrade-openacs-files" title="Upgrading the OpenACS files">the section called
-â€œUpgrading the OpenACS
-filesâ€</a>
+&ldquo;Upgrading the OpenACS
+files&rdquo;</a>
 </p><p>If you run into any errors at all, check your
 /var/lib/aolserver/$OPENACS_SERVICE_NAME/log/error.log file, and
 post your error on the OpenACS forums</p><p>Once the package has been installed, then you will need to

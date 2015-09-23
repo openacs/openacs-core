@@ -26,7 +26,7 @@ cvs commit -m "Update package to version 1.6."
 cvs tag notes-1-6-final
 cvs tag -F openacs-5-1-compat
 </pre><p>Of course, make sure you write upgrade scripts (<a class="xref" href="tutorial-upgrade-scripts" title="Writing upgrade scripts">the section called
-â€œWriting upgrade scriptsâ€</a>)</p>
+&ldquo;Writing upgrade scripts&rdquo;</a>)</p>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 		    leftLink="tutorial-distribute" leftLabel="Prev" leftTitle="Prepare the package for

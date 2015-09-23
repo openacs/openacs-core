@@ -308,7 +308,7 @@ aa_register_case \
 #    indent-tabs-mode: nil
 # End:
 </pre><p>See also <a class="xref" href="automated-testing-best-practices" title="Automated Testing">the section called
-â€œAutomated Testingâ€</a>.</p>
+&ldquo;Automated Testing&rdquo;</a>.</p>
 </div>
 </div>
 </div>

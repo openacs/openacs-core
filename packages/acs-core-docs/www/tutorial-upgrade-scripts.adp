@@ -24,8 +24,8 @@ this file. Test this out very well, because data model changes are
 more serious and fundamental changes than the program .tcl
 files.</p><p>Now use the APM to create a new package version 1.0b2. Commit
 all your changes, tag the release (<a class="xref" href="tutorial-upgrades" title="Distributing upgrades of your package">the section called
-â€œDistributing upgrades of your
-packageâ€</a>), and both new installations and upgrades
+&ldquo;Distributing upgrades of your
+package&rdquo;</a>), and both new installations and upgrades
 will be taken care of.</p>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

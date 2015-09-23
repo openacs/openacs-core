@@ -124,7 +124,7 @@ admin password: xxxx
 ######################################################################
 [root root]#
 </pre><p>You can proceed to <a class="xref" href="openacs" title="Next Steps">the section
-called â€œNext Stepsâ€</a>.</p>
+called &ldquo;Next Steps&rdquo;</a>.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="install-from-tarball" id="install-from-tarball"></a>Installation Option 2: Install from
@@ -272,7 +272,7 @@ SVRMGR&gt; <strong class="userinput"><code>exit;</code></strong>
 </pre><p>Your table space is now ready. In case you are trying to delete
 a previous OpenACS installation, consult these commands in
 <a class="xref" href="install-openacs-delete-tablespace" title="Deleting a tablespace">the section called
-â€œDeleting a tablespaceâ€</a>
+&ldquo;Deleting a tablespace&rdquo;</a>
 below.</p>
 </li><li class="listitem">
 <p>Make sure that you can login to Oracle using your <span class="emphasis"><em>service_name</em></span> account:</p><pre class="programlisting">
@@ -286,8 +286,8 @@ SQL&gt; <strong class="userinput"><code>exit;</code></strong>
 </pre><p>You should see today's date in a format 'YYYY-MM-DD.' If you
 can't login, try redoing step 1 again. If the date is in the wrong
 format, make sure you followed the steps outlined in <a class="xref" href="oracle" title="Troubleshooting Oracle Dates">the section called
-â€œTroubleshooting Oracle
-Datesâ€</a>
+&ldquo;Troubleshooting Oracle
+Dates&rdquo;</a>
 </p>
 </li>
 </ol></div>
@@ -604,8 +604,8 @@ ORA_NLS33=$ORACLE_HOME/ocommon/nls/admin/data
 </ul></div>
 </li><li class="listitem"><p>Test your <a class="link" href="backup-recovery" title="Chapter 8. Backup and Recovery">backup and
 recovery</a> procedure.</p></li><li class="listitem"><p>Set up <a class="xref" href="uptime" title="External uptime validation">the section called
-â€œExternal uptime
-validationâ€</a>.</p></li>
+&ldquo;External uptime
+validation&rdquo;</a>.</p></li>
 </ul></div><div class="cvstag">($Id: openacs.html,v 1.51.2.1 2015/09/23
 11:54:44 gustafn Exp $)</div>
 </div>

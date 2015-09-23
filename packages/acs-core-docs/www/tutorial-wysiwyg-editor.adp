@@ -16,8 +16,8 @@ WYSIWYG</h2></div></div></div><div class="authorblurb">
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><p>Most of the forms in OpenACS are created using the form builder,
 see <a class="xref" href="form-builder" title="Using Form Builder: building html forms dynamically">the section
-called â€œUsing Form Builder: building html forms
-dynamicallyâ€</a>. For detailed information on the API
+called &ldquo;Using Form Builder: building html forms
+dynamically&rdquo;</a>. For detailed information on the API
 take a look <a class="ulink" href="/api-doc/proc-view?proc=ad_form" target="_top">here</a>.</p><p>The following section shows how you can modify your form to
 allow WYSIWYG functionalities.</p><p>Convert your page to use <code class="code">ad_form</code> (some
 changes but worth it)</p><p>Here an examples. From:</p><pre class="programlisting">

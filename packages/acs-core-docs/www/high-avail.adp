@@ -11,8 +11,8 @@ Chapter 6. Production Environments"
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="high-avail" id="high-avail"></a>High Availability/High Performance
 Configurations</h2></div></div></div><p>See also <a class="xref" href="remote-postgres" title="Running a PostgreSQL database on another server">the section
-called â€œRunning a PostgreSQL database on another
-serverâ€</a>.</p><div class="figure">
+called &ldquo;Running a PostgreSQL database on another
+server&rdquo;</a>.</p><div class="figure">
 <a name="idp140480064824128" id="idp140480064824128"></a><p class="title"><b>Figure 6.1. Multiple-server
 configuration</b></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/hpha.png" align="middle" alt="Multiple-server configuration"></div></div>
 </div><br class="figure-break">

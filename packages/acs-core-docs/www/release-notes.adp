@@ -298,8 +298,8 @@ automated testing, which is not comprehensive. This release
 contains work done on the translation server
 http://translate.openacs.org through 7 Nov 2003.</p><p>Please report bugs using our <a class="ulink" href="http://openacs.org/bugtracker/openacs/" target="_top">Bug
 Tracker</a> at the <a class="ulink" href="http://openacs.org/" target="_top">OpenACS website</a>.</p><p>You may want to begin by reading our installation documentation
-for <a class="xref" href="unix-installation" title="a Unix-like system">the section called â€œa
-Unix-like systemâ€</a>. Note that the Windows
+for <a class="xref" href="unix-installation" title="a Unix-like system">the section called &ldquo;a
+Unix-like system&rdquo;</a>. Note that the Windows
 documentation is not current for OpenACS 5.7.0, but an alternative
 is to use John Sequeira's <a class="ulink" href="http://www.pobox.com/~johnseq/projects/oasisvm/" target="_top">Oasis VM project</a>.</p><p>After installation, the full documentation set can be found by
 visiting <code class="filename">http://yourserver/doc</code>.</p><p>New features in this release:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">

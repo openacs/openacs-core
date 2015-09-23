@@ -13,8 +13,8 @@ Chapter 16. Releasing OpenACS"
 Core and .LRN</h2></div></div></div><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem"><p>
 <b>Update Translations. </b><a class="xref" href="update-translations" title="How to Update the translations">the section called
-â€œHow to Update the
-translationsâ€</a>
+&ldquo;How to Update the
+translations&rdquo;</a>
 </p></li><li class="listitem">
 <p>
 <b>Rebuild the Changelog. </b>Rebuild the Changelog.

@@ -14,19 +14,19 @@ Chapter 2. Installation Overview"
 Unix-like OS</a> or <a class="xref" href="install-redhat" title="Appendix A. Install Red Hat 8/9">Appendix A,
 <i>Install Red Hat 8/9</i>
 </a> for more details). See the <a class="xref" href="individual-programs" title="Table 2.2. Version Compatibility Matrix">Table 2.2,
-â€œVersion Compatibility
-Matrixâ€</a>.</p></li><li class="listitem"><p>Install a database (see <a class="xref" href="oracle" title="Install Oracle 8.1.7">the section called
-â€œInstall Oracle 8.1.7â€</a> or
+&ldquo;Version Compatibility
+Matrix&rdquo;</a>.</p></li><li class="listitem"><p>Install a database (see <a class="xref" href="oracle" title="Install Oracle 8.1.7">the section called
+&ldquo;Install Oracle 8.1.7&rdquo;</a> or
 <a class="xref" href="postgres" title="Install PostgreSQL">Install PostgreSQL</a>).</p></li><li class="listitem"><p>Install AOLserver (<a class="xref" href="aolserver4" title="Install AOLserver 4">Install AOLserver 4</a>) .</p></li><li class="listitem"><p>Create a unique database and system user. Install the OpenACS
 tarball, start and AOLserver instance, and use the OpenACS web
 pages to complete installation (see <a class="xref" href="openacs" title="Install OpenACS 5.7.0">Install OpenACS
 5.7.0</a>).</p></li>
 </ol></div><p>Specific instructions are available for Mac OS X and Windows2000
 (see <a class="xref" href="mac-installation" title="OpenACS Installation Guide for Mac OS X">the section called
-â€œOpenACS Installation Guide for Mac OS
-Xâ€</a> or <a class="xref" href="win2k-installation" title="OpenACS Installation Guide for Windows2000">the section called
-â€œOpenACS Installation Guide for
-Windows2000â€</a>).</p><div class="sect2">
+&ldquo;OpenACS Installation Guide for Mac OS
+X&rdquo;</a> or <a class="xref" href="win2k-installation" title="OpenACS Installation Guide for Windows2000">the section called
+&ldquo;OpenACS Installation Guide for
+Windows2000&rdquo;</a>).</p><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="install-rpms" id="install-rpms"></a>Binaries and other shortcuts</h3></div></div></div><p>You can try out OpenACS using some binary installers. In
 general, they are not yet supported by the community, so they are
@@ -44,8 +44,8 @@ specifications:</p><div class="itemizedlist"><ul class="itemizedlist" style="lis
 <li class="listitem"><p>128MB RAM (much more if you want Oracle)</p></li><li class="listitem"><p>1GB free space on your hard drive (much more if you want
 Oracle)</p></li><li class="listitem"><p>A Unix-like operating system with Tcl, tDOM, and a mail
 transport agent like sendmail or qmail. (see <a class="xref" href="individual-programs" title="Prerequisite Software">the
-section called â€œPrerequisite
-Softwareâ€</a>)</p></li>
+section called &ldquo;Prerequisite
+Software&rdquo;</a>)</p></li>
 </ul></div><p>All of the software mentioned is open-source and available
 without direct costs, except for Oracle. You can obtain a free copy
 of Oracle for development purposes. This is described in the

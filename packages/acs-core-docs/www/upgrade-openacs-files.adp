@@ -22,8 +22,8 @@ the last method was added, which automatically changes the file
 system for you. If you are using the last method, you can skip this
 page. This page describes whether or not you need to be upgrading
 using this page or not: <a class="xref" href="upgrade-5-0-dot" title="Upgrading an OpenACS 5.0.0 or greater installation">the
-section called â€œUpgrading an OpenACS 5.0.0 or
-greater installationâ€</a>
+section called &ldquo;Upgrading an OpenACS 5.0.0 or
+greater installation&rdquo;</a>
 </p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">

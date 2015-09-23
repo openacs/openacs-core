@@ -23,11 +23,11 @@ acs-kernel/sql/postgres/upgrade-4.4-4.5.sql. See <a class="ulink" href="http://o
 <li class="listitem"><p>
 <b>Make a Backup. </b>Back up the database and file
 system (see <a class="xref" href="snapshot-backup" title="Manual backup and recovery">the section called
-â€œManual backup and
-recoveryâ€</a>).</p></li><li class="listitem"><p>
+&ldquo;Manual backup and
+recovery&rdquo;</a>).</p></li><li class="listitem"><p>
 <b>OPTIONAL: Upgrade OpenFTS. </b><a class="xref" href="upgrade-supporting" title="Upgrading OpenFTS from 0.2 to 0.3.2">the section called
-â€œUpgrading OpenFTS from 0.2 to
-0.3.2â€</a>
+&ldquo;Upgrading OpenFTS from 0.2 to
+0.3.2&rdquo;</a>
 </p></li><li class="listitem">
 <p>Stop the server</p><pre class="screen">
 [root root]# <strong class="userinput"><code>svc -d /service/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
@@ -35,8 +35,8 @@ recoveryâ€</a>).</p></li><li class="listitem"><p>
 </pre>
 </li><li class="listitem"><p>
 <b>Upgrade the file system. </b><a class="xref" href="upgrade-openacs-files" title="Upgrading the OpenACS files">the section called
-â€œUpgrading the OpenACS
-filesâ€</a>
+&ldquo;Upgrading the OpenACS
+files&rdquo;</a>
 </p></li><li class="listitem">
 <p><span class="strong"><strong>Start the
 server</strong></span></p><pre class="screen">

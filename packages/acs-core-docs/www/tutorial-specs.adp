@@ -12,8 +12,8 @@ Chapter 10. Advanced Topics"
 <a name="tutorial-specs" id="tutorial-specs"></a>Write the Requirements and Design Specs</h2></div></div></div><p>Before you get started you should make yourself familiar with
 the tags that are used to write your documentation. For tips on
 editing SGML files in emacs, see <a class="xref" href="docbook-primer" title="OpenACS Documentation Guide">the
-section called â€œOpenACS Documentation
-Guideâ€</a>.</p><p>It's time to document. For the tutorial we'll use pre-written
+section called &ldquo;OpenACS Documentation
+Guide&rdquo;</a>.</p><p>It's time to document. For the tutorial we'll use pre-written
 documentation. When creating a package from scratch, start by
 copying the documentation template from <code class="computeroutput">/var/lib/aolserver/openacs-dev/packages/acs-core-docs/xml/docs/xml/package-documentation-template.xml</code>
 to <code class="computeroutput">myfirstpackage/www/docs/xml/index.xml</code>.</p><p>You then edit that file with emacs to write the requirements and
