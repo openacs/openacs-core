@@ -47,20 +47,15 @@ set adp_lvl [adp_level]
 set file_list [list]
 set doc_root $::acs::rootdir/packages/acs-templating/www/doc
 
-#debugging:
-template::util::display_value doc_root
+#debugging
+ns_log notice "acs-templating/doc/gen/generated-docs.tcl: doc_root $doc_root"
 
-set namespace_template [template::util::read_file \
-	$doc_root/gen/namespace-template.adp]
-
+set namespace_template [template::util::read_file $doc_root/gen/namespace-template.adp]
 set dir [ns_library private]
 
 # debugging
-set svr_root $::acs::rootdir
-
-
-set dir [list $svr_root/packages/cms/tcl $svr_root/packages/acs-templating/tcl]
-template::util::display_value dir
+set dir [list $::acs::rootdir/packages/cms/tcl $::acs::rootdir/packages/acs-templating/tcl]
+ns_log notice "acs-templating/doc/gen/generated-docs.tcl: dir $dir"
 
 set parsed_list [doc::parse_tcl_library $dir]
 
@@ -126,10 +121,9 @@ foreach namespace_entry $parsed_list {
     set namespace_code [template::adp_compile -string $namespace_template]
 
     #debug
-    template::util::display_value namespace_code
+    ns_log notice "acs-templating/doc/gen/generated-docs.tcl: namespace_code $namespace_code"
     
     set namespace_output [template::adp_eval namespace_code]
-
     ns_log notice "\nwriting $namespace_page\n"
     
     template::util::write_to_file $namespace_page $namespace_output

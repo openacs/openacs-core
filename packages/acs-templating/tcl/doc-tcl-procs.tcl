@@ -175,8 +175,7 @@ ad_proc -private -deprecated template::util::display_value { ref } {
     @see use simple "ns_log ...." instead
 } {
     upvar $ref value
-    ns_log notice "$ref: $value
-"
+    ns_log notice "$ref: $value"
 }
 
 
@@ -606,13 +605,13 @@ ad_proc -private doc::parse_tcl_library { dir_list } {
 
   foreach dir $dir_list {
 
-  #debug
-  #template::util::display_value dir
+      #debug
+      #template::util::display_value dir
 
-  # using this lame hack since most aD servers are running an earlier version of Tcl than 8.3,
-  # which supports the -directory switch that this hack emulates
-  append file_list [glob -nocomplain $dir/*.tcl $dir/*/*.tcl $dir/*/*/*.tcl $dir/*/*/*/*.tcl ]
-  append file_list " "
+      # using this lame hack since most aD servers are running an earlier version of Tcl than 8.3,
+      # which supports the -directory switch that this hack emulates
+      append file_list [glob -nocomplain $dir/*.tcl $dir/*/*.tcl $dir/*/*/*.tcl $dir/*/*/*/*.tcl ]
+      append file_list " "
   }
 
   #debugging
