@@ -7,10 +7,23 @@ ad_page_contract {
 
 } {
     {checked_by_default_p:boolean 0}
+    {operation:word all}
 }
 
 set title "Package Installation"
 set context [list [list "/acs-admin/apm/" "Package Manager"] $title]
+
+set dimensional_list {
+    {
+        operation "Operation:" all {
+	    { upgrade "Upgrade" {} }
+	    { install "Install" {} }
+	    { all "All" {} }
+	}
+    }
+}
+
+set dimensional_list [ad_dimensional $dimensional_list]
 
 
 ### Get all the spec files
@@ -83,29 +96,35 @@ if { $spec_files eq "" } {
     append body {
         <h2>Select Packages to Install</h2><p>
         <p>Please select the set of packages you'd like to install.</p>
-    }
-
+    } [subst {
+        <div style="margin: 0 auto;">
+        $dimensional_list
+        </div>
+    }]
+    
     set formName "pkgsForm"
     append body [subst {
 
         <script type="text/javascript">
         function uncheckAll() {
             var install_form = document.getElementsByName('$formName')\[0\];
-            for (var i = 0; i < [llength $spec_files]; ++i)
-            install_form.elements\[i\].checked = false;
-            this.href='';
+            for (var i = 0; i < install_form.length; ++i) {
+                install_form.elements\[i\].checked = false;
+            }
         }
         function checkAll() {
             var install_form = document.getElementsByName('$formName')\[0\];
-            for (var i = 0; i < [llength $spec_files]; ++i)
-            install_form.elements\[i\].checked = true;
-            this.href='';
+            for (var i = 0; i < install_form.length; ++i) {
+                install_form.elements\[i\].checked = true;
+                //install_form.elements\[i\].href = '';
+            }
         }
         </script>
-        <a href="packages-install?checked_by_default_p=0" onclick="javascript:uncheckAll();return false"><b>uncheck all boxes</b></a> |
-        <a href="packages-install?checked_by_default_p=1" onclick="javascript:checkAll(); return false"><b>check all boxes</b></a>
+        <a href="#" onclick="javascript:uncheckAll();return false;"><b>uncheck all boxes</b></a> |
+        <a href="#" onclick="javascript:checkAll();return false;"><b>check all boxes</b></a>
     }]
-
+    #packages-install?checked_by_default_p=1
+    
     append body "<form name='$formName' action='packages-install-2' method='post'>\n"
 
     # Client properties do not deplete the limited URL variable space.
@@ -133,9 +152,9 @@ if { $spec_files eq "" } {
     }
     
     if { $checked_by_default_p } {
-        set widget [apm_package_selection_widget $pkg_info_list $pkg_key_list]
+        set widget [apm_package_selection_widget $pkg_info_list $pkg_key_list $operation]
     } else {
-        set widget [apm_package_selection_widget $pkg_info_list]
+        set widget [apm_package_selection_widget $pkg_info_list "" $operation]
     }
 
     if {$widget eq ""} {
