@@ -953,8 +953,9 @@ ad_proc -public ad_page_contract {
                 lappend $variable_to_set $actual_value
             } else {
                 if { [info exists $variable_to_set] } {
-                    ad_complain -key $formal_name:-doublevalue [_ acs-tcl.lt_Youve_supplied_two_va]
-                    ns_log Warning "User experienced Youve_supplied_two_va when submitting a form related to path_info: [ad_conn path_info]"
+                    set complaint [_ acs-tcl.lt_Youve_supplied_two_va]
+                    ad_complain -key $formal_name:-doublevalue $complaint
+                    ns_log Warning "User experienced '$complaint' when submitting a form related to path_info: [ad_conn path_info]"
                     continue
                 } else {
                     set $variable_to_set $actual_value
@@ -1384,11 +1385,11 @@ ad_proc -public ad_page_contract_filter {
 
     if {$prior_type eq "internal"} {
 	ns_mutex unlock $mutex
-	return -code error "[_ acs-tcl.lt_The_flag_name_name_is]"
+	return -code error [_ acs-tcl.lt_The_flag_name_name_is]
     } elseif { $prior_type ne "" } {
 	set prior_script [ad_page_contract_filter_script $name]
 	if { $prior_script ne $script } {
-	    ns_log Warning "[_ acs-tcl.lt_Multiple_definitions_]"
+	    ns_log Warning [_ acs-tcl.lt_Multiple_definitions_]
 	}
     }
 
