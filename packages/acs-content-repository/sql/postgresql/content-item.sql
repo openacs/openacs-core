@@ -52,12 +52,7 @@ $$ LANGUAGE plpgsql stable;
 -- new 19 param version of content_item__new (now its 20 with package_id)
 
 
--- old define_function_args('content_item__new','name,parent_id,item_id,locale,creation_date;now,creation_user,context_id,creation_ip,item_subtype;content_item,content_type;content_revision,title,description,mime_type;text/plain,nls_language,text,data,relation_tag,is_live;f,storage_type;null,package_id')
--- new
 select define_function_args('content_item__new','name,parent_id;null,item_id;null,locale;null,creation_date;now,creation_user;null,context_id;null,creation_ip;null,item_subtype;content_item,content_type;content_revision,title;null,description;null,mime_type;text/plain,nls_language;null,text;null,data;null,relation_tag;null,is_live;f,storage_type;null,package_id;null');
-
-
-
 
 --
 -- procedure content_item__new/20
@@ -1057,8 +1052,8 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-select define_function_args('content_item__is_published','item_id');
 
+select define_function_args('content_item__is_published','item_id');
 
 --
 -- procedure content_item__is_published/1
@@ -1083,8 +1078,8 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql stable;
 
-select define_function_args('content_item__is_publishable','item_id');
 
+select define_function_args('content_item__is_publishable','item_id');
 
 --
 -- procedure content_item__is_publishable/1
@@ -1205,8 +1200,8 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql stable;
 
-select define_function_args('content_item__is_valid_child','item_id,content_type,relation_tag');
 
+select define_function_args('content_item__is_valid_child','item_id,content_type,relation_tag');
 
 --
 -- procedure content_item__is_valid_child/3
@@ -1351,6 +1346,7 @@ $$ LANGUAGE plpgsql stable;
 -- 6) delete keyword associations
 -- 7) delete all associated comments
 
+
 select define_function_args('content_item__del','item_id');
 
 --
@@ -1491,12 +1487,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 
--- old define_function_args('content_item__get_id','item_path,root_folder_id,resolve_index;f')
--- new
 select define_function_args('content_item__get_id','item_path,root_folder_id;null,resolve_index;f');
-
-
-
 
 --
 -- procedure content_item__get_id/3
@@ -1688,10 +1679,9 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+
 -- I hard code the content_item_globals.c_root_folder_id here
 select define_function_args('content_item__get_virtual_path','item_id,root_folder_id;-100');
-
-
 
 --
 -- procedure content_item__get_virtual_path/2
@@ -1729,7 +1719,6 @@ $$ LANGUAGE plpgsql;
 
 
 
--- added
 select define_function_args('content_item__write_to_file','item_id,root_path');
 
 --
@@ -1762,9 +1751,8 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+
 select define_function_args('content_item__register_template','item_id,template_id,use_context');
-
-
 
 --
 -- procedure content_item__register_template/3
@@ -1803,11 +1791,7 @@ $$ LANGUAGE plpgsql;
 
 
 
--- old define_function_args('content_item__unregister_template','item_id,template_id,use_context')
--- new
 select define_function_args('content_item__unregister_template','item_id,template_id;null,use_context;null');
-
-
 
 --
 -- procedure content_item__unregister_template/3
@@ -1853,9 +1837,8 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+
 select define_function_args('content_item__get_template','item_id,use_context');
-
-
 
 --
 -- procedure content_item__get_template/2
@@ -1907,8 +1890,8 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql stable strict;
 
-select define_function_args('content_item__get_content_type','item_id');
 
+select define_function_args('content_item__get_content_type','item_id');
 
 --
 -- procedure content_item__get_content_type/1
@@ -1932,11 +1915,9 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql stable strict;
 
+
+
 select define_function_args('content_item__get_live_revision','item_id');
-
-select define_function_args('content_item__get_live_revision','item_id');
-
-
 
 --
 -- procedure content_item__get_live_revision/1
@@ -1960,8 +1941,8 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql stable strict;
 
-select define_function_args('content_item__set_live_revision','revision_id,publish_status;ready');
 
+select define_function_args('content_item__set_live_revision','revision_id,publish_status;ready');
 
 --
 -- procedure content_item__set_live_revision/1
@@ -2000,8 +1981,8 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-select define_function_args('content_item__set_live_revision','revision_id,publish_status;ready');
 
+select define_function_args('content_item__set_live_revision','revision_id,publish_status;ready');
 
 --
 -- procedure content_item__set_live_revision/2
@@ -2038,8 +2019,8 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-select define_function_args('content_item__unset_live_revision','item_id');
 
+select define_function_args('content_item__unset_live_revision','item_id');
 
 --
 -- procedure content_item__unset_live_revision/1
@@ -2072,12 +2053,8 @@ END;
 $$ LANGUAGE plpgsql;
 
 
--- old define_function_args('content_item__set_release_period','item_id,start_when,end_when')
--- new
+
 select define_function_args('content_item__set_release_period','item_id,start_when;null,end_when;null');
-
-
-
 
 --
 -- procedure content_item__set_release_period/3
@@ -2115,11 +2092,8 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-select define_function_args('content_item__get_revision_count','item_id');
 
 select define_function_args('content_item__get_revision_count','item_id');
-
-
 
 --
 -- procedure content_item__get_revision_count/1
@@ -2143,8 +2117,8 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql stable;
 
-select define_function_args('content_item__get_context','item_id');
 
+select define_function_args('content_item__get_context','item_id');
 
 --
 -- procedure content_item__get_context/1
@@ -2203,8 +2177,8 @@ return null;
 END;
 $$ LANGUAGE plpgsql;
 
-select define_function_args('content_item__move','item_id,target_folder_id,name');
 
+select define_function_args('content_item__move','item_id,target_folder_id,name');
 
 --
 -- procedure content_item__move/3
@@ -2253,8 +2227,8 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-select define_function_args('content_item__generic_move','item_id,target_item_id,name');
 
+select define_function_args('content_item__generic_move','item_id,target_item_id,name');
 
 --
 -- procedure content_item__generic_move/3
@@ -2341,8 +2315,6 @@ $$ LANGUAGE plpgsql;
 -- 4) copy the latest revision from the original item to the new item (if any)
 
 
-
--- added
 select define_function_args('content_item__copy2','item_id,target_folder_id,creation_user,creation_ip;null');
 
 --
@@ -2371,11 +2343,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 
--- old define_function_args('content_item__copy','item_id,target_folder_id,creation_user,creation_ip,name')
--- new
 select define_function_args('content_item__copy','item_id,target_folder_id,creation_user,creation_ip;null,name;null');
-
-
 
 --
 -- procedure content_item__copy/5
@@ -2534,9 +2502,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 
-
 select define_function_args('content_item__get_latest_revision','item_id');
-
 
 --
 -- procedure content_item__get_latest_revision/1
@@ -2569,8 +2535,8 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql strict stable;
 
-select define_function_args('content_item__get_best_revision','item_id');
 
+select define_function_args('content_item__get_best_revision','item_id');
 
 --
 -- procedure content_item__get_best_revision/1
@@ -2596,9 +2562,8 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql stable strict;
 
+
 select define_function_args('content_item__get_title','item_id,is_live;f');
-
-
 --
 -- procedure content_item__get_title/2
 --
@@ -2671,9 +2636,8 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql stable strict;
 
+
 select define_function_args('content_item__get_publish_date','item_id,is_live;f');
-
-
 --
 -- procedure content_item__get_publish_date/2
 --
@@ -2712,9 +2676,8 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql stable;
 
+
 select define_function_args('content_item__is_subclass','object_type,supertype');
-
-
 --
 -- procedure content_item__is_subclass/2
 --
@@ -2739,12 +2702,8 @@ END;
 $$ LANGUAGE plpgsql stable;
 
 
--- old define_function_args('content_item__relate','item_id,object_id,relation_tag;generic,order_n,relation_type;cr_item_rel')
--- new
+
 select define_function_args('content_item__relate','item_id,object_id,relation_tag;generic,order_n;null,relation_type;cr_item_rel');
-
-
-
 --
 -- procedure content_item__relate/5
 --
@@ -2855,12 +2814,9 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+
+
 select define_function_args('content_item__unrelate','rel_id');
-
-select define_function_args('content_item__unrelate','rel_id');
-
-
-
 --
 -- procedure content_item__unrelate/1
 --
@@ -2880,12 +2836,9 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+
+
 select define_function_args('content_item__is_index_page','item_id,folder_id');
-
-select define_function_args('content_item__is_index_page','item_id,folder_id');
-
-
-
 --
 -- procedure content_item__is_index_page/2
 --
@@ -2904,10 +2857,8 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql stable;
 
+
 select define_function_args('content_item__get_parent_folder','item_id');
-
-
-
 --
 -- procedure content_item__get_parent_folder/1
 --
