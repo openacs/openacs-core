@@ -1236,8 +1236,12 @@ ad_proc -public apm_package_id_from_key {package_key} {
 } {
     set var ::apm::package_id_from_key($package_key)
     if {[info exists $var]} {return [set $var]}
-    set $var [util_memoize [list apm_package_id_from_key_mem $package_key]]
-    #set $var [ns_cache_eval ns:memoize apm_package_id_from_key_$package_key [list apm_package_id_from_key_mem $package_key]]
+    set result [util_memoize [list apm_package_id_from_key_mem $package_key]]
+    #set result [ns_cache_eval ns:memoize apm_package_id_from_key_$package_key [list apm_package_id_from_key_mem $package_key]]
+    if {$result != 0} {
+        set $var $result
+    }
+    return $result
 }
 
 ad_proc -private apm_package_id_from_key_mem {package_key} {
