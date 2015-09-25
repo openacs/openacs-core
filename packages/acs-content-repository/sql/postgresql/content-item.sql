@@ -1054,7 +1054,6 @@ $$ LANGUAGE plpgsql;
 
 
 select define_function_args('content_item__is_published','item_id');
-
 --
 -- procedure content_item__is_published/1
 --
@@ -1080,7 +1079,6 @@ $$ LANGUAGE plpgsql stable;
 
 
 select define_function_args('content_item__is_publishable','item_id');
-
 --
 -- procedure content_item__is_publishable/1
 --
@@ -1202,7 +1200,6 @@ $$ LANGUAGE plpgsql stable;
 
 
 select define_function_args('content_item__is_valid_child','item_id,content_type,relation_tag');
-
 --
 -- procedure content_item__is_valid_child/3
 --
@@ -1348,7 +1345,6 @@ $$ LANGUAGE plpgsql stable;
 
 
 select define_function_args('content_item__del','item_id');
-
 --
 -- procedure content_item__del/1
 --
@@ -1488,7 +1484,6 @@ $$ LANGUAGE plpgsql;
 
 
 select define_function_args('content_item__get_id','item_path,root_folder_id;null,resolve_index;f');
-
 --
 -- procedure content_item__get_id/3
 --
@@ -1682,7 +1677,6 @@ $$ LANGUAGE plpgsql;
 
 -- I hard code the content_item_globals.c_root_folder_id here
 select define_function_args('content_item__get_virtual_path','item_id,root_folder_id;-100');
-
 --
 -- procedure content_item__get_virtual_path/2
 --
@@ -1720,7 +1714,6 @@ $$ LANGUAGE plpgsql;
 
 
 select define_function_args('content_item__write_to_file','item_id,root_path');
-
 --
 -- procedure content_item__write_to_file/2
 --
@@ -1753,7 +1746,6 @@ $$ LANGUAGE plpgsql;
 
 
 select define_function_args('content_item__register_template','item_id,template_id,use_context');
-
 --
 -- procedure content_item__register_template/3
 --
@@ -1792,7 +1784,6 @@ $$ LANGUAGE plpgsql;
 
 
 select define_function_args('content_item__unregister_template','item_id,template_id;null,use_context;null');
-
 --
 -- procedure content_item__unregister_template/3
 --
@@ -1839,7 +1830,6 @@ $$ LANGUAGE plpgsql;
 
 
 select define_function_args('content_item__get_template','item_id,use_context');
-
 --
 -- procedure content_item__get_template/2
 --
@@ -1892,7 +1882,6 @@ $$ LANGUAGE plpgsql stable strict;
 
 
 select define_function_args('content_item__get_content_type','item_id');
-
 --
 -- procedure content_item__get_content_type/1
 --
@@ -1918,7 +1907,6 @@ $$ LANGUAGE plpgsql stable strict;
 
 
 select define_function_args('content_item__get_live_revision','item_id');
-
 --
 -- procedure content_item__get_live_revision/1
 --
@@ -1943,7 +1931,6 @@ $$ LANGUAGE plpgsql stable strict;
 
 
 select define_function_args('content_item__set_live_revision','revision_id,publish_status;ready');
-
 --
 -- procedure content_item__set_live_revision/1
 --
@@ -1983,7 +1970,6 @@ $$ LANGUAGE plpgsql;
 
 
 select define_function_args('content_item__set_live_revision','revision_id,publish_status;ready');
-
 --
 -- procedure content_item__set_live_revision/2
 --
@@ -2021,7 +2007,6 @@ $$ LANGUAGE plpgsql;
 
 
 select define_function_args('content_item__unset_live_revision','item_id');
-
 --
 -- procedure content_item__unset_live_revision/1
 --
@@ -2055,7 +2040,6 @@ $$ LANGUAGE plpgsql;
 
 
 select define_function_args('content_item__set_release_period','item_id,start_when;null,end_when;null');
-
 --
 -- procedure content_item__set_release_period/3
 --
@@ -2094,7 +2078,6 @@ $$ LANGUAGE plpgsql;
 
 
 select define_function_args('content_item__get_revision_count','item_id');
-
 --
 -- procedure content_item__get_revision_count/1
 --
@@ -2119,7 +2102,6 @@ $$ LANGUAGE plpgsql stable;
 
 
 select define_function_args('content_item__get_context','item_id');
-
 --
 -- procedure content_item__get_context/1
 --
@@ -2179,7 +2161,6 @@ $$ LANGUAGE plpgsql;
 
 
 select define_function_args('content_item__move','item_id,target_folder_id,name');
-
 --
 -- procedure content_item__move/3
 --
@@ -2229,7 +2210,6 @@ $$ LANGUAGE plpgsql;
 
 
 select define_function_args('content_item__generic_move','item_id,target_item_id,name');
-
 --
 -- procedure content_item__generic_move/3
 --
@@ -2316,7 +2296,6 @@ $$ LANGUAGE plpgsql;
 
 
 select define_function_args('content_item__copy2','item_id,target_folder_id,creation_user,creation_ip;null');
-
 --
 -- procedure content_item__copy2/4
 --
@@ -2344,7 +2323,6 @@ $$ LANGUAGE plpgsql;
 
 
 select define_function_args('content_item__copy','item_id,target_folder_id,creation_user,creation_ip;null,name;null');
-
 --
 -- procedure content_item__copy/5
 --
@@ -2503,7 +2481,6 @@ $$ LANGUAGE plpgsql;
 
 
 select define_function_args('content_item__get_latest_revision','item_id');
-
 --
 -- procedure content_item__get_latest_revision/1
 --
@@ -2537,7 +2514,6 @@ $$ LANGUAGE plpgsql strict stable;
 
 
 select define_function_args('content_item__get_best_revision','item_id');
-
 --
 -- procedure content_item__get_best_revision/1
 --
