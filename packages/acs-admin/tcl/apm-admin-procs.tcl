@@ -95,13 +95,15 @@ ad_proc apm_shell_wrap { cmd } {
 
 ad_proc -private apm_package_selection_widget {
     pkg_info_list
-    {to_install ""} 
+    {to_install ""}
+    {operation "all"}
 } {
 
     Provides a widget for selecting packages.  Displays dependency information if available.
 
     @param pkg_info_list list of package infos for all packages to be listed
     @param to_install list of package_keys to install
+    @param operation filter for added operations (all, upgrade, install)
 } {
     if {$pkg_info_list eq ""} {
         return ""
@@ -162,8 +164,10 @@ ad_proc -private apm_package_selection_widget {
                 set higher_version_p 2
             }
             if {$higher_version_p == 2 } {
+                if {$operation eq "upgrade"} continue
                 set comment "New install."
             } elseif {$higher_version_p == 1 } {
+                if {$operation eq "install"} continue
                 set comment "Upgrade."
             } elseif {$higher_version_p == 0} {
                 set comment "Package version already installed."
