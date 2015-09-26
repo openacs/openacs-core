@@ -51,3 +51,9 @@ foreach dir {www tcl} {
 }
 
 nsv_unset ad_after_server_initialization .
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:
