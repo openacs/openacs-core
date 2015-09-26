@@ -200,7 +200,7 @@ ad_proc -public ad_unquotehtml {arg} {
 
     @see ad_quotehtml
 } {
-    return [string map {&gt; > &lt; < &quot; \" &amp; &} $arg]
+    return [string map {&amp; & &gt; > &lt; < &quot; \" &#34; \" &#39; '} $arg]
 }
 
 
