@@ -9,15 +9,15 @@
     <implements-subsite-p>f</implements-subsite-p>
     <inherit-templates-p>t</inherit-templates-p>
     
-    <version name="5.9.0d9" url="http://openacs.org/repository/download/apm/acs-kernel-5.9.0d9.apm">
+    <version name="5.9.0b1" url="http://openacs.org/repository/download/apm/acs-kernel-5.9.0b1.apm">
         <owner url="mailto:oct@openacs.org">OpenACS Core Team</owner>
         <summary>Routines and data models providing the foundation for OpenACS-based Web services.</summary>
-        <release-date>2013-09-08</release-date>
+        <release-date>2015-09-25</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
         <description format="text/html">The OpenACS kernel contains the core datamodel create and drop scripts for such things as objects, groups, partiies and the supporting PL/SQL and PL/pgSQL procedures.</description>
         <maturity>3</maturity>
 
-        <provides url="acs-kernel" version="5.9.0d9"/>
+        <provides url="acs-kernel" version="5.9.0b1"/>
 
         <callbacks>
         </callbacks>

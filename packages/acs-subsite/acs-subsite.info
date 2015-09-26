@@ -9,22 +9,22 @@
     <implements-subsite-p>t</implements-subsite-p>
     <inherit-templates-p>t</inherit-templates-p>
     
-    <version name="5.9.0d9" url="http://openacs.org/repository/download/apm/acs-subsite-5.9.0d9.apm">
+    <version name="5.9.0b1" url="http://openacs.org/repository/download/apm/acs-subsite-5.9.0b1.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Subsite</summary>
-        <release-date>2015-06-16</release-date>
+        <release-date>2015-09-25</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
         <description format="text/html">Provides for creating subsites within the OpenACS Community System.  Aware of parties, groups, users, portraits.  Can be themed via a per subsite master template.</description>
         <license>GPL</license>
         <maturity>3</maturity>
 
-        <provides url="acs-subsite" version="5.9.0d9"/>
-        <requires url="acs-authentication" version="5.9.0d1"/>
-        <requires url="acs-content-repository" version="5.9.0d1"/>
-        <requires url="acs-kernel" version="5.8.0d4"/>
-        <requires url="acs-tcl" version="5.9.0d1"/>
-        <requires url="acs-lang" version="5.9.0d1"/>
-        <requires url="acs-mail-lite" version="5.9.0d1"/>
+        <provides url="acs-subsite" version="5.9.0b1"/>
+        <requires url="acs-authentication" version="5.9.0b1"/>
+        <requires url="acs-content-repository" version="5.9.0b1"/>
+        <requires url="acs-kernel" version="5.9.0b1"/>
+        <requires url="acs-tcl" version="5.9.0b1"/>
+        <requires url="acs-lang" version="5.9.0b1"/>
+        <requires url="acs-mail-lite" version="5.9.0b1"/>
 
         <callbacks>
             <callback type="before-upgrade"  proc="subsite::before_upgrade"/>
