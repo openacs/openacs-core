@@ -7,10 +7,10 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
 
-    <version name="5.9.0d6" url="http://openacs.org/repository/download/apm/acs-content-repository-5.9.0d6.apm">
+    <version name="5.9.0b1" url="http://openacs.org/repository/download/apm/acs-content-repository-5.9.0b1.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>The canonical repository for OpenACS content.</summary>
-        <release-date>2015-05-03</release-date>
+        <release-date>2015-09-25</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
         <description format="text/html">Provides the API for creating and managing user generated content including 
          full support for versioning, rendering content to the filesystem, folders and composite content items, and
@@ -19,10 +19,10 @@
         <license>GPL</license>
         <maturity>3</maturity>
 
-        <provides url="acs-content-repository" version="5.9.0d6"/>
-        <requires url="acs-kernel" version="5.9.0d5"/>
-        <requires url="acs-service-contract" version="5.9.0d1"/>
-        <requires url="search" version="5.9.0d1"/>
+        <provides url="acs-content-repository" version="5.9.0b1"/>
+        <requires url="acs-kernel" version="5.9.0b1"/>
+        <requires url="acs-service-contract" version="5.9.0b1"/>
+        <requires url="search" version="5.9.0b1"/>
 
         <callbacks>
           <callback type="after-upgrade"  proc="content::apm::after_upgrade"/>
