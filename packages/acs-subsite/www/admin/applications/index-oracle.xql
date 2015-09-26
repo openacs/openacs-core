@@ -39,6 +39,6 @@
     
     order  by lower(p.instance_name)
       </querytext>
-</fullquery
+</fullquery>
  
 </queryset>
