@@ -908,11 +908,14 @@ ad_proc -public apm_package_installed_p {
 ad_proc -private apm_package_installed_p_not_cached {
     package_key
 } {
-    return [db_string apm_package_installed_p {
-      select 1 from apm_package_versions
-      where package_key = :package_key
-      and installed_p = 't'
-    } -default 0]
+    if {[catch {set installed_p [db_string apm_package_installed_p {
+        select 1 from apm_package_versions
+        where package_key = :package_key
+        and installed_p = 't'
+    } -default 0]}]} {
+        set installed_p 0
+    }
+    return $installed_p
 }
 
 ad_proc -public apm_package_enabled_p {

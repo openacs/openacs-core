@@ -191,10 +191,10 @@ aa_register_case -cats {api smoke} -procs {ad_quotehtml ad_unquotehtml} quote_un
     Test if it quote and unquote html
 } {
     #quote html
-    set html "\"<&text>\""
+    set html {"<&text>"}
     aa_log "Unquote html=$html"
     set result [ns_quotehtml $html]
-    aa_true "Quoute html=$result" [string equal "&quot;&lt;&amp;text&gt;&quot;" $result]
+    aa_true "Quoute html=$result" [string equal "&#34;&lt;&amp;text&gt;&#34;" $result]
 
     #unquote html
     set html $result

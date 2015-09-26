@@ -1112,7 +1112,7 @@ ad_proc -private apm_package_deinstall {
     # the backup directory for the package.
     regsub {@.+} [cc_email_from_party [ad_conn user_id]] "" my_email_name
 
-    set backup_dir "[apm_workspace_dir]/$package_key-removed-$my_email_name-[ns_fmttime [ns_time] "%Y%m%d-%H:%M:%S"]"
+    set backup_dir "[apm_workspace_dir]/$package_key-removed-$my_email_name-[ns_fmttime [ns_time] {%Y%m%d-%H:%M:%S}]"
 
     apm_callback_and_log $callback "
     <li>Moving <tt>packages/$package_key</tt> to $backup_dir... "
