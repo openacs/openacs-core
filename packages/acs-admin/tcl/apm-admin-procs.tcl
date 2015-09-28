@@ -95,7 +95,8 @@ ad_proc apm_shell_wrap { cmd } {
 
 ad_proc -private apm_package_selection_widget {
     pkg_info_list
-    {to_install ""} 
+    {to_install ""}
+    {operation "all"}
 } {
 
     Provides a widget for selecting packages.  Displays dependency information if available.
