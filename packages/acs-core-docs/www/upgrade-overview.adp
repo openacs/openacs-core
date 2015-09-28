@@ -26,11 +26,11 @@ install the files on your hard drive, run any appropriate database
 upgrade scripts, and prompt you to restart the server. After
 restarting the server again, the upgrade is complete.</p></li>
 </ol></div><div class="figure">
-<a name="idp140480063357440" id="idp140480063357440"></a><p class="title"><b>Figure 5.1. Upgrading
+<a name="idp140302492558672" id="idp140302492558672"></a><p class="title"><b>Figure 5.1. Upgrading
 with the APM</b></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/upgrade-apm.png" align="middle" alt="Upgrading with the APM"></div></div>
 </div><br class="figure-break"><p>It's always a good idea to precede an upgrade attempt with a
 <a class="link" href="snapshot-backup" title="Manual backup and recovery">snapshot backup</a>.</p><div class="table">
-<a name="idp140480063361120" id="idp140480063361120"></a><p class="title"><b>Table 5.1. Assumptions
+<a name="idp140302496486864" id="idp140302496486864"></a><p class="title"><b>Table 5.1. Assumptions
 in this section</b></p><div class="table-contents"><table summary="Assumptions in this section" cellspacing="0" border="1">
 <colgroup>
 <col><col>

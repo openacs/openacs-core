@@ -102,8 +102,8 @@ error.</p></li>
 </ol></div><p>At this point, <code class="computeroutput">bootstrap.tcl</code>
 is done executing. AOLserver proceeds to source the remaining files
 in the <code class="computeroutput">/tcl</code> directory (i.e.,
-unpackaged libraries) and begins listening for connections.</p><div class="cvstag">($Id: bootstrap-acs.html,v 1.49.2.1 2015/09/23
-11:54:22 gustafn Exp $)</div>
+unpackaged libraries) and begins listening for connections.</p><div class="cvstag">($&zwnj;Id: bootstrap-acs.xml,v 1.7 2006/07/17
+05:38:38 torbenb Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

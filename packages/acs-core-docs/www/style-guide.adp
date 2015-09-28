@@ -96,8 +96,8 @@ over your code and provide feedback and do the same for others.</p></li>
 </tr></thead><tbody><tr>
 <td>0.1</td><td>Creation</td><td>12/2003</td><td>Jeff Davis</td>
 </tr></tbody>
-</table></div><div class="cvstag">($Id: style-guide.html,v 1.28.2.1 2015/09/23
-11:54:54 gustafn Exp $)</div>
+</table></div><div class="cvstag">($&zwnj;Id: style-guide.xml,v 1.3 2006/07/17 05:38:37
+torbenb Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

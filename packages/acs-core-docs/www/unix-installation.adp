@@ -17,7 +17,8 @@ OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="unix-install" id="unix-install"></a>a
-Unix-like system</h3></div></div></div><p>You will need a computer running a unix-like system with the
+Unix-like system</h3></div></div></div><p>Most of the documentation in this section is kept as a
+reference. More up-to-date documentation is in the <a class="ulink" href="http://openacs.org/xowiki/openacs-system-install" target="_top">install sections in the Wiki</a>.</p><p>You will need a computer running a unix-like system with the
 following software installed:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>tdom</p></li><li class="listitem"><p>tcl --if you plan to use the OpenACS installation script</p></li><li class="listitem">
 <p>gmake and the compile and build environment.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
@@ -37,8 +38,8 @@ emacs keybindings for DocBook SGML)</p></li><li class="listitem"><p>daemontools 
 must first do <a class="xref" href="install-steps" title="Setting a global shell variable for cut and paste">Setting a
 global shell variable for cut and paste</a>.</p><p>To install a machine to the specifications of the Reference
 Platform, do the <a class="link" href="install-redhat" title="Appendix A. Install Red Hat 8/9">walkthrough
-of the Red Hat 8.0 Install for OpenACS</a>.</p><div class="cvstag">($Id: unix-installation.html,v 1.33.2.1
-2015/09/23 11:55:03 gustafn Exp $)</div>
+of the Red Hat 8.0 Install for OpenACS</a>.</p><div class="cvstag">($&zwnj;Id: os.xml,v 1.15 2006/07/17 05:38:37 torbenb
+Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

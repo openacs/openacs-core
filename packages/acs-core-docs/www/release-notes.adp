@@ -13,15 +13,16 @@ OpenACS?"
 <a name="release-notes" id="release-notes"></a>OpenACS Release Notes</h2></div></div></div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="release-notes-5-9-0" id="release-notes-5-9-0"></a>Release 5.9.0 beta</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
-<li class="listitem"><p>The release contains the 78 packages of the oacs-5-9 branch.
-These packages contain the OpenACS core packages, major application
-packages (e.g. most the ones used on OpenACS.org), and DotLRN.</p></li><li class="listitem">
-<p>Changes for all packages:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
+<li class="listitem"><p>The release of OpenACS 5.9.0 contains the 78 packages of the
+oacs-5-9 branch. These packages include the OpenACS core packages,
+the major application packages (e.g. most the ones used on
+OpenACS.org), and DotLRN 2.9.0.</p></li><li class="listitem">
+<p>Summary of changes:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
 <li class="listitem">
 <p>SQL:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: square;">
 <li class="listitem"><p>Improved performance of acs-object deletion.</p></li><li class="listitem"><p>Replaced many manual referential integrity calls by built-in
-handing in PostgreSQL.</p></li><li class="listitem"><p>Removed various manual bookeeping and deletion operations in the
-content repository by built-in handing in PostgreSQL.</p></li><li class="listitem"><p>Removed tree_sortkey on acs-objects to reduce its size and to
+handing in PostgreSQL.</p></li><li class="listitem"><p>Removed various manual bookkeeping and deletion operations in
+the content repository by built-in handing in PostgreSQL.</p></li><li class="listitem"><p>Removed tree_sortkey on acs-objects to reduce its size and to
 speedup operations, where the context-id is changed (could take on
 large installation several minutes)</p></li><li class="listitem"><p>Remove several uncalled / redundant SQL statements and
 functions.</p></li>
@@ -31,7 +32,13 @@ functions.</p></li>
 <li class="listitem"><p>Improve Performance of WebSites created with OpenACS: e.g. move
 core.js to a body requests, provide kernel parameter
 ResourcesExpireInterval to specify expiration times for
-resources.</p></li><li class="listitem"><p>Much better protection against XSS attacks.</p></li><li class="listitem"><p>Improved HTML validity (especially for admin pages)</p></li><li class="listitem"><p>Add lightweight support for ckeditor4 for templating::richtext
+resources.</p></li><li class="listitem"><p>Much better protection against XSS attacks.</p></li><li class="listitem"><p>Improved HTML validity (especially for admin pages)</p></li><li class="listitem">
+<p>Improved admin interface:</p><div class="itemizedlist"><ul class="itemizedlist compact" style="list-style-type: opencircle;">
+<li class="listitem" style="list-style-type: circle"><p>Placed all installation options to a single page.</p></li><li class="listitem" style="list-style-type: circle"><p>Added pagination to /admin/applications (was unusable for large
+sites)</p></li><li class="listitem" style="list-style-type: circle"><p>New admin pages for subsites linked from site-wide-admin package
+(/acs-admin).</p></li><li class="listitem" style="list-style-type: circle"><p>Added explanatory text to several admin pages.</p></li>
+</ul></div>
+</li><li class="listitem"><p>Add lightweight support for ckeditor4 for templating::richtext
 widget (configurable via package parameter "RichTextEditor" of
 acs-templating. ckeditor4 supports mobile devices (such as iPad,
 ...)</p></li>
@@ -42,9 +49,9 @@ acs-templating. ckeditor4 supports mobile devices (such as iPad,
 packages in order to create responsive designs, reduce hard-coding
 of paths, HTML etc.</p></li><li class="listitem"><p>Improved include-handling: All includes are now theme-able,
 interfaces of includes can be defined with ad_include_contract
-(similar to ad_page_contract).</p></li><li class="listitem"><p>Improved themability for display_templates. One can now provide
+(similar to ad_page_contract).</p></li><li class="listitem"><p>Improved them-ability for display_templates. One can now provide
 a display_template_name (similar to the sql statement name) to
-refer to display templates. This enables resuabilit and is
+refer to display templates. This enables reusability and is
 theme-able.</p></li><li class="listitem"><p>Dimensional slider reform (ad_dimensional): Removed hard-coded
 table layout from dimensional slider Add backwards compatible
 templates Move hard-coded styles into theme styling</p></li><li class="listitem"><p>Notification chunks are now theme-able as well (using
@@ -52,19 +59,21 @@ ad_include_contrat)</p></li><li class="listitem"><p>Complete template variable c
 </ul></div>
 </li><li class="listitem">
 <p>Misc:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: square;">
-<li class="listitem"><p>Improved Documentation templating (uniform appearance)</p></li><li class="listitem"><p>Make pretty-naming of acs-core packages more consistent</p></li><li class="listitem"><p>Mark unused functions of acs-tcl/tcl/table-display-procs.tcl as
+<li class="listitem"><p>Improved templating of OpenACS core documentation</p></li><li class="listitem"><p>Improved Russian Internationalization</p></li><li class="listitem"><p>Make pretty-names of acs-core packages more consistent</p></li><li class="listitem"><p>Mark unused functions of acs-tcl/tcl/table-display-procs.tcl as
 deprecated</p></li><li class="listitem">
-<p>Version numbers:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
-<li class="listitem"><p>Require PG 9.0 (End Of Life of PostgreSQL 8.4 was July 2014)</p></li><li class="listitem"><p>require XOTcl 2.0 (presented at the Tcl conference in 2011).</p></li><li class="listitem"><p>Significant performance improvement for large installations</p></li>
+<p>Version numbers:</p><div class="itemizedlist"><ul class="itemizedlist compact" style="list-style-type: opencircle;">
+<li class="listitem" style="list-style-type: circle"><p>Require PG 9.0 (End Of Life of PostgreSQL 8.4 was July 2014)</p></li><li class="listitem" style="list-style-type: circle"><p>Require XOTcl 2.0 (presented at the Tcl conference in 2011).</p></li><li class="listitem" style="list-style-type: circle"><p>Significant performance improvement for large installations</p></li>
 </ul></div>
 </li>
 </ul></div>
-</li>
+</li><li class="listitem"><p>Changes in application packages: Various bug fixes and
+improvements for e.g. file-storage, forums, news, notifications,
+xowiki.</p></li>
 </ul></div>
 </li>
 </ul></div><p>Altogether, OpenACS 5.9.0 differs from OpenACS 5.8.1 in about
-xxxx modifications (yyyy commits) contributed by zzzz
-committers.</p>
+xxxx modifications (yyyy commits) contributed by zzzz committers.
+For more details, consult the <a class="ulink" href="" target="_top">raw ChangeLog</a>.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="release-notes-5-8-1" id="release-notes-5-8-1"></a>Release 5.8.1</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
@@ -350,20 +359,20 @@ styles still using these mechanisms will break.</p></li><li class="listitem"><p>
 turned off by default via the acs-kernel parameter ExcludedFiles in
 section request-processor (The variable provides a string match
 glob list of files and is defaulted to "*/CVS/* *~")</p></li>
-</ul></div><div class="cvstag">($Id: release-notes.html,v 1.55.2.1 2015/09/23
-11:54:49 gustafn Exp $)</div>
+</ul></div><div class="cvstag">($&zwnj;Id: release-notes.xml,v 1.30.2.1 2015/09/23
+11:55:08 gustafn Exp $)</div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140480060047968" id="idp140480060047968"></a>Release 4.6.3</h3></div></div></div><p><a class="ulink" href="release-notes-4-6-3" target="_top">Release Notes for 4.6.3</a></p>
+<a name="idp140302493741664" id="idp140302493741664"></a>Release 4.6.3</h3></div></div></div><p><a class="ulink" href="release-notes-4-6-3" target="_top">Release Notes for 4.6.3</a></p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140480060049472" id="idp140480060049472"></a>Release 4.6.2</h3></div></div></div><p><a class="ulink" href="release-notes-4-6-2" target="_top">Release Notes for 4.6.2</a></p>
+<a name="idp140302493743168" id="idp140302493743168"></a>Release 4.6.2</h3></div></div></div><p><a class="ulink" href="release-notes-4-6-2" target="_top">Release Notes for 4.6.2</a></p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140480060050976" id="idp140480060050976"></a>Release 4.6</h3></div></div></div><p><a class="ulink" href="release-notes-4-6" target="_top">Release Notes for 4.6</a></p>
+<a name="idp140302493744672" id="idp140302493744672"></a>Release 4.6</h3></div></div></div><p><a class="ulink" href="release-notes-4-6" target="_top">Release Notes for 4.6</a></p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140480060052480" id="idp140480060052480"></a>Release 4.5</h3></div></div></div><p><a class="ulink" href="release-notes-4-5" target="_top">Release Notes for 4.5</a></p>
+<a name="idp140302493746176" id="idp140302493746176"></a>Release 4.5</h3></div></div></div><p><a class="ulink" href="release-notes-4-5" target="_top">Release Notes for 4.5</a></p>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
