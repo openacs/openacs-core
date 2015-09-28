@@ -43,14 +43,14 @@ entire &majorversion;.&minorversion; release sequence <xref linkend="changelog">
   <title>Release 5.9.0 beta</title>
   <itemizedlist>
     <listitem><para>
-      The release contains the 78 packages of the oacs-5-9 branch.
-      These packages contain the OpenACS core packages, major
+      The release of OpenACS 5.9.0 contains the 78 packages of the oacs-5-9 branch.
+      These packages include the OpenACS core packages, the major
       application packages (e.g. most the ones used on OpenACS.org), and
-      DotLRN.
+      DotLRN 2.9.0.
     </para></listitem>
 
     <listitem><para>
-      Changes for all packages:
+      Summary of changes:
       <itemizedlist>
 	<listitem><para>SQL:
 	<itemizedlist>
@@ -65,7 +65,7 @@ entire &majorversion;.&minorversion; release sequence <xref linkend="changelog">
 	  </para></listitem>
 
 	  <listitem><para>
-            Removed various manual bookeeping and deletion operations
+            Removed various manual bookkeeping and deletion operations
 	    in the content repository by built-in handing in PostgreSQL.
 	  </para></listitem>
 
@@ -99,6 +99,31 @@ entire &majorversion;.&minorversion; release sequence <xref linkend="changelog">
             Improved HTML validity (especially for admin pages)
 	  </para></listitem>
 
+	  <listitem><para>
+            Improved admin interface:
+	    <itemizedlist spacing='compact' mark='opencircle'>
+	      	   
+	      <listitem><para>
+		Placed all installation options to a single page.
+	      </para></listitem>
+
+	      <listitem><para>
+		Added pagination to /admin/applications (was unusable
+		for large sites)
+	      </para></listitem>
+
+	      <listitem><para>
+		New admin pages for subsites linked from
+		site-wide-admin package (/acs-admin).
+	      </para></listitem>
+
+	      <listitem><para>
+		Added explanatory text to several admin pages.
+	      </para></listitem>
+
+	    </itemizedlist>
+	  </para></listitem>
+
  	  <listitem><para> Add lightweight support for ckeditor4 for
  	  templating::richtext widget (configurable via package
  	  parameter "RichTextEditor" of acs-templating. ckeditor4
@@ -123,10 +148,10 @@ entire &majorversion;.&minorversion; release sequence <xref linkend="changelog">
 	  </para></listitem>
 
 	  <listitem><para>
-            Improved themability for display_templates. One can now
+            Improved them-ability for display_templates. One can now
 	    provide a display_template_name (similar to the sql
 	    statement name) to refer to display templates. This
-	    enables resuabilit and is theme-able.
+	    enables reusability and is theme-able.
 	  </para></listitem>
 
 	  <listitem><para> Dimensional slider reform (ad_dimensional):
@@ -147,11 +172,15 @@ entire &majorversion;.&minorversion; release sequence <xref linkend="changelog">
 	<listitem><para>Misc:
 	<itemizedlist>
  	  <listitem><para>
-            Improved Documentation templating (uniform appearance)
+            Improved templating of OpenACS core documentation
 	  </para></listitem>
 
+	  <listitem><para>
+            Improved Russian Internationalization
+	  </para></listitem>
+	  
  	  <listitem><para>
-            Make pretty-naming of acs-core packages more consistent
+            Make pretty-names of acs-core packages more consistent
 	  </para></listitem>
 
 	  <listitem><para>
@@ -160,13 +189,13 @@ entire &majorversion;.&minorversion; release sequence <xref linkend="changelog">
 
  	  <listitem><para>
 	    Version numbers:
-	    <itemizedlist>
+	    <itemizedlist spacing='compact' mark='opencircle'>
 	      <listitem><para>
 		Require PG 9.0 (End Of Life of PostgreSQL 8.4 was July 2014)
 	      </para></listitem>
 
 	      <listitem><para>
-		require XOTcl 2.0 (presented at the Tcl conference in 2011). 
+		Require XOTcl 2.0 (presented at the Tcl conference in 2011). 
 	      </para></listitem>
 
 	      <listitem><para>
@@ -177,12 +206,21 @@ entire &majorversion;.&minorversion; release sequence <xref linkend="changelog">
  	  </para></listitem>
 	</itemizedlist>
 	</para></listitem>
+	
+	<listitem><para>Changes in application packages: Various bug
+	fixes and improvements for e.g. file-storage, forums, news,
+	notifications, xowiki.
+	
+	</para></listitem>
       </itemizedlist>
     </para> </listitem>
   </itemizedlist>
   <para> Altogether, OpenACS 5.9.0 differs from OpenACS 5.8.1 in
   about xxxx modifications (yyyy commits) contributed by zzzz
-  committers.
+  committers. For more details, consult the
+  <ulink
+      href="http://fisheye.openacs.org/browse/~br=oacs-5-9/OpenACS/openacs-4/ChangeLog?hb=true">
+  raw ChangeLog</ulink>.
   </para>
 </sect2>
 

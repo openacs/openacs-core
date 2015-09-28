@@ -13,8 +13,8 @@ Chapter 11. Development Reference"
 dynamically</h2></div></div></div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="ad-form-overview" id="ad-form-overview"></a>Overview</h3></div></div></div><div class="authorblurb">
-<div class="cvstag">($Id: form-builder.html,v 1.30.2.1 2015/09/23
-11:54:31 gustafn Exp $)</div>
+<div class="cvstag">($&zwnj;Id: form-builder.xml,v 1.9.2.1 2015/09/23
+11:55:07 gustafn Exp $)</div>
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><p>OpenACS has a form manager called ad_form. Ad_form has an
 adaptable UI. Error handling includes inline error reporting, and
@@ -25,7 +25,7 @@ to this document, the ad_form <a class="ulink" href="http://openacs.org/api-doc/
 <a name="multi-part-elements" id="multi-part-elements"></a>Multi-part Elements</h3></div></div></div><p>Some elements have more than one choice, or can submit more than
 one value.</p><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140480060706896" id="idp140480060706896"></a>SELECT elements</h4></div></div></div><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">
+<a name="idp140302498036016" id="idp140302498036016"></a>SELECT elements</h4></div></div></div><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">
 <p>
 <b>Creating the form element. </b>Populate a list of
 lists with values for the option list.</p><pre class="programlisting">
@@ -106,7 +106,7 @@ widgets:</p><p><a class="ulink" href="http://openacs.org/forums/message-view?mes
 Errors</h3></div></div></div><p>Here are some common errors and what to do when you encounter
 them:</p><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140480060798048" id="idp140480060798048"></a>Error when selecting values</h4></div></div></div><p>This generally happens when there is an error in your query.</p>
+<a name="idp140302489119328" id="idp140302489119328"></a>Error when selecting values</h4></div></div></div><p>This generally happens when there is an error in your query.</p>
 </div>
 </div>
 </div>

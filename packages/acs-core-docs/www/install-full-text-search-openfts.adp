@@ -24,7 +24,7 @@ requiring only compilation of one module from PostgreSQL contrib,
 with an automated install process using the tsearch2-driver
 package.</p><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="install-openfts" id="install-openfts"></a>Install OpenFTS module</h3></div></div></div><a class="indexterm" name="idp140480065442080" id="idp140480065442080"></a><p>If you want full text search, and you are running PostgreSQL,
+<a name="install-openfts" id="install-openfts"></a>Install OpenFTS module</h3></div></div></div><a class="indexterm" name="idp140302503326624" id="idp140302503326624"></a><p>If you want full text search, and you are running PostgreSQL,
 install this module to support FTS. Do this step after you have
 installed both PostgreSQL and AOLserver. You will need the
 <a class="link" href="individual-programs">openfts tarball</a> in
@@ -119,7 +119,7 @@ exit</span></span>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="install-openfts-postgres" id="install-openfts-postgres"></a>Install OpenFTS prerequisites in
-PostgreSQL instance</h3></div></div></div><a class="indexterm" name="idp140480052650208" id="idp140480052650208"></a><p>If you are installing Full Text Search, add required packages to
+PostgreSQL instance</h3></div></div></div><a class="indexterm" name="idp140302497387936" id="idp140302497387936"></a><p>If you are installing Full Text Search, add required packages to
 the new database. (In order for full text search to work, you must
 also <a class="link" href="install-full-text-search-openfts" title="Install OpenFTS module">install</a> the PostgreSQL OpenFTS module
 and prerequisites.)</p><pre class="screen">

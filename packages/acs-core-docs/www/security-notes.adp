@@ -68,8 +68,8 @@ ad_proc -private ad_login_page {} {
 </pre><p>The set of string match expressions in the procedure above
 should be extended appropriately for other registration pages. This
 procedure does not use <code class="computeroutput">ad_parameter</code> or regular expressions for
-performance reasons, as it is called by the request processor.</p><div class="cvstag">($Id: security-notes.html,v 1.48.2.1 2015/09/23
-11:54:53 gustafn Exp $)</div>
+performance reasons, as it is called by the request processor.</p><div class="cvstag">($&zwnj;Id: security-notes.xml,v 1.7 2014/10/27
+16:39:32 victorg Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

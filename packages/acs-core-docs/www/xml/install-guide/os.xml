@@ -11,6 +11,11 @@
   </authorblurb>
   <sect2 id="unix-install">
     <title>a Unix-like system</title>
+    <para>Most of the documentation in this section is kept as a
+    reference. More up-to-date documentation is in the <ulink
+    url="http://openacs.org/xowiki/openacs-system-install">install
+    sections in the Wiki</ulink>.
+    </para>
     <para>You will need a computer running a unix-like system with the following software installed:</para>
     <itemizedlist>
       <listitem><para>tdom</para></listitem>

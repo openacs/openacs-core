@@ -12,7 +12,7 @@ Chapter 15. Kernel Documentation"
 <a name="ext-auth-requirements" id="ext-auth-requirements"></a>External
 Authentication Requirements</h2></div></div></div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140480084369136" id="idp140480084369136"></a>Vision</h3></div></div></div><p>People have plenty of usernames and passwords already, we don't
+<a name="idp140302499164816" id="idp140302499164816"></a>Vision</h3></div></div></div><p>People have plenty of usernames and passwords already, we don't
 want them to have yet another. We want people to be able to log in
 to OpenACS with the same password they use to log in to any other
 system.</p><p>Besides, administrators have better things to do than create
@@ -73,7 +73,7 @@ Pictures</h3></div></div></div><p>Authentication:</p><p><span class="inlinemedia
 <div class="titlepage"><div><div><h3 class="title">
 <a name="Requirements" id="Requirements"></a>Requirements</h3></div></div></div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140480084271664" id="idp140480084271664"></a>New API</h4></div></div></div><div class="segmentedlist"><table border="1" cellpadding="3" cellspacing="0" width="90%">
+<a name="idp140302501851168" id="idp140302501851168"></a>New API</h4></div></div></div><div class="segmentedlist"><table border="1" cellpadding="3" cellspacing="0" width="90%">
 <tr>
 <th width="15%">Feature</th><th width="8%">Status</th><th width="77%">Description</th>
 </tr><thead><tr><th>New API</th></tr></thead><tbody>

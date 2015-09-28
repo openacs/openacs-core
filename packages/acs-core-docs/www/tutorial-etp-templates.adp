@@ -86,7 +86,7 @@ cp article-content.adp col2-content.adp
 </li><li class="listitem">
 <p>The template should provide us with the following ETP
 layout:</p><div class="table">
-<a name="idp140480083469408"></a><p class="title"><b>TableÂ 10.1.Â table showing
+<a name="idp140302496254080"></a><p class="title"><b>TableÂ 10.1.Â table showing
 ETP layout</b></p><div class="table-contents"><table summary="table showing ETP layout" cellspacing="0" border="1" width="250">
 <colgroup>
 <col align="left" class="c1"><col width="2" align="left" class="c2">
@@ -133,8 +133,8 @@ view your ETP application using the col2 template.</p></li>
 <a name="end"></a>Who Wrote This and When</h3></div></div></div><p>This problem set was originally written by <a class="ulink" href="http://www.weg.ee.usyd.edu.au/people/ncarroll" target="_top">Nick Carroll</a> in August 2004 for the <a class="ulink" href="http://www.usyd.edu.au" target="_top">University of
 Sydney</a> Course <a class="ulink" href="http://www.weg.ee.usyd.edu.au/courses/ebus5002" target="_top">EBUS5002</a>.</p><p>This material is copyright 2004 by Nick Carroll. It may be
 copied, reused, and modified, provided credit is given to the
-original author.</p><div class="cvstag">($Id: tutorial-etp-templates.html,v 1.9.2.1
-2015/09/23 11:54:59 gustafn Exp $)</div>
+original author.</p><div class="cvstag">($&zwnj;Id: tutorial-advanced.xml,v 1.52 2015/06/27
+17:19:13 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

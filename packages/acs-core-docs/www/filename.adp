@@ -192,8 +192,8 @@ document.</em></span></p><div class="informaltable"><table cellspacing="0" borde
 <td>0.1</td><td>Creation</td><td>8/21/2000</td><td>Josh Finkler, Audrey McLoghlin</td>
 </tr>
 </tbody>
-</table></div><div class="cvstag">($Id: filename.html,v 1.48.2.1 2015/09/23
-11:54:30 gustafn Exp $)</div>
+</table></div><div class="cvstag">($&zwnj;Id: design-template.xml,v 1.8 2006/07/17
+05:38:37 torbenb Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

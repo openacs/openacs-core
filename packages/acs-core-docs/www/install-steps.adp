@@ -9,7 +9,8 @@ Chapter 2. Installation Overview"
 		    rightLink="individual-programs" rightLabel="Next">
 		<div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="install-steps" id="install-steps"></a>Basic Steps</h2></div></div></div><p>The basic steps for installing OpenACS are:</p><div class="orderedlist"><ol class="orderedlist" type="1">
+<a name="install-steps" id="install-steps"></a>Basic Steps</h2></div></div></div><p>Most of the documentation in this section is kept as a
+reference. More up-to-date documentation is in the <a class="ulink" href="http://openacs.org/xowiki/openacs-system-install" target="_top">install sections in the Wiki</a>.</p><p>The basic steps for installing OpenACS are:</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem"><p>Install an OS and supporting software (see <a class="xref" href="unix-installation" title="Install a Unix-like system and supporting software">Install a
 Unix-like OS</a> or <a class="xref" href="install-redhat" title="Appendix A. Install Red Hat 8/9">Appendix A,
 <i>Install Red Hat 8/9</i>
@@ -105,8 +106,8 @@ export OPENACS_SERVICE_NAME=<span class="replaceable"><span class="replaceable">
 </ul></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140480035945200" id="idp140480035945200"></a>Paths and Users</h3></div></div></div><div class="table">
-<a name="idp140480043733312" id="idp140480043733312"></a><p class="title"><b>Table 2.1. Default
+<a name="idp140302489802864" id="idp140302489802864"></a>Paths and Users</h3></div></div></div><div class="table">
+<a name="idp140302489803504" id="idp140302489803504"></a><p class="title"><b>Table 2.1. Default
 directories for a standard install</b></p><div class="table-contents"><table summary="Default directories for a standard install" cellspacing="0" width="100%" border="1">
 <colgroup>
 <col><col>
@@ -117,7 +118,7 @@ directories for a standard install</b></p><div class="table-contents"><table sum
 <td>name of administrative access account</td><td>remadmin</td>
 </tr><tr>
 <td>OpenACS service</td><td>
-<a class="indexterm" name="idp140480043705536" id="idp140480043705536"></a><span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span> (set to service0
+<a class="indexterm" name="idp140302489808304" id="idp140302489808304"></a><span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span> (set to service0
 in default install)</td>
 </tr><tr>
 <td>OpenACS service account</td><td><span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span></td>
@@ -179,8 +180,8 @@ your setup information (OS, etc) as well as the exact commands that
 are failing with the accompanying error. If there's a SQL error in
 the Tcl error or in the log, post that too.</p></li><li class="listitem"><p>If you find errors in this document or if you have ideas about
 making it better, please post them in our <a class="ulink" href="http://openacs.org/bugtracker/openacs/" target="_top">BugTracker</a>.</p></li>
-</ul></div><div class="cvstag">($Id: install-steps.html,v 1.35.2.1 2015/09/23
-11:54:39 gustafn Exp $)</div>
+</ul></div><div class="cvstag">($&zwnj;Id: overview.xml,v 1.29 2014/10/27 16:39:31
+victorg Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

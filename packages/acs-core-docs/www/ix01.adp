@@ -8,7 +8,7 @@
 		    rightLink="" rightLabel="">
 		<div class="index">
 <div class="titlepage"><div><div><h1 class="title">
-<a name="idp140480056169648" id="idp140480056169648"></a>Index</h1></div></div></div><div class="index">
+<a name="idp140302475582336" id="idp140302475582336"></a>Index</h1></div></div></div><div class="index">
 <div class="indexdiv">
 <h3>Symbols</h3><dl><dt>$OPENACS_SERVICE_NAME, <a class="indexterm" href="install-steps">Paths and Users</a>
 </dt></dl>
