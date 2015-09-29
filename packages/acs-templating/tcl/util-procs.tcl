@@ -818,7 +818,9 @@ ad_proc -public template::streaming_template {
     if { ![info exists subsite_id] } {
         set subsite_id [ad_conn subsite_id]
     }
-    set template [parameter::get -package_id $subsite_id -parameter StreamingHead]
+    set template [parameter::get -package_id $subsite_id \
+                      -parameter StreamingHead \
+                      -default "/packages/openacs-default-theme/lib/plain-streaming-head"]
     return [template::resource_path -type masters -style $template -relative]
 }
 
