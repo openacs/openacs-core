@@ -52,7 +52,7 @@ foreach pkg_info $pkg_install_list {
     }
 
     if {[apm_package_version_installed_p $version(package.key) $version(name)] } {
-	ns_log notice "===== ALREADY-installed $version(package.key)"
+	#ns_log notice "===== ALREADY-installed $version(package.key)"
 	# Already installed.
 	continue
     }
