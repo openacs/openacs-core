@@ -169,7 +169,6 @@ ad_proc -public template_tag_if_interp_expr {} {
 
         in { 
             append condition "$arg1 in { [lrange $args 2 end] } "
-            ns_log notice "==== in '$condition'"
             set next [llength $args]
         }
 
@@ -195,17 +194,10 @@ ad_proc -public template_tag_if_interp_expr {} {
         }
 
         defined {
-            # substitute variable references
-            #if { ! ( [regsub {^"@([a-zA-Z0-9_]+)\.([a-zA-Z0-9_.]+)@"$} $arg1 {\1(\2)} arg1]
-            #          || [regsub {^"@([a-zA-Z0-9_:]+)@"$} $arg1 {\1} arg1] )} { 
-            #     error "IF tag defined test uses string not variable for $arg1"
-            # }
-            
             set arg [template_tag_subst_reference $arg1]
             if {$arg eq ""} {
                 error "IF tag nil test uses string not variable for $arg1"
             }
-            ns_log notice "==== DEFINED '\[info exists $arg\]'"
             append condition "\[info exists $arg\]"
             set next $i
         }
