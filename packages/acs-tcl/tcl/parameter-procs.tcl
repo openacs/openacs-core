@@ -151,10 +151,11 @@ ad_proc -public parameter::get {
     }
     set value ""
 
-    # 1. If there is not package_id provided, check whether there is a
-    # parameter by this name in the parameter file?  Actually,
-    # ad_parameter_from_file is a misnomer, since the it checks ns_config
-    # values 
+    # 1. check whether there is a parameter by this name specified for
+    # the packagin in the parameter file.  The name
+    # ad_parameter_from_file is a misnomer, since the it checks
+    # ns_config values
+    #
     if {$package_id ne ""} {
 	set package_key ""
         # This can fail at server startup--OpenACS calls parameter::get to
