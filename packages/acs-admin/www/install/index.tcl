@@ -14,8 +14,8 @@ set repository_url "http://openacs.org/repository/"
 set head_channel [lindex [apm_get_repository_channels $repository_url] 0]
 set current_channel [apm_get_repository_channel]
 set channel $current_channel
-set remote_install_url [export_vars -base "install" { repository_url channel current_channel head_channel }]
-set remote_upgrade_url [export_vars -base "install" { { upgrade_p 1 } repository_url channel current_channel head_channel}]
+set remote_install_url [export_vars -base "install/install" { repository_url channel current_channel head_channel }]
+set remote_upgrade_url [export_vars -base "install/install" { { upgrade_p 1 } repository_url channel current_channel head_channel}]
 
 # template::multirow create install repository local
 #
