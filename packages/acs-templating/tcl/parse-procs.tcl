@@ -492,9 +492,7 @@ ad_proc -public template::adp_compile { {-file ""} {-string ""} } {
     # initialize the compiled code
     set parse_list [list "set __adp_output {}; set __ad_conn_locale \[ad_conn locale\]"]
 
-    if {($file ne "" && $string ne "")
-        || ($file eq "" && $string eq "")
-    } {
+    if {$file ne "" && $string ne ""} {
         error "you must specify either -file or -string"
     } elseif {$file ne ""} {
         set chunk [template::util::read_file $file]
