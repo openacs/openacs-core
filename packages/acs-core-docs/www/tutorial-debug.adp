@@ -15,7 +15,7 @@ Chapter 9. Development Tutorial"
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140302492987456" id="idp140302492987456"></a>Debugging</h3></div></div></div><p>
+<a name="idp140673146179280" id="idp140673146179280"></a>Debugging</h3></div></div></div><p>
 <b>Developer Support. </b>The Developer Support
 package adds several goodies: debug information for every page; the
 ability to log comments to the page instead of the error log, and
@@ -44,7 +44,7 @@ G goes to the end.<br>
           </p></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140302491276096" id="idp140302491276096"></a>Manual testing</h3></div></div></div><p>Make a list of basic tests to make sure it works</p><div class="segmentedlist"><table border="0">
+<a name="idp140673145206560" id="idp140673145206560"></a>Manual testing</h3></div></div></div><p>Make a list of basic tests to make sure it works</p><div class="segmentedlist"><table border="0">
 <thead><tr class="segtitle">
 <th>Test Num</th><th>Action</th><th>Expected Result</th>
 </tr></thead><tbody>
@@ -72,11 +72,11 @@ mfp::note::delete.</td><td class="seg">Proc should return 0 for success.</td>
 delete your own note. Edit your own note. Search for a note.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140302489465696" id="idp140302489465696"></a>Write automated tests</h3></div></div></div><div class="authorblurb">
+<a name="idp140673146221728" id="idp140673146221728"></a>Write automated tests</h3></div></div></div><div class="authorblurb">
 <p>by <a class="ulink" href="mailto:simon\@collaboraid.net" target="_top">Simon Carstensen</a> and Joel Aufrecht</p>
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><p>
-<a class="indexterm" name="idp140302489626000" id="idp140302489626000"></a> It seems to me that a lot of people have
+<a class="indexterm" name="idp140673146223872" id="idp140673146223872"></a> It seems to me that a lot of people have
 been asking for some guidelines on how to write automated tests.
 I've done several tests by now and have found the process to be
 extremely easy and useful. It's a joy to work with automated
@@ -144,7 +144,7 @@ any test. (<a class="ulink" href="http://www.nedbatchelder.com/blog/20030408T062
 myfirstpackage. You should see your test case. Run it and examine
 the results.</p><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140302495881584" id="idp140302495881584"></a>TCLWebtest tests</h4></div></div></div><p>API testing can only test part of our package - it doesn't test
+<a name="idp140673146264368" id="idp140673146264368"></a>TCLWebtest tests</h4></div></div></div><p>API testing can only test part of our package - it doesn't test
 the code in our adp/tcl pairs. For this, we can use TCLwebtest.
 TCLwebtest must be <a class="link" href="install-tclwebtest" title="Install tclwebtest.">installed</a> for this test to work.
 This provides a <a class="ulink" href="http://tclwebtest.sourceforge.net/doc/api_public.html" target="_top">library of functions</a> that make it easy to call a page
@@ -153,7 +153,7 @@ functions overlap slightly with acs-automated-testing; see the
 example provided for one approach on integrating them.</p>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140302495884144" id="idp140302495884144"></a>Example</h4></div></div></div><p>Now we can add the rest of the API tests, including a test with
+<a name="idp140673146267184" id="idp140673146267184"></a>Example</h4></div></div></div><p>Now we can add the rest of the API tests, including a test with
 deliberately bad data. The complete test looks like:</p><pre class="programlisting">
 ad_library {
     Test cases for my first package.

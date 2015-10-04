@@ -9,7 +9,7 @@
 		<div class="book">
 <div class="titlepage">
 <div><div><h1 class="title">
-<a name="idp140302485845888" id="idp140302485845888"></a>OpenACS Core Documentation</h1></div></div><hr>
+<a name="idp140673132616224" id="idp140673132616224"></a>OpenACS Core Documentation</h1></div></div><hr>
 </div><div class="toc">
 <p><b>Table of Contents</b></p><dl class="toc">
 <dt><span class="part"><a href="for-everyone">I. OpenACS For

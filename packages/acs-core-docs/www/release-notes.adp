@@ -59,7 +59,13 @@ ad_include_contrat)</p></li><li class="listitem"><p>Complete template variable c
 </ul></div>
 </li><li class="listitem">
 <p>Misc:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: square;">
-<li class="listitem"><p>Improved templating of OpenACS core documentation</p></li><li class="listitem"><p>Improved Russian Internationalization</p></li><li class="listitem"><p>Make pretty-names of acs-core packages more consistent</p></li><li class="listitem"><p>Mark unused functions of acs-tcl/tcl/table-display-procs.tcl as
+<li class="listitem"><p>Added ability to show ns_log statements of current request to
+developer support output when developer support is activated
+(controlled via package parameter "TclTraceLogServerities" in the
+acs-tcl package parameters)</p></li><li class="listitem"><p>Added ability to save data sent by ns_return in files on the
+file system. This can be used to validate HTML content also for
+password protected pages (controlled via package parameter
+"TclTraceSaveNsReturn" in the acs-tcl package parameters)</p></li><li class="listitem"><p>Improved templating of OpenACS core documentation</p></li><li class="listitem"><p>Improved Russian Internationalization</p></li><li class="listitem"><p>Make pretty-names of acs-core packages more consistent</p></li><li class="listitem"><p>Mark unused functions of acs-tcl/tcl/table-display-procs.tcl as
 deprecated</p></li><li class="listitem">
 <p>Version numbers:</p><div class="itemizedlist"><ul class="itemizedlist compact" style="list-style-type: opencircle;">
 <li class="listitem" style="list-style-type: circle"><p>Require PG 9.0 (End Of Life of PostgreSQL 8.4 was July 2014)</p></li><li class="listitem" style="list-style-type: circle"><p>Require XOTcl 2.0 (presented at the Tcl conference in 2011).</p></li><li class="listitem" style="list-style-type: circle"><p>Significant performance improvement for large installations</p></li>
@@ -359,20 +365,20 @@ styles still using these mechanisms will break.</p></li><li class="listitem"><p>
 turned off by default via the acs-kernel parameter ExcludedFiles in
 section request-processor (The variable provides a string match
 glob list of files and is defaulted to "*/CVS/* *~")</p></li>
-</ul></div><div class="cvstag">($&zwnj;Id: release-notes.xml,v 1.30.2.1 2015/09/23
-11:55:08 gustafn Exp $)</div>
+</ul></div><div class="cvstag">($&zwnj;Id: release-notes.xml,v 1.30.2.2 2015/09/28
+07:54:30 gustafn Exp $)</div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140302493741664" id="idp140302493741664"></a>Release 4.6.3</h3></div></div></div><p><a class="ulink" href="release-notes-4-6-3" target="_top">Release Notes for 4.6.3</a></p>
+<a name="idp140673139000784" id="idp140673139000784"></a>Release 4.6.3</h3></div></div></div><p><a class="ulink" href="release-notes-4-6-3" target="_top">Release Notes for 4.6.3</a></p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140302493743168" id="idp140302493743168"></a>Release 4.6.2</h3></div></div></div><p><a class="ulink" href="release-notes-4-6-2" target="_top">Release Notes for 4.6.2</a></p>
+<a name="idp140673139002288" id="idp140673139002288"></a>Release 4.6.2</h3></div></div></div><p><a class="ulink" href="release-notes-4-6-2" target="_top">Release Notes for 4.6.2</a></p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140302493744672" id="idp140302493744672"></a>Release 4.6</h3></div></div></div><p><a class="ulink" href="release-notes-4-6" target="_top">Release Notes for 4.6</a></p>
+<a name="idp140673139003792" id="idp140673139003792"></a>Release 4.6</h3></div></div></div><p><a class="ulink" href="release-notes-4-6" target="_top">Release Notes for 4.6</a></p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140302493746176" id="idp140302493746176"></a>Release 4.5</h3></div></div></div><p><a class="ulink" href="release-notes-4-5" target="_top">Release Notes for 4.5</a></p>
+<a name="idp140673139005296" id="idp140673139005296"></a>Release 4.5</h3></div></div></div><p><a class="ulink" href="release-notes-4-5" target="_top">Release Notes for 4.5</a></p>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

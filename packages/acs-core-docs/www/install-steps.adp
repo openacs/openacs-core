@@ -106,8 +106,8 @@ export OPENACS_SERVICE_NAME=<span class="replaceable"><span class="replaceable">
 </ul></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140302489802864" id="idp140302489802864"></a>Paths and Users</h3></div></div></div><div class="table">
-<a name="idp140302489803504" id="idp140302489803504"></a><p class="title"><b>Table 2.1. Default
+<a name="idp140673132278576" id="idp140673132278576"></a>Paths and Users</h3></div></div></div><div class="table">
+<a name="idp140673132279216" id="idp140673132279216"></a><p class="title"><b>Table 2.1. Default
 directories for a standard install</b></p><div class="table-contents"><table summary="Default directories for a standard install" cellspacing="0" width="100%" border="1">
 <colgroup>
 <col><col>
@@ -118,7 +118,7 @@ directories for a standard install</b></p><div class="table-contents"><table sum
 <td>name of administrative access account</td><td>remadmin</td>
 </tr><tr>
 <td>OpenACS service</td><td>
-<a class="indexterm" name="idp140302489808304" id="idp140302489808304"></a><span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span> (set to service0
+<a class="indexterm" name="idp140673132283824" id="idp140673132283824"></a><span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span> (set to service0
 in default install)</td>
 </tr><tr>
 <td>OpenACS service account</td><td><span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span></td>
@@ -180,8 +180,8 @@ your setup information (OS, etc) as well as the exact commands that
 are failing with the accompanying error. If there's a SQL error in
 the Tcl error or in the log, post that too.</p></li><li class="listitem"><p>If you find errors in this document or if you have ideas about
 making it better, please post them in our <a class="ulink" href="http://openacs.org/bugtracker/openacs/" target="_top">BugTracker</a>.</p></li>
-</ul></div><div class="cvstag">($&zwnj;Id: overview.xml,v 1.29 2014/10/27 16:39:31
-victorg Exp $)</div>
+</ul></div><div class="cvstag">($&zwnj;Id: overview.xml,v 1.29.2.1 2015/09/28
+07:54:30 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
