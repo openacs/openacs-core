@@ -1,8 +1,8 @@
 This is OpenACS - the Open Architecture Community System.
 
-Version 5.8.1
+Version 5.9.0b2
 
---------------
+---------------
 
 Full documentation is located in the tarball at
 packages/acs-core-docs/www/index.html
@@ -23,7 +23,7 @@ Please report bugs via http://openacs.org/bugtracker/openacs/
 and any questions and feedback at http://openacs.org/forums/.  Send 
 documentation questions and corrections to docs@openacs.org.
 
---------------
+---------------
 
 OpenACS is an advanced toolkit for building scalable,
 community-oriented web applications.
