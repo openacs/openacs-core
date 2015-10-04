@@ -226,7 +226,7 @@ ad_proc -public template_tag_if_interp_expr {} {
         default { 
             # treat <if @foo_p@> as a shortcut for <if @foo_p@ true>
             #append condition "\[template::util::is_true $arg1\]"
-            append condition "\[string is true -strict $x\]"
+            append condition "\[string is true -strict $arg1\]"
             set next [expr {$i - 1}]
         }
     }
