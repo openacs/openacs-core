@@ -10,14 +10,14 @@
     <version name="5.9.0b2" url="http://openacs.org/repository/download/apm/ref-timezones-5.9.0b2.apm">
         <owner url="mailto:jon@mayuli.com">Jon Griffin</owner>
         <summary>Timezone data for acs-reference.</summary>
-        <release-date>2015-09-25</release-date>
+        <release-date>2015-10-04</release-date>
         <maturity>3</maturity>
         <vendor url="http://www.mayuli.com">Mayuli Enterprises, LLC</vendor>
         <description format="text/plain">This is the timezone data for the acs-reference data package.  Used by acs-lang (among others) for localized times.</description>
 
         <provides url="ref-timezones" version="5.9.0b2"/>
-        <requires url="acs-kernel" version="5.9.0b1"/>
-        <requires url="acs-reference" version="5.9.0b1"/>
+        <requires url="acs-kernel" version="5.9.0b2"/>
+        <requires url="acs-reference" version="5.9.0b2"/>
 
         <callbacks>
             <callback type="after-upgrade"  proc="ref-timezones::apm::after_upgrade"/>
