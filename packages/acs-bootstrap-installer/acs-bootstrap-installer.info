@@ -9,18 +9,18 @@
     <implements-subsite-p>f</implements-subsite-p>
     <inherit-templates-p>t</inherit-templates-p>
     
-   <version name="5.9.0b1" url="http://openacs.org/repository/download/apm/acs-bootstrap-installer-5.9.0b1.apm">
+   <version name="5.9.0b2" url="http://openacs.org/repository/download/apm/acs-bootstrap-installer-5.9.0b2.apm">
         <owner url="mailto:dhogaza@pacifier.com">Don Baccus</owner>
         <summary>Bootstraps an OpenACS installation.</summary>
-        <release-date>2015-09-25</release-date>
+        <release-date>2015-10-04</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
         <description format="text/html">This package bootstraps OpenACS. If the core packages have not yet been installed, it calls the installer which leads the user through the steps necessary to do so.  It also checks that the installation meets the requirements for a successful install of OpenACS.</description>
         <license>GPL</license>
         <maturity>3</maturity>
 
-        <provides url="acs-bootstrap-installer" version="5.9.0b1"/>
-        <requires url="acs-kernel" version="5.9.0b1"/>
-        <requires url="acs-templating" version="5.9.0b1"/>
+        <provides url="acs-bootstrap-installer" version="5.9.0b2"/>
+        <requires url="acs-kernel" version="5.9.0b2"/>
+        <requires url="acs-templating" version="5.9.0b2"/>
 
         <callbacks>
             <callback type="after-upgrade"  proc="apm_bootstrap_upgrade"/>
