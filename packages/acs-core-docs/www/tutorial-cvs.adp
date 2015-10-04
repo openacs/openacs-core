@@ -71,7 +71,7 @@ done
 <span class="emphasis"><em>(many lines omitted)</em></span>
 [$OPENACS_SERVICE_NAME myfirstpackage]$
 </pre><div class="figure">
-<a name="idp140302489854368" id="idp140302489854368"></a><p class="title"><b>Figure 10.1. Upgrading
+<a name="idp140673144243536" id="idp140673144243536"></a><p class="title"><b>Figure 10.1. Upgrading
 a local CVS repository</b></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/development-with-cvs.png" align="middle" alt="Upgrading a local CVS repository"></div></div>
 </div><br class="figure-break">
 </div>

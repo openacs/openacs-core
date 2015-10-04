@@ -171,6 +171,19 @@ entire &majorversion;.&minorversion; release sequence <xref linkend="changelog">
 
 	<listitem><para>Misc:
 	<itemizedlist>
+	  <listitem><para>
+            Added ability to show ns_log statements of current request
+	    to developer support output when developer support is
+	    activated (controlled via package parameter "TclTraceLogServerities"
+	    in the acs-tcl package parameters)
+	  </para></listitem>
+
+	  <listitem><para> Added ability to save data sent by
+	  ns_return in files on the file system. This can be used to
+	  validate HTML content also for password protected pages
+	  (controlled via package parameter "TclTraceSaveNsReturn" in
+	  the acs-tcl package parameters) </para></listitem>
+	  
  	  <listitem><para>
             Improved templating of OpenACS core documentation
 	  </para></listitem>

@@ -130,7 +130,7 @@ are discussed in the following sections.</p>
 <a name="permissions-tedious-context-hierarchy" id="permissions-tedious-context-hierarchy"></a>Context
 Hierarchy</h3></div></div></div><p>Suppose objects <span class="emphasis"><em>A</em></span>,
 <span class="emphasis"><em>B</em></span>, ..., and <span class="emphasis"><em>F</em></span> form the following hierarchy.</p><div class="table">
-<a name="idp140302496400704" id="idp140302496400704"></a><p class="title"><b>Table 11.2. Context
+<a name="idp140673160586912" id="idp140673160586912"></a><p class="title"><b>Table 11.2. Context
 Hierarchy Example</b></p><div class="table-contents"><table summary="Context Hierarchy Example" cellspacing="0" border="1">
 <colgroup>
 <col align="center" class="c1"><col align="center" class="c2"><col align="center" class="c3">
@@ -156,7 +156,7 @@ Hierarchy Example</b></p><div class="table-contents"><table summary="Context Hie
 </table></div>
 </div><br class="table-break"><p>This can be represented in the <a class="xref" href="permissions-tediously-explained">acs_objects</a>
 table by the following entries:</p><div class="table">
-<a name="idp140302489668176" id="idp140302489668176"></a><p class="title"><b>Table 11.3. acs_objects
+<a name="idp140673146489520" id="idp140673146489520"></a><p class="title"><b>Table 11.3. acs_objects
 example data</b></p><div class="table-contents"><table summary="acs_objects example data" cellspacing="0" border="1">
 <colgroup>
 <col align="center" class="c1"><col align="center" class="c2">

@@ -105,7 +105,7 @@ create table <span class="bold"><strong>acs_objects</strong></span> (
     </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="permissions-tedious-context-hierarchy"></a>Context Hierarchy</h3></div></div></div><p>
       Suppose objects <span class="emphasis"><em>A</em></span>, <span class="emphasis"><em>B</em></span>, ..., 
       and <span class="emphasis"><em>F</em></span> form the following hierarchy. 
-    </p><div class="table"><a name="idp140302496400704"></a><p class="title"><b>Table 11.2. Context Hierarchy Example</b></p><div class="table-contents"><table summary="Context Hierarchy Example" cellspacing="0" border="1"><colgroup><col align="center" class="c1"><col align="center" class="c2"><col align="center" class="c3"></colgroup><tbody><tr><td colspan="3" align="center">
+    </p><div class="table"><a name="idp140673160586912"></a><p class="title"><b>Table 11.2. Context Hierarchy Example</b></p><div class="table-contents"><table summary="Context Hierarchy Example" cellspacing="0" border="1"><colgroup><col align="center" class="c1"><col align="center" class="c2"><col align="center" class="c3"></colgroup><tbody><tr><td colspan="3" align="center">
 	      <span class="bold"><strong>A</strong></span>
 	      <p>
   	        <code class="computeroutput">object_id=10</code>
@@ -139,7 +139,7 @@ create table <span class="bold"><strong>acs_objects</strong></span> (
       This can be represented in the 
       <a class="xref" href="permissions-tediously-explained.html#acs_objects">acs_objects</a> table
       by the following entries: 
-    </p><div class="table"><a name="idp140302489668176"></a><p class="title"><b>Table 11.3. acs_objects example data</b></p><div class="table-contents"><table summary="acs_objects example data" cellspacing="0" border="1"><colgroup><col align="center" class="c1"><col align="center" class="c2"></colgroup><thead><tr><th align="center">object_id</th><th align="center">context_id</th></tr></thead><tbody><tr><td align="center">20</td><td align="center">10</td></tr><tr><td align="center">30</td><td align="center">10</td></tr><tr><td align="center">40</td><td align="center">20</td></tr><tr><td align="center">50</td><td align="center">20</td></tr><tr><td align="center">60</td><td align="center">30</td></tr></tbody></table></div></div><br class="table-break"><p>
+    </p><div class="table"><a name="idp140673146489520"></a><p class="title"><b>Table 11.3. acs_objects example data</b></p><div class="table-contents"><table summary="acs_objects example data" cellspacing="0" border="1"><colgroup><col align="center" class="c1"><col align="center" class="c2"></colgroup><thead><tr><th align="center">object_id</th><th align="center">context_id</th></tr></thead><tbody><tr><td align="center">20</td><td align="center">10</td></tr><tr><td align="center">30</td><td align="center">10</td></tr><tr><td align="center">40</td><td align="center">20</td></tr><tr><td align="center">50</td><td align="center">20</td></tr><tr><td align="center">60</td><td align="center">30</td></tr></tbody></table></div></div><br class="table-break"><p>
       The first entry tells us that object 20 is the descendant of object 10, and
       the third entry shows that object 40 is the descendant of object 20. By
       running a <a class="ulink" href="http://www.oradoc.com/ora817/server.817/a85397/expressi.htm#1023748" target="_top">CONNECT BY</a> query,
