@@ -846,6 +846,7 @@ ad_proc -public template::resource_path {
     @param subsite_id subsite_id to determine theming information
 
     @return path of the resource (without extension)
+    @author Gustaf Neumann
 } {
     
     if {![regexp {^/(.*)} $style path]} {
@@ -857,6 +858,14 @@ ad_proc -public template::resource_path {
 	    set theme_dir [parameter::get -parameter ResourceDir -package_id $subsite_id]
 	}
 
+	if {$theme_dir ne ""} {
+            if {![file isdir $::acs::rootdir/$theme_dir]} {
+                ns_log warning "ResourceDir '$theme_dir' does not exist under '$::acs::rootdir';\
+                    ignore parameter setting of subsite $subsite_id"
+                set theme_dir ""
+            }
+        }
+        
 	if {$theme_dir ne ""} {
 	    set path $theme_dir/$type/$style
 	    if {![file exists $::acs::rootdir/$path.adp]} {
