@@ -800,7 +800,7 @@ ad_proc -public subsite::set_theme {
     DefaultFormStyle, DefaultListStyle, DefaultListFilterStyle,
     DefaultDimensionalStyle, and ResourceDir parameters.
 
-    @param subsite_id id of the subsite
+    @param subsite_id Id of the subsite
     @param theme Name of the theme (theme key)
 } {
     if { ![info exists subsite_id] } {
@@ -830,6 +830,49 @@ ad_proc -public subsite::set_theme {
     parameter::set_value -parameter StreamingHead -package_id $subsite_id \
         -value $streaming_head
 }
+
+ad_proc -public subsite::save_theme_parameters_as_default {
+    -subsite_id
+    -theme
+} {
+    Save the actual theming parameter set of the given/current subsite
+    as default for the given/current theme. These default values are
+    used, whenever a subsite switches to the specified theme.
+
+    @param subsite_id Id of the subsite
+    @param theme Name of the theme (theme key)
+
+    @author Gustaf Neumann
+} {
+
+    if { ![info exists subsite_id] } {
+        set subsite_id [ad_conn subsite_id]
+    }
+
+    if {![info exists theme]} {
+        set theme [subsite::get_theme -subsite_id $subsite_id]
+    }
+
+    set name [db_string get_theme_name {select name from subsite_themes where key = :theme} -default ""]
+    if {$name eq ""} {
+        error "no subsite theme with key $theme registered"
+    }
+
+    subsite::update_subsite_theme \
+        -key $theme \
+        -name                 $name \
+        -template             [parameter::get -parameter DefaultMaster           -package_id $subsite_id] \
+        -css                  [parameter::get -parameter ThemeCSS                -package_id $subsite_id] \
+        -js                   [parameter::get -parameter ThemeJS                 -package_id $subsite_id] \
+        -form_template        [parameter::get -parameter DefaultFormStyle        -package_id $subsite_id] \
+        -list_template        [parameter::get -parameter DefaultListStyle        -package_id $subsite_id] \
+        -list_filter_template [parameter::get -parameter DefaultListFilterStyle  -package_id $subsite_id] \
+        -dimensional_template [parameter::get -parameter DefaultDimensionalStyle -package_id $subsite_id] \
+        -resource_dir         [parameter::get -parameter ResourceDir             -package_id $subsite_id] \
+        -streaming_head       [parameter::get -parameter StreamingHead           -package_id $subsite_id] 
+        
+}
+
 
 ad_proc -public subsite::get_theme {
     -subsite_id
@@ -861,6 +904,40 @@ ad_proc -public subsite::new_subsite_theme {
     Add a new subsite theme, making it available to the theme configuration code.
 } {
     db_dml insert_subsite_theme {}
+}
+
+ad_proc -public subsite::update_subsite_theme {
+    -key:required
+    -name:required
+    -template:required
+    {-css ""}
+    {-js ""}
+    {-form_template ""}
+    {-list_template ""}
+    {-list_filter_template ""}
+    {-dimensional_template ""}
+    {-resource_dir ""}
+    {-streaming_head ""}
+} {
+    Update the default theming parameters in the database
+
+    @author Gustaf Neumann
+} {
+    db_dml update {
+      update subsite_themes
+        set name = :name,
+            template = :template,
+            css = :css,
+            js = :js,
+            form_template = :form_template,
+            list_template = :list_template,
+            list_filter_template = :list_filter_template,
+            dimensional_template = :dimensional_template,
+            resource_dir = :resource_dir,
+            streaming_head = :streaming_head
+     where
+        key = :key
+    }
 }
 
 ad_proc -public subsite::delete_subsite_theme {
