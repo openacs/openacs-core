@@ -9,7 +9,7 @@
     <implements-subsite-p>f</implements-subsite-p>
     <inherit-templates-p>t</inherit-templates-p>
     
-    <version name="5.9.0b2" url="http://openacs.org/repository/download/apm/acs-admin-5.9.0b2.apm">
+    <version name="5.9.0b3" url="http://openacs.org/repository/download/apm/acs-admin-5.9.0b3.apm">
         <owner url="mailto:dhogaza@pacifier.com">Don Baccus</owner>
         <summary>An interface for Site-wide administration of an OpenACS Installation.</summary>
         <release-date>2015-10-04</release-date>
@@ -20,7 +20,7 @@
         <license>GPL</license>
         <maturity>3</maturity>
 
-        <provides url="acs-admin" version="5.9.0b2"/>
+        <provides url="acs-admin" version="5.9.0b3"/>
         <requires url="acs-kernel" version="5.9.0b2"/>
         <requires url="acs-mail-lite" version="5.9.0b2"/>
 
