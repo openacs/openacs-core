@@ -448,13 +448,13 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
         set user_agent [string tolower [ns_set get [ns_conn headers] User-Agent]]
 
 	if {[string first "safari" $user_agent] != -1} {
-            regexp {version/([0-9]+)[.]} $user_agent _ user_agent_version
-            if {$user_agent_version < 3} {
+            if {[regexp {version/([0-9]+)[.]} $user_agent _ user_agent_version]
+                && $user_agent_version < 3} {
                 set element(htmlarea_p) false
             }
         } elseif {[string first "opera" $user_agent] != -1} {
-            regexp {^[^/]+/([0-9]+)[.]} $user_agent _ user_agent_version
-            if {$user_agent_version < 9} {
+            if {[regexp {^[^/]+/([0-9]+)[.]} $user_agent _ user_agent_version]
+                && $user_agent_version < 9} {
                 set element(htmlarea_p) false
             }
         }
