@@ -3,11 +3,20 @@ ad_page_contract {
 } {
     {package_type ""}
     {upgrade_p:boolean 0}
-    {repository_url ""}
+    {repository_url "http://openacs.org/repository/"}
     {channel ""}
     {maturity:naturalnum ""}
-    {current_channel}
-    {head_channel}
+    {current_channel ""}
+    {head_channel ""}
+}
+
+
+if {$current_channel eq ""} {
+    set current_channel [apm_get_repository_channel]
+    set channel $current_channel
+}
+if {$head_channel eq ""} {
+    set head_channel [lindex [apm_get_repository_channels $repository_url] 0]
 }
 
 #
