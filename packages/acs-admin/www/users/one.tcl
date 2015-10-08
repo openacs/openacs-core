@@ -34,8 +34,14 @@ set site_wide_admin_p [acs_user::site_wide_admin_p -user_id $user_id]
 set warning_p 0
 set ad_conn_user_id [ad_conn user_id]
 
+#
+# Define the url for switching side-wide admin priviledges with a timeout of 60 seconds
+#
 if { $site_wide_admin_p } {
+    set modify_admin_url [export_vars -base modify-admin-privileges {user_id:sign(max_age=60) {action:sign revoke}}]
     set warning_p 1
+} else {
+    set modify_admin_url [export_vars -base modify-admin-privileges {user_id:sign(max_age=60) {action:sign grant}}]
 }
 
 
