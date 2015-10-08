@@ -762,11 +762,16 @@ ad_proc -public export_vars {
                 if { $precedence_type ne "exclude" } {
 
                     foreach flag [split [lindex $name_spec 1] ","] {
-                        set exp_flag($name:$flag) 1
+                        ns_log notice "process flag '$flag'"
+                        set exp_flag($name:$flag) 0
+                        if {[regexp {^(\w+)[\(](.+)[\)]$} $flag . flag value]} {
+                            ns_log notice "set value [list set exp_flag($name:$flag) $value]"
+                            set exp_flag($name:$flag) $value
+                        }
                     }
                     
                     if { $sign_p } {
-                        set exp_flag($name:sign) 1
+                        set exp_flag($name:sign) 0
                     }
                     
                     if { [llength $var_spec] > 1 } {
@@ -793,7 +798,7 @@ ad_proc -public export_vars {
                                     # If no_empty_p isn't set, just do an array get
                                     set exp_value($name) [array get upvar_variable]
                                 }
-                                set exp_flag($name:array) 1
+                                set exp_flag($name:array) 0
                             } else {
                                 if { [info exists exp_flag($name:array)] } {
                                     return -code error "Variable \"$name\" is not an array"
@@ -857,8 +862,8 @@ ad_proc -public export_vars {
                         # very first time I tried to sign an array passed to a page that used
                         # ad_page_contract to verify the veracity of the parameter.
 
-                        ns_set put $export_set "$name:sig" [ad_sign [lsort $exp_value($name)]]
-
+                        ns_set put $export_set "$name:sig" \
+                            [export_vars_sign -params $exp_flag($name:sign) [lsort $exp_value($name)]]
                     }
                 } else {
                     if { [info exists exp_flag($name:multiple)] } {
@@ -869,7 +874,8 @@ ad_proc -public export_vars {
                         ns_set put $export_set $name "$exp_value($name)"
                     }
                     if { [info exists exp_flag($name:sign)] } {
-                        ns_set put $export_set "$name:sig" [ad_sign $exp_value($name)]
+                        ns_set put $export_set "$name:sig" \
+                            [export_vars_sign -params $exp_flag($name:sign) $exp_value($name)]
                     }
                 }
             }
@@ -927,6 +933,24 @@ ad_proc -public export_vars {
     return $export_string
 }
 
+ad_proc -private export_vars_sign {
+    {-params ""}
+    value
+} {
+    Call ad_sign parameterized via max_age and secret specified in urlencoding
+} {
+    set max_age ""
+    set secret  [ns_config "ns/server/[ns_info server]/acs" parametersecret ""]
+    foreach def [split $params &] {
+        lassign [split $def =] key val
+        switch $key {
+            max_age -
+            secret {set $key [ad_urldecode_query $val]}
+        }
+    }
+    ns_log notice [list ad_sign -max_age $max_age -secret $secret $value]
+    return [ad_sign -max_age $max_age -secret $secret $value]
+}
 
 
 ad_proc -deprecated ad_export_vars { 

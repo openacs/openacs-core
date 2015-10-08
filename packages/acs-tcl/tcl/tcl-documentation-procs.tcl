@@ -326,8 +326,8 @@ ad_proc -public ad_page_contract {
     <dt><b>verify</b>
     <dd>Will invoke <a href="/api-doc/proc-view?proc=ad_verify_signature"><code>ad_verify_signature</code></a>
     to verify the value of the variable, to make sure it's the value that was output by us, and haven't been tampered with.
-    If you use <a href="/api-doc/proc-view?proc=export_form_vars"><code>export_form_vars -sign</code></a>
-    or <a href="/api-doc/proc-view?proc=export_url_vars"><code>export_url_vars -sign</code></a> to export the 
+    If you use <a href="/api-doc/proc-view?proc=export_vars"><code>export_vars -form -sign</code></a>
+    or <a href="/api-doc/proc-view?proc=export_vars"><code>export_vars -sign</code></a> to export the 
     variable, use this flag to verify it. To verify a variable named <code>foo</code>, the verify flag 
     looks for a form variable named <code>foo:sig</code>. For a <code>:multiple</code>, it only expects one single 
     signature for the whole list. For <code>:array</code> it also expects one signature only, taken on the
@@ -1011,7 +1011,9 @@ ad_proc -public ad_page_contract {
 		if { ![info exists apc_internal_filter($formal_name:array)] } {
  		    # This is not an array, verify the variable
 		    if { ![info exists apc_signatures($formal_name)] 
-			 || ![ad_verify_signature $var $apc_signatures($formal_name)] 
+			 || ![ad_verify_signature \
+                                  -secret [ns_config "ns/server/[ns_info server]/acs" parametersecret ""] \
+                                  $var $apc_signatures($formal_name)]
 		    } {
 			ad_complain -key $formal_name:verify "[_ acs-tcl.lt_The_signature_for_the]"
 			continue
@@ -1019,7 +1021,9 @@ ad_proc -public ad_page_contract {
 		} else {
 		    # This is an array: verify the [array get] form of the array
 		    if { ![info exists apc_signatures($formal_name)] 
-			 || ![ad_verify_signature [lsort [array get var]] $apc_signatures($formal_name)] 
+			 || ![ad_verify_signature \
+                                  -secret [ns_config "ns/server/[ns_info server]/acs" parametersecret ""] \
+                                  [lsort [array get var]] $apc_signatures($formal_name)] 
 		    } {
 			ad_complain -key $formal_name:verify "[_ acs-tcl.lt_The_signature_for_the]"
 			continue
