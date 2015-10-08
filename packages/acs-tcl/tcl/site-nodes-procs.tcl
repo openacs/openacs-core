@@ -1423,8 +1423,13 @@ if {$UseXotclSiteNodes} {
         # Caching
         #####################################################
 
-        if {[catch {ns_cache flush xo_site_nodesNOTHING}]} {
-            ns_log notice "xotcl-core: creating xo_site_nodes cache"
+        if {[info commands ::ns_cache_names] ne ""} {
+            set createCache [expr {"xo_site_nodes" ni [::ns_cache_names]}]
+        } else {
+            set createCache [catch {ns_cache flush xo_site_nodes NOTHING}]
+        }
+        if {$createCache} {
+            ns_log notice "creating xo_site_nodes cache"
             ns_cache create xo_site_nodes -size 2000000
         }
 
