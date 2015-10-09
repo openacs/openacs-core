@@ -101,7 +101,7 @@ ad_proc -public ad_text_to_html {
         }
 
         set map {}
-        foreach ch $mychars entity $myHTML {
+        foreach ch $myChars entity $myHTML {
             lappend map $ch $entity
         }
         set text [string map $map $text]
@@ -1105,7 +1105,7 @@ ad_proc -public ad_html_to_text {
     }
 
     set map {}
-    foreach ch $mychars entity $myHTML {
+    foreach ch $myChars entity $myHTML {
         lappend map $entity $ch
     }
 
