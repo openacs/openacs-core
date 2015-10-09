@@ -100,9 +100,11 @@ ad_proc -public ad_text_to_html {
             &uuml; &yacute; &thorn; &yuml; &iquest;
         }
 
-        for  { set i 0 }   { $i  < [ llength  $myChars ] }   { incr i }  {
-            set  text [ string map "[ lindex $myChars $i ] [ lindex  $myHTML  $i ]" $text ]
+        set map {}
+        foreach ch $mychars entity $myHTML {
+            lappend map $ch $entity
         }
+        set text [string map $map $text]
     }
 
     # Convert line breaks
@@ -285,14 +287,14 @@ ad_proc -private util_close_html_tags {
     # -gustaf neumann    (Jan 2009)
 
     if {$break_soft == 0 && $break_hard == 0} {
-      set frag [string map [list &# "&amp;#"] $html_fragment]
-      if {[catch {dom parse -html <body>$frag doc} errorMsg]} {
-        # we got an error, so do normal processing
-        #ns_log notice "tdom can't parse the provided HTML, error=$errorMsg,\nchecking fragment without tdom"
+      #set frag [string map [list &# "&amp;#"] $html_fragment]
+      if {[catch {dom parse -html <body>$html_fragment doc} errorMsg]} {
+          # we got an error, so do normal processing
+          ns_log notice "tdom can't parse the provided HTML, error=$errorMsg,\nchecking fragment without tdom"
       } else {
         $doc documentElement root
         set html ""
-        # discared forms
+        # discard forms
         foreach node [$root selectNodes //form] {$node delete}
         # output wellformed html
         set b [lindex [$root selectNodes {//body}] 0]
@@ -1552,7 +1554,7 @@ ad_proc -public ad_html_text_convert {
             set text [string_truncate -ellipsis $ellipsis -more $more -len $truncate_len -- $text]
         }
     }
-    
+
     return $text
 }
 
