@@ -839,15 +839,15 @@ ad_proc -public site_node::closest_ancestor_package {
     <code>include_self</code> is set.
 
     @param url          The url of the node to start from. You must provide 
-    either url or node_id. An empty url is taken to mean 
-    the main site.
+                        either url or node_id. An empty url is taken to mean 
+                        the main site.
     @param node_id      The id of the node to start from. Takes precedence 
-    over any provided url.
+                        over any provided url.
     @param package_key  Restrict search to objects of this package type. You 
-    may supply a list of package_keys.
+                        may supply a list of package_keys.
     @param include_self Return the package_id at the passed-in node if it is 
-    of the desired package_key. Ignored if package_key is 
-    empty.
+                        of the desired package_key. Ignored if package_key is 
+                        empty.
 
     @return The id of the first object found and an empty string if no object
     is found. Throws an error if no node with given url can be found.
