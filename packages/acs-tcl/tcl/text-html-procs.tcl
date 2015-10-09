@@ -1104,12 +1104,12 @@ ad_proc -public ad_html_to_text {
         &uuml; &yacute; &thorn; &yuml; &iquest;
     }
 
-    for  { set i 0 }   { $i  < [ llength  $myHTML ] }   { incr i }  {
-        set output(text) [ string map "[ lindex $myHTML $i ] [ lindex  $myChars  $i ]" $output(text) ]
+    set map {}
+    foreach ch $mychars entity $myHTML {
+        lappend map $entity $ch
     }
-    #---
 
-    return $output(text)
+    return [string map $map $output(text)]
 }
 
 ad_proc -private ad_html_to_text_put_newline { output_var } {
