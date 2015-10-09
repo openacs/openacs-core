@@ -105,7 +105,7 @@ ad_proc -public api_read_script_documentation {
         regsub -all {\#.*$} $line "" line
         set line [string trim $line]
         if { $line ne "" } {
-            set has_contract_p [regexp {(^ad_(page|include)_contract\s)|( initialize )|} $line]
+            set has_contract_p [regexp {(^ad_(page|include)_contract\s)|(Package initialize )} $line]
             break
         }
     }
@@ -987,15 +987,15 @@ namespace eval ::apidoc {
         Given a proc name, formats it as HTML, including highlighting syntax in
         various colors and creating hyperlinks to other proc definitions.<BR>
         The inspiration for this proc was the tcl2html script created by Jeff Hobbs.
-        <P>
+        <p>
         Known Issues:
-        <OL>
-        <LI> This proc will mistakenly highlight switch strings that look like commands as commands, etc.
-        <LI> There are many undocumented AOLserver commands including all of the commands added by modules.
-        <LI> When a proc inside a string has explicitly quoted arguments, they are not formatted.
-        <LI> regexp and regsub are hard to parse properly.  E.g. If we use the start option, and we quote its argument,
+        <ol>
+        <li> This proc will mistakenly highlight switch strings that look like commands as commands, etc.
+        <li> There are many undocumented AOLserver commands including all of the commands added by modules.
+        <li> When a proc inside a string has explicitly quoted arguments, they are not formatted.
+        <li> regexp and regsub are hard to parse properly.  E.g. If we use the start option, and we quote its argument,
         and we have an ugly regexp, then this code might highlight it incorrectly.
-        </OL>
+        </ol>
 
         @author Jamie Rasmussen (jrasmuss@mle.ie)
 
