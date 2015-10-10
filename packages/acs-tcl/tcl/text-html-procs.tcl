@@ -212,12 +212,12 @@ ad_proc -public ad_unquotehtml {arg} {
 #
 ####################
 
+
 #
 # lars@pinds.com, 19 July 2000:
 # Should this proc change name to something in line with the rest
 # of the library?
 #
-
 ad_proc -private util_close_html_tags {
     html_fragment 
     {break_soft 0} 
@@ -257,8 +257,6 @@ ad_proc -private util_close_html_tags {
     @author Jeff Davis (davis@xarg.net)
     
 } {
-    set frag $html_fragment 
-
     # 
     # The code in this function had an exponential behavior based on
     # the size.  On the current OpenACS.org site (Jan 2009), the
@@ -287,7 +285,6 @@ ad_proc -private util_close_html_tags {
     # -gustaf neumann    (Jan 2009)
 
     if {$break_soft == 0 && $break_hard == 0} {
-      #set frag [string map [list &# "&amp;#"] $html_fragment]
       if {[catch {dom parse -html <body>$html_fragment doc} errorMsg]} {
           # we got an error, so do normal processing
           ns_log notice "tdom can't parse the provided HTML, error=$errorMsg,\nchecking fragment without tdom"
