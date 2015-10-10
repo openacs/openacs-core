@@ -1,6 +1,6 @@
 <master>
 <property name="context">@context;literal@</property>
-<property name="doc(title)">@doc.title;literal@</property>
+<property name="&doc">doc</property>
 
 <h1>@doc.title@</h1>
 
