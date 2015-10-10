@@ -33,14 +33,19 @@ template_tag tcl { chunk params } {
 
 template_tag property { chunk params } {
 
-  set name [ns_set iget $params name]
+    set name [ns_set iget $params name]
+    set adp  [ns_set iget $params adp 0]
 
-  # quote dollar signs, square bracket and quotes
-  regsub -all {[\]\[\"\\$]} $chunk {\\&} quoted_chunk
-  regsub -all {<tcl>} $quoted_chunk {<%} quoted_chunk
-  regsub -all {</tcl>} $quoted_chunk {%>} quoted_chunk
+    # quote dollar signs, square bracket and quotes
+    regsub -all {[\]\[\"\\$]} $chunk {\\&} quoted_chunk
+    if {$adp} {
+        regsub -all {<tcl>} $quoted_chunk {<%} quoted_chunk
+        regsub -all {</tcl>} $quoted_chunk {%>} quoted_chunk
 
-  template::adp_append_code "set __adp_properties($name) \[ns_adp_parse -string \"$quoted_chunk\"\]"
+        template::adp_append_code "set __adp_properties($name) \[ns_adp_parse -string \"$quoted_chunk\"\]"
+    } else {
+        template::adp_append_code "set __adp_properties($name) \"$quoted_chunk\""
+    }
 }
 
 # Set the master template.
