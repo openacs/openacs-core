@@ -4690,14 +4690,14 @@ ad_proc -public util::disk_cache_eval {
     if {$cache} {
         set hash [ns_sha1 $call]
         set dir [ad_tmpdir]/$key
-        set file_mame $dir/$id-$hash
+        set file_name $dir/$id-$hash
         ns_mutex eval [nsv_get ad_html_procs mutex] {
             if {![file isdirectory $dir]} {file mkdir $dir}
-            if {[file readable $file_mame]} {
-                set result [template::util::read_file $file_mame]
+            if {[file readable $file_name]} {
+                set result [template::util::read_file $file_name]
             } else {
                 set result [{*}$call]
-                template::util::write_file $file_mame $result
+                template::util::write_file $file_name $result
             }
         }
     } else {
