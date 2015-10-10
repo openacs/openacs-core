@@ -506,7 +506,7 @@ ad_proc -public template::widget::hidden {
     # I changed this by saying that field is multiple whenever element(values) 
     # exists and is not null.
     if { [info exists element(values)] && $element(values) ne "" } {
-      ns_log notice "hidden form element with multiple values: <$element(values)>"
+      #ns_log notice "hidden form element with multiple values: <$element(values)>"
       set output {}
       set count 0
       foreach itemvalue $element(values) {
