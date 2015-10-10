@@ -4657,14 +4657,16 @@ ad_proc ad_tmpdir {} {
     return [ns_config ns/parameters tmpdir]
 }
 
-if { [apm_first_time_loading_p] } {
-    nsv_set ad_html_procs mutex [ns_mutex create]
-}
 
 #
-# Experimental disk-cache, to test whether this can speed up openacs forums threads
+# Experimental disk-cache, to test whether this can speed up e.g. openacs.org forums threads....
 # Documentation follows
 #
+
+if { [apm_first_time_loading_p] } {
+    nsv_set ad_disk_cache mutex [ns_mutex create]
+}
+
 ad_proc -public util::disk_cache_flush {
     -key:required
     -id:required
@@ -4689,10 +4691,10 @@ ad_proc -public util::disk_cache_eval {
 		 -default 1]
     if {$cache} {
         set hash [ns_sha1 $call]
-        set dir [ad_tmpdir]/$key
+        set dir [ad_tmpdir]/oacs-cache/$key
         set file_name $dir/$id-$hash
-        ns_mutex eval [nsv_get ad_html_procs mutex] {
-            if {![file isdirectory $dir]} {file mkdir $dir}
+        if {![file isdirectory $dir]} {file mkdir $dir}
+        ns_mutex eval [nsv_get ad_disk_cache mutex] {
             if {[file readable $file_name]} {
                 set result [template::util::read_file $file_name]
             } else {
