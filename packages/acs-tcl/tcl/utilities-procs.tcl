@@ -4652,10 +4652,60 @@ ad_proc ad_tmpnam {{template ""}} {
 }
 
 ad_proc ad_tmpdir {} {
-    conveniece function to return the tmp directory
+    Convenience function to return the tmp directory
 } {
     return [ns_config ns/parameters tmpdir]
 }
+
+if { [apm_first_time_loading_p] } {
+    nsv_set ad_html_procs mutex [ns_mutex create]
+}
+
+#
+# Experimental disk-cache, to test whether this can speed up openacs forums threads
+# Documentation follows
+#
+ad_proc -public util::disk_cache_flush {
+    -key:required
+    -id:required
+} {
+} {
+    set dir [ad_tmpdir]/$key
+    foreach file [flib -nocomplain $dir/$id-*] {
+        file delete $file
+        ns_log notice "FLUSH file delete $file"
+    }
+}
+
+ad_proc -public util::disk_cache_eval {
+    -call:required
+    -key:required
+    -id:required
+} {
+} {
+    set cache [::parameter::get_from_package_key \
+		 -package_key acs-tcl \
+		 -parameter DiskCache \
+		 -default 1]
+    if {$cache} {
+        set hash [ns_sha1 $call]
+        set dir [ad_tmpdir]/$key
+        set file_mame $dir/$id-$hash
+        ns_mutex eval [nsv_get ad_html_procs mutex] {
+            if {![file isdirectory $dir]} {file mkdir $dir}
+            if {[file readable $file_mame]} {
+                set result [template::util::read_file $file_mame]
+            } else {
+                set result [{*}$call]
+                template::util::write_file $file_mame $result
+            }
+        }
+    } else {
+        set result [{*}$call]
+    }
+    return $result
+}
+
 
 # Local variables:
 #    mode: tcl
