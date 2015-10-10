@@ -92,7 +92,7 @@ ad_proc -public ad_complain {
     if { [info exists ::ad_page_contract_error_string($key)] } {
 	lappend ::ad_page_contract_complaints $::ad_page_contract_error_string($key)
     } elseif { $message eq "" } {
-	lappend ::ad_page_contract_complaints "[_ acs-tcl.lt_Validation_key_compla]"
+	lappend ::ad_page_contract_complaints [_ acs-tcl.lt_Validation_key_compla]
     } else {
 	lappend ::ad_page_contract_complaints $message
     }
@@ -551,6 +551,11 @@ ad_proc -public ad_page_contract {
 	ad_arg_parser $valid_args $args
     }
 
+    # reset $::ad_page_contract_variables
+    if {[info exists ::ad_page_contract_variables]} {
+        unset ::ad_page_contract_variables
+    }
+
     ####################
     # 
     #   Check supplied query form and set up variables in caller's environment
@@ -601,7 +606,7 @@ ad_proc -public ad_page_contract {
 	set element_len [llength $element]
 
 	if { $element_len > 2 } {
-	    return -code error "[_ acs-tcl.lt_Argspec_element_is_in]"
+	    return -code error [_ acs-tcl.lt_Argspec_element_is_in]
 	}
 
 	set arg_spec [lindex $element 0]
@@ -609,7 +614,7 @@ ad_proc -public ad_page_contract {
 	if { ![regexp {^([^ \t:]+)(?::([a-zA-Z0-9_,(|)]*))?$} $arg_spec match name flags] } {
 	    return -code error "Argspec '$arg_spec' doesn't have the right format. It must be var\[:flag\[,flag ...\]\]"
 	}
-	
+
 	lappend apc_formals $name
         set apc_formal($name) 1
 	     
@@ -1297,7 +1302,7 @@ ad_proc -public ad_page_contract_filter {
 	not to confuse Tcl into thinking it's octal
     } {
 	if { ![regexp {^[0-9]+$} $value] } {
-	    ad_complain "[_ acs-tcl.lt_Value_is_not_an_integ]"
+	    ad_complain [_ acs-tcl.lt_Value_is_not_an_integ]
 	    return 0
 	}
 	# trim leading zeros, so as not to confuse Tcl
@@ -1598,7 +1603,7 @@ ad_page_contract_filter integer { name value } {
       return 1
     }
   }
-  ad_complain "[_ acs-tcl.lt_name_is_not_an_intege]"
+  ad_complain [_ acs-tcl.lt_name_is_not_an_intege]
   return 0
 }
 
@@ -1622,7 +1627,7 @@ ad_page_contract_filter naturalnum { name value } {
       }
     }
 
-    ad_complain "[_ acs-tcl.lt_name_is_not_a_natural]"
+    ad_complain [_ acs-tcl.lt_name_is_not_a_natural]
     return 0
 }
 
@@ -1641,7 +1646,7 @@ ad_page_contract_filter range { name value range } {
     }
     lassign $range min max
     if { $value < $min || $value > $max } {
-	ad_complain "[_ acs-tcl.lt_name_is_not_in_the_ra]"
+	ad_complain [_ acs-tcl.lt_name_is_not_in_the_ra]
 	return 0
     }
     return 1
@@ -1653,7 +1658,7 @@ ad_page_contract_filter sql_identifier { name value } {
     @creation-date 25 July 2000
 } {		
     if { ![string is wordchar $value] } {
-	ad_complain "[_ acs-tcl.lt_name_is_not_a_valid_S]"
+	ad_complain [_ acs-tcl.lt_name_is_not_a_valid_S]
 	return 0 
     } 
     return 1
@@ -1726,7 +1731,7 @@ ad_page_contract_filter -type post date { name date } {
 } {
     foreach date_element { day month year } {
 	if { ![info exists date($date_element)] } {
-	    ad_complain "[_ acs-tcl.lt_Invalid_date_date_ele]"
+	    ad_complain [_ acs-tcl.lt_Invalid_date_date_ele]
 	    return 0
 	}
     }
@@ -1739,14 +1744,14 @@ ad_page_contract_filter -type post date { name date } {
 
     foreach date_element { day year } {
 	if { ![regexp {^(0*)(([1-9][0-9]*|0))$} $date($date_element) match zeros real_value] } {
-	    ad_complain "[_ acs-tcl.lt_Invalid_date_date_ele_1]"
+	    ad_complain [_ acs-tcl.lt_Invalid_date_date_ele_1]
 	    return 0
 	}
 	set date($date_element) $real_value
     }
 
     if { $date(year) ne "" && [string length $date(year)] != 4 } {
-	ad_complain "[_ acs-tcl.lt_Invalid_date_The_year]"
+	ad_complain [_ acs-tcl.lt_Invalid_date_The_year]
 	return 0
     } 
 
@@ -1771,7 +1776,7 @@ ad_page_contract_filter -type post date { name date } {
 	|| ($date(month) == 9 && $date(day) > 30) 
 	|| ($date(month) == 11 && $date(day) > 30)
     } {
-	ad_complain "[_ acs-tcl.lt_Invalid_date_datemont]"
+	ad_complain [_ acs-tcl.lt_Invalid_date_datemont]
 	return 0
     }
 
@@ -1787,7 +1792,7 @@ ad_page_contract_filter -type post time { name time } {
 } {
     foreach time_element { time ampm } {
 	if { ![info exists time($time_element)] } {
-	    ad_complain "[_ acs-tcl.lt_Invalid_time_time_ele]"
+	    ad_complain [_ acs-tcl.lt_Invalid_time_time_ele]
 	    return 0
 	}
     }
@@ -1799,7 +1804,7 @@ ad_page_contract_filter -type post time { name time } {
 
     set time_element_values [split $time(time) ":"]
     if { [llength $time_element_values] != 3 } {
-	ad_complain "[_ acs-tcl.lt_Invalid_time_timetime]"
+	ad_complain [_ acs-tcl.lt_Invalid_time_timetime]
 	return 0
     }
 
@@ -1818,7 +1823,7 @@ ad_page_contract_filter -type post time { name time } {
 	|| $time(minutes) < 0 || $time(minutes) > 59 
 	|| $time(seconds) < 0 || $time(seconds) > 59
     } {
-	ad_complain "[_ acs-tcl.lt_Invalid_time_timetime_1]"
+	ad_complain [_ acs-tcl.lt_Invalid_time_timetime_1]
 	return 0
     }
 
@@ -1832,7 +1837,7 @@ ad_page_contract_filter -type post time24 { name time } {
     @creation-date 25 July 2000
 } {
     if { ![info exists time(time)] } {
-	ad_complain "[_ acs-tcl.lt_Invalid_time_time_is_]"
+	ad_complain [_ acs-tcl.lt_Invalid_time_time_is_]
 	return 0
     }
   
@@ -1843,7 +1848,7 @@ ad_page_contract_filter -type post time24 { name time } {
 
     set time_element_values [split $time(time) ":"]
     if { [llength $time_element_values] != 3 } {
-	ad_complain "[_ acs-tcl.lt_Invalid_time_timetime]"
+	ad_complain [_ acs-tcl.lt_Invalid_time_timetime]
 	return 0
     }
 
@@ -1861,7 +1866,7 @@ ad_page_contract_filter -type post time24 { name time } {
 	    || $time(minutes) < 0 || $time(minutes) > 59 \
 	    || $time(seconds) < 0 || $time(seconds) > 59
     } {
-	ad_complain "[_ acs-tcl.lt_Invalid_time_timetime_2]"
+	ad_complain [_ acs-tcl.lt_Invalid_time_timetime_2]
 	return 0
     }
 
@@ -1925,7 +1930,7 @@ ad_page_contract_filter email { name value } {
 } {
     set valid_p [regexp "^\[^@\t ]+@\[^@.\t]+(\\.\[^@.\n ]+)+$" $value]
     if { !$valid_p } {
-	ad_complain "[_ acs-tcl.lt_name_does_not_appear_]"
+	ad_complain [_ acs-tcl.lt_name_does_not_appear_]
 	return 0
     }
     return 1
@@ -1950,7 +1955,7 @@ ad_page_contract_filter float { name value } {
     regsub {\.} $value "" value_to_be_tested
 
     if { ![regexp {^[0-9]+$} $value_to_be_tested] } {
-        ad_complain "[_ acs-tcl.lt_Value_is_not_an_decim]"
+        ad_complain [_ acs-tcl.lt_Value_is_not_an_decim]
         return 0
     }
     # trim leading zeros, so as not to confuse Tcl
@@ -1986,8 +1991,8 @@ ad_page_contract_filter negative_float { name value } {
     # trim leading zeros, so as not to confuse Tcl
     set value [string trimleft $value "0"]
     if { $value eq "" } {
-			# but not all of the zeros
-			set value "0"
+        # but not all of the zeros
+        set value "0"
     }
     return 1
 }
@@ -2022,7 +2027,7 @@ ad_page_contract_filter phone { name value } {
 } {
     if { [string trim $value] ne "" } {
 	if { ![regexp {^\(?([1-9][0-9]{2})\)?(-|\.|\ )?([0-9]{3})(-|\.|\ )?([0-9]{4})} $value] } {
-	    ad_complain "[_ acs-tcl.lt_value_does_not_appear]"
+	    ad_complain [_ acs-tcl.lt_value_does_not_appear]
 	    return 0
 	}
     }
@@ -2124,7 +2129,7 @@ ad_page_contract_filter_rule html { name filters } {
     @creation-date 25 July 2000
 } {
     foreach flag $filters {
-	if { [lsearch { nohtml html allhtml integer naturalnum } $flag] != -1 } {
+	if { $flag in { nohtml html allhtml integer naturalnum word token } } {
 	    return
 	}
     }
@@ -2136,7 +2141,7 @@ ad_page_contract_filter_rule tmpfile { name filters } {
     @author Lars Pind (lars@pinds.com)
     @creation-date 25 July 2000
 } {
-    if { [string match "*tmpfile" $name] && [lsearch -exact $filters tmpfile] == -1 } {
+    if { [string match "*tmpfile" $name] && "tmpfile" ni $filters } {
 	lappend filters tmpfile
     }
 }
