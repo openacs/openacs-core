@@ -141,7 +141,7 @@ ad_proc -private template:template_tag_helper {params} {
 	template::adp_append_code "            ns_cache set ds_page_bits \[ad_conn request\]:error \[lappend __include_errors \[list \"$src\" \$::errorInfo\]\]"
 	template::adp_append_code "        }"
     }
-    template::adp_append_code "        ns_log Error \"Error in include template \\\"\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]\\\": \$errmsg\n\$::errorInfo\""
+    template::adp_append_code "        ad_log Error \"Error in include template \\\"\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]\\\": \$errmsg\""
     template::adp_append_code "    }"
     template::adp_append_code "}"
 
@@ -697,7 +697,7 @@ template_tag include-optional { chunk params } {
 
   template::adp_append_code "if { \[catch { ad_try { lappend __adp_include_optional_output \[$command\] } ad_script_abort val { } } errmsg\] } {"
   template::adp_append_code "    append __adp_output \"Error in include template \\\"\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]\\\": \[ns_quotehtml \$errmsg\]\""
-  template::adp_append_code "    ns_log Error \"Error in include template \\\"\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]\\\": \$errmsg\n\$::errorInfo\""
+  template::adp_append_code "    ad_log Error \"Error in include template \\\"\[template::util::url_to_file \"$src\" \"\$__adp_stub\"\]\\\": \$errmsg\""
   template::adp_append_code "} else {"
   template::adp_append_code "if { \[string trim \[lindex \$__adp_include_optional_output end\]\] ne {} } {"
 

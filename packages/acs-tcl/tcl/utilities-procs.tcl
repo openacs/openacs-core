@@ -4708,6 +4708,28 @@ ad_proc -public util::disk_cache_eval {
     return $result
 }
 
+ad_proc -public ad_log {
+    level
+    message
+} {
+    Output ns_log message with detailed context. This function is
+    intended to be used typically with "error" to ease debugging.
+    
+    @param level Severity level such as "error" or "warning".
+    @param message Log message
+
+    @author Gustaf Neumann
+} {
+    set prefix ""
+    if {[ns_conn isconnected]} {
+        set headers [ns_conn headers]
+        append prefix \
+            [ns_conn method] \
+            " http://[ns_set iget $headers host][ns_conn url]?[ns_conn query]" \
+            " referred by '[get_referrer]'\n"
+    }
+    ns_log $level "${prefix}${message}\n[uplevel ad_get_tcl_call_stack]"
+}
 
 # Local variables:
 #    mode: tcl
