@@ -826,9 +826,7 @@ ad_proc rp_report_error {
 
     ns_return 500 text/html $rendered_page
 
-    set headers [ns_conn headers]
-    ns_log Error "[ns_conn method] http://[ns_set iget $headers host][ns_conn url]?[ns_conn query]\
-	referred by '$prev_url'\n$error_message"
+    ad_log error $error_message
 }
 
 ad_proc -private rp_path_prefixes {path} {
