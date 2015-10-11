@@ -67,9 +67,10 @@ set UseXotclSiteNodes 0
 #
 
 if {[info commands ::nx::Object] ne ""
-    && [db_driverkey ""] eq "postgresql"
-    && [apm_package_installed_p xotcl-core]
     && [ns_info name] eq "NaviServer"
+    && [db_driverkey ""] eq "postgresql"
+    && [db_string check_base_tables {select 1 from pg_class where relname = 'apm_package_versions'} -default 0]
+    && [apm_package_installed_p xotcl-core]
 } {
     set UseXotclSiteNodes 1
     ns_log notice "use XOTcl Site Nodes"
