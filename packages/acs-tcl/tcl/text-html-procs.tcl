@@ -285,21 +285,28 @@ ad_proc -private util_close_html_tags {
     # -gustaf neumann    (Jan 2009)
 
     if {$break_soft == 0 && $break_hard == 0} {
-      if {[catch {dom parse -html <body>$html_fragment doc} errorMsg]} {
-          # we got an error, so do normal processing
-          ns_log notice "tdom can't parse the provided HTML, error=$errorMsg,\nchecking fragment without tdom"
-      } else {
-        $doc documentElement root
-        set html ""
-        # discard forms
-        foreach node [$root selectNodes //form] {$node delete}
-        # output wellformed html
-        set b [lindex [$root selectNodes {//body}] 0]
-        foreach n [$b childNodes] {
-          append html [$n asHTML]
+        #
+        # We have to protect against crashes, that might happen due to
+        # unsupported numeric entities in tdom. Therefore, we map
+        # numeric entities into something sufficiently opaque
+        #
+        set frag [string map [list &# "\0&amp;#\0"] $html_fragment]
+        
+        if {[catch {dom parse -html <body>$frag doc} errorMsg]} {
+            # we got an error, so do normal processing
+            ns_log notice "tdom can't parse the provided HTML, error=$errorMsg,\nchecking fragment without tdom"
+        } else {
+            $doc documentElement root
+            set html ""
+            # discard forms
+            foreach node [$root selectNodes //form] {$node delete}
+            # output wellformed html
+            set b [lindex [$root selectNodes {//body}] 0]
+            foreach n [$b childNodes] {
+                append html [$n asHTML]
+            }
+            return [string map [list "\0&amp;#\0" &#] $html]
         }
-        return $html
-      }
     }
 
     set frag $html_fragment 
