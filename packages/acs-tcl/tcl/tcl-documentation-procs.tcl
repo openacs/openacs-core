@@ -1074,14 +1074,20 @@ ad_proc -public ad_page_contract {
 	
 	    } elseif { ![info exists apc_internal_filter($formal_name:optional)]} {
                 #
-                # The element is not optional. Finally check, if there
-                # is a multirow with the name already defined. This is
-                # just used for cases, where multirows are passed to
-                # an ad_include contract. No further checking other than
-                # check for existence is performed in this case.
+                # The element is not optional.
+                #
+                # Before we complain, we check, if a multirow or array
+                # with the name are already defined in the target
+                # environment. This is just used for cases, where
+                # multirows are passed to an "ad_include
+                # contract". These data types are not copied to the
+                # ns_set and therefore these are not seen by the above
+                # tests. No further checking other than check for
+                # existence is performed for these cases.
                 #
                 set multirow_name $formal_name:rowcount
-                if {![uplevel $level [list info exists $multirow_name]]} {
+                if {![uplevel $level [list info exists $multirow_name]]
+                    && ![uplevel $level [list info exists $formal_name]] } {
                     ad_complain -key $formal_name [_ acs-tcl.lt_You_must_supply_a_val]
                 }
 	    }
@@ -1231,8 +1237,14 @@ ad_proc ad_include_contract {docstring args} {
             #
             # For the time being, do nothing with arrays
             #
-            #ns_log notice "$__v is an array"
-            #lappend __cmd $__v [uplevel [list array get $__v]]
+            # ns_log notice "$__v is an array"
+            # if {[string match *:* $__v] || [uplevel [list info exists $__v:rowcount]]} {
+            #     #
+            #     # don't try to pass multirows
+            #     #
+            # } else {
+            #     #lappend __cmd $__v [uplevel [list array get $__v]]
+            # }
             continue
         }
         
