@@ -2199,13 +2199,17 @@ ad_proc -public apm_get_repository_channels { {repository_url http://openacs.org
     set repositories ""
     dom parse -simple -html [dict get $result page] doc
     $doc documentElement root
-    foreach node [$root selectNodes //ul/li] {
-        set txt [$node asText]
-        if {![regexp {^(\S+)\s[\(]([^\)]+)\)} $txt _ name tag]} {
+    foreach node [$root selectNodes {//ul/li/a}] {
+        set href [$node getAttribute href]
+        if {[regexp {(\d+[-]\d+)} $href . version]} {
+            set name $version
+            set tag oacs-$version
+            lappend repositories [list $name $tag]
+        } else {
+            set txt [string trim [$node asText]]
             ns_log warning "unexpected li found in repository $repository_url: $txt"
             continue
         }
-        lappend repositories [list $name $tag]
     }
     return $repositories
 }
