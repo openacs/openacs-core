@@ -986,7 +986,7 @@ ad_proc -public ad_get_signed_cookie {
     lassign $cookie_value value signature
     ns_log Debug "ad_get_signed_cookie: Got signed cookie $name with value $value, signature $signature."
 
-    if { [ad_verify_signature $value $signature] } {
+    if { [ad_verify_signature -secret $secret $value $signature] } {
         ns_log Debug "ad_get_signed_cookie: Verification of cookie $name OK"
         return $value
     }
@@ -1016,7 +1016,7 @@ ad_proc -public ad_get_signed_cookie_with_expr {
     }
 
     lassign $cookie_value value signature
-    set expr_time [ad_verify_signature_with_expr $value $signature]
+    set expr_time [ad_verify_signature_with_expr -secret $secret $value $signature]
 
     ns_log Debug "Security: Done calling get_cookie $cookie_value for $name; received $expr_time expiration, getting $value and $signature."
 
