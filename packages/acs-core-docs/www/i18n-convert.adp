@@ -219,7 +219,7 @@ begins.
   &lt;/if&gt;
 
 &lt;if \@components.view_bugs_url\@ not nil&gt;
-&lt;a href="\@components.view_bugs_url\@" title="#bug-tracker.View_the_bug_fo_component#"&gt;
+&lt;a href="\@components.view_bugs_url\@" title="<span>#</span>bug-tracker.View_the_bug_fo_component#"&gt;
 &lt;/if&gt;
 \@components.num_bugs\@ 
 &lt;if \@components.num_bugs\@ eq 1&gt;
@@ -234,7 +234,7 @@ begins.
 </pre><p>It would probably be better to do this as something like:</p><pre class="programlisting">
 &lt;if \@components.view_bugs_url\@ not nil&gt;
   &lt;if \@components.num_bugs\@ eq 1&gt;
-    &lt;a href="\@components.view_bugs_url\@" title="#bug-tracker.View_the_bug_fo_component#"&gt;#bug-tracker.one_bug#&lt;/a&gt;
+    &lt;a href="\@components.view_bugs_url\@" title="<span>#</span>bug-tracker.View_the_bug_fo_component#"&gt;<span>#</span>bug-tracker.one_bug#&lt;/a&gt;
   &lt;/if&gt;&lt;else&gt;
     &lt;a href="\@components.view_bugs_url\@" title="#bug-tracker.View_the_bug_fo_component#"&gt;#bug-tracker.N_bugs#&lt;/a&gt;
   &lt;/else&gt;
