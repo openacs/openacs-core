@@ -762,10 +762,8 @@ ad_proc -public export_vars {
                 if { $precedence_type ne "exclude" } {
 
                     foreach flag [split [lindex $name_spec 1] ","] {
-                        ns_log notice "process flag '$flag'"
                         set exp_flag($name:$flag) 0
                         if {[regexp {^(\w+)[\(](.+)[\)]$} $flag . flag value]} {
-                            ns_log notice "set value [list set exp_flag($name:$flag) $value]"
                             set exp_flag($name:$flag) $value
                         }
                     }
