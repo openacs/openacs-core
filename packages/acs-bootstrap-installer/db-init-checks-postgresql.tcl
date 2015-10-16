@@ -35,8 +35,8 @@ proc db_bootstrap_checks { errors error_p } {
         nsv_set ad_database_version . $version
     }
 
-    if { $version < 8.0 } {
-        append my_errors "<li>Your installed version of Postgres is too old.  Please install PostgreSQL 8.0 or later.\n"
+    if { $version < 9.0 } {
+        append my_errors "<li>Your installed version of Postgres is too old.  Please install PostgreSQL 9.0 or later.\n"
         set my_error_p 1
     }
 
@@ -58,8 +58,6 @@ proc db_bootstrap_checks { errors error_p } {
         append my_errors "<li>An unexpected error was encountered while testing for the of existence PL/pgSQL.  Here's the error messsage: <blockquote><pre>$errmsg</pre></blockquote>\n"
         set my_error_p 1
     }
-
-    # RBM: Remove check for 7.1 since we don't support it anymore. 2002-01-14 
 
     ns_db releasehandle $db
 
