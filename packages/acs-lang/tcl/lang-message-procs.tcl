@@ -837,6 +837,7 @@ ad_proc -public lang::message::lookup {
 			    set message $default
 			} else {
                             ad_log Error "lang::message::lookup: Key '$key' does not exist in en_US"
+                            set message "MESSAGE KEY MISSING: '$key'"
 			}
 		    }
                 }
