@@ -1718,8 +1718,8 @@ ad_proc -public security::locations {} {
     set host_post ""
 
     # set host_name
-    if {![regexp {(http://|https://)(.*?):(.*?)/?} [util_current_location] discard host_protocol host_name host_port]} {
-        regexp {(http://|https://)(.*?)/?} [util_current_location] discard host_protocol host_name
+    if {![regexp {(http://|https://)(.*?):(.*?)/?} [util_current_location] . host_protocol host_name host_port]} {
+        regexp {(http://|https://)(.*?)/?} [util_current_location] . host_protocol host_name
     }
 
     set driver_section [ns_driversection -driver $driver]
@@ -1728,7 +1728,7 @@ ad_proc -public security::locations {} {
     # not same as from config.tcl, may help with proxy issues etc
     set config_hostname [ns_config $driver_section hostname]
     if { $config_hostname ne $host_name } {
-        ns_log Warning "security::locations hostname '[ns_config $driver_section hostname]' from config.tcl does not match from util_current_location: $host_name"
+        ns_log notice "security::locations hostname '[ns_config $driver_section hostname]' from config.tcl does not match from util_current_location: $host_name"
     }
 
     # insecure locations
@@ -1786,7 +1786,7 @@ ad_proc -public security::locations {} {
                                       get_node_host_names "select host from host_node_map"]
     # fastest place for handling this special case:
     if { $config_hostname ne $host_name } {
-        ns_log Notice "security::locations adding $config_hostname since utl_current_location different than config.tcl."
+        #ns_log Notice "security::locations adding $config_hostname since utl_current_location different than config.tcl."
         lappend host_node_map_hosts_list $config_hostname
     }
     if { [llength $host_node_map_hosts_list] > 0 } {
