@@ -2096,13 +2096,13 @@ ad_page_contract_filter word { name value } {
 
 ad_page_contract_filter token { name value } {
     Checks whether the value is a Tcl word, or contains a few 
-    rather safe other characters (",", "-") used e.g. in orderby.
+    rather safe other characters (".", ",", "-") used e.g. in orderby.
 
     @author Gustaf Neumann
     @creation-date 24 June 2015
 } {
 
-    if {[regexp {^[\w,: -]+$} $value]} {
+    if {[regexp {^[\w.,: -]+$} $value]} {
 	return 1
     }
     ad_complain [_ acs-tcl.lt_name_contains_invalid]
