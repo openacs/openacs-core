@@ -53,8 +53,9 @@ set subsite_url [subsite::get_element -element url]
 
 set show_members_list_to [parameter::get -parameter "ShowMembersListTo" -default 2]
 set show_members_page_link_p \
-	[expr {$admin_p || ($user_id != 0 && $show_members_list_to ==1) || \
-	$show_members_list_to == 0 }]
+    [expr {$admin_p
+           || ($user_id != 0 && $show_members_list_to ==1)
+           || $show_members_list_to == 0 }]
 
 # User's group membership
 

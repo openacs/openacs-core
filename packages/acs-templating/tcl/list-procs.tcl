@@ -1711,10 +1711,10 @@ ad_proc -private template::list::prepare_filters {
 
 
             # Handle 'other_label'
-            if { ([info exists current_filter_value] && $current_filter_value ne "") && \
-                     !$found_selected_p && \
-                     $filter_properties(other_label) ne "" } {
-
+            if { [info exists current_filter_value] && $current_filter_value ne ""
+                 && !$found_selected_p
+                 && $filter_properties(other_label) ne ""
+             } {
                 # Add filter entry with the 'other_label'.
                 lappend filter_properties(values) [list $filter_properties(other_label) {}]
                 lappend filter_properties(urls) {}

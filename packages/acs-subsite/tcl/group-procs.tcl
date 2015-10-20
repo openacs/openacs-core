@@ -663,9 +663,12 @@ ad_proc -public group::add_member {
     set admin_p [permission::permission_p -object_id $group_id -privilege "admin"]
 
     # Only admins can add non-membership_rel members
-    if { $rel_type eq "" || \
-             (!$no_perm_check_p && $rel_type ne "" && $rel_type ne "membership_rel" && \
-                  ![permission::permission_p -object_id $group_id -privilege "admin"]) } {
+    if { $rel_type eq ""
+         || (!$no_perm_check_p
+             && $rel_type ne ""
+             && $rel_type ne "membership_rel"
+             && ![permission::permission_p -object_id $group_id -privilege "admin"])
+     } {
         set rel_type "membership_rel"
     }
 

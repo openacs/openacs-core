@@ -550,12 +550,13 @@ ad_proc -private ad_login_page {} {
     Returns 1 if the page is used for logging in, 0 otherwise. 
 
 } {
-
     set url [ad_conn url]
-    if { [string match "*register/*" $url] || [string match "/index*" $url] || \
-             [string match "/index*" $url] || \
-             "/" eq $url || \
-             [string match "*password-update*" $url] } {
+    if { [string match "*register/*" $url]
+         || [string match "/index*" $url]
+         || [string match "/index*" $url]
+         || "/" eq $url
+         || [string match "*password-update*" $url]
+     } {
         return 1
     }
 

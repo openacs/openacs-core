@@ -367,8 +367,7 @@ ad_proc -public apm_file_watchable_p { path } {
 
     # Check the db type
     set file_db_type [apm_guess_db_type $package_key $package_rel_path]
-    set right_db_type_p [expr {$file_db_type eq ""} || \
-                             [string equal $file_db_type [db_type]]]
+    set right_db_type_p [expr {$file_db_type eq "" || $file_db_type eq [db_type]}]
 
     # Check the file type
     set file_type [apm_guess_file_type $package_key $package_rel_path]

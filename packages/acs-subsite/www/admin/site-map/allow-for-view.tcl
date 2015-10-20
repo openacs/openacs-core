@@ -1,5 +1,5 @@
 ad_page_contract {
-   Ask for confirmation for view on public site_map
+    Ask for confirmation for view on public site_map
     @author Viaro Networks (vivian@viaro.net)
     @cvs-id $id:
 
@@ -24,10 +24,10 @@ set check_list [list]
 
 foreach check_node $checkbox {
     if {$main_node eq $check_node} {
-
+        
 	# The main site node is always checked
 	lappend check_list $check_node
-
+        
     } elseif {[site_node::get_parent_id -node_id $check_node] eq $main_node} {
 
 	# This node doesn't have a parent node, only the  main site node
@@ -37,19 +37,21 @@ foreach check_node $checkbox {
 	# The node has an inmediate parent, we put it on the list and all his parents until the
 	# node_id equals the main_site node_id and is already in the list
 	lappend check_list $check_node
-	while { [site_node::get_parent_id -node_id $check_node] != $main_node && \
-		[lsearch -exact $check_list [site_node::get_parent_id -node_id $check_node]] == -1 } {
-		set check_node [site_node::get_parent_id -node_id $check_node]
-		lappend check_list $check_node
-	    }
+	while {
+               [site_node::get_parent_id -node_id $check_node] != $main_node
+               && [site_node::get_parent_id -node_id $check_node] ni $check_list
+           } {
+            set check_node [site_node::get_parent_id -node_id $check_node]
+            lappend check_list $check_node
+        }
     }
 }
 
 
 db_transaction {
-    db_dml delete_nodes { *SQL* }
+    db_dml delete_nodes {}
     foreach checkbox $check_list {
-	db_dml insert_nodes { *SQL* }
+	db_dml insert_nodes {}
     }
 }
 
