@@ -361,9 +361,10 @@ proc http::geturl { url args } {
     foreach {flag value} $args {
 	if {[regexp $pat $flag]} {
 	    # Validate numbers
-	    if {[info exists state($flag)] && \
-		    [string is integer -strict $state($flag)] && \
-		    ![string is integer -strict $value]} {
+	    if {[info exists state($flag)]
+                && [string is integer -strict $state($flag)]
+                && ![string is integer -strict $value]
+            } {
 		unset $token
 		return -code error "Bad value for $flag ($value), must be integer"
 	    }
@@ -842,17 +843,20 @@ proc http::Event {s token} {
             # We have to use binary translation to count bytes properly.
             fconfigure $s -translation binary
 
-	    if {$state(-binary) || ![string match -nocase text* $state(type)]
-		    || [string match "*gzip*" $state(coding)]
-		    || [string match "*compress*" $state(coding)]} {
+	    if {$state(-binary)
+                || ![string match -nocase text* $state(type)]
+                || [string match "*gzip*" $state(coding)]
+                || [string match "*compress*" $state(coding)]
+            } {
 		# Turn off conversions for non-text data
                 set state(binary) 1
 		if {[info exists state(-channel)]} {
 		    fconfigure $state(-channel) -translation binary
 		}
 	    }
-	    if {[info exists state(-channel)] && \
-		    ![info exists state(-handler)]} {
+	    if {[info exists state(-channel)]
+                && ![info exists state(-handler)]
+            } {
 		# Initiate a sequence of background fcopies
 		fileevent $s readable {}
 		CopyStart $s $token
@@ -1149,8 +1153,9 @@ proc http::mapReply {string} {
 proc http::ProxyRequired {host} {
     variable http
     if {[info exists http(-proxyhost)] && [string length $http(-proxyhost)]} {
-	if {![info exists http(-proxyport)] || \
-		$http(-proxyport) eq ""} {
+	if {![info exists http(-proxyport)]
+            || $http(-proxyport) eq ""
+        } {
 	    set http(-proxyport) 8080
 	}
 	return [list $http(-proxyhost) $http(-proxyport)]

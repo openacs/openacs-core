@@ -552,8 +552,11 @@ ad_proc -public subsite::add_section_row {
     upvar $array info
 
     # the folder index page is called .
-    if { $info(url) eq "" || $info(url) eq "index" || \
-             [string match "*/" $info(url)] || [string match "*/index" $info(url)] } {
+    if { $info(url) eq ""
+         || $info(url) eq "index"
+         || [string match "*/" $info(url)]
+         || [string match "*/index" $info(url)]
+     } {
         set info(url) "[string range $info(url) 0 [string last / $info(url)]]."
     }
     
@@ -566,8 +569,11 @@ ad_proc -public subsite::add_section_row {
         # Need to prepend the path from the subsite to this package
         set current_url [string range [ad_conn url] [string length $base_url] end]
     }
-    if { $current_url eq "" || $current_url eq "index" || \
-             [string match "*/" $current_url] || [string match "*/index" $current_url] } {
+    if { $current_url eq ""
+         || $current_url eq "index"
+         || [string match "*/" $current_url]
+         || [string match "*/index" $current_url]
+     } {
         set current_url "[string range $current_url 0 [string last / $current_url]]."
     }
     
@@ -970,9 +976,9 @@ ad_proc -private subsite::assert_user_may_add_member {} {
 
     if { !$admin_p } {
         # If not admin, user must be member of group, and members must be allowed to invite other members
-        if { ![parameter::get -parameter "MembersCanInviteMembersP" -default 0] || \
-                 ![group::member_p -group_id $group_id] } {
-        
+        if { ![parameter::get -parameter "MembersCanInviteMembersP" -default 0]
+             || ![group::member_p -group_id $group_id]
+         } {
             ad_return_forbidden "Cannot invite members" "I'm sorry, but you're not allowed to invite members to this group"
             ad_script_abort
         }

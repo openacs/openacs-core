@@ -882,10 +882,11 @@ ad_proc -public site_node::closest_ancestor_package {
         array set node_array [site_node::get -url $url]
 
         # are we looking for a specific package_key?
-        if { $package_key eq "" || \
-                 [lsearch -exact $package_key $node_array(package_key)] != -1 } {
+        if { $package_key eq ""
+             || $node_array(package_key) in $package_key
+         } {
             set elm_value $node_array($element)
-        }       
+        }
     }
 
     return $elm_value
@@ -943,7 +944,7 @@ ad_proc -public site_node::verify_folder_name {
     } 
 
     if { $folder ne "" } {
-        if { [lsearch $existing_urls $folder] != -1 } {
+        if { $folder in $existing_urls } {
             # The folder is on the list
             if { $current_node_id eq "" } {
                 # New node: Complain
@@ -952,8 +953,9 @@ ad_proc -public site_node::verify_folder_name {
                 # Renaming an existing node: Check to see if the node is merely conflicting with itself
                 set parent_url [site_node::get_url -node_id $parent_node_id]
                 set new_node_url "$parent_url$folder"
-                if { ![site_node::exists_p -url $new_node_url] || \
-                         $current_node_id != [site_node::get_node_id -url $new_node_url] } {
+                if { ![site_node::exists_p -url $new_node_url]
+                     || $current_node_id != [site_node::get_node_id -url $new_node_url]
+                 } {
                     return {}
                 }
             }

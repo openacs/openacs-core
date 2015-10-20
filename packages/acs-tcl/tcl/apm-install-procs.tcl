@@ -537,8 +537,9 @@ ad_proc -private apm_dependency_check_new {
                         lassign $prov prov_uri prov_version
                         # If what we provide is not already provided, or the alredady provided version is
                         # less than what we provide, record this new provision
-                        if { ![info exists provided($prov_uri)] || \
-                                 [apm_version_names_compare $provided($prov_uri) $prov_version] == -1 } {
+                        if { ![info exists provided($prov_uri)]
+                             || [apm_version_names_compare $provided($prov_uri) $prov_version] == -1
+                         } {
                             set provided($prov_uri) $prov_version
                         }
                         # If what we provide is required, and the required version is less than what we provide,

@@ -2604,8 +2604,9 @@ ad_proc -public db_source_sql_file {
             foreach line [split $error "\n"] {
                 if { [string first NOTICE $line] == -1 } {
                     append error_lines "$line\n"
-                    set error_found [expr { $error_found || [string first ERROR $line] != -1 || \
-                                                [string first FATAL $line] != -1 } ]
+                    set error_found [expr { $error_found
+                                            || [string first ERROR $line] != -1
+                                            || [string first FATAL $line] != -1 } ]
                 }
             }
 
@@ -2737,8 +2738,9 @@ ad_proc -public db_load_sql_data {
             foreach line [split $error "\n"] {
                 if { [string first NOTICE $line] == -1 } {
                     append error_lines "$line\n"
-                    set error_found [expr { $error_found || [string first ERROR $line] != -1 || \
-                                                [string first FATAL $line] != -1 } ]
+                    set error_found [expr { $error_found
+                                            || [string first ERROR $line] != -1
+                                            || [string first FATAL $line] != -1 } ]
                 }
             }
 

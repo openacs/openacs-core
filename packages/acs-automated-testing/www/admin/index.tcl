@@ -114,8 +114,9 @@ if {$view_by eq "package"} {
         # - The package key is blank or it matches the specified.
         # - The category is blank or it matches the specified.
         #
-        if {($by_package_key eq "" || ($by_package_key eq $package_key)) && \
-                ($by_category eq "" || ([lsearch $categories $by_category] != -1))} {
+        if {($by_package_key eq "" || ($by_package_key eq $package_key))
+            && ($by_category eq "" || ($by_category in $categories))
+        } {
             # Swap the highlight flag between packages.
             if {$old_package_key ne $package_key} {
                 set marker 1

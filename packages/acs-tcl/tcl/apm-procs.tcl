@@ -1874,8 +1874,9 @@ ad_proc -public apm_get_installed_provides {
         and    d.version_id = v.version_id
         and    v.enabled_p = 't'
     } {
-        if { ![info exists installed_provides($service_uri)] || \
-                 [apm_version_names_compare $installed_provides($service_uri) $service_version] == -1 } {
+        if { ![info exists installed_provides($service_uri)]
+             || [apm_version_names_compare $installed_provides($service_uri) $service_version] == -1
+         } {
             set installed_provides($service_uri) $service_version
         }
     }
