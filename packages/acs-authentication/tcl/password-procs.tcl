@@ -449,11 +449,12 @@ ad_proc -public auth::password::reset {
     # Check the result code and provide canned responses
     switch $result(password_status) {
         ok {
-            if { ([info exists result(password)] && $result(password) ne "") && \
-                     (!$admin_p || [parameter::get \
-                                        -parameter EmailChangedPasswordP \
-                                        -package_id [ad_conn subsite_id] \
-                                        -default 1]) } {
+            if { [info exists result(password)] && $result(password) ne ""
+                 && (!$admin_p || [parameter::get \
+                                       -parameter EmailChangedPasswordP \
+                                       -package_id [ad_conn subsite_id] \
+                                       -default 1])
+             } {
                 # We have retrieved or reset a forgotten password that we should email to the user
                 with_catch errmsg {
                     auth::password::email_password \
