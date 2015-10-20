@@ -1421,8 +1421,10 @@ ad_proc -private auth::check_local_account_status {
 
     switch $member_state {
         approved {
-            set PasswordExpirationDays [parameter::get -parameter PasswordExpirationDays -package_id [ad_acs_kernel_id] -default 0]
-            
+            set PasswordExpirationDays [parameter::get \
+                                            -parameter PasswordExpirationDays \
+                                            -package_id [ad_acs_kernel_id] \
+                                            -default 0]
 
             if { $email_verified_p == "f" } {
                 if { !$no_dialogue_p } {
@@ -1435,12 +1437,19 @@ ad_proc -private auth::check_local_account_status {
                         set result(account_message) [_ acs-subsite.Error_sending_verification_mail]
                     }
                 }
-            } elseif { [acs_user::ScreenName] eq "require" && $screen_name eq "" } {
-                set message "Please enter a screen name now."
-                set result(account_url) [export_vars -no_empty -base "[subsite::get_element -element url]user/basic-info-update" { message return_url {edit_p 1} }]
-            } elseif { $PasswordExpirationDays > 0 && \
-                           ($password_age_days eq "" || $password_age_days > $PasswordExpirationDays) } {
                 
+            } elseif { [acs_user::ScreenName] eq "require"
+                       && $screen_name eq ""
+                   } {
+                set message "Please enter a screen name now."
+                set result(account_url) [export_vars -no_empty \
+                                             -base "[subsite::get_element -element url]user/basic-info-update" {
+                                                 message return_url {edit_p 1}
+                                             }]
+                
+            } elseif { $PasswordExpirationDays > 0
+                       && ($password_age_days eq "" || $password_age_days > $PasswordExpirationDays)
+                   } {
                 set message [_ acs-subsite.Password_regular_change_now]
                 set result(account_url) [export_vars -base "[subsite::get_element -element url]user/password-update" { return_url message }]
             } else {
@@ -1567,12 +1576,14 @@ ad_proc -private auth::validate_account_info {
 
     # TODO: When doing RBM's parameter, make sure that we still require both first_names and last_names, or none of them
     if { ([info exists user(first_names)] && $user(first_names) ne "") 
-	 && [string first "<" $user(first_names)] != -1 } {
+	 && [string first "<" $user(first_names)] != -1
+     } {
         set element_messages(first_names) [_ acs-subsite.lt_You_cant_have_a_lt_in]
     }
 
     if { ([info exists user(last_name)] && $user(last_name) ne "") 
-	 && [string first "<" $user(last_name)] != -1 } {
+	 && [string first "<" $user(last_name)] != -1
+     } {
         set element_messages(last_name) [_ acs-subsite.lt_You_cant_have_a_lt_in_1]
     }
 

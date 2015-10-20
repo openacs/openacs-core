@@ -721,9 +721,9 @@ ad_proc -private auth::sync::get_doc::http::GetDocument {
     
     array set param $parameters
     
-    if { ($param(SnapshotURL) ne "" && [clock format [clock seconds] -format "%d"] eq "01") || \
-             $param(IncrementalURL) eq "" } {
-
+    if { ($param(SnapshotURL) ne "" && [clock format [clock seconds] -format "%d"] eq "01")
+         || $param(IncrementalURL) eq ""
+     } {
         # On the first day of the month, we get a snapshot
         set url $param(SnapshotURL)
         set result(snapshot_p) "t"
@@ -799,9 +799,9 @@ ad_proc -private auth::sync::get_doc::file::GetDocument {
     
     array set param $parameters
     
-    if { ($param(SnapshotPath) ne "" && [clock format [clock seconds] -format "%d"] eq "01") || \
-             $param(IncrementalPath) eq "" } {
-
+    if { ($param(SnapshotPath) ne "" && [clock format [clock seconds] -format "%d"] eq "01")
+         || $param(IncrementalPath) eq ""
+     } {
         # On the first day of the month, we get a snapshot
         set path $param(SnapshotPath)
         set result(snapshot_p) "t"

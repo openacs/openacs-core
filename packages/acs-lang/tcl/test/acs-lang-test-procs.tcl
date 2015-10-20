@@ -349,8 +349,9 @@ ad_proc -private lang::test::execute_upgrade {
         } else {
             # Message is supposed to exist in DB
             # Is it new or changed?
-            if { ![info exists base_messages($message_key)] || \
-                     $base_messages($message_key) ne $db_messages($message_key) } {
+            if { ![info exists base_messages($message_key)]
+                 || $base_messages($message_key) ne $db_messages($message_key)
+             } {
                 # Added || updated 
                 aa_log "Adding/updating message $message_key"
                 lang::message::register \

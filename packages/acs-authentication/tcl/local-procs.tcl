@@ -499,17 +499,25 @@ ad_proc -private auth::local::registration::Register {
 
     # LARS TODO: Move this out of the local driver and into the auth framework
     # Send password confirmation email to user
-    if { [set email_reg_confirm_p [parameter::get -parameter EmailRegistrationConfirmationToUserP -package_id [ad_conn subsite_id] -default 1]] != 0 } {
-	if { $generated_pwd_p || \
-		 [parameter::get -parameter RegistrationProvidesRandomPasswordP -package_id [ad_conn subsite_id] -default 0] || \
-		 $email_reg_confirm_p } {
-
+    if { [set email_reg_confirm_p [parameter::get \
+                                       -parameter EmailRegistrationConfirmationToUserP \
+                                       -package_id [ad_conn subsite_id] -default 1]] != 0
+     } {
+	if { $generated_pwd_p
+             || [parameter::get \
+                     -parameter RegistrationProvidesRandomPasswordP \
+                     -package_id [ad_conn subsite_id] -default 0]
+             || $email_reg_confirm_p
+         } {
 	    with_catch errmsg {
 		auth::password::email_password \
 		    -username $username \
 		    -authority_id $authority_id \
 		    -password $password \
-		    -from [parameter::get -parameter NewRegistrationEmailAddress -package_id [ad_conn subsite_id] -default [ad_system_owner]] \
+		    -from [parameter::get \
+                               -parameter NewRegistrationEmailAddress \
+                               -package_id [ad_conn subsite_id] \
+                               -default [ad_system_owner]] \
 		    -subject_msg_key "acs-subsite.email_subject_Registration_password" \
 		    -body_msg_key "acs-subsite.email_body_Registration_password" 
 	    } {
