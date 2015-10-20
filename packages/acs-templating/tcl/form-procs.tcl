@@ -510,7 +510,7 @@ ad_proc -private template::form::render { id tag_attributes } {
   }
 
   if { [info exists form_properties(actions)] 
-       && [template::util::is_true $form_properties(actions)] 
+       && $form_properties(actions) ne "" 
      } {
     set form_properties(display_buttons) $form_properties(actions)
   }
