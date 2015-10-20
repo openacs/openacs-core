@@ -946,7 +946,7 @@ ad_proc -private export_vars_sign {
             secret {set $key [ad_urldecode_query $val]}
         }
     }
-    ns_log notice [list ad_sign -max_age $max_age -secret $secret $value]
+
     return [ad_sign -max_age $max_age -secret $secret $value]
 }
 
