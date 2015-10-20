@@ -11,7 +11,8 @@ ad_page_contract {
 }
 
 set confirmed_url [export_vars -base /acs-admin/users/modify-admin-privileges {
-    user_id:sign(max_age=60) action:sign {confirmed_p 1}}]
+    user_id:sign(max_age=60) action:sign {confirmed_p 1}
+}]
 set return_url [export_vars -base /acs-admin/users/one {user_id}]
 
 set context [list [list "./" "Users"] "Modify privileges"]
@@ -29,6 +30,9 @@ if {$confirmed_p} {
     # this is expensive so maybe we should check if we in fact are cacheing.
     util_memoize_flush_regexp "^permission::.*-party_id $user_id"
 }
+
+acs_user::get -user_id $user_id -array user_info
+
 
 # Local variables:
 #    mode: tcl
