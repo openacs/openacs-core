@@ -28,7 +28,7 @@ if {$object_id eq [subsite::main_site_id]} {
 
 set name [db_string name {}]
 
-set context [list [list "./" [_ acs-subsite.Permissions]] [ns_quotehtml [_ acs-subsite.Permissions_for_name]]]
+set context [list [list "./" [_ acs-subsite.Permissions]] [_ acs-subsite.Permissions_for_name]]
 
 db_multirow inherited inherited_permissions { *SQL* } { 
 }
