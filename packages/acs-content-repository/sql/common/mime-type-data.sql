@@ -117,7 +117,7 @@ insert into cr_mime_types (label,mime_type,file_extension) values ( 'Image - WAP
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'Image - CMU Raster'      , 'image/x-cmu-raster'            , 'ras' );
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'Image - Flexible Image Transport', 'image/x-fits'                  , 'fit' );
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'Image - Macromedia Freehand'     , 'image/x-freehand'              , 'fh' );
-insert into cr_mime_types (label,mime_type,file_extension) values ( 'Image - SVG'             , 'image/xml+svg'                 , 'svg' );
+insert into cr_mime_types (label,mime_type,file_extension) values ( 'Image - SVG'             , 'image/svg+xml'                 , 'svg' );
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'Image - PhotoCD'         , 'image/x-photo-cd'              , 'pcd' );
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'Image - Mac pict'        , 'image/x-pict'                  , 'pict' );
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'Image - PNM'             , 'image/x-portable-anymap'       , 'pnm' );
@@ -400,7 +400,7 @@ insert into cr_extension_mime_type_map (extension, mime_type) values ( 'stl','ap
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'stm','audio/x-mod' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'sv4cpio','application/x-sv4cpio' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'sv4crc','application/x-sv4crc' );
-insert into cr_extension_mime_type_map (extension, mime_type) values ( 'svg','image/xml+svg');
+insert into cr_extension_mime_type_map (extension, mime_type) values ( 'svg','image/svg+xml');
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'swf','application/x-shockwave-flash' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 't','application/x-troff' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'tar','application/x-tar' );
