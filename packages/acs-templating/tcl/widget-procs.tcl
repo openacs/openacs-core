@@ -662,7 +662,7 @@ ad_proc -public template::widget::menu {
 
             if { [info exists values($value)] } {
                 lappend selected_list $label
-                append output "<input type=\"hidden\" name=\"$widget_name\" value=\"[ns_quotehtml $value]\">"
+                append output [subst {<input type="hidden" name="$widget_name" value="[ns_quotehtml $value]">}]
             }
         }
 
@@ -679,22 +679,22 @@ ad_proc -public template::widget::menu {
                     set label [lindex $option 0]
                     set value [lindex $option 1]
 
-                    append output " <input type=\"$widget_type\" name=\"$widget_name\" value=\"[ns_quotehtml $value]\""
+                    append output [subst { <input type="$widget_type" name="$widget_name" value="[ns_quotehtml $value]"}]
                     if { [info exists values($value)] } {
-                        append output " checked=\"checked\""
+                        append output [subst { checked="checked"}]
                     }
 
-                    append output ">$label<br>\n"
+                    append output [subst {>[ns_quotehtml $label]<br>\n}]
                 }
             }
             default {
-                append output "<select name=\"$widget_name\" id=\"$widget_name\" "
+                append output [subst {<select name="$widget_name" id="$widget_name" }]
 
                 foreach name [array names attributes] {
                     if {$attributes($name) eq {}} {
-                        append output " $name=\"$name\""
+                        append output [subst { $name="$name"}]
                     } else {
-                        append output " $name=\"$attributes($name)\""
+                        append output [subst { $name="$attributes($name)"}]
                     }
                 }
                 append output ">\n"
@@ -704,12 +704,12 @@ ad_proc -public template::widget::menu {
                     set label [lindex $option 0]
                     set value [lindex $option 1]
 
-                    append output " <option value=\"[ns_quotehtml $value]\""
+                    append output [subst { <option value="[ns_quotehtml $value]"}]
                     if { [info exists values($value)] } {
-                        append output " selected=\"selected\""
+                        append output [subst { selected="selected"}]
                     }
 
-                    append output ">$label</option>\n"
+                    append output [subst {>[ns_quotehtml $label]</option>\n}]
                 }
                 append output "</select>"
             }
