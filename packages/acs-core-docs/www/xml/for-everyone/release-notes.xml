@@ -164,7 +164,8 @@ entire &majorversion;.&minorversion; release sequence <xref linkend="changelog">
 	  </para></listitem>
 
 	  <listitem><para>
-            Complete template variable controls (adding noi18n)
+            Complete template variable suffixes (adding noi18n,
+	    adressing bug #2692, full list is now: noquote, noi18n, literal)
 	  </para></listitem>
 	</itemizedlist>
 	</para></listitem>
@@ -528,7 +529,7 @@ entire &majorversion;.&minorversion; release sequence <xref linkend="changelog">
         <para>
           Notifications now calls lang::util::localize on the message subject and body
           before sending the message out, using the recipient locale if set, the
-          site-wide one if not.  This will cause message keys (entered as #....# strings)
+          site-wide one if not.  This will cause message keys (entered as <span>#</span>....# strings)
           to be replaced with the language text for the chosen locale.
         </para>
       </listitem>
