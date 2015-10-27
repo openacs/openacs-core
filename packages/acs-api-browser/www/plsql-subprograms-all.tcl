@@ -17,13 +17,7 @@ set context [list "All PL/SQL Subprograms"]
 # Organize the subprograms under three headings: FUNCTION, PROCEDURE,
 # and PACKAGE.
 
-db_multirow all_subprograms all_subprograms {
-    select object_type as type, object_name as name
-    from user_objects
-    where object_type in ('PACKAGE', 'PROCEDURE', 'FUNCTION')
-    order by
-    decode(object_type, 'PACKAGE', 0, 'PROCEDURE', 1, 'FUNCTION', 2) asc
-}
+db_multirow all_subprograms all_subprograms {}
 
 db_release_unused_handles
 ad_return_template
