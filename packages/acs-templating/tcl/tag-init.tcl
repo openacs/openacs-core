@@ -34,7 +34,8 @@ template_tag tcl { chunk params } {
 template_tag property { chunk params } {
 
     set name [ns_set iget $params name]
-    set adp  [ns_set iget $params adp 0]
+    set adp  [ns_set iget $params adp]
+    if {$adp eq ""} {set adp 0}
 
     # quote dollar signs, square bracket and quotes
     regsub -all {[\]\[\"\\$]} $chunk {\\&} quoted_chunk
@@ -102,7 +103,8 @@ template_tag slave { params } {
 #
 ad_proc -private template:template_tag_helper {params} {
     set src [ns_set iget $params src]
-    set ds [ns_set iget $params ds 1]
+    set ds [ns_set iget $params ds]
+    if {$ds eq ""} {set ds 1}
     
     #Start developer support frame around subordinate template.
     if { $ds && [info commands ::ds_enabled_p] ne "" && [info commands ::ds_adp_start_box] ne "" } {
@@ -666,7 +668,8 @@ template_tag include-optional { chunk params } {
   # the theme package
   #
   set src [template::themed_template [ns_set iget $params src]]
-  set ds [ns_set iget $params ds 1]
+  set ds [ns_set iget $params ds]
+  if {$ds eq ""} {set ds 1}
 
   #Start developer support frame around subordinate template.
   if { $ds && [info commands ::ds_enabled_p] ne "" && [info commands ::ds_adp_start_box] ne ""} {
