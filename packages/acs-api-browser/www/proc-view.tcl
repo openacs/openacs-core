@@ -127,6 +127,8 @@ proc $proc {[info args $proc]} {
         set documentation [api_proc_documentation -script $proc_index]
     }
 }
+set procViewToggleURL [export_vars -base proc-view [list proc [list source_p [expr {!$source_p}]] version_id]]
+set setDefaultURL [export_vars -base set-default [list source_p return_url]]
 
 #
 # Local variables:
