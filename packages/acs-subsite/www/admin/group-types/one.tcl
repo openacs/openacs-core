@@ -47,22 +47,7 @@ set context [list [list "[ad_conn package_url]admin/group-types/" [_ acs-subsite
 # Pull out the first 25 groups of this type. If there are more, we'll
 # offer a link to display them all. Alphabetize the first 25 groups
 
-db_multirow groups groups_select {
-    select my_view.group_name, my_view.group_id, rownum as num 
-    from (select /*+ ORDERED */ DISTINCT  g.group_name, g.group_id
-           from acs_objects o, groups g,
-                application_group_element_map app_group, 
-                all_object_party_privilege_map perm
-          where perm.object_id = g.group_id
-            and perm.party_id = :user_id
-            and perm.privilege = 'read'
-            and g.group_id = o.object_id
-            and o.object_type = :group_type
-            and app_group.package_id = :package_id
-            and app_group.element_id = g.group_id
-          order by lower(g.group_name)) my_view 
-    where rownum <= 26
-}
+db_multirow groups groups_select {}
 
 # Select out all the attributes for groups of this type
 db_multirow -extend {one_attribute_url} attributes attributes_select {

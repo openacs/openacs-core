@@ -42,14 +42,7 @@ if { ![db_0or1row select_type_info {
     set package_name $group_type
 }
     
-if { [db_string package_exists {
-    select case when exists (select 1 
-                               from user_objects o
-                              where o.object_type='PACKAGE' 
-                                and o.object_name = upper(:package_name))
-           then 1 else 0 end
-      from dual
-}] } {
+if { [db_string package_exists {}] } {
     lappend plsql [list "package_drop" [db_map package_drop]]
 } else {
     set package_name ""
@@ -61,13 +54,7 @@ lappend plsql [list "delete_rel_types" [db_map delete_rel_types]]
 # Remove the group_type
 lappend plsql [list "delete_group_type" [db_map delete_group_type]]
 
-if { [db_string type_exists {
-    select case when exists (select 1 from acs_object_types t where t.object_type = :group_type)
-                then 1
-                else 0
-           end
-      from dual
-}] } {
+if { [db_string type_exists {}] } {
     lappend plsql [list "drop_type" [db_map drop_type]]
 }
 
