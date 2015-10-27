@@ -14,13 +14,12 @@ ad_page_contract {
 
 set context [list "All PL/SQL Subprograms"]
 
-# Organize the subprograms under three headings: FUNCTION, PROCEDURE,
-# and PACKAGE.
-
+#
+# Organize the subprograms und types like FUNCTION, PROCEDURE, and
+# PACKAGE in oracle or FUNCTION in PostgresSQL
+#
 db_multirow all_subprograms all_subprograms {}
 
-db_release_unused_handles
-ad_return_template
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
