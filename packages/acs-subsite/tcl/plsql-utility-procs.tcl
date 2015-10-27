@@ -55,8 +55,8 @@ namespace eval plsql_utility {
                         then 1
                         else 0
                    end
-              from dual
-	}]
+              from dual            
+        }]
     }
 
 

@@ -113,9 +113,7 @@ ad_proc -public relation_add {
 	# JCD: this is enforced by trigger so no longer check explicitly
 	# see membership_rels_in_tr
 	# 
-	# set violated_err_msg [db_string select_rel_violation {
-	#    select rel_constraint.violation(:rel_id) from dual
-	# } -default ""]
+	# set violated_err_msg [db_string select_rel_violation {} -default ""]
 	#
 	# if { $violated_err_msg ne "" } {
 	#     error $violated_err_msg

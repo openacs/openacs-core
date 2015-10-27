@@ -25,7 +25,7 @@ ad_page_contract_filter attribute_dynamic_p { name value } {
                                     and a.object_type = t.object_type
                                     and a.attribute_id = :value)
 	            then 1 else 0 end
-	  from dual
+	  from dual        
     }] } {
 	return 1
     }
