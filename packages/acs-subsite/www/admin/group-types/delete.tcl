@@ -42,13 +42,7 @@ if { ![db_0or1row select_pretty_name {
     return
 }
 
-set subtypes_exist_p [db_string number_subtypes {
-    select case when exists (select 1 
-                               from acs_object_types t
-                              where t.supertype = :group_type) 
-                then 1 else 0 end
-      from dual
-}]
+set subtypes_exist_p [db_string number_subtypes {}]
 
 if { $subtypes_exist_p } {
     set return_url "[ad_conn url]?[ad_conn query]"
@@ -68,14 +62,7 @@ if { $subtypes_exist_p } {
 }
 
 # Now let's check if any relationship types depend on this group type
-set rel_types_depend_p [db_string rel_type_exists_p {
-    select case when exists (select 1 
-                               from acs_rel_types t
-                              where t.object_type_one = :group_type
-                                 or t.object_type_two = :group_type)
-                then 1 else 0 end
-      from dual
-}]
+set rel_types_depend_p [db_string rel_type_exists_p {}]
 
 if { $rel_types_depend_p } {
     set return_url "[ad_conn url]?[ad_conn query]"

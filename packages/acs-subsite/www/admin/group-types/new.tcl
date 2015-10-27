@@ -71,20 +71,12 @@ if { [template::form is_valid group_type] } {
 Please back up and choose another.</li>"
     } else {
 	# let's make sure the names are unique
-	if { [db_string pretty_name_unique {
-	    select case when exists (select 1 from acs_object_types t where t.pretty_name = :pretty_name)
-                    then 1 else 0 end
-	  from dual
-	}] } {
+	if { [db_string pretty_name_unique {}] } {
 	    incr exception_count
 	    append exception_text "<li> The specified pretty name, $pretty_name, already exists. Please enter another </li>"
 	}
 
-	if { [db_string pretty_name_unique {
-	    select case when exists (select 1 from acs_object_types t where t.pretty_plural = :pretty_plural)
-                    then 1 else 0 end
-	  from dual
-	}] } {
+	if { [db_string pretty_name_unique {}] } {
 	    incr exception_count
 	    append exception_text "<li> The specified pretty plural, $pretty_plural, already exists. Please enter another </li>"
 	}
