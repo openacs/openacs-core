@@ -3,20 +3,6 @@
 <queryset>
    <rdbms><type>postgresql</type><version>7.1</version></rdbms>
 
-<fullquery name="package_type_dynamic_p.object_type_dynamic_p">      
-      <querytext>
-      
-	select case when exists (select 1 
-                                   from acs_object_types t
-                                  where t.dynamic_p = 't'
-                                    and t.object_type = :object_type)
-	            then 1 else 0 end
-	  
-    
-      </querytext>
-</fullquery>
-
- 
 <fullquery name="package_create_attribute_list.select_all_attributes">      
       <querytext>
 

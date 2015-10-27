@@ -17,12 +17,13 @@ ad_page_contract_filter rel_type_dynamic_p {name value} {
     @creation-date 12/30/2000
 } {
     if {[db_string rel_type_dynamic_p {
-	select case when exists (select 1
-				 from acs_object_types t
-				 where t.dynamic_p = 't'
-				 and t.object_type = :value)
-	then 1 else 0 end
-	from dual}]} {
+        	select case when exists (select 1 
+                                   from acs_object_types t
+                                  where t.dynamic_p = 't'
+                                    and t.object_type = :value)
+	            then 1 else 0 end
+	  from dual
+    }]} {
 	return 1
     }
     ad_complain "Specific rel type either does not exist or is not dynamic and thus cannot be modified"

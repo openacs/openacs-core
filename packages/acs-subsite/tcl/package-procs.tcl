@@ -19,12 +19,12 @@ ad_proc -public package_type_dynamic_p {
     @creation-date 12/30/2000
 } {
     return [db_string object_type_dynamic_p {
-        select case when exists (select 1
-                                 from acs_object_types t
-                                 where t.dynamic_p = 't'
-                                 and t.object_type = :object_type)
-        then 1 else 0 end
-        from dual
+        	select case when exists (select 1 
+                                   from acs_object_types t
+                                  where t.dynamic_p = 't'
+                                    and t.object_type = :object_type)
+	            then 1 else 0 end
+	  from dual
     }]
 }
 
@@ -326,15 +326,7 @@ ad_proc -private package_create {
         db_exec_plsql $stmt_name $code
 
         # Let's check to make sure the package is valid
-        if { ![db_string package_valid_p {
-            select case when exists (select 1
-                                     from user_objects
-                                     where status = 'INVALID'
-                                     and object_name = upper(:package_name)
-                                     and object_type = upper(:type))
-            then 0 else 1 end
-            from dual
-        }] } {
+        if { ![db_string package_valid_p {}] } {
             error "$object_type \"$package_name\" is not valid after compiling:\n\n$code\n\n"
         }
     }
