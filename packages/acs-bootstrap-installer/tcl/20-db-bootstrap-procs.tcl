@@ -178,11 +178,9 @@ ad_proc db_bootstrap_set_db_type { errors } {
     # them in plain english
 
     if { [llength $pools] == 0 } {
-        set database_problem "There are no database pools specified in your OpenNSD
-    configuration file."
+        set database_problem "There are no database pools specified in your NaviServer configuration file."
     } elseif { [llength $pools] < 3 } {
-        set database_problem "OpenACS requires three database pools in order to
-    run correctly."
+        set database_problem "OpenACS requires three database pools in order to run correctly."
     }
 
     # We're done with the mult-db dbn stuff, from now on we deal only
@@ -206,7 +204,7 @@ ad_proc db_bootstrap_set_db_type { errors } {
     set bad_pools [list]
     set long_error 0
     foreach pool $pools {
-        if { [catch { set db [ns_db gethandle -timeout 15 $pool]}] || $db eq "" } {
+        if { [catch { set db [ns_db gethandle -timeout 15 $pool]} errorMsg] || $db eq "" } {
             ns_log Warning "$proc_name: couldn't allocate a handle from database pool \"$pool\"."
             lappend bad_pools "<li>OpenACS could not allocate a handle from database pool \"$pool\"."
             set long_error 1
