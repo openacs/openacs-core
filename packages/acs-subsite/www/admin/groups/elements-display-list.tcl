@@ -33,16 +33,7 @@ if {$admin_p} {
 
 # Pull out all the relations of the specified type
 
-db_1row rel_type_info {
-    select object_type as ancestor_rel_type
-      from acs_object_types
-     where supertype = 'relationship'
-       and object_type in (
-               select object_type from acs_object_types
-               start with object_type = :rel_type
-               connect by object_type = prior supertype
-           )
-}
+db_1row rel_type_info {}
 
 set extra_tables ""
 set extra_where_clauses ""

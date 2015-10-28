@@ -54,12 +54,7 @@ db_transaction {
 # Now let's offer to walk the user through the process of creating
 # constraints it there are any other segments
 
-if { ![db_string segments_exists_p {
-    select case when exists 
-                   (select 1 from rel_segments s where s.segment_id <> :segment_id)
-           then 1 else 0 end
-      from dual
-}] } {
+if { ![db_string segments_exists_p {}] } {
     # No more segments... can't create constraints
     ad_returnredirect $return_url
     return

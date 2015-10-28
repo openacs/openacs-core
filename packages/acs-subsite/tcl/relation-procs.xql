@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <queryset>
 
-<fullquery name="relation_remove.select_rel_info">      
+<fullquery name="relation_remove.select_rel_info_rm">
       <querytext>
 
 	select s.segment_id, r.object_id_two as party_id, t.package_name

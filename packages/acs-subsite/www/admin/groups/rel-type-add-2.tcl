@@ -23,13 +23,7 @@ ad_page_contract {
 	      from acs_objects o
 	     where o.object_id = :group_id
 	}
-	if { ![db_string types_match_p {
-	    select count(*)
-	      from acs_rel_types t
-	     where (t.object_type_one = :group_type 
-                    or acs_object_type.is_subtype_p(t.object_type_one, :group_type) = 't')
-               and t.rel_type = :rel_type
-	}] } {
+	if { ![db_string types_match_p {}] } {
 	    ad_complain "Groups of type \"$group_type\" cannot use relationships of type \"$rel_type.\""
 	}
     }
@@ -44,28 +38,14 @@ if { [catch {
     (:group_rel_id, :group_id, :rel_type)
 }   } err_msg] } {
     # Does this pair already exists?
-    if { ![db_string exists_p {
-	select case when exists (select 1 
-                                   from group_rels 
-                                  where group_id = :group_id
-                                    and rel_type = :rel_type)
-                    then 1 else 0 end
-	  from dual
-    }] } {
+    if { ![db_string exists_p {}] } {
 	ad_return_error "Error inserting to database" $err_msg
 	return
     }
 }
 
 # Now let's see if there is no relational segment. If not, offer to create one
-if { [db_string segment_exists_p {
-    select case when exists (select 1 
-                               from rel_segments s 
-                              where s.group_id = :group_id
-                                and s.rel_type = :rel_type)
-                then 1 else 0 end
-      from dual
-}] } {
+if { [db_string segment_exists_p {}] } {
     if { $return_url eq "" } {
 	set return_url [export_vars -base one group_id]
     }

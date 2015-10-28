@@ -38,7 +38,7 @@ template::multirow create group_types group_type group_type_enc type_pretty_name
 # should tell you total number of groups, and tell you "these are the ones
 # you have read privilege on", so you don't get confused.
 db_foreach select_group_types {
-    select /*+ ORDERED */ 
+     select
            t.object_type, t.pretty_name, count(g.group_id) as number_groups
       from groups g, acs_objects o, acs_object_types t,
            application_group_element_map app_group

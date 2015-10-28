@@ -60,22 +60,7 @@ db_1row group_info {
 }
 
 # We assume the group is on side 1... 
-db_1row rel_type_info {
-    select t.object_type_two, t.role_two as role, 
-           acs_rel_type.role_pretty_name(t.role_two) as role_pretty_name,
-           acs_object_type.pretty_name(t.object_type_two) as object_type_two_name,
-           ancestor_rel_types.object_type as ancestor_rel_type
-      from acs_rel_types t, acs_object_types obj_types, 
-           acs_object_types ancestor_rel_types
-     where t.rel_type = :rel_type
-       and t.rel_type = obj_types.object_type
-       and ancestor_rel_types.supertype = 'relationship'
-       and ancestor_rel_types.object_type in (
-               select object_type from acs_object_types
-               start with object_type = :rel_type
-               connect by object_type = prior supertype
-           )
-}
+db_1row rel_type_info {}
 
 # The role pretty names can be message catalog keys that need
 # to be localized before they are displayed

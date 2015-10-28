@@ -74,24 +74,12 @@ db_1row select_object_types {
        and r.rel_type = t.object_type
 }
 
-set object_types_one_list [db_list_of_lists select_object_types_one {
-    select replace(lpad(' ', (level - 1) * 4), ' ', '&nbsp;') || t.pretty_name, 
-           t.object_type as rel_type
-      from acs_object_types t
-   connect by prior t.object_type = t.supertype
-     start with t.object_type=:max_object_type_one
-}]
+set object_types_one_list [db_list_of_lists select_object_types_one {}]
 foreach obj $object_types_one_list {
     lappend object_types_one_list_i18n [lang::util::localize $obj]
 }
 
-set object_types_two_list [db_list_of_lists select_object_types_two {
-    select replace(lpad(' ', (level - 1) * 4), ' ', '&nbsp;') || t.pretty_name, 
-           t.object_type as rel_type
-      from acs_object_types t
-   connect by prior t.object_type = t.supertype
-     start with t.object_type=:max_object_type_two
-}]
+set object_types_two_list [db_list_of_lists select_object_types_two {}]
 foreach obj $object_types_two_list {
     lappend object_types_two_list_i18n [lang::util::localize $obj]
 }
@@ -175,20 +163,12 @@ if { [template::form is_valid rel_type] } {
 Please back up and choose another.</li>"
     } else {
 	# let's make sure the names are unique
-	if { [db_string pretty_name_unique {
-	    select case when exists (select 1 from acs_object_types t where t.pretty_name = :pretty_name)
-                    then 1 else 0 end
-	      from dual
-	}] } {
+	if { [db_string pretty_name_unique {}] } {
 	    incr exception_count
 	    append exception_text "<li> The specified pretty name, $pretty_name, already exists. Please enter another </li>"
 	}
 
-	if { [db_string pretty_plural_unique {
-	    select case when exists (select 1 from acs_object_types t where t.pretty_plural = :pretty_plural)
-                    then 1 else 0 end
-	      from dual
-	}] } {
+	if { [db_string pretty_plural_unique {}] } {
 	    incr exception_count
 	    append exception_text "<li> The specified pretty plural, $pretty_plural, already exists. Please enter another </li>"
 	}

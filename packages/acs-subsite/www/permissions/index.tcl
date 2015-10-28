@@ -20,7 +20,7 @@ if {(![info exists root] || $root eq "")} {
     set root [ad_conn package_id]
 }
 
-db_multirow objects adminable_objects { *SQL* }
+db_multirow objects adminable_objects {}
 
 set security_context_root [acs_magic_object security_context_root]
 set default_context [acs_magic_object default_context]

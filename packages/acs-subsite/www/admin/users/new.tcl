@@ -36,16 +36,7 @@ db_1row group_info {
 }
 
 # We assume the group is on side 1... 
-db_1row rel_type_info {
-    select object_type as ancestor_rel_type
-      from acs_object_types
-     where supertype = 'relationship'
-       and object_type in (
-               select object_type from acs_object_types
-               start with object_type = :add_with_rel_type
-               connect by object_type = prior supertype
-           )
-}
+db_1row rel_type_info {}
 
 set create_p [group::permission_p -privilege create $add_to_group_id]
 
@@ -160,12 +151,7 @@ if { [template::form is_valid add_user] } {
 	set email_verified_p "t"
     }
 
-    set double_click_p [db_string user_exists {
-	select case when exists
-	                 (select 1 from users where user_id = :user_id)
-	       then 1 else 0 end
-	from dual
-    }]
+    set double_click_p [db_string user_exists {}]
 
     if {!$double_click_p} {
 

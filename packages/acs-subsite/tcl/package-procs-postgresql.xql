@@ -85,17 +85,6 @@
 </fullquery>
 
  
-<fullquery name="package_insert_default_comment.select_comments">      
-      <querytext>
-      
-	    select acs_object__name(:user_id) as author,
-	           current_timestamp as creation_date
-	      
-	
-      </querytext>
-</fullquery>
-
- 
 <fullquery name="package_object_attribute_list.attributes_select">      
       <querytext>
 
@@ -153,15 +142,6 @@
       </querytext>
 </fullquery>
  
-<fullquery name="package_create.package_valid_p">      
-      <querytext>
-
-select 1
-    
-      </querytext>
-</fullquery>
-
- 
 <fullquery name="package_instantiate_object.create_object">      
       <querytext>
 
@@ -176,12 +156,10 @@ select 1
  
 <fullquery name="package_generate_body.select_supertype_function_params">      
       <querytext>
-      
-	select args.arg_name
-	  from acs_function_args args
-         where args.function =upper(:supertype_package_name) || '__NEW'
-    
-      </querytext>
+        select args.arg_name
+          from acs_function_args args
+        where args.function = upper(:supertype_package_name) || '__NEW'
+       </querytext>
 </fullquery>
 
  

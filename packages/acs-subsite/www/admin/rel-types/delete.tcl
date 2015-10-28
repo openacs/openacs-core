@@ -27,13 +27,7 @@ set rel_type_pretty_name [db_string select_pretty_name {
 }]
 
 
-set subtypes_exist_p [db_string number_subtypes {
-    select case when exists (select 1 
-                               from acs_object_types t
-                              where t.supertype = :rel_type) 
-                then 1 else 0 end
-      from dual
-}]
+set subtypes_exist_p [db_string number_subtypes {}]
 
 if { $subtypes_exist_p } {
     set return_url "[ad_conn url]?[ad_conn query]"
@@ -53,11 +47,7 @@ if { $subtypes_exist_p } {
 }
 
 # Now let's count up the number of things we're going to delete
-db_1row select_counts {
-    select (select count(*) from rel_segments where rel_type = :rel_type) as segments,
-           (select count(*) from acs_rels where rel_type = :rel_type) as rels
-      from dual
-} -column_array counts
+db_1row select_counts {} -column_array counts
 
 set export_vars [export_vars -form {rel_type return_url}]
 

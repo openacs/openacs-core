@@ -90,15 +90,7 @@ ad_proc -public application_group::contains_relation_p {
     # Check if the rel belongs to the application group, OR
     # the party *is* the application group.  This proc considers the
     # application group to contain itself.
-    set found_p [db_string app_group_contains_rel_p {
-        select case when exists (
-            select 1
-            from application_group_element_map
-            where package_id = :package_id
-              and rel_id = :rel_id
-        ) then 1 else 0 end
-        from dual
-    }]
+    set found_p [db_string app_group_contains_rel_p {}]
 
     return $found_p
 }
@@ -126,15 +118,7 @@ ad_proc -public application_group::contains_segment_p {
     # Check if the party is a member of the application group, OR
     # the party *is* the application group.  This proc considers the
     # applcation group to contain itself.
-    set found_p [db_string app_group_contains_segment_p {
-        select case when exists (
-            select 1
-            from application_group_segments
-            where package_id = :package_id
-              and segment_id = :segment_id
-        ) then 1 else 0 end
-        from dual
-    }]
+    set found_p [db_string app_group_contains_segment_p {}]
 
     return $found_p
 }
@@ -166,14 +150,7 @@ ad_proc -public application_group::group_id_from_package_id {
         error "application_group::group_id_from_package_id - no package_id specified."
     }
 
-    set group_id [db_exec_plsql application_group_from_package_id_query {
-        begin
-        :1 := application_group.group_id_from_package_id (
-            package_id => :package_id,
-            no_complain_p => :no_complain_p
-        );
-        end;
-    }]
+    set group_id [db_exec_plsql application_group_from_package_id_query {}]
 
     return $group_id
 }

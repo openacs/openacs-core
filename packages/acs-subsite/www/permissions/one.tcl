@@ -30,17 +30,17 @@ set name [db_string name {}]
 
 set context [list [list "./" [_ acs-subsite.Permissions]] [_ acs-subsite.Permissions_for_name]]
 
-db_multirow inherited inherited_permissions { *SQL* } { 
+db_multirow inherited inherited_permissions {} { 
 }
 
-db_multirow acl acl { *SQL* } {
+db_multirow acl acl {} {
 }
 
 set controls [list]
 set controlsUrl [export_vars -base grant {application_url object_id}]
 lappend controls "<a href=\"[ns_quotehtml $controlsUrl]\">[ns_quotehtml [_ acs-subsite.Grant_Permission]]</a>"
 
-db_1row context { *SQL* }
+db_1row context {}
 set context_name [lang::util::localize $context_name]
 
 set toggleUrl [export_vars -base toggle-inherit {application_url object_id}]
@@ -58,10 +58,10 @@ set show_children_url [export_vars -base one {object_id application_url {childre
 set hide_children_url [export_vars -base one {object_id application_url {children_p f}}]
 
 if {$children_p == "t"} {
-    db_multirow children children { *SQL* } {
+    db_multirow children children {} {
     }
 } else {
-    db_1row children_count { *SQL* } 
+    db_1row children_count {} 
 }
 
 # Local variables:

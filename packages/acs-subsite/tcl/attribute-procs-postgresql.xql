@@ -3,23 +3,6 @@
 <queryset>
    <rdbms><type>postgresql</type><version>7.1</version></rdbms>
 
-<fullquery name="attribute::exists_p.attr_exists_p">      
-      <querytext>
-      
-	select case when exists (select 1 
-                                   from acs_attributes a
-                                  where (a.attribute_name = :attribute
-                                         or a.column_name = :attribute)
-                                    and a.object_type = :object_type)
-                    then 1
-                    else 0
-                    end
-          
-    
-      </querytext>
-</fullquery>
-
- 
 <fullquery name="attribute::array_for_type.select_attributes">      
       <querytext>
 

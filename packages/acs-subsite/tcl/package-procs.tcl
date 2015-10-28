@@ -114,19 +114,7 @@ ad_proc -private package_create_attribute_list {
     # type and all its supertypes in order starting with this object
     # type up the type hierarchy
 
-    db_foreach select_all_attributes {
-        select upper(nvl(attr.table_name,t.table_name)) as attr_table_name,
-        upper(nvl(attr.column_name, attr.attribute_name)) as attr_column_name,
-        attr.ancestor_type, attr.min_n_values, attr.default_value
-        from acs_object_type_attributes attr,
-        (select t.object_type, t.table_name, level as type_level
-         from acs_object_types t
-         start with t.object_type = :object_type
-         connect by prior t.supertype = t.object_type) t
-        where attr.ancestor_type = t.object_type
-        and attr.object_type = :object_type
-        order by t.type_level
-    } {
+    db_foreach select_all_attributes {} {
         # First make sure the attribute is okay
         if { $limit_to ne "" } {
             # We have a limited list of arguments to use. Make sure
@@ -243,13 +231,7 @@ ad_proc -public package_recreate_hierarchy {
     including all children types.
 
 } {
-    set object_type_list [db_list select_object_types {
-        select t.object_type
-        from acs_object_types t
-        where t.dynamic_p = 't'
-        start with t.object_type = :object_type
-        connect by prior t.object_type = t.supertype
-    }]
+    set object_type_list [db_list select_object_types {}]
 
     # Something changed... flush the data dictionary cache for the
     # type hierarchy starting with this object's type. Note that we
@@ -396,12 +378,7 @@ ad_proc -private package_generate_body {
 
     # Prune down the list of attributes in supertype_attr_list to
     # those specific to the function call in the supertype's package
-    set supertype_params [db_list select_supertype_function_params {
-        select args.argument_name
-        from user_arguments args
-        where args.package_name =upper(:supertype_package_name)
-        and args.object_name='NEW'
-    }]
+    set supertype_params [db_list select_supertype_function_params {}]
 
     set supertype_attr_list [package_create_attribute_list \
                                  -supertype $supertype \
@@ -426,24 +403,14 @@ ad_proc -public package_object_view_reset {
 
 } {
     # First flush the cache for all pairs of object_type, ancestor_type (start_with)
-    db_foreach select_ancestor_types {
-        select t.object_type as ancestor_type
-        from acs_object_types t
-        start with t.object_type = :object_type
-        connect by prior t.supertype = t.object_type
-    } {
+    db_foreach select_ancestor_types {} {
         if { [util_memoize_cached_p [list package_object_view_helper -start_with $ancestor_type $object_type]] } {
             util_memoize_flush [list package_object_view_helper -start_with $ancestor_type $object_type]
         }
     }
 
     # flush the cache for all pairs of sub_type, object_type(start_with)
-    db_foreach select_sub_types {
-        select t.object_type as sub_type
-        from acs_object_types t
-        start with t.object_type = :object_type
-        connect by prior t.object_type = t.supertype
-    } {
+    db_foreach select_sub_types {} {
         if { [util_memoize_cached_p [list package_object_view_helper -start_with $object_type $sub_type]] } {
             util_memoize_flush [list package_object_view_helper -start_with $object_type $sub_type]
         }
@@ -557,13 +524,9 @@ ad_proc -private package_insert_default_comment { } {
 } {
     if { [ad_conn isconnected] } {
         set user_id [ad_conn user_id]
-        db_1row select_comments {
-            select acs_object.name(:user_id) as author,
-            sysdate as creation_date
-            from dual
-        }
+        db_1row select_comments {}
     } else {
-        db_1row select_comments {
+        db_1row select_author_unknwon {
             select 'Unknown' as author,
             sysdate as creation_date
             from dual
@@ -696,21 +659,7 @@ ad_proc -private package_table_columns_for_type {
     # it... It's slow because of the underlying data dictionary query
     # against user_arguments
 
-    return [db_list_of_lists select_object_type_param_list {
-        select cols.table_name, cols.column_name
-        from user_tab_columns cols,
-        (select upper(t.table_name) as table_name
-         from acs_object_types t
-         start with t.object_type = :object_type
-         connect by prior t.supertype = t.object_type) t
-        where cols.column_name in
-        (select args.argument_name
-         from user_arguments args
-         where args.position > 0
-         and args.object_name = upper(:object_name)
-         and args.package_name = upper(:package_name))
-        and cols.table_name = t.table_name
-    }]
+    return [db_list_of_lists select_object_type_param_list {}]
 
 }
 

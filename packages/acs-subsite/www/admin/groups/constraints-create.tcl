@@ -23,12 +23,7 @@ ad_page_contract {
 set context [list [list "[ad_conn package_url]admin/groups/" "Groups"] [list [export_vars -base one group_id] "One Group"] "Add constraint"]
 set export_vars [export_vars -form {group_id rel_type return_url}]
 
-db_1row select_props {
-    select acs_group.name(:group_id) as group_name,
-           t.pretty_name as rel_type_pretty_name
-      from acs_object_types t
-     where t.object_type = :rel_type
-}
+db_1row select_props {}
 
 ad_return_template
 
