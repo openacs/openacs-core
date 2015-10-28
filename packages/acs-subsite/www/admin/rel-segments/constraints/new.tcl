@@ -39,14 +39,7 @@ set context [list [list "../" "Relational segments"] [list [export_vars -base ..
 
 set package_id [ad_conn package_id]
 
-db_1row select_rel_properties {
-    select s.segment_name, 
-           acs_rel_type.role_pretty_name(t.role_one) as role_one_name,
-           acs_rel_type.role_pretty_name(t.role_two) as role_two_name
-      from rel_segments s, acs_rel_types t
-     where s.rel_type = t.rel_type
-       and s.segment_id = :rel_segment
-}
+db_1row select_rel_properties {}
 
 template::form create constraint_new
 
@@ -104,29 +97,11 @@ if { [template::form is_valid constraint_new] } {
     set creation_ip [ad_conn peeraddr]
     set ctr 0
     db_transaction {
-	set constraint_id [db_exec_plsql add_constraint {
-	 BEGIN
-	  :1 := rel_constraint.new(constraint_name => :constraint_name,
-                                   rel_segment => :rel_segment,
-                                   rel_side => :rel_side,
-                                   required_rel_segment => :required_rel_segment,
-                                   creation_user => :creation_user,
-                                   creation_ip => :creation_ip
-                                  );
-	 END;
-	}]
+	set constraint_id [db_exec_plsql add_constraint {}]
 
 	# check for violations
 	template::multirow create violations rel_id name
-	db_foreach select_violated_rels {
-	    select viol.rel_id, acs_object.name(viol.party_id) as name
-	      from rel_constraints_violated_one viol
-	     where viol.constraint_id = :constraint_id
-	    UNION ALL
-	    select viol.rel_id, acs_object.name(viol.party_id) as name
-	      from rel_constraints_violated_two viol
-	     where viol.constraint_id = :constraint_id
-	} {
+	db_foreach select_violated_rels {} {
 	    template::multirow append violations $rel_id $name
 	    incr ctr
 	} 

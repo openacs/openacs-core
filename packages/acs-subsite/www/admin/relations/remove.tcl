@@ -29,13 +29,7 @@ ad_page_contract {
 
 set context [list "Remove relation"]
 
-if { ![db_0or1row select_rel_info {
-    select acs_object_type.pretty_name(r.rel_type) as rel_type_pretty_name,
-           acs_object.name(r.object_id_one) as object_id_one_name,
-           acs_object.name(r.object_id_two) as object_id_two_name,
-           r.object_id_two
-      from acs_rels r
-     where r.rel_id = :rel_id} -column_array rel] 
+if { ![db_0or1row select_rel_info {} -column_array rel] 
 } {
     ad_return_error "Error" "Relation $rel_id does not exist"
     ad_script_abort
@@ -49,14 +43,7 @@ if { [relation_segment_has_dependant -rel_id $rel_id] } {
     # We can't remove this relation - display the violations
     template::multirow create dependants rel_id rel_type_pretty_name object_id_one_name object_id_two_name export_vars
 
-    db_foreach select_dependants {
-	select r.viol_rel_id as rel_id,
-	       acs_object_type.pretty_name(r.viol_rel_type) as rel_type_pretty_name,
-	       acs_object.name(r.viol_object_id_one) as object_id_one_name, 
-	       acs_object.name(r.viol_object_id_two) as object_id_two_name
-	  from rc_violations_by_removing_rel r
-	 where r.rel_id = :rel_id
-    } {
+    db_foreach select_dependants {} {
 	template::multirow append dependants $rel_id $rel_type_pretty_name $object_id_one_name $object_id_two_name [export_vars {rel_id return_url}]
     }
     ad_return_template remove-dependants-exist

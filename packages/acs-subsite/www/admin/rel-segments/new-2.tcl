@@ -41,12 +41,7 @@ set context [list [list "[ad_conn package_url]admin/rel-segments/" "Relational s
 
 set export_vars [export_vars -form {group_id rel_type return_url}]
 
-db_1row select_basic_info {
-    select acs_group.name(:group_id) as group_name,
-    nvl(acs_rel_type.role_pretty_plural(t.role_two),'Elements') as role_pretty_plural
-      from acs_rel_types t
-     where t.rel_type = :rel_type
-}
+db_1row select_basic_info {}
 
 # The role pretty names can be message catalog keys that need
 # to be localized before they are displayed

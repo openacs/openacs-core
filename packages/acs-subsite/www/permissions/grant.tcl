@@ -26,7 +26,7 @@ set context [list [list [export_vars -base one {object_id}] "[_ acs-subsite.Perm
 # acs_privileges. Note that nodes can appear more than one time in the
 # tree.
 
-set existing_privs [db_list select_privileges_list { }]
+set existing_privs [db_list select_privileges_list {}]
 
 # The maximum level that has been reached within the hierarchy.
 set maxlevel 1
@@ -41,7 +41,7 @@ foreach privilege $existing_privs {
 
 # Loop through each row in acs_privilege_hierarchy and shuffle the
 # $hierarchy list accordingly.
-db_foreach select_privileges_hierarchy { } {
+db_foreach select_privileges_hierarchy {} {
 
     if { [set start_pos [lsearch -regexp $hierarchy "\\m$child_privilege\\M"]] == -1 } {
         # child_privilege of this relation not in privileges - skip.

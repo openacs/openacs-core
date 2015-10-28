@@ -4,23 +4,6 @@
    <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
 
  
-<fullquery name="exists_p.attr_exists_p">      
-      <querytext>
-      
-	select case when exists (select 1 
-                                   from acs_attributes a
-                                  where (a.attribute_name = :attribute
-                                         or a.column_name = :attribute)
-                                    and a.object_type = :object_type)
-                    then 1
-                    else 0
-                    end
-          from dual
-    
-      </querytext>
-</fullquery>
-
- 
 <fullquery name="delete.select_attr_info">      
       <querytext>
       

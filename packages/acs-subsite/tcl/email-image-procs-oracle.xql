@@ -2,7 +2,7 @@
 <queryset>
 <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
 
-<fullquery name="email_image::new_item.lob_size">
+<fullquery name="email_image::new_item.new_lob_size">
       <querytext>
         update cr_revisions
         set content_length = dbms_lob.getlength(content)
@@ -10,7 +10,7 @@
      </querytext>
 </fullquery>
 
-<fullquery name="email_image::new_item.lob_content">
+<fullquery name="email_image::new_item.new_lob_content">
       <querytext>
         update cr_revisions
         set    content = empty_blob()

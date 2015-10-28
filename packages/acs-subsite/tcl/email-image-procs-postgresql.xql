@@ -2,7 +2,7 @@
 <queryset>
 <rdbms><type>postgresql</type><version>7.1</version></rdbms>
 
-<fullquery name="email_image::new_item.lob_size">
+<fullquery name="email_image::new_item.new_lob_size">
       <querytext>
         update cr_revisions 
 	set content_length = lob_length(lob)
@@ -10,7 +10,7 @@
       </querytext>
 </fullquery>
 
-<fullquery name="email_image::new_item.lob_content">
+<fullquery name="email_image::new_item.new_lob_content">
       <querytext>
         update cr_revisions
         set mime_type = :mime_type,

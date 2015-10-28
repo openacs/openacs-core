@@ -152,12 +152,12 @@ namespace eval rel_types {
 
 	# Create the actual acs object type
 
-	lappend plsql_drop [list db_exec_plsql drop_type {FOO}]
-	lappend plsql [list db_exec_plsql create_type {FOO}]
+	lappend plsql_drop [list db_exec_plsql drop_type {}]
+	lappend plsql [list db_exec_plsql create_type {}]
 
 	# Mark the type as dynamic
 
-	lappend plsql [list db_dml update_type {FOO}]
+	lappend plsql [list db_dml update_type FOO]
 	
 	# Force internationalisation of Roles
 	

@@ -41,20 +41,9 @@ set context [list [list "" "Relational segments"] "Add segment"]
 
 set export_vars [export_vars -form {group_id return_url}]
 # Select out all relationship types
-db_multirow rel_types select_relation_types {
-    select t.pretty_name, t.object_type as rel_type,
-    replace(lpad(' ', (level - 1) * 4), ' ', '&nbsp;') as indent
-    from acs_object_types t
-    where t.object_type not in (select s.rel_type from rel_segments s where s.group_id = :group_id)
-    connect by prior t.object_type = t.supertype
-    start with t.object_type in ('membership_rel', 'composition_rel')
-    order by lower(t.pretty_name) desc
-}
+db_multirow rel_types select_relation_types {}
 
-db_1row select_basic_info {
-    select acs_group.name(:group_id) as group_name
-      from dual
-}
+db_1row select_basic_info {}
 
 ad_return_template
 

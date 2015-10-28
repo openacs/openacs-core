@@ -15,13 +15,7 @@ ad_page_contract {
 }
 
 
-db_multirow supertypes select_supertypes {
-    select replace(lpad(' ', (level - 1) * 4), ' ', '&nbsp;') || t.pretty_name as name,
-           t.object_type
-      from acs_object_types t
-   connect by prior t.object_type = t.supertype
-     start with t.object_type in ('membership_rel','composition_rel')
-}
+db_multirow supertypes select_supertypes {}
 
 set context [list [list "[ad_conn package_url]admin/rel-types/" [_ acs-subsite.Relationship_Types]] [_ acs-subsite.Create_relation_type]]
 

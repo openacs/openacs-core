@@ -34,18 +34,7 @@ ad_proc -public rel_segments_new {
 	    set creation_ip [ad_conn peeraddr]
 	}
     }
-    return [db_exec_plsql create_rel_segment {
-      declare
-      begin 
-	:1 := rel_segment.new(segment_name => :segment_name,
-                                  group_id => :group_id,
-                                  context_id => :context_id,
-                                  rel_type => :rel_type,
-                                  creation_user => :creation_user,
-                                  creation_ip => :creation_ip
-                                 );
-      end;
-    }]
+    return [db_exec_plsql create_rel_segment {}]
 
 }
 
@@ -65,14 +54,10 @@ ad_proc -public rel_segments_delete {
 	  from rel_constraints c
 	 where c.required_rel_segment = :segment_id
     } {
-	db_exec_plsql constraint_delete {
-	    begin rel_constraint.del(:constraint_id); end;
-	}
+	db_exec_plsql constraint_delete {}
     }
 
-    db_exec_plsql rel_segment_delete {
-	begin rel_segment.del(:segment_id); end;
-    }
+    db_exec_plsql rel_segment_delete {}
     
 }
 

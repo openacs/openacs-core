@@ -86,17 +86,6 @@
 </fullquery>
 
  
-<fullquery name="package_insert_default_comment.select_comments">      
-      <querytext>
-      
-	    select acs_object.name(:user_id) as author,
-	           sysdate as creation_date
-	      from dual
-	
-      </querytext>
-</fullquery>
-
- 
 <fullquery name="package_object_attribute_list.attributes_select">      
       <querytext>
       
@@ -183,7 +172,17 @@
       </querytext>
 </fullquery>
 
- 
+
+<fullquery name="package_generate_body.select_supertype_function_params">      
+      <querytext>
+        select args.argument_name
+          from user_arguments args
+        where args.package_name =upper(:supertype_package_name)
+          and args.object_name='NEW'
+      </querytext>
+</fullquery>
+
+
 <partialquery name="package_generate_body.body">      
       <querytext>
 

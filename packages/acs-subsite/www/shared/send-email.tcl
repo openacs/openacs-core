@@ -18,7 +18,7 @@ if {$return_url eq ""} {
     set return_url [ad_pvt_home]
 }
 
-db_1row user_to_info { *SQL* }
+db_1row user_to_info {}
 set from [email_image::get_email -user_id $user_id]
 
 ad_form -name send-email -export {sendto return_url} -form {

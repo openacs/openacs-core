@@ -46,7 +46,7 @@
 
 
 
-<fullquery name="email_image::new_item.update_cr_items">
+<fullquery name="email_image::new_item.update_cr_items_new">
   <querytext>
         update cr_items
         set live_revision  = :revision_id

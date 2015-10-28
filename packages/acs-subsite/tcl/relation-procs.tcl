@@ -141,7 +141,7 @@ ad_proc -public relation_remove {
 } {
     # Pull out the segment_id and the party_id (object_id_two) from
     # acs_rels. Note the outer joins since the segment may not exist.
-    if { ![db_0or1row select_rel_info {}] } {
+    if { ![db_0or1row select_rel_info_rm {}] } {
         # Relation doesn't exist
 	return 0
     }

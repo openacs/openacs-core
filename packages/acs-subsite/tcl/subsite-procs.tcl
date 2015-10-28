@@ -258,12 +258,7 @@ ad_proc -public subsite::auto_mount_application {
 
     if { $pretty_name eq "" } {
         # Get the name of the object mounted at this node
-        db_1row select_package_object_names {
-            select t.pretty_name as package_name, acs_object.name(s.object_id) as object_name
-              from site_nodes s, apm_package_types t
-            where s.node_id = :node_id
-              and t.package_key = :package_key
-        }
+        db_1row select_package_object_names {}
         set pretty_name "$object_name $package_name"
         if { $ctr > 2 } {
             # This was a duplicate pkg name... append the ctr used in the instance name
@@ -390,15 +385,7 @@ ad_proc -public subsite::util::sub_type_exists_p {
     @creation-date 2000-02-07
 } {
 
-    return [db_string sub_type_exists_p {
-        select case 
-                 when exists (select 1 from acs_object_types 
-                              where supertype = :object_type)
-                 then 1 
-                 else 0 
-               end
-        from dual
-    }]
+    return [db_string sub_type_exists_p {}]
 
 }
 
@@ -411,11 +398,7 @@ ad_proc -public subsite::util::object_type_path_list {
 } {
     set path_list [list]
 
-    set type_list [db_list select_object_type_path {
-        select object_type from acs_object_types
-        start with object_type = :object_type
-        connect by object_type = prior supertype
-    }]
+    set type_list [db_list select_object_type_path {}]
 
     foreach type $type_list {
         lappend path_list $type
