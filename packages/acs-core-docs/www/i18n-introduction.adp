@@ -221,7 +221,7 @@ parameters, taken directly from the dotlrn package.</p><div class="informaltable
 1-Column;<span>#</span>dotlrn.class_page_file_storage_title#,Simple
 1-Column</td>
 </tr><tr>
-<td>departments_pretty_name</td><td>#departments_pretty_name#</td>
+<td>departments_pretty_name</td><td><span>#</span>departments_pretty_name#</td>
 </tr>
 </tbody>
 </table></div><p>Then, depending on how we retrieve the value, here's what we
@@ -239,7 +239,7 @@ class_instances_pages_csv</td><td>Kurs Startseite,Simple 2-Column;Kalender,Simpl
 <td>parameter::get <span class="strong"><strong>-localize</strong></span> -parameter
 departments_pretty_name</td><td>Abteilung</td>
 </tr><tr>
-<td>parameter::get -parameter departments_pretty_name</td><td>#departments_pretty_name#</td>
+<td>parameter::get -parameter departments_pretty_name</td><td><span>#</span>departments_pretty_name#</td>
 </tr>
 </tbody>
 </table></div><p>The value in the rightmost column in the table above is the
