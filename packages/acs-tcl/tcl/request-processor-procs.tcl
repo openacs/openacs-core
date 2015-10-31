@@ -515,10 +515,11 @@ ad_proc -private rp_resources_filter { why } {
     maximize throughput for resource files.  We just ns_returnfile the file, no
     permissions are checked, the ad_conn structure is not initialized, etc.
 
-    There are two mapping possibilities:
+    There are three mapping possibilities:
 
     /resources/package-key/* maps to root/packages/package-key/www/resources/*
 
+    If that fails, we map to root/packages/acs-subsite/www/resources/*
     If that fails, we map to root/www/resources/*
 
     If the file doesn't exist we'll log an error and return filter_ok, which will allow
@@ -534,12 +535,17 @@ ad_proc -private rp_resources_filter { why } {
         return [rp_serve_resource_file $path]
     }
 
-    set path "$::acs::rootdir/www/resources/[join [lrange [ns_conn urlv] 1 end] /]"
+    set path $::acs::rootdir/www/[ns_conn url]
+    if { [file isfile $path] } {
+        return [rp_serve_resource_file $path]
+    }
+    
+    set path [acs_package_root_dir acs-subsite]/www/[ns_conn url]
     if { [file isfile $path] } {
         return [rp_serve_resource_file $path]
     } 
 
-    ns_log Error "rp_sources_filter: file \"$path\" does not exists trying to serve as a normal request"
+    ns_log Warning "rp_sources_filter: file \"$path\" does not exists trying to serve as a normal request"
     return filter_ok
 }
 
