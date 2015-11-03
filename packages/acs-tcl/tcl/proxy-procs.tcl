@@ -1,5 +1,4 @@
-# packages/acs-tcl/tcl/proxy-procs.tcl                                                                                                   
-
+# packages/acs-tcl/tcl/proxy-procs.tcl                                                                                             
 ad_library {
 
     Proxy procs
@@ -9,26 +8,32 @@ ad_library {
     @cvs-id $Id$
 }
 
-# First check that ns_proxy is configured
-if {![catch {set handler [ns_proxy get exec_proxy]}]} {
-    ns_proxy release $handler
+#
+# First check if ns_proxy is available
+#
+if {![catch {set handler [ns_proxy configure exec_proxy -maxruns 0]}]} {
     
     namespace eval proxy {}
     
     ad_proc -public proxy::exec {
-	{-call}
+        {-call}
+        {-cd}
     } {
-	Execute the statement in a proxy instead of normal exec
-	
-	@param call Call which is passed to the "exec" command
+        Execute the statement in a proxy instead of normal exec
+
+        @param call Call which is passed to the "exec" command (required)
+        @param cd  change to the given directory before executing the command
     } {
-	set handle [ns_proxy get exec_proxy]
-	with_finally -code {
-	    set return_string [ns_proxy eval $handle "exec $call"]
-	} -finally {
-	    ns_proxy release $handle
-	}
-	return $return_string
+        set handle [ns_proxy get exec_proxy]
+        with_finally -code {
+            if {[info exists cd]} {
+                ns_proxy eval $handle [list cd $cd]
+            }
+            set return_string [ns_proxy eval $handle [list ::exec {*}$call]]
+        } -finally {
+            ns_proxy release $handle
+        }
+        return $return_string
     }
 
     # Now rename exec; protect cases, where file is loaded multiple times
