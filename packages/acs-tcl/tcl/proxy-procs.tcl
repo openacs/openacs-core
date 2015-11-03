@@ -11,7 +11,7 @@ ad_library {
 #
 # First check if ns_proxy is available
 #
-if {![catch {set handler [ns_proxy configure exec_proxy -maxruns 0]}]} {
+if {![catch {ns_proxy configure ExecPool -maxruns 0}]} {
     
     namespace eval proxy {}
     
@@ -24,7 +24,7 @@ if {![catch {set handler [ns_proxy configure exec_proxy -maxruns 0]}]} {
         @param call Call which is passed to the "exec" command (required)
         @param cd  change to the given directory before executing the command
     } {
-        set handle [ns_proxy get exec_proxy]
+        set handle [ns_proxy get ExecPool]
         with_finally -code {
             if {[info exists cd]} {
                 ns_proxy eval $handle [list cd $cd]
