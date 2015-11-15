@@ -453,7 +453,8 @@ ad_proc -public randomRange {range} {
 
     @return integer
 } {
-    return [expr {int([random] * $range)}]
+    incr range
+    return [expr {int([random] * $range) % $range}]
 }
 
 ad_proc -public db_html_select_options { 
