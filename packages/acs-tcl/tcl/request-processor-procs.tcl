@@ -230,8 +230,8 @@ ad_proc -public ad_register_proc {
         return
     }
 
-    if {$method ni { GET POST HEAD }} {
-        error "Method passed to ad_register_proc must be one of GET, POST, or HEAD"
+    if {$method ni { GET POST HEAD PUT DELETE }} {
+        error "Method passed to ad_register_proc must be one of GET, POST, HEAD, PUT and DELETE"
     }
 
     set proc_info [list $method $path $proc $arg $debug $noinherit $description [info script]]
