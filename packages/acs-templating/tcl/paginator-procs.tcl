@@ -53,10 +53,6 @@ ad_proc -public template::paginator::create { statement_name name query count_qu
     @param query        The actual query that returns the IDs of all rows in
                         the results.  Bind variables may be used.
 
-    @param count_query  Query returning the total number of records retrieved by 
-                        the original paginator query. This is the full number of 
-                        records, possibly exceeding number_of_pages * rows_per_page.
-
     @option timeout     The lifetime of a query result in seconds, after which
                         the query must be refreshed (if not reset).
 
@@ -148,7 +144,7 @@ $css_link
 	      ns_write [ns_adp_parse -file $header_file]
 	  }
 	  ns_write [lindex $opts(printing_prefs) 6]
-	  init $statement_name $name $query $count_query 1
+	  init $statement_name $name $query 1
 	  ns_write [lindex $opts(printing_prefs) 7]
 	  set footer_file [lindex $opts(printing_prefs) 4]
 	  if { $footer_file ne "" } {
@@ -171,7 +167,7 @@ $css_link
 	  }
 	  ad_script_abort
       } else {
-	  init $statement_name $name $query $count_query
+	  init $statement_name $name $query
       }
   } else {
     set opts(row_ids) $row_ids
@@ -184,7 +180,7 @@ $css_link
   set opts(group_count) [get_group $name $opts(page_count)]
 }
 
-ad_proc -private template::paginator::init { statement_name name query count_query {print_p 0} } {
+ad_proc -private template::paginator::init { statement_name name query {print_p 0} } {
     Initialize a paginated query.  Only called by create.
 } {
   get_reference
@@ -194,17 +190,42 @@ ad_proc -private template::paginator::init { statement_name name query count_que
 
   upvar 2 __paginator_ids ids
   set ids [list]
+  
+  set full_statement_name [uplevel 2 "db_qd_get_fullname $statement_name"]
+  
+  # Antonio Pisano 2015-11-17: to get the full rowcount of the records,
+  # we need to wrap the original query into a count(*). The problem comes
+  # with template::list, that builds the paginator query tampering with
+  # the original one, so if we come here from a template::list we cannot
+  # retrieve the real count anymore. I had to come out with a solution
+  # that wouldn't break existing contract for public procs, or this would
+  # have caused unpredictable regressions. Below is the strategy to get
+  # the original query.
+  
+  # If query comes from an xql we get it from there...
+  set original_query [db_map $full_statement_name]
+  # ...otherwise we try to see if we come from a template::list...
+  if {$original_query eq ""} {
+      # ...which was slightly modified to keep the original query untampered.
+      set list_name [lindex [split $name ,] 0]
+      if {![catch {template::list::get_reference -name $list_name}]} {
+          set original_query $list_properties(page_query_original)
+      }
+  }
+  # If any of the previous fail, we go for the explicit query
+  if {$original_query eq ""} {
+      set original_query $query
+  }
+      
 
   if { [info exists properties(contextual)] } {
 
       # query contains two columns, one for ID and one for context cue
 
       uplevel 2 "
-      set full_statement_name \[db_qd_get_fullname $statement_name\]
-
       # Can't use db_foreach here, since we need to use the ns_set directly.
       db_with_handle db {
-	set selection \[db_exec select \$db \$full_statement_name {$query}\]
+	set selection \[db_exec select \$db $full_statement_name {$query}\]
  
         set __paginator_ids \[list\]
         set total_so_far 1
@@ -292,7 +313,7 @@ ad_proc -private template::paginator::init { statement_name name query count_que
   }
   
   # Get full number of rows retrieved by original paginator query
-  set full_row_count [uplevel 3 [list db_string query $count_query]]
+  set full_row_count [uplevel 3 [list db_string query [db_map count_query]]]
   set properties(full_row_count) $full_row_count
   cache set $name:$query:full_row_count $full_row_count $properties(timeout)
 }
