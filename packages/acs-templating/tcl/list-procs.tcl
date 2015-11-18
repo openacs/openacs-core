@@ -558,14 +558,19 @@ ad_proc -public template::list::prepare {
         set last_row [expr {$first_row + ($groupsize + 1) * $page_size - 1}]
         set page_offset [expr {($page_group - 1) * $groupsize}]
 
-        # Obtain query which retrieves records count
-        set list_properties(count_query) [db_map count_query]
-
+        # Antonio Pisano 2015-11-17: From now on, the original query 
+        # will be tampered with the limit information, so this is our 
+        # last chance to save it and use it to get the full row count in
+        # the paginator.
+        set list_properties(page_query_original) $list_properties(page_query_substed)
+        
         # Now wrap the provided query with the limit information
         set list_properties(page_query_substed) [db_map pagination_query]
 
-        # Generate a paginator name which includes the page group we're in all the
-        # filter values, so the paginator cahing works properly
+        # Generate a paginator name which includes the page group we're in 
+        # and all the filter values, so the paginator cahing works properly
+        # Antonio Pisano 2015-11-17: it is important that the paginator_name starts with the list's 
+        # name, because we count on this in template::paginator::create to retrieve the count_query
         set paginator_name $list_properties(name)
 
         foreach filter $list_properties(filters) {
@@ -593,7 +598,6 @@ ad_proc -public template::list::prepare {
                              --dummy--query--name-- \
                              $list_properties(paginator_name) \
                              $list_properties(page_query_substed) \
-                             $list_properties(count_query) \
                              -pagesize $list_properties(page_size) \
                              -groupsize $list_properties(page_groupsize) \
                              -page_offset $page_offset \
