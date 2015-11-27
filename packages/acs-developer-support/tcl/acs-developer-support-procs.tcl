@@ -55,10 +55,20 @@
  ad_proc -public ds_enabled_p {} { 
      Returns true if developer-support facilities are enabled.
  } {
-     if { ![nsv_exists ds_properties enabled_p] || ![nsv_get ds_properties enabled_p] } {
-         return 0
+     #
+     # On busy sites, frequent calls to [ds_enabled_p] leads to huge
+     # number of mutex locks for the nsv ds_properties. Therefore,
+     # cache its results in a per-thead variable.
+     #
+     if {[info exists ::__ds_enabled_p]} {
+         return $::ds_enabled_p
      }
-     return 1
+     if { ![nsv_exists ds_properties enabled_p] || ![nsv_get ds_properties enabled_p] } {
+         set ::ds_enabled_p 0
+     } else {
+         set ::ds_enabled_p 1
+     }
+     return $::ds_enabled_p
  }
 
  ad_proc -public ds_collection_enabled_p {} {
@@ -359,8 +369,7 @@
  ad_proc -private ds_add { name args } { 
      Sets a developer-support property for the current request. 
  } {
-
-     if { [ds_enabled_p] && [ds_collection_enabled_p] } { 
+     if { [ds_enabled_p] && [ds_collection_enabled_p] } {
          if { [catch { nsv_exists ds_request . }] } {
              ns_log "Warning" "ds_request NSVs not initialized"
              return
@@ -692,7 +701,6 @@ ad_proc -public ds_init { } {
 	# variables, which are deleted automatically after every
 	# request.
 	#
-	set ::ds_enabled_p 1
 	if {[::ds_collection_enabled_p] } {set ::ds_collection_enabled_p 1}
 	if {[::ds_profiling_enabled_p] } {set ::ds_profiling_enabled_p 1}
 	if {[::ds_show_p]} {set ::ds_show_p 1}

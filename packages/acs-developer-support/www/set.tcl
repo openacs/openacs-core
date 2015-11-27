@@ -28,6 +28,7 @@ switch -- $field {
     }
     ds {
         nsv_set ds_properties enabled_p $enabled_p
+        set ::ds_enabled_p $enabled_p
     }
     frag {
         nsv_set ds_properties page_fragment_cache_p $enabled_p
