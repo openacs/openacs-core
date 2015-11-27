@@ -1,7 +1,7 @@
 
 # TODO: Handle the case when developer-support is not mounted
+set ip_address [ns_info address]:[ns_config [ns_driversection] port]
 
-set ip_address [ns_config ns/server/[ns_info server]/module/nssock address]
 
 set show_p [ds_show_p]
 
