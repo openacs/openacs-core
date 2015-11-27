@@ -60,7 +60,7 @@
      # number of mutex locks for the nsv ds_properties. Therefore,
      # cache its results in a per-thead variable.
      #
-     if {[info exists ::__ds_enabled_p]} {
+     if {[info exists ::ds_enabled_p]} {
          return $::ds_enabled_p
      }
      if { ![nsv_exists ds_properties enabled_p] || ![nsv_get ds_properties enabled_p] } {
