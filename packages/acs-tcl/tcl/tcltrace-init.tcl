@@ -10,8 +10,8 @@
 #
 set trace ""
 foreach {parameter default cmd} {
-    TclTraceLogServerities "" {trace add execution ::ns_log    enter {::tcltrace::before-ns_log}}
-    TclTraceSaveNsReturn   0  {trace add execution ::ns_return enter {::tcltrace::before-ns_return}}
+    TclTraceLogServerities "" {trace add execution ::ns_log     enter {::tcltrace::before-ns_log}}
+    TclTraceSaveNsReturn   0  {trace add execution ::ns_return  enter {::tcltrace::before-ns_return}}
 } {
     if {[::parameter::get_from_package_key \
 	     -package_key acs-tcl \
@@ -20,6 +20,12 @@ foreach {parameter default cmd} {
 	append trace \n$cmd 
     }
 }
+
+#
+# Optionally add more traces here
+#
+#append trace "\ntrace add execution ::nsv_get    enter {::tcltrace::before}"
+
 if {$trace ne ""} {
     ns_ictl trace create $trace
 }

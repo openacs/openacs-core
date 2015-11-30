@@ -65,7 +65,14 @@ namespace eval ::tcltrace {
 	} else {
 	    #catch {ds_comment "ignore $severity $msg"}
 	}
-    }   
+    }
+
+    ad_proc -private before { cmd op } {
+        Simple trace proc for arbitraty commands. simply reports traces to error.log.
+    } {
+        ns_log notice $cmd
+    }
+   
 }
 
 
