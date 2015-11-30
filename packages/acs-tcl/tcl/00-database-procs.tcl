@@ -113,10 +113,12 @@ ad_library {
 # We now use the following global variables:
 #
 # Server-Wide NSV arrays, keys:
-#     db_default_database  .
 #     db_available_pools   $dbn
 #     db_driverkey         $dbn
 #     db_pool_to_dbn       $pool
+#
+# Global Variables
+#    ::acs::default_database
 #
 # Per-thread Tcl global variables:
 #   One Tcl Array per Database Name:
@@ -156,7 +158,7 @@ ad_proc -private db_state_array_name_is {
     @creation-date 2003/03/16
 } {
     if { $dbn eq "" } {
-        set dbn [nsv_get {db_default_database} .]
+        set dbn $::acs::default_database
     }
     return "db_state_${dbn}"
 }
@@ -195,6 +197,11 @@ ad_proc -private db_driverkey {
         }
     }
 
+    set key ::acs::db_driverkey($dbn)
+    if {[info exists $key]} {
+        return [set $key]
+    }
+
     if { ![nsv_exists db_driverkey $dbn] } {
         # This ASSUMES that any overriding of this default value via
         # "ns_param driverkey_dbn" has already been done:
@@ -224,7 +231,7 @@ ad_proc -private db_driverkey {
         nsv_set db_driverkey $dbn $driverkey
     }
 
-    return [nsv_get db_driverkey $dbn]
+    return [set $key [nsv_get db_driverkey $dbn]]
 }
 
 
@@ -293,7 +300,7 @@ ad_proc -public db_known_database_types {} {
     The nsv containing the list is initialized by the bootstrap script and should
     never be referenced directly by user code.
 } {
-    return [nsv_get ad_known_database_types .]
+    return $::acs::known_database_types
 }
 
 

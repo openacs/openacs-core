@@ -322,7 +322,7 @@ ad_proc -private apm_guess_db_type { package_key path } {
             if {$db_dir eq "common"} {
                 return ""
             }
-            foreach known_database_type [db_known_database_types] {
+            foreach known_database_type $::acs::known_database_types {
                 if {[lindex $known_database_type 0] eq $db_dir} {
                     return $db_dir
                 }
@@ -332,7 +332,7 @@ ad_proc -private apm_guess_db_type { package_key path } {
     }
 
     set file_name [file tail $path]
-    foreach known_database_type [nsv_get ad_known_database_types .] {
+    foreach known_database_type $::acs::known_database_types {
         if { [regexp -- "\-[lindex $known_database_type 0]\.(xql|tcl|sqlj)\$" $file_name match] } {
             return [lindex $known_database_type 0]
         }
