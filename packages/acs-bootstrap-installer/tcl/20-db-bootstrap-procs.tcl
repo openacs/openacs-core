@@ -15,9 +15,9 @@ ad_proc -private db_available_pools {dbn} {
     @creation-date 2003/03/16
 } {
     if { $dbn eq "" } {
-        set dbn [nsv_get {db_default_database} .]
+        set dbn $::acs::default_database
     }
-    return [nsv_get {db_available_pools} $dbn]
+    return [nsv_get db_available_pools $dbn]
 }
 
 ad_proc -private db_pool_to_dbn_init {} {
@@ -31,7 +31,7 @@ ad_proc -private db_pool_to_dbn_init {} {
 } {
     foreach dbn [nsv_array names {db_available_pools}] {
         foreach pool [db_available_pools $dbn] {
-            nsv_set {db_pool_to_dbn} $pool $dbn
+            nsv_set db_pool_to_dbn $pool $dbn
         }
     }
 }
@@ -92,17 +92,17 @@ ad_proc db_bootstrap_set_db_type { errors } {
     # connecting to the same database and user in each pool, but at the moment
     # that's seems anal even by DRB's standards.
 
-    # Initialize the list of known database types .  User code should use the database
-    # API routine db_known_database_types rather than reference the nsv list directly.
-    # We might change the way this is implemented later.  Each database type is
-    # represented by a list consisting of the internal name, driver name, and
-    # "pretty name" (used by the APM to list the available database engines that 
-    # one's package can choose to support).  The driver name and "pretty name" happen
-    # to be the same for Postgres and Oracle but let's not depend on that being true
-    # in all cases...
+    # The same information is as well in 0-acs-init.tcl; it is kept
+    # here for a while to guarantee a smooth migration, since the
+    # db-interface is essential and we have to deal with situations,
+    # where still an old 0-acs-init.tcl is active. This could be
+    # removed around OpenACS 6.*
+    #
+    set ::acs::known_database_types {
+        {oracle Oracle Oracle}
+        {postgresql PostgreSQL PostgreSQL}
+    }
 
-    nsv_set ad_known_database_types . \
-        [list [list "oracle" "Oracle" "Oracle"] [list "postgresql" "PostgreSQL" "PostgreSQL"]]
 
     #
     # Initialize the list of available pools
@@ -133,7 +133,7 @@ ad_proc db_bootstrap_set_db_type { errors } {
                 # all_pools to ensure that the pool is valid.
 
                 set dbn_pools [ns_config $config_path "pools_${dbn}"]
-                nsv_set {db_available_pools} $dbn $dbn_pools
+                nsv_set db_available_pools $dbn $dbn_pools
                 ns_log Notice "$proc_name: For database '$dbn', the following pools are available: $dbn_pools"
             }
 
@@ -144,7 +144,8 @@ ad_proc db_bootstrap_set_db_type { errors } {
         }
     }
 
-    nsv_set {db_default_database} . $default_dbn
+    set ::acs::default_database $default_dbn
+
     ns_log Notice "$proc_name: Default database (dbn) is: '$default_dbn'"
 
     if { $old_availablepool_p } {
@@ -215,7 +216,7 @@ ad_proc db_bootstrap_set_db_type { errors } {
                 set database_problem "RDBMS type could not be determined: $errmsg"
                 ns_log Error "$proc_name: RDBMS type could not be determined: $errmsg"
             } else {
-                foreach known_database_type [nsv_get ad_known_database_types .] {
+                foreach known_database_type $::acs::known_database_types {
 
                     set this_type [lindex $known_database_type 1]
 
