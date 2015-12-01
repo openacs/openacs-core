@@ -324,5 +324,5 @@ McLoghlin and Wu</a>
 <address><a href="mailto:christian\@arsdigita.com">Christian
 Brechbuehler</a></address>
 <!-- Created: Mon Aug 14 11:53:07 EDT 2000 -->
-Last modified: $Id: design.html,v 1.4 2015/06/16 08:53:38 gustafn
+Last modified: $&zwnj;Id: design.html,v 1.4 2015/06/16 08:53:38 gustafn
 Exp $

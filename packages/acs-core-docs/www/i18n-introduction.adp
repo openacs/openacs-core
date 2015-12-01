@@ -78,7 +78,7 @@ localization.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-
 <p>The <span class="strong"><strong>short</strong></span>:
 <code class="computeroutput">#<span class="replaceable"><span class="replaceable">package_key.message_key</span></span>#</code>
 </p><p>The advantage of the short syntax is that it's short. It's as
-simple as inserting the value of a variable. Example: <span class="replaceable"><span class="replaceable"><span>#</span>forum.title#</span></span>
+simple as inserting the value of a variable. Example: <span class="replaceable"><span class="replaceable">#forum.title#</span></span>
 </p>
 </li><li class="listitem">
 <p>The <span class="strong"><strong>verbose</strong></span>:
@@ -216,12 +216,12 @@ parameters, taken directly from the dotlrn package.</p><div class="informaltable
 <th>Parameter Name</th><th>Parameter Value</th>
 </tr></thead><tbody>
 <tr>
-<td>class_instance_pages_csv</td><td><span>#</span>dotlrn.class_page_home_title#,Simple
-2-Column;<span>#</span>dotlrn.class_page_calendar_title#,Simple
-1-Column;<span>#</span>dotlrn.class_page_file_storage_title#,Simple
+<td>class_instance_pages_csv</td><td>#dotlrn.class_page_home_title#,Simple
+2-Column;#dotlrn.class_page_calendar_title#,Simple
+1-Column;#dotlrn.class_page_file_storage_title#,Simple
 1-Column</td>
 </tr><tr>
-<td>departments_pretty_name</td><td><span>#</span>departments_pretty_name#</td>
+<td>departments_pretty_name</td><td>#departments_pretty_name#</td>
 </tr>
 </tbody>
 </table></div><p>Then, depending on how we retrieve the value, here's what we
@@ -239,7 +239,7 @@ class_instances_pages_csv</td><td>Kurs Startseite,Simple 2-Column;Kalender,Simpl
 <td>parameter::get <span class="strong"><strong>-localize</strong></span> -parameter
 departments_pretty_name</td><td>Abteilung</td>
 </tr><tr>
-<td>parameter::get -parameter departments_pretty_name</td><td><span>#</span>departments_pretty_name#</td>
+<td>parameter::get -parameter departments_pretty_name</td><td>#departments_pretty_name#</td>
 </tr>
 </tbody>
 </table></div><p>The value in the rightmost column in the table above is the

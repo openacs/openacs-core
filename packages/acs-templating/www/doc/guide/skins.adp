@@ -6,7 +6,7 @@ Styles and Formats</property>
 <master>
 <h2>Presenting Data in Multiple Styles and Formats</h2>
 <a href="..">Templating System</a>
- : <a href="../developer-guide.html">Developer Guide</a>
+ : <a href="../developer-guide">Developer Guide</a>
  : User Guide
 <p>(Discussion of how to do cobranding, syndication of data in XML,
 etc.).</p>

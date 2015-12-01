@@ -4,7 +4,7 @@
 <master>
 <h2>content_type</h2>
 <p>
-<a href="../index.html">Content Repository</a> :
+<a href="../index">Content Repository</a> :
 content_type</p>
 <hr>
 <ul>
@@ -467,5 +467,5 @@ content_type.get_template</td>
 </table>
 <p> </p>
 
-Last Modified: $Id: type.html,v 1.1.1.1 2001/03/13 22:59:26 ben Exp
+Last Modified: $&zwnj;Id: type.html,v 1.1.1.1 2001/03/13 22:59:26 ben Exp
 $

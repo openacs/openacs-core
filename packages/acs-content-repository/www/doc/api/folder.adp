@@ -4,7 +4,7 @@
 <master>
 <h2>content_folder</h2>
 <p>
-<a href="../index.html">Content Repository</a> :
+<a href="../index">Content Repository</a> :
 content_folder</p>
 <hr>
 <ul>
@@ -387,5 +387,5 @@ content_folder.is_registered</td>
 </table>
 <p> </p>
 
-Last Modified: $Id: folder.html,v 1.2 2004/06/01 22:54:18 donb Exp
+Last Modified: $&zwnj;Id: folder.html,v 1.2 2004/06/01 22:54:18 donb Exp
 $

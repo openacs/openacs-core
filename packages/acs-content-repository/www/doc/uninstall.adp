@@ -29,5 +29,5 @@ uninstalling the entire data model.</p>
 <a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a>
 <br>
 
-Last revised: $Id: uninstall.html,v 1.1.1.1 2001/03/13 22:59:26 ben
+Last revised: $&zwnj;Id: uninstall.html,v 1.1.1.1 2001/03/13 22:59:26 ben
 Exp $

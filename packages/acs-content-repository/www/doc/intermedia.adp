@@ -86,5 +86,5 @@ SQL&gt; select score(1), doc_id from cr_test_documents
 <a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a>
 <br>
 
-Last revised: $Id: intermedia.html,v 1.1.1.1 2001/03/13 22:59:26
+Last revised: $&zwnj;Id: intermedia.html,v 1.1.1.1 2001/03/13 22:59:26
 ben Exp $

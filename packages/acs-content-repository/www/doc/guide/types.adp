@@ -110,5 +110,5 @@ part of a content type definition. See <a href="object-relationships">Object Rel
 details.</p>
 <hr>
 <a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>
-<p>Last Modified: $Id: types.html,v 1.1.1.1 2001/03/13 22:59:26 ben
+<p>Last Modified: $&zwnj;Id: types.html,v 1.1.1.1 2001/03/13 22:59:26 ben
 Exp $</p>

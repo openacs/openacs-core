@@ -185,5 +185,5 @@ solely by the value of the <tt>next_place</tt> attribute.</p>
 <a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a>
 <br>
 
-Last Modified: <tt>$Id: workflow.html,v 1.1.1.1 2001/03/13 22:59:26
+Last Modified: <tt>$&zwnj;Id: workflow.html,v 1.1.1.1 2001/03/13 22:59:26
 ben Exp $</tt>

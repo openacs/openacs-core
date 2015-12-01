@@ -119,5 +119,5 @@ portrait upload form would look like this:</p>
 </pre>
 <hr>
 <a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a>
-<p>Last Modified: $Id: storage.html,v 1.1.1.1 2001/03/13 22:59:26
+<p>Last Modified: $&zwnj;Id: storage.html,v 1.1.1.1 2001/03/13 22:59:26
 ben Exp $</p>

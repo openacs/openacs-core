@@ -4,7 +4,7 @@
 <master>
 <h2>content</h2>
 <p>
-<a href="../index.html">Content Repository</a> : content</p>
+<a href="../index">Content Repository</a> : content</p>
 <hr>
 <ul><li>Function content.blob_to_string</li></ul>
 <table cellpadding="3" cellspacing="0" border="0">
@@ -62,5 +62,5 @@ name
 
 </tt></pre></td></tr>
 </table>
-<p>Last Modified: $Id: content.html,v 1.1.1.1 2001/03/13 22:59:26
+<p>Last Modified: $&zwnj;Id: content.html,v 1.1.1.1 2001/03/13 22:59:26
 ben Exp $</p>

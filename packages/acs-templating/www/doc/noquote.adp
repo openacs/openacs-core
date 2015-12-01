@@ -5,9 +5,9 @@ Requirements}</property>
 Requirements</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
-		    leftLink="openacs" leftLabel="Prev"
+		    leftLink="" leftLabel=""
 		    title=""
-		    rightLink="mac-installation" rightLabel="Next">
+		    rightLink="" rightLabel="">
 		<div class="sect1" lang="en">
 <div class="titlepage">
 <div><h2 class="title" style="clear: both">
@@ -66,14 +66,14 @@ italic, you should not quote that entire string. However, if word
 in fact comes from the database and you don't want it to, for
 instance, close the &lt;i&gt; behind your back, you should quote
 it, and then enclose it between &lt;i&gt; and &lt;/i&gt;.</p><p>The ACS has a procedure that performs HTML quoting,
-ad_quotehtml. It accepts the string that needs to be quoted, and
+ns_quotehtml. It accepts the string that needs to be quoted, and
 returns the quoted string. In ACS 3.x, properly written code was
-expected to call ad_quotehtml every time it published a string to a
+expected to call ns_quotehtml every time it published a string to a
 web page. For example:</p><pre class="programlisting">
 doc_body_append "&lt;ul&gt;\n" set db [ns_db gethandle] set selection
 [ns_db select $db {SELECT name FROM bboard_forums}] while {[ns_db
 getrow $db $selection]} { set_variables_after_query doc_body_append
-"&lt;li&gt;Forum: &lt;tt&gt;[ad_quotehtml $name]&lt;/tt&gt;\n" }
+"&lt;li&gt;Forum: &lt;tt&gt;[ns_quotehtml $name]&lt;/tt&gt;\n" }
 doc_body_append "&lt;/ul&gt;\n"
 </pre><p>Obviously, this was very error-prone, and more often than not,
 the programmers would forget to quote the variables that come from
@@ -121,7 +121,7 @@ in its own subtle way. The trick is to remember that our templating
 still supports all the ADP features, including embedding Tcl code
 in the template. Thus instead of referring to the multirow variable
 with the \@forums.name\@ variable substitutions, we use
-&lt;%= [ad_quotehtml \@forums.name\@] %&gt;. This
+&lt;%= [ns_quotehtml \@forums.name\@] %&gt;. This
 works correctly, but obviously breaks the abstraction barrier
 between ADP and Tcl syntaxes. The practical result of breaking the
 abstraction is that every occurrence of Tcl code in an ADP template
@@ -131,7 +131,7 @@ Quoting is handled only in the areas where it is really crucial and
 where not handling it would quote immediate and visible breakage,
 such as in the case of displaying the bodies of bboard articles.
 This is not exaggeration; it has been proven by auditing the ACS
-4.0, both manually and through grepping for ad_quotehtml.
+4.0, both manually and through grepping for ns_quotehtml.
 Strangely, this otherwise sad fact allows us to deploy a very
 radical but much more robust solution to the problem.</p>
 </div><div class="sect2" lang="en">
@@ -184,8 +184,8 @@ available</a> .</p><p><span class="emphasis"><em><a href="mailto:hniksic\@xemacs
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="openacs" leftLabel="Prev" leftTitle=""
-		    rightLink="mac-installation" rightLabel="Next" rightTitle=""
-		    homeLink="index" homeLabel="Home" 
-		    upLink="complete-install" upLabel="Up"> 
+		    leftLink="" leftLabel="" leftTitle=""
+		    rightLink="" rightLabel="" rightTitle=""
+		    homeLink="" homeLabel="" 
+		    upLink="" upLabel=""> 
 		

@@ -59,7 +59,7 @@ it's not a delta but a list of valid records. See the larger
 example in the design document for more details.</p><p>(More information: <a href="ims-sync-driver-design" title="IMS Sync driver design">the section called “IMS Sync driver
 design”</a>, <a href="http://www.imsproject.org/enterprise/" target="_top">The IMS 1.1 spec</a>)</p>
 </li>
-</ol></div><div class="cvstag">($Id: configure-batch-sync.html,v 1.2
+</ol></div><div class="cvstag">($&zwnj;Id: configure-batch-sync.html,v 1.2
 2004/02/19 14:59:42 joela Exp $)</div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

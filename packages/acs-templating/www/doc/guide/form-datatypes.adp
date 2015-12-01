@@ -4,7 +4,7 @@
 <master>
 <h2>Custom Data Types</h2>
 <a href="..">Templating System</a>
- : <a href="../developer-guide.html">Developer Guide</a>
+ : <a href="../developer-guide">Developer Guide</a>
  : User Guide
 <hr>
 <a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>

@@ -4,7 +4,7 @@
 <master>
 <h2>Variables</h2>
 <a href="..">Templating System</a>
- : <a href="../designer-guide.html">Designer Guide</a>
+ : <a href="../designer-guide">Designer Guide</a>
  : <a href="index">Tag Reference</a>
  : Variables
 <h3>Summary</h3>

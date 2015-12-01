@@ -27,7 +27,7 @@ attributes in the <tt>input</tt>, <tt>select</tt>, or
 <tt>textarea</tt> tag used to ultimately render the element.</li><li>The <tt>validate</tt> switch may be used to perform simple
 custom validation of each element value. <tt>type</tt> is a keyword
 for the type of validation being performed. This same keyword must
-be referenced by the <tt><a href="../tagref/formerror.html">formerror</a></tt> tag to customize the
+be referenced by the <tt><a href="../tagref/formerror">formerror</a></tt> tag to customize the
 presentation and layout of the error message for this validation
 step. <tt>expression</tt> must be a block of arbitrary Tcl code
 that evaluates to 1 (valid) or 0 (not valid). The variable

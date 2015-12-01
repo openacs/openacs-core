@@ -6,7 +6,7 @@
 <h3>Overview</h3>
 <p>These widgets provide the single-selection and
 multiple-selection HTML controls; their usage is demonstrated in
-the <a href="../demo/index.html">acs-templating demo</a>.</p>
+the <a href="../demo/index">acs-templating demo</a>.</p>
 <h3>The Select Widget</h3>
 <p>This widget creates a list of choices, only one of which may be
 selected at any given time, using the HTML

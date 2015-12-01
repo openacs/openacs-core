@@ -76,7 +76,7 @@ ad_page_contract {
 
     \@author Jon Salz (jsalz\@arsdigita.com)
     \@creation-date 11 Aug 2000
-    \@cvs-id $Id$
+    \@cvs-id $&zwnj;Id$
 
 } {
     news_item_id:integer,notnull
@@ -121,7 +121,7 @@ ad_page_contract {
 
     \@author Jon Salz (jsalz\@arsdigita.com)
     \@creation-date 11 Aug 2000
-    \@cvs-id $Id$
+    \@cvs-id $&zwnj;Id$
 
 } {
     news_item_id:integer,notnull
@@ -227,7 +227,7 @@ module that uses the mechanism, not a whole page.
                       news items?
     \@author Jon Salz (jsalz\@mit.edu)
     \@creation-date 11 Aug 2000
-    \@cvs-id $Id$
+    \@cvs-id $&zwnj;Id$
 } {
 }</font></pre></td><td valign="top"><pre>
 <font color="#999999">ad_page_contract {
@@ -239,7 +239,7 @@ module that uses the mechanism, not a whole page.
                       news items?
     \@author Jon Salz (jsalz\@mit.edu)
     \@creation-date 11 Aug 2000
-    \@cvs-id $Id$
+    \@cvs-id $&zwnj;Id$
 } {
 } -properties {
   header:onevalue
@@ -361,11 +361,11 @@ value.</p>
 <th><code>packages/acs-core-ui/www/pvt/alerts.tcl</code></th><th><code>packages/acs-core-ui/www/pvt/alerts.adp</code></th>
 </tr><tr>
 <td valign="top"><pre><font color="#999999">ad_page_contract {
-    \@cvs-id $Id$
+    \@cvs-id $&zwnj;Id: migration.html,v 1.3 2014/10/27 16:40:14 victorg Exp $
 } {
 }</font></pre></td><td valign="top"><pre>
 <font color="#999999">ad_page_contract {
-    \@cvs-id $Id$
+    \@cvs-id $&zwnj;Id: migration.html,v 1.3 2014/10/27 16:40:14 victorg Exp $
 } {
 } -properties {
     header:onevalue
@@ -570,5 +570,5 @@ Brechbühler</a>, <a href="mailto:iwashima\@mit.edu">Hiro
 Iwashima</a>
 </address>
 
-Last modified: $Id: migration.html,v 1.3 2014/10/27 16:40:14
+Last modified: $&zwnj;Id: migration.html,v 1.3 2014/10/27 16:40:14
 victorg Exp $

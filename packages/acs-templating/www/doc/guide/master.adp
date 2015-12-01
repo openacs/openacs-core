@@ -4,7 +4,7 @@
 <master>
 <h2>Using Master Templates</h2>
 <a href="..">Templating System</a>
- : <a href="../developer-guide.html">Developer Guide</a>
+ : <a href="../developer-guide">Developer Guide</a>
  : User Guide
 <p>Master templates dramatically simplify the task of maintaining a
 consistent look and feel across all the pages of a site (or section

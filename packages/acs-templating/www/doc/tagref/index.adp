@@ -4,7 +4,7 @@
 <master>
 <h2>Template Markup Tag Reference</h2>
 <a href="..">Templating System</a>
- : <a href="../designer-guide.html">Designer Guide</a>
+ : <a href="../designer-guide">Designer Guide</a>
  : Tag Reference
 <h3>Overview</h3>
 <p>The publishing system implements a small number of special
@@ -52,4 +52,4 @@ the template later.</p>
 <address><a href="mailto:christian\@arsdigita.com">Christian
 Brechbühler</a></address>
 <!-- Created: Fri Sep 15 15:05:44 EDT 2000 -->
-Last modified: $Id$
+Last modified: $&zwnj;Id: index.html,v 1.4 2003/01/14 01:54:55 danw Exp $

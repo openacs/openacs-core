@@ -4,7 +4,7 @@
 <master>
 <h2>Implementing Data Sources</h2>
 <a href="..">Templating System</a>
- : <a href="../developer-guide.html">Developer Guide</a>
+ : <a href="../developer-guide">Developer Guide</a>
  : User Guide
 <p>Data sources are implemented in a Tcl script using regular Tcl
 variables, lists and arrays. The templating system includes a set
@@ -35,14 +35,14 @@ source based on a database query:</p>
 <code>query name onevalue "select name from users where user_id =
 123"</code>
 <p>You can embed a <tt>onevalue</tt> data source in a template with
-simple <a href="../tagref/variable.html">variable
+simple <a href="../tagref/variable">variable
 substitution</a>.</p>
 <h3><tt>onerow</tt></h3>
 <p>
 <tt>onerow</tt> data sources are implemented as Tcl arrays:</p>
 <code>set name(first_name) Walter<br>
 set name(last_name) Cronkite</code>
-<p>The <a href="../api/database.html"><tt>query</tt></a> procedure
+<p>The <a href="../api/database"><tt>query</tt></a> procedure
 may be used as a convenient way to store the result of a one-row
 database query into an array:</p>
 <pre>
@@ -55,7 +55,7 @@ query name onerow "
     user_id = 123"
 </pre>
 <p>You can embed references to column values of a <tt>onerow</tt>
-data source in a template with simple <a href="../tagref/variable.html">variable substitution</a>.</p>
+data source in a template with simple <a href="../tagref/variable">variable substitution</a>.</p>
 <h3><tt>onelist</tt></h3>
 <p>
 <tt>onelist</tt> data sources are implemented by creating a Tcl
@@ -67,7 +67,7 @@ set names [list "Walter" "Fred" "Susy" "Frieda"]
 source based on a one-column database query:</p>
 <code>query name onevalue "select name from users"</code>
 <p>You can iterate over a <tt>onelist</tt> data source in a
-template with the <a href="../tagref/list.html">list</a> tag.</p>
+template with the <a href="../tagref/list">list</a> tag.</p>
 <h3><tt>multirow</tt></h3>
 <p>
 <tt>multirow</tt> data sources are not represented by a single
@@ -78,7 +78,7 @@ multirow create cars make model year
 multirow append cars "Toyota" "Camry" "1996"
 multirow append cars "Volvo" "960" "1995"
 </pre>
-<p>The <a href="../api/database.html"><tt>query</tt></a> procedure
+<p>The <a href="../api/database"><tt>query</tt></a> procedure
 may be used as a convenient way to store the result of a multi-row,
 multi-column database query into a <tt>multirow</tt> data
 source:</p>
@@ -90,7 +90,7 @@ query name multirow "
     cars"
 </pre>
 <p>You can iterate over a <tt>multirow</tt> data source in a
-template with the <a href="../tagref/multiple.html">multiple</a>
+template with the <a href="../tagref/multiple">multiple</a>
 tag.</p>
 <hr>
 <a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>
