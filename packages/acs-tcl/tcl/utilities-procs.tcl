@@ -4103,7 +4103,7 @@ ad_proc -public util::randomize_list {
     set len [llength $list]
     set result [list]
     while { [llength $list] > 0 } {
-        set index [randomRange [llength $list]]
+        set index [randomRange [expr {[llength $list] - 1}]]
         lappend result [lindex $list $index]
         set list [lreplace $list $index $index]
     }
