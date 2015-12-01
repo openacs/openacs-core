@@ -16,7 +16,7 @@ Site"
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140216745032288" id="idp140216745032288"></a>Mounting OpenACS packages</h3></div></div></div><p>After you've installed your packages, you have to 'mount' them
+<a name="idp140400236054144" id="idp140400236054144"></a>Mounting OpenACS packages</h3></div></div></div><p>After you've installed your packages, you have to 'mount' them
 in order to make them appear on your website.</p><p>Make sure you are logged in, and then click on the 'Admin' or
 'Control Panel' link to get to the Site-Wide Administration page
 (at /acs-admin). Click on the subsite you'd like the application to

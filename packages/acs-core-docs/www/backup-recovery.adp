@@ -30,7 +30,7 @@ backup strategies (in particular full dumps from oracle, while easy
 to set up, are far from the best solution).</p><p>There are three basic things which need to be backed up, the
 database data, the server source tree, and the
 acs-content-repository (which is in the server source tree).</p><div class="figure">
-<a name="idp140216744771408" id="idp140216744771408"></a><p class="title"><b>Figure 8.1. Backup and
+<a name="idp140400238889792" id="idp140400238889792"></a><p class="title"><b>Figure 8.1. Backup and
 Recovery Strategy</b></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/backup.png" align="middle" alt="Backup and Recovery Strategy"></div></div>
 </div><p><br class="figure-break"></p>
 OpenACS docs are written by the named authors, and may be edited by

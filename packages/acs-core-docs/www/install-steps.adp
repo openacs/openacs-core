@@ -106,8 +106,8 @@ export OPENACS_SERVICE_NAME=<span class="replaceable"><span class="replaceable">
 </ul></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140216741783968" id="idp140216741783968"></a>Paths and Users</h3></div></div></div><div class="table">
-<a name="idp140216741784608" id="idp140216741784608"></a><p class="title"><b>Table 2.1. Default
+<a name="idp140400234971392" id="idp140400234971392"></a>Paths and Users</h3></div></div></div><div class="table">
+<a name="idp140400234972032" id="idp140400234972032"></a><p class="title"><b>Table 2.1. Default
 directories for a standard install</b></p><div class="table-contents"><table summary="Default directories for a standard install" cellspacing="0" width="100%" border="1">
 <colgroup>
 <col><col>
@@ -118,7 +118,7 @@ directories for a standard install</b></p><div class="table-contents"><table sum
 <td>name of administrative access account</td><td>remadmin</td>
 </tr><tr>
 <td>OpenACS service</td><td>
-<a class="indexterm" name="idp140216741789216" id="idp140216741789216"></a><span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span> (set to service0
+<a class="indexterm" name="idp140400234976640" id="idp140400234976640"></a><span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span> (set to service0
 in default install)</td>
 </tr><tr>
 <td>OpenACS service account</td><td><span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span></td>
