@@ -19,7 +19,7 @@
         <license>GPL version 2</license>
 
         <provides url="acs-service-contract" version="5.9.0b2"/>
-        <requires url="acs-kernel" version="5.9.0b2"/>
+        <requires url="acs-kernel" version="5.9.0"/>
 
         <callbacks>
         </callbacks>

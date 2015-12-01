@@ -20,9 +20,9 @@
         <maturity>3</maturity>
 
         <provides url="acs-content-repository" version="5.9.0b3"/>
-        <requires url="acs-kernel" version="5.9.0b2"/>
-        <requires url="acs-service-contract" version="5.9.0b2"/>
-        <requires url="search" version="5.9.0b2"/>
+        <requires url="acs-kernel" version="5.9.0"/>
+        <requires url="acs-service-contract" version="5.9.0"/>
+        <requires url="search" version="5.9.0"/>
 
         <callbacks>
           <callback type="after-upgrade"  proc="content::apm::after_upgrade"/>

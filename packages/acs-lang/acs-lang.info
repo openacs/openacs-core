@@ -21,11 +21,11 @@ locale-specific formatting functions for localizing dates, times, monetary amoun
         <maturity>3</maturity>
 
         <provides url="acs-lang" version="5.9.0b2"/>
-        <requires url="acs-kernel" version="5.9.0b2"/>
-        <requires url="acs-translations" version="5.9.0b2"/>
-        <requires url="ref-timezones" version="5.9.0b2"/>
-        <requires url="ref-countries" version="5.9.0b2"/>
-        <requires url="ref-language" version="5.9.0b2"/>
+        <requires url="acs-kernel" version="5.9.0"/>
+        <requires url="acs-translations" version="5.9.0"/>
+        <requires url="ref-timezones" version="5.9.0"/>
+        <requires url="ref-countries" version="5.9.0"/>
+        <requires url="ref-language" version="5.9.0"/>
 
         <callbacks>
             <callback type="after-install"  proc="lang::apm::after_install"/>
