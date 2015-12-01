@@ -659,13 +659,17 @@ ad_proc -public lang::util::translator_mode_p {} {
 
     @see lang::util::translator_mode_set
 } {
+    if {[info exists ::acs_translator_mode_p]} {
+        return $::acs_translator_mode_p
+    }
     if { [ad_conn isconnected] } {
         # There is an HTTP connection - return the client property
-        return [ad_get_client_property -default 0 acs-lang translator_mode_p]
+        set ::acs_translator_mode_p [ad_get_client_property -default 0 acs-lang translator_mode_p]
     } else {
         # No HTTP connection
-        return 0
+        set ::acs_translator_mode_p 0
     }
+    return $::acs_translator_mode_p
 }
 
 ad_proc -public lang::util::translator_mode_set {
