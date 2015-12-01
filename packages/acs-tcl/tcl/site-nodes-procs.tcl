@@ -1457,7 +1457,12 @@ if {$UseXotclSiteNodes} {
             }
 
             :protected method properties {-node_id:required} {
-                ns_cache_eval xo_site_nodes p-$node_id { next }
+                set key ::xo_site_nodes_property($node_id)
+                if {[info exists $key]} {
+                    return [set $key]
+                }
+                set $key [ns_cache_eval xo_site_nodes p-$node_id { next }]
+                return [set $key]
             }
 
             :public method get_url {-node_id:required} {
