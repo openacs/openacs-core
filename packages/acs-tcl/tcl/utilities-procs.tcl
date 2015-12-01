@@ -636,6 +636,9 @@ ad_proc -public export_vars {
     makes sure that the value isn't tampered with on the client side. The <code>-sign</code> 
     switch to <code>export_vars</code>, is a short-hand for specifying the <code>:sign</code> switch 
     on every variable.
+    <p>
+    For example, one can use now "user_id:sign(max_age=60)" in
+    export_vars to let the exported variable after 60 seconds.
     </dd>
 
     </dl>
