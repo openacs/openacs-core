@@ -86,7 +86,7 @@ cp article-content.adp col2-content.adp
 </li><li class="listitem">
 <p>The template should provide us with the following ETP
 layout:</p><div class="table">
-<a name="idp140216759423152"></a><p class="title"><b>TableÂ 10.1.Â table showing
+<a name="idp140400202467616"></a><p class="title"><b>TableÂ 10.1.Â table showing
 ETP layout</b></p><div class="table-contents"><table summary="table showing ETP layout" cellspacing="0" border="1" width="250">
 <colgroup>
 <col align="left" class="c1"><col width="2" align="left" class="c2">

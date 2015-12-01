@@ -25,7 +25,7 @@ and step by step instructions for creating a new package for the
 <div class="titlepage"><div><div><h3 class="title">
 <a name="server-file-layout" id="server-file-layout"></a>Server file layout</h3></div></div></div><p>Here is how an OpenACS 5 server is laid out starting from the
 Server root (ROOT):</p><div class="figure">
-<a name="idp140216758203120" id="idp140216758203120"></a><p class="title"><b>Figure 11.1. Server
+<a name="idp140400239317232" id="idp140400239317232"></a><p class="title"><b>Figure 11.1. Server
 file layout diagram</b></p><div class="figure-contents"><pre class="programlisting">
 ROOT/
     bin/
@@ -65,7 +65,7 @@ In OpenACS 5, this tool is called the <a class="link" href="packages" title="The
 <a class="indexterm" name="baby" id="baby"></a> To illustrate
 the general structure of a package, let's see what the package for
 the "notes" application should look like.</p><div class="figure">
-<a name="idp140216763166640" id="idp140216763166640"></a><p class="title"><b>Figure 11.2. Package
+<a name="idp140400255532528" id="idp140400255532528"></a><p class="title"><b>Figure 11.2. Package
 file layout diagram</b></p><div class="figure-contents"><pre class="programlisting">
 ROOT/
   +-- packages/    APM Root
@@ -136,7 +136,7 @@ installed or mounted. Files are returned directly, so .tcl or .adp
 files are not sourced in these directories. This makes it suitable
 for storing icons, css files, javascript, and other static content
 which can be treated this way.</p><div class="table">
-<a name="idp140216763156496" id="idp140216763156496"></a><p class="title"><b>Table 11.1. Package
+<a name="idp140400239747488" id="idp140400239747488"></a><p class="title"><b>Table 11.1. Package
 files</b></p><div class="table-contents"><table summary="Package files" cellspacing="0" border="1">
 <colgroup>
 <col><col><col>

@@ -24,7 +24,7 @@ OpenACS.org), and DotLRN 2.9.0.</p></li><li class="listitem">
 handing in PostgreSQL.</p></li><li class="listitem"><p>Removed various manual bookkeeping and deletion operations in
 the content repository by built-in handing in PostgreSQL.</p></li><li class="listitem"><p>Removed tree_sortkey on acs-objects to reduce its size and to
 speedup operations, where the context-id is changed (could take on
-large installation several minutes in earlier versions)</p></li><li class="listitem"><p>Remove several uncalled / redundant SQL statements and
+large installation several minutes in earlier versions)</p></li><li class="listitem"><p>Removed several uncalled / redundant SQL statements and
 functions.</p></li><li class="listitem">
 <p>Cleanup of .xql files in acs-subsite:</p><div class="itemizedlist"><ul class="itemizedlist compact" style="list-style-type: opencircle;">
 <li class="listitem" style="list-style-type: circle"><p>Some cleanup of .xql files: removed misleading sql-statements
@@ -57,7 +57,7 @@ acs-templating. ckeditor4 supports mobile devices (such as iPad,
 <li class="listitem"><p>Improved theme-ability: Moved more information into theme
 packages in order to create responsive designs, reduce hard-coding
 of paths, HTML etc.</p></li><li class="listitem"><p>Improved include-handling: All includes are now theme-able,
-interfaces of includes can be defined with ad_include_contract
+interfaces of includes can be defined with "ad_include_contract"
 (similar to ad_page_contract).</p></li><li class="listitem"><p>Improved them-ability for display_templates. One can now provide
 a display_template_name (similar to the sql statement name) to
 refer to display templates. This enables reusability and is
@@ -107,8 +107,10 @@ following statistics</p><pre class="programlisting">
 </pre><p>contributed by 4 committers (Michael Aram, Victor Guerra, Gustaf
 Neumann, Antonio Pisano) and patch/bugfix providers (Frank
 Bergmann, Andrew Helsley, Felix MÃ¶dritscher, Marcos
-Moser, Franz Penz, Thomas Renner). For more details, consult the
-<a class="ulink" href="" target="_top">raw ChangeLog</a>.</p>
+Moser, Franz Penz, Thomas Renner). These are significantly more
+changes as the differences in the last releases. All packages of
+the release were tested with PostgreSQL 9.4.* and Tcl 8.5.*. For
+more details, consult the <a class="ulink" href="" target="_top">raw ChangeLog</a>.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="release-notes-5-8-1" id="release-notes-5-8-1"></a>Release 5.8.1</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
@@ -394,20 +396,20 @@ styles still using these mechanisms will break.</p></li><li class="listitem"><p>
 turned off by default via the acs-kernel parameter ExcludedFiles in
 section request-processor (The variable provides a string match
 glob list of files and is defaulted to "*/CVS/* *~")</p></li>
-</ul></div><div class="cvstag">($&zwnj;Id: release-notes.xml,v 1.30.2.4 2015/10/27
-09:55:19 gustafn Exp $)</div>
+</ul></div><div class="cvstag">($&zwnj;Id: release-notes.xml,v 1.30.2.5 2015/12/01
+11:17:58 gustafn Exp $)</div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140216745447600" id="idp140216745447600"></a>Release 4.6.3</h3></div></div></div><p><a class="ulink" href="release-notes-4-6-3" target="_top">Release Notes for 4.6.3</a></p>
+<a name="idp140400233855216" id="idp140400233855216"></a>Release 4.6.3</h3></div></div></div><p><a class="ulink" href="release-notes-4-6-3" target="_top">Release Notes for 4.6.3</a></p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140216745449104" id="idp140216745449104"></a>Release 4.6.2</h3></div></div></div><p><a class="ulink" href="release-notes-4-6-2" target="_top">Release Notes for 4.6.2</a></p>
+<a name="idp140400233856720" id="idp140400233856720"></a>Release 4.6.2</h3></div></div></div><p><a class="ulink" href="release-notes-4-6-2" target="_top">Release Notes for 4.6.2</a></p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140216745450608" id="idp140216745450608"></a>Release 4.6</h3></div></div></div><p><a class="ulink" href="release-notes-4-6" target="_top">Release Notes for 4.6</a></p>
+<a name="idp140400233858224" id="idp140400233858224"></a>Release 4.6</h3></div></div></div><p><a class="ulink" href="release-notes-4-6" target="_top">Release Notes for 4.6</a></p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140216745452112" id="idp140216745452112"></a>Release 4.5</h3></div></div></div><p><a class="ulink" href="release-notes-4-5" target="_top">Release Notes for 4.5</a></p>
+<a name="idp140400233859728" id="idp140400233859728"></a>Release 4.5</h3></div></div></div><p><a class="ulink" href="release-notes-4-5" target="_top">Release Notes for 4.5</a></p>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

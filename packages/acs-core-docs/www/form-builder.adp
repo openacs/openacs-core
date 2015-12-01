@@ -25,7 +25,7 @@ to this document, the ad_form <a class="ulink" href="http://openacs.org/api-doc/
 <a name="multi-part-elements" id="multi-part-elements"></a>Multi-part Elements</h3></div></div></div><p>Some elements have more than one choice, or can submit more than
 one value.</p><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140216760741936" id="idp140216760741936"></a>SELECT elements</h4></div></div></div><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">
+<a name="idp140400226790112" id="idp140400226790112"></a>SELECT elements</h4></div></div></div><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">
 <p>
 <b>Creating the form element. </b>Populate a list of
 lists with values for the option list.</p><pre class="programlisting">
@@ -106,7 +106,7 @@ widgets:</p><p><a class="ulink" href="http://openacs.org/forums/message-view?mes
 Errors</h3></div></div></div><p>Here are some common errors and what to do when you encounter
 them:</p><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140216769078224" id="idp140216769078224"></a>Error when selecting values</h4></div></div></div><p>This generally happens when there is an error in your query.</p>
+<a name="idp140400255231312" id="idp140400255231312"></a>Error when selecting values</h4></div></div></div><p>This generally happens when there is an error in your query.</p>
 </div>
 </div>
 </div>

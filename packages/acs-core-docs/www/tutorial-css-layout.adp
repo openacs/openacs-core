@@ -12,7 +12,7 @@ Chapter 10. Advanced Topics"
 <a name="tutorial-css-layout" id="tutorial-css-layout"></a>Laying out a page with CSS instead of
 tables</h2></div></div></div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140216759595232" id="idp140216759595232"></a>.LRN home page with table-based
+<a name="idp140400202588432" id="idp140400202588432"></a>.LRN home page with table-based
 layout</h3></div></div></div><div class="mediaobject" align="center"><img src="images/dotlrn-style-1.png" align="middle"></div><p>A sample of the HTML code (<a class="ulink" href="files/dotlrn-style-1" target="_top">full source</a>)</p><pre class="programlisting">
 &lt;table border="0" width="100%"&gt;
   &lt;tr&gt;
@@ -40,7 +40,7 @@ layout</h3></div></div></div><div class="mediaobject" align="center"><img src="i
 </pre>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140216759600240" id="idp140216759600240"></a>.LRN Home with CSS-based layout</h3></div></div></div><div class="mediaobject" align="center"><img src="images/dotlrn-style-3.png" align="middle"></div><p>A sample of the HTML code (<a class="ulink" href="files/dotlrn-style-2" target="_top">full source</a>)</p><pre class="programlisting">
+<a name="idp140400202575984" id="idp140400202575984"></a>.LRN Home with CSS-based layout</h3></div></div></div><div class="mediaobject" align="center"><img src="images/dotlrn-style-3.png" align="middle"></div><p>A sample of the HTML code (<a class="ulink" href="files/dotlrn-style-2" target="_top">full source</a>)</p><pre class="programlisting">
 &lt;div class="left"&gt;
   &lt;div class="portlet-wrap-shadow"&gt;
     &lt;div class="portlet-wrap-bl"&gt;

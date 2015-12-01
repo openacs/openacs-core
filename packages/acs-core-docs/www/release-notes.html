@@ -21,7 +21,7 @@
 	    (could take on large installation several minutes in
 	    earlier versions)
 	  </p></li><li class="listitem"><p>
-            Remove several uncalled / redundant SQL statements and functions.
+            Removed several uncalled / redundant SQL statements and functions.
 	  </p></li><li class="listitem"><p> Cleanup of .xql files in acs-subsite:
 	  </p><div class="itemizedlist"><ul class="itemizedlist compact" style="list-style-type: opencircle; "><li class="listitem" style="list-style-type: circle"><p> Some cleanup of .xql files: removed
 	    misleading sql-statements from db_* calls, which were
@@ -73,7 +73,7 @@
 	  </p></li><li class="listitem"><p>
             Improved include-handling: All includes are now
 	    theme-able, interfaces of includes can be defined with
-	    ad_include_contract (similar to ad_page_contract).
+	    "ad_include_contract" (similar to ad_page_contract).
 	  </p></li><li class="listitem"><p>
             Improved them-ability for display_templates. One can now
 	    provide a display_template_name (similar to the sql
@@ -151,7 +151,11 @@
   </pre><p>
   contributed by 4 committers (Michael Aram, Victor Guerra, Gustaf Neumann, Antonio Pisano) and
   patch/bugfix providers (Frank Bergmann, Andrew Helsley, Felix
-  Mödritscher, Marcos Moser, Franz Penz, Thomas Renner).  For more
+  Mödritscher, Marcos Moser, Franz Penz, Thomas Renner).
+These are significantly more  changes as the differences
+in the last releases. All packages of the release were tested with
+PostgreSQL 9.4.* and Tcl 8.5.*.
+  For more
   details, consult the  
   <a class="ulink" href="" target="_top">
   raw ChangeLog</a>.
@@ -454,4 +458,4 @@ entire 5.7 release sequence <a class="xref" href="">???</a>.</p><div class="sect
         </p></li><li class="listitem"><p>
            Serving backup files and files from the CVS directories is turned off by default via the acs-kernel parameter
                 ExcludedFiles in section request-processor (The variable provides a string match glob list of files and is defaulted to "*/CVS/* *~")
-        </p></li></ul></div><div class="cvstag">($Id$)</div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idp140216745447600"></a>Release 4.6.3</h3></div></div></div><p><a class="ulink" href="release-notes-4-6-3.html" target="_top">Release Notes for 4.6.3</a></p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idp140216745449104"></a>Release 4.6.2</h3></div></div></div><p><a class="ulink" href="release-notes-4-6-2.html" target="_top">Release Notes for 4.6.2</a></p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idp140216745450608"></a>Release 4.6</h3></div></div></div><p><a class="ulink" href="release-notes-4-6.html" target="_top">Release Notes for 4.6</a></p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idp140216745452112"></a>Release 4.5</h3></div></div></div><p><a class="ulink" href="release-notes-4-5.html" target="_top">Release Notes for 4.5</a></p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="openacs-overview.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="acs-admin.html">Next</a></td></tr><tr><td width="40%" align="left">Overview </td><td width="20%" align="center"><a accesskey="u" href="general-documents.html">Up</a></td><td width="40%" align="right"> Part II. Administrator's Guide</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/current/release-notes.html#comments">View comments on this page at openacs.org</a></center></body></html>
+        </p></li></ul></div><div class="cvstag">($Id$)</div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idp140400233855216"></a>Release 4.6.3</h3></div></div></div><p><a class="ulink" href="release-notes-4-6-3.html" target="_top">Release Notes for 4.6.3</a></p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idp140400233856720"></a>Release 4.6.2</h3></div></div></div><p><a class="ulink" href="release-notes-4-6-2.html" target="_top">Release Notes for 4.6.2</a></p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idp140400233858224"></a>Release 4.6</h3></div></div></div><p><a class="ulink" href="release-notes-4-6.html" target="_top">Release Notes for 4.6</a></p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="idp140400233859728"></a>Release 4.5</h3></div></div></div><p><a class="ulink" href="release-notes-4-5.html" target="_top">Release Notes for 4.5</a></p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="openacs-overview.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="acs-admin.html">Next</a></td></tr><tr><td width="40%" align="left">Overview </td><td width="20%" align="center"><a accesskey="u" href="general-documents.html">Up</a></td><td width="40%" align="right"> Part II. Administrator's Guide</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/current/release-notes.html#comments">View comments on this page at openacs.org</a></center></body></html>

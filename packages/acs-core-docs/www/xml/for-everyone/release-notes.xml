@@ -77,7 +77,7 @@ entire &majorversion;.&minorversion; release sequence <xref linkend="changelog">
 	  </para></listitem>
 
 	  <listitem><para>
-            Remove several uncalled / redundant SQL statements and functions.
+            Removed several uncalled / redundant SQL statements and functions.
 	  </para></listitem>
 
 	  <listitem><para> Cleanup of .xql files in acs-subsite:
@@ -168,7 +168,7 @@ entire &majorversion;.&minorversion; release sequence <xref linkend="changelog">
  	  <listitem><para>
             Improved include-handling: All includes are now
 	    theme-able, interfaces of includes can be defined with
-	    ad_include_contract (similar to ad_page_contract).
+	    "ad_include_contract" (similar to ad_page_contract).
 	  </para></listitem>
 
 	  <listitem><para>
@@ -295,7 +295,11 @@ entire &majorversion;.&minorversion; release sequence <xref linkend="changelog">
   </programlisting>
   contributed by 4 committers (Michael Aram, Victor Guerra, Gustaf Neumann, Antonio Pisano) and
   patch/bugfix providers (Frank Bergmann, Andrew Helsley, Felix
-  Mödritscher, Marcos Moser, Franz Penz, Thomas Renner).  For more
+  Mödritscher, Marcos Moser, Franz Penz, Thomas Renner).
+These are significantly more  changes as the differences
+in the last releases. All packages of the release were tested with
+PostgreSQL 9.4.* and Tcl 8.5.*.
+  For more
   details, consult the  
   <ulink
       href="http://fisheye.openacs.org/browse/~br=oacs-5-9/OpenACS/openacs-4/ChangeLog?hb=true">
