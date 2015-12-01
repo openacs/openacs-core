@@ -7,7 +7,7 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.9.0b2" url="http://openacs.org/repository/download/apm/acs-messaging-5.9.0b2.apm">
+    <version name="5.9.0" url="http://openacs.org/repository/download/apm/acs-messaging-5.9.0.apm">
         <owner url="mailto:akk+@cs.cmu.edu">Anukul Kapoor</owner>
         <owner url="mailto:prevost@maya.com">John Prevost</owner>
         <owner url="mailto:vinod@kurup.com">Vinod Kurup</owner>
@@ -19,7 +19,7 @@
         <description format="text/html">Provides generic message services, with email sending.  acs-mail-lite and notifications are the 
         prefered packages for delivering this functionality and it is anticipated that this package will ultimately be deprecated.</description>
 
-        <provides url="acs-messaging" version="5.9.0b2"/>
+        <provides url="acs-messaging" version="5.9.0"/>
         <requires url="acs-content-repository" version="5.9.0"/>
         <requires url="acs-kernel" version="5.9.0"/>
         <requires url="acs-mail-lite" version="5.9.0"/>

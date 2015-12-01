@@ -8,7 +8,7 @@
     <singleton-p>t</singleton-p>
     <auto-mount>notifications</auto-mount>
 
-    <version name="5.9.0b2" url="http://openacs.org/repository/download/apm/notifications-5.9.0b2.apm">
+    <version name="5.9.0" url="http://openacs.org/repository/download/apm/notifications-5.9.0.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Email notifications management</summary>
         <release-date>2015-10-04</release-date>
@@ -17,7 +17,7 @@
         <maturity>3</maturity>
         <package_instance_name>#notifications.Notifications#</package_instance_name>
 
-        <provides url="notifications" version="5.9.0b2"/>
+        <provides url="notifications" version="5.9.0"/>
         <requires url="acs-kernel" version="5.9.0"/>
 	<requires url="acs-tcl" version="5.9.0"/>
         <requires url="acs-mail-lite" version="5.9.0"/>

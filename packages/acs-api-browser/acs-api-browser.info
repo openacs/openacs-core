@@ -7,7 +7,7 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.9.0b2" url="http://openacs.org/repository/download/apm/acs-api-browser-5.9.0b2.apm">
+    <version name="5.9.0" url="http://openacs.org/repository/download/apm/acs-api-browser-5.9.0.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>Interactive documentation for the Tcl and SQL APIs.</summary>
         <release-date>2015-10-04</release-date>
@@ -17,7 +17,7 @@
 	<maturity>3</maturity>
         <description format="text/html">On line interactive documentation for the locally installed Tcl and SQL APIs.  Links to the Tcl core and AOLServer online documentation as well.</description>
 
-        <provides url="acs-api-browser" version="5.9.0b2"/>
+        <provides url="acs-api-browser" version="5.9.0"/>
         <requires url="acs-kernel" version="5.9.0"/>
 
         <callbacks>

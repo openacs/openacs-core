@@ -9,7 +9,7 @@
     <implements-subsite-p>f</implements-subsite-p>
     <inherit-templates-p>t</inherit-templates-p>
     
-    <version name="5.9.0b2" url="http://openacs.org/repository/download/apm/acs-lang-5.9.0b2.apm">
+    <version name="5.9.0" url="http://openacs.org/repository/download/apm/acs-lang-5.9.0.apm">
         <owner url="mailto:peter@collaboraid.biz">Peter Marklund</owner>
         <summary>OpenACS Internationalization Support.</summary>
         <release-date>2015-10-04</release-date>
@@ -20,7 +20,7 @@ locale-specific formatting functions for localizing dates, times, monetary amoun
         <license>GPL</license>
         <maturity>3</maturity>
 
-        <provides url="acs-lang" version="5.9.0b2"/>
+        <provides url="acs-lang" version="5.9.0"/>
         <requires url="acs-kernel" version="5.9.0"/>
         <requires url="acs-translations" version="5.9.0"/>
         <requires url="ref-timezones" version="5.9.0"/>
