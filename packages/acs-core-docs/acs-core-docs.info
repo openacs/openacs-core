@@ -18,8 +18,8 @@
         </description>
 
         <provides url="acs-core-docs" version="5.9.0b2"/>
-        <requires url="acs-kernel" version="5.9.0b2"/>
-        <requires url="acs-tcl" version="5.9.0b2"/>
+        <requires url="acs-kernel" version="5.9.0"/>
+        <requires url="acs-tcl" version="5.9.0"/>
 
         <callbacks>
         </callbacks>

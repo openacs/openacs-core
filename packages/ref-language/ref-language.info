@@ -16,8 +16,8 @@
         <description format="text/plain">This is the ISO 639-1 language reference data (with languages names in English).</description>
 
         <provides url="ref-language" version="5.9.0b2"/>
-        <requires url="acs-kernel" version="5.9.0b2"/>
-        <requires url="acs-reference" version="5.9.0b2"/>
+        <requires url="acs-kernel" version="5.9.0"/>
+        <requires url="acs-reference" version="5.9.0"/>
 
         <callbacks>
             <callback type="after-install"  proc="ref_language::apm::after_install"/>

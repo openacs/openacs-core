@@ -19,8 +19,8 @@
         <maturity>3</maturity>
 
         <provides url="acs-tcl" version="5.9.0b2"/>
-        <requires url="acs-bootstrap-installer" version="5.9.0b2"/>
-        <requires url="acs-kernel" version="5.9.0b2"/>
+        <requires url="acs-bootstrap-installer" version="5.9.0"/>
+        <requires url="acs-kernel" version="5.9.0"/>
 
         <callbacks>
         </callbacks>

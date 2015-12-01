@@ -17,9 +17,9 @@
         <description format="text/html">Implements authentication-related security functions for OpenACS, including password, account and session management, bulk account creation etc.  Provides a contract based interface for different authentication methods such as PAM or LDAP based authentication.</description>
 
         <provides url="acs-authentication" version="5.9.0b2"/>
-        <requires url="acs-kernel" version="5.9.0b2"/>
-        <requires url="acs-service-contract" version="5.9.0b2"/>
-        <requires url="acs-mail-lite" version="5.9.0b2"/>
+        <requires url="acs-kernel" version="5.9.0"/>
+        <requires url="acs-service-contract" version="5.9.0"/>
+        <requires url="acs-mail-lite" version="5.9.0"/>
 
         <callbacks>
             <callback type="after-install"  proc="auth::package_install"/>

@@ -20,7 +20,7 @@
         automatic-rebuild servers as in a test farm.</description>
 
         <provides url="acs-automated-testing" version="5.9.0b2"/>
-        <requires url="acs-kernel" version="5.9.0b2"/>
+        <requires url="acs-kernel" version="5.9.0"/>
 
         <callbacks>
         </callbacks>

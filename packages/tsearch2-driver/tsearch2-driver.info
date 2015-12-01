@@ -15,7 +15,7 @@
         <maturity>3</maturity>
 
         <provides url="tsearch2-driver" version="5.9.0b2"/>
-        <requires url="search" version="5.9.0b2"/>
+        <requires url="search" version="5.9.0"/>
 
         <callbacks>
             <callback type="before-install" proc="tsearch2_driver::install::preinstall_checks"/>

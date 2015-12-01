@@ -19,9 +19,9 @@
         <maturity>3</maturity>
 
         <provides url="acs-mail-lite" version="5.9.0b2"/>
-        <requires url="acs-kernel" version="5.9.0b2"/>
-        <requires url="acs-service-contract" version="5.9.0b2"/>
-        <requires url="acs-tcl" version="5.9.0b2"/>
+        <requires url="acs-kernel" version="5.9.0"/>
+        <requires url="acs-service-contract" version="5.9.0"/>
+        <requires url="acs-tcl" version="5.9.0"/>
 
         <callbacks>
             <callback type="after-upgrade"  proc="acs_mail_lite::after_upgrade"/>

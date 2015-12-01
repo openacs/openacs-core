@@ -28,7 +28,7 @@ layout of a site can be more easily administered.
         <maturity>3</maturity>
 
         <provides url="acs-templating" version="5.9.0b3"/>
-        <requires url="acs-kernel" version="5.9.0b2"/>
+        <requires url="acs-kernel" version="5.9.0"/>
 
         <callbacks>
             <callback type="before-upgrade"  proc="template::apm::before_upgrade"/>

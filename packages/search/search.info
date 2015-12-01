@@ -19,8 +19,8 @@
         <maturity>3</maturity>
 
         <provides url="search" version="5.9.0b2"/>
-        <requires url="acs-service-contract" version="5.9.0b2"/>
-        <requires url="acs-templating" version="5.9.0b2"/>
+        <requires url="acs-service-contract" version="5.9.0"/>
+        <requires url="acs-templating" version="5.9.0"/>
 
         <callbacks>
             <callback type="after-instantiate"  proc="search::install::after_instantiate"/>

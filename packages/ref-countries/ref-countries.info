@@ -17,8 +17,8 @@
         <description format="text/plain">Countries supplies the ISO 3166 Country data for acs-reference.</description>
 
         <provides url="ref-countries" version="5.9.0b2"/>
-        <requires url="acs-kernel" version="5.9.0b2"/>
-        <requires url="acs-reference" version="5.9.0b2"/>
+        <requires url="acs-kernel" version="5.9.0"/>
+        <requires url="acs-reference" version="5.9.0"/>
 
         <callbacks>
             <callback type="after-upgrade"  proc="ref_countries::apm::after_upgrade"/>

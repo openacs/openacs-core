@@ -19,12 +19,12 @@
         <maturity>3</maturity>
 
         <provides url="acs-subsite" version="5.9.0b2"/>
-        <requires url="acs-authentication" version="5.9.0b2"/>
-        <requires url="acs-content-repository" version="5.9.0b2"/>
-        <requires url="acs-kernel" version="5.9.0b2"/>
-        <requires url="acs-tcl" version="5.9.0b2"/>
-        <requires url="acs-lang" version="5.9.0b2"/>
-        <requires url="acs-mail-lite" version="5.9.0b2"/>
+        <requires url="acs-authentication" version="5.9.0"/>
+        <requires url="acs-content-repository" version="5.9.0"/>
+        <requires url="acs-kernel" version="5.9.0"/>
+        <requires url="acs-tcl" version="5.9.0"/>
+        <requires url="acs-lang" version="5.9.0"/>
+        <requires url="acs-mail-lite" version="5.9.0"/>
 
         <callbacks>
             <callback type="before-upgrade"  proc="subsite::before_upgrade"/>

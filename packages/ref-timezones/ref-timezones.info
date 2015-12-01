@@ -16,8 +16,8 @@
         <description format="text/plain">This is the timezone data for the acs-reference data package.  Used by acs-lang (among others) for localized times.</description>
 
         <provides url="ref-timezones" version="5.9.0b2"/>
-        <requires url="acs-kernel" version="5.9.0b2"/>
-        <requires url="acs-reference" version="5.9.0b2"/>
+        <requires url="acs-kernel" version="5.9.0"/>
+        <requires url="acs-reference" version="5.9.0"/>
 
         <callbacks>
             <callback type="after-upgrade"  proc="ref-timezones::apm::after_upgrade"/>

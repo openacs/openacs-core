@@ -16,7 +16,7 @@
         <maturity>3</maturity>
 
         <provides url="intermedia-driver" version="5.9.0b2"/>
-        <requires url="search" version="5.9.0b2"/>
+        <requires url="search" version="5.9.0"/>
 
         <callbacks>
         </callbacks>

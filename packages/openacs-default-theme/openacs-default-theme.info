@@ -17,7 +17,7 @@
         <maturity>3</maturity>
 
         <provides url="openacs-default-theme" version="5.9.0b2"/>
-        <requires url="acs-subsite" version="5.9.0b2"/>
+        <requires url="acs-subsite" version="5.9.0"/>
 
         <callbacks>
             <callback type="after-install"  proc="openacs_default_theme::install::after_install"/>
