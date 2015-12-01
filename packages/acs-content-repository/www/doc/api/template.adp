@@ -4,7 +4,7 @@
 <master>
 <h2>content_template</h2>
 <p>
-<a href="../index.html">Content Repository</a> :
+<a href="../index">Content Repository</a> :
 content_template</p>
 <hr>
 <ul>
@@ -151,5 +151,5 @@ content_type.unregister_template,</td>
 </table>
 <p> </p>
 
-Last Modified: $Id: template.html,v 1.1.1.1 2001/03/13 22:59:26 ben
+Last Modified: $&zwnj;Id: template.html,v 1.1.1.1 2001/03/13 22:59:26 ben
 Exp $

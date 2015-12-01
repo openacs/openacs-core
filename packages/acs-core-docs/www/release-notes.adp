@@ -12,7 +12,7 @@ OpenACS?"
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="release-notes" id="release-notes"></a>OpenACS Release Notes</h2></div></div></div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="release-notes-5-9-0" id="release-notes-5-9-0"></a>Release 5.9.0 beta</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
+<a name="release-notes-5-9-0" id="release-notes-5-9-0"></a>Release 5.9.0</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>The release of OpenACS 5.9.0 contains the 78 packages of the
 oacs-5-9 branch. These packages include the OpenACS core packages,
 the major application packages (e.g. most the ones used on
@@ -24,8 +24,17 @@ OpenACS.org), and DotLRN 2.9.0.</p></li><li class="listitem">
 handing in PostgreSQL.</p></li><li class="listitem"><p>Removed various manual bookkeeping and deletion operations in
 the content repository by built-in handing in PostgreSQL.</p></li><li class="listitem"><p>Removed tree_sortkey on acs-objects to reduce its size and to
 speedup operations, where the context-id is changed (could take on
-large installation several minutes)</p></li><li class="listitem"><p>Remove several uncalled / redundant SQL statements and
-functions.</p></li>
+large installation several minutes in earlier versions)</p></li><li class="listitem"><p>Remove several uncalled / redundant SQL statements and
+functions.</p></li><li class="listitem">
+<p>Cleanup of .xql files in acs-subsite:</p><div class="itemizedlist"><ul class="itemizedlist compact" style="list-style-type: opencircle;">
+<li class="listitem" style="list-style-type: circle"><p>Some cleanup of .xql files: removed misleading sql-statements
+from db_* calls, which were ignored due .xql files</p></li><li class="listitem" style="list-style-type: circle"><p>Removed bug where same query-name was used in different branches
+of an if-statement for different sql statements, but the query-name
+lead to the wrong result.</p></li><li class="listitem" style="list-style-type: circle"><p>Removed multiple entries of same query name from .xql files
+(e.g. the entry "package_create_attribute_list.select_type_info"
+was 7 (!) times in a single .xql file)</p></li>
+</ul></div>
+</li>
 </ul></div>
 </li><li class="listitem">
 <p>Web Interface:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: square;">
@@ -53,9 +62,17 @@ interfaces of includes can be defined with ad_include_contract
 a display_template_name (similar to the sql statement name) to
 refer to display templates. This enables reusability and is
 theme-able.</p></li><li class="listitem"><p>Dimensional slider reform (ad_dimensional): Removed hard-coded
-table layout from dimensional slider Add backwards compatible
+table layout from dimensional slider. Add backwards compatible
 templates Move hard-coded styles into theme styling</p></li><li class="listitem"><p>Notification chunks are now theme-able as well (using
-ad_include_contrat)</p></li><li class="listitem"><p>Complete template variable controls (adding noi18n)</p></li>
+ad_include_contrat)</p></li><li class="listitem"><p>Complete template variable suffixes (adding noi18n, addressing
+bug #2692, full list is now: noquote, noi18n, literal)</p></li><li class="listitem"><p>Added timeout and configurable secrets for signed url parameters
+to export_vars/page_contracts. This can be used to secure sensitive
+operations such as granting permissions since a link can be set to
+timeout after e.g. 60 seconds; after that, the link is invalid. A
+secret (password) can be set in section ns/server/$server/acs
+parameter "parametersecret". For example, one can use now
+"user_id:sign(max_age=60)" in export_vars to let the exported
+variable expire after 60 seconds.</p></li>
 </ul></div>
 </li><li class="listitem">
 <p>Misc:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: square;">
@@ -65,21 +82,33 @@ developer support output when developer support is activated
 acs-tcl package parameters)</p></li><li class="listitem"><p>Added ability to save data sent by ns_return in files on the
 file system. This can be used to validate HTML content also for
 password protected pages (controlled via package parameter
-"TclTraceSaveNsReturn" in the acs-tcl package parameters)</p></li><li class="listitem"><p>Improved templating of OpenACS core documentation</p></li><li class="listitem"><p>Improved Russian Internationalization</p></li><li class="listitem"><p>Make pretty-names of acs-core packages more consistent</p></li><li class="listitem"><p>Mark unused functions of acs-tcl/tcl/table-display-procs.tcl as
-deprecated</p></li><li class="listitem">
+"TclTraceSaveNsReturn" in the acs-tcl package parameters)</p></li><li class="listitem"><p>New api function "ad_log" having the same interface as ns_log,
+but which logs the calling information (like URL and call-stack) to
+ease tracking of errors.</p></li><li class="listitem"><p>Use per-thread caching to reduce number of mutex lock operations
+and lock contention on various caches (util-memoize, xo_site_nodes,
+xotcl_object_types) and nsvs (e.g ds_properties)</p></li><li class="listitem"><p>Improved templating of OpenACS core documentation</p></li><li class="listitem"><p>Improved Russian Internationalization</p></li><li class="listitem"><p>Make pretty-names of acs-core packages more consistent</p></li><li class="listitem"><p>Mark unused functions of acs-tcl/tcl/table-display-procs.tcl as
+deprecated</p></li><li class="listitem"><p>Many more bug fixes (from bug tracker and extra) and performance
+improvements.</p></li><li class="listitem">
 <p>Version numbers:</p><div class="itemizedlist"><ul class="itemizedlist compact" style="list-style-type: opencircle;">
-<li class="listitem" style="list-style-type: circle"><p>Require PG 9.0 (End Of Life of PostgreSQL 8.4 was July 2014)</p></li><li class="listitem" style="list-style-type: circle"><p>Require XOTcl 2.0 (presented at the Tcl conference in 2011).</p></li><li class="listitem" style="list-style-type: circle"><p>Significant performance improvement for large installations</p></li>
+<li class="listitem" style="list-style-type: circle"><p>Require PG 9.0 (End Of Life of PostgreSQL 8.4 was July 2014)</p></li><li class="listitem" style="list-style-type: circle"><p>Require XOTcl 2.0 (presented at the Tcl conference in 2011).</p></li>
 </ul></div>
 </li>
 </ul></div>
-</li><li class="listitem"><p>Changes in application packages: Various bug fixes and
-improvements for e.g. file-storage, forums, news, notifications,
-xowiki.</p></li>
+</li><li class="listitem">
+<p>Changes in application packages:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: square;"><li class="listitem"><p>Various bug fixes and improvements for e.g. file-storage,
+forums, news, notifications, xowiki.</p></li></ul></div>
+</li>
 </ul></div>
 </li>
-</ul></div><p>Altogether, OpenACS 5.9.0 differs from OpenACS 5.8.1 in about
-xxxx modifications (yyyy commits) contributed by zzzz committers.
-For more details, consult the <a class="ulink" href="" target="_top">raw ChangeLog</a>.</p>
+</ul></div><p>Altogether, OpenACS 5.9.0 differs from OpenACS 5.8.1 by the
+following statistics</p><pre class="programlisting">
+      3658 files changed, 120800 insertions(+), 97617 deletions(-)
+  
+</pre><p>contributed by 4 committers (Michael Aram, Victor Guerra, Gustaf
+Neumann, Antonio Pisano) and patch/bugfix providers (Frank
+Bergmann, Andrew Helsley, Felix MÃ¶dritscher, Marcos
+Moser, Franz Penz, Thomas Renner). For more details, consult the
+<a class="ulink" href="" target="_top">raw ChangeLog</a>.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="release-notes-5-8-1" id="release-notes-5-8-1"></a>Release 5.8.1</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
@@ -201,8 +230,8 @@ could be moved from a set of interacting parameters to a cleaner
 XML description of how to build classes and clubs, etc.</p><p>Notifications now calls lang::util::localize on the message
 subject and body before sending the message out, using the
 recipient locale if set, the site-wide one if not. This will cause
-message keys (entered as #....# strings) to be replaced with the
-language text for the chosen locale.</p>
+message keys (entered as <span style="color: red">&lt;span&gt;#&lt;/span&gt;</span>....# strings) to be
+replaced with the language text for the chosen locale.</p>
 </li></ul></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
@@ -365,20 +394,20 @@ styles still using these mechanisms will break.</p></li><li class="listitem"><p>
 turned off by default via the acs-kernel parameter ExcludedFiles in
 section request-processor (The variable provides a string match
 glob list of files and is defaulted to "*/CVS/* *~")</p></li>
-</ul></div><div class="cvstag">($&zwnj;Id: release-notes.xml,v 1.30.2.2 2015/09/28
-07:54:30 gustafn Exp $)</div>
+</ul></div><div class="cvstag">($&zwnj;Id: release-notes.xml,v 1.30.2.4 2015/10/27
+09:55:19 gustafn Exp $)</div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140673139000784" id="idp140673139000784"></a>Release 4.6.3</h3></div></div></div><p><a class="ulink" href="release-notes-4-6-3" target="_top">Release Notes for 4.6.3</a></p>
+<a name="idp140216745447600" id="idp140216745447600"></a>Release 4.6.3</h3></div></div></div><p><a class="ulink" href="release-notes-4-6-3" target="_top">Release Notes for 4.6.3</a></p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140673139002288" id="idp140673139002288"></a>Release 4.6.2</h3></div></div></div><p><a class="ulink" href="release-notes-4-6-2" target="_top">Release Notes for 4.6.2</a></p>
+<a name="idp140216745449104" id="idp140216745449104"></a>Release 4.6.2</h3></div></div></div><p><a class="ulink" href="release-notes-4-6-2" target="_top">Release Notes for 4.6.2</a></p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140673139003792" id="idp140673139003792"></a>Release 4.6</h3></div></div></div><p><a class="ulink" href="release-notes-4-6" target="_top">Release Notes for 4.6</a></p>
+<a name="idp140216745450608" id="idp140216745450608"></a>Release 4.6</h3></div></div></div><p><a class="ulink" href="release-notes-4-6" target="_top">Release Notes for 4.6</a></p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140673139005296" id="idp140673139005296"></a>Release 4.5</h3></div></div></div><p><a class="ulink" href="release-notes-4-5" target="_top">Release Notes for 4.5</a></p>
+<a name="idp140216745452112" id="idp140216745452112"></a>Release 4.5</h3></div></div></div><p><a class="ulink" href="release-notes-4-5" target="_top">Release Notes for 4.5</a></p>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

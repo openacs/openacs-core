@@ -4,7 +4,7 @@
 <master>
 <h2>content_item</h2>
 <p>
-<a href="../index.html">Content Repository</a> :
+<a href="../index">Content Repository</a> :
 content_item</p>
 <hr>
 <ul>
@@ -801,4 +801,4 @@ procedure write_to_file (
 </table>
 <p> </p>
 
-Last Modified: $Id$
+Last Modified: $&zwnj;Id: item.html,v 1.3 2004/06/01 22:54:18 donb Exp $

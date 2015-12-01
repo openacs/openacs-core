@@ -158,5 +158,5 @@ intra-party relations.</font></p></dd>
 <address><a href="mailto:mbryzek\@arsdigita.com">Michael
 Bryzek</a></address>
 <br>
-<font size="-1">$Id: group-admin-pages-requirements.html,v 1.2
+<font size="-1">$&zwnj;Id: group-admin-pages-requirements.html,v 1.2
 2001/08/11 21:31:03 ben Exp $</font>

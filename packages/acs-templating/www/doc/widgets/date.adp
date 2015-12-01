@@ -8,7 +8,7 @@
 dates in a variety of formats. The widget operates in conjunction
 with various <code>template::util::date</code> functions in order
 to validate and manipulate the user's input. Please see the
-<a href="../demo/index.html">demo</a> pages for some examples of
+<a href="../demo/index">demo</a> pages for some examples of
 the widget's behavior.</p>
 <h3>The Date Object</h3>
 <p>The widget's value is a Date object, defined in

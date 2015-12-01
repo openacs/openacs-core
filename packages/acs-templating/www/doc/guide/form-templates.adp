@@ -6,7 +6,7 @@ Templates</property>
 <master>
 <h2>Customizing Form Templates</h2>
 <a href="..">Templating System</a>
- : <a href="../developer-guide.html">Developer Guide</a>
+ : <a href="../developer-guide">Developer Guide</a>
  : User Guide
 <p>The templating system allows the designer to have full control
 over the layout of a dynamic form.</p>

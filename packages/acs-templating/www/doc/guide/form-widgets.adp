@@ -4,7 +4,7 @@
 <master>
 <h2>Custom Form Widgets</h2>
 <a href="..">Templating System</a>
- : <a href="../developer-guide.html">Developer Guide</a>
+ : <a href="../developer-guide">Developer Guide</a>
  : User Guide
 <p>Form widgets are implemented as tcl procs that output the html
 to generate the form element. The tcl proc must be in the

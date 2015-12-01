@@ -6,7 +6,7 @@ Sources</property>
 <master>
 <h2>Documenting Data Sources</h2>
 <a href="..">Templating System</a>
- : <a href="../developer-guide.html">Developer Guide</a>
+ : <a href="../developer-guide">Developer Guide</a>
  : User Guide
 <p>Effective coordination between the developer and designer is one
 of the major challenges of any publishing team. The templating

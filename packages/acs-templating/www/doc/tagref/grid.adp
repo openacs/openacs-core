@@ -4,7 +4,7 @@
 <master>
 <h2>Grid</h2>
 <a href="..">Templating System</a>
- : <a href="../designer-guide.html">Designer Guide</a>
+ : <a href="../designer-guide">Designer Guide</a>
  : <a href="index">Tag Reference</a>
  : Grid
 <h3>Summary</h3>

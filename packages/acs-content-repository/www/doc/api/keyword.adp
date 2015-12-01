@@ -4,7 +4,7 @@
 <master>
 <h2>content_keyword</h2>
 <p>
-<a href="../index.html">Content Repository</a> :
+<a href="../index">Content Repository</a> :
 content_keyword</p>
 <hr>
 <ul>
@@ -333,5 +333,5 @@ content_keyword.set_description</td>
 </table>
 <p> </p>
 
-Last Modified: $Id: keyword.html,v 1.1.1.1 2001/03/13 22:59:26 ben
+Last Modified: $&zwnj;Id: keyword.html,v 1.1.1.1 2001/03/13 22:59:26 ben
 Exp $

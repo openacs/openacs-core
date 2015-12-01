@@ -4,7 +4,7 @@
 <master>
 <h2>content_revision</h2>
 <p>
-<a href="../index.html">Content Repository</a> :
+<a href="../index">Content Repository</a> :
 content_revision</p>
 <hr>
 <ul>
@@ -261,5 +261,5 @@ procedure to_html (
 </table>
 <p> </p>
 
-Last Modified: $Id: revision.html,v 1.1.1.1 2001/03/13 22:59:26 ben
+Last Modified: $&zwnj;Id: revision.html,v 1.1.1.1 2001/03/13 22:59:26 ben
 Exp $

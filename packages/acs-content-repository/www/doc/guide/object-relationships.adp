@@ -106,5 +106,5 @@ types as you would for any other ACS object.</p>
 <a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a>
 <br>
 
-Last modified: <tt>$Id: object-relationships.html,v 1.1.1.1
+Last modified: <tt>$&zwnj;Id: object-relationships.html,v 1.1.1.1
 2001/03/13 22:59:26 ben Exp $</tt>

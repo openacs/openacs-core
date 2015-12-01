@@ -6,7 +6,7 @@ Templates</property>
 <master>
 <h2>Embedding Code in Templates</h2>
 <a href="..">Templating System</a>
- : <a href="../developer-guide.html">Developer Guide</a>
+ : <a href="../developer-guide">Developer Guide</a>
  : User Guide
 <p>There are various ways to use Tcl in ADPs like ASP or JSP.</p>
 <p>You can use the <code>&lt;% ... %&gt;</code> and <code>&lt;%=

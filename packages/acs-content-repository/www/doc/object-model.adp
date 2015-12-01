@@ -29,5 +29,5 @@ necessary to create a custom subtype of Content Item itself.</p>
 <a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a>
 <br>
 
-Last revised: $Id: object-model.html,v 1.1.1.1 2001/03/13 22:59:26
+Last revised: $&zwnj;Id: object-model.html,v 1.1.1.1 2001/03/13 22:59:26
 ben Exp $

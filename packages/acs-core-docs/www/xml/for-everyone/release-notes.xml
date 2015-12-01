@@ -39,8 +39,8 @@ linkend="changelog-latest"></xref>) since the last release and in the
 entire &majorversion;.&minorversion; release sequence <xref linkend="changelog"></xref>.</para>
 -->
 
-<sect2  id="release-notes-5-9-0">
-  <title>Release 5.9.0 beta</title>
+<sect2 id="release-notes-5-9-0">
+  <title>Release 5.9.0</title>
   <itemizedlist>
     <listitem><para>
       The release of OpenACS 5.9.0 contains the 78 packages of the oacs-5-9 branch.
@@ -72,11 +72,35 @@ entire &majorversion;.&minorversion; release sequence <xref linkend="changelog">
 	  <listitem><para>
             Removed tree_sortkey on acs-objects to reduce its size and
 	    to speedup operations, where the context-id is changed
-	    (could take on large installation several minutes)
+	    (could take on large installation several minutes in
+	    earlier versions)
 	  </para></listitem>
 
 	  <listitem><para>
             Remove several uncalled / redundant SQL statements and functions.
+	  </para></listitem>
+
+	  <listitem><para> Cleanup of .xql files in acs-subsite:
+	  <itemizedlist spacing='compact' mark='opencircle'>
+	    <listitem><para> Some cleanup of .xql files: removed
+	    misleading sql-statements from db_* calls, which were
+	    ignored due .xql files
+	    </para></listitem>
+	    
+	    <listitem><para> Removed bug where same query-name was
+	    used in different branches of an if-statement for
+	    different sql statements, but the query-name lead to the
+	    wrong result.
+	    </para></listitem>
+
+	    <listitem><para> Removed multiple entries of same query
+	    name from .xql files (e.g. the entry
+	    "package_create_attribute_list.select_type_info" was
+	    7 (!) times in a single .xql file)
+	    </para></listitem>
+
+	  </itemizedlist>	    
+
 	  </para></listitem>
 	</itemizedlist>	    
 	</para></listitem>
@@ -155,7 +179,7 @@ entire &majorversion;.&minorversion; release sequence <xref linkend="changelog">
 	  </para></listitem>
 
 	  <listitem><para> Dimensional slider reform (ad_dimensional):
- 	  Removed hard-coded table layout from dimensional slider Add
+ 	  Removed hard-coded table layout from dimensional slider. Add
  	  backwards compatible templates Move hard-coded styles into
  	  theme styling </para></listitem>
 
@@ -165,11 +189,26 @@ entire &majorversion;.&minorversion; release sequence <xref linkend="changelog">
 
 	  <listitem><para>
             Complete template variable suffixes (adding noi18n,
-	    adressing bug #2692, full list is now: noquote, noi18n, literal)
+	    addressing bug #2692, full list is now: noquote, noi18n, literal)
 	  </para></listitem>
+
+	  <listitem><para>
+	    Added timeout and configurable secrets for signed url
+	    parameters to export_vars/page_contracts.
+	    This can be used to secure sensitive operations
+	    such as granting permissions since a link can be set to
+	    timeout after e.g. 60 seconds; after that, the link is
+	    invalid. A secret (password) can be set in section
+	    ns/server/$server/acs parameter "parametersecret".
+	  
+	    For example, one can use now "user_id:sign(max_age=60)" in
+	    export_vars to let the exported variable expire after 60 seconds.
+	  </para></listitem>
+	  
 	</itemizedlist>
 	</para></listitem>
 
+	
 	<listitem><para>Misc:
 	<itemizedlist>
 	  <listitem><para>
@@ -179,11 +218,24 @@ entire &majorversion;.&minorversion; release sequence <xref linkend="changelog">
 	    in the acs-tcl package parameters)
 	  </para></listitem>
 
-	  <listitem><para> Added ability to save data sent by
-	  ns_return in files on the file system. This can be used to
-	  validate HTML content also for password protected pages
-	  (controlled via package parameter "TclTraceSaveNsReturn" in
-	  the acs-tcl package parameters) </para></listitem>
+	  <listitem><para>
+	    Added ability to save data sent by
+	    ns_return in files on the file system. This can be used to
+	    validate HTML content also for password protected pages
+	    (controlled via package parameter "TclTraceSaveNsReturn" in
+	    the acs-tcl package parameters)
+	  </para></listitem>
+	  
+	  <listitem><para>
+            New api function "ad_log" having the same interface as
+	    ns_log, but which logs the calling information (like URL
+	    and call-stack) to ease tracking of errors.
+	  </para></listitem>	  
+
+	  <listitem><para> Use per-thread caching to reduce number of
+	  mutex lock operations and lock contention on various caches
+	  (util-memoize, xo_site_nodes, xotcl_object_types) and nsvs
+	  (e.g ds_properties) </para></listitem>
 	  
  	  <listitem><para>
             Improved templating of OpenACS core documentation
@@ -201,6 +253,12 @@ entire &majorversion;.&minorversion; release sequence <xref linkend="changelog">
             Mark unused functions of acs-tcl/tcl/table-display-procs.tcl as deprecated
 	  </para></listitem>
 
+	  <listitem><para>
+            Many more bug fixes (from bug tracker and extra) and
+	    performance improvements.
+	  </para></listitem>
+
+	  
  	  <listitem><para>
 	    Version numbers:
 	    <itemizedlist spacing='compact' mark='opencircle'>
@@ -212,26 +270,33 @@ entire &majorversion;.&minorversion; release sequence <xref linkend="changelog">
 		Require XOTcl 2.0 (presented at the Tcl conference in 2011). 
 	      </para></listitem>
 
-	      <listitem><para>
-		Significant performance improvement for large
-		installations
-	      </para></listitem>
 	    </itemizedlist>
  	  </para></listitem>
 	</itemizedlist>
 	</para></listitem>
 	
-	<listitem><para>Changes in application packages: Various bug
-	fixes and improvements for e.g. file-storage, forums, news,
-	notifications, xowiki.
-	
+	<listitem><para>Changes in application packages:
+	<itemizedlist>
+	  <listitem><para>
+	    Various bug
+	    fixes and improvements for e.g. file-storage, forums, news,
+	    notifications, xowiki.
+	  </para></listitem>
+	</itemizedlist>
 	</para></listitem>
       </itemizedlist>
     </para> </listitem>
   </itemizedlist>
-  <para> Altogether, OpenACS 5.9.0 differs from OpenACS 5.8.1 in
-  about xxxx modifications (yyyy commits) contributed by zzzz
-  committers. For more details, consult the
+  
+  <para> Altogether, OpenACS 5.9.0 differs from OpenACS 5.8.1 by the
+  following statistics
+  <programlisting>
+      3658 files changed, 120800 insertions(+), 97617 deletions(-)
+  </programlisting>
+  contributed by 4 committers (Michael Aram, Victor Guerra, Gustaf Neumann, Antonio Pisano) and
+  patch/bugfix providers (Frank Bergmann, Andrew Helsley, Felix
+  Mödritscher, Marcos Moser, Franz Penz, Thomas Renner).  For more
+  details, consult the  
   <ulink
       href="http://fisheye.openacs.org/browse/~br=oacs-5-9/OpenACS/openacs-4/ChangeLog?hb=true">
   raw ChangeLog</ulink>.

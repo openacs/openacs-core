@@ -4,7 +4,7 @@
 <master>
 <h2>If</h2>
 <a href="..">Templating System</a>
- : <a href="../designer-guide.html">Designer Guide</a>
+ : <a href="../designer-guide">Designer Guide</a>
  : <a href="index">Tag Reference</a>
  : If
 <h3>Summary</h3>

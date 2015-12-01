@@ -5,7 +5,7 @@
 <include src="/packages/acs-core-docs/lib/navheader"
 		    leftLink="usage" leftLabel="Prev"
 		    title=""
-		    rightLink="usage" rightLabel="Next">
+		    rightLink="" rightLabel="">
 		<div class="sect1" lang="en">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="requirements" id="requirements"></a>Requirements</h2></div></div></div><div class="authorblurb">
@@ -159,7 +159,7 @@ started</a>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 		    leftLink="usage" leftLabel="Prev" leftTitle="Usage"
-		    rightLink="usage" rightLabel="Next" rightTitle=""
+		    rightLink="" rightLabel="" rightTitle=""
 		    homeLink="index" homeLabel="Home" 
 		    upLink="index" upLabel="Up"> 
 		<center><a href="http://openacs.org/doc/requirements.html#comments">View comments

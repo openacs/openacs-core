@@ -79,5 +79,5 @@ content repository data model itself.</p>
 <a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a>
 <br>
 
-Last revised: $Id: install.html,v 1.1.1.1 2001/03/13 22:59:26 ben
+Last revised: $&zwnj;Id: install.html,v 1.1.1.1 2001/03/13 22:59:26 ben
 Exp $

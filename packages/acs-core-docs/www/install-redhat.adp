@@ -37,7 +37,7 @@ correct the problem. <a class="link" href="install-resources" title="Resources">
 <li class="listitem"><p>
 <a name="install-first-step" id="install-first-step"></a>Unplug
 the network cable from your computer. We don't want to connect to
-the network until we're sure the computer is secure. <a class="indexterm" name="idp140673139221216" id="idp140673139221216"></a>
+the network until we're sure the computer is secure. <a class="indexterm" name="idp140216758646608" id="idp140216758646608"></a>
 (Wherever you see the word secure, you should always read it as,
 "secure enough for our purposes, given the amount of work we're
 willing to exert and the estimated risk and consequences.")</p></li><li class="listitem"><p>Insert Red Hat 8.0 or 9.0 Disk 1 into the CD-ROM and reboot the
@@ -76,7 +76,7 @@ HARD DRIVE.</p></li><li class="listitem"><p>Click <code class="computeroutput"><
 screen</p></li>
 </ol></div>
 </li><li class="listitem">
-<p>Configure Networking. <a class="indexterm" name="idp140673137447520" id="idp140673137447520"></a> Again, if you
+<p>Configure Networking. <a class="indexterm" name="idp140216758890048" id="idp140216758890048"></a> Again, if you
 know what you're doing, do this step yourself, being sure to note
 the firewall holes. Otherwise, follow the instructions in this step
 to set up a computer directly connected to the internet with a
@@ -105,7 +105,7 @@ Click <code class="computeroutput"><span class="guibutton"><span class="guibutto
 development server we'll be setting up.</p></li>
 </ol></div>
 </li><li class="listitem"><p>
-<a class="indexterm" name="idp140673137358176" id="idp140673137358176"></a>Select any additional languages you want
+<a class="indexterm" name="idp140216759099616" id="idp140216759099616"></a>Select any additional languages you want
 the computer to support and then click <code class="computeroutput"><span class="guibutton"><span class="guibutton">
 <u><span class="accel">N</span></u>ext</span></span></code>
 </p></li><li class="listitem"><p>Choose your time zone and click <code class="computeroutput"><span class="guibutton"><span class="guibutton">
@@ -120,11 +120,11 @@ that's still screened by the firewall, or a resource hog. Just
 don't install a database or web server, because that would conflict
 with the database and web server we'll install later.</p><table border="0" summary="Simple list" class="simplelist">
 <tr><td>check <code class="computeroutput"><span class="guilabel"><span class="guilabel">Editors</span></span></code>
-(this installs emacs<a class="indexterm" name="idp140673137365040" id="idp140673137365040"></a>),</td></tr><tr><td>click <code class="computeroutput"><span class="guilabel"><span class="guilabel">Details</span></span></code> next
+(this installs emacs<a class="indexterm" name="idp140216746501696" id="idp140216746501696"></a>),</td></tr><tr><td>click <code class="computeroutput"><span class="guilabel"><span class="guilabel">Details</span></span></code> next
 to <code class="computeroutput"><span class="guilabel"><span class="guilabel">Text-based Internet</span></span></code>, check
 <code class="computeroutput"><span class="guilabel"><span class="guilabel">lynx</span></span></code>, and click <code class="computeroutput"><span class="guibutton"><span class="guibutton">
 <u><span class="accel">O</span></u>K</span></span></code>;</td></tr><tr><td>check <code class="computeroutput"><span class="guilabel"><span class="guilabel">Authoring and
-Publishing</span></span></code> (<a class="indexterm" name="idp140673137332672" id="idp140673137332672"></a>this installs
+Publishing</span></span></code> (<a class="indexterm" name="idp140216746508512" id="idp140216746508512"></a>this installs
 docbook),</td></tr><tr><td>uncheck <code class="computeroutput"><span class="guilabel"><span class="guilabel">Server Configuration
 Tools</span></span></code>,</td></tr><tr><td>uncheck <code class="computeroutput"><span class="guilabel"><span class="guilabel">Web
 Server</span></span></code>,</td></tr><tr><td>uncheck <code class="computeroutput"><span class="guilabel"><span class="guilabel">Windows File
@@ -149,7 +149,7 @@ View</span></span></code> and wait. In a minute, a list of packages
 will appear.</p><table border="0" summary="Simple list" class="simplelist">
 <tr><td>uncheck <code class="computeroutput"><span class="guilabel"><span class="guilabel">apmd</span></span></code>
 (monitors power, not very useful for servers),</td></tr><tr><td>check <code class="computeroutput"><span class="guilabel"><span class="guilabel">ImageMagick</span></span></code>
-(required for the <a class="indexterm" name="idp140673137348656" id="idp140673137348656"></a>photo-album packages,</td></tr><tr><td>uncheck<code class="computeroutput"><span class="guilabel"><span class="guilabel">isdn4k-utils</span></span></code>
+(required for the <a class="indexterm" name="idp140216759113408" id="idp140216759113408"></a>photo-album packages,</td></tr><tr><td>uncheck<code class="computeroutput"><span class="guilabel"><span class="guilabel">isdn4k-utils</span></span></code>
 (unless you are using isdn, this installs a useless daemon),</td></tr><tr><td>check <code class="computeroutput"><span class="guilabel"><span class="guilabel">mutt</span></span></code> (a mail
 program that reads Maildir),</td></tr><tr><td>uncheck <code class="computeroutput"><span class="guilabel"><span class="guilabel">nfs-utils</span></span></code>
 (nfs is a major security risk),</td></tr><tr><td>uncheck <code class="computeroutput"><span class="guilabel"><span class="guilabel">pam-devel</span></span></code> (I
@@ -195,7 +195,7 @@ step.</p></li><li class="listitem">
 <p>Lock down SSH</p><div class="orderedlist"><ol class="orderedlist" type="a">
 <li class="listitem">
 <p>
-<a class="indexterm" name="idp140673137219216" id="idp140673137219216"></a> SSH is the protocol we use to connect
+<a class="indexterm" name="idp140216746410496" id="idp140216746410496"></a> SSH is the protocol we use to connect
 securely to the computer (replacing telnet, which is insecure).
 sshd is the daemon that listens for incoming ssh connections. As a
 security precaution, we are now going to tell ssh not to allow

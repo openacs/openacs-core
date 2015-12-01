@@ -48,5 +48,5 @@ automatically deleted from the <tt>cr_doc_filter</tt> table.</p>
 <a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a>
 <br>
 
-Last Modified: $Id: convert.html,v 1.1.1.1 2001/03/13 22:59:26 ben
+Last Modified: $&zwnj;Id: convert.html,v 1.1.1.1 2001/03/13 22:59:26 ben
 Exp $

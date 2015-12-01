@@ -75,7 +75,7 @@ set output [template::adp_eval code]
 <font color="green"># now use the output however you wish</font>
 </pre></blockquote>
 
-Also see the "<a href="../demo/index.html#string">string</a>
+Also see the "<a href="../demo/index">string</a>
 " demo.
 <h3>Generating Templates from Other Templates</h3>
 <p>In some cases, the template itself may be based on yet another
@@ -91,11 +91,11 @@ to the user.</p>
 <p>Note that the generic "style" template contains templating tags
 (<tt>formwidget</tt>, <tt>formgroup</tt>, <tt>if</tt> etc.) that
 must be "protected" during the first step. The templating system
-provides the <a href="../tagref/noparse.html"><tt>noparse</tt></a>
+provides the <a href="../tagref/noparse"><tt>noparse</tt></a>
 tag to do this.</p>
 <hr>
 <a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>
 <br>
 
-Last modified: $Id: memory.html,v 1.1.1.1 2001/03/13 22:59:27 ben
+Last modified: $&zwnj;Id: memory.html,v 1.1.1.1 2001/03/13 22:59:27 ben
 Exp $

@@ -13,7 +13,7 @@ Chapter 6. Production Environments"
 Configurations</h2></div></div></div><p>See also <a class="xref" href="remote-postgres" title="Running a PostgreSQL database on another server">the section
 called &ldquo;Running a PostgreSQL database on another
 server&rdquo;</a>.</p><div class="figure">
-<a name="idp140673140359008" id="idp140673140359008"></a><p class="title"><b>Figure 6.1. Multiple-server
+<a name="idp140216757027360" id="idp140216757027360"></a><p class="title"><b>Figure 6.1. Multiple-server
 configuration</b></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/hpha.png" align="middle" alt="Multiple-server configuration"></div></div>
 </div><br class="figure-break">
 </div>

@@ -3,8 +3,8 @@
 <property name="doc(title)">Templating System User Guide: Overview</property>
 <master>
 <h2>Overview</h2>
-<a href="../index.html">Templating System</a>
- : <a href="../developer-guide.html">Developer Guide</a>
+<a href="../index">Templating System</a>
+ : <a href="../developer-guide">Developer Guide</a>
  : User Guide
 <p>This document provides a brief introduction to the design of the
 templating system and the process of building dynamic pages with

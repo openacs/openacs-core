@@ -6,7 +6,7 @@ Components</property>
 <master>
 <h2>Building Reusable Template Components</h2>
 <a href="..">Templating System</a>
- : <a href="../developer-guide.html">Developer Guide</a>
+ : <a href="../developer-guide">Developer Guide</a>
  : User Guide
 <p>Most page layouts can be separated into smaller components, many
 of which may appear in different contexts throughout a site.

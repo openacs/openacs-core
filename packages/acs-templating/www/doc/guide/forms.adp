@@ -6,7 +6,7 @@ Forms</property>
 <master>
 <h2>Creating and Populating Forms</h2>
 <a href="..">Templating System</a>
- : <a href="../developer-guide.html">Developer Guide</a>
+ : <a href="../developer-guide">Developer Guide</a>
  : User Guide
 <p>This document outlines the steps necessary to build a dynamic
 form in Tcl code.</p>
@@ -22,7 +22,7 @@ use it in the survey package.</p>
 <pre>
 form create add_user
 </pre>
-<p>See the <a href="../api/form.html">form API</a> for optional
+<p>See the <a href="../api/form">form API</a> for optional
 parameters to this command.</p>
 <h3>Add elements</h3>
 <p>Once the form is created, use the <tt>element create</tt>
@@ -33,7 +33,7 @@ element create add_user first_name -datatype text \
                                    -html { size 30 }
 </pre>
 <p>In auto-generated forms, elements appear in the order they were
-created. See the <a href="../api/element.html">element API</a> for
+created. See the <a href="../api/element">element API</a> for
 optional parameters to this command.</p>
 <h3>Set values</h3>
 <p>Self-validating forms should check whether a request or

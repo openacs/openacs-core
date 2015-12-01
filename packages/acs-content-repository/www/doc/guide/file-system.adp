@@ -59,7 +59,7 @@ structure to implement an intuitive user interface analagous to
 familiar desktop tools (Windows Explorer, MacOS Finder, etc.).</li><li>You can use the content repository API to constraint the type
 of content that a folder may contain (except for the index page).
 For example, it is possible to limit the contents of the "Press"
-folder to items of type "Press Release." See the <a href="../api/folder.html">Content Folder</a> API for more details.</li>
+folder to items of type "Press Release." See the <a href="../api/folder">Content Folder</a> API for more details.</li>
 </ul>
 <h3>Using your own root</h3>
 <p>By default, the content repository has one root folder for
@@ -108,5 +108,5 @@ parameter to specify the content root under which the
 <a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a>
 <br>
 
-Last Modified: $Id: file-system.html,v 1.1.1.1 2001/03/13 22:59:26
+Last Modified: $&zwnj;Id: file-system.html,v 1.1.1.1 2001/03/13 22:59:26
 ben Exp $

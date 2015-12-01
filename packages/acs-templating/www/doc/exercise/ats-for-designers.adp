@@ -5,7 +5,7 @@
 <h2>The ACS Templating System for Web Designers</h2>
 <h3>Reading</h3>
 <ul>
-<li>ACS Templating System <a href="../index.html">documents</a>
+<li>ACS Templating System <a href="../index">documents</a>
 </li><li>Templating System <a href="../../demo/">demo</a>
 </li><li>Read beginning and end of <a href="http://acs40.arsdigita.com/doc/developer-guide/templates.html">Using
 Templates in ACS 4</a>
@@ -28,16 +28,16 @@ need only build and edit a few pages to maintain a consistent
 presentation style while accomodating numerous permutaions of
 changing data.</p>
 <p>This training module will teach largely by exercise and example,
-but you should also refer regularly to the <a href="../index.html">ATS documents</a> provided and more specific
+but you should also refer regularly to the <a href="../index">ATS documents</a> provided and more specific
 pointers will be given to help you out along the way.</p>
 <p>Okay, let's get to the nitty gritty.</p>
 <h3><a name="exercises" id="exercises">Exercises</a></h3>
 <p>The basic building block of dynamic data in a template is the
-onevalue variable. A <a href="../tags/variable.html">variable</a>
+onevalue variable. A <a href="../tags/variable">variable</a>
 is simply a tag used in your <code>.adp</code> file that holds data
 supplied by another source file; that source will probably be
 another file of the same name with a <code>.tcl</code> extension.
-Variable tags come in three basic formats, as <a href="../tags/list.html">lists</a>, <a href="../tags/multiple.html">multiples</a> and onevalues.</p>
+Variable tags come in three basic formats, as <a href="../tags/list">lists</a>, <a href="../tags/multiple">multiples</a> and onevalues.</p>
 <p>
 <b>Exercise 1: Onevalues, onelists, multilists and
 multirows</b><br>
@@ -60,13 +60,13 @@ and make note of the textual and structural differences between the
 two, specifically:</p>
 <ul>
 <li>
-<a href="../tags/variable.html">variables</a> in the
+<a href="../tags/variable">variables</a> in the
 <code>.adp</code> file are designated with "\@" markers, like the
 <code>\@name\@</code> variable that litters the opening text block of
 <code>list-and-var-sample.adp</code>; here, <code>\@name\@</code> is
 used as a place-marker for the value set in
 <code>list-and-var.sample.tcl</code>
-</li><li>the variables within the <a href="../tags/multiple.html">&lt;multiple&gt;</a> tag, though only
+</li><li>the variables within the <a href="../tags/multiple">&lt;multiple&gt;</a> tag, though only
 appearing once in the .adp file, are cycled repeatedly to show
 multiple sets of information when displayed in
 <code>list-and-var-sample.acs</code>; example:
@@ -116,14 +116,14 @@ never seen.</p>
 <p><b>Exercise Two: &lt;if&gt; and &lt;else&gt;, the conditional
 tags</b></p>
 <p>Dynamic data implies a changing page, and also changing
-presentation. The <a href="../tags/if.html">&lt;if&gt;</a> and
+presentation. The <a href="../tags/if">&lt;if&gt;</a> and
 &lt;else&gt; tags allow you to alter the format of your page to
 accomodate data changes. The function of &lt;if&gt; is
 straightforward enough: given a condition -- such as \@x\@ equals 5
 -- all the text/html/dynamic data between the the opening and
 closing &lt;if&gt; tags will be displayed if and only if \@x\@ does
 in fact equal 5. A complete listing of currently supported
-conditions and some brief explanatory notes can be found <a href="../tags/if.html">here</a>. Also, a few more things to keep in
+conditions and some brief explanatory notes can be found <a href="../tags/if">here</a>. Also, a few more things to keep in
 mind:</p>
 <ul>
 <li>in Tcl all variables, even numbers, are stored as text strings
@@ -151,12 +151,12 @@ is appropriately changed to <i>an</i> for any 11-, 18- or 80- to
 89-year olds.</p>
 <p><b>Exercise Three: The &lt;master&gt; and &lt;slave&gt; tags --
 a call to the dominatrix in you</b></p>
-<p>The <a href="../tags/master.html">&lt;master&gt;</a> and
-<a href="../tags/slave.html">&lt;slave&gt;</a> tags allow you to
+<p>The <a href="../tags/master">&lt;master&gt;</a> and
+<a href="../tags/slave">&lt;slave&gt;</a> tags allow you to
 maintain a consistent style and format among pages without having
 to edit each page individually. To get a sense of what these tags
 do and how they work, go ahead and run through this short <a href="slave-sample.acs">demonstration</a>, and then use a text editor to
-view the related .adp files. Also, read <a href="../guide/master.html">this discussion</a> on the use of master
+view the related .adp files. Also, read <a href="../guide/master">this discussion</a> on the use of master
 pages.</p>
 <p>One thing you may have noticed earlier about
 <code>list-and-var-sample.adp</code> is that it lacks the standard
@@ -179,7 +179,7 @@ nothing in place of the &lt;slave&gt; tag</li><li>you can have nested slave sect
 within another slave</li><li>you <b>cannot</b> have two different slave sections within the
 same master (go ahead and try adding an extra &lt;slave&gt; tag to
 a master page to see what happens)</li><li>
-<a href="../tags/property.html">&lt;property&gt;</a> tags are
+<a href="../tags/property">&lt;property&gt;</a> tags are
 used within a slave section to pass text, HTML and references to
 local datasources up to the master page; these values are placed in
 the master page in the same fashion as onevalues</li><li>data and HTML can be passed from a nested slave section to its
@@ -202,7 +202,7 @@ label the newly inserted form with some slave-specific title.</p>
 <p>Creating forms with ATS can be as simple as inserting two tags
 into a page. Try this: open <code>form-sample.adp</code> and add
 the two following ATS tags:</p>
-<blockquote><code><tt><a href="../tags/formtemplate.html">&lt;formtemplate
+<blockquote><code><tt><a href="../tags/formtemplate">&lt;formtemplate
 id="add_entry"&gt;&lt;/formtemplate&gt;</a></tt></code></blockquote>
 <p>Save the page and reload it. You should see now see a big
 baby-blue form block; this is the ATS default style for form
@@ -214,7 +214,7 @@ or gender information.</p>
 <p>However, if ever you wish to build a form according to the
 mandates of your own taste, &lt;formtemplate&gt; also leaves you
 this option. Manually stylizing forms with ATS requires you to
-learn only two more tags, <a href="../tags/formwidget.html">&lt;formwidget&gt;</a> and <a href="../tags/formgroup.html">&lt;formgroup&gt;</a>. Browse through the
+learn only two more tags, <a href="../tags/formwidget">&lt;formwidget&gt;</a> and <a href="../tags/formgroup">&lt;formgroup&gt;</a>. Browse through the
 ATS <a href="../../demo">demo</a> for examples of
 &lt;formwidget&gt; and &lt;formwidget&gt; usage. For the most part
 &lt;formwidget&gt; should be used in most places you might have
@@ -249,13 +249,13 @@ closing &lt;/formtemplate&gt; tag to recover the default format, or
 make use of the .dat datasource page to view your developer's
 description and comments about the form.</p>
 <p>Also, try customizing your form's error response/correction
-request text. You'll need to use the <a href="../tags/formerror.html">&lt;formerror&gt;</a> tag, an example of
+request text. You'll need to use the <a href="../tags/formerror">&lt;formerror&gt;</a> tag, an example of
 which can be found under the gender formwidget.</p>
 <p><b>Exercise Five: more fun with multirows</b></p>
 <p>Now that you've confidently added the conditional &lt;if&gt; and
 &lt;else&gt; tags to your ATS toolbelt, it's time to put those
 tools to good use in formatting multirow data. First, read the
-<a href="../tags/multiple.html">docs</a> to learn about the
+<a href="../tags/multiple">docs</a> to learn about the
 automatcally generated <code>\@<i>your_multirow</i>.rownum\@</code>
 column, the <code>\@<i>your_multirow</i>:rowcount\@</code> onevalue
 which contains the total number of rows contained in your multirow,

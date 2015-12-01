@@ -558,5 +558,5 @@ select ad_group_member_p(1472, system_administrator_group_id) from dual
 <hr>
 <a href="mailto:webmaster\@dev.arsdigita.com"></a>
 <address>webmaster\@dev.arsdigita.com</address>
-<p>Last Modified: $Id: developer-support-example.html,v 1.1.1.1
-2001/04/20 20:51:09 donb Exp $</p>
+<p>Last Modified: $&zwnj;Id: developer-support-example.html,v
+1.1.1.1.28.1 2015/08/25 17:58:44 gustafn Exp $</p>

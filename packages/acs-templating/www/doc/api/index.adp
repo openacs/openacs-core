@@ -4,7 +4,7 @@
 <master>
 <h2>Object and API Reference</h2>
 <a href="..">Templating System</a>
- : <a href="../developer-guide.html">Developer Guide</a>
+ : <a href="../developer-guide">Developer Guide</a>
  : API
 
 Some of the API discussed here achieves functionality that the ACS
@@ -21,5 +21,5 @@ below.
 <address><a href="mailto:christian\@arsdigita.com">Christian
 Brechbühler</a></address>
 <!-- Created: Thu Sep 21 15:32:06 EDT 2000 -->
-Last modified: $Id: index.html,v 1.1.1.1 2001/03/13 22:59:27 ben
+Last modified: $&zwnj;Id: index.html,v 1.1.1.1 2001/03/13 22:59:27 ben
 Exp $

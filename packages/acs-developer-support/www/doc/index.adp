@@ -78,5 +78,5 @@ Developer Support.</p>
 <p>Please file bugs in the <a href="http://openacs.org/bugtracker/openacs/">Bug Tracker</a>.</p>
 <hr>
 <address><a href="mailto:jsalz\@mit.edu">jsalz\@mit.edu</a></address>
-<p>Last Modified: $Id: index.html,v 1.1.1.1.28.1 2015/08/21
-10:28:44 gustafn Exp $</p>
+<p>Last Modified: $&zwnj;Id: index.html,v 1.1.1.1.28.2 2015/08/25
+17:58:45 gustafn Exp $</p>

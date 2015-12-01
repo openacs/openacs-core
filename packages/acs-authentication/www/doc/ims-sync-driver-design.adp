@@ -5,7 +5,7 @@
 <include src="/packages/acs-core-docs/lib/navheader"
 		    leftLink="ext-auth-design" leftLabel="Prev"
 		    title="Design"
-		    rightLink="ext-auth-ldap-install" rightLabel="Next">
+		    rightLink="" rightLabel="">
 		<div class="sect1" lang="en">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="ims-sync-driver-design" id="ims-sync-driver-design"></a>IMS Sync
@@ -199,7 +199,7 @@ adopting OKI's programming interrfaces for this.</p></li><li><p><a href="http://
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 		    leftLink="ext-auth-design" leftLabel="Prev" leftTitle="Design"
-		    rightLink="ext-auth-ldap-install" rightLabel="Next" rightTitle=""
+		    rightLink="" rightLabel="" rightTitle=""
 		    homeLink="index" homeLabel="Home" 
 		    upLink="ext-auth-design" upLabel="Up"> 
 		

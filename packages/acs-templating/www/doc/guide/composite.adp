@@ -4,7 +4,7 @@
 <master>
 <h2>Assembling a Page from Components</h2>
 <a href="..">Templating System</a>
- : <a href="../developer-guide.html">Developer Guide</a>
+ : <a href="../developer-guide">Developer Guide</a>
  : <a href="">User
 Guide</a>
  : Composite
@@ -23,8 +23,8 @@ have the following structure.</p>
 <p>The "root" page includes the "widget" and wraps itself in the
 "master". That page in turn includes the "top" and "bottom".</p>
 <h3>Overall structure</h3>
-<p>The parts are put together with the <code>&lt;<a href="../tagref/include.html">include</a>&gt;</code> tag (in the diagram
-below, black links going right) and the <code>&lt;<a href="../tagref/master.html">master</a>&gt;</code> tag (brown link going
+<p>The parts are put together with the <code>&lt;<a href="../tagref/include">include</a>&gt;</code> tag (in the diagram
+below, black links going right) and the <code>&lt;<a href="../tagref/master">master</a>&gt;</code> tag (brown link going
 left); and the concept is similar to a procedure call. The
 structure of the composite page looks like this as a graph.</p>
 <center><table cellpadding="0" cellspacing="0" border="0">

@@ -221,6 +221,6 @@ drop package developer_defined_test_type;
 <address><font><a href="mailto:mbryzek\@arsdigita.com">Michael
 Bryzek</a></font></address>
 <font>
-<br><font size="-1">$Id: group-admin-pages-acceptance-test.html,v 1.3
+<br><font size="-1">$&zwnj;Id: group-admin-pages-acceptance-test.html,v 1.3
 2003/09/30 12:10:03 mohanp Exp $</font>
 </font>

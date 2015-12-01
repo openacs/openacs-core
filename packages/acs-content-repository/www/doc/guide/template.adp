@@ -136,5 +136,5 @@ content_item.unregister_template(
 </pre>
 <hr>
 <a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a>
-<p>Last Modified: $Id: template.html,v 1.1.1.1 2001/03/13 22:59:26
+<p>Last Modified: $&zwnj;Id: template.html,v 1.1.1.1 2001/03/13 22:59:26
 ben Exp $</p>

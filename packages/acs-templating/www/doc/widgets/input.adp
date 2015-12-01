@@ -7,7 +7,7 @@
 <p>These widgets provide a variety of HTML controls, all of which
 are based on <code>&lt;input type="..."&gt;</code>. In particular,
 the hidden, text, radio and checkbox widgets are currently
-implemented; their use is demonstrated in the <a href="../demo/index.html">acs-templating demo</a>.</p>
+implemented; their use is demonstrated in the <a href="../demo/index">acs-templating demo</a>.</p>
 <h3>The Hidden Widget</h3>
 <p>This is simply an <code>&lt;input type="hidden"&gt;</code>
 widget, which is used for passing pre-set variables along with the
@@ -17,7 +17,7 @@ form.</p>
 completely identical to the &lt;input type="text"&gt;. The
 <code>-html</code> parameter can be used to set its properties
 (such as <code>size</code>, <code>maxlength</code>, etc.), as
-described in the general widgets <a href="../index.html">reference</a>. The value of this widget is the text
+described in the general widgets <a href="../index">reference</a>. The value of this widget is the text
 string.</p>
 <h3>The Radio Group Widget</h3>
 <p>This widget actually represents a group of radio buttons, at

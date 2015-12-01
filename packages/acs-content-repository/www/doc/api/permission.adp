@@ -4,7 +4,7 @@
 <master>
 <h2>content_permission</h2>
 <p>
-<a href="../index.html">Content Repository</a> :
+<a href="../index">Content Repository</a> :
 content_permission</p>
 <hr>
 <ul>
@@ -282,5 +282,5 @@ holder, to ensure that the permission is not permanently lost</p>
 </table>
 <p> </p>
 
-Last Modified: $Id: permission.html,v 1.1.1.1 2001/03/13 22:59:26
+Last Modified: $&zwnj;Id: permission.html,v 1.1.1.1 2001/03/13 22:59:26
 ben Exp $

@@ -43,5 +43,5 @@ parts.</td>
 <address><a href="mailto:christian\@arsdigita.com">Christian
 Brechbühler</a></address>
 <!-- Created: Mon Aug 14 11:53:07 EDT 2000 -->
-Last modified: $Id: index.html,v 1.6.2.2 2015/08/21 10:28:47
+Last modified: $&zwnj;Id: index.html,v 1.6.2.2 2015/08/21 10:28:47
 gustafn Exp $

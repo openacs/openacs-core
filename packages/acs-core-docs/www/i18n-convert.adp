@@ -150,7 +150,7 @@ its checks primarily on en_US xml catalog files.</p>
 </li>
 </ol></div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140673159451712" id="idp140673159451712"></a>Avoiding common i18n mistakes</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
+<a name="idp140216757877136" id="idp140216757877136"></a>Avoiding common i18n mistakes</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem">
 <p>
 <b>Replace complicated keys with longer, simpler
@@ -219,7 +219,7 @@ begins.
   &lt;/if&gt;
 
 &lt;if \@components.view_bugs_url\@ not nil&gt;
-&lt;a href="\@components.view_bugs_url\@" title="<span>#</span>bug-tracker.View_the_bug_fo_component#"&gt;
+&lt;a href="\@components.view_bugs_url\@" title="#bug-tracker.View_the_bug_fo_component#"&gt;
 &lt;/if&gt;
 \@components.num_bugs\@ 
 &lt;if \@components.num_bugs\@ eq 1&gt;
@@ -234,9 +234,9 @@ begins.
 </pre><p>It would probably be better to do this as something like:</p><pre class="programlisting">
 &lt;if \@components.view_bugs_url\@ not nil&gt;
   &lt;if \@components.num_bugs\@ eq 1&gt;
-    &lt;a href="\@components.view_bugs_url\@" title="<span>#</span>bug-tracker.View_the_bug_fo_component#"&gt;<span>#</span>bug-tracker.one_bug#&lt;/a&gt;
+    &lt;a href="\@components.view_bugs_url\@" title="#bug-tracker.View_the_bug_fo_component#"&gt;#bug-tracker.one_bug#&lt;/a&gt;
   &lt;/if&gt;&lt;else&gt;
-    &lt;a href="\@components.view_bugs_url\@" title="<span>#</span>bug-tracker.View_the_bug_fo_component#"&gt;<span>#</span>bug-tracker.N_bugs#&lt;/a&gt;
+    &lt;a href="\@components.view_bugs_url\@" title="#bug-tracker.View_the_bug_fo_component#"&gt;#bug-tracker.N_bugs#&lt;/a&gt;
   &lt;/else&gt;
 &lt;/if&gt;
 </pre>
@@ -260,7 +260,7 @@ multirow append links "[_ bug-tracker.New_Bug]" "${url_prefix}bug-add"
 more control over the phrase.</p><p>In this example of bad i18n, full name is created by
 concatenating first and last name (admittedly this is pervasive in
 the toolkit):</p><pre class="programlisting">
-&lt;a href="\@past_version.maintainer_url\@" title="<span>#</span>bug-tracker.Email# \@past_version.maintainer_email\@"&gt;
+&lt;a href="\@past_version.maintainer_url\@" title="#bug-tracker.Email# \@past_version.maintainer_email\@"&gt;
 \@past_version.maintainer_first_names\@ \@past_version.maintainer_last_name\@&lt;/a&gt;
 </pre>
 </li><li class="listitem">
