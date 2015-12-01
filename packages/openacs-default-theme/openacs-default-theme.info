@@ -7,7 +7,7 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.9.0b2" url="http://openacs.org/repository/download/apm/openacs-default-theme-5.9.0b2.apm">
+    <version name="5.9.0" url="http://openacs.org/repository/download/apm/openacs-default-theme-5.9.0.apm">
         <owner url="mailto:dhogaza@pacifier.com">Don Baccus</owner>
         <summary>Provides the default &quot;plain&quot; and &quot;tabbed&quot; themes for OpenACS Subsites.</summary>
         <release-date>2015-10-04</release-date>
@@ -16,7 +16,7 @@
         <license>GPL version 2</license>
         <maturity>3</maturity>
 
-        <provides url="openacs-default-theme" version="5.9.0b2"/>
+        <provides url="openacs-default-theme" version="5.9.0"/>
         <requires url="acs-subsite" version="5.9.0"/>
 
         <callbacks>

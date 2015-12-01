@@ -7,7 +7,7 @@
     <initial-install-p>t</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="5.9.0b2" url="http://openacs.org/repository/download/apm/acs-service-contract-5.9.0b2.apm">
+    <version name="5.9.0" url="http://openacs.org/repository/download/apm/acs-service-contract-5.9.0.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>API and UI for service contracts</summary>
         <release-date>2015-10-04</release-date>
@@ -18,7 +18,7 @@
         url or the contracts used by dotlrn and new-portals to allow packages to provide portalized panes.</description>
         <license>GPL version 2</license>
 
-        <provides url="acs-service-contract" version="5.9.0b2"/>
+        <provides url="acs-service-contract" version="5.9.0"/>
         <requires url="acs-kernel" version="5.9.0"/>
 
         <callbacks>
