@@ -61,7 +61,8 @@ ad_proc -public template::data::transform::spellcheck {
     # case 2, submission of the page showing errors: returns the corrected text.
     set merge_text [template::util::spellcheck::merge_text $element(id)]
 
-    if { [set richtext_p $element(datatype) eq "richtext"] } {
+    set richtext_p [expr {$element(datatype) eq "richtext"}]
+    if { $richtext_p } {
 	# special treatment for the "richtext" datatype.
     	set format [template::util::richtext::get_property format [lindex $values 0]]
 	if { $merge_text ne "" } {
