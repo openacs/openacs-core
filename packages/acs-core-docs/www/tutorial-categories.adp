@@ -39,7 +39,7 @@ file:</p><pre class="programlisting">
           
 </pre><p>and the following snippet to your <code class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackage/www/admin/index.adp</code>
 file:</p><pre class="programlisting">
-                        &lt;a href="\@category_map_url\@"&lt;#categories.Site_wide_Categories#&lt;/a&gt;
+                        &lt;a href="\@category_map_url\@"&lt;<span>#</span>categories.Site_wide_Categories#&lt;/a&gt;
           
 </pre><p>The link created by the above code (<code class="computeroutput">category_map_url</code>) will take the admin to
 the generic admin UI where he can pick category trees that make
@@ -145,7 +145,7 @@ default value "<code class="computeroutput">0</code>".</p><p>Add the following l
 </pre><p>Change your to this:</p><pre class="programlisting">
                         &lt;a href=configure?&lt;%=[export_vars -url {return_url}]%&gt;&gt;Configure&lt;/a&gt;
                         &lt;if \@use_categories_p\@&gt;
-                        &lt;a href="\@category_map_url\@"&lt;#categories.Site_wide_Categories#&lt;/a&gt;
+                        &lt;a href="\@category_map_url\@"&lt;<span>#</span>categories.Site_wide_Categories#&lt;/a&gt;
                         &lt;/if&gt;
           
 </pre><p>Now create a configure page</p><pre class="programlisting">
