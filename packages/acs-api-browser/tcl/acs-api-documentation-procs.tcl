@@ -387,7 +387,7 @@ ad_proc -public api_proc_documentation {
     append out $first_line_tag$pretty_name$end_tag
     
     if {[regexp {^(.*) (inst)?proc (.*)$} $proc_name match cl prefix method]} {
-        set xotcl 1
+        set xotclArgs 1
         set scope ""
         if {[regexp {^(.+) (.+)$} $cl match scope cl]} {
             set cl "$scope do $cl"
@@ -395,18 +395,22 @@ ad_proc -public api_proc_documentation {
         if {$prefix eq ""} {
             set pretty_proc_name "[::xotcl::api object_link $scope $cl] $method"
         } else {
-            set pretty_proc_name \
-                "<i>&lt;instance of\
+            set pretty_proc_name "<i>&lt;instance of\
         [::xotcl::api object_link $scope $cl]&gt;</i> $method"
         }
     } else {
-        set xotcl 0
-        set pretty_proc_name $proc_name
+        set xotclArgs 0
+        if {[info commands ::xotcl::api] ne "" && [::xotcl::api isclass "" [lindex $proc_name 1]]} {
+            set name [lindex $proc_name 1]
+            set pretty_proc_name "[$name info class] [::xotcl::api object_link {} $name]"
+        } else {
+            set pretty_proc_name $proc_name
+        }
     }
 
     lappend command_line $pretty_proc_name
     foreach switch $doc_elements(switches) {
-        if {$xotcl} {
+        if {$xotclArgs} {
             if {"boolean" in $flags($switch)} {
                 set value "<i>on|off</i> "
             } elseif {"switch" in $flags($switch)} {
@@ -647,10 +651,11 @@ ad_proc api_proc_pretty_name {
     if {![info exists label]} {
         set label $proc
     }
+    ns_log notice "api_proc_pretty_name link $link_p, label $label, proc $proc"
     if { $link_p } {
         append out "<a href=\"[ns_quotehtml [api_proc_url $proc]]\">$label</a>"
     } else {    
-        append out "$label"
+        append out $label
     }
     array set doc_elements [nsv_get api_proc_doc $proc]
     if {$doc_elements(deprecated_p)} {
@@ -664,6 +669,7 @@ ad_proc api_proc_pretty_name {
     if { $doc_elements(private_p) } {
         append out " (private$deprecated)"
     }
+    ns_log notice "... return $out"
     return $out
 }
 
