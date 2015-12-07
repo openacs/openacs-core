@@ -729,14 +729,16 @@ ad_proc -public api_get_body {proc_name} {
             # the definition is locally in the connection thread
             return [::Serializer methodSerialize $obj $method $prefix]
         }
-    } elseif {[regexp {^([^ ]+)(Class|Object) (.*)$} $proc_name match thread kind obj]} {
+    } elseif {[regexp {^([^ ]+)(Class|Object) (.*)$} $proc_name . thread kind obj]} {
         return [$thread do $obj serialize]
+    } elseif {[regexp {(Class|Object) (.*)$} $proc_name . kind obj]} {
+        return [$obj serialize]
     } elseif {[info procs $proc_name] ne ""} {
         return [info body $proc_name]
     } elseif {[info procs ::nsf::procs::$proc_name] ne ""} {
         return [::nx::Object info method body ::nsf::procs::$proc_name]
     } else {
-        return "No such Tcl-proc"
+        return "No such Tcl-proc '$proc_name'"
     }
 }
 
