@@ -10,7 +10,7 @@
 </if>
 
 <div style="text-align:center">
-<img @widthheight@ src="@subsite_url@shared/portrait-bits.tcl?@export_vars@" alt="@doc.title@">
+<img @widthheight@ src="@portrait_image_url;noi18n@" alt="@doc.title@">
 </div>
 
 <ul>
