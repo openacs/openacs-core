@@ -5,13 +5,14 @@
 
 <if @inline_portrait_state@ eq "inline">
       <div style="float:right">
-        <a href="portrait?@portrait_export_vars@"><img src="portrait-bits?@portrait_export_vars@" width="@width@" height="@height@" alt="Portrait of @first_names@ @last_name@"></a>
+        <a href="@portrait_url;noi18n@"><img src="@portrait_image_url;noi18n@"
+	width="@width@" height="@height@" alt="Portrait of @first_names@ @last_name@"></a>
       </div>
 </if>
 <else>
   <if @inline_portrait_state@ eq "link">
     <ul class="action-links">
-      <li><a href="portrait?@portrait_export_vars@">#acs-subsite.Portrait#</a></li>
+      <li><a href="@portrait_url;noi18n@">#acs-subsite.Portrait#</a></li>
     </ul>
   </if>
 </else>

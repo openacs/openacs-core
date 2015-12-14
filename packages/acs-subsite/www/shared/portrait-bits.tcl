@@ -6,23 +6,14 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     user_id:naturalnum,notnull
-    {item_id:naturalnum ""}
     {size ""}
 }
 
-
-# If the item_id is provided then we are fine
-if {$item_id eq ""} {
-    if { ![db_0or1row get_item_id ""] } {
-	#    ad_return_error "Couldn't find portrait" "Couldn't find a portrait for User $user_id"
-	#ad_return_string_as_file -string "" -mime_type "image/jpeg" -filename ""
-	return
-    }
-}    
+set item_id [acs_user::get_portrait_id -user_id $user_id]
 
 if { $size eq "" } {
     cr_write_content -item_id $item_id
-} else {	
+} else {
     ad_returnredirect "/image/${item_id}/${size}"
 }
 

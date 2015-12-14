@@ -12,7 +12,8 @@ ad_page_contract {
     last_name:onevalue
     email:onevalue
     inline_portrait_state:onevalue
-    portrait_export_vars:onevalue
+    portrait_url:onevalue
+    portrait_image_url:onevalue
     width:onevalue
     height:onevalue
     system_name:onevalue
@@ -73,7 +74,8 @@ set bio [ad_text_to_html -- [person::get_bio -person_id $user_id]]
 
 # Do we show the portrait?
 set inline_portrait_state "none"
-set portrait_export_vars [export_vars {user_id}]
+set portrait_url [export_vars -base portrait {user_id}]
+set portrait_image_url [export_vars -base portrait-bits {user_id}]
 
 if {[db_0or1row portrait_info "
 select i.width, i.height, cr.title, cr.description, cr.publish_date
