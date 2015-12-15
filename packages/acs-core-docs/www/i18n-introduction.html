@@ -54,7 +54,7 @@
           </p><p>
             The advantage of the short syntax is that it's short. It's
             as simple as inserting the value of a variable.  Example:
-            <span class="replaceable"><span class="replaceable">#forum.title#</span></span>
+            <span class="replaceable"><span class="replaceable"><span>#</span>forum.title#</span></span>
           </p></li><li class="listitem"><p>
             The <span class="strong"><strong>verbose</strong></span>: <code class="computeroutput">&lt;trn
             key="<span class="replaceable"><span class="replaceable">package_key.message_key</span></span>"
@@ -197,7 +197,7 @@ ad_return_complaint 1 [_ dotlrn.class_may_not_be_deleted $msg_subst_list]
       </p><p>
         Here are a couple of examples. Say we have the following two
         parameters, taken directly from the dotlrn package.
-      </p><div class="informaltable"><table cellspacing="0" border="1"><colgroup><col class="c1"><col class="c2"></colgroup><thead><tr><th>Parameter Name</th><th>Parameter Value</th></tr></thead><tbody><tr><td>class_instance_pages_csv</td><td>#dotlrn.class_page_home_title#,Simple 2-Column;#dotlrn.class_page_calendar_title#,Simple 1-Column;#dotlrn.class_page_file_storage_title#,Simple 1-Column</td></tr><tr><td>departments_pretty_name</td><td>#departments_pretty_name#</td></tr></tbody></table></div><p>
+      </p><div class="informaltable"><table cellspacing="0" border="1"><colgroup><col class="c1"><col class="c2"></colgroup><thead><tr><th>Parameter Name</th><th>Parameter Value</th></tr></thead><tbody><tr><td>class_instance_pages_csv</td><td><span>#</span>dotlrn.class_page_home_title#,Simple 2-Column;<span>#</span>dotlrn.class_page_calendar_title#,Simple 1-Column;<span>#</span>dotlrn.class_page_file_storage_title#,Simple 1-Column</td></tr><tr><td>departments_pretty_name</td><td><span>#</span>departments_pretty_name#</td></tr></tbody></table></div><p>
         Then, depending on how we retrieve the value, here's what we get:
       </p><div class="informaltable"><table cellspacing="0" border="1"><colgroup><col class="c1"><col class="c2"></colgroup><thead><tr><th>Command used to retrieve Value</th><th>Retrieved Value</th></tr></thead><tbody><tr><td>parameter::get <span class="strong"><strong>-localize</strong></span> -parameter class_instances_pages_csv</td><td>Kurs Startseite,Simple 2-Column;Kalender,Simple 1-Column;Dateien,Simple 1-Column</td></tr><tr><td>parameter::get <span class="strong"><strong>-localize</strong></span> -parameter departments_pretty_name</td><td>Abteilung</td></tr><tr><td>parameter::get -parameter departments_pretty_name</td><td>#departments_pretty_name#</td></tr></tbody></table></div><p>
         The value in the rightmost column in the table above is the
