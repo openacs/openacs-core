@@ -2582,29 +2582,34 @@ ad_proc -public util_current_location {} {
     }
 
     set headers [ns_conn headers]
-    if { [ns_config "ns/parameters" ReverseProxyMode false]} {
+    if { [ns_config "ns/parameters" ReverseProxyMode false]
+         && [ns_set ifind $headers X-Forwarded-For] > -1} {
         #
         # We are running behind a proxy
         #
-        if {[ns_set ifind $headers X-Forwarded-For] > -1
-            && [ns_set iget $headers X-SSL-Request] == 1} {
+        if {[ns_set iget $headers X-SSL-Request] == 1} {
             #
             # We know, the request was an https request
             #
             set proto https
-            set port $default_port($proto)
         }
         #
-        # If we want to allow developers to access the backend server
-        # directly (not via the proxy), it is not necessary to set
-        # "SuppressHttpPort", and the port will be provided via the
-        # "Host:" header field.
+        # reset to the default port
         #
+        set port default_port($proto)
     }
     
     #
+    # If we want to allow developers to access the backend server
+    # directly (not via the proxy), the clause above does not fire,
+    # although "ReverseProxyMode" was set, since there is no
+    # "X-Forwarded-For".  The usage of "SuppressHttpPort" would not
+    # allow this use case.
+    #
+    
+    #
     # In case the "Host:" header field was provided, use the "hostame"
-    # and maybe the "port" from there.
+    # and maybe the "port" from there (this has the highest priority)
     #
     set Host [ns_set iget $headers Host]
     if {$Host ne ""} {
