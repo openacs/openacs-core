@@ -2542,66 +2542,86 @@ ad_proc -public util_driver_info {
 ad_proc -public util_current_location {} {
     Like ad_conn location - Returns the location string of the current
     request in the form protocol://hostname[:port] but it looks at the
-    Host header, that is, takes into account the host name the client
+    "Host:" header, that is, takes into account the host name the client
     used although it may be different from the host name from the server
     configuration file.  If the Host header is missing or empty 
     util_current_location falls back to ad_conn location.
-
-    cro@ncacasi.org 2002-06-07
-    Note: IE fouls up the Host header if a server is on a non-standard port; it
-    does not change the port number when redirecting to https.  So
-    we would get redirects from http://some-host:8000 to
-    https://some-host:8000
-
-    @author Lars Pind (lars@collaboraid.biz)
-    @author Peter Marklund
 } {
     set default_port(http) 80
     set default_port(https) 443
-    
-    util_driver_info -array driver
-    set proto $driver(proto)
-    set port $driver(port)
-
-    # This is the host from the browser's HTTP request
-    set Host [ns_set iget [ns_conn headers] Host]
-    lassign [split $Host ":"] Host_hostname Host_port
-
-    # suppress the configured http port when server is behind a proxy, to keep connection behind proxy
-    set suppress_port [parameter::get -package_id [apm_package_id_from_key acs-tcl] -parameter SuppressHttpPort -default 0]
-    if { $suppress_port && $port eq [ns_config -int "ns/server/[ns_info server]/module/nssock" Port] } {
-        ns_log Debug "util_current_location: suppressing http port $Host_port"
-        set Host_port ""
-        set port ""
-    }
-
-    # Server config location
-    if { ![regexp {^([a-z]+://)?([^:]+)(:[0-9]*)?$} [ad_conn location] match location_proto location_hostname location_port] } {
-        ns_log Error "util_current_location couldn't regexp '[ad_conn location]'"
-    }
-
-    if { $Host eq "" } {
-        # No Host header, return protocol from driver, hostname from [ad_conn location], and port from driver
-        set hostname $location_hostname
+    #
+    # The package parameter "SuppressHttpPort" might be set when the
+    # server is behind a proxy to hide the internal port.
+    #
+    set suppress_port [parameter::get \
+                           -package_id [apm_package_id_from_key acs-tcl] \
+                           -parameter SuppressHttpPort \
+                           -default 0]
+    #
+    # Obtain the information from ns_conn based on the actual driver
+    # handling the current request.  The obtained variables "proto",
+    # "hostname" and "port" will be the default and might be
+    # overwritten by more specific information.
+    #
+    if {[regexp {^([a-z]+://)?([^:]+)(:[0-9]*)?$} [ns_conn location] . proto hostname port]} {
+        if {$proto ne ""} {
+            lassign [split $proto :] proto .
+        }
+        if {$port eq ""} {
+            set port $default_port($location_proto)
+        }
     } else {
+        ns_log Error "util_current_location got invalid information from driver '[ns_conn location]'"
+        # provide fallback info
+        set hostname [ns_info hostname]
+        set proto ""
+    }
+    if {$proto eq ""} {
+        set proto http
+        set port  default_port($proto)
+    }
+
+    set headers [ns_conn headers]
+    if { [ns_config "ns/parameters" ReverseProxyMode false]} {
+        #
+        # We are running behind a proxy
+        #
+        if {[ns_set ifind $headers X-Forwarded-For] > -1
+            && [ns_set iget $headers X-SSL-Request] == 1} {
+            #
+            # We know, the request was an https request
+            #
+            set proto https
+            set port $default_port($proto)
+        }
+        #
+        # If we want to allow developers to access the backend server
+        # directly (not via the proxy), it is not necessary to set
+        # "SuppressHttpPort", and the port will be provided via the
+        # "Host:" header field.
+        #
+    }
+    
+    #
+    # In case the "Host:" header field was provided, use the "hostame"
+    # and maybe the "port" from there.
+    #
+    set Host [ns_set iget $headers Host]
+    if {$Host ne ""} {
+        lassign [split $Host ":"] Host_hostname Host_port
         set hostname $Host_hostname
-        if { $Host_port ne "" } {
+        if {$Host_port ne ""} {
             set port $Host_port
-        }    
+        }
     }
     
-    if { [ns_config "ns/parameters" ReverseProxyMode false]
-         && [ns_set ifind [ad_conn headers] X-Forwarded-For] > -1
-         && [ns_set iget [ad_conn headers] X-SSL-Request] == 1
-     } {
-        set proto https
-        set port $default_port($proto)
-    }
-    
-    if { $port ne "" && $port ne $default_port($proto) } {
-        return "$proto://$hostname:$port"
+    #
+    # We have all information, return the data...
+    #
+    if {$suppress_port || $port eq $default_port($proto) || $port eq ""} {
+        return $proto://$hostname
     } else {
-        return "$proto://$hostname"
+        return "$proto://$hostname:$port"
     }
 }
 
