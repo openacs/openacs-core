@@ -132,7 +132,7 @@ ad_proc -public template::data::validate::boolean {
   upvar 2 $message_ref message $value_ref value
 
   set result ""
-  set value [string tolower $value]
+  set value [::string tolower $value]
 
   switch $value {
       0 -
@@ -395,7 +395,7 @@ ad_proc -public template::data::validate::textdate {
 	}
     }
     if { [llength $error_msg] > 0 } {
-	set message "[join $error_msg {<br>}]"
+	set message [join $error_msg {<br>}]
         return 0
     } else {
         return 1
