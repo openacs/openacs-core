@@ -2578,7 +2578,7 @@ ad_proc -public util_current_location {} {
     }
     if {$proto eq ""} {
         set proto http
-        set port  default_port($proto)
+        set port  $default_port($proto)
     }
 
     set headers [ns_conn headers]
@@ -2596,7 +2596,7 @@ ad_proc -public util_current_location {} {
         #
         # reset to the default port
         #
-        set port default_port($proto)
+        set port $default_port($proto)
     }
     
     #
