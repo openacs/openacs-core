@@ -14,6 +14,176 @@ ad_library {
 namespace eval util {}
 namespace eval util::http {}
 
+ad_proc -private util::http::set_cookies {
+    -resp_headers:required
+    {-headers ""}
+    {-cookie_names ""}
+    {-pattern ""}
+} {
+    Extracts cookies from response headers. This is done reading every <code>set-cookie</code> header
+    and populating a ns_set of request headers suitable for issuing <code>util::http</code> requests.
+    
+    @param resp_headers Response headers, in a list form as returned by <code>util::http</code> API.
+    
+    @param headers      ns_set of request headers that will be populated with extracted cookies.
+                        If not specified, a new ns_set will be created. Existing cookies will be
+                        overwritten.
+    
+    @param cookie_names Cookie names we want to retrieve. Other cookies will be ignored.
+                        If omitted toghether with <code>-pattern</code> proc will include 
+                        every cookie.
+                        
+    @param pattern      Cookies which name respects this pattern as in <code>string match</code>
+                        will be included. If omitted toghether with <code>-cookie_names</code> proc 
+                        will include every cookie.
+    
+    @return ns_set of headers containing received cookies
+} {
+    if {$headers eq ""} {
+        set headers [ns_set create headers]
+    }
+    set cookies [list]
+    foreach {name value} $resp_headers {
+        # get only set-cookie headers, ignoring case
+        set name [string tolower $name]
+        if {$name ne "set-cookie"} continue
+        
+        # keep only relevant part of the cookie
+        set cookie [lindex [split $value ";"] 0]
+        set cookie_name [lindex [split $cookie "="] 0]
+        if {($cookie_names eq "" || $cookie_name in $cookie_names)
+         && ($pattern      eq "" || [string match $pattern $cookie_name])} {
+            lappend cookies $cookie
+        }
+    }
+    ns_set idelkey $headers "cookie"
+    set cookies [join $cookies "; "]
+    ns_set put $headers "cookie" $cookies
+    
+    return $headers
+}
+
+ad_proc -public util::http::basic_auth {
+    {-headers ""}
+    -username:required
+    -password:required
+} {
+    Builds BASIC authentication header for a HTTP request
+    
+    @param headers  ns_set of request headers that will be populated with auth header.
+                    If not specified, a new ns_set will be created. Existing header
+                    for BASIC authentication will be overwtitten.
+    
+    @param username Username for authentication
+                        
+    @param password Password for authentication
+    
+    @return ns_set of headers containing authentication data
+} {
+    if {$headers eq ""} {
+        set headers [ns_set create headers]
+    }
+    set h "Basic [base64::encode ${username}:$password]"
+    ns_set idelkey $headers "Authorization"
+    ns_set put     $headers "Authorization" $h
+    return $headers
+}
+
+ad_proc -public util::http::cookie_auth {
+    {-headers ""}
+    {-auth_vars ""}
+    {-auth_url ""}
+    {-auth_form ""}
+    {-auth_cookies ""}
+    {-preference {native curl}}
+} {
+    This proc implements the generic pattern for cookie-based authentication: user
+    logs in a webpage providing username, password and optionally other information
+    in a form, page replies generating one or more authentication cookies by which
+    user will be recognized on subsequent interaction with the server.<br>
+    <br>
+    By this method it is possible, for example, to authenticate on a remote OpenACS
+    installation providing <code>email</code> and <code>password</code> as credentials
+    to the /register/ page, and using <code>ad_session_id</code> and <code>ad_user_login</code> 
+    as <code>auth_cookies</code>.<br>
+    <br>
+    This proc takes care to submit to the login form also every other formfield on the
+    login page. This is important because this (often hidden) formfields can contain tokens
+    necessary for the authentication process.
+    
+    @param headers      ns_set of request headers that will be populated with auth headers.
+                        If not specified, a new ns_set will be created. Existing cookies
+                        will be overwritten.
+    
+    @param auth_vars    Variables issued to the login page in <code>export_vars -url</code> form.
+                        
+    @param auth_url     Login url
+    
+    @param auth_cookies Cookies we should look for in the response from the login page to obtain
+                        authentication data. If not specified, this will refer to every cookie
+                        received into <code>set-cookie</code> response headers.
+    
+    @auth_form          Form to put our data into. If not specified, there must be only one form
+                        on the login page, otherwise proc will throw an error.
+    
+    @return ns_set of headers containing authentication data
+} {
+    if {$headers eq ""} {
+        set headers [ns_set create headers]
+    }
+    
+    # Normalize url. Slashes at the end can make
+    # the same url don't look the same for the
+    # server, if we retrieve the same url from
+    # the 'action' attribute of the form.
+    set auth_url [string trimright $auth_url "/"]
+    set base_url [split $auth_url "/"]
+    set base_url [lindex $base_url 0]//[lindex $base_url 2]
+    
+    # Call login url to obtain login form
+    array set r [util::http::get -url $auth_url -preference $preference]
+
+    # Get cookies from response
+    util::http::set_cookies \
+      -resp_headers $r(headers) \
+      -headers      $headers \
+      -cookie_names $auth_cookies
+
+    # Obtain and export form vars not provided explicitly
+    set form [util::html::get_forms -html $r(page)]
+    set form [util::html::get_form -forms $form -id $auth_form]
+    
+    array set f $form
+    array set a $f(attributes)
+    # Action could be different from original login url
+    # I take that from form attributes.
+    if {[info exists a(action)]} {
+        set auth_url ${base_url}${a(action)}
+        set auth_url [string trimright $auth_url "/"]
+    }
+    
+    set formvars [util::html::get_form_vars -form $form]
+    set formvars [export_vars -url -exclude $auth_vars $formvars]
+    # Export vars provided explicitly in caller scope
+    set auth_vars [uplevel [list export_vars -url $auth_vars]]
+    # Join form vars with our vars
+    set formvars [join [list $formvars $auth_vars] "&"]
+
+    # Call login url with authentication parameters. Just retrieve the first response, as it 
+    # is common for login pages to redirect somewhere, but we just need to steal the cookies.
+    array set r [util::http::post \
+        -url $auth_url -body $formvars \
+        -headers $headers -max_depth 0 -preference $preference]
+
+    # Get cookies from response
+    util::http::set_cookies \
+      -resp_headers $r(headers) \
+      -headers      $headers \
+      -cookie_names $auth_cookies
+    
+    return $headers
+}
+
 ad_proc -public util::http::available {
     -url 
     {-preference {native curl}}
@@ -221,7 +391,7 @@ ad_proc util::http::get {
     @param timeout Timeout in seconds. The value can be an integer,
     a floating point number or an ns_time value.
     
-    @return Returns the data as dict with elements <code>page</code>,
+    @return Returns the data as dict with elements <code>headers</code>, <code>page</code>,
     <code>file</code>, <code>status</code>, and <code>modified</code>.
 
 } {
@@ -325,12 +495,15 @@ ad_proc util::http::post {
     conserve their original method.
     
     @param max_depth is the maximum number of redirects the proc is
-    allowed to follow. Be aware that when following redirects, unless
+    allowed to follow. A value of 0 disables redirection. When max 
+    depth for redirection has been reached, proc will return response 
+    from the last page we were redirected to. This is important if 
+    redirection response contains data such as cookies we need to
+    obtain anyway. Be aware that when following redirects, unless
     it is a code 303 redirect, url and POST urlencoded variables will
     be sent again to the redirected host. Multipart variables won't be
     sent again.  Sending to the redirected host can be dangerous, if
-    such host is not trusted or uses a lower level of secutiry. The
-    default behavior is to not follow redirects.
+    such host is not trusted or uses a lower level of security.
     
     @param preference decides which available implementation prefer in
     respective order. Choice is between 'native', based on ns_ api,
@@ -341,7 +514,7 @@ ad_proc util::http::post {
     @param timeout Timeout in seconds. The value can be an integer,
     a floating point number or an ns_time value.
     
-    @return Returns the data as dict with elements <code>page</code>,
+    @return Returns the data as dict with elements <code>headers</code>, <code>page</code>,
     <code>file</code>, <code>status</code>, and <code>modified</code>.
 
 } { 
@@ -499,6 +672,188 @@ ad_proc util::http::post {
 
 }
 
+ad_proc -private util::http::follow_redirects {
+    -url
+    -method
+    -status
+    -location 
+    {-body ""}
+    {-headers ""}
+    {-timeout 30}
+    {-depth 0}
+    {-max_depth 10}
+    -force_ssl:boolean
+    -multipart:boolean
+    -gzip_request:boolean
+    -gzip_response:boolean
+    -post_redirect:boolean
+    -spool:boolean
+    -preference {native curl}
+} {
+    Follow redirects. This proc is required because we want
+    to be able to follow a redirect until a certain depth and
+    then stop without throwing an error.<br>
+    <br>
+    Happens at times that even a redirect page contains 
+    very important information we want to be able to reach.
+    An example could be authentication headers. By putting
+    redirection handling here we can force a common behavior between
+    the two implementations, that otherwise would not be possible.
+    
+    @param body is the payload for the request and will be
+    passed as is (useful for many purposes, such as webDav).  A
+    convenient way to specify form variables through this argument is
+    passing a string obtained by <code>export_vars -url</code>. 
+    
+    <p> Default behavior is to build payload as an
+    'application/x-www-form-urlencoded' payload if no files are
+    specified, and 'multipart/form-data' otherwise. If
+    <code>-multipart</code> flag is set, format will be forced to
+    multipart.
+
+    @param headers specifies an ns_set of extra headers to send to the
+    server when doing the request.  Some options exist that allow to
+    avoid the need to specify headers manually, but headers will
+    always take precedence over options.
+
+    @param gzip_request informs the server that we are sending data
+    in gzip format. Data will be automatically compressed.  Notice
+    that not all servers can treat gzipped requests properly, and in
+    such cases response will likely be an error.
+
+    @param gzip_response informs the server that we are capable of
+    receiving gzipped responses.  If server complies to our
+    indication, the result will be automatically decompressed.
+    
+    @param force_ssl specifies wether we want to use SSL despite the
+    url being in http:// form.  Default behavior is to use SSL on
+    https:// urls only.
+    
+    @param spool enables file spooling of the request on the file
+    specified. It is useful when we expect large responses from the
+    server. The result is spooled to a temporary file, the name is
+    returned in the file component of the result.
+    
+    @param post_redirect decides what happens when we are POSTing and
+    server replies with 301, 302 or 303 redirects. RFC 2616/10.3.2
+    states that method should not change when 301 or 302 are returned,
+    and that GET should be used on a 303 response, but most HTTP
+    clients fail in respecting this and switch to a GET request
+    independently. This options forces this kinds of redirect to
+    conserve their original method.
+    
+    @param max_depth is the maximum number of redirects the proc is
+    allowed to follow. A value of 0 disables redirection. When max 
+    depth for redirection has been reached, proc will return response 
+    from the last page we were redirected to. This is important if 
+    redirection response contains data such as cookies we need to
+    obtain anyway. Be aware that when following redirects, unless
+    it is a code 303 redirect, url and POST urlencoded variables will
+    be sent again to the redirected host. Multipart variables won't be
+    sent again. Sending to the redirected host can be dangerous, if
+    such host is not trusted or uses a lower level of security.
+    
+    @param preference decides which available implementation prefer in
+    respective order. Choice is between 'native', based on ns_ api,
+    available for NaviServer only and giving the best performances and
+    'curl', which wraps the command line utility (available on every
+    system with curl installed).
+
+    @param timeout Timeout in seconds. The value can be an integer,
+    a floating point number or an ns_time value.
+    
+    @return Returns the data as dict with elements <code>headers</code>, <code>page</code>,
+    <code>file</code>, <code>status</code>, and <code>modified</code> from the last
+    followed redirect, or an empty string if request was not a redirection.
+
+} { 
+    ## Redirection management ##
+    
+    # Don't follow if page was not modified or this was not a proper redirect:
+    # not the right status code, missing location.
+    if {$status == 304 || ![string match "3??" $status] || $location eq ""} {
+        return ""
+    }
+    
+    # Other kinds of redirection...
+    # Decide by which method follow the redirect
+    if {$method eq "POST"} {
+        if {$status in {301 302 303} && !$post_redirect_p} {
+            set method "GET"
+        }
+    }
+
+    #
+    # A redirect from http might point to https, which in turn
+    # might not be configured. So we have to go through
+    # util::http::request again.
+    #
+    set this_proc ::util::http::request
+    
+    set urlvars [list]
+    
+    # ...retrieve redirect location variables...
+    set locvars [lindex [split $location ?] 1]
+    if {$locvars ne ""} {
+        lappend urlvars $locvars
+    }
+    
+    lappend urlvars [lindex [split $url ?] 1]
+    
+    # If we have POST payload and we are following by GET, put the payload into url vars.
+    if {$method eq "GET" && $body ne ""} {
+        set req_content_type [ns_set iget $headers "content-type"]
+        set multipart_p [string match -nocase "*multipart/form-data*" $req_content_type]
+        # I decided to don't translate into urlvars a multipart payload.
+        # This makes sense if we think that in a multipart payload we have
+        # many informations, such as mime_type, which cannot be put into url.
+        # Receiving a GET redirect after a POST is very common, so I won't throw an error
+        if {!$multipart_p} {
+            if {$gzip_request_p} {
+                set body [zlib gunzip $body]
+            }
+            lappend urlvars $body
+        }
+    }
+    
+    # Unite all variables into location URL
+    set urlvars [join $urlvars &]
+    
+    if {$urlvars ne ""} {
+        set location ${location}?${urlvars}
+    }
+    
+    if {$method eq "GET"} {
+        return [$this_proc \
+                    -method          GET \
+                    -url             $location \
+                    -headers         $headers \
+                    -timeout         $timeout \
+                    -depth           $depth \
+                    -max_depth       $max_depth \
+                    -force_ssl=$force_ssl_p \
+                    -gzip_response=$gzip_response_p \
+                    -post_redirect=$post_redirect_p \
+                    -spool=$spool_p \
+                    -preference $preference]
+    } else {
+        return [$this_proc \
+                    -method          POST \
+                    -url             $location \
+                    -body            $body \
+                    -headers         $headers \
+                    -timeout         $timeout \
+                    -depth           $depth \
+                    -max_depth       $max_depth \
+                    -force_ssl=$force_ssl_p \
+                    -gzip_request=$gzip_request_p \
+                    -gzip_response=$gzip_response_p \
+                    -post_redirect=$post_redirect_p \
+                    -spool=$spool_p \
+                    -preference $preference]
+    }
+}
+
 ad_proc -private util::http::request {
     -url 
     {-method GET}
@@ -555,12 +910,15 @@ ad_proc -private util::http::request {
     says we can assume variables to have been received.
     
     @param max_depth is the maximum number of redirects the proc is
-    allowed to follow. Be aware that when following redirects, unless
+    allowed to follow. A value of 0 disables redirection. When max 
+    depth for redirection has been reached, proc will return response 
+    from the last page we were redirected to. This is important if 
+    redirection response contains data such as cookies we need to
+    obtain anyway. Be aware that when following redirects, unless
     it is a code 303 redirect, url and POST urlencoded variables will
     be sent again to the redirected host. Multipart variables won't be
     sent again.  Sending to the redirected host can be dangerous, if
-    such host is not trusted or uses a lower level of secutiry. The
-    default behavior is to not follow redirects.
+    such host is not trusted or uses a lower level of security.
     
     @param preference decides which available implementation prefer
     in respective order. Choice is between 'native', based on ns_ api,
@@ -571,7 +929,7 @@ ad_proc -private util::http::request {
     @param timeout Timeout in seconds. The value can be an integer,
     a floating point number or an ns_time value.
     
-    @return Returns the data as dict with elements <code>page</code>,
+    @return Returns the data as dict with elements <code>headers</code>, <code>page</code>,
     <code>file</code>, <code>status</code>, and <code>modified</code>.
 
 } { 
@@ -676,12 +1034,15 @@ ad_proc -private util::http::native::request {
     says we can assume variables to have been received.
     
     @param max_depth is the maximum number of redirects the proc is
-    allowed to follow. Be aware that when following redirects, unless
+    allowed to follow. A value of 0 disables redirection. When max 
+    depth for redirection has been reached, proc will return response 
+    from the last page we were redirected to. This is important if 
+    redirection response contains data such as cookies we need to
+    obtain anyway. Be aware that when following redirects, unless
     it is a code 303 redirect, url and POST urlencoded variables will
     be sent again to the redirected host. Multipart variables won't be
     sent again.  Sending to the redirected host can be dangerous, if
-    such host is not trusted or uses a lower level of secutiry. The
-    default behavior is to not follow redirects.
+    such host is not trusted or uses a lower level of security.
 
     @param timeout Timeout in seconds. The value can be an integer,
     a floating point number or an ns_time value.
@@ -694,10 +1055,6 @@ ad_proc -private util::http::native::request {
     
     if {![regexp "^(https|http)://*" $url]} {
         return -code error "${this_proc}:  Invalid url:  $url"
-    }
-    
-    if {[incr depth] > $max_depth} {
-        return -code error "${this_proc}:  Recursive redirection:  $url"
     }
     
     # Check wether we will use ssl or not
@@ -805,88 +1162,29 @@ ad_proc -private util::http::native::request {
     # Move in a list to be returned to the caller
     set r_headers [ns_set array $resp_headers]
     ns_set free $resp_headers
-    
-    
-    ## Redirection management ##
-    
-    # Simple case: page had not been modified.
-    if {$status == 304} {
-        set page ""
-        # Other kinds of redirection...
-    } elseif {[string match "3??" $status] && $location ne ""} {
-        # Decide by which method follow the redirect
-        if {$method eq "POST"} {
-            if {$status in {301 302 303} && !$post_redirect_p} {
-                set method "GET"
-            }
-        }
 
-        #
-        # A redirect from http might point to https, which in turn
-        # might not be configured. So we have to go through
-        # util::http::request again.
-        #
-        set this_proc ::util::http::request
-        
-        set urlvars [list]
-        
-        # ...retrieve redirect location variables...
-        set locvars [lindex [split $location ?] 1]
-        if {$locvars ne ""} {
-            lappend urlvars $locvars
-        }
-        
-        lappend urlvars [lindex [split $url ?] 1]
-        
-        # If we have POST payload and we are following by GET, put the payload into url vars.
-        if {$method eq "GET" && $body ne ""} {
-            set req_content_type [ns_set iget $headers "content-type"]
-            set multipart_p [string match -nocase "*multipart/form-data*" $req_content_type]
-            # I decided to don't translate into urlvars a multipart payload.
-            # This makes sense if we think that in a multipart payload we have
-            # many informations, such as mime_type, which cannot be put into url.
-            # Receiving a GET redirect after a POST is very common, so I won't throw an error
-            if {!$multipart_p} {
-                if {$gzip_request_p} {
-                    set body [zlib gunzip $body]
-                }
-                lappend urlvars $body
-            }
-        }
-        
-        # Unite all variables into location URL
-        set urlvars [join $urlvars &]
-        
-        if {$urlvars ne ""} {
-            set location ${location}?${urlvars}
-        }
-        
-        if {$method eq "GET"} {
-            return [$this_proc \
-                        -method          GET \
-                        -url             $location \
-                        -headers         $headers \
-                        -timeout         $timeout \
-                        -depth           $depth \
-                        -max_depth       $max_depth \
-                        -force_ssl=$force_ssl_p \
-                        -gzip_response=$gzip_response_p \
-                        -post_redirect=$post_redirect_p \
-                        -spool=$spool_p]
-        } else {
-            return [$this_proc \
-                        -method          POST \
-                        -url             $location \
-                        -body            $body \
-                        -headers         $headers \
-                        -timeout         $timeout \
-                        -depth           $depth \
-                        -max_depth       $max_depth \
-                        -force_ssl=$force_ssl_p \
-                        -gzip_request=$gzip_request_p \
-                        -gzip_response=$gzip_response_p \
-                        -post_redirect=$post_redirect_p \
-                        -spool=$spool_p]
+    
+    # Redirection handling
+    if {$depth <= $max_depth} {
+        incr depth
+        set redirection [util::http::follow_redirects \
+            -url             $url \
+            -method          $method \
+            -status          $status \
+            -location        $location \
+            -body            $body \
+            -headers         $headers \
+            -timeout         $timeout \
+            -depth           $depth \
+            -max_depth       $max_depth \
+            -force_ssl=$force_ssl_p \
+            -gzip_request=$gzip_request_p \
+            -gzip_response=$gzip_response_p \
+            -post_redirect=$post_redirect_p \
+            -spool=$spool_p \
+            -preference "native"]
+        if {$redirection ne ""} {
+            return $redirection
         }
     }
     
@@ -1020,12 +1318,15 @@ ad_proc -private util::http::curl::request {
     update curl.
     
     @param max_depth is the maximum number of redirects the proc is
-    allowed to follow. Be aware that when following redirects, unless
+    allowed to follow. A value of 0 disables redirection. When max 
+    depth for redirection has been reached, proc will return response 
+    from the last page we were redirected to. This is important if 
+    redirection response contains data such as cookies we need to
+    obtain anyway. Be aware that when following redirects, unless
     it is a code 303 redirect, url and POST urlencoded variables will
     be sent again to the redirected host. Multipart variables won't be
     sent again.  Sending to the redirected host can be dangerous, if
-    such host is not trusted or uses a lower level of secutiry. The
-    default behavior is to not follow redirects.
+    such host is not trusted or uses a lower level of security.
 
     @param timeout Timeout in seconds. The value can be an integer, a
     floating point number or an ns_time value. Since curl versions
@@ -1102,11 +1403,15 @@ ad_proc -private util::http::curl::request {
     if {$timeout ne ""} {
         lappend cmd --connect-timeout [timeout $timeout]
     }
-    
-    # Set redirection up to max_depth
-    if {$max_depth ne ""} {
-        lappend cmd -L --max-redirs $max_depth
-    }
+
+# Antonio Pisano 2015-09-28: curl can follow redirects
+# out of the box, but its behavior is to throw an error
+# when maximum depth has been reached. I want it to 
+# return even a 3** page without complaining.
+#     # Set redirection up to max_depth
+#     if {$max_depth ne ""} {
+#         lappend cmd -L --max-redirs $max_depth
+#     }
     
     if {$method eq "GET"} {
         lappend cmd -G
@@ -1116,8 +1421,8 @@ ad_proc -private util::http::curl::request {
     if {!$post_redirect_p} {
         lappend cmd --post301 --post302
         if {[apm_version_names_compare [version] "7.26"] >= 0} {
-	    lappend cmd --post303
-	}
+            lappend cmd --post303
+        }
     }
     
     # Curl can decompress response transparently
@@ -1152,7 +1457,7 @@ ad_proc -private util::http::curl::request {
     set resp_headers_tmpfile [ad_tmpnam]
     lappend cmd -D $resp_headers_tmpfile
     lappend cmd $url
-     
+    
     set response [{*}$cmd]
      
     # Parse headers from dump file
@@ -1167,14 +1472,39 @@ ad_proc -private util::http::curl::request {
     close $rfd
     
     # Get values from response headers, then remove them
-    set content_type     [ns_set iget $resp_headers content-type]
-    set last_modified    [ns_set iget $resp_headers last-modified]
+    set content_type  [ns_set iget $resp_headers content-type]
+    set last_modified [ns_set iget $resp_headers last-modified]
+    set location      [ns_set iget $resp_headers location]
     # Move in a list to be returned to the caller
     set r_headers [ns_set array $resp_headers]
     ns_set free $resp_headers
     
     set status [string range $response end-2 end]
     set page   [string range $response 0 end-3]
+    
+    # Redirection handling
+    if {$depth <= $max_depth} {
+        incr depth
+        set redirection [util::http::follow_redirects \
+            -url             $url \
+            -method          $method \
+            -status          $status \
+            -location        $location \
+            -body            $body \
+            -headers         $headers \
+            -timeout         $timeout \
+            -depth           $depth \
+            -max_depth       $max_depth \
+            -force_ssl=$force_ssl_p \
+            -gzip_request=$gzip_request_p \
+            -gzip_response=$gzip_response_p \
+            -post_redirect=$post_redirect_p \
+            -spool=$spool_p \
+            -preference "curl"]
+        if {$redirection ne ""} {
+            return $redirection
+        }
+    }
     
     if {$spool_file ne ""} {
         set page "${this_proc}: response spooled to '$spool_file'"
@@ -1191,7 +1521,7 @@ ad_proc -private util::http::curl::request {
     file delete $data_binary_tmpfile
     
     return [list \
-		headers  $r_headers \
+                headers  $r_headers \
                 page     $page \
                 file     $spool_file \
                 status   $status \
