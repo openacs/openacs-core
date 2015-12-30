@@ -152,6 +152,11 @@ proc ad_proc args {
     if { !$public_p && !$private_p } {
         set public_p 1
     }
+    if {$public_p} {
+        set protection public
+    } else {
+        set protection private
+    }
 
     if { $warn_p && !$deprecated_p } {
         return -code error "Switch -warn can be provided to ad_proc only if -deprecated is also provided"
@@ -402,7 +407,8 @@ proc ad_proc args {
         }
     }
 
-    foreach element { public_p private_p deprecated_p warn_p varargs_p arg_list switches positionals } {
+    set protection 
+    foreach element { protection deprecated_p warn_p varargs_p arg_list switches positionals } {
         set doc_elements($element) [set $element]
     }
     foreach element { default_values flags } {
