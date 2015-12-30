@@ -60,10 +60,8 @@ set dimensional_list {
 
 set title "$pretty_name $version_name"
 set context [list $title]
-set dimensional_slider "[ad_dimensional \
-        $dimensional_list \
-        "" \
-        [ad_tcl_vars_to_ns_set version_id kind public_p about_package_key]]"
+set dimensional_slider [ad_dimensional $dimensional_list "" \
+                            [ad_tcl_vars_to_ns_set version_id kind public_p about_package_key]]
 
 switch $kind {
     procs_files {
@@ -107,7 +105,7 @@ switch $kind {
         foreach proc [lsort [array names procs]] {
             array set doc_elements [nsv_get api_proc_doc $proc]
             if { $public_p } {
-                if { !$doc_elements(public_p) } {
+                if { $doc_elements(protection) ne "public"} {
                     continue
                 }
             }
