@@ -752,15 +752,18 @@ ad_proc -public api_get_body {proc_name} {
     @param proc_name the name spec of the proc
     @return body of the specified prox
 } {
-    if {[regexp {^(.*) (inst)?proc (.*)$} $proc_name match obj prefix method]} {
+    if {[info commands ::xo::api] ne ""
+        && [regexp {^(.*) (inst)?proc (.*)$} $proc_name match obj prefix method]} {
         if {[regexp {^(.*) (.*)$} $obj match thread obj]} {
             return [::xo::api get_method_source $thread $obj $prefix $method]
         } else {
             return [::xo::api get_method_source "" $obj $prefix $method]
         }
-    } elseif {[regexp {^([^ ]+)(Class|Object) (.*)$} $proc_name . thread kind obj]} {
+    } elseif {[info commands ::xo::api] ne ""
+              && [regexp {^([^ ]+)(Class|Object) (.*)$} $proc_name . thread kind obj]} {
         return [::xo::api get_object_source $thread $obj]
-    } elseif {[regexp {(Class|Object) (.*)$} $proc_name . kind obj]} {
+    } elseif {[info commands ::xo::api] ne ""
+              && [regexp {(Class|Object) (.*)$} $proc_name . kind obj]} {
         return [::xo::api get_object_source "" $obj]
     } elseif {[info procs $proc_name] ne ""} {
         return [info body $proc_name]

@@ -4,7 +4,7 @@
   <property name="head">
   <style type="text/css">
   div.api-doc {background: #e4e4e4;}
-  div.api-doc dd {margin-left: 2em;}
+  dd {margin-left: 2em;}
   </style>
   </property>
 
