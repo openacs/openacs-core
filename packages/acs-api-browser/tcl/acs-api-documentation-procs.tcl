@@ -372,7 +372,7 @@ ad_proc -public api_proc_documentation {
     array set default_values $doc_elements(default_values)
 
     if {![info exists label]} {
-        if {[llength $proc_name] > 1} {
+        if {[llength $proc_name] > 1 && [info commands ::xo::api] ne ""} {
             set label [::xo::api method_label $proc_name]
         } else {
             set label $proc_name
