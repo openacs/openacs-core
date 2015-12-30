@@ -400,7 +400,9 @@ ad_proc -public api_proc_documentation {
     }
     append out $first_line_tag$pretty_name$end_tag
     
-    if {[regexp {^(.*) (inst)?proc (.*)$} $proc_name match cl prefix method]} {
+    if {[regexp {^(.*) (inst)?proc (.*)$} $proc_name match cl prefix method]
+        && [info commands ::xo::api] ne ""
+    } {
         set xotclArgs 1
         set scope ""
         if {[regexp {^(.+) (.+)$} $cl match scope cl]} {
