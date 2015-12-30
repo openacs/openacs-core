@@ -132,7 +132,7 @@ foreach proc [nsv_array names api_proc_doc] {
         if { $doc_elements(deprecated_p) } {
             lappend deprecated_matches [list $proc $score $args]
         } else {
-            if { $doc_elements(public_p) } { 
+            if { $doc_elements(protection) eq "public" } { 
                 lappend matches [list $proc $score $args]
             } else {
                 lappend private_matches [list $proc $score $args]
@@ -169,9 +169,13 @@ foreach output $deprecated_matches {
     multirow append deprecated_results $score $proc $args $url
 }
 
-set show_deprecated_url [export_vars -base [ad_conn url] -override { { show_deprecated_p 1 } } { name_weight doc_weight param_weight source_weight search_type query_string show_private_p }]
+set show_deprecated_url [export_vars -base [ad_conn url] -override {{ show_deprecated_p 1 }} {
+    name_weight doc_weight param_weight source_weight search_type query_string show_private_p
+}]
 
-set hide_deprecated_url [export_vars -base [ad_conn url] -override { { show_deprecated_p 0 } } { name_weight doc_weight param_weight source_weight search_type query_string show_private_p }]
+set hide_deprecated_url [export_vars -base [ad_conn url] -override { { show_deprecated_p 0 } } {
+    name_weight doc_weight param_weight source_weight search_type query_string show_private_p
+}]
 
 
 multirow create private_results score proc args url
@@ -183,9 +187,13 @@ foreach output $private_matches {
     multirow append private_results $score $proc $args $url
 }
 
-set show_private_url [export_vars -base [ad_conn url] -override { { show_private_p 1 } } { name_weight doc_weight param_weight source_weight search_type query_string show_deprecated_p }]
+set show_private_url [export_vars -base [ad_conn url] -override { { show_private_p 1 } } {
+    name_weight doc_weight param_weight source_weight search_type query_string show_deprecated_p
+}]
 
-set hide_private_url [export_vars -base [ad_conn url] -override { { show_private_p 0 } } { name_weight doc_weight param_weight source_weight search_type query_string show_deprecated_p }]
+set hide_private_url [export_vars -base [ad_conn url] -override { { show_private_p 0 } } {
+    name_weight doc_weight param_weight source_weight search_type query_string show_deprecated_p
+}]
 
 # Local variables:
 #    mode: tcl

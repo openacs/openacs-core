@@ -90,7 +90,7 @@ if { [nsv_exists api_proc_doc_scripts $path] } {
     foreach proc [lsort [nsv_get api_proc_doc_scripts $path]] {
         if { $public_p } {
             array set doc_elements [nsv_get api_proc_doc $proc]
-            if { !$doc_elements(public_p) } {
+            if { $doc_elements(protection) ne "public"} {
                 continue
             }
         }
@@ -99,7 +99,7 @@ if { [nsv_exists api_proc_doc_scripts $path] } {
     foreach proc [lsort [nsv_get api_proc_doc_scripts $path]] {
         if { $public_p } {
             array set doc_elements [nsv_get api_proc_doc $proc]
-            if { !$doc_elements(public_p) } {
+            if { $doc_elements(protection) ne "public"} {
                 continue
             }
         }

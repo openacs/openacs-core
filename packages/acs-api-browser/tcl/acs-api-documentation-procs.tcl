@@ -347,6 +347,7 @@ ad_proc -public api_proc_documentation {
     -xql:boolean
     -label
     {-first_line_tag <h3>}
+    {-proc_type ""}
     proc_name
 } {
 
@@ -371,12 +372,25 @@ ad_proc -public api_proc_documentation {
     array set default_values $doc_elements(default_values)
 
     if {![info exists label]} {
-        set label $proc_name
+        if {[llength $proc_name] > 1} {
+            set label [::xo::api method_label $proc_name]
+        } else {
+            set label $proc_name
+        }
     }
     if { $script_p } {
-        set pretty_name [api_proc_pretty_name -label $label $proc_name]
+        set pretty_name [api_proc_pretty_name \
+                             -include_debug_controls \
+                             -proc_type $proc_type \
+                             -label $label \
+                             $proc_name]
     } else {
-        set pretty_name [api_proc_pretty_name -link -label $label $proc_name]
+        set pretty_name [api_proc_pretty_name \
+                             -include_debug_controls \
+                             -link \
+                             -proc_type $proc_type \
+                             -label $label \
+                             $proc_name]
     }
     if {[regexp {<([^ >]+)} $first_line_tag match tag]} {
         set end_tag "</$tag>"
@@ -393,16 +407,15 @@ ad_proc -public api_proc_documentation {
             set cl "$scope do $cl"
         }
         if {$prefix eq ""} {
-            set pretty_proc_name "[::xotcl::api object_link $scope $cl] $method"
+            set pretty_proc_name "[::xo::api object_link $scope $cl] $method"
         } else {
-            set pretty_proc_name "<i>&lt;instance of\
-        [::xotcl::api object_link $scope $cl]&gt;</i> $method"
+            set pretty_proc_name [subst {<i>&lt;instance of [::xo::api object_link $scope $cl]&gt;</i> $method}]
         }
     } else {
         set xotclArgs 0
-        if {[info commands ::xotcl::api] ne "" && [::xotcl::api isclass "" [lindex $proc_name 1]]} {
+        if {[info commands ::xo::api] ne "" && [::xo::api isclass "" [lindex $proc_name 1]]} {
             set name [lindex $proc_name 1]
-            set pretty_proc_name "[$name info class] [::xotcl::api object_link {} $name]"
+            set pretty_proc_name "[$name info class] [::xo::api object_link {} $name]"
         } else {
             set pretty_proc_name $proc_name
         }
@@ -445,38 +458,44 @@ ad_proc -public api_proc_documentation {
     if { $doc_elements(varargs_p) } {
         lappend command_line "\[ <i>args</i>... \]"
     }
-    append out [util_wrap_list $command_line] "\n<blockquote>\n"
-    
+    append out [util_wrap_list $command_line]
+
+    set intro_out ""
     if { $script_p } {
-        append out [subst {<p>Defined in 
+        append intro_out [subst {<p>Defined in 
             <a href="/api-doc/procs-file-view?path=[ns_urlencode $doc_elements(script)]">$doc_elements(script)</a>
             <p>}]
     }
     
     if { $doc_elements(deprecated_p) } {
-        append out "<b><i>Deprecated."
+        append intro_out "<b><i>Deprecated."
         if { $doc_elements(warn_p) } {
-            append out " Invoking this procedure generates a warning."
+            append intro_out " Invoking this procedure generates a warning."
         }
-        append out "</i></b><p>\n"
+        append intro_out "</i></b><p>\n"
     }
 
-    append out "<p>[lindex $doc_elements(main) 0]\n<p>\n"
-    set haveBlocks [expr {
-                          [info exists doc_elements(param)]
-                          || [llength $doc_elements(switches)] > 0
-                          || [llength $doc_elements(positionals)] > 0
-                          || [info exists doc_elements(option)]
-                          || [info exists doc_elements(return)]
-                          || [info exists doc_elements(error)]
-                          || [info exists doc_elements(author)]
-                          || [info exists doc_elements(creation-date)]
-                          || [info exists doc_elements(change-log)]
-                          || [info exists doc_elements(cvs-id)]
-                          || [info exists doc_elements(see)]
-                      }]
+    set main [lindex $doc_elements(main) 0]
+    if {$main ne ""} {
+        append intro_out "<p>[lindex $doc_elements(main) 0]\n<p>\n"
+    }
+
+    #
+    # Make first a quick check, and if it fails, double check details
+    #
+    set haveBlocks [expr {[llength $doc_elements(switches)] > 0
+                          || [llength $doc_elements(positionals)] > 0}]
+    if {$haveBlocks == 0} {
+        foreach e {param option return error author creation-date change-log cvs-id see} {
+            if {[info exists doc_elements($e)] && $doc_elements($e) ne ""} {
+                set haveBlocks 1
+                break
+            }
+        }
+    }
+  
     if {$haveBlocks} {
-        append out "<dl>\n"
+        set blocks_out "<dl>\n"
 
         if { [info exists doc_elements(param)] } {
             foreach param $doc_elements(param) {
@@ -487,49 +506,49 @@ ad_proc -public api_proc_documentation {
         }
     
         if { [llength $doc_elements(switches)] > 0 } {
-            append out "<dt><b>Switches:</b></dt><dd><dl>\n"
+            append blocks_out "<dt><b>Switches:</b></dt><dd><dl>\n"
             foreach switch $doc_elements(switches) {
-                append out "<dt><b>-$switch</b>"
+                append blocks_out "<dt><b>-$switch</b>"
                 if {"boolean" in $flags($switch)} {
-                    append out " (boolean)"
+                    append blocks_out " (boolean)"
                 } 
                 
                 if { [info exists default_values($switch)]
                      && $default_values($switch) ne "" 
                  } {
-                    append out " (defaults to <code>\"[ns_quotehtml $default_values($switch)]\"</code>)"
+                    append blocks_out " (defaults to <code>\"[ns_quotehtml $default_values($switch)]\"</code>)"
                 } 
                 
                 if {"required" in $flags($switch)} {
-                    append out " (required)"
+                    append blocks_out " (required)"
                 } else {
-                    append out " (optional)"
+                    append blocks_out " (optional)"
                 }
-                append out "</dt>"
+                append blocks_out "</dt>"
                 if { [info exists params($switch)] } {
-                    append out "<dd>$params($switch)</dd>"
+                    append blocks_out "<dd>$params($switch)</dd>"
                 }
             }
-            append out "</dl></dd>\n"
+            append blocks_out "</dl></dd>\n"
         }
         
         if { [llength $doc_elements(positionals)] > 0 } {
-            append out "<dt><b>Parameters:</b></dt><dd>\n"
+            append blocks_out "<dt><b>Parameters:</b></dt><dd>\n"
             foreach positional $doc_elements(positionals) {
-                append out "<b>$positional</b>"
+                append blocks_out "<b>$positional</b>"
                 if { [info exists default_values($positional)] } {
                     if { $default_values($positional) eq "" } {
-                        append out " (optional)"
+                        append blocks_out " (optional)"
                     } else {
-                        append out " (defaults to <code>\"$default_values($positional)\"</code>)"
+                        append blocks_out " (defaults to <code>\"$default_values($positional)\"</code>)"
                     }
                 }
                 if { [info exists params($positional)] } {
-                    append out " - $params($positional)"
+                    append blocks_out " - $params($positional)"
                 }
-                append out "<br>\n"
+                append blocks_out "<br>\n"
             }
-            append out "</dd>\n"
+            append blocks_out "</dd>\n"
         }
         
 
@@ -539,46 +558,47 @@ ad_proc -public api_proc_documentation {
         # by ad_proc.
 
         if { [info exists doc_elements(option)] } {
-            append out "<b>Options:</b><dl>"
+            append blocks_out "<b>Options:</b><dl>"
             foreach param $doc_elements(option) {
                 if { [regexp {^([^ \t]+)[ \t](.+)$} $param "" name value] } {
-                    append out "<dt><b>-$name</b></dt><dd>$value<br></dd>"
+                    append blocks_out "<dt><b>-$name</b></dt><dd>$value<br></dd>"
                 }
             }
-            append out "</dl>"
+            append blocks_out "</dl>"
         }
         
 
         if { [info exists doc_elements(return)] } {
-            append out "<dt><b>Returns:</b></dt><dd>[join $doc_elements(return) "<br>"]</dd>\n"
+            append blocks_out "<dt><b>Returns:</b></dt><dd>[join $doc_elements(return) "<br>"]</dd>\n"
         }
     
         if { [info exists doc_elements(error)] } {
-            append out "<dt><b>Error:</b></dt><dd>[join $doc_elements(error) "<br>"]</dd>\n"
+            append blocks_out "<dt><b>Error:</b></dt><dd>[join $doc_elements(error) "<br>"]</dd>\n"
         }
 
-        append out [::apidoc::format_common_elements doc_elements]
-
-        append out "</dl>\n"
+        append blocks_out [::apidoc::format_common_elements doc_elements]
+        append blocks_out "</dl>\n"
+    } else {
+        set blocks_out ""
     }
-
-
 
     if { $source_p } {
         if {[parameter::get_from_package_key \
                  -package_key acs-api-browser \
                  -parameter FancySourceFormattingP \
                  -default 1]} {
-            append out [subst {<dt><b>Source code:</b></dt><dd>
+            set source_out [subst {<dt><b>Source code:</b></dt><dd>
                 <pre class="code">[::apidoc::tcl_to_html $proc_name]</pre>
                 </dd>
             }]
         } else {
-            append out [subst {<dt><b>Source code:</b></dt><dd>
+            set source_out [subst {<dt><b>Source code:</b></dt><dd>
                 <pre class="code">[ns_quotehtml [api_get_body $proc_name]]</pre>
                 </dd>
             }]
         }
+    } else {
+        set source_out ""
     }
 
     set xql_base_name $::acs::rootdir/
@@ -604,9 +624,10 @@ ad_proc -public api_proc_documentation {
         if { [file exists $::acs::rootdir/$xql_fn] } {
             set content [apidoc::get_xql_snippet -proc_name $proc_name -xql_file $xql_fn]
             if {$content ne ""} {set content "<pre class='code'>$content</pre>"}
+            set href [export_vars -base content-page-view {{source_p 1} {path $xql_fn}}]
             append there [subst {<dt><b>PostgreSQL XQL file:</b></dt>
                 <dd>$content
-                <a href="[ns_quotehtml [export_vars -base content-page-view {{source_p 1} {path $xql_fn}}]]">$xql_fn</a>
+                <a href="[ns_quotehtml $href]">$xql_fn</a>
                 <p>
                 </dd>
             }]
@@ -618,9 +639,10 @@ ad_proc -public api_proc_documentation {
         if { [file exists $::acs::rootdir/$xql_fn] } {
             set content [apidoc::get_xql_snippet -proc_name $proc_name -xql_file $xql_fn]
             if {$content ne ""} {set content "<pre class='code'>$content</pre>"}
+            set href [export_vars -base content-page-view {{source_p 1} {path $xql_fn}}]
             append there [subst {<dt><b>Oracle XQL file:</b></dt>
                 <dd>$content
-                <a href="[ns_quotehtml [export_vars -base content-page-view {{source_p 1} {path $xql_fn}}]]">$xql_fn</a>
+                <a href="[ns_quotehtml $href]">$xql_fn</a>
                 <p>
                 </dd>
             }]
@@ -628,19 +650,26 @@ ad_proc -public api_proc_documentation {
             lappend missing Oracle
         }
         if {[llength $missing] > 0} { 
-            append out [subst {<dt><b>XQL Not present:</b></dt><dd>[join $missing ", "]</dd>}]
+            set xql_out [subst {<dt><b>XQL Not present:</b></dt><dd>[join $missing ", "]</dd>}]
         }
-        append out $there  
+        append xql_out $there  
+    } else {
+        set xql_out ""
     }
 
+    set out_sections $intro_out$blocks_out$source_out$xql_out
+    if {$out_sections ne ""} {
+        append out <blockquote>$out_sections</blockquote>
+    }
     # No "see also" yet.
-    append out "</blockquote>"
     
     return $out
 }
 
 ad_proc api_proc_pretty_name { 
     -link:boolean
+    -include_debug_controls:boolean
+    {-proc_type ""}
     -label
     proc 
 } {
@@ -651,25 +680,22 @@ ad_proc api_proc_pretty_name {
     if {![info exists label]} {
         set label $proc
     }
-    ns_log notice "api_proc_pretty_name link $link_p, label $label, proc $proc"
     if { $link_p } {
-        append out "<a href=\"[ns_quotehtml [api_proc_url $proc]]\">$label</a>"
+        append out [subst {<a href="[ns_quotehtml [api_proc_url $proc]]">$label</a>}]
     } else {    
         append out $label
     }
-    array set doc_elements [nsv_get api_proc_doc $proc]
-    if {$doc_elements(deprecated_p)} {
-        set deprecated ", decprecated"
-    } else {
-        set deprecated ""
+    set doc_elements [nsv_get api_proc_doc $proc]
+    set debug_html [expr {$include_debug_controls_p && [info commands ::xo::api] ne ""
+                          ? [::xo::api debug_widget $proc] : ""}]
+    set hints {}
+    if {$proc_type ne ""} {lappend hints $proc_type}
+    if {[dict exists $doc_elements protection]} {lappend hints [dict get $doc_elements protection]}
+    if {[dict get $doc_elements deprecated_p]} {lappend hints deprecated}
+    if {[llength $hints] > 0} {
+        append out " ([join $hints {, }])"
     }
-    if { $doc_elements(public_p) } {
-        append out " (public$deprecated)"
-    }
-    if { $doc_elements(private_p) } {
-        append out " (private$deprecated)"
-    }
-    ns_log notice "... return $out"
+    append out $debug_html
     return $out
 }
 
@@ -726,19 +752,16 @@ ad_proc -public api_get_body {proc_name} {
     @param proc_name the name spec of the proc
     @return body of the specified prox
 } {
-
     if {[regexp {^(.*) (inst)?proc (.*)$} $proc_name match obj prefix method]} {
         if {[regexp {^(.*) (.*)$} $obj match thread obj]} {
-            # the definition is located in a disconnected thread
-            return [$thread do ::Serializer methodSerialize $obj $method $prefix]
+            return [::xo::api get_method_source $thread $obj $prefix $method]
         } else {
-            # the definition is locally in the connection thread
-            return [::Serializer methodSerialize $obj $method $prefix]
+            return [::xo::api get_method_source "" $obj $prefix $method]
         }
     } elseif {[regexp {^([^ ]+)(Class|Object) (.*)$} $proc_name . thread kind obj]} {
-        return [$thread do $obj serialize]
+        return [::xo::api get_object_source $thread $obj]
     } elseif {[regexp {(Class|Object) (.*)$} $proc_name . kind obj]} {
-        return [$obj serialize]
+        return [::xo::api get_object_source "" $obj]
     } elseif {[info procs $proc_name] ne ""} {
         return [info body $proc_name]
     } elseif {[info procs ::nsf::procs::$proc_name] ne ""} {
@@ -986,7 +1009,7 @@ namespace eval ::apidoc {
         @return boolean value
     } {
         set result 0
-        catch {set result [::xotcl::api inscope $scope ::xotcl::Object isobject $proc_name]}
+        catch {set result [::xo::api inscope $scope ::xotcl::Object isobject $proc_name]}
         return $result
     }
 
@@ -1011,8 +1034,8 @@ namespace eval ::apidoc {
 
     } {
 
-        if {[info commands ::xotcl::api] ne ""} {
-            set scope [::xotcl::api scope_from_proc_index $proc_name]
+        if {[info commands ::xo::api] ne ""} {
+            set scope [::xo::api scope_from_proc_index $proc_name]
         } else {
             set scope ""
         }
@@ -1143,7 +1166,7 @@ namespace eval ::apidoc {
         # to api-doc pages.  Perhaps we should hyperlink them to the Tcl man pages?
         # else and elseif are be treated as special cases later
 
-        if {[info commands ::xotcl::api] ne ""} {
+        if {[info commands ::xo::api] ne ""} {
             set XOTCL_KEYWORDS [list self my next]
             # Only command names are highlighted, otherwise we could add XOTcl method
             # names by [lsort -unique [concat [list self my next] ..
@@ -1268,7 +1291,7 @@ namespace eval ::apidoc {
                             append html [pretty_token keyword $proc_name]
 
                         } elseif {[is_xotcl_object $scope $proc_name]} {
-                            set url [::xotcl::api object_url \
+                            set url [::xo::api object_url \
                                          -show_source 1 -show_methods 2 \
                                          $scope $proc_name]
                             append html "<a href='[ns_quotehtml $url]' title='XOTcl object'>" \

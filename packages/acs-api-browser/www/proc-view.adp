@@ -1,13 +1,20 @@
 <master>
 <property name="doc(title)">@title;literal@</property>
 <property name="context">@context;literal@</property>
+<property name="head">
+  <style type="text/css">
+  div.api-doc {background: #e4e4e4;}
+  div.api-doc dd {margin-left: 2em;}
+  </style>
+</property>
 
 <if @error_msg@ ne "">
 @error_msg;noquote@
 </if>
 <else>
-<table width="100%">
-  <tr><td style="background: #eeeeee">@documentation;literal@</td></tr>
+  <div class="api-doc">
+  @documentation;literal@
+  </div>
 </table>
 
 <if @source_p@ eq 0>
