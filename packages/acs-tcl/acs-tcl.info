@@ -9,7 +9,7 @@
     <implements-subsite-p>f</implements-subsite-p>
     <inherit-templates-p>t</inherit-templates-p>
     
-    <version name="5.9.0" url="http://openacs.org/repository/download/apm/acs-tcl-5.9.0.apm">
+    <version name="5.9.1d1" url="http://openacs.org/repository/download/apm/acs-tcl-5.9.1d1.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>The Kernel Tcl API library.</summary>
         <release-date>2015-10-04</release-date>
@@ -18,7 +18,7 @@
         <license>GPL version 2</license>
         <maturity>3</maturity>
 
-        <provides url="acs-tcl" version="5.9.0"/>
+        <provides url="acs-tcl" version="5.9.1d1"/>
         <requires url="acs-bootstrap-installer" version="5.9.0"/>
         <requires url="acs-kernel" version="5.9.0"/>
 
