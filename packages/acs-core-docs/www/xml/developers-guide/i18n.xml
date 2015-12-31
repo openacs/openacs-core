@@ -165,7 +165,7 @@
           <para>
             The advantage of the short syntax is that it's short. It's
             as simple as inserting the value of a variable.  Example:
-            <replaceable>#forum.title#</replaceable>
+            <replaceable><span>#</span>forum.title#</replaceable>
           </para>
         </listitem>
 
@@ -402,11 +402,11 @@ ad_return_complaint 1 [_ dotlrn.class_may_not_be_deleted $msg_subst_list]
           <tbody>
             <row>
                <entry>class_instance_pages_csv</entry>
-               <entry>#dotlrn.class_page_home_title#,Simple 2-Column;#dotlrn.class_page_calendar_title#,Simple 1-Column;#dotlrn.class_page_file_storage_title#,Simple 1-Column</entry>
+               <entry><span>#</span>dotlrn.class_page_home_title#,Simple 2-Column;<span>#</span>dotlrn.class_page_calendar_title#,Simple 1-Column;<span>#</span>dotlrn.class_page_file_storage_title#,Simple 1-Column</entry>
             </row>
             <row>
                <entry>departments_pretty_name</entry>
-               <entry>#departments_pretty_name#</entry>
+               <entry><span>#</span>departments_pretty_name#</entry>
             </row>
           </tbody>
         </tgroup>
@@ -437,7 +437,7 @@ ad_return_complaint 1 [_ dotlrn.class_may_not_be_deleted $msg_subst_list]
             </row>
             <row>
                <entry>parameter::get -parameter departments_pretty_name</entry>
-               <entry>#departments_pretty_name#</entry>
+               <entry><span>#</span>departments_pretty_name#</entry>
             </row>
           </tbody>
         </tgroup>
