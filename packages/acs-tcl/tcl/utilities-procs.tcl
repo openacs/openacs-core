@@ -2568,7 +2568,7 @@ ad_proc -public util_current_location {} {
             lassign [split $proto :] proto .
         }
         if {$port eq ""} {
-            set port $default_port($location_proto)
+            set port $default_port($proto)
         }
     } else {
         ns_log Error "util_current_location got invalid information from driver '[ns_conn location]'"
