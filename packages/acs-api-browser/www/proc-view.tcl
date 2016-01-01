@@ -75,7 +75,15 @@ proc $proc {[info args $proc]} {
 }
 </pre></p>
         }]
-    } elseif {[info commands $absolute_proc] eq $absolute_proc} { 
+    } elseif {[info commands $absolute_proc] eq $absolute_proc} {
+
+        #
+        # In case the cmd is an object, redirect to the object browser
+        #
+        if {[info commands ::nsf::is] ne "" && [nsf::is object $absolute_proc]} {
+            ad_returnredirect [export_vars -base /xotcl/show-object {{object $absolute_proc}}]
+            ad_script_abort
+        }
 
         set result [util_memoize [list ::util::http::get -url $::apidoc::ns_api_html_index]]
         set page [dict get $result page]
