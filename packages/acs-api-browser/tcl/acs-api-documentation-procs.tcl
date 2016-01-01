@@ -1307,7 +1307,6 @@ namespace eval ::apidoc {
 
                         } elseif {$proc_namespace ne "" 
                                   && [info commands ::${proc_namespace}::${proc_name}] ne ""}  {
-                            ns_log notice "proc_namespace <$proc_namespace> ::${proc_namespace}::${proc_name}"
                             
                             if {[is_object $scope ${proc_namespace}::${proc_name}]} {
                                 set url [::xo::api object_url \
@@ -1320,12 +1319,14 @@ namespace eval ::apidoc {
                                 append html "<a href='[ns_quotehtml $url]' title='API command'>" \
                                     [pretty_token proc $proc_name] </a>
                             }
-                        } elseif {[info commands ::$proc_name] ne ""}  {
-                            ns_log notice "absolute ::${proc_name}"
-                            if {[is_object $scope ::${proc_name}]} {
+                        } elseif {[info commands ::$proc_name] ne ""} {
+                            set absolute_name [expr {[string match "::*" $proc_name]
+                                                     ? $proc_name
+                                                     : "::${proc_name}"}]
+                            if {[is_object $scope $absolute_name]} {
                                 set url [::xo::api object_url \
                                              -show_source 1 -show_methods 2 \
-                                             $scope ::${proc_name}]
+                                             $scope $absolute_name]
                                 append html "<a href='[ns_quotehtml $url]' title='XOTcl object'>" \
                                     [pretty_token object $proc_name] </a>
                             } else {
