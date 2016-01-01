@@ -405,9 +405,7 @@ ad_proc -public api_proc_documentation {
     } {
         set xotclArgs 1
         set scope ""
-        if {[regexp {^(.+) (.+)$} $cl match scope cl]} {
-            set cl "$scope do $cl"
-        }
+        regexp {^(.+) (.+)$} $cl match scope cl
         if {$prefix eq ""} {
             set pretty_proc_name "[::xo::api object_link $scope $cl] $method"
         } else {
