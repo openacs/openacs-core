@@ -1008,13 +1008,13 @@ namespace eval ::apidoc {
         return $score
     }
 
-    ad_proc -private is_xotcl_object {scope proc_name} {
+    ad_proc -private is_object {scope proc_name} {
         Checks, whether the specified argument is an xotcl object.
         Does not cause problems when xocl is not loaded.
         @return boolean value
     } {
         set result 0
-        catch {set result [::xo::api inscope $scope ::xotcl::Object isobject $proc_name]}
+        catch {set result [::xo::api inscope $scope ::nsf::is object $proc_name]}
         return $result
     }
 
@@ -1164,6 +1164,8 @@ namespace eval ::apidoc {
 
     } {
 
+        set $namespace_provided_p [expr {$proc_namespace ne ""}]
+        
         set script [string trimright $script]
         template::head::add_style -style $::apidoc::style
 
@@ -1295,13 +1297,6 @@ namespace eval ::apidoc {
                         } elseif {$proc_name in $XOTCL_KEYWORDS} {
                             append html [pretty_token keyword $proc_name]
 
-                        } elseif {[is_xotcl_object $scope $proc_name]} {
-                            set url [::xo::api object_url \
-                                         -show_source 1 -show_methods 2 \
-                                         $scope $proc_name]
-                            append html "<a href='[ns_quotehtml $url]' title='XOTcl object'>" \
-                                [pretty_token object $proc_name] </a>
-
                         } elseif {[string match "ns*" $proc_name]} {
                             set url "/api-doc/tcl-proc-view?tcl_proc=$proc_name"
                             append html "<a href='[ns_quotehtml $url]' title='[ns_info name] command'>" \
@@ -1312,20 +1307,45 @@ namespace eval ::apidoc {
 
                         } elseif {$proc_namespace ne "" 
                                   && [info commands ::${proc_namespace}::${proc_name}] ne ""}  {
-                            set url [api_proc_url ${proc_namespace}::${proc_name}]
-                            append html "<a href='[ns_quotehtml $url]' title='API command'>" \
-                                [pretty_token proc $proc_name] </a>
-
+                            ns_log notice "proc_namespace <$proc_namespace> ::${proc_namespace}::${proc_name}"
+                            
+                            if {[is_object $scope ${proc_namespace}::${proc_name}]} {
+                                set url [::xo::api object_url \
+                                             -show_source 1 -show_methods 2 \
+                                             $scope ::${proc_namespace}::${proc_name}]
+                                append html "<a href='[ns_quotehtml $url]' title='XOTcl object'>" \
+                                    [pretty_token object $proc_name] </a>
+                            } else {
+                                set url [api_proc_url ${proc_namespace}::${proc_name}]
+                                append html "<a href='[ns_quotehtml $url]' title='API command'>" \
+                                    [pretty_token proc $proc_name] </a>
+                            }
                         } elseif {[info commands ::$proc_name] ne ""}  {
-                            set url [api_proc_url $proc_name]
-                            append html "<a href='[ns_quotehtml $url]' title='API command'>" \
-                                [pretty_token proc $proc_name] </a>
-
+                            ns_log notice "absolute ::${proc_name}"
+                            if {[is_object $scope ::${proc_name}]} {
+                                set url [::xo::api object_url \
+                                             -show_source 1 -show_methods 2 \
+                                             $scope ::${proc_name}]
+                                append html "<a href='[ns_quotehtml $url]' title='XOTcl object'>" \
+                                    [pretty_token object $proc_name] </a>
+                            } else {
+                                set url [api_proc_url $proc_name]
+                                append html "<a href='[ns_quotehtml $url]' title='API command'>" \
+                                    [pretty_token proc $proc_name] </a>
+                            }
                         } else {
-                            append html ${proc_name}
+                            append html $proc_name
                             set proc_ok 1
                         }
                         incr i $procl
+
+                        if {$proc_name eq "namespace" && !$namespace_provided_p} {
+                            set endPos [string first \n $data $i+1]
+                            if {$endPos > -1} {
+                                set line [string range $data $i+1 $endPos]
+                                regexp {\s*eval\s+(\S+)\s+} $line . proc_namespace
+                            }
+                        }
 
                         if {$proc_name eq "regexp" || $proc_name eq "regsub"} {
                             #
