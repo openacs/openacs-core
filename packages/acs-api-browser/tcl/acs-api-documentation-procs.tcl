@@ -1164,7 +1164,7 @@ namespace eval ::apidoc {
 
     } {
 
-        set $namespace_provided_p [expr {$proc_namespace ne ""}]
+        set namespace_provided_p [expr {$proc_namespace ne ""}]
         
         set script [string trimright $script]
         template::head::add_style -style $::apidoc::style
