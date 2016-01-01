@@ -1014,7 +1014,7 @@ namespace eval ::apidoc {
         @return boolean value
     } {
         set result 0
-        catch {set result [::xo::api inscope $scope ::nsf::is object $proc_name]}
+        catch {set result [::xo::api isobject $scope $proc_name]}
         return $result
     }
 
