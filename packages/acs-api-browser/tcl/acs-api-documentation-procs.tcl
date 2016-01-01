@@ -1343,7 +1343,7 @@ namespace eval ::apidoc {
                             set endPos [string first \n $data $i+1]
                             if {$endPos > -1} {
                                 set line [string range $data $i+1 $endPos]
-                                regexp {\s*eval\s+(\S+)\s+} $line . proc_namespace
+                                regexp {\s*eval\s+(::)?(\S+)\s+} $line . . proc_namespace
                             }
                         }
 
