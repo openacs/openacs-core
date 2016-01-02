@@ -192,13 +192,7 @@ ad_proc -public acs_sc::contract::get_operations {
 } {
     Get a list of names of operations for the contract.
 } {
-    return [db_list select_operations {
-        select o.operation_name
-        from   acs_sc_operations o, 
-               acs_sc_contracts c
-        where  c.contract_name = :contract_name
-        and    o.contract_id = c.contract_id
-    }]
+    return [db_list select_operations {}]
 }
 
 

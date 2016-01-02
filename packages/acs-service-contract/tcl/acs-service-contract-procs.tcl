@@ -91,7 +91,7 @@ ad_proc -public acs_sc_binding_exists_p {
     @author Neophytos Demetriou
 } {
 
-    return [db_string binding_exists_p {*SQL*}]
+    return [db_string binding_exists_p {}]
 
 }
 
@@ -126,7 +126,7 @@ ad_proc -private acs_sc_get_alias {
 
     if {![set exists_p]} {return ""}
     
-    db_0or1row get_alias {*SQL*}
+    db_0or1row get_alias {}
 
     return [list $impl_alias $impl_pl]
 
@@ -160,14 +160,14 @@ ad_proc -private acs_sc_proc {
 	error "ACS-SC: Cannot find alias for $proc_name"
     }
 
-    if {![db_0or1row get_operation_definition {*SQL*}]} { 
+    if {![db_0or1row get_operation_definition {}]} { 
         ns_log warning "ACS-SC: operation definition not found for contract $contract operation $operation"
         return 0
     }
 
     append docblock "\n<b>acs-service-contract operation.  Call via acs_sc::invoke.</b>\n\n$operation_desc\n\n"
 
-    db_foreach operation_inputtype_element {*SQL*} {
+    db_foreach operation_inputtype_element {} {
 	lappend arguments "$element_name"
 	append docblock "\n@param $element_name $element_msg_type_name"
 	if { $element_msg_type_isset_p } {
@@ -175,7 +175,7 @@ ad_proc -private acs_sc_proc {
 	}
     }
 
-    db_foreach operation_outputtype_element {*SQL*} {
+    db_foreach operation_outputtype_element {} {
 	append docblock "\n@return <b>$element_name</b> - $element_msg_type_name"
 	if { $element_msg_type_isset_p } {
 	    append docblock " \[\]"
