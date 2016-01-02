@@ -9,11 +9,7 @@
      @return The instance of a running acs developer support.
 
  } {
-     return [util_memoize [list db_string acs_kernel_id_get {
-         select package_id from apm_packages
-         where package_key = 'acs-developer-support'
-         and rownum=1
-     } -default 0]]
+     return [util_memoize [list db_string acs_kernel_id_get {} -default 0]]
  }
 
  ad_proc -public ds_permission_p {} {
@@ -45,7 +41,7 @@
      } else {
        ns_log Warning "$user_id doesn't have $privilege on object $object_id"
        ad_return_forbidden "Permission Denied" "<blockquote>
-       <p>You don't have permission to $privilege [db_string name {select acs_object.name(:object_id) from dual}].</p>
+       <p>You don't have permission to $privilege [db_string name {}].</p>
        </blockquote>"
      }
      ad_script_abort
