@@ -60,9 +60,9 @@ proc foo { db args } {
 }
 
 db_transaction {
-db_dml unused &quot;insert into greeble(bork) values(33)&quot;
-foo $db
-db_dml unused &quot;insert into greeble(bork) values(50)&quot;
+   db_dml unused {insert into greeble(bork) values(33)}
+   foo $db
+   db_dml unused {insert into greeble(bork) values(50)}
 }
 
 </programlisting>
@@ -507,7 +507,7 @@ DML difficult. Here is an example that illustrates why:</para>
 set bar &quot;&quot;
 set baz &quot;&quot;
 
-db_dml foo_create &quot;insert into foo(bar, baz) values(:bar, :baz)&quot;
+db_dml foo_create {insert into foo(bar, baz) values(:bar, :baz)}
 #
 # the values of the &quot;bar&quot; and &quot;baz&quot; columns in the new row are both
 # null, because Oracle has coerced the empty string (even for the
@@ -536,7 +536,7 @@ explicitly to <computeroutput>null</computeroutput>, e.g.:</para>
 set bar [db_null]
 set baz [db_null]
 
-db_dml foo_create &quot;insert into foo(bar, baz) values(:bar, :baz)&quot;
+db_dml foo_create {insert into foo(bar, baz) values(:bar, :baz)}
 #
 # sets the values for both the &quot;bar&quot; and &quot;baz&quot; columns to null
 
@@ -835,11 +835,11 @@ insert. Only one of <computeroutput>-blobs</computeroutput>, <computeroutput>-cl
 
 <programlisting>
 
-db_dml insert_photos &quot;
+db_dml insert_photos {
         insert photos(photo_id, image, thumbnail_image)
         values(photo_id_seq.nextval, empty_blob(), empty_blob())
         returning image, thumbnail_image into :1, :2
-    &quot;  -blob_files [list &quot;/var/tmp/the_photo&quot; &quot;/var/tmp/the_thumbnail&quot;] 
+    } -blob_files [list &quot;/var/tmp/the_photo&quot; &quot;/var/tmp/the_thumbnail&quot;] 
 
 </programlisting>
 
@@ -913,8 +913,8 @@ If there is no <computeroutput>on_error</computeroutput> code, any errors will b
 
 proc replace_the_foo { col } {
     db_transaction {
-        db_dml &quot;delete from foo&quot;
-        db_dml &quot;insert into foo(col) values($col)&quot;
+        db_dml delete {delete from foo}
+        db_dml insert {insert into foo(col) values($col)}
     }
 }
 
@@ -928,7 +928,7 @@ print_the_foo ; # Writes out &quot;foo is 8&quot;
 db_transaction {
     replace_the_foo 14
     print_the_foo ; # Writes out &quot;foo is 14&quot;
-    db_dml &quot;insert into some_other_table(col) values(999)&quot;
+    db_dml insert_foo {insert into some_other_table(col) values(999)}
     ...
     db_abort_transaction
 } on_error {
@@ -953,7 +953,7 @@ print_the_foo ; # Writes out &quot;foo is 8&quot;
 </programlisting> 
 
 <para>Aborts all levels of a transaction. That is if this is called within
-several nested transactions, all of them are terminated. Use this insetead of
+several nested transactions, all of them are terminated. Use this instead of
 <computeroutput>db_dml &quot;abort&quot; &quot;abort transaction&quot;</computeroutput>. 
 
 

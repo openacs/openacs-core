@@ -46,9 +46,9 @@ proc foo { db args } {
 }
 
 db_transaction {
-db_dml unused "insert into greeble(bork) values(33)"
-foo $db
-db_dml unused "insert into greeble(bork) values(50)"
+   db_dml unused {insert into greeble(bork) values(33)}
+   foo $db
+   db_dml unused {insert into greeble(bork) values(50)}
 }
 
 </pre><p>This would insert greeble #33 and do all the stuff in
@@ -217,9 +217,9 @@ select * from :table_name
 Useful</strong></span></p><p>Why bother with bind variables at all - why not just write the
 Tcl statement above like this:</p><pre class="programlisting">
 
-db_dml presentation_delete "
-    delete from wp_presentations where presentation_id = $some_presentation_id
-"
+db_dml presentation_delete {
+    delete from wp_presentations where presentation_id = :some_presentation_id
+}
 
 </pre><p>(Note the use of double-quotes to allow the variable reference
 to <code class="computeroutput">$some_presentation_id</code> to be
@@ -324,7 +324,7 @@ why:</p><pre class="programlisting">
 set bar ""
 set baz ""
 
-db_dml foo_create "insert into foo(bar, baz) values(:bar, :baz)"
+db_dml foo_create {insert into foo(bar, baz) values(:bar, :baz)}
 #
 # the values of the "bar" and "baz" columns in the new row are both
 # null, because Oracle has coerced the empty string (even for the
@@ -342,7 +342,7 @@ column value explicitly to <code class="computeroutput">null</code>, e.g.:</p><p
 set bar [db_null]
 set baz [db_null]
 
-db_dml foo_create "insert into foo(bar, baz) values(:bar, :baz)"
+db_dml foo_create {insert into foo(bar, baz) values(:bar, :baz)}
 #
 # sets the values for both the "bar" and "baz" columns to null
 
@@ -494,11 +494,11 @@ should be a list of <span class="emphasis"><em>paths to
 files</em></span> containing the data to insert. Only one of
 <code class="computeroutput">-blobs</code>, <code class="computeroutput">-clobs</code>, <code class="computeroutput">-blob_files</code>, and <code class="computeroutput">-clob_files</code> may be provided.</p><p>Example:</p><pre class="programlisting">
 
-db_dml insert_photos "
+db_dml insert_photos {
         insert photos(photo_id, image, thumbnail_image)
         values(photo_id_seq.nextval, empty_blob(), empty_blob())
         returning image, thumbnail_image into :1, :2
-    "  -blob_files [list "/var/tmp/the_photo" "/var/tmp/the_thumbnail"] 
+    }  -blob_files [list "/var/tmp/the_photo" "/var/tmp/the_thumbnail"] 
 
 </pre><p>This inserts a new row into the <code class="computeroutput">photos</code> table, with the contents of the
 files <code class="computeroutput">/var/tmp/the_photo</code> and
@@ -540,13 +540,13 @@ propagated.</p><p>Example:</p><pre class="programlisting">
 
 proc replace_the_foo { col } {
     db_transaction {
-        db_dml "delete from foo"
-        db_dml "insert into foo(col) values($col)"
+        db_dml delete {delete from foo}
+        db_dml insert {insert into foo(col) values(:col)}
     }
 }
 
 proc print_the_foo {} {
-    doc_body_append "foo is [db_string "select col from foo"]&lt;br&gt;\n"
+    doc_body_append "foo is [db_string get_foo {select col from foo}]&lt;br&gt;\n"
 }
 
 replace_the_foo 8
@@ -555,7 +555,7 @@ print_the_foo ; # Writes out "foo is 8"
 db_transaction {
     replace_the_foo 14
     print_the_foo ; # Writes out "foo is 14"
-    db_dml "insert into some_other_table(col) values(999)"
+    db_dml insert_foo {insert into some_other_table(col) values(999)}
     ...
     db_abort_transaction
 } on_error {
@@ -570,7 +570,7 @@ print_the_foo ; # Writes out "foo is 8"
 <a name="kernel.dbapi_db_abort_transaction" id="kernel.dbapi_db_abort_transaction"></a>db_abort_transaction</code></strong></span></span></dt><dd>
 <pre class="programlisting"><span class="strong"><strong>db_abort_transaction</strong></span></pre><p>Aborts all levels of a transaction. That is if this is called
 within several nested transactions, all of them are terminated. Use
-this insetead of <code class="computeroutput">db_dml "abort" "abort
+this instead of <code class="computeroutput">db_dml "abort" "abort
 transaction"</code>.</p>
 </dd><dt><span class="term"><span class="strong"><strong><code class="computeroutput">
 <a name="kernel.dbapi_db_multirow" id="kernel.dbapi_db_multirow"></a>db_multirow</code></strong></span></span></dt><dd>

@@ -299,7 +299,7 @@ PoolSequence.sec_id_seq=20
 	</span></dt><dd><pre class="programlisting">
 db_abort_transaction
 	  </pre><p>Aborts all levels of a transaction. That is if this is called within
-	    several nested transactions, all of them are terminated. Use this insetead of
+	    several nested transactions, all of them are terminated. Use this instead of
 	    <code class="computeroutput">db_dml "abort" "abort transaction"</code>. 
 	    
 
@@ -567,13 +567,13 @@ db_transaction <span class="emphasis"><em>code_block</em></span> [ on_error { <s
 
 proc replace_the_foo { col } {
     db_transaction {
-        db_dml "delete from foo"
-        db_dml "insert into foo(col) values($col)"
+        db_dml delete {delete from foo}
+        db_dml insert {insert into foo(col) values(:col)}
     }
 }
 
 proc print_the_foo {} {
-    doc_body_append "foo is [db_string "select col from foo"]&lt;br&gt;\n"
+    doc_body_append "foo is [db_string get_foo {select col from foo}]&lt;br&gt;\n"
 }
 
 replace_the_foo 8
@@ -582,7 +582,7 @@ print_the_foo ; # Writes out "foo is 8"
 db_transaction {
     replace_the_foo 14
     print_the_foo ; # Writes out "foo is 14"
-    db_dml "insert into some_other_table(col) values(999)"
+    db_dml insert_foo {insert into some_other_table(col) values(999)}
     ...
     db_abort_transaction
 } on_error {
