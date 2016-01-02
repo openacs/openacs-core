@@ -22,15 +22,6 @@
     </querytext>
   </fullquery>
 
-  <fullquery name="content::revision::new.update_lob_attribute">
-    <querytext>
-		update $lob_table
-		set $lob_attribute = empty_clob()
-		where $lob_id_column = :revision_id
-		returning $lob_attribute into :1
-    </querytext>
-  </fullquery>
-
   <fullquery name="content::revision::item_id.item_id">
     <querytext>
       select item_id

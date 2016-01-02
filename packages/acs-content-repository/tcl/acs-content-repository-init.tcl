@@ -21,7 +21,7 @@ ad_proc -public acs_cr_scheduled_release_exec {} {
 
 } {
 
-    db_exec_plsql schedule_releases {begin cr_scheduled_release_exec; end;}
+    db_exec_plsql schedule_releases {}
 }
 
 ad_schedule_proc [expr {15 * 60}] acs_cr_scheduled_release_exec

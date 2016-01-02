@@ -51,7 +51,7 @@ ad_proc -public -deprecated cr::keyword::set_heading {
     Update a keyword heading
     @see content::keyword::set_heading
 } {
-    db_exec_plsql set_heading { }
+    db_exec_plsql set_heading {}
 }
 
 ad_proc -public -deprecated cr::keyword::get_keyword_id {
