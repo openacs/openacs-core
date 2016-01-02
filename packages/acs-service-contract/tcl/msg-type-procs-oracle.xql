@@ -13,16 +13,6 @@
         end;
     </querytext>
   </fullquery>
-
-  <fullquery name="acs_sc::msg_type::delete.delete_by_id">
-    <querytext>
-        begin
-            acs_sc_msg_type.del(
-                msg_type_id => :msg_type_id
-            );
-        end;
-    </querytext>
-  </fullquery>
   
   <fullquery name="acs_sc::msg_type::delete.delete_by_name">
     <querytext>
