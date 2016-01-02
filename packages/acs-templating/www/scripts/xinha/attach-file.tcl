@@ -36,7 +36,7 @@ if {![info exists parent_id] || $parent_id eq ""} {
 
 if {!$write_p} {
     # if parent_id does not exist yet, let's use the pacakage_id
-    if { ![db_0or1row "check_parent" "select object_id from acs_objects where object_id=:parent_id"] } {
+    if { ![db_0or1row check_parent {select object_id from acs_objects where object_id = :parent_id}] } {
         set parent_id $package_id
     }
 
