@@ -1,18 +1,6 @@
 <?xml version="1.0"?>
 <queryset>
 
-<fullquery name="subsite::default::create_app_group.group_exists">      
-      <querytext>
-      
-	    select 1
-            from dual
-            where exists (select 1
-                          from application_groups
-                          where package_id = :package_id)
-	
-      </querytext>
-</fullquery>
-
 <fullquery name="subsite::default::create_app_group.subsite_name_query">      
       <querytext>
       

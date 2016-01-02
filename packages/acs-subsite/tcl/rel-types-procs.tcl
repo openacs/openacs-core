@@ -62,16 +62,7 @@ namespace eval rel_types {
 	@author Michael Bryzek (mbryzek@arsdigita.com)
 	@creation-date 12/30/2000
     } {
-	return [db_string "group_rel_type_exists" "
-	     select case when exists (select 1
-                                        from acs_object_types t
-                                        where t.object_type not in (select g.rel_type
-                                                                      from group_rels g
-                                                                     where g.group_id = :group_id)
-                                      connect by prior t.object_type = t.supertype
-                                        start with t.object_type in ('membership_rel','composition_rel'))
-                    then 1 else 0 end
-               from dual"]
+	return [db_string group_rel_type_exists {}]
     }
 
     ad_proc -private additional_rel_types_group_type_p {
@@ -83,16 +74,7 @@ namespace eval rel_types {
 	@author Michael Bryzek (mbryzek@arsdigita.com)
 	@creation-date 12/30/2000
     } {
-	return [db_string "group_rel_type_exists" "
-	     select case when exists (select 1
-                                        from acs_object_types t
-                                        where t.object_type not in (select g.rel_type
-                                                                      from group_type_rels g
-                                                                     where g.group_type = :group_type)
-                                      connect by prior t.object_type = t.supertype
-                                        start with t.object_type in ('membership_rel','composition_rel'))
-                    then 1 else 0 end
-               from dual"]
+	return [db_string group_rel_type_exists {}]
     }
 
     ad_proc -public new {

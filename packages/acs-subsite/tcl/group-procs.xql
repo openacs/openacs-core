@@ -65,14 +65,6 @@
       </querytext>
 </fullquery>
 
-<fullquery name="group::member_p.group_id_from_name">      
-      <querytext>
-	  select group_id 
-          from   groups 
-          where  group_name = :group_name
-      </querytext>
-</fullquery>
-
 <fullquery name="group::get_rel_segment.select_segment_id">      
       <querytext>
       
