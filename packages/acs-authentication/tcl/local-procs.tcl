@@ -123,7 +123,7 @@ ad_proc -private auth::local::authentication::MergeUser {
 	# domain 
 	set new_email $new_username
 	    
-	set rel_id [db_string getrelid { *SQL* }]  
+	set rel_id [db_string getrelid {}]  
 	membership_rel::change_state -rel_id $rel_id -state "merged"
 	
 	acs_user::update -user_id $from_user_id -username "$new_username" -screen_name "$new_username"

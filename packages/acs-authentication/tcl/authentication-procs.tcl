@@ -1048,7 +1048,7 @@ ad_proc -private auth::create_local_account_helper {
         set user_id [db_exec_plsql user_insert {}]
 
         # set password_question, password_answer
-        db_dml update_question_answer {*SQL*} 
+        db_dml update_question_answer {} 
 
         if {[catch {
             # Call the extension
