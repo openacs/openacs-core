@@ -38,20 +38,6 @@
 </fullquery>
 
  
-<fullquery name="ad_maybe_redirect_for_registration.sql_test_1">      
-      <querytext>
-      select test_sql('select 1  where 1=[DoubleApos $value]') 
-      </querytext>
-</fullquery>
-
- 
-<fullquery name="ad_maybe_redirect_for_registration.sql_test_2">      
-      <querytext>
-      select test_sql('select 1  where 1=[DoubleApos "'$value'"]') 
-      </querytext>
-</fullquery>
-
- 
 <fullquery name="populate_secret_tokens_db.insert_random_token">      
       <querytext>
 

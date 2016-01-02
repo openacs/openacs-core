@@ -189,17 +189,6 @@
       </querytext>
 </fullquery>
 
-<fullquery name="apm_package_install.version_exists_p">      
-      <querytext>
-      
-	    select version_id 
-	    from apm_package_versions 
-	    where package_key = :package_key
-	    and version_id = apm_package__highest_version(:package_key)
-	
-      </querytext>
-</fullquery>
-
 <fullquery name="apm_copy_param_to_descendents.param_exists">      
   <querytext>
     select apm__parameter_p(:descendent_package_key, :parameter_name);
