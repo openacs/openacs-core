@@ -335,7 +335,9 @@ ad_proc content::folder::get_folder_from_package_not_cached {
 
     Returns the folder_id of the package instance
 } {
-    return [db_string get_folder_id "select folder_id from cr_folders where package_id=:package_id"]
+    return [db_string get_folder_id {
+        select folder_id from cr_folders where package_id = :package_id
+    }]
 }
 
 # Local variables:

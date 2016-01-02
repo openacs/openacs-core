@@ -12,12 +12,12 @@ ad_proc -private cr_item_search::assert_not_in_queue {
     Check if revision_id is in the search observer queue
 } {
     aa_false "Revision ${revision_id} is not queued for search events $events" \
-	[expr [db_string check_queue \
-		   "select count(*) from search_observer_queue 
-                            where object_id=:revision_id
-                            and event in
-                            ([template::util::tcl_to_sql_list $events])"\
-		   -default 0]]
+	[expr [db_string check_queue [subst {
+            select count(*) from search_observer_queue 
+            where object_id = :revision_id
+            and event in
+            ([template::util::tcl_to_sql_list $events])
+        }] -default 0]]
 }
 
 ad_proc -private cr_item_search::assert_in_queue {
@@ -30,12 +30,12 @@ ad_proc -private cr_item_search::assert_in_queue {
     @param events List of events to check for (INSERT,UPDATE,DELETE)
 } {
     aa_true "Revision ${revision_id} is queued for search events $events" \
-	[expr [db_string check_queue \
-		   "select count(*) from search_observer_queue 
-                            where object_id=:revision_id
-                            and event in 
-                            ([template::util::tcl_to_sql_list $events])"\
-		   -default 0]]
+	[expr [db_string check_queue [subst {
+            select count(*) from search_observer_queue 
+            where object_id = :revision_id
+            and event in 
+            ([template::util::tcl_to_sql_list $events])
+        }] -default 0]]
 }
 
 ad_proc -private cr_item_search::remove_from_queue {
@@ -88,10 +88,10 @@ aa_register_case -cats db cr_item_search_triggers {
 			   [content::item::get_latest_revision \
 				-item_id $item_id]] ne ""}]
 	    aa_false "Item is NOT queued for search indexing" \
-		[expr [db_string check_queue \
-			   "select 1 from search_observer_queue 
-                            where object_id=:latest_revision"\
-			  -default 0]]
+		[expr [db_string check_queue {
+                    select 1 from search_observer_queue 
+                    where object_id = :latest_revision
+                } -default 0]]
 	    aa_log "Update Item, still no live revision"
 	    content::item::update \
 		-item_id $item_id \

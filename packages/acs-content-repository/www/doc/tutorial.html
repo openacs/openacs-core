@@ -701,7 +701,7 @@ You now have a shiny new data model that handles revisions and all sorts of othe
 <table border=1 cellpadding=1 cellspacing=0>
 <tr>
 <th>Get latest revision (Tcl)
-<td>set live_revision_id [db_exec_plsql get_live_revision "select content_item__get_live_revision(:item_id)"]
+<td>set live_revision_id [db_exec_plsql get_live_revision {select content_item__get_live_revision(:item_id)}]
 
 <tr>
 <th>Get latest revision (pl/sql)

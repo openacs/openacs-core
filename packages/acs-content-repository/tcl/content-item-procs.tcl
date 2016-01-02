@@ -240,12 +240,16 @@ ad_proc -public ::content::item::get {
     if {"content_folder" eq $content_type} {
         return [db_0or1row get_item_folder "" -column_array local_array]
     }
-    set table_name [db_string get_table_name "select table_name from acs_object_types where object_type=:content_type"]
+    set table_name [db_string get_table_name {
+        select table_name from acs_object_types where object_type = :content_type
+    }]
     while {$table_name eq ""} {
         acs_object_type::get -object_type $content_type -array typeInfo
         ns_log notice "no table for $content_type registered, trying '$typeInfo(supertype)' instead"
         set content_type $typeInfo(supertype)
-        set table_name [db_string get_table_name "select table_name from acs_object_types where object_type=:content_type"]
+        set table_name [db_string get_table_name {
+            select table_name from acs_object_types where object_type = :content_type
+        }]
     }
     set table_name "${table_name}x"
     # get attributes of the content_item use the content_typex view
@@ -899,8 +903,9 @@ ad_proc -public ::content::item::get_publish_status {
 
 } {
 
-  set publish_status [db_string gps_get_publish_status \
-                          "select publish_status from cr_items where item_id = :item_id"]
+    set publish_status [db_string gps_get_publish_status {
+        select publish_status from cr_items where item_id = :item_id
+    }]
 
   return $publish_status
 }
