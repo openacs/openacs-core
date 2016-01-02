@@ -33,14 +33,14 @@ set context [list [list "./" "Merge"] "Merge"]
 
 
 # information of from_user_id
-db_1row from_get_info { *SQL* }
+db_1row from_get_info {}
 
 
 # information of to_user_id
-db_1row to_get_info { *SQL* }
+db_1row to_get_info {}
 
 # information of user_id one
-if { [db_0or1row to_user_portrait { *SQL* }] } {
+if { [db_0or1row to_user_portrait {}] } {
     set to_img_src "[subsite::get_element -element url]shared/portrait-bits.tcl?user_id=$to_user_id"
 } else {
     set to_img_src "/resources/acs-admin/not_available.gif"
