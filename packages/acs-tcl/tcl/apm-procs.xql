@@ -20,18 +20,6 @@
     </querytext>
   </fullquery>
 
-  <fullquery name="apm_package_list_search_order.get_dependencies">
-    <querytext>
-      select apd.service_uri
-      from apm_package_versions apv, apm_package_dependencies apd
-      where apv.package_key = :package_key
-        and apv.installed_p = 't'
-        and apd.version_id = apv.version_id
-        and apd.dependency_type in ('extends', 'embeds')
-      order by apd.dependency_id
-    </querytext>
-  </fullquery>
-
   <fullquery name="apm_package_list_url_resolution.get_inherit_templates_p">
     <querytext>
       select inherit_templates_p
