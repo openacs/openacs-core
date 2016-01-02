@@ -6,7 +6,7 @@
       <querytext>
         update cr_revisions
         set mime_type = :mime_type,
-        lob = [set __lob_id [db_string get_lob_id "select empty_lob()"]]
+        lob = [set __lob_id [db_string get_lob_id {select empty_lob()}]]
         where revision_id = :revision_id
      </querytext>
 </fullquery>
@@ -24,7 +24,7 @@
       <querytext>
         update cr_revisions
         set mime_type = :mime_type,
-        lob = [set __lob_id [db_string get_lob_id "select empty_lob()"]]
+        lob = [set __lob_id [db_string get_lob_id {select empty_lob()}]]
         where revision_id = :revision_id
      </querytext>
 </fullquery>

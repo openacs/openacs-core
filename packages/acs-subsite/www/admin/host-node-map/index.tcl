@@ -31,7 +31,7 @@ template::list::create \
 template::multirow create host_node_pairs host node_id url delete_url
 template::multirow append host_node_pairs \
     [ns_config ns/server/[ns_info server]/module/nssock Hostname] \
-    [db_string root_id  "select site_node.node_id('/') from dual"] \
+    [db_string root_id {}] \
     "/" \
     ""
 
@@ -62,7 +62,7 @@ ad_form -name add_host_node_mapping -form {
     }
 } -validate {
     {host
-	{![db_string check_host "select 1 from host_node_map where host = :host" -default 0]}
+	{![db_string check_host {select 1 from host_node_map where host = :host} -default 0]}
          "Host must be unique"
     }
 } -on_submit {

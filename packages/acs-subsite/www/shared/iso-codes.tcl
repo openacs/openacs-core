@@ -13,7 +13,9 @@ if {![db_table_exists countries] } {
     return
 }
 
-db_multirow ccodes country_codes "select iso, default_name from countries order by default_name" 
+db_multirow ccodes country_codes {
+    select iso, default_name from countries order by default_name
+}
 
 ad_return_template
 # Local variables:

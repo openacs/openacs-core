@@ -773,7 +773,7 @@ ad_proc -private group::group_p_not_cached {
 
     @param group_id The group_id of the group
 } {
-    return [db_string group "select 1 from groups where group_id = :group_id" -default 0]
+    return [db_string group {select 1 from groups where group_id = :group_id} -default 0]
 }
 
 

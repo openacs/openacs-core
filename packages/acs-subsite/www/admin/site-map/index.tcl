@@ -49,7 +49,9 @@ set context [list $doc(title)]
 
 set user_id [ad_conn user_id]
 
-set subsite_number [db_string count_subsites "select count(*) from apm_packages where package_key = 'acs-subsite'"]
+set subsite_number [db_string count_subsites {
+    select count(*) from apm_packages where package_key = 'acs-subsite'
+}]
 #
 # Not sure, what the intentions was to omit all(!) subsites if there
 # are more than 100. e.g. http://openacs.org/bugtracker/openacs/bug?bug_number=3174

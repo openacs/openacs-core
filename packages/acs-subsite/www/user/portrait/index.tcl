@@ -48,11 +48,11 @@ if { $current_user_id == $user_id } {
 set portrait_image_url [export_vars -base ${subsite_url}shared/portrait-bits.tcl {user_id}]
 set export_edit_vars   [export_vars {user_id return_url}]
 
-if {![db_0or1row user_info "select 
-  first_names, 
-  last_name 
-from persons 
-where person_id=:user_id"]} {
+if {![db_0or1row user_info {
+    select first_names, last_name 
+    from persons 
+    where person_id = :user_id
+}]} {
     set return_code "no_user"
     set context [list "Account Unavailable"]
     ad_return_template
@@ -60,11 +60,13 @@ where person_id=:user_id"]} {
 }
 
 
-if {![db_0or1row get_item_id "select live_revision as revision_id, item_id
-from acs_rels a, cr_items c
-where a.object_id_two = c.item_id
-and a.object_id_one = :user_id
-and a.rel_type = 'user_portrait_rel'"] || $revision_id eq ""} {
+if {![db_0or1row get_item_id {
+    select live_revision as revision_id, item_id
+    from acs_rels a, cr_items c
+    where a.object_id_two = c.item_id
+    and a.object_id_one = :user_id
+    and a.rel_type = 'user_portrait_rel
+}] || $revision_id eq ""} {
     # The user doesn't have a portrait yet
     set portrait_p 0
 } else {
