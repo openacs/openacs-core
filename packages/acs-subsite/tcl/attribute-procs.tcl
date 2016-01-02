@@ -235,14 +235,7 @@ ad_proc -public delete { attribute_id } {
     # 2. Drop the attribute
     # 3. Return
     
-    if { ![db_0or1row select_attr_info {
-        select a.object_type, a.attribute_name, 
-               decode(a.storage,'type_specific',t.table_name,a.table_name) as table_name,
-	       nvl(a.column_name, a.attribute_name) as column_name
-          from acs_attributes a, acs_object_types t
-         where a.attribute_id = :attribute_id
-           and t.object_type = a.object_type
-    }] } {
+    if { ![db_0or1row select_attr_info {}] } {
         # Attribute doesn't exist
         return 0
     }
@@ -436,21 +429,7 @@ ad_proc -public array_for_type {
           and a.storage in ('[join $include_storage_types "', '"]')"
     }
 
-    db_foreach select_attributes "
-	select nvl(a.column_name, a.attribute_name) as name, 
-               a.pretty_name, a.attribute_id, a.datatype, 
-               v.enum_value, v.pretty_name as value_pretty_name
-	from acs_object_type_attributes a,
-               acs_enum_values v,
-               (select t.object_type, level as type_level
-                  from acs_object_types t
-                 start with t.object_type = :start_with
-               connect by prior t.object_type = t.supertype) t 
-         where a.object_type = :object_type
-           and a.attribute_id = v.attribute_id(+)
-           and t.object_type = a.ancestor_type $storage_clause
-        order by type_level, a.sort_order
-    " {
+    db_foreach select_attributes {} {
 	# Enumeration values show up more than once...
 	if {$name ni $attr_list} {
 	    lappend attr_list $name

@@ -565,24 +565,7 @@ ad_proc package_object_attribute_list {
           and a.storage in ('[join $include_storage_types "', '"]')"
     }
 
-    return [db_list_of_lists attributes_select "
-    select a.attribute_id,
-           nvl(a.table_name, t.table_name) as table_name,
-           nvl(a.column_name, a.attribute_name) as attribute_name,
-           a.pretty_name,
-           a.datatype,
-           decode(a.min_n_values,0,'f','t') as required_p,
-               a.default_value,
-               t.table_name as object_type_table_name,
-               t.id_column as object_type_id_column
-          from acs_object_type_attributes a,
-               (select t.object_type, t.table_name, t.id_column, level as type_level
-                  from acs_object_types t
-                 start with t.object_type=:start_with
-               connect by prior t.object_type = t.supertype) t
-         where a.object_type = :object_type
-           and t.object_type = a.object_type $storage_clause
-         order by type_level"]
+    return [db_list_of_lists attributes_select {}]
 }
 
 
