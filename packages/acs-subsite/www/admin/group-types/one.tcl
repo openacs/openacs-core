@@ -29,13 +29,7 @@ set group_type_enc [ad_urlencode $group_type]
 
 set package_id [ad_conn package_id]
 
-if { ![db_0or1row select_pretty_name {
-    select t.pretty_name as group_type_pretty_name, t.dynamic_p,
-           nvl(gt.default_join_policy, 'open') as default_join_policy
-      from acs_object_types t, group_types gt
-     where t.object_type = :group_type
-       and t.object_type = gt.group_type(+)
-}] } {
+if { ![db_0or1row select_pretty_name {}] } {
     ad_return_error "Group type doesn't exist" "Group type \"$group_type\" doesn't exist"
     return
 }
@@ -50,18 +44,7 @@ set context [list [list "[ad_conn package_url]admin/group-types/" [_ acs-subsite
 db_multirow groups groups_select {}
 
 # Select out all the attributes for groups of this type
-db_multirow -extend {one_attribute_url} attributes attributes_select {
-    select a.attribute_id, a.pretty_name, 
-           a.ancestor_type, t.pretty_name as ancestor_pretty_name
-      from acs_object_type_attributes a,
-           (select t.object_type, t.pretty_name, level as type_level
-              from acs_object_types t
-             start with t.object_type='group'
-           connect by prior t.object_type = t.supertype) t 
-     where a.object_type = :group_type
-       and t.object_type = a.ancestor_type
-    order by type_level 
-} {
+db_multirow -extend {one_attribute_url} attributes attributes_select {} {
     set one_attribute_url [export_vars -base "../attributes/one" {attribute_id return_url}]
 }
 
