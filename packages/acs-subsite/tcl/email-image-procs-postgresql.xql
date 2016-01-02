@@ -2,14 +2,6 @@
 <queryset>
 <rdbms><type>postgresql</type><version>7.1</version></rdbms>
 
-<fullquery name="email_image::new_item.new_lob_size">
-      <querytext>
-        update cr_revisions 
-	set content_length = lob_length(lob)
-        where revision_id = :revision_id
-      </querytext>
-</fullquery>
-
 <fullquery name="email_image::new_item.new_lob_content">
       <querytext>
         update cr_revisions

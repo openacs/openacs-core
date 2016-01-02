@@ -2,14 +2,6 @@
 <queryset>
 <rdbms><type>oracle</type><version>8.1.6</version></rdbms>
 
-<fullquery name="email_image::new_item.new_lob_size">
-      <querytext>
-        update cr_revisions
-        set content_length = dbms_lob.getlength(content)
-        where revision_id = :revision_id
-     </querytext>
-</fullquery>
-
 <fullquery name="email_image::new_item.new_lob_content">
       <querytext>
         update cr_revisions

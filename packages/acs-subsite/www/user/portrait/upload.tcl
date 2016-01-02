@@ -15,15 +15,15 @@ ad_page_contract {
 
 set current_user_id [ad_conn user_id]
 
-set portrait_p [db_0or1row "checkportrait" {}]
+set portrait_p [db_0or1row checkportrait {}]
 
 if { $portrait_p } {
     set doc(title) [_ acs-subsite.upload_a_replacement_por]
-	set description [db_string "getstory" {}]
+    set description [db_string getstory {}]
 } else {
     set doc(title) [_ acs-subsite.Upload_Portrait]
-	set description ""
-	set revision_id ""
+    set description ""
+    set revision_id ""
 }
 
 if {$user_id eq ""} {
