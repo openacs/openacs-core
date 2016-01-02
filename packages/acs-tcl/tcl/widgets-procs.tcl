@@ -17,7 +17,7 @@ ad_proc us_state_widget {
     }
 
     db_foreach all_states {
-	select state_name, abbrev from us_states order by state_name
+        select state_name, abbrev from states order by state_name
     } {
         if { $default == $abbrev } {
             append widget_value "<option value=\"$abbrev\" selected=\"selected\">$state_name</option>\n" 
@@ -47,7 +47,7 @@ ad_proc country_widget {
 	}
     }
     db_foreach all_countries {
-	select default_name, iso from countries order by default_name 
+        select default_name, iso from countries order by default_name
     } {
         if { $default == $iso } {
             append widget_value "<option value=\"$iso\" selected=\"selected\">$default_name</option>\n" 

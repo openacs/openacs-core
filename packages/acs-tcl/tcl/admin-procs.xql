@@ -1,16 +1,6 @@
 <?xml version="1.0"?>
 <queryset>
 
-<fullquery name="ad_user_class_query.sql_post_select_for_user_class"> 
-      <querytext>
-      
-	    select sql_post_select
-	    from user_classes 
-            where user_class_id = [ns_dbquotevalue $user_class_id]
-	
-      </querytext>
-</fullquery>
-
 <fullquery name="ad_user_class_description.category_id">      
       <querytext>
         select category from categories where category_id = :category_id

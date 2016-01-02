@@ -93,31 +93,4 @@ select content_item__new(
       </querytext>
 </fullquery>
  
-<fullquery name="apm_file_add.apm_file_add">      
-      <querytext>
-
-	select apm_package_version__add_file(
-		:file_id,
-		:version_id,
-		:path,
-		:file_type,
-                :db_type
-		)
-    
-      </querytext>
-</fullquery>
-
- 
-<fullquery name="apm_file_remove.apm_file_remove">      
-      <querytext>
-
-	select apm_package_version__remove_file(
-				:version_id,
-				:path
-				)
-    
-      </querytext>
-</fullquery>
-
- 
 </queryset>

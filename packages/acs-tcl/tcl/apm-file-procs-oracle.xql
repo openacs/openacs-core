@@ -71,35 +71,4 @@ end;
       </querytext>
 </fullquery>
  
-<fullquery name="apm_file_add.apm_file_add">      
-      <querytext>
-      
-	begin
-	:1 := apm_package_version.add_file(
-		file_id => :file_id,
-		version_id => :version_id,
-		path => :path,
-		file_type => :file_type,
-                db_type => :db_type
-		);
-	end;
-    
-      </querytext>
-</fullquery>
-
- 
-<fullquery name="apm_file_remove.apm_file_remove">      
-      <querytext>
-      
-	begin
-	apm_package_version.remove_file(
-				path => :path,
-				version_id => :version_id
-				);
-	end;
-    
-      </querytext>
-</fullquery>
-
-
 </queryset>
