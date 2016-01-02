@@ -12,8 +12,8 @@ ad_page_contract {
     context:onevalue
 } -validate {
     if_diff_authority {
-	set from_authority_id [db_string gettoa "select authority_id from cc_users where user_id = :from_user_id"]
-	set to_authority_id [db_string getfroma "select authority_id from cc_users where user_id = :to_user_id"]
+	set from_authority_id [db_string gettoa {select authority_id from cc_users where user_id = :from_user_id}]
+	set to_authority_id [db_string getfroma {select authority_id from cc_users where user_id = :to_user_id}]
 	if { $from_authority_id ne $to_authority_id } {
 	    ad_complain "Merge only works for users of the same authority"
 	} 
@@ -32,8 +32,9 @@ set context [list [list "./" "Merge"] "Merge"]
 if { !$merge_p } {
     ad_returnredirect "/acs-admin/users"
 } else {
-    set final_results [callback merge::MergePackageUser -from_user_id $from_user_id -to_user_id $to_user_id]
-
+    set final_results [callback merge::MergePackageUser \
+                           -from_user_id $from_user_id \
+                           -to_user_id $to_user_id]
     set results "<ul>"
     foreach item $final_results {
 	append results "<li>[lindex $item 0]<ul>"
@@ -46,7 +47,9 @@ if { !$merge_p } {
 
     merge::MergeUserInfo -from_user_id $from_user_id -to_user_id $to_user_id
 
-    set impl_id [auth::authority::get_element -authority_id $to_authority_id -element "auth_impl_id"]
+    set impl_id [auth::authority::get_element \
+                     -authority_id $to_authority_id \
+                     -element "auth_impl_id"]
     set parameters [list $from_user_id $to_user_id $to_authority_id]
     set user_res [acs_sc::invoke \
 		      -error \

@@ -70,12 +70,10 @@ if {[catch {
 
     switch $email_verified_p {
         "t" {
-            db_exec_plsql approve_email "
-                begin acs_user.approve_email ( user_id => :user_id ); end;"
+            db_exec_plsql approve_email {}
         }
         "f" {
-            db_exec_plsql unapprove_email "
-                begin acs_user.unapprove_email ( user_id => :user_id ); end;"
+            db_exec_plsql unapprove_email {}
         }
     }
 } errmsg]} {
@@ -86,8 +84,8 @@ if {[catch {
 callback acs_admin::member_state_change -member_state $member_state -user_id $user_id
 
 set admin_user_id [ad_conn user_id]
-set email_from [db_string admin_email "select email from parties where party_id = :admin_user_id"]
-set subject "$action"
+set email_from [db_string admin_email {select email from parties where party_id = :admin_user_id}]
+set subject $action
 set message $email_message
 
 if {$return_url eq ""} {

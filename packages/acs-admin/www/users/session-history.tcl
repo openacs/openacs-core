@@ -22,10 +22,16 @@ append whole_page "[ad_admin_header "Session History"]
 # we have to query for pretty month and year separately because Oracle pads
 # month with spaces that we need to trim
 
-set selection [ns_db select $db "select to_char(entry_date,'YYYYMM') as sort_key, rtrim(to_char(entry_date,'Month')) as pretty_month, to_char(entry_date,'YYYY') as pretty_year, sum(session_count) as total_sessions, sum(repeat_count) as total_repeats
-from session_statistics
-group by to_char(entry_date,'YYYYMM'), to_char(entry_date,'Month'), to_char(entry_date,'YYYY')
-order by 1"]
+set selection [ns_db select $db {
+    select to_char(entry_date,'YYYYMM') as sort_key,
+       rtrim(to_char(entry_date,'Month')) as pretty_month,
+       to_char(entry_date,'YYYY') as pretty_year,
+       sum(session_count) as total_sessions,
+       sum(repeat_count) as total_repeats
+    from session_statistics
+    group by to_char(entry_date,'YYYYMM'), to_char(entry_date,'Month'), to_char(entry_date,'YYYY')
+    order by 1
+}]
 
 set last_year ""
 while { [ns_db getrow $db $selection] } {

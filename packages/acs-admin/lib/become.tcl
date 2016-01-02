@@ -14,7 +14,7 @@ set return_url [ad_pvt_home]
 
 # Get the password and user ID
 
-if {![db_0or1row password "select password from users where user_id=$user_id"]} {
+if {![db_0or1row password {select password from users where user_id = :user_id}]} {
     ad_return_error "Couldn't find user $user_id" "Couldn't find user $user_id."
     return
 }
