@@ -471,13 +471,7 @@ ad_proc -private sec_update_user_session_info {
     the user login either via permanent cookies at session creation
     time or when they login by entering their password.
 } {
-    db_dml update_last_visit {
-        update users
-        set second_to_last_visit = last_visit,
-        last_visit = sysdate,
-        n_sessions = n_sessions + 1
-        where user_id = :user_id
-    }
+    db_dml update_last_visit {}
     db_release_unused_handles
 }
 
@@ -1195,13 +1189,7 @@ ad_proc -private populate_secret_tokens_cache {} {
     # this is called directly from security-init.tcl,
     # so it runs during the install before the data model has been loaded
     if { [db_table_exists secret_tokens] } {
-        db_foreach get_secret_tokens {
-            select * from (
-                           select token_id, token
-                           from secret_tokens
-                           sample(15)
-                           ) where rownum < :num_tokens
-        } {
+        db_foreach get_secret_tokens {} {
             ns_cache set secret_tokens $token_id $token
         }
     }
