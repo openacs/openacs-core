@@ -22,16 +22,16 @@ ad_proc -public merge::MergeUserInfo {
 } {
     ns_log Notice "Running merge::MergeUserInfo"
     db_transaction {
-	if { ![db_0or1row to_user_portrait {*SQL*}] &&  [db_0or1row from_user_portrait {*SQL*}] } {
-	    db_dml upd_portrait {*SQL*}
+	if { ![db_0or1row to_user_portrait {}] &&  [db_0or1row from_user_portrait {}] } {
+	    db_dml upd_portrait {}
 	} 
 	
 	# get the permissions of the from_user_id
 	# and grant them to the to_user_id
-	db_foreach getfromobjs {*SQL*} {
+	db_foreach getfromobjs {} {
 	    # revoke the permissions of from_user_id
 	    permission::revoke -object_id $from_oid -party_id $from_user_id -privilege $from_priv
-	    if { ![db_string touserhas {*SQL*} ] } {
+	    if { ![db_string touserhas {} ] } {
 		# grant the permissions to to_user_id
 		permission::grant -object_id $from_oid -party_id $to_user_id -privilege $from_priv
 	    } 
@@ -39,7 +39,7 @@ ad_proc -public merge::MergeUserInfo {
 	
 	ns_log notice "  Merging acs_objects"
 	
-	db_dml acs_objs_upd  {*SQL*} 	
+	db_dml acs_objs_upd {} 	
     }
     ns_log Notice "Finishing merge::MergeUserInfo"
 }

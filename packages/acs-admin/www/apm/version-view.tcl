@@ -40,26 +40,9 @@ set downloaded_p [ad_decode $version_uri "" 0 1]
 # Obtain information about the enabled version of the package (if there is one).
 # We use rownum = 1 in case someone mucks up the database and leaves two package versions
 # installed and enabled.
-db_0or1row apm_enabled_version_info {
-    select version_id as installed_version_id, version_name as installed_version_name,
-    enabled_p as installed_enabled_p,
-    apm_package_version.version_name_greater(version_name, :version_name) as version_name_greater
-    from   apm_package_versions
-    where  package_key = :package_key
-    and    installed_p = 't'
-    and rownum = 1
-}
+db_0or1row apm_enabled_version_info {}
 
-db_0or1row apm_data_model_install_version {
-    select data_model_installed_version from (
-           select version_name as data_model_installed_version
-           from   apm_package_versions
-           where  package_key = :package_key
-           and    data_model_loaded_p = 't'
-           order by apm_package_version.sortable_version_name(version_name) desc
-    )
-    where rownum = 1
-}
+db_0or1row apm_data_model_install_version {}
 
 if { $vendor eq "" } {
     set vendor $vendor_uri

@@ -15,49 +15,9 @@
         </querytext>
     </fullquery>
 
-<fullquery name="member_approve">
-      <querytext>
-
-                        begin membership_rel.approve( rel_id => :rel_id ); end;
-      </querytext>
-</fullquery>
-
-
-<fullquery name="member_ban">
-      <querytext>
-
-                       begin membership_rel.ban( rel_id => :rel_id ); end;
-      </querytext>
-</fullquery>
-
-
-<fullquery name="member_reject">
-      <querytext>
-
-                       begin membership_rel.reject( rel_id => :rel_id ); end;
-      </querytext>
-</fullquery>
-
-
-<fullquery name="member_deleted">
-      <querytext>
-
-                       begin membership_rel.del( rel_id => :rel_id ); end;
-      </querytext>
-</fullquery>
-
-
-<fullquery name="member_unapprove">
-      <querytext>
-
-                       begin membership_rel.unapprove( rel_id => :rel_id ); end;
-      </querytext>
-</fullquery>
-
 
 <fullquery name="approve_email">
       <querytext>
-
                        begin acs_user.approve_email ( user_id => :user_id ); end;
       </querytext>
 </fullquery>
@@ -65,7 +25,6 @@
 
 <fullquery name="unapprove_email">
       <querytext>
-
                        begin acs_user.unapprove_email ( user_id => :user_id ); end;
       </querytext>
 </fullquery>
