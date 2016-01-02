@@ -10,15 +10,6 @@
     </querytext>
   </fullquery>
 
-  <fullquery name="lang::message::register.message_exists_p">
-    <querytext>
-       select count(*) 
-       from lang_messages
-       where package_key = :package_key
-         and message_key = :message_key  
-    </querytext>
-  </fullquery>
-
   <fullquery name="lang::message::register.insert_message_key">
     <querytext> 
         insert into lang_message_keys

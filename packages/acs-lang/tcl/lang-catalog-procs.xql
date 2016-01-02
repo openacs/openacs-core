@@ -54,40 +54,4 @@
     </querytext>
   </fullquery>
 
-  <fullquery name="lang::catalog::reset_upgrade_status_message_keys.reset_status">
-    <querytext>
-        update lang_message_keys
-              set upgrade_status = 'no_upgrade'
-              where package_key = :package_key
-    </querytext>
-  </fullquery>
-
-  <fullquery name="lang::catalog::import_from_file.reset_upgrade_status_messages">
-    <querytext>
-        update lang_messages
-                set upgrade_status = 'no_upgrade'
-                where package_key = :package_key
-                  and locale = :locale      
-    </querytext>
-  </fullquery>
-
-  <fullquery name="lang::catalog::import_from_file.mark_message_as_deleted">
-    <querytext>
-        update lang_messages
-           set upgrade_status = 'deleted'
-           where package_key = :package_key
-             and message_key = :message_key
-             and locale = :locale
-    </querytext>
-  </fullquery>
-
-  <fullquery name="lang::catalog::import_from_file.mark_message_key_as_deleted">
-    <querytext>
-        update lang_message_keys
-           set upgrade_status = 'deleted'
-           where package_key = :package_key
-             and message_key = :message_key
-    </querytext>
-  </fullquery>
-
 </queryset>
