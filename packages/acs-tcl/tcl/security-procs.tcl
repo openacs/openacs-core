@@ -637,7 +637,7 @@ ad_proc -public ad_get_login_url {
             # revise url to use hostname's domain
             # if url points to a non / host_node, redirect to main hostname
             set host_node_map_hosts_list [db_list -cache_key security-locations-host-names \
-                                              get_node_host_names "select host from host_node_map"]
+                                              get_node_host_names {select host from host_node_map}]
             if { [llength $host_node_map_hosts_list] > 0 } {
                 foreach hostname $host_node_map_hosts_list {
                     if { [string match -nocase "http://${hostname}*" $url_decoded] 
@@ -697,7 +697,7 @@ ad_proc -public ad_get_login_url {
                 # revise return_url to use hostname's domain
                 # if return_url points to a non / host_node, redirect to main hostname
                 set host_node_map_hosts_list [db_list -cache_key security-locations-host-names \
-                                                  get_node_host_names "select host from host_node_map"]
+                                                  get_node_host_names {select host from host_node_map}]
                 if { [llength $host_node_map_hosts_list] > 0 } {
                     foreach hostname $host_node_map_hosts_list {
                         if { [string match -nocase "http://${hostname}*" $return_url_decoded] \
@@ -1772,7 +1772,7 @@ ad_proc -public security::locations {} {
 
     # add locations from host_node_map 
     set host_node_map_hosts_list [db_list -cache_key security-locations-host-names \
-                                      get_node_host_names "select host from host_node_map"]
+                                      get_node_host_names {select host from host_node_map}]
     # fastest place for handling this special case:
     if { $config_hostname ne $host_name } {
         #ns_log Notice "security::locations adding $config_hostname since utl_current_location different than config.tcl."

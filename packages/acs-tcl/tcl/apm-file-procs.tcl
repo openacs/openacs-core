@@ -102,7 +102,7 @@ ad_proc -public apm_db_type_keys {} {
     Returns a list of valid database type keys.
 
 } {
-    return [util_memoize [list db_list db_type_keys "select db_type_key from apm_package_db_types"]]
+    return [util_memoize [list db_list db_type_keys {select db_type_key from apm_package_db_types}]]
 }
 
 
@@ -239,9 +239,11 @@ ad_proc -private apm_generate_tarball { version_id } {
     } else {
         #tarball exists, so all we have to do is to make a new revision for it
         #Let's check if a current revision exists:
-        if {![db_0or1row get_revision_id "select live_revision as revision_id
-              from cr_items
-             where item_id = :item_id"] || $revision_id eq ""} {
+        if {![db_0or1row get_revision_id {
+            select live_revision as revision_id
+            from cr_items
+            where item_id = :item_id
+        }] || $revision_id eq ""} {
             # It's an insert rather than an update            
             set revision_id [db_exec_plsql create_revision $create_revision]
         }
