@@ -423,7 +423,10 @@ ad_proc -private image::resize_existing_images {
 } {
     foreach {size_name dimensions} [image::get_convert_to_sizes] {
 
-        foreach item_id [db_list get_items "select item_id from cr_items where \content_type='image' and latest_revision is not null"] {
+        foreach item_id [db_list get_items {
+            select item_id from cr_items
+            where content_type='image' and latest_revision is not null
+        }] {
         image::resize \
             -item_id $item_id \
             -size_name $size_name

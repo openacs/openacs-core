@@ -47,9 +47,9 @@ set the_root $::acs::pageroot
 
 # Get the IDs
 set content_root \
-  [db_string content_root "select content_item.get_root_folder from dual"]
+  [db_string content_root {select content_item.get_root_folder from dual}]
 set template_root \
-  [db_string template_root "select content_template.get_root_folder from dual"]
+  [db_string template_root {select content_template.get_root_folder from dual}]
 
 # Serve the page
 # DRB: Note that content::init modifies the local variable the_root, which is treated

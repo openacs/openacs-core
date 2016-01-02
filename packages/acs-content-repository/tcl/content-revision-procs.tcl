@@ -131,7 +131,9 @@ ad_proc -public ::content::revision::new {
 	}
     }
     
-    set table_name [db_string get_table_name "select table_name from acs_object_types where object_type=:content_type"]
+    set table_name [db_string get_table_name {
+        select table_name from acs_object_types where object_type = :content_type
+    }]
 
     set query_text "insert into ${table_name}i
                     (revision_id, object_type, creation_user, creation_date, creation_ip, title, description, item_id, object_package_id, mime_type $attribute_names)
