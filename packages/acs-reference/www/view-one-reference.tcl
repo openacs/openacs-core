@@ -19,7 +19,7 @@ set title "View one Table"
 set context_bar [list [list "reference-list" "Reference List" ] "$title"]
 set user_id [ad_conn user_id]
 
-db_1row get_table { *SQL* } -column_array table_info
+db_1row get_table {} -column_array table_info
 
 ad_return_template
 
