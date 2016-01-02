@@ -933,11 +933,7 @@ ad_proc -public aa_log_final {
         ns_log Bug "aa_log_final: FAILED: $aa_testcase_id, $test_fails tests failed"
     }
 
-    db_dml testcase_result_insert {
-        insert into aa_test_final_results
-        (testcase_id, package_key, timestamp, passes, fails)
-        values (:aa_testcase_id, :aa_package_key, sysdate, :test_passes, :test_fails)
-    }
+    db_dml testcase_result_insert {}
 }
 
 ad_proc -public aa_run_with_teardown {
@@ -1251,9 +1247,9 @@ ad_proc -public aa_get_first_url {
     Procedure for geting the url of a mounted package with the package_key. It uses the first instance that it founds. This is usefull for tclwebtest tests.
 } {
 
-    if {![db_0or1row first_url { *SQL* }]} {
+    if {![db_0or1row first_url {}]} {
         site_node::instantiate_and_mount -package_key $package_key
-        db_1row first_url {*SQL*}
+        db_1row first_url {}
     }
 
     return $url
