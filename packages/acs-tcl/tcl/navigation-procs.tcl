@@ -290,7 +290,9 @@ ad_proc -public util_current_location_node_id { } {
     if { [string match -nocase "www.*" $location_hostname] } {
         set location_hostname [string range $location_hostname 4 end]
     } 
-    db_0or1row -cache_key util-${location_hostname}-node-id get_node_id_from_hostname "select node_id from host_node_map where host = :location_hostname"
+    db_0or1row -cache_key util-${location_hostname}-node-id get_node_id_from_hostname {
+        select node_id from host_node_map where host = :location_hostname
+    }
     if { ![info exists node_id ] } {
         set node_id ""
     }

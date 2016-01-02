@@ -14,7 +14,7 @@ ad_library {
 ad_schedule_proc -thread f [parameter::get -parameter SessionSweepInterval -default 7200] sec_sweep_sessions
 
 # Verify that the secret_tokens table is populated
-set secret_tokens_exists [db_string secret_tokens_exists "select decode(count(*),0,0,1) from secret_tokens"]
+set secret_tokens_exists [db_string secret_tokens_exists {select decode(count(*),0,0,1) from secret_tokens}]
 
 if { $secret_tokens_exists == 0 } {
     populate_secret_tokens_db
