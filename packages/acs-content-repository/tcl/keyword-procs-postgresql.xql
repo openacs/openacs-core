@@ -30,12 +30,6 @@
         </querytext>
     </fullquery>
 
-    <fullquery name="cr::keyword::item_unassign.item_unassign">
-        <querytext>
-            select content_keyword__item_unassign(:item_id, :keyword_id)
-        </querytext>
-    </fullquery>
-
     <fullquery name="cr::keyword::item_assign.keyword_assign">
         <querytext>
             select content_keyword__item_assign(

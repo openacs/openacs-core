@@ -164,11 +164,7 @@ ad_proc -public content::get_content_value { revision_id } {
     @return content element corresponding to the provided revision_id
 } { 
     db_transaction {
-        db_exec_plsql gcv_get_revision_id {
-            begin
-	    content_revision.to_temporary_clob(:revision_id);
-            end;
-        }
+        db_exec_plsql gcv_get_revision_id {}
 
         # Query for values from a previous revision
         set content [db_string gcv_get_previous_content ""]

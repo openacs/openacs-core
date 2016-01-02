@@ -38,14 +38,6 @@
       </querytext>
 </fullquery>
 
-<fullquery name="publish::write_content.get_revision_id">
-	<querytext>
-
-        select 1
-
-	</querytext>
-</fullquery>
-
 <fullquery name="publish::write_content.get_previous_content">      
       <querytext>
       

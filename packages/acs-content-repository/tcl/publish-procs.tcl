@@ -503,11 +503,7 @@ ad_proc -public publish::handle::text { item_id args } {
     } else {
 
         db_transaction {
-            db_exec_plsql get_revision_id {
-                begin
-                content_revision.to_temporary_clob(:revision_id);
-                end;
-            }
+            db_exec_plsql get_revision_id {}
 
             # Query for values from a previous revision
             set html [db_string get_previous_content ""]

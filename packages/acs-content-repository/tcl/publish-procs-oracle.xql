@@ -36,16 +36,6 @@
 </fullquery>
 
 
-<fullquery name="publish::write_content.get_revision_id">
-	<querytext>
-
-                begin
-                content_revision.to_temporary_clob(:revision_id);
-                end;
-
-	</querytext>
-</fullquery>
-
 <fullquery name="publish::write_content.get_previous_content">      
       <querytext>
       

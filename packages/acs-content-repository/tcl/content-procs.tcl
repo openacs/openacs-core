@@ -163,7 +163,7 @@ ad_proc -public cr_count_file_entries {name} {
     0 or 1 in consistent databases.
 
 } {
-    db_string count_entries { *SQL* }
+    db_string count_entries {}
 }
 
 ad_proc -private cr_delete_orphans {files} {

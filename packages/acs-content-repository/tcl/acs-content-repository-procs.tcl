@@ -26,7 +26,7 @@ ad_proc -private cr_delete_scheduled_files {} {
 } {
     db_transaction {
         # subselect makes sure there isn't a parent revision still lying around
-        db_foreach fetch_paths { *SQL* } {
+        db_foreach fetch_paths {} {
             set file [cr_fs_path $storage_area_key]/$path
             if {[regexp {^[0-9/]+$} $path]} {
                 # the filename looks valid, delete the file from filesystem
@@ -37,7 +37,7 @@ ad_proc -private cr_delete_scheduled_files {} {
             }
         }
         # now that all scheduled files deleted, clear table
-        db_dml delete_files { *SQL* }
+        db_dml delete_files {}
     }
 
     #
