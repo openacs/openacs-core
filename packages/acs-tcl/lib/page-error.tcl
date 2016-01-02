@@ -18,10 +18,10 @@ set comment_action 0
 set return_url $prev_url
 
 if {$user_id eq 0} {
-    set user_name "[_ acs-tcl.Public_User]"
+    set user_name [_ acs-tcl.Public_User]
     set public_userm_email [parameter::get -package_id [ad_acs_kernel_id] -parameter HostAdministrator -default ""]
 } else {
-    db_1row get_user_info { *SQL* }
+    db_1row get_user_info {}
     set public_userm_email $user_email
 }
 
@@ -103,7 +103,7 @@ if {$auto_submit_p && $user_id > 0} {
 	    -user_id $user_id
 	
 	bug_tracker::bugs_exist_p_set_true -package_id $bt_package_id
-        db_dml insert_auto_bug { *SQL* }
+        db_dml insert_auto_bug {}
     } else {
 	
 	#Comment on the Existing Bug even if the user dont want to add
@@ -113,7 +113,7 @@ if {$auto_submit_p && $user_id > 0} {
 	set bug_id $exist_bug
 	
 	if {$bug_number eq ""} {
-	    db_dml increase_reported_times { *SQL* }
+	    db_dml increase_reported_times {}
 	}
 	
 	# Get the bug data

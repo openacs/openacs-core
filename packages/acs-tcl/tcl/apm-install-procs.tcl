@@ -1185,14 +1185,7 @@ ad_proc -private apm_package_delete {
 
         # Remove package from APM tables
         apm_callback_and_log $callback "<li>Deleting $package_key..."
-        db_exec_plsql apm_package_delete {
-            begin
-            apm_package_type.drop_type(
-                                       package_key => :package_key,
-                                       cascade_p => 't'
-                                       );
-            end;
-        }
+        db_exec_plsql apm_package_delete {}
     }
 
     # Source SQL drop scripts
@@ -1231,11 +1224,7 @@ ad_proc -private apm_package_version_delete {
 } {
     Deletes a version from the database.
 } {
-    db_exec_plsql apm_version_delete {
-        begin
-        apm_package_version.del(version_id => :version_id);     
-        end;
-    }
+    db_exec_plsql apm_version_delete {}
 }
 
 ad_proc -public apm_package_version_count {package_key} {
@@ -1528,11 +1517,7 @@ ad_proc -private apm_package_install_spec { version_id } {
         }
 
         # Mark $version_id as the only installed version of the package.
-        db_dml version_mark_installed {
-            update apm_package_versions
-            set    installed_p = decode(version_id, :version_id, 't', 'f')
-            where  package_key = :package_key
-        }
+        db_dml version_mark_installed {}
     }
     ns_log Debug "apm_package_install_spec: Done updating .info file."
 }
@@ -1544,13 +1529,7 @@ ad_proc -public apm_version_enable { {-callback apm_dummy_callback} version_id }
     Enables a version of a package (disabling any other version of the package).
     @param version_id The id of the version to be enabled.
 } {
-    db_exec_plsql apm_package_version_enable {
-        begin
-        apm_package_version.enable(
-                                   version_id => :version_id
-                                   );
-        end;
-    }
+    db_exec_plsql apm_package_version_enable {}
     apm_callback_and_log $callback  "<p>Package enabled."
 }
 
@@ -1560,13 +1539,7 @@ ad_proc -public apm_version_disable { {-callback apm_dummy_callback} version_id 
 
     @param version_id The id of the version to be disabled.
 } {
-    db_exec_plsql apm_package_version_disable {
-        begin
-        apm_package_version.disable(
-                                    version_id => :version_id
-                                    );
-        end;
-    }
+    db_exec_plsql apm_package_version_disable {}
     apm_callback_and_log $callback  "<p>Package disabled."
 }
 
@@ -1658,12 +1631,7 @@ ad_proc -private apm_package_upgrade_p {package_key version_name} {
     @return 1 if a version of the indicated package_key of version lower than version_name \
         is already installed in the system, 0 otherwise.
 } {
-    return [db_string apm_package_upgrade_p {
-        select apm_package_version.version_name_greater(:version_name, version_name) upgrade_p
-        from apm_package_versions
-        where package_key = :package_key
-        and version_id = apm_package.highest_version (:package_key)
-    } -default 0]
+    return [db_string apm_package_upgrade_p {} -default 0]
 }
 
 ad_proc -private apm_package_upgrade_from { package_key version_name } {
@@ -1672,13 +1640,7 @@ ad_proc -private apm_package_upgrade_from { package_key version_name } {
     @return the version of the package currently installed, which we're upgrading from, if it's 
     different from the version_name passed in. If this is not an upgrade, returns the empty string.
 } {
-    return [db_string apm_package_upgrade_from {
-        select version_name 
-        from   apm_package_versions
-        where  package_key = :package_key
-        and    version_id = apm_package.highest_version(:package_key)
-        and    version_name != :version_name
-    } -default ""]
+    return [db_string apm_package_upgrade_from {} -default ""]
 }
 
 
@@ -1687,12 +1649,7 @@ ad_proc -private apm_version_upgrade {version_id} {
     Upgrade a package to a locally maintained later version.
 
 } {
-    db_exec_plsql apm_version_upgrade {
-        begin
-        apm_package_version.upgrade(version_id => :version_id);
-        end;
-
-    }
+    db_exec_plsql apm_version_upgrade {}
 } 
 
 ad_proc -private apm_upgrade_for_version_p {path initial_version_name final_version_name} {
@@ -1702,15 +1659,7 @@ ad_proc -private apm_upgrade_for_version_p {path initial_version_name final_vers
 
 } {
     ns_log Debug "apm_upgrade_for_version_p: upgrade_p $path, $initial_version_name $final_version_name"
-    return [db_exec_plsql apm_upgrade_for_version_p {
-        begin
-        :1 := apm_package_version.upgrade_p(
-                                            path => :path,
-                                            initial_version_name => :initial_version_name,
-                                            final_version_name => :final_version_name
-                                            );
-        end;
-    }]
+    return [db_exec_plsql apm_upgrade_for_version_p {}]
 }
 
 ad_proc -private apm_order_upgrade_scripts {upgrade_script_names} {

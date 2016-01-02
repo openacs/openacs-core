@@ -13,7 +13,7 @@ namespace eval person {}
 namespace eval acs_user {}
 
 ad_proc -private cc_lookup_screen_name_user { screen_name } {
-    return [db_string user_select {*SQL*} -default {}]
+    return [db_string user_select {} -default {}]
 }
 
 ad_proc cc_screen_name_user { screen_name } {
@@ -28,13 +28,13 @@ ad_proc cc_screen_name_user { screen_name } {
 ad_proc -private cc_lookup_email_user { email } {
     Return the user_id of a user given the email. Returns the empty string if no such user exists.
 } {
-    return [db_string user_select {*SQL*} -default {}]
+    return [db_string user_select {} -default {}]
 }
 
 ad_proc -public cc_email_from_party { party_id } {
     @return The email address of the indicated party.
 } {
-    return [db_string email_from_party {*SQL*} -default {}]
+    return [db_string email_from_party {} -default {}]
 }
 
 ad_proc cc_email_user { email } {
@@ -47,7 +47,7 @@ ad_proc cc_email_user { email } {
 }
 
 ad_proc -private cc_lookup_name_group { name } {
-    return [db_string group_select {*SQL*} -default {}]
+    return [db_string group_select {} -default {}]
 }
 
 ad_proc cc_name_to_group { name } {
@@ -268,7 +268,7 @@ ad_proc -public acs_user::change_state {
 } {
     Change the membership state of a user.
 } {
-    set rel_id [db_string select_rel_id {*SQL*} -default {}]
+    set rel_id [db_string select_rel_id {} -default {}]
 
     if {$rel_id eq ""} {
         return
@@ -444,7 +444,7 @@ ad_proc -private acs_user::get_from_user_id_not_cached { user_id } {
 
     @author Peter Marklund
 } {
-    db_1row select_user_info {*SQL*} -column_array row
+    db_1row select_user_info {} -column_array row
     
     return [array get row]
 }
@@ -455,7 +455,7 @@ ad_proc -private acs_user::get_from_username_not_cached { username authority_id 
 
     @author Peter Marklund
 } {
-    db_1row select_user_info {*SQL*} -column_array row
+    db_1row select_user_info {} -column_array row
 
     return [array get row]
 }
@@ -553,7 +553,7 @@ ad_proc -public acs_user::get_user_id_by_screen_name {
     Returns the user_id from a screen_name, or empty string if no user found.
     Searches all users, including banned, deleted, unapproved, etc.
 } {
-    return [db_string select_user_id_by_screen_name {*SQL*} -default {}]
+    return [db_string select_user_id_by_screen_name {} -default {}]
 }
 
 
@@ -649,7 +649,7 @@ ad_proc -public party::get_by_email {
 
     @return party_id
 } {
-    #    return [db_string select_party_id {*SQL*} -default ""]
+    #    return [db_string select_party_id {} -default ""]
 
     # The following query is identical in the result as the one above
     # It just takes into account that some applications (like contacts) make email not unique

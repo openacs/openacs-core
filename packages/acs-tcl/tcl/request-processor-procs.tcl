@@ -1666,7 +1666,7 @@ proc root_of_host1 {host} {
 }
 
 ad_proc -private rp_lookup_node_from_host { host } {
-    return [db_string  node_id { *SQL* } -default ""]
+    return [db_string node_id {} -default ""]
 } 
 
 

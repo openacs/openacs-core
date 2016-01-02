@@ -247,18 +247,9 @@ ad_proc -private apm_generate_tarball { version_id } {
         }
     }
 
-    db_dml update_tarball {update cr_revisions
-        set content = empty_blob()
-        where revision_id = :revision_id
-        returning content into :1} -blob_files [list $tmpfile]
+    db_dml update_tarball {} -blob_files [list $tmpfile]
 
-    db_dml update_content_length {
-        update apm_package_versions
-        set content_length = (select dbms_lob.getlength(content)
-                              from cr_revisons
-                              where revision_id = :revision_id)
-        where version_id = :version_id
-    }
+    db_dml update_content_length {}
 
     file delete $tmpfile
 }

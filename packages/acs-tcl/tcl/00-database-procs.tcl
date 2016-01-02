@@ -643,7 +643,7 @@ ad_proc -public db_exec_plsql {
     <code>yourfilename.tcl</code>:<br>
     <p>
     <pre>
-    db_exec_plsql delete_note { }</pre>
+    db_exec_plsql delete_note {}</pre>
 
     <p>
     <code>yourfilename-oracle.xql</code>:<br>

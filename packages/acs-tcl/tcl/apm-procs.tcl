@@ -948,13 +948,7 @@ ad_proc -public apm_highest_version {package_key} {
     Return the highest version of the indicated package.
     @return the version_id of the highest installed version of a package.
 } {
-    return [db_exec_plsql apm_highest_version {
-        begin
-        :1 := apm_package.highest_version (
-                                           package_key => :package_key
-                                           );
-        end;
-    }]
+    return [db_exec_plsql apm_highest_version {}]
 }
 
 ad_proc -public apm_highest_version_name {package_key} {
@@ -968,13 +962,7 @@ ad_proc -public apm_num_instances {package_key} {
 
     @return The number of instances of the indicated package.
 } {
-    return [db_exec_plsql apm_num_instances {
-        begin
-        :1 := apm_package.num_instances(
-                                        package_key => :package_key
-                                        );
-        end;
-    }]
+    return [db_exec_plsql apm_num_instances {}]
 
 }
 
@@ -1057,8 +1045,7 @@ ad_proc -public apm_parameter_register {
     }
 
     # Update the cache.
-    db_foreach apm_parameter_cache_update {
-    } {
+    db_foreach apm_parameter_cache_update {} {
         ad_parameter_cache -set $attr_value $package_id $parameter_name
     }
     return $parameter_id
@@ -1114,13 +1101,7 @@ ad_proc -public apm_dependency_remove {dependency_id} {
     Removes a dependency from the system.
 
 } {
-    db_exec_plsql dependency_remove {
-        begin
-        apm_package_version.remove_dependency(
-                                              dependency_id => :dependency_id
-                                              );
-        end;                            
-    }
+    db_exec_plsql dependency_remove {}
 }
 
 ad_proc -public apm_interface_add {
@@ -1139,16 +1120,7 @@ ad_proc -public apm_interface_add {
         set interface_id [db_null]
     }
     
-    return [db_exec_plsql interface_add {
-        begin
-        :1 := apm_package_version.add_interface(
-                                                interface_id => :interface_id,
-                                                version_id => :version_id,
-                                                interface_uri => :interface_uri,
-                                                interface_version => :interface_version
-                                                );                     
-        end;
-    }]
+    return [db_exec_plsql interface_add {}]
 }
 
 ad_proc -public apm_interface_remove {interface_id} {
@@ -1156,13 +1128,7 @@ ad_proc -public apm_interface_remove {interface_id} {
     Removes a interface from the system.
 
 } {
-    db_exec_plsql interface_remove {
-        begin
-        apm_package_version.remove_interface(
-                                             interface_id => :interface_id
-                                             );
-        end;
-    }
+    db_exec_plsql interface_remove {}
 }
 
 ad_proc -public apm_version_get { 
@@ -1305,7 +1271,7 @@ ad_proc -public apm_package_url_from_id {package_id} {
 }
 
 ad_proc -private apm_package_url_from_id_mem {package_id} {
-    return [db_string apm_package_url_from_id {*SQL*} -default {}]
+    return [db_string apm_package_url_from_id {} -default {}]
 }
 
 #
