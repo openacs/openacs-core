@@ -14,7 +14,11 @@ ad_page_contract {
 
 set user_id [ad_conn user_id]
 
-db_1row name_get "select first_names, last_name, email, url from persons, parties where persons.person_id = parties.party_id and party_id =:user_id" -bind [ad_tcl_vars_to_ns_set user_id]
+db_1row name_get {
+    select first_names, last_name, email, url
+    from persons, parties
+    where persons.person_id = parties.party_id and party_id =:user_id
+} -bind [ad_tcl_vars_to_ns_set user_id]
 
 if { $first_names ne "" || $last_name ne "" } {
     set full_name "$first_names $last_name"

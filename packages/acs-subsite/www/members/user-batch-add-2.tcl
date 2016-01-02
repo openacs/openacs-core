@@ -39,7 +39,7 @@ while {[regexp {(.[^\n]+)} $userlist match_fodder row] } {
 	append exception_text "<li>Couldn't find a valid email address in ($row).</li>\n"
 	continue
     } else {
-	set user_exists_p [db_0or1row user_id "select party_id from parties where email = lower(:email)"]
+	set user_exists_p [db_0or1row user_id {select party_id from parties where email = lower(:email)}]
 	
 	if {$user_exists_p > 0} {
 

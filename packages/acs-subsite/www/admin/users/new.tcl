@@ -231,7 +231,7 @@ The user was added by $creation_name from [ad_conn url]."
 
 	if { $email_verified_p == "f" } {
 	
-	    set row_id [db_string user_new_2_rowid_for_email "select rowid from users where user_id = :user_id"]
+	    set row_id [db_string user_new_2_rowid_for_email {select rowid from users where user_id = :user_id}]
 	    # the user has to come back and activate their account
 
             set href [export_vars \

@@ -26,7 +26,9 @@ if {$package_key eq "/new"} {
 }
 
 if { $instance_name eq "" } {
-        set instance_name [db_string instance_default_name "select pretty_name from apm_package_types where package_key = :package_key"]
+    set instance_name [db_string instance_default_name {
+        select pretty_name from apm_package_types where package_key = :package_key
+    }]
 }
 
 db_transaction {
