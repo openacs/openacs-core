@@ -11,11 +11,7 @@ ad_proc -public acs_message_p {
 } {
     Check if an integer is a valid OpenACS message id.
 } {
-    return [string equal [db_exec_plsql acs_message_p {
-	begin
-	    :1 := acs_message.message_p(:message_id);
-	end;
-    }] "t"]
+    return [string equal [db_exec_plsql acs_message_p {}] "t"]
 }
 
 ad_page_contract_filter acs_message_id { name value } {
@@ -63,9 +59,7 @@ ad_proc -public acs_messaging_first_ancestor {
     the message_id of the first ancestor message (i.e. the message
     that originated the thread).
 } {
-    db_1row acs_message_first_ancestor {
-	select acs_message.first_ancestor(:message_id) as ancestor_id from dual
-    }
+    db_1row acs_message_first_ancestor {}
 
     return $ancestor_id
 }
