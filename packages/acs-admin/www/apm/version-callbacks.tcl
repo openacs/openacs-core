@@ -7,10 +7,16 @@ ad_page_contract {
     version_id:naturalnum,notnull    
 }
 
-db_1row package_version_info "select pretty_name, version_name from apm_package_version_info where version_id = :version_id"
+db_1row package_version_info {
+    select pretty_name, version_name
+    from apm_package_version_info
+    where version_id = :version_id
+}
 
 set page_title "\#acs-admin.Tcl_Callbacks\#"
-set context [list [list "." "\#acs-admin.Package_Manager\#"] [list [export_vars -base version-view { version_id }] "$pretty_name $version_name"] $page_title]
+set context [list [list "." "\#acs-admin.Package_Manager\#"] \
+                 [list [export_vars -base version-view { version_id }] "$pretty_name $version_name"] \
+                 $page_title]
 
 set unused_callback_types [apm_unused_callback_types -version_id $version_id]
 

@@ -12,8 +12,8 @@ ad_page_contract {
     context:onevalue
 } -validate {
     if_diff_authority {
-	set from_authority_id [db_string gettoa "select authority_id from cc_users where user_id = :from_user_id"]
-	set to_authority_id [db_string getfroma "select authority_id from cc_users where user_id = :to_user_id"]
+	set from_authority_id [db_string gettoa {select authority_id from cc_users where user_id = :from_user_id}]
+	set to_authority_id [db_string getfroma {select authority_id from cc_users where user_id = :to_user_id}]
 	if { $from_authority_id ne $to_authority_id } {
 	    ad_complain "Merge only works for users from the same authority"
 	}

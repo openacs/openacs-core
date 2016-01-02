@@ -56,11 +56,7 @@ set user_finite_state_links [join [ad_registration_finite_state_machine_admin_li
 
 # XXX Make sure to make the following into links and this looks okay
 
-db_multirow user_contributions  user_contributions "select at.pretty_name, at.pretty_plural, a.creation_date, acs_object.name(a.object_id) object_name
-from acs_objects a, acs_object_types at
-where a.object_type = at.object_type
-and a.creation_user = :user_id
-order by object_name, creation_date"
+db_multirow user_contributions user_contributions {}
 
 # cro@ncacasi.org 2002-02-20 
 # Boy is this query wacked, but I think I am starting to understand

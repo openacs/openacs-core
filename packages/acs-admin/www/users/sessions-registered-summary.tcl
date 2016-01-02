@@ -33,11 +33,13 @@ append whole_page "[ad_admin_header "Registered Sessions"]
 # we have to query for pretty month and year separately because Oracle pads
 # month with spaces that we need to trim
 
-set selection [ns_db select $db "select round(sysdate-last_visit) as n_days, count(*) as n_sessions, count(second_to_last_visit) as n_repeats
-from users
-where last_visit is not null
-group by round(sysdate-last_visit)
-order by 1"]
+set selection [ns_db select $db {
+    select round(sysdate-last_visit) as n_days, count(*) as n_sessions, count(second_to_last_visit) as n_repeats
+    from users
+    where last_visit is not null
+    group by round(sysdate-last_visit)
+    order by 1
+}]
 
 set table_rows ""
 

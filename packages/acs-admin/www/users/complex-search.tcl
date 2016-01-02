@@ -103,8 +103,11 @@ set rowcount 0
 
 if {$limit_to_users_in_group_id ne "" 
     && ![regexp {[^-0-9]} $limit_to_users_in_group_id] } {
-    set group_name [db_string user_group_name_from_id \
-                        "select group_name from groups where group_id = :limit_to_users_in_group_id"]
+    set group_name [db_string user_group_name_from_id {
+        select group_name
+        from groups
+        where group_id = :limit_to_users_in_group_id
+    }]
     incr rowcount
     set criteria:[set rowcount](data) \
         "Is a member of '$group_name'"
@@ -194,16 +197,18 @@ set criteria:rowcount $rowcount
 
 
 if { $limit_to_users_in_group_id ne "" } {
-    set query "select distinct first_names, last_name, email, member_state, email_verified_p, cu.user_id
+    set query {
+        select distinct first_names, last_name, email, member_state, email_verified_p, cu.user_id
         from cc_users cu, group_member_map gm
         where (cu.user_id = gm.member_id
-        and gm.group_id = :limit_to_users_in_group_id)"
+               and gm.group_id = :limit_to_users_in_group_id)
+    }
     if {[llength $where_clause] > 0} {
         append query \
             "\n$where_conjunction [join $where_clause "\n$where_conjunction "]"
     }
 } else {
-    set query "select user_id, email_verified_p, first_names, last_name, email, member_state from cc_users"
+    set query {select user_id, email_verified_p, first_names, last_name, email, member_state from cc_users}
     if {[llength $where_clause] > 0} {
         append query "\nwhere [join $where_clause "\n$where_conjunction "]"
     }

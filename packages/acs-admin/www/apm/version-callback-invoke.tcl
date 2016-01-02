@@ -9,7 +9,11 @@ ad_page_contract {
     type:notnull
 }
 
-db_1row package_version_info "select pretty_name, version_name from apm_package_version_info where version_id = :version_id"
+db_1row package_version_info {
+    select pretty_name, version_name
+    from apm_package_version_info
+    where version_id = :version_id
+}
 
 set return_url [export_vars -base version-callbacks { version_id }]
 

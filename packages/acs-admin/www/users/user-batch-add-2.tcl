@@ -35,8 +35,11 @@ while {[regexp {(.[^\n]+)} $userlist match_fodder row] } {
 	append exception_text "<li>Couldn't find a valid email address in ($row).</li>\n"
 	continue
     } else {
-	set email_count [db_string unused "select count(email)
-from parties where email = lower(:email)"]
+	set email_count [db_string unused {
+            select count(email)
+            from parties
+            where email = lower(:email)
+        }]
 	
 	if {$email_count > 0} {
 	    append exception_text "<li> $email was already in the database.</li>\n"
