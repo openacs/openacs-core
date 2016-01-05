@@ -23,10 +23,9 @@ ad_proc -private apm_required_attribute_value { element attribute } {
 }
 
 ad_proc -private apm_attribute_value {
-    {
-	-default ""
-    }
-    element attribute } {
+    {-default ""}
+    element attribute
+} {
 
     Parses the XML element to return the value for the specified attribute.
 
@@ -238,7 +237,11 @@ ad_proc -public apm_read_package_info_file { path } {
     set xml_data [read $file]
     close $file
 
-    set tree [xml_parse -persist $xml_data]
+    if {[catch {set tree [xml_parse -persist $xml_data]} errorMsg]} {
+        ns_log error "parsing XML file $path lead to error: $errorMsg"
+        return -code error "file: $path\n$errorMsg"
+    }
+
     set root_node [xml_doc_get_first_node $tree]
     apm_log APMDebug "XML: root node is [xml_node_get_name $root_node]"
     set package $root_node
