@@ -1444,6 +1444,20 @@ ad_proc -public ad_conn {args} {
                             # return the physical peer address
                             return [ns_conn $var]
                         }
+
+                        mobile_p {
+                            #
+                            # Check, if we are used from a mobile device (based on user_agent).
+                            #
+                            if {[ns_conn isconnected]} {
+                                set user_agent [string tolower [ns_set get [ns_conn headers] User-Agent]]
+                                set ad_conn(mobile_p) [regexp (android|webos|iphone|ipad) $user_agent]
+                            } else {
+                                set ad_conn(mobile_p) 0
+                            }
+                            return $ad_conn(mobile_p)
+                        }
+                        
                         default {
                             return [ns_conn $var]
                         }
