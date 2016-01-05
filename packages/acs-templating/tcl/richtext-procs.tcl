@@ -330,6 +330,8 @@ ad_proc -public template::util::richtext::initialize_widget {
     return $result
 }
 
+set ::template::util::richtext::editors {}
+
 ad_proc -public template::util::richtext::register_editor { editor } {
 
     Make an rich-text editor known to the templating system.
