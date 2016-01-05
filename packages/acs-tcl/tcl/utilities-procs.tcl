@@ -1655,6 +1655,7 @@ ad_proc -private util_WriteWithExtraOutputHeaders {
 
 ad_proc -private ReturnHeaders {
     {content_type text/html}
+    {content_length ""}
 } {
     We use this when we want to send out just the headers
     and then do incremental writes with ns_write.  This way the user
@@ -1664,13 +1665,14 @@ ad_proc -private ReturnHeaders {
     It returns status 200 and all headers including
     any added to outputheaders.
 } {
-
-    if {[string match "text/*" $content_type] && ![string match "*charset=*" $content_type]} {
+    set text_p [string match "text/*" $content_type]
+    if {$text_p && ![string match "*charset=*" $content_type]} {
         append content_type "; charset=[ns_config ns/parameters OutputCharset iso-8859-1]"
     }
 
     if {[ns_info name] eq "NaviServer"} {
-        ns_headers 200 $content_type
+        set binary [expr {$text_p ? "" : "-binary"}]
+        ns_headers {*}$binary 200 $content_type {*}$content_length
     } else {
         set all_the_headers "HTTP/1.0 200 OK
 MIME-Version: 1.0

@@ -110,11 +110,27 @@ ad_proc -public cr_write_content {
             if { $string_p } {
                 return [db_blob_get write_lob_content ""]
             }
-	    # need to set content_length header here
-	    ns_set put [ns_conn outputheaders] "Content-Length" $content_length
-            ReturnHeaders $mime_type
-	    # also need to check for HEAD method and skip sending
-	    # actual content
+
+            #
+	    # Need to set content_length header here.
+            #
+            # Unfortunately, old versions of OpenACS did not set the
+            # content_length correctly, so we fix this here locally.
+            #
+            if {$content_length eq "0" && [db_driverkey ""] eq "postgresql"} {
+                set content_length [db_string get_lob_length {
+                    select sum(byte_len)
+                    from cr_revisions, lob_data
+                    where revision_id = :revision_id and lob_id = cr_revisions.lob
+                }]
+            }
+            
+            ns_set put [ns_conn outputheaders] "Content-Length" $content_length
+            
+            ReturnHeaders $mime_type $content_length
+            #
+	    # In a HEAD request, just send headers and no content
+            #
 	    if {![string equal -nocase "head" [ns_conn method]]} {
 		db_write_blob write_lob_content ""
 	    } else {

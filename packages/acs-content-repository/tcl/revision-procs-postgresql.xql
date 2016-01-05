@@ -21,7 +21,7 @@
 
 <fullquery name="cr_write_content.write_lob_content">
       <querytext>
-          select lob as content
+          select lob as content, 'lob' as storage_type
           from cr_revisions
           where revision_id = :revision_id
       </querytext>
