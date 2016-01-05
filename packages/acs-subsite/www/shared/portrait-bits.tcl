@@ -24,7 +24,13 @@ if { $item_id != 0} {
     if {$size eq ""} {
         cr_write_content -item_id $item_id
     } else {
-        content::item::get -item_id $item_id -array_name itemInfo
+        if {[content::item::get -item_id $item_id -array_name itemInfo] == 0} {
+            if {[content::item::get -item_id $item_id -array_name itemInfo -revision latest] == 0} {
+                ad_log warning "cannot obtain revision info for item_id $item_id user_id $user_id"
+                ns_returnnotfound
+                ad_script_abort
+            }
+        }
 
         #
         # For portraits stored as files in the content repository,
