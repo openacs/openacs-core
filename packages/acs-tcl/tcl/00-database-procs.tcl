@@ -428,10 +428,10 @@ ad_proc -public db_nextval {
           }
           if {[info exists ::db::sequences(t_$sequence)]} {
             #ns_log notice "-- found t_$sequence"
-            set nextval [db_string -dbn $dbn "nextval" "select nextval('t_$sequence')"]
+            set nextval [db_string -dbn $dbn nextval "select nextval('t_$sequence')"]
           } elseif {[info exists ::db::sequences($sequence)]} {
             #ns_log notice "-- found $sequence"
-            set nextval [db_string -dbn $dbn "nextval" "select nextval('$sequence')"]
+            set nextval [db_string -dbn $dbn nextval "select nextval('$sequence')"]
           } elseif { [db_0or1row -dbn $dbn nextval_sequence "
                  select nextval('${sequence}') as nextval
                  where (select relkind 
@@ -449,7 +449,7 @@ ad_proc -public db_nextval {
             # finally, there might be a view with a nextval
             #
             ns_log debug "db_nextval: sequence($sequence) is not a real sequence.  perhaps it uses the view hack."
-            set nextval [db_string -dbn $dbn "nextval" "select nextval from $sequence"]
+            set nextval [db_string -dbn $dbn nextval "select nextval from $sequence"]
           }
 
           return $nextval
@@ -458,7 +458,7 @@ ad_proc -public db_nextval {
         oracle -
         nsodbc -
         default {
-            return [db_string -dbn $dbn "nextval" "select $sequence.nextval from dual"]
+            return [db_string -dbn $dbn nextval "select $sequence.nextval from dual"]
         }
     }
 }
