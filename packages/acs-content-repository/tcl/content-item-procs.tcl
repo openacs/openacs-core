@@ -220,7 +220,7 @@ ad_proc -public ::content::item::get {
     @creation-date 2004-05-28
 
     @param item_id
-    @param revision live, latest, or best (live if it exists, otherwise latest)
+    @param revision live, latest
     @param array_name name of array to upvar content into
     @return upvars array_name containing all attributes of the content
     type except content
