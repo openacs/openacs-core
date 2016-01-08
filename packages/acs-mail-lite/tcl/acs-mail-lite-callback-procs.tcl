@@ -24,32 +24,25 @@ ad_proc -public -callback acs_mail_lite::send {
     {-filesystem_files}
     {-delete_filesystem_files_p}
     {-object_id}
+    {-status ok}
+    {-errorMsg ""}
 } {
 
     Callback for executing code after an email has been send using the send mechanism.
     
 	@param package_id Package ID of the sending package
-	
 	@param message_id the generated message_id for this mail
-
 	@param from_addr email of the sender
-
 	@param to_addr list of emails to whom did we send this email
-
 	@param body Text body of the email
-
-    @param mime_type Mime type of the email body
-	
+        @param mime_type Mime type of the email body
 	@param subject of the email
-	
 	@param cc_addr list of emails to whom did we send this email in CC
-
 	@param bcc_addr list of emails to whom did we send this email in BCC
-
 	@param file_ids List of file ids sent as attachments.
-
-    @param object_id The ID of the object that is responsible for sending the mail in the first place
-
+        @param object_id The ID of the object that is responsible for sending the mail in the first place
+        @param status Status of the send operation ("ok" or "error")
+        @param errorMsg Error Details
 } -
 
 ad_proc -public -callback acs_mail_lite::incoming_email {
