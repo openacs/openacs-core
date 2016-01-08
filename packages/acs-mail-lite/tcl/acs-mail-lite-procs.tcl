@@ -20,7 +20,7 @@ namespace eval acs_mail_lite {
         return [apm_package_id_from_key acs-mail-lite]
     }
     
-    ad_proc -public get_parameter {
+    ad_proc -public get_parameter {    prevPreventRecursionFlags
         -name:required
         {-default ""}
     } {
@@ -593,7 +593,9 @@ namespace eval acs_mail_lite {
                             -package_id $package_id \
                             -message_id $message_id]
 
-
+        set errorMsg ""
+        set status ok
+        
         if { $send_mode eq "log" } {
 
             # Add recipients to headers
@@ -611,10 +613,12 @@ namespace eval acs_mail_lite {
             ns_log Notice "acs-mail-lite::send: $notice\n\n**********\nEnvelope sender: $originator\n\n$packaged\n**********"
 
         } else {
-
-            acs_mail_lite::smtp -multi_token $tokens \
-                -headers $headers_list \
-                -originator $originator
+            
+            if {[catch {acs_mail_lite::smtp -multi_token $tokens \
+                       -headers $headers_list \
+                            -originator $originator} errorMsg]} {
+                set status error
+            }
             
             # Close all mime tokens
             mime::finalize $tokens -subordinates all
@@ -635,7 +639,9 @@ namespace eval acs_mail_lite {
                 -file_ids $file_ids \
                 -filesystem_files $filesystem_files \
                 -delete_filesystem_files_p $delete_filesystem_files_p \
-                -object_id $object_id
+                -object_id $object_id \
+                -status $status
+                -errorMsg $errorMsg
         }
         
 	# Attachment files can now be deleted, if so required.
@@ -646,6 +652,9 @@ namespace eval acs_mail_lite {
 		file delete $f
 	    }
 	}
+        if {$status ne "ok"} {
+            error $errorMsg
+        }
     }
 
     #---------------------------------------
