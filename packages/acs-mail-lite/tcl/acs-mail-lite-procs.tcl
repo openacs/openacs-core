@@ -329,6 +329,7 @@ namespace eval acs_mail_lite {
                             -subject $subject \
                             -body $body \
                             -package_id $package_id \
+                            -object_id $object_id \
                             -file_ids $file_ids \
                             -filesystem_files $filesystem_files \
                             -delete_filesystem_files_p $delete_filesystem_files_p \
