@@ -20,7 +20,7 @@ namespace eval acs_mail_lite {
         return [apm_package_id_from_key acs-mail-lite]
     }
     
-    ad_proc -public get_parameter {    prevPreventRecursionFlags
+    ad_proc -public get_parameter {
         -name:required
         {-default ""}
     } {
