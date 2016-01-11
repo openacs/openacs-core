@@ -641,7 +641,7 @@ namespace eval acs_mail_lite {
                 -filesystem_files $filesystem_files \
                 -delete_filesystem_files_p $delete_filesystem_files_p \
                 -object_id $object_id \
-                -status $status
+                -status $status \
                 -errorMsg $errorMsg
         }
         
