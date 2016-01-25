@@ -323,7 +323,7 @@ ad_proc -public template::util::richtext::initialize_widget {
     }
 
     set result {success 1}
-    lappend result {*}[::richtext-${editor}::initialize_widget \
+    lappend result {*}[::richtext::${editor}::initialize_widget \
                            -form_id $form_id \
                            -text_id $text_id \
                            -options $options]
@@ -356,7 +356,7 @@ ad_proc -public template::util::richtext::render_widgets { } {
     ns_log debug "we have the following editors registered: $::template::util::richtext::editors"
     
     foreach editor $::template::util::richtext::editors {
-        ::richtext-${editor}::render_widgets
+        ::richtext::${editor}::render_widgets
     }
 }
 
