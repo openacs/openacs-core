@@ -760,7 +760,7 @@ ad_proc -public api_get_body {proc_name} {
             return [::xo::api get_method_source "" $obj $prefix $method]
         }
     } elseif {[info commands ::xo::api] ne ""
-              && [regexp {^([^ ]+)(Class|Object) (.*)$} $proc_name . thread kind obj]} {
+              && [regexp {^([^ ]+) (Class|Object) (.*)$} $proc_name . thread kind obj]} {
         return [::xo::api get_object_source $thread $obj]
     } elseif {[info commands ::xo::api] ne ""
               && [regexp {(Class|Object) (.*)$} $proc_name . kind obj]} {
