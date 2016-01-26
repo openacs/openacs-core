@@ -67,7 +67,7 @@ if {![file readable $::acs::rootdir/$path] || [file isdirectory $::acs::rootdir/
 }
 
 set mime_type [ns_guesstype $path]
-if {![string match "text/*" $mime_type]} {
+if {![string match "text/*" $mime_type] && [file extension $path] ne ".xql"} {
     set source_p 0
     set source_link 0
 } else {
