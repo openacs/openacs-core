@@ -419,7 +419,7 @@ ad_proc -public template::form::section {
 
     # legend can't be empty
     if { $section ne "" && $legendtext eq "" } {
-        ns_log Warning "template::form::section (form: $id, section: $section): The section legend is empty. You must provide text for the legend otherwise the section fieldset won't be created."
+        ad_log Warning "template::form::section (form: $id, section: $section): The legend-text of this section is empty. You must provide text for the legend-text otherwise the section fieldset won't be created."
         return
     }
 
