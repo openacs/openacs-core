@@ -556,7 +556,7 @@ ad_proc -private template::form::render { id tag_attributes } {
       # Submitting invalid data to hidden elements is a common attack vector.  
       # This does not give them much information in the response.
       ad_return_complaint 1 "Your request is invalid."
-      ns_log Warning "Validation error in hidden form element.\
+      ad_log Warning "Validation error in hidden form element.\
 	This may be part of a vulnerability scan or attack reconnaissance: \
 	'[set $id:error($element(id))]' on element '$element(id)'."
       ad_script_abort
@@ -659,7 +659,7 @@ ad_proc -private template::form::check_elements { id } {
 
       } else {
 
-        ns_log Warning "template::form::check_elements: MISSING FORMWIDGET: $id\:$element_ref"
+        ad_log Warning "template::form::check_elements: MISSING FORMWIDGET: $id\:$element_ref"
         # Throw an error ?
       }
     }
