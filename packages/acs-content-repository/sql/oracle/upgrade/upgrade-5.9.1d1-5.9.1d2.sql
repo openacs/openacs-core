@@ -1,20 +1,9 @@
--- Data model to support content repository of the ArsDigita
--- Community System
-
--- Copyright (C) 1999-2000 ArsDigita Corporation
--- Author: Karl Goldstein (karlg@arsdigita.com)
-
--- $Id$
-
--- This is free software distributed under the terms of the GNU Public
--- License.  Full text of the license is available from the GNU Project:
--- http://www.fsf.org/copyleft/gpl.html
-set serveroutput on size 1000000 format wrapped
-
-create or replace view content_item_globals as
-    select -100 as c_root_folder_id
-    from dual;
-
+--
+-- upgrade of content_item.set_live_revision() by adding an optional
+-- argument for the publish_date in order not to force the current
+-- time to be the publish date.
+--
+--
 create or replace package body content_item
 as
 
@@ -1737,30 +1726,3 @@ end get_parent_folder;
 end content_item;
 /
 show errors
-
--- Trigger to maintain context_id in acs_objects
-create or replace trigger cr_items_update_tr 
-after update of parent_id on cr_items for each row
-begin
-  update acs_objects set context_id = :new.parent_id
-  where object_id = :new.item_id;
-end cr_items_ins_update_tr;
-/
-show errors
-
--- Trigger to maintain publication audit trail
-create or replace trigger cr_items_publish_update_tr 
-before update of live_revision, publish_status on cr_items for each row
-begin
-  insert into cr_item_publish_audit (
-    item_id, old_revision, new_revision, old_status, new_status, publish_date
-  ) values (
-    :new.item_id, :old.live_revision, :new.live_revision, 
-    :old.publish_status, :new.publish_status,
-    sysdate
-  );
-end cr_items_publish_update_tr;
-/
-show errors
-
-
