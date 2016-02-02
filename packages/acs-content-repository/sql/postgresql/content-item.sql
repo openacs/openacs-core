@@ -1930,53 +1930,14 @@ END;
 $$ LANGUAGE plpgsql stable strict;
 
 
-select define_function_args('content_item__set_live_revision','revision_id,publish_status;ready');
+select define_function_args('content_item__set_live_revision','revision_id,publish_status;ready,publish_date;now()');
 --
--- procedure content_item__set_live_revision/1
---
-CREATE OR REPLACE FUNCTION content_item__set_live_revision(
-   set_live_revision__revision_id integer
-) RETURNS integer AS $$
---
--- content_item__set_live_revision/1 maybe obsolete, when we define proper defaults for /2
---
-DECLARE
-  set_live_revision__publish_status cr_items.publish_status%TYPE default 'ready';
-BEGIN
-
-  update
-    cr_items
-  set
-    live_revision = set_live_revision__revision_id,
-    publish_status = set_live_revision__publish_status
-  where
-    item_id = (select
-                 item_id
-               from
-                 cr_revisions
-               where
-                 revision_id = set_live_revision__revision_id);
-
-  update
-    cr_revisions
-  set
-    publish_date = now()
-  where
-    revision_id = set_live_revision__revision_id;
-
-  return 0; 
-END;
-$$ LANGUAGE plpgsql;
-
-
-select define_function_args('content_item__set_live_revision','revision_id,publish_status;ready');
---
--- procedure content_item__set_live_revision/2
+-- procedure content_item__set_live_revision/1,2,3
 --
 CREATE OR REPLACE FUNCTION content_item__set_live_revision(
    set_live_revision__revision_id integer,
-   set_live_revision__publish_status varchar -- default 'ready'
-
+   set_live_revision__publish_status varchar default 'ready',
+   set_live_revision__publish_date timestamptz default now()
 ) RETURNS integer AS $$
 DECLARE
 BEGIN
@@ -1997,7 +1958,7 @@ BEGIN
   update
     cr_revisions
   set
-    publish_date = now()
+    publish_date = set_live_revision__publish_date
   where
     revision_id = set_live_revision__revision_id;
 
