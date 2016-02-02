@@ -33,7 +33,7 @@ BEGIN
                select content_revision__new(
                                      p_new.title,
                                      p_new.description,
-                                     p_new.publish_date(),
+                                     p_new.publish_date,
                                      p_new.mime_type,
                                      p_new.nls_language,
                                      case when p_new.text is null 
