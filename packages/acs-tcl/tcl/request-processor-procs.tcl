@@ -672,7 +672,7 @@ ad_proc -private rp_filter { why } {
     
     if { [catch { array set node [site_node::get -url $ad_conn_url] } errmsg] } {
         # log and do nothing
-        rp_debug "error within rp_filter [ns_conn method] [ns_conn url] [ns_conn query].  $errmsg"
+        ad_log error "error within rp_filter: $errmsg"
     } else {
 
         if {$node(url) eq "$ad_conn_url/"} {
