@@ -967,7 +967,7 @@ ad_proc -public ad_page_contract {
                 }
             }
         } else {
-            ns_log Error "ad_page_contract: attempt to use a nonstandard variable name in form.  [ns_set key $form $form_counter_i]  "
+            ad_log warning "ad_page_contract: attempt to use a nonstandard variable name in form.  [ns_set key $form $form_counter_i]  "
         }
     }
     
