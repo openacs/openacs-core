@@ -36,7 +36,7 @@ if {$version_id ne ""} {
          where version_id = :version_id
     }
     if {[info exists pretty_name]} {
-	lappend context [list "package-view?version_id=$version_id&amp;kind=sql_files" "$pretty_name $version_name"]
+	lappend context [list [export_vars -base package-view {version_id {kind sql_files}}] "$pretty_name $version_name"]
     }
 }
 lappend context [file tail $url]
