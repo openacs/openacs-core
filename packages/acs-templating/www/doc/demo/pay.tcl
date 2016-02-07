@@ -3,7 +3,6 @@ form create pay_bill -section required -sec_legendtext Payment -elements {
   payee -label "Payee" -datatype text -widget text 
   amount -label "Amount" -datatype integer -widget text 
 } 
-template::form::section pay_bill optional
 template::element::create pay_bill note -label "Note" -datatype text -widget text -optional
 
     
