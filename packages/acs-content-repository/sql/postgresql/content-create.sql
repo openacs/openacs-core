@@ -1375,16 +1375,19 @@ BEGIN
 
   v_revision_id := content_revision__new(
                'Template',
-               NULL,
-               now(),
-               'text/html',
-               null,
+               null,           -- description
+               now(),          -- publish_date
+               'text/html',    -- mime_type
+               null,           -- nls_language
                '<html><body>@text;noquote@</body></html>',
                v_item_id,
-               NULL,
-               now(),
-               null,
-               null);
+               null,           -- revision_id
+               now(),          -- creation_date
+               null,           -- creation_user
+               null,           -- creation_ip
+	       null,           -- content_length
+	       null            -- package_id
+	       );
 
   update 
     cr_revisions

@@ -762,6 +762,7 @@ BEGIN
                                      now(),
                                      p_new.creation_user, 
                                      p_new.creation_ip,
+                                     null,                   -- content_length
                                      p_new.object_package_id
                 ) into v_revision_id;
                 ';
@@ -777,13 +778,13 @@ BEGIN
                     and ot1.table_name is not null
                   order by level asc
   LOOP
-    function_text := function_text || ' ' || content_type__trigger_insert_statement(type_rec.object_type) || ';
+    function_text := function_text || content_type__trigger_insert_statement(type_rec.object_type) || ';
     ';
   end loop;
 
   function_text := function_text || '
    return;
-   end;'' language ''plpgsql''; 
+   end;'' language plpgsql; 
    ';
   -- end building the rule definition code
 
