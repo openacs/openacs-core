@@ -904,7 +904,7 @@ CREATE OR REPLACE FUNCTION content_folder__register_content_type(
 
 ) RETURNS integer AS $$
 DECLARE
-  v_is_registered                               varchar;  
+  v_is_registered boolean;
 BEGIN
 
   if register_content_type__include_subtypes = 'f' then
