@@ -210,9 +210,6 @@ $$ LANGUAGE plpgsql;
 -- new
 select define_function_args('content_folder__new','name,label,description;null,parent_id;null,context_id;null,folder_id;null,creation_date;now,creation_user;null,creation_ip;null,security_inherit_p;t,package_id;null');
 
-
-
-
 --
 -- procedure content_folder__new/11
 --
@@ -904,7 +901,7 @@ CREATE OR REPLACE FUNCTION content_folder__register_content_type(
 
 ) RETURNS integer AS $$
 DECLARE
-  v_is_registered                               varchar;  
+  v_is_registered boolean;  
 BEGIN
 
   if register_content_type__include_subtypes = 'f' then
