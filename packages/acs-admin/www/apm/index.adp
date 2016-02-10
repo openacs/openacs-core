@@ -16,7 +16,7 @@
 <ul>
 <li><a href="package-add">Create a new package.</a>
 <li><a href="write-all-specs">Write new specification files for all installed, locally generated packages.</a>
-<li><a href="/acs-admin/install">Install packages.</a>
+<li><a href="/acs-admin/install">Install or Upgrade packages.</a>
 </ul>
 
 @watches_html;noquote@
