@@ -1,117 +1,21 @@
--- Data model to support content repository of the ArsDigita
--- Publishing System
-
--- Copyright (C) 1999-2000 ArsDigita Corporation
--- Author: Hiro Iwashima (iwashima@mit.edu)
-
--- $Id$
-
--- This is free software distributed under the terms of the GNU Public
--- License.  Full text of the license is available from the GNU Project:
--- http://www.fsf.org/copyleft/gpl.html
-
--- This is to handle images
-
-create table images (
-   image_id       integer
-                  constraint images_image_id_fk
-                  references cr_revisions
-                  constraint images_image_id_pk
-                  primary key,
-   width          integer,
-   height         integer
-);
-
-
-begin;
-
- select content_type__create_type (
-   'image',
-   'content_revision',
-   'Image',
-   'Images',
-   'images',
-   'image_id',
-   null
- );
-
- select content_type__create_attribute (
-   'image',
-   'width',
-   'integer',
-   'Width',
-   'Widths',
-   null,
-   null,
-   'text'
- );
-
- select content_type__create_attribute (
-   'image',
-   'height',
-   'integer',
-   'Height',
-   'Heights',
-   null,
-   null,
-   'text'
- );
-
-end;
-
--- register MIME types to this content type
-begin;
-
-  select content_type__register_mime_type(
-    'image',
-    'image/jpeg'
-  );
-
-  select content_type__register_mime_type(
-    'image',
-    'image/gif'
-  );
-
-end;
-
-
--- content-image.sql patch
 --
--- adds standard image pl/sql package
---
--- Walter McGinnis (wtem@olywa.net), 2001-09-23
--- based on original photo-album package code by Tom Baginski
+-- reduce number of versions of image__new from 4 to 2by using defaults
+-- reduce number of versions of image__new_revision from 2 to 1 by using defaults
+-- commented differences
 --
 
-/*
- Creates a new image
- Binary file stored in file-system
-*/
+-- image__new/17
+DROP FUNCTION IF EXISTS image__new(varchar,integer,integer,integer,varchar,integer,varchar,varchar,varchar,varchar,boolean,timestamptz,varchar,integer,integer,integer,integer);
+DROP FUNCTION IF EXISTS image__new(varchar,integer,integer,integer,varchar,integer,varchar,varchar,varchar,varchar,boolean,timestamptz,varchar,integer,integer,integer);
 
--- DRB: This code has some serious problem, IMO.  It's impossible to derive a new
--- type from "image" and make use of it, for starters.  Photo-album uses two 
--- content types to store a photograph - pa_photo and image.  pa_photo would, in
--- the world of real object-oriented languages, be derived from image and there's
--- really no reason not to do so in the OpenACS object type system.  The current
--- style requires separate content_items and content_revisions for both the 
--- pa_photo extended type and the image base type.  They're only tied together
--- by the coincidence of both being the live revision at the same time.  Delete
--- one or the other and guess what, that association's broken!
+-- DRB's version image__new/16 (differs in arg type 11ff)
+DROP FUNCTION IF EXISTS image__new(varchar,integer,integer,integer,varchar,integer,varchar,varchar,varchar,varchar,varchar,varchar,timestamptz,integer,integer,integer);
+DROP FUNCTION IF EXISTS image__new(varchar,integer,integer,integer,varchar,integer,varchar,varchar,varchar,varchar,varchar,varchar,timestamptz,integer,integer);
 
--- This is not, to put it mildly, clean.  Nor is it efficient to fill the RDBMS
--- with twice as many objects as you need...
+-- procedure image__new_revision/12
+DROP FUNCTION IF EXISTS image__new_revision(integer,integer,varchar,varchar,timestamptz,varchar,varchar,integer,varchar,integer,integer,integer);
+DROP FUNCTION IF EXISTS image__new_revision(integer,integer,varchar,varchar,timestamptz,varchar,varchar,integer,varchar,integer,integer);
 
--- The Oracle version does allow a non-image type to be specified, as does my
--- alternative down below.  This needs a little more straightening out.
-
--- DRB: BLOB issues make it impractical to use package_instantiate_object to create
--- new revisions that contain binary data so a higher-level Tcl API is required rather
--- than the standard package_instantiate_object.  So we don't bother calling define_function_args
--- here.
-
-
-
-select define_function_args('image__new','name,parent_id;null,item_id;null,revision_id;null,mime_type;jpeg,creation_user;null,creation_ip;null,relation_tag;null,title;null,description;null,is_live;f,publish_date;now(),path,file_size,height,width,package_id;null');
 
 --
 -- procedure image__new/17
@@ -223,6 +127,7 @@ $$ LANGUAGE plpgsql;
 -- compared to image_new/17:
 --    * has no relation_tag, is_live, path, file_size
 --    * but has storage_type, content_type, nls_language
+
 --
 CREATE OR REPLACE FUNCTION image__new(
    p_name varchar,
@@ -308,8 +213,6 @@ $$ LANGUAGE plpgsql;
 
 
 
-select define_function_args('image__new_revision','item_id,revision_id,title,description,publish_date,mime_type,nls_language,creation_user,creation_ip,height,width,package_id');
-
 --
 -- procedure image__new_revision/12
 --
@@ -362,25 +265,4 @@ BEGIN
 
     return v_revision_id;
 END;
-$$ LANGUAGE plpgsql;
-
-
-
-
-select define_function_args('image__delete','v_item_id');
-
---
--- procedure image__delete/1
---
-CREATE OR REPLACE FUNCTION image__delete(
-   v_item_id integer
-) RETURNS integer AS $$
-DECLARE
-BEGIN
-
-    -- This should take care of deleting revisions, too.
-    PERFORM content_item__delete (v_item_id);
-    return 0;
-
-END; 
 $$ LANGUAGE plpgsql;

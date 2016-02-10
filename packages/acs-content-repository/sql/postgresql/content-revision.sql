@@ -20,271 +20,17 @@
 -- here.
 
 
-
--- added
-
---
--- procedure content_revision__new/12
---
-CREATE OR REPLACE FUNCTION content_revision__new(
-   new__title varchar,
-   new__description varchar,       -- default null
-   new__publish_date timestamptz,  -- default now()
-   new__mime_type varchar,         -- default 'text/plain'
-   new__nls_language varchar,      -- default null
-   new__data integer,
-   new__item_id integer,
-   new__revision_id integer,       -- default null
-   new__creation_date timestamptz, -- default now()
-   new__creation_user integer,     -- default null
-   new__creation_ip varchar,       -- default null
-   new__package_id integer         -- default null
-
-) RETURNS integer AS $$
-DECLARE
-  -- lob id 
-  v_revision_id               integer;       
-  v_package_id                acs_objects.package_id%TYPE;
-  v_content_type              acs_object_types.object_type%TYPE;
-BEGIN
-
-  v_content_type := content_item__get_content_type(new__item_id);
-
-  if new__package_id is null then
-    v_package_id := acs_object__package_id(new__item_id);
-  else
-    v_package_id := new__package_id;
-  end if;
-
-  v_revision_id := acs_object__new(
-      new__revision_id,
-      v_content_type, 
-      new__creation_date, 
-      new__creation_user, 
-      new__creation_ip, 
-      new__item_id,
-      't',
-      new__title,
-      v_package_id
-  );
-
-  -- binary data is stored in cr_revisions using Dons lob hack.
-  -- This routine only inserts the lob id.  It would need to be followed by 
-  -- ns_pg blob_dml from within a tcl script to actually insert the lob data.
-
-  -- After the lob data is inserted, the content_length needs to be updated 
-  -- as well.
-  -- DanW, 2001-05-10.
-
-  insert into cr_revisions (
-    revision_id, title, description, mime_type, publish_date,
-    nls_language, lob, item_id, content_length
-  ) values (
-    v_revision_id, new__title, new__description,
-    new__mime_type, 
-    new__publish_date, new__nls_language, new__data, 
-    new__item_id, 0
-  );
-
-  return v_revision_id;
-
-END;
-$$ LANGUAGE plpgsql;
-
-
-
---
--- procedure content_revision__new/11
---
-CREATE OR REPLACE FUNCTION content_revision__new(
-   new__title varchar,
-   new__description varchar,       -- default null
-   new__publish_date timestamptz,  -- default now()
-   new__mime_type varchar,         -- default 'text/plain'
-   new__nls_language varchar,      -- default null
-   new__data integer,
-   new__item_id integer,
-   new__revision_id integer,       -- default null
-   new__creation_date timestamptz, -- default now()
-   new__creation_user integer,     -- default null
-   new__creation_ip varchar        -- default null
-
-) RETURNS integer AS $$
-DECLARE
-  -- lob id 
-BEGIN
-        return content_revision__new(new__title,
-                                     new__description,
-                                     new__publish_date,
-                                     new__mime_type,
-                                     new__nls_language,
-                                     new__data,
-                                     new__item_id,
-                                     new__revision_id,
-                                     new__creation_date,
-                                     new__creation_user,
-                                     new__creation_ip,
-                                     null
-               );
-END;
-$$ LANGUAGE plpgsql;
-
-
-
---
--- procedure content_revision__new/7
---
-CREATE OR REPLACE FUNCTION content_revision__new(
-   new__title varchar,
-   new__description varchar,      -- default null
-   new__publish_date timestamptz, -- default now()
-   new__mime_type varchar,        -- default 'text/plain'
-   new__text text,                -- default ' '
-   new__item_id integer,
-   new__package_id integer        -- default null
-
-) RETURNS integer AS $$
-DECLARE
-BEGIN
-        return content_revision__new(new__title,
-                                     new__description,
-                                     new__publish_date,
-                                     new__mime_type,
-                                     null,
-                                     new__text,
-                                     new__item_id,
-                                     null,
-                                     now(),
-                                     null,
-                                     null,
-                                     null,
-                                     new__package_id
-               );
-
-END;
-$$ LANGUAGE plpgsql;
-
-
-
---
--- procedure content_revision__new/6
---
-CREATE OR REPLACE FUNCTION content_revision__new(
-   new__title varchar,
-   new__description varchar,      -- default null
-   new__publish_date timestamptz, -- default now()
-   new__mime_type varchar,        -- default 'text/plain'
-   new__text text,                -- default ' '
-   new__item_id integer
-
-) RETURNS integer AS $$
-DECLARE
-BEGIN
-        return content_revision__new(new__title,
-                                     new__description,
-                                     new__publish_date,
-                                     new__mime_type,
-                                     null,
-                                     new__text,
-                                     new__item_id,
-                                     null,
-                                     now(),
-                                     null,
-                                     null,
-                                     null,
-                                     null
-               );
-
-END;
-$$ LANGUAGE plpgsql;
-
-
-
---
--- procedure content_revision__new/11
---
-CREATE OR REPLACE FUNCTION content_revision__new(
-   new__title varchar,
-   new__description varchar,       -- default null
-   new__publish_date timestamptz,  -- default now()
-   new__mime_type varchar,         -- default 'text/plain'
-   new__nls_language varchar,      -- default null
-   new__text text,                 -- default ' '
-   new__item_id integer,
-   new__revision_id integer,       -- default null
-   new__creation_date timestamptz, -- default now()
-   new__creation_user integer,     -- default null
-   new__creation_ip varchar        -- default null
-
-) RETURNS integer AS $$
-DECLARE
-BEGIN
-        return content_revision__new(new__title,
-                                     new__description,
-                                     new__publish_date,
-                                     new__mime_type,
-                                     new__nls_language,
-                                     new__text,
-                                     new__item_id,
-                                     new__revision_id,
-                                     new__creation_date,
-                                     new__creation_user,
-                                     new__creation_ip,
-                                     null,
-                                     null
-                                     );
-END;
-$$ LANGUAGE plpgsql;
-
-
-
--- added
-
---
--- procedure content_revision__new/12
---
-CREATE OR REPLACE FUNCTION content_revision__new(
-   new__title varchar,
-   new__description varchar,       -- default null
-   new__publish_date timestamptz,  -- default now()
-   new__mime_type varchar,         -- default 'text/plain'
-   new__nls_language varchar,      -- default null
-   new__text text,                 -- default ' '
-   new__item_id integer,
-   new__revision_id integer,       -- default null
-   new__creation_date timestamptz, -- default now()
-   new__creation_user integer,     -- default null
-   new__creation_ip varchar,       -- default null
-   new__content_length integer     -- default null
-
-) RETURNS integer AS $$
-DECLARE
-BEGIN
-        return content_revision__new(new__title,
-                                     new__description,
-                                     new__publish_date,
-                                     new__mime_type,
-                                     new__nls_language,
-                                     new__text,
-                                     new__item_id,
-                                     new__revision_id,
-                                     new__creation_date,
-                                     new__creation_user,
-                                     new__creation_ip,
-                                     new__content_length,
-                                     null
-                                     );
-END;
-$$ LANGUAGE plpgsql;
-
 -- function new
 
-
--- added
 select define_function_args('content_revision__new','title,description;null,publish_date;now(),mime_type;text/plain,nls_language;null,text; ,item_id,revision_id;null,creation_date;now(),creation_user;null,creation_ip;null,content_length;null,package_id;null');
 
 --
--- procedure content_revision__new/13
+-- content_revision__new/13
+--
+-- We can't use for the last two argments "default null", since
+-- otherwise calls with provided package_id but no content_length
+-- would lead to a wrong interpretation of the package_id as
+-- content_length.
 --
 CREATE OR REPLACE FUNCTION content_revision__new(
    new__title varchar,
@@ -358,9 +104,159 @@ END;
 $$ LANGUAGE plpgsql;
 
 
+--
+-- procedure content_revision__new/11 content_revision__new/12
+--
+-- text/file version
+--
+CREATE OR REPLACE FUNCTION content_revision__new(
+   new__title varchar,
+   new__description varchar,       -- default null
+   new__publish_date timestamptz,  -- default now()
+   new__mime_type varchar,         -- default 'text/plain'
+   new__nls_language varchar,      -- default null
+   new__text text,                 -- default ' '
+   new__item_id integer,
+   new__revision_id integer,       -- default null
+   new__creation_date timestamptz, -- default now()
+   new__creation_user integer,     -- default null
+   new__creation_ip varchar,       -- default null
+   new__package_id integer default null
+
+) RETURNS integer AS $$   
+DECLARE
+BEGIN
+	raise NOTICE 'content_revision__new/12 is deprecated, call content_revision__new/13 instead';
+
+        return content_revision__new(new__title,
+                                     new__description,
+                                     new__publish_date,
+                                     new__mime_type,
+                                     new__nls_language,
+                                     new__text,
+                                     new__item_id,
+                                     new__revision_id,
+                                     new__creation_date,
+                                     new__creation_user,
+                                     new__creation_ip,
+                                     null,               -- content_length
+                                     new__package_id
+		);
+END
+$$ LANGUAGE plpgsql;
+
+
+--
+-- procedure content_revision__new/11 content_revision__new/12
+--
+-- lob version
+--
+CREATE OR REPLACE FUNCTION content_revision__new(
+   new__title varchar,
+   new__description varchar,       -- default null
+   new__publish_date timestamptz,  -- default now()
+   new__mime_type varchar,         -- default 'text/plain'
+   new__nls_language varchar,      -- default null
+   new__data integer,
+   new__item_id integer,
+   new__revision_id integer,       -- default null
+   new__creation_date timestamptz, -- default now()
+   new__creation_user integer,     -- default null
+   new__creation_ip varchar,       -- default null
+   new__package_id integer default null
+
+) RETURNS integer AS $$
+DECLARE
+  v_revision_id               integer;       
+  v_package_id                acs_objects.package_id%TYPE;
+  v_content_type              acs_object_types.object_type%TYPE;
+BEGIN
+
+  v_content_type := content_item__get_content_type(new__item_id);
+
+  if new__package_id is null then
+    v_package_id := acs_object__package_id(new__item_id);
+  else
+    v_package_id := new__package_id;
+  end if;
+
+  v_revision_id := acs_object__new(
+      new__revision_id,
+      v_content_type, 
+      new__creation_date, 
+      new__creation_user, 
+      new__creation_ip, 
+      new__item_id,
+      't',
+      new__title,
+      v_package_id
+  );
+
+  -- binary data is stored in cr_revisions using Dons lob hack.
+  -- This routine only inserts the lob id.  It would need to be followed by 
+  -- ns_pg blob_dml from within a tcl script to actually insert the lob data.
+
+  -- After the lob data is inserted, the content_length needs to be updated 
+  -- as well.
+  -- DanW, 2001-05-10.
+
+  insert into cr_revisions (
+    revision_id, title, description, mime_type, publish_date,
+    nls_language, lob, item_id, content_length
+  ) values (
+    v_revision_id, new__title, new__description,
+    new__mime_type, 
+    new__publish_date, new__nls_language, new__data, 
+    new__item_id, 0
+  );
+
+  return v_revision_id;
+
+END;
+$$ LANGUAGE plpgsql;
+
+
+
+
+--
+-- procedure content_revision__new/6 content_revision__new/7
+--
+CREATE OR REPLACE FUNCTION content_revision__new(
+   new__title varchar,
+   new__description varchar,      -- default null
+   new__publish_date timestamptz, -- default now()
+   new__mime_type varchar,        -- default 'text/plain'
+   new__text text,                -- default ' '
+   new__item_id integer,
+   new__package_id integer default null
+
+) RETURNS integer AS $$
+DECLARE
+BEGIN
+	raise NOTICE 'content_revision__new/7 is deprecated, call content_revision__new/13 instead';
+
+        return content_revision__new(new__title,
+                                     new__description,
+                                     new__publish_date,
+                                     new__mime_type,
+                                     null,
+                                     new__text,
+                                     new__item_id,
+                                     null,
+                                     now(),
+                                     null,
+                                     null,
+                                     null,
+                                     new__package_id
+               );
+
+END;
+$$ LANGUAGE plpgsql;
+
+
+
 -- procedure copy_attributes
 select define_function_args('content_revision__copy_attributes','content_type,revision_id,copy_id');
-
 
 --
 -- procedure content_revision__copy_attributes/3
