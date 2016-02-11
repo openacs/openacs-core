@@ -390,10 +390,14 @@ create table cr_child_rels (
                      references acs_objects,
   parent_id          integer
                      constraint cr_child_rels_parent_id_nn
-                     not null,
+                     not null
+		     CONSTRAINT cr_child_rels_parent_id_fk
+                     FOREIGN KEY (parent_id) REFERENCES acs_objects(object_id) ON DELETE CASCADE,
   child_id           integer
                      constraint cr_child_rels_child_id_nn
-                     not null,
+                     not null
+		     CONSTRAINT cr_child_rels_child_id_fk
+		     FOREIGN KEY (child_id) REFERENCES cr_items(item_id) ON DELETE CASCADE,
   relation_tag       varchar(100),
   order_n            integer
 );
@@ -417,7 +421,8 @@ create table cr_item_rels (
                      references acs_objects,
   item_id            integer
                      constraint cr_item_rels_item_id_fk
-                     references cr_items,
+		     CONSTRAINT cr_item_rels_item_id_fk
+		     FOREIGN KEY (item_id) REFERENCES cr_items(item_id) ON DELETE CASCADE,
   related_object_id  integer
                      constraint cr_item_rels_rel_obj_fk
                      references acs_objects,
@@ -950,8 +955,8 @@ create table cr_symlinks (
 		  constraint cr_symlinks_symlink_id_pk 
                   primary key,
   target_id       integer
-                  constraint cr_symlinks_target_id_fk
-		  references cr_items
+  		  CONSTRAINT cr_symlinks_target_id_fk
+		  FOREIGN KEY (target_id) REFERENCES cr_items(item_id) ON DELETE CASCADE
 		  constraint cr_symlinks_target_id_nn
 		  not null,
   label		  varchar(1000)
