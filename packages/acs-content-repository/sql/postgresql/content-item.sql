@@ -1037,8 +1037,8 @@ $$ LANGUAGE plpgsql stable;
 -- 6) delete keyword associations
 -- 7) delete all associated comments
 
-
 select define_function_args('content_item__del','item_id');
+
 --
 -- procedure content_item__del/1
 --
@@ -1046,20 +1046,9 @@ CREATE OR REPLACE FUNCTION content_item__del(
    delete__item_id integer
 ) RETURNS integer AS $$
 DECLARE
-  v_symlink_val                  record;
-  v_revision_val                 record;
-  v_rel_val                      record;
+  v_revision_val record;
+  v_child_val record;
 BEGIN
-  --
-  -- Delete all symlinks to this item
-  --
-  for v_symlink_val in select symlink_id
-                       from   cr_symlinks
-                       where  target_id = delete__item_id 
-  LOOP
-    PERFORM content_symlink__delete(v_symlink_val.symlink_id);
-  end loop;
-
   --
   -- Delete all revisions of this item
   --
@@ -1075,35 +1064,19 @@ BEGIN
   end loop;
 
   --
-  -- Delete all relations on this item
+  -- Delete all children of this item via a recursive call.
   --
-  for v_rel_val in select rel_id
-                   from   cr_item_rels
-                   where  item_id = delete__item_id
-                   or     related_object_id = delete__item_id 
-  LOOP
-    PERFORM acs_rel__delete(v_rel_val.rel_id);
-  end loop;  
-
-  for v_rel_val in select rel_id
-                   from   cr_child_rels
-                   where  child_id = delete__item_id 
-  LOOP
-    PERFORM acs_rel__delete(v_rel_val.rel_id);
-  end loop;  
-
-  for v_rel_val in select rel_id, child_id
-                   from   cr_child_rels
-                   where  parent_id = delete__item_id 
-  LOOP
-    PERFORM acs_rel__delete(v_rel_val.rel_id);
-    PERFORM content_item__delete(v_rel_val.child_id);
-  end loop;  
-
+  -- The following loop is just needed to delete the revisions of
+  -- child items. It could be removed, when proper foreign keys are
+  -- used along the inheritence path of cr_content_revisions (which is
+  -- not enforced and not always the case).
   --
-  -- Delete associated comments
-  --
-  PERFORM journal_entry__delete_for_object(delete__item_id);
+  for v_child_val in select item_id
+                      from   cr_items
+                      where  parent_id = delete__item_id 
+  LOOP     
+     PERFORM content_item__delete(v_child_val.item_id);
+  end loop; 
 
   --
   -- Finally, delete the acs_object of the item.

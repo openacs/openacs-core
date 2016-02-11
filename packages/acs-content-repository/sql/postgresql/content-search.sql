@@ -81,7 +81,9 @@ select acs_sc_binding__new('FtsContentProvider','content_template');
 
 -- DaveB: We only want to index live_revisions 2002-09-26
 
-
+--
+-- procedure content_search__itrg/0
+--
 
 CREATE OR REPLACE FUNCTION content_search__itrg () RETURNS trigger AS $$
 BEGIN
@@ -91,14 +93,6 @@ if (select live_revision from cr_items where item_id=new.item_id) = new.revision
     return new;
 END;
 $$ LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION content_search__dtrg () RETURNS trigger AS $$
-BEGIN
-    perform search_observer__enqueue(old.revision_id,'DELETE');
-    return old;
-END;
-$$ LANGUAGE plpgsql;
-
 
 
 --
@@ -150,9 +144,6 @@ $$ LANGUAGE plpgsql;
 
 create trigger content_search__itrg after insert on cr_revisions
 for each row execute procedure content_search__itrg (); 
-
-create trigger content_search__dtrg after delete on cr_revisions
-for each row execute procedure content_search__dtrg (); 
 
 create trigger content_search__utrg after update on cr_revisions
 for each row execute procedure content_search__utrg (); 
