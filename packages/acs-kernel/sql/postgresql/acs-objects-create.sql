@@ -235,8 +235,9 @@ create table acs_objects (
 				references acs_object_types (object_type),
         title			varchar(1000) default null,
         package_id		integer default null,
-        context_id		integer constraint acs_objects_context_id_fk
-				references acs_objects(object_id),
+        context_id		integer
+				CONSTRAINT acs_objects_context_id_fk
+				REFERENCES acs_objects(object_id) ON DELETE CASCADE,
 	security_inherit_p	boolean default 't' not null,
 	creation_user		integer,
 	creation_date		timestamptz default current_timestamp not null,
@@ -331,11 +332,11 @@ comment on column acs_objects.title is '
 
 create table acs_object_context_index (
 	object_id	integer not null
-                        constraint acs_obj_context_idx_obj_id_fk
-			references acs_objects(object_id),
+			CONSTRAINT acs_obj_context_idx_obj_id_fk
+			REFERENCES acs_objects(object_id) ON DELETE CASCADE,
 	ancestor_id	integer not null
-                        constraint acs_obj_context_idx_anc_id_fk
-			references acs_objects(object_id),
+			CONSTRAINT acs_obj_context_idx_anc_id_fk
+			REFERENCES acs_objects(object_id) ON DELETE CASCADE,
 	n_generations	integer not null
 			constraint acs_obj_context_idx_n_gen_ck
 			check (n_generations >= 0),
@@ -476,19 +477,6 @@ $$ LANGUAGE plpgsql;
 
 create trigger acs_objects_context_id_up_tr after update on acs_objects
 for each row execute procedure acs_objects_context_id_up_tr ();
-
-CREATE OR REPLACE FUNCTION acs_objects_context_id_del_tr () RETURNS trigger AS $$
-BEGIN
-  delete from acs_object_context_index
-  where object_id = old.object_id;
-
-  return old;
-
-END;
-$$ LANGUAGE plpgsql;
-
-create trigger acs_objects_context_id_del_tr before delete on acs_objects
-for each row execute procedure acs_objects_context_id_del_tr ();
 
 ----------------------
 -- ATTRIBUTE VALUES --
