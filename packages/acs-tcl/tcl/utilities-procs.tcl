@@ -4749,15 +4749,15 @@ ad_proc -public ad_log {
 
     @author Gustaf Neumann
 } {
-    set prefix ""
+    set request ""
     if {[ns_conn isconnected]} {
         set headers [ns_conn headers]
-        append prefix \
+        append request "    " \
             [ns_conn method] \
             " http://[ns_set iget $headers host][ns_conn url]?[ns_conn query]" \
             " referred by '[get_referrer]'\n"
     }
-    ns_log $level "${prefix}${message}\n[uplevel ad_get_tcl_call_stack]"
+    ns_log $level "${message}\n[uplevel ad_get_tcl_call_stack]${request}\n"
 }
 
 # Local variables:
