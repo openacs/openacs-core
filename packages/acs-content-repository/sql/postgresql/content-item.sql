@@ -50,10 +50,10 @@ END;
 $$ LANGUAGE plpgsql stable;
 
 
-select define_function_args('content_item__new','name,parent_id;null,item_id;null,locale;null,creation_date;now,creation_user;null,context_id;null,creation_ip;null,item_subtype;content_item,content_type;content_revision,title;null,description;null,mime_type;text/plain,nls_language;null,text;null,data;null,relation_tag;null,is_live;f,storage_type;null,package_id;null');
+select define_function_args('content_item__new','name,parent_id;null,item_id;null,locale;null,creation_date;now,creation_user;null,context_id;null,creation_ip;null,item_subtype;content_item,content_type;content_revision,title;null,description;null,mime_type;text/plain,nls_language;null,text;null,data;null,relation_tag;null,is_live;f,storage_type;null,package_id;null,with_child_rels;t');
 
 --
--- procedure content_item__new/19 content_item__new/20
+-- procedure content_item__new/21 (accepts 19-21 args)
 --
 CREATE OR REPLACE FUNCTION content_item__new(
    new__name cr_items.name%TYPE,
@@ -75,7 +75,8 @@ CREATE OR REPLACE FUNCTION content_item__new(
    new__relation_tag cr_child_rels.relation_tag%TYPE,   -- default null
    new__is_live boolean,                                -- default 'f'
    new__storage_type cr_items.storage_type%TYPE,        -- default null
-   new__package_id acs_objects.package_id%TYPE default null
+   new__package_id acs_objects.package_id%TYPE default null,
+   new__with_child_rels boolean DEFAULT 't'
 
 ) RETURNS integer AS $$
 DECLARE
@@ -169,7 +170,8 @@ BEGIN
   );
 
   -- if the parent is not a folder, insert into cr_child_rels
-  if v_parent_id != -4 and
+  if new__with_child_rels = 't' and
+    v_parent_id != -4 and
     content_folder__is_folder(v_parent_id) = 'f' then
 
     v_rel_id := acs_object__new(
@@ -244,9 +246,8 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-
 --
--- procedure content_item__new/16 content_item__new/17
+-- procedure content_item__new/17 (accepts 16-17 args)
 --
 CREATE OR REPLACE FUNCTION content_item__new(
    new__name varchar,
@@ -273,7 +274,7 @@ CREATE OR REPLACE FUNCTION content_item__new(
 --
 DECLARE
 BEGIN
-	raise NOTICE 'content_item__new/17 is deprecated, call content_item__new/20 instead';
+	raise NOTICE 'content_item__new/17 is deprecated, call content_item__new/21 instead';
 
         return content_item__new(new__name,
                                  new__parent_id,
@@ -294,7 +295,8 @@ BEGIN
 				 null,  -- relation_tag
 				 'f',   -- is_live
 				 new__storage_type,
-                                 new__package_id
+                                 new__package_id,
+				 't'    -- with_child_rels
                );
 END;
 $$ LANGUAGE plpgsql;
@@ -302,7 +304,7 @@ $$ LANGUAGE plpgsql;
 
 
 --
--- procedure content_item__new/15 content_item__new/16
+-- procedure content_item__new/17 (accepts 15-17 args)
 --
 CREATE OR REPLACE FUNCTION content_item__new(
    new__name varchar,
@@ -320,10 +322,10 @@ CREATE OR REPLACE FUNCTION content_item__new(
    new__mime_type varchar,         -- default 'text/plain'
    new__nls_language varchar,      -- default null
    new__data integer,              -- default null
-   new__package_id integer default null
+   new__package_id integer default null,
+   new__with_child_rels boolean DEFAULT 't'
+
 ) RETURNS integer AS $$
---
--- content_item__new/16 maybe obsolete, when we define proper defaults for /20
 --
 -- This version passes "data" as integer (lob version), most other use
 -- "text" and "storage_type"
@@ -413,8 +415,9 @@ BEGIN
   );
 
   -- if the parent is not a folder, insert into cr_child_rels
-  if v_parent_id != -4 and
-    content_folder__is_folder(v_parent_id) = 'f' and 
+  if new__with_child_rels = 't' and
+    v_parent_id != -4 and
+    content_folder__is_folder(v_parent_id) = 'f' and
     content_item__is_valid_child(v_parent_id, new__content_type) = 't' then
 
     if new__relation_tag is null or new__relation_tag = '' then
@@ -500,7 +503,7 @@ $$ LANGUAGE plpgsql;
 
 
 --
--- procedure content_item__new/5 content_item__new/6
+-- procedure content_item__new/6 (accepts 5-6 args)
 --
 CREATE OR REPLACE FUNCTION content_item__new(
    new__name varchar,
@@ -512,7 +515,7 @@ CREATE OR REPLACE FUNCTION content_item__new(
 ) RETURNS integer AS $$
 DECLARE
 BEGIN
-	raise NOTICE 'content_item__new/5 is deprecated, call content_item__new/20 instead';
+	raise NOTICE 'content_item__new/5 is deprecated, call content_item__new/21 instead';
 
 	-- calls content_item__new/20
 
@@ -535,7 +538,8 @@ BEGIN
 				 null,               -- relation_tag
 				 'f',                -- is_live				 
                                  'text',             -- storage_type
-                                 new__package_id
+                                 new__package_id,
+				 't'                 -- with_child_rels
                );
 
 END;
@@ -586,8 +590,6 @@ CREATE OR REPLACE FUNCTION content_item__new(
    new__package_id integer default null
 
 ) RETURNS integer AS $$
---
--- content_item__new/17 maybe obsolete, when we define proper defaults for /20
 --
 -- differs from other content_item__new/17 by
 --    this version has 1st arg item_id vs. 3rd arg (differs as well from /20)
@@ -797,22 +799,15 @@ BEGIN
 
   -- validate children
   -- make sure the # of children of each type fall between min_n and max_n
-  for v_child_type in select
-                        child_type, min_n, max_n
-                      from
-                        cr_type_children
-                      where
-                        parent_type = v_content_type 
-	                and (min_n is not null or max_n is not null)
+  for v_child_type in select child_type, min_n, max_n
+                      from   cr_type_children
+                      where  parent_type = v_content_type 
+	              and    (min_n is not null or max_n is not null)
   LOOP
-    select
-      count(rel_id) into v_child_count
-    from
-      cr_child_rels
-    where
-      parent_id = is_publishable__item_id
-    and
-      content_item__get_content_type(child_id) = v_child_type.child_type;
+    select count(item_id) into v_child_count
+    from   cr_items
+    where  parent_id = is_publishable__item_id
+    and    content_item__get_content_type(child_id) = v_child_type.child_type;
 
     -- make sure # of children is in range
     if v_child_type.min_n is not null 
@@ -829,24 +824,16 @@ BEGIN
   -- validate relations
   -- make sure the # of ext links of each type fall between min_n and max_n
   -- only check if one of min_n max_n not null
-  for v_rel_type in select
-                      target_type, min_n, max_n
-                    from
-                      cr_type_relations
-                    where
-                      content_type = v_content_type
-		      and (max_n is not null or min_n is not null)
+  for v_rel_type in select target_type, min_n, max_n
+                    from   cr_type_relations
+                    where  content_type = v_content_type
+		    and    (max_n is not null or min_n is not null)
   LOOP
-    select
-      count(rel_id) into v_rel_count
-    from
-      cr_item_rels i, acs_objects o
-    where
-      i.related_object_id = o.object_id
-    and
-      i.item_id = is_publishable__item_id
-    and
-      coalesce(content_item__get_content_type(o.object_id),o.object_type) = v_rel_type.target_type;
+    select count(rel_id) into v_rel_count
+    from   cr_item_rels i, acs_objects o
+    where  i.related_object_id = o.object_id
+    and    i.item_id = is_publishable__item_id
+    and    coalesce(content_item__get_content_type(o.object_id),o.object_type) = v_rel_type.target_type;
       
     -- make sure # of object relations is in range
     if v_rel_type.min_n is not null 
@@ -912,17 +899,11 @@ BEGIN
   v_is_valid_child := 'f';
 
   -- first check if content_type is a registered child_type
-  select
-    sum(max_n) into v_max_children
-  from
-    cr_type_children
-  where
-    parent_type = content_item__get_content_type(is_valid_child__item_id)
-  and
-    child_type = is_valid_child__content_type
-    and 
-      (is_valid_child__relation_tag is null 
-       or is_valid_child__relation_tag = relation_tag);
+  select sum(max_n) into v_max_children
+  from   cr_type_children
+  where  parent_type = content_item__get_content_type(is_valid_child__item_id)
+  and    child_type = is_valid_child__content_type
+  and    (is_valid_child__relation_tag is null or is_valid_child__relation_tag = relation_tag);
 
   if NOT FOUND then 
       return 'f';
@@ -932,20 +913,24 @@ BEGIN
   if v_max_children is null then
     return 't';
   end if;
-  
-  -- next check if there are already max_n children of that content type
-  select
-    count(rel_id) into v_n_children
-  from
-    cr_child_rels
-  where
-    parent_id = is_valid_child__item_id
-  and
-    content_item__get_content_type(child_id) = is_valid_child__content_type
-  and 
-    (is_valid_child__relation_tag is null 
-     or is_valid_child__relation_tag = relation_tag);
 
+  --
+  -- Next check if there are already max_n children of that content type.
+  -- Use cr_child_rels only, when a non-null relation_tag is provided.
+  --
+  if is_valid_child__relation_tag is null then
+        select count(item_id) into v_n_children
+        from   cr_items
+        where  parent_id = is_valid_child__item_id
+        and    content_item__get_content_type(child_id) = is_valid_child__content_type;
+  else
+        select count(rel_id) into v_n_children
+        from   cr_child_rels
+        where  parent_id = is_valid_child__item_id
+        and    content_item__get_content_type(child_id) = is_valid_child__content_type
+        and    is_valid_child__relation_tag = relation_tag;
+  end if;
+  
   if NOT FOUND then 
      return 'f';
   end if;
@@ -970,7 +955,7 @@ CREATE OR REPLACE FUNCTION content_item__is_valid_child(
    is_valid_child__content_type varchar
 ) RETURNS boolean AS $$
 --
--- content_item__is_valid_child/2 maybe obsolete, when we define proper defaults for /3
+-- variant without relation_tag
 --
 DECLARE
   v_is_valid_child                       boolean;       
@@ -981,14 +966,10 @@ BEGIN
   v_is_valid_child := 'f';
 
   -- first check if content_type is a registered child_type
-  select
-    sum(max_n) into v_max_children
-  from
-    cr_type_children
-  where
-    parent_type = content_item__get_content_type(is_valid_child__item_id)
-  and
-    child_type = is_valid_child__content_type;
+  select sum(max_n) into v_max_children
+  from   cr_type_children
+  where  parent_type = content_item__get_content_type(is_valid_child__item_id)
+  and    child_type = is_valid_child__content_type;
 
   if NOT FOUND then 
      return 'f';
@@ -1000,14 +981,10 @@ BEGIN
   end if;
 
   -- next check if there are already max_n children of that content type
-  select
-    count(rel_id) into v_n_children
-  from
-    cr_child_rels
-  where
-    parent_id = is_valid_child__item_id
-  and
-    content_item__get_content_type(child_id) = is_valid_child__content_type;
+  select count(item_id) into v_n_children
+  from   cr_items
+  where  parent_id = is_valid_child__item_id
+  and    content_item__get_content_type(child_id) = is_valid_child__content_type;
 
   if NOT FOUND then 
      return 'f';
@@ -1766,28 +1743,6 @@ $$ LANGUAGE plpgsql stable;
 -- 3) update the parent_id for the item
 
 
---
--- procedure content_item__move/2
---
-CREATE OR REPLACE FUNCTION content_item__move(
-   move__item_id integer,
-   move__target_folder_id integer
-) RETURNS integer AS $$
---
--- content_item__move/2 maybe obsolete, when we define proper defaults for /3
---
-DECLARE
-BEGIN
-  perform content_item__move(
-	move__item_id,
-	move__target_folder_id,
-	NULL
-	);
-return null;
-END;
-$$ LANGUAGE plpgsql;
-
-
 select define_function_args('content_item__move','item_id,target_folder_id,name');
 --
 -- procedure content_item__move/3
@@ -1795,7 +1750,7 @@ select define_function_args('content_item__move','item_id,target_folder_id,name'
 CREATE OR REPLACE FUNCTION content_item__move(
    move__item_id integer,
    move__target_folder_id integer,
-   move__name varchar
+   move__name varchar default null
 ) RETURNS integer AS $$
 DECLARE
 BEGIN
@@ -1888,31 +1843,6 @@ END;
 $$ LANGUAGE plpgsql;
 
 
-
-
---
--- procedure content_item__copy/4
---
-CREATE OR REPLACE FUNCTION content_item__copy(
-   item_id integer,
-   target_folder_id integer,
-   creation_user integer,
-   creation_ip varchar -- default null
-
-) RETURNS integer AS $$
---
--- content_item__copy/4 maybe obsolete, when we define proper defaults for /5
---
-DECLARE
-  copy_id                cr_items.item_id%TYPE;
-BEGIN
-
-  copy_id := content_item__copy2(item_id, target_folder_id, creation_user, creation_ip);
-
-  return 0; 
-END;
-$$ LANGUAGE plpgsql;
-
 -- copy a content item to a target folder
 -- 1) make sure we are not copying the item to an invalid location:
 --   that is, the destination folder exists, is a valid folder,
@@ -1952,14 +1882,14 @@ $$ LANGUAGE plpgsql;
 
 select define_function_args('content_item__copy','item_id,target_folder_id,creation_user,creation_ip;null,name;null');
 --
--- procedure content_item__copy/5
+-- procedure content_item__copy/5 (accepts 3-5 args)
 --
 CREATE OR REPLACE FUNCTION content_item__copy(
    copy__item_id integer,
    copy__target_folder_id integer,
    copy__creation_user integer,
-   copy__creation_ip varchar, -- default null
-   copy__name varchar         -- default null
+   copy__creation_ip varchar default null,
+   copy__name varchar default null
 
 ) RETURNS integer AS $$
 DECLARE
@@ -1973,8 +1903,8 @@ DECLARE
   v_is_registered               boolean;
   v_old_revision_id             cr_revisions.revision_id%TYPE;
   v_new_revision_id             cr_revisions.revision_id%TYPE;
-  v_old_live_revision_id             cr_revisions.revision_id%TYPE;
-  v_new_live_revision_id             cr_revisions.revision_id%TYPE;
+  v_old_live_revision_id        cr_revisions.revision_id%TYPE;
+  v_new_live_revision_id        cr_revisions.revision_id%TYPE;
   v_storage_type                cr_items.storage_type%TYPE;
 BEGIN
 
@@ -2030,8 +1960,8 @@ BEGIN
     where
       item_id = copy__item_id;
 
--- copy to a different folder, or allow copy to the same folder
--- with a different name
+    -- copy to a different folder, or allow copy to the same folder
+    -- with a different name
 
     if copy__target_folder_id != v_current_folder_id  or ( v_name != copy__name and copy__name is not null ) then
       -- make sure the content type of the item is registered to the folder
@@ -2042,24 +1972,31 @@ BEGIN
       );
 
       if v_is_registered = 't' then
-        -- create the new content item
+        --
+        -- create the new content item via content_item__new/21
+	--
         v_item_id := content_item__new(
             coalesce (copy__name, v_name),
             copy__target_folder_id,
-            null,
+            null,               -- item_id
             v_locale,
-            now(),
+            now(),              -- creation_date
             copy__creation_user,
-            null,
+            null,               -- context_id
             copy__creation_ip,
             'content_item',            
             v_content_type,
-            null,
-            null,
-            'text/plain',
-            null,
-            null,
-            v_storage_type
+            null,               -- title
+            null,               -- description
+            'text/plain',       -- mime_type
+            null,               -- nls_language
+            null,               -- text
+            null,               -- data
+            null,               -- relation_tag
+            'f',                -- is_live	    
+            v_storage_type,
+	    null,               -- package_id
+	    't'                 -- with_child_rels
         );
 
 	select
@@ -2173,7 +2110,7 @@ select define_function_args('content_item__get_title','item_id,is_live;f');
 --
 CREATE OR REPLACE FUNCTION content_item__get_title(
    get_title__item_id integer,
-   get_title__is_live boolean -- default 'f'
+   get_title__is_live boolean default 'f'
 
 ) RETURNS varchar AS $$
 DECLARE
@@ -2220,25 +2157,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql stable;
 
-
-
-
---
--- procedure content_item__get_title/1
---
-CREATE OR REPLACE FUNCTION content_item__get_title(
-   get_title__item_id integer
-) RETURNS varchar AS $$
---
--- content_item__get_title/1 maybe obsolete, when we define proper defaults for /2
---
-DECLARE
-BEGIN
-  
-  return content_item__get_title(get_title__item_id, 'f');
-
-END;
-$$ LANGUAGE plpgsql stable strict;
 
 
 select define_function_args('content_item__get_publish_date','item_id,is_live;f');
