@@ -15,7 +15,7 @@ aa_register_case -cats {smoke production_safe} documentation__check_proc_doc {
     set good 0
     foreach p [lsort -dictionary [nsv_array names api_proc_doc]] {
         array set pa [nsv_get api_proc_doc $p]
-        if { $pa(public_p)
+        if { "public" in $pa(protection)
              && !($pa(deprecated_p) || $pa(warn_p))
          } {
             incr count
