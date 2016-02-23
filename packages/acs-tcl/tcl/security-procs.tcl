@@ -828,12 +828,12 @@ ad_proc -public ad_sign {
 
     @param value the value to be signed.
 } {
+    if {$token_id eq ""} { 
+        # pick a random token_id
+        set token_id [sec_get_random_cached_token_id]
+    }
 
     if { $secret eq "" } {
-        if {$token_id eq ""} { 
-            # pick a random token_id
-            set token_id [sec_get_random_cached_token_id]
-        }
         set secret_token [sec_get_token $token_id]
     } else {
         set secret_token $secret
@@ -849,7 +849,6 @@ ad_proc -public ad_sign {
     }
 
     set hash [ns_sha1 "$value$token_id$expire_time$secret_token"]
-
     set signature [list $token_id $expire_time $hash]
 
     return $signature
