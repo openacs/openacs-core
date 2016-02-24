@@ -1288,25 +1288,47 @@ namespace eval ::apidoc {
                             if {$endPos > -1} {
                                 set line0 [string range $data $i $endPos]
                                 set line [string trim $line0]
-                                if {[string range $line end end] eq "\{"
-                                    && [llength [string range $line 0 end-1]] == 3} {
-                                    set comment_start [expr {[string last "\{" $line] + $i}]
-                                    set comment_end [expr {$comment_start + 1}]
-                                    while {![info complete [string range $data $comment_start $comment_end]] && $comment_end < $l} {
-                                        incr comment_end
+                                #
+                                # Does the line end with a open brace?
+                                #
+                                if {[string range $line end end] eq "\{"} {
+                                    # Do we have a signature of an
+                                    # ad_proc (ad_proc ?-options ...?
+                                    # name args) before that?
+                                    #
+                                    # Note, that this handles just
+                                    # single line ad-proc signatures,
+                                    # not multi-line argument lists.
+                                    
+                                    set start [string range $line 0 end-1]
+                                    set elements 3
+                                    for {set idx 1} {[string range [lindex $start $idx] 0 0] eq "-"} {incr idx} {
+                                        incr elements
                                     }
-                                    if {$comment_end < $l} {
-                                        ns_log notice "AD_PROC CAND COMM [string range $data $comment_start $comment_end]"
-                                        set url ""
-                                        append html \
-                                            "<a href='/api-doc/proc-view?proc=ad_proc' title='ad_proc'>" \
-                                            [pretty_token proc ad_proc] </a> \
-                                            [string range $data $i+7 $comment_start] \
-                                            "<span class='comment'>" \
-                                            [string range $data $comment_start+1 $comment_end-1] \
-                                            "</span>\}" 
-                                        set i $comment_end
-                                        continue
+                                    
+                                    if {[llength $start] == $elements} {
+                                        #
+                                        # Read next lines until brace is balanced.
+                                        #
+                                        set comment_start [expr {[string last "\{" $line] + $i}]
+                                        set comment_end [expr {$comment_start + 1}]
+                                        while {![info complete [string range $data $comment_start $comment_end]]
+                                               && $comment_end < $l} {
+                                            incr comment_end
+                                        }
+                                        if {$comment_end < $l} {
+                                            ns_log notice "AD_PROC CAND COMM [string range $data $comment_start $comment_end]"
+                                            set url ""
+                                            append html \
+                                                "<a href='/api-doc/proc-view?proc=ad_proc' title='ad_proc'>" \
+                                                [pretty_token proc ad_proc] </a> \
+                                                [string range $data $i+7 $comment_start] \
+                                                "<span class='comment'>" \
+                                                [string range $data $comment_start+1 $comment_end-1] \
+                                                "</span>\}" 
+                                            set i $comment_end
+                                            continue
+                                        }
                                     }
                                 }
                             }
