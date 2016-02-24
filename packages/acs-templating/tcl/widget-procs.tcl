@@ -700,16 +700,16 @@ ad_proc -public template::widget::menu {
                 append output ">\n"
 
                 foreach option $options_list {
+                    lassign $option label value
 
-                    set label [lindex $option 0]
-                    set value [lindex $option 1]
-
-                    append output [subst { <option value="[ns_quotehtml $value]"}]
+                    append output [subst { <option value="[ns_quotehtml $value]"}] \
                     if { [info exists values($value)] } {
                         append output [subst { selected="selected"}]
                     }
-
-                    append output [subst {>[ns_quotehtml $label]</option>\n}]
+                    # Whe option element contains "normal" character data,
+                    # which must not contain any "<". For details, see:
+                    # https://www.w3.org/TR/html-markup/syntax.html#normal-character-data
+                    append output [subst {>[string map {< "&lt;" > "&gt;"} $label]</option>\n}]
                 }
                 append output "</select>"
             }
