@@ -2541,6 +2541,38 @@ ad_proc -public util_driver_info {
     }
 }
 
+ad_proc util::split_location {location protoVar hostnameVar portVar} {
+    Split the provided location into "protocol", "hostname" and
+    "port".  The results are returned to the provided output
+    variables.  The function supports IP-literal notation according to
+    RFC 3986 section 3.2.2.
+    
+    @author Gustaf Neumann
+    @return boolean value indicating success
+} {
+    upvar $protoVar proto $hostnameVar hostname $portVar port
+    
+    if {
+        [regexp {^([a-z]+://)?([^:]+)(:[0-9]*)?$} [ns_conn location] . proto hostname port]
+        || [regexp {^([a-z]+://)?(\[[^\]]+\])(:[0-9]*)?$} [ns_conn location] . proto hostname port]
+    } {
+        if {$proto ne ""} {
+            lassign [split $proto :] proto .
+        }
+        if {$port eq ""} {
+            set default_port(http) 80
+            set default_port(https) 443
+            set port $default_port($proto)
+        } else {
+            set port [string range $port 1 end]
+        }
+        set success 1
+    } else {
+        set success 0
+    }
+    return $success 
+}
+
 ad_proc -public util_current_location {} {
     Like ad_conn location - Returns the location string of the current
     request in the form protocol://hostname[:port] but it looks at the
@@ -2549,6 +2581,15 @@ ad_proc -public util_current_location {} {
     configuration file.  If the Host header is missing or empty 
     util_current_location falls back to ad_conn location.
 } {
+
+    #
+    # Compute util_current_location only once per request and cache
+    # the result per thread.
+    #
+    if {[info exists ::__util_current_location]} {
+        return $::__util_current_location
+    }
+    
     set default_port(http) 80
     set default_port(https) 443
     #
@@ -2565,14 +2606,7 @@ ad_proc -public util_current_location {} {
     # "hostname" and "port" will be the default and might be
     # overwritten by more specific information.
     #
-    if {[regexp {^([a-z]+://)?([^:]+)(:[0-9]*)?$} [ns_conn location] . proto hostname port]} {
-        if {$proto ne ""} {
-            lassign [split $proto :] proto .
-        }
-        if {$port eq ""} {
-            set port $default_port($proto)
-        }
-    } else {
+    if {![util::split_location [ns_conn location] proto hostname port]} {
         ns_log Error "util_current_location got invalid information from driver '[ns_conn location]'"
         # provide fallback info
         set hostname [ns_info hostname]
@@ -2615,10 +2649,10 @@ ad_proc -public util_current_location {} {
     #
     set Host [ns_set iget $headers Host]
     if {$Host ne ""} {
-        lassign [split $Host ":"] Host_hostname Host_port
-        set hostname $Host_hostname
-        if {$Host_port ne ""} {
-            set port $Host_port
+        if {[util::split_location $Host .proto hostname Host_port]} {
+            if {$Host_port ne ""} {
+                set port $Host_port
+            }
         }
     }
     
@@ -2626,10 +2660,14 @@ ad_proc -public util_current_location {} {
     # We have all information, return the data...
     #
     if {$suppress_port || $port eq $default_port($proto) || $port eq ""} {
-        return $proto://$hostname
+        set result ${proto}://${hostname}
     } else {
-        return "$proto://$hostname:$port"
+        set result ${proto}://${hostname}:${port}
     }
+
+    set ::__util_current_location $result
+    #ns_log notice "util_current_location returns <$result>"
+    return $result
 }
 
 ad_proc -public util_current_directory {} {
