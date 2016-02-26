@@ -286,7 +286,8 @@ ad_proc -public ad_choice_bar { items links values {default ""} } {
 ad_proc -public util_current_location_node_id { } {
     returns node_id of util_current_location. Useful for hostnode mapped sites using ad_context_bar
 } {
-    regexp {^([a-z]+://)?([^:]+)(:[0-9]*)?$} [util_current_location] match location_proto location_hostname location_port
+    util::split_location [util_current_location] .proto location_hostname .port
+
     if { [string match -nocase "www.*" $location_hostname] } {
         set location_hostname [string range $location_hostname 4 end]
     } 
