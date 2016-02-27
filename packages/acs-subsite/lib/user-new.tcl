@@ -60,7 +60,7 @@ ad_form -name register -export {next_url user_id return_url} -form [auth::get_re
     }
 }
 
-if { ([info exists rel_group_id] && $rel_group_id ne "") } {
+if { [info exists rel_group_id] && $rel_group_id ne "" } {
     ad_form -extend -name register -form {
         {rel_group_id:integer(hidden),optional}
     }
