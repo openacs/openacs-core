@@ -1,5 +1,5 @@
 ad_page_contract {
-    displays a user's portrait to the user him/herself
+    Displays a user's portrait to the user him/herself
     offers options to replace it
 
     @author philg@mit.edu
@@ -65,7 +65,10 @@ if {![db_0or1row get_item_id {
     from acs_rels a, cr_items c
     where a.object_id_two = c.item_id
     and a.object_id_one = :user_id
-    and a.rel_type = 'user_portrait_rel
+    and a.rel_type = 'user_portrait_rel'
+    and live_revision is not null
+    order by revision_id desc
+    limit 1
 }] || $revision_id eq ""} {
     # The user doesn't have a portrait yet
     set portrait_p 0
