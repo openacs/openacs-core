@@ -457,7 +457,7 @@ ad_proc -public group::get_join_policy_options {} {
 
 ad_proc -public group::default_member_state {
     { -join_policy "" }
-    { -create_p "" }
+    { -create_p false }
     -no_complain:boolean
 } {
     If user has 'create' privilege on group_id OR 
