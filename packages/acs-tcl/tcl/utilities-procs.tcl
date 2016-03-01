@@ -3289,30 +3289,6 @@ ad_proc -public max { args } {
     return $max
 }
 
-# usage: 
-#   suppose the variable is called "expiration_date"
-#   put "[ad_dateentrywidget expiration_date]" in your form
-#     and it will expand into lots of weird generated var names
-#   put ns_dbformvalue [ns_getform] expiration_date date expiration_date
-#     and whatever the user typed will be set in $expiration_date
-
-proc ad_dateentrywidget {column {default_date "1940-11-03"}} {
-    if {[ns_info name] ne "NaviServer"} {
-        ns_share NS
-    } else {
-        set NS(months) [list January February March April May June \
-                            July August September October November December]
-    }
-    set output "<select name=\"$column.month\">\n"
-    for {set i 0} {$i < 12} {incr i} {
-        append output "<option> [lindex $NS(months) $i]</option>\n"
-    }
-
-    append output "</select>&nbsp;<input name=\"$column.day\" type=\"text\" size=\"3\" maxlength=\"2\">&nbsp;<input name=\"$column.year\" type=\"text\" size=\"5\" maxlength=\"4\">"
-
-    return [ns_dbformvalueput $output $column date $default_date]
-}
-
 ad_proc -public util_ns_set_to_list {
     {-set:required}
 } {

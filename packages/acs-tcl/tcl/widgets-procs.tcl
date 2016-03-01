@@ -168,12 +168,8 @@ ad_proc ad_dateentrywidget {column { value 0 } } {
 } {
     # if you would like the default to be null, call with value= ""
 
-    if {[ns_info name] ne "NaviServer"} {
-        ns_share NS
-    } else {
-        set NS(months) [list January February March April May June \
-                            July August September October November December]
-    }
+    set NS(months) [list January February March April May June \
+                        July August September October November December]
 
     if { $value == 0 } {
 	# no default, so use today
