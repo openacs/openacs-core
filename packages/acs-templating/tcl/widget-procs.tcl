@@ -385,39 +385,38 @@ ad_proc -public template::widget::input {
 	set attributes(id) "$element(name)" 
     }
 
-    
     # Handle display mode of visible normal form elements, i.e. not hidden, not submit, not button, not clear
     if { $element(mode) ne "edit" && $type ni { hidden submit button clear checkbox radio } } {
         set output ""
         if { [info exists element(value)] } {
             append output [ns_quotehtml $element(value)]
-            append output "<input type=\"hidden\" name=\"$element(name)\" value=\"[ns_quotehtml $element(value)]\">"
+            append output [subst {<input type="hidden" name="$element(name)" value="[ns_quotehtml $element(value)]">}]
         }
     } else {
-        set output "<input type=\"$type\" name=\"$element(name)\""
+        set output [subst {<input type="$type" name="$element(name)"}]
 
         if { $element(mode) ne "edit" && $type ni { hidden submit button clear } } {
             append output " disabled"
         }
 
-
         if { [info exists element(value)] } {
-            append output " value=\"[ns_quotehtml $element(value)]\""
+            append output [subst { value="[ns_quotehtml $element(value)]"}]
         } 
 
         foreach name [array names attributes] {
             if {$attributes($name) eq {}} {
                 append output " $name"
             } else {
-                append output " $name=\"$attributes($name)\""
+                append output [subst { $name="$attributes($name)"}]
             }
         }
 
         if { [info exists element(maxlength)] } {
-            append output " maxlength=\"$element(maxlength)\""
+            append output [subst { maxlength="$element(maxlength)"}]
         }
 
         append output " >"
+
     }
 
     return $output
@@ -1296,13 +1295,13 @@ ad_proc -public template::widget::checkbox_text {
     set output {}
     
     # edit mode
-    set checkbox_text "<input type=checkbox name=$element(name)"
+    set checkbox_text [subst {<input type="checkbox" name="$element(name)"}]
 
     foreach name [array names attributes] {
 	if {$attributes($name) eq {}} {
 	    append checkbox_text " $name"
 	} else {
-	    append checkbox_text " $name=\"$attributes($name)\""
+	    append checkbox_text [subst { $name="$attributes($name)"}]
 	}
     }
     
