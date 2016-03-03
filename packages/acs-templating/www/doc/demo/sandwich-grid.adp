@@ -19,7 +19,7 @@
         <table bgcolor="#99CCFF" cellpadding="4" cellspacing="0" border="1" >
           <tr>
             <td><b>Sandwich Name</b>&nbsp;&nbsp;</td>
-	    <td><formwidget id=nickname>
+	    <td><formwidget id="nickname">
                 <if @formerror.nickname@ not nil><br><font color="red"><b>@formerror.nickname@<b></font></if>
             </td>
 
@@ -28,13 +28,13 @@
 	    <td><b>Protein</b>&nbsp;&nbsp;</td>
 	    <td>
 	      <table cellpadding="4" cellspacing="0" border="0">
-                <formgroup id=protein cols=2>
+                <formgroup id="protein" cols="2">
                   <if @formgroup.col@ eq "1">
                     <tr>
                   </if>
                   <td>
                     <if @formgroup.rownum@ le @formgroup:rowcount@>
-                      @formgroup.widget@ @formgroup.label@
+                      @formgroup.widget;literal@ @formgroup.label;noquote@
                     </if>
                     <else>
                       &nbsp;
@@ -52,13 +52,13 @@
 	    <td><b>Vitamins</b>&nbsp;&nbsp;</td>
 	    <td> 
 	      <table cellpadding="4" cellspacing="0" border="0">
-               <formgroup id=vitamins cols=2>
+               <formgroup id="vitamins" cols="2">
                   <if @formgroup.col@ eq "1">
                     <tr>
                   </if>
                   <td>
                     <if @formgroup.rownum@ le @formgroup:rowcount@>
-                      @formgroup.widget@ @formgroup.label@
+                      @formgroup.widget;literal@ @formgroup.label;noquote@
                     </if>
                     <else>
                       &nbsp;
@@ -74,9 +74,9 @@
           </tr>
         </table>
       </td></tr>
-      <tr>
-        <td align="center"><br><input type="submit" value="Submit"></td>
-      </tr>
+         <tr>
+  	   <td align="center"><formwidget id="ok"></td>
+         </tr>
     </table>
 
   </formtemplate>
