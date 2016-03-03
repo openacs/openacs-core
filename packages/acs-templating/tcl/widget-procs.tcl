@@ -701,7 +701,7 @@ ad_proc -public template::widget::menu {
                 foreach option $options_list {
                     lassign $option label value
 
-                    append output [subst { <option value="[ns_quotehtml $value]"}] \
+                    append output [subst { <option value="[ns_quotehtml $value]"}]
                     if { [info exists values($value)] } {
                         append output [subst { selected="selected"}]
                     }
