@@ -4769,7 +4769,7 @@ ad_proc -public ad_log {
         append request "    " \
             [ns_conn method] \
             " http://[ns_set iget $headers host][ns_conn url]?[ns_conn query]" \
-            " referred by '[get_referrer]'\n"
+            " referred by '[get_referrer]' peer [ad_conn peeraddr]"
     }
     ns_log $level "${message}\n[uplevel ad_get_tcl_call_stack]${request}\n"
 }
