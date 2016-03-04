@@ -960,7 +960,7 @@ ad_proc -public ad_page_contract {
                 if { [info exists $variable_to_set] } {
                     set complaint [_ acs-tcl.lt_Youve_supplied_two_va]
                     ad_complain -key $formal_name:-doublevalue $complaint
-                    ns_log Warning "User experienced '$complaint' when submitting a form related to path_info: [ad_conn path_info]"
+                    ad_log Warning "User experienced '$complaint' when submitting a form related to path_info: [ad_conn path_info]"
                     continue
                 } else {
                     set $variable_to_set $actual_value
