@@ -665,8 +665,8 @@ ad_proc -private rp_filter { why } {
     }
     rp_debug -ns_log_level debug -debug t "rp_filter: setting up request: [ns_conn method] [ns_conn url] [ns_conn query]"
 
-    if {[string length $ad_conn_url] >= 100} {
-        ad_log warning "requested URL is too long ([string length $ad_conn_url] bytes, max 100); url=$ad_conn_url; reset url to /"
+    if {[string length $ad_conn_url] >= 132} {
+        ad_log warning "requested URL is too long ([string length $ad_conn_url] bytes, max 132); url=$ad_conn_url; reset url to /"
         set ad_conn_url /
     }
     
