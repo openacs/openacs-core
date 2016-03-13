@@ -4,6 +4,7 @@ ad_page_contract {
   {grid:boolean ""}
 } -properties {}
 
+set title "Sandwich Demo"
 
 form create sandwich -has_submit 1 \
     -elements {
