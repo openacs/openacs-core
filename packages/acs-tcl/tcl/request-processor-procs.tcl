@@ -491,11 +491,11 @@ ad_proc -private rp_serve_resource_file { path } {
     set expireTime [parameter::get -package_id [ad_acs_kernel_id] -parameter ResourcesExpireInterval -default 0]
     if {$expireTime != 0} {
         if {![string is integer -strict $expireTime]} {
-            if {[regexp {^(\d)+d} $expireTime _ t]} {
+            if {[regexp {^(\d+)d} $expireTime _ t]} {
                 set expireTime [expr {60*60*24*$t}]
-            } elseif {[regexp {^(\d)+h} $expireTime _ t]} {
+            } elseif {[regexp {^(\d+)h} $expireTime _ t]} {
                 set expireTime [expr {60*60*$t}]
-            } elseif {[regexp {^(\d)+m} $expireTime _ t]} {
+            } elseif {[regexp {^(\d+)m} $expireTime _ t]} {
                 set expireTime [expr {60*$t}]
             } else {
                 ns_log error "invalid expire time '$expireTime' specified"
