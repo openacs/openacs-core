@@ -2723,7 +2723,17 @@ ad_proc -public ad_get_tcl_call_stack {
 } {
     set stack ""
     for { set x [expr {[info level] + $level}] } { $x > 0 } { incr x -1 } {
-        append stack "    called from [info level $x]\n"
+        set info [info level $x]
+        regsub -all \n $info {\\n} info
+        if {[string length $info]>200} {
+            set arglist ""
+            foreach arg $info {
+                if {[string length $arg]>40} {set arg [string range $arg 0 40]...}
+                lappend arglist $arg
+            }
+            set info $arglist
+        }
+        append stack "    called from $info\n"
     }
     return $stack
 }
