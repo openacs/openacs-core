@@ -2553,17 +2553,18 @@ ad_proc util::split_location {location protoVar hostnameVar portVar} {
     upvar $protoVar proto $hostnameVar hostname $portVar port
     
     if {
-        [regexp {^([a-z]+://)?([^:]+)(:[0-9]*)?$} [ns_conn location] . proto hostname port]
-        || [regexp {^([a-z]+://)?(\[[^\]]+\])(:[0-9]*)?$} [ns_conn location] . proto hostname port]
+        [regexp {^([a-z]+://)?([^:]+)(:[0-9]*)?$} $location . proto hostname port]
+        || [regexp {^([a-z]+://)?(\[[^\]]+\])(:[0-9]*)?$} $location . proto hostname port]
     } {
         if {$proto ne ""} {
             lassign [split $proto :] proto .
         }
-        if {$port eq ""} {
+        if {$port eq "" && $proto ne ""} {
             set default_port(http) 80
             set default_port(https) 443
             set port $default_port($proto)
         } else {
+            # In case there is no proto, the port is set to ""
             set port [string range $port 1 end]
         }
         set success 1
