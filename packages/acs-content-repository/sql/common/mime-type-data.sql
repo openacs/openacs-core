@@ -74,7 +74,7 @@ insert into cr_mime_types (label,mime_type,file_extension) values ( 'Audio Real'
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'Quattro Pro'             , 'application/x-quattro-pro'     , 'wq1');
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'Archive RAR'             , 'application/x-rar-compressed'  , 'rar');
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'Session Description Protocol', 'application/sdp'           , 'sdp' );
-insert into cr_mime_types (label,mime_type,file_extension) values ( 'Macromedia Shockwave'    , 'application/x-shockwave-flash' , 'swf' );
+insert into cr_mime_types (label,mime_type,file_extension) values ( 'Macromedia Shockwave'    , 'application/vnd.adobe.flash-movie' , 'swf' );
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'SQL'                     , 'application/x-sql'             , 'sql' );
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'Archive Mac Stuffit compressed'  , 'application/x-stuffit'         , 'sit' );
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'Archive SVR4 cpio'       , 'application/x-sv4cpio'         , 'sv4cpio');
@@ -401,7 +401,7 @@ insert into cr_extension_mime_type_map (extension, mime_type) values ( 'stm','au
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'sv4cpio','application/x-sv4cpio' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'sv4crc','application/x-sv4crc' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'svg','image/svg+xml');
-insert into cr_extension_mime_type_map (extension, mime_type) values ( 'swf','application/x-shockwave-flash' );
+insert into cr_extension_mime_type_map (extension, mime_type) values ( 'swf','application/vnd.adobe.flash-movie' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 't','application/x-troff' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'tar','application/x-tar' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'tex','application/x-tex' );
