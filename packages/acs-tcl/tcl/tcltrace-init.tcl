@@ -10,7 +10,7 @@
 #
 set trace ""
 foreach {parameter default cmd} {
-    TclTraceLogServerities "" {trace add execution ::ns_log     enter {::tcltrace::before-ns_log}}
+    TclTraceLogSeverities ""  {trace add execution ::ns_log     enter {::tcltrace::before-ns_log}}
     TclTraceSaveNsReturn   0  {trace add execution ::ns_return  enter {::tcltrace::before-ns_return}}
 } {
     if {[::parameter::get_from_package_key \
