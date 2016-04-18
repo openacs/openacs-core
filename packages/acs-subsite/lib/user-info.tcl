@@ -218,13 +218,18 @@ ad_form -extend -name user_info -form $elms_list -on_request {
 
 # LARS HACK: Make the URL and email elements real links
 if { ![form is_valid user_info] } {
-    element set_properties user_info email -display_value "<a href=\"mailto:[element get_value user_info email]\">[element get_value user_info email]</a>"
-    if {![string match -nocase "http://*" [element get_value user_info url]]} {
-	element set_properties user_info url -display_value \
-		"<a href=\"http://[element get_value user_info url]\">[element get_value user_info url]</a>"
+    element set_properties user_info email \
+        -display_value "<a href=\"mailto:[element get_value user_info email]\">[element get_value user_info email]</a>"
+    
+    set url [element get_value user_info url]
+    if {   ![string match -nocase "http://*" $url]
+        && ![string match -nocase "https://*" $url]
+    } {
+        element set_properties user_info url \
+            -display_value "<a href=\"http://$url\">$url</a>"
     } else {
 	element set_properties user_info url -display_value \
-		"<a href=\"[element get_value user_info url]\">[element get_value user_info url]</a>"
+		"<a href=\"$url\">$url</a>"
     }
 }
 
