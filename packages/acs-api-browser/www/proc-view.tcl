@@ -36,7 +36,7 @@ set default_source_p [ad_get_client_property -default 0 acs-api-browser api_doc_
 set return_url [export_vars -base [ad_conn url] {proc version_id}]
 set error_msg ""
 
-if { ![info exists source_p] } {
+if { ![info exists source_p] || $source_p eq ""} {
     set source_p $default_source_p
 }
 
