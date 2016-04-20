@@ -2515,9 +2515,9 @@ ad_proc -public util_driver_info {
 
     set section [ns_driversection -driver $driver]
 
-    switch $driver {
-        nsudp -
-        nssock {
+    switch -glob -- $driver {
+        nsudp* -
+        nssock* {
             set result(proto) http
             set result(port) [ns_config -int $section Port]
         }
@@ -2525,7 +2525,7 @@ ad_proc -public util_driver_info {
             set result(proto) http
             set result(port) {}
         }
-        nsssl - nsssle {
+        nsssl* - nsssle {
             set result(port) [ns_config -int $section Port]
             set result(proto) https
         }
@@ -4776,10 +4776,9 @@ ad_proc -public ad_log {
 } {
     set request ""
     if {[ns_conn isconnected]} {
-        set headers [ns_conn headers]
         append request "    " \
             [ns_conn method] \
-            " http://[ns_set iget $headers host][ns_conn url]?[ns_conn query]" \
+            " [util_current_location][ns_conn url]?[ns_conn query]" \
             " referred by '[get_referrer]' peer [ad_conn peeraddr]"
     }
     ns_log $level "${message}\n[uplevel ad_get_tcl_call_stack]${request}\n"
