@@ -896,7 +896,7 @@ ad_proc -public export_vars {
     if { $url_p } {
         set export_list [list]
         for { set i 0 } { $i < $export_size } { incr i } {
-            lappend export_list [ns_urlencode [ns_set key $export_set $i]]=[ns_urlencode [ns_set value $export_set $i]]
+            lappend export_list [ad_urlencode_path [ns_set key $export_set $i]]=[ad_urlencode_query [ns_set value $export_set $i]]
         }
         set export_string [join $export_list "&"]
     } else {
@@ -1207,7 +1207,7 @@ ad_proc export_ns_set_vars {
             set value [ns_set value $setid $set_counter_i]
             if {$name ni $exclusion_list && $name ne ""} {
                 if {$format eq "url"} {
-                    lappend return_list "[ns_urlencode $name]=[ns_urlencode $value]"
+                    lappend return_list "[ad_urlencode_path $name]=[ad_urlencode_query $value]"
                 } else {
                     lappend return_list " name=\"[ns_quotehtml $name]\" value=\"[ns_quotehtml $value]\""
                 }
@@ -1316,7 +1316,7 @@ ad_proc -public export_entire_form_as_url_vars {
                 $vars_to_passthrough eq "" 
                 || ($varname in $vars_to_passthrough)
             } {
-                lappend params "[ns_urlencode $varname]=[ad_urlencode_query $varvalue]" 
+                lappend params "[ad_urlencode_path $varname]=[ad_urlencode_query $varvalue]" 
             }
         }
         return [join $params "&"]
