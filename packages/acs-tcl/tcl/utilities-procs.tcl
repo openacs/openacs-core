@@ -896,7 +896,7 @@ ad_proc -public export_vars {
     if { $url_p } {
         set export_list [list]
         for { set i 0 } { $i < $export_size } { incr i } {
-            lappend export_list [ns_urlencode [ns_set key $export_set $i]]=[ns_urlencode [ns_set value $export_set $i]]
+            lappend export_list [ad_urlencode_query [ns_set key $export_set $i]]=[ad_urlencode_query [ns_set value $export_set $i]]
         }
         set export_string [join $export_list "&"]
     } else {
