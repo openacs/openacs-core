@@ -1,8 +1,10 @@
- # $Id$
- # File:        developer-support-procs.tcl
- # Author:      Jon Salz <jsalz@mit.edu>
- # Date:        22 Apr 2000
- # Description: Provides routines used to aggregate request/response information for debugging.
+ad_library {
+
+    Provides routines used to aggregate request/response information for debugging.
+
+    @author Jon Salz <jsalz@mit.edu>
+    @creation-date 22 Apr 2000
+}
 
  ad_proc -private ds_instance_id {} {
 
