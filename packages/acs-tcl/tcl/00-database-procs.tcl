@@ -420,36 +420,39 @@ ad_proc -public db_nextval {
           # - gustaf neumann (18.5.2008)
           #
           if {![info exists ::db::sequences]} {
-            ns_log notice "-- creating per thread sequence table"
-            namespace eval ::db {}
-            foreach s [db_list -dbn $dbn relnames "select relname, relkind  from pg_class where relkind = 'S'"] {
-              set ::db::sequences($s) 1
-            }
+              ns_log notice "-- creating per thread sequence table"
+              namespace eval ::db {}
+              foreach s [db_list -dbn $dbn relnames "select relname, relkind  from pg_class where relkind = 'S'"] {
+                  set ::db::sequences($s) 1
+              }
           }
           if {[info exists ::db::sequences(t_$sequence)]} {
-            #ns_log notice "-- found t_$sequence"
-            set nextval [db_string -dbn $dbn nextval "select nextval('t_$sequence')"]
+              #ns_log notice "-- found t_$sequence"
+              set nextval [db_string -dbn $dbn nextval "select nextval('t_$sequence')"]
+              ad_log Warning "Deprecated sequence name '$sequence' is used. Use instead 't_$sequence'"
           } elseif {[info exists ::db::sequences($sequence)]} {
-            #ns_log notice "-- found $sequence"
-            set nextval [db_string -dbn $dbn nextval "select nextval('$sequence')"]
+              #ns_log notice "-- found $sequence"
+              set nextval [db_string -dbn $dbn nextval "select nextval('$sequence')"]
           } elseif { [db_0or1row -dbn $dbn nextval_sequence "
                  select nextval('${sequence}') as nextval
                  where (select relkind 
                         from pg_class 
                         where relname = '${sequence}') = 'S'
              "]} {
-            #
-            # We do not have an according sequence-table. Use the system catalog to check
-            # for the sequence
-            #
-            # ... the query sets nextval if it succeeds
-            #
+              #
+              # We do not have an according sequence-table. Use the system catalog to check
+              # for the sequence
+              #
+              # ... the query sets nextval if it succeeds
+              #
+              ad_log Warning "Probably deprecated sequence name '$sequence' is used (no sequence table found)"
           } else {
-            #
-            # finally, there might be a view with a nextval
-            #
-            ns_log debug "db_nextval: sequence($sequence) is not a real sequence.  perhaps it uses the view hack."
-            set nextval [db_string -dbn $dbn nextval "select nextval from $sequence"]
+              #
+              # finally, there might be a view with a nextval
+              #
+              ns_log debug "db_nextval: sequence($sequence) is not a real sequence.  perhaps it uses the view hack."
+              set nextval [db_string -dbn $dbn nextval "select nextval from $sequence"]
+              ad_log Warning "Using deprecated sequence view hack for '$sequence'. Is there not real sequence?"
           }
 
           return $nextval
@@ -779,7 +782,7 @@ ad_proc -private db_exec_plpgsql { db statement_name pre_sql fname } {
 
     set sql [db_qd_replace_sql $statement_name $pre_sql]
 
-    set unique_id [db_nextval "anon_func_seq"]
+    set unique_id [db_nextval "t_anon_func_seq"]
 
     set function_name "__exec_${unique_id}_${fname}"
 
