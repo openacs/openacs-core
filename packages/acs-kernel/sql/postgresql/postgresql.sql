@@ -2,8 +2,8 @@ create view dual as select now() as sysdate;
 
 -- used to support anonymous plsql blocks in the db_plsql function call in tcl.
 create sequence t_anon_func_seq;
-create view anon_func_seq as 
-select nextval('t_anon_func_seq') as nextval;
+-- create view anon_func_seq as 
+-- select nextval('t_anon_func_seq') as nextval;
 
 
 
