@@ -106,19 +106,13 @@ ad_proc -callback search::search -impl tsearch2-driver {
     @creation-date 2004-06-05
 
     @param query
-
     @param offset
-
     @param limit
-
     @param user_id
-
     @param df
-
     @param packages list of packages to search for content in.
 
     @return
-
     @error
 } {
     set packages {}
@@ -210,11 +204,9 @@ ad_proc -public tsearch2::summary {
     @creation-date 2004-06-05
 
     @param query
-
     @param txt
 
     @return summary containing search query terms
-
     @error
 } {
     set query [tsearch2::build_query -query $query]
