@@ -412,13 +412,21 @@ ad_proc -public db_nextval {
           # sequence name. Checking this at runtime is unnecessary
           # complex and costly.
           #
-          # The best solution would certainly be to call db_nextval
-          # only with real sequence names. In that case, the whole
-          # function would for postgres would collapse to a single
-          # line, without any need for sequence name caching.
+          # The best solution would certainly be to call "db_nextval"
+          # only with real sequence names (as defined in SQL). In that
+          # case, the whole function would for postgres would collapse
+          # to a single line, without any need for sequence name
+          # caching. But in that case, one should rename the sequences
+          # from t_SEQUENCE to SEQUENCE for postgres.
           #
-          # - gustaf neumann (18.5.2008)
-          #
+          # However, since Oracle uses the pseudo column ".nextval",
+          # which is emulated via the view, it is not clear, how
+          # feasible this is to remove all such views without breaking
+          # installed applications.  We keep for such cases the view,
+          # but nevertheless, the function "db_nextval" should always
+          # be called with names without the "t_" prefix to achieve
+          # Oracle compatibility.
+            
           if {![info exists ::db::sequences]} {
               ns_log notice "-- creating per thread sequence table"
               namespace eval ::db {}
@@ -429,10 +437,12 @@ ad_proc -public db_nextval {
           if {[info exists ::db::sequences(t_$sequence)]} {
               #ns_log notice "-- found t_$sequence"
               set nextval [db_string -dbn $dbn nextval "select nextval('t_$sequence')"]
-              ad_log Warning "Deprecated sequence name '$sequence' is used. Use instead 't_$sequence'"
           } elseif {[info exists ::db::sequences($sequence)]} {
               #ns_log notice "-- found $sequence"
               set nextval [db_string -dbn $dbn nextval "select nextval('$sequence')"]
+              if {[string match t_* $sequence]} {
+                  ad_log Warning "For portability, db_nextval should be called without the leading 't_' prefix: 't_$sequence'"
+              }
           } elseif { [db_0or1row -dbn $dbn nextval_sequence "
                  select nextval('${sequence}') as nextval
                  where (select relkind 
@@ -782,7 +792,7 @@ ad_proc -private db_exec_plpgsql { db statement_name pre_sql fname } {
 
     set sql [db_qd_replace_sql $statement_name $pre_sql]
 
-    set unique_id [db_nextval "t_anon_func_seq"]
+    set unique_id [db_nextval "anon_func_seq"]
 
     set function_name "__exec_${unique_id}_${fname}"
 
