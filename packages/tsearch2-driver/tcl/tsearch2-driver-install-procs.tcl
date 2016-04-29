@@ -31,12 +31,12 @@ ad_proc -public tsearch2_driver::install::preinstall_checks {
 	# in psql we do this by checking the presense of a data type tsvector
 	# select typname from pg_type where typename='tsvector';
 
-	if { [db_0or1row "tsearch_compile_check" "select distinct(typname) from pg_type where typname='tsvector'"] } {
-	
-		# if tsearch is installed
-		ns_log Notice "******* Tsearch2 is compiled and installed. ***********"
-		# continue with installation
-			
+	if { [db_0or1row tsearch_compile_check {
+	    select distinct(typname) from pg_type where typname='tsvector'
+	}] } {
+	    # if tsearch is installed
+	    ns_log Notice "******* Tsearch2 is compiled and installed. ***********"
+	    # continue with installation
 	} else {
 	
 		# tsearch not installed
