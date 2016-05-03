@@ -13,13 +13,13 @@ insert into cr_mime_types (label,mime_type,file_extension) values ( 'Unkown'    
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'AutoCAD drawing files'   , 'application/acad'              , 'dwg' );
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'Andrew data stream'      , 'application/andrew-inset'      , 'ez' );
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'ClarisCAD files'         , 'application/clariscad'         , 'ccad' );
-insert into cr_mime_types (label,mime_type,file_extension) values ( 'Text - Comma separated value'   , 'application/csv'        , 'csv' );
+insert into cr_mime_types (label,mime_type,file_extension) values ( 'Text - Comma separated value', 'application/csv'           , 'csv' );
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'MATRA Prelude drafting'  , 'application/drafting'          , 'drw' );
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'DXF (AutoCAD)'           , 'application/dxf'               , 'dxf' );
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'Filemaker Pro'           , 'application/filemaker'         , 'fm' );
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'Macromedia Futuresplash' , 'application/futuresplash'      , 'spl' );
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'NCSA HDF data format'    , 'application/hdf'               , 'hdf' );
-insert into cr_mime_types (label,mime_type,file_extension) values ( 'Image - IGES graphics format'    , 'application/iges'      , 'iges' );
+insert into cr_mime_types (label,mime_type,file_extension) values ( 'Image - IGES graphics format', 'application/iges'          , 'iges' );
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'Mac binhex 4.0'          , 'application/mac-binhex40'      , 'hqx' );
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'Mac Compactpro'          , 'application/mac-compactpro'    , 'cpt' );
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'Microsoft Word'          , 'application/msword'            , 'doc' );
@@ -74,7 +74,7 @@ insert into cr_mime_types (label,mime_type,file_extension) values ( 'Audio Real'
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'Quattro Pro'             , 'application/x-quattro-pro'     , 'wq1');
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'Archive RAR'             , 'application/x-rar-compressed'  , 'rar');
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'Session Description Protocol', 'application/sdp'           , 'sdp' );
-insert into cr_mime_types (label,mime_type,file_extension) values ( 'Macromedia Shockwave'    , 'application/vnd.adobe.flash-movie' , 'swf' );
+insert into cr_mime_types (label,mime_type,file_extension) values ( 'Macromedia Shockwave'    , 'application/vnd.adobe.flash-movie', 'swf' );
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'SQL'                     , 'application/x-sql'             , 'sql' );
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'Archive Mac Stuffit compressed'  , 'application/x-stuffit' , 'sit' );
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'Archive SVR4 cpio'       , 'application/x-sv4cpio'         , 'sv4cpio');
@@ -294,7 +294,7 @@ insert into cr_extension_mime_type_map (extension, mime_type) values ( 'fm','app
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'gif','image/gif' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'gtar','application/x-gtar' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'gz','application/gzip' );
-insert into cr_extension_mime_type_map (extension, mime_type) values ( 'gzip','application/x-gzip' );
+insert into cr_extension_mime_type_map (extension, mime_type) values ( 'gzip','application/gzip' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'hdf','application/hdf');
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'hqx','application/mac-binhex40' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'html','text/html' );

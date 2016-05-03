@@ -30,5 +30,7 @@ end;
 /
 
 select inline_0('Archive gzip compressed','gz','application/x-gzip','application/gzip') from dual;
+select inline_0('Archive gzip compressed','gzip','application/x-gzip','application/gzip') from dual;
+
 
 drop function inline_0;
