@@ -30,5 +30,6 @@ end;
 $$ language 'plpgsql';
 
 select inline_0('Archive gzip compressed','gz','application/x-gzip','application/gzip');
+select inline_0('Archive gzip compressed','gzip','application/x-gzip','application/gzip');
 
 drop function inline_0(varchar,varchar,varchar,varchar);
