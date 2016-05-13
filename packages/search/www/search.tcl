@@ -5,8 +5,8 @@ ad_page_contract {
 } {
     q:trim
     {t:trim ""}
-    {offset:naturalnum 0}
-    {num:naturalnum 0}
+    {offset:naturalnum,notnull 0}
+    {num:naturalnum,notnull 0}
     {dfs:word,trim ""}
     {dts:word,trim ""}
     {search_package_id:naturalnum ""}
@@ -23,7 +23,6 @@ ad_page_contract {
 set page_title "Search Results"
 
 set package_id [ad_conn package_id]
-
 set package_url [ad_conn package_url]
 set package_url_with_extras $package_url
 
