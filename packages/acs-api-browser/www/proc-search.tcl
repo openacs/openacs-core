@@ -13,13 +13,13 @@ ad_page_contract {
     @creation-date Jul 14, 2000
     @cvs-id $Id$
 } {
-    {name_weight:optional 0}
-    {doc_weight:integer,optional 0}
-    {param_weight:integer,optional 0}
-    {source_weight:integer,optional 0}
+    {name_weight:notnull 0}
+    {doc_weight:integer,notnull 0}
+    {param_weight:integer,notnull 0}
+    {source_weight:integer,notnull 0}
     {search_type:optional 0}
-    {show_deprecated_p:boolean 0}
-    {show_private_p:boolean 0}
+    {show_deprecated_p:boolean,notnull 0}
+    {show_private_p:boolean,notnull 0}
     query_string
 } -properties {
     title:onevalue

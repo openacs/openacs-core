@@ -3,10 +3,10 @@ ad_page_contract {
 
     @cvs-id $Id$
 } {
-    version_id:naturalnum,optional
+    version_id:naturalnum,optional,notnull
     { public_p:boolean "" }
     path:path,trim
-    source_p:boolean,optional,trim
+    source_p:boolean,optional,trim,notnull
 } -properties {
     title:onevalue
     context:onevalue

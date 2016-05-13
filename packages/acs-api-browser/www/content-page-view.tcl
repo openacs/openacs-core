@@ -11,7 +11,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     version_id:naturalnum,optional
-    source_p:boolean,optional,trim
+    source_p:boolean,optional,trim,notnull
     path:trim,notnull
 } -properties {
     title:onevalue
