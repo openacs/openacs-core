@@ -1,3 +1,12 @@
+ad_page_contract {
+
+    @author unknown
+    @creation-date unknown
+
+} -query {
+    {payee ""}
+    {amount:integer ""}
+}
 
 form create pay_bill -section required -sec_legendtext Payment -elements {
   payee -label "Payee" -datatype text -widget text 
