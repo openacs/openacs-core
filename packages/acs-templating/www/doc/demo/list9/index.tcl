@@ -7,7 +7,7 @@ ad_page_contract {
   @cvs-id $Id$
 } -query {
   orderby:token,optional
-  color_filter_value:optional
+  color_filter_value:word,optional
   page:naturalnum,optional
 } -properties {
   notes:multirow
