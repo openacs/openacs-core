@@ -2197,7 +2197,7 @@ ad_proc ad_page_contract_handle_datasource_error {error} {
 				-default "/packages/acs-tcl/lib/ad-return-complaint"]
     set exception_count 1
     set exception_text $error
-    ns_return 200 text/html [ad_parse_template \
+    ns_return 422 text/html [ad_parse_template \
                                  -params [list [list exception_count $exception_count] \
                                               [list exception_text $exception_text]] \
 				 $complaint_template]
