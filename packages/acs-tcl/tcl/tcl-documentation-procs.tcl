@@ -1175,9 +1175,15 @@ ad_proc -public ad_page_contract {
             foreach elm [ad_complaints_get_list] {
                 template::multirow append complaints $elm
             }
-            ns_return 422 text/html [ad_parse_template \
-                                         -params [list complaints [list context $::ad_page_contract_context]] \
-                                         "/packages/acs-tcl/lib/complain"]
+            if {[catch {
+                set html [ad_parse_template \
+                              -params [list complaints [list context $::ad_page_contract_context]] \
+                              "/packages/acs-tcl/lib/complain"]
+            } errorMsg]} {
+                ad_log error "problem rendering complain page: $errorMsg"
+                set html "Invalid input"
+            }
+            ns_return 422 text/html $html
 	    ad_script_abort
 	}
     }
