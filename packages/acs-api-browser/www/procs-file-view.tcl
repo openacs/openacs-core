@@ -32,7 +32,7 @@ if { ![info exists version_id] &&
 }
 
 set path [apidoc::sanitize_path $path]
-if {![file readable $::acs::rootdir/$path] || [file isdirectory $::acs::rootdir/$path]} {
+if {![file readable ${::acs::rootdir}$path] || [file isdirectory ${::acs::rootdir}$path]} {
     if {[info exists version_id]} {
 	set kind procs
 	set href [export_vars -base [ad_conn package_url]/package-view {version_id {kind procs}}]
@@ -76,6 +76,7 @@ if { [info exists version_id] } {
 
 }
 
+set path [string trimleft / $path]
 lappend context [file tail $path]
 
 set title [file tail $path]
