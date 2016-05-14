@@ -6,7 +6,7 @@ ad_page_contract {
   @creation-date 2000-10-23
   @cvs-id $Id$
 } -query {
-  orderby:optional
+  orderby:token,optional
   color_filter_value:optional
   page:naturalnum,optional
 } -properties {
