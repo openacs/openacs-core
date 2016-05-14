@@ -76,7 +76,7 @@ if { [info exists version_id] } {
 
 }
 
-set path [string trimleft / $path]
+set path [string trimleft $path /]
 lappend context [file tail $path]
 
 set title [file tail $path]
