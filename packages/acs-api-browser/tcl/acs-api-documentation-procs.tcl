@@ -1473,7 +1473,7 @@ namespace eval ::apidoc {
         @return sanitized path
     } {
         set path [ns_normalizepath $path]
-        if {![string match "$prefix/*" $path]} {
+        if {![string match "/$prefix/*" $path]} {
             set filename "$::acs::rootdir/$path"
             ns_log notice [subst {INTRUDER ALERT:\n\nsomesone tried to snarf '$filename'!
                 file exists: [file exists $filename] user_id: [ad_conn user_id] peer: [ad_conn peeraddr]
