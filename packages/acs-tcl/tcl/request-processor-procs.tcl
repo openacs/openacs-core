@@ -585,6 +585,21 @@ ad_proc -private rp_filter { why } {
     set root [root_of_host [ad_host]]
     set ad_conn_url [ad_conn url]
 
+    if {[string first [encoding convertto utf-8 \x00] $ad_conn_url] > -1} {
+        ad_log warning "BAD CHAR in URL $ad_conn_url // rp_filter $why"
+        # reset [ad_conn url], otherwise we might run into a problem when rendering the error page
+        ad_conn -set url ${root}/
+        ad_page_contract_handle_datasource_error "URL contains invalid characters"
+        return filter_return
+    }
+    if {[string length $ad_conn_url] > 132} {
+        ad_log warning "URL TOO LONG: $ad_conn_url // rp_filter $why"
+        # reset [ad_conn url], otherwise we might run into a problem when rendering the error page
+        ad_conn -set url ${root}/
+        ad_page_contract_handle_datasource_error "URL is longer than allowed"
+        return filter_return
+    }
+
     # 2. handle special case: if the root is a prefix of the URL, 
     #                         remove this prefix from the URL, and redirect.
     if { $root ne "" } {
@@ -665,14 +680,9 @@ ad_proc -private rp_filter { why } {
     }
     rp_debug -ns_log_level debug -debug t "rp_filter: setting up request: [ns_conn method] [ns_conn url] [ns_conn query]"
 
-    if {[string length $ad_conn_url] >= 132} {
-        ad_log warning "requested URL is too long ([string length $ad_conn_url] bytes, max 132); url=$ad_conn_url; reset url to /"
-        set ad_conn_url /
-    }
-    
     if { [catch { array set node [site_node::get -url $ad_conn_url] } errmsg] } {
         # log and do nothing
-        ad_log error "error within rp_filter: $errmsg"
+        ad_log error "error within rp_filter when getting site node: $errmsg"
     } else {
 
         if {$node(url) eq "$ad_conn_url/"} {
