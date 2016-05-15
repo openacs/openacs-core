@@ -29,6 +29,7 @@ if {$package_key eq ""} {
     #
     #####
     apm_get_package_repository -array repository
+    apm_get_installed_versions -array installed
 
     set install_pkgs $package_key
     while 1 {
@@ -86,13 +87,14 @@ if {$package_key eq ""} {
                 
                 set must_add {}
                 foreach p $properties(install) {
-                    if {$p ni $install_pkgs} {
+                    if {$p ni $install_pkgs && ![info exists installed($p)]} {
+                        #ns_log notice "+++ install_pkgs <$p> ni <$install_pkgs> and not already installed"
                         lappend must_add $p
                     }
                 }
                 if {[llength $must_add] > 0} {
-                    lappend install_pkgs {*}$must_add
                     ns_log notice "+++ install_pkgs <$install_pkgs> after must_add <$must_add>"
+                    lappend install_pkgs {*}$must_add
                     set fixpoint_p 0
                     break
                 }
