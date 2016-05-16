@@ -265,7 +265,7 @@ CREATE OR REPLACE FUNCTION content_item__new(
    new__mime_type varchar,         -- default 'text/plain'
    new__nls_language varchar,      -- default null
    new__text varchar,              -- default null
-   new__storage_type varchar,      -- check in ('text','file')
+   new__storage_type cr_items.storage_type%TYPE,
    new__package_id integer default null
 
 ) RETURNS integer AS $$
@@ -568,7 +568,7 @@ $$ LANGUAGE plpgsql;
 
 -- function new -- sets security_inherit_p to FALSE -DaveB
 --
--- procedure content_item__new/16 content_item__new/17
+-- procedure content_item__new/17 (accepts 16-17 args)
 --
 CREATE OR REPLACE FUNCTION content_item__new(
    new__item_id integer,            --default null
@@ -582,7 +582,7 @@ CREATE OR REPLACE FUNCTION content_item__new(
    new__is_live boolean,            -- default 'f'
    new__mime_type varchar,
    new__text text,                  -- default null
-   new__storage_type varchar,       -- check in ('text', 'file')
+   new__storage_type cr_items.storage_type%TYPE,
    new__security_inherit_p boolean, -- default 't'
    new__storage_area_key varchar,   -- default 'CR_FILES'
    new__item_subtype varchar,
