@@ -4779,7 +4779,7 @@ ad_proc -public ad_log {
         append request "    " \
             [ns_conn method] \
             " [util_current_location][ns_conn url]?[ns_conn query]" \
-            " referred by '[get_referrer]' peer [ad_conn peeraddr]"
+            " referred by '[get_referrer]' peer [ad_conn peeraddr] user_id [ad_conn user_id]"
     }
     ns_log $level "${message}\n[uplevel ad_get_tcl_call_stack]${request}\n"
 }
