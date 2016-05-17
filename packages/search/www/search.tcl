@@ -6,7 +6,7 @@ ad_page_contract {
     q:trim
     {t:trim ""}
     {offset:naturalnum,notnull 0}
-    {num:naturalnum,notnull 0}
+    {num:range(0|200) 0}
     {dfs:word,trim ""}
     {dts:word,trim ""}
     {search_package_id:naturalnum ""}
