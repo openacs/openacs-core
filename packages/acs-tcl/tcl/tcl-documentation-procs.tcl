@@ -1663,7 +1663,13 @@ ad_page_contract_filter range { name value range } {
 	ad_script_abort
     }
     lassign $range min max
-    if { $value < $min || $value > $max } {
+    #
+    # Strip leading zeros from value to avoid octal number
+    # confusions.
+    #
+    regexp {^(0*)([1-9][0-9]*|0)$} $value . zeros value
+    
+    if { ![string is integer -strict $value] || $value < $min || $value > $max } {
 	ad_complain [_ acs-tcl.lt_name_is_not_in_the_ra]
 	return 0
     }
