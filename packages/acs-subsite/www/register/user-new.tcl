@@ -5,6 +5,12 @@ ad_page_contract {
 } {
     {email ""}
     {return_url [ad_pvt_home]}
+} -validate {
+    valid_return_url {
+        if {[string first {$} $return_url] > -1} {
+            ad_complain "return_url contains invalid character"
+        }
+    }
 }
 
 set registration_url [parameter::get -parameter RegistrationRedirectUrl]
