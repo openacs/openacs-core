@@ -20,7 +20,7 @@ ad_page_contract {
     {search_type:optional 0}
     {show_deprecated_p:boolean,notnull 0}
     {show_private_p:boolean,notnull 0}
-    query_string
+    {query_string:token,notnull}
 } -properties {
     title:onevalue
     context:onevalue
