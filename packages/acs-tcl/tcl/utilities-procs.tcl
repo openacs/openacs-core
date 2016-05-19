@@ -4609,16 +4609,21 @@ ad_proc util::external_url_p { url } {
     HTTP or HTTPS port number added or removed from current host name    
     or another hostname that the host responds to (from host_node_map)
 } {
-    set locations_list [security::locations]
-    # there may be as many as 3 valid full urls from one hostname
     set external_url_p [util_complete_url_p $url]
-
-    # more valid url pairs with host_node_map
-    foreach location $locations_list {
-        set encoded_location [ns_urlencode $location]
-        #       ns_log Notice "util::external_url_p location \"$location/*\" url $url match [string match "${encoded_location}/*" $url]"
-        set external_url_p [expr { $external_url_p && ![string match "$location/*" $url] } ] 
-        set external_url_p [expr { $external_url_p && ![string match "${encoded_location}/*" $url] } ] 
+    #
+    # If it is syntactical a url with a protocol, it might be really
+    # external.
+    #
+    if {$external_url_p} {
+        set locations_list [security::locations]
+        # more valid url pairs with host_node_map
+        
+        foreach location $locations_list {
+            set encoded_location [ns_urlencode $location]
+            # ns_log Notice "util::external_url_p location \"$location/*\" url $url match [string match "${encoded_location}/*" $url]"
+            set external_url_p [expr { $external_url_p && ![string match "$location/*" $url] } ] 
+            set external_url_p [expr { $external_url_p && ![string match "${encoded_location}/*" $url] } ] 
+        }
     }
     return $external_url_p
 }
