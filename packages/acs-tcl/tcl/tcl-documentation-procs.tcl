@@ -407,6 +407,10 @@ ad_proc -public ad_page_contract {
     <dd>Pluggable filter, installed by default, that makes sure hat argument contains only Tcl word
     characters (as defined by \w in Tcl regular expressions, i.e. characers, digits and underscore).
 
+    <dt><a href="proc-view?proc=ad_page_contract_filter_proc_return_url"><b>return_url</b></a>
+    <dd>Pluggable filter, installed by default, that makes sure hat argument contains a valid
+    (non-external) return url, which can be used in ad_returnredirect without throwing an error.
+
     </dl>
 
     <a href="/api-doc/proc-search?query_string=ad_page_contract_filter_proc&search_type=Search&name_weight=5&param_weight=3&doc_weight=2">more filters...</a>
@@ -2137,6 +2141,21 @@ ad_page_contract_filter path { name value } {
     return 0
 }
 
+ad_page_contract_filter return_url { name value } {
+    Checks whether the value is a an acceptable
+    (non-external) return url, which can be used
+    in ad_returnredirect without throwing an error.
+
+    @author Gustaf Neumann
+    @creation-date 19 Mai 2016
+} {
+
+    if { $value eq "" || [util::external_url_p $value]} {
+        ad_complain [_ acs-tcl.lt_name_is_not_valid]
+        return 0
+    }
+    return 1
+}
 
 
 
