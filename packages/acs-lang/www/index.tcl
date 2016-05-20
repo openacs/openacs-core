@@ -1,7 +1,7 @@
 ad_page_contract {
     Localization home
 } {
-    {return_url ""}
+    {return_url:return_url ""}
     {return_p:boolean "f"}
 }
 

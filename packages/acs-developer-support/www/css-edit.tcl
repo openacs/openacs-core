@@ -8,7 +8,7 @@ ad_page_contract {
 } {
     {file_location}
     {css_location}
-    {return_url "/"}
+    {return_url:return_url "/"}
 } -properties {
 } -validate {
 } -errors {

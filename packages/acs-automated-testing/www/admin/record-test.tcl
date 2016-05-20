@@ -9,7 +9,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     package_key
-    {return_url ""}
+    {return_url:return_url ""}
 } -properties {
 } -validate {
 } -errors {
