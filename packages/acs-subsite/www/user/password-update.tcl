@@ -5,7 +5,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     {user_id:naturalnum,notnull {[ad_conn untrusted_user_id]}}
-    {return_url ""}
+    {return_url:return_url ""}
     {old_password ""}
     {message ""}
 }

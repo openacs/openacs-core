@@ -10,7 +10,7 @@ ad_page_contract {
 
 } {
     rel_type:notnull,rel_type_dynamic_p
-    { return_url "" }
+    { return_url:return_url "" }
 } -properties {
     context:onevalue
     rel_type_pretty_name:onevalue

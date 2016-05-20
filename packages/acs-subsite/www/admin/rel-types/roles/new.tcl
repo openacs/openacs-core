@@ -12,7 +12,7 @@ ad_page_contract {
     { role:trim "" }
     { pretty_name "" }
     { pretty_plural "" }
-    { return_url "" }
+    { return_url:return_url "" }
 } -properties {
     context:onevalue
     

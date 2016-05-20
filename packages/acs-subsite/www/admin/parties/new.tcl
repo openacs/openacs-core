@@ -13,7 +13,7 @@ ad_page_contract {
     { party_type_exact_p:boolean t }
     { party_id:naturalnum "" }
     { party.email ""}
-    { return_url "" }
+    { return_url:return_url "" }
     {add_to_group_id:naturalnum ""}
     {add_with_rel_type "membership_rel"}
     {group_rel_type_list ""}

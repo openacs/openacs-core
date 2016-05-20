@@ -10,7 +10,7 @@ ad_page_contract {
 } {
     group_id:naturalnum,notnull
     join_policy:notnull
-    {return_url ""}
+    {return_url:return_url ""}
 } -validate {
     groups_exists_p -requires {group_id:notnull} {
 	if { ![group::permission_p -privilege admin $group_id] } {

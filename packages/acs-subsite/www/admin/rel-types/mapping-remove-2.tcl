@@ -12,7 +12,7 @@ ad_page_contract {
 } {
     { group_rel_id:naturalnum "" }
     { group_type_rel_id:naturalnum "" }
-    { return_url "" }
+    { return_url:return_url "" }
 } -properties {
     context:onevalue
 }

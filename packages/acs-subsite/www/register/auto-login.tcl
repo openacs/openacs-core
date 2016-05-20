@@ -6,7 +6,7 @@ ad_page_contract {
 } {
     email
     password
-    {return_url "/"}
+    {return_url:return_url "/"}
 }
 
 array set auth_info [auth::authenticate \

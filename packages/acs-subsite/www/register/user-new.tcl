@@ -4,7 +4,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     {email ""}
-    {return_url [ad_pvt_home]}
+    {return_url:return_url [ad_pvt_home]}
 } -validate {
     valid_return_url {
         if {[string first {$} $return_url] > -1} {

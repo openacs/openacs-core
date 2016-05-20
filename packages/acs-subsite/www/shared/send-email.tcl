@@ -4,7 +4,7 @@ ad_page_contract {
     @author Miguel Marin (miguelmarin@viaro.net) Viaro Networks (www.viaro.net)
 } {
     sendto:notnull
-    {return_url ""}
+    {return_url:return_url ""}
 } -properties {
     context:onevalue
 }

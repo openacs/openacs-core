@@ -10,7 +10,7 @@ ad_page_contract {
 
 } {
     segment_id:naturalnum,notnull
-    { return_url "" }
+    { return_url:return_url "" }
 } -properties {
     export_vars:onevalue
     segment_name:onevalue
