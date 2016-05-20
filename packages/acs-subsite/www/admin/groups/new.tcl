@@ -15,7 +15,7 @@ ad_page_contract {
     { group_id:naturalnum "" }
     {add_to_group_id:integer ""}
     {add_with_rel_type "composition_rel"}
-    { return_url:return_url "" }
+    { return_url:localurl "" }
     {group_rel_type_list ""}
 } -properties {
     context:onevalue

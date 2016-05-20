@@ -5,7 +5,7 @@ ad_page_contract {
     {authority_id:naturalnum ""}
     {username ""}
     {email ""}
-    {return_url:return_url ""}
+    {return_url:localurl ""}
 }
 
 set subsite_id [ad_conn subsite_id]
