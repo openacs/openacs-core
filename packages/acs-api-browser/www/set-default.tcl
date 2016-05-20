@@ -2,7 +2,7 @@ ad_page_contract {
     Set user preferences for API browsing.
 } {
     source_p:boolean,optional,notnull
-    return_url:return_url
+    return_url:localurl
 }
 
 set found_p 0
