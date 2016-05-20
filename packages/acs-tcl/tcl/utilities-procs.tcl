@@ -4611,8 +4611,8 @@ ad_proc util::external_url_p { url } {
 } {
     set external_url_p [util_complete_url_p $url]
     #
-    # If it is syntactical a url with a protocol, it might be really
-    # external.
+    # Only if the URL is syntactical a URL with a protocol, it might
+    # be external.
     #
     if {$external_url_p} {
         set locations_list [security::locations]

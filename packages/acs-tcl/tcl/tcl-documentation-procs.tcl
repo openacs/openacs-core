@@ -407,9 +407,9 @@ ad_proc -public ad_page_contract {
     <dd>Pluggable filter, installed by default, that makes sure hat argument contains only Tcl word
     characters (as defined by \w in Tcl regular expressions, i.e. characers, digits and underscore).
 
-    <dt><a href="proc-view?proc=ad_page_contract_filter_proc_return_url"><b>return_url</b></a>
-    <dd>Pluggable filter, installed by default, that makes sure hat argument contains a valid
-    (non-external) return url, which can be used in ad_returnredirect without throwing an error.
+    <dt><a href="proc-view?proc=ad_page_contract_filter_proc_localurl"><b>localurl</b></a>
+    <dd>Pluggable filter, installed by default, that makes sure hat argument contains a 
+    non-external url, which can be used in ad_returnredirect without throwing an error.
 
     </dl>
 
@@ -2141,9 +2141,9 @@ ad_page_contract_filter path { name value } {
     return 0
 }
 
-ad_page_contract_filter return_url { name value } {
+ad_page_contract_filter localurl { name value } {
     Checks whether the value is a an acceptable
-    (non-external) return url, which can be used
+    (non-external) url, which can be used
     in ad_returnredirect without throwing an error.
 
     @author Gustaf Neumann
