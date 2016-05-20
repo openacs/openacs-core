@@ -7,7 +7,7 @@ ad_page_contract {
 } {
     extension:notnull
     mime_type:notnull
-    {return_url ""}
+    {return_url:return_url ""}
 }
 
 if { $return_url eq "" } {

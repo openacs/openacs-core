@@ -6,7 +6,7 @@ ad_page_contract {
 
 } {
     { extension_p:boolean 0 }
-    { orderby "mime_type" }
+    { orderby:token "mime_type" }
 }
 
 set return_url [export_vars -base "index" {extension_p orderby}]
