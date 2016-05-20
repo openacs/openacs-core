@@ -10,7 +10,7 @@ ad_page_contract {
     user_id:naturalnum,notnull
     {member_state "no_change"}
     {email_verified_p:boolean "no_change"}
-    {return_url:return_url ""}
+    {return_url:localurl ""}
 } -properties {
     context:onevalue
     export_vars:onevalue
