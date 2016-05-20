@@ -13,7 +13,7 @@ ad_page_contract {
     rel_type:notnull
     { party_id:naturalnum "" }
     { exact_p:boolean "f" }
-    { return_url:return_url "" }
+    { return_url:localurl "" }
     { allow_out_of_scope_p:boolean "f" }
 } -properties {
     context:onevalue

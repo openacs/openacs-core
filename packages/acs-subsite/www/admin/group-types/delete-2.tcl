@@ -10,7 +10,7 @@ ad_page_contract {
 
 } {
     group_type
-    { return_url:return_url "" }
+    { return_url:localurl "" }
     { operation "" }
 } -properties {
     context:onevalue

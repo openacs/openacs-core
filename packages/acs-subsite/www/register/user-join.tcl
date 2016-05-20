@@ -11,7 +11,7 @@ ad_page_contract {
 } {
     {group_id:naturalnum,notnull {[application_group::group_id_from_package_id]}}
     {rel_type:notnull "membership_rel"}
-    {return_url:return_url {}}
+    {return_url:localurl {}}
 } -properties {
     context:onevalue
     role_pretty_name:onevalue
