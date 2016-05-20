@@ -1,7 +1,7 @@
 ad_page_contract {
     Make user invisible.
 } {
-    {return_url ""}
+    {return_url:return_url ""}
 }
 
 auth::require_login

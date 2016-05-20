@@ -11,7 +11,7 @@ ad_page_contract {
 } {
     group_id:integer,notnull
     { rel_type:trim "" }
-    { return_url "" }
+    { return_url:return_url "" }
 } -properties {
     context:onevalue
     export_vars:onevalue

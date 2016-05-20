@@ -11,7 +11,7 @@ ad_page_contract {
 } {
     segment_id:naturalnum,notnull
     { operation "" }
-    { return_url "" }
+    { return_url:return_url "" }
 }
 
 set operation [string trim [string tolower $operation]]

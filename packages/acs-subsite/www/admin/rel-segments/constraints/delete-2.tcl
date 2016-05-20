@@ -11,7 +11,7 @@ ad_page_contract {
 } {
     constraint_id:naturalnum,notnull
     { operation "" }
-    { return_url "" }
+    { return_url:return_url "" }
 }
 
 permission::require_permission -object_id $constraint_id -privilege delete

@@ -9,7 +9,7 @@ ad_page_contract {
     @cvs-id $Id$
 
 } {
-    { return_url "" }
+    { return_url:return_url "" }
 } -properties {
     context:onevalue
 }

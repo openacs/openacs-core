@@ -6,7 +6,7 @@ ad_page_contract {
     @creation-date September 26, 1999
     @cvs-id $Id$
 } {
-    {return_url "" }
+    {return_url:return_url "" }
     {user_id:naturalnum ""}
 } -properties {
     first_names:onevalue
