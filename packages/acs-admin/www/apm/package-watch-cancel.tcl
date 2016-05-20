@@ -5,7 +5,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     package_key
-    {return_url "index"}
+    {return_url:return_url "index"}
 } 
 
 apm_cancel_all_watches $package_key

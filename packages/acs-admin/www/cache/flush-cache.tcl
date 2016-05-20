@@ -2,7 +2,7 @@ ad_page_contract {
     Flush one or more values from util_memoize's cache
 } {
     suffix
-    {return_url "."}
+    {return_url:return_url "."}
 }
 
 if {$suffix eq "util_memoize"} {   

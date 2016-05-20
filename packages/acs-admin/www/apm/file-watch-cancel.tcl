@@ -8,7 +8,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     {watch_file ""}
-    {return_url ""}
+    {return_url:return_url ""}
 }
 apm_file_watch_cancel $watch_file
 
