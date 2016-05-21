@@ -8,7 +8,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     request_id:naturalnum,notnull
-    return_url
+    return_url:localurl
 }
 
 # Security Check
