@@ -168,6 +168,11 @@ ad_proc -private sec_handler {} {
             # would cause users' sessions to expire as soon as the session needed to be renewed
             sec_generate_session_id_cookie
         }
+        
+        #
+        # generate a csrf token
+        #
+        security::csrf::new
     }
 }
 
@@ -180,17 +185,15 @@ ad_proc -private sec_login_read_cookie {} {
 
     @return List of values read from cookie ad_user_login_secure or ad_user_login
 } {
-    # If over HTTPS, we look for a secure cookie, otherwise we look for the normal one
-    set login_list [list]
+    #
+    # If over HTTPS, we look for the *_secure cookie
+    #
     if { [security::secure_conn_p] } {
-        catch {
-            set login_list [split [ad_get_signed_cookie "ad_user_login_secure"] ","]
-        }
-    } 
-    if { $login_list eq "" } {
-        set login_list [split [ad_get_signed_cookie "ad_user_login"] ","]
+        set cookie_name "ad_user_login_secure"
+    } else {
+        set cookie_name "ad_user_login"
     }
-    return $login_list
+    return [split [ad_get_signed_cookie $cookie_name] ","]
 }
 
 ad_proc -private sec_login_handler {} {
@@ -1792,6 +1795,104 @@ ad_proc -public security::locations {} {
     }
     return $locations
 }
+
+namespace eval security::csrf {}
+
+ad_proc -public security::csrf::new {{-tokenname __csrf_token} -user_id} {
+
+    Create a security token to protect against CSRF (Cross-Site
+    Request Forgery).  The token is set (and cached) in a global
+    per-thread variable an can be included in forms e.g. via the
+    following command.
+    
+    <if @::__csrf_token@ defined><input type="hidden" name="__csrf_token" value="@::__csrf_token;literal@"></if>
+
+    The token is automatically cleared together with other global
+    variables at the end of the processing of every request.
+    
+    @return csrf token
+} {
+    set cached_var_name ::__csrf_token
+    if {[info exists $cached_var_name]} {
+        return [set $cached_var_name]
+    }
+    if {![info exists user_id]} {
+        set user_id [ad_conn user_id]
+    }
+    if {$user_id == 0} {
+        #
+        # Anonymous request, use a peer address as session_id
+        #
+        set session_id [ad_conn peeraddr]
+    } else {
+        #
+        # User is logged in, use a session token.
+        #
+        set session_id [ad_conn session_id]
+    }
+    
+    if {[info commands ::crypto::hmac] ne ""} {
+        set secret    [ns_config "ns/server/[ns_info server]/acs" parametersecret ""]
+        set signature [::crypto::hmac string $secret $session_id]
+    } else {
+        set signature [ns_sha1 $session_id]
+    }
+    return [set $cached_var_name $signature]
+
+}
+
+    
+ad_proc -public security::csrf::validate {{-tokenname __csrf_token} {-allowempty false}} {
+
+    Validate a CSRF token and call security::csrf::fail the request if
+    invalid.
+
+    @return nothing
+} {
+    set oldToken [ns_queryget $tokenname]
+    if {$oldToken eq ""} {
+        # We can't validate, since there is no token.
+        if {$allowempty} {
+            return ""
+        }
+        security::csrf::fail
+    }
+    if {![info exists user_id]} {
+        set user_id [ad_conn user_id]
+    }
+
+    if {$user_id == 0} {
+        set session_id [ad_conn peeraddr]
+    } else {
+        set session_id [ad_conn session_id]
+    }
+
+    if {[info commands ::crypto::hmac] ne ""} {
+        set secret    [ns_config "ns/server/[ns_info server]/acs" parametersecret ""]
+        set signature [::crypto::hmac string $secret $session_id]
+    } else {
+        set signature [ns_sha1 $session_id]
+    }
+    if {$oldToken ne $signature} {
+        security::csrf::fail
+    }
+}
+
+ad_proc -private security::csrf::fail {} {
+    
+    This function is called, when a csrf validation fails. Unless the
+    current user is swa, it aborts the current request.
+    
+} {
+    ad_log Warning "CSRF failure"
+    if {[acs_user::site_wide_admin_p]} {
+        ns_log notice "would abort if not swa: [ns_conn request]"
+    } else {
+        ad_page_contract_handle_datasource_error "Invalid form token (potential Cross-Site Request Forgery)"
+        ad_script_abort
+    }
+}
+
 
 #
 # Local variables:
