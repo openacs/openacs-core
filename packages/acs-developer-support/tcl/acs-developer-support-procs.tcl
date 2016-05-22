@@ -227,7 +227,8 @@ ad_library {
          if { [nsv_exists ds_request $::ad_conn(request).conn] } {
              array set conn [nsv_get ds_request $::ad_conn(request).conn]
              if { [info exists conn(startclicks)] } {
-                 append out "Page served in [format "%.f" [expr { ([clock clicks -milliseconds] - $conn(startclicks)) }]] ms<br>\n"
+                 set time [format "%.f" [expr { ([clock clicks -microseconds] - $conn(startclicks))/1000.0 }]]
+                 append out "Page served in $time ms<br>\n"
              }
          }
 
@@ -276,7 +277,7 @@ ad_library {
          if { [nsv_exists ds_request $::ad_conn(request).conn] } {
              array set conn [nsv_get ds_request $::ad_conn(request).conn]
              if { [info exists conn(startclicks)] } {
-                 set result [format "%.f" [expr { ([clock clicks -milliseconds] - $conn(startclicks)) }]]
+                 set result [format "%.f" [expr { ([clock clicks -microseconds] - $conn(startclicks))/1000.0 }]]
              }
          }
      }
@@ -316,6 +317,7 @@ ad_library {
 
          ds_add start [ns_time]
          ds_add conn startclicks [ad_conn start_clicks]
+
          for { set i 0 } { $i < [ns_set size [ad_conn headers]] } { incr i } {
              ds_add headers [ns_set key [ad_conn headers] $i] [ns_set value [ad_conn headers] $i]
          }
@@ -666,13 +668,13 @@ ad_proc -public ds_profile { command {tag {}} } {
             if { $tag eq "" } {
                 error "Tag parameter is required"
             }
-            set ::ds_profile__start_clock($tag) [clock clicks -milliseconds]
+            set ::ds_profile__start_clock($tag) [clock clicks -microeconds]
         }
         stop {
             if { [info exists ::ds_profile__start_clock($tag)] 
                  && $::ds_profile__start_clock($tag) ne "" } {
                 ds_add prof $tag \
-                    [expr {[clock clicks -milliseconds] - $::ds_profile__start_clock($tag)}]
+                    [expr {[clock clicks -microseconds] - $::ds_profile__start_clock($tag)}]
                 unset ::ds_profile__start_clock($tag)
             } else {
                 ns_log Warning "ds_profile stop called without a corresponding call to ds_profile start, with tag $tag"
