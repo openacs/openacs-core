@@ -30,6 +30,8 @@ ad_page_contract {
     source_weight:onevalue
     query_string:onevalue
     results:multirow
+} -validate {
+    csrf { security::csrf::validate }
 }
 
 ##########################################################
