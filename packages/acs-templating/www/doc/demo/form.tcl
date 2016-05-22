@@ -1,3 +1,10 @@
+ad_page_contract {
+    Demo page
+} {
+    {user_id:integer,notnull ""}
+    {state:word ""}
+}
+
 form create add_user -elements {
     user_id -label "User ID" -datatype integer -widget hidden
     first_name -html { size 30 } -label "First Name" -datatype text
@@ -23,12 +30,10 @@ if { [form is_request add_user] } {
 
 if { [form is_valid add_user] } {
 
-    db_dml insert_sample "
-    insert into 
-      ad_template_sample_users 
-    values (
-      :user_id, :first_name, :last_name, :address1, :address2, :city, :state
-    )" -bind [ns_getform]
+    db_dml insert_sample {
+        insert into  ad_template_sample_users 
+        values ( :user_id, :first_name, :last_name, :address1, :address2, :city, :state)
+    } -bind [ns_getform]
 
     template::forward index.html
 }
