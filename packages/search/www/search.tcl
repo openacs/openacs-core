@@ -18,6 +18,7 @@ ad_page_contract {
             ad_complain "#search.lt_You_must_specify_some#"
         }
     }
+    csrf { security::csrf::validate }
 }
 
 set page_title "Search Results"
