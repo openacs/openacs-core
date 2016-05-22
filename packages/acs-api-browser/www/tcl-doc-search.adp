@@ -13,9 +13,11 @@ You can try searching the <a href="@tcl_docs_url@">Tcl documentation</a> yoursel
 <table cellpadding="5">
   <tr>
     <td bgcolor="#dddddd">
-     <form action=tcl-doc-search method=get>
+     <form action="tcl-doc-search" method="get">
      <b>Tcl Documentation Search:</b><br>
-     <input type="text" name="tcl_proc" value="@tcl_proc@"> <input type="submit" value="Go"><br>
+     <input type="text" name="tcl_proc" value="@tcl_proc@">
+     <if @::__csrf_token@ defined><input type="hidden" name="__csrf_token" value="@::__csrf_token;literal@"></if>
+     <input type="submit" value="Go"><br>
      </form>
      </td>
   </tr>

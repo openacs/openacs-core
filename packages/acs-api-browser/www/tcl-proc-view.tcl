@@ -7,6 +7,8 @@ ad_page_contract {
     title:onevalue
     context:onevalue
     tcl_proc:onevalue
+} -validate {
+    csrf { security::csrf::validate }    
 }
 
 set ns_api_index_result [util_memoize [list ::util::http::get -url $::apidoc::ns_api_html_index]]

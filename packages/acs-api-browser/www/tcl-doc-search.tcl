@@ -7,6 +7,8 @@ ad_page_contract {
     title:onevalue
     context:onevalue
     tcl_proc:onevalue
+} -validate {
+    csrf { security::csrf::validate }
 }
 
 set tcl_docs_root "http://tcl.tk/man/tcl[info tclversion]/TclCmd/"
