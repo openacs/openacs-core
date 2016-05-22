@@ -104,7 +104,7 @@ ad_proc -public person::person_p {
     return [util_memoize [list ::person::person_p_not_cached -party_id $party_id]]
 }
 
-ad_proc -public person::person_p_not_cached {
+ad_proc -private person::person_p_not_cached {
     {-party_id:required}
 } {
     is this party a person? Cached
@@ -180,7 +180,7 @@ ad_proc -public person::name_flush {
     acs_user::flush_cache -user_id $person_id
 }
 
-ad_proc -public person::name_not_cached {
+ad_proc -private person::name_not_cached {
     {-person_id ""}
     {-email ""}
 } {
@@ -351,7 +351,7 @@ ad_proc -public acs_user::get_by_username {
     return $user_id
 }    
 
-ad_proc -public acs_user::get_by_username_not_cached {
+ad_proc -private acs_user::get_by_username_not_cached {
     {-authority_id:required}
     {-username:required}
 } {
@@ -694,7 +694,7 @@ ad_proc -public acs_user::get_portrait_id {
     return [util_memoize [list acs_user::get_portrait_id_not_cached -user_id $user_id] 600]
 }
 
-ad_proc -public acs_user::get_portrait_id_not_cached {
+ad_proc -private acs_user::get_portrait_id_not_cached {
     {-user_id:required}
 } {
     Return the image_id of the portrait of a user, if it does not exist, return 0
