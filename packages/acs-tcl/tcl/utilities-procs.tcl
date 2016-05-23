@@ -701,6 +701,17 @@ ad_proc -public export_vars {
         set url_p 1
     }
 
+    #
+    # TODO: At least the parsing of the options should be transformed
+    # to produce a single dict, containing the properties of all form
+    # vars (probably optionally) and specified arguments. The dict
+    # should be the straightforeward source for the genertion of the
+    # output set. One should be able to speed the code significantly
+    # up (at least for the standard cases).
+    #
+    # -Gustaf Neumann
+    #
+
     # 'noprocessing_vars' is yet another container of variables, 
     # only this one doesn't have the values subst'ed
     # and we don't try to find :multiple and :array flags in the namespec
