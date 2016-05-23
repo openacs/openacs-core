@@ -38,6 +38,7 @@ set error_msg ""
 
 if { ![info exists source_p] || $source_p eq ""} {
     set source_p $default_source_p
+    if {$source_p eq ""} {set source_p 0}
 }
 
 if {[string match ::* $proc]} {
