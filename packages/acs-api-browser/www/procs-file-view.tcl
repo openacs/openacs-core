@@ -18,12 +18,14 @@ ad_page_contract {
 
 set url_vars [export_vars {path version_id}]
 set return_url [ns_urlencode [ad_conn url]?][ns_urlencode $url_vars]
+
 set default_source_p [ad_get_client_property -default 0 acs-api-browser api_doc_source_p]
 if { ![info exists source_p] } {
     set source_p $default_source_p
+    if {$source_p eq ""} {set source_p 0}
 }
-if { ![info exists version_id] && 
-     [regexp {^packages/([^ /]+)/} $path "" package_key] } {
+if { ![info exists version_id]
+     && [regexp {^packages/([^ /]+)/} $path "" package_key] } {
     db_0or1row version_id_from_package_key {
         select version_id 
 	from apm_enabled_package_versions 
