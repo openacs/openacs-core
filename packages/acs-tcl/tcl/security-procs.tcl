@@ -1796,103 +1796,142 @@ ad_proc -public security::locations {} {
     return $locations
 }
 
-namespace eval security::csrf {}
+namespace eval ::security::csrf {
 
-ad_proc -public security::csrf::new {{-tokenname __csrf_token} -user_id} {
-
-    Create a security token to protect against CSRF (Cross-Site
-    Request Forgery).  The token is set (and cached) in a global
-    per-thread variable an can be included in forms e.g. via the
-    following command.
+    #
+    # CSRF protection.
+    #
+    # High Level commands:
+    #
+    #    security::csrf::new
+    #    security::csrf::validate
     
-    <if @::__csrf_token@ defined><input type="hidden" name="__csrf_token" value="@::__csrf_token;literal@"></if>
+    ad_proc -public ::security::csrf::new {{-tokenname __csrf_token} -user_id} {
 
-    The token is automatically cleared together with other global
-    variables at the end of the processing of every request.
+        Create a security token to protect against CSRF (Cross-Site
+        Request Forgery).  The token is set (and cached) in a global
+        per-thread variable an can be included in forms e.g. via the
+        following command.
     
-    @return csrf token
-} {
-    set cached_var_name ::__csrf_token
-    if {[info exists $cached_var_name]} {
-        return [set $cached_var_name]
-    }
-    if {![info exists user_id]} {
-        set user_id [ad_conn user_id]
-    }
-    if {$user_id == 0} {
-        #
-        # Anonymous request, use a peer address as session_id
-        #
-        set session_id [ad_conn peeraddr]
-    } else {
-        #
-        # User is logged in, use a session token.
-        #
-        set session_id [ad_conn session_id]
-    }
+        <if @::__csrf_token@ defined><input type="hidden" name="__csrf_token" value="@::__csrf_token;literal@"></if>
+
+        The token is automatically cleared together with other global
+        variables at the end of the processing of every request.
     
-    if {[info commands ::crypto::hmac] ne ""} {
-        set secret    [ns_config "ns/server/[ns_info server]/acs" parametersecret ""]
-        set signature [::crypto::hmac string $secret $session_id]
-    } else {
-        set signature [ns_sha1 $session_id]
-    }
-    return [set $cached_var_name $signature]
-
-}
-
-    
-ad_proc -public security::csrf::validate {{-tokenname __csrf_token} {-allowempty false}} {
-
-    Validate a CSRF token and call security::csrf::fail the request if
-    invalid.
-
-    @return nothing
-} {
-    set oldToken [ns_queryget $tokenname]
-    if {$oldToken eq ""} {
-        # We can't validate, since there is no token.
-        if {$allowempty} {
-            return ""
+        @return csrf token
+    } {
+        set cached_var_name ::$tokenname
+        if {[info exists $cached_var_name]} {
+            return [set $cached_var_name]
         }
-        security::csrf::fail
-    }
-    if {![info exists user_id]} {
-        set user_id [ad_conn user_id]
-    }
-
-    if {$user_id == 0} {
-        set session_id [ad_conn peeraddr]
-    } else {
-        set session_id [ad_conn session_id]
+        
+        set token [token -tokenname $tokenname]
+        return [set $cached_var_name $token]
     }
 
-    if {[info commands ::crypto::hmac] ne ""} {
-        set secret    [ns_config "ns/server/[ns_info server]/acs" parametersecret ""]
-        set signature [::crypto::hmac string $secret $session_id]
-    } else {
-        set signature [ns_sha1 $session_id]
+    #
+    # validate
+    #
+    ad_proc -public ::security::csrf::validate {{-tokenname __csrf_token} {-allowempty false}} {
+        
+        Validate a CSRF token and call security::csrf::fail the request if
+        invalid.
+
+        @return nothing
+    } {
+        if {![info exists ::$tokenname]} {
+            #
+            # If there is no global csrf token, we assume that the
+            # csrf token generation is deactivated, we accept everything.
+            #
+            return
+        }
+        
+        set oldToken [ns_queryget $tokenname]
+        if {$oldToken eq ""} {
+            #
+            # There is not token in the query/form parameters, we
+            # can't validate, since there is no token.
+            #
+            if {$allowempty} {
+                return
+            }
+            fail
+        }
+        
+        set token [token -tokenname $tokenname]
+        if {$oldToken ne $token} {
+            fail
+        }
     }
-    if {$oldToken ne $signature} {
-        security::csrf::fail
+
+    #
+    # Compute a session id or the best equivalent
+    #
+    ad_proc -private ::security::csrf::session_id { } {
+
+        Return an ID for the current session for CSRF protection
+
+        @return session ID
+    } {
+        if {[ad_conn untrusted_user_id] == 0} {
+            #
+            # Anonymous request, use a peer address as session_id
+            #
+            set session_id [ad_conn peeraddr]
+        } else {
+            #
+            # User is logged in, use a session token.
+            #
+            set session_id [ad_conn session_id]
+        }
+        return $session_id
+    }
+
+    #
+    # Generate CSRF token 
+    #
+    ad_proc -private ::security::csrf::token { {-tokenname __csrf_token} } {
+
+        Generate a CSRF token and return it
+
+        @return CSRF token
+    } {
+        #
+        # We compute the token only once per requests. If it was already
+        # computed, and we can pick it up and return it. Otherwise,
+        # we compute it new.
+        #
+        set globalTokenName ::$tokenname
+        if {[info exists $globalTokenName]} {
+            set token [set $globalTokenName]
+        } elseif {[info commands ::crypto::hmac] ne ""} {
+            set secret [ns_config "ns/server/[ns_info server]/acs" parametersecret ""]
+            set token  [::crypto::hmac string $secret [session_id]]
+        } else {
+            set token  [ns_sha1 [session_id]]
+        }
+        return $token
+    }
+
+    #
+    # Failure handling
+    #
+    ad_proc -private ::security::csrf::fail {} {
+    
+        This function is called, when a csrf validation fails. Unless the
+        current user is swa, it aborts the current request.
+        
+    } {
+        ad_log Warning "CSRF failure"
+        if {[acs_user::site_wide_admin_p]} {
+            ns_log notice "would abort if not swa: [ns_conn request]"
+        } else {
+            ad_page_contract_handle_datasource_error "Invalid request token (potential Cross-Site Request Forgery)"
+            ad_script_abort
+        }
     }
 }
-
-ad_proc -private security::csrf::fail {} {
-    
-    This function is called, when a csrf validation fails. Unless the
-    current user is swa, it aborts the current request.
-    
-} {
-    ad_log Warning "CSRF failure"
-    if {[acs_user::site_wide_admin_p]} {
-        ns_log notice "would abort if not swa: [ns_conn request]"
-    } else {
-        ad_page_contract_handle_datasource_error "Invalid form token (potential Cross-Site Request Forgery)"
-        ad_script_abort
-    }
-}
-
 
 #
 # Local variables:
