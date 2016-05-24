@@ -1171,25 +1171,32 @@ ad_proc -public ad_page_contract {
     set ::ad_page_contract_variables $apc_formals
 
     if { [ad_complaints_count] > 0 } {
-	if { [info exists return_errors] } {
-	    upvar 1 $return_errors error_list
-	    set error_list [ad_complaints_get_list]
-	} else {
-            template::multirow create complaints text
-            foreach elm [ad_complaints_get_list] {
-                template::multirow append complaints $elm
+
+        #
+        # Add safety belt to prevent recursive loop
+        #
+        if {[incr __ad_complain_depth] < 10} {
+            
+            if { [info exists return_errors] } {
+                upvar 1 $return_errors error_list
+                set error_list [ad_complaints_get_list]
+            } else {
+                template::multirow create complaints text
+                foreach elm [ad_complaints_get_list] {
+                    template::multirow append complaints $elm
+                }
+                if {[catch {
+                    set html [ad_parse_template \
+                                  -params [list complaints [list context $::ad_page_contract_context] \
+                                               [list prev_url [get_referrer]] \
+                                              ] "/packages/acs-tcl/lib/complain"]
+                } errorMsg]} {
+                    ad_log error "problem rendering complain page: $errorMsg"
+                    set html "Invalid input"
+                }
+                ns_return 422 text/html $html
+                ad_script_abort
             }
-            if {[catch {
-                set html [ad_parse_template \
-                              -params [list complaints [list context $::ad_page_contract_context] \
-                                           [list prev_url [get_referrer]] \
-                                          ] "/packages/acs-tcl/lib/complain"]
-            } errorMsg]} {
-                ad_log error "problem rendering complain page: $errorMsg"
-                set html "Invalid input"
-            }
-            ns_return 422 text/html $html
-	    ad_script_abort
 	}
     }
 
