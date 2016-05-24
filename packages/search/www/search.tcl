@@ -146,6 +146,7 @@ if { $info(automatic_and_queries_p) && "and" in $q } {
 
 set url_advanced_search ""
 append url_advanced_search "advanced-search?q=$urlencoded_query"
+if {[info exists ::__csrf_token]} {append url_advanced_search "&__csrf_token=$::__csrf_token"}
 if { $num > 0 } { append url_advanced_search "&num=$num" }
 
 set query $q
