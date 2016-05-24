@@ -1891,7 +1891,7 @@ namespace eval ::security::csrf {
     #
     # Generate CSRF token 
     #
-    ad_proc -private ::security::csrf::token { {-tokenname __csrf_token} } {
+    ad_proc -public ::security::csrf::token { {-tokenname __csrf_token} } {
 
         Generate a CSRF token and return it
 
