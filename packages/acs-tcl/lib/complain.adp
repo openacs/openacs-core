@@ -21,4 +21,5 @@
 <p>
   #acs-tcl.Thank_you#
 </p>
+<if @prev_url@ defined and @prev_url@ not nil><p> <a href="@prev_url@">#acs-tcl.Return_prev#</a></if></p>
 
