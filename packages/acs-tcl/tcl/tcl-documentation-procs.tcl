@@ -1175,7 +1175,7 @@ ad_proc -public ad_page_contract {
         #
         # Add safety belt to prevent recursive loop
         #
-        if {[incr __ad_complain_depth] < 10} {
+        if {[incr ::__ad_complain_depth] < 10} {
             
             if { [info exists return_errors] } {
                 upvar 1 $return_errors error_list
@@ -1191,7 +1191,7 @@ ad_proc -public ad_page_contract {
                                                [list prev_url [get_referrer]] \
                                               ] "/packages/acs-tcl/lib/complain"]
                 } errorMsg]} {
-                    ad_log error "problem rendering complain page: $errorMsg"
+                    ad_log error "problem rendering complain page: $errorMsg ($::errorCode)"
                     set html "Invalid input"
                 }
                 ns_return 422 text/html $html
