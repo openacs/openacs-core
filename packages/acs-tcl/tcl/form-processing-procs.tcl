@@ -601,7 +601,11 @@ ad_proc -public ad_form {
             # and validation block to be extended, for now at least until I get more experience
             # with this ...
 
-            if {$valid_arg ni { name form method action html validate export mode cancel_url has_edit has_submit actions edit_buttons display_buttons fieldset on_validation_error}} {
+            if {$valid_arg ni {
+                name form method action html validate export mode cancel_url
+                has_edit has_submit actions edit_buttons display_buttons
+                fieldset on_validation_error
+            }} {
                 set af_parts(${form_name}__extend) ""
             }
         }
@@ -831,12 +835,16 @@ ad_proc -public ad_form {
                 # ...take it from caller stack...
                 if {$is_var_p} {
                   set value [uplevel [list set $name]]
-                # ...or ignore this field.
+                  # ...or ignore this field.
                 } else {
-                    continue
+                  continue
                 }
+              } else {
+                #
+                # substitute only the explicitly specified value
+                #
+                set value [uplevel [list subst $value]]
               }
-              set value [uplevel [list subst $value]]
               # field is multiple: use '-values' instead of '-value'
               if {$multiple_p} {
                 template::element create $form_name $name \
