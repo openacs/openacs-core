@@ -4801,9 +4801,13 @@ ad_proc -public ad_log {
             foreach {k v} [ns_set array [ns_conn headers]] {
                 append request "\n $k:\t$v"
             }
-            set data [ns_conn content]
-            if {[string length $data] < 2000} {
-               append request "\n post-data:\t$data"
+            if {expr {[ns_conn flags] & 1}} {
+                append request "\n connection already closed"
+            } else {
+                set data [ns_conn content]
+                if {[string length $data] < 2000} {
+                    append request "\n post-data:\t$data"
+                }
             }
         }
     }
