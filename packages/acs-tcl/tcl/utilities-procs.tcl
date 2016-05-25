@@ -4796,6 +4796,16 @@ ad_proc -public ad_log {
             [ns_conn method] \
             " [util_current_location][ns_conn url]?[ns_conn query]" \
             " referred by '[get_referrer]' peer [ad_conn peeraddr] user_id [ad_conn user_id]"
+        if {$level in {error Error}} {
+            append request \n
+            foreach {k v} [ns_set array [ns_conn headers]] {
+                append request "\n $k:\t$v"
+            }
+            set data [ns_conn content]
+            if {[string length $data] < 2000} {
+               append request "\n post-data:\t$data"
+            }
+        }
     }
     ns_log $level "${message}\n[uplevel ad_get_tcl_call_stack]${request}\n"
 }
