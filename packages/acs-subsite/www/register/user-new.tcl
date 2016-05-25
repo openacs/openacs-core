@@ -7,7 +7,14 @@ ad_page_contract {
     {return_url:localurl [ad_pvt_home]}
 } -validate {
     valid_return_url {
-        if {[string first {$} $return_url] > -1} {
+        #
+        # TODO: The following protection is for the cmd
+        #     ad_form -name register -export {next_url user_id return_url}
+        # in acs-subsite/lib/usr-new and has to be addressed in ad_form
+        #
+        if {[string first {$} $return_url] > -1
+            || [string first {\[} $return_url] > -1
+        } {
             ad_complain "return_url contains invalid character"
         }
     }

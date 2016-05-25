@@ -10,7 +10,6 @@
 #                   Will add an element to the form where the user can pick a relation among the permissible 
 #                   rel-types for the group.
 
-
 # Check if user can self register
 auth::self_registration
 
@@ -168,7 +167,7 @@ ad_form -extend -name register -on_request {
     
     
     # User is registered and logged in
-    if { (![info exists return_url] || $return_url eq "") } {
+    if { ![info exists return_url] || $return_url eq "" } {
         # Redirect to subsite home page.
         set return_url [subsite::get_element -element url]
     }
