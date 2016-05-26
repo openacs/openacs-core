@@ -4801,7 +4801,7 @@ ad_proc -public ad_log {
             foreach {k v} [ns_set array [ns_conn headers]] {
                 append request "\n $k:\t$v"
             }
-            if {expr {[ns_conn flags] & 1}} {
+            if {[ns_conn flags] & 1} {
                 append request "\n connection already closed"
             } else {
                 set data [ns_conn content]
