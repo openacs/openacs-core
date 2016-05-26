@@ -13,7 +13,7 @@ insert into cr_mime_types (label,mime_type,file_extension) values ( 'Unkown'    
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'AutoCAD drawing files'   , 'application/acad'              , 'dwg' );
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'Andrew data stream'      , 'application/andrew-inset'      , 'ez' );
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'ClarisCAD files'         , 'application/clariscad'         , 'ccad' );
-insert into cr_mime_types (label,mime_type,file_extension) values ( 'Text - Comma separated value', 'application/csv'           , 'csv' );
+insert into cr_mime_types (label,mime_type,file_extension) values ( 'Text - Comma separated value', 'text/csv'                  , 'csv' );
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'MATRA Prelude drafting'  , 'application/drafting'          , 'drw' );
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'DXF (AutoCAD)'           , 'application/dxf'               , 'dxf' );
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'Filemaker Pro'           , 'application/filemaker'         , 'fm' );
@@ -29,7 +29,7 @@ insert into cr_mime_types (label,mime_type,file_extension) values ( 'PDF'       
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'PostScript'              , 'application/postscript'        , 'ps' );
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'RTF - Rich Text Format'  , 'application/rtf'               , 'rtf' );
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'Stereolithography'       , 'application/sla'               , 'stl');
-insert into cr_mime_types (label,mime_type,file_extension) values ( 'VCard'                   , 'application/vcard'             , 'vcf');
+insert into cr_mime_types (label,mime_type,file_extension) values ( 'VCard'                   , 'text/vcard'                    , 'vcf');
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'VDA-FS Surface data'     , 'application/vda'               , 'vda');
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'SSOYE Koan Files'        , 'application/vnd.koan'          , 'skp');
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'FrameMaker MIF format'   , 'application/vnd.mif'           , 'mif' );
@@ -177,6 +177,8 @@ insert into cr_mime_types (label,mime_type,file_extension) values ('SPPS data fi
 insert into cr_mime_types (label,mime_type,file_extension) values ('SPPS data file'           ,'application/x-spss-outputfile'   , 'spo');
 insert into cr_mime_types (label,mime_type,file_extension) values ('Video MP4'                , 'video/mp4'                      , 'mp4');
 insert into cr_mime_types (label,mime_type,file_extension) values ('XPInstall'                , 'application/x-xpinstall'        , 'xpi'); 
+insert into cr_mime_types (label,mime_type,file_extension) values ('iCalendar'                , 'text/calendar'                  , 'ics'); 
+
 
 -- Open Documents MIME types
 insert into cr_mime_types (mime_type, file_extension, label) values ('application/vnd.oasis.opendocument.text', 'odt', 'OpenDocument Text');
@@ -263,7 +265,7 @@ insert into cr_extension_mime_type_map (extension, mime_type) values ( 'class','
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'cpio','application/x-cpio' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'cpt','application/mac-compactpro' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'css','text/css' );
-insert into cr_extension_mime_type_map (extension, mime_type) values ( 'csv','application/csv');
+insert into cr_extension_mime_type_map (extension, mime_type) values ( 'csv','text/csv');
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'cur','application/octet-stream' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'dcr','application/x-director' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'deb','application/x-debian-package' );
@@ -417,7 +419,7 @@ insert into cr_extension_mime_type_map (extension, mime_type) values ( 'ult','au
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'ustar','application/x-ustar' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'uu','application/octet-stream' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'vcd','application/x-cdlink' );
-insert into cr_extension_mime_type_map (extension, mime_type) values ( 'vcf','application/vcard' );
+insert into cr_extension_mime_type_map (extension, mime_type) values ( 'vcf','text/vcard' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'vdo','video/vdo' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'vda','application/vda' );
 insert into cr_extension_mime_type_map (extension, mime_type) values ( 'vivo','video/vnd.vivo' );
@@ -476,6 +478,7 @@ insert into cr_extension_mime_type_map (extension, mime_type) values ('sav', 'ap
 insert into cr_extension_mime_type_map (extension, mime_type) values ('spo', 'application/x-spss-outputfile');
 insert into cr_extension_mime_type_map (extension, mime_type) values ('mp4', 'video/mp4');
 insert into cr_extension_mime_type_map (extension, mime_type) values ('xpi', 'application/x-xpinstall');
+insert into cr_extension_mime_type_map (extension, mime_type) values ('ics', 'text/calendar');
 
 -- Open Documents MIME types
 insert into cr_extension_mime_type_map (mime_type, extension) values ('application/vnd.oasis.opendocument.text', 'odt');

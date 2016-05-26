@@ -163,6 +163,7 @@ create index cr_type_relations_tgt_typ_idx ON cr_type_relations(target_type);
 --------------------------------------------------------------
 -- CONTENT ITEMS
 --------------------------------------------------------------
+CREATE TYPE cr_item_storage_type_enum AS ENUM ('text', 'file', 'lob');
 
 -- Define the cr_items table
 
