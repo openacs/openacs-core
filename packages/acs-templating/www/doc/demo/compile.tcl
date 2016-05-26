@@ -11,7 +11,7 @@ ad_page_contract {
          ad_complain "Only files within this directory may be shown."
       }
        set dir [file dirname [ad_conn file]]
-       if { ![file readable $file] } {
+       if { ![file readable $dir/$file] } {
            ad_complain "requested file is not readable."
       }
    }
