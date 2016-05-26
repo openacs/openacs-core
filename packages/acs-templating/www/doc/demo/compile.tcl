@@ -10,13 +10,16 @@ ad_page_contract {
       if { [regexp {\.\.|^/} $file] } {
          ad_complain "Only files within this directory may be shown."
       }
+       set dir [file dirname [ad_conn file]]
+       if { ![file readable $file] } {
+           ad_complain "requested file is not readable."
+      }
    }
 }
  
 # [ns_url2file [ns_conn url]]  fails under request processor !
 # the file for URL pkg/page may be in packages/pkg/www/page, not www/pkg/page
 
-set dir [file dirname [ad_conn file]]
 set compiled [template::adp_compile -file $dir/$file]
 
 # Local variables:
