@@ -997,8 +997,11 @@ BEGIN
     ret_val = 0;
 
     user_pg_version := string_to_array(trim(p__version),'.')::int[];
-    select string_to_array(setting, '.')::int[] into pg_version from pg_settings where name = 'server_version';
-
+    
+    --   select string_to_array(setting, '.')::int[] into pg_version from pg_settings where name = 'server_version';
+    -- the following version does not barf on beta-versions etc.
+    select string_to_array(setting::int/10000 || '.' || (setting::int%10000)/100 || '.' || (setting::int%100), '.')::int[] into pg_version
+    from pg_settings where name = 'server_version_num';
 
     for index in array_length(user_pg_version, 1) + 1..array_length(pg_version, 1) loop
         user_pg_version[index] := 0;
