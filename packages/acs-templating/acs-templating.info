@@ -28,7 +28,6 @@ layout of a site can be more easily administered.
         <maturity>3</maturity>
 
         <provides url="acs-templating" version="5.9.1d5"/>
-	<requires url="acs-tcl" version="5.9.1d8"/>
         <requires url="acs-kernel" version="5.9.0"/>
 
         <callbacks>
