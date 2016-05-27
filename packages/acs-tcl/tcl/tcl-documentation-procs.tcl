@@ -1191,7 +1191,17 @@ ad_proc -public ad_page_contract {
                                                [list prev_url [get_referrer]] \
                                               ] "/packages/acs-tcl/lib/complain"]
                 } errorMsg]} {
-                    ad_log error "problem rendering complain page: $errorMsg ($::errorCode)"
+                    set errorCode $::errorCode
+                    #
+                    # Check, if we were called from "ad_script_abort" (intentional abortion)
+                    #
+                    if {[ad_exception $errorCode] eq "ad_script_abort"} {
+                        #
+                        # Yes, this was an intentional abortion
+                        #
+                        return ""
+                    }
+                    ad_log error "problem rendering complain page: $errorMsg ($errorCode)"
                     set html "Invalid input"
                 }
                 ns_return 422 text/html $html
