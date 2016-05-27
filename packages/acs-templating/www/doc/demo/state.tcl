@@ -1,9 +1,9 @@
 ad_page_contract {
   $Id$
 } -query {
-  state_abbrev
+    state_abbrev
 } -properties {} -validate {
-    validate_state_abbreaf -requires state_abbrev {
+    validate_state_abbrev -requires state_abbrev {
         if {$state_abbrev ni {CA HI NV}} {
             ad_complain  "Invalid state abbreviation $state_abbrev."
         }
