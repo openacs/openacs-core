@@ -6,6 +6,12 @@ ad_page_contract {
     {username ""}
     {email ""}
     {return_url:localurl ""}
+} -validate {
+    valid_email -require email {
+        if {![regexp {^[\w.@+/=$%!*~-]+$} $email]} {
+            ad_complain "invalid email address"
+        }
+    }
 }
 
 set subsite_id [ad_conn subsite_id]
