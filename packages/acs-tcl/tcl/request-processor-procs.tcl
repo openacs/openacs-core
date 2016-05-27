@@ -890,7 +890,10 @@ ad_proc -private rp_handler {} {
         ad_returnredirect [ns_conn url]
         return
     }
-    if {$ad_conn(extra_url) ne "" && ![string match "*$ad_conn(extra_url)" [ns_conn url]]} {
+    if {[info exists ad_conn(extra_url)]
+        && $ad_conn(extra_url) ne ""
+        && ![string match "*$ad_conn(extra_url)" [ns_conn url]]
+    } {
         #
         # On internal redirects, the current ad_conn(extra_url) might be
         # from a previous request, which might have lead to a not-found
