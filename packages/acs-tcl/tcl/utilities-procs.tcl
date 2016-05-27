@@ -4778,6 +4778,62 @@ ad_proc -public util::disk_cache_eval {
     return $result
 }
 
+ad_proc -public util::request_info {
+    {-with_headers:boolean false}
+} {
+    
+    Produce a string containing the detailed request information.
+    This is in particular useful for debugging, when errors are raised.
+    
+    @param with_headers Include request headers
+    @author Gustaf Neumann
+
+} {
+    set info ""
+    if {[ns_conn isconnected]} {
+        #
+        # Base information
+        #
+        append info "    " \
+            [ns_conn method] \
+            " [util_current_location][ns_conn url]?[ns_conn query]" \
+            " referred by '[get_referrer]' peer [ad_conn peeraddr] user_id [ad_conn user_id]"
+        
+        if {[ns_conn method] eq "POST"} {
+            # 
+            # POST data info
+            #
+            if {[ns_conn flags] & 1} {
+                append info "\n connection already closed, cooked form-content:"
+                foreach {k v} [ns_set array [ns_getform]] {
+                    if {[string length $v] > 100} {
+                        set v "[string range $v 0 100]..."
+                    }
+                    append info "\n        $k:\t$v"
+                }
+            } else {
+                set data [ns_conn content]
+                if {[string length $data] < 2000} {
+                    append info "\n        post-data: $data"
+                }
+            }
+        }
+
+        #
+        # Optional header info
+        #
+        if {$with_headers_p} {
+            append info \n
+            foreach {k v} [ns_set array [ns_conn headers]] {
+                append info "\n $k:\t$v"
+            }
+        }
+    }
+    return $info
+}
+
+
+
 ad_proc -public ad_log {
     level
     message
@@ -4790,29 +4846,10 @@ ad_proc -public ad_log {
 
     @author Gustaf Neumann
 } {
-    set request ""
-    if {[ns_conn isconnected]} {
-        append request "    " \
-            [ns_conn method] \
-            " [util_current_location][ns_conn url]?[ns_conn query]" \
-            " referred by '[get_referrer]' peer [ad_conn peeraddr] user_id [ad_conn user_id]"
-        if {$level in {error Error}} {
-            append request \n
-            foreach {k v} [ns_set array [ns_conn headers]] {
-                append request "\n $k:\t$v"
-            }
-            if {[ns_conn method] eq "POST"} {
-                if {[ns_conn flags] & 1} {
-                    append request "\n connection already closed"
-                } else {
-                    set data [ns_conn content]
-                    if {[string length $data] < 2000} {
-                        append request "\n post-data:\t$data"
-                    }
-                }
-            }
-        }
-    }
+    set with_headers [expr {$level in {error Error}}]
+    append request "    " \
+        [util::request_info -with_headers=$with_headers]
+    
     ns_log $level "${message}\n[uplevel ad_get_tcl_call_stack]${request}\n"
 }
 
