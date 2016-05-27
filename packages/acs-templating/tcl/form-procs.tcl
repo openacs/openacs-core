@@ -171,10 +171,8 @@ ad_proc -public template::form::create { id args } {
     regsub -all {\r} $opts(elements) {} element_data
 
     foreach element [split $element_data "\n"] {
-
       set element [string trim $element]
       if {$element eq {}} { continue }
-
       template::element create $id {*}$element
     }
   }
