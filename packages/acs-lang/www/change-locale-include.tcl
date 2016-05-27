@@ -59,11 +59,11 @@ if { [form is_valid locale] } {
     set package_id [element get_value locale package_id_info]
 
     if {[util::external_url_p $return_url]} {
-        ad_complain 1 "invalid url"
+        ad_return_complaint 1 "invalid url"
         ad_script_abort
     }
     if {![string is integer -strict $package_id]} {
-        ad_complain 1 "invalid package_id"
+        ad_return_complaint 1 "invalid package_id"
         ad_script_abort
     }
 }
