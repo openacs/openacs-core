@@ -4804,7 +4804,7 @@ ad_proc -public util::request_info {
             # POST data info
             #
             if {[ns_conn flags] & 1} {
-                append info "\n connection already closed, cooked form-content:"
+                append info "\n    connection already closed, cooked form-content:"
                 foreach {k v} [ns_set array [ns_getform]] {
                     if {[string length $v] > 100} {
                         set v "[string range $v 0 100]..."
