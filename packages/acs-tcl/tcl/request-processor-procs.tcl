@@ -1697,8 +1697,12 @@ proc root_of_host1 {host} {
 }
 
 ad_proc -private rp_lookup_node_from_host { host } {
-    binary scan [encoding convertto utf-8 $host] H* hex
-    ns_log notice "rp_lookup_node_from_host <$host> hex $hex"
+    if {![regexp {^[\w.@+/=$%!*~-]+$} $host]} {
+        binary scan [encoding convertto utf-8 $host] H* hex
+        ad_log error "rp_lookup_node_from_host: host <$host> (hey $hex) contains invalid characters"
+        ad_return_complaint 1 "invalid request"
+        ad_script_abort
+    }
     return [db_string node_id {} -default ""]
 } 
 
