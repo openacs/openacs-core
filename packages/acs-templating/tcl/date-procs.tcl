@@ -98,20 +98,23 @@ ad_proc -public template::util::date::daysInMonth { month {year 0} } {
     @return the number of days in a month, accounting for leap years
     LOOKATME: IS THE LEAP YEAR CODE CORRECT ?
 } {
-  set month [string trimleft $month 0]
-  variable month_data
-  set month_desc $month_data($month)
-  set days [lindex $month_desc 2]
+    set month [string trimleft $month 0]
+    set year [string trimleft $year 0]
+    if {$year eq ""} {set year 0}
+
+    variable month_data
+    set month_desc $month_data($month)
+    set days [lindex $month_desc 2]
   
-  if { $month == 2 && (
-          (($year % 4) == 0 && ($year % 100) != 0) ||
-          ($year % 400) == 0
-        ) } {
-    return [expr {$days + 1}]
-  } else {
-    return $days
-  } 
-}  
+    if { $month == 2
+         && ( (($year % 4) == 0 && ($year % 100) != 0) ||
+              (($year % 400) == 0) )
+     } {
+        return [expr {$days + 1}]
+    } else {
+        return $days
+    }
+}
 
 ad_proc -public template::util::date::create {
   {year {}} {month {}} {day {}} {hours {}} 
