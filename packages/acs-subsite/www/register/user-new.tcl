@@ -18,6 +18,11 @@ ad_page_contract {
             ad_complain "return_url contains invalid character"
         }
     }
+    valid_email -requires email {
+        if {![regexp {^[\w.@+/=$%!*~-]+$} $email]} {
+            ad_complain "invalid email address"
+        }
+    }
 }
 
 set registration_url [parameter::get -parameter RegistrationRedirectUrl]
