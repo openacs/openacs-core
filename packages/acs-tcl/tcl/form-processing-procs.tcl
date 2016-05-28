@@ -789,18 +789,18 @@ ad_proc -public ad_form {
     # :array and :sign flags in exported variables.
     if { [info exists export] } {
         foreach value $export {
-			set has_value_p [expr {[llength $value] >= 2}]
+            set has_value_p [expr {[llength $value] >= 2}]
             lassign $value name value
 
             # recognize supported flags
             lassign [split $name ":"] name mode
             set modes [split $mode ,]
 
-			# verify variable existance and nature
+            # verify variable existance and nature
             set var_exists_p [uplevel [list info  exists $name]]
             set is_array_p   [uplevel [list array exists $name]]
 
-			# arrays are automatically recognized, even if not specified
+            # arrays are automatically recognized, even if not specified
             set array_p    [expr {$is_array_p || "array" in $modes}]
             set sign_p     [expr {"sign"     in $modes}]
             set multiple_p [expr {"multiple" in $modes}]
@@ -813,8 +813,8 @@ ad_proc -public ad_form {
                   set value [uplevel [list array get $name]]
                 # else, if a variable exists but it's not an array, throw error (as in export_vars)
                 } elseif {$var_exists_p} {
-				  error "variable \"$name\" should be an array"
-				# else, just ignore this export
+                    error "variable \"$name\" should be an array"
+                # else, just ignore this export
                 } else {continue}
               }
               # arrays generate one hidden formfield for each key
