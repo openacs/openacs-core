@@ -8,15 +8,15 @@ ad_page_contract {
     file:trim,notnull
 } -validate {
    valid_file -requires file {
-      if { [regexp {\.\.|^/} $file] } {
-         ad_complain "Only files within this directory may be shown."
-      }
-      set dir [file dirname [ad_conn file]]
-      if {![file readable $dir/$file]} {
-         ad_complain "The specified file ist not readable"
-      }       
+       if { [regexp {\.\.|^/} $file] } {
+           ad_complain "Only files within this directory may be shown."
+       }
+       set dir [file dirname [ad_conn file]]
+       if {![file readable $dir/$file] || [file isdirectory $dir/$file]} {
+           ad_complain "The specified file ist not readable"
+       }
    }
-}  
+}
 
 #
 # [ns_url2file [ns_conn url]] fails under request processor, since
