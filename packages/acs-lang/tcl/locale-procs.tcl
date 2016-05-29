@@ -612,7 +612,9 @@ ad_proc -private lang::conn::browser_locale {} {
 }
 
 ad_proc -private lang::conn::get_accept_language_header {} {
-
+    Obtain a list of locals from the request headers.
+    @return a list of locales in the syntax used by OpenAcs (ISO codes)
+} {
     set acclang [ns_set iget [ns_conn headers] "Accept-Language"]
 
     # Split by comma, and get rid of any ;q=0.5 parts
@@ -622,6 +624,9 @@ ad_proc -private lang::conn::get_accept_language_header {} {
         # Get rid of trailing ;q=0.5 part
         set elm [lindex [split $elm ";"] 0]
 
+        if {![regexp {^[a-zA-Z-]+$} $elem]} {
+            error "invalid locale in provided Accept-Language header field"
+        }
         # elm is now either like 'da' or 'en-us'
         # make it into something like 'da' or 'en_US'
         set elmv [split $elm "-"]
