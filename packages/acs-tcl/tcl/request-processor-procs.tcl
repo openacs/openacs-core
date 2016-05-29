@@ -740,8 +740,9 @@ ad_proc -private rp_filter { why } {
     } errorMsg] } {
         ad_log error "language setup failed: $errorMsg"
         ad_return_complaint 1 "invalid language settings"
-        ad_script_abort
-
+        rp_finish_serving_page
+        return "filter_return"
+        
         # acs-lang doesn't seem to be installed. Even though it must be installed now,
         # the problem is that if it isn't, everything breaks. So we wrap it in
         # a catch, and set locale and language to the empty strings.
