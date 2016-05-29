@@ -323,7 +323,7 @@ ad_proc -private lang::user::site_wide_locale_not_cached {
         # Check, if someone hacked the cookie
         #
         if {![lang::conn::valid_locale_p $locale]} {
-            error "invalid locale cookie"
+            error "invalid locale cookie '$locale'"
         }
     } else {
         set locale [db_string get_user_site_wide_locale {} -default "$system_locale"]
