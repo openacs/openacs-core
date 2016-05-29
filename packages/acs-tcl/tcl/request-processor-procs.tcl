@@ -739,14 +739,17 @@ ad_proc -private rp_filter { why } {
         ad_conn -set charset [lang::util::charset_for_locale $locale] 
     } errorMsg] } {
         ad_log error "language setup failed: $errorMsg"
+        ad_return_complaint 1 "invalid language settings"
+        ad_script_abort
+
         # acs-lang doesn't seem to be installed. Even though it must be installed now,
         # the problem is that if it isn't, everything breaks. So we wrap it in
         # a catch, and set locale and language to the empty strings.
         # This is a temporary work-around until it's reasonably safe
         # to assume that most people have added acs-lang to their system.
-        ad_conn -set locale ""
-        ad_conn -set language ""
-        ad_conn -set charset ""
+        #ad_conn -set locale ""
+        #ad_conn -set language ""
+        #ad_conn -set charset ""
     }
 
     if {[ns_info name] eq "NaviServer"}  {
