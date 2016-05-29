@@ -737,7 +737,8 @@ ad_proc -private rp_filter { why } {
         ad_conn -set locale $locale
         ad_conn -set language [lang::conn::language -locale $locale]
         ad_conn -set charset [lang::util::charset_for_locale $locale] 
-    }] } {
+    } errorMsg] } {
+        ad_log error "language setup failed: $errorMsg"
         # acs-lang doesn't seem to be installed. Even though it must be installed now,
         # the problem is that if it isn't, everything breaks. So we wrap it in
         # a catch, and set locale and language to the empty strings.
