@@ -322,7 +322,7 @@ ad_proc -private lang::user::site_wide_locale_not_cached {
         #
         # Check, if someone hacked the cookie
         #
-        if {![lang::conn::valid_locale_p $locale]} {
+        if {$locale ne "" && ![lang::conn::valid_locale_p $locale]} {
             error "invalid locale cookie '$locale'"
         }
     } else {
