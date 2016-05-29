@@ -319,6 +319,12 @@ ad_proc -private lang::user::site_wide_locale_not_cached {
 
     if { $user_id == 0 } {
         set locale [ad_get_cookie "ad_locale"]
+        #
+        # Check, if someone hacked the cookie
+        #
+        if {![lang::conn::valid_locale_p $locale]} {
+            error "invalid locale cookie"
+        }
     } else {
         set locale [db_string get_user_site_wide_locale {} -default "$system_locale"]
     }
@@ -611,9 +617,15 @@ ad_proc -private lang::conn::browser_locale {} {
     }
 }
 
+ad_proc -private lang::conn::valid_locale_p {locale} {
+    Check, of the provided locale is syntactically correct
+} {
+    return [regexp {^[a-zA-Z]+(_[a-zA-Z]+)?$} $locale]
+}
+
 ad_proc -private lang::conn::get_accept_language_header {} {
     Obtain a list of locals from the request headers.
-    @return a list of locales in the syntax used by OpenAcs (ISO codes)
+    @return a list of locales in the syntax used by OpenACS (ISO codes)
 } {
     set acclang [ns_set iget [ns_conn headers] "Accept-Language"]
 
@@ -624,9 +636,6 @@ ad_proc -private lang::conn::get_accept_language_header {} {
         # Get rid of trailing ;q=0.5 part
         set elm [lindex [split $elm ";"] 0]
 
-        if {![regexp {^[a-zA-Z-]+$} $elem]} {
-            error "invalid locale in provided Accept-Language header field"
-        }
         # elm is now either like 'da' or 'en-us'
         # make it into something like 'da' or 'en_US'
         set elmv [split $elm "-"]
@@ -634,8 +643,11 @@ ad_proc -private lang::conn::get_accept_language_header {} {
         if { [llength $elmv] > 1 } {
             append elm "_[string toupper [lindex $elmv 1]]"
         }
-
-        lappend acclangv $elm
+        if {[lang::conn::valid_locale_p $elm]} {
+            lappend acclangv $elm
+        } else {
+            error "invalid locale in provided Accept-Language header field"
+        }
     }
     
     return $acclangv
