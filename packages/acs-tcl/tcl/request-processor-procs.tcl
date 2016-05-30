@@ -738,19 +738,10 @@ ad_proc -private rp_filter { why } {
         ad_conn -set language [lang::conn::language -locale $locale]
         ad_conn -set charset [lang::util::charset_for_locale $locale] 
     } errorMsg] } {
-        ad_log error "language setup failed: $errorMsg"
+        ns_log warning "language setup failed: $errorMsg"
         ad_return_complaint 1 "invalid language settings"
         rp_finish_serving_page
         return "filter_return"
-        
-        # acs-lang doesn't seem to be installed. Even though it must be installed now,
-        # the problem is that if it isn't, everything breaks. So we wrap it in
-        # a catch, and set locale and language to the empty strings.
-        # This is a temporary work-around until it's reasonably safe
-        # to assume that most people have added acs-lang to their system.
-        #ad_conn -set locale ""
-        #ad_conn -set language ""
-        #ad_conn -set charset ""
     }
 
     if {[ns_info name] eq "NaviServer"}  {
@@ -1702,7 +1693,7 @@ proc root_of_host1 {host} {
 }
 
 ad_proc -private rp_lookup_node_from_host { host } {
-    if {![regexp {^[\w.@+/=$%!*~-]+$} $host]} {
+    if {![regexp {^[\w.@+/=$%!*~\[\]-]+$} $host]} {
         binary scan [encoding convertto utf-8 $host] H* hex
         ad_log error "rp_lookup_node_from_host: host <$host> (hey $hex) contains invalid characters"
         ad_return_complaint 1 "invalid request"

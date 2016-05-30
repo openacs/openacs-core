@@ -118,7 +118,7 @@ ad_proc -public ad_form {
     } -validate {
         {value
          {[string length $value] >= 3}
-         "\"value\" must be a string containing three or more characters"
+         "\$value\" must be a string containing three or more characters"
         }
     } -on_submit {
         
