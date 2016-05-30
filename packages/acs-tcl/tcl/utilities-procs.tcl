@@ -2659,13 +2659,15 @@ ad_proc -public util_current_location {} {
     # In case the "Host:" header field was provided, use the "hostame"
     # and maybe the "port" from there (this has the highest priority)
     #
-    set Host [ns_set iget $headers Host]
+    set Host [security::validated_host_header]
     if {$Host ne ""} {
         if {[util::split_location $Host .proto hostname Host_port]} {
             if {$Host_port ne ""} {
                 set port $Host_port
             }
         }
+    } else {
+        ns_log notice "ignore non-existing or untrusted host header, fall back to <$hostname>"
     }
     
     #

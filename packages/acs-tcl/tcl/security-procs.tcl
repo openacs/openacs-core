@@ -1784,7 +1784,7 @@ ad_proc -public security::locations {} {
         if { $suppress_http_port } {
             foreach hostname $host_node_map_hosts_list {
                 lappend locations "http://${hostname}"
-                lappend locations "https://${hostname}${host_map_https_port}"
+                lappend locations "https://${hostname}"
             }
         } else {
             foreach hostname $host_node_map_hosts_list {
@@ -1795,6 +1795,108 @@ ad_proc -public security::locations {} {
     }
     return $locations
 }
+
+ad_proc -public security::validated_host_header {} {
+    @return validated host header field or empty
+    @author Gustaf Neumann
+
+    Protect against faked or invalid host header fields
+} {
+    #
+    # Check, if we have a host header field
+    #
+    set host [ns_set iget [ns_conn headers] Host]
+    if {$host eq ""} {
+        return ""
+    }
+    
+    #
+    # Check, if we have validated it before, or it belongs to the
+    # predefined accepted host header fields.
+    #
+    set key ::acs::validated($host)
+    if {[info exists $key]} {
+        return $host
+    }
+    
+    if {![util::split_location $host .proto hostName hostPort]} {
+        return ""
+    }
+
+    #
+    # Check, if the provided host is the same as the configued host
+    # name. Should be true in most cases.
+    #
+    if {$hostName eq [ns_info hostname] || $hostName eq [ns_info addr]} {
+        #
+        # port is currently ignored
+        #
+        set $key 1
+        return $host
+    }
+
+    #
+    # Check, if the provided host is the same as in the configured
+    # SystemURL.
+    #
+    if {[util::split_location [ad_url] .proto systemHost systemPort]} {
+        if {$hostName eq $systemHost && $hostPort eq $systemPort} {
+            set $key 1
+            return $host
+        }
+    }
+
+    #
+    # Check against the virtual server configuration of NaviServer.
+    #
+    if {[ns_info name] ne "NaviServer"} {
+        foreach s [ns_info servers] {
+            foreach driver {nssock nsssl} {
+                set section [ns_driversection -driver $driver -server $s]
+                if {$section eq ""} continue
+                set vloc [ns_config ns/module/$driver/servers $s]
+                if {$vloc ne ""
+                    && [util::split_location $vloc .proto vHost vPort]
+                    && $vHost eq $hostName
+                } {
+                    set $key 1
+                    return $host
+                }
+            }
+        }
+    }
+
+    #
+    # Check against host node map. Here we need as well protection
+    # against invalid utf-8 characters.
+    #
+    if {![regexp {^[\w.:@+/=$%!*~\[\]-]+$} $host]} {
+        ns_log Warning "host header field contains invalid characters: $host"
+        return ""
+    }
+    set result [db_list host_header_field_mapped {select 1 from host_node_map where host = :host}]
+    if {$result == 1} {
+        #
+        # port is ignored
+        #
+        set $key 1
+        return $host
+    }
+    
+    #
+    # We could/should check as well against a white-list of additional
+    # host names (maybe via ::acs::validated, or via config file, or
+    # via additional package parameter).
+    #
+
+    #
+    # Now we give up
+    #
+    ns_log warning "ignore untrusted host header field: '$host'"
+
+    return ""
+}
+
 
 namespace eval ::security::csrf {
 
