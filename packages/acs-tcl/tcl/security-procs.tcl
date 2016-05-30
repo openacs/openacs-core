@@ -1840,7 +1840,8 @@ ad_proc -public security::validated_host_header {} {
     # SystemURL.
     #
     if {[util::split_location [ad_url] .proto systemHost systemPort]} {
-        if {$hostName eq $systemHost && $hostPort eq $systemPort} {
+        if {$hostName eq $systemHost
+            && ($hostPort eq $systemPort || $hostPort eq "") } {
             set $key 1
             return $host
         }
