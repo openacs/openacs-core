@@ -101,6 +101,8 @@ ad_form \
 	{time:text(hidden)}
 	{token_id:integer(hidden)}
 	{hash:text(hidden)}
+    } -validate {
+        { token_id {$token_id < 2**31} "invalid token id"}
     }
 
 set username_widget text
