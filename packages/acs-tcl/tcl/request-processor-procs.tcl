@@ -1643,7 +1643,7 @@ ad_proc ad_host {} {
     if { [regexp {^([^:]+)} $host_and_port match host] } {
         return $host
     } else {
-        return "unknown host"
+        return ""
     }
 }
 
@@ -1695,7 +1695,7 @@ proc root_of_host1 {host} {
 ad_proc -private rp_lookup_node_from_host { host } {
     if {![regexp {^[\w.@+/=$%!*~\[\]-]+$} $host]} {
         binary scan [encoding convertto utf-8 $host] H* hex
-        ad_log error "rp_lookup_node_from_host: host <$host> (hey $hex) contains invalid characters"
+        ad_log error "rp_lookup_node_from_host: host <$host> (hex $hex) contains invalid characters"
         ad_return_complaint 1 "invalid request"
         ad_script_abort
     }
