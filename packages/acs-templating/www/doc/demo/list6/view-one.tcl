@@ -7,6 +7,15 @@ ad_page_contract {
     context:onevalue
     title:onevalue
     body:onevalue
+} -validate {
+    valid_note_id -requires template_demo_note_id {
+        if {![db_0or1row note_exists {
+            select 1 from template_demo_notes
+            where template_demo_note_id = :template_demo_note_id
+        }]} {
+            ad_complain "Invalid note ID"
+        }
+    }
 }
 
 set context [list "One note"]
