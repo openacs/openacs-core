@@ -581,7 +581,13 @@ ad_proc -private rp_filter { why } {
     # Start of patch "hostname-based subsites"
     # -------------------------------------------------------------------------
     # 1. determine the root of the host and the requested URL
-    set root [root_of_host [ad_host]]
+    if {[catch {set root [root_of_host [ad_host]]} errorMsg]} {
+        # check if error message was returned already earlier
+        if {![ad_exception $::errorCode] eq "ad_script_abort"} {
+            ad_page_contract_handle_datasource_error "Host header is invalid"
+        }
+        return filter_return
+    }
     set ad_conn_url [ad_conn url]
 
     if {[string first [encoding convertto utf-8 \x00] $ad_conn_url] > -1} {
