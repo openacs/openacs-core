@@ -1,12 +1,19 @@
 ad_page_contract {
-  @cvs-id $Id$
+    @cvs-id $Id$
 } {
-  user_id:naturalnum,notnull
+    user_id:naturalnum,notnull
 } -properties {
-  users:onerow
+    users:onerow
+} -validate {
+    valid_user_id -requires user_id {
+        if {![db_0or1row user_exists {
+            select 1 from ad_template_sample_users
+            where user_id = :user_id
+        }]} {
+            ad_complain "Invalid user ID"
+        }
+    }
 }
-
-
 
 set query "select 
              first_name, last_name
