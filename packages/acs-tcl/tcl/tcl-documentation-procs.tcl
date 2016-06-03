@@ -348,7 +348,7 @@ ad_proc -public ad_page_contract {
     <dt><a href="proc-view?proc=ad_page_contract_filter_proc_time"><b>time</b></a>
     <dd>Pluggable filter, installed by default, that makes sure the array validates as a time in 
     am/pm format. That is that it has two fields: <code>time</code> and <code>ampm</code> that have 
-    valid values. Use this filter with :array to do automoatic time filtering. To use it, set up 
+    valid values. Use this filter with :array to do automatic time filtering. To use it, set up 
     in you HTML form using [ec_timeentrywidget varname] or equivalent. Then on the processing page
     specify the filter using <code>varname:array,time</code>. If the time validates, there will be
     a variable set in your environment <code>varname</code> with five keys: <code>time, ampm,
@@ -357,8 +357,8 @@ ad_proc -public ad_page_contract {
     <dt><a href="proc-view?proc=ad_page_contract_filter_proc_time24"><b>time24</b></a>
     <dd>Pluggable filter, installed by default, that makes sure the array validates as a time in 
     24hr format. That is that it has one field: <code>time</code> that has valid values. Use this
-    filter with :array to do automoatic time filtering. To use it, set up in you HTML form using
-    &lt;input type=text name=varname.time&gt;. Then on the processing page specify the filter using 
+    filter with :array to do automatic time filtering. To use it, set up in you HTML form using
+    &lt;input type="text" name="varname".time&gt;. Then on the processing page specify the filter using 
     <code>varname:array,time24</code>. If the time validates, there will be a variable set in your
     environment <code>varname</code> with four keys: <code>time, hours, minutes,</code> and
     <code>seconds</code>.
@@ -386,7 +386,7 @@ ad_proc -public ad_page_contract {
     
     <dt><a href="proc-view?proc=ad_page_contract_filter_proc_allhtml"><b>allhtml</b></a>
     <dd>Pluggable filter, installed by default, that allows any and all html.  Use of this filter
-    is not reccomended, except for cases when the HTML will not be presented to the user or there is some
+    is not recommended, except for cases when the HTML will not be presented to the user or there is some
     other reason for overriding the site-wide control over naughty html.
     
     <dt><a href="proc-view?proc=ad_page_contract_filter_proc_tmpfile"><b>tmpfile</b></a>
@@ -396,19 +396,19 @@ ad_proc -public ad_page_contract {
     <dd>Pluggable filter, installed by default, that makes sure the value is a valid SQL identifier.
 
     <dt><a href="proc-view?proc=ad_page_contract_filter_proc_path"><b>path</b></a>
-    <dd>Pluggable filter, installed by default, that makes sure hat argument contains only Tcl word
-    characters or a few addional safe characters used in paths ("/", ".", "-")
+    <dd>Pluggable filter, installed by default, that makes sure that argument contains only Tcl word
+    characters or a few additional safe characters used in paths ("/", ".", "-")
     
     <dt><a href="proc-view?proc=ad_page_contract_filter_proc_token"><b>token</b></a>
-    <dd>Pluggable filter, installed by default, that makes sure hat argument contains only Tcl word
-    characters or a few addional safe characters (",", ":", "-").
+    <dd>Pluggable filter, installed by default, that makes sure that argument contains only Tcl word
+    characters or a few additional safe characters (",", ":", "-").
     
     <dt><a href="proc-view?proc=ad_page_contract_filter_proc_word"><b>word</b></a>
-    <dd>Pluggable filter, installed by default, that makes sure hat argument contains only Tcl word
-    characters (as defined by \w in Tcl regular expressions, i.e. characers, digits and underscore).
+    <dd>Pluggable filter, installed by default, that makes sure that argument contains only Tcl word
+    characters (as defined by \w in Tcl regular expressions, i.e. characters, digits and underscore).
 
     <dt><a href="proc-view?proc=ad_page_contract_filter_proc_localurl"><b>localurl</b></a>
-    <dd>Pluggable filter, installed by default, that makes sure hat argument contains a 
+    <dd>Pluggable filter, installed by default, that makes sure that argument contains a 
     non-external url, which can be used in ad_returnredirect without throwing an error.
 
     </dl>
@@ -422,7 +422,7 @@ ad_proc -public ad_page_contract {
     <b>Note</b> that there can be <em>no</em> spaces between name,
     colon, flags, commas, etc. The first space encountered denotes the 
     beginning of the default value. Also, variable names can't contain
-    commas, colons or anything Tcl accepts as list element seperators 
+    commas, colons or anything Tcl accepts as list element separators 
     (space, tab, newline, possibly others)
     If more than one value is specified for something that's not 
     a multiple, a complaint will be thrown ("you supplied more than one value for foo").
