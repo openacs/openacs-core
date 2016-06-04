@@ -1800,7 +1800,10 @@ ad_proc -public security::validated_host_header {} {
     @return validated host header field or empty
     @author Gustaf Neumann
 
-    Protect against faked or invalid host header fields
+    Protect against faked or invalid host header fields. Host header
+    attacks can lead to web-cache poisoning and password reset attacks
+    (for more details, see e.g.
+     http://www.skeletonscribe.net/2013/05/practical-http-host-header-attacks.html)
 } {
     #
     # Check, if we have a host header field
@@ -1833,6 +1836,21 @@ ad_proc -public security::validated_host_header {} {
         #
         set $key 1
         return $host
+    }
+
+    #
+    # Check, if the provided host is the same in [ns_conn location]
+    # (will be used as default, but we do not want a warning in such
+    # cases).
+    #
+    if {[util::split_location [ns_conn location] proto locationHost locationPort]} {
+        if {$hostName eq $locationHost} {
+            #
+            # port is currently ignored
+            #
+            set $key 1
+            return $host            
+        }
     }
 
     #

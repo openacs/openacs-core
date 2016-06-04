@@ -583,7 +583,7 @@ ad_proc -private rp_filter { why } {
     # 1. determine the root of the host and the requested URL
     if {[catch {set root [root_of_host [ad_host]]} errorMsg]} {
         # check if error message was returned already earlier
-        if {![ad_exception $::errorCode] eq "ad_script_abort"} {
+        if {[ad_exception $::errorCode] ne "ad_script_abort"} {
             ad_page_contract_handle_datasource_error "Host header is invalid"
         }
         return filter_return
