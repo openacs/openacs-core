@@ -701,6 +701,17 @@ ad_proc -public export_vars {
         set url_p 1
     }
 
+    #
+    # TODO: At least the parsing of the options should be transformed
+    # to produce a single dict, containing the properties of all form
+    # vars (probably optionally) and specified arguments. The dict
+    # should be the straightforeward source for the genertion of the
+    # output set. One should be able to speed the code significantly
+    # up (at least for the standard cases).
+    #
+    # -Gustaf Neumann
+    #
+
     # 'noprocessing_vars' is yet another container of variables, 
     # only this one doesn't have the values subst'ed
     # and we don't try to find :multiple and :array flags in the namespec
@@ -2648,13 +2659,15 @@ ad_proc -public util_current_location {} {
     # In case the "Host:" header field was provided, use the "hostame"
     # and maybe the "port" from there (this has the highest priority)
     #
-    set Host [ns_set iget $headers Host]
+    set Host [security::validated_host_header]
     if {$Host ne ""} {
         if {[util::split_location $Host .proto hostname Host_port]} {
             if {$Host_port ne ""} {
                 set port $Host_port
             }
         }
+    } else {
+        ns_log notice "ignore non-existing or untrusted host header, fall back to <$hostname>"
     }
     
     #
@@ -4609,16 +4622,21 @@ ad_proc util::external_url_p { url } {
     HTTP or HTTPS port number added or removed from current host name    
     or another hostname that the host responds to (from host_node_map)
 } {
-    set locations_list [security::locations]
-    # there may be as many as 3 valid full urls from one hostname
     set external_url_p [util_complete_url_p $url]
-
-    # more valid url pairs with host_node_map
-    foreach location $locations_list {
-        set encoded_location [ns_urlencode $location]
-        #       ns_log Notice "util::external_url_p location \"$location/*\" url $url match [string match "${encoded_location}/*" $url]"
-        set external_url_p [expr { $external_url_p && ![string match "$location/*" $url] } ] 
-        set external_url_p [expr { $external_url_p && ![string match "${encoded_location}/*" $url] } ] 
+    #
+    # Only if the URL is syntactical a URL with a protocol, it might
+    # be external.
+    #
+    if {$external_url_p} {
+        set locations_list [security::locations]
+        # more valid url pairs with host_node_map
+        
+        foreach location $locations_list {
+            set encoded_location [ns_urlencode $location]
+            # ns_log Notice "util::external_url_p location \"$location/*\" url $url match [string match "${encoded_location}/*" $url]"
+            set external_url_p [expr { $external_url_p && ![string match "$location/*" $url] } ] 
+            set external_url_p [expr { $external_url_p && ![string match "${encoded_location}/*" $url] } ] 
+        }
     }
     return $external_url_p
 }
@@ -4762,6 +4780,62 @@ ad_proc -public util::disk_cache_eval {
     return $result
 }
 
+ad_proc -public util::request_info {
+    {-with_headers:boolean false}
+} {
+    
+    Produce a string containing the detailed request information.
+    This is in particular useful for debugging, when errors are raised.
+    
+    @param with_headers Include request headers
+    @author Gustaf Neumann
+
+} {
+    set info ""
+    if {[ns_conn isconnected]} {
+        #
+        # Base information
+        #
+        append info "    " \
+            [ns_conn method] \
+            " [util_current_location][ns_conn url]?[ns_conn query]" \
+            " referred by '[get_referrer]' peer [ad_conn peeraddr] user_id [ad_conn user_id]"
+        
+        if {[ns_conn method] eq "POST"} {
+            # 
+            # POST data info
+            #
+            if {[ns_conn flags] & 1} {
+                append info "\n    connection already closed, cooked form-content:"
+                foreach {k v} [ns_set array [ns_getform]] {
+                    if {[string length $v] > 100} {
+                        set v "[string range $v 0 100]..."
+                    }
+                    append info "\n        $k:\t$v"
+                }
+            } else {
+                set data [ns_conn content]
+                if {[string length $data] < 2000} {
+                    append info "\n        post-data: $data"
+                }
+            }
+        }
+
+        #
+        # Optional header info
+        #
+        if {$with_headers_p} {
+            append info \n
+            foreach {k v} [ns_set array [ns_conn headers]] {
+                append info "\n $k:\t$v"
+            }
+        }
+    }
+    return $info
+}
+
+
+
 ad_proc -public ad_log {
     level
     message
@@ -4774,13 +4848,10 @@ ad_proc -public ad_log {
 
     @author Gustaf Neumann
 } {
-    set request ""
-    if {[ns_conn isconnected]} {
-        append request "    " \
-            [ns_conn method] \
-            " [util_current_location][ns_conn url]?[ns_conn query]" \
-            " referred by '[get_referrer]' peer [ad_conn peeraddr]"
-    }
+    set with_headers [expr {$level in {error Error}}]
+    append request "    " \
+        [util::request_info -with_headers=$with_headers]
+    
     ns_log $level "${message}\n[uplevel ad_get_tcl_call_stack]${request}\n"
 }
 

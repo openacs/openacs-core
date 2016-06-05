@@ -12,7 +12,7 @@ ad_page_contract {
     locale
     package_key
     {message_key ""}
-    {return_url {[export_vars -base message-list { locale package_key }]}}
+    {return_url:localurl {[export_vars -base message-list { locale package_key }]}}
 }
 
 

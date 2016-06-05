@@ -15,12 +15,18 @@ ad_page_contract {
   @creation-date 2000-10-23
   @cvs-id $Id$
 } -query {
-  orderby:optional
-  color_filter_value:optional
+    orderby:token,notnull,optional
+    color_filter_value:optional,trim,notnull
 } -properties {
-  notes:multirow
-  context:onevalue
-  create_p:onevalue
+    notes:multirow
+    context:onevalue
+    create_p:onevalue
+} -validate {
+    valid_color -requires color_filter_value {
+        if {$color_filter_value ni {blue green purple red orange yellow}} {
+            ad_complain "Invalid value: $color_filter_value"
+        }
+    }
 }
 
 set package_id [ad_conn package_id]

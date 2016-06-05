@@ -1,7 +1,7 @@
 ad_page_contract {
     Make user visible.
 } {
-    {return_url ""}
+    {return_url:localurl ""}
 }
 
 auth::require_login

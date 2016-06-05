@@ -5,7 +5,13 @@ ad_page_contract {
     {authority_id:naturalnum ""}
     {username ""}
     {email ""}
-    {return_url ""}
+    {return_url:localurl ""}
+} -validate {
+    valid_email -requires email {
+        if {![regexp {^[\w.@+/=$%!*~-]+$} $email]} {
+            ad_complain "invalid email address"
+        }
+    }
 }
 
 set subsite_id [ad_conn subsite_id]

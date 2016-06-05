@@ -10,7 +10,7 @@ ad_page_contract {
 
 } {
     group_id:naturalnum,notnull
-    { return_url "" }
+    { return_url:localurl "" }
 } -properties {
     context:onevalue
     export_vars:onevalue

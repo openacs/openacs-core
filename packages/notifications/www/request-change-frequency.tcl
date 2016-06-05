@@ -7,7 +7,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     request_id:naturalnum,notnull
-    return_url
+    return_url:localurl
 }
 
 set user_id [ad_conn user_id]

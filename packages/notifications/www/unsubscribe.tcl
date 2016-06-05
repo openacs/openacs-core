@@ -7,7 +7,7 @@ ad_page_contract {
     object_id:naturalnum,notnull
     request_id:naturalnum,multiple
     type_id:naturalnum,notnull
-    return_url         
+    return_url:localurl         
 } 
 
 set request_count [llength $request_id]

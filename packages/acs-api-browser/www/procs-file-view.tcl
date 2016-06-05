@@ -3,10 +3,10 @@ ad_page_contract {
 
     @cvs-id $Id$
 } {
-    version_id:naturalnum,optional
+    version_id:naturalnum,optional,notnull
     { public_p:boolean "" }
     path:path,trim
-    source_p:boolean,optional,trim
+    source_p:boolean,optional,trim,notnull
 } -properties {
     title:onevalue
     context:onevalue
@@ -18,12 +18,14 @@ ad_page_contract {
 
 set url_vars [export_vars {path version_id}]
 set return_url [ns_urlencode [ad_conn url]?][ns_urlencode $url_vars]
+
 set default_source_p [ad_get_client_property -default 0 acs-api-browser api_doc_source_p]
 if { ![info exists source_p] } {
     set source_p $default_source_p
+    if {$source_p eq ""} {set source_p 0}
 }
-if { ![info exists version_id] && 
-     [regexp {^packages/([^ /]+)/} $path "" package_key] } {
+if { ![info exists version_id]
+     && [regexp {^packages/([^ /]+)/} $path "" package_key] } {
     db_0or1row version_id_from_package_key {
         select version_id 
 	from apm_enabled_package_versions 
@@ -32,7 +34,7 @@ if { ![info exists version_id] &&
 }
 
 set path [apidoc::sanitize_path $path]
-if {![file readable $::acs::rootdir/$path] || [file isdirectory $::acs::rootdir/$path]} {
+if {![file readable ${::acs::rootdir}$path] || [file isdirectory ${::acs::rootdir}$path]} {
     if {[info exists version_id]} {
 	set kind procs
 	set href [export_vars -base [ad_conn package_url]/package-view {version_id {kind procs}}]
@@ -76,6 +78,7 @@ if { [info exists version_id] } {
 
 }
 
+set path [string trimleft $path /]
 lappend context [file tail $path]
 
 set title [file tail $path]

@@ -7,7 +7,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     {version_id:naturalnum,notnull}
-    {return_url "index"}
+    {return_url:localurl "index"}
 }
 
 apm_version_info $version_id

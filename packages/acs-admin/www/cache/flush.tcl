@@ -5,7 +5,7 @@ ad_page_contract {
     pattern
     raw_date
     key:allhtml
-    {return_url "show-util-memoize?pattern=$pattern"}
+    {return_url:localurl "show-util-memoize?pattern=$pattern"}
 }
 
 if {[catch {set pair [ns_cache get util_memoize $key]} errmsg]} {

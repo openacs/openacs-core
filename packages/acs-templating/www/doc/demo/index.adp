@@ -285,11 +285,18 @@ Template</th><th width="15%">Output</th>
 </td>
 </tr><tr>
 <td>A form with Select widgets</td><td align="center"><a href="show.tcl?file=select.tcl">View</a></td><td align="center"><a href="show.tcl?file=select.adp">View</a></td><td align="center"><a href="compile.tcl?file=select.adp">View</a></td><td align="center"><a href="select">View</a></td>
-</tr><tr>
-<td rowspan="3">Custom validation of a request</td><td rowspan="3" align="center"><a href="show.tcl?file=state.tcl">View</a></td><td rowspan="3" align="center"><a href="show.tcl?file=state.adp">View</a></td><td rowspan="3" align="center"><a href="compile.tcl?file=state.adp">View</a></td><td align="center"><a href="state?state_abbrev=UI">Inline Error
-Message</a></td>
-</tr><tr><td align="center"><a href="state?state_abbrev=UI&amp;errorpage">Sitewide Error Page</a></td></tr><tr><td align="center"><a href="state?state_abbrev=CA">Valid
-Request</a></td></tr><tr>
+</tr>
+
+<tr>
+<td rowspan="2">Custom validation of a request</td>
+<td rowspan="2" align="center"><a href="show.tcl?file=state.tcl">View</a></td>
+<td rowspan="2" align="center"><a href="show.tcl?file=state.adp">View</a></td>
+<td rowspan="2" align="center"><a href="compile.tcl?file=state.adp">View</a></td>
+<td align="center"><a href="state?state_abbrev=UI">Error Page</a></td>
+</tr>
+<tr><td align="center"><a href="state?state_abbrev=CA">Valid Request</a></td></tr>
+
+<tr>
 <td>A form with the Date widget</td><td align="center"><a href="show.tcl?file=date-test.tcl">View</a></td><td align="center"><a href="show.tcl?file=date-test.adp">View</a></td><td align="center"><a href="compile.tcl?file=date-test.adp">View</a></td><td align="center"><a href="date-test">View</a></td>
 </tr><tr>
 <td>Editing: several pages in one</td><td align="center"><a href="show.tcl?file=user-edit.tcl">View</a></td><td align="center"><a href="show.tcl?file=user-edit.adp">View</a></td><td align="center"><a href="compile.tcl?file=user-edit.adp">View</a></td><td align="center"><a href="user-edit">View</a></td>

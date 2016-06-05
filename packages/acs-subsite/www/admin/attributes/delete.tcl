@@ -10,7 +10,7 @@ ad_page_contract {
 
 } {
     attribute_id:notnull,naturalnum,attribute_dynamic_p
-    { return_url "" }
+    { return_url:localurl "" }
 } -properties {
     context:onevalue
     attribute_id:onevalue

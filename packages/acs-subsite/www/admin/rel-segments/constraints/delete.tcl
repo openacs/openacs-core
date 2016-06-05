@@ -10,7 +10,7 @@ ad_page_contract {
 
 } {
     constraint_id:naturalnum,notnull
-    { return_url "" }
+    { return_url:localurl "" }
 } -properties {
     context:onevalue
     constraint_name:onevalue

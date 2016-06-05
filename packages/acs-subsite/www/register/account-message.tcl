@@ -4,7 +4,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     {message:html ""}
-    {return_url ""}
+    {return_url:localurl ""}
 }
 
 set page_title "Logged in"

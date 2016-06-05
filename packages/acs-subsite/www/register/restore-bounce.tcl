@@ -2,7 +2,7 @@ ad_page_contract {
     The page restores a user from the deleted state.
     @cvs-id $Id$
 } {
-    {return_url {[ad_pvt_home]}}
+    {return_url:localurl {[ad_pvt_home]}}
 }
 
 set page_title [_ acs-mail-lite.Restore_bounce]

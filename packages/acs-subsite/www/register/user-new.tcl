@@ -4,7 +4,25 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     {email ""}
-    {return_url [ad_pvt_home]}
+    {return_url:localurl [ad_pvt_home]}
+} -validate {
+    valid_return_url {
+        #
+        # TODO: The following protection is for the cmd
+        #     ad_form -name register -export {next_url user_id return_url}
+        # in acs-subsite/lib/usr-new and has to be addressed in ad_form
+        #
+        if {[string first {$} $return_url] > -1
+            || [string first {\[} $return_url] > -1
+        } {
+            ad_complain "return_url contains invalid character"
+        }
+    }
+    valid_email -requires email {
+        if {![regexp {^[\w.@+/=$%!*~-]+$} $email]} {
+            ad_complain "invalid email address"
+        }
+    }
 }
 
 set registration_url [parameter::get -parameter RegistrationRedirectUrl]

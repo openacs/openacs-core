@@ -8,7 +8,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     rel_id:naturalnum,notnull
-    { return_url "" }
+    { return_url:localurl "" }
 } -properties {
     context:onevalue
     export_vars:onevalue

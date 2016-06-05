@@ -6,7 +6,7 @@ ad_page_contract {
     @cvs-id $Id$  
 } {
     version_id:naturalnum,notnull
-    {return_url {[export_vars -base "version-i18n-index" { version_id }]}}
+    {return_url:localurl {[export_vars -base "version-i18n-index" { version_id }]}}
 }
 
 db_1row package_version_info { 

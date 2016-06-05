@@ -68,6 +68,7 @@
     <form method="get" action="search">
       <div>
 	<input type="text" name="q" size="60" maxlength="256" value="@query@">
+         <if @::__csrf_token@ defined><input type="hidden" name="__csrf_token" value="@::__csrf_token;literal@"></if>
 	<input type="submit" value="#search.Search#">
       </div>
     </form>

@@ -5,7 +5,7 @@ ad_page_contract {
     @creation-date 22 Jun 2000
     @cvs-id $Id$
 } {
-    {return_url "" }
+    {return_url:localurl "" }
     {user_id:naturalnum ""}
 } -properties {
     context:onevalue

@@ -12,7 +12,7 @@ ad_page_contract {
 } {
     group_id:notnull,naturalnum
     rel_type:notnull
-    { return_url "" }
+    { return_url:localurl "" }
 } -properties {
     context:onevalue
     export_vars:onevalue

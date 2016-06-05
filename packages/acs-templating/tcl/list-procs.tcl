@@ -348,13 +348,18 @@ ad_proc -public template::list::create {
             error "You cannot have bulk_actions without providing a key for list '$name'"
         }
         # Create the checkbox element
+        set label {<input type="checkbox" name="_dummy" onclick="acs_ListCheckAll('$name', this.checked)"
+            onkeypress="acs_ListCheckAll('$name', this.checked)" title="[_ acs-templating.lt_Checkuncheck_all_rows]">}
+        if {[info exists ::__csrf_token]} {
+            append label \n [subst {<input type="hidden" name="__csrf_token" value="$::__csrf_token">}]
+        }
+        
         # We only ulevel 1 here, because we want the subst to be done in this namespace
         template::list::element::create \
             -list_name $name \
             -element_name $checkbox_name \
             -spec {
-                label {<input type="checkbox" name="_dummy" onclick="acs_ListCheckAll('$name', this.checked)"
-                    onkeypress="acs_ListCheckAll('$name', this.checked)" title="[_ acs-templating.lt_Checkuncheck_all_rows]">}
+                label $label
                 display_template {<input type="checkbox" name="$key" value="@$list_properties(multirow).$key@"
                     id="$name.@$list_properties(multirow).$key@" title="[_ acs-templating.lt_Checkuncheck_this_row]">}
                 sub_class {narrow}
@@ -507,9 +512,15 @@ ad_proc -public template::list::prepare {
         set list_properties(orderby_selected_name) $orderby_name
 
         if { $orderby_direction eq "" } {
-            template::list::orderby::get_reference \
-                -list_name $name \
-                -orderby_name $orderby_name
+
+            if {[catch {
+                template::list::orderby::get_reference \
+                    -list_name $name \
+                    -orderby_name $orderby_name
+            } errorMsg]} {
+                ad_page_contract_handle_datasource_error $errorMsg
+                ad_script_abort
+            }
 
             set orderby_direction $orderby_properties(default_direction)
         }
@@ -1043,7 +1054,12 @@ ad_proc -public template::list::orderby_clause {
     set result {}
     template::list::orderby::get_reference -list_name $name -orderby_name $list_properties(orderby_selected_name)
 
+    if {![info exists orderby_properties(orderby_$list_properties(orderby_selected_direction))]} {
+        ad_page_contract_handle_datasource_error "invalid value for orderby: $list_properties(orderby_selected_direction)"
+        ad_script_abort
+    }
     set result $orderby_properties(orderby_$list_properties(orderby_selected_direction))
+
     if { $orderby_p && $result ne "" } {
         set result "order by $result"
     }

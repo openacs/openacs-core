@@ -12,11 +12,11 @@ first or last name.</p>
 <table border="0">
   <formtemplate id="user_search">
     <tr>
-      <td nowrap><formwidget id=user_search>
+      <td nowrap><formwidget id="user_search">
       <formerror id="user_search"><br>
-        <font color=red>@formerror.user_search@</font>
+        <font color=red>@formerror.user_search;noquote@</font>
       </formerror></td>
-      <td nowrap><formwidget id=submit></td>
+      <td nowrap><formwidget id="submit"></td>
     </tr>
   </formtemplate>
 </table>

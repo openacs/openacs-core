@@ -9,7 +9,7 @@ ad_page_contract {
 } {
     version_id:naturalnum,notnull
     paths:multiple
-    {return_url ""}
+    {return_url:localurl ""}
 } 
 
 set package_key [apm_package_key_from_version_id $version_id]

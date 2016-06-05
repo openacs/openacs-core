@@ -9,7 +9,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     group_id:naturalnum,notnull
-    {return_url ""}
+    {return_url:localurl ""}
 } -properties {
     context:onevalue
     group_id:onevalue

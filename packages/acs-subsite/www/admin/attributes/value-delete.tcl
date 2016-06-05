@@ -11,7 +11,7 @@ ad_page_contract {
 } {
     attribute_id:naturalnum,notnull
     enum_value:trim,notnull
-    { return_url [export_vars -base one attribute_id] }    
+    { return_url:localurl "[export_vars -base one attribute_id]" }
 } -properties {
     context:onevalue
     export_vars:onevalue

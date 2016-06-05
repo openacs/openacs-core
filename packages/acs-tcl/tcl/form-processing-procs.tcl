@@ -118,7 +118,7 @@ ad_proc -public ad_form {
     } -validate {
         {value
          {[string length $value] >= 3}
-         "\"value\" must be a string containing three or more characters"
+         "\$value\" must be a string containing three or more characters"
         }
     } -on_submit {
         
@@ -601,7 +601,11 @@ ad_proc -public ad_form {
             # and validation block to be extended, for now at least until I get more experience
             # with this ...
 
-            if {$valid_arg ni { name form method action html validate export mode cancel_url has_edit has_submit actions edit_buttons display_buttons fieldset on_validation_error}} {
+            if {$valid_arg ni {
+                name form method action html validate export mode cancel_url
+                has_edit has_submit actions edit_buttons display_buttons
+                fieldset on_validation_error
+            }} {
                 set af_parts(${form_name}__extend) ""
             }
         }
@@ -785,31 +789,33 @@ ad_proc -public ad_form {
     # :array and :sign flags in exported variables.
     if { [info exists export] } {
         foreach value $export {
+            set has_value_p [expr {[llength $value] >= 2}]
             lassign $value name value
+
+            # recognize supported flags
             lassign [split $name ":"] name mode
             set modes [split $mode ,]
-            # recognize supported flags
+
+            # verify variable existance and nature
+            set var_exists_p [uplevel [list info  exists $name]]
+            set is_array_p   [uplevel [list array exists $name]]
+
+            # arrays are automatically recognized, even if not specified
+            set array_p    [expr {$is_array_p || "array" in $modes}]
             set sign_p     [expr {"sign"     in $modes}]
-            set array_p    [expr {"array"    in $modes}]
             set multiple_p [expr {"multiple" in $modes}]
-            set is_array_p [uplevel [list array exists $name]]
-            # var is array and will be exported as such even if not said explicitly
-            if {$is_array_p} {set array_p t}
-            set is_var_p [expr {!$is_array_p && [uplevel [list info exists $name]]}]
             
             if {$array_p} {
-              if {$is_var_p} {
-                  error "variable \"$name\" should be an array"
-              }
-              # no explicit value...
-              if {$value eq ""} {
-                # ...take it from caller stack...
+              # no explicit value:
+              if {!$has_value_p} {
+                # if array in caller stack exists, get its value from there
                 if {$is_array_p} {
                   set value [uplevel [list array get $name]]
-                # ...or ignore this field.
-                } else {
-                  continue
-                }
+                # else, if a variable exists but it's not an array, throw error (as in export_vars)
+                } elseif {$var_exists_p} {
+                    error "variable \"$name\" should be an array"
+                # else, just ignore this export
+                } else {continue}
               }
               # arrays generate one hidden formfield for each key
               foreach {key val} $value {
@@ -826,17 +832,19 @@ ad_proc -public ad_form {
                 }
               }
             } else {
-              # no explicit value...
-              if {$value eq ""} {
-                # ...take it from caller stack...
-                if {$is_var_p} {
+              # no explicit value:
+              if {!$has_value_p} {
+                # if variable in caller stack exists, get its value from there
+                if {$var_exists_p} {
                   set value [uplevel [list set $name]]
-                # ...or ignore this field.
-                } else {
-                    continue
-                }
+                # else, just ignore this export
+                } else {continue}
+              } else {
+                #
+                # substitute only the explicitly specified value
+                #
+                set value [uplevel [list subst $value]]
               }
-              set value [uplevel [list subst $value]]
               # field is multiple: use '-values' instead of '-value'
               if {$multiple_p} {
                 template::element create $form_name $name \

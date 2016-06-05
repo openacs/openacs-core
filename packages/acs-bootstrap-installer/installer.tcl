@@ -480,12 +480,19 @@ ad_proc -private install_do_packages_install {} {
         ns_write "<p><b><i>At least one core package has an unsatisifed dependency.\
               No packages have been installed missing: [lindex $dependency_results 2]. \
               Here's what the APM has computed:</i></b>"
-
+        
         ns_write "\n<ul>"
+        set deps ""
         foreach dep $pkg_list {
             lassign $dep _name _path _a _b _pkg _deps _flag _msg
             ns_write "<li>[lindex $_pkg 0]: $_msg</li>"
+            append deps "[lindex $_pkg 0]: $_msg\n"
         }
+        
+        ns_log Error "At least one core package has an unsatisifed dependency.\
+              No packages have been installed missing: [lindex $dependency_results 2]. \
+              Here's what the APM has computed:\n$deps"
+
         return
     }
 

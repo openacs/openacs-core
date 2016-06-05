@@ -6,7 +6,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
   user_id:naturalnum,notnull
-  {return_url .}
+  {return_url:localurl .}
   {permanent:boolean f}
 }
 

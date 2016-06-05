@@ -8,7 +8,7 @@ ad_page_contract {
     {package_id:naturalnum "[ad_conn package_id]"}
     package_key:optional
     {scope "instance"}
-    {return_url:optional "[ad_conn url]?[ad_conn query]"}
+    {return_url:localurl,optional "[ad_conn url]?[ad_conn query]"}
     {section ""}
 }
 

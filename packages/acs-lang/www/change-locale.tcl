@@ -2,7 +2,7 @@ ad_page_contract {
 
 } {
     user_locale
-    return_url
+    return_url:localurl
 }
 
 if { [catch {lang::user::set_locale $user_locale} errmsg] } {

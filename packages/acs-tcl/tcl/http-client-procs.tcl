@@ -319,6 +319,8 @@ ad_proc -private util::http::get_channel_settings {
     #   (B.3) RFC 2616 text/* registration (if not covered by B.1)
     #   default to iso-8859-1
     #
+    #   (B.4) RFC 4627 json defaults to utf-8
+    #
     # (C) If neither A or B apply (e.g., because an invalid charset
     # name was given to the charset parameter), we default to
     # "binary". This corresponds to the behaviour of
@@ -331,7 +333,7 @@ ad_proc -private util::http::get_channel_settings {
     #
     
     set enc ""
-    if {[regexp {^text/.*$|^.*/xml.*$|^.*\+xml.*$} $content_type]} {
+    if {[regexp {^text/.*$|^.*/json.*$|^.*/xml.*$|^.*\+xml.*$} $content_type]} {
         # Case (A): Check for an explicitly provided charset parameter
         if {[regexp {;\s*charset\s*=([^;]*)} $content_type _ charset]} {
             set enc [ns_encodingforcharset [string trim $charset]]
@@ -339,12 +341,16 @@ ad_proc -private util::http::get_channel_settings {
         # Case (B.1)
         if {$enc eq "" && [regexp {^text/xml.*$|text/.*\+xml.*$} $content_type]} {
             set enc [ns_encodingforcharset us-ascii]
-        } 
+        }
 
         # Case (B.3)
         if {$enc eq "" && [string match "text/*" $content_type]} {
             set enc [ns_encodingforcharset iso-8859-1]
-        }   
+        }
+        # Case (B.4)
+        if {$enc eq "" && $content_type eq "application/json"} {
+          set enc [ns_encodingforcharset utf-8]
+        }
     }
     # Cases (C) and (B.2) are covered by the [expr] below.
     set enc [expr {$enc eq "" ? "binary" : $enc}]
@@ -1480,7 +1486,7 @@ ad_proc -private util::http::curl::request {
     ns_set free $resp_headers
     
     set status [string range $response end-2 end]
-    set page   [string range $response 0 end-3]
+    set page   [string range $response 0 end-4]
     
     # Redirection handling
     if {$depth <= $max_depth} {

@@ -319,6 +319,12 @@ ad_proc -private lang::user::site_wide_locale_not_cached {
 
     if { $user_id == 0 } {
         set locale [ad_get_cookie "ad_locale"]
+        #
+        # Check, if someone hacked the cookie
+        #
+        if {$locale ne "" && ![lang::conn::valid_locale_p $locale]} {
+            error "invalid locale cookie '$locale'"
+        }
     } else {
         set locale [db_string get_user_site_wide_locale {} -default "$system_locale"]
     }
@@ -611,8 +617,16 @@ ad_proc -private lang::conn::browser_locale {} {
     }
 }
 
-ad_proc -private lang::conn::get_accept_language_header {} {
+ad_proc -private lang::conn::valid_locale_p {locale} {
+    Check, of the provided locale is syntactically correct
+} {
+    return [regexp {^[a-zA-Z]+(_[a-zA-Z]+)?$} $locale]
+}
 
+ad_proc -private lang::conn::get_accept_language_header {} {
+    Obtain a list of locals from the request headers.
+    @return a list of locales in the syntax used by OpenACS (ISO codes)
+} {
     set acclang [ns_set iget [ns_conn headers] "Accept-Language"]
 
     # Split by comma, and get rid of any ;q=0.5 parts
@@ -629,8 +643,11 @@ ad_proc -private lang::conn::get_accept_language_header {} {
         if { [llength $elmv] > 1 } {
             append elm "_[string toupper [lindex $elmv 1]]"
         }
-
-        lappend acclangv $elm
+        if {[lang::conn::valid_locale_p $elm]} {
+            lappend acclangv $elm
+        } else {
+            error "invalid locale in provided Accept-Language header field"
+        }
     }
     
     return $acclangv

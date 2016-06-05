@@ -13,7 +13,7 @@ ad_page_contract {
     constraint_name:optional
     rel_side:optional
     required_rel_segment:optional
-    { return_url "" }
+    { return_url:localurl "" }
 } -properties {
     context:onevalue
     segment_name:onevalue

@@ -10,7 +10,7 @@ ad_page_contract {
 
 } {
     role:notnull
-    { return_url "" }
+    { return_url:localurl "" }
 } -properties {
     context:onevalue
     pretty_name:onevalue

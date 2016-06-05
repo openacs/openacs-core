@@ -9,7 +9,7 @@ ad_page_contract {
 } {
     rel_id:naturalnum,notnull
     { operation "" }
-    { return_url "" }
+    { return_url:localurl "" }
 } -validate {
     permission_p -requires {rel_id:notnull} {
 	if { ![relation_permission_p -privilege delete $rel_id] } {

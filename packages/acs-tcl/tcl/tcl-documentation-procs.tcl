@@ -348,7 +348,7 @@ ad_proc -public ad_page_contract {
     <dt><a href="proc-view?proc=ad_page_contract_filter_proc_time"><b>time</b></a>
     <dd>Pluggable filter, installed by default, that makes sure the array validates as a time in 
     am/pm format. That is that it has two fields: <code>time</code> and <code>ampm</code> that have 
-    valid values. Use this filter with :array to do automoatic time filtering. To use it, set up 
+    valid values. Use this filter with :array to do automatic time filtering. To use it, set up 
     in you HTML form using [ec_timeentrywidget varname] or equivalent. Then on the processing page
     specify the filter using <code>varname:array,time</code>. If the time validates, there will be
     a variable set in your environment <code>varname</code> with five keys: <code>time, ampm,
@@ -357,8 +357,8 @@ ad_proc -public ad_page_contract {
     <dt><a href="proc-view?proc=ad_page_contract_filter_proc_time24"><b>time24</b></a>
     <dd>Pluggable filter, installed by default, that makes sure the array validates as a time in 
     24hr format. That is that it has one field: <code>time</code> that has valid values. Use this
-    filter with :array to do automoatic time filtering. To use it, set up in you HTML form using
-    &lt;input type=text name=varname.time&gt;. Then on the processing page specify the filter using 
+    filter with :array to do automatic time filtering. To use it, set up in you HTML form using
+    &lt;input type="text" name="varname".time&gt;. Then on the processing page specify the filter using 
     <code>varname:array,time24</code>. If the time validates, there will be a variable set in your
     environment <code>varname</code> with four keys: <code>time, hours, minutes,</code> and
     <code>seconds</code>.
@@ -386,7 +386,7 @@ ad_proc -public ad_page_contract {
     
     <dt><a href="proc-view?proc=ad_page_contract_filter_proc_allhtml"><b>allhtml</b></a>
     <dd>Pluggable filter, installed by default, that allows any and all html.  Use of this filter
-    is not reccomended, except for cases when the HTML will not be presented to the user or there is some
+    is not recommended, except for cases when the HTML will not be presented to the user or there is some
     other reason for overriding the site-wide control over naughty html.
     
     <dt><a href="proc-view?proc=ad_page_contract_filter_proc_tmpfile"><b>tmpfile</b></a>
@@ -396,16 +396,20 @@ ad_proc -public ad_page_contract {
     <dd>Pluggable filter, installed by default, that makes sure the value is a valid SQL identifier.
 
     <dt><a href="proc-view?proc=ad_page_contract_filter_proc_path"><b>path</b></a>
-    <dd>Pluggable filter, installed by default, that makes sure hat argument contains only Tcl word
-    characters or a few addional safe characters used in paths ("/", ".", "-")
+    <dd>Pluggable filter, installed by default, that makes sure that argument contains only Tcl word
+    characters or a few additional safe characters used in paths ("/", ".", "-")
     
     <dt><a href="proc-view?proc=ad_page_contract_filter_proc_token"><b>token</b></a>
-    <dd>Pluggable filter, installed by default, that makes sure hat argument contains only Tcl word
-    characters or a few addional safe characters (",", ":", "-").
+    <dd>Pluggable filter, installed by default, that makes sure that argument contains only Tcl word
+    characters or a few additional safe characters (",", ":", "-").
     
     <dt><a href="proc-view?proc=ad_page_contract_filter_proc_word"><b>word</b></a>
-    <dd>Pluggable filter, installed by default, that makes sure hat argument contains only Tcl word
-    characters (as defined by \w in Tcl regular expressions, i.e. characers, digits and underscore).
+    <dd>Pluggable filter, installed by default, that makes sure that argument contains only Tcl word
+    characters (as defined by \w in Tcl regular expressions, i.e. characters, digits and underscore).
+
+    <dt><a href="proc-view?proc=ad_page_contract_filter_proc_localurl"><b>localurl</b></a>
+    <dd>Pluggable filter, installed by default, that makes sure that argument contains a 
+    non-external url, which can be used in ad_returnredirect without throwing an error.
 
     </dl>
 
@@ -418,7 +422,7 @@ ad_proc -public ad_page_contract {
     <b>Note</b> that there can be <em>no</em> spaces between name,
     colon, flags, commas, etc. The first space encountered denotes the 
     beginning of the default value. Also, variable names can't contain
-    commas, colons or anything Tcl accepts as list element seperators 
+    commas, colons or anything Tcl accepts as list element separators 
     (space, tab, newline, possibly others)
     If more than one value is specified for something that's not 
     a multiple, a complaint will be thrown ("you supplied more than one value for foo").
@@ -1167,18 +1171,42 @@ ad_proc -public ad_page_contract {
     set ::ad_page_contract_variables $apc_formals
 
     if { [ad_complaints_count] > 0 } {
-	if { [info exists return_errors] } {
-	    upvar 1 $return_errors error_list
-	    set error_list [ad_complaints_get_list]
-	} else {
-            template::multirow create complaints text
-            foreach elm [ad_complaints_get_list] {
-                template::multirow append complaints $elm
+
+        #
+        # Add safety belt to prevent recursive loop
+        #
+        if {[incr ::__ad_complain_depth] < 10} {
+            
+            if { [info exists return_errors] } {
+                upvar 1 $return_errors error_list
+                set error_list [ad_complaints_get_list]
+            } else {
+                template::multirow create complaints text
+                foreach elm [ad_complaints_get_list] {
+                    template::multirow append complaints $elm
+                }
+                if {[catch {
+                    set html [ad_parse_template \
+                                  -params [list complaints [list context $::ad_page_contract_context] \
+                                               [list prev_url [get_referrer]] \
+                                              ] "/packages/acs-tcl/lib/complain"]
+                } errorMsg]} {
+                    set errorCode $::errorCode
+                    #
+                    # Check, if we were called from "ad_script_abort" (intentional abortion)
+                    #
+                    if {[ad_exception $errorCode] eq "ad_script_abort"} {
+                        #
+                        # Yes, this was an intentional abortion
+                        #
+                        return ""
+                    }
+                    ad_log error "problem rendering complain page: $errorMsg ($errorCode)"
+                    set html "Invalid input"
+                }
+                ns_return 422 text/html $html
+                ad_script_abort
             }
-            ns_return 422 text/html [ad_parse_template \
-                                         -params [list complaints [list context $::ad_page_contract_context]] \
-                                         "/packages/acs-tcl/lib/complain"]
-	    ad_script_abort
 	}
     }
 
@@ -1657,7 +1685,13 @@ ad_page_contract_filter range { name value range } {
 	ad_script_abort
     }
     lassign $range min max
-    if { $value < $min || $value > $max } {
+    #
+    # Strip leading zeros from value to avoid octal number
+    # confusions.
+    #
+    regexp {^(0*)([1-9][0-9]*|0)$} $value . zeros value
+    
+    if { ![string is integer -strict $value] || $value < $min || $value > $max } {
 	ad_complain [_ acs-tcl.lt_name_is_not_in_the_ra]
 	return 0
     }
@@ -2125,6 +2159,21 @@ ad_page_contract_filter path { name value } {
     return 0
 }
 
+ad_page_contract_filter localurl { name value } {
+    Checks whether the value is a an acceptable
+    (non-external) url, which can be used
+    in ad_returnredirect without throwing an error.
+
+    @author Gustaf Neumann
+    @creation-date 19 Mai 2016
+} {
+
+    if { $value eq "" || [util::external_url_p $value]} {
+        ad_complain [_ acs-tcl.lt_name_is_not_valid]
+        return 0
+    }
+    return 1
+}
 
 
 
@@ -2191,10 +2240,11 @@ ad_proc ad_page_contract_handle_datasource_error {error} {
 				-default "/packages/acs-tcl/lib/ad-return-complaint"]
     set exception_count 1
     set exception_text $error
-    ns_return 200 text/html [ad_parse_template \
+    ns_return 422 text/html [ad_parse_template \
                                  -params [list [list exception_count $exception_count] \
-                                              [list exception_text $exception_text]] \
-				 $complaint_template]
+                                              [list exception_text $exception_text] \
+                                              [list prev_url  [get_referrer]] \
+                                             ]  $complaint_template]
 }
 
 # Local variables:

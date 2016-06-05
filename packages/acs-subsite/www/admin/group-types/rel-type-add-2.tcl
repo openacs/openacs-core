@@ -12,7 +12,7 @@ ad_page_contract {
 } {
     group_type:trim,notnull
     rel_type:trim,notnull
-    { return_url "" }
+    { return_url:localurl "" }
 } -validate {
     rel_type_acceptable_p -requires {group_type:notnull rel_type:notnull} {
 	# This test makes sure this group_type can accept the

@@ -8,6 +8,12 @@ ad_page_contract {
     {authority_id:naturalnum ""}
     {username ""}
     {email ""}
+} -validate {
+    valid_email -requires email {
+        if {![regexp {^[\w.@+/=$%!*~-]+$} $email]} {
+            ad_complain "invalid email address"
+        }
+    }
 }
 
 set page_title [_ acs-subsite.Reset_Password]

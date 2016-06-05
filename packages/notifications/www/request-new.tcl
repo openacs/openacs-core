@@ -9,7 +9,7 @@ ad_page_contract {
     type_id:naturalnum,notnull
     object_id:naturalnum,notnull
     {pretty_name ""}
-    return_url
+    return_url:localurl
 }
 
 set user_id [auth::require_login]

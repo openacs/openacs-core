@@ -13,7 +13,9 @@ ad_page_contract {
 } -errors {
   supersticion {This number brings you no luck.}
 } -properties {
-  phrase:onevalue
+    phrase:onevalue
+} -validate {
+    csrf { security::csrf::validate }   
 } -return_errors error_list
 
 if {[info exists error_list]} {

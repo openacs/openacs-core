@@ -7,7 +7,8 @@ ad_page_contract {
 set page_title "Install OpenACS Packages"
 set context [list $page_title]
 
-set local_install_url "[ad_conn package_url]/apm/packages-install"
+set local_install_url [export_vars -base [ad_conn package_url]/apm/packages-install { {operation install} }]
+set local_upgrade_url [export_vars -base [ad_conn package_url]/apm/packages-install { {operation upgrade} }]
 set local_path $::acs::rootdir/packages
 
 set remote_install_url [export_vars -base "install/install" { repository_url channel current_channel head_channel }]

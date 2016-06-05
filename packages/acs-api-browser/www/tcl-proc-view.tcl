@@ -7,6 +7,8 @@ ad_page_contract {
     title:onevalue
     context:onevalue
     tcl_proc:onevalue
+} -validate {
+    csrf { security::csrf::validate }    
 }
 
 set ns_api_index_result [util_memoize [list ::util::http::get -url $::apidoc::ns_api_html_index]]
@@ -17,6 +19,7 @@ set ns_api_index_page [dict get $ns_api_index_result page]
 # abbreviation in case the full name is not found (e.g. man page "nsv"
 # contains "nsv_array", "nsv_set" etc.)
 #
+set url ""
 for {set i [string length $tcl_proc]} {$i > 1} {incr i -1} {
     set proc [string range $tcl_proc 0 $i]
     set url [apidoc::search_on_webindex \

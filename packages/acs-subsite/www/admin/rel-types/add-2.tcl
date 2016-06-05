@@ -12,7 +12,7 @@ ad_page_contract {
     constraint_id:naturalnum,notnull
     rel_type:notnull
     object_type:notnull
-    { return_url "" }
+    { return_url:localurl "" }
 }
 
 db_dml update_rel_type_mapping {

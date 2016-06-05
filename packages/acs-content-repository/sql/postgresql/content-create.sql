@@ -163,6 +163,7 @@ create index cr_type_relations_tgt_typ_idx ON cr_type_relations(target_type);
 --------------------------------------------------------------
 -- CONTENT ITEMS
 --------------------------------------------------------------
+CREATE TYPE cr_item_storage_type_enum AS ENUM ('text', 'file', 'lob');
 
 -- Define the cr_items table
 
@@ -192,9 +193,7 @@ create table cr_items (
   content_type        varchar(100)
                       constraint cr_items_content_type_fk
                       references acs_object_types,
-  storage_type        varchar(10) default 'text' not null
-                      constraint cr_items_storage_type_ck
-                      check (storage_type in ('lob','text','file')),
+  storage_type        cr_item_storage_type_enum default 'text' not null,
   storage_area_key    varchar(100) default 'CR_FILES' not null,
   tree_sortkey        varbit not null,
   max_child_sortkey   varbit

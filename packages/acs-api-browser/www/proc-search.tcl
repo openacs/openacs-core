@@ -13,14 +13,14 @@ ad_page_contract {
     @creation-date Jul 14, 2000
     @cvs-id $Id$
 } {
-    {name_weight:optional 0}
-    {doc_weight:integer,optional 0}
-    {param_weight:integer,optional 0}
-    {source_weight:integer,optional 0}
+    {name_weight:notnull 0}
+    {doc_weight:integer,notnull 0}
+    {param_weight:integer,notnull 0}
+    {source_weight:integer,notnull 0}
     {search_type:optional 0}
-    {show_deprecated_p:boolean 0}
-    {show_private_p:boolean 0}
-    query_string
+    {show_deprecated_p:boolean,notnull 0}
+    {show_private_p:boolean,notnull 0}
+    {query_string:token,notnull}
 } -properties {
     title:onevalue
     context:onevalue
@@ -30,6 +30,8 @@ ad_page_contract {
     source_weight:onevalue
     query_string:onevalue
     results:multirow
+} -validate {
+    csrf { security::csrf::validate }
 }
 
 ##########################################################
@@ -187,12 +189,12 @@ foreach output $private_matches {
     multirow append private_results $score $proc $args $url
 }
 
+global __csrf_token
 set show_private_url [export_vars -base [ad_conn url] -override { { show_private_p 1 } } {
-    name_weight doc_weight param_weight source_weight search_type query_string show_deprecated_p
+    name_weight doc_weight param_weight source_weight search_type query_string show_deprecated_p __csrf_token
 }]
-
 set hide_private_url [export_vars -base [ad_conn url] -override { { show_private_p 0 } } {
-    name_weight doc_weight param_weight source_weight search_type query_string show_deprecated_p
+    name_weight doc_weight param_weight source_weight search_type query_string show_deprecated_p __csrf_token
 }]
 
 # Local variables:

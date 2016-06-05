@@ -10,7 +10,7 @@ ad_page_contract {
 
 } {
     group_rel_type_id:naturalnum,notnull
-    { return_url "" }
+    { return_url:localurl "" }
     { operation:trim "No, I want to cancel my request" }
 }
 

@@ -168,6 +168,11 @@ ad_proc -private sec_handler {} {
             # would cause users' sessions to expire as soon as the session needed to be renewed
             sec_generate_session_id_cookie
         }
+        
+        #
+        # generate a csrf token
+        #
+        security::csrf::new
     }
 }
 
@@ -180,17 +185,15 @@ ad_proc -private sec_login_read_cookie {} {
 
     @return List of values read from cookie ad_user_login_secure or ad_user_login
 } {
-    # If over HTTPS, we look for a secure cookie, otherwise we look for the normal one
-    set login_list [list]
+    #
+    # If over HTTPS, we look for the *_secure cookie
+    #
     if { [security::secure_conn_p] } {
-        catch {
-            set login_list [split [ad_get_signed_cookie "ad_user_login_secure"] ","]
-        }
-    } 
-    if { $login_list eq "" } {
-        set login_list [split [ad_get_signed_cookie "ad_user_login"] ","]
+        set cookie_name "ad_user_login_secure"
+    } else {
+        set cookie_name "ad_user_login"
     }
-    return $login_list
+    return [split [ad_get_signed_cookie $cookie_name] ","]
 }
 
 ad_proc -private sec_login_handler {} {
@@ -1781,7 +1784,7 @@ ad_proc -public security::locations {} {
         if { $suppress_http_port } {
             foreach hostname $host_node_map_hosts_list {
                 lappend locations "http://${hostname}"
-                lappend locations "https://${hostname}${host_map_https_port}"
+                lappend locations "https://${hostname}"
             }
         } else {
             foreach hostname $host_node_map_hosts_list {
@@ -1791,6 +1794,264 @@ ad_proc -public security::locations {} {
         }
     }
     return $locations
+}
+
+ad_proc -public security::validated_host_header {} {
+    @return validated host header field or empty
+    @author Gustaf Neumann
+
+    Protect against faked or invalid host header fields. Host header
+    attacks can lead to web-cache poisoning and password reset attacks
+    (for more details, see e.g.
+     http://www.skeletonscribe.net/2013/05/practical-http-host-header-attacks.html)
+} {
+    #
+    # Check, if we have a host header field
+    #
+    set host [ns_set iget [ns_conn headers] Host]
+    if {$host eq ""} {
+        return ""
+    }
+    
+    #
+    # Check, if we have validated it before, or it belongs to the
+    # predefined accepted host header fields.
+    #
+    set key ::acs::validated($host)
+    if {[info exists $key]} {
+        return $host
+    }
+    
+    if {![util::split_location $host .proto hostName hostPort]} {
+        return ""
+    }
+
+    #
+    # Check, if the provided host is the same as the configued host
+    # name. Should be true in most cases.
+    #
+    if {$hostName eq [ns_info hostname] || $hostName eq [ns_info addr]} {
+        #
+        # port is currently ignored
+        #
+        set $key 1
+        return $host
+    }
+
+    #
+    # Check, if the provided host is the same in [ns_conn location]
+    # (will be used as default, but we do not want a warning in such
+    # cases).
+    #
+    if {[util::split_location [ns_conn location] proto locationHost locationPort]} {
+        if {$hostName eq $locationHost} {
+            #
+            # port is currently ignored
+            #
+            set $key 1
+            return $host            
+        }
+    }
+
+    #
+    # Check, if the provided host is the same as in the configured
+    # SystemURL.
+    #
+    if {[util::split_location [ad_url] .proto systemHost systemPort]} {
+        if {$hostName eq $systemHost
+            && ($hostPort eq $systemPort || $hostPort eq "") } {
+            set $key 1
+            return $host
+        }
+    }
+
+    #
+    # Check against the virtual server configuration of NaviServer.
+    #
+    if {[ns_info name] ne "NaviServer"} {
+        foreach s [ns_info servers] {
+            foreach driver {nssock nsssl} {
+                set section [ns_driversection -driver $driver -server $s]
+                if {$section eq ""} continue
+                set vloc [ns_config ns/module/$driver/servers $s]
+                if {$vloc ne ""
+                    && [util::split_location $vloc .proto vHost vPort]
+                    && $vHost eq $hostName
+                } {
+                    set $key 1
+                    return $host
+                }
+            }
+        }
+    }
+
+    #
+    # Check against host node map. Here we need as well protection
+    # against invalid utf-8 characters.
+    #
+    if {![regexp {^[\w.:@+/=$%!*~\[\]-]+$} $host]} {
+        ns_log Warning "host header field contains invalid characters: $host"
+        return ""
+    }
+    set result [db_list host_header_field_mapped {select 1 from host_node_map where host = :host}]
+    if {$result == 1} {
+        #
+        # port is ignored
+        #
+        set $key 1
+        return $host
+    }
+    
+    #
+    # We could/should check as well against a white-list of additional
+    # host names (maybe via ::acs::validated, or via config file, or
+    # via additional package parameter).
+    #
+
+    #
+    # Now we give up
+    #
+    ns_log warning "ignore untrusted host header field: '$host'"
+
+    return ""
+}
+
+
+namespace eval ::security::csrf {
+
+    #
+    # CSRF protection.
+    #
+    # High Level commands:
+    #
+    #    security::csrf::new
+    #    security::csrf::validate
+    
+    ad_proc -public ::security::csrf::new {{-tokenname __csrf_token} -user_id} {
+
+        Create a security token to protect against CSRF (Cross-Site
+        Request Forgery).  The token is set (and cached) in a global
+        per-thread variable an can be included in forms e.g. via the
+        following command.
+    
+        <if @::__csrf_token@ defined><input type="hidden" name="__csrf_token" value="@::__csrf_token;literal@"></if>
+
+        The token is automatically cleared together with other global
+        variables at the end of the processing of every request.
+    
+        @return csrf token
+    } {
+        set cached_var_name ::$tokenname
+        if {[info exists $cached_var_name]} {
+            return [set $cached_var_name]
+        }
+        
+        set token [token -tokenname $tokenname]
+        return [set $cached_var_name $token]
+    }
+
+    #
+    # validate
+    #
+    ad_proc -public ::security::csrf::validate {{-tokenname __csrf_token} {-allowempty false}} {
+        
+        Validate a CSRF token and call security::csrf::fail the request if
+        invalid.
+
+        @return nothing
+    } {
+        if {![info exists ::$tokenname]} {
+            #
+            # If there is no global csrf token, we assume that the
+            # csrf token generation is deactivated, we accept everything.
+            #
+            return
+        }
+        
+        set oldToken [ns_queryget $tokenname]
+        if {$oldToken eq ""} {
+            #
+            # There is not token in the query/form parameters, we
+            # can't validate, since there is no token.
+            #
+            if {$allowempty} {
+                return
+            }
+            fail
+        }
+        
+        set token [token -tokenname $tokenname]
+        if {$oldToken ne $token} {
+            fail
+        }
+    }
+
+    #
+    # Compute a session id or the best equivalent
+    #
+    ad_proc -private ::security::csrf::session_id { } {
+
+        Return an ID for the current session for CSRF protection
+
+        @return session ID
+    } {
+        if {[ad_conn untrusted_user_id] == 0} {
+            #
+            # Anonymous request, use a peer address as session_id
+            #
+            set session_id [ad_conn peeraddr]
+        } else {
+            #
+            # User is logged in, use a session token.
+            #
+            set session_id [ad_conn session_id]
+        }
+        return $session_id
+    }
+
+    #
+    # Generate CSRF token 
+    #
+    ad_proc -public ::security::csrf::token { {-tokenname __csrf_token} } {
+
+        Generate a CSRF token and return it
+
+        @return CSRF token
+    } {
+        #
+        # We compute the token only once per requests. If it was already
+        # computed, and we can pick it up and return it. Otherwise,
+        # we compute it new.
+        #
+        set globalTokenName ::$tokenname
+        if {[info exists $globalTokenName]} {
+            set token [set $globalTokenName]
+        } elseif {[info commands ::crypto::hmac] ne ""} {
+            set secret [ns_config "ns/server/[ns_info server]/acs" parametersecret ""]
+            set token  [::crypto::hmac string $secret [session_id]]
+        } else {
+            set token  [ns_sha1 [session_id]]
+        }
+        return $token
+    }
+
+    #
+    # Failure handling
+    #
+    ad_proc -private ::security::csrf::fail {} {
+    
+        This function is called, when a csrf validation fails. Unless the
+        current user is swa, it aborts the current request.
+        
+    } {
+        ad_log Warning "CSRF failure"
+        if {[acs_user::site_wide_admin_p]} {
+            ns_log notice "would abort if not swa: [ns_conn request]"
+        } else {
+            ad_page_contract_handle_datasource_error "Invalid request token (potential Cross-Site Request Forgery)"
+            ad_script_abort
+        }
+    }
 }
 
 #
