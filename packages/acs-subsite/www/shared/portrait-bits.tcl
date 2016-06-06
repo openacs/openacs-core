@@ -73,6 +73,7 @@ if { $item_id != 0} {
         # file by the if-clause above.
         #
         if {[file exists $filename]} {
+            ns_setexpires 86400 ;# 1 day
             ad_returnfile_background 200 $itemInfo(mime_type) $filename
         } else {
             ad_log warning "cannot show portrait with item_id $item_id for user $user_id "
