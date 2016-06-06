@@ -12,8 +12,7 @@ ad_page_contract {
     {view_by "group_type"}
 } -validate {
     view_by_valid_p {
-	set valid_view_by_list [list group_type rel_type]
-	if { [lsearch $valid_view_by_list $view_by] == -1} { 
+	if { $view_by ni {group_type rel_type}} { 
 	    ad_complain "view_by is invalid."
 	}
     }
