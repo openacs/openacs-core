@@ -1275,15 +1275,20 @@ ad_proc -public ad_get_client_property {
     {-session_id ""}
     module
     name
-} { 
-    Looks up a property for a session. If $cache is true, will use the
-    cached value if available. If $cache_only is true, will never
+} {
+    Looks up a property for a session. If -cache is true, will use the
+    cached value if available. If -cache_only is true, will never
     incur a database hit (i.e., will only return a value if
     cached). If the property is secure, we must be on a validated session
-    over SSL.
+    over HTTPS.
 
     @param session_id controls which session is used
-
+    @param module typically the name of the package to which the property
+           belongs (serves as a namespace)
+    @param name name of the property
+    @return value of the property or default
+    
+    @see ad_set_client_property
 } {
     if { $session_id eq "" } {
         set id [ad_conn session_id]
@@ -1329,17 +1334,20 @@ ad_proc -public ad_set_client_property {
     name
     value
 } { 
-    Sets a client (session-level) property. If $persistent is true,
-    the new value will be written through to the database. If
-    $deferred is true, the database write will be delayed until
-    connection close (although calls to ad_get_client_property will
-                      still return the correct value immediately). If $secure is true,
+    Sets a client (session-level) property. If -persistent is true,
+    the new value will be written through to the database (it will
+    survive a server restart, bit it will be slower). If -secure is true,
     the property will not be retrievable except via a validated,
     secure (HTTPS) connection.
 
     @param session_id controls which session is used
     @param clob tells us to use a large object to store the value
+    @param module typically the name of the package to which the property
+           belongs (serves as a namespace)
+    @param name name of the property
+    @param value value if the property
 
+    @see ad_get_client_property
 } {
 
     if { $secure != "f" && ![security::secure_conn_p] } {
