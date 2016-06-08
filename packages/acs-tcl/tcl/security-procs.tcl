@@ -334,9 +334,9 @@ ad_proc -public ad_user_logout {} {
 } {
     set domain [parameter::get -parameter CookieDomain -package_id [ad_acs_kernel_id]]
 
-    ad_unset_cookie -domain $domain -secure t ad_session_id
+    ad_unset_cookie -domain $domain -secure f ad_session_id
+    ad_unset_cookie -domain $domain -secure f ad_user_login
     ad_unset_cookie -domain $domain -secure t ad_secure_token
-    ad_unset_cookie -domain $domain -secure t ad_user_login
     ad_unset_cookie -domain $domain -secure t ad_user_login_secure
 }
 
