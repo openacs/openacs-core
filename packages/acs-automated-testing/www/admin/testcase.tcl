@@ -85,7 +85,7 @@ if {[llength $testcase_bodys] == 0} {
     #
     # Work out the URL for this directory (stripping off the file element).
     #
-    set url "[ad_conn url]"
+    set url [ad_conn url]
     regexp {(.*)/[^/]*} $url {\\1} url
     append url "/component?package_key=${package_key}"
 
