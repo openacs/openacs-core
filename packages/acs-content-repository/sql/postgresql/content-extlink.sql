@@ -74,10 +74,14 @@ BEGIN
       null,
       null,
       'text/plain',
+      null,      
       null,
-      null,
+      null,  -- data
+      null,  -- relation_tag
+      'f',   -- is_live      
       'text',
-      v_package_id
+      v_package_id,
+      't'    -- with_child_rels
   );
 
   insert into cr_extlinks
