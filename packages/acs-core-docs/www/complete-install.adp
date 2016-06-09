@@ -20,7 +20,7 @@ Unix-like system and supporting software</a></span></dt><dt><span class="sect1">
 PostgreSQL</a></span></dt><dt><span class="sect1"><a href="aolserver4">Install AOLserver
 4</a></span></dt><dt><span class="sect1"><a href="openacs">Install OpenACS
 5.7.0</a></span></dt><dt><span class="sect1"><a href="win2k-installation">OpenACS
-Installation Guide for Windows2000</a></span></dt><dt><span class="sect1"><a href="mac-installation">OpenACS
+Installation Guide for Windows</a></span></dt><dt><span class="sect1"><a href="mac-installation">OpenACS
 Installation Guide for Mac OS X</a></span></dt>
 </dl>
 </div>

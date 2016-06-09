@@ -76,7 +76,7 @@ occur over HTTPS.</p>
 <div class="titlepage"><div><div><h4 class="title">
 <a name="authentication-details" id="authentication-details"></a>Details</h4></div></div></div><p>The authentication system issues up to four signed cookies (see
 below), with each cookie serving a different purpose. These cookies
-are:</p><div class="informaltable"><table cellspacing="0" border="1">
+are:</p><div class="informaltable"><table class="informaltable" cellspacing="0" border="1">
 <colgroup>
 <col><col><col><col>
 </colgroup><tbody>
@@ -161,7 +161,7 @@ of three actions taken on it:</p><div class="itemizedlist"><ul class="itemizedli
 <li class="listitem"><p>set: cookie with no expiration is set</p></li><li class="listitem"><p>delete: set to "" with max age of 0, so it is expired
 immediately</p></li><li class="listitem"><p>nothing: if the cookie is present, it remains</p></li>
 </ul></div><p>The current state of the permanent login cookies is not taken
-into account when determining the appropriate action.</p><div class="informaltable"><table cellspacing="0" border="1">
+into account when determining the appropriate action.</p><div class="informaltable"><table class="informaltable" cellspacing="0" border="1">
 <colgroup>
 <col><col><col><col><col>
 </colgroup><tbody>

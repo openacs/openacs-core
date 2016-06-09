@@ -465,7 +465,7 @@ system, we want to reduce the implementation risk by breaking the
 implementation into phases.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="i18n-requirements-revision-history" id="i18n-requirements-revision-history"></a>Revision History</h3></div></div></div><div class="informaltable"><table cellspacing="0" border="1">
+<a name="i18n-requirements-revision-history" id="i18n-requirements-revision-history"></a>Revision History</h3></div></div></div><div class="informaltable"><table class="informaltable" cellspacing="0" border="1">
 <colgroup>
 <col><col><col><col>
 </colgroup><tbody>

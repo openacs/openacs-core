@@ -164,7 +164,7 @@ should be fairly small and simple.</p><p>In particular, constraining a <code cla
 has access to should not add more than one line to a query.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="permissions-requirements-history" id="permissions-requirements-history"></a>Revision History</h3></div></div></div><div class="informaltable"><table cellspacing="0" border="1">
+<a name="permissions-requirements-history" id="permissions-requirements-history"></a>Revision History</h3></div></div></div><div class="informaltable"><table class="informaltable" cellspacing="0" border="1">
 <colgroup>
 <col><col><col><col>
 </colgroup><tbody>

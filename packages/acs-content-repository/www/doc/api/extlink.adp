@@ -11,23 +11,22 @@ content_extlink</p>
 <li><a href="#overview">Overview</a></li><li><a href="#related">Related Objects</a></li><li><a href="#api">API</a></li>
 </ul>
 <p> </p>
-<h3><a name="overview">Overview</a></h3>
+<h3><a name="overview" id="overview">Overview</a></h3>
 <p>External links are references to content pages on other web
 sites. They provide the basis for maintaining a hierarchy of
 "bookmarks" that may be managed in a manner analogous to other
 content items. In particular, external links may be tagged with
 keywords and related to the site's own content items.</p>
 <p> </p>
-<h3><a name="related">Related Objects</a></h3>
+<h3><a name="related" id="related">Related Objects</a></h3>
 
-See also: {content_item }
+See also: {content_item}
 <p> </p>
-<h3><a name="api">API</a></h3>
-<ul><li>
-<font size="+1">Function:</font>
-content_extlink.is_extlink</li></ul>
-<p>Determines if the item is a extlink</p>
-<table cellpadding="3" cellspacing="0" border="0">
+<h3><a name="api" id="api">API</a></h3>
+<ul>
+<li>
+<font size="+1">Function:</font> content_extlink.is_extlink
+<p>Determines if the item is a extlink</p><table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr>
@@ -42,13 +41,11 @@ function is_extlink (
 </tt></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_extlink.new, content_extlink.resolve</td>
 </tr>
-</table>
-<p> </p>
-<ul><li>
-<font size="+1">Function:</font> content_extlink.new</li></ul>
+</table><p> </p>
+</li><li>
+<font size="+1">Function:</font> content_extlink.new
 <p>Create a new extlink, an item pointing to an off-site
-resource</p>
-<table cellpadding="3" cellspacing="0" border="0">
+resource</p><table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr>
@@ -97,12 +94,10 @@ function new (
 </tt></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>acs_object.new, content_item.new, content_extlink.resolve</td>
 </tr>
-</table>
-<p> </p>
-<ul><li>
-<font size="+1">Procedure:</font> content_extlink.delete</li></ul>
-<p>Deletes the extlink</p>
-<table cellpadding="3" cellspacing="0" border="0">
+</table><p> </p>
+</li><li>
+<font size="+1">Procedure:</font> content_extlink.delete
+<p>Deletes the extlink</p><table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1"><tr>
@@ -116,7 +111,8 @@ procedure delete (
 <th align="left" valign="top">See Also:</th><td>content_extlink.new, acs_object.delete</td>
 </tr>
 </table>
-<p> </p>
+</li>
+</ul>
 
-Last Modified: $&zwnj;Id: extlink.html,v 1.1.1.1 2001/03/13 22:59:26 ben
-Exp $
+Last Modified: $&zwnj;Id: extlink.html,v 1.1.1.1.30.1 2016/06/09 08:21:01
+gustafn Exp $

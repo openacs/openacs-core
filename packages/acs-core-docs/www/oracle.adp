@@ -939,7 +939,7 @@ section called &ldquo;Creating an appropriate tuning
 and monitoring environment&rdquo;</a></p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="install-oracle-defaults" id="install-oracle-defaults"></a>Defaults</h3></div></div></div><p>We used the following defaults while installing Oracle.</p><div class="informaltable"><table cellspacing="0" border="1">
+<a name="install-oracle-defaults" id="install-oracle-defaults"></a>Defaults</h3></div></div></div><p>We used the following defaults while installing Oracle.</p><div class="informaltable"><table class="informaltable" cellspacing="0" border="1">
 <colgroup>
 <col><col><col>
 </colgroup><thead><tr>

@@ -214,7 +214,7 @@ why:</p><pre class="programlisting">
 set bar ""
 set baz ""
 
-db_dml foo_create {insert into foo(bar, baz) values(:bar, :baz)}
+db_dml foo_create "insert into foo(bar, baz) values(:bar, :baz)"
 #
 # the values of the "bar" and "baz" columns in the new row are both
 # null, because Oracle has coerced the empty string (even for the
@@ -232,7 +232,7 @@ column value explicitly to <code class="computeroutput">null</code>, e.g.:</p><p
 set bar [db_null]
 set baz [db_null]
 
-db_dml foo_create {insert into foo(bar, baz) values(:bar, :baz)}
+db_dml foo_create "insert into foo(bar, baz) values(:bar, :baz)"
 #
 # sets the values for both the "bar" and "baz" columns to null
 </pre>
@@ -509,12 +509,12 @@ propagated.</p><p>Example:</p><pre class="programlisting">
 proc replace_the_foo { col } {
     db_transaction {
         db_dml delete {delete from foo}
-        db_dml insert {insert into foo(col) values($col)}
+        db_dml insert {insert into foo(col) values(:col)}
     }
 }
 
 proc print_the_foo {} {
-    doc_body_append "foo is [db_string get_foo {select col from foo}]&lt;br&gt;\n"
+    doc_body_append "foo is [db_string "select col from foo"]&lt;br&gt;\n"
 }
 
 replace_the_foo 8
@@ -585,7 +585,7 @@ set baz ""
 db_dml unused {delete from foo}
 db_dml unused {insert into foo(baz) values(:baz)}
 
-set n_rows [db_string unused {select count(*) from foo where baz is null}]
+set n_rows [db_string unused "select count(*) from foo where baz is null"]
 #
 # $n_rows is 1; in effect, the "baz is null" criterion is matching
 # the empty string we just inserted (because of Oracle's coercion
@@ -600,8 +600,8 @@ db_dml foo_insert {insert into foo(baz) values(:1)} {[db_nullify_empty_string $b
           
 </pre>
 </dd>
-</dl></div><div class="cvstag">($&zwnj;Id: db-api.xml,v 1.13 2009/07/12 01:08:30
-donb Exp $)</div>
+</dl></div><div class="cvstag">($&zwnj;Id: db-api.xml,v 1.13.8.1 2016/01/02 21:55:21
+gustafn Exp $)</div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="db-api-caching" id="db-api-caching"></a>Caching Database API Results</h3></div></div></div><p>The database API allows for direct caching of query results.

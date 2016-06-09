@@ -20,11 +20,10 @@ They are simply used to create links between content items.</p>
 See also: content_item, content_folder
 <p> </p>
 <h3><a name="api">API</a></h3>
-<ul><li>
-<font size="+1">Function:</font>
-content_symlink.is_symlink</li></ul>
-<p>Determines if the item is a symlink</p>
-<table cellpadding="3" cellspacing="0" border="0">
+<ul>
+<li>
+<font size="+1">Function:</font> content_symlink.is_symlink
+<p>Determines if the item is a symlink</p><table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr>
@@ -39,12 +38,10 @@ function is_symlink (
 </tt></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_symlink.new, content_symlink.resolve</td>
 </tr>
-</table>
-<p> </p>
-<ul><li>
-<font size="+1">Function:</font> content_symlink.new</li></ul>
-<p>Create a new symlink, linking two items</p>
-<table cellpadding="3" cellspacing="0" border="0">
+</table><p> </p>
+</li><li>
+<font size="+1">Function:</font> content_symlink.new
+<p>Create a new symlink, linking two items</p><table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr>
@@ -91,12 +88,10 @@ function new (
 </tt></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>acs_object.new, content_item.new, content_symlink.resolve</td>
 </tr>
-</table>
-<p> </p>
-<ul><li>
-<font size="+1">Function:</font> content_symlink.resolve</li></ul>
-<p>Resolves the symlink and returns the target item id.</p>
-<table cellpadding="3" cellspacing="0" border="0">
+</table><p> </p>
+</li><li>
+<font size="+1">Function:</font> content_symlink.resolve
+<p>Resolves the symlink and returns the target item id.</p><table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr>
@@ -112,13 +107,11 @@ function resolve (
 </tt></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_symlink.new, content_symlink.is_symlink</td>
 </tr>
-</table>
-<p> </p>
-<ul><li>
+</table><p> </p>
+</li><li>
 <font size="+1">Function:</font>
-content_symlink.resolve_content_type</li></ul>
-<p>Gets the content type of the target item.</p>
-<table cellpadding="3" cellspacing="0" border="0">
+content_symlink.resolve_content_type
+<p>Gets the content type of the target item.</p><table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Michael Pih</td>
 </tr><tr>
@@ -134,13 +127,11 @@ function resolve_content_type (
 </tt></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_symlink.resolve</td>
 </tr>
-</table>
-<p> </p>
-<ul><li>
-<font size="+1">Procedure:</font> content_symlink.copy</li></ul>
+</table><p> </p>
+</li><li>
+<font size="+1">Procedure:</font> content_symlink.copy
 <p>Copies the symlink itself to another folder, without resolving
-the symlink</p>
-<table cellpadding="3" cellspacing="0" border="0">
+the symlink</p><table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1">
@@ -158,12 +149,10 @@ procedure copy (
 </tt></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_symlink.new, content_item.copy</td>
 </tr>
-</table>
-<p> </p>
-<ul><li>
-<font size="+1">Procedure:</font> content_symlink.delete</li></ul>
-<p>Deletes the symlink</p>
-<table cellpadding="3" cellspacing="0" border="0">
+</table><p> </p>
+</li><li>
+<font size="+1">Procedure:</font> content_symlink.delete
+<p>Deletes the symlink</p><table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1"><tr>
@@ -177,7 +166,9 @@ procedure delete (
 <th align="left" valign="top">See Also:</th><td>content_symlink.new, acs_object.delete</td>
 </tr>
 </table>
+</li>
+</ul>
 <p> </p>
 
-Last Modified: $&zwnj;Id: symlink.html,v 1.2 2014/10/27 16:39:14 victorg
-Exp $
+Last Modified: $&zwnj;Id: symlink.html,v 1.2.2.1 2016/06/09 08:21:01
+gustafn Exp $

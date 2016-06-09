@@ -21,13 +21,12 @@ a website. All content items should subclass a content type.</p>
 See also: {Content Item }
 <p> </p>
 <h3><a name="api">API</a></h3>
-<ul><li>
-<font size="+1">Function:</font>
-content_type.create_attribute</li></ul>
+<ul>
+<li>
+<font size="+1">Function:</font> content_type.create_attribute
 <p>Create a new attribute for the specified type. Automatically
 create the column for the attribute if the column does not already
-exist.</p>
-<table cellpadding="3" cellspacing="0" border="0">
+exist.</p><table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr>
@@ -58,13 +57,11 @@ function create_attribute (
 </tt></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>acs_object_type.create_attribute, content_type.create_type</td>
 </tr>
-</table>
-<p> </p>
-<ul><li>
-<font size="+1">Function:</font> content_type.get_template</li></ul>
+</table><p> </p>
+</li><li>
+<font size="+1">Function:</font> content_type.get_template
 <p>Retrieve the appropriate template for rendering items of the
-specified type.</p>
-<table cellpadding="3" cellspacing="0" border="0">
+specified type.</p><table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr>
@@ -88,11 +85,9 @@ content_item.unregister_template, content_item.get_template,
 content_type.unregister_template, content_type.register_template,
 content_type.set_default_template</td>
 </tr>
-</table>
-<p> </p>
-<ul><li>
-<font size="+1">Function:</font>
-content_type.is_content_type</li></ul>
+</table><p> </p>
+</li><li>
+<font size="+1">Function:</font> content_type.is_content_type
 <table cellpadding="3" cellspacing="0" border="0">
 <tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><i>Not yet documented</i></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
 function is_content_type (
@@ -100,13 +95,11 @@ function is_content_type (
 ) return char;
 
 </tt></pre></td></tr>
-</table>
-<p> </p>
-<ul><li>
-<font size="+1">Procedure:</font> content_type.create_type</li></ul>
+</table><p> </p>
+</li><li>
+<font size="+1">Procedure:</font> content_type.create_type
 <p>Create a new content type. Automatically create the attribute
-table for the type if the table does not already exist.</p>
-<table cellpadding="3" cellspacing="0" border="0">
+table for the type if the table does not already exist.</p><table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1">
@@ -142,15 +135,12 @@ procedure create_type (
 </tt></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>acs_object_type.create_type</td>
 </tr>
-</table>
-<p> </p>
-<ul><li>
-<font size="+1">Procedure:</font>
-content_type.drop_attribute</li></ul>
+</table><p> </p>
+</li><li>
+<font size="+1">Procedure:</font> content_type.drop_attribute
 <p>Drop an existing attribute. If you are using CMS, make sure to
 call <tt>cm_form_widget.unregister_attribute_widget</tt> before
-calling this function.</p>
-<table cellpadding="3" cellspacing="0" border="0">
+calling this function.</p><table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1">
@@ -174,14 +164,11 @@ procedure drop_attribute (
 <th align="left" valign="top">See Also:</th><td>acs_object.drop_attribute, content_type.create_attribute,
 cm_form_widget.unregister_attribute_widget</td>
 </tr>
-</table>
-<p> </p>
-<ul><li>
-<font size="+1">Procedure:</font>
-content_type.refresh_view</li></ul>
+</table><p> </p>
+</li><li>
+<font size="+1">Procedure:</font> content_type.refresh_view
 <p>Create a view for the type which joins all attributes of the
 type, including the inherited attributes. The view is named "</p>
-
 X" Called by create_attribute and create_type.
 <table name="" for="" content_type="">
 <tr><td></td></tr><tr>
@@ -196,16 +183,14 @@ procedure refresh_view (
 </tt></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_type.create_type</td>
 </tr>
-</table>
-<p> </p>
-<ul><li>
+</table><p> </p>
+</li><li>
 <font size="+1">Procedure:</font>
-content_type.register_child_type</li></ul>
+content_type.register_child_type
 <p>Register a parent-child relationship between a content type and
 another object type. This may then be used by the
 content_item.is_valid_relation function to validate the
-relationship between an item and a potential child.</p>
-<table cellpadding="3" cellspacing="0" border="0">
+relationship between an item and a potential child.</p><table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1">
@@ -236,11 +221,10 @@ procedure register_child_type (
 <th align="left" valign="top">See Also:</th><td>content_type.register_relation_type,
 content_type.register_child_type</td>
 </tr>
-</table>
-<p> </p>
-<ul><li>
+</table><p> </p>
+</li><li>
 <font size="+1">Procedure:</font>
-content_type.register_mime_type</li></ul>
+content_type.register_mime_type
 <table cellpadding="3" cellspacing="0" border="0">
 <tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><i>Not yet documented</i></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
 procedure register_mime_type (
@@ -249,16 +233,14 @@ procedure register_mime_type (
 );
 
 </tt></pre></td></tr>
-</table>
-<p> </p>
-<ul><li>
+</table><p> </p>
+</li><li>
 <font size="+1">Procedure:</font>
-content_type.register_relation_type</li></ul>
+content_type.register_relation_type
 <p>Register a relationship between a content type and another
 object type. This may then be used by the
 content_item.is_valid_relation function to validate any
-relationship between an item and another object.</p>
-<table cellpadding="3" cellspacing="0" border="0">
+relationship between an item and another object.</p><table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1">
@@ -289,14 +271,12 @@ procedure register_relation_type (
 </tt></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_type.unregister_relation_type</td>
 </tr>
-</table>
-<p> </p>
-<ul><li>
+</table><p> </p>
+</li><li>
 <font size="+1">Procedure:</font>
-content_type.register_template</li></ul>
+content_type.register_template
 <p>Register a template for the content type. This template may be
-used to render all items of that type.</p>
-<table cellpadding="3" cellspacing="0" border="0">
+used to render all items of that type.</p><table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1">
@@ -325,15 +305,13 @@ content_item.unregister_template, content_item.get_template,
 content_type.unregister_template,
 content_type.set_default_template, content_type.get_template</td>
 </tr>
-</table>
-<p> </p>
-<ul><li>
+</table><p> </p>
+</li><li>
 <font size="+1">Procedure:</font>
-content_type.set_default_template</li></ul>
+content_type.set_default_template
 <p>Make the registered template a default template. The default
 template will be used to render all items of the type for which no
-individual template is registered.</p>
-<table cellpadding="3" cellspacing="0" border="0">
+individual template is registered.</p><table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1">
@@ -358,16 +336,14 @@ content_item.unregister_template, content_item.get_template,
 content_type.unregister_template, content_type.register_template,
 content_type.get_template</td>
 </tr>
-</table>
-<p> </p>
-<ul><li>
+</table><p> </p>
+</li><li>
 <font size="+1">Procedure:</font>
-content_type.unregister_child_type</li></ul>
+content_type.unregister_child_type
 <p>Register a parent-child relationship between a content type and
 another object type. This may then be used by the
 content_item.is_valid_relation function to validate the
-relationship between an item and a potential child.</p>
-<table cellpadding="3" cellspacing="0" border="0">
+relationship between an item and a potential child.</p><table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1">
@@ -389,11 +365,10 @@ procedure unregister_child_type (
 <th align="left" valign="top">See Also:</th><td>content_type.register_relation_type,
 content_type.register_child_type</td>
 </tr>
-</table>
-<p> </p>
-<ul><li>
+</table><p> </p>
+</li><li>
 <font size="+1">Procedure:</font>
-content_type.unregister_mime_type</li></ul>
+content_type.unregister_mime_type
 <table cellpadding="3" cellspacing="0" border="0">
 <tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><i>Not yet documented</i></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
 procedure unregister_mime_type (
@@ -402,14 +377,12 @@ procedure unregister_mime_type (
 );
 
 </tt></pre></td></tr>
-</table>
-<p> </p>
-<ul><li>
+</table><p> </p>
+</li><li>
 <font size="+1">Procedure:</font>
-content_type.unregister_relation_type</li></ul>
+content_type.unregister_relation_type
 <p>Unregister a relationship between a content type and another
-object type.</p>
-<table cellpadding="3" cellspacing="0" border="0">
+object type.</p><table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1">
@@ -432,15 +405,13 @@ procedure unregister_relation_type (
 </tt></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_type.register_relation_type</td>
 </tr>
-</table>
-<p> </p>
-<ul><li>
+</table><p> </p>
+</li><li>
 <font size="+1">Procedure:</font>
-content_type.unregister_template</li></ul>
+content_type.unregister_template
 <p>Unregister a template. If the unregistered template was the
 default template, the content_type can no longer be rendered in the
-use_context,</p>
-<table cellpadding="3" cellspacing="0" border="0">
+use_context,</p><table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1">
@@ -464,8 +435,9 @@ content_item.unregister_template, content_item.get_template,
 content_type.set_default_template, content_type.register_template,
 content_type.get_template</td>
 </tr>
-</table>
-<p> </p>
+</table><p> </p>
+</li>
+</ul>
 
-Last Modified: $&zwnj;Id: type.html,v 1.1.1.1 2001/03/13 22:59:26 ben Exp
-$
+Last Modified: $&zwnj;Id: type.html,v 1.1.1.1.30.1 2016/06/09 08:21:01
+gustafn Exp $

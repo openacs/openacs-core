@@ -6,7 +6,8 @@
 <p>
 <a href="../index">Content Repository</a> : content</p>
 <hr>
-<ul><li>Function content.blob_to_string</li></ul>
+<ul>
+<li>Function content.blob_to_string
 <table cellpadding="3" cellspacing="0" border="0">
 <tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><i>Not yet documented</i></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
 function blob_to_string(
@@ -20,7 +21,7 @@ name
 
 </tt></pre></td></tr>
 </table>
-<ul><li>Procedure content.blob_to_file</li></ul>
+</li><li>Procedure content.blob_to_file
 <table cellpadding="3" cellspacing="0" border="0">
 <tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><i>Not yet documented</i></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
 procedure blob_to_file(
@@ -34,7 +35,7 @@ name
 
 </tt></pre></td></tr>
 </table>
-<ul><li>Procedure content.string_to_blob</li></ul>
+</li><li>Procedure content.string_to_blob
 <table cellpadding="3" cellspacing="0" border="0">
 <tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><i>Not yet documented</i></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
 procedure string_to_blob(
@@ -48,7 +49,7 @@ name
 
 </tt></pre></td></tr>
 </table>
-<ul><li>Procedure content.string_to_blob_size</li></ul>
+</li><li>Procedure content.string_to_blob_size
 <table cellpadding="3" cellspacing="0" border="0">
 <tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><i>Not yet documented</i></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
 procedure string_to_blob_size(
@@ -62,5 +63,7 @@ name
 
 </tt></pre></td></tr>
 </table>
-<p>Last Modified: $&zwnj;Id: content.html,v 1.1.1.1 2001/03/13 22:59:26
-ben Exp $</p>
+</li>
+</ul>
+<p>Last Modified: $&zwnj;Id: content.html,v 1.1.1.1.30.1 2016/06/09
+08:21:01 gustafn Exp $</p>

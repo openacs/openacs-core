@@ -725,8 +725,8 @@ sorts of other things we haven't gotten to yet. Now, in your Tcl
 pages and your ps/sql code, you can...
 <table border="1" cellpadding="1" cellspacing="0">
 <tr>
-<th>Get latest revision (Tcl)</th><td>set live_revision_id [db_exec_plsql get_live_revision "select
-content_item__get_live_revision(:item_id)"]</td>
+<th>Get latest revision (Tcl)</th><td>set live_revision_id [db_exec_plsql get_live_revision {select
+content_item__get_live_revision(:item_id)}]</td>
 </tr><tr>
 <th>Get latest revision (pl/sql)</th><td>live_revision_id :=
 content_item__get_live_revision(:item_id);</td>

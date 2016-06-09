@@ -16,7 +16,7 @@ victorg Exp $)</div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 		    leftLink="win2k-installation" leftLabel="Prev" leftTitle="OpenACS Installation Guide for
-Windows2000"
+Windows"
 		    rightLink="configuring-new-site" rightLabel="Next" rightTitle="
 Chapter 4. Configuring a new OpenACS
 Site"

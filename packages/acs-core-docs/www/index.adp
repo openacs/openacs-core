@@ -9,7 +9,7 @@
 		<div class="book">
 <div class="titlepage">
 <div><div><h1 class="title">
-<a name="idp140400202299216" id="idp140400202299216"></a>OpenACS Core Documentation</h1></div></div><hr>
+<a name="idp140722818749440" id="idp140722818749440"></a>OpenACS Core Documentation</h1></div></div><hr>
 </div><div class="toc">
 <p><b>Table of Contents</b></p><dl class="toc">
 <dt><span class="part"><a href="for-everyone">I. OpenACS For
@@ -33,7 +33,7 @@ Unix-like system and supporting software</a></span></dt><dt><span class="sect1">
 PostgreSQL</a></span></dt><dt><span class="sect1"><a href="aolserver4">Install AOLserver
 4</a></span></dt><dt><span class="sect1"><a href="openacs">Install OpenACS
 5.7.0</a></span></dt><dt><span class="sect1"><a href="win2k-installation">OpenACS
-Installation Guide for Windows2000</a></span></dt><dt><span class="sect1"><a href="mac-installation">OpenACS
+Installation Guide for Windows</a></span></dt><dt><span class="sect1"><a href="mac-installation">OpenACS
 Installation Guide for Mac OS X</a></span></dt>
 </dl></dd><dt><span class="chapter"><a href="configuring-new-site">4.
 Configuring a new OpenACS Site</a></span></dt><dd><dl>

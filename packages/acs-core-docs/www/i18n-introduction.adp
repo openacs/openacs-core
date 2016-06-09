@@ -78,7 +78,8 @@ localization.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-
 <p>The <span class="strong"><strong>short</strong></span>:
 <code class="computeroutput">#<span class="replaceable"><span class="replaceable">package_key.message_key</span></span>#</code>
 </p><p>The advantage of the short syntax is that it's short. It's as
-simple as inserting the value of a variable. Example: <span class="replaceable"><span class="replaceable"><span>#</span>forum.title#</span></span>
+simple as inserting the value of a variable. Example: <span class="replaceable"><span class="replaceable">
+<span style="color: red">&lt;span&gt;#&lt;/span&gt;</span>forum.title#</span></span>
 </p>
 </li><li class="listitem">
 <p>The <span class="strong"><strong>verbose</strong></span>:
@@ -209,23 +210,25 @@ case, instead of storing the real text in the parameter, you should
 use message keys using the short notation above, i.e. <span class="strong"><strong>#<span class="emphasis"><em>package_key.message_key</em></span>#</strong></span>.</p><p>In order to avoid clashes with other uses of the hash character,
 you need to tell the APM that the parameter value needs to be
 localized when retrieving it. You do that by saying: <span class="strong"><strong>parameter::get -localize</strong></span>.</p><p>Here are a couple of examples. Say we have the following two
-parameters, taken directly from the dotlrn package.</p><div class="informaltable"><table cellspacing="0" border="1">
+parameters, taken directly from the dotlrn package.</p><div class="informaltable"><table class="informaltable" cellspacing="0" border="1">
 <colgroup>
 <col class="c1"><col class="c2">
 </colgroup><thead><tr>
 <th>Parameter Name</th><th>Parameter Value</th>
 </tr></thead><tbody>
 <tr>
-<td>class_instance_pages_csv</td><td><span>#</span>dotlrn.class_page_home_title#,Simple
-2-Column;<span>#</span>dotlrn.class_page_calendar_title#,Simple
-1-Column;<span>#</span>dotlrn.class_page_file_storage_title#,Simple
+<td>class_instance_pages_csv</td><td>
+<span style="color: red">&lt;span&gt;#&lt;/span&gt;</span>dotlrn.class_page_home_title#,Simple
+2-Column;<span style="color: red">&lt;span&gt;#&lt;/span&gt;</span>dotlrn.class_page_calendar_title#,Simple
+1-Column;<span style="color: red">&lt;span&gt;#&lt;/span&gt;</span>dotlrn.class_page_file_storage_title#,Simple
 1-Column</td>
 </tr><tr>
-<td>departments_pretty_name</td><td><span>#</span>departments_pretty_name#</td>
+<td>departments_pretty_name</td><td>
+<span style="color: red">&lt;span&gt;#&lt;/span&gt;</span>departments_pretty_name#</td>
 </tr>
 </tbody>
 </table></div><p>Then, depending on how we retrieve the value, here's what we
-get:</p><div class="informaltable"><table cellspacing="0" border="1">
+get:</p><div class="informaltable"><table class="informaltable" cellspacing="0" border="1">
 <colgroup>
 <col class="c1"><col class="c2">
 </colgroup><thead><tr>
@@ -239,7 +242,8 @@ class_instances_pages_csv</td><td>Kurs Startseite,Simple 2-Column;Kalender,Simpl
 <td>parameter::get <span class="strong"><strong>-localize</strong></span> -parameter
 departments_pretty_name</td><td>Abteilung</td>
 </tr><tr>
-<td>parameter::get -parameter departments_pretty_name</td><td><span>#</span>departments_pretty_name#</td>
+<td>parameter::get -parameter departments_pretty_name</td><td>
+<span style="color: red">&lt;span&gt;#&lt;/span&gt;</span>departments_pretty_name#</td>
 </tr>
 </tbody>
 </table></div><p>The value in the rightmost column in the table above is the

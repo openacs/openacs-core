@@ -77,7 +77,7 @@ application developer. Until the implementation of the general
 permissions system, every OpenACS application had to manage access
 control to its data separately. Later on, a notion of "scoping" was
 introduced into the core data model.</p><p>"Scope" is a term best explained by example. Consider some
-hypothetical rows in the <code class="computeroutput">address_book</code> table:</p><div class="informaltable"><table cellspacing="0" border="1">
+hypothetical rows in the <code class="computeroutput">address_book</code> table:</p><div class="informaltable"><table class="informaltable" cellspacing="0" border="1">
 <colgroup>
 <col><col><col><col>
 </colgroup><tbody>
@@ -435,7 +435,7 @@ application level SQL queries?</p>
 </dl></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="object-system-requirements-history" id="object-system-requirements-history"></a>Revision History</h3></div></div></div><div class="informaltable"><table cellspacing="0" border="1">
+<a name="object-system-requirements-history" id="object-system-requirements-history"></a>Revision History</h3></div></div></div><div class="informaltable"><table class="informaltable" cellspacing="0" border="1">
 <colgroup>
 <col><col><col><col>
 </colgroup><tbody>

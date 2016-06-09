@@ -25,9 +25,9 @@ pages to complete installation (see <a class="xref" href="openacs" title="Instal
 </ol></div><p>Specific instructions are available for Mac OS X and Windows2000
 (see <a class="xref" href="mac-installation" title="OpenACS Installation Guide for Mac OS X">the section called
 &ldquo;OpenACS Installation Guide for Mac OS
-X&rdquo;</a> or <a class="xref" href="win2k-installation" title="OpenACS Installation Guide for Windows2000">the section called
+X&rdquo;</a> or <a class="xref" href="win2k-installation" title="OpenACS Installation Guide for Windows">the section called
 &ldquo;OpenACS Installation Guide for
-Windows2000&rdquo;</a>).</p><div class="sect2">
+Windows&rdquo;</a>).</p><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="install-rpms" id="install-rpms"></a>Binaries and other shortcuts</h3></div></div></div><p>You can try out OpenACS using some binary installers. In
 general, they are not yet supported by the community, so they are
@@ -106,9 +106,9 @@ export OPENACS_SERVICE_NAME=<span class="replaceable"><span class="replaceable">
 </ul></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140400234971392" id="idp140400234971392"></a>Paths and Users</h3></div></div></div><div class="table">
-<a name="idp140400234972032" id="idp140400234972032"></a><p class="title"><b>Table 2.1. Default
-directories for a standard install</b></p><div class="table-contents"><table summary="Default directories for a standard install" cellspacing="0" width="100%" border="1">
+<a name="idp140722829601824" id="idp140722829601824"></a>Paths and Users</h3></div></div></div><div class="table">
+<a name="idp140722829602464" id="idp140722829602464"></a><p class="title"><b>Table 2.1. Default
+directories for a standard install</b></p><div class="table-contents"><table class="table" summary="Default directories for a standard install" cellspacing="0" width="100%" border="1">
 <colgroup>
 <col><col>
 </colgroup><tbody>
@@ -118,7 +118,7 @@ directories for a standard install</b></p><div class="table-contents"><table sum
 <td>name of administrative access account</td><td>remadmin</td>
 </tr><tr>
 <td>OpenACS service</td><td>
-<a class="indexterm" name="idp140400234976640" id="idp140400234976640"></a><span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span> (set to service0
+<a class="indexterm" name="idp140722829607072" id="idp140722829607072"></a><span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span> (set to service0
 in default install)</td>
 </tr><tr>
 <td>OpenACS service account</td><td><span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span></td>

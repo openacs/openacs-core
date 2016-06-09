@@ -18,7 +18,7 @@ and webserver to work. Many additional programs, such as a build
 environment, Mail Transport Agent, and source control system, are
 also needed for a fully effective installation.</p><div class="table">
 <a name="compatibility-matrix" id="compatibility-matrix"></a><p class="title"><b>Table 2.2. Version
-Compatibility Matrix</b></p><div class="table-contents"><table summary="Version Compatibility Matrix" cellspacing="0" border="1">
+Compatibility Matrix</b></p><div class="table-contents"><table class="table" summary="Version Compatibility Matrix" cellspacing="0" border="1">
 <colgroup>
 <col class="c1"><col class="c2"><col class="3.2.5"><col class="4.5"><col class="4.6"><col class="4.6.1"><col class="4.6.2"><col class="4.6.3"><col class="5.0"><col class="5.1">
 </colgroup><thead><tr>
@@ -102,10 +102,10 @@ suggest you use <strong class="userinput"><code>wget</code></strong> to download
 &ldquo;OpenACS Installation Guide for Mac OS
 X&rdquo;</a>
 </p></li><li class="listitem"><p>
-<b>Windows/VMWare. </b><a class="xref" href="win2k-installation" title="OpenACS Installation Guide for Windows2000">the section called
+<b>Windows/VMWare. </b><a class="xref" href="win2k-installation" title="OpenACS Installation Guide for Windows">the section called
 &ldquo;OpenACS Installation Guide for
-Windows2000&rdquo;</a> The only way to run OpenACS on Windows
-is through the VMWare emulator. (Please let me know if you have
+Windows&rdquo;</a> The only way to run OpenACS on Windows is
+through the VMWare emulator. (Please let me know if you have
 OpenACS running directly in Windows.)</p></li>
 </ul></div>
 </li><li class="listitem">

@@ -217,9 +217,9 @@ select * from :table_name
 Useful</strong></span></p><p>Why bother with bind variables at all - why not just write the
 Tcl statement above like this:</p><pre class="programlisting">
 
-db_dml presentation_delete {
-    delete from wp_presentations where presentation_id = :some_presentation_id
-}
+db_dml presentation_delete "
+    delete from wp_presentations where presentation_id = $some_presentation_id
+"
 
 </pre><p>(Note the use of double-quotes to allow the variable reference
 to <code class="computeroutput">$some_presentation_id</code> to be
@@ -498,7 +498,7 @@ db_dml insert_photos {
         insert photos(photo_id, image, thumbnail_image)
         values(photo_id_seq.nextval, empty_blob(), empty_blob())
         returning image, thumbnail_image into :1, :2
-    }  -blob_files [list "/var/tmp/the_photo" "/var/tmp/the_thumbnail"] 
+    } -blob_files [list "/var/tmp/the_photo" "/var/tmp/the_thumbnail"] 
 
 </pre><p>This inserts a new row into the <code class="computeroutput">photos</code> table, with the contents of the
 files <code class="computeroutput">/var/tmp/the_photo</code> and
@@ -541,12 +541,12 @@ propagated.</p><p>Example:</p><pre class="programlisting">
 proc replace_the_foo { col } {
     db_transaction {
         db_dml delete {delete from foo}
-        db_dml insert {insert into foo(col) values(:col)}
+        db_dml insert {insert into foo(col) values($col)}
     }
 }
 
 proc print_the_foo {} {
-    doc_body_append "foo is [db_string get_foo {select col from foo}]&lt;br&gt;\n"
+    doc_body_append "foo is [db_string "select col from foo"]&lt;br&gt;\n"
 }
 
 replace_the_foo 8
@@ -699,8 +699,8 @@ user.</p><p>The nsv containing the list is initialized by the bootstrap
 script and should never be referenced directly by user code.
 Returns the current rdbms type and version.</p>
 </dd>
-</dl></div><div class="cvstag">($&zwnj;Id: db-api.xml,v 1.11 2014/10/27 16:39:31
-victorg Exp $)</div>
+</dl></div><div class="cvstag">($&zwnj;Id: db-api.xml,v 1.11.2.1 2016/01/02 21:55:21
+gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

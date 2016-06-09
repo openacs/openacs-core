@@ -126,7 +126,7 @@ the same time.</p>
 <div class="titlepage"><div><div><h3 class="title">
 <a name="permissions-object-context" id="permissions-object-context"></a>Object Context</h3></div></div></div><p>In OpenACS 5.7.0, object context is a scoping mechanism.
 "Scoping" and "scope" are terms best explained by example: consider
-some hypothetical rows in the <code class="computeroutput">address_book</code> table:</p><div class="informaltable"><table cellspacing="0" border="1">
+some hypothetical rows in the <code class="computeroutput">address_book</code> table:</p><div class="informaltable"><table class="informaltable" cellspacing="0" border="1">
 <colgroup>
 <col><col><col><col><col>
 </colgroup><thead><tr>

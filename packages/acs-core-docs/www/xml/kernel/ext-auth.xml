@@ -904,8 +904,7 @@ module</ulink> for Zope
   </sect2>
 
   <sect2 id="Feedbac"><title>Feedback</title>
-    <para>We'd really appreciate feedback on this proposal. Please
-follow up at
+    <para>We'd really appreciate feedback on this proposal. Please follow up at
 <ulink url="http://openacs.org/forums/message-view?message_id=97341">this
 openacs.org forums thread</ulink>.</para>
   </sect2>
@@ -949,5 +948,5 @@ CAS</ulink>, a centrl authentication service a' la
       </tgroup>
     </informaltable>
   </sect2>
-  </sect1>
+</sect1>
 

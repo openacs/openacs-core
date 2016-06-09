@@ -113,7 +113,7 @@ implementation, for aiding and guiding yourself or other
 programmers.</em></span></p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="yourpackage-revision-history" id="yourpackage-revision-history"></a>Revision History</h3></div></div></div><div class="informaltable"><table cellspacing="0" border="1">
+<a name="yourpackage-revision-history" id="yourpackage-revision-history"></a>Revision History</h3></div></div></div><div class="informaltable"><table class="informaltable" cellspacing="0" border="1">
 <colgroup>
 <col><col><col><col>
 </colgroup><thead><tr>

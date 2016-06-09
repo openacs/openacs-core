@@ -151,7 +151,7 @@ retrieved through use of the ad_conn procedure. The following
 variables are available for public use. If the ad_conn procedure
 doesn't recognize a variable being passed to it for a lookup, it
 tries to get a value using ns_conn. This guarantees that ad_conn
-subsumes the functionality of ns_conn.</p><div class="informaltable"><table cellspacing="0" border="0">
+subsumes the functionality of ns_conn.</p><div class="informaltable"><table class="informaltable" cellspacing="0" border="0">
 <colgroup>
 <col class="c1"><col class="c2">
 </colgroup><tbody>

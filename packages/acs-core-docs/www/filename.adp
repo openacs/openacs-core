@@ -178,7 +178,7 @@ the following roles as they may apply:</p><div class="itemizedlist"><ul class="i
 <div class="titlepage"><div><div><h3 class="title">
 <a name="yourpackage-design-revision-history" id="yourpackage-design-revision-history"></a>Revision History</h3></div></div></div><p><span class="emphasis"><em>The revision history table below is
 for this template - modify it as needed for your actual design
-document.</em></span></p><div class="informaltable"><table cellspacing="0" border="1">
+document.</em></span></p><div class="informaltable"><table class="informaltable" cellspacing="0" border="1">
 <colgroup>
 <col><col><col><col>
 </colgroup><thead><tr>

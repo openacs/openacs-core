@@ -122,7 +122,7 @@ file's topmost element is a <code class="computeroutput">sect1</code>.</p>
 <div class="titlepage"><div><div><h3 class="title">
 <a name="psgml-mode-usage" id="psgml-mode-usage"></a>How to use it</h3></div></div></div><p>Of course, you should read the emacs texinfo pages that come
 with PSGML mode from start to finish. Barring that, here are some
-handy commands:</p><div class="informaltable"><table cellspacing="0" border="0">
+handy commands:</p><div class="informaltable"><table class="informaltable" cellspacing="0" border="0">
 <colgroup>
 <col><col>
 </colgroup><thead><tr>

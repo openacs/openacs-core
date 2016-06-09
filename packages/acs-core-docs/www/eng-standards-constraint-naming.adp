@@ -32,7 +32,7 @@ name.</p>
 with the following abbreviations taken from Oracle Docs at
 <a class="ulink" href="http://oradoc.photo.net/ora81/DOC/server.815/a67779/ch4e.htm#8953" target="_top">http://oradoc.photo.net/ora81/DOC/server.815/a67779/ch4e.htm#8953</a>.
 Note that we shortened all of the constraint abbrevations to two
-characters to save room.</p><div class="informaltable"><table cellspacing="0" border="1">
+characters to save room.</p><div class="informaltable"><table class="informaltable" cellspacing="0" border="1">
 <colgroup>
 <col><col>
 </colgroup><thead><tr>
