@@ -2,7 +2,7 @@
 <property name="context">@context;literal@</property>
 <property name="doc(title)">@role_props.pretty_name;literal@</property>
 
-<p><b>Properties:</b>
+<p><strong>Properties:</strong>
 <ul>
   <li> Role: @role@
   <li> Pretty name: @role_props.pretty_name@
@@ -10,7 +10,7 @@
   <li> <a href="edit?role=@role_enc@">Edit properties</a>
 </ul>
 
-<p><b>Relationship types that use this role:</b>
+<p><strong>Relationship types that use this role:</strong>
 
 <ul>
   <if @rels:rowcount@ eq 0>
@@ -22,7 +22,7 @@
   </else>
 </ul>
 
-<p><b>Administration</b>
+<p><strong>Administration</strong>
 
 <ul>
   <if @rels:rowcount@ eq 0>

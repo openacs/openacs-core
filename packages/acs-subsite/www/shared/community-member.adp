@@ -18,7 +18,7 @@
 </else>
 
 <p>
-  #acs-subsite.A_member_of_the_system# <b>@pretty_creation_date@</b>.
+  #acs-subsite.A_member_of_the_system# <strong>@pretty_creation_date@</strong>.
 </p>
 
 <if @member_state@ eq "deleted">
@@ -39,7 +39,7 @@
 </else>
 
 <p>
-  <b>#acs-subsite.Name#:</b> @first_names@ @last_name@
+  <strong>#acs-subsite.Name#:</strong> @first_names@ @last_name@
 </p>
 
 <if @show_email_p@ true>
@@ -48,14 +48,14 @@
 
 <if @verified_user_id@ ne 0 and @url@ not nil>
   <p>
-    <b>#acs-subsite.Home_page#:</b> 
+    <strong>#acs-subsite.Home_page#:</strong> 
     <a href="@url@">@url@</a>
   </p>
 </if>
 
 <if @verified_user_id@ ne 0 and @bio@ not nil>
   <p>
-    <b>#acs-subsite.Biography#:</b>
+    <strong>#acs-subsite.Biography#:</strong>
    </p>
    <blockquote>
      @bio;noquote@

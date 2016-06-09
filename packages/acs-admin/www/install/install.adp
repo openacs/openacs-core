@@ -21,4 +21,4 @@
   <listtemplate name="packages"></listtemplate>
 </else>
 
-<p> <b>&raquo;</b> <a href=".">Go back to software installation</a>
+<p> <strong>&raquo;</strong> <a href=".">Go back to software installation</a>

@@ -16,27 +16,27 @@
 		    <tr>
 		      <td>
 			<center>
-			<b>ACCOUNT ONE</b>
+			<strong>ACCOUNT ONE</strong>
 			  <p/>
 			  <img style="border:2" width="80" height="80" src="@one_img_src@" alt="Portrait of @user_id@">
-			    <h3>General Information of user one (<b>@one_email@</b>):</h3>
+			    <h3>General Information of user one (<strong>@one_email@</strong>):</h3>
 			</center>
 			<ul>
 			  <li>
 			    Name:
-			    <i>@one_first_names@ @one_last_name@</i>
+			    <em>@one_first_names@ @one_last_name@</em>
 			  </li>
 			  <li>
 			    Email:
-			    <b><a href="mailto:@one_email@">@one_email@</a></b>
+			    <strong><a href="mailto:@one_email@">@one_email@</a></strong>
 			  </li>
 			  <li>
 			    Scren name:
-			    <b>@one_screen_name@</b>
+			    <strong>@one_screen_name@</strong>
 			  </li>
 			  <li>
 			    Username:
-			    <b>@one_username@</b>
+			    <strong>@one_username@</strong>
 			  </li>
 			  <li>
 			    User id:
@@ -109,7 +109,7 @@
 		<tr>
 		  <td>
 		    <center>		  
-		      <b>Which is the good account?</b>
+		      <strong>Which is the good account?</strong>
 		      <p/>
 			<input type="radio" name="merge_action" value="0">
 			  <img src="/resources/acs-admin/left.gif" alt="left one">
@@ -145,27 +145,27 @@
 		    <tr>
 		      <td>
 			<center>
-			  <b>ACCOUNT TWO</b>
+			  <strong>ACCOUNT TWO</strong>
 			  <p/>
 			    <img style="border:2" width="80" height="80" src="@two_img_src@" alt="Portrait of @user_id_from_search@">
-			    <h3>General Information of user two (<b>@two_email@</b>):</h3>
+			    <h3>General Information of user two (<strong>@two_email@</strong>):</h3>
 			</center>
 			<ul>
 			  <li>
 			    Name:
-			    <i>@two_first_names@ @two_last_name@</i>
+			    <em>@two_first_names@ @two_last_name@</em>
 			  </li>
 			  <li>
 			    Email:
-			    <b><a href="mailto:@two_email@">@two_email@</a></b>
+			    <strong><a href="mailto:@two_email@">@two_email@</a></strong>
 			  </li>
 			  <li>
 			    Scren name:
-			    <b>@two_screen_name@</b>
+			    <strong>@two_screen_name@</strong>
 			  </li>
 			  <li>
 			    Username:
-			    <b>@two_username@</b>
+			    <strong>@two_username@</strong>
 			  </li>
 			  <li>
 			    User id:

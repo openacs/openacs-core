@@ -22,7 +22,7 @@
 <else>
   <p> #acs-subsite.No_package_parameters# </p>
   <if @return_url@ not nil>
-    <p> <b>&raquo;</b> <a href="@return_url@">#acs-subsite.Go_back#</a> </p>
+    <p> <strong>&raquo;</strong> <a href="@return_url@">#acs-subsite.Go_back#</a> </p>
   </if>
 </else>
 

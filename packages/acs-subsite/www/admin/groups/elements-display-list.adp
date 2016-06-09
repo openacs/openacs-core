@@ -9,7 +9,7 @@
         <if @member_state@ ne @possible_member_states.val@>
             <a href="@possible_member_states.url@">@possible_member_states.label@</a>
         </if><else>
-            <b>@possible_member_states.label@</b>
+            <strong>@possible_member_states.label@</strong>
         </else>
 
     </multiple>

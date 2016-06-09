@@ -5,7 +5,7 @@
 <p>#acs-mail-lite.Bounce_disabled#</p>
 
 <p>
-  <b>&raquo;</b> <a href="@return_url@">#acs-subsite.Continue#</a>
+  <strong>&raquo;</strong> <a href="@return_url@">#acs-subsite.Continue#</a>
 </p>
 
 

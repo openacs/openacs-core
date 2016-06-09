@@ -44,7 +44,7 @@
 <h4>Properties of this type of relationship</h4>
 
 <ul>
-  <li> <b>Side One:</b>
+  <li> <strong>Side One:</strong>
   <ul>
     <li> Object Type: <a href="../object-types/one?object_type=@properties.object_type_one@">@properties.object_type_one_pretty_name@</a>
     <li> Role: <a href="roles/one?role=<%=[ad_urlencode $properties(role_one)]%>">@properties.role_one_pretty_name@</a>
@@ -62,7 +62,7 @@
 </else>
   </ul>
 
-  <p><li> <b>Side Two:</b>
+  <p><li> <strong>Side Two:</strong>
   <ul>
     <li> Object Type: <a href="../object-types/one?object_type=@properties.object_type_two@">@properties.object_type_two_pretty_name@</a>
     <li> Role: <a href="roles/one?role=<%=[ad_urlencode $properties(role_two)]%>">@properties.role_two_pretty_name@</a>

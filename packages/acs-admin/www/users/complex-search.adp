@@ -13,7 +13,7 @@
     </multiple>
     </ul>
   </if><else>
-    for users matching <b> @combine_method@ </b> of the criteria:
+    for users matching <strong> @combine_method@ </strong> of the criteria:
     <ul>
     <multiple name="criteria">
       <li> @criteria.data@ </li>

@@ -111,8 +111,8 @@ acs_object_types.dynamic_p       char(1) default 'f'
                                  constraint acs_obj_types_dynamic_p_ck
                                  check (dynamic_p in ('t', 'f'))
 </pre>
-<p><b>Note that the <code>dynamic_p</code> is still experimental
-and may be removed in a future version of ACS</b></p>
+<p><strong>Note that the <code>dynamic_p</code> is still experimental
+and may be removed in a future version of ACS</strong></p>
 <h3>VII. Data Model Discussion</h3>
 
 ...

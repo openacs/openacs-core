@@ -2,15 +2,15 @@
 <property name="context">@context;literal@</property>
 <property name="doc(title)">@attribute.pretty_name;literal@</property>
 	
-<b>Properties:</b>			   
+<strong>Properties:</strong>			   
 <ul>
 <multiple name="attr_props">
-  <li> <b>@attr_props.key@:</b> @attr_props.value@
+  <li> <strong>@attr_props.key@:</strong> @attr_props.value@
 </multiple>
 </ul>
 
 <if @attribute.datatype@ eq "enumeration">
-  <p><b>Possible values:</b>
+  <p><strong>Possible values:</strong>
   <ul>
   <if @enum_values:rowcount@ eq 0>
     <li> <em>(none)</em>
@@ -26,7 +26,7 @@
   
 </if>
 
-<p><b>Administration:</b>
+<p><strong>Administration:</strong>
 <ul>
 
 <if @dynamic_p@ eq "t">

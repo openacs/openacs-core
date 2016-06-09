@@ -19,7 +19,7 @@
       @export_form_vars;noquote@
       <multiple name="acl">
         <if @mainsite_p@ true and @acl.grantee_id@ eq "-1">
-	<div>@acl.grantee_name@, @acl.privilege@ <b>#acs-subsite.perm_cannot_be_removed#</b></div>
+	<div>@acl.grantee_name@, @acl.privilege@ <strong>#acs-subsite.perm_cannot_be_removed#</strong></div>
 	</if>
         <else>
           <input type="checkbox" name="revoke_list" value="@acl.grantee_id@ @acl.privilege@" 

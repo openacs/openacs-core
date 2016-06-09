@@ -5,7 +5,7 @@
 
 <if @rel_types:rowcount@ eq 0>
 
-  <b>There are no relationship types for which to create segments</b>
+  <strong>There are no relationship types for which to create segments</strong>
 
 </if><else>
 

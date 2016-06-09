@@ -3,7 +3,7 @@
 <property name="context">@context;literal@</property>
 
 <p>
-  Please select one of the following packages to mount on <code><b>@site_node_url@</b></code>.
+  Please select one of the following packages to mount on <code><strong>@site_node_url@</strong></code>.
 </p>
 
 <if @unmounted:rowcount@ gt 0>

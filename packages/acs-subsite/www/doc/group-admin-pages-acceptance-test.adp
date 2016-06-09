@@ -97,7 +97,7 @@ test types"</font></li><li><font>Add a permissible rel type of Membership
 Relation</font></li><li><font>Add a group named "Test group"</font></li>
 </ol>
 <h3><font>GROUP TYPE PAGES BASIC FUNCTIONALITY</font></h3>
-<font><b>(Start at /admin)</b></font>
+<font><strong>(Start at /admin)</strong></font>
 <ol>
 <li><font>Click on group types</font></li><li><font>Click on Groups</font></li><li><font>Click on "Group name" under "Attributes of this type of
 group"</font></li><li><font>Ensure that you see the properties of the attribute and
@@ -110,7 +110,7 @@ longer show up</font></li><li><font>Recreate the group Foobar</font></li><li><fo
 "ArsDigita"</font></li><li><font>Change ArsDigita's join policy to closed</font></li>
 </ol>
 <h3><font>DYNAMICALLY EXTENDING GROUPS</font></h3>
-<font><b>(Start at /admin/group-types/)</b></font>
+<font><strong>(Start at /admin/group-types/)</strong></font>
 <ol>
 <li><font>Click on "Define a new group type" and create a new group
 type called "Project" with type "project". Ensure that all the

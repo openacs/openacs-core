@@ -16,8 +16,8 @@ function check_checkbox () {
 
 </script>
 
-<b>@head;noquote@</b>
+<strong>@head;noquote@</strong>
 
 <listtemplate name="nodes"></listtemplate>
 
-<b>&raquo;</b><a href="../site-map">Return</a>&nbsp;&nbsp;<b>&raquo;</b><a href="/site-map">#acs-subsite.UserSiteMap#</a><br><br>
+<strong>&raquo;</strong><a href="../site-map">Return</a>&nbsp;&nbsp;<strong>&raquo;</strong><a href="/site-map">#acs-subsite.UserSiteMap#</a><br><br>

@@ -7,9 +7,9 @@
 </p>
 
 <p>
-  Catalog files have been loaded from the directory <b>@catalog_dir@</b>.
+  Catalog files have been loaded from the directory <strong>@catalog_dir@</strong>.
 </p>
 
 <p>
-  <b>&raquo;</b> <a href="@return_url@">Return</a>
+  <strong>&raquo;</strong> <a href="@return_url@">Return</a>
 </p>

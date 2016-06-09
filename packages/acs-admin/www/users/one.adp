@@ -22,15 +22,15 @@
 <if @user_id;literal@ ne @ad_conn_user_id;literal@>
   <if @warning_p@>
       <p>
-        <b>WARNING:</b> This user is a site-wide administrator (maybe the only one).
+        <strong>WARNING:</strong> This user is a site-wide administrator (maybe the only one).
         Deleting or banning this user may mean you will be unable to administrate the site.
       </p>
   </if>
-  <p>Member state: <b>@user_info.member_state@</b> - change member state: @user_finite_state_links;noquote@<br>
+  <p>Member state: <strong>@user_info.member_state@</strong> - change member state: @user_finite_state_links;noquote@<br>
   Delete user: <a href="@delete_user_url@">temporarily</a>, <a href="@delete_user_permanent_url@">permanently</a></p>
 </if>
 <else>
-  <p>Member state: <b>@user_info.member_state@</b> <i>(cannot change state for yourself)</i></p>
+  <p>Member state: <strong>@user_info.member_state@</strong> <em>(cannot change state for yourself)</em></p>
 </else>
 
 <h2>This user is a member of the following groups:</h2>
