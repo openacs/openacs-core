@@ -1,17 +1,24 @@
 # packages/acs-core-docs/www/index.vuh
-
-set purlv [split [ad_conn path_info] /]
-
+set path [ad_conn path_info]
+set purlv [split $path /]
 set package_key [lindex $purlv 0]
 
 # replace the package key by "doc" (preserve presence of any trailing slash).
-set path_tail \
-  "doc[string range [ad_conn path_info] [string length $package_key] end]"
+set path_tail "doc[string range $path [string length $package_key] end]"
 
-if {[ad_conn path_info] eq "index.html" } {
+if {$path eq "index.html" } {
     rp_internal_redirect "/packages/acs-core-docs/www/index.adp"
-} elseif {[file isdirectory "$::acs::rootdir/packages/$package_key/www/doc"]} {
-  rp_internal_redirect "/packages/$package_key/www/$path_tail"
+    
+} elseif {[file isdirectory $::acs::rootdir/packages/$package_key/www/doc]} {
+    rp_internal_redirect "/packages/$package_key/www/$path_tail"
+    
 } else {
-  rp_internal_redirect "/packages/$package_key/$path_tail"
+    rp_internal_redirect "/packages/$package_key/$path_tail"
 }
+
+#
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:
