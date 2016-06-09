@@ -65,3 +65,9 @@ if {$extra_arg eq "info"} {
 } else {
     cr_write_content -item_id $object_id
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

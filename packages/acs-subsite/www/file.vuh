@@ -56,3 +56,9 @@ if { $private eq "private" } {
 # find a cr_item and serve it
 
 cr_write_content -item_id $object_id
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

@@ -5,3 +5,9 @@ set rest [join [lrange $urlv 2 end] "/"]
 set file "[acs_package_root_dir $package_key]/www/sitewide-admin/$rest"
 
 rp_internal_redirect -absolute_path $file
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

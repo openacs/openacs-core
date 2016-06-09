@@ -15,3 +15,9 @@ rp_form_put item_id $request
 set internal_path "/packages/[ad_conn package_key]/www/note-edit"
 
 rp_internal_redirect $internal_path
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:
