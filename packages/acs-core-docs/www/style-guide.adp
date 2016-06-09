@@ -33,57 +33,57 @@ line we have advanced these guidelines.</p>
 <a name="style-commandments" id="style-commandments"></a>Commandments</h3></div></div></div><p>Here is a short list of the basic rules code contributed to
 OpenACS should follow...</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem"><p>
-<b>Follow the file naming and the package structure
-rules. </b> Some of the file naming rules are
+<strong>Follow the file naming and the package structure
+rules. </strong> Some of the file naming rules are
 requirements for things to function correctly (for example data
 model creation scripts and tcl library files must be named properly
 to be used), while some are suggestions (the <span class="emphasis"><em>object-verb</em></span> naming convention) which if
 ignored won't break anything, but if you follow the rules people
 will be able to understand your package much more easily.</p></li><li class="listitem"><p>
-<b>Be literate in your programming. </b> Use
+<strong>Be literate in your programming. </strong> Use
 ad_proc, ad_library, and ad_page_contract to provide documentation
 for your code, use comments on your datamodel, explain what things
 mean and how they should work.</p></li><li class="listitem"><p>
-<b>Test. </b> Write test cases for your API and data
+<strong>Test. </strong> Write test cases for your API and data
 model; test negative cases as well as positive; document your
 tests. Provide tests for bugs which are not yet fixed. Test, Test,
 Test.</p></li><li class="listitem"><p>
-<b>Use namespaces. </b> For new packages choose a
+<strong>Use namespaces. </strong> For new packages choose a
 namespace and place all procedures in it and in oracle create
 packages.</p></li><li class="listitem"><p>
-<b>Follow the constraint naming and the PL/SQL and PL/pgSQL
-rules. </b> Naming constraints is important for
+<strong>Follow the constraint naming and the PL/SQL and PL/pgSQL
+rules. </strong> Naming constraints is important for
 upgradability and for consistency. Also, named constraints can be
 immensely helpful in developing good error handling. Following the
 PL/SQL and PL/pgSQL rules ensure that the procedures created can be
 handled similarly across both Oracle and PostgreSQL databases.</p></li><li class="listitem"><p>
-<b>Follow the code formatting guidelines. </b> The
+<strong>Follow the code formatting guidelines. </strong> The
 code base is very large and if things are formatted consistently it
 is easier to read. Also, if it conforms to the standard it won't be
 reformatted (which can mask the change history and making tracking
 down bugs much harder). Using spaces rather than tabs makes patches
 easier to read and manage and does not force other programmers to
 decipher what tab settings you had in place in your editor.</p></li><li class="listitem"><p>
-<b>Use the standard APIs. </b> Don't reinvent the
+<strong>Use the standard APIs. </strong> Don't reinvent the
 wheel. Prefer extending an existing core API to creating your own.
 If something in the core does not meet your particular needs it
 probably won't meet others as well and fleshing out the core API's
 makes the toolkit more useful for everyone and more easily
 extended.</p></li><li class="listitem"><p>
-<b>Make sure your datamodel create/drop scripts
-work. </b> Break the table creation out from the
+<strong>Make sure your datamodel create/drop scripts
+work. </strong> Break the table creation out from the
 package/stored procedure creation and use <code class="computeroutput">create or replace</code> where possible so that
 scripts can be sourced more than once. Make sure your drop script
 works if data has been inserted (and permissioned and notifications
 have been attached etc).</p></li><li class="listitem">
 <p>
-<b>Practice CVS/Bug Tracker Hygiene. </b> Commit
+<strong>Practice CVS/Bug Tracker Hygiene. </strong> Commit
 your work. commit with sensible messages and include patch and bug
 numbers in your commit messages.</p><p>Create bug tracker tickets for things you are going to work on
 yourself (just in case you don't get to it and to act as a pointer
 for others who might encounter the same problem).</p>
 </li><li class="listitem"><p>
-<b>Solicit code reviews. </b> Ask others to look
+<strong>Solicit code reviews. </strong> Ask others to look
 over your code and provide feedback and do the same for others.</p></li>
 </ol></div>
 </div><div class="sect2">

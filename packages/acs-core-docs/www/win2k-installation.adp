@@ -10,14 +10,12 @@ Chapter 3. Complete Installation"
 		<div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="win2k-installation" id="win2k-installation"></a>OpenACS Installation Guide for
-Windows</h2></div></div></div><p>A version of OpenACS and NaviServer is maintained by Maurizio
-Martignano ans is available from (10/2003), the best option to get
-OpenACS 5.7.0 running on Windows is to use <a class="ulink" href="http://vmware.com" target="_top">VMware</a> and John Sequeira's
-<a class="ulink" href="http://www.spazioit.com/pages_en/sol_inf_en/windows-openacs_en/" target="_top">Spazio IT</a>
+Windows</h2></div></div></div><p>A binary version of OpenACS and NaviServer is maintained by
+Maurizio Martignano and is available from <a class="ulink" href="http://www.spazioit.com/pages_en/sol_inf_en/windows-openacs_en/" target="_top">Spazio IT</a>
 </p>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
-		    leftLink="openacs" leftLabel="Prev" leftTitle="Install OpenACS 5.7.0"
+		    leftLink="openacs" leftLabel="Prev" leftTitle="Install OpenACS 5.9.0"
 		    rightLink="mac-installation" rightLabel="Next" rightTitle="OpenACS Installation Guide for Mac OS
 X"
 		    homeLink="index" homeLabel="Home" 

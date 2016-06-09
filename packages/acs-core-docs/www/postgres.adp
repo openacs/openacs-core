@@ -13,17 +13,17 @@ Chapter 3. Complete Installation"
 <p>by <a class="ulink" href="mailto:vinod\@kurup.com" target="_top">Vinod Kurup</a>
 </p>
 OpenACS docs are written by the named authors, and may be edited by
-OpenACS documentation staff.</div><p>Skip this section if you will run only Oracle.</p><p>OpenACS 5.7.0 will run with <a class="link" href="individual-programs" title="PostgreSQL 7.4.x (Either this or Oracle is REQUIRED)">PostgreSQL</a>
+OpenACS documentation staff.</div><p>Skip this section if you will run only Oracle.</p><p>OpenACS 5.9.0 will run with <a class="link" href="individual-programs" title="PostgreSQL 7.4.x (Either this or Oracle is REQUIRED)">PostgreSQL</a>
 7.3.2, 7.3.3, and 7.3.4 and 7.4.x. 7.4.7 is the recommended version
 of PostgreSQL.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>
-<a name="install-postgres-mac" id="install-postgres-mac"></a><b>Special notes for Mac OS
-X. </b>If you are running Mac OS X prior to 10.3, you
+<a name="install-postgres-mac" id="install-postgres-mac"></a><strong>Special notes for Mac OS
+X. </strong>If you are running Mac OS X prior to 10.3, you
 should be able to install and use PostGreSQL 7.3.x. Mac OS X 10.3
 requires PostGreSQL 7.4.</p></li><li class="listitem">
 <p>
-<a name="install-postgres-debian" id="install-postgres-debian"></a><b>Special Notes for
-Debian. </b>
+<a name="install-postgres-debian" id="install-postgres-debian"></a><strong>Special Notes for
+Debian. </strong>
 </p><p>Debian stable user should install PostGreSQL from source as
 detailed below, or they should use the www.backports.org backport
 for Postgres to get a more current version. Debian unstable users:
@@ -38,8 +38,8 @@ su postgres -c "/usr/lib/postgresql/bin/createlang plpgsql template1"</code></st
 next section.</p>
 </li><li class="listitem">
 <p>
-<a name="install-postgres-rpm" id="install-postgres-rpm"></a><b>Special Notes for Red
-Hat. </b>Red Hat users: If you install PostgreSQL 7.3.2
+<a name="install-postgres-rpm" id="install-postgres-rpm"></a><strong>Special Notes for Red
+Hat. </strong>Red Hat users: If you install PostgreSQL 7.3.2
 from the Red Hat 9 RPM, you can skip a few steps. These shell
 commands add some links for compatibility with the directories from
 a source-based install; start the service; create a new group for
@@ -74,7 +74,7 @@ for other binary packages as well.</p>
 <p>Safe approach: install from source</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
 <p>
-<b>Unpack PostgreSQL 7.4.7. </b>If you have not
+<strong>Unpack PostgreSQL 7.4.7. </strong>If you have not
 downloaded the postgresql tarball to <code class="computeroutput">/var/tmp/postgresql-7.4.7.tar.gz</code>, <a class="link" href="individual-programs" title="PostgreSQL 7.4.x (Either this or Oracle is REQUIRED)">get
 it</a>.</p><pre class="screen">
 [root root]# <strong class="userinput"><code>cd /usr/local/src</code></strong>
@@ -85,7 +85,7 @@ tar xzf /var/tmp/postgresql-7.4.7.tar.gz</span></span>
 </pre>
 </li><li class="listitem">
 <p>
-<b>ALTERNATIVE: Unpack PostgreSQL 7.4.7. </b>If you
+<strong>ALTERNATIVE: Unpack PostgreSQL 7.4.7. </strong>If you
 have not downloaded the postgresql tarball to <code class="computeroutput">/var/tmp/postgresql-7.4.7.tar.bz2</code>,
 <a class="link" href="individual-programs" title="PostgreSQL 7.4.x (Either this or Oracle is REQUIRED)">get
 it</a>.</p><pre class="screen">
@@ -97,7 +97,7 @@ tar xfj /var/tmp/postgresql-7.4.7.tar.bz2</span></span>
 </pre>
 </li><li class="listitem">
 <p>
-<b>Install Bison. </b>Only do this if <strong class="userinput"><code>bison --version</code></strong> is smaller than
+<strong>Install Bison. </strong>Only do this if <strong class="userinput"><code>bison --version</code></strong> is smaller than
 1.875 and you install PostgreSQL 7.4 from cvs instead of
 tarball.</p><pre class="screen">
 [root root]# <strong class="userinput"><code>cd /usr/local/src</code></strong>
@@ -109,7 +109,7 @@ tarball.</p><pre class="screen">
 </pre>
 </li><li class="listitem">
 <p>
-<b>Create the Postgres user. </b> Create a user and
+<strong>Create the Postgres user. </strong> Create a user and
 group (if you haven't done so before) for PostgreSQL. This is the
 account that PostgreSQL will run as since it will not run as root.
 Since nobody will log in directly as that user, we'll leave the
@@ -130,7 +130,7 @@ chmod 750 /usr/local/pgsql</span></span>
 </pre><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
 <li class="listitem">
 <p>
-<b>Mac OS X: Do instead: </b>First make sure the
+<strong>Mac OS X: Do instead: </strong>First make sure the
 gids and uids below are available (change them if they are not).To
 list taken uids and gids:</p><pre class="screen"><strong class="userinput"><code>nireport / /groups name gid | grep "[0123456789][0123456789]"
 nireport / /users name uid | grep "[0123456789][0123456789]"</code></strong></pre><p>Now you can install the users</p><pre class="screen"><strong class="userinput"><code>sudo niutil -create / /groups/web
@@ -147,7 +147,7 @@ chown -R postgres:web /usr/local/pgsql /usr/local/src/postgresql-7.4.7
 chmod 750 /usr/local/pgsql</code></strong></pre>
 </li><li class="listitem">
 <p>
-<b>FreeBSD users: </b> need to add more
+<strong>FreeBSD users: </strong> need to add more
 parameters.</p><pre class="screen">
 [root src]# <strong class="userinput"><code>mkdir -p /usr/local/pgsql</code></strong>
 [root src]# <strong class="userinput"><code>pw groupadd -n web</code></strong>
@@ -165,7 +165,7 @@ chmod -R 750 /usr/local/pgsql</span></span>
 </ul></div>
 </li><li class="listitem">
 <a name="install-postgres-env" id="install-postgres-env"></a><p>
-<b>Set up postgres's environment variables. </b>They
+<strong>Set up postgres's environment variables. </strong>They
 are necessary for the executable to find its supporting libraries.
 Put the following lines into the postgres user's environment.</p><pre class="screen">
 [root src]# <strong class="userinput"><code>su - postgres</code></strong>
@@ -188,7 +188,7 @@ PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/usr/bin/X11:/
 </p>
 </li><li class="listitem">
 <a name="install-postgres-compile" id="install-postgres-compile"></a><p>
-<b>Compile and install PostgreSQL. </b> Change to
+<strong>Compile and install PostgreSQL. </strong> Change to
 the postgres user and run <code class="computeroutput">./configure</code> to set the compilation options
 automatically. This is the point at which you can configure
 PostgreSQL in various ways. For example, if you are installing on
@@ -225,7 +225,7 @@ make install</span></span>
 </pre>
 </li><li class="listitem">
 <a name="install-postgres-startup" id="install-postgres-startup"></a><p>
-<b>Start PostgreSQL. </b> The <code class="computeroutput">initdb</code> command initializes the database.
+<strong>Start PostgreSQL. </strong> The <code class="computeroutput">initdb</code> command initializes the database.
 <code class="computeroutput">pg_ctl</code> is used to start up
 PostgreSQL. If PostgreSQL is unable to allocate enough memory, see
 section 11 Tuning PostgreSQL (below).</p><pre class="screen">
@@ -244,7 +244,7 @@ postmaster successfully started
 </p>
 </li><li class="listitem">
 <a name="install-plpgsql" id="install-plpgsql"></a><p>
-<b>Install Pl/pgSQL. </b>Set up plpgsq and allow
+<strong>Install Pl/pgSQL. </strong>Set up plpgsq and allow
 your user to have access. Plpgsql is a PL/SQL-like language. We add
 it to template1, which is the template from which all new databases
 are created. We can verify that it was created with the createlang
@@ -263,7 +263,7 @@ createlang -l template1</span></span>
 </pre>
 </li><li class="listitem">
 <a name="install-postgres-test" id="install-postgres-test"></a><p>
-<b>Test PostgreSQL (OPTIONAL). </b>Create a database
+<strong>Test PostgreSQL (OPTIONAL). </strong>Create a database
 and try some simple commands. The output should be as shown.</p><pre class="screen">
 [postgres pgsql]$ <strong class="userinput"><code>createdb mytestdb</code></strong>
 CREATE DATABASE
@@ -318,11 +318,11 @@ appropriate run levels.</p><pre class="screen">
 </pre>
 </li><li class="listitem">
 <p>Red Hat from source:</p><pre class="screen">
-[root src]# <strong class="userinput"><code>cp /var/tmp/openacs-5.7.0/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql</code></strong>
+[root src]# <strong class="userinput"><code>cp /var/tmp/openacs-5.9.0/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql</code></strong>
 [root src]# <strong class="userinput"><code>chown root.root /etc/rc.d/init.d/postgresql</code></strong>
 [root src]# <strong class="userinput"><code>chmod 755 /etc/rc.d/init.d/postgresql</code></strong>
 [root src]# 
-<span class="action"><span class="action">cp /var/tmp/openacs-5.7.0/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql
+<span class="action"><span class="action">cp /var/tmp/openacs-5.9.0/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql
 chown root.root /etc/rc.d/init.d/postgresql
 chmod 755 /etc/rc.d/init.d/postgresql</span></span>
 </pre><p>Test the script.</p><pre class="screen">
@@ -350,7 +350,7 @@ service postgresql start</span></span>
 [root ~]# <strong class="userinput"><code>chown root.root /etc/init.d/postgresql</code></strong>
 [root ~]# <strong class="userinput"><code>chmod 755 /etc/init.d/postgresql</code></strong>
 [root ~]# <span class="action"><span class="action">
-cp /var/tmp/openacs-5.7.0/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql
+cp /var/tmp/openacs-5.9.0/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql
 chown root.root /etc/init.d/postgresql
 chmod 755 /etc/init.d/postgresql</span></span>
 </pre><p>Test the script</p><pre class="screen">
@@ -375,11 +375,11 @@ Starting PostgreSQL: ok
 </pre>
 </li><li class="listitem">
 <p>FreeBSD:</p><pre class="screen">
-[root ~]# <strong class="userinput"><code>cp /tmp/openacs-5.7.0/packages/acs-core-docs/www/files/postgresql.txt /usr/local/etc/rc.d/postgresql.sh</code></strong>
+[root ~]# <strong class="userinput"><code>cp /tmp/openacs-5.9.0/packages/acs-core-docs/www/files/postgresql.txt /usr/local/etc/rc.d/postgresql.sh</code></strong>
 [root ~]# <strong class="userinput"><code>chown root:wheel /usr/local/etc/rc.d/postgresql.sh</code></strong>
 [root ~]# <strong class="userinput"><code>chmod 755 /usr/local/etc/rc.d/postgresql.sh</code></strong>
 [root ~]# <span class="action"><span class="action">
-cp /tmp/openacs-5.7.0/packages/acs-core-docs/www/files/postgresql.txt /usr/local/etc/rc.d/postgresql.sh
+cp /tmp/openacs-5.9.0/packages/acs-core-docs/www/files/postgresql.txt /usr/local/etc/rc.d/postgresql.sh
 chown root:wheel /usr/local/etc/rc.d/postgresql.sh
 chmod 755 /usr/local/etc/rc.d/postgresql.sh</span></span>
 </pre><p>Test the script</p><pre class="screen">
@@ -401,7 +401,7 @@ versions. Instead of installing the boot scripts in <code class="computeroutput"
 SuSE 8.0, delete the <code class="computeroutput">rc.d/</code> part
 in each of the following commands.</p>
 </div><pre class="screen">
-[root ~]# <strong class="userinput"><code>cp /var/tmp/openacs-5.7.0/packages/acs-core-docs/www/files/postgresql.txt /etc/rc.d/init.d/postgresql</code></strong>
+[root ~]# <strong class="userinput"><code>cp /var/tmp/openacs-5.9.0/packages/acs-core-docs/www/files/postgresql.txt /etc/rc.d/init.d/postgresql</code></strong>
 [root ~]# <strong class="userinput"><code>chown root.root /etc/rc.d/init.d/postgresql</code></strong>
 [root ~]# <strong class="userinput"><code>chmod 755 /etc/rc.d/init.d/postgresql</code></strong>
 </pre><p>Test the script.</p><pre class="screen">
@@ -458,8 +458,8 @@ commands a little. This usually isn't a problem as Red Hat defaults
 to runlevel 3)</p>
 </li><li class="listitem">
 <p>
-<a name="postgres-tune" id="postgres-tune"></a><b>Tune postgres.
-(OPTIONAL). </b>The default values for PostgreSQL are
+<a name="postgres-tune" id="postgres-tune"></a><strong>Tune postgres.
+(OPTIONAL). </strong>The default values for PostgreSQL are
 very conservative; we can safely change some of them and improve
 performance.</p><div class="orderedlist"><ol class="orderedlist" type="a">
 <li class="listitem">

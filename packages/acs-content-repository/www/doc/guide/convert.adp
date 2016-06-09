@@ -9,7 +9,7 @@ Word documents to HTML. This document describes how to make this
 conversion be part of the item creation or editing process, such
 that the content is always stored in the repository as HTML.</p>
 <p>
-<b>Note:</b> Because temporary tables and LOB storage are used
+<strong>Note:</strong> Because temporary tables and LOB storage are used
 during the conversion process, the entire process described here
 must be performed within the context of a single transaction.</p>
 <h3>Create the Revision</h3>

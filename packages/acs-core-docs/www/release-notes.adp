@@ -255,7 +255,7 @@ content, to handle file attachments, etc. "complex-send" will
 disappear from acs-core in a future release.</p>
 </li></ul></div>
 </div><p>The ChangeLogs include an annotated list of changes (<a class="xref" href="">???</a>) since the last release and in the entire
-5.7 release sequence <a class="xref" href="">???</a>.</p><div class="sect2">
+5.9 release sequence <a class="xref" href="">???</a>.</p><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="release-notes-5-3-1" id="release-notes-5-3-1"></a>Release 5.3.1</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;"><li class="listitem">
 <p>Bug fixes.</p><p>New TIPs implemented.</p><p>All Core Automated Tests for Postgres pass.</p><p>New Site and Blank master templates and CSS compatible with the
@@ -263,7 +263,7 @@ disappear from acs-core in a future release.</p>
 existing sites.</p>
 </li></ul></div>
 </div><p>The ChangeLogs include an annotated list of changes (<a class="xref" href="">???</a>) since the last release and in the entire
-5.7 release sequence <a class="xref" href="">???</a>.</p><div class="sect2">
+5.9 release sequence <a class="xref" href="">???</a>.</p><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="release-notes-5-3-0" id="release-notes-5-3-0"></a>Release 5.3.0</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;"><li class="listitem">
 <p>Bug fixes.</p><p>New TIPs implemented.</p><p>All Core Automated Tests for Postgres pass.</p>
@@ -346,7 +346,7 @@ http://translate.openacs.org through 7 Nov 2003.</p><p>Please report bugs using 
 Tracker</a> at the <a class="ulink" href="http://openacs.org/" target="_top">OpenACS website</a>.</p><p>You may want to begin by reading our installation documentation
 for <a class="xref" href="unix-installation" title="a Unix-like system">the section called &ldquo;a
 Unix-like system&rdquo;</a>. Note that the Windows
-documentation is not current for OpenACS 5.7.0, but an alternative
+documentation is not current for OpenACS 5.9.0, but an alternative
 is to use John Sequeira's <a class="ulink" href="http://www.pobox.com/~johnseq/projects/oasisvm/" target="_top">Oasis VM project</a>.</p><p>After installation, the full documentation set can be found by
 visiting <code class="filename">http://yourserver/doc</code>.</p><p>New features in this release:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>Internationalization support. A message catalog to store
@@ -400,16 +400,16 @@ glob list of files and is defaulted to "*/CVS/* *~")</p></li>
 14:38:54 gustafn Exp $)</div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140722827047312" id="idp140722827047312"></a>Release 4.6.3</h3></div></div></div><p><a class="ulink" href="release-notes-4-6-3" target="_top">Release Notes for 4.6.3</a></p>
+<a name="idp140598224401968" id="idp140598224401968"></a>Release 4.6.3</h3></div></div></div><p><a class="ulink" href="release-notes-4-6-3" target="_top">Release Notes for 4.6.3</a></p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140722827048816" id="idp140722827048816"></a>Release 4.6.2</h3></div></div></div><p><a class="ulink" href="release-notes-4-6-2" target="_top">Release Notes for 4.6.2</a></p>
+<a name="idp140598224403472" id="idp140598224403472"></a>Release 4.6.2</h3></div></div></div><p><a class="ulink" href="release-notes-4-6-2" target="_top">Release Notes for 4.6.2</a></p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140722827050320" id="idp140722827050320"></a>Release 4.6</h3></div></div></div><p><a class="ulink" href="release-notes-4-6" target="_top">Release Notes for 4.6</a></p>
+<a name="idp140598224404976" id="idp140598224404976"></a>Release 4.6</h3></div></div></div><p><a class="ulink" href="release-notes-4-6" target="_top">Release Notes for 4.6</a></p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140722827051824" id="idp140722827051824"></a>Release 4.5</h3></div></div></div><p><a class="ulink" href="release-notes-4-5" target="_top">Release Notes for 4.5</a></p>
+<a name="idp140598224406480" id="idp140598224406480"></a>Release 4.5</h3></div></div></div><p><a class="ulink" href="release-notes-4-5" target="_top">Release Notes for 4.5</a></p>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

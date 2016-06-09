@@ -14,7 +14,7 @@ Chapter 3. Complete Installation"
 </p>
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><p>If you are installing PostGreSQL instead of Oracle, skip this
-section.</p><p>OpenACS 5.7.0 will install with Oracle 9i but has not been
+section.</p><p>OpenACS 5.9.0 will install with Oracle 9i but has not been
 extensively tested so may still have bugs or tuning issues. See
 <a class="ulink" href="http://www.piskorski.com/docs/oracle.html" target="_top">Andrew Piskorski's Oracle 9i notes</a> for
 guidance.</p><p>This installation guide attempts to present all of the

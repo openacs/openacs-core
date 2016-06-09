@@ -14,7 +14,7 @@ Listing of public methods:<br>
 <h3>Method Detail</h3>
 <p align="right">
 <font color="red">*</font> indicates required</p>
-<b>Public Methods:</b>
+<strong>Public Methods:</strong>
 <br>
 <table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name=""></a></td></tr><tr><td>
@@ -23,7 +23,7 @@ form (useful for simple update forms). Typical usage is to query a
 onerow data source from database and pass the resulting array
 reference to set_values for setting default values in an update
 form.</blockquote><dl><dd>
-<b>Parameters:</b><table>
+<strong>Parameters:</strong><table>
 <tr>
 <td align="right">
 <code>id</code><font color="red">*</font>
@@ -43,12 +43,12 @@ correspond to element identifiers in the form</td>
 <blockquote>Determine whether a form exists by checking for its
 data structures.</blockquote><dl>
 <dd>
-<b>Parameters:</b><table><tr>
+<strong>Parameters:</strong><table><tr>
 <td align="right">
 <code>id</code><font color="red">*</font>
 </td><td align="left">The ID of an ATS form object.</td>
 </tr></table>
-</dd><dt><b>Returns:</b></dt><dd>1 if a form with the specified ID exists. 0 if it does
+</dd><dt><strong>Returns:</strong></dt><dd>1 if a form with the specified ID exists. 0 if it does
 not.</dd>
 </dl>
 </td></tr>
@@ -58,7 +58,7 @@ not.</dd>
 <blockquote>Generates hidden input tags for all values in a form
 submission. Typically used to create a confirmation page following
 an initial submission.</blockquote><dl>
-<dt><b>Returns:</b></dt><dd>A string containing hidden input tags for inclusion in a
+<dt><strong>Returns:</strong></dt><dd>A string containing hidden input tags for inclusion in a
 form.</dd>
 </dl>
 </td></tr>
@@ -67,14 +67,14 @@ form.</dd>
 <tr><td width="100%" bgcolor="#CCCCFF"><a name=""></a></td></tr><tr><td>
 <blockquote>Initialize the data structures for a form.</blockquote><dl>
 <dd>
-<b>Parameters:</b><table><tr>
+<strong>Parameters:</strong><table><tr>
 <td align="right">
 <code>id</code><font color="red">*</font>
 </td><td align="left">A keyword identifier for the form, such as {
 add_user} or { edit_item} . The ID must be unique in the context of
 a single page.</td>
 </tr></table>
-</dd><dt><b>Options:</b></dt><dd><table>
+</dd><dt><strong>Options:</strong></dt><dd><table>
 <tr>
 <td align="right"><code>method</code></td><td align="left">The standard METHOD attribute to specify in the
 HTML FORM tag at the beginning of the rendered form. Defaults to
@@ -96,7 +96,7 @@ onSubmit validate() } }</td>
 <tr><td width="100%" bgcolor="#CCCCFF"><a name=""></a></td></tr><tr><td>
 <blockquote>Return a list which represents the result of getting
 combined values from multiple form elements</blockquote><dl><dd>
-<b>Parameters:</b><table>
+<strong>Parameters:</strong><table>
 <tr>
 <td align="right">
 <code>id</code><font color="red">*</font>
@@ -119,7 +119,7 @@ combine the values of all elements starting with { foo}</td>
 <table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name=""></a></td></tr><tr><td>
 <blockquote>Return the number of elements in a form</blockquote><dl><dd>
-<b>Parameters:</b><table><tr>
+<strong>Parameters:</strong><table><tr>
 <td align="right">
 <code>id</code><font color="red">*</font>
 </td><td align="left">The form identifier</td>
@@ -132,12 +132,12 @@ combine the values of all elements starting with { foo}</td>
 <blockquote>Return true if a submission in progress. The submission
 may or may not be valid.</blockquote><dl>
 <dd>
-<b>Parameters:</b><table><tr>
+<strong>Parameters:</strong><table><tr>
 <td align="right">
 <code>id</code><font color="red">*</font>
 </td><td align="left">The form identifier</td>
 </tr></table>
-</dd><dt><b>Returns:</b></dt><dd>1 if true or 0 if false</dd>
+</dd><dt><strong>Returns:</strong></dt><dd>1 if true or 0 if false</dd>
 </dl>
 </td></tr>
 </table>
@@ -148,12 +148,12 @@ may or may not be valid.</blockquote><dl>
 to validation problems). This command is used to conditionally set
 default values for form elements.</blockquote><dl>
 <dd>
-<b>Parameters:</b><table><tr>
+<strong>Parameters:</strong><table><tr>
 <td align="right">
 <code>id</code><font color="red">*</font>
 </td><td align="left">The form identifier</td>
 </tr></table>
-</dd><dt><b>Returns:</b></dt><dd>1 if true or 0 if false</dd>
+</dd><dt><strong>Returns:</strong></dt><dd>1 if true or 0 if false</dd>
 </dl>
 </td></tr>
 </table>
@@ -164,12 +164,12 @@ was valid. Typically used to conditionally execute DML and redirect
 to the next page, as opposed to returning the form back to the user
 to report validation errors.</blockquote><dl>
 <dd>
-<b>Parameters:</b><table><tr>
+<strong>Parameters:</strong><table><tr>
 <td align="right">
 <code>id</code><font color="red">*</font>
 </td><td align="left">The form identifier</td>
 </tr></table>
-</dd><dt><b>Returns:</b></dt><dd>1 if true or 0 if false</dd>
+</dd><dt><strong>Returns:</strong></dt><dd>1 if true or 0 if false</dd>
 </dl>
 </td></tr>
 </table>
@@ -179,7 +179,7 @@ to report validation errors.</blockquote><dl>
 all single values). Typically used when processing the form
 submission to prepare for DML or other type of
 transaction.</blockquote><dl><dd>
-<b>Parameters:</b><table>
+<strong>Parameters:</strong><table>
 <tr>
 <td align="right">
 <code>id</code><font color="red">*</font>
@@ -201,7 +201,7 @@ may be divided into any number of sections for layout purposes.
 Elements are tagged with the current section name as they are added
 to the form. A form style template may insert a divider in the form
 whenever the section name changes.</blockquote><dl><dd>
-<b>Parameters:</b><table>
+<strong>Parameters:</strong><table>
 <tr>
 <td align="right">
 <code>id</code><font color="red">*</font>
@@ -216,13 +216,13 @@ whenever the section name changes.</blockquote><dl><dd>
 </td></tr>
 </table>
 <p>
-<b>Private Methods</b>:<br>
+<strong>Private Methods</strong>:<br>
 </p>
 <table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name=""></a></td></tr><tr><td>
 <blockquote>Auto-generate the template for a form</blockquote><dl>
 <dd>
-<b>Parameters:</b><table>
+<strong>Parameters:</strong><table>
 <tr>
 <td align="right">
 <code>id</code><font color="red">*</font>
@@ -235,7 +235,7 @@ form. Form style templates must be placed in the forms subdirectory
 of the ATS resources directory.</td>
 </tr>
 </table>
-</dd><dt><b>Returns:</b></dt><dd>A string containing a template for the body of the form.</dd>
+</dd><dt><strong>Returns:</strong></dt><dd>A string containing a template for the body of the form.</dd>
 </dl>
 </td></tr>
 </table>
@@ -250,7 +250,7 @@ commands.</blockquote></td></tr>
 hidden widgets and rendering those that have not been rendered yet.
 Called after rendering a custom form template as a debugging
 aid.</blockquote><dl><dd>
-<b>Parameters:</b><table><tr>
+<strong>Parameters:</strong><table><tr>
 <td align="right">
 <code>id</code><font color="red">*</font>
 </td><td align="left">The form identifier</td>
@@ -263,7 +263,7 @@ aid.</blockquote><dl><dd>
 <blockquote>Render the HTML FORM tag along with a hidden element
 that identifies the form object.</blockquote><dl>
 <dd>
-<b>Parameters:</b><table>
+<strong>Parameters:</strong><table>
 <tr>
 <td align="right">
 <code>id</code><font color="red">*</font>
@@ -275,7 +275,7 @@ that identifies the form object.</blockquote><dl>
 the FORM tag, such as JavaScript event handlers.</td>
 </tr>
 </table>
-</dd><dt><b>Returns:</b></dt><dd>A string containing the rendered tags.</dd>
+</dd><dt><strong>Returns:</strong></dt><dd>A string containing the rendered tags.</dd>
 </dl>
 </td></tr>
 </table>
@@ -284,7 +284,7 @@ the FORM tag, such as JavaScript event handlers.</td>
 <blockquote>Render the finished HTML output for a dynamic
 form.</blockquote><dl>
 <dd>
-<b>Parameters:</b><table>
+<strong>Parameters:</strong><table>
 <tr>
 <td align="right">
 <code>id</code><font color="red">*</font>
@@ -297,7 +297,7 @@ form. Form style templates must be placed in the forms subdirectory
 of the ATS resources directory.</td>
 </tr>
 </table>
-</dd><dt><b>Returns:</b></dt><dd>A string containing the HTML for the body of the form.</dd>
+</dd><dt><strong>Returns:</strong></dt><dd>A string containing the HTML for the body of the form.</dd>
 </dl>
 </td></tr>
 </table>

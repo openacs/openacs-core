@@ -13,14 +13,14 @@ Chapter 11. Development Reference"
 <p>By <a class="ulink" href="http://planitia.org" target="_top">Rafael H. Schloming</a>
 </p>
 OpenACS docs are written by the named authors, and may be edited by
-OpenACS documentation staff.</div><p>One of the major design features of OpenACS 5.7.0 is the
+OpenACS documentation staff.</div><p>One of the major design features of OpenACS 5.9.0 is the
 explicit representation of <span class="emphasis"><em>object
 identity</em></span>. The reason I say "explicit representation" is
 because the concept of object identity has been around forever. It
 is inherent to our problem domain. Consider the example of 3.x
 style scoping. The 3.x data models use the triple (user_id,
 group_id, scope) to <span class="emphasis"><em>identify</em></span>
-an <span class="emphasis"><em>object</em></span>. In the 5.7.0 data
+an <span class="emphasis"><em>object</em></span>. In the 5.9.0 data
 model this object is <span class="emphasis"><em>explicitly
 represented</em></span> by a single party_id.</p><p>Another good example of this is can be found in the user groups
 data model. The 3.x user groups data model contains another example
@@ -28,7 +28,7 @@ of an <span class="emphasis"><em>implied identity</em></span>.
 Every mapping between a user and a group could have an arbitrary
 number of attached values (user_group_member_fields, etc.). In this
 case it is the pair (group_id, user_id) that implicitly refers to
-an object (the person's membership in a group). In the 5.7.0 data
+an object (the person's membership in a group). In the 5.9.0 data
 model this object identity is made explicit by adding an integer
 primary key to the table that maps users to groups.</p><p>Coming from a purely relational world, this might seem slightly
 weird at first. The pair (group_id, user_id) is sufficient to

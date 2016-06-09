@@ -6,9 +6,9 @@
     th { font-family: Arial, Helvetica }
     td { font-family: Arial, Helvetica }
   </style>
-  </head>
-  <body bgcolor="#FFFFCC">
-  <h1>Customize a Sandwich</h1>
+</head>
+<body bgcolor="#FFFFCC">
+<h1>Customize a Sandwich</h1>
 <hr>
 
   <formtemplate id="sandwich">

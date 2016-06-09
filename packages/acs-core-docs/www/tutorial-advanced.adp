@@ -12,7 +12,7 @@ Developers"
 <div class="titlepage"><div><div><h2 class="title">
 <a name="tutorial-advanced" id="tutorial-advanced"></a>Chapter 10. Advanced
 Topics</h2></div></div></div><div class="toc">
-<p><b>Table of Contents</b></p><dl class="toc">
+<p><strong>Table of Contents</strong></p><dl class="toc">
 <dt><span class="sect1"><a href="tutorial-specs">Write the
 Requirements and Design Specs</a></span></dt><dt><span class="sect1"><a href="tutorial-cvs">Add the new
 package to CVS</a></span></dt><dt><span class="sect1"><a href="tutorial-etp-templates">OpenACS Edit This Page

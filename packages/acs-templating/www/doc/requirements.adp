@@ -17,7 +17,7 @@ Su</a>
 The following is a requirements document for the ACS Templating
 System version 0.5. It has also been called Karl's Templates, the
 Dynamic Publishing System (DPS), and Stencil. The official package
-name for the system is now <code><b>acs-templating</b></code>
+name for the system is now <code><strong>acs-templating</strong></code>
 .
 <a name="vision" id="vision"></a>
 <h3>II. Vision Statement</h3>
@@ -54,23 +54,23 @@ for multiple pages.</li>
 <p>The template system is designed to be used by two classes of
 users: programmers and designers. In bulding a web site,
 programmers are generally responsible for defining and implementing
-the <i>application logic</i> of the site, while designers are more
-responsible for the <i>presentation</i>. Generally speaking, the
+the <em>application logic</em> of the site, while designers are more
+responsible for the <em>presentation</em>. Generally speaking, the
 application logic generates data for the presentation to display to
 the user. The template system must provide mechanisms that supports
 both of these tasks and allows the designer and programmer to work
 seperately, but for their work to be combined at runtime into
 something that the user sees as a single page.</p>
-<p>Thus, pages are naturally split into two parts. The <i>logic
-part</i> executes application logic and generates data, and the
-<i>presentation</i> part that specifies the layout of the page and
+<p>Thus, pages are naturally split into two parts. The <em>logic
+part</em> executes application logic and generates data, and the
+<em>presentation</em> part that specifies the layout of the page and
 so on.</p>
 <p>What is needed is:</p>
 <ol>
 <li>A notation and API for the programmer specify the application
 logic and to generate the data to be displayed. In ACS, we call the
-data that we wish to display a <i>data source</i> or <i>page
-property</i>. Application logic is driven by the inputs the page
+data that we wish to display a <em>data source</em> or <em>page
+property</em>. Application logic is driven by the inputs the page
 gathers from the user request (e.g. the HTTP request), and the
 computation that the page must perform on this input. This
 computation will generally create and populate the data sources and
@@ -124,8 +124,8 @@ Substitution</strong><p>Much like the "mail merge" feature of a word processor, 
 authors must use special tags to position each piece of dynamic
 data within the layout. Each template is associated with a data
 dictionary that lists all available variables.</p><strong>10.10.2 Use of Components</strong><p>To speed development and ensure consistency of design, template
-authors are encouraged to assemble pages from distinct <i>component
-templates</i> that may be recycled in different contexts. One
+authors are encouraged to assemble pages from distinct <em>component
+templates</em> that may be recycled in different contexts. One
 typical practice is to build a "master" template for an entire
 section of a site, with a common header, footer and sidebar layout.
 For each page request, the "content" template is incorporated
@@ -143,9 +143,9 @@ box.</p><strong>10.10.4 Conditional Insertion</strong><p>Designers often need to
 specific data being presented. For example, when presenting a list
 of library books that a user has checked out, the designer might
 want to highlight the overdue ones in red. For this, designers must
-have the ability to write simple program logic (<i>Note: We run the
+have the ability to write simple program logic (<em>Note: We run the
 risk of inventing our own language here, we must be
-careful</i>).</p>
+careful</em>).</p>
 </li><li style="list-style: none">
 <strong>10.10.5 Iteration</strong><p>Dynamic pages often present lists of values or records, each of
 which typically represents the results of a database query.

@@ -18,7 +18,7 @@ OpenACS documentation staff.</div><div class="sect2">
 <a name="tutorial-picture" id="tutorial-picture"></a>The intended page map</h3></div></div></div><div class="mediaobject"><img src="images/openacs-best-practice.png"></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140722829292704" id="idp140722829292704"></a>Overview</h3></div></div></div><p>To start developing new code in OpenACS, we build a new package.
+<a name="idp140598232474128" id="idp140598232474128"></a>Overview</h3></div></div></div><p>To start developing new code in OpenACS, we build a new package.
 A package is a a discrete collection of web pages, tcl code, and
 database tables and procedures. A package with user interface is
 called an <span class="strong"><strong>application</strong></span>;
@@ -36,15 +36,15 @@ now. Code that is temporary hackage is clearly marked.</p><p>In this tutorial, w
 displaying a list of text notes.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140722829296992" id="idp140722829296992"></a>Before you begin</h3></div></div></div><p>You will need:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
+<a name="idp140598232488288" id="idp140598232488288"></a>Before you begin</h3></div></div></div><p>You will need:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>A computer with a working installation of OpenACS. If you don't
 have this, see <a class="xref" href="install-overview" title="Chapter 2. Installation Overview">Chapter 2,
-<i>Installation Overview</i>
-</a>.</p></li><li class="listitem"><p>Example files, which are included in the standard OpenACS 5.7.0
+<em>Installation Overview</em>
+</a>.</p></li><li class="listitem"><p>Example files, which are included in the standard OpenACS 5.9.0
 distribution.</p></li>
 </ul></div><div class="figure">
-<a name="idp140722829964688" id="idp140722829964688"></a><p class="title"><b>Figure 9.1. Assumptions
-in this section</b></p><div class="figure-contents"><div class="informaltable"><table class="informaltable" cellspacing="0" border="1">
+<a name="idp140598221905120" id="idp140598221905120"></a><p class="title"><strong>Figure 9.1. Assumptions
+in this section</strong></p><div class="figure-contents"><div class="informaltable"><table class="informaltable" cellspacing="0" border="1">
 <colgroup>
 <col><col>
 </colgroup><tbody>
@@ -62,7 +62,7 @@ in this section</b></p><div class="figure-contents"><div class="informaltable"><
 </div><br class="figure-break">
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140722829972304" id="idp140722829972304"></a>Use the APM to initialize a new
+<a name="idp140598221485520" id="idp140598221485520"></a>Use the APM to initialize a new
 package</h3></div></div></div><p>We use the <a class="ulink" href="packages" target="_top">ACS Package Manager</a> (APM) to add, remove, and upgrade
 packages. It handles package meta-data, such as lists of files that
 belong in the package. Each package is uniquely identified by a
@@ -102,7 +102,7 @@ the package will be within this directory. <a class="ulink" href="packages" targ
 packages</a>).</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140722829995168" id="idp140722829995168"></a>Add an Application Instance to the
+<a name="idp140598223122096" id="idp140598223122096"></a>Add an Application Instance to the
 Server</h3></div></div></div><p>In order to see your work in progress, you must create a map
 between the URL space of incoming requests and the package
 application instance. You do this by adding the application in the
@@ -121,7 +121,7 @@ fields are optional).</p></li>
 to be satisfied from the files at <code class="computeroutput">/var/lib/aolserver/$OPENACS_SERVICE_NAME/packages/myfirstpackage/www</code>.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140722830003952" id="idp140722830003952"></a>Quick start</h3></div></div></div><p>The remainder of the tutorial walks you through each file one at
+<a name="idp140598222359408" id="idp140598222359408"></a>Quick start</h3></div></div></div><p>The remainder of the tutorial walks you through each file one at
 a time as you create the package. You can skip all this, and get a
 working package, by doing the following:</p><pre class="screen">
 cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/acs-core-docs/www/files/tutorial

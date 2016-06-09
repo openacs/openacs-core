@@ -9,17 +9,17 @@
 <li>Drops the attribute storage tables for all content types you
 have defined.</li><li>Drops the general tables for the content repository.</li>
 </ol>
-<p>The uninstall script does <b>not</b> do the following:</p>
+<p>The uninstall script does <strong>not</strong> do the following:</p>
 <ol>
-<li>It does <b>not</b> delete rows from the <tt>acs_objects</tt>
+<li>It does <strong>not</strong> delete rows from the <tt>acs_objects</tt>
 table. Many other tables reference the <tt>object_id</tt> column in
 this table, so there is the possibility that the uninstall script
-will encounter foreign key reference errors.</li><li>It does <b>not</b> delete types from the
+will encounter foreign key reference errors.</li><li>It does <strong>not</strong> delete types from the
 <tt>acs_object_types</tt> table. As for objects themselves, it is
 impossible for an automatic script to properly handle disposal of
 all foreign key references.</li>
 </ol>
-<p>Because of what the uninstall script does <b>not</b> do, it is
+<p>Because of what the uninstall script does <strong>not</strong> do, it is
 only appropriate for removing the content repository <em>in
 preparation for removing the entire ACS Objects data model</em>. If
 you wish to upgrade an existing installation and cannot afford to

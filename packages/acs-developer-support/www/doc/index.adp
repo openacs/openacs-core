@@ -25,7 +25,7 @@ software is doing under the hood.</p>
 Emacs, and <tt>tail -f
 /web/servername/log/servername-error.log</tt>. Now this has been
 augmented: <tt>ad_footer</tt> and <tt>ad_admin_footer</tt> now
-display a link entitled <i>Developer Information</i>. (You can use
+display a link entitled <em>Developer Information</em>. (You can use
 the <tt>ds_link</tt> procedure to generate the link yourself.)
 Following the link displays a screenful of information
 including:</p>
@@ -55,7 +55,7 @@ ds_comment "Foo is $foo"
 </pre></blockquote>
 
 Your comment will show up at the bottom of the page, beneath the
-<i>Developer Information</i>
+<em>Developer Information</em>
  link (but only for site-wide
 administrators). It will also be displayed on the Developer
 Information page itself.

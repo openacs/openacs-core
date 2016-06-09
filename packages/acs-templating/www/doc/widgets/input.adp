@@ -28,7 +28,7 @@ radio buttons to display. The <em>option_list</em> is a list of
 label-value pairs. For example,</p>
 <blockquote><pre>
 template::element create test_form cost \
- -label "Car Cost" -datatype number <b>-widget radio</b> \
+ -label "Car Cost" -datatype number <strong>-widget radio</strong> \
  -options { {Cheap 1000} {Medium 50000} {Expensive 999999} }
 </pre></blockquote>
 

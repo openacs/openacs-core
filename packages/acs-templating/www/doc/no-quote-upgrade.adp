@@ -7,7 +7,7 @@
 
 The variable substitution in the templating has been changed to
 become more friendly towards quoting. The rationale for the change
-and the definition of terms like <i>quoting</i>
+and the definition of terms like <em>quoting</em>
  are present in
 <a href="no-quote">the quoting article</a>
 . As it discusses
@@ -44,9 +44,9 @@ don't internationalize.
 this change. Most variables either need to be quoted (those
 containing textual data that comes from the database or from the
 user) or are unaffected by quoting (numerical database IDs, etc.)
-The variables where this behavior is undesired are <b>those that
-contain HTML</b> which is expected to be included as part of the
-page, and <b>those that are already quoted</b> by Tcl code. Such
+The variables where this behavior is undesired are <strong>those that
+contain HTML</strong> which is expected to be included as part of the
+page, and <strong>those that are already quoted</strong> by Tcl code. Such
 variables should be protected from quoting by the <tt>;noquote</tt>
 modifier.</p>
 <h3>The Most Common Cases.</h3>
@@ -55,7 +55,7 @@ The most common cases where you need to add <tt>;noquote</tt>
  to
 the variable name are easy to recognize and identify.
 <p>
-<b>Hidden form variables.</b><br>
+<strong>Hidden form variables.</strong><br>
 Also known as "hidden input fields", hidden form variables are form
 fields with pre-defined values which are not shown to the user.
 These days they are used for transferring internal state across
@@ -107,26 +107,26 @@ everything works as expected:
       
 </pre></blockquote>
 <p>
-<b>Snippets of HTML produced by Tcl code, aka
-<i>widgets</i>
-</b>.<br>
+<strong>Snippets of HTML produced by Tcl code, aka
+<em>widgets</em>
+</strong>.<br>
 Normally we try to fit all HTML code into the ADP template and have
 the Tcl code handle the "logic" of the program. And yet, sometimes
 pieces of relatively convoluted HTML need to be included in many
 templates. In such cases, it makes sense to generate the
-<i>widget</i> programmatically and include it into the template as
+<em>widget</em> programmatically and include it into the template as
 a variable. A typical widget is a date entry widget which provides
 the user the input and selection boxes for year, month, and day,
 all of which default to the current date.</p>
-<p>Another example of widgets is the <i>context bar</i> often found
+<p>Another example of widgets is the <em>context bar</em> often found
 on top of ACS pgages.</p>
 <p>Obviously, all widgets should be treated as HTML and therefore
 adorned with the <tt>;noquote</tt> qualifier. This also assumes
 that the routines that <em>build</em> the widget are correctly
-written and that they will quote the <i>components</i> used to
+written and that they will quote the <em>components</em> used to
 build the widget.</p>
 <p>
-<b>Pieces of text that are already quoted.</b><br>
+<strong>Pieces of text that are already quoted.</strong><br>
 This quoting is usually part of a more general preparation for HTML
 rendering of the text. For instance, a bboard posting can be either
 HTML or text. If it is HTML, we transmit it as is; if not, we
@@ -144,7 +144,7 @@ consciously chose to let the master template handle a variable
 given by the Tcl code. Typically page titles, headings, and context
 bars are handled this way. For example:</p>
 <blockquote>
-<b>master:</b><pre>
+<strong>master:</strong><pre>
 &lt;head&gt;
   &lt;title&gt;\@title\@&lt;/title&gt;
 &lt;/head&gt;
@@ -153,7 +153,7 @@ bars are handled this way. For example:</p>
   &lt;slave&gt;
 &lt;/body&gt;
       
-</pre><b>slave:</b><pre>
+</pre><strong>slave:</strong><pre>
 &lt;master&gt;
 &lt;property name="title"&gt;\@title\@&lt;/property&gt;
 &lt;property name="heading"&gt;\@title\@&lt;/property&gt;
@@ -181,13 +181,13 @@ templating system should avoid this pitfall by quoting the variable
 (or not) only once, at the point where the value is passed from the
 Tcl code to the templating system. However, no such point in time
 exists because what in fact happens is that the template gets
-compiled into code that simply <i>takes</i> what it needs from the
-environment and <i>then</i> does the quoting. Properties are passed
+compiled into code that simply <em>takes</em> what it needs from the
+environment and <em>then</em> does the quoting. Properties are passed
 to the master so that all the property variables are shoved into an
 environment; by the time the master template is executed, all
 information on which variable came from where and whether it might
 have already been quoted is lost.</font></blockquote>
-<p>This occurrence is often referred to as <i>over-quoting</i>.
+<p>This occurrence is often referred to as <em>over-quoting</em>.
 Over-quoting is sometimes hard to detect because things seem to
 work fine in most cases. To notice the problem in the example above
 (and in any other over-quoting example), the title needs to contain
@@ -208,7 +208,7 @@ the package and one for the whole site.</p>
 <p>To reiterate, a bug-free version of the slave template looks
 like this:</p>
 <blockquote>
-<b>slave sans over-quoting:</b><pre>
+<strong>slave sans over-quoting:</strong><pre>
 &lt;master&gt;
 &lt;property name="doc(title)"&gt;\@title;literal\@&lt;/property&gt;
 &lt;property name="heading"&gt;\@title;literal\@&lt;/property&gt;
@@ -219,10 +219,10 @@ like this:</p>
 <p>The exact same problems when the <tt>include</tt> statement
 passes some text. Here is an example:</p>
 <blockquote>
-<b>Including template:</b><pre>
+<strong>Including template:</strong><pre>
 &lt;include src="user-kick-form" id=\@kicked_id\@ reason=\@default_reason\@&gt;
       
-</pre><b>Included template:</b><pre>
+</pre><strong>Included template:</strong><pre>
 &lt;form action="do-kick" method=POST&gt;
   Kick user \@name\@.&lt;br&gt;
   Reason: &lt;textarea name=reason&gt;\@reason\@&lt;/textarea&gt;&lt;br&gt;
@@ -245,7 +245,7 @@ second time by the included page. The fix is also similar: when you
 transfer non-constant text to an included page, make sure to add
 <tt>;literal</tt>.</p>
 <blockquote>
-<b>Including template, sans over-quoting:</b><pre>
+<strong>Including template, sans over-quoting:</strong><pre>
 &lt;include src="user-kick-form" id=\@kicked_id;literal\@ reason=\@default_reason;literal\@&gt;
       
 </pre>
@@ -285,12 +285,12 @@ testing for the quoting changes. Here are the cases you need to
 watch out for.
 <ul>
 <li>
-<b>HTML junk appearing in the page.</b><br>
+<strong>HTML junk appearing in the page.</strong><br>
 Literal HTML visible to the user typically comes from an
 "<tt>export_form_vars</tt>" or a widget variable that lacks
 <tt>;noquote</tt>. To fix the problem, simply add <tt>;noquote</tt>
 to the variable.</li><li>
-<b>Over-quoting and under-quoting.</b><br>
+<strong>Over-quoting and under-quoting.</strong><br>
 To detect quoting defects, you need to assume an active role in
 naming your objects. The best way to do it is to create objects
 (bboard forums, messages, news items, etc.) with names that contain

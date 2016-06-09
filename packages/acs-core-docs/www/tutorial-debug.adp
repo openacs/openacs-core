@@ -15,20 +15,20 @@ Chapter 9. Development Tutorial"
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140722777607472" id="idp140722777607472"></a>Debugging</h3></div></div></div><p>
-<b>Developer Support. </b>The Developer Support
+<a name="idp140598138534272" id="idp140598138534272"></a>Debugging</h3></div></div></div><p>
+<strong>Developer Support. </strong>The Developer Support
 package adds several goodies: debug information for every page; the
 ability to log comments to the page instead of the error log, and
 fast user switching so that you can test pages as anonymous and as
 dummy users without logging in and out.</p><p>
-<b>PostgreSQL. </b>You can work directly with the
+<strong>PostgreSQL. </strong>You can work directly with the
 database to do debugging steps like looking directly at tables and
 testing stored procedures. Start emacs. Type <strong class="userinput"><code>M-x sql-postgres</code></strong>. Press enter for
 server name and use <strong class="userinput"><code><span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span></code></strong>
 for database name. You can use C-(up arrow) and C-(down arrow) for
 command history.</p><p>Hint: "Parse error near *" usually means that an xql file wasn't
 recognized, because the tcl file is choking on the *SQL*
-placeholder that it falls back on.</p><p><b>Watching the server log. </b></p><p>To set up real-time monitoring of the AOLserver error log,
+placeholder that it falls back on.</p><p><strong>Watching the server log. </strong></p><p>To set up real-time monitoring of the AOLserver error log,
 <span class="bold"><strong>type</strong></span>
 </p><pre class="screen">
 less /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/log/openacs-dev-error.log
@@ -44,7 +44,7 @@ G goes to the end.<br>
           </p></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140722813836048" id="idp140722813836048"></a>Manual testing</h3></div></div></div><p>Make a list of basic tests to make sure it works</p><div class="segmentedlist"><table border="0">
+<a name="idp140598234053088" id="idp140598234053088"></a>Manual testing</h3></div></div></div><p>Make a list of basic tests to make sure it works</p><div class="segmentedlist"><table border="0">
 <thead><tr class="segtitle">
 <th>Test Num</th><th>Action</th><th>Expected Result</th>
 </tr></thead><tbody>
@@ -72,11 +72,11 @@ mfp::note::delete.</td><td class="seg">Proc should return 0 for success.</td>
 delete your own note. Edit your own note. Search for a note.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140722813952992" id="idp140722813952992"></a>Write automated tests</h3></div></div></div><div class="authorblurb">
+<a name="idp140598235796944" id="idp140598235796944"></a>Write automated tests</h3></div></div></div><div class="authorblurb">
 <p>by <a class="ulink" href="mailto:simon\@collaboraid.net" target="_top">Simon Carstensen</a> and Joel Aufrecht</p>
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><p>
-<a class="indexterm" name="idp140722828794752" id="idp140722828794752"></a> It seems to me that a lot of people have
+<a class="indexterm" name="idp140598235798992" id="idp140598235798992"></a> It seems to me that a lot of people have
 been asking for some guidelines on how to write automated tests.
 I've done several tests by now and have found the process to be
 extremely easy and useful. It's a joy to work with automated
@@ -144,7 +144,7 @@ any test. (<a class="ulink" href="http://www.nedbatchelder.com/blog/20030408T062
 myfirstpackage. You should see your test case. Run it and examine
 the results.</p><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140722815437424" id="idp140722815437424"></a>TCLWebtest tests</h4></div></div></div><p>API testing can only test part of our package - it doesn't test
+<a name="idp140598235818048" id="idp140598235818048"></a>TCLWebtest tests</h4></div></div></div><p>API testing can only test part of our package - it doesn't test
 the code in our adp/tcl pairs. For this, we can use TCLwebtest.
 TCLwebtest must be <a class="link" href="install-tclwebtest" title="Install tclwebtest.">installed</a> for this test to work.
 This provides a <a class="ulink" href="http://tclwebtest.sourceforge.net/doc/api_public.html" target="_top">library of functions</a> that make it easy to call a page
@@ -153,7 +153,7 @@ functions overlap slightly with acs-automated-testing; see the
 example provided for one approach on integrating them.</p>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140722813834592" id="idp140722813834592"></a>Example</h4></div></div></div><p>Now we can add the rest of the API tests, including a test with
+<a name="idp140598235820800" id="idp140598235820800"></a>Example</h4></div></div></div><p>Now we can add the rest of the API tests, including a test with
 deliberately bad data. The complete test looks like:</p><pre class="programlisting">
 ad_library {
     Test cases for my first package.

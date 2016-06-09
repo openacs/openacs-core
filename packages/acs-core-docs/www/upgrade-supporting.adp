@@ -68,7 +68,7 @@ exit</span></span>
 </pre>
 </li><li class="listitem">
 <p>
-<b>OPTIONAL: Install the new OpenFTS Engine. </b>If
+<strong>OPTIONAL: Install the new OpenFTS Engine. </strong>If
 you want to upgrade the OpenFTS Engine, do these steps. (You must
 have already upgraded the OpenFTS driver to 0.3.2.)</p><div class="orderedlist"><ol class="orderedlist" type="a">
 <li class="listitem"><p>Browse to <code class="computeroutput">http://<span class="replaceable"><span class="replaceable">yourserver</span></span>/admin/site-map</code>

@@ -9,7 +9,7 @@
 <ul>
 <li>Function content.blob_to_string
 <table cellpadding="3" cellspacing="0" border="0">
-<tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><i>Not yet documented</i></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
+<tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><em>Not yet documented</em></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
 function blob_to_string(
   blob_loc blob) return varchar2
 as language
@@ -23,7 +23,7 @@ name
 </table>
 </li><li>Procedure content.blob_to_file
 <table cellpadding="3" cellspacing="0" border="0">
-<tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><i>Not yet documented</i></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
+<tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><em>Not yet documented</em></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
 procedure blob_to_file(
 s varchar2, blob_loc blob)
 as language
@@ -37,7 +37,7 @@ name
 </table>
 </li><li>Procedure content.string_to_blob
 <table cellpadding="3" cellspacing="0" border="0">
-<tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><i>Not yet documented</i></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
+<tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><em>Not yet documented</em></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
 procedure string_to_blob(
   s varchar2, blob_loc blob)
 as language
@@ -51,7 +51,7 @@ name
 </table>
 </li><li>Procedure content.string_to_blob_size
 <table cellpadding="3" cellspacing="0" border="0">
-<tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><i>Not yet documented</i></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
+<tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><em>Not yet documented</em></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
 procedure string_to_blob_size(
   s varchar2, blob_loc blob, blob_size number)
 as language

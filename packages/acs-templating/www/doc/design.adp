@@ -27,38 +27,38 @@ accomplish.</em><p>The overall goal of the templating system is to provide the
 publishing team with a set of tools for simplifying the development
 and maintenance of the user interface. In particular:</p><ul>
 <li><p>
-<b>A common solution.</b> Programmers and designers should only
+<strong>A common solution.</strong> Programmers and designers should only
 have to learn a single system that serves as a UI substrate for all
 the functionally specific modules used on a site. The system should
 not make any assumptions about how pages should look or function.
 Designers should be able to change the default presentation of any
 module using a single metholodogy with minimal exposure to
 code.</p></li><li><p>
-<b>Separation of code (Tcl, Java and SQL) and layout (HTML).</b>
+<strong>Separation of code (Tcl, Java and SQL) and layout (HTML).</strong>
 Programmers should be able to specify the data sources and other
 properties of the template independently of the HTML template used
 to present the data. HTML authors should be to able to write
 templates that reference the data sources and properties without
 further intervention from the programmer to produce a finished
 page.</p></li><li><p>
-<b>Separation of page components.</b> There should be provisions
+<strong>Separation of page components.</strong> There should be provisions
 so that pages can be broken into discrete components to simplify
 maintenance of the HTML code and allow for reuse in different
 contexts. Examples of common page components include a navigation
 bar, a search box, or a section of a report or story. Another
 common example is a portal page that allows the user to choose from
 a palette of features to display.</p></li><li><p>
-<b>Global control over presentation.</b> There should be a way
+<strong>Global control over presentation.</strong> There should be a way
 to define one or more standard master templates used by most pages
 on a site, so that changes to the overall look and feel of a site
 can be made in one place.</p></li><li><p>
-<b>Dynamic selection of presentation style.</b> Given that the
+<strong>Dynamic selection of presentation style.</strong> Given that the
 same data may be presented in many different ways, there should be
 a general mechanism for selecting a specific presentation
 (including file format, layout, character set and language) for
 each page request, depending on characteristics such as user
 preference, location, browser type and/or device.</p></li><li><p>
-<b>Usability.</b> Programmers should be able to develop template
+<strong>Usability.</strong> Programmers should be able to develop template
 specifications using their standard tools for writing and
 maintaining code on the server. HTML authors should be able to
 access information about template specifications and work on
@@ -207,7 +207,7 @@ parsing happens recursively.
 <h4>Tcl Call Stack</h4>
 <p>Below is a diagram of the typical call stack when processing a
 page without dependent pages. To conform to the Tcl notion of
-what's up and down (as in <b>up</b>var), the stack grows down.</p>
+what's up and down (as in <strong>up</strong>var), the stack grows down.</p>
 <blockquote><table>
 <tr>
 <th align="left">Level</th><th align="left">Procedure</th><th align="left">Arguments</th>
@@ -224,7 +224,7 @@ what's up and down (as in <b>up</b>var), the stack grows down.</p>
 </tr><tr>
 <td>(6)</td><td>template::adp_prepare</td><td></td>
 </tr><tr>
-<td><b>#5</b></td><td>template::code::tcl::/web/<em>service</em>/www/page</td>
+<td><strong>#5</strong></td><td>template::code::tcl::/web/<em>service</em>/www/page</td>
 </tr>
 </table></blockquote>
 <p>Levels #1 to #3 exposed here are request processor internals. In

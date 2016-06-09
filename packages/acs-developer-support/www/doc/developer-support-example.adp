@@ -552,7 +552,7 @@ select ad_group_member_p(1472, system_administrator_group_id) from dual
 <td align="right" bgcolor="#DDDDDD" nowrap="nowrap">
   1 ms  </td><td bgcolor="#DDDDDD">releasehandle nsdb3 (log pool)</td>
 </tr><tr>
-<td bgcolor="black" align="right"><font color="white"><b>  3678 ms  </b></font></td><th align="left">(total)</th>
+<td bgcolor="black" align="right"><font color="white"><strong>  3678 ms  </strong></font></td><th align="left">(total)</th>
 </tr>
 </table></blockquote>
 <hr>

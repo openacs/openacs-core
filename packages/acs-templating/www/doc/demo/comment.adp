@@ -1,4 +1,7 @@
 <html>
+<head>
+<title>Comment Mechanisms</title>
+</head>
   <body>
     The template system introduces no new mechanisms for comments.
     You can use

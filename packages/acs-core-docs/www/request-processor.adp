@@ -14,14 +14,14 @@ Chapter 11. Development Reference"
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="rp-overview" id="rp-overview"></a>Overview</h3></div></div></div><p>This document is a brief introduction to the OpenACS 5.7.0
+<a name="rp-overview" id="rp-overview"></a>Overview</h3></div></div></div><p>This document is a brief introduction to the OpenACS 5.9.0
 Request Processor; more details can be found in the <a class="xref" href="rp-design" title="Request Processor Design">OpenACS 4
 Request Processor Design</a>. Here we cover the high level concepts
 behind the system, and implications and usage for the application
 developer.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="rp-thenewway" id="rp-thenewway"></a>Request Processor</h3></div></div></div><p>The 5.7.0 Request Processor is a global filter and set of Tcl
+<a name="rp-thenewway" id="rp-thenewway"></a>Request Processor</h3></div></div></div><p>The 5.9.0 Request Processor is a global filter and set of Tcl
 procs that respond to every incoming URL reaching the server. The
 following diagram summarizes the stages of the request processor
 assuming a URL request like <code class="computeroutput">http://someserver.com/notes/somepage.adp</code>.</p><div class="mediaobject" align="center"><img src="images/rp-flow.gif" align="middle"></div><div class="variablelist"><dl class="variablelist">
@@ -46,7 +46,7 @@ handler</a> is described in detail in its own document. It examines
 the client request and either extracts or sets up new session
 tokens for the user.</p></dd><dt><span class="term">Stage 3: Authorization</span></dt><dd><p>Next, the Request Processor checks if the user has appropriate
 access privileges to the requested part of the site. In OpenACS
-5.7.0, access control is dictated by the <a class="ulink" href="permissions" target="_top">permissions system</a>. In this case,
+5.9.0, access control is dictated by the <a class="ulink" href="permissions" target="_top">permissions system</a>. In this case,
 the RP checks if the user has "read" priviledges on the object in
 the site map specified by the URL. This object is typically a
 package instance, but it could easily be something more granular,

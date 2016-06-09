@@ -21,7 +21,7 @@ approach usually taken by auth-ldap. Both will be dealt with in
 these section</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
 <a name="install-openldap" id="install-openldap"></a><p>
-<b>Install openldap. </b>Download and install
+<strong>Install openldap. </strong>Download and install
 ns_ldap</p><pre class="screen">
 [root aolserver]# <strong class="userinput"><code>cd /usr/local/src/</code></strong>
           [root src]# <strong class="userinput"><code>wget ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/openldap-2.2.17.tgz</code></strong>
@@ -40,7 +40,7 @@ make install
 </pre>
 </li><li class="listitem">
 <a name="install-ns_ldap" id="install-ns_ldap"></a><p>
-<b>Install ns_ldap. </b>Download and install
+<strong>Install ns_ldap. </strong>Download and install
 ns_ldap</p><pre class="screen">
 [root aolserver]# <strong class="userinput"><code>cd /usr/local/src/aolserver/</code></strong>
           [root aolserver]# <strong class="userinput"><code>wget http://www.sussdorff.de/ressources/nsldap.tgz</code></strong>
@@ -57,8 +57,8 @@ make install LDAP=/usr/local/openldap INST=/usr/local/aolserver
 </pre>
 </li><li class="listitem">
 <a name="configure-ns_ldap" id="configure-ns_ldap"></a><p>
-<b>Configure ns_ldap for traditional
-use. </b>Traditionally OpenACS has supported ns_ldap
+<strong>Configure ns_ldap for traditional
+use. </strong>Traditionally OpenACS has supported ns_ldap
 for authentification by storing the OpenACS password in an
 encrypted field within the LDAP server called "userPassword".
 Furthermore a CN field was used for searching for the username,
@@ -72,8 +72,8 @@ ${bindir}/nsldap.so</code> to enable the loading of the ns_ldap
 module.</p></li></ul></div>
 </li><li class="listitem">
 <a name="configure-ns_ldap-bind" id="configure-ns_ldap-bind"></a><p>
-<b>Configure ns_ldap for use with LDAP
-bind. </b>LDAP authentication usually is done by trying
+<strong>Configure ns_ldap for use with LDAP
+bind. </strong>LDAP authentication usually is done by trying
 to bind (aka. login) a user with the LDAP server. The password of
 the user is not stored in any field of the LDAP server, but kept
 internally. The latest version of ns_ldap supports this method with

@@ -15,22 +15,22 @@ Chapter 9. Development Tutorial"
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140722832207344" id="idp140722832207344"></a>Install some API</h3></div></div></div><p>As a workaround for missing content-repository functionality,
+<a name="idp140598226856288" id="idp140598226856288"></a>Install some API</h3></div></div></div><p>As a workaround for missing content-repository functionality,
 copy a provided file into the directory for tcl files:</p><pre class="screen"><span class="action"><span class="action">cp /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/acs-core-docs/www/files/tutorial/note-procs.tcl /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackage/tcl/</span></span></pre><p>To make this file take effect, go to the <a class="ulink" href="/acs-admin/apm" target="_top">APM</a> and choose "Reload changed"
 for "MyFirstPackage".</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140722837502784" id="idp140722837502784"></a>Page Map</h3></div></div></div><p>Our package will have two visible pages. The first shows a list
+<a name="idp140598227228464" id="idp140598227228464"></a>Page Map</h3></div></div></div><p>Our package will have two visible pages. The first shows a list
 of all objects; the second shows a single object in view or edit
 mode, and can also be used to add an object. The index page will
 display the list, but since we might reuse the list later, we'll
 put it in a seperate file and include it on the index page.</p><div class="figure">
-<a name="idp140722837504144" id="idp140722837504144"></a><p class="title"><b>Figure 9.5. Page
-Map</b></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/tutorial-page-map.png" align="middle" alt="Page Map"></div></div>
+<a name="idp140598227229824" id="idp140598227229824"></a><p class="title"><strong>Figure 9.5. Page
+Map</strong></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/tutorial-page-map.png" align="middle" alt="Page Map"></div></div>
 </div><br class="figure-break">
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140722837498400" id="idp140722837498400"></a>Build the "Index" page</h3></div></div></div><p>Each user-visible page in your package has, typically, three
+<a name="idp140598227221232" id="idp140598227221232"></a>Build the "Index" page</h3></div></div></div><p>Each user-visible page in your package has, typically, three
 parts. The <code class="computeroutput">tcl</code> file holds the
 procedural logic for the page, including Tcl and
 database-independent SQL code, and does things like check

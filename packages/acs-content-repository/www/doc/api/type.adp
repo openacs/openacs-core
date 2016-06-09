@@ -89,7 +89,7 @@ content_type.set_default_template</td>
 </li><li>
 <font size="+1">Function:</font> content_type.is_content_type
 <table cellpadding="3" cellspacing="0" border="0">
-<tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><i>Not yet documented</i></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
+<tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><em>Not yet documented</em></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
 function is_content_type (
   object_type   in acs_object_types.object_type%TYPE
 ) return char;
@@ -226,7 +226,7 @@ content_type.register_child_type</td>
 <font size="+1">Procedure:</font>
 content_type.register_mime_type
 <table cellpadding="3" cellspacing="0" border="0">
-<tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><i>Not yet documented</i></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
+<tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><em>Not yet documented</em></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
 procedure register_mime_type (
   content_type  in cr_content_mime_type_map.content_type%TYPE,
   mime_type     in cr_content_mime_type_map.mime_type%TYPE
@@ -370,7 +370,7 @@ content_type.register_child_type</td>
 <font size="+1">Procedure:</font>
 content_type.unregister_mime_type
 <table cellpadding="3" cellspacing="0" border="0">
-<tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><i>Not yet documented</i></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
+<tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><em>Not yet documented</em></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
 procedure unregister_mime_type (
   content_type  in cr_content_mime_type_map.content_type%TYPE,
   mime_type     in cr_content_mime_type_map.mime_type%TYPE

@@ -22,8 +22,8 @@ multirow:</p>
 starting from 1, 2, 3, etc.</li><li>
 <tt>groupnum_last_p</tt> is a boolean saying whether this is
 the last row inside the current group tag, before the value of
-<tt>column</tt> changes. <b>Note</b>, however, that this
-<b>only</b> works inside the <b>inner-most</b><tt>group</tt> if
+<tt>column</tt> changes. <strong>Note</strong>, however, that this
+<strong>only</strong> works inside the <strong>inner-most</strong><tt>group</tt> if
 you have multiple <tt>group</tt> tags nested within each
 other.</li>
 </ul>

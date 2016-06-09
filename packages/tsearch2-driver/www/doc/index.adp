@@ -98,7 +98,7 @@ search service), you have to tell the search package to
 reindex:</p>
 <pre>
     insert into search_observer_queue (
-            select <i>my_id</i>, now(),'INSERT' from <i>my_table</i>
+            select <em>my_id</em>, now(),'INSERT' from <em>my_table</em>
             );
   
 </pre>

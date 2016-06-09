@@ -71,8 +71,8 @@ done
 <span class="emphasis"><em>(many lines omitted)</em></span>
 [$OPENACS_SERVICE_NAME myfirstpackage]$
 </pre><div class="figure">
-<a name="idp140722833177856" id="idp140722833177856"></a><p class="title"><b>Figure 10.1. Upgrading
-a local CVS repository</b></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/development-with-cvs.png" align="middle" alt="Upgrading a local CVS repository"></div></div>
+<a name="idp140598235666480" id="idp140598235666480"></a><p class="title"><strong>Figure 10.1. Upgrading
+a local CVS repository</strong></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/development-with-cvs.png" align="middle" alt="Upgrading a local CVS repository"></div></div>
 </div><br class="figure-break">
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

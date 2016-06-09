@@ -16,7 +16,7 @@ which specifies all the possible choices. The <em>option_list</em>
 is a list of label-value pairs. For example,</p>
 <blockquote><pre>
 template::element create pizza_form topping \
- -label "Pizza Topping" -datatype keyword <b>-widget select</b> \
+ -label "Pizza Topping" -datatype keyword <strong>-widget select</strong> \
  -options { 
     {Pepperoni pepperoni} 
     {Sausage sausage} 
@@ -43,7 +43,7 @@ selection widget shown above could be changed to</p>
 template::element create pizza_form topping \
  -label "Pizza Topping" -datatype keyword -widget select \
  -options { 
-    <b>{{No Topping} {}}</b>
+    <strong>{{No Topping} {}}</strong>
     {Pepperoni pepperoni} 
     {Sausage sausage} 
     {{Canadian Bacon} cbacon} 

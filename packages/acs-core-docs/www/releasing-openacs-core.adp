@@ -12,12 +12,12 @@ Chapter 16. Releasing OpenACS"
 <a name="releasing-openacs-core" id="releasing-openacs-core"></a>OpenACS
 Core and .LRN</h2></div></div></div><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem"><p>
-<b>Update Translations. </b><a class="xref" href="update-translations" title="How to Update the translations">the section called
+<strong>Update Translations. </strong><a class="xref" href="update-translations" title="How to Update the translations">the section called
 &ldquo;How to Update the
 translations&rdquo;</a>
 </p></li><li class="listitem">
 <p>
-<b>Rebuild the Changelog. </b>Rebuild the Changelog.
+<strong>Rebuild the Changelog. </strong>Rebuild the Changelog.
 I use a tool called cvs2cl. Run this command from the package root
 to automatically generate a Changelog file in the same dir. We
 generate two changelogs, one for the minor branch and one for the
@@ -26,7 +26,7 @@ cvs2cl -F <span class="replaceable"><span class="replaceable">oacs-5-0</span></s
 cvs2cl -F <span class="replaceable"><span class="replaceable">oacs-5-0</span></span> --delta <span class="replaceable"><span class="replaceable">openacs-5-0-1-final</span></span>:<span class="replaceable"><span class="replaceable">oacs-5-0</span></span> -f ChangeLog-recent</span></span></pre>
 </li><li class="listitem">
 <p>
-<b>Update Version Numbers. </b>The version numbers
+<strong>Update Version Numbers. </strong>The version numbers
 in the documentation and in the packages must be updated. This
 should only happen after a release candidate is approved.</p><p class="remark"><em><span class="remark">.LRN: this must be
 repeated for .LRN modules (dotlrn-core in the dotlrn cvs tree) and
@@ -61,7 +61,7 @@ automated tests pass.</p></li><li class="listitem"><p>Commit changes to CVS</p><
 </ol></div>
 </li><li class="listitem">
 <p>
-<b>Tag the files in CVS. </b>The steps to this point
+<strong>Tag the files in CVS. </strong>The steps to this point
 should have ensured that the head of the current branch contains
 the full set of code to release. Now we need to tag it as the code
 to be released.</p><div class="orderedlist"><ol class="orderedlist" type="a">
@@ -121,9 +121,9 @@ cvs tag <span class="replaceable"><span class="replaceable">openacs-5-1-2-final<
 </li>
 </ol></div>
 </li><li class="listitem">
-<p><b>Make the tarball(s). </b></p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
+<p><strong>Make the tarball(s). </strong></p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem">
-<p><b>openacs-core. </b></p><div class="orderedlist"><ol class="orderedlist" type="a">
+<p><strong>openacs-core. </strong></p><div class="orderedlist"><ol class="orderedlist" type="a">
 <li class="listitem">
 <p>Go to a new working space and export the tagged files.</p><pre class="screen"><span class="action"><span class="action">mkdir /var/tmp/tarball
 cd /var/tmp/tarball
@@ -136,7 +136,7 @@ tar cz -f <span class="replaceable"><span class="replaceable">openacs-5.0.0a1.ta
 </li>
 </ol></div>
 </li><li class="listitem">
-<p><b>dotlrn. </b></p><div class="orderedlist"><ol class="orderedlist" type="a">
+<p><strong>dotlrn. </strong></p><div class="orderedlist"><ol class="orderedlist" type="a">
 <li class="listitem">
 <p>Go to a new working space and export the tagged files. (was
 getting errors here trying to use -d, so gave up and just moved
@@ -162,18 +162,18 @@ tar cz -f <span class="replaceable"><span class="replaceable">dotlrn-2.0.0a1.tar
 </li>
 </ul></div>
 </li><li class="listitem"><p>
-<b>Test the new tarball(s). </b>Download the
+<strong>Test the new tarball(s). </strong>Download the
 tarballs just created and install them and make sure everything
 looks okay and that automated tests pass.</p></li><li class="listitem">
 <p>
-<b>Update Web site. </b>Update the different places
+<strong>Update Web site. </strong>Update the different places
 on OpenACS.org where we track status.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>Release Status for the current version - something like
 http://openacs.org/projects/openacs/5.0/milestones</p></li><li class="listitem"><p>Home page of openacs.org</p></li><li class="listitem"><p>Post a new news item</p></li>
 </ul></div>
 </li><li class="listitem">
 <p>
-<b>Clean Up. </b>Clean up after yourself.</p><pre class="screen"><span class="action"><span class="action">cd /var/tmp
+<strong>Clean Up. </strong>Clean up after yourself.</p><pre class="screen"><span class="action"><span class="action">cd /var/tmp
 rm -rf tarball dotlrn-tarball dotlrn-packages openacs-<span class="replaceable"><span class="replaceable">5.0.0a1</span></span>
 rm -rf /var/tmp/openacs-4</span></span></pre>
 </li>

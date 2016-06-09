@@ -14,7 +14,7 @@ Developers</property>
 Package Developers</h1></div></div></div><div class="partintro">
 <p>Tutorials and reference material for creating new OpenACS
 packages.</p><div class="toc">
-<p><b>Table of Contents</b></p><dl class="toc">
+<p><strong>Table of Contents</strong></p><dl class="toc">
 <dt><span class="chapter"><a href="tutorial">9. Development
 Tutorial</a></span></dt><dd><dl>
 <dt><span class="sect1"><a href="tutorial-newpackage">Creating

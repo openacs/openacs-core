@@ -34,7 +34,7 @@ so most data models simply defer the issue by treating reference
 data as something simple to implement. Elsewhere. The reality is
 that for most organizations reference data is extremely important
 and also extremely difficult to manage.</p>
-<p>This module will not only <i>package</i> all of a site's
+<p>This module will not only <em>package</em> all of a site's
 reference data in one place, it will also help manage that
 data.</p>
 <h3>III. System Overview</h3>
@@ -55,7 +55,7 @@ information for him.</p>
 <h3>V. Related Links</h3>
 <ul><li><a href="design">Design document</a></li></ul>
 <h3>VI.A Requirements: Data Model</h3>
-<p>10.10 The package should use a table that is the <i>master</i>
+<p>10.10 The package should use a table that is the <em>master</em>
 table for all reference tables.<br>
 10.20 The package should employ a field to show whether this data
 is internally derived or not.<br>
@@ -96,12 +96,12 @@ countries, what should happen?</p>
 <ul>
 <li>The reference package should note this change.</li><li>The appropriate table is updated. In this case countries et
 al.</li><li>An update to the repository database field effective_date is
-added.</li><li>A <i>diff</i> type of entry into the reference repository
-history. <font color="red"><i>This is not in the current data
-model</i></font>
+added.</li><li>A <em>diff</em> type of entry into the reference repository
+history. <font color="red"><em>This is not in the current data
+model</em></font>
 </li><li>Then any sub-programs using this data will note the change of
 effective date and be able to handle the change as needed (i.e.
-simply read the new table).</li><li>Historical data will be available using this <i>diff</i> for
+simply read the new table).</li><li>Historical data will be available using this <em>diff</em> for
 those applications that need to use the old data</li>
 </ul>
 <p>Note also that it is possible to have overlapping effective

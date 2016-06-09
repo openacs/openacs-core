@@ -99,11 +99,11 @@ otherwise</td>
 of the following values:
 <ul>
 <li>
-<b>none</b>: Not recursive. Look for an exact match.</li><li>
-<b>up</b>: Recursive from specific to general. A search for
+<strong>none</strong>: Not recursive. Look for an exact match.</li><li>
+<strong>up</strong>: Recursive from specific to general. A search for
 "attack dogs" will also match "dogs", "animals", "mammals",
 etc.</li><li>
-<b>down</b>: Recursive from general to specific. A search for
+<strong>down</strong>: Recursive from general to specific. A search for
 "mammals" will also match "dogs", "attack dogs", "cats", "siamese
 cats", etc.</li>
 </ul>

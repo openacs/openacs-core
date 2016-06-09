@@ -16,8 +16,8 @@ OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
 <p>
-<b>Check suitability of previously installed
-TCL. </b>Start tcl (type <strong class="userinput"><code>tclsh</code></strong> or find it using
+<strong>Check suitability of previously installed
+TCL. </strong>Start tcl (type <strong class="userinput"><code>tclsh</code></strong> or find it using
 <strong class="userinput"><code>which tclsh</code></strong>).</p><pre class="screen">
 [root root]% <strong class="userinput"><code>info exists tcl_platform(threaded)</code></strong>
 1
@@ -31,8 +31,8 @@ info patchlevel
 </pre><p>If the first command returns anything other than <code class="computeroutput">1</code>, then tcl is not threaded. If tcl is
 threaded and the version is 8.4 or higher, then installing tcl from
 source is optional.</p><p>
-<a name="tcl-download" id="tcl-download"></a><b>Retrieve Tcl 8.4
-(or higher). </b>Download and install Tcl 8.4 from
+<a name="tcl-download" id="tcl-download"></a><strong>Retrieve Tcl 8.4
+(or higher). </strong>Download and install Tcl 8.4 from
 source</p><p>Note for Debian users: you can apt-get install tcl8.4-dev if you
 have the right version (stable users will need to add tcl8.4 to
 their sources.list file as described on the <a class="link" href="postgres" title="Install PostgreSQL">Install Postgres</a>
@@ -63,7 +63,7 @@ make install</span></span>
 </pre>
 </li><li class="listitem">
 <a name="aolserver4-download" id="aolserver4-download"></a><p>
-<b>Retrieve AOLserver. </b>Download the aolserver
+<strong>Retrieve AOLserver. </strong>Download the aolserver
 from CVS.</p><pre class="screen">
 [root root]# <strong class="userinput"><code>cd /usr/local/src</code></strong>
 [root src]# <strong class="userinput"><code>mkdir aolserver40r10</code></strong>
@@ -92,8 +92,8 @@ cvs -z3 -d:pserver:anonymous\@cvs.sourceforge.net:/cvsroot/tcllib co -r tcllib-1
 </pre>
 </li><li class="listitem">
 <a name="aolserver4-install" id="aolserver4-install"></a><p>
-<b>Configure, compile and install
-AOLserver. </b>Many people need to run more than one
+<strong>Configure, compile and install
+AOLserver. </strong>Many people need to run more than one
 version of AOLserver in parallel. This section accomodates future
 upgrades by installing AOLserver 4 in <code class="computeroutput">/usr/local/aolserver40r9</code>.</p><pre class="screen">
 [root aolserver]# <strong class="userinput"><code>cd /usr/local/src/aolserver40r10/aolserver</code></strong>
@@ -112,8 +112,8 @@ they use the correct path.</p><pre class="screen">
 [root aolserver]# <strong class="userinput"><code>ln -s /usr/local/aolserver40r10 /usr/local/aolserver</code></strong>
 </pre>
 </li><li class="listitem">
-<a name="aolserver4-modules-install" id="aolserver4-modules-install"></a><p><b>Configure, compile and install the
-modules. </b></p><div class="orderedlist"><ol class="orderedlist" type="a">
+<a name="aolserver4-modules-install" id="aolserver4-modules-install"></a><p><strong>Configure, compile and install the
+modules. </strong></p><div class="orderedlist"><ol class="orderedlist" type="a">
 <li class="listitem">
 <p>
 <a name="aolserver4-nscache-install" id="aolserver4-nscache-install"></a>Install nscache</p><pre class="screen">
@@ -191,7 +191,7 @@ platforms (e.g. for Debian 3.0: --with-tcl=/usr/lib/tcl8.4)</p><p>Now you can co
 </ol></div>
 </li><li class="listitem">
 <a name="aolserver4-db-wrapper" id="aolserver4-db-wrapper"></a><p>
-<b>Add a database-specific wrapper script. </b>This
+<strong>Add a database-specific wrapper script. </strong>This
 script sets database environment variables before starting
 AOLserver; this allows the AOLserver instance to communicate with
 the database. There is one script for Oracle and one for
@@ -205,28 +205,28 @@ page and integrated into the text there)</p><div class="itemizedlist"><ul class=
 <li class="listitem">
 <p>Oracle</p><pre class="screen">
 [root aolserver]# <strong class="userinput"><code>cd /usr/local/aolserver/bin</code></strong>
-[root bin]# <strong class="userinput"><code>cp /tmp/openacs-5.7.0/packages/acs-core-docs/www/files/nsd-oracle.txt ./nsd-oracle</code></strong>
+[root bin]# <strong class="userinput"><code>cp /tmp/openacs-5.9.0/packages/acs-core-docs/www/files/nsd-oracle.txt ./nsd-oracle</code></strong>
 [root bin]# <strong class="userinput"><code>chmod 750 nsd-oracle</code></strong>
 [root bin]#
 <span class="action"><span class="action">cd /usr/local/aolserver/bin
-cp /var/tmp/openacs-5.7.0/packages/acs-core-docs/www/files/nsd-oracle.txt ./nsd-oracle
+cp /var/tmp/openacs-5.9.0/packages/acs-core-docs/www/files/nsd-oracle.txt ./nsd-oracle
 chmod 750 nsd-oracle</span></span>
 </pre>
 </li><li class="listitem">
 <p>PostgreSQL</p><pre class="screen">
 [root aolserver]# <strong class="userinput"><code>cd /usr/local/aolserver/bin</code></strong>
-[root bin]# <strong class="userinput"><code>cp /var/tmp/openacs-5.7.0/packages/acs-core-docs/www/files/nsd-postgres.txt ./nsd-postgres</code></strong>
+[root bin]# <strong class="userinput"><code>cp /var/tmp/openacs-5.9.0/packages/acs-core-docs/www/files/nsd-postgres.txt ./nsd-postgres</code></strong>
 [root bin]# <strong class="userinput"><code>chmod 755 nsd-postgres</code></strong>
 [root bin]#
 <span class="action"><span class="action">cd /usr/local/aolserver/bin
-cp /var/tmp/openacs-5.7.0/packages/acs-core-docs/www/files/nsd-postgres.txt ./nsd-postgres
+cp /var/tmp/openacs-5.9.0/packages/acs-core-docs/www/files/nsd-postgres.txt ./nsd-postgres
 chmod 755 nsd-postgres</span></span>
 </pre>
 </li>
 </ul></div><p>You may need to edit these scripts if you are not using
 /usr/local/aolserver as the directory of Aolserver4.</p>
 </li><li class="listitem"><p>
-<b>Change startup script (optional). </b>If you want
+<strong>Change startup script (optional). </strong>If you want
 to run AOLserver on a port below 1024 (normally, for a webserver
 you will use 80), you will have to change the <code class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/etc/daemontools/run</code>
 script according to the documentation found there (namely: Add the
@@ -238,7 +238,7 @@ victorg Exp $)</div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 		    leftLink="postgres" leftLabel="Prev" leftTitle="Install PostgreSQL"
-		    rightLink="openacs" rightLabel="Next" rightTitle="Install OpenACS 5.7.0"
+		    rightLink="openacs" rightLabel="Next" rightTitle="Install OpenACS 5.9.0"
 		    homeLink="index" homeLabel="Home" 
 		    upLink="complete-install" upLabel="Up"> 
 		

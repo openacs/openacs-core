@@ -8,10 +8,10 @@
 <h3>In a Nutshell</h3>
 
 When templatizing a legacy tcl page, your task is to
-<b>separate</b>
+<strong>separate</strong>
  code and graphical presentation. The latter goes
 into an ADP file; it contains essentially HTML, augmented by a few
-special tags and the <code>\@<i>variable</i>\@</code>
+special tags and the <code>\@<em>variable</em>\@</code>
  construct. The
 code goes into a Tcl script. In other words, a templated page
 consists of two files, a Tcl part that puts its results in data
@@ -246,12 +246,12 @@ module that uses the mechanism, not a whole page.
   context_bar:onevalue
   subsite_id:onevalue
   subsite:multirow
-</font><b>item</b>:multirow<font color="#999999">
+</font><strong>item</strong>:multirow<font color="#999999">
   footer:onevalue
 }</font>
 </pre></td><td> </td>
 </tr><tr bgcolor="#CCCCCC">
-<td align="center"><b>...</b></td><td align="center"><b>...</b></td><td align="center"><b>...</b></td>
+<td align="center"><strong>...</strong></td><td align="center"><strong>...</strong></td><td align="center"><strong>...</strong></td>
 </tr><tr>
 <td valign="top"><pre>
 append body "
@@ -288,7 +288,7 @@ append body "
 &lt;/ul&gt;
 "
 </pre></td><td valign="top"><pre>
-<font color="green">db_multirow <b>item</b>
+<font color="green">db_multirow <strong>item</strong>
 </font> news_items_select {
     select news_item_id, title
     from news_items_obj
@@ -303,7 +303,7 @@ append body "
 &lt;ul&gt;
 
 
-&lt;multiple name=<b>item</b>&gt;
+&lt;multiple name=<strong>item</strong>&gt;
 
 
 
@@ -313,11 +313,11 @@ append body "
 
   &lt;li&gt;&lt;a href=
       "item-view?news_item_id=<font color="blue">&lt;%
-      %&gt;</font>\@<b>item</b>.news_item_id\@"
-      &gt;\@<b>item</b>.title\@&lt;/a&gt;
+      %&gt;</font>\@<strong>item</strong>.news_item_id\@"
+      &gt;\@<strong>item</strong>.title\@&lt;/a&gt;
 &lt;/multiple&gt;
 
-&lt;if \@<b>item</b>:rowcount\@ eq 0&gt;
+&lt;if \@<strong>item</strong>:rowcount\@ eq 0&gt;
   &lt;li&gt;There are
   currently no news items
   available.
@@ -380,7 +380,7 @@ value.</p>
 }</font>
 </pre></td><td> </td>
 </tr><tr bgcolor="#CCCCCC">
-<td align="center"><b>...</b></td><td align="center"><b>...</b></td><td align="center"><b>...</b></td>
+<td align="center"><strong>...</strong></td><td align="center"><strong>...</strong></td><td align="center"><strong>...</strong></td>
 </tr><tr>
 <td valign="top"><pre>
 

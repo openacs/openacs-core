@@ -11,11 +11,11 @@ Chapter 5. Upgrading"
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="upgrade-4.6.3-to-5" id="upgrade-4.6.3-to-5"></a>Upgrading OpenACS 4.6.3 to 5.0</h2></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>
-<b>Oracle. </b>This forum posting documents
+<strong>Oracle. </strong>This forum posting documents
 <a class="ulink" href="http://openacs.org/forums/message-view?message_id=201394" target="_top">how to upgrade an Oracle installation from OpenACS 4.6.3 to
 5</a> .</p></li><li class="listitem">
 <p>
-<b>PostGreSQL. </b>You must use PostGreSQL 7.3.x or
+<strong>PostGreSQL. </strong>You must use PostGreSQL 7.3.x or
 newer to upgrade OpenACS beyond 4.6.3. See <a class="link" href="upgrade-supporting" title="Upgrading from PostGreSQL 7.2 to 7.3">Upgrade PostGreSQL to
 7.3</a>; <a class="xref" href="individual-programs" title="Table 2.2. Version Compatibility Matrix">Table 2.2,
 &ldquo;Version Compatibility
@@ -23,8 +23,8 @@ Matrix&rdquo;</a>
 </p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem"><p><a class="link" href="snapshot-backup" title="Manual backup and recovery">Back up the database and file
 system.</a></p></li><li class="listitem"><p>
-<b>Upgrade the file system for
-packages/acs-kernel. </b><a class="xref" href="upgrade-openacs-files" title="Upgrading the OpenACS files">the section called
+<strong>Upgrade the file system for
+packages/acs-kernel. </strong><a class="xref" href="upgrade-openacs-files" title="Upgrading the OpenACS files">the section called
 &ldquo;Upgrading the OpenACS
 files&rdquo;</a>
 </p></li><li class="listitem">

@@ -9,9 +9,9 @@
 		<div class="book">
 <div class="titlepage">
 <div><div><h1 class="title">
-<a name="idp140722818749440" id="idp140722818749440"></a>OpenACS Core Documentation</h1></div></div><hr>
+<a name="idp140598216278192" id="idp140598216278192"></a>OpenACS Core Documentation</h1></div></div><hr>
 </div><div class="toc">
-<p><b>Table of Contents</b></p><dl class="toc">
+<p><strong>Table of Contents</strong></p><dl class="toc">
 <dt><span class="part"><a href="for-everyone">I. OpenACS For
 Everyone</a></span></dt><dd><dl>
 <dt><span class="chapter"><a href="general-documents">1. High
@@ -32,7 +32,7 @@ Unix-like system and supporting software</a></span></dt><dt><span class="sect1">
 8.1.7</a></span></dt><dt><span class="sect1"><a href="postgres">Install
 PostgreSQL</a></span></dt><dt><span class="sect1"><a href="aolserver4">Install AOLserver
 4</a></span></dt><dt><span class="sect1"><a href="openacs">Install OpenACS
-5.7.0</a></span></dt><dt><span class="sect1"><a href="win2k-installation">OpenACS
+5.9.0</a></span></dt><dt><span class="sect1"><a href="win2k-installation">OpenACS
 Installation Guide for Windows</a></span></dt><dt><span class="sect1"><a href="mac-installation">OpenACS
 Installation Guide for Mac OS X</a></span></dt>
 </dl></dd><dt><span class="chapter"><a href="configuring-new-site">4.
@@ -205,7 +205,7 @@ Update the translations</a></span></dt>
 </dl></dd><dt><span class="index"><a href="ix01">Index</a></span></dt>
 </dl>
 </div><div class="list-of-figures">
-<p><b>List of Figures</b></p><dl>
+<p><strong>List of Figures</strong></p><dl>
 <dt>4.1. <a href="how-do-I">Site
 Templates</a>
 </dt><dt>4.2. <a href="how-do-I">Granting
@@ -253,7 +253,7 @@ layout diagram</a>
 </dt>
 </dl>
 </div><div class="list-of-tables">
-<p><b>List of Tables</b></p><dl>
+<p><strong>List of Tables</strong></p><dl>
 <dt>2.1. <a href="install-steps">Default
 directories for a standard install</a>
 </dt><dt>2.2. <a href="individual-programs">Version
@@ -275,7 +275,7 @@ Localization Overview</a>
 </dt>
 </dl>
 </div><div class="list-of-examples">
-<p><b>List of Examples</b></p><dl><dt>12.1. <a href="variables">Getting
+<p><strong>List of Examples</strong></p><dl><dt>12.1. <a href="variables">Getting
 datetime from the database ANSI-style</a>
 </dt></dl>
 </div>

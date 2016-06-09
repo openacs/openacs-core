@@ -13,15 +13,15 @@ Chapter 2. Installation Overview"
 reference. More up-to-date documentation is in the <a class="ulink" href="http://openacs.org/xowiki/openacs-system-install" target="_top">install sections in the Wiki</a>.</p><p>The basic steps for installing OpenACS are:</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem"><p>Install an OS and supporting software (see <a class="xref" href="unix-installation" title="Install a Unix-like system and supporting software">Install a
 Unix-like OS</a> or <a class="xref" href="install-redhat" title="Appendix A. Install Red Hat 8/9">Appendix A,
-<i>Install Red Hat 8/9</i>
+<em>Install Red Hat 8/9</em>
 </a> for more details). See the <a class="xref" href="individual-programs" title="Table 2.2. Version Compatibility Matrix">Table 2.2,
 &ldquo;Version Compatibility
 Matrix&rdquo;</a>.</p></li><li class="listitem"><p>Install a database (see <a class="xref" href="oracle" title="Install Oracle 8.1.7">the section called
 &ldquo;Install Oracle 8.1.7&rdquo;</a> or
 <a class="xref" href="postgres" title="Install PostgreSQL">Install PostgreSQL</a>).</p></li><li class="listitem"><p>Install AOLserver (<a class="xref" href="aolserver4" title="Install AOLserver 4">Install AOLserver 4</a>) .</p></li><li class="listitem"><p>Create a unique database and system user. Install the OpenACS
 tarball, start and AOLserver instance, and use the OpenACS web
-pages to complete installation (see <a class="xref" href="openacs" title="Install OpenACS 5.7.0">Install OpenACS
-5.7.0</a>).</p></li>
+pages to complete installation (see <a class="xref" href="openacs" title="Install OpenACS 5.9.0">Install OpenACS
+5.9.0</a>).</p></li>
 </ol></div><p>Specific instructions are available for Mac OS X and Windows2000
 (see <a class="xref" href="mac-installation" title="OpenACS Installation Guide for Mac OS X">the section called
 &ldquo;OpenACS Installation Guide for Mac OS
@@ -92,8 +92,8 @@ dropdb <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME
 createdb <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
 </span></span>
 </pre><p>
-<a name="cut-and-paste-name-var" id="cut-and-paste-name-var"></a><b>Setting a global shell variable for
-cut and paste. </b>In order to cut and paste the
+<a name="cut-and-paste-name-var" id="cut-and-paste-name-var"></a><strong>Setting a global shell variable for
+cut and paste. </strong>In order to cut and paste the
 instructions into your shell, you must set the environment variable
 $OPENACS_SERVICE_NAME. In order to set it globally so that it works
 for any new users or special service users you may create, edit the
@@ -106,9 +106,9 @@ export OPENACS_SERVICE_NAME=<span class="replaceable"><span class="replaceable">
 </ul></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140722829601824" id="idp140722829601824"></a>Paths and Users</h3></div></div></div><div class="table">
-<a name="idp140722829602464" id="idp140722829602464"></a><p class="title"><b>Table 2.1. Default
-directories for a standard install</b></p><div class="table-contents"><table class="table" summary="Default directories for a standard install" cellspacing="0" width="100%" border="1">
+<a name="idp140598226649664" id="idp140598226649664"></a>Paths and Users</h3></div></div></div><div class="table">
+<a name="idp140598226650304" id="idp140598226650304"></a><p class="title"><strong>Table 2.1. Default
+directories for a standard install</strong></p><div class="table-contents"><table class="table" summary="Default directories for a standard install" cellspacing="0" width="100%" border="1">
 <colgroup>
 <col><col>
 </colgroup><tbody>
@@ -118,7 +118,7 @@ directories for a standard install</b></p><div class="table-contents"><table cla
 <td>name of administrative access account</td><td>remadmin</td>
 </tr><tr>
 <td>OpenACS service</td><td>
-<a class="indexterm" name="idp140722829607072" id="idp140722829607072"></a><span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span> (set to service0
+<a class="indexterm" name="idp140598226654912" id="idp140598226654912"></a><span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span> (set to service0
 in default install)</td>
 </tr><tr>
 <td>OpenACS service account</td><td><span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span></td>
@@ -130,7 +130,7 @@ in default install)</td>
 <td>Location of source code tarballs for new software</td><td>/var/tmp</td>
 </tr><tr>
 <td>The OpenACS tarball contains some files which are useful while
-setting up other software. Those files are located at:</td><td>/var/tmp/openacs-5.7.0/packages/acs-core-docs/www/files</td>
+setting up other software. Those files are located at:</td><td>/var/tmp/openacs-5.9.0/packages/acs-core-docs/www/files</td>
 </tr><tr>
 <td>Database backup directory</td><td><span class="replaceable"><span class="replaceable">/var/lib/aolserver/$OPENACS_SERVICE_NAME/database-backup</span></span></td>
 </tr><tr>

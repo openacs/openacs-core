@@ -225,7 +225,7 @@ custom instance of Notes for every registered user, mount that
 instance at the user's home page, and set up the permissions so
 that the instance is only visible to that user. The end result is a
 site where users can come and write notes to themselves.</p><p>This is a good example of the leverage available in the OpenACS
-5.7.0 system. The code that we have written for Notes is not at all
+5.9.0 system. The code that we have written for Notes is not at all
 more complex than a similar application without access control or
 site map awareness. By adding a small amount of code, we have taken
 a small, simple, and special purpose application to something that
@@ -234,7 +234,7 @@ complete with multi-user features, access control, and centralized
 administration.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="subsites-summary" id="subsites-summary"></a>Summary</h3></div></div></div><p>In OpenACS 5.7.0, application pages and scripts can be aware of
+<a name="subsites-summary" id="subsites-summary"></a>Summary</h3></div></div></div><p>In OpenACS 5.9.0, application pages and scripts can be aware of
 the package instance, or subsite in which they are executing. This
 is a powerful general purpose mechanism that can be used to
 structure web services in very flexible ways.</p><p>We saw how to use this mechanism in the Notes application and

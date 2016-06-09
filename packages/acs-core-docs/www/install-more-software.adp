@@ -13,7 +13,7 @@ Part II. Administrator's Guide"
 <div class="titlepage"><div><div><h2 class="title">
 <a name="install-more-software" id="install-more-software"></a>Appendix B. Install
 additional supporting software</h2></div></div></div><div class="toc">
-<p><b>Table of Contents</b></p><dl class="toc">
+<p><strong>Table of Contents</strong></p><dl class="toc">
 <dt><span class="sect1"><a href="openacs-unpack">Unpack the
 OpenACS tarball</a></span></dt><dt><span class="sect1"><a href="install-cvs">Initialize CVS
 (OPTIONAL)</a></span></dt><dt><span class="sect1"><a href="psgml-for-emacs">Add PSGML

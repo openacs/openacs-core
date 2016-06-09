@@ -30,8 +30,8 @@ in the 'normal' colors. The label is 'do', though.</p>
 the one below, which only uses the first 32 measurements. The
 curves are less smooth, but the message is the same.</p>
 <p><img src="time3a/stage09.gif"></p>
-<p>In ACS 3.4.6, Tcl-only pages are sereved <b>faster</b> than in
-4.0 beta-2. The templated pages are delivered much <b>slower</b>.
+<p>In ACS 3.4.6, Tcl-only pages are sereved <strong>faster</strong> than in
+4.0 beta-2. The templated pages are delivered much <strong>slower</strong>.
 The first time the template system reads a templated page, it takes
 about 3 seconds! The result is cached, mitigating the problem a
 lot.</p>

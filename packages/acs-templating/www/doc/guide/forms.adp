@@ -11,7 +11,7 @@ Forms</property>
 <p>This document outlines the steps necessary to build a dynamic
 form in Tcl code.</p>
 <p>
-<b>Important Note:</b> The <tt><a href="http://openacs.org//api-doc/proc-view?proc=ad%5fform">ad_form</a></tt>
+<strong>Important Note:</strong> The <tt><a href="http://openacs.org//api-doc/proc-view?proc=ad%5fform">ad_form</a></tt>
 function has been written to be a more consistent, easier way to
 create and manage dynamic forms. Behind the scenes it uses the
 templating system's form builder, but it hides much of its

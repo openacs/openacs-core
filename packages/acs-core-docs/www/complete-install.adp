@@ -13,13 +13,13 @@ Part II. Administrator's Guide"
 <div class="titlepage"><div><div><h2 class="title">
 <a name="complete-install" id="complete-install"></a>Chapter 3. Complete
 Installation</h2></div></div></div><div class="toc">
-<p><b>Table of Contents</b></p><dl class="toc">
+<p><strong>Table of Contents</strong></p><dl class="toc">
 <dt><span class="sect1"><a href="unix-installation">Install a
 Unix-like system and supporting software</a></span></dt><dt><span class="sect1"><a href="oracle">Install Oracle
 8.1.7</a></span></dt><dt><span class="sect1"><a href="postgres">Install
 PostgreSQL</a></span></dt><dt><span class="sect1"><a href="aolserver4">Install AOLserver
 4</a></span></dt><dt><span class="sect1"><a href="openacs">Install OpenACS
-5.7.0</a></span></dt><dt><span class="sect1"><a href="win2k-installation">OpenACS
+5.9.0</a></span></dt><dt><span class="sect1"><a href="win2k-installation">OpenACS
 Installation Guide for Windows</a></span></dt><dt><span class="sect1"><a href="mac-installation">OpenACS
 Installation Guide for Mac OS X</a></span></dt>
 </dl>

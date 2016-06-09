@@ -13,7 +13,7 @@ Developers"
 		<div class="chapter">
 <div class="titlepage"><div><div><h2 class="title">
 <a name="i18n" id="i18n"></a>Chapter 14. Internationalization</h2></div></div></div><div class="toc">
-<p><b>Table of Contents</b></p><dl class="toc">
+<p><strong>Table of Contents</strong></p><dl class="toc">
 <dt><span class="sect1"><a href="i18n-overview">Internationalization and Localization
 Overview</a></span></dt><dt><span class="sect1"><a href="i18n-introduction">How
 Internationalization/Localization works in OpenACS</a></span></dt><dt><span class="sect1"><a href="i18n-convert">How to

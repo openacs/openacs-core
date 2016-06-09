@@ -1,4 +1,7 @@
 <html>
+<head>
+<title>Demo: Explicit Escape</title>
+</head>
   <body>
     <h1>Hello</h1>
 

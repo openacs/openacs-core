@@ -50,7 +50,7 @@ value this will affect the includer. When the datasource in the
 included page has the same name (<code>&amp;users="users"</code>),
 you can use the shorthand <code>&amp;="users"</code>.</li><li>It is important to note that variables passed through
 <tt>include</tt> become available to the .tcl and .adp files being
-include'd, but it <b>does not</b> make them settable through
+include'd, but it <strong>does not</strong> make them settable through
 <tt>ad_page_contract</tt>.
 <p>So if you'd like to have a template that will return a fragment
 of a page that you'd like to include in other pages, make sure its

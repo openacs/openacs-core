@@ -1,4 +1,7 @@
 <html>
+<head>
+<title>Demo: Embed Escape</title>
+</head>
   <body>
     <h1>Welcome</h1>
 

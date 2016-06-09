@@ -67,12 +67,12 @@ as many assignments per task as desired. There is currently no
 workflow API to set deadlines, so you must write your own DML to
 insert a row into <tt>wf_case_deadlines</tt> if you wish to allow
 the publisher to set deadlines ahead of time.</p>
-<p>The above workflow is created in the <b>Default</b> context. In
+<p>The above workflow is created in the <strong>Default</strong> context. In
 practice, you may wish to create one or more contexts in which to
 create your workflows. Contexts may be used to represent different
 departments within an organization.</p>
 <p>The <tt>start_case</tt> enables the first task in the workflow,
-in this case <b>Authoring</b>.</p>
+in this case <strong>Authoring</strong>.</p>
 <h3>Check Out Item</h3>
 <p>If multiple persons are assigned to the same task, it is useful
 to allow a single person to "check out" or lock an item while they
@@ -150,9 +150,9 @@ begin
 end;
 /
 </pre>
-<p>In this case an author is finishing the <b>Authoring</b> task,
+<p>In this case an author is finishing the <strong>Authoring</strong> task,
 upon which the workflow engine will move the workflow to the
-<b>Authored</b> state (as indicated by the <tt>next_place</tt>
+<strong>Authored</strong> state (as indicated by the <tt>next_place</tt>
 attribute). If the author had previously checked out the item, then
 only the second step is required.</p>
 <h3>Approve or Reject</h3>

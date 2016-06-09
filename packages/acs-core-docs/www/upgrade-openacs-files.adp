@@ -12,7 +12,7 @@ Chapter 5. Upgrading"
 <a name="upgrade-openacs-files" id="upgrade-openacs-files"></a>Upgrading
 the OpenACS files</h2></div></div></div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140722832534368" id="idp140722832534368"></a>Chosing a Method to Upgrade your
+<a name="idp140598228599536" id="idp140598228599536"></a>Chosing a Method to Upgrade your
 Files</h3></div></div></div><p>OpenACS is distributed in many different ways:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>as a collection of files</p></li><li class="listitem"><p>as one big tarball</p></li><li class="listitem"><p>via CVS</p></li><li class="listitem"><p>via automatic download from within the APM (package manager)</p></li>
 </ul></div><p>Upgrades work by first changing the file system (via any of the
@@ -27,11 +27,11 @@ greater installation&rdquo;</a>
 </p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140722832539392" id="idp140722832539392"></a>Methods of upgrading OpenACS files</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
+<a name="idp140598228604560" id="idp140598228604560"></a>Methods of upgrading OpenACS files</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem">
 <p>
-<b>Upgrading files for a site which is not in a CVS
-repository. </b>Unpack the tarball into a new directory
+<strong>Upgrading files for a site which is not in a CVS
+repository. </strong>Unpack the tarball into a new directory
 and copy its contents on top of your working directory. Or just
 'install software', select remote repository, and upgrade your
 files from there.</p><pre class="screen">
@@ -56,12 +56,12 @@ how to upgrade your local CVS repository with the latest OpenACS
 version, without overriding your own local customizations.</p><p>This diagram explains the basic idea. However, the labels are
 incorrect. Step 1(a) has been removed, and Step 1(b) should be
 labelled Step 1.</p><div class="figure">
-<a name="idp140722832514864" id="idp140722832514864"></a><p class="title"><b>Figure 5.2. Upgrading a
-local CVS repository</b></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/upgrade-cvs.png" align="middle" alt="Upgrading a local CVS repository"></div></div>
+<a name="idp140598228614672" id="idp140598228614672"></a><p class="title"><strong>Figure 5.2. Upgrading a
+local CVS repository</strong></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/upgrade-cvs.png" align="middle" alt="Upgrading a local CVS repository"></div></div>
 </div><br class="figure-break"><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
 <li class="listitem">
 <p>
-<b>Step 0: Set up a working CVS checkout. </b>To get
+<strong>Step 0: Set up a working CVS checkout. </strong>To get
 your OpenACS code into your local CVS repository, you will set up a
 working CVS checkout of OpenACS. When you want to update your site,
 you'll update the working CVS checkout, import those changes into
@@ -96,10 +96,10 @@ directory. If it does, you probably checked out the entire tree.
 You might want to start over, remove your working CVS checkout, and
 try again.</p>
 </li><li class="listitem">
-<p><b>Step 1: Import new OpenACS code. </b></p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: square;">
+<p><strong>Step 1: Import new OpenACS code. </strong></p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: square;">
 <li class="listitem">
 <p>
-<b>Update CVS. </b>Update your local CVS working
+<strong>Update CVS. </strong>Update your local CVS working
 checkout (unless you just set it up).</p><pre class="screen">
 [root root]# <strong class="userinput"><code>su - <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
 </code></strong>
@@ -109,8 +109,8 @@ checkout (unless you just set it up).</p><pre class="screen">
 </pre>
 </li><li class="listitem">
 <p>
-<b>Update a single package via cvs working
-checkout. </b>You can add or upgrade a single package
+<strong>Update a single package via cvs working
+checkout. </strong>You can add or upgrade a single package
 at a time, if you already have a cvs working directory.</p><pre class="screen">
 [root root]# <strong class="userinput"><code>su - <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
 </code></strong>
@@ -124,7 +124,7 @@ package.</p>
 </ul></div>
 </li><li class="listitem">
 <p>
-<b>Step 2: Merge New OpenACS code. </b>Now that you
+<strong>Step 2: Merge New OpenACS code. </strong>Now that you
 have a local copy of the new OpenACS code, you need to import it
 into your local CVS repository and resolve any conflicts that
 occur.</p><p>Import the new files into your cvs repository; where they match
@@ -170,8 +170,8 @@ local tree.</p><pre class="screen">
 </pre>
 </li><li class="listitem">
 <p>
-<b>Step 3: Upgrade your local staging
-site. </b>Update your working tree with the new files.
+<strong>Step 3: Upgrade your local staging
+site. </strong>Update your working tree with the new files.
 The CVS flags ensure that new directories are created and pruned
 directories destroyed.</p><pre class="screen">
 [$OPENACS_SERVICE_NAME <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>-upgrade]$ <strong class="userinput"><code>cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
@@ -194,7 +194,7 @@ the OpenACS CVS repository (cvs.openacs.org)</strong></span></p><div class="orde
 </pre></li></ol></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140722832459936" id="idp140722832459936"></a>Upgrading a Production Site Safely</h3></div></div></div><p>If you are upgrading a production OpenACS site which is on a
+<a name="idp140598228525936" id="idp140598228525936"></a>Upgrading a Production Site Safely</h3></div></div></div><p>If you are upgrading a production OpenACS site which is on a
 private CVS tree, this process lets you do the upgrade without
 risking extended downtime or an unusable site:</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem"><p>Declare a freeze on new cvs updates - ie, you cannot run cvs

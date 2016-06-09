@@ -15,7 +15,7 @@ Chapter 12. Engineering Standards"
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><p>Best practices in writing OpenACS automated tests</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>
-<b>Special characters in Tcl. </b> Try strings
+<strong>Special characters in Tcl. </strong> Try strings
 starting with a <code class="computeroutput">-Bad</code> and
 strings containing <code class="computeroutput">[BAD]</code>,
 <code class="computeroutput">{</code>, <code class="computeroutput">\077</code>, and <code class="computeroutput">$Bad</code>. For user input, <code class="computeroutput">[BAD]</code> should never be evaluated,
@@ -24,7 +24,7 @@ a <code class="computeroutput">?</code> and <code class="computeroutput">$Bad</c
 <code class="computeroutput">-Bad [BAD] \077 { $Bad</code> should
 be valid user input, should pass through the system unaltered, and
 if it isn't that's a bug.</p></li><li class="listitem"><p>
-<b>Quoting issues. </b>Put some html in plain text
+<strong>Quoting issues. </strong>Put some html in plain text
 fields and make sure the result is properly quoted anywhere it
 shows up (I use "&lt;b&gt;bold&lt;/b&gt;" usually). Look out
 especially for quoting errors in the context bar and in round trips
@@ -35,16 +35,16 @@ incorrect. (It's not clear whether this should be considered an
 error but given that data for text fields can come from various
 sources if it's text it should be properly quoted and we should not
 rely on input validation to prevent XSS security holes.)</p></li><li class="listitem"><p>
-<b>Whitespace input. </b>Check that whitespace is
+<strong>Whitespace input. </strong>Check that whitespace is
 not considered valid input for a field if it does not make sense.
 For example, the subject of a forum post is used to construct a
 link and if it is " " it will have a link of <code class="computeroutput">&lt;a href="..."&gt; &lt;/a&gt;</code> which would
 not be clickable if whitespace was allowed as a valid input.</p></li><li class="listitem"><p>
-<b>Doubleclick. </b> Make sure that if you submit a
+<strong>Doubleclick. </strong> Make sure that if you submit a
 form, use the back button, and submit again that the behavior is
 reasonable (correct behavior depends on what the form is for, but a
 server error is not reasonable).</p></li><li class="listitem"><p>
-<b>Duplicate names. </b> Make sure that if a
+<strong>Duplicate names. </strong> Make sure that if a
 duplicate name is entered that there is a reasonable error rather
 than a server error. Check for insert, move, copy, and rename.</p></li>
 </ul></div><div class="cvstag">($&zwnj;Id: auto-testing.xml,v 1.3 2006/07/17

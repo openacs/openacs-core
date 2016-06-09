@@ -26,11 +26,11 @@ $ gunzip -c ats.tar.gz | tar xvf -
 <p>The distribution consists of four subdirectories:</p>
 <ol>
 <li>
-<b><tt>demo</tt></b>: A set of sample templates and supporting
+<strong><tt>demo</tt></strong>: A set of sample templates and supporting
 files.</li><li>
-<b><tt>doc</tt></b>: Documentation and tutorials.</li><li>
-<b><tt>tcl</tt></b>: The Tcl module.</li><li>
-<b><tt>resources</tt></b>: Sitewide style templates for forms
+<strong><tt>doc</tt></strong>: Documentation and tutorials.</li><li>
+<strong><tt>tcl</tt></strong>: The Tcl module.</li><li>
+<strong><tt>resources</tt></strong>: Sitewide style templates for forms
 and error messages and associated assets.</li>
 </ol>
 <p>You can also untar (or check out) the distribution somewhere
@@ -57,14 +57,14 @@ module:</p>
 [ns/server/myserver/modules]
 nssock=nssock.so
 nslog=nslog.so
-<b>ats=Tcl</b>
+<strong>ats=Tcl</strong>
 </pre>
 <p>or if you are using the new configuration file format:</p>
 <pre>
 ns_section "ns/server/${server}/modules"
 ns_param   nssock          nssock.so
 ns_param   nslog           nslog.so
-<b>ns_param   ats          Tcl</b>
+<strong>ns_param   ats          Tcl</strong>
 </pre>
 <p>Note that you should replace <tt>ats</tt> with whatever you
 named the directory or symlink for the templating code within your

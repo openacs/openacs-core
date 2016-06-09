@@ -1,6 +1,6 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Install OpenACS 5.7.0}</property>
-<property name="doc(title)">Install OpenACS 5.7.0</property>
+<property name="context">{/doc/acs-core-docs {Documentation}} {Install OpenACS 5.9.0}</property>
+<property name="doc(title)">Install OpenACS 5.9.0</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
 		    leftLink="aolserver4" leftLabel="Prev"
@@ -9,7 +9,7 @@ Chapter 3. Complete Installation"
 		    rightLink="win2k-installation" rightLabel="Next">
 		<div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="openacs" id="openacs"></a>Install OpenACS 5.7.0</h2></div></div></div><div class="authorblurb">
+<a name="openacs" id="openacs"></a>Install OpenACS 5.9.0</h2></div></div></div><div class="authorblurb">
 <p>by <a class="ulink" href="mailto:vinod\@kurup.com" target="_top">Vinod Kurup</a>
 </p>
 OpenACS docs are written by the named authors, and may be edited by
@@ -146,8 +146,8 @@ $OPENACS_SERVICE_NAME</code></strong>
 [root root]# <strong class="userinput"><code>su - <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
 </code></strong>
 [$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>cd /var/lib/aolserver</code></strong>
-[$OPENACS_SERVICE_NAME aolserver]$ <strong class="userinput"><code>tar xzf /var/tmp/openacs-5.7.0.tgz</code></strong>
-[$OPENACS_SERVICE_NAME aolserver]$ <strong class="userinput"><code>mv openacs-5.7.0 <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
+[$OPENACS_SERVICE_NAME aolserver]$ <strong class="userinput"><code>tar xzf /var/tmp/openacs-5.9.0.tgz</code></strong>
+[$OPENACS_SERVICE_NAME aolserver]$ <strong class="userinput"><code>mv openacs-5.9.0 <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
 </code></strong>
 [$OPENACS_SERVICE_NAME aolserver]$ <strong class="userinput"><code>chmod -R 775 <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
 </code></strong>
@@ -163,8 +163,8 @@ logout
 [root root]#
 <span class="action"><span class="action">su - $OPENACS_SERVICE_NAME
 cd /var/lib/aolserver
-tar xzf /var/tmp/openacs-5.7.0.tgz
-mv openacs-5.7.0 $OPENACS_SERVICE_NAME
+tar xzf /var/tmp/openacs-5.9.0.tgz
+mv openacs-5.9.0 $OPENACS_SERVICE_NAME
 chmod -R 755 $OPENACS_SERVICE_NAME
 chown -R $OPENACS_SERVICE_NAME.$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME
 exit</span></span>
@@ -175,8 +175,8 @@ exit</span></span>
 <p>Prepare the database</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem">
 <p>
-<a name="install-openacs-prepare-oracle" id="install-openacs-prepare-oracle"></a><b>Prepare Oracle for
-OpenACS. </b>If you won't be using Oracle, skip to
+<a name="install-openacs-prepare-oracle" id="install-openacs-prepare-oracle"></a><strong>Prepare Oracle for
+OpenACS. </strong>If you won't be using Oracle, skip to
 <a class="xref" href="openacs" title="Prepare PostgreSQL for an OpenACS Service">Prepare PostgreSQL for
 an OpenACS Service</a>
 </p><p>You should be sure that your user account (e.g. <code class="computeroutput"><span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span></code>) is in the
@@ -293,8 +293,8 @@ Dates&rdquo;</a>
 </ol></div>
 </li><li class="listitem">
 <p>
-<a name="install-openacs-prepare-postgres" id="install-openacs-prepare-postgres"></a><b>Prepare PostgreSQL for an
-OpenACS Service. </b>
+<a name="install-openacs-prepare-postgres" id="install-openacs-prepare-postgres"></a><strong>Prepare PostgreSQL for an
+OpenACS Service. </strong>
 </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
 <li class="listitem">
 <p>
@@ -336,7 +336,7 @@ cleans out discarded data from the database. A quick way to
 automate vacuuming is to edit the cron file for the database user.
 Recommended: <code class="computeroutput">VACUUM ANALYZE</code>
 every hour and <code class="computeroutput">VACUUM FULL
-ANALYZE</code> every day.</p><a class="indexterm" name="idp140722836797120" id="idp140722836797120"></a><pre class="screen">
+ANALYZE</code> every day.</p><a class="indexterm" name="idp140598225731824" id="idp140598225731824"></a><pre class="screen">
 [$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>export EDITOR=emacs;crontab -e</code></strong>
 </pre><p>Add these lines to the file. The vacuum command cleans up
 temporary structures within a PostGreSQL database, and can improve
@@ -360,8 +360,8 @@ the database should be ready for installing OpenACS.</p></li>
 </li>
 </ul></div>
 </li><li class="listitem">
-<a name="install-openacs-configure-aol" id="install-openacs-configure-aol"></a><p><b>Configure an AOLserver Service for
-OpenACS. </b></p><div class="orderedlist"><ol class="orderedlist" type="a">
+<a name="install-openacs-configure-aol" id="install-openacs-configure-aol"></a><p><strong>Configure an AOLserver Service for
+OpenACS. </strong></p><div class="orderedlist"><ol class="orderedlist" type="a">
 <li class="listitem">
 <p>
 <a name="configure-config-tcl" id="configure-config-tcl"></a>
@@ -370,7 +370,7 @@ virtual servers. A virtual server is an HTTP service running on a
 specific port, e.g. port 80. In order for OpenACS to work, you need
 to configure a virtual server. The Reference Platform uses a
 configuration file included in the OpenACS tarball, <code class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/etc/config.tcl</code>.
-Open it in an editor to adjust the parameters.</p><a class="indexterm" name="idp140722836810768" id="idp140722836810768"></a><pre class="screen">
+Open it in an editor to adjust the parameters.</p><a class="indexterm" name="idp140598225720096" id="idp140598225720096"></a><pre class="screen">
 [root root]# <strong class="userinput"><code>su - <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
 </code></strong>
 [$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/etc</code></strong>
@@ -420,7 +420,7 @@ started, but for more options, read the <a class="ulink" href="http://aolserver.
 for SSL support.</a> (OPTIONAL)</p></li>
 </ol></div>
 </li><li class="listitem">
-<a name="verify-aolserver-startup" id="verify-aolserver-startup"></a><p><b>Verify AOLserver startup. </b></p><div class="orderedlist"><ol class="orderedlist" type="a">
+<a name="verify-aolserver-startup" id="verify-aolserver-startup"></a><p><strong>Verify AOLserver startup. </strong></p><div class="orderedlist"><ol class="orderedlist" type="a">
 <li class="listitem">
 <p>
 <a name="start-aolserver" id="start-aolserver"></a> Kill any
@@ -473,9 +473,9 @@ keepalive</a> (OPTIONAL)</p></li>
 </ol></div>
 </li><li class="listitem">
 <a name="install-openacs-using-installer" id="install-openacs-using-installer"></a><p>
-<b>Configure a Service with the OpenACS
-Installer. </b> Now that you've got AOLserver up and
-running, let's install OpenACS 5.7.0.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
+<strong>Configure a Service with the OpenACS
+Installer. </strong> Now that you've got AOLserver up and
+running, let's install OpenACS 5.9.0.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>You should see a page from the webserver titled <code class="computeroutput">OpenACS Installation: Welcome</code>. You will be
 warned if your version of the database driver is out of date, if
 AOLserver cannot connect to the database, if any modules are
@@ -512,7 +512,7 @@ daemontools</a>), you'll need to manually restart your service.</p><pre class="s
 </pre>
 </li><li class="listitem"><p>Give the server a few minutes to start up. Then reload the final
 page above. You should see the front page, with an area to login
-near the upper right. Congratulations, OpenACS 5.7.0 is now up and
+near the upper right. Congratulations, OpenACS 5.9.0 is now up and
 running!</p></li>
 </ul></div>
 </li>
@@ -524,7 +524,7 @@ or you are an OpenACS core developer, you may want to install from
 CVS. This is identical to Option 2 except that you get the files
 from CVS instead of the tarball: <a class="ulink" href="http://openacs.org/4/checkout" target="_top">CVS Checkout
 Instructions</a>. So, instead of <code class="computeroutput"><strong class="userinput"><code>tar xzf
-/var/tmp/openacs-5.7.0.tgz</code></strong></code>, <code class="computeroutput"><strong class="userinput"><code>cvs -z3 -d
+/var/tmp/openacs-5.9.0.tgz</code></strong></code>, <code class="computeroutput"><strong class="userinput"><code>cvs -z3 -d
 :pserver:anonymous\@openacs.org:/cvsroot co
 acs-core</code></strong></code>.</p>
 </div><div class="sect2">

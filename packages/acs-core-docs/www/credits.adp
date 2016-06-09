@@ -10,7 +10,7 @@ Part II. Administrator's Guide"
 		<div class="appendix">
 <div class="titlepage"><div><div><h2 class="title">
 <a name="credits" id="credits"></a>Appendix C. Credits</h2></div></div></div><div class="toc">
-<p><b>Table of Contents</b></p><dl class="toc">
+<p><strong>Table of Contents</strong></p><dl class="toc">
 <dt><span class="section"><a href="install-origins">Where did
 this document come from?</a></span></dt><dt><span class="section"><a href="os-install">Linux Install
 Guides</a></span></dt><dt><span class="section"><a href="os-security">Security

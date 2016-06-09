@@ -14,7 +14,7 @@ Chapter 11. Development Reference"
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="objects-overview" id="objects-overview"></a>Overview</h3></div></div></div><p>Developing data models in OpenACS 5.7.0 is much like developing
+<a name="objects-overview" id="objects-overview"></a>Overview</h3></div></div></div><p>Developing data models in OpenACS 5.9.0 is much like developing
 data models for OpenACS 3, save for the implementation. As usual,
 you need to examine how to model the information that the
 application must store and manipulate, and define a suitable set of
@@ -83,7 +83,7 @@ the code needed to describe a new object type called <code class="computeroutput
 for the PG version) file created when we <a class="link" href="packages" title="OpenACS Packages">created the package</a>.
 Then, do the following:</p><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140722839958992" id="idp140722839958992"></a>Describe the new type to the type
+<a name="idp140598234327168" id="idp140598234327168"></a>Describe the new type to the type
 system</h4></div></div></div><p>First, add an entry to the <code class="computeroutput">acs_object_types</code> table with the following
 PL/SQL call:</p><pre class="programlisting">
 begin  
@@ -139,7 +139,7 @@ these attributes. Again, because the new type <code class="computeroutput">note<
 attributes, so there is no need for us to define them.</p>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140722839970224" id="idp140722839970224"></a>Define a table in which to store your
+<a name="idp140598234308848" id="idp140598234308848"></a>Define a table in which to store your
 objects</h4></div></div></div><p>The next thing we do is make a small modification to the data
 model to reflect the fact that each row in the <code class="computeroutput">notes</code> table represents something that is
 not only an object of type <code class="computeroutput">note</code>, but also an <code class="computeroutput">acs_object</code>. The new table definition looks
@@ -163,7 +163,7 @@ transparently find any objects that are instances of any subtype of
 <code class="computeroutput">acs_objects</code>.</p>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140722839979360" id="idp140722839979360"></a>Define a package for type specific
+<a name="idp140598234296912" id="idp140598234296912"></a>Define a package for type specific
 procedures</h4></div></div></div><p>The next step is to define a PL/SQL package for your new type,
 and write some basic procedures to create and delete objects. Here
 is a package definition for our new type:</p><pre class="programlisting">
@@ -210,7 +210,7 @@ that used OBJ as its context would also be "read only" by default.
 We'll talk about this more later.</p>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140722839987072" id="idp140722839987072"></a>Define a package body for type specific
+<a name="idp140598234290768" id="idp140598234290768"></a>Define a package body for type specific
 procedures</h4></div></div></div><p>The PL/SQL package body contains the implementations of the
 procedures defined above. The only subtle thing going on here is
 that we must use <code class="computeroutput">acs_object.new</code>
@@ -305,7 +305,7 @@ which to start.</p>
 <a name="objects-design-guidance" id="objects-design-guidance"></a>Design Guidance</h3></div></div></div><p>In this section we cover some overall guidelines for designing
 data models that are meant to be integrated with the OpenACS object
 system.</p><p>There are two basic rules you should follow when designing
-OpenACS 5.7.0 data models:</p><div class="orderedlist"><ol class="orderedlist" type="1">
+OpenACS 5.9.0 data models:</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem"><p>Never utilize fields in the <code class="computeroutput">acs_objects</code> table in application specific
 ways. That is, never assign any application-specific semantics to
 this data. In the notes application, we use the <code class="computeroutput">creation_date</code> and <code class="computeroutput">last_modified</code> fields, but this is OK since
@@ -348,7 +348,7 @@ straightforward, but requires a good amount of thought at design
 time even for simple applications.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="objects-summary" id="objects-summary"></a>Summary</h3></div></div></div><p>Hooking into the OpenACS 5.7.0 object system brings the
+<a name="objects-summary" id="objects-summary"></a>Summary</h3></div></div></div><p>Hooking into the OpenACS 5.9.0 object system brings the
 application developer numerous benefits, and doing it involves only
 four easy steps:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: opencircle;">
 <li class="listitem" style="list-style-type: circle"><p>Describe the a new object type to the system. Most new

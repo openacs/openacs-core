@@ -13,7 +13,7 @@ Part II. Administrator's Guide"
 <div class="titlepage"><div><div><h2 class="title">
 <a name="backup-recovery" id="backup-recovery"></a>Chapter 8. Backup and
 Recovery</h2></div></div></div><div class="toc">
-<p><b>Table of Contents</b></p><dl class="toc">
+<p><strong>Table of Contents</strong></p><dl class="toc">
 <dt><span class="sect1"><a href="install-next-backups">Backup
 Strategy</a></span></dt><dt><span class="sect1"><a href="snapshot-backup">Manual
 backup and recovery</a></span></dt><dt><span class="sect1"><a href="automated-backup">Automated
@@ -30,8 +30,8 @@ backup strategies (in particular full dumps from oracle, while easy
 to set up, are far from the best solution).</p><p>There are three basic things which need to be backed up, the
 database data, the server source tree, and the
 acs-content-repository (which is in the server source tree).</p><div class="figure">
-<a name="idp140722831894464" id="idp140722831894464"></a><p class="title"><b>Figure 8.1. Backup and
-Recovery Strategy</b></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/backup.png" align="middle" alt="Backup and Recovery Strategy"></div></div>
+<a name="idp140598221658928" id="idp140598221658928"></a><p class="title"><strong>Figure 8.1. Backup and
+Recovery Strategy</strong></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/backup.png" align="middle" alt="Backup and Recovery Strategy"></div></div>
 </div><p><br class="figure-break"></p>
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div>

@@ -151,7 +151,7 @@ entrenched within the OpenACS, this section's details are likely to
 shift from UI specifics to template interface specifics.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="yourpackage-design-config" id="yourpackage-design-config"></a>Configuration/Parameters</h3></div></div></div><p>Under OpenACS 5.7.0, parameters are set at two levels: at the
+<a name="yourpackage-design-config" id="yourpackage-design-config"></a>Configuration/Parameters</h3></div></div></div><p>Under OpenACS 5.9.0, parameters are set at two levels: at the
 global level by the OpenACS-admin, and at the subsite level by a
 sub-admin. In this section, list and discuss both levels of
 parameters.</p>

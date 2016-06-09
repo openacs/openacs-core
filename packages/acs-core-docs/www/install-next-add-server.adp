@@ -11,15 +11,15 @@ Chapter 6. Production Environments"
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="install-next-add-server" id="install-next-add-server"></a>Running
 multiple services on one machine</h2></div></div></div><p>
-<b>Services on different ports. </b>To run a
+<strong>Services on different ports. </strong>To run a
 different service on another port but the same ip, simply repeat
-<a class="xref" href="openacs" title="Install OpenACS 5.7.0">Install OpenACS 5.7.0</a> replacing
+<a class="xref" href="openacs" title="Install OpenACS 5.9.0">Install OpenACS 5.9.0</a> replacing
 <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>, and change
 the</p><pre class="programlisting">
 set httpport              8000
 set httpsport             8443 
 </pre><p>to different values.</p><p>
-<b>Services on different host names. </b>For
+<strong>Services on different host names. </strong>For
 example, suppose you want to support <code class="computeroutput">http://service0.com</code> and <code class="computeroutput">http://bar.com</code> on the same machine. The
 easiest way is to assign each one a different ip address. Then you
 can install two services as above, but with different values

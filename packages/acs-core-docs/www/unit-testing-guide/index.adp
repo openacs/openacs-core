@@ -68,12 +68,12 @@ where a test fails.</p>
 <p>If you need to create a set of tests for a module, the first
 step is to create a directory tree beneath the module directory.
 The current convention is to put all .java files in a
-"/java/src/com/arsdigita/acs/<i>module name</i>/test" directory.
-The <i>module name</i> should be the ACS module name, but with all
+"/java/src/com/arsdigita/acs/<em>module name</em>/test" directory.
+The <em>module name</em> should be the ACS module name, but with all
 dashes removed and with appropriate capitilization. All .java files
 that you create that contain test cases must have the word Test in
 the filename. All of the classes you create should be in the
-com.arsdigita.acs.<i>module name</i>.test package, and should
+com.arsdigita.acs.<em>module name</em>.test package, and should
 import "com.dallaway.jsptest.*" and "junit.framework.*" (and
 optionally, if needed, com.arsdigita.acs.acsKernel.ACSCommon).
 Next, the public class needs to extend "TestCase", and provide new
@@ -81,7 +81,7 @@ method definitions for "suite()" and the constructor. Typically, in
 the constructor, you should extract the system property
 "system.url" to determine which server to test against.</p>
 <hr>
-<i>Last updated - 2000-12-19</i>
+<em>Last updated - 2000-12-19</em>
 <br>
 <a href="mailto:pmcneill\@arsdigita.com"></a>
 <address>pmcneill\@arsdigita.com</address>

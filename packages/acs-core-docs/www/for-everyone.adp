@@ -10,7 +10,7 @@
 <div class="titlepage"><div><div><h1 class="title">
 <a name="for-everyone" id="for-everyone"></a>Part I. OpenACS For
 Everyone</h1></div></div></div><div class="toc">
-<p><b>Table of Contents</b></p><dl class="toc">
+<p><strong>Table of Contents</strong></p><dl class="toc">
 <dt><span class="chapter"><a href="general-documents">1. High
 level information: What is OpenACS?</a></span></dt><dd><dl>
 <dt><span class="sect1"><a href="openacs-overview">Overview</a></span></dt><dt><span class="sect1"><a href="release-notes">OpenACS

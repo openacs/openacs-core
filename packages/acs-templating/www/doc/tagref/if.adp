@@ -44,9 +44,9 @@ when certain conditions are met.</p>
 The condition of the &lt;if&gt; tag is built from terms of the form
 <blockquote>
 <var>x</var><sub>0</sub> [<code>not</code>]
-<code><b>op</b></code><var>x</var><sub>1</sub><var>x</var><sub>2</sub> ...</blockquote>
+<code><strong>op</strong></code><var>x</var><sub>1</sub><var>x</var><sub>2</sub> ...</blockquote>
 
-The operator <code><b>op</b></code>
+The operator <code><strong>op</strong></code>
  determines the number operands
 (<var>x</var>
 <sub>0</sub>
@@ -60,54 +60,54 @@ The operator <code><b>op</b></code>
 <li>binary
 <ul>
 <li>
-<var>x</var><sub>0</sub><code><b>gt</b></code> 
+<var>x</var><sub>0</sub><code><strong>gt</strong></code> 
 <var>x</var><sub>1</sub>
 </li><li>
-<var>x</var><sub>0</sub><code><b>ge</b></code> 
+<var>x</var><sub>0</sub><code><strong>ge</strong></code> 
 <var>x</var><sub>1</sub>
 </li><li>
-<var>x</var><sub>0</sub><code><b>lt</b></code> 
+<var>x</var><sub>0</sub><code><strong>lt</strong></code> 
 <var>x</var><sub>1</sub>
 </li><li>
-<var>x</var><sub>0</sub><code><b>le</b></code> 
+<var>x</var><sub>0</sub><code><strong>le</strong></code> 
 <var>x</var><sub>1</sub>
 </li><li>
-<var>x</var><sub>0</sub><code><b>eq</b></code> 
+<var>x</var><sub>0</sub><code><strong>eq</strong></code> 
 <var>x</var><sub>1</sub>
 </li><li>
-<var>x</var><sub>0</sub><code><b>ne</b></code> 
+<var>x</var><sub>0</sub><code><strong>ne</strong></code> 
 <var>x</var><sub>1</sub>
 </li>
 </ul>
 </li><li>n-ary
 <ul><li>
-<var>x</var><sub>0</sub><code><b>in</b></code> 
+<var>x</var><sub>0</sub><code><strong>in</strong></code> 
 <var>x</var><sub>1</sub><var>x</var><sub>2</sub><var>x</var><sub>3</sub> ...</li></ul>
 </li><li>ternary
 <ul><li>
-<var>x</var><sub>0</sub><code><b>between</b></code> 
+<var>x</var><sub>0</sub><code><strong>between</strong></code> 
 <var>x</var><sub>1</sub><var>x</var><sub>2</sub>
 </li></ul>
 </li><li>unary
 <ul>
 <li>
-<var>x</var><sub>0</sub><code><b>nil</b></code>
+<var>x</var><sub>0</sub><code><strong>nil</strong></code>
 </li><li>
-<var>x</var><sub>0</sub><code><b>defined</b></code>
+<var>x</var><sub>0</sub><code><strong>defined</strong></code>
 </li><li>
-<var>x</var><sub>0</sub><code><b>odd</b></code>
+<var>x</var><sub>0</sub><code><strong>odd</strong></code>
 </li><li>
-<var>x</var><sub>0</sub><code><b>even</b></code>
+<var>x</var><sub>0</sub><code><strong>even</strong></code>
 </li><li>
-<var>x</var><sub>0</sub><code><b>true</b></code>
+<var>x</var><sub>0</sub><code><strong>true</strong></code>
 </li><li>
-<var>x</var><sub>0</sub><code><b>false</b></code>
+<var>x</var><sub>0</sub><code><strong>false</strong></code>
 </li>
 </ul>
 </li>
 </ul>
 <p>Any of these operators can be prefixed with
-<code><b>not</b></code> to invert the outcome.</p>
+<code><strong>not</strong></code> to invert the outcome.</p>
 <h3>Notes</h3>
 <ul>
 <li><p>Any legal variables that may be referenced in the template may

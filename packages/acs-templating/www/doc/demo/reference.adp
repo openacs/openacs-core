@@ -1,6 +1,9 @@
 <html>
-  <body>
-    <h1>Passing a Multirow Datasource</h1>
+<head>
+<title>Demo: Passing Datasources</title>
+</head>
+<body>
+<h1>Passing a Multirow Datasource</h1>
 
     Here are all sample users.
 

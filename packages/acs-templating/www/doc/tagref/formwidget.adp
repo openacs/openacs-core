@@ -16,10 +16,10 @@ the Tcl script associated with the template.</p>
   &lt;formtemplate id="add_user"&gt;
   &lt;table&gt;
   &lt;tr&gt;
-    &lt;td&gt;First Name&lt;/td&gt;&lt;td&gt;<b>&lt;formwidget id="first_name"&gt;</b>&lt;/td&gt;
+    &lt;td&gt;First Name&lt;/td&gt;&lt;td&gt;<strong>&lt;formwidget id="first_name"&gt;</strong>&lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
-    &lt;td&gt;First Name&lt;/td&gt;&lt;td&gt;<b>&lt;formwidget id="first_name"&gt;</b>&lt;/td&gt;
+    &lt;td&gt;First Name&lt;/td&gt;&lt;td&gt;<strong>&lt;formwidget id="first_name"&gt;</strong>&lt;/td&gt;
   &lt;/tr&gt;
   &lt;/table&gt;&lt;br&gt;
   &lt;input type=submit value="Submit"&gt;

@@ -43,7 +43,7 @@ particular parts.</p>
 various information associated with it, such as deadlines,
 descriptions of what needs to be accomplished, and so on:</p>
 <blockquote><pre>
-<b>Task</b>
+<strong>Task</strong>
           Title
           Description
           Task Number
@@ -51,7 +51,7 @@ descriptions of what needs to be accomplished, and so on:</p>
 </pre></blockquote>
 <h3>Overview</h3>
 <p>First of all, let's get some terminology out of the way. Columns
-of a table are referred to as <i>attributes</i> in content
+of a table are referred to as <em>attributes</em> in content
 repository-speak.</p>
 
 The steps to set up your data model are as follows:
@@ -76,10 +76,10 @@ every time someone edits it.</p>
 <p>You will have two tables: one with versioned attributes, and one
 without versioned attributes.</p>
 <p>
-<i>Convention:</i> often, developers will name the first table
-by what it is (in my case <b>pm_tasks</b>), and the second,
+<em>Convention:</em> often, developers will name the first table
+by what it is (in my case <strong>pm_tasks</strong>), and the second,
 versioned table by the same name, but with _revisions at the end.
-Thus, I'll name my second table <b>pm_tasks_revisions</b>.</p>
+Thus, I'll name my second table <strong>pm_tasks_revisions</strong>.</p>
 
 This is actually very easy:
 <p>Versioned portion:</p>
@@ -90,7 +90,7 @@ This is actually very easy:
             constraint pm_tasks_revisions_id_pk
             primary key
             constraint pm_tasks_revisions_id_fk
-            references <b>cr_revisions</b>(revision_id)
+            references <strong>cr_revisions</strong>(revision_id)
             on delete cascade,
             title
             varchar(100),
@@ -107,7 +107,7 @@ This is actually very easy:
             constraint pm_tasks_id_pk
             primary key
             constraint pm_tasks_id_fk
-            references <b>cr_items</b>(item_id)
+            references <strong>cr_items</strong>(item_id)
             on delete cascade,
             task_number
             integer
@@ -125,9 +125,9 @@ I'll describe what these views are later, but they are useful. You
 were warned.</p>
 <p>Notice that each table uses as its primary key a reference to
 either the <code>cr_revisions</code> table or the
-<code>cr_items</code> table. A <i>content item</i> is basically
-just some content: either text or binary data. The <i>contents
-revisions</i> table keeps track of which version from the
+<code>cr_items</code> table. A <em>content item</em> is basically
+just some content: either text or binary data. The <em>contents
+revisions</em> table keeps track of which version from the
 tasks_revisions table is the most current, and which one is
 live.</p>
 <p>All this is going inside the
@@ -155,8 +155,8 @@ due, and what needs to be done.</p>
 </pre></blockquote>
 <p>You then need to add in all the attributes, so that the content
 repository can do some magic things behind the scenes. The content
-repository doesn't know about what's inside of the <i>pm_tasks</i>
-and <i>pm_tasks_revisions</i> tables, so we teach it:</p>
+repository doesn't know about what's inside of the <em>pm_tasks</em>
+and <em>pm_tasks_revisions</em> tables, so we teach it:</p>
 <blockquote><pre>
           -- add in attributes
           
@@ -195,7 +195,7 @@ and <i>pm_tasks_revisions</i> tables, so we teach it:</p>
         
 </pre></blockquote>
 <p>
-<b>Side effect</b>: once you've created the content type, the
+<strong>Side effect</strong>: once you've created the content type, the
 content repository creates a view for you called
 <code>pm_tasks_revisionsx</code>. Note the x at the end of the
 name. If you're using Postgres, I believe it will also create a
@@ -218,12 +218,12 @@ that take advantage of the new columns and tables you've added.
 Another nice thing is that all that messy business of defining your
 attributes through the API is taken care of.</p>
 <p>
-<i>Types</i> is the content repository are another term for
+<em>Types</em> is the content repository are another term for
 tables, although that doesn't explain it completely. Types are also
 kept track of within OpenACS, in the <code>acs_object_types</code>
 table, so the system knows about the tables you create, and can do
 some intelligent things with them.</p>
-<p>A lot of the <i>intelligent things</i> you can do with this
+<p>A lot of the <em>intelligent things</em> you can do with this
 information is still being built. But imagine for example that you
 are using the project manager package I've written. You work at an
 ice cream company, and every task that is done also has an
@@ -316,12 +316,12 @@ pm_tasks, the title and description are stored in
 pm_tasks_revisions, and some additional information like who
 entered the information is stored in cr_revisions and cr_items.
 Whenever you make a change to this item, you don't change the table
-yourself, but <b>add</b>
+yourself, but <strong>add</strong>
  a revision, using your
 <code>pm_task__new_task_revision</code>
  function (which we'll write
 in a little bit). This function adds another revision, but
-<i>not</i>
+<em>not</em>
  another item or cr_item. After you've added another
 revision, you'll have two revisions and one item. Two entries in
 cr_revisions (and pm_tasks_revisions), and one item in cr_items and
@@ -509,25 +509,25 @@ $$ language plpgsql;
 
 cr_items:
 <blockquote>
-<b>item_id</b> - unique id for this item, will be
-different than the revision_id<br><b>parent_id</b> - used to group items into a hierarchy (see
-below)<br><b>name</b> - this is used to make a URL by the content repository.
+<strong>item_id</strong> - unique id for this item, will be
+different than the revision_id<br><strong>parent_id</strong> - used to group items into a hierarchy (see
+below)<br><strong>name</strong> - this is used to make a URL by the content repository.
 It must be unique per content folder. You can use a number, or
 something like project_231. One way to do this is to set it equal
-to a title plus the item_id.<br><b>locale</b> - not sure, probably for internationalization
-support<br><b>live_revision</b> - this is equal to the cr_revision table's
-revision_id that is the live version<br><b>latest_revision</b> - this is equal to the cr_revision table's
-revision_id that is the latest version<br><b>publish_status</b> - not sure<br><b>content_type</b> - not sure<br><b>storage_type</b> - not sure, probably text or binary?<br><b>storage_area_key</b> - not sure<br><b>tree_sortkey</b> - a utility column used in hierarchical
+to a title plus the item_id.<br><strong>locale</strong> - not sure, probably for internationalization
+support<br><strong>live_revision</strong> - this is equal to the cr_revision table's
+revision_id that is the live version<br><strong>latest_revision</strong> - this is equal to the cr_revision table's
+revision_id that is the latest version<br><strong>publish_status</strong> - not sure<br><strong>content_type</strong> - not sure<br><strong>storage_type</strong> - not sure, probably text or binary?<br><strong>storage_area_key</strong> - not sure<br><strong>tree_sortkey</strong> - a utility column used in hierarchical
 queries.<br>
 </blockquote>
 
 cr_revisions:
 <blockquote>
-<b>revision_id</b> - a unique id for this revision.<br><b>item_id</b> - a reference to the item_id for this revision<br><b>title</b> - you can use this for your application. For example,
-My Big Project<br><b>description</b> - you can use this for your application, as a
-longer description.<br><b>publish_date</b> - the date this was published. Not sure if this
-is for your use, or internal<br><b>mime_type</b> - the mime type.<br><b>nls_language</b> - I believe this is for
-internationalization<br><b>lob</b> - the binary content.<br><b>content</b> - the text content.<br><b>content_length</b> - the length of the text or binary
+<strong>revision_id</strong> - a unique id for this revision.<br><strong>item_id</strong> - a reference to the item_id for this revision<br><strong>title</strong> - you can use this for your application. For example,
+My Big Project<br><strong>description</strong> - you can use this for your application, as a
+longer description.<br><strong>publish_date</strong> - the date this was published. Not sure if this
+is for your use, or internal<br><strong>mime_type</strong> - the mime type.<br><strong>nls_language</strong> - I believe this is for
+internationalization<br><strong>lob</strong> - the binary content.<br><strong>content</strong> - the text content.<br><strong>content_length</strong> - the length of the text or binary
 content?<br>
 </blockquote>
 <h3>Structuring your data into a hierarchy</h3>
@@ -552,7 +552,7 @@ describes the <code>cr_items</code> table:</p>
       Column      |          Type          |          Modifiers          
 ------------------+------------------------+-----------------------------
  item_id          | integer                | not null
- <b>parent_id</b>        | integer                | not null
+ <strong>parent_id</strong>        | integer                | not null
  name             | character varying(400) | not null
  locale           | character varying(4)   | 
  live_revision    | integer                | 
@@ -694,7 +694,7 @@ table:</p>
  description        | text                    | 
  has_child_folders  | boolean                 | default 'f'
  has_child_symlinks | boolean                 | default 'f'
- <b>package_id</b>         | integer                 | 
+ <strong>package_id</strong>         | integer                 | 
 </pre></blockquote>
 
 Note that there is a <code>package_id</code>

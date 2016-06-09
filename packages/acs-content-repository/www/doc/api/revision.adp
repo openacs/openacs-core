@@ -45,7 +45,7 @@ function copy (
 </li><li>
 <font size="+1">Function:</font> content_revision.export_xml
 <table cellpadding="3" cellspacing="0" border="0">
-<tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><i>Not yet documented</i></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
+<tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><em>Not yet documented</em></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
 function export_xml (
   revision_id IN cr_revisions.revision_id%TYPE
 ) return cr_xml_docs.doc_id%TYPE;
@@ -75,7 +75,7 @@ function get_number (
 </li><li>
 <font size="+1">Function:</font> content_revision.import_xml
 <table cellpadding="3" cellspacing="0" border="0">
-<tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><i>Not yet documented</i></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
+<tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><em>Not yet documented</em></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
 function import_xml (
   item_id IN cr_items.item_id%TYPE,
   revision_id IN cr_revisions.revision_id%TYPE,
@@ -146,7 +146,7 @@ function new (
 </li><li>
 <font size="+1">Function:</font> content_revision.read_xml
 <table cellpadding="3" cellspacing="0" border="0">
-<tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><i>Not yet documented</i></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
+<tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><em>Not yet documented</em></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
 function read_xml (
   item_id IN number,
   revision_id IN number,
@@ -163,7 +163,7 @@ name
 </li><li>
 <font size="+1">Function:</font> content_revision.write_xml
 <table cellpadding="3" cellspacing="0" border="0">
-<tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><i>Not yet documented</i></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
+<tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><em>Not yet documented</em></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
 function write_xml (
   revision_id IN number,
   clob_loc IN clob
@@ -214,7 +214,7 @@ procedure index_attributes(
 </li><li>
 <font size="+1">Procedure:</font> content_revision.replace
 <table cellpadding="3" cellspacing="0" border="0">
-<tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><i>Not yet documented</i></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
+<tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><em>Not yet documented</em></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
 procedure replace(
   revision_id number, search varchar2, replace varchar2)
 as language

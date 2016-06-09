@@ -14,10 +14,10 @@ skins), a bit like in a programming language where code that may be
 used more than once makes up a procedure. The complete page may
 have the following structure.</p>
 <center><table cellpadding="5" cellspacing="0"><tr><td bgcolor="#FFCCCC">
-<b>master</b><table cellpadding="5" cellspacing="8">
-<tr><td bgcolor="#CCCCFF" valign="top"><b>top</b></td></tr><tr><td height="120" bgcolor="#CCCC99" valign="top">
-<b>root (main)</b><p> </p><table cellpadding="5" cellspacing="8"><tr><td width="120" bgcolor="#CCFFCC" valign="top"><b>widget</b></td></tr></table>
-</td></tr><tr><td bgcolor="#99CCFF" valign="top"><b>bottom</b></td></tr>
+<strong>master</strong><table cellpadding="5" cellspacing="8">
+<tr><td bgcolor="#CCCCFF" valign="top"><strong>top</strong></td></tr><tr><td height="120" bgcolor="#CCCC99" valign="top">
+<strong>root (main)</strong><p> </p><table cellpadding="5" cellspacing="8"><tr><td width="120" bgcolor="#CCFFCC" valign="top"><strong>widget</strong></td></tr></table>
+</td></tr><tr><td bgcolor="#99CCFF" valign="top"><strong>bottom</strong></td></tr>
 </table>
 </td></tr></table></center>
 <p>The "root" page includes the "widget" and wraps itself in the
@@ -71,31 +71,31 @@ deferred until the whole slave page ("root" in the example) is
 done. For our example, the following order results.</p>
 <center><table>
 <tr>
-<td colspan="3" bgcolor="#CCCC99"><b>root.tcl</b></td><td></td>
+<td colspan="3" bgcolor="#CCCC99"><strong>root.tcl</strong></td><td></td>
 </tr><tr>
-<td colspan="3" bgcolor="#CCCC99"><b>root.adp</b></td><td>(beginning and middle)</td>
+<td colspan="3" bgcolor="#CCCC99"><strong>root.adp</strong></td><td>(beginning and middle)</td>
 </tr><tr>
-<td rowspan="2" width="15" bgcolor="#CCCC99"> </td><td colspan="2" bgcolor="#CCFFCC"><b>widget.tcl</b></td><td></td>
+<td rowspan="2" width="15" bgcolor="#CCCC99"> </td><td colspan="2" bgcolor="#CCFFCC"><strong>widget.tcl</strong></td><td></td>
 </tr><tr>
-<td colspan="2" bgcolor="#CCFFCC"><b>widget.adp</b></td><td></td>
+<td colspan="2" bgcolor="#CCFFCC"><strong>widget.adp</strong></td><td></td>
 </tr><tr>
-<td colspan="3" bgcolor="#CCCC99"><b>root.adp</b></td><td>(end)</td>
+<td colspan="3" bgcolor="#CCCC99"><strong>root.adp</strong></td><td>(end)</td>
 </tr><tr>
-<td rowspan="8" width="15" bgcolor="#CCCC99"> </td><td colspan="2" bgcolor="#FFCCCC"><b>master.tcl</b></td><td></td>
+<td rowspan="8" width="15" bgcolor="#CCCC99"> </td><td colspan="2" bgcolor="#FFCCCC"><strong>master.tcl</strong></td><td></td>
 </tr><tr>
-<td colspan="2" bgcolor="#FFCCCC"><b>master.adp</b></td><td>(beginning)</td>
+<td colspan="2" bgcolor="#FFCCCC"><strong>master.adp</strong></td><td>(beginning)</td>
 </tr><tr>
-<td rowspan="2" width="15" bgcolor="#FFCCCC"> </td><td bgcolor="#CCCCFF"><b>top.tcl</b></td><td></td>
+<td rowspan="2" width="15" bgcolor="#FFCCCC"> </td><td bgcolor="#CCCCFF"><strong>top.tcl</strong></td><td></td>
 </tr><tr>
-<td bgcolor="#CCCCFF"><b>top.adp</b></td><td></td>
+<td bgcolor="#CCCCFF"><strong>top.adp</strong></td><td></td>
 </tr><tr>
-<td colspan="2" bgcolor="#FFCCCC"><b>master.adp</b></td><td>(middle, containing <code>&lt;slave&gt;</code> tag)</td>
+<td colspan="2" bgcolor="#FFCCCC"><strong>master.adp</strong></td><td>(middle, containing <code>&lt;slave&gt;</code> tag)</td>
 </tr><tr>
-<td rowspan="2" width="15" bgcolor="#FFCCCC"> </td><td bgcolor="#99CCFF"><b>bottom.tcl</b></td><td></td>
+<td rowspan="2" width="15" bgcolor="#FFCCCC"> </td><td bgcolor="#99CCFF"><strong>bottom.tcl</strong></td><td></td>
 </tr><tr>
-<td bgcolor="#99CCFF"><b>bottom.adp</b></td><td></td>
+<td bgcolor="#99CCFF"><strong>bottom.adp</strong></td><td></td>
 </tr><tr>
-<td colspan="2" bgcolor="#FFCCCC"><b>master.adp</b></td><td>(end)</td>
+<td colspan="2" bgcolor="#FFCCCC"><strong>master.adp</strong></td><td>(end)</td>
 </tr>
 </table></center>
 <p>Here we assume the ACS/Tcl situation, where the "code" is a tcl

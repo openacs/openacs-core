@@ -13,7 +13,7 @@ Part II. Administrator's Guide"
 <div class="titlepage"><div><div><h2 class="title">
 <a name="install-overview" id="install-overview"></a>Chapter 2. Installation
 Overview</h2></div></div></div><div class="toc">
-<p><b>Table of Contents</b></p><dl class="toc">
+<p><strong>Table of Contents</strong></p><dl class="toc">
 <dt><span class="sect1"><a href="install-steps">Basic
 Steps</a></span></dt><dt><span class="sect1"><a href="individual-programs">Prerequisite Software</a></span></dt>
 </dl>

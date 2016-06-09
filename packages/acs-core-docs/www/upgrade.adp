@@ -10,7 +10,7 @@ Part II. Administrator's Guide"
 		<div class="chapter">
 <div class="titlepage"><div><div><h2 class="title">
 <a name="upgrade" id="upgrade"></a>Chapter 5. Upgrading</h2></div></div></div><div class="toc">
-<p><b>Table of Contents</b></p><dl class="toc">
+<p><strong>Table of Contents</strong></p><dl class="toc">
 <dt><span class="sect1"><a href="upgrade-overview">Overview</a></span></dt><dt><span class="sect1"><a href="upgrade-4.5-to-4.6">Upgrading
 4.5 or higher to 4.6.3</a></span></dt><dt><span class="sect1"><a href="upgrade-4.6.3-to-5">Upgrading
 OpenACS 4.6.3 to 5.0</a></span></dt><dt><span class="sect1"><a href="upgrade-5-0-dot">Upgrading an

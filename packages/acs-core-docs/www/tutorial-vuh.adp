@@ -28,13 +28,19 @@ referring links in note-list. First, add the vuh:</p><pre class="screen">
 
 set query [ad_conn url]
 
-set request [string range $query [expr [string last / $query] + 1] end]
+set request [string range $query [string last / $query]+1 end]
 
 rp_form_put item_id $request
 
 set internal_path "/packages/[ad_conn package_key]/www/note-edit"
 
 rp_internal_redirect $internal_path
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:
 </pre><p>We parse the incoming request and treat everything after the
 final / as the item id. Note that this simple redirection will lose
 any additional query parameters passed in. Many OpenACS objects

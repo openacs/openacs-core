@@ -2,7 +2,7 @@
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Install PostgreSQL</title><link rel="stylesheet" type="text/css" href="openacs.css"><meta name="generator" content="DocBook XSL Stylesheets V1.79.1"><link rel="home" href="index.html" title="OpenACS Core Documentation"><link rel="up" href="complete-install.html" title="Chapter 3. Complete Installation"><link rel="previous" href="oracle.html" title="Install Oracle 8.1.7"><link rel="next" href="aolserver4.html" title="Install AOLserver 4"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><a href="http://openacs.org"><img src="/doc/images/alex.jpg" style="border:0" alt="Alex logo"></a><table width="100%" summary="Navigation header" border="0"><tr><td width="20%" align="left"><a accesskey="p" href="oracle.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Complete Installation</th><td width="20%" align="right"> <a accesskey="n" href="aolserver4.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="postgres"></a>Install PostgreSQL</h2></div></div></div><div class="authorblurb"><p>by <a class="ulink" href="mailto:vinod@kurup.com" target="_top">Vinod Kurup</a></p>
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
-        </div><p>Skip this section if you will run only Oracle.</p><p>OpenACS 5.7.0 will run with <a class="link" href="individual-programs.html#source-postgresql" title="PostgreSQL 7.4.x (Either this or Oracle is REQUIRED)">PostgreSQL</a> 7.3.2, 7.3.3, and 7.3.4 and 7.4.x.  7.4.7 is the recommended version of PostgreSQL.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><a name="install-postgres-mac"></a><b>Special notes for Mac OS X. </b>If you are running Mac OS X prior to 10.3, you should be
+        </div><p>Skip this section if you will run only Oracle.</p><p>OpenACS 5.9.0 will run with <a class="link" href="individual-programs.html#source-postgresql" title="PostgreSQL 7.4.x (Either this or Oracle is REQUIRED)">PostgreSQL</a> 7.3.2, 7.3.3, and 7.3.4 and 7.4.x.  7.4.7 is the recommended version of PostgreSQL.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><a name="install-postgres-mac"></a><b>Special notes for Mac OS X. </b>If you are running Mac OS X prior to 10.3, you should be
         able to install and use PostGreSQL 7.3.x.  Mac OS X 10.3
         requires PostGreSQL 7.4. </p></li><li class="listitem"><p><a name="install-postgres-debian"></a><b>Special Notes for Debian. </b></p><p>Debian stable user should install PostGreSQL from source
       as detailed below, or they should use the www.backports.org
@@ -215,11 +215,11 @@ logout
         state. Red Hat and Debian and SuSE each work a little
         differently.  If you haven't <a class="link" href="openacs.html#install-from-tarball" title="Installation Option 2: Install from tarball"> untarred the OpenACS tarball</a>, you will need to do so now to access the postgresql.txt file.
 	</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p>Red Hat RPM:</p><p>The init script is already installed; just turn it on for the appropriate run levels.</p><pre class="screen">[root root]# <strong class="userinput"><code>chkconfig --level 345 postgresql on</code></strong>
-[root root]# </pre></li><li class="listitem"><p>Red Hat from source:</p><pre class="screen">[root src]# <strong class="userinput"><code>cp /var/tmp/openacs-5.7.0/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql</code></strong>
+[root root]# </pre></li><li class="listitem"><p>Red Hat from source:</p><pre class="screen">[root src]# <strong class="userinput"><code>cp /var/tmp/openacs-5.9.0/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql</code></strong>
 [root src]# <strong class="userinput"><code>chown root.root /etc/rc.d/init.d/postgresql</code></strong>
 [root src]# <strong class="userinput"><code>chmod 755 /etc/rc.d/init.d/postgresql</code></strong>
 [root src]# 
-<span class="action"><span class="action">cp /var/tmp/openacs-5.7.0/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql
+<span class="action"><span class="action">cp /var/tmp/openacs-5.9.0/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql
 chown root.root /etc/rc.d/init.d/postgresql
 chmod 755 /etc/rc.d/init.d/postgresql</span></span></pre><p>Test the script.</p><pre class="screen">[root root]# <strong class="userinput"><code>service postgresql stop</code></strong>
 Stopping PostgreSQL: ok
@@ -242,7 +242,7 @@ service postgresql start</span></span></pre></li><li class="listitem"><p>Debian:
 [root ~]# <strong class="userinput"><code>chown root.root /etc/init.d/postgresql</code></strong>
 [root ~]# <strong class="userinput"><code>chmod 755 /etc/init.d/postgresql</code></strong>
 [root ~]# <span class="action"><span class="action">
-cp /var/tmp/openacs-5.7.0/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql
+cp /var/tmp/openacs-5.9.0/packages/acs-core-docs/www/files/postgresql.txt /etc/init.d/postgresql
 chown root.root /etc/init.d/postgresql
 chmod 755 /etc/init.d/postgresql</span></span></pre><p>Test the script</p><pre class="screen">[root ~]# <strong class="userinput"><code>/etc/init.d/postgresql stop</code></strong>
 Stopping PostgreSQL: ok
@@ -260,11 +260,11 @@ Stopping PostgreSQL: ok
    /etc/rc5.d/S20postgresql -&gt; ../init.d/postgresql
 [root ~]# <strong class="userinput"><code>/etc/init.d/postgresql start</code></strong>
 Starting PostgreSQL: ok
-[root ~]#</pre></li><li class="listitem"><p>FreeBSD:</p><pre class="screen">[root ~]# <strong class="userinput"><code>cp /tmp/openacs-5.7.0/packages/acs-core-docs/www/files/postgresql.txt /usr/local/etc/rc.d/postgresql.sh</code></strong>
+[root ~]#</pre></li><li class="listitem"><p>FreeBSD:</p><pre class="screen">[root ~]# <strong class="userinput"><code>cp /tmp/openacs-5.9.0/packages/acs-core-docs/www/files/postgresql.txt /usr/local/etc/rc.d/postgresql.sh</code></strong>
 [root ~]# <strong class="userinput"><code>chown root:wheel /usr/local/etc/rc.d/postgresql.sh</code></strong>
 [root ~]# <strong class="userinput"><code>chmod 755 /usr/local/etc/rc.d/postgresql.sh</code></strong>
 [root ~]# <span class="action"><span class="action">
-cp /tmp/openacs-5.7.0/packages/acs-core-docs/www/files/postgresql.txt /usr/local/etc/rc.d/postgresql.sh
+cp /tmp/openacs-5.9.0/packages/acs-core-docs/www/files/postgresql.txt /usr/local/etc/rc.d/postgresql.sh
 chown root:wheel /usr/local/etc/rc.d/postgresql.sh
 chmod 755 /usr/local/etc/rc.d/postgresql.sh</span></span></pre><p>Test the script</p><pre class="screen">[root ~]# <strong class="userinput"><code>/usr/local/etc/rc.d/postgresql.sh stop</code></strong>
 Stopping PostgreSQL: ok
@@ -282,7 +282,7 @@ Starting PostgreSQL: ok
             <code class="computeroutput">rc.d/</code> part in each of the
             following commands.
 
-          </p></div><pre class="screen">[root ~]# <strong class="userinput"><code>cp /var/tmp/openacs-5.7.0/packages/acs-core-docs/www/files/postgresql.txt /etc/rc.d/init.d/postgresql</code></strong>
+          </p></div><pre class="screen">[root ~]# <strong class="userinput"><code>cp /var/tmp/openacs-5.9.0/packages/acs-core-docs/www/files/postgresql.txt /etc/rc.d/init.d/postgresql</code></strong>
 [root ~]# <strong class="userinput"><code>chown root.root /etc/rc.d/init.d/postgresql</code></strong>
 [root ~]# <strong class="userinput"><code>chmod 755 /etc/rc.d/init.d/postgresql</code></strong></pre><p>
 

@@ -17,8 +17,8 @@ OpenACS documentation staff.</div><p>OpenACS requires, at a minimum, an operatin
 and webserver to work. Many additional programs, such as a build
 environment, Mail Transport Agent, and source control system, are
 also needed for a fully effective installation.</p><div class="table">
-<a name="compatibility-matrix" id="compatibility-matrix"></a><p class="title"><b>Table 2.2. Version
-Compatibility Matrix</b></p><div class="table-contents"><table class="table" summary="Version Compatibility Matrix" cellspacing="0" border="1">
+<a name="compatibility-matrix" id="compatibility-matrix"></a><p class="title"><strong>Table 2.2. Version
+Compatibility Matrix</strong></p><div class="table-contents"><table class="table" summary="Version Compatibility Matrix" cellspacing="0" border="1">
 <colgroup>
 <col class="c1"><col class="c2"><col class="3.2.5"><col class="4.5"><col class="4.6"><col class="4.6.1"><col class="4.6.2"><col class="4.6.3"><col class="5.0"><col class="5.1">
 </colgroup><thead><tr>
@@ -85,24 +85,24 @@ This includes a full set of documentation. The tarball works with
 both PostgreSQL and Oracle. Some scripts require bash shell.</p>
 </li><li class="listitem">
 <p>
-<b>Operating System. </b>OpenACS is designed for a
+<strong>Operating System. </strong>OpenACS is designed for a
 Unix-like system. It is developed primarily in Linux. It can be run
 on Mac OS X, and in Windows within VMWare.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
 <li class="listitem"><p>
-<b>GNU/Linux. </b>The installation assumes a linux
+<strong>GNU/Linux. </strong>The installation assumes a linux
 kernel of 2.2.22 or newer, or 2.4.14 or newer.</p></li><li class="listitem"><p>
-<b>FreeBSD. </b><a class="ulink" href="http://www.orchardlabs.com/freebsd/" target="_top">FreeBSD
+<strong>FreeBSD. </strong><a class="ulink" href="http://www.orchardlabs.com/freebsd/" target="_top">FreeBSD
 guide</a>. The OpenACS Reference Platform uses shell scripts
 written for bash, which is the standard Linux shell. If you are
 using a different shell, you will need to substitute your shell's
 conventions for setting environment variables when appropriate, and
 install bash to work with the scripts. Substitute <strong class="userinput"><code>fetch</code></strong> when the instructions
 suggest you use <strong class="userinput"><code>wget</code></strong> to download software.</p></li><li class="listitem"><p>
-<b>Mac OS X. </b><a class="xref" href="mac-installation" title="OpenACS Installation Guide for Mac OS X">the section called
+<strong>Mac OS X. </strong><a class="xref" href="mac-installation" title="OpenACS Installation Guide for Mac OS X">the section called
 &ldquo;OpenACS Installation Guide for Mac OS
 X&rdquo;</a>
 </p></li><li class="listitem"><p>
-<b>Windows/VMWare. </b><a class="xref" href="win2k-installation" title="OpenACS Installation Guide for Windows">the section called
+<strong>Windows/VMWare. </strong><a class="xref" href="win2k-installation" title="OpenACS Installation Guide for Windows">the section called
 &ldquo;OpenACS Installation Guide for
 Windows&rdquo;</a> The only way to run OpenACS on Windows is
 through the VMWare emulator. (Please let me know if you have
@@ -110,7 +110,7 @@ OpenACS running directly in Windows.)</p></li>
 </ul></div>
 </li><li class="listitem">
 <p>
-<b>Build Environment. </b>The Reference Platform
+<strong>Build Environment. </strong>The Reference Platform
 installation compiles most programs from source code.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
 <li class="listitem"><p>You need
 recent versions of these libraries for Oracle to work properly. For
@@ -134,10 +134,10 @@ requires these to compile. (Debian users: <code class="computeroutput">apt-get i
 to install OpenFTS.</p></li>
 </ul></div>
 </li><li class="listitem">
-<a name="source-tcllib" id="source-tcllib"></a><p> OpenACS 5.7.0
+<a name="source-tcllib" id="source-tcllib"></a><p> OpenACS 5.9.0
 uses those Tcl extensions to send e-mail out, among others.</p>
 </li><li class="listitem">
-<a name="source-tdom" id="source-tdom"></a><p>OpenACS 5.7.0 stores
+<a name="source-tdom" id="source-tdom"></a><p>OpenACS 5.9.0 stores
 queries in XML files, so we use an AOLserver module called tDOM to
 parse these files. (This replaces libxml2, which was used prior to
 4.6.4.)</p>
@@ -146,7 +146,7 @@ parse these files. (This replaces libxml2, which was used prior to
 is a tool for testing web interfaces via Tcl scripts.</p>
 </li><li class="listitem">
 <p>
-<b>Web Server. </b>The web server handles incoming
+<strong>Web Server. </strong>The web server handles incoming
 HTTP requests, provides a runtime environment for OpenACS's Tcl
 code, connects to the database, sends out HTTP responses, and logs
 requests and errors. OpenACS uses AOLserver; <a class="ulink" href="http://openacs.org/forums/message-view?message_id=21461" target="_top">some people have had success running Apache with
@@ -155,7 +155,7 @@ mod_nsd</a>.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-s
 base HTTP server</p>
 </li></ul></div><p>Mat Kovach is graciously maintaining an AOLserver distribution
 that includes all the patches and modules needed to run OpenACS
-5.7.0. These instructions will describe how to install using his
+5.9.0. These instructions will describe how to install using his
 source distribution. He also has binaries for SuSE 7.3 and OpenBSD
 2.8 (and perhaps more to come), currently located at <a class="ulink" href="http://uptime.openacs.org/aolserver-openacs/" target="_top">uptime.openacs.org</a>.</p><p>It's also possible to download all the pieces and patches
 yourself:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
@@ -173,7 +173,7 @@ available at <a class="ulink" href="http://sourceforge.net/tracker/index.php?fun
 </ul></div>
 </li><li class="listitem">
 <a name="nsopenssl-download" id="nsopenssl-download"></a><p>
-<b>nsopenssl, OPTIONAL. </b>Provides SSL
+<strong>nsopenssl, OPTIONAL. </strong>Provides SSL
 capabilities for AOLserver. It requires OpenSSL. You need this if
 you want users to make secure (https) connections to your
 webserver. aolserver3.x requires <a class="ulink" href="http://www.scottg.net/download/nsopenssl-2.1a.tar.gz" target="_top">nsopenssl 2.1a</a>. aolserver4.x requires nsopenssl3; see
@@ -207,15 +207,15 @@ You need this or something equivalent if you are running a
 high-availability production site and do not have an external load
 balancing system.</p></li><li class="listitem">
 <p>
-<b>Database. </b>The data on your site (for example,
+<strong>Database. </strong>The data on your site (for example,
 user names and passwords, calender entries, and notes) is stored in
 the database. OpenACS separates the database with an abstraction
 layer, which means that several different databases all function
 identically. While you can run the core OpenACS on any supported
 database, not all contributed packages support all databases.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
 <li class="listitem"><p>
-<b>Oracle 8.1.7 (Either this or PostgreSQL is
-REQUIRED). </b>You can register and download Oracle
+<strong>Oracle 8.1.7 (Either this or PostgreSQL is
+REQUIRED). </strong>You can register and download Oracle
 from <a class="ulink" href="http://otn.oracle.com/software/content.html" target="_top">Oracle
 TechNet</a>. You need this if you want to use an Oracle
 database.</p></li><li class="listitem"><p>
@@ -224,7 +224,7 @@ PostgreSQL database.</p></li>
 </ul></div>
 </li><li class="listitem">
 <p>
-<b>Process Controller. </b>This is software that
+<strong>Process Controller. </strong>This is software that
 initiates other software, and restarts that software if it fails.
 On Linux, we recommend using Daemontools to control AOLserver and
 qmail.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;"><li class="listitem">
@@ -235,7 +235,7 @@ An alternative would be to run the services from inittab.</p>
 </li></ul></div>
 </li><li class="listitem">
 <p>
-<b>Mail Transport Agent. </b>A Mail Transport Agent
+<strong>Mail Transport Agent. </strong>A Mail Transport Agent
 is a program that handles all incoming and outgoing mail. The
 Reference Platform uses Qmail; any MTA that provides a sendmail
 wrapper (that is, that can be invoked by calling the sendmail
@@ -254,7 +254,7 @@ this if you are running qmail.</p></li>
 docbook-xsl v1.56, libxslt 1.0.21, xsltproc 1.0.21). You need this
 to write or edit documentation.</p></li><li class="listitem">
 <p>
-<b>Source Control. </b>A Source Control system keeps
+<strong>Source Control. </strong>A Source Control system keeps
 track of all of the old versions of your files. It lets you recover
 old files, compare versions of file, and identify specific versions
 of files. You can use any source control system; the Reference

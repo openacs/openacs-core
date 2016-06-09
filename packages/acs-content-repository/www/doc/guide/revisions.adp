@@ -13,10 +13,10 @@ object.</li><li>Insert a corresponding row in the <tt>cr_revisions</tt> table
 with the basic attributes for the revision.</li><li>Write the content data into the <tt>content</tt> BLOB column of
 the <tt>cr_revisions</tt> table.</li><li>Insert a corresponding row into the attribute table of each
 ancestor of the content type of the item. This is not applicable if
-the content type is <b>Basic Item</b> or an immediate subtype
+the content type is <strong>Basic Item</strong> or an immediate subtype
 thereof.</li><li>Insert a corresponding row into the attribute table of the
 content type of the item. This is not applicable if the content
-type is <b>Basic Item</b>.</li>
+type is <strong>Basic Item</strong>.</li>
 </ol>
 <h3>Use the Content Revision API to create a revision</h3>
 <p>Content revisions are initialized using the

@@ -112,7 +112,7 @@ crowding the start and end tags like so:</p><pre>
 reduces the legibility of the template to others who need to edit
 the template later.</p>
 </li><li><p>
-<b>Caution:</b>   Do not write to the connection.
+<strong>Caution:</strong>   Do not write to the connection.
 Specifically, if you must use the <code>&lt;% %&gt;</code> tag, do
 not call <code>ns_puts</code>, because it will not work the same
 way as in AOLserver's ADP pages.</p></li>

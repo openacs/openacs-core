@@ -25,9 +25,9 @@ each item in a list data source.</p>
 </pre>
 <h3>Notes</h3>
 <ul>
-<li><p>The special variable <tt>datasource<b>:</b>rownum</tt> has the
+<li><p>The special variable <tt>datasource<strong>:</strong>rownum</tt> has the
 same meaning as the special column
-<tt>datasource<b>.</b>rownum</tt> in the body of a
+<tt>datasource<strong>.</strong>rownum</tt> in the body of a
 <tt>multiple</tt> tag.</p></li><li><p>The special variable <tt>datasource:rowcount</tt> has the same
 meaning in the list context as it does for multirow data
 sources.</p></li>

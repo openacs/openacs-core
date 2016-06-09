@@ -84,7 +84,7 @@ the attribute tables for the entire chain of inheritance for that
 content type. The view always has the same name as the attribute
 table for the content table, with an "x" appended to distinguish it
 from the table itself (for example, if the attribute table for
-<b>Press Releases</b> is <tt>press_releases</tt>, then the view
+<strong>Press Releases</strong> is <tt>press_releases</tt>, then the view
 will be named <tt>press_releasesx</tt>. Querying this view is a
 convenient means of accessing any attribute associated with a
 content item.</p>

@@ -13,15 +13,15 @@ Listing of public methods:<br>
 <h3>Method Detail</h3>
 <p align="right">
 <font color="red">*</font> indicates required</p>
-<b>Public Methods:</b>
+<strong>Public Methods:</strong>
 <br>
 <table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF">
-<a name="content_add::content_method_html" id="content_add::content_method_html"><font size="+1" weight="bold">content_add::content_method_html</font></a><br><small><i>  by Michael Pih</i></small>
+<a name="content_add::content_method_html" id="content_add::content_method_html"><font size="+1" weight="bold">content_add::content_method_html</font></a><br><small><em>  by Michael Pih</em></small>
 </td></tr><tr><td>
 <blockquote>Generates HTML stub for revision content method choices
 for a content item</blockquote><dl><dd>
-<b>Parameters:</b><table>
+<strong>Parameters:</strong><table>
 <tr>
 <td align="right">
 <code>db</code><font color="red">*</font>

@@ -13,7 +13,7 @@ OpenACS Platform Developers"
 <div class="titlepage"><div><div><h2 class="title">
 <a name="kernel-doc" id="kernel-doc"></a>Chapter 15. Kernel
 Documentation</h2></div></div></div><div class="toc">
-<p><b>Table of Contents</b></p><dl class="toc">
+<p><strong>Table of Contents</strong></p><dl class="toc">
 <dt><span class="sect1"><a href="kernel-overview">Overview</a></span></dt><dt><span class="sect1"><a href="object-system-requirements">Object Model
 Requirements</a></span></dt><dt><span class="sect1"><a href="object-system-design">Object
 Model Design</a></span></dt><dt><span class="sect1"><a href="permissions-requirements">Permissions

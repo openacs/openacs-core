@@ -13,7 +13,7 @@ Part II. Administrator's Guide"
 <div class="titlepage"><div><div><h2 class="title">
 <a name="maintenance-web" id="maintenance-web"></a>Chapter 6. Production
 Environments</h2></div></div></div><div class="toc">
-<p><b>Table of Contents</b></p><dl class="toc">
+<p><strong>Table of Contents</strong></p><dl class="toc">
 <dt><span class="sect1"><a href="install-openacs-keepalive">Starting and Stopping an OpenACS
 instance.</a></span></dt><dt><span class="sect1"><a href="install-openacs-inittab">AOLserver keepalive with
 inittab</a></span></dt><dt><span class="sect1"><a href="install-next-add-server">Running multiple services on one

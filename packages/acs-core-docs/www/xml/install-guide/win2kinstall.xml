@@ -7,11 +7,8 @@
 <sect1 id="win2k-installation">
 <title>OpenACS Installation Guide for Windows</title>
 
-  <para>A version of OpenACS and NaviServer is maintained by Maurizio
-  Martignano ans is available from
-    (10/2003), the best option to get OpenACS &version; running on Windows
-    is to use <ulink url="http://vmware.com">VMware</ulink> and John
-    Sequeira's <ulink
+  <para>A binary version of OpenACS and NaviServer is maintained by Maurizio
+  Martignano and is available from <ulink
     url="http://www.spazioit.com/pages_en/sol_inf_en/windows-openacs_en/">Spazio
     IT</ulink>
   </para>

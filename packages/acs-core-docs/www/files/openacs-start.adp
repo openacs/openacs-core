@@ -14,7 +14,7 @@ Notes</a> before proceeding to better understand what is contained
 in this release.</p>
 <p>Your database driver is correctly installed and configured.</p>
 <p>The next step is to install the OpenACS kernel data model. Click
-the <i>Next</i> button to proceed.</p>
+the <em>Next</em> button to proceed.</p>
 <form action="install-data-model" method="get">
 <center><input type="submit" value="Next -&gt;"></center><hr><a href="mailto:gatekeepers\@openacs.org"></a><address>gatekeepers\@openacs.org</address>
 </form>

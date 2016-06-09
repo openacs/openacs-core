@@ -39,8 +39,8 @@ supplied by another source file; that source will probably be
 another file of the same name with a <code>.tcl</code> extension.
 Variable tags come in three basic formats, as <a href="../tags/list">lists</a>, <a href="../tags/multiple">multiples</a> and onevalues.</p>
 <p>
-<b>Exercise 1: Onevalues, onelists, multilists and
-multirows</b><br>
+<strong>Exercise 1: Onevalues, onelists, multilists and
+multirows</strong><br>
 (nestedlists, too?)</p>
 <p>Let's first take a look at some list and variable tags in
 action. Open up another browser and look at <a href="list-and-var-sample.txt">this page</a>, which is a text rendition
@@ -70,13 +70,13 @@ used as a place-marker for the value set in
 appearing once in the .adp file, are cycled repeatedly to show
 multiple sets of information when displayed in
 <code>list-and-var-sample.acs</code>; example:
-<blockquote><pre><code>    &lt;multiple name="<i>your_multirow</i>"&gt;
-    &lt;tr&gt;&lt;td&gt;\@<i>your_multirow</i>.first_names\@ \@<i>your_multirow</i>.last_name\@ &lt;/td&gt; &lt;/tr&gt;
+<blockquote><pre><code>    &lt;multiple name="<em>your_multirow</em>"&gt;
+    &lt;tr&gt;&lt;td&gt;\@<em>your_multirow</em>.first_names\@ \@<em>your_multirow</em>.last_name\@ &lt;/td&gt; &lt;/tr&gt;
     &lt;/multiple&gt;
     </code></pre></blockquote>
 The user will see one table row filled with a different person's
 name for each row contained in the multirow
-<code><i>your_multirow</i></code>.</li><li>multirow variables are identified with this format: \@&lt;name
+<code><em>your_multirow</em></code>.</li><li>multirow variables are identified with this format: \@&lt;name
 of the multirow&gt;.&lt;name of a field in the multirow&gt;\@, and
 can only be called within their respective
 <code>&lt;multiple&gt;</code> tags</li>
@@ -113,8 +113,8 @@ page</li>
 <p>Congratulations! You've just created a personalized web page
 describing friends you've never met and movies you've possibly
 never seen.</p>
-<p><b>Exercise Two: &lt;if&gt; and &lt;else&gt;, the conditional
-tags</b></p>
+<p><strong>Exercise Two: &lt;if&gt; and &lt;else&gt;, the conditional
+tags</strong></p>
 <p>Dynamic data implies a changing page, and also changing
 presentation. The <a href="../tags/if">&lt;if&gt;</a> and
 &lt;else&gt; tags allow you to alter the format of your page to
@@ -129,13 +129,13 @@ mind:</p>
 <li>in Tcl all variables, even numbers, are stored as text strings
 with quantitative values, so conditions like less than, greater
 than, and (not) between can also be used with text to determine
-alphabetical order: <i>a</i> &lt; <i>b</i> &lt; ... &lt; <i>z</i>,
+alphabetical order: <em>a</em> &lt; <em>b</em> &lt; ... &lt; <em>z</em>,
 lower-case letters are greater than upper-case, and numbers less
 than letters. Example: "you" are greater than "me", and "I" am less
 than "you"</li><li>the "between" conditions checks inclusively, so &lt;if 2
 between 2 6&gt; will test true</li><li>
 <code>&lt;if \@a\@ between \@b\@ \@c\@&gt;</code> requires that
-<code>\@a\@</code> is greater than or equal to <code>\@b\@</code><i>and</i> less than or equal to <code>\@c\@</code>; so <code>&lt;if
+<code>\@a\@</code> is greater than or equal to <code>\@b\@</code><em>and</em> less than or equal to <code>\@c\@</code>; so <code>&lt;if
 \@x\@ between 4 2&gt;</code> will always test false</li><li>the "in" condition uses a regular expression check (or will it?
 <font color="red">come back here and revise</font>)</li>
 </ul>
@@ -146,11 +146,11 @@ that the friend description reads "likes chocolate" when
 <code>likes_chocolate_p</code> is "t", "doesn't like chocolate"
 when <code>likes_chocolate_p</code> is "f", or "probably like
 chocolate" if <code>likes_chocolate_p</code> is an empty string.
-Also, add one &lt;if&gt;, and one &lt;if&gt; only, so that <i>a</i>
-is appropriately changed to <i>an</i> for any 11-, 18- or 80- to
+Also, add one &lt;if&gt;, and one &lt;if&gt; only, so that <em>a</em>
+is appropriately changed to <em>an</em> for any 11-, 18- or 80- to
 89-year olds.</p>
-<p><b>Exercise Three: The &lt;master&gt; and &lt;slave&gt; tags --
-a call to the dominatrix in you</b></p>
+<p><strong>Exercise Three: The &lt;master&gt; and &lt;slave&gt; tags --
+a call to the dominatrix in you</strong></p>
 <p>The <a href="../tags/master">&lt;master&gt;</a> and
 <a href="../tags/slave">&lt;slave&gt;</a> tags allow you to
 maintain a consistent style and format among pages without having
@@ -176,7 +176,7 @@ including its ".adp" extension</li><li>as mentioned earlier, slave sections do n
 within a master tag already formatted for HTML</li><li>as the demonstration points out, pages are browsed at the .acs
 page sharing the same file name as the slave, not master</li><li>the master page can be viewed at its own .acs page, but shows
 nothing in place of the &lt;slave&gt; tag</li><li>you can have nested slave sections, that is, a slave section
-within another slave</li><li>you <b>cannot</b> have two different slave sections within the
+within another slave</li><li>you <strong>cannot</strong> have two different slave sections within the
 same master (go ahead and try adding an extra &lt;slave&gt; tag to
 a master page to see what happens)</li><li>
 <a href="../tags/property">&lt;property&gt;</a> tags are
@@ -196,8 +196,8 @@ independently formatted html page, and enslave it to the mastery of
 of your personal web page. It would also be nice if you were to
 label the newly inserted form with some slave-specific title.</p>
 <p>
-<b>Exercise Four: The functions of
-&lt;formtemplate&gt;</b><br>
+<strong>Exercise Four: The functions of
+&lt;formtemplate&gt;</strong><br>
 </p>
 <p>Creating forms with ATS can be as simple as inserting two tags
 into a page. Try this: open <code>form-sample.adp</code> and add
@@ -233,7 +233,7 @@ you should now see a hand-built version of the same form.</p>
 most obviously the lack of background color and a few missing entry
 fields in the manually constructed one. Maybe not so noticeable is
 the grouping of entry widgets into one HTML table row (check out
-the <i>Name</i> field) and the multi-input combination of text
+the <em>Name</em> field) and the multi-input combination of text
 entry boxes and radio buttons for entering telephone number
 information. Take a look at how the phone information entry section
 is constructed in <code>form-sample.adp</code>. Note specifically:
@@ -251,18 +251,18 @@ description and comments about the form.</p>
 <p>Also, try customizing your form's error response/correction
 request text. You'll need to use the <a href="../tags/formerror">&lt;formerror&gt;</a> tag, an example of
 which can be found under the gender formwidget.</p>
-<p><b>Exercise Five: more fun with multirows</b></p>
+<p><strong>Exercise Five: more fun with multirows</strong></p>
 <p>Now that you've confidently added the conditional &lt;if&gt; and
 &lt;else&gt; tags to your ATS toolbelt, it's time to put those
 tools to good use in formatting multirow data. First, read the
 <a href="../tags/multiple">docs</a> to learn about the
-automatcally generated <code>\@<i>your_multirow</i>.rownum\@</code>
-column, the <code>\@<i>your_multirow</i>:rowcount\@</code> onevalue
+automatcally generated <code>\@<em>your_multirow</em>.rownum\@</code>
+column, the <code>\@<em>your_multirow</em>:rowcount\@</code> onevalue
 which contains the total number of rows contained in your multirow,
 and the &lt;multiple&gt; <code>startrow</code> and
 <code>maxrows</code> attributes. Possible point of confusion: the
-variable <code>\@<i>your_multirow</i>:rowcount\@</code> is a onevalue
-and not a column of the multirow <code><i>your_multirow</i></code>,
+variable <code>\@<em>your_multirow</em>:rowcount\@</code> is a onevalue
+and not a column of the multirow <code><em>your_multirow</em></code>,
 so it need not be used within &lt;multiple&gt; tags and in many
 cases should not be used within &lt;multiple&gt; tags. Why is this?
 (Take a look at how <code>\@address:rowcount\@</code> is used.) Now

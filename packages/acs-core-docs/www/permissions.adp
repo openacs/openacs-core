@@ -14,7 +14,7 @@ Chapter 11. Development Reference"
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="permissions-overview" id="permissions-overview"></a>Overview</h3></div></div></div><p>The OpenACS 5.7.0 Permissions system allows developers and
+<a name="permissions-overview" id="permissions-overview"></a>Overview</h3></div></div></div><p>The OpenACS 5.9.0 Permissions system allows developers and
 administrators to set access control policies at the object level,
 that is, any application or system object represented by a row in
 the <code class="computeroutput">acs_objects</code> table can be
@@ -32,7 +32,7 @@ domains.</p></li>
 they fit together with the permissions system.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="permissions-groups" id="permissions-groups"></a>Groups</h3></div></div></div><p>OpenACS 5.7.0 has an abstraction called a <span class="emphasis"><em>party</em></span>. Parties have a recursive
+<a name="permissions-groups" id="permissions-groups"></a>Groups</h3></div></div></div><p>OpenACS 5.9.0 has an abstraction called a <span class="emphasis"><em>party</em></span>. Parties have a recursive
 definition. We can illustrate how it works with the following
 simplified data model. First, we define the <code class="computeroutput">parties</code> table, where each party has an
 email address and a URL for contact information.</p><pre class="programlisting">
@@ -80,13 +80,13 @@ operation on some object. Privileges are the basic units out of
 which we build access control policies. For example in the Unix
 filesystem, access is controlled by granting users some combination
 of read, write, or execute privileges on files and directories. In
-OpenACS 5.7.0, the table of privileges is organized hierarchically
+OpenACS 5.9.0, the table of privileges is organized hierarchically
 so that developers can define privileges that aggregate some set of
 privileges together. For example, if we have read, write, create
 and delete privileges, it might be convenient to combine them into
 a new privilege called "admin". Then, when a user is granted
 "admin" privilege, she is automatically granted all the child
-privileges that the privilege contains. The OpenACS 5.7.0 kernel
+privileges that the privilege contains. The OpenACS 5.9.0 kernel
 data model defines these privileges:</p><pre class="programlisting">
 # 
 begin
@@ -124,7 +124,7 @@ means for controlling permissions of a large group of objects at
 the same time.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="permissions-object-context" id="permissions-object-context"></a>Object Context</h3></div></div></div><p>In OpenACS 5.7.0, object context is a scoping mechanism.
+<a name="permissions-object-context" id="permissions-object-context"></a>Object Context</h3></div></div></div><p>In OpenACS 5.9.0, object context is a scoping mechanism.
 "Scoping" and "scope" are terms best explained by example: consider
 some hypothetical rows in the <code class="computeroutput">address_book</code> table:</p><div class="informaltable"><table class="informaltable" cellspacing="0" border="1">
 <colgroup>
@@ -190,7 +190,7 @@ default.</p><p>See the package developer tutorials for examples on how to use
 permissions code.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="permissions-summary" id="permissions-summary"></a>Summary</h3></div></div></div><p>OpenACS 5.7.0 defines three separate mechanisms for specifying
+<a name="permissions-summary" id="permissions-summary"></a>Summary</h3></div></div></div><p>OpenACS 5.9.0 defines three separate mechanisms for specifying
 access control in applications.</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem"><p>The Groups data model allows you to define hierarchical
 organizations of users and groups of users.</p></li><li class="listitem"><p>The Permissions data model allows you to define a hierarchy of

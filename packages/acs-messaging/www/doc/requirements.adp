@@ -7,7 +7,7 @@
 by <a href="mailto:akk\@arsdigita.com">Anukul Kapoor</a>
  and
 <a href="mailto:akk\@arsdigita.com">Pete Su</a>
-<i>This is only a DRAFT</i>
+<em>This is only a DRAFT</em>
 <h3>I. Introduction</h3>
 <p>In ACS 3.x, each messaging application (e.g. bboard, general
 comments, spam, ticket tracker and so on) used its own specialized
@@ -130,9 +130,9 @@ types, although initial implementations may be more limited.</p>
 <p><strong>100.0 Messages and E-Mail</strong></p>
 <p>The system should provide the following interfaces for
 integrating with existing E-mail systems. Note that these
-requirements only deal with <i>sending</i> mail. Our feeling that a
+requirements only deal with <em>sending</em> mail. Our feeling that a
 seperate package should be implemented to deal with
-<i>receiving</i> mail that would use ACS Messages for storage of
+<em>receiving</em> mail that would use ACS Messages for storage of
 incoming messages.</p>
 <blockquote>
 <p><strong>100.10 Sending Single Messages</strong></p><p>The system should provide a mechanism for specifying that a

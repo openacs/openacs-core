@@ -59,7 +59,7 @@ have this basic structure:</p>
   &lt;td&gt;&lt;!-- SECTION LINKS --&gt;&lt;/td&gt;
   &lt;td colspan=2&gt;
     &lt;!-- CONTENT --&gt;
-    <b>&lt;slave&gt;</b>
+    <strong>&lt;slave&gt;</strong>
   &lt;/td&gt;
 &lt;/tr&gt;
 

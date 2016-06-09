@@ -33,7 +33,7 @@ dev0103-001.</p>
 <h4>Total Time (Sum of all Stages)</h4>
 <p><img src="time2/stage15.gif"></p>
 <p>Overall, the templated pages are delivered markedly
-<b>slower</b>, by about 65ms. Forcing the template system to always
+<strong>slower</strong>, by about 65ms. Forcing the template system to always
 reread all files and to recompile the ADP part slows them down, as
 expected, but overall they are still faster than the Tcl-only
 page.</p>
