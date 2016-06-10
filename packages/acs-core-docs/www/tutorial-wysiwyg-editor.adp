@@ -91,34 +91,33 @@ value for your form.</p><pre class="programlisting">
         
 </pre><p>All you need now is a configuration page where the user can
 change this setting. Create a <code class="code">configure.tcl</code> file:</p><pre class="programlisting">
-        ad_page_contract {
+ad_page_contract {
 
-        This page allows a faq admin to change the UseWysiwygP setting
+    This page allows a faq admin to change the UseWysiwygP setting
 
-        } {
-        {return_url ""}
-        }
+} {
+    {return_url ""}
+}
 
-        set title "Should we support WYSIWYG?"
-        set context [list $title]
+    set title "Should we support WYSIWYG?"
+    set context [list $title]
 
-        set use_wysiwyg_p
+    set use_wysiwyg_p
 
-        ad_form -name categories_mode -form {
+    ad_form -name categories_mode -form {
         {enabled_p:text(radio)
-                {label "Enable WYSIWYG"}
-                {options {{Yes t} {No f}}}
-                {value $use_wysiwyg_p}
+            {label "Enable WYSIWYG"}
+            {options {{Yes t} {No f}}}
+            {value $use_wysiwyg_p}
         }
         {return_url:text(hidden) {value $return_url}}
         {submit:text(submit) {label "Change"}}
-        } -on_submit {
+    } -on_submit {
         parameter::set_value  -parameter "UseWysiwygP" -value $enabled_p
         if {$return_url ne ""} {
-                ns_returnredirect $return_url
+            ns_returnredirect $return_url
         }
-        }
-        
+    }
 </pre><p>In the corresponding ADP file write</p><pre class="programlisting">
         &lt;master&gt;
         &lt;property name="title"&gt;\@title\@&lt;/property&gt;

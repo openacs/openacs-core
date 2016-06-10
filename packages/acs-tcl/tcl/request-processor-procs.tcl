@@ -750,6 +750,11 @@ ad_proc -private rp_filter { why } {
         return "filter_return"
     }
 
+    set headers [ns_conn headers]
+    ns_set put $headers "X-Forwarded-For" 1.2.3.4
+    ns_set put $headers "X-User-ID" 123
+    ns_log notice "setting <X-Forwarded-For> to 1.2.3.4 in $headers"
+
     if {[ns_info name] eq "NaviServer"}  {
         # provide context information for background writer
         set requestor [expr {$::ad_conn(user_id) == 0 ? [ad_conn peeraddr] : $::ad_conn(user_id)}]
