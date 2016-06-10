@@ -27,7 +27,7 @@
 <p>A package is <strong>enabled</strong> if it is scheduled to run at server startup
 and is deliverable by the request processor.
 </p>
-<p>If a Tcl library file (<tt>*-procs.tcl</tt>) or query file (<tt>*.xql</tt>) is being
+<p>If a Tcl library file (<kbd>*-procs.tcl</kbd>) or query file (<kbd>*.xql</kbd>) is being
 <strong>watched</strong>, the request processor monitors it, reloading it into running interpreters
 whenever it is changed. This is useful during development
 (so you don't have to restart the server for your changes to take
