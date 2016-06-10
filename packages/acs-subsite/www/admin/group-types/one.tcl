@@ -62,7 +62,9 @@ db_multirow allowed_relations relations_select {
 # See if we need to offer a link to add a rel type
 set more_relation_types_p [rel_types::additional_rel_types_p -group_type $group_type]
 
-set add_group_url [export_vars -base "../parties/new" {{party_type $group_type} {add_with_rel_type composition_rel} return_url}]
+set add_group_url [export_vars -base "../groups/new" {
+    {group_type $group_type} {add_with_rel_type composition_rel} return_url
+}]
 
 set add_attribute_url [export_vars -base "../attributes/add" {{object_type $group_type} return_url}]
 
