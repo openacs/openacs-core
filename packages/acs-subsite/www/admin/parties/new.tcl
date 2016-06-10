@@ -176,10 +176,15 @@ attribute::add_form_elements -form_id add_party -variable_prefix rel -start_with
 if { [template::form is_valid add_party] } {
 
     db_transaction {
-	party::new -email ${party.email} -form_id add_party -variable_prefix party -party_id $party_id -context_id [ad_conn package_id] $party_type 
+	set party_id [party::new \
+                          -email ${party.email} \
+                          -form_id add_party \
+                          -variable_prefix party \
+                          -party_id $party_id \
+                          -context_id [ad_conn package_id] \
+                          $party_type]
 
 	relation_add -member_state $member_state $add_with_rel_type $add_to_group_id $party_id
-
     }
 
     # there may be more segments to put this new party in before the
