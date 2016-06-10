@@ -6,24 +6,24 @@
 
 <h2>#acs-subsite.Groups_of_this_type#</h2>
 
-<ul>
+<blockquote>
   <if @groups:rowcount@ eq 0>
-    <li>(#acs-subsite.none#)</li>
+    <p>(#acs-subsite.none#)</p>
   </if>
   <else>
-    <multiple name="groups">
+  <ul>
+  <multiple name="groups">
       <if @groups.rownum@ gt 25>
         <li> <a href="groups-display?group_type=@group_type_enc@">#acs-subsite.View_all_groups_of_this_type#</a> </li>
       </if>
       <else>
-        <li> <a href="../groups/one?group_id=@groups.group_id@">@groups.group_name@</a> </li>
+        <li> <a href="../groups/one?group_id=@groups.group_id;literal@">@groups.group_name@</a> </li>
       </else>
-    </multiple>
+  </multiple>
+  </ul>
   </else>
-</ul>
-<ul>
-  <li><a href="@add_group_url@">#acs-subsite.Add_a_group_of_this_type#</a></li>
-</ul>
+  <a href="@add_group_url@" class="button">#acs-subsite.Add_a_group_of_this_type#</a>
+</blockquote>
 
 <h2>#acs-subsite.Attributes_of_this_type_of_group#</h2>
 
