@@ -396,12 +396,7 @@ for each row execute procedure composition_rels_del_tr ();
 -- create or replace package body composition_rel
 -- function new
 
--- old define_function_args('composition_rel__new','rel_id,rel_type;composition_rel,object_id_one,object_id_two,creation_user,creation_ip')
--- new
 select define_function_args('composition_rel__new','rel_id;null,rel_type;composition_rel,object_id_one,object_id_two,creation_user;null,creation_ip;null');
-
-
-
 
 --
 -- procedure composition_rel__new/6

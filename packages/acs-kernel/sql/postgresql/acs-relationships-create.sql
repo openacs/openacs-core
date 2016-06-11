@@ -553,11 +553,7 @@ for each row execute procedure acs_rels_in_tr ();
 -- function new
 
 
--- old define_function_args('acs_rel__new','rel_id,rel_type,object_id_one,object_id_two,context_id,creation_user,creation_ip')
--- new
 select define_function_args('acs_rel__new','rel_id;null,rel_type;relationship,object_id_one,object_id_two,context_id;null,creation_user;null,creation_ip;null');
-
-
 
 --
 -- procedure acs_rel__new/7
