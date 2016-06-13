@@ -16,8 +16,7 @@
             and perm.privilege = 'read'
             and g.group_id = o.object_id
             and o.object_type = :group_type
-            and app_group.package_id = :package_id
-            and app_group.element_id = g.group_id
+            and (app_group.package_id = :package_id and app_group.element_id = g.group_id or o.object_id = -2)
           order by g.group_name, g.group_id) my_view 
     limit 26
 

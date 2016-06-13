@@ -35,8 +35,9 @@ if { ![db_0or1row select_pretty_name {}] } {
 }
 
 set doc(title) [_ acs-subsite.Details_for__group_type_pretty_name]
-
 set context [list [list "[ad_conn package_url]admin/group-types/" [_ acs-subsite.Group_Types]] $group_type_pretty_name]
+
+acs_object_type::get -object_type $group_type -array type_info
 
 # Pull out the first 25 groups of this type. If there are more, we'll
 # offer a link to display them all. Alphabetize the first 25 groups

@@ -4,6 +4,11 @@
 				   
 <h1>@doc.title@</h1>
 
+<ul>
+<li>Group: @type_info.pretty_name@
+<li>Supertype: <a href="one?group_type=@type_info.supertype@">@type_info.supertype@</a>
+</ul>
+
 <h2>#acs-subsite.Groups_of_this_type#</h2>
 
 <blockquote>
@@ -43,7 +48,7 @@
 </ul>
 <ul>
   <if @dynamic_p@ eq "t"> 
-      <li><a href="@add_attribute_url@">#acs-subsite.Add_an_attribute#</a></li>
+      <li><a href="@add_attribute_url@" class="button">#acs-subsite.Add_an_attribute#</a></li>
   </if>
   <else>
       <li>#acs-subsite.Attributes_can_only_be_added_by_programmers#</li>
@@ -67,7 +72,7 @@
   </else>
 </ul>
 <ul>
-  <li><a href="rel-type-add?group_type=@group_type_enc@">#acs-subsite.Add_a_permissible_relationship_type#</a></li>
+  <li><a href="rel-type-add?group_type=@group_type_enc@" class="button">#acs-subsite.Add_a_permissible_relationship_type#</a></li>
 </ul>
 
 
@@ -79,7 +84,7 @@
       <li>#acs-subsite.Default_join_policy#: @default_join_policy@
            (<a href="change-join-policy?group_type=@group_type_enc@">#acs-subsite.edit#</a>)
         </li>
-      <li> <a href="delete?group_type=@group_type_enc@">#acs-subsite.Delete_this_group_type#</a>
+      <li> <a href="delete?group_type=@group_type_enc@" class="button">#acs-subsite.Delete_this_group_type#</a>
       </li>
   </if>
   <else>
