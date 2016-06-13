@@ -5,6 +5,7 @@ ad_page_contract {
     @creation-date 2003-06-02
     @cvs-id $Id$
 } {
+    {group_id:integer,notnull ""}
     {member_state "approved"}
     {orderby:token "name,asc"}
     page:naturalnum,optional
@@ -16,10 +17,17 @@ ad_page_contract {
     }
 }
 
-set page_title [_ acs-subsite.Members]
-set context [list $page_title]
+set package_id [ad_conn package_id]
+if {$group_id eq ""} {
+    set group_id [application_group::group_id_from_package_id -package_id $package_id]
+}
+group::get -group_id $group_id -array group_info
+subsite::get -subsite_id $package_id -array subsite_info
+ns_log notice "group_id $group_id $package_id [array get group_info]"
+set group_name $group_info(title)
 
-set group_id [application_group::group_id_from_package_id]
+set page_title "[_ acs-subsite.Members] of Group: $group_info(group_name) (subsite $subsite_info(instance_name))"
+set context [list $page_title]
 
 # Is this the main site? In that case, we don't offer to remove users completely,
 # only to ban/delete them.
@@ -32,7 +40,9 @@ set show_member_list_to [parameter::get -parameter "ShowMembersListTo" -default 
 # 1 = members
 # 2 = admins
 
-if { $show_member_list_to != 0 || [permission::permission_p -party_id [ad_conn untrusted_user_id] -object_id $group_id -privilege "admin"] } {
+if { $show_member_list_to != 0
+     || [permission::permission_p -party_id [ad_conn untrusted_user_id] -object_id $group_id -privilege "admin"]
+ } {
     # Refresh login
     auth::require_login
 }
@@ -42,7 +52,11 @@ if { $show_member_list_to != 0 || [permission::permission_p -party_id [ad_conn u
 #    - does user have delete on group?
 set admin_p [permission::permission_p -party_id $user_id -object_id $group_id -privilege "admin"]
 
-set show_member_list_p [expr { $show_member_list_to == 0 || $admin_p || ($show_member_list_to == 1 && [group::member_p -group_id $group_id]) }]
+set show_member_list_p [expr {
+                              $show_member_list_to == 0
+                              || $admin_p
+                              || ($show_member_list_to == 1 && [group::member_p -group_id $group_id])
+                          }]
 
 if { !$show_member_list_p } { 
     set title [_ acs-subsite.Cannot_see_memb_list]
