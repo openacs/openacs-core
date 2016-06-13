@@ -1294,13 +1294,22 @@ ad_proc -private apm_package_url_from_key_mem {package_key} {
 # package_key -> version_id 
 #
 
-ad_proc -public apm_version_id_from_package_key { package_key } {
-    Return the id of the enabled version of the given package_key.
+ad_proc -public apm_version_id_from_package_key {
+    {-all:boolean}
+    package_key
+} {
+    Return the id of the (per default enabled) version of the given package_key.
     If no such version id can be found, returns the empty string.
 
+    @param all when specified, return the the enabled or disabled version_id of the package_key.
+    @param package_key
     @author Peter Marklund
 } {
-    return [db_string get_id {} -default ""]
+    if {$all_p} {
+        return [db_string get_id {} -default ""]
+    } else {
+        return [db_string get_enabled_id {} -default ""]
+    }
 }
 
 #

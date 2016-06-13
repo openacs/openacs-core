@@ -186,10 +186,18 @@
     </querytext>
   </fullquery>
 
-  <fullquery name="apm_version_id_from_package_key.get_id">      
+  <fullquery name="apm_version_id_from_package_key.get_enabled_id">      
     <querytext>
         select version_id 
         from apm_enabled_package_versions 
+        where package_key = :package_key
+    </querytext>
+  </fullquery>
+  
+  <fullquery name="apm_version_id_from_package_key.get_id">      
+    <querytext>
+        select version_id 
+        from apm_package_versions 
         where package_key = :package_key
     </querytext>
   </fullquery>

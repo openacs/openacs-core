@@ -1144,13 +1144,13 @@ ad_proc -private apm_package_delete {
     package_key
 } {
 
-    Deinstall a package from the system. Will unmount and uninstantiate
+    De-install a package from the system. Will unmount and uninstantiate
     package instances, invoke any before-uninstall callback, source any
     provided sql drop scripts, remove message keys, and delete
     the package from the APM tables.
 
 } {
-    set version_id [apm_version_id_from_package_key $package_key]
+    set version_id [apm_version_id_from_package_key -all $package_key]
 
     # Unmount all instances of this package with the Tcl API that 
     # invokes before-unmount callbacks
