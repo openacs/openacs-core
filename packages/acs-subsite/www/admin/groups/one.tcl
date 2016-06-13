@@ -45,7 +45,7 @@ set return_url_enc [ad_urlencode $return_url]
 db_1row group_info {
     select g.group_name, g.join_policy,
            o.object_type as group_type,
-           t.pretty_name
+           t.pretty_name as group_type_pretty_name
       from groups g, acs_objects o, acs_object_types t
      where g.group_id = o.object_id
        and o.object_type = t.object_type
