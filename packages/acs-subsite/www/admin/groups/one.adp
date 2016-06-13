@@ -2,6 +2,9 @@
 <property name="context">@context;literal@</property>
 <property name="doc(title)">@group_name;literal@</property>
 
+<h2>Manage Group: @group_name@</h2>
+Group Type: @group_type_pretty_name@
+
 <h3>Attributes</h3>
 
 <ul>
