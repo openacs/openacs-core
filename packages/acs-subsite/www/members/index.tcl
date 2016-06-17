@@ -160,11 +160,11 @@ template::list::create \
     } -orderby {
         name {
             label "[_ acs-subsite.Name]"
-            orderby "lower(u.first_names || ' ' || u.last_name)"
+            orderby "lower(p.first_names || ' ' || p.last_name)"
         }
         email {
             label "[_ acs-subsite.Email]"
-            orderby "u.email"
+            orderby "pa.email"
         }
     }
 
