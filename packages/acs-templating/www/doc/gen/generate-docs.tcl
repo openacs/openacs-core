@@ -1,3 +1,10 @@
+
+if {![acs_user::site_wide_admin_p]} {
+    ad_return_forbidden "Permission Denied" \
+        "<blockquote><p>You don't have permissions to run this script"
+    ad_script_abort
+}
+
 # @datasource namespaces multirow
 # Data for all namespaces in the package
 # @column name
