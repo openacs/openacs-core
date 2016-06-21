@@ -15,7 +15,7 @@ Chapter 9. Development Tutorial"
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140302499750624" id="idp140302499750624"></a>Code the data model</h3></div></div></div><p>We create all database objects with scripts in the <code class="computeroutput">myfirstpackage/sql/</code> directory. All database
+<a name="idp140641342806176" id="idp140641342806176"></a>Code the data model</h3></div></div></div><p>We create all database objects with scripts in the <code class="computeroutput">myfirstpackage/sql/</code> directory. All database
 scripts are database-specific and are thus in either the
 <code class="computeroutput">myfirstpackage/sql/oracle</code> or
 <code class="computeroutput">myfirstpackage/sql/postgresql</code>
@@ -42,7 +42,7 @@ objects, we can also use some content repository functions to
 simplify our database creation. (<a class="ulink" href="objects" target="_top">More information about ACS
 Objects</a>. <a class="ulink" href="/doc/acs-content-repository" target="_top">More information about the Content
 Repository</a>.)</p><div class="figure">
-<a name="idp140302503358112" id="idp140302503358112"></a><p class="title"><strong>Figure 9.2. Tutorial
+<a name="idp140641342948800" id="idp140641342948800"></a><p class="title"><strong>Figure 9.2. Tutorial
 Data Model</strong></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/tutorial-data-model.png" align="middle" alt="Tutorial Data Model"></div></div>
 </div><br class="figure-break"><p>The top of each sql file has some standard comments, including
 doc tags such as <code class="computeroutput">\@author</code> which
@@ -51,7 +51,7 @@ the file is checked in to cvs.</p><pre class="screen">
 [$OPENACS_SERVICE_NAME ~]$ <strong class="userinput"><code>cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackage/sql/postgresql</code></strong>
 [$OPENACS_SERVICE_NAME postgresql]$ <strong class="userinput"><code>emacs myfirstpackage-create.sql</code></strong>
 </pre><p>Paste the text below into the file, save, and close.</p><div class="figure">
-<a name="idp140302501814288" id="idp140302501814288"></a><p class="title"><strong>Figure 9.3. The
+<a name="idp140641349396016" id="idp140641349396016"></a><p class="title"><strong>Figure 9.3. The
 Database Creation Script</strong></p><div class="figure-contents"><pre class="programlisting">
 -- creation script
 --
@@ -81,7 +81,7 @@ from other packages.</p><p>Create a database file to drop everything if the pack
 uninstalled.</p><pre class="screen">
 [$OPENACS_SERVICE_NAME postgresql]$ <strong class="userinput"><code>emacs myfirstpackage-drop.sql</code></strong>
 </pre><div class="figure">
-<a name="idp140302497895200" id="idp140302497895200"></a><p class="title"><strong>Figure 9.4. Database
+<a name="idp140641343035984" id="idp140641343035984"></a><p class="title"><strong>Figure 9.4. Database
 Deletion Script</strong></p><div class="figure-contents"><pre class="programlisting">
 -- drop script
 --

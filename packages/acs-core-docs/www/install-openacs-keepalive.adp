@@ -112,7 +112,7 @@ in another window, so you can see what happens when you type these
 commands.</p><p>Most of this information comes from Tom Jackson's <a class="ulink" href="http://zmbh.com/daemontools-aolserver/daemontools-aolserver.html" target="_top">AOLserver+Daemontools Mini-HOWTO</a>.</p>
 </li>
 </ol></div><div class="table">
-<a name="idp140302504563952" id="idp140302504563952"></a><p class="title"><strong>Table 6.1. How it
+<a name="idp140641344750592" id="idp140641344750592"></a><p class="title"><strong>Table 6.1. How it
 Works</strong></p><div class="table-contents"><table class="table" summary="How it Works" cellspacing="0" border="1">
 <colgroup>
 <col><col><col><col><col><col>

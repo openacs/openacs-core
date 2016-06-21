@@ -48,6 +48,8 @@ characters to save room.</p><div class="informaltable"><table class="informaltab
 <td>check</td><td>ck</td>
 </tr><tr>
 <td>not null</td><td>nn</td>
+</tr><tr>
+<td>index</td><td>idx</td>
 </tr>
 </tbody>
 </table></div>

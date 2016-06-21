@@ -76,6 +76,11 @@ two characters to save room.
   <entry>not null</entry>
   <entry>nn</entry>
 </row>
+<row>
+  <entry>index</entry>
+  <entry>idx</entry>
+</row>
+
 </tbody></tgroup></informaltable>
 
 
