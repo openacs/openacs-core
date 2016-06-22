@@ -11,7 +11,7 @@ text markers to divvy the Tcl library file into neat compartments:
 namespace, procedure and directive. Each of these divisions has its
 own text marker(s). In the end, your Tcl file should look somthing
 like this:
-<blockquote><pre><code><tt>
+<blockquote><pre><code><kbd>
 [------------------------------------------------------]
 [------  <em>ignored text at beginning of file</em>  -----------]
 [------------------------------------------------------]
@@ -53,7 +53,7 @@ like this:
 
 
 # <font color="red">\@namespace</font> ... <em>&lt;other namespaces&gt;</em>
-</tt></code></pre></blockquote>
+</kbd></code></pre></blockquote>
 
 Note that comment lines are indented to indicate the manner in
 which they should be grouped only, and that there is no required

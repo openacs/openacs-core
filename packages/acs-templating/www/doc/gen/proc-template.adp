@@ -1,6 +1,6 @@
 <table width="100%"><tr><td width="100%" bgcolor="#CCCCFF">
   <a name="@info.proc_name@"><font size="+1" weight=bold>@info.proc_name@</font></a>
-  <if @info.author@ not nil><br><small><i>&nbsp;&nbsp;by @info.author@</i></small></if>
+  <if @info.author@ not nil><br><small><em>&nbsp;&nbsp;by @info.author@</em></small></if>
 </td>
 </tr>
 <tr><td>
@@ -9,7 +9,7 @@
 </blockquote>
 <dl>
 <if @params:rowcount@ gt 0>
-  <b>Parameters:</b>
+  <strong>Parameters:</strong>
   <table>
   <multiple name=params>
   <tr>
@@ -19,7 +19,7 @@
        <td align="left">
     </if>
     <else>
-     </td><td align="left"> <i>default</i> @params.default@; 
+     </td><td align="left"> <em>default</em> @params.default@; 
     </else>
   </if>
   @params.description@</td></tr>
@@ -27,25 +27,25 @@
    </table>
 </if>
 <if @info.return@ not nil>
-  <dt><b>Returns:</b>
+  <dt><strong>Returns:</strong>
   <dd>
   @info.return@
 </if>
 <if @options:rowcount@ gt 0>
-  <dt><b>Options:</b>
+  <dt><strong>Options:</strong>
   <table>
   <multiple name=options>
   <tr><td align="right"><code>@options.name@</code></td>
   <td align="left">
   <if @options.default@ not nil>
-    <i>default</i> @options.default@;
+    <em>default</em> @options.default@;
   </if>
   @options.description@</td></tr>
   </multiple>
   </table>
 </if>
 <if @see:rowcount@ gt 0>
-  <dt><b>See Also:</b>
+  <dt><strong>See Also:</strong>
   <multiple name=see>
     <dd>@see.type@ - <group column=type><a href="@see.url@">@see.name@</a></br></group>
   </multiple>

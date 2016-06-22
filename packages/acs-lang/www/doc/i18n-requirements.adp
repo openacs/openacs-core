@@ -319,8 +319,8 @@ per locale or language)
 to select an approprate locale-specific template file to use. The
 request locale is computed as per (see requirement 20.0).</p><p><font color="#080EFF"><em>Design note: this would probably be
 implemented by suffixing the locale or a locale abbreviation to the
-template filename, such as <tt>foo.ja.adp</tt> or
-<tt>foo.en_GB.adp</tt>.</em></font></p><p>
+template filename, such as <kbd>foo.ja.adp</kbd> or
+<kbd>foo.en_GB.adp</kbd>.</em></font></p><p>
 <strong>70.20</strong>A template file may be created for a partial locale
 (language only, without a territory), and the request processor
 should be able to find the closest match for the current request

@@ -1,7 +1,7 @@
 <if @switchable_count@ gt 1>
   <multiple name="locale_list">
     <if @current_locale@ eq @locale_list.locale@>
-      <b>@locale_list.l10n_label@</b>
+      <strong>@locale_list.l10n_label@</strong>
     </if>
     <else>
       <a href="@locale_list.switch_url@">@locale_list.l10n_label@</a>

@@ -19,14 +19,14 @@
       <tr><td>
         <table bgcolor="#99CCFF" cellpadding="4" cellspacing="0" border="1" >
           <tr>
-            <td><b>Sandwich Name</b>&nbsp;&nbsp;</td>
+            <td><strong>Sandwich Name</strong>&nbsp;&nbsp;</td>
 	    <td><formwidget id="nickname">
-                <if @formerror.nickname@ not nil><br><font color="red"><b>@formerror.nickname@<b></font></if>
+                <if @formerror.nickname@ not nil><br><font color="red"><strong>@formerror.nickname@<strong></font></if>
             </td>
 
           </tr>
           <tr>
-	    <td><b>Protein</b>&nbsp;&nbsp;</td>
+	    <td><strong>Protein</strong>&nbsp;&nbsp;</td>
 	    <td>
 	      <table cellpadding="4" cellspacing="0" border="0">
                 <formgroup id="protein" cols="2">
@@ -46,11 +46,11 @@
                   </if>
                 </formgroup> 
 	      </table>
-              <if @formerror.protein@ not nil><br><font color="red"><b>@formerror.protein@<b></font></if>
+              <if @formerror.protein@ not nil><br><font color="red"><strong>@formerror.protein@<strong></font></if>
 	    </td>
 	  </tr>
 	  <tr>
-	    <td><b>Vitamins</b>&nbsp;&nbsp;</td>
+	    <td><strong>Vitamins</strong>&nbsp;&nbsp;</td>
 	    <td> 
 	      <table cellpadding="4" cellspacing="0" border="0">
                <formgroup id="vitamins" cols="2">
@@ -70,7 +70,7 @@
                   </if>
                 </formgroup> 
 	      </table>
-              <if @formerror.vitamins@ not nil><br><font color="red"><b>@formerror.vitamins@<b></font></if>
+              <if @formerror.vitamins@ not nil><br><font color="red"><strong>@formerror.vitamins@<strong></font></if>
             </td>
           </tr>
         </table>

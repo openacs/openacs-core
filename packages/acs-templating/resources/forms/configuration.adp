@@ -17,7 +17,7 @@
     <if @elements.section@ not nil>
       <tr>
         <td colspan="2">
-          <a name="@elements.section@"><b>@elements.section@</b></a>
+          <a name="@elements.section@"><strong>@elements.section@</strong></a>
           <hr>
         </td>
       </tr>

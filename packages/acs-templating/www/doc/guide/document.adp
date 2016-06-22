@@ -57,6 +57,6 @@ checkbox, radio, select, multiselect and textbox</li>
 </ul>
 <p>Once the templates have been enabled, the designer can simply
 visit the URL from which the page will be served, substituting
-<tt>acs</tt> with the <tt>dat</tt> extension.</p>
+<kbd>acs</kbd> with the <kbd>dat</kbd> extension.</p>
 <hr>
 <a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>

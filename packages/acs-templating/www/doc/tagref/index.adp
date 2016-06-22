@@ -13,10 +13,10 @@ their work. The tags allow authors to accomplish four basic tasks
 that are not possible with standard HTML:</p>
 <ul>
 <li>Embed a dynamic variable in a template (<a href="variable">variables</a>).</li><li>Repeat a template section for each object in a dynamic list of
-objects (<tt><a href="multiple">multiple</a></tt>,
-<tt><a href="grid">grid</a></tt>).</li><li>Output different template sections depending on the value of
-one or more dynamic variables (<tt><a href="if">if</a></tt>).</li><li>Provide a mechanism for building complete pages from multiple
-component templates (<tt><a href="include">include</a></tt>).</li>
+objects (<kbd><a href="multiple">multiple</a></kbd>,
+<kbd><a href="grid">grid</a></kbd>).</li><li>Output different template sections depending on the value of
+one or more dynamic variables (<kbd><a href="if">if</a></kbd>).</li><li>Provide a mechanism for building complete pages from multiple
+component templates (<kbd><a href="include">include</a></kbd>).</li>
 </ul>
 <h3>Available Tags</h3>
 <ul>
@@ -36,8 +36,8 @@ This usually does not affect how browsers display the page.
 However, if a page layout depends on the presence or absence of
 whitespace between HTML tags for proper display, then special care
 must be taken with dynamic tags to avoid adding whitespace.</p><p>When placed on a line by themselves, tags that are containers
-for template sections (<tt>grid</tt>, <tt>if</tt>, and
-<tt>multiple</tt>) will cause newlines to be added to the page at
+for template sections (<kbd>grid</kbd>, <kbd>if</kbd>, and
+<kbd>multiple</kbd>) will cause newlines to be added to the page at
 the beginning and end of the section. This can be avoided by
 crowding the start and end tags like so:</p><pre>
 &lt;td&gt;&lt;if %x% eq 5&gt;&lt;img src="five.gif"&gt;&lt;/if&gt;

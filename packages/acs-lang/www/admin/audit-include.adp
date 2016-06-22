@@ -16,7 +16,7 @@
               </blockquote>
             </if>
             <p>
-              -- <i><a href="@audit.creation_user_url@">@audit.creation_user_name@</a> at @audit.creation_date@</i>
+              -- <em><a href="@audit.creation_user_url@">@audit.creation_user_name@</a> at @audit.creation_date@</em>
             </p>
           </if>
         </group>

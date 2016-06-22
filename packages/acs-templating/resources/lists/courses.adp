@@ -26,7 +26,7 @@
                 <if \@paginator_pages.page@ lt 10>&nbsp;&nbsp;</if><a href="\@paginator_pages.url@" title="\@paginator_pages.context@">\@paginator_pages.page@</a>
               </if>
               <else>
-                <if \@paginator_pages.page@ lt 10>&nbsp;&nbsp;</if><b>\@paginator_pages.page@</b>
+                <if \@paginator_pages.page@ lt 10>&nbsp;&nbsp;</if><strong>\@paginator_pages.page@</strong>
               </else>
             </multiple>
 
@@ -234,7 +234,7 @@
               <if \@paginator_pages.page@ lt 10>&nbsp;&nbsp;</if><a href="\@paginator_pages.url@" title="\@paginator_pages.context@">\@paginator_pages.page@</a>
             </if>
             <else>
-              <if \@paginator_pages.page@ lt 10>&nbsp;&nbsp;</if><b>\@paginator_pages.page@</b>
+              <if \@paginator_pages.page@ lt 10>&nbsp;&nbsp;</if><strong>\@paginator_pages.page@</strong>
             </else>
           </multiple>
 

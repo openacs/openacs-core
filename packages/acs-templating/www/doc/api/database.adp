@@ -46,19 +46,19 @@ template::query persons nestedlist "
 </pre>
 <h3>Note(s)</h3>
 <ul>
-<li>Valid values for <tt>structure</tt> are <tt>onevalue, onerow,
-multirow, onelist, nestedlist and multilist.</tt>
+<li>Valid values for <kbd>structure</kbd> are <kbd>onevalue, onerow,
+multirow, onelist, nestedlist and multilist.</kbd>
 </li><li>
-<tt>sql</tt> may be any valid SQL statement whose result set
+<kbd>sql</kbd> may be any valid SQL statement whose result set
 has the appropriate dimensions for the desired
-<tt>structure</tt>.</li><li>The <tt>db</tt> parameter is optional. If no parameter is
+<kbd>structure</kbd>.</li><li>The <kbd>db</kbd> parameter is optional. If no parameter is
 supplied, a handle will be requested to perform the query and then
-released immediately.</li><li>The <tt>startrow</tt> and <tt>maxrows</tt> parameters are valid
+released immediately.</li><li>The <kbd>startrow</kbd> and <kbd>maxrows</kbd> parameters are valid
 only for multirow queries. They may be specified to limit the rows
-from the query result that are included in the data source.</li><li>The <tt>eval</tt> parameter takes a block of Tcl code to
+from the query result that are included in the data source.</li><li>The <kbd>eval</kbd> parameter takes a block of Tcl code to
 perform on each row of a multirow query as it is fetched from the
-database. The code may refer to the <tt>row</tt> array to get and
-set column values.</li><li>The <tt>bind</tt> option is valid only when using Oracle.</li>
+database. The code may refer to the <kbd>row</kbd> array to get and
+set column values.</li><li>The <kbd>bind</kbd> option is valid only when using Oracle.</li>
 </ul>
 <hr>
 <a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>

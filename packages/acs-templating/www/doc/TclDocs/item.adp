@@ -205,12 +205,12 @@ exists, 0 (zero) otherwise.</td>
 will be one of the following:
 <ul>
 <li>
-<tt>production</tt> - The item is still in production. The
+<kbd>production</kbd> - The item is still in production. The
 workflow (if any) is not finished, and the item has no live
 revision.</li><li>
-<tt>ready</tt> - The item is ready for publishing</li><li>
-<tt>live</tt> - The item has been published</li><li>
-<tt>expired</tt> - The item has been published in the past, but
+<kbd>ready</kbd> - The item is ready for publishing</li><li>
+<kbd>live</kbd> - The item has been published</li><li>
+<kbd>expired</kbd> - The item has been published in the past, but
 its publication has expired</li>
 </ul>
 </blockquote><dl>

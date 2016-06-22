@@ -13,7 +13,7 @@ template::form create <em>name \
 <p>Initialize data structures for a dynamic form. This procedure
 must be called before adding elements to the form.</p>
 <ul><li>Additional attributes to include in the HTML form tag may be
-specified with the <tt>html</tt> option.</li></ul>
+specified with the <kbd>html</kbd> option.</li></ul>
 <pre>
 template::form is_request <em>name</em>
 </pre>

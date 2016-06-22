@@ -8,7 +8,7 @@
 <p>
 
 
-<b>Test 3</b>
+<strong>Test 3</strong>
 <p>
 <em>Verify that data required to convert from local times for Europe/Paris into Universal Time
 is loaded into the database.</em>
@@ -22,7 +22,7 @@ is loaded into the database.</em>
 </table>
 <p>
 
-<b>Test 4</b>
+<strong>Test 4</strong>
 <p>
 <em>Verify that the conversions between UTC and local time work correctly.</em>
 <p>

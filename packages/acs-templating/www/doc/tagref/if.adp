@@ -8,7 +8,7 @@
  : <a href="index">Tag Reference</a>
  : If
 <h3>Summary</h3>
-<p>The <tt>if</tt> tag is used to output a template section only
+<p>The <kbd>if</kbd> tag is used to output a template section only
 when certain conditions are met.</p>
 <h3>Usage Examples</h3>
 <pre>
@@ -111,42 +111,42 @@ The operator <code><strong>op</strong></code>
 <h3>Notes</h3>
 <ul>
 <li><p>Any legal variables that may be referenced in the template may
-also be used in <tt>if</tt> statements. Words not surrounded with
-the commerical at sign (<tt>\@</tt>) are interpreted literally.</p></li><li>
+also be used in <kbd>if</kbd> statements. Words not surrounded with
+the commerical at sign (<kbd>\@</kbd>) are interpreted literally.</p></li><li>
 <p>Phrases with spaces in them must be enclosed in quotes to be
 grouped correctly:</p><pre>
   &lt;if \@datasource.variable\@ eq "blue sky"&gt;
-    &lt;td bgcolor=#0000ff&gt;
+    &lt;td bgcolor="#0000ff"&gt;
   &lt;/if&gt;
 </pre>
 </li><li>
-<p>The <tt>elseif</tt> tag may be used following an <tt>if</tt>
+<p>The <kbd>elseif</kbd> tag may be used following an <kbd>if</kbd>
 block to specify an alternate conditional template section.</p><pre>
   &lt;if \@datasource.variable\@ eq "blue"&gt;
-    &lt;td bgcolor=#0000ff&gt;
+    &lt;td bgcolor="#0000ff"&gt;
   &lt;/if&gt;
   &lt;elseif \@datasource.variable\@ eq "red"&gt;
     &lt;td bgcolor=red&gt;
   &lt;/elseif&gt;
   &lt;else&gt;
-    &lt;td bgcolor=#ffffff&gt;
+    &lt;td bgcolor="#ffffff"&gt;
   &lt;/else&gt;
 </pre>
 </li><li>
-<p>The <tt>else</tt> tag may be used following an <tt>if</tt> block
+<p>The <kbd>else</kbd> tag may be used following an <kbd>if</kbd> block
 to specify an alternate template section when a condition is not
 true:</p><pre>
   &lt;if \@datasource.variable\@ eq "blue"&gt;
-    &lt;td bgcolor=#0000ff&gt;
+    &lt;td bgcolor="#0000ff"&gt;
   &lt;/if&gt;
   &lt;else&gt;
-    &lt;td bgcolor=#ffffff&gt;
+    &lt;td bgcolor="#ffffff"&gt;
   &lt;/else&gt;
 </pre>
 </li><li><p>Compound expressions can be created by combining terms with the
-<tt>and</tt> and <tt>or</tt> keywords, as illustrated above. Any
+<kbd>and</kbd> and <kbd>or</kbd> keywords, as illustrated above. Any
 number of statements may be connected in this fashion. There is no
-way to group statements to change the order of evaluation.</p></li><li><p>When a variable is tested using the <tt>nil</tt> operator, it
+way to group statements to change the order of evaluation.</p></li><li><p>When a variable is tested using the <kbd>nil</kbd> operator, it
 will return true if the variable is undefined or if the value of
 the variable is an empty string.</p></li>
 </ul>

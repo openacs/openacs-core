@@ -202,8 +202,8 @@ label the newly inserted form with some slave-specific title.</p>
 <p>Creating forms with ATS can be as simple as inserting two tags
 into a page. Try this: open <code>form-sample.adp</code> and add
 the two following ATS tags:</p>
-<blockquote><code><tt><a href="../tags/formtemplate">&lt;formtemplate
-id="add_entry"&gt;&lt;/formtemplate&gt;</a></tt></code></blockquote>
+<blockquote><code><kbd><a href="../tags/formtemplate">&lt;formtemplate
+id="add_entry"&gt;&lt;/formtemplate&gt;</a></kbd></code></blockquote>
 <p>Save the page and reload it. You should see now see a big
 baby-blue form block; this is the ATS default style for form
 presentation. Aside from requiring no HTML code, the

@@ -8,7 +8,7 @@
  : <a href="index">Tag Reference</a>
  : Switch
 <h3>Summary</h3>
-<p>The <tt>switch</tt> tag is used to output one of n-sections when
+<p>The <kbd>switch</kbd> tag is used to output one of n-sections when
 the switch variable matches one of the n-case statements. A default
 section can also be output if none of the n-case statements matches
 the switch variable.</p>
@@ -62,12 +62,12 @@ items.</p>
 <h3>Notes</h3>
 <ul>
 <li><p>Any legal variables that may be referenced in the template may
-also be used in <tt>switch</tt> statements.</p></li><li>
+also be used in <kbd>switch</kbd> statements.</p></li><li>
 <p>Phrases with spaces in them must be enclosed in double quotes
 and curly braces to be matched correctly. Failure to quote words
 with spaces correctly results in an error.</p><pre>
   &lt;case "{blue sky}"&gt;
-    &lt;td bgcolor=#0000ff&gt;
+    &lt;td bgcolor="#0000ff"&gt;
   &lt;/case&gt;
 </pre>
 </li>

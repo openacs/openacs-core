@@ -155,7 +155,7 @@
     <tr>
       <td valign="bottom" align="center" width="50%" rowspan="2">
 	<fieldset style="margin-top:10px;padding-top:10px;">
-	  <legend><b>@HTML_Preview@</b></legend>
+	  <legend><strong>@HTML_Preview@</strong></legend>
 	  <iframe name="ipreview" id="ipreview" frameborder="0" style="width:95%;" height="150"  src="./blank.html"></iframe>
 	</fieldset>
       </td>
@@ -163,7 +163,7 @@
       <td valign="top" width="50%" >
 	<if @write_p@ eq 1>
 	  <fieldset style="margin-top:10px;padding-top:10px;">
-	    <legend><b>@HTML_UploadTitle@</b></legend>
+	    <legend><strong>@HTML_UploadTitle@</strong></legend>
 	    <formtemplate id="upload_form">
 	      <table cellspacing="2" cellpadding="2" border="0" width="55%">
 		<tr class="form-element">

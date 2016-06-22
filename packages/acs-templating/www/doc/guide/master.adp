@@ -46,37 +46,37 @@ users.</p>
 <p>A master template to implement the page layout shown above would
 have this basic structure:</p>
 <blockquote><pre>
-&lt;html&gt;&lt;body&gt;&lt;table width=100% cellspacing=0 cellpadding=0 border=0&gt;
+&lt;html&gt;&lt;body&gt;&lt;table width="100%" cellspacing="0" cellpadding="0" border="0"&gt;
 
 &lt;tr&gt;
   &lt;td&gt;&lt;!-- LOGO --&gt;&lt;/td&gt;
-  &lt;td colspan=2&gt;&lt;!-- AD BANNER --&gt;&lt;/td&gt;
+  &lt;td colspan="2"&gt;&lt;!-- AD BANNER --&gt;&lt;/td&gt;
 &lt;/tr&gt;
 
-&lt;tr&gt;&lt;td colspan=3&gt;&lt;!-- NAVIGATION/CONTEXT BAR --&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td colspan="3"&gt;&lt;!-- NAVIGATION/CONTEXT BAR --&gt;&lt;/td&gt;&lt;/tr&gt;
 
 &lt;tr&gt;
   &lt;td&gt;&lt;!-- SECTION LINKS --&gt;&lt;/td&gt;
-  &lt;td colspan=2&gt;
+  &lt;td colspan="2"&gt;
     &lt;!-- CONTENT --&gt;
     <strong>&lt;slave&gt;</strong>
   &lt;/td&gt;
 &lt;/tr&gt;
 
-&lt;tr&gt;&lt;td colspan=3&gt;&lt;!-- FOOTER --&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td colspan="3"&gt;&lt;!-- FOOTER --&gt;&lt;/td&gt;&lt;/tr&gt;
 
 &lt;/table&gt;&lt;/body&gt;&lt;/html&gt;
 </pre></blockquote>
 <p>The only special feature of this master template is the
-<tt>slave</tt> tag, which marks the location of the content area.
+<kbd>slave</kbd> tag, which marks the location of the content area.
 Note that the content is inserted into the master template as a
 single passage of HTML or plain text. The master template should
-always frame the content area within a <tt>td</tt> tag when using a
+always frame the content area within a <kbd>td</kbd> tag when using a
 table to specify the overall layout of the page. Page layouts that
-do not rely on tables often use <tt>hr</tt> tags to demarcate the
+do not rely on tables often use <kbd>hr</kbd> tags to demarcate the
 content area from the header and footer.</p>
 <h3>Write the Page Template(s)</h3>
-<p>A page template must include a <tt>master</tt> tag to specify
+<p>A page template must include a <kbd>master</kbd> tag to specify
 that its output should be enclosed in a master template:</p>
 <blockquote><pre>
 &lt;master src="/templates/master"&gt;
@@ -87,7 +87,7 @@ that its output should be enclosed in a master template:</p>
 &lt;p&gt;&lt;b&gt;\@byline\@&lt;/b&gt;: \@text&lt;/p&gt;
 ...
 </pre></blockquote>
-<p>The <tt>master</tt> tag may be included anywhere in the body of
+<p>The <kbd>master</kbd> tag may be included anywhere in the body of
 the page template, although usually the top of the file is the best
 location for it.</p>
 <h3>Adding Dynamic Elements to the Master Template</h3>
@@ -113,7 +113,7 @@ set user_name [your_procedure_to_get_the_current_user_name]
 Template</h3>
 <p>As mentioned above, in many cases the dynamic elements of the
 master template depend on whatever is appearing in the content area
-for a particular request. The <tt>property</tt> tag may be used in
+for a particular request. The <kbd>property</kbd> tag may be used in
 the page template to specify values that should be passed to the
 master template:</p>
 <blockquote><pre>
@@ -123,8 +123,8 @@ master template:</p>
 &lt;!--Begin layout of page content--&gt;
 ...
 </pre></blockquote>
-<p>In this case, the <tt>property</tt> tag establishes
-<tt>title</tt> as a data source for the master template. Properties
+<p>In this case, the <kbd>property</kbd> tag establishes
+<kbd>title</kbd> as a data source for the master template. Properties
 are set as regular Tcl variables prior to executing the Tcl script
 associated with the master template. This allows the page template
 to pass an ID which the Tcl script associated with the master

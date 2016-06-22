@@ -7,8 +7,8 @@
   <em>by Stanislav Freidin The procs in this namespace are
 useful for publishing items, including items inside other items,
 and writing items to the filesystem.</em>
-<p><em>Specifically, the <tt>content</tt>, <tt>child</tt> and
-<tt>relation</tt> tags are defined here.</em></p>
+<p><em>Specifically, the <kbd>content</kbd>, <kbd>child</kbd> and
+<kbd>relation</kbd> tags are defined here.</em></p>
 <p>Also see:</p>
 <dl>
 <dt>namespace</dt><dd><a href="item">item</a></dd>
@@ -45,17 +45,17 @@ if they exist; the unchanged HTML if they do not</dd>
 <blockquote>Return the name of a proc that should be used to render
 items with the given mime-type. The mime type handlers should all
 follow the naming convention
-<blockquote><tt>proc
+<blockquote><kbd>proc
 publish::handle::<em>mime_prefix</em>::<em>mime_suffix</em>
-</tt></blockquote>
+</kbd></blockquote>
 If the specific mime handler could not be found,
-<tt>get_mime_handler</tt> looks for a generic procedure with the
+<kbd>get_mime_handler</kbd> looks for a generic procedure with the
 name
-<blockquote><tt>proc
+<blockquote><kbd>proc
 publish::handle::<em>mime_prefix</em>
-</tt></blockquote>
+</kbd></blockquote>
 If the generic mime handler does not exist either,
-<tt>get_mime_handler</tt> returns { }</blockquote><dl>
+<kbd>get_mime_handler</kbd> returns { }</blockquote><dl>
 <dd>
 <strong>Parameters:</strong><table><tr>
 <td align="right">
@@ -140,11 +140,11 @@ variable will be set to the empty string { }</td>
 </tr>
 </table>
 </dd><dt><strong>Returns:</strong></dt><dd>The HTML resulting from merging the item with its template, or
-" " if no template exists or the <tt>-no_merge</tt> flag was
+" " if no template exists or the <kbd>-no_merge</kbd> flag was
 specified</dd><dt><strong>Options:</strong></dt><dd><table>
 <tr>
 <td align="right"><code>embed</code></td><td align="left">Signifies that the content should be embedded
-directly in the parent item. <tt>-embed</tt> is <strong>required</strong> for
+directly in the parent item. <kbd>-embed</kbd> is <strong>required</strong> for
 this proc, since it makes no sense to handle the binary file in any
 other way.</td>
 </tr><tr>
@@ -164,8 +164,8 @@ In this case, the proc will return the empty string { }</td>
 <table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="publish::item_include_tag" id="publish::item_include_tag"><font size="+1" weight="bold">publish::item_include_tag</font></a></td></tr><tr><td>
 <blockquote>Create an include tag to include an item, in the form
-<blockquote><tt>include src=/foo/bar/baz item_id=<em>item_id</em>
-param=value param=value ...</tt></blockquote>
+<blockquote><kbd>include src=/foo/bar/baz item_id=<em>item_id</em>
+param=value param=value ...</kbd></blockquote>
 </blockquote><dl>
 <dd>
 <strong>Parameters:</strong><table>
@@ -177,7 +177,7 @@ param=value param=value ...</tt></blockquote>
 <td align="right">
 <code>extra_args</code><font color="red">*</font>
 </td><td align="left">{} A list of extra parameters to be passed to the
-<tt>include</tt> tag, in form {name value name value ...}</td>
+<kbd>include</kbd> tag, in form {name value name value ...}</td>
 </tr>
 </table>
 </dd><dt><strong>Returns:</strong></dt><dd>The HTML for the include tag</dd><dt><strong>See Also:</strong></dt><dd>proc - <a href="item">item::item_url</a><br><a href="publish">publish::html_args</a><br>
@@ -223,7 +223,7 @@ template::util}</td>
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="publish::publish_revision" id="publish::publish_revision"><font size="+1" weight="bold">publish::publish_revision</font></a></td></tr><tr><td>
 <blockquote>Render a revision for an item and write it to the
 filesystem. The revision is always rendered with the
-<tt>-embed</tt> option turned on.</blockquote><dl>
+<kbd>-embed</kbd> option turned on.</blockquote><dl>
 <dd>
 <strong>Parameters:</strong><table><tr>
 <td align="right">
@@ -295,7 +295,7 @@ to be used when publishing the item to the filesystem.</td>
 <table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="publish::unpublish_item" id="publish::unpublish_item"><font size="+1" weight="bold">publish::unpublish_item</font></a></td></tr><tr><td>
 <blockquote>Delete files which were created by
-<tt>publish_revision</tt>
+<kbd>publish_revision</kbd>
 </blockquote><dl>
 <dd>
 <strong>Parameters:</strong><table><tr>
@@ -463,7 +463,7 @@ recursion if this option is specified</td>
 <td align="right"><code>embed</code></td><td align="left">Signifies that the content should be statically
 embedded directly in the HTML. If this option is not specified, the
 item may be dynamically referenced, f.ex. using the
-{<tt>&lt;include&gt;</tt>} tag</td>
+{<kbd>&lt;include&gt;</kbd>} tag</td>
 </tr><tr>
 <td align="right"><code>html</code></td><td align="left">Extra HTML parameters to be passed to the item
 handler, in format {name value name value ...}</td>
@@ -476,7 +476,7 @@ handler, in format {name value name value ...}</td>
 <table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="publish::html_args" id="publish::html_args"><font size="+1" weight="bold">publish::html_args</font></a></td></tr><tr><td>
 <blockquote>Concatenate a list of name-value pairs as returned by
-<tt>set_to_pairs</tt> into a list of { name=value}
+<kbd>set_to_pairs</kbd> into a list of { name=value}
 pairs</blockquote><dl>
 <dd>
 <strong>Parameters:</strong><table><tr>
@@ -493,7 +493,7 @@ pairs</blockquote><dl>
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="publish::merge_with_template" id="publish::merge_with_template"><font size="+1" weight="bold">publish::merge_with_template</font></a></td></tr><tr><td>
 <blockquote>Merge the item with its template and return the
 resulting HTML. This proc is simlar to
-<tt>content::init</tt>
+<kbd>content::init</kbd>
 </blockquote><dl>
 <dd>
 <strong>Parameters:</strong><table><tr>
@@ -528,15 +528,15 @@ already empty</dd><dt><strong>See Also:</strong></dt><dd>proc - <a href="publish
 </table>
 <table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="publish::process_tag" id="publish::process_tag"><font size="+1" weight="bold">publish::process_tag</font></a></td></tr><tr><td>
-<blockquote>Process a <tt>child</tt> or <tt>relation</tt> tag. This
+<blockquote>Process a <kbd>child</kbd> or <kbd>relation</kbd> tag. This
 is a helper proc for the tags, which acts as a wrapper for
-<tt>render_subitem</tt>.</blockquote><dl>
+<kbd>render_subitem</kbd>.</blockquote><dl>
 <dd>
 <strong>Parameters:</strong><table>
 <tr>
 <td align="right">
 <code>relation_type</code><font color="red">*</font>
-</td><td align="left">Either <tt>child</tt> or <tt>relation</tt>
+</td><td align="left">Either <kbd>child</kbd> or <kbd>relation</kbd>
 </td>
 </tr><tr>
 <td align="right">
@@ -552,8 +552,8 @@ is a helper proc for the tags, which acts as a wrapper for
 <table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="publish::push_id" id="publish::push_id"><font size="+1" weight="bold">publish::push_id</font></a></td></tr><tr><td>
 <blockquote>Push an item id on top of stack. This proc is used to
-store state between <tt>child</tt>, <tt>relation</tt> and
-<tt>content</tt> tags.</blockquote><dl>
+store state between <kbd>child</kbd>, <kbd>relation</kbd> and
+<kbd>content</kbd> tags.</blockquote><dl>
 <dd>
 <strong>Parameters:</strong><table>
 <tr>
@@ -584,7 +584,7 @@ HTML, stripping off the headers.</blockquote><dl>
 </tr><tr>
 <td align="right">
 <code>relation_type</code><font color="red">*</font>
-</td><td align="left">Either <tt>child</tt> or <tt>relation</tt>.
+</td><td align="left">Either <kbd>child</kbd> or <kbd>relation</kbd>.
 Determines which tables are searched for subitems.</td>
 </tr><tr>
 <td align="right">
@@ -594,15 +594,15 @@ Determines which tables are searched for subitems.</td>
 <td align="right">
 <code>index</code><font color="red">*</font>
 </td><td align="left">The relative index of the subitem. The subitem
-with lowest <tt>order_n</tt> has index 1, the second lowest
-<tt>order_n</tt> has index 2, and so on.</td>
+with lowest <kbd>order_n</kbd> has index 1, the second lowest
+<kbd>order_n</kbd> has index 2, and so on.</td>
 </tr><tr>
 <td align="right">
 <code>is_embed</code><font color="red">*</font>
 </td><td align="left">If { t} , the child item may be embedded directly
 in the HTML. Otherwise, it may be dynamically included. The proc
 does not process this parameter directly, but passes it to
-<tt>handle_item</tt>
+<kbd>handle_item</kbd>
 </td>
 </tr><tr>
 <td align="right">
@@ -612,8 +612,8 @@ rendering the item, in form {name value name value ...}</td>
 </tr><tr>
 <td align="right"><code>is_merge</code></td><td align="left">
 <em>default</em> t; If { t} ,
-<tt>merge_with_template</tt> may be used to render the subitem.
-Otherwise, <tt>merge_with_template</tt> should not be used, in
+<kbd>merge_with_template</kbd> may be used to render the subitem.
+Otherwise, <kbd>merge_with_template</kbd> should not be used, in
 order to prevent infinite recursion.</td>
 </tr><tr>
 <td align="right"><code>context</code></td><td align="left">
@@ -703,13 +703,13 @@ roots.</blockquote><dl>
 </table>
 <table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name=""></a></td></tr><tr><td>
-<blockquote>Implements the <tt>child</tt> tag which renders a child
+<blockquote>Implements the <kbd>child</kbd> tag which renders a child
 item. See the Developer Guide for more information.<br>
 The child tag format is
-<blockquote><tt>{&lt;child} tag=<em>tag</em> index=<em>n embed
-{args</em>&gt;}</tt></blockquote>
+<blockquote><kbd>{&lt;child} tag=<em>tag</em> index=<em>n embed
+{args</em>&gt;}</kbd></blockquote>
 </blockquote><dl><dd>
-<tt><strong>Parameters:</strong></tt><table><tr>
+<kbd><strong>Parameters:</strong></kbd><table><tr>
 <td align="right">
 <code>params</code><font color="red">*</font>
 </td><td align="left">The ns_set id for extra HTML parameters</td>
@@ -719,11 +719,11 @@ The child tag format is
 </table>
 <table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name=""></a></td></tr><tr><td>
-<blockquote>Implements the <tt>content</tt> tag which renders the
+<blockquote>Implements the <kbd>content</kbd> tag which renders the
 content of the current item. See the Developer Guide for more
 information.<br>
-The content tag format is simply {<tt>&lt;content&gt;</tt>.} The
-<tt>embed</tt> and <tt>no_merge</tt> parameters are implicit to the
+The content tag format is simply {<kbd>&lt;content&gt;</kbd>.} The
+<kbd>embed</kbd> and <kbd>no_merge</kbd> parameters are implicit to the
 tag.</blockquote><dl><dd>
 <strong>Parameters:</strong><table><tr>
 <td align="right">
@@ -735,11 +735,11 @@ tag.</blockquote><dl><dd>
 </table>
 <table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name=""></a></td></tr><tr><td>
-<blockquote>Implements the <tt>relation</tt> tag which renders a
+<blockquote>Implements the <kbd>relation</kbd> tag which renders a
 related item. See the Developer Guide for more information.<br>
 The relation tag format is
-<blockquote><tt>{&lt;relation} tag=<em>tag</em> index=<em>n embed
-{args</em>&gt;}</tt></blockquote>
+<blockquote><kbd>{&lt;relation} tag=<em>tag</em> index=<em>n embed
+{args</em>&gt;}</kbd></blockquote>
 </blockquote><dl><dd>
 <strong>Parameters:</strong><table><tr>
 <td align="right">

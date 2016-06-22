@@ -76,7 +76,7 @@ specified for this parameter.</td>
 </tr><tr>
 <td align="right"><code>datatype</code></td><td align="left">The name of a datatype for the element values.
 Valid datatypes must have a validation procedure defined in the
-<tt>template::data::validate</tt> namespace.</td>
+<kbd>template::data::validate</kbd> namespace.</td>
 </tr><tr>
 <td align="right"><code>optional</code></td><td align="left">A flag indicating that no value is required for
 this element. If a default value is specified, the default is used

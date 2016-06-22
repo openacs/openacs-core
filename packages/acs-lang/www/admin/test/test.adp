@@ -6,7 +6,7 @@
 <a href="/pvt/home">Your Workspace</a> : Testing the language and localization API
 <hr>
 <p>
-<b>Test 1</b>
+<strong>Test 1</strong>
 <p>
 <em>Verify that the message catalog loader ran
 successfully at server startup.</em>
@@ -20,7 +20,7 @@ successfully at server startup.</em>
 </table>
 <p>
 
-<b>Test 2</b>
+<strong>Test 2</strong>
 <p>
 <em>Verify that the &lt;trn&gt; ADP tag works when the user's preferred
 language is set to 
@@ -38,7 +38,7 @@ or <a href="locale-set?locale=de">German</a></em>.
 </table>
 <p>
 
-<b>Test 3</b>
+<strong>Test 3</strong>
 <p>
 <em>Verify that data required to convert from local times for Europe/Paris into Universal Time
 is loaded into the database.</em>
@@ -52,7 +52,7 @@ is loaded into the database.</em>
 </table>
 <p>
 
-<b>Test 4</b>
+<strong>Test 4</strong>
 <p>
 <em>Verify that the conversions between UTC and local time work correctly.</em>
 <p>
@@ -65,7 +65,7 @@ is loaded into the database.</em>
 </table>
 <p>
 
-<b>Test 5</b>
+<strong>Test 5</strong>
 <p>
 <em>Verify the results of localization routines.</em>
 <p>

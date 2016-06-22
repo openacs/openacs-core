@@ -11,7 +11,7 @@ used as onevalues within the master page -->
 
 This web page is the uniquely conceived brainchild of @name@, a product of long @time_periods@ of 
 assiduous labor and the creative genius of @name@.  Esoteric, unforeseen, and unforgettable, 
-this web page stands as a monument to the singular and inimitable mind that is <b>@name@</b>.
+this web page stands as a monument to the singular and inimitable mind that is <strong>@name@</strong>.
 
 <p>
 

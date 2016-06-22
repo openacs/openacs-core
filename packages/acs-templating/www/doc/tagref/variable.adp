@@ -12,13 +12,13 @@
 data.</p>
 <h3>Usage</h3>
 <p>Simple variables are referenced by surrounding the variable name
-with "commercial at" (<tt>\@</tt>) signs:</p>
+with "commercial at" (<kbd>\@</kbd>) signs:</p>
 <pre>
 &lt;!-- simple variables --&gt;
 &lt;b&gt;&lt;i&gt;\@first_name\@ \@last_name\@&lt;/b&gt;&lt;/i&gt;
 </pre>
 <p>When processing this template, the server will look for
-variables named <tt>first_name</tt> and <tt>last_name</tt> and
+variables named <kbd>first_name</kbd> and <kbd>last_name</kbd> and
 substitute their values in the output:</p>
 <pre>
 &lt;b&gt;&lt;i&gt;Fred Finkel&lt;/b&gt;&lt;/i&gt;

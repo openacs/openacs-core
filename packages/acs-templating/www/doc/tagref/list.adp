@@ -8,7 +8,7 @@
  : <a href="index">Tag Reference</a>
  : List
 <h3>Summary</h3>
-<p>The <tt>list</tt> tag is used to repeat a template section for
+<p>The <kbd>list</kbd> tag is used to repeat a template section for
 each item in a list data source.</p>
 <h3>Usage</h3>
 <pre>
@@ -25,10 +25,10 @@ each item in a list data source.</p>
 </pre>
 <h3>Notes</h3>
 <ul>
-<li><p>The special variable <tt>datasource<strong>:</strong>rownum</tt> has the
+<li><p>The special variable <kbd>datasource<strong>:</strong>rownum</kbd> has the
 same meaning as the special column
-<tt>datasource<strong>.</strong>rownum</tt> in the body of a
-<tt>multiple</tt> tag.</p></li><li><p>The special variable <tt>datasource:rowcount</tt> has the same
+<kbd>datasource<strong>.</strong>rownum</kbd> in the body of a
+<kbd>multiple</kbd> tag.</p></li><li><p>The special variable <kbd>datasource:rowcount</kbd> has the same
 meaning in the list context as it does for multirow data
 sources.</p></li>
 </ul>

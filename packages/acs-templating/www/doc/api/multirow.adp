@@ -14,8 +14,8 @@ multirow <strong>get</strong><em>name index column</em>
 <p>Get a particular column value or a reference to an entire
 row.</p><ul>
 <li>Rows are indexed starting with 1.</li><li>If a column name is omitted, this procedure will set
-<tt>name</tt> to be a reference to an array containing the values
-for the row specified by <tt>index</tt>.</li>
+<kbd>name</kbd> to be a reference to an array containing the values
+for the row specified by <kbd>index</kbd>.</li>
 </ul>
 </blockquote>
 <pre>
@@ -58,7 +58,7 @@ current row are accessible (and modifiable) as local variables.
   set full_name "$foo(first_name) $foo(last_name)"
 </pre>
 <h3>Note(s)</h3>
-<ul><li>Use the <tt>eval</tt> option to template::query to modify
+<ul><li>Use the <kbd>eval</kbd> option to template::query to modify
 column values while building a data source from a multirow query
 result.</li></ul>
 <hr>

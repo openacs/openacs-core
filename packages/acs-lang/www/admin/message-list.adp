@@ -17,7 +17,7 @@
   Show: 
   <multiple name="show_opts">
     <if @show_opts.rownum@ gt 1> | </if>
-    <if @show_opts.selected_p@><b>@show_opts.label@ (@show_opts.count@)</b> </if>
+    <if @show_opts.selected_p@><strong>@show_opts.label@ (@show_opts.count@)</strong> </if>
     <else><a href="@show_opts.url@">@show_opts.label@ (@show_opts.count@)</a> </else>
   </multiple>
 </p>
@@ -30,7 +30,7 @@
   </if>
 
   <if @messages:rowcount@ eq 0>
-    <i>No messages</i>
+    <em>No messages</em>
   </if>
   <else>
     <li><a href="@batch_edit_url@">Batch edit these messages</a></li>

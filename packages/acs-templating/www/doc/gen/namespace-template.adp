@@ -7,7 +7,7 @@
 
 <h2>Namespace @info.name@</h2>
 <if @info.author@ not nil>
-&nbsp;&nbsp;<i>by @info.author@</i>
+&nbsp;&nbsp;<em>by @info.author@</em>
 </if>
 <blockquote>
 @info.overview@
@@ -43,7 +43,7 @@ The namespace @info.name@ currently contains no public methods.
 </p>
 
 <if @public:rowcount@ gt 0>
-<b>Public Methods:</b><br>
+<strong>Public Methods:</strong><br>
 </if>
 
 <multiple name=public>
@@ -54,7 +54,7 @@ The namespace @info.name@ currently contains no public methods.
 <p>
 
 <if @private:rowcount@ gt 0>
-<b>Private Methods</b>:<br>
+<strong>Private Methods</strong>:<br>
 </if>
 <multiple name=private>
 <include src=proc-template data="@private.data;literal@">

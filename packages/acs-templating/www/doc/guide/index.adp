@@ -90,8 +90,8 @@ present on each page as part of the site specification.</p>
 page, the developer writes a Tcl script to <a href="data">implement the data sources</a>. The Tcl script should
 be located under the page root at the URL of the finished page. For
 example, a dynamic page that will be located at
-<tt>http://yoursite.com/cars.acs</tt> requires a Tcl script located
-on the server at <tt>/web/yoursite/www/cars.tcl</tt> (or wherever
+<kbd>http://yoursite.com/cars.acs</kbd> requires a Tcl script located
+on the server at <kbd>/web/yoursite/www/cars.tcl</kbd> (or wherever
 your pages happen to be located).</p>
 <p>In addition to setting data sources, the Tcl script may perform
 any other required tasks, such as checking permissions, performing
@@ -115,9 +115,9 @@ code and accessed by the designer or publisher for reference.</p>
 <h3>Write the Template</h3>
 <p>The final step is to <a href="templates">write a
 template</a> specifying the layout of the page. Template files must
-have the <tt>adp</tt> extension. By default the system looks for
+have the <kbd>adp</kbd> extension. By default the system looks for
 the template at the same location as the associated Tcl script,
-such as <tt>/web/yoursite/www/cars.adp</tt>.</p>
+such as <kbd>/web/yoursite/www/cars.adp</kbd>.</p>
 <p>The layout is mostly HTML, with a small number of additional
 custom tags to control the presentation of dynamic data on the
 page. In most cases, the initial draft of the template will be

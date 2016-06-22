@@ -7,7 +7,7 @@
 <hr>
 <p>
 
-<b>Test 5</b>
+<strong>Test 5</strong>
 <p>
 <em>Verify the results of localization routines.</em>
 <p>

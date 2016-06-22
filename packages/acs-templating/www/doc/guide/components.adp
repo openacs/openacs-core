@@ -23,7 +23,7 @@ within a table grid.</li>
 scenarios. The basic process is to build a container template,
 which delineates the skeletal layout of the page. Component
 templates may then be placed in the container template with the
-<tt>include</tt> tag. The container may pass arguments to the
+<kbd>include</kbd> tag. The container may pass arguments to the
 components as needed for personalization or any other purpose.</p>
 <!--
  <h3>Building the Container Template</h3>

@@ -11,7 +11,7 @@
   <multiple name=elements>
   
     <if @elements.section@ not nil>
-      <tr><td colspan="2" bgcolor="#eeeeee"><b>@elements.section;noquote@</b></td></tr>
+      <tr><td colspan="2" bgcolor="#eeeeee"><strong>@elements.section;noquote@</strong></td></tr>
     </if>
 
     <group column="section">
@@ -27,11 +27,11 @@
       <else>
         <!-- If the widget is wide, display it in its own section -->
         <if @elements.wide@ not nil>
-          <tr><td colspan="2" bgcolor="#eeeeee"><b>@elements.label;noquote@</b></td></tr>
+          <tr><td colspan="2" bgcolor="#eeeeee"><strong>@elements.label;noquote@</strong></td></tr>
           <tr><td colspan="2">
         </if>
         <else>
-          <tr><td><b>@elements.label@</b>&nbsp;&nbsp;
+          <tr><td><strong>@elements.label@</strong>&nbsp;&nbsp;
           <if @elements.help_text@ not nil>
             <br>&nbsp;&nbsp;
             <font size=-1><noparse><formhelp id=@elements.id;noquote@></noparse></font><br>
@@ -62,7 +62,7 @@
 
 		</table>
 		<formerror id=@elements.id;noquote@><br>
-		  <font color="red"><b>\@formerror.@elements.id@;noquote\@</b></font>
+		  <font color="red"><strong>\@formerror.@elements.id@;noquote\@</strong></font>
 		</formerror>
               </noparse>
 	    </td>
@@ -72,7 +72,7 @@
 	      <if @elements.wide@ not nil>
                 <noparse>
                   <formerror  id=@elements.id;noquote@><br>
-                    <font color="red"><b>\@formerror.@elements.id@;noquote\@</b></font><br>
+                    <font color="red"><strong>\@formerror.@elements.id@;noquote\@</strong></font><br>
                   </formerror>
                 </noparse>
               </if><else><td bgcolor="#EEEEEE"></else>
@@ -83,7 +83,7 @@
 	      <if @elements.wide@ not nil></if><else><td nowrap></else>
 		<noparse><formwidget id="@elements.id@">
 		<formerror id="@elements.id@"><br><font 
-		   color="red"><b>\@formerror.@elements.id@;noquote\@<b></font>
+		   color="red"><strong>\@formerror.@elements.id@;noquote\@<strong></font>
                 </formerror></noparse>
 	      </td>
 	    </else>

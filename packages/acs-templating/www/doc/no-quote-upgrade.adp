@@ -24,20 +24,20 @@ you will find it useful.</p>
 The change to the templating system can be expressed in one
 sentence:
 <blockquote>All variables are now quoted by default, except those
-explicitly protected by <tt>;noquote</tt> or
-<tt>;literal;</tt>.</blockquote>
+explicitly protected by <kbd>;noquote</kbd> or
+<kbd>;literal;</kbd>.</blockquote>
 
 This means that the only way your code can fail is if the new code
 quotes a variable which is not meant to be quoted. Which is where
-<tt>;noquote</tt>
+<kbd>;noquote</kbd>
  needs to be added. That's all porting effort that
 is required. Actually, the variables are subject to HTML-quoting
-and internationalization. The suffix <tt>;noquote</tt>
+and internationalization. The suffix <kbd>;noquote</kbd>
  means that
 the variable's content will be internationalized, but not
-HTML-quoted, while <tt>;no18n</tt>
+HTML-quoted, while <kbd>;no18n</kbd>
  means quote, but don't
-internationalize. Finally <tt>;literal</tt>
+internationalize. Finally <kbd>;literal</kbd>
  means: don't quote and
 don't internationalize.
 <p>This is not hard because most variables will not be affected by
@@ -47,11 +47,11 @@ user) or are unaffected by quoting (numerical database IDs, etc.)
 The variables where this behavior is undesired are <strong>those that
 contain HTML</strong> which is expected to be included as part of the
 page, and <strong>those that are already quoted</strong> by Tcl code. Such
-variables should be protected from quoting by the <tt>;noquote</tt>
+variables should be protected from quoting by the <kbd>;noquote</kbd>
 modifier.</p>
 <h3>The Most Common Cases.</h3>
 
-The most common cases where you need to add <tt>;noquote</tt>
+The most common cases where you need to add <kbd>;noquote</kbd>
  to
 the variable name are easy to recognize and identify.
 <p>
@@ -71,7 +71,7 @@ this:</p>
 </pre></blockquote>
 
 ACS has a convenience function for creating hidden form variables,
-<tt>export_form_vars</tt>
+<kbd>export_form_vars</kbd>
 . It accepts a list of variables and
 returns the HTML code containing the hidden input tags that map
 variable names to variable values, as found in the Tcl environment.
@@ -81,7 +81,7 @@ set form_vars [export_vars -form {var1 var2}]
       
 </pre></blockquote>
 
-The ADP will simply refer to the <tt>form_vars</tt>
+The ADP will simply refer to the <kbd>form_vars</kbd>
  variable:
 <blockquote><pre>
 &lt;form&gt;
@@ -91,12 +91,12 @@ The ADP will simply refer to the <tt>form_vars</tt>
       
 </pre></blockquote>
 
-This will no longer work as intended because <tt>form_vars</tt>
+This will no longer work as intended because <kbd>form_vars</kbd>
 
 will be, like any other variable, quoted, and the user will end up
 seeing raw HTML text of the hidden variables. Even worse, the
 browser will not be aware of these form fields, and the page will
-not work. After protecting the variable with <tt>;noquote</tt>
+not work. After protecting the variable with <kbd>;noquote</kbd>
 ,
 everything works as expected:
 <blockquote><pre>
@@ -121,7 +121,7 @@ all of which default to the current date.</p>
 <p>Another example of widgets is the <em>context bar</em> often found
 on top of ACS pgages.</p>
 <p>Obviously, all widgets should be treated as HTML and therefore
-adorned with the <tt>;noquote</tt> qualifier. This also assumes
+adorned with the <kbd>;noquote</kbd> qualifier. This also assumes
 that the routines that <em>build</em> the widget are correctly
 written and that they will quote the <em>components</em> used to
 build the widget.</p>
@@ -132,13 +132,13 @@ rendering of the text. For instance, a bboard posting can be either
 HTML or text. If it is HTML, we transmit it as is; if not, we
 perform quoting, word-wrapping, etc. In both cases it is obvious
 that quoting performed by the templating system would be redundant,
-so we must be careful to add <tt>;noquote</tt> to the ADP.</p>
-<h3>The <tt>property</tt> and <tt>include</tt> Gotchas.</h3>
+so we must be careful to add <kbd>;noquote</kbd> to the ADP.</p>
+<h3>The <kbd>property</kbd> and <kbd>include</kbd> Gotchas.</h3>
 
 Transfer of parameters between included ADPs often requires manual
-addition of <tt>;noquote</tt>
+addition of <kbd>;noquote</kbd>
 . Let's review why.
-<p>The <tt>property</tt> tag is used to pass a piece of information
+<p>The <kbd>property</kbd> tag is used to pass a piece of information
 to the master template. This is used by the ADP whose writer
 consciously chose to let the master template handle a variable
 given by the Tcl code. Typically page titles, headings, and context
@@ -166,14 +166,14 @@ The obvious intention of the master is to allow its slave templates
 to provide a "title" and a "heading" of the page in a standardized
 fashion. The obvious intention of our slave template is to allow
 its corresponding Tcl code to set a single variable,
-<tt>title</tt>
+<kbd>title</kbd>
 , which will be used for both title and heading.
 What's wrong with this code?
 <p>The problem is that title gets quoted <em>twice</em>, once by
 the slave template, and once by the master template. This is the
 result of how the templating system works: <em>every</em>
-occurrence of <tt>\@<var>variable</var>\@</tt> is converted to
-<tt>[ad_quotehtml $<var>variable</var>]</tt>, even when it is
+occurrence of <kbd>\@<var>variable</var>\@</kbd> is converted to
+<kbd>[ad_quotehtml $<var>variable</var>]</kbd>, even when it is
 used only to set a property and you would expect the quoting to be
 suppressed.</p>
 <blockquote><font size="-1">Implementation note: Ideally, the
@@ -191,19 +191,19 @@ have already been quoted is lost.</font></blockquote>
 Over-quoting is sometimes hard to detect because things seem to
 work fine in most cases. To notice the problem in the example above
 (and in any other over-quoting example), the title needs to contain
-one of the characters <tt>&lt;</tt>, <tt>&gt;</tt> or
-<tt>&amp;</tt>. If it does, they will appear quoted to the user
+one of the characters <kbd>&lt;</kbd>, <kbd>&gt;</kbd> or
+<kbd>&amp;</kbd>. If it does, they will appear quoted to the user
 instead of appearing as-is.</p>
-<p>Over-quoting is resolved by adding <tt>;noquote</tt> to one of
-the variables. We strongly recommend that you add <tt>;literal</tt>
-inside the <tt>property</tt> tag rather than in the master. The
+<p>Over-quoting is resolved by adding <kbd>;noquote</kbd> to one of
+the variables. We strongly recommend that you add <kbd>;literal</kbd>
+inside the <kbd>property</kbd> tag rather than in the master. The
 reason is that, first, it makes sense to do so because conceptually
 the master is the one that "shows" the variable, so it makes sense
-that it gets to quote it. Secondly, a <tt>property</tt> tag is
+that it gets to quote it. Secondly, a <kbd>property</kbd> tag is
 supposed to merely <em>transfer</em> a piece of text to the master;
 it is much cleaner and more maintainable if this transfer is
 defined to be non-lossy. This becomes important in practice when
-there is a hierarchy of <tt>master</tt> templates -- e.g. one for
+there is a hierarchy of <kbd>master</kbd> templates -- e.g. one for
 the package and one for the whole site.</p>
 <p>To reiterate, a bug-free version of the slave template looks
 like this:</p>
@@ -216,7 +216,7 @@ like this:</p>
       
 </pre>
 </blockquote>
-<p>The exact same problems when the <tt>include</tt> statement
+<p>The exact same problems when the <kbd>include</kbd> statement
 passes some text. Here is an example:</p>
 <blockquote>
 <strong>Including template:</strong><pre>
@@ -226,24 +226,24 @@ passes some text. Here is an example:</p>
 &lt;form action="do-kick" method=POST&gt;
   Kick user \@name\@.&lt;br&gt;
   Reason: &lt;textarea name=reason&gt;\@reason\@&lt;/textarea&gt;&lt;br&gt;
-  &lt;input type=submit value="Kick"&gt;
+  &lt;input type="submit" value="Kick"&gt;
 &lt;/form&gt;
       
 </pre>
 </blockquote>
 
 Here an include statement is used to include an HTML form widget
-parts of which are defined with Tcl variables <tt>$id</tt>
+parts of which are defined with Tcl variables <kbd>$id</kbd>
  and
-<tt>$default_reason</tt>
+<kbd>$default_reason</kbd>
  whose values presumably come from the
 database.
 <p>What happens is that <var>reason</var> that prefills the
-<tt>textarea</tt> is over-quoted. The reasons are the same as in
+<kbd>textarea</kbd> is over-quoted. The reasons are the same as in
 the last example: it gets quoted once by the includer, and the
 second time by the included page. The fix is also similar: when you
 transfer non-constant text to an included page, make sure to add
-<tt>;literal</tt>.</p>
+<kbd>;literal</kbd>.</p>
 <blockquote>
 <strong>Including template, sans over-quoting:</strong><pre>
 &lt;include src="user-kick-form" id=\@kicked_id;literal\@ reason=\@default_reason;literal\@&gt;
@@ -259,16 +259,16 @@ to be done for each template. The items are sorted approximately by
 frequency of occurrence of the problem.
 <ol>
 <li>Audit the template for variables that export form variables and
-add <tt>;noquote</tt> to them.</li><li>More generally, audit the template for variables that are known
+add <kbd>;noquote</kbd> to them.</li><li>More generally, audit the template for variables that are known
 to contain HTML, e.g. those that contain widgets or HTML content
-provided by the user. Add <tt>;noquote</tt> to them.</li><li>Add <tt>;literal</tt> to variables used inside the
-<tt>property</tt> tag.</li><li>Add <tt>;noquote</tt> to textual variables whose values are
-attributes to the <tt>include</tt> tag.</li><li>Audit the template for occurrences of
-<tt>&lt;%= [ns_quotehtml \@<var>variable</var>\@] =&gt;</tt>
-and replace them with <tt>\@<var>variable</var>\@</tt>.</li><li>Audit the Tcl code for occurrences of <tt>ns_quotehtml</tt>. If
+provided by the user. Add <kbd>;noquote</kbd> to them.</li><li>Add <kbd>;literal</kbd> to variables used inside the
+<kbd>property</kbd> tag.</li><li>Add <kbd>;noquote</kbd> to textual variables whose values are
+attributes to the <kbd>include</kbd> tag.</li><li>Audit the template for occurrences of
+<kbd>&lt;%= [ns_quotehtml \@<var>variable</var>\@] =&gt;</kbd>
+and replace them with <kbd>\@<var>variable</var>\@</kbd>.</li><li>Audit the Tcl code for occurrences of <kbd>ns_quotehtml</kbd>. If
 it is used to build an HTML component, leave it, but take note of
 the variable the result gets saved to. Otherwise, remove the
-quoting.</li><li>Add <tt>;noquote</tt> to the "HTML component" variables noted
+quoting.</li><li>Add <kbd>;noquote</kbd> to the "HTML component" variables noted
 in the previous step.</li>
 </ol>
 
@@ -287,28 +287,28 @@ watch out for.
 <li>
 <strong>HTML junk appearing in the page.</strong><br>
 Literal HTML visible to the user typically comes from an
-"<tt>export_form_vars</tt>" or a widget variable that lacks
-<tt>;noquote</tt>. To fix the problem, simply add <tt>;noquote</tt>
+"<kbd>export_form_vars</kbd>" or a widget variable that lacks
+<kbd>;noquote</kbd>. To fix the problem, simply add <kbd>;noquote</kbd>
 to the variable.</li><li>
 <strong>Over-quoting and under-quoting.</strong><br>
 To detect quoting defects, you need to assume an active role in
 naming your objects. The best way to do it is to create objects
 (bboard forums, messages, news items, etc.) with names that contain
-the representation of an entity, e.g. "<tt>&amp;copy;</tt>". This
+the representation of an entity, e.g. "<kbd>&amp;copy;</kbd>". This
 looks like the copyright SGML entity, and intentionally so. The
 testing consists of checking that the browser prints exactly what
 you typed in as the name. Thus if your forum/message/etc. is listed
-as "<tt>&amp;copy;</tt>", everything is OK. If it is listed as
-"<tt>&amp;amp;copy;</tt>", it means that the string was quoted
+as "<kbd>&amp;copy;</kbd>", everything is OK. If it is listed as
+"<kbd>&amp;amp;copy;</kbd>", it means that the string was quoted
 twice, i.e. over-quoted. Finally, if the entity is interpreted
 (shown as ©), it means that the string lacks quoting, i.e. it
 is under-quoted.
 <p>To get rid of over-quoting, make sure that the variables don't
-get quoted in <em>transport</em>, such as in the <tt>property</tt>
-tag or as an attribute of the <tt>include</tt> tag. Also, make sure
+get quoted in <em>transport</em>, such as in the <kbd>property</kbd>
+tag or as an attribute of the <kbd>include</kbd> tag. Also, make sure
 that your Tcl code is not quoting the variable name.</p><p>To get rid of under-quoting, make sure that your variable gets
 quoted exactly once. This can be achieved either by removing a
-(presumably overzealous) <tt>;noquote</tt> or by quoting the string
+(presumably overzealous) <kbd>;noquote</kbd> or by quoting the string
 from Tcl. The latter is necessary when building HTML components,
 such as a context bar, from strings that come from the database or
 from the user.</p>

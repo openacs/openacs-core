@@ -52,6 +52,6 @@ Search <formwidget id="search_locale"> for <formwidget id="q"> <input type="subm
     </table>
   </if>
   <else>
-    <i>No messages found.</i>
+    <em>No messages found.</em>
   </else>
 </if>

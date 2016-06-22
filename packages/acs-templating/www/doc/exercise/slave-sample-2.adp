@@ -2,7 +2,7 @@
 <property name="header">&lt;master&gt; and &lt;slave&gt; Demo:</property>
 <p align="center">
 
-<b>while the rest of the page stays the same.</b>
+<strong>while the rest of the page stays the same.</strong>
 
 <p align="center">
 

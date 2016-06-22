@@ -103,7 +103,7 @@ select, input, button { font: 11px Tahoma,Verdana,sans-serif; }
   <div style="border-bottom:1px solid #000000;font-weight:bold;margin-bottom: 5px;">@HTML_Context@</div>
 
   <fieldset style="padding-top:10px;">
-    <legend><b>@HTML_Legend@</b></legend>
+    <legend><strong>@HTML_Legend@</strong></legend>
     <if @up_url@ not nil>
       <div style="margin-bottom:3px;"><a href="@up_url@"><img 
         src="/resources/acs-templating/xinha-nightly/plugins/OacsFS/img/up.gif" 
@@ -120,7 +120,7 @@ select, input, button { font: 11px Tahoma,Verdana,sans-serif; }
     <tr>
       <td valign="bottom" align="center" width="50%" rowspan="2">
 	<fieldset style="margin-top:10px;padding-top:10px;">
-	  <legend><b>@HTML_Preview@</b></legend>
+	  <legend><strong>@HTML_Preview@</strong></legend>
 	  <iframe name="ipreview" id="ipreview" frameborder="0" style="width:95%;" height="150"  src="./blank.html"></iframe>
 	</fieldset>
       </td>
@@ -128,7 +128,7 @@ select, input, button { font: 11px Tahoma,Verdana,sans-serif; }
       <td valign="top" width="50%" >
 	<if @write_p@ eq 1>
 	  <fieldset style="margin-top:10px;padding-top:10px;">
-	    <legend><b>@HTML_UploadTitle@</b></legend>
+	    <legend><strong>@HTML_UploadTitle@</strong></legend>
 	    <formtemplate id="upload_form">
 	      <table cellspacing="2" cellpadding="2" border="0" width="55%">
 		<tr class="form-element">

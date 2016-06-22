@@ -8,7 +8,7 @@
  : <a href="index">Tag Reference</a>
  : include-optional
 <h3>Summary</h3>
-<p>The <tt>include-optional</tt> tag is used to include another
+<p>The <kbd>include-optional</kbd> tag is used to include another
 template in the current template, but make some other chunk
 dependent on whether or not the included template returned
 something.</p>
@@ -37,7 +37,7 @@ show, you don't want to show the frame either.</p>
 </pre>
 <h3>Notes</h3>
 <ul><li>The output of the included template will be put where the
-<tt>&lt;include-output&gt;</tt> appears.</li></ul>
+<kbd>&lt;include-output&gt;</kbd> appears.</li></ul>
 <hr>
 <small>Tag added by: Lars Pinds (lars\@collaboraid.net)<br>
 Documentation added from sources on Nov 2002, Roberto
