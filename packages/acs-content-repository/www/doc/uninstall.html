@@ -4,11 +4,11 @@
   </head>
   <body>
   <h2>Uninstalling the Content Repository</h2>
-  <b><a href="index.html">Content Repository</a></b>
+  <strong><a href="index.html">Content Repository</a></strong>
 <hr>
 
 <p>The content repository includes an uninstall script,
-<tt>sql/content-drop.sql</tt>.  This script does two things:</p>
+<kbd>sql/content-drop.sql</kbd>.  This script does two things:</p>
 
 <ol>
   <li>Drops the attribute storage tables for all content types you have
@@ -16,21 +16,21 @@
   <li>Drops the general tables for the content repository.
 </ol>
 
-<p>The uninstall script does <b>not</b> do the following:</p>
+<p>The uninstall script does <strong>not</strong> do the following:</p>
 
 <ol>
-  <li>It does <b>not</b> delete rows from the <tt>acs_objects</tt>
-      table.  Many other tables reference the <tt>object_id</tt>
+  <li>It does <strong>not</strong> delete rows from the <kbd>acs_objects</kbd>
+      table.  Many other tables reference the <kbd>object_id</kbd>
       column in this table, so there is the possibility that the
       uninstall script will encounter foreign key reference errors.
 
-  <li>It does <b>not</b> delete types from the
-      <tt>acs_object_types</tt> table.  As for objects themselves, it
+  <li>It does <strong>not</strong> delete types from the
+      <kbd>acs_object_types</kbd> table.  As for objects themselves, it
       is impossible for an automatic script to properly handle
       disposal of all foreign key references.
 </ol>
 
-<p>Because of what the uninstall script does <b>not</b> do, it is only
+<p>Because of what the uninstall script does <strong>not</strong> do, it is only
 appropriate for removing the content repository <em>in preparation for
 removing the entire ACS Objects data model</em>.  If you wish to
 upgrade an existing installation and cannot afford to lose your data,
