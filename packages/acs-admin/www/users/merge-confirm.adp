@@ -8,9 +8,9 @@
     <p/>
     <strong>
       The user @from_first_names@ @from_last_name@ (@from_email@) will be deleted.
-    <b/>
+    </strong>
     <p/>
-    <b style="color:red">
+    <strong style="color:red">
       These accounts will be merged and the <u>good and final account</u> will be: 
 
     <p/>
