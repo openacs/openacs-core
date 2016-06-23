@@ -41,25 +41,24 @@ shows you how to use this interface to make your pages aware of
 which instance was requested.</p>
 </dd><dt><span class="term">Stage 2: Authentication</span></dt><dd><p>Next, the Request Processor examines the request for session
 information. Session information is generally sent from the client
-(the user's browser) to the server via cookies. The <a class="link" href="security-notes" title="Security Notes">security/session
-handler</a> is described in detail in its own document. It examines
-the client request and either extracts or sets up new session
-tokens for the user.</p></dd><dt><span class="term">Stage 3: Authorization</span></dt><dd><p>Next, the Request Processor checks if the user has appropriate
+(the user&#39;s browser) to the server via cookies. The <a class="link" href="security-notes" title="Security Notes">security/session handler</a> is described in
+detail in its own document. It examines the client request and
+either extracts or sets up new session tokens for the user.</p></dd><dt><span class="term">Stage 3: Authorization</span></dt><dd><p>Next, the Request Processor checks if the user has appropriate
 access privileges to the requested part of the site. In OpenACS
 5.9.0, access control is dictated by the <a class="ulink" href="permissions" target="_top">permissions system</a>. In this case,
-the RP checks if the user has "read" priviledges on the object in
-the site map specified by the URL. This object is typically a
-package instance, but it could easily be something more granular,
-such as whehter the user can view a particular piece of content
-within a package instance. This automatic check makes it easy to
-set up sites with areas that are only accessible to specific groups
-of users.</p></dd><dt><span class="term">Stage 4: URL Processing, File
+the RP checks if the user has "read" priviledges on the
+object in the site map specified by the URL. This object is
+typically a package instance, but it could easily be something more
+granular, such as whehter the user can view a particular piece of
+content within a package instance. This automatic check makes it
+easy to set up sites with areas that are only accessible to
+specific groups of users.</p></dd><dt><span class="term">Stage 4: URL Processing, File
 Search</span></dt><dd>
 <p>Finally, the Request Processor finds the file we intend to
 serve, searching the filesystem to locate the actual file that
 corresponds to an abstract URL. It searches for files with
 predefined "magic" extensions, i.e. files that end with:
-<code class="computeroutput">.html</code>, <code class="computeroutput">.tcl</code> and <code class="computeroutput">.adp</code>.</p><p>If the RP can't find any matching files with the expected
+<code class="computeroutput">.html</code>, <code class="computeroutput">.tcl</code> and <code class="computeroutput">.adp</code>.</p><p>If the RP can&#39;t find any matching files with the expected
 extensions, it will look for virtual-url-handler files, or
 <code class="computeroutput">.vuh</code> files. A <code class="computeroutput">.vuh</code> file will be executed as if it were a
 Tcl file, but with the tail end of the URL removed. This allows the
@@ -67,12 +66,12 @@ code in the <code class="computeroutput">.vuh</code> file to act
 like a registered procedure for an entire subtree of the URL
 namespace. Thus a <code class="computeroutput">.vuh</code> file can
 be thought of as a replacement for filters and registered procs,
-except that they integrate cleanly and correctly with the RP's URL
-mapping mechanisms. The details of how to use these files are
+except that they integrate cleanly and correctly with the RP's
+URL mapping mechanisms. The details of how to use these files are
 described in <a class="xref" href="rp-design" title="Request Processor Design">OpenACS 4 Request Processor
 Design</a>.</p><p>Once the appropriate file is found, it is either served directly
-if it's static content, or sent to the template system or the
-standard Tcl interpreter if it's a dynamic page.</p>
+if it&#39;s static content, or sent to the template system or the
+standard Tcl interpreter if it&#39;s a dynamic page.</p>
 </dd>
 </dl></div>
 </div><div class="sect2">
@@ -80,10 +79,10 @@ standard Tcl interpreter if it's a dynamic page.</p>
 <a name="rp-basicapi" id="rp-basicapi"></a>Basic
 API</h3></div></div></div><p>Once the flow of control reaches a dynamic page, the Request
 Processor has populated the environment of the request with several
-pieces of useful information. The RP's environment is accessible
-through the <code class="computeroutput">ad_conn</code> interface,
-and the following calls should be useful to you when developing
-dynamic pages:</p><div class="variablelist"><dl class="variablelist">
+pieces of useful information. The RP's environment is
+accessible through the <code class="computeroutput">ad_conn</code>
+interface, and the following calls should be useful to you when
+developing dynamic pages:</p><div class="variablelist"><dl class="variablelist">
 <dt><span class="term"><code class="computeroutput">[ad_conn
 user_id]</code></span></dt><dd><p>The ID of the user associated with this request. By convention
 this is zero if there is no user.</p></dd><dt><span class="term"><code class="computeroutput">[ad_conn
@@ -107,8 +106,8 @@ package_key]</code></span></dt><dd><p>If the URL refers to a package instance, t
 name of the package.</p></dd><dt><span class="term"><code class="computeroutput">[ad_conn
 path_info]</code></span></dt><dd><p>In a .vuh file, path_info is the trailing part of the URL not
 matched by the .vuh file.</p></dd>
-</dl></div><div class="cvstag">($&zwnj;Id: rp.xml,v 1.12 2010/12/11 23:36:32 ryang
-Exp $)</div>
+</dl></div><div class="cvstag">($&zwnj;Id: request-processor.html,v 1.49.2.10
+2016/06/21 07:44:36 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

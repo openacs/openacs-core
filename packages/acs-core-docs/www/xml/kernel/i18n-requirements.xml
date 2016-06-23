@@ -47,7 +47,7 @@
         <term>locale</term>
 	<listitem>
           <para>
-            The definition of the subset of a user's environment that depends on
+            The definition of the subset of a user&#39;s environment that depends on
             language and cultural conventions.
           </para>
         </listitem>
@@ -489,14 +489,14 @@ filesystem</para>
 <para>Acs-templating does the following.</para>
 <itemizedlist>
         <listitem>
-          <para>When the acs-templating package opens an an ADP or Tcl file, it assumes the file is iso-8859-1.  If the output charset (OutputCharset) in the AOLserver config file is set, then acs-templating assumes it's that charset.  
+          <para>When the acs-templating package opens an an ADP or Tcl file, it assumes the file is iso-8859-1.  If the output charset (OutputCharset) in the AOLserver config file is set, then acs-templating assumes it&#39;s that charset.  
 Writing Files</para>
         </listitem>
         <listitem>
           <para>When the acs-templating package writes an an ADP or
           Tcl file, it assumes the file is iso-8859-1.  If the output
           charset (OutputCharset) in the AOLserver config file is set,
-          then acs-templating assumes it's that charset.  </para>
+          then acs-templating assumes it&#39;s that charset.  </para>
         </listitem>
       </itemizedlist>
 
@@ -535,7 +535,7 @@ Writing Files</para>
           override the default system choice of character set when parsing
           and validating user form data. <remark>INCOMPLETE - form
           widgets in acs-templating/tcl/date-procs.tcl are not
-          internationalized.  Also, acs-templating's UI needs to be
+          internationalized.  Also, acs-templating&#39;s UI needs to be
           internationalized by replacing all user-visible strings with
           message keys.</remark></para>
 

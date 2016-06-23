@@ -34,19 +34,19 @@ exit</span></span></pre></li><li class="listitem"><p>
         labels are incorrect. Step 1(a) has been removed, and Step
         1(b) should be labelled Step 1.</p><div class="figure"><a name="idp140641342579808"></a><p class="title"><b>Figure 5.2. Upgrading a local CVS repository</b></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/upgrade-cvs.png" align="middle" alt="Upgrading a local CVS repository"></div></div></div><br class="figure-break"><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p><b>Step 0: Set up a working CVS checkout. </b>To get your OpenACS code into your local CVS
                 repository, you will set up a working CVS checkout of
-                OpenACS. When you want to update your site, you'll
+                OpenACS. When you want to update your site, you&#39;ll
                 update the working CVS checkout, import those changes
                 into your local CVS checkout, create a temporary CVS
                 checkout to merge your local changes, fix any
                 conflicts, commit your changes, and then update your
-                site. It sounds complicated, but it's not too bad, and
+                site. It sounds complicated, but it&#39;s not too bad, and
                 it is the best way to work around CVS's limitations.</p><p>This part describes how to set up your working CVS
-        checkout. Once it is set up, you'll be able to update any
+        checkout. Once it is set up, you&#39;ll be able to update any
         packages using the existing working CVS checkout. We use one
         dedicated directory for each branch of OpenACS - if you are
         using OpenACS 5.1,x, you will need a 5.1 checkout. That will
         be good for 5.1, 5.11, 5.12, and so on. But when you want to
-        upgrade to OpenACS 5.2, you'll need to check out another
+        upgrade to OpenACS 5.2, you&#39;ll need to check out another
         branch.</p><p>The <span class="replaceable"><span class="replaceable">openacs-5-1-compat</span></span> tag identifies the latest released version of OpenACS 5.1 (ie, 5.1.3 or 5.1.4) and the latest compatible version of each package.  Each minor release of OpenACS since 5.0 has this tagging structure.  For example, OpenACS 5.1.x has <code class="computeroutput">openacs-5-1-compat</code>.</p><p>You will want to separately check out all the
                 packages you are using.
               </p><pre class="screen">[root root]# <strong class="userinput"><code>su - <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span></code></strong>
@@ -55,7 +55,7 @@ exit</span></span></pre></li><li class="listitem"><p>
 [$OPENACS_SERVICE_NAME aolserver]$ <strong class="userinput"><code>cd openacs-4/packages</code></strong>
 [$OPENACS_SERVICE_NAME aolserver]$ <strong class="userinput"><code>cvs -d :pserver:anonymous@cvs.openacs.org:/cvsroot checkout -r <span class="replaceable"><span class="replaceable">openacs-5-1-compat</span></span> <span class="replaceable"><span class="replaceable">packagename packagename2...</span></span></code></strong>
 [$OPENACS_SERVICE_NAME aolserver]$ <strong class="userinput"><code>cd ../..</code></strong>
-[$OPENACS_SERVICE_NAME aolserver]$ <strong class="userinput"><code>mv openacs-4 <span class="replaceable"><span class="replaceable">openacs-5-1</span></span></code></strong></pre><p>Make sure your working CVS checkout doesn't have
+[$OPENACS_SERVICE_NAME aolserver]$ <strong class="userinput"><code>mv openacs-4 <span class="replaceable"><span class="replaceable">openacs-5-1</span></span></code></strong></pre><p>Make sure your working CVS checkout doesn&#39;t have
               the entire CVS tree from OpenACS. A good way to check
               this is if it has a contrib directory. If it does, you
               probably checked out the entire tree. You might want to
@@ -74,7 +74,7 @@ exit</span></span></pre></li><li class="listitem"><p>
 [$OPENACS_SERVICE_NAME myfirstpackage]$ <strong class="userinput"><code>cvs -d /var/lib/cvs/ import -m "importing package" <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/<span class="replaceable"><span class="replaceable">myfirstpackage</span></span> OpenACS openacs-5-1</code></strong></pre></div><p>Create a new directory as temporary working space to
             reconcile conflicts between the new files and your current
             work.  The example uses the cvs keyword yesterday, making
-            the assumption that you haven't checked in new code to
+            the assumption that you haven&#39;t checked in new code to
             your local tree in the last day. This section should be
             improved to use tags instead of the keyword yesterday!</p><pre class="screen">[$OPENACS_SERVICE_NAME openacs-5.1]$ <strong class="userinput"><code> cd /var/lib/aolserver</code></strong>
 [$OPENACS_SERVICE_NAME tmp]$ <strong class="userinput"><code>rm -rf <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>-upgrade</code></strong>
@@ -83,10 +83,10 @@ exit</span></span></pre></li><li class="listitem"><p>
 (CVS feedback here)</pre><p>The file /var/tmp/openacs-upgrade/cvs.txt contains the
             results of the upgrade.  If you changed files that are
             part of the OpenACS tarball and those changes conflict,
-            you'll have to manually reconcile them.  Use the emacs
+            you&#39;ll have to manually reconcile them.  Use the emacs
             command <code class="computeroutput">M-x sort-lines</code>
             (you may have to click Ctrl-space at the beginning of the
-            file, and go to the end, and then try M-x sort-lines) and then, for each line that starts with a C, open that file and manually resolve the conflict by deleting the excess lines.  When you're finished, or if there aren't any conflicts, save and exit.</p><p>Once you've fixed any conflicts, commit the new code
+            file, and go to the end, and then try M-x sort-lines) and then, for each line that starts with a C, open that file and manually resolve the conflict by deleting the excess lines.  When you&#39;re finished, or if there aren&#39;t any conflicts, save and exit.</p><p>Once you&#39;ve fixed any conflicts, commit the new code
             to your local tree.  </p><pre class="screen">[$OPENACS_SERVICE_NAME tmp]$ <strong class="userinput"><code>cd <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>-upgrade</code></strong>
 [$OPENACS_SERVICE_NAME <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>-upgrade]$ <strong class="userinput"><code>cvs commit -m "Upgraded to 5.1"</code></strong></pre></li><li class="listitem"><p><b>Step 3: Upgrade your local staging site. </b>Update your working tree with the new files.  The CVS flags ensure that new directories are created and pruned directories destroyed.</p><pre class="screen">[$OPENACS_SERVICE_NAME <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>-upgrade]$ <strong class="userinput"><code>cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span></code></strong>
 [$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>cvs up -Pd</code></strong>

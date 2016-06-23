@@ -195,7 +195,7 @@ the next.  These rules are fine-tuned with each release; an example is <ulink ur
       </listitem>
       <listitem>
         <para>The distance from OLDVERSION to NEWVERSION should never span a release.   For example if we had a bug fix in
-acs-kernel on 5.1.0 you wouldn't want a file upgrade-5.0.4-5.1.0d1.sql since if you subsequently need to provide a 5.0.4-5.0.5 upgrade you will have to rename the 5.0.4-5.1.0 upgrade since you can't have upgrades which overlap like that.  Instead, use <computeroutput>upgrade-5.1.0d1-5.1.0d2.sql</computeroutput>
+acs-kernel on 5.1.0 you wouldn&#39;t want a file upgrade-5.0.4-5.1.0d1.sql since if you subsequently need to provide a 5.0.4-5.0.5 upgrade you will have to rename the 5.0.4-5.1.0 upgrade since you can&#39;t have upgrades which overlap like that.  Instead, use <computeroutput>upgrade-5.1.0d1-5.1.0d2.sql</computeroutput>
 </para>
       </listitem>
     </orderedlist>

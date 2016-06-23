@@ -14,14 +14,14 @@ useful.</p><div class="section">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="install-resources-books" id="install-resources-books"></a>Books</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>
-<a class="ulink" href="http://www.amazon.com/exec/obidos/ASIN/1558605347/photonetA" target="_top">Philip and Alex's Guide to Web Publishing</a> - A
+<a class="ulink" href="http://www.amazon.com/exec/obidos/ASIN/1558605347/photonetA" target="_top">Philip and Alex&#39;s Guide to Web Publishing</a> - A
 very readable guide to database-backed community websites.</p></li><li class="listitem"><p>
 <a class="ulink" href="http://www.amazon.com/exec/obidos/ISBN=1565922603/photonetA/" target="_top">UNIX Power Tools</a> - An excellent introduction to
 the command line tools and basic programs of UNIX</p></li><li class="listitem"><p>
 <a class="ulink" href="http://www.amazon.com/exec/obidos/ASIN/0130206016/photonetA" target="_top">UNIX System Administration Handbook</a> (formerly the
 "red book" - now the "purple" book)</p></li><li class="listitem"><p>
-<a class="ulink" href="http://www.amazon.com/exec/obidos/ASIN/076453162X/photonetA" target="_top">UNIX System Administrator's Bible</a> - (LePage and
-Iarerra 1998; IDG)</p></li><li class="listitem"><p><a class="ulink" href="http://www.amazon.com/exec/obidos/ASIN/1565921518/photonetA" target="_top">Running Linux</a></p></li><li class="listitem"><p><a class="ulink" href="http://www.amazon.com/exec/obidos/ASIN/1565921526/photonetA" target="_top">Learning Gnu Emacs</a></p></li><li class="listitem"><p><a class="ulink" href="http://www.amazon.com/exec/obidos/ASIN/1565925858/photonetA" target="_top">Linux in a Nutshell</a></p></li>
+<a class="ulink" href="http://www.amazon.com/exec/obidos/ASIN/076453162X/photonetA" target="_top">UNIX System Administrator&#39;s Bible</a> - (LePage
+and Iarerra 1998; IDG)</p></li><li class="listitem"><p><a class="ulink" href="http://www.amazon.com/exec/obidos/ASIN/1565921518/photonetA" target="_top">Running Linux</a></p></li><li class="listitem"><p><a class="ulink" href="http://www.amazon.com/exec/obidos/ASIN/1565921526/photonetA" target="_top">Learning Gnu Emacs</a></p></li><li class="listitem"><p><a class="ulink" href="http://www.amazon.com/exec/obidos/ASIN/1565925858/photonetA" target="_top">Linux in a Nutshell</a></p></li>
 </ul></div><div class="section">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="install-resources-web" id="install-resources-web"></a>Web Sites</h4></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">

@@ -216,7 +216,7 @@
             <title>FreeBSD</title>
             <para><ulink url="http://www.orchardlabs.com/freebsd/">FreeBSD guide</ulink>.  The OpenACS Reference Platform uses shell scripts written for bash, which is the
               standard Linux shell.  If you are using a different
-              shell, you will need to substitute your shell's
+              shell, you will need to substitute your shell&#39;s
               conventions for setting environment variables when
               appropriate, and install bash to work with the scripts. Substitute <userinput>fetch</userinput> when the instructions suggest you use 
               <userinput>wget</userinput> to download software.</para>
@@ -355,7 +355,7 @@
       </para>
 
       <para>
-        It's also possible to download all the pieces and patches yourself:
+        It&#39;s also possible to download all the pieces and patches yourself:
       </para>
       
       <itemizedlist>
@@ -369,7 +369,7 @@
               url="http://prdownloads.sourceforge.net/aolserver/nspostgres-3.5.tar.gz?download">SourceForge</ulink>. If
               you do decide to use nspostgres.so, you have to remember to
               change the AOLserver config file to point to nspostgres.so
-              instead of postgres.so. This guide uses Mat Kovach's distro
+              instead of postgres.so. This guide uses Mat Kovach&#39;s distro
               (i.e. postgres.so)
 
           </para></listitem>

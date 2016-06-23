@@ -20,7 +20,7 @@
 	       	   {after_html
                {&lt;a name="#"&gt;Anchor&lt;/a&gt;}}}
 	} ...
-	</pre><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Warning</h3><p>You must not give your your form the same name that your page has. Otherwise HTMLArea won't load.</p></div><p>Convert your textarea widget to a richtext widget and enable htmlarea.</p><p>The <code class="code">htmlarea_p</code>-flag can be used to prevent 
+	</pre><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Warning</h3><p>You must not give your your form the same name that your page has. Otherwise HTMLArea won&#39;t load.</p></div><p>Convert your textarea widget to a richtext widget and enable htmlarea.</p><p>The <code class="code">htmlarea_p</code>-flag can be used to prevent 
 	WYSIWYG functionality. Defaults to true if left away.</p><p>From:</p><pre class="programlisting">
 	{my_input_field_2:text
 	</pre><p>To:</p><pre class="programlisting">
@@ -31,7 +31,7 @@
 	take a look at the <code class="code">cr_mime_types</code> table.</p><p>Make sure that both values are passed as a list to your 
 	<code class="code">ad_form</code> or you will have problems 
 	displaying the content or handling the data manipulation correctly.</p><p>Depending on the data model of your package you either support a content format 
-	or don't. If you don't you can assume <code class="code">"text/html"</code> or 
+	or don&#39;t. If you don&#39;t you can assume <code class="code">"text/html"</code> or 
 	<code class="code">"text/richtext"</code> or <code class="code">"text/enhanced"</code>.</p><p>The relevant parts in your <code class="code">ad_form</code> definition are the 
 	switches <code class="code">-new_data</code>, <code class="code">-edit_data</code>, 
 	<code class="code">-on_request</code> and <code class="code">-on_submit</code>.</p><p>To allow your data to display correctly you need to add an <code class="code">-on_request</code> block. 
@@ -44,7 +44,7 @@
 	set format [ template::util::richtext::get_property format $my_input_field_2] #This is optional
 	</pre><p>Now the correct values for <code class="code">my_input_field_2</code> and 
 	<code class="code">format</code> are passed to the <code class="code">-new_data</code> and 
-	<code class="code">-edit_data</code> blocks which don't need to get touched.</p><p>To make HTMLArea optional per package instance define a string parameter 
+	<code class="code">-edit_data</code> blocks which don&#39;t need to get touched.</p><p>To make HTMLArea optional per package instance define a string parameter 
 	<code class="code">UseWysiwygP</code> which defaults <code class="code">0</code> for your 
 	package using the APM.</p><p>In your edit page make the following changes</p><pre class="programlisting">
 	# Is WYSIWYG enabled?

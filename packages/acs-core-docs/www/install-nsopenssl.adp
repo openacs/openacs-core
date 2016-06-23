@@ -18,7 +18,7 @@ OpenACS documentation staff.</div><p>This AOLserver module is required if you wa
 to your site via https. These commands compile nsopenssl and
 install it, along with a tcl helper script to handle https
 connections. You will also need ssl certificates. Because those
-should be different for each server service, you won't need
+should be different for each server service, you won&#39;t need
 <a class="link" href="install-ssl">those
 instructions</a> until later.</p><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
@@ -96,9 +96,9 @@ port (usually by adding <code class="computeroutput">-b
 </code> to the
 nsd call. If you are using daemontools, this can be changed in your
 <code class="computeroutput">etc/daemontools/run file</code>).</p><p>To enable SSL support in your server, make sure your
-etc/config.tcl file has a section on "OpenSSL 3 with AOLserver4".
-If that section is not present, try looking at the README file in
-<code class="computeroutput">/usr/local/src/aolserver/nsopenssl</code>.</p>
+etc/config.tcl file has a section on "OpenSSL 3 with
+AOLserver4". If that section is not present, try looking at
+the README file in <code class="computeroutput">/usr/local/src/aolserver/nsopenssl</code>.</p>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

@@ -109,7 +109,7 @@ By Richard Li and Yon Feldman
    
    <listitem><para>
     Name parameters as simply as possible, i.e., use the column name
-    if the parameter corresponds to a table column. We're deprecating
+    if the parameter corresponds to a table column. We&#39;re deprecating
     the v_* and *_in syntax in favor of named parameters notation:
     </para>     
 
@@ -174,7 +174,7 @@ By Richard Li and Yon Feldman
    
    <listitem><para>
     Use 't' and 'f' for booleans, not the PL/SQL "boolean" datatype
-    because it can't be used in SQL queries.
+    because it can&#39;t be used in SQL queries.
    </para></listitem>
 
    <listitem><para>

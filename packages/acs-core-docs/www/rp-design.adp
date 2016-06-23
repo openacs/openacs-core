@@ -55,13 +55,13 @@ is the pageroot for the <span class="emphasis"><em>package_key</em></span> packa
 global namespace containing variables associated with the current
 request.</p></li><li class="listitem"><p>
 <span class="strong"><strong>abstract URL</strong></span> -- A
-URL with no extension that doesn't directly correspond to a file in
-the filesystem.</p></li><li class="listitem"><p>
+URL with no extension that doesn&#39;t directly correspond to a
+file in the filesystem.</p></li><li class="listitem"><p>
 <span class="strong"><strong>abstract file</strong></span> or
 <span class="strong"><strong>abstract path</strong></span> -- A URL
 that has been translated into a file system path (probably by
-prepending the appropriate pageroot), but still doesn't have any
-extension and so does not directly correspond to a file in the
+prepending the appropriate pageroot), but still doesn&#39;t have
+any extension and so does not directly correspond to a file in the
 filesystem.</p></li><li class="listitem"><p>
 <span class="strong"><strong>concrete file</strong></span> or
 <span class="strong"><strong>concrete path</strong></span> -- A
@@ -149,8 +149,8 @@ entries in the mapping.</p>
 <a name="rp-design-req-env" id="rp-design-req-env"></a>Request Environment</h3></div></div></div><p>The request environment is managed by the procedure <span class="strong"><strong>ad_conn</strong></span>. Variables can be set and
 retrieved through use of the ad_conn procedure. The following
 variables are available for public use. If the ad_conn procedure
-doesn't recognize a variable being passed to it for a lookup, it
-tries to get a value using ns_conn. This guarantees that ad_conn
+doesn&#39;t recognize a variable being passed to it for a lookup,
+it tries to get a value using ns_conn. This guarantees that ad_conn
 subsumes the functionality of ns_conn.</p><div class="informaltable"><table class="informaltable" cellspacing="0" border="0">
 <colgroup>
 <col class="c1"><col class="c2">
@@ -192,8 +192,8 @@ user_id]</code></td><td valign="top">User_id of a person if the person is logged
 Otherwise, it is blank</td>
 </tr><tr>
 <td valign="top"><code class="computeroutput">[ad_conn
-sec_validated]</code></td><td valign="top">This becomes "secure" when the connection uses
-SSL</td>
+sec_validated]</code></td><td valign="top">This becomes "secure" when the
+connection uses SSL</td>
 </tr><tr><td colspan="2"></td></tr><tr><td colspan="2"><span class="strong"><strong>Database
 API</strong></span></td></tr><tr>
 <td valign="top"><code class="computeroutput">[ad_conn

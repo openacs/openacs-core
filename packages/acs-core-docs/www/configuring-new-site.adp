@@ -7,7 +7,7 @@ Site</property>
 <include src="/packages/acs-core-docs/lib/navheader"
 		    leftLink="mac-installation" leftLabel="Prev"
 		    title="
-Part II. Administrator's Guide"
+Part II. Administrator&#39;s Guide"
 		    rightLink="configuring-install-packages" rightLabel="Next">
 		<div class="chapter">
 <div class="titlepage"><div><div><h2 class="title">

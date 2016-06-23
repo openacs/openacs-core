@@ -10,7 +10,7 @@
       of OpenACS installations can enjoy the system.
     </p><p>
       The history of OpenACS documentation:  ..began by
-      building on a good documentation base from ArsDigita's ACS in the
+      building on a good documentation base from ArsDigita&#39;s ACS in the
       late 1990's. Some sections of the documentation, however, lacked
       details and examples; others simply did not exist. The OpenACS
       community began meeting the challenge by identifying needs and
@@ -36,7 +36,7 @@
       developers had to learn the system through experience with
       working with it and discussion in the forums.  Informal sharing
       of experiential and tacit knowledge has become the OpenACS
-      community's main method of sharing knowledge.
+      community&#39;s main method of sharing knowledge.
     </p><p>
       This document attempts to shape ongoing documentation efforts by
       using principles of continual improvement to re-engineer
@@ -166,7 +166,7 @@
         book in print, and help new readers visualize how the
         documentation is organized. 
       </p></li><li class="listitem"><p>
-        The use licenses between OpenACS and Arsdigita's ACS are not
+        The use licenses between OpenACS and Arsdigita&#39;s ACS are not
         compatible, thereby creating strict limits on how much
         OpenACS developers should have access to Arsdigita code and
         resources.  The OpenACS documentation has a new legal
@@ -323,8 +323,8 @@
        </p></li><li class="listitem"><p>
         Create a long bulleted list of features. Feature list should
         go deeper than high-level feature lists and look at the
-        quality of the implementations (from the user's perspective,
-        not the programmer's).  Example issues an end-user may have
+        quality of the implementations (from the user&#39;s perspective,
+        not the programmer&#39;s).  Example issues an end-user may have
         questions about: Ticket Tracker and Ticket Tracker Lite, why
         would I want one of them vs the other? And, before I specify
         to download and install it, what credit card gateways are
@@ -363,7 +363,7 @@
       </p></li><li class="listitem"><p>
         Create a list of administrative tools that are useful to
         administrating OpenACS, including developer support,
-        schema-browser and api browser. Link to AOLserver's config
+        schema-browser and api browser. Link to AOLserver&#39;s config
         file documentation.
       </p></li><li class="listitem"><p>
         Resources on high level subjects such as web services,
@@ -514,7 +514,7 @@
         they are not available elsewhere.
       </p></li><li class="listitem"><p>
         Add overview diagrams showing the core parts of the
-        datamodel including an updated summary of Greenspun's
+        datamodel including an updated summary of Greenspun&#39;s
         Chapter 4: Data Models and the Object System 
       </p></li><li class="listitem"><p>
         package design guidelines and development process templates
@@ -636,7 +636,7 @@
       to represent paper-based books online.
     </p><p>
       The following DocBook primer walks you through the basics, and should cover the
-      needs for 95 percent of the documentation we produce. You are welcome to explore DocBook's
+      needs for 95 percent of the documentation we produce. You are welcome to explore DocBook&#39;s
       <a class="ulink" href="http://docbook.org/tdg/en/html/part2.html" target="_top">
     list of elements</a> and use more exotic features in your
       documents. The list is made up of SGML-elements but basically
@@ -661,7 +661,7 @@
     <a class="ulink" href="http://sourceforge.net/projects/docbook/" target="_top">XSL
     Stylesheets</a> (docbook-xsl) - The stylesheets to convert
     to HTML. We have been using a stylesheet based upon
-    NWalsh's chunk.xsl.
+    NWalsh&#39;s chunk.xsl.
     </p></li><li class="listitem"><p>
     <code class="computeroutput">xsltproc</code> - The processor that
     will take an XML document and, given a xsl stylesheet, convert
@@ -703,7 +703,7 @@
              |
              +--sect2           : <span class="strong"><strong>Sections</strong></span> - <span class="emphasis"><em>functional requirements</em></span>
                  |
-                 +--sect3       : <span class="strong"><strong>Subsections</strong></span> - <span class="emphasis"><em>Programmer's API</em></span>
+                 +--sect3       : <span class="strong"><strong>Subsections</strong></span> - <span class="emphasis"><em>Programmer&#39;s API</em></span>
                      |
                     ...         : <span class="strong"><strong>...</strong></span>
     </pre><p>
@@ -724,7 +724,7 @@
       <code class="computeroutput">id</code>, is standard and can be used with all elements. It comes in  very 
       handy when interlinking between documents (more about this when talking about links in <a class="xref" href="docbook-primer.html#dbprimer-links" title="Links">the section called “Links”</a>). 
       The value of <code class="computeroutput">id</code> has to be unique 
-      throughout the book you're making since the <code class="computeroutput">id</code>'s in your 
+      throughout the book you&#39;re making since the <code class="computeroutput">id</code>'s in your 
       <code class="computeroutput">sect1</code>'s will turn into filenames when the book is parsed into HTML.
     </p><p>
       <a class="indexterm" name="idp140641349958352"></a>
@@ -732,7 +732,7 @@
       as the link when referring to this <code class="computeroutput">sect1</code>.
     </p><p>
       Right after the opening tag you put the title of the document - this is usually the same as 
-      <code class="computeroutput">xreflabel</code>-attribute. E.g. the top level of the document you're
+      <code class="computeroutput">xreflabel</code>-attribute. E.g. the top level of the document you&#39;re
       reading right now looks like this:
     </p><pre class="programlisting">
 &lt;sect1 id="docbook-primer" xreflabel="DocBook Primer"&gt;
@@ -770,11 +770,11 @@
       and <a class="ulink" href="http://docbook.org/tdg/en/html/userinput.html" target="_top"><strong class="userinput"><code>&lt;userinput&gt;</code></strong></a>
 </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="dbprimer-links"></a>Links</h3></div></div></div><p>
       <a class="indexterm" name="idp140641349981152"></a>
-      Linking falls into two different categories: inside the book you're making and outside:
+      Linking falls into two different categories: inside the book you&#39;re making and outside:
     </p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><span class="strong"><strong>1. Inside linking, cross-referencing other parts of your book</strong></span></span></dt><dd><p>
         By having unique <code class="computeroutput">id</code>'s you can cross-reference any part of your book
         with a simple tag, regardless of where that part is.
-      </p><p><a class="indexterm" name="idp140641349984816"></a>Check out how I link to a subsection of the Developer's Guide:</p><p>Put this in your XML:</p><pre class="programlisting">
+      </p><p><a class="indexterm" name="idp140641349984816"></a>Check out how I link to a subsection of the Developer&#39;s Guide:</p><p>Put this in your XML:</p><pre class="programlisting">
 - Find information about creating a package in
 &lt;xref linkend="packages-making-a-package"&gt;&lt;/xref&gt;.
 </pre><p>And the output is:</p><pre class="programlisting">
@@ -786,7 +786,7 @@
         Provide the end-tag, <code class="computeroutput">&lt;/xref&gt;</code>, or
           </p></li><li class="listitem"><p>
         Put a slash before the ending-bracket: <code class="computeroutput">&lt;xref linkend="blahblah"/&gt;</code>
-          </p></li></ol></div><p>If the section you link to hasn't a specified <code class="computeroutput">xreflabel</code>-attribute,
+          </p></li></ol></div><p>If the section you link to hasn&#39;t a specified <code class="computeroutput">xreflabel</code>-attribute,
         the link is going to look like this:</p><p>Put this in your XML:</p><pre class="programlisting">
 -Find information about what a package looks like in 
 &lt;xref linkend="packages-looks"&gt;&lt;/xref&gt;.
@@ -794,12 +794,12 @@
 - Find information about what a package looks like in 
 <a class="xref" href="packages.html#packages-looks" title="What a Package Looks Like">the section called “What a Package Looks Like”</a>.
 </pre><p>
-        Note that since I haven't provided an <code class="computeroutput">xreflabel</code> for the subsection, 
+        Note that since I haven&#39;t provided an <code class="computeroutput">xreflabel</code> for the subsection, 
         <code class="computeroutput">packages-looks</code>, the
         parser will try its best to explain where the link takes you.
       </p></dd><dt><span class="term"><span class="strong"><strong>2. Linking outside the documentation</strong></span></span></dt><dd><p>
         <a class="indexterm" name="idp140641349999760"></a>
-        If you're hyper-linking out of the documentation, it works almost the same way as HTML - the tag is just
+        If you&#39;re hyper-linking out of the documentation, it works almost the same way as HTML - the tag is just
         a little different
 
         (<a class="ulink" href="http://docbook.org/tdg/en/html/ulink.html" target="_top"><code class="computeroutput">&lt;ulink&gt;</code></a>):
@@ -846,7 +846,7 @@
       only with relative paths.
     </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="dbprimer-lists"></a>Lists</h3></div></div></div><p>
       <a class="indexterm" name="idp140641350015984"></a>
-      Here's how you make the DocBook equivalent of the three usual HTML-lists:
+      Here&#39;s how you make the DocBook equivalent of the three usual HTML-lists:
     </p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><span class="strong"><strong>1. How to make an &lt;ul&gt;</strong></span></span></dt><dd><p>
         Making an unordered list is pretty much like doing the same thing in HTML - if you close your <code class="computeroutput">&lt;li&gt;</code>, that is. The only differences are that each list item has to be wrapped in something more, such as
         <code class="computeroutput">&lt;para&gt;</code>, and that the tags are called
@@ -870,7 +870,7 @@
 
 &lt;/orderedlist&gt;
 </pre></dd><dt><span class="term"><span class="strong"><strong>3. How to make a &lt;dl&gt;</strong></span></span></dt><dd><p>
-        This kind of list is called a <code class="computeroutput">variablelist</code> and these are the tags you'll need to 
+        This kind of list is called a <code class="computeroutput">variablelist</code> and these are the tags you&#39;ll need to 
         make it happen:
         <a class="ulink" href="http://docbook.org/tdg/en/html/variablelist.html" target="_top"><code class="computeroutput">&lt;variablelist&gt;</code></a>,
         <a class="ulink" href="http://docbook.org/tdg/en/html/varlistentry.html" target="_top"><code class="computeroutput">&lt;varlistentry&gt;</code></a>, 
@@ -931,7 +931,7 @@
       Our documentation uses two flavors of emphasis - italics and bold type. DocBook uses one - 
       <a class="ulink" href="http://docbook.org/tdg/en/html/emphasis.html" target="_top"><code class="computeroutput">&lt;emphasis&gt;</code></a>.
     </p><p>
-      The <code class="computeroutput">&lt;emphasis&gt;</code> tag defaults to italics when parsed. If you're looking for 
+      The <code class="computeroutput">&lt;emphasis&gt;</code> tag defaults to italics when parsed. If you&#39;re looking for 
       emphasizing with bold type, use <code class="computeroutput">&lt;emphasis role="strong"&gt;</code>.
     </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="dbprimer-indexing"></a>Indexing Your DocBook Documents</h3></div></div></div><p>
       Words that are marked as index-words are referenced in an index
@@ -957,7 +957,7 @@
     </p><pre class="screen">
 <code class="computeroutput">bash$ </code><strong class="userinput"><code>xsltproc -o outputfilename.xml /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/html.xsl filename.xml</code></strong>
 </pre><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
-      This example uses Daniel Veillard's <span class="strong"><strong>xsltproc</strong></span> command available
+      This example uses Daniel Veillard&#39;s <span class="strong"><strong>xsltproc</strong></span> command available
       as part of libxslt from <a class="ulink" href="http://www.xmlsoft.org/XSLT/" target="_top">http://www.xmlsoft.org/XSLT/</a>.
       If you are using other XML processors such as Xalan or Saxon,
       you will need to change the command line appropriately.
@@ -983,7 +983,7 @@
       David Lutterkort
       wrote an <a class="link" href="psgml-mode.html" title="Using PSGML mode in Emacs">intro to the PSGML Mode in Emacs</a>
     </p></li><li class="listitem"><p>
-      James Clark's free Java parser
+      James Clark&#39;s free Java parser
       <a class="ulink" href="http://www.jclark.com/xml/xp/index.html" target="_top">XP</a>. Note that
       this does not validate XML, only parses it.
       </p></li><li class="listitem"><p>
@@ -997,7 +997,7 @@
     </p></li><li class="listitem"><p>
       In the process of transforming your HTML into XML, 
       <a class="ulink" href="http://tidy.sourceforge.net/" target="_top">HTML tidy</a>
-      can be a handy tool to make your HTML "regexp'able".
+      can be a handy tool to make your HTML "regexp&#39;able".
       Brandoch Calef has made a 
       <a class="ulink" href="http://web.archive.org/web/20010830084757/http://developer.arsdigita.com/working-papers/bcalef/html-to-docbook.html" target="_top">Perl
       script with directions</a> (now via archive.org)

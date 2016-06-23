@@ -18,7 +18,7 @@
               capability of making itself adaptable to the requirements of different
               native languages, local customs and coded character sets.
           </p></dd><dt><span class="term">locale</span></dt><dd><p>
-            The definition of the subset of a user's environment that depends on
+            The definition of the subset of a user&#39;s environment that depends on
             language and cultural conventions.
           </p></dd><dt><span class="term">localization (L10n)</span></dt><dd><p>
             The process of establishing information within a computer system
@@ -94,7 +94,7 @@ logic from presentation.</p></li></ol></div></div><div class="sect2"><div class=
 Analysis</h3></div></div></div><p>Other application servers: ATG Dyanmo, Broadvision, Vignette,
 ... ? Anyone know how they deal with i18n ?</p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="V._Related_Links"></a>Related
 Links</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><span class="emphasis"><em>System/Package "coversheet" - where all
-documentation for this software is linked off of</em></span></p></li><li class="listitem"><p><span class="emphasis"><em><a class="link" href="i18n-design.html" title="Design Notes">Design document</a></em></span></p></li><li class="listitem"><p><span class="emphasis"><em><a class="link" href="i18n.html" title="Chapter 14. Internationalization">Developer's guide</a></em></span></p></li><li class="listitem"><p><span class="emphasis"><em>User's guide</em></span></p></li><li class="listitem"><p><span class="emphasis"><em>Other-cool-system-related-to-this-one
+documentation for this software is linked off of</em></span></p></li><li class="listitem"><p><span class="emphasis"><em><a class="link" href="i18n-design.html" title="Design Notes">Design document</a></em></span></p></li><li class="listitem"><p><span class="emphasis"><em><a class="link" href="i18n.html" title="Chapter 14. Internationalization">Developer&#39;s guide</a></em></span></p></li><li class="listitem"><p><span class="emphasis"><em>User&#39;s guide</em></span></p></li><li class="listitem"><p><span class="emphasis"><em>Other-cool-system-related-to-this-one
 document</em></span></p><p><a class="ulink" href="http://www.li18nux.net/" target="_top">LI18NUX
 2000 Globalization Specification:
 http://www.li18nux.net/</a></p><p><a class="ulink" href="http://www.mozilla.org/docs/refList/i18n/l12yGuidelines.html" target="_top">Mozilla
@@ -178,11 +178,11 @@ browsers and authoring tools, the system must be able to read and
 write other character sets. In particular, conversions to and from
 Unicode will need to be explicitly performed at the following
 times:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Loading source files (.tcl or .adp) or content files from the
-filesystem</p></li><li class="listitem"><p>Accepting form input data from users</p></li><li class="listitem"><p>Delivering text output to a browser</p></li><li class="listitem"><p>Composing an email message</p></li><li class="listitem"><p>Writing data to the filesystem</p></li></ul></div><p>Acs-templating does the following.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>When the acs-templating package opens an an ADP or Tcl file, it assumes the file is iso-8859-1.  If the output charset (OutputCharset) in the AOLserver config file is set, then acs-templating assumes it's that charset.  
+filesystem</p></li><li class="listitem"><p>Accepting form input data from users</p></li><li class="listitem"><p>Delivering text output to a browser</p></li><li class="listitem"><p>Composing an email message</p></li><li class="listitem"><p>Writing data to the filesystem</p></li></ul></div><p>Acs-templating does the following.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>When the acs-templating package opens an an ADP or Tcl file, it assumes the file is iso-8859-1.  If the output charset (OutputCharset) in the AOLserver config file is set, then acs-templating assumes it&#39;s that charset.  
 Writing Files</p></li><li class="listitem"><p>When the acs-templating package writes an an ADP or
           Tcl file, it assumes the file is iso-8859-1.  If the output
           charset (OutputCharset) in the AOLserver config file is set,
-          then acs-templating assumes it's that charset.  </p></li></ul></div><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a name="Tcl_Source_File_Character_Set"></a>Tcl Source File Character Set</h4></div></div></div><div class="blockquote"><blockquote class="blockquote"><p>There are two classes of Tcl files loaded by the system;
+          then acs-templating assumes it&#39;s that charset.  </p></li></ul></div><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a name="Tcl_Source_File_Character_Set"></a>Tcl Source File Character Set</h4></div></div></div><div class="blockquote"><blockquote class="blockquote"><p>There are two classes of Tcl files loaded by the system;
       library files loaded at server startup, and page script files,
       which are run on each page request.</p><p><span class="emphasis"><em>Should we require all Tcl files be stored as UTF8?
       That seems too much of a burden on developers.</em></span></p><p><span class="emphasis"><em>50.10</em></span> Tcl library files can be authored
@@ -198,7 +198,7 @@ Writing Files</p></li><li class="listitem"><p>When the acs-templating package wr
           override the default system choice of character set when parsing
           and validating user form data. <em><span class="remark">INCOMPLETE - form
           widgets in acs-templating/tcl/date-procs.tcl are not
-          internationalized.  Also, acs-templating's UI needs to be
+          internationalized.  Also, acs-templating&#39;s UI needs to be
           internationalized by replacing all user-visible strings with
           message keys.</span></em></p><p><span class="emphasis"><em>50.30.10</em></span>In Japan and some
            other Asian languages where there are multiple character set
@@ -243,7 +243,7 @@ of a text file being uploaded must be provided.</p><p><span class="emphasis"><em
 data to the content repository as well</em></span></p></blockquote></div></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="VI.H_Sorting_and_Searching"></a>Sorting and Searching</h3></div></div></div><div class="blockquote"><blockquote class="blockquote"><p><span class="emphasis"><em>80.10</em></span> Support API for correct collation
 (sorting order) on lists of strings in locale-dependent way.</p><p><span class="emphasis"><em>80.20</em></span> For the Tcl API, we will say that
 locale-dependent sorting will use Oracle SQL operations (i.e., we
-won't provide a Tcl API for this). We require a Tcl API
+won&#39;t provide a Tcl API for this). We require a Tcl API
 function to return the correct incantation of NLS_SORT to use for a
 given locale with <code class="literal">ORDER BY</code> clauses in
 queries.</p><p><span class="emphasis"><em>80.40</em></span> The system must handle full-text
@@ -256,7 +256,7 @@ times.</p><p><span class="emphasis"><em>90.30</em></span> Store all dates and ti
 universal time zone, UTC.</p><p><span class="emphasis"><em>90.40</em></span> For a registered users, a time
 zone preference should be stored.</p><p><span class="emphasis"><em>90.50</em></span> For a non-registered user a time
 zone preference should be attached via a session or else UTC should
-be used to display every date and time.</p><p><span class="emphasis"><em>90.60</em></span> The default if we can't
+be used to display every date and time.</p><p><span class="emphasis"><em>90.60</em></span> The default if we can&#39;t
 determine a time zone is to display all dates and times in some
 universal time zone such as GMT.</p></blockquote></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="VI.H_Database"></a>Database</h3></div></div></div><div class="blockquote"><blockquote class="blockquote"><p><span class="emphasis"><em>100.10</em></span> Since UTF8 strings can use up to
 three (UCS2) or six (UCS4) bytes per character, make sure that

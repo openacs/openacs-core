@@ -82,7 +82,7 @@ psql:myfirstpackage-create.sql:15: NOTICE:  CREATE TABLE will create implicit tr
                          0
 (1 row)
 
-[$OPENACS_SERVICE_NAME postgresql]$</pre><p>If there are errors, use them to debug the sql file and try again.  If there are errors in the database table creation, you may need to run the drop script to drop the table so that you can recreate it.  The drop script will probably have errors since some of the things it's trying to drop may be missing.  They can be ignored.</p><p>Once you get the same output as shown above, test the drop script:</p><pre class="screen">[$OPENACS_SERVICE_NAME postgresql]$ <strong class="userinput"><code>psql service0 -f myfirstpackage-drop.sql</code></strong>
+[$OPENACS_SERVICE_NAME postgresql]$</pre><p>If there are errors, use them to debug the sql file and try again.  If there are errors in the database table creation, you may need to run the drop script to drop the table so that you can recreate it.  The drop script will probably have errors since some of the things it&#39;s trying to drop may be missing.  They can be ignored.</p><p>Once you get the same output as shown above, test the drop script:</p><pre class="screen">[$OPENACS_SERVICE_NAME postgresql]$ <strong class="userinput"><code>psql service0 -f myfirstpackage-drop.sql</code></strong>
 
  content_type__drop_type
 -------------------------

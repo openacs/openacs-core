@@ -152,7 +152,7 @@ create table <span class="bold"><strong>acs_objects</strong></span> (
       ..., and <span class="emphasis"><em>F</em></span> can be derived by ascertaining that these objects 
       are children of <span class="emphasis"><em>A</em></span> by traversing the context hierarchy.
       As it turns out, hierarchical queries are expensive.  As
-      Rafael Schloming put it so aptly, <span class="emphasis"><em>Oracle can't deal with hierarchies for shit.</em></span> 
+      Rafael Schloming put it so aptly, <span class="emphasis"><em>Oracle can&#39;t deal with hierarchies for shit.</em></span> 
     </p><p>
       One way to solve this problem is to cache a flattened view of the context tree like so: 
     </p><div class="informaltable"><table class="informaltable" cellspacing="0" border="1"><colgroup><col align="center" class="c1"><col align="center" class="c2"><col align="center" class="c3"></colgroup><thead><tr><th align="center">object</th><th align="center">ancestor</th><th align="center">n_generations</th></tr></thead><tbody><tr><td align="center">A</td><td align="center">A</td><td align="center">0</td></tr><tr><td align="center">B</td><td align="center">B</td><td align="center">0</td></tr><tr><td align="center">B</td><td align="center">A</td><td align="center">1</td></tr><tr><td align="center">C</td><td align="center">C</td><td align="center">0</td></tr><tr><td align="center">C</td><td align="center">A</td><td align="center">1</td></tr><tr><td align="center">D</td><td align="center">D</td><td align="center">0</td></tr><tr><td align="center">D</td><td align="center">B</td><td align="center">1</td></tr><tr><td align="center">D</td><td align="center">A</td><td align="center">2</td></tr><tr><td align="center">E</td><td align="center">E</td><td align="center">0</td></tr><tr><td align="center">E</td><td align="center">B</td><td align="center">1</td></tr><tr><td align="center">E</td><td align="center">A</td><td align="center">2</td></tr><tr><td align="center">F</td><td align="center">F</td><td align="center">0</td></tr><tr><td align="center">F</td><td align="center">C</td><td align="center">1</td></tr><tr><td align="center">F</td><td align="center">A</td><td align="center">2</td></tr></tbody></table></div><p>
@@ -223,7 +223,7 @@ end;
 </pre><p>
       One final note about 
       <a class="xref" href="permissions-tediously-explained.html#acs_objects">acs_objects</a>. By setting
-      an object's <code class="computeroutput">security_inherit_p</code> column to 'f', you can stop permissions
+      an object&#39;s <code class="computeroutput">security_inherit_p</code> column to 'f', you can stop permissions
       from cascading down the context tree. In the following example, Joe does not have
       the read permissions on <span class="emphasis"><em>C</em></span> and <span class="emphasis"><em>F</em></span>. 
     </p><div class="informaltable"><table class="informaltable" cellspacing="0" border="1"><colgroup><col align="center" class="c1"><col align="center" class="c2"><col align="center" class="c3"></colgroup><tbody><tr><td colspan="3" align="center">
@@ -615,7 +615,7 @@ from
     as
       exists_p char(1);
     begin
-      -- XXX This must be fixed: -1 shouldn't be hardcoded (it is the public)
+      -- XXX This must be fixed: -1 shouldn&#39;t be hardcoded (it is the public)
       select decode(count(*),0,'f','t') into exists_p
         from <a class="xref" href="permissions-tediously-explained.html#acs_object_party_privilege_map">acs_object_party_privilege_map</a>
        where object_id = permission_p.object_id

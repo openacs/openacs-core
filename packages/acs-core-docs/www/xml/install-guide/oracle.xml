@@ -15,7 +15,7 @@
     If you are installing PostGreSQL instead of Oracle, skip this section.
   </para>
   <para>
-    OpenACS &version; will install with Oracle 9i but has not been extensively tested so may still have bugs or tuning issues.  See <ulink url="http://www.piskorski.com/docs/oracle.html">Andrew Piskorski's Oracle 9i notes</ulink> for guidance.
+    OpenACS &version; will install with Oracle 9i but has not been extensively tested so may still have bugs or tuning issues.  See <ulink url="http://www.piskorski.com/docs/oracle.html">Andrew Piskorski&#39;s Oracle 9i notes</ulink> for guidance.
   </para>
   
   <para>
@@ -24,9 +24,9 @@
        
     <para>
       
-      This document assumes that you'll be installing Oracle on the same
+      This document assumes that you&#39;ll be installing Oracle on the same
       box as AOLserver. For more details on a remote Oracle installation,
-      see Daryl Biberdorf's <ulink
+      see Daryl Biberdorf&#39;s <ulink
       url="http://openacs.org/new-file-storage/one-file?file_id=273">document</ulink>.
       
     </para>
@@ -38,7 +38,7 @@
         
         
         <para><ulink url="http://dizwell.com/html/oracle_on_linux.html">Dizwell - Howard
-        Roger's company - on Oracle on Linux</ulink></para>
+        Roger&#39;s company - on Oracle on Linux</ulink></para>
       </listitem>
       <listitem>
         <para><ulink url="http://puschitz.com/">Werner Puschitz - Oracle on Red Hat Linux</ulink></para>
@@ -55,7 +55,7 @@
       Production Oracle systems should run on certified platforms.  Follow the
       <ulink
       url="http://metalink.oracle.com/metalink/plsql/ml2_documents.showDocument?p_database_id=NOT&amp;p_id=223718.1">metalink
-      note 223718.1</ulink>to find certified platforms. If you don't have
+      note 223718.1</ulink>to find certified platforms. If you don&#39;t have
       metalink access, take a look at the Oracle on Linux FAQ: <ulink
       url="http://otn.oracle.com/tech/linux/htdocs/linux_techsupp_faq.html#Linux_Distributions">Which
       Linux Distributions Are Directly Supported By Oracle?</ulink>. In summary,
@@ -63,7 +63,7 @@
     </para>
 
     <para>
-      If you don't have an account at <ulink url="http://otn.oracle.com">OTN</ulink>
+      If you don&#39;t have an account at <ulink url="http://otn.oracle.com">OTN</ulink>
       get one: you can download the Oracle software from the <ulink
       url="http://otn.oracle.com/software/products/database/oracle10g/index.html">
       Oracle Downloads</ulink> page. It is also get the CDs shipped to you for
@@ -110,7 +110,7 @@
       To be able to download a patchset, you need a (to-pay-for) account on <ulink
       url="metalink.oracle.com">Metalink</ulink>. You may find the appropriate
       patchset by following <ulink
-      url="http://openacs.org/forums/message-view?message_id=33004">Andrew's
+      url="http://openacs.org/forums/message-view?message_id=33004">Andrew&#39;s
       suggestion</ulink>.
     </para>
 
@@ -125,7 +125,7 @@
       printable PDFs and full-text search. Altogether there is more than
       20.000 pages of documentation, so do not expect to understand Oracle
       within in a few hours. The best starting pointing into Oracle is the
-      Concepts book. Here's the <ulink
+      Concepts book. Here&#39;s the <ulink
       url="http://otn.oracle.com/pls/tahiti/tahiti.to_toc?pathname=server.817%2Fa76965%2Ftoc.htm&amp;remark=docindex">8i
       version</ulink> and the <ulink
       url="http://otn.oracle.com/pls/db92/db92.to_toc?pathname=server.920%2Fa96524%2Ftoc.htm&amp;remark=docindex">9.2
@@ -136,7 +136,7 @@
     <para>
       To give you an idea of how configurable Oracle is and how much thought
       you may need to put into buying the proper hardware and creating a sane
-      setup, you should thoroughly read Cary Millsap's <ulink
+      setup, you should thoroughly read Cary Millsap&#39;s <ulink
       url="http://www.miracleas.dk/BAARF/0.Millsap1996.08.21-VLDB.pdf">Configuring
       Oracle Server for VLDB</ulink> and the <ulink
       url="http://download-west.oracle.com/docs/html/A97297_01/appg_ofa.htm#sthref787">Optimal
@@ -182,7 +182,7 @@ nls_date_format = &quot;YYYY-MM-DD&quot;</programlisting>
       url="http://openacs.org/forums/message-view?message_id=28829">thread</ulink>
       and <ulink
       url="http://openacs.org/forums/message-view?message_id=67108">Andrew
-      Piskorski's mini-guide</ulink>.
+      Piskorski&#39;s mini-guide</ulink>.
 
     </para>
 
@@ -282,7 +282,7 @@ root:/ora8# exit</programlisting>
 
       <listitem><para>
 
-          Set up the <computeroutput>oracle</computeroutput> user's
+          Set up the <computeroutput>oracle</computeroutput> user&#39;s
           environment
 
         </para>
@@ -920,7 +920,7 @@ Changing groupname of /ora8/m01/app/oracle/oraInventory to oinstall.
             Run the script. Switch to the oracle user first
             to set the environment appropriately and then do
             <command>su</command> to get root privileges, while keeping
-            the oracle user's enviroment.
+            the oracle user&#39;s enviroment.
             </para>
 
             <programlisting>

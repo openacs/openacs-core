@@ -9,7 +9,7 @@ Chapter 10. Advanced Topics"
 		    rightLink="tutorial-admin-pages" rightLabel="Next">
 		<div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="tutorial-comments" id="tutorial-comments"></a>Adding Comments</h2></div></div></div><p>You can track comments for any ACS Object. Here we'll track
+<a name="tutorial-comments" id="tutorial-comments"></a>Adding Comments</h2></div></div></div><p>You can track comments for any ACS Object. Here we&#39;ll track
 comments for notes. On the note-edit.tcl/adp pair, which is used to
 display individual notes, we want to put a link to add comments at
 the bottom of the screen. If there are any comments, we want to

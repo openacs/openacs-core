@@ -11,11 +11,11 @@ Chapter 10. Advanced Topics"
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="tutorial-future-topics" id="tutorial-future-topics"></a>Future
 Topics</h2></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
-<li class="listitem"><p>How to enforce security so that users can't change other users
-records</p></li><li class="listitem"><p>How to use the content management tables so that ... what?</p></li><li class="listitem"><p>How to change the default stylesheets for Form Builder HTML
+<li class="listitem"><p>How to enforce security so that users can&#39;t change other
+users records</p></li><li class="listitem"><p>How to use the content management tables so that ... what?</p></li><li class="listitem"><p>How to change the default stylesheets for Form Builder HTML
 forms.</p></li><li class="listitem"><p>How to make your package searchable with OpenFTS/Oracle</p></li><li class="listitem"><p>How to prepare pagelets for inclusion in other pages</p></li><li class="listitem"><p>How and when to put procedures in a tcl procedure library</p></li><li class="listitem"><p>More on ad_form - data validation, other stuff. (plan to draw
-from Jon Griffin's doc)</p></li><li class="listitem"><p>partialquery in xql</p></li><li class="listitem"><p>How to use the html/text entry widget to get the "does this look
-right" confirm page</p></li><li class="listitem"><p>APM package dependencies</p></li>
+from Jon Griffin&#39;s doc)</p></li><li class="listitem"><p>partialquery in xql</p></li><li class="listitem"><p>How to use the html/text entry widget to get the "does this
+look right" confirm page</p></li><li class="listitem"><p>APM package dependencies</p></li>
 </ul></div><p>See also the <a class="ulink" href="http://openacs.org/faq/one-faq?faq_id=43841" target="_top">OpenACS
 Programming FAQ</a>
 </p>

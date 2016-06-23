@@ -494,8 +494,8 @@ PostgreSQL 9.4.* and Tcl 8.5.*.
     <itemizedlist>
       <listitem>
         <para>
-          Made changes that extend acs-kernel's create_type and create_attribute procs,
-          so they're optionally able to create sql tables and columns.  Optional metadata
+          Made changes that extend acs-kernel&#39;s create_type and create_attribute procs,
+          so they&#39;re optionally able to create sql tables and columns.  Optional metadata
           params allow for the automatic generation of foreign key references, check
           exprs, etc.
         </para>
@@ -512,13 +512,13 @@ PostgreSQL 9.4.* and Tcl 8.5.*.
           Added new package dependency type, "embeds".  This is a variant of the
           "extends" package dependency type added in OpenACS 5.5.0.  It allows one
           to write embeddable packages, with scripts made visible in client packages
-          using URLs which include the embedded package's package key.  An example
+          using URLs which include the embedded package&#39;s package key.  An example
           embeddable package might be a rewritten "attachments" package.  The current
           implementation requires a global instance be mounted, and client packages
           generate urls to that global instance.  Among other things, this leads to
           the user navigating to the top-level subsite, losing any subsite theming
           that might be associated with a community.  Using "embeds", a rewritten
-          package would run in the client package's context, maintaining theming and
+          package would run in the client package&#39;s context, maintaining theming and
           automatically associating attachments with the client package.
         </para>
         <para>
@@ -611,7 +611,7 @@ PostgreSQL 9.4.* and Tcl 8.5.*.
       <listitem>
         <para>This is a minor bugfix release.
         </para>
-        <para>Site node caching was removed as doesn't work correctly</para>
+        <para>Site node caching was removed as doesn&#39;t work correctly</para>
         <para>Critical issues with search on oracle were fixed</para>
         <para>More html strict work etc</para>
       </listitem>
@@ -640,9 +640,9 @@ PostgreSQL 9.4.* and Tcl 8.5.*.
               in the API browser for details.
               </para>
         <para>Templates have been modified to comply with HTML strict</para>
-        <para>The Search package's results page has been improved</para>
+        <para>The Search package&#39;s results page has been improved</para>
         <para>TinyMCE WYSIWYG support has been added, RTE and HTMLArea support dropped</para>
-        <para>acs-mail-lite's send has been cleaned up to properly encode content, to handle
+        <para>acs-mail-lite&#39;s send has been cleaned up to properly encode content, to handle
               file attachments, etc.  "complex-send" will disappear from acs-core in a future
               release.</para>
       </listitem>
@@ -855,7 +855,7 @@ entire &majorversion;.&minorversion; release sequence <xref linkend="changelog">
         You may want to begin by reading our installation documentation for
         <xref linkend="unix-install"/>.  Note that the Windows documentation is
         not current for OpenACS &version;, but an alternative is to use John
-        Sequeira's <ulink
+        Sequeira&#39;s <ulink
         url="http://www.pobox.com/~johnseq/projects/oasisvm/">Oasis VM
         project</ulink>.
   </para>
@@ -889,7 +889,7 @@ entire &majorversion;.&minorversion; release sequence <xref linkend="changelog">
           authentication, password management, account creation, and account import mechanisms.
 
           This includes improvements to the basic cookie handling, so logins can be expired without the 
-          user's identity being completely lost. You can set login to expire after a certain period 
+          user&#39;s identity being completely lost. You can set login to expire after a certain period 
           (e.g. 8 hours, then password must be refreshed), or you can have all issues login cookies
           expired at once, e.g. if you have left a permanent login cookie on a public machine somewhere.
         </para>
@@ -907,12 +907,12 @@ entire &majorversion;.&minorversion; release sequence <xref linkend="changelog">
           administration, your workspace, and login/logout, and is rendered
           using CSS.
 
-          And there's a new community template
+          And there&#39;s a new community template
           (/packages/acs-subsite/www/group-master), which provides useful
           navigation to the applications and administrative UI in a
           subsite.
 
-          In addition, there's new, simpler UI for managing members of a
+          In addition, there&#39;s new, simpler UI for managing members of a
           subsite, instantiating and mounting applications, setting
           permissions, parameters, etc.
 
@@ -923,7 +923,7 @@ entire &majorversion;.&minorversion; release sequence <xref linkend="changelog">
 
           The list builder has been added for easily generating templated
           tables and lists, with features such as filtering, sorting,
-          actions on multiple rows with checkboxes, etc. Most of all, it's
+          actions on multiple rows with checkboxes, etc. Most of all, it&#39;s
           fast to use, and results in consistently-looking,
           consistently-behaving, templated tables.
         </para>
@@ -956,7 +956,7 @@ entire &majorversion;.&minorversion; release sequence <xref linkend="changelog">
 
       <listitem>
         <para>
-          Who's online feature.
+          Who&#39;s online feature.
         </para>
       </listitem>
 

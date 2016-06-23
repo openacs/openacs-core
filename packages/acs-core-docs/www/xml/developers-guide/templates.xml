@@ -22,7 +22,7 @@ cleanly separate <emphasis>application logic</emphasis> from <emphasis>display
 logic</emphasis>. The intent is to have all of the logic related to
 manipulating the database and other application state data in one
 place, and all the logic related to displaying the state of the
-application in another place.  This gives developer's quicker
+application in another place.  This gives developer&#39;s quicker
 customization and easier upgrades, and also allows developers and
 graphic designers to work more independently.
 </para>
@@ -43,7 +43,7 @@ template related tags, and data source substitutions.
 In the overall context of our example OpenACS Notes application, this
 document will show you how to set up a simple templated page that
 displays a form to the user for entering new notes into the system. In
-later sections of the DG, we'll discuss how to develop the pages that
+later sections of the DG, we&#39;ll discuss how to develop the pages that
 actually add notes to the database, how to provide a separate instance
 of the Notes application to every user and how to design appropriate
 access control policies for the system.
@@ -62,8 +62,8 @@ users to enter data into the database. Typically, this takes two
 pages: one that displays a form for data entry, and another page that
 runs the code to update the database and tells the user whether the
 operation failed. In this document, we will use the template system to
-build the first of these pages. This isn't a very interesting use of
-the system since we won't be displaying much data, but we'll cover
+build the first of these pages. This isn&#39;t a very interesting use of
+the system since we won&#39;t be displaying much data, but we&#39;ll cover
 more on that end later.
 </para>
 
@@ -119,14 +119,14 @@ Some things to note about this code:
 <itemizedlist>
 <listitem><para>
 The procedure <link linkend="tcl-doc-ad-page-contract">ad_page_contract</link> is
-always the first thing a <computeroutput>.tcl</computeroutput> file calls, if it's under
+always the first thing a <computeroutput>.tcl</computeroutput> file calls, if it&#39;s under
 the www/ directory (i.e. not a Tcl library file). It does validation
 of input values from the HTTP request (i.e. form variables) and in
 this case, the <computeroutput>-properties</computeroutput> clause is used to set up the
 data sources that we will ship over to the <computeroutput>.adp</computeroutput> part of
 the page. In this case, we only use the simplest possible kind of data
 source, called a <computeroutput>onevalue</computeroutput>, which hold just a single
-string value.  Later on, we'll see how to use more powerful kinds of
+string value.  Later on, we&#39;ll see how to use more powerful kinds of
 data sources for representing multiple rows from an SQL query.  You
 also include overall documentation for the page in the contract, and
 OpenACS has automatic tools that extract this documentation and make it
@@ -211,7 +211,7 @@ logic part of the page is just a <computeroutput>.tcl</computeroutput> that sets
 <emphasis>data sources</emphasis> that are used by the display part of the page. The
 display part of the page is an <computeroutput>.adp</computeroutput> file with some
 special tags and notations for dealing with display logic and
-inserting properties into the text of the page. Later on we'll get
+inserting properties into the text of the page. Later on we&#39;ll get
 into templates more deeply, and show how to use database queries as
 data sources.
 </para>

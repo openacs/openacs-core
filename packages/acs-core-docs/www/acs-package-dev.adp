@@ -79,7 +79,7 @@ Internationalization</a></span></dt><dd><dl>
 Overview</a></span></dt><dt><span class="sect1"><a href="i18n-introduction">How
 Internationalization/Localization works in OpenACS</a></span></dt><dt><span class="sect1"><a href="i18n-convert">How to
 Internationalize a Package</a></span></dt><dt><span class="sect1"><a href="i18n-design">Design
-Notes</a></span></dt><dt><span class="sect1"><a href="i18n-translators">Translator's Guide</a></span></dt>
+Notes</a></span></dt><dt><span class="sect1"><a href="i18n-translators">Translator&#39;s Guide</a></span></dt>
 </dl></dd><dt><span class="appendix"><a href="cvs-tips">D. Using CVS
 with an OpenACS Site</a></span></dt>
 </dl>

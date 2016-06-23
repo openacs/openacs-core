@@ -21,10 +21,10 @@ two characters to save room.
 </p><div class="informaltable"><table class="informaltable" cellspacing="0" border="1"><colgroup><col><col></colgroup><thead><tr><th>Constraint type</th><th>Abbreviation</th></tr></thead><tbody><tr><td>references (foreign key)</td><td>fk</td></tr><tr><td>unique</td><td>un</td></tr><tr><td>primary key</td><td>pk</td></tr><tr><td>check</td><td>ck</td></tr><tr><td>not null</td><td>nn</td></tr><tr><td>index</td><td>idx</td></tr></tbody></table></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="eng-standards-constraint-naming-format"></a>Format of constraint name</h3></div></div></div><p>
 &lt;table name&gt;_&lt;column_name&gt;_&lt;constraint abbreviation&gt;
 </p><p>
-In reality, this won't be possible because of the character limitation on 
+In reality, this won&#39;t be possible because of the character limitation on 
 names inside oracle. When the name is too long, we will follow these two
 steps in order:
-</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p> Abbreviate the table name with the table's initials (e.g. users -&gt; u and users_contact -&gt; uc).
+</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p> Abbreviate the table name with the table&#39;s initials (e.g. users -&gt; u and users_contact -&gt; uc).
 </p></li><li class="listitem"><p> Truncate the column name until it fits.</p></li></ol></div><p>
 If the constraint name is still too long, you should consider rewriting your
 entire data model :)
@@ -52,8 +52,8 @@ create table constraint_naming_example (
        constraint cne_example_id_one_line_unq unique(example_id, one_line_description)
 );
 
-</pre></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="eng-standards-constraint-naming-pk"></a>Why it's good to name primary keys</h3></div></div></div><p>
-Naming primary keys might not have any obvious advantages. However, here's an 
+</pre></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="eng-standards-constraint-naming-pk"></a>Why it&#39;s good to name primary keys</h3></div></div></div><p>
+Naming primary keys might not have any obvious advantages. However, here&#39;s an 
 example where naming the primary key really helps (and this is by no means
 a rare case!
 </p><pre class="programlisting">
@@ -71,7 +71,7 @@ Execution Plan
    3	1     INDEX (UNIQUE SCAN) OF 'EXAMPLE_TOPICS_TOPIC_ID_PK' (UNI
 	  QUE)
 </pre><p>
-Isn't it nice to see "EXAMPLE_TOPICS_TOPIC_ID_PK" in the trace
+Isn&#39;t it nice to see "EXAMPLE_TOPICS_TOPIC_ID_PK" in the trace
 and know exactly which table oracle is using at each step?
 </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="eng-standards-constraint-naming-nn"></a>Naming not null constraints is optional...</h3></div></div></div><p>
 People disagree on whether or not we should be naming not null
@@ -81,7 +81,7 @@ requirement.
 </p><p>
 </p><div>About Naming the not null constraints</div><p>
 </p><p>
-Though naming "not null" constraints doesn't help immeditately in error
+Though naming "not null" constraints doesn&#39;t help immeditately in error
 debugging (e.g. the error will say something like 
 "Cannot insert null value into column"), we recommend naming not null
 constraints to be consistent in our naming of all constraints.

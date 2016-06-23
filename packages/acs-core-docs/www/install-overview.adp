@@ -7,7 +7,7 @@ Overview</property>
 <include src="/packages/acs-core-docs/lib/navheader"
 		    leftLink="acs-admin" leftLabel="Prev"
 		    title="
-Part II. Administrator's Guide"
+Part II. Administrator&#39;s Guide"
 		    rightLink="install-steps" rightLabel="Next">
 		<div class="chapter">
 <div class="titlepage"><div><div><h2 class="title">
@@ -25,7 +25,7 @@ OpenACS documentation staff.</div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 		    leftLink="acs-admin" leftLabel="Prev" leftTitle="
-Part II. Administrator's Guide"
+Part II. Administrator&#39;s Guide"
 		    rightLink="install-steps" rightLabel="Next" rightTitle="Basic Steps"
 		    homeLink="index" homeLabel="Home" 
 		    upLink="acs-admin" upLabel="Up"> 

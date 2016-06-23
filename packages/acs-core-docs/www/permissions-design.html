@@ -12,10 +12,10 @@ consistent interface. For example, we might decide that the transaction that
 bans a user from a sub-site is an operation a site administrator is able to
 assign to a particular user. Or perhaps an application developer might decide
 that viewing a certain set of pages within the application is an operation to
-be individually granted or revoked from a user. It's expected that the
+be individually granted or revoked from a user. It&#39;s expected that the
 Permissions system will be seeing a lot of use - almost every page will make
 at least one permissions API call, and some will make several.</p><p>For programmers, the Permissions API provides a means to work with access
-control in a consistent manner. If a programmer's OpenACS package defines new
+control in a consistent manner. If a programmer&#39;s OpenACS package defines new
 methods for itself, the Permissions API must provide simple calls to
 determine whether the current user is authorized to perform the given method.
 In addition, using the Permissions API, queries should easily select only
@@ -92,12 +92,12 @@ which:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-t
 a member of</p></li><li class="listitem"><p>privileges get associated with the methods of any other privileges they
 have taken methods from (at any level) (see
 <code class="computeroutput">acs_privilege_hierarchy</code>)</p></li><li class="listitem"><p>objects get access control from direct grants, or inherit permissions
-from their context (unless the "don't inherit" flag is
+from their context (unless the "don&#39;t inherit" flag is
 set)</p></li></ul></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="permissions-design-transactions"></a>Legal Transactions</h3></div></div></div><p>There are three essential areas in which all transactions in the
 permissions system fall:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Modification of methods and privileges</p></li><li class="listitem"><p>Modification of permissions</p></li><li class="listitem"><p>Queries on permissions</p></li></ul></div><p><span class="strong"><strong>"Modification of methods and privileges."</strong></span> This
 refers to actions that happen mainly at package installation time - a package
 will create a number of methods for its own use, then associate them with the
-system's standard privileges, or new privileges which the package has
+system&#39;s standard privileges, or new privileges which the package has
 created. The association step might also happen later, if the site-wide
 administrator chooses to change permissions policy.</p><p>These steps involve directly manipulating the <code class="computeroutput">acs_methods</code>,
 <code class="computeroutput">acs_privileges</code>, and <code class="computeroutput">acs_privilege_method_rules</code> tables. A
@@ -170,7 +170,7 @@ of all possible permissions and a list of all parties in the system. (For
 large sites, some future search mechanism will be necessary.) After choosing
 privileges to grant, the user is returned to the "edit privileges for
 one object" screen.</p><p>If it makes sense, the system will also display a checkbox which the user
-may select to toggle whether permissions are inherited from the object's
+may select to toggle whether permissions are inherited from the object&#39;s
 context.</p><p>There are a number of potential future enhancements for the permissions
 UI, outlined below.</p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="permissions-design-configure"></a>Configuration/Parameters</h3></div></div></div><p>There are no configuration options for the permissions system.</p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="permissions-design-future"></a>Future Improvements/Areas of Likely Change</h3></div></div></div><p>The most important future changes to the Permissions system are likely to
 be in the UI:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>There should be a page displaying a list of all objects for which the

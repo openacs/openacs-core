@@ -13,14 +13,14 @@ restricts the application developer to representing a "flat group"
 that contains only users: The <code class="computeroutput">user_groups</code> table may contain the
 <code class="computeroutput">group_id</code> of a parent group, but parent-child relationship
 support is limited because it only allows one kind of relationship between
-groups to be represented. Moreover, the Oracle database's limited support
+groups to be represented. Moreover, the Oracle database&#39;s limited support
 for tree-like structures makes the queries over these relationships
 expensive.</p><p>In addition, the Module Scoping design in OpenACS 3.0 introduced a
 <span class="emphasis"><em>party</em></span> abstraction - a thing that is a person or a group of people -
 though not in the form of an explicit table. Rather, the triple of
 <code class="computeroutput">scope</code>, <code class="computeroutput">user_id</code>, and <code class="computeroutput">group_id</code> columns
 was used to identify the party. One disadvantage of this design convention is
-that it increases a data model's complexity by requiring the programmer
+that it increases a data model&#39;s complexity by requiring the programmer
 to:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>add these three columns to each "scoped" table</p></li><li class="listitem"><p>define a multi-column check constraint to protect against data corruption
 (e.g., a row with a <code class="computeroutput">scope</code> value of "group" but a null
 <code class="computeroutput">group_id</code>)</p></li><li class="listitem"><p>perform extra checks in <code class="computeroutput">Tcl</code> and <code class="computeroutput">PL/SQL</code>
@@ -45,11 +45,11 @@ on membership) trades against the complexity of the code.</p></div><div class="s
 
 </span></dt><dd><p>The set of all defined persons. To allow easy sorting of persons, the
 name requirement <a class="link" href="groups-requirements.html#groups-requirements-30-10">30.10</a> is met by
-splitting the person's name into two columns: <code class="computeroutput">first_names</code> and
+splitting the person&#39;s name into two columns: <code class="computeroutput">first_names</code> and
 <code class="computeroutput">last_name</code>.</p></dd><dt><span class="term"><code class="computeroutput">users</code>
 
 </span></dt><dd><p>The set of all registered users; this table includes information about
-the user's email address and the user's visits to the site.</p></dd><dt><span class="term"><code class="computeroutput">user_preferences</code>
+the user&#39;s email address and the user&#39;s visits to the site.</p></dd><dt><span class="term"><code class="computeroutput">user_preferences</code>
 
 </span></dt><dd><p>Preferences for the user.</p></dd><dt><span class="term"><code class="computeroutput">groups</code>
 
@@ -76,9 +76,9 @@ appropriate<code class="computeroutput">rel_id</code> from the <code class="comp
 When a specialized type of group is required, the group type can be extended
 by an application developer. Membership constraints can be specified at
 creation time by passing a parent group to the constructor.</p><p>The <code class="computeroutput">membership_rels</code> and <code class="computeroutput">composition_rels</code> tables indicate
-a group's direct members and direct components; these tables do not
+a group&#39;s direct members and direct components; these tables do not
 provide a record of the members or components that are in the group by virtue
-of being a member or component of one of the group's component groups.
+of being a member or component of one of the group&#39;s component groups.
 Site pages will query group membership often, but the network of component
 groups can become a very complex directed acyclic graph and traversing this
 graph for every query will quickly degrade performance. To make membership
@@ -162,7 +162,7 @@ function person.name (
   person_id     persons.person_id%TYPE
 ) return varchar;
 </pre><p><span class="strong"><strong>User</strong></span></p><p><code class="computeroutput">acs_user.new</code> creates a new user and returns the <code class="computeroutput">user_id</code>.
-The function must be given the user's email address and the full name of
+The function must be given the user&#39;s email address and the full name of
 the user in two pieces: <code class="computeroutput">first_names</code> and <code class="computeroutput">last_name</code>. All
 other fields are optional. The interface for this function is:</p><pre class="programlisting">
 function acs_user.new (
@@ -194,7 +194,7 @@ function acs_user.receives_alerts_p (
   user_id       users.user_id%TYPE
 ) return varchar;
 </pre><p>Use the procedures <code class="computeroutput">acs_user.approve_email</code> and
-<code class="computeroutput">acs_user.unapprove_email</code> to specify whether the user's email
+<code class="computeroutput">acs_user.unapprove_email</code> to specify whether the user&#39;s email
 address is valid. The interface for these procedures are:</p><pre class="programlisting">
 procedure acs_user.approve_email (
   user_id       users.user_id%TYPE
@@ -232,7 +232,7 @@ function acs_group.member_p (
   party_id      parties.party_id%TYPE,
 ) return char;
 </pre><p><span class="strong"><strong>Membership Relationship</strong></span></p><p><code class="computeroutput">membership_rel.new</code> creates a new membership relationship type
-between two parties and returns the relationship type's <code class="computeroutput">rel_id</code>.
+between two parties and returns the relationship type&#39;s <code class="computeroutput">rel_id</code>.
 All fields are optional and default to null except for <code class="computeroutput">rel_type</code>
 which defaults to membership_rel. The interface for this function is:</p><pre class="programlisting">
 function membership_rel.new (
@@ -278,7 +278,7 @@ procedure membership_rel.delete (
   rel_id           membership_rels.rel_id%TYPE
 );
 </pre><p><span class="strong"><strong>Composition Relationship</strong></span></p><p><code class="computeroutput">composition_rel.new</code> creates a new composition relationship type
-and returns the relationship's <code class="computeroutput">rel_id</code>. All fields are optional
+and returns the relationship&#39;s <code class="computeroutput">rel_id</code>. All fields are optional
 and default to null except for <code class="computeroutput">rel_type</code> which defaults to
 composition_rel. The interface for this function is:</p><pre class="programlisting">
 function membership_rel.new (

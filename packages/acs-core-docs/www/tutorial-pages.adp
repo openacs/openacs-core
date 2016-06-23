@@ -16,15 +16,16 @@ OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="idp140641327080736" id="idp140641327080736"></a>Install some API</h3></div></div></div><p>As a workaround for missing content-repository functionality,
-copy a provided file into the directory for tcl files:</p><pre class="screen"><span class="action"><span class="action">cp /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/acs-core-docs/www/files/tutorial/note-procs.tcl /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackage/tcl/</span></span></pre><p>To make this file take effect, go to the <a class="ulink" href="/acs-admin/apm" target="_top">APM</a> and choose "Reload changed"
-for "MyFirstPackage".</p>
+copy a provided file into the directory for tcl files:</p><pre class="screen"><span class="action"><span class="action">cp /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/acs-core-docs/www/files/tutorial/note-procs.tcl /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackage/tcl/</span></span></pre><p>To make this file take effect, go to the <a class="ulink" href="/acs-admin/apm" target="_top">APM</a> and choose "Reload
+changed" for "MyFirstPackage".</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="idp140641353443984" id="idp140641353443984"></a>Page Map</h3></div></div></div><p>Our package will have two visible pages. The first shows a list
 of all objects; the second shows a single object in view or edit
 mode, and can also be used to add an object. The index page will
-display the list, but since we might reuse the list later, we'll
-put it in a seperate file and include it on the index page.</p><div class="figure">
+display the list, but since we might reuse the list later,
+we&#39;ll put it in a seperate file and include it on the index
+page.</p><div class="figure">
 <a name="idp140641353445344" id="idp140641353445344"></a><p class="title"><strong>Figure 9.5. Page
 Map</strong></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/tutorial-page-map.png" align="middle" alt="Page Map"></div></div>
 </div><br class="figure-break">
@@ -38,7 +39,7 @@ permissions, invoke the database queries, and modify variables, and
 the <code class="computeroutput">adp</code> page holds html. The
 <code class="computeroutput">-postgres.xql</code> and <code class="computeroutput">-oracle.xql</code> files contains
 database-specific SQL. The default page in any directory is
-<code class="computeroutput">index</code>, so we'll build that
+<code class="computeroutput">index</code>, so we&#39;ll build that
 first, starting with the tcl file:</p><pre class="screen">
 [$OPENACS_SERVICE_NAME postgresql]$<strong class="userinput"><code> cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackages/www</code></strong>
 [$OPENACS_SERVICE_NAME www]$ <strong class="userinput"><code>emacs index.tcl</code></strong>
@@ -47,7 +48,7 @@ ad_page_contract {
     This is the main page for the package.  It displays all of the Notes and provides links to edit them and to create new Notes.
 
     \@author Your Name (you\@example.com)
-    \@cvs-id $&zwnj;Id: index.tcl,v 1.2.22.1 2015/09/10 08:21:20 gustafn Exp $
+    \@cvs-id $&zwnj;Id: tutorial-pages.html,v 1.44.2.10 2016/06/21 07:44:36 gustafn Exp $
 }
 
 set page_title [ad_conn instance_name]
@@ -63,8 +64,8 @@ set context [list]
   &lt;property name="context"&gt;\@context;literal\@&lt;/property&gt;
 &lt;include src="/packages/myfirstpackage/lib/note-list"&gt;
 </pre><p>The index page includes the list page, which we put in /lib
-instead of /www to designate that it's available for reuse by other
-packages.</p><pre class="screen">
+instead of /www to designate that it&#39;s available for reuse by
+other packages.</p><pre class="screen">
 [$OPENACS_SERVICE_NAME www]$<strong class="userinput"><code> mkdir /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackage/lib</code></strong>
 [$OPENACS_SERVICE_NAME www]$<strong class="userinput"><code> cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackage/lib</code></strong>
 [$OPENACS_SERVICE_NAME lib]$ <strong class="userinput"><code>emacs note-list.tcl</code></strong>
@@ -126,7 +127,7 @@ ad_page_contract {
     This is the view-edit page for notes.
 
     \@author Your Name (you\@example.com)
-    \@cvs-id $&zwnj;Id: note-edit.tcl,v 1.3.2.1 2015/09/10 08:21:20 gustafn Exp $
+    \@cvs-id $&zwnj;Id: tutorial-pages.html,v 1.44.2.10 2016/06/21 07:44:36 gustafn Exp $
  
     \@param item_id If present, assume we are editing that note.  Otherwise, we are creating a new note.
 } {
@@ -185,7 +186,7 @@ ad_page_contract {
     This deletes a note
 
     \@author Your Name (you\@example.com)
-    \@cvs-id $&zwnj;Id: note-delete.tcl,v 1.3.2.1 2015/09/10 08:21:20 gustafn Exp $
+    \@cvs-id $&zwnj;Id: tutorial-pages.html,v 1.44.2.10 2016/06/21 07:44:36 gustafn Exp $
  
     \@param item_id The item_id of the note to delete
 } {
@@ -197,7 +198,7 @@ set title [content::item::get_title -item_id $item_id]
 mfp::note::delete -item_id $item_id
 
 ad_returnredirect "."
-# stop running this code, since we're redirecting
+# stop running this code, since we&#39;re redirecting
 abort
 
 # Local variables:

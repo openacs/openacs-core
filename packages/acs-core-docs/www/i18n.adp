@@ -18,7 +18,7 @@ Developers"
 Overview</a></span></dt><dt><span class="sect1"><a href="i18n-introduction">How
 Internationalization/Localization works in OpenACS</a></span></dt><dt><span class="sect1"><a href="i18n-convert">How to
 Internationalize a Package</a></span></dt><dt><span class="sect1"><a href="i18n-design">Design
-Notes</a></span></dt><dt><span class="sect1"><a href="i18n-translators">Translator's Guide</a></span></dt>
+Notes</a></span></dt><dt><span class="sect1"><a href="i18n-translators">Translator&#39;s Guide</a></span></dt>
 </dl>
 </div><div class="authorblurb">
 <p>By <a class="ulink" href="http://www.petermarklund.com/" target="_top">Peter Marklund</a> and <a class="ulink" href="http://www.pinds.com/" target="_top">Lars Pind</a>

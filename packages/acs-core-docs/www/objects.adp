@@ -31,19 +31,20 @@ create table notes (
     title             varchar(255) not null,
     body              varchar(1024)
 )
-</pre><p>We've omitted constraint names for the purpose of clarity.</p><p>Thinking further ahead, we can imagine doing any of the
+</pre><p>We&#39;ve omitted constraint names for the purpose of
+clarity.</p><p>Thinking further ahead, we can imagine doing any of the
 following things with Notes as well:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: opencircle;">
 <li class="listitem" style="list-style-type: circle"><p>Define access control policies on notes.</p></li><li class="listitem" style="list-style-type: circle"><p>Attach user comments on notes.</p></li><li class="listitem" style="list-style-type: circle"><p>Allow users to define custom fields to store on their notes.</p></li><li class="listitem" style="list-style-type: circle"><p>Automatically generate input forms or output displays for
-notes.</p></li><li class="listitem" style="list-style-type: circle"><p>Allow other applications to use notes in ways we don't know of
-yet.</p></li>
+notes.</p></li><li class="listitem" style="list-style-type: circle"><p>Allow other applications to use notes in ways we don&#39;t know
+of yet.</p></li>
 </ul></div><p>In OpenACS, the key to enabling these types of services on your
 application data is to take advantage of the Object System. The
-first question, then, is "Just what are objects, and what do you
-use them for anyway?". The short answer: objects are anything
-represented in the application's data model that will need to be
-managed by any central service in OpenACS, or that may be reusable
-in the context of future applications. Every object in the system
-is represented using a row in the <code class="computeroutput">acs_objects</code> table. This table defines all
+first question, then, is "Just what are objects, and what do
+you use them for anyway?". The short answer: objects are
+anything represented in the application&#39;s data model that will
+need to be managed by any central service in OpenACS, or that may
+be reusable in the context of future applications. Every object in
+the system is represented using a row in the <code class="computeroutput">acs_objects</code> table. This table defines all
 the standard attributes that are stored on every object, including
 its system-wide unique ID, object type, and some generic auditing
 columns.</p><p>To make use of the object system, you as the application
@@ -61,8 +62,9 @@ available to your application "for free."</p></li>
 </ul></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="objects-how-to-use" id="objects-how-to-use"></a>How to Use Objects</h3></div></div></div><p>Using ACS objects is straightforward: all that's required are a
-few extra steps in the design of your application data model.</p><p>In order to hook our Notes application into the object system,
+<a name="objects-how-to-use" id="objects-how-to-use"></a>How to Use Objects</h3></div></div></div><p>Using ACS objects is straightforward: all that&#39;s required
+are a few extra steps in the design of your application data
+model.</p><p>In order to hook our Notes application into the object system,
 we make some calls to use our <code class="computeroutput">notes</code> table as the basis for a new
 <span class="emphasis"><em>object type</em></span>. Object types
 are analogous to classes in programming languages such as C++ and
@@ -77,8 +79,9 @@ play a role similar to the data dictionary in Oracle. As in Java,
 object types can inherit attributes from a parent type, so the type
 system forms a hierarchy. Unlike Java, Oracle does not support this
 inheritance transparently, so we have to make sure we add our own
-bookkeeping code to keep everything consistent. Below you'll find
-the code needed to describe a new object type called <code class="computeroutput">notes</code> in your system.</p><p>Fire up your text editor and open the <code class="computeroutput">ROOT/packages/notes/sql/oracle/notes-create.sql</code>
+bookkeeping code to keep everything consistent. Below you&#39;ll
+find the code needed to describe a new object type called
+<code class="computeroutput">notes</code> in your system.</p><p>Fire up your text editor and open the <code class="computeroutput">ROOT/packages/notes/sql/oracle/notes-create.sql</code>
 (<code class="computeroutput">ROOT/packages/notes/sql/postgresql/notes-create.sql</code>
 for the PG version) file created when we <a class="link" href="packages" title="OpenACS Packages">created the package</a>.
 Then, do the following:</p><div class="sect3">
@@ -104,13 +107,13 @@ new object type called <code class="computeroutput">note</code>.
 This type is a subtype of the <code class="computeroutput">acs_object</code> type, which means that we want
 to inherit all of the basic attributes of all ACS objects. As
 mentioned, it will take some work on our part to make this happen,
-since Oracle can't do it automatically. In general, most basic
+since Oracle can&#39;t do it automatically. In general, most basic
 applications will define types that are simple subtypes of
 <code class="computeroutput">acs_object</code>.</p><p>Add entries to the <code class="computeroutput">acs_attributes</code> table to describe the data
 attributes of the new type. This data can eventually be used to do
 things like automatically generate user interfaces to manipulate
 the <code class="computeroutput">notes</code> table, though that
-functionality isn't yet available.</p><pre class="programlisting">
+functionality isn&#39;t yet available.</p><pre class="programlisting">
 declare 
  attr_id acs_attributes.attribute_id%TYPE; 
 begin
@@ -190,9 +193,9 @@ end note;
 / 
 show errors 
 </pre><p>You might be wondering what all the extra parameters are to
-these calls, since we haven't mentioned them before. These
+these calls, since we haven&#39;t mentioned them before. These
 parameters are needed to fill out information that will be stored
-about the object that's not stored directly in the table you
+about the object that&#39;s not stored directly in the table you
 defined. The OpenACS Object System defines these attributes on the
 type <code class="computeroutput">acs_object</code> since all
 objects should have these attributes. Internally, there are tables
@@ -205,9 +208,9 @@ domain to which the object belongs. It is used by the <a class="link" href="perm
 if no permissions are explicitly attached to the object, then the
 object inherits its permissions from the context. For example, if I
 had told you how to use the <a class="link" href="permissions" title="Groups, Context, Permissions">permissions</a> system to
-specify that an object OBJ was "read only", then any other object
-that used OBJ as its context would also be "read only" by default.
-We'll talk about this more later.</p>
+specify that an object OBJ was "read only", then any
+other object that used OBJ as its context would also be "read
+only" by default. We&#39;ll talk about this more later.</p>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="idp140641353326144" id="idp140641353326144"></a>Define a package body for type specific
@@ -268,11 +271,12 @@ as
 end note; 
 / 
 show errors; 
-</pre><p>That's pretty much it! As long as you use the <code class="computeroutput">note.new</code> function to create notes, and the
+</pre><p>That&#39;s pretty much it! As long as you use the <code class="computeroutput">note.new</code> function to create notes, and the
 <code class="computeroutput">note.delete</code> function to delete
-them, you'll be assured that the relationship each <code class="computeroutput">note</code> has with its corresponding
+them, you&#39;ll be assured that the relationship each <code class="computeroutput">note</code> has with its corresponding
 <code class="computeroutput">acs_object</code> is preserved.</p><p>The last thing to do is to make a file <code class="computeroutput">ROOT/packages/notes/sql/notes-drop.sql</code> so
-it's easy to drop the data model when, say, you're testing:</p><pre class="programlisting">
+it&#39;s easy to drop the data model when, say, you&#39;re
+testing:</p><pre class="programlisting">
 begin 
   acs_object_type.drop_type ('note'); 
 end; 
@@ -296,7 +300,7 @@ object type that is a subtype of <code class="computeroutput">acs_object</code>,
 system.</p><p>For example, for most applications, you will want to use objects
 to represent the data in your application that is user visible and
 thus requires access control. But other internal tables, views,
-mapping tables and so on probably don't need to be objects. As
+mapping tables and so on probably don&#39;t need to be objects. As
 before, this kind of design decision is mostly made on an
 application-by-application basis, but this is a good baseline from
 which to start.</p>
@@ -315,14 +319,14 @@ fields.</p></li><li class="listitem">
 to the <code class="computeroutput">context_id</code> attribute of
 an object. This field is used for a very specific purpose by the
 permissions system, and using this field in <span class="emphasis"><em>any other way whatsoever</em></span> is guaranteed
-to make your application act strangely.</p><p>As we'll see later, the Notes example will point each note
-object's <code class="computeroutput">context_id</code> to the
+to make your application act strangely.</p><p>As we&#39;ll see later, the Notes example will point each note
+object&#39;s <code class="computeroutput">context_id</code> to the
 package instance in which the note was created. The idea will be
 that in a real site, the administrator would create one package
 instance for every separate set of Notes (say, one per user). The
-instance would "own" all of the notes that it created, and the
-administrator would be able to use the package instance as the
-basis for access control, which is convenient.</p>
+instance would "own" all of the notes that it created,
+and the administrator would be able to use the package instance as
+the basis for access control, which is convenient.</p>
 </li>
 </ol></div><p>The reason behind these two rules is pretty straightforward:
 First, the OpenACS Object system itself is meant to be a generic
@@ -340,10 +344,10 @@ application that you do not absolutely need.</p><p>In the Notes example, the res
 we are careful to define our own attribute for <code class="computeroutput">owner_id</code> rather than overloading
 <code class="computeroutput">creation_user</code> from the objects
 table. But, since we will probably use <code class="computeroutput">creation_date</code> and so on for their intended
-purposes, we don't bother to define our own attributes to store
-that data again. This will entail joins with <code class="computeroutput">acs_objects</code> but that's OK because it makes
-the overall data model cleaner. The real lesson is that deciding
-exactly how and when to use inherited attributes is fairly
+purposes, we don&#39;t bother to define our own attributes to store
+that data again. This will entail joins with <code class="computeroutput">acs_objects</code> but that&#39;s OK because it
+makes the overall data model cleaner. The real lesson is that
+deciding exactly how and when to use inherited attributes is fairly
 straightforward, but requires a good amount of thought at design
 time even for simple applications.</p>
 </div><div class="sect2">
@@ -361,8 +365,8 @@ PL/SQL procedures defined above.</p></li><li class="listitem" style="list-style-
 <code class="computeroutput">acs_objects</code>. This means you
 should never use the fields in <code class="computeroutput">acs_objects</code> for application-specific
 purposes. This is especially true for the <code class="computeroutput">context_id</code> field.</p></li>
-</ul></div><div class="cvstag">($&zwnj;Id: objects.xml,v 1.9 2006/07/17 05:38:37
-torbenb Exp $)</div>
+</ul></div><div class="cvstag">($&zwnj;Id: objects.html,v 1.52.2.10 2016/06/21
+07:44:36 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

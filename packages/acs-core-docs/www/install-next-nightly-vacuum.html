@@ -8,12 +8,12 @@
       data can make a tremendous difference in the execution speed of
       queries. This command can also be run from cron, but it probably makes
       more sense to run this command as part of your nightly backup
-      procedure - if "vacuum" is going to screw up the database, you'd
-      prefer it to happen immediately after (not before!) you've made a
+      procedure - if "vacuum" is going to screw up the database, you&#39;d
+      prefer it to happen immediately after (not before!) you&#39;ve made a
       backup! The "vacuum" command is very reliable, but conservatism is
-      the key to good system management. So, if you're using the export
-      procedure described above, you don't need to do this extra
+      the key to good system management. So, if you&#39;re using the export
+      procedure described above, you don&#39;t need to do this extra
       step.
-    </p><p>Edit your crontab:</p><pre class="programlisting">[joeuser ~]$ <strong class="userinput"><code>crontab -e</code></strong></pre><p>We'll set vacuum up to run nightly at 1 AM. Add the following
+    </p><p>Edit your crontab:</p><pre class="programlisting">[joeuser ~]$ <strong class="userinput"><code>crontab -e</code></strong></pre><p>We&#39;ll set vacuum up to run nightly at 1 AM. Add the following
     line:</p><pre class="programlisting">
 0 1 * * * /usr/local/pgsql/bin/vacuumdb <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span></pre><div class="cvstag">($Id$)</div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="install-openacs-delete-tablespace.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="backup-recovery.html">Next</a></td></tr><tr><td width="40%" align="left">Deleting a tablespace </td><td width="20%" align="center"><a accesskey="u" href="database-management.html">Up</a></td><td width="40%" align="right"> Chapter 8. Backup and Recovery</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/current/install-next-nightly-vacuum.html#comments">View comments on this page at openacs.org</a></center></body></html>

@@ -44,7 +44,7 @@
         <code class="computeroutput">~/.cvsrc</code> with the contents:
       </p><pre class="screen"><span class="action"><span class="action">cvs -z6
 cvs -q</span></span></pre><p><code class="computeroutput">-z6</code> speeds up cvs access over the network quite a bit by enabling compressed
-        connection by default.  <code class="computeroutput">-q</code> suppresses some verbose output from commands.  For example, it makes the output of <code class="computeroutput">cvs up</code> much easier to read.</p><div class="sidebar"><div class="titlepage"><div><div><p class="title"><b></b></p></div></div></div><p>Administrator Note: These are the steps to grant CVS commit rights to a user:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>Create the user's account.  On cvs.openacs.org:</p><pre class="screen"><span class="action"><span class="action">sudo bash
+        connection by default.  <code class="computeroutput">-q</code> suppresses some verbose output from commands.  For example, it makes the output of <code class="computeroutput">cvs up</code> much easier to read.</p><div class="sidebar"><div class="titlepage"><div><div><p class="title"><b></b></p></div></div></div><p>Administrator Note: These are the steps to grant CVS commit rights to a user:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>Create the user&#39;s account.  On cvs.openacs.org:</p><pre class="screen"><span class="action"><span class="action">sudo bash
 /usr/sbin/useradd -c "<span class="replaceable"><span class="replaceable">Real Name</span></span>" -G cvs -p <span class="replaceable"><span class="replaceable">passwd</span></span> <span class="replaceable"><span class="replaceable">username</span></span>
 /usr/sbin/usermod -G cvs,<span class="replaceable"><span class="replaceable">username</span></span> <span class="replaceable"><span class="replaceable">username</span></span>
           </span></span></pre></li><li class="listitem"><p>Grant cvs access to the user account.  On any machine, in a temporary directory:</p><pre class="screen"><span class="action"><span class="action">cvs -d :ext:cvs.openacs.org:/cvsroot co CVSROOT
@@ -131,7 +131,7 @@ ref-timezones search</pre><p>
                   calendar package. All non-core, non-dotlrn packages should have a
                   tag of this style, based on the package name. Many packages have
                   not been re-released since the new naming convention was adopted
-                  and so don't have a tag of this type.
+                  and so don&#39;t have a tag of this type.
                 </p></li><li class="listitem"><p><code class="computeroutput">openacs-<span class="replaceable"><span class="replaceable">x</span></span>-<span class="replaceable"><span class="replaceable">y</span></span>-compat</code> tags point to the most recent released version of OpenACS <span class="replaceable"><span class="replaceable">X</span></span>.<span class="replaceable"><span class="replaceable">Y</span></span>.
             It is similar to openacs-x-y-z-compat, except that it will
             always get the most recent dot-release of Core and the
@@ -229,9 +229,9 @@ cvs tag -b <span class="replaceable"><span class="replaceable">oacs-5-1</span></
         be addressed with another upgrade script. E.g., the last planned
         upgrade script for a package previously in dev 1 would be
         upgrade-2.0.0d1-2.0.0b1.sql, not upgrade-2.0.0d1-2.0.0.sql. Note
-        that using rc1 instead of b1 would be nice, because that's the
+        that using rc1 instead of b1 would be nice, because that&#39;s the
         convention with release codes in cvs, but the package manager
-        doesn't support rc tags.</em></span>
+        doesn&#39;t support rc tags.</em></span>
       </p></li><li class="listitem"><p>
               Database upgrade scripts should never go to the release
               version, e.g., should always have a letter suffix such as d1 or
@@ -310,9 +310,9 @@ cvs tag -b <span class="replaceable"><span class="replaceable">oacs-5-1</span></
         OpenACS code so that patches can be generated.
         </em></span>
       </p></li></ol></div><p>
-          For example, adding a new API function wouldn't require a
+          For example, adding a new API function wouldn&#39;t require a
           TIP. Changing an existing API function by adding an optional new
-          flag which defaults to no-effect wouldn't require a TIP. Added a
+          flag which defaults to no-effect wouldn&#39;t require a TIP. Added a
           new mandatory flag to an existing function would require a
           TIP.
         </p></li></ol></div></div><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a name="idp140641353533504"></a>
@@ -366,10 +366,10 @@ cvs tag -b <span class="replaceable"><span class="replaceable">oacs-5-1</span></
           Added missing h3 HTML close tag".
         </p></li><li class="listitem"><p>
           Commit one cohesive bug fix or feature change at a time.
-          Don't put a bunch of unrelated changes into one commit.
+          Don&#39;t put a bunch of unrelated changes into one commit.
         </p></li><li class="listitem"><p>
           Before you throw out or change a piece of code that you
-          don't fully understand, use cvs annotate and cvs log on the file to
+          don&#39;t fully understand, use cvs annotate and cvs log on the file to
           see who wrote the code and why. Consider contacting the
           author.
         </p></li><li class="listitem"><p>
@@ -395,7 +395,7 @@ cvs tag -b <span class="replaceable"><span class="replaceable">oacs-5-1</span></
               OpenACS cvs web</a>
             and
             <a class="ulink" href="http://xarg.net/tools/cvs/" target="_top">
-              Jeff's cvs
+              Jeff&#39;s cvs
               browser
             </a>
             are useful tools in understanding what is
@@ -416,7 +416,7 @@ cvs tag -b <span class="replaceable"><span class="replaceable">oacs-5-1</span></
           </p></li><li class="listitem"><p>
             <a class="ulink" href="https://www.cvshome.org/docs/manual/cvs-1.11.17/cvs_10.html#SEC82" target="_top">file locking etc. with cvs</a>
           </p></li><li class="listitem"><p>
-            <a class="ulink" href="http://www.piskorski.com/docs/cvs-conventions.html" target="_top">Piskorski's cvs refs</a>
+            <a class="ulink" href="http://www.piskorski.com/docs/cvs-conventions.html" target="_top">Piskorski&#39;s cvs refs</a>
           </p></li><li class="listitem"><p>
             <a class="ulink" href="http://openacs.org/doc/current/backups-with-cvs.html" target="_top">backup with cvs</a>
           </p></li><li class="listitem"><p>

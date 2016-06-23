@@ -20,7 +20,7 @@ interface to various "general" services. OpenACS 4 defines a central
 data model that keeps track of the application objects that we wish to
 manage, and serves as a primary store of <span class="emphasis"><em>metadata</em></span>. By
 <span class="emphasis"><em>metadata</em></span>, we mean data stored on behalf of an application
-<span class="emphasis"><em>outside</em></span> of the application's data model in order to enable
+<span class="emphasis"><em>outside</em></span> of the application&#39;s data model in order to enable
 certain central services. The OpenACS 4 Object Model (or object system) manages
 several different kinds of data and metadata to allow us to provide general
 services to applications:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><a class="xref" href="object-system-design.html#objects-design-object-ident" title="Object Identification">Object Identification</a> </p><p>Every application object is given a unique identifier in the system. This
@@ -82,7 +82,7 @@ application had to manage access control to its data separately. Later on, a
 notion of "scoping" was introduced into the core data model.</p><p>"Scope" is a term best explained by example. Consider some
 hypothetical rows in the <code class="computeroutput">address_book</code> table:</p><div class="informaltable"><table class="informaltable" cellspacing="0" border="1"><colgroup><col><col><col><col><col></colgroup><tbody><tr><td><span class="strong"><strong>...</strong></span></td><td><span class="strong"><strong><code class="computeroutput">scope</code></strong></span></td><td><span class="strong"><strong><code class="computeroutput">user_id</code></strong></span></td><td><span class="strong"><strong><code class="computeroutput">group_id</code></strong></span></td><td><span class="strong"><strong>...</strong></span></td></tr><tr><td>...</td><td><code class="computeroutput">user</code></td><td><code class="computeroutput">123</code></td><td> </td><td>...</td></tr><tr><td>...</td><td><code class="computeroutput">group</code></td><td> </td><td><code class="computeroutput">456</code></td><td>...</td></tr><tr><td>...</td><td><code class="computeroutput">public</code></td><td> </td><td> </td><td>...</td></tr></tbody></table></div><p>The first row represents an entry in User 123's personal address book,
 the second row represents an entry in User Group 456's shared address
-book, and the third row represents an entry in the site's public address
+book, and the third row represents an entry in the site&#39;s public address
 book.</p><p>In this way, the scoping columns identify the security context in which a
 given object belongs, where each context is <span class="emphasis"><em>either</em></span> a person
 <span class="emphasis"><em>or</em></span> a group of people <span class="emphasis"><em>or</em></span> the general public (itself a group
@@ -94,11 +94,11 @@ tree. Often this tree will reflect an observed hierarchy in a site, e.g. a
 forum message would probably list a forum topic as its context, and a
 forum topic might list a subsite as its context. Thus, contexts make it
 easier to break the site up into security domains according to its natural
-structure. An object's context is stored in the <code class="computeroutput">context_id</code>
-column of the <code class="computeroutput">acs_objects</code> table.</p><p>We use an object's context to provide a default answer to questions
+structure. An object&#39;s context is stored in the <code class="computeroutput">context_id</code>
+column of the <code class="computeroutput">acs_objects</code> table.</p><p>We use an object&#39;s context to provide a default answer to questions
 regarding access control. Whenever we ask a question of the form "can
 user X perform action Y on object Z", the OpenACS security model will defer
-to an object's context if there is no information about user X's
+to an object&#39;s context if there is no information about user X's
 permission to perform action Y on object Z.</p><p>The context system forms the basis for the rest of the OpenACS access control
 system, which is described in in two separate documents: one for the <a class="link" href="permissions-design.html" title="Permissions Design">permissions system</a> and another for the
 <a class="link" href="groups-design.html" title="Groups Design">party groups</a> system. The context system
@@ -138,7 +138,7 @@ normalized away. The canonical example of this is the explosion of the
 these fat tables have a couple of other problems:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>They degrade performance.</p></li><li class="listitem"><p>Denormalization can make it hard to maintain consistency constraints on
 the data.</p></li></ul></div><p>Object subtypes provide a way to factor the data model while still keeping
 track of the fact that each member of a subtype (i.e. for each row in the
-subtype's table), is also a member of the parent type (i.e. there is a
+subtype&#39;s table), is also a member of the parent type (i.e. there is a
 corresponding row in the parent type table). Therefore, applications an use
 this mechanism without worrying about this bookkeeping themselves, and we
 avoid having applications pollute the core data model with their specific
@@ -202,12 +202,12 @@ the face of it, they seem like a redundant mechanism however, since one could
 easily create a mapping table to do the same thing. The advantage of
 registering this table as a relation type is that in principle the OpenACS 4
 object system could use the meta data in the types table to do useful things
-in a generic way on all relation types. But this mechanism doesn't really
+in a generic way on all relation types. But this mechanism doesn&#39;t really
 exist yet.</p><p>Relation types are a somewhat abstract idea. To get a better feel for
 them, you should just skip to the <a class="link" href="object-system-design.html#object-system-design-relsmodel">data model</a>.</p></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="object-system-design-summary"></a>Summary and Design Considerations</h3></div></div></div><p>The OpenACS 4 Object Model is designed to generalize and unify the following
 mechanisms that are repeatedly implemented in OpenACS-based systems to manage
 generic and application specific metadata:</p><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a name="objects-design-why-not-objdb"></a>Why not Object Databases?</h4></div></div></div><p>The presence of a framework for subtyping and inheritance always brings up
-the question of why we don't just use an object database. The main reason
+the question of why we don&#39;t just use an object database. The main reason
 is that all of the major object database vendors ship products that are
 effectively tied to some set of object oriented programming languages. Their
 idea is to provide tight language-level integration to lower the
@@ -235,7 +235,7 @@ our existing relational data model. By doing this, we retain all the power of
 the relational data model while gaining the object oriented features we need
 most.</p><p>In the context of OpenACS 4, this means using the object model to make our
 data models more flexible, so that new modules can easily gain access to
-generic features. However, while the API itself doesn't enforce the idea
+generic features. However, while the API itself doesn&#39;t enforce the idea
 that applications only use the object model for metadata, it is also the case
 that the data model is not designed to scale to large type hierarchies. In
 the more limited domain of the metadata model, this is acceptable since the
@@ -319,7 +319,7 @@ In most cases, an attribute maps directly to a column in the table identified
 by the <code class="computeroutput">table_name</code> of the corresponding object type, although, as
 mentioned above, we sometimes store attribute values as key-value pairs in a
 "skinny" table. However, when you ask the question "What are
-the attributes of this type of object?", you don't really care about
+the attributes of this type of object?", you don&#39;t really care about
 how the values for each attribute are stored (in a column or as key-value
 pairs); you expect to receive the complete list of all attributes.</p></li><li class="listitem"><p>The <code class="computeroutput">max_n_values</code> and <code class="computeroutput">min_n_values</code> columns
 encode information about the number of values an attribute may hold.
@@ -370,7 +370,7 @@ the data stored in the <a class="link" href="object-system-design.html#objects-d
 model, which is discussed next.</p></div><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a name="objects-design-op-level"></a>Operational-level Data Model</h4></div></div></div><p>The operational level data model centers around the
 <code class="computeroutput">acs_objects</code> table. This table contains a single row for every
 instance of the type <code class="computeroutput">acs_object</code>. The table contains the
-object's unique identifier, a reference to its type, security
+object&#39;s unique identifier, a reference to its type, security
 information, and generic auditing information. Here is what the table looks
 like:</p><pre class="programlisting">
 
@@ -395,10 +395,10 @@ modeled as objects. There is another table called
 <code class="computeroutput">acs_object_context_index</code> that stores the context hierarchy.</p><p>Other tables in the core data model store additional information related
 to objects. The table <code class="computeroutput">acs_attribute_values</code> and
 <code class="computeroutput">acs_static_attr_values</code> are used to store attribute values that
-are not stored in a helper table associated with the object's type. The
+are not stored in a helper table associated with the object&#39;s type. The
 former is used for instance attributes while the latter is used for
 class-wide "static" values. These tables have the same basic form,
-so we'll only show the first:</p><pre class="programlisting">
+so we&#39;ll only show the first:</p><pre class="programlisting">
 
 <code class="computeroutput">create table acs_attribute_values (
         object_id       not null
@@ -431,8 +431,8 @@ that are instances of a relation type.</p><pre class="programlisting">
 type. We do this so we can store all the mapping tables in this one
 table.</p></li><li class="listitem"><p><code class="computeroutput">rel_type</code> is the ID of the relation type to which this object
 belongs.</p></li><li class="listitem"><p>The next two object IDs are the IDs of the objects being mapped.</p></li></ul></div><p>All this table does is store one row for every pair of objects that
-we'd like to attach with a relation. Any additional attributes that
-we'd like to attach to this pair of objects is specified in the
+we&#39;d like to attach with a relation. Any additional attributes that
+we&#39;d like to attach to this pair of objects is specified in the
 attributes of the relation type, and could be stored in any number of places.
 As in the 3.x user/groups system, these places include helper tables or
 generic skinny tables.</p><p>This table, along with <code class="computeroutput">acs_attributes</code> and
@@ -444,9 +444,9 @@ provides the central location that contains a single row for every object in
 the system. Services can use this table along with the metadata in stored in
 the knowledge level data model to create, manage, query and manipulate
 objects in a uniform manner. The <code class="computeroutput">acs_rels</code> table has an analogous
-role in storing information on relations.</p><p>These are all the tables that we'll discuss in this document. The rest
+role in storing information on relations.</p><p>These are all the tables that we&#39;ll discuss in this document. The rest
 of the Kernel data model is described in the documents for <a class="link" href="subsites-design.html" title="Subsites Design Document">subsites</a>, the <a class="link" href="permissions-design.html" title="Permissions Design">permissions</a> system and for the <a class="link" href="groups-design.html" title="Groups Design">groups</a> system.</p><p>Some examples of how these tables are used in the system can be found in
-the discussion of the API, which comes next.</p></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="object-system-design-api"></a>API</h3></div></div></div><p>Now we'll examine each piece of the API in detail. Bear in mind that
+the discussion of the API, which comes next.</p></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="object-system-design-api"></a>API</h3></div></div></div><p>Now we&#39;ll examine each piece of the API in detail. Bear in mind that
 the Object Model API is defined primarily through PL/SQL packages.</p><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a name="objects-design-object-types"></a>Object Types and Attributes</h4></div></div></div><p>The object system provides an API for creating new object types and then
 attaching attributes to them. The procedures <code class="computeroutput">create_type</code> and
 <code class="computeroutput">drop_type</code> are used to create and delete type definitions.</p><p>The two calls show up in the package <code class="computeroutput">acs_object_type</code>.</p><pre class="programlisting">
@@ -578,7 +578,7 @@ so developers who need to do this will probably have to be fairly familiar
 with the data model at a lower level.</p><p>The function <code class="computeroutput">acs_object.new()</code> makes a new object for you. The
 function <code class="computeroutput">acs_object.del()</code> deletes an object. As before, this
 is an abbreviated interface with all the long type specs removed. See the
-data model or developer's guide for the full interface.</p><pre class="programlisting">
+data model or developer&#39;s guide for the full interface.</p><pre class="programlisting">
 
 <code class="computeroutput"> function new (
   object_id     in acs_objects.object_id%TYPE default null,
@@ -599,8 +599,8 @@ data model or developer's guide for the full interface.</p><pre class="programli
 
 </pre><p>Next, we define some generic functions to manipulate attributes. Again,
 these interfaces are useful to an extent, but for large scale queries,
-it's likely that developers would have to query the data model directly,
-and then encapsulate their queries in procedures.</p><p>For names, the <code class="computeroutput">default_name</code> function is used if you don't
+it&#39;s likely that developers would have to query the data model directly,
+and then encapsulate their queries in procedures.</p><p>For names, the <code class="computeroutput">default_name</code> function is used if you don&#39;t
 want to define your own name function.</p><pre class="programlisting">
 
 <code class="computeroutput"> function name (
@@ -667,7 +667,7 @@ procedure for creating a new ticket:</p><pre class="programlisting">
 </code>
 
 </pre><p>This function will typically be defined in the context of a PL/SQL
-package, but we've left it stand-alone here for simplicity.</p><p>To summarize: in order to take advantage of OpenACS 4 services, a new
+package, but we&#39;ve left it stand-alone here for simplicity.</p><p>To summarize: in order to take advantage of OpenACS 4 services, a new
 application need only do three things:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Define a data model to describe application objects. This can just be a
 normal SQL table.</p></li><li class="listitem"><p>Create an object type, using code like in the example from the previous
 section.</p></li><li class="listitem"><p>Make sure application objects are created using
@@ -776,9 +776,9 @@ on each membership fact:</p><pre class="programlisting">
  );
 </code>
 
-</pre><p>In this example, we've made groups a subtype of
+</pre><p>In this example, we&#39;ve made groups a subtype of
 <code class="computeroutput">acs_object</code> to make the code simpler. The actual data model is
-somewhat different. Also, we've assumed that there is a helper table
+somewhat different. Also, we&#39;ve assumed that there is a helper table
 called <code class="computeroutput">groups</code> to store information on groups, and that there is
 a helper table called <code class="computeroutput">group_types</code> that has been defined to store
 extra attributes on groups.</p><p>Now, assuming we have another object type called <code class="computeroutput">person</code> to
@@ -851,7 +851,7 @@ group:</p><pre class="programlisting">
   end;
 </code>
 
-</pre></div><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a name="objects-design-discuss"></a>Summary and Discussion</h4></div></div></div><p>The Object Model's API and data model provides a small set of simple
+</pre></div><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a name="objects-design-discuss"></a>Summary and Discussion</h4></div></div></div><p>The Object Model&#39;s API and data model provides a small set of simple
 procedures that allow applications to create object types, object instances,
 and object relations. Most of the data model is straightforward; the relation
 type mechanism is a bit more complex, but in return it provides functionality

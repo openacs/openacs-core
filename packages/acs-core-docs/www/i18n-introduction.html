@@ -33,7 +33,7 @@
       which are static and mostly text, it may be easier to create a
       new ADP page for each language.  In this case, the pages are
       distinguished by a file naming convention.
-    </p><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="i18n-content"></a>User Content</h3></div></div></div><p>OpenACS does not have a general system for supporting multiple, localized versions of user-input content.  This document currently refers only to internationalizing the text in the package user interface.</p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="i18n-locale-templates"></a>Separate Templates for each Locale</h3></div></div></div><p>If the request processor finds a file named <code class="computeroutput">filename.locale.adp</code>, where locale matches the user's locale, it will process that file instead of <code class="computeroutput">filename.adp</code>.  For example, for a user with locale <code class="computeroutput">tl_PH</code>, the file <code class="computeroutput">index.tl_PH.adp</code>, if found, will be used instead of <code class="computeroutput">index.adp</code>.  The locale-specific file should thus contain text in the language appropriate for that locale.  The code in the page, however, should still be in English.  Message keys are processed normally.</p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="i18n-message-catalog"></a>Message Catalogs</h3></div></div></div><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a name="i18n-message-catalog-adps"></a>Message Keys in Template Files (ADP Files)</h4></div></div></div><p>
+    </p><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="i18n-content"></a>User Content</h3></div></div></div><p>OpenACS does not have a general system for supporting multiple, localized versions of user-input content.  This document currently refers only to internationalizing the text in the package user interface.</p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="i18n-locale-templates"></a>Separate Templates for each Locale</h3></div></div></div><p>If the request processor finds a file named <code class="computeroutput">filename.locale.adp</code>, where locale matches the user&#39;s locale, it will process that file instead of <code class="computeroutput">filename.adp</code>.  For example, for a user with locale <code class="computeroutput">tl_PH</code>, the file <code class="computeroutput">index.tl_PH.adp</code>, if found, will be used instead of <code class="computeroutput">index.adp</code>.  The locale-specific file should thus contain text in the language appropriate for that locale.  The code in the page, however, should still be in English.  Message keys are processed normally.</p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="i18n-message-catalog"></a>Message Catalogs</h3></div></div></div><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a name="i18n-message-catalog-adps"></a>Message Keys in Template Files (ADP Files)</h4></div></div></div><p>
         Internationalizing templates is about replacing human readable
         text in a certain language with internal message keys, which
         can then be dynamically replaced with real human language in
@@ -52,7 +52,7 @@
             The <span class="strong"><strong>short</strong></span>:
             <code class="computeroutput">#<span class="replaceable"><span class="replaceable">package_key.message_key</span></span>#</code>
           </p><p>
-            The advantage of the short syntax is that it's short. It's
+            The advantage of the short syntax is that it&#39;s short. It&#39;s
             as simple as inserting the value of a variable.  Example:
             <span class="replaceable"><span class="replaceable"><span style="color: red">&lt;span&gt;#&lt;/span&gt;</span>forum.title#</span></span>
           </p></li><li class="listitem"><p>
@@ -64,8 +64,8 @@
             The verbose syntax allows you to specify a default text in
             a certain language. This syntax is not recommended
             anymore, but it can be convenient for development, because
-            it still works even if you haven't created the message
-            in the message catalog yet, because what it'll do is
+            it still works even if you haven&#39;t created the message
+            in the message catalog yet, because what it&#39;ll do is
             create the message key with the default text from the tag
             as the localized message.  Example: <span class="emphasis"><em>&lt;trn
             key="forum.title" locale="en_US"&gt;Title&lt;/trn&gt;</em></span>
@@ -76,7 +76,7 @@
           </p><p>
             This syntax has been designed to make it easy to
             internationalize existing pages. This is not a syntax that
-            stays in the page. As you'll see later, it'll be replaced
+            stays in the page. As you&#39;ll see later, it&#39;ll be replaced
             with the short syntax by a special feature of the APM. You
             may leave out the message_key by writing an underscore (_)
             character instead, in which case a message key will be
@@ -88,8 +88,8 @@
         <code class="computeroutput">\#package_key.message_key\#</code>. In Tcl
         files all message lookups *must* be on either of the following formats:
       </p><p>
-        </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Typical static key lookup: <code class="computeroutput">[_ package_key.message_key]</code> - The message key and package key used here must be string literals, they can't result from variable evaluation.</p></li><li class="listitem"><p>
-            Static key lookup with non-default locale: <code class="computeroutput">[lang::message::lookup $locale package_key.message_key]</code> - The message key and package key used here must be string literals, they can't result from variable evaluation.</p></li><li class="listitem"><p>
+        </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Typical static key lookup: <code class="computeroutput">[_ package_key.message_key]</code> - The message key and package key used here must be string literals, they can&#39;t result from variable evaluation.</p></li><li class="listitem"><p>
+            Static key lookup with non-default locale: <code class="computeroutput">[lang::message::lookup $locale package_key.message_key]</code> - The message key and package key used here must be string literals, they can&#39;t result from variable evaluation.</p></li><li class="listitem"><p>
             Dynamic key lookup: <code class="computeroutput">[lang::util::localize $var_with_embedded_message_keys]</code> - In this case the message keys in the variable <code class="computeroutput">var_with_embedded_message_keys</code> must appear as string literals <code class="computeroutput">\#package_key.message_key\#</code> somewhere in the code. Here is an example of a dynamic lookup:
             <code class="computeroutput">set message_key_array {
     dynamic_key_1  \#package_key.message_key1\#
@@ -162,7 +162,7 @@ ad_return_complaint 1 [_ dotlrn.class_may_not_be_deleted $msg_subst_list]
 # in curly braces (should return nothing, or possibly a few lines for inspection)
 <strong class="userinput"><code>find -iname '*.tcl'|xargs egrep -i '\{.*&lt;#'</code></strong>
 
-# Check if you've forgotten space between default key and text in message tags (should return nothing)
+# Check if you&#39;ve forgotten space between default key and text in message tags (should return nothing)
 <strong class="userinput"><code>find -iname '*.tcl'|xargs egrep -i '&lt;#_[^ ]'</code></strong>
 
 # Review the list of tcl files with no message lookups
@@ -171,19 +171,19 @@ ad_return_complaint 1 [_ dotlrn.class_may_not_be_deleted $msg_subst_list]
         When you feel ready you may vist your package in the
         <a class="ulink" href="/acs-admin/apm" target="_top">package manager</a>
         and run the action "Replace tags with keys
-        and insert into catalog" on the Tcl files that you've edited to
+        and insert into catalog" on the Tcl files that you&#39;ve edited to
         replace the temporary tags with calls to the message lookup
         procedure.
       </p><div class="sect4"><div class="titlepage"><div><div><h5 class="title"><a name="i18n-date-time-number"></a>Dates, Times, and Numbers in Tcl files</h5></div></div></div><p>
       Most date, time, and number variables are calculated in Tcl files.  Dates and times must be converted when stored in the database,
       when retrieved from the database, and when displayed.  All dates
-      are stored in the database in the server's timezone, which is an
+      are stored in the database in the server&#39;s timezone, which is an
       APM Parameter set at
       <code class="computeroutput">/acs-lang/admin/set-system-timezone</code>
       and readable at
       <code class="computeroutput">lang::system::timezone.</code>.  When
       retrieved from the database and displayed, dates and times must
-      be localized to the user's locale.
+      be localized to the user&#39;s locale.
     </p></div></div><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a name="i18n-message-apm-params"></a>APM Parameters</h4></div></div></div><p>
         Some parameters contain text that need to be localized. In
         this case, instead of storing the real text in the parameter,
@@ -198,7 +198,7 @@ ad_return_complaint 1 [_ dotlrn.class_may_not_be_deleted $msg_subst_list]
         Here are a couple of examples. Say we have the following two
         parameters, taken directly from the dotlrn package.
       </p><div class="informaltable"><table class="informaltable" cellspacing="0" border="1"><colgroup><col class="c1"><col class="c2"></colgroup><thead><tr><th>Parameter Name</th><th>Parameter Value</th></tr></thead><tbody><tr><td>class_instance_pages_csv</td><td><span style="color: red">&lt;span&gt;#&lt;/span&gt;</span>dotlrn.class_page_home_title#,Simple 2-Column;<span style="color: red">&lt;span&gt;#&lt;/span&gt;</span>dotlrn.class_page_calendar_title#,Simple 1-Column;<span style="color: red">&lt;span&gt;#&lt;/span&gt;</span>dotlrn.class_page_file_storage_title#,Simple 1-Column</td></tr><tr><td>departments_pretty_name</td><td><span style="color: red">&lt;span&gt;#&lt;/span&gt;</span>departments_pretty_name#</td></tr></tbody></table></div><p>
-        Then, depending on how we retrieve the value, here's what we get:
+        Then, depending on how we retrieve the value, here&#39;s what we get:
       </p><div class="informaltable"><table class="informaltable" cellspacing="0" border="1"><colgroup><col class="c1"><col class="c2"></colgroup><thead><tr><th>Command used to retrieve Value</th><th>Retrieved Value</th></tr></thead><tbody><tr><td>parameter::get <span class="strong"><strong>-localize</strong></span> -parameter class_instances_pages_csv</td><td>Kurs Startseite,Simple 2-Column;Kalender,Simple 1-Column;Dateien,Simple 1-Column</td></tr><tr><td>parameter::get <span class="strong"><strong>-localize</strong></span> -parameter departments_pretty_name</td><td>Abteilung</td></tr><tr><td>parameter::get -parameter departments_pretty_name</td><td><span style="color: red">&lt;span&gt;#&lt;/span&gt;</span>departments_pretty_name#</td></tr></tbody></table></div><p>
         The value in the rightmost column in the table above is the
         value returned by an invocation of parameter::get. Note that

@@ -10,8 +10,8 @@ Chapter 12. Engineering Standards"
 		<div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="cvs-guidelines" id="cvs-guidelines"></a> CVS Guidelines</h2></div></div></div><div class="authorblurb">
-<div class="cvstag">($&zwnj;Id: cvs.xml,v 1.6 2006/07/17 05:38:37 torbenb
-Exp $)</div><p>By Joel Aufrecht with input from Jeff Davis, Branimir Dolicki,
+<div class="cvstag">($&zwnj;Id: cvs-guidelines.html,v 1.10.2.10
+2016/06/21 07:44:35 gustafn Exp $)</div><p>By Joel Aufrecht with input from Jeff Davis, Branimir Dolicki,
 and Jade Rubick.</p>
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><div class="sect2">
@@ -28,8 +28,8 @@ after <code class="computeroutput">cvs</code> in checkout commands.
 This will create a local checkout directory that uses
 cvs.openacs.org but does not specify the user. By default, it will
 use your local account name as the user, so if you are logged in as
-"foobar" it will try to check out and commit as if you had
-specified <code class="computeroutput">:ext:foobar\@cvs.openacs.org:/cvsroot</code>. The
+"foobar" it will try to check out and commit as if you
+had specified <code class="computeroutput">:ext:foobar\@cvs.openacs.org:/cvsroot</code>. The
 advantage of not specifying a user in the checkout command is that
 other users can work in the directory using their own accounts.</p><p>OpenACS.org supports non-anonymous cvs access only over ssh, so
 you must have <code class="computeroutput">CVS_RSH=ssh</code> in
@@ -54,7 +54,7 @@ verbose output from commands. For example, it makes the output of
 <div class="titlepage"><div><div><p class="title"></p></div></div></div><p>Administrator Note: These are the steps to grant CVS commit
 rights to a user:</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-<p>Create the user's account. On cvs.openacs.org:</p><pre class="screen"><span class="action"><span class="action">sudo bash
+<p>Create the user&#39;s account. On cvs.openacs.org:</p><pre class="screen"><span class="action"><span class="action">sudo bash
 /usr/sbin/useradd -c "<span class="replaceable"><span class="replaceable">Real Name</span></span>" -G cvs -p <span class="replaceable"><span class="replaceable">passwd</span></span><span class="replaceable"><span class="replaceable">username</span></span>
 /usr/sbin/usermod -G cvs,<span class="replaceable"><span class="replaceable">username</span></span><span class="replaceable"><span class="replaceable">username</span></span>
 </span></span></pre>
@@ -193,7 +193,8 @@ that will retrieve only the files in the calendar 2.0.0 release. It
 applies only to the calendar package. All non-core, non-dotlrn
 packages should have a tag of this style, based on the package
 name. Many packages have not been re-released since the new naming
-convention was adopted and so don't have a tag of this type.</p></li><li class="listitem">
+convention was adopted and so don&#39;t have a tag of this
+type.</p></li><li class="listitem">
 <p>
 <code class="computeroutput">openacs-<span class="replaceable"><span class="replaceable">x</span></span>-<span class="replaceable"><span class="replaceable">y</span></span>-compat</code>
 tags point to the most recent released version of OpenACS
@@ -346,15 +347,17 @@ release candidate it cannot be addressed with another upgrade
 script. E.g., the last planned upgrade script for a package
 previously in dev 1 would be upgrade-2.0.0d1-2.0.0b1.sql, not
 upgrade-2.0.0d1-2.0.0.sql. Note that using rc1 instead of b1 would
-be nice, because that's the convention with release codes in cvs,
-but the package manager doesn't support rc tags.</em></span></p>
+be nice, because that&#39;s the convention with release codes in
+cvs, but the package manager doesn&#39;t support rc
+tags.</em></span></p>
 </li><li class="listitem"><p>Database upgrade scripts should never go to the release version,
 e.g., should always have a letter suffix such as d1 or b1.</p></li><li class="listitem"><p>CVS commit messages should be intelligible in the context of
 Changelogs. They should not refer to the files or versions.</p></li><li class="listitem"><p>CVS commit messages and code comments should refer to bug, tip,
-or patch number if appropriate, in the format "resolves bug 11",
-"resolves bugs 11, resolves bug 22". "implements tip 42",
-"implements tip 42, implements tip 50", "applies patch 456 by User
-Name", "applies patch 456 by User Name, applies patch 523 by
+or patch number if appropriate, in the format "resolves bug
+11", "resolves bugs 11, resolves bug 22".
+"implements tip 42", "implements tip 42, implements
+tip 50", "applies patch 456 by User Name",
+"applies patch 456 by User Name, applies patch 523 by
 ...".</p></li>
 </ol></div>
 </li><li class="listitem">
@@ -381,10 +384,10 @@ functions.</p></li><li class="listitem"><p>does not change the data model</p></l
 <p>Tags</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
 <p>When a package is released in final form, the developer shall
-tag it "packagename-x-y-z-final" and "openacs-x-y-compat". x-y
-should correspond to the current branch. If the package is
-compatible with several different core versions, several compat
-tags should be applied.</p><p><span class="emphasis"><em>Reason 1: The packagename tag is a
+tag it "packagename-x-y-z-final" and
+"openacs-x-y-compat". x-y should correspond to the
+current branch. If the package is compatible with several different
+core versions, several compat tags should be applied.</p><p><span class="emphasis"><em>Reason 1: The packagename tag is a
 permanent, static tag that allows for future comparison. The compat
 tag is a floating tag which is used by the repository generator to
 determine the most recent released version of each package for each
@@ -404,10 +407,11 @@ to fork packages as needed, and provides a common ancestor between
 the fork and the OpenACS code so that patches can be
 generated.</em></span></p>
 </li>
-</ol></div><p>For example, adding a new API function wouldn't require a TIP.
-Changing an existing API function by adding an optional new flag
-which defaults to no-effect wouldn't require a TIP. Added a new
-mandatory flag to an existing function would require a TIP.</p>
+</ol></div><p>For example, adding a new API function wouldn&#39;t require a
+TIP. Changing an existing API function by adding an optional new
+flag which defaults to no-effect wouldn&#39;t require a TIP. Added
+a new mandatory flag to an existing function would require a
+TIP.</p>
 </li>
 </ol></div>
 </div><div class="sect3">
@@ -429,15 +433,16 @@ to build a new and clean API consider deprecating the old proc and
 making it invoke the new one.</p></li><li class="listitem"><p>Never rush to commit something. Before committing double check
 with cvs diff what exactly you are committing.</p></li><li class="listitem"><p>Always accompany a commit with a brief but informative comment.
 If your commit is related to bug number N and/or patch number P,
-indicate this in the commit comment by including "bug N" and/or
-"patch P". This allows us to link bugs and patches in the Bug
-Tracker with changes to the source code. For example suppose you
-are committing a patch that closes a missing HTML tag, then an
-appropriate comment could be "Fixing bug 321 by applying patch 134.
-Added missing h3 HTML close tag".</p></li><li class="listitem"><p>Commit one cohesive bug fix or feature change at a time. Don't
-put a bunch of unrelated changes into one commit.</p></li><li class="listitem"><p>Before you throw out or change a piece of code that you don't
-fully understand, use cvs annotate and cvs log on the file to see
-who wrote the code and why. Consider contacting the author.</p></li><li class="listitem"><p>Test your change before committing. Use the OpenACS package
+indicate this in the commit comment by including "bug N"
+and/or "patch P". This allows us to link bugs and patches
+in the Bug Tracker with changes to the source code. For example
+suppose you are committing a patch that closes a missing HTML tag,
+then an appropriate comment could be "Fixing bug 321 by
+applying patch 134. Added missing h3 HTML close tag".</p></li><li class="listitem"><p>Commit one cohesive bug fix or feature change at a time.
+Don&#39;t put a bunch of unrelated changes into one commit.</p></li><li class="listitem"><p>Before you throw out or change a piece of code that you
+don&#39;t fully understand, use cvs annotate and cvs log on the
+file to see who wrote the code and why. Consider contacting the
+author.</p></li><li class="listitem"><p>Test your change before committing. Use the OpenACS package
 acs-automated-testing to test Tcl procedures and the tool <a class="ulink" href="http://tclwebtest.sourceforge.net" target="_top">Tclwebtest</a> to test pages</p></li><li class="listitem"><p>Keep code simple, adhere to conventions, and use comments
 liberally.</p></li><li class="listitem"><p>In general, treat the code with respect, at the same time, never
 stop questioning what you see. The code can always be improved,
@@ -448,12 +453,12 @@ fashion.</p></li>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="cvs-resources" id="cvs-resources"></a>Additional Resources for CVS</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
-<li class="listitem"><p>The <a class="ulink" href="http://cvs.openacs.org/cvs/" target="_top">OpenACS cvs web</a> and <a class="ulink" href="http://xarg.net/tools/cvs/" target="_top">Jeff's cvs browser</a>
-are useful tools in understanding what is happening with the
-code.</p></li><li class="listitem"><p>There is a mailing list of cvs changes at <a class="ulink" href="http://willfork.com/mailman/listinfo/openacs-cvs-list" target="_top">willfork.com</a>
+<li class="listitem"><p>The <a class="ulink" href="http://cvs.openacs.org/cvs/" target="_top">OpenACS cvs web</a> and <a class="ulink" href="http://xarg.net/tools/cvs/" target="_top">Jeff&#39;s cvs
+browser</a> are useful tools in understanding what is happening
+with the code.</p></li><li class="listitem"><p>There is a mailing list of cvs changes at <a class="ulink" href="http://willfork.com/mailman/listinfo/openacs-cvs-list" target="_top">willfork.com</a>
 </p></li><li class="listitem"><p>There is an RSS feed of cvs changes at <a class="ulink" href="http://xarg.net/tools/cvs/rss/?days=3" target="_top">RSS
 feed</a>
-</p></li><li class="listitem"><p><a class="ulink" href="https://www.cvshome.org/docs/manual/cvs-1.11.17/cvs.html" target="_top">cvs manual</a></p></li><li class="listitem"><p><a class="ulink" href="https://www.cvshome.org/docs/manual/cvs-1.11.17/cvs_7.html#SEC66" target="_top">adding files/dirs with cvs</a></p></li><li class="listitem"><p><a class="ulink" href="https://www.cvshome.org/docs/manual/cvs-1.11.17/cvs_10.html#SEC82" target="_top">file locking etc. with cvs</a></p></li><li class="listitem"><p><a class="ulink" href="http://www.piskorski.com/docs/cvs-conventions.html" target="_top">Piskorski's cvs refs</a></p></li><li class="listitem"><p><a class="ulink" href="http://openacs.org/doc/current/backups-with-cvs.html" target="_top">backup with cvs</a></p></li><li class="listitem"><p><a class="ulink" href="http://openacs.org/forums/message-view?message_id=178551" target="_top">merging 2 file heirarchies with cvs</a></p></li>
+</p></li><li class="listitem"><p><a class="ulink" href="https://www.cvshome.org/docs/manual/cvs-1.11.17/cvs.html" target="_top">cvs manual</a></p></li><li class="listitem"><p><a class="ulink" href="https://www.cvshome.org/docs/manual/cvs-1.11.17/cvs_7.html#SEC66" target="_top">adding files/dirs with cvs</a></p></li><li class="listitem"><p><a class="ulink" href="https://www.cvshome.org/docs/manual/cvs-1.11.17/cvs_10.html#SEC82" target="_top">file locking etc. with cvs</a></p></li><li class="listitem"><p><a class="ulink" href="http://www.piskorski.com/docs/cvs-conventions.html" target="_top">Piskorski&#39;s cvs refs</a></p></li><li class="listitem"><p><a class="ulink" href="http://openacs.org/doc/current/backups-with-cvs.html" target="_top">backup with cvs</a></p></li><li class="listitem"><p><a class="ulink" href="http://openacs.org/forums/message-view?message_id=178551" target="_top">merging 2 file heirarchies with cvs</a></p></li>
 </ul></div>
 </div>
 </div>

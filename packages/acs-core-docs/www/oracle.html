@@ -5,27 +5,27 @@
         </div><p>
     If you are installing PostGreSQL instead of Oracle, skip this section.
   </p><p>
-    OpenACS 5.9.0 will install with Oracle 9i but has not been extensively tested so may still have bugs or tuning issues.  See <a class="ulink" href="http://www.piskorski.com/docs/oracle.html" target="_top">Andrew Piskorski's Oracle 9i notes</a> for guidance.
+    OpenACS 5.9.0 will install with Oracle 9i but has not been extensively tested so may still have bugs or tuning issues.  See <a class="ulink" href="http://www.piskorski.com/docs/oracle.html" target="_top">Andrew Piskorski&#39;s Oracle 9i notes</a> for guidance.
   </p><p>
       This installation guide attempts to present all of the information necessary to complete an OpenACS installation.  We try hard to make all of the steps possible in one pass, rather than having a step which amounts to "go away and develop a profound understanding of software X and then come back and, in 99% of all cases, type these two lines."  The exception to our rule is Oracle production systems.  This page describes a set of steps to get a working Oracle development server, but it is <span class="strong"><strong>unsuitable for production systems</strong></span>.  If you will be using OpenACS on Oracle in a production environment, you will experience many problems unless you develop a basic understanding of Oracle which is outside the scope of this document.  T
     </p><p>
       
-      This document assumes that you'll be installing Oracle on the same
+      This document assumes that you&#39;ll be installing Oracle on the same
       box as AOLserver. For more details on a remote Oracle installation,
-      see Daryl Biberdorf's <a class="ulink" href="http://openacs.org/new-file-storage/one-file?file_id=273" target="_top">document</a>.
+      see Daryl Biberdorf&#39;s <a class="ulink" href="http://openacs.org/new-file-storage/one-file?file_id=273" target="_top">document</a>.
       
     </p><p>
       
     Useful links to find help on how to set up Oracle under Linux are:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p><a class="ulink" href="http://dizwell.com/html/oracle_on_linux.html" target="_top">Dizwell - Howard
-        Roger's company - on Oracle on Linux</a></p></li><li class="listitem"><p><a class="ulink" href="http://puschitz.com/" target="_top">Werner Puschitz - Oracle on Red Hat Linux</a></p></li><li class="listitem"><p><a class="ulink" href="http://www.suse.com/us/business/certifications/certified_software/oracle/" target="_top">SuSE/Oracle Support matrix</a></p></li></ul></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="install-oracle-getit"></a>Acquire Oracle</h3></div></div></div><p>
+        Roger&#39;s company - on Oracle on Linux</a></p></li><li class="listitem"><p><a class="ulink" href="http://puschitz.com/" target="_top">Werner Puschitz - Oracle on Red Hat Linux</a></p></li><li class="listitem"><p><a class="ulink" href="http://www.suse.com/us/business/certifications/certified_software/oracle/" target="_top">SuSE/Oracle Support matrix</a></p></li></ul></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="install-oracle-getit"></a>Acquire Oracle</h3></div></div></div><p>
       Production Oracle systems should run on certified platforms.  Follow the
       <a class="ulink" href="http://metalink.oracle.com/metalink/plsql/ml2_documents.showDocument?p_database_id=NOT&amp;p_id=223718.1" target="_top">metalink
-      note 223718.1</a>to find certified platforms. If you don't have
+      note 223718.1</a>to find certified platforms. If you don&#39;t have
       metalink access, take a look at the Oracle on Linux FAQ: <a class="ulink" href="http://otn.oracle.com/tech/linux/htdocs/linux_techsupp_faq.html#Linux_Distributions" target="_top">Which
       Linux Distributions Are Directly Supported By Oracle?</a>. In summary,
       free and inexpensive Linux distributions are not certified.
     </p><p>
-      If you don't have an account at <a class="ulink" href="http://otn.oracle.com" target="_top">OTN</a>
+      If you don&#39;t have an account at <a class="ulink" href="http://otn.oracle.com" target="_top">OTN</a>
       get one: you can download the Oracle software from the <a class="ulink" href="http://otn.oracle.com/software/products/database/oracle10g/index.html" target="_top">
       Oracle Downloads</a> page. It is also get the CDs shipped to you for
       a nominal fee from the <a class="ulink" href="http://oraclestore.oracle.com/OA_HTML/ibeCCtdMinisites.jsp?language=US" target="_top">Oracle
@@ -45,20 +45,20 @@
     both of which are considered to be very stable.
     </p><p> 
       To be able to download a patchset, you need a (to-pay-for) account on <a class="ulink" href="metalink.oracle.com" target="_top">Metalink</a>. You may find the appropriate
-      patchset by following <a class="ulink" href="http://openacs.org/forums/message-view?message_id=33004" target="_top">Andrew's
+      patchset by following <a class="ulink" href="http://openacs.org/forums/message-view?message_id=33004" target="_top">Andrew&#39;s
       suggestion</a>.
     </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="install-oracle-keepinmind"></a>Things to Keep in Mind</h3></div></div></div><p>
       Oracle is very well-documented software, the <a class="ulink" href="http://tahiti.oracle.com" target="_top">online documentation</a> comes with
       printable PDFs and full-text search. Altogether there is more than
       20.000 pages of documentation, so do not expect to understand Oracle
       within in a few hours. The best starting pointing into Oracle is the
-      Concepts book. Here's the <a class="ulink" href="http://otn.oracle.com/pls/tahiti/tahiti.to_toc?pathname=server.817%2Fa76965%2Ftoc.htm&amp;remark=docindex" target="_top">8i
+      Concepts book. Here&#39;s the <a class="ulink" href="http://otn.oracle.com/pls/tahiti/tahiti.to_toc?pathname=server.817%2Fa76965%2Ftoc.htm&amp;remark=docindex" target="_top">8i
       version</a> and the <a class="ulink" href="http://otn.oracle.com/pls/db92/db92.to_toc?pathname=server.920%2Fa96524%2Ftoc.htm&amp;remark=docindex" target="_top">9.2
       version</a>.
     </p><p>
       To give you an idea of how configurable Oracle is and how much thought
       you may need to put into buying the proper hardware and creating a sane
-      setup, you should thoroughly read Cary Millsap's <a class="ulink" href="http://www.miracleas.dk/BAARF/0.Millsap1996.08.21-VLDB.pdf" target="_top">Configuring
+      setup, you should thoroughly read Cary Millsap&#39;s <a class="ulink" href="http://www.miracleas.dk/BAARF/0.Millsap1996.08.21-VLDB.pdf" target="_top">Configuring
       Oracle Server for VLDB</a> and the <a class="ulink" href="http://download-west.oracle.com/docs/html/A97297_01/appg_ofa.htm#sthref787" target="_top">Optimal
       Flexible Architecture</a> standard.
     </p><p>
@@ -87,7 +87,7 @@ nls_date_format = "YYYY-MM-DD"</pre><p>
 
       For additional resources/documentation, please see this <a class="ulink" href="http://openacs.org/forums/message-view?message_id=28829" target="_top">thread</a>
       and <a class="ulink" href="http://openacs.org/forums/message-view?message_id=67108" target="_top">Andrew
-      Piskorski's mini-guide</a>.
+      Piskorski&#39;s mini-guide</a>.
 
     </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="install-oracle-preinstall"></a>Pre-Installation Tasks</h3></div></div></div><p>
 
@@ -156,7 +156,7 @@ root:/ora8# mkdir -p m01 m02 m03/oradata/ora8
 root:/ora8# chown -R oracle.dba /ora8
 root:/ora8# exit</pre></li><li class="listitem"><p>
 
-          Set up the <code class="computeroutput">oracle</code> user's
+          Set up the <code class="computeroutput">oracle</code> user&#39;s
           environment
 
         </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p> 
@@ -326,7 +326,7 @@ Password: **********
 oracle:/where/oracle/Disk1$ ls
 doc  index.htm  install  runInstaller  stage  starterdb</pre><p>
 
-          If you don't see
+          If you don&#39;t see
           <code class="computeroutput">runInstaller</code>, you are in the
           wrong directory.
 
@@ -532,7 +532,7 @@ Changing groupname of /ora8/m01/app/oracle/oraInventory to oinstall.
             Run the script. Switch to the oracle user first
             to set the environment appropriately and then do
             <span class="command"><strong>su</strong></span> to get root privileges, while keeping
-            the oracle user's enviroment.
+            the oracle user&#39;s enviroment.
             </p><pre class="programlisting">
 [joeuser ~]$ su - oracle
 Password: *********
@@ -649,7 +649,7 @@ IMPORTANT NOTE: Please delete any log and trace files previously
             </p></li></ul></div></li></ul></div><p>
       Congratulations, you have just installed Oracle 8.1.7 Server!
       However, you still need to create a database which can take about an
-      hour of non-interactive time, so don't quit yet.
+      hour of non-interactive time, so don&#39;t quit yet.
     </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="install-oracle-create"></a>Creating the First Database</h3></div></div></div><p>
       This step will take you through the steps of creating a customized
       database. Be warned that this process takes about an hour on a
@@ -744,7 +744,7 @@ Password: *********
         </p></li><li class="listitem"><p>
           Finally, select "<code class="computeroutput">Save information to a shell
             script</code>" and click
-          "<code class="computeroutput">Finish</code>" (We're
+          "<code class="computeroutput">Finish</code>" (We&#39;re
           going to examine the contents of this file before creating our
           database.)
         </p></li><li class="listitem"><p>
@@ -775,7 +775,7 @@ Password: *********
         </p><pre class="programlisting">
 nls_date_format = "YYYY-MM-DD"</pre></li><li class="listitem"><p>
           Now find the <code class="computeroutput">open_cursors</code> line
-          in the file. If you're using
+          in the file. If you&#39;re using
           <code class="computeroutput">emacs</code> scroll up to the top of
           the buffer and do <code class="computeroutput">CTRL-S</code> and
           type <code class="computeroutput">open_cursors</code> to find the
@@ -813,8 +813,8 @@ oracle:/ora8/m01/app/oracle/product/8.1.7/assistants/dbca/jlib$ ./sqlora8.sh</pr
           "ORA-01432: public synonym to be dropped does not
           exist") Fear not, this is normal.
         </p><p>
-          Eventually, you'll be returned to your shell prompt. In the
-          meantime, relax, you've earned it.
+          Eventually, you&#39;ll be returned to your shell prompt. In the
+          meantime, relax, you&#39;ve earned it.
         </p></li></ul></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="istall-oracle-test"></a>Acceptance Test</h3></div></div></div><p>
       For this step, open up a terminal and
       <code class="computeroutput">su</code> to
@@ -822,13 +822,13 @@ oracle:/ora8/m01/app/oracle/product/8.1.7/assistants/dbca/jlib$ ./sqlora8.sh</pr
       running X and Netscape (or other web browser) for this phase.
     </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
           You need to download the "Oracle Acceptance Test" file.
-          It's available <a class="ulink" href="files/acceptance-sql.txt" target="_top">here</a> and at <a class="ulink" href="http://philip.greenspun.com/wtr/oracle/acceptance-sql.txt" target="_top">http://philip.greenspun.com/wtr/oracle/acceptance-sql.txt</a>.
+          It&#39;s available <a class="ulink" href="files/acceptance-sql.txt" target="_top">here</a> and at <a class="ulink" href="http://philip.greenspun.com/wtr/oracle/acceptance-sql.txt" target="_top">http://philip.greenspun.com/wtr/oracle/acceptance-sql.txt</a>.
           Save the file to <code class="computeroutput">/var/tmp</code>
         </p></li><li class="listitem"><p>
           In the oracle shell, copy the file.
         </p><pre class="programlisting">
 [oracle ~]$ cp /var/tmp/acceptance-sql.txt /var/tmp/acceptance.sql</pre></li><li class="listitem"><p>        
-          Once you've got the acceptance test file all set, stay in
+          Once you&#39;ve got the acceptance test file all set, stay in
           your term and type the following:
         </p><pre class="programlisting">
 [oracle ~]$ sqlplus system/manager</pre><p>
@@ -839,9 +839,9 @@ oracle:/ora8/m01/app/oracle/product/8.1.7/assistants/dbca/jlib$ ./sqlora8.sh</pr
 [oracle ~]$ svrmgrl
 SVRMGR&gt; connect internal
 SVRMGR&gt; startup</pre></li><li class="listitem"><p>
-          Now that you're into SQL*Plus, change the default passwords
+          Now that you&#39;re into SQL*Plus, change the default passwords
           for system, sys, and ctxsys to "alexisahunk" (or to
-          something you'll remember):
+          something you&#39;ll remember):
         </p><pre class="programlisting">
 SQL&gt; alter user system identified by alexisahunk;
 SQL&gt; alter user sys identified by alexisahunk;
@@ -849,7 +849,7 @@ SQL&gt; alter user ctxsys identified by alexisahunk;</pre></li><li class="listit
           Verify that your date settings are correct. 
         </p><pre class="programlisting">
 SQL&gt; select sysdate from dual;</pre><p>
-          If you don't see a date that fits the format
+          If you don&#39;t see a date that fits the format
           <code class="computeroutput">YYYY-MM-DD</code>, please read <a class="xref" href="oracle.html#install-oracle-troubleshooting" title="Troubleshooting Oracle Dates">the section called “Troubleshooting Oracle Dates”</a>.
         </p></li><li class="listitem"><p>
           At this point we are going to hammer your database with an
@@ -857,7 +857,7 @@ SQL&gt; select sysdate from dual;</pre><p>
         </p><pre class="programlisting">
 SQL&gt; @ /var/tmp/acceptance.sql
 
-; A bunch of lines will scroll by.  You'll know if the test worked if
+; A bunch of lines will scroll by.  You&#39;ll know if the test worked if
 ; you see this at the end:
 
 SYSDATE
@@ -879,13 +879,13 @@ ORA-01450: maximum key length (758) exceeded</pre><p>
           can set the parameter using the
           <code class="computeroutput">dbassist</code> program or by setting
           the <code class="computeroutput">DB_BLOCK_SIZE</code> parameter in
-          your database's creation script.
+          your database&#39;s creation script.
         </p><p>
           If there were no errors, then consider yourself fortunate. Your
           Oracle installation is working.
         </p></li></ul></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="install-oracle-automating"></a>Automating Startup &amp; Shutdown</h3></div></div></div><p>
       You will want to automate the database startup and shutdown process.
-      It's probably best to have Oracle spring to life when you boot up
+      It&#39;s probably best to have Oracle spring to life when you boot up
       your machine.
     </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p> 
           Oracle includes a script called
@@ -900,7 +900,7 @@ ORA-01450: maximum key length (758) exceeded</pre><p>
 [oracle ~]$ cp /var/tmp/dbstart.txt /ora8/m01/app/oracle/product/8.1.7/bin/dbstart 
 [oracle ~]$ chmod 755 /ora8/m01/app/oracle/product/8.1.7/bin/dbstart</pre></li><li class="listitem"><p>
 
-          While you're logged in as
+          While you&#39;re logged in as
           <code class="computeroutput">oracle</code>, you should configure the
           <code class="computeroutput">oratab</code> file to load your
           database at start.  Edit the file
@@ -1165,7 +1165,7 @@ SQL&gt; exit</pre></li></ul></div><p>
       the number of seconds elapsed since some date. However, for the
       purposes of inputing dates into Oracle and getting them back out,
       Oracle needs to be told to use a specific date format. By default, it
-      uses an Oracle-specific format which isn't copacetic. You want
+      uses an Oracle-specific format which isn&#39;t copacetic. You want
       Oracle to use the ANSI-compliant date format which is of form
       <code class="computeroutput">'YYYY-MM-DD'</code>.
     </p><p>
@@ -1190,7 +1190,7 @@ SQL&gt; column sysdate format a15
 SQL&gt; select sysdate from dual;</pre><p>
       If the date does not conform to this format, double-check that you
       included the necessary line in the init scripts. If it still
-      isn't working, make sure that you have restarted the database
+      isn&#39;t working, make sure that you have restarted the database
       since adding the line:
     </p><pre class="programlisting">
 [joeuser ~]$ svrmgrl
@@ -1202,7 +1202,7 @@ Database dismounted.
 ORACLE instance shut down.
 SVRMGR&gt; startup
 ORACLE instance started.</pre><p>
-      If you're sure that you have restarted the database since adding
+      If you&#39;re sure that you have restarted the database since adding
       the line, check your initialization scripts. Make sure that the
       following line is not included:
     </p><pre class="programlisting">
@@ -1214,7 +1214,7 @@ export nls_lang = american</pre><p>
     </p><pre class="programlisting">
 export nls_date_format = 'YYYY-MM-DD'</pre><p>
       Log back in again. If adding the
-      <code class="computeroutput">nls_date_format</code> line doesn't
+      <code class="computeroutput">nls_date_format</code> line doesn&#39;t
       help, you can ask for advice in our <a class="ulink" href="http://www.openacs.org/forums/" target="_top">OpenACS forums</a>.
     </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="install-oracle-procs"></a>Useful Procedures</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
           Dropping a tablespace

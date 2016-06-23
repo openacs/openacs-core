@@ -44,7 +44,7 @@ authentication system by forcing all logins to occur over HTTPS.</p></div><div c
 with each cookie serving a different purpose. These cookies are:</p><div class="informaltable"><table class="informaltable" cellspacing="0" border="1"><colgroup><col><col><col><col></colgroup><tbody><tr><td><span class="strong"><strong>name</strong></span></td><td><span class="strong"><strong>value</strong></span></td><td><span class="strong"><strong>max-age</strong></span></td><td><span class="strong"><strong>secure?</strong></span></td></tr><tr><td>ad_session_id</td><td>session_id,user_id</td><td>SessionTimeout</td><td>no</td></tr><tr><td>ad_user_login</td><td>user_id</td><td>Infinity</td><td>no</td></tr><tr><td>ad_user_login_secure</td><td>user_id,random</td><td>Infinity</td><td>yes</td></tr><tr><td>ad_secure_token</td><td>session_id,user_id,random</td><td>SessionLifetime</td><td>yes</td></tr></tbody></table></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>ad_session_id</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p>reissued on any hit separated by more than SessionRenew seconds from the
 previous hit that received a cookie</p></li><li class="listitem"><p>is valid only for SessionTimeout seconds</p></li><li class="listitem"><p>is the canonical source for the session ID in ad_conn</p></li></ul></div></li><li class="listitem"><p>ad_user_login</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p>is used for permanent logins</p></li></ul></div></li><li class="listitem"><p>ad_user_login_secure</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p>is used for permanent secure logins</p></li><li class="listitem"><p>contains random garbage (ns_time) to prevent attack against the secure
 hash</p></li></ul></div></li><li class="listitem"><p>ad_secure_token
-</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p>is a session-level cookie from the browser's standpoint</p></li><li class="listitem"><p>its signature expires in SessionLifetime seconds</p></li><li class="listitem"><p>contains random garbage (ns_time) to prevent attack against the secure
+</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p>is a session-level cookie from the browser&#39;s standpoint</p></li><li class="listitem"><p>its signature expires in SessionLifetime seconds</p></li><li class="listitem"><p>contains random garbage (ns_time) to prevent attack against the secure
 hash</p></li><li class="listitem"><p>user_id is extraneous</p></li></ul></div></li></ul></div></div><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a name="authentication-process"></a>Authentication Process</h4></div></div></div><p>The Tcl function (<code class="computeroutput">sec_handler</code>) is called by the request
 processor to authenticate the user. It first checks the
 <code class="computeroutput">ad_session_id</code> cookie. If there is no valid session in progress,
@@ -185,7 +185,7 @@ out on the signature.</p><p>Signed cookies include in their RFC2109 VALUE field 
 value and the signature. In addition to the expiration of the digital
 signature, RFC 2109 specifies an optional max age that is returned to the
 client. For most cookies, this max age matches the expiration date of the
-cookie's signature. The standard specifies that when the max age is not
+cookie&#39;s signature. The standard specifies that when the max age is not
 included, the cookie should be "discarded when the user agent
 exits." Because we can not trust the client to do this, we must specify
 a timeout for the signature. The SessionLifetime parameter is used for this
@@ -215,7 +215,7 @@ because there is no cache eviction policy per se -- the cache is cleared when
 the thread is destroyed by AOLserver. 
 </p></div><div class="sect4"><div class="titlepage"><div><div><h5 class="title"><a name="signature-security"></a>Security</h5></div></div></div><p>Storing information on a client always presents an additional security
 risk.</p><p>Since we are only validating the information and not trying to protect it
-as a secret, we don't use salt. Cryptographic salt is useful if you are
+as a secret, we don&#39;t use salt. Cryptographic salt is useful if you are
 trying to protect information from being read (e.g., hashing passwords).</p></div></div><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a name="external-ssl"></a>External SSL</h4></div></div></div><p>
 External SSL mechanisms (firewall, dedicated hardware, etc.) can be used by
 creating two pools of AOLservers. In one pool the servers should be

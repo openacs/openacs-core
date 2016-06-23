@@ -39,7 +39,7 @@ info patchlevel
         <para>Note for Debian users: you can apt-get install
       tcl8.4-dev if you have the right version (stable users will need
       to add tcl8.4 to their sources.list file as described on the
-      <link linkend="postgres">Install Postgres</link> page). You'll
+      <link linkend="postgres">Install Postgres</link> page). You&#39;ll
       have to use /usr/lib/tcl8.4/ instead of /usr/local/lib when you
       try to find the tcl libraries, however.</para>
 
@@ -200,7 +200,7 @@ nspostgres.c:679: warning: passing arg 3 of `Tcl_DStringAppend' as signed due to
       Note that this section requires you to have OpenACS files available, which
       you can get through CVS, through a tarball, or by other
       means. You can come back to this section after you acquire the
-      OpenACS code, but don't forget to come back. (Note to
+      OpenACS code, but don&#39;t forget to come back. (Note to
       maintainers: this should be moved to the next page and
       integrated into the text there)
     </para>

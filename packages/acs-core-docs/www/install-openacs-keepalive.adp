@@ -13,10 +13,10 @@ Chapter 6. Production Environments"
 instance.</h2></div></div></div><p>The simplest way to start and stop and OpenACS site is to run
 the startup shell script provided, <code class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/etc/daemontools/run</code>.
 This runs as a regular task, and logs to the logfile. To stop the
-site, kill the script.</p><p>A more stable way to run OpenACS is with a "keepalive" mechanism
-of some sort, so that whenever the server halts or is stopped for a
-reset, it restarts automatically. This is recommended for
-development and production servers.</p><p>The Reference Platform uses Daemontools to control AOLserver. A
+site, kill the script.</p><p>A more stable way to run OpenACS is with a "keepalive"
+mechanism of some sort, so that whenever the server halts or is
+stopped for a reset, it restarts automatically. This is recommended
+for development and production servers.</p><p>The Reference Platform uses Daemontools to control AOLserver. A
 simpler method, using <code class="computeroutput">init</code>, is
 <a class="link" href="install-openacs-inittab" title="AOLserver keepalive with inittab">here</a>.</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem"><p>Daemontools must already be installed. If not, <a class="link" href="install-daemontools" title="Install Daemontools (OPTIONAL)">install it</a>.</p></li><li class="listitem">
@@ -109,7 +109,7 @@ server.</p><pre class="screen">
 </li><li class="listitem">
 <p>Verify that the controls work. You may want to <code class="computeroutput">tail -f /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/log/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>-error.log</code>
 in another window, so you can see what happens when you type these
-commands.</p><p>Most of this information comes from Tom Jackson's <a class="ulink" href="http://zmbh.com/daemontools-aolserver/daemontools-aolserver.html" target="_top">AOLserver+Daemontools Mini-HOWTO</a>.</p>
+commands.</p><p>Most of this information comes from Tom Jackson&#39;s <a class="ulink" href="http://zmbh.com/daemontools-aolserver/daemontools-aolserver.html" target="_top">AOLserver+Daemontools Mini-HOWTO</a>.</p>
 </li>
 </ol></div><div class="table">
 <a name="idp140641344750592" id="idp140641344750592"></a><p class="title"><strong>Table 6.1. How it

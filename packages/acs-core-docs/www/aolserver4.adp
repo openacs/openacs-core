@@ -31,12 +31,12 @@ info patchlevel
 </pre><p>If the first command returns anything other than <code class="computeroutput">1</code>, then tcl is not threaded. If tcl is
 threaded and the version is 8.4 or higher, then installing tcl from
 source is optional.</p><p>
-<a name="tcl-download" id="tcl-download"></a><strong>Retrieve Tcl 8.4
-(or higher). </strong>Download and install Tcl 8.4 from
-source</p><p>Note for Debian users: you can apt-get install tcl8.4-dev if you
+<a name="tcl-download" id="tcl-download"></a><strong>Retrieve
+Tcl 8.4 (or higher). </strong>Download and install Tcl
+8.4 from source</p><p>Note for Debian users: you can apt-get install tcl8.4-dev if you
 have the right version (stable users will need to add tcl8.4 to
 their sources.list file as described on the <a class="link" href="postgres" title="Install PostgreSQL">Install Postgres</a>
-page). You'll have to use /usr/lib/tcl8.4/ instead of
+page). You&#39;ll have to use /usr/lib/tcl8.4/ instead of
 /usr/local/lib when you try to find the tcl libraries, however.</p><p>If you have not installed Tcl already, download the latest Tcl
 version from Sourceforge</p><p>
 <span class="bold"><strong>Debian:</strong></span><code class="computeroutput"><span class="action"><span class="action">apt-get
@@ -63,8 +63,8 @@ make install</span></span>
 </pre>
 </li><li class="listitem">
 <a name="aolserver4-download" id="aolserver4-download"></a><p>
-<strong>Retrieve AOLserver. </strong>Download the aolserver
-from CVS.</p><pre class="screen">
+<strong>Retrieve AOLserver. </strong>Download the
+aolserver from CVS.</p><pre class="screen">
 [root root]# <strong class="userinput"><code>cd /usr/local/src</code></strong>
 [root src]# <strong class="userinput"><code>mkdir aolserver40r10</code></strong>
 [root src]# <strong class="userinput"><code>cd aolserver40r10</code></strong>
@@ -93,9 +93,9 @@ cvs -z3 -d:pserver:anonymous\@cvs.sourceforge.net:/cvsroot/tcllib co -r tcllib-1
 </li><li class="listitem">
 <a name="aolserver4-install" id="aolserver4-install"></a><p>
 <strong>Configure, compile and install
-AOLserver. </strong>Many people need to run more than one
-version of AOLserver in parallel. This section accomodates future
-upgrades by installing AOLserver 4 in <code class="computeroutput">/usr/local/aolserver40r9</code>.</p><pre class="screen">
+AOLserver. </strong>Many people need to run more than
+one version of AOLserver in parallel. This section accomodates
+future upgrades by installing AOLserver 4 in <code class="computeroutput">/usr/local/aolserver40r9</code>.</p><pre class="screen">
 [root aolserver]# <strong class="userinput"><code>cd /usr/local/src/aolserver40r10/aolserver</code></strong>
 [root aolserver]# <strong class="userinput"><code>./configure --prefix=/usr/local/aolserver40r10 --with-tcl=/usr/local/lib/</code></strong>
 [root aolserver]# <strong class="userinput"><code>make install</code></strong><span class="action"><span class="action">cd /usr/local/src/aolserver40r10/aolserver
@@ -191,15 +191,15 @@ platforms (e.g. for Debian 3.0: --with-tcl=/usr/lib/tcl8.4)</p><p>Now you can co
 </ol></div>
 </li><li class="listitem">
 <a name="aolserver4-db-wrapper" id="aolserver4-db-wrapper"></a><p>
-<strong>Add a database-specific wrapper script. </strong>This
-script sets database environment variables before starting
-AOLserver; this allows the AOLserver instance to communicate with
-the database. There is one script for Oracle and one for
-PostgreSQL. They do not conflict. If you plan to use both
-databases, install both. Note that this section requires you to
-have OpenACS files available, which you can get through CVS,
+<strong>Add a database-specific wrapper
+script. </strong>This script sets database environment
+variables before starting AOLserver; this allows the AOLserver
+instance to communicate with the database. There is one script for
+Oracle and one for PostgreSQL. They do not conflict. If you plan to
+use both databases, install both. Note that this section requires
+you to have OpenACS files available, which you can get through CVS,
 through a tarball, or by other means. You can come back to this
-section after you acquire the OpenACS code, but don't forget to
+section after you acquire the OpenACS code, but don&#39;t forget to
 come back. (Note to maintainers: this should be moved to the next
 page and integrated into the text there)</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem">
@@ -226,15 +226,16 @@ chmod 755 nsd-postgres</span></span>
 </ul></div><p>You may need to edit these scripts if you are not using
 /usr/local/aolserver as the directory of Aolserver4.</p>
 </li><li class="listitem"><p>
-<strong>Change startup script (optional). </strong>If you want
-to run AOLserver on a port below 1024 (normally, for a webserver
-you will use 80), you will have to change the <code class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/etc/daemontools/run</code>
+<strong>Change startup script
+(optional). </strong>If you want to run AOLserver on a
+port below 1024 (normally, for a webserver you will use 80), you
+will have to change the <code class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">service0</span></span>/etc/daemontools/run</code>
 script according to the documentation found there (namely: Add the
 -b <span class="replaceable"><span class="replaceable">yourip:yourport</span></span> switch)</p></li><li class="listitem"><p>
 <a class="link" href="aolserver">Test
 AOLserver</a>.</p></li>
-</ol></div><div class="cvstag">($&zwnj;Id: aolserver4.xml,v 1.31 2014/10/27 16:39:31
-victorg Exp $)</div>
+</ol></div><div class="cvstag">($&zwnj;Id: aolserver4.html,v 1.27.2.10 2016/06/21
+07:44:35 gustafn Exp $)</div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 		    leftLink="postgres" leftLabel="Prev" leftTitle="Install PostgreSQL"

@@ -7,7 +7,7 @@ Environments</property>
 <include src="/packages/acs-core-docs/lib/navheader"
 		    leftLink="upgrade-supporting" leftLabel="Prev"
 		    title="
-Part II. Administrator's Guide"
+Part II. Administrator&#39;s Guide"
 		    rightLink="install-openacs-keepalive" rightLabel="Next">
 		<div class="chapter">
 <div class="titlepage"><div><div><h2 class="title">

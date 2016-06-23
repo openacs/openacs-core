@@ -24,7 +24,7 @@
  
     <para>
       The history of OpenACS documentation:  ..began by
-      building on a good documentation base from ArsDigita's ACS in the
+      building on a good documentation base from ArsDigita&#39;s ACS in the
       late 1990's. Some sections of the documentation, however, lacked
       details and examples; others simply did not exist. The OpenACS
       community began meeting the challenge by identifying needs and
@@ -53,7 +53,7 @@
       developers had to learn the system through experience with
       working with it and discussion in the forums.  Informal sharing
       of experiential and tacit knowledge has become the OpenACS
-      community's main method of sharing knowledge.
+      community&#39;s main method of sharing knowledge.
     </para>
     <para>
       This document attempts to shape ongoing documentation efforts by
@@ -225,7 +225,7 @@
         documentation is organized. 
       </para></listitem>
       <listitem><para>
-        The use licenses between OpenACS and Arsdigita's ACS are not
+        The use licenses between OpenACS and Arsdigita&#39;s ACS are not
         compatible, thereby creating strict limits on how much
         OpenACS developers should have access to Arsdigita code and
         resources.  The OpenACS documentation has a new legal
@@ -422,8 +422,8 @@
       <listitem><para>
         Create a long bulleted list of features. Feature list should
         go deeper than high-level feature lists and look at the
-        quality of the implementations (from the user's perspective,
-        not the programmer's).  Example issues an end-user may have
+        quality of the implementations (from the user&#39;s perspective,
+        not the programmer&#39;s).  Example issues an end-user may have
         questions about: Ticket Tracker and Ticket Tracker Lite, why
         would I want one of them vs the other? And, before I specify
         to download and install it, what credit card gateways are
@@ -476,7 +476,7 @@
       <listitem><para>
         Create a list of administrative tools that are useful to
         administrating OpenACS, including developer support,
-        schema-browser and api browser. Link to AOLserver's config
+        schema-browser and api browser. Link to AOLserver&#39;s config
         file documentation.
       </para></listitem>
       <listitem><para>
@@ -697,7 +697,7 @@
       </para></listitem>
       <listitem><para>
         Add overview diagrams showing the core parts of the
-        datamodel including an updated summary of Greenspun's
+        datamodel including an updated summary of Greenspun&#39;s
         Chapter 4: Data Models and the Object System 
       </para></listitem>
       <listitem><para>
@@ -868,7 +868,7 @@
     
     <para>
       The following DocBook primer walks you through the basics, and should cover the
-      needs for 95 percent of the documentation we produce. You are welcome to explore DocBook's
+      needs for 95 percent of the documentation we produce. You are welcome to explore DocBook&#39;s
       <ulink url="http://docbook.org/tdg/en/html/part2.html">
     list of elements</ulink> and use more exotic features in your
       documents. The list is made up of SGML-elements but basically
@@ -921,7 +921,7 @@
     <ulink url="http://sourceforge.net/projects/docbook/">XSL
     Stylesheets</ulink> (docbook-xsl) - The stylesheets to convert
     to HTML. We have been using a stylesheet based upon
-    NWalsh's chunk.xsl.
+    NWalsh&#39;s chunk.xsl.
     </para>
       </listitem>
       
@@ -991,7 +991,7 @@
              |
              +--sect2           : <emphasis role="strong">Sections</emphasis> - <emphasis>functional requirements</emphasis>
                  |
-                 +--sect3       : <emphasis role="strong">Subsections</emphasis> - <emphasis>Programmer's API</emphasis>
+                 +--sect3       : <emphasis role="strong">Subsections</emphasis> - <emphasis>Programmer&#39;s API</emphasis>
                      |
                     ...         : <emphasis role="strong">...</emphasis>
     </programlisting>
@@ -1024,7 +1024,7 @@
       <computeroutput>id</computeroutput>, is standard and can be used with all elements. It comes in  very 
       handy when interlinking between documents (more about this when talking about links in <xref linkend="dbprimer-links"/>). 
       The value of <computeroutput>id</computeroutput> has to be unique 
-      throughout the book you're making since the <computeroutput>id</computeroutput>'s in your 
+      throughout the book you&#39;re making since the <computeroutput>id</computeroutput>'s in your 
       <computeroutput>sect1</computeroutput>'s will turn into filenames when the book is parsed into HTML.
     </para>
 
@@ -1036,7 +1036,7 @@
 
     <para>
       Right after the opening tag you put the title of the document - this is usually the same as 
-      <computeroutput>xreflabel</computeroutput>-attribute. E.g. the top level of the document you're
+      <computeroutput>xreflabel</computeroutput>-attribute. E.g. the top level of the document you&#39;re
       reading right now looks like this:
     </para>
 
@@ -1104,7 +1104,7 @@
 
     <para>
       <indexterm><primary>Linking</primary></indexterm>
-      Linking falls into two different categories: inside the book you're making and outside:
+      Linking falls into two different categories: inside the book you&#39;re making and outside:
     </para>
 
 
@@ -1117,7 +1117,7 @@
         with a simple tag, regardless of where that part is.
       </para>
 
-      <para><indexterm><primary>xref</primary><secondary>linkend</secondary></indexterm>Check out how I link to a subsection of the Developer's Guide:</para>
+      <para><indexterm><primary>xref</primary><secondary>linkend</secondary></indexterm>Check out how I link to a subsection of the Developer&#39;s Guide:</para>
 
 
       <para>Put this in your XML:</para>
@@ -1152,7 +1152,7 @@
         </listitem>
       </orderedlist>
 
-      <para>If the section you link to hasn't a specified <computeroutput>xreflabel</computeroutput>-attribute,
+      <para>If the section you link to hasn&#39;t a specified <computeroutput>xreflabel</computeroutput>-attribute,
         the link is going to look like this:</para>
 
 
@@ -1171,7 +1171,7 @@
 
 
       <para>
-        Note that since I haven't provided an <computeroutput>xreflabel</computeroutput> for the subsection, 
+        Note that since I haven&#39;t provided an <computeroutput>xreflabel</computeroutput> for the subsection, 
         <computeroutput>packages-looks</computeroutput>, the
         parser will try its best to explain where the link takes you.
       </para>
@@ -1184,7 +1184,7 @@
     <term><emphasis role="strong">2. Linking outside the documentation</emphasis></term>
     <listitem><para>
         <indexterm><primary>ulink</primary></indexterm>
-        If you're hyper-linking out of the documentation, it works almost the same way as HTML - the tag is just
+        If you&#39;re hyper-linking out of the documentation, it works almost the same way as HTML - the tag is just
         a little different
 
         (<ulink url="http://docbook.org/tdg/en/html/ulink.html"><computeroutput>&lt;ulink&gt;</computeroutput></ulink>):
@@ -1261,7 +1261,7 @@
 
     <para>
       <indexterm><primary>lists</primary></indexterm>
-      Here's how you make the DocBook equivalent of the three usual HTML-lists:
+      Here&#39;s how you make the DocBook equivalent of the three usual HTML-lists:
     </para>
 
     <variablelist>
@@ -1311,7 +1311,7 @@
       <varlistentry>
     <term><emphasis role="strong">3. How to make a &lt;dl&gt;</emphasis></term>
     <listitem><para>
-        This kind of list is called a <computeroutput>variablelist</computeroutput> and these are the tags you'll need to 
+        This kind of list is called a <computeroutput>variablelist</computeroutput> and these are the tags you&#39;ll need to 
         make it happen:
         <ulink url="http://docbook.org/tdg/en/html/variablelist.html"><computeroutput>&lt;variablelist&gt;</computeroutput></ulink>,
         <ulink url="http://docbook.org/tdg/en/html/varlistentry.html"><computeroutput>&lt;varlistentry&gt;</computeroutput></ulink>, 
@@ -1430,7 +1430,7 @@
     </para>
 
     <para>
-      The <computeroutput>&lt;emphasis&gt;</computeroutput> tag defaults to italics when parsed. If you're looking for 
+      The <computeroutput>&lt;emphasis&gt;</computeroutput> tag defaults to italics when parsed. If you&#39;re looking for 
       emphasizing with bold type, use <computeroutput>&lt;emphasis role="strong"&gt;</computeroutput>.
     </para>
 
@@ -1486,7 +1486,7 @@
     
     <note>
       <para>
-      This example uses Daniel Veillard's <emphasis
+      This example uses Daniel Veillard&#39;s <emphasis
       role="strong">xsltproc</emphasis> command available
       as part of libxslt from <ulink
       url="http://www.xmlsoft.org/XSLT/">http://www.xmlsoft.org/XSLT/</ulink>.
@@ -1539,7 +1539,7 @@
       wrote an <link linkend="psgml-mode">intro to the PSGML Mode in Emacs</link>
     </para></listitem>
       <listitem><para>
-      James Clark's free Java parser
+      James Clark&#39;s free Java parser
       <ulink url="http://www.jclark.com/xml/xp/index.html">XP</ulink>. Note that
       this does not validate XML, only parses it.
       </para></listitem>
@@ -1562,7 +1562,7 @@
     <para>
       In the process of transforming your HTML into XML, 
       <ulink url="http://tidy.sourceforge.net/">HTML tidy</ulink>
-      can be a handy tool to make your HTML "regexp'able".
+      can be a handy tool to make your HTML "regexp&#39;able".
       Brandoch Calef has made a 
       <ulink
       url="http://web.archive.org/web/20010830084757/http://developer.arsdigita.com/working-papers/bcalef/html-to-docbook.html">Perl

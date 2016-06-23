@@ -54,8 +54,8 @@ cd ~/openacs/packages
             cvs -d:pserver:anonymous\@openacs.org:/cvsroot co edit-this-page
 </pre>
 </li><li class="listitem"><p>Go to the package manager at http://yoursite/acs-admin/apm. And
-install the new package: edit-this-page.</p></li><li class="listitem"><p>Or use the "Add Application" form available on the Main
-site.</p></li>
+install the new package: edit-this-page.</p></li><li class="listitem"><p>Or use the "Add Application" form available on the
+Main site.</p></li>
 </ul></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
@@ -86,8 +86,8 @@ cp article-content.adp col2-content.adp
 </li><li class="listitem">
 <p>The template should provide us with the following ETP
 layout:</p><div class="table">
-<a name="idp140641343525936"></a><p class="title"><strong>TableÂ 10.1.Â table showing
-ETP layout</strong></p><div class="table-contents"><table class="table" summary="table showing ETP layout" cellspacing="0" border="1" width="250">
+<a name="idp140669741815440"></a><p class="title"><strong>TableÂ 10.1.Â table
+showing ETP layout</strong></p><div class="table-contents"><table class="table" summary="table showing ETP layout" cellspacing="0" border="1" width="250">
 <colgroup>
 <col align="left" class="c1"><col width="2" align="left" class="c2">
 </colgroup><tbody>
@@ -97,10 +97,10 @@ ETP layout</strong></p><div class="table-contents"><table class="table" summary=
 </tbody>
 </table></div>
 </div><br class="table-break">
-</li><li class="listitem"><p>The "Main Content" pane should contain the editable content that
-ETP provides.</p></li><li class="listitem"><p>The "Header" should display the title of the page that you set
-in ETP.</p></li><li class="listitem"><p>The "Sidebar" should display the extlinks that you add as a
-content item in ETP.</p></li>
+</li><li class="listitem"><p>The "Main Content" pane should contain the editable
+content that ETP provides.</p></li><li class="listitem"><p>The "Header" should display the title of the page that
+you set in ETP.</p></li><li class="listitem"><p>The "Sidebar" should display the extlinks that you add
+as a content item in ETP.</p></li>
 </ul></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">

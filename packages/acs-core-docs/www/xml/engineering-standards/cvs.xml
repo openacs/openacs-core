@@ -71,7 +71,7 @@ cvs -q</action></screen>
         <para>Administrator Note: These are the steps to grant CVS commit rights to a user:</para>
       <orderedlist>
         <listitem>
-          <para>Create the user's account.  On cvs.openacs.org:</para>
+          <para>Create the user&#39;s account.  On cvs.openacs.org:</para>
           <screen><action>sudo bash
 /usr/sbin/useradd -c "<replaceable>Real Name</replaceable>" -G cvs -p <replaceable>passwd</replaceable> <replaceable>username</replaceable>
 /usr/sbin/usermod -G cvs,<replaceable>username</replaceable> <replaceable>username</replaceable>
@@ -245,7 +245,7 @@ ref-timezones search</programlisting>
                   calendar package. All non-core, non-dotlrn packages should have a
                   tag of this style, based on the package name. Many packages have
                   not been re-released since the new naming convention was adopted
-                  and so don't have a tag of this type.
+                  and so don&#39;t have a tag of this type.
                 </para>
               </listitem>
 
@@ -477,9 +477,9 @@ cvs tag -b <replaceable>oacs-5-1</replaceable></programlisting>
         be addressed with another upgrade script. E.g., the last planned
         upgrade script for a package previously in dev 1 would be
         upgrade-2.0.0d1-2.0.0b1.sql, not upgrade-2.0.0d1-2.0.0.sql. Note
-        that using rc1 instead of b1 would be nice, because that's the
+        that using rc1 instead of b1 would be nice, because that&#39;s the
         convention with release codes in cvs, but the package manager
-        doesn't support rc tags.</emphasis>
+        doesn&#39;t support rc tags.</emphasis>
       </para>
 
           </listitem>
@@ -629,9 +629,9 @@ cvs tag -b <replaceable>oacs-5-1</replaceable></programlisting>
           </listitem>
         </orderedlist>
         <para>
-          For example, adding a new API function wouldn't require a
+          For example, adding a new API function wouldn&#39;t require a
           TIP. Changing an existing API function by adding an optional new
-          flag which defaults to no-effect wouldn't require a TIP. Added a
+          flag which defaults to no-effect wouldn&#39;t require a TIP. Added a
           new mandatory flag to an existing function would require a
           TIP.
         </para>
@@ -715,13 +715,13 @@ cvs tag -b <replaceable>oacs-5-1</replaceable></programlisting>
       <listitem>
         <para>
           Commit one cohesive bug fix or feature change at a time.
-          Don't put a bunch of unrelated changes into one commit.
+          Don&#39;t put a bunch of unrelated changes into one commit.
         </para>
       </listitem>
       <listitem>
         <para>
           Before you throw out or change a piece of code that you
-          don't fully understand, use cvs annotate and cvs log on the file to
+          don&#39;t fully understand, use cvs annotate and cvs log on the file to
           see who wrote the code and why. Consider contacting the
           author.
         </para>
@@ -768,7 +768,7 @@ cvs tag -b <replaceable>oacs-5-1</replaceable></programlisting>
               OpenACS cvs web</ulink>
             and
             <ulink url="http://xarg.net/tools/cvs/">
-              Jeff's cvs
+              Jeff&#39;s cvs
               browser
             </ulink>
             are useful tools in understanding what is
@@ -809,7 +809,7 @@ cvs tag -b <replaceable>oacs-5-1</replaceable></programlisting>
         </listitem>
         <listitem>
           <para>
-            <ulink url="http://www.piskorski.com/docs/cvs-conventions.html">Piskorski's cvs refs</ulink>
+            <ulink url="http://www.piskorski.com/docs/cvs-conventions.html">Piskorski&#39;s cvs refs</ulink>
           </para>
         </listitem>
         <listitem>

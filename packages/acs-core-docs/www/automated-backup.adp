@@ -23,10 +23,9 @@ with your specific parameters.</p></li><li class="listitem">
 chmod +x backup.sh
 </pre>
 </li><li class="listitem">
-<p>Set this file to run automatically by adding a line to root's
-crontab. (Typically, with <code class="computeroutput">export
-EDITOR=emacs; crontab -e</code>.) This example runs the backup
-script at 1:30 am every day.</p><pre class="programlisting">
+<p>Set this file to run automatically by adding a line to
+root&#39;s crontab. (Typically, with <code class="computeroutput">export EDITOR=emacs; crontab -e</code>.) This
+example runs the backup script at 1:30 am every day.</p><pre class="programlisting">
 30 1 * * *        sh /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/etc/backup.sh
 </pre>
 </li>

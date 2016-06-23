@@ -10,7 +10,7 @@ makes this even easier.
 </p><p>There were four significant problems with the way OpenACS previously used the
 database (i.e., directly through the <code class="computeroutput">ns_db</code> interface):</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p><span class="strong"><strong>Handle management</strong></span>. We required code to pass database
 handles around, and for routines which needed to perform database access but
-didn't receive a database handle as input, it was difficult to know from
+didn&#39;t receive a database handle as input, it was difficult to know from
 which of the three "magic pools" (main, subquery, and log) to
 allocate a new handle. 
 
@@ -50,7 +50,7 @@ variable named <code class="computeroutput">selection</code> (likewise for
 <code class="computeroutput">set_variables_after_subquery</code> and <code class="computeroutput">subselection</code>). 
 
 
-</p></li><li class="listitem"><p><span class="strong"><strong>Hard-coded reliance on Oracle</strong></span>. It's difficult to
+</p></li><li class="listitem"><p><span class="strong"><strong>Hard-coded reliance on Oracle</strong></span>. It&#39;s difficult to
 write code supporting various different databases (dynamically using the
 appropriate dialect based on the type of database being used, e.g., using
 <code class="computeroutput">DECODE</code> on Oracle and <code class="computeroutput">CASE ... WHEN</code> on
@@ -68,9 +68,9 @@ be Oracle for now.)
 3.3.1. The statement names supplied to each call are not used by the API at
 all. The API's design for SQL abstraction is in fact incomplete;
 unresolved issues include:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>how to add <code class="computeroutput">WHERE</code> clause criteria dynamically</p></li><li class="listitem"><p>how to build a dynamic <code class="computeroutput">ORDER BY</code> clause (Ben Adida has a
-proposed solution for this)</p></li><li class="listitem"><p>how to define a statement's formal interface (i.e., what bind
+proposed solution for this)</p></li><li class="listitem"><p>how to define a statement&#39;s formal interface (i.e., what bind
 variables it expects, what columns its <code class="computeroutput">SELECT</code> clause must
-contain if it's a query) without actually implementing the statement in a
+contain if it&#39;s a query) without actually implementing the statement in a
 specific SQL dialect</p></li></ul></div><p>
 So why is the incremental change of adding statement naming to the API worth
 the effort? It is worth the effort because we know that giving each SQL
@@ -79,8 +79,8 @@ design. Therefore, we know that the effort will not be wasted, and taking
 advantage of the new support for bind variables will already require code
 that uses 3.3.0 version of the API to be updated. 
 </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="db-api-detailed-set-var-aft-query"></a>The Bell Tolls for <code class="computeroutput">set_variables_after_query</code></h3></div></div></div><p>
-<code class="computeroutput">set_variables_after_query</code> is gone! (Well, it's still there,
-but you'll never need to use it.) The new API routines set local
+<code class="computeroutput">set_variables_after_query</code> is gone! (Well, it&#39;s still there,
+but you&#39;ll never need to use it.) The new API routines set local
 variables automatically. For instance: 
 </p><pre class="programlisting">
 
@@ -88,8 +88,8 @@ db_1row select_names "select first_names, last_name from users where user_id = [
 doc_body_append "Hello, $first_names $last_name!"
 
 </pre><p>
-Like <code class="computeroutput">ns_db 1row</code>, this will bomb if the query doesn't return
-any rows (no such user exists). If this isn't what you want, you can
+Like <code class="computeroutput">ns_db 1row</code>, this will bomb if the query doesn&#39;t return
+any rows (no such user exists). If this isn&#39;t what you want, you can
 write: 
 </p><pre class="programlisting">
 
@@ -97,7 +97,7 @@ if { [db_0or1row select_names "select first_names, last_name from users where us
     doc_body_append "Hello, $first_names $last_name!"
 } else {
     # Executed if the query returns no rows.
-    doc_body_append "There's no such user!"
+    doc_body_append "There&#39;s no such user!"
 }
 
 </pre><p>
@@ -110,7 +110,7 @@ db_foreach select_names "select first_names, last_name from users" {
 }
 
 </pre><p>
-That's right, <code class="computeroutput">db_foreach</code> is now like <code class="computeroutput">ns_db
+That&#39;s right, <code class="computeroutput">db_foreach</code> is now like <code class="computeroutput">ns_db
 select</code> plus a <code class="computeroutput">while</code> loop plus
 <code class="computeroutput">set_variables_after_query</code> plus an <code class="computeroutput">if</code> statement
 (containing code to be executed if no rows are returned). 
@@ -120,7 +120,7 @@ select</code> plus a <code class="computeroutput">while</code> loop plus
 db_foreach select_names "select first_names, last_name from users where last_name like 'S%'" {
      doc_body_append "Say hi to $first_names $last_name for me!&lt;br&gt;"
 } if_no_rows {
-     doc_body_append "There aren't any users with last names beginnings with S!"
+     doc_body_append "There aren&#39;t any users with last names beginnings with S!"
 }
 
 </pre></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="db-api-detailed-handles"></a>Handle Management</h3></div></div></div><p>
@@ -135,7 +135,7 @@ db_foreach select_names "select first_names, last_name, user_id from users" {
     doc_body_append "&lt;li&gt;User $first_names $last_name\n&lt;ul&gt;"
 
     db_foreach select_groups "select group_id from user_group_map where user_id = $user_id" {
-        # There's a selection in progress, so we allocated a database handle
+        # There&#39;s a selection in progress, so we allocated a database handle
         # from the subquery pool for this selection.
         doc_body_append "&lt;li&gt;Member of group #$group_id.\n"
     } if_no_rows {
@@ -147,12 +147,12 @@ doc_body_append "&lt;/ul&gt;"
 db_release_unused_handles
 
 </pre><p>
-A new handle isn't actually allocated and released for every selection,
+A new handle isn&#39;t actually allocated and released for every selection,
 of course - as a performance optimization, the API keeps old handles around
 until <code class="computeroutput">db_release_unused_handles</code> is invoked (or the script
 terminates). 
 </p><p>Note that there is no analogue to <code class="computeroutput">ns_db gethandle</code> - the
-handle is always automatically allocated the first time it's needed.</p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="db-api-detailed-bindvars"></a>Bind Variables</h3></div></div></div><p><span class="strong"><strong>Introduction</strong></span></p><p>
+handle is always automatically allocated the first time it&#39;s needed.</p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="db-api-detailed-bindvars"></a>Bind Variables</h3></div></div></div><p><span class="strong"><strong>Introduction</strong></span></p><p>
 Most SQL statements require that the code invoking the statement pass along
 data associated with that statement, usually obtained from the user. For
 instance, in order to delete a WimpyPoint presentation, a Tcl script might
@@ -163,7 +163,7 @@ delete from wp_presentations where presentation_id = <span class="emphasis"><em>
 
 </pre><p>
 where <span class="emphasis"><em><code class="computeroutput">some_presentation_id</code></em></span> is a number which is a valid
-presentation ID of the presentation I want to delete. It's easy to write
+presentation ID of the presentation I want to delete. It&#39;s easy to write
 code handling situations like this since SQL statements can include
 <span class="strong"><strong>bind variables</strong></span>, which represent placeholders for actual
 data. A bind variable is specified as a colon followed by an identifier, so
@@ -177,7 +177,7 @@ db_dml presentation_delete {
 </pre><p>
 When this SQL statement is invoked, the value for the bind variable
 <code class="computeroutput">:some_presentation_id</code> is pulled from the Tcl variable
-<code class="computeroutput">$some_presentation_id</code> (in the caller's environment). Note
+<code class="computeroutput">$some_presentation_id</code> (in the caller&#39;s environment). Note
 that bind variables are not limited to one per statement; you can use an
 arbitrary number, and each will pull from the correspondingly named Tcl
 variable. (Alternatively, you can also specify an list or <code class="computeroutput">ns_set</code>
@@ -187,7 +187,7 @@ there is never any need to put single-quotes around the value for a bind
 variable, or to use <code class="computeroutput">db_quote</code> to escape single-quotes contained
 in the value. The following works fine, despite the apostrophe:</p><pre class="programlisting">
 
-set exclamation "That's all, folks!"
+set exclamation "That&#39;s all, folks!"
 db_dml exclamation_insert { insert into exclamations(exclamation) values(:exclamation) }
 
 </pre><p>Note that you can use a bind variable in a SQL statement only where you
@@ -223,7 +223,7 @@ This deletes every presentation in the database! Using bind variables
 eliminates this gaping security hole: since bind variable values are taken
 literally. Oracle will attempt to delete presentations whose presentation ID
 is literally <code class="computeroutput">'3 or 1 = 1'</code> (i.e., no presentations, since
-<code class="computeroutput">'3 or 1 = 1'</code> can't possibly be a valid integer
+<code class="computeroutput">'3 or 1 = 1'</code> can&#39;t possibly be a valid integer
 primary key for <code class="computeroutput">wp_presentations</code>. In general, since Oracle
 always considers the values of bind variables to be literals, it becomes more
 difficult for users to perform URL surgery to trick scripts into running
@@ -377,7 +377,7 @@ will write something like:
 </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>first_names is Jon. last_name is Salz.</p></li><li class="listitem"><p>first_names is Lars. last_name is Pind.</p></li><li class="listitem"><p>first_names is Michael. last_name is Yoon.</p></li></ul></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="dp-api-detailed-api"></a>API</h3></div></div></div><p>
 Note that you never have to use <code class="computeroutput">ns_db</code> anymore (including
 <code class="computeroutput">ns_db gethandle</code>)! Just start doing stuff, and (if you want) call
-<code class="computeroutput">db_release_unused_handles</code> when you're done as a hint to
+<code class="computeroutput">db_release_unused_handles</code> when you&#39;re done as a hint to
 release the database handle. 
 </p><div class="variablelist"><dl class="variablelist"><dt><span class="term"><span class="strong"><strong><code class="computeroutput"><a name="kernel.dbapi_db_null"></a>db_null</code></strong></span>
 
@@ -413,7 +413,7 @@ loop and flush the database handle) and <code class="computeroutput">continue</c
 column values. Raises an error if the query does not return exactly 1 row. </p><p>Example:</p><pre class="programlisting">
 
 db_1row select_foo "select foo, bar from greeble where greeble_id = $greeble_id"
-# Bombs if there's no such greeble!
+# Bombs if there&#39;s no such greeble!
 # Now $foo and $bar are set.
 
 </pre></dd><dt><span class="term"><span class="strong"><strong><code class="computeroutput"><a name="kernel.dbapi_db_0or1row"></a>db_0or1row</code></strong></span> </span></dt><dd><pre class="programlisting">
@@ -424,7 +424,7 @@ sets variables to column values and returns 1. If no rows are returned,
 returns 0. If more than one row is returned, throws an error. </p></dd><dt><span class="term"><span class="strong"><strong><code class="computeroutput"><a name="kernel.dbapi_db_string"></a>db_string</code></strong></span> </span></dt><dd><pre class="programlisting">
 <span class="strong"><strong>db_string</strong></span> <span class="emphasis"><em>statement-name</em></span> <span class="emphasis"><em>sql</em></span> [ -default <span class="emphasis"><em>default</em></span> ] [ -bind <span class="emphasis"><em>bind_set_id</em></span> | -bind <span class="emphasis"><em>bind_value_list</em></span> ]
 </pre><p>Returns the first column of the result of SQL query
-<span class="emphasis"><em><code class="computeroutput">sql</code></em></span>. If <span class="emphasis"><em><code class="computeroutput">sql</code></em></span> doesn't return a
+<span class="emphasis"><em><code class="computeroutput">sql</code></em></span>. If <span class="emphasis"><em><code class="computeroutput">sql</code></em></span> doesn&#39;t return a
 row, returns <span class="emphasis"><em><code class="computeroutput">default</code></em></span> (or throws an error if
 <span class="emphasis"><em><code class="computeroutput">default</code></em></span> is unspecified). Analogous to
 <code class="computeroutput">database_to_tcl_string</code> and
@@ -440,7 +440,7 @@ uses a value from the pool if available to save a round-trip to the database.
 </p></dd><dt><span class="term"><span class="strong"><strong><code class="computeroutput"><a name="kernel.dbapi_db_list"></a>db_list</code></strong></span></span></dt><dd><pre class="programlisting">
 <span class="strong"><strong>db_list</strong></span> <span class="emphasis"><em>statement-name</em></span> <span class="emphasis"><em>sql</em></span> [ -bind <span class="emphasis"><em>bind_set_id</em></span> | -bind <span class="emphasis"><em>bind_value_list</em></span> ]
 </pre><p>Returns a Tcl list of the values in the first column of the result of SQL
-query <span class="emphasis"><em><code class="computeroutput">sql</code></em></span>. If <span class="emphasis"><em><code class="computeroutput">sql</code></em></span> doesn't
+query <span class="emphasis"><em><code class="computeroutput">sql</code></em></span>. If <span class="emphasis"><em><code class="computeroutput">sql</code></em></span> doesn&#39;t
 return any rows, returns an empty list. Analogous to
 <code class="computeroutput">database_to_tcl_list</code>. 
 
@@ -448,7 +448,7 @@ return any rows, returns an empty list. Analogous to
 <span class="strong"><strong>db_list_of_lists</strong></span> <span class="emphasis"><em>statement-name</em></span> <span class="emphasis"><em>sql</em></span> [ -bind <span class="emphasis"><em>bind_set_id</em></span> | -bind <span class="emphasis"><em>bind_value_list</em></span> ]
 </pre><p>Returns a Tcl list, each element of which is a list of all column values
 in a row of the result of SQL query <span class="emphasis"><em><code class="computeroutput">sql</code></em></span>. If
-<span class="emphasis"><em><code class="computeroutput">sql</code></em></span> doesn't return any rows, returns an empty list.
+<span class="emphasis"><em><code class="computeroutput">sql</code></em></span> doesn&#39;t return any rows, returns an empty list.
 (Analogous to <code class="computeroutput">database_to_tcl_list_list</code>.) 
 
 </p></dd><dt><span class="term"><span class="strong"><strong><code class="computeroutput"><a name="kernel.dbapi_db_list_of_ns_sets"></a>db_list_of_ns_sets</code></strong></span></span></dt><dd><pre class="programlisting">
@@ -560,11 +560,11 @@ several nested transactions, all of them are terminated. Use this instead of
     </p><p>
     Each row also has a column, rownum, automatically
     added and set to the row number, starting with 1. Note that this will
-    override any column in the SQL statement named 'rownum', also if you're
+    override any column in the SQL statement named 'rownum', also if you&#39;re
     using the Oracle rownum pseudo-column.
     </p><p>
     If the <code class="computeroutput">-local</code> is passed, the variables defined
-    by db_multirow will be set locally (useful if you're compiling dynamic templates
+    by db_multirow will be set locally (useful if you&#39;re compiling dynamic templates
     in a function or similar situations).
     </p><p>                                                                                                                                        
     You may supply a code block, which will be executed for each row in
@@ -580,7 +580,7 @@ several nested transactions, all of them are terminated. Use this instead of
     useful for things like constructing a URL for the object retrieved by
     the query.
     </p><p>
-    If you're constructing your multirow through multiple queries with the
+    If you&#39;re constructing your multirow through multiple queries with the
     same set of columns, but with different rows, you can use the
     <code class="computeroutput">-append</code> switch. This causes the rows returned by this query
     to be appended to the rows already in the multirow, instead of starting
@@ -612,7 +612,7 @@ statement.
 </p></dd><dt><span class="term"><span class="strong"><strong><code class="computeroutput"><a name="kernel.dbapi_db_with_handle"></a>db_with_handle</code></strong></span></span></dt><dd><pre class="programlisting">
 <span class="strong"><strong>db_with_handle</strong></span> <span class="emphasis"><em>var</em></span> <span class="emphasis"><em>code_block</em></span>
 </pre><p>Places a database handle into the variable <span class="emphasis"><em><code class="computeroutput">var</code></em></span> and
-executes <span class="emphasis"><em><code class="computeroutput">code_block</code></em></span>. This is useful when you don't
+executes <span class="emphasis"><em><code class="computeroutput">code_block</code></em></span>. This is useful when you don&#39;t
 want to have to use the new API (<code class="computeroutput">db_foreach</code>,
 <code class="computeroutput">db_1row</code>, etc.), but need to use database handles explicitly. </p><p>Example:</p><pre class="programlisting">
 
@@ -623,7 +623,7 @@ proc lookup_the_foo { foo } {
 }
 
 db_with_handle db {
-    # Now there's a database handle in $db.
+    # Now there&#39;s a database handle in $db.
     set selection [ns_db select $db "select foo from bar"]
     while { [ns_db getrow $db $selection] } {
         set_variables_after_query
@@ -677,7 +677,7 @@ db_with_handle db {
 			<span class="strong"><strong>db_package_supports_rdbms_p</strong></span> db_type_list
 		</pre><p>
 			Returns 1 if db_type_list contains the current RDMBS type.  A package
-			intended to run with a given RDBMS must note this in it's package info
+			intended to run with a given RDBMS must note this in it&#39;s package info
 			file regardless of whether or not it actually uses the database. 
 		</p></dd><dt><span class="term">
 		<span class="strong"><strong>

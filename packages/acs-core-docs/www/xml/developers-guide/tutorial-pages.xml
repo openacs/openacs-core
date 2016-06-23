@@ -20,7 +20,7 @@
   </sect2>
   <sect2>
     <title>Page Map</title>
-    <para>Our package will have two visible pages.  The first shows a list of all objects; the second shows a single object in view or edit mode, and can also be used to add an object.  The index page will display the list, but since we might reuse the list later, we'll put it in a seperate file and include it on the index page.</para>
+    <para>Our package will have two visible pages.  The first shows a list of all objects; the second shows a single object in view or edit mode, and can also be used to add an object.  The index page will display the list, but since we might reuse the list later, we&#39;ll put it in a seperate file and include it on the index page.</para>
       <figure>
         <title>Page Map</title>
         <mediaobject>
@@ -41,7 +41,7 @@
       holds html.  The <computeroutput>-postgres.xql</computeroutput>
       and <computeroutput>-oracle.xql</computeroutput> files contains
       database-specific SQL.  The default page in any directory is
-      <computeroutput>index</computeroutput>, so we'll build that
+      <computeroutput>index</computeroutput>, so we&#39;ll build that
       first, starting with the tcl file:</para>
       <screen>[$OPENACS_SERVICE_NAME postgresql]$<userinput> cd /var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/packages/myfirstpackages/www</userinput>
 [$OPENACS_SERVICE_NAME www]$ <userinput>emacs index.tcl</userinput></screen>
@@ -49,7 +49,7 @@
       <programlisting><xi:include href="../../files/tutorial/index.tcl" xi:parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"><xi:fallback>example missing</xi:fallback></xi:include></programlisting>
     <para>Now <computeroutput>index.adp</computeroutput>:</para>
       <programlisting><xi:include href="../../files/tutorial/index.adp" xi:parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"><xi:fallback>example missing</xi:fallback></xi:include></programlisting>
-      <para>The index page includes the list page, which we put in /lib instead of /www to designate that it's available for reuse by other packages.</para>
+      <para>The index page includes the list page, which we put in /lib instead of /www to designate that it&#39;s available for reuse by other packages.</para>
       <screen>[$OPENACS_SERVICE_NAME www]$<userinput> mkdir /var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/packages/myfirstpackage/lib</userinput>
 [$OPENACS_SERVICE_NAME www]$<userinput> cd /var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/packages/myfirstpackage/lib</userinput>
 [$OPENACS_SERVICE_NAME lib]$ <userinput>emacs note-list.tcl</userinput></screen>

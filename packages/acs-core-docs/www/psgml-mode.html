@@ -10,9 +10,9 @@ it can save you some typing since pressing <code class="computeroutput">C-c/</co
 tag automatically.</p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="psgml-mode-getit"></a>Where to get it</h3></div></div></div><p>Most newer emacsen come with PSGML mode preinstalled. You can find out
 whether your emacs has it with the <code class="computeroutput">locate-library</code> command. In Emacs,
 type <code class="computeroutput">M-x locate-library</code> and enter <code class="computeroutput">psgml</code>. Emacs will tell
-you if it found it or not.</p><p>If you don't have PSGML preinstalled in your Emacs, there are two
+you if it found it or not.</p><p>If you don&#39;t have PSGML preinstalled in your Emacs, there are two
 things you can do:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>On Linux: Get the <a class="ulink" href="ftp://sourceware.cygnus.com:/pub/docbook-tools/docware/RPMS/noarch/psgml-1.2.1-1.noarch.rpm" target="_top">
-psgml rpm</a> from <a class="ulink" href="http://sources.redhat.com/docbook-tools/" target="_top">RedHat's
+psgml rpm</a> from <a class="ulink" href="http://sources.redhat.com/docbook-tools/" target="_top">RedHat&#39;s
 docbook-tools</a> and install it as usual.</p></li><li class="listitem"><p>On other systems: Get the tarball from the <a class="ulink" href="http://www.lysator.liu.se/~lenst/about_psgml/" target="_top">PSGML Website.</a>
 Unpack it and follow the install instructions.</p></li></ol></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="psgml-mode-catalogs"></a>Using <code class="computeroutput">CATALOG</code> files</h3></div></div></div><p>The easiest way to teach PSGML mode about a DTD is by adding it to your
 own <code class="computeroutput">CATALOG</code>. Here is an example of how you can set that up for the
@@ -29,7 +29,7 @@ directory and put the line </p><pre class="programlisting">
 in it. By maintaining your own <code class="computeroutput">CATALOG</code>, it is easy to add more
 DTD's without changing your emacs settings. (<span class="emphasis"><em>How about that HTML 4.01 DTD you
 always wanted to get from <a class="ulink" href="http://www.w3.org/TR/html4/" target="_top">W3C</a> ? The
-DTD is in the zip archives and tarballs available on the site.</em></span>)</p></li></ol></div><p>That's it. Now you are ready to tell emacs all about PSGML mode and
+DTD is in the zip archives and tarballs available on the site.</em></span>)</p></li></ol></div><p>That&#39;s it. Now you are ready to tell emacs all about PSGML mode and
 that funky <code class="computeroutput">CATALOG</code></p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="psgml-mode-tell-emacs"></a>What to tell emacs</h3></div></div></div><p>If you installed PSGML mode in a non-standard location, e.g., somewhere in
 your home directory, you need to add this to the <code class="computeroutput">load-path</code> by adding
 this line to your <code class="computeroutput">.emacs</code> file:</p><pre class="programlisting">
@@ -79,8 +79,8 @@ case, do <span class="emphasis"><em>not</em></span> include a DOCTYPE declaratio
    
 </pre><p>Which says that the parent of this document can be found in the file
 <code class="computeroutput">top.xml</code>, that the element in the parent that will enclose the
-current document is a <code class="computeroutput">book</code> and that the current file's topmost
+current document is a <code class="computeroutput">book</code> and that the current file&#39;s topmost
 element is a <code class="computeroutput">sect1</code>.</p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="psgml-mode-usage"></a>How to use it</h3></div></div></div><p>Of course, you should read the emacs texinfo pages that come with PSGML
 mode from start to finish. Barring that, here are some handy commands:</p><div class="informaltable"><table class="informaltable" cellspacing="0" border="0"><colgroup><col><col></colgroup><thead><tr><th>Key</th><th>Command</th></tr></thead><tbody><tr><td><code class="computeroutput">C-c C-e</code></td><td>Insert an element. Uses completion and only lets you insert elements that
-are valid</td></tr><tr><td><code class="computeroutput">C-c C-a</code></td><td>Edit attributes of enclosing element.</td></tr><tr><td><code class="computeroutput">C-c C-x C-i</code></td><td>Show information about the document's DTD.</td></tr><tr><td><code class="computeroutput">C-c C-x C-e</code></td><td>Describe element. Shows for one element which elements can be parents,
+are valid</td></tr><tr><td><code class="computeroutput">C-c C-a</code></td><td>Edit attributes of enclosing element.</td></tr><tr><td><code class="computeroutput">C-c C-x C-i</code></td><td>Show information about the document&#39;s DTD.</td></tr><tr><td><code class="computeroutput">C-c C-x C-e</code></td><td>Describe element. Shows for one element which elements can be parents,
 what its contents can be and lists its attributes.</td></tr></tbody></table></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="psgml-mode-reading"></a>Further reading</h3></div></div></div><p>Start with the <a class="xref" href="docbook-primer.html" title="OpenACS Documentation Guide">the section called “OpenACS Documentation Guide”</a></p><div class="cvstag">($Id$)</div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="docbook-primer.html">Prev</a> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right"> <a accesskey="n" href="nxml-mode.html">Next</a></td></tr><tr><td width="40%" align="left">OpenACS Documentation Guide </td><td width="20%" align="center"><a accesskey="u" href="doc-standards.html">Up</a></td><td width="40%" align="right"> Using nXML mode in Emacs</td></tr></table><hr><address><a href="mailto:docs@openacs.org">docs@openacs.org</a></address></div><a name="comments"></a><center><a href="http://openacs.org/doc/current/psgml-mode.html#comments">View comments on this page at openacs.org</a></center></body></html>

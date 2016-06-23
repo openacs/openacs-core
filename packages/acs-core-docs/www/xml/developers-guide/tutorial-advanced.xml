@@ -12,14 +12,14 @@
     <para>This tutorial covers topics which are not essential to
     creating a minimal working package.  Each section can be used
     independently of all of the others; all sections assume that
-    you've completed the basic tutorial.</para>
+    you&#39;ve completed the basic tutorial.</para>
 
     <sect1 id="tutorial-specs">
       <title>Write the Requirements and Design Specs</title>
       <para>Before you get started you should make yourself familiar with
       the tags that are used to write your documentation. For tips on
         editing SGML files in emacs, see <xref linkend="docbook-primer"/>.</para>
-      <para>It's time to document.  For the tutorial we'll use
+      <para>It&#39;s time to document.  For the tutorial we&#39;ll use
       pre-written documentation.  When creating a package
       from scratch, start by copying the documentation template from
 	<computeroutput>/var/lib/aolserver/openacs-dev/packages/acs-core-docs/xml/docs/xml/package-documentation-template.xml</computeroutput>
@@ -82,7 +82,7 @@ Writing index.html for book
       <title>Add the new package to CVS</title>
       <para>Before you do any more work, make sure that your work is
       protected by putting it all into cvs.  The <computeroutput>cvs
-      add</computeroutput> command is not recursive, so you'll have to
+      add</computeroutput> command is not recursive, so you&#39;ll have to
       traverse the directory tree manually and add as you go.  (<ulink
       url="http://www.piskorski.com/docs/cvs-conventions.html">More on
       CVS</ulink>)</para>
@@ -336,7 +336,7 @@ done
 
   <sect1 id="tutorial-comments">
      <title>Adding Comments</title>
-     <para>You can track comments for any ACS Object.  Here we'll track
+     <para>You can track comments for any ACS Object.  Here we&#39;ll track
      comments for notes.  On the note-edit.tcl/adp pair, which is used to
      display individual notes, we want to put a link to add comments at
      the bottom of the screen.  If there are any comments, we want to
@@ -380,7 +380,7 @@ done
        Delete Selected button on the bottom of the list.
        </para></listitem>
        <listitem><para>Dedicated admin pages.  If you want admins to have
-       access to data that users aren't interested in or aren't allowed
+       access to data that users aren&#39;t interested in or aren&#39;t allowed
        to see you will need dedicated admin pages.  The conventional
        place to put those dedicated admin pages is in the
  <computeroutput>/var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/packages/myfirstpackage/www/admin</computeroutput>
@@ -389,7 +389,7 @@ done
 <screen>[$OPENACS_SERVICE_NAME www]$ <userinput>mkdir admin</userinput></screen>
 <screen>[$OPENACS_SERVICE_NAME www]$ <userinput>cd admin</userinput></screen>
       <para>
-      Even if your application doesn't need any admin pages of its own you will
+      Even if your application doesn&#39;t need any admin pages of its own you will
       usually need at least one simple page with a bunch of links to existing
       administration UI such as Category Management or standard Parameters UI.
       Adding the link to Category Management is described in the section on
@@ -431,12 +431,12 @@ set parameters_url [export_vars -base "/shared/parameters" {
 
 <para>
 Now that you have the first admin page it would be nice to have a link to it
-somewhere in the system so that admins don't have to type in the
+somewhere in the system so that admins don&#39;t have to type in the
 <computeroutput>/admin</computeroutput> every time they need to reach it.  You
 could put a static link to the toplevel
 <computeroutput>index.adp</computeroutput> but that might be distracting for
 people who are not admins.  Besides, some people consider it impolite to first
-offer a link and then display a nasty "You don't have permission to access this
+offer a link and then display a nasty "You don&#39;t have permission to access this
 page" message.
 </para>
 <para>
@@ -477,20 +477,20 @@ In
     <para>extended by <ulink url="mailto:nima.mazloumi@gmx.de">Nima Mazloumi</ulink></para>
   </authorblurb>
     <para>You can associate any ACS Object with one or more categories.
-    In this tutorial we'll show how to equip your application with user
+    In this tutorial we&#39;ll show how to equip your application with user
     interface to take advantage of the Categories service.
     </para>
     <para>
-    We'll start by installing the Categories service.  Go to
+    We&#39;ll start by installing the Categories service.  Go to
     <computeroutput>/acs/admin</computeroutput> and install it.  This step
-    won't be necessary for the users of your applications because you'll create
+    won&#39;t be necessary for the users of your applications because you&#39;ll create
     a dependency with the Package Manager which will take care that the
     Categories service always gets installed when your application gets
     installed.
     </para>
     <para>
     Now that we have installed the Categories service we can proceed to
-    modifying our application so that it can take advantage of it.  We'll do it
+    modifying our application so that it can take advantage of it.  We&#39;ll do it
     in three steps:
     </para>
     <orderedlist>
@@ -543,8 +543,8 @@ In
           to categorize items.  The easiest way to do this is by adding the
           <computeroutput>category</computeroutput> widget type of the
           form builder to <computeroutput>note-edit.tcl</computeroutput>.
-          To achieve this we'll need to use the <computeroutput>-extend</computeroutput>
-          switch to the <computeroutput>ad_form</computeroutput> command. Here's the "meat" of the
+          To achieve this we&#39;ll need to use the <computeroutput>-extend</computeroutput>
+          switch to the <computeroutput>ad_form</computeroutput> command. Here&#39;s the "meat" of the
           <computeroutput>note-edit.tcl</computeroutput> page:</para>
           <programlisting>
 			# extend the form to support categories
@@ -583,7 +583,7 @@ should be deleted.  It also looks for a confirmation variable, which
 should initially be absert.  If it is absent, we create a form to
 allow the user to confirm the deletion.  Note that in
 <computeroutput>entry-edit.tcl</computeroutput> we used <computeroutput>ad_form</computeroutput> to access the Form Template
-commands; here, we call them directly because we don't need the extra
+commands; here, we call them directly because we don&#39;t need the extra
 features of ad_form.  The form calls itself, but
 with hidden variables carrying both
 <computeroutput>note_id</computeroutput> and
@@ -744,7 +744,7 @@ form generated by the ad_form command with the matching name.  Test it
         		set category_name [category::get_name $category_id]
         		if { $category_name eq "" } {
             		ad_return_exception_page 404 "No such category" "Site-wide \
-          			Category with ID $category_id doesn't exist"
+          			Category with ID $category_id doesn&#39;t exist"
             		return
         		}
         		# Show Category in context bar
@@ -846,7 +846,7 @@ form generated by the ad_form command with the matching name.  Test it
     developer, there are a couple of steps you need to take in order
     to release a new version of your package. </para>
 
-    <para>For the sake of this example, let's assume you are the
+    <para>For the sake of this example, let&#39;s assume you are the
     package owner of the <computeroutput>notes</computeroutput>
     package. It is currently at version 1.5, and you are planning on
     releasing version 1.6. It is also located in OpenACS's CVS.</para>
@@ -954,7 +954,7 @@ cvs tag -F openacs-5-1-compat
       -- @creation-date 2002-05-16
       --
       -- This code is newly concocted by Ben, but with significant concepts and code
-      -- lifted from Gilbert's UBB forums. Thanks Orchard Labs.
+      -- lifted from Gilbert&#39;s UBB forums. Thanks Orchard Labs.
       -- Lars and Jade in turn lifted this from gwong and ben.
 
 create function inline_0 ()
@@ -1138,7 +1138,7 @@ drop function inline_0();
     <computeroutput>tree_level()</computeroutput> function, which
     gives you the level, starting from 1, 2, 3... </para>
 
-    <para>Here's an example, pulling all of the children for a given
+    <para>Here&#39;s an example, pulling all of the children for a given
   parent:</para> 
 
     <programlisting>
@@ -1155,14 +1155,14 @@ drop function inline_0();
       and parent.key = :the_parent_key;
       </programlisting>
 
-    <para>The reason we substract the parent's tree_level from the
-    child's tree_level is that the tree_levels are global, so if you
-    want the parent's tree_level to start with 0, you'll want the
-    subtraction in there. This is a reason you'll commonly see magic
+    <para>The reason we substract the parent&#39;s tree_level from the
+    child&#39;s tree_level is that the tree_levels are global, so if you
+    want the parent&#39;s tree_level to start with 0, you&#39;ll want the
+    subtraction in there. This is a reason you&#39;ll commonly see magic
     numbers in tree_sortkey SQL queries, like
     <computeroutput>tree_level(children.tree_sortkey) -
     4</computeroutput>. That is basically an incorrect way to do it,
-    and subtracting the parent's tree_level is the preferred method.</para>
+    and subtracting the parent&#39;s tree_level is the preferred method.</para>
 
     <para>This example does not include the parent. To return the entire subtree including the parent, leave out the non-equals clause:</para>
 
@@ -1384,7 +1384,7 @@ db_multirow \
         </itemizedlist>
       </listitem>
       <listitem>
-        <para>If you are correctly flushing the cached value, then it will need to be reloaded.  You may wish to pre-load it, so that the loading delay does not impact users.  If you have a sequence of pages, you could call the cached proc in advance, to increase the chances that it's loaded and current when the user reaches it.  Or, you can call (and discard) it immediately after flushing it.</para>
+        <para>If you are correctly flushing the cached value, then it will need to be reloaded.  You may wish to pre-load it, so that the loading delay does not impact users.  If you have a sequence of pages, you could call the cached proc in advance, to increase the chances that it&#39;s loaded and current when the user reaches it.  Or, you can call (and discard) it immediately after flushing it.</para>
       </listitem>
     </orderedlist>
   </sect1>
@@ -1434,7 +1434,7 @@ db_multirow \
 	} ...
 	</programlisting>
 	<warning>
-	<para>You must not give your your form the same name that your page has. Otherwise HTMLArea won't load.</para>
+	<para>You must not give your your form the same name that your page has. Otherwise HTMLArea won&#39;t load.</para>
 	</warning>
 	<para>Convert your textarea widget to a richtext widget and enable htmlarea.</para>
 	<para>The <code>htmlarea_p</code>-flag can be used to prevent 
@@ -1455,7 +1455,7 @@ db_multirow \
 	<code>ad_form</code> or you will have problems 
 	displaying the content or handling the data manipulation correctly.</para>
 	<para>Depending on the data model of your package you either support a content format 
-	or don't. If you don't you can assume <code>"text/html"</code> or 
+	or don&#39;t. If you don&#39;t you can assume <code>"text/html"</code> or 
 	<code>"text/richtext"</code> or <code>"text/enhanced"</code>.</para>
 	<para>The relevant parts in your <code>ad_form</code> definition are the 
 	switches <code>-new_data</code>, <code>-edit_data</code>, 
@@ -1474,7 +1474,7 @@ db_multirow \
 	</programlisting>
 	<para>Now the correct values for <code>my_input_field_2</code> and 
 	<code>format</code> are passed to the <code>-new_data</code> and 
-	<code>-edit_data</code> blocks which don't need to get touched.</para>
+	<code>-edit_data</code> blocks which don&#39;t need to get touched.</para>
 	<para>To make HTMLArea optional per package instance define a string parameter 
 	<code>UseWysiwygP</code> which defaults <code>0</code> for your 
 	package using the APM.</para>
@@ -1555,7 +1555,7 @@ ad_page_contract {
 
     <para>Under the Manage section, click on Parameters</para>
 
-    <para>It's fairly self-explanatory at this point. Create the
+    <para>It&#39;s fairly self-explanatory at this point. Create the
     parameters you want, and then access them in your code using the
     parameter::get procedure.</para>
 
@@ -1674,7 +1674,7 @@ ns_param pools_legacy [list legacy]</programlisting>
   <sect1 id="tutorial-future-topics">
   <title>Future Topics</title>
     <itemizedlist>
-      <listitem><para>How to enforce security so that users can't
+      <listitem><para>How to enforce security so that users can&#39;t
       change other users records</para>
       </listitem>
       <listitem><para>How to use the content management tables so that
@@ -1685,7 +1685,7 @@ ns_param pools_legacy [list legacy]</programlisting>
       <listitem><para>How to prepare pagelets for inclusion in other pages</para></listitem>
       <listitem><para>How and when to put procedures in a tcl procedure library</para></listitem>
       <listitem><para>More on ad_form - data validation, other stuff.
-      (plan to draw from Jon Griffin's doc)</para></listitem>
+      (plan to draw from Jon Griffin&#39;s doc)</para></listitem>
       <listitem><para>partialquery in xql</para></listitem>
       <listitem><para>How to use the html/text entry widget to get the
       "does this look right" confirm page </para></listitem>

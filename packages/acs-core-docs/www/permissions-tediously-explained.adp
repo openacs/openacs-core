@@ -130,8 +130,8 @@ are discussed in the following sections.</p>
 <a name="permissions-tedious-context-hierarchy" id="permissions-tedious-context-hierarchy"></a>Context
 Hierarchy</h3></div></div></div><p>Suppose objects <span class="emphasis"><em>A</em></span>,
 <span class="emphasis"><em>B</em></span>, ..., and <span class="emphasis"><em>F</em></span> form the following hierarchy.</p><div class="table">
-<a name="idp140641354647744" id="idp140641354647744"></a><p class="title"><strong>Table 11.2. Context
-Hierarchy Example</strong></p><div class="table-contents"><table class="table" summary="Context Hierarchy Example" cellspacing="0" border="1">
+<a name="idp140641354647744" id="idp140641354647744"></a><p class="title"><strong>Table 11.2. Context Hierarchy
+Example</strong></p><div class="table-contents"><table class="table" summary="Context Hierarchy Example" cellspacing="0" border="1">
 <colgroup>
 <col align="center" class="c1"><col align="center" class="c2"><col align="center" class="c3">
 </colgroup><tbody>
@@ -156,8 +156,8 @@ Hierarchy Example</strong></p><div class="table-contents"><table class="table" s
 </table></div>
 </div><br class="table-break"><p>This can be represented in the <a class="xref" href="permissions-tediously-explained">acs_objects</a>
 table by the following entries:</p><div class="table">
-<a name="idp140641354664256" id="idp140641354664256"></a><p class="title"><strong>Table 11.3. acs_objects
-example data</strong></p><div class="table-contents"><table class="table" summary="acs_objects example data" cellspacing="0" border="1">
+<a name="idp140641354664256" id="idp140641354664256"></a><p class="title"><strong>Table 11.3. acs_objects example
+data</strong></p><div class="table-contents"><table class="table" summary="acs_objects example data" cellspacing="0" border="1">
 <colgroup>
 <col align="center" class="c1"><col align="center" class="c2">
 </colgroup><thead><tr>
@@ -195,8 +195,8 @@ table.</p><div class="informaltable"><table class="informaltable" cellspacing="0
 </table></div><p>The fact that Joe can also read <span class="emphasis"><em>B</em></span>, <span class="emphasis"><em>C</em></span>, ..., and <span class="emphasis"><em>F</em></span> can be derived by ascertaining that
 these objects are children of <span class="emphasis"><em>A</em></span> by traversing the context hierarchy.
 As it turns out, hierarchical queries are expensive. As Rafael
-Schloming put it so aptly, <span class="emphasis"><em>Oracle can't
-deal with hierarchies for shit.</em></span>
+Schloming put it so aptly, <span class="emphasis"><em>Oracle
+can&#39;t deal with hierarchies for shit.</em></span>
 </p><p>One way to solve this problem is to cache a flattened view of
 the context tree like so:</p><div class="informaltable"><table class="informaltable" cellspacing="0" border="1">
 <colgroup>
@@ -295,9 +295,9 @@ begin
     end if;
 end;
 </pre><p>One final note about <a class="xref" href="permissions-tediously-explained">acs_objects</a>.
-By setting an object's <code class="computeroutput">security_inherit_p</code> column to 'f', you can
-stop permissions from cascading down the context tree. In the
-following example, Joe does not have the read permissions on
+By setting an object&#39;s <code class="computeroutput">security_inherit_p</code> column to 'f',
+you can stop permissions from cascading down the context tree. In
+the following example, Joe does not have the read permissions on
 <span class="emphasis"><em>C</em></span> and <span class="emphasis"><em>F</em></span>.</p><div class="informaltable"><table class="informaltable" cellspacing="0" border="1">
 <colgroup>
 <col align="center" class="c1"><col align="center" class="c2"><col align="center" class="c3">
@@ -663,7 +663,7 @@ OpenACS. This is accessible from Tcl via the <code class="computeroutput">permis
     as
       exists_p char(1);
     begin
-      -- XXX This must be fixed: -1 shouldn't be hardcoded (it is the public)
+      -- XXX This must be fixed: -1 shouldn&#39;t be hardcoded (it is the public)
       select decode(count(*),0,'f','t') into exists_p
         from <a class="xref" href="permissions-tediously-explained">acs_object_party_privilege_map</a>
        where object_id = permission_p.object_id

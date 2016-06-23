@@ -18,7 +18,7 @@ the Object Model (OM, also referred to later as the object system) is
 concerned primarily with the storage and management of <span class="emphasis"><em>metadata</em></span>, on
 any object within a given instance of OpenACS 4. The term "metadata"
 refers to any extra data the OM stores on behalf of the application - outside
-of the application's data model - in order to enable certain generic
+of the application&#39;s data model - in order to enable certain generic
 services. The term "object" refers to any entity being represented
 within the OpenACS, and typically corresponds to a single row within the
 relational database.</p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="object-system-requirements-vision"></a>Vision Statement</h3></div></div></div><p>The OpenACS 4 Object Model must address five high-level requirements that
@@ -52,7 +52,7 @@ on, a notion of "scoping" was introduced into the core data
 model.</p><p>"Scope" is a term best explained by example. Consider some
 hypothetical rows in the <code class="computeroutput">address_book</code> table:</p><div class="informaltable"><table class="informaltable" cellspacing="0" border="1"><colgroup><col><col><col><col></colgroup><tbody><tr><td><span class="strong"><strong>...</strong></span></td><td><span class="strong"><strong><code class="computeroutput">scope</code></strong></span></td><td><span class="strong"><strong><code class="computeroutput">user_id</code></strong></span></td><td><span class="strong"><strong><code class="computeroutput">group_id</code></strong></span></td><td><span class="strong"><strong>...</strong></span></td></tr><tr><td>...</td><td><code class="computeroutput">user</code></td><td><code class="computeroutput">123</code></td><td> </td><td>...</td></tr><tr><td>...</td><td><code class="computeroutput">group</code></td><td> </td><td><code class="computeroutput">456</code></td><td>...</td></tr><tr><td>...</td><td><code class="computeroutput">public</code></td><td> </td><td> </td><td>...</td></tr></tbody></table></div><p>The first row represents an entry in User 123's personal address book,
 the second row represents an entry in User Group 456's shared address
-book, and the third row represents an entry in the site's public address
+book, and the third row represents an entry in the site&#39;s public address
 book.</p><p>In this way, the scoping columns identify the security context in which a
 given object belongs, where each context is <span class="emphasis"><em>either</em></span> a person
 <span class="emphasis"><em>or</em></span> a group of people <span class="emphasis"><em>or</em></span> the general public (itself a group
@@ -68,7 +68,7 @@ above.</p><p><span class="strong"><strong>Extensible Data Models</strong></span>
 tables in the system became bloated as they were extended to support an
 increasing number of modules. The <code class="computeroutput">users</code> table is the best case
 in point: it became full of columns that exist for various special
-applications (e.g. user portraits), but that aren't really related to
+applications (e.g. user portraits), but that aren&#39;t really related to
 each other in any way except that they store information on users, i.e. the
 table became grossly denormalized. Normalizing (breaking-down) this table
 into several pieces, each of which is specific to a particular application,
@@ -82,13 +82,13 @@ inheritance. Developers can then use the framework to allow users to define
 custom extensions to the existing data models, and the OM does the
 bookkeeping necessary to make this easier, providing a generic API for object
 creation that automatically keeps track of the location and relationships
-between data.</p><p><span class="strong"><strong>Design Note:</strong></span> While this doesn't really belong in a
+between data.</p><p><span class="strong"><strong>Design Note:</strong></span> While this doesn&#39;t really belong in a
 requirements document, the fact that we are constrained to using relational
 databases means that certain constraints on the overall design of the object
 data model exist, which you can read about in <a class="xref" href="object-system-design.html#object-system-design-summary" title="Summary and Design Considerations">Summary and Design Considerations</a>.</p><p><span class="strong"><strong>Modifiable Data Models</strong></span></p><p>Another recurring applications problem is how to store a modifiable data
 model, or how to store information that may change extensively between
 releases or in different client installations. Furthermore, we want to avoid
-changes to an application's database queries in the face of any custom
+changes to an application&#39;s database queries in the face of any custom
 extensions, since such changes are difficult or dangerous to make at runtime,
 and can make updating the system difficult. Some example applications in OpenACS
 3.x with modifiable data models include:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>User/groups: developers and users can attach custom data to group types,
@@ -150,7 +150,7 @@ to readily build and use generic services that work globally across a
 system.</p><p>The object identifiers should be subject to the following
 requirements:</p><p><span class="strong"><strong>10.10 Uniqueness</strong></span></p><p>The object ID should be unique among all the IDs in the entire OpenACS system
 in which the object lives.</p><p><span class="strong"><strong>10.20 Useful as a Reference</strong></span></p><p>Applications should be able to use the unique object ID as a reference,
-with which they can fetch any or all of the object's attributes.</p><p><span class="strong"><strong>10.30 Storable</strong></span></p><p>Object IDs should be storable in tables. e.g. you should be able to use
+with which they can fetch any or all of the object&#39;s attributes.</p><p><span class="strong"><strong>10.30 Storable</strong></span></p><p>Object IDs should be storable in tables. e.g. you should be able to use
 them to implement mapping tables between objects, to represent
 relationships.</p><p><span class="strong"><strong>10.40 Moveable</strong></span></p><p>Objects should be mobile between databases. That is, information will
 often need to be moved between multiple servers (development, staging, and
@@ -258,7 +258,7 @@ impact query performance.</p></dd><dt><span class="term"><span class="strong"><s
 another. Since it is important that the largest audience of developers
 possible adopts and uses the OM, it must be easy to incorporate into
 applications, and it must not impose undue requirements on an
-application's data model. In other words, it should be easy to "hook
+application&#39;s data model. In other words, it should be easy to "hook
 into" the object model, and that ability should not have a major impact
 on the application data model.</p><p><span class="strong"><strong>Note:</strong></span> Is the API the only way to obtain values? How does
 this integrate with application level SQL queries?</p></dd></dl></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="object-system-requirements-history"></a>Revision History</h3></div></div></div><div class="informaltable"><table class="informaltable" cellspacing="0" border="1"><colgroup><col><col><col><col></colgroup><tbody><tr><td><span class="strong"><strong>Document Revision #</strong></span></td><td><span class="strong"><strong>Action Taken, Notes</strong></span></td><td><span class="strong"><strong>When?</strong></span></td><td><span class="strong"><strong>By Whom?</strong></span></td></tr><tr><td>0.1</td><td>Creation</td><td>08/10/2000</td><td>Bryan Quinn</td></tr><tr><td>0.2</td><td>Major re-write</td><td>08/11/2000</td><td>Pete Su</td></tr><tr><td>0.3</td><td>Draft completed after initial reviews</td><td>08/22/2000</td><td>Pete Su</td></tr><tr><td>0.4</td><td>Edited, updated to conform to requirements template, pending freeze</td><td>08/23/2000</td><td>Kai Wu</td></tr><tr><td> </td><td>Final edits before freeze</td><td>08/24/2000</td><td>Pete Su</td></tr><tr><td>0.5</td><td>Edited for consistency</td><td>08/27/2000</td><td>Kai Wu</td></tr><tr><td>0.6</td><td>Put Object ID stuff first, because it makes more sense</td><td>08/28/2000</td><td>Pete Su</td></tr><tr><td>0.7</td><td>Added requirement that knowledge-level objects must be moveable between

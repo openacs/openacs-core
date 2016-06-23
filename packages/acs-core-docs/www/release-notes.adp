@@ -31,8 +31,9 @@ functions.</p></li><li class="listitem">
 from db_* calls, which were ignored due .xql files</p></li><li class="listitem" style="list-style-type: circle"><p>Removed bug where same query-name was used in different branches
 of an if-statement for different sql statements, but the query-name
 lead to the wrong result.</p></li><li class="listitem" style="list-style-type: circle"><p>Removed multiple entries of same query name from .xql files
-(e.g. the entry "package_create_attribute_list.select_type_info"
-was 7 (!) times in a single .xql file)</p></li>
+(e.g. the entry
+"package_create_attribute_list.select_type_info" was 7
+(!) times in a single .xql file)</p></li>
 </ul></div>
 </li>
 </ul></div>
@@ -48,17 +49,17 @@ sites)</p></li><li class="listitem" style="list-style-type: circle"><p>New admin
 (/acs-admin).</p></li><li class="listitem" style="list-style-type: circle"><p>Added explanatory text to several admin pages.</p></li>
 </ul></div>
 </li><li class="listitem"><p>Add lightweight support for ckeditor4 for templating::richtext
-widget (configurable via package parameter "RichTextEditor" of
-acs-templating. ckeditor4 supports mobile devices (such as iPad,
-...)</p></li>
+widget (configurable via package parameter
+"RichTextEditor" of acs-templating. ckeditor4 supports
+mobile devices (such as iPad, ...)</p></li>
 </ul></div>
 </li><li class="listitem">
 <p>Templating:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: square;">
 <li class="listitem"><p>Improved theme-ability: Moved more information into theme
 packages in order to create responsive designs, reduce hard-coding
 of paths, HTML etc.</p></li><li class="listitem"><p>Improved include-handling: All includes are now theme-able,
-interfaces of includes can be defined with "ad_include_contract"
-(similar to ad_page_contract).</p></li><li class="listitem"><p>Improved them-ability for display_templates. One can now provide
+interfaces of includes can be defined with
+"ad_include_contract" (similar to ad_page_contract).</p></li><li class="listitem"><p>Improved them-ability for display_templates. One can now provide
 a display_template_name (similar to the sql statement name) to
 refer to display templates. This enables reusability and is
 theme-able.</p></li><li class="listitem"><p>Dimensional slider reform (ad_dimensional): Removed hard-coded
@@ -71,20 +72,22 @@ operations such as granting permissions since a link can be set to
 timeout after e.g. 60 seconds; after that, the link is invalid. A
 secret (password) can be set in section ns/server/$server/acs
 parameter "parametersecret". For example, one can use now
-"user_id:sign(max_age=60)" in export_vars to let the exported
-variable expire after 60 seconds.</p></li>
+"user_id:sign(max_age=60)" in export_vars to let the
+exported variable expire after 60 seconds.</p></li>
 </ul></div>
 </li><li class="listitem">
 <p>Misc:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: square;">
 <li class="listitem"><p>Added ability to show ns_log statements of current request to
 developer support output when developer support is activated
-(controlled via package parameter "TclTraceLogServerities" in the
-acs-tcl package parameters)</p></li><li class="listitem"><p>Added ability to save data sent by ns_return in files on the
+(controlled via package parameter
+"TclTraceLogServerities" in the acs-tcl package
+parameters)</p></li><li class="listitem"><p>Added ability to save data sent by ns_return in files on the
 file system. This can be used to validate HTML content also for
 password protected pages (controlled via package parameter
-"TclTraceSaveNsReturn" in the acs-tcl package parameters)</p></li><li class="listitem"><p>New api function "ad_log" having the same interface as ns_log,
-but which logs the calling information (like URL and call-stack) to
-ease tracking of errors.</p></li><li class="listitem"><p>Use per-thread caching to reduce number of mutex lock operations
+"TclTraceSaveNsReturn" in the acs-tcl package
+parameters)</p></li><li class="listitem"><p>New api function "ad_log" having the same interface as
+ns_log, but which logs the calling information (like URL and
+call-stack) to ease tracking of errors.</p></li><li class="listitem"><p>Use per-thread caching to reduce number of mutex lock operations
 and lock contention on various caches (util-memoize, xo_site_nodes,
 xotcl_object_types) and nsvs (e.g ds_properties)</p></li><li class="listitem"><p>Improved templating of OpenACS core documentation</p></li><li class="listitem"><p>Improved Russian Internationalization</p></li><li class="listitem"><p>Make pretty-names of acs-core packages more consistent</p></li><li class="listitem"><p>Mark unused functions of acs-tcl/tcl/table-display-procs.tcl as
 deprecated</p></li><li class="listitem"><p>Many more bug fixes (from bug tracker and extra) and performance
@@ -176,28 +179,29 @@ than 18.000 modifications (781 commits) contributed by 7
 committers.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="release-notes-5-7-0" id="release-notes-5-7-0"></a>Release 5.7.0</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;"><li class="listitem"><p>Made changes that extend acs-kernel's create_type and
-create_attribute procs, so they're optionally able to create sql
-tables and columns. Optional metadata params allow for the
+<a name="release-notes-5-7-0" id="release-notes-5-7-0"></a>Release 5.7.0</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;"><li class="listitem"><p>Made changes that extend acs-kernel&#39;s create_type and
+create_attribute procs, so they&#39;re optionally able to create
+sql tables and columns. Optional metadata params allow for the
 automatic generation of foreign key references, check exprs,
 etc.</p></li></ul></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="release-notes-5-6-0" id="release-notes-5-6-0"></a>Release 5.6.0</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;"><li class="listitem">
-<p>Added new package dependency type, "embeds". This is a variant
-of the "extends" package dependency type added in OpenACS 5.5.0. It
-allows one to write embeddable packages, with scripts made visible
-in client packages using URLs which include the embedded package's
-package key. An example embeddable package might be a rewritten
-"attachments" package. The current implementation requires a global
-instance be mounted, and client packages generate urls to that
-global instance. Among other things, this leads to the user
-navigating to the top-level subsite, losing any subsite theming
-that might be associated with a community. Using "embeds", a
-rewritten package would run in the client package's context,
-maintaining theming and automatically associating attachments with
-the client package.</p><p>Added global package parameters - parameters can now have scope
-"local" or "global", with "local" being the default..</p><p>Fixes for ns_proxy handling</p><p>Significant speedup for large sites</p><p>Optional support for selenium remote control
+<p>Added new package dependency type, "embeds". This is a
+variant of the "extends" package dependency type added in
+OpenACS 5.5.0. It allows one to write embeddable packages, with
+scripts made visible in client packages using URLs which include
+the embedded package&#39;s package key. An example embeddable
+package might be a rewritten "attachments" package. The
+current implementation requires a global instance be mounted, and
+client packages generate urls to that global instance. Among other
+things, this leads to the user navigating to the top-level subsite,
+losing any subsite theming that might be associated with a
+community. Using "embeds", a rewritten package would run
+in the client package&#39;s context, maintaining theming and
+automatically associating attachments with the client package.</p><p>Added global package parameters - parameters can now have scope
+"local" or "global", with "local"
+being the default..</p><p>Fixes for ns_proxy handling</p><p>Significant speedup for large sites</p><p>Optional support for selenium remote control
 (acs-automated-tests)</p><p>New administration UI to manage mime types and extension map</p><p>Added acs-mail-lite package params for rollout support</p><p>Support for 3-chars language codes in acs-lang</p><p>Added OOXML mime types in acs-content-repository</p>
 </li></ul></div>
 </div><div class="sect2">
@@ -205,26 +209,28 @@ the client package.</p><p>Added global package parameters - parameters can now h
 <a name="release-notes-5-5-0" id="release-notes-5-5-0"></a>Release 5.5.0</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;"><li class="listitem">
 <p>PostgreSQL 8.3 is now fully supported, including the use of the
 built-in standard version of tsearch2.</p><p>TinyMCE has been upgraded to 3.2.4.1 with language pack
-support.</p><p>acs-mail-lite now correctly implements rollout support.</p><p>Added new package dependency type, "extends". Implements a weak
-form of package inheritance (parameters and, optionally,
-templates). Multiple inheritance is supported. For instance, the
-non-core "layout-managed-subsite" extends the "acs-subsite" and
-"layout-manager" packages, resulting in a package that combines the
-semantics of both.</p><p>Added new package attribute "implements-subsite-p" (default
-"f"). If true, this package may be mounted as a subsite and is
-expected to implement subsite semantics. Typically used by packages
-which extend acs-subsite.</p><p>Added new package attribute "inherit-templates-p" (default "t").
-If true, the package inherits templates defined in the packages it
-extends. This means that the package only needs to specify
-templates where the UI of an extended package is modified or
-extended. This greatly reduces the need to fork base packages when
-one needs to customize it. Rather than modify the package directly,
-use "extends" rather than "requires" then rewrite those templates
-you need to customize.</p><p>Added a simple mechanism for defining subsite themes, removing
+support.</p><p>acs-mail-lite now correctly implements rollout support.</p><p>Added new package dependency type, "extends".
+Implements a weak form of package inheritance (parameters and,
+optionally, templates). Multiple inheritance is supported. For
+instance, the non-core "layout-managed-subsite" extends
+the "acs-subsite" and "layout-manager"
+packages, resulting in a package that combines the semantics of
+both.</p><p>Added new package attribute "implements-subsite-p"
+(default "f"). If true, this package may be mounted as a
+subsite and is expected to implement subsite semantics. Typically
+used by packages which extend acs-subsite.</p><p>Added new package attribute "inherit-templates-p"
+(default "t"). If true, the package inherits templates
+defined in the packages it extends. This means that the package
+only needs to specify templates where the UI of an extended package
+is modified or extended. This greatly reduces the need to fork base
+packages when one needs to customize it. Rather than modify the
+package directly, use "extends" rather than
+"requires" then rewrite those templates you need to
+customize.</p><p>Added a simple mechanism for defining subsite themes, removing
 the hard-wired choices implemented in earlier versions of OpenACS.
 The default theme has been moved into a new package,
-"openacs-default-theme". Simplifies the customization of the look
-and feel of OpenACS sites and subsites.</p><p>The install xml facility has been enhanced to allow the calling
+"openacs-default-theme". Simplifies the customization of
+the look and feel of OpenACS sites and subsites.</p><p>The install xml facility has been enhanced to allow the calling
 of arbitrary Tcl procedures and includes various other enhancements
 written by Xarg. Packages can extend the facility, too. As an
 example of what can be done, the configuration of .LRN communities
@@ -238,7 +244,7 @@ replaced with the language text for the chosen locale.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="release-notes-5-4-2" id="release-notes-5-4-2"></a>Release 5.4.2</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;"><li class="listitem">
-<p>This is a minor bugfix release.</p><p>Site node caching was removed as doesn't work correctly</p><p>Critical issues with search on oracle were fixed</p><p>More html strict work etc</p>
+<p>This is a minor bugfix release.</p><p>Site node caching was removed as doesn&#39;t work correctly</p><p>Critical issues with search on oracle were fixed</p><p>More html strict work etc</p>
 </li></ul></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
@@ -249,10 +255,10 @@ replaced with the language text for the chosen locale.</p>
 <p>New Templating API added to add scripts, css, etc to the HTML
 HEAD and BODY sections of the generated HTML document. Please see
 /packages/acs-templating/tcl/head-procs.tcl or visit the
-template::head procs in the API browser for details.</p><p>Templates have been modified to comply with HTML strict</p><p>The Search package's results page has been improved</p><p>TinyMCE WYSIWYG support has been added, RTE and HTMLArea support
-dropped</p><p>acs-mail-lite's send has been cleaned up to properly encode
-content, to handle file attachments, etc. "complex-send" will
-disappear from acs-core in a future release.</p>
+template::head procs in the API browser for details.</p><p>Templates have been modified to comply with HTML strict</p><p>The Search package&#39;s results page has been improved</p><p>TinyMCE WYSIWYG support has been added, RTE and HTMLArea support
+dropped</p><p>acs-mail-lite&#39;s send has been cleaned up to properly encode
+content, to handle file attachments, etc. "complex-send"
+will disappear from acs-core in a future release.</p>
 </li></ul></div>
 </div><p>The ChangeLogs include an annotated list of changes (<a class="xref" href="">???</a>) since the last release and in the entire
 5.9 release sequence <a class="xref" href="">???</a>.</p><div class="sect2">
@@ -347,7 +353,7 @@ Tracker</a> at the <a class="ulink" href="http://openacs.org/" target="_top">Ope
 for <a class="xref" href="unix-installation" title="a Unix-like system">the section called &ldquo;a
 Unix-like system&rdquo;</a>. Note that the Windows
 documentation is not current for OpenACS 5.9.0, but an alternative
-is to use John Sequeira's <a class="ulink" href="http://www.pobox.com/~johnseq/projects/oasisvm/" target="_top">Oasis VM project</a>.</p><p>After installation, the full documentation set can be found by
+is to use John Sequeira&#39;s <a class="ulink" href="http://www.pobox.com/~johnseq/projects/oasisvm/" target="_top">Oasis VM project</a>.</p><p>After installation, the full documentation set can be found by
 visiting <code class="filename">http://yourserver/doc</code>.</p><p>New features in this release:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>Internationalization support. A message catalog to store
 translated text, localization of dates, number formatting, timezone
@@ -358,8 +364,8 @@ user information through IMS Enterprise 1.1 format. Easily extended
 to support other authentication, password management, account
 creation, and account import mechanisms. This includes improvements
 to the basic cookie handling, so logins can be expired without the
-user's identity being completely lost. You can set login to expire
-after a certain period (e.g. 8 hours, then password must be
+user&#39;s identity being completely lost. You can set login to
+expire after a certain period (e.g. 8 hours, then password must be
 refreshed), or you can have all issues login cookies expired at
 once, e.g. if you have left a permanent login cookie on a public
 machine somewhere.</p></li><li class="listitem"><p>User interface enhancements. All pages, including site-wide and
@@ -367,10 +373,10 @@ subsite admin pages, will be templated, so they can be styled using
 master template and site-wide stylesheets. We have a new
 default-master template, which includes links to administration,
 your workspace, and login/logout, and is rendered using CSS. And
-there's a new community template
+there&#39;s a new community template
 (/packages/acs-subsite/www/group-master), which provides useful
 navigation to the applications and administrative UI in a subsite.
-In addition, there's new, simpler UI for managing members of a
+In addition, there&#39;s new, simpler UI for managing members of a
 subsite, instantiating and mounting applications, setting
 permissions, parameters, etc. Site-wide admin as also seen the
 addition of a new simpler software install UI to replace the APM
@@ -378,13 +384,13 @@ for non-developer users, and improved access to parameters,
 internationalization, automated testing, service contracts, etc.
 The list builder has been added for easily generating templated
 tables and lists, with features such as filtering, sorting, actions
-on multiple rows with checkboxes, etc. Most of all, it's fast to
-use, and results in consistently-looking, consistently-behaving,
+on multiple rows with checkboxes, etc. Most of all, it&#39;s fast
+to use, and results in consistently-looking, consistently-behaving,
 templated tables.</p></li><li class="listitem"><p>Automated testing. The automated testing framework has been
 improved significantly, and there are automated tests for a number
 of packages.</p></li><li class="listitem"><p>Security enhancements. HTML quoting now happens in the
 templating system, greatly minimizing the chance that users can
-sneak malicious HTML into the pages of other users.</p></li><li class="listitem"><p>Oracle 9i support.</p></li><li class="listitem"><p>Who's online feature.</p></li><li class="listitem"><p>Spell checking.</p></li>
+sneak malicious HTML into the pages of other users.</p></li><li class="listitem"><p>Oracle 9i support.</p></li><li class="listitem"><p>Who&#39;s online feature.</p></li><li class="listitem"><p>Spell checking.</p></li>
 </ul></div><p>Potential incompatibilities:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>With the release of OpenACS 5, PostgreSQL 7.2 is no longer
 supported. Upgrades are supported from OpenACS 4.6.3 under Oracle
@@ -396,8 +402,8 @@ styles still using these mechanisms will break.</p></li><li class="listitem"><p>
 turned off by default via the acs-kernel parameter ExcludedFiles in
 section request-processor (The variable provides a string match
 glob list of files and is defaulted to "*/CVS/* *~")</p></li>
-</ul></div><div class="cvstag">($&zwnj;Id: release-notes.xml,v 1.30.2.6 2015/12/01
-14:38:54 gustafn Exp $)</div>
+</ul></div><div class="cvstag">($&zwnj;Id: release-notes.html,v 1.55.2.10 2016/06/21
+07:44:36 gustafn Exp $)</div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="idp140641344086192" id="idp140641344086192"></a>Release 4.6.3</h3></div></div></div><p><a class="ulink" href="release-notes-4-6-3" target="_top">Release Notes for 4.6.3</a></p>
@@ -415,7 +421,7 @@ glob list of files and is defaulted to "*/CVS/* *~")</p></li>
 <include src="/packages/acs-core-docs/lib/navfooter"
 		    leftLink="openacs-overview" leftLabel="Prev" leftTitle="Overview"
 		    rightLink="acs-admin" rightLabel="Next" rightTitle="
-Part II. Administrator's Guide"
+Part II. Administrator&#39;s Guide"
 		    homeLink="index" homeLabel="Home" 
 		    upLink="general-documents" upLabel="Up"> 
 		

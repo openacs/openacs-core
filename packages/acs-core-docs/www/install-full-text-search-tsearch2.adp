@@ -18,7 +18,7 @@ using Tsearch2</h2></div></div></div><div class="authorblurb">
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="install-tsearch2" id="install-tsearch2"></a>Install Tsearch2 module</h3></div></div></div><a class="indexterm" name="idp140641353646144" id="idp140641353646144"></a><p>If you want full text search, and you are running PostgreSQL,
+<a name="install-tsearch2" id="install-tsearch2"></a>Install Tsearch2 module</h3></div></div></div><a class="indexterm" name="idp140669742763552" id="idp140669742763552"></a><p>If you want full text search, and you are running PostgreSQL,
 install this module to support FTS. Do this step after you have
 installed both PostgreSQL and AOLserver. You will need the tseach2
 module form PostgreSQL contrib. This is included with the
@@ -98,8 +98,8 @@ tsearch in your OpenACS database instance.</p></li><li class="listitem">
 </pre>
 </li><li class="listitem"><p>Wait a minute, then browse back to the home page.</p></li><li class="listitem"><p>Click on <code class="computeroutput"><span class="guilabel"><span class="guilabel">Admin</span></span></code> on the
 top of the screen.</p></li><li class="listitem"><p>Click on <code class="computeroutput"><span class="guilabel"><span class="guilabel">Main Site
-Administration</span></span></code> in the "Subsite Administration"
-section.</p></li><li class="listitem"><p>Click on <code class="computeroutput"><span class="guilabel"><span class="guilabel">Site Map</span></span></code> in
+Administration</span></span></code> in the "Subsite
+Administration" section.</p></li><li class="listitem"><p>Click on <code class="computeroutput"><span class="guilabel"><span class="guilabel">Site Map</span></span></code> in
 the "Advanced Features" section.</p></li><li class="listitem">
 <p>Mount the Search interface in the site map.</p><div class="orderedlist"><ol class="orderedlist" type="a">
 <li class="listitem"><p>Click the <code class="computeroutput"><span class="guilabel"><span class="guilabel">new sub

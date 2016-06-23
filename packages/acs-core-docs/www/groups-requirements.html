@@ -8,7 +8,7 @@
       particularly to support powerful subsite services; that is, where one OpenACS
       installation can support what appears to the user as distinct web services
       for different user communities.</p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="groups-requirements-vision"></a>Vision Statement</h3></div></div></div><p>A powerful web service that can meet the needs of large enterprises must
-      be able to model the the real world's very rich organizational structures
+      be able to model the the real world&#39;s very rich organizational structures
       and many ways of decomposing the same organization. For example, a
       corporation can be broken into structures (the corporation, its divisions,
       and their departments) or regions (the Boston office, the LA office); a
@@ -20,14 +20,14 @@
       that contains only users: The <code class="computeroutput">user_groups</code> table may contain the
       <code class="computeroutput">group_id</code> of a parent group, but parent-child relationship
       support is limited because it only allows one kind of relationship between
-      groups to be represented. Moreover, the Oracle database's limited support
+      groups to be represented. Moreover, the Oracle database&#39;s limited support
       for tree-like structures makes the queries over these relationships
       expensive.</p><p>In addition, the Module Scoping design in OpenACS 3.0 introduced a
       <span class="emphasis"><em>party</em></span> abstraction - a thing that is a person or a group of people -
       though not in the form of an explicit table. Rather, the triple of
       <code class="computeroutput">scope</code>, <code class="computeroutput">user_id</code>, and <code class="computeroutput">group_id</code> columns
       was used to identify the party. One disadvantage of this design convention is
-      that it increases a data model's complexity by requiring the programmer
+      that it increases a data model&#39;s complexity by requiring the programmer
       to:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>add these three columns to each "scoped" table</p></li><li class="listitem"><p>define a multi-column check constraint to protect against data corruption
           (e.g., a row with a <code class="computeroutput">scope</code> value of "group" but a null
           <code class="computeroutput">group_id</code>)</p></li><li class="listitem"><p>perform extra checks in <code class="computeroutput">Tcl</code> and <code class="computeroutput">PL/SQL</code>
@@ -63,7 +63,7 @@
       modeled as groups, and Eddie would be a user. There would be a composition
       relationship between each Sierra Club chapter and the Sierra Club. Membership
       relationships would exist between Eddie and the Massachusetts Chapter,
-      between Eddie and the Sierra Club (due to Eddie's membership in the
+      between Eddie and the Sierra Club (due to Eddie&#39;s membership in the
       Massachusetts chapter), and between the Sierra Club and Greenpeace.</p><p>Membership requirements can vary from group to group. The parties and
       groups system must provide a base type that specifies the bare minimum
       necessary to join a group.</p><p>The parties and groups system must support constraints between a composite
@@ -165,12 +165,12 @@
             component of a second group. This API is subject to the constraints laid out
             in the data model.</p></dd><dt><span class="term"><span class="strong"><strong>120.0 Remove a party as a member of a group</strong></span>
 
-        </span></dt><dd><p>The parties and groups system provides an API for deleting a party's
+        </span></dt><dd><p>The parties and groups system provides an API for deleting a party&#39;s
             membership in a group. This API is subject to the constraints laid out in the
             data model.</p></dd><dt><span class="term"><span class="strong"><strong>125.0 Remove a group as a component of a second
             group</strong></span>
 
-        </span></dt><dd><p>The parties and groups system provides an API for deleting a group's
+        </span></dt><dd><p>The parties and groups system provides an API for deleting a group&#39;s
             composition in a second group. This API is subject to the constraints laid
             out in the data model.</p></dd><dt><span class="term"><span class="strong"><strong>130.0 Membership check</strong></span>
 

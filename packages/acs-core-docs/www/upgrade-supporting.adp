@@ -68,9 +68,10 @@ exit</span></span>
 </pre>
 </li><li class="listitem">
 <p>
-<strong>OPTIONAL: Install the new OpenFTS Engine. </strong>If
-you want to upgrade the OpenFTS Engine, do these steps. (You must
-have already upgraded the OpenFTS driver to 0.3.2.)</p><div class="orderedlist"><ol class="orderedlist" type="a">
+<strong>OPTIONAL: Install the new OpenFTS
+Engine. </strong>If you want to upgrade the OpenFTS
+Engine, do these steps. (You must have already upgraded the OpenFTS
+driver to 0.3.2.)</p><div class="orderedlist"><ol class="orderedlist" type="a">
 <li class="listitem"><p>Browse to <code class="computeroutput">http://<span class="replaceable"><span class="replaceable">yourserver</span></span>/admin/site-map</code>
 </p></li><li class="listitem"><p>On the <code class="computeroutput">openfts</code> line, click
 on <code class="computeroutput"><span class="guilabel"><span class="guilabel">set parameters</span></span></code>.</p></li><li class="listitem"><p>Change the value of <code class="computeroutput">openfts_tcl_src_path</code> from <code class="computeroutput">/usr/local/src/Search-OpenFTS-tcl-0.2/</code> to
@@ -96,8 +97,8 @@ problems in 7.2, because truncation occurs both at function
 creation and at function calling, so they still match. But if you
 use a database created in 7.2 in 7.3, the function names in the
 database remain truncated but the function calls are not, and so
-they don't match. Also some functions use casting commands that no
-longer work in 7.3 and these functions must be recreated.</p><p>To upgrade an OpenACS site from PostGreSQL 7.2 to 7.3, first
+they don&#39;t match. Also some functions use casting commands that
+no longer work in 7.3 and these functions must be recreated.</p><p>To upgrade an OpenACS site from PostGreSQL 7.2 to 7.3, first
 upgrade the kernel to 4.6.3. Then, dump the database, run the
 upgrade script <code class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/bin/pg_7.2to7.3_upgrade_helper.pl</code>
 on the dump file, and reply the dump. See <a class="ulink" href="http://openacs.org/forums/message-view?message_id=109337" target="_top">Forum OpenACS Q&amp;A: PG 7.2-&gt;7.3 upgrade gotcha?</a>.
@@ -128,15 +129,15 @@ perl code in step two in <a class="ulink" href="http://cvs.openacs.org/cvs/opena
 installation guide. Keep in mind that your installation location is
 different, and your startup script (/etc/init.d/postgres73 should
 be named differently. You might even need to edit that file to make
-the paths correct). You'll also need to add <code class="computeroutput">export PGPORT=5434</code> to the .bashrc and/or
+the paths correct). You&#39;ll also need to add <code class="computeroutput">export PGPORT=5434</code> to the .bashrc and/or
 .bash_profile for the postgres73 user.</p></li><li class="listitem"><p>Install PostgreSQL 7.3.x. Note that you PostgreSQL must listen
-on a different port in order to work correctly, so you'll need to
-edit the configuration file
+on a different port in order to work correctly, so you&#39;ll need
+to edit the configuration file
 (/usr/local/pgsql73/data/postgresql.conf) and change the port (to
 5433, say). create a second postgres user to differentiate between
-the two postgres installs. When you do ./configure, you'll need to
-include --prefix=$HOME to ensure that it is installed in the
-postgres73 user's home directory.</p></li><li class="listitem"><p>Change the path in <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>'s .bashrc or
+the two postgres installs. When you do ./configure, you&#39;ll need
+to include --prefix=$HOME to ensure that it is installed in the
+postgres73 user&#39;s home directory.</p></li><li class="listitem"><p>Change the path in <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>'s .bashrc or
 .bash_profile (or both) files to reflect the new postgres73 user
 directory. Also add in the PGPORT.</p></li><li class="listitem"><p>Restore the database from dump as per the <a class="link" href="snapshot-backup" title="Postgres">recovery
 instructions</a>.</p></li>

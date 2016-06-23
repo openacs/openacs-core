@@ -66,7 +66,7 @@ your pages aware of which instance was requested.
 <listitem><para>
 Next, the Request Processor examines the request for session
 information. Session information is generally sent from the client
-(the user's browser) to the server via cookies. The <link linkend="security-notes">security/session handler</link> is described in
+(the user&#39;s browser) to the server via cookies. The <link linkend="security-notes">security/session handler</link> is described in
 detail in its own document. It examines the client request and either
 extracts or sets up new session tokens for the user.
 </para></listitem>
@@ -98,7 +98,7 @@ extensions, i.e. files that end with: <computeroutput>.html</computeroutput>,
 </para>
 
 <para>
-If the RP can't find any matching files with the expected extensions,
+If the RP can&#39;t find any matching files with the expected extensions,
 it will look for virtual-url-handler files, or <computeroutput>.vuh</computeroutput>
 files. A <computeroutput>.vuh</computeroutput> file will be executed as if it were a Tcl
 file, but with the tail end of the URL removed. This allows the code
@@ -112,8 +112,8 @@ described in <xref linkend="rp-design"/>.
 
 <para>
 Once the appropriate file is found, it is either served directly if
-it's static content, or sent to the template system or the standard
-Tcl interpreter if it's a dynamic page.
+it&#39;s static content, or sent to the template system or the standard
+Tcl interpreter if it&#39;s a dynamic page.
 </para>
 
 </listitem>

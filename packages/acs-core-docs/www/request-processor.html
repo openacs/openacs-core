@@ -31,7 +31,7 @@ your pages aware of which instance was requested.
 </p></dd><dt><span class="term">Stage 2: Authentication</span></dt><dd><p>
 Next, the Request Processor examines the request for session
 information. Session information is generally sent from the client
-(the user's browser) to the server via cookies. The <a class="link" href="security-notes.html" title="Security Notes">security/session handler</a> is described in
+(the user&#39;s browser) to the server via cookies. The <a class="link" href="security-notes.html" title="Security Notes">security/session handler</a> is described in
 detail in its own document. It examines the client request and either
 extracts or sets up new session tokens for the user.
 </p></dd><dt><span class="term">Stage 3: Authorization</span></dt><dd><p>
@@ -51,7 +51,7 @@ an abstract URL.  It searches for files with predefined "magic"
 extensions, i.e. files that end with: <code class="computeroutput">.html</code>,
 <code class="computeroutput">.tcl</code> and <code class="computeroutput">.adp</code>.  
 </p><p>
-If the RP can't find any matching files with the expected extensions,
+If the RP can&#39;t find any matching files with the expected extensions,
 it will look for virtual-url-handler files, or <code class="computeroutput">.vuh</code>
 files. A <code class="computeroutput">.vuh</code> file will be executed as if it were a Tcl
 file, but with the tail end of the URL removed. This allows the code
@@ -63,8 +63,8 @@ mapping mechanisms.  The details of how to use these files are
 described in <a class="xref" href="rp-design.html" title="Request Processor Design">OpenACS 4 Request Processor Design</a>.
 </p><p>
 Once the appropriate file is found, it is either served directly if
-it's static content, or sent to the template system or the standard
-Tcl interpreter if it's a dynamic page.
+it&#39;s static content, or sent to the template system or the standard
+Tcl interpreter if it&#39;s a dynamic page.
 </p></dd></dl></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="rp-basicapi"></a>Basic API</h3></div></div></div><p>
 Once the flow of control reaches a dynamic page, the Request Processor
 has populated the environment of the request with several pieces of

@@ -13,7 +13,7 @@
 [postgres pgsql]$ <strong class="userinput"><code>cd /usr/local/src/postgresql-7.3.4/contrib/tsearch/</code></strong>
 [postgres tsearch]$ <strong class="userinput"><code>make</code></strong>
 sed 's,MODULE_PATHNAME,$libdir/tsearch,g' tsearch.sql.in &gt;tsearch.sql
-/usr/bin/flex  -8 -Ptsearch_yy -o'parser.c' parser.l<span class="emphasis"><em>(many lines omitted)</em></span>
+/usr/bin/flex  -8 -Ptsearch_yy -o&#39;parser.c' parser.l<span class="emphasis"><em>(many lines omitted)</em></span>
 rm -f libtsearch.so
 ln -s libtsearch.so.0.0 libtsearch.so
 [postgres tsearch]$ <strong class="userinput"><code>make install</code></strong>

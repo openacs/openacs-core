@@ -36,8 +36,8 @@ database</a></span></dt><dt><span class="sect1"><a href="tutorial-future-topics"
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><p>This tutorial covers topics which are not essential to creating
 a minimal working package. Each section can be used independently
-of all of the others; all sections assume that you've completed the
-basic tutorial.</p>
+of all of the others; all sections assume that you&#39;ve completed
+the basic tutorial.</p>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 		    leftLink="tutorial-debug" leftLabel="Prev" leftTitle="Debugging and Automated Testing"

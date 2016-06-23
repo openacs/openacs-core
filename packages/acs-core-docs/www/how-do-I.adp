@@ -45,13 +45,13 @@ default index page from the Subsite package to the Main site and
 edit it:</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem"><pre class="screen"><strong class="userinput"><code>cp <code class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/acs-subsite/www/index*</code><code class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/www</code>
 </code></strong></pre></li><li class="listitem"><p>Edit the new <code class="computeroutput">index.adp</code> to
-change the text; you shouldn't need to edit <code class="computeroutput">index.tcl</code> unless you are adding new
+change the text; you shouldn&#39;t need to edit <code class="computeroutput">index.tcl</code> unless you are adding new
 functionality.</p></li>
 </ol></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="idp140641349579520" id="idp140641349579520"></a>How do I change the site-wide style?</h3></div></div></div><p>Almost all pages on an OpenACS site use <a class="ulink" href="/doc/acs-templating" target="_top">ACS Templating</a>, and so
-their appearance is driven by a layer of different files. Let's
+their appearance is driven by a layer of different files. Let&#39;s
 examine how this works:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem">
 <p>A templated page uses an ADP/Tcl pair. The first line in the ADP
@@ -71,8 +71,8 @@ site-wide navigation elements and invokes <code class="computeroutput">blank-mas
 and .tcl).</p></li><li class="listitem"><p>
 <code class="computeroutput">Blank-master</code> does HTML
 housekeeping and provides a framework for special sitewide
-navigation "meta" elements such as Translator widgets and Admin
-widgets.</p></li>
+navigation "meta" elements such as Translator widgets and
+Admin widgets.</p></li>
 </ul></div><div class="figure">
 <a name="idp140641349595024" id="idp140641349595024"></a><p class="title"><strong>Figure 4.1. Site
 Templates</strong></p><div class="figure-contents"><div class="mediaobject"><img src="images/site-templates.png" alt="Site Templates"></div></div>
@@ -83,43 +83,44 @@ Templates</strong></p><div class="figure-contents"><div class="mediaobject"><img
 problem?</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem">
 <p>
-<strong>Steps to Reproduce. </strong>The events package does
-not allow users to register for new events.</p><div class="orderedlist"><ol class="orderedlist" type="1">
+<strong>Steps to Reproduce. </strong>The events
+package does not allow users to register for new events.</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem"><p>Go to the http://yourserver.net/events as a visitor (ie, log out
 and, if necessary, clear cookies). This in on a 4.6.3 site with
 events version 0.1d3.</p></li><li class="listitem"><p>Select an available event</p></li><li class="listitem"><p>A link such as <code class="computeroutput">Registration:
 Deadline is 03/15/2004 10:00am. » Login or sign up to
-register for this event.</code> is visible. Click on "Login or sign
-up"</p></li><li class="listitem"><p>Complete a new registration. Afterwards, you should be
+register for this event.</code> is visible. Click on "Login or
+sign up"</p></li><li class="listitem"><p>Complete a new registration. Afterwards, you should be
 redirected back to the same page.</p></li>
-</ol></div><p>Actual Results: The page says <code class="computeroutput">"You
-do not have permission to register for this event."</code>
+</ol></div><p>Actual Results: The page says <code class="computeroutput">"You do not have permission to register for
+this event."</code>
 </p><p>Expected results: A link or form to sign up for the event is
 shown.</p>
 </li><li class="listitem">
 <p>
-<strong>Finding the problem. </strong>We start with the page
-that has the error. In the URL it's <code class="computeroutput">http://myserver.net/events/event-info.tcl</code>,
+<strong>Finding the problem. </strong>We start with
+the page that has the error. In the URL it&#39;s <code class="computeroutput">http://myserver.net/events/event-info.tcl</code>,
 so open the file <code class="computeroutput">/var/lib/aolserver/$OPENACS_SERVICE_NAME/packages/events/www/event-info.tcl</code>.
 It contains this line:</p><pre class="programlisting">
 set can_register_p [events::security::can_register_for_event_p -event_id $event_id]
 </pre><p>We need to know what that procedure does, so go to <a class="ulink" href="/api-doc" target="_top">/api-doc</a>, paste
 events::security::can_register_for_event_p into the ACS Tcl API
 Search box, and click Feeling Lucky. The next pages shows the proc,
-and we click "show source" to see more information. The body of the
-proc is simply</p><pre class="programlisting">
+and we click "show source" to see more information. The
+body of the proc is simply</p><pre class="programlisting">
 return [permission::permission_p -party_id $user_id -object_id $event_id -privilege write]
 </pre><p>This means that a given user must have the write privilige on
-the event in order to register. Let's assume that the priviliges
-inherit, so that if a user has the write privilige on the whole
-package, they will have the write privilege on the event.</p>
+the event in order to register. Let&#39;s assume that the
+priviliges inherit, so that if a user has the write privilige on
+the whole package, they will have the write privilege on the
+event.</p>
 </li><li class="listitem">
 <p>
-<strong>Setting Permissions. </strong>A permission has three
-parts: the privilige, the object of the privilige, and the subject
-being granted the privilige. In this case the privilige is "write,"
-the object is the Events package, and the subject is all Registered
-Users.</p><div class="orderedlist"><ol class="orderedlist" type="1">
+<strong>Setting Permissions. </strong>A permission
+has three parts: the privilige, the object of the privilige, and
+the subject being granted the privilige. In this case the privilige
+is "write," the object is the Events package, and the
+subject is all Registered Users.</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem"><p>To grant permissions on a package, start at the <a class="ulink" href="/admin/site-map" target="_top">site map</a>. Find the event
 package and click "Set permissions".</p></li><li class="listitem"><p>Click "Grant Permission"</p></li><li class="listitem">
 <p>Grant the write permission to Registered Users.</p><div class="figure">
@@ -128,8 +129,8 @@ Permissions</strong></p><div class="figure-contents"><div class="mediaobject"><i
 </div><br class="figure-break">
 </li>
 </ol></div><p>OpenACS 5.0 offers a prettier version at <a class="ulink" href="/admin/applications" target="_top">/admin/applications</a>.</p><div class="figure">
-<a name="idp140641349623728" id="idp140641349623728"></a><p class="title"><strong>Figure 4.3. Granting
-Permissions in 5.0</strong></p><div class="figure-contents"><div class="mediaobject"><img src="images/grant-perm-50.png" alt="Granting Permissions in 5.0"></div></div>
+<a name="idp140641349623728" id="idp140641349623728"></a><p class="title"><strong>Figure 4.3. Granting Permissions in
+5.0</strong></p><div class="figure-contents"><div class="mediaobject"><img src="images/grant-perm-50.png" alt="Granting Permissions in 5.0"></div></div>
 </div><br class="figure-break">
 </li>
 </ul></div>

@@ -324,7 +324,7 @@ the APM API can return the status of the package on the local OpenACS
 instance.</para>
 
 <!--
-      <para><emphasis role="strong">4.400.1</emphasis> Given a package's URL, the system API can be
+      <para><emphasis role="strong">4.400.1</emphasis> Given a package&#39;s URL, the system API can be
       queried for the existence of that installed package locally.
 
       

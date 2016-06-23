@@ -19,25 +19,25 @@ OpenACS documentation staff.</div><div class="sect2">
 each site.</h3></div></div></div><p>AOLserver needs to be started as the root user if you want to
 use port 80. Once it starts, though, it will drop the root
 privileges and run as another user, which you must specify on the
-command line. It's important that this user has as few privileges
-as possible. Why? Because if an intruder somehow breaks in through
-AOLserver, you don't want her to have any ability to do damage to
-the rest of your server.</p><p>At the same time, AOLserver needs to have write access to some
+command line. It&#39;s important that this user has as few
+privileges as possible. Why? Because if an intruder somehow breaks
+in through AOLserver, you don&#39;t want her to have any ability to
+do damage to the rest of your server.</p><p>At the same time, AOLserver needs to have write access to some
 files on your system in order for OpenACS to function properly. So,
-we'll run AOLserver with a different user account for each
+we&#39;ll run AOLserver with a different user account for each
 different service. A service name should be a single word,
 <span class="emphasis"><em>letters and numbers only</em></span>. If
 the name of your site is one word, that would be a good choice. For
-example "<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>" might be the
-service name for the <a class="ulink" href="http://%24OPENACS_SERVICE_NAME.net/" target="_top">
+example "<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>" might be
+the service name for the <a class="ulink" href="http://%24OPENACS_SERVICE_NAME.net/" target="_top">
 <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>.net</a>
-community.</p><p>We'll leave the password blank, which prevents login by
+community.</p><p>We&#39;ll leave the password blank, which prevents login by
 password, for increased security. The only way to log in will be
 with ssh certificates. The only people who should log in are
 developers for that specific instance. Add this user, and put it in
 the <code class="computeroutput"><span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span></code> group so
 that it can use database and server commands associated with that
-group. (If you don't know how to do this, type <strong class="userinput"><code>man usermod</code></strong>. You can type
+group. (If you don&#39;t know how to do this, type <strong class="userinput"><code>man usermod</code></strong>. You can type
 <strong class="userinput"><code>groups</code></strong> to find out
 which groups a user is a part of)</p><pre class="screen">
 [root root]# <strong class="userinput"><code>useradd <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
@@ -84,9 +84,9 @@ install and, if it does not work the first time, consider switching
 to a <a class="link" href="openacs" title="Installation Option 2: Install from tarball">manual
 installation</a>.</p><p>Get the install script from CVS. It is located within the main
 cvs tree, at /etc/install. Use anonymous CVS checkout to get that
-directory in the home directory of the service's dedicated user. We
-put it there so that it is not overwritten when we do the main CVS
-checkout to the target location.</p><pre class="screen">
+directory in the home directory of the service&#39;s dedicated
+user. We put it there so that it is not overwritten when we do the
+main CVS checkout to the target location.</p><pre class="screen">
 [root root]# <strong class="userinput"><code>su - <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
 </code></strong>
 [$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>cvs -d :pserver:anonymous\@cvs.openacs.org:/cvsroot co -d install openacs-4/etc/install</code></strong>
@@ -99,11 +99,11 @@ U install/tcl/user-procs.tcl
 [$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>cd install</code></strong>
 [$OPENACS_SERVICE_NAME install]$ <strong class="userinput"><code>emacs install.tcl</code></strong>
 </pre><p>Edit the installation configuration file, <code class="computeroutput">/home/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/install/install.tcl</code>
-and update the site-specific values, such as the new service's IP
-address and name, which will be written into the new service's
-<code class="computeroutput">config.tcl</code> file. If your system
-is different from the one described in the previous sections, check
-the file paths as well. Set <code class="computeroutput">do_checkout=yes</code> to create a new OpenACS
+and update the site-specific values, such as the new service&#39;s
+IP address and name, which will be written into the new
+service&#39;s <code class="computeroutput">config.tcl</code> file.
+If your system is different from the one described in the previous
+sections, check the file paths as well. Set <code class="computeroutput">do_checkout=yes</code> to create a new OpenACS
 site directly from a CVS checkout, or <code class="computeroutput">=no</code> if you have a fully configured site and
 just want to rebuild it (drop and recreate the database and repeat
 the installation). If you have followed a stock installation, the
@@ -176,8 +176,8 @@ exit</span></span>
 <li class="listitem">
 <p>
 <a name="install-openacs-prepare-oracle" id="install-openacs-prepare-oracle"></a><strong>Prepare Oracle for
-OpenACS. </strong>If you won't be using Oracle, skip to
-<a class="xref" href="openacs" title="Prepare PostgreSQL for an OpenACS Service">Prepare PostgreSQL for
+OpenACS. </strong>If you won&#39;t be using Oracle,
+skip to <a class="xref" href="openacs" title="Prepare PostgreSQL for an OpenACS Service">Prepare PostgreSQL for
 an OpenACS Service</a>
 </p><p>You should be sure that your user account (e.g. <code class="computeroutput"><span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span></code>) is in the
 <code class="computeroutput">dba</code> group.</p><div class="orderedlist"><ol class="orderedlist" type="a">
@@ -215,15 +215,15 @@ SVRMGR&gt; <strong class="userinput"><code>select file_name from dba_data_files;
 /ora8/m01/app/oracle/oradata/ora8/drsys01.dbf
 </pre>
 </li><li class="listitem"><p>Using the above output, you should determine where to store your
-tablespace. As a general rule, you'll want to store your tablespace
-on a mount point under the <code class="computeroutput">/ora8</code> directory that is separate from the
+tablespace. As a general rule, you&#39;ll want to store your
+tablespace on a mount point under the <code class="computeroutput">/ora8</code> directory that is separate from the
 Oracle system data files. By default, the Oracle system is on
 <code class="computeroutput">m01</code>, so we will use
 <code class="computeroutput">m02</code>. This enables your Oracle
 system and database files to be on separate disks for optimized
 performance. For more information on such a configuration, see
-<a class="ulink" href="http://philip.greenspun.com/panda/databases-choosing" target="_top">Chapter 12</a> of <a class="ulink" href="http://philip.greenspun.com/panda/" target="_top">Philip's
-book</a>. For this example, we'll use <code class="computeroutput">/ora8/m02/oradata/ora8/</code>.</p></li><li class="listitem">
+<a class="ulink" href="http://philip.greenspun.com/panda/databases-choosing" target="_top">Chapter 12</a> of <a class="ulink" href="http://philip.greenspun.com/panda/" target="_top">Philip&#39;s
+book</a>. For this example, we&#39;ll use <code class="computeroutput">/ora8/m02/oradata/ora8/</code>.</p></li><li class="listitem">
 <p>Create the directory for the datafile; to do this, exit from
 <code class="computeroutput">svrmgrl</code> and login as
 <code class="computeroutput">root</code> for this step:</p><pre class="programlisting">
@@ -239,11 +239,11 @@ Password: ************
 </li><li class="listitem">
 <p>Create a tablespace for the service. It is important that the
 tablespace can <code class="computeroutput">autoextend</code>. This
-allows the tablespace's storage capacity to grow as the size of the
-data grows. We set the pctincrease to be a very low value so that
-our extents won't grow geometrically. We do not set it to 0 at the
-tablespace level because this would affect Oracle's ability to
-automatically coalesce free space in the tablespace.</p><pre class="programlisting">
+allows the tablespace&#39;s storage capacity to grow as the size of
+the data grows. We set the pctincrease to be a very low value so
+that our extents won&#39;t grow geometrically. We do not set it to
+0 at the tablespace level because this would affect Oracle&#39;s
+ability to automatically coalesce free space in the tablespace.</p><pre class="programlisting">
 [$OPENACS_SERVICE_NAME ~]$ <strong class="userinput"><code>svrmgrl</code></strong>
 SVRMGR&gt; <strong class="userinput"><code>connect internal;</code></strong>
 SVRMGR&gt; <strong class="userinput"><code>create tablespace <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
@@ -257,7 +257,7 @@ SVRMGR&gt; <strong class="userinput"><code>create tablespace <span class="replac
 </pre>
 </li><li class="listitem">
 <p>Create a database user for this service. Give the user access to
-the tablespace and rights to connect. We'll use <code class="computeroutput"><span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAMEpassword</span></span></code> as
+the tablespace and rights to connect. We&#39;ll use <code class="computeroutput"><span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAMEpassword</span></span></code> as
 our password.</p><p>Write down what you specify as <span class="emphasis"><em>service_name</em></span> (i.e. <code class="computeroutput"><span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span></code>) and
 <span class="emphasis"><em>database_password</em></span> (i.e.
 <code class="computeroutput"><span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAMEpassword</span></span></code>).
@@ -283,9 +283,10 @@ SYSDATE
 ----------
 2001-12-20
 SQL&gt; <strong class="userinput"><code>exit;</code></strong>
-</pre><p>You should see today's date in a format 'YYYY-MM-DD.' If you
-can't login, try redoing step 1 again. If the date is in the wrong
-format, make sure you followed the steps outlined in <a class="xref" href="oracle" title="Troubleshooting Oracle Dates">the section called
+</pre><p>You should see today&#39;s date in a format
+'YYYY-MM-DD.' If you can&#39;t login, try redoing step 1
+again. If the date is in the wrong format, make sure you followed
+the steps outlined in <a class="xref" href="oracle" title="Troubleshooting Oracle Dates">the section called
 &ldquo;Troubleshooting Oracle
 Dates&rdquo;</a>
 </p>
@@ -293,16 +294,16 @@ Dates&rdquo;</a>
 </ol></div>
 </li><li class="listitem">
 <p>
-<a name="install-openacs-prepare-postgres" id="install-openacs-prepare-postgres"></a><strong>Prepare PostgreSQL for an
-OpenACS Service. </strong>
+<a name="install-openacs-prepare-postgres" id="install-openacs-prepare-postgres"></a><strong>Prepare PostgreSQL
+for an OpenACS Service. </strong>
 </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
 <li class="listitem">
 <p>
 <a name="create-service-db-user" id="create-service-db-user"></a>PostgreSQL:</p><p>Create a user in the database matching the service name. With
 default PostgreSQL authentication, a system user connecting locally
 automatically authenticates as the postgres user of the same name,
-if one exists. We currently use postgres "super-users" for
-everything, which means that anyone with access to any of the
+if one exists. We currently use postgres "super-users"
+for everything, which means that anyone with access to any of the
 openacs system accounts on a machine has full access to all
 postgresql databases on that machine.</p><pre class="screen">
 [root root]# <strong class="userinput"><code>su - postgres</code></strong>
@@ -348,9 +349,9 @@ minute is 0 and the hour is 1, i.e., 1:00 am every day, and every
 0 1-23 * * * /usr/local/pgsql/bin/vacuumdb --analyze <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
 0 0 * * * /usr/local/pgsql/bin/vacuumdb --full --analyze <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
 </pre><p>Depending on your distribution, you may receive email when the
-crontab items are executed. If you don't want to receive email for
-those crontab items, you can add <code class="computeroutput">&gt;
-/dev/null 2&gt;&amp;1</code> to the end of each crontab line</p>
+crontab items are executed. If you don&#39;t want to receive email
+for those crontab items, you can add <code class="computeroutput">&gt; /dev/null 2&gt;&amp;1</code> to the end of
+each crontab line</p>
 </li><li class="listitem"><p>
 <a class="link" href="install-full-text-search-openfts" title="Install OpenFTS prerequisites in PostgreSQL instance">Add
 Full Text Search Support</a> (OPTIONAL)</p></li><li class="listitem"><p>
@@ -376,15 +377,16 @@ Open it in an editor to adjust the parameters.</p><a class="indexterm" name="idp
 [$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/etc</code></strong>
 [$OPENACS_SERVICE_NAME etc]$ <strong class="userinput"><code>emacs config.tcl</code></strong>
 </pre><p>You can continue without changing any values in the file.
-However, if you don't change <code class="computeroutput">address</code> to match the computer's ip address,
-you won't be able to browse to your server from other machines.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
+However, if you don&#39;t change <code class="computeroutput">address</code> to match the computer&#39;s ip
+address, you won&#39;t be able to browse to your server from other
+machines.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>
 <span class="emphasis"><em>httpport</em></span> - If you want
 your server on a different port, enter it here. The Reference
 Platform port is 8000, which is suitable for development use. Port
-80 is the standard http port - it's the port used by your browser
-when you enter http://yourserver.test. So you should use port 80
-for your production site.</p></li><li class="listitem"><p>
+80 is the standard http port - it&#39;s the port used by your
+browser when you enter http://yourserver.test. So you should use
+port 80 for your production site.</p></li><li class="listitem"><p>
 <span class="emphasis"><em>httpsport</em></span> - This is the
 port for https requests. The Reference Platform https port is 8443.
 If http port is set to 80, httpsport should be 443 to match the
@@ -442,7 +444,7 @@ via <code class="computeroutput">-u <span class="replaceable"><span class="repla
 also send a <code class="computeroutput">-b</code> flag. Do this by
 editing the <code class="computeroutput">run</code> file as
 indicated in the comments.</p><p>If you are root then killall will affect all OpenACS services on
-the machine, so if there's more than one you'll have to do
+the machine, so if there&#39;s more than one you&#39;ll have to do
 <code class="computeroutput">ps -auxw | grep nsd</code> and
 selectively kill by job number.</p><pre class="screen">
 [$OPENACS_SERVICE_NAME etc]$ <strong class="userinput"><code>killall nsd</code></strong>
@@ -459,14 +461,15 @@ specify a URL like: <code class="computeroutput">http://<span class="replaceable
 </p><p>You should see a page that looks like <a class="ulink" href="files/openacs-start" target="_top">this</a>. If you <a class="link" href="cvs-tips" title="Add the Service to CVS - OPTIONAL">imported your files into
 cvs</a>, now that you know it worked you can erase the temp
 directory with <code class="computeroutput">rm -rf
-/var/lib/aolserver/$OPENACS_SERVICE_NAME.orig</code>.</p><p>If you don't see the login page, view your error log
+/var/lib/aolserver/$OPENACS_SERVICE_NAME.orig</code>.</p><p>If you don&#39;t see the login page, view your error log
 (<code class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/log/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>-error.log</code>)
 to make sure the service is starting without any problems. The most
 common errors here are trying to start a port 80 server while not
 root, failing to connect because of a firewall, and aolserver
 failing to start due to permissions errors or missing files. If you
-need to make changes, don't forget to kill any running servers with
-<strong class="userinput"><code>killall nsd</code></strong>.</p>
+need to make changes, don&#39;t forget to kill any running servers
+with <strong class="userinput"><code>killall
+nsd</code></strong>.</p>
 </li><li class="listitem"><p>
 <a class="link" href="install-openacs-keepalive" title="Starting and Stopping an OpenACS instance.">Automate AOLserver
 keepalive</a> (OPTIONAL)</p></li>
@@ -474,8 +477,8 @@ keepalive</a> (OPTIONAL)</p></li>
 </li><li class="listitem">
 <a name="install-openacs-using-installer" id="install-openacs-using-installer"></a><p>
 <strong>Configure a Service with the OpenACS
-Installer. </strong> Now that you've got AOLserver up and
-running, let's install OpenACS 5.9.0.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
+Installer. </strong> Now that you&#39;ve got AOLserver
+up and running, let&#39;s install OpenACS 5.9.0.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>You should see a page from the webserver titled <code class="computeroutput">OpenACS Installation: Welcome</code>. You will be
 warned if your version of the database driver is out of date, if
 AOLserver cannot connect to the database, if any modules are
@@ -486,7 +489,7 @@ proceed to load the OpenACS Kernel data model.</p></li><li class="listitem">
 <p>The next page shows the results of loading the OpenACS Kernel
 data model - be prepared to wait a few minutes as it works. You
 should see a string of output messages from the database as the
-datamodel is created. You'll see the line:</p><pre class="programlisting">
+datamodel is created. You&#39;ll see the line:</p><pre class="programlisting">
 Loading package .info files ... this will take a few minutes
 </pre><p>This will really take a few minutes. Have faith! Finally,
 another <code class="computeroutput">Next</code> button will appear
@@ -494,20 +497,21 @@ at the bottom - click it.</p>
 </li><li class="listitem"><p>The following page shows the results of loading the core package
 data models. You should see positive results for each of the
 previously selected packages, but watch out for any errors.
-Eventually, the page will display "Generating secret tokens" and
-then "Done"- click <code class="computeroutput">Next</code>.</p></li><li class="listitem"><p>You should see a page, "OpenACS Installation: Create
+Eventually, the page will display "Generating secret
+tokens" and then "Done"- click <code class="computeroutput">Next</code>.</p></li><li class="listitem"><p>You should see a page, "OpenACS Installation: Create
 Administrator" with form fields to define the OpenACS site
 administrator. Fill out the fields as appropriate, and click
 <code class="computeroutput">Create User</code>.</p></li><li class="listitem"><p>You should see a page, "OpenACS Installation: Set System
-Information" allowing you to name your service. Fill out the fields
-as appropriate, and click <code class="computeroutput">Set System
-Information</code>
+Information" allowing you to name your service. Fill out the
+fields as appropriate, and click <code class="computeroutput">Set
+System Information</code>
 </p></li><li class="listitem">
-<p>You'll see the final Installer page, "OpenACS Installation:
-Complete." It will tell you that the server is being restarted;
-note that unless you already set up a way for AOLserver to restart
-itself (ie. <a class="link" href="install-openacs-keepalive" title="Starting and Stopping an OpenACS instance.">inittab or
-daemontools</a>), you'll need to manually restart your service.</p><pre class="screen">
+<p>You&#39;ll see the final Installer page, "OpenACS
+Installation: Complete." It will tell you that the server is
+being restarted; note that unless you already set up a way for
+AOLserver to restart itself (ie. <a class="link" href="install-openacs-keepalive" title="Starting and Stopping an OpenACS instance.">inittab or
+daemontools</a>), you&#39;ll need to manually restart your
+service.</p><pre class="screen">
 [$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>/usr/local/aolserver/bin/nsd-postgres -t /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/config.tcl</code></strong>
 </pre>
 </li><li class="listitem"><p>Give the server a few minutes to start up. Then reload the final
@@ -546,7 +550,7 @@ to learn how to develop your own packages.</p></li><li class="listitem">
 <p>Set up database environment variables for the site user.
 Depending on how you installed Oracle or PostGreSQL, these settings
 may be necessary for working with the database while logged in as
-the service user. They do not directly affect the service's
+the service user. They do not directly affect the service&#39;s
 run-time connection with the database, because those environmental
 variables are set by the wrapper scripts nsd-postgres and
 nsd-oracle.</p><pre class="screen">
@@ -563,9 +567,9 @@ export PATH=$PATH:/usr/local/pgsql/bin
 </li><li class="listitem">
 <p>Oracle. These environment variables are specific for a local
 Oracle installation communicating via IPC. If you are connecting to
-a remote Oracle installation, you'll need to adjust these
-appropriately. Also, make sure that the '8.1.7' matches your Oracle
-version.</p><pre class="programlisting">
+a remote Oracle installation, you&#39;ll need to adjust these
+appropriately. Also, make sure that the '8.1.7' matches
+your Oracle version.</p><pre class="programlisting">
 export ORACLE_BASE=/ora8/m01/app/oracle
 export ORACLE_HOME=$ORACLE_BASE/product/<span class="replaceable"><span class="replaceable">8.1.7</span></span>
 export PATH=$PATH:$ORACLE_HOME/bin
@@ -606,8 +610,8 @@ ORA_NLS33=$ORACLE_HOME/ocommon/nls/admin/data
 recovery</a> procedure.</p></li><li class="listitem"><p>Set up <a class="xref" href="uptime" title="External uptime validation">the section called
 &ldquo;External uptime
 validation&rdquo;</a>.</p></li>
-</ul></div><div class="cvstag">($&zwnj;Id: openacs.xml,v 1.31 2006/07/17 05:38:37
-torbenb Exp $)</div>
+</ul></div><div class="cvstag">($&zwnj;Id: openacs.html,v 1.51.2.10 2016/06/21
+07:44:36 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

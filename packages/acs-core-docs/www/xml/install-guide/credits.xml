@@ -25,7 +25,7 @@
 	  </para></listitem>
 
 	  <listitem><para> 
-		  <ulink url="http://www.orchardlabs.com/freebsd/">Gilbert Wong's FreeBSD
+		  <ulink url="http://www.orchardlabs.com/freebsd/">Gilbert Wong&#39;s FreeBSD
 		  installation guide</ulink>
 		</para></listitem> 
 
@@ -69,9 +69,9 @@
     <title>Where did this document come from?</title>
     <para>
       This document was created by <ulink
-      url="mailto:vinod@kurup.com">Vinod Kurup</ulink>, but it's really
+      url="mailto:vinod@kurup.com">Vinod Kurup</ulink>, but it&#39;s really
       just plagiarism from a number of documents that came before it. If
-      I've used something that you've written without proper credit, let me
+      I've used something that you&#39;ve written without proper credit, let me
       know and I'll fix it right away.
     </para>
     <para>Versions 4.6.2 to present were edited by <ulink
@@ -89,19 +89,19 @@
         </para></listitem> 
 
       <listitem><para> 
-          <ulink url="http://www.orchardlabs.com/">Gilbert Wong's FreeBSD
+          <ulink url="http://www.orchardlabs.com/">Gilbert Wong&#39;s FreeBSD
           installation guide</ulink>
         </para></listitem> 
 
       <listitem><para> 
-          <ulink url="http://kurup.com/acs/openacs-4.html">Vinod Kurup's Brief OpenACS4
+          <ulink url="http://kurup.com/acs/openacs-4.html">Vinod Kurup&#39;s Brief OpenACS4
           installation guide</ulink>
         </para></listitem>
 
       <listitem><para> 
           <ulink
           url="http://www.aufrecht.org/openacs-4.5-quick-guide/">Joel
-          Aufrecht's OpenACS 4.5 Quick Guide.</ulink>
+          Aufrecht&#39;s OpenACS 4.5 Quick Guide.</ulink>
         </para></listitem> 
 
     </itemizedlist>
@@ -113,7 +113,7 @@
     <section id="os-install" xreflabel="Linux Install Guides">
     <title>Linux Install Guides</title>
     <para>
-      Here's a list of some helpful documentation for various OS's
+      Here&#39;s a list of some helpful documentation for various OS's
     </para>
 
     <itemizedlist>
@@ -156,7 +156,7 @@
   <section id="os-security" xreflabel="Security Information">
     <title>Security Information</title>
     <para>
-      Once you get your OS installed, it's imperative that you secure your
+      Once you get your OS installed, it&#39;s imperative that you secure your
       installation. As Jon Griffin repeatedly warns us, "No distribution is
       secure out of the box."  The Reference Platform implements
       some basic precautions, but security is a process, not a
@@ -175,7 +175,7 @@
       </listitem>
       <listitem><para> 
           <ulink url="http://jongriffin.com/static/linuxnotes">Jon
-          Griffin's notes</ulink>
+          Griffin&#39;s notes</ulink>
           </para></listitem>
       <listitem><para> 
           <ulink url="http://www.seifried.org/lasg/">Linux Administrators
@@ -190,7 +190,7 @@
       <listitem><para> 
           <ulink
             url="http://www.counterpane.com/crypto-gram.html">Bruce
-          Schneier's Crypto-Gram</ulink>, especially <ulink
+          Schneier&#39;s Crypto-Gram</ulink>, especially <ulink
           url="http://www.counterpane.com/crypto-gram-0103.html#1">The
           security patch treadmill</ulink> and <ulink
           url="http://www.counterpane.com/crypto-gram-0107.html#5">Monitoring First</ulink>.</para>
@@ -214,7 +214,7 @@
 
             <ulink
             url="http://www.amazon.com/exec/obidos/ASIN/1558605347/photonetA">Philip
-            and Alex's Guide to Web Publishing</ulink> - A very readable
+            and Alex&#39;s Guide to Web Publishing</ulink> - A very readable
             guide to database-backed community websites.
 
           </para></listitem>
@@ -241,7 +241,7 @@
 
             <ulink
             url="http://www.amazon.com/exec/obidos/ASIN/076453162X/photonetA">UNIX
-            System Administrator's Bible</ulink> -  (LePage and Iarerra 1998;
+            System Administrator&#39;s Bible</ulink> -  (LePage and Iarerra 1998;
             IDG) 
 
           </para></listitem>

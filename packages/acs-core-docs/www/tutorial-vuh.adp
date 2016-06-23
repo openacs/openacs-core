@@ -45,9 +45,9 @@ rp_internal_redirect $internal_path
 final / as the item id. Note that this simple redirection will lose
 any additional query parameters passed in. Many OpenACS objects
 maintain a pretty-name, which is a unique, human-readable string,
-usually derived from title, which makes an even better 'pretty url'
-than a numeric id; this requires that your display page be able to
-look up an item based on pretty id.</p><p>We use <code class="computeroutput">rp_form_put</code> to store
+usually derived from title, which makes an even better 'pretty
+url' than a numeric id; this requires that your display page be
+able to look up an item based on pretty id.</p><p>We use <code class="computeroutput">rp_form_put</code> to store
 the item id in the internal register that the next page is
 expecting, and then redirects the request in process internally
 (ie, without a browser refresh).</p><p>Next, modify note-list so that its link is of the new form.:</p><pre class="screen">

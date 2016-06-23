@@ -42,11 +42,12 @@ objects, we can also use some content repository functions to
 simplify our database creation. (<a class="ulink" href="objects" target="_top">More information about ACS
 Objects</a>. <a class="ulink" href="/doc/acs-content-repository" target="_top">More information about the Content
 Repository</a>.)</p><div class="figure">
-<a name="idp140641342948800" id="idp140641342948800"></a><p class="title"><strong>Figure 9.2. Tutorial
-Data Model</strong></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/tutorial-data-model.png" align="middle" alt="Tutorial Data Model"></div></div>
+<a name="idp140641342948800" id="idp140641342948800"></a><p class="title"><strong>Figure 9.2. Tutorial Data
+Model</strong></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/tutorial-data-model.png" align="middle" alt="Tutorial Data Model"></div></div>
 </div><br class="figure-break"><p>The top of each sql file has some standard comments, including
 doc tags such as <code class="computeroutput">\@author</code> which
-will be picked up by the API browser. The string <code class="computeroutput">$&zwnj;Id:$</code> will automatically be expanded when
+will be picked up by the API browser. The string <code class="computeroutput">$&zwnj;Id: tutorial-database.html,v 1.44.2.10 2016/06/21
+07:44:36 gustafn Exp $</code> will automatically be expanded when
 the file is checked in to cvs.</p><pre class="screen">
 [$OPENACS_SERVICE_NAME ~]$ <strong class="userinput"><code>cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackage/sql/postgresql</code></strong>
 [$OPENACS_SERVICE_NAME postgresql]$ <strong class="userinput"><code>emacs myfirstpackage-create.sql</code></strong>
@@ -75,14 +76,14 @@ select content_folder__register_content_type(-100,'mfp_note','t');
 </div><br class="figure-break"><p>The creation script calls a function in PL/pgSQL (PL/pgSQL is a
 procedural language extention to sql), <code class="computeroutput"><a class="ulink" href="/api-doc/plsql-subprogram-one?type=FUNCTION&amp;name=content%5ftype%5f%5fcreate%5ftype" target="_top">content_type__create_type</a></code>, which in turn
 creates the necessary database changes to support our data object.
-Notice the use of "mfp." This is derived from "My First Package"
-and ensures that our object is unlikely to conflict with objects
-from other packages.</p><p>Create a database file to drop everything if the package is
+Notice the use of "mfp." This is derived from "My
+First Package" and ensures that our object is unlikely to
+conflict with objects from other packages.</p><p>Create a database file to drop everything if the package is
 uninstalled.</p><pre class="screen">
 [$OPENACS_SERVICE_NAME postgresql]$ <strong class="userinput"><code>emacs myfirstpackage-drop.sql</code></strong>
 </pre><div class="figure">
-<a name="idp140641343035984" id="idp140641343035984"></a><p class="title"><strong>Figure 9.4. Database
-Deletion Script</strong></p><div class="figure-contents"><pre class="programlisting">
+<a name="idp140641343035984" id="idp140641343035984"></a><p class="title"><strong>Figure 9.4. Database Deletion
+Script</strong></p><div class="figure-contents"><pre class="programlisting">
 -- drop script
 --
 -- \@author joel\@aufrecht.org
@@ -113,7 +114,7 @@ psql:myfirstpackage-create.sql:15: NOTICE:  CREATE TABLE will create implicit tr
 again. If there are errors in the database table creation, you may
 need to run the drop script to drop the table so that you can
 recreate it. The drop script will probably have errors since some
-of the things it's trying to drop may be missing. They can be
+of the things it&#39;s trying to drop may be missing. They can be
 ignored.</p><p>Once you get the same output as shown above, test the drop
 script:</p><pre class="screen">
 [$OPENACS_SERVICE_NAME postgresql]$ <strong class="userinput"><code>psql service0 -f myfirstpackage-drop.sql</code></strong>

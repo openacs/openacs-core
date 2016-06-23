@@ -15,8 +15,8 @@
         related to the service, you can also issue the following:</p><pre class="programlisting">SVRMGR&gt; <strong class="userinput"><code>drop tablespace <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span> including contents cascade constraints;</code></strong></pre></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="install-openacs-delete-postgres-tablespace"></a>Deleting a PostgreSQL tablespace</h3></div></div></div><p>
         Dropping a PostgreSQL tablespace is easy. You have to stop any
         AOLserver instances that are using the database that you wish to
-        drop. If you're using daemontools, this is simple, just use the
-        'down' flag (-d). If you're using inittab, you have to comment out
+        drop. If you&#39;re using daemontools, this is simple, just use the
+        'down' flag (-d). If you&#39;re using inittab, you have to comment out
         your server in <code class="computeroutput">/etc/inittab</code>,
         reread the inittab with <code class="computeroutput">/sbin/init
         q</code>, and then <code class="computeroutput">restart-aolserver

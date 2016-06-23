@@ -12,12 +12,12 @@ software"
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="install-qmail" id="install-qmail"></a>Install qmail (OPTIONAL)</h2></div></div></div><p>Qmail is a Mail Transfer Agent. It handles incoming and outgoing
 mail. Install qmail if you want your OpenACS server to send and
-receive mail, and you don't want to use an alternate MTA.</p><p>Red Hat 9: all djb tools (qmail, daemontools, ucspi) will fail
+receive mail, and you don&#39;t want to use an alternate MTA.</p><p>Red Hat 9: all djb tools (qmail, daemontools, ucspi) will fail
 to compile in Red Hat 9 because of changes to glibc (<a class="ulink" href="http://moni.csi.hu/pub/glibc-2.3.1/" target="_top">patches</a>)</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
 <p>
-<strong>Install ucspi. </strong>This program handles incoming
-tcp connections. <a class="link" href="individual-programs" title="ucspi-tcp 0.88, OPTIONAL">Download ucspi</a> and install it.</p><pre class="screen">
+<strong>Install ucspi. </strong>This program handles
+incoming tcp connections. <a class="link" href="individual-programs" title="ucspi-tcp 0.88, OPTIONAL">Download ucspi</a> and install it.</p><pre class="screen">
 [root root]# <strong class="userinput"><code>cd /usr/local/src</code></strong>
 [root src]# <strong class="userinput"><code>wget http://cr.yp.to/ucspi-tcp/ucspi-tcp-0.88.tar.gz</code></strong>
 [root src]# <strong class="userinput"><code>tar xzf ucspi-tcp-0.88.tar.gz</code></strong><span class="action"><span class="action">cd /usr/local/src 
@@ -48,20 +48,20 @@ tcpserver: usage: tcpserver [ -1UXpPhHrRoOdDqQv ] [ -c limit ] [ -x rules.cdb ] 
 ] [ -b backlog ] [ -l localname ] [ -t timeout ] host port program
 [root ucspi-tcp-0.88]#
 </pre><p>
-<a class="indexterm" name="idp140641353562832" id="idp140641353562832"></a> (I'm not sure if this next step is 100%
-necessary, but when I skip it I get problems. If you get the error
-<code class="computeroutput">553 sorry, that domain isn't in my
-list of allowed rcpthosts (#5.7.1)</code> then you need to do
+<a class="indexterm" name="idp140641353562832" id="idp140641353562832"></a> (I'm not sure if this next step is
+100% necessary, but when I skip it I get problems. If you get the
+error <code class="computeroutput">553 sorry, that domain isn&#39;t
+in my list of allowed rcpthosts (#5.7.1)</code> then you need to do
 this.) AOLserver sends outgoing mail via the ns_sendmail command,
 which pipes a command to the sendmail executable. Or, in our case,
 the qmail replacement wrapper for the sendmail executable. In some
 cases, though, the outgoing mail requset is apparently sent through
 tcp/ip, so that it comes to qmail from 127.0.0.1 (a special IP
-address that means the local machine - the "loopback" interface).
-Unless this mail is addressed to the same machine, qmail thinks
-that it's an attempt to relay mail, and rejects it. So these two
-commands set up an exception so that any mail sent from 127.0.0.1
-is allowed to send outgoing mail.</p><pre class="screen">
+address that means the local machine - the "loopback"
+interface). Unless this mail is addressed to the same machine,
+qmail thinks that it&#39;s an attempt to relay mail, and rejects
+it. So these two commands set up an exception so that any mail sent
+from 127.0.0.1 is allowed to send outgoing mail.</p><pre class="screen">
 [root ucspi-tcp-0.88]# <strong class="userinput"><code>cp /tmp/openacs-5.9.0/packages/acs-core-docs/www/files/tcp.smtp.txt /etc/tcp.smtp</code></strong>
 [root ucspi-tcp-0.88]# <strong class="userinput"><code>tcprules /etc/tcp.smtp.cdb /etc/tcp.smtp.tmp &lt; /etc/tcp.smtp</code></strong><span class="action"><span class="action">cp /tmp/openacs-5.9.0/packages/acs-core-docs/www/files/tcp.smtp.txt /etc/tcp.smtp 
 tcprules /etc/tcp.smtp.cdb /etc/tcp.smtp.tmp &lt; /etc/tcp.smtp </span></span>
@@ -131,7 +131,7 @@ cd netqmail-1.04
 ./collate.sh
 cd netqmail-1.04
 make setup check</span></span>
-</pre><p>Replace sendmail with qmail's wrapper.</p><a class="indexterm" name="idp140641353587760" id="idp140641353587760"></a><pre class="screen">
+</pre><p>Replace sendmail with qmail&#39;s wrapper.</p><a class="indexterm" name="idp140641353587760" id="idp140641353587760"></a><pre class="screen">
 [root qmail-1.03]# <strong class="userinput"><code>rm -f /usr/bin/sendmail /usr/sbin/sendmail</code></strong>
 [root qmail-1.03]# <strong class="userinput"><code>ln -s /var/qmail/bin/sendmail /usr/sbin/sendmail</code></strong>
 [root qmail-1.03]#
@@ -139,10 +139,10 @@ make setup check</span></span>
 ln -s /var/qmail/bin/sendmail /usr/sbin/sendmail</span></span>
 </pre><p>Configure qmail - specifically, run the config script to set up
 files in <code class="computeroutput">/var/qmail/control</code>
-specifying the computer's identity and which addresses it should
-accept mail for. This command will automatically set up qmail
-correctly if you have correctly set a valid host nome. If not,
-you'll want to read <code class="computeroutput">/var/qmail/doc/INSTALL.ctl</code> to find out how
+specifying the computer&#39;s identity and which addresses it
+should accept mail for. This command will automatically set up
+qmail correctly if you have correctly set a valid host nome. If
+not, you&#39;ll want to read <code class="computeroutput">/var/qmail/doc/INSTALL.ctl</code> to find out how
 to configure qmail.</p><pre class="screen">
 [root qmail-1.03]# <strong class="userinput"><code>./config-fast <span class="replaceable"><span class="replaceable">yourserver.test</span></span>
 </code></strong>
@@ -157,10 +157,10 @@ Make sure to change rcpthosts if you add hosts to locals or virtualdomains!
 [root qmail-1.03]#
 <span class="action"><span class="action">./config-fast <span class="replaceable"><span class="replaceable">yourserver.test</span></span>
 </span></span>
-</pre><p>All incoming mail that isn't for a specific user is handled by
-the <code class="computeroutput">alias</code> user. This includes
-all root mail. These commands prepare the alias user to receive
-mail.</p><pre class="screen">
+</pre><p>All incoming mail that isn&#39;t for a specific user is handled
+by the <code class="computeroutput">alias</code> user. This
+includes all root mail. These commands prepare the alias user to
+receive mail.</p><pre class="screen">
 [root qmail-1.03]# <strong class="userinput"><code>cd ~alias; touch .qmail-postmaster .qmail-mailer-daemon .qmail-root</code></strong>
 [root alias]# <strong class="userinput"><code>chmod 644 ~alias/.qmail*</code></strong>
 [root alias]# <strong class="userinput"><code>/var/qmail/bin/maildirmake ~alias/Maildir/</code></strong>
@@ -228,9 +228,9 @@ chmod 755 /var/qmail/supervise/qmail-smtpd/log/run
 ln -s /var/qmail/supervise/qmail-send /var/qmail/supervise/qmail-smtpd /service
 </span></span>
 </pre><p>Wait ten seconds or so, and then verify that that the four qmail
-processes are running. If uptimes don't rise above 1 second, this
-may indicate broken scripts that are continuously restarting. In
-that case, start debugging by checking permissions.</p><pre class="screen">
+processes are running. If uptimes don&#39;t rise above 1 second,
+this may indicate broken scripts that are continuously restarting.
+In that case, start debugging by checking permissions.</p><pre class="screen">
 [root root]# <strong class="userinput"><code>qmailctl stat</code></strong>
 /service/qmail-send: up (pid 32700) 430 seconds
 /service/qmail-send/log: up (pid 32701) 430 seconds
