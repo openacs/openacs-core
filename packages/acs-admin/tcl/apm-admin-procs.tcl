@@ -595,6 +595,10 @@ ad_proc -private apm_build_repository {
                   [list &channels channels update_pretty_date $update_pretty_date]]
     close $fw
 
+    # Add a redirector for outdated releases
+    set fw [open "${work_dir}repository/index.vuh" w]
+    puts $fw "ns_returnredirect /repository/"
+    close $fw
 
     # Without the trailing slash
     set work_repository_dirname "${work_dir}repository"
