@@ -58,8 +58,6 @@ $$ LANGUAGE plpgsql stable;
 -- procedure acs_permission__permission_p_recursive_array/3
 --
 
-perform define_function_args('acs_permission__permission_p_recursive_array','a_objects,a_party_id,a_privilege');
-
 CREATE OR REPLACE FUNCTION  acs_permission__permission_p_recursive_array(
        permission_p__objects   integer[],
        permission_p__party_id  integer, 
