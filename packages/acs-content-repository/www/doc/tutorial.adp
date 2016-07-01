@@ -6,12 +6,13 @@
 
 by <a href="http://rubick.com">Jade Rubick</a>
 <h3>Why use the content repository?</h3>
-<p>Let's say you're a developer making a package for OpenACS.
-You've heard statements like, "every package should use the content
-repository", or maybe a developer has suggested that you use it. Or
-maybe you just stumbled across it. Why would you want to spend your
-time reading this document and wasting a good afternoon when you
-could get started coding right away?</p>
+<p>Let&#39;s say you&#39;re a developer making a package for
+OpenACS. You&#39;ve heard statements like, "every package
+should use the content repository", or maybe a developer has
+suggested that you use it. Or maybe you just stumbled across it.
+Why would you want to spend your time reading this document and
+wasting a good afternoon when you could get started coding right
+away?</p>
 <p>The simple answer is that the content repository (CR) gives you
 many different things for free:</p>
 <ul>
@@ -50,21 +51,21 @@ descriptions of what needs to be accomplished, and so on:</p>
         
 </pre></blockquote>
 <h3>Overview</h3>
-<p>First of all, let's get some terminology out of the way. Columns
-of a table are referred to as <em>attributes</em> in content
-repository-speak.</p>
+<p>First of all, let&#39;s get some terminology out of the way.
+Columns of a table are referred to as <em>attributes</em> in
+content repository-speak.</p>
 
 The steps to set up your data model are as follows:
 <ol>
 <li>What attributes do you want?</li><li>Define tables</li><li>Describe attributes</li>
 </ol>
 <h3>What attributes do you want?</h3>
-<p>The first step is to decide on what part of a Task you'd you'd
-like to have under revision control, and what portion you'd like to
-have just one version of. In our case, the only thing we wouldn't
-want under version control is the Task Number. This will be a
-unique identifier for the task, and we don't want that changing
-every time someone edits it.</p>
+<p>The first step is to decide on what part of a Task you&#39;d
+you&#39;d like to have under revision control, and what portion
+you&#39;d like to have just one version of. In our case, the only
+thing we wouldn&#39;t want under version control is the Task
+Number. This will be a unique identifier for the task, and we
+don&#39;t want that changing every time someone edits it.</p>
 <p>For our simple example:</p>
 <blockquote><pre>
           Title - want versions
@@ -77,9 +78,10 @@ every time someone edits it.</p>
 without versioned attributes.</p>
 <p>
 <em>Convention:</em> often, developers will name the first table
-by what it is (in my case <strong>pm_tasks</strong>), and the second,
-versioned table by the same name, but with _revisions at the end.
-Thus, I'll name my second table <strong>pm_tasks_revisions</strong>.</p>
+by what it is (in my case <strong>pm_tasks</strong>), and the
+second, versioned table by the same name, but with _revisions at
+the end. Thus, I'll name my second table
+<strong>pm_tasks_revisions</strong>.</p>
 
 This is actually very easy:
 <p>Versioned portion:</p>
@@ -117,12 +119,12 @@ This is actually very easy:
 <p>One thing you have to be careful of when creating these tables
 is that there are no columns that have the same names as any of the
 columns in the <code>cr_items</code> and <code>cr_revisions</code>
-tables. For example, you can't call you key on the
+tables. For example, you can&#39;t call you key on the
 pm_tasks_revisions table <code>revision_id</code>. Why? There are
 some views that are automatically generated that combine these
-tables for you, but they won't be created if the names conflict.
-I'll describe what these views are later, but they are useful. You
-were warned.</p>
+tables for you, but they won&#39;t be created if the names
+conflict. I'll describe what these views are later, but they
+are useful. You were warned.</p>
 <p>Notice that each table uses as its primary key a reference to
 either the <code>cr_revisions</code> table or the
 <code>cr_items</code> table. A <em>content item</em> is basically
@@ -134,11 +136,11 @@ live.</p>
 <code>sql/postgresql/project-manager-create.sql</code> file. Your
 name will be different of course.</p>
 <h3>Describe attributes</h3>
-<p>After we've created the two tables, we need to let the content
-repository know that we have a new type of structured data that we
-are storing in the content repository. Tasks are a "content type",
-because they have data associated with them, such as when they are
-due, and what needs to be done.</p>
+<p>After we&#39;ve created the two tables, we need to let the
+content repository know that we have a new type of structured data
+that we are storing in the content repository. Tasks are a
+"content type", because they have data associated with
+them, such as when they are due, and what needs to be done.</p>
 <p>I thus need to to</p>
 <blockquote><pre>
           --create the content type
@@ -155,8 +157,9 @@ due, and what needs to be done.</p>
 </pre></blockquote>
 <p>You then need to add in all the attributes, so that the content
 repository can do some magic things behind the scenes. The content
-repository doesn't know about what's inside of the <em>pm_tasks</em>
-and <em>pm_tasks_revisions</em> tables, so we teach it:</p>
+repository doesn&#39;t know about what&#39;s inside of the
+<em>pm_tasks</em> and <em>pm_tasks_revisions</em> tables, so we
+teach it:</p>
 <blockquote><pre>
           -- add in attributes
           
@@ -195,10 +198,10 @@ and <em>pm_tasks_revisions</em> tables, so we teach it:</p>
         
 </pre></blockquote>
 <p>
-<strong>Side effect</strong>: once you've created the content type, the
-content repository creates a view for you called
+<strong>Side effect</strong>: once you&#39;ve created the
+content type, the content repository creates a view for you called
 <code>pm_tasks_revisionsx</code>. Note the x at the end of the
-name. If you're using Postgres, I believe it will also create a
+name. If you&#39;re using Postgres, I believe it will also create a
 view for you called <code>pm_tasks_revisionsi</code>
 </p>
 <p>Why are these two views created? the x view is created for
@@ -212,38 +215,40 @@ them with extra columns. You could do this by using <code>create
 table</code> or <code>alter table add column</code> statements in
 SQL, but this also adds in some meta-data that will be useful to
 you. The disadvantage is that you have to call the content
-repository API. The advantage is that someday you'll be able to do
-really cool stuff with it, like automatically generate interfaces
-that take advantage of the new columns and tables you've added.
-Another nice thing is that all that messy business of defining your
-attributes through the API is taken care of.</p>
+repository API. The advantage is that someday you&#39;ll be able to
+do really cool stuff with it, like automatically generate
+interfaces that take advantage of the new columns and tables
+you&#39;ve added. Another nice thing is that all that messy
+business of defining your attributes through the API is taken care
+of.</p>
 <p>
 <em>Types</em> is the content repository are another term for
-tables, although that doesn't explain it completely. Types are also
-kept track of within OpenACS, in the <code>acs_object_types</code>
-table, so the system knows about the tables you create, and can do
-some intelligent things with them.</p>
+tables, although that doesn&#39;t explain it completely. Types are
+also kept track of within OpenACS, in the
+<code>acs_object_types</code> table, so the system knows about the
+tables you create, and can do some intelligent things with
+them.</p>
 <p>A lot of the <em>intelligent things</em> you can do with this
 information is still being built. But imagine for example that you
-are using the project manager package I've written. You work at an
-ice cream company, and every task that is done also has an
-associated ice cream flavor with it (yeah, this isn't a good
+are using the project manager package I've written. You work at
+an ice cream company, and every task that is done also has an
+associated ice cream flavor with it (yeah, this isn&#39;t a good
 example, but pay attention anyway). If I've written the project
 manager to take advantage of it, when you add in this extra
 attribute to the pm_tasks_revisions table, the UI aspects will be
-automatically taken care of. You'll be able to select a flavor when
-you edit a task, and it will be shown on the task view page. This
-is the direction OpenACS development is going, and it will be
+automatically taken care of. You&#39;ll be able to select a flavor
+when you edit a task, and it will be shown on the task view page.
+This is the direction OpenACS development is going, and it will be
 really really cool!</p>
 <p>First, I'm going to describe how to extend other content
-repository tables using the CR API. Then, I'll describe how to set
-up your own tables as well:</p>
+repository tables using the CR API. Then, I'll describe how to
+set up your own tables as well:</p>
 <p>As you recall from earlier in this page, attributes are just
 another term for columns in a table. The Content Repository has a
 mechanism for adding and removing columns via the pl/sql API. If
 you check your /api-doc:
 <code>/api-doc/plsql-subprogram-one?type=FUNCTION&amp;name=content%5ftype%5f%5fcreate%5fattribute</code>
-, you'll see that there is a way to extend the columns
+, you&#39;ll see that there is a way to extend the columns
 programmatically.</p>
 <p>Why would you want to do this? For project manager, I decided to
 do this because I wanted to customize my local version of the
@@ -300,43 +305,44 @@ table</a>
 You then need to define a couple of functions, that do all the
 nasty work of putting everything in the right tables. The general
 idea behind it is that the revisioned information is never changed,
-but added to. Here's how it works. When you create a new task, you
-call the <code>pm_task__new_task_item</code>
- function (which we'll
-write in a little bit). This function creates both a new content
-item, and a new content revision. Information is actually stored in
-four tables, believe it or not: <code>cr_revisions</code>
+but added to. Here&#39;s how it works. When you create a new task,
+you call the <code>pm_task__new_task_item</code>
+ function (which
+we&#39;ll write in a little bit). This function creates both a new
+content item, and a new content revision. Information is actually
+stored in four tables, believe it or not:
+<code>cr_revisions</code>
+, <code>cr_items</code>
 ,
-<code>cr_items</code>
-, <code>pm_tasks</code>
-, and
-<code>pm_tasks_revisions</code>
-. The task number is stored in
-pm_tasks, the title and description are stored in
-pm_tasks_revisions, and some additional information like who
-entered the information is stored in cr_revisions and cr_items.
-Whenever you make a change to this item, you don't change the table
-yourself, but <strong>add</strong>
+<code>pm_tasks</code>
+, and <code>pm_tasks_revisions</code>
+. The
+task number is stored in pm_tasks, the title and description are
+stored in pm_tasks_revisions, and some additional information like
+who entered the information is stored in cr_revisions and cr_items.
+Whenever you make a change to this item, you don&#39;t change the
+table yourself, but <strong>add</strong>
  a revision, using your
 <code>pm_task__new_task_revision</code>
- function (which we'll write
-in a little bit). This function adds another revision, but
+ function (which we&#39;ll
+write in a little bit). This function adds another revision, but
 <em>not</em>
- another item or cr_item. After you've added another
-revision, you'll have two revisions and one item. Two entries in
-cr_revisions (and pm_tasks_revisions), and one item in cr_items and
-pm_tasks. The cr_revisions table keeps track of which item is the
-most recent, and which item is "live". For the edit-this-page
-application, for example, this is used to keep track of which
-revision to a page is actually being served to users. In your code,
-you'll use your pm_tasks_revisionsx view, which joins the
-pm_tasks_revisions table with the cr_revisions table (and it might
-even join in cr_items -- I forget at the moment).
+ another item or cr_item. After you&#39;ve added
+another revision, you&#39;ll have two revisions and one item. Two
+entries in cr_revisions (and pm_tasks_revisions), and one item in
+cr_items and pm_tasks. The cr_revisions table keeps track of which
+item is the most recent, and which item is "live". For
+the edit-this-page application, for example, this is used to keep
+track of which revision to a page is actually being served to
+users. In your code, you&#39;ll use your pm_tasks_revisionsx view,
+which joins the pm_tasks_revisions table with the cr_revisions
+table (and it might even join in cr_items -- I forget at the
+moment).
 <h3>Defining your pl/sql functions</h3>
 
 You can see the actual functions used in project manager via the
 <a href="http://cvs.openacs.org/cvs/openacs-4/contrib/packages/project-manager/sql/postgresql/">
-CVS browser's entry for project-manager</a>
+CVS browser&#39;s entry for project-manager</a>
 . Note these are a
 little more expanded than what I've used in the examples above.
 <blockquote><pre>
@@ -509,24 +515,27 @@ $$ language plpgsql;
 
 cr_items:
 <blockquote>
-<strong>item_id</strong> - unique id for this item, will be
-different than the revision_id<br><strong>parent_id</strong> - used to group items into a hierarchy (see
-below)<br><strong>name</strong> - this is used to make a URL by the content repository.
-It must be unique per content folder. You can use a number, or
-something like project_231. One way to do this is to set it equal
-to a title plus the item_id.<br><strong>locale</strong> - not sure, probably for internationalization
-support<br><strong>live_revision</strong> - this is equal to the cr_revision table's
-revision_id that is the live version<br><strong>latest_revision</strong> - this is equal to the cr_revision table's
-revision_id that is the latest version<br><strong>publish_status</strong> - not sure<br><strong>content_type</strong> - not sure<br><strong>storage_type</strong> - not sure, probably text or binary?<br><strong>storage_area_key</strong> - not sure<br><strong>tree_sortkey</strong> - a utility column used in hierarchical
-queries.<br>
+<strong>item_id</strong> - unique id for this item,
+will be different than the revision_id<br><strong>parent_id</strong> - used to group items into a hierarchy
+(see below)<br><strong>name</strong> - this is used to make a URL by the content
+repository. It must be unique per content folder. You can use a
+number, or something like project_231. One way to do this is to set
+it equal to a title plus the item_id.<br><strong>locale</strong> - not sure, probably for
+internationalization support<br><strong>live_revision</strong> - this is equal to the cr_revision
+table&#39;s revision_id that is the live version<br><strong>latest_revision</strong> - this is equal to the cr_revision
+table&#39;s revision_id that is the latest version<br><strong>publish_status</strong> - not sure<br><strong>content_type</strong> - not sure<br><strong>storage_type</strong> - not sure, probably text or
+binary?<br><strong>storage_area_key</strong> - not sure<br><strong>tree_sortkey</strong> - a utility column used in
+hierarchical queries.<br>
 </blockquote>
 
 cr_revisions:
 <blockquote>
-<strong>revision_id</strong> - a unique id for this revision.<br><strong>item_id</strong> - a reference to the item_id for this revision<br><strong>title</strong> - you can use this for your application. For example,
-My Big Project<br><strong>description</strong> - you can use this for your application, as a
-longer description.<br><strong>publish_date</strong> - the date this was published. Not sure if this
-is for your use, or internal<br><strong>mime_type</strong> - the mime type.<br><strong>nls_language</strong> - I believe this is for
+<strong>revision_id</strong> - a unique id for this
+revision.<br><strong>item_id</strong> - a reference to the item_id for this
+revision<br><strong>title</strong> - you can use this for your application. For
+example, My Big Project<br><strong>description</strong> - you can use this for your
+application, as a longer description.<br><strong>publish_date</strong> - the date this was published. Not
+sure if this is for your use, or internal<br><strong>mime_type</strong> - the mime type.<br><strong>nls_language</strong> - I believe this is for
 internationalization<br><strong>lob</strong> - the binary content.<br><strong>content</strong> - the text content.<br><strong>content_length</strong> - the length of the text or binary
 content?<br>
 </blockquote>
@@ -544,8 +553,8 @@ underneath their given project.
 <p>Using this structure is optional, but useful in many
 circumstances.</p>
 <p>The facility for this is built into the <code>cr_items</code>
-data model. This makes sense, because you wouldn't want your
-hierarchy associated with each revision. Here's how Postgres
+data model. This makes sense, because you wouldn&#39;t want your
+hierarchy associated with each revision. Here&#39;s how Postgres
 describes the <code>cr_items</code> table:</p>
 <blockquote><pre>
                          Table "public.cr_items"
@@ -576,16 +585,16 @@ The <code>parent_id</code>
 give the application its own root directory. Because the content
 repository is shared among applications, this separates it off from
 other applications. They can still use the items in your
-application, but it must be a more deliberate process. If you don't
-create your own root directory, you may see strange-looking data
-from other applications in your application, or see your
-application's data in other applications. There are times when
-you'll want to do this, but probably not until you're much more
-familiar with the content repository. Another reason for creating
-your own root repository is that you application may be mounted
-several times. If you want to separate the directory structure
-between instances of your application, you need to create your own
-root directory:</p>
+application, but it must be a more deliberate process. If you
+don&#39;t create your own root directory, you may see
+strange-looking data from other applications in your application,
+or see your application&#39;s data in other applications. There are
+times when you&#39;ll want to do this, but probably not until
+you&#39;re much more familiar with the content repository. Another
+reason for creating your own root repository is that you
+application may be mounted several times. If you want to separate
+the directory structure between instances of your application, you
+need to create your own root directory:</p>
 <blockquote><pre>
 -- Creates and returns a unique name for new project folders
 
@@ -646,21 +655,22 @@ $$ language plpgsql;
 </pre></blockquote>
 
 Note that this example is for projects rather than tasks. This is
-because for the application I'm writing, projects are what tasks
-are stored inside of. A project has many component tasks. If you
-were writing another application, or if I wasn't doing anythign
-with projects, then this would be creating a folder for just tasks.
+because for the application I'm writing, projects are what
+tasks are stored inside of. A project has many component tasks. If
+you were writing another application, or if I wasn&#39;t doing
+anythign with projects, then this would be creating a folder for
+just tasks.
 <p>Typically, this definition would go in your
 <code>sql/postgresql/project-manager-create.sql</code> file. If
 this file is broken in several parts, this would go in the
 project-manager-create-functions.sql portion.</p>
-<p>Once you've created your root directory, you will set the
+<p>Once you&#39;ve created your root directory, you will set the
 <code>parent_id</code> of your items to the id for the new root
-repository (in our case, it's returned from the
+repository (in our case, it&#39;s returned from the
 <code>pm_project__new_root_folder function</code>)</p>
-<p>In the project-manager application, we'll create a root
+<p>In the project-manager application, we&#39;ll create a root
 repository, and make all projects under that root repository. That
-means they'll all have a <code>parent_id</code> set to the root
+means they&#39;ll all have a <code>parent_id</code> set to the root
 repository. However, we also want to make projects that are
 sub-projects of other projects. In that case, we will set the
 <code>parent_id</code> of the sub-project to the
@@ -668,12 +678,12 @@ sub-projects of other projects. In that case, we will set the
 <h4>Understanding folders</h4>
 
 For a little while now, we have been talking about folders, but we
-haven't delved into what CR folders are. Folders are sub-classes of
-<code>cr_items</code>
-, and the only real difference is that they
-contain no data, except for a label and description.
-<p>If you create folders for your application, then you'll need to
-make sure you manage them along with your other objects. For
+haven&#39;t delved into what CR folders are. Folders are
+sub-classes of <code>cr_items</code>
+, and the only real difference
+is that they contain no data, except for a label and description.
+<p>If you create folders for your application, then you&#39;ll need
+to make sure you manage them along with your other objects. For
 example, if you were to add a folder for each of your objects, then
 you would probably want to make sure you delete the folder when you
 delete the object.</p>
@@ -683,7 +693,7 @@ folder you create for each instance of your application (if you
 install the project-manager in two parts of your web server, for
 example, it should have two different root folders). When your
 application is running, it can determine the root folder by
-searching the cr_folders table. Here's the definition of that
+searching the cr_folders table. Here&#39;s the definition of that
 table:</p>
 <blockquote><pre>
                  Table "public.cr_folders"
@@ -715,14 +725,14 @@ select folder_id from cr_folders where package_id = :package_id;
 <h3>Drop scripts</h3>
 
 If you have problems with your drop script in OpenACS 4.6.2, then
-<a href="http://openacs.org/forums/message-view?message_id=112355">Tammy's
+<a href="http://openacs.org/forums/message-view?message_id=112355">Tammy&#39;s
 drop scripts</a>
  might be of interest to you.
 <h2>Using your data model</h2>
 
 You now have a shiny new data model that handles revisions and all
-sorts of other things we haven't gotten to yet. Now, in your Tcl
-pages and your ps/sql code, you can...
+sorts of other things we haven&#39;t gotten to yet. Now, in your
+Tcl pages and your ps/sql code, you can...
 <table border="1" cellpadding="1" cellspacing="0">
 <tr>
 <th>Get latest revision (Tcl)</th><td>set live_revision_id [db_exec_plsql get_live_revision {select
@@ -740,7 +750,7 @@ obtained with the content_item__get_latest_revision function</p>
 <ul>
 <li><a href="http://openacs.org/doc/acs-content-repository/">OpenACS Content
 Repository docs</a></li><li><a href="http://www.thedesignexperience.org/openacs-stuff/contentrepository">
-Dave's page on Using the Content Repository</a></li>
+Dave&#39;s page on Using the Content Repository</a></li>
 </ul>
 <h3>Reference: Definitions</h3>
 <dl>
@@ -790,7 +800,7 @@ content_template defined wrong</a>
 <h3>Troubleshooting</h3>
 
 One problem I ran into while trying to get my SQL create and drop
-scripts working was that sometimes I wasn't able to delete a
+scripts working was that sometimes I wasn&#39;t able to delete a
 content type because I would get errors like these:
 <blockquote><pre>
 Referential Integrity: attempting to delete live_revision: 658
@@ -808,8 +818,8 @@ select i.item_id, r.revision_id, r.title, i.content_type from cr_items i, cr_rev
 
 Really, however, what you need to do is make sure your __delete and
 drop scripts first go through and delete all children of those
-items. I'm not sure if you need to delete the items themselves -- I
-believe they may be dropped by themselves when the tables are
+items. I'm not sure if you need to delete the items themselves
+-- I believe they may be dropped by themselves when the tables are
 dropped, because of the <code>cascade</code>
  portion of the SQL
 data model.

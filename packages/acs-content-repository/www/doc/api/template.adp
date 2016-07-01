@@ -40,13 +40,13 @@ retrieved</td>
 </tr><tr>
 <th align="right" valign="top">root_folder_id:</th><td>  </td><td>Starts path resolution at this folder</td>
 </tr>
-</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
+</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><kbd>
 function get_path (
   template_id    in cr_templates.template_id%TYPE,
   root_folder_id in cr_folders.folder_id%TYPE default c_root_folder_id
 ) return varchar2;
 
-</tt></pre></td></tr><tr>
+</kbd></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_item.get_path</td>
 </tr>
 </table><p> </p>
@@ -54,10 +54,10 @@ function get_path (
 <font size="+1">Function:</font>
 content_template.get_root_folder
 <table cellpadding="3" cellspacing="0" border="0">
-<tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><em>Not yet documented</em></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
+<tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><em>Not yet documented</em></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><kbd>
 function get_root_folder return cr_folders.folder_id%TYPE;
 
-</tt></pre></td></tr>
+</kbd></pre></td></tr>
 </table><p> </p>
 </li><li>
 <font size="+1">Function:</font> content_template.is_template
@@ -65,15 +65,16 @@ function get_root_folder return cr_folders.folder_id%TYPE;
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr>
-<th align="left">Returns:</th><td align="left">'t' if the item is a template, 'f' otherwise</td>
+<th align="left">Returns:</th><td align="left">'t' if the item is a template, 'f'
+otherwise</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1"><tr>
 <th align="right" valign="top">item_id:</th><td>  </td><td>The item id</td>
-</tr></table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
+</tr></table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><kbd>
 function is_template (
   template_id   in cr_templates.template_id%TYPE
 ) return varchar2;
 
-</tt></pre></td></tr><tr>
+</kbd></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_template.new</td>
 </tr>
 </table><p> </p>
@@ -96,16 +97,16 @@ parent item, an error is thrown</td>
 <th align="right" valign="top">template_id:</th><td>  </td><td>The id of the new template. A new id will be allocated if this
 parameter is null</td>
 </tr><tr>
-<th align="right" valign="top">creation_date:</th><td>  </td><td>As in <tt>acs_object.new</tt>
+<th align="right" valign="top">creation_date:</th><td>  </td><td>As in <kbd>acs_object.new</kbd>
 </td>
 </tr><tr>
-<th align="right" valign="top">creation_ip:</th><td>  </td><td>As in <tt>acs_object.new</tt>
+<th align="right" valign="top">creation_ip:</th><td>  </td><td>As in <kbd>acs_object.new</kbd>
 </td>
 </tr><tr>
-<th align="right" valign="top">creation_user:</th><td>  </td><td>As in <tt>acs_object.new</tt>
+<th align="right" valign="top">creation_user:</th><td>  </td><td>As in <kbd>acs_object.new</kbd>
 </td>
 </tr>
-</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
+</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><kbd>
 function new (
   name          in cr_items.name%TYPE,
   parent_id     in acs_objects.context_id%TYPE default null,
@@ -117,7 +118,7 @@ function new (
   creation_ip   in acs_objects.creation_ip%TYPE default null
 ) return cr_templates.template_id%TYPE;
 
-</tt></pre></td></tr><tr>
+</kbd></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>acs_object.new, content_item.new,
 content_item.register_template, content_type.register_template</td>
 </tr>
@@ -131,12 +132,12 @@ operation cannot be undone.</p><table cellpadding="3" cellspacing="0" border="0"
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1"><tr>
 <th align="right" valign="top">template_id:</th><td>  </td><td>The id of the template to delete</td>
-</tr></table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
+</tr></table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><kbd>
 procedure delete (
   template_id   in cr_templates.template_id%TYPE
 );
 
-</tt></pre></td></tr><tr>
+</kbd></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>acs_object.delete, content_item.unregister_template,
 content_type.unregister_template,</td>
 </tr>
@@ -144,5 +145,5 @@ content_type.unregister_template,</td>
 </li>
 </ul>
 
-Last Modified: $&zwnj;Id: template.html,v 1.1.1.1.30.1 2016/06/09
-08:21:01 gustafn Exp $
+Last Modified: $&zwnj;Id: template.html,v 1.1.1.1.30.2 2016/06/22
+07:40:41 gustafn Exp $

@@ -32,8 +32,8 @@ posesses the cm_perm_admin access.</p><table cellpadding="3" cellspacing="0" bor
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr>
-<th align="left">Returns:</th><td align="left">'t' if the donation is possible, 'f'
-otherwise</td>
+<th align="left">Returns:</th><td align="left">'t' if the donation is possible,
+'f' otherwise</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1">
 <tr>
 <th align="right" valign="top">object_id:</th><td>  </td><td>The object whose permissions are to be changed</td>
@@ -42,14 +42,14 @@ otherwise</td>
 </tr><tr>
 <th align="right" valign="top">privilege:</th><td>  </td><td>The privilege to be granted</td>
 </tr>
-</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
+</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><kbd>
   function has_grant_authority (
     object_id         in acs_objects.object_id%TYPE,
     holder_id         in parties.party_id%TYPE,
     privilege         in acs_privileges.privilege%TYPE
   ) return varchar2;
 
-</tt></pre></td></tr><tr>
+</kbd></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_permission.grant_permission,
 content_permission.is_has_revoke_authority,
 acs_permission.grant_permission</td>
@@ -66,8 +66,8 @@ access.</p><table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr>
-<th align="left">Returns:</th><td align="left">'t' if it is possible to revoke the privilege, 'f'
-otherwise</td>
+<th align="left">Returns:</th><td align="left">'t' if it is possible to revoke the
+privilege, 'f' otherwise</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1">
 <tr>
 <th align="right" valign="top">object_id:</th><td>  </td><td>The object whose permissions are to be changed</td>
@@ -78,7 +78,7 @@ otherwise</td>
 </tr><tr>
 <th align="right" valign="top">revokee_id:</th><td>  </td><td>The user from whom the privilege is to be taken away</td>
 </tr>
-</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
+</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><kbd>
   function has_revoke_authority (
     object_id         in acs_objects.object_id%TYPE,
     holder_id         in parties.party_id%TYPE,
@@ -86,7 +86,7 @@ otherwise</td>
     revokee_id        in parties.party_id%TYPE
   ) return varchar2;
 
-</tt></pre></td></tr><tr>
+</kbd></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_permission.has_grant_authority,
 content_permission.revoke_permission,
 acs_permission.revoke_permission</td>
@@ -102,8 +102,8 @@ automatically gain the permission on all the child objects.</p><table cellpaddin
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr>
-<th align="left">Returns:</th><td align="left">'t' if the user has the specified permission on
-the object, 'f' otherwise</td>
+<th align="left">Returns:</th><td align="left">'t' if the user has the specified
+permission on the object, 'f' otherwise</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1">
 <tr>
 <th align="right" valign="top">object_id:</th><td>  </td><td>The object whose permissions are to be checked</td>
@@ -112,14 +112,14 @@ the object, 'f' otherwise</td>
 </tr><tr>
 <th align="right" valign="top">privilege:</th><td>  </td><td>The privilege to be checked</td>
 </tr>
-</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
+</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><kbd>
   function permission_p (
     object_id         in acs_objects.object_id%TYPE,
     holder_id         in parties.party_id%TYPE,
     privilege         in acs_privileges.privilege%TYPE
   ) return varchar2;
 
-</tt></pre></td></tr><tr>
+</kbd></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_permission.grant_permission,
 content_permission.revoke_permission,
 acs_permission.permission_p</td>
@@ -142,14 +142,14 @@ permission, since they are no longer relevant.</p><table cellpadding="3" cellspa
 </tr><tr>
 <th align="right" valign="top">privilege:</th><td>  </td><td>The parent privilege to be granted</td>
 </tr>
-</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
+</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><kbd>
   procedure grant_permission_h (
     object_id         in acs_objects.object_id%TYPE,
     grantee_id        in parties.party_id%TYPE,
     privilege         in acs_privileges.privilege%TYPE
   );
 
-</tt></pre></td></tr><tr>
+</kbd></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_permission.grant_permission</td>
 </tr>
 </table><p> </p>
@@ -170,14 +170,14 @@ permission, since they are no longer relevant.</p><table cellpadding="3" cellspa
 </tr><tr>
 <th align="right" valign="top">privilege:</th><td>  </td><td>The parent privilege to be granted</td>
 </tr>
-</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
+</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><kbd>
   procedure grant_permission_h (
     object_id         in acs_objects.object_id%TYPE,
     grantee_id        in parties.party_id%TYPE,
     privilege         in acs_privileges.privilege%TYPE
   );
 
-</tt></pre></td></tr><tr>
+</kbd></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_permission.grant_permission</td>
 </tr>
 </table><p> </p>
@@ -195,14 +195,14 @@ object is created under a given parent</p><table cellpadding="3" cellspacing="0"
 </tr><tr>
 <th align="right" valign="top">child_object_id:</th><td>  </td><td>The child object id</td>
 </tr>
-</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
+</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><kbd>
   procedure inherit_permissions (
     parent_object_id  in acs_objects.object_id%TYPE,
     child_object_id   in acs_objects.object_id%TYPE,
     child_creator_id  in parties.party_id%TYPE default null
   );
 
-</tt></pre></td></tr><tr>
+</kbd></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_permission.grant, acs_permission.grant_permission</td>
 </tr>
 </table><p> </p>
@@ -223,14 +223,14 @@ holder, to ensure that the permission is not permanently lost</p><table cellpadd
 </tr><tr>
 <th align="right" valign="top">privilege:</th><td>  </td><td>The parent privilege to be revoked</td>
 </tr>
-</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
+</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><kbd>
   procedure revoke_permission_h (
     object_id         in acs_objects.object_id%TYPE,
     revokee_id        in parties.party_id%TYPE,
     privilege         in acs_privileges.privilege%TYPE
   );
 
-</tt></pre></td></tr><tr>
+</kbd></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_permission.revoke_permission</td>
 </tr>
 </table><p> </p>
@@ -251,14 +251,14 @@ holder, to ensure that the permission is not permanently lost</p><table cellpadd
 </tr><tr>
 <th align="right" valign="top">privilege:</th><td>  </td><td>The parent privilege to be revoked</td>
 </tr>
-</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
+</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><kbd>
   procedure revoke_permission_h (
     object_id         in acs_objects.object_id%TYPE,
     revokee_id        in parties.party_id%TYPE,
     privilege         in acs_privileges.privilege%TYPE
   );
 
-</tt></pre></td></tr><tr>
+</kbd></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_permission.revoke_permission</td>
 </tr>
 </table>
@@ -266,5 +266,5 @@ holder, to ensure that the permission is not permanently lost</p><table cellpadd
 </ul>
 <p> </p>
 
-Last Modified: $&zwnj;Id: permission.html,v 1.1.1.1.30.1 2016/06/09
-08:21:01 gustafn Exp $
+Last Modified: $&zwnj;Id: permission.html,v 1.1.1.1.30.2 2016/06/22
+07:40:41 gustafn Exp $

@@ -15,10 +15,11 @@ content_folder</p>
 <p>Content folders contain related content items and allow content
 managers to group content as they see fit. Within a content folder,
 content items must have unique names since this is where they will
-be served from. For example within the folder "movies" (served from
-"/movies") all items must have unique names, such as: "terminator,"
-"terminator2" (served from "/movies/terminator,
-"/movies/terminator2" respectively).</p>
+be served from. For example within the folder "movies"
+(served from "/movies") all items must have unique names,
+such as: "terminator," "terminator2" (served
+from "/movies/terminator, "/movies/terminator2"
+respectively).</p>
 <p> </p>
 <h3><a name="related">Related Objects</a></h3>
 
@@ -36,12 +37,12 @@ otherwise</p><table cellpadding="3" cellspacing="0" border="0">
 <th align="left">Returns:</th><td align="left">The item ID of the index page</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1"><tr>
 <th align="right" valign="top">folder_id The:</th><td>  </td><td>folder id</td>
-</tr></table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
+</tr></table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><kbd>
 function get_index_page (
   folder_id in cr_folders.folder_id%TYPE
 ) return cr_items.item_id%TYPE;
 
-</tt></pre></td></tr>
+</kbd></pre></td></tr>
 </table><p> </p>
 </li><li>
 <font size="+1">Function:</font> content_folder.get_label
@@ -50,15 +51,15 @@ name method for the folder object.</p><table cellpadding="3" cellspacing="0" bor
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr>
-<th align="left">Returns:</th><td align="left">The folder's label</td>
+<th align="left">Returns:</th><td align="left">The folder&#39;s label</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1"><tr>
 <th align="right" valign="top">folder_id:</th><td>  </td><td>The folder id</td>
-</tr></table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
+</tr></table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><kbd>
 function get_label (
   folder_id in cr_folders.folder_id%TYPE
 ) return cr_folders.label%TYPE;
 
-</tt></pre></td></tr><tr>
+</kbd></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>acs_object_type.create_type, the docs for the name_method
 parameter</td>
 </tr>
@@ -69,16 +70,16 @@ parameter</td>
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr>
-<th align="left">Returns:</th><td align="left">'t' if the folder contains no subfolders or items,
-'f' otherwise</td>
+<th align="left">Returns:</th><td align="left">'t' if the folder contains no subfolders
+or items, 'f' otherwise</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1"><tr>
 <th align="right" valign="top">folder_id:</th><td>  </td><td>The folder id</td>
-</tr></table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
+</tr></table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><kbd>
 function is_empty (
   folder_id  in cr_folders.folder_id%TYPE
 ) return varchar2;
 
-</tt></pre></td></tr><tr>
+</kbd></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_folder.is_folder</td>
 </tr>
 </table><p> </p>
@@ -88,15 +89,16 @@ function is_empty (
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr>
-<th align="left">Returns:</th><td align="left">'t' if the item is a folder, 'f' otherwise</td>
+<th align="left">Returns:</th><td align="left">'t' if the item is a folder, 'f'
+otherwise</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1"><tr>
 <th align="right" valign="top">item_id:</th><td>  </td><td>The item id</td>
-</tr></table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
+</tr></table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><kbd>
 function is_folder (
   item_id         in cr_items.item_id%TYPE
 ) return char;
 
-</tt></pre></td></tr><tr>
+</kbd></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_folder.new, content_folder.is_sub_folder</td>
 </tr>
 </table><p> </p>
@@ -108,53 +110,55 @@ may be added to the folder.</p><table cellpadding="3" cellspacing="0" border="0"
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr>
-<th align="left">Returns:</th><td align="left">'t' if the type is registered to this folder, 'f'
-otherwise</td>
+<th align="left">Returns:</th><td align="left">'t' if the type is registered to this
+folder, 'f' otherwise</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1">
 <tr>
 <th align="right" valign="top">folder_id:</th><td>  </td><td>The folder id</td>
 </tr><tr>
 <th align="right" valign="top">content_type:</th><td>  </td><td>The content type to be checked</td>
 </tr><tr>
-<th align="right" valign="top">include_subtypes:</th><td>  </td><td>If 't', all subtypes of the <tt>content_type</tt> will be
-checked, returning 't' if all of them are registered. If 'f', only
-an exact match with <tt>content_type</tt> will be performed.</td>
+<th align="right" valign="top">include_subtypes:</th><td>  </td><td>If 't', all subtypes of the <kbd>content_type</kbd>
+will be checked, returning 't' if all of them are
+registered. If 'f', only an exact match with
+<kbd>content_type</kbd> will be performed.</td>
 </tr>
-</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
+</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><kbd>
 function is_registered (
   folder_id             in cr_folders.folder_id%TYPE,
   content_type          in cr_folder_type_map.content_type%TYPE,
   include_subtypes      in varchar2 default 'f'
 ) return varchar2;
 
-</tt></pre></td></tr><tr>
+</kbd></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_folder.register_content_type,
 content_folder.unregister_content_type,</td>
 </tr>
 </table><p> </p>
 </li><li>
 <font size="+1">Function:</font> content_folder.is_sub_folder
-<p>Determine if the item <tt>target_folder_id</tt> is a subfolder
-of the item <tt>folder_id</tt>
+<p>Determine if the item <kbd>target_folder_id</kbd> is a subfolder
+of the item <kbd>folder_id</kbd>
 </p><table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr>
-<th align="left">Returns:</th><td align="left">'t' if the item <tt>target_folder_id</tt> is a
-subfolder of the item <tt>folder_id</tt>, 'f' otherwise</td>
+<th align="left">Returns:</th><td align="left">'t' if the item
+<kbd>target_folder_id</kbd> is a subfolder of the item
+<kbd>folder_id</kbd>, 'f' otherwise</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1">
 <tr>
 <th align="right" valign="top">folder_id:</th><td>  </td><td>The superfolder id</td>
 </tr><tr>
 <th align="right" valign="top">target_folder_id:</th><td>  </td><td>The subfolder id</td>
 </tr>
-</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
+</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><kbd>
 function is_sub_folder (
   folder_id             in cr_folders.folder_id%TYPE,
   target_folder_id      in cr_folders.folder_id%TYPE
 ) return char;
 
-</tt></pre></td></tr><tr>
+</kbd></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_folder.is_folder</td>
 </tr>
 </table><p> </p>
@@ -179,16 +183,16 @@ default</td>
 <th align="right" valign="top">revision_id:</th><td>  </td><td>The id of the new revision. A new id will be allocated by
 default</td>
 </tr><tr>
-<th align="right" valign="top">creation_date:</th><td>  </td><td>As in <tt>acs_object.new</tt>
+<th align="right" valign="top">creation_date:</th><td>  </td><td>As in <kbd>acs_object.new</kbd>
 </td>
 </tr><tr>
-<th align="right" valign="top">creation_ip:</th><td>  </td><td>As in <tt>acs_object.new</tt>
+<th align="right" valign="top">creation_ip:</th><td>  </td><td>As in <kbd>acs_object.new</kbd>
 </td>
 </tr><tr>
-<th align="right" valign="top">creation_user:</th><td>  </td><td>As in <tt>acs_object.new</tt>
+<th align="right" valign="top">creation_user:</th><td>  </td><td>As in <kbd>acs_object.new</kbd>
 </td>
 </tr>
-</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
+</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><kbd>
 function new (
   name          in cr_items.name%TYPE,
   label         in cr_folders.label%TYPE,
@@ -202,7 +206,7 @@ function new (
   creation_ip   in acs_objects.creation_ip%TYPE default null
 ) return cr_folders.folder_id%TYPE;
 
-</tt></pre></td></tr><tr>
+</kbd></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>acs_object.new, content_item.new</td>
 </tr>
 </table><p> </p>
@@ -220,13 +224,13 @@ templates cannot be copied</p><table cellpadding="3" cellspacing="0" border="0">
 </tr><tr>
 <th align="right" valign="top">target_folder_id:</th><td>  </td><td>The destination folder</td>
 </tr>
-</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
+</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><kbd>
 procedure copy (
   folder_id             in cr_folders.folder_id%TYPE,
   target_folder_id      in cr_folders.folder_id%TYPE
 );
 
-</tt></pre></td></tr><tr>
+</kbd></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_folder.new, content_folder.copy</td>
 </tr>
 </table><p> </p>
@@ -238,12 +242,12 @@ empty</p><table cellpadding="3" cellspacing="0" border="0">
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1"><tr>
 <th align="right" valign="top">folder_id:</th><td>  </td><td>The id of the folder to delete</td>
-</tr></table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
+</tr></table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><kbd>
 procedure delete (
   folder_id     in cr_folders.folder_id%TYPE
 );
 
-</tt></pre></td></tr><tr>
+</kbd></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>acs_object.delete, content_item.delete</td>
 </tr>
 </table><p> </p>
@@ -261,13 +265,13 @@ templates cannot be moved.</p><table cellpadding="3" cellspacing="0" border="0">
 </tr><tr>
 <th align="right" valign="top">target_folder_id:</th><td>  </td><td>The destination folder</td>
 </tr>
-</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
+</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><kbd>
 procedure move (
   folder_id             in cr_folders.folder_id%TYPE,
   target_folder_id      in cr_folders.folder_id%TYPE
 );
 
-</tt></pre></td></tr><tr>
+</kbd></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_folder.new, content_folder.copy</td>
 </tr>
 </table><p> </p>
@@ -285,14 +289,14 @@ the folder.</p><table cellpadding="3" cellspacing="0" border="0">
 </tr><tr>
 <th align="right" valign="top">content_type:</th><td>  </td><td>The content type to be registered</td>
 </tr>
-</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
+</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><kbd>
 procedure register_content_type (
   folder_id             in cr_folders.folder_id%TYPE,
   content_type          in cr_folder_type_map.content_type%TYPE,
   include_subtypes      in varchar2 default 'f'
 );
 
-</tt></pre></td></tr><tr>
+</kbd></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_folder.unregister_content_type,
 content_folder.is_registered</td>
 </tr>
@@ -307,8 +311,8 @@ content_folder.is_registered</td>
 <th align="right" valign="top">folder_id:</th><td>  </td><td>The id of the folder to modify</td>
 </tr><tr>
 <th align="right" valign="top">name:</th><td>  </td><td>The new name for the folder. An error will be thrown if an item
-with this name already exists under this folder's parent. If this
-parameter is null, the old name will be preserved</td>
+with this name already exists under this folder&#39;s parent. If
+this parameter is null, the old name will be preserved</td>
 </tr><tr>
 <th align="right" valign="top">label:</th><td>  </td><td>The new label for the folder. The old label will be preserved
 if this parameter is null</td>
@@ -316,7 +320,7 @@ if this parameter is null</td>
 <th align="right" valign="top">label:</th><td>  </td><td>The new description for the folder. The old description will be
 preserved if this parameter is null</td>
 </tr>
-</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
+</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><kbd>
 procedure rename (
   folder_id      in cr_folders.folder_id%TYPE,
   name           in cr_items.name%TYPE default null,
@@ -324,7 +328,7 @@ procedure rename (
   description    in cr_folders.description%TYPE default null
 );
 
-</tt></pre></td></tr><tr>
+</kbd></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_folder.new</td>
 </tr>
 </table><p> </p>
@@ -343,17 +347,17 @@ unregistered, the items remain in the folder.</p><table cellpadding="3" cellspac
 </tr><tr>
 <th align="right" valign="top">content_type:</th><td>  </td><td>The content type to be unregistered</td>
 </tr><tr>
-<th align="right" valign="top">include_subtypes:</th><td>  </td><td>If 't', all subtypes of <tt>content_type</tt> will be
+<th align="right" valign="top">include_subtypes:</th><td>  </td><td>If 't', all subtypes of <kbd>content_type</kbd> will be
 unregistered as well</td>
 </tr>
-</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
+</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><kbd>
 procedure unregister_content_type (
   folder_id             in cr_folders.folder_id%TYPE,
   content_type          in cr_folder_type_map.content_type%TYPE,
   include_subtypes      in varchar2 default 'f'
 );
 
-</tt></pre></td></tr><tr>
+</kbd></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_folder.register_content_type,
 content_folder.is_registered</td>
 </tr>
@@ -362,5 +366,5 @@ content_folder.is_registered</td>
 </ul>
 <p> </p>
 
-Last Modified: $&zwnj;Id: folder.html,v 1.2.18.1 2016/06/09 08:21:01
+Last Modified: $&zwnj;Id: folder.html,v 1.2.18.2 2016/06/22 07:40:41
 gustafn Exp $

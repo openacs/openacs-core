@@ -43,7 +43,7 @@ exist.</p><table cellpadding="3" cellspacing="0" border="0">
 </tr><tr>
 <th align="right" valign="top">default_value:</th><td>  </td><td>The default value for the attribute, defaults to null</td>
 </tr>
-</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
+</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><kbd>
 function create_attribute (
   content_type          in acs_attributes.object_type%TYPE,
   attribute_name        in acs_attributes.attribute_name%TYPE,
@@ -54,7 +54,7 @@ function create_attribute (
   column_spec           in varchar2  default 'varchar2(4000)'
 ) return acs_attributes.attribute_id%TYPE;
 
-</tt></pre></td></tr><tr>
+</kbd></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>acs_object_type.create_attribute, content_type.create_type</td>
 </tr>
 </table><p> </p>
@@ -73,13 +73,13 @@ specified type.</p><table cellpadding="3" cellspacing="0" border="0">
 <th align="right" valign="top">use_context:</th><td>  </td><td>The context in which the template is appropriate, such as
 'admin' or 'public'</td>
 </tr>
-</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
+</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><kbd>
 function get_template (
   content_type  in cr_type_template_map.content_type%TYPE,
   use_context   in cr_type_template_map.use_context%TYPE
 ) return cr_templates.template_id%TYPE;
 
-</tt></pre></td></tr><tr>
+</kbd></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_item.register_template,
 content_item.unregister_template, content_item.get_template,
 content_type.unregister_template, content_type.register_template,
@@ -89,12 +89,12 @@ content_type.set_default_template</td>
 </li><li>
 <font size="+1">Function:</font> content_type.is_content_type
 <table cellpadding="3" cellspacing="0" border="0">
-<tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><em>Not yet documented</em></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
+<tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><em>Not yet documented</em></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><kbd>
 function is_content_type (
   object_type   in acs_object_types.object_type%TYPE
 ) return char;
 
-</tt></pre></td></tr>
+</kbd></pre></td></tr>
 </table><p> </p>
 </li><li>
 <font size="+1">Procedure:</font> content_type.create_type
@@ -117,10 +117,10 @@ supertype</td>
 </tr><tr>
 <th align="right" valign="top">id_column:</th><td>  </td><td>The primary key for the table, defaults to 'XXX'</td>
 </tr><tr>
-<th align="right" valign="top">name_method:</th><td>  </td><td>As in <tt>acs_object_type.create_type</tt>
+<th align="right" valign="top">name_method:</th><td>  </td><td>As in <kbd>acs_object_type.create_type</kbd>
 </td>
 </tr>
-</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
+</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><kbd>
 procedure create_type (
   content_type          in acs_object_types.object_type%TYPE,
   supertype             in acs_object_types.object_type%TYPE
@@ -132,14 +132,14 @@ procedure create_type (
   name_method           in acs_object_types.name_method%TYPE default null
 );
 
-</tt></pre></td></tr><tr>
+</kbd></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>acs_object_type.create_type</td>
 </tr>
 </table><p> </p>
 </li><li>
 <font size="+1">Procedure:</font> content_type.drop_attribute
 <p>Drop an existing attribute. If you are using CMS, make sure to
-call <tt>cm_form_widget.unregister_attribute_widget</tt> before
+call <kbd>cm_form_widget.unregister_attribute_widget</kbd> before
 calling this function.</p><table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
@@ -149,18 +149,18 @@ calling this function.</p><table cellpadding="3" cellspacing="0" border="0">
 </tr><tr>
 <th align="right" valign="top">attribute_name:</th><td>  </td><td>The name of the attribute to drop</td>
 </tr><tr>
-<th align="right" valign="top">drop_column:</th><td>  </td><td>If 't', will also alter the table and remove the column where
-the attribute is stored. The default is 'f' (leaves the table
-untouched).</td>
+<th align="right" valign="top">drop_column:</th><td>  </td><td>If 't', will also alter the table and remove the column
+where the attribute is stored. The default is 'f' (leaves
+the table untouched).</td>
 </tr>
-</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
+</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><kbd>
 procedure drop_attribute (
   content_type          in acs_attributes.object_type%TYPE,
   attribute_name        in acs_attributes.attribute_name%TYPE,
   drop_column           in varchar2 default 'f'
 );
 
-</tt></pre></td></tr><tr>
+</kbd></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>acs_object.drop_attribute, content_type.create_attribute,
 cm_form_widget.unregister_attribute_widget</td>
 </tr>
@@ -168,19 +168,20 @@ cm_form_widget.unregister_attribute_widget</td>
 </li><li>
 <font size="+1">Procedure:</font> content_type.refresh_view
 <p>Create a view for the type which joins all attributes of the
-type, including the inherited attributes. The view is named "</p>
+type, including the inherited attributes. The view is named
+"</p>
 X" Called by create_attribute and create_type.
 <table name="" for="" content_type="">
 <tr><td></td></tr><tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1"><tr>
 <th align="right" valign="top">content_type:</th><td>  </td><td>The type for which the view is to be created.</td>
-</tr></table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
+</tr></table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><kbd>
 procedure refresh_view (
   content_type  in cr_type_template_map.content_type%TYPE
 );
 
-</tt></pre></td></tr><tr>
+</kbd></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_type.create_type</td>
 </tr>
 </table><p> </p>
@@ -208,7 +209,7 @@ which an item must have to go live.</td>
 <th align="right" valign="top">max_n:</th><td>  </td><td>The minimun number of relationships of this type which an item
 must have to go live.</td>
 </tr>
-</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
+</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><kbd>
 procedure register_child_type (
   parent_type  in cr_type_children.parent_type%TYPE,
   child_type    in cr_type_children.child_type%TYPE,
@@ -217,7 +218,7 @@ procedure register_child_type (
   max_n         in integer default null
 );
 
-</tt></pre></td></tr><tr>
+</kbd></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_type.register_relation_type,
 content_type.register_child_type</td>
 </tr>
@@ -226,13 +227,13 @@ content_type.register_child_type</td>
 <font size="+1">Procedure:</font>
 content_type.register_mime_type
 <table cellpadding="3" cellspacing="0" border="0">
-<tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><em>Not yet documented</em></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
+<tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><em>Not yet documented</em></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><kbd>
 procedure register_mime_type (
   content_type  in cr_content_mime_type_map.content_type%TYPE,
   mime_type     in cr_content_mime_type_map.mime_type%TYPE
 );
 
-</tt></pre></td></tr>
+</kbd></pre></td></tr>
 </table><p> </p>
 </li><li>
 <font size="+1">Procedure:</font>
@@ -259,7 +260,7 @@ must have to go live.</td>
 <th align="right" valign="top">max_n:</th><td>  </td><td>The minimun number of relationships of this type which an item
 must have to go live.</td>
 </tr>
-</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
+</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><kbd>
 procedure register_relation_type (
   content_type  in cr_type_relations.content_type%TYPE,
   target_type   in cr_type_relations.target_type%TYPE,
@@ -268,7 +269,7 @@ procedure register_relation_type (
   max_n         in integer default null
 );
 
-</tt></pre></td></tr><tr>
+</kbd></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_type.unregister_relation_type</td>
 </tr>
 </table><p> </p>
@@ -288,10 +289,10 @@ used to render all items of that type.</p><table cellpadding="3" cellspacing="0"
 <th align="right" valign="top">use_context:</th><td>  </td><td>The context in which the template is appropriate, such as
 'admin' or 'public'</td>
 </tr><tr>
-<th align="right" valign="top">is_default:</th><td>  </td><td>If 't', this template becomes the default template for the
-type, default is 'f'.</td>
+<th align="right" valign="top">is_default:</th><td>  </td><td>If 't', this template becomes the default template for
+the type, default is 'f'.</td>
 </tr>
-</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
+</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><kbd>
 procedure register_template (
   content_type  in cr_type_template_map.content_type%TYPE,
   template_id   in cr_templates.template_id%TYPE,
@@ -299,7 +300,7 @@ procedure register_template (
   is_default    in cr_type_template_map.is_default%TYPE default 'f'
 );
 
-</tt></pre></td></tr><tr>
+</kbd></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_item.register_template,
 content_item.unregister_template, content_item.get_template,
 content_type.unregister_template,
@@ -323,14 +324,14 @@ individual template is registered.</p><table cellpadding="3" cellspacing="0" bor
 <th align="right" valign="top">use_context:</th><td>  </td><td>The context in which the template is appropriate, such as
 'admin' or 'public'</td>
 </tr>
-</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
+</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><kbd>
 procedure set_default_template (
   content_type  in cr_type_template_map.content_type%TYPE,
   template_id   in cr_templates.template_id%TYPE,
   use_context   in cr_type_template_map.use_context%TYPE
 );
 
-</tt></pre></td></tr><tr>
+</kbd></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_item.register_template,
 content_item.unregister_template, content_item.get_template,
 content_type.unregister_template, content_type.register_template,
@@ -354,14 +355,14 @@ relationship between an item and a potential child.</p><table cellpadding="3" ce
 </tr><tr>
 <th align="right" valign="top">relation_tag:</th><td>  </td><td>A simple token used to identify a set of relations.</td>
 </tr>
-</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
+</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><kbd>
 procedure unregister_child_type (
   parent_type  in cr_type_children.parent_type%TYPE,
   child_type   in cr_type_children.child_type%TYPE,
   relation_tag in cr_type_children.relation_tag%TYPE default null
 );
 
-</tt></pre></td></tr><tr>
+</kbd></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_type.register_relation_type,
 content_type.register_child_type</td>
 </tr>
@@ -370,13 +371,13 @@ content_type.register_child_type</td>
 <font size="+1">Procedure:</font>
 content_type.unregister_mime_type
 <table cellpadding="3" cellspacing="0" border="0">
-<tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><em>Not yet documented</em></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
+<tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><em>Not yet documented</em></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><kbd>
 procedure unregister_mime_type (
   content_type  in cr_content_mime_type_map.content_type%TYPE,
   mime_type     in cr_content_mime_type_map.mime_type%TYPE
 );
 
-</tt></pre></td></tr>
+</kbd></pre></td></tr>
 </table><p> </p>
 </li><li>
 <font size="+1">Procedure:</font>
@@ -395,14 +396,14 @@ targeted.</td>
 </tr><tr>
 <th align="right" valign="top">relation_tag:</th><td>  </td><td>A simple token used to identify a set of relations.</td>
 </tr>
-</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
+</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><kbd>
 procedure unregister_relation_type (
   content_type in cr_type_relations.content_type%TYPE,
   target_type  in cr_type_relations.target_type%TYPE,
   relation_tag in cr_type_relations.relation_tag%TYPE default null
 );
 
-</tt></pre></td></tr><tr>
+</kbd></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_type.register_relation_type</td>
 </tr>
 </table><p> </p>
@@ -422,14 +423,14 @@ use_context,</p><table cellpadding="3" cellspacing="0" border="0">
 </tr><tr>
 <th align="right" valign="top">use_context:</th><td>  </td><td>The context in which the template is to be unregistered</td>
 </tr>
-</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><tt>
+</table></blockquote></td></tr><tr><th align="left" colspan="2">Declaration:</th></tr><tr align="left"><td colspan="2" align="left"><pre><kbd>
 procedure unregister_template (
   content_type  in cr_type_template_map.content_type%TYPE default null,
   template_id   in cr_templates.template_id%TYPE,
   use_context   in cr_type_template_map.use_context%TYPE default null
 );
 
-</tt></pre></td></tr><tr>
+</kbd></pre></td></tr><tr>
 <th align="left" valign="top">See Also:</th><td>content_item.register_template,
 content_item.unregister_template, content_item.get_template,
 content_type.set_default_template, content_type.register_template,
@@ -439,5 +440,5 @@ content_type.get_template</td>
 </li>
 </ul>
 
-Last Modified: $&zwnj;Id: type.html,v 1.1.1.1.30.1 2016/06/09 08:21:01
+Last Modified: $&zwnj;Id: type.html,v 1.1.1.1.30.2 2016/06/22 07:40:41
 gustafn Exp $

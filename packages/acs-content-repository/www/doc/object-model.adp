@@ -3,6 +3,7 @@
 <property name="doc(title)">Content Repository: Object Model</property>
 <master>
 <h2>Object Model</h2>
+<strong><a href="index">Content Repository</a></strong>
 <p>The content repository is an extension of the ACS Object Model.
 The following diagram illustrates the relationship among the
 standard object types defined by the content repository (click on a
@@ -29,5 +30,5 @@ necessary to create a custom subtype of Content Item itself.</p>
 <a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a>
 <br>
 
-Last revised: $&zwnj;Id: object-model.html,v 1.1.1.1 2001/03/13 22:59:26
-ben Exp $
+Last revised: $&zwnj;Id: object-model.html,v 1.1.1.1.30.1 2016/06/22
+07:40:41 gustafn Exp $
