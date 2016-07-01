@@ -877,7 +877,7 @@ is
   else
     select count(*)
       into m_result
-      from acs_rels rels, all_object_party_privilege_map perm
+      from acs_rels rels, acs_object_party_privilege_map perm
     where perm.object_id = rels.rel_id
            and perm.privilege = 'read'
            and rels.rel_type = 'membership_rel'
