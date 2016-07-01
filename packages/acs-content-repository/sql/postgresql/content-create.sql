@@ -56,7 +56,7 @@ comment on table cr_extension_mime_type_map is '
 \i ../common/mime-type-data.sql
 
 create table cr_content_mime_type_map (
-  content_type  varchar(100)
+  content_type  varchar(1000)
 		constraint cr_content_mime_map_ctyp_fk
 		references acs_object_types,
   mime_type	varchar(200)
@@ -115,10 +115,10 @@ insert into cr_locales (
 --------------------------------------------------------------
 
 create table cr_type_children (
-  parent_type   varchar(100)
+  parent_type   varchar(1000)
 		constraint cr_type_children_parent_type_fk
 		references acs_object_types,
-  child_type    varchar(100)
+  child_type    varchar(1000)
 		constraint cr_type_children_child_type_fk
 		references acs_object_types,
   relation_tag  varchar(100),
@@ -138,10 +138,10 @@ create index cr_type_children_chld_type_idx ON cr_type_children(child_type);
 
 
 create table cr_type_relations (
-  content_type  varchar(100)
+  content_type  varchar(1000)
 		constraint cr_type_relations_parent_fk
 		references acs_object_types,
-  target_type   varchar(100)
+  target_type   varchar(1000)
 		constraint cr_type_relations_child_fk
 		references acs_object_types,
   relation_tag  varchar(100),
@@ -190,7 +190,7 @@ create table cr_items (
                       check (publish_status in 
                             ('production', 'ready', 'live', 'expired')
                             ),
-  content_type        varchar(100)
+  content_type        varchar(1000)
                       constraint cr_items_content_type_fk
                       references acs_object_types,
   storage_type        cr_item_storage_type_enum default 'text' not null,
@@ -830,7 +830,7 @@ create table cr_folder_type_map (
   folder_id	integer
 		constraint cr_folder_type_map_fldr_fk
 		references cr_folders on delete cascade,
-  content_type  varchar(100)
+  content_type  varchar(1000)
 		constraint cr_folder_type_map_typ_fk
 		references acs_object_types on delete cascade,
   constraint cr_folder_type_map_pk
@@ -879,7 +879,7 @@ insert into cr_template_use_contexts values ('admin');
 insert into cr_template_use_contexts values ('public');
 
 create table cr_type_template_map (
-  content_type     varchar(100)
+  content_type     varchar(1000)
                    constraint cr_type_template_map_typ_fk
                    references acs_object_types
                    constraint cr_type_template_map_typ_nn
