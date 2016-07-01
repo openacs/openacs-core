@@ -1,4 +1,4 @@
-<ul>
+<ol>
 
 <if @rels:rowcount@ eq 0>
   <li>There are no allowable relationship types for this group</li>
@@ -53,6 +53,6 @@
   </multiple>
 </else>
 
-  <li> <a href="rel-type-add?group_id=@group_id@">#acs-subsite.Add_a_permissible_relationship_type#</a> </li>
+  <li> <a href="rel-type-add?group_id=@group_id@" class="button">#acs-subsite.Add_a_permissible_relationship_type#</a> </li>
 
-</ul>
+</ol>
