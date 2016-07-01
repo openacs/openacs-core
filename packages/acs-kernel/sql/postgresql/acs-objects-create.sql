@@ -230,7 +230,7 @@ select nextval('t_acs_object_id_seq') as nextval;
 create table acs_objects (
 	object_id		integer not null
 				constraint acs_objects_object_id_pk primary key,
-	object_type		varchar(100) not null
+	object_type		varchar(1000) not null
 				constraint acs_objects_object_type_fk
 				references acs_object_types (object_type),
         title			varchar(1000) default null,
@@ -507,7 +507,7 @@ comment on table acs_attribute_values is '
 ';
 
 create table acs_static_attr_values (
-	object_type	varchar(100) not null
+	object_type	varchar(1000) not null
 			constraint acs_static_a_v_obj_id_fk
 			references acs_object_types (object_type) on delete cascade,
 	attribute_id	integer not null

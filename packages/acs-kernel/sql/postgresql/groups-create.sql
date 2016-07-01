@@ -149,13 +149,13 @@ BEGIN
    'rel_id',                         -- id_column
    'admin_rel',                      -- package_name
    'group',                          -- object_type_one
-   null,                               -- role_one
-   0,                                  -- min_n_rels_one
-   null,                               -- max_n_rels_one
+   null,                             -- role_one
+   0,                                -- min_n_rels_one
+   null,                             -- max_n_rels_one
    'person',                         -- object_type_two
    'admin',                          -- role_two
-   0,                                  -- min_n_rels_two
-   null                                -- max_n_rels_two   
+   0,                                -- min_n_rels_two
+   null                              -- max_n_rels_two   
    );
 
   return 0;
@@ -170,7 +170,7 @@ drop function inline_0 ();
 -- show errors
 
 create table group_types (
-        group_type              varchar(400) not null
+        group_type              varchar(1000) not null
                                 constraint group_types_group_type_pk primary key
                                 constraint group_types_group_type_fk
                                 references acs_object_types (object_type),
@@ -204,11 +204,11 @@ create table groups (
 
 create table group_type_rels (
        group_rel_type_id      integer constraint gtr_group_rel_type_id_pk primary key,
-       rel_type		      varchar(100) not null 
+       rel_type		      varchar(1000) not null 
                               constraint group_type_rels_rel_type_fk
                               references acs_rel_types (rel_type)
                               on delete cascade,
-       group_type	      varchar(100) not null 
+       group_type	      varchar(1000) not null 
                               constraint group_type_rels_group_type_fk
                               references acs_object_types (object_type)
                               on delete cascade,
@@ -228,7 +228,7 @@ comment on table group_type_rels is '
 
 create table group_rels (
        group_rel_id           integer constraint group_rels_group_rel_id_pk primary key,
-       rel_type		      varchar(100) not null 
+       rel_type		      varchar(1000) not null 
                               constraint group_rels_rel_type_fk
                               references acs_rel_types (rel_type)
                               on delete cascade,
@@ -295,7 +295,7 @@ create table group_element_index (
 			constraint group_element_index_cont_id_fk
 			references groups (group_id)
                         on delete cascade,
-        rel_type        varchar(100) not null
+        rel_type        varchar(1000) not null
                         constraint group_elem_index_rel_type_fk
                         references acs_rel_types (rel_type)
                         on delete cascade,

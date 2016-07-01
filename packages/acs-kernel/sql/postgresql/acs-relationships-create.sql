@@ -22,11 +22,11 @@ create table acs_rel_roles (
 );
 
 create table acs_rel_types (
-	rel_type	varchar(100) not null
+	rel_type	varchar(1000) not null
 			constraint acs_rel_types_rel_type_pk primary key
 			constraint acs_rel_types_rel_type_fk
 			references acs_object_types(object_type),
-	object_type_one	varchar(100) not null
+	object_type_one	varchar(1000) not null
 			constraint acs_rel_types_obj_type_1_fk
 			references acs_object_types (object_type),
 	role_one	varchar(100) constraint acs_rel_types_role_one_fk
@@ -37,7 +37,7 @@ create table acs_rel_types (
 	max_n_rels_one	integer
 			constraint acs_rel_types_max_n_1_ck
 			check (max_n_rels_one >= 0),
-	object_type_two	varchar(100) not null
+	object_type_two	varchar(1000) not null
 			constraint acs_rel_types_obj_type_2_fk
 			references acs_object_types (object_type),
 	role_two	varchar(100) constraint acs_rel_types_role_two_fk
