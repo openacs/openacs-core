@@ -12,7 +12,7 @@
              where g.group_id = o.object_id
 		and o.object_type = :group_type) g,
            (select object_id
-            from all_object_party_privilege_map
+            from acs_object_party_privilege_map
             where party_id = :user_id and privilege = 'read') perm,
            application_group_element_map m
      where perm.object_id = g.group_id

@@ -34,7 +34,7 @@ db_multirow applications select_applications {
     and    t.package_key = p.package_key
     and    t.package_type = 'apm_application'
     and    exists (select 1 
-                   from   all_object_party_privilege_map perm 
+                   from   acs_object_party_privilege_map perm 
                    where  perm.object_id = p.package_id
                    and    perm.privilege = 'read'
                    and    perm.party_id = :user_id)
