@@ -249,58 +249,35 @@ $$ LANGUAGE plpgsql immutable strict;
 --
 -- procedure get_func_definition/2
 --
+
 CREATE OR REPLACE FUNCTION get_func_definition(
    fname varchar,
    args oidvector
-) RETURNS text AS $$
+) RETURNS text AS $PROC$
 DECLARE
-        nargs           integer default 0;
-        v_pos           integer;
         v_funcdef       text default '';
         v_args          varchar;
-        v_one_arg       varchar;
-        v_one_type      varchar;
         v_nargs         integer;
         v_src           text;
         v_rettype       varchar;
 BEGIN
-        select proargtypes, pronargs, number_src(prosrc), 
+        select pg_get_function_arguments(oid), pronargs, prosrc, -- was number_src(prosrc)
                (select typname from pg_type where oid = p.prorettype::integer)
           into v_args, v_nargs, v_src, v_rettype
           from pg_proc p 
          where proname = fname::name
            and proargtypes = args;
 
-         v_funcdef := v_funcdef || '
-create or replace function ' || fname || '(';
-
-         v_pos := position(' ' in v_args);
-
-         while nargs < v_nargs loop
-             nargs := nargs + 1;
-             if nargs = v_nargs then 
-                 v_one_arg := v_args;
-                 v_args    := '';
-             else
-                 v_one_arg := substr(v_args, 1, v_pos - 1);
-                 v_args    := substr(v_args, v_pos + 1);
-                 v_pos     := position(' ' in v_args);            
-             end if;
-             select case when nargs = 1 
-                           then typname 
-                           else ',' || typname 
-                         end into v_one_type 
-               from pg_type 
-              where oid = v_one_arg::integer;
-             v_funcdef := v_funcdef || v_one_type;
-         end loop;
-         v_funcdef := v_funcdef || ') returns ' || v_rettype || E' as ''\n' || v_src || ''' language ''plpgsql'';';
+         v_funcdef :=
+	 	   E'--\n-- ' || fname || '/' || v_nargs || E'\n--' 
+         	   || E'\ncreate or replace function ' || fname || E'(\n  '
+                   || replace(v_args, ', ', E',\n  ')
+	           || E'\n) returns ' || v_rettype
+		   || E' as $$\n' || v_src || '$$ language plpgsql;';
 
         return v_funcdef;
-
 END;
-$$ LANGUAGE plpgsql stable strict;
-
+$PROC$ LANGUAGE plpgsql stable strict;
 
 
 --
