@@ -134,23 +134,15 @@ ad_proc -public application_group::group_id_from_package_id {
     empty string if the application group doesn't exist.
 } {
 
-    if {$no_complain_p} {
-        set no_complain_p t
-    } else {
-        set no_complain_p f
-    }
-
-    if { [ad_conn isconnected] } {
-        if {$package_id eq ""} {
+    if { [ad_conn isconnected] && $package_id eq "" } {
     	set package_id [ad_conn package_id]
-        }
     }
 
     if {$package_id eq ""} {
         error "application_group::group_id_from_package_id - no package_id specified."
     }
 
-    set group_id [db_exec_plsql application_group_from_package_id_query {}]
+    set group_id [db_string application_group_from_package_id_query {}]
 
     return $group_id
 }
