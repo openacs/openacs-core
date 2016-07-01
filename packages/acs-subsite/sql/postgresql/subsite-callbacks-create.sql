@@ -23,7 +23,7 @@ create table subsite_callbacks (
 			   constraint sgc_callback_id_pk primary key,
        event_type          varchar(100) not null
 			   constraint sgc_event_type_ck check(event_type in ('insert','update','delete')),
-       object_type         varchar(100) not null
+       object_type         varchar(1000) not null
 			   constraint sgc_object_type_fk references acs_object_types
                            on delete cascade,
        callback		   varchar(300) not null,
