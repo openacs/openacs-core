@@ -3,7 +3,10 @@
 set pretty_name [_ acs-subsite.subsite]
 set pretty_plural [_ acs-subsite.subsites]
 
-set admin_p [permission::permission_p -object_id [ad_conn subsite_id] -privilege admin -party_id [ad_conn untrusted_user_id]]
+set admin_p [permission::permission_p \
+                 -object_id [ad_conn subsite_id] \
+                 -privilege admin \
+                 -party_id [ad_conn untrusted_user_id]]
 
 set actions {}
 if {[info exists admin_p] 
