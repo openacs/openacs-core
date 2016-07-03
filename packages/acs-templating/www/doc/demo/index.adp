@@ -8,11 +8,11 @@
 
 As the links reveal, the "Data" files have the extension
 <code>.tcl</code>
- and the "Template" files have <code>.adp</code>
-.
-If you want to see a little behind the scenes, you can look at the
-tcl code into which we compile the template. The last column will
-deliver the resulting page to your browser.
+ and the "Template" files have
+<code>.adp</code>
+. If you want to see a little behind the scenes,
+you can look at the tcl code into which we compile the template.
+The last column will deliver the resulting page to your browser.
 <p>Mechanisms underlaid in red are known to not work.</p>
 <h3>General</h3>
 <a name="hello" id="hello"></a>
@@ -90,10 +90,11 @@ Template</th><th width="15%">Output</th>
 <h3>Iteration</h3>
 
 To see the following examples with different data, you can enter
-additional users into the sample table with "a simple form" or
-change them with "editing: several pages in one" in section
-<a href="#formmgr">Using the Form Manager</a>
- below. <a name="multiple" id="multiple"></a>
+additional users into the sample table with "a simple
+form" or change them with "editing: several pages in
+one" in section <a href="#formmgr">Using the Form Manager</a>
+
+below. <a name="multiple" id="multiple"></a>
 <a name="multirow" id="multirow"></a>
 <a name="multiaccess" id="multiaccess"></a>
 <a name="grid" id="grid"></a>
