@@ -15,8 +15,8 @@ tsearch2.sql to be loaded into the database)</li><li>This package installed</li>
 "tsearch2-driver".</li><li>indexing some data</li>
 </ul>
 <h2>
-<a name="install-fts-engine" id="install-fts-engine"></a>Install OpenACS' Tsearch2 Full-Text Search
-Package</h2>
+<a name="install-fts-engine" id="install-fts-engine"></a>Install OpenACS' Tsearch2 Full-Text
+Search Package</h2>
 <ol type="1">
 <li><p>If you have not yet, install <a href="http://openacs.org/xowiki/pages/en/postgresql-tsearch2">PostgreSQL's
 tsearch2 module</a>.</p></li><li><p>Click <code class="computeroutput"><span class="guilabel"><span class="guilabel">Admin</span></span></code> on the
@@ -29,8 +29,8 @@ PostgreSQL database, the installer will automatically enable
 tsearch in your OpenACS database instance.</p></li><li><p>Restart AOLserver. Wait a minute, then browse back to the home
 page.</p></li><li><p>Click on <code class="computeroutput"><span class="guilabel"><span class="guilabel">Admin</span></span></code> on the
 top of the screen.</p></li><li><p>Click on <code class="computeroutput"><span class="guilabel"><span class="guilabel">Main Site
-Administration</span></span></code> in the "Subsite Administration"
-section.</p></li><li><p>Click on <code class="computeroutput"><span class="guilabel"><span class="guilabel">Site Map</span></span></code> in
+Administration</span></span></code> in the "Subsite
+Administration" section.</p></li><li><p>Click on <code class="computeroutput"><span class="guilabel"><span class="guilabel">Site Map</span></span></code> in
 the "Advanced Features" section.</p></li><li>
 <p>Mount the Search interface in the site-map.</p><ol type="a">
 <li><p>Click the <code class="computeroutput"><span class="guilabel"><span class="guilabel">new sub
