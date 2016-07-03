@@ -7,14 +7,13 @@
       <querytext>
       
     select r.rel_id, acs_object__name(r.object_id_one) || ' and ' || acs_object__name(r.object_id_two) as name
-      from acs_rels r, acs_object_party_privilege_map perm,
-           app_group_distinct_rel_map m
-     where perm.object_id = r.rel_id
-       and perm.party_id = :user_id
-       and perm.privilege = 'read'
+      from acs_rels r, app_group_distinct_rel_map m
+     where 
        and r.rel_type = :rel_type
        and m.rel_id = r.rel_id
        and m.package_id = :package_id
+       and acs_permission__permission_p(r.rel_id, :user_id, 'read')
+
      order by lower(acs_object__name(r.object_id_one) || ' and ' || acs_object__name(r.object_id_two))
 
       </querytext>
