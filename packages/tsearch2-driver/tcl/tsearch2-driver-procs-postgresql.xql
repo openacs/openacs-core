@@ -11,18 +11,6 @@
     </querytext>
   </fullquery>
 
-  <fullquery name="callback::search::search::impl::tsearch2-driver.base_query"> 
-  <rdbms><type>postgresql</type><version>8.3</version></rdbms>
-    <querytext>
-      where fti @@ to_tsquery(:query)
-        and exists (select 1
-                    from acs_object_party_privilege_map m
-                    where m.object_id = txt.object_id
-                      and m.party_id = :user_id
-                      and m.privilege = 'read')
-    </querytext>
-  </fullquery>
-
   <fullquery name="callback::search::search::impl::tsearch2-driver.base_query">
   <rdbms><type>postgresql</type><version>8.4</version></rdbms>
     <querytext>
@@ -110,18 +98,6 @@
               setweight(to_tsvector('default',coalesce(:title,'')),'A')
               ||setweight(to_tsvector('default',coalesce(:keywords,'')),'B')
               ||to_tsvector('default',coalesce(:txt,'')))
-    </querytext>
-  </fullquery>
-
-  <fullquery name="callback::search::search::impl::tsearch2-driver.base_query">
-  <rdbms><type>postgresql</type><version>8.0</version></rdbms>
-    <querytext>
-      where fti @@ to_tsquery('default',:query)
-        and exists (select 1
-                    from acs_object_party_privilege_map m
-                    where m.object_id = txt.object_id
-                      and m.party_id = :user_id
-                      and m.privilege = 'read')
     </querytext>
   </fullquery>
 
