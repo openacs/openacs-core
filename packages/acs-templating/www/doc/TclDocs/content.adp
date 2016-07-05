@@ -123,8 +123,8 @@ relation tags, this proc does nothing.</blockquote><dl>
 </dd><dt><strong>Options:</strong></dt><dd><table>
 <tr>
 <td align="right"><code>section</code></td><td align="left">
-<em>none</em> If present, creates a new form section
-for the element.</td>
+<em>none</em> If present, creates a new form
+section for the element.</td>
 </tr><tr>
 <td align="right"><code>label</code></td><td align="left">{Child relation tag} The label for the
 element</td>

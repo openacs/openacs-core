@@ -3,6 +3,9 @@
 <property name="doc(title)">Templating System API: Page Request</property>
 <master>
 <h2>Page Request</h2>
+<strong>
+<a href="../index">Templating System</a> : API
+Reference</strong>
 <h3>Summary</h3>
 <p>Transform, validate and report errors in the query parameters
 associated with a page request.</p>
@@ -28,19 +31,19 @@ exists for the specified datatype (i.e. the components of a
 <kbd>date</kbd> are assembled into a single structure).</p>
 <ul>
 <li>Options for <kbd>datatype</kbd> are the same as for form
-elements.</li><li>The <kbd>multiple</kbd> switch indicates that more than one value
-may be submitted. The local variable set by the procedure will be a
-list.</li><li>The <kbd>optional</kbd> switch indicates that the parameter value
-may be empty or missing. A value is assumed to be required if this
-switch is not specified.</li><li>The <kbd>validate</kbd> switch may be used to perform simple
-custom validation of each parameter value. <kbd>expression</kbd> must
-be a block of arbitrary Tcl code that evaluates to 1 (valid) or 0
-(not valid). The variable <kbd>$value</kbd> may be used in the
+elements.</li><li>The <kbd>multiple</kbd> switch indicates that more than one
+value may be submitted. The local variable set by the procedure
+will be a list.</li><li>The <kbd>optional</kbd> switch indicates that the parameter
+value may be empty or missing. A value is assumed to be required if
+this switch is not specified.</li><li>The <kbd>validate</kbd> switch may be used to perform simple
+custom validation of each parameter value. <kbd>expression</kbd>
+must be a block of arbitrary Tcl code that evaluates to 1 (valid)
+or 0 (not valid). The variable <kbd>$value</kbd> may be used in the
 expression to reference the parameter value. <kbd>message</kbd> is
 simply a string containing a message to return to the user if
-validation fails. The variables <kbd>$value</kbd> and <kbd>$label</kbd>
-may be used in the message to reference the parameter value and
-label (or name if no label is supplied).</li>
+validation fails. The variables <kbd>$value</kbd> and
+<kbd>$label</kbd> may be used in the message to reference the
+parameter value and label (or name if no label is supplied).</li>
 </ul>
 <pre>
 template::request get_param <em>name</em>

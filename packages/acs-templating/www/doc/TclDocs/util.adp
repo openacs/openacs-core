@@ -84,8 +84,8 @@ file</td>
 <tr>
 <td align="right">
 <code>list</code><font color="red">*</font>
-</td><td align="left">{let's see how this parses out} the alphabetized
-list</td>
+</td><td align="left">{let&#39;s see how this parses out} the
+alphabetized list</td>
 </tr><tr>
 <td align="right">
 <code>entry</code><font color="red">*</font>

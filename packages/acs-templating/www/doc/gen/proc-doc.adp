@@ -6,11 +6,11 @@
 <strong>Templating System</strong>
 <h3>Text divisions, grouping</h3>
 <em>&lt; blah blah &gt;</em>
- The Tcl proc parser relies on three main
-text markers to divvy the Tcl library file into neat compartments:
-namespace, procedure and directive. Each of these divisions has its
-own text marker(s). In the end, your Tcl file should look somthing
-like this:
+ The Tcl proc parser relies on three
+main text markers to divvy the Tcl library file into neat
+compartments: namespace, procedure and directive. Each of these
+divisions has its own text marker(s). In the end, your Tcl file
+should look somthing like this:
 <blockquote><pre><code><kbd>
 [------------------------------------------------------]
 [------  <em>ignored text at beginning of file</em>  -----------]
@@ -64,11 +64,11 @@ those documenting their own work:</p>
 <blockquote>
 <strong>the \@namespace marker</strong><ul>
 <li>
-<code><strong>\@namespace</strong></code> is used to indicate the starting
-point of all text -- code and comments -- related to the procedures
-contained within that namespace. All text between one
-<code>\@namespace</code> marker and the next is parsed out as either
-Tcl proc source text or commentary of some sort</li><li>the body of text that falls between two <code>\@namespace</code>
+<code><strong>\@namespace</strong></code> is used to indicate
+the starting point of all text -- code and comments -- related to
+the procedures contained within that namespace. All text between
+one <code>\@namespace</code> marker and the next is parsed out as
+either Tcl proc source text or commentary of some sort</li><li>the body of text that falls between two <code>\@namespace</code>
 markers is divided into sections identified by</li>
 </ul><strong>the \@public/private markers</strong><ul>
 <li>although this convention is in no way enforced, each Tcl
@@ -90,9 +90,9 @@ The parser requires no specified ordering or grouping of these
 directives. Note: there should be one <code>\@param</code> or
 <code>\@option</code> directive marker for each parameter and option
 accepted by Tcl procedure. For the <strong>\@option</strong> and
-<strong>\@parameter</strong> markers, please follow one of the following
-formats, depending on whether or not the parameter or option you
-are detailing has a default value:
+<strong>\@parameter</strong> markers, please follow one of the
+following formats, depending on whether or not the parameter or
+option you are detailing has a default value:
 <blockquote>with a default value:
 <blockquote><code># \@(param|option) <em>&lt;parameter name&gt;</em>
 {default <em>&lt;description of default value&gt;</em>}
@@ -103,11 +103,11 @@ for required parameters:
 </code></blockquote>
 </blockquote>
 Note that the literal curly brackets with the word
-<strong><em>default</em></strong> are required to include any information about
-the option or parameter's default values. When default-value
-information is not included, the entry value will be marked as
-<em>required</em> if it is a parameter, or display no information if
-it is an option.
+<strong><em>default</em></strong> are required to include any
+information about the option or parameter&#39;s default values.
+When default-value information is not included, the entry value
+will be marked as <em>required</em> if it is a parameter, or
+display no information if it is an option.
 <p>For example: the fictional procedure grant_permission might be
 preceded by these comments:</p><blockquote><pre><code># \@public grant_permission
 # checks for whether or not a user has the privilege 
@@ -122,7 +122,7 @@ preceded by these comments:</p><blockquote><pre><code># \@public grant_permissio
 # id of the privilege specifying 
 # what actions the user can perform upon the object
 
-# \@option granter_id {default taken from the current user's id} id of the user granting the privilege
+# \@option granter_id {default taken from the current user&#39;s id} id of the user granting the privilege
 # \@option alert_admin_email email of an admin to be alerted
 
 # \@see namespace util util.html
@@ -134,8 +134,9 @@ In the above example <code>user_id</code> and
 description, and <code>granter_id</code> and
 <code>privilege_id</code> would show the the default info from
 above.
-<p>On to <strong>\@see</strong> directive markers:</p><blockquote># \@see <em>&lt;type of reference&gt;</em><em>&lt;name of
-reference&gt;</em><em>&lt;url of reference&gt;</em>
+<p>On to <strong>\@see</strong> directive markers:</p><blockquote># \@see <em>&lt;type of reference&gt;</em><em>&lt;name
+of reference&gt;</em><em>&lt;url of
+reference&gt;</em>
 </blockquote>
 Indicating the url of the reference is made somewhat simple because
 all namespaces will be described within their own static html page,
@@ -148,7 +149,8 @@ and all procedure information is anchor-referenced:
 </code></pre></blockquote>
 If you are referring to a namespace or procedure (use
 <code>proc</code> for the reference type), the url value is
-optional as long as you use the <strong>full</strong> and <strong>completely
-qualified</strong> name of the namespace or procedure.</blockquote>
+optional as long as you use the <strong>full</strong> and
+<strong>completely qualified</strong> name of the namespace or
+procedure.</blockquote>
 <hr>
 <a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>

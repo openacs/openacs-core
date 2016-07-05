@@ -44,12 +44,12 @@ source.</p>
 <pre></pre>
 <h3>Notes</h3>
 <ul>
-<li><p>The special variable <kbd>datasource:rowcount</kbd> may be used to
-check for no rows in a data source (or any other special condition
-related to the number of rows in the data source).</p></li><li>
-<p>The special column <kbd>datasource.rownum</kbd> is set implicitly
-for each repetition and can be used in conjunction with the
-<kbd>if</kbd> tag to do row banding:</p><pre>
+<li><p>The special variable <kbd>datasource:rowcount</kbd> may be used
+to check for no rows in a data source (or any other special
+condition related to the number of rows in the data source).</p></li><li>
+<p>The special column <kbd>datasource.rownum</kbd> is set
+implicitly for each repetition and can be used in conjunction with
+the <kbd>if</kbd> tag to do row banding:</p><pre>
   &lt;multiple&gt;
 
   &lt;if \@datasource.rownum\@ odd&gt;
@@ -70,8 +70,8 @@ of rows that are output from the data source:</p><pre>
 </pre><p>This attribute will cause processing to stop after <var>n</var>
 rows have been output.</p>
 </li><li>
-<p>The <kbd>startrow</kbd> attribute may be used to skip a number of
-rows at the beginning of the data source:</p><pre>
+<p>The <kbd>startrow</kbd> attribute may be used to skip a number
+of rows at the beginning of the data source:</p><pre>
   &lt;multiple startrow="n"&gt;
   ...
 </pre><p>This attribute will cause processing of the data source to begin

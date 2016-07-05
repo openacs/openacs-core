@@ -3,6 +3,9 @@
 <property name="doc(title)">Templating System API: Multirow</property>
 <master>
 <h2>Multirow</h2>
+<strong>
+<a href="../index">Templating System</a> : API
+Reference</strong>
 <h3>Summary</h3>
 <p>Access and modify rows and columns of a multirow data
 source.</p>
@@ -30,8 +33,7 @@ multirow <strong>size</strong><em>name</em>
 multirow <strong>create</strong><em>name column [column ...]</em>
 </pre>
 <blockquote><p>Set up a new multirow data source. This is an alternative to
-having <a href="/api-doc/proc-view?proc=db%5fmultirow">db_multirow</a> create the
-data source.</p></blockquote>
+having <a href="">db_multirow</a> create the data source.</p></blockquote>
 <pre>
 multirow <strong>append</strong><em>name value [value ...]</em>
 </pre>

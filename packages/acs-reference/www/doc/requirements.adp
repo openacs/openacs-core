@@ -17,11 +17,11 @@ this data.</li><li>It offers a convenient repository for and the ability to run
 reports on data of this sort.</li><li>It allows us to monitor the usage of reference data.</li>
 </ul>
 <h3>II. Vision Statement</h3>
-<p>What is reference data? Simply put, it is data that doesn't
+<p>What is reference data? Simply put, it is data that doesn&#39;t
 change very often and also in many cases comes from an external
 source and not from within the system itself. Many times it is
-created from a standards body, i.e. <a href="http://www.iso.ch/">ISO</a> or <a href="http://www.ansi.org">ANSI</a>, and may be required for a client's
-particular industrial needs.</p>
+created from a standards body, i.e. <a href="http://www.iso.ch/">ISO</a> or <a href="http://www.ansi.org">ANSI</a>, and may be required for a
+client&#39;s particular industrial needs.</p>
 <p>Some examples of reference data are:</p>
 <ul>
 <li>Geographic data: zip codes, country codes and
@@ -34,7 +34,7 @@ so most data models simply defer the issue by treating reference
 data as something simple to implement. Elsewhere. The reality is
 that for most organizations reference data is extremely important
 and also extremely difficult to manage.</p>
-<p>This module will not only <em>package</em> all of a site's
+<p>This module will not only <em>package</em> all of a site&#39;s
 reference data in one place, it will also help manage that
 data.</p>
 <h3>III. System Overview</h3>
@@ -79,15 +79,15 @@ particular table has expired.</p>
 <p>The requirements below are not met by the current
 implementation:</p>
 <p>30.10 There needs to be a way to query the data source and
-update automatically. If that isn't possible, as it won't be in
-many cases, the application should be able to query a master server
-and see if there is new data for a particular table or tables. For
-example: refdata.arsdigita.com could hold the reference tables and
-when newer table versions become available, simply upload only
-these versions or perhaps even only the differences between the
-tables. In any case, there should be an admin page that shows
-current status and revisions of various data, where to find info
-about additional sources (if applicable), and provide a UI to
+update automatically. If that isn&#39;t possible, as it won&#39;t
+be in many cases, the application should be able to query a master
+server and see if there is new data for a particular table or
+tables. For example: refdata.arsdigita.com could hold the reference
+tables and when newer table versions become available, simply
+upload only these versions or perhaps even only the differences
+between the tables. In any case, there should be an admin page that
+shows current status and revisions of various data, where to find
+info about additional sources (if applicable), and provide a UI to
 upload or import new data.</p>
 <h3>VII. Implementation Notes</h3>
 <p>The package needs to handle changes to reference data in a

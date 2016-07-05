@@ -11,8 +11,8 @@ Templates</property>
 <p>There are various ways to use Tcl in ADPs like ASP or JSP.</p>
 <p>You can use the <code>&lt;% ... %&gt;</code> and <code>&lt;%=
 ... %&gt;</code> tags just as in an ADP page handled by the
-AOLserver. For examples, see the section "embedded tcl" on the
-<a href="../demo">demonstration page</a>.</p>
+AOLserver. For examples, see the section "embedded tcl"
+on the <a href="../demo">demonstration page</a>.</p>
 <p>Generally, avoid putting escaped Tcl code in adp files, or
 generating HTML fragments in tcl procedures. It subverts the
 separation of code and layout, one of the benefits of templating.

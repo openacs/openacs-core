@@ -30,7 +30,7 @@ only available through tcl.</p>
 documentation through ad_proc.</p>
 <p>The Service Contract interface specification was inspired by
 WDSL, the interface specfication for web services.</p>
-<h2>Hitchiker's Guide to Service Contract Definitions</h2>
+<h2>Hitchiker&#39;s Guide to Service Contract Definitions</h2>
 <ul>
 <li>contract - analagous to interface, contracts serve as logical
 containers for operations.</li><li>operation - a method of an interface. defines a method
@@ -47,7 +47,7 @@ recieves.</li>
 mind that all implementations need to implement it and that
 extension of the contract after deployment is often not practical.
 In other words take the time to do a little future proofing and
-thinking about possible uses that you weren't planning on.</p>
+thinking about possible uses that you weren&#39;t planning on.</p>
 <h3>Defining Operations</h3>
 <p>Next define the logical operations that will make up your
 contract</p>

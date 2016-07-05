@@ -27,9 +27,9 @@ structure comments on a datasource in the following way:</p>
   # the name of the user
   
   # \@data_input add_entry form
-  # a form for adding entries to user's address book 
+  # a form for adding entries to user&#39;s address book 
   # \@input first_names text 
-  # entry subject's first and middle names
+  # entry subject&#39;s first and middle names
   # \@input last_name text
   # \@input title text form of address for entry subject
   # \@input birthday date birthdate w/ "MONTH DD YYYY" format
@@ -48,9 +48,9 @@ directives, column names, and associated explanations:</li><li style="list-style
 </code></blockquote></li><li>forms are documented with the data_input directive, and are
 also followed with a series of input directives with the name and
 type of input widgets, and necessary comments:</li><li style="list-style: none">
-<blockquote><code># \@data_input <em>name</em> form <em>comments</em> #
-\@input <em>name</em> &lt;<em>type of form entry</em>&gt;
-<em>comments</em>
+<blockquote><code># \@data_input <em>name</em> form
+<em>comments</em> # \@input <em>name</em> &lt;<em>type of form
+entry</em>&gt; <em>comments</em>
 </code></blockquote>
 Possible form entry types include text (or textentry), date,
 checkbox, radio, select, multiselect and textbox</li>

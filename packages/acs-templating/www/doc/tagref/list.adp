@@ -25,10 +25,10 @@ each item in a list data source.</p>
 </pre>
 <h3>Notes</h3>
 <ul>
-<li><p>The special variable <kbd>datasource<strong>:</strong>rownum</kbd> has the
-same meaning as the special column
-<kbd>datasource<strong>.</strong>rownum</kbd> in the body of a
-<kbd>multiple</kbd> tag.</p></li><li><p>The special variable <kbd>datasource:rowcount</kbd> has the same
+<li><p>The special variable
+<kbd>datasource<strong>:</strong>rownum</kbd> has the same meaning
+as the special column <kbd>datasource<strong>.</strong>rownum</kbd>
+in the body of a <kbd>multiple</kbd> tag.</p></li><li><p>The special variable <kbd>datasource:rowcount</kbd> has the same
 meaning in the list context as it does for multirow data
 sources.</p></li>
 </ul>

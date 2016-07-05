@@ -92,7 +92,7 @@ item exists</dd>
 <table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="item::get_extended_url" id="item::get_extended_url"><font size="+1" weight="bold">item::get_extended_url</font></a></td></tr><tr><td>
 <blockquote>Retrieves the relative URL of the item with a file
-extension based on the item's mime_type (Example: {
+extension based on the item&#39;s mime_type (Example: {
 /foo/bar/baz.html} ).</blockquote><dl>
 <dd>
 <strong>Parameters:</strong><table><tr>
@@ -112,9 +112,9 @@ defaults to { .html}</td>
 </tr><tr>
 <td align="right"><code>revision_id</code></td><td align="left">
 <em>default</em> the live revision; Specifies the
-revision_id which will be used to retrieve the item's mime_type.
-This option is ignored if the -template_extension option is
-specified.</td>
+revision_id which will be used to retrieve the item&#39;s
+mime_type. This option is ignored if the -template_extension option
+is specified.</td>
 </tr>
 </table></dd><dt><strong>See Also:</strong></dt><dd>proc - <a href="item">item::get_mime_info</a><br><a href="item">item::get_template_id</a><br><a href="item">item::get_url</a><br>
 </dd>
@@ -210,8 +210,8 @@ workflow (if any) is not finished, and the item has no live
 revision.</li><li>
 <kbd>ready</kbd> - The item is ready for publishing</li><li>
 <kbd>live</kbd> - The item has been published</li><li>
-<kbd>expired</kbd> - The item has been published in the past, but
-its publication has expired</li>
+<kbd>expired</kbd> - The item has been published in the past,
+but its publication has expired</li>
 </ul>
 </blockquote><dl>
 <dd>
@@ -245,8 +245,8 @@ retrieved</td>
 </dd><dt><strong>Returns:</strong></dt><dd>1 on success (and create a content array in the calling frame),
 0 on failure</dd><dt><strong>Options:</strong></dt><dd><table><tr>
 <td align="right"><code>item_id</code></td><td align="left">
-<em>default</em><em>auto-generated</em>; The item_id
-of the corresponding item.</td>
+<em>default</em><em>auto-generated</em>; The
+item_id of the corresponding item.</td>
 </tr></table></dd><dt><strong>See Also:</strong></dt><dd>proc - <a href="item">item::get_content_type</a><br><a href="item">item::get_mime_info</a><br>
 </dd>
 </dl>
@@ -257,8 +257,8 @@ of the corresponding item.</td>
 <blockquote>Retrieves the template which can be used to render the
 item. If there is a template registered directly to the item,
 returns the id of that template. Otherwise, returns the id of the
-default template registered to the item's content_type. Returns an
-empty string on failure.</blockquote><dl>
+default template registered to the item&#39;s content_type. Returns
+an empty string on failure.</blockquote><dl>
 <dd>
 <strong>Parameters:</strong><table>
 <tr>
@@ -267,8 +267,8 @@ empty string on failure.</blockquote><dl>
 </td><td align="left">The item id</td>
 </tr><tr>
 <td align="right"><code>context</code></td><td align="left">
-<em>default</em> 'public'; The context in which the
-template will be used.</td>
+<em>default</em> 'public'; The context in
+which the template will be used.</td>
 </tr>
 </table>
 </dd><dt><strong>Returns:</strong></dt><dd>The template_id of the template which can be used to render the
@@ -290,8 +290,8 @@ it is specified in the ini file.</blockquote><dl>
 </td><td align="left">The item id</td>
 </tr><tr>
 <td align="right"><code>context</code></td><td align="left">
-<em>default</em> 'public'; The context in which the
-template will be used.</td>
+<em>default</em> 'public'; The context in
+which the template will be used.</td>
 </tr>
 </table>
 </dd><dt><strong>Returns:</strong></dt><dd>The template_id of the template which can be used to render the

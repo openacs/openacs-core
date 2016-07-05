@@ -14,7 +14,7 @@ form in Tcl code.</p>
 <strong>Important Note:</strong> The <kbd><a href="http://openacs.org//api-doc/proc-view?proc=ad%5fform">ad_form</a></kbd>
 function has been written to be a more consistent, easier way to
 create and manage dynamic forms. Behind the scenes it uses the
-templating system's form builder, but it hides much of its
+templating system&#39;s form builder, but it hides much of its
 complexity. You should definitely look at it and at the pages that
 use it in the survey package.</p>
 <h3>Create a form</h3>

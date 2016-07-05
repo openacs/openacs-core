@@ -8,10 +8,10 @@
  : <a href="index">Tag Reference</a>
  : Switch
 <h3>Summary</h3>
-<p>The <kbd>switch</kbd> tag is used to output one of n-sections when
-the switch variable matches one of the n-case statements. A default
-section can also be output if none of the n-case statements matches
-the switch variable.</p>
+<p>The <kbd>switch</kbd> tag is used to output one of n-sections
+when the switch variable matches one of the n-case statements. A
+default section can also be output if none of the n-case statements
+matches the switch variable.</p>
 <h3>Usage Examples</h3>
 <pre>
 &lt;switch \@x\@&gt;
@@ -25,7 +25,7 @@ the switch variable.</p>
          Hello Sam
     &lt;/case&gt;
     &lt;default&gt;
-         I don't recognize your name.
+         I don&#39;t recognize your name.
     &lt;/default&gt;
 &lt;/switch&gt;
 </pre>
@@ -55,7 +55,7 @@ items.</p>
          Your must be Fred Greta or Sam, but I'm not sure which one.
     &lt;/case&gt;
     &lt;default&gt;
-         I don't recognize your name.
+         I don&#39;t recognize your name.
     &lt;/default&gt;
 &lt;/switch&gt;
 </pre>

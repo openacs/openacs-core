@@ -5,6 +5,9 @@ Wizard}</property>
 Wizard</property>
 <master>
 <h2>Integrating Forms into a Wizard</h2>
+<strong>
+<a href="../index">Templating System</a> : User
+Guide</strong>
 <p>This document outlines the steps necessary to build a dynamic
 form wizard in Tcl code.</p>
 <a href="wizard-procs-doc">Updated documentation of
@@ -27,8 +30,8 @@ wizard add make_sandwich -label "Add the lettuce" -url "add-lettuce"
 <p>In auto-generated wizards, the wizard steps appear in the order
 they were created. See the <a href="/api-doc/proc-view?proc=template%3a%3awizard%3a%3acreate">wizard
 API</a> for optional parameters to this command. Alternatively,
-wizard steps can be created in the <kbd>wizard create</kbd> statement
-with the <kbd>-steps</kbd> option:</p>
+wizard steps can be created in the <kbd>wizard create</kbd>
+statement with the <kbd>-steps</kbd> option:</p>
 <pre>
 wizard create make_sandwich -action "eat-sandwich.acs?sandwich_id=$sandwich_id" -params { 
   sandwich_id 
@@ -41,9 +44,9 @@ wizard create make_sandwich -action "eat-sandwich.acs?sandwich_id=$sandwich_id" 
 <h3>Setting wizard state variables</h3>
 <p>Most likely, a wizard will store one or more state variables
 using the <kbd>-params</kbd> option in the <kbd>wizard create</kbd>
-statement. At any point in the wizard process, a state variable's
-value can be updated using the <kbd>wizard set_param</kbd>
-command.</p>
+statement. At any point in the wizard process, a state
+variable&#39;s value can be updated using the <kbd>wizard
+set_param</kbd> command.</p>
 <pre>
 # check to see if a sandwich_id has been passed in by the wizard
 request set_param sandwich_id -datatype integer -optional
@@ -76,9 +79,9 @@ if { [wizard exists] } {
 </pre><p>In the .adp file:</p><pre>
 &lt;formtemplate id=\@form_name\@ style=wizard&gt;
 </pre>
-</li><li>Advancing the wizard with the <kbd>wizard forward</kbd> command.
-The page the wizard forwards to depends on which wizard submit
-button was pressed (next, repeat, previous, finish):
+</li><li>Advancing the wizard with the <kbd>wizard forward</kbd>
+command. The page the wizard forwards to depends on which wizard
+submit button was pressed (next, repeat, previous, finish):
 <pre>
 if { [wizard exists] } {
   # go to the next wizard step

@@ -4,9 +4,9 @@
 <master>
 <h2>Namespace publish</h2>
 
-  <em>by Stanislav Freidin The procs in this namespace are
-useful for publishing items, including items inside other items,
-and writing items to the filesystem.</em>
+  <em>by Stanislav Freidin The procs in this namespace
+are useful for publishing items, including items inside other
+items, and writing items to the filesystem.</em>
 <p><em>Specifically, the <kbd>content</kbd>, <kbd>child</kbd> and
 <kbd>relation</kbd> tags are defined here.</em></p>
 <p>Also see:</p>
@@ -140,17 +140,17 @@ variable will be set to the empty string { }</td>
 </tr>
 </table>
 </dd><dt><strong>Returns:</strong></dt><dd>The HTML resulting from merging the item with its template, or
-" " if no template exists or the <kbd>-no_merge</kbd> flag was
-specified</dd><dt><strong>Options:</strong></dt><dd><table>
+" " if no template exists or the <kbd>-no_merge</kbd>
+flag was specified</dd><dt><strong>Options:</strong></dt><dd><table>
 <tr>
 <td align="right"><code>embed</code></td><td align="left">Signifies that the content should be embedded
-directly in the parent item. <kbd>-embed</kbd> is <strong>required</strong> for
-this proc, since it makes no sense to handle the binary file in any
-other way.</td>
+directly in the parent item. <kbd>-embed</kbd> is
+<strong>required</strong> for this proc, since it makes no sense to
+handle the binary file in any other way.</td>
 </tr><tr>
 <td align="right"><code>revision_id</code></td><td align="left">
-<em>default</em> The live revision for the item; The
-revision whose content is to be used</td>
+<em>default</em> The live revision for the item;
+The revision whose content is to be used</td>
 </tr><tr>
 <td align="right"><code>no_merge</code></td><td align="left">If present, do NOT merge with the template, in
 order to prevent infinite recursion in the {&lt;content&gt;} tag.
@@ -253,8 +253,8 @@ time has passed.</blockquote><dl>
 between the sweeps of all items in the content repository. Lower
 values increase the precision of the publishing/expiration dates
 but decrease performance. If this parameter is not specified, the
-value of the StatusSweepInterval parameter in the server's INI file
-is used (if it exists).</td>
+value of the StatusSweepInterval parameter in the server&#39;s INI
+file is used (if it exists).</td>
 </tr></table>
 </dd><dt><strong>See Also:</strong></dt><dd>proc - <a href="publish">publish::set_publish_status</a><br><a href="publish">publish::track_publish_status</a><br><a href="publish">publish::unschedule_status_sweep</a><br>
 </dd>
@@ -283,8 +283,8 @@ Otherwise, unpublish the item from the filesystem.</blockquote><dl>
 expired} , { ready} or { live}</td>
 </tr><tr>
 <td align="right"><code>revision_id</code></td><td align="left">
-<em>default</em> The live revision; The revision id
-to be used when publishing the item to the filesystem.</td>
+<em>default</em> The live revision; The revision
+id to be used when publishing the item to the filesystem.</td>
 </tr>
 </table>
 </dd><dt><strong>See Also:</strong></dt><dd>proc - <a href="publish">publish::publish_revision</a><br><a href="publish">publish::unpublish_item</a><br>
@@ -332,9 +332,9 @@ status.</blockquote><dl>
 <blockquote>Write the content (blob) of a revision into a binary
 file in the filesystem. The file will be published at the relative
 URL under each publish root listed under the PublishRoots parameter
-in the server's INI file (the value returnded by
+in the server&#39;s INI file (the value returnded by
 publish::get_page_root is used as the default). The file extension
-will be based on the revision's mime-type.<br>
+will be based on the revision&#39;s mime-type.<br>
 For example, an revision whose mime-type is { image/jpeg} for an
 item at { Sitemap/foo/bar} may be written as
 /web/your_server_name/www/foo/bar.jpg</blockquote><dl>
@@ -484,7 +484,8 @@ pairs</blockquote><dl>
 <code>argv</code><font color="red">*</font>
 </td><td align="left">The list of name-value pairs</td>
 </tr></table>
-</dd><dt><strong>Returns:</strong></dt><dd>An HTML string in format " name=value name=value ..."</dd><dt><strong>See Also:</strong></dt><dd>proc - <a href="publish">publish::set_to_pairs</a><br>
+</dd><dt><strong>Returns:</strong></dt><dd>An HTML string in format " name=value name=value
+..."</dd><dt><strong>See Also:</strong></dt><dd>proc - <a href="publish">publish::set_to_pairs</a><br>
 </dd>
 </dl>
 </td></tr>
@@ -528,15 +529,16 @@ already empty</dd><dt><strong>See Also:</strong></dt><dd>proc - <a href="publish
 </table>
 <table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="publish::process_tag" id="publish::process_tag"><font size="+1" weight="bold">publish::process_tag</font></a></td></tr><tr><td>
-<blockquote>Process a <kbd>child</kbd> or <kbd>relation</kbd> tag. This
-is a helper proc for the tags, which acts as a wrapper for
+<blockquote>Process a <kbd>child</kbd> or <kbd>relation</kbd> tag.
+This is a helper proc for the tags, which acts as a wrapper for
 <kbd>render_subitem</kbd>.</blockquote><dl>
 <dd>
 <strong>Parameters:</strong><table>
 <tr>
 <td align="right">
 <code>relation_type</code><font color="red">*</font>
-</td><td align="left">Either <kbd>child</kbd> or <kbd>relation</kbd>
+</td><td align="left">Either <kbd>child</kbd> or
+<kbd>relation</kbd>
 </td>
 </tr><tr>
 <td align="right">
@@ -562,8 +564,8 @@ store state between <kbd>child</kbd>, <kbd>relation</kbd> and
 </td><td align="left">The id to be put on stack</td>
 </tr><tr>
 <td align="right"><code>revision_id</code></td><td align="left">
-<em>default</em> { }; The id of the revision to use.
-If missing, live revision will most likely be used</td>
+<em>default</em> { }; The id of the revision to
+use. If missing, live revision will most likely be used</td>
 </tr>
 </table>
 </dd><dt><strong>See Also:</strong></dt><dd>proc - <a href="publish">publish::get_main_item_id</a><br><a href="publish">publish::get_main_revision_id</a><br><a href="publish">publish::pop_id</a><br>
@@ -703,8 +705,8 @@ roots.</blockquote><dl>
 </table>
 <table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name=""></a></td></tr><tr><td>
-<blockquote>Implements the <kbd>child</kbd> tag which renders a child
-item. See the Developer Guide for more information.<br>
+<blockquote>Implements the <kbd>child</kbd> tag which renders a
+child item. See the Developer Guide for more information.<br>
 The child tag format is
 <blockquote><kbd>{&lt;child} tag=<em>tag</em> index=<em>n embed
 {args</em>&gt;}</kbd></blockquote>
@@ -723,8 +725,8 @@ The child tag format is
 content of the current item. See the Developer Guide for more
 information.<br>
 The content tag format is simply {<kbd>&lt;content&gt;</kbd>.} The
-<kbd>embed</kbd> and <kbd>no_merge</kbd> parameters are implicit to the
-tag.</blockquote><dl><dd>
+<kbd>embed</kbd> and <kbd>no_merge</kbd> parameters are implicit to
+the tag.</blockquote><dl><dd>
 <strong>Parameters:</strong><table><tr>
 <td align="right">
 <code>params</code><font color="red">*</font>

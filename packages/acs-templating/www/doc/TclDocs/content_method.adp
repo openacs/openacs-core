@@ -45,7 +45,8 @@ methods</blockquote><dl>
 </td><td align="left">The content type</td>
 </tr></table>
 </dd><dt><strong>Returns:</strong></dt><dd>A list of content methods or a list of label-value pairs of
-content methods if the " -get_labels" option is specified</dd><dt><strong>Options:</strong></dt><dd><table><tr>
+content methods if the " -get_labels" option is
+specified</dd><dt><strong>Options:</strong></dt><dd><table><tr>
 <td align="right"><code>get_labels</code></td><td align="left">Instead of a list of content methods, return a
 list of label-value pairs of associated content methods.</td>
 </tr></table></dd><dt><strong>See Also:</strong></dt><dd>content_method::get_content_method_options,

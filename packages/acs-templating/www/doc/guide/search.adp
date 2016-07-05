@@ -5,6 +5,9 @@ Forms}</property>
 Forms</property>
 <master>
 <h2>Implementing Search-and-Select Forms</h2>
+<strong>
+<a href="../index">Templating System</a> : User
+Guide</strong>
 <p>Form designers are often confronted by the need to provide users
 with a way to choose from hundreds or even thousands of potential
 options, exceeding the practical capacity of a select list or set
@@ -36,14 +39,14 @@ templating system is to create a single page that conditionally
 includes two different forms:</p>
 <ol>
 <li><p>Say the administrator wishes to edit the name and screen name of
-a user. The administrator requests a page, <kbd>user-edit.acs</kbd>.
-The page looks for a query parameter named <kbd>user_id</kbd> to
-specify which user to edit.</p></li><li><p>Initially, <kbd>user_id</kbd> is not specified. In this case, the
-page includes a user search form.</p></li><li><p>The user enters part of a user name or screen name and submits
+a user. The administrator requests a page,
+<kbd>user-edit.acs</kbd>. The page looks for a query parameter
+named <kbd>user_id</kbd> to specify which user to edit.</p></li><li><p>Initially, <kbd>user_id</kbd> is not specified. In this case,
+the page includes a user search form.</p></li><li><p>The user enters part of a user name or screen name and submits
 the form, which returns to the same URL with the query parameter
 <kbd>user_search</kbd>. If this parameter is defined, the page
-queries the database for potential matches.</p></li><li><p>If one match is found, the page sets a <kbd>user_id</kbd> variable
-and includes the actual user edit form.</p></li><li><p>If multiple matches are found, the page includes a listing of
+queries the database for potential matches.</p></li><li><p>If one match is found, the page sets a <kbd>user_id</kbd>
+variable and includes the actual user edit form.</p></li><li><p>If multiple matches are found, the page includes a listing of
 users. The name of each each user is linked back to the same page,
 with the appropriate <kbd>user_id</kbd>. The page prompts the
 administrator to choose one. A link is also provided with no
@@ -51,9 +54,9 @@ administrator to choose one. A link is also provided with no
 <kbd>user_id</kbd> and displays the edit form.</p></li>
 </ol>
 <p>A working implementation of this example is provided in the
-files <kbd>demo/user-edit.tcl</kbd> and <kbd>demo/user-edit.adp</kbd>.
-You must execute the demo data file (<kbd>demo/demo.sql</kbd>) for
-the page to function.</p>
+files <kbd>demo/user-edit.tcl</kbd> and
+<kbd>demo/user-edit.adp</kbd>. You must execute the demo data file
+(<kbd>demo/demo.sql</kbd>) for the page to function.</p>
 <p>Try the following scenarios:</p>
 <ol>
 <li>Submit the search form without entering any search

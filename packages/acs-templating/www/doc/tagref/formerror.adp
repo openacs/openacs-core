@@ -54,8 +54,8 @@ will not be added.</p>
 <ul>
 <li><p>The contents of the <kbd>formerror</kbd> tag may appear on the
 form when a submission is returned to the user for correction.</p></li><li><p>The contents of the tag may use the special variables
-<kbd>label</kbd> and <kbd>value</kbd> to refer to the element label and
-submitted value.</p></li><li><p>You can use the variable \@formerror.element_id\@ to refer to the
+<kbd>label</kbd> and <kbd>value</kbd> to refer to the element label
+and submitted value.</p></li><li><p>You can use the variable \@formerror.element_id\@ to refer to the
 automatically generated error message within the formerror
 tags.</p></li><li><p>The <kbd>type</kbd> attribute is optional and is used to
 distinguish messages for specific types of validation errors. Each
@@ -65,8 +65,8 @@ developer in the script associated with template.</p></li><li><p>If the contents
 (&lt;formerror&gt;&lt;/formerror&gt;), the message specified by the
 developer in the script are inserted when appropriate. This is
 particularly useful for international sites, where locale-dependent
-messages may be stored in the database.</p></li><li><p>If the <kbd>type</kbd> attribute is not specified <em>and</em> the
-contents of the tag are empty, all appropriate messages are
+messages may be stored in the database.</p></li><li><p>If the <kbd>type</kbd> attribute is not specified <em>and</em>
+the contents of the tag are empty, all appropriate messages are
 inserted (separated by &lt;,br&gt; tags).</p></li><li><p>See the <a href="formwidget"><kbd>formwidget</kbd></a> and
 <a href="formgroup"><kbd>formgroup</kbd></a> tags for more
 information on writing the body of a dynamic form template.</p></li>

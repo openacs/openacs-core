@@ -27,16 +27,16 @@ the Tcl script associated with the template.</p>
 </pre>
 <h3>Notes</h3>
 <ul>
-<li><p>The <kbd>formwidget</kbd> tag takes the place of <kbd>input</kbd>
-and <kbd>select</kbd> tags in static HTML forms. The system
-substitutes these tags with the appropriate HTML tags, complete
-with their proper values, options and other attributes, while
-rendering the template. Explicit form tags in the template may be
-used in special circumstances, but should be avoided wherever
-possible.</p></li><li>
+<li><p>The <kbd>formwidget</kbd> tag takes the place of
+<kbd>input</kbd> and <kbd>select</kbd> tags in static HTML forms.
+The system substitutes these tags with the appropriate HTML tags,
+complete with their proper values, options and other attributes,
+while rendering the template. Explicit form tags in the template
+may be used in special circumstances, but should be avoided
+wherever possible.</p></li><li>
 <p>HTML attributes, including JavaScript event handlers, may be
-specified as attributes to the <kbd>formwidget</kbd> tag. The system
-will include all such attributes in the <kbd>input</kbd> or
+specified as attributes to the <kbd>formwidget</kbd> tag. The
+system will include all such attributes in the <kbd>input</kbd> or
 <kbd>select</kbd> tag of the rendered HTML form.</p><pre>
 &lt;formwidget id="cc_number" onChange="validate();"&gt;
 </pre>

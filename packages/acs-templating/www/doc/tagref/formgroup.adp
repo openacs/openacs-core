@@ -28,24 +28,25 @@ with the template.</p>
 <ul>
 <li><p>The <kbd>formgroup</kbd> tag contains a template for formatting
 each check box or radio button in the group. The tag makes a
-special multirow data source named <kbd>formgroup</kbd> available in
-the body of the tag. The <kbd>formgroup</kbd> data source includes
-two columns. The first is <kbd>widget</kbd>, containing an HTML
-<kbd>input</kbd> tag for one of the buttons in the group. The second
-is <kbd>label</kbd>, containing a corresponding label for the
-button.</p></li><li><p>The <kbd>formgroup</kbd> tag may emulate either the <a href="multiple"><kbd>multiple</kbd></a> or <a href="grid"><kbd>grid</kbd></a> tags in repeating the template
+special multirow data source named <kbd>formgroup</kbd> available
+in the body of the tag. The <kbd>formgroup</kbd> data source
+includes two columns. The first is <kbd>widget</kbd>, containing an
+HTML <kbd>input</kbd> tag for one of the buttons in the group. The
+second is <kbd>label</kbd>, containing a corresponding label for
+the button.</p></li><li><p>The <kbd>formgroup</kbd> tag may emulate either the <a href="multiple"><kbd>multiple</kbd></a> or <a href="grid"><kbd>grid</kbd></a> tags in repeating the template
 section within the tag. By default it emulates the <a href="multiple"><kbd>multiple</kbd></a> tag. If the <kbd>cols</kbd>
-attribute is specified, the <kbd>formgroup</kbd> tag will emulate the
-<a href="grid"><kbd>grid</kbd></a> tag.</p></li><li>
+attribute is specified, the <kbd>formgroup</kbd> tag will emulate
+the <a href="grid"><kbd>grid</kbd></a> tag.</p></li><li>
 <p>HTML attributes, including JavaScript event handlers, may be
 specified as attributes to the <kbd>formgroup</kbd> tag. The system
-will include all such attributes in the <kbd>input</kbd> tags of each
-radio button or check box in the group.</p><pre>
+will include all such attributes in the <kbd>input</kbd> tags of
+each radio button or check box in the group.</p><pre>
 &lt;formgroup id="services" onChange="validate();"&gt;
 </pre>
 </li><li><p>See the <a href="formtemplate"><kbd>formtemplate</kbd></a>
-and <a href="formwidget"><kbd>formwidget</kbd></a> tags for more
-information on writing the body of a dynamic form template.</p></li>
+and <a href="formwidget"><kbd>formwidget</kbd></a> tags for
+more information on writing the body of a dynamic form
+template.</p></li>
 </ul>
 <hr>
 <a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>

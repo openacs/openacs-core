@@ -47,8 +47,8 @@ The condition of the &lt;if&gt; tag is built from terms of the form
 <code><strong>op</strong></code><var>x</var><sub>1</sub><var>x</var><sub>2</sub> ...</blockquote>
 
 The operator <code><strong>op</strong></code>
- determines the number operands
-(<var>x</var>
+ determines the number
+operands (<var>x</var>
 <sub>0</sub>
 , ...
 <var>x</var>
@@ -112,7 +112,8 @@ The operator <code><strong>op</strong></code>
 <ul>
 <li><p>Any legal variables that may be referenced in the template may
 also be used in <kbd>if</kbd> statements. Words not surrounded with
-the commerical at sign (<kbd>\@</kbd>) are interpreted literally.</p></li><li>
+the commerical at sign (<kbd>\@</kbd>) are interpreted
+literally.</p></li><li>
 <p>Phrases with spaces in them must be enclosed in quotes to be
 grouped correctly:</p><pre>
   &lt;if \@datasource.variable\@ eq "blue sky"&gt;
@@ -133,9 +134,9 @@ block to specify an alternate conditional template section.</p><pre>
   &lt;/else&gt;
 </pre>
 </li><li>
-<p>The <kbd>else</kbd> tag may be used following an <kbd>if</kbd> block
-to specify an alternate template section when a condition is not
-true:</p><pre>
+<p>The <kbd>else</kbd> tag may be used following an <kbd>if</kbd>
+block to specify an alternate template section when a condition is
+not true:</p><pre>
   &lt;if \@datasource.variable\@ eq "blue"&gt;
     &lt;td bgcolor="#0000ff"&gt;
   &lt;/if&gt;
@@ -144,9 +145,9 @@ true:</p><pre>
   &lt;/else&gt;
 </pre>
 </li><li><p>Compound expressions can be created by combining terms with the
-<kbd>and</kbd> and <kbd>or</kbd> keywords, as illustrated above. Any
-number of statements may be connected in this fashion. There is no
-way to group statements to change the order of evaluation.</p></li><li><p>When a variable is tested using the <kbd>nil</kbd> operator, it
+<kbd>and</kbd> and <kbd>or</kbd> keywords, as illustrated above.
+Any number of statements may be connected in this fashion. There is
+no way to group statements to change the order of evaluation.</p></li><li><p>When a variable is tested using the <kbd>nil</kbd> operator, it
 will return true if the variable is undefined or if the value of
 the variable is an empty string.</p></li>
 </ul>

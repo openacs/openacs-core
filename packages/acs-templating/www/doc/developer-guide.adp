@@ -45,7 +45,8 @@ widgets</a></li><li><a href="guide/form-datatypes">Implementing custom data
 types</a></li>
 </ul>
 </li><li>Handling errors
-<ul><li>See the "contract", "error", and "state" <a href="demo/">demos</a>.</li></ul>
+<ul><li>See the "contract", "error", and
+"state" <a href="demo/">demos</a>.</li></ul>
 </li>
 </ul></li><li>Object and API Reference
 <ul>
@@ -70,14 +71,14 @@ Normally, does nothing at all. With the <code>-string</code>
  option
 you get the resulting HTML page returned as a string.
 <p>The optional <code>template</code> argument is a path to a page
-(tcl/adp file pair). Note that you don't supply the ".tcl" or
-".adp" extension. It is resolved by help of
-<code>template::util::url_to_file</code> (with the current file
-stub as reference path) and passed to
+(tcl/adp file pair). Note that you don&#39;t supply the
+".tcl" or ".adp" extension. It is resolved by
+help of <code>template::util::url_to_file</code> (with the current
+file stub as reference path) and passed to
 <code>template::set_file</code>, to change the name of the page
-being served currently. If it starts with a "/", it is taken to be
-a path relative to the server root; otherwise it is a filename
-relative to the directory of the tcl script.</p>
+being served currently. If it starts with a "/", it is
+taken to be a path relative to the server root; otherwise it is a
+filename relative to the directory of the tcl script.</p>
 <h5><code><a href="/api-doc/proc-view?proc=ad_page_contract">ad_page_contract</a></code></h5>
 
 Normally, complaints about incorrect parameters are written
@@ -88,10 +89,10 @@ which to put any error messages as a list, and
 <code>ad_page_contract</code>
  will return in any case. You can then
 present the errors to the user in a templated page, consistent with
-the look and feel of the rest of your service. If there's no
+the look and feel of the rest of your service. If there&#39;s no
 complaint, <code>ad_page_contract</code>
- won't touch the variable;
-typically it will stay undefined.
+ won&#39;t touch the
+variable; typically it will stay undefined.
 <hr>
 <address><a href="mailto:christian\@arsdigita.com">Christian
 Brechbühler</a></address>

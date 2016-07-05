@@ -18,14 +18,14 @@ the column does not change from row to row.</p>
 multirow:</p>
 <ul>
 <li>
-<kbd>groupnum</kbd> is the rownum within the innermost group tag,
-starting from 1, 2, 3, etc.</li><li>
+<kbd>groupnum</kbd> is the rownum within the innermost group
+tag, starting from 1, 2, 3, etc.</li><li>
 <kbd>groupnum_last_p</kbd> is a boolean saying whether this is
 the last row inside the current group tag, before the value of
-<kbd>column</kbd> changes. <strong>Note</strong>, however, that this
-<strong>only</strong> works inside the <strong>inner-most</strong><kbd>group</kbd> if
-you have multiple <kbd>group</kbd> tags nested within each
-other.</li>
+<kbd>column</kbd> changes. <strong>Note</strong>, however, that
+this <strong>only</strong> works inside the
+<strong>inner-most</strong><kbd>group</kbd> if you have multiple
+<kbd>group</kbd> tags nested within each other.</li>
 </ul>
 <h3>Usage</h3>
 <pre>
@@ -72,20 +72,21 @@ row except the last row in the group:</p>
 </pre>
 <p>This attribute will cause the rows within the group to appear to
 be sepparated by vertical bars. This is much more convenient than
-using the <kbd>&lt;groupnum_last_p&gt;</kbd> tags to check whether we
-are on the last row.</p>
+using the <kbd>&lt;groupnum_last_p&gt;</kbd> tags to check whether
+we are on the last row.</p>
 <h3>Notes</h3>
 <ul>
 <li><p>
 <kbd>Group</kbd> tags may be nested to perform even more complex
 formatting.</p></li><li><p>Be careful when nesting several group tags. The group tag works
 very narrowly - it only looks at the column you provide it with and
-so long as that column doesn't change, it keeps looping. E.g. if
-you have 3 levels and the value of the outermost column changes but
-the value of the middle column doesn't, the inner group tag won't
-notice and will continue to loop. A workaround would be to create a
-derived column, which contains e.g. "$f1,$f2", and use that as the
-column for the inner group tag. (See also <a href="http://openacs.org/bugtracker/openacs/bug?bug%5fnumber=428">this
+so long as that column doesn&#39;t change, it keeps looping. E.g.
+if you have 3 levels and the value of the outermost column changes
+but the value of the middle column doesn&#39;t, the inner group tag
+won&#39;t notice and will continue to loop. A workaround would be
+to create a derived column, which contains e.g.
+"$f1,$f2", and use that as the column for the inner group
+tag. (See also <a href="http://openacs.org/bugtracker/openacs/bug?bug%5fnumber=428">this
 bug</a>).</p></li>
 </ul>
 <hr>

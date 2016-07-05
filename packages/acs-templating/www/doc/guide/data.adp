@@ -15,8 +15,8 @@ relational database queries.</p>
 structures as data sources:</p>
 <table cellspacing="0" cellpadding="4" border="1">
 <tr>
-<td><kbd>onevalue</kbd></td><td>A simple scalar, such as a user's first name or the total due
-on a purchase order.</td>
+<td><kbd>onevalue</kbd></td><td>A simple scalar, such as a user&#39;s first name or the total
+due on a purchase order.</td>
 </tr><tr>
 <td><kbd>onelist</kbd></td><td>A list of simple scalars.</td>
 </tr><tr>
@@ -27,24 +27,25 @@ on a purchase order.</td>
 </table>
 <h3><kbd>onevalue</kbd></h3>
 <p>
-<kbd>onevalue</kbd> data sources are implemented simply by setting
-a Tcl variable:</p>
+<kbd>onevalue</kbd> data sources are implemented simply by
+setting a Tcl variable:</p>
 <code>set name "Walter Cronkite"</code>
-<p>The <kbd>query</kbd> procedure may be used to set a onevalue data
-source based on a database query:</p>
-<code>query name onevalue "select name from users where user_id =
-123"</code>
-<p>You can embed a <kbd>onevalue</kbd> data source in a template with
-simple <a href="../tagref/variable">variable
+<p>The <kbd>query</kbd> procedure may be used to set a onevalue
+data source based on a database query:</p>
+<code>query name onevalue "select name from users where
+user_id = 123"</code>
+<p>You can embed a <kbd>onevalue</kbd> data source in a template
+with simple <a href="../tagref/variable">variable
 substitution</a>.</p>
 <h3><kbd>onerow</kbd></h3>
 <p>
-<kbd>onerow</kbd> data sources are implemented as Tcl arrays:</p>
+<kbd>onerow</kbd> data sources are implemented as Tcl
+arrays:</p>
 <code>set name(first_name) Walter<br>
 set name(last_name) Cronkite</code>
-<p>The <a href="../api/database"><kbd>query</kbd></a> procedure
-may be used as a convenient way to store the result of a one-row
-database query into an array:</p>
+<p>The <a href="../api/database"><kbd>query</kbd></a>
+procedure may be used as a convenient way to store the result of a
+one-row database query into an array:</p>
 <pre>
 query name onerow "
   select 
@@ -58,8 +59,8 @@ query name onerow "
 data source in a template with simple <a href="../tagref/variable">variable substitution</a>.</p>
 <h3><kbd>onelist</kbd></h3>
 <p>
-<kbd>onelist</kbd> data sources are implemented by creating a Tcl
-list:</p>
+<kbd>onelist</kbd> data sources are implemented by creating a
+Tcl list:</p>
 <pre>
 set names [list "Walter" "Fred" "Susy" "Frieda"]
 </pre>
@@ -78,10 +79,10 @@ multirow create cars make model year
 multirow append cars "Toyota" "Camry" "1996"
 multirow append cars "Volvo" "960" "1995"
 </pre>
-<p>The <a href="../api/database"><kbd>query</kbd></a> procedure
-may be used as a convenient way to store the result of a multi-row,
-multi-column database query into a <kbd>multirow</kbd> data
-source:</p>
+<p>The <a href="../api/database"><kbd>query</kbd></a>
+procedure may be used as a convenient way to store the result of a
+multi-row, multi-column database query into a <kbd>multirow</kbd>
+data source:</p>
 <pre>
 query name multirow "
   select 

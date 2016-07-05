@@ -18,8 +18,9 @@ methods.</blockquote>
 <tr><td width="100%" bgcolor="#CCCCFF"><a name=" set split_name $see_name doc::util::text_divider split_name :: set name_length [llength $split_name] set see_namespace [join [lrange $split_name 0 [expr $name_length - 2]] \" set="" url=""><font size="+1" weight="bold">set split_name
 $see_name doc::util::text_divider split_name :: set name_length
 [llength $split_name] set see_namespace [join [lrange $split_name 0
-[expr $name_length - 2]] \"\"] set url \"[doc::util::dbl_colon_fix
-$see_namespace].html#[set see_name]\"</font></a></td></tr><tr><td><blockquote>procedure to deal with \@see comments</blockquote></td></tr>
+[expr $name_length - 2]] \"\"] set url
+\"[doc::util::dbl_colon_fix $see_namespace].html#[set
+see_name]\"</font></a></td></tr><tr><td><blockquote>procedure to deal with \@see comments</blockquote></td></tr>
 </table>
 <table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name=""></a></td></tr><tr><td>

@@ -36,22 +36,24 @@ Substitution</a>.</p>
 <p>To speed development and ensure consistency of design, template
 authors are encouraged to assemble pages from distinct component
 templates that may be recycled in different contexts. One typical
-practice is to build a "master" template for an entire section of a
-site, with a common header, footer and sidebar layout. For each
-page request, the "content" template is incorporated dynamically
-into a specified area of the master template, usually a table
-cell.</p>
+practice is to build a "master" template for an entire
+section of a site, with a common header, footer and sidebar layout.
+For each page request, the "content" template is
+incorporated dynamically into a specified area of the master
+template, usually a table cell.</p>
 <p>(graphic)</p>
 <p>Another common practice is to build small reusable templates
 that may be included in other templates as logical components. This
-may be useful for common "widgets" such as search boxes or lists of
-related links, as well as for building configurable portal pages
-where users may assemble different types of content to their
-liking.</p>
+may be useful for common "widgets" such as search boxes
+or lists of related links, as well as for building configurable
+portal pages where users may assemble different types of content to
+their liking.</p>
 <p>(graphic)</p>
 <p>See <a href="tagref/include"><kbd>include</kbd></a> and
-<a href="tagref/master"><kbd>master</kbd></a>. See also <a href="guide/components">Building reusable layout components</a> and
-<a href="guide/master">Using master templates</a>.</p>
+<a href="tagref/master"><kbd>master</kbd></a>. See also
+<a href="guide/components">Building reusable layout
+components</a> and <a href="guide/master">Using master
+templates</a>.</p>
 <h4>Property Declarations</h4>
 <p>Template authors need a simple mechanism for declaring
 properties within the templates. The most common use of such
@@ -115,7 +117,7 @@ the template later.</p>
 <strong>Caution:</strong>   Do not write to the connection.
 Specifically, if you must use the <code>&lt;% %&gt;</code> tag, do
 not call <code>ns_puts</code>, because it will not work the same
-way as in AOLserver's ADP pages.</p></li>
+way as in AOLserver&#39;s ADP pages.</p></li>
 </ul>
 <hr>
 <address><a href="mailto:christian\@arsdigita.com">Christian

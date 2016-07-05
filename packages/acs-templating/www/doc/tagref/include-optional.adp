@@ -13,8 +13,8 @@ template in the current template, but make some other chunk
 dependent on whether or not the included template returned
 something.</p>
 <p>This is useful if, say, you want to wrap the template with some
-HTML, for example, a frame in a portal, but if there's nothing to
-show, you don't want to show the frame either.</p>
+HTML, for example, a frame in a portal, but if there&#39;s nothing
+to show, you don&#39;t want to show the frame either.</p>
 <h3>Usage</h3>
 <pre>
 &lt;include-optional src="blog-months"&gt;

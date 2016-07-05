@@ -3,6 +3,7 @@
 <property name="doc(title)">Templating System: Installation</property>
 <master>
 <h2>Installation</h2>
+<strong><a href="index">Templating System</a></strong>
 <p>The templating system may be used alone or in conjunction with
 version 4.0 or greater of the ArsDigita Community System (ACS). The
 following instructions apply to a standalone installation only.</p>
@@ -26,12 +27,13 @@ $ gunzip -c ats.tar.gz | tar xvf -
 <p>The distribution consists of four subdirectories:</p>
 <ol>
 <li>
-<strong><kbd>demo</kbd></strong>: A set of sample templates and supporting
-files.</li><li>
-<strong><kbd>doc</kbd></strong>: Documentation and tutorials.</li><li>
+<strong><kbd>demo</kbd></strong>: A set of sample templates and
+supporting files.</li><li>
+<strong><kbd>doc</kbd></strong>: Documentation and
+tutorials.</li><li>
 <strong><kbd>tcl</kbd></strong>: The Tcl module.</li><li>
-<strong><kbd>resources</kbd></strong>: Sitewide style templates for forms
-and error messages and associated assets.</li>
+<strong><kbd>resources</kbd></strong>: Sitewide style templates
+for forms and error messages and associated assets.</li>
 </ol>
 <p>You can also untar (or check out) the distribution somewhere
 else and symlink it under your page root. (If you do not wish to
@@ -42,8 +44,8 @@ configuration options below).</p>
 For AOLserver to load the module source code, you must move, copy
 or symlink the <kbd>tcl</kbd> directory in the templating system
 distribution to the private Tcl library of your AOLserver
-installation (as indicated by the <kbd>Library</kbd> parameter in the
-<kbd>ns/server/myserver/tcl</kbd> section of the AOLserver
+installation (as indicated by the <kbd>Library</kbd> parameter in
+the <kbd>ns/server/myserver/tcl</kbd> section of the AOLserver
 configuration file):</p>
 <pre>
 $ cd /web/myserver/tcl
@@ -69,8 +71,8 @@ ns_param   nslog           nslog.so
 <p>Note that you should replace <kbd>ats</kbd> with whatever you
 named the directory or symlink for the templating code within your
 private Tcl library.</p>
-<p>You will also need to ensure that the "fancy" ADP parser is the
-default:</p>
+<p>You will also need to ensure that the "fancy" ADP
+parser is the default:</p>
 <pre>
 [ns/server/<em>yourserver</em>/adp]
 Map=/*.adp
@@ -87,10 +89,11 @@ AOLserver configuration file in the
 <tr>
 <td><kbd>DatabaseInterface</kbd></td><td>Specifies the set of procedures to use for accessing a
 relational database from the templating system. Two interfaces are
-supplied with the system: <kbd>oracle</kbd> (uses the <kbd>ns_ora</kbd>
-API in conjunction with the AOLserver Oracle driver) and
-<kbd>generic</kbd> (uses the <kbd>ns_db</kbd> API in conjunction with
-any AOLserver RDBMS driver). The default is <kbd>Oracle</kbd>.</td>
+supplied with the system: <kbd>oracle</kbd> (uses the
+<kbd>ns_ora</kbd> API in conjunction with the AOLserver Oracle
+driver) and <kbd>generic</kbd> (uses the <kbd>ns_db</kbd> API in
+conjunction with any AOLserver RDBMS driver). The default is
+<kbd>Oracle</kbd>.</td>
 </tr><tr>
 <td><kbd>ShowCompiledTemplatesP</kbd></td><td>Enables a filter on the <kbd>cmp</kbd> extension so that the
 compiled Tcl code for any template may be viewed in a browser for

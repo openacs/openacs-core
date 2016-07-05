@@ -64,8 +64,8 @@ order:</p><table cellpadding="2" cellspacing="0" border="1" bgcolor="#EEEEEE">
 </tr>
 </table>
 </li><li>
-<p>The <kbd>\@datasource.row\@</kbd> variable can be used to band grid
-rows:</p><pre>
+<p>The <kbd>\@datasource.row\@</kbd> variable can be used to band
+grid rows:</p><pre>
   &lt;if \@datasource.col\@ eq 1 and \@datasource.row\@ odd&gt;
     &lt;tr bgcolor="#eeeeee"&gt;
   &lt;/if&gt;
