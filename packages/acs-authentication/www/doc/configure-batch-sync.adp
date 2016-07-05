@@ -54,8 +54,8 @@ incremental file record looks like:</p><pre class="programlisting">
   &lt;/sourcedid&gt;
   &lt;/person&gt;
 &lt;/enterprise&gt;
-</pre><p>A snapshot file is similar but doesn't have recstatus, since
-it's not a delta but a list of valid records. See the larger
+</pre><p>A snapshot file is similar but doesn&#39;t have recstatus, since
+it&#39;s not a delta but a list of valid records. See the larger
 example in the design document for more details.</p><p>(More information: <a href="ims-sync-driver-design" title="IMS Sync driver design">the section called “IMS Sync driver
 design”</a>, <a href="http://www.imsproject.org/enterprise/" target="_top">The IMS 1.1 spec</a>)</p>
 </li>
