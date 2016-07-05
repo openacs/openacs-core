@@ -153,7 +153,9 @@ ad_proc -private permission::permission_p_not_cached {
     # We have a thread-local cache here
     global permission__permission_p__cache
     if { ![info exists permission__permission_p__cache($party_id,$object_id,$privilege)] } {
-        set permission__permission_p__cache($party_id,$object_id,$privilege) [expr {[db_exec_plsql select_permission_p {}] ? 1 : 0 }]
+        set permission__permission_p__cache($party_id,$object_id,$privilege) [db_string select_permission_p {
+            select acs_permission.permission_p(:object_id, :party_id, :privilege) from dual
+        }]
     }
     return $permission__permission_p__cache($party_id,$object_id,$privilege)
 }
@@ -268,7 +270,6 @@ ad_proc -public permission::require_write_permission {
 
     @param creation_user Optionally specify creation_user directly as an optimization. 
                          Otherwise a query will be executed.
-
     @param party_id      The party to have or not have write permission.
 
     @see permission::write_permission_p
@@ -277,6 +278,21 @@ ad_proc -public permission::require_write_permission {
         ad_return_forbidden  "Permission Denied"  "You don't have permission to $action this object."
         ad_script_abort
     } 
+}
+
+ad_proc -public permission::get_parties_with_permission {
+    {-object_id:required}
+    {-privilege "admin"}
+} {
+    Return a list of lists of party_id and acs_object.title,
+    having a given privilege on the given object
+
+    @param obect_id 
+    @param privilege
+
+    @see permission::permission_p
+} {
+    return [db_list_of_lists get_parties {}]
 }
 
 

@@ -1,14 +1,35 @@
+--
+-- The DO statement is used to allow this script to be run multiple
+-- times without raising exceptions
+--
 
---
--- Use a better name for attribute "tag" in party_approved_member_map
--- 
-alter table party_approved_member_map rename tag to originating_rel_id;
+DO $$
+DECLARE
+	v_found boolean;
+BEGIN
+	--
+	-- Was the column already renamed?
+	--
+	SELECT exists(
+	   SELECT column_name 
+	   FROM information_schema.columns 
+	   WHERE table_name = 'party_approved_member_map' and column_name = 'originating_rel_id'
+        ) INTO v_found;
 
---
--- Create an "identity relationship"
---
-select acs_object__new(-10, 'relationship') from dual;
-insert into acs_rels (rel_id, rel_type, object_id_one, object_id_two) values (-10, 'relationship', 0, 0);
+	if v_found IS FALSE then
+	   --
+	   -- Use a better name for attribute "tag" in party_approved_member_map
+	   -- 
+	   alter table party_approved_member_map rename tag to originating_rel_id;
+
+	   --
+	   -- Create an "identity relationship"
+	   --
+	   select acs_object__new(-10, 'relationship') from dual;
+	   insert into acs_rels (rel_id, rel_type, object_id_one, object_id_two) values (-10, 'relationship', 0, 0);
+
+	end if;
+END$$;
 
 --
 -- Use the new identity relation instead of value "0"
@@ -27,15 +48,37 @@ where originating_rel_id in
 except select rel_id from acs_rels);
 
 --
--- Add a foreign key
+-- Add a foreign key ...
+-- ... and let the script run multiple times...
 --
-alter table party_approved_member_map
+ALTER TABLE party_approved_member_map
+DROP CONSTRAINT IF EXISTS party_member_rel_id_fk;
+
+ALTER TABLE party_approved_member_map
 ADD CONSTRAINT party_member_rel_id_fk foreign key (originating_rel_id)
 references acs_rels on delete cascade;
 
--- speed up referential integrity
-create index party_member_party_idx on party_approved_member_map(party_id);
-create index party_member_originating_idx on party_approved_member_map(originating_rel_id);
+
+DO $$
+DECLARE
+	v_found boolean;
+BEGIN
+	--
+	-- Was the index already created?
+	--
+	SELECT exists(
+	   SELECT relname from pg_class
+	   WHERE relname ='party_member_party_idx'
+	) into v_found;
+	
+	if v_found IS FALSE then
+	   --
+	   -- speed up referential integrity
+	   --
+	   create index party_member_party_idx on party_approved_member_map(party_id);
+	   create index party_member_originating_idx on party_approved_member_map(originating_rel_id);
+	end if;
+END$$;
 
 
 --

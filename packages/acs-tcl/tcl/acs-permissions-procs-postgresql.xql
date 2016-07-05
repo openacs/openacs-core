@@ -24,8 +24,7 @@
 
     <fullquery name="permission::require_permission.name">      
         <querytext>
-            select acs_object__name(:object_id)
-            from dual
+            select acs_object__name(:object_id) from dual
         </querytext>
     </fullquery>
 
@@ -37,11 +36,12 @@
         </querytext>
     </fullquery>
 
-    <fullquery name="permission::permission_p_not_cached.select_permission_p">
-        <querytext>
-            select acs_permission__permission_p(:object_id, :party_id, :privilege)
-        </querytext>
+    <fullquery name="permission::get_parties_with_permission.get_parties">
+      <querytext>
+        select distinct o.title, p.party_id
+        from acs_permission.parties_with_object_privilege(:object_id, :privilege) p, acs_objects o
+        where p.party_id = o.object_id
+      </querytext>
     </fullquery>
-
-
+    
 </queryset>

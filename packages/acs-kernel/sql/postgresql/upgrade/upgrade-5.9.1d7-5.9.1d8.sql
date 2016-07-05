@@ -6,6 +6,7 @@
 --
 -- procedure acs_permission__permission_p/3
 --
+DROP FUNCTION IF EXISTS acs_permission__permission_p(integer, integer, varchar);
 CREATE OR REPLACE FUNCTION acs_permission__permission_p(
        permission_p__object_id integer,
        permission_p__party_id  integer,
@@ -57,7 +58,7 @@ $$ LANGUAGE plpgsql stable;
 --
 -- procedure acs_permission__permission_p_recursive_array/3
 --
-
+DROP FUNCTION IF EXISTS acs_permission__permission_p_recursive_array(integer[], integer, varchar);
 CREATE OR REPLACE FUNCTION  acs_permission__permission_p_recursive_array(
        permission_p__objects   integer[],
        permission_p__party_id  integer, 
