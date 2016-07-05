@@ -780,6 +780,7 @@ ad_proc -public subsite::get_theme_options {} {
     return $master_theme_options
 }
 
+
 ad_proc -public subsite::set_theme {
     -subsite_id
     {-theme:required}
@@ -795,6 +796,8 @@ ad_proc -public subsite::set_theme {
     if { ![info exists subsite_id] } {
         set subsite_id [ad_conn subsite_id]
     }
+
+    set old_theme [subsite::get_theme -subsite_id $subsite_id]
 
     db_1row get_theme_paths {}
 
@@ -818,7 +821,27 @@ ad_proc -public subsite::set_theme {
         -value $resource_dir
     parameter::set_value -parameter StreamingHead -package_id $subsite_id \
         -value $streaming_head
+
+    
+    callback subsite::theme_changed \
+        -subsite_id $subsite_id \
+        -old_theme $old_theme \
+        -new_theme $theme
 }
+
+ad_proc -public -callback subsite::theme_changed {
+    -subsite_id:required
+    -old_theme:required
+    -new_theme:required
+} {
+
+    Callback for executing code after the subsite theme has been send changed
+    
+    @param subsite_id subsite, of which the theme was changed
+    @param old_theme the old theme
+    @param new_theme the new theme
+} -
+
 
 ad_proc -public subsite::save_theme_parameters_as_default {
     -subsite_id
