@@ -7,7 +7,7 @@
   <querytext>
     SELECT exists (
        SELECT 1 FROM information_schema.schemata
-       WHERE schema_name = : schema_name
+       WHERE schema_name = :schema_name
     )
   </querytext>
 </fullquery>
