@@ -24,8 +24,7 @@
            sum([join $privs "_p + "]_p) as any_perm_p_
     from   (select grantee_id,
                    [join $from_all_clauses ", "]
-            from   acs_permissions_all
-            where  object_id = :object_id
+            from   acs_permission.permissions_all(:object_id)
             union all
             select grantee_id,
                    [join $from_direct_clauses ", "]
