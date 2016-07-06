@@ -724,10 +724,8 @@ CREATE OR REPLACE FUNCTION acs_permission__permission_p_recursive_array(
        p_party_id  integer, 
        p_privilege varchar
 ) RETURNS table (object_id integer, orig_object_id integer) AS $$
-BEGIN
-  RETURN QUERY SELECT acs_permission.permission_p_recursive_array(p_objects, p_party_id, p_privilege);
-END; 
-$$ LANGUAGE plpgsql stable;
+  SELECT acs_permission.permission_p_recursive_array(p_objects, p_party_id, p_privilege);
+$$ LANGUAGE sql stable;
 
 
 select define_function_args('acs_permission__grant_permission','object_id,grantee_id,privilege');
