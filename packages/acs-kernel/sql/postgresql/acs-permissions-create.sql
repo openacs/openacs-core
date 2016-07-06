@@ -659,6 +659,16 @@ $$ LANGUAGE plpgsql stable;
 --
 -- procedure acs_permission.permissions_all/1
 --
+--    Return the permissions for an object from the object context
+--    hierarchy. The call
+--
+--         select * from acs_permission.permissions_all(:object_id)
+--
+--    is compatible with the old/Oracle call
+--
+--         select * from acs_permission_all where where object_id = :object_id
+--
+--
 CREATE OR REPLACE FUNCTION acs_permission.permissions_all(
        p_object_id integer
 ) RETURNS table (object_id integer, grantee_id integer, privilege varchar) AS $$
