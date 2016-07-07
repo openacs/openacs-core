@@ -1186,7 +1186,6 @@ $$ LANGUAGE plpgsql stable strict;
 
 
 
--- added
 select define_function_args('acs_group__member_p','party_id,group_id,cascade_membership');
 
 --
@@ -1199,19 +1198,24 @@ CREATE OR REPLACE FUNCTION acs_group__member_p(
 ) RETURNS boolean AS $$
 DECLARE
 BEGIN
-  if p_cascade_membership  then
+  if p_cascade_membership then
+    --
+    -- Direct and indirect memberships
+    --
     return count(*) > 0
       from group_member_map
-      where group_id = p_group_id and
-            member_id = p_party_id;
+      where group_id = p_group_id
+        and member_id = p_party_id;
   else
+    --
+    -- Only direct memberships
+    --
     return count(*) > 0
-      from acs_rels rels, acs_object_party_privilege_map perm
-    where perm.object_id = rels.rel_id
-           and perm.privilege = 'read'
-           and rels.rel_type = 'membership_rel'
-	   and rels.object_id_one = p_group_id
-           and rels.object_id_two = p_party_id;
+      from acs_rels rels
+    where rels.rel_type = 'membership_rel'
+      and rels.object_id_one = p_group_id
+      and rels.object_id_two = p_party_id
+      and acs_permission.permission_p(rels.rel_id, p_party_id, 'read');
   end if;
 END;
 $$ LANGUAGE plpgsql stable;
@@ -1278,18 +1282,9 @@ $$ LANGUAGE plpgsql;
 
 
 
--- show errors
-
-
 -- create or replace package body admin_rel
--- function new
 
--- old define_function_args('admin_rel__new','rel_id,rel_type;admin_rel,object_id_one,object_id_two,member_state;approved,creation_user,creation_ip')
--- new
 select define_function_args('admin_rel__new','rel_id;null,rel_type;admin_rel,object_id_one,object_id_two,member_state;approved,creation_user;null,creation_ip;null');
-
-
-
 
 --
 -- procedure admin_rel__new/7
@@ -1327,9 +1322,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- function new
-
-
 --
 -- procedure admin_rel__new/2
 --
@@ -1354,10 +1346,8 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- procedure delete
 
 
--- added
 select define_function_args('admin_rel__delete','rel_id');
 
 --
