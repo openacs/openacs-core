@@ -25,7 +25,7 @@ BEGIN
 	   --
 	   -- Create an "identity relationship"
 	   --
-	   select acs_object__new(-10, 'relationship') from dual;
+	   perform acs_object__new(-10, 'relationship') from dual;
 	   insert into acs_rels (rel_id, rel_type, object_id_one, object_id_two) values (-10, 'relationship', 0, 0);
 
 	end if;
