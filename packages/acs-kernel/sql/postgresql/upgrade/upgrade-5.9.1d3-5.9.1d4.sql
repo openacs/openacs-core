@@ -14,7 +14,11 @@ BEGIN
 
    ELSE
 	-- verison earlier than 9.2, no "IF EXISTS"
-	drop view anon_func_seq;
+        select 1 from pg_views where viewname = 'anon_func_seq' into v_dummy;
+	IF v_dummy THEN
+	   drop view anon_func_seq;
+      	   ALTER SEQUENCE IF EXISTS t_anon_func_seq RENAME TO anon_func_seq;
+	END IF;
 
    END IF;
    return 1;
