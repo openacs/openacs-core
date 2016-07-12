@@ -411,7 +411,8 @@ ad_library {
      set kill_count 0
      foreach name $names {
          if { [regexp {^([0-9]+)\.} $name "" request]
-              && [expr {$request <= $max_request}] } {
+              && $request <= $max_request
+          } {
              incr kill_count
              nsv_unset ds_request $name
          }
