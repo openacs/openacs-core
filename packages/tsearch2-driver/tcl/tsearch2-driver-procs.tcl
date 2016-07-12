@@ -317,7 +317,7 @@ ad_proc -public tsearch2::seperate_query_and_operators {
     # match quotes
     set quote_count [regexp -all {\"} $query]
     # if quotes don't match, just remove all of them
-    if {[expr {$quote_count % 2}] == 1} {
+    if {$quote_count % 2 == 1} {
         regsub -all {\"} $query {} query
     }
 
