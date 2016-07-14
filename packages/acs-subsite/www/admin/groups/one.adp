@@ -26,7 +26,7 @@ Group Type: @group_type_pretty_name@
   </multiple>
  </else>
  <li> Join Policy: @join_policy@
-     <if @admin_p@ true">
+     <if @admin_p@ true>
          (<a href="change-join-policy?return_url=@return_url_enc@&amp;group_id=@group_id@">edit</a>)
      </if>
  <if @category_url@ not nil>
