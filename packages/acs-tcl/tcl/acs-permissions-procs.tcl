@@ -154,7 +154,7 @@ ad_proc -private permission::permission_p_not_cached {
     global permission__permission_p__cache
     if { ![info exists permission__permission_p__cache($party_id,$object_id,$privilege)] } {
         set permission__permission_p__cache($party_id,$object_id,$privilege) [db_string select_permission_p {
-            select acs_permission.permission_p(:object_id, :party_id, :privilege)::int from dual
+            select acs_permission.permission_p(:object_id, :party_id, :privilege)::integer from dual
         }]
     }
     return $permission__permission_p__cache($party_id,$object_id,$privilege)
