@@ -28,7 +28,7 @@ from (select DISTINCT rels.rel_id, object_id_two
         and rels.object_id_one = :group_id $extra_where_clauses) r, 
      party_names 
 where r.object_id_two = party_names.party_id
-and   acs_permission__permission_p(rels.rel_id, :user_id, 'read')         
+and   acs_permission.permission_p(r.rel_id, :user_id, 'read')         
 
 order by element_name
 
