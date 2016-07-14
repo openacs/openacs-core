@@ -96,14 +96,14 @@ template::list::create \
 	    display_template {
 		<if @nodes.instance_url@ eq "/">
   		    <input type="checkbox" name="checkbox" checked disabled>
-		    <input type="hidden" name="checkbox" value=@nodes.node_id@>
+		    <input type="hidden" name="checkbox" value="@nodes.node_id@">
 		</if>
 		<else>
 		    <if @nodes.view_p@ true>
-		        <input type="checkbox" name="checkbox" value=@nodes.node_id@ checked> 
+		        <input type="checkbox" name="checkbox" value="@nodes.node_id@" checked> 
 		    </if>
 		    <else>
-                        <input type="checkbox" name="checkbox" value=@nodes.node_id@ >  
+                        <input type="checkbox" name="checkbox" value="@nodes.node_id@" >  
 		    </else>
 		</else>
 	    }
