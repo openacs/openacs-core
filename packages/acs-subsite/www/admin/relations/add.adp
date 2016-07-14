@@ -5,7 +5,7 @@
 <blockquote>
 
 <if @party_id@ nil>
-  <if @allow_out_of_scope_p@ eq "f">
+  <if @allow_out_of_scope_p@ false>
     You can select an existing @object_type_two_name@ from this subsite below.
     <br>
     If the @object_type_two_name@ that you want to add as @role_pretty_name@

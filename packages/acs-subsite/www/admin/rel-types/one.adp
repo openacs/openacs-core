@@ -33,7 +33,7 @@
     </li>
    </multiple>
   </else>
-  <if @dynamic_p@ eq "t"> 
+  <if @dynamic_p@ true> 
     <li> <a href="../attributes/add?object_type=@rel_type_enc@&amp;return_url=@return_url_enc@">Add an attribute</a></li>
   </if><else>
     <li> Attributes can only be added by programmers since this object type is not dynamically created</li>
@@ -90,7 +90,7 @@
 
   <li> <a href="new-2?supertype=@rel_type_enc@">Create subtype</a>
 
-<if @dynamic_p@ eq "t"> 
+<if @dynamic_p@ true> 
   <li> <a href="delete?rel_type=@rel_type_enc@">Delete this relationship type</a>
 </if>
 

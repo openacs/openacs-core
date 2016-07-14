@@ -47,7 +47,7 @@
   </if>
 </ul>
 <ul>
-  <if @dynamic_p@ eq "t"> 
+  <if @dynamic_p@ true> 
       <li><a href="@add_attribute_url@" class="button">#acs-subsite.Add_an_attribute#</a></li>
   </if>
   <else>
@@ -79,7 +79,7 @@
 <h2>#acs-subsite.Administration#</h2>
 
 <ul>
-  <if @dynamic_p@ eq "t"> 
+  <if @dynamic_p@ true> 
 
       <li>#acs-subsite.Default_join_policy#: @default_join_policy@
            (<a href="change-join-policy?group_type=@group_type_enc@">#acs-subsite.edit#</a>)

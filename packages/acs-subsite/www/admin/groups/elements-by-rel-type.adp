@@ -31,7 +31,7 @@
       <ul>
         <li>#acs-subsite.Administration#
           <ul>
-            <if @create_p@ eq 1 and @rels.rel_type_valid_p@ eq 1>
+            <if @create_p@ true and @rels.rel_type_valid_p@ true>
               <li><a href="@relations_add_url@">Add @rels.role_pretty_name@</a> </li>
             </if>
             <li>Relational segment: 
@@ -42,7 +42,7 @@
                 <a href="../rel-segments/one?segment_id=@rels.segment_id@">@rels.segment_name@</a>
               </else>
             </li>
-            <if @admin_p@ eq "1">
+            <if @admin_p@ true>
               <li><a href="rel-type-remove?group_rel_id=@rels.group_rel_id@">Remove this relationship type</a></li>
             </if>
           </ul>

@@ -1,4 +1,4 @@
-<if @admin_p@ eq 1>
+<if @admin_p@ true>
 <if @ancestor_rel_type@ eq membership_rel>
     <multiple name="possible_member_states">
 
@@ -25,7 +25,7 @@
 <ol>
  <multiple name="rels">
   <li> <a href="../relations/one?rel_id=@rels.rel_id@">@rels.element_name@</a>
-  <if @delete_p@ eq 1>
+  <if @delete_p@ true>
     (<a href="../relations/remove?rel_id=@rels.rel_id@&amp;return_url=@return_url_enc@">remove</a>)
   </if>
   </li>

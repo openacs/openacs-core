@@ -19,14 +19,14 @@ Group Type: @group_type_pretty_name@
    </if><else>
       @attributes.value@
    </else>
-   <if @write_p@ eq 1>
+   <if @write_p@ true>
      (<a href="../attributes/edit-one?@attributes.export_vars@">edit</a>) 
    </if>
    </li>
   </multiple>
  </else>
  <li> Join Policy: @join_policy@
-     <if @admin_p@ eq "1">
+     <if @admin_p@ true">
          (<a href="change-join-policy?return_url=@return_url_enc@&amp;group_id=@group_id@">edit</a>)
      </if>
  <if @category_url@ not nil>
@@ -40,10 +40,10 @@ Group Type: @group_type_pretty_name@
 <h3>Permissible relationship types (subtypes of membership or composition rels)</h3>
 <include src="elements-by-rel-type" group_id="@group_id;literal@">
 
-<if @admin_p@ eq 1>
+<if @admin_p@ true>
   <h3>Extreme Actions</h3>
   <ul>
-    <li> <a href="delete?group_id=@group_id@">Nuke this group</a>
+    <li> <a href="delete?group_id=@group_id@" class="button">Nuke this group</a>
   </ul>
 </if>
 
