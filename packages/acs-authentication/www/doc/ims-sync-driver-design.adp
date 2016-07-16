@@ -195,7 +195,7 @@ article says that IMS Enterprise 1.1 (current version) does not
 address the communication model, which is critically missing for
 real seamless interoperability. IMS Enterprise 2.0 will address
 this, but Blackboard, who&#39;s influential in the IMS committee,
-is adopting OKI's programming interrfaces for this.</p></li><li><p><a href="http://www.cetis.ac.uk/content/20030717185453" target="_top">IMS and OKI, the wire and the socket</a></p></li>
+is adopting OKI&#39;s programming interrfaces for this.</p></li><li><p><a href="http://www.cetis.ac.uk/content/20030717185453" target="_top">IMS and OKI, the wire and the socket</a></p></li>
 </ul></div>
 </div>
 </div>
