@@ -83,16 +83,16 @@
   </table>
 
   <blockquote>
-    <div><b>&raquo;</b>
+    <div><strong>&raquo;</strong>
     <a href="rerun?package_key=@by_package_key@&amp;category=@by_category@&amp;view_by=@view_by@&amp;quiet=@quiet@&amp;stress=@stress@&amp;security_risk=@security_risk@"> Rerun displayed test cases</a>
     </div>
     <div>
-    <b>&raquo;</b>
+    <strong>&raquo;</strong>
     <a href="clear?package_key=@by_package_key@&amp;category=@by_category@&amp;view_by=@view_by@&amp;quiet=@quiet@&amp;stress=@stress@&amp;security_risk=@security_risk@"> Clear test result data</a>
     </div>
     <if @by_package_key@ ne "">
       <div>
-      <b>&raquo;</b>
+      <strong>&raquo;</strong>
       <a href="@record_url@"> Record a test</a>
       </div>
     </if>
@@ -181,16 +181,16 @@
 
   <blockquote>
     <div>
-    <b>&raquo;</b>
+    <strong>&raquo;</strong>
     <a href="rerun?package_key=@by_package_key@&amp;category=@by_category@&amp;view_by=@view_by@&amp;quiet=@quiet@&amp;stress=@stress@&amp;security_risk=@security_risk@"> Rerun displayed test cases</a>
     </div>
     <div>
-    <b>&raquo;</b>
+    <strong>&raquo;</strong>
     <a href="clear?package_key=@by_package_key@&amp;category=@by_category@&amp;view_by=@view_by@&amp;quiet=@quiet@&amp;stress=@stress@&amp;security_risk=@security_risk@"> Clear test result data</a> 
     </div>
     <if @by_package_key@ ne "">
       <div>
-      <b>&raquo;</b>
+      <strong>&raquo;</strong>
       <a href="@record_url@"> Record a test</a>
       </div>
     </if>

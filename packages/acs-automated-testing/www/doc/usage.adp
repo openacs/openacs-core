@@ -18,7 +18,7 @@ auto-rebuilding servers on test.openacs.org</p><div class="itemizedlist"><ul typ
 <li>
 <p>The master server shows the status of all other servers. For
 test.openacs.org, it listens on port 80.</p><div class="orderedlist"><ol type="1">
-<li><p>The acs-automated-testing parameter <tt class="computeroutput">IsInstallReportServer</tt> is set to 1</p></li><li><p>The acs-automated-testing parameter <tt class="computeroutput">XMLReportDir</tt> is set to <tt class="computeroutput">/var/log/openacs-install</tt>. This is arbitrary -
+<li><p>The acs-automated-testing parameter <kbd class="computeroutput">IsInstallReportServer</kbd> is set to 1</p></li><li><p>The acs-automated-testing parameter <kbd class="computeroutput">XMLReportDir</kbd> is set to <kbd class="computeroutput">/var/log/openacs-install</kbd>. This is arbitrary -
 it just needs to be somewhere all the servers can write to.</p></li>
 </ol></div>
 </li><li>
@@ -32,10 +32,10 @@ rebuilt, add this to /home/service1/install/install.tcl:</p><pre class="programl
 </li><li>
 <p>Get the results of the automated tests dumped where the master
 server can see them - in this example, the same directory as above,
-<tt class="computeroutput">/var/log/openacs-install</tt>, by adding
+<kbd class="computeroutput">/var/log/openacs-install</kbd>, by adding
 this to install.tcl (requires 5.1):</p><pre class="programlisting">
           set install_xml_file          "/var/lib/aolserver/service0/packages/acs-core-docs/www/files/install-autotest.xml"
-</pre><p>This will copy in the file <tt class="computeroutput">install-autotest.xml</tt>:</p><pre class="programlisting">
+</pre><p>This will copy in the file <kbd class="computeroutput">install-autotest.xml</kbd>:</p><pre class="programlisting">
 &lt;?xml version="1.0"?&gt;
 
 &lt;!-- This is an install.xml which can be used to configure servers for reporting their automated test results.  Requires acs-automated-testing 5.1.0b2 or better --&gt;
@@ -68,9 +68,9 @@ case $1 in
 esac
 
 sudo /home/$1/install/install.sh 2&gt;&amp;1
-</pre><p>and allow the <tt class="computeroutput">master</tt> user to
+</pre><p>and allow the <kbd class="computeroutput">master</kbd> user to
 execute this file as root (this is a limitation of the automatic
-install script, which must be root). In <tt class="computeroutput">/etc/sudoers</tt>, include a line:</p><pre class="programlisting">
+install script, which must be root). In <kbd class="computeroutput">/etc/sudoers</kbd>, include a line:</p><pre class="programlisting">
 master ALL = NOPASSWD: /usr/local/bin/rebuild-server.sh
 </pre>
 </li>

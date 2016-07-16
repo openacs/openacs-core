@@ -49,7 +49,7 @@
   </ul>
   
   <p>
-    <b>Results</b> 
+    <strong>Results</strong> 
     [<if @quiet@ eq "1">
       <strong> quiet </strong> | 
       <a href="@verbose_url@">verbose</a>

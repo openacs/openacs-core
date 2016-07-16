@@ -33,7 +33,7 @@
   <li>Test failures
     <if @has_test_report_p@>
       <if @testcase_failures:rowcount@ eq 0>
-        <i>none</i>
+        <em>none</em>
       </if>
       <else>
         <table>
