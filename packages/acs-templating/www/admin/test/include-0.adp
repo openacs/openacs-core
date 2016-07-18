@@ -1,4 +1,7 @@
 <html>
+<head>
+<title>Recursive include</title>
+</head>
   <body>
     <h2>
       Testcase for recursive <code>include</code> and <code>if</code>
