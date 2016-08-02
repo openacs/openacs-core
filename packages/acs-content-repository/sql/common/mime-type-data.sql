@@ -9,7 +9,7 @@
 --
 -- mapping of extension to mime type done later.
 
-insert into cr_mime_types (label,mime_type,file_extension) values ( 'Unkown'                  , '*/*'                           , '' );
+insert into cr_mime_types (label,mime_type,file_extension) values ( 'Unknown'                 , '*/*'                           , '' );
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'AutoCAD drawing files'   , 'application/acad'              , 'dwg' );
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'Andrew data stream'      , 'application/andrew-inset'      , 'ez' );
 insert into cr_mime_types (label,mime_type,file_extension) values ( 'ClarisCAD files'         , 'application/clariscad'         , 'ccad' );
