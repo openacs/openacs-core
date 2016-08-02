@@ -18,7 +18,13 @@ set context [list "All PL/SQL Subprograms"]
 # Organize the subprograms und types like FUNCTION, PROCEDURE, and
 # PACKAGE in oracle or FUNCTION in PostgresSQL
 #
-db_multirow all_subprograms all_subprograms {}
+db_multirow -extend { url label } all_subprograms all_subprograms {} {
+    set url [export_vars -base plsql-subprogram-one {type name}]
+    set label [string tolower $name]
+    if {$nargs > 0} {
+        append label /$nargs
+    }
+}
 
 # Local variables:
 #    mode: tcl

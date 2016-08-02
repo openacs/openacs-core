@@ -16,9 +16,13 @@ namespace eval ::apidoc {
         # NaviServer at sourceforge
         #
         set ns_api_host  "http://naviserver.sourceforge.net/"
-        set ns_api_index "n/naviserver/files/"
-        set ns_api_root ${ns_api_host}${ns_api_index}
-        set ns_api_html_index $ns_api_root/commandlist.html
+        set ns_api_index [list "n/naviserver/files/" "n/"]
+        set ns_api_root  [list \
+                              ${ns_api_host}[lindex $ns_api_index 0] \
+                              ${ns_api_host}[lindex $ns_api_index 1] ]
+        set ns_api_html_index [list \
+                                   [lindex $ns_api_root 0]commandlist.html \
+                                   [lindex $ns_api_root 1]toc.html ]
     } else {
         #
         # AOLserver wiki on panpotic
@@ -1144,6 +1148,35 @@ namespace eval ::apidoc {
             }
         }
         return $url
+    }
+
+    ad_proc -private get_doc_url {-cmd -index -root -host} {
+
+        foreach i $index r $root {
+            set result [util_memoize [list ::util::http::get -url $i]]
+            set page   [dict get $result page]
+
+            #
+            # Since man pages contain often a summary of multiple commands, try
+            # abbreviation in case the full name is not found (e.g. man page "nsv"
+            # contains "nsv_array", "nsv_set" etc.)
+            #
+            set url ""
+            for {set i [string length $cmd]} {$i > 1} {incr i -1} {
+                set proc [string range $cmd 0 $i]
+                set url [apidoc::search_on_webindex \
+                             -page $page \
+                             -root $r \
+                             -host $host \
+                             -proc $proc]
+                if {$url ne ""} {
+                    ns_log notice "=== cmd <$cmd> --> $url"
+                    return $url
+                }
+            }
+        }
+        ns_log notice "=== cmd <$cmd> not found on <$index> root <$root> host <$host>"
+        return ""
     }
 
     ad_proc -private pretty_token {kind token} {

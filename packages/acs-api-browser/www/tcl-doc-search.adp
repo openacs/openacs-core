@@ -6,7 +6,7 @@ Sorry, no Tcl procedures were found with that name.
 
 <p>
 
-You can try searching the <a href="@tcl_docs_url@">Tcl documentation</a> yourself.
+You can try searching the <a href="@tcl_docs_url;noi18n@">Tcl documentation</a> yourself.
 
 <p>
 
