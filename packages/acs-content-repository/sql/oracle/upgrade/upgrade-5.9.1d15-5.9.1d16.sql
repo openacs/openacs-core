@@ -2,6 +2,7 @@
 -- Update mime_type to official content type as registered by IANA.
 -- The changes have to be performed in a transaction, therefore the inline function.
 --
+
 create or replace function inline_0 (
     p_label in varchar,
     p_extension in varchar,
