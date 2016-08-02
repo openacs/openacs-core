@@ -6,7 +6,7 @@ Sorry, no <%= [ns_info name]%> Tcl API procedures were found with that name.
 
 <p>
 
-You can try searching the <a href="@apidoc::ns_api_html_index@"><%= [ns_info name]%> documentation</a> yourself.
+You can try searching the <a href="@doc_url;noi18n@"><%= [ns_info name]%> documentation</a> yourself.
 
 <p>
 
