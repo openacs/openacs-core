@@ -5,7 +5,7 @@
     </if>
     <if @comments:rowcount@ gt 0>
       <multiple name="comments">
-        <b>Comment:</b> <pre>@comments.text;noi18n@</pre><br>
+        <strong>Comment:</strong> <pre>@comments.text;noi18n@</pre><br>
       </multiple>
       <hr>
     </if>
@@ -17,7 +17,7 @@
           Faked user: @fake_user_name@ <if @fake_user_email@ not nil>(@fake_user_email@)</if> [user_id #@fake_user_id@] <a href="@unfake_url@">(Unfake)</a><br>
         </if>
         <else>
-          Faked user: <i>Not faking.</i><br>
+          Faked user: <em>Not faking.</em><br>
         </else>
         Change faked user: <if @search_p@ eq "0"><select name="user_id">
           <multiple name="users">

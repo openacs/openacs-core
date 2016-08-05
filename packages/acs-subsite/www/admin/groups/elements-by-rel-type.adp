@@ -7,7 +7,7 @@
 <else>
   <multiple name="rels">
 
-    <li><strong>@rels.role_pretty_plural@ (@rels.rel_type_pretty_name@)</strong>
+    <li><strong>@rels.rel_type@: @rels.role_pretty_plural@ (@rels.rel_type_pretty_name@)</strong>
 
       <group column="rel_type">
         <if @rels.num_rels@ nil>
