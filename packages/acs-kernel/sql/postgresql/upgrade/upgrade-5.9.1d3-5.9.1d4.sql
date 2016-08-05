@@ -13,7 +13,7 @@ BEGIN
 	END IF;
 
    ELSE
-	-- verison earlier than 9.2, no "IF EXISTS"
+	-- verison earlier than 9.2, no "IF EXISTS" for ALTER SEQUENCE
         select 1 from pg_views where viewname = 'anon_func_seq' into v_dummy;
 	IF found THEN
 	   drop view anon_func_seq;
