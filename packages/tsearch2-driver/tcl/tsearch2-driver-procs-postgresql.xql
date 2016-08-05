@@ -22,8 +22,7 @@
   <rdbms><type>postgresql</type><version>8.3</version></rdbms>
     <querytext>
       select txt.object_id
-      from
-      [join $from_clauses ","]
+      from [join $from_clauses ","]
       $base_query
       [expr {[llength $where_clauses] > 0 ? " and " : ""}]
       [join $where_clauses " and "]
@@ -35,13 +34,12 @@
   <fullquery name="callback::search::search::impl::tsearch2-driver.search">
   <rdbms><type>postgresql</type><version>8.4</version></rdbms>
     <querytext>
-        select distinct(orig_object_id) from acs_permission__permission_p_recursive_array(array(
-        select txt.object_id
-        from
-        [join $from_clauses ","]
-        $base_query
-        [expr {[llength $where_clauses] > 0 ? " and [join $where_clauses { and }]" : ""}]
-        order by ts_rank(fti,to_tsquery(:query)) desc
+        select distinct(orig_object_id) from acs_permission.permission_p_recursive_array(array(
+           select txt.object_id
+           from [join $from_clauses ","]
+           $base_query
+           [expr {[llength $where_clauses] > 0 ? " and [join $where_clauses { and }]" : ""}]
+           order by ts_rank(fti,to_tsquery(:query)) desc
         ), :user_id, 'read')
         $limit_clause $offset_clause
     </querytext>
@@ -51,8 +49,7 @@
   <rdbms><type>postgresql</type><version>8.3</version></rdbms>
     <querytext>
       select count(*)
-      from
-      [join $from_clauses ","]
+      from [join $from_clauses ","]
       $base_query
       [expr {[llength $where_clauses] > 0 ? " and [join $where_clauses { and }]" : ""}]
     </querytext>
@@ -63,8 +60,7 @@
     <querytext>
       select count(distinct(orig_object_id)) from acs_permission__permission_p_recursive_array(array(
       select txt.object_id
-      from
-      [join $from_clauses ","]
+      from [join $from_clauses ","]
       $base_query
       [expr {[llength $where_clauses] > 0 ? " and " : ""}]
       [join $where_clauses " and "]
