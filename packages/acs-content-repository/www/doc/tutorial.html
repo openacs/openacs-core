@@ -61,7 +61,7 @@
         and so on:</p>
 
       <blockquote><pre>
-          <B>Task</B>
+          <strong>Task</strong>
           Title
           Description
           Task Number
@@ -231,7 +231,7 @@
 
       <P>
    
-     <B>Side effect</B>: once you've created the content type, the
+     <strong>Side effect</strong>: once you've created the content type, the
      content repository creates a view for you called
      <code>pm_tasks_revisionsx</code>. Note the x at the end of the
      name. If you're using Postgres, I believe it will also create a
@@ -252,7 +252,7 @@
       you've added. Another nice thing is that all that messy business
       of defining your attributes through the API is taken care of.</p>
 
-      <p><I>Types</em> is the content repository are another term for
+      <p><em>Types</em> is the content repository are another term for
       tables, although that doesn't explain it completely. Types are
       also kept track of within OpenACS, in the
       <code>acs_object_types</code> table, so the system knows about
@@ -526,7 +526,7 @@ $$ language plpgsql;
 
 cr_items:
 <blockquote>
- <B>item_id</strong> - unique id for this item, will be different than the revision_id<BR>
+ <strong>item_id</strong> - unique id for this item, will be different than the revision_id<BR>
  <strong>parent_id</strong> - used to group items into a hierarchy (see below)<BR>
  <strong>name</strong> - this is used to make a URL by the content repository. It must be unique per content folder. You can use a number, or something like project_231. One way to do this is to set it equal to a title plus the item_id.<BR>
  <strong>locale</strong> - not sure, probably for internationalization support<BR>
@@ -568,7 +568,7 @@ The facility for this is built into the <code>cr_items</code> data model. This m
       Column      |          Type          |          Modifiers          
 ------------------+------------------------+-----------------------------
  item_id          | integer                | not null
- <B>parent_id</B>        | integer                | not null
+ <strong>parent_id</strong>        | integer                | not null
  name             | character varying(400) | not null
  locale           | character varying(4)   | 
  live_revision    | integer                | 

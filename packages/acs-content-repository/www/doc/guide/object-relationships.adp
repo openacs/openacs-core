@@ -52,7 +52,7 @@ of a particular content type that an item may have. You may
 optionally specify a "tag" for identifying child items of
 the same type. For example, you may want to allow only 1 image with
 the "featured" tag, and up to 8 other images without
-this.</li><li>A Boolean API function, <tt>content_item.is_valid_child</tt>,
+this.</li><li>A Boolean API function, <kbd>content_item.is_valid_child</kbd>,
 which checks all registered child constraints on the content type
 of an item and returns true if it is currently possible to add an
 child of a particular type to tan item. Note that this function
@@ -91,7 +91,7 @@ of <kbd>content_revision</kbd>) rather than simply
 <kbd>content_item</kbd>. As for parent-child relationship
 constraints, ou may optionally specify a "tag" for
 identifying related objects of the same type.</li><li>A Boolean API function,
-<tt>content_item.is_valid_relation</tt>, which checks all
+<kbd>content_item.is_valid_relation</kbd>, which checks all
 registered constraints on the content type of an item and returns
 true if it is currently possible to relate an object of a
 particular type to an item.</li><li>A mapping table, <kbd>cr_item_rels</kbd>, which contains two
