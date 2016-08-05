@@ -45,6 +45,40 @@ ad_proc -public core_docs_uninstalled_packages {} {
     return [util_memoize core_docs_uninstalled_packages_internal]
 }
 
+ad_proc -public core_docs_html_redirector {args} { 
+
+    Performs an internal redirect requests for .html-pages to .adp
+    pages if these exist.
+    
+    @author Gustaf Neumann
+} {
+    #
+    # There is no [ad_conn file] processed yet. Therefore, we have to
+    # compute the path (consider just the path after the package_url
+    # for file name construction).
+    #
+    set path    [string range [ad_conn url] [string length [ad_conn package_url]] end]
+    set html_fn [acs_package_root_dir [ad_conn package_key]]/www/$path
+    set adp_fn  [file root $html_fn].adp
+    
+    if {[file readable $adp_fn]} {
+        #
+        # Perform an internal redirect to the .adp file and stop the filter chain
+        #
+        #ns_log notice "===== core_docs_html_redirector <$args> url <[ad_conn url]> <[ad_conn file]> ADP exists"
+        
+        rp_internal_redirect -absolute_path $adp_fn 
+        return filter_break
+        
+    } else {
+        #
+        # Continue with business as usual
+        #
+        return filter_ok
+    }
+}
+
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
