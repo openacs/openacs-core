@@ -78,7 +78,9 @@ cvs -q</action></screen>
           </action></screen>
         </listitem>
         <listitem>
-          <para>Grant cvs access to the user account.  On any machine, in a temporary directory:</para>
+          <para>Grant cvs access to the user account.  On any machine,
+	  in a temporary directory:
+	  </para>
           <screen><action>cvs -d :ext:cvs.openacs.org:/cvsroot co CVSROOT
 cd CVSROOT
 emacs avail</action></screen>

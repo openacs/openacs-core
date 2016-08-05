@@ -857,7 +857,7 @@ and users with write permission on the Bug Tracker project (package instance) ma
 &lt;msg key="Fix_1"&gt;for&lt;/msg&gt;
 &lt;msg key="Fix_2"&gt;for Bugs&lt;/msg&gt;</programlisting>
 
-          <para>Another example: <computeroutput>Bug-tracker component maintainer"</computeroutput> was converted to <computeroutput>"[_ bug-tracker.Bug-tracker]"</computeroutput>.  Instead, it should be <computeroutput>bug_tracker_component_maintainer</computeroutput>.</para>
+          <para>Another example: <computeroutput>"Bug-tracker component maintainer"</computeroutput> was converted to <computeroutput>"[_ bug-tracker.Bug-tracker]"</computeroutput>.  Instead, it should be <computeroutput>bug_tracker_component_maintainer</computeroutput>.</para>
         </listitem>
 
         <listitem>

@@ -109,7 +109,7 @@ for dir in *; do ( cd $dir &amp;&amp; cvs tag -F <replaceable>openacs-5-0-compat
         <para>Note that for the compat tag we use the <action>-F</action> flag which will force the tag to the new version (just in 
           case someone has created the tag already on another version).  Excercise care when doing this since 
           you don&#39;t want to inadvertently move a prior release tag.  Also if the tagging goes horribly wrong 
-          for some reason you can delete the tag via "<command>cvs tag -d &lt;symbolic_tag&gt;</command>".</para>
+          for some reason you can delete the tag via <command>cvs tag -d &lt;symbolic_tag&gt;</command>.</para>
       </listitem>
           <listitem>
             <para>Apply the <computeroutput>final</computeroutput> tag across the tree.  First, check out the entire OpenACS tree, getting the most recent stable version of each package.  This is most simply done on openacs.org:</para>

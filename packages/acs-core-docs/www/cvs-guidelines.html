@@ -43,13 +43,36 @@
   To do so, create the file
         <code class="computeroutput">~/.cvsrc</code> with the contents:
       </p><pre class="screen"><span class="action"><span class="action">cvs -z6
-cvs -q</span></span></pre><p><code class="computeroutput">-z6</code> speeds up cvs access over the network quite a bit by enabling compressed
-        connection by default.  <code class="computeroutput">-q</code> suppresses some verbose output from commands.  For example, it makes the output of <code class="computeroutput">cvs up</code> much easier to read.</p><div class="sidebar"><div class="titlepage"><div><div><p class="title"><b></b></p></div></div></div><p>Administrator Note: These are the steps to grant CVS commit rights to a user:</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>Create the user&#39;s account.  On cvs.openacs.org:</p><pre class="screen"><span class="action"><span class="action">sudo bash
+cvs -q</span></span></pre>
+<p><code class="computeroutput">-z6</code> speeds up cvs access over the network quite a bit by enabling compressed
+connection by default.  <code class="computeroutput">-q</code> suppresses some verbose output from commands.  For example, it makes the output of <code class="computeroutput">cvs up</code> much easier to read.</p>
+<div class="sidebar"><div class="titlepage"><div><div><p class="title"><b></b></p>
+</div></div></div>
+<p>Administrator Note: These are the steps to grant CVS commit rights to a user:</p><div class="orderedlist">
+  <ol class="orderedlist" type="1">
+    <li class="listitem"><p>Create the user&#39;s account.  On cvs.openacs.org:</p><pre class="screen"><span class="action"><span class="action">sudo bash
 /usr/sbin/useradd -c "<span class="replaceable"><span class="replaceable">Real Name</span></span>" -G cvs -p <span class="replaceable"><span class="replaceable">passwd</span></span> <span class="replaceable"><span class="replaceable">username</span></span>
 /usr/sbin/usermod -G cvs,<span class="replaceable"><span class="replaceable">username</span></span> <span class="replaceable"><span class="replaceable">username</span></span>
-          </span></span></pre></li><li class="listitem"><p>Grant cvs access to the user account.  On any machine, in a temporary directory:</p><pre class="screen"><span class="action"><span class="action">cvs -d :ext:cvs.openacs.org:/cvsroot co CVSROOT
+    </span></span></pre></li>
+    <li class="listitem"><p>Grant cvs access to the user account.  On any machine, in a temporary directory:</p>
+    <pre class="screen"><span class="action"><span class="action">cvs -d :ext:cvs.openacs.org:/cvsroot co CVSROOT
 cd CVSROOT
-emacs avail</span></span></pre><p>Add an avail line of the form:</p><pre class="programlisting">avail|<span class="replaceable"><span class="replaceable">username</span></span>|openacs-4</pre><pre class="screen"><span class="action"><span class="action">cvs commit -m "added commit on X for username" avail</span></span></pre></li></ol></div></div><div class="sidebar"><div class="titlepage"><div><div><p class="title"><b></b></p></div></div></div><p>Branimir suggests an additional level of abstraction.  If you put</p><pre class="programlisting">Host cvs-server
+emacs avail</span></span></pre><p>Add an avail line of the form:</p>
+    <pre class="programlisting">avail|<span class="replaceable"><span class="replaceable">username</span></span>|openacs-4</pre>
+    <pre class="screen"><span class="action"><span class="action">cvs commit -m "added commit on X for username" avail</span></span></pre>
+    </li>
+  </ol>
+</div>
+</div>
+<div class="sidebar">
+<div class="titlepage">
+<div>
+<div>
+  <p class="title"><b></b></p>
+</div>
+</div>
+</div>
+<p>Branimir suggests an additional level of abstraction.  If you put</p><pre class="programlisting">Host cvs-server
       HostName cvs.openacs.org
       User <span class="replaceable"><span class="replaceable">yournamehere</span></span></pre><p>into your <code class="computeroutput">~/.ssh/config</code> file, then you can use <code class="computeroutput">-d :ext:cvs-server:/cvsroot</code> instead of <code class="computeroutput">-d :ext:cvs.openacs.org:/cvsroot</code>.  You can then change the definition of <code class="computeroutput">cvs-server</code> by changing one file instead of editing hundreds of <code class="computeroutput">CVSROOT/Repository</code> files.</p></div></div><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a name="idp140641348771376"></a>Checkout for Package Development</h4></div></div></div><p>If you are actively developing a non-core package, you
       should work from the latest core release branch.  Currently this

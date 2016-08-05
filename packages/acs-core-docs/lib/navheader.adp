@@ -64,7 +64,7 @@
     <span style="display:table-cell;text-align:left;width:20%;padding-left:20px;">
         <a accesskey="p" href="@leftLink@" class="arrow_box-left">@leftLabel@</a>
     </span>
-    <span style="display:table-cell;text-align:center;width:60%;"><b>@title@</b></span>
+    <span style="display:table-cell;text-align:center;width:60%;"><strong>@title@</strong></span>
     <span style="display:table-cell;text-align:right;width:20%;padding-right:20px;">
         <a accesskey="n" href="@rightLink@" class="arrow_box">@rightLabel@</a>
     </span>

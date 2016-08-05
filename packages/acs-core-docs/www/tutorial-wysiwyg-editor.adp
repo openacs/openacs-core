@@ -132,7 +132,7 @@ ad_page_contract {
         set return_url [ad_conn url]
 
         #ADP:
-        &lt;a href=configure?&lt;%=[export_vars -url {return_url}]%&gt;&gt;Configure&lt;/a&gt;
+        &lt;a href="configure?&lt;%=[export_vars" -url {return_url}]%&gt;&gt;Configure&lt;/a&gt;
         
 </pre>
 </div>

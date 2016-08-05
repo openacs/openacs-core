@@ -11,7 +11,7 @@
 <div><div><h1 class="title">
 <a name="idp140717547632592" id="idp140717547632592"></a>OpenACS Core Documentation</h1></div></div><hr>
 </div><div class="toc">
-<p><b>Table of Contents</b></p><dl class="toc">
+<p><strong>Table of Contents</strong></p><dl class="toc">
 <dt><span class="part"><a href="for-everyone">I. OpenACS For
 Everyone</a></span></dt><dd><dl>
 <dt><span class="chapter"><a href="general-documents">1. High
@@ -203,7 +203,7 @@ Update the translations</a></span></dt>
 </dl></dd><dt><span class="index"><a href="ix01">Index</a></span></dt>
 </dl>
 </div><div class="list-of-figures">
-<p><b>List of Figures</b></p><dl>
+<p><strong>List of Figures</strong></p><dl>
 <dt>4.1. <a href="how-do-I">Site
 Templates</a>
 </dt><dt>4.2. <a href="how-do-I">Granting
@@ -251,7 +251,7 @@ layout diagram</a>
 </dt>
 </dl>
 </div><div class="list-of-tables">
-<p><b>List of Tables</b></p><dl>
+<p><strong>List of Tables</strong></p><dl>
 <dt>2.1. <a href="install-steps">Default
 directories for a standard install</a>
 </dt><dt>2.2. <a href="individual-programs">Version
@@ -273,7 +273,7 @@ Localization Overview</a>
 </dt>
 </dl>
 </div><div class="list-of-examples">
-<p><b>List of Examples</b></p><dl><dt>12.1. <a href="variables">Getting
+<p><strong>List of Examples</strong></p><dl><dt>12.1. <a href="variables">Getting
 datetime from the database ANSI-style</a>
 </dt></dl>
 </div>
