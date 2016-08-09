@@ -7,10 +7,10 @@
   <initial-install-p>t</initial-install-p>
   <singleton-p>t</singleton-p>
 
-  <version name="5.9.1d20" url="http://openacs.org/repository/download/apm/acs-content-repository-5.9.1d20.apm">
+  <version name="5.9.1d21" url="http://openacs.org/repository/download/apm/acs-content-repository-5.9.1d21.apm">
     <owner url="http://openacs.org">OpenACS</owner>
     <summary>The canonical repository for OpenACS content.</summary>
-    <release-date>2015-10-04</release-date>
+    <release-date>2016-08-08</release-date>
     <vendor url="http://openacs.org">OpenACS</vendor>
     <description format="text/html">Provides the API for creating and managing user generated content including 
          full support for versioning, rendering content to the filesystem, folders and composite content items, and
@@ -19,7 +19,7 @@
     <license>GPL</license>
     <maturity>3</maturity>
 
-    <provides url="acs-content-repository" version="5.9.1d20"/>
+    <provides url="acs-content-repository" version="5.9.1d21"/>
     <requires url="acs-kernel" version="5.9.0"/>
     <requires url="acs-tcl" version="5.9.1d2"/>
     <requires url="acs-service-contract" version="5.9.0"/>
