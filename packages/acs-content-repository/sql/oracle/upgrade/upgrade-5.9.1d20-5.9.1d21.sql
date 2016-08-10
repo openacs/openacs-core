@@ -12,6 +12,8 @@ create or replace function inline_0 (
 return integer 
 as
 begin
+  v_extension_exists integer default 0;
+
   delete from cr_extension_mime_type_map where mime_type = p_old_mime_type;
 
   insert into cr_mime_types(label, mime_type, file_extension)
@@ -20,8 +22,12 @@ begin
 
   update cr_content_mime_type_map   set mime_type = p_new_mime_type where mime_type = p_old_mime_type;
   update cr_revisions               set mime_type = p_new_mime_type where mime_type = p_old_mime_type;
+  
+  select 1 into v_extension_exists 
+    from cr_extension_mime_type_map 
+    where extension = p_extension;
 
-  if exists (select 1 from cr_extension_mime_type_map where extension = p_extension) then
+  if v_extension_exists = 1 then
     update cr_extension_mime_type_map set mime_type = p_new_mime_type where extension = p_extension;
   else
     insert into cr_extension_mime_type_map (extension, mime_type)
