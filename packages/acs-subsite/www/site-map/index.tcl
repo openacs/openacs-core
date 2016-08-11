@@ -91,10 +91,10 @@ template::list::create \
 		    <a href="@nodes.instance_url@">@nodes.instance;noquote@</a>   
 		</else>
 		<if @nodes.expand_mode@ eq 1>
-		&nbsp;<a href="?@nodes.expand_url@#@nodes.node_id@"><img style="border:0" src="/resources/down.gif"></a>
+		&nbsp;<a href="@nodes.expand_url@#@nodes.node_id@"><img style="border:0" src="/resources/down.gif"></a>
 		</if>
 		<if @nodes.expand_mode@ eq 2>
-                &nbsp;<a href="?@nodes.expand_url@#@nodes.node_id@"><img style="border:0" src="/resources/up.gif"></a>
+                &nbsp;<a href="@nodes.expand_url@#@nodes.node_id@"><img style="border:0" src="/resources/up.gif"></a>
                 </if>
 
 		<if @nodes.action_type@ eq "new_folder">
@@ -144,7 +144,7 @@ db_foreach nodes_select {} {
     set parameters_url ""
     set permissions_url ""
 
-    if { [lsearch -exact $open_nodes $parent_id] == -1 && $parent_id ne "" && $mylevel > 2 } { continue } 
+    if { $parent_id ni $open_nodes && $parent_id ne "" && $mylevel > 2 } { continue } 
         
     if {$directory_p == "t"} {
 	set add_folder_url [export_vars -base . {expand:multiple root_id node_id {new_parent $node_id} {new_type folder}}]
@@ -211,7 +211,7 @@ db_foreach nodes_select {} {
 	
 	lappend urlvars "root_id=$root_id"
 	
-	set expand_url "[join $urlvars "&"]"
+	set expand_url [join $urlvars "&"]
     } else {
 	set expand_url ""
     }
@@ -225,7 +225,7 @@ db_foreach nodes_select {} {
 	if {$new_application == $node_id} {
 	    
 	    set action_type "new_app"
-	    set action_form_part "[export_vars -form {expand:multiple root_id node_id new_package_id}] [apm_application_new_checkbox]"
+	    set action_form_part [export_vars -form {expand:multiple root_id node_id new_package_id}] [apm_application_new_checkbox]
 	    
 	    #Generate a package_id for double click protection
 	    set new_package_id [db_nextval acs_object_id_seq]
