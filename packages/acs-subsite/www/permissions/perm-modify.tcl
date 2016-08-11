@@ -37,7 +37,6 @@ if { ![info exists perm_array([ad_conn user_id],admin)] } {
     set perm_array([ad_conn user_id],admin) add
 }
 
-set page "<ul>"
 
 db_transaction {
     db_foreach permissions_in_db {} {
@@ -62,12 +61,10 @@ db_transaction {
         
         switch -- $perm_array($elm) {
             remove {
-                db_exec_plsql remove {}
-                append page "<li>select acs_permission__revoke_permission($object_id, $party_id, $privilege)"
+                permission::revoke -party_id $party_id -object_id $object_id -privilege $privilege
             }
             add {
-                db_exec_plsql add {}
-                append page "<li>select acs_permission__grant_permission($object_id, $party_id, $privilege)"
+                permission::grant -party_id $party_id -object_id $object_id -privilege $privilege
             }
         }
     }
@@ -75,7 +72,6 @@ db_transaction {
     ad_return_complaint 1 "Ooops, looks like we screwed up. Sorry. $errmsg<p> $::errorInfo"
 }
 
-append page "</ul>"
 
 ad_returnredirect $return_url
 
