@@ -105,10 +105,10 @@ template::list::create \
                 <if @nodes.node_id@ ne -99999>
                   <a name="@nodes.node_id@">@nodes.tree_indent;noquote@</a>
                 <if @nodes.expand_mode@ eq 1>
-                  (<a href="@nodes.expand_url@#@nodes.node_id@">+</a>)
+                  (<a href="?@nodes.expand_url@#@nodes.node_id@">+</a>)
                 </if>
                 <if @nodes.expand_mode@ eq 2>
-                  (<a href="@nodes.expand_url@#@nodes.node_id@">-</a>)
+                  (<a href="?@nodes.expand_url@#@nodes.node_id@">-</a>)
                 </if>
                 <if @nodes.instance_url@ ne none>
                   <a href="@nodes.name_url@">@nodes.name;noquote@</a>

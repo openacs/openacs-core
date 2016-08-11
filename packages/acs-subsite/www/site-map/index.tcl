@@ -91,10 +91,10 @@ template::list::create \
 		    <a href="@nodes.instance_url@">@nodes.instance;noquote@</a>   
 		</else>
 		<if @nodes.expand_mode@ eq 1>
-		&nbsp;<a href="@nodes.expand_url@#@nodes.node_id@"><img style="border:0" src="/resources/down.gif"></a>
+		&nbsp;<a href="?@nodes.expand_url@#@nodes.node_id@"><img style="border:0" src="/resources/down.gif"></a>
 		</if>
 		<if @nodes.expand_mode@ eq 2>
-                &nbsp;<a href="@nodes.expand_url@#@nodes.node_id@"><img style="border:0" src="/resources/up.gif"></a>
+                &nbsp;<a href="?@nodes.expand_url@#@nodes.node_id@"><img style="border:0" src="/resources/up.gif"></a>
                 </if>
 
 		<if @nodes.action_type@ eq "new_folder">
