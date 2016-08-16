@@ -254,10 +254,16 @@ ad_proc -public NsSettoTclString {set_id} {
     return $result
 }
 
-ad_proc -public get_referrer {} {
-    gets the Referer for the headers
-} { 
-    return [ns_set get [ns_conn headers] Referer]
+ad_proc -public get_referrer {-relative:boolean} {
+    @return referer from the request headers.
+    @param relative return the refer without protocol and host
+} {
+    set url [ns_set get [ns_conn headers] Referer]
+    if {$relative_p} {
+        # In case the referrer URL has a protocol and host remove it
+        regexp {^[a-z]+://[^/]+(/.+)$} $url . url
+    }
+    return $url
 }
 
 ##
