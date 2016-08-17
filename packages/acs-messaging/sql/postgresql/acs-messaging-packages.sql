@@ -108,7 +108,7 @@ CREATE OR REPLACE FUNCTION acs_message__new(
    p_creation_ip varchar,   --default null,
    p_object_type varchar,   --default 'acs_message',
    p_is_live boolean,       --default 't'
-   p_package_id integer
+   p_package_id integer      default null
 
 ) RETURNS integer AS $$
 DECLARE
@@ -145,23 +145,23 @@ DECLARE
         end if;
 
         v_message_id := content_item__new (
-            v_rfc822_id,			  -- name           
-            p_parent_id,			  -- parent_id      
-            p_message_id,			  -- item_id        
-            null,				  -- locale
-            p_creation_date,			  -- creation_date  
-            p_creation_user,			  -- creation_user  
-            p_context_id,			  -- context_id     
-            p_creation_ip,			  -- creation_ip    
-            p_object_type,			  -- item_subtype   
-            'acs_message_revision',		  -- content_type   
-            null,				  -- title
-            null,				  -- description
-            'text/plain',			  -- mime_type
-            null,				  -- nls_language
-            null,				  -- text
-            'text',				  -- storage_type
-            p_package_id
+            v_rfc822_id,			  -- 1   name           
+            p_parent_id,			  -- 2   parent_id      
+            p_message_id,			  -- 3   item_id        
+            null,				  -- 4   locale
+            p_creation_date,			  -- 5   creation_date  
+            p_creation_user,			  -- 6   creation_user  
+            p_context_id,			  -- 7   context_id     
+            p_creation_ip,			  -- 8   creation_ip    
+            p_object_type,			  -- 9   item_subtype   
+            'acs_message_revision',		  -- 10  content_type   
+            null,				  -- 11  title
+            null,				  -- 12  description
+            'text/plain',			  -- 13  mime_type
+            null,				  -- 14  nls_language
+            null,				  -- 15  text
+            'text',				  -- 16  storage_type
+            p_package_id                          -- 17  package_id
         );
 
         insert into acs_messages 
@@ -186,55 +186,6 @@ DECLARE
         return v_message_id;
 END;
 $$ LANGUAGE plpgsql;
-
-
-
---
--- procedure acs_message__new/16
---
-CREATE OR REPLACE FUNCTION acs_message__new(
-   p_message_id integer,    --default null,
-   p_reply_to integer,      --default null,
-   p_sent_date timestamptz, --default sysdate,
-   p_sender integer,        --default null,
-   p_rfc822_id varchar,     --default null,
-   p_title varchar,         --default null,
-   p_description varchar,   --default null,
-   p_mime_type varchar,     --default 'text/plain',
-   p_text text,             --default null,
-   p_data integer,          --default null,
-   p_parent_id integer,     --default 0,
-   p_context_id integer,
-   p_creation_user integer, --default null,
-   p_creation_ip varchar,   --default null,
-   p_object_type varchar,   --default 'acs_message',
-   p_is_live boolean        --default 't'
-
-) RETURNS integer AS $$
-DECLARE
-        p_creation_date timestamptz := current_timestamp;  -- alias for $13 --default sysdate,
-BEGIN
-    return acs_message__new (p_message_id,
-                             p_reply_to,
-                             p_sent_date,
-                             p_sender,
-                             p_rfc822_id,
-                             p_title,
-                             p_description,
-                             p_mime_type,
-                             p_text,
-                             p_data,
-                             p_parent_id,
-                             p_context_id,
-                             p_creation_user,
-                             p_creation_ip,
-                             p_object_type,
-                             p_is_live,
-                             null::integer
-   );
-END;
-$$ LANGUAGE plpgsql;
-
 
 
 -- added
