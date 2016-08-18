@@ -636,7 +636,7 @@ ad_proc -private lang::conn::get_accept_language_header {} {
         # Get rid of trailing ;q=0.5 part and trim spaces
         set elm [string trimleft [lindex [split $elm ";"] 0] " "]
         # Ignore the default catchall setting "*"
-        if {$elem eq "*"} {
+        if {$elm eq "*"} {
             continue
         }
         # elm is now either like 'da' or 'en-us'
