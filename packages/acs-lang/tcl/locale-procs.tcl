@@ -633,9 +633,12 @@ ad_proc -private lang::conn::get_accept_language_header {} {
     # acclang is something like 'da,en-us;q=0.8,es-ni;q=0.5,de;q=0.3'
     set acclangv [list]
     foreach elm [split $acclang ","] {
-        # Get rid of trailing ;q=0.5 part
-        set elm [lindex [split $elm ";"] 0]
-
+        # Get rid of trailing ;q=0.5 part and trim spaces
+        set elm [string trimleft [lindex [split $elm ";"] 0] " "]
+        # Ignore the default catchall setting "*"
+        if {$elem eq "*"} {
+            continue
+        }
         # elm is now either like 'da' or 'en-us'
         # make it into something like 'da' or 'en_US'
         set elmv [split $elm "-"]
