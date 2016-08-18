@@ -620,7 +620,7 @@ ad_proc -private lang::conn::browser_locale {} {
 ad_proc -private lang::conn::valid_locale_p {locale} {
     Check, of the provided locale is syntactically correct
 } {
-    return [regexp {^[a-zA-Z]+(_[a-zA-Z]+)?$} $locale]
+    return [regexp {^[a-zA-Z]+(_[a-zA-Z0-9]+)?$} $locale]
 }
 
 ad_proc -private lang::conn::get_accept_language_header {} {
