@@ -286,7 +286,7 @@ ad_proc tsearch2::build_query { -query } {
         regsub {([-/@.\d\w\(\)])\s+?([-/@.\d\w\(\)])} $query {\1 \& \2} query
     }
     # if a ! is by itself then prepend &
-    regsub {(\w+?)\s*(!)} $query {\1 \& !} query
+    regsub -all {(\w+?)\s*(!)} $query {\1 \& !} query
     # if there is )( then insert an & between them 
     # or if there is )\w or \w( insert an & between them
     regsub {(\))([\(\w])} $query {\1 \& \2} query
