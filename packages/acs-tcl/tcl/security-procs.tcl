@@ -1740,9 +1740,14 @@ ad_proc -public security::locations {} {
         append insecure_location ":$insecure_port"
         set host_map_http_port ":$insecure_port"
     }
+    lappend locations $insecure_location
 
-    # secure location, favoring nsopenssl
-    # nsopenssl 3 has variable locations for the secure port, openacs standardized at:
+    # Now obtain information about secure locations, favoring
+    # nsopenssl, and then check for nsssl and nsssle.
+    #
+    # nsopenssl 3 has variable locations for the secure
+    # port, openacs standardized at:
+    
     if { $sdriver eq "nsopenssl" } {
         set secure_port [ns_config -int "ns/server/[ns_info server]/module/$sdriver/ssldriver/users" port 443]
     } elseif { $sdriver ne "" } {
@@ -1760,7 +1765,13 @@ ad_proc -public security::locations {} {
         set secure_port ""
     }
 
-    lappend locations $insecure_location
+    if {$secure_port == 0} {
+        # port == 0 means, that the driver is loaded, but the server
+        # is not listing on this port. Therefore, we ignore the fact
+        # that the ssl driver is loaded
+        set sdriver ""
+    }
+    
     # if we have a secure location, add it
     set host_map_https_port ""
 
