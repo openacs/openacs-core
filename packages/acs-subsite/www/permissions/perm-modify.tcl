@@ -33,7 +33,7 @@ foreach elm $perm {
 }
 
 # Don't want them to remove themselves as admins
-if { ![info exists perm_array([ad_conn user_id],admin)] } {
+if { ![info exists perm_array([ad_conn user_id],admin)] && ![acs_user::site_wide_admin_p] } {
     set perm_array([ad_conn user_id],admin) add
 }
 
