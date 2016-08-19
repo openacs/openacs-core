@@ -853,7 +853,10 @@ ad_proc rp_report_error {
 }
 
 ad_proc -private rp_path_prefixes {path} {
-    Returns all the prefixes of a path ordered from most to least specific.
+    
+    Returns all the prefixes of a path ordered from most to least
+    specific.
+    
 } {
     if {[string index $path 0] ne "/"} {
         set path "/$path"
@@ -876,8 +879,8 @@ ad_proc -private rp_path_prefixes {path} {
 
 ad_proc -private rp_handler {} {
 
-    The request handler, which responds to absolutely every HTTP request made to
-    the server.
+    The request handler, which responds to absolutely every HTTP
+    request made to the server.
 
 } {
 
@@ -1669,19 +1672,34 @@ ad_proc ad_port {} {
 namespace eval ::acs {}
 
 ad_proc root_of_host {host} {
+    
     Maps a hostname to the corresponding sub-directory.
+    
 } {
     set key ::acs::root_of_host($host)
     if {[info exists $key]} {return [set $key]}
-    set $key [root_of_host1 $host]
+    set $key [root_of_host_noncached $host]
 }
 
-proc root_of_host1 {host} {
+ad_proc -private root_of_host_noncached {host} {
+
+    Helper function for root_of_host, which performs the actual work.
+    
+} {
+    #
     # The main hostname is mounted at /.
-    if { $host eq [ns_config ns/server/[ns_info server]/module/nssock Hostname] } {
-        return ""
+    #
+    foreach driver {nssock nsssl} {
+        set driver_section [ns_driversection -driver $driver]
+        set configured_hostname [ns_config $driver_section hostname]
+        if { $host eq $configured_hostname } {
+            return ""
+        }
     }
+
+    #
     # Other hostnames map to subsites.
+    #
     set node_id [util_memoize [list rp_lookup_node_from_host $host]]
 
     if {$node_id eq ""} {
