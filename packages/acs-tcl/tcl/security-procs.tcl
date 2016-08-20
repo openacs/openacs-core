@@ -1920,6 +1920,19 @@ ad_proc -public security::validated_host_header {} {
         set $key 1
         return $host
     }
+
+    #
+    # Handle aliases for locations, which cannot be determined from
+    # config files, but which are supposed to be ok.
+    #
+    if {$hostName eq "localhost"} {
+        #
+        # This is not an attempt, where someone tries to lure us to a
+        # different host via redirect.
+        #
+        set $key 1
+        return $host
+    }
     
     #
     # We could/should check as well against a white-list of additional
