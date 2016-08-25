@@ -348,8 +348,8 @@ ad_proc -public template::list::create {
             error "You cannot have bulk_actions without providing a key for list '$name'"
         }
         # Create the checkbox element
-        set label [subst {<input type="checkbox" name="_dummy" onclick="acs_ListCheckAll('$name', this.checked)"
-            onkeypress="acs_ListCheckAll('$name', this.checked)" title="[_ acs-templating.lt_Checkuncheck_all_rows]">}]
+        set label [subst {<input type="checkbox" name="_dummy" onclick="acs_ListCheckAll([ad_quotehtml $name], this.checked)"
+            onkeypress="acs_ListCheckAll([ad_quotehtml $name], this.checked)" title="[_ acs-templating.lt_Checkuncheck_all_rows]">}]
         if {[info exists ::__csrf_token]} {
             append label \n [subst {<input type="hidden" name="__csrf_token" value="$::__csrf_token">}]
         }
