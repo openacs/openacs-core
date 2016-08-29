@@ -103,11 +103,14 @@ incr maxlevel
 
 foreach element $hierarchy {
     lassign $element level privilege
-
-    lappend select_list [list "[string repeat "&nbsp;&nbsp;&nbsp;" $level] $privilege" $privilege]
+    lappend select_list [list "[string repeat {&nbsp;&nbsp;&nbsp;} $level] $privilege" $privilege]
 }
 
-ad_form -name grant -export {return_url} -form {
+ad_form \
+    -name grant \
+    -export {return_url} \
+    -has_submit 1 \
+    -form {
     {object_id:text(hidden)
         {value $object_id}
     }
