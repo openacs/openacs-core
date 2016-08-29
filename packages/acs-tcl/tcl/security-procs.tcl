@@ -588,8 +588,8 @@ ad_proc -public ad_redirect_for_registration {} {
 }
 
 ad_proc -public ad_get_login_url {
-    -authority_id
-    -username
+    {-authority_id ""}
+    {-username ""}
     -return:boolean
 } {
     
@@ -615,8 +615,10 @@ ad_proc -public ad_get_login_url {
         set url /
     }
 
-    set UseHostnameDomainforReg [parameter::get -package_id [apm_package_id_from_key acs-tcl] \
-                                     -parameter UseHostnameDomainforReg -default 0]
+    set UseHostnameDomainforReg [parameter::get \
+                                     -package_id [apm_package_id_from_key acs-tcl] \
+                                     -parameter UseHostnameDomainforReg \
+                                     -default 0]
     if { $UseHostnameDomainforReg } {
 
         # get config.tcl's hostname
@@ -624,8 +626,8 @@ ad_proc -public ad_get_login_url {
 
         set current_location [util_current_location]
         # if current domain and hostdomain are different (and UseHostnameDomain), revise url
-        if { ![string match -nocase "*${config_hostname}*" $current_location] } {
 
+        if { ![string match -nocase "*${config_hostname}*" $current_location] } {
             if { [string range $url 0 0] eq "/" } {
                 # Make the url fully qualified
                 if { [security::secure_conn_p] } {
@@ -665,11 +667,11 @@ ad_proc -public ad_get_login_url {
     append url "register/"
 
     set export_vars [list]
-    if { [info exists authority_id] && $authority_id ne "" } {
+    if { $authority_id ne "" } {
         lappend export_vars authority_id
         
     }
-    if { ([info exists username] && $username ne "") } {
+    if { $username ne "" } {
         lappend export_vars username
         
     }
@@ -1912,7 +1914,8 @@ ad_proc -public security::validated_host_header {} {
         ns_log Warning "host header field contains invalid characters: $host"
         return ""
     }
-    set result [db_list host_header_field_mapped {select 1 from host_node_map where host = :host}]
+    set result [db_list host_header_field_mapped {select 1 from host_node_map where host = :hostName}]
+    ns_log notice "checking entry <$hostName> from host_node_map -> $result"
     if {$result == 1} {
         #
         # port is ignored
