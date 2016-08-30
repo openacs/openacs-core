@@ -10,7 +10,11 @@ ad_library {
     @cvs-id $Id$
 }
 
-namespace eval security {}
+namespace eval security {
+    set log(login_url) debug    ;# notice
+    set log(login_cookie) debug ;# notice
+}
+
 
 # cookies (all are signed cookies):
 #   cookie                value                          max-age         secure
@@ -76,10 +80,12 @@ ad_proc -private sec_handler {} {
 } {
     ns_log debug "OACS= sec_handler: enter"
 
-    #foreach c [list ad_session_id ad_secure_token ad_user_login ad_user_login_secure] {
-    #    lappend msg "$c [ad_get_cookie $c]"
-    #}
-    #ns_log notice "OACS cookies: $msg"
+    if {$::security::log(login_cookie) ne "debug"} {
+        foreach c [list ad_session_id ad_secure_token ad_user_login ad_user_login_secure] {
+            lappend msg "$c [ad_get_cookie $c]"
+        }
+        ns_log notice "OACS [ns_conn url] cookies: $msg"
+    }
 
     if { [catch { 
         set cookie_list [ad_get_signed_cookie "ad_session_id"]
@@ -90,7 +96,7 @@ ad_proc -private sec_handler {} {
         # -> it expired.
 
         # Now check for login cookie
-        ns_log Debug "OACS: Not a valid session cookie, looking for login cookie '$errmsg'"
+        ns_log $::security::log(login_cookie) "OACS: Not a valid session cookie, looking for login cookie '$errmsg'"
         ad_user_logout
         sec_login_handler
     } else {
@@ -132,7 +138,7 @@ ad_proc -private sec_handler {} {
             }
         }
 
-        ns_log Debug "Security: Insecure session OK: session_id = $session_id, untrusted_user_id = $untrusted_user_id, auth_level = $auth_level, user_id = $user_id"
+        ns_log $::security::log(login_cookie) "Security: Insecure session OK: session_id = $session_id, untrusted_user_id = $untrusted_user_id, auth_level = $auth_level, user_id = $user_id"
 
         # We're okay, insofar as the insecure session, check if it's also secure
         if { $auth_level eq "ok" && [security::secure_conn_p] } {
@@ -144,7 +150,7 @@ ad_proc -private sec_handler {} {
                     set auth_level secure
                 }
             }
-            ns_log Debug "Security: Secure session checked: session_id = $session_id, untrusted_user_id = $untrusted_user_id, auth_level = $auth_level, user_id = $user_id"
+            ns_log $::security::log(login_cookie) "Security: Secure session checked: session_id = $session_id, untrusted_user_id = $untrusted_user_id, auth_level = $auth_level, user_id = $user_id"
         }
 
         # Setup ad_conn
@@ -621,13 +627,17 @@ ad_proc -public ad_get_login_url {
                                      -default 0]
     if { $UseHostnameDomainforReg } {
 
-        # get config.tcl's hostname
+        # Get config.tcl's hostname
         set config_hostname [ns_config [ns_driversection] hostname]
-
+        
         set current_location [util_current_location]
-        # if current domain and hostdomain are different (and UseHostnameDomain), revise url
+        util::split_location $current_location currentProto currentHost currentPort
+        
+        # if current domain and hostdomain are different (and UseHostnameDomain), rewrite url
 
-        if { ![string match -nocase "*${config_hostname}*" $current_location] } {
+        ns_log $::security::log(login_url) "ad_get_login_url: UseHostnameDomainforReg current_location <$current_location> <$config_hostname> ne <$currentHost>"
+        
+        if { $currentHost ne $config_hostname} {
             if { [string range $url 0 0] eq "/" } {
                 # Make the url fully qualified
                 if { [security::secure_conn_p] } {
@@ -638,31 +648,38 @@ ad_proc -public ad_get_login_url {
             } else {
                 set url_decoded $url
             }
-
-            # revise url to use hostname's domain
-            # if url points to a non / host_node, redirect to main hostname
+            #
+            # Rewrite url to use hostname's domain if url points to a
+            # non / host_node, redirect to main hostname
             set host_node_map_hosts_list [db_list -cache_key security-locations-host-names \
                                               get_node_host_names {select host from host_node_map}]
+
             if { [llength $host_node_map_hosts_list] > 0 } {
+
+                set restUrl ""
+                regexp {^(https?://[^/]+)(/.*)$} $url_decoded . currentLocation restUrl
+                util::split_location $url_decoded currentProto currentHost currentPort
+
                 foreach hostname $host_node_map_hosts_list {
-                    if { [string match -nocase "http://${hostname}*" $url_decoded] 
-                         || [string match -nocase "https://${hostname}*" $url_decoded] } {
-                        db_1row get_node_id_from_host_name {
-                            select node_id as host_node_id 
-                            from host_node_map 
-                            where host = :hostname
-                        }
-                        # site node already in url, so just switching domain.
-                        if { ![regsub -- "${hostname}" $url_decoded "${config_hostname}" url_decoded] } {
-                            ns_log Warning "ad_get_login_url(ref619): regsub was unable to modify url to hostname's domain. User may not appear to be logged-in after login. url_decoded: ${url_decoded} url: ${url}"
-                        } 
+                    if {$hostname eq $currentHost} {
+                        #
+                        # The provided hostname is in the host-node
+                        # map. Replace the hostname with the
+                        # configured hostname from the startup
+                        # file.
+                        #
+                        set url_decoded [util::join_location -proto $currentProto -hostname $config_hostname -port $currentPort]
+                        append url_decoded $restUrl
+                        ns_log $::security::log(login_url) "ad_get_login_url: site node already in url, so just switching domain to <$url_decoded>"
+                        # no need to iterate over all entries in host-node map
+                        break
                     }
                 }
             }
             set url $url_decoded
         }
     }
-
+    ns_log $::security::log(login_url) "ad_get_login_url: login_url without vars <$url>"
 
     append url "register/"
 
@@ -676,8 +693,11 @@ ad_proc -public ad_get_login_url {
         
     }
 
-    # We don't add a return_url if you're currently under /register, because that will frequently
-    # interfere with normal login procedure
+    #
+    # Don't add a return_url if you're currently under /register,
+    # because that will frequently interfere with normal login
+    # procedure.
+    #
     if { [ad_conn isconnected] && $return_p && ![string match "register/*" [ad_conn extra_url]] } {
         if { [security::secure_conn_p] || ![security::RestrictLoginToSSLP] } {
             set return_url [ad_return_url]
@@ -686,9 +706,11 @@ ad_proc -public ad_get_login_url {
         }
 
         if { $UseHostnameDomainforReg } {
-            # if current domain and hostdomain are different (and UseHostnameDomainforReg), revise return_url
-            if { ![string match -nocase "*${config_hostname}*" $current_location] } {
-                
+            # if current domain and hostdomain are different (and
+            # UseHostnameDomainforReg), rewrite return_url
+
+            if { $currentHost ne $config_hostname} {
+
                 if { [string range $return_url 0 0] eq "/" } {
                     # Make the return_url fully qualified
                     if { [security::secure_conn_p] } {
@@ -699,28 +721,40 @@ ad_proc -public ad_get_login_url {
                 } else {
                     set return_url_decoded $return_url
                 }
-                # revise return_url to use hostname's domain
-                # if return_url points to a non / host_node, redirect to main hostname
+
+                #
+                # Rewrite return_url to use hostname's domain if
+                # return_url points to a non / host_node, redirect to
+                # main hostname.
+                #
                 set host_node_map_hosts_list [db_list -cache_key security-locations-host-names \
                                                   get_node_host_names {select host from host_node_map}]
-                if { [llength $host_node_map_hosts_list] > 0 } {
+                if {[llength $host_node_map_hosts_list] > 0 } {
+
+                    set restUrl ""
+                    regexp {^(https?://[^/]+)(/.*)$} $return_url_decoded . returnLocation restUrl
+                    util::split_location $returnLocation returnProto returnHost returnPort
+
                     foreach hostname $host_node_map_hosts_list {
-                        if { [string match -nocase "http://${hostname}*" $return_url_decoded] \
-                                 || [string match -nocase "https://${hostname}*" $return_url_decoded] } {
+                        if {$hostname eq $returnHost} {
+                            ns_log notice "ad_get_login_url: map return-url to main site"
+                        
                             db_1row get_node_id_from_host_name {
                                 select node_id as host_node_id 
                                 from host_node_map 
                                 where host = :hostname
                             }
-                            if { ![regsub -- ${hostname} $return_url_decoded \
-                                       "${config_hostname}[site_node::get_url -node_id ${host_node_id} -notrailing]" \
-                                       return_url_decoded] } {
-                                ns_log Warning "ad_get_login_url(ref672): regsub was unable to modify return_url to hostname's domain. User may not appear to be logged-in after login. return_url_decoded: ${return_url_decoded} return_url: ${return_url}"
-                            } 
+                            set subsiteUrl [site_node::get_url -node_id ${host_node_id} -notrailing]
+                            set rUrl [util::join_location -proto $returnProto -hostname ${config_hostname} -port $returnPort]
+                            append rUrl $subsiteUrl $restUrl
+                            set return_url_decoded $rUrl
+                            # no need to iterate over all entries of host-node map
+                            break
                         }
                     }
                 }
                 set return_url $return_url_decoded
+                ns_log $::security::log(login_url) "ad_get_login_url: final return_url <$return_url>"
             }
         }
 
@@ -731,6 +765,7 @@ ad_proc -public ad_get_login_url {
     if { [llength $export_vars] > 0 } {
         set url [export_vars -base $url $export_vars]
     }
+    ns_log $::security::log(login_url) "ad_get_login_url: final login_url <$url>"
 
     return $url
 }
@@ -977,20 +1012,19 @@ ad_proc -public ad_get_signed_cookie {
 } {
 
     set cookie_value [ns_urldecode [ad_get_cookie -include_set_cookies $include_set_cookies $name]]
-
     if { $cookie_value eq "" } {
         error "Cookie does not exist."
     }
 
     lassign $cookie_value value signature
-    ns_log Debug "ad_get_signed_cookie: Got signed cookie $name with value $value, signature $signature."
+    ns_log $::security::log(login_cookie) "ad_get_signed_cookie: Got signed cookie $name with value $value, signature $signature."
 
     if { [ad_verify_signature -secret $secret $value $signature] } {
-        ns_log Debug "ad_get_signed_cookie: Verification of cookie $name OK"
+        ns_log $::security::log(login_cookie) "ad_get_signed_cookie: Verification of cookie $name OK"
         return $value
     }
 
-    ns_log Debug "ad_get_signed_cookie: Verification of cookie $name FAILED"
+    ns_log $::security::log(login_cookie) "ad_get_signed_cookie: Verification of cookie $name FAILED"
     error "Cookie could not be authenticated."
 }
 
@@ -1719,14 +1753,16 @@ ad_proc -public security::locations {} {
     set host_post ""
 
     # set host_name
-    if {![regexp {(http://|https://)(.*?):(.*?)/?} [util_current_location] . host_protocol host_name host_port]} {
-        regexp {(http://|https://)(.*?)/?} [util_current_location] . host_protocol host_name
+    if {![util::split_location [util_current_location] host_protocol host_name host_port]} {
+        error "cannot split location <[util_current_location]>"
     }
 
     set driver_section [ns_driversection -driver $driver]
-    
-    # Let's give a warning if util_current_location returns host_name
-    # not same as from config.tcl, may help with proxy issues etc
+    #
+    # Let's give a notice when util_current_location returns host_name
+    # not same as from config.tcl, may help with proxy issues
+    # etc. This is quite normal when e.g. host-node maps are involved.
+    #
     set config_hostname [ns_config $driver_section hostname]
     if { $config_hostname ne $host_name } {
         ns_log notice "security::locations hostname '[ns_config $driver_section hostname]' from config.tcl does not match from util_current_location: $host_name"
@@ -1760,7 +1796,7 @@ ad_proc -public security::locations {} {
         # checking nsopenssl 2.0 which has different names for 
         # the secure port etc, and deprecated with this version of OpenACS
         if {$secure_port eq "" || $secure_port eq "443" } {
-            ns_log Notice "Using 'ServerPort' in $driver_section is deprecated"
+            ns_log Warning "Using 'ServerPort' in config file in $driver_section is deprecated (use 'port' instead)"
             set secure_port [ns_config -int $driver_section ServerPort 443]
         }
     } else {
@@ -1814,6 +1850,7 @@ ad_proc -public security::locations {} {
             }
         }
     }
+    #ns_log notice "security::locations <$locations>"
     return $locations
 }
 
