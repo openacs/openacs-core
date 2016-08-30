@@ -2566,6 +2566,7 @@ ad_proc util::split_location {location protoVar hostnameVar portVar} {
     
     @author Gustaf Neumann
     @return boolean value indicating success
+    @see util::split_location
 } {
     upvar $protoVar proto $hostnameVar hostname $portVar port
     
@@ -2589,6 +2590,28 @@ ad_proc util::split_location {location protoVar hostnameVar portVar} {
         set success 0
     }
     return $success 
+}
+
+ad_proc util::join_location {{-proto ""} {-hostname} {-port ""}} {
+    Join hostname and port and use IP-literal notation when necessary.
+    The function is the inverse function of  util::split_location.
+    @return location consisting of hostname and optionally port 
+    @author Gustaf Neumann
+    @see util::split_location
+} {
+    set result ""
+    if {$proto ne ""} {
+        append result $proto://
+    }
+    if {[string match *:* $hostname]} {
+        append result "\[$hostname\]"
+    } else {
+        append result $hostname
+    }
+    if {$port ne ""} {
+        append result :$port
+    }
+    return $result
 }
 
 ad_proc -public util_current_location {} {
@@ -2686,7 +2709,7 @@ ad_proc -public util_current_location {} {
     }
 
     set ::__util_current_location $result
-    #ns_log notice "util_current_location returns <$result>"
+    #ns_log notice "util_current_location returns <$result> based on hostname <$hostname>"
     return $result
 }
 
@@ -4634,14 +4657,19 @@ ad_proc util::external_url_p { url } {
     # be external.
     #
     if {$external_url_p} {
+        #
+        # If it has a protocol, we have to be able to find it in security::locations
+        #
         set locations_list [security::locations]
         # more valid url pairs with host_node_map
         
         foreach location $locations_list {
-            set encoded_location [ns_urlencode $location]
-            # ns_log Notice "util::external_url_p location \"$location/*\" url $url match [string match "${encoded_location}/*" $url]"
-            set external_url_p [expr { $external_url_p && ![string match "$location/*" $url] } ] 
-            set external_url_p [expr { $external_url_p && ![string match "${encoded_location}/*" $url] } ] 
+            set len [string length $location]
+            #ns_log notice "util::external_url_p location match <$location/*> with <$url> sub <[string range $url 0 $len-1]>"
+            if {[string range $url 0 $len-1] eq $location} {
+                set external_url_p 0
+                break
+            }
         }
     }
     return $external_url_p
