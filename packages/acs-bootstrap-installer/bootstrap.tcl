@@ -130,7 +130,7 @@ set errno [catch {
 
     # Is OpenACS installation complete? If not, source the installer and bail.
     if { ![ad_verify_install] } {
-	ns_log Notice "$proc_name: Installation is not complete - sourcing the installer."
+	ns_log warning "$proc_name: Installation is not complete - sourcing the installer."
 	source "$::acs::rootdir/packages/acs-bootstrap-installer/installer.tcl"
 	source "$::acs::rootdir/packages/acs-bootstrap-installer/installer-init.tcl"
 	return

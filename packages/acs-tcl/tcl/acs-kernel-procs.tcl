@@ -73,21 +73,20 @@ ad_proc -public ad_acs_admin_node {} {
 ad_proc -public ad_verify_install {} {
   Returns 1 if the acs is properly installed, 0 otherwise.
 } {
-    # define util_memoize with proc here to avoid error messages about multiple 
+    # Define util_memoize with proc here to avoid error messages about multiple 
     # defines.
     if { ![db_table_exists apm_packages] || ![db_table_exists site_nodes] } {
+        ns_log warning "ad_verify_install: apm_packages [db_table_exists apm_packages] site_nodes [db_table_exists site_nodes]"
 	proc util_memoize {script {max_age ""}} {{*}$script}
 	return 0
     }
     set kernel_install_p [apm_package_installed_p acs-kernel] 
     set admin_exists_p [ad_acs_administrator_exists_p]
-
-    ns_log Debug "Verifying Installation: Kernel Installed? $kernel_install_p \
- 	    An Administrator? $admin_exists_p"
-
+    
     if { $kernel_install_p && $admin_exists_p} {
 	return 1 
     } else {
+        ns_log warning "ad_verify_install: kernel_install_p $kernel_install_p admin_exists_p $admin_exists_p"
 	proc util_memoize {script {max_age ""}} {{*}$script}
 	return 0
     }
