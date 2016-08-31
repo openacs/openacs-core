@@ -108,7 +108,8 @@ BEGIN
    'group',
    'component',
    0,
-   null
+   null,
+   't'
    );
 
 
@@ -132,7 +133,8 @@ BEGIN
    'person',                         -- object_type_two
    'member',                         -- role_two
    0,                                  -- min_n_rels_two
-   null                                -- max_n_rels_two
+   null,                                -- max_n_rels_two
+   't'
    );
 
  --
@@ -155,7 +157,8 @@ BEGIN
    'person',                         -- object_type_two
    'admin',                          -- role_two
    0,                                -- min_n_rels_two
-   null                              -- max_n_rels_two   
+   null,                             -- max_n_rels_two
+   false                             -- composable_p
    );
 
   return 0;
@@ -317,13 +320,13 @@ create index group_elem_idx_rel_type_idx on group_element_index (rel_type);
 -- create index group_elem_idx_container_idx on group_element_index (container_id);
 
 
-comment on table group_element_index is '
+comment on table group_element_index is $$
  This table is for internal use by the parties system.  It as an auxiliary
  table, a denormalization of data, that is used to improve performance.
  Do not query on this table or insert into it.  Query on group_element_map
- instead.  And insert by using the API''s for membership_rel, composition_rel, 
+ instead.  And insert by using the API's for membership_rel, composition_rel, 
  or some sub-type of those relationship types.
-';
+$$;   -- ease life of syntax high-lighter '
 
 
 -----------

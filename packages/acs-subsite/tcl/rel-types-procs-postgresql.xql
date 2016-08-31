@@ -53,7 +53,8 @@ select acs_rel_type__create_type (
 	:object_type_two,
 	:role_two,
 	:min_n_rels_two,
-	:max_n_rels_two
+	:max_n_rels_two,
+    :composable_p
 );
 </querytext>
 </fullquery>

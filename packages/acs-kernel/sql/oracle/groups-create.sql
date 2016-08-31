@@ -89,7 +89,8 @@ begin
    object_type_one => 'group', role_one => 'composite',
    min_n_rels_one => 0, max_n_rels_one => null,
    object_type_two => 'group', role_two => 'component',
-   min_n_rels_two => 0, max_n_rels_two => null
+   min_n_rels_two => 0, max_n_rels_two => null,
+   composable_p => 't'
  );
 
  --
@@ -107,7 +108,8 @@ begin
    object_type_one => 'group',
    min_n_rels_one => 0, max_n_rels_one => null,
    object_type_two => 'person', role_two => 'member',
-   min_n_rels_two => 0, max_n_rels_two => null
+   min_n_rels_two => 0, max_n_rels_two => null,
+   composable_p => 't'
  );
 
  acs_rel_type.create_role ('admin', 'Administrator', 'Administrators');
@@ -123,7 +125,8 @@ begin
    object_type_one => 'group',
    min_n_rels_one => 0, max_n_rels_one => null,
    object_type_two => 'person', role_two => 'admin',
-   min_n_rels_two => 0, max_n_rels_two => null
+   min_n_rels_two => 0, max_n_rels_two => null,
+   composable_p => 'f'
  );
 
  commit;

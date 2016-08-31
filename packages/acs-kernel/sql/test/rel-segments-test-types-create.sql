@@ -12,11 +12,12 @@ BEGIN
 		'group',
                 null,
 		0,
-		null,
+		null::integer,
 		'party',
                 'member',
 		0,
-		null
+		null::integer,
+               'f'
 		);
 
 
@@ -31,11 +32,12 @@ BEGIN
 		'group',
 		null,
 		0,
-		null,
+		null::integer,
 		'party',
                 'member',
 		0,
-		null
+		null::integer,
+                'f'
 		);
 
         return null;

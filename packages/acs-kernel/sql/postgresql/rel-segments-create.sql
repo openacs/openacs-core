@@ -185,11 +185,8 @@ create index party_member_originating_idx on party_approved_member_map(originati
 
 -- Helper functions to maintain the materialized party_approved_member_map. 
 
---
--- Create an "identity relationship"
---
-select acs_object__new(-10, 'relationship') from dual;
-insert into acs_rels (rel_id, rel_type, object_id_one, object_id_two) values (-10, 'relationship', 0, 0);
+
+
 
 
 select define_function_args('party_approved_member__add_one','party_id,member_id,rel_id');
@@ -333,8 +330,8 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-create trigger parties_in_tr after insert on parties
-for each row execute procedure parties_in_tr ();
+ create trigger parties_in_tr after insert on parties
+ for each row execute procedure parties_in_tr ();
 
 CREATE OR REPLACE FUNCTION parties_del_tr () RETURNS trigger AS $$
 BEGIN

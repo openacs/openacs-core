@@ -771,9 +771,6 @@ $$ language 'sql' immutable strict;
 -- that acs_objects will become HUGE on real systems the resulting sequential scan would cripple
 -- performance.   
 
--- WARNING: subselects in where clauses that call this function and join on an outer table appear
--- to reliably kill PG 7.1.2, at least if "exists" is involved.   PG 7.2 doesn''t die on my test
--- case, so it appears to have been fixed.
 create or replace function tree_ancestor_keys(varbit) returns setof varbit as $$
 
   select tree_ancestor_keys($1, 1)

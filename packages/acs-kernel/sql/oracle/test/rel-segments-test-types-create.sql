@@ -10,7 +10,8 @@ begin
 		object_type_one => 'group', 
 		min_n_rels_one => 0, max_n_rels_one => null,
 		object_type_two => 'party', role_two => 'member',
-		min_n_rels_two => 0, max_n_rels_two => null
+		min_n_rels_two => 0, max_n_rels_two => null,
+        composable_p => 't'
 	);
 
 
@@ -25,7 +26,8 @@ begin
 		object_type_one => 'group', 
 		min_n_rels_one => 0, max_n_rels_one => null,
 		object_type_two => 'party', role_two => 'member',
-		min_n_rels_two => 0, max_n_rels_two => null
+		min_n_rels_two => 0, max_n_rels_two => null,
+        composable_p => 't'
 	);
 end;
 /

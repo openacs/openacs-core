@@ -27,7 +27,8 @@ begin acs_rel_type.drop_type(:rel_type); end;
             object_type_two   => :object_type_two, 
             role_two          => :role_two,
             min_n_rels_two    => :min_n_rels_two,
-            max_n_rels_two    => :max_n_rels_two
+            max_n_rels_two    => :max_n_rels_two,
+            composable_p      => :composable_p
 	    );
 	    end;
 </querytext>
