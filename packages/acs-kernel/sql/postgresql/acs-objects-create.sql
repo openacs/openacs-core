@@ -294,16 +294,16 @@ comment on table acs_objects is '
 The root table for the acs object heirarchy.  It all starts here folks.
 ';
 
-comment on column acs_objects.context_id is '
+comment on column acs_objects.context_id is $$
  The context_id column points to an object that provides a context for
  this object. Often this will reflect an observed hierarchy in a site,
  for example a bboard message would probably list a bboard topic as
- it''s context, and a bboard topic might list a sub-site as it''s
+ it's context, and a bboard topic might list a sub-site as it's
  context. Whenever we ask a question of the form "can user X perform
  action Y on object Z", the acs security model will defer to an
- object''s context if there is no information about user X''s
+ object's context if there is no information about user X's
  permission to perform action Y on object Z.
-';
+$$;
 
 comment on column acs_objects.creation_user is '
  Who created the object; may be null since objects can be created by
@@ -1378,15 +1378,15 @@ BEGIN
    -- N_GENERATIONS is how far ancestor_id is from object_id
 
    -- Note that this function is only supposed to verify that the
-   -- index contains each ancestor for OBJECT_ID. It doesn''t
+   -- index contains each ancestor for OBJECT_ID. It doesn't
    -- guarantee that there aren''t extraneous rows or that
-   -- OBJECT_ID''s children are contained in the index. That is
+   -- OBJECT_ID's children are contained in the index. That is
    -- verified by seperate functions.
 
    result := 't';
 
    -- Grab the context and security_inherit_p flag of the current
-   -- ancestor''s parent.
+   -- ancestor's parent.
    select context_id, security_inherit_p 
    into check_object_ancestors__context_id, 
         check_object_ancestors__security_inherit_p
@@ -1397,7 +1397,7 @@ BEGIN
      if check_object_ancestors__context_id is null then
        result := 't';
      else
-       -- This can be a constraint, can''t it?
+       -- This can be a constraint, can't it?
        PERFORM acs_log__error('acs_object.check_representation',
                      'Object 0 doesn''t have a null context_id');
        result := 'f';
