@@ -105,8 +105,12 @@
             /* mime_type     => */ null,
             /* nls_language  => */ null,
             /* text          => */ null,
+            /* data          => */ null,
+            /* relation_tag  => */ null,
+            /* is live       => */ 'f',
             /* storage_type  => */ :storage_type,
-            /* package_id    => */ :package_id
+            /* package_id    => */ :package_id,
+            /* w_child_rels  => */ 't'
     );
       </querytext>
 </fullquery>
