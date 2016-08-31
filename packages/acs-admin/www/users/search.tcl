@@ -101,7 +101,7 @@ if { $only_authorized_p } {
 if { ![info exists passthrough] } {
     set passthrough_parameters ""
 } else {
-    set passthrough_parameters "[export_entire_form_as_url_vars $passthrough]"
+    set passthrough_parameters [export_entire_form_as_url_vars $passthrough]
 }
 
 if { $limit_to_user_id ne "" } {
