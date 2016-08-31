@@ -1453,7 +1453,7 @@ if {$UseXotclSiteNodes} {
             }
 
             :public method get_node_id {-url:required} {
-                ns_cache_eval xo_site_nodes id-$url { next }
+                return [ns_cache_eval xo_site_nodes id-$url { next }]
             }
 
             :protected method properties {-node_id:required} {
