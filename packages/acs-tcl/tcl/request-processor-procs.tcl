@@ -597,8 +597,8 @@ ad_proc -private rp_filter { why } {
         ad_page_contract_handle_datasource_error "URL contains invalid characters"
         return filter_return
     }
-    if {[string length $ad_conn_url] > 132} {
-        ad_log warning "URL TOO LONG: $ad_conn_url // rp_filter $why"
+    if {[string length $ad_conn_url] > [parameter::get -package_id [ad_acs_kernel_id] -parameter MaxUrlLength -default 2000]} {
+        ad_log warning "URL TOO LONG: <$ad_conn_url> rp_filter $why"
         # reset [ad_conn url], otherwise we might run into a problem when rendering the error page
         ad_conn -set url ${root}/
         ad_page_contract_handle_datasource_error "URL is longer than allowed"
@@ -679,7 +679,7 @@ ad_proc -private rp_filter { why } {
     # expects urlc to be set to the length of urlv and urlv to have a non-null
     # trailing element except in the case where urlc is 0 and urlv the empty list.
 
-    if { [lindex [ad_conn urlv] end] == "" } {
+    if { [lindex [ad_conn urlv] end] eq "" } {
         ad_conn -set urlc [expr {[ad_conn urlc] - 1}]
         ad_conn -set urlv [lrange [ad_conn urlv] 0 [expr {[llength [ad_conn urlv]] - 2}] ]
     }

@@ -39,8 +39,6 @@ select inline_0 ();
 drop function inline_0 ();
 
 
--- show errors
-
 -- This table allows urls to be mapped to a node_ids.
 
 create table site_nodes (
@@ -50,7 +48,7 @@ create table site_nodes (
                         primary key,
         parent_id       integer constraint site_nodes_parent_id_fk
                         references site_nodes (node_id),
-        name            varchar(100) 
+        name            text
                         constraint site_nodes_name_ck
                         check (name not like '%/%'),
         constraint site_nodes_un
@@ -59,7 +57,7 @@ create table site_nodes (
         directory_p     boolean not null,
         -- Should urls that are logical children of this node be
         -- mapped to this node?
-        pattern_p       boolean default 'f' not null,
+        pattern_p       boolean default false not null,
         object_id       integer constraint site_nodes_object_id_fk
                         references acs_objects (object_id),
         tree_sortkey    varbit
@@ -354,22 +352,17 @@ END;
 $$ LANGUAGE plpgsql;
 
 
--- function node_id
 
-
--- added
 select define_function_args('site_node__node_id','url,parent_id;null');
-
 --
 -- procedure site_node__node_id/2
 --
 CREATE OR REPLACE FUNCTION site_node__node_id(
-   node_id__url varchar,
-   node_id__parent_id integer -- default null
-
+   p_url varchar,
+   p_parent_id integer default null
 ) RETURNS integer AS $$
 DECLARE
-  v_pos                  integer;       
+  v_pos                  integer;
   v_first                site_nodes.name%TYPE;
   v_rest                 text; 
   v_node_id              integer;       
@@ -378,34 +371,45 @@ DECLARE
   v_directory_p          site_nodes.directory_p%TYPE;
   v_trailing_slash_p     boolean;       
 BEGIN
-    v_url := node_id__url;
+    v_url := p_url;
 
     if substr(v_url, length(v_url), 1) = '/' then
-      -- It ends with a / so it must be a directory.
-      v_trailing_slash_p := 't';
+      --
+      -- The URL ends with a / so it must be a directory. Strip the
+      -- trailing slash.
+      --
+      v_trailing_slash_p := true;
       v_url := substr(v_url, 1, length(v_url) - 1);
     end if;
 
-    v_pos := 1;
+    --
+    -- Split the URL on the first "/" into v_first and v_rest. 
+    --
+    select position('/' in v_url) into v_pos;
 
-    while v_pos <= length(v_url) and substr(v_url, v_pos, 1) <> '/' loop
-      v_pos := v_pos + 1;
-    end loop;
-
-    if v_pos = length(v_url) then
+    if v_pos = 0 then
+      --
+      -- No slash found
+      --
       v_first := v_url;
       v_rest := null;
     else
+      --
+      -- Split URL
+      --
       v_first := substr(v_url, 1, v_pos - 1);
       v_rest := substr(v_url, v_pos + 1);
     end if;
 
-    if node_id__parent_id is not null then 
+    if p_parent_id is not null then 
       select node_id, directory_p into v_node_id, v_directory_p
       from site_nodes
-      where parent_id = node_id__parent_id
+      where parent_id = p_parent_id
       and name = v_first;
-    else 
+    else
+      --
+      -- This is typically just the query on the (empty) top-node.
+      --
       select node_id, directory_p into v_node_id, v_directory_p
       from site_nodes
       where parent_id is null 
@@ -413,29 +417,35 @@ BEGIN
     end if;
 
     if NOT FOUND then 
-        return site_node__find_pattern(node_id__parent_id);
+        return site_node__find_pattern(p_parent_id);
     end if;
 
+    --
+    -- v_first was found. 
+    --
     if v_rest is null then
-      if v_trailing_slash_p = 't' and v_directory_p = 'f' then
-        return site_node__find_pattern(node_id__parent_id);
+      --
+      -- We are at the end of the URL. If we have a trailing slash and
+      -- the site node is not a directory, return the result of
+      -- find_pattern(). Otherwise, return the found node_id
+      --
+      if v_trailing_slash_p is true and v_directory_p is false then
+        return site_node__find_pattern(p_parent_id);
       else
         return v_node_id;
       end if;
     else
+      --
+      -- Call the function recursively on the v_rest chunk
+      --
       return site_node__node_id(v_rest, v_node_id);
     end if;
-
-
 END;
 $$ LANGUAGE plpgsql;
 
 
--- function url
 
--- added
 select define_function_args('site_node__url','node_id');
-
 --
 -- procedure site_node__url/1
 --
@@ -508,4 +518,3 @@ $inline_0$ LANGUAGE plpgsql;
 select inline_0();
 drop function inline_0();
 
--- show errors
