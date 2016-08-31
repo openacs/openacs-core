@@ -109,9 +109,10 @@ ad_proc -private apm_package_selection_widget {
         return ""
     }
 
+    set label [dict get {install Install upgrade Upgrade all Install/Update} $operation]
     set counter 0
-    set widget "<blockquote><table class='list-table' cellpadding='3' cellspacing='5' summary='Available Packages'>
-      <tr class='list-header'><th>Install</th><th>Package</th><th>Package Key</th><th>Comment</th></tr>"
+    set widget [subst {<blockquote><table class='list-table' cellpadding='3' cellspacing='5' summary='Available Packages'>
+        <tr class='list-header'><th>$label</th><th>Package</th><th>Package Key</th><th>Comment</th></tr>}]
 
     foreach pkg_info $pkg_info_list {
         
