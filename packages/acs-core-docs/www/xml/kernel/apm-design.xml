@@ -35,10 +35,10 @@ apm-procs.tcl</ulink></para></listitem>
 <listitem><para><ulink url="/api-doc/procs-file-view?path=packages%2facs%2dtcl%2ftcl%2fapm%2dinstall%2dprocs%2etcl">
 apm-install-procs.tcl</ulink> (Supports installation of packages)</para></listitem>
 
-<listitem><para><ulink url="/api-doc/procs-file-view?path=packages%2facs%2dtcl%2ftcl%2f20%2dapm%2dload%2dprocs%2etcl">
-20-apm-load-procs.tcl</ulink> (Bootstraps APM for server startup)</para></listitem>
+<listitem><para><ulink url="/api-doc/procs-file-view?path=packages%2facs%2dbootstrap%2dinstaller%2ftcl%2f30%2dapm%2dload%2dprocs%2etcl">
+30-apm-load-procs.tcl</ulink> (Bootstraps APM for server startup)</para></listitem>
 
-<listitem><para><ulink url="/api-doc/procs-file-view?path=packages%2facs%2dtcl%2ftcl%2fapm%2dadmin%2dprocs%2etcl">
+<listitem><para><ulink url="/api-doc/procs-file-view?path=packages%2facs%2dadmin%2ftcl%2fapm%2dadmin%2dprocs%2etcl">
 apm-admin-procs.tcl</ulink> (Supports APM UI)</para></listitem>
 </itemizedlist>
 </listitem>

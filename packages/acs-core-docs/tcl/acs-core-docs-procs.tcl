@@ -57,10 +57,27 @@ ad_proc -public core_docs_html_redirector {args} {
     # compute the path (consider just the path after the package_url
     # for file name construction).
     #
-    set path    [string range [ad_conn url] [string length [ad_conn package_url]] end]
+    set url [ad_conn url]
+    #
+    # For now, ignore all version info
+    #
+    regsub {^/doc/(current|openacs-[0-9-]+|HEAD)/} $url /doc/ url
+        
+    set path    [string range $url [string length [ad_conn package_url]] end]
     set html_fn [acs_package_root_dir [ad_conn package_key]]/www/$path
+    if {[file exists html_fn]} {
+        #
+        # true acs-core-docs
+        #
+    } elseif {[regexp {^([a-z0-9_-]+)/(.+)$} $path _ pkg path]} {
+        #
+        # package acs-core-docs
+        #
+        set html_fn [acs_package_root_dir $pkg]/www/doc/$path
+        ns_log notice "... pkg doc <$html_fn>"
+    }
     set adp_fn  [file root $html_fn].adp
-    
+
     if {[file readable $adp_fn]} {
         #
         # Perform an internal redirect to the .adp file and stop the filter chain
