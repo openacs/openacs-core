@@ -65,7 +65,7 @@ ad_proc -public core_docs_html_redirector {args} {
         
     set path    [string range $url [string length [ad_conn package_url]] end]
     set html_fn [acs_package_root_dir [ad_conn package_key]]/www/$path
-    if {[file exists html_fn]} {
+    if {[file exists $html_fn]} {
         #
         # true acs-core-docs
         #
