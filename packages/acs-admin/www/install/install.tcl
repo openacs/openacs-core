@@ -128,14 +128,17 @@ multirow -unclobber foreach packages {
     set install_url [export_vars -base install-2 { package_key {repository_url $fetch_url}}]
 }
 
+set operation_label [expr {$upgrade_p ? "Upgrade" : "Install"}]
+
 # Build the list-builder list
 template::list::create \
     -name packages \
     -multirow packages \
     -key package_key \
-    -bulk_actions {
-        "Install or upgrade checked applications" "install-2" "Install or upgrade checked applications"
-    } \
+    -bulk_actions [list \
+                       "$operation_label checked applications" \
+                       "install-2" \
+                       "$operation_label or upgrade checked applications" ] \
     -bulk_action_export_vars {
         {repository_url $fetch_url}
     } \
