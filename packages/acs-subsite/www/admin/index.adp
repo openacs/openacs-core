@@ -30,7 +30,7 @@
   <h1>#acs-subsite.lt_For_Site-Wide_Adminis#</h1>
   <ul>
     <li>
-    <a href="@acs_admin_url@">@acs_admin_name@</a> <span style="font-style:italic;color:#666;">(#acs-subsite.Site_wide_administration#)</span>
+    <a href="@full_acs_admin_url@">@acs_admin_name@</a> <span style="font-style:italic;color:#666;">(#acs-subsite.Site_wide_administration#)</span>
     </li>
   </ul>
 </if>

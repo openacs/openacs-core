@@ -626,9 +626,12 @@ ad_proc -public ad_get_login_url {
                                      -parameter UseHostnameDomainforReg \
                                      -default 0]
     if { $UseHostnameDomainforReg } {
-
-        # Get config.tcl's hostname
-        set config_hostname [ns_config [ns_driversection] hostname]
+        #
+        # Get the configured hostname from the NaviServer/AOLserver
+        # config file (config.tcl) either from nssock or from the
+        # https driver.
+        #
+        set config_hostname [dict get [util_driver_info] hostname] 
         
         set current_location [util_current_location]
         util::split_location $current_location currentProto currentHost currentPort
@@ -745,7 +748,7 @@ ad_proc -public ad_get_login_url {
                                 where host = :hostname
                             }
                             set subsiteUrl [site_node::get_url -node_id ${host_node_id} -notrailing]
-                            set rUrl [util::join_location -proto $returnProto -hostname ${config_hostname} -port $returnPort]
+                            set rUrl [util::join_location -proto $returnProto -hostname $config_hostname -port $returnPort]
                             append rUrl $subsiteUrl $restUrl
                             set return_url_decoded $rUrl
                             # no need to iterate over all entries of host-node map

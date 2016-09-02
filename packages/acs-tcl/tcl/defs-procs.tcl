@@ -123,6 +123,8 @@ ad_proc -public ad_publisher_name {} {
 ad_proc -public ad_url {} {
     This will be called by email alerts. Do not use ad_conn location
     @return the system url as defined in the kernel parameter SystemURL.
+    @see util::configured_location
+    @see util_current_location
 } {
     return [parameter::get -package_id [ad_acs_kernel_id] -parameter SystemURL]
 }

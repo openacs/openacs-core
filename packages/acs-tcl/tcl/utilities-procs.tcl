@@ -2516,7 +2516,7 @@ ad_proc -public util_absolute_path_p {path} {
 }
 
 ad_proc -public util_driver_info {
-    {-array:required} 
+    {-array} 
     {-driver ""}
 } {
     Returns the protocol and port for the specified driver.
@@ -2524,7 +2524,6 @@ ad_proc -public util_driver_info {
     @param driver the driver to query (defaults to [ad_conn driver])
     @param array the array to populate with proto and port
 } {
-    upvar $array result
 
     if {$driver eq ""} {
         set driver [ad_conn driver]
@@ -2535,27 +2534,29 @@ ad_proc -public util_driver_info {
     switch -glob -- $driver {
         nsudp* -
         nssock* {
-            set result(proto) http
-            set result(port) [ns_config -int $section Port]
+            set d [list proto http port [ns_config -int $section Port]] 
         }
         nsunix {
-            set result(proto) http
-            set result(port) {}
+            set d [list proto http port ""]
         }
         nsssl* - nsssle {
-            set result(port) [ns_config -int $section Port]
-            set result(proto) https
+            set d [list proto https port [ns_config -int $section Port]]
         }
         nsopenssl {
-            set result(port) [ns_config -int $section ServerPort]
-            set result(proto) https
+            set d [list proto https port [ns_config -int $section ServerPort]]
         }
         default {
             ns_log Error "Unknown driver: [ad_conn driver]. Only know nssock, nsunix, nsssl, nsssle, nsopenssl"
-            set result(port) [ns_config -int $section Port]
-            set result(proto) http
+            set d [list proto http port [ns_config -int $section Port]]
         }
     }
+    lappend d hostname [ns_config $section hostname]
+    
+    if {[info exists array]} {
+        upvar $array result
+        array set result {*}$d
+    }
+    return $d
 }
 
 ad_proc util::split_location {location protoVar hostnameVar portVar} {
@@ -2614,13 +2615,43 @@ ad_proc util::join_location {{-proto ""} {-hostname} {-port ""}} {
     return $result
 }
 
+ad_proc -public util::configured_location {} {
+
+    Return the configured location as configured for the current
+    network driver. While [util_current_location] honors the virtual
+    host information of the host header field,
+    util::configured_location returns the main configured location
+    (probably the main subsite). This also differs from [ad_url],
+    which returns always the same value from the kernel parameter,
+    since it returns either the https or http result.
+
+    @return the configured location in the form "proto://hostname?:port?"
+
+    @see ad_url
+    @see util_current_location
+} {
+    set driver_info [util_driver_info]
+    return [util::join_location \
+                -proto    [dict get $driver_info proto] \
+                -hostname [dict get $driver_info hostname] \
+                -port     [dict get $driver_info port]]
+}
+
 ad_proc -public util_current_location {} {
-    Like ad_conn location - Returns the location string of the current
-    request in the form protocol://hostname[:port] but it looks at the
-    "Host:" header, that is, takes into account the host name the client
-    used although it may be different from the host name from the server
-    configuration file.  If the Host header is missing or empty 
-    util_current_location falls back to ad_conn location.
+    
+    Like [ad_conn location] - Returns the location string of the
+    current request in the form protocol://hostname?:port? but it
+    looks at the "Host:" header field, that is, takes into account the
+    host name the client used although it may be different from the
+    host name from the server configuration file.  If the Host header
+    is missing or empty util_current_location falls back to ad_conn
+    location.
+
+    @return the configured location in the form "protocol://hostname?:port?"
+
+    @see util::configured_location
+    @see ad_url
+    @see ad_conn
 } {
 
     #
