@@ -18,7 +18,7 @@ namespace eval security {
 
 # cookies (all are signed cookies):
 #   cookie                value                          max-age         secure
-#   ad_session_id         session_id,user_id,login_level SessionTimeout  no
+#   ad_session_id         session_id,user_id,login_level SessionTimeout  yes|no  (when SecureSessionCookie set: yes)
 #   ad_user_login         user_id,issue_time,auth_token  never expires   no
 #   ad_user_login_secure  user_id,random                 never expires   yes
 #   ad_secure_token       session_id,random,peeraddr     SessionLifetime yes
@@ -341,6 +341,7 @@ ad_proc -public ad_user_logout {} {
     set domain [parameter::get -parameter CookieDomain -package_id [ad_acs_kernel_id]]
 
     ad_unset_cookie -domain $domain -secure f ad_session_id
+    ad_unset_cookie -domain $domain -secure t ad_session_id
     ad_unset_cookie -domain $domain -secure f ad_user_login
     ad_unset_cookie -domain $domain -secure t ad_secure_token
     ad_unset_cookie -domain $domain -secure t ad_user_login_secure
@@ -517,7 +518,10 @@ ad_proc -private sec_generate_session_id_cookie {} {
         }
     }
     ad_set_signed_cookie \
-        -secure f \
+        -secure [expr {[parameter::get \
+                            -parameter SecureSessionCookie \
+                            -package_id [ad_acs_kernel_id] \
+                            -default 0] ? "t" : "f"}] \
         -discard $discard -replace t -max_age $max_age -domain $domain \
         ad_session_id "$session_id,$user_id,$login_level,[ns_time]"
 }

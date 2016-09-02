@@ -9,15 +9,15 @@
     <implements-subsite-p>f</implements-subsite-p>
     <inherit-templates-p>t</inherit-templates-p>
     
-    <version name="5.9.1d16" url="http://openacs.org/repository/download/apm/acs-kernel-5.9.1d16.apm">
+    <version name="5.9.1d17" url="http://openacs.org/repository/download/apm/acs-kernel-5.9.1d17.apm">
         <owner url="mailto:oct@openacs.org">OpenACS Core Team</owner>
         <summary>Routines and data models providing the foundation for OpenACS-based Web services.</summary>
-        <release-date>2016-07-05</release-date>
+        <release-date>2016-09-02</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
         <description format="text/html">The OpenACS kernel contains the core datamodel create and drop scripts for such things as objects, groups, partiies and the supporting PL/SQL and PL/pgSQL procedures.</description>
         <maturity>3</maturity>
 
-        <provides url="acs-kernel" version="5.9.1d16"/>
+        <provides url="acs-kernel" version="5.9.1d17"/>
 
         <callbacks>
         </callbacks>
@@ -69,6 +69,7 @@
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="RestrictErrorsToAdminsP"  default="1" description="Whether we show errors to adminstrators only"/>
             <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="RestrictLoginToSSLP"  default="1" description="Should login, register, and password update pages be restricted to HTTPS?" section_name="security"/>
             <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="ScreenName"  default="solicit" description="Can be &#39;none&#39;, &#39;solicit&#39;, or &#39;require&#39;. If you say none, we will not ask users to provide a screen_name. If you say &#39;solicit&#39;, we will ask for one, but not require it. If you say &#39;require&#39;, we will not let users register or login without setting up a screen_name." section_name="Local Accounts"/>
+            <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="SecureSessionCookie"  default="0" description="Set this parameter to 1 in order to set for the ad_session cookie the &#34;secure&#34; flag to make it harder to sniff this cookie. This option can be used, when all session are purely https." section_name="security"/>
             <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="SendErrorEmailP"  default="0" description="Whether to send an email to the site owner describing details whenever an error ocurrs, or not. A value of 0 in this parameter indicates that no emails are goint to be send, in the other hand, a value of 1 indicates that an email is going to be send when error ocurrs.  "/>
             <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="ServeXQLFiles"  default="0" description="Should we serve .xql files (database query files) to browsers? Say 0 to not serve them, 1 to serve them. Typically you do not want to serve these files. Requires a server restart to take effect." section_name="request-processor"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="SessionLifetime"  default="604800" description="how long after the last hit should we save information in the SessionLifetime table?" section_name="security"/>
