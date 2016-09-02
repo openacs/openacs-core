@@ -1489,12 +1489,10 @@ ad_proc -public security::require_secure_conn {} {
 
     @author Peter Marklund
 } {
-    if { ![https_available_p] } {
-        return
-    } 
-
-    if { ![security::secure_conn_p] } {
-        security::redirect_to_secure [ad_return_url -qualified]
+    if { [https_available_p] } {
+        if { ![security::secure_conn_p] } {
+            security::redirect_to_secure [ad_return_url -qualified]
+        }
     }
 }
 
@@ -1506,14 +1504,11 @@ ad_proc -public security::redirect_to_secure {
 
     @author Peter Marklund
 } {
-    if { ![https_available_p] } {
-        return
-    } 
-
-    set secure_url [get_secure_qualified_url $url]
-
-    ad_returnredirect $secure_url
-    ad_script_abort
+    if { [https_available_p] } {
+        set secure_url [get_secure_qualified_url $url]
+        ad_returnredirect $secure_url
+        ad_script_abort
+    }
 }
 
 ad_proc -public security::redirect_to_insecure {
@@ -1542,27 +1537,13 @@ ad_proc -private security::get_https_port {} {
 
     @author Gustaf Neumann
 } {
-
-    # get available server modules
+    # get secure driver server modules
     set sdriver [security::driver]
 
-    if {$sdriver eq ""} {
-        return ""
+    if {$sdriver ne ""} {
+        set d [util_driver_info -driver $sdriver]
+        return [dict get $d port]
     }
-
-    set secure_port [ns_config -int [ns_driversection -driver $sdriver] port]
-    if {$secure_port eq "" && $driver eq "nsopenssl"} {
-        # checking nsopenssl 2.0 which has different names for the secure port etc, 
-        # and is not supported with this version of OpenACS
-        set secure_port [ns_config -int [ns_driversection -driver nsopenssl] ServerPort]
-        if {$secure_port eq ""} {
-            # nsopenssl 3 has variable locations for the secure
-            # port, openacs standardized at:
-            set secure_port [ns_config -int "ns/server/[ns_info server]/module/nsopenssl/ssldriver/users" port]
-        }
-    }
-    
-    return $secure_port
 }
 
 ad_proc -private security::get_secure_qualified_url { url } {
