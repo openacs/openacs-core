@@ -19,71 +19,71 @@ ad_proc -private template::reset_request_vars {} {
     handled by the templating system.
 } {
     array unset ::template::head::scripts
-    #array set ::template::head::scripts [list]
-
     array unset ::template::head::links
-    #array set ::template::head::links [list]
-
     array unset ::template::head::metas
-    #array set ::template::head::metas [list]
-
     array unset ::template::body_handlers
-    #array set ::template::head::body_handlers [list]
-
     array unset ::template::body_scripts
-    #array set ::template::body_scripts [list]
 
     set ::template::headers [list]
     set ::template::footers [list]
 }
 
 ad_proc -public template::add_script {
-    {-type "text/javascript"}
-    {-defer:boolean}
     {-async:boolean}
-    {-src ""}
     {-charset ""}
-    {-script ""}
+    {-crossorigin ""}
+    {-defer:boolean}
+    {-integrity ""}
     {-order "0"}
+    {-script ""}
     {-section "head"}
+    {-src ""}
+    {-type "text/javascript"}
 } {
-    @param type    the type attribute of the script tag, eg. 'text/javascript'
-    @param defer   whether execution of the script should be defered until after
-                   the page has been loaded
     @param async   whether execution of the script should be executed asynchronously
                    as soon as it is available
-    @param src     the src attribute of the script tag, ie. the source url of the
-                   script
     @param charset the charset attribute of the script tag, ie. the character 
                    set of the script if it differs from the main document
+    @param crossorigin  Enumerated attribute to indicate whether CORS
+                   (Cross-Origin Resource Sharing) should be used 
+    @param defer   whether execution of the script should be defered until after
+                   the page has been loaded
+    @param integrity provide hash values for W3C Subresource Integrity recommentation
+    @param order   specify inclusion order
     @param script  the inline script for the body of the script tag.  This 
                    parameter will be ignored if a value has been supplied for src
-    @param order   specify inclusion order
     @param section section, where script is added ("head" or "body")
+    @param src     the src attribute of the script tag, ie. the source url of the
+                   script
+    @param type    the type attribute of the script tag, eg. 'text/javascript'
 } {
     if {$section eq "head"} {
 	#
 	# A head script
 	#
 	::template::head::add_script -type $type -defer=$defer_p -async=$async_p \
-	    -src $src -charset $charset -script $script -order $order
+	    -src $src -charset $charset -script $script -order $order \
+            -crossorigin $crossorigin -integrity $integrity
     } else {
 	#
 	# A body script. The order is ignored.
 	#
 	::template::add_body_script -type $type -defer=$defer_p -async=$async_p \
-	    -src $src -charset $charset -script $script
+	    -src $src -charset $charset -script $script \
+            -crossorigin $crossorigin -integrity $integrity
     }
 }
 
 ad_proc -public template::head::add_script {
-    {-type "text/javascript"}
-    {-defer:boolean}
     {-async:boolean}
-    {-src ""}
     {-charset ""}
-    {-script ""}
+    {-crossorigin ""}
+    {-defer:boolean}
+    {-integrity ""}
     {-order "0"}
+    {-script ""}
+    {-src ""}
+    {-type "text/javascript"}
 } {
     Add a script to the head section of the document to be returned to the
     users client.  A script library in an external file may only be included 
@@ -92,22 +92,23 @@ ad_proc -public template::head::add_script {
     caller must ensure that anonymous script blocks are not inadvertantly added 
     multiple times.  You <strong>must</strong> supply either src or script.
 
-    @param type    the type attribute of the script tag, eg. 'text/javascript'
-    @param defer   whether execution of the script should be defered until after
-                   the page has been loaded
     @param async   whether execution of the script should be executed asynchronously
                    as soon as it is available
-    @param src     the src attribute of the script tag, ie. the source url of the
-                   script
     @param charset the charset attribute of the script tag, ie. the character 
                    set of the script if it differs from the main document
+    @param crossorigin  Enumerated attribute to indicate whether CORS
+                   (Cross-Origin Resource Sharing) should be used 
+    @param defer   whether execution of the script should be defered until after
+                   the page has been loaded
+    @param integrity provide hash values for W3C Subresource Integrity recommentation
+    @param order   specify inclusion order
     @param script  the inline script for the body of the script tag.  This 
                    parameter will be ignored if a value has been supplied for src
-    @param order   specify inclusion order
+    @param src     the src attribute of the script tag, ie. the source url of the
+                   script
+    @param type    the type attribute of the script tag, eg. 'text/javascript'
     
 } {
-    variable ::template::head::scripts
-
     if {$defer_p} {
         set defer defer
     } else {
@@ -124,43 +125,46 @@ ad_proc -public template::head::add_script {
         if {$script eq ""} {
             error "You must supply either -src or -script."
         }
-
-        lappend scripts(anonymous) $type "" $charset $defer $async $script $order
+        lappend ::template::head::scripts(anonymous) $type "" $charset $defer $async $script $order $crossorigin $integrity
     } else {
-        set scripts($src) [list $type $src $charset $defer $async "" $order]
+        set ::template::head::scripts($src) [list $type $src $charset $defer $async "" $order $crossorigin $integrity]
     }
 }
 
 ad_proc -public template::head::add_link {
-    {-rel:required}
+    {-crossorigin ""}
     {-href:required}
-    {-type ""}
-    {-media ""}
-    {-title ""}
+    {-integrity ""}
     {-lang ""}
+    {-media ""}
     {-order "0"}
+    {-rel:required}
+    {-title ""}
+    {-type ""}
 } {
     Add a link tag to the head section of the document to be returned to the
     users client.  A given target document may only be added once for a 
     specified relation; subsequent calls to add_link will replace the existing 
     entry.  
 
-    @param rel     the rel attribute of the link tag defining the relationship
-                   of the linked document to the current one, eg. 'stylesheet'
+    @param crossorigin  Enumerated attribute to indicate whether CORS
+                   (Cross-Origin Resource Sharing) should be used 
     @param href    the href attribute of the link tag, eg. the target document
                    of the link
-    @param type    the type attribute of the link tag, eg. 'text/css'
-    @param media   the media attribute of the link tag describing which display
-                   media this link is relevant to.  This may be a comma 
-                   separated list of values, eg. 'screen,print,braille'
-    @param title   the title attribute of the link tag describing the target of
-                   this link 
+    @param integrity provide hash values for W3C Subresource Integrity recommentation
     @param lang    the lang attribute of the link tag specifying the language 
                    of its attributes if they differ from the document language
+    @param media   the media attribute of the link tag describing which display
+                   media this link is relevant to.  This may be a comma 
+    @param order   specify inclusion order
+    @param rel     the rel attribute of the link tag defining the relationship
+                   of the linked document to the current one, eg. 'stylesheet'
+    @param title   the title attribute of the link tag describing the target of
+                   this link 
+    @param type    the type attribute of the link tag, eg. 'text/css'
+                   separated list of values, eg. 'screen,print,braille'
 } {
-    variable ::template::head::links
-
-    set links($rel,$href) [list $rel $href $type $media $title $lang $order]
+    set ::template::head::links($rel,$href) [list $rel $href $type $media $title $lang $order $crossorigin $integrity]
 }
 
 ad_proc -public template::head::add_meta {
@@ -233,37 +237,45 @@ ad_proc -public template::head::add_style {
 }
 
 ad_proc -public template::head::add_javascript {
-    {-defer:boolean}
     {-async:boolean}
-    {-src ""}
     {-charset ""}
-    {-script ""}
+    {-crossorigin ""}
+    {-defer:boolean}
+    {-integrity ""}
     {-order "0"}
+    {-script ""}
+    {-src ""}
 } {
     Add a script of type 'text/javascript' to the head section of the document 
     to be returned to the users client.  This function is a wrapper around 
     template::head::add_script.  You must supply either src or script.
 
-    @param defer   whether execution of the script should be defered until after
-                   the page has been loaded
     @param async   whether execution of the script should be executed asynchronously
                    as soon as it is available
-    @param src     the src attribute of the script tag, ie. the source url of the
-                   script
     @param charset the charset attribute of the script tag, ie. the character 
                    set of the script if it differs from the main document
+    @param crossorigin  Enumerated attribute to indicate whether CORS
+                   (Cross-Origin Resource Sharing) should be used 
+    @param defer   whether execution of the script should be defered until after
+                   the page has been loaded
+    @param integrity provide hash values for W3C Subresource Integrity recommentation
+    @param order   specify inclusion order
     @param script  the inline script for the body of the script tag.  This 
                    parameter will be ignored if a value has been supplied for
                    src
+    @param src     the src attribute of the script tag, ie. the source url of the
+                   script
 
     @see template::head::add_script
 } {
-    template::head::add_script -defer=$defer_p -async=$async_p \
+    template::head::add_script \
+        -defer=$defer_p -async=$async_p \
         -type text/javascript \
         -src $src \
         -charset $charset \
         -script $script \
-        -order $order
+        -order $order \
+        -crossorigin $crossorigin -integrity $integrity
 }
 
 ad_proc -public template::head::add_css {
@@ -358,30 +370,34 @@ ad_proc -public template::add_body_handler {
 }
 
 ad_proc -public template::add_body_script {
-    {-type "text/javascript"}
-    {-defer:boolean}
     {-async:boolean}
-    {-src ""}
     {-charset ""}
+    {-crossorigin ""}
+    {-defer:boolean}
+    {-integrity ""}
     {-script ""}
+    {-src ""}
+    {-type "text/javascript"}
 } {
     Add a script to the start of the body section of the document to be returned
     to the users client. You <strong>must</strong> supply either src or script.
 
-    @param type    the type attribute of the script tag, eg. 'text/javascript'
-    @param defer   whether execution of the script should be defered until after
-                   the page has been loaded
     @param async   whether execution of the script should be executed asynchronously
                    as soon as it is available
-    @param src     the src attribute of the script tag, ie. the source url of the
-                   script
     @param charset the charset attribute of the script tag, ie. the character 
                    set of the script if it differs from the main document
+    @param crossorigin  Enumerated attribute to indicate whether CORS
+                   (Cross-Origin Resource Sharing) should be used 
+    @param defer   whether execution of the script should be defered until after
+                   the page has been loaded
+    @param integrity provide hash values for W3C Subresource Integrity recommentation
     @param script  the inline script for the body of the script tag.  This 
                    parameter will be ignored if a value has been supplied for
                    src
+    @param src     the src attribute of the script tag, ie. the source url of the
+                   script
+    @param type    the type attribute of the script tag, eg. 'text/javascript'
 } {
-    variable ::template::body_scripts
 
     if {$defer_p} {
         set defer defer
@@ -398,7 +414,7 @@ ad_proc -public template::add_body_script {
         error "You must supply either -src or -script."
     }
 
-    lappend body_scripts $type $src $charset $defer $async $script
+    lappend ::template::body_scripts $type $src $charset $defer $async $script $crossorigin $integrity
 }
 
 ad_proc -public template::add_header {
@@ -515,11 +531,11 @@ ad_proc template::head::prepare_multirows {} {
 
     # Generate the <link> tag multirow
     variable ::template::head::links
-    template::multirow create link rel type href title lang media order
+    template::multirow create link rel type href title lang media order crossorigin integrity
     if {[array exists links]} {
         # first non alternate stylesheet
         foreach name [array names links] {
-            foreach {rel href type media title lang order} $links($name) {
+            foreach {rel href type media title lang order crossorigin integrity} $links($name) {
                 if {$rel ne "alternate stylesheet"} {
                     template::multirow append link \
                         $rel \
@@ -528,7 +544,8 @@ ad_proc template::head::prepare_multirows {} {
                         $title \
                         $lang \
                         $media \
-                        $order
+                        $order \
+                        $crossorigin $integrity
                     set links($name) ""
                 }
             }
@@ -537,7 +554,7 @@ ad_proc template::head::prepare_multirows {} {
         template::multirow sort link order
         # now alternate stylesheet
         foreach name [array names links] {
-            foreach {rel href type media title lang order} $links($name) {
+            foreach {rel href type media title lang order crossorigin integrity} $links($name) {
                 if {$links($name) ne ""} {
                     template::multirow append link \
                         $rel \
@@ -546,12 +563,13 @@ ad_proc template::head::prepare_multirows {} {
                         $title \
                         $lang \
                         $media \
-                        $order
+                        $order \
+                        $crossorigin $integrity
                     set links($name) ""
                 }
             }
         }
-        unset links
+        array unset links
     }
 
     # Generate the <style /> tag multirow 
@@ -568,15 +586,15 @@ ad_proc template::head::prepare_multirows {} {
                     $style
             }
         }
-        unset styles
+        array unset styles
     }
 
     # Generate the head <script /> tag multirow
     variable ::template::head::scripts
-    template::multirow create headscript type src charset defer async content order
+    template::multirow create headscript type src charset defer async content order crossorigin integrity
     if {[array exists scripts]} {
         foreach name [array names scripts] {
-            foreach {type src charset defer async content order} $scripts($name) {
+            foreach {type src charset defer async content order crossorigin integrity} $scripts($name) {
                 template::multirow append headscript \
                     $type \
                     $src \
@@ -584,25 +602,27 @@ ad_proc template::head::prepare_multirows {} {
                     $defer \
                     $async \
                     $content \
-                    $order
+                    $order \
+                    $crossorigin $integrity
             }
         }
         template::multirow sort headscript order
-        unset scripts
+        array unset scripts
     }
 
     # Generate the body <script /> tag multirow
     variable ::template::body_scripts
-    template::multirow create body_script type src charset defer async content
+    template::multirow create body_script type src charset defer async content crossorigin integrity
     if {[info exists body_scripts]} {
-        foreach {type src charset defer async content} $body_scripts {
+        foreach {type src charset defer async content crossorigin integrity} $body_scripts {
             template::multirow append body_script \
                 $type \
                 $src \
                 $charset \
                 $defer \
                 $async \
-                $content
+                $content \
+                $crossorigin $integrity
         }
         unset body_scripts
     }
