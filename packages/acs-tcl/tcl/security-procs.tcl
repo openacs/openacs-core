@@ -1501,6 +1501,7 @@ ad_proc -public security::require_secure_conn {} {
 }
 
 ad_proc -public security::redirect_to_secure {
+    {-script_abort:boolean true}
     url 
 } {
     Redirect to the given URL and enter secure (HTTPS) mode.    
@@ -1510,8 +1511,10 @@ ad_proc -public security::redirect_to_secure {
 } {
     if { [https_available_p] } {
         set secure_url [get_secure_qualified_url $url]
+        ns_set put [ad_conn outputheaders] Vary "Upgrade-Insecure-Requests"
+        # ns_log notice "redirect $url to secure url $secure_url"
         ad_returnredirect $secure_url
-        ad_script_abort
+        if {$script_abort_p} {ad_script_abort}
     }
 }
 
@@ -1556,11 +1559,9 @@ ad_proc -private security::get_secure_qualified_url { url } {
 
     @author Peter Marklund
 } {
-    # Get part of URL after location
     set qualified_uri [get_qualified_uri $url]
-
     set secure_url [get_secure_location]${qualified_uri}
-
+    
     return $secure_url
 }
 
@@ -1609,26 +1610,19 @@ ad_proc -private security::get_secure_location {} {
     @author Peter Marklund
 } {
     set current_location [util_current_location]
-    set https_prefix {https://}
-
-    if { [regexp $https_prefix $current_location] } {
+    
+    if { [regexp {^https://} $current_location] } {
+        #
         # Current location is already secure - do nothing
+        #
         set secure_location $current_location
+    } elseif {[util::split_location $current_location proto hostname port]} {
+        set secure_location [util::join_location \
+                                 -proto https \
+                                 -hostname $hostname \
+                                 -port [security::get_https_port]]
     } else {
-        # Current location is insecure - get location from config file
-        set secure_location [ad_conn location]
-        # Prefix with https
-        regsub {^(?:http://)?} $secure_location {https://} secure_location
-
-        # remove port number if using nonstandard port
-        regexp {^(.*:.*):([0-9]+)} $secure_location match secure_location port
-
-        # Add port number if non-standard
-        set https_port [get_https_port]
-        if { $https_port ne "443" } {
-            set secure_location ${secure_location}:$https_port
-        }
-
+        error "invalid location $current_location"
     }
 
     return $secure_location
