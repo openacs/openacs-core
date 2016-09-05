@@ -2554,7 +2554,7 @@ ad_proc -public util_driver_info {
     
     if {[info exists array]} {
         upvar $array result
-        array set result {*}$d
+        array set result $d
     }
     return $d
 }
