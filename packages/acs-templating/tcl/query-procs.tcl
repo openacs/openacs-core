@@ -766,7 +766,7 @@ ad_proc -public template::multirow {
       set index [lindex $args 0]
       set column [lindex $args 1]
       # Set an array reference if no column is specified
-      if {$column eq {}} {
+      if {$column eq ""} {
 
         # If -local was specified, the upvar is done with a relative stack frame
         # index, and we must take into account the fact that the uplevel moves up
@@ -780,9 +780,14 @@ ad_proc -public template::multirow {
         }
 
       } else {
-        # If a column is specified, just return the value for it
-        upvar $multirow_level_up $name:$index arr
-        return $arr($column)
+          # If a column is specified, just return the value for it
+          upvar $multirow_level_up $name:$index arr
+          if {[info exists arr($column)]} {
+              return $arr($column)
+          } else {
+              ns_log warning "can't obtain template variable form ${name}:${index}: $column"
+              return ""
+          }
       }
     }
     
