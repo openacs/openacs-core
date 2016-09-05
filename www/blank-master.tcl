@@ -161,106 +161,36 @@ if {![string is list $jsSpecs]} {
     }
 }
 #
-# Temporary (?) fix to get xinha working
+# Render richtext widgets: The richtext widgets require typically a
+# single configuration for all richtext widgets of a certain type on a
+# page (that might require a list of the HTML IDs of all affected
+# textareas).
 #
-if {[info exists ::acs_blank_master(xinha)]} {
-  set ::xinha_dir /resources/acs-templating/xinha-nightly/
-  set ::xinha_lang [lang::conn::language]
-  #
-  # Xinha localization covers 33 languages, removing
-  # the following restriction should be fine.
-  #
-  #if {$::xinha_lang ne "en" && $::xinha_lang ne "de"} {
-  #  set ::xinha_lang en
-  #}
+::template::util::richtext::render_widgets
 
-  # We could add site wide Xinha configurations (.js code) into xinha_params
-  set xinha_params ""
-
-  # Per call configuration
-  set xinha_plugins $::acs_blank_master(xinha.plugins)
-  set xinha_options $::acs_blank_master(xinha.options)
-  
-  # HTML ids of the textareas used for Xinha
-  set htmlarea_ids '[join $::acs_blank_master__htmlareas "','"]'
-  
-  template::head::add_script -type text/javascript -script "
-         xinha_editors = null;
-         xinha_init = null;
-         xinha_config = null;
-         xinha_plugins = null;
-         xinha_init = xinha_init ? xinha_init : function() {
-            xinha_plugins = xinha_plugins ? xinha_plugins : 
-              \[$xinha_plugins\];
-
-            // THIS BIT OF JAVASCRIPT LOADS THE PLUGINS, NO TOUCHING  
-            if(!Xinha.loadPlugins(xinha_plugins, xinha_init)) return;
-
-            xinha_editors = xinha_editors ? xinha_editors :\[ $htmlarea_ids \];
-            xinha_config = xinha_config ? xinha_config() : new Xinha.Config();
-            $xinha_params
-            $xinha_options
-            xinha_editors = 
-                 Xinha.makeEditors(xinha_editors, xinha_config, xinha_plugins);
-            Xinha.startEditors(xinha_editors);
-         }
-         //window.onload = xinha_init;
-      "
-
-  template::add_body_handler -event onload -script "xinha_init();"
-  # Antonio Pisano 2015-03-27: including big javascripts in head is discouraged by current best practices for web.
-  # We should consider moving every inclusion like this in the body. As consequences are non-trivial, just warn for now. 
-  template::head::add_javascript -src ${::xinha_dir}XinhaCore.js
-}
-
-if { [info exists ::acs_blank_master(tinymce)] } {
-    # we are using TinyMCE
-    # Antonio Pisano 2015-03-27: including big javascripts in head is discouraged by current best practices for web.
-    # We should consider moving every inclusion like this in the body. As consequences are non-trivial, just warn for now. 
-    template::head::add_javascript -src "/resources/acs-templating/tinymce/jscripts/tiny_mce/tiny_mce_src.js" -order tinymce0
-    # get the textareas where we apply tinymce
-    set tinymce_elements [list]
-    foreach htmlarea_id [lsort -unique $::acs_blank_master__htmlareas] {
-        lappend tinymce_elements $htmlarea_id
-    }			
-    set tinymce_config $::acs_blank_master(tinymce.config)    
-
-    # Figure out the language to use
-    # 1st is the user language, if not available then the system one,
-    # fallback to english which is provided by default
-
-    set tinymce_relpath "packages/acs-templating/www/resources/tinymce/jscripts/tiny_mce"
-    set lang_list [list [lang::user::language] [lang::system::language]]
-    set tinymce_lang "en"
-    foreach elm $lang_list {
-        if { [file exists $::acs::rootdir/${tinymce_relpath}/langs/${elm}.js] } {
-            set tinymce_lang $elm
-            break
-        }
-    }
-
-    # TODO : each element should have it's own init
-    # Antonio Pisano 2015-03-27: including big javascripts in head is discouraged by current best practices for web.
-    # We should consider moving every inclusion like this in the body. As consequences are non-trivial, just warn for now. 
-    template::head::add_javascript -script "
-        tinyMCE.init(\{language: \"$tinymce_lang\", $tinymce_config\});
-	" -order tinymceZ
-}
-
-if { [info exists ::acs_blank_master(ckeditor4)] } {
-    template::head::add_javascript -src "//cdn.ckeditor.com/4.5.2/standard/ckeditor.js"
-}
+#
+# Get the basic content info like title and charset for the head of
+# the page.
+#
 
 if {![info exists doc(title)]} {
-    set doc(title) "[ad_conn instance_name]"
-    ns_log warning "[ad_conn url] has no doc(title) set."
+    set doc(title) [ad_conn instance_name]
+    ns_log warning "[ad_conn url] has no doc(title) set, fallback to instance_name."
 }
-# AG: Markup in <title> tags doesn't render well.
-#set doc(title) [ns_striphtml $doc(title)]
 
 if {![info exists doc(charset)]} {
     set doc(charset) [ns_config ns/parameters OutputCharset [ad_conn charset]]
 }
+
+#
+# The document language is always set from [ad_conn lang] which by default 
+# returns the language setting for the current user.  This is probably
+# not a bad guess, but the rest of OpenACS must override this setting when
+# appropriate and set the lang attribute of tags which differ from the language
+# of the page.  Otherwise we are lying to the browser.
+#
+set doc(lang) [ad_conn language]
+
 
 template::head::add_meta \
     -content "text/html; charset=$doc(charset)" \
@@ -275,12 +205,6 @@ template::head::add_meta \
 #     -content "text/javascript" \
 #     -http_equiv "Content-Script-Type"
 
-# The document language is always set from [ad_conn lang] which by default 
-# returns the language setting for the current user.  This is probably
-# not a bad guess, but the rest of OpenACS must override this setting when
-# appropriate and set the lang attribxute of tags which differ from the language
-# of the page.  Otherwise we are lying to the browser.
-set doc(lang) [ad_conn language]
 
 # Determine if we should be displaying the translation UI
 #
