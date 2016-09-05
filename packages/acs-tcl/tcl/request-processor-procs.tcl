@@ -605,6 +605,14 @@ ad_proc -private rp_filter { why } {
         return filter_return
     }
 
+    if {[ns_set get [ns_conn headers] Upgrade-Insecure-Requests 0]
+        && [security::https_available_p]
+        && ![security::secure_conn_p]
+    } {
+        security::redirect_to_secure -script_abort=false [ad_return_url -qualified]
+        return filter_return
+    }
+
     # 2. handle special case: if the root is a prefix of the URL, 
     #                         remove this prefix from the URL, and redirect.
     if { $root ne "" } {
