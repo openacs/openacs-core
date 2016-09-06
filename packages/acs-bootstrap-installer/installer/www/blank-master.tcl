@@ -53,7 +53,9 @@ ad_page_contract {
   @see template::add_footer
  
   @author Kevin Scaldeferri (kevin@arsdigita.com)
-          Lee Denison (lee@xarg.co.uk)
+    Lee Denison (lee@xarg.co.uk)
+    Gustaf Neumann
+    
   @creation-date 14 Sept 2000
 
   $Id$
@@ -70,7 +72,22 @@ template::head::add_meta \
     -name generator \
     -lang en \
     -content "OpenACS version [ad_acs_version]"
-    
+
+#
+# Add the content security policy. Since this is the blank master, we
+# are defensive and check, if the system has already support for it
+# via the CSPEnabledP kernel parameter. Otherwise users would be
+# blocked out.
+#
+if {[parameter::get -parameter CSPEnabledP -package_id [ad_acs_kernel_id] -default 0]
+    && [info commands ::security::csp::render] ne ""
+} {
+    set csp [::security::csp::render]
+    if {$csp ne ""} {
+        ns_set put [ns_conn outputheaders] Content-Security-Policy $csp
+    }
+}
+
 # Add standard javascript
 #
 # Include core.js inclusion to the bottom of the body.
@@ -88,9 +105,6 @@ template::head::add_javascript -script {
     document.forms[form_name].elements[element_name].focus();
   }
 }
-
-# The following (forms, list and xinha) should
-# be done in acs-templating.
 
 #
 # Add css for the current subsite, defaulting to the old list/form css which was

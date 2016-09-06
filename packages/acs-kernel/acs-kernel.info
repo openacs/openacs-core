@@ -9,15 +9,15 @@
     <implements-subsite-p>f</implements-subsite-p>
     <inherit-templates-p>t</inherit-templates-p>
     
-    <version name="5.9.1d17" url="http://openacs.org/repository/download/apm/acs-kernel-5.9.1d17.apm">
+    <version name="5.9.1d18" url="http://openacs.org/repository/download/apm/acs-kernel-5.9.1d18.apm">
         <owner url="mailto:oct@openacs.org">OpenACS Core Team</owner>
         <summary>Routines and data models providing the foundation for OpenACS-based Web services.</summary>
-        <release-date>2016-09-02</release-date>
+        <release-date>2016-09-06</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
         <description format="text/html">The OpenACS kernel contains the core datamodel create and drop scripts for such things as objects, groups, partiies and the supporting PL/SQL and PL/pgSQL procedures.</description>
         <maturity>3</maturity>
 
-        <provides url="acs-kernel" version="5.9.1d17"/>
+        <provides url="acs-kernel" version="5.9.1d18"/>
 
         <callbacks>
         </callbacks>
@@ -29,6 +29,7 @@
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="AllowedTag"  default="A ADDRESS B BLOCKQUOTE BR CODE DIV DD DL DT EM FONT HR I LI OL P PRE SPAN STRIKE STRONG SUB SUP TABLE TBODY TD TR TT U UL EMAIL FIRST_NAMES LAST_NAME GROUP_NAME H1 H2 H3 H4 H5 H6" description="A space separated list of all the HTML tags that people may use. Add a * to always allow all tags." section_name="antispam"/>
             <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="ApprovalExpirationDays"  default="0" description="The number of days after which registration approval expires, which will cause the user to change state to &#39;needs_approval&#39;. Set to 0 to disable expiration of approval." section_name="security"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="BugTrackerInstance"  description="Use this parameter to indicate the instance of the bug tracker where the errors will be automatically submited. You must use a relative url indicating where is mounted the instance of the bug tracker. For instance, if you have your bug tracker instance mounted under &#34;/bug&#34;, this parameter must be &#34;/bug&#34;.  Leave this parameter in blank if you do not want to use it." section_name="request-processor"/>
+            <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="CSPEnabledP"  default="1" description="Enable automated generation of W3C ontent Security Policies (CSP)" section_name="security"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="CanonicalServer"  description="In the list of IPs above, which is the canonical (primary) server? If a port is not listed, we assume port 80." section_name="server-cluster"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="ClusterAuthorizedIP"  description="A space separated list of which machines can issues requests (e.g., flushing) to the cluster. Can use glob matching notation (10.0.0.*)" section_name="server-cluster"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="ClusterEnabledP"  default="0" description="is clustering enabled?" section_name="server-cluster"/>
@@ -69,7 +70,6 @@
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="RestrictErrorsToAdminsP"  default="1" description="Whether we show errors to adminstrators only"/>
             <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="RestrictLoginToSSLP"  default="1" description="Should login, register, and password update pages be restricted to HTTPS?" section_name="security"/>
             <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="ScreenName"  default="solicit" description="Can be &#39;none&#39;, &#39;solicit&#39;, or &#39;require&#39;. If you say none, we will not ask users to provide a screen_name. If you say &#39;solicit&#39;, we will ask for one, but not require it. If you say &#39;require&#39;, we will not let users register or login without setting up a screen_name." section_name="Local Accounts"/>
-            <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="SecureSessionCookie"  default="0" description="Set this parameter to 1 in order to set for the ad_session cookie the &#34;secure&#34; flag to make it harder to sniff this cookie. This option can be used, when all session are purely https." section_name="security"/>
             <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="SendErrorEmailP"  default="0" description="Whether to send an email to the site owner describing details whenever an error ocurrs, or not. A value of 0 in this parameter indicates that no emails are goint to be send, in the other hand, a value of 1 indicates that an email is going to be send when error ocurrs.  "/>
             <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="ServeXQLFiles"  default="0" description="Should we serve .xql files (database query files) to browsers? Say 0 to not serve them, 1 to serve them. Typically you do not want to serve these files. Requires a server restart to take effect." section_name="request-processor"/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="SessionLifetime"  default="604800" description="how long after the last hit should we save information in the SessionLifetime table?" section_name="security"/>

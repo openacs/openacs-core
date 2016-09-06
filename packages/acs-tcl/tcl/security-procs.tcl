@@ -176,9 +176,10 @@ ad_proc -private sec_handler {} {
         }
         
         #
-        # generate a csrf token
+        # generate a csrf token and a csp nonce value
         #
         security::csrf::new
+        security::csp::nonce
     }
 }
 
@@ -1970,45 +1971,135 @@ ad_proc -public security::validated_host_header {} {
     return ""
 }
 
+namespace eval ::security::csp {
 
-#
-# Generate a nonce token as described in W3C Content Security Policy
-# https://www.w3.org/TR/CSP/
-#
-ad_proc -public ::security::nonce_token { {-tokenname __nonce_token} } {
+    #
+    # Generate a nonce token as described in W3C Content Security Policy
+    # https://www.w3.org/TR/CSP/
+    #
+    ad_proc -public ::security::csp::nonce { {-tokenname __csp_nonce} } {
     
-    Generate a Nonce token and return it. The nonce token can be used
-    in content security policies (CSP2) for "script" and "style"
-    elements. Desired Properties: generate a single unique value per
-    request which is hard for a hacker to predict, it should only
-    contain base64 characters (so hex is fine).
-
-    For details, see https://www.w3.org/TR/CSP/
-
-    @return nonce token
-    @author Gustaf Neumann
-} {
-    #
-    # Compute the nonce value only once per requests. If it was
-    # already computed, pick it up and return the precomputed
-    # value. Otherwise, compute the value new.
-    #
-    set globalTokenName ::$tokenname
-    if {[info exists $globalTokenName]} {
-        set token [set $globalTokenName]
-    } else {
-        set session_id [::security::csrf::session_id]
-        set secret [ns_config "ns/server/[ns_info server]/acs" parametersecret ""]
-
-        if {[info commands ::crypto::hmac] ne ""} {
-            set token  [::crypto::hmac string $secret $session_id-[clock clicks -microseconds]]
+        Generate a Nonce token and return it. The nonce token can be used
+        in content security policies (CSP2) for "script" and "style"
+        elements. Desired Properties: generate a single unique value per
+        request which is hard for a hacker to predict, it should only
+        contain base64 characters (so hex is fine).
+        
+        For details, see https://www.w3.org/TR/CSP/
+        
+        @return nonce token
+        @author Gustaf Neumann
+    } {
+        #
+        # Compute the nonce value only once per requests. If it was
+        # already computed, pick it up and return the precomputed
+        # value. Otherwise, compute the value new.
+        #
+        set globalTokenName ::$tokenname
+        if {[info exists $globalTokenName]} {
+            set token [set $globalTokenName]
         } else {
-            set token  [ns_sha1 "$secret-$session_id-[clock clicks -microseconds]"]
+            set session_id [::security::csrf::session_id]
+            set secret [ns_config "ns/server/[ns_info server]/acs" parametersecret ""]
+            
+            if {[info commands ::crypto::hmac] ne ""} {
+                set token  [::crypto::hmac string $secret $session_id-[clock clicks -microseconds]]
+            } else {
+                set token  [ns_sha1 "$secret-$session_id-[clock clicks -microseconds]"]
+            }
+            set $globalTokenName $token
         }
-        set $globalTokenName $token
+        return $token
     }
-    return $token
+
+    # security::csp::require style-src 'unsafe-inline'
+    ad_proc -public ::security::csp::require {directive value} {
+        Add a single value to a CSP directive
+        @directive name of the directive (such as e.g. style-src)
+        @value allowed source for this page (such as e.g. unsafe-inline)
+    } {
+        set var ::__csp__directive($directive)
+        if {![info exists $var] || $value ni [set $var]} {
+            lappend $var $value
+        }
+    }
+
+    ad_proc -public ::security::csp::render {} {
+    } {
+        #
+        # Fetch the nonce token
+        #
+        set nonce [::security::nonce_token]
+
+        #
+        # Add 'self' rules
+        #
+        security::csp::require default-src 'self'
+        security::csp::require script-src 'self'
+        security::csp::require style-src 'self'
+
+        #
+        # Always add the nonce-token to script-src
+        #
+        security::csp::require script-src 'nonce-$nonce'
+        
+        # We need for the time being 'unsafe-inline' for style-src,
+        # otherwise not even the style attribute (e.g. <p
+        # style="...">) would be allowed.
+        #
+        security::csp::require style-src 'unsafe-inline'
+        
+        #
+        # Check for invalid combination to avoid unexpected behavior
+        #
+        foreach directive {script-src style-src} {
+            #
+            # The combination of 'unsafe-inline' with a hash or nonce is
+            # not possible, since 'unsafe-inline' is ignored in such
+            # cases.
+            #
+            set var ::__csp__directive($directive)
+            if {[info exists $var] && "'unsafe-inline'" in [set $var]} {
+                foreach prefix {nonce sha256 sha384 sha512} {
+                    set p [lsearch -glob [set $var] '$prefix-*']
+                    if {$p > -1} {
+                        set $var [lreplace [set $var] $p $p]
+                    }
+                }
+            }
+        }
+
+        set policy ""
+        foreach directive {
+            child-src
+            connect-src
+            default-src
+            font-src
+            form-action
+            frame-src
+            frome-ancestors
+            img-src
+            media-src
+            object-src
+            plugin-types
+            report-uri
+            sandbox
+            script-src
+            style-src
+        } {
+            set var ::__csp__directive($directive)
+            if {[info exists $var]} {
+                append policy "$directive [join [set $var] { }];"
+            }
+        }
+        return $policy
+    }
+
 }
+
+#TODO remove me: just for a transition phase
+proc ::security::nonce_token args {uplevel ::security::csp::nonce {*}$args}
+
 
 namespace eval ::security::csrf {
 
