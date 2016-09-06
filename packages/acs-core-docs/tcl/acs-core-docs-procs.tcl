@@ -74,7 +74,7 @@ ad_proc -public core_docs_html_redirector {args} {
         # package acs-core-docs
         #
         set html_fn [acs_package_root_dir $pkg]/www/doc/$path
-        ns_log notice "... pkg doc <$html_fn>"
+        #ns_log notice "... pkg doc <$html_fn>"
     }
     set adp_fn  [file root $html_fn].adp
 
@@ -82,10 +82,14 @@ ad_proc -public core_docs_html_redirector {args} {
         #
         # Perform an internal redirect to the .adp file and stop the filter chain
         #
-        #ns_log notice "===== core_docs_html_redirector <$args> url <[ad_conn url]> <[ad_conn file]> ADP exists"
-        
-        rp_internal_redirect -absolute_path $adp_fn 
-        return filter_break
+        #ns_log notice "===== core_docs_html_redirector <$args> url <[ad_conn url]> <[ad_conn file]> ADP exists -> break"
+        rp_internal_redirect -absolute_path $adp_fn
+        #
+        # do NOT run any more post-authorization filters and do NOT
+        # run the function registered, but run the trace to get the
+        # entry logged in access.log
+        #
+        return filter_return
         
     } else {
         #
