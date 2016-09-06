@@ -1971,6 +1971,45 @@ ad_proc -public security::validated_host_header {} {
 }
 
 
+#
+# Generate a nonce token as described in W3C Content Security Policy
+# https://www.w3.org/TR/CSP/
+#
+ad_proc -public ::security::nonce_token { {-tokenname __nonce_token} } {
+    
+    Generate a Nonce token and return it. The nonce token can be used
+    in content security policies (CSP2) for "script" and "style"
+    elements. Desired Properties: generate a single unique value per
+    request which is hard for a hacker to predict, it should only
+    contain base64 characters (so hex is fine).
+
+    For details, see https://www.w3.org/TR/CSP/
+
+    @return nonce token
+    @author Gustaf Neumann
+} {
+    #
+    # Compute the nonce value only once per requests. If it was
+    # already computed, pick it up and return the precomputed
+    # value. Otherwise, compute the value new.
+    #
+    set globalTokenName ::$tokenname
+    if {[info exists $globalTokenName]} {
+        set token [set $globalTokenName]
+    } else {
+        set session_id [::security::csrf::session_id]
+        set secret [ns_config "ns/server/[ns_info server]/acs" parametersecret ""]
+
+        if {[info commands ::crypto::hmac] ne ""} {
+            set token  [::crypto::hmac string $secret $session_id-[clock clicks -microseconds]]
+        } else {
+            set token  [ns_sha1 "$secret-$session_id-[clock clicks -microseconds]"]
+        }
+        set $globalTokenName $token
+    }
+    return $token
+}
+
 namespace eval ::security::csrf {
 
     #
@@ -1994,6 +2033,8 @@ namespace eval ::security::csrf {
         variables at the end of the processing of every request.
     
         @return csrf token
+        
+        @author Gustaf Neumann
     } {
         set cached_var_name ::$tokenname
         if {[info exists $cached_var_name]} {
@@ -2071,6 +2112,7 @@ namespace eval ::security::csrf {
         Generate a CSRF token and return it
 
         @return CSRF token
+        @author Gustaf Neumann
     } {
         #
         # We compute the token only once per requests. If it was already
@@ -2080,12 +2122,16 @@ namespace eval ::security::csrf {
         set globalTokenName ::$tokenname
         if {[info exists $globalTokenName]} {
             set token [set $globalTokenName]
-        } elseif {[info commands ::crypto::hmac] ne ""} {
-            set secret [ns_config "ns/server/[ns_info server]/acs" parametersecret ""]
-            set token  [::crypto::hmac string $secret [session_id]]
         } else {
-            set token  [ns_sha1 [session_id]]
+            set secret [ns_config "ns/server/[ns_info server]/acs" parametersecret ""]
+            if {[info commands ::crypto::hmac] ne ""} {
+                set token [::crypto::hmac string $secret [session_id]]
+            } else {
+                set token [ns_sha1 $secret-[session_id]]
+            }
+            set $globalTokenName $token
         }
+
         return $token
     }
 
