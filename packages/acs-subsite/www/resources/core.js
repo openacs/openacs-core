@@ -614,9 +614,9 @@ Calendar.dayMouseDown = function(ev) {
 		cal._dragStart(ev);
 	}
 	if (el.navtype == -1 || el.navtype == 1) {
-		cal.timeout = setTimeout("Calendar.showMonthsCombo()", 250);
+	    cal.timeout = setTimeout(function() {Calendar.showMonthsCombo();}, 250);
 	} else if (el.navtype == -2 || el.navtype == 2) {
-		cal.timeout = setTimeout((el.navtype > 0) ? "Calendar.showYearsCombo(true)" : "Calendar.showYearsCombo(false)", 250);
+	    cal.timeout = setTimeout((el.navtype > 0) ? function() {Calendar.showYearsCombo(true);} : function() {Calendar.showYearsCombo(false);}, 250);
 	} else {
 		cal.timeout = null;
 	}
