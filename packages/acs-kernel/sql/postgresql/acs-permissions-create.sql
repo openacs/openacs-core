@@ -763,7 +763,7 @@ CREATE OR REPLACE FUNCTION acs_permission__permission_p_recursive_array(
        p_party_id  integer, 
        p_privilege varchar
 ) RETURNS table (object_id integer, orig_object_id integer) AS $$
-  SELECT acs_permission.permission_p_recursive_array(p_objects, p_party_id, p_privilege);
+  SELECT acs_permission.permission_p_recursive_array($1, $2, $3);
 $$ LANGUAGE sql stable;
 
 
