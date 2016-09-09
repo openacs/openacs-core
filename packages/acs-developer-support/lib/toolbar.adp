@@ -8,7 +8,7 @@
       <td class="actions">
         <ul>
           <multiple name="ds_buttons">
-            <li><a href="@ds_buttons.toggle_url@" class="@ds_buttons.state@" title="@ds_buttons.title@">@ds_buttons.label@</a></li>
+            <li><a id="ACS_DS_@ds_buttons.label@" href="@ds_buttons.toggle_url@" class="@ds_buttons.state@" title="@ds_buttons.title@">@ds_buttons.label@</a></li>
           </multiple>
         </ul>
       </td>

@@ -103,26 +103,27 @@ if { $spec_files eq "" } {
     }]
     
     set formName "pkgsForm"
-    append body [subst {
-
-        <script type="text/javascript">
-        function uncheckAll() {
-            var install_form = document.getElementsByName('$formName')\[0\];
-            for (var i = 0; i < install_form.length; ++i) {
-                install_form.elements\[i\].checked = false;
-            }
-        }
-        function checkAll() {
+    template::add_body_script -script [subst {
+        document.getElementById('check_all').addEventListener('click', function () {
             var install_form = document.getElementsByName('$formName')\[0\];
             for (var i = 0; i < install_form.length; ++i) {
                 install_form.elements\[i\].checked = true;
                 //install_form.elements\[i\].href = '';
             }
-        }
-        </script>
-        <a href="#" onclick="javascript:uncheckAll();return false;"><b>uncheck all boxes</b></a> |
-        <a href="#" onclick="javascript:checkAll();return false;"><b>check all boxes</b></a>
+            return false;            
+        });
+        document.getElementById('uncheck_all').addEventListener('click', function () {
+            var install_form = document.getElementsByName('$formName')\[0\];
+            for (var i = 0; i < install_form.length; ++i) {
+                install_form.elements\[i\].checked = false;
+            }
+            return false;            
+        });
     }]
+    append body {
+        <a href="#" id="uncheck_all"><b>uncheck all boxes</b></a> |
+        <a href="#" id="check_all"><b>check all boxes</b></a>
+    }
     #packages-install?checked_by_default_p=1
     
     append body "<form name='$formName' action='packages-install-2' method='post'>\n"
