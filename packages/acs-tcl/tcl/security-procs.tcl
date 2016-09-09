@@ -2037,6 +2037,7 @@ namespace eval ::security::csp {
         security::csp::require default-src 'self'
         security::csp::require script-src 'self'
         security::csp::require style-src 'self'
+        security::csp::require img-src 'self'
 
         #
         # Always add the nonce-token to script-src
