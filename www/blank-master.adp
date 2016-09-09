@@ -17,7 +17,7 @@
    enforce the order, it is put here.
 </comment>
 <if @::acs_blank_master__htmlareas@ defined and @::xinha_dir@ defined and @::xinha_lang@ defined>
-<script type="text/javascript">
+<script type="text/javascript"<if @::__csp_nonce@ not nil> nonce="@::__csp_nonce;literal@"</if>>
 _editor_url = "@::xinha_dir;literal@"; 
 _editor_lang = "@::xinha_lang;literal@";
 </script>
@@ -28,7 +28,7 @@ _editor_lang = "@::xinha_lang;literal@";
 
 <if @head@ not nil>@head;literal@</if>
 </head>
-<body<if @body.class@ not nil> class="@body.class;literal@"</if><if @body.id@ not nil> id="@body.id;literal@"</if><if @event_handlers@ not nil>@event_handlers;literal@</if>>
+<body<if @body.class@ not nil> class="@body.class;literal@"</if><if @body.id@ not nil> id="@body.id;literal@"</if>>
   @header;literal@
 <slave>
   @footer;literal@

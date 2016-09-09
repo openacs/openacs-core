@@ -91,20 +91,8 @@ if {[parameter::get -parameter CSPEnabledP -package_id [ad_acs_kernel_id] -defau
 # Add standard javascript
 #
 # Include core.js inclusion to the bottom of the body.
-# The only function needed alread onload is acs_Focus()
-#
+
 template::add_body_script -type "text/javascript" -src "/resources/acs-subsite/core.js"
-
-template::head::add_javascript -script {
-  function acs_Focus(form_name, element_name) {
-    if (document.forms == null) return;
-    if (document.forms[form_name] == null) return;
-    if (document.forms[form_name].elements[element_name] == null) return;
-    if (document.forms[form_name].elements[element_name].type == 'hidden') return;
-
-    document.forms[form_name].elements[element_name].focus();
-  }
-}
 
 #
 # Add css for the current subsite, defaulting to the old list/form css which was
@@ -238,12 +226,24 @@ if {[llength [info commands ::ds_show_p]] == 1 && [ds_show_p]} {
 }
 
 if {[info exists focus] && $focus ne ""} {
-    # Handle elements where the name contains a dot
+    #
+    # Handle only values of focus where the provided name contains a
+    # dot.
+    #
     if { [regexp {^([^.]*)\.(.*)$} $focus match form_name element_name] } {
-        template::add_body_handler \
-            -event onload \
-            -script "acs_Focus('${form_name}', '${element_name}');" \
-            -identifier "focus"
+        set focus_script {
+            function acs_Focus(form_name, element_name) {
+                if (document.forms == null) return;
+                if (document.forms[form_name] == null) return;
+                if (document.forms[form_name].elements[element_name] == null) return;
+                if (document.forms[form_name].elements[element_name].type == 'hidden') return;
+                
+                document.forms[form_name].elements[element_name].focus();
+            }}
+        append focus_script "acs_Focus('${form_name}', '${element_name}');\n"
+        template::add_body_script -script $focus_script
+    } else {
+        ns_log warning "blank-master: variable focus has invalid value '$focus'"
     }
 }
 
@@ -251,7 +251,10 @@ if {[info exists focus] && $focus ne ""} {
 set header [template::get_header_html]
 set footer [template::get_footer_html]
 template::head::prepare_multirows
-set event_handlers [template::get_body_event_handlers]
+
+# body event handlers are converted into body_scripts
+template::get_body_event_handlers
+
 
 # Local variables:
 #    mode: tcl

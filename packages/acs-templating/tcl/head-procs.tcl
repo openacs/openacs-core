@@ -695,10 +695,26 @@ ad_proc template::get_body_event_handlers {
             unset body_handlers($name)
         }
         
-        # Now create the event handlers string
+        set js ""
         foreach {event script} [array get body_handlers] {
-            append event_handlers " " $event = \" [join $script { }] \"
+            #
+            # Remove the "on" prefix if provided. E.g. "onload" is
+            # mapped to the "load" event on "window" (UIevent). It
+            # would as well be possible to map to DOM events (on
+            # "document")
+            # (https://developer.mozilla.org/en-US/docs/Web/Events)
+            #
+            regsub ^on $event "" event
+            append js [subst {
+                window.addEventListener('$event', function () {
+                    [join $script { }]
+                });
+            }]
         }
+        if {$js ne ""} {
+            template::add_body_script -script $js
+        }
+        
         unset body_handlers
     }
 
