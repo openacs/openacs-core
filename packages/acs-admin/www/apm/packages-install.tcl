@@ -104,16 +104,18 @@ if { $spec_files eq "" } {
     
     set formName "pkgsForm"
     template::add_body_script -script [subst {
-        document.getElementById('check_all').addEventListener('click', function () {
+        document.getElementById('check_all').addEventListener('click', function (event) {
             var install_form = document.getElementsByName('$formName')\[0\];
+            event.preventDefault();
             for (var i = 0; i < install_form.length; ++i) {
                 install_form.elements\[i\].checked = true;
                 //install_form.elements\[i\].href = '';
             }
             return false;            
         });
-        document.getElementById('uncheck_all').addEventListener('click', function () {
+        document.getElementById('uncheck_all').addEventListener('click', function (event) {
             var install_form = document.getElementsByName('$formName')\[0\];
+            event.preventDefault();
             for (var i = 0; i < install_form.length; ++i) {
                 install_form.elements\[i\].checked = false;
             }
