@@ -73,21 +73,6 @@ template::head::add_meta \
     -lang en \
     -content "OpenACS version [ad_acs_version]"
 
-#
-# Add the content security policy. Since this is the blank master, we
-# are defensive and check, if the system has already support for it
-# via the CSPEnabledP kernel parameter. Otherwise users would be
-# blocked out.
-#
-if {[parameter::get -parameter CSPEnabledP -package_id [ad_acs_kernel_id] -default 0]
-    && [info commands ::security::csp::render] ne ""
-} {
-    set csp [::security::csp::render]
-    if {$csp ne ""} {
-        ns_set put [ns_conn outputheaders] Content-Security-Policy $csp
-    }
-}
-
 # Add standard javascript
 #
 # Include core.js inclusion to the bottom of the body.
@@ -256,6 +241,28 @@ template::head::prepare_multirows
 # body event handlers are converted into body_scripts
 template::get_body_event_handlers
 
+#
+# Add the content security policy. Since this is the blank master, we
+# are defensive and check, if the system has already support for it
+# via the CSPEnabledP kernel parameter. Otherwise users would be
+# blocked out.
+#
+if {[parameter::get -parameter CSPEnabledP -package_id [ad_acs_kernel_id] -default 0]
+    && [info commands ::security::csp::render] ne ""
+} {
+    set csp [::security::csp::render]
+    if {$csp ne ""} {
+
+        set ua [ns_set iget [ns_conn headers] user-agent]
+        if {[regexp {Trident/.*rv:([0-9]{1,}[\.0-9]{0,})} $ua]} {
+            set field X-Content-Security-Policy
+        } else {
+            set field Content-Security-Policy
+        }
+
+        ns_set put [ns_conn outputheaders] $field $csp
+    }
+}
 
 # Local variables:
 #    mode: tcl

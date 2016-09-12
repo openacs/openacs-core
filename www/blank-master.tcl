@@ -84,7 +84,15 @@ if {[parameter::get -parameter CSPEnabledP -package_id [ad_acs_kernel_id] -defau
 } {
     set csp [::security::csp::render]
     if {$csp ne ""} {
-        ns_set put [ns_conn outputheaders] Content-Security-Policy $csp
+
+        set ua [ns_set iget [ns_conn headers] user-agent]
+        if {[regexp {Trident/.*rv:([0-9]{1,}[\.0-9]{0,})} $ua]} {
+            set field X-Content-Security-Policy
+        } else {
+            set field Content-Security-Policy
+        }
+
+        ns_set put [ns_conn outputheaders] $field $csp
     }
 }
 
