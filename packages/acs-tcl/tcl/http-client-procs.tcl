@@ -163,7 +163,7 @@ ad_proc -public util::http::cookie_auth {
     }
     
     set formvars [util::html::get_form_vars -form $form]
-    set formvars [export_vars -url -exclude $auth_vars $formvars]
+    set formvars [export_vars -exclude $auth_vars $formvars]
     # Export vars provided explicitly in caller scope
     set auth_vars [uplevel [list export_vars -url $auth_vars]]
     # Join form vars with our vars
