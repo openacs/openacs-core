@@ -239,7 +239,8 @@ if {[info exists focus] && $focus ne ""} {
                 if (document.forms[form_name].elements[element_name].type == 'hidden') return;
                 
                 document.forms[form_name].elements[element_name].focus();
-            }}
+            };
+        }
         append focus_script "acs_Focus('${form_name}', '${element_name}');\n"
         template::add_body_script -script $focus_script
     } else {

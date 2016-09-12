@@ -340,9 +340,17 @@ ad_proc -public ad_user_logout {} {
     Logs the user out. 
 } {
     set domain [parameter::get -parameter CookieDomain -package_id [ad_acs_kernel_id]]
-
-    ad_unset_cookie -domain $domain -secure f ad_session_id
-    ad_unset_cookie -domain $domain -secure t ad_session_id
+    #
+    # Use the same "secure" setting for unsetting the cookie as it was
+    # used for setting the cookie. The implementation is not 100%
+    # correct, for cases, when the parameter value for
+    # "SecureSessionCookie" was altered during a session, but this
+    # should be a seldom border case.
+    #
+    ad_unset_cookie -domain $domain -secure [expr {[parameter::get \
+                            -parameter SecureSessionCookie \
+                            -package_id [ad_acs_kernel_id] \
+                            -default 0] ? "t" : "f"}] ad_session_id
     ad_unset_cookie -domain $domain -secure f ad_user_login
     ad_unset_cookie -domain $domain -secure t ad_secure_token
     ad_unset_cookie -domain $domain -secure t ad_user_login_secure
@@ -2038,9 +2046,18 @@ namespace eval ::security::csp {
         security::csp::require script-src 'self'
         security::csp::require style-src 'self'
         security::csp::require img-src 'self'
+        security::csp::require font-src 'self'
 
         #
-        # Always add the nonce-token to script-src
+        # Always add the nonce-token to script-src. Note, that nonce
+        # definition comes via CSP 2, which - at the current time - is
+        # not supported by all browsers interpreting CSPs. We could
+        # add a "unsafe-inline" here, since the spec defines that when
+        # 'unsafe-inline' and a 'nonce-source' is used, the
+        # 'unsafe-inline'" will have no effect
+        # (https://w3c.github.io/webappsec-csp/ § 6.6.2.2.). However,
+        # some security checkers just look for 'unsafe-inline' and
+        # downgrade the rating without honoring the 'nonce-src'.
         #
         security::csp::require script-src 'nonce-$nonce'
         
@@ -2049,26 +2066,12 @@ namespace eval ::security::csp {
         # style="...">) would be allowed.
         #
         security::csp::require style-src 'unsafe-inline'
-        
+
         #
-        # Check for invalid combination to avoid unexpected behavior
+        # Define a report URI to ease debugging. CSP 3 will support a
+        # "report-to" directive, but will still support "report-uri".
         #
-        foreach directive {script-src style-src} {
-            #
-            # The combination of 'unsafe-inline' with a hash or nonce is
-            # not possible, since 'unsafe-inline' is ignored in such
-            # cases.
-            #
-            set var ::__csp__directive($directive)
-            if {[info exists $var] && "'unsafe-inline'" in [set $var]} {
-                foreach prefix {nonce sha256 sha384 sha512} {
-                    set p [lsearch -glob [set $var] '$prefix-*']
-                    if {$p > -1} {
-                        set $var [lreplace [set $var] $p $p]
-                    }
-                }
-            }
-        }
+        security::csp::require report-uri /SYSTEM/csp-collector.tcl
 
         set policy ""
         foreach directive {
