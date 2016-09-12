@@ -116,7 +116,7 @@ namespace eval notification::email {
     } {
 
        # Get user data
-       set email [cc_email_from_party $to_user_id]
+       set email [party::email -party_id $to_user_id]
        set user_locale [lang::user::site_wide_locale -user_id $to_user_id]
        if { $user_locale eq "" } {
            set user_locale lang::system::site_wide_locale
@@ -150,7 +150,7 @@ namespace eval notification::email {
        set reply_to [reply_address -object_id $reply_object_id -type_id $notification_type_id]
 
        if { $from_user_id ne "" && $from_user_id != 0 && [db_0or1row get_person {}]} {
-           set from_email [cc_email_from_party $from_user_id]
+           set from_email [party::email -party_id $from_user_id]
 	   
            # Set the Mail-Followup-To address to the
            # address of the notifications handler.
@@ -337,7 +337,7 @@ namespace eval notification::email {
             set to [parse_email_address $to]
 
             # Find the from user
-            set from_user [cc_lookup_email_user $from]
+            set from_user [party::get_by_email -email $from]
 
             # We don't accept empty users for now
             if {$from_user eq ""} {

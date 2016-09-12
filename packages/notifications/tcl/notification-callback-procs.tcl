@@ -80,7 +80,7 @@ ad_proc -public -callback acs_mail_lite::incoming_email -impl notifications {
 
     # Find the user_id of the sender
     ns_log Notice "acs_mail_lite::incoming_email -impl notifications: from $from"
-    set user_id [cc_lookup_email_user $from]
+    set user_id [party::get_by_email -email $from]
     
     # We don't accept empty users for now
     if {$user_id eq ""} {
