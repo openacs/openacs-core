@@ -445,6 +445,8 @@ ad_proc -private install_do_packages_install {} {
             } -default 0]
             if {$kernel_id > 0} {
                 proc ad_acs_kernel_id {} "return $kernel_id"
+                ns_log notice "installer: setting ::acs::kernel_id to $::acs::kernel_id"
+                set ::acs::kernel_id $kernel_id
             }
             return $kernel_id
         } else {
