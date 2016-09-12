@@ -1266,13 +1266,15 @@ ad_proc -private ad_acs_kernel_id_mem {} {
     return [db_string acs_kernel_id_get {} -default 0]
 }
 
-# use proc rather than ad_proc on redefine since we don't want to see a 
-# multiple define proc warning...
 ad_proc -public ad_acs_kernel_id {} {
     Returns the package_id of the kernel.
 } {
     set acs_kernel_id [ad_acs_kernel_id_mem]
+    #
+    # use proc rather than ad_proc on redefine since we don't want to see a 
+    # multiple define proc warning...
     proc ad_acs_kernel_id {} "return $acs_kernel_id"
+    
     return $acs_kernel_id
 }
 
