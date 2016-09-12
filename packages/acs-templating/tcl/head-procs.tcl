@@ -413,6 +413,18 @@ ad_proc -public template::add_body_script {
     if {$src eq "" && $script eq ""} {
         error "You must supply either -src or -script."
     }
+    
+    if {$script ne ""} {
+        #
+        # For the time being, not all browsers support
+        # nonces. According to the spects the added 'unsafe-inline',
+        # is ignored on browsers supporting nonces.
+        # 
+        # We could restrict setting of unsafe-inline to certain
+        # browsers by checking the user agent.
+        #
+        security::csp::require script-src 'unsafe-inline'
+    }
 
     lappend ::template::body_scripts $type $src $charset $defer $async $script $crossorigin $integrity
 }
