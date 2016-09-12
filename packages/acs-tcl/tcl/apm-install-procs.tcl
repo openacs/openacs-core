@@ -1111,7 +1111,7 @@ ad_proc -private apm_package_deinstall {
 
     # Obtain the portion of the email address before the at sign. We'll use this in the name of
     # the backup directory for the package.
-    regsub {@.+} [cc_email_from_party [ad_conn user_id]] "" my_email_name
+    regsub {@.+} [party::email -party_id [ad_conn user_id]] "" my_email_name
 
     set backup_dir "[apm_workspace_dir]/$package_key-removed-$my_email_name-[ns_fmttime [ns_time] {%Y%m%d-%H:%M:%S}]"
 
