@@ -12,49 +12,59 @@ namespace eval party {}
 namespace eval person {}
 namespace eval acs_user {}
 
-ad_proc -private cc_lookup_screen_name_user { screen_name } {
+ad_proc -deprecated -private cc_lookup_screen_name_user { screen_name } {
+    @see acs_user::get_user_id_by_screen_name
+} {
     return [db_string user_select {} -default {}]
 }
 
-ad_proc cc_screen_name_user { screen_name } {
+ad_proc -deprecated cc_screen_name_user { screen_name } {
 
-    Returns the user ID for a particular screen name, or an empty string
+    @return Returns the user ID for a particular screen name, or an empty string
     if none exists.
+
+    @see acs_user::get_user_id_by_screen_name
 
 } {
     return [util_memoize [list cc_lookup_screen_name_user $screen_name]]
 }
 
-ad_proc -private cc_lookup_email_user { email } {
+ad_proc -deprecated -private cc_lookup_email_user { email } {
     Return the user_id of a user given the email. Returns the empty string if no such user exists.
+    @see party::get_by_email
 } {
     return [db_string user_select {} -default {}]
 }
 
-ad_proc -public cc_email_from_party { party_id } {
+ad_proc -public -deprecated cc_email_from_party { party_id } {
     @return The email address of the indicated party.
+    @see party::email
 } {
     return [db_string email_from_party {} -default {}]
 }
 
-ad_proc cc_email_user { email } {
+ad_proc -deprecated cc_email_user { email } {
 
-    Returns the user ID for a particular email address, or an empty string
+    @return Returns the user ID for a particular email address, or an empty string
     if none exists.
 
+    @see party::get_by_email
 } {
     return [util_memoize [list cc_lookup_email_user $email]]
 }
 
-ad_proc -private cc_lookup_name_group { name } {
+ad_proc -deprecated -private cc_lookup_name_group { name } {
+    @see group::get_id
+} {
     return [db_string group_select {} -default {}]
 }
 
-ad_proc cc_name_to_group { name } {
+ad_proc -deprecated cc_name_to_group { name } {
 
     Returns the group ID for a particular name, or an empty string
     if none exists.
-
+    
+    @see group::get_id
 } {
     return [util_memoize [list cc_lookup_name_group $name]]
 }
@@ -349,7 +359,7 @@ ad_proc -public acs_user::get_by_username {
 	util_memoize_flush [list acs_user::get_by_username_not_cached -authority_id $authority_id -username $username]
     }
     return $user_id
-}    
+}
 
 ad_proc -private acs_user::get_by_username_not_cached {
     {-authority_id:required}
@@ -365,7 +375,6 @@ ad_proc -private acs_user::get_by_username_not_cached {
 }  {
     return [db_string user_id_from_username {} -default {}]
 }    
-
 
 ad_proc -public acs_user::get {
     {-user_id {}}
