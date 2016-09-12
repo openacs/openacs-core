@@ -76,7 +76,7 @@ ad_proc -public core_docs_html_redirector {args} {
         set html_fn [acs_package_root_dir $pkg]/www/doc/$path
         #ns_log notice "... pkg doc <$html_fn>"
     }
-    set adp_fn  [file root $html_fn].adp
+    set adp_fn  [file rootname $html_fn].adp
 
     if {[file readable $adp_fn]} {
         #
