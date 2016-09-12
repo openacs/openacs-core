@@ -24,10 +24,10 @@ aa_register_case \
 	
 	aa_run_with_teardown -test_code {
 	    array set user_info [twt::user::create -user_id $user_id]
-	    set user_id_p [cc_lookup_email_user $user_info(email)]
+	    set user_id_p [party::get_by_email -email $user_info(email)]
 	    aa_true "User ID CORRECTO" \
 	    	[string match $user_id_p $user_info(user_id)]
-	    set email_p [cc_email_from_party $user_info(user_id)]
+	    set email_p [party::email -party_id $user_info(user_id)]
 	    aa_log "returns:  $email_p ,  creation:  $user_info(email)"
 	    aa_true "Email correcto" \
 		[string match $email_p [string tolower $user_info(email)]]
@@ -77,7 +77,7 @@ aa_register_case \
 		aa_true "correct name" [string match [person::name -person_id $user_info(user_id)] "$first_names $last_name"]
 
 		set prs_id [person::new -first_names $first_names -last_name $last_name -email "${email}s"]
-		set email_p [cc_email_from_party $prs_id]
+		set email_p [party::email -party_id $prs_id]
 		aa_true "New person pass" [string match $email_p [string tolower "${email}s"]]
 		
 		person::update -person_id $prs_id -first_names "hh$first_names" -last_name "hh$last_name"
