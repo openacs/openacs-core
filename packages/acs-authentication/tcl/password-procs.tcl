@@ -178,7 +178,7 @@ ad_proc -public auth::password::recover_password {
             }
             return [array get result]
         }
-        set user_id [cc_lookup_email_user $email]
+        set user_id [party::get_by_email -email $email]
         if { $user_id eq "" } {
             set result(password_status) "failed_to_connect"
             set result(password_message) "Unknown email"
@@ -248,7 +248,7 @@ ad_proc -public auth::password::get_forgotten_url {
             set authority_id [auth::authority::local]
         }
     } else {
-        set user_id [cc_lookup_email_user $email]
+        set user_id [party::get_by_email -email $email]
         if { $user_id ne "" } {
             acs_user::get -user_id $user_id -array user
             set authority_id $user(authority_id)

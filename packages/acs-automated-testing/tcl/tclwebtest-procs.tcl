@@ -192,7 +192,7 @@ ad_proc twt::user::login { email password {username ""}}  {
     set response_url [tclwebtest::response url]
 
     if { ![string match "*${home_uri}*" $response_url] } {
-        if { [cc_lookup_email_user $email] eq "" } {
+        if { [party::get_by_email -email $email] eq "" } {
             error "Failed to login user with email=\"$email\" and password=\"$password\". No user with such email in database."
         } else {
             ns_log Error "Failed to log in user with email=\"$email\" and password=\"$password\" eventhough email exists (password may be incorrect). response_body=[tclwebtest::response body]"
