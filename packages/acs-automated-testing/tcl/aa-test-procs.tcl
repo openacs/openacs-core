@@ -39,7 +39,7 @@ proc aa_proc_copy {proc_name_old proc_name_new {new_body ""}} {
     # (like for proc based ad_procs), but the real argument/parameter
     # list, we address these differences here for all needed cases.
     #
-    if {[info proc $proc_name_old] ne ""} {
+    if {[info procs $proc_name_old] ne ""} {
         #
         # We copy a regular Tcl proc
         #
