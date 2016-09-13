@@ -2021,7 +2021,7 @@ namespace eval ::security::csp {
     }
 
     # security::csp::require style-src 'unsafe-inline'
-    ad_proc -public ::security::csp::require {directive value} {
+    ad_proc -public ::security::csp::require {{-force:boolean} directive value} {
         Add a single value to a CSP directive
         @directive name of the directive (such as e.g. style-src)
         @value allowed source for this page (such as e.g. unsafe-inline)
@@ -2029,6 +2029,13 @@ namespace eval ::security::csp {
         set var ::__csp__directive($directive)
         if {![info exists $var] || $value ni [set $var]} {
             lappend $var $value
+        }
+        if {$force_p} {
+            ns_log notice "CSP: forcing $directive $value"
+            set var ::__csp__directive_forced($directive)
+            if {![info exists $var] || $value ni [set $var]} {
+                lappend $var $value
+            }
         }
     }
 
@@ -2059,7 +2066,18 @@ namespace eval ::security::csp {
         # some security checkers just look for 'unsafe-inline' and
         # downgrade the rating without honoring the 'nonce-src'.
         #
-        security::csp::require script-src 'nonce-$nonce'
+        # Another problem is mixed content. When we set the nonce-src
+        # and 'unsafe-inline', and a browser honoring nonces ignores
+        # the 'unsafe-inline', but some javascript framework requires
+        # it (e.g ckeditor4), we have a problem. Therefore, an
+        # application can force "'unsafe-inline'" which means that we
+        # do not set the nonce-src in such cases.
+        #
+        if {![info exists ::__csp__directive_forced(script-src)]
+            || "'unsafe-inline'" ni $::__csp__directive_forced(script-src)
+        } {
+            security::csp::require script-src 'nonce-$nonce'
+        }
         
         # We need for the time being 'unsafe-inline' for style-src,
         # otherwise not even the style attribute (e.g. <p
