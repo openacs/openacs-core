@@ -80,7 +80,7 @@
 			  </li>
 			</ul>
 			  <center>
-			    (<a href="javascript:void(d=document);void(el=d.getElementsByTagName('div'));for(i=0;i&lt;el.length;i++){if(el[i].className=='um-more-info'){void(el[i].className='um-more-info-off')}else{if(el[i].className=='um-more-info-off'){void(el[i].className='um-more-info')}}};" class="off" title="Toggle Footer display">more information</a>)
+			    (<a id="toggle-footer-display-control-1" href="#" class="off" title="Toggle Footer display">more information</a>)
 			  </center>
 			<div class="um-adp-box-off">
 			  <div class="um-more-info-off">
@@ -209,7 +209,7 @@
 			  </li>
 			</ul>
 			<center>
-			  (<a href="javascript:void(d=document);void(el=d.getElementsByTagName('div'));for(i=0;i&lt;el.length;i++){if(el[i].className=='um-more-info2'){void(el[i].className='um-more-info-off2')}else{if(el[i].className=='um-more-info-off2'){void(el[i].className='um-more-info2')}}};" class="off" title="Toggle Footer display">more information</a>)
+			  (<a id="toggle-footer-display-control-2" href="#" class="off" title="Toggle Footer display">more information</a>)
 			</center>
 			<div class="um-adp-box-off2">
 			  <div class="um-more-info-off2">

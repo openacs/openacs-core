@@ -89,6 +89,24 @@ template::head::add_css \
     -href "/resources/acs-admin/um-more-info.css" \
     -media all
 
+template::add_body_script -script {
+    function toggle_footer(event) {
+        event.preventDefault();
+        var el = document.getElementsByTagName('div');
+        for(i = 0; i < el.length; i++) {
+          if (el[i].className=='um-more-info') {
+              el[i].className='um-more-info-off';
+          } else {
+              if (el[i].className=='um-more-info-off') {
+                  el[i].className='um-more-info';
+              }
+          }
+      };
+      return false;
+    };
+    document.getElementById('toggle-footer-display-control-1').addEventListener('click', toggle_footer, false);
+    document.getElementById('toggle-footer-display-control-2').addEventListener('click', toggle_footer, false);    
+}
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
