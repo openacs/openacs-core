@@ -720,7 +720,7 @@ ad_proc template::get_body_event_handlers {
             append js [subst {
                 window.addEventListener('$event', function () {
                     [join $script { }]
-                });
+                }, false);
             }]
         }
         if {$js ne ""} {
