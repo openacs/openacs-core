@@ -590,9 +590,14 @@ ad_proc -public template::widget::richtext { element_reference tag_attributes } 
 
 		set ::acs_blank_master(${richtextEditor}.options) [array get options]
 	    }
-		      
+
+            #
+            # The following trick with document.write is for providing
+            # reasonable behavior when javascript is turned completely
+            # off.
+            #
             append output \
-		"</span>\n<script type='text/javascript'>" \n \
+		"</span>\n<script type='text/javascript' nonce='$::__csp_nonce'>\n" \
 		[subst {document.write("<input name='$element(id).format' value='text/html' type='hidden'>");}] \
 		"</script>\n<noscript><div>" \
 		[subst {<span class="form-widget"><label for="$element(id).format">[_ acs-templating.Format]: </label>}] \
