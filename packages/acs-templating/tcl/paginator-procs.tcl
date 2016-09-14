@@ -38,7 +38,7 @@ ad_proc -public template::paginator { command args } {
   paginator::$command {*}$args
 }
 
-ad_proc -public template::paginator::create { statement_name name query count_query args } {
+ad_proc -public template::paginator::create { statement_name name query args } {
     Creates a paginator object.  Performs an initial query to get the complete
     list of rows in the query result and caches the result for subsequent
     queries.
