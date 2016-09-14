@@ -208,7 +208,8 @@ ad_proc -private template::paginator::init { statement_name name query {print_p 
   if {$original_query eq ""} {
       # ...which was slightly modified to keep the original query untampered.
       set list_name [lindex [split $name ,] 0]
-      if {![catch {template::list::get_reference -name $list_name}]} {
+      if {[info exists ::[template::list::get_refname -name $list_name]]} {
+          template::list::get_reference -name $list_name
           set original_query $list_properties(page_query_original)
       }
   }
