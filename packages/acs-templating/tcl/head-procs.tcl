@@ -232,8 +232,22 @@ ad_proc -public template::head::add_style {
 } {
     variable ::template::head::styles
 
+    if {[info exists styles(anonymous)]} {
+        #
+        # Add this combination only once
+        #
+        foreach {_type _media _title _lang _style} $styles(anonymous) {
+            if {$type eq $_type
+                && $_media eq $media
+                && $_title eq $title
+                && $_lang  eq $lang
+                && $_style eq $style
+            } {
+                return
+            }
+        }
+    }
     lappend styles(anonymous) $type $media $title $lang $style
- 
 }
 
 ad_proc -public template::head::add_javascript {
