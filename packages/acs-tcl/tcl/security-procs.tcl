@@ -2056,6 +2056,12 @@ namespace eval ::security::csp {
         security::csp::require font-src 'self'
 
         #
+        # Some browser (safari, chrome) need "font-src data:", maybe
+        # for plugins or diffent font settings. Seems safe enough.
+        #
+        security::csp::require font-src data:
+        
+        #
         # Always add the nonce-token to script-src. Note, that nonce
         # definition comes via CSP 2, which - at the current time - is
         # not supported by all browsers interpreting CSPs. We could
