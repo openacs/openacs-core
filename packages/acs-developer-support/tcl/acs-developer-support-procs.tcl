@@ -669,7 +669,7 @@ ad_proc -public ds_profile { command {tag {}} } {
             if { $tag eq "" } {
                 error "Tag parameter is required"
             }
-            set ::ds_profile__start_clock($tag) [clock clicks -microeconds]
+            set ::ds_profile__start_clock($tag) [clock clicks -microseconds]
         }
         stop {
             if { [info exists ::ds_profile__start_clock($tag)] 
