@@ -19,7 +19,18 @@ namespace eval acs_mail_lite {
     } {
         set domain [parameter::get_from_package_key -package_key "acs-mail-lite" -parameter "BounceDomain"]
         if { $domain eq "" } {
-	    regsub {http://} [ns_config [ns_driversection -driver nssock] hostname] _ domain
+            #
+            # If there is no domain configured, use the configured
+            # hostname as domain name
+            #
+            foreach driver {nsssl nssock} {
+                set driver_section [ns_driversection -driver $driver]
+                set configured_hostname [ns_config $driver_section hostname]
+                if {$configured_hostname ne ""} {
+                    set domain $configured_hostname
+                    break
+                }
+            }
 	}
 	return $domain
     }
