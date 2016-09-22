@@ -1663,8 +1663,11 @@ ad_proc -private security::get_insecure_location {} {
 
 if {[ns_info name] ne "NaviServer"} {
     #
-    # compatibility with NaviServer, which allows global and per-server
-    # defined drivers.
+    # Compatibility function for AOLserver, which allows abstracts
+    # from the configuration section in the config files. NaviServer
+    # supports in general global and per-server defined drivers. The
+    # emulated version just supports per-server configurations, since
+    # these are the only ones supported by AOLserver.
     #
     ad_proc -public ns_driversection {
         {-driver "nssock"}
@@ -1968,8 +1971,11 @@ ad_proc -public security::validated_host_header {} {
     #
     # We could/should check as well against a white-list of additional
     # host names (maybe via ::acs::validated, or via config file, or
-    # via additional package parameter).
+    # via additional package parameter). Probably the best way is to
+    # get alternate (alias) names from the driver section of the
+    # current driver [ns_conn driver] (maybe check global and local).
     #
+    #ns_set array [ns_configsection ns/module/nssock/servers]
 
     #
     # Now we give up
