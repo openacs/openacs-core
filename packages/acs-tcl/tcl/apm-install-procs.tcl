@@ -1276,9 +1276,7 @@ ad_proc -private apm_package_install_data_model {
                 apm_callback_and_log $callback "<ul>\n"
                 set ul_p 1
             }
-            apm_callback_and_log $callback "<li>Loading data model $path/$file_path...
-<blockquote><pre>
-"
+            apm_callback_and_log $callback "<li>Loading data model $path/$file_path...\n<blockquote><pre>\n"
             db_source_sql_file -callback $callback $path/$file_path
             apm_callback_and_log $callback "</pre></blockquote>\n"
         } elseif { $file_type eq "sqlj_code" } {
@@ -1286,9 +1284,7 @@ ad_proc -private apm_package_install_data_model {
                 apm_callback_and_log $callback "<ul>\n"
                 set ul_p 1
             }
-            apm_callback_and_log $callback "<li>Loading SQLJ code $path/$file_path...
-<blockquote><pre>
-"
+            apm_callback_and_log $callback "<li>Loading SQLJ code $path/$file_path...\n<blockquote><pre>\n"
             db_source_sqlj_file -callback $callback "$path/$file_path"
             apm_callback_and_log $callback "</pre></blockquote>\n"
         } elseif {$file_type eq "ctl_file"} {
@@ -1297,8 +1293,7 @@ ad_proc -private apm_package_install_data_model {
                 apm_callback_and_log $callback "<ul>\n"
                 set ul_p 1
             }
-            apm_callback_and_log $callback "<li>Loading data file $path/$file_path...
-<blockquote><pre>"
+            apm_callback_and_log $callback "<li>Loading data file $path/$file_path...\n<blockquote><pre>\n"
             db_load_sql_data -callback $callback $path/$file_path
             apm_callback_and_log $callback "</pre></blockquote>\n"
         }
@@ -2014,11 +2009,15 @@ ad_proc -private apm_get_package_repository {
     # This will be a list of array-lists of packages available for install
     upvar 1 $array repository
 
+    #ns_log notice "apm_get_package_repository repository_url=$repository_url"
+    
     apm_get_installed_versions -array installed_version
 
     if { $repository_url ne "" } {
         set manifest_url "${repository_url}manifest.xml"
 
+        #ns_log notice "apm_get_package_repository manifest_url=$manifest_url"
+        
         # See if we already have it in a client property
         set manifest [ad_get_client_property acs-admin [string range $manifest_url end-49 end]]
 
@@ -2157,6 +2156,7 @@ ad_proc -public apm_get_repository_channels { {repository_url http://openacs.org
 } {
     set result [util::http::get -url $repository_url]
     set status [dict get $result status]
+    #ns_log notice "GOT\n$repository_url\n[dict get $result page]"
     if {$status != 200} {
         return -code error "unexpected result code $status from url $repository_url"
     }
