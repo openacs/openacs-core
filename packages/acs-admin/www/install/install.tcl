@@ -16,7 +16,7 @@ if {$current_channel eq ""} {
     set channel $current_channel
 }
 if {$head_channel eq ""} {
-    set head_channel [lindex [apm_get_repository_channels $repository_url] 0]
+    set head_channel [lindex [apm_get_repository_channels] 0]
 }
 
 #
@@ -58,7 +58,13 @@ set upgrades_p 0
 array set package [list]
 
 if {$channel eq ""} {set channel $current_channel}
-set fetch_url $repository_url/$channel/
+if {[regexp {/(\d+-\d+)/$} $repository_url . passed_in_channel]} {
+    set fetch_url $repository_url
+} else {
+    set fetch_url $repository_url/$channel/
+}
+
+ns_log notice "fetch_url=<$fetch_url>,channel=<$channel>"
 
 apm_get_package_repository -repository_url $fetch_url -array repository
 
