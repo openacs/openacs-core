@@ -2594,39 +2594,46 @@ ad_proc -public db_source_sql_file {
             } else {
                 set pghost "-h [db_get_dbhost]"
             }
+            
+            set errno [catch {
+                cd [file dirname $file]
+                set fp [open "|[file join [db_get_pgbin] psql] $pghost $pgport $pguser -f $file [db_get_database] $pgpass" "r"]
+            } errorMsg]
 
-            cd [file dirname $file]
-            set fp [open "|[file join [db_get_pgbin] psql] $pghost $pgport $pguser -f $file [db_get_database] $pgpass" "r"]
-
-            while { [gets $fp line] >= 0 } {
-                # Don't bother writing out lines which are purely whitespace.
-                if { ![string is space $line] } {
-                    apm_callback_and_log $callback "[ns_quotehtml $line]\n"
+            if {$errno > 0} {
+                set error_found 1
+                set error_lines $errorMsg
+            } else {
+                while { [gets $fp line] >= 0 } {
+                    # Don't bother writing out lines which are purely whitespace.
+                    if { ![string is space $line] } {
+                        apm_callback_and_log $callback "[ns_quotehtml $line]\n"
+                    }
                 }
-            }
 
-            # PSQL dumps errors and notice information on stderr, and has no option to turn
-            # this off.  So we have to chug through the "error" lines looking for those that
-            # really signal an error.
+                # PSQL dumps errors and notice information on stderr, and has no option to turn
+                # this off.  So we have to chug through the "error" lines looking for those that
+                # really signal an error.
 
-            set errno [ catch {
-                close $fp
-            } error]
+                set errno [ catch {
+                    close $fp
+                } error]
 
-            if { $errno == 2 } {
-                return $error
-            }
+                if { $errno == 2 } {
+                    return $error
+                }
 
-            # Just filter out the "NOTICE" lines, so we get the stack dump along with real
-            # ERRORs.  This could be done with a couple of opaque-looking regexps...
+                # Just filter out the "NOTICE" lines, so we get the stack dump along with real
+                # ERRORs.  This could be done with a couple of opaque-looking regexps...
 
-            set error_found 0
-            foreach line [split $error "\n"] {
-                if { [string first NOTICE $line] == -1 } {
-                    append error_lines "$line\n"
-                    set error_found [expr { $error_found
-                                            || [string first ERROR $line] != -1
-                                            || [string first FATAL $line] != -1 } ]
+                set error_found 0
+                foreach line [split $error "\n"] {
+                    if { [string first NOTICE $line] == -1 } {
+                        append error_lines "$line\n"
+                        set error_found [expr { $error_found
+                                                || [string first ERROR $line] != -1
+                                                || [string first FATAL $line] != -1 } ]
+                    }
                 }
             }
 
