@@ -24,7 +24,7 @@
 
 <if @continue_url@ not nil>
   <p>
-    &raquo; <a href="@continue_url@">Install above <if @install:rowcount@ eq 1>package</if><else>packages</else></a>
+    <a href="@continue_url@" class="button">Install above <if @install:rowcount@ eq 1>package</if><else>packages</else></a>
   </p>
 </if>
 <if @problems_p@ true>
