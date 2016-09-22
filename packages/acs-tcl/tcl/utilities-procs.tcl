@@ -1736,17 +1736,6 @@ ad_proc -public safe_eval args {
     return [ad_apply uplevel $args]
 }
 
-ad_proc -public -deprecated lmap {list proc_name} {
-    Applies proc_name to each item of the list, appending the result of 
-    each call to a new list that is the return value.
-} {
-    set lmap [list]
-    foreach item $list {
-        lappend lmap [safe_eval $proc_name $item]
-    }
-    return $lmap
-}
-
 ad_proc -public ad_decode { args } {
     this procedure is analogus to sql decode procedure. first parameter is
     the value we want to decode. this parameter is followed by a list of
@@ -2579,9 +2568,7 @@ ad_proc util::split_location {location protoVar hostnameVar portVar} {
             lassign [split $proto :] proto .
         }
         if {$port eq "" && $proto ne ""} {
-            set default_port(http) 80
-            set default_port(https) 443
-            set port $default_port($proto)
+            set port [dict get {http 80 https 443} $proto]
         } else {
             # In case there is no proto, the port is set to ""
             set port [string range $port 1 end]
@@ -2603,6 +2590,13 @@ ad_proc util::join_location {{-proto ""} {-hostname} {-port ""}} {
     set result ""
     if {$proto ne ""} {
         append result $proto://
+        #
+        # When the specified port is equal to the default port, omit
+        # it from the result.
+        #
+        if {$port ne "" && $port eq [dict get {http 80 https 443} $proto]} {
+            set port ""
+        }
     }
     if {[string match *:* $hostname]} {
         append result "\[$hostname\]"
