@@ -11,7 +11,7 @@
   <p> Done installing packages. </p>
 
   <p>
-    <strong>&raquo;</strong> <a href="../server-restart">Click here to restart your server now</a>
+    <strong>&raquo;</strong> <a href="../server-restart" class='button">Click here</a> to restart your server now.
   </p>
 </else>
 

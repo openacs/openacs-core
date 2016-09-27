@@ -109,7 +109,8 @@ foreach pkg_info $pkg_install_list {
         # probably check for such dependencies and continue if there are none.
         ns_write {
 	    </ul>
-	    <script>window.scrollTo(0,document.body.scrollHeight);clearInterval(myInterval);</script>
+	    <script nonce='$::__csp_nonce'>window.scrollTo(0,document.body.scrollHeight);clearInterval(myInterval);
+            </script>
 	}
         ad_script_abort
     }
@@ -126,8 +127,8 @@ if {$installed_count < 1} {
 } else {
     ns_write {</ul><p>
 	Done installing packages.
-	<p>You should restart the server now to make installed and upgraded packages available. 
-	<a href="../server-restart">Click here</a> to restart the server now.</p>
+	<p>You should restart the server now to make installed and upgraded packages available.</p>
+        <p><a href="../server-restart" class="button">Click here</a> to restart the server now.</p>
     }
 }
 ns_write {
