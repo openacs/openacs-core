@@ -248,16 +248,15 @@ $extra_stuff_for_document_head
 <title>$page_title</title>
 </head>
 "
-
     array set attrs [list]
-
     set attrs(bgcolor) [parameter::get -package_id [ad_acs_kernel_id] -parameter bgcolor -default "white"]
     set attrs(text)    [parameter::get -package_id [ad_acs_kernel_id] -parameter textcolor -default "black"]
 
     if { $focus ne "" } {
-	set attrs(onLoad) "javascript:document.${focus}.focus()"
+        template::add_body_script -script [subst {
+            window.addEventListener('load', function () {document.${focus}.focus()}, false);
+        }]
     }
-
     foreach attr [array names attrs] {
 	lappend attr_list "$attr=\"$attrs($attr)\""
     }
