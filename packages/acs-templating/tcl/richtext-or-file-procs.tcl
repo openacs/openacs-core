@@ -298,7 +298,7 @@ ad_proc -public template::widget::richtext_or_file {
       }
 
       if { $storage_type eq "" || $storage_type eq "text" } {
-          append output {<script type="text/javascript"><!--} \n {acs_RichText_WriteButtons();  //--></script>}
+          append output {<script type="text/javascript" nonce='$::__csp_nonce'><!--} \n {acs_RichText_WriteButtons();  //--></script>}
 
           append output [textarea_internal "$element(id).text" attributes $text]
           append output "<br>Format: [menu "$element(id).mime_type" [template::util::richtext_or_file::format_options] $mime_type attributes]"

@@ -114,7 +114,8 @@ ad_proc -public template::paginator::create { statement_name name query args } {
     # problem.
     #
     if { ($row_ids eq {} && ![::cache exists $cache_key])
-	 || ([info exists opts(flush_p)] && $opts(flush_p) == "t") } {
+	 || ([info exists opts(flush_p)] && $opts(flush_p) == "t")
+     } {
       if { [info exists opts(printing_prefs)] && $opts(printing_prefs) ne "" } {
 	  set title [lindex $opts(printing_prefs) 0]
 	  set stylesheet [lindex $opts(printing_prefs) 1]
@@ -157,10 +158,8 @@ $css_link
 	      #	  nsv_set __template_cache_timeout $cache_key $opts(timeout)
 	      #}
 	      ns_write [subst {
-          <script type="text/javascript">
-          <!-- Begin
+          <script type="text/javascript" nonce="$::__csp_nonce">
 	  document.location.href="[ns_quotehtml $return_url]";
-          // End -->
           </script>
 	  <noscript><a href="[ns_quotehtml $return_url]">Click here to continue.</a></noscript>
 	      }]

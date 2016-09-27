@@ -222,7 +222,7 @@ ad_proc -public -deprecated template::widget::richtext_htmlarea { element_refere
   set output {}
 
   if {$element(mode) eq "edit"} {
-      append output {<script type="text/javascript"><!--} \n {acs_RichText_WriteButtons();  //--></script>}
+      append output {<script type="text/javascript" nonce='$::__csp_nonce'><!--} \n {acs_RichText_WriteButtons();  //--></script>}
       
       set attributes(id) "richtext__$element(form_id)__$element(id)"
       
