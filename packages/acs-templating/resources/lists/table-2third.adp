@@ -1,3 +1,8 @@
+<%
+security::csp::require -force script-src 'unsafe-inline';
+ns_log notice "list template table-2third.adp: should remove: script-src 'unsafe-inline' (onclick, ...)"
+%>
+
 <if @list_properties.page_size@ not nil>
 <!-- top pagination -->
   <noparse>
