@@ -32,15 +32,26 @@ if {$object_id ne ""} {
     permission::require_permission -object_id $object_id -privilege admin
 }
 
-if {$new_parent ne ""} {
-    set javascript "onLoad=\"javascript:document.new_parent.name.focus();document.new_parent.name.select()\""
-} elseif {$new_application ne ""} {
-    set javascript "onLoad=\"javascript:document.new_application.instance_name.focus();document.new_application.instance_name.select()\""
-} elseif {$rename_application ne ""} {
-    set javascript "onLoad=\"javascript:document.rename_application.instance_name.focus();document.rename_application.instance_name.select()\""
-} else {
-    set javascript ""
-}
+# if {$new_parent ne ""} {
+#     set onload "document.new_parent.name.focus();document.new_parent.name.select();"
+# } elseif {$new_application ne ""} {
+#     set onload "document.new_application.instance_name.focus();document.new_application.instance_name.select();"
+# } elseif {$rename_application ne ""} {
+#     set onload "document.rename_application.instance_name.focus();document.rename_application.instance_name.select();"
+# } else {
+#     set onload ""
+# }
+#
+# if {$onload ne ""} {
+#     template::add_body_handler -event onload -script $onload
+# }
+#
+#template::add_body_script -script {
+#    function check_checkbox () {
+#        window.document.nodes.node_id.checked = 'true';
+#    }
+#}
+
 
 set parent_link [export_vars -base . {expand:multiple {root_id $parent_id}}]
 

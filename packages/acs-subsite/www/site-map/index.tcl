@@ -26,16 +26,12 @@ array set node [site_node::get -node_id $root_id]
 set parent_id $node(parent_id)
 set object_id $node(object_id)
 
-if {$new_parent ne ""} {
-    set javascript "onLoad=\"javascript:document.new_parent.name.focus();document.new_parent.name.select()\""
-} elseif {$new_application ne ""} {
-    set javascript "onLoad=\"javascript:document.new_application.instance_name.focus();document.new_application.instance_name.select()\""
-} elseif {$rename_application ne ""} {
-   set javascript "onLoad=\"javascript:document.rename_application.instance_name.focus();document.rename_application.instance_name.select()\""
-} else {
-    set javascript ""
-}
-set javascript "onload=\"javascript:document.check_checkbox()\""
+# template::add_body_script -script {
+#     function check_checkbox () {
+#         window.document.nodes.node_id.checked = 'true';
+#     }
+# }
+# template::add_body_handler -event onload -script "check_checkbox();"
 
 
 set parent_link [export_vars -base . {expand:multiple {root_id $parent_id}}]
