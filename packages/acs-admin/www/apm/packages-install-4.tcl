@@ -24,7 +24,7 @@ ad_return_top_of_page [ad_parse_template \
 
 ns_write {
     <h2>Installing packages...</h2>
-    <script>var myInterval = setInterval(function(){window.scrollTo(0,document.body.scrollHeight)}, 300);
+    <script nonce='$::__csp_nonce'>var myInterval = setInterval(function(){window.scrollTo(0,document.body.scrollHeight)}, 300);
     </script>
     <p>
     <ul>
@@ -132,7 +132,7 @@ if {$installed_count < 1} {
     }
 }
 ns_write {
-    <script>window.scrollTo(0,document.body.scrollHeight);clearInterval(myInterval);</script>
+    <script nonce='$::__csp_nonce'>window.scrollTo(0,document.body.scrollHeight);clearInterval(myInterval);</script>
 }
 
 # Local variables:

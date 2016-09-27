@@ -139,7 +139,7 @@ foreach package_key $install_order {
 
     ns_write [subst {
 	<p>Installing $package_key ...<br>
-	<script>window.scrollTo(0,document.body.scrollHeight);</script>
+	<script nonce='$::__csp_nonce'>window.scrollTo(0,document.body.scrollHeight);</script>
     }]
     
     # Install the package -- this actually copies the files into the
@@ -160,7 +160,7 @@ foreach package_key $install_order {
 	ns_write "... installation OK <br>\n"
     }
     ns_write {
-	<script>window.scrollTo(0,document.body.scrollHeight);</script>
+	<script nonce='$::__csp_nonce'>window.scrollTo(0,document.body.scrollHeight);</script>
     }
 }
 

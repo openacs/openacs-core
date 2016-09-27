@@ -21,10 +21,10 @@ set context [list \
 		 $title]
 
 set form_name "packageAdd"
-set body "<form name='$form_name' action='package-add-2' method='post'>\n"
-append body [subst {
+set body [subst {
+<form name='$form_name' action='package-add-2' method='post'>
 [export_vars -form {package_id version_id}] 
-<script type="text/javascript">
+<script type="text/javascript" nonce='$::__csp_nonce'>
 function updateURLs() {
     // Update the package and version URL, if the package key and/or version name change.
     var form = document.getElementsByName('$form_name')\[0\];
@@ -33,9 +33,7 @@ function updateURLs() {
     if ((form.version_name.value != '') && (form.version_uri.value == ''))
         form.version_uri.value = 'http://openacs.org/repository/download/apm/' + form.package_key.value + '-' + form.version_name.value + '.apm';
 }
-</script>
 
-<script type="text/javascript">
 function checkMailto(element) {
     // If it looks like an email address without a mailto: (contains an @ but
     // no colon) then prepend 'mailto:'.

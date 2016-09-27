@@ -435,7 +435,7 @@ proc ad_menu_header {{section ""} {uplink ""}} {
 
     if { $java_script_p } {
     	append return_string " 
-	<script type=\"text/javascript\">
+	<script type='text/javascript' nonce='$::__csp_nonce'>
 	//<!--
 	
 	go = new Image();
@@ -504,7 +504,7 @@ proc ad_menu_header {{section ""} {uplink ""}} {
 	
 	append return_string "
 
-	<script type=\"text/javascript\">
+	<script type='text/javascript' nonce='$::__csp_nonce'>
 	//<!--
 	
 	function hiLite(imgObjName) \{

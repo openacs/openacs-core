@@ -2266,7 +2266,7 @@ ad_proc -deprecated util_ReturnMetaRefresh {
     ad_return_top_of_page [subst {
         <head>
         <meta http-equiv="refresh" content="$seconds_delay;URL=[ns_quotehtml $url]">
-        <script type="text/javascript">
+        <script type="text/javascript" nonce="$::__csp_nonce">
         window.location.href = "[ns_quotehtml $url]";
         </script>
         </head>
