@@ -783,7 +783,7 @@ ad_proc template::add_acs_confirm_handler {
         template::add_body_script -script [subst {
             var elems = document.getElementsByClassName('$CSSclass');
             for (var i = 0, l = elems.length; i < l; i++) {
-                elems[i].addEventListener('click', function (event) {
+                elems\[i\].addEventListener('click', function (event) {
                     if (!confirm('$message')) {
                         event.preventDefault();
                     };
@@ -791,7 +791,7 @@ ad_proc template::add_acs_confirm_handler {
             }
         }]
     }
-    template::add_body_script -script $script
+    #template::add_body_script -script $script
 }
 
 
