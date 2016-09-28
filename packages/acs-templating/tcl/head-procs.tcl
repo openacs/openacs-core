@@ -758,6 +758,44 @@ ad_proc template::get_body_event_handlers {
     return $event_handlers
 }
 
+ad_proc template::add_acs_confirm_handler {
+    {-message "Are you sure?"}
+    {-CSSclass "acs-confirm"}
+    {-id}
+} {
+    Register an event handler for confirmation dialogs
+    for elements either with an specified ID or for elements
+    of a CSS class (default "acs_confirm").
+
+    @id      optional ID for HTML element
+    @message Message to be displayed in the confirmation dialog
+    @author  Gustaf Neumann
+} {
+    if {[info exists id]} {
+        template::add_body_script -script [subst {
+            document.getElementById('$id').addEventListener('click', function (event) {
+                if (!confirm('$message')) {
+                    event.preventDefault();
+                };
+            }, false);
+        }]
+    } else {
+        template::add_body_script -script [subst {
+            var elems = document.getElementsByClassName('$CSSclass');
+            for (var i = 0, l = elems.length; i < l; i++) {
+                elems[i].addEventListener('click', function (event) {
+                    if (!confirm('$message')) {
+                        event.preventDefault();
+                    };
+                }, false);
+            }
+        }]
+    }
+    template::add_body_script -script $script
+}
+
+
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
