@@ -40,7 +40,7 @@ function checkMailto(element) {
     if (element.value.indexOf('@') >= 0 && element.value.indexOf(':') < 0)
         element.value = 'mailto:' + element.value;
 }
-</script>
+ </script>
 
 <table>
 
@@ -54,7 +54,7 @@ Files for your package will be placed in a directory with this name.</td>
 
 <tr>
   <th align="right" nowrap>Package Key:</th>
-  <td><input name="package_key" size="30" onChange="updateURLs()"></td>
+  <td><input name="package_key" id="package_key" size="30"></td>
 </tr>
 
 <tr>
@@ -149,7 +149,7 @@ an optional suffix of <strong>d</strong> for development, <strong>a</strong> for
 
 <tr>
   <th align="right" nowrap>Initial Version:</th>
-  <td><input name="version_name" size="10" onChange="updateURLs()"></td>
+  <td><input name="version_name" id="version_name" size="10"></td>
 </tr>
 
 <tr>
@@ -257,7 +257,14 @@ this package, please load them manually into your database.
 
 ad_return_template apm
 
-
+# Add onChange event listener to package_key and version_name fields to comply with CSP.
+# No inline JS event handlers!
+template::add_body_script -script "
+    var elem = document.getElementById('package_key');
+    elem.addEventListener('change', function (event) {updateURLs();});
+    
+    var elem = document.getElementById('version_name');
+    elem.addEventListener('change', function (event) {updateURLs();});"
 
 
 # Local variables:
