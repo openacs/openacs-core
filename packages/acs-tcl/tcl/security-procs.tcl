@@ -2180,10 +2180,12 @@ namespace eval ::security::csrf {
 
         @return nothing
     } {
-        if {![info exists ::$tokenname]} {
+        if {![info exists ::$tokenname] || ![ns_conn isconnected]} {
             #
-            # If there is no global csrf token, we assume that the
-            # csrf token generation is deactivated, we accept everything.
+            # If there is no global csrf token, or we are not in a
+            # connection thread, we accept everything.  If there is
+            # not csrf token, we assume, that its generation is
+            # deactivated,
             #
             return
         }
@@ -2215,7 +2217,12 @@ namespace eval ::security::csrf {
 
         @return session ID
     } {
-        if {[ad_conn untrusted_user_id] == 0} {
+        if {![ns_conn isconnected]} {
+            #
+            # Must be a background job, take the address
+            #
+            set session_id [ns_info address]
+        } elseif {[ad_conn untrusted_user_id] == 0} {
             #
             # Anonymous request, use a peer address as session_id
             #
