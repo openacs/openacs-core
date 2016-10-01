@@ -18,9 +18,9 @@ form create add_user -elements {
            valid_length {expr {[string length $value] == 2} } { State must be 2 characters in length } \
            valid_range  {expr {$value in {CA HI NV}}}         { Invalid state } \
         }
-} -html {
-    onSubmit "return confirm('Are you sure you want to submit?');"
 }
+
+template::add_acs_confirm_handler -event submit -id add_user -message "Are you sure you want to submit?"
 
 # set values
 
