@@ -187,7 +187,7 @@ template::list::create \
                   <a href="@nodes.rename_url@#rename">[_ acs-subsite.rename]</a>
                 </if>
                 <if @nodes.delete_url@ ne "">
-                  <a href="@nodes.delete_url@" onclick="return confirm('Are you sure you want to delete node @nodes.name@ and any package mounted there?');">[_ acs-subsite.delete]</a>
+                <a href="@nodes.delete_url@" id="@nodes.delete_id;literal@">[_ acs-subsite.delete]</a>
                 </if>
                 <if @nodes.parameters_url@ ne "">
                   <a href="@nodes.parameters_url@">[_ acs-subsite.parameters]</a>
@@ -205,7 +205,7 @@ template::list::create \
 multirow create nodes \
     node_id expand_mode expand_url tree_indent name name_url instance instance_url type \
     action_type action_form_part add_folder_url new_app_url unmount_url mount_url \
-    rename_url delete_url parameters_url permissions_url extra_form_part
+    rename_url delete_url parameters_url permissions_url extra_form_part delete_id
 
 set open_nodes [list]
 
@@ -309,12 +309,16 @@ db_foreach nodes_select {} {
         set action_type "new_folder"
         set action_form_part [export_vars -form {expand:multiple parent_id node_type root_id}]
     }
-
+    set delete_id delete-$node_id
+    
     multirow append nodes \
         $node_id $expand_mode $expand_url $indent $name $name_url $object_name $url $package_pretty_name \
         $action_type $action_form_part $add_folder_url $new_app_url $unmount_url $mount_url \
-        $rename_url $delete_url $parameters_url $permissions_url ""
+        $rename_url $delete_url $parameters_url $permissions_url "" $delete_id
 
+    template::add_acs_confirm_handler \
+        -id $delete_id \
+        -message "Are you sure you want to delete node $name and any package mounted there?"
 }
 
 set new_app_form_part_1 [subst {

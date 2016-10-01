@@ -57,7 +57,7 @@
     </else>
   </li>
   <li>
-    <a href="@rebuild_url@" onclick="return confirm('Are you sure you want to wipe and rebuild this server?');">Rebuild this server now</a>
+    <a href="@rebuild_url@" id="action-rebuild" class="button">Rebuild this server now</a>
   </li>
   <li>
     <a href="@rebuild_log_url@">Rebuild log</a>

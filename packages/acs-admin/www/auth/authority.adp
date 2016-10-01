@@ -26,7 +26,7 @@
 
   <if @batch_sync_run_url@ not nil>
     <p>
-      <strong>&raquo;</strong> <a href="@batch_sync_run_url@" onclick="return confirm('Are you sure you want to run a batch job to sync the user database now?');">Run new batch job now</a>
+      <strong>&raquo;</strong> <a href="@batch_sync_run_url@" id="batch-sync-run" class="button">Run new batch job now</a>
     </p>
   </if>
 

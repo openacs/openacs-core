@@ -22,8 +22,8 @@
 <li><a href="lookup">#acs-lang.Look_up_message#</a></li>
 
 <if @site_wide_admin_p@>
-  <li><a href="@import_url@" title="#acs-lang.Imports_messages_system-wide_from_catalog_files#" onclick="return confirm('#acs-lang.Are_you_sure_you_want_to_import_all_I18N_messages_from_catalog_files#');">#acs-lang.Import_all_messages#</a></li>
-  <li><a href="@export_url@" title="#acs-lang.Export_messages_system-wide_to_catalog_files#" onclick="return confirm('#acs-lang.Are_you_sure_you_want_to_export_all_I18N_messages_to_catalog_files#');">#acs-lang.Export_all_messages#</a></li>
+  <li><a href="@import_url@" title="#acs-lang.Imports_messages_system-wide_from_catalog_files#" id="action-import">#acs-lang.Import_all_messages#</a></li>
+  <li><a href="@export_url@" title="#acs-lang.Export_messages_system-wide_to_catalog_files#" id="action-export">#acs-lang.Export_all_messages#</a></li>
 </if>
 
 </ul>
