@@ -138,7 +138,7 @@ db_multirow -extend {
         # The authority can be selected as register authority
         set registration_status "can_select"
         set registration_url [export_vars -base authority-registration-select { authority_id }]
-        template::add_acs_confirm_handler \
+        template::add_confirm_handler \
             -id $select_id \
             -message [_ acs-admin.You_are_changing_all_user_registrations_to_be_in_authority_authorities_pretty_name \
                           [list authorities.pretty_name $pretty_name]]
@@ -147,7 +147,7 @@ db_multirow -extend {
         set registration_status "cannot_select"
     }
     if {$short_name ne "local"} {
-        template::add_acs_confirm_handler \
+        template::add_confirm_handler \
             -id $delete_id \
             -message [_ acs-admin.Are_you_sure_you_want_to_delete_authority_authorities_pretty_name \
                           [list authorities.pretty_name $pretty_name]]

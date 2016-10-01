@@ -758,7 +758,7 @@ ad_proc template::get_body_event_handlers {
     return $event_handlers
 }
 
-ad_proc template::add_acs_confirm_handler {
+ad_proc template::add_confirm_handler {
     {-message "Are you sure?"}
     {-CSSclass "acs-confirm"}
     {-event click}

@@ -284,7 +284,7 @@ if { $display_batch_history_p } {
     if { ([info exists get_doc_impl_id] && $get_doc_impl_id ne "")
          && ([info exists process_doc_impl_id] && $process_doc_impl_id ne "") } {
         set batch_sync_run_url [export_vars -base batch-job-run { authority_id }]
-        template::add_acs_confirm_handler \
+        template::add_confirm_handler \
             -id batch-sync-run \
             -message "Are you sure you want to run a batch job to sync the user database now?"
     } else {

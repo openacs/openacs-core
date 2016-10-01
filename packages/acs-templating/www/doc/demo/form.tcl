@@ -20,7 +20,7 @@ form create add_user -elements {
         }
 }
 
-template::add_acs_confirm_handler -event submit -id add_user -message "Are you sure you want to submit?"
+template::add_confirm_handler -event submit -id add_user -message "Are you sure you want to submit?"
 
 # set values
 

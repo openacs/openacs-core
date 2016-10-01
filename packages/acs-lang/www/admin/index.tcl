@@ -28,9 +28,9 @@ set translator_mode_p [lang::util::translator_mode_p]
 set import_url [export_vars -base import-messages]
 set export_url [export_vars -base export-messages]
 
-template::add_acs_confirm_handler -id action-import \
+template::add_confirm_handler -id action-import \
     -message [_ acs-lang.Are_you_sure_you_want_to_import_all_I18N_messages_from_catalog_files]
-template::add_acs_confirm_handler -id action-export \
+template::add_confirm_handler -id action-export \
     -message [_ acs-lang.Are_you_sure_you_want_to_export_all_I18N_messages_to_catalog_files]
 
 set parameter_url [export_vars -base "/shared/parameters" {

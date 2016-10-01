@@ -316,7 +316,7 @@ db_foreach nodes_select {} {
         $action_type $action_form_part $add_folder_url $new_app_url $unmount_url $mount_url \
         $rename_url $delete_url $parameters_url $permissions_url "" $delete_id
 
-    template::add_acs_confirm_handler \
+    template::add_confirm_handler \
         -id $delete_id \
         -message "Are you sure you want to delete node $name and any package mounted there?"
 }
