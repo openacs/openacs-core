@@ -761,6 +761,7 @@ ad_proc template::get_body_event_handlers {
 ad_proc template::add_acs_confirm_handler {
     {-message "Are you sure?"}
     {-CSSclass "acs-confirm"}
+    {-event click}
     {-id}
 } {
     Register an event handler for confirmation dialogs
@@ -773,7 +774,7 @@ ad_proc template::add_acs_confirm_handler {
 } {
     if {[info exists id]} {
         template::add_body_script -script [subst {
-            document.getElementById('$id').addEventListener('click', function (event) {
+            document.getElementById('$id').addEventListener('$event', function (event) {
                 if (!confirm('$message')) {
                     event.preventDefault();
                 };
@@ -783,7 +784,7 @@ ad_proc template::add_acs_confirm_handler {
         template::add_body_script -script [subst {
             var elems = document.getElementsByClassName('$CSSclass');
             for (var i = 0, l = elems.length; i < l; i++) {
-                elems\[i\].addEventListener('click', function (event) {
+                elems\[i\].addEventListener('$event', function (event) {
                     if (!confirm('$message')) {
                         event.preventDefault();
                     };
