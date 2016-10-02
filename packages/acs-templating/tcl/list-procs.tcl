@@ -348,10 +348,21 @@ ad_proc -public template::list::create {
             error "You cannot have bulk_actions without providing a key for list '$name'"
         }
         # Create the checkbox element
-        set label [subst {<input type="checkbox" name="_dummy" onclick="acs_ListCheckAll('[ns_quotehtml $name]', this.checked)"
-            onkeypress="acs_ListCheckAll('[ns_quotehtml $name]', this.checked)" title="[_ acs-templating.lt_Checkuncheck_all_rows]">}]
+        set label [subst {
+            <input type="checkbox" name="_dummy" id="$name-bulkaction-control" title="[_ acs-templating.lt_Checkuncheck_all_rows]">
+        }]
+        template::add_event_listener \
+            -id $name-bulkaction-control \
+            -preventdefault=false \
+            -script [subst {acs_ListCheckAll('[ns_quotehtml $name]', this.checked);}]
+        template::add_event_listener \
+            -id $name-bulkaction-control \
+            -event keypress \
+            -preventdefault=false \
+            -script [subst {acs_ListCheckAll('[ns_quotehtml $name]', this.checked);}]
+
         if {[info exists ::__csrf_token]} {
-            append label \n [subst {<input type="hidden" name="__csrf_token" value="$::__csrf_token">}]
+            append label [subst {<input type="hidden" name="__csrf_token" value="$::__csrf_token">}]
         }
         
         # We only ulevel 1 here, because we want the subst to be done in this namespace

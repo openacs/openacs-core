@@ -759,17 +759,19 @@ ad_proc template::get_body_event_handlers {
 }
 
 ad_proc template::add_confirm_handler {
+    {-event click}
     {-message "Are you sure?"}
     {-CSSclass "acs-confirm"}
-    {-event click}
     {-id}
 } {
     Register an event handler for confirmation dialogs
     for elements either with an specified ID or for elements
     of a CSS class (default "acs_confirm").
 
-    @id      optional ID for HTML element
-    @message Message to be displayed in the confirmation dialog
+    @event    register confirm handler for this type of event
+    @id       register confirm handler for this HTML ID
+    @CSSclass register confirm handler for this CSS class
+    @message  Message to be displayed in the confirmation dialog
     @author  Gustaf Neumann
 } {
     if {[info exists id]} {
@@ -792,9 +794,46 @@ ad_proc template::add_confirm_handler {
             }
         }]
     }
-    #template::add_body_script -script $script
 }
 
+
+ad_proc template::add_event_listener {
+    {-event click}
+    {-CSSclass "acs-listen"}
+    {-id}
+    {-usecapture:boolean false}
+    {-preventdefault:boolean true}
+    {-script:required}
+} {
+    
+    Register an event handler for elements either with an specified ID
+    or for elements of a CSS class.
+
+    @event    register confirm handler for this type of event
+    @id       register confirm handler for this HTML ID
+    @CSSclass register confirm handler for this CSS class
+    @message  Message to be displayed in the confirmation dialog
+    @author  Gustaf Neumann
+} {
+    set prevent [expr {$preventdefault_p ? "event.preventDefault();" : ""}]
+
+    if {[info exists id]} {
+        template::add_body_script -script [subst {
+            document.getElementById('$id').addEventListener('$event', function (event) {
+                $prevent$script
+            }, $usecapture_p);
+        }]
+    } else {
+        template::add_body_script -script [subst {
+            var elems = document.getElementsByClassName('$CSSclass');
+            for (var i = 0, l = elems.length; i < l; i++) {
+                elems\[i\].addEventListener('$event', function (event) {
+                    $prevent;$script
+                }, $usecapture_p);
+            }
+        }]
+    }
+}
 
 
 # Local variables:
