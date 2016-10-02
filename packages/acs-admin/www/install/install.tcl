@@ -144,7 +144,7 @@ template::list::create \
     -bulk_actions [list \
                        "$operation_label checked applications" \
                        "install-2" \
-                       "$operation_label or upgrade checked applications" ] \
+                       "$operation_label checked applications" ] \
     -bulk_action_export_vars {
         {repository_url $fetch_url}
     } \
