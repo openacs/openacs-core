@@ -3,7 +3,7 @@
           OpenACS docs are written by the named authors, and may be edited
           by OpenACS documentation staff.
         </div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Tcl procedures: /packages/acs-kernel/10-database-procs.tcl</p></li><li class="listitem"><p>Tcl initialization: /packages/acs-kernel/database-init.tcl</p></li></ul></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="db-api-detailed-bigpicture"></a>The Big Picture</h3></div></div></div><p>
-One of OpenACS's great strengths is that code written for it is very close to
+One of OpenACS&#39;s great strengths is that code written for it is very close to
 the database. It is very easy to interact with the database from anywhere
 within OpenACS. Our goal is to develop a coherent API for database access which
 makes this even easier. 
@@ -66,7 +66,7 @@ writing SQL inline for a "default SQL dialect", which we assume to
 be Oracle for now.) 
 </p><p>To be clear, SQL abstraction is <span class="emphasis"><em>not</em></span> fully implemented in OpenACS
 3.3.1. The statement names supplied to each call are not used by the API at
-all. The API's design for SQL abstraction is in fact incomplete;
+all. The API&#39;s design for SQL abstraction is in fact incomplete;
 unresolved issues include:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>how to add <code class="computeroutput">WHERE</code> clause criteria dynamically</p></li><li class="listitem"><p>how to build a dynamic <code class="computeroutput">ORDER BY</code> clause (Ben Adida has a
 proposed solution for this)</p></li><li class="listitem"><p>how to define a statement&#39;s formal interface (i.e., what bind
 variables it expects, what columns its <code class="computeroutput">SELECT</code> clause must

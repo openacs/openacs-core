@@ -223,7 +223,7 @@ rm -rf /var/tmp/openacs-4</action></screen>
     </orderedlist>
 
     <para>
-      Here is a shell script that automates packaging the tarball (it&#39;s a bit out of date with the new steps - I've been doing everything manually or with little throwaway scripts as detailed above until the process is stabilized).
+      Here is a shell script that automates packaging the tarball (it&#39;s a bit out of date with the new steps - I&#39;ve been doing everything manually or with little throwaway scripts as detailed above until the process is stabilized).
     </para>
 
     <programlisting><xi:include href="../../../../etc/install/build-release.sh" xi:parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"><xi:fallback>release script missing</xi:fallback></xi:include></programlisting>

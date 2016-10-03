@@ -98,7 +98,7 @@ G goes to the end.
     </authorblurb>
 
     <para><indexterm><primary>Automated tests</primary></indexterm>
-    It seems to me that a lot of people have been asking for some guidelines on how to write automated tests. I've done several tests by now and have found the process to be extremely easy and useful. It&#39;s a joy to work with automated testing once you get the hang of it.</para>
+    It seems to me that a lot of people have been asking for some guidelines on how to write automated tests. I&#39;ve done several tests by now and have found the process to be extremely easy and useful. It&#39;s a joy to work with automated testing once you get the hang of it.</para>
     <para>Create the directory that will contain the test
     script and edit the script file.  The directory location and file name are standards which are recognized by the automated testing package:</para>
     <screen>[$OPENACS_SERVICE_NAME www]$<userinput> mkdir /var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/packages/myfirstpackage/tcl/test</userinput>

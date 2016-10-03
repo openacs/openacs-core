@@ -329,7 +329,7 @@
       <formalpara>
         <title>Web Server</title>
         <para>The web server handles incoming HTTP requests, provides
-          a runtime environment for OpenACS's Tcl code, connects to the
+          a runtime environment for OpenACS&#39;s Tcl code, connects to the
           database, sends out HTTP responses, and logs requests and
           errors.  OpenACS uses AOLserver;
           <ulink url="http://openacs.org/forums/message-view?message_id=21461">some people have had success running Apache with mod_nsd</ulink>.</para>

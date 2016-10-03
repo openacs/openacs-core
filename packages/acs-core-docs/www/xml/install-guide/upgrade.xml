@@ -412,7 +412,7 @@ exit</action></screen>
                 checkout to merge your local changes, fix any
                 conflicts, commit your changes, and then update your
                 site. It sounds complicated, but it&#39;s not too bad, and
-                it is the best way to work around CVS's limitations.</para>
+                it is the best way to work around CVS&#39;s limitations.</para>
               </formalpara>
               <para>This part describes how to set up your working CVS
         checkout. Once it is set up, you&#39;ll be able to update any

@@ -743,7 +743,7 @@ nice real-time collaboration feature frequently requested by
 members of the community. This is particularly interesting when
 integrated with a chat or instant messaging service like
 Jabber.</para>
-      <para>What I'm concretely suggesting is that we keep a record of
+      <para>What I&#39;m concretely suggesting is that we keep a record of
 which authenticated users have requested pags on the site in the
 last x minutes (typically about 5), and thus are considered to be
 currently online. There&#39;s nothing more to it. This lets us display
@@ -822,7 +822,7 @@ Authenticating against multiple servers simultaneously</title>
 can be logged into multiple authorities at the same time. This is
 useful if, for example, you need to get login tokens such as
 Kerberos tickets for access to shared resources.</para>
-      <para>I can see the value in this, but for simplicity&#39;s sake, I'm
+      <para>I can see the value in this, but for simplicity&#39;s sake, I&#39;m
 in favor of keeping this use-case out of the loop until we have
 someone with a real requirement who could help us guide
 development.</para>
@@ -881,7 +881,7 @@ Specific Drivers</title>
           PAM level, so we don&#39;t have to write them all ourselves. The
           downside is that we can&#39;t do things like account creation, password
           management, real-time account synchronization, etc., not supported
-          by PAM (I'm not entirely sure what is and is not
+          by PAM (I&#39;m not entirely sure what is and is not
           supported).</para></listitem>
         <listitem><para>RADIUS</para></listitem>
         <listitem><para>LDAP</para></listitem>

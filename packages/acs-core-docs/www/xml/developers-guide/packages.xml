@@ -415,7 +415,7 @@ ROOT/
     <para>
       The following sections will show you how to make a package for the
       Notes application. In addition, they will discuss some site
-      management features in OpenACS &majorversion; that take advantage of the APM's package
+      management features in OpenACS &majorversion; that take advantage of the APM&#39;s package
       instance model. The two most important of these are <emphasis>subsites</emphasis>,
       and the <emphasis>site map</emphasis> tool, which can be used to map applications to
       one or more arbitrary URLs in a running site.
@@ -599,7 +599,7 @@ ROOT/
       
       <listitem><para>The new package has been created and installed in the server. At
       this point, you should add your package files to your CVS repository.
-      I'll assume that you have set up your development repository according
+      I&#39;ll assume that you have set up your development repository according
       to the standards described in 
       <link linkend="cvs-service-import">this appendix</link>. If so, then you just do this:
     </para>

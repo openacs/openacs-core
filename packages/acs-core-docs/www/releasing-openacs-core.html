@@ -57,7 +57,7 @@ tar cz -f <span class="replaceable"><span class="replaceable">dotlrn-2.0.0a1.tar
 </span></span></pre></li></ol></div></li></ul></div></li><li class="listitem"><p><b>Test the new tarball(s). </b>Download the tarballs just created and install them and make sure everything looks okay and that automated tests pass.</p></li><li class="listitem"><p><b>Update Web site. </b>Update the different places on OpenACS.org where we track status.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>Release Status for the current version - something like http://openacs.org/projects/openacs/5.0/milestones</p></li><li class="listitem"><p>Home page of openacs.org</p></li><li class="listitem"><p>Post a new news item</p></li></ul></div></li><li class="listitem"><p><b>Clean Up. </b>Clean up after yourself.</p><pre class="screen"><span class="action"><span class="action">cd /var/tmp
 rm -rf tarball dotlrn-tarball dotlrn-packages openacs-<span class="replaceable"><span class="replaceable">5.0.0a1</span></span>
 rm -rf /var/tmp/openacs-4</span></span></pre></li></ol></div><p>
-      Here is a shell script that automates packaging the tarball (it&#39;s a bit out of date with the new steps - I've been doing everything manually or with little throwaway scripts as detailed above until the process is stabilized).
+      Here is a shell script that automates packaging the tarball (it&#39;s a bit out of date with the new steps - I&#39;ve been doing everything manually or with little throwaway scripts as detailed above until the process is stabilized).
     </p><pre class="programlisting">#!/bin/bash
 
 # if TAG=1 create the cvs tags otherwise assume they exist.

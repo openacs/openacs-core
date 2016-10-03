@@ -14,7 +14,7 @@
   <sect2 id="db-api-overview">
     <title>Overview</title>
     <para>
-      One of OpenACS's great strengths is that code written for it is
+      One of OpenACS&#39;s great strengths is that code written for it is
       very close to the database. It is very easy to interact with the
       database from anywhere within OpenACS, and we have a
       coherent API for database access which makes this even easier.

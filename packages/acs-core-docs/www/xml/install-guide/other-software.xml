@@ -256,7 +256,7 @@ tcpserver: usage: tcpserver [ -1UXpPhHrRoOdDqQv ] [ -c limit ] [ -x rules.cdb ] 
               <primary>qmail</primary>
               <secondary>rcpthosts error message</secondary>
             </indexterm>
-(I'm not sure if this next step is 100% necessary, but when I skip it
+(I&#39;m not sure if this next step is 100% necessary, but when I skip it
 I get problems.  If you get the error <computeroutput>553 sorry, that domain isn&#39;t in my list of allowed rcpthosts (#5.7.1)</computeroutput> then you need to do this.)  AOLserver sends outgoing mail via the ns_sendmail
 command, which pipes a command to the sendmail executable.  Or, in our
 case, the qmail replacement wrapper for the sendmail executable.  In
@@ -843,7 +843,7 @@ CREATE
         <para>
           If you get the error 
           <computeroutput>ERROR: could not access file "$libdir/tsearch": no such file or directory</computeroutput>
-          It is probably because PostgreSQL's libdir configuration variable points to a diffent directory than where tsearch is.
+          It is probably because PostgreSQL&#39;s libdir configuration variable points to a diffent directory than where tsearch is.
           You can find out where PostgreSQL expects to find tsearch via
           <screen><userinput>pg_config --pkglibdir</userinput></screen>
         </para>
