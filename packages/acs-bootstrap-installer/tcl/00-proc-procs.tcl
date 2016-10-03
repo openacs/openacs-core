@@ -49,9 +49,27 @@ proc ad_make_relative_path { path } {
 
 proc ad_get_tcl_call_stack { { level -2 }} {
     set stack ""
+    #
+    # keep the previous state of ::errorInfo
+    #
+    set errorInfo $::errorInfo
+    
     for { set x [expr {[info level] + $level}] } { $x > 0 } { incr x -1 } {
         set info [info level $x]
         regsub -all \n $info {\\n} info
+        #
+        # In case, we have an nsf frame, add information about the
+        # current object and the current class to the debug output.
+        #
+        if {![catch {uplevel #$x ::nsf::current} obj]
+            && ![catch {uplevel #$x [list ::nsf::current class]} class]
+        } {
+            set objInfo [list $obj $class]
+            set info "{$objInfo} $info"
+        }
+        #
+        # Don't produce too long lines
+        #
         if {[string length $info]>200} {
             set arglist ""
             foreach arg $info {
@@ -59,9 +77,13 @@ proc ad_get_tcl_call_stack { { level -2 }} {
                 lappend arglist $arg
             }
             set info $arglist
-        }     
+        }
         append stack "    called from $info\n"
     }
+    #
+    # restore previous state of ::errorInfo
+    #
+    set ::errorInfo $errorInfo
     return $stack
 }
 
