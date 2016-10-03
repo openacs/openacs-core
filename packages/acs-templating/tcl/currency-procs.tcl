@@ -1,17 +1,19 @@
-# Currency widgets for the OpenACS Templating System
+ad_library {
+    Currency widgets for the OpenACS Templating System
 
-# This is free software distributed under the terms of the GNU Public
-# License.  Full text of the license is available from the GNU Project:
-# http://www.fsf.org/copyleft/gpl.html
+    These are modelled somewhat after the date procs.
 
-# @author Don Baccus (dhogaza@pacifier.com)
+    DRB: This was totally non-functional in ACS 4.2 Classic.  It's now partly
+    functional in that we accept and process currency values.  We really need
+    to tie this in with the acs-lang money database as this code's far too
+    simplistic.    
 
-# These are modelled somewhat after the date procs.
-
-# DRB: This was totally non-functional in ACS 4.2 Classic.  It's now partly
-# functional in that we accept and process currency values.  We really need
-# to tie this in with the acs-lang money database as this code's far too
-# simplistic.
+    This is free software distributed under the terms of the GNU Public
+    License.  Full text of the license is available from the GNU Project:
+    http://www.fsf.org/copyleft/gpl.html
+    
+    @author Don Baccus (dhogaza@pacifier.com)
+}
 
 namespace eval template {}
 namespace eval template::util {}
