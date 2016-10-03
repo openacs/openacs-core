@@ -1,15 +1,18 @@
-# Interface to the ACS for the ArsDigita Templating System
-# Procedures in this file only make sense if you use the template system
-# together with the ArsDigita Community System
+ad_library {
+    Interface to the ACS for the ArsDigita Templating System
+    Procedures in this file only make sense if you use the template system
+    together with the ArsDigita Community System
+    
+    Copyright (C) 1999-2000 ArsDigita Corporation
 
-# Copyright (C) 1999-2000 ArsDigita Corporation
-# Authors: Christian Brechbuehler <christian@arsdigita.com
+    This is free software distributed under the terms of the GNU Public
+    License.  Full text of the license is available from the GNU Project:
+    http://www.fsf.org/copyleft/gpl.html
 
-# $Id$
-
-# This is free software distributed under the terms of the GNU Public
-# License.  Full text of the license is available from the GNU Project:
-# http://www.fsf.org/copyleft/gpl.html
+    @author Christian Brechbuehler <christian@arsdigita.com>
+    
+    @cvs-id $Id$
+}
 
 ad_proc -public ad_return_template {
     -string:boolean
