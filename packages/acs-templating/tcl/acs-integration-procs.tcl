@@ -3,16 +3,17 @@ ad_library {
     Procedures in this file only make sense if you use the template system
     together with the ArsDigita Community System
     
-    Copyright (C) 1999-2000 ArsDigita Corporation
-
-    This is free software distributed under the terms of the GNU Public
-    License.  Full text of the license is available from the GNU Project:
-    http://www.fsf.org/copyleft/gpl.html
-
     @author Christian Brechbuehler <christian@arsdigita.com>
     
     @cvs-id $Id$
 }
+
+# Copyright (C) 1999-2000 ArsDigita Corporation
+
+# This is free software distributed under the terms of the GNU Public
+# License.  Full text of the license is available from the GNU Project:
+# http://www.fsf.org/copyleft/gpl.html
+
 
 ad_proc -public ad_return_template {
     -string:boolean

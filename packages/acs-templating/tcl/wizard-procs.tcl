@@ -1,14 +1,21 @@
-# Wizard tool for the ArsDigita Templating System
+ad_library {
+    Wizard tool for the ArsDigita Templating System
 
-# Copyright (C) 1999-2000 ArsDigita Corporation
+    @author Karl Goldstein    (karlg@arsdigita.com)
+    @author Jun Yamog
+
+    @cvs-id $Id$
+}
+
 # Authors: Karl Goldstein    (karlg@arsdigita.com)
 # heavily modified by Jun Yamog on June 2003
 
-# wizard-procs.tcl,v 1.1.2.1 2001/01/04 20:14:57 brech Exp
+# Copyright (C) 1999-2000 ArsDigita Corporation
 
 # This is free software distributed under the terms of the GNU Public
 # License.  Full text of the license is available from the GNU Project:
 # http://www.fsf.org/copyleft/gpl.html
+
 
 namespace eval template {}
 namespace eval template::wizard {}

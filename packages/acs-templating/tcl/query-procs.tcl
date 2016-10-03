@@ -1,12 +1,11 @@
 ad_library {
-
     Database Query API for the ArsDigita Templating System
 
     @creation-date 29 September 2000
     @author Karl Goldstein (karlg@arsdigita.com)
-            Stanislav Freidin (sfreidin@arsdigita.com)
+    @author Stanislav Freidin (sfreidin@arsdigita.com)
+    
     @cvs-id $Id$
-
 }
 
 namespace eval template {}
@@ -27,6 +26,7 @@ namespace eval template::query {}
 # into the query-dispatcher.  This ties into the standard db api's 
 # transaction control and handle allocation into the templating query interface
 # allowing the two db api's to be mixed together. 
+
 
 ad_proc -public template::query { statement_name result_name type sql args } {
     Public interface to template query api.  This routine parses the arguements and

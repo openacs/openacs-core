@@ -1,18 +1,21 @@
 ad_library {
     ADP to Tcl Compiler for the ArsDigita Templating System,
-    Based on the original ADP to Tcl compiler by Jon Salz (jsalz@mit.edu)
-
-    Copyright (C) 1999-2000 ArsDigita Corporation
-
-    This is free software distributed under the terms of the GNU Public
-    License.  Full text of the license is available from the GNU Project:
-    http://www.fsf.org/copyleft/gpl.html
 
     @author Karl Goldstein
     @author Stanislav Freidin
+    @author Jon Salz
 
     @cvs-id $Id$
 }
+
+# Based on the original ADP to Tcl compiler by Jon Salz (jsalz@mit.edu)
+
+# Copyright (C) 1999-2000 ArsDigita Corporation
+
+# This is free software distributed under the terms of the GNU Public
+# License.  Full text of the license is available from the GNU Project:
+# http://www.fsf.org/copyleft/gpl.html
+
 
 namespace eval template {}
 

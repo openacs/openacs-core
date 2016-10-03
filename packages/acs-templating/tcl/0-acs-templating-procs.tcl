@@ -2,18 +2,19 @@ ad_library {
     Initialize namespaces, global macros and filters for ArsDigita Templating
     System
 
-    Initialize namespaces used by template procs
-
-    Copyright (C) 1999-2000 ArsDigita Corporation
-
-    This is free software distributed under the terms of the GNU Public
-    License.  Full text of the license is available from the GNU Project:
-    http://www.fsf.org/copyleft/gpl.html
-
     @author Karl Goldstein (karlg@arsdigita.com)
 
     @cvs-id $Id$
 }
+
+# Initialize namespaces used by template procs
+
+# Copyright (C) 1999-2000 ArsDigita Corporation
+
+# This is free software distributed under the terms of the GNU Public
+# License.  Full text of the license is available from the GNU Project:
+# http://www.fsf.org/copyleft/gpl.html
+
 
 ad_proc -public template_tag { name arglist body } {
     Generic wrapper for registered tag handlers.
