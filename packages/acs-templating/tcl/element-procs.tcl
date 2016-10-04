@@ -464,7 +464,7 @@ ad_proc -private template::element::validate { form_id element_id } {
     set formerror($element_id:required) [_ acs-templating.Element_is_required]
 
     if {$element(widget) in {hidden submit}} {
-       ns_log Warning "template::element::validate: No value for hidden/submit element $label"
+        ad_log warning "template::element::validate: No value for $element(widget) element $label"
      }
   }
 
@@ -522,8 +522,8 @@ ad_proc -private template::element::validate { form_id element_id } {
       lappend v_errors $message
       set formerror($element_id:data) $message
 
-      if { [lsearch -exact {hidden submit} $element(widget)] } {
-	ns_log Warning "template::element::validate: Invalid value for hidden/submit element $label: $message"
+      if { $element(widget) in {hidden submit} } {
+          ad_log warning "template::element::validate: Invalid value for $element(widget) element $label: $message"
       }
     }
 
