@@ -4896,9 +4896,12 @@ ad_proc -public util::request_info {
                     append info "\n        $k:\t$v"
                 }
             } else {
-                set data [ns_conn content]
-                if {[string length $data] < 2000} {
-                    append info "\n        post-data: $data"
+                set ct [ns_set iget [ns_conn headers] content-type]
+                if {[string match text/* $ct]} {
+                    set data [ns_conn content]
+                    if {[string length $data] < 2000} {
+                        append info "\n        post-data: $data"
+                    }
                 }
             }
         }
