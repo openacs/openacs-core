@@ -42,9 +42,7 @@
   <strong>#acs-subsite.Name#:</strong> @first_names@ @last_name@
 </p>
 
-<if @show_email_p@ true>
- 	@email_image;noquote@
-</if>
+<if @show_email_p@ true>@email_image;noquote@</if>
 
 <if @verified_user_id@ ne 0 and @url@ not nil>
   <p>
