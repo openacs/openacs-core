@@ -229,6 +229,20 @@ ad_proc -public util::http::available {
     return ""
 }
 
+ad_proc -private util::http::native_https_api {
+} {
+    Obtains the right https native API
+} {
+    # Since naviserver 4.99.12 ns_http handles also https
+    if {[apm_version_names_compare \
+             [ns_info patchlevel] "4.99.12"] >= 0} {        
+        return [info commands ns_http]
+    }
+    # Default: check if we have ns_ssl
+    return [info commands ns_ssl]
+}
+
+
 ad_proc -private util::http::apis_not_cached {
 } {
     Obtains implemented apis for http communication
@@ -239,12 +253,15 @@ ad_proc -private util::http::apis_not_cached {
         lappend http  "curl"
         lappend https "curl"
     }
+
     if {[info commands ns_http] ne ""} {
         lappend http  "native"
     }
-    if {[info commands ns_ssl] ne ""} {
+
+    if {[util::http::native_https_api] ne ""} {        
         lappend https "native"
     }
+
     return [list $http $https]
 }
 
@@ -252,7 +269,7 @@ ad_proc -private util::http::apis {
 } {
     Obtains implemented apis for http communication
 } {
-    return [util_memoize [list util::http::apis_not_cached]]
+    return [ns_memoize -- util::http::apis_not_cached]
 }
 
 
@@ -1065,10 +1082,10 @@ ad_proc -private util::http::native::request {
     
     # Check wether we will use ssl or not
     if {$force_ssl_p || [string match "https://*" $url]} {
-        if {[info commands ns_ssl] eq ""} {
+        set http_api [util::http::native_https_api]
+        if {$http_api eq ""} {
             return -code error "${this_proc}:  SSL not enabled"
         }
-        set http_api "ns_ssl"
     } else {
         set http_api "ns_http"
     }
