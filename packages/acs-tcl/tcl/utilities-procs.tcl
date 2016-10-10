@@ -4897,7 +4897,7 @@ ad_proc -public util::request_info {
                 }
             } else {
                 set ct [ns_set iget [ns_conn headers] content-type]
-                if {[string match text/* $ct]} {
+                if {[string match text/* $ct] || $ct eq "application/x-www-form-urlencoded"} {
                     set data [ns_conn content]
                     if {[string length $data] < 2000} {
                         append info "\n        post-data: $data"
