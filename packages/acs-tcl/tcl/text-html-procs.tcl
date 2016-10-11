@@ -39,39 +39,44 @@ ad_proc -public ad_text_to_html {
     if { $text eq "" } {
         return {}
     }
-    
+
+    set nr_links 0
     if { !$no_links_p } {
-        # We start by putting a space in front so our URL/email highlighting will work
-        # for URLs/emails right in the beginning of the text.
+        # We start by putting a space in front so our URL/email
+        # highlighting will work for URLs/emails right in the
+        # beginning of the text.
         set text " $text"
     
-        # if something is " http://" or " https://"
-        # we assume it is a link to an outside source. 
+        # if something is " http://" or " https://" or "ftp://" we
+        # assume it is a link to an outside source.
     
-        # (bd) The only purpose of thiese sTaRtUrL and
-        # eNdUrL markers is to get rid of trailing dots,
-        # commas and things like that.  Note that there
-        # is a \x001 special char before and after each marker.
+        # (bd) The only purpose of these sTaRtUrL and eNdUrL markers
+        # is to get rid of trailing dots, commas and things like that.
+        # Note that there is a \x001 special char before and after
+        # each marker.
     
-        regsub -nocase -all {([^a-zA-Z0-9]+)(http://[^\(\)"<>\s]+)} $text "\\1\x001sTaRtUrL\\2eNdUrL\x001" text
-        regsub -nocase -all {([^a-zA-Z0-9]+)(https://[^\(\)"<>\s]+)} $text "\\1\x001sTaRtUrL\\2eNdUrL\x001" text
-        regsub -nocase -all {([^a-zA-Z0-9]+)(ftp://[^\(\)"<>\s]+)} $text "\\1\x001sTaRtUrL\\2eNdUrL\x001" text
-
-        # Don't dress URLs that are already HREF=... or SRC=... chunks
-        if { $includes_html_p } {
-            regsub -nocase -all {(href\s*=\s*['"]?)\x001sTaRtUrL([^\x001]*)eNdUrL\x001} $text {\1\2} text
-            regsub -nocase -all {(src\s*=\s*['"]?)\x001sTaRtUrL([^\x001]*)eNdUrL\x001} $text {\1\2} text
+        set nr_links [regsub -nocase -all \
+                          {([^a-zA-Z0-9]+)((http|https|ftp)://[^\(\)\"<>\s]+)} $text \
+                          "\\1\x001sTaRtUrL\\2eNdUrL\x001" text]
+        #
+        # Remove marker from URLs that are already HREF=... or SRC=... chunks
+        #
+        if { $includes_html_p && $has_links_p > 0} {
+            regsub -nocase -all {(href\s*=\s*['\"]?)\x001sTaRtUrL([^\x001]*)eNdUrL\x001} $text {\1\2} text
+            regsub -nocase -all {(src\s*=\s*['\"]?)\x001sTaRtUrL([^\x001]*)eNdUrL\x001}  $text {\1\2} text
         }
     
         # email links have the form xxx@xxx.xxx
+        #
         # JCD: don't treat things =xxx@xxx.xxx as email since most
         # common occurance seems to be in urls (although VPATH bounce
-        # emails like bounce-user=domain.com@sourcehost.com will then not
-        # work correctly).  It's all quite ugly.
+        # emails like bounce-user=domain.com@sourcehost.com will then
+        # not work correctly).  It's all quite ugly.
  
-        regsub -nocase -all {([^a-zA-Z0-9=]+)(mailto:)?([^=\(\)\s:;,@<>]+@[^\(\)\s.:;,@<>]+[.][^\(\)\s:;,@<>]+)} $text \
-                "\\1\x001sTaRtEmAiL\\3eNdEmAiL\x001" text
-    }    
+        incr nr_links [regsub -nocase -all \
+                           {([^a-zA-Z0-9=]+)(mailto:)?([^=\(\)\s:;,@<>]+@[^\(\)\s.:;,@<>]+[.][^\(\)\s:;,@<>]+)} $text \
+                           "\\1\x001sTaRtEmAiL\\3eNdEmAiL\x001" text]
+    }
 
     # At this point, before inserting some of our own <, >, and "'s
     # we quote the ones entered by the user:
@@ -109,11 +114,7 @@ ad_proc -public ad_text_to_html {
 
     # Convert line breaks
     if { !$no_lines_p } {
-        if { $includes_html_p } {
-            set text [util_convert_line_breaks_to_html -includes_html -- $text]
-        } else {
-            set text [util_convert_line_breaks_to_html -- $text]
-        }
+        set text [util_convert_line_breaks_to_html -includes_html=$includes_html_p -- $text]
     }
 
     if { !$no_quote_p } {
@@ -124,21 +125,34 @@ ad_proc -public ad_text_to_html {
         regsub -all {\t} $text {\&nbsp;\&nbsp;\&nbsp;\&nbsp;} text
     }
 
-    if { !$no_links_p } {
+    if { !$no_links_p && $nr_links > 0} {
         # Move the end of the link before any punctuation marks at the end of the URL
-        regsub -all {([]!?.:;,<>\(\)\}"'-]+)(eNdUrL\x001)} $text {\2\1} text
-        regsub -all {([]!?.:;,<>\(\)\}"'-]+)(eNdEmAiL\x001)} $text {\2\1} text
+        regsub -all {([]!?.:;,<>\(\)\}\"'-]+)((eNdUrL|eNdEmAiL)\x001)} $text {\2\1} text
 
-        # Dress the links and emails with A HREF
+        #
+        # Convert the marked links and emails into "<a href=...>..."
+        #
         regsub -all {\x001sTaRtUrL([^\x001]*)eNdUrL\x001} $text {<a href="\1">\1</a>} text
         regsub -all {\x001sTaRtEmAiL([^\x001]*)eNdEmAiL\x001} $text {<a href="mailto:\1">\1</a>} text
         set text [string trimleft $text]
     }
 
-    # JCD: Remove all the eNd sTaRt stuff and warn if we do it since its bad
-    # to have these left (means something is broken in our regexps above)
-    if {[regsub -all {(\x001sTaRtUrL|eNdUrL\x001|\x001sTaRtEmAiL|eNdEmAiL\x001)} $text {} text]} {
-        ns_log warning "Replaced sTaRt/eNd magic tags in ad_text_to_html"
+    if {$nr_links > 0} {
+        set changed_back [regsub -all \
+                              {(\x001sTaRtUrL|eNdUrL\x001|\x001sTaRtEmAiL|eNdEmAiL\x001)} $text \
+                              {} text]
+        if {$includes_html_p} {
+            #
+            # All markers should be gone now.
+            #
+            # In case we changed something back (means something is
+            # broken in our regexps above), provide a warning, we have
+            # to debug.
+            #
+            if {$changed_back > 0} {
+                ad_log warning "Replaced sTaRt/eNd magic tags in ad_text_to_html"
+            }
+        }
     }
 
     return $text
@@ -168,11 +182,6 @@ ad_proc -public util_convert_line_breaks_to_html {
     if { $includes_html_p } {
 	set tags [join { ul ol li blockquote p div table tr td th } |]
         regsub -all -nocase "\\s*(</?($tags)\\s*\[^>\]*>)\\s*" $text {\1} text
-
-        #foreach tag { ul ol li blockquote p div table tr td th } {
-        #    regsub -all -nocase "\\n\\s*(</?${tag}\\s*\[^>\]*>)" $text {\1} text
-        #    regsub -all -nocase "(</?${tag}\\s*\[^>\]*>)\\s*\\n" $text {\1} text
-        #}
     }
 
     # Convert _single_ CRLF's to <br>'s to preserve line breaks
