@@ -61,7 +61,7 @@ ad_proc -public ad_text_to_html {
         #
         # Remove marker from URLs that are already HREF=... or SRC=... chunks
         #
-        if { $includes_html_p && $has_links_p > 0} {
+        if { $includes_html_p && $nr_links > 0} {
             regsub -nocase -all {(href\s*=\s*['\"]?)\x001sTaRtUrL([^\x001]*)eNdUrL\x001} $text {\1\2} text
             regsub -nocase -all {(src\s*=\s*['\"]?)\x001sTaRtUrL([^\x001]*)eNdUrL\x001}  $text {\1\2} text
         }
