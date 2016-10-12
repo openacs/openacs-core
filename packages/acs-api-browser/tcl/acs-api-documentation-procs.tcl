@@ -809,7 +809,7 @@ namespace eval ::apidoc {
         @param see a string expected to comtain the resource to format
         @return the html string representing the resource
     } {
-        regsub -all {proc *} $see {} see
+        #regsub -all {proc *} $see {} see
         set see [string trim $see]
         if {[nsv_exists api_proc_doc $see]} {
             set href [export_vars -base proc-view {{proc $see}}]
