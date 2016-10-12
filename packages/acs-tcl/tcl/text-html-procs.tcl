@@ -42,30 +42,24 @@ ad_proc -public ad_text_to_html {
 
     set nr_links 0
     if { !$no_links_p } {
+        #
         # We start by putting a space in front so our URL/email
         # highlighting will work for URLs/emails right in the
         # beginning of the text.
+        #
         set text " $text"
     
         # if something is " http://" or " https://" or "ftp://" we
         # assume it is a link to an outside source.
-    
-        # (bd) The only purpose of these sTaRtUrL and eNdUrL markers
-        # is to get rid of trailing dots, commas and things like that.
-        # Note that there is a \x001 special char before and after
-        # each marker.
-    
+        #
+        # (bd) The only purpose of the markers is to get rid of
+        # trailing dots, commas and things like that.  Note that there
+        # are begin \x001 and end \x002 special chars as marker.
+        #
         set nr_links [regsub -nocase -all \
                           {([^a-zA-Z0-9]+)((http|https|ftp)://[^\(\)\"<>\s]+)} $text \
-                          "\\1\x001sTaRtUrL\\2eNdUrL\x001" text]
-        #
-        # Remove marker from URLs that are already HREF=... or SRC=... chunks
-        #
-        if { $includes_html_p && $nr_links > 0} {
-            regsub -nocase -all {(href\s*=\s*['\"]?)\x001sTaRtUrL([^\x001]*)eNdUrL\x001} $text {\1\2} text
-            regsub -nocase -all {(src\s*=\s*['\"]?)\x001sTaRtUrL([^\x001]*)eNdUrL\x001}  $text {\1\2} text
-        }
-    
+                          "\\1\x001\\2\x002" text]
+
         # email links have the form xxx@xxx.xxx
         #
         # JCD: don't treat things =xxx@xxx.xxx as email since most
@@ -75,7 +69,14 @@ ad_proc -public ad_text_to_html {
  
         incr nr_links [regsub -nocase -all \
                            {([^a-zA-Z0-9=]+)(mailto:)?([^=\(\)\s:;,@<>]+@[^\(\)\s.:;,@<>]+[.][^\(\)\s:;,@<>]+)} $text \
-                           "\\1\x001sTaRtEmAiL\\3eNdEmAiL\x001" text]
+                           "\\1\x001mailto:\\3\x002" text]
+
+        #
+        # Remove marker from URLs that are already HREF=... or SRC=... chunks
+        #
+        if { $includes_html_p && $nr_links > 0} {
+            regsub -nocase -all {((href|src)\s*=\s*['\"]?)\x001([^\x002]*)\x002} $text {\1\3} text
+        }
     }
 
     # At this point, before inserting some of our own <, >, and "'s
@@ -126,21 +127,22 @@ ad_proc -public ad_text_to_html {
     }
 
     if { !$no_links_p && $nr_links > 0} {
-        # Move the end of the link before any punctuation marks at the end of the URL
-        regsub -all {([]!?.:;,<>\(\)\}\"'-]+)((eNdUrL|eNdEmAiL)\x001)} $text {\2\1} text
+        #
+        # Move the end of the link before any punctuation marks at the
+        # end of the URL.
+        #
+        regsub -all {([]!?.:;,<>\(\)\}\"'-]+)(\x002)} $text {\2\1} text
 
         #
         # Convert the marked links and emails into "<a href=...>..."
         #
-        regsub -all {\x001sTaRtUrL([^\x001]*)eNdUrL\x001} $text {<a href="\1">\1</a>} text
-        regsub -all {\x001sTaRtEmAiL([^\x001]*)eNdEmAiL\x001} $text {<a href="mailto:\1">\1</a>} text
+        regsub -all {\x001([^\x002]+?)\x002} $text {<a href="\1">\1</a>} text
+
         set text [string trimleft $text]
     }
 
     if {$nr_links > 0} {
-        set changed_back [regsub -all \
-                              {(\x001sTaRtUrL|eNdUrL\x001|\x001sTaRtEmAiL|eNdEmAiL\x001)} $text \
-                              {} text]
+        set changed_back [regsub -all {(\x001|\x002)} $text {} text]
         if {$includes_html_p} {
             #
             # All markers should be gone now.
@@ -150,7 +152,7 @@ ad_proc -public ad_text_to_html {
             # to debug.
             #
             if {$changed_back > 0} {
-                ad_log warning "Replaced sTaRt/eNd magic tags in ad_text_to_html"
+                ad_log warning "Replaced spurious magic marker in ad_text_to_html"
             }
         }
     }
