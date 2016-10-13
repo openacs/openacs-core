@@ -53,12 +53,16 @@ ad_proc -public ad_text_to_html {
         # assume it is a link to an outside source.
         #
         # (bd) The only purpose of the markers is to get rid of
-        # trailing dots, commas and things like that.  Note that there
-        # are begin \x001 and end \x002 special chars as marker.
+        # trailing dots, commas and things like that.  Note the code
+        # uses utf-8 codes \u0002 (start of text) and \u0003 (end of
+        # text) special chars as marker. Previously, we had \x001 and
+        # \x002, which do not work reliably (regsub was missing some
+        # entries, probably due to a mess-up of the internal
+        # representation).
         #
         set nr_links [regsub -nocase -all \
                           {([^a-zA-Z0-9]+)((http|https|ftp)://[^\(\)\"<>\s]+)} $text \
-                          "\\1\x001\\2\x002" text]
+                          "\\1\u0002\\2\u0003" text]
 
         # email links have the form xxx@xxx.xxx
         #
@@ -69,13 +73,13 @@ ad_proc -public ad_text_to_html {
  
         incr nr_links [regsub -nocase -all \
                            {([^a-zA-Z0-9=]+)(mailto:)?([^=\(\)\s:;,@<>]+@[^\(\)\s.:;,@<>]+[.][^\(\)\s:;,@<>]+)} $text \
-                           "\\1\x001mailto:\\3\x002" text]
+                           "\\1\u0002mailto:\\3\u0003" text]
 
         #
         # Remove marker from URLs that are already HREF=... or SRC=... chunks
         #
         if { $includes_html_p && $nr_links > 0} {
-            regsub -nocase -all {((href|src)\s*=\s*['\"]?)\x001([^\x002]*)\x002} $text {\1\3} text
+            regsub -nocase -all {((href|src)\s*=\s*['\"]?)\u0002([^\u0003]*)\u0003} $text {\1\3} text
         }
     }
 
@@ -126,23 +130,21 @@ ad_proc -public ad_text_to_html {
         regsub -all {\t} $text {\&nbsp;\&nbsp;\&nbsp;\&nbsp;} text
     }
 
-    if { !$no_links_p && $nr_links > 0} {
+    if { $nr_links > 0} {
         #
         # Move the end of the link before any punctuation marks at the
         # end of the URL.
         #
-        regsub -all {([]!?.:;,<>\(\)\}\"'-]+)(\x002)} $text {\2\1} text
+        regsub -all {([\]!?.:;,<>\(\)\}\"'-]+)(\u0003)} $text {\2\1} text
 
         #
         # Convert the marked links and emails into "<a href=...>..."
         #
-        regsub -all {\x001([^\x002]+?)\x002} $text {<a href="\1">\1</a>} text
+        regsub -all {\u0002([^\u0003]+?)\u0003} $text {<a href="\1">\1</a>} text
 
         set text [string trimleft $text]
-    }
 
-    if {$nr_links > 0} {
-        set changed_back [regsub -all {(\x001|\x002)} $text {} text]
+        set changed_back [regsub -all {(\u0002|\u0003)} $text {} text]
         if {$includes_html_p} {
             #
             # All markers should be gone now.
