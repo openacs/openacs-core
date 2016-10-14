@@ -111,15 +111,15 @@ ad_proc adp_parse_ad_conn_file {} {
             set apm_package_url [apm_package_url_from_key "acs-lang"]
             
             # Attempt to move all message keys outside of tags
-            while { [regsub -all {(<[^>]*)(\x002\(\x001[^\x001]*\x001\)\x002)([^>]*>)} $parsed_template {\2\1\3} parsed_template] } {}
+            while { [regsub -all {(<[^>]*)(\x02\(\x01[^\x01]*\x01\)\x02)([^>]*>)} $parsed_template {\2\1\3} parsed_template] } {}
             
             # Attempt to move all message keys outside of <select>...</select> statements
-            regsub -all -nocase {(<option\s[^>]*>[^<]*)(\x002\(\x001[^\x001]*\x001\)\x002)([^<]*</option[^>]*>)} $parsed_template {\2\1\3} parsed_template
+            regsub -all -nocase {(<option\s[^>]*>[^<]*)(\x02\(\x01[^\x01]*\x01\)\x02)([^<]*</option[^>]*>)} $parsed_template {\2\1\3} parsed_template
 
-            while { [regsub -all -nocase {(<select[^>]*>[^<]*)(\x002\(\x001[^\x001]*\x001\)\x002)} $parsed_template {\2\1} parsed_template] } {}
+            while { [regsub -all -nocase {(<select[^>]*>[^<]*)(\x02\(\x01[^\x01]*\x01\)\x02)} $parsed_template {\2\1} parsed_template] } {}
 
             set start 0
-            while { [regexp -nocase -indices -start $start {(<select[^\x002]*)(\x002\(\x001[^\x001]*\x001\)\x002)} $parsed_template indices select_idx message_idx] } {
+            while { [regexp -nocase -indices -start $start {(<select[^\x02]*)(\x02\(\x01[^\x01]*\x01\)\x02)} $parsed_template indices select_idx message_idx] } {
                 set select [string range $parsed_template [lindex $select_idx 0] [lindex $select_idx 1]]
 
                 if { [string first "</select" [string tolower $select]] != -1 } {
@@ -134,7 +134,7 @@ ad_proc adp_parse_ad_conn_file {} {
 
             # TODO: We could also move message keys out of <head>...</head>
 
-            while { [regexp -indices {\x002\(\x001([^\x001]*)\x001\)\x002} $parsed_template indices key] } {
+            while { [regexp -indices {\x02\(\x01([^\x01]*)\x01\)\x02} $parsed_template indices key] } {
                 set before [string range $parsed_template 0 [lindex $indices 0]-1]
                 set after [string range $parsed_template [lindex $indices 1]+1 end]
 

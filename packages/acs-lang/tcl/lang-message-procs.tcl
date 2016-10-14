@@ -864,7 +864,7 @@ ad_proc -public lang::message::lookup {
             }
             
             # encode the key in the page
-            set message "$message\x002(\x001$key\x001)\x002"
+            set message "$message\x02(\x01$key\x01)\x02"
         }
     }
 
