@@ -819,9 +819,10 @@ ad_proc template::add_event_listener {
 
     if {[info exists id]} {
         template::add_body_script -script [subst {
-            document.getElementById('$id').addEventListener('$event', function (event) {
-                $prevent$script
-            }, $usecapture_p);
+            var e = document.getElementById('$id');
+            if (e !== null) {
+                e.addEventListener('$event', function (event) {$prevent$script}, $usecapture_p);
+            }
         }]
     } else {
         template::add_body_script -script [subst {
