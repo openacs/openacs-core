@@ -24,7 +24,7 @@ ad_page_contract {
     verified_user_id:onevalue
     subsite_url:onevalue
 } -validate {
-    valid_user_id -requires user_id {
+    valid_user_id {
         set verified_user_id [ad_conn user_id]
         set untrusted_user_id [ad_conn untrusted_user_id]
         
