@@ -300,6 +300,14 @@ ad_proc -private apm_build_repository {
                 ns_log Notice "Repository: Found channel $channel using tag $tag_name"
                 set channel_tag($channel) $tag_name
             }
+        } elseif { [regexp {^openacs-([1-9][0-9]*-[0-9]+-[0-9]+)-final$} $tag_name match oacs_version] } {
+            lassign [split $oacs_version "-"] major_version minor_version patch_version
+            #ns_log Notice "Repository: tag <$tag_name> oacs version <$oacs_version> split into /$major_version/$minor_version/$patch_version/"
+            if { $major_version >= 5 && $minor_version >= 8} {
+                set channel "${major_version}-${minor_version}-$patch_version"
+                ns_log Notice "Repository: Found channel $channel using tag $tag_name"
+                set channel_tag($channel) $tag_name
+            }
         }
     }
 
@@ -577,9 +585,21 @@ ad_proc -private apm_build_repository {
     ns_log Notice "Repository: Finishing Repository"
 
     foreach channel [array names channel_tag] {
-        regexp {^([1-9][0-9]*)-([0-9]+)$} $channel . major minor
-        set tag_order([format %.3d $major]-[format %.3d $minor]) $channel
-        set tag_label($channel) "OpenACS $major.$minor"
+        if {[regexp {^([1-9][0-9]*)-([0-9]+)$} $channel . major minor]} {
+            #
+            # *-compat channels: The "patchlevel" of these channels is
+            # the highest possible value, higher than the released
+            # -final channels.
+            #
+            set tag_order([format %.3d $major]-[format %.3d $minor]-999) $channel
+            set tag_label($channel) "OpenACS $major.$minor"
+        } elseif {[regexp {^([1-9][0-9]*)-([0-9]+)-([0-9]+)$} $channel . major minor patch]} {
+            #
+            # *-final channels: a concrete patchlevel is provided.
+            #
+            set tag_order([format %.3d $major]-[format %.3d $minor]-[format %.3d $patch]) $channel
+            set tag_label($channel) "OpenACS $major.$minor.$patch"
+        }
     }
 
     
