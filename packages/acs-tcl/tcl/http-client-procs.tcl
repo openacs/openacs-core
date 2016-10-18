@@ -235,7 +235,7 @@ ad_proc -private util::http::native_https_api {
 } {
     # Since naviserver 4.99.12 ns_http handles also https
     if {[apm_version_names_compare \
-             [ns_info patchlevel] "4.99.11"] > 0} {        
+             [ns_info patchlevel] "4.99.12"] > 0} {        
         return [info commands ns_http]
     }
     # Default: check if we have ns_ssl
