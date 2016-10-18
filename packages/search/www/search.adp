@@ -59,7 +59,7 @@
   </div>
 </else>
 
-<include src="/packages/search/lib/navbar" &="urlencoded_query"
+<include src="/packages/search/lib/navbar" &="q"
     paginator_class="list-paginator-bottom" count="@result.count;literal@" &="low" &="high"
     &="offset" &="num" &="search_package_id">
 
