@@ -14,7 +14,7 @@
         <summary>Site wide search</summary>
         <release-date>2015-10-04</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
-        <description format="text/html">Site wide search implemented with service contracts, currently supports postgres via the tsearch2 driver (OpenFTS still support but deprecated).</description>
+        <description format="text/html">Site wide search implemented with service contracts, currently supports PostgreSQL via the tsearch2 driver and Oracle via the intermedia-driver.</description>
         <license>GPL version 2</license>
         <maturity>3</maturity>
 
