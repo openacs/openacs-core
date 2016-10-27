@@ -11,7 +11,13 @@
 
   <fullquery name="content::revision::new.get_storage_type">
     <querytext>
-	select storage_type from cr_items where item_id=:item_id
+      select storage_type from cr_items where item_id=:item_id
+    </querytext>
+  </fullquery>
+
+  <fullquery name="content::revision::new.mime_type_registered_p">
+    <querytext>
+      select exists(select 1 from cr_mime_types where mime_type = :mime_type)
     </querytext>
   </fullquery>
 </queryset>

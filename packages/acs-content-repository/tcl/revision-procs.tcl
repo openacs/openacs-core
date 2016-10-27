@@ -358,6 +358,43 @@ ad_proc cr_registered_type_for_mime_type {
     return [db_string registered_type_for_mime_type "" -default ""]
 }
 
+ad_proc cr_check_mime_type {
+    -mime_type
+    {-filename ""}
+    {-file ""}
+} {
+    Check wether the mimetype is registered. If not, check wether it
+    can be guessed from the filename. If guessed mimetype is not
+    registered optionally insert it.
+
+    @param mime_type param The mime type
+    @param filename the filename
+    @param file the actual file being saved. This option currently
+           doesn't have any effect, but in the future would be better
+           to inspect the actual file content instead of trusting the user.
+
+    @return the mapped mimetype
+} {    
+    # TODO: we use only the extension to get the mimetype. Something
+    # better should be done, like inspecting the actual content of the
+    # file and never trust the user on this regard, but as this
+    # involves changes also in the data model, we leave this for the
+    # future. Usages of this proc in the systems are already set to
+    # give us the path to the file here.
+    set extension [string tolower [string trimleft [file extension $filename] "."]]
+    if {[db_0or1row lookup_mimetype {}]} {
+        return $mime_type
+    }
+    set mime_type [string tolower [ns_guesstype $filename]]
+    if {[db_0or1row lookup_mimetype {}]} {
+        return $mime_type
+    }
+    set allow_mimetype_creation_p \
+        [parameter::get \
+             -parameter AllowMimeTypeCreationP -default 0]
+    return [cr_filename_to_mime_type -create=$allow_mimetype_creation_p \
+                $filename]
+}
 
 ad_proc -public cr_filename_to_mime_type { 
     -create:boolean
@@ -381,10 +418,11 @@ ad_proc -public cr_filename_to_mime_type {
         return "*/*"
     } 
     
-    if {[db_0or1row lookup_mimetype { select mime_type from cr_extension_mime_type_map where extension = :extension }]} { 
+    if {[db_0or1row lookup_mimetype {}]} {
         return $mime_type
     } else { 
         set mime_type [string tolower [ns_guesstype $filename]]
+        
         ns_log Debug "guessed mime \"$mime_type\" create_p $create_p" 
         if {(!$create_p) || $mime_type eq "*/*" || $mime_type eq ""} {
             # we don't have anything meaningful for this mimetype 
