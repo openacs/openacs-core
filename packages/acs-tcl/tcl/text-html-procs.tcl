@@ -69,10 +69,12 @@ ad_proc -public ad_text_to_html {
         # JCD: don't treat things =xxx@xxx.xxx as email since most
         # common occurance seems to be in urls (although VPATH bounce
         # emails like bounce-user=domain.com@sourcehost.com will then
-        # not work correctly).  It's all quite ugly.
+        # not work correctly).  Another tricky case is
+        #     http://www.postgresql.org/message-id/20060329203545.M43728@narrowpathinc.com
+        # where we do not want turn the @ into a mailto.
  
         incr nr_links [regsub -nocase -all \
-                           {([^a-zA-Z0-9=]+)(mailto:)?([^=\(\)\s:;,@<>]+@[^\(\)\s.:;,@<>]+[.][^\(\)\s:;,@<>]+)} $text \
+                           {([^a-zA-Z0-9=/.]+)(mailto:)?([^=\(\)\s:;,@<>/]+@[^\(\)\s.:;,@<>]+[.][^\(\)\s:;,@<>]+)} $text \
                            "\\1\u0002mailto:\\3\u0003" text]
 
         #
