@@ -129,7 +129,9 @@ if { $show ne "untranslated" && $page_start > 0 } {
 
 lappend edit_buttons { "Update" "ok" }
 
-if { $show ne "untranslated" && $page_end < [expr {$total}] } { 
+if { $show ne "untranslated"
+     && $page_end < $total
+ } {
     lappend edit_buttons { "Update and next >" "next" }
 }
 
@@ -255,7 +257,7 @@ multirow create pagination text hint url selected group
 
 for {set count 0} {$count < $total} {incr count 10 } {
     set end_page [expr {$count + 9}]
-    if { $end_page > [expr {$total-1}] } {
+    if { $end_page > $total-1 } {
         set end_page [expr {$total-1}]
     }
     

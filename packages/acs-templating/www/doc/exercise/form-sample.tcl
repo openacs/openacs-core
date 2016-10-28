@@ -117,7 +117,7 @@ db_multirow address get_address ""
 
 set rowcount [set address:rowcount]
 
-if { $rowcount > [expr {$start_row + $num_rows}] } {
+if { $rowcount > $start_row + $num_rows } {
     set next_set [expr {$start_row + $num_rows}]
 } else {
     set next_set ""
@@ -133,7 +133,7 @@ if { $previous_set < 1} {
     set previous_set 1 
 }
 
-if {$rowcount > [expr {$next_set + $num_rows}]} {
+if {$rowcount > $next_set + $num_rows} {
     set last_set [expr {$rowcount - ($rowcount % $num_rows)}]
 } else {
     set last_set ""

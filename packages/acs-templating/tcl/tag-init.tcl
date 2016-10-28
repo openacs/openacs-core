@@ -201,7 +201,7 @@ template_tag multiple { chunk params } {
   for { set $i [expr {1 + $startrow}] } { \$$i <= \${$name:rowcount}"
 
   if {$maxrows >= 0} {
-    template::adp_append_code " && \$$i <= [expr {$maxrows + $startrow}]" \
+    template::adp_append_code " && \$$i <= $maxrows + $startrow" \
 	-nobreak
   }
   
@@ -214,7 +214,7 @@ template_tag multiple { chunk params } {
       template::adp_append_code " if { \$$i < \${$name:rowcount}"
 
       if {$maxrows >= 0} {
-	  template::adp_append_code " && \$$i < [expr {$maxrows + $startrow}]" \
+	  template::adp_append_code " && \$$i < $maxrows + $startrow" \
 	      -nobreak
       }
 

@@ -177,8 +177,9 @@ After adding support for the fancy ADP parser, please restart your web server.
 
 set stacksize [ns_config "ns/threads" StackSize]
 
-if { ![string is integer $stacksize] ||
-     $stacksize < [expr {$acs_application(min_stack_size) * 1024}] } {
+if { ![string is integer $stacksize]
+     || $stacksize < $acs_application(min_stack_size) * 1024
+ } {
     append errors "<li><p><strong>The configured AOLserver Stacksize is too small, missing, or a non-integer value.
 $acs_application(pretty_name) requires a StackSize parameter of at least
 ${acs_application(min_stack_size)}K.
