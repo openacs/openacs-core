@@ -261,7 +261,7 @@ ad_proc -public get_referrer {-relative:boolean} {
     set url [ns_set get [ns_conn headers] Referer]
     if {$relative_p} {
         # In case the referrer URL has a protocol and host remove it
-        regexp {^[a-z]+://[^/]+(/.+)$} $url . url
+        regexp {^[a-z]+://[^/]+(/.*)$} $url . url
     }
     return $url
 }

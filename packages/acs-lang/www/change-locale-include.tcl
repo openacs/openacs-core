@@ -5,11 +5,9 @@
 #    @author Christian Hvid
 
 if { ![info exists return_url] || $return_url eq "" } {
-    # Use referer header
-    set return_url [ns_set iget [ns_conn headers] referer]
-    # In case the referrer URL has a protocol and host remove it
-    regexp {^[a-z]+://[^/]+(/.+)$} $return_url . return_url
+    set return_url [get_referrer -relative]
 }
+
 #
 # Check if the passed in value or the referer is faked
 #
