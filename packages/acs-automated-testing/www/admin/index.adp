@@ -196,5 +196,5 @@
     </if>
     
   </blockquote>
-<p><a href="doc/">Documentation</a>
+<p><a href="../doc/">Documentation</a></p>
 
