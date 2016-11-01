@@ -390,7 +390,7 @@ ad_proc -public template::add_body_handler {
         # Even a one event handler needs to be added in a list
         # since all handlers, anonymous and specific are treated as a
         # list in blank-master.tcl
-       set body_handlers($event,$identifier) [list $script]
+        set body_handlers($event,$identifier) [list $script]
     }
 }
 
@@ -718,20 +718,29 @@ ad_proc template::get_body_event_handlers {
 } {
     Get body event handlers specified with template::add_body_handler
 } {
+    #
     # Concatenate the javascript event handlers for the body tag
+    #
     variable ::template::body_handlers
     set event_handlers ""
+
     if {[array exists body_handlers]} {
-        
+
+        #
+        # Collect all entries for one event type (e.g. "onload")
+        # 
         foreach name [array names body_handlers] {
             set event [lindex [split $name ","] 0]
-            # ns_log notice "event $event name $name JS !!!$body_handlers($name)!!!"
             foreach javascript $body_handlers($name) {
                 lappend body_handlers($event) "[string trimright $javascript {; }];"
             }
             unset body_handlers($name)
         }
-        
+
+        #
+        # Turn events into calls for event listener and add these via
+        # add_body_script.
+        #
         set js ""
         foreach {event script} [array get body_handlers] {
             #
@@ -751,7 +760,7 @@ ad_proc template::get_body_event_handlers {
         if {$js ne ""} {
             template::add_body_script -script $js
         }
-        
+
         unset body_handlers
     }
 
