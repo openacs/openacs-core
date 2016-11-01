@@ -233,13 +233,22 @@ if {[info exists focus] && $focus ne ""} {
     }
 }
 
+#
 # Retrieve headers and footers
+#
 set header [template::get_header_html]
 set footer [template::get_footer_html]
-template::head::prepare_multirows
 
-# body event handlers are converted into body_scripts
+#
+# Body event handlers are converted into body_scripts
+#
 template::get_body_event_handlers
+
+#
+# Build multirows: this has to be done after get_body_event_handlers
+# to include these body_scripts as well.
+#
+template::head::prepare_multirows
 
 #
 # Add the content security policy. Since this is the blank master, we
