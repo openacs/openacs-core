@@ -935,7 +935,7 @@ ad_proc -private rp_handler {} {
     if { [set code [catch {
         if { [rp_performance_mode] } {
             if { ![catch {
-                set file $::tcl_url2file([ad_conn url])
+                set file      $::tcl_url2file([ad_conn url])
                 set path_info $::tcl_url2path_info([ad_conn url])
             } errmsg] } {
                 ad_conn -set file $file
@@ -946,46 +946,56 @@ ad_proc -private rp_handler {} {
             rp_debug -debug t "error in rp_handler: $errmsg"
         }
 
-        set resolve_values [concat $::acs::pageroot[string trimright [ad_conn package_url] /] \
-                                [apm_package_url_resolution [ad_conn package_key]]]
+        if {[ad_conn package_key] ne ""} {
+            #
+            # Only in cases where the URL referes to a mounted
+            # package, try these paths. Otherwise [ad_conn
+            # package_url] and [ad_conn package_key] are empty and
+            # return no useful resolve values.
+            #
+            set resolve_values [concat $::acs::pageroot[string trimright [ad_conn package_url] /] \
+                                    [apm_package_url_resolution [ad_conn package_key]]]
 
-        foreach resolve_value $resolve_values {
-            lassign $resolve_value root match_prefix
-            set extra_url [ad_conn extra_url]
-            if { $match_prefix ne "" } {
-                if { [string first $match_prefix $extra_url] == 0 } {
-                    # An empty root indicates we should reject the attempted reference.  This
-                    # is used to block references to embeded package [sitewide-]admin pages that
-                    # avoid the request processor permission check
-                    if { $root eq "" } {
-                        break
+            foreach resolve_value $resolve_values {
+                lassign $resolve_value root match_prefix
+                set extra_url [ad_conn extra_url]
+                if { $match_prefix ne "" } {
+                    if { [string first $match_prefix $extra_url] == 0 } {
+                        # An empty root indicates we should reject the
+                        # attempted reference.  This is used to block
+                        # references to embedded package
+                        # [sitewide-]admin pages that avoid the
+                        # request processor permission check.
+                        if { $root eq "" } {
+                            break
+                        }
+                        set extra_url [string trimleft \
+                                           [string range $extra_url [string length $match_prefix] end] /]
+                    } else {
+                        continue
                     }
-                    set extra_url [string trimleft \
-                                       [string range $extra_url [string length $match_prefix] end] /]
-                } else {
+                }
+                ds_add rp [list notice "Trying rp_serve_abstract_file $root/$extra_url" $startclicks [clock clicks -microseconds]]
+
+                ad_try {
+                    rp_serve_abstract_file "$root/$extra_url"
+                    set ::tcl_url2file([ad_conn url]) [ad_conn file]
+                    set ::tcl_url2path_info([ad_conn url]) [ad_conn path_info]
+                } notfound val {
+                    ds_add rp [list notice "File $root/$extra_url: Not found" $startclicks [clock clicks -microseconds]]
+                    ds_add rp [list transformation [list notfound "$root / $extra_url" $val] $startclicks [clock clicks -microseconds]]
+                    continue
+                } redirect url {
+                    ds_add rp [list notice "File $root/$extra_url: Redirect" $startclicks [clock clicks -microseconds]]
+                    ds_add rp [list transformation [list redirect $root/$extra_url $url] $startclicks [clock clicks -milliseconds]]
+                    ad_returnredirect $url
+                } directory dir_index {
+                    ds_add rp [list notice "File $root/$extra_url: Directory index" $startclicks [clock clicks -microseconds]]
+                    ds_add rp [list transformation [list directory $root/$extra_url $dir_index] $startclicks [clock clicks -microseconds]]
                     continue
                 }
+                return
             }
-            ds_add rp [list notice "Trying rp_serve_abstract_file $root/$extra_url" $startclicks [clock clicks -microseconds]]
-
-            ad_try {
-                rp_serve_abstract_file "$root/$extra_url"
-                set ::tcl_url2file([ad_conn url]) [ad_conn file]
-                set ::tcl_url2path_info([ad_conn url]) [ad_conn path_info]
-            } notfound val {
-                ds_add rp [list notice "File $root/$extra_url: Not found" $startclicks [clock clicks -microseconds]]
-                ds_add rp [list transformation [list notfound "$root / $extra_url" $val] $startclicks [clock clicks -microseconds]]
-                continue
-            } redirect url {
-                ds_add rp [list notice "File $root/$extra_url: Redirect" $startclicks [clock clicks -microseconds]]
-                ds_add rp [list transformation [list redirect $root/$extra_url $url] $startclicks [clock clicks -milliseconds]]
-                ad_returnredirect $url
-            } directory dir_index {
-                ds_add rp [list notice "File $root/$extra_url: Directory index" $startclicks [clock clicks -microseconds]]
-                ds_add rp [list transformation [list directory $root/$extra_url $dir_index] $startclicks [clock clicks -microseconds]]
-                continue
-            }
-            return
         }
 
         if {[info exists dir_index]
