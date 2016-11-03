@@ -70,7 +70,7 @@ ad_proc -public rp_internal_redirect {
     # restore the file setting. we need to do this because
     # rp_serve_abstract_file sets it to the path we internally
     # redirected to, and rp_handler will cache the file setting
-    # internally in the tcl_url2file variable when PerformanceModeP is
+    # internally in the ::tcl_url2file variable when PerformanceModeP is
     # switched on. This way it caches the location that was originally
     # requested, not the path that we redirected to.
     ad_conn -set file $saved_file
@@ -934,10 +934,9 @@ ad_proc -private rp_handler {} {
     rp_debug "rp_handler: handling request: [ns_conn method] [ns_conn url]?[ns_conn query]"
     if { [set code [catch {
         if { [rp_performance_mode] } {
-            global tcl_url2file tcl_url2path_info
             if { ![catch {
-                set file $tcl_url2file([ad_conn url])
-                set path_info $tcl_url2path_info([ad_conn url])
+                set file $::tcl_url2file([ad_conn url])
+                set path_info $::tcl_url2path_info([ad_conn url])
             } errmsg] } {
                 ad_conn -set file $file
                 ad_conn -set path_info $path_info
@@ -971,8 +970,8 @@ ad_proc -private rp_handler {} {
 
             ad_try {
                 rp_serve_abstract_file "$root/$extra_url"
-                set tcl_url2file([ad_conn url]) [ad_conn file]
-                set tcl_url2path_info([ad_conn url]) [ad_conn path_info]
+                set ::tcl_url2file([ad_conn url]) [ad_conn file]
+                set ::tcl_url2path_info([ad_conn url]) [ad_conn path_info]
             } notfound val {
                 ds_add rp [list notice "File $root/$extra_url: Not found" $startclicks [clock clicks -microseconds]]
                 ds_add rp [list transformation [list notfound "$root / $extra_url" $val] $startclicks [clock clicks -microseconds]]
@@ -1019,8 +1018,8 @@ ad_proc -private rp_handler {} {
                         [string range $extra_url [string length $prefix]-1 end]
                     rp_serve_abstract_file -noredirect -nodirectory \
                         -extension_pattern ".vuh" "$root$prefix"
-                    set tcl_url2file([ad_conn url]) [ad_conn file]
-                    set tcl_url2path_info([ad_conn url]) [ad_conn path_info]
+                    set ::tcl_url2file([ad_conn url]) [ad_conn file]
+                    set ::tcl_url2path_info([ad_conn url]) [ad_conn path_info]
                 } notfound val {
                     ds_add rp [list transformation [list notfound $root$prefix $val] $startclicks [clock clicks -microseconds]]
                     continue
