@@ -816,7 +816,7 @@ ad_proc rp_report_error {
     set error_url "[ad_url][ad_conn url]?[export_entire_form_as_url_vars]"
     #    set error_file [template::util::url_to_file $error_url]
     set error_file [ad_conn file]
-    set package_key []
+    #set package_key [ad_conn package_key]
     set prev_url [get_referrer]
     set feedback_id [db_nextval acs_object_id_seq]
     set user_id [ad_conn user_id]
