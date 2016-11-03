@@ -46,8 +46,8 @@ selected radio button. For instance, if the user selects
 .
 <p>The default form template renders the Radio Group widget as a
 column of radio buttons. Since the Radio Group can consist of many
-HTML controls, the usual <a href="/ats/doc/tagref/formwidget">formwidget</a> tag cannot be used
-to position the widget; instead, the <a href="/ats/doc/tagref/formgroup">formgroup</a> tag must be
+HTML controls, the usual <a href="/doc/acs-templating/tagref/formwidget">formwidget</a> tag cannot be used
+to position the widget; instead, the <a href="/doc/acs-templating/tagref/formgroup">formgroup</a> tag must be
 used.</p>
 <h3>The Checkbox Group Widget</h3>
 <p>This widget is identical in use to the Radio Group widget, but
