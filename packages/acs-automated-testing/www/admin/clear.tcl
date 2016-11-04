@@ -14,8 +14,6 @@ db_dml delete_testcase_tests_sql $sql
 set sql "delete from aa_test_final_results"
 db_dml delete_testcase_tests_sql $sql
 
-ad_returnredirect "index"
-
 ad_returnredirect "index?by_package_key=$package_key&by_category=$category&view_by=$view_by&quiet=$quiet"
 
 # Local variables:
