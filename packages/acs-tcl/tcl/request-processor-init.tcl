@@ -74,12 +74,14 @@ foreach method {GET HEAD POST} {
 }
 
 # Unregister any GET/HEAD/POST handlers for /*.tcl (since they
-# interfere with the abstract URL system). AOLserver automatically
-# registers these in file.tcl if EnableTclPages=On.
+# interfere with the abstract URL system of OpenACS). AOLserver/
+# NaviServer automatically register these when EnableTclPages is
+# configured as true.
 
-ns_unregister_proc GET /*.tcl
-ns_unregister_proc HEAD /*.tcl
-ns_unregister_proc POST /*.tcl
+set unreg_cmd [expr {$::acs::useNaviServer ? "ns_unregister_op" : "ns_unregister_proc"}]
+$unreg_cmd GET /*.tcl
+$unreg_cmd HEAD /*.tcl
+$unreg_cmd POST /*.tcl
 
 set listings [ns_config "ns/server/[ns_info server]" "directorylisting" "none"]
 if { $listings eq "fancy" || $listings eq "simple" } {
