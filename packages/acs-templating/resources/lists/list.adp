@@ -46,8 +46,11 @@
   <if @bulk_actions:rowcount@ gt 0>
     <div class="list-button-bar">
       <multiple name="bulk_actions">
-        <span class="list-button-header"><a href="#" class="list-button" title="@bulk_actions.title@" 
-        onclick="ListBulkActionClick('@list_properties.name@', '@bulk_actions.url@'); return false;">@bulk_actions.label@</a></span>
+	<% template::add_event_listener -id "$list_properties(name)-bulk_action-$bulk_actions(rownum)" -script [subst {
+	    $list_properties(bulk_action_click_function)('$list_properties(name)', '$bulk_actions(url)');
+	}] %>
+        <span class="list-button-header"><a href="#" class="list-button" title="@bulk_actions.title@"
+	id="@list_properties.name;literal@-bulk_action-@bulk_actions.rownum;literal@">@bulk_actions.label@</a></span>
       </multiple>
     </div>
     </form>

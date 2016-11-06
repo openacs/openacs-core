@@ -1,8 +1,3 @@
-<%
-security::csp::require -force script-src 'unsafe-inline';
-ns_log notice "list template table-2third.adp: should remove: script-src 'unsafe-inline' (onclick, ...)"
-%>
-
 <if @list_properties.page_size@ not nil>
 <!-- top pagination -->
   <noparse>
@@ -244,7 +239,10 @@ ns_log notice "list template table-2third.adp: should remove: script-src 'unsafe
     <!-- list-button-bar-bottom div -->
     <div class="list-button-bar-bottom">
         <multiple name="bulk_actions">
-        <input type="submit" title="@bulk_actions.title@" onclick="@list_properties.bulk_action_click_function@('@list_properties.name@', '@bulk_actions.url@'); return false;" value="@bulk_actions.label@" class="button">
+	<% template::add_event_listener -id "$list_properties(name)-bulk_action-$bulk_actions(rownum)" -script [subst {
+	    $list_properties(bulk_action_click_function)('$list_properties(name)', '$bulk_actions(url)');
+	}] %>
+        <input type="submit" title="@bulk_actions.title@" id="@list_properties.name;literal@-bulk_action-@bulk_actions.rownum;literal@" value="@bulk_actions.label@" class="button">
         </multiple>
     </div>
     <!-- end of list-button-bar-bottom div -->
