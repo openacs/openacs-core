@@ -94,8 +94,11 @@
         <if @tests.result@ eq "fail">
           <td class="fail">FAILED</td>
         </if>
-        <else>
+        <elseif @tests.result@ eq "pass">
           <td class="ok">@tests.result@</td>
+        </elseif>
+        <else>
+          <td>@tests.result@</td>
         </else>
         <td><pre>@tests.notes@</pre></td>
       </tr>
