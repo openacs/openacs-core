@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-templating {Templating}} {Commenting Tcl procedures for parsing}</property>
+<property name="context">{/doc/acs-templating {ACS Templating}} {Commenting Tcl procedures for parsing}</property>
 <property name="doc(title)">Commenting Tcl procedures for parsing</property>
 <master>
 <h2>Using comments to document Tcl procedures</h2>

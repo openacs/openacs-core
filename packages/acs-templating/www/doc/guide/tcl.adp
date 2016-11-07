@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-templating {Templating}} {Templating System User Guide: Embedding Code in
+<property name="context">{/doc/acs-templating {ACS Templating}} {Templating System User Guide: Embedding Code in
 Templates}</property>
 <property name="doc(title)">Templating System User Guide: Embedding Code in
 Templates</property>

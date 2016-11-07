@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-templating {Templating}} {ATS and CMS Tcl Procedure Specifications}</property>
+<property name="context">{/doc/acs-templating {ACS Templating}} {ATS and CMS Tcl Procedure Specifications}</property>
 <property name="doc(title)">ATS and CMS Tcl Procedure Specifications</property>
 <master>
 <h2 class="title" align="center">ATS and CMS Tcl Procedure

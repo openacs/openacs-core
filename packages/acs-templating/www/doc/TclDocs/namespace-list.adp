@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-templating {Templating}} {All Namespaces}</property>
+<property name="context">{/doc/acs-templating {ACS Templating}} {All Namespaces}</property>
 <property name="doc(title)">All Namespaces</property>
 <master>
 <h1><a href="namespaces" target="mainFrame">All

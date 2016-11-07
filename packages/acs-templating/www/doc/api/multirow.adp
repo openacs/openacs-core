@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-templating {Templating}} {Templating System API: Multirow}</property>
+<property name="context">{/doc/acs-templating {ACS Templating}} {Templating System API: Multirow}</property>
 <property name="doc(title)">Templating System API: Multirow</property>
 <master>
 <h2>Multirow</h2>

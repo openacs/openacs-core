@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-templating {Templating}} {Template Markup Tag Reference}</property>
+<property name="context">{/doc/acs-templating {ACS Templating}} {Template Markup Tag Reference}</property>
 <property name="doc(title)">Template Markup Tag Reference</property>
 <master>
 <h2>Template Markup Tag Reference</h2>

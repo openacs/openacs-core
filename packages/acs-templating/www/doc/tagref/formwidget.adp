@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-templating {Templating}} {Templating System Tag Reference: Formwidget}</property>
+<property name="context">{/doc/acs-templating {ACS Templating}} {Templating System Tag Reference: Formwidget}</property>
 <property name="doc(title)">Templating System Tag Reference: Formwidget</property>
 <master>
 <h2>Formwidget</h2>

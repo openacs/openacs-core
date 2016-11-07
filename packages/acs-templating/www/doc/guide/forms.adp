@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-templating {Templating}} {Templating System User Guide: Creating and Populating
+<property name="context">{/doc/acs-templating {ACS Templating}} {Templating System User Guide: Creating and Populating
 Forms}</property>
 <property name="doc(title)">Templating System User Guide: Creating and Populating
 Forms</property>

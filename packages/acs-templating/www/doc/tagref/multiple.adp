@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-templating {Templating}} {Templating System Tag Reference: Multiple}</property>
+<property name="context">{/doc/acs-templating {ACS Templating}} {Templating System Tag Reference: Multiple}</property>
 <property name="doc(title)">Templating System Tag Reference: Multiple</property>
 <master>
 <h2>Multiple</h2>

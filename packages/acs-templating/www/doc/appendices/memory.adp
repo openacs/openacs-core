@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-templating {Templating}} {Templating System Appendix D: Parsing templates in
+<property name="context">{/doc/acs-templating {ACS Templating}} {Templating System Appendix D: Parsing templates in
 memory}</property>
 <property name="doc(title)">Templating System Appendix D: Parsing templates in
 memory</property>

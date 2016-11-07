@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-templating {Templating}} {Templating System Widget Reference: Date}</property>
+<property name="context">{/doc/acs-templating {ACS Templating}} {Templating System Widget Reference: Date}</property>
 <property name="doc(title)">Templating System Widget Reference: Date</property>
 <master>
 <h2>The Date Widget</h2>

@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-templating {Templating}} {Templating System Tag Reference: Switch}</property>
+<property name="context">{/doc/acs-templating {ACS Templating}} {Templating System Tag Reference: Switch}</property>
 <property name="doc(title)">Templating System Tag Reference: Switch</property>
 <master>
 <h2>Switch</h2>
@@ -52,7 +52,7 @@ items.</p>
 <pre>
 &lt;switch \@x\@&gt;
     &lt;case in "Fred" "Greta" "Sam"&gt;
-         Your must be Fred Greta or Sam, but I'm not sure which one.
+         Your must be Fred Greta or Sam, but I&#39;m not sure which one.
     &lt;/case&gt;
     &lt;default&gt;
          I don&#39;t recognize your name.

@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-templating {Templating}} {Templating an Existing Tcl Page}</property>
+<property name="context">{/doc/acs-templating {ACS Templating}} {Templating an Existing Tcl Page}</property>
 <property name="doc(title)">Templating an Existing Tcl Page</property>
 <master>
 <h2>Templating an Existing Tcl Page</h2>

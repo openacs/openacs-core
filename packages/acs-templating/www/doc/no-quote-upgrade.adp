@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-templating {Templating}} {Upgrading existing ADPs to noquote templating}</property>
+<property name="context">{/doc/acs-templating {ACS Templating}} {Upgrading existing ADPs to noquote templating}</property>
 <property name="doc(title)">Upgrading existing ADPs to noquote templating</property>
 <master>
 <h2>Upgrading existing ADPs to noquote templating</h2>

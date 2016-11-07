@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-templating {Templating}} {Templating System User Guide: Presenting Data in Multiple
+<property name="context">{/doc/acs-templating {ACS Templating}} {Templating System User Guide: Presenting Data in Multiple
 Styles and Formats}</property>
 <property name="doc(title)">Templating System User Guide: Presenting Data in Multiple
 Styles and Formats</property>

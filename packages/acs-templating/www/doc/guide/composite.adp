@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-templating {Templating}} {Templating System User Guide: Composite Page}</property>
+<property name="context">{/doc/acs-templating {ACS Templating}} {Templating System User Guide: Composite Page}</property>
 <property name="doc(title)">Templating System User Guide: Composite Page</property>
 <master>
 <h2>Assembling a Page from Components</h2>

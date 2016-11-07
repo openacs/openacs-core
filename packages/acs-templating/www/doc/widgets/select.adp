@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-templating {Templating}} {Templating System Widget Reference: Select}</property>
+<property name="context">{/doc/acs-templating {ACS Templating}} {Templating System Widget Reference: Select}</property>
 <property name="doc(title)">Templating System Widget Reference: Select</property>
 <master>
 <h2>The Input Widgets</h2>

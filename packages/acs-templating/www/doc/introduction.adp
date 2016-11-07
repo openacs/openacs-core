@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-templating {Templating}} {Templating System: Goals}</property>
+<property name="context">{/doc/acs-templating {ACS Templating}} {Templating System: Goals}</property>
 <property name="doc(title)">Templating System: Goals</property>
 <master>
 <h2>Goals</h2>

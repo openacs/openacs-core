@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-templating {Templating}} {Using the Wizard}</property>
+<property name="context">{/doc/acs-templating {ACS Templating}} {Using the Wizard}</property>
 <property name="doc(title)">Using the Wizard</property>
 <master>
 <h2>Overview Of How To Make A Wizard</h2>

@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-templating {Templating}} {Templating System Widget Reference: Input}</property>
+<property name="context">{/doc/acs-templating {ACS Templating}} {Templating System Widget Reference: Input}</property>
 <property name="doc(title)">Templating System Widget Reference: Input</property>
 <master>
 <h2>The Input Widgets</h2>
@@ -46,9 +46,9 @@ selected radio button. For instance, if the user selects
 .
 <p>The default form template renders the Radio Group widget as a
 column of radio buttons. Since the Radio Group can consist of many
-HTML controls, the usual <a href="/doc/acs-templating/tagref/formwidget">formwidget</a> tag cannot be used
-to position the widget; instead, the <a href="/doc/acs-templating/tagref/formgroup">formgroup</a> tag must be
-used.</p>
+HTML controls, the usual <a href="/doc/acs-templating/tagref/formwidget">formwidget</a> tag
+cannot be used to position the widget; instead, the <a href="/doc/acs-templating/tagref/formgroup">formgroup</a> tag must
+be used.</p>
 <h3>The Checkbox Group Widget</h3>
 <p>This widget is identical in use to the Radio Group widget, but
 instead of radio buttons it generates a group of checkboxes, any

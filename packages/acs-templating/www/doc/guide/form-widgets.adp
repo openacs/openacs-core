@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-templating {Templating}} {Templating System User Guide: Custom Form Widgets}</property>
+<property name="context">{/doc/acs-templating {ACS Templating}} {Templating System User Guide: Custom Form Widgets}</property>
 <property name="doc(title)">Templating System User Guide: Custom Form Widgets</property>
 <master>
 <h2>Custom Form Widgets</h2>

@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-templating {Templating}} {HTMLQuoting as Part of the Templating System -
+<property name="context">{/doc/acs-templating {ACS Templating}} {HTMLQuoting as Part of the Templating System -
 Requirements}</property>
 <property name="doc(title)">HTMLQuoting as Part of the Templating System -
 Requirements</property>
@@ -73,10 +73,13 @@ ns_quotehtml. It accepts the string that needs to be quoted, and
 returns the quoted string. In ACS 3.x, properly written code was
 expected to call ns_quotehtml every time it published a string to a
 web page. For example:</p><pre class="programlisting">
-doc_body_append "&lt;ul&gt;\n" set db [ns_db gethandle] set selection
-[ns_db select $db {SELECT name FROM bboard_forums}] while {[ns_db
-getrow $db $selection]} { set_variables_after_query doc_body_append
-"&lt;li&gt;Forum: &lt;tt&gt;[ns_quotehtml $name]&lt;/tt&gt;\n" }
+doc_body_append "&lt;ul&gt;\n"
+set db [ns_db gethandle]
+set selection [ns_db select $db {SELECT name FROM bboard_forums}]
+while {[ns_db getrow $db $selection]} {
+    set_variables_after_query
+    doc_body_append "&lt;li&gt;Forum: &lt;tt&gt;[ns_quotehtml $name]&lt;/tt&gt;\n"
+}
 doc_body_append "&lt;/ul&gt;\n"
 </pre><p>Obviously, this was very error-prone, and more often than not,
 the programmers would forget to quote the variables that come from
@@ -99,8 +102,11 @@ the issue was ignored or postponed.</p><p>Let&#39;s review the ACS 3.x code from
 change is that it comes in two parts: the presentation template,
 and the programming logic code. The template will look like
 this:</p><pre class="programlisting">
-&lt;ul&gt; &lt;multiple name=forums&gt; &lt;li&gt;Forum:
-  &lt;tt&gt;\@forums.name\@&lt;/tt&gt; &lt;/multiple&gt; &lt;/ul&gt;
+&lt;ul&gt;
+  &lt;multiple name=forums&gt;
+    &lt;li&gt;Forum: &lt;tt&gt;\@forums.name\@&lt;/tt&gt;
+  &lt;/multiple&gt;
+&lt;/ul&gt;
 </pre><p>Once you understand the (simple) workings of the multiple tag,
 this version strikes you as much more readable than the old one.
 But we&#39;re not done yet: we need to write the Tcl code that
@@ -108,7 +114,9 @@ grabs forum names from the database. The db_multirow proc is
 designed exactly for this; it retrieves rows from the database and
 assigns variables from each row to template variables in each pass
 of a multiple of our choice.</p><pre class="programlisting">
-db_multirow forums get_forum_names { SELECT name FROM forums }
+db_multirow forums get_forum_names {
+  SELECT name FROM forums
+}
 </pre><p>At this point the careful reader will wonder at which point the
 forum name gets quoted, and if so, how does the templating system
 know whether the forum name needs to be quoted or not? The answer
@@ -181,9 +189,9 @@ changes to the ACS.</h3></div></div><p>After some discussion, it was decided tha
 included into the next ACS release. Since the change is
 incompatible, it will be announced to module owners and the general
 public. Explanation on how to port your existing modules and the
-"gotchas" that one can expect follows in a <a href="">separate document</a> .</p><p>The discussion about speed, i.e. benchmarking results before and
-after the change, is <a href="speed" target="_top">also
-available</a> .</p><p><span class="emphasis"><em><a href="mailto:hniksic\@xemacs.org" target="_top">Hrvoje Niksic</a></em></span></p>
+"gotchas" that one can expect follows in a <a href="">separate document</a> .</p>
+&gt;
+<p><span class="emphasis"><em><a href="mailto:hniksic\@xemacs.org" target="_top">Hrvoje Niksic</a></em></span></p>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
