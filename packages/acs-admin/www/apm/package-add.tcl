@@ -54,7 +54,7 @@ Files for your package will be placed in a directory with this name.</td>
 
 <tr>
   <th align="right" nowrap>Package Key:</th>
-  <td><input name="package_key" id="package_key" size="30"></td>
+  <td><input name="package_key" size="30" class="update-url"></td>
 </tr>
 
 <tr>
@@ -149,7 +149,7 @@ an optional suffix of <strong>d</strong> for development, <strong>a</strong> for
 
 <tr>
   <th align="right" nowrap>Initial Version:</th>
-  <td><input name="version_name" id="version_name" size="10"></td>
+  <td><input name="version_name" size="10" id="update-url"></td>
 </tr>
 
 <tr>
@@ -208,7 +208,7 @@ for URLs, in which case you should precede them with <tt>mailto:</tt> (e.g.,
 </tr>
 <tr>
   <th align="right" nowrap>Primary Owner URL:</th>
-  <td><input name="owner_uri" size="30" value="mailto:$email" onChange="checkMailto(this)"></td>
+  <td><input name="owner_uri" size="30" value="mailto:$email" class="check-mailto"></td>
 </tr>
 <tr>
   <th align="right" nowrap>Secondary Owner:</th>
@@ -216,7 +216,7 @@ for URLs, in which case you should precede them with <tt>mailto:</tt> (e.g.,
 </tr>
 <tr>
   <th align="right" nowrap>Secondary Owner URL:</th>
-  <td><input name="owner_uri" size="30" onChange="checkMailto(this)"></td>
+  <td><input name="owner_uri" size="30" class="check-mailto"></td>
 </tr>
 
 <tr>
@@ -255,17 +255,13 @@ this package, please load them manually into your database.
 </table>
 }]
 
+
+# Add event listener for updating urls and checking mailto urls
+
+template::add_event_listener -CSSclass "update-url" -event change -script {updateURLs();}
+template::add_event_listener -CSSclass "check-mailto" -event change -script {checkMailto(this);}
+
 ad_return_template apm
-
-# Add onChange event listener to package_key and version_name fields to comply with CSP.
-# No inline JS event handlers!
-template::add_body_script -script "
-    var elem = document.getElementById('package_key');
-    elem.addEventListener('change', function (event) {updateURLs();});
-    
-    var elem = document.getElementById('version_name');
-    elem.addEventListener('change', function (event) {updateURLs();});"
-
 
 # Local variables:
 #    mode: tcl
