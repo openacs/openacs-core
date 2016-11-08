@@ -3047,15 +3047,12 @@ ad_proc -public template::list::orderby::set_properties {
 
 
 template_tag listtemplate { chunk params } {
-
     set level [template::adp_level]
-
+    
     set list_name [template::get_attribute listtemplate $params name]
-
     set style [ns_set iget $params style]
 
     template::adp_append_code "set list_properties(name) [list $list_name]"
-
     template::adp_append_string \
         "\[template::list::render -name \"$list_name\" -style \"$style\"\]"
 }
@@ -3071,7 +3068,6 @@ template_tag listelement { params } {
 }
 
 template_tag listrow { params } {
-
     set level [template::adp_level]
 
     template::adp_append_string \
