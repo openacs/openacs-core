@@ -378,8 +378,13 @@ proc menu_submenu_select_list {items urls {highlight_url "" }} {
     set return_string ""
     set counter 0
 
-    append return_string "<form name=submenu ACTION=/redir>
-<select name=\"url\" onchange=\"go_to_url(this.options\[this.selectedIndex\].value)\">"
+    set selectid id[clock clicks -microseconds]
+    append return_string [subst {<form name="submenu" action="/redir">
+        <select name="url" id="$selectid">}]
+
+    template::add_event_listener \
+        -id $selectid -event change \
+        -script {go_to_url(this.options[this.selectedIndex].value);}
 
     foreach item $items {
 	set url_stub [ad_conn url]
@@ -388,17 +393,17 @@ proc menu_submenu_select_list {items urls {highlight_url "" }} {
 	# either by highlight_url, or if highlight_url is not set,
 	# the current url then select it
 	if {$highlight_url ne "" && $highlight_url == [lindex $urls $counter]} {
- 	    append return_string "<OPTION VALUE=\"[lindex $urls $counter]\" selected>$item"
+ 	    append return_string [subst {<option value="[lindex $urls $counter]" selected>$item}]
 	} elseif {$highlight_url eq "" && [string match "*$url_stub*" [lindex $urls $counter]]} {
-	    append return_string "<OPTION VALUE=\"[lindex $urls $counter]\" selected>$item"
+	    append return_string [subst {<option value="[lindex $urls $counter]" selected>$item}]
 	} else {
-	    append return_string "<OPTION VALUE=\"[lindex $urls $counter]\">$item"
+	    append return_string [subst {<option value="[lindex $urls $counter]">$item}]
 	}
 	incr counter
     }
     
     append return_string "</select><br>
-    <noscript><input type=\"Submit\" value=\"GO\">
+    <noscript><input type='submit' value='GO'>
     </noscript>
     </form>\n"
 }
