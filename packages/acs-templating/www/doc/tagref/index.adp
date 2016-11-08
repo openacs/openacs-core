@@ -13,16 +13,15 @@ their work. The tags allow authors to accomplish four basic tasks
 that are not possible with standard HTML:</p>
 <ul>
 <li>Embed a dynamic variable in a template (<a href="variable">variables</a>).</li><li>Repeat a template section for each object in a dynamic list of
-objects (<kbd><a href="multiple">multiple</a></kbd>,
-<kbd><a href="grid">grid</a></kbd>).</li><li>Output different template sections depending on the value of
-one or more dynamic variables (<kbd><a href="if">if</a></kbd>).</li><li>Provide a mechanism for building complete pages from multiple
-component templates (<kbd><a href="include">include</a></kbd>).</li>
+objects (<kbd>multiple</kbd>, <kbd>grid</kbd>).</li><li>Output different template sections depending on the value of
+one or more dynamic variables (<kbd>if</kbd>).</li><li>Provide a mechanism for building complete pages from multiple
+component templates (<kbd>include</kbd>).</li>
 </ul>
 <h3>Available Tags</h3>
 <ul>
 <li><a href="variable">Variables</a></li><li><code>&lt;<a href="multiple">multiple</a>&gt;</code></li><li><code>&lt;<a href="group">group</a>&gt;</code></li><li><code>&lt;<a href="grid">grid</a>&gt;</code></li><li><code>&lt;<a href="list">list</a>&gt;</code></li><li><code>&lt;<a href="if">if&gt;,&lt;elseif&gt;,&lt;else&gt;</a>
 </code></li><li><code>&lt;<a href="switch">switch&gt;,&lt;case&gt;,&lt;default&gt;</a>
-</code></li><li><code>&lt;<a href="include">include</a>&gt;</code></li><li><code>&lt;<a href="include-optional">include-optional</a>&gt;</code></li><li><code>&lt;<a href="property">property</a>&gt;</code></li><li><code>&lt;<a href="noparse">noparse</a>&gt;</code></li><li><code>&lt;<a href="master">master</a>&gt;</code></li><li><code>&lt;<a href="slave">slave</a>&gt;</code></li><li><code>&lt;<a href="formtemplate">formtemplate</a>&gt;</code></li><li><code>&lt;<a href="formwidget">formwidget</a>&gt;</code></li><li><code>&lt;<a href="formgroup">formgroup</a>&gt;</code></li><li><code>&lt;<a href="formerror">formerror</a>&gt;</code></li>
+</code></li><li><code>&lt;<a href="include">include</a>&gt;</code></li><li><code>&lt;<a href="include-optional">include-optional</a>&gt;</code></li><li><code>&lt;<a href="property">property</a>&gt;</code></li><li><code>&lt;<a href="noparse">noparse</a>&gt;</code></li><li><code>&lt;<a href="master">master</a>&gt;</code></li><li><code>&lt;<a href="slave">slave</a>&gt;</code></li><li><code>&lt;<a href="formtemplate">formtemplate</a>&gt;</code></li><li><code>&lt;<a href="formwidget">formwidget</a>&gt;</code></li><li><code>&lt;<a href="formgroup">formgroup</a>&gt;</code></li><li><code>&lt;<a href="formerror">formerror</a>&gt;</code></li><li><code>&lt;<a href="listtemplate">listtemplate</a>&gt;</code></li><li><code>&lt;<a href="listtemplate">listfilters</a>&gt;</code></li>
 </ul>
 <h3>Notes</h3>
 <ul>
