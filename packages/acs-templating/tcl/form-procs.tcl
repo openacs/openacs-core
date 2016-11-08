@@ -587,9 +587,26 @@ ad_proc -private template::form::render { id tag_attributes } {
       append output " class=\"margin-form\""
   }
 
+  # make sure, that event handlers have IDs
+  foreach name [array names attributes] {
+      if {[regexp -nocase {^on(.*)%} $name . event]} {
+          if {![info exists attributes(id)]} {
+              set attributes(id) "id[clock clicks -microseconds]"
+          }
+      }
+  }
+    
   # append attributes to form tag
   foreach name [array names attributes] {
-    if {$attributes($name) eq {}} {
+    if {[regexp -nocase {^on(.*)%} $name . event]} {
+        #
+        # Convert automatically on$event attribute into event listener
+        #
+        template::add_event_listener \
+            -event $event
+            -id $attributes(id) \
+            -script $attributes($name)
+    } elseif {$attributes($name) eq {}} {
       append output " $name"
     } else {
       append output " $name=\"$attributes($name)\""
