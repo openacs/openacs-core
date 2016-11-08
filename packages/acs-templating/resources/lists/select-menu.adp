@@ -28,7 +28,8 @@
 %>
 
 
-<SCRIPT>
+<tcl>
+template::add_body_script -script {
 function getSelectedValues (select_name, filter_url, filter_name) {
 
   var r = new Array();
@@ -93,7 +94,8 @@ function getPageURL (filter_url) {
    var url = filter_array[0];
    return url;
 }
-</SCRIPT>
+}
+</tcl>
 
 <table border="0">
 <tr>
@@ -111,10 +113,16 @@ function getPageURL (filter_url) {
                 <tr>
                     <td>
 		        <if @filters.type@ eq "multival">
- 	                    <select name="@filters.filter_label@" onchange="window.location = getSelectedValues(this,'@filters.url@','@filters.filter_name@')" multiple size="3">    
+ 	                    <select id="list-filter-@filters.rownum;literal@" name="@filters.filter_label@" multiple size="3">
+			    <tcl>template::add_event_listener -id "list-filter-$filters(rownum)" -event change -script [subst {
+	                          window.location = getSelectedValues(this,'$filters(url)','$filters(filter_name)');
+	                    }]</tcl>
 			</if>
 		        <else>
- 	                    <select name="@filters.filter_label@" onchange="window.location = this.options[this.selectedIndex].value">
+ 	                    <select id="list-filter-@filters.rownum;literal@" name="@filters.filter_label@">
+			    <tcl>template::add_event_listener -id "list-filter-$filters(rownum)" -event change -script {
+	                          window.location = this.options[this.selectedIndex].value;
+	                    }</tcl>
 			</else>
 			    <if @filters.filter_clear_url@ nil>
 		               <option value="#">- - - - -</option>
