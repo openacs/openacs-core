@@ -264,9 +264,7 @@ if { ![db_table_exists apm_packages] } {
         set system_url "http://yourdomain.com"
     }
 
-    set email_input_widget [install_input_widget \
-                                -extra_attributes "onChange=\"updateSystemEmails()\"" \
-                                email]
+    set email_input_widget [install_input_widget -extra_attributes {id="email-addr"} email]
     append body "
 
 <h2>System Configuration</h2>
@@ -274,18 +272,6 @@ if { ![db_table_exists apm_packages] } {
 We'll need to create a site-wide administrator for your server (like the root
 user in UNIX). Please type in the email address, first and last name, and password
 for this user.
-
-<script type=\"text/javascript\">
-function updateSystemEmails() {
-    var form = document.forms\[0\];
-    
-    form.system_owner.value = form.email.value;
-    form.admin_owner.value = form.email.value;
-    form.host_administrator.value = form.email.value;
-    form.outgoing_sender.value = form.email.value;
-    form.new_registrations.value = form.email.value;
-}
-</script>
 
 <form action=\"installer/install\" method=\"POST\">
 
@@ -378,6 +364,21 @@ The email address to send New registration notifications.<br><br>
   This is particularly useful if you're authenticating against other services, such as LDAP or the 
   local operating system, which may not use email as the basis of authentication.
 </p>
+
+<script type=\"text/javascript\">
+function updateSystemEmails() {
+    var form = document.forms\[0\];
+    
+    form.system_owner.value = form.email.value;
+    form.admin_owner.value = form.email.value;
+    form.host_administrator.value = form.email.value;
+    form.outgoing_sender.value = form.email.value;
+    form.new_registrations.value = form.email.value;
+}
+var elem = document.getElementById('email-addr');
+elem.addEventListener('change', function (event) {updateSystemEmails();});
+</script>
+
     "
 } else {
     # OK, apm_packages is installed - let's check out some other stuff too:
