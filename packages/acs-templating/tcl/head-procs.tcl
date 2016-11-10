@@ -792,6 +792,9 @@ ad_proc template::add_confirm_handler {
             }, false);
         }]
     } else {
+        #
+        # In case, no id is provided, use the "CSSclass"
+        #
         template::add_body_script -script [subst {
             var elems = document.getElementsByClassName('$CSSclass');
             for (var i = 0, l = elems.length; i < l; i++) {
@@ -834,6 +837,9 @@ ad_proc template::add_event_listener {
             }
         }]
     } else {
+        #
+        # In case, no id is provided, use the "CSSclass"
+        #
         template::add_body_script -script [subst {
             var elems = document.getElementsByClassName('$CSSclass');
             for (var i = 0, l = elems.length; i < l; i++) {
