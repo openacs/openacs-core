@@ -15,10 +15,10 @@ Pluggable Authentication Modules (PAM) with OpenACS</h2></div></div></div><p>Ope
 AOLserver.</p><div class="orderedlist"><ol type="1">
 <li>
 <p>
-<strong>Add PAM support to AOLserver. </strong>OpenACS
-supports PAM support via the PAM AOLserver module. PAM is system of
-modular support, and can provide local (unix password), RADIUS,
-LDAP (<a href="http://www.tldp.org/HOWTO/LDAP-Implementation-HOWTO/pamnss.html" target="_top">more information</a>), and other forms of
+<strong>Add PAM support to
+AOLserver. </strong>OpenACS supports PAM support via
+the PAM AOLserver module. PAM is system of modular support, and can
+provide local (unix password), RADIUS, LDAP (<a href="http://www.tldp.org/HOWTO/LDAP-Implementation-HOWTO/pamnss.html" target="_top">more information</a>), and other forms of
 authentication. Note that due to security issues, the AOLserver PAM
 module cannot be used for local password authentication.</p><div class="orderedlist"><ol type="a">
 <li>
@@ -52,13 +52,13 @@ make install</span></span>
 </pre>
 </li><li>
 <p>
-<strong>Set up a PAM domain. </strong>A PAM domain is a set
-of rules for granting privileges based on other programs. Each
-instance of AOLserver uses a domain; different aolserver instances
-can use the same domain but one AOLserver instance cannot use two
-domains. The domain describes which intermediate programs will be
-used to check permissions. You may need to install software to
-perform new types of authentication.</p><div class="itemizedlist"><ul type="disc">
+<strong>Set up a PAM domain. </strong>A PAM domain
+is a set of rules for granting privileges based on other programs.
+Each instance of AOLserver uses a domain; different aolserver
+instances can use the same domain but one AOLserver instance cannot
+use two domains. The domain describes which intermediate programs
+will be used to check permissions. You may need to install software
+to perform new types of authentication.</p><div class="itemizedlist"><ul type="disc">
 <li>
 <p><strong>RADIUS in PAM. </strong></p><div class="orderedlist"><ol type="i">
 <li>
@@ -118,9 +118,9 @@ package. </strong><a href="/acs-admin/install/" target="_top">Install</a><code 
 restart the server.</p></li><li>
 <p>
 <a name="ext-auth-create-authority" id="ext-auth-create-authority"></a><strong>Create an OpenACS
-authority. </strong>OpenACS supports multiple authentication
-authorities. The OpenACS server itself is the "Local
-Authority," used by default.</p><div class="orderedlist"><ol type="a">
+authority. </strong>OpenACS supports multiple
+authentication authorities. The OpenACS server itself is the
+"Local Authority," used by default.</p><div class="orderedlist"><ol type="a">
 <li><p>Browse to the authentication administration page, <code class="computeroutput">http://<span class="replaceable"><span class="replaceable">yourserver</span></span><a href="/acs-admin/auth/" target="_top">/acs-admin/auth/</a>
 </code>. Create and name an
 authority (in the sitewide admin UI)</p></li><li><p>Set Authentication to PAM.</p></li><li><p>If the PAM domain defines a <code class="computeroutput">password</code> command, you can set Password

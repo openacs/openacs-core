@@ -11,18 +11,18 @@
 <a name="ext-auth-ldap-install" id="ext-auth-ldap-install"></a>Using
 LDAP/Active Directory with OpenACS</h2></div></div></div><div class="authorblurb">by <a href="http://openacs.org/shared/community-member?user_id=8551" target="_top">John Sequeira</a>, <a href="http://openacs.org/shared/community-member?user_id=8263" target="_top">Michael Steigman</a>, and <a href="http://openacs.org/shared/community-member?user_id=12805" target="_top">Carl Blesius</a>. OpenACS docs are written by the named
 authors, and may be edited by OpenACS documentation staff.</div><p>
-<strong>ToDo: </strong>Add/verify information on on-demand
-sync, account registration, and batch synchronization. Add section
-on ldapsearch.</p><p>
-<strong>Overview. </strong>You do not want to make users
-remember yet another password and username. If you can avoid it you
-do not want to store their passwords either. This document should
-help you set your system up so your users can seamlessly log in to
-your OpenACS instance using the password they are accustomed to
-using for other things at your institution.</p><p>
-<strong>Background. </strong>The original OpenACS LDAP
-implementation (which has been depreciated by this package) treated
-the LDAP server as another data store similar to Oracle or
+<strong>ToDo: </strong>Add/verify information on
+on-demand sync, account registration, and batch synchronization.
+Add section on ldapsearch.</p><p>
+<strong>Overview. </strong>You do not want to make
+users remember yet another password and username. If you can avoid
+it you do not want to store their passwords either. This document
+should help you set your system up so your users can seamlessly log
+in to your OpenACS instance using the password they are accustomed
+to using for other things at your institution.</p><p>
+<strong>Background. </strong>The original OpenACS
+LDAP implementation (which has been depreciated by this package)
+treated the LDAP server as another data store similar to Oracle or
 Postgresql. It opened a connection using a priveleged account and
 read or stored an encrypted password for the user in question. This
 password was independent of the user&#39;s operating system or
@@ -46,8 +46,8 @@ create an account for them in OpenACS and log them in.</p><div class="orderedlis
 <li>
 <p>
 <a name="ext-auth-ldap-setup" id="ext-auth-ldap-setup"></a><strong>Installing AOLserver LDAP support
-(openldap and nsldap). </strong>Install openldap and nsldap
-using <a href="http://openacs.org/doc/current/install-ldap-radius.html" target="_top">the document Malte created</a> Next, modify your config.tcl
+(openldap and nsldap). </strong>Install openldap and
+nsldap using <a href="http://openacs.org/doc/current/install-ldap-radius.html" target="_top">the document Malte created</a> Next, modify your config.tcl
 file as directed in the nsldap README. Here&#39;s what the relevant
 additions should look like:</p><pre class="screen"><code class="computeroutput">
 # LDAP authentication
@@ -76,11 +76,12 @@ that you see something like this in your error.log:</p><pre class="screen"><code
 [10/Jan/2006:11:11:08][22553.3076437088][-main-] Debug: nsldap: Registering LDAPCheckPools (600)
     </code></pre>
 </li><li><p>
-<strong>auth-ldap + driver installation. </strong>Next,
-visit the software installation page in acs-admin and install the
-auth-ldap package. Your OpenACS installation now has all the code
-required to authenticate using nsldap, so now you need to configure
-your site&#39;s authentication to take advantage of it. To add the
+<strong>auth-ldap + driver
+installation. </strong>Next, visit the software
+installation page in acs-admin and install the auth-ldap package.
+Your OpenACS installation now has all the code required to
+authenticate using nsldap, so now you need to configure your
+site&#39;s authentication to take advantage of it. To add the
 authentication driver to your OpenACS instance, go to: Main Site,
 Site-Wide Administration, and then AuthenticationHere&#39;s some
 sample Authentication Driver values:Name=Active Directory, Short
@@ -130,19 +131,19 @@ if {[ns_ldap bind $lh $fdn $password]} {
     </code></pre>
 </li>
 </ol></div><p>
-<strong>Troubleshooting. </strong>If you&#39;re having
-trouble figuring out some the values for the ldapm, see this useful
-page on <a href="http://bugzilla.glob.com.au/activedirectory/" target="_top">setting up Active Directory integration with
-Bugzilla</a>. It explains how distinguished names are defined in
-Active Directory, and how to test that you have the correct values
-for connectivity and base DN using the OpenLDAP command-line
-utility ldapsearch.John had an issue where nsldap was not loading
-because AOLServer couldn&#39;t find the openldap client libraries,
-but he was able to fix it by adding the openldap libraries to his
+<strong>Troubleshooting. </strong>If you&#39;re
+having trouble figuring out some the values for the ldapm, see this
+useful page on <a href="http://bugzilla.glob.com.au/activedirectory/" target="_top">setting up Active Directory integration with Bugzilla</a>.
+It explains how distinguished names are defined in Active
+Directory, and how to test that you have the correct values for
+connectivity and base DN using the OpenLDAP command-line utility
+ldapsearch.John had an issue where nsldap was not loading because
+AOLServer couldn&#39;t find the openldap client libraries, but he
+was able to fix it by adding the openldap libraries to his
 LD_LIBRARY_PATH (e.g. /usr/local/openldap/lib)</p><p>
-<strong>Credits. </strong>Thanks to Malte Sussdorf for his
-help and the <a href="http://www.lcs.mgh.harvard.edu/" target="_top">Laboratory of Computer Science at Massachusetts General
-Hospital</a> for underwriting this work.</p>
+<strong>Credits. </strong>Thanks to Malte Sussdorf
+for his help and the <a href="http://www.lcs.mgh.harvard.edu/" target="_top">Laboratory of Computer Science at Massachusetts
+General Hospital</a> for underwriting this work.</p>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 		    leftLink="ext-auth-pam-install" leftLabel="Prev" leftTitle="Using Pluggable Authentication Modules
