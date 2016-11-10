@@ -651,7 +651,15 @@ ad_proc -public site_node::get_node_id_from_object_id {
 } {
     return the site node id associated with the given object_id
 } {
-    set url  [lindex [get_url_from_object_id -object_id $object_id] 0]
+    set urls [get_url_from_object_id -object_id $object_id]
+    if {[llength $urls] == 0} {
+        set url ""
+    } else {
+        if {[llength $urls] > 1} {
+            ad_log warning "get_node_id_from_object_id for object $object_id returns [llength $urls] urls, first one is returned"
+        }
+        set url [lindex $urls 0]
+    }
     if { $url ne "" } {
         return [get_node_id -url $url]
     } else {
