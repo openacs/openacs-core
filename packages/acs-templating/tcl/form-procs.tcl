@@ -602,6 +602,7 @@ ad_proc -private template::form::render { id tag_attributes } {
         #
         # Convert automatically on$event attribute into event listener
         #
+        ns_log notice "automatically adding event listener for attribute $name in form with id $id"
         template::add_event_listener \
             -event $event
             -id $attributes(id) \
