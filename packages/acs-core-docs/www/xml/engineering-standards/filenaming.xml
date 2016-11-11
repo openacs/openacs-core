@@ -33,7 +33,7 @@ Essentially, we want our files named in a fashion that reflects their purpose.</
 
 <para>
 
-Under the page root (and the template root if using the <ulink url="style">Style package</ulink>):
+Under the page root:
 </para>
 
 <itemizedlist>
@@ -73,7 +73,7 @@ Thus, the page to edit a bookmark is <computeroutput>/bookmarks/edit.tcl</comput
 
 <blockquote>
 <para>
-<computeroutput>one.</computeroutput><emphasis><computeroutput>extension</computeroutput></emphasis>
+<computeroutput>one.extension</computeroutput>
 </para>
 </blockquote>
 
@@ -179,7 +179,7 @@ use the convention:</para>
 
 <para>
 File names also appear <emphasis>within</emphasis> pages, as linked URLs and
-form targets. When they do, always use <ulink url="abstract-url">abstract
+form targets. When they do, always use <ulink url="rp-design">abstract
 URLs</ulink> (e.g., <computeroutput>user-delete</computeroutput> instead of
 <computeroutput>user-delete.tcl</computeroutput>), because they enhance maintainability.
 </para>

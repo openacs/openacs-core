@@ -22,6 +22,10 @@
 <para><xref linkend="rp-requirements"/></para>
 </listitem>
 
+<listitem>
+<para><ulink url="request-processor">Request Processor Stages and API</ulink></para>
+</listitem>
+
 <listitem><para><ulink url="/api-doc/procs-file-view?path=packages/acs-tcl/tcl/request-processor-procs.tcl">
 /packages/acs-tcl/tcl/request-processor-procs.tcl</ulink></para></listitem>
 
