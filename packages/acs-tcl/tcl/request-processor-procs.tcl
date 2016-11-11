@@ -258,7 +258,7 @@ ad_proc -private rp_invoke_filter { conn filter_info why } {
                 ad_try {
                     set result [$proc $conn $arg $why]
                 } ad_script_abort val {
-                    set result "filter_return"
+                    set result filter_return
                 }
             } error] 
         }
@@ -271,7 +271,7 @@ ad_proc -private rp_invoke_filter { conn filter_info why } {
         # make sure you report catching the error!
         rp_debug "error in filter $proc for [ns_conn method] [ns_conn url]?[ns_conn query] errno is $errno message is $::errorInfo"
         rp_report_error
-        set result "filter_return"
+        set result filter_return
 
     } elseif {$result ne "filter_ok" && $result ne "filter_break" && $result ne "filter_return" } {
 
@@ -281,7 +281,7 @@ ad_proc -private rp_invoke_filter { conn filter_info why } {
         # report the bad filter_return message
         rp_debug -debug t -ns_log_level error $error_msg
         rp_report_error -message $error_msg
-        set result "filter_return"
+        set result filter_return
     } else {
         ds_add rp [list filter [list $why [ns_conn method] [ns_conn url] $proc $arg] \
                        $startclicks [clock clicks -microseconds] $result]
@@ -562,6 +562,7 @@ ad_proc -private rp_filter { why } {
     #
     #####
 
+    sec_handler_reset
     ad_conn -reset
     if {[ns_info name] eq "NaviServer"} {
         # ns_conn id the internal counter by aolserver 4.5 and
@@ -624,10 +625,10 @@ ad_proc -private rp_filter { why } {
             if { [security::secure_conn_p] } {
                 # it's a secure connection.
                 ad_returnredirect -allow_complete_url https://[ad_host][ad_port]$url
-                return "filter_return"
+                return filter_return
             } else {
                 ad_returnredirect -allow_complete_url http://[ad_host][ad_port]$url
-                return "filter_return"
+                return filter_return
             }
         }
         # Normal case: Prepend the root to the URL.
@@ -661,7 +662,7 @@ ad_proc -private rp_filter { why } {
     } {
         ns_log Notice "nasty spider $user_agent"
         ns_returnredirect "http://www.yahoo.com"
-        return "filter_return"
+        return filter_return
     }
     ## BLOCK NASTY YAHOO FINISH
 
@@ -677,7 +678,7 @@ ad_proc -private rp_filter { why } {
                 set query "?[export_entire_form_as_url_vars]"
             }
             ad_returnredirect -allow_complete_url "[ns_conn location][ns_conn url]$query"
-            return "filter_return"
+            return filter_return
         }
     }
 
@@ -702,7 +703,7 @@ ad_proc -private rp_filter { why } {
             ad_returnredirect $node(url)
             rp_debug "rp_filter: returnredirect $node(url)"
             rp_debug "rp_filter: return filter_return"
-            return "filter_return"
+            return filter_return
         }
 
         ad_conn -set node_id $node(node_id)
@@ -755,7 +756,7 @@ ad_proc -private rp_filter { why } {
         ns_log warning "language setup failed: $errorMsg"
         ad_return_complaint 1 "invalid language settings"
         rp_finish_serving_page
-        return "filter_return"
+        return filter_return
     }
 
     set headers [ns_conn headers]
@@ -792,12 +793,12 @@ ad_proc -private rp_filter { why } {
         } ad_script_abort val {
             rp_finish_serving_page
             rp_debug "rp_filter: return filter_return"
-            return "filter_return"
+            return filter_return
         }
     }
 
     rp_debug "rp_filter: return filter_ok"
-    return "filter_ok"
+    return filter_ok
 }
 
 ad_proc rp_report_error {
