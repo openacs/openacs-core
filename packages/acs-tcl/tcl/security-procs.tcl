@@ -73,6 +73,17 @@ ad_proc -private sec_sweep_sessions {} {
     db_release_unused_handles
 }
 
+ad_proc -private sec_handler_reset {} {
+
+    provide dummy values for global variables provided by the
+    sec_handler, in case, the sec_handler is not called or runs into
+    an exception.
+    
+} {
+    set ::__csp_nonce ""
+    set ::__csrf_token ""
+}
+
 ad_proc -private sec_handler {} {
 
     Reads the security cookies, setting fields in ad_conn accordingly.
