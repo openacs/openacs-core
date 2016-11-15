@@ -2100,13 +2100,10 @@ ad_proc -public db_0or1row {
     }
 
     if { [info exists column_array] } {
-        for { set i 0 } { $i < [ns_set size $selection] } { incr i } {
-            set array_val([ns_set key $selection $i]) [ns_set value $selection $i]
-        }
+        array set array_val [ns_set array $selection]
     } elseif { ![info exists column_set] } {
         for { set i 0 } { $i < [ns_set size $selection] } { incr i } {
-            upvar 1 [ns_set key $selection $i] return_value
-            set return_value [ns_set value $selection $i]
+            uplevel 1 [list set [ns_set key $selection $i] [ns_set value $selection $i]]
         }
     }
 
