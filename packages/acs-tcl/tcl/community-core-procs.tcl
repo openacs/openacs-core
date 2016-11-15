@@ -380,7 +380,7 @@ ad_proc -public acs_user::get {
     {-user_id {}}
     {-authority_id {}}
     {-username {}}
-    {-array:required}
+    {-array}
     {-include_bio:boolean}
 } {
     Get basic information about a user. Uses util_memoize to cache info from the database.
@@ -412,16 +412,21 @@ ad_proc -public acs_user::get {
       <li> email_bouncing_p
       <li> no_alerts_until
       <li> last_visit
+      <li> last_visit_ansi
       <li> second_to_last_visit
+      <li> second_to_last_visit_ansi
       <li> n_sessions
       <li> password_question
       <li> password_answer
       <li> password_changed_date
       <li> member_state
       <li> rel_id
+      <li> password_age_days
+      <li> creation_date
+      <li> creation_ip
       <li> bio (if -include_bio switch is present)
     </ul>
-
+    @result dict of attributes
     @author Lars Pind (lars@collaboraid.biz)
 } {
     if { $user_id eq "" } {
@@ -434,17 +439,20 @@ ad_proc -public acs_user::get {
         }
     }
 
-    upvar $array row
     if { $user_id ne "" } {
-        array set row [util_memoize [list acs_user::get_from_user_id_not_cached $user_id] [cache_timeout]]
+        set data [util_memoize [list acs_user::get_from_user_id_not_cached $user_id] [cache_timeout]]
     } else {
-        array set row [util_memoize [list acs_user::get_from_username_not_cached $username $authority_id] [cache_timeout]]
-        set user_id $row(user_id)
+        set data [util_memoize [list acs_user::get_from_username_not_cached $username $authority_id] [cache_timeout]]
     }
 
     if { $include_bio_p } {
-        set row(bio) [person::get_bio -person_id $user_id]
+        lappend data bio [person::get_bio -person_id [dict get $data user_id]]
     }
+    if {[info exists array]} {
+        upvar $array row
+        array set row $data
+    }
+    return $data
 }
 
 ad_proc -private acs_user::get_from_user_id_not_cached { user_id } {
@@ -486,14 +494,15 @@ ad_proc -public acs_user::flush_cache {
     @author Peter Marklund
 } {
     util_memoize_flush [list acs_user::get_from_user_id_not_cached $user_id]
-    
-    # get username and authority_id so we can flush the get_from_username_not_cached proc
-    if { ![catch { 
-        acs_user::get -user_id $user_id -array user
-    }] } {
-        util_memoize_flush [list acs_user::get_from_username_not_cached $user(username) $user(authority_id)]
-	util_memoize_flush [list acs_user::get_by_username_not_cached -authority_id $user(authority_id) -username $user(username)]
-    }
+    #
+    # get username and authority_id so we can flush the
+    # get_from_username_not_cached proc
+    #
+    set u [acs_user::get -user_id $user_id -array user]
+    set user_name [dict get $u username]
+    set user_nameauthority_id [dict get $u usernameauthority_id]
+    util_memoize_flush [list acs_user::get_from_username_not_cached $username $authority_id]
+    util_memoize_flush [list acs_user::get_by_username_not_cached -authority_id $authority_id -username $username]
 }
 
 ad_proc -public acs_user::get_element {
