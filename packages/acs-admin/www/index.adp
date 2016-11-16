@@ -12,7 +12,7 @@
   <p>Manage application packages with site-wide administration facilities.
   These packages have either site-wide parameters (package
   parameters valid for every instance of the package) or they have an
-  own web interface for site-wide administration (www/site-wide-admin).
+  own web interface for site-wide administration (www/sitewide-admin).
   
   <listtemplate name="packages" style="table-2third"></listtemplate>
   <p>
