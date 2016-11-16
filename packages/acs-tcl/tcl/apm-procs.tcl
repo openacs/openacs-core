@@ -1301,12 +1301,15 @@ ad_proc -public apm_version_id_from_package_key {
     Return the id of the (per default enabled) version of the given package_key.
     If no such version id can be found, returns the empty string.
 
-    @param all when specified, return the the enabled or disabled version_id of the package_key.
+    @param all when specified, return the the enabled or disabled version_ids of the package_key.
     @param package_key
     @author Peter Marklund
+
+    @return the supposedly unique version_id for the enabled package, or a list of
+            all the enabled and disabled version when -all flag is specified
 } {
     if {$all_p} {
-        return [db_string get_id {} -default ""]
+        return [db_list get_id {}]
     } else {
         return [db_string get_enabled_id {} -default ""]
     }

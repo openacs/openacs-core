@@ -1137,9 +1137,7 @@ ad_proc -private apm_package_deinstall {
 
 ad_proc -private apm_package_delete {
     {-sql_drop_scripts ""}
-    { 
-        -callback apm_dummy_callback
-    }
+    {-callback apm_dummy_callback}
     {-remove_files:boolean}
     package_key
 } {
@@ -1150,7 +1148,8 @@ ad_proc -private apm_package_delete {
     the package from the APM tables.
 
 } {
-    set version_id [apm_version_id_from_package_key -all $package_key]
+    # get the supposedly unique enabled version of this package
+    set version_id [apm_version_id_from_package_key $package_key]
 
     # Unmount all instances of this package with the Tcl API that 
     # invokes before-unmount callbacks
@@ -1891,8 +1890,19 @@ ad_proc -public apm_version_names_compare {
 
     @author Lars Pind
 } {
-    db_1row select_sortable_versions {}
-    return [string compare $sortable_version_1 $sortable_version_2]
+    regsub -all {[^0-9]+} $version_name_1 {.} version_name_1
+    regsub -all {[^0-9]+} $version_name_2 {.} version_name_2
+
+    foreach token_1 [split $version_name_1 .] token_2 [split $version_name_2 .] {
+        if {$token_1 eq ""} {set token_1 0}
+        if {$token_2 eq ""} {set token_2 0}
+        if {$token_1 > $token_2} {return  1}
+        if {$token_2 > $token_1} {return -1}
+    }
+
+    return 0   
+    # db_1row select_sortable_versions {}
+    # return [string compare $sortable_version_1 $sortable_version_2]
 }
 
 ad_proc -private apm_upgrade_logic_compare {
