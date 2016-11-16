@@ -1890,19 +1890,8 @@ ad_proc -public apm_version_names_compare {
 
     @author Lars Pind
 } {
-    regsub -all {[^0-9]+} $version_name_1 {.} version_name_1
-    regsub -all {[^0-9]+} $version_name_2 {.} version_name_2
-
-    foreach token_1 [split $version_name_1 .] token_2 [split $version_name_2 .] {
-        if {$token_1 eq ""} {set token_1 0}
-        if {$token_2 eq ""} {set token_2 0}
-        if {$token_1 > $token_2} {return  1}
-        if {$token_2 > $token_1} {return -1}
-    }
-
-    return 0   
-    # db_1row select_sortable_versions {}
-    # return [string compare $sortable_version_1 $sortable_version_2]
+    db_1row select_sortable_versions {}
+    return [string compare $sortable_version_1 $sortable_version_2]
 }
 
 ad_proc -private apm_upgrade_logic_compare {
