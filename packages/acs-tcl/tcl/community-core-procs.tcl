@@ -499,7 +499,7 @@ ad_proc -public acs_user::flush_cache {
     # get_from_username_not_cached proc
     #
     set u [acs_user::get -user_id $user_id]
-    set user_name    [dict get $u username]
+    set username     [dict get $u username]
     set authority_id [dict get $u authority_id]
     util_memoize_flush [list acs_user::get_from_username_not_cached $username $authority_id]
     util_memoize_flush [list acs_user::get_by_username_not_cached -authority_id $authority_id -username $username]
