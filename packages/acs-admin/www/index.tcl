@@ -12,15 +12,20 @@ set subsite_number [db_string count_subsites [subst {
 }]]
 
 db_multirow -extend { admin_url global_param_url } packages installed_packages {} {
+    set package_type [db_string get_package_type {
+        select package_type from apm_package_types 
+        where package_key = :package_key
+    }]
     if {
 	[apm_package_installed_p $package_key]
+        && $package_type ne "apm_service"
 	&& [file exists "[acs_package_root_dir $package_key]/www/sitewide-admin/"]
     } {
         set admin_url "package/$package_key/"
     } else {
         set admin_url ""
     }
-    if { [catch {db_1row global_params_exist {}} errmsg]
+    if { ![db_0or1row global_params_exist {}]
 	 || $global_params == 0
      } {
 	set global_param_url ""
