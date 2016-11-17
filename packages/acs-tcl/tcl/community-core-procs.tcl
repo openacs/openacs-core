@@ -498,9 +498,9 @@ ad_proc -public acs_user::flush_cache {
     # get username and authority_id so we can flush the
     # get_from_username_not_cached proc
     #
-    set u [acs_user::get -user_id $user_id -array user]
-    set user_name [dict get $u username]
-    set user_nameauthority_id [dict get $u usernameauthority_id]
+    set u [acs_user::get -user_id $user_id]
+    set user_name    [dict get $u username]
+    set authority_id [dict get $u authority_id]
     util_memoize_flush [list acs_user::get_from_username_not_cached $username $authority_id]
     util_memoize_flush [list acs_user::get_by_username_not_cached -authority_id $authority_id -username $username]
 }
