@@ -44,7 +44,7 @@
   <msg key="Spanish">Spanisch</msg>
   <msg key="this-language">Deutsch</msg>
   <msg key="Translated_messages_on_this_page">Übersetzte Nachrichten auf dieser Seite (%locale%)</msg>
-  <msg key="Your_locale_for_package">Die Spracheinstellung für %package_name%. Wenn gesetzt wird diese die Systemweiten Einstellungen für diese Applikation überschreiben</msg>
+  <msg key="Your_locale_for_package">Die Spracheinstellung für %package_name%. Wenn gesetzt wird diese die systemweiten Einstellungen für diese Applikation überschreiben</msg>
   <msg key="Your_locale_site_wide">Ihre Spracheinstellung für die gesamte Website</msg>
   <msg key="Your_Preferred_Locale">Ihre bevorzugte Spracheinstellung</msg>
   <msg key="Your_timezone">Ihre Zeitzone</msg>
