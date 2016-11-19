@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {AOLserver keepalive with inittab}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {AOLserver keepalive with inittab}</property>
 <property name="doc(title)">AOLserver keepalive with inittab</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

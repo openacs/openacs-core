@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Appendix D. Using CVS with an
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Appendix D. Using CVS with an
 OpenACS Site}</property>
 <property name="doc(title)">Appendix D. Using CVS with an
 OpenACS Site</property>
@@ -19,7 +19,7 @@ an OpenACS Site</h2></div></div></div><div class="authorblurb">
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><p>
 <a name="cvs-service-import" id="cvs-service-import"></a><strong>Add the Service to CVS -
-OPTIONAL. </strong><a class="indexterm" name="idp140641341255024" id="idp140641341255024"></a>These steps take
+OPTIONAL. </strong><a class="indexterm" name="idp140198988785616" id="idp140198988785616"></a>These steps take
 an existing OpenACS directory and add it to a <a class="link" href="install-cvs" title="Initialize CVS (OPTIONAL)">CVS
 repository</a>.</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">

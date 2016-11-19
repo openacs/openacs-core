@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {ACS4 Unit Tests}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {ACS4 Unit Tests}</property>
 <property name="doc(title)">ACS4 Unit Tests</property>
 <master>
 <h2>ACS4 Unit Tests</h2>
@@ -53,7 +53,7 @@ succeeded.</p>
 
 Adding new test cases is meant to be as easy as possible. Simple
 create a new function in the appropriate .java file, making sure
-that the function name begins with "test". I've
+that the function name begins with "test". I&#39;ve
 adopted a naming convention where the function name consists of the
 word "test", a short description of what the function
 does (with words delimited by underscores), followed finally by the

@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Part IV. For OpenACS Platform
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Part IV. For OpenACS Platform
 Developers}</property>
 <property name="doc(title)">Part IV. For OpenACS Platform
 Developers</property>

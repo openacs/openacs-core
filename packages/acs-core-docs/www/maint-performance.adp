@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Diagnosing Performance Problems}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Diagnosing Performance Problems}</property>
 <property name="doc(title)">Diagnosing Performance Problems</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -32,7 +32,7 @@ Information" at the bottom of the page.</p></li><li class="listitem">
 <p>This should return a list of database queries on the page,
 including the exact query (so it can be cut-paste into psql or
 oracle) and the time each query took.</p><div class="figure">
-<a name="idp140641344911744" id="idp140641344911744"></a><p class="title"><strong>Figure 6.8. Query
+<a name="idp140198994401888" id="idp140198994401888"></a><p class="title"><strong>Figure 6.8. Query
 Analysis example</strong></p><div class="figure-contents"><div class="mediaobject"><img src="images/query-duration.png" alt="Query Analysis example"></div></div>
 </div><br class="figure-break">
 </li>
@@ -123,7 +123,7 @@ about 1% per Oracle Support information.</p><p>To be able to get a overview of h
 query, install "autotrace". I usually follow the
 instructions here <a class="ulink" href="http://asktom.oracle.com/~tkyte/article1/autotrace.html" target="_top">http://asktom.oracle.com/~tkyte/article1/autotrace.html</a>.</p><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140641348016688" id="idp140641348016688"></a>Make sure, that the Oracle CBO works with
+<a name="idp140198994424928" id="idp140198994424928"></a>Make sure, that the Oracle CBO works with
 adequate statistics</h4></div></div></div><p>The Oracle Cost Based optimizer is a piece of software that
 tries to find the "optimal" execution plan for a given
 SQL statement. For that it estimates the costs of running a SQL

@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Groups, Context, Permissions}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Groups, Context, Permissions}</property>
 <property name="doc(title)">Groups, Context, Permissions</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -196,8 +196,8 @@ organizations of users and groups of users.</p></li><li class="listitem"><p>The 
 user rights.</p></li><li class="listitem"><p>The Context hierarchy allows you to define organize default
 permissions in a hierarchical fashion.</p></li>
 </ol></div><p>A PL/SQL or Tcl API is then used to check permissions in
-application pages.</p><div class="cvstag">($&zwnj;Id: permissions.html,v 1.50.2.10 2016/06/21
-07:44:36 gustafn Exp $)</div>
+application pages.</p><div class="cvstag">($&zwnj;Id: permissions.xml,v 1.17.6.1 2016/06/23
+08:32:46 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

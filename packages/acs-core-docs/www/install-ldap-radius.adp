@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Install LDAP for use as external authentication}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Install LDAP for use as external authentication}</property>
 <property name="doc(title)">Install LDAP for use as external authentication</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

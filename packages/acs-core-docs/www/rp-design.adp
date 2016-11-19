@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Request Processor Design}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Request Processor Design}</property>
 <property name="doc(title)">Request Processor Design</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -17,7 +17,8 @@ OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="rp-design-essentials" id="rp-design-essentials"></a>Essentials</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p><a class="xref" href="rp-requirements" title="Request Processor Requirements">OpenACS 4 Request Processor
-Requirements</a></p></li><li class="listitem"><p><a class="ulink" href="/api-doc/procs-file-view?path=packages/acs-tcl/tcl/request-processor-procs.tcl" target="_top">/packages/acs-tcl/tcl/request-processor-procs.tcl</a></p></li><li class="listitem"><p><a class="ulink" href="/api-doc/procs-file-view?path=packages/acs-tcl/tcl/request-processor-init.tcl" target="_top">/packages/acs-tcl/tcl/request-processor-init.tcl</a></p></li><li class="listitem"><p><a class="ulink" href="/api-doc/procs-file-view?path=packages/acs-tcl/tcl/site-nodes-procs.tcl" target="_top">/packages/acs-tcl/tcl/site-nodes-procs.tcl</a></p></li><li class="listitem"><p><a class="ulink" href="/api-doc/procs-file-view?path=packages/acs-tcl/tcl/site-nodes-init.tcl" target="_top">/packages/acs-tcl/tcl/site-nodes-init.tcl</a></p></li><li class="listitem"><p><a class="ulink" href="/doc/sql/display-sql?package_key=acs-kernel&amp;url=site-nodes-create.sql" target="_top">/packages/acs-kernel/sql/site-nodes-create.sql</a></p></li>
+Requirements</a></p></li><li class="listitem"><p><a class="ulink" href="request-processor" target="_top">Request
+Processor Stages and API</a></p></li><li class="listitem"><p><a class="ulink" href="/api-doc/procs-file-view?path=packages/acs-tcl/tcl/request-processor-procs.tcl" target="_top">/packages/acs-tcl/tcl/request-processor-procs.tcl</a></p></li><li class="listitem"><p><a class="ulink" href="/api-doc/procs-file-view?path=packages/acs-tcl/tcl/request-processor-init.tcl" target="_top">/packages/acs-tcl/tcl/request-processor-init.tcl</a></p></li><li class="listitem"><p><a class="ulink" href="/api-doc/procs-file-view?path=packages/acs-tcl/tcl/site-nodes-procs.tcl" target="_top">/packages/acs-tcl/tcl/site-nodes-procs.tcl</a></p></li><li class="listitem"><p><a class="ulink" href="/api-doc/procs-file-view?path=packages/acs-tcl/tcl/site-nodes-init.tcl" target="_top">/packages/acs-tcl/tcl/site-nodes-init.tcl</a></p></li><li class="listitem"><p><a class="ulink" href="/doc/sql/display-sql?package_key=acs-kernel&amp;url=site-nodes-create.sql" target="_top">/packages/acs-kernel/sql/site-nodes-create.sql</a></p></li>
 </ul></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">

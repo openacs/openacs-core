@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Bootstrapping OpenACS}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Bootstrapping OpenACS}</property>
 <property name="doc(title)">Bootstrapping OpenACS</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -103,8 +103,8 @@ log an error.</p></li>
 </ol></div><p>At this point, <code class="computeroutput">bootstrap.tcl</code>
 is done executing. AOLserver proceeds to source the remaining files
 in the <code class="computeroutput">/tcl</code> directory (i.e.,
-unpackaged libraries) and begins listening for connections.</p><div class="cvstag">($&zwnj;Id: bootstrap-acs.html,v 1.49.2.10 2016/06/21
-07:44:35 gustafn Exp $)</div>
+unpackaged libraries) and begins listening for connections.</p><div class="cvstag">($&zwnj;Id: bootstrap-acs.xml,v 1.7 2006/07/17
+05:38:38 torbenb Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

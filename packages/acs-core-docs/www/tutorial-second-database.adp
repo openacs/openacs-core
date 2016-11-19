@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Connect to a second database}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Connect to a second database}</property>
 <property name="doc(title)">Connect to a second database</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

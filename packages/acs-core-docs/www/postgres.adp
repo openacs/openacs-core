@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Install PostgreSQL}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Install PostgreSQL}</property>
 <property name="doc(title)">Install PostgreSQL</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

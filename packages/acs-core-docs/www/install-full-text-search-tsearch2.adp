@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Install Full Text Search using Tsearch2}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Install Full Text Search using Tsearch2}</property>
 <property name="doc(title)">Install Full Text Search using Tsearch2</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -18,7 +18,7 @@ using Tsearch2</h2></div></div></div><div class="authorblurb">
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="install-tsearch2" id="install-tsearch2"></a>Install Tsearch2 module</h3></div></div></div><a class="indexterm" name="idp140669742763552" id="idp140669742763552"></a><p>If you want full text search, and you are running PostgreSQL,
+<a name="install-tsearch2" id="install-tsearch2"></a>Install Tsearch2 module</h3></div></div></div><a class="indexterm" name="idp140198994433952" id="idp140198994433952"></a><p>If you want full text search, and you are running PostgreSQL,
 install this module to support FTS. Do this step after you have
 installed both PostgreSQL and AOLserver. You will need the tseach2
 module form PostgreSQL contrib. This is included with the

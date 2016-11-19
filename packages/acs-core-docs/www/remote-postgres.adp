@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Running a PostgreSQL database on another server}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Running a PostgreSQL database on another server}</property>
 <property name="doc(title)">Running a PostgreSQL database on another server</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

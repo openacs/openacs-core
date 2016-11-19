@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Prerequisite Software}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Prerequisite Software}</property>
 <property name="doc(title)">Prerequisite Software</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -167,7 +167,7 @@ interfaces via Tcl scripts.</p>
 <p>
 <strong>Web Server. </strong>The web server handles
 incoming HTTP requests, provides a runtime environment for
-OpenACS's Tcl code, connects to the database, sends out HTTP
+OpenACS&#39;s Tcl code, connects to the database, sends out HTTP
 responses, and logs requests and errors. OpenACS uses AOLserver;
 <a class="ulink" href="http://openacs.org/forums/message-view?message_id=21461" target="_top">some people have had success running Apache with
 mod_nsd</a>.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;"><li class="listitem">
@@ -316,8 +316,8 @@ track old versions of your files, do controlled deployment of code
 from development to production, or get or contribute development
 code from openacs.org.</p></li></ul></div>
 </li>
-</ul></div><div class="cvstag">($&zwnj;Id: individual-programs.html,v 1.33.2.10
-2016/06/21 07:44:36 gustafn Exp $)</div>
+</ul></div><div class="cvstag">($&zwnj;Id: software.xml,v 1.26.2.2 2016/10/03
+09:17:51 gustafn Exp $)</div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 		    leftLink="install-steps" leftLabel="Prev" leftTitle="Basic Steps"

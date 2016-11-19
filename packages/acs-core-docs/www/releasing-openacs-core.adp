@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {OpenACS Core and .LRN}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {OpenACS Core and .LRN}</property>
 <property name="doc(title)">OpenACS Core and .LRN</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -108,8 +108,8 @@ force the tag to the new version (just in case someone has created
 the tag already on another version). Excercise care when doing this
 since you don&#39;t want to inadvertently move a prior release tag.
 Also if the tagging goes horribly wrong for some reason you can
-delete the tag via "<span class="command"><strong>cvs tag -d
-&lt;symbolic_tag&gt;</strong></span>".</p>
+delete the tag via <span class="command"><strong>cvs tag -d
+&lt;symbolic_tag&gt;</strong></span>.</p>
 </li><li class="listitem">
 <p>Apply the <code class="computeroutput">final</code> tag across
 the tree. First, check out the entire OpenACS tree, getting the
@@ -180,7 +180,7 @@ rm -rf tarball dotlrn-tarball dotlrn-packages openacs-<span class="replaceable">
 rm -rf /var/tmp/openacs-4</span></span></pre>
 </li>
 </ol></div><p>Here is a shell script that automates packaging the tarball
-(it&#39;s a bit out of date with the new steps - I've been
+(it&#39;s a bit out of date with the new steps - I&#39;ve been
 doing everything manually or with little throwaway scripts as
 detailed above until the process is stabilized).</p><pre class="programlisting">
 #!/bin/bash
@@ -264,8 +264,8 @@ tar -czf ../dotlrn-${DOTLRN_VERSION//-/.}.tar.gz dotlrn-${DOTLRN_VERSION//-/.}
 
 # Clean up after ourselves...
 cd $BASE &amp;&amp; rm -rf dotlrn-tarball tarball openacs-4 dotlrn-packages
-</pre><div class="cvstag">($&zwnj;Id: releasing-openacs-core.html,v 1.20.2.10
-2016/06/21 07:44:36 gustafn Exp $)</div>
+</pre><div class="cvstag">($&zwnj;Id: releasing-openacs.xml,v 1.22.2.3
+2016/10/03 09:17:51 gustafn Exp $)</div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 		    leftLink="releasing-openacs" leftLabel="Prev" leftTitle="

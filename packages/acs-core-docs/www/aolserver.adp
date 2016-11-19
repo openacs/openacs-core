@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Install AOLserver 3.3oacs1}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Install AOLserver 3.3oacs1}</property>
 <property name="doc(title)">Install AOLserver 3.3oacs1</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -303,8 +303,8 @@ set address 0.0.0.0
 </li><li class="listitem"><p>
 <a class="link" href="analog-install" title="Install Analog web file analyzer">Install Analog</a> web file
 analyzer. (OPTIONAL)</p></li>
-</ol></div><div class="cvstag">($&zwnj;Id: aolserver.html,v 1.52.2.10 2016/06/21
-07:44:35 gustafn Exp $)</div>
+</ol></div><div class="cvstag">($&zwnj;Id: aolserver.xml,v 1.22.14.1 2016/06/23
+08:32:46 gustafn Exp $)</div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 		    leftLink="install-ldap-radius" leftLabel="Prev" leftTitle="Install LDAP for use as external

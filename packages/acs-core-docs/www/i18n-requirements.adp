@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {OpenACS Internationalization Requirements}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {OpenACS Internationalization Requirements}</property>
 <property name="doc(title)">OpenACS Internationalization Requirements</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -103,7 +103,7 @@ multiple languages simultaneously. For example, www.un.org with
 content and navigation in multiple languages.</p><p>The site would have an end-user visible UI to support these
 languages, and the content management system must allow articles to
 be posted in these languages. In some cases it may be necessary to
-make the modules' admin UI's operate in more than one
+make the modules' admin UI&#39;s operate in more than one
 supported language, while in other cases the backend admin
 interface can operate in a single language.</p>
 </li><li class="listitem"><p>A developer is writing a new module, and wants to make it easy

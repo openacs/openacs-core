@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Add the new package to CVS}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Add the new package to CVS}</property>
 <property name="doc(title)">Add the new package to CVS</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -71,7 +71,7 @@ done
 <span class="emphasis"><em>(many lines omitted)</em></span>
 [$OPENACS_SERVICE_NAME myfirstpackage]$
 </pre><div class="figure">
-<a name="idp140641342353248" id="idp140641342353248"></a><p class="title"><strong>Figure 10.1. Upgrading a local CVS
+<a name="idp140198984971392" id="idp140198984971392"></a><p class="title"><strong>Figure 10.1. Upgrading a local CVS
 repository</strong></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/development-with-cvs.png" align="middle" alt="Upgrading a local CVS repository"></div></div>
 </div><br class="figure-break">
 </div>

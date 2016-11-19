@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Basic Steps}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Basic Steps}</property>
 <property name="doc(title)">Basic Steps</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -106,8 +106,8 @@ export OPENACS_SERVICE_NAME=<span class="replaceable"><span class="replaceable">
 </ul></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140641344966640" id="idp140641344966640"></a>Paths and Users</h3></div></div></div><div class="table">
-<a name="idp140641344967280" id="idp140641344967280"></a><p class="title"><strong>Table 2.1. Default
+<a name="idp140198980963312" id="idp140198980963312"></a>Paths and Users</h3></div></div></div><div class="table">
+<a name="idp140198980963952" id="idp140198980963952"></a><p class="title"><strong>Table 2.1. Default
 directories for a standard install</strong></p><div class="table-contents"><table class="table" summary="Default directories for a standard install" cellspacing="0" width="100%" border="1">
 <colgroup>
 <col><col>
@@ -118,7 +118,7 @@ directories for a standard install</strong></p><div class="table-contents"><tabl
 <td>name of administrative access account</td><td>remadmin</td>
 </tr><tr>
 <td>OpenACS service</td><td>
-<a class="indexterm" name="idp140641344972080" id="idp140641344972080"></a><span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span> (set to service0
+<a class="indexterm" name="idp140198980968752" id="idp140198980968752"></a><span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span> (set to service0
 in default install)</td>
 </tr><tr>
 <td>OpenACS service account</td><td><span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span></td>
@@ -183,8 +183,8 @@ commands that are failing with the accompanying error. If
 there&#39;s a SQL error in the Tcl error or in the log, post that
 too.</p></li><li class="listitem"><p>If you find errors in this document or if you have ideas about
 making it better, please post them in our <a class="ulink" href="http://openacs.org/bugtracker/openacs/" target="_top">BugTracker</a>.</p></li>
-</ul></div><div class="cvstag">($&zwnj;Id: install-steps.html,v 1.35.2.10 2016/06/21
-07:44:36 gustafn Exp $)</div>
+</ul></div><div class="cvstag">($&zwnj;Id: overview.xml,v 1.29.2.2 2016/06/23
+08:32:46 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

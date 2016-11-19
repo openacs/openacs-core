@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Mounting OpenACS packages}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Mounting OpenACS packages}</property>
 <property name="doc(title)">Mounting OpenACS packages</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -16,7 +16,7 @@ Site"
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140641349538576" id="idp140641349538576"></a>Mounting OpenACS packages</h3></div></div></div><p>After you&#39;ve installed your packages, you have to
+<a name="idp140198986037920" id="idp140198986037920"></a>Mounting OpenACS packages</h3></div></div></div><p>After you&#39;ve installed your packages, you have to
 'mount' them in order to make them appear on your
 website.</p><p>Make sure you are logged in, and then click on the
 'Admin' or 'Control Panel' link to get to the

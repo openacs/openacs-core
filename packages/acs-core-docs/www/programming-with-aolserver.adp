@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Programming with AOLserver}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Programming with AOLserver}</property>
 <property name="doc(title)">Programming with AOLserver</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -230,8 +230,8 @@ lightweight, so memory consumption should not be a problem.
 However, when using <code class="computeroutput">ns_set get</code>
 to perform lookup by name, they perform a linear lookup, whereas
 arrays use a hash table, so <code class="computeroutput">ns_set</code>s are slower than arrays when the
-number of entries is large.</p><div class="cvstag">($&zwnj;Id: programming-with-aolserver.html,v
-1.49.2.10 2016/06/21 07:44:36 gustafn Exp $)</div>
+number of entries is large.</p><div class="cvstag">($&zwnj;Id: programming-with-aolserver.xml,v 1.7
+2014/10/27 16:39:30 victorg Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

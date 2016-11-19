@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {External Authentication Requirements}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {External Authentication Requirements}</property>
 <property name="doc(title)">External Authentication Requirements</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -12,7 +12,7 @@ Chapter 15. Kernel Documentation"
 <a name="ext-auth-requirements" id="ext-auth-requirements"></a>External
 Authentication Requirements</h2></div></div></div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140641357115072" id="idp140641357115072"></a>Vision</h3></div></div></div><p>People have plenty of usernames and passwords already, we
+<a name="idp140198988912720" id="idp140198988912720"></a>Vision</h3></div></div></div><p>People have plenty of usernames and passwords already, we
 don&#39;t want them to have yet another. We want people to be able
 to log in to OpenACS with the same password they use to log in to
 any other system.</p><p>Besides, administrators have better things to do than create
@@ -74,7 +74,7 @@ Pictures</h3></div></div></div><p>Authentication:</p><p><span class="inlinemedia
 <div class="titlepage"><div><div><h3 class="title">
 <a name="Requirements" id="Requirements"></a>Requirements</h3></div></div></div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140641338601088" id="idp140641338601088"></a>New API</h4></div></div></div><div class="segmentedlist"><table border="1" cellpadding="3" cellspacing="0" width="90%">
+<a name="idp140199009431360" id="idp140199009431360"></a>New API</h4></div></div></div><div class="segmentedlist"><table border="1" cellpadding="3" cellspacing="0" width="90%">
 <tr>
 <th width="15%">Feature</th><th width="8%">Status</th><th width="77%">Description</th>
 </tr><thead><tr><th>New API</th></tr></thead><tbody>
@@ -526,7 +526,7 @@ would be nice to add a feature to show who&#39;s currently online,
 a nice real-time collaboration feature frequently requested by
 members of the community. This is particularly interesting when
 integrated with a chat or instant messaging service like
-Jabber.</p><p>What I'm concretely suggesting is that we keep a record of
+Jabber.</p><p>What I&#39;m concretely suggesting is that we keep a record of
 which authenticated users have requested pags on the site in the
 last x minutes (typically about 5), and thus are considered to be
 currently online. There&#39;s nothing more to it. This lets us
@@ -587,7 +587,7 @@ Authenticating against multiple servers simultaneously</h4></div></div></div><di
 be logged into multiple authorities at the same time. This is
 useful if, for example, you need to get login tokens such as
 Kerberos tickets for access to shared resources.</p><p>I can see the value in this, but for simplicity&#39;s sake,
-I'm in favor of keeping this use-case out of the loop until we
+I&#39;m in favor of keeping this use-case out of the loop until we
 have someone with a real requirement who could help us guide
 development.</p><p>For now, OpenACS is still more of an integrated suite, it
 doesn&#39;t access many outside applications. I think it would be
@@ -627,7 +627,7 @@ convenient because there&#39;ll be plenty of drivers for the OS PAM
 level, so we don&#39;t have to write them all ourselves. The
 downside is that we can&#39;t do things like account creation,
 password management, real-time account synchronization, etc., not
-supported by PAM (I'm not entirely sure what is and is not
+supported by PAM (I&#39;m not entirely sure what is and is not
 supported).</p></li><li class="listitem"><p>RADIUS</p></li><li class="listitem"><p>LDAP</p></li>
 </ul></div><div class="sect4">
 <div class="titlepage"><div><div><h5 class="title">

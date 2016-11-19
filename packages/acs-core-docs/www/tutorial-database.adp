@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Setting Up Database Objects}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Setting Up Database Objects}</property>
 <property name="doc(title)">Setting Up Database Objects</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -15,7 +15,7 @@ Chapter 9. Development Tutorial"
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140641342806176" id="idp140641342806176"></a>Code the data model</h3></div></div></div><p>We create all database objects with scripts in the <code class="computeroutput">myfirstpackage/sql/</code> directory. All database
+<a name="idp140198982868368" id="idp140198982868368"></a>Code the data model</h3></div></div></div><p>We create all database objects with scripts in the <code class="computeroutput">myfirstpackage/sql/</code> directory. All database
 scripts are database-specific and are thus in either the
 <code class="computeroutput">myfirstpackage/sql/oracle</code> or
 <code class="computeroutput">myfirstpackage/sql/postgresql</code>
@@ -42,17 +42,16 @@ objects, we can also use some content repository functions to
 simplify our database creation. (<a class="ulink" href="objects" target="_top">More information about ACS
 Objects</a>. <a class="ulink" href="/doc/acs-content-repository" target="_top">More information about the Content
 Repository</a>.)</p><div class="figure">
-<a name="idp140641342948800" id="idp140641342948800"></a><p class="title"><strong>Figure 9.2. Tutorial Data
+<a name="idp140198982233408" id="idp140198982233408"></a><p class="title"><strong>Figure 9.2. Tutorial Data
 Model</strong></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/tutorial-data-model.png" align="middle" alt="Tutorial Data Model"></div></div>
 </div><br class="figure-break"><p>The top of each sql file has some standard comments, including
 doc tags such as <code class="computeroutput">\@author</code> which
-will be picked up by the API browser. The string <code class="computeroutput">$&zwnj;Id: tutorial-database.html,v 1.44.2.10 2016/06/21
-07:44:36 gustafn Exp $</code> will automatically be expanded when
+will be picked up by the API browser. The string <code class="computeroutput">$&zwnj;Id:$</code> will automatically be expanded when
 the file is checked in to cvs.</p><pre class="screen">
 [$OPENACS_SERVICE_NAME ~]$ <strong class="userinput"><code>cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackage/sql/postgresql</code></strong>
 [$OPENACS_SERVICE_NAME postgresql]$ <strong class="userinput"><code>emacs myfirstpackage-create.sql</code></strong>
 </pre><p>Paste the text below into the file, save, and close.</p><div class="figure">
-<a name="idp140641349396016" id="idp140641349396016"></a><p class="title"><strong>Figure 9.3. The
+<a name="idp140198979530768" id="idp140198979530768"></a><p class="title"><strong>Figure 9.3. The
 Database Creation Script</strong></p><div class="figure-contents"><pre class="programlisting">
 -- creation script
 --
@@ -82,7 +81,7 @@ conflict with objects from other packages.</p><p>Create a database file to drop 
 uninstalled.</p><pre class="screen">
 [$OPENACS_SERVICE_NAME postgresql]$ <strong class="userinput"><code>emacs myfirstpackage-drop.sql</code></strong>
 </pre><div class="figure">
-<a name="idp140641343035984" id="idp140641343035984"></a><p class="title"><strong>Figure 9.4. Database Deletion
+<a name="idp140198982439376" id="idp140198982439376"></a><p class="title"><strong>Figure 9.4. Database Deletion
 Script</strong></p><div class="figure-contents"><pre class="programlisting">
 -- drop script
 --

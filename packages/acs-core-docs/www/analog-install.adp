@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Install Analog web file analyzer}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Install Analog web file analyzer}</property>
 <property name="doc(title)">Install Analog web file analyzer</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

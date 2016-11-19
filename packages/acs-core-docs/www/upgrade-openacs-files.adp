@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Upgrading the OpenACS files}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Upgrading the OpenACS files}</property>
 <property name="doc(title)">Upgrading the OpenACS files</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -12,7 +12,7 @@ Chapter 5. Upgrading"
 <a name="upgrade-openacs-files" id="upgrade-openacs-files"></a>Upgrading
 the OpenACS files</h2></div></div></div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140641343545904" id="idp140641343545904"></a>Chosing a Method to Upgrade your
+<a name="idp140198992442448" id="idp140198992442448"></a>Chosing a Method to Upgrade your
 Files</h3></div></div></div><p>OpenACS is distributed in many different ways:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>as a collection of files</p></li><li class="listitem"><p>as one big tarball</p></li><li class="listitem"><p>via CVS</p></li><li class="listitem"><p>via automatic download from within the APM (package manager)</p></li>
 </ul></div><p>Upgrades work by first changing the file system (via any of the
@@ -27,7 +27,7 @@ greater installation&rdquo;</a>
 </p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140641341701392" id="idp140641341701392"></a>Methods of upgrading OpenACS files</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
+<a name="idp140198992447536" id="idp140198992447536"></a>Methods of upgrading OpenACS files</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem">
 <p>
 <strong>Upgrading files for a site which is not in a CVS
@@ -56,7 +56,7 @@ how to upgrade your local CVS repository with the latest OpenACS
 version, without overriding your own local customizations.</p><p>This diagram explains the basic idea. However, the labels are
 incorrect. Step 1(a) has been removed, and Step 1(b) should be
 labelled Step 1.</p><div class="figure">
-<a name="idp140641342579808" id="idp140641342579808"></a><p class="title"><strong>Figure 5.2. Upgrading a local CVS
+<a name="idp140198992457648" id="idp140198992457648"></a><p class="title"><strong>Figure 5.2. Upgrading a local CVS
 repository</strong></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/upgrade-cvs.png" align="middle" alt="Upgrading a local CVS repository"></div></div>
 </div><br class="figure-break"><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
 <li class="listitem">
@@ -69,7 +69,7 @@ working CVS checkout, import those changes into your local CVS
 checkout, create a temporary CVS checkout to merge your local
 changes, fix any conflicts, commit your changes, and then update
 your site. It sounds complicated, but it&#39;s not too bad, and it
-is the best way to work around CVS's limitations.</p><p>This part describes how to set up your working CVS checkout.
+is the best way to work around CVS&#39;s limitations.</p><p>This part describes how to set up your working CVS checkout.
 Once it is set up, you&#39;ll be able to update any packages using
 the existing working CVS checkout. We use one dedicated directory
 for each branch of OpenACS - if you are using OpenACS 5.1,x, you
@@ -196,7 +196,7 @@ the OpenACS CVS repository (cvs.openacs.org)</strong></span></p><div class="orde
 </pre></li></ol></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140641340014128" id="idp140641340014128"></a>Upgrading a Production Site Safely</h3></div></div></div><p>If you are upgrading a production OpenACS site which is on a
+<a name="idp140198992514784" id="idp140198992514784"></a>Upgrading a Production Site Safely</h3></div></div></div><p>If you are upgrading a production OpenACS site which is on a
 private CVS tree, this process lets you do the upgrade without
 risking extended downtime or an unusable site:</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem"><p>Declare a freeze on new cvs updates - ie, you cannot run cvs

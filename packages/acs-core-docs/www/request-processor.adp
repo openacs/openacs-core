@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {The Request Processor}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {The Request Processor}</property>
 <property name="doc(title)">The Request Processor</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -66,7 +66,7 @@ code in the <code class="computeroutput">.vuh</code> file to act
 like a registered procedure for an entire subtree of the URL
 namespace. Thus a <code class="computeroutput">.vuh</code> file can
 be thought of as a replacement for filters and registered procs,
-except that they integrate cleanly and correctly with the RP's
+except that they integrate cleanly and correctly with the RP&#39;s
 URL mapping mechanisms. The details of how to use these files are
 described in <a class="xref" href="rp-design" title="Request Processor Design">OpenACS 4 Request Processor
 Design</a>.</p><p>Once the appropriate file is found, it is either served directly
@@ -79,7 +79,7 @@ standard Tcl interpreter if it&#39;s a dynamic page.</p>
 <a name="rp-basicapi" id="rp-basicapi"></a>Basic
 API</h3></div></div></div><p>Once the flow of control reaches a dynamic page, the Request
 Processor has populated the environment of the request with several
-pieces of useful information. The RP's environment is
+pieces of useful information. The RP&#39;s environment is
 accessible through the <code class="computeroutput">ad_conn</code>
 interface, and the following calls should be useful to you when
 developing dynamic pages:</p><div class="variablelist"><dl class="variablelist">
@@ -106,8 +106,8 @@ package_key]</code></span></dt><dd><p>If the URL refers to a package instance, t
 name of the package.</p></dd><dt><span class="term"><code class="computeroutput">[ad_conn
 path_info]</code></span></dt><dd><p>In a .vuh file, path_info is the trailing part of the URL not
 matched by the .vuh file.</p></dd>
-</dl></div><div class="cvstag">($&zwnj;Id: request-processor.html,v 1.49.2.10
-2016/06/21 07:44:36 gustafn Exp $)</div>
+</dl></div><div class="cvstag">($&zwnj;Id: rp.xml,v 1.12.6.2 2016/10/03 09:17:51
+gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {OpenACS Core Documentation}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {OpenACS Core Documentation}</property>
 <property name="doc(title)">OpenACS Core Documentation</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -9,7 +9,7 @@
 		<div class="book">
 <div class="titlepage">
 <div><div><h1 class="title">
-<a name="idp140641337422128" id="idp140641337422128"></a>OpenACS Core Documentation</h1></div></div><hr>
+<a name="idp140198977745328" id="idp140198977745328"></a>OpenACS Core Documentation</h1></div></div><hr>
 </div><div class="toc">
 <p><strong>Table of Contents</strong></p><dl class="toc">
 <dt><span class="part"><a href="for-everyone">I. OpenACS For
@@ -286,5 +286,4 @@ datetime from the database ANSI-style</a>
 Part I. OpenACS For Everyone"
 		    homeLink="" homeLabel="" 
 		    upLink="" upLabel=""> 
-		<center><a href="http://openacs.org/doc/current/index.html#comments">View comments
-on this page at openacs.org</a></center>
+		

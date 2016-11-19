@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Package Manager Design}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Package Manager Design}</property>
 <property name="doc(title)">Package Manager Design</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -22,9 +22,9 @@ diagram</a></p></li><li class="listitem">
 <li class="listitem"><p><a class="ulink" href="/api-doc/procs-file-view?path=packages%2facs%2dtcl%2ftcl%2fapm%2dprocs%2etcl" target="_top">apm-procs.tcl</a></p></li><li class="listitem"><p>
 <a class="ulink" href="/api-doc/procs-file-view?path=packages%2facs%2dtcl%2ftcl%2fapm%2dinstall%2dprocs%2etcl" target="_top">apm-install-procs.tcl</a> (Supports installation of
 packages)</p></li><li class="listitem"><p>
-<a class="ulink" href="/api-doc/procs-file-view?path=packages%2facs%2dtcl%2ftcl%2f20%2dapm%2dload%2dprocs%2etcl" target="_top">20-apm-load-procs.tcl</a> (Bootstraps APM for server
+<a class="ulink" href="/api-doc/procs-file-view?path=packages%2facs%2dbootstrap%2dinstaller%2ftcl%2f30%2dapm%2dload%2dprocs%2etcl" target="_top">30-apm-load-procs.tcl</a> (Bootstraps APM for server
 startup)</p></li><li class="listitem"><p>
-<a class="ulink" href="/api-doc/procs-file-view?path=packages%2facs%2dtcl%2ftcl%2fapm%2dadmin%2dprocs%2etcl" target="_top">apm-admin-procs.tcl</a> (Supports APM UI)</p></li>
+<a class="ulink" href="/api-doc/procs-file-view?path=packages%2facs%2dadmin%2ftcl%2fapm%2dadmin%2dprocs%2etcl" target="_top">apm-admin-procs.tcl</a> (Supports APM UI)</p></li>
 </ul></div>
 </li><li class="listitem">
 <p>PL/SQL file</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;"><li class="listitem"><p><a class="ulink" href="/doc/sql/display-sql?url=apm-create.sql&amp;package_key=acs-kernel" target="_top">apm-create.sql</a></p></li></ul></div>
@@ -615,7 +615,7 @@ public interface for querying file information.</p></li>
 </ul></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="apm-design-ui" id="apm-design-ui"></a>User Interface</h3></div></div></div><p>The <a class="ulink" href="/acs-admin/apm" target="_top">APM's user interface</a> is part of the <a class="ulink" href="/acs-admin" target="_top">OpenACS Administration Service</a>.
+<a name="apm-design-ui" id="apm-design-ui"></a>User Interface</h3></div></div></div><p>The <a class="ulink" href="/acs-admin/apm" target="_top">APM&#39;s user interface</a> is part of the <a class="ulink" href="/acs-admin" target="_top">OpenACS Administration Service</a>.
 The UI is the primary point of contact with APM by developers and
 administrators. It is part of OpenACS Administration, because only
 the site-wide administrator should be able to access it. Thus in

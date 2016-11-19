@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Install tclwebtest.}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Install tclwebtest.}</property>
 <property name="doc(title)">Install tclwebtest.</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

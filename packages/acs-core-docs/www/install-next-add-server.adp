@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Running multiple services on one machine}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Running multiple services on one machine}</property>
 <property name="doc(title)">Running multiple services on one machine</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

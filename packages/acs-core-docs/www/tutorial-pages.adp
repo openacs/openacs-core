@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Creating Web Pages}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Creating Web Pages}</property>
 <property name="doc(title)">Creating Web Pages</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -15,23 +15,23 @@ Chapter 9. Development Tutorial"
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140641327080736" id="idp140641327080736"></a>Install some API</h3></div></div></div><p>As a workaround for missing content-repository functionality,
+<a name="idp140198983077264" id="idp140198983077264"></a>Install some API</h3></div></div></div><p>As a workaround for missing content-repository functionality,
 copy a provided file into the directory for tcl files:</p><pre class="screen"><span class="action"><span class="action">cp /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/acs-core-docs/www/files/tutorial/note-procs.tcl /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackage/tcl/</span></span></pre><p>To make this file take effect, go to the <a class="ulink" href="/acs-admin/apm" target="_top">APM</a> and choose "Reload
 changed" for "MyFirstPackage".</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140641353443984" id="idp140641353443984"></a>Page Map</h3></div></div></div><p>Our package will have two visible pages. The first shows a list
+<a name="idp140198981118272" id="idp140198981118272"></a>Page Map</h3></div></div></div><p>Our package will have two visible pages. The first shows a list
 of all objects; the second shows a single object in view or edit
 mode, and can also be used to add an object. The index page will
 display the list, but since we might reuse the list later,
 we&#39;ll put it in a seperate file and include it on the index
 page.</p><div class="figure">
-<a name="idp140641353445344" id="idp140641353445344"></a><p class="title"><strong>Figure 9.5. Page
+<a name="idp140198984293872" id="idp140198984293872"></a><p class="title"><strong>Figure 9.5. Page
 Map</strong></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/tutorial-page-map.png" align="middle" alt="Page Map"></div></div>
 </div><br class="figure-break">
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140641353447872" id="idp140641353447872"></a>Build the "Index" page</h3></div></div></div><p>Each user-visible page in your package has, typically, three
+<a name="idp140198982950608" id="idp140198982950608"></a>Build the "Index" page</h3></div></div></div><p>Each user-visible page in your package has, typically, three
 parts. The <code class="computeroutput">tcl</code> file holds the
 procedural logic for the page, including Tcl and
 database-independent SQL code, and does things like check
@@ -48,7 +48,7 @@ ad_page_contract {
     This is the main page for the package.  It displays all of the Notes and provides links to edit them and to create new Notes.
 
     \@author Your Name (you\@example.com)
-    \@cvs-id $&zwnj;Id: tutorial-pages.html,v 1.44.2.10 2016/06/21 07:44:36 gustafn Exp $
+    \@cvs-id $&zwnj;Id: index.tcl,v 1.2.22.1 2015/09/10 08:21:20 gustafn Exp $
 }
 
 set page_title [ad_conn instance_name]
@@ -127,7 +127,7 @@ ad_page_contract {
     This is the view-edit page for notes.
 
     \@author Your Name (you\@example.com)
-    \@cvs-id $&zwnj;Id: tutorial-pages.html,v 1.44.2.10 2016/06/21 07:44:36 gustafn Exp $
+    \@cvs-id $&zwnj;Id: note-edit.tcl,v 1.3.2.1 2015/09/10 08:21:20 gustafn Exp $
  
     \@param item_id If present, assume we are editing that note.  Otherwise, we are creating a new note.
 } {
@@ -186,7 +186,7 @@ ad_page_contract {
     This deletes a note
 
     \@author Your Name (you\@example.com)
-    \@cvs-id $&zwnj;Id: tutorial-pages.html,v 1.44.2.10 2016/06/21 07:44:36 gustafn Exp $
+    \@cvs-id $&zwnj;Id: note-delete.tcl,v 1.3.2.1 2015/09/10 08:21:20 gustafn Exp $
  
     \@param item_id The item_id of the note to delete
 } {

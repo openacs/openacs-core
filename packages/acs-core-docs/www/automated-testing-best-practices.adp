@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Automated Testing}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Automated Testing}</property>
 <property name="doc(title)">Automated Testing</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -51,8 +51,8 @@ is for, but a server error is not reasonable).</p></li><li class="listitem"><p>
 <strong>Duplicate names. </strong> Make sure that if
 a duplicate name is entered that there is a reasonable error rather
 than a server error. Check for insert, move, copy, and rename.</p></li>
-</ul></div><div class="cvstag">($&zwnj;Id: automated-testing-best-practices.html,v
-1.28.2.10 2016/06/21 07:44:35 gustafn Exp $)</div>
+</ul></div><div class="cvstag">($&zwnj;Id: auto-testing.xml,v 1.3.14.1 2016/06/23
+08:32:46 gustafn Exp $)</div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 		    leftLink="variables" leftLabel="Prev" leftTitle="Variables"

@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Chapter 6. Production
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Chapter 6. Production
 Environments}</property>
 <property name="doc(title)">Chapter 6. Production
 Environments</property>

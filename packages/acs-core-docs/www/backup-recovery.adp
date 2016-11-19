@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Chapter 8. Backup and
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Chapter 8. Backup and
 Recovery}</property>
 <property name="doc(title)">Chapter 8. Backup and
 Recovery</property>
@@ -21,8 +21,8 @@ Backup</a></span></dt><dt><span class="sect1"><a href="backups-with-cvs">Using C
 for backup-recovery</a></span></dt>
 </dl>
 </div><div class="authorblurb">
-<div class="cvstag">($&zwnj;Id: backup-recovery.html,v 1.43.2.10
-2016/06/21 07:44:35 gustafn Exp $)</div><p>By <a class="ulink" href="mailto:dhogaza\@pacifier.com" target="_top">Don Baccus</a> with additions by <a class="ulink" href="mailto:joel\@aufrecht.org" target="_top">Joel Aufrecht</a>
+<div class="cvstag">($&zwnj;Id: recovery.xml,v 1.17.6.2 2016/10/03
+09:17:51 gustafn Exp $)</div><p>By <a class="ulink" href="mailto:dhogaza\@pacifier.com" target="_top">Don Baccus</a> with additions by <a class="ulink" href="mailto:joel\@aufrecht.org" target="_top">Joel Aufrecht</a>
 </p><p>We will cover some basic backup and recovery strategies. These
 are intended to be robust but simple enough to set up. For a large
 scale production site you would probably need to create your own
@@ -30,7 +30,7 @@ backup strategies (in particular full dumps from oracle, while easy
 to set up, are far from the best solution).</p><p>There are three basic things which need to be backed up, the
 database data, the server source tree, and the
 acs-content-repository (which is in the server source tree).</p><div class="figure">
-<a name="idp140641348920208" id="idp140641348920208"></a><p class="title"><strong>Figure 8.1. Backup
+<a name="idp140198993039968" id="idp140198993039968"></a><p class="title"><strong>Figure 8.1. Backup
 and Recovery Strategy</strong></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/backup.png" align="middle" alt="Backup and Recovery Strategy"></div></div>
 </div><p><br class="figure-break"></p>
 OpenACS docs are written by the named authors, and may be edited by

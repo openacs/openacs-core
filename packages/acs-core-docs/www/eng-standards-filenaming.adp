@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {ACS File Naming and Formatting Standards}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {ACS File Naming and Formatting Standards}</property>
 <property name="doc(title)">ACS File Naming and Formatting Standards</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -24,8 +24,7 @@ the following three purposes:</p><div class="itemizedlist"><ul class="itemizedli
 editing, linking, etc)</p></li><li class="listitem"><p>housing procedures, packages, data models and other prerequisite
 code Essentially, we want our files named in a fashion that
 reflects their purpose.</p></li>
-</ul></div><p>Under the page root (and the template root if using the
-<a class="ulink" href="style" target="_top">Style package</a>):</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
+</ul></div><p>Under the page root:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem">
 <p>For naming files that enable a specific action on an object, use
 this format:</p><div class="blockquote"><blockquote class="blockquote"><p><span class="emphasis"><em><code class="computeroutput">object-verb.extension</code></em></span></p></blockquote></div><p>For example, the page to erase a user&#39;s portrait from the
@@ -42,9 +41,7 @@ Instead, we omit the object type, and use this convention:</p><div class="blockq
 </li><li class="listitem">
 <p>For naming files that display the properties of a primary object
 - such as the bookmark object within the bookmark module - use this
-convention:</p><div class="blockquote"><blockquote class="blockquote"><p>
-<code class="computeroutput">one.</code><span class="emphasis"><em><code class="computeroutput">extension</code></em></span>
-</p></blockquote></div><p>For example, the page to view one bookmark is <code class="computeroutput">/bookmarks/one.tcl</code>. Note that no verb is
+convention:</p><div class="blockquote"><blockquote class="blockquote"><p><code class="computeroutput">one.extension</code></p></blockquote></div><p>For example, the page to view one bookmark is <code class="computeroutput">/bookmarks/one.tcl</code>. Note that no verb is
 necessary for display-type files.</p>
 </li><li class="listitem">
 <p>Otherwise, if the object to be displayed is not the primary
@@ -84,7 +81,7 @@ use the convention:</p><div class="blockquote"><blockquote class="blockquote"><p
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="eng-standards-filenaming-urls" id="eng-standards-filenaming-urls"></a>URLs</h3></div></div></div><p>File names also appear <span class="emphasis"><em>within</em></span> pages, as linked URLs and form
-targets. When they do, always use <a class="ulink" href="abstract-url" target="_top">abstract URLs</a> (e.g., <code class="computeroutput">user-delete</code> instead of <code class="computeroutput">user-delete.tcl</code>), because they enhance
+targets. When they do, always use <a class="ulink" href="rp-design" target="_top">abstract URLs</a> (e.g., <code class="computeroutput">user-delete</code> instead of <code class="computeroutput">user-delete.tcl</code>), because they enhance
 maintainability.</p><p>Similarly, when linking to the index page of a directory, do not
 explicitly name the index file (<code class="computeroutput">index.tcl</code>, <code class="computeroutput">index.adp</code>, <code class="computeroutput">index.html</code>, etc.). Instead, use just the
 directory name, for both relative links (<code class="computeroutput">subdir/</code>) and absolute links (<code class="computeroutput">/top-level-dir/</code>). If linking to the
@@ -175,7 +172,7 @@ header structure is recommended:</p><pre class="programlisting">
 -- <span class="emphasis"><em>author</em></span>
 -- <span class="emphasis"><em>created</em></span>
 --
--- <a class="ulink" href="http://www.loria.fr/~molli/cvs/doc/cvs_12.html#SEC93" target="_top">$&zwnj;Id: eng-standards-filenaming.html,v 1.48.2.10 2016/06/21 07:44:36 gustafn Exp $</a>
+-- <a class="ulink" href="http://www.loria.fr/~molli/cvs/doc/cvs_12.html#SEC93" target="_top">$&zwnj;Id$</a>
 </pre><p>Of course, replace "<code class="computeroutput">--</code>" with the comment delimiter
 appropriate for the language in which you are programming.</p>
 </div><div class="sect2">
@@ -219,8 +216,8 @@ used rarely, only when they are exceedingly useful.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="eng-standards-filenaming-tcllib" id="eng-standards-filenaming-tcllib"></a>Tcl Library Files</h3></div></div></div><p>Further standards for Tcl library files are under discussion; we
-plan to include naming conventions for procs.</p><div class="cvstag">($&zwnj;Id: eng-standards-filenaming.html,v 1.48.2.10
-2016/06/21 07:44:36 gustafn Exp $)</div>
+plan to include naming conventions for procs.</p><div class="cvstag">($&zwnj;Id: filenaming.xml,v 1.7.2.2 2016/11/11
+08:53:59 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Install Full Text Search using OpenFTS (deprecated see
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Install Full Text Search using OpenFTS (deprecated see
 tsearch2)}</property>
 <property name="doc(title)">Install Full Text Search using OpenFTS (deprecated see
 tsearch2)</property>
@@ -24,7 +24,7 @@ requiring only compilation of one module from PostgreSQL contrib,
 with an automated install process using the tsearch2-driver
 package.</p><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="install-openfts" id="install-openfts"></a>Install OpenFTS module</h3></div></div></div><a class="indexterm" name="idp140641353731200" id="idp140641353731200"></a><p>If you want full text search, and you are running PostgreSQL,
+<a name="install-openfts" id="install-openfts"></a>Install OpenFTS module</h3></div></div></div><a class="indexterm" name="idp140198993645472" id="idp140198993645472"></a><p>If you want full text search, and you are running PostgreSQL,
 install this module to support FTS. Do this step after you have
 installed both PostgreSQL and AOLserver. You will need the
 <a class="link" href="individual-programs">openfts tarball</a> in
@@ -119,7 +119,7 @@ exit</span></span>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="install-openfts-postgres" id="install-openfts-postgres"></a>Install OpenFTS prerequisites in
-PostgreSQL instance</h3></div></div></div><a class="indexterm" name="idp140641353760528" id="idp140641353760528"></a><p>If you are installing Full Text Search, add required packages to
+PostgreSQL instance</h3></div></div></div><a class="indexterm" name="idp140198993614640" id="idp140198993614640"></a><p>If you are installing Full Text Search, add required packages to
 the new database. (In order for full text search to work, you must
 also <a class="link" href="install-full-text-search-openfts" title="Install OpenFTS module">install</a> the PostgreSQL OpenFTS module
 and prerequisites.)</p><pre class="screen">
@@ -138,7 +138,7 @@ CREATE
 </pre><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
 <h3 class="title">Note</h3><p>If you get the error <code class="computeroutput">ERROR: could
 not access file "$libdir/tsearch": no such file or
-directory</code> It is probably because PostgreSQL's libdir
+directory</code> It is probably because PostgreSQL&#39;s libdir
 configuration variable points to a diffent directory than where
 tsearch is. You can find out where PostgreSQL expects to find
 tsearch via</p><pre class="screen"><strong class="userinput"><code>pg_config --pkglibdir</code></strong></pre>

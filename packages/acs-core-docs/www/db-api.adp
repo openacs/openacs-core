@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {The OpenACS Database Access API}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {The OpenACS Database Access API}</property>
 <property name="doc(title)">The OpenACS Database Access API</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -11,7 +11,7 @@ Chapter 11. Development Reference"
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="db-api" id="db-api"></a>The OpenACS Database Access API</h2></div></div></div><p>By Pete Su and Jon Salz. Modified by Roberto Mello.</p><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="db-api-overview" id="db-api-overview"></a>Overview</h3></div></div></div><p>One of OpenACS's great strengths is that code written for it
+<a name="db-api-overview" id="db-api-overview"></a>Overview</h3></div></div></div><p>One of OpenACS&#39;s great strengths is that code written for it
 is very close to the database. It is very easy to interact with the
 database from anywhere within OpenACS, and we have a coherent API
 for database access which makes this even easier.</p><p>More detailed information about the DB api is available at
@@ -602,8 +602,8 @@ db_dml foo_insert {insert into foo(baz) values(:1)} {[db_nullify_empty_string $b
           
 </pre>
 </dd>
-</dl></div><div class="cvstag">($&zwnj;Id: db-api.html,v 1.50.2.11 2016/06/21
-07:44:35 gustafn Exp $)</div>
+</dl></div><div class="cvstag">($&zwnj;Id: db-api.xml,v 1.13.8.3 2016/10/03 09:17:51
+gustafn Exp $)</div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="db-api-caching" id="db-api-caching"></a>Caching Database API Results</h3></div></div></div><p>The database API allows for direct caching of query results.
@@ -646,5 +646,4 @@ db_flush_cache -cache_key_pattern page_${page_id}_*
 		    rightLink="templates" rightLabel="Next" rightTitle="Using Templates in OpenACS"
 		    homeLink="index" homeLabel="Home" 
 		    upLink="dev-guide" upLabel="Up"> 
-		<center><a href="http://openacs.org/doc/current/db-api.html#comments">View comments
-on this page at openacs.org</a></center>
+		

@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Enabling WYSIWYG}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Enabling WYSIWYG}</property>
 <property name="doc(title)">Enabling WYSIWYG</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -132,7 +132,7 @@ ad_page_contract {
         set return_url [ad_conn url]
 
         #ADP:
-        &lt;a href="configure?&lt;%=[export_vars" -url {return_url}]%&gt;&gt;Configure&lt;/a&gt;
+        &lt;a href=configure?&lt;%=[export_vars -url {return_url}]%&gt;&gt;Configure&lt;/a&gt;
         
 </pre>
 </div>

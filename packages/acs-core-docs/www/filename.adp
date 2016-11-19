@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Detailed Design Documentation Template}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Detailed Design Documentation Template}</property>
 <property name="doc(title)">Detailed Design Documentation Template</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -194,8 +194,8 @@ document.</em></span></p><div class="informaltable"><table class="informaltable"
 <td>0.1</td><td>Creation</td><td>8/21/2000</td><td>Josh Finkler, Audrey McLoghlin</td>
 </tr>
 </tbody>
-</table></div><div class="cvstag">($&zwnj;Id: filename.html,v 1.48.2.10 2016/06/21
-07:44:36 gustafn Exp $)</div>
+</table></div><div class="cvstag">($&zwnj;Id: design-template.xml,v 1.8.14.1 2016/06/23
+08:32:46 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

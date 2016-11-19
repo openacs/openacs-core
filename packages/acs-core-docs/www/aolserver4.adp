@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Install AOLserver 4}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Install AOLserver 4}</property>
 <property name="doc(title)">Install AOLserver 4</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -234,8 +234,8 @@ script according to the documentation found there (namely: Add the
 -b <span class="replaceable"><span class="replaceable">yourip:yourport</span></span> switch)</p></li><li class="listitem"><p>
 <a class="link" href="aolserver">Test
 AOLserver</a>.</p></li>
-</ol></div><div class="cvstag">($&zwnj;Id: aolserver4.html,v 1.27.2.10 2016/06/21
-07:44:35 gustafn Exp $)</div>
+</ol></div><div class="cvstag">($&zwnj;Id: aolserver4.xml,v 1.31.2.1 2016/06/23
+08:32:46 gustafn Exp $)</div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 		    leftLink="postgres" leftLabel="Prev" leftTitle="Install PostgreSQL"

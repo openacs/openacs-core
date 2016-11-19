@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Linux Install Guides}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Linux Install Guides}</property>
 <property name="doc(title)">Linux Install Guides</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -10,7 +10,7 @@ Appendix C. Credits"
 		<div class="section">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="os-install" id="os-install"></a>Linux Install Guides</h2></div></div></div><p>Here&#39;s a list of some helpful documentation for various
-OS's</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
+OS&#39;s</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>
 <a class="ulink" href="http://tinyplanet.ca/pubs/debian/" target="_top">Painless Debian GNU/Linux</a> by Stephen van
 Egmond</p></li><li class="listitem"><p><a class="ulink" href="http://www.debian.org/releases/stable/installmanual" target="_top">Official Debian Guide</a></p></li><li class="listitem"><p><a class="ulink" href="http://www.redhat.com/docs/manuals/linux/" target="_top">RedHat</a></p></li><li class="listitem"><p><a class="ulink" href="http://www.linux-mandrake.com/en/fdoc.php3" target="_top">Mandrake</a></p></li><li class="listitem"><p><a class="ulink" href="http://sdb.suse.de/sdb/en/html/" target="_top">SuSE</a></p></li>

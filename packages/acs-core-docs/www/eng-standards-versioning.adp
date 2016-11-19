@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Release Version Numbering}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Release Version Numbering}</property>
 <property name="doc(title)">Release Version Numbering</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -10,8 +10,8 @@ Chapter 12. Engineering Standards"
 		<div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="eng-standards-versioning" id="eng-standards-versioning"></a>Release Version Numbering</h2></div></div></div><div class="authorblurb">
-<div class="cvstag">($&zwnj;Id: eng-standards-versioning.html,v 1.51.2.10
-2016/06/21 07:44:36 gustafn Exp $)</div><p>By Ron Henderson, Revised by Joel Aufrecht</p>
+<div class="cvstag">($&zwnj;Id: eng-standards-versioning.xml,v 1.10.14.2
+2016/10/28 20:26:53 gustafn Exp $)</div><p>By Ron Henderson, Revised by Joel Aufrecht</p>
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><p>OpenACS version numbers help identify at a high-level what is in
 a particular release and what has changed since the last
@@ -135,7 +135,11 @@ conflicts with existing level 2 packages.</p></li><li class="listitem"><p>
 <span class="strong"><strong>Level 3: Mature and
 Standard.</strong></span> Same as level 2, plus meets published
 coding standards; is fully internationalized; available on both
-supported databases.</p></li>
+supported databases.</p></li><li class="listitem"><p>
+<span class="strong"><strong>Level 4:
+Deprecated.</strong></span> The package was in some earlier version
+is use, but was probably replaced by a another package. The package
+description should point to a preferred version.</p></li>
 </ul></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">

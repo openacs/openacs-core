@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Install Oracle 8.1.7}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Install Oracle 8.1.7}</property>
 <property name="doc(title)">Install Oracle 8.1.7</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -970,8 +970,8 @@ to do a <code class="computeroutput">connect internal</code> within
 access to the Oracle system.</td>
 </tr>
 </tbody>
-</table></div><div class="cvstag">($&zwnj;Id: oracle.html,v 1.49.2.10 2016/06/21
-07:44:36 gustafn Exp $)</div>
+</table></div><div class="cvstag">($&zwnj;Id: oracle.xml,v 1.21.14.1 2016/06/23
+08:32:46 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
@@ -980,5 +980,4 @@ supporting software"
 		    rightLink="postgres" rightLabel="Next" rightTitle="Install PostgreSQL"
 		    homeLink="index" homeLabel="Home" 
 		    upLink="complete-install" upLabel="Up"> 
-		<center><a href="http://openacs.org/doc/current/oracle.html#comments">View comments
-on this page at openacs.org</a></center>
+		

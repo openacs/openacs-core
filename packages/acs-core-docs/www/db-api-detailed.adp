@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Database Access API}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Database Access API}</property>
 <property name="doc(title)">Database Access API</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -17,7 +17,7 @@ OpenACS documentation staff.</div><div class="itemizedlist"><ul class="itemizedl
 <li class="listitem"><p>Tcl procedures: /packages/acs-kernel/10-database-procs.tcl</p></li><li class="listitem"><p>Tcl initialization: /packages/acs-kernel/database-init.tcl</p></li>
 </ul></div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="db-api-detailed-bigpicture" id="db-api-detailed-bigpicture"></a>The Big Picture</h3></div></div></div><p>One of OpenACS's great strengths is that code written for it
+<a name="db-api-detailed-bigpicture" id="db-api-detailed-bigpicture"></a>The Big Picture</h3></div></div></div><p>One of OpenACS&#39;s great strengths is that code written for it
 is very close to the database. It is very easy to interact with the
 database from anywhere within OpenACS. Our goal is to develop a
 coherent API for database access which makes this even easier.</p><p>There were four significant problems with the way OpenACS
@@ -83,7 +83,7 @@ the learning curve, we provide a facility for writing SQL inline
 for a "default SQL dialect", which we assume to be Oracle
 for now.)</p><p>To be clear, SQL abstraction is <span class="emphasis"><em>not</em></span> fully implemented in OpenACS 3.3.1.
 The statement names supplied to each call are not used by the API
-at all. The API's design for SQL abstraction is in fact
+at all. The API&#39;s design for SQL abstraction is in fact
 incomplete; unresolved issues include:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>how to add <code class="computeroutput">WHERE</code> clause
 criteria dynamically</p></li><li class="listitem"><p>how to build a dynamic <code class="computeroutput">ORDER
@@ -703,8 +703,8 @@ the user.</p><p>The nsv containing the list is initialized by the bootstrap
 script and should never be referenced directly by user code.
 Returns the current rdbms type and version.</p>
 </dd>
-</dl></div><div class="cvstag">($&zwnj;Id: db-api-detailed.html,v 1.48.2.11
-2016/06/21 07:44:35 gustafn Exp $)</div>
+</dl></div><div class="cvstag">($&zwnj;Id: db-api.xml,v 1.11.2.2 2016/06/23 08:32:47
+gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

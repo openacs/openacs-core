@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Package Manager Requirements}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Package Manager Requirements}</property>
 <property name="doc(title)">Package Manager Requirements</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -27,7 +27,7 @@ number <span class="strong"><strong>4</strong></span>.</p><p>We gratefully ackno
 original design documentation which suggested these features, as
 well as the influence of the design and open-source implementation
 of the Red Hat Package manager, the Debian packaging system, and
-PERL's CPAN in the development of the ideas behind this
+PERL&#39;s CPAN in the development of the ideas behind this
 document.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
@@ -177,8 +177,9 @@ exhibits different behavior.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="apm-requirements-links" id="apm-requirements-links"></a>Related Links</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
-<li class="listitem"><p><a class="ulink" href="/doc/core-arch-guide/apm" target="_top">APM 3.3 Design document</a></p></li><li class="listitem"><p><a class="ulink" href="/doc/packaging" target="_top">Five minute
-guide to packaging a module</a></p></li><li class="listitem"><p><a class="ulink" href="/doc/core-arch-guide/subcommunities" target="_top">Sub-communities</a></p></li>
+<li class="listitem"><p><a class="ulink" href="apm-design" target="_top">APM 3.3 Design
+document</a></p></li><li class="listitem"><p><a class="ulink" href="packages" target="_top">Five minute guide
+to packaging a module</a></p></li><li class="listitem"><p><a class="ulink" href="subsites-requirements" target="_top">Sub-sites</a></p></li>
 </ul></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
@@ -309,12 +310,12 @@ created.</p>
 package</strong></span></p><p>
 <span class="strong"><strong>20.1</strong></span> The developer
 must be able to add files to the package. This is done by copying
-the files into the package directory in the host OS's file
+the files into the package directory in the host OS&#39;s file
 system. Files can be added at any point after package creation.</p><p>
 <span class="strong"><strong>20.3</strong></span> Once a package
 has been versioned and distributed, no new files should be added to
 the package without incrementing the version number.</p><p>
-<span class="strong"><strong>20.5</strong></span> The APM's
+<span class="strong"><strong>20.5</strong></span> The APM&#39;s
 UI should facilitate the process of adding new files, by scanning
 the file system for new files automatically, and allowing the
 developer to confirm adding them.</p><p>

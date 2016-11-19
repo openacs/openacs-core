@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Install OpenACS 5.9.0}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Install OpenACS 5.9.0}</property>
 <property name="doc(title)">Install OpenACS 5.9.0</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -337,7 +337,7 @@ cleans out discarded data from the database. A quick way to
 automate vacuuming is to edit the cron file for the database user.
 Recommended: <code class="computeroutput">VACUUM ANALYZE</code>
 every hour and <code class="computeroutput">VACUUM FULL
-ANALYZE</code> every day.</p><a class="indexterm" name="idp140641344441664" id="idp140641344441664"></a><pre class="screen">
+ANALYZE</code> every day.</p><a class="indexterm" name="idp140198981277152" id="idp140198981277152"></a><pre class="screen">
 [$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>export EDITOR=emacs;crontab -e</code></strong>
 </pre><p>Add these lines to the file. The vacuum command cleans up
 temporary structures within a PostGreSQL database, and can improve
@@ -371,7 +371,7 @@ virtual servers. A virtual server is an HTTP service running on a
 specific port, e.g. port 80. In order for OpenACS to work, you need
 to configure a virtual server. The Reference Platform uses a
 configuration file included in the OpenACS tarball, <code class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/etc/config.tcl</code>.
-Open it in an editor to adjust the parameters.</p><a class="indexterm" name="idp140641344455648" id="idp140641344455648"></a><pre class="screen">
+Open it in an editor to adjust the parameters.</p><a class="indexterm" name="idp140198981291136" id="idp140198981291136"></a><pre class="screen">
 [root root]# <strong class="userinput"><code>su - <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
 </code></strong>
 [$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/etc</code></strong>
@@ -523,14 +523,15 @@ running!</p></li>
 </ol></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="install-from-cvs" id="install-from-cvs"></a>Installation Option 3: Install from CVS</h3></div></div></div><p>If you want to track fresh code developments inbetween releases,
+<a name="install-from-cvs" id="install-from-cvs"></a>Installation Option 3: Install from CVS</h3></div></div></div><p>If you want to track fresh code developments between releases,
 or you are an OpenACS core developer, you may want to install from
 CVS. This is identical to Option 2 except that you get the files
-from CVS instead of the tarball: <a class="ulink" href="http://openacs.org/4/checkout" target="_top">CVS Checkout
-Instructions</a>. So, instead of <code class="computeroutput"><strong class="userinput"><code>tar xzf
-/var/tmp/openacs-5.9.0.tgz</code></strong></code>, <code class="computeroutput"><strong class="userinput"><code>cvs -z3 -d
+from CVS instead of the tarball: <a class="ulink" href="/xowiki/Get_the_Code" target="_top">CVS Checkout Instructions</a>.
+In short, instead of <code class="computeroutput"><strong class="userinput"><code>tar xzf
+/var/tmp/openacs-5.9.0.tgz</code></strong></code>, use <code class="computeroutput"><strong class="userinput"><code>cvs -z3 -d
 :pserver:anonymous\@openacs.org:/cvsroot co
-acs-core</code></strong></code>.</p>
+acs-core</code></strong></code> to obtain an ACS core
+installation.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="install-next-steps" id="install-next-steps"></a>Next Steps</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
@@ -610,8 +611,8 @@ ORA_NLS33=$ORACLE_HOME/ocommon/nls/admin/data
 recovery</a> procedure.</p></li><li class="listitem"><p>Set up <a class="xref" href="uptime" title="External uptime validation">the section called
 &ldquo;External uptime
 validation&rdquo;</a>.</p></li>
-</ul></div><div class="cvstag">($&zwnj;Id: openacs.html,v 1.51.2.10 2016/06/21
-07:44:36 gustafn Exp $)</div>
+</ul></div><div class="cvstag">($&zwnj;Id: openacs.xml,v 1.31.14.2 2016/07/05
+16:42:42 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

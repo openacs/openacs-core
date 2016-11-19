@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {How to Internationalize a Package}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {How to Internationalize a Package}</property>
 <property name="doc(title)">How to Internationalize a Package</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -154,7 +154,7 @@ its checks primarily on en_US xml catalog files.</p>
 </li>
 </ol></div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140641340474912" id="idp140641340474912"></a>Avoiding common i18n mistakes</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
+<a name="idp140198987208736" id="idp140198987208736"></a>Avoiding common i18n mistakes</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem">
 <p>
 <strong>Replace complicated keys with longer, simpler
@@ -330,8 +330,8 @@ semantically match their text. Fix these:</p><pre class="programlisting">
 &lt;msg key="Fix_1"&gt;for&lt;/msg&gt;
 &lt;msg key="Fix_2"&gt;for Bugs&lt;/msg&gt;
 </pre><p>Another example: <code class="computeroutput">Bug-tracker
-component maintainer"</code> was converted to <code class="computeroutput">"[_ bug-tracker.Bug-tracker]"</code>.
-Instead, it should be <code class="computeroutput">bug_tracker_component_maintainer</code>.</p>
+component maintainer</code> was converted to <code class="computeroutput">[_ bug-tracker.Bug-tracker]</code>. Instead, it
+should be <code class="computeroutput">bug_tracker_component_maintainer</code>.</p>
 </li><li class="listitem"><p>
 <strong>Translations in Avoid "clever" message
 reuse. </strong>Translations may need to differ

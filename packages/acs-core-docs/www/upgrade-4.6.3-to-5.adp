@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Upgrading OpenACS 4.6.3 to 5.0}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Upgrading OpenACS 4.6.3 to 5.0}</property>
 <property name="doc(title)">Upgrading OpenACS 4.6.3 to 5.0</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

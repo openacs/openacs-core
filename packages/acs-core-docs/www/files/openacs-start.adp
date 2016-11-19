@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {OpenACS Installation: Welcome}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {OpenACS Installation: Welcome}</property>
 <property name="doc(title)">OpenACS Installation: Welcome</property>
 <master>
 <h2>OpenACS Installation: Welcome</h2>

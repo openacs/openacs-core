@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Appendix C. Credits}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Appendix C. Credits}</property>
 <property name="doc(title)">Appendix C. Credits</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -44,8 +44,8 @@ Rubick, Fred Yankowski, Dan Chak, Sebastiano Pilla, Reuven Lerner,
 Malte Sussdorff, Stan Kaufman and Pascal Scheffers.</p><p>
 <span class="strong"><strong>All questions and
 comments</strong></span> regarding this guide should be posted on
-the <a class="ulink" href="http://openacs.org/forums/" target="_top">OpenACS forums</a>.</p><div class="cvstag">($&zwnj;Id: credits.html,v 1.46.2.10 2016/06/21
-07:44:35 gustafn Exp $)</div>
+the <a class="ulink" href="http://openacs.org/forums/" target="_top">OpenACS forums</a>.</p><div class="cvstag">($&zwnj;Id: credits.xml,v 1.12.14.2 2016/10/03
+09:17:51 gustafn Exp $)</div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 		    leftLink="aolserver" leftLabel="Prev" leftTitle="Install AOLserver 3.3oacs1"

@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Groups Requirements}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Groups Requirements}</property>
 <property name="doc(title)">Groups Requirements</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -31,7 +31,7 @@ structures (the corporation, its divisions, and their departments)
 or regions (the Boston office, the LA office); a person who is
 employed by (is a member of) a specific department is also a member
 of the division and the corporation, and works at (is a member of,
-but in a different sense) a particular office. OpenACS's
+but in a different sense) a particular office. OpenACS&#39;s
 Parties and Groups system will support such complex relations
 faithfully.</p><p><span class="strong"><strong>Historical
 Motivations</strong></span></p><p>The primary limitation of the OpenACS 3.x user group system is

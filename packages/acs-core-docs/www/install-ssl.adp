@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Installing SSL Support for an OpenACS service}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Installing SSL Support for an OpenACS service}</property>
 <property name="doc(title)">Installing SSL Support for an OpenACS service</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

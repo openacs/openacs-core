@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {OpenACS Style Guide}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {OpenACS Style Guide}</property>
 <property name="doc(title)">OpenACS Style Guide</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -70,7 +70,7 @@ settings you had in place in your editor.</p></li><li class="listitem"><p>
 reinvent the wheel. Prefer extending an existing core API to
 creating your own. If something in the core does not meet your
 particular needs it probably won&#39;t meet others as well and
-fleshing out the core API's makes the toolkit more useful for
+fleshing out the core API&#39;s makes the toolkit more useful for
 everyone and more easily extended.</p></li><li class="listitem"><p>
 <strong>Make sure your datamodel create/drop scripts
 work. </strong> Break the table creation out from the
@@ -99,8 +99,8 @@ others.</p></li>
 </tr></thead><tbody><tr>
 <td>0.1</td><td>Creation</td><td>12/2003</td><td>Jeff Davis</td>
 </tr></tbody>
-</table></div><div class="cvstag">($&zwnj;Id: style-guide.html,v 1.28.2.10 2016/06/21
-07:44:36 gustafn Exp $)</div>
+</table></div><div class="cvstag">($&zwnj;Id: style-guide.xml,v 1.3.14.2 2016/10/03
+09:17:51 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

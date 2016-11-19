@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Install a Unix-like system and supporting software}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Install a Unix-like system and supporting software}</property>
 <property name="doc(title)">Install a Unix-like system and supporting software</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

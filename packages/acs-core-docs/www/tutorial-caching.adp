@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Basic Caching}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Basic Caching}</property>
 <property name="doc(title)">Basic Caching</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

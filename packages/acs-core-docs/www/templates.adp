@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Using Templates in OpenACS}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Using Templates in OpenACS}</property>
 <property name="doc(title)">Using Templates in OpenACS</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -153,8 +153,8 @@ templates more deeply, and show how to use database queries as data
 sources.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="templates-documentation" id="templates-documentation"></a>Documentation</h3></div></div></div><p><a class="ulink" href="/doc/acs-templating/" target="_top">Templating system documentation</a></p><div class="cvstag">($&zwnj;Id: templates.html,v 1.49.2.10 2016/06/21
-07:44:36 gustafn Exp $)</div>
+<a name="templates-documentation" id="templates-documentation"></a>Documentation</h3></div></div></div><p><a class="ulink" href="/doc/acs-templating/" target="_top">Templating system documentation</a></p><div class="cvstag">($&zwnj;Id: templates.xml,v 1.12.2.1 2016/06/23
+08:32:46 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

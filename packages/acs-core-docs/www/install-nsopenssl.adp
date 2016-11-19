@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Install nsopenssl}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Install nsopenssl}</property>
 <property name="doc(title)">Install nsopenssl</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

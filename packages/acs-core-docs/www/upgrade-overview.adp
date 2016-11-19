@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Overview}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Overview}</property>
 <property name="doc(title)">Overview</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -26,11 +26,11 @@ install the files on your hard drive, run any appropriate database
 upgrade scripts, and prompt you to restart the server. After
 restarting the server again, the upgrade is complete.</p></li>
 </ol></div><div class="figure">
-<a name="idp140641340852736" id="idp140641340852736"></a><p class="title"><strong>Figure 5.1. Upgrading with the
+<a name="idp140198992325136" id="idp140198992325136"></a><p class="title"><strong>Figure 5.1. Upgrading with the
 APM</strong></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/upgrade-apm.png" align="middle" alt="Upgrading with the APM"></div></div>
 </div><br class="figure-break"><p>It&#39;s always a good idea to precede an upgrade attempt with a
 <a class="link" href="snapshot-backup" title="Manual backup and recovery">snapshot backup</a>.</p><div class="table">
-<a name="idp140641341851072" id="idp140641341851072"></a><p class="title"><strong>Table 5.1. Assumptions in this
+<a name="idp140198992328624" id="idp140198992328624"></a><p class="title"><strong>Table 5.1. Assumptions in this
 section</strong></p><div class="table-contents"><table class="table" summary="Assumptions in this section" cellspacing="0" border="1">
 <colgroup>
 <col><col>

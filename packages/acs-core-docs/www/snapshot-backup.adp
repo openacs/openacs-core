@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Manual backup and recovery}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Manual backup and recovery}</property>
 <property name="doc(title)">Manual backup and recovery</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -61,11 +61,11 @@ Export done in US7ASCII character set and US7ASCII NCHAR character set
   . exporting pre-schema procedural objects and actions
   . exporting foreign function library names for user SERVICE_NAME 
   . exporting object type definitions for user SERVICE_NAME 
-  About to export SERVICE_NAME's objects ...
+  About to export SERVICE_NAME&#39;s objects ...
   . exporting database links
   . exporting sequence numbers
   . exporting cluster definitions
-  . about to export SERVICE_NAME's tables via Conventional Path ...
+  . about to export SERVICE_NAME&#39;s tables via Conventional Path ...
   . exporting synonyms
   . exporting views
   . exporting stored procedures

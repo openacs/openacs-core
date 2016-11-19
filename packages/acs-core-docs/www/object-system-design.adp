@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Object Model Design}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Object Model Design}</property>
 <property name="doc(title)">Object Model Design</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -177,7 +177,7 @@ object&#39;s context is stored in the <code class="computeroutput">context_id</c
 questions regarding access control. Whenever we ask a question of
 the form "can user X perform action Y on object Z", the
 OpenACS security model will defer to an object&#39;s context if
-there is no information about user X's permission to perform
+there is no information about user X&#39;s permission to perform
 action Y on object Z.</p><p>The context system forms the basis for the rest of the OpenACS
 access control system, which is described in in two separate
 documents: one for the <a class="link" href="permissions-design" title="Permissions Design">permissions
@@ -394,11 +394,11 @@ things like constraint names are not included.</p><div class="sect3">
 around three tables that keep track of object types, attributes,
 and relation types. The first table is <code class="computeroutput">acs_object_types</code>, shown here in an
 abbreviated form:</p><pre class="programlisting"><code class="computeroutput">create table acs_object_types (
-        object_type          varchar(100) not null primary key,
+        object_type          varchar(1000) not null primary key,
         supertype            references acs_object_types (object_type),
         abstract_p           char(1) default 'f' not null
-        pretty_name          varchar(100) not null unique,
-        pretty_plural        varchar(100) not null unique,
+        pretty_name          varchar(1000) not null unique,
+        pretty_plural        varchar(1000) not null unique,
         table_name           varchar(30) not null unique,
         id_column            varchar(30) not null,
         name_method          varchar(30),
@@ -475,7 +475,7 @@ to store multiple sets of attributes on a given user, one set for
 each group membership relation in which they participated.</p><p>In OpenACS 4, this sort of data can be stored as a relationship
 type, in <a name="object-system-design-relsmodel" id="object-system-design-relsmodel"></a><code class="computeroutput">acs_rel_types</code>. The key parts of this table
 look like this:</p><pre class="programlisting"><code class="computeroutput">create table acs_rel_types (
-        rel_type        varchar(100) not null
+        rel_type        varchar(1000) not null
                         references acs_object_types(object_type),
         object_type_one not null
                         references acs_object_types (object_type),

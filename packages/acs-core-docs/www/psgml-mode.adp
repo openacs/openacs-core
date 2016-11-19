@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {Using PSGML mode in Emacs}</property>
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {Using PSGML mode in Emacs}</property>
 <property name="doc(title)">Using PSGML mode in Emacs</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -51,7 +51,7 @@ DTD</a> zip archive from <a class="ulink" href="http://docbook.org/" target="_to
 </li><li class="listitem">
 <p>Create a file with the name <code class="computeroutput">CATALOG</code> in the <code class="computeroutput">dtd</code> directory and put the line</p><pre class="programlisting">
       CATALOG "docbook-xml/docbook.cat"
-</pre><p>in it. By maintaining your own <code class="computeroutput">CATALOG</code>, it is easy to add more DTD's
+</pre><p>in it. By maintaining your own <code class="computeroutput">CATALOG</code>, it is easy to add more DTD&#39;s
 without changing your emacs settings. (<span class="emphasis"><em>How about that HTML 4.01 DTD you always wanted to
 get from <a class="ulink" href="http://www.w3.org/TR/html4/" target="_top">W3C</a> ? The DTD is in the zip archives and tarballs
 available on the site.</em></span>)</p>
@@ -145,8 +145,8 @@ parents, what its contents can be and lists its attributes.</td>
 <a name="psgml-mode-reading" id="psgml-mode-reading"></a>Further reading</h3></div></div></div><p>Start with the <a class="xref" href="docbook-primer" title="OpenACS Documentation Guide">the section called
 &ldquo;OpenACS Documentation
 Guide&rdquo;</a>
-</p><div class="cvstag">($&zwnj;Id: psgml-mode.html,v 1.48.2.10 2016/06/21
-07:44:36 gustafn Exp $)</div>
+</p><div class="cvstag">($&zwnj;Id: psgml-mode.xml,v 1.8 2006/07/17 05:38:37
+torbenb Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-core-docs {Documentation}} {
+<property name="context">{/doc/acs-core-docs {ACS Core Documentation}} {
 Chapter 14. Internationalization}</property>
 <property name="doc(title)">
 Chapter 14. Internationalization</property>
@@ -33,5 +33,4 @@ Template"
 Overview"
 		    homeLink="index" homeLabel="Home" 
 		    upLink="acs-package-dev" upLabel="Up"> 
-		<center><a href="http://openacs.org/doc/current/i18n.html#comments">View comments
-on this page at openacs.org</a></center>
+		
