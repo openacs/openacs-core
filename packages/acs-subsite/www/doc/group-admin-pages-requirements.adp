@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-subsite {Subsite}} {Group Admin Pages - Requirements}</property>
+<property name="context">{/doc/acs-subsite {ACS Subsite}} {Group Admin Pages - Requirements}</property>
 <property name="doc(title)">Group Admin Pages - Requirements</property>
 <master>
 <h2><font><font>Group Admin Pages - Requirements</font></font></h2>
@@ -165,5 +165,5 @@ intra-party relations.</font></p></dd>
 <address><a href="mailto:mbryzek\@arsdigita.com">Michael
 Bryzek</a></address>
 <br>
-<font size="-1">$&zwnj;Id: group-admin-pages-requirements.html,v 1.2
-2001/08/11 21:31:03 ben Exp $</font>
+<font size="-1">$&zwnj;Id: group-admin-pages-requirements.html,v 1.2.30.1
+2016/07/18 11:40:32 gustafn Exp $</font>

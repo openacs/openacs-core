@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-subsite {Subsite}} {ACS Subsite Documentation}</property>
+<property name="context">{/doc/acs-subsite {ACS Subsite}} {ACS Subsite Documentation}</property>
 <property name="doc(title)">ACS Subsite Documentation</property>
 <master>
 <h2>Images available from the acs-subsite package</h2>

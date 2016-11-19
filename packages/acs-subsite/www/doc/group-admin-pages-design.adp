@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-subsite {Subsite}} {Group Admin Pages - Design}</property>
+<property name="context">{/doc/acs-subsite {ACS Subsite}} {Group Admin Pages - Design}</property>
 <property name="doc(title)">Group Admin Pages - Design</property>
 <master>
 <h2>Group Admin Pages - Design</h2>

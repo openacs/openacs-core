@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-subsite {Subsite}} {ACS Subsite Documentation}</property>
+<property name="context">{/doc/acs-subsite {ACS Subsite}} {ACS Subsite Documentation}</property>
 <property name="doc(title)">ACS Subsite Documentation</property>
 <master>
 <h1>ACS Subsite Documentation</h1>
@@ -8,11 +8,11 @@ ACS subsite docs
 <h2>Document overview</h2>
 <table cellpadding="0" cellspacing="0">
 <tr>
-<td colspan="2"><a href="subsites-requirements">Overall
+<td colspan="2"><a href="/doc/subsites-requirements">Overall
 requirements</a></td><td>Overview of the requirements that motivated the design of
 subsites.</td>
 </tr><tr>
-<td colspan="2"><a href="subsites-design">Design</a></td><td>Overview of the API provided by ACS subsites including the
+<td colspan="2"><a href="/doc/subsites-design">Design</a></td><td>Overview of the API provided by ACS subsites including the
 package manger, site nodes, and request processor hooks.</td>
 </tr><tr>
 <td colspan="2"><a href="group-admin-pages-requirements">Group
