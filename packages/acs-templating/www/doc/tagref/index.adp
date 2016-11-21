@@ -51,5 +51,5 @@ the template later.</p>
 <address><a href="mailto:christian\@arsdigita.com">Christian
 Brechbühler</a></address>
 <!-- Created: Fri Sep 15 15:05:44 EDT 2000 -->
-Last modified: $&zwnj;Id: index.html,v 1.4.24.1 2016/06/22 07:48:44
+Last modified: $&zwnj;Id: index.html,v 1.4.24.2 2016/11/08 10:42:20
 gustafn Exp $

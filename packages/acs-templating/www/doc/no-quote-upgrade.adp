@@ -9,12 +9,12 @@ The variable substitution in the templating has been changed to
 become more friendly towards quoting. The rationale for the change
 and the definition of terms like <em>quoting</em>
  are present in
-<a href="no-quote">the quoting article</a>
-. As it discusses
-these concepts in some depths, we see no reason to repeat them
-here. Instead, we will assume that you have read the previous
-article and focus on the topic of this one: the changes you need to
-apply to make your module conformant to the new quoting rules.
+<a href="noquote">the quoting article</a>
+. As it discusses these
+concepts in some depths, we see no reason to repeat them here.
+Instead, we will assume that you have read the previous article and
+focus on the topic of this one: the changes you need to apply to
+make your module conformant to the new quoting rules.
 <p>This text is written as a result of our efforts to make the ACS
 installation for the German Bank project work, therefore it is
 based on field experience rather than academic discussion. We hope
