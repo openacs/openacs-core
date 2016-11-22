@@ -2172,13 +2172,13 @@ namespace eval ::security::csrf {
         
         @author Gustaf Neumann
     } {
-        set cached_var_name ::$tokenname
-        if {[info exists $cached_var_name] && [set $globalTokenName] ne ""} {
-            return [set $cached_var_name]
+        set globalTokenName ::$tokenname
+        if {[info exists $globalTokenName] && [set $globalTokenName] ne ""} {
+            return [set $globalTokenName]
         }
         
         set token [token -tokenname $tokenname]
-        return [set $cached_var_name $token]
+        return [set $globalTokenName $token]
     }
 
     #
