@@ -2173,7 +2173,7 @@ namespace eval ::security::csrf {
         @author Gustaf Neumann
     } {
         set cached_var_name ::$tokenname
-        if {[info exists $cached_var_name]} {
+        if {[info exists $cached_var_name] && [set $globalTokenName] ne ""} {
             return [set $cached_var_name]
         }
         
@@ -2263,7 +2263,7 @@ namespace eval ::security::csrf {
         # we compute it new.
         #
         set globalTokenName ::$tokenname
-        if {[info exists $globalTokenName]} {
+        if {[info exists $globalTokenName] && [set $globalTokenName] ne ""} {
             set token [set $globalTokenName]
         } else {
             set secret [ns_config "ns/server/[ns_info server]/acs" parametersecret ""]
