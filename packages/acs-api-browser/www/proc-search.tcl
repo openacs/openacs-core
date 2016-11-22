@@ -172,11 +172,11 @@ foreach output $deprecated_matches {
 }
 
 set show_deprecated_url [export_vars -base [ad_conn url] -override {{ show_deprecated_p 1 }} {
-    name_weight doc_weight param_weight source_weight search_type query_string show_private_p
+    name_weight doc_weight param_weight source_weight search_type query_string show_private_p __csrf_token
 }]
 
 set hide_deprecated_url [export_vars -base [ad_conn url] -override { { show_deprecated_p 0 } } {
-    name_weight doc_weight param_weight source_weight search_type query_string show_private_p
+    name_weight doc_weight param_weight source_weight search_type query_string show_private_p __csrf_token
 }]
 
 
