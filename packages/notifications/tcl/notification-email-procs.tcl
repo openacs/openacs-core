@@ -150,7 +150,7 @@ namespace eval notification::email {
            {(href|src)\s*=\s*[\"]((http|https|ftp|mailto):[^'\"]+)[\"]} $content \
            "\\1=\"\u0001\\2\u0002\"" content
        
-       set content [regsub -all {(href|src)=['\"]([^\u0001:'\"]+?)['\"]} $html "\\1='${host}\\2'"]
+       set content [regsub -all {(href|src)=['\"]([^\u0001:'\"]+?)['\"]} $content "\\1='${host}\\2'"]
        #
        # remove protection characters
        #
