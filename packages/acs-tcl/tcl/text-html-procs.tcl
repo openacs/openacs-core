@@ -165,7 +165,7 @@ ad_proc -public ad_text_to_html {
 }
 
 ad_proc -public ad_html_qualify_links {
-    -package_url
+    -path
     html
 } {
     
@@ -175,6 +175,7 @@ ad_proc -public ad_html_qualify_links {
     1) prepend paths starting with a "/" by the protocol and host.
     2) prepend paths not starting a "/" by the package_url, in case it was passed in.
 
+    links, which are already fully qualified are not modified.
     
 } {
     set host "[string trimright [ad_url] /]/"
@@ -190,12 +191,14 @@ ad_proc -public ad_html_qualify_links {
         {(href|src)\s*=\s*[\"]((http|https|ftp|mailto):[^'\"]+)[\"]} $html \
         "\\1=\"\u0001\\2\u0002\"" html
 
-    if {[info exists package_url]} {
-        set host "[string trimright $package_url /]/"
-        set html [regsub -all {(href|src)=['\"]([^/][^\u0001:'\"]+?)['\"]} $html "\\1='${host}${package_url}\\2'"]
+    if {[info exists path]} {
+        set path "[string trim $path /]/"
+        regsub -all {(href|src)\s*=\s*['\"]([^/][^\u0001:'\"]+?)['\"]} $html \
+            "\\1='${host}${path}\\2111'" html
     }
-    set html [regsub -all {(href|src)=['\"](/[^\u0001:'\"]+?)['\"]} $html "\\1=\"${host}\\2\""]
-    
+    regsub -all {(href|src)\s*=\s*['\"]/([^\u0001:'\"]+?)['\"]} $html \
+        "\\1=\"${host}\\2222\"" html
+   
     #
     # Remove all protection characters again.
     #
