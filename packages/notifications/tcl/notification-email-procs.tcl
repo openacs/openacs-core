@@ -137,9 +137,25 @@ namespace eval notification::email {
 
        # DAVEB convert relative URLs to fully qualified URLs
        set host "[string trimright [ad_url] "/"]/"
-       set re {(href|src)=['\"][^(http|https|mailto:)]/?([^'\"]+?)['\"]}
-       set subspec "\\1='${host}\\2'"
-       set content [regsub -all $re $content $subspec]
+       #set re {(href|src)=['\"][^(http|https|mailto:)]/?([^'\"]+?)['\"]}
+       #set subspec "\\1='${host}\\2'"
+       #set content [regsub -all $re $content $subspec]
+
+       # Protect all full qualified URLs with special characters (one
+       # rule for single quotes, one for double quotes).
+       regsub -nocase -all \
+           {(href|src)\s*=\s*'((http|https|ftp|mailto):[^'\"]+)'} $content \
+           "\\1='\u0001\\2\u0002'" content
+       regsub -nocase -all \
+           {(href|src)\s*=\s*[\"]((http|https|ftp|mailto):[^'\"]+)[\"]} $content \
+           "\\1=\"\u0001\\2\u0002\"" content
+       
+       set content [regsub -all {(href|src)=['\"]([^\u0001:'\"]+?)['\"]} $html "\\1='${host}\\2'"]
+       #
+       # remove protection characters
+       #
+       regsub -nocase -all {((href|src)\s*=\s*['\"]?)\u0001([^\u0002]*)\u0002} $content {\1\3} content
+       
 
        # Use this to build up extra mail headers        
        set extra_headers [list]
