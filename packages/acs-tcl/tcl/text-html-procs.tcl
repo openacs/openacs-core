@@ -164,6 +164,47 @@ ad_proc -public ad_text_to_html {
     return $text
 }
 
+ad_proc -public ad_html_qualify_links {
+    -package_url
+    html
+} {
+    
+    Convert in the HTML text relative URLs into fully qualified URLs
+    including the host name. It performs the following operations:
+
+    1) prepend paths starting with a "/" by the protocol and host.
+    2) prepend paths not starting a "/" by the package_url, in case it was passed in.
+
+    
+} {
+    set host "[string trimright [ad_url] /]/"
+
+    #
+    # Protect all full qualified URLs with special characters (one
+    # rule for single quotes, one for double quotes).
+    #
+    regsub -nocase -all \
+        {(href|src)\s*=\s*'((http|https|ftp|mailto):[^'\"]+)'} $html \
+        "\\1='\u0001\\2\u0002'" html
+    regsub -nocase -all \
+        {(href|src)\s*=\s*[\"]((http|https|ftp|mailto):[^'\"]+)[\"]} $html \
+        "\\1=\"\u0001\\2\u0002\"" html
+
+    if {[info exists package_url]} {
+        set host "[string trimright $package_url /]/"
+        set html [regsub -all {(href|src)=['\"]([^/][^\u0001:'\"]+?)['\"]} $html "\\1='${host}${package_url}\\2'"]
+    }
+    set html [regsub -all {(href|src)=['\"](/[^\u0001:'\"]+?)['\"]} $html "\\1=\"${host}\\2\""]
+    
+    #
+    # Remove all protection characters again.
+    #
+    regsub -nocase -all {((href|src)\s*=\s*['\"]?)\u0001([^\u0002]*)\u0002} $html {\1\3} html
+
+    return $html
+}   
+
+
 ad_proc -public util_convert_line_breaks_to_html {
     {-includes_html:boolean}
     text
