@@ -790,14 +790,21 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql stable strict;
 
--- show errors
-
+--
 -- Trigger to maintain latest_revision in cr_items
-
+--
 CREATE OR REPLACE FUNCTION cr_revision_latest_tr () RETURNS trigger AS $$
+DECLARE
+  v_latest_revision      cr_revisions.revision_id%TYPE;
 BEGIN
-  update cr_items set latest_revision = new.revision_id
-  where item_id = new.item_id;
+
+  select latest_revision from cr_items into v_latest_revision where item_id = new.item_id;
+
+  if v_latest_revision <> new.revision_id then
+     update cr_items set latest_revision = new.revision_id
+     where item_id = new.item_id;
+  end if;
+  
   return new;
 END;
 $$ LANGUAGE plpgsql;
