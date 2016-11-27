@@ -155,7 +155,7 @@ ad_proc -private template::data::transform::currency {
                     set have_values 1
                 }
 		set fractional_part_format [lindex $format 3]
-		for { set j [string length $value] } { $j < $fractional_part_format } { set j [expr {$j + 1}] } {
+		for { set j [string length $value] } { $j < $fractional_part_format } { incr j } {
 		    append $value 0
 		}
 	    }

@@ -998,7 +998,7 @@ ad_proc -public ad_page_contract {
 		    # This is an array variable, so we need to loop through each name.* variable for this package we have ...
 		    set array_list ""
 		    foreach arrayvar [ns_cache names util_memoize] {
-			if [regexp [list [ad_conn session_id] [ad_conn package_id] "$formal_name."] $arrayvar] {
+			if {[regexp [list [ad_conn session_id] [ad_conn package_id] "$formal_name."] $arrayvar]} {
 			    set arrayvar [lindex $arrayvar [llength $arrayvar]-1]
 			    if { $array_list ne "" } {
 				append array_list " "

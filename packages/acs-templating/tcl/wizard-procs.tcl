@@ -360,7 +360,7 @@ ad_proc -private template::wizard::get_wizards_levels {} {
     set level [expr {$parse_level - 1}]
 
     set levels {}
-    for {set i $level} {$i > 1} {set i [expr {$i - 1}]} {
+    for {set i $level} {$i > 1} {incr i -1} {
         upvar #$i wizard:name parent_wizard
         if {[info exists parent_wizard]} {
             lappend levels $i

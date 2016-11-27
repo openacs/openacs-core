@@ -147,7 +147,7 @@ ad_proc -public add {
             # execute drop statements until we reach position $i+1
             #  This position represents the operation on which we failed, and thus
             #  is not executed
-            for { set inner [expr {[llength $plsql_drop] - 1}] } { $inner > $i + 1 } { set inner [expr {$inner - 1}] } {
+            for { set inner [expr {[llength $plsql_drop] - 1}] } { $inner > $i + 1 } { incr inner -1 } {
                 set drop_cmd [lindex $plsql_drop $inner]
                 if { [catch $drop_cmd err_msg_2] } {
                     append err_msg "\nAdditional error while trying to roll back: $err_msg_2"

@@ -68,7 +68,7 @@ set distinct [array size ip_p]
 # run standard Unix uptime command to get load average (crude measure of 
 # system health)
 
-if [catch { set uptime_output [exec /usr/bin/uptime] } errmsg] {
+if {[catch { set uptime_output [exec /usr/bin/uptime] } errmsg]} {
    # whoops something wrong with uptime (check path)
    set uptime_output "ERROR running uptime, check path in script"
 }

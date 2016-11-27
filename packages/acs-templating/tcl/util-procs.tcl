@@ -910,7 +910,7 @@ ad_proc -public stack_frame_values {level} {
 	}
 	append varlist "        </ul>\n"
       } else {
-	if [catch {append varlist "'[uplevel #$level set $i]'\n"}] {
+          if {[catch {append varlist "'[uplevel #$level set $i]'\n"}]} {
 	  append varlist "<em>bad string value</em>\n"
 	}
       }

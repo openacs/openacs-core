@@ -510,7 +510,7 @@ ad_proc -public template::adp_compile { {-file ""} {-string ""} } {
     # avoid substituting when it is a percentage attribute to an HTML tag.
     regsub -all {([^0-9])%>} $chunk {\1</tcl>} chunk
     # warn about the first ambiguity in the source
-    if [regexp {[0-9]+%>} $chunk match] {
+    if {[regexp {[0-9]+%>} $chunk match]} {
         ns_log warning "ambiguous '$match'; write Tcl escapes with a space like\
       <% set x 50 %> and HTML tags with proper quoting, like <hr width=\"50%\">\
       when compiling ADP source: template::adp_compile $source_type {$source}"

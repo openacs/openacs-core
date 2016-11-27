@@ -22,7 +22,7 @@ ad_proc -private template_tag_if_condition { chunk params condition_type } {
     # parse simplified conditional expression
     set args [template_tag_if_concat_params $params]
 
-    if [catch {
+    if {[catch {
 
         while { 1 } { 
 
@@ -48,7 +48,7 @@ ad_proc -private template_tag_if_condition { chunk params condition_type } {
             set args [lrange $args 1 end] 
         }
 
-    } errorMsg] {
+    } errorMsg]} {
 
         set condition "$condition_type \{ 1 "
         set chunk $errorMsg

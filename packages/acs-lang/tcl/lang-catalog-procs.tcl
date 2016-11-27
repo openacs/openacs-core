@@ -1144,9 +1144,9 @@ ad_proc -private lang::catalog::translate {} {
     set default_locale [parameter::get -package_id [apm_package_id_from_key acs-lang] -parameter SiteWideLocale]
     db_foreach get_untranslated_messages {} {    
         foreach lang [list es_ES fr_FR de_DE] {
-            if [catch {
+            if {[catch {
                 set translated_message [lang_babel_translate $message en_$lang]
-            } errmsg] {
+            } errmsg]} {
                 ns_log Notice "Error translating $message into $lang: $errmsg"
             } else {
                 lang::message::register $lang $package_key $message_key $translated_message
