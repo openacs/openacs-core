@@ -2,9 +2,9 @@
 -- Reduced generation of dead tuples in postgres.
 --
 -- Background: In the old version, the fields latest and live
--- revisions were updated always via two separate dmlDML statements.
--- Every update causes in PostgreSQL (tested to pg 9.6) one more dead
--- tuple, such that on busy systems, we see 30k + dead tuples per
+-- revisions were updated always via two separate DML statements.
+-- Every update causes in PostgreSQL (tested against pg 9.6) one more
+-- dead tuple, such that on busy systems, we see 30k + dead tuples per
 -- hour. These dead tuples in turn cause more auto vacuum operations
 -- and can lead to abandoned query plans.
 --

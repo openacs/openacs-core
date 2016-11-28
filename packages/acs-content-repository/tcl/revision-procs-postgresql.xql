@@ -118,18 +118,19 @@
 <fullquery name="cr_import_content.content_revision_new">
       <querytext>
          select content_revision__new (
-            /* title         => */ :title,
-            /* description   => */ :description,
-            /* publish_date  => */ current_timestamp,
-            /* mime_type     => */ :mime_type,
-            /* nls_language  => */ null,
-            /* data          => */ null,
-            /* item_id       => */ :item_id,
-            /* revision_id   => */ :revision_id,
-            /* creation_date => */ current_timestamp,
-            /* creation_user => */ :creation_user,
-            /* creation_ip   => */ :creation_ip,
-            /* package_id    => */ :package_id
+            /* title          => */ :title,
+            /* description    => */ :description,
+            /* publish_date   => */ current_timestamp,
+            /* mime_type      => */ :mime_type,
+            /* nls_language   => */ null,
+            /* data           => */ null,
+            /* item_id        => */ :item_id,
+            /* revision_id    => */ :revision_id,
+            /* creation_date  => */ current_timestamp,
+            /* creation_user  => */ :creation_user,
+            /* creation_ip    => */ :creation_ip,
+	    /* content_length => */ null, 
+            /* package_id     => */ :package_id
     );
       </querytext>
 </fullquery>
