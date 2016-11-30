@@ -13,8 +13,8 @@ Chapter 11. Development Reference"
 dynamically</h2></div></div></div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="ad-form-overview" id="ad-form-overview"></a>Overview</h3></div></div></div><div class="authorblurb">
-<div class="cvstag">($&zwnj;Id: form-builder.xml,v 1.9.2.2 2016/06/23
-08:32:46 gustafn Exp $)</div>
+<div class="cvstag">($&zwnj;Id: form-builder.html,v 1.30.2.12 2016/11/19
+09:21:53 gustafn Exp $)</div>
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><p>OpenACS has a form manager called ad_form. Ad_form has an
 adaptable UI. Error handling includes inline error reporting, and

@@ -48,7 +48,7 @@ ad_page_contract {
     This is the main page for the package.  It displays all of the Notes and provides links to edit them and to create new Notes.
 
     \@author Your Name (you\@example.com)
-    \@cvs-id $&zwnj;Id: index.tcl,v 1.2.22.1 2015/09/10 08:21:20 gustafn Exp $
+    \@cvs-id $&zwnj;Id: tutorial-pages.html,v 1.44.2.12 2016/11/19 09:21:55 gustafn Exp $
 }
 
 set page_title [ad_conn instance_name]
@@ -127,7 +127,7 @@ ad_page_contract {
     This is the view-edit page for notes.
 
     \@author Your Name (you\@example.com)
-    \@cvs-id $&zwnj;Id: note-edit.tcl,v 1.3.2.1 2015/09/10 08:21:20 gustafn Exp $
+    \@cvs-id $&zwnj;Id: tutorial-pages.html,v 1.44.2.12 2016/11/19 09:21:55 gustafn Exp $
  
     \@param item_id If present, assume we are editing that note.  Otherwise, we are creating a new note.
 } {
@@ -186,7 +186,7 @@ ad_page_contract {
     This deletes a note
 
     \@author Your Name (you\@example.com)
-    \@cvs-id $&zwnj;Id: note-delete.tcl,v 1.3.2.1 2015/09/10 08:21:20 gustafn Exp $
+    \@cvs-id $&zwnj;Id: tutorial-pages.html,v 1.44.2.12 2016/11/19 09:21:55 gustafn Exp $
  
     \@param item_id The item_id of the note to delete
 } {

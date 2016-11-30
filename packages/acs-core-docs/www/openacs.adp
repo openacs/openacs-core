@@ -611,8 +611,8 @@ ORA_NLS33=$ORACLE_HOME/ocommon/nls/admin/data
 recovery</a> procedure.</p></li><li class="listitem"><p>Set up <a class="xref" href="uptime" title="External uptime validation">the section called
 &ldquo;External uptime
 validation&rdquo;</a>.</p></li>
-</ul></div><div class="cvstag">($&zwnj;Id: openacs.xml,v 1.31.14.2 2016/07/05
-16:42:42 gustafn Exp $)</div>
+</ul></div><div class="cvstag">($&zwnj;Id: openacs.html,v 1.51.2.12 2016/11/19
+09:21:54 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

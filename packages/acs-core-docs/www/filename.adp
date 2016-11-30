@@ -194,8 +194,8 @@ document.</em></span></p><div class="informaltable"><table class="informaltable"
 <td>0.1</td><td>Creation</td><td>8/21/2000</td><td>Josh Finkler, Audrey McLoghlin</td>
 </tr>
 </tbody>
-</table></div><div class="cvstag">($&zwnj;Id: design-template.xml,v 1.8.14.1 2016/06/23
-08:32:46 gustafn Exp $)</div>
+</table></div><div class="cvstag">($&zwnj;Id: filename.html,v 1.48.2.12 2016/11/19
+09:21:53 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

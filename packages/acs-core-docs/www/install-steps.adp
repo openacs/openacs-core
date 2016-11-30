@@ -183,8 +183,8 @@ commands that are failing with the accompanying error. If
 there&#39;s a SQL error in the Tcl error or in the log, post that
 too.</p></li><li class="listitem"><p>If you find errors in this document or if you have ideas about
 making it better, please post them in our <a class="ulink" href="http://openacs.org/bugtracker/openacs/" target="_top">BugTracker</a>.</p></li>
-</ul></div><div class="cvstag">($&zwnj;Id: overview.xml,v 1.29.2.2 2016/06/23
-08:32:46 gustafn Exp $)</div>
+</ul></div><div class="cvstag">($&zwnj;Id: install-steps.html,v 1.35.2.12 2016/11/19
+09:21:54 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

@@ -46,7 +46,8 @@ Repository</a>.)</p><div class="figure">
 Model</strong></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/tutorial-data-model.png" align="middle" alt="Tutorial Data Model"></div></div>
 </div><br class="figure-break"><p>The top of each sql file has some standard comments, including
 doc tags such as <code class="computeroutput">\@author</code> which
-will be picked up by the API browser. The string <code class="computeroutput">$&zwnj;Id:$</code> will automatically be expanded when
+will be picked up by the API browser. The string <code class="computeroutput">$&zwnj;Id: tutorial-database.html,v 1.44.2.12 2016/11/19
+09:21:55 gustafn Exp $</code> will automatically be expanded when
 the file is checked in to cvs.</p><pre class="screen">
 [$OPENACS_SERVICE_NAME ~]$ <strong class="userinput"><code>cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/packages/myfirstpackage/sql/postgresql</code></strong>
 [$OPENACS_SERVICE_NAME postgresql]$ <strong class="userinput"><code>emacs myfirstpackage-create.sql</code></strong>

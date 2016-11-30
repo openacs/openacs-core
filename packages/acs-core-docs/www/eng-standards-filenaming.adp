@@ -172,7 +172,7 @@ header structure is recommended:</p><pre class="programlisting">
 -- <span class="emphasis"><em>author</em></span>
 -- <span class="emphasis"><em>created</em></span>
 --
--- <a class="ulink" href="http://www.loria.fr/~molli/cvs/doc/cvs_12.html#SEC93" target="_top">$&zwnj;Id$</a>
+-- <a class="ulink" href="http://www.loria.fr/~molli/cvs/doc/cvs_12.html#SEC93" target="_top">$&zwnj;Id: eng-standards-filenaming.html,v 1.48.2.12 2016/11/19 09:21:53 gustafn Exp $</a>
 </pre><p>Of course, replace "<code class="computeroutput">--</code>" with the comment delimiter
 appropriate for the language in which you are programming.</p>
 </div><div class="sect2">
@@ -216,8 +216,8 @@ used rarely, only when they are exceedingly useful.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="eng-standards-filenaming-tcllib" id="eng-standards-filenaming-tcllib"></a>Tcl Library Files</h3></div></div></div><p>Further standards for Tcl library files are under discussion; we
-plan to include naming conventions for procs.</p><div class="cvstag">($&zwnj;Id: filenaming.xml,v 1.7.2.2 2016/11/11
-08:53:59 gustafn Exp $)</div>
+plan to include naming conventions for procs.</p><div class="cvstag">($&zwnj;Id: eng-standards-filenaming.html,v 1.48.2.12
+2016/11/19 09:21:53 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
