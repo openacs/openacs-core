@@ -149,7 +149,7 @@ an optional suffix of <strong>d</strong> for development, <strong>a</strong> for
 
 <tr>
   <th align="right" nowrap>Initial Version:</th>
-  <td><input name="version_name" size="10" id="update-url"></td>
+  <td><input class="update-url" name="version_name" size="10"></td>
 </tr>
 
 <tr>
