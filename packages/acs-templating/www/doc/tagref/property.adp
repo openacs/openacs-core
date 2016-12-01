@@ -27,4 +27,4 @@ template, such as a title or logo.</p>
 <ul><li><p>See <a href="master"><kbd>master</kbd></a> and <a href="slave"><kbd>slave</kbd></a> for more information about master
 templates.</p></li></ul>
 <hr>
-<a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>
+<!-- <a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a> -->

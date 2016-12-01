@@ -33,4 +33,4 @@ meaning in the list context as it does for multirow data
 sources.</p></li>
 </ul>
 <hr>
-<a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>
+<!-- <a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a> -->

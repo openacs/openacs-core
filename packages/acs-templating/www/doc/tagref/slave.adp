@@ -26,4 +26,4 @@ master template where the body template should be inserted.</p>
 <ul><li><p>See <a href="property"><kbd>property</kbd></a> and <a href="master"><kbd>master</kbd></a> for more information related to
 master templates.</p></li></ul>
 <hr>
-<a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>
+<!-- <a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a> -->

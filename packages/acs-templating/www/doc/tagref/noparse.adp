@@ -28,4 +28,4 @@ where the attributes of the output template (such as references to
 component templates in an <kbd>include</kbd> tag or to form
 elements in a <kbd>formwidget</kbd> tag) must be</p></li></ul>
 <hr>
-<a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>
+<!-- <a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a> -->

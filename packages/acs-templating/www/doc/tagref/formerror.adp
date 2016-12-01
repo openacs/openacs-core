@@ -72,4 +72,4 @@ inserted (separated by &lt;,br&gt; tags).</p></li><li><p>See the <a href="formwi
 information on writing the body of a dynamic form template.</p></li>
 </ul>
 <hr>
-<a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>
+<!-- <a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a> -->

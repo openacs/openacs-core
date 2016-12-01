@@ -152,4 +152,4 @@ will return true if the variable is undefined or if the value of
 the variable is an empty string.</p></li>
 </ul>
 <hr>
-<a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>
+<!-- <a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a> -->

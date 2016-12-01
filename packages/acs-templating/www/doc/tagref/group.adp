@@ -90,4 +90,4 @@ tag. (See also <a href="http://openacs.org/bugtracker/openacs/bug?bug%5fnumber=4
 bug</a>).</p></li>
 </ul>
 <hr>
-<a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>
+<!-- <a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a> -->

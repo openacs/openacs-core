@@ -33,4 +33,4 @@ data source name and column with a period:</p>
 <ul><li><p>An attempt to reference a variable that does not exist will
 cause an error message to appear in the browser.</p></li></ul>
 <hr>
-<a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>
+<!-- <a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a> -->

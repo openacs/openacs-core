@@ -34,4 +34,4 @@ of acs-templating are used as default values.</p>
 <p>See the <a href="/doc/acs-templating/demo/#listbuilder"><kbd>listbuilder
 demos</kbd></a> for more detailed examples.</p>
 <hr>
-<a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>
+<!-- <a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a> -->
