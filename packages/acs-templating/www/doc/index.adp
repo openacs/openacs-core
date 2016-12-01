@@ -29,7 +29,7 @@ Guide</a></td><td>Writing a Template, the ADP part of a page</td>
  </td><td>API for programming the Tcl part of a page</td>
 </tr><tr>
 <td></td><td>
-<a href="api/">API</a>, <a href="TclDocs/content">TclDoc</a>    </td><td>Object and API Reference</td>
+<a href="api/">API</a></td><td>API Reference</td>
 </tr><tr>
 <td colspan="2"><a href="migration">Migration</a></td><td>Bringing legacy tcl pages to use the template system.</td>
 </tr><tr>
@@ -40,8 +40,7 @@ parts.</td>
 <h2>Release Notes</h2>
 <p>Please file bugs in the <a href="http://openacs.org/bugtracker/openacs/">Bug Tracker</a>.</p>
 <hr>
-<address><a href="mailto:christian\@arsdigita.com">Christian
-Brechbühler</a></address>
+Original maintainer: Christian Brechbühler (christian@arsdigita.com)<br>
 <!-- Created: Mon Aug 14 11:53:07 EDT 2000 -->
 Last modified: $&zwnj;Id: index.html,v 1.6.2.3 2016/06/22 07:48:43
 gustafn Exp $
