@@ -75,13 +75,16 @@ ad_proc -private sec_sweep_sessions {} {
 
 ad_proc -private sec_handler_reset {} {
 
-    provide dummy values for global variables provided by the
+    Provide dummy values for global variables provided by the
     sec_handler, in case, the sec_handler is not called or runs into
     an exception.
     
 } {
     set ::__csp_nonce [::security::csp::nonce]
     set ::__csrf_token ""
+    
+    # initialize untrusted user id
+    ad_conn -set untrusted_user_id 0
 }
 
 ad_proc -private sec_handler {} {
