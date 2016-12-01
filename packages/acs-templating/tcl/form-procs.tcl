@@ -68,9 +68,11 @@ ad_proc -public template::form::create { id args } {
 
     @option html            A list of additional name-value attribute pairs to
                             include in the HTML FORM tag at the beginning of the 
-                            rendered form. Common attributes include JavaScript 
-                            event handlers and multipart form encoding.  For example, 
-                            "-html { enctype multipart/form-data onSubmit validate() }"
+                            rendered form. Common use for this option is to set multipart
+                            form encoding by specifying "-html { enctype multipart/form-data }".
+                            Please note that to comply with newer security features, such as CSP,
+                            one should not specify javascript event handlers here, as they will
+                            be rendered inline.
     
     @option mode            If set to 'display', the form is shown in display-only mode, where 
                             the user cannot edit the fields. Each widget knows how to display its contents
