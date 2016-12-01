@@ -80,7 +80,7 @@ ad_proc -private sec_handler_reset {} {
     an exception.
     
 } {
-    set ::__csp_nonce ""
+    set ::__csp_nonce [::security::csp::nonce]
     set ::__csrf_token ""
 }
 
@@ -190,7 +190,6 @@ ad_proc -private sec_handler {} {
         # generate a csrf token and a csp nonce value
         #
         security::csrf::new
-        security::csp::nonce
     }
 }
 
