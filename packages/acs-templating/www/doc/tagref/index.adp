@@ -48,8 +48,7 @@ the template later.</p>
 </li>
 </ul>
 <hr>
-<address><a href="mailto:christian\@arsdigita.com">Christian
-Brechbühler</a></address>
+Original maintainer - Christian Brechbühler (christian@arsdigita.com)<br>
 <!-- Created: Fri Sep 15 15:05:44 EDT 2000 -->
 Last modified: $&zwnj;Id: index.html,v 1.4.24.2 2016/11/08 10:42:20
 gustafn Exp $
