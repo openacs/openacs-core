@@ -131,4 +131,4 @@ page template to pass an ID which the Tcl script associated with
 the master template may use to query for additional
 information.</p>
 <hr>
-<a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>
+<!-- <a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a> -->

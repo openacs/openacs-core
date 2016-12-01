@@ -57,4 +57,4 @@ number of which can be checked at any given time. The
 contains a list of all the checked values; the <code>value</code>
 (singular) property contains the first element in the list.</p>
 <hr>
-<a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>
+<!-- <a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a> -->

@@ -64,4 +64,4 @@ current row are accessible (and modifiable) as local variables.
 column values while building a data source from a multirow query
 result.</li></ul>
 <hr>
-<a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>
+<!-- <a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a> -->

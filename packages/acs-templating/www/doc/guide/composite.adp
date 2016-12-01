@@ -151,4 +151,4 @@ not needed, giving three basic possibilities.</p>
 <p>It is an error to omit both parts; this is a special case
 intended to speed up debugging.</p>
 <hr>
-<a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>
+<!-- <a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a> -->

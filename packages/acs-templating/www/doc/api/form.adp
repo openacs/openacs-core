@@ -36,4 +36,4 @@ place after this procedure has been checked.</p>
 <h3>Example</h3>
 <h3>Note(s)</h3>
 <hr>
-<a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>
+<!-- <a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a> -->

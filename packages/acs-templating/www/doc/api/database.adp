@@ -66,4 +66,4 @@ set column values.</li><li>The <kbd>bind</kbd> option is valid only when using
 Oracle.</li>
 </ul>
 <hr>
-<a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>
+<!-- <a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a> -->

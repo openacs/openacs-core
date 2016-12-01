@@ -57,4 +57,4 @@ if { [template::form is_request add_user] } {
 <kbd>element create</kbd>. In this case the value is set separately
 to avoid the additional database query during a submission.</p>
 <hr>
-<a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>
+<!-- <a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a> -->

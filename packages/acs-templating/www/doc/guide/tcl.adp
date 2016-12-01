@@ -18,4 +18,4 @@ generating HTML fragments in tcl procedures. It subverts the
 separation of code and layout, one of the benefits of templating.
 Embedded Tcl makes templates non-portable to ACS/Java.</p>
 <hr>
-<a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>
+<!-- <a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a> -->

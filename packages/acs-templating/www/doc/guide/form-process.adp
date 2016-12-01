@@ -37,4 +37,4 @@ therefor processed within the framework of the same code that was
 used to create the form.</li>
 </ol>
 <hr>
-<a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>
+<!-- <a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a> -->

@@ -66,4 +66,4 @@ element contains a list of all the selected choices; the
 <code>value</code> (singular) property contains the first selected
 choice.</p>
 <hr>
-<a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>
+<!-- <a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a> -->

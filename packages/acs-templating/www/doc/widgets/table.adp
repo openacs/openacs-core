@@ -11,4 +11,4 @@ with controls for sorting on any number of columns. The table
 layout may be based on a standard sitewide style, or on a custom
 template.</p>
 <hr>
-<a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>
+<!-- <a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a> -->

@@ -95,7 +95,7 @@ templating tags (<kbd>formwidget</kbd>, <kbd>formgroup</kbd>,
 <kbd>if</kbd> etc.) that must be "protected" during the
 first step. The templating system provides the <a href="../tagref/noparse"><kbd>noparse</kbd></a> tag to do this.</p>
 <hr>
-<a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>
+<!-- <a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a> -->
 <br>
 
 Last modified: $&zwnj;Id: memory.html,v 1.1.1.1.30.1 2016/06/22 07:48:44

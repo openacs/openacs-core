@@ -87,4 +87,4 @@ request parameters. It is not intended as a replacement to
 Community System.</li>
 </ul>
 <hr>
-<a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>
+<!-- <a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a> -->

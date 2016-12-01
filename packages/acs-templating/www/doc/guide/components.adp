@@ -30,4 +30,4 @@ or any other purpose.</p>
  <h3>Building the Container Template</h3>
  <h3>Including Component Templates</h3>
 --><hr>
-<a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>
+<!-- <a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a> -->

@@ -66,4 +66,4 @@ results (i.e. <kbd>e</kbd>).</li><li>Submit the search form with criteria likely
 result (i.e. <kbd>Sally</kbd>).</li>
 </ol>
 <hr>
-<a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>
+<!-- <a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a> -->

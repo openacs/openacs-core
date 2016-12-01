@@ -94,4 +94,4 @@ query name multirow "
 template with the <a href="../tagref/multiple">multiple</a>
 tag.</p>
 <hr>
-<a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>
+<!-- <a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a> -->

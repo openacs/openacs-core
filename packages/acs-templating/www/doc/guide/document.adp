@@ -59,4 +59,4 @@ checkbox, radio, select, multiselect and textbox</li>
 visit the URL from which the page will be served, substituting
 <kbd>acs</kbd> with the <kbd>dat</kbd> extension.</p>
 <hr>
-<a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>
+<!-- <a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a> -->

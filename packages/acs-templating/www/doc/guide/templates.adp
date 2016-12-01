@@ -79,4 +79,4 @@ the layout from item to item.</p>
 <p>See <a href="../tagref/multiple"><kbd>multiple</kbd></a>,
 <a href="../tagref/group"><kbd>group</kbd></a>, <a href="../tagref/list"><kbd>list</kbd></a>.</p>
 <hr>
-<a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>
+<!-- <a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a> -->

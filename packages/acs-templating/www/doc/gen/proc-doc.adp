@@ -153,4 +153,4 @@ optional as long as you use the <strong>full</strong> and
 <strong>completely qualified</strong> name of the namespace or
 procedure.</blockquote>
 <hr>
-<a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>
+<!-- <a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a> -->

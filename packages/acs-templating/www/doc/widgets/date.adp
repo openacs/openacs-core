@@ -200,4 +200,4 @@ fragment widget showing the purpose of the widget, such as
 </table>
 <p>Examples of various Date widgets can be found on the <a href="/ats/demo/index">demo</a> pages.</p>
 <hr>
-<a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>
+<!-- <a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a> -->

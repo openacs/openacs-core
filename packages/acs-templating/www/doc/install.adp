@@ -115,4 +115,4 @@ create and populate a simple table in your database.</p>
 samples included in the distribution to test whether the system is
 working properly.</p>
 <hr>
-<a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>
+<!-- <a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a> -->
