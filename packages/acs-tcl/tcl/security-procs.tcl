@@ -2023,7 +2023,17 @@ namespace eval ::security::csp {
         if {[info exists $globalTokenName]} {
             set token [set $globalTokenName]
         } else {
-            set session_id [::security::csrf::session_id]
+            if {![ns_conn isconnected]} {
+                #
+                # Must be a background job, take the address
+                #
+                set session_id [ns_info address]
+            } else {
+                #
+                # Anonymous request, use a peer address as session_id
+                #
+                set session_id [ad_conn peeraddr]
+            }
             set secret [ns_config "ns/server/[ns_info server]/acs" parametersecret ""]
             
             if {[info commands ::crypto::hmac] ne ""} {
