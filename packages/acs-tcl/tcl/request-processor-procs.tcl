@@ -1339,6 +1339,7 @@ ad_proc -public ad_conn {args} {
                 browser_id ""
                 session_id ""
                 user_id ""
+                untrusted_user_id 0
                 token ""
                 last_issue ""
                 deferred_dml ""

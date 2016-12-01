@@ -82,9 +82,6 @@ ad_proc -private sec_handler_reset {} {
 } {
     set ::__csp_nonce [::security::csp::nonce]
     set ::__csrf_token ""
-    
-    # initialize untrusted user id
-    ad_conn -set untrusted_user_id 0
 }
 
 ad_proc -private sec_handler {} {
