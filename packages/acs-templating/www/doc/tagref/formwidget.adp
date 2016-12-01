@@ -33,16 +33,21 @@ The system substitutes these tags with the appropriate HTML tags,
 complete with their proper values, options and other attributes,
 while rendering the template. Explicit form tags in the template
 may be used in special circumstances, but should be avoided
-wherever possible.</p></li><li>
-<p>HTML attributes, including JavaScript event handlers, may be
-specified as attributes to the <kbd>formwidget</kbd> tag. The
-system will include all such attributes in the <kbd>input</kbd> or
-<kbd>select</kbd> tag of the rendered HTML form.</p><pre>
-&lt;formwidget id="cc_number" onChange="validate();"&gt;
-</pre>
-</li><li><p>See the <a href="formtemplate"><kbd>formtemplate</kbd></a>
+wherever possible.</p></li>
+<li>
+    <p>
+      HTML attributes may be specified as attributes to
+      the <kbd>formwidget</kbd> tag. The system will include all such
+      attributes in the <kbd>input</kbd> or
+      <kbd>select</kbd> tag of the rendered HTML form.
+      Although possible, newer browser security features such as CSP
+      discourage the use of inline Javascript event handlers.
+    </p>
+    <pre>&lt;formwidget id="cc_number" style="color:red;"&gt;</pre>
+</li>
+<li><p>See the <a href="formtemplate"><kbd>formtemplate</kbd></a>
 and <a href="formgroup"><kbd>formgroup</kbd></a> tags for more
 information on writing the body of a dynamic form template.</p></li>
 </ul>
 <hr>
-<a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a>
+<!-- <a href="mailto:templating\@arsdigita.com">templating\@arsdigita.com</a> -->
