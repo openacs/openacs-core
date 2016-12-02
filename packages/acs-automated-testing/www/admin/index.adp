@@ -116,8 +116,10 @@
         </else>
         <td> <a href="index?stress=@stress@&amp;security_risk=@security_risk@&amp;by_package_key=@packageinfo.key@&amp;view_by=testcase&amp;quiet=@quiet@">@packageinfo.key@</a></td>
         <if @packageinfo.total@ eq "0">
-          <td> No Data </td><td>-</td><td>-</td>
-          <td style="color:#ff0000"> fail </td>
+          <td align="right">No data</td>
+          <td align="right">-</td>
+          <td align="right">-</td>
+          <td align="right">-</td>
         </if><else>
           <td align="right"> @packageinfo.total@ </td>
           <td align="right"> @packageinfo.passes@ </td>
@@ -156,12 +158,14 @@
           <tr class="even">
         </else>
         <td> @tests.package_key@ </td>
-        <td> <a href="testcase?testcase_id=@tests.id@&amp;package_key=@tests.package_key@&amp;view_by=@view_by@&amp;category=@by_category@&amp;quiet=@quiet@">@tests.id@</a></td>
+        <td><a href="@tests.url@">@tests.id@</a></td>
         <td> @tests.categories@ </td>
         <td> @tests.description@ </td>
         <if @tests.timestamp@ eq "">
-          <td> No Data </td><td>-</td><td>-</td>
-          <td style="color:#ff0000"> fail </td>
+          <td>No data</td>
+          <td>-</td>
+          <td align="right">-</td>
+          <td align="right">-</td>
         </if><else>
           <td>
             <if @tests.fails@ gt 0>
@@ -196,5 +200,5 @@
     </if>
     
   </blockquote>
-<p><a href="../doc/">Documentation</a></p>
+<p><a href="doc/">Documentation</a>
 

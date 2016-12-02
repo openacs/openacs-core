@@ -5,6 +5,7 @@ ad_page_contract {
     package_key:token
     {showsource:boolean 0}
     {quiet:boolean 1}
+    {return_url ""}
 } -properties {
     title:onevalue
     context_bar:onevalue
@@ -106,7 +107,9 @@ set resource_file_url [export_vars -base init-file-resource {
     {absolute_file_path $testcase_file}
 }]
 
-set return_url [export_vars -base . { { view_by testcase } quiet { by_package_key $package_key } }]
+if {$return_url eq ""} {
+  set return_url [export_vars -base . { { view_by testcase } quiet { by_package_key $package_key } }]
+}
 
 set quiet_url "[export_vars -base testcase -entire_form -exclude {quiet}]&quiet=1"
 set verbose_url "[export_vars -base testcase -entire_form -exclude {quiet}]&quiet=0"
