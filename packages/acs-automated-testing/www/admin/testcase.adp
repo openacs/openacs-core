@@ -66,7 +66,15 @@
     </tr>
     <multiple name="tests_quiet">
       <tr>
-        <td>@tests_quiet.result@</td>
+        <if @tests_quiet.result@ eq "fail">
+          <td class="fail">FAILED</td>
+        </if>
+        <elseif @tests_quiet.result@ eq "pass">
+          <td class="ok">@tests_quiet.result@</td>
+        </elseif>
+        <else>
+          <td>@tests_quiet.result@</td>
+        </else>
         <td align="right" class="@tests_quiet.result@">@tests_quiet.count@</td>
       </tr>
     </multiple>
