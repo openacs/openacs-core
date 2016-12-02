@@ -22,7 +22,7 @@ foreach var_name {system_owner admin_owner host_administrator outgoing_sender ne
 if {$password ne $password_confirmation  } {
     install_return 200 "Passwords Don't Match" [subst {
 The passwords you've entered don't match. 
-Please <a href="#" onClick="history.back();return false;">try again</a>.
+Please <a class="back-buttons" href="#">try again</a>.
     }]
     return
 }
@@ -103,7 +103,7 @@ if { ![db_string user_exists {
 	install_return 200 "Unable to Create Administrator" [subst {
 Unable to create the site-wide administrator:
 <blockquote><pre>[ns_quotehtml $::errorInfo]</pre></blockquote>
-Please <a href="#" onClick="history.back();return false;">try again</a>.
+Please <a class="back-buttons" href="#">try again</a>.
 }
         return
     }
@@ -199,6 +199,18 @@ if { $post_installation_message ne "" } {
     ns_write "
 <p> When the server is back up you can visit <a href=\"/acs-admin/\">the site-wide administration pages</a> </p>"
 }
+
+ns_write [subst {
+   <script type='text/javascript' nonce='$::__csp_nonce'>
+     var elems = document.getElementsByClassName('back-buttons');
+     for (var i = 0, l = elems.length; i < l; i++) {
+        elems\[i\].addEventListener('click', function (event) {
+           event.preventDefault();
+           history.back();
+        }, false);
+     }
+   </script>
+}]
 
 ns_write [install_footer]
 
