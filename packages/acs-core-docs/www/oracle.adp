@@ -51,7 +51,7 @@ version. Find the docs here:</p><div class="itemizedlist"><ul class="itemizedlis
 </ul></div><p>It is generally useful to run a particular Oracle version with
 its latest patchset. At the time of writing these were 8.1.7.4 and
 9.2.0.5, both of which are considered to be very stable.</p><p>To be able to download a patchset, you need a (to-pay-for)
-account on <a class="ulink" href="metalink.oracle.com" target="_top">Metalink</a>. You may find the appropriate patchset by
+account on <a class="ulink" href="http://metalink.oracle.com" target="_top">Metalink</a>. You may find the appropriate patchset by
 following <a class="ulink" href="http://openacs.org/forums/message-view?message_id=33004" target="_top">Andrew&#39;s suggestion</a>.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">

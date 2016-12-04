@@ -108,7 +108,7 @@
 
     <para> 
       To be able to download a patchset, you need a (to-pay-for) account on <ulink
-      url="metalink.oracle.com">Metalink</ulink>. You may find the appropriate
+	      url="http://metalink.oracle.com">Metalink</ulink>. You may find the appropriate
       patchset by following <ulink
       url="http://openacs.org/forums/message-view?message_id=33004">Andrew&#39;s
       suggestion</ulink>.
