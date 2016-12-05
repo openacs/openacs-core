@@ -43,7 +43,7 @@
   </else>
 
   <ul>
-    <li><a href="rerun?testcase_id=@testcase_id@&amp;package_key=@package_key@&amp;quiet=@quiet@">Rerun this test case</a></li>
+    <li><a href="@rerun_url@">Rerun this test case</a></li>
     <li><a href="@resource_file_url@">Resource test definition file</a></li>
     <li><a href="@return_url@">Back to testcase list</a></li>
   </ul>
@@ -115,7 +115,7 @@
   </table>
 
   <ul>
-    <li><a href="rerun?testcase_id=@testcase_id@&amp;package_key=@package_key@&amp;quiet=@quiet@">Rerun this test case</a></li>
+    <li><a href="@rerun_url@">Rerun this test case</a></li>
     <li><a href="@resource_file_url@">Resource test definition file</a></li>
     <li><a href="@return_url@">Back to testcase list</a></li>
   </ul>

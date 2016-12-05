@@ -107,6 +107,8 @@ set resource_file_url [export_vars -base init-file-resource {
     {absolute_file_path $testcase_file}
 }]
 
+set rerun_url [export_vars -base rerun {testcase_id package_key quiet {return_url [ad_return_url]}}]
+
 if {$return_url eq ""} {
   set return_url [export_vars -base . { { view_by testcase } quiet { by_package_key $package_key } }]
 }
