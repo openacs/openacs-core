@@ -795,12 +795,16 @@ $$ LANGUAGE plpgsql stable strict;
 --
 CREATE OR REPLACE FUNCTION cr_revision_latest_tr () RETURNS trigger AS $$
 DECLARE
-  v_latest_revision      cr_revisions.revision_id%TYPE;
+  v_content_type      cr_items.content_type%TYPE;
 BEGIN
 
-  select latest_revision from cr_items into v_latest_revision where item_id = new.item_id;
-
-  if v_latest_revision <> new.revision_id then
+  select content_type from cr_items into v_content_type where item_id = new.item_id;
+  --
+  -- Don't set the latest revision via trigger, since other means in
+  -- the xotcl-core frame work take care for it. This is not the most
+  -- general solution, but improves the situation for busy sites.
+  --
+  if substring(v_content_type,1,2) != '::' then
      update cr_items set latest_revision = new.revision_id
      where item_id = new.item_id;
   end if;
