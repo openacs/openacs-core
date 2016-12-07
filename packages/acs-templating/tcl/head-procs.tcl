@@ -42,15 +42,15 @@ ad_proc -public template::add_script {
 } {
     @param async   whether execution of the script should be executed asynchronously
                    as soon as it is available
-    @param charset the charset attribute of the script tag, ie. the character 
+    @param charset the charset attribute of the script tag, ie. the character
                    set of the script if it differs from the main document
     @param crossorigin  Enumerated attribute to indicate whether CORS
-                   (Cross-Origin Resource Sharing) should be used 
+                   (Cross-Origin Resource Sharing) should be used
     @param defer   whether execution of the script should be defered until after
                    the page has been loaded
     @param integrity provide hash values for W3C Subresource Integrity recommentation
     @param order   specify inclusion order
-    @param script  the inline script for the body of the script tag.  This 
+    @param script  the inline script for the body of the script tag.  This
                    parameter will be ignored if a value has been supplied for src
     @param section section, where script is added ("head" or "body")
     @param src     the src attribute of the script tag, ie. the source url of the
@@ -86,28 +86,28 @@ ad_proc -public template::head::add_script {
     {-type "text/javascript"}
 } {
     Add a script to the head section of the document to be returned to the
-    users client.  A script library in an external file may only be included 
-    once; subsequent calls to add_script will replace the existing entry.  
-    Anonymous script blocks will be added without checking for duplicates; the 
-    caller must ensure that anonymous script blocks are not inadvertantly added 
+    users client.  A script library in an external file may only be included
+    once; subsequent calls to add_script will replace the existing entry.
+    Anonymous script blocks will be added without checking for duplicates; the
+    caller must ensure that anonymous script blocks are not inadvertantly added
     multiple times.  You <strong>must</strong> supply either src or script.
 
     @param async   whether execution of the script should be executed asynchronously
                    as soon as it is available
-    @param charset the charset attribute of the script tag, ie. the character 
+    @param charset the charset attribute of the script tag, ie. the character
                    set of the script if it differs from the main document
     @param crossorigin  Enumerated attribute to indicate whether CORS
-                   (Cross-Origin Resource Sharing) should be used 
+                   (Cross-Origin Resource Sharing) should be used
     @param defer   whether execution of the script should be defered until after
                    the page has been loaded
     @param integrity provide hash values for W3C Subresource Integrity recommentation
     @param order   specify inclusion order
-    @param script  the inline script for the body of the script tag.  This 
+    @param script  the inline script for the body of the script tag.  This
                    parameter will be ignored if a value has been supplied for src
     @param src     the src attribute of the script tag, ie. the source url of the
                    script
     @param type    the type attribute of the script tag, eg. 'text/javascript'
-    
+
 } {
     if {$defer_p} {
         set defer defer
@@ -130,7 +130,7 @@ ad_proc -public template::head::add_script {
         # For the time being, not all browsers support
         # nonces. According to the spects the added 'unsafe-inline',
         # is ignored on browsers supporting nonces.
-        # 
+        #
         # We could restrict setting of unsafe-inline to certain
         # browsers by checking the user agent.
         #
@@ -154,24 +154,24 @@ ad_proc -public template::head::add_link {
     {-type ""}
 } {
     Add a link tag to the head section of the document to be returned to the
-    users client.  A given target document may only be added once for a 
-    specified relation; subsequent calls to add_link will replace the existing 
-    entry.  
+    users client.  A given target document may only be added once for a
+    specified relation; subsequent calls to add_link will replace the existing
+    entry.
 
     @param crossorigin  Enumerated attribute to indicate whether CORS
-                   (Cross-Origin Resource Sharing) should be used 
+                   (Cross-Origin Resource Sharing) should be used
     @param href    the href attribute of the link tag, eg. the target document
                    of the link
     @param integrity provide hash values for W3C Subresource Integrity recommentation
-    @param lang    the lang attribute of the link tag specifying the language 
+    @param lang    the lang attribute of the link tag specifying the language
                    of its attributes if they differ from the document language
     @param media   the media attribute of the link tag describing which display
-                   media this link is relevant to.  This may be a comma 
+                   media this link is relevant to.  This may be a comma
     @param order   specify inclusion order
     @param rel     the rel attribute of the link tag defining the relationship
                    of the linked document to the current one, eg. 'stylesheet'
     @param title   the title attribute of the link tag describing the target of
-                   this link 
+                   this link
     @param type    the type attribute of the link tag, eg. 'text/css'
                    separated list of values, eg. 'screen,print,braille'
 } {
@@ -187,20 +187,20 @@ ad_proc -public template::head::add_meta {
 } {
     Add a meta tag to the head section of the document to be returned to the
     users client.  A meta tag with a given name or http-equiv may only be added
-    once; subsequent calls to add_meta will replace the existing entry.  You 
+    once; subsequent calls to add_meta will replace the existing entry.  You
     <strong>must</strong> supply either name or http_equiv.
 
-    @param http_equiv the http-equiv attribute of the meta tag, ie. the 
+    @param http_equiv the http-equiv attribute of the meta tag, ie. the
                       HTTP header which this metadata is equivalent to
                       eg. 'content-type'
-    @param name       the name attribute of the meta tag, ie. the metadata 
+    @param name       the name attribute of the meta tag, ie. the metadata
                       identifier
-    @param scheme     the scheme attribute of the meta tag defining which 
-                      metadata scheme should be used to interpret the metadata, 
+    @param scheme     the scheme attribute of the meta tag defining which
+                      metadata scheme should be used to interpret the metadata,
                       eg. 'DC' for Dublin Core (http://dublincore.org/)
     @param content    the content attribute of the meta tag, ie the metadata
                       value
-    @param lang       the lang attribute of the meta tag specifying the language 
+    @param lang       the lang attribute of the meta tag specifying the language
                       of its attributes if they differ from the document language
 } {
     variable ::template::head::metas
@@ -227,18 +227,18 @@ ad_proc -public template::head::add_style {
 } {
 
     Add an embedded css style declaration
-    
+
     @author Dave Bauer (dave@thedesignexperience.org)
     @creation-date 2007-11-30
-    
+
     @param style CSS content to be included in the style tag
     @param type    the type attribute of the link tag, eg. 'text/css'
     @param media   the media attribute of the link tag describing which display
-                   media this link is relevant to.  This may be a comma 
+                   media this link is relevant to.  This may be a comma
                    separated list of values, eg. 'screen,print,braille'
     @param title   the title attribute of the link tag describing the target of
-                   this link 
-    @param lang    the lang attribute of the link tag specifying the language 
+                   this link
+    @param lang    the lang attribute of the link tag specifying the language
                    of its attributes if they differ from the document language
 } {
     variable ::template::head::styles
@@ -271,21 +271,21 @@ ad_proc -public template::head::add_javascript {
     {-script ""}
     {-src ""}
 } {
-    Add a script of type 'text/javascript' to the head section of the document 
-    to be returned to the users client.  This function is a wrapper around 
+    Add a script of type 'text/javascript' to the head section of the document
+    to be returned to the users client.  This function is a wrapper around
     template::head::add_script.  You must supply either src or script.
 
     @param async   whether execution of the script should be executed asynchronously
                    as soon as it is available
-    @param charset the charset attribute of the script tag, ie. the character 
+    @param charset the charset attribute of the script tag, ie. the character
                    set of the script if it differs from the main document
     @param crossorigin  Enumerated attribute to indicate whether CORS
-                   (Cross-Origin Resource Sharing) should be used 
+                   (Cross-Origin Resource Sharing) should be used
     @param defer   whether execution of the script should be defered until after
                    the page has been loaded
     @param integrity provide hash values for W3C Subresource Integrity recommentation
     @param order   specify inclusion order
-    @param script  the inline script for the body of the script tag.  This 
+    @param script  the inline script for the body of the script tag.  This
                    parameter will be ignored if a value has been supplied for
                    src
     @param src     the src attribute of the script tag, ie. the source url of the
@@ -312,22 +312,22 @@ ad_proc -public template::head::add_css {
     {-order "0"}
 } {
     Add a link tag with relation type 'stylesheet' or 'alternate stylesheet',
-    and type 'text/css' to the head section of the document to be returned to 
-    the users client.  A given target stylesheet may only be added once; 
-    subsequent calls to add_css will replace the existing entry.  This function 
-    is a wrapper around template::head::add_link.  
+    and type 'text/css' to the head section of the document to be returned to
+    the users client.  A given target stylesheet may only be added once;
+    subsequent calls to add_css will replace the existing entry.  This function
+    is a wrapper around template::head::add_link.
 
-    @param href      the href attribute of the link tag, eg. the target 
+    @param href      the href attribute of the link tag, eg. the target
                      stylesheet
-    @param alternate sets the rel attribute of the link tag defining to 
-                     'alternate stylesheet' if set, sets it to 'stylesheet' 
+    @param alternate sets the rel attribute of the link tag defining to
+                     'alternate stylesheet' if set, sets it to 'stylesheet'
                      otherwise
-    @param media     the media attribute of the link tag describing which 
-                     display media this link is relevant to.  This may be a 
+    @param media     the media attribute of the link tag describing which
+                     display media this link is relevant to.  This may be a
                      comma separated list of values, eg. 'screen,print,braille'
-    @param title     the title attribute of the link tag describing the target 
-                     of this link 
-    @param lang      the lang attribute of the link tag specifying the language 
+    @param title     the title attribute of the link tag describing the target
+                     of this link
+    @param lang      the lang attribute of the link tag specifying the language
                      of its attributes if they differ from the document language
 
     @see template::head::add_link
@@ -352,11 +352,11 @@ ad_proc -public template::add_body_handler {
     {-script:required}
     {-identifier anonymous}
 } {
-    Adds javascript code to an event handler in the body tag.  Several 
-    javascript code blocks may be assigned to each handler by subsequent calls 
+    Adds javascript code to an event handler in the body tag.  Several
+    javascript code blocks may be assigned to each handler by subsequent calls
     to template::add_body_handler.
 
-    <p>If your script may only be added once you may supply an identifier.  
+    <p>If your script may only be added once you may supply an identifier.
     Subsequent calls to template::add_body_handler with the same identifier
     will replace your script rather than appending to it.</p>
 
@@ -376,7 +376,7 @@ ad_proc -public template::add_body_handler {
       <li>onkeyup</li>
     </ul>
 
-    @param event      the event during which the supplied script should be 
+    @param event      the event during which the supplied script should be
                       executed
     @param script     the javascript code to execute
     @param identifier a name, if supplied, used to ensure this javascript code
@@ -409,14 +409,14 @@ ad_proc -public template::add_body_script {
 
     @param async   whether execution of the script should be executed asynchronously
                    as soon as it is available
-    @param charset the charset attribute of the script tag, ie. the character 
+    @param charset the charset attribute of the script tag, ie. the character
                    set of the script if it differs from the main document
     @param crossorigin  Enumerated attribute to indicate whether CORS
-                   (Cross-Origin Resource Sharing) should be used 
+                   (Cross-Origin Resource Sharing) should be used
     @param defer   whether execution of the script should be defered until after
                    the page has been loaded
     @param integrity provide hash values for W3C Subresource Integrity recommentation
-    @param script  the inline script for the body of the script tag.  This 
+    @param script  the inline script for the body of the script tag.  This
                    parameter will be ignored if a value has been supplied for
                    src
     @param src     the src attribute of the script tag, ie. the source url of the
@@ -438,13 +438,13 @@ ad_proc -public template::add_body_script {
     if {$src eq "" && $script eq ""} {
         error "You must supply either -src or -script."
     }
-    
+
     if {$script ne ""} {
         #
         # For the time being, not all browsers support
         # nonces. According to the spects the added 'unsafe-inline',
         # is ignored on browsers supporting nonces.
-        # 
+        #
         # We could restrict setting of unsafe-inline to certain
         # browsers by checking the user agent.
         #
@@ -462,15 +462,15 @@ ad_proc -public template::add_header {
 } {
     Add a header include to the beginning of the document body.  This function
     is used by site wide services to add functionality to the beginning of a
-    page.  Examples include the developer support toolbar, acs-lang translation 
+    page.  Examples include the developer support toolbar, acs-lang translation
     interface and the acs-templating WYSIWYG editor textarea place holder.  If
     you are not implementing a site wide service, you should not be using this
     function to add content to your page.  You must supply either src or html.
 
-    @param direction whether the header should be added as the outer most 
+    @param direction whether the header should be added as the outer most
                      page content or the inner most
     @param src       the path to the include
-    @param params    a list of name, value pairs to pass as parameter to the 
+    @param params    a list of name, value pairs to pass as parameter to the
                      include
     @param html      literal html to include in the page.  This parameter will
                      be ignored if a values has been supplied for src.
@@ -507,15 +507,15 @@ ad_proc -public template::add_footer {
 } {
     Add a footer include to the end of the document body.  This function
     is used by site wide services to add functionality to the end of a
-    page.  Examples include the developer support toolbar, acs-lang translation 
+    page.  Examples include the developer support toolbar, acs-lang translation
     interface and the acs-templating WYSIWYG editor textarea place holder.  If
     you are not implementing a site wide service, you should not be using this
     function to add content to your page.  You must supply either src or html.
 
-    @param direction whether the footer should be added as the outer most 
+    @param direction whether the footer should be added as the outer most
                      page content or the inner most
     @param src       the path to the include
-    @param params    a list of name, value pairs to pass as parameter to the 
+    @param params    a list of name, value pairs to pass as parameter to the
                      include
     @param html      literal html to include in the page.  This parameter will
                      be ignored if a values has been supplied for src.
@@ -609,7 +609,7 @@ ad_proc template::head::prepare_multirows {} {
         array unset links
     }
 
-    # Generate the <style /> tag multirow 
+    # Generate the <style /> tag multirow
     variable ::template::head::styles
     template::multirow create ___style type title lang media style
     if {[array exists styles]} {
@@ -728,7 +728,7 @@ ad_proc template::get_body_event_handlers {
 
         #
         # Collect all entries for one event type (e.g. "onload")
-        # 
+        #
         foreach name [array names body_handlers] {
             set event [lindex [split $name ","] 0]
             foreach javascript $body_handlers($name) {
@@ -772,40 +772,39 @@ ad_proc template::add_confirm_handler {
     {-message "Are you sure?"}
     {-CSSclass "acs-confirm"}
     {-id}
+    {-formfield}
 } {
-    Register an event handler for confirmation dialogs
-    for elements either with an specified ID or for elements
-    of a CSS class (default "acs_confirm").
+    Register an event handler for confirmation dialogs for elements
+    either with a specified ID, CSS class, or for a formfield targeted
+    by form id and field name.
 
-    @event    register confirm handler for this type of event
-    @id       register confirm handler for this HTML ID
-    @CSSclass register confirm handler for this CSS class
-    @message  Message to be displayed in the confirmation dialog
+    @param event     register confirm handler for this type of event
+    @param id        register confirm handler for this HTML ID
+    @param CSSclass  register confirm handler for this CSS class
+    @param formfield register confirm handler for this formfield, specified
+                     in a list of two elements in the form
+                     <code>{ form_id field_name }</code>
+    @param message  Message to be displayed in the confirmation dialog
     @author  Gustaf Neumann
 } {
+    set script [subst {
+        if (!confirm('$message')) {
+            event.preventDefault();
+        }
+    }]
+
+    set cmd [list template::add_event_listener \
+                 -event $event -script $script -preventdefault=false]
+
     if {[info exists id]} {
-        template::add_body_script -script [subst {
-            document.getElementById('$id').addEventListener('$event', function (event) {
-                if (!confirm('$message')) {
-                    event.preventDefault();
-                };
-            }, false);
-        }]
+        lappend cmd -id $id
+    } elseif {[info exists formfield]} {
+        lappend cmd -formfield $formfield
     } else {
-        #
-        # In case, no id is provided, use the "CSSclass"
-        #
-        template::add_body_script -script [subst {
-            var elems = document.getElementsByClassName('$CSSclass');
-            for (var i = 0, l = elems.length; i < l; i++) {
-                elems\[i\].addEventListener('$event', function (event) {
-                    if (!confirm('$message')) {
-                        event.preventDefault();
-                    };
-                }, false);
-            }
-        }]
+        lappend cmd -CSSclass $CSSclass
     }
+
+    {*}$cmd
 }
 
 
@@ -813,42 +812,54 @@ ad_proc template::add_event_listener {
     {-event click}
     {-CSSclass "acs-listen"}
     {-id}
+    {-formfield}
     {-usecapture:boolean false}
     {-preventdefault:boolean true}
     {-script:required}
 } {
-    
-    Register an event handler for elements either with an specified ID
-    or for elements of a CSS class.
 
-    @event    register confirm handler for this type of event
-    @id       register confirm handler for this HTML ID
-    @CSSclass register confirm handler for this CSS class
-    @message  Message to be displayed in the confirmation dialog
+    Register an event handler for elements either with a specified ID,
+    CSS class, or for a formfield targeted by form id and field name.
+
+    @param event     register handler for this type of event
+    @param id        register handler for this HTML ID
+    @param CSSclass  register handler for this CSS class
+    @param formfield register handler for this formfield, specified
+                     in a list of two elements in the form
+                     <code>{ form_id field_name }</code>
     @author  Gustaf Neumann
 } {
     set prevent [expr {$preventdefault_p ? "event.preventDefault();" : ""}]
 
+    set script [subst {
+        e.addEventListener('$event', function (event) {$prevent$script}, $usecapture_p);
+    }]
+
     if {[info exists id]} {
-        template::add_body_script -script [subst {
+        set script [subst {
             var e = document.getElementById('$id');
-            if (e !== null) {
-                e.addEventListener('$event', function (event) {$prevent$script}, $usecapture_p);
-            }
+            if (e !== null) {$script}
+        }]
+    } elseif {[info exists formfield]} {
+        lassign $formfield id name
+        set script [subst {
+            var e = document.getElementById('$id').elements.namedItem('$name');
+            if (e !== null) {$script}
         }]
     } else {
         #
         # In case, no id is provided, use the "CSSclass"
         #
-        template::add_body_script -script [subst {
+        set script [subst {
             var elems = document.getElementsByClassName('$CSSclass');
             for (var i = 0, l = elems.length; i < l; i++) {
-                elems\[i\].addEventListener('$event', function (event) {
-                    $prevent;$script
-                }, $usecapture_p);
+               var e = elems\[i\];
+               $script
             }
         }]
     }
+
+    template::add_body_script -script $script
 }
 
 
