@@ -32,4 +32,5 @@
   <msg key="Request_Notification">Benachrichtigungsfunktion aktivieren</msg>
   <msg key="SUBJECT">BETREFF:</msg>
   <msg key="Unsubscribe">Benachrichtigungsfunktion deaktivieren</msg>
+  <msg key="Subscribe_to_notification">Subskribiere Benachrichtigungen:</msg>
 </message_catalog>

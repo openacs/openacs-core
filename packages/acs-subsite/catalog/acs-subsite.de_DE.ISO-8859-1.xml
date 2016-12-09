@@ -27,7 +27,7 @@
   <msg key="Administrative_options">Verwaltungsoptionen für diesen Benutzer</msg>
   <msg key="Alert_Type">Art der Benachrichtigung</msg>
   <msg key="another_picture">ein neues Bild</msg>
-  <msg key="Answer">Antwort:</msg>
+  <msg key="Answer">Antwort</msg>
   <msg key="Application_Error">Anwendungsfehler</msg>
   <msg key="Applications">Anwendungen</msg>
   <msg key="Approve">Freischalten</msg>
@@ -36,7 +36,7 @@
   <msg key="Authority">Authentifizierungsstelle</msg>
   <msg key="Bad_Password">Falsches Passwort</msg>
   <msg key="Ban">Deaktivieren</msg>
-  <msg key="Basic_Information">Allgemeine Informationen:</msg>
+  <msg key="Basic_Information">Allgemeine Informationen</msg>
   <msg key="Biographies">Biographien</msg>
   <msg key="Biography">Lebenslauf</msg>
   <msg key="Biography_Mime_Type">Mime Typ für die Biographie</msg>
@@ -59,7 +59,7 @@
   <msg key="Communities">Communities</msg>
   <msg key="communities">Communities</msg>
   <msg key="community">Community</msg>
-  <msg key="Confirm">Bestätigen:</msg>
+  <msg key="Confirm">Bestätigen</msg>
   <msg key="confirmation_password_changed">Die Änderung Ihres Passworts war erfolgreich.</msg>
   <msg key="Continue">Fortsetzen</msg>
   <msg key="Continue_to_your_account">Weiter nach %pvt_home_name%</msg>
@@ -68,7 +68,7 @@
   <msg key="create_asm">Erstellen Sie einen neuen Registrationsfragebogen</msg>
   <msg key="Create_new_community">Neue %pretty_name% erstellen</msg>
   <msg key="Create_new_subsite">Neue Subsite erstellen</msg>
-  <msg key="Current_Password">Aktuelles Passwort:</msg>
+  <msg key="Current_Password">Aktuelles Passwort</msg>
   <msg key="Currently_invisible_msg">&lt;p&gt; Ihr Onlinestatus ist für andere Benutzer verborgen. &lt;/p&gt;</msg>
   <msg key="Currently_visible_msg">&lt;p&gt; Ihr Onlinestatus ist für andere Benutzer sichtbar. &lt;/p&gt; </msg>
   <msg key="Customize_Question">Frage ändern</msg>
@@ -97,7 +97,7 @@
   <msg key="email_as_text_admin">e-Mail als Text anzeigen</msg>
   <msg key="email_body_Forgotten_password">Hier sind Ihre neuen Anmeldedaten: %account_id_label%: %account_id% %password_label%: %password%. Bitte ändern Sie Ihr Passwort unter folgendem Link: %reset_password_url%</msg>
   <msg key="email_body_Registration_password">Vielen Dank für Ihre Registrierung bei %system_name%. Mit folgenden Daten können Sie sich bei %system_url% anmelden: %account_id_label%: %account_id% %password_label%: %password% Bitte ändern Sie Ihr Passwort unter folgendem Link: %reset_password_url%</msg>
-  <msg key="Email_Confirmation">E-Mail-Adresse bestätigen:</msg>
+  <msg key="Email_Confirmation">E-Mail-Adresse bestätigen</msg>
   <msg key="email_dont_show">Meine e-Mail nicht anzeigen</msg>
   <msg key="email_dont_show_admin">e-Mail nicht anzeigen</msg>
   <msg key="email_not_available">Nicht verfügbar</msg>
@@ -109,7 +109,8 @@
   <msg key="Enter_your_username_to">Um Ihr Passwort zurücksetzen zu lassen, geben Sie bitte zunächst Ihre Benutzeridentifikation ein. </msg>
   <msg key="Erase_Portrait">Bild löschen</msg>
   <msg key="erase_portrait">Bild löschen</msg>
-  <msg key="Error">Fehler</msg>
+  <msg key="Error">Fehlerbeschreibung</msg>
+  <msg key="error">Fehler</msg>
   <msg key="Error_sending_mail">Fehler beim Senden der E-Mail</msg>
   <msg key="Error_sending_verification_mail">Die Email-Nachricht zur Überprüfung der Adresse konte nicht gesendet werden</msg>
   <msg key="Error_trying_to_register">Es trat ein Fehler auf während wir versucht haben, einen Account für Sie anzulegen.</msg>
@@ -200,7 +201,7 @@
 </msg>
   <msg key="lt_registration_request_submitted">Ihr Registrierungsantrag wurde an den Administrator von %system_name% übermittelt. Sie wurden noch nicht freigeschaltet.</msg>
   <msg key="lt_Saving_email_address_">E-Mail-Adresse und Passwort werden gespeichert.</msg>
-  <msg key="lt_Show_everyone_else_at">Zeigen Sie, wer Sie sind bei %system_name%</msg>
+  <msg key="lt_Show_everyone_else_at">Zeigen Sie, wer Sie sind bei %system_name%:</msg>
   <msg key="lt_Sorry_but_it_seems_th">Sie haben keinen Zugang zu %system_name%. Wahrscheinlich wurde Ihr Benutzerkonto deaktiviert.</msg>
   <msg key="lt_Stop_inheriting_permi">Aufhören, die Berechtigungen von %parent_object_name% zu vererben</msg>
   <msg key="lt_Sure_erase_user_por">Wollen Sie das Bild dieses Benutzers wirklich löschen?</msg>
@@ -214,7 +215,7 @@
   <msg key="lt_To_confirm_your_regis">Zur Bestätigung Ihrer Registrierung klicken Sie bitte auf %confirmation_url%.</msg>
   <msg key="lt_Upload_your_favorite">Die Datei muss im JPEG oder GIF-Format vorliegen und sich auf Ihrem PC befinden. Eine Verlinkung mit einem Bild im Internet ist nicht möglich.</msg>
   <msg key="lt_Uploaded_pretty_date">Hochgeladen am: %pretty_date%</msg>
-  <msg key="lt_Uploaded_publish_date">Hochgeladen am:</msg>
+  <msg key="lt_Uploaded_publish_date">Hochgeladen am: %publish_date%</msg>
   <msg key="lt_Use_the_Browse_button">Klicken Sie auf 'Durchsuchen...', wählen Sie die gewünschte Datei aus und klicken Sie auf 'Öffnen'. </msg>
   <msg key="lt_User_has_portrait_title">Dieser Benutzer hat seinen Lebenslauf oder sein Bild bereitgestellt.</msg>
   <msg key="lt_We_cant_find_you">Ihre Benutzeridentifikation (%user_id%) konnte nicht in der Benutzerdatenbank gefunden werden. Wahrscheinlich wurde Ihr Benutzerkonto gelöscht.</msg>
@@ -245,9 +246,9 @@
   <msg key="Missing_argument">Fehlendes Argument</msg>
   <msg key="mount">mount</msg>
   <msg key="My_Account">Mein Account</msg>
-  <msg key="Name">Name:</msg>
+  <msg key="Name">Name</msg>
   <msg key="new_application">neue Applikation</msg>
-  <msg key="New_Password">Neues Passwort:</msg>
+  <msg key="New_Password">Neues Passwort</msg>
   <msg key="No_applications">Keine Anwendungen vorhanden</msg>
   <msg key="no_assessment">Kein Assessment verfügbar</msg>
   <msg key="No_ISO_Codes">Keine ISO-Codes geladen</msg>
@@ -283,7 +284,7 @@
   <msg key="Privacy">Privatsphäre</msg>
   <msg key="Problem_auth_no_memb">Es gab einen Fehler beim authentifizieren des Accounts. Sehr wahrscheinlich enthält die Datenbank User mit keinem member_state.</msg>
   <msg key="Profile">Profil</msg>
-  <msg key="Question">Frage:</msg>
+  <msg key="Question">Frage</msg>
   <msg key="Re_enable">Aktivieren</msg>
   <msg key="read">Lesen</msg>
   <msg key="Recover_Password">Passwort zurücksetzen</msg>
@@ -332,7 +333,7 @@
   <msg key="This_user_has_left_the">Dieser Benutzer ist nicht mehr bei dotLRN registriert.</msg>
   <msg key="To_log_in_visit_the">Um sich anzumelden, gehen Sie auf die</msg>
   <msg key="Topic">Thema</msg>
-  <msg key="type_specific_info">Typspezifische Informationen:</msg>
+  <msg key="type_specific_info">Typ-spezifische Informationen</msg>
   <msg key="Unknown_email">Email-Adresse unbekannt</msg>
   <msg key="unmount">abhängen</msg>
   <msg key="UP">Eine Ebene nach oben</msg>
@@ -368,7 +369,7 @@
   <msg key="You_have_no_email_alerts">Sie haben derzeit keine Benachrichtigungsfunktion aktiviert.</msg>
   <msg key="Your_Account">Benutzerkonto</msg>
   <msg key="Your_discussion_alerts">Ihre Benachrichtigungen für Diskussionsforen</msg>
-  <msg key="Your_Portrait">Ihr Bild:</msg>
+  <msg key="Your_Portrait">Ihr Bild</msg>
   <msg key="Your_system_alerts">Ihre Benachrichtigungen für %gc_system_name%</msg>
   <msg key="Youre_marked_as_back">Sie sind unter %site_link% als wieder anwesend gekennzeichnet.</msg>
 </message_catalog>

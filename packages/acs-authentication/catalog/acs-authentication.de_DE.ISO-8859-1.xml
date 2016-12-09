@@ -2,4 +2,7 @@
 <message_catalog package_key="acs-authentication" locale="de_DE" charset="ISO-8859-1">
 
   <msg key="Invalid_username_or_password">Benutzeridentifikation oder Passwort ist falsch</msg>
+    <msg key="lt_Not_getting_the_results_you_expected">Erhalten Sie
+    die erwarteten Ergebnisse nicht? Versuchen Sie:</msg>
+
 </message_catalog>
