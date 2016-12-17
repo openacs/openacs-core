@@ -26,6 +26,10 @@ ad_proc acs_mail_lite::utils::build_subject {
     the mime::word_encode proc to do it or local code (word_encode is
     buggy in mime < 1.5.2 )
 
+    A purely tcllib based version would be
+        [mime::word_encode utf-8 quoted-printable $subject]
+    but that would miss the safety-belt for newline handling
+
 } {
 
     set charset [string toupper $charset]
@@ -35,6 +39,20 @@ ad_proc acs_mail_lite::utils::build_subject {
     # 69 = 76 - 7 where 7 is for "=?"+"?Q?+"?="
     set maxlen [expr {69 - [string length $charset]}]
         
+    #
+    # Make sure, the subject line does not have surrounding white
+    # space/new lines
+    #
+    set subject [string trim $subject]
+
+    if {[regsub -all {[\r\n]} $subject " " s]} {
+        ad_log warning "subject line contains line breaks (replaced by space): '$subject' -> '$s'"
+        set subject $s
+    }
+    
+    #
+    # set up variables for loop
+    #
     set result ""
     set line ""
     set i 0
