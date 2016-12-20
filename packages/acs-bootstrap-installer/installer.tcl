@@ -319,6 +319,17 @@ proc install_admin_widget {} {
 
 }
 
+proc install_back_button_widget {} {    
+    return [subst {Please <a id="install-back-button" href="#">try again</a>.
+    <script type='text/javascript' nonce='[security::csp::nonce]'>
+     var e = document.getElementById('install-back-button');
+     e.addEventListener('click', function (event) {
+        event.preventDefault();
+        history.back();
+     }, false);
+    </script>}]
+}
+
 proc install_redefine_ad_conn {} {
 
     # Peter Marklund
