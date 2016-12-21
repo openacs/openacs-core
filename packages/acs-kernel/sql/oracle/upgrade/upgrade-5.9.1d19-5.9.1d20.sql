@@ -1,12 +1,3 @@
---
--- /packages/acs-kernel/sql/utilities-create.sql
---
--- Useful PL/SQL utility routines.
---
--- @author Jon Salz (jsalz@mit.edu)
--- @creation-date 12 Aug 2000
--- @cvs-id $Id$
---
 
 create or replace package util
 as
@@ -68,8 +59,7 @@ as
     TYPE primary_keys IS TABLE OF varchar2;
 
     function get_primary_keys(table IN varchar2)
-       return primary_keys
-	 PIPELINED;
+       return primary_keys;
 	 
 end util;
 /
