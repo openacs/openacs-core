@@ -1930,19 +1930,37 @@ ad_proc -public security::validated_host_header {} {
     #
     # Check against the virtual server configuration of NaviServer.
     #
-    if {[ns_info name] ne "NaviServer"} {
-        foreach s [ns_info servers] {
-            foreach driver {nssock nsssl} {
-                set section [ns_driversection -driver $driver -server $s]
-                if {$section eq ""} continue
-                set vloc [ns_config ns/module/$driver/servers $s]
-                if {$vloc ne ""
-                    && [util::split_location $vloc .proto vHost vPort]
-                    && $vHost eq $hostName
-                } {
-                    set $key 1
-                    return $host
-                }
+    if {[ns_info name] eq "NaviServer"} {
+        set s [ns_info server]
+        foreach driver {nssock nssock_v6 nssock_v4 nsssl} {
+            #
+            # Check ns_driversection for the current server
+            #
+            set section [ns_driversection -driver $driver -server $s]
+            if {$section eq ""} continue
+            set vloc [ns_config ns/module/$driver/servers $s]
+            if {$vloc ne ""
+                && [util::split_location $vloc .proto vHost vPort]
+                && $vHost eq $hostName
+            } {
+                ns_log notice "security::validated_host_header: found $host via config section"
+                set $key 1
+                return $host
+            }
+            #
+            # Check global driver installation with virtual servers
+            #
+            set section [ns_configsection ns/module/$driver/servers]
+            if {$section eq ""} continue
+            set names {}
+            foreach {key value} [ns_set array $section] {
+                if {$key ne $s} continue
+                lappend names $value
+            }
+            if {$host in $names} {
+                ns_log notice "security::validated_host_header: found $host via virtual server configuration"
+                set $key 1
+                return $host
             }
         }
     }
