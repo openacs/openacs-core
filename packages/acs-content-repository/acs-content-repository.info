@@ -9,7 +9,7 @@
     <implements-subsite-p>f</implements-subsite-p>
     <inherit-templates-p>t</inherit-templates-p>
     
-    <version name="5.9.1d25" url="http://openacs.org/repository/download/apm/acs-content-repository-5.9.1d25.apm">
+    <version name="5.9.1d26" url="http://openacs.org/repository/download/apm/acs-content-repository-5.9.1d26.apm">
         <owner url="http://openacs.org">OpenACS</owner>
         <summary>The canonical repository for OpenACS content.</summary>
         <release-date>2016-10-24</release-date>
@@ -21,7 +21,7 @@
         <license>GPL</license>
         <maturity>3</maturity>
 
-        <provides url="acs-content-repository" version="5.9.1d25"/>
+        <provides url="acs-content-repository" version="5.9.1d26"/>
         <requires url="acs-kernel" version="5.9.0"/>
         <requires url="acs-service-contract" version="5.9.0"/>
         <requires url="acs-tcl" version="5.9.1d2"/>

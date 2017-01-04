@@ -488,8 +488,8 @@ create table cr_revisions (
 create index cr_revisions_lob_idx ON cr_revisions(lob);
 create index cr_revisions_item_id_idx ON cr_revisions(item_id);
 
-create trigger cr_revisions_lob_trig before delete or update or insert
-on cr_revisions for each row execute procedure on_lob_ref();
+CREATE TRIGGER cr_revisions_lob_trig AFTER UPDATE or DELETE or INSERT
+ON cr_revisions FOR EACH ROW EXECUTE PROCEDURE on_lob_ref();
 
 create index cr_revisions_by_mime_type on cr_revisions(mime_type);
 create index cr_revisions_title_idx on cr_revisions(title);
