@@ -22,7 +22,7 @@
 -- GN
 
 
-DROP FUNCTION content_item__set_live_revision(integer, character varying, timestamp with time zone);
+DROP FUNCTION IF EXISTS content_item__set_live_revision(integer, character varying, timestamp with time zone);
 
 select define_function_args('content_item__set_live_revision','revision_id,publish_status;ready,publish_date;now(),is_latest;f');
 --
