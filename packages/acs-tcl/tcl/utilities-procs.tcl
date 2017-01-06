@@ -2556,22 +2556,18 @@ ad_proc util::split_location {location protoVar hostnameVar portVar} {
     
     @author Gustaf Neumann
     @return boolean value indicating success
-    @see util::split_location
+    @see util::join_location
 } {
     upvar $protoVar proto $hostnameVar hostname $portVar port
-    
-    if {
-        [regexp {^([a-z]+://)?([^:]+)(:[0-9]*)?$} $location . proto hostname port]
-        || [regexp {^([a-z]+://)?(\[[^\]]+\])(:[0-9]*)?$} $location . proto hostname port]
-    } {
-        if {$proto ne ""} {
-            lassign [split $proto :] proto .
-        }
-        if {$port eq "" && $proto ne ""} {
-            set port [dict get {http 80 https 443} $proto]
+
+    set urlInfo [ns_parseurl $location]
+    if {[dict exists $urlInfo proto] && [dict exists $urlInfo host]} {
+        set proto [dict get $urlInfo proto]
+        set hostname [dict get $urlInfo host]
+        if {[dict exists $urlInfo port]} {
+            set port [dict get $urlInfo port]
         } else {
-            # In case there is no proto, the port is set to ""
-            set port [string range $port 1 end]
+            set port [dict get {http 80 https 443} $proto]
         }
         set success 1
     } else {
@@ -4555,8 +4551,6 @@ ad_proc -public util::string_check_urlsafe {
 
 ad_proc -public util::which {prog} {
 
-    @author Gustaf Neumann
-
     Use environment variable PATH to search for the specified executable
     program. Replacement for UNIX command "which", avoiding exec.
 
@@ -4570,6 +4564,7 @@ ad_proc -public util::which {prog} {
     @return fully qualified name including path, when specified program is found, 
     or otherwise empty string
 
+    @author Gustaf Neumann
 } {
     switch $::tcl_platform(platform) {
         windows {
@@ -4939,6 +4934,112 @@ ad_proc -public ad_log {
     
     ns_log $level "${message}\n[uplevel ad_get_tcl_call_stack]${request}\n"
 }
+
+
+if {[ns_info name] ne "NaviServer"} {
+    #
+    # In case, we are not running under NaviServer, provide a proc
+    # compatible with NaviServer's built in ns_parseurl.
+    #
+    ad_proc ns_parseurl {url} {
+        Emulation of NaviServer's ns_parseurl
+        
+        @author Gustaf Neumann
+    } {
+        #puts stderr url=$url
+        set result ""
+        if {[regexp {^([a-zA-Z]+):(.*)$} $url . proto url]} {
+            #
+            # a protocol was specified
+            #
+            lappend result proto $proto
+        }
+        if {[regexp {^//([^/]+)(/?.*)$} $url . host url]} {
+            #
+            # two slashes -> host is specified
+            #
+            if {[regexp {^\[(.*)\]:([0-9]+)$} $host . host port]} {
+                # IP literal notation followed by port
+                lappend result host $host port $port
+            } elseif {[regexp {^\[(.*)\]$} $host . host port]} {
+                # IP literal notation followed with no port
+                lappend result host $host
+            } elseif {[regexp {^(.*):([0-9]+)$} $host . host port]} {
+                lappend result host $host port $port
+            } else {
+                lappend result host $host
+            }
+        }
+        if {[regexp {^/(.*)/([^/]+)$} $url . path tail]} {
+            lappend result path $path tail $tail
+        } elseif {[regexp {^/([^/]+)$} $url . tail]} {
+            lappend result path "" tail $tail
+        } elseif {$url in {"/" ""}} {
+            lappend result path {} tail {}
+        } else {
+            lappend result tail $url
+        }
+        return $result
+    }
+
+
+    package require tcltest 2.2
+    namespace import -force ::tcltest::*
+
+    ::tcltest::configure {*}$argv
+
+    test ns_parseurl-1.0 {basic syntax: plain call} -body {
+        ns_parseurl 
+    } -returnCodes error -result {wrong # args: should be "ns_parseurl url"}
+
+    test ns_parseurl-1.1 {full url, no port} -body {
+        ns_parseurl http://openacs.org/www/t.html
+    } -result {proto http host openacs.org path www tail t.html}
+
+    test ns_parseurl-1.2 {full url, no port} -body {
+        ns_parseurl http://openacs.org:80/www/t.html
+    } -result {proto http host openacs.org port 80 path www tail t.html}
+
+    test ns_parseurl-1.3 {full url, no port, no component} -body {
+        ns_parseurl http://openacs.org/
+    } -result {proto http host openacs.org path {} tail {}}
+
+    test ns_parseurl-1.4 {full url, no port, no component, no trailing slash} -body {
+        ns_parseurl http://openacs.org
+    } -result {proto http host openacs.org path {} tail {}}
+
+    test ns_parseurl-1.5 {full url, no port, one component} -body {
+        ns_parseurl http://openacs.org/t.html
+    } -result {proto http host openacs.org path {} tail t.html}
+
+    #
+    # relative URLs
+    #
+
+    test ns_parseurl-2.1 {relative url} -body {
+        ns_parseurl /www/t.html
+    } -result {path www tail t.html}
+
+    # legacy NaviServer, desired?
+    test ns_parseurl-2.2 {relative url, no leading /} -body {
+        ns_parseurl www/t.html
+    } -result {tail www/t.html}
+
+    #
+    # protocol relative (protocol agnostic) URLs (contained in RFC 3986)
+    #
+    test ns_parseurl-3.1 {protocol relative url with port} -body {
+        ns_parseurl //openacs.org/www/t.html
+    } -result {host openacs.org path www tail t.html}
+
+    test ns_parseurl-3.2 {protocol relative url without port} -body {
+        ns_parseurl //openacs.org:80/www/t.html
+    } -result {host openacs.org port 80 path www tail t.html}
+
+
+    cleanupTests
+}
+
 
 # Local variables:
 #    mode: tcl
