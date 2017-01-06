@@ -50,8 +50,8 @@ membership state.</p><p>The design choice of explicitly representing object iden
 with an integer primary key that is derived from a globally unique
 sequence is the key to eliminating redundant code and replacing it
 with generic <span class="emphasis"><em>object level
-services</em></span>.</p><div class="cvstag">($&zwnj;Id: object-identity.html,v 1.49.2.12
-2016/11/19 09:21:54 gustafn Exp $)</div>
+services</em></span>.</p><div class="cvstag">($&zwnj;Id: object-identity.xml,v 1.7 2006/07/17
+05:38:37 torbenb Exp $)</div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 		    leftLink="permissions-tediously-explained" leftLabel="Prev" leftTitle="OpenACS Permissions Tediously

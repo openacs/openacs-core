@@ -316,8 +316,8 @@ track old versions of your files, do controlled deployment of code
 from development to production, or get or contribute development
 code from openacs.org.</p></li></ul></div>
 </li>
-</ul></div><div class="cvstag">($&zwnj;Id: individual-programs.html,v 1.33.2.13
-2016/11/19 09:21:53 gustafn Exp $)</div>
+</ul></div><div class="cvstag">($&zwnj;Id: software.xml,v 1.26.2.2 2016/10/03
+09:17:51 gustafn Exp $)</div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 		    leftLink="install-steps" leftLabel="Prev" leftTitle="Basic Steps"

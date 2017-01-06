@@ -12,7 +12,7 @@ Chapter 5. Upgrading"
 <a name="upgrade-openacs-files" id="upgrade-openacs-files"></a>Upgrading
 the OpenACS files</h2></div></div></div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140198992442448" id="idp140198992442448"></a>Chosing a Method to Upgrade your
+<a name="idp140529128482688" id="idp140529128482688"></a>Chosing a Method to Upgrade your
 Files</h3></div></div></div><p>OpenACS is distributed in many different ways:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>as a collection of files</p></li><li class="listitem"><p>as one big tarball</p></li><li class="listitem"><p>via CVS</p></li><li class="listitem"><p>via automatic download from within the APM (package manager)</p></li>
 </ul></div><p>Upgrades work by first changing the file system (via any of the
@@ -27,7 +27,7 @@ greater installation&rdquo;</a>
 </p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140198992447536" id="idp140198992447536"></a>Methods of upgrading OpenACS files</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
+<a name="idp140529128487776" id="idp140529128487776"></a>Methods of upgrading OpenACS files</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem">
 <p>
 <strong>Upgrading files for a site which is not in a CVS
@@ -56,7 +56,7 @@ how to upgrade your local CVS repository with the latest OpenACS
 version, without overriding your own local customizations.</p><p>This diagram explains the basic idea. However, the labels are
 incorrect. Step 1(a) has been removed, and Step 1(b) should be
 labelled Step 1.</p><div class="figure">
-<a name="idp140198992457648" id="idp140198992457648"></a><p class="title"><strong>Figure 5.2. Upgrading a local CVS
+<a name="idp140529128497888" id="idp140529128497888"></a><p class="title"><strong>Figure 5.2. Upgrading a local CVS
 repository</strong></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/upgrade-cvs.png" align="middle" alt="Upgrading a local CVS repository"></div></div>
 </div><br class="figure-break"><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle;">
 <li class="listitem">
@@ -196,7 +196,7 @@ the OpenACS CVS repository (cvs.openacs.org)</strong></span></p><div class="orde
 </pre></li></ol></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140198992514784" id="idp140198992514784"></a>Upgrading a Production Site Safely</h3></div></div></div><p>If you are upgrading a production OpenACS site which is on a
+<a name="idp140529128555024" id="idp140529128555024"></a>Upgrading a Production Site Safely</h3></div></div></div><p>If you are upgrading a production OpenACS site which is on a
 private CVS tree, this process lets you do the upgrade without
 risking extended downtime or an unusable site:</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem"><p>Declare a freeze on new cvs updates - ie, you cannot run cvs

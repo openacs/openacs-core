@@ -26,7 +26,7 @@ at the top of the file:</p><pre class="programlisting">
 #
 # <span class="emphasis"><em>author&#39;s email address</em></span>, <span class="emphasis"><em>file creation date</em></span>
 #
-# <a class="ulink" href="http://www.loria.fr/~molli/cvs/doc/cvs_12.html#SEC93" target="_top">$&zwnj;Id: tcl-doc.html,v 1.49.2.12 2016/11/19 09:21:55 gustafn Exp $</a>
+# <a class="ulink" href="http://www.loria.fr/~molli/cvs/doc/cvs_12.html#SEC93" target="_top">$&zwnj;Id: tcl-doc.xml,v 1.7 2006/07/17 05:38:38 torbenb Exp $</a>
 #
 </pre><p>In addition, the inputs expected by a Tcl page (i.e., form
 variables) would be enumerated in a call to <code class="computeroutput">ad_page_variables</code>, in effect, documenting
@@ -86,7 +86,7 @@ ad_page_contract {
 
     \@author Jon Salz (jsalz\@mit.edu)
     \@creation-date 3 Jul 2000
-    \@cvs-id $&zwnj;Id: tcl-doc.html,v 1.49.2.12 2016/11/19 09:21:55 gustafn Exp $
+    \@cvs-id $&zwnj;Id$
 }
 
 </pre><p>Note that:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
@@ -195,7 +195,7 @@ at the beginning of every Tcl page. Instead of:</p><pre class="programlisting">
 #
 # jsalz\@mit.edu, 7 Jun 2000
 #
-# $&zwnj;Id: tcl-doc.html,v 1.49.2.12 2016/11/19 09:21:55 gustafn Exp $
+# $&zwnj;Id: tcl-doc.xml,v 1.7 2006/07/17 05:38:38 torbenb Exp $
 
 </pre><p>you&#39;ll now write:</p><pre class="programlisting">
 
@@ -207,7 +207,7 @@ ad_library {
 
     \@creation-date 7 Jun 2000
     \@author Jon Salz (jsalz\@mit.edu)
-    \@cvs-id $&zwnj;Id: tcl-doc.html,v 1.49.2.12 2016/11/19 09:21:55 gustafn Exp $
+    \@cvs-id $&zwnj;Id$
 
 }
 
@@ -222,8 +222,8 @@ indicating when the script was first created.</p></li><li class="listitem"><p>A 
 page&#39;s CVS identification string. Just use <code class="computeroutput">$&zwnj;Id: tcl-documentation.html,v 1.2 2000/09/19
 07:22:35 ron Exp $</code> when creating the file, and CVS will
 substitute an appropriate string when you check the file in.</p></li>
-</ul></div><div class="cvstag">($&zwnj;Id: tcl-doc.html,v 1.49.2.12 2016/11/19
-09:21:55 gustafn Exp $)</div>
+</ul></div><div class="cvstag">($&zwnj;Id: tcl-doc.xml,v 1.7 2006/07/17 05:38:38
+torbenb Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

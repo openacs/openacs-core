@@ -264,8 +264,8 @@ tar -czf ../dotlrn-${DOTLRN_VERSION//-/.}.tar.gz dotlrn-${DOTLRN_VERSION//-/.}
 
 # Clean up after ourselves...
 cd $BASE &amp;&amp; rm -rf dotlrn-tarball tarball openacs-4 dotlrn-packages
-</pre><div class="cvstag">($&zwnj;Id: releasing-openacs-core.html,v 1.20.2.14
-2016/11/19 09:21:55 gustafn Exp $)</div>
+</pre><div class="cvstag">($&zwnj;Id: releasing-openacs.xml,v 1.22.2.3
+2016/10/03 09:17:51 gustafn Exp $)</div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 		    leftLink="releasing-openacs" leftLabel="Prev" leftTitle="

@@ -323,8 +323,8 @@ primary key in what could be thought of as a pure relation. Because
 a membership relation is an ordinary acs object with <a class="ulink" href="object-identity" target="_top">object
 identity</a>, it is as easy to extend the membership relation to
 store extra information as it is to extend the users table or the
-groups table.</p><div class="cvstag">($&zwnj;Id: parties.html,v 1.51.2.12 2016/11/19
-09:21:54 gustafn Exp $)</div>
+groups table.</p><div class="cvstag">($&zwnj;Id: parties.xml,v 1.9 2006/09/25 20:32:37
+byronl Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

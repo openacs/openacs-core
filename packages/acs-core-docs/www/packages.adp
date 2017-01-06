@@ -25,7 +25,7 @@ and step by step instructions for creating a new package for the
 <div class="titlepage"><div><div><h3 class="title">
 <a name="server-file-layout" id="server-file-layout"></a>Server file layout</h3></div></div></div><p>Here is how an OpenACS 5 server is laid out starting from the
 Server root (ROOT):</p><div class="figure">
-<a name="idp140198984495360" id="idp140198984495360"></a><p class="title"><strong>Figure 11.1. Server file layout
+<a name="idp140529122514848" id="idp140529122514848"></a><p class="title"><strong>Figure 11.1. Server file layout
 diagram</strong></p><div class="figure-contents"><pre class="programlisting">
 ROOT/
     bin/
@@ -65,7 +65,7 @@ removal. In OpenACS 5, this tool is called the <a class="link" href="packages" t
 <a class="indexterm" name="baby" id="baby"></a> To illustrate
 the general structure of a package, let&#39;s see what the package
 for the "notes" application should look like.</p><div class="figure">
-<a name="idp140198986036528" id="idp140198986036528"></a><p class="title"><strong>Figure 11.2. Package file layout
+<a name="idp140529122521952" id="idp140529122521952"></a><p class="title"><strong>Figure 11.2. Package file layout
 diagram</strong></p><div class="figure-contents"><pre class="programlisting">
 ROOT/
   +-- packages/    APM Root
@@ -136,7 +136,7 @@ installed or mounted. Files are returned directly, so .tcl or .adp
 files are not sourced in these directories. This makes it suitable
 for storing icons, css files, javascript, and other static content
 which can be treated this way.</p><div class="table">
-<a name="idp140198984266672" id="idp140198984266672"></a><p class="title"><strong>Table 11.1. Package
+<a name="idp140529119935360" id="idp140529119935360"></a><p class="title"><strong>Table 11.1. Package
 files</strong></p><div class="table-contents"><table class="table" summary="Package files" cellspacing="0" border="1">
 <colgroup>
 <col><col><col>
@@ -401,8 +401,8 @@ download and install. We&#39;ll cover this later.</p></li>
 <a name="packages-add-reading" id="packages-add-reading"></a>Additional Reading</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p><a class="xref" href="apm-design" title="Package Manager Design">Package Manager Design</a></p></li><li class="listitem"><p><a class="xref" href="apm-requirements" title="Package Manager Requirements">Package Manager Requirements</a></p></li><li class="listitem"><p><a class="link" href="tutorial-newpackage" title="Creating an Application Package">package development
 tutorial</a></p></li>
-</ul></div><div class="cvstag">($&zwnj;Id: packages.html,v 1.51.2.13 2016/11/19
-09:21:54 gustafn Exp $)</div>
+</ul></div><div class="cvstag">($&zwnj;Id: packages.xml,v 1.9.14.2 2016/10/03
+09:17:51 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

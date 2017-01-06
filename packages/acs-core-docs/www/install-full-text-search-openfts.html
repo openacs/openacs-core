@@ -6,14 +6,14 @@
       Tsearch2. See 
       <a class="xref" href="install-full-text-search-tsearch2.html" title="Install Full Text Search using Tsearch2">Install       Full Text Search using Tsearch2</a>. Tsearch2 is much easier to install, requiring only
       compilation of one module from PostgreSQL contrib, with an
-      automated install process using the tsearch2-driver package.</p><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="install-openfts"></a>Install OpenFTS module</h3></div></div></div><a class="indexterm" name="idp140198993645472"></a><p>If you want full text search, and you are running PostgreSQL, install this module to support FTS.  Do this step after you have installed both PostgreSQL and
+      automated install process using the tsearch2-driver package.</p><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="install-openfts"></a>Install OpenFTS module</h3></div></div></div><a class="indexterm" name="idp140529130323488"></a><p>If you want full text search, and you are running PostgreSQL, install this module to support FTS.  Do this step after you have installed both PostgreSQL and
       AOLserver.  You will need the <a class="link" href="individual-programs.html#openfts-download">openfts
       tarball</a> in <code class="computeroutput">/tmp</code>.</p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>Install Tsearch.  This is a PostgreSQL module that
 	  OpenFTS requires.</p><pre class="screen">[root root]# <strong class="userinput"><code>su - postgres</code></strong>
 [postgres pgsql]$ <strong class="userinput"><code>cd /usr/local/src/postgresql-7.3.4/contrib/tsearch/</code></strong>
 [postgres tsearch]$ <strong class="userinput"><code>make</code></strong>
 sed 's,MODULE_PATHNAME,$libdir/tsearch,g' tsearch.sql.in &gt;tsearch.sql
-/usr/bin/flex  -8 -Ptsearch_yy -o&#39;parser.c' parser.l<span class="emphasis"><em>(many lines omitted)</em></span>
+/usr/bin/flex  -8 -Ptsearch_yy -o'parser.c' parser.l<span class="emphasis"><em>(many lines omitted)</em></span>
 rm -f libtsearch.so
 ln -s libtsearch.so.0.0 libtsearch.so
 [postgres tsearch]$ <strong class="userinput"><code>make install</code></strong>
@@ -81,7 +81,7 @@ cd /usr/local/src/postgresql-7.3.4/contrib/pgsql_contrib_openfts
 make
 su postgres
 make install
-exit</span></span></pre></li></ol></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="install-openfts-postgres"></a>Install OpenFTS prerequisites in PostgreSQL instance</h3></div></div></div><a class="indexterm" name="idp140198993614640"></a><p>If you are installing Full Text Search, add required
+exit</span></span></pre></li></ol></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="install-openfts-postgres"></a>Install OpenFTS prerequisites in PostgreSQL instance</h3></div></div></div><a class="indexterm" name="idp140529130622784"></a><p>If you are installing Full Text Search, add required
         packages to the new database.  (In order for full text search
         to work, you must also <a class="link" href="install-full-text-search-openfts.html#install-openfts" title="Install OpenFTS module">install</a> the PostgreSQL
         OpenFTS module and prerequisites.)</p><pre class="screen">[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>/usr/local/pgsql/bin/psql <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span> -f /usr/local/src/postgresql-7.3.4/contrib/tsearch/tsearch.sql</code></strong>
@@ -98,7 +98,7 @@ CREATE
 /usr/local/pgsql/bin/psql <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span> -f /usr/local/src/postgresql-7.3.4/contrib/pgsql_contrib_openfts/openfts.sql</span></span></pre><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
           If you get the error 
           <code class="computeroutput">ERROR: could not access file "$libdir/tsearch": no such file or directory</code>
-          It is probably because PostgreSQL&#39;s libdir configuration variable points to a diffent directory than where tsearch is.
+          It is probably because PostgreSQL's libdir configuration variable points to a diffent directory than where tsearch is.
           You can find out where PostgreSQL expects to find tsearch via
           </p><pre class="screen"><strong class="userinput"><code>pg_config --pkglibdir</code></strong></pre><p>
         </p></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="enable-openfts"></a>Enable OpenFTS in config.tcl</h3></div></div></div><p>If you have <a class="link" href="install-full-text-search-openfts.html#install-openfts" title="Install OpenFTS module">installed OpenFTS</a>, you can enable it for this service.  Uncomment this line from <code class="computeroutput">config.tcl</code>.  (To uncomment a line in a tcl file, remove the <code class="computeroutput">#</code> at the beginning of the line.)</p><pre class="programlisting">#ns_param   nsfts           ${bindir}/nsfts.so</pre></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="install-fts-engine-openfts"></a>Install Full Text Search Engine</h3></div></div></div><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>Click <code class="computeroutput"><span class="guilabel"><span class="guilabel">Admin</span></span></code> on the top of the default home page.  If prompted, log in with the account and password you entered during install.</p></li><li class="listitem"><p>Click on the <code class="computeroutput"><span class="guilabel"><span class="guilabel">Install

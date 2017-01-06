@@ -12,7 +12,7 @@ Site"
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="how-do-I" id="how-do-I"></a>How Do I?</h2></div></div></div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140198986015872" id="idp140198986015872"></a>How do I edit the front page of a new site
+<a name="idp140529128316688" id="idp140529128316688"></a>How do I edit the front page of a new site
 through a web interface?</h3></div></div></div><p>The easiest way is to install the Edit-This-Page package.</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem"><p>Log in to the web site as an administrator.</p></li><li class="listitem"><p>Click on Admin &gt; Install Software &gt; Install from OpenACS
 Repository / Install new application</p></li><li class="listitem"><p>Choose Edit This Page and install</p></li><li class="listitem"><p>Follow the instructions within <a class="ulink" href="/doc/edit-this-page/install" target="_top">Edit This Page</a> (the
@@ -20,12 +20,12 @@ link will only work after Edit This Page is installed).</p></li>
 </ol></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140198986021248" id="idp140198986021248"></a>How do I let anybody who registers post to
+<a name="idp140529128322064" id="idp140529128322064"></a>How do I let anybody who registers post to
 a weblog?</h3></div></div></div><p>Go to <code class="computeroutput"><a class="ulink" href="/admin/permissions" target="_top">/admin/permissions</a></code>
 and grant Create to Registered Users</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140198986023168" id="idp140198986023168"></a>How do I replace the front page of a new
+<a name="idp140529128323984" id="idp140529128323984"></a>How do I replace the front page of a new
 site with the front page of an application on that site</h3></div></div></div><p>Suppose you install a new site and install Weblogger, and you
 want all visitors to see weblogger automatically.</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem"><p>On the front page, click the <code class="computeroutput"><a class="ulink" href="/admin" target="_top">Admin</a></code> button.</p></li><li class="listitem"><p>On the administration page, click <code class="computeroutput">Parameters</code> link.</p></li><li class="listitem"><p>Change the parameter <code class="computeroutput">IndexRedirectUrl</code> to be the URI of the
@@ -35,7 +35,7 @@ trailing slash.</p></li>
 </ol></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140198986003600" id="idp140198986003600"></a>How do I put custom functionality on front
+<a name="idp140529128330864" id="idp140529128330864"></a>How do I put custom functionality on front
 page of a new site?</h3></div></div></div><p>Every page within an OpenACS site is part of a <span class="strong"><strong>subsite</strong></span><a class="ulink" href="/doc/acs-subsite" target="_top">More information)</a>. The home
 page of the entire site is the front page is a special, default
 instance of a subsite, served from <code class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/www</code>. If an
@@ -50,7 +50,7 @@ functionality.</p></li>
 </ol></div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140198985993264" id="idp140198985993264"></a>How do I change the site-wide style?</h3></div></div></div><p>Almost all pages on an OpenACS site use <a class="ulink" href="/doc/acs-templating" target="_top">ACS Templating</a>, and so
+<a name="idp140529128339520" id="idp140529128339520"></a>How do I change the site-wide style?</h3></div></div></div><p>Almost all pages on an OpenACS site use <a class="ulink" href="/doc/acs-templating" target="_top">ACS Templating</a>, and so
 their appearance is driven by a layer of different files. Let&#39;s
 examine how this works:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem">
@@ -74,12 +74,12 @@ housekeeping and provides a framework for special sitewide
 navigation "meta" elements such as Translator widgets and
 Admin widgets.</p></li>
 </ul></div><div class="figure">
-<a name="idp140198985984240" id="idp140198985984240"></a><p class="title"><strong>Figure 4.1. Site
+<a name="idp140529128352304" id="idp140529128352304"></a><p class="title"><strong>Figure 4.1. Site
 Templates</strong></p><div class="figure-contents"><div class="mediaobject"><img src="images/site-templates.png" alt="Site Templates"></div></div>
 </div><br class="figure-break">
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140198985977568" id="idp140198985977568"></a>How do I diagnose a permissions
+<a name="idp140529128354608" id="idp140529128354608"></a>How do I diagnose a permissions
 problem?</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem">
 <p>
@@ -124,12 +124,12 @@ subject is all Registered Users.</p><div class="orderedlist"><ol class="orderedl
 <li class="listitem"><p>To grant permissions on a package, start at the <a class="ulink" href="/admin/site-map" target="_top">site map</a>. Find the event
 package and click "Set permissions".</p></li><li class="listitem"><p>Click "Grant Permission"</p></li><li class="listitem">
 <p>Grant the write permission to Registered Users.</p><div class="figure">
-<a name="idp140198985957584" id="idp140198985957584"></a><p class="title"><strong>Figure 4.2. Granting
+<a name="idp140529128372784" id="idp140529128372784"></a><p class="title"><strong>Figure 4.2. Granting
 Permissions</strong></p><div class="figure-contents"><div class="mediaobject"><img src="images/grant-perm-463.png" alt="Granting Permissions"></div></div>
 </div><br class="figure-break">
 </li>
 </ol></div><p>OpenACS 5.0 offers a prettier version at <a class="ulink" href="/admin/applications" target="_top">/admin/applications</a>.</p><div class="figure">
-<a name="idp140198985960912" id="idp140198985960912"></a><p class="title"><strong>Figure 4.3. Granting Permissions in
+<a name="idp140529128376112" id="idp140529128376112"></a><p class="title"><strong>Figure 4.3. Granting Permissions in
 5.0</strong></p><div class="figure-contents"><div class="mediaobject"><img src="images/grant-perm-50.png" alt="Granting Permissions in 5.0"></div></div>
 </div><br class="figure-break">
 </li>

@@ -51,8 +51,8 @@ version. Find the docs here:</p><div class="itemizedlist"><ul class="itemizedlis
 </ul></div><p>It is generally useful to run a particular Oracle version with
 its latest patchset. At the time of writing these were 8.1.7.4 and
 9.2.0.5, both of which are considered to be very stable.</p><p>To be able to download a patchset, you need a (to-pay-for)
-account on <a class="ulink" href="http://metalink.oracle.com" target="_top">Metalink</a>. You may find the appropriate patchset by
-following <a class="ulink" href="http://openacs.org/forums/message-view?message_id=33004" target="_top">Andrew&#39;s suggestion</a>.</p>
+account on <a class="ulink" href="http://metalink.oracle.com" target="_top">Metalink</a>. You may find the appropriate patchset
+by following <a class="ulink" href="http://openacs.org/forums/message-view?message_id=33004" target="_top">Andrew&#39;s suggestion</a>.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="install-oracle-keepinmind" id="install-oracle-keepinmind"></a>Things to Keep in Mind</h3></div></div></div><p>Oracle is very well-documented software, the <a class="ulink" href="http://tahiti.oracle.com" target="_top">online
@@ -970,8 +970,8 @@ to do a <code class="computeroutput">connect internal</code> within
 access to the Oracle system.</td>
 </tr>
 </tbody>
-</table></div><div class="cvstag">($&zwnj;Id: oracle.html,v 1.49.2.12 2016/11/19
-09:21:54 gustafn Exp $)</div>
+</table></div><div class="cvstag">($&zwnj;Id: oracle.xml,v 1.21.14.2 2016/12/04
+11:24:07 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

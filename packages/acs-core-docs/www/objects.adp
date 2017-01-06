@@ -86,7 +86,7 @@ find the code needed to describe a new object type called
 for the PG version) file created when we <a class="link" href="packages" title="OpenACS Packages">created the package</a>.
 Then, do the following:</p><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140198988154544" id="idp140198988154544"></a>Describe the new type to the type
+<a name="idp140529118225792" id="idp140529118225792"></a>Describe the new type to the type
 system</h4></div></div></div><p>First, add an entry to the <code class="computeroutput">acs_object_types</code> table with the following
 PL/SQL call:</p><pre class="programlisting">
 begin  
@@ -142,7 +142,7 @@ these attributes. Again, because the new type <code class="computeroutput">note<
 attributes, so there is no need for us to define them.</p>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140198988135696" id="idp140198988135696"></a>Define a table in which to store your
+<a name="idp140529118924624" id="idp140529118924624"></a>Define a table in which to store your
 objects</h4></div></div></div><p>The next thing we do is make a small modification to the data
 model to reflect the fact that each row in the <code class="computeroutput">notes</code> table represents something that is
 not only an object of type <code class="computeroutput">note</code>, but also an <code class="computeroutput">acs_object</code>. The new table definition looks
@@ -166,7 +166,7 @@ transparently find any objects that are instances of any subtype of
 <code class="computeroutput">acs_objects</code>.</p>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140198988120400" id="idp140198988120400"></a>Define a package for type specific
+<a name="idp140529118937232" id="idp140529118937232"></a>Define a package for type specific
 procedures</h4></div></div></div><p>The next step is to define a PL/SQL package for your new type,
 and write some basic procedures to create and delete objects. Here
 is a package definition for our new type:</p><pre class="programlisting">
@@ -213,7 +213,7 @@ other object that used OBJ as its context would also be "read
 only" by default. We&#39;ll talk about this more later.</p>
 </div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140198988107984" id="idp140198988107984"></a>Define a package body for type specific
+<a name="idp140529118681088" id="idp140529118681088"></a>Define a package body for type specific
 procedures</h4></div></div></div><p>The PL/SQL package body contains the implementations of the
 procedures defined above. The only subtle thing going on here is
 that we must use <code class="computeroutput">acs_object.new</code>
@@ -365,8 +365,8 @@ PL/SQL procedures defined above.</p></li><li class="listitem" style="list-style-
 <code class="computeroutput">acs_objects</code>. This means you
 should never use the fields in <code class="computeroutput">acs_objects</code> for application-specific
 purposes. This is especially true for the <code class="computeroutput">context_id</code> field.</p></li>
-</ul></div><div class="cvstag">($&zwnj;Id: objects.html,v 1.52.2.12 2016/11/19
-09:21:54 gustafn Exp $)</div>
+</ul></div><div class="cvstag">($&zwnj;Id: objects.xml,v 1.9.14.1 2016/06/23
+08:32:46 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

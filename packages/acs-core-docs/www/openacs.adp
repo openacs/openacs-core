@@ -337,7 +337,7 @@ cleans out discarded data from the database. A quick way to
 automate vacuuming is to edit the cron file for the database user.
 Recommended: <code class="computeroutput">VACUUM ANALYZE</code>
 every hour and <code class="computeroutput">VACUUM FULL
-ANALYZE</code> every day.</p><a class="indexterm" name="idp140198981277152" id="idp140198981277152"></a><pre class="screen">
+ANALYZE</code> every day.</p><a class="indexterm" name="idp140529124103840" id="idp140529124103840"></a><pre class="screen">
 [$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>export EDITOR=emacs;crontab -e</code></strong>
 </pre><p>Add these lines to the file. The vacuum command cleans up
 temporary structures within a PostGreSQL database, and can improve
@@ -371,7 +371,7 @@ virtual servers. A virtual server is an HTTP service running on a
 specific port, e.g. port 80. In order for OpenACS to work, you need
 to configure a virtual server. The Reference Platform uses a
 configuration file included in the OpenACS tarball, <code class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/etc/config.tcl</code>.
-Open it in an editor to adjust the parameters.</p><a class="indexterm" name="idp140198981291136" id="idp140198981291136"></a><pre class="screen">
+Open it in an editor to adjust the parameters.</p><a class="indexterm" name="idp140529124117824" id="idp140529124117824"></a><pre class="screen">
 [root root]# <strong class="userinput"><code>su - <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
 </code></strong>
 [$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/etc</code></strong>
@@ -611,8 +611,8 @@ ORA_NLS33=$ORACLE_HOME/ocommon/nls/admin/data
 recovery</a> procedure.</p></li><li class="listitem"><p>Set up <a class="xref" href="uptime" title="External uptime validation">the section called
 &ldquo;External uptime
 validation&rdquo;</a>.</p></li>
-</ul></div><div class="cvstag">($&zwnj;Id: openacs.html,v 1.51.2.12 2016/11/19
-09:21:54 gustafn Exp $)</div>
+</ul></div><div class="cvstag">($&zwnj;Id: openacs.xml,v 1.31.14.2 2016/07/05
+16:42:42 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

@@ -703,8 +703,8 @@ the user.</p><p>The nsv containing the list is initialized by the bootstrap
 script and should never be referenced directly by user code.
 Returns the current rdbms type and version.</p>
 </dd>
-</dl></div><div class="cvstag">($&zwnj;Id: db-api-detailed.html,v 1.48.2.14
-2016/11/19 09:21:53 gustafn Exp $)</div>
+</dl></div><div class="cvstag">($&zwnj;Id: db-api.xml,v 1.11.2.2 2016/06/23 08:32:47
+gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
