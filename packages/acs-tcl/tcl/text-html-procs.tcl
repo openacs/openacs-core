@@ -602,7 +602,7 @@ ad_proc -private util_close_html_tags {
         set tag $tagstack($i)
 
         # LARS: Only close tags which we aren't supposed to remove
-        if { $syn($tag) ne "discard" && $syn($tag) ne "remove" } {
+        if { $syn($tag) ni {discard remove}} {
             append out "</$tagstack($i)>"
         }
     }
