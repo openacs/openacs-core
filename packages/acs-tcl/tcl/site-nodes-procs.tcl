@@ -136,7 +136,7 @@ ad_proc -public site_node::delete {
     -delete_subnodes:boolean
 } {
     delete the site node
-} {    
+} {
     if {!$delete_subnodes_p} {
         set n_subnodes [llength [site_node::get_children \
                                      -node_id $node_id]]
@@ -144,7 +144,7 @@ ad_proc -public site_node::delete {
             error "Site node has subnodes. To force use -delete_subnodes option"
         }
     }
-        
+
     set nodes_to_delete {}
 
     # breadth-first visit of the node tree, so we can delete children
