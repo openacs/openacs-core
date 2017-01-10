@@ -21,9 +21,9 @@ ad_proc -public ad_print_stack_trace {} {
     @see ad_get_tcl_call_stack
 } {
     uplevel {
-	if {$::errorInfo ne ""} { 
+        if {$::errorInfo ne ""} {
             set callStack [list $::errorInfo "invoked from within"]
-        } else { 
+        } else {
             set callStack {}
         }
         for {set i [info level]} {$i > 0} {incr i -1} {
