@@ -878,8 +878,8 @@ ad_proc -private rp_path_prefixes {path} {
     set components [split $path "/"]
     set prefixes [list]
     for {set i [expr {[llength $components] -1}]} {$i > 0} {incr i -1} {
-        lappend prefixes "[join [lrange $components 0 $i] "/"]/"
-        lappend prefixes "[join [lrange $components 0 $i] "/"]"
+        lappend prefixes "[join [lrange $components 0 $i] /]/"
+        lappend prefixes [join [lrange $components 0 $i] /]
     }
     lappend prefixes "/"
 
