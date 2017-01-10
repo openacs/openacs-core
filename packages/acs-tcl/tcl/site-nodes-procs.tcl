@@ -172,7 +172,6 @@ ad_proc -public site_node::delete {
         # ...then the node itself
         db_exec_plsql delete_site_node {}
         update_cache -node_id $node_id
-        incr i -1
     }
 }
 
