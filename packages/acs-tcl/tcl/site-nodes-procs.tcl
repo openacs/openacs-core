@@ -161,9 +161,7 @@ ad_proc -public site_node::delete {
     }
 
     # delete nodes in reverse order, starting from leaves
-    set i [expr {[llength $nodes_to_delete] - 1}]
-    while {$i >= 0} {
-        set node_id [lindex $nodes_to_delete $i]
+    foreach node_id [lreverse $nodes_to_delete] {
         # first delete package_id under this node...
         set package_id [site_node::get_object_id \
                             -node_id $node_id]
