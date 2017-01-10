@@ -155,9 +155,9 @@ ad_proc -public site_node::delete {
         set parent_id [lindex $queue 0]
         lappend nodes_to_delete $parent_id
         set queue [lrange $queue 1 end]
-        set queue [concat $queue [site_node::get_children \
-                                      -element "node_id" \
-                                      -node_id $parent_id]]
+        lappend queue {*}[site_node::get_children \
+                              -element "node_id" \
+                              -node_id $parent_id]
     }
 
     # delete nodes in reverse order, starting from leaves
