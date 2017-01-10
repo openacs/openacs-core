@@ -29,7 +29,8 @@ ad_proc -public ad_print_stack_trace {} {
         for {set i [info level]} {$i > 0} {incr i -1} {
             set call [info level $i]
             if {[string length $call] > 160} {
-                set call "[string range $call 0 150]..."            }
+                set call "[string range $call 0 150]..."
+            }
             regsub -all {\n} $call {\\n} call
             lappend callStack "   $call"
             if {$i > 1} {
