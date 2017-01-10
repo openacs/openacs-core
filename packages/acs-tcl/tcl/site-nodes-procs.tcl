@@ -134,6 +134,7 @@ ad_proc -public site_node::new {
 ad_proc -public site_node::delete {
     {-node_id:required}
     -delete_subnodes:boolean
+    -delete_package:boolean
 } {
     delete the site node
 } {
@@ -165,7 +166,9 @@ ad_proc -public site_node::delete {
         # first delete package_id under this node...
         set package_id [site_node::get_object_id \
                             -node_id $node_id]
-        apm_package_instance_delete $package_id
+        if {$delete_package_p} {
+            apm_package_instance_delete $package_id
+        }
         # ...then the node itself
         db_exec_plsql delete_site_node {}
         update_cache -node_id $node_id
