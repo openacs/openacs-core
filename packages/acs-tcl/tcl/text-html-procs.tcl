@@ -869,7 +869,280 @@ ad_proc ad_parse_html_attributes_upvar {
         return {}
     }
 
+    ad_proc ad_sanitize_html {
+        -html:required
+        -allowed_tags
+        -allowed_attributes
+        -allowed_protocols
+        -unallowed_tags
+        -unallowed_attributes
+        -unallowed_protocols
+        -remove_js:boolean
+        -remove_outer_urls:boolean
+        -validate:boolean
+    } {
 
+        Sanitizes HTML by specified criteria, basically removing
+        unallowed tags and attributes, javascript or outer references
+        into page URLs. When desired, this proc can act also as just a
+        validator in order to enforce some markup policies.
+
+        @param html the markup to be checked.
+        
+        @param allowed_tags list of tags we allow in the markup.
+        
+        @param allowed_attributes list of attributes we allow in the
+        markup.
+        
+        @param allowed_protocols list of attributes we allow into
+        links
+        
+        @param unallowed_tags list of tags we don't allow in the
+        markup.
+        
+        @param unallowed_attributes list of attributes we don't allow
+        in the markup.
+        
+        @param unallowed_protocols list of protocols we don't allow in
+        the markup.
+        
+        @param remove_js this flag decides whether every script tag,
+        inline event handlers and the javascript: pseudo-protocol
+        should be stripped from the markup.
+        
+        @param remove_outer_urls this flag tells the proc to remove
+        every reference to external addresses. Proc will try to
+        distinguish between external URLs and fine fully specified
+        internal ones. Acceptable URLs will be transformed in absolute
+        local references, others will be just stripped togheter with
+        the attribute.
+        
+        @param validate This flag will avoid the creation of the
+        stripped markup and just report whether the original one
+        respects all the specified requirements.
+
+        @return sanitized markup or a (0/1) truth value when the
+        -validate flag is specified
+
+        @author Antonio Pisano
+        
+    } {
+        ## Allowed/Unallowed tags come from the user or default to
+        ## those specified in the parameters
+        
+        array set allowed_tag {}
+        if {![info exists allowed_tags]} {
+            # Use the antispam tags for this package instance and whatever is on the kernel.
+            set allowed_tags {}
+            lappend allowed_tags_list {*}[ad_parameter_all_values_as_list -package_id [ad_acs_kernel_id] AllowedTag antispam]
+            lappend allowed_tags_list {*}[ad_parameter_all_values_as_list AllowedTag antispam]
+        }
+
+        array set allowed_attribute {}
+        if {![info exists allowed_attributes]} {
+            set allowed_attributes {}
+            lappend allowed_attributes {*}[ad_parameter_all_values_as_list -package_id [ad_acs_kernel_id] AllowedAttribute antispam]
+            lappend allowed_attributes {*}[ad_parameter_all_values_as_list AllowedAttribute antispam]
+        }
+
+        array set allowed_protocol {}
+        if {![info exists allowed_protocols]} {
+            set allowed_protocols {}
+            lappend allowed_protocols {*}[ad_parameter_all_values_as_list -package_id [ad_acs_kernel_id] AllowedProtocol antispam]
+            lappend allowed_protocols {*}[ad_parameter_all_values_as_list AllowedProtocol antispam]
+        }
+
+        if {"*" in $allowed_tags} {
+            set allowed_tags "*"
+        }
+        foreach tag $allowed_tags {
+            set allowed_tag([string tolower $tag]) 1
+        }
+        
+        if {"*" in $allowed_attributes} {
+            set allowed_attributes "*"
+        }
+        foreach attribute $allowed_attributes {
+            set allowed_attribute([string tolower $attribute]) 1
+        }
+        
+        if {"*" in $allowed_protocols} {
+            set allowed_protocols "*"
+        }
+        foreach protocol $allowed_protocols {
+            set allowed_protocol([string tolower $protocol]) 1
+        }
+        
+        array set unallowed_tag {}
+        if {![info exists unallowed_tags]} {
+            set unallowed_tags {}
+        }
+
+        array set unallowed_attribute {}
+        if {![info exists unallowed_attributes]} {
+            set unallowed_attributes {}
+        }
+
+        array set unallowed_protocol {}
+        if {![info exists unallowed_protocols]} {
+            set unallowed_protocols {}
+        }
+
+        # TODO: consider default unallowed stuff to come from a parameter
+        
+        if {$remove_js_p} {
+            lappend unallowed_tags "script"
+            lappend unallowed_attributes {*}{                
+                onafterprint onbeforeprint onbeforeunload onerror
+                onhashchange onload onmessage onoffline ononline
+                onpagehide onpageshow onpopstate onresize onstorage
+                onunload onblur onchange oncontextmenu onfocus oninput
+                oninvalid onreset onsearch onselect onsubmit onkeydown
+                onkeypress onkeyup onclick ondblclick onmousedown
+                onmousemove onmouseout onmouseover onmouseup
+                onmousewheel onwheel ondrag ondragend ondragenter
+                ondragleave ondragover ondragstart ondrop onscroll
+                oncopy oncut onpaste onabort oncanplay
+                oncanplaythrough oncuechange ondurationchange
+                onemptied onended onerror onloadeddata
+                onloadedmetadata onloadstart onpause onplay onplaying
+                onprogress onratechange onseeked onseeking onstalled
+                onsuspend ontimeupdate onvolumechange onwaiting onshow
+                ontoggle
+            }
+            lappend unallowed_protocols "javascript"
+        }
+
+        foreach tag $unallowed_tags {
+            set unallowed_tag([string tolower $tag]) 1
+        }
+        
+        foreach attribute $unallowed_attributes {
+            set unallowed_attribute([string tolower $attribute]) 1
+        }
+        foreach protocol $unallowed_protocols {
+            set unallowed_protocol([string tolower $protocol]) 1
+        }
+
+        ##
+
+        
+        # root of the document must be unique, this will enforce it by
+        # wrapping html in an auxiliary root element
+        set lmarker "<root>"
+        set rmarker "</root>"
+        set html "${lmarker}${html}${rmarker}"        
+        if {[catch {dom parse -html $html doc} errmsg]} {
+            ad_log error "Failed at parsing HTML. Error from tDOM is: $errmsg"
+            return [expr {$validate ? 0 : ""}]
+        }
+        $doc documentElement root
+        
+        set driver_info [util_driver_info]
+        set driver_prot [dict get $driver_info proto]
+        set driver_host [dict get $driver_info hostname]
+        set driver_port [dict get $driver_info port]
+        set ports(http) 80
+        set ports(https) 443
+        if {[info exists ports($driver_prot)] && $ports($driver_prot) ne $driver_port} {
+            append driver_host :$driver_port
+        }
+
+        set queue [$root childNodes]        
+        while {$queue ne {}} {
+            set node [lindex $queue 0]
+            set queue [lrange $queue 1 end]
+            
+            # skip all non-element nodes
+            if {$node eq "" || [$node nodeType] ne "ELEMENT_NODE"} continue
+
+            # 1: check tag is allowed
+            set node_name [string tolower [$node nodeName]]
+            if {[info exists unallowed_tag($node_name)]
+                || ($allowed_tags ne "*" && ![info exists allowed_tag($node_name)])} {
+                if {$validate_p} {
+                    return 0
+                } else {
+                    $node delete
+                    continue
+                }
+            }
+            
+            # tag itself is allowed, we can inspect its children
+            lappend queue {*}[$node childNodes]
+
+            # 2: check tag contains only allowed attributes            
+            foreach att [$node attributes] {
+                set att [string tolower $att]
+                if {[info exists unallowed_attribute($att)]
+                    || ($allowed_attributes ne "*" && ![info exists allowed_attribute($att)])} {
+                    if {$validate_p} {
+                        return 0
+                    } else {
+                        $node removeAttribute $att
+                        continue
+                    }
+                }
+                
+                # 3: check for any attribute that could contain a url
+                # whether this is acceptable
+                switch $att {
+                    "href" - "src" - "content" {                        
+                        set att_val [string trim [$node getAttribute $att ""]]
+                        if {$att_val eq ""} continue            
+                        
+                        # url in attribute has the protocol part
+                        if {[regexp -nocase {^(\w+:)?(//)?(.*)$} $att_val match prot slashes url]} {
+                            # remove the ':'
+                            set prot [string range $prot 0 end-1]
+                            # no external urls allowed: we still want
+                            # to allow fully specified urls that refer
+                            # to this server, so we try to transform
+                            # the url in a local absolute reference,
+                            # rather than stripping the attribute
+                            # altogheter. Also, accept urls without
+                            # protocol and slashes (e.g. the '#'
+                            # idiom) and we leave the special
+                            # javascript protocol to the next branch
+                            # of the if.
+                            if {$remove_outer_urls_p && ($prot ni {"" "javascript"} || $slashes eq "//")} {
+                                # a fine full reference to our machine...
+                                if {$prot eq $driver_prot && [regsub ^$driver_host $url {} url]} {
+                                    $node setAttribute $att $url
+                                # ...a nasty reference to who knows where.
+                                } elseif {$validate_p} {
+                                    return 0
+                                } else {
+                                    $node removeAttribute $att
+                                }
+                            } elseif {$prot ne ""} {
+                                # check if protocol is allowed
+                                if {[info exists unallowed_protocol($prot)]
+                                 || ($allowed_protocols ne "*" && ![info exists allowed_protocol($prot)])} {
+                                    if {$validate_p} {
+                                        return 0
+                                    } else {
+                                        $node removeAttribute $att
+                                        continue
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if {$validate_p} {
+            return 1
+        } else {
+            set html [$root asHTML]
+            # remove auxiliary root element from output
+            set html [string range $html [string length $lmarker] end-[string length $rmarker]]
+            set html [string trim $html]
+            return $html
+        }
+    }
 
 
     ####################
