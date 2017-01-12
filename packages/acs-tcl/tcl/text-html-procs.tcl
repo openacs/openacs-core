@@ -877,8 +877,8 @@ ad_proc ad_parse_html_attributes_upvar {
         -unallowed_tags
         -unallowed_attributes
         -unallowed_protocols
-        -remove_js:boolean
-        -remove_outer_urls:boolean
+        -no_js:boolean
+        -no_outer_urls:boolean
         -validate:boolean
     } {
 
@@ -906,11 +906,11 @@ ad_proc ad_parse_html_attributes_upvar {
         @param unallowed_protocols list of protocols we don't allow in
         the markup.
         
-        @param remove_js this flag decides whether every script tag,
+        @param no_js this flag decides whether every script tag,
         inline event handlers and the javascript: pseudo-protocol
         should be stripped from the markup.
         
-        @param remove_outer_urls this flag tells the proc to remove
+        @param no_outer_urls this flag tells the proc to remove
         every reference to external addresses. Proc will try to
         distinguish between external URLs and fine fully specified
         internal ones. Acceptable URLs will be transformed in absolute
@@ -990,7 +990,7 @@ ad_proc ad_parse_html_attributes_upvar {
 
         # TODO: consider default unallowed stuff to come from a parameter
         
-        if {$remove_js_p} {
+        if {$no_js_p} {
             lappend unallowed_tags "script"
             lappend unallowed_attributes {*}{                
                 onafterprint onbeforeprint onbeforeunload onerror
@@ -1042,11 +1042,12 @@ ad_proc ad_parse_html_attributes_upvar {
         set driver_prot [dict get $driver_info proto]
         set driver_host [dict get $driver_info hostname]
         set driver_port [dict get $driver_info port]
-        set ports(http) 80
-        set ports(https) 443
-        if {[info exists ports($driver_prot)] && $ports($driver_prot) ne $driver_port} {
-            append driver_host :$driver_port
-        }
+        set system_url [util::join_location \
+                            -proto    $driver_prot \
+                            -hostname $driver_host \
+                            -port     $driver_port]
+        # protocol-relative version of the system url
+        regsub ^$driver_prot:// $system_url {//} system_url_noprot
 
         set queue [$root childNodes]        
         while {$queue ne {}} {
@@ -1058,14 +1059,11 @@ ad_proc ad_parse_html_attributes_upvar {
 
             # 1: check tag is allowed
             set node_name [string tolower [$node nodeName]]
-            if {[info exists unallowed_tag($node_name)]
-                || ($allowed_tags ne "*" && ![info exists allowed_tag($node_name)])} {
-                if {$validate_p} {
-                    return 0
-                } else {
-                    $node delete
-                    continue
-                }
+            if {[info exists unallowed_tag($node_name)] ||
+                ($allowed_tags ne "*" && ![info exists allowed_tag($node_name)])} {
+                # invalid tag!
+                if {$validate_p} {return 0} else {$node delete}
+                continue
             }
             
             # tag itself is allowed, we can inspect its children
@@ -1074,58 +1072,55 @@ ad_proc ad_parse_html_attributes_upvar {
             # 2: check tag contains only allowed attributes            
             foreach att [$node attributes] {
                 set att [string tolower $att]
-                if {[info exists unallowed_attribute($att)]
-                    || ($allowed_attributes ne "*" && ![info exists allowed_attribute($att)])} {
-                    if {$validate_p} {
-                        return 0
-                    } else {
-                        $node removeAttribute $att
-                        continue
-                    }
+                if {[info exists unallowed_attribute($att)] ||
+                    ($allowed_attributes ne "*" && ![info exists allowed_attribute($att)])} {
+                    # invalid attribute!
+                    if {$validate_p} {return 0} else {$node removeAttribute $att}
+                    continue
                 }
                 
                 # 3: check for any attribute that could contain a url
                 # whether this is acceptable
                 switch $att {
-                    "href" - "src" - "content" {                        
-                        set att_val [string trim [$node getAttribute $att ""]]
-                        if {$att_val eq ""} continue            
+                    "href" - "src" - "content" - "action" {                        
+                        set url [string trim [$node getAttribute $att ""]]
+                        if {$url eq ""} continue
                         
-                        # url in attribute has the protocol part
-                        if {[regexp -nocase {^(\w+:)?(//)?(.*)$} $att_val match prot slashes url]} {
-                            # remove the ':'
-                            set prot [string range $prot 0 end-1]
-                            # no external urls allowed: we still want
-                            # to allow fully specified urls that refer
-                            # to this server, so we try to transform
-                            # the url in a local absolute reference,
-                            # rather than stripping the attribute
-                            # altogheter. Also, accept urls without
-                            # protocol and slashes (e.g. the '#'
-                            # idiom) and we leave the special
-                            # javascript protocol to the next branch
-                            # of the if.
-                            if {$remove_outer_urls_p && ($prot ni {"" "javascript"} || $slashes eq "//")} {
-                                # a fine full reference to our machine...
-                                if {$prot eq $driver_prot && [regsub ^$driver_host $url {} url]} {
+                        set prot ""
+                        
+                        # attribute is a URL as per RFC
+                        if {[util::split_location $url prot hostname port]} {
+                            if {$no_outer_urls_p} {
+                                # no external urls allowed: we still want
+                                # to allow fully specified urls that refer
+                                # to this server, but we'll transform them
+                                # in a local absolute reference. For all
+                                # others, attribute will be removed
+                                # altogether.
+                                # - This is ok, points to our system...
+                                if {[regsub ^($system_url|$system_url_noprot) $url {} url]} {
                                     $node setAttribute $att $url
-                                # ...a nasty reference to who knows where.
-                                } elseif {$validate_p} {
-                                    return 0
+                                # ...this is not, points elsewhere!
                                 } else {
-                                    $node removeAttribute $att
+                                    # invalid attribute!
+                                    if {$validate_p} {return 0} else {$node removeAttribute $att}
+                                    continue
                                 }
-                            } elseif {$prot ne ""} {
-                                # check if protocol is allowed
-                                if {[info exists unallowed_protocol($prot)]
-                                 || ($allowed_protocols ne "*" && ![info exists allowed_protocol($prot)])} {
-                                    if {$validate_p} {
-                                        return 0
-                                    } else {
-                                        $node removeAttribute $att
-                                        continue
-                                    }
-                                }
+                            }
+                            # this was likely a protocol-relative url
+                            if {$prot eq ""} {
+                                set prot $driver_prot
+                            }
+                        }
+
+                        # regexp is for stuff like 'javascript:' pseudoprotocol, that is not really a url
+                        if {$prot ne "" || [regexp {^(\w+):.*$} $url match prot]} {
+                            # check if protocol is allowed
+                            if {[info exists unallowed_protocol($prot)] ||
+                                ($allowed_protocols ne "*" && ![info exists allowed_protocol($prot)])} {
+                                # invalid attribute!
+                                if {$validate_p} {return 0} else {$node removeAttribute $att}
+                                continue
                             }
                         }
                     }
