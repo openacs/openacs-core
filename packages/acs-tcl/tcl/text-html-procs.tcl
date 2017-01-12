@@ -1034,7 +1034,7 @@ ad_proc ad_parse_html_attributes_upvar {
         set html "${lmarker}${html}${rmarker}"        
         if {[catch {dom parse -html $html doc} errmsg]} {
             ad_log error "Failed at parsing HTML. Error from tDOM is: $errmsg"
-            return [expr {$validate ? 0 : ""}]
+            return [expr {$validate_p ? 0 : ""}]
         }
         $doc documentElement root
         
