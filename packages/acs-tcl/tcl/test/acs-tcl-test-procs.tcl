@@ -1133,6 +1133,56 @@ aa_register_case -cats {api smoke} acs_user__registered_user_p {
 }
 
 
+aa_register_case -cats {api smoke} util__ns_parseurl {
+    Test ns_parseurl
+
+    @author Gustaf Neumann
+} {
+    aa_equals "full url, no port" \
+        [ns_parseurl http://openacs.org/www/t.html] \
+        {proto http host openacs.org path www tail t.html}
+    
+    aa_equals "full url, with port" \
+        [ns_parseurl http://openacs.org:80/www/t.html] \
+        {proto http host openacs.org port 80 path www tail t.html}
+    
+    aa_equals "full url, no port, no component" \
+        [ns_parseurl http://openacs.org/] \
+        {proto http host openacs.org path {} tail {}}
+
+    aa_equals "full url, no port, no component, no trailing slash" \
+        [ns_parseurl http://openacs.org] \
+        {proto http host openacs.org path {} tail {}}
+    
+    aa_equals "full url, no port, one component" \
+        [ns_parseurl http://openacs.org/t.html] \
+        {proto http host openacs.org path {} tail t.html}
+
+    #
+    # relative URLs
+    #
+    aa_equals "relative url" \
+        [ns_parseurl /www/t.html] \
+        {path www tail t.html}
+    
+    # legacy NaviServer for pre HTTP/1.0, desired?
+    
+    aa_equals "legacy NaviServer, pre HTTP/1.0, no leading /" \
+        [ns_parseurl www/t.html] \
+        {tail www/t.html}
+
+    #
+    # protocol relative (protocol agnostic) URLs (contained in RFC 3986)
+    #
+    aa_equals "protocol relative url with port" \
+        [ns_parseurl //openacs.org/www/t.html] \
+        {host openacs.org path www tail t.html}
+    
+    aa_equals "protocol relative url without port" \
+        [ns_parseurl //openacs.org:80/www/t.html] \
+        {host openacs.org port 80 path www tail t.html}    
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
