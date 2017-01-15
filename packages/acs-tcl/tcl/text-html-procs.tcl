@@ -869,7 +869,113 @@ ad_proc ad_parse_html_attributes_upvar {
         return {}
     }
 
-    ad_proc ad_sanitize_html {
+    package require struct
+    package require htmlparse    
+    
+    ad_proc ad_dom_fix_html {
+        -html:required
+    } {
+        
+        Similar in spirit to the famous Tidy command line utility,
+        this proc takes a piece of possibly invalid markup and returns
+        a 'fixed' version where unopened tags have been closed and
+        attribute specifications have been normalized by transforming them
+        in the form <code>attribute-name="attribute value"</code>. All
+        attributes with an invalid (non-alphanumeric) name will be
+        stripped.<br>
+        <br>        
+        Be aware that every comment and also the possibly present
+        DOCTYPE declaration will be stripped from the markup. Also,
+        most of tag's internal whitespace will be trimmed. This
+        behavior comes from the htmlparse library used in this
+        implementation.
+
+        @author Antonio Pisano
+        
+    } {
+        set tree [::struct::tree]
+
+        
+        catch {::htmlparse::tags destroy}
+
+        ::struct::stack ::htmlparse::tags
+        ::htmlparse::tags push root
+        $tree set root type root
+
+        ::htmlparse::parse \
+            -cmd [list ::htmlparse::2treeCallback $tree] \
+            -incvar errs $html
+
+        $tree walk root -order post n {
+            ::htmlparse::Reorder $tree $n
+        }
+
+        ::htmlparse::tags destroy
+        
+
+        set marker root
+        set lmarker "<$marker>"
+        set rmarker "</$marker>"
+        dom createDocument $marker doc
+        set root [$doc documentElement]
+        
+        set queue {}
+        lappend queue [list $root [$tree children [$tree children root]]]
+        while {$queue ne {}} {
+            lassign [lindex $queue 0] domparent treechildren            
+            set queue [lrange $queue 1 end]
+
+            foreach child $treechildren {
+                set type [$tree get $child type]
+                set data [$tree get $child data]
+                if {$type eq "PCDATA"} {
+                    set el [$doc createTextNode $data]
+                } else {
+                    set el [$doc createElement $type]
+
+                    # parse element attributes
+                    while {$data ne ""} {
+                        set data [string trim $data]
+                        # attribute with a value, optionally surrounded by double or single quotes
+                        if {[regexp "^(\[^= \]+)=(\"\[^\"\]*\"|'\[^'\].*'|\[^ \]*)" $data m attname attvalue]} {
+                            if {[string match "\"*\"" $attvalue] ||
+                                [string match "'*'" $attvalue]} {
+                                set attvalue [string range $attvalue 1 end-1]
+                            }
+                        # attribute with no value
+                        } elseif {[regexp {^([^\s]+)} $data m attname]} {
+                            set attvalue ""
+                        } else {
+                            error "Unrecoverable attribute spec in supplied markup"
+                        }
+
+                        # skip bogus attribute names
+                        if {[string is alnum -strict $attname]} {
+                            $el setAttribute $attname $attvalue
+                        }
+                        
+                        set data [string range $data [string length $m] end]
+                    }
+                }
+
+                $domparent appendChild $el
+
+                set elchildren [$tree children $child]
+                if {$elchildren ne {}} {
+                    lappend queue [list $el $elchildren]
+                }
+            }
+        }
+
+        $tree destroy
+
+        set html [$doc asHTML]
+        set html [string range $html [string length $lmarker] end-[string length $rmarker]]
+
+        return [string trim $html]
+    }
+
+    ad_proc ad_dom_sanitize_html {
         -html:required
         -allowed_tags
         -allowed_attributes
@@ -880,6 +986,7 @@ ad_proc ad_parse_html_attributes_upvar {
         -no_js:boolean
         -no_outer_urls:boolean
         -validate:boolean
+        -fix:boolean
     } {
 
         Sanitizes HTML by specified criteria, basically removing
@@ -920,6 +1027,13 @@ ad_proc ad_parse_html_attributes_upvar {
         @param validate This flag will avoid the creation of the
         stripped markup and just report whether the original one
         respects all the specified requirements.
+
+        @param fix When parsing fails on markup as it is, try to fix
+        it by, for example, closing unclosed tags or normalizing
+        attribute specification. This operation will remove most of
+        plain whitespace into text content of original HTML, toghether
+        with every comment and the eventually present DOCTYPE
+        declaration.
 
         @return sanitized markup or a (0/1) truth value when the
         -validate flag is specified
@@ -1031,23 +1145,49 @@ ad_proc ad_parse_html_attributes_upvar {
         # wrapping html in an auxiliary root element
         set lmarker "<root>"
         set rmarker "</root>"
-        set html "${lmarker}${html}${rmarker}"        
-        if {[catch {dom parse -html $html doc} errmsg]} {
-            ad_log error "Failed at parsing HTML. Error from tDOM is: $errmsg"
-            return [expr {$validate_p ? 0 : ""}]
+        set html "${lmarker}${html}${rmarker}"
+        
+        if {[catch {
+            dom parse -html $html doc
+        } errmsg]} {
+            if {!$fix_p ||
+                [catch {
+                    set html [ad_fix_html -html $html]
+                    dom parse -html $html doc
+                } errmsg]} {
+                ad_log error "Parsing of the document failed. Reported error: $errmsg"
+                return [expr {$validate_p ? 0 : ""}]
+            }
         }
+        
         $doc documentElement root
         
         set driver_info [util_driver_info]
         set driver_prot [dict get $driver_info proto]
         set driver_host [dict get $driver_info hostname]
         set driver_port [dict get $driver_info port]
-        set system_url [util::join_location \
-                            -proto    $driver_prot \
-                            -hostname $driver_host \
-                            -port     $driver_port]
-        # protocol-relative version of the system url
-        regsub ^$driver_prot:// $system_url {//} system_url_noprot
+
+        ## create a regex clause of possible addresses referring to
+        ## this system
+        set our_locations {}
+
+        # location from conf files
+        set location [util::join_location \
+                          -proto    $driver_prot \
+                          -hostname $driver_host \
+                          -port     $driver_port]
+        set our_location($location) 1
+        regsub {^\w+://} $location {//} location
+        set our_location($location) 1
+
+        # location from connection
+        set location [ad_conn location]
+        set our_location($location) 1                
+        regsub {^\w+://} $location {//} location
+        set our_location($location) 1
+        
+        set our_locations [join [array names our_location] |]
+        ##
 
         set queue [$root childNodes]        
         while {$queue ne {}} {
@@ -1088,17 +1228,18 @@ ad_proc ad_parse_html_attributes_upvar {
                         
                         set prot ""
                         
-                        # attribute is a URL as per RFC
-                        if {[util::split_location $url prot hostname port]} {
+                        # attribute is a full URL
+                        if {[regexp {^(\w+:)?//(.*)} $url match prot loc]} {
                             if {$no_outer_urls_p} {
-                                # no external urls allowed: we still want
-                                # to allow fully specified urls that refer
-                                # to this server, but we'll transform them
-                                # in a local absolute reference. For all
-                                # others, attribute will be removed
-                                # altogether.
+                                # no external urls allowed: we still
+                                # want to allow fully specified urls
+                                # that refer to this server, but we'll
+                                # transform them in a local absolute
+                                # reference. For all others, attribute
+                                # will be just removed.                                
                                 # - This is ok, points to our system...
-                                if {[regsub ^($system_url|$system_url_noprot) $url {} url]} {
+                                if {[regsub ^($our_locations) $url {} url]} {
+                                    set url /[string trimleft $url "/"]
                                     $node setAttribute $att $url
                                 # ...this is not, points elsewhere!
                                 } else {
