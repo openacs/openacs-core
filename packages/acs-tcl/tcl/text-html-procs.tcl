@@ -874,6 +874,8 @@ ad_proc ad_parse_html_attributes_upvar {
     
     ad_proc ad_dom_fix_html {
         -html:required
+        {-marker "root"}
+        -dom:boolean
     } {
         
         Similar in spirit to the famous Tidy command line utility,
@@ -889,6 +891,19 @@ ad_proc ad_parse_html_attributes_upvar {
         most of tag's internal whitespace will be trimmed. This
         behavior comes from the htmlparse library used in this
         implementation.
+
+        @param html Markup to process
+
+        @param marker Root element use to enforce a single root of the
+               DOM tree.
+        
+        @param dom When this flag is set, instead of returning markup,
+        the proc will return the tDOM object built during the
+        operation. Useful when the result should be used by tDOM
+        anyway, so we can avoid superfluous parsing.
+
+        @return markup or a tDOM document object if the -dom flag is
+        specified
 
         @author Antonio Pisano
         
@@ -913,10 +928,9 @@ ad_proc ad_parse_html_attributes_upvar {
         ::htmlparse::tags destroy
         
 
-        set marker root
         set lmarker "<$marker>"
         set rmarker "</$marker>"
-        dom createDocument $marker doc
+        set doc [dom createDocument $marker]
         set root [$doc documentElement]
         
         set queue {}
@@ -969,9 +983,14 @@ ad_proc ad_parse_html_attributes_upvar {
 
         $tree destroy
 
-        set html [$doc asHTML]
-        set html [string range $html [string length $lmarker] end-[string length $rmarker]]
-
+        if {$dom_p} {
+            return $doc
+        } else {
+            set html [$doc asHTML]
+            $doc delete            
+            set html [string range $html [string length $lmarker] end-[string length $rmarker]]
+        }
+        
         return [string trim $html]
     }
 
@@ -1145,15 +1164,13 @@ ad_proc ad_parse_html_attributes_upvar {
         # wrapping html in an auxiliary root element
         set lmarker "<root>"
         set rmarker "</root>"
-        set html "${lmarker}${html}${rmarker}"
         
         if {[catch {
-            dom parse -html $html doc
+            dom parse -html "${lmarker}${html}${rmarker}" doc
         } errmsg]} {
             if {!$fix_p ||
                 [catch {
-                    set html [ad_fix_html -html $html]
-                    dom parse -html $html doc
+                    set doc [ad_dom_fix_html -html $html -dom]
                 } errmsg]} {
                 ad_log error "Parsing of the document failed. Reported error: $errmsg"
                 return [expr {$validate_p ? 0 : ""}]
@@ -1270,9 +1287,11 @@ ad_proc ad_parse_html_attributes_upvar {
         }
 
         if {$validate_p} {
+            $doc delete
             return 1
-        } else {
+        } else {            
             set html [$root asHTML]
+            $doc delete            
             # remove auxiliary root element from output
             set html [string range $html [string length $lmarker] end-[string length $rmarker]]
             set html [string trim $html]
