@@ -868,9 +868,6 @@ ad_proc ad_parse_html_attributes_upvar {
         }
         return {}
     }
-
-    package require struct
-    package require htmlparse    
     
     ad_proc ad_dom_fix_html {
         -html:required
@@ -908,6 +905,13 @@ ad_proc ad_parse_html_attributes_upvar {
         @author Antonio Pisano
         
     } {
+        if {[catch {package require struct}]} {
+            error "Package struct non found on the system"
+        }
+        if {[catch {package require htmlparse}]} {
+            error "Package htmlparse non found on the system"
+        }
+        
         set tree [::struct::tree]
 
         
