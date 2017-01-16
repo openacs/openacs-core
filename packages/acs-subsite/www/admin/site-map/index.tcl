@@ -225,7 +225,7 @@ db_foreach nodes_select {} {
         set add_folder_url [export_vars -base . {expand:multiple root_id node_id {new_parent $node_id} {new_type folder}}]
         if {$object_id eq ""} {
             set mount_url [export_vars -base mount {expand:multiple root_id node_id}]
-            set new_app_url [export_vars {expand:multiple root_id {new_application $node_id}}]
+            set new_app_url [export_vars -base . {expand:multiple root_id {new_application $node_id}}]
         } else {
             # This makes sure you can't unmount the thing that is serving the page you're looking at.
             if {[ad_conn node_id] != $node_id} {
