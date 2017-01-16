@@ -61,7 +61,7 @@ ad_proc ad_context_node_list {
 } {
     set context [list]
 
-    while { $node_id ne "" } {
+    while { $node_id ne "" } {        
         array set node [site_node::get -node_id $node_id]
         
         # JCD: Provide something for the name if the instance name is
@@ -72,7 +72,11 @@ ad_proc ad_context_node_list {
             set node(instance_name) $node(name)
         }
 
-        set context [concat [list [list $node(url) [ns_quotehtml $node(instance_name)]]] $context]
+        # don't collect link for nodes without an object underneath
+        # (e.g. empty site folders), as they would just be dead links
+        if {$node(object_id) ne ""} {
+            set context [list [list $node(url) [ns_quotehtml $node(instance_name)]] {*}$context]
+        }
 
         # We have the break here, so that 'from_node' itself is included
         if {$node_id eq $from_node} {
