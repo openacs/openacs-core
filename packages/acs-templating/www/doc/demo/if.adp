@@ -86,38 +86,38 @@
 
 <tr><td><kbd><strong>true</strong></kbd></td>
     <td><kbd>if \@bool_t_p\@ true</kbd></td>
-    <td><strong><if @bool_t_p@ true>ok</if>
+    <td><strong><if @bool_t_p;literal@ true>ok</if>
            <else>not ok</else></strong></td>
 </tr>
 
 <tr><td><kbd><strong>true</strong></kbd></td>
     <td><kbd>if \@bool_1_p\@ true</kbd></td>
-    <td><strong><if @bool_1_p@ true>ok</if>
+    <td><strong><if @bool_1_p;literal@ true>ok</if>
            <else>not ok</else></strong></td>
 </tr>
 
 <tr><td><kbd><strong>true short</strong></kbd></td>
     <td><kbd>if \@bool_t_p\@</kbd></td>
-    <td><strong><if @bool_t_p@>ok</if>
+    <td><strong><if @bool_t_p;literal@ true>ok</if>
            <else>not ok</else></strong></td>
 </tr>
 
 <tr><td><kbd><strong>true short</strong></kbd></td>
     <td><kbd>if \@bool_1_p\@</kbd></td>
-    <td><strong><if @bool_1_p@>ok</if>
+    <td><strong><if @bool_1_p;literal@ true>ok</if>
            <else>not ok</else></strong></td>
 </tr>
 
 
 <tr><td><kbd><strong>false</strong></kbd></td>
     <td><kbd>if \@bool_f_p\@ false</kbd></td>
-    <td><strong><if @bool_f_p@ false>ok</if>
+    <td><strong><if @bool_f_p;literal@ false>ok</if>
            <else>not ok</else></strong></td>
 </tr>
 
 <tr><td><kbd><strong>false</strong></kbd></td>
     <td><kbd>if \@bool_0_p\@ false</kbd></td>
-    <td><strong><if @bool_0_p@ false>ok</if>
+    <td><strong><if @bool_0_p;literal@ false>ok</if>
            <else>not ok</else></strong></td>
 </tr>
 

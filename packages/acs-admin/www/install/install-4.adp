@@ -4,7 +4,7 @@
 
 <h2>@page_title@</h2>
 
-<if @success_p@ false>
+<if @success_p;literal@ false>
   <p>Unfortunately, we had some errors. Please check your server error log or contact your system administrator. </p>
 </if>
 <else>

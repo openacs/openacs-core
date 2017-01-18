@@ -43,7 +43,7 @@
 
   <if @user_search:rowcount@ gt 30>
 
-    <if @only_authorized_p@ eq 0>
+    <if @only_authorized_p;literal@ false>
       <p>
         We're showing all users, authorized or not (<a href="complex-search?@export_authorize@&amp;only_authorized_p=1">
         show only authorized</a>).

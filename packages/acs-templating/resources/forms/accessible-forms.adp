@@ -37,7 +37,7 @@
 	      @elements.label;noquote@
 	    </label>
 
-	    <if @form_properties.show_required_p@ true>
+	    <if @form_properties.show_required_p;literal@ true>
 
 	      <if @elements.optional@ nil and @elements.mode@ ne "display" and @elements.widget@ ne "inform" and @elements.widget@ ne "select"><span class="form-required-mark">*</span></if>
 	    </if>

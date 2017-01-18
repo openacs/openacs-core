@@ -5,7 +5,7 @@
 
 <listfilters name="packages" style="inline-filters"></listfilters>
 <if @packages:rowcount@ eq 0>
-  <if @upgrade_p@ true>
+  <if @upgrade_p;literal@ true>
     <p> No packages on your system need upgrading. </p>
   </if>
   <else>

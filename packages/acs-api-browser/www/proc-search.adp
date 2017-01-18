@@ -21,7 +21,7 @@ No results found
 
 
 <if @private_results:rowcount@ gt 0>
-  <if @show_private_p@ true>
+  <if @show_private_p;literal@ true>
     <p>
       <strong>Show</strong> | <a href="@hide_private_url@">Hide</a> <strong>@private_results:rowcount@ private</strong> procedure matches
     </p>
@@ -41,7 +41,7 @@ No results found
 
 
 <if @deprecated_results:rowcount@ gt 0>
-  <if @show_deprecated_p@ true>
+  <if @show_deprecated_p;literal@ true>
     <p>
       <strong>Show</strong> | <a href="@hide_deprecated_url@">Hide</a> <strong>@deprecated_results:rowcount@ deprecated</strong> procedure matches
     </p>

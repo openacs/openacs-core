@@ -31,7 +31,7 @@
     </ul>
   </li>
   <li>Test failures
-    <if @has_test_report_p@>
+    <if @has_test_report_p;literal@ true>
       <if @testcase_failures:rowcount@ eq 0>
         <em>none</em>
       </if>

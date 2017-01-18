@@ -36,7 +36,7 @@ These are my best friends!  Email them!
     
 who lives at @friends.address@ and
 
-<if @friends.likes_chocolate_p@ eq f>
+<if @friends.likes_chocolate_p;literal@ false>
 doesn't like
 </if>
 <else>

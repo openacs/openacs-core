@@ -128,7 +128,7 @@ function getPageURL (filter_url) {
 		               <option value="#">- - - - -</option>
 			    </if>
       	                    <group column="filter_name">
-	                    <if @filters.selected_p@ true>
+	                    <if @filters.selected_p;literal@ true>
 			         <option value="@filters.url@" selected>
 			             @filters.label@
                                  </option>

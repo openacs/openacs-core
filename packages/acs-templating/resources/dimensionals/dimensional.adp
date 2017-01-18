@@ -3,7 +3,7 @@
 </multiple></tr>
 <tr><multiple name="dimensional">
 <td>[<group column="key">
-<if @dimensional.selected@ true><strong>@dimensional.group_label@</strong></if><else><a href="@dimensional.href@">@dimensional.group_label@</a></else><if @dimensional.groupnum_last_p@ false> | </if>
+<if @dimensional.selected@ true><strong>@dimensional.group_label@</strong></if><else><a href="@dimensional.href@">@dimensional.group_label@</a></else><if @dimensional.groupnum_last_p;literal@ false> | </if>
 </group>]</td>
 </multiple></tr>
 </table>

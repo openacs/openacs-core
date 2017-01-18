@@ -20,7 +20,7 @@
 </ul>
 
 <if @user_id;literal@ ne @ad_conn_user_id;literal@>
-  <if @warning_p@>
+  <if @warning_p;literal@ true>
       <p>
         <strong>WARNING:</strong> This user is a site-wide administrator (maybe the only one).
         Deleting or banning this user may mean you will be unable to administrate the site.
@@ -70,7 +70,7 @@ above.
 <h2>Administrative Actions</h2>
 
 <ul>
-<if @site_wide_admin_p@ true>
+<if @site_wide_admin_p;literal@ true>
   <li><a href="@modify_admin_url;noi18n@">Revoke site-wide administration privileges</a></li>
 </if>
 <else>

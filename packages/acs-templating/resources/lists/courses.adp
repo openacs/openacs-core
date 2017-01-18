@@ -94,7 +94,7 @@
       <group column="subrownum">
         <th class="@elements.class@"@elements.cell_attributes;noquote@>
           <if @elements.orderby_url@ not nil>
-            <if @elements.ordering_p@ true>
+            <if @elements.ordering_p;literal@ true>
               <a href="@elements.orderby_url@">@elements.label;noquote@</a>
               <a href="@elements.orderby_url@" title="@elements.orderby_html_title@"><if @elements.orderby_direction@ eq "desc"><img src="/resources/acs-templating/sort-descending.png" border="0"></if><else><img src="/resources/acs-templating/sort-ascending.png" border="0"></else></a>
             </if>
@@ -188,7 +188,7 @@
       </noparse>
   </if>
 
-  <if @list_properties.aggregates_p@ true>
+  <if @list_properties.aggregates_p;literal@ true>
     <noparse><if \@@list_properties.multirow@.rownum@ eq \@@list_properties.multirow@:rowcount@></noparse>
       <multiple name="elements">
         <tr class="list-subheader last">

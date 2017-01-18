@@ -12,14 +12,14 @@
         </td>
       </tr>
       <group column="filter_name">
-        <if @filters.selected_p@ true>
+        <if @filters.selected_p;literal@ true>
           <tr class="list-filter-selected">
         </if>
         <else>
           <tr>
         </else>
           <td class="list-filter">
-            <if @filters.selected_p@ true><span class="list-filter-selected">@filters.label@</span></if>
+            <if @filters.selected_p;literal@ true><span class="list-filter-selected">@filters.label@</span></if>
             <else><a href="@filters.url@" title="@filters.url_html_title@">@filters.label@</a></else>
           </td>
           <td align="right" class="list-filter">
