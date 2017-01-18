@@ -1,5 +1,5 @@
 
-<if @user_info.email_verified_p@ true>
+<if @user_info.email_verified_p;literal@ true>
 
   <property name="doc(title)">#acs-subsite.lt_Your_email_is_confirm#</property>
 

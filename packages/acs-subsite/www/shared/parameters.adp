@@ -13,7 +13,7 @@
 <if @counter@ gt 0>
   <formtemplate id="parameters"></formtemplate>
 
-  <if @display_warning_p@ true>
+  <if @display_warning_p;literal@ true>
     <span style="color: red; font-weight: bold;">(*)</span>
     #acs-subsite.lt_Note_text_in_red_below#
   </if>

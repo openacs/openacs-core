@@ -22,7 +22,7 @@
       <input name="object_id" type="text"> <input value="Continue" type="submit">
       </div>
     </form>
-<if @admin_p@><p>
+<if @admin_p;literal@ true><p>
 #acs-subsite.You_can_also_browse_from# <a href="./?root=@default_context@">#acs-subsite.default_context#</a>
 #acs-subsite.or_the# <a href="./?root=@security_context_root@">#acs-subsite.Security_context_root#</a>#acs-subsite._or# <a href="./?root=@subsite@">#acs-subsite.this_subsite#</a>.
 </p></if>

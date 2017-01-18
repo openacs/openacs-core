@@ -26,7 +26,7 @@
 </ul>
 
 
-<if @admin_p@ true>
+<if @admin_p;literal@ true>
   <h4>Administration</h4>
   <ul>
     <li> <a href="delete?segment_id=@props.segment_id;literal@">Delete this segment</a> </li>

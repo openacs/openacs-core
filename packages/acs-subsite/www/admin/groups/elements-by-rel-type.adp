@@ -42,7 +42,7 @@
                 <a href="../rel-segments/one?segment_id=@rels.segment_id@">@rels.segment_name@</a>
               </else>
             </li>
-            <if @admin_p@ true>
+            <if @admin_p;literal@ true>
               <li><a href="rel-type-remove?group_rel_id=@rels.group_rel_id@">Remove this relationship type</a></li>
             </if>
           </ul>

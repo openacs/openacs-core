@@ -9,7 +9,7 @@
   <li><a href="../members/">#acs-subsite.Members#</a></li>
   <li><a href="../shared/parameters?return_url=../admin">#acs-subsite.Parameters#</a></li>
   <li><a href="subsite-add">#acs-subsite.Create_new_subsite#</a></li>
-  <if @convert_subsite_p@>
+  <if @convert_subsite_p;literal@ true>
     <li><a href="subsite-convert-type">#acs-subsite.Convert_to_descendent_subsite_type#</a></li>
   </if>
 </ul>
@@ -26,7 +26,7 @@
   <!-- <li><a href="host-node-map/">#acs-subsite.Host_Node_Map#</a></li> -->
 </ul>
 
-<if @sw_admin_p@ true>
+<if @sw_admin_p;literal@ true>
   <h1>#acs-subsite.lt_For_Site-Wide_Adminis#</h1>
   <ul>
     <li>

@@ -16,7 +16,7 @@
    </if><else>
       @attributes.value@
    </else>
-   <if @write_p@ true>
+   <if @write_p;literal@ true>
      (<a href="../attributes/edit-one?@attributes.export_vars@">edit</a>) 
    </if>
    </li>
@@ -68,7 +68,7 @@
  </ul>
 </if>
 
-<if @object_two_read_p@ true>
+<if @object_two_read_p;literal@ true>
     <h3>About @rel.object_id_two_name@</h3>
     
     <ul>
@@ -83,7 +83,7 @@
        </if><else>
           @object_two_attributes.value@
        </else>
-       <if @object_two_write_p@ true>
+       <if @object_two_write_p;literal@ true>
          (<a href="../attributes/edit-one?@object_two_attributes.export_vars@">edit</a>) 
        </if>
        </li>

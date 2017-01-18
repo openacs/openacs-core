@@ -29,7 +29,7 @@
 <p><strong>Administration:</strong>
 <ul>
 
-<if @dynamic_p@ true>
+<if @dynamic_p;literal@ true>
   <li><a href="delete?@url_vars@">Delete this attribute</a>
 </if><else>
   <li>  This attribute can only be administered by programmers as it does not belong to a dynamically created object.

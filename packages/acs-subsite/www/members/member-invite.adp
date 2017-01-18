@@ -5,7 +5,7 @@
 
 <h1>#acs-subsite.Invite_a_user#</h1>
 
-<if @subsite_p@>
+<if @subsite_p;literal@ true>
 
   <h2>#acs-subsite.Search_For_Exist_User#</h2>
 

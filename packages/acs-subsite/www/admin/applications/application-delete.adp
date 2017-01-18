@@ -6,7 +6,7 @@
 @listing;noquote@
 
 <p>
-  Are you sure you want to delete <if @num@ eq 1>this application</if><else>these @num@ applications</else>?
+  Are you sure you want to delete <if @num;literal@ true>this application</if><else>these @num@ applications</else>?
 </p>
 
 <p>

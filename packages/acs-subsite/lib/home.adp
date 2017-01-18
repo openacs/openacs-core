@@ -35,7 +35,7 @@
             <li><a href="../user/email-privacy-level">#acs-subsite.Change_my_email_P#</a></li>
           </ul>
 
-          <if @invisible_p@ true>
+          <if @invisible_p;literal@ true>
             #acs-subsite.Currently_invisible_msg#
             <ul>
               <li><a href="@make_visible_url@">#acs-subsite.Make_yourself_visible_label#</a></li>

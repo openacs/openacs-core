@@ -38,7 +38,7 @@
   @controls;noquote@
 
   <h3>#acs-subsite.Children#</h3>
-  <if @children_p@>
+  <if @children_p;literal@ true>
     <if @children:rowcount@ gt 0>
       <ul>
         <multiple name="children">
@@ -53,7 +53,7 @@
     </else>
   </if>
 
-  <if @children_p@ eq "f">
+  <if @children_p;literal@ false>
     <if @num_children@ gt 0> #acs-subsite.lt_num_children_Children# [<a href="one?object_id=@object_id@&amp;children_p=t">#acs-subsite.Show#</a>]</if>
     <else>
       <em>#acs-subsite.none#</em>

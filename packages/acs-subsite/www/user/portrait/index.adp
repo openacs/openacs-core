@@ -5,7 +5,7 @@
 <switch @return_code@>
 
 <case value="no_error">
-<if @admin_p@ eq 1>
+<if @admin_p;literal@ true>
 <p>#acs-subsite.lt_This_is_the_image_that#:</p>
 </if>
 
@@ -20,7 +20,7 @@
 </li>
 </ul>
 
-<if @admin_p@ eq 1>
+<if @admin_p;literal@ true>
 #acs-subsite.Options#:
 
 <ul>
@@ -46,7 +46,7 @@
 
 <case value="no_portrait">
 <p>
-<if @admin_p@ eq "0">
+<if @admin_p;literal@ false>
 #acs-subsite.lt_This_user_doesnt_have#
 <a href="upload?@export_edit_vars@">#acs-subsite.go_upload_the_users_por#</a>.
 </if>
