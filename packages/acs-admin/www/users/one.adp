@@ -10,8 +10,8 @@
 <li>User ID:  @user_id;literal@</li>
 <li><a href="@user_info.url;noi18n@">View community member page</a></li>
 <li>Registration date:  @user_info.creation_date_pretty@</li>
-<li>Registration IP: @user_info.creation_ip@ (<a href="@user_info.by_ip_url@" title="Other registrations from this IP address">others</a>)</li>
-<li>Last visit: @user_info.last_visit_pretty@</li>
+<li>Registration IP: <a href="./ip-info?ip=@user_info.creation_ip@">@user_info.creation_ip@</a> (<a href="@user_info.by_ip_url@" title="Other registrations from this IP address">others</a>)</li>
+<li>Last visit: @user_info.last_visit_pretty@ from </li>
 
 
 <if @portrait_url@ not nil>

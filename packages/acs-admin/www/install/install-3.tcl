@@ -90,11 +90,24 @@ foreach package_key $install_order {
     array set version $repository($package_key)
     
     if { ([info exists version(download_url)] && $version(download_url) ne "") } {
+        ns_write [subst {
+            <p>Transferring $version(download_url) ...
+            <script nonce='$::__csp_nonce'>window.scrollTo(0,document.body.scrollHeight);</script>
+        }]
         set spec_file [apm_load_apm_file -url $version(download_url)]
         if { $spec_file eq "" } {
-            ns_log Error "Error downloading package $package_key from $version(download_url). Installing package failed."
+            set msg "Error downloading package $package_key from $version(download_url). Installing package failed."
+            ns_write [subst {
+                <p>$msg
+                <script nonce='$::__csp_nonce'>window.scrollTo(0,document.body.scrollHeight);</script>
+            }]
+            ns_log Error $msg
             set success_p 0
             continue
+        }
+        ns_write [subst {
+            Done<br>
+            <script nonce='$::__csp_nonce'>window.scrollTo(0,document.body.scrollHeight);</script>
         }
         set package_path "[apm_workspace_install_dir]/$package_key"
     } else {
