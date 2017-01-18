@@ -14,7 +14,7 @@
   Show: 
   <multiple name="show_opts">
     <if @show_opts.rownum@ gt 1> | </if>
-    <if @show_opts.selected_p@><strong>@show_opts.label@ (@show_opts.count@)</strong> </if>
+    <if @show_opts.selected_p;literal@ true><strong>@show_opts.label@ (@show_opts.count@)</strong> </if>
     <else><a href="@show_opts.url@">@show_opts.label@ (@show_opts.count@)</a> </else>
   </multiple>
 </p>

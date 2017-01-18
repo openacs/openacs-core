@@ -11,6 +11,6 @@
 <if @change_locale_url@ not nil>
   <a href="@change_locale_url@">@change_locale_text@</a>
 </if>
-<if @lang_admin_p@>
+<if @lang_admin_p;literal@ true>
       <a class="button" href="@lang_admin_url@">@lang_admin_text@</a>
 </if>

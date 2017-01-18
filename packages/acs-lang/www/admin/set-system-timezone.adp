@@ -66,7 +66,7 @@
   </if>
 
   <if @correct_p@ not nil>
-    <tr style=<if @correct_p@ true>"background: #00bb00"</if><else>"background: red"</else>>
+    <tr style=<if @correct_p;literal@ true>"background: #00bb00"</if><else>"background: red"</else>>
       <td>
         <span style="color: white">
           Does it look like the OpenACS timezone setting above is correct:
@@ -74,7 +74,7 @@
       </td>
       <td>
         <span style="color: white">
-          <if @correct_p@ true>
+          <if @correct_p;literal@ true>
             <strong>YES!</strong> (Congratulations)
           </if>
           <else>
