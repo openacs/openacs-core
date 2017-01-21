@@ -679,9 +679,11 @@ ad_proc util::http::post {
     # Body will be appended as is to the payload
     set body "${payload}${body}"
     
-    # some servers (e.g. Google) will demand this header in case of
-    # POST requests
-    ns_set put $headers "Content-length" [string length $body]
+    if {[ns_set iget $headers "transfer-encoding"] ne "chunked"} {
+        # some servers (e.g. Google) will demand this header in case of
+        # POST requests
+        ns_set put $headers "Content-length" [string length $body]
+    }
 
     return [util::http::request \
                 -method          POST \
