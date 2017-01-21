@@ -2,7 +2,7 @@
 <property name="context">@context;literal@</property>
 <property name="doc(title)">@page_title;literal@</property>
 
-<if @and_queries_notice_p@ eq 1>
+<if @and_queries_notice_p;literal@ true>
   <font color="6f6f6f">
     #search.The#
     [<a href="help/basics#and">#search.details#</a>]<br>
@@ -82,7 +82,7 @@
   </if>
 </if>
 
-<if @and_queries_notice_p@ eq 1>
+<if @and_queries_notice_p;literal@ true>
   <p class="hint">#search.and_not_needed# [<a href="help/basics#and">#search.details#</a>]</p>
 </if>
 <if @nstopwords@ eq 1>
@@ -92,7 +92,7 @@
   <p class="hint">#search.lt_The_following_words_a# [<a href="help/basics#stopwords">#search.details#</a>]</p>
 </if>
 
-<if @debug_p@>
+<if @debug_p;literal@ true>
   <p>#search.Searched_for_query#</p>
   <p>#search.Results_count#</p>
 </if>
