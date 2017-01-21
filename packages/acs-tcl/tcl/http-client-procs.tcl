@@ -675,13 +675,17 @@ ad_proc util::http::post {
         ns_set put $headers "Content-type" "application/x-www-form-urlencoded"
         set payload $formvars; unset formvars
     }
-    
+
     # Body will be appended as is to the payload
-    append payload $body; unset body
+    set body "${payload}${body}"
     
+    # some servers (e.g. Google) will demand this header in case of
+    # POST requests
+    ns_set put $headers "Content-length" [string length $body]
+
     return [util::http::request \
                 -method          POST \
-                -body            $payload \
+                -body            $body \
                 -headers         $headers \
                 -url             $url \
                 -timeout         $timeout \
@@ -1122,9 +1126,9 @@ ad_proc -private util::http::native::request {
     
     ## Encoding of the request
     
-    # Any conversion or encoding of the payload 
-    # should happen only at the first redirect
-    if {$depth == 1} {
+    # Any conversion or encoding of the payload should happen only at
+    # the first request and not on redirects
+    if {$depth == 0} {
         set content_type [ns_set iget $headers "content-type"]
         if {$content_type eq ""} {
             set content_type "text/plain; charset=[ns_config ns/parameters OutputCharset iso-8859-1]"
@@ -1286,6 +1290,7 @@ ad_proc -private util::http::curl::request {
     {-method GET}
     {-headers ""} 
     {-body ""}
+    {-files {}}
     {-timeout 30} 
     {-depth 0}
     {-max_depth 10}
@@ -1314,6 +1319,12 @@ ad_proc -private util::http::curl::request {
     in gzip format. Data will be automatically compressed.  Notice
     that not all servers can treat gzipped requests properly, and in
     such cases response will likely be an error.
+
+    @param files curl is natively capable to send files via POST
+    requests, and exploiting it can be desirable to overcome the still
+    relevant 2GB limitation on tcl vars, that is, to send very large
+    files via POST. Files by this parameter are couples in the form
+    <code>{ form_field_name file_path_on_filesystem }</code>
     
     @param gzip_response informs the server that we are
     capable of receiving gzipped responses.  If server complies to our
@@ -1395,21 +1406,25 @@ ad_proc -private util::http::curl::request {
             return -code error "${this_proc}:  zlib support not enabled"
         }
     }
-    
+
     ## Encoding of the request
     
-    set content_type [ns_set iget $headers "content-type"]
-    if {$content_type eq ""} {
-        set content_type "text/plain; charset=[ns_config ns/parameters OutputCharset iso-8859-1]"
-    }
-    
-    set enc [util::http::get_channel_settings $content_type]
-    if {$enc ne "binary"} {
-        set body [encoding convertto $enc $body]
-    }
-    
-    if {$gzip_request_p} {
-        set body [zlib gzip $body]
+    # Any conversion or encoding of the payload should happen only at
+    # the first request and not on redirects
+    if {$depth == 0} {
+        set content_type [ns_set iget $headers "content-type"]
+        if {$content_type eq ""} {
+            set content_type "text/plain; charset=[ns_config ns/parameters OutputCharset iso-8859-1]"
+        }
+        
+        set enc [util::http::get_channel_settings $content_type]
+        if {$enc ne "binary"} {
+            set body [encoding convertto $enc $body]
+        }
+        
+        if {$gzip_request_p} {
+            set body [zlib gzip $body]
+        }
     }
     
     ## Issuing of the request
@@ -1425,7 +1440,7 @@ ad_proc -private util::http::curl::request {
     
     if {$timeout ne ""} {
         lappend cmd --connect-timeout [timeout $timeout]
-    }
+    }    
 
 # Antonio Pisano 2015-09-28: curl can follow redirects
 # out of the box, but its behavior is to throw an error
@@ -1439,6 +1454,15 @@ ad_proc -private util::http::curl::request {
     if {$method eq "GET"} {
         lappend cmd -G
     }
+
+    # Files to be sent natively by curl by the -F option
+    foreach f $files {
+        if {[llength $f] != 2} {
+            return -code error "${this_proc}:  invalid -files parameter: $files"
+        }
+        set f [join $f "=@"]
+        lappend cmd -F $f
+    }    
     
     # If required, we'll follow POST request redirections by GET
     if {!$post_redirect_p} {
@@ -1458,6 +1482,7 @@ ad_proc -private util::http::curl::request {
     # just spool body content to a file and let it be read by curl.
     set data_binary_tmpfile [ad_tmpnam]
     set wfd [open $data_binary_tmpfile w]
+    fconfigure $wfd -translation binary
     puts -nonewline $wfd $body
     close $wfd
     lappend cmd --data-binary "@${data_binary_tmpfile}"
