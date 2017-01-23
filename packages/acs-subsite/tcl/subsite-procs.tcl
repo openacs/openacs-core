@@ -843,7 +843,7 @@ ad_proc -public -callback subsite::theme_changed {
 } -
 
 
-ad_proc -public subsite::save_theme_parameters_as_default {
+ad_proc -public subsite::save_theme_parameters {
     -subsite_id
     -theme
 } {
@@ -884,6 +884,46 @@ ad_proc -public subsite::save_theme_parameters_as_default {
         -streaming_head       [parameter::get -parameter StreamingHead           -package_id $subsite_id] 
         
 }
+
+ad_proc -public subsite::save_theme_parameters_as {
+    -subsite_id
+    -theme:required
+    -pretty_name:required
+} {
+    Save the actual theming parameter for the given/current subsite
+    under a new name.
+
+    @param subsite_id Id of the subsite
+    @param theme Name of the theme (theme key)
+    @param pretty_theme Pretty Name (of the theme)
+
+    @author Gustaf Neumann
+} {
+
+    if { ![info exists subsite_id] } {
+        set subsite_id [ad_conn subsite_id]
+    }
+
+    set exists_p [db_string get_theme_name {select 1 from subsite_themes where key = :theme} -default 0]
+    if {$exists_p} {
+        error "subsite theme with key $theme exists already"
+    }
+
+    subsite::new_subsite_theme \
+        -key                  $theme \
+        -name                 $pretty_name \
+        -template             [parameter::get -parameter DefaultMaster           -package_id $subsite_id] \
+        -css                  [parameter::get -parameter ThemeCSS                -package_id $subsite_id] \
+        -js                   [parameter::get -parameter ThemeJS                 -package_id $subsite_id] \
+        -form_template        [parameter::get -parameter DefaultFormStyle        -package_id $subsite_id] \
+        -list_template        [parameter::get -parameter DefaultListStyle        -package_id $subsite_id] \
+        -list_filter_template [parameter::get -parameter DefaultListFilterStyle  -package_id $subsite_id] \
+        -dimensional_template [parameter::get -parameter DefaultDimensionalStyle -package_id $subsite_id] \
+        -resource_dir         [parameter::get -parameter ResourceDir             -package_id $subsite_id] \
+        -streaming_head       [parameter::get -parameter StreamingHead           -package_id $subsite_id] 
+        
+}
+
 
 
 ad_proc -public subsite::get_theme {
@@ -951,6 +991,8 @@ ad_proc -public subsite::update_subsite_theme {
         key = :key
     }
 }
+
+
 
 ad_proc -public subsite::delete_subsite_theme {
     -key:required

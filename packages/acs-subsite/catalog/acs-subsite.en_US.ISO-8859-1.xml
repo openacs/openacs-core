@@ -25,6 +25,7 @@
   <msg key="Account_reopened_message">Your account at %system_name% has been reopened. Welcome back.</msg>
   <msg key="Account_reopened_title">Account Reopened</msg>
   <msg key="Action">Action</msg>
+  <msg key="Active_theme">Active</msg>
   <msg key="Add">Add</msg>
   <msg key="Add_a_group_of_this_type">Add a group of this type</msg>
   <msg key="Add_a_permissible_relationship_type">Add a permissible relationship type</msg>
@@ -144,6 +145,7 @@ logging in again. &lt;/p&gt;
   <msg key="Delete_selected_app">Delete selected applications</msg>
   <msg key="Delete_this_application">Delete this application</msg>
   <msg key="Delete_this_group_type">Delete this group type</msg>
+  <msg key="Delete_this_theme">Delete this theme</msg>
   <msg key="Description">Description</msg>
   <msg key="Details_for__group_type_pretty_name">Details for Group Type &#34;%group_type_pretty_name%&#34;</msg>
   <msg key="DevAdmin">DevAdmin</msg>
@@ -255,6 +257,7 @@ Please visit the following link to change your password now:
   <msg key="Join_subsite">Join subsite</msg>
   <msg key="Join_this_community">Join this community</msg>
   <msg key="Join_this_subsite">Join this subsite</msg>
+  <msg key="Key">Key</msg>
   <msg key="Keyword">Keyword</msg>
   <msg key="Last_name">Last name</msg>
   <msg key="Last_name_not_provided_by_authority">Last name was not provided by the login authority. Please enter your last name.</msg>
@@ -391,6 +394,7 @@ account was deleted for some reason.</msg>
   <msg key="Members">Members</msg>
   <msg key="Members_only">Members only</msg>
   <msg key="Missing_argument">Missing argument</msg>
+  <msg key="Modified_theme">Modified</msg>
   <msg key="mount">mount</msg>
   <msg key="My_Account">Your Account</msg>
   <msg key="Name">Name</msg>
@@ -513,6 +517,7 @@ You can always change your password by doing the following:
   <msg key="Select_Applications">Select Applications</msg>
   <msg key="Select_Applications__helptext">If the application is not in the list, you may need to &lt;a href=\&#34;/acs-admin/install/\&#34;&gt;install&lt;/a&gt; it on the server</msg>
   <msg key="Select_relation_type">Select relation type</msg>
+  <msg key="Select_theme">Select Theme</msg>
   <msg key="Send_email_to_this_user">Send email to this user</msg>
   <msg key="Send_me_a_copy">Send me a copy:</msg>
   <msg key="Services">Services</msg>
@@ -546,6 +551,7 @@ You can always change your password by doing the following:
   <msg key="The_name_of_the_new_subsite_you_re_setting_up">The name of the new subsite you&#39;re setting up</msg>
   <msg key="Theme">Theme</msg>
   <msg key="theme">theme</msg>
+  <msg key="Themes">Themes</msg>
   <msg key="This_group_is_closed">This group is closed. New members can only get access by invitation.</msg>
   <msg key="This_group_type_can_only_be_administered_by_programmers">This group type can only be administered by programmers</msg>
   <msg key="This_should_be_a_short_string">This should be a short string, all lowercase, with hyphens instead of spaces, whicn will be used in the URL of the new application. If you leave this blank, we will generate one for you from name of the application.</msg>

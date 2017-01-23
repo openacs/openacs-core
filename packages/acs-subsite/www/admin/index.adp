@@ -5,6 +5,7 @@
 <ul>
   <li><a href="applications/">#acs-subsite.Applications#</a></li>
   <li><a href="configure">#acs-subsite.Configure#</a></li>
+  <li><a href="themes">#acs-subsite.Themes#</a></li>
   <li><a href="permissions">#acs-subsite.Permissions#</a></li>
   <li><a href="../members/">#acs-subsite.Members#</a></li>
   <li><a href="../shared/parameters?return_url=../admin">#acs-subsite.Parameters#</a></li>
