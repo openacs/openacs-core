@@ -19,6 +19,14 @@ list::create \
     -pass_properties rename_theme \
     -page_query_name select_themes \
     -elements {
+        view {
+            sub_class narrow
+            display_template {
+                <img src="/resources/acs-subsite/Zoom16.gif" height="16" width="16" alt="#acs-subsite.View_this_theme#" style="border:0">
+            }
+            link_url_eval {[export_vars -base view { {theme $key} }]}
+            link_html { title "#acs-subsite.View_this_theme#" }
+        }
         
         key {
             label "[_ acs-subsite.Key]"
