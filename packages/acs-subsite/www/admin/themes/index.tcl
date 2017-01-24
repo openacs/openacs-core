@@ -26,15 +26,22 @@ list::create \
         name {
             label "[_ acs-subsite.Name]"
         }
+        usage_count {
+            label "[_ acs-subsite.Usage]"
+            html {style "text-align: center;"}
+
+        }
         active_p {
             label "[_ acs-subsite.Active_theme]"
             display_template {
                 <if @themes.active_p;literal@ true>
-                <img src="/shared/images/radiochecked.gif" height="16" width="16" alt="#acs-subsite.Modified_theme#" style="border:0">
+                <img src="/shared/images/radiochecked.gif" height="16" width="16" alt="#acs-subsite.Modified_theme#"
+                style="display: block; margin-left: auto; margin-right: auto;">
                 </if>
                 <else>
                 <a href="set?theme=@themes.key@" title="#acs-subsite.Select_theme#">
-                <img src="/shared/images/radio.gif" height="16" width="16" alt="#acs-subsite.Select_theme#" style="border:0">
+                <img src="/shared/images/radio.gif" height="16" width="16" alt="#acs-subsite.Select_theme#"
+                style="display: block; margin-left: auto; margin-right: auto;">
                 </a>
                 </else>
             }
@@ -54,7 +61,8 @@ list::create \
                 </form>
                 </if>
                 <else>
-                <img src="/shared/images/radiochecked.gif" height="16" width="16" alt="#acs-subsite.Modified_theme#" style="border:0">
+                <img src="/shared/images/radiochecked.gif" height="16" width="16" alt="#acs-subsite.Modified_theme#"
+                style="display: block; margin-left: auto; margin-right: auto;">
                 <a href="./?rename_theme=@themes.key;literal@">Save new</a>
                 </else>
                 </if>
@@ -63,7 +71,7 @@ list::create \
         delete {
             sub_class narrow
             display_template {
-                <if @themes.active_p;literal@ false>
+                <if @themes.usage_count;literal@ eq 0>
                 <img src="/shared/images/Delete16.gif" height="16" width="16" alt="#acs-subsite.Delete_this_theme#" style="border:0">
                 </if>
             }
@@ -86,7 +94,9 @@ set settings {
     streaming_head       StreamingHead
 }
 
-db_multirow -extend {active_p modified_p} themes select_themes {} {
+set package_keys '[join [subsite::package_keys] ',']'
+
+db_multirow -extend {active_p modified_p delete_p usage_count} themes select_themes {} {
     set active_p [expr {$currentThemeKey eq $key}]
     set modified_p 0
     if {$active_p} {
@@ -97,6 +107,14 @@ db_multirow -extend {active_p modified_p} themes select_themes {} {
             }
         }
     }
+    set usage_count [db_string count_theme_usages [subst {
+        select count(*)
+        from apm_parameters p, apm_parameter_values v
+        where p.parameter_name = 'ThemeKey'
+        and   p.package_key in ($package_keys)
+        and   p.parameter_id = v.parameter_id
+        and   v.attr_value = :key
+    }]]
 }
 
 
