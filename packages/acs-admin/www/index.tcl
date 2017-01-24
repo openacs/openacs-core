@@ -8,7 +8,9 @@ ad_page_contract {
 set page_title [ad_conn instance_name]
 set package_keys '[join [subsite::package_keys] ',']'
 set subsite_number [db_string count_subsites [subst {
-    select count(*) from apm_packages where package_key in ($package_keys)
+    select count(p.package_id) from apm_packages p, site_nodes s
+    where  package_key in ($package_keys)
+    and    s.object_id = p.package_id
 }]]
 
 db_multirow -extend { admin_url global_param_url } packages installed_packages {} {
