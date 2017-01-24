@@ -101,8 +101,11 @@ db_multirow -extend {active_p modified_p delete_p usage_count} themes select_the
     set modified_p 0
     if {$active_p} {
         foreach {var param} $settings {
-            set modified_p [expr {[set $var] ne [parameter::get -parameter $param -package_id $subsite_id]}]
+            set default [set $var]
+            set value   [parameter::get -parameter $param -package_id $subsite_id]
+            set modified_p [expr {$default ne $value}]
             if {$modified_p} {
+                ns_log notice "theme parameter $var differs: default '$default' actual value '$value'"
                 break
             }
         }
