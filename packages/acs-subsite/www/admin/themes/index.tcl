@@ -22,7 +22,9 @@ list::create \
         view {
             sub_class narrow
             display_template {
+                <if @themes.active_p;literal@ true>
                 <img src="/resources/acs-subsite/Zoom16.gif" height="16" width="16" alt="#acs-subsite.View_this_theme#" style="border:0">
+                </if>
             }
             link_url_eval {[export_vars -base view { {theme $key} }]}
             link_html { title "#acs-subsite.View_this_theme#" }
