@@ -23,7 +23,7 @@ list::create \
             sub_class narrow
             display_template {
                 <if @themes.active_p;literal@ true>
-                <img src="/resources/acs-subsite/Zoom16.gif" height="16" width="16" alt="#acs-subsite.View_this_theme#" style="border:0">
+                <img src="/resources/acs-subsite/Edit16.gif" height="16" width="16" alt="#acs-subsite.View_this_theme#" style="border:0">
                 </if>
             }
             link_url_eval {[export_vars -base view { {theme $key} }]}
@@ -111,8 +111,9 @@ db_multirow -extend {active_p modified_p delete_p usage_count} themes select_the
     set modified_p 0
     if {$active_p} {
         foreach {var param} $settings {
-            set default [set $var]
-            set value   [parameter::get -parameter $param -package_id $subsite_id]
+            set default [string trim [set $var]]
+            set value   [string trim [parameter::get -parameter $param -package_id $subsite_id]]
+            regsub -all {\r\n} $value "\n" value
             set modified_p [expr {$default ne $value}]
             if {$modified_p} {
                 ns_log notice "theme parameter $var differs: default '$default' actual value '$value'"

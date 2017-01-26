@@ -18,8 +18,6 @@ ad_page_contract {
 set subsite_id [ad_conn subsite_id]
 set instance_name [apm_instance_name_from_id $subsite_id]
 
-
-
 set settings {
     template             DefaultMaster
     css                  ThemeCSS
@@ -35,7 +33,7 @@ set settings {
 set subsite_id [ad_conn subsite_id]
 set currentThemeKey [parameter::get -parameter ThemeKey -package_id $subsite_id]
 
-ns_log notice currentThemeKey=$currentThemeKey
+#ns_log notice currentThemeKey=$currentThemeKey
 #ns_log notice ACTION=[template::form get_action theme]-[ns_set array [ns_getform]]
 
 db_1row get_vars_of_seleted_theme {select * from  subsite_themes where key = :theme}
@@ -45,27 +43,27 @@ db_1row get_vars_of_seleted_theme {select * from  subsite_themes where key = :th
 # case, we try to implement our own management here. Probably, the
 # display mode of textarea should be fixed to reduce complexity here.
 #
-if {[ns_queryget formbutton:edit] eq "Edit"} {
+if {1 || [ns_queryget formbutton:edit] ne ""} {
     set htmlSpecs ""
-    ns_log notice "true edit mode"
+    #ns_log notice "true edit mode"
     set editMode 1
-    set editButtons [list [list Save save] ]
+    set editButtons [list [list " Save " save] ]
     set page_title "Edit Theme Parameters of Subsite: $instance_name"
     #
     # Since we are doing our own display/edit modes, we have to tell
     # ad_form, that this request should be treated like a fresh
     # request.
     #
-    ns_set truncate [ns_getform] 0
+    #ns_set truncate [ns_getform] 0
 } else {
     set htmlSpecs [list disabled disabled]
-    ns_log notice "view mode"
+    #ns_log notice "view mode"
     set editMode 0
     set editButtons [list [list Edit edit] ]
     set page_title "View Theme Parameters of Subsite: $instance_name"
 }
 
-set context [list $page_title]
+set context [list {. #acs-subsite.Themes#} $page_title]
 
 
 
@@ -74,10 +72,10 @@ set formSpec {}
 foreach {var param} $settings {
     if {$var in {css js}} {
         lappend htmlSpecs rows 5 cols 100
-        set currentSpec [list ${var}:text(textarea),nospell,optional [list label $var] [list html $htmlSpecs]]
+        set currentSpec [list ${var}:text(textarea),nospell,optional [list label $param] [list html $htmlSpecs]]
     } else {
         lappend htmlSpecs size 80
-        set currentSpec [list ${var}:text,optional [list label $var] [list html $htmlSpecs]]
+        set currentSpec [list ${var}:text,optional [list label $param] [list html $htmlSpecs]]
     }
     
     if {$currentThemeKey eq $key} {
@@ -110,11 +108,19 @@ ad_form -name theme \
     -edit_buttons $editButtons \
     -form $formSpec \
     -on_request {
-        ns_log notice "on request"
+        #ns_log notice "on request"
+        
     } -on_submit {
-        ns_log notice "on submit"
+        #ns_log notice "on submit ====== SAVE?"
+        if {[ns_queryget formbutton:save] ne ""} {
+            ns_log notice "edit theme ====== SAVE form values in actual parameter settings"
+            foreach {var param} $settings {
+                parameter::set_value -parameter $param -package_id $subsite_id -value [set $var]
+            }
+        }
+            
     } -after_submit {
-        if {!$editMode} {
+        if {1 || !$editMode} {
             ad_returnredirect $return_url
             ad_script_abort
         }
