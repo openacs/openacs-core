@@ -2,7 +2,7 @@ ad_page_contract {
     Processes a new user created by an admin
     @cvs-id $Id$
 } -query {
-    user_id
+    user_id:naturalnum,notnull
     password
     {referer "/acs-admin/users"}
 } -properties {
