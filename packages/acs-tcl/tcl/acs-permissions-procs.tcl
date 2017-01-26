@@ -133,9 +133,6 @@ ad_proc -public permission::permission_p {
 }
 
 
-# accepts nocache to match permission_p arguments 
-# since we alias it to permission::permission_p if
-# caching disabled.
 ad_proc -private permission::permission_p_not_cached {
     {-no_cache:boolean}
     {-party_id ""}
@@ -144,13 +141,17 @@ ad_proc -private permission::permission_p_not_cached {
 } {
     does party X have privilege Y on object Z
 
+    This function accepts "-no_cache" just to match the permission_p
+    signature since we alias it to permission::permission_p when
+    caching is disabled.
+
     @see permission::permission_p
 } {
     if { $party_id eq "" } {
         set party_id [ad_conn user_id]
     }
 
-    # We have a thread-local cache here
+    # We have a per-request cache here
     global permission__permission_p__cache
     if { ![info exists permission__permission_p__cache($party_id,$object_id,$privilege)] } {
         set permission__permission_p__cache($party_id,$object_id,$privilege) [db_string select_permission_p {
