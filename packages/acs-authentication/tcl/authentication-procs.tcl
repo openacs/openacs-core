@@ -390,7 +390,7 @@ ad_proc -private auth::get_register_authority {
     set parameter_value [parameter::get_from_package_key -parameter RegisterAuthority -package_key "acs-authentication"]
 
     # Catch the case where somebody has set the parameter to some non-existant authority
-    if { [lsearch [auth::authority::get_short_names] $parameter_value] != -1} {
+    if {$parameter_value in [auth::authority::get_short_names]} {
         # The authority exists
         set authority_id [auth::authority::get_id -short_name $parameter_value]
 
