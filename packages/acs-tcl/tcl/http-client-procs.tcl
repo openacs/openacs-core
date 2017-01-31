@@ -593,7 +593,7 @@ ad_proc util::http::post {
     # If required from headers, force a multipart form
     set req_content_type [ns_set iget $headers "content-type"]
     if {$req_content_type ne ""} {
-        if {[set multipart_p [string match -nocase "*multipart/form-data*" $req_content_type]} {
+        if {[set multipart_p [string match -nocase "*multipart/form-data*" $req_content_type]]} {
             # content-type was set as multipart by hand, we delete the
             # manual header, because we will create a proper one, with
             # boundaries etc later
