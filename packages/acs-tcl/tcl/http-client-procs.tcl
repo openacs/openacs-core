@@ -746,11 +746,15 @@ ad_proc util::http::post {
                      $payload_file \
                      $payload_file_fd]
         lassign $app payload payload_file payload_file_fd
-
-        # ...otherwise this will be an 'application/x-www-form-urlencoded' payload
+        
     } else {
-        set content_type "application/x-www-form-urlencoded"
-        ns_set put $headers "Content-type" $content_type
+        # If people specified a content type we won't overwrite it,
+        # otherwise this will be a 'application/x-www-form-urlencoded'
+        # payload
+        if {$req_content_type eq ""} {
+            set content_type "application/x-www-form-urlencoded"
+            ns_set put $headers "Content-type" $content_type
+        }
         set enc [util::http::get_channel_settings $content_type]
         set payload $formvars
     }
