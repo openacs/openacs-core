@@ -590,29 +590,28 @@ ad_proc util::http::post {
         set headers [ns_set create headers]
     }
 
-    # If required from headers, force a multipart form
     set req_content_type [ns_set iget $headers "content-type"]
-    if {$req_content_type ne ""} {
-        if {[set multipart_p [string match -nocase "*multipart/form-data*" $req_content_type]]} {
-            # content-type was set as multipart by hand, we delete the
-            # manual header, because we will create a proper one, with
-            # boundaries etc later
-            ns_set idelkey $headers "Content-type"
-        }
-    }
     
-    ## Construction of the payload
-    # By user choice, or because we have files, this will be a 'multipart/form-data' payload...
     set payload {}
     set payload_file {}
     set payload_file_fd {}
-    
-    if {$multipart_p || $files ne [list]} {
 
+    # Request will be multipart if required by the flag, if we have
+    # files or if set up manually by the headers
+    if {$multipart_p ||
+        $files ne {} ||
+        [string match -nocase "*multipart/form-data*" $req_content_type]} {
+
+        # delete every manually set content-type header...
+        while {[ns_set ifind $headers "Content-type"] >= 0} {
+            ns_set idelkey $headers "Content-type"
+        }
+        # ...replace it with our own...
         set boundary [ns_sha1 [list [clock clicks -milliseconds] [clock seconds]]]
-        set content_type "multipart/form-data; boundary=$boundary"
-        ns_set put $headers "Content-type" $content_type
-        set enc [util::http::get_channel_settings $content_type]
+        set req_content_type "multipart/form-data; boundary=$boundary"        
+        ns_set put $headers "Content-type" $req_content_type
+        # ...and get the proper encoding for the content.
+        set enc [util::http::get_channel_settings $req_content_type]
 
         # Transform files into binaries
         foreach file $files {
@@ -752,10 +751,10 @@ ad_proc util::http::post {
         # otherwise this will be a 'application/x-www-form-urlencoded'
         # payload
         if {$req_content_type eq ""} {
-            set content_type "application/x-www-form-urlencoded"
-            ns_set put $headers "Content-type" $content_type
+            set req_content_type "application/x-www-form-urlencoded"
+            ns_set put $headers "Content-type" $req_content_type
         }
-        set enc [util::http::get_channel_settings $content_type]
+        set enc [util::http::get_channel_settings $req_content_type]
         set payload $formvars
     }
 
