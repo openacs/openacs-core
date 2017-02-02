@@ -2549,7 +2549,7 @@ ad_proc -public util_driver_info {
 }
 
 ad_proc util::split_location {location protoVar hostnameVar portVar} {
-    Split the provided location into "protocol", "hostname" and
+    Split the provided location into "proto", "hostname" and
     "port".  The results are returned to the provided output
     variables.  The function supports IP-literal notation according to
     RFC 3986 section 3.2.2.

@@ -1531,7 +1531,7 @@ ad_proc -public security::redirect_to_secure {
     if { [https_available_p] } {
         set secure_url [get_secure_qualified_url $url]
         ns_set put [ad_conn outputheaders] Vary "Upgrade-Insecure-Requests"
-        # ns_log notice "redirect $url to secure url $secure_url"
+        #ns_log notice "redirect $url to secure url $secure_url"
         ad_returnredirect $secure_url
         if {$script_abort_p} {ad_script_abort}
     }
@@ -1731,9 +1731,125 @@ ad_proc -public security::driver {} {
     return $::acs::sdriver
 }
 
+if {[info commands ns_driver] ne ""} {
+    
+    ad_proc -private security::configured_driver_info {} {
+        
+        Return a list of dicts containing type, driver, location and port
+        of the configured drivers
+        
+    } {
+        set defaultport {nssock 80 nsssl 433}
+        set result {}
+        foreach i [ns_driver info] {
+            set type     [dict get $i type]
+            set location [dict get $i location]
+            set li       [ns_parseurl $location]
+            
+            if {[dict exists $li port]} {
+                set port [dict get $li port]
+                set suffix ":$port"
+            } else {
+                set port [dict get $defaultport $type]
+                set suffix ""
+            }
+            lappend result [list \
+                                proto [dict get $i protocol] \
+                                driver [dict get $i module] \
+                                host [dict get $li host] \
+                                location $location port $port suffix $suffix]
+        }
+        return $result
+    }
+    
+} else {
+    
+    ad_proc -private security::configured_driver_info {} {
+        set result ""
+        #
+        # Find the first insecure driver based on driver names from
+        # recommended config files
+        # 
+        foreach driver {nssock nssock_v4 nssock_v6} {
+            set driver_section [ns_driversection -driver $driver]
+            if {$driver_section ne ""} {
+
+                set host [ns_config $driver_section hostname]
+                if {$host eq ""} {
+                    set host [ns_config $driver_section address]
+                    if {[string match "*:*" $host]} {
+                        set host "\[$host\]"
+                    }
+                }
+                set location "http://$host"
+                
+                set port [ns_config -int $driver_section port 80]
+                if { $port ne "" && $port != 80 } {
+                    set suffix ":$port"
+                    append location $suffix
+                } else {
+                    set port 80
+                    set suffix ""
+                }
+                lappend result [list proto http driver $driver host $host \
+                                    location $location port $port suffix $suffix]                
+            }
+        }
+
+        #
+        # Oobtain information about secure locations.
+        #
+        set sdriver [security::driver]
+
+        # nsopenssl 3 has variable locations for the secure
+        # port, openacs standardized at:
+        
+        if { $sdriver eq "nsopenssl" } {
+            set port [ns_config -int "ns/server/[ns_info server]/module/$sdriver/ssldriver/users" port 443]
+            set host [ns_config "ns/server/[ns_info server]/module/$sdriver/ssldriver/users" hostname]
+            
+        } elseif { $sdriver ne "" } {
+            # get secure port for all other cases of nsssl, nsssle etc
+            set driver_section [ns_driversection -driver $sdriver]
+            set host [ns_config $driver_section hostname]
+            if {$host eq ""} {
+                set host [ns_config $driver_section address]
+                if {[string match "*:*" $host]} {
+                    set host "\[$host\]"
+                }
+            }
+            set port [ns_config -int $driver_section port]
+            
+            # checking nsopenssl 2.0 which has different names for 
+            # the secure port etc, and deprecated with this version of OpenACS
+            if {$port eq ""} {
+                set port [ns_config -int $driver_section ServerPort 443]
+                if {$port ne ""} {
+                    ns_log Warning "Using 'ServerPort' in config file in $driver_section is deprecated (use 'port' instead)"
+                }
+            }
+        } else {
+            set port ""
+        }
+        
+        if {$sdriver ne ""} {
+            set location "https://$host"
+            if {$port eq "" || $port eq "443" } {
+                set suffix ""
+            } else {
+                set suffix ":$port"
+                append location $suffix
+            }
+ 
+            lappend result [list proto https driver $sdriver host $host \
+                                location $location port $port suffix $suffix]                
+        }
+        return $result
+    }
+}
 
 ad_proc -public security::locations {} {
-    @return insecure location and secure location followed possibly by alternate insecure location(s) as a list.
+    @return insecure location and secure location followed possibly by alternate location(s) as a list.
 
     The location consists of protocol://domain:port for website. This proc is ported 
     from ec_insecure_location and ec_secure_location for reliably getting locations.  
@@ -1742,121 +1858,106 @@ ad_proc -public security::locations {} {
     This proc also assumes hostnames from host_node_map table are accurate and legit.
 } {
     set locations [list]
-    # following from ec_preferred_drivers
-    set driver "nssock"
-    set sdriver [security::driver]
-
-    # set the driver results
-    array set drivers [list driver $driver sdriver $sdriver]
-    set driver $drivers(driver)
-
-    # check if port number is included here, we'll reattach it after
-    # the request if its a non-standard port. Since we build the
-    # secure url from this host name we need to replace the port with
-    # the secure port
-    set host_post ""
-
-    # set host_name
-    if {![util::split_location [util_current_location] host_protocol host_name host_port]} {
-        error "cannot split location <[util_current_location]>"
+    set portless_locations {}
+    #
+    # Get Information from configured servers
+    #
+    set driver_info [security::configured_driver_info]
+    foreach d $driver_info {
+        #
+        # port == 0 means that the driver is just used for sending, but not for receiveing
+        #
+        if {[dict get $d port] != 0} {
+            set location [dict get $d location]
+            if {$location ni $locations} {lappend locations $location}
+            
+            set location [dict get $d proto]://[dict get $d host]
+            if {$location ni $portless_locations &&
+                $location ni $locations} {
+                lappend portless_locations $location
+            }
+            append location :[dict get $d port]
+            if {$location ni $locations} {lappend locations $location}
+        }
     }
 
-    set driver_section [ns_driversection -driver $driver]
-    #
-    # Let's give a notice when util_current_location returns host_name
-    # not same as from config.tcl, may help with proxy issues
-    # etc. This is quite normal when e.g. host-node maps are involved.
-    #
-    set config_hostname [ns_config $driver_section hostname]
-    if { $config_hostname ne $host_name } {
-        ns_log notice "security::locations hostname '[ns_config $driver_section hostname]' from config.tcl does not match from util_current_location: $host_name"
-    }
+    if {[ns_conn isconnected]} {
+        #
+        # Get Information about the current connection
+        #
 
-    # insecure locations
-    set insecure_port [ns_config -int $driver_section port 80]
-
-    set insecure_location "http://${host_name}"
-    set host_map_http_port ""
-    if { $insecure_port ne "" && $insecure_port != 80 } {
-        set alt_insecure_location $insecure_location
-        append insecure_location ":$insecure_port"
-        set host_map_http_port ":$insecure_port"
-    }
-    lappend locations $insecure_location
-
-    # Now obtain information about secure locations, favoring
-    # nsopenssl, and then check for nsssl and nsssle.
-    #
-    # nsopenssl 3 has variable locations for the secure
-    # port, openacs standardized at:
-    
-    if { $sdriver eq "nsopenssl" } {
-        set secure_port [ns_config -int "ns/server/[ns_info server]/module/$sdriver/ssldriver/users" port 443]
-    } elseif { $sdriver ne "" } {
-        # get secure port for all other cases of nsssl, nsssle etc
-        set driver_section [ns_driversection -driver $sdriver]
-        set secure_port [ns_config -int $driver_section port]
+        #
+        # Is the current connection secure?
+        #
+        set secure_conn_p [security::secure_conn_p]
         
-        # checking nsopenssl 2.0 which has different names for 
-        # the secure port etc, and deprecated with this version of OpenACS
-        if {$secure_port eq "" || $secure_port eq "443" } {
-            ns_log Warning "Using 'ServerPort' in config file in $driver_section is deprecated (use 'port' instead)"
-            set secure_port [ns_config -int $driver_section ServerPort 443]
+        set current_location [util_current_location]
+        if {$current_location ni $locations} {
+            lappend locations $current_location
+        }
+        
+        #
+        # When we are on a secure connection, the command above added
+        # already a secure connection. When we are on a nonsecure
+        # connection, but HTTPS is available, allow as well the
+        # current host via the secure connection.
+        #
+        if {!$secure_conn_p && [https_available_p]} {
+            set secure_current_location [security::get_secure_location]
+            #ns_log notice "ADD secure_current_location: <$secure_current_location>"
+            if {$secure_current_location ni $locations} {
+                lappend locations $secure_current_location
+            }
         }
     } else {
-        set secure_port ""
-    }
-
-    if {$secure_port == 0} {
-        # port == 0 means, that the driver is loaded, but the server
-        # is not listing on this port. Therefore, we ignore the fact
-        # that the ssl driver is loaded
-        set sdriver ""
+        set secure_conn_p 0
     }
     
-    # if we have a secure location, add it
-    set host_map_https_port ""
-
-    if { $sdriver ne "" } {
-        set secure_location "https://${host_name}"
-        if {$secure_port ne "" && $secure_port ne "443"}  {
-            append secure_location ":$secure_port"
-            set host_map_https_port ":$secure_port"
-        }
-        lappend locations $secure_location
-    }
-    # consider if we are behind a proxy and don't want to publish the proxy's backend port
+    #
+    # Consider if we are behind a proxy and don't want to publish the
+    # proxy's backend port. In this cases, SuppressHttpPort can be used
+    #
     set suppress_http_port [parameter::get -parameter SuppressHttpPort \
                                 -package_id [apm_package_id_from_key acs-tcl] \
                                 -default 0]
-    if { [info exists alt_insecure_location] && $suppress_http_port } {
-        lappend locations $alt_insecure_location
+    if {$suppress_http_port} {
+        lappend locations {*}$portless_locations
     }
 
-    # add locations from host_node_map 
+   
+    #
+    # Add locations from host_node_map
+    #
     set host_node_map_hosts_list [db_list -cache_key security-locations-host-names \
                                       get_node_host_names {select host from host_node_map}]
-    # fastest place for handling this special case:
-    if { $config_hostname ne $host_name } {
-        #ns_log Notice "security::locations adding $config_hostname since utl_current_location different than config.tcl."
-        lappend host_node_map_hosts_list $config_hostname
-    }
+ 
     if { [llength $host_node_map_hosts_list] > 0 } {
         if { $suppress_http_port } {
             foreach hostname $host_node_map_hosts_list {
                 lappend locations "http://${hostname}"
-                lappend locations "https://${hostname}"
+                if {$secure_conn_p} {
+                    lappend locations "https://${hostname}"
+                }
             }
         } else {
             foreach hostname $host_node_map_hosts_list {
-                lappend locations "http://${hostname}${host_map_http_port}"
-                lappend locations "https://${hostname}${host_map_https_port}"
+                if {[dict get $d proto] eq "http"} {
+                    lappend locations "http://${hostname}[dict get $d suffix]"
+                }
+                if {$secure_conn_p} {
+                    foreach d $driver_info {
+                        if {[dict get $d proto] eq "https"} {
+                            lappend locations "https://${hostname}[dict get $d suffix]"
+                        }
+                    }
+                }
             }
         }
     }
-    #ns_log notice "security::locations <$locations>"
+    ns_log notice "security::locations <$locations>"
     return $locations
 }
+
 
 ad_proc -public security::validated_host_header {} {
     @return validated host header field or empty
