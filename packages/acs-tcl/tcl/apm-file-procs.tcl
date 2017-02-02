@@ -197,29 +197,8 @@ ad_proc -private apm_generate_tarball { version_id } {
     set user_id     [ad_conn user_id]
     set name        "tarball-for-package-version-${version_id}"
     set title       "${package_key}-tarball"
-
-    set create_item "
-                  begin
-                   :1 := content_item.new(name        => :name,
-                                          creation_ip => :creation_ip
-                         );
-                  end;"
-
-    set create_revision "
-                  begin
-                   :1 := content_revision.new(title => :title,
-                                              description => 'gzipped tarfile',
-                                              text => 'not_important',
-                                              mime_type => 'text/plain',
-                                              item_id => :item_id,
-                                              creation_user => :user_id,
-                                              creation_ip => :creation_ip
-                         );
-
-                   update cr_items
-                   set live_revision = :1
-                   where item_id = :item_id;
-                 end;"
+    set description "gzipped tarfile"
+    set mime_type   "text/plain"
 
     db_1row item_exists_p {select case when item_id is null 
         then 0 
@@ -230,12 +209,18 @@ ad_proc -private apm_generate_tarball { version_id } {
 
     if {!$item_id} {
         # content item hasen't been created yet - create one.        
-        set item_id [db_exec_plsql create_item $create_item]
+        set item_id [content::item::new \
+                         -name          $name \
+                         -title         $title \
+                         -description   $description \
+                         -mime_type     $mime_type \
+                         -creation_user $user_id \
+                         -creation_ip   $creation_ip \
+                         -is_live       true]
+        set revision_id [content::item::get_live_revision -item_id $item_id]
         db_dml set_item_id "update apm_package_versions 
                                set item_id = :item_id 
                              where version_id = :version_id"
-        set revision_id [db_exec_plsql create_revision $create_revision]
-        
     } else {
         #tarball exists, so all we have to do is to make a new revision for it
         #Let's check if a current revision exists:
@@ -245,7 +230,13 @@ ad_proc -private apm_generate_tarball { version_id } {
             where item_id = :item_id
         }] || $revision_id eq ""} {
             # It's an insert rather than an update            
-            set revision_id [db_exec_plsql create_revision $create_revision]
+            set revision_id [content::revision::new -item_id $item_id \
+                                 -title         $title \
+                                 -description   $description \
+                                 -mime_type     $mime_type \
+                                 -creation_user $user_id \
+                                 -creation_ip   $creation_ip \
+                                 -is_live       true]
         }
     }
 
