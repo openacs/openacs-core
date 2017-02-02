@@ -1739,22 +1739,23 @@ if {[info commands ns_driver] ne ""} {
         of the configured drivers
         
     } {
-        set defaultport {nssock 80 nsssl 433}
+        set defaultport {http 80 https 433}
         set result {}
         foreach i [ns_driver info] {
             set type     [dict get $i type]
             set location [dict get $i location]
+            set proto    [dict get $i protocol]
             set li       [ns_parseurl $location]
             
             if {[dict exists $li port]} {
                 set port [dict get $li port]
                 set suffix ":$port"
             } else {
-                set port [dict get $defaultport $type]
+                set port [dict get $defaultport $proto]
                 set suffix ""
             }
             lappend result [list \
-                                proto [dict get $i protocol] \
+                                proto $proto \
                                 driver [dict get $i module] \
                                 host [dict get $li host] \
                                 location $location port $port suffix $suffix]
