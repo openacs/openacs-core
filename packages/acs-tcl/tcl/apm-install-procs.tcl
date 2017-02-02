@@ -2108,7 +2108,9 @@ ad_proc -private apm_get_package_repository {
         }
     } else {
         # Parse spec files
-        foreach spec_file [apm_scan_packages "$::acs::rootdir/packages"] {
+        set spec_files [apm_scan_packages "$::acs::rootdir/packages"]
+        lappend spec_files {*}[apm_scan_packages]
+        foreach spec_file $spec_files {
             with_catch errmsg {
                 array unset version
                 array set version [apm_read_package_info_file $spec_file]

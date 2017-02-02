@@ -64,14 +64,20 @@ if {$package_key eq ""} {
             #
             # Load package info from spec file. 
             #
+            unset -nocomplain spec_file
             if {[catch {set spec_file [apm_package_info_file_path $pkg]}]} {
-                #
-                # In case the spec file is not found (unknown package)
-                # produce an empty entry.
-                #
-                array set package [list package.key $pkg embeds "" extends "" \
-                                       provides "" requires "" properties {install ""}]
-            } else {
+                set workspace_dir [apm_workspace_install_dir]
+                if {[catch {set spec_file [apm_package_info_file_path -path $workspace_dir $pkg]}]} {
+                    #
+                    # In case the spec file is not found (unknown package)
+                    # produce an empty entry.
+                    #
+                    array set package [list package.key $pkg embeds "" extends "" \
+                                           provides "" requires "" properties {install ""}]
+                }                    
+            }
+
+            if {[info exists spec_file]} {
                 array set package [apm_read_package_info_file $spec_file]
             }
 
