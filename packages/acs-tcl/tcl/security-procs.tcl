@@ -1849,13 +1849,21 @@ if {[info commands ns_driver] ne ""} {
 }
 
 ad_proc -public security::locations {} {
+
+    This function returns the configured locations and the current
+    location and the vhost locations, potentially in HTTP or in HTTPs
+    variants.
+
+    When the package parameter "SuppressHttpPort" of acs-tcl parameter
+    is true, then an alternate location without a port is included.
+    This proc also assumes hostnames from host_node_map table are
+    accurate and legit.
+    
+    The term location refers to protocol://domain:port for
+    website.
+
     @return insecure location and secure location followed possibly by alternate location(s) as a list.
 
-    The location consists of protocol://domain:port for website. This proc is ported 
-    from ec_insecure_location and ec_secure_location for reliably getting locations.  
-    If acs-tcl's SuppressHttpPort parameter is true, then the alternate ec_insecure_location 
-    without port is appended to the list, since it is a valid alternate.  
-    This proc also assumes hostnames from host_node_map table are accurate and legit.
 } {
     set locations [list]
     set portless_locations {}
