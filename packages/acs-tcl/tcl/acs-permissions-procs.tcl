@@ -152,21 +152,20 @@ ad_proc -private permission::permission_p_not_cached {
     }
 
     # We have a per-request cache here
-    global permission__permission_p__cache
-    if { ![info exists permission__permission_p__cache($party_id,$object_id,$privilege)] } {
-        set permission__permission_p__cache($party_id,$object_id,$privilege) [db_string select_permission_p {
+    set key ::permission__permission_p__cache($party_id,$object_id,$privilege)
+    if { ![info exists $key] } {
+        set $key [db_string select_permission_p {
             select acs_permission.permission_p(:object_id, :party_id, :privilege)::integer from dual
         }]
     }
-    return $permission__permission_p__cache($party_id,$object_id,$privilege)
+    return [set $key]
 }
 
 
 ad_proc -private permission::permission_thread_cache_flush {} {
     Flush thread cache
 } {
-    global permission__permission_p__cache
-    array unset permission__permission_p__cache
+    array unset ::permission__permission_p__cache
 }
 
 ad_proc -public permission::require_permission {
