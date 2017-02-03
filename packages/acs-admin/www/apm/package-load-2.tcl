@@ -55,7 +55,7 @@ if {$file_path eq ""} {
 ns_log Debug "APM: Loading $file_path"
 
 # If file_path ends in .apm, then load the single package.
-if { [file extension $file_path] eq "apm" || $url_param ne ""} {
+if { [file extension $file_path] eq ".apm" || $url_param ne ""} {
     apm_load_apm_file {*}$url_param -callback apm_ns_write_callback $file_path
 } else {
     # See if this is a directory.
