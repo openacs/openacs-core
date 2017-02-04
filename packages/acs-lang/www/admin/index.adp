@@ -2,7 +2,7 @@
   <property name="doc(title)">@page_title;literal@</property>
   <property name="context">@context;literal@</property>
 
-<include src="/packages/acs-lang/lib/conflict-link" />
+<include src="/packages/acs-lang/lib/conflict-link" >
 
 <h1>@page_title@</h1>
 
