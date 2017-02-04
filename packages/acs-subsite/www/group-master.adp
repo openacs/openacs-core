@@ -146,7 +146,7 @@
     TODO: remove this and add a more systematic / package independent way 
     TODO  of getting this content here
   </comment>
-  <if @curriculum_bar_p;literal@ true><include src="/packages/curriculum/lib/bar" /></if>
+  <if @curriculum_bar_p;literal@ true><include src="/packages/curriculum/lib/bar" ></if>
 
   <div id="footer">
     <div class="block-marker">Begin footer</div>
