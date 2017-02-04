@@ -1,8 +1,7 @@
 --
--- Fix of change from d23-24 since trigger was fired too early (at
--- least for main usages)
+-- This change is required by a change of behavior in PostgreSQL 9.3
+-- (analysis and fix by Guenter Ernst).
 --
-
 -- The old trigger tried to update a deleted ROW,
 -- 03/Jan/2017:16:00:36][4864.7f6e84a99700][-conn:production:7-]
 -- ERROR:  tuple to be updated was already modified by an operation triggered by the current command
