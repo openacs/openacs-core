@@ -1005,7 +1005,6 @@ ad_proc -private db_exec { type db statement_name pre_sql {ulevel 2} args } {
 
 } {
     set start_time [expr {[clock clicks -microseconds]/1000.0}]
-    set start_time_fine [clock seconds]
     set driverkey [db_driverkey -handle_p 1 $db]
 
     # Note: Although marked as private, db_exec is in fact called
@@ -1099,11 +1098,13 @@ ad_proc -private db_exec { type db statement_name pre_sql {ulevel 2} args } {
     } error]
 
     # JCD: we log the clicks, dbname, query time, and statement to catch long running queries.
-    # If we took more than 5 seconds yack about it.
-    if { [clock clicks -milliseconds] - $start_time > 5000 } {
-        ns_log Warning "db_exec: longdb [expr {[clock seconds] - $start_time_fine}] seconds $db $type $statement_name"
+    # If we took more than 3 seconds yack about it.
+    if { [clock clicks -milliseconds] - $start_time > 3000 } {
+        set duration [format %.2f [expr {[clock clicks -milliseconds] - $start_time}]]
+        ns_log Warning "db_exec: longdb $duration seconds $db $type $statement_name"
     } else {
-        ns_log Debug "db_exec: timing [expr {[clock seconds] - $start_time_fine}] seconds $db $type $statement_name"
+        #set duration [format %.2f [expr {[clock clicks -milliseconds] - $start_time}]]
+        #ns_log Debug "db_exec: timing $duration seconds $db $type $statement_name"
     }
 
     ds_collect_db_call $db $type $statement_name $sql $start_time $errno $error
