@@ -17,14 +17,14 @@ layout</h3></div></div></div><div class="mediaobject" align="center"><img src="i
 &lt;table border="0" width="100%"&gt;
   &lt;tr&gt;
     &lt;td valign="top" width="50%"&gt;
-      &lt;table class="element" border=0 cellpadding="0" cellspacing="0" width="100%"&gt;
+      &lt;table class="element" border="0" cellpadding="0" cellspacing="0" width="100%"&gt;
         &lt;tr&gt; 
-          &lt;td colspan=3 class="element-header-text"&gt;
+          &lt;td colspan="3" class="element-header-text"&gt;
             &lt;bold&gt;Groups&lt;/bold&gt;
          &lt;/td&gt;
        &lt;/tr&gt;
        &lt;tr&gt;
-         &lt;td colspan=3 class="dark-line" height="0"&gt;&lt;img src="/resources/acs-subsite/spacer.gif"&gt;&lt;/td&gt;&lt;/tr&gt;
+         &lt;td colspan="3" class="dark-line" height="0"&gt;&lt;img src="/resources/acs-subsite/spacer.gif"&gt;&lt;/td&gt;&lt;/tr&gt;
           &lt;tr&gt;
             &lt;td class="light-line" width="1"&gt;
               &lt;img src="/resources/acs-subsite/spacer.gif" width="1"&gt;
