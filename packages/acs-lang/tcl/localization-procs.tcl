@@ -93,8 +93,11 @@ ad_proc -public lc_parse_number {
 	# Strip leading zeros
 	regexp -- "0*(\[0-9\.\]+)" $number match number
 	
-	# if number is real and mod(number)<1, then we have pulled off the leading zero; i.e. 0.231 -> .231 -- this is still fine for tcl though...
-	# Last pathological case
+	# if number is real and mod(number)<1, then we have pulled off
+	# the leading zero; i.e. 0.231 -> .231 -- this is still fine
+	# for Tcl though...
+
+        # Last pathological case
 	if {"." eq $number } {
 	    set number 0
 	}
@@ -305,7 +308,7 @@ ad_proc -public lc_time_fmt {
         return ""
     }
 
-    if { (![info exists locale] || $locale eq "") } {
+    if { $locale eq "" } {
         set locale [ad_conn locale]
     }
     
