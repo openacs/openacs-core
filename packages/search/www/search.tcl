@@ -35,7 +35,7 @@ ad_page_contract {
         }
     }
     
-    csrf { security::csrf::validate }
+    csrf { csrf::validate }
 }
 
 set page_title "Search Results"
