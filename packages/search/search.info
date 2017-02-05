@@ -20,7 +20,7 @@
 
         <provides url="search" version="5.9.1d2"/>
         <requires url="acs-service-contract" version="5.9.0"/>
-	<requires url="acs-tcl" version="5.9.1d14"/>
+        <requires url="acs-tcl" version="5.9.1d14"/>
         <requires url="acs-templating" version="5.9.0"/>
 
         <callbacks>
@@ -35,6 +35,7 @@
             <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="SubsiteSearchP"  default="0" description="If mounted in a subsite should the search be restricted to items in the subsite by default.  Requires that package_id in acs_objects be properly populated."/>
             <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="Symbol2Interval"  default="m3 {3 month ago} m6 {6 month ago} y1 {1 year ago}" description="Translate symbol to date interval."/>
             <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="Syndicate"  default="0" description="Should syndication data be stored when indexing for search."/>
+            <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="ValidateCSRFP"  default="1" description="Boolean parameter to activate/deactivate CSRF protection for this package instance"/>
         </parameters>
 
     </version>
