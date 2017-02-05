@@ -2247,6 +2247,32 @@ ad_proc ad_page_contract_handle_datasource_error {error} {
                                              ]  $complaint_template]
 }
 
+namespace eval ::template::csrf {
+    ad_proc ::template::csrf::validate {
+        -package_id
+    } {
+        validate a csrf token
+
+        @author Gustaf Neumann
+        @creation-date Feb 2, 2017
+    } {
+        if {![info exists package_id]} {
+            if {![ns_conn isconnected]} {
+                return 0
+            }
+            set package_id [ad_conn package_id]
+        }
+        set validateCSRF_p [parameter::get \
+                                -package_id $package_id \
+				-parameter "ValidateCSRFP" \
+                                -default 1]
+        
+        if {$validateCSRF_p ne "" && $validateCSRF_p} {
+            security::csrf::validate
+        }
+    }
+}
+
 # Local variables:
 #    mode: tcl
 #    tcl-indent-level: 4
