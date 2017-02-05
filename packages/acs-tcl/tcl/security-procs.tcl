@@ -2176,9 +2176,16 @@ namespace eval ::security::csp {
 
     # security::csp::require style-src 'unsafe-inline'
     ad_proc -public ::security::csp::require {{-force:boolean} directive value} {
-        Add a single value to a CSP directive
+        
+        Add a single value directive to the CSP rule-set. The
+        directices are picked up, when the pages is rendered, by the
+        CSP generator.
+        
         @directive name of the directive (such as e.g. style-src)
         @value allowed source for this page (such as e.g. unsafe-inline)
+        
+        @author Gustaf Neumann
+        @see    security::csp::render
     } {
         set var ::__csp__directive($directive)
         if {![info exists $var] || $value ni [set $var]} {
@@ -2194,6 +2201,13 @@ namespace eval ::security::csp {
     }
 
     ad_proc -public ::security::csp::render {} {
+        
+        This is the CSP generator. Collect the specified directives
+        and build from these directives the full CSP specification for
+        the current page.
+
+        @author Gustaf Neumann
+        @see    security::csp::require
     } {
         #
         # Fetch the nonce token
