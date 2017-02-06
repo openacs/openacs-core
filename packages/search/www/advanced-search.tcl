@@ -16,7 +16,7 @@ ad_page_contract {
         }
     }
     
-    csrf { security::csrf::validate }
+    csrf { csrf::validate }
 }
 
 set package_id [ad_conn package_id]
