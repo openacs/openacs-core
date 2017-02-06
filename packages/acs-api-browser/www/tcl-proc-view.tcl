@@ -8,7 +8,7 @@ ad_page_contract {
     context:onevalue
     tcl_proc:onevalue
 } -validate {
-    csrf { security::csrf::validate }    
+    csrf { csrf::validate }    
 }
 
 set url [apidoc::get_doc_url -cmd $tcl_proc \

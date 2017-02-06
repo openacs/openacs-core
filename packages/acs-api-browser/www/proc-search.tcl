@@ -31,7 +31,7 @@ ad_page_contract {
     query_string:onevalue
     results:multirow
 } -validate {
-    csrf { security::csrf::validate }
+    csrf { csrf::validate }
 }
 
 ##########################################################
