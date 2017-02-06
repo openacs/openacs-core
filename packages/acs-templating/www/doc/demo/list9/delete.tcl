@@ -8,7 +8,7 @@ ad_page_contract {
 } {
   template_demo_note_id:naturalnum,notnull,multiple
 } -validate {
-    csrf { security::csrf::validate }
+    csrf { csrf::validate }
 }
 
 foreach template_demo_note_id $template_demo_note_id {
