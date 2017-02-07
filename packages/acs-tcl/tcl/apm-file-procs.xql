@@ -21,16 +21,6 @@
       </querytext>
 </fullquery>
 
-<fullquery name="apm_generate_tarball.get_revision_id">      
-      <querytext>
-
-        select live_revision as revision_id
-          from cr_items
-         where item_id = :item_id
-
-      </querytext>
-</fullquery>
-
 <fullquery name="apm_db_type_keys.db_type_keys">      
       <querytext>
       select db_type_key from apm_package_db_types
