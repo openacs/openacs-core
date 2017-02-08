@@ -625,41 +625,46 @@ proc menu_submenu_select_list {items urls {highlight_url "" }} {
 #    append return_string "<TR><TD>"
 # }
 
-proc ad_menu_footer {{section ""}} {
+# --
+# apisano 2017-02-08: this proc is obsolete and currently broken, as
+# ad_naked_html_patterns is not defined anywhere on the
+# system. Therefore, I am commenting it out.
+# --
+# proc ad_menu_footer {{section ""}} {
    
-    # if it is an excluded directory, just return
-    set url_stub [ad_conn url]
-    set full_filename "$::acs::pageroot$url_stub"
+#     # if it is an excluded directory, just return
+#     set url_stub [ad_conn url]
+#     set full_filename "$::acs::pageroot$url_stub"
    
-    foreach naked_pattern [ad_naked_html_patterns] {
-	if { [string match $naked_pattern $url_stub] } {
-	    return ""
-	}
-    }
+#     foreach naked_pattern [ad_naked_html_patterns] {
+# 	if { [string match $naked_pattern $url_stub] } {
+# 	    return ""
+# 	}
+#     }
 
-    set netscape3_p 0
+#     set netscape3_p 0
 	
-    if {[netscape3_browser]} {
-	set netscape3_p 1
-    }
+#     if {[netscape3_browser]} {
+# 	set netscape3_p 1
+#     }
 
-    append return_string "</TD></TR></TABLE>"
+#     append return_string "</TD></TR></TABLE>"
     
-    # close up the table
-    if {$netscape3_p != 1} {
-	append return_string "</TD></TR>
-       </TABLE>"
-    }
+#     # close up the table
+#     if {$netscape3_p != 1} {
+# 	append return_string "</TD></TR>
+#        </TABLE>"
+#     }
 
-    # bottom bar
+#     # bottom bar
 
-    append return_string "
-    <TABLE border=0 cellpadding=0 cellspacing=0 height=24 width=\"100%\">
-       <TR bgcolor=\"#000066\"><TD align=left valign=bottom><A href=#top onMouseOver=\"hiLite('back_to_top')\" onMouseOut=\"unhiLite('back_to_top')\"><img name=\"back_to_top\" src=\"/graphics/24_back_to_top.gif\" border=0 width=200 height=24 alt=\"top\"></A></TD>
-         <TD align=right valign=bottom><A href=\"[parameter::get -parameter GlobalURLStub -default /global]/rules\" onMouseOver=\"hiLite('rules')\" onMouseOut=\"unhiLite('rules')\"><img name=\"rules\" src=\"/graphics/rules.gif\" border=0 width=96 height=24 valign=bottom alt=\"rules\"></A><A href=\"[ad_help_link $section]\" onMouseOver=\"hiLite('help')\" onMouseOut=\"unhiLite('help')\"><img name=\"help\" src=\"/graphics/help.gif\" border=0 width=30 height=24 align=bottom alt=\"help\"></A></TD></TR>
-    </TABLE>"
-    return $return_string
-}
+#     append return_string "
+#     <TABLE border=0 cellpadding=0 cellspacing=0 height=24 width=\"100%\">
+#        <TR bgcolor=\"#000066\"><TD align=left valign=bottom><A href=#top onMouseOver=\"hiLite('back_to_top')\" onMouseOut=\"unhiLite('back_to_top')\"><img name=\"back_to_top\" src=\"/graphics/24_back_to_top.gif\" border=0 width=200 height=24 alt=\"top\"></A></TD>
+#          <TD align=right valign=bottom><A href=\"[parameter::get -parameter GlobalURLStub -default /global]/rules\" onMouseOver=\"hiLite('rules')\" onMouseOut=\"unhiLite('rules')\"><img name=\"rules\" src=\"/graphics/rules.gif\" border=0 width=96 height=24 valign=bottom alt=\"rules\"></A><A href=\"[ad_help_link $section]\" onMouseOver=\"hiLite('help')\" onMouseOut=\"unhiLite('help')\"><img name=\"help\" src=\"/graphics/help.gif\" border=0 width=30 height=24 align=bottom alt=\"help\"></A></TD></TR>
+#     </TABLE>"
+#     return $return_string
+# }
 
 
 # Local variables:
