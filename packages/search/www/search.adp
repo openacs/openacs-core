@@ -47,10 +47,10 @@
         <li>
           <a href="@searchresult.url_one@" class="result-title">
             <if @searchresult.title_summary@ nil>#search.Untitled#</if>	
-            <else>@searchresult.title_summary;noquote@</else>
+            <else>@searchresult.title_summary;literal@</else>
           </a>
           <if @searchresult.txt_summary@ not nil>	
-            <div class="result-text">@searchresult.txt_summary;noquote@</div>
+            <div class="result-text">@searchresult.txt_summary;literal@</div>
           </if>
           <div class="result-url">@searchresult.url_one@</div>
         </li>
