@@ -615,6 +615,7 @@ ad_proc util::http::post {
 
         # Transform files into binaries
         foreach file $files {
+            unset -nocomplain f
             array set f $file
 
             if {![info exists f(data)]} {
