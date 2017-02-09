@@ -329,7 +329,8 @@ ad_proc -public lc_time_fmt {
 	    error "Invalid date: $datetime"
 	}
     }
-
+    set lc_time_year [dt_trim_leading_zeros $lc_time_year]
+    
     set a [expr {(14 - $lc_time_month) / 12}]
     set y [expr {$lc_time_year - $a}]
     set m [expr {$lc_time_month + 12*$a - 2}]
