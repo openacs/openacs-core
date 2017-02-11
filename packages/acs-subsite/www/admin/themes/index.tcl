@@ -7,8 +7,8 @@ ad_page_contract {
     {rename_theme ""}
 }
 
-set page_title [_ acs-subsite.Themes]
-set context [list $page_title]
+set doc(title) [_ acs-subsite.Themes]
+set context [list $doc(title)]
 
 set subsite_node_id [ad_conn subsite_node_id]
 
@@ -114,6 +114,7 @@ db_multirow -extend {active_p modified_p delete_p usage_count} themes select_the
             set default [string trim [set $var]]
             set value   [string trim [parameter::get -parameter $param -package_id $subsite_id]]
             regsub -all {\r\n} $value "\n" value
+            regsub -all {\r\n} $default "\n" default            
             set modified_p [expr {$default ne $value}]
             if {$modified_p} {
                 ns_log notice "theme parameter $var differs: default '$default' actual value '$value'"

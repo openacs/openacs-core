@@ -846,6 +846,7 @@ ad_proc -public -callback subsite::theme_changed {
 ad_proc -public subsite::save_theme_parameters {
     -subsite_id
     -theme
+    -local_p 
 } {
     Save the actual theming parameter set of the given/current subsite
     as default for the given/current theme. These default values are
@@ -881,7 +882,8 @@ ad_proc -public subsite::save_theme_parameters {
         -list_filter_template [parameter::get -parameter DefaultListFilterStyle  -package_id $subsite_id] \
         -dimensional_template [parameter::get -parameter DefaultDimensionalStyle -package_id $subsite_id] \
         -resource_dir         [parameter::get -parameter ResourceDir             -package_id $subsite_id] \
-        -streaming_head       [parameter::get -parameter StreamingHead           -package_id $subsite_id] 
+        -streaming_head       [parameter::get -parameter StreamingHead           -package_id $subsite_id] \
+        -local_p              $local_p
         
 }
 
@@ -920,7 +922,8 @@ ad_proc -public subsite::save_theme_parameters_as {
         -list_filter_template [parameter::get -parameter DefaultListFilterStyle  -package_id $subsite_id] \
         -dimensional_template [parameter::get -parameter DefaultDimensionalStyle -package_id $subsite_id] \
         -resource_dir         [parameter::get -parameter ResourceDir             -package_id $subsite_id] \
-        -streaming_head       [parameter::get -parameter StreamingHead           -package_id $subsite_id] 
+        -streaming_head       [parameter::get -parameter StreamingHead           -package_id $subsite_id] \
+        -local_p              true
         
 }
 
@@ -952,9 +955,13 @@ ad_proc -public subsite::new_subsite_theme {
     {-dimensional_template ""}
     {-resource_dir ""}
     {-streaming_head ""}
+    {-local_p true}
 } {
     Add a new subsite theme, making it available to the theme configuration code.
 } {
+    # the following line is for Oracle compatibility
+    set local_p [expr {$local_p ? "t" : "f"}]
+    
     db_dml insert_subsite_theme {}
 }
 
@@ -970,11 +977,15 @@ ad_proc -public subsite::update_subsite_theme {
     {-dimensional_template ""}
     {-resource_dir ""}
     {-streaming_head ""}
+    {-local_p false}
 } {
     Update the default theming parameters in the database
 
     @author Gustaf Neumann
 } {
+    # the following line is for Oracle compatibility
+    set local_p [expr {$local_p ? "t" : "f"}]
+    
     db_dml update {
       update subsite_themes
         set name = :name,
@@ -986,7 +997,8 @@ ad_proc -public subsite::update_subsite_theme {
             list_filter_template = :list_filter_template,
             dimensional_template = :dimensional_template,
             resource_dir = :resource_dir,
-            streaming_head = :streaming_head
+            streaming_head = :streaming_head,
+            local_p = :local_p
      where
         key = :key
     }

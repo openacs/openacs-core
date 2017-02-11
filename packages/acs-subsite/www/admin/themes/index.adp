@@ -1,5 +1,5 @@
 <master>
-  <property name="doc(title)">@page_title;literal@</property>
+  <property name="&doc">doc</property>
   <property name="context">@context;literal@</property>
 
 <h1>Available Themes</h1>

@@ -33,42 +33,28 @@ set settings {
 set subsite_id [ad_conn subsite_id]
 set currentThemeKey [parameter::get -parameter ThemeKey -package_id $subsite_id]
 
-#ns_log notice currentThemeKey=$currentThemeKey
-#ns_log notice ACTION=[template::form get_action theme]-[ns_set array [ns_getform]]
-
+#
+# Get the default values for the theme from the DB
+#
 db_1row get_vars_of_seleted_theme {select * from  subsite_themes where key = :theme}
 
 #
-# Since the standard display mode does not produce good results in our
-# case, we try to implement our own management here. Probably, the
-# display mode of textarea should be fixed to reduce complexity here.
+# Default edit buttons
 #
-if {1 || [ns_queryget formbutton:edit] ne ""} {
-    set htmlSpecs ""
-    #ns_log notice "true edit mode"
-    set editMode 1
-    set editButtons [list [list " Save " save] ]
-    set page_title "Edit Theme Parameters of Subsite: $instance_name"
+set editButtons {{" Save Parameters " save}}
+if {$local_p} {
     #
-    # Since we are doing our own display/edit modes, we have to tell
-    # ad_form, that this request should be treated like a fresh
-    # request.
+    # When the local_p flag is set, allow to overwrite the theme
+    # defaults.
     #
-    #ns_set truncate [ns_getform] 0
-} else {
-    set htmlSpecs [list disabled disabled]
-    #ns_log notice "view mode"
-    set editMode 0
-    set editButtons [list [list Edit edit] ]
-    set page_title "View Theme Parameters of Subsite: $instance_name"
+    lappend editButtons {" Overwrite Theme Defaults and Save Parameters " overwrite}
 }
-
+set page_title "Edit Theme Parameters of Subsite: $instance_name"
 set context [list {. #acs-subsite.Themes#} $page_title]
-
-
 
 set nr_differs 0
 set formSpec {}
+set htmlSpecs ""
 foreach {var param} $settings {
     if {$var in {css js}} {
         lappend htmlSpecs rows 5 cols 100
@@ -81,9 +67,11 @@ foreach {var param} $settings {
     if {$currentThemeKey eq $key} {
         set currentValue [string trim [parameter::get -parameter $param -package_id $subsite_id]]
         regsub -all {\r\n} $currentValue "\n" currentValue
-        if {$currentValue ne [string trim [set $var]]} {
+        set value [string trim [set $var]]
+        regsub -all {\r\n} $value "\n" value
+        if {$currentValue ne $value} {
             lappend currentSpec [list help_text "differs"]
-            #ns_log notice "current value \n<$currentValue>\ndiffers from\n<[string trim [set $var]]>"
+            ns_log notice "current value \n<$currentValue>\ndiffers from\n<$value>"
             incr nr_differs
         }
         #
@@ -111,19 +99,31 @@ ad_form -name theme \
         #ns_log notice "on request"
         
     } -on_submit {
-        #ns_log notice "on submit ====== SAVE?"
-        if {[ns_queryget formbutton:save] ne ""} {
-            ns_log notice "edit theme ====== SAVE form values in actual parameter settings"
+        
+        if {[ns_queryget formbutton:save] ne "" || [ns_queryget formbutton:overwrite] ne ""} {
+            #ns_log notice "edit theme ====== SAVE form values in actual parameter settings"
             foreach {var param} $settings {
                 parameter::set_value -parameter $param -package_id $subsite_id -value [set $var]
             }
         }
-            
-    } -after_submit {
-        if {1 || !$editMode} {
-            ad_returnredirect $return_url
-            ad_script_abort
+        if {[ns_queryget formbutton:overwrite] ne ""} {
+            #ns_log notice "edit theme ====== OVERWRITE form values in theme defaults"
+
+            set params {}
+            foreach {var param} $settings {
+                lappend params -$var [set $var]
+            }
+
+            subsite::update_subsite_theme \
+                -key      $theme \
+                -name     $name \
+                -local_p  true \
+                {*}$params
         }
+        
+    } -after_submit {
+        ad_returnredirect $return_url
+        ad_script_abort
     }
 
 # Local variables:
