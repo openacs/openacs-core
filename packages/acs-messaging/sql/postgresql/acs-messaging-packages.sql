@@ -29,7 +29,6 @@ CREATE OR REPLACE FUNCTION acs_message__edit(
    p_creation_user integer,     -- default null
    p_creation_ip varchar,       -- default null
    p_is_live boolean            -- default 't'
-
 ) RETURNS integer AS $$
 DECLARE
     v_revision_id cr_revisions.revision_id%TYPE;
@@ -38,28 +37,32 @@ BEGIN
     if p_data is not null then
 		-- need to take care of blob?
         v_revision_id := content_revision__new (
-            p_message_id,		-- item_id        
-            p_title,			-- title          
-            p_description,		-- description    
-            p_data,			-- data           
-            p_mime_type,		-- mime_type      
-            p_creation_date,		-- creation_date  
-            p_creation_user,		-- creation_user  
-            p_creation_ip		-- creation_ip    
+            p_title,			-- title
+            p_description,		-- description
+            now(),			-- publish_date
+            p_mime_type,		-- mime_type
+            null,			-- nls_language
+            p_data,			-- data
+            p_message_id,		-- item_id
+            p_creation_date,		-- creation_date
+            p_creation_user,		-- creation_user
+            p_creation_ip		-- creation_ip
         );
     else if p_title is not null or p_text is not null then
         v_revision_id := content_revision__new (
-            p_title,			-- title          
-            p_description,		-- description    
-			now(),		-- publish_date
-            p_mime_type,		-- mime_type      
-			null,		-- nls_language
-            p_text,			-- text           
-            p_message_id,		-- item_id        
-			null,		-- revision_id
-            p_creation_date,		-- creation_date  
-            p_creation_user,		-- creation_user  
-            p_creation_ip		-- creation_ip    
+            p_title,			-- title
+            p_description,		-- description
+            now(),			-- publish_date
+            p_mime_type,		-- mime_type
+            null,			-- nls_language
+            p_text,			-- text
+            p_message_id,		-- item_id
+            null,			-- revision_id
+            p_creation_date,		-- creation_date
+            p_creation_user,		-- creation_user
+            p_creation_ip,		-- creation_ip
+	    null,                       -- content_length
+	    null			-- package_id
         );      
     end if;
 	end if;
@@ -633,7 +636,7 @@ CREATE OR REPLACE FUNCTION acs_message__edit_image(
 DECLARE
     v_revision_id  cr_revisions.revision_id%TYPE;
 BEGIN
-		-- not sure which __new to use
+	-- not sure which __new to use
     v_revision_id := content_revision__new (
          p_title,             -- title         
          NULL,                -- description
