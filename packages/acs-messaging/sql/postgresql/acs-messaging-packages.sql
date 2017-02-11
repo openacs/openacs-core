@@ -471,20 +471,20 @@ select define_function_args('acs_message__new_image','message_id,image_id;null,f
 --
 CREATE OR REPLACE FUNCTION acs_message__new_image(
    p_message_id integer,
-   p_image_id integer,          -- default null
+   p_image_id integer,                         -- default null
    p_file_name varchar,
-   p_title varchar,             -- default null
-   p_description text,          -- default null
-   p_mime_type varchar,         -- default 'text/plain'
-   p_data integer,              -- default null
-   p_width integer,             -- default null
-   p_height integer,            -- default null
-   p_creation_date timestamptz, -- default sysdate
-   p_creation_user integer,     -- default null
-   p_creation_ip varchar,       -- default null
-   p_is_live boolean,           -- default 't'
-   p_storage_type varchar,      -- default 'file'
-   p_package_id integer         -- default null
+   p_title varchar,                            -- default null
+   p_description text,                         -- default null
+   p_mime_type varchar,                        -- default 'text/plain'
+   p_data integer,                             -- default null
+   p_width integer,                            -- default null
+   p_height integer,                           -- default null
+   p_creation_date timestamptz,                -- default sysdate
+   p_creation_user integer,                    -- default null
+   p_creation_ip varchar,                      -- default null
+   p_is_live boolean,                          -- default 't'
+   p_storage_type cr_items.storage_type%TYPE,  -- default 'file'
+   p_package_id integer default null
 
 ) RETURNS integer AS $$
 DECLARE
@@ -504,10 +504,10 @@ BEGIN
 	 'content_revision',			-- content_type
 	 null,					-- title
 	 null,					-- description
-	 'text/plain',			-- mime_type
+	 'text/plain',				-- mime_type
 	 null,					-- nls_language
 	 null,					-- text
-	 'file',				-- storage_type
+	 p_storage_type,			-- storage_type
          p_package_id				-- package_id
     );
 
@@ -529,50 +529,6 @@ BEGIN
     return v_image_id;
 END;
 $$ LANGUAGE plpgsql;
-
-
-
---
--- procedure acs_message__new_image/14
---
-CREATE OR REPLACE FUNCTION acs_message__new_image(
-   p_message_id integer,
-   p_image_id integer,          -- default null
-   p_file_name varchar,
-   p_title varchar,             -- default null
-   p_description text,          -- default null
-   p_mime_type varchar,         -- default 'text/plain'
-   p_data integer,              -- default null
-   p_width integer,             -- default null
-   p_height integer,            -- default null
-   p_creation_date timestamptz, -- default sysdate
-   p_creation_user integer,     -- default null
-   p_creation_ip varchar,       -- default null
-   p_is_live boolean,           -- default 't'
-   p_storage_type varchar       -- default 'file'
-
-) RETURNS integer AS $$
-DECLARE
-BEGIN
-    return acs_message__new_image (p_message_id,
-                                   p_image_id,
-                                   p_file_name,
-                                   p_title,
-                                   p_description,
-                                   p_mime_type,
-                                   p_data,
-                                   p_width,
-                                   p_height,
-                                   p_creation_date,
-                                   p_creation_user,
-                                   p_creation_ip,
-                                   p_is_live,
-                                   p_storage_type,
-                                   null
-   );
-END;
-$$ LANGUAGE plpgsql;
-
 
 
 -- added
