@@ -331,9 +331,6 @@ $$ LANGUAGE plpgsql stable strict;
     -- functions will migrate to another PL/SQL package or be replaced
     -- by direct calls to CR code in the near future.
 
-
-
--- added
 select define_function_args('acs_message__new_file','message_id,file_id;null,file_name,title;null,description;null,mime_type;text/plain,data;null,creation_date;sysdate,creation_user;null,creation_ip;null,is_live;t,storage_type;file,package_id;null');
 
 --
@@ -341,19 +338,19 @@ select define_function_args('acs_message__new_file','message_id,file_id;null,fil
 --
 CREATE OR REPLACE FUNCTION acs_message__new_file(
    p_message_id integer,
-   p_file_id integer,           -- default null
+   p_file_id integer,                         -- default null
    p_file_name varchar,
-   p_title varchar,             -- default null
-   p_description text,          -- default null
-   p_mime_type varchar,         -- default 'text/plain'
-   p_data integer,              -- default null
-   p_creation_date timestamptz, -- default sysdate
-   p_creation_user integer,     -- default null
-   p_creation_ip varchar,       -- default null
-   p_is_live boolean,           -- default 't'
-   p_storage_type varchar,      -- default 'file'
-   p_package_id integer         -- default null
-
+   p_title varchar,                           -- default null
+   p_description text,                        -- default null
+   p_mime_type varchar,                       -- default 'text/plain'
+   p_data integer,                            -- default null
+   p_creation_date timestamptz,               -- default sysdate
+   p_creation_user integer,                   -- default null
+   p_creation_ip varchar,                     -- default null
+   p_is_live boolean,                         -- default 't'
+   p_storage_type cr_items.storage_type%TYPE, -- default 'file'
+   p_package_id integer default null
+   
 ) RETURNS integer AS $$
 DECLARE
     v_file_id      cr_items.item_id%TYPE;
@@ -368,15 +365,19 @@ BEGIN
         p_creation_user,		   -- creation_user  
         null,				   -- context_id
         p_creation_ip,			   -- creation_ip    
-        'content_item',		   -- item_subtype
+        'content_item',		   	   -- item_subtype
         'content_revision',		   -- content_type
         null,				   -- title
         null,				   -- description
         'text/plain',			   -- mime_type
         null,				   -- nls_language
         null,				   -- text
+	null,  				   -- data
+	null,  				   -- relation_tag
+	false, 				   -- is_live
 	p_storage_type,			   -- storage_type
-        p_package_id			   -- package_id
+        p_package_id,			   -- package_id
+        true                               -- with_child_rels
     );
 
     -- create an initial revision for the new attachment
@@ -393,45 +394,6 @@ BEGIN
     );
 
     return v_file_id;
-END;
-$$ LANGUAGE plpgsql;
-
-
-
---
--- procedure acs_message__new_file/12
---
-CREATE OR REPLACE FUNCTION acs_message__new_file(
-   p_message_id integer,
-   p_file_id integer,           -- default null
-   p_file_name varchar,
-   p_title varchar,             -- default null
-   p_description text,          -- default null
-   p_mime_type varchar,         -- default 'text/plain'
-   p_data integer,              -- default null
-   p_creation_date timestamptz, -- default sysdate
-   p_creation_user integer,     -- default null
-   p_creation_ip varchar,       -- default null
-   p_is_live boolean,           -- default 't'
-   p_storage_type varchar       -- default 'file'
-
-) RETURNS integer AS $$
-DECLARE
-BEGIN
-    return acs_message__new_file (p_message_id,
-                                  p_file_id,
-                                  p_file_name,
-                                  p_title,
-                                  p_description,
-                                  p_mime_type,
-                                  p_data,
-                                  p_creation_date,
-                                  p_creation_user,
-                                  p_creation_ip,
-                                  p_is_live,
-                                  p_storage_type,
-                                  null
-   );
 END;
 $$ LANGUAGE plpgsql;
 
