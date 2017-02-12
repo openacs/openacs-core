@@ -234,7 +234,7 @@ CREATE OR REPLACE FUNCTION image__new(
    p_creation_ip varchar,   -- default null
    p_title varchar,         -- default null
    p_description varchar,   -- default null
-   p_storage_type varchar,
+   p_storage_type cr_items.storage_type%TYPE,
    p_content_type varchar,
    p_nls_language varchar,
    p_publish_date timestamptz,

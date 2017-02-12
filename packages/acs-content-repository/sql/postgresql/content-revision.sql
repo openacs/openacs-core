@@ -674,7 +674,7 @@ DECLARE
   v_content                            cr_revisions.content%TYPE;
   v_lob                                cr_revisions.lob%TYPE;
   v_new_lob                            cr_revisions.lob%TYPE;
-  v_storage_type                       varchar;
+  v_storage_type                       cr_items.storage_type%TYPE;
 BEGIN
   if content_copy__revision_id is null then 
 	raise exception 'content_revision__content_copy attempt to copy a null revision_id';
@@ -769,7 +769,7 @@ CREATE OR REPLACE FUNCTION content_revision__get_content(
    get_content__revision_id integer
 ) RETURNS text AS $$
 DECLARE
-  v_storage_type                      varchar;
+  v_storage_type                      cr_items.storage_type%TYPE;
   v_lob_id                            integer;
   v_data                              text;
 BEGIN
