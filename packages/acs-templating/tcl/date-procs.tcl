@@ -88,7 +88,7 @@ ad_proc -public template::util::date::monthName { month length } {
     Return the specified month name (short or long)
 } {
     # trim leading zeros to avoid octal problem
-    set month [template::util::leadingTrim $month]
+    set month [util::trim_leading_zeros $month]
     if {$length eq "long"} {
         return [lc_time_fmt "2002-[format "%02d" $month]-01" "%B"]
     } else {
@@ -147,7 +147,7 @@ ad_proc -public template::util::date::today {} {
 
   foreach v $now {
     # trim leading zeros to avoid octal problem
-    lappend today [template::util::leadingTrim $v]
+    lappend today [util::trim_leading_zeros $v]
   }
 
   return [create {*}$today]
@@ -160,7 +160,7 @@ ad_proc -public template::util::date::now {} {
   set today [list]
 
   foreach v $now {
-    lappend today [template::util::leadingTrim $v]
+    lappend today [util::trim_leading_zeros $v]
   }
 
     return [create {*}$today]
@@ -443,7 +443,7 @@ ad_proc -public template::util::date::set_property { what date value } {
 
   switch $value {
     year - month - day - hour - minutes - seconds - short_year - short_hours - ampm {
-      set value [template::util::leadingTrim $value]
+      set value [util::trim_leading_zeros $value]
     }
   }
 
@@ -490,7 +490,7 @@ ad_proc -public template::util::date::set_property { what date value } {
       set old_date [clock format $value -format "%Y %m %d %H %M %S"]
       set new_date [list]
       foreach field $old_date {
-        lappend new_date [template::util::leadingTrim $field]
+        lappend new_date [util::trim_leading_zeros $field]
       }
       lappend new_date [lindex $date 6]
       return $new_date
@@ -499,7 +499,7 @@ ad_proc -public template::util::date::set_property { what date value } {
       set old_format [lindex $date 6]
       set new_date [list]
       foreach fragment $value {
-        lappend new_date [template::util::leadingTrim $fragment]
+        lappend new_date [util::trim_leading_zeros $fragment]
       }
       lappend new_date $old_format
       return $new_date
@@ -569,7 +569,7 @@ ad_proc -public template::util::date::now_min_interval {} {
 } {
   set now [list]
   foreach v [clock format [clock seconds] -format "%Y %m %d %H %M %S"] {
-      lappend now [template::util::leadingTrim $v]
+      lappend now [util::trim_leading_zeros $v]
   }
     
   # manipulate the minute value so it rounds up to nearest minute interval
@@ -603,7 +603,7 @@ ad_proc -public template::util::date::now_min_interval_plus_hour {} {
 } {
   set now [list]
   foreach v [clock format [clock seconds] -format "%Y %m %d %H %M %S"] {
-      lappend now [template::util::leadingTrim $v]
+      lappend now [util::trim_leading_zeros $v]
   }
     
   # manipulate the minute value so it rounds up to nearest minute interval
@@ -705,7 +705,7 @@ ad_proc -public template::util::negative { value } {
   if {$value eq ""} {
     return 0
   } else {
-    return [expr {[template::util::leadingTrim $value] < 0}]
+    return [expr {[util::trim_leading_zeros $value] < 0}]
   }
 }
 
@@ -805,16 +805,11 @@ ad_proc -public template::util::leadingPad { string size } {
 
 }  
 
-ad_proc -public template::util::leadingTrim { value } {
+ad_proc -public -deprecated template::util::leadingTrim { value } {
     Trim the leading zeroes from the value, but preserve the value
     as "0" if it is "00"
 } {
-  set empty [string equal $value ""]
-  set value [string trimleft $value 0]
-  if { !$empty && $value eq "" } {
-    set value 0
-  }
-  return $value
+    return [util::trim_leading_zeros $value]
 }
 
 # Create an html fragment to display a numeric range widget
@@ -870,7 +865,7 @@ ad_proc -public template::widget::dateFragment {
   upvar $element_reference element
   
   set value [template::util::date::get_property $fragment $value]
-  set value [template::util::leadingTrim $value]
+  set value [util::trim_leading_zeros $value]
 
   if { $mode ne "edit" } {
     set output {}
@@ -1026,7 +1021,7 @@ ad_proc -public template::widget::date { element_reference tag_attributes } {
    } {
     set value $element(value)
     foreach v $value {
-      lappend trim_value [template::util::leadingTrim $v]
+      lappend trim_value [util::trim_leading_zeros $v]
     }
     set value $trim_value
   } else {

@@ -199,7 +199,7 @@ ad_proc -public template::util::currency::set_property {
 
     # Erase leading zeroes from the value, but make sure that 00
     # is not completely erased
-    set value [template::util::leadingTrim $value]
+    set value [util::trim_leading_zeros $value]
 
     set format [lindex $currency_list 5]
 
