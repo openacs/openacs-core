@@ -22,7 +22,7 @@ locale-specific formatting functions for localizing dates, times, monetary amoun
 
         <provides url="acs-lang" version="5.9.1d3"/>
         <requires url="acs-kernel" version="5.9.0"/>
-	<requires url="acs-tcl" version="5.9.1d6"/>
+	<requires url="acs-tcl" version="5.9.1d15"/>
         <requires url="acs-translations" version="5.9.0"/>
         <requires url="ref-timezones" version="5.9.0"/>
         <requires url="ref-countries" version="5.9.0"/>
