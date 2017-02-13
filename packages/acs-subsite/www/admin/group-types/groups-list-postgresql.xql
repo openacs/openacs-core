@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <queryset>
+  <rdbms><type>postgresql</type><version>9.0</version></rdbms>
 
 <fullquery name="select_groups">      
   <querytext>

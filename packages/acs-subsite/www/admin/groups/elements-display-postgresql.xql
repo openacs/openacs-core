@@ -1,4 +1,5 @@
 <?xml version="1.0"?>
+  <rdbms><type>postgresql</type><version>9.0</version></rdbms>
 
 <queryset>
    <rdbms><type>postgresql</type><version>7.1</version></rdbms>
