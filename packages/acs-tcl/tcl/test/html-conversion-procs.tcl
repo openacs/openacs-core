@@ -93,7 +93,7 @@ aa_register_case -cats {api smoke} ad_html_text_convert {
     set string "What?\nNever mind, buddy"
     
     aa_equals "" [ad_html_text_convert -from "text/plain" -to "text/html" -truncate_len 14 -- $string] \
-        [ad_text_to_html "What?\nNever..."]
+        "What?<br>\nNever..."
     
     aa_equals "" [ad_html_text_convert -from "text/plain" -to "text/plain" -truncate_len 14 -- $string] \
         "What?\nNever..."

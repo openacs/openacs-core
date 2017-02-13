@@ -37,9 +37,10 @@ ad_proc -public ad_text_to_html {
     @creation-date 19 July 2000
 } {
     if { $text eq "" } {
-        return {}
+        return ""
     }
 
+    set space_added 0
     set nr_links 0
     if { !$no_links_p } {
         #
@@ -48,6 +49,7 @@ ad_proc -public ad_text_to_html {
         # beginning of the text.
         #
         set text " $text"
+        set space_added 1
 
         # if something is " http://" or " https://" or "ftp://" we
         # assume it is a link to an outside source.
@@ -122,6 +124,8 @@ ad_proc -public ad_text_to_html {
     # Convert line breaks
     if { !$no_lines_p } {
         set text [util_convert_line_breaks_to_html -includes_html=$includes_html_p -- $text]
+        # the function strips all leading white space
+        set space_added 0
     }
 
     if { !$no_quote_p } {
@@ -144,8 +148,6 @@ ad_proc -public ad_text_to_html {
         #
         regsub -all {\u0002([^\u0003]+?)\u0003} $text {<a href="\1">\1</a>} text
 
-        set text [string trimleft $text]
-
         set changed_back [regsub -all {(\u0002|\u0003)} $text {} text]
         if {$includes_html_p} {
             #
@@ -159,6 +161,10 @@ ad_proc -public ad_text_to_html {
                 ad_log warning "Replaced spurious magic marker in ad_text_to_html"
             }
         }
+    }
+
+    if {$space_added} {
+        set text [string range $text 1 end]
     }
 
     return $text
