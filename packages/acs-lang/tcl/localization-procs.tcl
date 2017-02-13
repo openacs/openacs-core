@@ -89,14 +89,8 @@ ad_proc -public lc_parse_number {
 	    regsub -all "$dec" $number "." number
 	}
 
-
-	# Strip leading zeros
-	regexp -- "0*(\[0-9\.\]+)" $number match number
+        set number [lc_trim_leading_zeros $number]
 	
-	# if number is real and mod(number)<1, then we have pulled off
-	# the leading zero; i.e. 0.231 -> .231 -- this is still fine
-	# for Tcl though...
-
         # Last pathological case
 	if {"." eq $number } {
 	    set number 0
@@ -329,7 +323,7 @@ ad_proc -public lc_time_fmt {
 	    error "Invalid date: $datetime"
 	}
     }
-    set lc_time_year [dt_trim_leading_zeros $lc_time_year]
+    set lc_time_year [lc_trim_leading_zeros $lc_time_year]
     
     set a [expr {(14 - $lc_time_month) / 12}]
     set y [expr {$lc_time_year - $a}]
@@ -340,6 +334,27 @@ ad_proc -public lc_time_fmt {
     
     return [subst [util_memoize [list lc_time_fmt_compile $fmt $locale]]]
 }
+
+ad_proc -private lc_trim_leading_zeros { 
+    string 
+} {
+    Returns a string w/ leading zeros trimmed.
+    Used to get around Tcl interpreter problems w/ thinking leading
+    zeros are octal.
+    
+    If string is real and mod(number)<1, then we have pulled off
+    the leading zero; i.e. 0.231 -> .231 -- this is still fine
+    for Tcl though...
+} {
+    set string [string trimleft $string 0]
+
+    if {$string eq ""} {
+        return 0
+    }
+
+    return $string
+}
+
 
 ad_proc -public lc_time_fmt_compile {
     fmt 
