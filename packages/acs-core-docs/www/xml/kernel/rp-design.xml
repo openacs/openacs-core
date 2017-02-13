@@ -148,7 +148,7 @@ therefore this mapping is stored in the database.</para>
 <para><emphasis role="strong">Authentication and Authorization</emphasis></para>
 
 <para>Once the request processor has located both the package_id and concrete
-file associated with the request, authentication is performed by the <ulink url="../sessions.html">session</ulink> security system. After authentication has
+file associated with the request, authentication is performed by the <ulink url="security-design.html">session</ulink> security system. After authentication has
 been performed the user is authorized to have read access for the given
 package by the <xref linkend="permissions-design"/>.
 If authorization succeeds then the request is served, otherwise it is
