@@ -705,18 +705,8 @@ ad_proc -private db_qd_internal_parse_one_query {parsing_state} {
 } { 
     
     # Find the index that we're looking at
-    set index [lindex $parsing_state 0]
+    lassign $parsing_state index node_list parsed_doc default_rdbms file_path
     
-    # Find the list of nodes
-    set node_list [lindex $parsing_state 1]
-
-    # Parsed Doc Pointer
-    set parsed_doc [lindex $parsing_state 2]
-
-    # Default RDBMS
-    set default_rdbms [lindex $parsing_state 3]
-    set file_path [lindex $parsing_state 4]
-
     # BASE CASE
     if {[llength $node_list] <= $index} {
 	# Clean up
@@ -736,7 +726,7 @@ ad_proc -private db_qd_internal_parse_one_query {parsing_state} {
 
     # Update the parsing state so we know
     # what to parse next 
-    set parsing_state [list $index $node_list [lindex $parsing_state 2] $default_rdbms $file_path]
+    set parsing_state [list $index $node_list $parsed_doc $default_rdbms $file_path]
 
     # Parse the actual query from XML
     set one_query [db_qd_internal_parse_one_query_from_xml_node $one_query_xml $default_rdbms $file_path]
