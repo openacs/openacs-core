@@ -4914,7 +4914,25 @@ ad_proc -public util::request_info {
     return $info
 }
 
+ad_proc util::trim_leading_zeros { 
+    string 
+} {
+    Returns a string w/ leading zeros trimmed.
+    Used to get around Tcl interpreter problems w/ thinking leading
+    zeros are octal.
+    
+    If string is real and mod(number)<1, then we have pulled off
+    the leading zero; i.e. 0.231 -> .231 -- this is still fine
+    for Tcl though...
+} {
+    set string [string trimleft $string 0]
 
+    if {$string eq ""} {
+        return 0
+    }
+
+    return $string
+}
 
 ad_proc -public ad_log {
     level
@@ -4981,8 +4999,9 @@ if {[ns_info name] ne "NaviServer"} {
         }
         return $result
     }
+}
 
- }
+
 
 
 # Local variables:
