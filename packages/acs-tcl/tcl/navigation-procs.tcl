@@ -39,8 +39,9 @@ ad_proc -public ad_context_bar_html {
     }
 
     set out {}
-    foreach element [lrange $context 0 [llength $context]-2] { 
-        append out [subst {<a href="[ns_quotehtml [lindex $element 0]]">[ns_quotehtml [lindex $element 1]]</a> $separator }]
+    foreach element [lrange $context 0 [llength $context]-2] {
+        lassign $element href label
+        append out [subst {<a href="[ns_quotehtml $href]">[ns_quotehtml $label]</a> $separator }]
     }
     append out [ns_quotehtml [lindex $context end]]
 
@@ -63,7 +64,7 @@ ad_proc ad_context_node_list {
 
     while { $node_id ne "" } {        
         array set node [site_node::get -node_id $node_id]
-        
+
         # JCD: Provide something for the name if the instance name is
         # absent.  name is the tail bit of the url which seems like a
         # reasonable thing to display.
@@ -72,7 +73,7 @@ ad_proc ad_context_node_list {
             set node(instance_name) $node(name)
         }
 
-        # don't collect link for nodes without an object underneath
+        # Don't collect link for nodes without an object underneath
         # (e.g. empty site folders), as they would just be dead links
         if {$node(object_id) ne ""} {
             set context [list [list $node(url) [ns_quotehtml $node(instance_name)]] {*}$context]
@@ -82,7 +83,7 @@ ad_proc ad_context_node_list {
         if {$node_id eq $from_node} {
             break
         }
-        
+
         set node_id $node(parent_id)
     }
 
