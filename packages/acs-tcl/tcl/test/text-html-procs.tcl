@@ -136,8 +136,9 @@ aa_register_case -cats {api smoke} ad_dom_sanitize_html {
             set test_result [string trim $test_result]
             aa_true "$msg fixing markup?" [expr {$result eq $test_result}]
         }
-    
-    array set r [util::http::get -url [util::configured_location]]
+
+    aa_log "trying to get start page from [util::configured_location]/"
+    array set r [util::http::get -url [util::configured_location]/]
     set test_case $r(page)
 
     set msg "Test case 6: in our index page is removing tags ok"
