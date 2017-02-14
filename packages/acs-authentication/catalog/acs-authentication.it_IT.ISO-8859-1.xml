@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <message_catalog package_key="acs-authentication" locale="it_IT" charset="ISO-8859-1">
 
+  <msg key="Add_to_Community">Aggiungi alla Comunità</msg>
+  <msg key="Add_to_system_name">Aggiungi a %system_name%</msg>
+  <msg key="Does_not_have_an_account_on_system_name">Non ha un account su %system_name%</msg>
+  <msg key="Has_account_on_system_name">Ha un account su %system_name%</msg>
   <msg key="Invalid_username_or_password">Nome utente o password non sono corretti</msg>
+  <msg key="lt_Not_getting_the_results_you_expected">Non stai ottenendo i risultati che ti aspettavi? Prova a cercare:</msg>
 </message_catalog>

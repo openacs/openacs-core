@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<message_catalog package_key="openacs-default-theme" locale="it_IT" charset="ISO-8859-1">
+
+  <msg key="plain">Tema Base Default OpenACS</msg>
+  <msg key="tabbed">Tema Default OpenACS a Schede</msg>
+</message_catalog>
