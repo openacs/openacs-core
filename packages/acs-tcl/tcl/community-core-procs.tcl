@@ -495,14 +495,20 @@ ad_proc -public acs_user::flush_cache {
 } {
     util_memoize_flush [list acs_user::get_from_user_id_not_cached $user_id]
     #
-    # get username and authority_id so we can flush the
-    # get_from_username_not_cached proc
+    # Get username and authority_id so we can flush the
+    # get_from_username_not_cached proc.
     #
-    set u [acs_user::get -user_id $user_id]
-    set username     [dict get $u username]
-    set authority_id [dict get $u authority_id]
-    util_memoize_flush [list acs_user::get_from_username_not_cached $username $authority_id]
-    util_memoize_flush [list acs_user::get_by_username_not_cached -authority_id $authority_id -username $username]
+    # Note, that it might be the case, that this function is called
+    # for user_ids, which are "persons", but do not qualify as
+    # "users". Therefore, the catch is used (like in earlier versions)
+    #
+    catch {
+        set u [acs_user::get -user_id $user_id]
+        set username     [dict get $u username]
+        set authority_id [dict get $u authority_id]
+        util_memoize_flush [list acs_user::get_from_username_not_cached $username $authority_id]
+        util_memoize_flush [list acs_user::get_by_username_not_cached -authority_id $authority_id -username $username]
+    }
 }
 
 ad_proc -public acs_user::get_element {
