@@ -1,8 +1,5 @@
-# 
-
 ad_library {
-    
-    
+    Test cases for community core procs.
     
     @author byron Haroldo Linares Roman (bhlr@galileo.edu)
     @creation-date 2006-07-28
@@ -62,7 +59,7 @@ aa_register_case \
 	set user_info(password) $password
 	set user_info(email) $email
 	
-	aa_log "Created user with email=\"$email\" and password=\"$password\""
+	aa_log "Created user with email=\"$email\" and password=\"$password\" user_id=$user_info(user_id)"
 	
 	aa_run_with_teardown -rollback \
 	    -test_code {
@@ -79,7 +76,11 @@ aa_register_case \
 		set prs_id [person::new -first_names $first_names -last_name $last_name -email "${email}s"]
 		set email_p [party::email -party_id $prs_id]
 		aa_true "New person pass" [string match $email_p [string tolower "${email}s"]]
-		
+
+                aa_log "New Person has user_id=$prs_id email_p=$email_p"
+                aa_log "Is this ID in persons ? [db_list _ {select * from persons where person_id=:prs_id}]"
+                aa_log "Is this ID in users   ? [db_list _ {select * from cc_users where user_id=:prs_id}]"
+
 		person::update -person_id $prs_id -first_names "hh$first_names" -last_name "hh$last_name"
 		aa_true "name changed" [string match [person::name -person_id $prs_id] "hh$first_names hh$last_name"]
 		
