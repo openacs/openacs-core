@@ -94,6 +94,7 @@
   <msg key="First_Names">Nombre</msg>
   <msg key="Group">Grupo</msg>
   <msg key="Group_name">Nombre del grupo</msg>
+  <msg key="Group_names">Nombre de los grupos</msg>
   <msg key="Groups">Grupos</msg>
   <msg key="Last_Name">Apellidos</msg>
   <msg key="Last_Names">Apellidos</msg>
@@ -118,6 +119,8 @@
   <msg key="member_state_banned">prohibido</msg>
   <msg key="member_state_Deleted">Borrado</msg>
   <msg key="member_state_deleted">borrado</msg>
+  <msg key="member_state_Merged">fusionado</msg>
+  <msg key="member_state_merged">fusionado</msg>
   <msg key="member_state_Needs_Approval">Necesita Aprobación </msg>
   <msg key="member_state_needs_approval">necesita aprobación</msg>
   <msg key="member_state_Rejected">Rechazado</msg>
@@ -137,8 +140,10 @@
   <msg key="Unregistered">No Registrado</msg>
   <msg key="Unregistered_Visitor">Visitante No Registrado</msg>
   <msg key="URL">URL</msg>
+  <msg key="URLs">URLs</msg>
   <msg key="User">Usuario</msg>
   <msg key="Username">Nombre de usuario</msg>
   <msg key="Usernames">Nombres de usuario</msg>
+  <msg key="Users">Usuarios</msg>
   <msg key="Visitor">Visitante</msg>
 </message_catalog>

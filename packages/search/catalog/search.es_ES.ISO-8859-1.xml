@@ -3,16 +3,16 @@
 
   <msg key="________Search_took">. Búsqueda tardo</msg>
   <msg key="Advanced_Search">Búsqueda Avanzada</msg>
-  <msg key="advanced_search">&quot;búsqueda avanzada&quot;</msg>
+  <msg key="advanced_search">&#34;búsqueda avanzada&#34;</msg>
   <msg key="anytime">cualquier hora</msg>
   <msg key="Date_Range">Rango de Fechas</msg>
   <msg key="details">detalles</msg>
   <msg key="Enter_keywords_to_search_for">Introducir palabras a buscar</msg>
   <msg key="Feeling_Lucky">Me siento afortunado</msg>
-  <msg key="lt_bstopwordsb_is_a_very">&quot;&lt;b&gt;%stopwords%&lt;/b&gt;&quot; es una palabra muy común y no ha sido tomada en cuenta para la búsqueda.</msg>
+  <msg key="lt_bstopwordsb_is_a_very">&#34;&lt;b&gt;%stopwords%&lt;/b&gt;&#34; es una palabra muy común y no ha sido tomada en cuenta para la búsqueda.</msg>
   <msg key="lt_FtsEngineDriver_not_a">¡FtsEngineDriver no disponible!</msg>
   <msg key="lt_Make_sure_all_words_a">Asegúrese que todas las palabras estén escritas correctamente.</msg>
-  <msg key="lt_No_pages_were_found_c">No se ha encontrado páginas que contengan &quot;</msg>
+  <msg key="lt_No_pages_were_found_c">No se ha encontrado páginas que contengan &#34;</msg>
   <msg key="lt_The_following_words_a">Las palabras siguientes son demasiado comunes y no han sido incluidas en su búsqueda:</msg>
   <msg key="lt_Tip_In_most_browsers_">Consejo: En la mayoría de los navegadores, puede pulsar la tecla Intro en lugar de pulsar el botón de búsqueda</msg>
   <msg key="lt_Try_different_keyword">Inténtelo con otras palabras.</msg>
@@ -34,7 +34,7 @@
   <msg key="seconds">segundos.</msg>
   <msg key="selected">seleccionado</msg>
   <msg key="Suggestions">Sugerencias:</msg>
-  <msg key="The">El operador &quot;&lt;b&gt;AND&lt;/b&gt;&quot; no es necesario  -- por defecto, se incluyen todos los términos en la búsqueda.</msg>
+  <msg key="The">El operador &#34;&lt;b&gt;AND&lt;/b&gt;&#34; no es necesario  -- por defecto, se incluyen todos los términos en la búsqueda.</msg>
   <msg key="Try_fewer_keywords">Inténtelo con más palabras.</msg>
   <msg key="Untitled">Sin título</msg>
 </message_catalog>

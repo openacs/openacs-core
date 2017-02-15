@@ -6,7 +6,7 @@
   <msg key="Bounce_disabled">Bounce deshabilitado. Volverá a recibir emails.</msg>
   <msg key="Bouncing_users">Usuarios con emails erróneos</msg>
   <msg key="CC">CC</msg>
-  <msg key="cc_help">Enviar copia a varias direcciones separadas por &quot;;&quot;</msg>
+  <msg key="cc_help">Enviar copia a varias direcciones separadas por &#34;;&#34;</msg>
   <msg key="check_uncheck">Seleccionar/deseleccionar</msg>
   <msg key="lt_there_was_an_error_processing">Ocurrió un error al procesar su petición.</msg>
   <msg key="Message">Mensaje</msg>
