@@ -64,7 +64,7 @@
   <msg key="Biography">Biografia</msg>
   <msg key="Biography_Mime_Type">Mime Type Biografia</msg>
   <msg key="Biography_Mime_Types">Mime Type Biografia</msg>
-  <msg key="Build_Site_Map">Crea la Mappa Sito</msg>
+  <msg key="Build_Site_Map">Crea la Mappa del Sito</msg>
   <msg key="by_group_type">per tipologia gruppo</msg>
   <msg key="cannot_retrieve_password">Non e&#39; permesso recuperare la password dall&#39;autorita&#39; locale</msg>
   <msg key="Cannot_see_memb_list">Non puoi vedere la lista dei partecipanti</msg>
@@ -488,7 +488,7 @@
   <msg key="Username">Nome utente</msg>
   <msg key="Username_not_found_for_authority">Nessun utente con username &#39;%username%&#39; trovato per l&#39;authority %this_authority%</msg>
   <msg key="Username_required">Nome utente richiesto</msg>
-  <msg key="UserSiteMap">Mappa di Sito di utente</msg>
+  <msg key="UserSiteMap">Mappa del Sito Utente</msg>
   <msg key="Vacation_Info_Updated">Informazione ferie aggiornata.</msg>
   <msg key="Vacation_information_updated">Informazione ferie su %site_link% aggiornata.</msg>
   <msg key="view_all_online_members">Visualizza tutti i membri online.</msg>
@@ -496,7 +496,7 @@
   <msg key="View_Alphabetical_Index">Visualizza Indice Alfabetico</msg>
   <msg key="Visible_to">Visibile per</msg>
   <msg key="Welcome_user">Benvenuto, %user_name%</msg>
-  <msg key="When_leaving_checkbox_empty">Lasciando una checkbox vuota qui, allora quel privilegio viene tolto all&#39;entità a cui era stato invece precedentemente concesso.</msg>
+  <msg key="When_leaving_checkbox_empty">Lasciando la checkbox vuota qui, il privilegio viene tolto all&#39;entità a cui era stato invece precedentemente concesso.</msg>
   <msg key="Whos_Online_link_label">Utenti online in questo momento</msg>
   <msg key="Whos_Online_title">Chi è connesso</msg>
   <msg key="write">Scrittura</msg>
@@ -504,7 +504,7 @@
   <msg key="You_are_in_the_follow">Appartieni ai seguenti gruppi</msg>
   <msg key="You_can_also_browse_from">Puoi anche scorrere dal </msg>
   <msg key="You_can_always_re_open">Potrai sempre riaprirlo tramite </msg>
-  <msg key="You_can_specify_the_default_types_of">Puoi specificare i tipi di relazioni che possono essere usate per i gruppi di questo tipo. Nota che ogni gruppo potrà in seguito cambiare le sue tipologie di relazione consentite.</msg>
+  <msg key="You_can_specify_the_default_types_of">Puoi specificare i tipi di relazioni che possono essere usate per i gruppi di questo tipo. Nota che ogni gruppo potrà in seguito cambiare le tipologie di relazione ad esso consentite.</msg>
   <msg key="You_do_not_have_admin_on">Non hai i diritti di amministrare l&#39;oggetto %root% od alcuno dei suoi oggetti figlio</msg>
   <msg key="You_dont_have_a_portrait">Non hai ancora un ritratto. Puoi</msg>
   <msg key="You_have_admin_rights_on">Hai diritti di amministrare i seguenti oggetti:</msg>
