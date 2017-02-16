@@ -2,8 +2,9 @@
 <message_catalog package_key="acs-mail-lite" locale="de_DE" charset="ISO-8859-1">
 
   <msg key="Associated_files">Verknüpfte Dateien:</msg>
+  <msg key="BCC">BCC</msg>
   <msg key="CC">CC</msg>
-  <msg key="cc_help">Liste von E-Mail Adressen durch &quot;;&quot; getrennt an die eine Kopie der E-Mail geschickt werden soll.</msg>
+  <msg key="cc_help">Liste von E-Mail Adressen durch &#34;;&#34; getrennt an die eine Kopie der E-Mail geschickt werden soll.</msg>
   <msg key="check_uncheck">Alle/Keine auswählen</msg>
   <msg key="lt_there_was_an_error_processing">Es gab einen Fehler bei der Verarbeitung Ihrer Anfrage</msg>
   <msg key="Message">Nachricht</msg>
