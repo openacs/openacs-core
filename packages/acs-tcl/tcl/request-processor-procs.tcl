@@ -606,7 +606,10 @@ ad_proc -private rp_filter { why } {
         return filter_return
     }
 
-    if {[ns_set get [ns_conn headers] Upgrade-Insecure-Requests 0]
+    # ns_set get accepts default as 3rd argument only on Naviserver
+    set upgrade_insecure_requests_p [ns_set get [ns_conn headers] Upgrade-Insecure-Requests]                                     
+    if {$upgrade_insecure_requests_p ne "" &&
+        $upgrade_insecure_requests_p
         && [security::https_available_p]
         && ![security::secure_conn_p]
     } {
