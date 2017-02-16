@@ -1775,6 +1775,12 @@ if {[info commands ns_driver] ne ""} {
             set driver_section [ns_driversection -driver $driver]
             if {$driver_section ne ""} {
 
+                set location [ns_config $driver_section location]
+                if {$location ne "" && [util::split_location $location proto host port]} {
+                    lappend result [list proto http driver $driver host $host \
+                                        location $location port $port suffix $suffix]
+                }
+
                 set host [ns_config $driver_section hostname]
                 if {$host eq ""} {
                     set host [ns_config $driver_section address]
@@ -2038,39 +2044,31 @@ ad_proc -public security::validated_host_header {} {
     }
 
     #
-    # Check against the virtual server configuration of NaviServer.
+    # Check against the virtual server configuration of NaviServer. xxxx
     #
     if {[ns_info name] eq "NaviServer"} {
         set s [ns_info server]
-        foreach driver {nssock nssock_v6 nssock_v4 nsssl} {
+        set driverInfo [security::configured_driver_info]
+        set drivers [lmap d $driverInfo {dict get $d driver}]
+        
+        foreach driver $drivers {
             #
-            # Check ns_driversection for the current server
+            # Check global "servers" configuration for virtual servers for the driver
             #
-            set section [ns_driversection -driver $driver -server $s]
-            if {$section eq ""} continue
-            set vloc [ns_config ns/module/$driver/servers $s]
-            if {$vloc ne ""
-                && [util::split_location $vloc .proto vHost vPort]
-                && $vHost eq $hostName
-            } {
-                ns_log notice "security::validated_host_header: found $host via config section"
-                set $key 1
-                return $host
-            }
-            #
-            # Check global driver installation with virtual servers
-            #
-            set section [ns_configsection ns/module/$driver/servers]
-            if {$section eq ""} continue
-            set names {}
-            foreach {key value} [ns_set array $section] {
-                if {$key ne $s} continue
-                lappend names $value
-            }
-            if {$host in $names} {
-                ns_log notice "security::validated_host_header: found $host via virtual server configuration"
-                set $key 1
-                return $host
+            set ns [ns_configsection ns/module/$driver/servers]
+            if {$ns ne ""} {
+                #
+                # We have a global "servers" configuration for the driver
+                #
+                set names [lmap {key value} [ns_set array $ns] {
+                    if {$key ne $s} continue
+                    set v
+                }]
+                if {$host in $names} {
+                    ns_log notice "security::validated_host_header: found $host via global virtual server configuration for $driver"
+                    set $key 1
+                    return $host
+                }
             }
         }
     }
