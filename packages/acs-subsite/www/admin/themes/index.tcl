@@ -19,15 +19,15 @@ list::create \
     -pass_properties rename_theme \
     -page_query_name select_themes \
     -elements {
-        view {
+        edit {
             sub_class narrow
             display_template {
                 <if @themes.active_p;literal@ true>
-                <img src="/resources/acs-subsite/Edit16.gif" height="16" width="16" alt="#acs-subsite.View_this_theme#" style="border:0">
+                <img src="/resources/acs-subsite/Edit16.gif" height="16" width="16" alt="#acs-subsite.Edit_this_theme#" style="border:0">
                 </if>
             }
             link_url_eval {[export_vars -base view { {theme $key} }]}
-            link_html { title "#acs-subsite.View_this_theme#" }
+            link_html { title "#acs-subsite.Edit_this_theme#" }
         }
         
         key {

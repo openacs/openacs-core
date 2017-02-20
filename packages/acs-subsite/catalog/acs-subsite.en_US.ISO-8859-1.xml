@@ -164,6 +164,7 @@ logging in again. &lt;/p&gt;
   <msg key="Edit_caption">Edit Caption</msg>
   <msg key="edit_comment">edit comment</msg>
   <msg key="Edit_Options">Edit Options</msg>
+  <msg key="Edit_this_theme">Edit this theme</msg>
   <msg key="Elements_not_editable">Certain elements are not editable, because they are managed by %authority_name%.</msg>
   <msg key="Email">Email</msg>
   <msg key="Email_already_exists">#acs-subsite.Email# already exists</msg>
