@@ -108,7 +108,7 @@ foreach package_key $install_order {
         ns_write [subst {
             Done<br>
             <script nonce='$::__csp_nonce'>window.scrollTo(0,document.body.scrollHeight);</script>
-        }
+        }]
         set package_path "[apm_workspace_install_dir]/$package_key"
     } else {
         set spec_file $version(path)
