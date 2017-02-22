@@ -23,7 +23,7 @@ set user_info(by_ip_url) [export_vars -base "complex-search" { { target one } { 
 set return_url [ad_return_url]
 
 set delete_user_url [export_vars -base delete-user { user_id return_url {permanent f}}]
-set delete_user_permanent_url [export_vars -base delete-user { user_id return_url {permanent t}}]
+set delete_user_permanent_url [export_vars -base delete-user { user_id {return_url /acs-admin/users} {permanent t}}]
 
 #
 # RBM: Check if the requested user is a site-wide admin and warn the 
