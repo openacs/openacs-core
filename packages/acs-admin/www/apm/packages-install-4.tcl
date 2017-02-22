@@ -22,13 +22,13 @@ ad_return_top_of_page [ad_parse_template \
                            -params [list context title] \
                            [template::streaming_template]]
 
-ns_write {
+ns_write [subst {
     <h2>Installing packages...</h2>
     <script nonce='$::__csp_nonce'>var myInterval = setInterval(function(){window.scrollTo(0,document.body.scrollHeight)}, 300);
     </script>
     <p>
     <ul>
-}
+}]
 
 
 # We have a set of SQL files that need to be sourced at the appropriate time.
@@ -107,11 +107,11 @@ foreach pkg_info $pkg_install_list {
         # Installation of the package failed and we shouldn't continue with installation
         # as there might be packages depending on the failed package. Ideally we should
         # probably check for such dependencies and continue if there are none.
-        ns_write {
+        ns_write [subst {
 	    </ul>
 	    <script nonce='$::__csp_nonce'>window.scrollTo(0,document.body.scrollHeight);clearInterval(myInterval);
             </script>
-	}
+	}]
         ad_script_abort
     }
 
@@ -131,9 +131,9 @@ if {$installed_count < 1} {
         <p><a href="../server-restart" class="button">Click here</a> to restart the server now.</p>
     }
 }
-ns_write {
+ns_write [subst {
     <script nonce='$::__csp_nonce'>window.scrollTo(0,document.body.scrollHeight);clearInterval(myInterval);</script>
-}
+}]
 
 # Local variables:
 #    mode: tcl
