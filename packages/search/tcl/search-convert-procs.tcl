@@ -39,7 +39,7 @@ ad_proc -public search::convert::binary_to_text {
         }
         application/msexcel -
         application/vnd.ms-excel {
-            set convert_command {xls2csv $filename >$tmp_filename}
+            set convert_command {xls2csv $filename >$tmp_filename 2> /dev/null}
         }
         application/mspowerpoint -
         application/vnd.ms-powerpoint {
