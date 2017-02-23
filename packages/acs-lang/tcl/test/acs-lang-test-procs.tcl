@@ -533,7 +533,7 @@ aa_register_case \
 
     # Read the contents of the catalog file
     array set catalog_array [lang::catalog::parse [lang::catalog::read_file $catalog_file]]
-    array set updated_messages_array [lindex [array get catalog_array messages] 1]
+    array set updated_messages_array $catalog_array(messages)
 
     # Assert that the old messages are unchanged
     foreach old_message_key [array names messages_array] { 
@@ -857,11 +857,11 @@ aa_register_case \
         set system_timezone [lang::system::timezone]
         set user_timezone [lang::user::timezone]
 
-
         set timezones [lc_list_all_timezones]
+        set n [expr {[llength $timezones]-1}]
         
-        set desired_user_timezone [lindex [lindex $timezones [randomRange [expr {[llength $timezones]-1}]]] 0]
-        set desired_system_timezone [lindex [lindex $timezones [randomRange [expr {[llength $timezones]-1}]]] 0]
+        set desired_user_timezone [lindex [lindex $timezones [randomRange $n]] 0]
+        set desired_system_timezone [lindex [lindex $timezones [randomRange $n]] 0]
         
         set error_p 0
         with_catch errmsg {

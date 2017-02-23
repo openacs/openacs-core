@@ -658,8 +658,7 @@ ad_proc -private lang::message::format {
                     append formated_message $percent_match
                 } else {
                     # Do the substitution
-                
-                    append formated_message [lindex [array get value_array $variable_string] 1]
+                    append formated_message $value_array($variable_string)
                 }
             } else {
                 regexp {^([^.]+)(?:\.([^.]+))?$} $variable_string match variable_name array_key

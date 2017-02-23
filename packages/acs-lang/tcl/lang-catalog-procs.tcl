@@ -583,11 +583,11 @@ ad_proc -private lang::catalog::import_from_file {
     }
 
     # Get the messages array, and the list of message keys to iterate over
-    array set messages_array [lindex [array get catalog_array messages] 1]
+    array set messages_array $catalog_array(messages)
     set messages_array_names [array names messages_array]
 
     # Get the descriptions array
-    array set descriptions_array [lindex [array get catalog_array descriptions] 1]
+    array set descriptions_array $catalog_array(descriptions)
 
     ns_log Notice "Loading messages in file $file_path"
 
