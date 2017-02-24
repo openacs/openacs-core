@@ -491,12 +491,14 @@ ad_proc -private apm_load_install_xml_file {} {
 
     @author Peter Marklund
 } {
+    set fn [apm_install_xml_file_path]
     # Abort if there is no install.xml file
-    if { ![file exists [apm_install_xml_file_path]] } {
+    if { ![file exists $fn] } {
         return ""
     }
 
-    set file [open [apm_install_xml_file_path]]
+    #ns_log notice "==== LOADING xml file: $fn"
+    set file [open $fn]
     set root_node [xml_doc_get_first_node [xml_parse -persist [read $file]]]
     close $file
 
