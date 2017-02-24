@@ -51,13 +51,14 @@ foreach pkg_info $pkg_install_list {
 	continue
     }
 
-    if {[apm_package_version_installed_p $version(package.key) $version(name)] } {
-	#ns_log notice "===== ALREADY-installed $version(package.key)"
+    set package_key $version(package.key)
+
+    if {[apm_package_version_installed_p $package_key $version(name)] } {
+	#ns_log notice "===== ALREADY installed $package_key"
 	# Already installed.
 	continue
     }
 
-    set package_key $version(package.key)
     set version_files $version(files)
 
     set data_model_files [list]
@@ -86,7 +87,7 @@ foreach pkg_info $pkg_install_list {
     set enable_p 1
 
     if {[catch {
-	ns_log notice "===== INSTALL $version(package.key)"
+	ns_log notice "===== INSTALL $package_key"
 	set version_id [apm_package_install \
 			    -enable=$enable_p \
 			    -package_path $package_path \
@@ -95,7 +96,7 @@ foreach pkg_info $pkg_install_list {
 			    -data_model_files $data_model_files \
 			    -mount_path $selected_mount_path \
 			    $spec_file]
-	ns_log notice "===== INSTALL $version(package.key) DONE"
+	ns_log notice "===== INSTALL $package_key DONE"
 
     } errorMsg]} {
 	ns_write "Error: $errorMsg\n"
