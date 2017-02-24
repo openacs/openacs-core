@@ -1345,12 +1345,7 @@ ad_proc -public ad_page_contract_filter {
 	    ad_complain [_ acs-tcl.lt_Value_is_not_an_integ]
 	    return 0
 	}
-	# trim leading zeros, so as not to confuse Tcl
-	set value [string trimleft $value "0"]
-	if { $value eq "" } {
-	    # but not all of the zeros
-	    set value "0"
-	}
+        set value [util::trim_leading_zeros $value]
 	return 1
     }
     </pre>
@@ -1635,13 +1630,13 @@ ad_page_contract_filter integer { name value } {
     return 1
   }
 
-  if { [regexp {^(-)?(0*)([1-9][0-9]*|0)$} $value match sign zeros value] } {
-    # Trim the value for any leading zeros
-    set value $sign$value
-    # the string might be still to large, so check again...
-    if {[string is integer -strict $value]} {
-      return 1
-    }
+  if { [regexp {^(-)(.*)$} $value match sign rest] } {
+      # Trim the value for any leading zeros
+      set value $sign[util::trim_leading_zeros $rest]
+      # the string might be still to large, so check again...
+      if {[string is integer -strict $value]} {
+          return 1
+      }
   }
   ad_complain [_ acs-tcl.lt_name_is_not_an_intege]
   return 0
@@ -1681,15 +1676,12 @@ ad_page_contract_filter range { name value range } {
     @creation-date August 18, 2000
 } {
     if { [llength $range] != 2 } {
-	error "[_ acs-tcl.lt_Invalid_number_of_par]"
+	error [_ acs-tcl.lt_Invalid_number_of_par]
 	ad_script_abort
     }
+
     lassign $range min max
-    #
-    # Strip leading zeros from value to avoid octal number
-    # confusions.
-    #
-    regexp {^(0*)([1-9][0-9]*|0)$} $value . zeros value
+    set value [util::trim_leading_zeros $value]
     
     if { ![string is integer -strict $value] || $value < $min || $value > $max } {
 	ad_complain [_ acs-tcl.lt_name_is_not_in_the_ra]
@@ -2004,12 +1996,8 @@ ad_page_contract_filter float { name value } {
         ad_complain [_ acs-tcl.lt_Value_is_not_an_decim]
         return 0
     }
-    # trim leading zeros, so as not to confuse Tcl
-    set value [string trimleft $value "0"]
-    if { $value eq "" } {
-        # but not all of the zeros
-        set value "0"
-    }
+
+    set value [util::trim_leading_zeros $value]
 
     # finally add the signum character again
     set value "$signum$value"
@@ -2019,27 +2007,32 @@ ad_page_contract_filter float { name value } {
 
 ad_page_contract_filter negative_float { name value } {
     Same as float but allows negative numbers too
+    
+    GN: this is deprecated, since "float" allows as well negative numbers
 
     @author Brian Fenton 
     @creation-date 1 December 2004
 } {
+    # Check if the first character is a "+" or "-"
+    set signum ""
+    if {[regexp {^([\+\-])(.*)} $value match signum rest]} {
+        set value $rest
+    }
+
     # remove the first decimal point, the theory being that
     # at this point a valid float will pass an integer test
-    regsub {\.} $value "" value2
-    # remove the first minus sign, the theory being that
-    # at this point a valid float will pass an integer test
-    regsub {\-} $value2 "" value_to_be_tested
+    regsub {\.} $value "" value_to_be_tested
 
     if { ![regexp {^[0-9]+$} $value_to_be_tested] } {
-	ad_complain "Value is not an decimal number."
-	return 0
+        ad_complain [_ acs-tcl.lt_Value_is_not_an_decim]
+        return 0
     }
-    # trim leading zeros, so as not to confuse Tcl
-    set value [string trimleft $value "0"]
-    if { $value eq "" } {
-        # but not all of the zeros
-        set value "0"
-    }
+
+    set value [util::trim_leading_zeros $value]
+
+    # finally add the signum character again
+    set value "$signum$value"
+
     return 1
 }
 
