@@ -1013,18 +1013,22 @@ ad_proc -public ad_page_contract {
 		}
 	    }
 	}
-	
-	if { [ad_page_contract_get_validation_passed_p $formal_name] } {
+
+        #
+        # Perform these checks only, when the validation is passed and
+        # a we have a value for the variable
+        #
+	if { [ad_page_contract_get_validation_passed_p $formal_name] && [info exists var]} {
 	    
 	    if { [info exists apc_internal_filter($formal_name:verify)] } {
 		if { ![info exists apc_internal_filter($formal_name:array)] } {
- 		    # This is not an array, verify the variable
+ 		    # This is not an array, verify the scalar variable
 		    if { ![info exists apc_signatures($formal_name)] 
 			 || ![ad_verify_signature \
                                   -secret [ns_config "ns/server/[ns_info server]/acs" parametersecret ""] \
                                   $var $apc_signatures($formal_name)]
 		    } {
-			ad_complain -key $formal_name:verify "[_ acs-tcl.lt_The_signature_for_the]"
+			ad_complain -key $formal_name:verify [_ acs-tcl.lt_The_signature_for_the]
 			continue
 		    }
 		} else {
@@ -1034,27 +1038,26 @@ ad_proc -public ad_page_contract {
                                   -secret [ns_config "ns/server/[ns_info server]/acs" parametersecret ""] \
                                   [lsort [array get var]] $apc_signatures($formal_name)] 
 		    } {
-			ad_complain -key $formal_name:verify "[_ acs-tcl.lt_The_signature_for_the]"
+			ad_complain -key $formal_name:verify [_ acs-tcl.lt_The_signature_for_the]
 			continue
 		    }
 		}
 	    }
 
 	    # Apply post filters
-	    if { [info exists var] } {
-		foreach filter $apc_post_filters($formal_name) {
-		    ad_complaints_with_key $formal_name:$filter {
-			if { ![info exists apc_filter_parameters($formal_name:$filter)] } {
-			    set filter_ok_p [[ad_page_contract_filter_proc $filter] $formal_name var]
-			} else {
-			    set filter_ok_p [[ad_page_contract_filter_proc $filter] $formal_name var $apc_filter_parameters($formal_name:$filter)]
-			}
-		    }
-		    if { $filter_ok_p } {
-			ad_page_contract_set_validation_passed $formal_name:$filter
-		    } else { 
-			break
-		    }
+            foreach filter $apc_post_filters($formal_name) {
+                ad_complaints_with_key $formal_name:$filter {
+                    set filter_proc [ad_page_contract_filter_proc $filter]
+                    if { ![info exists apc_filter_parameters($formal_name:$filter)] } {
+                        set filter_ok_p [$filter_proc $formal_name var]
+                    } else {
+                        set filter_ok_p [$filter_proc $formal_name var $apc_filter_parameters($formal_name:$filter)]
+                    }
+                }
+                if { $filter_ok_p } {
+                    ad_page_contract_set_validation_passed $formal_name:$filter
+                } else { 
+                    break
 		}
 	    }
 	    
