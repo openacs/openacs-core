@@ -769,10 +769,20 @@ ad_proc -private apm_package_install {
 } {
     set version_id 0
     array set version [apm_read_package_info_file $spec_file_path]
-    set package_key $version(package.key)
+    set package_key  $version(package.key)
+    set version_name $version(name)
 
     # Determine if we are upgrading or installing.
     set upgrade_from_version_name [apm_package_upgrade_from $package_key $version(name)]
+    
+    if {$upgrade_from_version_name ne "" && $upgrade_from_version_name eq $version_name} {
+        #
+        # nothing to do.
+        #
+        ns_log notice "apm_package_install package $package_key already installed in version $version_name"
+        return [apm_version_id_from_package_key $package_key]
+    }
+    
     set upgrade_p [expr {$upgrade_from_version_name ne ""}] 
 
     if {$upgrade_p} {
@@ -780,6 +790,7 @@ ad_proc -private apm_package_install {
     } else {
         set operations {Installing Installed}
     }
+
     
     apm_callback_and_log $callback "<h3>[lindex $operations 0] $version(package-name) $version(name)</h3>"
 
@@ -793,7 +804,6 @@ ad_proc -private apm_package_install {
         }
 
         # Move the package into the packages dir        
-        #exec "mv" "$package_path" "$::acs::rootdir/packages"
         file rename $package_path $::acs::rootdir/packages
 
         # We moved the spec file, so update its path
@@ -811,7 +821,6 @@ ad_proc -private apm_package_install {
         set implements_subsite_p $version(implements-subsite-p)
         set inherit_templates_p $version(inherit-templates-p)
         set auto_mount $version(auto-mount)
-        set version_name $version(name)
         set version_uri $version(url)
         set summary $version(summary)
         set description_format $version(description.format)
@@ -1268,6 +1277,7 @@ ad_proc -private apm_package_install_data_model {
 
     foreach item $data_model_files {
         lassign $item file_path file_type
+
         ns_log Debug "apm_package_install_data_model: Now processing $file_path of type $file_type"
         if {$file_type eq "data_model_create" || 
             $file_type eq "data_model_upgrade" } {
