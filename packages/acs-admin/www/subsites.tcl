@@ -18,12 +18,14 @@ if {$subsite_number > 500} {
 } else {
     set too_many_subsites_p 0
 
-    db_multirow -extend { admin_url path_pretty parameter_url} subsites subsite_admin_urls {} {
+    db_multirow -extend { theme theme_url admin_url path_pretty parameter_url} subsites subsite_admin_urls {} {
         set admin_url "${node_url}admin/"
         set parameter_url [export_vars -base /shared/parameters {package_id {return_url "[ad_conn url]"}}]
         set path_pretty $instance_name
         array set node [site_node::get -node_id $node_id]
         set parent_id $node(parent_id)
+        set theme [parameter::get -parameter ThemeKey -package_id $package_id]
+        set theme_url ${admin_url}themes/
         
         while { $parent_id ne "" } {
             array unset node
@@ -49,7 +51,12 @@ if {$subsite_number > 500} {
                 display_template {\#acs-admin.Pages#}
                 html {align left}
             }
-            
+
+            theme {
+                label "Theme"
+                link_url_col theme_url
+                html {align left}
+            }
             admin_url {
                 label "Subsite Administration"
                 link_html { title "Subsite Administration" }
