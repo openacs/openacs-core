@@ -755,6 +755,7 @@ ad_proc -private apm_package_install {
     {-enable:boolean}
     {-callback apm_dummy_callback}
     {-load_data_model:boolean}
+    {-install_from_repository:boolean}
     {-data_model_files 0}
     {-package_path ""}
     {-mount_path ""}
@@ -1010,9 +1011,11 @@ ad_proc -private apm_package_install {
 
         
         if {[file exists $::acs::rootdir/packages/$package_key/install.xml]} {
+            #
             # Run install.xml only for new installs
+            #
             ns_log notice "===== RUN /packages/$package_key/install.xml"
-            apm::process_install_xml /packages/$package_key/install.xml ""
+            apm::process_install_xml -install_from_repository=$install_from_repository_p /packages/$package_key/install.xml ""
         }
 
     } else {
@@ -2234,6 +2237,7 @@ ad_proc -private apm_load_install_xml {filename binds} {
 
 ad_proc -public apm::process_install_xml {
     -nested:boolean
+    -install_from_repository:boolean
     filename binds
 } {
     process an xml install definition file which is expected to contain 
@@ -2281,7 +2285,7 @@ ad_proc -public apm::process_install_xml {
     set actions [xml_node_get_children [lindex $actions 0]]
 
     foreach action $actions {
-        set install_proc_out [apm_invoke_install_proc -node $action]
+        set install_proc_out [apm_invoke_install_proc -install_from_repository=$install_from_repository_p -node $action]
         set out [concat $out $install_proc_out]
     }
 
@@ -2292,6 +2296,7 @@ ad_proc -public apm::process_install_xml {
 }
 
 ad_proc -private apm_invoke_install_proc {
+    {-install_from_repository:boolean}
     {-type "action"}
     {-node:required}
 } {
@@ -2314,7 +2319,13 @@ ad_proc -private apm_invoke_install_proc {
     }
 
     ns_log notice "apm_invoke_install_proc: call [list ::install::xml::${type}::${name} $node]"
-    return [::install::xml::${type}::${name} $node]
+    if {$install_from_repository_p && $name eq "install"} {
+        ns_log notice "apm_invoke_install_proc: skip [list ::install::xml::${type}::${name} $node] (install from repo)"
+        set result 1
+    } else {
+        set result [::install::xml::${type}::${name} $node]
+    }
+    return $result
 }
 
 ##############
