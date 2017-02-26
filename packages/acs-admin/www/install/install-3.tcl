@@ -159,6 +159,7 @@ foreach package_key $install_order {
     # right place in the file system and backs up any old files
     set version_id [apm_package_install \
                         -enable \
+                        -install_from_repository \
                         -package_path $package_path \
                         -load_data_model \
                         -data_model_files $data_model_files \
