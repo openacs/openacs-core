@@ -2097,6 +2097,9 @@ ad_proc -private apm_get_package_repository {
                              [xml_node_get_attribute $dependency_node "version"]]
                 }
             }
+            foreach install_node [xml_node_get_children_by_name $package_node "install"] {
+                lappend version(install) [xml_node_get_attribute $install_node "package"] 
+            }
 
             if { ![info exists installed_version($version(package.key))] } {
                 # Package is not installed
