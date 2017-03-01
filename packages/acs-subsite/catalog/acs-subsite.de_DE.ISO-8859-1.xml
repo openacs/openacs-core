@@ -487,8 +487,8 @@ copy it as above to the new location, then select &lt;em&gt;unmount&lt;/em&gt; a
   <msg key="User_name">Benutzername</msg>
   <msg key="User_Portrait">Portrait des Users</msg>
   <msg key="User_Portraits">Portraits der User</msg>
-  <msg key="User_Profile">Profil des Users</msg>
-  <msg key="User_Profiles">Prodile der User</msg>
+  <msg key="User_Profile">Benutzer/innen-Profil</msg>
+  <msg key="User_Profiles">Benutzer/innen-Profile</msg>
   <msg key="Username">Benutzeridentifikation</msg>
   <msg key="Username_not_found_for_authority">Benutzer mit Namen &#39;%username%&#39; konnte in %this_authority% nicht gefunden werden</msg>
   <msg key="Username_required">Benutzername muss angegeben werden</msg>
