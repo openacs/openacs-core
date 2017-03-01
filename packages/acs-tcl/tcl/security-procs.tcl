@@ -1804,7 +1804,7 @@ if {[info commands ns_driver] ne ""} {
         }
 
         #
-        # Oobtain information about secure locations.
+        # Obtain information about secure locations.
         #
         set sdriver [security::driver]
 
@@ -1999,8 +1999,13 @@ ad_proc -public security::validated_host_header {} {
     if {[info exists $key]} {
         return $host
     }
-    
-    if {![util::split_location $host .proto hostName hostPort]} {
+
+    if {![string match *//* $host]} {
+        set splithost [ns_conn protocol]://$host
+    } else {
+        set splithost $host
+    }
+    if {![util::split_location $splithost .proto hostName hostPort]} {
         return ""
     }
 
