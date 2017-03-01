@@ -43,7 +43,7 @@
 <if @admin_p@ true or @delete_p@ true>
 <p><h3>Administration</h3>
  <ul>
-  <if @admin_p@ true" and @member_state@ ne "">
+  <if @admin_p@ true and @member_state@ ne "">
         <li> Member State:
       <form method="post" action="change-member-state">
     	<div>
