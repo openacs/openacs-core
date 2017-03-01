@@ -4954,7 +4954,7 @@ ad_proc -public ad_log {
 }
 
 
-if {[ns_info name] ne "NaviServer"} {
+if {[info commands ns_parseurl] eq ""} {
     #
     # In case, we are not running under NaviServer, provide a proc
     # compatible with NaviServer's built in ns_parseurl.
