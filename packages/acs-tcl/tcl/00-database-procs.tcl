@@ -2549,8 +2549,10 @@ ad_proc -public db_source_sql_file {
         oracle {
             set user_pass [db_get_sql_user -dbn $dbn]
             cd [file dirname $file]
-            set fp [open "|[file join $::env(ORACLE_HOME) bin sqlplus] $user_pass @$file" "r"]
-
+            set fp [open "|[file join $::env(ORACLE_HOME) bin sqlplus] $user_pass @$file" "r+"]
+            fconfigure $fp -buffering line
+            puts $fp "exit"
+            
             while { [gets $fp line] >= 0 } {
                 # Don't bother writing out lines which are purely whitespace.
                 if { ![string is space $line] } {
