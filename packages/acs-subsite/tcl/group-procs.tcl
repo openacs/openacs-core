@@ -101,8 +101,7 @@ ad_proc -public group::new {
         error "Object type \"$group_type\" does not exist"
     }
 
-    set var_list [list]
-    lappend var_list [list context_id $context_id]
+    set var_list [list context_id $context_id]
     lappend var_list [list $id_column $group_id]
     if { $group_name ne "" } {
         lappend var_list [list group_name $group_name]
@@ -122,18 +121,21 @@ ad_proc -public group::new {
     	$group_type]
 
     # We can't change the group_name to an I18N version as this would
-    # break compatability with group::member_p -group_name and the
+    # break compatibility with group::member_p -group_name and the
     # like. So instead we change the title of the object of the group
     # (through the pretty name). We just have to change the display of
     # groups to the title at the appropriate places.
+    #
+    # In case, a pretty_name was already provided in form of a message
+    # key, there is no need to convert this a second time.
 
-    if { [info commands "::lang::util::convert_to_i18n"] ne "" } {
+    if {![regexp [message_tag_regexp] $pretty_name]} {
 	set pretty_name [lang::util::convert_to_i18n -message_key "group_title_${group_id}" -text "$pretty_name"]
     } 
 	
     # Update the title to the pretty name
     if {$pretty_name ne ""} {
-	db_dml title_update "update acs_objects set title=:pretty_name where object_id = :group_id"
+	db_dml title_update "update acs_objects set title = :pretty_name where object_id = :group_id"
     }
     return $group_id
 }
