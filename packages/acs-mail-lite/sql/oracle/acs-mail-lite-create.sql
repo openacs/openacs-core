@@ -25,7 +25,9 @@ CREATE TABLE acs_mail_lite_queue (
                               references apm_packages,
     file_ids                  varchar(4000),
     filesystem_files          varchar(4000),
-    delete_filesystem_files_p boolean,
+    delete_filesystem_files_p char(1)
+                              constraint amlq_del_fs_files_p_ck
+                              check (delete_filesystem_files_p in ('t','f')),
     mime_type                 varchar(200),
     object_id                 integer,
     no_callback_p             char(1)
