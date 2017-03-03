@@ -47,7 +47,7 @@ create table site_nodes (
 );
 
 create index site_nodes_object_id_idx on site_nodes (object_id);
-create index site_nodes_parent_object_node_id_idx on site_nodes(parent_id, object_id, node_id);
+create index site_nodes_parent_obj_node_idx on site_nodes(parent_id, object_id, node_id);
 create index site_nodes_parent_id_idx on site_nodes(parent_id);
 
 
