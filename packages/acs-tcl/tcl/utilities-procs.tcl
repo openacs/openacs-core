@@ -167,9 +167,9 @@ ad_proc check_for_form_variable_naughtiness {
         set passed_check_p 0
 
         # check to make sure path is to an authorized directory
-        set tmpdir_list [ad_parameter_all_values_as_list TmpDir]
+        set tmpdir_list [ad_parameter_all_values_as_list -package_id [ad_conn subsite_id] TmpDir]
         if { $tmpdir_list eq "" } {
-            set tmpdir_list [list "/var/tmp" "/tmp"]
+            set tmpdir_list [list [ns_config ns/parameters tmpdir] "/var/tmp" "/tmp"]
         }
 
         foreach tmpdir $tmpdir_list {

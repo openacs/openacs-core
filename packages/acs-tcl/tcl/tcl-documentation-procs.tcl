@@ -1749,7 +1749,7 @@ ad_page_contract_filter tmpfile { name value } {
     # check to make sure path is to an authorized directory
     set tmpdir_list [ad_parameter_all_values_as_list -package_id [ad_conn subsite_id] TmpDir]
     if { $tmpdir_list eq "" } {
-        set tmpdir_list [list "/var/tmp" "/tmp" [ns_config ns/parameters tmpdir]]
+        set tmpdir_list [list [ns_config ns/parameters tmpdir] "/var/tmp" "/tmp"]
     }
 
     foreach tmpdir $tmpdir_list {
