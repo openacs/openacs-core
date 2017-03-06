@@ -597,13 +597,13 @@ ad_proc -private auth::local::user_info::unregister_impl {} {
 }
 
 ad_proc -private auth::local::user_info::GetUserInfo {
-    user_id
+    username
     {parameters ""}
 } {
     Implements the GetUserInfo operation of the auth_user_info
     service contract for the local account implementation.
 } {
-
+    set user_id [acs_user::get_by_username -username $username]
     set result(info_status) [auth::get_local_account_status -user_id $user_id]
     set result(info_message) ""
     db_1row get_user_info {} -column_array user_info
