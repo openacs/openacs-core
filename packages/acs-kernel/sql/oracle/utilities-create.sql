@@ -1,3 +1,4 @@
+PROMPT starting utilities-create.sql....
 --
 -- /packages/acs-kernel/sql/utilities-create.sql
 --
@@ -35,42 +36,6 @@ as
     function index_exists (
 	name in varchar2)
 	return boolean;
-
-    function foreign_key_exists (
-        table     IN varchar2,
-	column    IN varchar2,
-	reftable  IN varchar2,
-	refcolumn IN varchar2)
-    return boolean;
-
-    function unique_exists (
-        table     IN varchar2,
-	column    IN varchar2,
-	single_p  IN boolean default true)
-    return boolean;
-
-    function primary_key_exists (
-        table     IN varchar2,
-	column    IN varchar2,
-	single_p  IN boolean default true)
-    return boolean;
-
-    function not_null_exists (
-        table     IN varchar2,
-	column    IN varchar2)
-    return boolean;
-
-    function get_default (
-        table     IN varchar2,
-	column    IN varchar2)
-    return LONG;
-
-    TYPE primary_keys IS TABLE OF varchar2;
-
-    function get_primary_keys(table IN varchar2)
-       return primary_keys
-	 PIPELINED;
-	 
 end util;
 /
 show errors
@@ -118,8 +83,23 @@ as
         name IN varchar2)
     return boolean
     as
+
+      v_count integer;
+      v_exists boolean;
+
     begin
-      return exists (select 1 from user_tables where table_name = t_name);
+
+      select decode(count(*),0,0,1) into v_count 
+      from user_tables where table_name = upper(table_exists.name);
+
+      if v_count = 1 then
+        v_exists := true;
+      else
+        v_exists := false;
+      end if;
+
+      return v_exists;
+
     END table_exists;
     
     function table_column_exists (
@@ -127,128 +107,66 @@ as
         c_name IN varchar2)
     return boolean
     as
+      v_count integer;
+      v_exists boolean;
+
     begin
-      return exists (select 1 from user_tab_columns where c.table_name = t_name and c.column_name = c_name);
+
+      select decode(count(*),0,0,1) into v_count from user_tab_columns
+      where table_name = upper(table_column_exists.t_name)
+      and column_name = upper(table_column_exists.c_name);
+
+      if v_count = 1 then
+        v_exists := true;
+      else
+        v_exists := false;
+      end if;
+
+      return v_exists;
+      
     END table_column_exists;
     
     function view_exists (
         name IN varchar2)
     return boolean
     as
+      v_count integer;
+      v_exists boolean;
+
     begin
-      return exists (select 1 from user_views where view_name = name);
+
+      select decode(count(*),0,0,1) into v_count 
+      from user_views where view_name = upper(view_exists.name);
+
+      if v_count = 1 then
+        v_exists := true;
+      else
+        v_exists := false;
+      end if;
+
+      return v_exists;
+
     END view_exists;
     
     function index_exists (
         name IN varchar2)
     return boolean
     as
+      v_count integer;
+      v_exists boolean;
+
     begin
-      return exists (select 1 from user_indexes where index_name = name);
+      select decode(count(*),0,0,1) into v_count 
+      from user_indexes where index_name = upper(index_exists.name);
+
+      if v_count = 1 then
+        v_exists := true;
+      else
+        v_exists := false;
+      end if;
+
+      return v_exists;
     END index_exists;
-
-    function foreign_key_exists (
-        table     IN varchar2,
-	column    IN varchar2,
-	reftable  IN varchar2,
-	refcolumn IN varchar2)
-    return boolean
-    as
-    begin
-      return exists (
-      SELECT 1 FROM USER_CONSTRAINTS CONS
-      LEFT JOIN USER_CONS_COLUMNS COLS ON COLS.CONSTRAINT_NAME = CONS.CONSTRAINT_NAME
-      LEFT JOIN USER_CONSTRAINTS CONS_R ON CONS_R.CONSTRAINT_NAME = CONS.R_CONSTRAINT_NAME
-      LEFT JOIN USER_CONS_COLUMNS COLS_R ON COLS_R.CONSTRAINT_NAME = CONS.R_CONSTRAINT_NAME
-      WHERE CONS.CONSTRAINT_TYPE = 'R'
-        AND CONS.TABLE_NAME = table
-	AND COLS.COLUMN_NAME = column
-  	AND CONS_R.TABLE_NAME = reftable
-  	AND COLS_R.COLUMN_NAME = refcolumn);
-    END foreign_key_exists;
-
-    function unique_exists (
-        table     IN varchar2,
-	column    IN varchar2,
-	single_p  IN boolean default true)
-    return boolean
-    as
-    begin
-      return exists (
-      SELECT 1
-       FROM all_constraints c
-       JOIN all_cons_columns cc ON (c.owner = cc.owner
-	                                 AND c.constraint_name = cc.constraint_name)
-       WHERE c.constraint_type = 'U'
-	 AND c.table_name = table
-	 AND cc.column_name = column
-	 and (not single_p or (
-	    select count(*) from all_cons_columns
-	     where constraint_name = c.constraint_name) = 1));
-    END unique_exists;
-
-    function primary_key_exists (
-        table     IN varchar2,
-	column    IN varchar2,
-	single_p  IN boolean default true)
-    return boolean
-    as
-    begin
-      return exists (
-      SELECT 1
-       FROM all_constraints c
-       JOIN all_cons_columns cc ON (c.owner = cc.owner
-	                                 AND c.constraint_name = cc.constraint_name)
-       WHERE c.constraint_type = 'P'
-	 AND c.table_name = table
-	 AND cc.column_name = column
-	 and (not single_p or (
-	    select count(*) from all_cons_columns
-	     where constraint_name = c.constraint_name
-	       and owner = c.owner) = 1));
-    END primary_key_exists;
-
-    function not_null_exists (
-        table     IN varchar2,
-	column    IN varchar2)
-    return boolean
-    as
-    begin
-      return (
-      SELECT nullable = 'N'
-        FROM ALL_TAB_COLUMNS
-	 WHERE table_name = table
-	   AND column_name = column);
-    END not_null_exists;
-
-    function get_default (
-        table     IN varchar2,
-	column    IN varchar2)
-    return LONG
-    as
-    begin
-      return (
-      SELECT DATA_DEFAULT
-        FROM ALL_TAB_COLUMNS
-	 WHERE table_name = table
-	   AND column_name = column);
-    END get_default;
-
-    function get_primary_keys(table IN varchar2)
-        return primary_keys IS
-        rec primary_keys;
-    BEGIN
-          SELECT cols.column_name
-	    BULK COLLECT INTO rec
-	  FROM all_constraints cons, all_cons_columns cols
-	  WHERE cols.table_name = table
-	  AND cons.constraint_type = 'P'
-	  AND cons.constraint_name = cols.constraint_name
-	  AND cons.owner = cols.owner
-	  ORDER BY cols.table_name, cols.position;
-
-        RETURN rec;
-    END get_primary_keys;
 
 end util;
 /
