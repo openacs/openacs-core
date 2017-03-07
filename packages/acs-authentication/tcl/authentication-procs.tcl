@@ -618,8 +618,8 @@ ad_proc -public auth::create_user {
         set creation_info(account_status) closed
     }
 
-    if { ([info exists local_account_message] && $local_account_message ne "") } {
-        if { ([info exists creation_info(account_message)] && $creation_info(account_message) ne "") } {
+    if { [info exists local_account_message] && $local_account_message ne "" } {
+        if { [info exists creation_info(account_message)] && $creation_info(account_message) ne "" } {
             # Concatenate local and remote account messages
             set creation_info(account_message) "<p>[auth::authority::get_element -authority_id $authority_id -element pretty_name]: $creation_info(account_message)</p> <p>[ad_system_name]: $local_account_message</p>"
         } else {
@@ -627,7 +627,7 @@ ad_proc -public auth::create_user {
         }
     }
         
-    # Issue login cookie if login was successful
+    # Unless nologin was specified, issue login cookie if login was successful
     if { !$nologin_p && $creation_info(creation_status) eq "ok" && $creation_info(account_status) eq "ok" && [ad_conn user_id] == 0 } {
         auth::issue_login -user_id $creation_info(user_id)
     }
@@ -1566,7 +1566,7 @@ ad_proc -private auth::validate_account_info {
                                -username $username]
         
         if { $user(user_id) eq "" } {
-    set this_authority [auth::authority::get_element -authority_id $authority_id -element pretty_name]
+            set this_authority [auth::authority::get_element -authority_id $authority_id -element pretty_name]
             set element_messages(username) [_ acs-subsite.Username_not_found_for_authority]
         }
     } else {
@@ -1614,7 +1614,7 @@ ad_proc -private auth::validate_account_info {
         }
     }
     
-    if { ([info exists user(email)] && $user(email) ne "") } {
+    if { [info exists user(email)] && $user(email) ne "" } {
         # Check that email is unique
         set email $user(email)
         set email_party_id [party::get_by_email -email $user(email)]
