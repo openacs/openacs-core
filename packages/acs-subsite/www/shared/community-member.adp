@@ -51,21 +51,21 @@
   </p>
 </if>
 
-<if @verified_user_id@ ne 0 and @bio@ not nil>
-  <p>
-    <strong>#acs-subsite.Biography#:</strong>
-   </p>
-   <blockquote>
-     @bio;noquote@
-   </blockquote>
+<if @verified_user_id@ ne 0>
+    <if @bio@ not nil>
+      <p>
+	<strong>#acs-subsite.Biography#:</strong>
+      </p>
+      <blockquote>
+	@bio;noquote@
+      </blockquote>
+    </if>
 </if>
-
-
-<if @untrusted_user_id;literal@ false>
+<else>
   <blockquote>
     #acs-subsite.If_you_were_to# <a href="@subsite_url@register/index?@login_export_vars@">#acs-subsite.log_in#</a>#acs-subsite.lt__youd_be_able_to_get#
   </blockquote>
-</if>
+</else>
 
 <if @site_wide_admin_p;literal@ true>
   <h3>#acs-subsite.lt_For_Site-Wide_Adminis#</h3>
