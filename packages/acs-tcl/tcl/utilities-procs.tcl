@@ -1781,47 +1781,80 @@ ad_proc -public ad_urlencode { string } {
 }
 
 if {[ns_info name] eq "NaviServer"} {
+    #
+    # NaviServer
+    #
+    ad_proc -public ad_urlencode_folder_path {path} {
+        Perform an urlencode operation on the segments of the provided
+        folder (for a full folder path rather than path segments as in
+        ad_urlencode_path).
+        @see ad_urlencode_path
+    } {f
+        return [ns_urlencode -part path -- {*}[split $path /]]
+    }
+    
     ad_proc -public ad_urlencode_path { string } {
-        encode provided string with url-encoding for paths (instead of queries) as defined in RFC 3986
+        Encode provided string with url-encoding for paths segments
+        (instead of query segments) as defined in RFC 3986
     } { 
         return [ns_urlencode -part path -- $string]
     }
     ad_proc -public ad_urldecode_path { string } {
-        decode provided string with url-encoding for paths (instead of queries) as defined in RFC 3986
+        Decode provided string with url-encoding for paths segments
+        (instead of query segments) as defined in RFC 3986
     } {
         return [ns_urldecode -part path -- $string]
     }
     ad_proc -public ad_urlencode_query { string } {
-        encode provided string with url-encoding for query (instead of paths) as defined in RFC 3986
+        Encode provided string with url-encoding for query segments
+        (instead of paths) as defined in RFC 3986
     } { 
         return [ns_urlencode -part query -- $string]
     }
     ad_proc -public ad_urldecode_query { string } {
-        decode provided string with url-encoding for query (instead of paths) as defined in RFC 3986
+        Decode provided string with url-encoding for query segments
+        (instead of path segments) as defined in RFC 3986
     } {
         return [ns_urldecode -part query -- $string]
     }
 } else {
+    #
+    # AOLserver
+    #
+
+    ad_proc -public ad_urlencode_folder_path {path} {
+        Perform an urlencode operation on the segments of the provided
+        folder (for a full folder path rather than path segments as in
+        ad_urlencode_path).
+        @see ad_urlencode_path        
+    } {
+        set segments {}
+        foreach segment [split $path /] {
+            lappend segments [ns_urlencode $segment]
+        }
+        return [join $segments /]
+    }
+    
     ad_proc -public ad_urlencode_path { string } {
-        encode provided string with url-encodingfor paths; 
+        Encode provided string with url-encoding for path segments; 
         same as ad_urlencode, since aolserver does not support this difference
     } {
         return [ad_urlencode $string]
     }
     ad_proc -public ad_urldecode_path { string } {
-        decode provided string with url-encoding for paths; 
+        Decode provided string with url-encoding for path segments; 
         same as ns_urldecode, since aolserver does not support this difference
     } {
         return [ns_urldecode $string]
     }
     ad_proc -public ad_urlencode_query { string } {
-        encode provided string with url-encodingfor paths; 
+        Encode provided string with url-encodingfor path segments; 
         same as ad_urlencode, since aolserver does not support this difference
     } {
         return [ad_urlencode $string]
     }
     ad_proc -public ad_urldecode_query { string } {
-        decode provided string with url-encoding for paths; 
+        Decode provided string with url-encoding for path segments; 
         same as ns_urldecode, since aolserver does not support this difference
     } {
         return [ns_urldecode $string]
@@ -1944,7 +1977,7 @@ if {[ns_info name] eq "NaviServer"} {
     #
     # Use plain AOLserver
     #
-
+    
     #
     # Unset Cookie
     #
