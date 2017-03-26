@@ -793,7 +793,7 @@ ad_proc -public ad_return_url {
     if { [llength $query_list] == 0 } {
         set url [ns_conn url]
     } else {
-        set url "[ns_conn url]?[join $query_list "&"]"
+        set url "[ns_conn url]?[join $query_list &]"
     }
     
     if { $qualified_p } {
