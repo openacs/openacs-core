@@ -933,14 +933,15 @@ ad_proc -public export_vars {
     if { [info exists base] && $base ne "" } {
         if { $export_string ne "" } {
             if { [string first ? $base] > -1 } {
-                # The base already has query vars
+                # The base already has query vars; assume that the
+                # path up to this point is already correctly encoded.
                 set export_string "$base&$export_string"
             } else { 
                 # The base has no query vars
-                set export_string "$base?$export_string"
+                set export_string "[ad_urlencode_url $base]?$export_string"
             }
         } else {
-            set export_string $base
+            set export_string [ad_urlencode_url $base]
         }
     }
     
@@ -1789,7 +1790,7 @@ if {[ns_info name] eq "NaviServer"} {
         folder (for a full folder path rather than path segments as in
         ad_urlencode_path).
         @see ad_urlencode_path
-    } {f
+    } {
         return [ns_urlencode -part path -- {*}[split $path /]]
     }
     
@@ -1861,7 +1862,25 @@ if {[ns_info name] eq "NaviServer"} {
     }    
 }
 
-
+ad_proc -public ad_urlencode_url {url} {
+    Perform an urlencode operation on a potentially full url
+    (containing a location, but without query part).
+    @see ad_urlencode_folder_path
+} {
+    if {[util_complete_url_p $url]} {
+        set components [ns_parseurl $url]
+        set result [util::join_location \
+                        -proto [dict get $components proto] \
+                        -hostname [dict get $components host] \
+                        -port [dict get $components port] \
+                       ]
+        set fullpath [dict get $components path]/[dict get $components tail]
+        append result / [ad_urlencode_folder_path $fullpath]
+    } else {
+        set result [ad_urlencode_folder_path $url]
+    }
+    return $result
+}
 
 if {[ns_info name] eq "NaviServer"} {
     #
@@ -2513,6 +2532,8 @@ ad_proc -public util_get_user_messages {
         template::multirow append $multirow $message
     }
 }
+
+
 
 ad_proc -public util_complete_url_p {string} {
     Determine whether string is a complete URL, i.e.
