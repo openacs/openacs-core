@@ -1043,7 +1043,7 @@ ad_proc -public ad_get_signed_cookie {
 
 } {
 
-    set cookie_value [ns_urldecode [ad_get_cookie -include_set_cookies $include_set_cookies $name]]
+    set cookie_value [ad_get_cookie -include_set_cookies $include_set_cookies $name]
     if { $cookie_value eq "" } {
         error "Cookie does not exist."
     }
@@ -1074,7 +1074,7 @@ ad_proc -public ad_get_signed_cookie_with_expr {
 
 } {
 
-    set cookie_value [ns_urldecode [ad_get_cookie -include_set_cookies $include_set_cookies $name]]
+    set cookie_value [ad_get_cookie -include_set_cookies $include_set_cookies $name]
 
     if { $cookie_value eq "" } {
         error "Cookie does not exist."
@@ -1147,7 +1147,7 @@ ad_proc -public ad_set_signed_cookie {
     }
 
     set cookie_value [ad_sign -secret $secret -token_id $token_id -max_age $signature_max_age $value]
-    set data [ns_urlencode [list $value $cookie_value]]
+    set data [list $value $cookie_value]
 
     ad_set_cookie \
         -replace $replace \

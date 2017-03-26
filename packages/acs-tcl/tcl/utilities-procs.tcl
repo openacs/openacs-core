@@ -1985,7 +1985,7 @@ if {[ns_info name] eq "NaviServer"} {
                 if { [string tolower [ns_set key $headers $i]] eq "set-cookie" 
                      && [regexp "^$name=(\[^;\]*)" [ns_set value $headers $i] match value] 
                  } {
-                    return $value
+                    return [ns_urldecode $value]
                 }
             }
         }
@@ -2001,7 +2001,7 @@ if {[ns_info name] eq "NaviServer"} {
             if { $value eq "\"\"" } {
                 set value ""
             }
-            return $value
+            return [ns_urldecode $value]
         }
 
         return $default
@@ -2083,7 +2083,7 @@ if {[ns_info name] eq "NaviServer"} {
         if { $value eq "" } {
             set cookie "$name=\"\""
         } else {
-            set cookie "$name=$value"
+            set cookie "$name=[ns_urlencode $value]"
         }
 
         if { $path ne "" } {
