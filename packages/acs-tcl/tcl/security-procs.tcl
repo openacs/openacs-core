@@ -2073,7 +2073,7 @@ ad_proc -public security::validated_host_header {} {
                 #
                 set names [lmap {key value} [ns_set array $ns] {
                     if {$key ne $s} continue
-                    set v
+                    set value
                 }]
                 if {$host in $names} {
                     ns_log notice "security::validated_host_header: found $host via global virtual server configuration for $driver"
