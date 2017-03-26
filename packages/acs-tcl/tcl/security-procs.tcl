@@ -93,7 +93,7 @@ ad_proc -private sec_handler {} {
 
     if {$::security::log(login_cookie) ne "debug"} {
         foreach c [list ad_session_id ad_secure_token ad_user_login ad_user_login_secure] {
-            lappend msg "$c [ad_get_cookie $c]"
+            lappend msg "$c '[ad_get_cookie $c]'"
         }
         ns_log notice "OACS [ns_conn url] cookies: $msg"
     }
@@ -108,7 +108,13 @@ ad_proc -private sec_handler {} {
 
         # Now check for login cookie
         ns_log $::security::log(login_cookie) "OACS: Not a valid session cookie, looking for login cookie '$errmsg'"
-        ad_user_logout
+        if {![string match "*does not exist*" $errmsg]} {
+            #
+            # Current firefox does not seem to include cookies in CSP
+            # messages sent via "report-uri"
+            #
+            ad_user_logout
+        }
         sec_login_handler
     } else {
         # The session cookie already exists and is valid.
