@@ -59,7 +59,7 @@ ad_proc -public search::convert::binary_to_text {
             set convert_command {unzip -p $filename content.xml >$tmp_filename}
         }
         text/html {
-	    file delete $tmp_filename
+	    file delete -- $tmp_filename
 	    #
 	    # Reading the whole content into memory is not necessarily
 	    # the best when dealing with huge files. However, for
@@ -68,7 +68,7 @@ ad_proc -public search::convert::binary_to_text {
             return [ns_striphtml [template::util::read_file $filename]]
         }
         text/plain {
-	    file delete $tmp_filename
+	    file delete -- $tmp_filename
 	    #
 	    # Reading the whole content into memory is not necessarily
 	    # the best when dealing with huge files. However, for
@@ -85,7 +85,7 @@ ad_proc -public search::convert::binary_to_text {
     }
 
     if {[catch {eval exec $convert_command} err]} {
-        catch {file delete $tmp_filename}
+        catch {file delete -- $tmp_filename}
         ns_log Error "SEARCH: conversion failed - $convert_command: $err"
         return
     }
@@ -93,7 +93,7 @@ ad_proc -public search::convert::binary_to_text {
     set fd [open $tmp_filename "r"]
     set result [read $fd]
     close $fd
-    file delete $tmp_filename
+    file delete -- $tmp_filename
     return $result
 }
 

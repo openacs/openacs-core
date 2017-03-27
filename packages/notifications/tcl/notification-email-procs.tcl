@@ -308,7 +308,7 @@ namespace eval notification::email {
             # the rest of the foreach as well
             if { $is_auto_reply_p } {
                 ns_log Debug "load_qmail_mail_queue: message $msg is from an auto-responder, skipping"
-                if {[catch {file delete $msg} errmsg]} {
+                if {[catch {file delete -- $msg} errmsg]} {
                     ns_log Warning "load_qmail_mail_queue: couldn't remove message $msg:  $errmsg"
                 }
                 continue
@@ -346,7 +346,7 @@ namespace eval notification::email {
 		    -message_headers $orig_headers \
 		    -reason "Invalid sender.  You must be a member of the site and\nyour From address must match your registered address."
 
-                if {[catch {file delete $msg} errmsg]} {
+                if {[catch {file delete -- $msg} errmsg]} {
                     ns_log Warning "load_qmail_mail_queue: couldn't remove message $msg: $errmsg"
                 }
                 continue
@@ -364,7 +364,7 @@ namespace eval notification::email {
 		    -message_headers $orig_headers \
 		    -reason "Invalid To Address"
 
-                if {[catch {file delete $msg} errmsg]} {
+                if {[catch {file delete -- $msg} errmsg]} {
                     ns_log Warning "load_qmail_mail_queue: couldn't remove message file $msg: $errmsg"
                 }
                 continue
@@ -384,7 +384,7 @@ namespace eval notification::email {
 	        set headers $orig_headers
                 db_dml holdinsert {} -clobs [list $to_addr $headers $body]
 
-                if {[catch {file delete $msg} errmsg]} { 
+                if {[catch {file delete -- $msg} errmsg]} { 
 		    ns_log Error "load_qmail_mail_queue: unable to delete queued message $msg: $errmsg"
 		}
 

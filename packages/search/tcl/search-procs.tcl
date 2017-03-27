@@ -302,7 +302,7 @@ ad_proc -private search::content_filter {
     #ns_log notice "search::content_filter txt len [string length $txt]"
 
     if {[info exists tmp_filename]} {
-	file delete $tmp_filename
+	file delete -- $tmp_filename
     }
 }
 
