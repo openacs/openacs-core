@@ -24,7 +24,7 @@ ad_page_contract {
 }
 
 if {$delete} {
-    file delete -force [apm_workspace_install_dir]
+    file delete -force -- [apm_workspace_install_dir]
 }
 
 set title "Contents of Loaded Package"

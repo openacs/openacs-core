@@ -31,7 +31,7 @@ ad_proc -private cr_delete_scheduled_files {} {
             if {[regexp {^[0-9/]+$} $path]} {
                 # the filename looks valid, delete the file from filesystem
                 ns_log Debug "cr_delete_scheduled_files: deleting $file"
-                file delete $file
+                file delete -- $file
             } else {
                 ns_log Warning "cr_delete_scheduled_files: refuse to delete $file"
             }
@@ -117,7 +117,7 @@ ad_proc cr_check_orphaned_files {-delete:boolean {-mtime ""}} {
         
         lappend result $f
         if {$delete_p} {
-            file delete $f
+            file delete -- $f
         }
     }
     

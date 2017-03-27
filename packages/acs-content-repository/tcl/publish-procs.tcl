@@ -1065,7 +1065,7 @@ ad_proc -public publish::write_content { revision_id args } {
       # crap out if the file already exists, but on the other hand, we shouldn't accidentally
       # overwrite files
       if { [file exists $root_path$file_url] } {
-          file delete $root_path$file_url
+          file delete -- $root_path$file_url
       }
 
       # Write blob/text to file

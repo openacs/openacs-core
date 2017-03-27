@@ -320,7 +320,7 @@ ad_proc -private apm_build_repository {
     #----------------------------------------------------------------------
 
     # Wipe and re-create the working directory
-    file delete -force $work_dir
+    file delete -force -- $work_dir
     file mkdir ${work_dir}
     set update_pretty_date [lc_time_fmt [clock format [clock seconds] -format "%Y-%m-%d %T"] %c]
     
@@ -332,8 +332,8 @@ ad_proc -private apm_build_repository {
         ns_log Notice "Repository: Channel $channel using tag $channel_tag($channel)"
         
         # Wipe and re-create the checkout directory
-        file delete -force "${work_dir}openacs-4"
-        file delete -force "${work_dir}dotlrn"
+        file delete -force -- "${work_dir}openacs-4"
+        file delete -force -- "${work_dir}dotlrn"
         file mkdir "${work_dir}dotlrn/packages"
         
         # Prepare channel directory
@@ -465,7 +465,7 @@ ad_proc -private apm_build_repository {
                                   file ${channel_dir}$pkg_info(package.key)-$pkg_info(name).apm:\
                                   \n$errmsg\n$::errorCode,$::errorInfo"
                             }
-                            file delete $tmp_filename
+                            file delete -- $tmp_filename
                         }
                         
                         set apm_url "${repository_url}$channel/$pkg_info(package.key)-$pkg_info(name).apm"
@@ -629,7 +629,7 @@ ad_proc -private apm_build_repository {
     ns_log Notice "Repository: Moving work repository $work_repository_dirname to live repository dir at <a href=\"/repository\/>$repository_dir</a>\n"
 
     if { [file exists $repository_bak] } {
-        file delete -force $repository_bak
+        file delete -force -- $repository_bak
     }
     if { [file exists $repository_dirname] } {
         file rename $repository_dirname $repository_bak

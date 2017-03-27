@@ -61,7 +61,7 @@ if { $item_id != 0} {
                         where revision_id = :revision_id
                     } -file $input_file
                     exec convert $input_file -resize $size $filename
-                    file delete $input_file
+                    file delete -- $input_file
                 }
                 default {
                     ad_log warning "unsupported storage type for portraits: $itemInfo(storage_type)"

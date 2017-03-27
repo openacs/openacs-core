@@ -257,7 +257,7 @@ ad_proc -public template::util::spellcheck::get_element_formtext {
 	}
     }
 
-    file delete $tmpfile
+    file delete -- $tmpfile
 
     ####
     #

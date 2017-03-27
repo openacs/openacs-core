@@ -188,7 +188,7 @@ ad_proc -private cr_delete_orphans {files} {
             # the content entry does not exist anymore, therefore the
             # file is an orphan and should be removed
             ns_log notice "delete orphaned file $dir$name"
-            file delete $dir$name
+            file delete -- $dir$name
           }
     }
 }

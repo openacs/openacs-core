@@ -369,7 +369,7 @@ ad_proc -private lang::test::execute_upgrade {
     aa_log "locale=$locale ----------3. Make changes to catalog files and do first upgrade----------"
 
     # Update the catalog file
-    file delete -force $catalog_file_path
+    file delete -force -- $catalog_file_path
     lang::catalog::export_to_file $catalog_file_path [array get file_messages]
     aa_true "First upgrade: catalog file $catalog_file_path updated" [file exists $catalog_file_path]
 
@@ -562,12 +562,12 @@ aa_register_case \
         lang::message::unregister $package_key $message_key
     }
     # Delete the catalog files
-    file delete $catalog_backup_file
-    file delete $catalog_file
+    file delete -- $catalog_backup_file
+    file delete -- $catalog_file
 
     # Delete the tcl files
-    file delete "$::acs::rootdir/$tcl_file"
-    file delete "$::acs::rootdir/$tcl_backup_file"
+    file delete -- $::acs::rootdir/$tcl_file
+    file delete -- $::acs::rootdir/$tcl_backup_file
 }
 
 aa_register_case \
@@ -663,7 +663,7 @@ Test text"
             [regexp $expected_adp_pattern $adp_contents match]
 
     # Remove the adp test file
-    file delete $adp_file_path
+    file delete -- $adp_file_path
 }
 
 aa_register_case \

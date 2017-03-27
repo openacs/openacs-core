@@ -179,7 +179,7 @@ ad_proc -public email_image::new_item {
     }
     
     # Delete the temporary file created by ImageMagick
-    catch { file delete  $dest_path } errMsg
+    catch { file delete -- $dest_path } errMsg
     
     set img_src [ns_quotehtml "/shared/email-image-bits.tcl?user_id=$user_id&revision_id=$revision_id"]
     set send_email_url [ns_quotehtml "/shared/send-email?sendto=$user_id&return_url=$return_url"]
@@ -271,7 +271,7 @@ ad_proc -public email_image::edit_email_image {
         }
     }
     # Delete the temporary file created by ImageMagick
-    catch { file delete  $dest_path } errMsg
+    catch { file delete -- $dest_path } errMsg
 }
 
 

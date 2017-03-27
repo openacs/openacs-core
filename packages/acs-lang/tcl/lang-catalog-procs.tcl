@@ -338,7 +338,7 @@ ad_proc -private lang::catalog::export_to_file {
         array set old_filename_info [apm_parse_catalog_path $old_catalog_file]
 
         if {$old_filename_info(locale) eq $filename_info(locale)} {
-            file delete $old_catalog_file
+            file delete -- $old_catalog_file
         }
     }
 
