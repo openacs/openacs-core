@@ -111,7 +111,7 @@ aa_register_case -cats {api db smoke} apm__test_info_file {
     } error]
 
     # Teardown
-    file delete $spec_path
+    file delete -- $spec_path
     foreach {type proc} [array get callback_array] {
       db_dml remove_callback {delete from apm_package_callbacks 
                               where version_id = :version_id
@@ -194,7 +194,7 @@ aa_register_case -cats {db api smoke} apm__test_callback_invoke {
     } error]
 
     # Teardown
-    file delete $file_path
+    file delete -- $file_path
     apm_remove_callback_proc -package_key $package_key -type $type
 
     if { $error_p } {

@@ -1215,7 +1215,7 @@ ad_proc -private apm_package_delete {
     # Optionally remove the files from the filesystem
     if {$remove_files_p==1} {
         if { [catch { 
-            file delete -force [acs_package_root_dir $package_key] 
+            file delete -force -- [acs_package_root_dir $package_key] 
         } error] } {
             apm_callback_and_log $callback "<li>Unable to delete [acs_package_root_dir $package_key]:<font color=red>$error</font>"
         }

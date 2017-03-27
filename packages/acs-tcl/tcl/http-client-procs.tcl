@@ -1417,7 +1417,7 @@ ad_proc -private util::http::native::request {
     }
 
     if {$delete_body_file_p} {
-        file delete -force $body_file
+        file delete -force -- $body_file
     }
 
     ## Decoding of the response
@@ -1792,9 +1792,9 @@ ad_proc -private util::http::curl::request {
     }
 
     # Delete temp files
-    file delete $resp_headers_tmpfile
+    file delete -- $resp_headers_tmpfile
     if {$create_body_file_p || $delete_body_file_p} {
-        file delete -force $body_file
+        file delete -force -- $body_file
     }
 
     return [list \

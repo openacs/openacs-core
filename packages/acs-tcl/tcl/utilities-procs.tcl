@@ -4877,7 +4877,7 @@ ad_proc -public util::disk_cache_flush {
 } {
     set dir [ad_tmpdir]/$key
     foreach file [flib -nocomplain $dir/$id-*] {
-        file delete $file
+        file delete -- $file
         ns_log notice "FLUSH file delete $file"
     }
 }

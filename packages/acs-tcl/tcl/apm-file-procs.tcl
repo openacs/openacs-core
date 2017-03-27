@@ -18,7 +18,7 @@ ad_proc -private apm_mkdir {path} {
     }] } {
         # There must be a file blocking the directory creation.
         if { [catch {
-            file delete -force $path
+            file delete -force -- $path
             file mkdir $path
         } errmsg]} {
             error "Error creationg directory $path: $errmsg"
@@ -151,7 +151,7 @@ ad_proc -private apm_extract_tarball { version_id dir } {
     #ns_log notice "exec sh -c 'cd $dir ; [apm_gzip_cmd] -d -q -c $apm_file | [apm_tar_cmd] xf - 2>/dev/null'"
     exec [apm_gzip_cmd] -d -q -c -S .apm $apm_file | [apm_tar_cmd] -xf - -C $dir 2> [apm_dev_null]
 
-    file delete $apm_file
+    file delete -- $apm_file
 }
 
 
@@ -231,7 +231,7 @@ ad_proc -private apm_generate_tarball { version_id } {
 
     db_dml update_content_length {}
 
-    file delete $tmpfile
+    file delete -- $tmpfile
 }
 
 
@@ -485,7 +485,7 @@ ad_proc -private apm_transfer_file {
             set h [ns_http queue -timeout $timeout:0 $url]
             set replyHeaders [ns_set create]
             ns_http wait -file F -headers $replyHeaders -spoolsize 1 $h
-            if {[file exists $output_file_name]} {file delete $output_file_name}
+            if {[file exists $output_file_name]} {file delete -- $output_file_name}
             file rename $F $output_file_name
             set location [ns_set iget $replyHeaders location]
             if {$location eq ""} break
@@ -627,7 +627,7 @@ ad_proc -private apm_load_apm_file {
     if { [catch {
         array set package [apm_read_package_info_file [file join $tmpdir $info_file]]
     } errmsg]} {
-        file delete -force $tmpdir
+        file delete -force -- $tmpdir
         apm_callback_and_log $callback  "The archive contains an unparseable package specification file: 
     <code>$info_file</code>.  The following error was produced while trying to 
     parse it: <blockquote><pre>[ns_quotehtml $errmsg]</pre></blockquote>.
@@ -637,7 +637,7 @@ ad_proc -private apm_load_apm_file {
                 ns_log Error "Error loading APM file form url $url: Bad package .info file. $errmsg\n$::errorInfo"
         return
     }
-    file delete -force $tmpdir
+    file delete -force -- $tmpdir
     set package_key $package(package.key)
     set pretty_name $package(package-name)
     set version_name $package(name)

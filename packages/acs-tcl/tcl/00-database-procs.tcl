@@ -2752,7 +2752,7 @@ ad_proc -public db_load_sql_data {
             } error]
 
             # remove the copy file.
-            file delete -force $copy_file
+            file delete -force -- $copy_file
 
             if { $errno == 2 } {
                 return $error
