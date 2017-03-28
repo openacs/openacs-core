@@ -486,7 +486,7 @@ ad_proc -private apm_transfer_file {
             set replyHeaders [ns_set create]
             ns_http wait -file F -headers $replyHeaders -spoolsize 1 $h
             if {[file exists $output_file_name]} {file delete -- $output_file_name}
-            file rename $F $output_file_name
+            file rename -- $F $output_file_name
             set location [ns_set iget $replyHeaders location]
             if {$location eq ""} break
             ns_log notice "Transfer $url redirected to $location ..."

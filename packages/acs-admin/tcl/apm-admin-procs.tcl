@@ -632,9 +632,9 @@ ad_proc -private apm_build_repository {
         file delete -force -- $repository_bak
     }
     if { [file exists $repository_dirname] } {
-        file rename $repository_dirname $repository_bak
+        file rename -- $repository_dirname $repository_bak
     }
-    file rename $work_repository_dirname  $repository_dirname
+    file rename -- $work_repository_dirname  $repository_dirname
 
     ns_log Debug "Repository: DONE"
 

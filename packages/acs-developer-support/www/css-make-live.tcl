@@ -26,7 +26,7 @@ set target $file_location
 set source [content::revision::get_cr_file_path -revision_id $revision_id]
 
 #todo check if files are stored in db
-file copy -force $source $target
+file copy -force -- $source $target
 
 ad_returnredirect $return_url_2
 

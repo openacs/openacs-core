@@ -300,9 +300,9 @@ if { [file exists $repository_bak] } {
     file delete -force -- $repository_bak
 }
 if { [file exists $repository_dirname] } {
-    file rename $repository_dirname $repository_bak
+    file rename -- $repository_dirname $repository_bak
 }
-file rename $work_repository_dirname  $repository_dirname
+file rename -- $work_repository_dirname  $repository_dirname
 
 ns_write "</ul> <h2>DONE</h2>\n"
 

@@ -4235,7 +4235,7 @@ ad_proc -public util::backup_file {
     }
 
     #exec "mv" "$file_path" "$backup_path"
-    file rename $file_path $backup_path
+    file rename -- $file_path $backup_path
 }
 
 
@@ -4878,7 +4878,7 @@ ad_proc -public util::disk_cache_flush {
     set dir [ad_tmpdir]/$key
     foreach file [flib -nocomplain $dir/$id-*] {
         file delete -- $file
-        ns_log notice "FLUSH file delete $file"
+        ns_log notice "FLUSH file delete -- $file"
     }
 }
 
