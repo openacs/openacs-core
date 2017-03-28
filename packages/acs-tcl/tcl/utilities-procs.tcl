@@ -2455,10 +2455,9 @@ ad_proc -public ad_returnredirect {
         set url [util_current_location]$target_url
     } else {
         # URL is relative to current directory.
-        if {$target_url eq "."} {
-            set url [util_current_location][util_current_directory]
-        } else {
-            set url [util_current_location][util_current_directory]$target_url
+        set url [util_current_location][ad_urlencode_folder_path [util_current_directory]]
+        if {$target_url ne "."} {
+            append url $target_url
         }
     }
 
