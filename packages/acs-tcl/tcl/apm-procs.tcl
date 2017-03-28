@@ -1699,13 +1699,23 @@ ad_proc -private apm_callback_has_valid_args {
     }
 
     set test_arg_list ""
+    set test_arg_list_spec ""
     foreach arg_name [apm_arg_names_for_callback_type -type $type] {
         lappend test_arg_list -$arg_name value
+        lappend test_arg_list_spec -${arg_name}:required        
     }
 
     if { $test_arg_list eq "" } {
         # The callback proc should take no args
         return [expr {[info args ::$proc_name] eq ""}]
+    }
+    
+    if {[info commands ::nsf::cmd::info] ne ""} {
+        #
+        # We can compare the signature of via nsf procs
+        #
+        return [expr {[::nsf::cmd::info parameter ::$proc_name] eq $test_arg_list_spec}]
+
     }
 
     # The callback proc should have required arg switches. Check
