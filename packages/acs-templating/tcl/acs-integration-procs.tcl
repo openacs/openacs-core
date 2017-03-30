@@ -93,13 +93,26 @@ ad_proc -public get_server_root {} {
 
 
 ad_proc adp_parse_ad_conn_file {} {
-    handle a request for an adp and/or tcl file in the template system.
+    
+    Handle a request for an adp and/or tcl file in the template system
+    based on the current setting of [ad_conn file]. This file is
+    registered via rp_register_extension_handler
+
+    @see rp_register_extension_handler
 } {
     set ::template::parse_level ""
     #ns_log debug "adp_parse_ad_conn_file => file '[file rootname [ad_conn file]]'"
     template::reset_request_vars
 
-    set parsed_template [template::adp_parse [file rootname [ad_conn file]] {}]
+    #
+    # [ad_conn file] is always an absolute name, remove the
+    # acs::rootdir, compute the template and add the acs::rootdir
+    # again.
+    #
+    set absolute_file [ad_conn file]
+    set relative_name [string range $absolute_file [string length $::acs::rootdir] end]
+    set themed_template $::acs::rootdir/[template::themed_template [file rootname $relative_name]]
+    set parsed_template [template::adp_parse $themed_template {}]
 
     if {$parsed_template ne ""} {
         
