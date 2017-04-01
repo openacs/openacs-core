@@ -1546,7 +1546,7 @@ ad_proc api_proc_link { proc } {
     @author Lars Pind (lars@pinds.com)
     @creation-date 14 July 2000
 } {
-    return "<a href=\"[ns_htmlencode [api_proc_url $proc]]\">$proc</a>"
+    return "<a href=\"[ns_quotehtml [api_proc_url $proc]]\">$proc</a>"
 }
 
 
