@@ -1872,7 +1872,7 @@ ad_proc -public ad_urlencode_url {url} {
         set result [util::join_location \
                         -proto [dict get $components proto] \
                         -hostname [dict get $components host] \
-                        -port [dict get $components port] \
+                        -port [expr {[dict exists $components port] ? [dict get $components port] : ""}] \
                        ]
         set fullpath [dict get $components path]/[dict get $components tail]
         append result / [ad_urlencode_folder_path $fullpath]
