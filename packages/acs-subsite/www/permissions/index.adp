@@ -8,7 +8,12 @@
         <multiple name="objects">
 
           <li> <if @objects.object_id@ eq @root@ and @objects.context_id@ not nil> <a href="./?root=@objects.context_id@">#acs-subsite.UP#</a></if>
-          <if @objects.object_id@ ne @root@><a href="./?root=@objects.object_id@">+</a></if> <strong>@objects.name@</strong> @objects.object_type@ <a href="one?object_id=@objects.object_id@">#acs-subsite.permissions#</a></li>
+          <if @objects.object_id@ ne @root@><a href="./?root=@objects.object_id@">+</a></if>
+	  <strong>@objects.name@</strong>
+	  @objects.object_type@
+	  <if @objects.object_id@ not nil><a href="@objects.url;noi18n@">@objects.url;noi18n@</a>:
+	  </if>
+	  <a href="one?object_id=@objects.object_id@">#acs-subsite.permissions#</a></li>
 
         </multiple>
       </ul>

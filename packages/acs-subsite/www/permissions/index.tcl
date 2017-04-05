@@ -16,11 +16,17 @@ set user_id [auth::require_login]
 
 set context "Permissions"
 
-if {(![info exists root] || $root eq "")} { 
+if {![info exists root] || $root eq ""} { 
     set root [ad_conn package_id]
 }
 
 db_multirow objects adminable_objects {}
+template::multirow extend objects url
+template::multirow foreach objects {
+    if {$object_type eq "apm_package"} {
+        set url [ site_node::get_url_from_object_id -object_id $object_id]
+    }
+}
 
 set security_context_root [acs_magic_object security_context_root]
 set default_context [acs_magic_object default_context]
