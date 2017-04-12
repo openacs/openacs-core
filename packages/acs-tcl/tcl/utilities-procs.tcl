@@ -931,17 +931,14 @@ ad_proc -public export_vars {
 
     # Prepend with the base URL
     if { [info exists base] && $base ne "" } {
-        if { $export_string ne "" } {
-            if { [string first ? $base] > -1 } {
-                # The base already has query vars; assume that the
-                # path up to this point is already correctly encoded.
-                set export_string "$base&$export_string"
-            } else { 
-                # The base has no query vars
-                set export_string "[ad_urlencode_url $base]?$export_string"
-            }
+        if { [string first ? $base] > -1 } {
+            # The base already has query vars; assume that the
+            # path up to this point is already correctly encoded.
+            set export_string $base[expr {$export_string ne "" ? "&$export_string" : ""}]
         } else {
-            set export_string [ad_urlencode_url $base]
+            # The base has no query vars
+            set base [ad_urlencode_url $base]
+            set export_string $base[expr {$export_string ne "" ? "?$export_string" : ""}]
         }
     }
     
