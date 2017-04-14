@@ -498,7 +498,7 @@ ad_proc -public ad_page_contract {
     The intent is that you want to provide as much feedback as possible at once, but you don't want
     redundant feedback, like "foo must be an integer" <em>and</em> "foo must be in range 10 to 20".
     So a check for foo in range 10 to 20 would have a <code>-requires { foo:integer }</code> switch,
-    to ensure that the check only gets executed if foo was sucessfully validated as an integer.
+    to ensure that the check only gets executed if foo was successfully validated as an integer.
 
     <p>
 
