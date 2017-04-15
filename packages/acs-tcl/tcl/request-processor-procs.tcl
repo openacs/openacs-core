@@ -617,6 +617,31 @@ ad_proc -private rp_filter { why } {
         return filter_return
     }
 
+
+    #
+    # UseCanonicalLocation is a experimental feature, not to be
+    # activated for the OpenACS 5.9.1 release. One can use this to
+    # force requests submitted to a alternate DNS entry to be
+    # redirected to a canonical name. For more background, see:
+    # https://support.google.com/webmasters/answer/139066?hl=en
+    # https://webmasters.stackexchange.com/questions/44830/should-i-redirect-the-site-ip-address-to-the-domain-name
+    #
+    if {[parameter::get -package_id [ad_acs_kernel_id] -parameter UseCanonicalLocation -default 0]} {
+        set canonical_location [parameter::get -package_id [ad_acs_kernel_id] -parameter SystemURL]
+        set current_location [util_current_location]
+        #
+        # It might be useful in the future to define per-subsite
+        # CanonicalLocations, and/or combine this with the host-node-map
+        #
+        if {[string index $canonical_location end] eq "/"} {
+            set canonical_location [string trimright $canonical_location /]
+        }
+        if {$current_location ne $canonical_location} {
+            ns_returnmoved $canonical_location$ad_conn_url
+            return filter_return
+        }
+    }
+
     # 2. handle special case: if the root is a prefix of the URL,
     #                         remove this prefix from the URL, and redirect.
     if { $root ne "" } {
@@ -627,10 +652,10 @@ ad_proc -private rp_filter { why } {
             }
             if { [security::secure_conn_p] } {
                 # it's a secure connection.
-                ad_returnredirect -allow_complete_url https://[ad_host][ad_port]$url
+                ns_returnmoved https://[ad_host][ad_port]$url
                 return filter_return
             } else {
-                ad_returnredirect -allow_complete_url http://[ad_host][ad_port]$url
+                ns_returnmoved http://[ad_host][ad_port]$url
                 return filter_return
             }
         }
