@@ -162,5 +162,4 @@ started</a>
 		    rightLink="" rightLabel="" rightTitle=""
 		    homeLink="index" homeLabel="Home" 
 		    upLink="index" upLabel="Up"> 
-		<center><a href="http://openacs.org/doc/requirements.html#comments">View comments
-on this page at openacs.org</a></center>
+		
