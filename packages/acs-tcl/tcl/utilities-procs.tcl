@@ -2558,10 +2558,12 @@ ad_proc -public util_driver_info {
     {-array} 
     {-driver ""}
 } {
-    Returns the protocol and port for the specified driver.
+    Returns the protocol and port for the specified (or current) driver.
 
     @param driver the driver to query (defaults to [ad_conn driver])
     @param array the array to populate with proto and port
+
+    @see security::configured_driver_info
 } {
 
     if {$driver eq ""} {

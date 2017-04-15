@@ -1742,7 +1742,9 @@ if {[info commands ns_driver] ne ""} {
     ad_proc -private security::configured_driver_info {} {
         
         Return a list of dicts containing type, driver, location and port
-        of the configured drivers
+        of all configured drivers
+
+        @see util_driver_info
         
     } {
         set defaultport {http 80 https 433}
@@ -2017,9 +2019,12 @@ ad_proc -public security::validated_host_header {} {
 
     #
     # Check, if the provided host is the same as the configued host
-    # name. Should be true in most cases.
+    # name for the current driver or one of its IP addresses. Should
+    # be true in most cases.
     #
-    if {$hostName eq [ns_info hostname] || $hostName eq [ns_info addr]} {
+    set driverInfo [util_driver_info]
+    set driverHostName [dict get $driverInfo hostname]
+    if {$hostName eq $driverHostName || $hostName in [ns_addrbyhost -all $driverHostName]} {
         #
         # port is currently ignored
         #
