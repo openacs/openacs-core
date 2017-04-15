@@ -1335,7 +1335,7 @@ namespace eval ::apidoc {
                                     
                                     set start [string range $line 0 end-1]
                                     set elements 3
-                                    for {set idx 1} {[string range [lindex $start $idx] 0 0] eq "-"} {incr idx} {
+                                    for {set idx 1} {[string index [lindex $start $idx] 0] eq "-"} {incr idx} {
                                         incr elements
                                     }
                                     

@@ -670,7 +670,7 @@ ad_proc -public ad_get_login_url {
         ns_log $::security::log(login_url) "ad_get_login_url: UseHostnameDomainforReg current_location <$current_location> <$config_hostname> ne <$currentHost>"
         
         if { $currentHost ne $config_hostname} {
-            if { [string range $url 0 0] eq "/" } {
+            if { [string index $url 0] eq "/" } {
                 # Make the url fully qualified
                 if { [security::secure_conn_p] } {
                     set url_decoded [security::get_secure_qualified_url $url]
@@ -743,7 +743,7 @@ ad_proc -public ad_get_login_url {
 
             if { $currentHost ne $config_hostname} {
 
-                if { [string range $return_url 0 0] eq "/" } {
+                if { [string index $return_url 0] eq "/" } {
                     # Make the return_url fully qualified
                     if { [security::secure_conn_p] } {
                         set return_url_decoded [security::get_secure_qualified_url $return_url]
@@ -1621,7 +1621,7 @@ ad_proc -private security::get_qualified_uri { url } {
 } {
     set uri [get_uri_part $url]
 
-    if { [string range $uri 0 0] ne "/" } {
+    if { [string index $uri 0] ne "/" } {
         # Make relative URI qualified
         return [ad_conn url]/$uri
     }
