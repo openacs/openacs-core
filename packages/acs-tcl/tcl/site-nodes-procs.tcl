@@ -1208,7 +1208,7 @@ ad_proc -public site_node::conn_url {
     set subsite_get_url [subsite::get_url]
     set joined_url [file join $subsite_get_url $ns_conn_url]
     # join drops ending slash for some cases. Add back if appropriate.
-    if { [string range $ns_conn_url end end] eq "/" && [string range $joined_url end end] ne "/" } {
+    if { [string index $ns_conn_url end] eq "/" && [string index $joined_url end] ne "/" } {
         append joined_url "/"
     }
     return $joined_url

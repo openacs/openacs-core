@@ -1324,7 +1324,7 @@ namespace eval ::apidoc {
                                 #
                                 # Does the line end with a open brace?
                                 #
-                                if {[string range $line end end] eq "\{"} {
+                                if {[string index $line end] eq "\{"} {
                                     # Do we have a signature of an
                                     # ad_proc (ad_proc ?-options ...?
                                     # name args) before that?

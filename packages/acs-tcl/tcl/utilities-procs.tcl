@@ -2798,7 +2798,7 @@ ad_proc -public util_current_directory {} {
 } {
     set path [ad_conn url]
 
-    set lastchar [string range $path end end]
+    set lastchar [string index $path end]
     if {$lastchar eq "/" } {
         return $path
     } else { 
