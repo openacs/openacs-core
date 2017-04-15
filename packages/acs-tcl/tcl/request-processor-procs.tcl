@@ -606,18 +606,6 @@ ad_proc -private rp_filter { why } {
         return filter_return
     }
 
-    # ns_set get accepts default as 3rd argument only on Naviserver
-    set upgrade_insecure_requests_p [ns_set get [ns_conn headers] Upgrade-Insecure-Requests]                                     
-    if {$upgrade_insecure_requests_p ne "" &&
-        $upgrade_insecure_requests_p
-        && [security::https_available_p]
-        && ![security::secure_conn_p]
-    } {
-        security::redirect_to_secure -script_abort=false [ad_return_url -qualified]
-        return filter_return
-    }
-
-
     #
     # UseCanonicalLocation is a experimental feature, not to be
     # activated for the OpenACS 5.9.1 release. One can use this to
@@ -641,6 +629,24 @@ ad_proc -private rp_filter { why } {
             return filter_return
         }
     }
+
+    #
+    # Check, if we are supposed to upgrade insecure requests. This
+    # should be after the canonical check to avoid multiple redirects.
+    #
+    # ns_set get accepts a default value in 3rd argument only on
+    # Naviserver; so perform the check in two steps for AOLserver
+    # compatibility.
+    set upgrade_insecure_requests_p [ns_set get [ns_conn headers] Upgrade-Insecure-Requests]                                     
+    if {$upgrade_insecure_requests_p ne "" &&
+        $upgrade_insecure_requests_p
+        && [security::https_available_p]
+        && ![security::secure_conn_p]
+    } {
+        security::redirect_to_secure -script_abort=false [ad_return_url -qualified]
+        return filter_return
+    }
+
 
     # 2. handle special case: if the root is a prefix of the URL,
     #                         remove this prefix from the URL, and redirect.
