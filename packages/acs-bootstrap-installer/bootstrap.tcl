@@ -181,7 +181,7 @@ set errno [catch {
 }]
 
 if { $errno && $errno != 2 } {
-    # An error occured while bootstrapping. Handle it by registering a filter
+    # An error occurred while bootstrapping. Handle it by registering a filter
     # to display the error message, rather than leaving the site administrator
     # to guess what broke.
 

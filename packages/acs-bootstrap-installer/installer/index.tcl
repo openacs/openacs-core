@@ -25,7 +25,7 @@ if { [ns_queryexists done_p] } {
   if { [ad_verify_install] } {
     install_return 200 "OpenACS Installation Complete" "
 
-You have successfully installed the Open Architecture Community System (OpenACS)!
+You have successfuly installed the Open Architecture Community System (OpenACS)!
 
 <p> Your server process has been terminated.  Unless you have configured your
 web server to restart automatically, as outlined in the 

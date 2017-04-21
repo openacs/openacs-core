@@ -587,7 +587,7 @@ proc http::geturl { url args } {
 	# get trying to write the post data.  Having both fileevents active
 	# changes the timing and the behavior, but no two platforms
 	# (among Solaris, Linux, and NT)  behave the same, and none 
-	# behave all that well in any case.  Servers should always read thier
+	# behave all that well in any case.  Servers should always read their
 	# POST data if they expect the client to read their response.
 		
 	if {$isQuery || $isQueryChannel} {
@@ -1005,7 +1005,7 @@ proc http::CopyStart {s token} {
 #
 # Arguments
 #	token	The token returned from http::geturl
-#	count	The amount transfered
+#	count	The amount transferred
 #
 # Side Effects
 #	Invokes callbacks

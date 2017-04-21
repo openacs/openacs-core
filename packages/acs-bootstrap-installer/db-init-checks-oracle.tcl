@@ -15,7 +15,7 @@ proc db_bootstrap_checks { errors error_p } {
             append my_errors "(db_bootstrap_checks) Internal error accessing pool \"$pool\".<br>"
             set my_error_p 1
         } else { # DRB: The aD code didn't deallocate the database handle if either of the following
-            # errors occured.  Boo hiss...
+            # errors occurred.  Boo hiss...
             if { [catch { ns_ora 1row $db "select sysdate from dual" }] ||
                  [catch { ns_ora exec_plsql_bind $db { begin :1 := 37*73; end; } 1 "" }] } {
                 append my_errors "Database pool \"$pool\" has been configured with an old version of the Oracle driver.  You'll need version 2.3 or later.<br>"
@@ -69,7 +69,7 @@ proc db_helper_checks { errors error_p } {
 
     # Oracle should provide ctxhx
     global env
-    # How the hell we'd get this far without ORACLE_HOME is beyond me, but they wanna
+    # How the hell we'd get this far without ORACLE_HOME is beyond me, but they want to
     # check, so let them check!
     if {![info exists env(ORACLE_HOME)]} {
         append my_errors "<li><p>

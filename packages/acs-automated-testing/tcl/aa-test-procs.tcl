@@ -158,7 +158,7 @@ ad_proc -public aa_register_init_class {
     running a set of testcases, and the descructor called <strong>once</strong>
     upon completion of running a set of testcases.<p>
     The idea behind this is that it could be used to perform data intensive
-    operations that shared amoungst a set if testcases.  For example, mounting
+    operations that shared amongst a set if testcases.  For example, mounting
     an instance of a package.  This could be performed by each testcase
     individually, but this would be highly inefficient if there are any
     significant number of them.
@@ -1244,7 +1244,7 @@ ad_proc -public aa_test::parse_test_file {
 ad_proc -public aa_get_first_url {
     {-package_key:required}
 } {
-    Procedure for geting the url of a mounted package with the package_key. It uses the first instance that it founds. This is usefull for tclwebtest tests.
+    Procedure for geting the url of a mounted package with the package_key. It uses the first instance that it founds. This is useful for tclwebtest tests.
 } {
 
     if {![db_0or1row first_url {}]} {

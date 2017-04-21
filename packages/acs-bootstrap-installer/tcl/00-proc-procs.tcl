@@ -509,7 +509,7 @@ proc ad_proc args {
 
     } elseif { $callback eq "" && [llength $switches] == 0 } {
 	#
-	# Nothing special is used in the argument definiton, create a
+	# Nothing special is used in the argument definition, create a
 	# plain proc
 	#
         uplevel [::list proc $proc_name_as_passed $arg_list "${log_code}$code_block"]
