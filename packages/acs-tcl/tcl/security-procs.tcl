@@ -2024,7 +2024,7 @@ ad_proc -public security::validated_host_header {} {
     #
     set driverInfo [util_driver_info]
     set driverHostName [dict get $driverInfo hostname]
-    if {$hostName eq $driverHostName || $hostName in [ns_ -all $driverHostName]} {
+    if {$hostName eq $driverHostName || $hostName in [ns_addrbyhost -all $driverHostName]} {
         #
         # port is currently ignored
         #
