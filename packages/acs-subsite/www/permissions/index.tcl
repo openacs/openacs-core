@@ -2,7 +2,7 @@
 ad_page_contract {
     Display all objects that the user has admin on.
     
-    Templated and changed to browse heirarchy by davis@xarg.net 
+    Templated and changed to browse hierarchy by davis@xarg.net 
     since all objects can be a *lot* of objects.
     
     @author rhs@mit.edu

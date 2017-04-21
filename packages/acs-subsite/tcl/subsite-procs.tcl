@@ -394,7 +394,7 @@ ad_proc -public subsite::util::object_type_path_list {
     object_type
     {ancestor_type acs_object}
 } {
-    @return the object type heirarchy for the given object type from ancestor_type to object_type
+    @return the object type hierarchy for the given object type from ancestor_type to object_type
 } {
     set path_list [list]
 

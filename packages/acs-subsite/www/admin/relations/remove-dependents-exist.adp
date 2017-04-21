@@ -9,10 +9,10 @@ and @rel.object_id_two_name@.
 <p>
 
 <ul>
-  <multiple name="dependants">
-    <li> @dependants.rel_type_pretty_name@ between 
-         @dependants.object_id_one_name@ and @dependants.object_id_two_name@
-         (<a href="remove?@dependants.export_vars@">remove</a>)
+  <multiple name="dependents">
+    <li> @dependents.rel_type_pretty_name@ between 
+         @dependents.object_id_one_name@ and @dependents.object_id_two_name@
+         (<a href="remove?@dependents.export_vars@">remove</a>)
     </li>
   </multiple>
 </ul>

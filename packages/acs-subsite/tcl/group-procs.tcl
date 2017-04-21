@@ -640,7 +640,7 @@ ad_proc -public group::admin_p {
     {-group_id:required}
     {-user_id:required}
 } {
-    @return 1 if user_id is in teh admin_rel for group_id
+    @return 1 if user_id is in the admin_rel for group_id
 } {
     set admin_rel_id [relation::get_id \
                           -object_id_one $group_id \

@@ -107,7 +107,7 @@ aa_register_case -cats smoke acs_subsite_unregistered_visitor {
 
 
 aa_register_case -cats smoke acs_subsite_check_composite_group {
-    Build a 3-level hierachy of composite groups and check memberships. This test case covers the membership and composition rel insertion triggers and composability of basic membership and admin rels.
+    Build a 3-level hierarchy of composite groups and check memberships. This test case covers the membership and composition rel insertion triggers and composability of basic membership and admin rels.
 
     @author Michael Steigman
 } {

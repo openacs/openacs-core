@@ -91,7 +91,7 @@ if {$group_rel_type_list eq ""} {
 	set object_type_pretty_name $party_type_pretty_name
 	
 	# We're going to have to pass the required_group_rel_type_list to the
-	# next page.  The easiest way I see to do this is jsut encode the list
+	# next page.  The easiest way I see to do this is just encode the list
 	# in a variable, since the list is just a string anyways.
 	
 	# We don't care about the first group/rel_type combo, because we'll pass

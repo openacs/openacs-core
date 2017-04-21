@@ -19,7 +19,7 @@
 </fullquery>
 
  
-<fullquery name="relation_segment_has_dependant.others_depend_p">      
+<fullquery name="relation_segment_has_dependent.others_depend_p">      
       <querytext>
       
 	    select case when exists
