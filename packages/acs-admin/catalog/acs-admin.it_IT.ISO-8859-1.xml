@@ -11,7 +11,7 @@
   <msg key="Are_you_sure_you_want_to_delete_authority_authorities_pretty_name">Sei sicuro/a di voler eliminare l&#39;authority %authorities.pretty_name%?</msg>
   <msg key="Authentication">Autenticazione</msg>
   <msg key="Authority_name">Nome authority</msg>
-  <msg key="Authority_short_name_help_text">Questo viene usato quando ci si riferisce all&#39;authorithy nei parametri ecc. Anche se dovessi cambiare il nome visualizzato sopra, questo dovrebbe rimanere immutato.</msg>
+  <msg key="Authority_short_name_help_text">Questo viene usato quando ci si riferisce all&#39;authority nei parametri ecc. Anche se dovessi cambiare il nome visualizzato sopra, questo dovrebbe rimanere immutato.</msg>
   <msg key="Batch_sync_enabled">Sincronizzazione batch abilitata</msg>
   <msg key="Batch_Synchronization">Sincronizzazione batch</msg>
   <msg key="Change_password_URL">URL di modifica password</msg>
@@ -19,7 +19,7 @@
   <msg key="Creation_user">Utente creazione</msg>
   <msg key="Delete">Elimina</msg>
   <msg key="Delete_callback">Callback di eliminazione</msg>
-  <msg key="Disable_this_authority">Disabilita questa authorithy</msg>
+  <msg key="Disable_this_authority">Disabilita questa authority</msg>
   <msg key="Document">Documento</msg>
   <msg key="Document_end_time">Ora fine documento</msg>
   <msg key="Document_message">Messaggio documento</msg>
@@ -27,7 +27,7 @@
   <msg key="Document_status">Status documento</msg>
   <msg key="download">scarica</msg>
   <msg key="Edit_callback">Callback di modifica</msg>
-  <msg key="Enable_this_authority">Abilita questa authorithy</msg>
+  <msg key="Enable_this_authority">Abilita questa authority</msg>
   <msg key="Enabled">Abilitato/a</msg>
   <msg key="End_time">Ora fine</msg>
   <msg key="General">Generale</msg>
