@@ -282,7 +282,7 @@
             the procedure call with a variable lookup on the syntax %var_name%. Remember
             to initialize a tcl variable with the same name on some line above the text.</para></listitem>
         <listitem><para>If the text is in a tcl file you must replace variable lookups 
-            (occurences of $var_name or ${var_name}) with %var_name%</para></listitem>
+            (occurrences of $var_name or ${var_name}) with %var_name%</para></listitem>
         <listitem><para>You are now ready to follow the normal procedure and mark up the text using a 
             tempoarary message tag (&lt;#_ text_with_percentage_vars#&gt;) and run the action 
             replace tags with keys in the APM.</para></listitem>
@@ -960,6 +960,6 @@ found, then that locale is offered instead.</para>
 
       </listitem>
     </itemizedlist>
-    <para>When creating a new locale based on an existing one, such as creating the Guatamalan version of Spanish, you can copy the existing locale&#39;s catalog files using the script <computeroutput>/packages/acs-core-docs/www/files/create-new-catalog.sh</computeroutput>.</para>
+    <para>When creating a new locale based on an existing one, such as creating the Guatemalan version of Spanish, you can copy the existing locale&#39;s catalog files using the script <computeroutput>/packages/acs-core-docs/www/files/create-new-catalog.sh</computeroutput>.</para>
   </sect1>
 </chapter>

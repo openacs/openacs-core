@@ -42,7 +42,7 @@ click <code class="computeroutput">Batch edit these
 messages</code>.</p><div class="mediaobject" align="center"><img src="images/translation-batch-edit.png" align="middle"></div>
 </li>
 </ul></div><p>When creating a new locale based on an existing one, such as
-creating the Guatamalan version of Spanish, you can copy the
+creating the Guatemalan version of Spanish, you can copy the
 existing locale&#39;s catalog files using the script <code class="computeroutput">/packages/acs-core-docs/www/files/create-new-catalog.sh</code>.</p>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

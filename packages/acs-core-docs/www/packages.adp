@@ -50,7 +50,7 @@ ROOT/
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="packages-looks" id="packages-looks"></a>What a Package Looks Like</h3></div></div></div><p>Each package encapsulates all of its data model, library code,
-logic, adminstration pages and user pages in a single part of the
+logic, administration pages and user pages in a single part of the
 file tree. This means developers can track down <span class="emphasis"><em>everything</em></span> that is related to a
 particular package without hunting all over the file system.
 Encapsulating everything about a package in one place also makes it
@@ -168,7 +168,7 @@ have the scripts source the other data model files. In Oracle this
 can be done by including <span class="emphasis"><em>\@\@
 filename</em></span> in the creation or drop scripts. See the
 <a class="ulink" href="http://www.orafaq.com/faqplus.htm#AT" target="_top">Oracle FAQ</a> for examples. In PostgreSQL the same
-is acomplished by including <span class="emphasis"><em>\i
+is accomplished by including <span class="emphasis"><em>\i
 filename</em></span>.</td><td><code class="computeroutput">sql/&lt;database&gt;/*.sql</code></td>
 </tr><tr>
 <td>Data Model Upgrade Scripts</td><td>Contain changes to the data model between versions. The APM can

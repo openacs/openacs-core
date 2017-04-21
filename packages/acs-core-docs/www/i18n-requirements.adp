@@ -427,7 +427,7 @@ in some universal time zone such as GMT.</p>
 <span class="emphasis"><em>100.10</em></span> Since UTF8 strings
 can use up to three (UCS2) or six (UCS4) bytes per character, make
 sure that column size declarations in the schema are large enough
-to accomodate required data (such as email addresses in Japanese).
+to accommodate required data (such as email addresses in Japanese).
 <em><span class="remark">Since 5.0.0, this is covered in the
 database install instructions for both PostgreSQL and
 Oracle.</span></em>

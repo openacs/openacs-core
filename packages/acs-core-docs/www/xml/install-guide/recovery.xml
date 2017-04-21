@@ -214,7 +214,7 @@ exit</action></screen>
           <para>Back up all of the files in the service, including the
           database backup file but excluding the auto-generated
           <filename>supervise</filename> directory, which is
-          unneccesary and has complicated permissions.  </para>
+          unnecessary and has complicated permissions.  </para>
         </formalpara>
         <para>In the tar command,</para>
         <itemizedlist>

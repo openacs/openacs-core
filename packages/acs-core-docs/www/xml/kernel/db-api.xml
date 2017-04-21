@@ -870,7 +870,7 @@ of the files <computeroutput>/var/tmp/the_photo</computeroutput> and
 <emphasis role="strong">db_blob_get_file</emphasis> <emphasis>statement-name</emphasis> <emphasis>sql</emphasis> [ -bind <emphasis>bind_set_id</emphasis> | -bind <emphasis>bind_value_list</emphasis> ]
 </programlisting>
 
-<para>Analagous to <computeroutput>ns_ora write_clob/write_blob/blob_get_file</computeroutput>. 
+<para>Analogous to <computeroutput>ns_ora write_clob/write_blob/blob_get_file</computeroutput>. 
 
 
 </para></listitem>

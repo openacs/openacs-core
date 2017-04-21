@@ -345,7 +345,7 @@ of the installation asking you to run a script as <code class="computeroutput">r
 </p></li><li class="listitem">
 <p>Run the script. Switch to the oracle user first to set the
 environment appropriately and then do <span class="command"><strong>su</strong></span> to get root privileges, while
-keeping the oracle user&#39;s enviroment.</p><pre class="programlisting">
+keeping the oracle user&#39;s environment.</p><pre class="programlisting">
 [joeuser ~]$ su - oracle
 Password: *********
 [oracle ~]$ su

@@ -330,7 +330,7 @@ and Linking Users</title>
         <seglistitem>
           <seg>EXT-AUTH-15</seg>
           <seg>B</seg>
-          <seg>On-demand syncronization</seg>
+          <seg>On-demand synchronization</seg>
         </seglistitem>
       </segmentedlist>
       
@@ -539,7 +539,7 @@ site configured to expire people&#39;s login after e.g. 2, 4, or 8
 hours.</para>
       <para>The other advantage is that we can still offer certain
 functionality to you, even when your login is not trusted. For
-example, we could let you browse publically available forums, and
+example, we could let you browse publicly available forums, and
 only when you want to post do you need to log in. This makes it
 even more feasible to have a more secure login expiration
 setting.</para>

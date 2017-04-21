@@ -13,7 +13,7 @@ Chapter 10. Advanced Topics"
 databases. In this example, the OpenACS site uses a PostGre
 database, and accesses another PostGre database called legacy.</p><div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-<p>Modify config.tcl to accomodate the legacy database, and to
+<p>Modify config.tcl to accommodate the legacy database, and to
 ensure that the legacy database is not used for standard OpenACS
 queries:</p><pre class="programlisting">
 ns_section ns/db/pools

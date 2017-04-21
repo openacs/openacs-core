@@ -56,7 +56,7 @@ select content_type__create_type(
 
 -- necessary to work around limitation of content repository:
 select content_folder__register_content_type(-100,'mfp_note','t');
-</pre></div></div><br class="figure-break"><p>The creation script calls a function in PL/pgSQL (PL/pgSQL is a procedural language extention to sql),
+</pre></div></div><br class="figure-break"><p>The creation script calls a function in PL/pgSQL (PL/pgSQL is a procedural language extension to sql),
     <code class="computeroutput"><a class="ulink" href="/api-doc/plsql-subprogram-one?type=FUNCTION&amp;name=content%5ftype%5f%5fcreate%5ftype" target="_top">content_type__create_type</a></code>, which
     in turn creates the necessary database changes to support our data
     object.  Notice the use of "mfp."  This is derived from "My

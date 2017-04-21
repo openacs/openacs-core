@@ -46,7 +46,7 @@ detail in its own document. It examines the client request and
 either extracts or sets up new session tokens for the user.</p></dd><dt><span class="term">Stage 3: Authorization</span></dt><dd><p>Next, the Request Processor checks if the user has appropriate
 access privileges to the requested part of the site. In OpenACS
 5.9.0, access control is dictated by the <a class="ulink" href="permissions" target="_top">permissions system</a>. In this case,
-the RP checks if the user has "read" priviledges on the
+the RP checks if the user has "read" privileges on the
 object in the site map specified by the URL. This object is
 typically a package instance, but it could easily be something more
 granular, such as whehter the user can view a particular piece of

@@ -16,7 +16,7 @@ Carstensen</a>
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><p>The notifications package allows you to send notifications
 through any defined communications medium (e.g. email, sms) upon
-some event occuring within the system.</p><p>This tutorial steps through the process of integrating the
+some event occurring within the system.</p><p>This tutorial steps through the process of integrating the
 notifications package with your package.</p><p>First step is to create the notification types. To do this a
 script similar to the one below needs to be loaded into Postgresql.
 I create this script in a

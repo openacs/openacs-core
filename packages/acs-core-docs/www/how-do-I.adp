@@ -58,7 +58,7 @@ examine how this works:</p><div class="itemizedlist"><ul class="itemizedlist" st
 file is usually:</p><pre class="programlisting">
 &lt;master&gt;
 </pre><p>If it appears exactly like this, without any arguments, the
-template processer uses <code class="computeroutput">default-master</code> for that subsite. For pages
+template processor uses <code class="computeroutput">default-master</code> for that subsite. For pages
 in <code class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/www</code>, this
 is <code class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/www/default-master.adp</code>
 and the associated .tcl file.</p>

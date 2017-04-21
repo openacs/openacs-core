@@ -109,7 +109,7 @@ exit</span></span>
 <a name="backup-file-system" id="backup-file-system"></a><p>
 <strong>Back up the file system. </strong>Back up
 all of the files in the service, including the database backup file
-but excluding the auto-generated <code class="filename">supervise</code> directory, which is unneccesary and has
+but excluding the auto-generated <code class="filename">supervise</code> directory, which is unnecessary and has
 complicated permissions.</p><p>In the tar command,</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>
 <code class="computeroutput">c</code> create a new tar

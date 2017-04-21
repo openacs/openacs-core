@@ -62,7 +62,7 @@ ROOT/
 
     <para>
       Each package encapsulates all of its data model, library code,
-      logic, adminstration pages and user pages in a single part of
+      logic, administration pages and user pages in a single part of
       the file tree.  This means developers can track down
       <emphasis>everything</emphasis> that is related to a particular
       package without hunting all over the file system.  Encapsulating
@@ -223,7 +223,7 @@ ROOT/
           scripts. See the <ulink
         url="http://www.orafaq.com/faqplus.htm#AT">
         Oracle FAQ</ulink> for examples. In
-          PostgreSQL the same is acomplished by including <emphasis>\i filename</emphasis>.
+          PostgreSQL the same is accomplished by including <emphasis>\i filename</emphasis>.
         </entry>
         <entry>
           <computeroutput>sql/&lt;database&gt;/*.sql</computeroutput>

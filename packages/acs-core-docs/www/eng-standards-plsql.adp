@@ -83,7 +83,7 @@ notation:</p><pre class="programlisting">
       <code class="computeroutput">
         acs_user.create(first_names_in =&gt; 'Jane', last_name_in =&gt; 'Doe', etc.)
       </code>
-</pre><p>To achieve this we must fully qualify arguements passed into
+</pre><p>To achieve this we must fully qualify arguments passed into
 procedures or functions when using them inside a SQL statement.
 This will get rid of any ambiguities in your code, i.e. it will
 tell the parser when you want the value of the column and when you
@@ -129,7 +129,7 @@ etc.) should optionally accept an ID:</p><pre class="programlisting"><code class
            ) return acs_objects.object_id%TYPE;
      </code></pre><p>takes the optional argument <code class="computeroutput">object_id</code>. Do this to allow people to use
 the same API call when they are doing double click protection, that
-is, tehy have already gotten an <code class="computeroutput">object_id</code> and now they want to create the
+is, they have already gotten an <code class="computeroutput">object_id</code> and now they want to create the
 object with that <code class="computeroutput">object_id</code>.</p>
 </li>
 </ol></div>

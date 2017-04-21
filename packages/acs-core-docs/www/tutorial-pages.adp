@@ -24,7 +24,7 @@ changed" for "MyFirstPackage".</p>
 of all objects; the second shows a single object in view or edit
 mode, and can also be used to add an object. The index page will
 display the list, but since we might reuse the list later,
-we&#39;ll put it in a seperate file and include it on the index
+we&#39;ll put it in a separate file and include it on the index
 page.</p><div class="figure">
 <a name="idp140529108440432" id="idp140529108440432"></a><p class="title"><strong>Figure 9.5. Page
 Map</strong></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/tutorial-page-map.png" align="middle" alt="Page Map"></div></div>

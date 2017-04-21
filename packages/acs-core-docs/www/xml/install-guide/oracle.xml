@@ -920,7 +920,7 @@ Changing groupname of /ora8/m01/app/oracle/oraInventory to oinstall.
             Run the script. Switch to the oracle user first
             to set the environment appropriately and then do
             <command>su</command> to get root privileges, while keeping
-            the oracle user&#39;s enviroment.
+            the oracle user&#39;s environment.
             </para>
 
             <programlisting>

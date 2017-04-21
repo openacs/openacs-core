@@ -28,9 +28,9 @@ ad_proc my_proc {-foo} {
     return [util_memoize [list my_proc_not_cached -foo $foo]]
 }
 </pre>
-</li><li class="listitem"><p>In your code, always call my_proc. There will be a seperate
+</li><li class="listitem"><p>In your code, always call my_proc. There will be a separate
 cache item for each unique call to my_proc_not_cached so that calls
-with different arguments are cached seperately. You can flush the
+with different arguments are cached separately. You can flush the
 cache for each cache key by calling util_memoize_flush
 my_proc_not_cached args.</p></li><li class="listitem">
 <p>The cached material will of course become obsolete over time.

@@ -94,7 +94,7 @@ cvs -z3 -d:pserver:anonymous\@cvs.sourceforge.net:/cvsroot/tcllib co -r tcllib-1
 <a name="aolserver4-install" id="aolserver4-install"></a><p>
 <strong>Configure, compile and install
 AOLserver. </strong>Many people need to run more than
-one version of AOLserver in parallel. This section accomodates
+one version of AOLserver in parallel. This section accommodates
 future upgrades by installing AOLserver 4 in <code class="computeroutput">/usr/local/aolserver40r9</code>.</p><pre class="screen">
 [root aolserver]# <strong class="userinput"><code>cd /usr/local/src/aolserver40r10/aolserver</code></strong>
 [root aolserver]# <strong class="userinput"><code>./configure --prefix=/usr/local/aolserver40r10 --with-tcl=/usr/local/lib/</code></strong>
@@ -174,7 +174,7 @@ Uncomment the instructions meant for AOLserver 4, but edit it to
 look like this:</p><pre class="screen">
 ../configure --enable-threads --disable-tdomalloc
           --prefix=/usr/local/aolserver --with-tcl=/usr/local/lib
-</pre><p>Note that the location of the Tcl library may vary on differnt
+</pre><p>Note that the location of the Tcl library may vary on different
 platforms (e.g. for Debian 3.0: --with-tcl=/usr/lib/tcl8.4)</p><p>Now you can compile and configure tDOM</p><pre class="screen">
 [root unix]# <strong class="userinput"><code>sh CONFIG</code></strong>
 [root unix]# <strong class="userinput"><code>make install</code></strong>

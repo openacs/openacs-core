@@ -54,7 +54,7 @@ parent:</p><pre class="programlisting">
       and parent.tree_sortkey &lt;&gt; children.tree_sortkey
       and parent.key = :the_parent_key;
       
-</pre><p>The reason we substract the parent&#39;s tree_level from the
+</pre><p>The reason we subtract the parent&#39;s tree_level from the
 child&#39;s tree_level is that the tree_levels are global, so if
 you want the parent&#39;s tree_level to start with 0, you&#39;ll
 want the subtraction in there. This is a reason you&#39;ll commonly

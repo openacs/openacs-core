@@ -91,7 +91,7 @@ efficient.</p>
 </ol></div><p>What the DB API (in conjuntion with the database drivers
 implemented for aolserver) do is send the SQL statement to the
 server for parsing, then <span class="emphasis"><em>bind</em></span> values to the variables and sends
-those values along seperately as a second step. This seperate
+those values along separately as a second step. This separate
 binding step is where the term <span class="emphasis"><em>bind
 variable</em></span> comes from.</p><p>This split has several advantages. First, type checking happens
 on the literal. If the column we are comparing against holds
@@ -484,7 +484,7 @@ db_write_blob <span class="emphasis"><em>statement-name</em></span><span class="
 
 db_blob_get_file <span class="emphasis"><em>statement-name</em></span><span class="emphasis"><em>sql</em></span> [ -bind <span class="emphasis"><em>bind_set_id</em></span> | -bind <span class="emphasis"><em>bind_value_list</em></span> ]
           
-</pre><p>Analagous to <code class="computeroutput">ns_ora
+</pre><p>Analogous to <code class="computeroutput">ns_ora
 write_clob/write_blob/blob_get_file</code>.</p>
 </dd><dt><span class="term"><code class="computeroutput">
 <a name="devguide.dbapi_db_release_unused_handles" id="devguide.dbapi_db_release_unused_handles"></a>db_release_unused_handles</code></span></dt><dd>

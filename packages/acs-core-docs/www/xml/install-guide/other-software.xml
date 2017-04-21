@@ -511,7 +511,7 @@ mv analog-5.32 /usr/share/</action></screen>
           tsearch2 from a package, you can use the
           http://www.sai.msu.su/~megera/postgres/gist/tsearch/V2/regprocedure_update.sql
           regprocedure script to update the database after tsearch2 is
-          installed into it. TODO link to section decribing how to fix
+          installed into it. TODO link to section describing how to fix
           an existing tsearch2 database with this patch.</para>
           </listitem>
         <listitem>
@@ -1088,7 +1088,7 @@ ln -s /usr/local/ssl/lib/libcrypto.so.0.9.7 libcrypto.so.0.9.7
 </screen>
 </para>
 
-      <para>SSL support must be enabled seperately in each OpenACS
+      <para>SSL support must be enabled separately in each OpenACS
         server (<xref linkend="ssl-certificates"/>. </para>
 
       <para>If your ports for SSL are privileged (below 1024), you
@@ -1145,7 +1145,7 @@ ln -s /usr/local/tclwebtest/tclwebtest /usr/local/bin
         <para>By <ulink url="mailto:openacs@sussdorff.de">Malte Sussdorff</ulink></para>
       </authorblurb>
       
-      <para>This section is work in progress. It will detail how you can install Squirrelmail as a webmail frontend for OpenACS, thereby neglecting the need to have a seperate webmail package within OpenACS</para>
+      <para>This section is work in progress. It will detail how you can install Squirrelmail as a webmail frontend for OpenACS, thereby neglecting the need to have a separate webmail package within OpenACS</para>
       <screen>[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]# <userinput>cd www</userinput>
 [$OPENACS_SERVICE_NAME www]# <userinput>wget http://cesnet.dl.sourceforge.net/sourceforge/squirrelmail/squirrelmail-1.4.4.tar.gz</userinput>
 [$OPENACS_SERVICE_NAME www]# <userinput>tar xfz squirrelmail-1.4.4.tar.gz</userinput>

@@ -100,7 +100,7 @@ cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/tcllib co -r tcllib-1-
     <listitem id="aolserver4-install">
       <formalpara>
         <title>Configure, compile and install AOLserver</title>
-        <para>Many people need to run more than one version of AOLserver in parallel.  This section accomodates future upgrades by installing AOLserver 4 in <computeroutput>/usr/local/aolserver40r9</computeroutput>.</para>
+        <para>Many people need to run more than one version of AOLserver in parallel.  This section accommodates future upgrades by installing AOLserver 4 in <computeroutput>/usr/local/aolserver40r9</computeroutput>.</para>
       </formalpara>
         <screen>[root aolserver]# <userinput>cd /usr/local/src/aolserver40r10/aolserver</userinput>
 [root aolserver]# <userinput>./configure --prefix=/usr/local/aolserver40r10 --with-tcl=/usr/local/lib/</userinput>
@@ -170,7 +170,7 @@ nspostgres.c:679: warning: passing arg 3 of `Tcl_DStringAppend' as signed due to
               <para>Edit the <computeroutput>CONFIG</computeroutput> file. Uncomment the instructions meant for AOLserver 4, but edit it to look like this:</para>
               <screen>../configure --enable-threads --disable-tdomalloc
           --prefix=/usr/local/aolserver --with-tcl=/usr/local/lib</screen>
-              <para>Note that the location of the Tcl library may vary on differnt platforms (e.g. for Debian 3.0: --with-tcl=/usr/lib/tcl8.4)</para>
+              <para>Note that the location of the Tcl library may vary on different platforms (e.g. for Debian 3.0: --with-tcl=/usr/lib/tcl8.4)</para>
               <para>Now you can compile and configure tDOM</para>
               <screen>[root unix]# <userinput>sh CONFIG</userinput>
 [root unix]# <userinput>make install</userinput></screen>

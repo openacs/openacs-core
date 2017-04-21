@@ -31,7 +31,7 @@ tsearch2 patch to correctly restore from a pg_dump backup. If you
 installed tsearch2 from a package, you can use the
 http://www.sai.msu.su/~megera/postgres/gist/tsearch/V2/regprocedure_update.sql
 regprocedure script to update the database after tsearch2 is
-installed into it. TODO link to section decribing how to fix an
+installed into it. TODO link to section describing how to fix an
 existing tsearch2 database with this patch.</p></li><li class="listitem">
 <p>As of May 9, 2004 there is a source patch available for
 tsearch2. The patch provides changes to the pg_ts_ configuration

@@ -109,7 +109,7 @@ developer account:</p><pre class="screen"><span class="action"><span class="acti
 <div class="titlepage"><div><div><h4 class="title">
 <a name="idp140529116829424" id="idp140529116829424"></a>Checkout .LRN</h4></div></div></div><p>.LRN consists of a given version openacs core, plus a set of
 packages. These are collectively packages together to form a
-distrubution of .LRN. F .LRN 2.0.0 sits on top of OpenACS 5.0.0.
+distribution of .LRN. F .LRN 2.0.0 sits on top of OpenACS 5.0.0.
 .LRN also uses an OpenACS install.xml file during installation;
 this file is distributed within the dotlrn package and must be
 moved. To get a development checkout of .LRN in the subdirectory

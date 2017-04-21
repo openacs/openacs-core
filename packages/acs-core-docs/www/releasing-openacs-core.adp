@@ -105,7 +105,7 @@ for dir in *; do ( cd $dir &amp;&amp; cvs tag <span class="replaceable"><span cl
 for dir in *; do ( cd $dir &amp;&amp; cvs tag -F <span class="replaceable"><span class="replaceable">openacs-5-0-compat</span></span> ); done
 </span></span></pre><p>Note that for the compat tag we use the <span class="action"><span class="action">-F</span></span> flag which will
 force the tag to the new version (just in case someone has created
-the tag already on another version). Excercise care when doing this
+the tag already on another version). Exercise care when doing this
 since you don&#39;t want to inadvertently move a prior release tag.
 Also if the tagging goes horribly wrong for some reason you can
 delete the tag via <span class="command"><strong>cvs tag -d

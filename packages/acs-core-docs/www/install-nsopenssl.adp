@@ -87,7 +87,7 @@ symlinks</p><pre class="screen">
 ln -s /usr/local/ssl/lib/libssl.so.0.9.7 libssl.so.0.9.7
 ln -s /usr/local/ssl/lib/libcrypto.so.0.9.7 libcrypto.so.0.9.7
 </span></span>
-</pre><p>SSL support must be enabled seperately in each OpenACS server
+</pre><p>SSL support must be enabled separately in each OpenACS server
 (<a class="xref" href="install-ssl">Generate
 ssl certificates</a>.</p><p>If your ports for SSL are privileged (below 1024), you will have
 to start AOLserver with prebinds for both your HTTP and your HTTPS

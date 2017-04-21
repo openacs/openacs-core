@@ -224,7 +224,7 @@ Users</h4></div></div></div><div class="segmentedlist"><table border="1" cellpad
 </tr><tr class="seglistitem">
 <td class="seg">EXT-AUTH-08</td><td class="seg">A</td><td class="seg">Automation of batch Synchronization</td>
 </tr><tr class="seglistitem">
-<td class="seg">EXT-AUTH-15</td><td class="seg">B</td><td class="seg">On-demand syncronization</td>
+<td class="seg">EXT-AUTH-15</td><td class="seg">B</td><td class="seg">On-demand synchronization</td>
 </tr>
 </tbody>
 </table></div><p>Regardless of the login method, the user needs to have a row in
@@ -374,7 +374,7 @@ username and password, which will make it practical to have your
 site configured to expire people&#39;s login after e.g. 2, 4, or 8
 hours.</p><p>The other advantage is that we can still offer certain
 functionality to you, even when your login is not trusted. For
-example, we could let you browse publically available forums, and
+example, we could let you browse publicly available forums, and
 only when you want to post do you need to log in. This makes it
 even more feasible to have a more secure login expiration
 setting.</p><p>By default, <code class="literal">auth::require_login</code>

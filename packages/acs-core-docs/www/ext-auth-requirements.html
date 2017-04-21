@@ -117,7 +117,7 @@ to access these settings.</p><p>OpenACS will come pre-configured with one author
 the "local" authority, meaning we'll authenticate as normal using the
 local users table. This will, just like any other authority, be
 implemetned using a service contract.</p></div><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a name="Synchronizing_and_Linking_User"></a>Synchronizing
-and Linking Users</h4></div></div></div><div class="segmentedlist"><table border="1" cellpadding="3" cellspacing="0" width="90%"><tr><th width="15%">Feature</th><th width="8%">Status</th><th width="77%">Description</th></tr><thead><tr><th>Synchronizing and linking users</th></tr></thead><tbody><tr class="seglistitem"><td class="seg">EXT-AUTH-28</td><td class="seg">A</td><td class="seg">Create service contract for Batch Sync.</td></tr><tr class="seglistitem"><td class="seg">EXT-AUTH-38</td><td class="seg">A</td><td class="seg">Batch User Synchronization API</td></tr><tr class="seglistitem"><td class="seg">EXT-AUTH-38</td><td class="seg">A</td><td class="seg">IMS Synchronization driver</td></tr><tr class="seglistitem"><td class="seg">EXT-AUTH-08</td><td class="seg">A</td><td class="seg">Automation of batch Synchronization</td></tr><tr class="seglistitem"><td class="seg">EXT-AUTH-15</td><td class="seg">B</td><td class="seg">On-demand syncronization</td></tr></tbody></table></div><p>Regardless of the login method, the user needs to have a row
+and Linking Users</h4></div></div></div><div class="segmentedlist"><table border="1" cellpadding="3" cellspacing="0" width="90%"><tr><th width="15%">Feature</th><th width="8%">Status</th><th width="77%">Description</th></tr><thead><tr><th>Synchronizing and linking users</th></tr></thead><tbody><tr class="seglistitem"><td class="seg">EXT-AUTH-28</td><td class="seg">A</td><td class="seg">Create service contract for Batch Sync.</td></tr><tr class="seglistitem"><td class="seg">EXT-AUTH-38</td><td class="seg">A</td><td class="seg">Batch User Synchronization API</td></tr><tr class="seglistitem"><td class="seg">EXT-AUTH-38</td><td class="seg">A</td><td class="seg">IMS Synchronization driver</td></tr><tr class="seglistitem"><td class="seg">EXT-AUTH-08</td><td class="seg">A</td><td class="seg">Automation of batch Synchronization</td></tr><tr class="seglistitem"><td class="seg">EXT-AUTH-15</td><td class="seg">B</td><td class="seg">On-demand synchronization</td></tr></tbody></table></div><p>Regardless of the login method, the user needs to have a row
 in the OpenACS users table. This can happen through a batch job, in
 real-time, or both in combination.  We use the <a class="ulink" href="http://ims.edna.edu.au/enterprise/" target="_top">IMS Enterprise 1.1</a> specification. </p><p>Batch job means that we do a synchronization (import new
 users, modify changed, purge deleted) on a regular interval, e.g.
@@ -221,7 +221,7 @@ username and password, which will make it practical to have your
 site configured to expire people's login after e.g. 2, 4, or 8
 hours.</p><p>The other advantage is that we can still offer certain
 functionality to you, even when your login is not trusted. For
-example, we could let you browse publically available forums, and
+example, we could let you browse publicly available forums, and
 only when you want to post do you need to log in. This makes it
 even more feasible to have a more secure login expiration
 setting.</p><p>By default, <code class="literal">auth::require_login</code> would
