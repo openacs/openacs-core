@@ -32,14 +32,14 @@ documentation through ad_proc.</p>
 WDSL, the interface specfication for web services.</p>
 <h2>Hitchiker&#39;s Guide to Service Contract Definitions</h2>
 <ul>
-<li>contract - analagous to interface, contracts serve as logical
+<li>contract - analogous to interface, contracts serve as logical
 containers for operations.</li><li>operation - a method of an interface. defines a method
 signature, including both input and outputs as well as metadata
 such as caching.</li><li>implementation - an implementation is a set of concrete
 functions that fufills an interface.</li><li>implementation alias - is the method of an implementation that
 fufills a given operation of the contract.</li><li>bindings - association between an interface and an
 implementation.</li><li>types - define the kind of input and outputs a operation
-recieves.</li>
+receives.</li>
 </ul>
 <h2>Usage</h2>
 <h3>Design the Contract</h3>

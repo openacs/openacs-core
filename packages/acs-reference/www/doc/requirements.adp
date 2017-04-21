@@ -106,5 +106,5 @@ those applications that need to use the old data</li>
 </ul>
 <p>Note also that it is possible to have overlapping effective
 dates. This will not be implemented in the first version, but
-should be recognized and accomodated throughout the development
+should be recognized and accommodated throughout the development
 process for the service package.</p>

@@ -84,7 +84,7 @@ representing messages.</p>
 <p><strong>20.0 Message Content</strong></p>
 <p>A message should have a primary content body consisting of a
 specified MIME type and a block of storage holding the content. In
-addition, applications may store one or more seperate revisions of
+addition, applications may store one or more separate revisions of
 a message.</p>
 <p><strong>30.0 Attachments</strong></p>
 <p>Messages may be composed of additional attachments. Each
@@ -131,7 +131,7 @@ types, although initial implementations may be more limited.</p>
 <p>The system should provide the following interfaces for
 integrating with existing E-mail systems. Note that these
 requirements only deal with <em>sending</em> mail. Our feeling that
-a seperate package should be implemented to deal with
+a separate package should be implemented to deal with
 <em>receiving</em> mail that would use ACS Messages for storage of
 incoming messages.</p>
 <blockquote>

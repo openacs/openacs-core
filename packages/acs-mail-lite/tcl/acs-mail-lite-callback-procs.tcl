@@ -92,7 +92,7 @@ ad_proc -public -callback acs_mail_lite::incoming_email -impl acs-mail-lite {
     upvar $array email
 
     set to [acs_mail_lite::parse_email_address -email $email(to)]
-    ns_log Debug "acs_mail_lite::incoming_email -impl acs-mail-lite called. Recepient $to"
+    ns_log Debug "acs_mail_lite::incoming_email -impl acs-mail-lite called. Recipient $to"
 
     lassign [acs_mail_lite::parse_bounce_address -bounce_address $to] user_id package_id signature
     

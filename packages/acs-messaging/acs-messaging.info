@@ -17,7 +17,7 @@
         <release-date>2017-02-27</release-date>
         <vendor url="http://openacs.org">OpenACS</vendor>
         <description format="text/html">Provides generic message services, with email sending.  acs-mail-lite and notifications are the 
-        prefered packages for delivering this functionality and it is anticipated that this package will ultimately be deprecated.</description>
+        preferred packages for delivering this functionality and it is anticipated that this package will ultimately be deprecated.</description>
         <license>GPL</license>
         <maturity>3</maturity>
 

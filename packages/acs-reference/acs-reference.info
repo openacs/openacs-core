@@ -9,7 +9,7 @@
 
     <version name="5.9.1b3" url="http://openacs.org/repository/download/apm/acs-reference-5.9.1b3.apm">
         <owner url="mailto:jon@jongriffin.com">Jon Griffin</owner>
-        <summary>Tools and API for managing refrence data.</summary>
+        <summary>Tools and API for managing reference data.</summary>
         <release-date>2017-02-27</release-date>
         <maturity>3</maturity>
         <vendor url="http://www.mayuli.com">Mayuli Enterprises, LLC</vendor>

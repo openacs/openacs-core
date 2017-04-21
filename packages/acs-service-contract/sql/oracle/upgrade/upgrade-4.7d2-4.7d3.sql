@@ -33,7 +33,7 @@ as
        impl_name		acs_sc_impls.impl_name%TYPE
    );
 
-   /* Next 2 functions are deprecated but left here for backwards compatability */
+   /* Next 2 functions are deprecated but left here for backwards compatibility */
 
    function new_alias (
        impl_contract_name	acs_sc_contracts.contract_name%TYPE,
