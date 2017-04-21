@@ -59,7 +59,7 @@ more responsible for the <em>presentation</em>. Generally speaking,
 the application logic generates data for the presentation to
 display to the user. The template system must provide mechanisms
 that supports both of these tasks and allows the designer and
-programmer to work seperately, but for their work to be combined at
+programmer to work separately, but for their work to be combined at
 runtime into something that the user sees as a single page.</p>
 <p>Thus, pages are naturally split into two parts. The <em>logic
 part</em> executes application logic and generates data, and the

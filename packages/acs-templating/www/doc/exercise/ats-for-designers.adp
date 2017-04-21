@@ -28,7 +28,7 @@ will help us understand how it works. An ATS template itself serves
 as a reusable, unchanging framework that delivers dynamic data. The
 advantage to this is something you probably already realize: you
 need only build and edit a few pages to maintain a consistent
-presentation style while accomodating numerous permutaions of
+presentation style while accommodating numerous permutaions of
 changing data.</p>
 <p>This training module will teach largely by exercise and example,
 but you should also refer regularly to the <a href="../index">ATS documents</a> provided and more specific
@@ -120,7 +120,7 @@ conditional tags</strong></p>
 <p>Dynamic data implies a changing page, and also changing
 presentation. The <a href="../tags/if">&lt;if&gt;</a> and
 &lt;else&gt; tags allow you to alter the format of your page to
-accomodate data changes. The function of &lt;if&gt; is
+accommodate data changes. The function of &lt;if&gt; is
 straightforward enough: given a condition -- such as \@x\@ equals 5
 -- all the text/html/dynamic data between the the opening and
 closing &lt;if&gt; tags will be displayed if and only if \@x\@ does

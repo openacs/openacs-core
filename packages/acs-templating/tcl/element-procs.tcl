@@ -388,7 +388,7 @@ ad_proc -public template::element::get_property { form_id element_id property } 
 
     @param form_id     The identifier of the form containing the element.
     @param element_id  The unique identifier of the element.
-    @param property    The property to be retreived
+    @param property    The property to be retrieved
 
     @return The value of the property, or "" if the property does not exist
 

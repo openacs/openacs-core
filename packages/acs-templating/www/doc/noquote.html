@@ -134,7 +134,7 @@ uglier in its own subtle way. The trick is to remember that our
 templating still supports all the ADP features, including embedding
 Tcl code in the template. Thus instead of referring to the multirow
 variable with the @forums.name@ variable substitutions, we use
-&lt;%= [ns_quotehtml @forums.name@] %&gt;. This works
+&lt;%=Â [ns_quotehtmlÂ @forums.name@]Â %&gt;. This works
 correctly, but obviously breaks the abstraction barrier between ADP
 and Tcl syntaxes. The practical result of breaking the abstraction is
 that every occurrence of Tcl code in an ADP template will have to be
@@ -198,7 +198,7 @@ measure correctly.) During two of the following days, we would find a
 broken page from time to time, typically by spotting the obviously
 visible HTML markup. Such a page would get fixed it in a matter of
 seconds by appending ;noquote to the name of the offending variable.
-</p><p>We launched successfully within schedule.
+</p><p>We launched successfuly within schedule.
 </p></div><div class="sect2" lang="en"><div class="titlepage"><div><h3 class="title"><a name="Porting_the_quoting_changes_to_the_ACS"></a>Porting the quoting changes to the ACS.
 </h3></div></div><p>
 After some discussion, it was decided that these changes will be

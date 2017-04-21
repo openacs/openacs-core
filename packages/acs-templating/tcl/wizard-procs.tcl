@@ -660,7 +660,7 @@ ad_proc -public template::wizard::get_forward_url { step_id } {
 }
 
 ad_proc -public template::wizard::get_action_url {} {
-    Retreive the URL to the action
+    Retrieve the URL to the action
 
     @see template::wizard
 } {

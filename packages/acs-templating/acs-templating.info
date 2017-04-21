@@ -16,7 +16,7 @@
         <vendor url="http://openacs.org">OpenACS</vendor>
         <description format="text/html">The templating system provides the tag library and support routines
 that allow developers and graphic designers to work
-independently. Templates specify the layout of the page seperately
+independently. Templates specify the layout of the page separately
 from the contents of the page. Graphic designers work primarily on the
 layout part of the template (the template), while programmers work
 primarily a script that generates the the content part of the template

@@ -705,7 +705,7 @@ ad_proc -deprecated -public template::util::get_param {
     {section ""} 
     {key ""} 
 } {
-    Retreive a stored parameter, or "" if no such parameter
+    Retrieve a stored parameter, or "" if no such parameter
     If section/key are present, read the parameter from the specified
     section.key in the INI file, and cache them under the given name
 } {

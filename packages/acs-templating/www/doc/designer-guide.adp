@@ -86,7 +86,7 @@ subheading for each office.</p></li><li><p>Colors or patterns may alternate betw
 designer may want to have alternate between white and gray bands in
 a table.</p></li>
 </ol>
-<p>To accomodate these type of scenarios, the template parser sets
+<p>To accommodate these type of scenarios, the template parser sets
 some additional variables that the designer can reference to vary
 the layout from item to item.</p>
 <p>See <a href="tagref/multiple"><kbd>multiple</kbd></a>,

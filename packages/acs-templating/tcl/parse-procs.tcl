@@ -35,7 +35,7 @@ ad_proc -public template::adp_include {
     </pre>
 
     The [list &book "bookdata" ...] tells adp_include to pass the book array by reference to the adp include, where it is
-    refered to via @book.field@.
+    referred to via @book.field@.
 
     @param uplevel how far up the stack should the adp_level be set to
     (default is the calling procedures level)
@@ -576,7 +576,7 @@ ad_proc -public template::adp_compile { {-file ""} {-string ""} } {
 
 ad_proc -public template::adp_array_variable_regexp {} {
     The regexp pattern used to find adp array variables in 
-    a piece of text (i.e. @array_name.variable_name@). Captures the character preceeding
+    a piece of text (i.e. @array_name.variable_name@). Captures the character preceding
     the first @ in \1, the array_name in \2, and variable_name in \3
     
     @author Peter Marklund (peter@collaboraid.biz)
@@ -615,7 +615,7 @@ ad_proc -public template::adp_array_variable_regexp_noi18n {} {
 ad_proc -public template::adp_variable_regexp {} {
     The regexp pattern used to find adp variables in
     a piece of text, i.e. occurenceis of @variable_name@. 
-    Captures the character preceeding the first @ in \1 and
+    Captures the character preceding the first @ in \1 and
     the variable_name in \2.
 
     @author Peter Marklund (peter@collaboraid.biz)

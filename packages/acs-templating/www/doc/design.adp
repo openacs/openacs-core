@@ -100,7 +100,7 @@ System" to distinguish it from the obsolescent templates or
 "Styles" by Philip Greenspun. An extended and improved
 version was named "Dynamic Publishing System". It
 wasn&#39;t part of the ACS yet, but client projects like iluvCAMP
-used it successfully. Newcomers were consistently puzzled by the
+used it successfuly. Newcomers were consistently puzzled by the
 <code>.data</code> files, which specified the datasources in an
 apparently unfamiliar XML syntax. (The <code>.form</code> files
 specified elements in an HTML form similarly.) To mitigate this

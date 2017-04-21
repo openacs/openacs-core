@@ -123,19 +123,19 @@ handler.</blockquote><dl>
 <code>revision_id_ref</code><font color="red">*</font>
 </td><td align="left">
 <em>required</em> The name of the variable in the
-calling frame that will recieve the revision_id whose content blob
+calling frame that will receive the revision_id whose content blob
 was written to the filesystem.</td>
 </tr><tr>
 <td align="right">
 <code>url_ref</code><font color="red">*</font>
 </td><td align="left">The name of the variable in the calling frame that
-will recieve the relative URL of the file in the file system which
+will receive the relative URL of the file in the file system which
 contains the content blob</td>
 </tr><tr>
 <td align="right">
 <code>error_ref</code><font color="red">*</font>
 </td><td align="left">The name of the variable in the calling frame that
-will recieve an error message. If no error has ocurred, this
+will receive an error message. If no error has occurred, this
 variable will be set to the empty string { }</td>
 </tr>
 </table>
@@ -187,7 +187,7 @@ param=value param=value ...</kbd></blockquote>
 </table>
 <table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="publish::mkdirs" id="publish::mkdirs"><font size="+1" weight="bold">publish::mkdirs</font></a></td></tr><tr><td>
-<blockquote>Create all the directories neccessary to save the
+<blockquote>Create all the directories necessary to save the
 specified file</blockquote><dl><dd>
 <strong>Parameters:</strong><table><tr>
 <td align="right">

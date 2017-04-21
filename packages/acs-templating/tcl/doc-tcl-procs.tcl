@@ -460,7 +460,7 @@ ad_proc -private doc::parse_namespace { text_lines }  {
     # as would be expected if the namespace were being described 
     # for the first time; otherwise
     # it is set to 0;  the problem i'm trying to resolve here is multiple uses 
-    # of the @namespace directive and determining which occurance of the 
+    # of the @namespace directive and determining which occurrence of the 
     # directive is followed by comments
     # by comments we want to parse into our static files
 
@@ -489,7 +489,7 @@ ad_proc -private doc::parse_namespace { text_lines }  {
     if { $has_comments } {
 	
 	# this check determines whether or not we want the comments
-	# following this occurrance of the @namespace directive for 
+	# following this occurrence of the @namespace directive for 
 	# this namespace to be included in our static files
 
         set namespace_info [list name "$namespace_name" overview "$namespace_description" author "$namespace_author" see "$namespace_see"]

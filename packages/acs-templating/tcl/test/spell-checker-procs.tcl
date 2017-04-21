@@ -147,9 +147,9 @@ aa_register_case -cats { api } spellcheck__get_element_formtext {
     #####
 
     set command $base_command
-    lappend command -text "This <i>sentence</i> <b>does</b> contain mispelled worrds. What we have here is <a href=\"\#\">HTML</a>."
+    lappend command -text "This <i>sentence</i> <b>does</b> contain misspelled worrds. What we have here is <a href=\"\#\">HTML</a>."
     lappend command -html
-    set errwords {mispelled worrds}
+    set errwords {misspelled worrds}
     
     aa_log "--- Incorrectly spelled HTML fragment --- $command"
 

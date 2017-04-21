@@ -76,7 +76,7 @@ revisions exist</dd><dt><strong>See Also:</strong></dt><dd>proc - <a href="item"
 </table>
 <table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name="item::get_content_type" id="item::get_content_type"><font size="+1" weight="bold">item::get_content_type</font></a></td></tr><tr><td>
-<blockquote>Retrieves the content type of tyhe item. If the item
+<blockquote>Retrieves the content type of the item. If the item
 does not exist, returns an empty string.</blockquote><dl>
 <dd>
 <strong>Parameters:</strong><table><tr>

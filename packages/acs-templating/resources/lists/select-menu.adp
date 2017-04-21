@@ -22,7 +22,7 @@
 #	   where_clause { filter_where_cluse }
 #     }
 #  }
-#  - The recieving page variable must be of the type :multiple
+#  - The receiving page variable must be of the type :multiple
 #    since the filter sends the values in the following way:
 #    filter_name=filter_value&amp;filter_name=filter_value&....&amp;extra_variables=extra_values
 %>
@@ -58,7 +58,7 @@ function getSelectedValues (select_name, filter_url, filter_name) {
       }	
 
   if (extra_vars.length > 0 ) {
-      // There are extra variables, so we send then using along wiht the filter value
+      // There are extra variables, so we send then using along with the filter value
       return (url+'?'+filter_name+'='+r.join('&'+filter_name+'=')+'&'+extra_vars);
   } 
   else 

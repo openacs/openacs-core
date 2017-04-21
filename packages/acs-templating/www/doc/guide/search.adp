@@ -25,8 +25,8 @@ results, the system returns the user to the search form to modify
 the search criteria and search again.</p><p>To continue the travel site example, if an exact match is found
 for the cities entered by the user, the system immediately returns
 a list of flights. If several possible matches are found, the
-system prompts the user to choose a city before proceding. If no
-matches are found, the sytem prompts the user to search again.</p>
+system prompts the user to choose a city before proceeding. If no
+matches are found, the system prompts the user to search again.</p>
 </li>
 </ol>
 <p>To illustrate how to implement this type of page flow using the

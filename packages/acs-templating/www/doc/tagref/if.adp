@@ -112,7 +112,7 @@ operands (<var>x</var>
 <ul>
 <li><p>Any legal variables that may be referenced in the template may
 also be used in <kbd>if</kbd> statements. Words not surrounded with
-the commerical at sign (<kbd>\@</kbd>) are interpreted
+the commercial at sign (<kbd>\@</kbd>) are interpreted
 literally.</p></li><li>
 <p>Phrases with spaces in them must be enclosed in quotes to be
 grouped correctly:</p><pre>

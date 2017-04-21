@@ -89,7 +89,7 @@ ad_proc -public template::head::add_script {
     users client.  A script library in an external file may only be included
     once; subsequent calls to add_script will replace the existing entry.
     Anonymous script blocks will be added without checking for duplicates; the
-    caller must ensure that anonymous script blocks are not inadvertantly added
+    caller must ensure that anonymous script blocks are not inadvertently added
     multiple times.  You <strong>must</strong> supply either src or script.
 
     @param async   whether execution of the script should be executed asynchronously
@@ -128,7 +128,7 @@ ad_proc -public template::head::add_script {
 
         #
         # For the time being, not all browsers support
-        # nonces. According to the spects the added 'unsafe-inline',
+        # nonces. According to the specs the added 'unsafe-inline',
         # is ignored on browsers supporting nonces.
         #
         # We could restrict setting of unsafe-inline to certain
@@ -442,7 +442,7 @@ ad_proc -public template::add_body_script {
     if {$script ne ""} {
         #
         # For the time being, not all browsers support
-        # nonces. According to the spects the added 'unsafe-inline',
+        # nonces. According to the specs the added 'unsafe-inline',
         # is ignored on browsers supporting nonces.
         #
         # We could restrict setting of unsafe-inline to certain

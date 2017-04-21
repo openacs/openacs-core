@@ -127,7 +127,7 @@ ad_proc -public template::list::create {
     This switch is required to have bulk actions.
 
     @param  pass_properties
-    A list of variables in the caller's namespace, which should be avilable to the display_template
+    A list of variables in the caller's namespace, which should be available to the display_template
     of elements.
 
     @param  actions        A list of action buttons to display at the top of
@@ -146,7 +146,7 @@ ad_proc -public template::list::create {
     @param  bulk_action_method should a bulk action be a "get" or "post"
 
     @param  bulk_action_export_vars
-    A list of additional variables to pass to the receving page, along with the other variables for
+    A list of additional variables to pass to the receiving page, along with the other variables for
     the selected keys. This is typically useful if the rows in this list are all hanging off of
     one row in a parent table. For example, if this list contains the order lines of one particular
     order, and the primary key of the order lines table is 'order_id, item_id', the key would be
@@ -612,7 +612,7 @@ ad_proc -public template::list::prepare {
         # We need this uplevel so that the bind variables in the query
         # will get bound at the caller's level
         # we pass in a dummy query name because the query text was
-        # already retreived previously with db_map so this call
+        # already retrieved previously with db_map so this call
         # always passes the full query text and not the query name
         # this was failing if the template::list call contained a
         # page_query with an empty page_query_name
@@ -3226,7 +3226,7 @@ ad_proc -private template::list::prepare_filter_form {
             lappend filter_names_options [list $option_label $option_name]
         }
     }
-    # build an ad_form form based on the choosen filters
+    # build an ad_form form based on the chosen filters
     set filters_form_name list-filters-$name
     set add_filter_form_name list-filter-add-$name
     ad_form -name $add_filter_form_name -form {

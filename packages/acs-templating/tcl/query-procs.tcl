@@ -29,8 +29,8 @@ namespace eval template::query {}
 
 
 ad_proc -public template::query { statement_name result_name type sql args } {
-    Public interface to template query api.  This routine parses the arguements and
-    dispatches to the query command specified by the type arguement.
+    Public interface to template query api.  This routine parses the arguments and
+    dispatches to the query command specified by the type argument.
 
     @option maxrows    Limits the query results of a multirow query
                        to a fixed number of rows.
@@ -422,7 +422,7 @@ ad_proc -private get_cached_result { name type } {
 
     @param type Type of query
 
-    @return 1 if result was successfully retrieved, 0 if failed
+    @return 1 if result was successfuly retrieved, 0 if failed
 } {
 
   upvar opts opts
@@ -610,7 +610,7 @@ ad_proc -public multirow {
     multirow is really template::multirow or possibly 
     template::query::multirow depending on context.
     the "template::" or "template::query::"
-    may be ommitted depending on what the namespace 
+    may be omitted depending on what the namespace 
     is.  .tcl pages are evaluated in the template:: 
     namespace.
 

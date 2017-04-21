@@ -117,7 +117,7 @@ ad_form -form {
 
 } -after_submit {
 
-    # We've successfully processed the submission, send the user back to the index page.
+    # We've successfuly processed the submission, send the user back to the index page.
 
     ad_returnredirect "./"
 

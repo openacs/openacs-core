@@ -157,7 +157,7 @@ $css_link
 	  }
 	  set return_url [lindex $opts(printing_prefs) 5]
 	  if { $return_url ne "" } {
-	      # Not sure, what the intented semantics of this command was...
+	      # Not sure, what the intended semantics of this command was...
 	      #if { [llength $opts(row_ids)]==0 } {
 	      #	  nsv_set __template_cache_timeout $cache_key $opts(timeout)
 	      #}
@@ -645,7 +645,7 @@ ad_proc -public template::paginator::get_display_info { name datasource page } {
     </tr>
     <tr>
       <td>previous_page:</td>
-                 <td>preceeding page or empty string if at beginning</td>
+                 <td>preceding page or empty string if at beginning</td>
     </tr>
     <tr>
       <td>next_group:</td>
