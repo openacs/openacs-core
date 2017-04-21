@@ -769,7 +769,7 @@ ad_proc -public ad_page_contract {
 
     if { ![info exists validate] } {
         set validate [list]
-    }d
+    }
 
     set validate_len [llength $validate]
     for { set i 0 } { $i < $validate_len } { incr i } {
