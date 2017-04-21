@@ -172,7 +172,7 @@ ad_proc -private ad_complaints_parse_error_strings { errorstrings } {
 #
 
 ad_proc -private ad_page_contract_set_validation_passed { key } {
-    Call this to signal that a certain validation block has passed successfully.
+    Call this to signal that a certain validation block has passed successfuly.
     This can be tested later using ad_page_contract_get_validation_passed_p.
 
     @param key Is the key, in the format of either <i>formal_name</i> or <i>formal_name</i>:<i>flag_name</i>.
@@ -494,11 +494,11 @@ ad_proc -public ad_page_contract {
     <p>
 
     Each validation block can also have a <b><fcode>-requires</code></b> switch, which takes a list of
-    validations that must already have been successfully passed, for the validation to get executed.
+    validations that must already have been successfuly passed, for the validation to get executed.
     The intent is that you want to provide as much feedback as possible at once, but you don't want
     redundant feedback, like "foo must be an integer" <em>and</em> "foo must be in range 10 to 20".
     So a check for foo in range 10 to 20 would have a <code>-requires { foo:integer }</code> switch,
-    to ensure that the check only gets executed if foo was successfully validated as an integer.
+    to ensure that the check only gets executed if foo was successfuly validated as an integer.
 
     <p>
 

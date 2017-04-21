@@ -654,7 +654,7 @@ ad_proc -private apm_load_apm_file {
             file mkdir $install_path
         }
         
-        apm_callback_and_log $callback  "<li>Extracting files into the filesytem."
+        apm_callback_and_log $callback  "<li>Extracting files into the filesystem."
         apm_callback_and_log $callback  "<li>$pretty_name $version_name ready for installation."
 
         #ns_log notice "exec sh -c 'cd $install_path ; [apm_gzip_cmd] -d -q -c $file_path | [apm_tar_cmd] xf -' 2>/dev/null"

@@ -1530,7 +1530,7 @@ ad_proc -public apm_invoke_callback_proc {
      are called).
 
     @return 1 if invocation
-    was carried out successfully, 0 if no proc to invoke could
+    was carried out successfuly, 0 if no proc to invoke could
     be found. Will propagate any error thrown by the callback.
 
     @author Peter Marklund

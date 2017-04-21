@@ -3886,7 +3886,7 @@ ad_proc -public -deprecated ad_block_sql_urls {
     #
     # If one of these phrases is found, we construct a test SQL query
     # that incorporates the variable into its WHERE clause and ask
-    # the database to parse it. If the query does parse successfully,
+    # the database to parse it. If the query does parse successfuly,
     # then we know that the suspicious user input would result in a
     # executing SQL that we didn't write, so we abort processing this
     # HTTP request.

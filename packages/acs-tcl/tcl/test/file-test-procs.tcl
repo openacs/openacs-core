@@ -33,7 +33,7 @@ aa_register_case -cats {smoke production_safe} files__tcl_file_syntax_errors {
 
         # Check that the file parses
         if {! [info complete $data] } {
-            aa_log_result fail "$file parses successfully"
+            aa_log_result fail "$file parses successfuly"
         } else {
             incr good
         }
