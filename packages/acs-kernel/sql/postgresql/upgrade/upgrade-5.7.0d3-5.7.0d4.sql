@@ -387,7 +387,7 @@ begin
     -- Add the appropriate column to the table
 
     -- We can only create the table column if
-    -- 1. the attribute is declared type_specific (generic storage uses an auxillary table)
+    -- 1. the attribute is declared type_specific (generic storage uses an auxiliary table)
     -- 2. the attribute is not declared static
     -- 3. it does not already exist in the table
 

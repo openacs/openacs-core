@@ -358,7 +358,7 @@ create view group_distinct_member_map
 as select distinct group_id, member_id
    from group_approved_member_map;
 
--- some more views, like party_memeber_map and party_approved_member_map,
+-- some more views, like party_member_map and party_approved_member_map,
 -- are created in rel-segments-create.sql
 
 -- Just in case someone is still querying the group_component_index and
@@ -478,7 +478,7 @@ for each row  execute procedure  composition_rels_in_tr();
 
 
 ---------------------------------------------
--- POPULATE DATA FOR PERMISSABLE REL TYPES --
+-- POPULATE DATA FOR PERMISSIBLE REL TYPES --
 ---------------------------------------------
 
 -- define standard types for groups of type 'group'

@@ -511,7 +511,7 @@ BEGIN
   PERFORM rel_constraint__delete(side_one_constraint);
   PERFORM rel_constraint__delete(side_two_constraint);
 
-  -- Remove the test memebership relations
+  -- Remove the test membership relations
   for r in select * from blah_member_rels LOOP
     PERFORM blah_member_rel__delete(r.rel_id);
   end loop;

@@ -464,7 +464,7 @@ select * from acs_object_party_privilege_map;
 
 -- This table acts as a mutex for inserts/deletes from acs_permissions.
 -- This is used since postgresql's exception handing mechanism is non-
--- existant.  A dup insert on acs_permissions will roll-back the 
+-- existent.  A dup insert on acs_permissions will roll-back the 
 -- transaction and give an error, which is not what we want.  Using a 
 -- separate table for locking allows us exclusive access for 
 -- inserts/deletes, but does not block readers.  That way we don't 

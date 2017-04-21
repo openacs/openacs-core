@@ -947,7 +947,7 @@ select define_function_args('trigger_type','tgtype');
 -- PG version checking helper
 -- vguerra@wu.ac.at 
 
--- This helper function indicates wether the current version of PG 
+-- This helper function indicates whether the current version of PG 
 -- one runs on is greater than, less than or equal to a given version, 
 -- returning 1 , -1 or 0 correspondingly.
 

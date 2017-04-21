@@ -291,7 +291,7 @@ for each row execute procedure acs_objects_last_mod_update_tr ();
 -- show errors
 
 comment on table acs_objects is '
-The root table for the acs object heirarchy.  It all starts here folks.
+The root table for the acs object hierarchy.  It all starts here folks.
 ';
 
 comment on column acs_objects.context_id is $$
@@ -1070,7 +1070,7 @@ BEGIN
        end if;
 
      else
-       -- Specific attribute: table name/column need to be retreived
+       -- Specific attribute: table name/column need to be retrieved
  
        if v_static = 'f' then
          select 
@@ -1381,7 +1381,7 @@ BEGIN
    -- index contains each ancestor for OBJECT_ID. It doesn't
    -- guarantee that there aren''t extraneous rows or that
    -- OBJECT_ID's children are contained in the index. That is
-   -- verified by seperate functions.
+   -- verified by separate functions.
 
    result := 't';
 
@@ -1451,7 +1451,7 @@ BEGIN
    -- N_GENERATIONS is how far the current DESCENDANT_ID is from
    -- OBJECT_ID.
 
-   -- This function will verfy that each actualy descendant of
+   -- This function will verfy that each actually descendant of
    -- OBJECT_ID has a row in the index table. It does not check that
    -- there aren't extraneous rows or that the ancestors of OBJECT_ID
    -- are maintained correctly.

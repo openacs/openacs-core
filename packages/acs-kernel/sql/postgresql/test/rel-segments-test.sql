@@ -365,7 +365,7 @@ BEGIN
   PERFORM rel_segment__delete(seg_E_yippies);
   PERFORM rel_segment__delete(rel_segment__get(F,'membership_rel'));
 
-  -- Remove the test memebership relations
+  -- Remove the test membership relations
   for r in select * from blah_member_rels LOOP
     PERFORM blah_member_rel__delete(r.rel_id);
   end loop;

@@ -1162,7 +1162,7 @@ where rc_required_rel_segments.group_id(+) = group_rel_type_party_combos.group_i
 -- Question: Given relation :rel_id
 --
 --           If we were to remove the relation specified by rel_id, 
---           what constraints would be violated and by waht parties?
+--           what constraints would be violated and by what parties?
 --
 -- Answer:   select r.rel_id, r.constraint_id, r.constraint_name
 --	            acs_object_type.pretty_name(r.rel_type) as rel_type_pretty_name,

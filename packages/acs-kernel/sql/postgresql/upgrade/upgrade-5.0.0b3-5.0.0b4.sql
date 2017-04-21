@@ -373,7 +373,7 @@ begin
        end if;
 
      else
-       -- Specific attribute: table name/column need to be retreived
+       -- Specific attribute: table name/column need to be retrieved
  
        if v_static = ''f'' then
          select 
