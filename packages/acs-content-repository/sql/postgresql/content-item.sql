@@ -1236,6 +1236,8 @@ DECLARE
   v_resolved_root_id               integer;       
   v_path                           text    default '';  
   v_rec                            record;
+  v_current_item_id                integer;
+  v_current_name                   text;
 BEGIN
 
   -- check that the item exists
@@ -1301,14 +1303,14 @@ BEGIN
     -- this is an absolute path so prepend a '/'
     -- loop over the absolute path
 
-    for v_rec in select i2.name, tree_level(i2.tree_sortkey) as tree_level
-                 from cr_items i1, cr_items i2
-                 where i2.parent_id <> 0
-                 and i1.item_id = get_path__item_id
-                 and i1.tree_sortkey between i2.tree_sortkey and tree_right(i2.tree_sortkey)
-                 order by tree_level
+    v_current_item_id := get_path__item_id;
+
+    while v_current_item_id <> 0
     LOOP
-      v_path := v_path || '/' || v_rec.name;
+      select parent_id, name into v_current_item_id, v_current_name from cr_items where item_id = v_current_item_id;
+      if FOUND then
+        v_path :=  '/' || v_current_name || v_path;
+      end if;
     end loop;
 
   end if;
