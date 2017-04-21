@@ -995,7 +995,7 @@ aa_register_case \
     # Create the test package in the file system
     lang::test::setup_test_package
 
-    # Can't run this test case with the usual rollback switch since if everthing
+    # Can't run this test case with the usual rollback switch since if everything
     # is wrapped in one transaction then the creation_date of the messages will be the
     # same and the query in lang::catalog::last_sync_messages will return duplicates.
     aa_run_with_teardown \

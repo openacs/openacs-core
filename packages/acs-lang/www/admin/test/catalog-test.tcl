@@ -13,7 +13,7 @@ set header [ad_header $title]
 set context_bar [ad_context_bar "Message Catalog Test"]
 set footer [ad_footer]
 
-# Test 1 verifies that the message catalog has loaded successfully
+# Test 1 verifies that the message catalog has loaded successfuly
 set english [_ en test.English]
 set french  [_ fr test.French]
 set spanish [_ es test.Spanish]

@@ -385,7 +385,7 @@ insert into ad_locales
 insert into ad_locales
        (locale, label, language, country, nls_language, nls_territory,
         nls_charset, mime_charset, default_p, enabled_p)
- values ('uk_UA', 'Ukranian (UA)', 'uk', 'UA', 'Ukranian', 'Ukraine', 'UTF8', 'UTF-8', 'f', 'f');
+ values ('uk_UA', 'Ukrainian (UA)', 'uk', 'UA', 'Ukrainian', 'Ukraine', 'UTF8', 'UTF-8', 'f', 'f');
 
 insert into ad_locales
        (locale, label, language, country, nls_language, nls_territory,

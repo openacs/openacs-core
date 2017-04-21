@@ -386,7 +386,7 @@ zone such as GMT.</p>
 <blockquote><p>
 <strong>100.10</strong> Since UTF8 strings can use up to three
 (UCS2) or six (UCS4) bytes per character, make sure that column
-size declarations in the schema are large enough to accomodate
+size declarations in the schema are large enough to accommodate
 required data (such as email addresses in Japanese).</p></blockquote>
 <h3>VI.I Email and Messaging</h3>
 

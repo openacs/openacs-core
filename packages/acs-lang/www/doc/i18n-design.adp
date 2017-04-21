@@ -498,7 +498,7 @@ translated string. Takes three optional parameters:
 it is omitted this procedure returns simply the text enclosed by
 the tags.</li><li>
 <code>lang</code> specifies the language of the text string
-enclosed within the flags. If it is ommitted value defaults to
+enclosed within the flags. If it is omitted value defaults to
 English.</li><li>
 <code>type</code> specifies the context in which the
 translation is made. If omitted, type is user which means that the

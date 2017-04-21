@@ -21,7 +21,7 @@ ad_proc -public lc_parse_number {
 } {
     Converts a number to its canonical 
     representation by stripping everything but the 
-    decimal seperator and triming left 0's so it 
+    decimal separator and triming left 0's so it 
     won't be octal. It can process the following types of numbers:
     <ul>
     <li>Just digits (allows leading zeros).
@@ -114,7 +114,7 @@ ad_proc -private lc_sepfmt {
     Called by lc_numeric and lc_monetary.
     <p>
     Takes a grouping specifier and 
-    inserts the given seperator into the string. 
+    inserts the given separator into the string. 
     Given a separator of : 
     and a number of 123456789 it returns:
     <pre>
@@ -132,7 +132,7 @@ ad_proc -private lc_sepfmt {
     @param num_re     Regular expression for valid numbers
     @return           Number formatted with thousand separator
 } {
-    # with empty seperator or grouping string we behave 
+    # with empty separator or grouping string we behave 
     # posixly
     if {$grouping eq "" || $sep eq "" } { 
         return $num
@@ -291,7 +291,7 @@ ad_proc -public lc_time_fmt {
     </pre>
     See also <pre>man strftime</pre> on a UNIX shell prompt for more of these abbreviations.
     @param locale          Locale identifier must be in the locale database
-    @error                 Fails if given a non-existant locale or a malformed datetime
+    @error                 Fails if given a non-existent locale or a malformed datetime
                            Doesn't check for impossible dates. Ask it for 29 Feb 1999 and it will tell you it was a Monday
                            (1st March was a Monday, it wasn't a leap year). Also it only works with the Gregorian calendar -
                            but that's reasonable, but could be a problem if you are running a seriously historical site 
