@@ -43,7 +43,7 @@ have a special position for a "featured" photo.</p>
 <table border="0" width="100%"><tr>
 <td align="center"><img src="article.gif" border="1"></td><td align="center"><img src="photo.gif" border="1"></td>
 </tr></table>
-<p>The content repository accomodates these situations in the
+<p>The content repository accommodates these situations in the
 following ways:</p>
 <ul>
 <li>An API procedure, <kbd>content_type.register_child_type</kbd>,

@@ -231,7 +231,7 @@ comment on table cr_files_to_delete is '
 ';
 
 
--- DCW, this can't be defined in the apm_package_versions table defintion,
+-- DCW, this can't be defined in the apm_package_versions table definition,
 -- because cr_items is created afterwards.
 
 alter table apm_package_versions add

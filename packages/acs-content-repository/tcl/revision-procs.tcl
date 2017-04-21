@@ -71,7 +71,7 @@ ad_proc -public cr_write_content {
             set filename [db_string write_file_content ""]
 	    if {$filename eq ""} {
 		error "No content for the revision $revision_id.\
-		This seems to be an error which occured during the upload of the file"
+		This seems to be an error which occurred during the upload of the file"
 	    } elseif {![file readable $filename]} {
 	      ns_log Error "Could not read file $filename. Maybe the content repository is (partially) missing?"
 	      ns_return 404 text/plain {}
@@ -363,7 +363,7 @@ ad_proc cr_check_mime_type {
     {-filename ""}
     {-file ""}
 } {
-    Check wether the mimetype is registered. If not, check wether it
+    Check whether the mimetype is registered. If not, check whether it
     can be guessed from the filename. If guessed mimetype is not
     registered optionally insert it.
 

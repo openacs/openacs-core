@@ -204,7 +204,7 @@ function get_virtual_path (
 
 procedure write_to_file (
   --/** Writes the content of the  live revision of this item to a file, 
-  --    creating all the neccessary directories in the process
+  --    creating all the necessary directories in the process
   --    @author Karl Goldstein
   --    @param item_id         The item to be written to a file
   --    @param root_path       The path in the filesystem to which the root of the

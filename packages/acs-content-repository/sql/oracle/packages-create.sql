@@ -503,7 +503,7 @@ function get_virtual_path (
 
 procedure write_to_file (
   --/** Writes the content of the  live revision of this item to a file, 
-  --    creating all the neccessary directories in the process
+  --    creating all the necessary directories in the process
   --    @author Karl Goldstein
   --    @param item_id         The item to be written to a file
   --    @param root_path       The path in the filesystem to which the root of the
@@ -1622,7 +1622,7 @@ function is_assigned (
 ) return varchar2;
 
 function get_path (
-  --/** Retreives a path to the keyword/subject category, with the most general 
+  --/** Retrieves a path to the keyword/subject category, with the most general 
   --    category at the root of the path
   --    @author Karl Goldstein
   --    @param keyword_id         The keyword id 
@@ -1659,8 +1659,8 @@ is
   function has_grant_authority (
     --/** Determine if the user may grant a certain permission to another
     --    user. The permission may only be granted if the user has 
-    --    the permission himself and posesses the cm_perm access, or if the
-    --    user posesses the cm_perm_admin access.
+    --    the permission himself and possesses the cm_perm access, or if the
+    --    user possesses the cm_perm_admin access.
     --    @author Karl Goldstein
     --    @param object_id   The object whose permissions are to be changed
     --    @param holder_id   The person who is attempting to grant the permissions
@@ -1697,7 +1697,7 @@ is
     --    @param object_id     The object whose permissions are to be changed
     --    @param holder_id     The person who is attempting to grant the permissions
     --    @param privilege     The privilege to be granted
-    --    @param recepient_id  The person who will gain the privilege 
+    --    @param recipient_id  The person who will gain the privilege 
     --    @param is_recursive  If 't', applies the donation recursively to
     --      all child objects of the object (equivalent to UNIX's <tt>chmod -r</tt>).
     --      If 'f', only affects the objects itself.
@@ -1707,7 +1707,7 @@ is
     object_id         in acs_objects.object_id%TYPE,
     holder_id         in parties.party_id%TYPE,
     privilege         in acs_privileges.privilege%TYPE,
-    recepient_id      in parties.party_id%TYPE,
+    recipient_id      in parties.party_id%TYPE,
     is_recursive      in varchar2 default 'f',
     object_type       in acs_objects.object_type%TYPE default 'content_item'
   );
@@ -1715,8 +1715,8 @@ is
   function has_revoke_authority (
     --/** Determine if the user may take a certain permission away from another
     --    user. The permission may only be revoked if the user has 
-    --    the permission himself and posesses the cm_perm access, while the
-    --    other user does not, or if the user posesses the cm_perm_admin access.
+    --    the permission himself and possesses the cm_perm access, while the
+    --    other user does not, or if the user possesses the cm_perm_admin access.
     --    @author Karl Goldstein
     --    @param object_id   The object whose permissions are to be changed
     --    @param holder_id   The person who is attempting to revoke the permissions
@@ -1755,7 +1755,7 @@ is
     --    @param object_id     The object whose permissions are to be changed
     --    @param holder_id     The person who is attempting to revoke the permissions
     --    @param privilege     The privilege to be revoked 
-    --    @param recepient_id  The person who will lose the privilege 
+    --    @param recipient_id  The person who will lose the privilege 
     --    @param is_recursive  If 't', applies the operation recursively to
     --      all child objects of the object (equivalent to UNIX's <tt>chmod -r</tt>).
     --      If 'f', only affects the objects itself.

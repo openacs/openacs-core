@@ -718,7 +718,7 @@ procedure unset_live_revision (
 </li><li>
 <font size="+1">Procedure:</font> content_item.write_to_file
 <p>Writes the content of the live revision of this item to a file,
-creating all the neccessary directories in the process</p><table cellpadding="3" cellspacing="0" border="0">
+creating all the necessary directories in the process</p><table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr><th align="left" colspan="2">Parameters:</th></tr><tr><td></td></tr><tr><td align="left" colspan="2"><blockquote><table border="0" cellpadding="0" cellspacing="1">

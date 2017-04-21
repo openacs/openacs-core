@@ -27,8 +27,8 @@ See also: {content_item }
 content_permission.has_grant_authority
 <p>Determine if the user may grant a certain permission to another
 user. The permission may only be granted if the user has the
-permission himself and posesses the cm_perm access, or if the user
-posesses the cm_perm_admin access.</p><table cellpadding="3" cellspacing="0" border="0">
+permission himself and possesses the cm_perm access, or if the user
+possesses the cm_perm_admin access.</p><table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>
 </tr><tr>
@@ -60,8 +60,8 @@ acs_permission.grant_permission</td>
 content_permission.has_revoke_authority
 <p>Determine if the user may take a certain permission away from
 another user. The permission may only be revoked if the user has
-the permission himself and posesses the cm_perm access, while the
-other user does not, or if the user posesses the cm_perm_admin
+the permission himself and possesses the cm_perm access, while the
+other user does not, or if the user possesses the cm_perm_admin
 access.</p><table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>

@@ -1,1 +1,1 @@
-UPDATE cr_mime_types set label = 'Unknown' where label = 'Unkown';
+UPDATE cr_mime_types set label = 'Unknown' where label = 'Unknown';

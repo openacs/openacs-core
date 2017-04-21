@@ -61,7 +61,7 @@ root, and having press releases as its children. Using the folder
 approach may have the following advantages:</p>
 <ul>
 <li>Content management systems can take advantage of the folder
-structure to implement an intuitive user interface analagous to
+structure to implement an intuitive user interface analogous to
 familiar desktop tools (Windows Explorer, MacOS Finder, etc.).</li><li>You can use the content repository API to constraint the type
 of content that a folder may contain (except for the index page).
 For example, it is possible to limit the contents of the

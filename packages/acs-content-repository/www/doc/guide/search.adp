@@ -12,7 +12,7 @@ for searching content. It uses Intermedia to index the
 all the attribute columns for each content type.</p>
 <h3>Searching Content</h3>
 <p>The <kbd>content</kbd> column in <kbd>cr_revisions</kbd> may
-contain data in any text or binary format. To accomodate searches
+contain data in any text or binary format. To accommodate searches
 across multiple file types, the content repository uses an
 Intermedia index with the INSO filtering option. The INSO filter
 automatically detects the the file type of a binary object, and

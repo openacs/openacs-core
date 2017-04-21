@@ -149,7 +149,7 @@ BEGIN
   --
   -- The following loop could be dropped / replaced by a cascade
   -- operation, when proper foreign keys are used along the
-  -- inheritence path.
+  -- inheritance path.
   --
   for v_revision_val in select revision_id 
                         from   cr_revisions

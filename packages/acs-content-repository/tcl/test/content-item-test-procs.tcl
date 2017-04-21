@@ -106,7 +106,7 @@ aa_register_case content_item {
             # delete the evil_name item
             #########################################################
             
-            # in oracle content_item.del is not a fucntion and cannot
+            # in oracle content_item.del is not a function and cannot
             # return true or false so we have to rely on a query to
             # see if the item exists or not
             

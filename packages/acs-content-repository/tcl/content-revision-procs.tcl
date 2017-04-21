@@ -179,7 +179,7 @@ ad_proc -public ::content::revision::update_content {
     
 } {
     
-    Update content column seperately. Oracle does not allow insert
+    Update content column separately. Oracle does not allow insert
     into a BLOB.
     
     This assumes that if storage type is lob and no file is specified

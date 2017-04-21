@@ -110,7 +110,7 @@ ad_proc -public cr_create_content_file_from_string {item_id revision_id str} {
 ad_proc -public cr_file_size {relative_file_path} {
 
     Returns the size of a file stored in the content repository.  Takes the 
-    relative file path of the content repository file as an arguement.
+    relative file path of the content repository file as an argument.
 
 } {
     return [file size [cr_fs_path]$relative_file_path]

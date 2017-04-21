@@ -5,7 +5,7 @@
 --
 -- data assembly Jeff Davis davis@xarg.net 
 
--- Here are Mime types + text description + cannonical extension
+-- Here are Mime types + text description + canonical extension
 --
 -- mapping of extension to mime type done later.
 

@@ -71,7 +71,7 @@ BEGIN
   --
   -- The following loop could be dropped / replaced by a cascade
   -- operation, when proper foreign keys are used along the
-  -- inheritence path.
+  -- inheritance path.
   --
   for v_revision_val in select revision_id 
                         from   cr_revisions
@@ -85,7 +85,7 @@ BEGIN
   --
   -- The following loop is just needed to delete the revisions of
   -- child items. It could be removed, when proper foreign keys are
-  -- used along the inheritence path of cr_content_revisions (which is
+  -- used along the inheritance path of cr_content_revisions (which is
   -- not enforced and not always the case).
   --
   for v_child_val in select item_id

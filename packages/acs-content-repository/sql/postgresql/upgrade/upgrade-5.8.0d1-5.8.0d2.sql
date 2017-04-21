@@ -417,7 +417,7 @@ select define_function_args('content_permission__inherit_permissions','parent_ob
 select define_function_args('content_permission__has_grant_authority','object_id,holder_id,privilege');
 select define_function_args('content_permission__has_revoke_authority','object_id,holder_id,privilege,revokee_id');
 select define_function_args('content_permission__grant_permission_h','object_id,grantee_id,privilege');
-select define_function_args('content_permission__grant_permission','object_id,holder_id,privilege,recepient_id,is_recursive;f,object_type;content_item');
+select define_function_args('content_permission__grant_permission','object_id,holder_id,privilege,recipient_id,is_recursive;f,object_type;content_item');
 select define_function_args('content_permission__revoke_permission_h','object_id,revokee_id,privilege');
 select define_function_args('content_permission__revoke_permission','object_id,holder_id,privilege,revokee_id,is_recursive;f,object_type;content_item');
 select define_function_args('content_permission__permission_p','object_id,holder_id,privilege');

@@ -63,7 +63,7 @@ content_keyword.get_description</td>
 </table><p> </p>
 </li><li>
 <font size="+1">Function:</font> content_keyword.get_path
-<p>Retreives a path to the keyword/subject category, with the most
+<p>Retrieves a path to the keyword/subject category, with the most
 general category at the root of the path</p><table cellpadding="3" cellspacing="0" border="0">
 <tr>
 <th align="left">Author:</th><td align="left">Karl Goldstein</td>

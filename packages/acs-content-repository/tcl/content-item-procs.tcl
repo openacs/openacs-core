@@ -228,7 +228,7 @@ ad_proc -public ::content::item::get {
     @param array_name name of array to upvar content into
     @return upvars array_name containing all attributes of the content
     type except content
-    @return returns 0 if item does not exists or 1 if query was sucessful
+    @return returns 0 if item does not exists or 1 if query was successful
 
     @error
 } {
@@ -238,7 +238,7 @@ ad_proc -public ::content::item::get {
     }
     set content_type [content_type -item_id $item_id]
     if {$content_type eq ""} {
-        # content_type query was unsucessful, item does not exist
+        # content_type query was unsuccessful, item does not exist
         return 0
     }
     if {"content_folder" eq $content_type} {

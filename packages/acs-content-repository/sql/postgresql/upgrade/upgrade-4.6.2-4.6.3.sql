@@ -23,7 +23,7 @@ create table tmp_cr_extension_mime_type_map as select * from cr_extension_mime_t
 
 -- data from sql/common/mime-type-data.sql
 
-insert into tmp_cr_mime_types (label,mime_type,file_extension) values ( 'Unkown'                  , '*/*'                           , '' );
+insert into tmp_cr_mime_types (label,mime_type,file_extension) values ( 'Unknown'                  , '*/*'                           , '' );
 insert into tmp_cr_mime_types (label,mime_type,file_extension) values ( 'AutoCAD drawing files'   , 'application/acad'              , 'dwg' );
 insert into tmp_cr_mime_types (label,mime_type,file_extension) values ( 'Andrew data stream'      , 'application/andrew-inset'      , 'ez' );
 insert into tmp_cr_mime_types (label,mime_type,file_extension) values ( 'ClarisCAD files'         , 'application/clariscad'         , 'ccad' );

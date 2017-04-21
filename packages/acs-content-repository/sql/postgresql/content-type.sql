@@ -454,7 +454,7 @@ BEGIN
                                         drop_attribute__attribute_name);
 
   -- FIXME: postgresql does not support drop column.
-  -- Drop the column if neccessary
+  -- Drop the column if necessary
   if drop_attribute__drop_column then
       execute 'alter table ' || v_table || ' drop column ' ||
         drop_attribute__attribute_name || ' cascade';
@@ -698,8 +698,8 @@ $$ LANGUAGE plpgsql stable;
 -- into the input view when a new content revision is added.  Pg locks the 
 -- underlying table when the rule is dropped, so the dropping and recreating
 -- of the new content revisons seems like it would be reliable, but the 
--- possiblity of a race condition exists for either the initial creation
--- of dropping of a type.  I'm not sure if the possiblity of a race condition
+-- possibility of a race condition exists for either the initial creation
+-- of dropping of a type.  I'm not sure if the possibility of a race condition
 -- acually exists in practice.  The thing to do here might be to just create 
 -- a function that dynamically builds the insert strings and does the 
 -- each time an insert is done on the content_type view.  Trade-off being
