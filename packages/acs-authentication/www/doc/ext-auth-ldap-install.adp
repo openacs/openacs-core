@@ -23,7 +23,7 @@ to using for other things at your institution.</p><p>
 <strong>Background. </strong>The original OpenACS
 LDAP implementation (which has been depreciated by this package)
 treated the LDAP server as another data store similar to Oracle or
-Postgresql. It opened a connection using a priveleged account and
+Postgresql. It opened a connection using a privileged account and
 read or stored an encrypted password for the user in question. This
 password was independent of the user&#39;s operating system or
 network account, and had to be synchronized if you wanted the same

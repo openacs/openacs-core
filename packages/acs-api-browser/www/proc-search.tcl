@@ -3,7 +3,7 @@
 ad_page_contract {
     Searches for procedures with containing query_string
     if lucky redirects to best match
-    Weight the different hits with the propper weights
+    Weight the different hits with the proper weights
 
     Shows a list of returned procs with links to proc-view
 

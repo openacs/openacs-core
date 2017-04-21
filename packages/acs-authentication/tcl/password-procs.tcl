@@ -512,7 +512,7 @@ ad_proc -private auth::password::email_password {
     {-body_msg_key "acs-subsite.email_body_Forgotten_password"}
     {-from ""}
 } {
-    Send an email to ther user with given username and authority with the new password.
+    Send an email to the user with given username and authority with the new password.
 
     @param from             The email's from address. Can be in email@foo.com <Your Name> format.
                             Defaults to ad_system_owner.
