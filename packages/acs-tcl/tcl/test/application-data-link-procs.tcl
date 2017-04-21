@@ -1,5 +1,5 @@
 ad_library {
-    Tests for applicaiton data links
+    Tests for application data links.
 }
 
 aa_register_case -cats api data_links_scan_links {

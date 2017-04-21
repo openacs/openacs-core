@@ -928,7 +928,7 @@ proc sgml::DTD:ELEMENT {id value} {
 #	A syntax tree is constructed.
 #	A transition table is built next.
 #
-#	This is going to need alot of work!
+#	This is going to need a lot of work!
 #
 # Arguments:
 #	state	state array variable

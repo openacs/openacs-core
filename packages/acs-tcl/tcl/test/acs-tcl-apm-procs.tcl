@@ -64,8 +64,8 @@ aa_register_case -cats {api smoke} -procs {apm_package_instance_new} test_apm_pa
         
         aa_log "Package to be instantiated: $package_key"
         aa_log "Instance name to be added: $instance_name"
-        set error_ocurred [catch {set package_id [apm_package_instance_new -package_key $package_key -instance_name $instance_name ]} err_men]
-        aa_log "Error Message $error_ocurred: $err_men "
+        set error_occurred [catch {set package_id [apm_package_instance_new -package_key $package_key -instance_name $instance_name ]} err_men]
+        aa_log "Error Message $error_occurred: $err_men "
         aa_true "Setting the new instance succeeded" [expr {[info exists package_id] && $package_id ne ""}]
         
      

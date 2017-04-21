@@ -276,7 +276,7 @@ ad_proc -deprecated ad_dbclick_check_dml {
 } {
     This proc is used for pages using double click protection. table_name
     is table_name for which we are checking whether the double click
-    occured. id_column_name is the name of the id table
+    occurred. id_column_name is the name of the id table
     column. generated_id is the generated id, which is supposed to have
     been generated on the previous page. return_url is url to which this 
     procedure will return redirect in the case of successful insertion in
@@ -1129,7 +1129,7 @@ ad_proc -deprecated export_form_vars {
     You can append :multiple to the name of a variable. In this case, the value will be treated as a list,
     and each of the elements output separately.
     <p>
-    export_vars is now the prefered interface.
+    export_vars is now the preferred interface.
     <p>
 
     Example usage: <code>[export_vars -form -sign {foo bar:multiple baz}]</code>
@@ -1174,7 +1174,7 @@ ad_proc -public export_entire_form {} {
     generally not be used. It's much better to explicitly name 
     the variables you want to export.  
 
-    export_vars is now the prefered interface.
+    export_vars is now the preferred interface.
 
     @see export_vars
 } {
@@ -1200,7 +1200,7 @@ ad_proc export_ns_set_vars {
     format = url, a url parameter string will be returned. If format = form, a
     block of hidden form fragments will be returned.  
 
-    export_vars is now the prefered interface.
+    export_vars is now the preferred interface.
     
     @param format either url or form 
     @param exclusion_list list of fields to exclude 
@@ -1241,7 +1241,7 @@ ad_proc -deprecated export_url_vars {
     -sign:boolean
     args 
 } {
-    export_vars is now the prefered interface.
+    export_vars is now the preferred interface.
 
     Returns a string of key=value pairs suitable for inclusion in a
     URL; you can pass it any number of variables as arguments.  If any are
@@ -1312,7 +1312,7 @@ ad_proc -deprecated export_url_vars {
 ad_proc -public export_entire_form_as_url_vars { 
     {vars_to_passthrough ""}
 } {
-    export_vars is now the prefered interface.
+    export_vars is now the preferred interface.
 
     Returns a URL parameter string of name-value pairs of all the form
     parameters passed to this page. If vars_to_passthrough is given, it
@@ -4503,7 +4503,7 @@ ad_proc -public util::string_length_compare { s1 s2 } {
 ad_proc -public util::roll_server_log {} {
     Invoke the AOLserver ns_logroll command with some bookend log records.  This rolls the error log, not the access log.
 } { 
-    # This param controlls how many backups of the server log to keep, 
+    # This param controls how many backups of the server log to keep, 
     ns_config -int "ns/parameters" logmaxbackup 10
     ns_log Notice "util::roll_server_log: Rolling the server log now..." 
     ns_logroll 
@@ -4662,8 +4662,9 @@ ad_proc util::catch_exec {command result_var} {
     @param command A list of arguments to pass to exec
     @param result_var Variable name in caller's scope to set the result in
 
-    @return 0 or 1. 0 if no error, 1 if an error occured. If an error occured
-    the error message will be put into result_var in the caller's scope.
+    @return 0 or 1. 0 if no error, 1 if an error occurred. If an error
+    occurred the error message will be put into result_var in the
+    caller's scope.
 
     @author Dave Bauer
     @creation-date 2008-01-28
@@ -4730,7 +4731,7 @@ ad_proc util::catch_exec {command result_var} {
                 # failed.  The error code is in $errName, and a                 
                 # human-readable message is in $msg.                            
                 ns_log notice "util::catch_exec: posix $errName $msg $result"
-                set result "an error occured $errName \"$msg\""
+                set result "an error occurred $errName \"$msg\""
                 return 1
             }
 

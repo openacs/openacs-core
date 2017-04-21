@@ -573,7 +573,7 @@ ad_proc -private apm_load_apm_file {
                               [exec [apm_gzip_cmd] -d -q -c -S .apm $file_path | [apm_tar_cmd] tf - 2> [apm_dev_null]]] "\n"]
         apm_callback_and_log $callback  "<li>Done. Archive is [format %.1f [expr { [file size $file_path] / 1024.0 }]]KB, with [llength $files] files.<li>"
     } errmsg] } {
-        apm_callback_and_log $callback "The follow error occured during the uncompression process:
+        apm_callback_and_log $callback "The follow error occurred during the uncompression process:
     <blockquote><pre>[ns_quotehtml $errmsg]</pre></blockquote><br>
     "
                 ns_log Error "Error loading APM file form url $url: $errmsg\n$::errorInfo"

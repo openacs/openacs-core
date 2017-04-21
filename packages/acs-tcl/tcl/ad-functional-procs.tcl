@@ -670,7 +670,7 @@ ad_proc -public unzip {xs} "unzip takes a list of tuples {x1 y1} {x2 y2} {x3 y3}
 #   drop_while p xs  returns the remaining portion of the list
 #   span p xs        = (takeWhile p xs, dropWhile p xs)
 #
-#   take_until p xs  returns the list of elements upto and including the
+#   take_until p xs  returns the list of elements up to and including the
 #                    first element of xs which satisfies p
 #
 # --------------------------------------------------------------------------------
@@ -702,7 +702,7 @@ ad_proc -public span {p xs} "splits a list using take_while and drop_while" {
     list [take_while $p $xs] [drop_while $p $xs]
 }
 
-ad_proc -public take_until {p xs} "returns the list of elements upto and including the
+ad_proc -public take_until {p xs} "returns the list of elements up to and including the
                             first element of xs which satisfies p" {
     set index 0    
     foreach x $xs {

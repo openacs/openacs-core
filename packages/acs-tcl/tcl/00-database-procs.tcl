@@ -83,7 +83,7 @@ ad_library {
 # The "driverkey" indirection layer:
 #
 # Note that in the AOLserver config file, you may optionally add one
-# entry for each database definining its "driver key".  If you do NOT
+# entry for each database defining its "driver key".  If you do NOT
 # specify a driver key in the AOLserver config file, the appropriate
 # key will be determined for you by calling "ns_db driver" once on
 # startup for the first pool defined in each database.  Therefore,

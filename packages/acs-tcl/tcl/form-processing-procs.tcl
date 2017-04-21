@@ -295,7 +295,7 @@ ad_proc -public ad_form {
     <dd>A code block which sets the values for each element of the form meant to be modifiable by
         the user when the built-in key management feature is being used or to define options for
         select lists etc. Set the values as local variables in the code block, and they'll get 
-        fetched and used as element values for you. This block is executed <i>everytime</i> the
+        fetched and used as element values for you. This block is executed <i>every time</i> the
         form is loaded <i>except</i> when the form is being submitted (in which case the -on_submit
         block is executed.)
     </dd>
@@ -425,7 +425,7 @@ ad_proc -public ad_form {
   
     <ul>
       <li>
-        <a href="/api-doc/proc-search?query%5fstring=template%3a%3adata%3a%3avalidate">Avaliable datatypes</a>. 
+        <a href="/api-doc/proc-search?query%5fstring=template%3a%3adata%3a%3avalidate">Available datatypes</a>. 
         For example, the procedure <code>template::data::validate::float</code> on this list implements the 'float' datatype.
       </li>
       <li>
@@ -796,7 +796,7 @@ ad_proc -public ad_form {
             lassign [split $name ":"] name mode
             set modes [split $mode ,]
 
-            # verify variable existance and nature
+            # verify variable existence and nature
             set var_exists_p [uplevel [list info  exists $name]]
             set is_array_p   [uplevel [list array exists $name]]
 

@@ -69,7 +69,7 @@ ad_proc -public ad_text_to_html {
         # email links have the form xxx@xxx.xxx
         #
         # JCD: don't treat things =xxx@xxx.xxx as email since most
-        # common occurance seems to be in urls (although VPATH bounce
+        # common occurrence seems to be in urls (although VPATH bounce
         # emails like bounce-user=domain.com@sourcehost.com will then
         # not work correctly).  Another tricky case is
         #     http://www.postgresql.org/message-id/20060329203545.M43728@narrowpathinc.com
@@ -724,11 +724,15 @@ ad_proc ad_parse_html_attributes_upvar {
             break
         }
 
-        # This regexp matches an attribute name and an equal sign, if present.
-        # Also eats whitespace before or after.
-        # The \A corresponds to ^, except it matches the position we're starting from, not the start of the string
+        # This regexp matches an attribute name and an equal sign, if
+        # present.  Also eats whitespace before or after.  The \A
+        # corresponds to ^, except it matches the position we're
+        # starting from, not the start of the string.
         if { ![regexp -indices -start $i {\A\s*([^\s=>]+)\s*(=?)\s*} $html match attr_name_idx equal_sign_idx] } {
-            # Apparantly, there's no attribute name here. Let's eat all whitespace and lonely equal signs.
+            #
+            # Apparently, there's no attribute name here.
+            # Let's eat all whitespace and lonely equal signs.
+            #
             regexp -indices -start $i {\A[\s=]*} $html match
             set i [expr { [lindex $match 1] + 1 }]
         } {
@@ -828,7 +832,7 @@ ad_proc ad_parse_html_attributes_upvar {
             incr i
 
             if { ![regexp -indices -start $i {\A/?([-_a-zA-Z0-9]+)\s*} $html match name_idx] } {
-                # The tag-opener isn't followed by USASCII letters (with or without optional inital slash)
+                # The tag-opener isn't followed by USASCII letters (with or without optional initial slash)
                 # Not considered a tag. Shouldn't do any harm in browsers.
                 # (Tested with digits, with &#65; syntax, with whitespace)
             } else {
@@ -1060,7 +1064,7 @@ ad_proc ad_parse_html_attributes_upvar {
         @param fix When parsing fails on markup as it is, try to fix
         it by, for example, closing unclosed tags or normalizing
         attribute specification. This operation will remove most of
-        plain whitespace into text content of original HTML, toghether
+        plain whitespace into text content of original HTML, together
         with every comment and the eventually present DOCTYPE
         declaration.
 
@@ -1372,8 +1376,9 @@ ad_proc ad_parse_html_attributes_upvar {
                 set last_tag_end [incr i]
                 continue
             } elseif {[string match "!--*" [string range $html $i+1 end]]} {
-                # handle HTML comments, I can't beleive noone noticed this before.
-                # this code maybe not be elegant but it works
+                # Handle HTML comments, I can't believe no one noticed
+                # this before.  This code maybe not be elegant but it
+                # works.
 
                 # find the closing comment tag.
                 set comment_idx [string first "-->" $html $i]
@@ -2175,7 +2180,7 @@ ad_proc -public string_truncate {
     Should always be called as string_truncate [-flags ...] -- string
     since otherwise strings which start with a - will treated as switches, and will cause an error.
 
-    @param len       The lenght to truncate to. If zero, no truncation will occur.
+    @param len       The length to truncate to. If zero, no truncation will occur.
 
     @param ellipsis  This will get put at the end of the truncated string, if the string was truncated.
     However, this counts towards the total string length, so that the returned string

@@ -30,11 +30,11 @@ ad_proc -private util::http::set_cookies {
                         overwritten.
 
     @param cookie_names Cookie names we want to retrieve. Other cookies will be ignored.
-                        If omitted toghether with <code>-pattern</code> proc will include
+                        If omitted together with <code>-pattern</code> proc will include
                         every cookie.
 
     @param pattern      Cookies which name respects this pattern as in <code>string match</code>
-                        will be included. If omitted toghether with <code>-cookie_names</code> proc
+                        will be included. If omitted together with <code>-cookie_names</code> proc
                         will include every cookie.
 
     @return ns_set of headers containing received cookies
@@ -201,7 +201,7 @@ ad_proc -public util::http::available {
     'curl', which wraps the command line utility (available on every
     system with curl installed).
 
-    @param force_ssl specifies wether we want to use SSL despite the
+    @param force_ssl specifies whether we want to use SSL despite the
     url being in http:// form. Default behavior is to use SSL on
     https:// urls only.
 
@@ -412,7 +412,7 @@ ad_proc util::http::get {
     capable of receiving gzipped responses.  If server complies to our
     indication, the result will be automatically decompressed.
 
-    @param force_ssl specifies wether we want to use SSL
+    @param force_ssl specifies whether we want to use SSL
     despite the url being in http:// form.  Default behavior is to use
     SSL on https:// urls only.
 
@@ -526,7 +526,7 @@ ad_proc util::http::post {
     receiving gzipped responses.  If server complies to our
     indication, the result will be automatically decompressed.
 
-    @param force_ssl specifies wether we want to use SSL despite the
+    @param force_ssl specifies whether we want to use SSL despite the
     url being in http:// form.  Default behavior is to use SSL on
     https:// urls only.
 
@@ -577,7 +577,8 @@ ad_proc util::http::post {
         set urlvars($key) 1
     }
 
-    # Check wether we don't have multiple variable definition in url and payload
+    # Check whether we don't have multiple variable definition in url
+    # and payload.
     foreach var [split $formvars &] {
         set var [split $var =]
         set key [lindex $var 0]
@@ -923,7 +924,7 @@ ad_proc -private util::http::follow_redirects {
     receiving gzipped responses.  If server complies to our
     indication, the result will be automatically decompressed.
 
-    @param force_ssl specifies wether we want to use SSL despite the
+    @param force_ssl specifies whether we want to use SSL despite the
     url being in http:// form.  Default behavior is to use SSL on
     https:// urls only.
 
@@ -1101,7 +1102,7 @@ ad_proc -private util::http::request {
     receiving gzipped responses.  If server complies to our
     indication, the result will be automatically decompressed.
 
-    @param force_ssl specifies wether we want to use SSL despite the
+    @param force_ssl specifies whether we want to use SSL despite the
     url being in http:// form. Default behavior is to use SSL on
     https:// urls only.
 
@@ -1238,7 +1239,7 @@ ad_proc -private util::http::native::request {
     receiving gzipped responses.  If server complies to our
     indication, the result will be automatically decompressed.
 
-    @param force_ssl specifies wether we want to use SSL despite the
+    @param force_ssl specifies whether we want to use SSL despite the
     url being in http:// form. Default behavior is to use SSL on
     https:// urls only.
 
@@ -1281,7 +1282,7 @@ ad_proc -private util::http::native::request {
         return -code error "${this_proc}:  Invalid url:  $url"
     }
 
-    # Check wether we will use ssl or not
+    # Check whether we will use ssl or not
     if {$force_ssl_p || [string match "https://*" $url]} {
         set http_api [util::http::native_https_api]
         if {$http_api eq ""} {
@@ -1295,7 +1296,7 @@ ad_proc -private util::http::native::request {
         set headers [ns_set create headers]
     }
 
-    # Determine wether we want to gzip the request.
+    # Determine whether we want to gzip the request.
     # Servers uncapable of treating such requests will likely throw an error...
     set req_content_encoding [ns_set iget $headers "content-encoding"]
     if {$req_content_encoding ne ""} {
@@ -1602,8 +1603,8 @@ ad_proc -private util::http::curl::request {
         set headers [ns_set create headers]
     }
 
-    # Determine wether we want to gzip the request.
-    # Default is no, can't know wether the server accepts it.
+    # Determine whether we want to gzip the request.
+    # Default is no, can't know whether the server accepts it.
     # We could at the http api level (TODO?)
     set req_content_encoding [ns_set iget $headers "content-encoding"]
     if {$req_content_encoding ne ""} {
@@ -1712,7 +1713,7 @@ ad_proc -private util::http::curl::request {
     }
     lappend cmd --data-binary "@${body_file}"
 
-    # Return response code toghether with webpage
+    # Return response code together with webpage
     lappend cmd -w " %\{http_code\}"
 
     # Add headers to the command line
@@ -1990,7 +1991,7 @@ ad_proc -deprecated -public util_httppost {url formvars {timeout 30} {depth 0} {
         set rfd [lindex $http 0]
         set wfd [lindex $http 1]
 
-        #headers necesary for a post and the form variables
+        #headers necessary for a post and the form variables
 
         _ns_http_puts $timeout $wfd "Content-type: application/x-www-form-urlencoded \r"
         _ns_http_puts $timeout $wfd "Content-length: [string length $formvars]\r"
@@ -2134,7 +2135,7 @@ ad_proc -deprecated -public util_http_file_upload { -file -data -binary:boolean 
     <p>
 
     If you specify <tt>-file</tt> then <tt>-filename</tt> is optional
-    (it can be infered from the name of the file).  However, if you
+    (it can be inferred from the name of the file).  However, if you
     specify <tt>-data</tt> then it is mandatory.
 
     <p>
@@ -2151,7 +2152,7 @@ ad_proc -deprecated -public util_http_file_upload { -file -data -binary:boolean 
     <li><tt>array</tt> (list of key value pairs like what [array get] returns)
     <li><tt>formvars</tt> (list of url encoded formvars, i.e. foo=bar&x=1)
     <li><tt>ns_set</tt> (an ns_set containing key/value pairs)
-    <li><tt>vars</tt> (a list of tcl vars to grab from the calling enviroment)
+    <li><tt>vars</tt> (a list of tcl vars to grab from the calling environment)
     </ul>
 
     <p>

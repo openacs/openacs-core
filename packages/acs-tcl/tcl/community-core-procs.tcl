@@ -221,7 +221,7 @@ ad_proc -public person::update {
 # DRB: Though I've moved the bio field to type specific rather than generic storage, I've
 # maintained the API semantics exactly as they were before mostly in order to make upgrade
 # possible.  In the future, the number of database hits can be diminished by getting rid of
-# the seperate queries for bio stuff. However, I have removed bio_mime_type because it's
+# the separate queries for bio stuff. However, I have removed bio_mime_type because it's
 # unused and unsupported in the existing code.
 
 ad_proc -public person::get_bio {

@@ -1331,7 +1331,7 @@ ad_proc -public apm_package_key_from_version_id {version_id} {
 
 ad_proc -private apm_package_key_from_version_id_mem {version_id} {
     Returns the package_key for the given APM package version id. Goes to the database
-    everytime called.
+    every time called.
 
     @author Peter Marklund (peter@collaboraid.biz)
 } {

@@ -2024,7 +2024,7 @@ ad_proc -public security::validated_host_header {} {
     #
     set driverInfo [util_driver_info]
     set driverHostName [dict get $driverInfo hostname]
-    if {$hostName eq $driverHostName || $hostName in [ns_addrbyhost -all $driverHostName]} {
+    if {$hostName eq $driverHostName || $hostName in [ns_ -all $driverHostName]} {
         #
         # port is currently ignored
         #
@@ -2287,7 +2287,7 @@ namespace eval ::security::csp {
             font-src
             form-action
             frame-src
-            frome-ancestors
+            frame-ancestors
             img-src
             media-src
             object-src

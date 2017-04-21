@@ -1,10 +1,10 @@
 #
-# Add Tcl traces for asserted tcl commands.
+# Add Tcl traces for asserted Tcl commands.
 #
 # Add the traces only, when the functions are active (i.e. the
-# controling package parameter has not the default value), because
+# controlling package parameter has not the default value), because
 # adding the traces has performance impact on potentially frequently
-# called tcl commands (such as e.g. ns_log)
+# called Tcl commands (such as e.g. ns_log)
 #
 # Therefore, activating/deactivating requires a server restart.
 #
