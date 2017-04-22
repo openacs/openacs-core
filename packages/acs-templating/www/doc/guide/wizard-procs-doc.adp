@@ -21,7 +21,7 @@ ex.
 its the same as your current wizard file. Has no effect for
 subwizards.</li><li>name - use to distinguish between the different wizards, since
 you can have 1 or more subwizard. name must be no spaces,
-alpanumeric similar to normal tcl variable naming convention</li><li>params - are used to keep values that you would like to pass on
+alpanumeric similar to normal Tcl variable naming convention</li><li>params - are used to keep values that you would like to pass on
 to the other steps</li><li>steps - are use to define what includes to use for each step of
 the wizard</li>
 </ul>
@@ -40,7 +40,7 @@ ex.
        &lt;include src="\@wizard:current_url\@"&gt;
     
 </pre>
-</li><li>Create the individual steps, these are just normal tcl and/or
+</li><li>Create the individual steps, these are just normal Tcl and/or
 adp files. So make a step1.tcl, step1.adp, step2.tcl, step2.adp,
 step3.tcl and step3.adp. Normally this files are self submitting
 forms</li><li>Add "template:wizard forward" on each step (eg.
@@ -126,9 +126,9 @@ mean? It will properly get the current value of the param which was
 set by "template::wizard set_param", while
 ad_page_contract will not pick that up since it will get what is
 the request http var value. This is because "template::wizard
-get_param" gets the value from the tcl var while
+get_param" gets the value from the Tcl var while
 ad_page_contract gets the value from the http var. So while
-processing in tcl that value may change.</li><li>
+processing in Tcl that value may change.</li><li>
 <h3>How can you get the url of a wizard that is not your current
 step?</h3>
 You can use the following on your wizard.adp

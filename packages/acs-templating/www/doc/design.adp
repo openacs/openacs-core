@@ -100,7 +100,7 @@ System" to distinguish it from the obsolescent templates or
 "Styles" by Philip Greenspun. An extended and improved
 version was named "Dynamic Publishing System". It
 wasn&#39;t part of the ACS yet, but client projects like iluvCAMP
-used it successfuly. Newcomers were consistently puzzled by the
+used it successfully. Newcomers were consistently puzzled by the
 <code>.data</code> files, which specified the datasources in an
 apparently unfamiliar XML syntax. (The <code>.form</code> files
 specified elements in an HTML form similarly.) To mitigate this
@@ -191,7 +191,7 @@ serving a templated page involves.
 <code>.adp</code> or <code>.tcl</code> file. As both invoke the
 same handler, it doesn&#39;t matter that adp take precendence.</li><li>If a <code>.tcl</code> file is present, its <a href="/api-doc/proc-view?proc=ad_page_contract"><code>ad_page_contract</code></a>
 in the <code>-properties</code> block indicates a set of data
-sources that will be made available to the template.</li><li>The rest of the tcl script executes, defining these data
+sources that will be made available to the template.</li><li>The rest of the Tcl script executes, defining these data
 sources. It may change the name of the page being served by calling
 <code>template::set_file</code> directly or through the wrapper
 <code>ad_return_template</code>.</li><li>The corresponding template (file <em>stub</em>.adp) is
@@ -246,11 +246,11 @@ be pushed to the list, and popped when that proc returned. This
 next level will appear as #6, due to the repeated
 <code>uplevel</code>ing.</p>
 <h4>Caching and Template Compilation</h4>
-<p>To improve performance, adp pages are compiled into a tcl proc,
+<p>To improve performance, adp pages are compiled into a Tcl proc,
 and thus cached for future use. Tcl pages are also cached in a
 proc; this saves the trouble of reading and parsing the file the
 next time. The template system remembers the modification times of
-the adp and tcl sources, and re-processes any requested file if the
+the adp and Tcl sources, and re-processes any requested file if the
 cached version is no longer current. Consequently, this cacheing is
 transparent in normal use.</p>
 <p>To emphasize that "normal" use essentially always

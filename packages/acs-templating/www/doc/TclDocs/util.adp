@@ -103,7 +103,7 @@ parsed data for public or private procs</blockquote></td></tr>
 </table>
 <table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name=""></a></td></tr><tr><td><blockquote>uses ns_library to find the server root, may not always
-be accurate because it essentially asks for the tcl library path
+be accurate because it essentially asks for the Tcl library path
 and strips off the last /tcl directory</blockquote></td></tr>
 </table>
 <table width="100%">

@@ -181,7 +181,7 @@ measure correctly.) During two of the following days, we would find
 a broken page from time to time, typically by spotting the
 obviously visible HTML markup. Such a page would get fixed it in a
 matter of seconds by appending ;noquote to the name of the
-offending variable.</p><p>We launched successfuly within schedule.</p>
+offending variable.</p><p>We launched successfully within schedule.</p>
 </div><div class="sect2" lang="en">
 <div class="titlepage"><div><h3 class="title">
 <a name="Porting_the_quoting_changes_to_the_ACS" id="Porting_the_quoting_changes_to_the_ACS"></a>Porting the quoting

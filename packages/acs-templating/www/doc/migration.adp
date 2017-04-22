@@ -7,7 +7,7 @@
  : Migration
 <h3>In a Nutshell</h3>
 
-When templatizing a legacy tcl page, your task is to
+When templatizing a legacy Tcl page, your task is to
 <strong>separate</strong>
  code and graphical presentation. The
 latter goes into an ADP file; it contains essentially HTML,
@@ -27,7 +27,7 @@ of the option. Then your script performs all the computations and
 queries needed to define these data sources. There are special
 mechanisms for handling multirow data sources; see below.</p>
 <p>At the end of the Tcl script, you should call
-<code>ad_return_template</code>. The template runs after the tcl
+<code>ad_return_template</code>. The template runs after the Tcl
 script, and can use these data sources.</p>
 <p>Make sure that the fancy adp parser is enabled in your AOL ini
 file.</p>
@@ -40,11 +40,11 @@ file.</p>
 <li>Do not write to the connection directly. Avoid
 <code>ns_puts</code>, <code>ns_write</code> etc., which don&#39;t
 wait till the headers are written or the page is completed; they
-may act differently than you expect.</li><li>If you can, put code in the tcl file, not between <code>&lt;%
-%&gt;</code> in the adp page.</li><li>Put HTML in the adp page, not int the tcl program. Put reusable
+may act differently than you expect.</li><li>If you can, put code in the Tcl file, not between <code>&lt;%
+%&gt;</code> in the adp page.</li><li>Put HTML in the adp page, not int the Tcl program. Put reusable
 HTML fragments in a separate adp file (think of it as a widget)
 that will be <code>&lt;include&gt;</code>d from several pages.
-Prefer this to writing a tcl proc that returns HTML.</li><li>Remember to remove backslashes where you had to escape special
+Prefer this to writing a Tcl proc that returns HTML.</li><li>Remember to remove backslashes where you had to escape special
 characters, as in
 <blockquote><pre>
 Nuts  <font color="red">\</font>$2.70 <font color="red">\</font>[&lt;a href="<font color="red">\</font>"shoppe<font color="red">\</font>"&gt;buy&lt;/a&gt;<font color="red">\</font>]
@@ -65,7 +65,7 @@ simplicity, I pick <code>item-view</code>, which does not use a
 panes fit next to each other and to line up corresponding code.</p>
 <table cellspacing="5" bgcolor="#CCDDFF">
 <tr bgcolor="#CCCCCC">
-<th rowspan="2">old tcl code</th><th colspan="2">new</th>
+<th rowspan="2">old Tcl code</th><th colspan="2">new</th>
 </tr><tr bgcolor="#CCCCCC">
 <th><code>packages/news/www/item-view.tcl</code></th><th><code>packages/news/www/item-view.adp</code></th>
 </tr><tr>
@@ -215,7 +215,7 @@ example shows the part of the <code>index</code>
 module that uses the mechanism, not a whole page.
 <table cellspacing="5" bgcolor="#CCDDFF">
 <tr bgcolor="#CCCCCC">
-<th rowspan="2">old tcl code</th><th colspan="2">new</th>
+<th rowspan="2">old Tcl code</th><th colspan="2">new</th>
 </tr><tr bgcolor="#CCCCCC">
 <th><code>packages/news/www/index.tcl</code></th><th><code>packages/news/www/index.adp</code></th>
 </tr><tr>
@@ -353,11 +353,11 @@ performed inside the body, then it might be helpful to build your
 own multirow variable. In the excert below, taken from
 /pvt/alerts.tcl and /pvt/alerts.adp, the foreach logic made it hard
 to use the db_multirow because it needed a combination of the
-output from sql and also the output of tcl procedures using that
+output from sql and also the output of Tcl procedures using that
 value.</p>
 <table cellspacing="5" bgcolor="#CCDDFF">
 <tr bgcolor="#CCCCCC">
-<th rowspan="2">old tcl code</th><th colspan="2">new</th>
+<th rowspan="2">old Tcl code</th><th colspan="2">new</th>
 </tr><tr bgcolor="#CCCCCC">
 <th><code>packages/acs-core-ui/www/pvt/alerts.tcl</code></th><th><code>packages/acs-core-ui/www/pvt/alerts.adp</code></th>
 </tr><tr>

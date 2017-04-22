@@ -14,7 +14,7 @@ Templates</property>
 AOLserver. For examples, see the section "embedded tcl"
 on the <a href="../demo">demonstration page</a>.</p>
 <p>Generally, avoid putting escaped Tcl code in adp files, or
-generating HTML fragments in tcl procedures. It subverts the
+generating HTML fragments in Tcl procedures. It subverts the
 separation of code and layout, one of the benefits of templating.
 Embedded Tcl makes templates non-portable to ACS/Java.</p>
 <hr>

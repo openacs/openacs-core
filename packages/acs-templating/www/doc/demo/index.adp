@@ -11,7 +11,7 @@ As the links reveal, the "Data" files have the extension
  and the "Template" files have
 <code>.adp</code>
 . If you want to see a little behind the scenes,
-you can look at the tcl code into which we compile the template.
+you can look at the Tcl code into which we compile the template.
 The last column will deliver the resulting page to your browser.
 <p>Mechanisms underlaid in red are known to not work.</p>
 <h3>General</h3>

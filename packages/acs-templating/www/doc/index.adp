@@ -31,7 +31,7 @@ Guide</a></td><td>Writing a Template, the ADP part of a page</td>
 <td></td><td>
 <a href="api/">API</a></td><td>API Reference</td>
 </tr><tr>
-<td colspan="2"><a href="migration">Migration</a></td><td>Bringing legacy tcl pages to use the template system.</td>
+<td colspan="2"><a href="migration">Migration</a></td><td>Bringing legacy Tcl pages to use the template system.</td>
 </tr><tr>
 <td colspan="2"><a href="demo/">Demonstration</a></td><td>Samples of the various mechanisms, with both Tcl and ADP
 parts.</td>

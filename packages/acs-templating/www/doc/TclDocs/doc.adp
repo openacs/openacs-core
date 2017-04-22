@@ -19,7 +19,7 @@ methods.</blockquote>
 <a name=""></a><br><small><em>  by simon</em></small>
 </td></tr><tr><td>
 <blockquote>called by parse_file, this procedure is given the body
-of text between two namespace markers in a tcl library file and
+of text between two namespace markers in a Tcl library file and
 parses out procedure source and comments</blockquote><dl><dd>
 <strong>Parameters:</strong><table><tr>
 <td align="right">
@@ -76,7 +76,7 @@ be generated automatically). - \@option (for switches such as -foo)
 </table>
 <table width="100%">
 <tr><td width="100%" bgcolor="#CCCCFF"><a name=""></a></td></tr><tr><td>
-<blockquote>takes the absolute path of the tcl library directory
+<blockquote>takes the absolute path of the Tcl library directory
 and parses through it</blockquote><dl>
 <dt><strong>Returns:</strong></dt><dd>a long lists of lists of lists, each list element contains a
 three-element list of the format { {info} {public procedures

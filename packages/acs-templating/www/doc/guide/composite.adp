@@ -102,7 +102,7 @@ the following order results.</p>
 </tr>
 </table></center>
 <p>Here we assume the ACS/Tcl situation, where the "code"
-is a tcl script in a .tcl file. The template is a .adp file.</p>
+is a Tcl script in a .tcl file. The template is a .adp file.</p>
 <h3>Variants of Page Nodes</h3>
 <p>The graph of the overall structure has five nodes, shown as a
 code/template pair. This is the standard situation, where the

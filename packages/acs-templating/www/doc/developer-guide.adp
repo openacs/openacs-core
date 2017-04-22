@@ -11,14 +11,14 @@ Start a Tcl page as usual with <code>ad_page_contract</code>
 . Be
 sure to pass a <code>-properties</code>
  block; this signals the use
-of templating. The tcl page should fill the data sources you
+of templating. The Tcl page should fill the data sources you
 promised in the contract, and not write to the connection. At the
-end of your tcl page, call <code>ad_return_template</code>
+end of your Tcl page, call <code>ad_return_template</code>
 . The
 template system will look for an adp page with the file name stub
-you indicate (defaulting to the same stub as the tcl page), process
+you indicate (defaulting to the same stub as the Tcl page), process
 that, and deliver it to the client. The adp page can use the
-datasources defined in the tcl page.
+datasources defined in the Tcl page.
 <h3>Guide</h3>
 <ol>
 <li>User Guide</li><li style="list-style: none"><ul>
@@ -78,7 +78,7 @@ file stub as reference path) and passed to
 <code>template::set_file</code>, to change the name of the page
 being served currently. If it starts with a "/", it is
 taken to be a path relative to the server root; otherwise it is a
-filename relative to the directory of the tcl script.</p>
+filename relative to the directory of the Tcl script.</p>
 <h5><code><a href="/api-doc/proc-view?proc=ad_page_contract">ad_page_contract</a></code></h5>
 
 Normally, complaints about incorrect parameters are written

@@ -65,7 +65,7 @@ references, see how message-chunk is used throughout the forums
 package.</p>
 </li><li>If the <kbd>src</kbd> attribute begins with a slash, the path
 is assumed to be relative to the server root, the parent directory
-of the tcl library. If not, the path is assumed to be relative to
+of the Tcl library. If not, the path is assumed to be relative to
 the <em>current template</em>, <em>not</em> the URL of the page
 request.</li><li>If the page layout is sensitive to additional whitespace
 surrounding the subtemplate, then care must be taken that the
