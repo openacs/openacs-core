@@ -29,7 +29,7 @@
         </note>
       </listitem>
     </itemizedlist>
-    <para>Note: Instructions for installing tDOM and threaded tcl are included with the AOLserver4 installation instructions, 
+    <para>Note: Instructions for installing tDOM and threaded Tcl are included with the AOLserver4 installation instructions, 
     if these are not yet installed.</para>
     <para>The following programs may be useful or required for some configurations. They are included in most distributions:</para>
     <itemizedlist>

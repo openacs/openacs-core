@@ -460,7 +460,7 @@ exit</action></screen>
                     </formalpara>
                   <screen>[root root]# <userinput>su - <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
 [$OPENACS_SERVICE_NAME aolserver]$ <userinput>cd /var/lib/aolserver/<replaceable>openacs-5-1</replaceable></userinput>
-[$OPENACS_SERVICE_NAME aolserver]$ <userinput>cvs up -Pd ChangeLog *.txt bin etc tcl www packages/*</userinput></screen>
+[$OPENACS_SERVICE_NAME aolserver]$ <userinput>cvs up -Pd ChangeLog *.txt bin etc Tcl www packages/*</userinput></screen>
                 </listitem>
               <listitem>
                 <formalpara>
@@ -616,7 +616,7 @@ exit</action></screen>
           </orderedlist>
         </listitem>
         <listitem>
-          <para>Build and install the new OpenFTS driver and supporting tcl procedures.  (This section of shell code is not fully documented; please exercise care.)</para>
+          <para>Build and install the new OpenFTS driver and supporting Tcl procedures.  (This section of shell code is not fully documented; please exercise care.)</para>
           <screen>cd /usr/local/src/
           tar xzf /var/tmp/Search-OpenFTS-tcl-0.3.2.tar.gz
           chown -R root.root Search-OpenFTS-tcl-0.3.2/

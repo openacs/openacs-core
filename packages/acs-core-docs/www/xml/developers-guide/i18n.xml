@@ -280,8 +280,8 @@
             <para>
               For each message call in the text, decide on a variable name and replace
             the procedure call with a variable lookup on the syntax %var_name%. Remember
-            to initialize a tcl variable with the same name on some line above the text.</para></listitem>
-        <listitem><para>If the text is in a tcl file you must replace variable lookups 
+            to initialize a Tcl variable with the same name on some line above the text.</para></listitem>
+        <listitem><para>If the text is in a Tcl file you must replace variable lookups 
             (occurrences of $var_name or ${var_name}) with %var_name%</para></listitem>
         <listitem><para>You are now ready to follow the normal procedure and mark up the text using a 
             tempoarary message tag (&lt;#_ text_with_percentage_vars#&gt;) and run the action 
@@ -321,7 +321,7 @@ ad_return_complaint 1 [_ dotlrn.class_may_not_be_deleted $msg_subst_list]
 </screen>
 
       <para>
-        When we were done going through the tcl files we ran the following
+        When we were done going through the Tcl files we ran the following
         commands to check for mistakes:
       </para>
 
@@ -334,7 +334,7 @@ ad_return_complaint 1 [_ dotlrn.class_may_not_be_deleted $msg_subst_list]
 # Check if you&#39;ve forgotten space between default key and text in message tags (should return nothing)
 <userinput>find -iname '*.tcl'|xargs egrep -i '&lt;#_[^ ]'</userinput>
 
-# Review the list of tcl files with no message lookups
+# Review the list of Tcl files with no message lookups
 <userinput>for tcl_file in $(find -iname '*.tcl'); do egrep -L '(&lt;#|\[_)' $tcl_file; done</userinput>
 </screen>
 
@@ -514,7 +514,7 @@ ad_return_complaint 1 [_ dotlrn.class_may_not_be_deleted $msg_subst_list]
       <listitem>
         <formalpara>
           <title>Replace human-readable text in Tcl files with temporary tags</title>
-          <para>Examine all of the tcl files in the packages for human-readable text and replace it with temporary tags.  The temporary tags in Tcl are slightly different from those in ADP.  If the first character in the temporary tag is an underscore (<computeroutput>_</computeroutput>), then the message keys will be auto-generated from the original message text.  Here is an unmodified tcl file:</para>
+          <para>Examine all of the Tcl files in the packages for human-readable text and replace it with temporary tags.  The temporary tags in Tcl are slightly different from those in ADP.  If the first character in the temporary tag is an underscore (<computeroutput>_</computeroutput>), then the message keys will be auto-generated from the original message text.  Here is an unmodified Tcl file:</para>
         </formalpara>
 <programlisting>
 set title "Messages for $a(name) in $b(label)"
@@ -538,7 +538,7 @@ set context [list [list . &lt;#_ SimPlay#&gt;] \
       <listitem>
         <formalpara>
           <title>Replace the temporary message tags in Tcl files</title>
-          <para>Repeat step 2 for tcl files.  Here is the example Tcl file after conversion:</para>
+          <para>Repeat step 2 for Tcl files.  Here is the example Tcl file after conversion:</para>
         </formalpara>
         <programlisting>
 set title [_ simulation.admin_title]
@@ -664,7 +664,7 @@ set foo_date_ansi [lc_time_system_to_conn $foo_date_ansi]</programlisting>
         message lookups in tcl, adp, and info files and the set of keys in
         the catalog file are identical.  The scripts below assume that
         message lookups in adp and info files are on the format
-        \#package_key.message_key\#, and that message lookups in tcl files
+        \#package_key.message_key\#, and that message lookups in Tcl files
         are always is done with one of the valid lookups described above. The script further assumes
         that you have perl installed and in your path.  Run the script like
         this:
@@ -882,7 +882,7 @@ the message appears.
             <para>Watch out for quoting and escaping when editing text that is also code.  For example, the original string </para>
           </formalpara>
           <programlisting>set title "Patch \"$patch_summary\" is nice."</programlisting>
-          <para>breaks if the message text retains all of the escaping that was in the tcl command:</para>
+          <para>breaks if the message text retains all of the escaping that was in the Tcl command:</para>
           <programlisting>&lt;msg&gt;Patch \&quot;$patch_summary\&quot; is nice.&lt;/msg&gt;</programlisting>
           <para>When it becomes a key, it should be:</para>
           <programlisting>&lt;msg&gt;Patch &quot;$patch_summary&quot; is nice.&lt;/msg&gt;</programlisting>

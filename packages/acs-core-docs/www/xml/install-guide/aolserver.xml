@@ -95,7 +95,7 @@ cd /usr/local/src/aolserver
       <screen>[root aolserver]# <userinput>export POSTGRES=/usr/local/pgsql; ./conf</userinput>
 Building in /usr/local/aolserver
 with the following modules:
-aolserver
+AOLserver
 nscache
 nsrewrite
 nssha1

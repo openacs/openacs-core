@@ -497,7 +497,7 @@ mv analog-5.32 /usr/share/</action></screen>
           <secondary>installation</secondary>
         </indexterm>
       <para>If you want full text search, and you are running PostgreSQL, install this module to support FTS.  Do this step after you have installed both PostgreSQL and
-      AOLserver.  You will need the tseach2 module form PostgreSQL
+      AOLserver.  You will need the tsearch2 module form PostgreSQL
       contrib. This is included with the PostgreSQL full source
       distribution. It is also available with the PostgreSQL contrib
       package provided by most distribution packages. On debian it is
@@ -783,7 +783,7 @@ tar xzf /tmp/Search-OpenFTS-tcl-0.3.2.tar.gz
 cd /usr/local/src/Search-OpenFTS-tcl-0.3.2/
 ./configure --with-aolserver-src=/usr/local/src/aolserver/aolserver --with-tcl=/usr/lib/
 make
-cd aolserver
+cd AOLserver
 make
 cp nsfts.so /usr/local/aolserver/bin
 </action></screen>
@@ -852,7 +852,7 @@ CREATE
       
       <sect2 id="enable-openfts">
         <title>Enable OpenFTS in config.tcl</title>
-        <para>If you have <link linkend="install-openfts">installed OpenFTS</link>, you can enable it for this service.  Uncomment this line from <computeroutput>config.tcl</computeroutput>.  (To uncomment a line in a tcl file, remove the <computeroutput>#</computeroutput> at the beginning of the line.)</para>
+        <para>If you have <link linkend="install-openfts">installed OpenFTS</link>, you can enable it for this service.  Uncomment this line from <computeroutput>config.tcl</computeroutput>.  (To uncomment a line in a Tcl file, remove the <computeroutput>#</computeroutput> at the beginning of the line.)</para>
         <programlisting>#ns_param   nsfts           ${bindir}/nsfts.so</programlisting>
       </sect2>
 
@@ -1008,7 +1008,7 @@ line, click
 
       <para>This AOLserver module is required if you want people to connect to your site via
           https.  These commands compile nsopenssl and install it,
-          along with a tcl helper script to handle https connections.
+          along with a Tcl helper script to handle https connections.
           You will also need ssl certificates.  Because those should
           be different for each server service, you won&#39;t need <link
           linkend="ssl-certificates">those instructions</link> until

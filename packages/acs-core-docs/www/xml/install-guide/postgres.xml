@@ -24,7 +24,7 @@
       url="https://www.postgresql.org/download">www.postgresql.org/download/</ulink>.
   </para>
 
-  <para>Larger installations might want to tune the PostgresSQL
+  <para>Larger installations might want to tune the PostgreSQL
   installation with e.g. the utility <ulink
   url="https://github.com/gregs1104/pgtune">pgtune</ulink>, which is also
   available via <userinput>apt-get install pgtune</userinput> or

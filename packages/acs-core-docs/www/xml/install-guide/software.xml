@@ -381,7 +381,7 @@
           </para></listitem>
         
         <listitem><para>
-            The patch for aolserver 3.x that makes <computeroutput>ns_uuencode</computeroutput>
+            The patch for AOLserver 3.x that makes <computeroutput>ns_uuencode</computeroutput>
             work for binary files is available at <ulink
               url="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=474259&amp;group_id=3152&amp;atid=303152">sourceforge.net</ulink>
           </para></listitem> 

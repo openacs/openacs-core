@@ -344,7 +344,7 @@ SQL&gt; <userinput>exit;</userinput></programlisting>
               <listitem id="create-service-db-user">
                 <para>PostgreSQL:</para>
                 <para>Create a user in the database matching the service
-            name.  With default PostgreSQL authentication, a system user connecting locally automatically authenticates as the postgres user of the same name, if one exists.  We currently use postgres "super-users" for everything, which means that anyone with access to any of the openacs system accounts on a machine has full access to all postgresql databases on that machine.</para>
+            name.  With default PostgreSQL authentication, a system user connecting locally automatically authenticates as the postgres user of the same name, if one exists.  We currently use postgres "super-users" for everything, which means that anyone with access to any of the OpenACS system accounts on a machine has full access to all postgresql databases on that machine.</para>
                 <screen>[root root]# <userinput>su - postgres</userinput>
 [postgres pgsql]$ <userinput>createuser -a -d <replaceable>$OPENACS_SERVICE_NAME</replaceable></userinput>
 CREATE USER
@@ -523,7 +523,7 @@ nsd: no process killed
 	  to make sure the service is starting without any
 	  problems. The most common errors here are trying to start a
 	  port 80 server while not root, failing to connect because of
-	  a firewall, and aolserver failing to start due to
+	  a firewall, and AOLserver failing to start due to
 	  permissions errors or missing files.  If you need to make
 	  changes, don&#39;t forget to kill any running servers with
 	  <userinput>killall nsd</userinput>.

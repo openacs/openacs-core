@@ -31,7 +31,7 @@ cvs2cl -F <replaceable>oacs-5-0</replaceable> --delta <replaceable>openacs-5-0-1
           <title>Update Version Numbers</title>
           <para>The version numbers in the documentation and in the packages must be updated.  This should only happen after a release candidate is approved.</para>
         </formalpara>
-        <remark>.LRN: this must be repeated for .LRN modules (dotlrn-core in the dotlrn cvs tree) and for any modified modules in the .LRN prerequisites (dotlrn-prereq in openacs cvs tree).  My current working model is that I bulk-update .LRN and OpenACS core but that I don&#39;t touch dotlrn-prereq modules - I just use the most recent release and it&#39;s up to individual package developers to tag and <link linkend="releasing-package">release those packages</link> when they change.  This model is already broken because following it means that dotlrn-prereqs don&#39;t get new translations.</remark>
+        <remark>.LRN: this must be repeated for .LRN modules (dotlrn-core in the dotlrn cvs tree) and for any modified modules in the .LRN prerequisites (dotlrn-prereq in OpenACS cvs tree).  My current working model is that I bulk-update .LRN and OpenACS core but that I don&#39;t touch dotlrn-prereq modules - I just use the most recent release and it&#39;s up to individual package developers to tag and <link linkend="releasing-package">release those packages</link> when they change.  This model is already broken because following it means that dotlrn-prereqs don&#39;t get new translations.</remark>
         <orderedlist>
           <listitem>
             <para>Update /var/lib/aolserver/$OPENACS_SERVICE_NAME/packages/acs-core-docs/www/xml/variables.ent with the new version number.
@@ -159,7 +159,7 @@ tar cz -f <replaceable>openacs-5.0.0a1.tar.gz</replaceable> openacs-<replaceable
                 <para>Go to a new working space and export the tagged
                 files. (was getting errors here trying to use -d, so
                 gave up and just moved things from openacs-4 to
-                openacs at the end)</para>
+                OpenACS at the end)</para>
             <screen><action>mkdir /var/tmp/dotlrn-tarball
 cd /var/tmp/dotlrn-tarball
 cvs -d /cvsroot export -r <replaceable>openacs-5-0-0a1</replaceable> acs-core

@@ -287,7 +287,7 @@ common operation is querying the permissions database. Several kinds of
 questions are commonly asked: First, and most commonly, &quot;Can this party
 perform this method on this object?&quot; Two Tcl functions are provided to
 answer this - one which returns a boolean, the other of which results in an
-error page. These tcl functions directly access the
+error page. These Tcl functions directly access the
 <computeroutput>acs_object_party_method_map</computeroutput>.</para>
 
 <para>The second most commonly asked question occurs when a list of objects is
@@ -360,7 +360,7 @@ procedure revoke_permission (
 
 <para><emphasis role="strong">Tcl Procedures</emphasis></para>
 
-<para>Two tcl procedures provide a simple call for the query, &quot;Can this
+<para>Two Tcl procedures provide a simple call for the query, &quot;Can this
 user perform this method on this object?&quot; One returns true or false, the
 other presents an error page.</para>
 

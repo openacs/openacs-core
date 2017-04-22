@@ -554,7 +554,7 @@
       </para></listitem>
       <listitem><para>
         list critical decisions (perhaps as questions) that need to
-        be made before starting: which OS, which DB, which aolserver
+        be made before starting: which OS, which DB, which AOLserver
         version, system name, dependencies et cetera. Maybe summarize
         options as tables or decision-trees. For example, "As you
         proceed throughout the installation, you will be acting on
@@ -610,7 +610,7 @@
       </listitem>
       <listitem><para>
         Provide working examples that highlight the various
-        subsystems, tcl environment, OpenACS protocols, aolserver
+        subsystems, Tcl environment, OpenACS protocols, AOLserver
         template and ns_* commands, OpenACS templating, sql queries,
         db triggers, scheduling protocols, how to use the page contract,
         how to get the accessing user_id etc

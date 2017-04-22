@@ -181,7 +181,7 @@ done
         In this problem set you will familiarise yourself with the templating system in openacs. This will be achieved through customising an existing edit-this-page application template.
       </para>
       <para>
-        Before proceeding, it is strongly advised to read the templating documentation on your openacs installation (http://localhost:8000/doc/acs-templating). The documentation lists the special tags available for ADP files.
+        Before proceeding, it is strongly advised to read the templating documentation on your OpenACS installation (http://localhost:8000/doc/acs-templating). The documentation lists the special tags available for ADP files.
       </para>
     </sect2>
     
@@ -349,7 +349,7 @@ done
   { return_url "[ad_conn url]?[ad_conn query]"} 
  }]
  </programlisting>
-     <para>This calls a global, public tcl function that the
+     <para>This calls a global, public Tcl function that the
      general_comments package registered, to get its url. You then
      embed in that url the id of the note and its title, and set the
      return_url to the current url so that the user can return after
@@ -1054,7 +1054,7 @@ drop function inline_0();
             -notif_text $new_content
     </programlisting>
 
-    <para>This code is placed in the tcl procedure that creates blog
+    <para>This code is placed in the Tcl procedure that creates blog
     entries, right after the entry gets created in the code. The
     <computeroutput>$blog(package_id)</computeroutput> is the OpenACS
     object_id of the Weblogger instance to which the entry has been
@@ -1659,7 +1659,7 @@ ns_param pools_legacy [list legacy]</programlisting>
           <code>db_</code> API calls.  For
           example, suppose there is a table called "foo" in the legacy
           system, with a field "bar".  List "bar" for all records with
-          this tcl file:</para>
+          this Tcl file:</para>
         <programlisting>db_foreach -dbn legacy get_bar_query {
   select bar from foo
   limit 10
@@ -1683,7 +1683,7 @@ ns_param pools_legacy [list legacy]</programlisting>
       Builder HTML forms.</para></listitem>
       <listitem><para>How to make your package searchable with OpenFTS/Oracle</para></listitem>
       <listitem><para>How to prepare pagelets for inclusion in other pages</para></listitem>
-      <listitem><para>How and when to put procedures in a tcl procedure library</para></listitem>
+      <listitem><para>How and when to put procedures in a Tcl procedure library</para></listitem>
       <listitem><para>More on ad_form - data validation, other stuff.
       (plan to draw from Jon Griffin&#39;s doc)</para></listitem>
       <listitem><para>partialquery in xql</para></listitem>

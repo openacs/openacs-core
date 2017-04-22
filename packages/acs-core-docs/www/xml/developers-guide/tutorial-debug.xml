@@ -31,7 +31,7 @@
 </para>
     </formalpara>
     <para>Hint: "Parse error near *" usually means that an xql file
-      wasn&#39;t recognized, because the tcl file is choking on the *SQL*
+      wasn&#39;t recognized, because the Tcl file is choking on the *SQL*
       placeholder that it falls back on.</para>
     <formalpara>
       <title>Watching the server log</title>

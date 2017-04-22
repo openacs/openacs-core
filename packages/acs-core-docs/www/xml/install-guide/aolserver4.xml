@@ -16,7 +16,7 @@
     <listitem>
       <formalpara>
         <title>Check suitability of previously installed TCL</title>
-        <para>Start tcl (type <userinput>tclsh</userinput> or find it using <userinput>which tclsh</userinput>).
+        <para>Start Tcl (type <userinput>tclsh</userinput> or find it using <userinput>which tclsh</userinput>).
         </para>
       </formalpara>
       <screen>[root root]% <userinput>info exists tcl_platform(threaded)</userinput>
@@ -29,8 +29,8 @@ info exists tcl_platform(threaded)
 info patchlevel
 </action></screen>
       <para>If the first command returns anything other than <computeroutput>1</computeroutput>, 
-        then tcl is not threaded. If tcl is threaded and the version is 8.4 or higher, then installing
-        tcl from source is optional.
+        then Tcl is not threaded. If Tcl is threaded and the version is 8.4 or higher, then installing
+        Tcl from source is optional.
       </para>
       <formalpara id="tcl-download">
         <title>Retrieve Tcl 8.4 (or higher)</title>
@@ -41,7 +41,7 @@ info patchlevel
       to add tcl8.4 to their sources.list file as described on the
       <link linkend="postgres">Install Postgres</link> page). You&#39;ll
       have to use /usr/lib/tcl8.4/ instead of /usr/local/lib when you
-      try to find the tcl libraries, however.</para>
+      try to find the Tcl libraries, however.</para>
 
       <para>If you have not installed Tcl already, download the latest Tcl version from Sourceforge</para>
       <para><emphasis role="bold">Debian:</emphasis>
@@ -70,7 +70,7 @@ make install</action>
     <listitem id="aolserver4-download">
       <formalpara>
         <title>Retrieve AOLserver</title>
-        <para>Download the aolserver from CVS.</para>
+        <para>Download the AOLserver from CVS.</para>
       </formalpara>
       <screen>[root root]# <userinput>cd /usr/local/src</userinput>
 [root src]# <userinput>mkdir aolserver40r10</userinput>
@@ -88,7 +88,7 @@ make install</action>
 <action>cd /usr/local/src
 mkdir aolserver40r10
 cd aolserver40r10
-cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co -r aolserver_v40_r10 aolserver
+cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co -r aolserver_v40_r10 AOLserver
 cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nscache
 cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nspostgres
 cvs -z3 -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aolserver co nssha1

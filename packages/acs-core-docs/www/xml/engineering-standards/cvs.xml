@@ -53,7 +53,7 @@
       <para>
         With this setup, you will be asked for your password with
         each cvs command.  To avoid this, set up ssh certificate
-        authentication for your openacs account.  (<ulink
+        authentication for your OpenACS account.  (<ulink
         url="http://www.uberdose.com/kbase/ssh-automatic-login/">More
         information</ulink>)
       </para>
@@ -150,7 +150,7 @@ cvs up -d <replaceable>packagename</replaceable></action></screen>
     <sect3>
       <title>Checkout .LRN</title>
       <para>
-        .LRN consists of a given version openacs core, plus a set of
+        .LRN consists of a given version OpenACS core, plus a set of
         packages. These are collectively packages together to form a
         distribution of .LRN. F .LRN 2.0.0 sits on top of OpenACS 5.0.0.
         .LRN also uses an OpenACS install.xml file during installation;
@@ -179,7 +179,7 @@ mv dotlrn/install.xml ..</action></screen>
     <sect3>
       <title>Modules</title>
       <para>
-        All OpenACS code resides within a single CVS module, <computeroutput>openacs-4</computeroutput>.  (The openacs-4 directory contains code for all versions of OpenACS 4 and later, and .LRN 1 and later.)   Checking out this module retrieves all openacs code of any type.  For convenience, subsets of <computeroutput>openacs-4</computeroutput> are repackaged as smaller modules.</para>
+        All OpenACS code resides within a single CVS module, <computeroutput>openacs-4</computeroutput>.  (The openacs-4 directory contains code for all versions of OpenACS 4 and later, and .LRN 1 and later.)   Checking out this module retrieves all OpenACS code of any type.  For convenience, subsets of <computeroutput>openacs-4</computeroutput> are repackaged as smaller modules.</para>
         
         <para>
           <computeroutput>acs-core</computeroutput> contains only critical common
@@ -277,7 +277,7 @@ ref-timezones search</programlisting>
             added to core packages on release branches.  For all other
             packages, release branches are the recommended location
             for development.  For example, if you are working on
-            calendar, which is compatible with openacs 5.0 but not
+            calendar, which is compatible with OpenACS 5.0 but not
                 5.1, work on the oacs-5-0 branch.</para>
               </listitem>
         <listitem>

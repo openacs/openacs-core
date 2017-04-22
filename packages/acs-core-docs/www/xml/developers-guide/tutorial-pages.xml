@@ -13,7 +13,7 @@
   
   <sect2>
     <title>Install some API</title>
-    <para>As a workaround for missing content-repository functionality, copy a provided file into the directory for tcl files:</para>
+    <para>As a workaround for missing content-repository functionality, copy a provided file into the directory for Tcl files:</para>
     <screen>
     <action>cp /var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/packages/acs-core-docs/www/files/tutorial/note-procs.tcl /var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/packages/myfirstpackage/tcl/</action></screen>
     <para>To make this file take effect, go to the <ulink url="/acs-admin/apm">APM</ulink> and choose "Reload changed" for "MyFirstPackage".</para>
@@ -42,7 +42,7 @@
       and <computeroutput>-oracle.xql</computeroutput> files contains
       database-specific SQL.  The default page in any directory is
       <computeroutput>index</computeroutput>, so we&#39;ll build that
-      first, starting with the tcl file:</para>
+      first, starting with the Tcl file:</para>
       <screen>[$OPENACS_SERVICE_NAME postgresql]$<userinput> cd /var/lib/aolserver/<replaceable>$OPENACS_SERVICE_NAME</replaceable>/packages/myfirstpackages/www</userinput>
 [$OPENACS_SERVICE_NAME www]$ <userinput>emacs index.tcl</userinput></screen>
       <para>Paste this into the file.</para>      
@@ -65,7 +65,7 @@
 <screen>[$OPENACS_SERVICE_NAME www]$ <userinput>emacs note-edit.adp</userinput></screen>
       <programlisting><xi:include href="../../files/tutorial/note-edit.adp" xi:parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"><xi:fallback>example missing</xi:fallback></xi:include></programlisting>
      <para>And the delete page.  Since it has no UI, there is only a
-     tcl page, and no adp page.</para>
+     Tcl page, and no adp page.</para>
 <screen>[$OPENACS_SERVICE_NAME www]$ <userinput>emacs note-delete.tcl</userinput></screen>
       <programlisting><xi:include href="../../files/tutorial/note-delete.tcl" xi:parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"><xi:fallback>example missing</xi:fallback></xi:include></programlisting>
     </sect2>
