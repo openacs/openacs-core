@@ -88,7 +88,7 @@ ad_proc -private ad_canonical_server_p {} {
 
     we're using IP:port to uniquely identify the canonical server, since
     hostname or IP does not always uniquely identify an instance of
-    aolserver (for instance, if we have the aolservers sitting behind a
+    AOLserver (for instance, if we have the aolservers sitting behind a
     load balancer).
 } {
     set canonical_server [parameter::get -package_id [ad_acs_kernel_id] -parameter CanonicalServer]

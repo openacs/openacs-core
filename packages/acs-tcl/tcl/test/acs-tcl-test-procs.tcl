@@ -522,15 +522,15 @@ aa_register_case -cats {api db smoke} db__transaction {
     # verify the on_error clause is called
     set error_called 0
     catch {db_transaction { set foo } on_error {set error_called 1}} errMsg
-    aa_equals "error clause invoked on tcl error" \
+    aa_equals "error clause invoked on Tcl error" \
         $error_called 1
 
-    # Check that the tcl error propigates up from the code block
+    # Check that the Tcl error propigates up from the code block
     set error_p [catch {db_transaction { error "BAD CODE"}} errMsg]
     aa_equals "Tcl error propigates to errMsg from code block" \
         $errMsg "Transaction aborted: BAD CODE"
 
-    # Check that the tcl error propigates up from the on_error block
+    # Check that the Tcl error propigates up from the on_error block
     set error_p [catch {db_transaction {set foo} on_error { error "BAD CODE"}} errMsg]
     aa_equals "Tcl error propigates to errMsg from on_error block" \
         $errMsg "BAD CODE"

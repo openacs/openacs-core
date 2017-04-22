@@ -305,7 +305,7 @@ ad_proc -public template::util::date::get_property { what date } {
       # DRB: We need to differentiate between date and timestamp, for PG, at least, 	 
       # and since Oracle supports to_timestamp() we'll just do it for both DBs. 	 
       # DEDS: revert this first as to_timestamp is only for
-      # oracle9i. no clear announcement that openacs has dropped
+      # oracle9i. no clear announcement that OpenACS has dropped
       # support for 8i
       if { [llength $date] <= 3 || ([db_type] eq "oracle" && [string match "8.*" [db_version]]) } {
           return "to_date('$value', '$format')"

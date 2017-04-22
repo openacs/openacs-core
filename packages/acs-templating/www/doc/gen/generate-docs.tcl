@@ -12,7 +12,7 @@ if {![acs_user::site_wide_admin_p]} {
 
 # @private write_to_file
 # this procedure is only used here; inadvertently
-# replicated some other proc, don't move to tcl library
+# replicated some other proc, don't move to Tcl library
 
 proc ::template::util::write_to_file { file_name output} {
 

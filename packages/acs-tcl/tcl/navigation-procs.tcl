@@ -310,7 +310,7 @@ ad_proc -public util_current_location_node_id { } {
 proc ad_no_uplevel_patterns {} {
     set regexp_patterns [list]
     lappend regexp_patterns "*/pvt/home.tcl"
-    # tcl files in the root directory
+    # Tcl files in the root directory
     lappend regexp_patterns "^/\[^/\]*\.tcl\$"
     lappend regexp_patterns "/admin*"
 }

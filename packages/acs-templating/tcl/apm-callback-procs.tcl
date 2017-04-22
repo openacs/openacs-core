@@ -86,7 +86,7 @@ ad_proc -private template::apm::after_upgrade {
             5.3.0d1 5.3.0d2 {
                 db_transaction {
                     # mount acs-templating so we can address
-                    # executable tcl scripts under www with a url
+                    # executable Tcl scripts under www with a url
                     set package_id [apm_package_id_from_key acs-templating]
                     array set main_subsite \
                         [site_node::get_from_url \

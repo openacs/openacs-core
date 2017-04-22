@@ -1,5 +1,5 @@
 ad_page_contract {
-    A form to help semi-automate the conversion of tcl and adp files from using literal
+    A form to help semi-automate the conversion of Tcl and adp files from using literal
     text strings to using the message catalog.
 
     @author Peter Marklund (peter@collaboraid.biz)
@@ -19,7 +19,7 @@ db_1row package_version_info {
     where version_id = :version_id
 }
 
-set page_title "Message catalog lookups for adp and tcl files of $pretty_name $version_name"
+set page_title "Message catalog lookups for adp and Tcl files of $pretty_name $version_name"
 set context_bar [ad_context_bar $page_title]
 
 set file_option_list [list]
@@ -151,7 +151,7 @@ switch -- $file_type {
 	set href2 [export_vars -base version-i18n -override {{file_type sql}} {version_id pre_select_files_p show_status_p only_text_p}]
         set file_type_filter [subst {
 	    <b>Show adp files</b>: $text_only_filter |
-	    <a href="[ns_quotehtml $href1]">Show tcl files</a> |
+	    <a href="[ns_quotehtml $href1]">Show Tcl files</a> |
 	    <a href="[ns_quotehtml $href2]">Show sql files</a>
 	}]
     }
@@ -160,7 +160,7 @@ switch -- $file_type {
 	set href2 [export_vars -base version-i18n -override {{file_type sql}} {version_id pre_select_files_p show_status_p only_text_p}]
         set file_type_filter [subst {
 	    <a href="[ns_quotehtml $href1]">Show adp files</a> |
-	    <b>Show tcl files</b> |
+	    <b>Show Tcl files</b> |
 	    <a href="[ns_quotehtml $href2]">Show sql files</a>
 	}]
     }
@@ -170,7 +170,7 @@ switch -- $file_type {
 	
         set file_type_filter [subst {
 	    <a href="[ns_quotehtml $href1]">Show adp files</a> |
-	    <a href="[ns_quotehtml $href2]">Show tcl files</a> |
+	    <a href="[ns_quotehtml $href2]">Show Tcl files</a> |
 	    <b>Show sql files</b>
 	}]
     }

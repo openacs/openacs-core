@@ -1,6 +1,6 @@
 # packages/acs-tcl/tcl/http-auth-procs.tcl
 ad_library {
-   Use openacs user logins for HTTP authentication
+   Use OpenACS user logins for HTTP authentication
 }
 
 namespace eval http_auth {}
@@ -46,7 +46,7 @@ ad_proc http_auth::set_user_id {} {
 	    ns_returnunauthorized
 	    return 0
 	}
-        ns_log debug "\nTDAV: auth_check openacs 5.0 user_id= $auth(user_id)"
+        ns_log debug "\nTDAV: auth_check OpenACS 5.0 user_id= $auth(user_id)"
         ad_conn -set user_id $auth(user_id)
 
     } else {
@@ -64,7 +64,7 @@ ad_proc http_auth::register_filter {
 
     @param url_pattern Follows ns_register_filter rules for defining the
     pattern to match.
-    @param proc Name of tcl procedure to call to check permissions. Use this to figure out what object the URL pattern matches to. This proc should accept two named parameters user_id and url. Should return a valid Tcl true or false value. If empty the site_node matching the URL will be checked.
+    @param proc Name of Tcl procedure to call to check permissions. Use this to figure out what object the URL pattern matches to. This proc should accept two named parameters user_id and url. Should return a valid Tcl true or false value. If empty the site_node matching the URL will be checked.
     
     @return Tcl true or false 
 
@@ -84,7 +84,7 @@ ad_proc http_auth::authorize {
     args
     why
 } {
-    Check HTTP authentication for an openacs user account and
+    Check HTTP authentication for an OpenACS user account and
     call the registered procedure to handle the URL to check
     permissions
 } {

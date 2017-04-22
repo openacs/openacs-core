@@ -796,7 +796,7 @@ ad_proc -private db_exec_plpgsql { db statement_name pre_sql fname } {
 
     set function_name "__exec_${unique_id}_${fname}"
 
-    # insert tcl variable values (Openacs - Dan)
+    # insert Tcl variable values (OpenACS - Dan)
     if {$sql ne $pre_sql } {
         set sql [uplevel 2 [list subst -nobackslashes $sql]]
     }
@@ -895,7 +895,7 @@ ad_proc -private db_bind_var_quoted_p { sql bind_start_idx bind_end_idx} {
 ad_proc -private db_bind_var_substitution { sql { bind "" } } {
 
     This proc emulates the bind variable substitution in the postgresql driver.
-    Since this is a temporary hack, we do it in tcl instead of hacking up the
+    Since this is a temporary hack, we do it in Tcl instead of hacking up the
     driver to support plsql calls.  This is only used for the db_exec_plpgsql
     function.
 
@@ -1016,7 +1016,7 @@ ad_proc -private db_exec { type db statement_name pre_sql {ulevel 2} args } {
 
     set sql [db_qd_replace_sql $statement_name $pre_sql]
 
-    # insert tcl variable values (Openacs - Dan)
+    # insert Tcl variable values (OpenACS - Dan)
     if {$sql ne $pre_sql } {
         set sql [uplevel $ulevel [list subst -nobackslashes $sql]]
     }
@@ -1959,7 +1959,7 @@ ad_proc -public db_dml {{-dbn ""} statement_name sql args } {
     } elseif {$command eq "blob_dml_file"} {
         # PostgreSQL:
         db_with_handle -dbn $dbn db {
-            # another ugly hack to avoid munging tcl files.
+            # another ugly hack to avoid munging Tcl files.
             # __lob_id needs to be set inside of a query (.xql) file for this
             # to work.  Say for example that you need to create a lob. In
             # Oracle, you would do something like:
@@ -3128,7 +3128,7 @@ ad_proc -public db_blob_get {{-dbn ""} statement_name sql args } {
             set full_statement_name [db_qd_get_fullname $statement_name]
             set sql [db_qd_replace_sql $full_statement_name $pre_sql]
 
-            # insert tcl variable values (borrowed from Dan W - olah)
+            # insert Tcl variable values (borrowed from Dan W - olah)
             if {$sql ne $pre_sql } {
                 set sql [uplevel 2 [list subst -nobackslashes $sql]]
             }
@@ -3209,7 +3209,7 @@ ad_proc -private db_exec_lob_oracle {
 
     set sql [db_qd_replace_sql $statement_name $pre_sql]
 
-    # insert tcl variable values (Openacs - Dan)
+    # insert Tcl variable values (OpenACS - Dan)
     if {$sql ne $pre_sql } {
         set sql [uplevel $ulevel [list subst -nobackslashes $sql]]
     }
@@ -3333,7 +3333,7 @@ ad_proc -private db_exec_lob_postgresql {
     # Query Dispatcher (OpenACS - ben)
     set sql [db_qd_replace_sql $statement_name $pre_sql]
 
-    # insert tcl variable values (Openacs - Dan)
+    # insert Tcl variable values (OpenACS - Dan)
     if {$sql ne $pre_sql } {
         set sql [uplevel $ulevel [list subst -nobackslashes $sql]]
     }

@@ -8,7 +8,7 @@ if { [info exists problems] } {
 
   request error {*}$problems
 
-  # Note that you must explicitly return from the tcl script following an error.
+  # Note that you must explicitly return from the Tcl script following an error.
   return
 }
 

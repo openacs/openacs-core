@@ -21,7 +21,7 @@ ad_proc -public install::xml::action::text { node } {
 }
 
 ad_proc -private ::install::xml::action::source { node } {
-    Source an install.xml file, sql file or tcl script during execution of 
+    Source an install.xml file, sql file or Tcl script during execution of 
     the current install.xml.
 
     If no type attribute is specified then this tag will attempt to guess 

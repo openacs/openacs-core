@@ -129,7 +129,7 @@ proc _http_read {timeout sock length} {
 
 } ;# _http_read
 
-# tcl page support
+# Tcl page support
 
 proc ns_putscript {conn ignored} {
 	ns_returnbadrequest $conn "Cannot PUT a script file"

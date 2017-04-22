@@ -422,7 +422,7 @@ ad_proc -private get_cached_result { name type } {
 
     @param type Type of query
 
-    @return 1 if result was successfuly retrieved, 0 if failed
+    @return 1 if result was successfully retrieved, 0 if failed
 } {
 
   upvar opts opts
@@ -1118,7 +1118,7 @@ ad_proc -public cache { command cache_key args } {
 	    set _ [lindex $args 0]
       } else {
 	#
-	# Use a pair for aolserver
+	# Use a pair for AOLserver
 	#
 	ns_cache set template_cache $cache_key [list $timeout [lindex $args 0]]
       }

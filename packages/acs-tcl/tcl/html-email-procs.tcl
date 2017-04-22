@@ -8,7 +8,7 @@ ad_library {
     @cvs-id $Id$
 }
 
-# switched to using tcllib, its required for openacs >= 5.3
+# switched to using tcllib, its required for OpenACS >= 5.3
 package require mime
 
 ad_proc build_mime_message {
@@ -80,7 +80,7 @@ ad_proc build_mime_message {
     # line, which is the last boundary, because acs_mail_lite::send seems to be
     # adding another one on for us.
 
-    ## JCD: not anymore.  maybe an aolserver 3.3 bug?  removing the clipping.
+    ## JCD: not anymore.  maybe an AOLserver 3.3 bug?  removing the clipping.
     ns_set put $message_data body [join [lrange $lines 4 end] \n]
 
     return $message_data

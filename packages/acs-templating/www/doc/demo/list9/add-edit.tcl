@@ -106,7 +106,7 @@ ad_form -form {
 
 } -after_submit {
 
-    # We've successfuly processed the submission.
+    # We've successfully processed the submission.
     # Clear the pagination cache.
 
     cache flush notes*

@@ -47,7 +47,7 @@ ad_proc -private ad_user_class_description { set_id } {
     set clauses [list]
     set pretty_description ""
 
-    # turn all the parameters in the ns_set into tcl vars
+    # turn all the parameters in the ns_set into Tcl vars
     ad_ns_set_to_tcl_vars -duplicates fail $set_id 
     
     # All the SQL statements are named after the criteria name (e.g. category_id)

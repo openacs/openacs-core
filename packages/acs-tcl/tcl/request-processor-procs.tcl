@@ -565,7 +565,7 @@ ad_proc -private rp_filter { why } {
     sec_handler_reset
     ad_conn -reset
     if {[ns_info name] eq "NaviServer"} {
-        # ns_conn id the internal counter by aolserver 4.5 and
+        # ns_conn id the internal counter by AOLserver 4.5 and
         # NaviServer. The semantics of the counter were different in
         # Aolserver 4.0, when we require at least AolServer 4.5 the
         # server test could go away.
@@ -1628,7 +1628,7 @@ ad_proc -private ad_http_cache_control { } {
     It should be called only when the method to return the data to the
     client is going to be ns_return. In other cases, e.g. ns_returnfile,
     one can assume that the returned content is not dynamic and can in
-    fact be cached. Besides that, aolserver implements its own handling
+    fact be cached. Besides that, AOLserver implements its own handling
     of Last-Modified headers with ns_returnfile. Also it should be
     called as late as possible - shortly before ns_return, so that
     other code has the chance to set no_cache_control_p to 1 before

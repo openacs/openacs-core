@@ -1537,7 +1537,7 @@ ad_proc -private template::list::prepare_elements {
         if {!$element_properties(hide_p)} {
             if {$element_properties(from_clause_eval) ne ""} {
                 set evaluated_from_clause [uplevel $list_properties(ulevel) $element_properties($property)]
-                if {[lseach $list_properties(from_clauses) $evaluated_from_clause] < 0} {
+                if {[lsearch $list_properties(from_clauses) $evaluated_from_clause] < 0} {
                     lappend list_properties(from_clauses) $evaluated_from_clause
                 }
             } elseif {$element_properties(from_clause) ne "" \

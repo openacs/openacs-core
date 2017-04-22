@@ -766,7 +766,7 @@ ad_proc -private apm_package_install {
     containing a human-readable (English) status message.
 
     @param spec_file_path The path to an XML .info file relative to
-    @return The version_id if successfuly installed, 0 otherwise.
+    @return The version_id if successfully installed, 0 otherwise.
 } {
     set version_id 0
     array set version [apm_read_package_info_file $spec_file_path]

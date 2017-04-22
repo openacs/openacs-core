@@ -108,7 +108,7 @@ if { [form is_valid add_entry] } {
       )"
 
     # can't seem to get orable to bind array variables birthday.day, birthday.month and birthday.year
-    # okay, turns out oracle doesn't support arrays, will have to do this in tcl first
+    # okay, turns out oracle doesn't support arrays, will have to do this in Tcl first
  
     template::forward form-sample.acs
 }

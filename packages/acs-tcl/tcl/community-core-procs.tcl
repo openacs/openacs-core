@@ -154,7 +154,7 @@ ad_proc -public person::delete {
 ad_proc -public person::get {
     {-person_id:required} 
 } {
-    get info for a person as a tcl array in list form
+    get info for a person as a Tcl array in list form
 } {
     db_1row get_person {}
     

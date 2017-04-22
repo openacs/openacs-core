@@ -24,8 +24,8 @@ ad_proc -public tdom::get_node_object {
     parent_node_object
     args
 } {
-    Returns a tdom object to the args given
-    If the tdom object doesn't exist or the value is null, return null
+    Returns a tDOM object to the args given
+    If the tDOM object doesn't exist or the value is null, return null
 
     <pre>
     Example -----------------------------------------------------
@@ -56,7 +56,7 @@ ad_proc -public tdom::get_node_object {
 ad_proc -public tdom::get_parent_node_object {
     child_node_object
 } {
-    Returns a tdom object for the parent node of the child node object passed in
+    Returns a tDOM object for the parent node of the child node object passed in
 } {
     set parent_node_object ""
     catch {set parent_node_object [$child_node_object parentNode]}

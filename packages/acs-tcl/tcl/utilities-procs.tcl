@@ -1835,25 +1835,25 @@ if {[ns_info name] eq "NaviServer"} {
     
     ad_proc -public ad_urlencode_path { string } {
         Encode provided string with url-encoding for path segments; 
-        same as ad_urlencode, since aolserver does not support this difference
+        same as ad_urlencode, since AOLserver does not support this difference
     } {
         return [ad_urlencode $string]
     }
     ad_proc -public ad_urldecode_path { string } {
         Decode provided string with url-encoding for path segments; 
-        same as ns_urldecode, since aolserver does not support this difference
+        same as ns_urldecode, since AOLserver does not support this difference
     } {
         return [ns_urldecode $string]
     }
     ad_proc -public ad_urlencode_query { string } {
         Encode provided string with url-encodingfor path segments; 
-        same as ad_urlencode, since aolserver does not support this difference
+        same as ad_urlencode, since AOLserver does not support this difference
     } {
         return [ad_urlencode $string]
     }
     ad_proc -public ad_urldecode_query { string } {
         Decode provided string with url-encoding for path segments; 
-        same as ns_urldecode, since aolserver does not support this difference
+        same as ns_urldecode, since AOLserver does not support this difference
     } {
         return [ns_urldecode $string]
     }    
@@ -3886,7 +3886,7 @@ ad_proc -public -deprecated ad_block_sql_urls {
     #
     # If one of these phrases is found, we construct a test SQL query
     # that incorporates the variable into its WHERE clause and ask
-    # the database to parse it. If the query does parse successfuly,
+    # the database to parse it. If the query does parse successfully,
     # then we know that the suspicious user input would result in a
     # executing SQL that we didn't write, so we abort processing this
     # HTTP request.

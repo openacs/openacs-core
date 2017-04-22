@@ -313,7 +313,7 @@ ad_proc -public apm_file_watchable_p { path } {
     Given the path of a file determine if it is
     appropriate to be watched for reload. The file should
     be db compatible with the system and be of right 
-    type (for example contain tcl procs or xql queries).
+    type (for example contain Tcl procs or xql queries).
 
     @param The path of the file relative to server root
 

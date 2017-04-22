@@ -122,7 +122,7 @@ ad_proc -private sec_handler {} {
         set session_last_renew_time [lindex $cookie_data 3]
         if {![string is integer -strict $session_last_renew_time]} {
             # This only happens if the session cookie is old style
-            # previous to openacs 5.7 and does not have session review time
+            # previous to OpenACS 5.7 and does not have session review time
             # embedded.
             # Assume cookie expired and force login handler
             set session_last_renew_time 0
@@ -1817,7 +1817,7 @@ if {[info commands ns_driver] ne ""} {
         set sdriver [security::driver]
 
         # nsopenssl 3 has variable locations for the secure
-        # port, openacs standardized at:
+        # port, OpenACS standardized at:
         
         if { $sdriver eq "nsopenssl" } {
             set port [ns_config -int "ns/server/[ns_info server]/module/$sdriver/ssldriver/users" port 443]

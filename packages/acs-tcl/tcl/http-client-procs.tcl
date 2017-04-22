@@ -233,7 +233,7 @@ ad_proc -private util::http::native_https_api_not_cached {
 } {
     Obtains the right https native API
 } {
-    # Since naviserver 4.99.12 ns_http handles also https
+    # Since NaviServer 4.99.12 ns_http handles also https
     if {[apm_version_names_compare \
              [ns_info patchlevel] "4.99.12"] >= 0} {
         return [info commands ns_http]
@@ -1701,7 +1701,7 @@ ad_proc -private util::http::curl::request {
 
     # Unfortunately, as we are interacting with a shell, there is no
     # way to escape content easily and safely. Even when body is
-    # passed as a tcl variable, we just write its content to a file
+    # passed as a Tcl variable, we just write its content to a file
     # and let it be read by curl.
     set create_body_file_p [expr {$body_file eq ""}]
     if {$create_body_file_p} {
@@ -2152,7 +2152,7 @@ ad_proc -deprecated -public util_http_file_upload { -file -data -binary:boolean 
     <li><tt>array</tt> (list of key value pairs like what [array get] returns)
     <li><tt>formvars</tt> (list of url encoded formvars, i.e. foo=bar&x=1)
     <li><tt>ns_set</tt> (an ns_set containing key/value pairs)
-    <li><tt>vars</tt> (a list of tcl vars to grab from the calling environment)
+    <li><tt>vars</tt> (a list of Tcl vars to grab from the calling environment)
     </ul>
 
     <p>

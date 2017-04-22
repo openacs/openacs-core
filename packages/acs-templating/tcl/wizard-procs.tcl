@@ -68,7 +68,7 @@ ad_proc -public template::wizard::create { args } {
     same as your current wizard file.  Has no effect for subwizards.</li>
     <li>name - use to distinguish between the different wizards, since you can
     have 1 or more subwizard. name must be no spaces, alpanumeric similar
-    to normal tcl variable naming convention</li>
+    to normal Tcl variable naming convention</li>
     <li>params - are used to keep values that you would like to pass on to 
     the other steps</li>
     <li>steps - are use to define what includes to use for each step of the
@@ -131,8 +131,8 @@ ad_proc -public template::wizard::get_param { name } {
     get the current value of the param which was set by "template::wizard set_param",
     while ad_page_contract will not pick that up since it will get what is the request
     http var value.  This is because "template::wizard get_param" gets the value
-    from the tcl var while ad_page_contract gets the value from the http var.
-    So while processing in tcl that value may change.
+    from the Tcl var while ad_page_contract gets the value from the http var.
+    So while processing in Tcl that value may change.
     </p>
 
     @see template::wizard
