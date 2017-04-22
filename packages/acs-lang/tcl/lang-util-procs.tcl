@@ -132,7 +132,7 @@ ad_proc lang::util::replace_temporary_tags_with_lookups {
     file per default) of the package that the files belong to, the database 
     is not accessed in any way.
 
-    @param file_list         A list of paths to adp or tcl files to do replacements in. The
+    @param file_list         A list of paths to adp or Tcl files to do replacements in. The
                              paths should be relative to $::acs::rootdir. All files must
                              belong to the same package.
 

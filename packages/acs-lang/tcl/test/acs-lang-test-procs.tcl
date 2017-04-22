@@ -474,8 +474,8 @@ aa_register_case \
 	lang::util::get_temporary_tags_indices
     } util__replace_temporary_tags_with_lookups {
 
-    A test tcl file and catalog file are created. The temporary tags in the
-    tcl file are replaced with message lookups and keys and messages are appended
+    A test Tcl file and catalog file are created. The temporary tags in the
+    Tcl file are replaced with message lookups and keys and messages are appended
     to the catalog file.
 
     @author Peter Marklund (peter@collaboraid.biz)
@@ -500,7 +500,7 @@ aa_register_case \
     # NOTE: must be kept up-to-date for teardown to work
     set expected_new_keys [list Auto_Key key_1_1] 
 
-    # Write the test tcl file
+    # Write the test Tcl file
     set tcl_file_id [open "$::acs::rootdir/$tcl_file" w]    
     set new_key_1 "_"
     set new_text_1 "Auto Key"
@@ -526,7 +526,7 @@ aa_register_case \
         return $catalog_file
     "
 
-    # Replace message tags in the tcl file and insert into catalog file
+    # Replace message tags in the Tcl file and insert into catalog file
     lang::util::replace_temporary_tags_with_lookups $tcl_file
 
     aa_unstub lang::catalog::get_catalog_file_path
@@ -551,11 +551,11 @@ aa_register_case \
     aa_true "third key not inserted" [string equal [lindex [array get updated_messages_array $new_key_3] 1] \
                                                    $messages_array($new_key_3)]
 
-    # Check that there are no tags left in the tcl file
+    # Check that there are no tags left in the Tcl file
     set tcl_file_id [open "$::acs::rootdir/$tcl_file" r]
     set updated_tcl_contents [read $tcl_file_id]
     close $tcl_file_id
-    aa_true "tags in tcl file replaced" [expr {[llength [lang::util::get_temporary_tags_indices $updated_tcl_contents]] == 0}]
+    aa_true "tags in Tcl file replaced" [expr {[llength [lang::util::get_temporary_tags_indices $updated_tcl_contents]] == 0}]
 
     # Delete the test message keys
     foreach message_key [concat [array names messages_array] $expected_new_keys] {
@@ -565,7 +565,7 @@ aa_register_case \
     file delete -- $catalog_backup_file
     file delete -- $catalog_file
 
-    # Delete the tcl files
+    # Delete the Tcl files
     file delete -- $::acs::rootdir/$tcl_file
     file delete -- $::acs::rootdir/$tcl_backup_file
 }

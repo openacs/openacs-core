@@ -169,7 +169,7 @@ ad_proc -public lc_numeric {
     for that locale.
 
     @param num      Number in canonical form
-    @param fmt      Format string used by the tcl format 
+    @param fmt      Format string used by the Tcl format 
                     command (should be restricted to the form "%.Nf" if present).
     @param locale   Locale
     @return         Localized form of the number
