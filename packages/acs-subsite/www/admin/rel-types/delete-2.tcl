@@ -51,7 +51,7 @@ if { $operation ne "Yes, I really want to delete this relationship type" } {
 	ad_return_error "Error deleting relationship type" "We got the following error trying to delete this relationship type:<pre>$errmsg</pre>"
 	ad_script_abort
     }
-    # If we successfuly dropped the relationship type, drop the table.
+    # If we successfully dropped the relationship type, drop the table.
     # Note that we do this outside the transaction as it commits all
     # transactions anyway
     if { [db_table_exists $table_name] } {

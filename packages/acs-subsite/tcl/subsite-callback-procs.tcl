@@ -58,7 +58,7 @@ ad_proc -public subsite_callback {
 
 	switch -- $type {
 	    tcl { 
-		# Execute the tcl procedure
+		# Execute the Tcl procedure
 		$callback -object_id $object_id -node_id $node_id -package_id $package_id
 	    }
 	    default { error "Callbacks of type $type not supported" }
