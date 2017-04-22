@@ -17,7 +17,7 @@
 <strong>Test 1</strong>
 <p>
 <em>Verify that the message catalog loader ran
-successfuly at server startup.</em>
+successfully at server startup.</em>
 <p>
 <table cellspacing="0" cellpadding="4" border="1">
 <tr><th>Word to lookup</th><th>Language</th><th>Results of catalog lookup</th></tr>

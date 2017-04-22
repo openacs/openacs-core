@@ -301,7 +301,7 @@ passes it along to <strong>ns_return</strong>.</font></blockquote>
 should be the default system encoding.</p>
 <h4>VI.C Loading Regular Tcl Script Files</h4>
 <strong>10.50</strong>
- By default, tcl and template files in the
+ By default, Tcl and template files in the
 system will be loaded using the default system encoding. This is
 generally ISO-8859-1 for AOLserver running on Unix systems in
 English.
@@ -421,7 +421,7 @@ character set specified by it&#39;s file suffix:
                          bboard.iso-8859-6
 </pre>
 
-A message catalog file consists of tcl code to define messages in a
+A message catalog file consists of Tcl code to define messages in a
 given language or locale:
 <pre>
 
@@ -623,7 +623,7 @@ indexed table.</p>
 <li>fconfigure -encoding blah</li><li>content type in outputheaders set for encoding conversion
 <pre>
 ad_proc adp_parse_ad_conn_file {} {
-    handle a request for an adp and/or tcl file in the template system.
+    handle a request for an adp and/or Tcl file in the template system.
 } {
     namespace eval template variable parse_level ""
     #ns_log debug "adp_parse_ad_conn_file =&gt; file '[file root [ad_conn file]]'"
