@@ -50,7 +50,7 @@ ad_proc -public auth::require_login {
     set return_url [ad_get_login_url -return]
 
     # Long URLs (slightly above 4000 bytes) can kill aolserver-4.0.10, causing
-    # a restart. They lead to empty Bowser-windows with aolserver 4.5 (but no
+    # a restart. They lead to empty Browser-windows with AOLserver 4.5 (but no
     # crash so far). May browsers have length limitations for URLs. E.g.
     # 2083 is the documented maximal length of MSIE.
     #
