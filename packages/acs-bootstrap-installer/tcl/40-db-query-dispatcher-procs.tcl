@@ -293,7 +293,7 @@ ad_proc -public db_qd_get_fullname {local_name {added_stack_num 1}} {
         # added case for handling .vuh files which are sourced from 
         # rp_handle_tcl_request.  Otherwise, QD was forming fullquery path 
         # with the assumption that the query resided in the 
-        # rp_handle_tcl_request proc itself. (Openacs - DanW)
+        # rp_handle_tcl_request proc itself. (OpenACS - DanW)
 
         switch $proc_name {
 
@@ -356,7 +356,7 @@ ad_proc -public db_qd_get_fullname {local_name {added_stack_num 1}} {
         # check to see if a package proc is being called without 
         # namespace qualification.  If so, add the package qualification to the
         # proc_name, so that the correct query can be looked up. 
-        # (Openacs - DanW)
+        # (OpenACS - DanW)
 
         set calling_namespace [string range [uplevel [expr {1 + $added_stack_num}] {namespace current}] 2 end]
         # db_qd_log QDDebug "calling namespace = $calling_namespace"

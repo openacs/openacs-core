@@ -36,7 +36,7 @@ foreach init_item [nsv_get ad_after_server_initialization .] {
 proc __is_xql {arg} { 
     return [expr {[file isdirectory $arg] || [file extension $arg] eq ".xql"}]}
 
-# We need to load query files for the top-level stuff in www and tcl
+# We need to load query files for the top-level stuff in www and Tcl
 # dirs is the list of directories to walk for xql files.  Packages .xql
 # files are parsed elsewhere in the bootstrap process.
 

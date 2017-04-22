@@ -703,7 +703,7 @@ ad_proc -public ::foobar::new {
 	\@author Roberto Mello <rmello at fslc.usu.edu>
 	\@creation-date 2002-01-21
 	
-	\@param oacs_user If this user is already an openacs user. oacs_user_p will be defined.
+	\@param oacs_user If this user is already an OpenACS user. oacs_user_p will be defined.
 	\@param shazam Magical incantation that calls Captain Marvel. Required parameter.
 	\@param user_id The id for the user to process. Optional with default "" 
 	                (api-browser will show the default automatically)
@@ -713,7 +713,7 @@ ad_proc -public ::foobar::new {
 	}
 
 	if { $oacs_user_p } {
-		# Do something if this is an openacs user
+		# Do something if this is an OpenACS user
 	}
 }
     </pre>

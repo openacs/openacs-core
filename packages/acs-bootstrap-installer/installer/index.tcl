@@ -25,7 +25,7 @@ if { [ns_queryexists done_p] } {
   if { [ad_verify_install] } {
     install_return 200 "OpenACS Installation Complete" "
 
-You have successfuly installed the Open Architecture Community System (OpenACS)!
+You have successfully installed the Open Architecture Community System (OpenACS)!
 
 <p> Your server process has been terminated.  Unless you have configured your
 web server to restart automatically, as outlined in the 
@@ -226,7 +226,7 @@ chmod -R ug+rw $::acs::rootdir/packages
 
 db_helper_checks errors error_p
 
-# Now that we know that the database and aolserver are set up
+# Now that we know that the database and AOLserver are set up
 # correctly, let's check out the actual db.
 if {$error_p} {
     append body [subst {<p>

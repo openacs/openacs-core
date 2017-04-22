@@ -65,7 +65,7 @@ set errno [catch {
     # Used for ns_logs:
     set proc_name {Bootstrap}
 
-    # Load the special bootstrap tcl library.
+    # Load the special bootstrap Tcl library.
 
     set files [lsort [glob -nocomplain "$::acs::rootdir/packages/acs-bootstrap-installer/tcl/*-procs.tcl"]]
     if { [llength $files] == 0 } {

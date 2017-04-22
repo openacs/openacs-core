@@ -410,7 +410,7 @@ ad_proc -private apm_bootstrap_load_libraries {
     package_key
     {errorVarName ""}
 } {
-    Scan all the files in the tcl dir of the package and load those asked for by the init
+    Scan all the files in the Tcl dir of the package and load those asked for by the init
     and procs flags.
 
     This proc is an analog of apm_load_libraries.  In addition though
