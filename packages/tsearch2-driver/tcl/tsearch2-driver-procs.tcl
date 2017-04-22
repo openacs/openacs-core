@@ -297,10 +297,10 @@ ad_proc tsearch2::build_query { -query } {
     return $query
 }
 
-ad_proc -public tsearch2::seperate_query_and_operators {
+ad_proc -public tsearch2::separate_query_and_operators {
     -query
 } {
-    Seperates special operators from full text query
+    Separates special operators from full text query
     
     @author Dave Bauer (dave@thedesignexperience.org)
     @creation-date 2004-07-10

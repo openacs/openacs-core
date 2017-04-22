@@ -28,7 +28,7 @@ ad_proc -public tsearch2_driver::install::preinstall_checks {
 	ns_log Notice " ********** STARTING BEFORE-INSTALL CALLBACK ****************"
 
 	# check if tsearch2 is installed
-	# in psql we do this by checking the presense of a data type tsvector
+	# in psql we do this by checking the presence of a data type tsvector
 	# select typname from pg_type where typename='tsvector';
 
 	if { [db_0or1row tsearch_compile_check {
