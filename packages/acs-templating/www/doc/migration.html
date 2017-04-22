@@ -12,7 +12,7 @@
     
     <h3>In a Nutshell</h3>
 
-    When templatizing a legacy tcl page, your task is to
+    When templatizing a legacy Tcl page, your task is to
     <strong>separate</strong> code and graphical presentation.  The latter goes
     into an ADP file; it contains essentially HTML, augmented by a few
     special tags and the <code>@<em>variable</em>@</code> construct.
@@ -36,7 +36,7 @@
     <p>
       At the end of the Tcl script, you should call
       <code>ad_return_template</code>.  The template runs after the
-      tcl script, and can use these data sources.
+      Tcl script, and can use these data sources.
 
     <p>
       Make sure that the fancy adp parser is enabled in your AOL ini
@@ -54,13 +54,13 @@
 	wait till the headers are written or the page is completed; they
 	may act differently than you expect.
       <li>
-	If you can, put code in the tcl file, not between <code>&lt;%
+	If you can, put code in the Tcl file, not between <code>&lt;%
 	%&gt;</code> in the adp page.
       <li>
-	Put HTML in the adp page, not int the tcl program.  Put
+	Put HTML in the adp page, not int the Tcl program.  Put
 	reusable HTML fragments in a separate adp file (think of it as 
 	a widget) that will be <code>&lt;include&gt;</code>d from
-	several pages.  Prefer this to writing a tcl proc that returns 
+	several pages.  Prefer this to writing a Tcl proc that returns 
 	HTML.
       <li>
 	Remember to remove backslashes where you had to escape special 
@@ -92,7 +92,7 @@
     </p>
     <table cellspacing="5" bgcolor="#ccddff">
       <tr bgcolor="#cccccc">
-	<th rowspan="2">old tcl code</th>
+	<th rowspan="2">old Tcl code</th>
 	<th colspan="2">new</th>
       </tr>
       <tr bgcolor="#cccccc">
@@ -251,7 +251,7 @@ ad_return_template
 
     <table cellspacing="5" bgcolor="#ccddff">
       <tr bgcolor="#cccccc">
-	<th rowspan="2">old tcl code</th>
+	<th rowspan="2">old Tcl code</th>
 	<th colspan="2">new</th>
       </tr>
       <tr bgcolor="#cccccc">
@@ -420,12 +420,12 @@ append body "
     own multirow variable.  In the excert below, taken from
     /pvt/alerts.tcl and /pvt/alerts.adp, the foreach logic made it
     hard to use the db_multirow because it needed a combination of the
-    output from sql and also the output of tcl procedures using that
+    output from sql and also the output of Tcl procedures using that
     value.
 
     <table cellspacing="5" bgcolor="#ccddff">
       <tr bgcolor="#cccccc">
-	<th rowspan="2">old tcl code</th>
+	<th rowspan="2">old Tcl code</th>
 	<th colspan="2">new</th>
       </tr>
       <tr bgcolor="#cccccc">
