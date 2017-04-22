@@ -35,7 +35,7 @@
 --   and appends the timezone abbreviation.
 
 -- timezone__get_offset(timezone, timestamptz) returns interval
---   Returns a PostgreSQL interval (which can be added or substracted from
+--   Returns a PostgreSQL interval (which can be added or subtracted from
 --   a UTC timestamp) for the timestamp in the given timezone.
 
 -- timezone__get_rawoffset(timezone, timestamptz) returns interval
