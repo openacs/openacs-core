@@ -38,11 +38,22 @@ ad_proc -public ad_approval_system_inuse_p {} {
 ad_proc -private ad_user_class_parameters {} {
     Returns the list of parameter var names used to define a user class.
 } {
-    return [list category_id country_code usps_abbrev intranet_user_p group_id last_name_starts_with email_starts_with expensive user_state sex age_above_years age_below_years registration_during_month registration_before_days registration_after_days registration_after_date last_login_before_days last_login_after_days last_login_equals_days number_visits_below number_visits_above user_class_id sql_post_select crm_state curriculum_elements_completed]
+    return {
+        category_id country_code usps_abbrev intranet_user_p
+        group_id last_name_starts_with email_starts_with expensive
+        user_state sex age_above_years age_below_years
+        registration_during_month registration_before_days
+        registration_after_days registration_after_date
+        last_login_before_days last_login_after_days
+        last_login_equals_days number_visits_below number_visits_above
+        user_class_id sql_post_select crm_state
+        curriculum_elements_completed
+    }
 }
  
 ad_proc -private ad_user_class_description { set_id } {
-    Takes an ns_set of key/value pairs and produces a human-readable description of the class of users specified.
+    Takes an ns_set of key/value pairs and produces a human-readable
+    description of the class of users specified.
 } {
     set clauses [list]
     set pretty_description ""
@@ -178,41 +189,63 @@ ad_proc -private ad_registration_finite_state_machine_admin_links {
     user_id
     {return_url ""}
 } {
-    Returns the admininistation links to change the user's state in the user_state finite state machine. If the nohtml switch is set, then a list of lists will be returned (url label).
+    Returns the admininistation links to change the user's state
+    in the user_state finite state machine. If the nohtml switch
+    is set, then a list of lists will be returned (url label).
 } {
     set user_finite_states [list]
     switch $member_state {
         "approved" {
             lappend user_finite_states \
-                [list [export_vars -base "/acs-admin/users/member-state-change" {user_id return_url {member_state banned}}] [_ acs-tcl.ban]] \
-                [list [export_vars -base "/acs-admin/users/member-state-change" {user_id return_url {member_state deleted}}] [_ acs-tcl.delete]]
+                [list [export_vars -base "/acs-admin/users/member-state-change" {
+                    user_id return_url {member_state banned}
+                }] [_ acs-tcl.ban]] \
+                [list [export_vars -base "/acs-admin/users/member-state-change" {
+                    user_id return_url {member_state deleted}
+                }] [_ acs-tcl.delete]]
         }
         "deleted" {
             lappend user_finite_states \
-                [list [export_vars -base "/acs-admin/users/member-state-change" {user_id return_url {member_state approved}}] [_ acs-tcl.undelete]] \
-                [list [export_vars -base "/acs-admin/users/member-state-change" {user_id return_url {member_state banned}}] [_ acs-tcl.ban]]
+                [list [export_vars -base "/acs-admin/users/member-state-change" {
+                    user_id return_url {member_state approved}
+                }] [_ acs-tcl.undelete]] \
+                [list [export_vars -base "/acs-admin/users/member-state-change" {
+                    user_id return_url {member_state banned}
+                }] [_ acs-tcl.ban]]
         }
         "needs approval" {
             lappend user_finite_states \
-                [list [export_vars -base "/acs-admin/users/member-state-change" {user_id return_url {member_state approved}}] [_ acs-tcl.approve]] \
-                [list [export_vars -base "/acs-admin/users/member-state-change" {user_id return_url {member_state rejected}}] [_ acs-tcl.reject]]
+                [list [export_vars -base "/acs-admin/users/member-state-change" {
+                    user_id return_url {member_state approved}
+                }] [_ acs-tcl.approve]] \
+                [list [export_vars -base "/acs-admin/users/member-state-change" {
+                    user_id return_url {member_state rejected}
+                }] [_ acs-tcl.reject]]
         }
         "rejected" {
             lappend user_finite_states \
-                [list [export_vars -base "/acs-admin/users/member-state-change" {user_id return_url {member_state approved}}] [_ acs-tcl.approve]]
+                [list [export_vars -base "/acs-admin/users/member-state-change" {
+                    user_id return_url {member_state approved}
+                }] [_ acs-tcl.approve]]
         }
         "banned" {
             lappend user_finite_states \
-                [list [export_vars -base "/acs-admin/users/member-state-change" {user_id return_url {member_state approved}}] [_ acs-tcl.approve]]
+                [list [export_vars -base "/acs-admin/users/member-state-change" {
+                    user_id return_url {member_state approved}
+                }] [_ acs-tcl.approve]]
         }
     }
 
     if { $email_verified_p == "t" } {
         lappend user_finite_states \
-            [list [export_vars -base "/acs-admin/users/member-state-change" {user_id return_url {email_verified_p f}}] [_ acs-tcl.lt_require_email_verific]]
+            [list [export_vars -base "/acs-admin/users/member-state-change" {
+                user_id return_url {email_verified_p f}
+            }] [_ acs-tcl.lt_require_email_verific]]
     } else {
         lappend user_finite_states \
-            [list [export_vars -base "/acs-admin/users/member-state-change" {user_id return_url {email_verified_p t}}] [_ acs-tcl.approve_email]]
+            [list [export_vars -base "/acs-admin/users/member-state-change" {
+                user_id return_url {email_verified_p t}
+            }] [_ acs-tcl.approve_email]]
     }
 
     if { $nohtml_p } {
