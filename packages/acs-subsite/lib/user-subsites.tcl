@@ -1,4 +1,4 @@
-db_multirow -extend {url admin_p} groups groups {
+db_multirow -extend {url admin_p admin_url} groups groups {
   select distinct ap.package_id, groups.group_id, lower(groups.group_name), groups.group_name
      from groups, group_member_map gm, application_groups ap
      where groups.group_id = gm.group_id and gm.member_id=:user_id
@@ -6,7 +6,9 @@ db_multirow -extend {url admin_p} groups groups {
   order by lower(groups.group_name)
 } {
     set admin_p [permission::permission_p -party_id $user_id -object_id $group_id -privilege "admin"]
-    set url [apm_package_url_from_id $package_id]
+    #set url [apm_package_url_from_id $package_id]
+    set url ""
+    set admin_url [export_vars -base /members/ {{group_id $group_id}}]
 }
 
 # Local variables:
