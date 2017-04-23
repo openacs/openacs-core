@@ -255,13 +255,11 @@ ad_proc -private ad_registration_finite_state_machine_admin_links {
 
     } else {
 
-        # Build the list of A tags
+        # Build a list of anchor tags
 
-        set user_finite_state_links [list]
-
+        set user_finite_state_links {}
         foreach elm $user_finite_states {
-            set url [lindex $elm 0]
-            set label [lindex $elm 1]
+            lassign $elm url label
             lappend user_finite_state_links [subst {<a href="[ns_quotehtml $url]">$label</a>}]
         }
         
