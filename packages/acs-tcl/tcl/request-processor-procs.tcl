@@ -625,6 +625,8 @@ ad_proc -private rp_filter { why } {
             set canonical_location [string trimright $canonical_location /]
         }
         if {$current_location ne $canonical_location} {
+            set q [ns_conn query]
+            if {$q ne ""} {append ad_conn_url ?$q}
             ns_returnmoved $canonical_location$ad_conn_url
             return filter_return
         }
