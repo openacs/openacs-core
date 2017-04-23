@@ -90,9 +90,6 @@ set message $email_message
 
 if {$return_url eq ""} {
     set return_url [export_vars -base /acs-admin/users/one {user_id}]
-} else {
-    ad_returnredirect $return_url
-    ad_script_abort
 }
 
 set context [list [list "./" "Users"] "$action"]
