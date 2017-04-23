@@ -263,7 +263,7 @@
   <msg key="lt_On_portrait_publish_d">Am %portrait_publish_date% haben Sie &lt;a href=&#34;%subsite_url%user/portrait/&#34;&gt;%portrait_title%&lt;/a&gt; hochgeladen</msg>
   <msg key="lt_Our_server_can_tell_y">Bestimmte Daten wie Benutzeridentifikation oder Passwort können vom Browser gespeichert werden. Dadurch brauchen diese Daten bei Computern, die von nur einer Person genutzt werden, nicht bei jeder Sitzung neu eingegeben zu werden.</msg>
   <msg key="lt_Password_Confirmation">Passwort bestätigen</msg>
-  <msg key="lt_Personal_Home_Page_UR">Adresse der persönlichen Homepage:</msg>
+  <msg key="lt_Personal_Home_Page_UR">URL der persönlichen Homepage:</msg>
   <msg key="lt_Please_locate_your_co">Bitte wählen Sie aus der folgenden Liste Ihren Ländercode aus. Gehen Sie dann mit Hilfe Ihres Browsers zum  Formular zurück.</msg>
   <msg key="lt_Please_read_and_follo">Bitte führen Sie die in der E-Mail genannten Schritte aus.</msg>
   <msg key="lt_Please_try_to_a_hrefi">Bitte versuchen Sie noch einmal, sich &lt;a href=&#34;index&#34;&gt;anzumelden&lt;/a&gt;.</msg>
