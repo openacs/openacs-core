@@ -149,6 +149,7 @@ template::list::create \
             }
         }
     } -filters {
+        group_id {}
         member_state {
             label "[_ acs-subsite.Member_State]"
             values $member_state_options
