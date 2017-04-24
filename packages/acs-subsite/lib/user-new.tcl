@@ -61,13 +61,21 @@ if { $callback_url ne "" } {
 # Pre-generate user_id for double-click protection
 set user_id [db_nextval acs_object_id_seq]
 
-ad_form -name register -export {next_url user_id return_url} -form [auth::get_registration_form_elements]  -validate {
+ad_form -name register -export {next_url user_id return_url} -form [auth::get_registration_form_elements]
+
+#
+# Standard validator
+#
+set validate {
     {email
         {[string equal "" [party::get_by_email -email $email]]}
         "[_ acs-subsite.Email_already_exists]"
     }
 }
 
+#
+# Handling of additional groups
+#
 if { $rel_group_id ne "" } {
     ad_form -extend -name register -form {
         {rel_group_id:integer(hidden),optional}
@@ -88,6 +96,12 @@ if { $rel_group_id ne "" } {
         }
     }
 }
+
+#
+# Register the validators after all form-fields were added (in case
+# conditional fields were added needing validators).
+#
+ad_form -extend -name register -validate $validate
 
 ad_form -extend -name register -on_request {
     # Populate elements from local variables
