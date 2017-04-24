@@ -757,7 +757,7 @@ ad_proc -public auth::get_registration_form_elements {
         first_names {size 30}
         last_name {size 30}
         screen_name {size 30}
-        url {size 50 value "http://"}
+        url {size 80 value ""}
         password {size 20}
         password_confirm {size 20}
         secret_question {size 30}
