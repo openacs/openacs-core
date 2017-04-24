@@ -8,12 +8,6 @@ ad_library {
     @cvs-id $Id$
 }
 
-if {![info exists acs::kernel_id]} {
-    # This is a saftey check for upgrades, when for whatever reason
-    # acs::kernel_id was not yet set. This might only happen on direct
-    # upgrade attempts of version before OpenACS 5.9.0 to 5.9.1.
-    set ::acs::kernel_id [ad_acs_kernel_id_mem]
-}
 #####
 #
 #  PUBLIC API
@@ -810,8 +804,6 @@ ad_proc -private rp_filter { why } {
 
     # Who's online
     whos_online::user_requested_page [ad_conn untrusted_user_id]
-    if {} {
-    }
 
     #####
     #
