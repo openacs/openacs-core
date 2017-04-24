@@ -805,6 +805,17 @@ ad_proc -private rp_filter { why } {
     # Who's online
     whos_online::user_requested_page [ad_conn untrusted_user_id]
 
+    #
+    # The actual (untrused) user_id can be added to the access.log by
+    # configuring:
+    #
+    #     ns_section ns/server/$server/acs
+    #         ns_param LogIncludeUserId 1
+    #
+    if {[ns_config "ns/server/[ns_info server]/acs" LogIncludeUserId 0]} {
+        ns_set put [ns_conn headers] X-User-Id [ad_conn untrusted_user_id]
+    }
+    
     #####
     #
     # Make sure the user is authorized to make this request.
