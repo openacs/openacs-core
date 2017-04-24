@@ -550,6 +550,7 @@ ad_proc -public export_vars {
     -entire_form:boolean
     -no_empty:boolean
     {-base}
+    -base_encode:boolean
     {-anchor}
     {-exclude {}}
     {-override {}}
@@ -693,6 +694,9 @@ ad_proc -public export_vars {
     @option base The base URL to make a link to. This will be prepended to the query string 
     along with a question mark (?), if the query is non-empty. so the returned
     string can be used directly in a link. This is only relevant to URL export.
+
+    @option base_encode Decides whether argument passed as <code>base</code> option will be
+                        encoded by ad_urlencode_url proc
 
     @author Lars Pind (lars@pinds.com)
     @creation-date December 7, 2000
@@ -928,18 +932,15 @@ ad_proc -public export_vars {
     if { $quotehtml_p } {
         set export_string [ns_quotehtml $export_string]
     }
-
+    
     # Prepend with the base URL
     if { [info exists base] && $base ne "" } {
-        if { [string first ? $base] > -1 } {
-            # The base already has query vars; assume that the
-            # path up to this point is already correctly encoded.
-            set export_string $base[expr {$export_string ne "" ? "&$export_string" : ""}]
-        } else {
-            # The base has no query vars
+        # if required, encode url part as well
+        if {$base_encode_p} {
             set base [ad_urlencode_url $base]
-            set export_string $base[expr {$export_string ne "" ? "?$export_string" : ""}]
         }
+
+        set export_string $base[expr {[string first ? $base] > -1 ? "&" : "?"}]$export_string
     }
     
     # Append anchor
