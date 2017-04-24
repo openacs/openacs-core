@@ -8,6 +8,12 @@ ad_library {
     @cvs-id $Id$
 }
 
+if {![info exists acs::kernel_id]} {
+    # This is a saftey check for upgrades, when for whatever reason
+    # acs::kernel_id was not yet set. This might only happen on direct
+    # upgrade attempts of version before OpenACS 5.9.0 to 5.9.1.
+    set ::acs::kernel_id [ad_acs_kernel_id_mem]
+}
 #####
 #
 #  PUBLIC API
@@ -487,7 +493,7 @@ ad_proc -private rp_serve_resource_file { path } {
     if { ![rp_file_can_be_public_p $path] } {
         ad_raise notfound
     }
-    set expireTime [parameter::get -package_id [ad_acs_kernel_id] -parameter ResourcesExpireInterval -default 0]
+    set expireTime [parameter::get -package_id $::acs::kernel_id -parameter ResourcesExpireInterval -default 0]
     if {$expireTime != 0} {
         if {![string is integer -strict $expireTime]} {
             if {[regexp {^(\d+)d} $expireTime _ t]} {
@@ -598,7 +604,7 @@ ad_proc -private rp_filter { why } {
         ad_page_contract_handle_datasource_error "URL contains invalid characters"
         return filter_return
     }
-    if {[string length $ad_conn_url] > [parameter::get -package_id [ad_acs_kernel_id] -parameter MaxUrlLength -default 2000]} {
+    if {[string length $ad_conn_url] > [parameter::get -package_id $::acs::kernel_id -parameter MaxUrlLength -default 2000]} {
         ad_log warning "URL TOO LONG: <$ad_conn_url> rp_filter $why"
         # reset [ad_conn url], otherwise we might run into a problem when rendering the error page
         ad_conn -set url ${root}/
@@ -614,8 +620,8 @@ ad_proc -private rp_filter { why } {
     # https://support.google.com/webmasters/answer/139066?hl=en
     # https://webmasters.stackexchange.com/questions/44830/should-i-redirect-the-site-ip-address-to-the-domain-name
     #
-    if {[parameter::get -package_id [ad_acs_kernel_id] -parameter UseCanonicalLocation -default 0]} {
-        set canonical_location [parameter::get -package_id [ad_acs_kernel_id] -parameter SystemURL]
+    if {[parameter::get -package_id $::acs::kernel_id -parameter UseCanonicalLocation -default 0]} {
+        set canonical_location [parameter::get -package_id $::acs::kernel_id -parameter SystemURL]
         set current_location [util_current_location]
         #
         # It might be useful in the future to define per-subsite
@@ -703,7 +709,7 @@ ad_proc -private rp_filter { why } {
     ## BLOCK NASTY YAHOO FINISH
 
     if { $root eq ""
-         && [parameter::get -package_id [ad_acs_kernel_id] -parameter ForceHostP -default 0]
+         && [parameter::get -package_id $::acs::kernel_id -parameter ForceHostP -default 0]
      } {
         set host_header [ns_set iget [ns_conn headers] "Host"]
         regexp {^([^:]*)} $host_header "" host_no_port
@@ -804,6 +810,8 @@ ad_proc -private rp_filter { why } {
 
     # Who's online
     whos_online::user_requested_page [ad_conn untrusted_user_id]
+    if {} {
+    }
 
     #####
     #
@@ -877,7 +885,7 @@ ad_proc rp_report_error {
 
     set error_message $message
 
-    if {[parameter::get -package_id [ad_acs_kernel_id] -parameter RestrictErrorsToAdminsP -default 0]
+    if {[parameter::get -package_id $::acs::kernel_id -parameter RestrictErrorsToAdminsP -default 0]
         && ![permission::permission_p -object_id [ad_conn package_id] -privilege admin]
     } {
         set message {}
@@ -1224,14 +1232,14 @@ ad_proc -private rp_file_can_be_public_p { path } {
 } {
     #  first check that we are not serving a forbidden file like a .xql, a backup or CVS file
     if {[file extension $path] eq ".xql"
-        && ![parameter::get -parameter ServeXQLFiles -package_id [ad_acs_kernel_id] -default 0] } {
+        && ![parameter::get -parameter ServeXQLFiles -package_id $::acs::kernel_id -default 0] } {
         # Can't use ad_return_exception_page because it depends upon an initialized ad_conn
         ns_log Warning "An attempt was made to access an .XQL resource: {$path}."
         ns_return 404 "text/html" "Not Found"
         ns_conn close
         return 0
     }
-    foreach match [parameter::get -parameter ExcludedFiles -package_id [ad_acs_kernel_id] -default {}] {
+    foreach match [parameter::get -parameter ExcludedFiles -package_id $::acs::kernel_id -default {}] {
         if {[string match $match $path]} {
             # Can't use ad_return_exception_page because it depends upon an initialized ad_conn
             ns_log Warning "An attempt was made to access an ExcludedFiles resource: {$path}."
@@ -1263,7 +1271,7 @@ ad_proc -private rp_concrete_file {
 
     # Search for files in the order specified in ExtensionPrecedence,
     # include always "vuh"
-    set precedence [parameter::get -package_id [ad_acs_kernel_id] -parameter ExtensionPrecedence -default tcl]
+    set precedence [parameter::get -package_id $::acs::kernel_id -parameter ExtensionPrecedence -default tcl]
     foreach extension [concat [split [string trim $precedence] ","] vuh] {
         if { [lsearch -glob $files "*.$extension"] != -1 } {
             return "$path.$extension"
@@ -1651,7 +1659,7 @@ ad_proc -private ad_http_cache_control { } {
 
 } {
 
-    if { ![parameter::get -package_id [ad_acs_kernel_id] -parameter HttpCacheControlP -default 0]} {
+    if { ![parameter::get -package_id $::acs::kernel_id -parameter HttpCacheControlP -default 0]} {
         return
     }
 
