@@ -433,20 +433,66 @@ ad_proc -public group::possible_member_states {} {
 
 ad_proc -public group::get_member_state_pretty {
     {-member_state:required}
+    {-component pretty_name}
+    {-user_name  ""}
+    {-community_name  ""}
+    {-url ""}
+    {-membership "membership"}
 } {
     Returns the pretty-name of a member state.
 } {
-    array set message_key_array {
-        approved #acs-kernel.member_state_approved#
-        "needs approval" #acs-kernel.member_state_needs_approval#
-        banned #acs-kernel.member_state_banned#
-        rejected #acs-kernel.member_state_rejected#
-        deleted #acs-kernel.member_state_deleted#
-        merged #acs-kernel.member_state_merged#
+    set message_key_dict {}
+    
+    switch $component {
+        pretty_name {
+            set message_key_dict {
+                "approved"       #acs-kernel.member_state_approved#
+                "banned"         #acs-kernel.member_state_banned#
+                "deleted"        #acs-kernel.member_state_deleted#
+                "merged"         #acs-kernel.member_state_merged#
+                "needs approval" #acs-kernel.member_state_needs_approval#
+                "rejected"       #acs-kernel.member_state_rejected#
+            }
+        }
+        action {
+            if {$user_name eq ""} {
+                error "user_name must be specified and must be non-empty"
+            }
+            set message_key_dict [subst {
+                "approved"       "Approve $name"
+                "banned"         "Ban $name"
+                "deleted"        "Delete $name"
+                "merged"         "Merge $name"
+                "needs approval" "Require Admin Approval for $name"
+                "rejected"       "Reject $name"
+            }]
+        }
+        email_message {
+            if {$community_name eq ""} {
+                error "community_name must be specified and must be non-empty"
+            }
+            if {$url eq ""} {
+                error "url must be specified and must be non-empty"
+            }
+            set message_key_dict [subst {
+                "approved"       "Your $membership in $community_name has been approved. Please return to $url."
+                "banned"         "You have been banned from $community_name."
+                "deleted"        "Your $membership has been deleted from $community_name."
+                "merged"         "Your $membership at $community_name will be merged."
+                "needs approval" "Your $membership at $community_name is awaiting approval from an administrator."
+                "rejected"       "Your $membership at $community_name has been rejected."
+            }]
+        }
     }
 
-    return [lang::util::localize $message_key_array($member_state)]
+    if {[dict exists $message_key_dict $member_state]} {
+        set result [lang::util::localize [dict get $message_key_dict $member_state]]
+    } else {
+        set result ""
+    }
+    return $result
 }
+
 
 ad_proc -public group::get_join_policy_options {} {
     Returns a list of valid join policies in a format suitable for a form builder drop-down.

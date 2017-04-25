@@ -8,8 +8,8 @@ ad_page_contract {
 
 } {
     user_id:naturalnum,notnull
-    {member_state "no_change"}
-    {email_verified_p:boolean "no_change"}
+    {member_state}
+    {email_verified_p:boolean}
     {return_url:localurl ""}
 } -properties {
     context:onevalue
@@ -24,30 +24,12 @@ if {![db_0or1row get_states {}]} {
     return
 }
 
-set action ""
 
-switch $member_state {
-    "approved" {
-	set action "Approve $name"
-	set email_message "Your membership in [ad_system_name] has been approved. Please return to [ad_url]."
-    }
-    "banned" {
-	set action "Ban $name"
-	set email_message "You have been banned from [ad_system_name]."
-    }
-    "rejected" {
-	set action "Reject $name"
-	set email_message "Your account have been rejected from [ad_system_name]."
-    }
-    "deleted" {
-	set action "Delete $name"
-	set email_message "Your account have been deleted from [ad_system_name]."
-    }
-    "needs approval" {
-	set action "Require Admin Approval for $name"
-	set email_message "Your account at [ad_system_name] is awaiting approval from an administrator."
-    }
-}
+set action [group::get_member_state_pretty -component action -user_name $name]
+set email_message [group::get_member_state_pretty -component email_message \
+                       -community_name [ad_system_name] \
+                       -url [ad_url] \
+                       -membership "account"]
 
 switch $email_verified_p {
     "t" {
