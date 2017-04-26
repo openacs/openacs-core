@@ -95,7 +95,7 @@ if {[db_0or1row portrait_info {
 }]} {
     # We have a portrait. Let's see if we can show it inline
 
-    if { $width ne "" && $width < 300 } {
+    if { $width ne "" && $width < 400 } {
 	# let's show it inline
 	set inline_portrait_state "inline"
     } else {
