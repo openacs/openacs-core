@@ -249,26 +249,24 @@ ad_proc -public cr_import_content {
                     error "Image file must be stored in an image object"
                 }
     
-                set what_aolserver_told_us ""
+                set what_nsd_told_us ""
                 if {$mime_type eq "image/jpeg"} {
-                    catch { set what_aolserver_told_us [ns_jpegsize $tmp_filename] }
+                    catch { set what_nsd_told_us [ns_jpegsize $tmp_filename] }
                 } elseif {$mime_type eq "image/gif"} {
-                    catch { set what_aolserver_told_us [ns_gifsize $tmp_filename] }
-                } elseif {$mime_type eq "image/png"} { 
-		    # we don't have built in png size detection
-		    # but we want to allow upload of png images
+                    catch { set what_nsd_told_us [ns_gifsize $tmp_filename] }
+                } elseif {$mime_type eq "image/png"} {
+                    catch { set what_nsd_told_us [ns_pngsize $tmp_filename] }
 		} else {
                     error "Unknown image type"
                 }
 
-                # the AOLserver jpegsize command has some bugs where the height comes 
-                # through as 1 or 2 
-                if { $what_aolserver_told_us ne "" 
-		     && [lindex $what_aolserver_told_us 0] > 10
-		     && [lindex $what_aolserver_told_us 1] > 10 
+                # The AOLserver/ jpegsize command has some bugs where the height comes 
+                # through as 1 or 2, so trust the valuesresult only on larger values.
+                if { $what_nsd_told_us ne "" 
+		     && [lindex $what_nsd_told_us 0] > 10
+		     && [lindex $what_nsd_told_us 1] > 10 
 		 } {
-                    set original_width [lindex $what_aolserver_told_us 0]
-                    set original_height [lindex $what_aolserver_told_us 1]
+                    lassign $what_nsd_told_us original_width original_height
                 } else {
                     set original_width ""
                     set original_height ""
