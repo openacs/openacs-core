@@ -434,63 +434,46 @@ ad_proc -public group::possible_member_states {} {
 ad_proc -public group::get_member_state_pretty {
     {-member_state:required}
     {-component pretty_name}
-    {-user_name  ""}
-    {-community_name  ""}
+    {-user_name ""}
+    {-community_name ""}
+    {-site_name ""}
     {-url ""}
-    {-membership "membership"}
+    {-locale ""}
 } {
     Returns the pretty-name of a member state.
 } {
-    set message_key_dict {}
+    if {$member_state ni {approved banned deleted merged "needs approval" rejected}} {
+        error "invalid member_state '$member_state'"
+    }
+    #
+    # We can't use spaces in message keys, so replace it with a "_".
+    #
+    regsub -all " " $member_state "_" member_state
     
     switch $component {
         pretty_name {
-            set message_key_dict {
-                "approved"       #acs-kernel.member_state_approved#
-                "banned"         #acs-kernel.member_state_banned#
-                "deleted"        #acs-kernel.member_state_deleted#
-                "merged"         #acs-kernel.member_state_merged#
-                "needs approval" #acs-kernel.member_state_needs_approval#
-                "rejected"       #acs-kernel.member_state_rejected#
-            }
+            set message #acs-kernel.member_state_$member_state#
         }
         action {
-            if {$user_name eq ""} {
-                error "user_name must be specified and must be non-empty"
-            }
-            set message_key_dict [subst {
-                "approved"       "Approve $name"
-                "banned"         "Ban $name"
-                "deleted"        "Delete $name"
-                "merged"         "Merge $name"
-                "needs approval" "Require Admin Approval for $name"
-                "rejected"       "Reject $name"
-            }]
+            if {$user_name eq ""} { error "user_name must be specified and must be non-empty" }
+            set message #acs-kernel.member_state_action_$member_state#
         }
-        email_message {
-            if {$community_name eq ""} {
-                error "community_name must be specified and must be non-empty"
-            }
-            if {$url eq ""} {
-                error "url must be specified and must be non-empty"
-            }
-            set message_key_dict [subst {
-                "approved"       "Your $membership in $community_name has been approved. Please return to $url."
-                "banned"         "You have been banned from $community_name."
-                "deleted"        "Your $membership has been deleted from $community_name."
-                "merged"         "Your $membership at $community_name will be merged."
-                "needs approval" "Your $membership at $community_name is awaiting approval from an administrator."
-                "rejected"       "Your $membership at $community_name has been rejected."
-            }]
+        account_mail {
+            if {$site_name eq ""} { error "site_name must be specified and must be non-empty" }
+            if {$url eq ""} { error "url must be specified and must be non-empty" }
+            set message #member_state_account_mail_$member_state#                            
+        }
+        community_mail {
+            if {$community_name eq ""} { error "community_name must be specified and must be non-empty" }
+            if {$url eq ""} { error "url must be specified and must be non-empty" }
+            set message #member_state_community_mail_$member_state#
+        }
+        default {
+            error "invalid component '$component'"
         }
     }
-
-    if {[dict exists $message_key_dict $member_state]} {
-        set result [lang::util::localize [dict get $message_key_dict $member_state]]
-    } else {
-        set result ""
-    }
-    return $result
+    
+    return [lang::util::localize $message $locale]
 }
 
 

@@ -8,9 +8,15 @@ ad_page_contract {
 
 } {
     user_id:naturalnum,notnull
-    {member_state}
+    {member_state:trim}
     {email_verified_p:boolean}
     {return_url:localurl ""}
+} -validate {
+    member_state {
+        if {$member_state ni {approved banned deleted merged "needs approval" rejected}} {
+            ad_complain "invalid member_state '$member_state'"
+        }
+    }
 } -properties {
     context:onevalue
     export_vars:onevalue
@@ -24,27 +30,34 @@ if {![db_0or1row get_states {}]} {
     return
 }
 
-
-set action [group::get_member_state_pretty -component action -user_name $name]
-set email_message [group::get_member_state_pretty -component email_message \
-                       -community_name [ad_system_name] \
-                       -url [ad_url] \
-                       -membership "account"]
-
+#
+# This page is used for state changes in the member_state, and as well
+# on email confirm require and approve operations.
+#
 switch $email_verified_p {
     "t" {
-	set action "Approve Email for $name"
-	set email_message "Your email in [ad_system_name] has been approved.  Please return to [ad_url]."
+        set user_name     $name
+        set url           [ad_url]
+        set site_name     [ad_system_name]
+        set action        [lang::util::localize #acs-kernel.email_action_approved#]
+        set email_message [lang::util::localize #acs-kernel.email_mail_approved#]
     }
     "f" {
-	set action "Require Email from $name"
-	set email_message "Your email in [ad_system_name] needs approval. please go to [ad_url]/register/email-confirm"
+        set user_name     $name
+        set url           [ad_url]/register/email-confirm
+        set site_name     [ad_system_name]
+        set action        [lang::util::localize #acs-kernel.email_action_needs_approval#]
+        set email_message [lang::util::localize #acs-kernel.email_mail_needs_approval#]
     }
-}
-
-if {$action eq ""} {
-    ad_return_complaint 1 "Not valid action: You have not changed the user in any way"
-    return
+    default {
+        set action        [group::get_member_state_pretty -component action \
+                               -member_state $member_state \
+                               -user_name $name]
+        set email_message [group::get_member_state_pretty -component account_mail \
+                               -member_state $member_state \
+                               -site_name [ad_system_name] \
+                               -url [ad_url]]
+    }
 }
 
 if {[catch {
