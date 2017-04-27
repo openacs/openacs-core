@@ -6,12 +6,38 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     page:naturalnum,optional
+    {search_name ""}
+    {search_url ""}
+    {search_application ""}
 }
 
 set page_title [_ acs-subsite.Applications]
 set context [list $page_title]
 
 set subsite_node_id [ad_conn subsite_node_id]
+
+set locale [ad_conn locale]
+
+ad_form \
+    -name filter \
+    -edit_buttons [list [list "Go" go]] \
+    -form {
+	{search_name:text,optional
+	    {label "#acs-subsite.Name#"}
+	    {html {length 20} }
+	    {value $search_name}
+	}
+	{search_url:text,optional
+	    {label "#acs-subsite.URL#"}
+	    {html {length 20} }
+	    {value $search_url}
+	}
+	{search_application:text,optional
+	    {label "#acs-subsite.Application#"}
+	    {html {length 20} }
+	    {value $search_application}
+	}
+    } -on_submit {}
 
 list::create \
     -name applications \
@@ -65,13 +91,25 @@ list::create \
             link_url_eval {[export_vars -base application-delete { node_id }]}
             link_html { title "#acs-subsite.Delete_this_application#" }
         }
+    } -filters {
+	search_name {
+	    hide_p 1
+            where_clause {(:search_name is null or upper(coalesce(coalesce(m.message, md.message), p.instance_name)) like '%' || upper(:search_name) || '%')}
+	}
+	search_url {
+	    hide_p 1
+            where_clause {(:search_url is null or upper(n.name) like '%' || upper(:search_url) || '%')}
+	}
+	search_application {
+	    hide_p 1
+            where_clause {(:search_application is null or upper(pt.pretty_name) like '%' || upper(:search_application) || '%')}
+	}
     }
-
 
 
 db_multirow -extend { parameter_url } applications select_applications_page {} {
     set instance_name [string repeat "- " $treelevel]$instance_name
-    if { $num_parameters > 0 } {
+    if { $parameters_p } {
         set parameter_url [export_vars -base ../../shared/parameters { package_id { return_url [ad_return_url] } }]
     }
 }
