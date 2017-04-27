@@ -13,8 +13,11 @@ db_multirow -extend {url admin_p admin_url member_state_pretty} groups groups {
 } {
     set admin_p [permission::permission_p -party_id $user_id -object_id $group_id -privilege "admin"]
     set member_state_pretty [group::get_member_state_pretty -member_state $member_state]
-    #set url [apm_package_url_from_id $package_id]
-    set url ""
+    if {$package_id ne "" && $group_id != [acs_magic_object registered_users]} {
+        set url [apm_package_url_from_id $package_id]
+    } else {
+        set url ""
+    }
     set admin_url [export_vars -base /members/ {{group_id $group_id}}]
 }
 
