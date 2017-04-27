@@ -123,7 +123,7 @@ namespace eval membership_rel {
     } {
         Return the user_id of a rel_id
     } {
-        return [dict get [get -rel_id $rel_id user_id]]
+        return [dict get [get -rel_id $rel_id] user_id]
     }
     
     ad_proc -public get_group_id {
@@ -131,7 +131,7 @@ namespace eval membership_rel {
     } {
         Return the group_id of a rel_id
     } {
-        return [dict get [get -rel_id $rel_id group_id]]
+        return [dict get [get -rel_id $rel_id] group_id]
     }
 
 }
