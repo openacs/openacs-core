@@ -228,6 +228,7 @@ Please visit the following link to change your password now:
   <msg key="Grant">Grant</msg>
   <msg key="Grant_Permission">Grant Permission</msg>
   <msg key="Group_administration">Group administration</msg>
+  <msg key="Group_members">Members of Group: %group_name%</msg>
   <msg key="Group_type">Group type</msg>
   <msg key="Group_type_administration">Group type administration</msg>
   <msg key="Group_Types">Group Types</msg>

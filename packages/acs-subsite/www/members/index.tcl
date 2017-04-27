@@ -23,15 +23,19 @@ if {$group_id eq ""} {
 }
 group::get -group_id $group_id -array group_info
 subsite::get -subsite_id $package_id -array subsite_info
-ns_log notice "group_id $group_id $package_id [array get group_info]"
-set group_name $group_info(title)
 
-set page_title "[_ acs-subsite.Members] of Group: $group_info(group_name) (subsite $subsite_info(instance_name))"
-set context [list $page_title]
+set group_name $group_info(title)
 
 # Is this the main site? In that case, we don't offer to remove users completely,
 # only to ban/delete them.
 set main_site_p [string equal [site_node::get_url -node_id [ad_conn node_id]] "/"]
+
+set page_title [lang::message::lookup "" acs-subsite.Group_members "" [list group_name $group_info(group_name)]]
+if {!$main_site_p} {
+    append page_title " (subsite $subsite_info(instance_name))"
+}
+set context [list $page_title]
+
 
 set user_id [ad_conn user_id]
 
@@ -65,9 +69,13 @@ if { !$show_member_list_p } {
 if { $admin_p } {
     # We can skip the permissions check for "delete" because user had admin.
     set delete_p 1
+    set hide_email_p 0
+    set hide_member_state_p 0
 } else {
     # user doesn't have admin -- now find out if they have delete.
     set delete_p [permission::permission_p -party_id $user_id -object_id $group_id -privilege "delete"]
+    set hide_email_p 1
+    set hide_member_state_p 1
 }
 
 set actions {}
@@ -76,10 +84,6 @@ set bulk_actions {}
 if { $admin_p || [parameter::get -parameter "MembersCanInviteMembersP" -default 0] } {
     set actions [_ acs-subsite.Invite]
     lappend actions { member-invite }
-}
-
-if { $admin_p } {
-    
 }
 
 set member_state_options [list]
@@ -92,6 +96,25 @@ db_foreach select_member_states {} {
 }
 
 db_1row pretty_roles {}
+
+set orderby_option {
+    name {
+        label "[_ acs-subsite.Name]"
+        orderby "lower(p.first_names || ' ' || p.last_name)"
+    }
+}
+if {!$hide_email_p} {
+    lappend orderby_option email {
+        label "[_ acs-subsite.Email]"
+        orderby "pa.email"
+    }
+}
+if {!$hide_member_state_p} {
+    lappend orderby_option member_state {
+        label "[_ acs-subsite.Member_State]"
+        orderby mr.member_state
+    }
+}
 
 template::list::create \
     -name "members" \
@@ -112,6 +135,7 @@ template::list::create \
 	    display_template {
 		@members.user_email;noquote@
 	    }
+            hide_p $hide_email_p
         }
         rel_role {
             label "[_ acs-subsite.Role]"
@@ -121,6 +145,7 @@ template::list::create \
         }
         member_state_pretty {
             label "[_ acs-subsite.Member_State]"
+            hide_p $hide_member_state_p
         }
         member_state_change {
             label {Action}
@@ -158,16 +183,7 @@ template::list::create \
             }
             has_default_p 1
         }
-    } -orderby {
-        name {
-            label "[_ acs-subsite.Name]"
-            orderby "lower(p.first_names || ' ' || p.last_name)"
-        }
-        email {
-            label "[_ acs-subsite.Email]"
-            orderby "pa.email"
-        }
-    }
+    } -orderby $orderby_option
 
 
 # Pull out all the relations of the specified type

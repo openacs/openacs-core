@@ -187,6 +187,7 @@
   <msg key="Grant">Erteilen</msg>
   <msg key="Grant_Permission">Berechtigungen erteilen</msg>
   <msg key="Group_administration">Gruppenadministration</msg>
+  <msg key="Group_members">Mitglieder der Gruppe: %group_name%</msg>
   <msg key="Group_type">Gruppentyp</msg>
   <msg key="Group_type_administration">Administration Gruppentyp</msg>
   <msg key="Group_Types">Gruppentypen</msg>
