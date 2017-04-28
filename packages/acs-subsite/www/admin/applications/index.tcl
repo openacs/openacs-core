@@ -6,9 +6,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     page:naturalnum,optional
-    {search_name ""}
-    {search_url ""}
-    {search_application ""}
+    {search ""}
 }
 
 set page_title [_ acs-subsite.Applications]
@@ -21,21 +19,13 @@ set locale [ad_conn locale]
 ad_form \
     -name filter \
     -edit_buttons [list [list "Go" go]] \
+    -has_submit 1 \
+    -html { style "float:right;" } \
     -form {
-	{search_name:text,optional
-	    {label "#acs-subsite.Name#"}
-	    {html {length 20} }
-	    {value $search_name}
-	}
-	{search_url:text,optional
-	    {label "#acs-subsite.URL#"}
-	    {html {length 20} }
-	    {value $search_url}
-	}
-	{search_application:text,optional
-	    {label "#acs-subsite.Application#"}
-	    {html {length 20} }
-	    {value $search_application}
+	{search:text,optional
+            {label ""}
+	    {html {length 20 placeholder "Search"} }
+	    {value $search}
 	}
     } -on_submit {}
 
@@ -92,18 +82,10 @@ list::create \
             link_html { title "#acs-subsite.Delete_this_application#" }
         }
     } -filters {
-	search_name {
+	search {
 	    hide_p 1
-            where_clause {(:search_name is null or upper(coalesce(coalesce(m.message, md.message), p.instance_name)) like '%' || upper(:search_name) || '%')}
-	}
-	search_url {
-	    hide_p 1
-            where_clause {(:search_url is null or upper(n.name) like '%' || upper(:search_url) || '%')}
-	}
-	search_application {
-	    hide_p 1
-            where_clause {(:search_application is null or upper(pt.pretty_name) like '%' || upper(:search_application) || '%')}
-	}
+            where_clause {(:search is null or upper(coalesce(coalesce(m.message, md.message), p.instance_name) || n.name || pt.pretty_name) like '%' || upper(:search) || '%')}
+        }
     }
 
 
