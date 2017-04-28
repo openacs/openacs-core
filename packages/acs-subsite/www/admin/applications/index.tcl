@@ -24,7 +24,7 @@ ad_form \
     -form {
 	{search:text,optional
             {label ""}
-	    {html {length 20 placeholder "Search"} }
+	    {html {length 20 placeholder "[_ acs-kernel.common_Search]"} }
 	    {value $search}
 	}
     } -on_submit {}
