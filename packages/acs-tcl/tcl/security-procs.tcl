@@ -2018,6 +2018,12 @@ ad_proc -public security::validated_host_header {} {
     }
 
     #
+    # Remove trailing dot, as this is allowed in fully qualified DNS
+    # names (see e.g. §3.2.2 of RFC 3976).
+    #
+    set hostName [string trimright $hostName .]
+    
+    #
     # Check, if the provided host is the same as the configued host
     # name for the current driver or one of its IP addresses. Should
     # be true in most cases.
