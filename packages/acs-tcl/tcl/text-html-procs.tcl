@@ -813,9 +813,6 @@ ad_proc ad_parse_html_attributes_upvar {
                                         [ad_parameter_all_values_as_list -package_id [ad_acs_kernel_id] AllowedProtocol antispam] \
                                         [ad_parameter_all_values_as_list AllowedProtocol antispam]]
 
-        foreach tag $allowed_tags_list {
-            set allowed_tag([string tolower $tag]) 1
-        }
         foreach attribute $allowed_attributes_list {
             set allowed_attribute([string tolower $attribute]) 1
         }
@@ -852,10 +849,7 @@ ad_proc ad_parse_html_attributes_upvar {
 
                     set attr_list [ad_parse_html_attributes_upvar html i]
 
-                    set attr_count 0
                     foreach attribute $attr_list {
-                        incr attr_count
-
                         lassign $attribute attr_name attr_value
 
                         if { ![info exists allowed_attribute($attr_name)]
