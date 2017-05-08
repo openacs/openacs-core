@@ -37,7 +37,7 @@ if { ![info exists perm_array([ad_conn user_id],admin)] && ![acs_user::site_wide
     set perm_array([ad_conn user_id],admin) add
 }
 
-
+set changes_p false
 db_transaction {
     db_foreach permissions_in_db {} {
 
@@ -62,18 +62,22 @@ db_transaction {
         switch -- $perm_array($elm) {
             remove {
                 permission::revoke -party_id $party_id -object_id $object_id -privilege $privilege
+                set changes_p true
             }
             add {
                 permission::grant -party_id $party_id -object_id $object_id -privilege $privilege
+                set changes_p true
             }
         }
     }
 } on_error {
-    ad_return_complaint 1 "Ooops, looks like we screwed up. Sorry. $errmsg<p> $::errorInfo"
+    ad_return_complaint 1 "[_ acs-tcl.The] $errmsg<p> $::errorInfo"
+    ad_script_abort
 }
 
+set message [expr {$changes_p ? [_ acs-subsite.Information_Updated] : ""}]
 
-ad_returnredirect $return_url
+ad_returnredirect -message $message $return_url
 
 # Local variables:
 #    mode: tcl
