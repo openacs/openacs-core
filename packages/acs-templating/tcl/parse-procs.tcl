@@ -531,7 +531,11 @@ ad_proc -public template::adp_compile { {-file ""} {-string ""} } {
 
     # Since messages may read the variables of the adp page they go trough
     # expand_percentage_signs which amongst other things does an uplevel subst
-    while {[regsub -all {([^\\])\#([-a-zA-Z0-9_:\.]+)\#} $code {\1[template::expand_percentage_signs [lang::message::lookup $__ad_conn_locale {\2} {TRANSLATION MISSING} {} -1]]} code]} {}
+    while {[regsub -all \
+                {([^\\])\#([-a-zA-Z0-9_:]+[.][-a-zA-Z0-9_:]+)\#} \
+                $code \
+                {\1[template::expand_percentage_signs [lang::message::lookup $__ad_conn_locale {\2} {TRANSLATION MISSING} {} -1]]} \
+                code]} {}
 
     # We do each substitution set in two pieces, separately for normal
     # variables and for variables with ";noquote" attached to them.
