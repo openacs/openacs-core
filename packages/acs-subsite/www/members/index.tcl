@@ -61,7 +61,8 @@ set show_member_list_p [expr {
                               $show_member_list_to == 0
                               || $admin_p
                               || ($show_member_list_to == 1 && [group::member_p -group_id $group_id])
-                              || ($show_member_list_to == 3 && [group::member_p -group_id $group_id] && $group_id != [ad_conn subsite_id])
+                              || ($show_member_list_to == 3 && [group::member_p -group_id $group_id] &&
+                                  $group_id != [application_group::group_id_from_package_id -package_id [ad_conn subsite_id]])
                           }]
 
 if {$show_member_list_p} {
