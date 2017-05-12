@@ -695,17 +695,22 @@ ad_proc -public party::approved_members {
     @author Peter Marklund
 } {
     if { $object_type ne "" } {
-        set from_clause ", acs_objects ao"
-        set where_clause "and pamm.member_id = ao.object_id
-             and ao.object_type = :object_type"
+        set sql {
+            select pamm.member_id
+            from party_approved_member_map pamm, acs_objects ao
+            where pamm.party_id  = :party_id
+            and   pamm.member_id = ao.object_id
+            and   ao.object_type = :object_type
+        }
+    } {
+        set sql {
+            select pamm.member_id
+            from party_approved_member_map pamm
+            where pamm.party_id = :party_id
+        }
     }
 
-    return [db_list select_party_members "
-             select pamm.member_id
-             from party_approved_member_map pamm
-             $from_clause
-             where pamm.party_id = :party_id
-             $where_clause"]
+    return [db_list select_party_members $sql]
 }
 
 ad_proc -public acs_user::get_portrait_id {
