@@ -812,7 +812,7 @@ namespace eval ::apidoc {
         #regsub -all {proc *} $see {} see
         set see [string trim $see]
         if {[nsv_exists api_proc_doc $see]} {
-            set href [export_vars -base proc-view {{proc $see}}]
+            set href [export_vars -base /api-doc/proc-view {{proc $see}}]
             return [subst {<a href="[ns_quotehtml $href]">$see</a>}]
         }
         if {[string match "/doc/*" $see]
