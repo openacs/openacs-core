@@ -48,17 +48,18 @@
       <li>
 	<strong>Customize the front page</strong>. Edit the files
       <code>@acs::rootdir@/www/index.adp</code> and
-      <code>@acs::rootdir@/www/index.tcl</code>.  (<a
-      href="/doc/templates.html">More information</a>)
+      <code>@acs::rootdir@/www/index.tcl</code> (for more information, look into
+      <a href="/doc/templates.html" title="Using Templates in OpenACS">Using Templates in OpenACS</a>).
       </li>
       <li>Change the site's overall appearance by <strong>editing the master template</strong> that wraps every page. The master template is <code>@acs::rootdir@/www/default-master.adp</code>.       An ADP file is almost like HTML, except with a few extra bells
-      and whistles (<a href="/doc/acs-templating/designer-guide.html"
-      title="Templating Designer's Guide">more information</a>).</li>
+      and whistles (for more details, look into the <a href="/doc/acs-templating/designer-guide"
+      title="Templating Designer's Guide">Templating Designer's Guide</a>).</li>
 
       <li><a href="/admin/" title="Package and User
       administration">Site Administration</a>
       <ul>
-      <li>Invite <a href="/acs-admin/users/">Users</a> or create <a href="/admin/groups/">Groups</a> (<a href="doc/permissions.html">More information</a>)</li>
+      <li>Invite <a href="/acs-admin/users/">Users</a> or create <a href="/admin/groups/">Groups</a>
+      (for more information, see the documentation about <a href="/doc/permissions">Groups, Context and Permissions</a>)</li>
       <li><strong>Download contributed  packages</strong> at the <a href="http://openacs.org/software/" 
       title="Software Page on openacs.org">OpenACS Software Page</a>.</li>
       <li><strong>Install packages</strong>. In addition to the Core packages,
