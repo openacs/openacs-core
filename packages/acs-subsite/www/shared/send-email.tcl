@@ -24,7 +24,7 @@ set from [email_image::get_email -user_id $user_id]
 ad_form -name send-email -export {sendto return_url} -form {
     {from:text(text),optional
         {label "From:"}
-        {html {{disabled ""} {size 40}}}
+        {html {disabled "" size 40}}
         {value $from}
     }
     {subject:text(text)
