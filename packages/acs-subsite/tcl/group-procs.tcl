@@ -608,38 +608,43 @@ ad_proc -public group::member_p_not_cached {
 
 ad_proc -public group::party_member_p {
     -party_id
-    { -group_name "" }
     { -group_id "" }
+    { -group_name "" }
     { -subsite_id "" }
 } {
-    Return 1 if the party is an approved member of the group specified.
-    You can specify a group name or group id.
-    </p><p>
-    <strong>Note:</strong> The group name is <strong>not</strong> unique
-    by definition,
-    and if you call this function with a duplicate group name it 
-    <strong>will</strong> bomb!!! Using the group name as a parameter is
-    thus strongly discouraged unless you are really, really sure the 
-    name is unique.</p>
-    <p>The party must have specifically
-    been granted membership on the group in question.</p>
+    
+    Return 1 if the party is an approved member of the group
+    specified.
+
+    One can specify a group_id (preferred) or a group name.
+    <strong>Note:</strong> The group name is <strong>not</strong>
+    unique by definition, and if you call this function with a
+    duplicate group name it <strong>will</strong> return the first one
+    (arbitrary)!!! Using the group name as a parameter is thus
+    strongly discouraged unless you are really, really sure the name
+    is unique.</p>
+
+    <p>The party must have specifically been granted
+    membership on the group in question.</p>
     
 } {
-
-    if { $group_name eq "" && $group_id eq "" } {
-	return 0
-    }
-
     if { $group_name ne "" } {
+        if {$group_id ne ""} {
+            ad_log warning "group::party_member_p: ignore specified group_id $group_id, usin name '$group_name' instead"
+        }
 	set group_id [group::get_id -group_name $group_name -subsite_id $subsite_id]
-	if { $group_id eq "" } {
-	    return 0
-	}
     }
 
-    set result [lindex [db_list party_is_member {}] 0]
-    
-    return [template::util::is_true $result]
+    if { $group_id eq "" } {
+        set result 0
+    } else {
+        set result [db_string party_is_member {
+            select 1 from group_approved_member_map
+            where member_id = :party_id
+            and group_id = :group_id
+        } -default 0]
+    }
+    return $result
 }
 
 ad_proc -public group::get_rel_segment {
