@@ -242,9 +242,11 @@ ad_proc -public group::get_id {
 
     @return the first group_id of the groups found for that group_name.
 
-    @error
 } {
-    return [util_memoize [list group::get_id_not_cached -group_name $group_name -subsite_id $subsite_id -application_group_id ""]]
+    return [util_memoize [list group::get_id_not_cached \
+                              -group_name $group_name \
+                              -subsite_id $subsite_id \
+                              -application_group_id $application_group_id]]
 }
 
 ad_proc -private group::get_id_not_cached {
