@@ -129,7 +129,7 @@ ad_proc -public group::new {
     # In case, a pretty_name was already provided in form of a message
     # key, there is no need to convert this a second time.
 
-    if {![regexp [lang::util::message_tag_regexp] $pretty_name]} {
+    if {![regexp [lang::util::message_key_regexp] $pretty_name]} {
 	set pretty_name [lang::util::convert_to_i18n -message_key "group_title_${group_id}" -text "$pretty_name"]
     } 
 	

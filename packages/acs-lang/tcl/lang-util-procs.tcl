@@ -71,9 +71,18 @@ ad_proc lang::util::message_tag_regexp {} {
     is the message key, and the third sub match is the message text in en_US locale.
 
     @author Peter marklund (peter@collaboraid.biz)
+    @see lang::util::message_key_regexp
 } {
     return {(<#\s*?([-a-zA-Z0-9_:\.]+)\s+(.+?)\s*?#>)}
 }
+
+ad_proc lang::util::message_key_regexp {} {
+    Regular expression for recongnizing message keys in the form #package_name.key#.
+    @see lang::util::message_tag_regexp
+} {
+    return {\#([-a-zA-Z0-9_]+[.][-a-zA-Z0-9_]+)\#}
+}
+
 
 ad_proc lang::util::get_temporary_tags_indices { adp_file_string } {
     Given the contents of an adp file return the indices of the
