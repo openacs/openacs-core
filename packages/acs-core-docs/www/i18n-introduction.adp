@@ -79,8 +79,7 @@ page is usable before you have done localization.</p><div class="itemizedlist"><
 <code class="computeroutput">#<span class="replaceable"><span class="replaceable">package_key.message_key</span></span>#</code>
 </p><p>The advantage of the short syntax is that it&#39;s short.
 It&#39;s as simple as inserting the value of a variable. Example:
-<span class="replaceable"><span class="replaceable">
-<span style="color: red">&lt;span&gt;#&lt;/span&gt;</span>forum.title#</span></span>
+<code class="computeroutput">#<span class="replaceable"><span class="replaceable">forum.title</span></span>#</code>
 </p>
 </li><li class="listitem">
 <p>The <span class="strong"><strong>verbose</strong></span>:
@@ -156,8 +155,8 @@ translators is made easier the longer the phrases to translate
 are). In those cases, follow these steps:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>For each message call in the text, decide on a variable name and
 replace the procedure call with a variable lookup on the syntax
-%var_name%. Remember to initialize a tcl variable with the same
-name on some line above the text.</p></li><li class="listitem"><p>If the text is in a tcl file you must replace variable lookups
+%var_name%. Remember to initialize a Tcl variable with the same
+name on some line above the text.</p></li><li class="listitem"><p>If the text is in a Tcl file you must replace variable lookups
 (occurrences of $var_name or ${var_name}) with %var_name%</p></li><li class="listitem"><p>You are now ready to follow the normal procedure and mark up the
 text using a tempoarary message tag (&lt;#_
 text_with_percentage_vars#&gt;) and run the action replace tags
@@ -178,7 +177,7 @@ values to be interpolated into the message so that our example
 becomes:</p><pre class="screen"><strong class="userinput"><code>set msg_subst_list [list subject [parameter::get -localize -parameter classes_pretty_name] class_instances [parameter::get -localize -parameter class_instances_pretty_plural]]
 
 ad_return_complaint 1 [_ dotlrn.class_may_not_be_deleted $msg_subst_list]
-</code></strong></pre><p>When we were done going through the tcl files we ran the
+</code></strong></pre><p>When we were done going through the Tcl files we ran the
 following commands to check for mistakes:</p><pre class="screen">
 # Message tags should usually not be in curly braces since then the message lookup may not be
 # executed then (you can usually replace curly braces with the list command). Find message tags 
@@ -188,7 +187,7 @@ following commands to check for mistakes:</p><pre class="screen">
 # Check if you&#39;ve forgotten space between default key and text in message tags (should return nothing)
 <strong class="userinput"><code>find -iname '*.tcl'|xargs egrep -i '&lt;#_[^ ]'</code></strong>
 
-# Review the list of tcl files with no message lookups
+# Review the list of Tcl files with no message lookups
 <strong class="userinput"><code>for tcl_file in $(find -iname '*.tcl'); do egrep -L '(&lt;#|\[_)' $tcl_file; done</code></strong>
 </pre><p>When you feel ready you may vist your package in the <a class="ulink" href="/acs-admin/apm" target="_top">package manager</a> and
 run the action "Replace tags with keys and insert into
@@ -220,13 +219,12 @@ parameters, taken directly from the dotlrn package.</p><div class="informaltable
 </tr></thead><tbody>
 <tr>
 <td>class_instance_pages_csv</td><td>
-<span style="color: red">&lt;span&gt;#&lt;/span&gt;</span>dotlrn.class_page_home_title#,Simple
-2-Column;<span style="color: red">&lt;span&gt;#&lt;/span&gt;</span>dotlrn.class_page_calendar_title#,Simple
-1-Column;<span style="color: red">&lt;span&gt;#&lt;/span&gt;</span>dotlrn.class_page_file_storage_title#,Simple
+<code class="computeroutput">#<span class="replaceable"><span class="replaceable">dotlrn.class_page_home_title</span></span>#</code>,Simple
+2-Column;<code class="computeroutput">#<span class="replaceable"><span class="replaceable">dotlrn.class_page_calendar_title</span></span>#</code>,Simple
+1-Column;<code class="computeroutput">#<span class="replaceable"><span class="replaceable">dotlrn.class_page_file_storage_title</span></span>#</code>,Simple
 1-Column</td>
 </tr><tr>
-<td>departments_pretty_name</td><td>
-<span style="color: red">&lt;span&gt;#&lt;/span&gt;</span>departments_pretty_name#</td>
+<td>departments_pretty_name</td><td><code class="computeroutput">#<span class="replaceable"><span class="replaceable">departments_pretty_name</span></span>#</code></td>
 </tr>
 </tbody>
 </table></div><p>Then, depending on how we retrieve the value, here&#39;s what we
@@ -244,8 +242,7 @@ class_instances_pages_csv</td><td>Kurs Startseite,Simple 2-Column;Kalender,Simpl
 <td>parameter::get <span class="strong"><strong>-localize</strong></span> -parameter
 departments_pretty_name</td><td>Abteilung</td>
 </tr><tr>
-<td>parameter::get -parameter departments_pretty_name</td><td>
-<span style="color: red">&lt;span&gt;#&lt;/span&gt;</span>departments_pretty_name#</td>
+<td>parameter::get -parameter departments_pretty_name</td><td><code class="computeroutput">#<span class="replaceable"><span class="replaceable">departments_pretty_name</span></span>#</code></td>
 </tr>
 </tbody>
 </table></div><p>The value in the rightmost column in the table above is the
