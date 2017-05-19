@@ -162,7 +162,7 @@ ad_proc -public relation_remove {
 	}
     }
 
-    db_exec_plsql relation_delete "begin ${package_name}.del(:rel_id); end;"
+    db_exec_plsql relation_delete {}
 
     return 1
 }
