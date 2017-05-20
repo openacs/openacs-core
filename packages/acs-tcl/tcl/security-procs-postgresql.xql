@@ -17,11 +17,8 @@
 
 <fullquery name="ad_set_client_property.prop_upsert">      
   <querytext>
-      begin
-         PERFORM sec_session_property__upsert(:session_id, :module, :name, :value, :secure, :last_hit);
-	 return 1;
-      end;
-      </querytext>
+    select sec_session_property__upsert(:session_id, :module, :name, :value, :secure, :last_hit) from dual
+  </querytext>
 </fullquery>
  
 
