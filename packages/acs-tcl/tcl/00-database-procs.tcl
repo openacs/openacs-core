@@ -236,12 +236,24 @@ ad_proc -private db_driverkey {
 
 
 ad_proc -public db_type {} {
-    @return the RDBMS type (i.e. oracle, postgresql) this OpenACS installation is using.  The nsv ad_database_type is set up during the bootstrap process.
+    @return the RDBMS type (i.e. oracle, postgresql) this OpenACS installation is using.
+    The nsv ad_database_type is set up during the bootstrap process.
 } {
+    #
     # Currently this should always be either "oracle" or "postgresql":
     # --atp@piskorski.com, 2003/03/16 22:01 EST
-
-    return [nsv_get ad_database_type .]
+    #
+    # First check, if the database type exists in the namespaced
+    # variable. This should be always the case. If this fail, fall
+    # back to the old-style nsv (which can be costly in tight db loops)
+    #
+    if {[info exists ::acs::database_type]} {
+        set result $::acs::database_type
+    } else {
+        set result [nsv_get ad_database_type .]
+        ns_log Warning "db_type '$result' had to be obtained from the nsv 'ad_database_type'"
+    }
+    return $result
 }
 
 ad_proc -public db_compatible_rdbms_p { db_type } {
