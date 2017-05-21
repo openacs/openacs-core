@@ -77,7 +77,7 @@ ad_proc lang::util::message_tag_regexp {} {
 }
 
 ad_proc lang::util::message_key_regexp {} {
-    Regular expression for recongnizing message keys in the form #package_name.key#.
+    Regular expression for recognizing message keys in the form <span>#</span>package_name.key#.
     @see lang::util::message_tag_regexp
 } {
     return {\#([-a-zA-Z0-9_]+[.][-a-zA-Z0-9_]+)\#}
