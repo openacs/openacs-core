@@ -12,7 +12,7 @@ ad_page_contract {
     {email_verified_p:boolean}
     {return_url:localurl ""}
 } -validate {
-    member_state {
+    valid_member_state -requires member_state {
         if {$member_state ni {approved banned deleted merged "needs approval" rejected}} {
             ad_complain "invalid member_state '$member_state'"
         }
