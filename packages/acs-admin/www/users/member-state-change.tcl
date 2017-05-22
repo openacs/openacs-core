@@ -9,7 +9,7 @@ ad_page_contract {
 } {
     user_id:naturalnum,notnull
     {member_state:trim}
-    {email_verified_p:boolean}
+    {email_verified_p:boolean ""}
     {return_url:localurl ""}
 } -validate {
     valid_member_state -requires member_state {
