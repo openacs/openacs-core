@@ -606,6 +606,28 @@ ad_proc -private ad_login_page {} {
 #
 #####
 
+ad_proc -private ad_get_node_id_from_host_node_map {hostname} {
+    Obtain node_id from host_node_map
+    @param hostname
+    @return node_id (or 0, if the provided hostname is not mapped)
+} {
+    #
+    # Get all entries in one sweep, such that the result can be
+    # cached, no matter which hostname is provided as input; the code
+    # assumes that the host-node-map is always short. This allows us
+    # as well to purge the entries without a pattern match.
+    #
+    set lists [db_list_of_lists -cache_key ad_get_host_node_map \
+                  get_node_host_names {select host, node_id from host_node_map}]
+    set p [lsearch -index 0 -exact $lists $hostname]
+    if {$p != -1} {
+        set result [lindex $lists $p 1]
+    } else {
+        set result 0
+    }
+    return $result
+}
+
 ad_proc -public ad_redirect_for_registration {} {
     
     Redirects user to [subsite]/register/index to require the user to
@@ -622,6 +644,33 @@ ad_proc -public ad_redirect_for_registration {} {
     ad_returnredirect [ad_get_login_url -return]
 }
 
+
+ad_proc -private security::replace_host_in_url {-hostname url} {
+
+    Given a fully qualified url, replace the hostname in this URL with
+    the given hostname.
+    
+    @return url with remapped hostname
+} {
+    set ui [ns_parseurl $url]
+    if {[dict exists $ui port]} {
+        set _port [dict get $ui port]
+    } else {
+        set _port ""
+    }
+    set location [util::join_location \
+                      -proto [dict get $ui proto] \
+                      -hostname $hostname \
+                      -port $_port]
+    set elements ""
+    if {[dict get $ui path] ne ""} {
+        lappend elements [dict get $ui path]
+    }
+    lappend elements [dict get $ui tail]
+
+    return $location/[join $elements /]
+}
+
 ad_proc -public ad_get_login_url {
     {-authority_id ""}
     {-username ""}
@@ -636,82 +685,88 @@ ad_proc -public ad_get_login_url {
 
     @author Lars Pind (lars@collaboraid.biz)
 } {
-    if { [ad_conn isconnected] } {
-        set url [subsite::get_element -element url]
-
-        # Check to see that the user (most likely "The Public" party, since there's probably no user logged in)
-        # actually have permission to view that subsite, otherwise we'll get into an infinite redirect loop
-        array set site_node [site_node::get_from_url -url $url]
-        set package_id $site_node(object_id)
-        if { ![permission::permission_p -no_login -object_id $site_node(object_id) -privilege read -party_id 0] } {
-            set url /
-        }
-    } else {
-        set url /
-    }
-
+    
+    set current_location [util_current_location]
+    util::split_location $current_location currentProto current_host current_port
+    set config_hostname [dict get [util_driver_info] hostname] 
     set UseHostnameDomainforReg [parameter::get \
                                      -package_id [apm_package_id_from_key acs-tcl] \
                                      -parameter UseHostnameDomainforReg \
                                      -default 0]
-    if { $UseHostnameDomainforReg } {
-        #
-        # Get the configured hostname from the NaviServer/AOLserver
-        # config file (config.tcl) either from nssock or from the
-        # https driver.
-        #
-        set config_hostname [dict get [util_driver_info] hostname] 
-        
-        set current_location [util_current_location]
-        util::split_location $current_location currentProto currentHost currentPort
-        
-        # if current domain and hostdomain are different (and UseHostnameDomain), rewrite url
+    set require_qualified_return_url $UseHostnameDomainforReg
+    set host_node_id [ad_get_node_id_from_host_node_map $current_host]
 
-        ns_log $::security::log(login_url) "ad_get_login_url: UseHostnameDomainforReg current_location <$current_location> <$config_hostname> ne <$currentHost>"
-        
-        if { $currentHost ne $config_hostname} {
-            if { [string index $url 0] eq "/" } {
-                # Make the url fully qualified
-                if { [security::secure_conn_p] } {
-                    set url_decoded [security::get_secure_qualified_url $url]
-                } else {
-                    set url_decoded [security::get_insecure_qualified_url $url]
-                }
-            } else {
-                set url_decoded $url
-            }
+    if { $host_node_id > 0 } {
+        #
+        # We are on a host-node mapped subsite
+        #
+        set package_id  [site_node::get_object_id -node_id $host_node_id]
+        set package_key [apm_package_key_from_id $package_id]
+        if {$package_key eq "acs-subsite"} {
             #
-            # Rewrite url to use hostname's domain if url points to a
-            # non / host_node, redirect to main hostname
-            set host_node_map_hosts_list [db_list -cache_key security-locations-host-names \
-                                              get_node_host_names {select host from host_node_map}]
+            # The host-node-map points to a subsite, use this for
+            # login.
+            #
+            set url /
 
-            if { [llength $host_node_map_hosts_list] > 0 } {
-
-                set restUrl ""
-                regexp {^(https?://[^/]+)(/.*)$} $url_decoded . currentLocation restUrl
-                util::split_location $url_decoded currentProto currentHost currentPort
-
-                foreach hostname $host_node_map_hosts_list {
-                    if {$hostname eq $currentHost} {
-                        #
-                        # The provided hostname is in the host-node
-                        # map. Replace the hostname with the
-                        # configured hostname from the startup
-                        # file.
-                        #
-                        set url_decoded [util::join_location -proto $currentProto -hostname $config_hostname -port $currentPort]
-                        append url_decoded $restUrl
-                        ns_log $::security::log(login_url) "ad_get_login_url: site node already in url, so just switching domain to <$url_decoded>"
-                        # no need to iterate over all entries in host-node map
-                        break
-                    }
-                }
+            if {$UseHostnameDomainforReg} {
+                set url [subsite::get_element -subsite_id $package_id -element url]
+                set url [security::get_qualified_url $url]
+                # We have a fully qualified url, but we have to remap
+                # the URL to the configured host name, since
+                # get_qualified prepends the [ad_conn location], which
+                # points to the virtual host name.
+                set url [security::replace_host_in_url -hostname $config_hostname $url]
             }
-            set url $url_decoded
+        } else {
+            #
+            # The host-node-map points to an application package and
+            # not to a subsite. We have to provide logins via next
+            # available subsite.
+            #
+            set subsite_id [site_node::closest_ancestor_package \
+                                     -node_id $host_node_id \
+                                     -package_key acs-subsite \
+                                     -include_self \
+                                     -element "object_id"]
+            set url [subsite::get_element -subsite_id $subsite_id -element url]
+            set url [security::get_qualified_url $url]
+            set url [security::replace_host_in_url -hostname $config_hostname $url]
+            set require_qualified_return_url 1
+        }
+    } else {
+        #
+        # We are on normal subsite
+        #
+        if { [ad_conn isconnected] } {
+            set url [subsite::get_element -element url]
+            #
+            # Check to see that the user (most likely "The Public"
+            # party, since there's probably no user logged in)
+            # actually have permission to view that subsite, otherwise
+            # we'll get into an infinite redirect loop.
+            #
+            array set site_node [site_node::get_from_url -url $url]
+            set package_id $site_node(object_id)
+            if { ![permission::permission_p -no_login \
+                       -object_id $site_node(object_id) \
+                       -privilege read \
+                       -party_id 0] } {
+                set url /
+            }
+        } else {
+            #
+            # If we are not connected, there can't be a virtual
+            # server, so we assume to perform the login on the main
+            # subsite.
+            #
+            set url /
+        }
+        if {$UseHostnameDomainforReg} {
+            set url [security::get_qualified_url $url]
+            set url [security::replace_host_in_url -hostname $config_hostname $url]
         }
     }
-    ns_log $::security::log(login_url) "ad_get_login_url: login_url without vars <$url>"
 
     append url "register/"
 
@@ -726,70 +781,20 @@ ad_proc -public ad_get_login_url {
     }
 
     #
-    # Don't add a return_url if you're currently under /register,
+    # Don't add a return_url if you're already under /register,
     # because that will frequently interfere with normal login
     # procedure.
     #
     if { [ad_conn isconnected] && $return_p && ![string match "register/*" [ad_conn extra_url]] } {
-        if { [security::secure_conn_p] || ![security::RestrictLoginToSSLP] } {
+        #
+        # In a few cases, we do not need to add a fully qualified
+        # return url. The secure cases have to be still tested.
+        #
+        if { !$require_qualified_return_url && ([security::secure_conn_p] || ![security::RestrictLoginToSSLP]) } {
             set return_url [ad_return_url]
         } else {
             set return_url [ad_return_url -qualified]
         }
-
-        if { $UseHostnameDomainforReg } {
-            # if current domain and hostdomain are different (and
-            # UseHostnameDomainforReg), rewrite return_url
-
-            if { $currentHost ne $config_hostname} {
-
-                if { [string index $return_url 0] eq "/" } {
-                    # Make the return_url fully qualified
-                    if { [security::secure_conn_p] } {
-                        set return_url_decoded [security::get_secure_qualified_url $return_url]
-                    } else {
-                        set return_url_decoded [security::get_insecure_qualified_url $return_url]
-                    }
-                } else {
-                    set return_url_decoded $return_url
-                }
-
-                #
-                # Rewrite return_url to use hostname's domain if
-                # return_url points to a non / host_node, redirect to
-                # main hostname.
-                #
-                set host_node_map_hosts_list [db_list -cache_key security-locations-host-names \
-                                                  get_node_host_names {select host from host_node_map}]
-                if {[llength $host_node_map_hosts_list] > 0 } {
-
-                    set restUrl ""
-                    regexp {^(https?://[^/]+)(/.*)$} $return_url_decoded . returnLocation restUrl
-                    util::split_location $returnLocation returnProto returnHost returnPort
-
-                    foreach hostname $host_node_map_hosts_list {
-                        if {$hostname eq $returnHost} {
-                            ns_log notice "ad_get_login_url: map return-url to main site"
-                        
-                            db_1row get_node_id_from_host_name {
-                                select node_id as host_node_id 
-                                from host_node_map 
-                                where host = :hostname
-                            }
-                            set subsiteUrl [site_node::get_url -node_id ${host_node_id} -notrailing]
-                            set rUrl [util::join_location -proto $returnProto -hostname $config_hostname -port $returnPort]
-                            append rUrl $subsiteUrl $restUrl
-                            set return_url_decoded $rUrl
-                            # no need to iterate over all entries of host-node map
-                            break
-                        }
-                    }
-                }
-                set return_url $return_url_decoded
-                ns_log $::security::log(login_url) "ad_get_login_url: final return_url <$return_url>"
-            }
-        }
-
 
         lappend export_vars { return_url }
     }
@@ -1578,13 +1583,25 @@ ad_proc -private security::get_https_port {} {
     }
 }
 
+ad_proc -private security::get_qualified_url { url } {
+    @return secure or insecure qualified url
+} {
+    if { [security::secure_conn_p] } {
+        set qualified_url [security::get_secure_qualified_url $url]
+    } else {
+        set qualified_url [security::get_insecure_qualified_url $url]
+    }
+    return $qualified_url
+}
+
+
 ad_proc -private security::get_secure_qualified_url { url } {
     Given a relative or qualified url, return the fully qualified
     HTTPS version.
 
     @author Peter Marklund
 } {
-    set qualified_uri [get_qualified_uri $url]
+    set qualified_uri [get_qualified_uri_part $url]
     set secure_url [get_secure_location]${qualified_uri}
     
     return $secure_url
@@ -1597,7 +1614,7 @@ ad_proc -private security::get_insecure_qualified_url { url } {
     @author Peter Marklund
 } {
     # Get part of URL after location
-    set qualified_uri [get_qualified_uri $url]
+    set qualified_uri [get_qualified_uri_part $url]
 
     set insecure_url [get_insecure_location]${qualified_uri}
 
@@ -1606,17 +1623,17 @@ ad_proc -private security::get_insecure_qualified_url { url } {
 
 ad_proc -private security::get_uri_part { url } {
     Get the URI following the location of the given URL. Assumes
-    the given URL has the http or https protocol or is a relative
+    the given URL has the "http" or "https" protocol or is a relative
     URL.
 
     @author Peter Marklund
 } {
-    regexp {^(?:http://[^/]+)?(.*)} $url match uri
+    regexp {^(?:http[s]?://[^/]+)?(.*)} $url match uri
 
     return $uri
 }
 
-ad_proc -private security::get_qualified_uri { url } {
+ad_proc -private security::get_qualified_uri_part { url } {
     
 } {
     set uri [get_uri_part $url]
@@ -1977,7 +1994,7 @@ ad_proc -public security::locations {} {
             }
         }
     }
-    ns_log notice "security::locations <$locations>"
+    #ns_log notice "security::locations <$locations>"
     return $locations
 }
 

@@ -795,21 +795,16 @@ ad_proc -public ad_return_url {
     } else {
         set url "[ns_conn url]?[join $query_list &]"
     }
-    
+
     if { $qualified_p } {
         # Make the return_url fully qualified
-        if { [security::secure_conn_p] } {
-            set url [security::get_secure_qualified_url $url]
-        } else {
-            set url [security::get_insecure_qualified_url $url]
-        }
+        set url [security::get_qualified_url $url]
     }
 
     if { $urlencode_p } {
-        return [ns_urlencode $url]
-    } else {
-        return $url
+        set url [ns_urlencode $url]
     }
+    return $url
 }
 
 ad_proc -public ad_progress_bar_begin {

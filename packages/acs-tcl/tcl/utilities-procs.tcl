@@ -2608,6 +2608,17 @@ ad_proc -public util_driver_info {
     return $d
 }
 
+ad_proc util::split_host {hostspec hostnameVar portVar} {
+    Split host potentially into a host name and a port
+} {
+    upvar $hostnameVar hostname $portVar port
+    if {![regexp {^(.*):(\d+)$} $hostspec . hostname port]} {
+        set port ""
+        set hostname $hostspec
+    }
+    regexp {^\[(.+)\]$} $hostname . hostname
+}
+
 ad_proc util::split_location {location protoVar hostnameVar portVar} {
     Split the provided location into "proto", "hostname" and
     "port".  The results are returned to the provided output
@@ -2770,11 +2781,11 @@ ad_proc -public util_current_location {} {
     # and maybe the "port" from there (this has the highest priority)
     #
     set Host [security::validated_host_header]
+    #ns_log notice "util_current_location validated host header <$Host>"
     if {$Host ne ""} {
-        if {[util::split_location $Host .proto hostname Host_port]} {
-            if {$Host_port ne ""} {
-                set port $Host_port
-            }
+        util::split_host $Host hostname Host_port
+        if {$Host_port ne ""} {
+            set port $Host_port
         }
     } else {
         ns_log notice "ignore non-existing or untrusted host header, fall back to <$hostname>"
