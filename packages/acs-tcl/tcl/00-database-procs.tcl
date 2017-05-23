@@ -3552,7 +3552,7 @@ ad_proc -public db_flush_cache {
 } {
     #
     # If the key pattern has meta characters, iterate over the entries.
-    # Otherwise, make a direct lookup, without retrieven the all keys
+    # Otherwise, make a direct lookup, without retrieving the all keys
     # from the cache, which can cause large mutex lock times.
     #
     if {[regexp {[*\]\[]} $cache_key_pattern]} {
