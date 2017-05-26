@@ -1746,7 +1746,7 @@ ad_proc -public security::driver {} {
     }
     set ::acs::sdriver ""
     set server_modules [ad_server_modules]
-    foreach driver {nsssl nsopenssl nsssle} {
+    foreach driver {nsssl nsssl_v4 nsssl_v6 nsopenssl nsssle} {
         if {$driver ni $server_modules} continue
         set ::acs::sdriver $driver
         break
