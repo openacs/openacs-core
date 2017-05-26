@@ -1981,8 +1981,10 @@ ad_proc -public security::locations {} {
             }
         } else {
             foreach hostname $host_node_map_hosts_list {
-                if {[dict get $d proto] eq "http"} {
-                    lappend locations "http://${hostname}[dict get $d suffix]"
+                foreach d $driver_info {
+                    if {[dict get $d proto] eq "http"} {
+                        lappend locations "http://${hostname}[dict get $d suffix]"
+                    }
                 }
                 if {$secure_conn_p} {
                     foreach d $driver_info {
