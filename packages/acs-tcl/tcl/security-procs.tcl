@@ -426,7 +426,7 @@ ad_proc -private sec_setup_session {
     ns_log debug "OACS= sec_setup_session: enter"
 
     set session_id [ad_conn session_id]
-
+    
     # figure out the session id, if we don't already have it
     if { $session_id eq ""} {
 
@@ -458,16 +458,19 @@ ad_proc -private sec_setup_session {
         # changes from user_id 0, since owasp recommends to renew the
         # session_id after any privilege level change
         #
-        #if { $prev_user_id != 0 && $prev_user_id != $new_user_id } 
+        ns_log debug "prev_user_id $prev_user_id new_user_id $new_user_id"
+        
         if { $prev_user_id != 0 && $prev_user_id != $new_user_id } {
             # this is a change in identity so we should create
             # a new session so session-level data is not shared
+            ns_log debug "sec_allocate_session"
             set session_id [sec_allocate_session]
         }
 
         if { $prev_user_id != $new_user_id } {
             # a change of user_id on an active session
             # demands an update of the users table
+            ns_log debug "sec_update_user_session_info"
             sec_update_user_session_info $new_user_id
         }
     }
@@ -671,23 +674,16 @@ ad_proc -private security::replace_host_in_url {-hostname url} {
     return $location/[join $elements /]
 }
 
-ad_proc -public ad_get_login_url {
-    {-authority_id ""}
-    {-username ""}
-    -return:boolean
-} {
+ad_proc -private security::get_register_subsite {} {
     
-    Returns a URL to the login page of the closest subsite, or the main site, if there's no current connection.
-    
-    @option return      If set, will export the current form, so when the registration is complete, 
-    the user will be returned to the current location.  All variables in 
-    ns_getform (both posts and gets) will be maintained.
+    Returns a URL pointing to the subsite, on which the
+    register/unregister should be performed. If there is no current
+    connection, the main site url is returned.
 
-    @author Lars Pind (lars@collaboraid.biz)
+    @author Gustaf Neumann
 } {
     
-    set current_location [util_current_location]
-    util::split_location $current_location currentProto current_host current_port
+    util::split_location [util_current_location] current_proto current_host current_port
     set config_hostname [dict get [util_driver_info] hostname] 
     set UseHostnameDomainforReg [parameter::get \
                                      -package_id [apm_package_id_from_key acs-tcl] \
@@ -696,6 +692,11 @@ ad_proc -public ad_get_login_url {
     set require_qualified_return_url $UseHostnameDomainforReg
     set host_node_id [ad_get_node_id_from_host_node_map $current_host]
 
+    # we need
+    #    UseHostnameDomainforReg
+    #    host_node_id
+    #    config_hostname
+    
     if { $host_node_id > 0 } {
         #
         # We are on a host-node mapped subsite
@@ -767,18 +768,32 @@ ad_proc -public ad_get_login_url {
             set url [security::replace_host_in_url -hostname $config_hostname $url]
         }
     }
+    return [list url $url require_qualified_return_url $require_qualified_return_url]
+}
 
+
+ad_proc -public ad_get_login_url {
+    {-authority_id ""}
+    {-username ""}
+    -return:boolean
+} {
+    
+    Returns a URL to the login page of the closest subsite, or the main site, if there's no current connection.
+    
+    @option return      If set, will export the current form, so when the registration is complete, 
+    the user will be returned to the current location.  All variables in 
+    ns_getform (both posts and gets) will be maintained.
+
+    @author Lars Pind (lars@collaboraid.biz)
+    @author Gustaf Neumann
+
+} {
+
+    set subsite_info [security::get_register_subsite]
+    set url [dict get $subsite_info url]
+    set require_qualified_return_url [dict get $subsite_info require_qualified_return_url]
+    
     append url "register/"
-
-    set export_vars [list]
-    if { $authority_id ne "" } {
-        lappend export_vars authority_id
-        
-    }
-    if { $username ne "" } {
-        lappend export_vars username
-        
-    }
 
     #
     # Don't add a return_url if you're already under /register,
@@ -795,13 +810,9 @@ ad_proc -public ad_get_login_url {
         } else {
             set return_url [ad_return_url -qualified]
         }
-
-        lappend export_vars { return_url }
     }
+    set url [export_vars -base $url -no_empty {authority_id username return_url}]
 
-    if { [llength $export_vars] > 0 } {
-        set url [export_vars -base $url $export_vars]
-    }
     ns_log $::security::log(login_url) "ad_get_login_url: final login_url <$url>"
 
     return $url
@@ -820,12 +831,10 @@ ad_proc -public ad_get_logout_url {
 
     @author Lars Pind (lars@collaboraid.biz)
 } {
-    if { [ad_conn isconnected] } {
-        set url [subsite::get_element -element url]
-    } else {
-        set url /
-    }
 
+    set subsite_info [security::get_register_subsite]
+    set url [dict get $subsite_info url]
+    
     append url "register/logout"
 
     if { $return_p && $return_url eq "" } {
@@ -1922,10 +1931,6 @@ ad_proc -public security::locations {} {
     }
 
     if {[ns_conn isconnected]} {
-        #
-        # Get Information about the current connection
-        #
-
         #
         # Is the current connection secure?
         #
