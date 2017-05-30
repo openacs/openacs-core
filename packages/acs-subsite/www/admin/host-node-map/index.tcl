@@ -67,6 +67,9 @@ ad_form -name add_host_node_mapping -form {
     }
 } -on_submit {
     util_memoize_flush_regexp "rp_lookup_node_from_host"
+    db_flush_cache -cache_key_pattern security-locations-host-names
+    db_flush_cache -cache_key_pattern ad_get_host_node_map
+
     db_dml host_node_insert {}
 } -after_submit {
     ad_returnredirect index
