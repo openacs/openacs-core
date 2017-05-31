@@ -24,7 +24,12 @@ foreach {parameter default cmd} {
 #
 # Optionally add more traces here
 #
-#append trace "\ntrace add execution ::nsv_get    enter {::tcltrace::before}"
+set traced_cmds {}
+#set traced_cmds {::nsv_get}
+#set traced_cmds {::ns_setcookie ::ns_getcookie ::ns_deletecookie}
+foreach cmd $traced_cmds {
+    append trace "\ntrace add execution $cmd  enter {::tcltrace::before}"
+}
 
 if {$trace ne ""} {
     ns_ictl trace create $trace

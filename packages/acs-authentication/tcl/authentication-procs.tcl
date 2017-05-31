@@ -168,6 +168,7 @@ ad_proc -public auth::authenticate {
     {-no_cookie:boolean}
     {-first_names ""}
     {-last_name ""}
+    {-host_node_id ""}
 } {
     Try to authenticate and login the user forever by validating the username/password combination,
     and return authentication and account status codes.
@@ -176,9 +177,10 @@ ad_proc -public auth::authenticate {
     @param authority_id The ID of the authority to ask to verify the user. Defaults to local authority.
     @param username     Authority specific username of the user.
     @param email        User's email address. You must supply either username or email.
-    @param passowrd     The password as the user entered it.
+    @param password     The password as the user entered it.
     @param persistent   Set this if you want a permanent login cookie
     @param no_cookie    Set this if you don't want to issue a login cookie
+    @param host_node_id Optional parameter used to determine the cookie domain from the host_node_map
 
     @return Array list with the following entries:
 
@@ -352,18 +354,39 @@ ad_proc -public auth::authenticate {
     if { $remote_account_message ne "" } {
         if { [info exists result(account_message)] && $result(account_message) ne "" } {
             # Concatenate local and remote account messages
-            set result(account_message) "<p>[auth::authority::get_element -authority_id $authority_id -element pretty_name]: $remote_account_message </p> <p>[ad_system_name]: $result(account_message)</p>"
+            set local_account_message [auth::authority::get_element \
+                                           -authority_id $authority_id \
+                                           -element pretty_name]
+            set result(account_message) [subst {
+                <p>$local_account_message: $remote_account_message</p>
+                <p>[ad_system_name]: $result(account_message)</p>
+            }]
         } else {
             set result(account_message) $remote_account_message
         }
     }
 
     # Issue login cookie if login was successful
-    if { $result(auth_status) eq "ok" && !$no_cookie_p && [info exists result(user_id)] && $result(user_id) ne "" } {
+    if { $result(auth_status) eq "ok"
+         && !$no_cookie_p
+         && [info exists result(user_id)] && $result(user_id) ne ""
+     } {
+        if {$host_node_id ne ""} {
+            set cookie_domain [db_string get_mapped_host {
+                select host from host_node_map where node_id = :host_node_id
+            } -default ""]
+            if {$cookie_domain eq ""} {
+                ns_log warning "auth::authenticate: host_node_id $host_node_id was provided but is apparently not mapped"
+            }
+        } else {
+            set cookie_domain ""
+        }
+        ns_log notice "auth::authenticate recieves host_node_id $host_node_id domain <$cookie_domain>"
         auth::issue_login \
             -user_id $result(user_id) \
             -persistent=$persistent_p \
-            -account_status $result(account_status)
+            -account_status $result(account_status) \
+            -cookie_domain $cookie_domain
     }
 
     return [array get result]
@@ -371,13 +394,15 @@ ad_proc -public auth::authenticate {
 
 ad_proc -private auth::issue_login {
     {-user_id:required}
-    {-persistent:boolean}
     {-account_status "ok"}
+    {-cookie_domain ""}
+    {-persistent:boolean}
 } {
     Issue the login cookie.
 } {
     ad_user_login \
         -account_status $account_status \
+        -cookie_domain $cookie_domain \
         -forever=$persistent_p \
         $user_id
 }

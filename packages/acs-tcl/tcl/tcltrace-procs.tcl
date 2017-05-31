@@ -76,7 +76,7 @@ namespace eval ::tcltrace {
     ad_proc -private before { cmd op } {
         Simple trace proc for arbitraty commands. simply reports traces to error.log.
     } {
-        ns_log notice $cmd
+        ns_log notice "trace: $cmd"
     }
    
 }

@@ -6,6 +6,7 @@ ad_page_contract {
     {username ""}
     {email ""}
     {return_url:localurl ""}
+    {host_node_id:naturalnum ""}
 } -validate {
     valid_email -requires email {
         if {![regexp {^[\w.@+/=$%!*~-]+$} $email]} {
@@ -21,6 +22,7 @@ if {$login_template eq ""} {
     set login_template "/packages/acs-subsite/lib/login"
 }
 
+ns_log notice "register/index.tcl: login_template <$login_template> host_node_id <$host_node_id>"
 
 # Local variables:
 #    mode: tcl

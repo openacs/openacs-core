@@ -75,12 +75,7 @@ if { $allow_persistent_login_p } {
 set subsite_url [subsite::get_element -element url]
 set system_name [ad_system_name]
 
-if { $return_url ne "" } {
-    if { [util::external_url_p $return_url] } {
-      ad_returnredirect -message "only urls without a host name are permitted" "."
-      ad_script_abort
-    }
-} else {
+if { $return_url eq "" } {
     set return_url [ad_pvt_home]
 }
 
@@ -94,7 +89,7 @@ set forgotten_pwd_url [auth::password::get_forgotten_url \
                            -username $username \
                            -email $email]
 
-set register_url [export_vars -no_empty -base "[subsite::get_url]register/user-new" { return_url host_node_id }]
+set register_url [export_vars -no_empty -base "[subsite::get_url]register/user-new" { return_url }]
 if { $authority_id eq [auth::get_register_authority] || [auth::UseEmailForLoginP] } {
     set register_url [export_vars -no_empty -base $register_url { username email}]
 }
@@ -108,6 +103,7 @@ ad_form \
     -action "[subsite::get_url]register/" -form {
 	{return_url:text(hidden)}
 	{time:text(hidden)}
+        {host_node_id:text(hidden)}
 	{token_id:integer(hidden)}
 	{hash:text(hidden)}
     } -validate {
@@ -115,7 +111,7 @@ ad_form \
     }
 
 set username_widget text
-if { [parameter::get -parameter UsePasswordWidgetForUsername -package_id [ad_acs_kernel_id]] } {
+if { [parameter::get -parameter UsePasswordWidgetForUsername -package_id $::acs::kernel_id] } {
     set username_widget password
 }
 
@@ -192,15 +188,19 @@ ad_form -extend -name login -on_request {
     set token [sec_get_token $token_id]
     set computed_hash [ns_sha1 "$time$token_id$token"]
     
-    set expiration_time [parameter::get -parameter LoginPageExpirationTime -package_id [ad_acs_kernel_id] -default 600]
+    set expiration_time [parameter::get \
+                             -parameter LoginPageExpirationTime \
+                             -package_id $::acs::kernel_id \
+                             -default 600]
     if { $expiration_time < 30 } { 
         # If expiration_time is less than 30 seconds, it's practically impossible to login
         # and you will have completely hosed login on your entire site
         set expiration_time 30
     }
 
-    if { $hash ne $computed_hash  || 
-             $time < [ns_time] - $expiration_time } {
+    if { $hash ne $computed_hash
+         || $time < [ns_time] - $expiration_time
+     } {
         ad_returnredirect -message [_ acs-subsite.Login_has_expired] -- [export_vars -base [ad_conn url] { return_url }]
         ad_script_abort
     }
@@ -222,6 +222,7 @@ ad_form -extend -name login -on_request {
                              -last_name $last_name \
                              -username [string trim $username] \
                              -password $password \
+                             -host_node_id $host_node_id \
                              -persistent=[expr {$allow_persistent_login_p && [template::util::is_true $persistent_p]}]]
     
     # Handle authentication problems

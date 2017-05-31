@@ -155,7 +155,7 @@ ad_proc -private sec_handler {} {
             }
         }
 
-        ns_log $::security::log(login_cookie) "Security: Insecure session OK: session_id = $session_id, untrusted_user_id = $untrusted_user_id, auth_level = $auth_level, user_id = $user_id"
+        ns_log $::security::log(login_cookie) "Security: Insecure session OK: session_id $session_id, untrusted_user_id $untrusted_user_id, auth_level $auth_level, user_id $user_id"
 
         # We're okay, insofar as the insecure session, check if it's also secure
         if { $auth_level eq "ok" && [security::secure_conn_p] } {
@@ -267,6 +267,7 @@ ad_proc -private sec_login_handler {} {
 
 ad_proc -public ad_user_login {
     {-account_status "ok"}
+    {-cookie_domain ""}
     -forever:boolean
     user_id
 } { 
@@ -286,14 +287,16 @@ ad_proc -public ad_user_login {
 
     set auth_level "ok"
     set secure_p [security::secure_conn_p]
-    set domain [parameter::get -parameter CookieDomain -package_id [ad_acs_kernel_id]]
+    if {$cookie_domain eq ""} {
+        set cookie_domain [parameter::get -parameter CookieDomain -package_id $::acs::kernel_id]
+    }
 
     # If you're logged in over a secure connection, you're secure
     if { $secure_p } {
         ad_set_signed_cookie \
             -max_age $max_age \
             -secure t \
-            -domain $domain \
+            -domain $cookie_domain \
             ad_user_login_secure \
             "$user_id,[ns_time],[sec_get_user_auth_token $user_id],[ns_time],$forever_p"
 
@@ -308,13 +311,13 @@ ad_proc -public ad_user_login {
     ns_log Debug "ad_user_login: Setting new ad_user_login cookie with max_age $max_age"
     ad_set_signed_cookie \
         -max_age $max_age \
-        -domain $domain \
+        -domain $cookie_domain \
         -secure f \
         ad_user_login \
         "$user_id,[ns_time],[sec_get_user_auth_token $user_id],$forever_p"
 
     # deal with the current session
-    sec_setup_session $user_id $auth_level $account_status
+    sec_setup_session -cookie_domain $cookie_domain $user_id $auth_level $account_status
 }
 
 ad_proc -public sec_get_user_auth_token {
@@ -352,10 +355,14 @@ ad_proc -public sec_change_user_auth_token {
 }
 
 
-ad_proc -public ad_user_logout {} { 
+ad_proc -public ad_user_logout {
+    {-cookie_domain ""}
+} { 
     Logs the user out. 
 } {
-    set domain [parameter::get -parameter CookieDomain -package_id [ad_acs_kernel_id]]
+    if {$cookie_domain eq ""} {
+        set cookie_domain [parameter::get -parameter CookieDomain -package_id $::acs::kernel_id]
+    }
     #
     # Use the same "secure" setting for unsetting the cookie as it was
     # used for setting the cookie. The implementation is not 100%
@@ -363,13 +370,13 @@ ad_proc -public ad_user_logout {} {
     # "SecureSessionCookie" was altered during a session, but this
     # should be a seldom border case.
     #
-    ad_unset_cookie -domain $domain -secure [expr {[parameter::get \
+    ad_unset_cookie -domain $cookie_domain -secure [expr {[parameter::get \
                             -parameter SecureSessionCookie \
                             -package_id [ad_acs_kernel_id] \
                             -default 0] ? "t" : "f"}] ad_session_id
-    ad_unset_cookie -domain $domain -secure f ad_user_login
-    ad_unset_cookie -domain $domain -secure t ad_secure_token
-    ad_unset_cookie -domain $domain -secure t ad_user_login_secure
+    ad_unset_cookie -domain $cookie_domain -secure f ad_user_login
+    ad_unset_cookie -domain $cookie_domain -secure t ad_secure_token
+    ad_unset_cookie -domain $cookie_domain -secure t ad_user_login_secure
 }
 
 ad_proc -public ad_check_password { 
@@ -413,7 +420,8 @@ ad_proc -public ad_change_password {
     db_release_unused_handles
 }
 
-ad_proc -private sec_setup_session { 
+ad_proc -private sec_setup_session {
+    {-cookie_domain ""}
     new_user_id 
     auth_level
     account_status
@@ -491,7 +499,7 @@ ad_proc -private sec_setup_session {
 
     ns_log debug "OACS= about to generate session id cookie"
 
-    sec_generate_session_id_cookie
+    sec_generate_session_id_cookie -cookie_domain $cookie_domain
 
     ns_log debug "OACS= done generating session id cookie"
 
@@ -513,10 +521,15 @@ ad_proc -private sec_update_user_session_info {
     db_release_unused_handles
 }
 
-ad_proc -private sec_generate_session_id_cookie {} { 
+ad_proc -private sec_generate_session_id_cookie {
+    {-cookie_domain ""}
+} { 
     Sets the ad_session_id cookie based on global variables. 
 } {
     set user_id [ad_conn untrusted_user_id]
+    #
+    # Maybe we need the session_id of the cookie-domain
+    #
     set session_id [ad_conn session_id]
     set auth_level [ad_conn auth_level]
     set account_status [ad_conn account_status]
@@ -532,10 +545,14 @@ ad_proc -private sec_generate_session_id_cookie {} {
 
     ns_log Debug "Security: [ns_time] sec_generate_session_id_cookie setting session_id=$session_id, user_id=$user_id, login_level=$login_level"
 
-    set domain [parameter::get -parameter CookieDomain -package_id [ad_acs_kernel_id]]
+    if {$cookie_domain eq ""} {
+        set cookie_domain [parameter::get -parameter CookieDomain -package_id $::acs::kernel_id]
+    }
 
-    # we fetch the last value element of ad_user_login cookie (or ad_user_login_secure) that indicates
-    # if user wanted to be remembered when loggin in
+    # Fetch the last value element of ad_user_login cookie (or
+    # ad_user_login_secure) that indicates if user wanted to be
+    # remembered when loggin in.
+    
     set discard t
     set max_age [sec_session_timeout]
     catch { 
@@ -550,7 +567,10 @@ ad_proc -private sec_generate_session_id_cookie {} {
                             -parameter SecureSessionCookie \
                             -package_id [ad_acs_kernel_id] \
                             -default 0] ? "t" : "f"}] \
-        -discard $discard -replace t -max_age $max_age -domain $domain \
+        -discard $discard \
+        -replace t \
+        -max_age $max_age \
+        -domain $cookie_domain \
         ad_session_id "$session_id,$user_id,$login_level,[ns_time]"
 }
 
@@ -691,11 +711,6 @@ ad_proc -private security::get_register_subsite {} {
                                      -default 0]
     set require_qualified_return_url $UseHostnameDomainforReg
     set host_node_id [ad_get_node_id_from_host_node_map $current_host]
-
-    # we need
-    #    UseHostnameDomainforReg
-    #    host_node_id
-    #    config_hostname
     
     if { $host_node_id > 0 } {
         #
@@ -768,7 +783,10 @@ ad_proc -private security::get_register_subsite {} {
             set url [security::replace_host_in_url -hostname $config_hostname $url]
         }
     }
-    return [list url $url require_qualified_return_url $require_qualified_return_url]
+    return [list \
+                url $url \
+                require_qualified_return_url $require_qualified_return_url \
+                host_node_id $host_node_id]
 }
 
 
@@ -790,14 +808,15 @@ ad_proc -public ad_get_login_url {
 } {
 
     set subsite_info [security::get_register_subsite]
-    set url [dict get $subsite_info url]
-    set require_qualified_return_url [dict get $subsite_info require_qualified_return_url]
+    foreach var {url require_qualified_return_url host_node_id} {
+        set $var [dict get $subsite_info $var]
+    }
     
     append url "register/"
 
     #
     # Don't add a return_url if you're already under /register,
-    # because that will frequently interfere with normal login
+    # because that will frequently interfere with the normal login
     # procedure.
     #
     if { [ad_conn isconnected] && $return_p && ![string match "register/*" [ad_conn extra_url]] } {
@@ -811,7 +830,7 @@ ad_proc -public ad_get_login_url {
             set return_url [ad_return_url -qualified]
         }
     }
-    set url [export_vars -base $url -no_empty {authority_id username return_url}]
+    set url [export_vars -base $url -no_empty {authority_id username return_url host_node_id}]
 
     ns_log $::security::log(login_url) "ad_get_login_url: final login_url <$url>"
 
