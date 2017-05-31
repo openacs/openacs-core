@@ -79,6 +79,9 @@ if {$package_key eq ""} {
 
             if {[info exists spec_file]} {
                 array set package [apm_read_package_info_file $spec_file]
+            } else {
+                ad_return_complaint 1 "Could not find .info file of dependency: $pkg."
+                ad_script_abort
             }
 
             if {[info exists failed($pkg)]} {
