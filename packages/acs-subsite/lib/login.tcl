@@ -8,8 +8,9 @@ ad_include_contract {
     @param email
 } {
     {subsite_id:naturalnum ""}
-    {return_url:trim ""}
+    {return_url:localurl,trim ""}
     {authority_id:naturalnum ""}
+    {host_node_id:naturalnum ""}
     {username ""}
     {email ""}
 }
@@ -51,12 +52,21 @@ if { $email eq "" && $username eq "" && [ad_conn untrusted_user_id] != 0 } {
 #  1. Allowed if allowed both site-wide (on acs-kernel) and on the subsite
 #  2. Default setting is in acs-kernel
 
-set allow_persistent_login_p [parameter::get -parameter AllowPersistentLoginP -package_id [ad_acs_kernel_id] -default 1]
+set allow_persistent_login_p [parameter::get \
+                                  -parameter AllowPersistentLoginP \
+                                  -package_id $::acs::kernel_id \
+                                  -default 1]
 if { $allow_persistent_login_p } {
-    set allow_persistent_login_p [parameter::get -package_id $subsite_id -parameter AllowPersistentLoginP -default 1]
+    set allow_persistent_login_p [parameter::get \
+                                      -package_id $subsite_id \
+                                      -parameter AllowPersistentLoginP \
+                                      -default 1]
 }
 if { $allow_persistent_login_p } {
-    set default_persistent_login_p [parameter::get -parameter DefaultPersistentLoginP -package_id [ad_acs_kernel_id] -default 1]
+    set default_persistent_login_p [parameter::get \
+                                        -parameter DefaultPersistentLoginP \
+                                        -package_id $::acs::kernel_id \
+                                        -default 1]
 } else {
     set default_persistent_login_p 0
 }
@@ -79,11 +89,14 @@ if { $authority_id eq "" } {
     set authority_id [lindex $authority_options 0 1]
 }
 
-set forgotten_pwd_url [auth::password::get_forgotten_url -authority_id $authority_id -username $username -email $email]
+set forgotten_pwd_url [auth::password::get_forgotten_url \
+                           -authority_id $authority_id \
+                           -username $username \
+                           -email $email]
 
-set register_url [export_vars -base "[subsite::get_url]register/user-new" { return_url }]
+set register_url [export_vars -no_empty -base "[subsite::get_url]register/user-new" { return_url host_node_id }]
 if { $authority_id eq [auth::get_register_authority] || [auth::UseEmailForLoginP] } {
-    set register_url [export_vars -no_empty -base $register_url { username email }]
+    set register_url [export_vars -no_empty -base $register_url { username email}]
 }
 
 set login_button [list [list [_ acs-subsite.Log_In] ok]]
@@ -251,17 +264,26 @@ ad_form -extend -name login -on_request {
  			    } else {
  				set operation create
  			    }
-			    element $operation login email -widget $username_widget -datatype text -label [_ acs-subsite.Email]
+			    element $operation login email \
+                                -widget $username_widget \
+                                -datatype text \
+                                -label [_ acs-subsite.Email]
 			    if {[element error_p login email]} {
 				template::form::set_error login email [_ acs-subsite.Email_not_provided_by_authority]
 			    }
 			}
 			*first* {
-			    element create login first_names -widget text -datatype text -label [_ acs-subsite.First_names]
+			    element create login first_names \
+                                -widget text \
+                                -datatype text \
+                                -label [_ acs-subsite.First_names]
 			    template::form::set_error login email [_ acs-subsite.First_names_not_provided_by_authority]
 			}
 			*last* {
-			    element create login last_name -widget text -datatype text -label [_ acs-subsite.Last_name]
+			    element create login last_name \
+                                -widget text \
+                                -datatype text \
+                                -label [_ acs-subsite.Last_name]
 			    template::form::set_error login last_name [_ acs-subsite.Last_name_not_provided_by_authority]
 			}
 		    }
@@ -287,7 +309,9 @@ ad_form -extend -name login -on_request {
 
     # Handle account_message
     if { [info exists auth_info(account_message)] && $auth_info(account_message) ne "" } {
-        ad_returnredirect [export_vars -base "[subsite::get_element -element url]register/account-message" { { message $auth_info(account_message) } return_url }]
+        ad_returnredirect [export_vars -base "[subsite::get_element -element url]register/account-message" {
+            { message $auth_info(account_message) } return_url
+        }]
         ad_script_abort
     } elseif {![info exists auth_info(element_messages)]} {
         # No message
