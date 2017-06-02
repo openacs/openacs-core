@@ -90,9 +90,9 @@ on a live site, therefore this mapping is stored in the
 database.</p><p><span class="strong"><strong>Authentication and
 Authorization</strong></span></p><p>Once the request processor has located both the package_id and
 concrete file associated with the request, authentication is
-performed by the <a class="ulink" href="security-design" target="_top">session</a> security system. After authentication has been
-performed the user is authorized to have read access for the given
-package by the <a class="xref" href="permissions-design" title="Permissions Design">OpenACS 4 Permissions Design</a>. If
+performed by the <a class="ulink" href="security-design" target="_top">session</a> security system. After authentication has
+been performed the user is authorized to have read access for the
+given package by the <a class="xref" href="permissions-design" title="Permissions Design">OpenACS 4 Permissions Design</a>. If
 authorization succeeds then the request is served, otherwise it is
 aborted.</p><p><span class="strong"><strong>Concrete File
 Search</strong></span></p><p>To actually serve a file, the request processor generates an
@@ -112,7 +112,7 @@ file is found at any of the searched locations then it is
 served.</p><p><span class="strong"><strong>Virtual URL
 Handlers</strong></span></p><p>If no file is found during the concrete file search, then the
 request processor searches the filesystem for a <span class="strong"><strong>virtual url handler</strong></span> (<span class="strong"><strong>.vuh</strong></span>) file. This file contains
-normal tcl code, and is in fact handled by the same extension
+normal Tcl code, and is in fact handled by the same extension
 handling procedure that handles .tcl files. The only way this file
 is treated differently is in how the request processor searches for
 it. When a lookup fails, the request processor generates each valid

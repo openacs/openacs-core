@@ -32,7 +32,7 @@ numbers in the documentation and in the packages must be updated.
 This should only happen after a release candidate is approved.</p><p class="remark"><em><span class="remark">.LRN: this must be
 repeated for .LRN modules (dotlrn-core in the dotlrn cvs tree) and
 for any modified modules in the .LRN prerequisites (dotlrn-prereq
-in openacs cvs tree). My current working model is that I
+in OpenACS cvs tree). My current working model is that I
 bulk-update .LRN and OpenACS core but that I don&#39;t touch
 dotlrn-prereq modules - I just use the most recent release and
 it&#39;s up to individual package developers to tag and <a class="link" href="releasing-package" title="How to package and release an OpenACS Package">release those
@@ -141,7 +141,7 @@ tar cz -f <span class="replaceable"><span class="replaceable">openacs-5.0.0a1.ta
 <li class="listitem">
 <p>Go to a new working space and export the tagged files. (was
 getting errors here trying to use -d, so gave up and just moved
-things from openacs-4 to openacs at the end)</p><pre class="screen"><span class="action"><span class="action">mkdir /var/tmp/dotlrn-tarball
+things from openacs-4 to OpenACS at the end)</p><pre class="screen"><span class="action"><span class="action">mkdir /var/tmp/dotlrn-tarball
 cd /var/tmp/dotlrn-tarball
 cvs -d /cvsroot export -r <span class="replaceable"><span class="replaceable">openacs-5-0-0a1</span></span> acs-core
 cd /var/tmp/dotlrn-tarball/openacs-4/packages
@@ -264,8 +264,8 @@ tar -czf ../dotlrn-${DOTLRN_VERSION//-/.}.tar.gz dotlrn-${DOTLRN_VERSION//-/.}
 
 # Clean up after ourselves...
 cd $BASE &amp;&amp; rm -rf dotlrn-tarball tarball openacs-4 dotlrn-packages
-</pre><div class="cvstag">($&zwnj;Id: releasing-openacs.xml,v 1.22.2.3
-2016/10/03 09:17:51 gustafn Exp $)</div>
+</pre><div class="cvstag">($&zwnj;Id: releasing-openacs.xml,v 1.22.2.5
+2017/04/22 17:18:48 gustafn Exp $)</div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 		    leftLink="releasing-openacs" leftLabel="Prev" leftTitle="

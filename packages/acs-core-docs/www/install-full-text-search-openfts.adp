@@ -24,7 +24,7 @@ requiring only compilation of one module from PostgreSQL contrib,
 with an automated install process using the tsearch2-driver
 package.</p><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="install-openfts" id="install-openfts"></a>Install OpenFTS module</h3></div></div></div><a class="indexterm" name="idp140529130323488" id="idp140529130323488"></a><p>If you want full text search, and you are running PostgreSQL,
+<a name="install-openfts" id="install-openfts"></a>Install OpenFTS module</h3></div></div></div><a class="indexterm" name="idp140186669121592" id="idp140186669121592"></a><p>If you want full text search, and you are running PostgreSQL,
 install this module to support FTS. Do this step after you have
 installed both PostgreSQL and AOLserver. You will need the
 <a class="link" href="individual-programs">openfts tarball</a> in
@@ -84,7 +84,7 @@ tar xzf /tmp/Search-OpenFTS-tcl-0.3.2.tar.gz
 cd /usr/local/src/Search-OpenFTS-tcl-0.3.2/
 ./configure --with-aolserver-src=/usr/local/src/aolserver/aolserver --with-tcl=/usr/lib/
 make
-cd aolserver
+cd AOLserver
 make
 cp nsfts.so /usr/local/aolserver/bin
 </span></span>
@@ -119,7 +119,7 @@ exit</span></span>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="install-openfts-postgres" id="install-openfts-postgres"></a>Install OpenFTS prerequisites in
-PostgreSQL instance</h3></div></div></div><a class="indexterm" name="idp140529130622784" id="idp140529130622784"></a><p>If you are installing Full Text Search, add required packages to
+PostgreSQL instance</h3></div></div></div><a class="indexterm" name="idp140186683681672" id="idp140186683681672"></a><p>If you are installing Full Text Search, add required packages to
 the new database. (In order for full text search to work, you must
 also <a class="link" href="install-full-text-search-openfts" title="Install OpenFTS module">install</a> the PostgreSQL OpenFTS module
 and prerequisites.)</p><pre class="screen">
@@ -146,7 +146,7 @@ tsearch via</p><pre class="screen"><strong class="userinput"><code>pg_config --p
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="enable-openfts" id="enable-openfts"></a>Enable OpenFTS in config.tcl</h3></div></div></div><p>If you have <a class="link" href="install-full-text-search-openfts" title="Install OpenFTS module">installed OpenFTS</a>, you can enable it
-for this service. Uncomment this line from <code class="computeroutput">config.tcl</code>. (To uncomment a line in a tcl
+for this service. Uncomment this line from <code class="computeroutput">config.tcl</code>. (To uncomment a line in a Tcl
 file, remove the <code class="computeroutput">#</code> at the
 beginning of the line.)</p><pre class="programlisting">
 #ns_param   nsfts           ${bindir}/nsfts.so

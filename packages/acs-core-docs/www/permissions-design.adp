@@ -161,7 +161,7 @@ operation is querying the permissions database. Several kinds of
 questions are commonly asked: First, and most commonly, "Can
 this party perform this method on this object?" Two Tcl
 functions are provided to answer this - one which returns a
-boolean, the other of which results in an error page. These tcl
+boolean, the other of which results in an error page. These Tcl
 functions directly access the <code class="computeroutput">acs_object_party_method_map</code>.</p><p>The second most commonly asked question occurs when a list of
 objects is being displayed, often in order to provide appropriate
 UI functionality: "For this party, what methods are available
@@ -206,7 +206,7 @@ procedure revoke_permission (
   privilege    acs_permissions.privilege%TYPE
 );
 </pre><p>These procedures are defined in <a class="ulink" href="/doc/sql/display-sql?url=acs-permissions-create.sql&amp;package_key=acs-kernel" target="_top"><code class="computeroutput">permissions-create.sql</code></a>
-</p><p><span class="strong"><strong>Tcl Procedures</strong></span></p><p>Two tcl procedures provide a simple call for the query,
+</p><p><span class="strong"><strong>Tcl Procedures</strong></span></p><p>Two Tcl procedures provide a simple call for the query,
 "Can this user perform this method on this object?" One
 returns true or false, the other presents an error page.</p><p>To receive a true or false value, Tcl code should call:</p><pre class="programlisting">
 permission::permission_p -object_id $object_id -party_id $user_id -privilege $method

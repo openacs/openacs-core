@@ -21,8 +21,8 @@ Backup</a></span></dt><dt><span class="sect1"><a href="backups-with-cvs">Using C
 for backup-recovery</a></span></dt>
 </dl>
 </div><div class="authorblurb">
-<div class="cvstag">($&zwnj;Id: recovery.xml,v 1.17.6.2 2016/10/03
-09:17:51 gustafn Exp $)</div><p>By <a class="ulink" href="mailto:dhogaza\@pacifier.com" target="_top">Don Baccus</a> with additions by <a class="ulink" href="mailto:joel\@aufrecht.org" target="_top">Joel Aufrecht</a>
+<div class="cvstag">($&zwnj;Id: recovery.xml,v 1.17.6.3 2017/04/21
+15:07:53 gustafn Exp $)</div><p>By <a class="ulink" href="mailto:dhogaza\@pacifier.com" target="_top">Don Baccus</a> with additions by <a class="ulink" href="mailto:joel\@aufrecht.org" target="_top">Joel Aufrecht</a>
 </p><p>We will cover some basic backup and recovery strategies. These
 are intended to be robust but simple enough to set up. For a large
 scale production site you would probably need to create your own
@@ -30,7 +30,7 @@ backup strategies (in particular full dumps from oracle, while easy
 to set up, are far from the best solution).</p><p>There are three basic things which need to be backed up, the
 database data, the server source tree, and the
 acs-content-repository (which is in the server source tree).</p><div class="figure">
-<a name="idp140529122009312" id="idp140529122009312"></a><p class="title"><strong>Figure 8.1. Backup
+<a name="idp140186663493128" id="idp140186663493128"></a><p class="title"><strong>Figure 8.1. Backup
 and Recovery Strategy</strong></p><div class="figure-contents"><div class="mediaobject" align="center"><img src="images/backup.png" align="middle" alt="Backup and Recovery Strategy"></div></div>
 </div><p><br class="figure-break"></p>
 OpenACS docs are written by the named authors, and may be edited by

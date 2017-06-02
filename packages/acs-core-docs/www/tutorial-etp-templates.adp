@@ -28,7 +28,7 @@ some reason, then you only need to make that change in one
 location, instead of across many files.</p><p>In this problem set you will familiarise yourself with the
 templating system in openacs. This will be achieved through
 customising an existing edit-this-page application template.</p><p>Before proceeding, it is strongly advised to read the templating
-documentation on your openacs installation
+documentation on your OpenACS installation
 (http://localhost:8000/doc/acs-templating). The documentation lists
 the special tags available for ADP files.</p>
 </div><div class="sect2">
@@ -86,7 +86,7 @@ cp article-content.adp col2-content.adp
 </li><li class="listitem">
 <p>The template should provide us with the following ETP
 layout:</p><div class="table">
-<a name="idp140529126099504"></a><p class="title"><strong>TableÂ 10.1.Â table
+<a name="idp140186667458776"></a><p class="title"><strong>TableÂ 10.1.Â table
 showing ETP layout</strong></p><div class="table-contents"><table class="table" summary="table showing ETP layout" cellspacing="0" border="1" width="250">
 <colgroup>
 <col align="left" class="c1"><col width="2" align="left" class="c2">
@@ -133,8 +133,8 @@ view your ETP application using the col2 template.</p></li>
 <a name="end"></a>Who Wrote This and When</h3></div></div></div><p>This problem set was originally written by <a class="ulink" href="http://www.weg.ee.usyd.edu.au/people/ncarroll" target="_top">Nick Carroll</a> in August 2004 for the <a class="ulink" href="http://www.usyd.edu.au" target="_top">University of
 Sydney</a> Course <a class="ulink" href="http://www.weg.ee.usyd.edu.au/courses/ebus5002" target="_top">EBUS5002</a>.</p><p>This material is copyright 2004 by Nick Carroll. It may be
 copied, reused, and modified, provided credit is given to the
-original author.</p><div class="cvstag">($&zwnj;Id: tutorial-advanced.xml,v 1.52.2.3
-2016/10/03 09:17:51 gustafn Exp $)</div>
+original author.</p><div class="cvstag">($&zwnj;Id: tutorial-advanced.xml,v 1.52.2.6
+2017/04/22 17:18:48 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

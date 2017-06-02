@@ -188,7 +188,7 @@ nspostgres.so, you have to remember to change the AOLserver config
 file to point to nspostgres.so instead of postgres.so. This guide
 uses Mat Kovach&#39;s distro (i.e. postgres.so)</p></li><li class="listitem"><p>The patch that makes <code class="computeroutput">exec</code>
 work on BSD is available at <a class="ulink" href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=415475&amp;group_id=3152&amp;atid=303152" target="_top">sourceforge.net</a>
-</p></li><li class="listitem"><p>The patch for aolserver 3.x that makes <code class="computeroutput">ns_uuencode</code> work for binary files is
+</p></li><li class="listitem"><p>The patch for AOLserver 3.x that makes <code class="computeroutput">ns_uuencode</code> work for binary files is
 available at <a class="ulink" href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=474259&amp;group_id=3152&amp;atid=303152" target="_top">sourceforge.net</a>
 </p></li><li class="listitem"><p>The patch that makes AOLserver 3.x respect the <code class="computeroutput">-g</code> flag is available at <a class="ulink" href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=509413&amp;group_id=3152&amp;atid=303152" target="_top">sourceforge.net</a>
 </p></li>
@@ -316,8 +316,8 @@ track old versions of your files, do controlled deployment of code
 from development to production, or get or contribute development
 code from openacs.org.</p></li></ul></div>
 </li>
-</ul></div><div class="cvstag">($&zwnj;Id: software.xml,v 1.26.2.2 2016/10/03
-09:17:51 gustafn Exp $)</div>
+</ul></div><div class="cvstag">($&zwnj;Id: software.xml,v 1.26.2.3 2017/04/22
+17:18:48 gustafn Exp $)</div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 		    leftLink="install-steps" leftLabel="Prev" leftTitle="Basic Steps"

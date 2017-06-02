@@ -316,7 +316,7 @@ ref-timezones search</programlisting>
         </listitem>
               <listitem>
                 <para>
-                  Confirm via the <ulink url="http://cvs.openacs.org/cvs/openacs-4/">
+                  Confirm via the <ulink url="http://cvs.openacs.org/browse/OpenACS/openacs-4/">
                     OpenACS CVS browser </ulink>
                   that your changes are where you intended them to be.
                 </para>
@@ -766,47 +766,30 @@ cvs tag -b <replaceable>oacs-5-1</replaceable></programlisting>
       <listitem>
         <para>
           The 
-            <ulink url="http://cvs.openacs.org/cvs/">
-              OpenACS cvs web</ulink>
-            and
-            <ulink url="http://xarg.net/tools/cvs/">
-              Jeff&#39;s cvs
-              browser
-            </ulink>
-            are useful tools in understanding what is
-            happening with the code.
+            <ulink url="http://cvs.openacs.org/">
+              OpenACS cvs web browser</ulink>
+              is a useful tools in understanding what is
+              happening with the code.
           </para>
         </listitem>
         <listitem>
           <para>
-            There is a mailing list of cvs changes at
-      <ulink url="http://willfork.com/mailman/listinfo/openacs-cvs-list">
-        willfork.com
-      </ulink>
-          </para>
-        </listitem>
-        <listitem>
-          <para>There is an RSS feed of cvs changes at 
-          <ulink url="http://xarg.net/tools/cvs/rss/?days=3">
-            RSS feed
-          </ulink>
+            There is general information about CVS at 
+      <ulink url="http://www.nongnu.org/cvs/">
+        nongnu.org
+      </ulink>.
           </para>
         </listitem>
 
         
         <listitem>
           <para>
-            <ulink url="https://www.cvshome.org/docs/manual/cvs-1.11.17/cvs.html">cvs manual</ulink>
+            <ulink url="http://web.mit.edu/gnu/doc/html/cvs_20.html">cvs manual</ulink>
           </para>
         </listitem>
         <listitem>
           <para>
-            <ulink url="https://www.cvshome.org/docs/manual/cvs-1.11.17/cvs_7.html#SEC66">adding files/dirs with cvs</ulink>
-          </para>
-        </listitem>
-        <listitem>
-          <para>
-            <ulink url="https://www.cvshome.org/docs/manual/cvs-1.11.17/cvs_10.html#SEC82">file locking etc. with cvs</ulink>
+            <ulink url="http://cvsbook.red-bean.com/cvsbook.html">Open Source Development with CVS, 3rd Edition</ulink>
           </para>
         </listitem>
         <listitem>

@@ -23,7 +23,7 @@ Engine</span></span></code>
 </strong></span></p></li>
 </ol></div>
 </li><li class="listitem">
-<p>Build and install the new OpenFTS driver and supporting tcl
+<p>Build and install the new OpenFTS driver and supporting Tcl
 procedures. (This section of shell code is not fully documented;
 please exercise care.)</p><pre class="screen">
 cd /usr/local/src/

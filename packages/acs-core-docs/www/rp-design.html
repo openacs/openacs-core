@@ -61,7 +61,7 @@ the global pageroot will be served instead of a directory listing in the
 package pageroot, even though the global pageroot is searched later. If a
 file is found at any of the searched locations then it is served.</p><p><span class="strong"><strong>Virtual URL Handlers</strong></span></p><p>If no file is found during the concrete file search, then the request
 processor searches the filesystem for a <span class="strong"><strong>virtual url handler</strong></span>
-(<span class="strong"><strong>.vuh</strong></span>) file. This file contains normal tcl code, and is in
+(<span class="strong"><strong>.vuh</strong></span>) file. This file contains normal Tcl code, and is in
 fact handled by the same extension handling procedure that handles .tcl
 files. The only way this file is treated differently is in how the request
 processor searches for it. When a lookup fails, the request processor

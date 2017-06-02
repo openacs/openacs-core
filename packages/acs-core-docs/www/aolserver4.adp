@@ -17,7 +17,7 @@ OpenACS documentation staff.</div><div class="orderedlist"><ol class="orderedlis
 <li class="listitem">
 <p>
 <strong>Check suitability of previously installed
-TCL. </strong>Start tcl (type <strong class="userinput"><code>tclsh</code></strong> or find it using
+TCL. </strong>Start Tcl (type <strong class="userinput"><code>tclsh</code></strong> or find it using
 <strong class="userinput"><code>which tclsh</code></strong>).</p><pre class="screen">
 [root root]% <strong class="userinput"><code>info exists tcl_platform(threaded)</code></strong>
 1
@@ -28,8 +28,8 @@ TCL. </strong>Start tcl (type <strong class="userinput"><code>tclsh</code></str
 info exists tcl_platform(threaded)
 info patchlevel
 </span></span>
-</pre><p>If the first command returns anything other than <code class="computeroutput">1</code>, then tcl is not threaded. If tcl is
-threaded and the version is 8.4 or higher, then installing tcl from
+</pre><p>If the first command returns anything other than <code class="computeroutput">1</code>, then Tcl is not threaded. If Tcl is
+threaded and the version is 8.4 or higher, then installing Tcl from
 source is optional.</p><p>
 <a name="tcl-download" id="tcl-download"></a><strong>Retrieve
 Tcl 8.4 (or higher). </strong>Download and install Tcl
@@ -37,7 +37,7 @@ Tcl 8.4 (or higher). </strong>Download and install Tcl
 have the right version (stable users will need to add tcl8.4 to
 their sources.list file as described on the <a class="link" href="postgres" title="Install PostgreSQL">Install Postgres</a>
 page). You&#39;ll have to use /usr/lib/tcl8.4/ instead of
-/usr/local/lib when you try to find the tcl libraries, however.</p><p>If you have not installed Tcl already, download the latest Tcl
+/usr/local/lib when you try to find the Tcl libraries, however.</p><p>If you have not installed Tcl already, download the latest Tcl
 version from Sourceforge</p><p>
 <span class="bold"><strong>Debian:</strong></span><code class="computeroutput"><span class="action"><span class="action">apt-get
 install tcl8.4 tcl8.4-dev</span></span></code> and proceed to the
@@ -64,7 +64,7 @@ make install</span></span>
 </li><li class="listitem">
 <a name="aolserver4-download" id="aolserver4-download"></a><p>
 <strong>Retrieve AOLserver. </strong>Download the
-aolserver from CVS.</p><pre class="screen">
+AOLserver from CVS.</p><pre class="screen">
 [root root]# <strong class="userinput"><code>cd /usr/local/src</code></strong>
 [root src]# <strong class="userinput"><code>mkdir aolserver40r10</code></strong>
 [root src]# <strong class="userinput"><code>cd aolserver40r10</code></strong>
@@ -81,7 +81,7 @@ aolserver from CVS.</p><pre class="screen">
 <span class="action"><span class="action">cd /usr/local/src
 mkdir aolserver40r10
 cd aolserver40r10
-cvs -z3 -d:pserver:anonymous\@cvs.sourceforge.net:/cvsroot/aolserver co -r aolserver_v40_r10 aolserver
+cvs -z3 -d:pserver:anonymous\@cvs.sourceforge.net:/cvsroot/aolserver co -r aolserver_v40_r10 AOLserver
 cvs -z3 -d:pserver:anonymous\@cvs.sourceforge.net:/cvsroot/aolserver co nscache
 cvs -z3 -d:pserver:anonymous\@cvs.sourceforge.net:/cvsroot/aolserver co nspostgres
 cvs -z3 -d:pserver:anonymous\@cvs.sourceforge.net:/cvsroot/aolserver co nssha1
@@ -234,8 +234,8 @@ script according to the documentation found there (namely: Add the
 -b <span class="replaceable"><span class="replaceable">yourip:yourport</span></span> switch)</p></li><li class="listitem"><p>
 <a class="link" href="aolserver">Test
 AOLserver</a>.</p></li>
-</ol></div><div class="cvstag">($&zwnj;Id: aolserver4.xml,v 1.31.2.1 2016/06/23
-08:32:46 gustafn Exp $)</div>
+</ol></div><div class="cvstag">($&zwnj;Id: aolserver4.xml,v 1.31.2.3 2017/04/22
+17:18:48 gustafn Exp $)</div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 		    leftLink="postgres" leftLabel="Prev" leftTitle="Install PostgreSQL"

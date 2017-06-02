@@ -228,7 +228,7 @@ SQL&gt; <strong class="userinput"><code>exit;</code></strong></pre><p>
 		  in the wrong format, make sure you followed the steps outlined in
 		  <a class="xref" href="oracle.html#install-oracle-troubleshooting" title="Troubleshooting Oracle Dates">the section called “Troubleshooting Oracle Dates”</a>
 		  </p></li></ol></div></li><li class="listitem"><p><a name="install-openacs-prepare-postgres"></a><b>Prepare PostgreSQL for an OpenACS Service. </b></p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p><a name="create-service-db-user"></a>PostgreSQL:</p><p>Create a user in the database matching the service
-            name.  With default PostgreSQL authentication, a system user connecting locally automatically authenticates as the postgres user of the same name, if one exists.  We currently use postgres "super-users" for everything, which means that anyone with access to any of the openacs system accounts on a machine has full access to all postgresql databases on that machine.</p><pre class="screen">[root root]# <strong class="userinput"><code>su - postgres</code></strong>
+            name.  With default PostgreSQL authentication, a system user connecting locally automatically authenticates as the postgres user of the same name, if one exists.  We currently use postgres "super-users" for everything, which means that anyone with access to any of the OpenACS system accounts on a machine has full access to all postgresql databases on that machine.</p><pre class="screen">[root root]# <strong class="userinput"><code>su - postgres</code></strong>
 [postgres pgsql]$ <strong class="userinput"><code>createuser -a -d <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span></code></strong>
 CREATE USER
 [postgres pgsql]$ <strong class="userinput"><code>exit</code></strong>
@@ -238,7 +238,7 @@ logout
 CREATE DATABASE
 [$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$
 <span class="action"><span class="action">su - <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
-/usr/local/pgsql/bin/createdb -E UNICODE <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span></span></span></pre></li><li class="listitem"><p>Automate daily database Vacuuming.  This is a process which cleans out discarded data from the database.  A quick way to automate vacuuming is to edit the cron file for the database user.  Recommended: <code class="computeroutput">VACUUM ANALYZE</code> every hour and <code class="computeroutput">VACUUM FULL ANALYZE</code> every day.</p><a class="indexterm" name="idp140529124103840"></a><pre class="screen">[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>export EDITOR=emacs;crontab -e</code></strong></pre><p>Add these lines to the file.  The vacuum command cleans up temporary structures within a PostGreSQL database, and can improve performance.  We vacuum gently every hour and completely every day.  The numbers and stars at the beginning are cron columns that specify when the program should be run - in this case, whenever the minute is 0 and the hour is 1, i.e., 1:00 am every day, and every (*) day of month, month, and day of week.  Type <code class="computeroutput">man 5 crontab</code> for more information.</p><pre class="programlisting">0 1-23 * * * /usr/local/pgsql/bin/vacuumdb --analyze <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
+/usr/local/pgsql/bin/createdb -E UNICODE <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span></span></span></pre></li><li class="listitem"><p>Automate daily database Vacuuming.  This is a process which cleans out discarded data from the database.  A quick way to automate vacuuming is to edit the cron file for the database user.  Recommended: <code class="computeroutput">VACUUM ANALYZE</code> every hour and <code class="computeroutput">VACUUM FULL ANALYZE</code> every day.</p><a class="indexterm" name="idp140186673868376"></a><pre class="screen">[$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>export EDITOR=emacs;crontab -e</code></strong></pre><p>Add these lines to the file.  The vacuum command cleans up temporary structures within a PostGreSQL database, and can improve performance.  We vacuum gently every hour and completely every day.  The numbers and stars at the beginning are cron columns that specify when the program should be run - in this case, whenever the minute is 0 and the hour is 1, i.e., 1:00 am every day, and every (*) day of month, month, and day of week.  Type <code class="computeroutput">man 5 crontab</code> for more information.</p><pre class="programlisting">0 1-23 * * * /usr/local/pgsql/bin/vacuumdb --analyze <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
 0 0 * * * /usr/local/pgsql/bin/vacuumdb --full --analyze <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span></pre><p>Depending on your distribution, you may receive
                 email when the crontab items are executed. If you
                 don't want to receive email for those crontab items,
@@ -251,7 +251,7 @@ CREATE DATABASE
 	  need to configure a virtual server.  The Reference Platform
 	  uses a configuration file included in the OpenACS tarball,
 	  <code class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/etc/config.tcl</code>.
-	   Open it in an editor to adjust the parameters.</p><a class="indexterm" name="idp140529124117824"></a><pre class="screen">[root root]# <strong class="userinput"><code>su - <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span></code></strong>
+	   Open it in an editor to adjust the parameters.</p><a class="indexterm" name="idp140186673882360"></a><pre class="screen">[root root]# <strong class="userinput"><code>su - <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span></code></strong>
 [$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/etc</code></strong>
 [$OPENACS_SERVICE_NAME etc]$ <strong class="userinput"><code>emacs config.tcl</code></strong>
 </pre><p>
@@ -304,7 +304,7 @@ nsd: no process killed
 	  to make sure the service is starting without any
 	  problems. The most common errors here are trying to start a
 	  port 80 server while not root, failing to connect because of
-	  a firewall, and aolserver failing to start due to
+	  a firewall, and AOLserver failing to start due to
 	  permissions errors or missing files.  If you need to make
 	  changes, don't forget to kill any running servers with
 	  <strong class="userinput"><code>killall nsd</code></strong>.

@@ -21,7 +21,7 @@ note-edit.tcl:</p><pre class="programlisting">
   { return_url "[ad_conn url]?[ad_conn query]"} 
  }]
  
-</pre><p>This calls a global, public tcl function that the
+</pre><p>This calls a global, public Tcl function that the
 general_comments package registered, to get its url. You then embed
 in that url the id of the note and its title, and set the
 return_url to the current url so that the user can return after

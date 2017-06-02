@@ -16,7 +16,7 @@ software"
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><p>This AOLserver module is required if you want people to connect
 to your site via https. These commands compile nsopenssl and
-install it, along with a tcl helper script to handle https
+install it, along with a Tcl helper script to handle https
 connections. You will also need ssl certificates. Because those
 should be different for each server service, you won&#39;t need
 <a class="link" href="install-ssl">those

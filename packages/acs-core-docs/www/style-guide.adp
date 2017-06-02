@@ -14,12 +14,12 @@ Chapter 12. Engineering Standards"
 <a name="style-guide-motivation" id="style-guide-motivation"></a>Motivation</h3></div></div></div><p>Why have coding standards for OpenACS? And if the code works why
 change it to adhere to some arbitrary rules?</p><p>Well, first lets consider the OpenACS code base (all this as of
 December 2003 and including dotLRN). There are about 390,000 lines
-of tcl code, about 460,000 lines of sql (in datamodel scripts and
+of Tcl code, about 460,000 lines of sql (in datamodel scripts and
 .xql files), about 80,000 lines of markup in .adp files, and about
 100,000 lines of documentation. All told, just about a million
 lines of "stuff". In terms of logical units there are
 about 160 packages, 800 tables, 2,000 stored procedures, about
-2,000 functional pages, and about 3,200 tcl procedures.</p><p>When confronted by this much complexity it&#39;s important to be
+2,000 functional pages, and about 3,200 Tcl procedures.</p><p>When confronted by this much complexity it&#39;s important to be
 able to make sense of it without having to wade through it all.
 Things should be coherent, things should be named predictably and
 behave like you would expect, and your guess about what something
@@ -36,7 +36,7 @@ OpenACS should follow...</p><div class="orderedlist"><ol class="orderedlist" typ
 <strong>Follow the file naming and the package structure
 rules. </strong> Some of the file naming rules are
 requirements for things to function correctly (for example data
-model creation scripts and tcl library files must be named properly
+model creation scripts and Tcl library files must be named properly
 to be used), while some are suggestions (the <span class="emphasis"><em>object-verb</em></span> naming convention) which if
 ignored won&#39;t break anything, but if you follow the rules
 people will be able to understand your package much more
@@ -99,8 +99,8 @@ others.</p></li>
 </tr></thead><tbody><tr>
 <td>0.1</td><td>Creation</td><td>12/2003</td><td>Jeff Davis</td>
 </tr></tbody>
-</table></div><div class="cvstag">($&zwnj;Id: style-guide.xml,v 1.3.14.2 2016/10/03
-09:17:51 gustafn Exp $)</div>
+</table></div><div class="cvstag">($&zwnj;Id: style-guide.xml,v 1.3.14.3 2017/04/22
+17:18:48 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

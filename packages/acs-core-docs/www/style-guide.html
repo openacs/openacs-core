@@ -7,12 +7,12 @@
     </p><p>
       Well, first lets consider the OpenACS code base (all this as of
       December 2003 and including dotLRN).  There are about 390,000
-      lines of tcl code, about 460,000 lines of sql (in datamodel
+      lines of Tcl code, about 460,000 lines of sql (in datamodel
       scripts and .xql files), about 80,000 lines of markup in .adp
       files, and about 100,000 lines of documentation.  All told, just
       about a million lines of "stuff".  In terms of logical units
       there are about 160 packages, 800 tables, 2,000 stored
-      procedures, about 2,000 functional pages, and about 3,200 tcl
+      procedures, about 2,000 functional pages, and about 3,200 Tcl
       procedures.
     </p><p>
       When confronted by this much complexity it's important to be
@@ -32,7 +32,7 @@
     </p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p><b>Follow the file naming and the package structure rules. </b>
             Some of the file naming rules are requirements for things
             to function correctly (for example data model creation
-            scripts and tcl library files must be named properly to be
+            scripts and Tcl library files must be named properly to be
             used), while some are suggestions (the
             <span class="emphasis"><em>object-verb</em></span> naming convention) which
             if ignored won't break anything, but if you follow the

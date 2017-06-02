@@ -16,7 +16,7 @@ OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><p>Skip this section if you will run only Oracle.</p><p>OpenACS 5.9.0 will run with <a class="link" href="individual-programs" title="PostgreSQL 7.4.x (Either this or Oracle is REQUIRED)">PostgreSQL</a>
 9.0 or newer. 9.5 is currently the recommended version of
 PostgreSQL.</p><p>It is recommend to use a prepackaged version of PostgreSQL,
-which are available in source and binary formats from <a class="ulink" href="https://www.postgresql.org/download" target="_top">www.postgresql.org/download/</a>.</p><p>Larger installations might want to tune the PostgresSQL
+which are available in source and binary formats from <a class="ulink" href="https://www.postgresql.org/download" target="_top">www.postgresql.org/download/</a>.</p><p>Larger installations might want to tune the PostgreSQL
 installation with e.g. the utility <a class="ulink" href="https://github.com/gregs1104/pgtune" target="_top">pgtune</a>,
 which is also available via <strong class="userinput"><code>apt-get
 install pgtune</code></strong> or <strong class="userinput"><code>dnf install pgtune</code></strong> on

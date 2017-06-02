@@ -106,7 +106,7 @@ package_key]</code></span></dt><dd><p>If the URL refers to a package instance, t
 name of the package.</p></dd><dt><span class="term"><code class="computeroutput">[ad_conn
 path_info]</code></span></dt><dd><p>In a .vuh file, path_info is the trailing part of the URL not
 matched by the .vuh file.</p></dd>
-</dl></div><div class="cvstag">($&zwnj;Id: rp.xml,v 1.12.6.2 2016/10/03 09:17:51
+</dl></div><div class="cvstag">($&zwnj;Id: rp.xml,v 1.12.6.3 2017/04/21 15:07:52
 gustafn Exp $)</div>
 </div>
 </div>

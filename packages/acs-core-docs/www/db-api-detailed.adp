@@ -703,7 +703,7 @@ the user.</p><p>The nsv containing the list is initialized by the bootstrap
 script and should never be referenced directly by user code.
 Returns the current rdbms type and version.</p>
 </dd>
-</dl></div><div class="cvstag">($&zwnj;Id: db-api.xml,v 1.11.2.2 2016/06/23 08:32:47
+</dl></div><div class="cvstag">($&zwnj;Id: db-api.xml,v 1.11.2.3 2017/04/21 15:07:53
 gustafn Exp $)</div>
 </div>
 </div>

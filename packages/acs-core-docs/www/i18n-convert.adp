@@ -42,13 +42,13 @@ the database message catalog, and then writes that catalog out to
 an xml file.</p></li><li class="listitem">
 <p>
 <strong>Replace human-readable text in Tcl files with temporary
-tags. </strong>Examine all of the tcl files in the
+tags. </strong>Examine all of the Tcl files in the
 packages for human-readable text and replace it with temporary
 tags. The temporary tags in Tcl are slightly different from those
 in ADP. If the first character in the temporary tag is an
 underscore (<code class="computeroutput">_</code>), then the
 message keys will be auto-generated from the original message text.
-Here is an unmodified tcl file:</p><pre class="programlisting">
+Here is an unmodified Tcl file:</p><pre class="programlisting">
 set title "Messages for $a(name) in $b(label)"
 set context [list [list . "SimPlay"] \
                   [list [export_vars -base case-admin { case_id }] \ 
@@ -67,7 +67,7 @@ substitute variables, would have been very confusing</p>
 </li><li class="listitem">
 <p>
 <strong>Replace the temporary message tags in Tcl
-files. </strong>Repeat step 2 for tcl files. Here is
+files. </strong>Repeat step 2 for Tcl files. Here is
 the example Tcl file after conversion:</p><pre class="programlisting">
 set title [_ simulation.admin_title]
 set context [list [list . [_ simulation.SimPlay]] \
@@ -142,7 +142,7 @@ check that the set of keys used in message lookups in tcl, adp, and
 info files and the set of keys in the catalog file are identical.
 The scripts below assume that message lookups in adp and info files
 are on the format \#package_key.message_key\#, and that message
-lookups in tcl files are always is done with one of the valid
+lookups in Tcl files are always is done with one of the valid
 lookups described above. The script further assumes that you have
 perl installed and in your path. Run the script like this:
 <code class="computeroutput">acs-lang/bin/check-catalog.sh
@@ -154,7 +154,7 @@ its checks primarily on en_US xml catalog files.</p>
 </li>
 </ol></div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140529108524432" id="idp140529108524432"></a>Avoiding common i18n mistakes</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
+<a name="idp140186670844264" id="idp140186670844264"></a>Avoiding common i18n mistakes</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem">
 <p>
 <strong>Replace complicated keys with longer, simpler
@@ -350,7 +350,7 @@ editing text that is also code. For example, the original
 string</p><pre class="programlisting">
 set title "Patch \"$patch_summary\" is nice."
 </pre><p>breaks if the message text retains all of the escaping that was
-in the tcl command:</p><pre class="programlisting">
+in the Tcl command:</p><pre class="programlisting">
 &lt;msg&gt;Patch \"$patch_summary\" is nice.&lt;/msg&gt;
 </pre><p>When it becomes a key, it should be:</p><pre class="programlisting">
 &lt;msg&gt;Patch "$patch_summary" is nice.&lt;/msg&gt;

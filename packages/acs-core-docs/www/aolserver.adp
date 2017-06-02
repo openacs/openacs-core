@@ -84,7 +84,7 @@ these symlinks: <code class="computeroutput">ln -s
 [root aolserver]# <strong class="userinput"><code>export POSTGRES=/usr/local/pgsql; ./conf</code></strong>
 Building in /usr/local/aolserver
 with the following modules:
-aolserver
+AOLserver
 nscache
 nsrewrite
 nssha1
@@ -303,8 +303,8 @@ set address 0.0.0.0
 </li><li class="listitem"><p>
 <a class="link" href="analog-install" title="Install Analog web file analyzer">Install Analog</a> web file
 analyzer. (OPTIONAL)</p></li>
-</ol></div><div class="cvstag">($&zwnj;Id: aolserver.xml,v 1.22.14.1 2016/06/23
-08:32:46 gustafn Exp $)</div>
+</ol></div><div class="cvstag">($&zwnj;Id: aolserver.xml,v 1.22.14.2 2017/04/22
+17:18:48 gustafn Exp $)</div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
 		    leftLink="install-ldap-radius" leftLabel="Prev" leftTitle="Install LDAP for use as external

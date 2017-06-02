@@ -602,7 +602,7 @@ db_dml foo_insert {insert into foo(baz) values(:1)} {[db_nullify_empty_string $b
           
 </pre>
 </dd>
-</dl></div><div class="cvstag">($&zwnj;Id: db-api.xml,v 1.13.8.3 2016/10/03 09:17:51
+</dl></div><div class="cvstag">($&zwnj;Id: db-api.xml,v 1.13.8.4 2017/04/21 15:07:52
 gustafn Exp $)</div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
