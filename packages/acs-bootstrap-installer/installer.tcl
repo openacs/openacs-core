@@ -351,12 +351,7 @@ ad_proc -public ad_windows_p {} {
     Returns 1 if the ACS is running under Windows.
     Note,  this procedure is a best guess, not sure of a better way of determining:
 } {
-    set thisplatform [ns_info platform]
-    if {$thisplatform eq "win32"} {
-        return 1
-    } else {
-        return 0
-    }
+    return [expr {[ns_info platform] in {win32 win64}}]
 }
 
 ad_proc -private install_load_errors_formatted {errorVarName} {
