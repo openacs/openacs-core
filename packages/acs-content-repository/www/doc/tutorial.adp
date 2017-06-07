@@ -341,8 +341,8 @@ moment).
 <h3>Defining your pl/sql functions</h3>
 
 You can see the actual functions used in project manager via the
-<a href="http://cvs.openacs.org/cvs/openacs-4/contrib/packages/project-manager/sql/postgresql/">
-CVS browser&#39;s entry for project-manager</a>
+<a href="https://github.com/openacs/project-manager/tree/master/sql/postgresql/">
+GitHub browser&#39;s entry for project-manager</a>
 . Note these are a
 little more expanded than what I've used in the examples above.
 <blockquote><pre>
