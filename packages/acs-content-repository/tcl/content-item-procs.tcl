@@ -853,8 +853,10 @@ ad_proc -public content::item::upload_file {
         }
 
         set existing_filenames [db_list get_parent_existing_filenames {}]
-        set filename [util_text_to_url \
-              -text ${title} -existing_urls "$existing_filenames" -replacement "_"]
+        set filename [ad_sanitize_filename \
+                          -existing_names $existing_filenames \
+                          -collapse_spaces \
+                          -replace_with "_" $title]
 
         set revision_id [cr_import_content \
                              -storage_type "file" -title $title \

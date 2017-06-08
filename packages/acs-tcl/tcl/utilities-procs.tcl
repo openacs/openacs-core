@@ -3282,6 +3282,120 @@ ad_proc -public util_wrap_list {
     return $out
 }
 
+# apisano 2017-06-08: this should someday replace proc
+# util_text_to_url, but it is unclear to me whether we want two
+# different semantics to sanitize URLs and filesystem names or
+# not. For the time being I have replaced util_text_to_url in every
+# place where this was used to sanitize filenames.
+ad_proc ad_sanitize_filename {
+    -no_resolve:boolean
+    {-existing_names ""}
+    -collapse_spaces:boolean
+    {-replace_with "-"}
+    -tolower:boolean
+    str
+} {
+    Sanitize the provided filename for modern Windows, OS X, and Unix
+    file systems (NTFS, ext, etc.). FAT 8.3 filenames are not supported.
+    The generated strings should be safe against
+    <a target="_blank" href="https://github.com/minimaxir/big-list-of-naughty-strings">
+    https://github.com/minimaxir/big-list-of-naughty-strings
+    </a>
+
+    @author Gustaf Neumann
+} {
+    #
+    # Trim trailing periods and spaces (for Windows)
+    #
+    set str [string trim $str { .}]
+
+    #
+    # Remove Control characters (0x00–0x1f and 0x80–0x9f)
+    # and reserved characters (/, ?, <, >, \, :, *, |, and ")
+    regsub -all {[\u0000-\u001f|/|?|<|>|\\:*|\"]+} $str "" str
+
+    # allow a custom replacement char, that must be safe.
+    regsub -all {[\u0000-\u001f|/|?|<|>|\\:*|\"|\.]+} $replace_with "" replace_with
+    if {$replace_with eq ""} {error "-replace_with must be a safe filesystem character"}
+
+    # dots other than in file extension are dangerous. Put inside two
+    # '#' character will be seen as message keys and file-storage is
+    # currently set to interpret them.
+    set str_ext [file extension $str]
+    set str_noext [string range $str 0 end-[string length $str_ext]]
+    regsub -all {\.} $str_noext $replace_with str_noext
+    set str ${str_noext}${str_ext}
+
+    #
+    # Remove Unix reserved filenames (. and ..)
+    # reserved names in windows
+    set l [string length $str]
+    if {($l <  3 && $str in {"." ".."}) ||
+        ($l == 3 && $str in {CON PRN AUX NUL}) ||
+        ($l == 4 && $str in {
+            COM1 COM2 COM3 COM4 COM5 COM6 COM7 COM8 COM9
+            LPT1 LPT2 LPT3 LPT4 LPT5 LPT6 LPT7 LPT8 LPT9
+        })
+    } {
+        set str ""
+    } elseif {$l > 255} {
+        #
+        # Truncate the name to 255 characters
+        #
+        set str [string range $str 0 254]
+    }
+
+    #
+    # The transformations above are necessary. The following
+    # transformation are optional.
+    #
+    if {$collapse_spaces_p} {
+        #
+        # replace all consecutive spaces by a single char
+        #
+        regsub -all {[ ]+} $str $replace_with str
+    }
+    if {$tolower_p} {
+        #
+        # replace all consecutive spaces by a single "-"
+        #
+        set str [string tolower $str]
+    }
+
+    # check if the resulting name is already present
+    if {$str in $existing_names} {
+
+        if { $no_resolve_p } {
+            # name is already present in the existing_names list and we
+            # are asked to not automatically resolve the collision
+            error "The name $str is already present"
+        } else {
+            # name is already present in the existing_names list -
+            # compute an unoccupied replacement using a pattern like
+            # this: if foo is taken, try foo-2, then foo-3 etc.
+
+            # Holes will not be re-occupied. E.g. if there's foo-2 and
+            # foo-4, a foo-5 will be created instead of foo-3. This
+            # way confusion through replacement of deleted content
+            # with new stuff is avoided.
+
+            set number 2
+
+            foreach name $existing_names {
+
+                if { [regexp "${str}${replace_with}(\\d+)\$" $name match n] } {
+                    # matches the foo-123 pattern
+                    if { $n >= $number } { set number [expr {$n + 1}] }
+                }
+            }
+
+            set str "$str$replace_with$number"
+        }
+    }
+
+    return $str
+}
+
 ad_proc -public util_text_to_url { 
     {-existing_urls {}}
     {-no_resolve:boolean}
