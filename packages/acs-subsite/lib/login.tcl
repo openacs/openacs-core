@@ -103,7 +103,7 @@ ad_form \
     -action "[subsite::get_url]register/" -form {
 	{return_url:text(hidden)}
 	{time:text(hidden)}
-        {host_node_id:text(hidden)}
+        {host_node_id:text(hidden),optional}
 	{token_id:integer(hidden)}
 	{hash:text(hidden)}
     } -validate {
