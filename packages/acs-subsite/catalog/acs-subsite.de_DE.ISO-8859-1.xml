@@ -317,7 +317,7 @@
   <msg key="Manage_unmounted_applications">Abgehängte Anwendungen verwalten</msg>
   <msg key="manage_users_email">Verwalten des E-Mail Datenschutzes des Users</msg>
   <msg key="Manage_your_notifications">Benachrichtigungsoptionen verwalten</msg>
-  <msg key="Mem_list_not_allowed">Sie sind nicht berechtigt, die Liste der Teilnehmer zu sehen.</msg>
+  <msg key="Mem_list_not_allowed">Sie sind nicht berechtigt, die Liste aller Teilnehmer zu sehen.</msg>
   <msg key="Member">Teilnehmer</msg>
   <msg key="Member_State">Teilnehmerstatus</msg>
   <msg key="Members">Teilnehmer</msg>
