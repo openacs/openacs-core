@@ -109,10 +109,10 @@ server.</p><pre class="screen">
 </li><li class="listitem">
 <p>Verify that the controls work. You may want to <code class="computeroutput">tail -f /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/log/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>-error.log</code>
 in another window, so you can see what happens when you type these
-commands.</p><p>Most of this information comes from Tom Jackson&#39;s <a class="ulink" href="http://zmbh.com/daemontools-aolserver/daemontools-aolserver.html" target="_top">AOLserver+Daemontools Mini-HOWTO</a>.</p>
+commands.</p><p>More information can be found on the <a class="ulink" href="http://panoptic.com/wiki/aolserver/How_to_start_stop_AOLserver_using_Daemontools" target="_top">AOLserver Daemontools</a> page.</p>
 </li>
 </ol></div><div class="table">
-<a name="idp140186661898120" id="idp140186661898120"></a><p class="title"><strong>Table 6.1. How it
+<a name="idp140434643185336" id="idp140434643185336"></a><p class="title"><strong>Table 6.1. How it
 Works</strong></p><div class="table-contents"><table class="table" summary="How it Works" cellspacing="0" border="1">
 <colgroup>
 <col><col><col><col><col><col>

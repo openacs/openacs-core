@@ -29,7 +29,7 @@ packages/acs-kernel. </strong><a class="xref" href="upgrade-openacs-files" titl
 files&rdquo;</a>
 </p></li><li class="listitem">
 <p>Upgrade the kernel manually. (There is a script to do most of
-the rest: <a class="ulink" href="http://cvs.openacs.org/cvs/openacs-4/contrib/misc/upgrade_4.6_to_5.0.sh?only_with_tag=HEAD" target="_top">/contrib/misc/upgrade_4.6_to_5.0.sh on HEAD</a>).
+the rest: <a class="ulink" href="http://cvs.openacs.org/browse/OpenACS/openacs-4/contrib/misc/upgrade_4.6_to_5.0.sh?r=1.6" target="_top">/contrib/misc/upgrade_4.6_to_5.0.sh on HEAD</a>).
 You&#39;ll still have to do a lot of stuff manually, but automated
 trial and error is much more fun.)</p><pre class="screen">
 [root root]# <strong class="userinput"><code>su - <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>

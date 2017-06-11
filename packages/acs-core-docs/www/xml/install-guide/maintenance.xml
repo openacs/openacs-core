@@ -130,9 +130,9 @@ root      5582  0.0  0.2  3276  628 pts/0    S    11:55   0:00 grep nsd
       </para>
             <para>
 
-        Most of this information comes from Tom Jackson&#39;s <ulink
-          url="http://zmbh.com/daemontools-aolserver/daemontools-aolserver.html">AOLserver+Daemontools
-          Mini-HOWTO</ulink>.
+        More information can be found on the <ulink
+          url="http://panoptic.com/wiki/aolserver/How_to_start_stop_AOLserver_using_Daemontools">AOLserver
+	Daemontools</ulink> page.
 </para>
         </listitem>
       </orderedlist>

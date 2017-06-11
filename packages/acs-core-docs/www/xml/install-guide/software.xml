@@ -405,14 +405,14 @@
           aolserver3.x requires <ulink
             url="http://www.scottg.net/download/nsopenssl-2.1a.tar.gz">nsopenssl 2.1a</ulink>. aolserver4.x requires nsopenssl3; see
           <ulink url="http://www.aolserver.com/">aolserver.com</ulink> for latest release. (<ulink
-            url="http://www.scottg.net/webtools/aolserver/modules/nsopenssl/">home page</ulink>)
+            url="http://panoptic.com/wiki/aolserver/Nsopenssl">home page</ulink>)
         </para>
       </formalpara>
     </listitem>
     
     <listitem id="nspam-download">
       <formalpara>
-        <title><ulink url="http://braindamage.alal.com/software/nspam.html">ns_pam</ulink> 0.1 or newer, OPTIONAL</title>
+        <title><ulink url="http://wayback.archive.org/web/20050228071203/http://braindamage.alal.com/software/nspam.html">ns_pam</ulink> 0.1 or newer, OPTIONAL</title>
         <para>Provides PAM capabilities for AOLserver.  You
           need this if you want OpenACS users to authenticate
           through a PAM module (such as RADIUS).</para>

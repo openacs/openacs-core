@@ -199,11 +199,11 @@ available at <a class="ulink" href="http://sourceforge.net/tracker/index.php?fun
 capabilities for AOLserver. It requires OpenSSL. You need this if
 you want users to make secure (https) connections to your
 webserver. aolserver3.x requires <a class="ulink" href="http://www.scottg.net/download/nsopenssl-2.1a.tar.gz" target="_top">nsopenssl 2.1a</a>. aolserver4.x requires nsopenssl3; see
-<a class="ulink" href="http://www.aolserver.com/" target="_top">aolserver.com</a> for latest release. (<a class="ulink" href="http://www.scottg.net/webtools/aolserver/modules/nsopenssl/" target="_top">home page</a>)</p>
+<a class="ulink" href="http://www.aolserver.com/" target="_top">aolserver.com</a> for latest release. (<a class="ulink" href="http://panoptic.com/wiki/aolserver/Nsopenssl" target="_top">home page</a>)</p>
 </li><li class="listitem">
 <a name="nspam-download" id="nspam-download"></a><p>
 <strong>
-<a class="ulink" href="http://braindamage.alal.com/software/nspam.html" target="_top">ns_pam</a> 0.1 or newer,
+<a class="ulink" href="http://wayback.archive.org/web/20050228071203/http://braindamage.alal.com/software/nspam.html" target="_top">ns_pam</a> 0.1 or newer,
 OPTIONAL. </strong>Provides PAM capabilities for
 AOLserver. You need this if you want OpenACS users to authenticate
 through a PAM module (such as RADIUS).</p>

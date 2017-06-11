@@ -29,8 +29,7 @@
       word, <emphasis>letters and numbers only</emphasis>. If the name
       of your site is one word, that would be a good choice. For
       example &quot;<replaceable>$OPENACS_SERVICE_NAME</replaceable>&quot; might be the service name for the
-      <ulink url="http://$OPENACS_SERVICE_NAME.net/"><replaceable>$OPENACS_SERVICE_NAME</replaceable>.net</ulink>
-      community.</para>
+      <replaceable>$OPENACS_SERVICE_NAME</replaceable>.net community.</para>
 
         <para>We&#39;ll leave the password blank, which prevents login by
       password, for increased security.  The only way to log in will

@@ -124,7 +124,7 @@ Example:</p><div class="orderedlist"><ol class="orderedlist" type="1">
           
 </pre>
 </li><li class="listitem"><p>Use perl to replace <code class="computeroutput">timestamp</code> with <code class="computeroutput">timestamptz</code> in the dump file. See example
-perl code in step two in <a class="ulink" href="http://cvs.openacs.org/cvs/openacs-4/contrib/misc/upgrade_4.6_to_5.0.sh?only_with_tag=HEAD" target="_top">/contrib/misc/upgrade_4.6_to_5.0.sh</a>
+perl code in step two in <a class="ulink" href="http://cvs.openacs.org/browse/OpenACS/openacs-4/contrib/misc/upgrade_4.6_to_5.0.sh?r=1.6" target="_top">/contrib/misc/upgrade_4.6_to_5.0.sh</a>
 </p></li><li class="listitem"><p>Create a new user for PostgreSQL 7.3.x, as per the Postgres
 installation guide. Keep in mind that your installation location is
 different, and your startup script (/etc/init.d/postgres73 should

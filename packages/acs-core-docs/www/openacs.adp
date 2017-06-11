@@ -29,8 +29,7 @@ different service. A service name should be a single word,
 <span class="emphasis"><em>letters and numbers only</em></span>. If
 the name of your site is one word, that would be a good choice. For
 example "<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>" might be
-the service name for the <a class="ulink" href="http://%24OPENACS_SERVICE_NAME.net/" target="_top">
-<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>.net</a>
+the service name for the <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>.net
 community.</p><p>We&#39;ll leave the password blank, which prevents login by
 password, for increased security. The only way to log in will be
 with ssh certificates. The only people who should log in are
@@ -337,7 +336,7 @@ cleans out discarded data from the database. A quick way to
 automate vacuuming is to edit the cron file for the database user.
 Recommended: <code class="computeroutput">VACUUM ANALYZE</code>
 every hour and <code class="computeroutput">VACUUM FULL
-ANALYZE</code> every day.</p><a class="indexterm" name="idp140186673868376" id="idp140186673868376"></a><pre class="screen">
+ANALYZE</code> every day.</p><a class="indexterm" name="idp140434642344760" id="idp140434642344760"></a><pre class="screen">
 [$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>export EDITOR=emacs;crontab -e</code></strong>
 </pre><p>Add these lines to the file. The vacuum command cleans up
 temporary structures within a PostGreSQL database, and can improve
@@ -371,7 +370,7 @@ virtual servers. A virtual server is an HTTP service running on a
 specific port, e.g. port 80. In order for OpenACS to work, you need
 to configure a virtual server. The Reference Platform uses a
 configuration file included in the OpenACS tarball, <code class="computeroutput">/var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/etc/config.tcl</code>.
-Open it in an editor to adjust the parameters.</p><a class="indexterm" name="idp140186673882360" id="idp140186673882360"></a><pre class="screen">
+Open it in an editor to adjust the parameters.</p><a class="indexterm" name="idp140434642358744" id="idp140434642358744"></a><pre class="screen">
 [root root]# <strong class="userinput"><code>su - <span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>
 </code></strong>
 [$OPENACS_SERVICE_NAME $OPENACS_SERVICE_NAME]$ <strong class="userinput"><code>cd /var/lib/aolserver/<span class="replaceable"><span class="replaceable">$OPENACS_SERVICE_NAME</span></span>/etc</code></strong>

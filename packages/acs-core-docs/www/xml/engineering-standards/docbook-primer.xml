@@ -962,7 +962,7 @@
     <para>
       You can look at some templates for documents (in Docbook XML) in
       the <ulink
-      url="http://openacs.org/cvs/openacs-4/packages/acs-core-docs/www/xml/engineering-standards">sources
+      url="https://github.com/openacs/openacs-core/tree/oacs-5-9/packages/acs-core-docs/www/xml/engineering-standards">sources
       for acs-core-docs</ulink>, especially the <emphasis>
       Detailed Design Documentation Template</emphasis> and the
       <emphasis>System/Application Requirements Template</emphasis>.
@@ -1003,7 +1003,7 @@
       and we will provide a set of templates for documenting an entire package. </para>
 
     <para>For now you can take a look at the
-      <ulink url="http://openacs.org/cvs/openacs-4/packages/acs-core-docs/www/xml/engineering-standards">sources of these DocBook documents</ulink>
+      <ulink url="https://github.com/openacs/openacs-core/tree/oacs-5-9/packages/acs-core-docs/www/xml/engineering-standards">sources of these DocBook documents</ulink>
       to get an idea of how they are tied together.
     </para>
   </sect2>
@@ -1506,7 +1506,7 @@
 </screen>
 
     <para> 
-    You could also look at the <ulink url="http://cvs.openacs.org/cvs/openacs-4/packages/acs-core-docs/www/xml/Makefile?view=markup">acs-core-docs Makefile</ulink> 
+    You could also look at the <ulink url="https://raw.githubusercontent.com/openacs/openacs-core/master/packages/acs-core-docs/www/xml/Makefile">acs-core-docs Makefile</ulink> 
     for examples of how these documents are generated.
     </para>
 
