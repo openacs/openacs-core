@@ -800,12 +800,11 @@
       It is open-source. 
       </para></listitem>
       <listitem><para>
-      A growing community surrounds DocBook (has 
-      <ulink url="http://docbook.org/mailinglist/index.html">mailing lists</ulink>) 
+      The DocBook community <ulink url="http://docbook.org/help">mailing lists</ulink>
       </para></listitem>
       <listitem><para>
       A number of free and commercial 
-      <ulink url="http://www.docbook.org/wiki/moin.cgi/DocBookTools">tools</ulink> are available
+      <ulink url="https://github.com/docbook/wiki/wiki/DocBookTools">tools</ulink> are available
       for editing and publishing DocBook documents. 
       </para></listitem>
       <listitem><para>
@@ -939,9 +938,9 @@
     <para>
     Some editing tool. A popular one is Emacs with the psgml and nXML
     modes. The <ulink
-    url="http://en.tldp.org/LDP/LDP-Author-Guide/">LDP Author
+    url="http://www.tldp.org/LDP/LDP-Author-Guide/html/index.html">LDP Author
     Guide</ulink> and <ulink
-    url="http://wiki.docbook.org/topic/DocBookAuthoringTools">DocBook
+    url="https://github.com/docbook/wiki/wiki/DocBookTools">DocBook
     Wiki</ulink> list some alternates.
     </para>
       </listitem>

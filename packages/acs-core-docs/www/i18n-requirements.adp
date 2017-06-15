@@ -129,11 +129,9 @@ guide</a></em></span></p></li><li class="listitem"><p><span class="emphasis"><em
 <p><span class="emphasis"><em>Other-cool-system-related-to-this-one
 document</em></span></p><p><a class="ulink" href="http://www.li18nux.net/" target="_top">LI18NUX 2000 Globalization Specification:
 http://www.li18nux.net/</a></p><p><a class="ulink" href="http://www.mozilla.org/docs/refList/i18n/l12yGuidelines.html" target="_top">Mozilla i18N Guidelines:
-http://www.mozilla.org/docs/refList/i18n/l12yGuidelines.html</a></p><p><a class="ulink" href="http://sunsite.berkeley.edu/amher/iso_639.html" target="_top">ISO
-639:1988 Code for the representation of names of languages
-http://sunsite.berkeley.edu/amher/iso_639.html</a></p><p><a class="ulink" href="http://www.niso.org/3166.html" target="_top">ISO 3166-1:1997 Codes for the representation of names of
-countries and their subdivisions Part 1: Country codes
-http://www.niso.org/3166.html</a></p><p><a class="ulink" href="http://www.isi.edu/in-notes/iana/assignments/character-sets" target="_top">IANA Registry of Character Sets</a></p>
+http://www.mozilla.org/docs/refList/i18n/l12yGuidelines.html</a></p><p><a class="ulink" href="https://www.iso.org/standard/4766.html" target="_top">ISO 639:1988 Code for the representation of names of
+languages</a></p><p><a class="ulink" href="https://www.iso.org/standard/24591.html" target="_top">ISO 3166-1:1997 Codes for the representation of names
+of countries and their subdivisions Part 1: Country codes</a></p><p><a class="ulink" href="http://www.isi.edu/in-notes/iana/assignments/character-sets" target="_top">IANA Registry of Character Sets</a></p>
 </li><li class="listitem"><p><span class="emphasis"><em>Test plan</em></span></p></li><li class="listitem"><p><span class="emphasis"><em>Competitive system(s)</em></span></p></li>
 </ul></div>
 </div><div class="sect2">

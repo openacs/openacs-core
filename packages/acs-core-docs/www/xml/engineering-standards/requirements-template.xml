@@ -154,9 +154,10 @@
     </itemizedlist>
 
     <para>
-      For guidelines writing requirements, take a 
-      <ulink url="http://www.arsdigita.com/ad-sepg/process/requirements-quality.html">look
-	at the quality standards</ulink>, along with a good example, such as <xref linkend="apm-requirements"/>.
+      For guidelines writing requirements, take a look at <ulink url="http://www.utm.mx/~caff/doc/OpenUPWeb/openup/guidances/guidelines/writing_good_requirements_48248536.html">
+	quality standards</ulink> or <ulink
+	url="https://ep.jhu.edu/about-us/news-and-media/writing-good-requirements-checklists">requirements
+	checklist</ulink>, along with a good example, such as <xref linkend="apm-requirements"/>.
     </para>
 
     <para>

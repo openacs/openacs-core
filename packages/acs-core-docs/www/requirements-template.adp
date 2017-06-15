@@ -86,7 +86,7 @@ should look or function.</p><p><span class="strong"><strong>10.0.5</strong></spa
 any module using a single methodology with minimal exposure to
 code.</p>
 </blockquote></div>
-</li></ul></div><p>For guidelines writing requirements, take a <a class="ulink" href="http://www.arsdigita.com/ad-sepg/process/requirements-quality.html" target="_top">look at the quality standards</a>, along with a good
+</li></ul></div><p>For guidelines writing requirements, take a look at <a class="ulink" href="http://www.utm.mx/~caff/doc/OpenUPWeb/openup/guidances/guidelines/writing_good_requirements_48248536.html" target="_top">quality standards</a> or <a class="ulink" href="https://ep.jhu.edu/about-us/news-and-media/writing-good-requirements-checklists" target="_top">requirements checklist</a>, along with a good
 example, such as <a class="xref" href="apm-requirements" title="Package Manager Requirements">Package Manager
 Requirements</a>.</p><p>Besides writing requirements in natural language, consider using
 the following techniques as needed:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">

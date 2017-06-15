@@ -31,7 +31,7 @@ find out whether your emacs has it with the <code class="computeroutput">locate-
 <code class="computeroutput">psgml</code>. Emacs will tell you if
 it found it or not.</p><p>If you don&#39;t have PSGML preinstalled in your Emacs, there
 are two things you can do:</p><div class="orderedlist"><ol class="orderedlist" type="1">
-<li class="listitem"><p>On Linux: Get the <a class="ulink" href="ftp://sourceware.cygnus.com:/pub/docbook-tools/docware/RPMS/noarch/psgml-1.2.1-1.noarch.rpm" target="_top">psgml rpm</a> from <a class="ulink" href="http://sources.redhat.com/docbook-tools/" target="_top">RedHat&#39;s docbook-tools</a> and install it as usual.</p></li><li class="listitem"><p>On other systems: Get the tarball from the <a class="ulink" href="http://www.lysator.liu.se/~lenst/about_psgml/" target="_top">PSGML Website.</a> Unpack it and follow the install
+<li class="listitem"><p>On Linux: Get the <a class="ulink" href="ftp://sourceware.cygnus.com:/pub/docbook-tools/docware/RPMS/noarch/psgml-1.2.1-1.noarch.rpm" target="_top">psgml rpm</a> from <a class="ulink" href="http://sources.redhat.com/docbook-tools/" target="_top">RedHat&#39;s docbook-tools</a> and install it as usual.</p></li><li class="listitem"><p>On other systems: Get the tarball from the <a class="ulink" href="https://www.emacswiki.org/emacs/PsgmlMode" target="_top">PSGML Website.</a> Unpack it and follow the install
 instructions.</p></li>
 </ol></div>
 </div><div class="sect2">

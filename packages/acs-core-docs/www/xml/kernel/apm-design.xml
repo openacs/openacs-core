@@ -229,13 +229,13 @@ Fortunately, there are many precedents for systematic solutions,
 including:</para>
 
 <itemizedlist>
-<listitem><para><ulink url="http://www.debian.org/">Debian GNU/Linux</ulink> and the <ulink url="http://www.debian.org/doc/packaging-manuals/packaging.html/">Debian
+<listitem><para><ulink url="http://www.debian.org/">Debian GNU/Linux</ulink> and the <ulink url="https://www.debian.org/doc/manuals/maint-guide/">Debian
 Packaging manual</ulink></para></listitem>
 
 <listitem><para><ulink url="http://www.freebsd.org/">FreeBSD</ulink> has <ulink url="http://www.freebsd.org/handbook/ports.html">the Ports
 collection</ulink></para></listitem>
 
-<listitem><para><ulink url="http://www.redhat.com/">Red Hat Linux</ulink> has <ulink url="http://rpm.redhat.com/">the Red Hat Package Manager (RPM)</ulink></para></listitem>
+<listitem><para><ulink url="http://www.redhat.com/">Red Hat Linux</ulink> has <ulink url="https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/5/html/Deployment_Guide/ch-rpm.html">the Red Hat Package Manager (RPM)</ulink></para></listitem>
 </itemizedlist>
 
 <para>Borrowing from all of the above, OpenACS 3.3 introduces its own package

@@ -21,7 +21,7 @@ Internationalize a Package</a></span></dt><dt><span class="sect1"><a href="i18n-
 Notes</a></span></dt><dt><span class="sect1"><a href="i18n-translators">Translator&#39;s Guide</a></span></dt>
 </dl>
 </div><div class="authorblurb">
-<p>By <a class="ulink" href="http://www.petermarklund.com/" target="_top">Peter Marklund</a> and <a class="ulink" href="http://www.pinds.com/" target="_top">Lars Pind</a>
+<p>By <a class="ulink" href="mailto:peter\@collaboraid.biz" target="_top">Peter Marklund</a> and <a class="ulink" href="mailto:lars\@collaboraid.biz" target="_top">Lars Pind</a>
 </p>
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div>

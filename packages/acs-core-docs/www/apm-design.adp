@@ -137,13 +137,13 @@ and any software platform has the potential to develop problems
 like those described above. Fortunately, there are many precedents
 for systematic solutions, including:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>
-<a class="ulink" href="http://www.debian.org/" target="_top">Debian GNU/Linux</a> and the <a class="ulink" href="http://www.debian.org/doc/packaging-manuals/packaging.html/" target="_top">Debian Packaging manual</a>
+<a class="ulink" href="http://www.debian.org/" target="_top">Debian GNU/Linux</a> and the <a class="ulink" href="https://www.debian.org/doc/manuals/maint-guide/" target="_top">Debian Packaging manual</a>
 </p></li><li class="listitem"><p>
 <a class="ulink" href="http://www.freebsd.org/" target="_top">FreeBSD</a> has <a class="ulink" href="http://www.freebsd.org/handbook/ports.html" target="_top">the
 Ports collection</a>
 </p></li><li class="listitem"><p>
 <a class="ulink" href="http://www.redhat.com/" target="_top">Red
-Hat Linux</a> has <a class="ulink" href="http://rpm.redhat.com/" target="_top">the Red Hat Package Manager (RPM)</a>
+Hat Linux</a> has <a class="ulink" href="https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/5/html/Deployment_Guide/ch-rpm.html" target="_top">the Red Hat Package Manager (RPM)</a>
 </p></li>
 </ul></div><p>Borrowing from all of the above, OpenACS 3.3 introduces its own
 package management system, the OpenACS Package Manager (APM), which
