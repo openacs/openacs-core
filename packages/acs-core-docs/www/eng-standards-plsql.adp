@@ -142,7 +142,7 @@ viewable in the SQL files but also through our SQL and PL/SQL
 browsers. This means that we should try to make it as consistent as
 possible to all source code readers.</p></li><li class="listitem"><p>Lowercase everything, with the exception of %TYPE and
 %ROWTYPE.</p></li>
-</ol></div><div class="cvstag">($&zwnj;Id: plsql.xml,v 1.6.14.2 2017/04/21 15:07:52
+</ol></div><div class="cvstag">($&zwnj;Id: plsql.xml,v 1.6.14.3 2017/06/16 17:19:52
 gustafn Exp $)</div>
 </div>
 </div>

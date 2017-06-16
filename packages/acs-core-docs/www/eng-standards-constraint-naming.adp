@@ -126,8 +126,8 @@ a requirement.</p><div>About Naming the not null constraints</div><p>Though nami
 immeditately in error debugging (e.g. the error will say something
 like "Cannot insert null value into column"), we
 recommend naming not null constraints to be consistent in our
-naming of all constraints.</p><div class="cvstag">($&zwnj;Id: constraint-naming.xml,v 1.6.14.2
-2016/06/23 08:32:46 gustafn Exp $)</div>
+naming of all constraints.</p><div class="cvstag">($&zwnj;Id: constraint-naming.xml,v 1.6.14.3
+2017/06/16 17:19:52 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

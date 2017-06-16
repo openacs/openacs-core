@@ -41,8 +41,7 @@ Follow the <a class="ulink" href="http://metalink.oracle.com/metalink/plsql/ml2_
 platforms. If you don&#39;t have metalink access, take a look at
 the Oracle on Linux FAQ: <a class="ulink" href="http://www.orafaq.com/wiki/Linux_FAQ" target="_top">Which Linux
 Distributions Are Directly Supported By Oracle?</a>. In summary,
-free and inexpensive Linux distributions are not certified.</p><p>If you don&#39;t have an account at <a class="ulink" href="http://otn.oracle.com" target="_top">OTN</a> get one: you can
-download the Oracle software from the <a class="ulink" href="http://otn.oracle.com/software/products/database/oracle10g/index.html" target="_top">Oracle Downloads</a> page.</p><p>Each Oracle release comes with extensive and usually quite
+free and inexpensive Linux distributions are not certified.</p><p>You can download the Oracle software from the <a class="ulink" href="https://www.oracle.com/downloads/index.html" target="_top">Oracle Downloads</a> page.</p><p>Each Oracle release comes with extensive and usually quite
 well-written documentation. Your first step should be to thoroughly
 read the release notes for your operating system and your Oracle
 version. Find the docs here:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
@@ -63,7 +62,7 @@ starting pointing into Oracle is the Concepts book. Here&#39;s the
 thought you may need to put into buying the proper hardware and
 creating a sane setup, you should thoroughly read Cary
 Millsap&#39;s <a class="ulink" href="http://www.miracleas.dk/BAARF/0.Millsap1996.08.21-VLDB.pdf" target="_top">Configuring Oracle Server for VLDB</a> and the
-<a class="ulink" href="http://download-west.oracle.com/docs/html/A97297_01/appg_ofa.htm#sthref787" target="_top">Optimal Flexible Architecture</a> standard.</p><p>Throughout these instructions, we will refer to a number of
+<a class="ulink" href="https://en.wikipedia.org/wiki/Optimal_Flexible_Architecture" target="_top">Optimal Flexible Architecture</a> standard.</p><p>Throughout these instructions, we will refer to a number of
 configurable settings and advise certain defaults. With the
 exception of passwords, we advise you to follow these defaults
 unless you know what you are doing. Subsequent documents will
@@ -438,11 +437,7 @@ an hour of non-interactive time, so don&#39;t quit yet.</p>
 <div class="titlepage"><div><div><h3 class="title">
 <a name="install-oracle-create" id="install-oracle-create"></a>Creating the First Database</h3></div></div></div><p>This step will take you through the steps of creating a
 customized database. Be warned that this process takes about an
-hour on a Pentium II with 128 MB of RAM.</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
-<h3 class="title">Note</h3><p>RedHat 7.3 and 8.0 users: Before running <span class="command"><strong>dbassist</strong></span>, do the following.</p><div class="orderedlist"><ol class="orderedlist" type="1">
-<li class="listitem"><p>Download the <a class="ulink" href="http://otn.oracle.com/software/products/oracle8i/htdocs/linuxsoft.html" target="_top">glibc patch</a> from Oracle Technet into <code class="computeroutput">/var/tmp</code>.</p></li><li class="listitem"><p>cd $ORACLE_HOME</p></li><li class="listitem"><p>tar xzf /var/tmp/glibc2.1.3-stubs.tgz</p></li><li class="listitem"><p>./setup_stubs</p></li>
-</ol></div>
-</div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
+hour on a Pentium II with 128 MB of RAM.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem">
 <p>Make sure you are running X. Open up a terminal and <code class="computeroutput">su</code> to oracle and then run the <code class="computeroutput">dbassist</code> program.</p><pre class="programlisting">
 [joeuser ~]$ xhost +localhost
@@ -969,8 +964,8 @@ to do a <code class="computeroutput">connect internal</code> within
 access to the Oracle system.</td>
 </tr>
 </tbody>
-</table></div><div class="cvstag">($&zwnj;Id: oracle.xml,v 1.21.14.3 2017/04/21
-15:07:53 gustafn Exp $)</div>
+</table></div><div class="cvstag">($&zwnj;Id: oracle.xml,v 1.21.14.4 2017/06/16
+17:19:52 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

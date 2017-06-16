@@ -113,44 +113,11 @@
     <section id="os-install" xreflabel="Linux Install Guides">
     <title>Linux Install Guides</title>
     <para>
-      Here&#39;s a list of some helpful documentation for various OS&#39;s
+      Here&#39;s a list of some helpful documentation for <ulink
+      url="http://openacs.org/xowiki/openacs-system-install">installing
+      OpenACS on various operating systems</ulink>
     </para>
 
-    <itemizedlist>
-      <listitem><para>
-          <ulink url="http://tinyplanet.ca/pubs/debian/">Painless Debian
-          GNU/Linux</ulink> by Stephen van Egmond
-        </para></listitem>
-
-      <listitem><para> 
-
-          <ulink
-          url="http://www.debian.org/releases/stable/installmanual">Official
-          Debian Guide</ulink> 
-
-        </para></listitem>
-
-      <listitem><para>
-
-          <ulink
-          url="http://www.redhat.com/docs/manuals/linux/">RedHat</ulink>
-
-        </para></listitem>
-
-      <listitem><para>
-
-          <ulink
-          url="http://www.linux-mandrake.com/en/fdoc.php3">Mandrake</ulink>
-
-        </para></listitem>
-
-      <listitem><para>
-
-          <ulink url="http://sdb.suse.de/sdb/en/html/">SuSE</ulink>
-
-        </para></listitem>
-
-    </itemizedlist>
     </section>
 
   <section id="os-security" xreflabel="Security Information">
@@ -174,16 +141,16 @@
         </para>
       </listitem>
       <listitem><para> 
-          <ulink url="http://jongriffin.com/static/linuxnotes">Jon
+          <ulink url="https://web.archive.org/web/20060622032854/http://jongriffin.com/static/linuxnotes">Jon
           Griffin&#39;s notes</ulink>
           </para></listitem>
       <listitem><para> 
-          <ulink url="http://www.seifried.org/lasg/">Linux Administrators
+          <ulink url="http://www.linuxtopia.org/online_books/linux_administrators_security_guide/">Linux Administrators
           Security Guide</ulink>
           </para></listitem>
       <listitem><para> 
           <ulink
-            url="http://www.suse.com/en/support/howto/secure_webserv/index.html">Installation
+            url="http://www.linuxsecurity.com/content/view/110249/">Installation
             of a Secure Webserver</ulink>
         </para></listitem>
 
