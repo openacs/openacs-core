@@ -489,7 +489,7 @@
           <formalpara>
             <title>Oracle 8.1.7 (Either this or PostgreSQL is REQUIRED)</title>
             <para>You can register and download Oracle from <ulink
-                url="http://otn.oracle.com/software/content.html">Oracle
+                url="https://www.oracle.com/downloads/index.html">Oracle
                 TechNet</ulink>.  You need this if you want to use an
               Oracle database.</para>
           </formalpara>

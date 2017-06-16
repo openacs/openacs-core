@@ -57,7 +57,7 @@
       url="http://metalink.oracle.com/metalink/plsql/ml2_documents.showDocument?p_database_id=NOT&amp;p_id=223718.1">metalink
       note 223718.1</ulink>to find certified platforms. If you don&#39;t have
       metalink access, take a look at the Oracle on Linux FAQ: <ulink
-      url="http://otn.oracle.com/tech/linux/htdocs/linux_techsupp_faq.html#Linux_Distributions">Which
+      url="http://www.orafaq.com/wiki/Linux_FAQ">Which
       Linux Distributions Are Directly Supported By Oracle?</ulink>. In summary,
       free and inexpensive Linux distributions are not certified.
     </para>
@@ -66,10 +66,7 @@
       If you don&#39;t have an account at <ulink url="http://otn.oracle.com">OTN</ulink>
       get one: you can download the Oracle software from the <ulink
       url="http://otn.oracle.com/software/products/database/oracle10g/index.html">
-      Oracle Downloads</ulink> page. It is also get the CDs shipped to you for
-      a nominal fee from the <ulink
-      url="http://oraclestore.oracle.com/OA_HTML/ibeCCtdMinisites.jsp?language=US">Oracle
-      Store</ulink>.
+      Oracle Downloads</ulink> page. 
     </para>
 
 
@@ -83,20 +80,20 @@
           <listitem>
             <para>
           <ulink
-          url="http://otn.oracle.com/documentation/oracle8i.html">Oracle 8i
+          url="http://www.oracle.com/technetwork/documentation/oracle8i-085806.html">Oracle 8i
           Release Documentation</ulink></para>
           </listitem>
 
           <listitem>
             <para>
               <ulink
-          url="http://otn.oracle.com/documentation/oracle9i.html">Oracle 9i Release Documentation</ulink>
+          url="https://docs.oracle.com/cd/B10501_01/server.920/a96531/ch4_doc.htm">Oracle 9i Release Documentation</ulink>
             </para>
           </listitem>
           <listitem>
             <para>
           <ulink
-          url="http://otn.oracle.com/documentation/database10g.html">Oracle
+          url="https://docs.oracle.com/cd/B19306_01/server.102/b14214/chapter2.htm#g62359">Oracle
           10g Release Documentation</ulink></para>
           </listitem>
         </itemizedlist>
@@ -2070,7 +2067,7 @@ SQL&gt; drop tablespace <emphasis>table_space_name</emphasis> including contents
 
     <para>
       For more information on Oracle, please consult the <ulink
-        url="http://oradoc.photo.net/">documentation</ulink>.
+        url="https://docs.oracle.com/en/database/">documentation</ulink>.
     </para>
   </sect2>
 

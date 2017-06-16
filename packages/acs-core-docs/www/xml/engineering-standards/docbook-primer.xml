@@ -833,7 +833,7 @@
     <emphasis>XML does not require extra
       effort</emphasis>. Writing in XML is almost identical to
     SGML, with a couple extra rules. More details in the
-    <ulink url="http://en.tldp.org/LDP/LDP-Author-Guide/docbookxml.html">LDP Author Guide</ulink>.
+    <ulink url="http://www.tldp.org/LDP/LDP-Author-Guide/html/index.html">LDP Author Guide</ulink>.
     </para></listitem>
       <listitem><para>
     <emphasis>The tool chain has matured</emphasis>. xsltproc and other XML 
@@ -1521,7 +1521,7 @@
       <listitem>
     <para>
     The <ulink
-    url="http://en.tldp.org/LDP/LDP-Author-Guide/">LDP Author
+    url="http://www.tldp.org/LDP/LDP-Author-Guide/html/index.html">LDP Author
     Guide</ulink> has a lot of good information, a table of
     docbook elements and their "look" in HTML and lots of good links
     for tools.

@@ -145,8 +145,8 @@ parents, what its contents can be and lists its attributes.</td>
 <a name="psgml-mode-reading" id="psgml-mode-reading"></a>Further reading</h3></div></div></div><p>Start with the <a class="xref" href="docbook-primer" title="OpenACS Documentation Guide">the section called
 &ldquo;OpenACS Documentation
 Guide&rdquo;</a>
-</p><div class="cvstag">($&zwnj;Id: psgml-mode.xml,v 1.8 2006/07/17 05:38:37
-torbenb Exp $)</div>
+</p><div class="cvstag">($&zwnj;Id: psgml-mode.xml,v 1.8.14.1 2017/06/15
+13:56:42 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

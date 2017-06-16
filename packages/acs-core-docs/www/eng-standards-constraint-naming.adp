@@ -23,16 +23,15 @@ associate a particular constraint with our data model. This gives
 us two real advantages:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>We can quickly identify and fix any errors.</p></li><li class="listitem"><p>We can reliabily modify or drop constraints</p></li>
 </ul></div><div>Why do we need a naming convention?</div><p>
-<a class="ulink" href="http://oradoc.photo.net/ora8doc/DOC/server803/A54647_01/ch2.htm#2956" target="_top">Oracle limits names</a>, in general, to 30
+<a class="ulink" href="https://docs.oracle.com/database/121/SQLRF/sql_elements008.htm#SQLRF00223" target="_top">Oracle limits names</a>, in general, to 30
 characters, which is hardly enough for a human readable constraint
 name.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="eng-standards-constraint-naming-abbr" id="eng-standards-constraint-naming-abbr"></a>Abbreviations</h3></div></div></div><p>We propose the following naming convention for all constraints,
-with the following abbreviations taken from Oracle Docs at
-<a class="ulink" href="http://oradoc.photo.net/ora81/DOC/server.815/a67779/ch4e.htm#8953" target="_top">http://oradoc.photo.net/ora81/DOC/server.815/a67779/ch4e.htm#8953</a>.
-Note that we shortened all of the constraint abbrevations to two
-characters to save room.</p><div class="informaltable"><table class="informaltable" cellspacing="0" border="1">
+with the following abbreviations taken from Oracle Docs. Note that
+we shortened all of the constraint abbrevations to two characters
+to save room.</p><div class="informaltable"><table class="informaltable" cellspacing="0" border="1">
 <colgroup>
 <col><col>
 </colgroup><thead><tr>

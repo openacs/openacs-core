@@ -39,15 +39,14 @@ Linux</a></p></li><li class="listitem"><p><a class="ulink" href="http://puschitz
 <a name="install-oracle-getit" id="install-oracle-getit"></a>Acquire Oracle</h3></div></div></div><p>Production Oracle systems should run on certified platforms.
 Follow the <a class="ulink" href="http://metalink.oracle.com/metalink/plsql/ml2_documents.showDocument?p_database_id=NOT&amp;p_id=223718.1" target="_top">metalink note 223718.1</a>to find certified
 platforms. If you don&#39;t have metalink access, take a look at
-the Oracle on Linux FAQ: <a class="ulink" href="http://otn.oracle.com/tech/linux/htdocs/linux_techsupp_faq.html#Linux_Distributions" target="_top">Which Linux Distributions Are Directly Supported By
-Oracle?</a>. In summary, free and inexpensive Linux distributions
-are not certified.</p><p>If you don&#39;t have an account at <a class="ulink" href="http://otn.oracle.com" target="_top">OTN</a> get one: you can
-download the Oracle software from the <a class="ulink" href="http://otn.oracle.com/software/products/database/oracle10g/index.html" target="_top">Oracle Downloads</a> page. It is also get the CDs
-shipped to you for a nominal fee from the <a class="ulink" href="http://oraclestore.oracle.com/OA_HTML/ibeCCtdMinisites.jsp?language=US" target="_top">Oracle Store</a>.</p><p>Each Oracle release comes with extensive and usually quite
+the Oracle on Linux FAQ: <a class="ulink" href="http://www.orafaq.com/wiki/Linux_FAQ" target="_top">Which Linux
+Distributions Are Directly Supported By Oracle?</a>. In summary,
+free and inexpensive Linux distributions are not certified.</p><p>If you don&#39;t have an account at <a class="ulink" href="http://otn.oracle.com" target="_top">OTN</a> get one: you can
+download the Oracle software from the <a class="ulink" href="http://otn.oracle.com/software/products/database/oracle10g/index.html" target="_top">Oracle Downloads</a> page.</p><p>Each Oracle release comes with extensive and usually quite
 well-written documentation. Your first step should be to thoroughly
 read the release notes for your operating system and your Oracle
 version. Find the docs here:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
-<li class="listitem"><p><a class="ulink" href="http://otn.oracle.com/documentation/oracle8i.html" target="_top">Oracle 8i Release Documentation</a></p></li><li class="listitem"><p><a class="ulink" href="http://otn.oracle.com/documentation/oracle9i.html" target="_top">Oracle 9i Release Documentation</a></p></li><li class="listitem"><p><a class="ulink" href="http://otn.oracle.com/documentation/database10g.html" target="_top">Oracle 10g Release Documentation</a></p></li>
+<li class="listitem"><p><a class="ulink" href="http://www.oracle.com/technetwork/documentation/oracle8i-085806.html" target="_top">Oracle 8i Release Documentation</a></p></li><li class="listitem"><p><a class="ulink" href="https://docs.oracle.com/cd/B10501_01/server.920/a96531/ch4_doc.htm" target="_top">Oracle 9i Release Documentation</a></p></li><li class="listitem"><p><a class="ulink" href="https://docs.oracle.com/cd/B19306_01/server.102/b14214/chapter2.htm#g62359" target="_top">Oracle 10g Release Documentation</a></p></li>
 </ul></div><p>It is generally useful to run a particular Oracle version with
 its latest patchset. At the time of writing these were 8.1.7.4 and
 9.2.0.5, both of which are considered to be very stable.</p><p>To be able to download a patchset, you need a (to-pay-for)
@@ -940,7 +939,7 @@ SQL&gt; drop tablespace <span class="emphasis"><em>table_space_name</em></span> 
 </pre>
 </li>
 </ul></div>
-</li></ul></div><p>For more information on Oracle, please consult the <a class="ulink" href="http://oradoc.photo.net/" target="_top">documentation</a>.</p>
+</li></ul></div><p>For more information on Oracle, please consult the <a class="ulink" href="https://docs.oracle.com/en/database/" target="_top">documentation</a>.</p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="oracle-next-steps" id="oracle-next-steps"></a>Oracle Next Steps</h3></div></div></div><p><a class="xref" href="maint-performance" title="Creating an appropriate tuning and monitoring environment">the

@@ -221,7 +221,7 @@ ROOT/
           files. In Oracle this can be done by including 
           <emphasis>@@ filename</emphasis> in the creation or drop
           scripts. See the <ulink
-        url="http://www.orafaq.com/faqplus.htm#AT">
+        url="http://www.orafaq.com/wiki/Scripts">
         Oracle FAQ</ulink> for examples. In
           PostgreSQL the same is accomplished by including <emphasis>\i filename</emphasis>.
         </entry>

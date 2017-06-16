@@ -25,7 +25,7 @@ and step by step instructions for creating a new package for the
 <div class="titlepage"><div><div><h3 class="title">
 <a name="server-file-layout" id="server-file-layout"></a>Server file layout</h3></div></div></div><p>Here is how an OpenACS 5 server is laid out starting from the
 Server root (ROOT):</p><div class="figure">
-<a name="idp140255968759528" id="idp140255968759528"></a><p class="title"><strong>Figure 11.1. Server file layout
+<a name="idp140507674332200" id="idp140507674332200"></a><p class="title"><strong>Figure 11.1. Server file layout
 diagram</strong></p><div class="figure-contents"><pre class="programlisting">
 ROOT/
     bin/
@@ -65,7 +65,7 @@ removal. In OpenACS 5, this tool is called the <a class="link" href="packages" t
 <a class="indexterm" name="baby" id="baby"></a> To illustrate
 the general structure of a package, let&#39;s see what the package
 for the "notes" application should look like.</p><div class="figure">
-<a name="idp140255968831368" id="idp140255968831368"></a><p class="title"><strong>Figure 11.2. Package file layout
+<a name="idp140507673227672" id="idp140507673227672"></a><p class="title"><strong>Figure 11.2. Package file layout
 diagram</strong></p><div class="figure-contents"><pre class="programlisting">
 ROOT/
   +-- packages/    APM Root
@@ -136,7 +136,7 @@ installed or mounted. Files are returned directly, so .tcl or .adp
 files are not sourced in these directories. This makes it suitable
 for storing icons, css files, javascript, and other static content
 which can be treated this way.</p><div class="table">
-<a name="idp140255979713496" id="idp140255979713496"></a><p class="title"><strong>Table 11.1. Package
+<a name="idp140507669190440" id="idp140507669190440"></a><p class="title"><strong>Table 11.1. Package
 files</strong></p><div class="table-contents"><table class="table" summary="Package files" cellspacing="0" border="1">
 <colgroup>
 <col><col><col>
@@ -167,8 +167,8 @@ SQL in the creation and drop scripts into several files and then
 have the scripts source the other data model files. In Oracle this
 can be done by including <span class="emphasis"><em>\@\@
 filename</em></span> in the creation or drop scripts. See the
-<a class="ulink" href="http://www.orafaq.com/faqplus.htm#AT" target="_top">Oracle FAQ</a> for examples. In PostgreSQL the same
-is accomplished by including <span class="emphasis"><em>\i
+<a class="ulink" href="http://www.orafaq.com/wiki/Scripts" target="_top">Oracle FAQ</a> for examples. In PostgreSQL the same is
+accomplished by including <span class="emphasis"><em>\i
 filename</em></span>.</td><td><code class="computeroutput">sql/&lt;database&gt;/*.sql</code></td>
 </tr><tr>
 <td>Data Model Upgrade Scripts</td><td>Contain changes to the data model between versions. The APM can

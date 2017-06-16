@@ -254,7 +254,7 @@ support all databases.</p><div class="itemizedlist"><ul class="itemizedlist" sty
 <li class="listitem"><p>
 <strong>Oracle 8.1.7 (Either this or PostgreSQL is
 REQUIRED). </strong>You can register and download
-Oracle from <a class="ulink" href="http://otn.oracle.com/software/content.html" target="_top">Oracle
+Oracle from <a class="ulink" href="https://www.oracle.com/downloads/index.html" target="_top">Oracle
 TechNet</a>. You need this if you want to use an Oracle
 database.</p></li><li class="listitem"><p>
 <a name="source-postgresql" id="source-postgresql"></a><strong>

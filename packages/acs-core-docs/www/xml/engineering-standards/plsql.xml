@@ -53,7 +53,7 @@ By Richard Li and Yon Feldman
    <listitem><para>
     Encapsulation of related fuctionality is key to maintainability
     and upgradeability of our software. Try to bundle your code into
-    <ulink url="http://oradoc.photo.net/ora816/appdev.816/a77069/08_packs.htm#4376">packages</ulink>
+    <ulink url="https://docs.oracle.com/database/121/LNPLS/packages.htm#LNPLS009">packages</ulink>
     whenever possible. This will make upgrading, bug fixing, and
     customizing, among other things, a possibility.
    </para></listitem>
