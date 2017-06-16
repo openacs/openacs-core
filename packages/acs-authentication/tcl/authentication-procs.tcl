@@ -1680,7 +1680,7 @@ ad_proc -private auth::validate_account_info {
             set username_member_state [acs_user::get_element -user_id $username_user_id -element member_state]
             switch $username_member_state {
                 banned {
-                    set element_messages(email) [_ acs-subsite.lt_This_user_is_deleted]
+                    set element_messages(username) [_ acs-subsite.lt_This_user_is_deleted]
                 }
                 default {
                     set element_messages(username) [_ acs-subsite.Have_user_name]
