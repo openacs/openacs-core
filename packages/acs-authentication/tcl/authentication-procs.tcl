@@ -1654,14 +1654,9 @@ ad_proc -private auth::validate_account_info {
                 acs_user::get \
                     -user_id $email_party_id \
                     -array email_user
-
                 switch $email_user(member_state) {
                     banned {
-                        # A user with this email does exist, but he's banned, so we can 'steal' his email address
-                        # by setting it to something dummy
-                        party::update \
-                            -party_id $email_party_id \
-                            -email "dummy-email-$email_party_id"
+                        set element_messages(email) [_ acs-subsite.lt_This_user_is_deleted]
                     }
                     default {
                         set element_messages(email) [_ acs-subsite.Have_user_mail]
@@ -1685,11 +1680,7 @@ ad_proc -private auth::validate_account_info {
             set username_member_state [acs_user::get_element -user_id $username_user_id -element member_state]
             switch $username_member_state {
                 banned {
-                    # A user with this username does exist, but he's banned, so we can 'steal' his username
-                    # by setting it to something dummy
-                    acs_user::update \
-                        -user_id $username_user_id \
-                        -username "dummy-username-$username_user_id"
+                    set element_messages(email) [_ acs-subsite.lt_This_user_is_deleted]
                 }
                 default {
                     set element_messages(username) [_ acs-subsite.Have_user_name]
