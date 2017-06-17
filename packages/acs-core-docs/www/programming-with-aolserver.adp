@@ -10,7 +10,7 @@ Chapter 11. Development Reference"
 		<div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="programming-with-aolserver" id="programming-with-aolserver"></a>Programming with AOLserver</h2></div></div></div><div class="authorblurb">
-<p>By Michael Yoon, Jon Salz and <a class="ulink" href="http://www.pinds.com/lars" target="_top">Lars Pind</a>.</p>
+<p>By Michael Yoon, Jon Salz and Lars Pind.</p>
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">

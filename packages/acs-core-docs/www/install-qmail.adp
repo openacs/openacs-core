@@ -48,7 +48,7 @@ tcpserver: usage: tcpserver [ -1UXpPhHrRoOdDqQv ] [ -c limit ] [ -x rules.cdb ] 
 ] [ -b backlog ] [ -l localname ] [ -t timeout ] host port program
 [root ucspi-tcp-0.88]#
 </pre><p>
-<a class="indexterm" name="idp140183970773368" id="idp140183970773368"></a> (I&#39;m not sure if this next step is
+<a class="indexterm" name="idp140205661011336" id="idp140205661011336"></a> (I&#39;m not sure if this next step is
 100% necessary, but when I skip it I get problems. If you get the
 error <code class="computeroutput">553 sorry, that domain isn&#39;t
 in my list of allowed rcpthosts (#5.7.1)</code> then you need to do
@@ -68,7 +68,7 @@ tcprules /etc/tcp.smtp.cdb /etc/tcp.smtp.tmp &lt; /etc/tcp.smtp </span></span>
 </pre>
 </li><li class="listitem">
 <p>
-<strong>Install Qmail. </strong><a class="indexterm" name="idp140183970752280" id="idp140183970752280"></a>
+<strong>Install Qmail. </strong><a class="indexterm" name="idp140205661018328" id="idp140205661018328"></a>
 </p><p>
 <a class="link" href="individual-programs" title="ucspi-tcp 0.88, OPTIONAL">Download qmail</a>, set up the
 standard supporting users and build the binaries:</p><pre class="screen">
@@ -131,7 +131,7 @@ cd netqmail-1.04
 ./collate.sh
 cd netqmail-1.04
 make setup check</span></span>
-</pre><p>Replace sendmail with qmail&#39;s wrapper.</p><a class="indexterm" name="idp140183970768488" id="idp140183970768488"></a><pre class="screen">
+</pre><p>Replace sendmail with qmail&#39;s wrapper.</p><a class="indexterm" name="idp140205661036264" id="idp140205661036264"></a><pre class="screen">
 [root qmail-1.03]# <strong class="userinput"><code>rm -f /usr/bin/sendmail /usr/sbin/sendmail</code></strong>
 [root qmail-1.03]# <strong class="userinput"><code>ln -s /var/qmail/bin/sendmail /usr/sbin/sendmail</code></strong>
 [root qmail-1.03]#
@@ -170,7 +170,7 @@ receive mail.</p><pre class="screen">
 chmod 644 ~alias/.qmail* 
 /var/qmail/bin/maildirmake ~alias/Maildir/ 
 chown -R alias.nofiles /var/qmail/alias/Maildir</span></span>
-</pre><a class="indexterm" name="idp140183970746616" id="idp140183970746616"></a><p>Configure qmail to use the Maildir delivery format (instead of
+</pre><a class="indexterm" name="idp140205661050696" id="idp140205661050696"></a><p>Configure qmail to use the Maildir delivery format (instead of
 mbox), and install a version of the qmail startup script modified
 to use Maildir.</p><pre class="screen">
 [root alias]# <strong class="userinput"><code>echo "./Maildir" &gt; /var/qmail/bin/.qmail</code></strong>

@@ -403,20 +403,20 @@ styles still using these mechanisms will break.</p></li><li class="listitem"><p>
 turned off by default via the acs-kernel parameter ExcludedFiles in
 section request-processor (The variable provides a string match
 glob list of files and is defaulted to "*/CVS/* *~")</p></li>
-</ul></div><div class="cvstag">($&zwnj;Id: release-notes.xml,v 1.30.2.7 2016/06/23
-08:32:46 gustafn Exp $)</div>
+</ul></div><div class="cvstag">($&zwnj;Id: release-notes.xml,v 1.30.2.8 2017/06/17
+10:15:42 gustafn Exp $)</div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140183967024184" id="idp140183967024184"></a>Release 4.6.3</h3></div></div></div><p><a class="ulink" href="release-notes-4-6-3" target="_top">Release Notes for 4.6.3</a></p>
+<a name="idp140205644294616" id="idp140205644294616"></a>Release 4.6.3</h3></div></div></div><p><a class="ulink" href="release-notes-4-6-3" target="_top">Release Notes for 4.6.3</a></p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140183967025688" id="idp140183967025688"></a>Release 4.6.2</h3></div></div></div><p><a class="ulink" href="release-notes-4-6-2" target="_top">Release Notes for 4.6.2</a></p>
+<a name="idp140205644296120" id="idp140205644296120"></a>Release 4.6.2</h3></div></div></div><p><a class="ulink" href="release-notes-4-6-2" target="_top">Release Notes for 4.6.2</a></p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140183967027192" id="idp140183967027192"></a>Release 4.6</h3></div></div></div><p><a class="ulink" href="release-notes-4-6" target="_top">Release Notes for 4.6</a></p>
+<a name="idp140205644297624" id="idp140205644297624"></a>Release 4.6</h3></div></div></div><p><a class="ulink" href="release-notes-4-6" target="_top">Release Notes for 4.6</a></p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140183967028696" id="idp140183967028696"></a>Release 4.5</h3></div></div></div><p><a class="ulink" href="release-notes-4-5" target="_top">Release Notes for 4.5</a></p>
+<a name="idp140205644299128" id="idp140205644299128"></a>Release 4.5</h3></div></div></div><p><a class="ulink" href="release-notes-4-5" target="_top">Release Notes for 4.5</a></p>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
