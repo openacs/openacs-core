@@ -32,8 +32,7 @@ document. T</p><p>This document assumes that you&#39;ll be installing Oracle on
 the same box as AOLserver. For more details on a remote Oracle
 installation, see Daryl Biberdorf&#39;s <a class="ulink" href="http://openacs.org/new-file-storage/one-file?file_id=273" target="_top">document</a>.</p><p>Useful links to find help on how to set up Oracle under Linux
 are:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
-<li class="listitem"><p><a class="ulink" href="http://dizwell.com/html/oracle_on_linux.html" target="_top">Dizwell - Howard Roger&#39;s company - on Oracle on
-Linux</a></p></li><li class="listitem"><p><a class="ulink" href="http://puschitz.com/" target="_top">Werner Puschitz - Oracle on Red Hat Linux</a></p></li><li class="listitem"><p><a class="ulink" href="http://www.suse.com/us/business/certifications/certified_software/oracle/" target="_top">SuSE/Oracle Support matrix</a></p></li>
+<li class="listitem"><p><a class="ulink" href="https://www.dizwell.com/wordpress/technical-articles/oracle/" target="_top">Dizwell - on Oracle on Linux</a></p></li><li class="listitem"><p><a class="ulink" href="http://puschitz.com/" target="_top">Werner Puschitz - Oracle on Red Hat Linux</a></p></li><li class="listitem"><p><a class="ulink" href="http://www.suse.com/us/business/certifications/certified_software/oracle/" target="_top">SuSE/Oracle Support matrix</a></p></li>
 </ul></div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="install-oracle-getit" id="install-oracle-getit"></a>Acquire Oracle</h3></div></div></div><p>Production Oracle systems should run on certified platforms.
@@ -964,8 +963,8 @@ to do a <code class="computeroutput">connect internal</code> within
 access to the Oracle system.</td>
 </tr>
 </tbody>
-</table></div><div class="cvstag">($&zwnj;Id: oracle.xml,v 1.21.14.4 2017/06/16
-17:19:52 gustafn Exp $)</div>
+</table></div><div class="cvstag">($&zwnj;Id: oracle.xml,v 1.21.14.5 2017/06/16
+17:54:32 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

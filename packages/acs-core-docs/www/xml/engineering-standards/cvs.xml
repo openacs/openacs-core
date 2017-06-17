@@ -54,7 +54,7 @@
         With this setup, you will be asked for your password with
         each cvs command.  To avoid this, set up ssh certificate
         authentication for your OpenACS account.  (<ulink
-        url="http://www.uberdose.com/kbase/ssh-automatic-login/">More
+        url="https://www.digitalocean.com/community/tutorials/how-to-configure-ssh-key-based-authentication-on-a-linux-server">More
         information</ulink>)
       </para>
 

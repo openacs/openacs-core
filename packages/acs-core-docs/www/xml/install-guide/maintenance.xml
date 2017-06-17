@@ -838,7 +838,7 @@ openacs.org=&gt;</programlisting>
     up to 80.000 permutations are being tested in a Oracle 8i). To get an
     adequate cost estimate, the CBO needs to have adequate statistics. For
     that Oracle supplies the <ulink
-    url="http://download-west.oracle.com/docs/cd/B10501_01/appdev.920/a96612/d_stats.htm#999107">dbms_stats
+    url="http://docs.oracle.com/cd/B19306_01/appdev.102/b14258/d_stats.htm#CIHBIEII">dbms_stats
     package</ulink>.
       </para>
     </sect3>
