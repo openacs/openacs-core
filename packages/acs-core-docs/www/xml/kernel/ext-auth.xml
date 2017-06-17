@@ -337,7 +337,7 @@ and Linking Users</title>
       <para>Regardless of the login method, the user needs to have a row
 in the OpenACS users table. This can happen through a batch job, in
 real-time, or both in combination.  We use the <ulink
-url="http://ims.edna.edu.au/enterprise/">IMS Enterprise 1.1</ulink> specification. </para>
+url="https://www.imsglobal.org/enterprise/index.html">IMS Enterprise 1.1</ulink> specification. </para>
       <para>Batch job means that we do a synchronization (import new
 users, modify changed, purge deleted) on a regular interval, e.g.
 every night. You can also decide to have a monthly full
@@ -912,7 +912,7 @@ openacs.org forums thread</ulink>.</para>
   <sect2 id="Reference"><title>References</title>
     <itemizedlist>
       <listitem>
-        <para>      <ulink url="http://ims.edna.edu.au/enterprise/">IMS Enterprise</ulink></para>
+        <para>      <ulink url="https://www.imsglobal.org/enterprise/index.html/">IMS Enterprise</ulink></para>
       </listitem>
       <listitem><para><ulink url="http://openacs.org/projects/openacs/packages/ex-auth/">Threads
 and links</ulink> collected by Carl Blesius.</para></listitem>
@@ -921,7 +921,7 @@ PAM specification</ulink></para></listitem>
       <listitem><para><ulink url="http://openacs.org/new-file-storage/download/oacs-pam.html?version_id=687">Draft
 Proposal</ulink> by Andrew Grumet.</para></listitem>
       <listitem><para><ulink url="http://www.yale.edu/tp/auth/">Yale
-CAS</ulink>, a centrl authentication service a' la
+CAS</ulink>, a central authentication service a' la
         Passport.</para></listitem>
     </itemizedlist>
     </sect2>

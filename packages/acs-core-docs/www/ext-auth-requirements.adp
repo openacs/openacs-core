@@ -12,7 +12,7 @@ Chapter 15. Kernel Documentation"
 <a name="ext-auth-requirements" id="ext-auth-requirements"></a>External
 Authentication Requirements</h2></div></div></div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140667804478088" id="idp140667804478088"></a>Vision</h3></div></div></div><p>People have plenty of usernames and passwords already, we
+<a name="idp140183966665448" id="idp140183966665448"></a>Vision</h3></div></div></div><p>People have plenty of usernames and passwords already, we
 don&#39;t want them to have yet another. We want people to be able
 to log in to OpenACS with the same password they use to log in to
 any other system.</p><p>Besides, administrators have better things to do than create
@@ -74,7 +74,7 @@ Pictures</h3></div></div></div><p>Authentication:</p><p><span class="inlinemedia
 <div class="titlepage"><div><div><h3 class="title">
 <a name="Requirements" id="Requirements"></a>Requirements</h3></div></div></div><div class="sect3">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="idp140667814971640" id="idp140667814971640"></a>New API</h4></div></div></div><div class="segmentedlist"><table border="1" cellpadding="3" cellspacing="0" width="90%">
+<a name="idp140183971207656" id="idp140183971207656"></a>New API</h4></div></div></div><div class="segmentedlist"><table border="1" cellpadding="3" cellspacing="0" width="90%">
 <tr>
 <th width="15%">Feature</th><th width="8%">Status</th><th width="77%">Description</th>
 </tr><thead><tr><th>New API</th></tr></thead><tbody>
@@ -229,8 +229,7 @@ Users</h4></div></div></div><div class="segmentedlist"><table border="1" cellpad
 </tbody>
 </table></div><p>Regardless of the login method, the user needs to have a row in
 the OpenACS users table. This can happen through a batch job, in
-real-time, or both in combination. We use the <a class="ulink" href="http://ims.edna.edu.au/enterprise/" target="_top">IMS
-Enterprise 1.1</a> specification.</p><p>Batch job means that we do a synchronization (import new users,
+real-time, or both in combination. We use the <a class="ulink" href="https://www.imsglobal.org/enterprise/index.html" target="_top">IMS Enterprise 1.1</a> specification.</p><p>Batch job means that we do a synchronization (import new users,
 modify changed, purge deleted) on a regular interval, e.g. every
 night. You can also decide to have a monthly full synchronization,
 plus daily incremental ones. That&#39;s up to you. The advantage is
@@ -646,10 +645,10 @@ follow up at <a class="ulink" href="http://openacs.org/forums/message-view?messa
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="Reference" id="Reference"></a>References</h3></div></div></div><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
-<li class="listitem"><p><a class="ulink" href="http://ims.edna.edu.au/enterprise/" target="_top">IMS Enterprise</a></p></li><li class="listitem"><p>
+<li class="listitem"><p><a class="ulink" href="https://www.imsglobal.org/enterprise/index.html/" target="_top">IMS Enterprise</a></p></li><li class="listitem"><p>
 <a class="ulink" href="http://openacs.org/projects/openacs/packages/ex-auth/" target="_top">Threads and links</a> collected by Carl Blesius.</p></li><li class="listitem"><p><a class="ulink" href="http://java.sun.com/security/jaas/doc/pam.html" target="_top">Solaris/Linux PAM specification</a></p></li><li class="listitem"><p>
 <a class="ulink" href="http://openacs.org/new-file-storage/download/oacs-pam.html?version_id=687" target="_top">Draft Proposal</a> by Andrew Grumet.</p></li><li class="listitem"><p>
-<a class="ulink" href="http://www.yale.edu/tp/auth/" target="_top">Yale CAS</a>, a centrl authentication service a' la
+<a class="ulink" href="http://www.yale.edu/tp/auth/" target="_top">Yale CAS</a>, a central authentication service a' la
 Passport.</p></li>
 </ul></div>
 </div><div class="sect2">

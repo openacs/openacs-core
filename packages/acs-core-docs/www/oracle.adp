@@ -963,8 +963,8 @@ to do a <code class="computeroutput">connect internal</code> within
 access to the Oracle system.</td>
 </tr>
 </tbody>
-</table></div><div class="cvstag">($&zwnj;Id: oracle.xml,v 1.21.14.5 2017/06/16
-17:54:32 gustafn Exp $)</div>
+</table></div><div class="cvstag">($&zwnj;Id: oracle.xml,v 1.21.14.6 2017/06/17
+08:29:28 gustafn Exp $)</div>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"

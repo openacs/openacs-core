@@ -327,7 +327,7 @@ done
     
     <sect2 id="end">
       <title>Who Wrote This and When</title>
-      <para>This problem set was originally written by <ulink url="http://www.weg.ee.usyd.edu.au/people/ncarroll">Nick Carroll</ulink> in August 2004 for the <ulink url="http://www.usyd.edu.au">University of Sydney</ulink> Course <ulink url="http://www.weg.ee.usyd.edu.au/courses/ebus5002">EBUS5002</ulink>.</para>
+      <para>This problem set was originally written by Nick Carroll in August 2004 for the <ulink url="http://www.usyd.edu.au">University of Sydney</ulink> Course EBUS5002.</para>
       <para>This material is copyright 2004 by Nick Carroll.  It may be copied, reused, and modified, provided credit is given to the original author.</para>
       <para><phrase role="cvstag">($Id$)</phrase></para>
     </sect2>

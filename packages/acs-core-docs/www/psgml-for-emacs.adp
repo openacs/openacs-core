@@ -12,7 +12,7 @@ software"
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="psgml-for-emacs" id="psgml-for-emacs"></a>Add PSGML commands to emacs init file
 (OPTIONAL)</h2></div></div></div><p>
-<a class="indexterm" name="idp140667803015944" id="idp140667803015944"></a> If you plan to write or edit any
+<a class="indexterm" name="idp140183970909464" id="idp140183970909464"></a> If you plan to write or edit any
 documentation with emacs, install a customized emacs configuration
 file with DocBook commands in the skeleton directory, so it will be
 used for all new users. The file also fixes the backspace -&gt;

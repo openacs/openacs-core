@@ -25,7 +25,7 @@ OpenACS documentation staff.</div><p>
 this guide from many sources of information.</p><p>
 <a class="ulink" href="mailto:joel\@aufrecht.org" target="_top">Joel Aufrecht</a> updated the document starting in March
 2003.</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
-<li class="listitem"><p><a class="ulink" href="http://openacs.org/doc/openacs/install/" target="_top">OpenACS 3.x Installation Guide</a></p></li><li class="listitem"><p><a class="ulink" href="http://www.orchardlabs.com/freebsd/" target="_top">Gilbert Wong&#39;s FreeBSD installation guide</a></p></li><li class="listitem"><p><a class="ulink" href="http://www.kurup.com/acs/openacs-4.html" target="_top">My own Brief OpenACS4 installation guide</a></p></li>
+<li class="listitem"><p><a class="ulink" href="http://openacs.org/doc/openacs/install/" target="_top">OpenACS 3.x Installation Guide</a></p></li><li class="listitem"><p><a class="ulink" href="https://web.archive.org/web/20011204174701/http://www.orchardlabs.com:80/freebsd/" target="_top">Gilbert Wong&#39;s FreeBSD installation guide</a></p></li><li class="listitem"><p><a class="ulink" href="http://www.kurup.com/acs/openacs-4.html" target="_top">My own Brief OpenACS4 installation guide</a></p></li>
 </ul></div><p>Acknowledgments for versions of the above documents go (in no
 particular order) to Bryan Quinn, Adam Farkas, Brian Stein, Doug
 Hoffman, Ravi Jasuja, Hiro Iwashima, Ryan Lee, Jonathan Goler,

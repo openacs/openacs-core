@@ -93,14 +93,13 @@ Linux. It can be run on Mac OS X, and in Windows within VMWare.</p><div class="i
 <li class="listitem"><p>
 <strong>GNU/Linux. </strong>The installation assumes
 a linux kernel of 2.2.22 or newer, or 2.4.14 or newer.</p></li><li class="listitem"><p>
-<strong>FreeBSD. </strong><a class="ulink" href="http://www.orchardlabs.com/freebsd/" target="_top">FreeBSD
-guide</a>. The OpenACS Reference Platform uses shell scripts
-written for bash, which is the standard Linux shell. If you are
-using a different shell, you will need to substitute your
-shell&#39;s conventions for setting environment variables when
-appropriate, and install bash to work with the scripts. Substitute
-<strong class="userinput"><code>fetch</code></strong> when the
-instructions suggest you use <strong class="userinput"><code>wget</code></strong> to download software.</p></li><li class="listitem"><p>
+<strong>FreeBSD. </strong><a class="ulink" href="https://web.archive.org/web/20011204174701/http://www.orchardlabs.com:80/freebsd/" target="_top">FreeBSD guide</a>. The OpenACS Reference Platform
+uses shell scripts written for bash, which is the standard Linux
+shell. If you are using a different shell, you will need to
+substitute your shell&#39;s conventions for setting environment
+variables when appropriate, and install bash to work with the
+scripts. Substitute <strong class="userinput"><code>fetch</code></strong> when the instructions
+suggest you use <strong class="userinput"><code>wget</code></strong> to download software.</p></li><li class="listitem"><p>
 <strong>Mac OS X. </strong><a class="xref" href="mac-installation" title="OpenACS Installation Guide for Mac OS X">the section called
 &ldquo;OpenACS Installation Guide for Mac OS
 X&rdquo;</a>

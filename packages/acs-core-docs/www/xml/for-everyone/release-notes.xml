@@ -856,7 +856,7 @@ entire &majorversion;.&minorversion; release sequence <xref linkend="changelog">
         <xref linkend="unix-install"/>.  Note that the Windows documentation is
         not current for OpenACS &version;, but an alternative is to use John
         Sequeira&#39;s <ulink
-        url="http://www.pobox.com/~johnseq/projects/oasisvm/">Oasis VM
+        url="http://www.jsequeira.com/oasis/about.html">Oasis VM
         project</ulink>.
   </para>
     

@@ -214,7 +214,7 @@
         <listitem>
           <formalpara>
             <title>FreeBSD</title>
-            <para><ulink url="http://www.orchardlabs.com/freebsd/">FreeBSD guide</ulink>.  The OpenACS Reference Platform uses shell scripts written for bash, which is the
+            <para><ulink url="https://web.archive.org/web/20011204174701/http://www.orchardlabs.com:80/freebsd/">FreeBSD guide</ulink>.  The OpenACS Reference Platform uses shell scripts written for bash, which is the
               standard Linux shell.  If you are using a different
               shell, you will need to substitute your shell&#39;s
               conventions for setting environment variables when

@@ -353,7 +353,8 @@ Tracker</a> at the <a class="ulink" href="http://openacs.org/" target="_top">Ope
 for <a class="xref" href="unix-installation" title="a Unix-like system">the section called &ldquo;a
 Unix-like system&rdquo;</a>. Note that the Windows
 documentation is not current for OpenACS 5.9.0, but an alternative
-is to use John Sequeira&#39;s <a class="ulink" href="http://www.pobox.com/~johnseq/projects/oasisvm/" target="_top">Oasis VM project</a>.</p><p>After installation, the full documentation set can be found by
+is to use John Sequeira&#39;s <a class="ulink" href="http://www.jsequeira.com/oasis/about.html" target="_top">Oasis VM
+project</a>.</p><p>After installation, the full documentation set can be found by
 visiting <code class="filename">http://yourserver/doc</code>.</p><p>New features in this release:</p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc;">
 <li class="listitem"><p>Internationalization support. A message catalog to store
 translated text, localization of dates, number formatting, timezone
@@ -406,16 +407,16 @@ glob list of files and is defaulted to "*/CVS/* *~")</p></li>
 08:32:46 gustafn Exp $)</div>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140667809295544" id="idp140667809295544"></a>Release 4.6.3</h3></div></div></div><p><a class="ulink" href="release-notes-4-6-3" target="_top">Release Notes for 4.6.3</a></p>
+<a name="idp140183967024184" id="idp140183967024184"></a>Release 4.6.3</h3></div></div></div><p><a class="ulink" href="release-notes-4-6-3" target="_top">Release Notes for 4.6.3</a></p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140667809297048" id="idp140667809297048"></a>Release 4.6.2</h3></div></div></div><p><a class="ulink" href="release-notes-4-6-2" target="_top">Release Notes for 4.6.2</a></p>
+<a name="idp140183967025688" id="idp140183967025688"></a>Release 4.6.2</h3></div></div></div><p><a class="ulink" href="release-notes-4-6-2" target="_top">Release Notes for 4.6.2</a></p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140667809298552" id="idp140667809298552"></a>Release 4.6</h3></div></div></div><p><a class="ulink" href="release-notes-4-6" target="_top">Release Notes for 4.6</a></p>
+<a name="idp140183967027192" id="idp140183967027192"></a>Release 4.6</h3></div></div></div><p><a class="ulink" href="release-notes-4-6" target="_top">Release Notes for 4.6</a></p>
 </div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140667809300056" id="idp140667809300056"></a>Release 4.5</h3></div></div></div><p><a class="ulink" href="release-notes-4-5" target="_top">Release Notes for 4.5</a></p>
+<a name="idp140183967028696" id="idp140183967028696"></a>Release 4.5</h3></div></div></div><p><a class="ulink" href="release-notes-4-5" target="_top">Release Notes for 4.5</a></p>
 </div>
 </div>
 <include src="/packages/acs-core-docs/lib/navfooter"
