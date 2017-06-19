@@ -214,7 +214,7 @@ ad_proc -public auth::authenticate {
             return [array get result]
         }
         set user_id [party::get_by_email -email $email]
-        if { $user_id eq "" } {
+        if { $user_id eq "" || ![acs_user::registered_user_p -user_id $user_id] } {            
             set result(auth_status) "no_account"
             set result(auth_message) [_ acs-subsite.Unknown_email]
             return [array get result]
