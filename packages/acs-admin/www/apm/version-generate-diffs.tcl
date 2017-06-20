@@ -39,7 +39,10 @@ foreach file [apm_get_package_files -package_key $package_key] {
 	continue
     }
 
-    set cmd [list exec /usr/bin/diff]
+    if {[set diff [util::which diff]] eq ""} {
+        error "'diff' command not found on the system"
+    }
+    set cmd [list exec $diff]
     if { $context_p } {
 	lappend cmd "-c"
     }
