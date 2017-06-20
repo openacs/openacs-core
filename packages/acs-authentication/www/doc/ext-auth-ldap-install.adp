@@ -133,7 +133,7 @@ if {[ns_ldap bind $lh $fdn $password]} {
 </ol></div><p>
 <strong>Troubleshooting. </strong>If you&#39;re
 having trouble figuring out some the values for the ldapm, see this
-useful page on <a href="http://bugzilla.glob.com.au/activedirectory/" target="_top">setting up Active Directory integration with Bugzilla</a>.
+useful page on <a href="https://www.rhyous.com/2009/11/10/how-to-configure-bugzilla-to-authenticate-to-active-directory/" target="_top">setting up Active Directory integration with Bugzilla</a>.
 It explains how distinguished names are defined in Active
 Directory, and how to test that you have the correct values for
 connectivity and base DN using the OpenLDAP command-line utility
