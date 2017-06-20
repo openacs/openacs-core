@@ -141,6 +141,7 @@
   <msg key="Edit_caption">Modifica Didascalia</msg>
   <msg key="edit_comment">modifica il commento</msg>
   <msg key="Edit_Options">Modifica Opzioni</msg>
+  <msg key="Edit_this_theme">Modifica questo tema</msg>
   <msg key="Elements_not_editable">Certi elementi non sono modificabili, in quanto gestiti da %authority_name%.</msg>
   <msg key="Email">Email</msg>
   <msg key="Email_already_exists">#acs-subsite.Email# già esistente</msg>
@@ -186,6 +187,7 @@
   <msg key="Grant">Garantisci</msg>
   <msg key="Grant_Permission">Garantisci il permesso</msg>
   <msg key="Group_administration">Amministrazione gruppo</msg>
+  <msg key="Group_members">Membri del Gruppo: %group_name%</msg>
   <msg key="Group_type">Tipologia gruppo</msg>
   <msg key="Group_type_administration">Amministrazione tipologia gruppo</msg>
   <msg key="Group_Types">Tipologie Gruppi</msg>
@@ -402,6 +404,7 @@
   <msg key="Req_membership_comm">Richieste di partecipazione di questa comunità</msg>
   <msg key="Req_membership_subs">Richieste di partecipazione di questo subsite</msg>
   <msg key="Request_Change_Password_token_email">Richiesta di Cambio Password: un token per modificare la tua password ti é stato inviato via email. Segui le istruzioni nella mail per cambiare la tua password</msg>
+  <msg key="Request_join_submitted">La tua richiesta di iscrizione al gruppo &#39;%group_name%&#39; è stata inviata</msg>
   <msg key="Request_membership">Richiedi di partecipare</msg>
   <msg key="Reset_Password">Reimposta Password</msg>
   <msg key="return_to_application">ritorna alla applicazione</msg>
@@ -509,6 +512,7 @@
   <msg key="You_dont_have_a_portrait">Non hai ancora un ritratto. Puoi</msg>
   <msg key="You_have_admin_rights_on">Hai diritti di amministrare i seguenti oggetti:</msg>
   <msg key="You_have_no_email_alerts">Al momento non hai notifiche via email attive.</msg>
+  <msg key="You_joined_group">Ti sei iscritto al gruppo &#39;%group_name%&#39;</msg>
   <msg key="Your_Account">La tua Utenza</msg>
   <msg key="Your_discussion_alerts">Le tue notifiche riguardanti i forum di discussione</msg>
   <msg key="Your_Portrait">Il Tuo Ritratto</msg>

@@ -501,6 +501,7 @@ You can always change your password by doing the following:
   <msg key="Req_membership_comm">Request membership of this community</msg>
   <msg key="Req_membership_subs">Request membership of this subsite</msg>
   <msg key="Request_Change_Password_token_email">Request to Change Password: A token for changing your password has been emailed to you. Follow the instructions in that email to change your password</msg>
+  <msg key="Request_join_submitted">Your request to join group &#39;%group_name%&#39; has been submitted</msg>
   <msg key="Request_membership">Request membership</msg>
   <msg key="Reset_Password">Reset Password</msg>
   <msg key="return_to_application">return to application</msg>
@@ -614,6 +615,7 @@ copy it as above to the new location, then select &lt;em&gt;unmount&lt;/em&gt; a
   <msg key="You_dont_have_a_portrait">You don&#39;t have a portrait yet. You can</msg>
   <msg key="You_have_admin_rights_on">You have admin rights on the following objects:</msg>
   <msg key="You_have_no_email_alerts">You currently have no email alerts registered.</msg>
+  <msg key="You_joined_group">You have joined the group &#39;%group_name%&#39;</msg>
   <msg key="Your_Account">Your Account</msg>
   <msg key="Your_discussion_alerts">Your discussion forum alerts</msg>
   <msg key="Your_Portrait">Your Portrait</msg>

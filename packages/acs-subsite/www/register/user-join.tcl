@@ -177,8 +177,8 @@ if { $not_hidden == 0 || [template::form is_valid join] } {
     }
     
     switch $member_state {
-        "approved" { set message "You have joined the group \"$group_name\"." }
-        "needs approval" { set message "Your request to join group \"$group_name\" has been submitted." }
+        "approved" { set message "[_ acs-subsite.You_joined_group]." }
+        "needs approval" { set message "[_ acs-subsite.Request_join_submitted]." }
     }
 
 
