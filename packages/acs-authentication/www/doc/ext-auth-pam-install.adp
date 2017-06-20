@@ -18,7 +18,7 @@ AOLserver.</p><div class="orderedlist"><ol type="1">
 <strong>Add PAM support to
 AOLserver. </strong>OpenACS supports PAM support via
 the PAM AOLserver module. PAM is system of modular support, and can
-provide local (unix password), RADIUS, LDAP (<a href="http://www.tldp.org/HOWTO/LDAP-Implementation-HOWTO/pamnss.html" target="_top">more information</a>), and other forms of
+provide local (unix password), RADIUS, LDAP (<a href="http://www.tldp.org/HOWTO/archived/LDAP-Implementation-HOWTO/pamnss.html" target="_top">more information</a>), and other forms of
 authentication. Note that due to security issues, the AOLserver PAM
 module cannot be used for local password authentication.</p><div class="orderedlist"><ol type="a">
 <li>
@@ -101,7 +101,7 @@ file name, not the fully pathed name) of the domain file in</p><pre class="progr
 </li>
 </ol></div>
 </li><li><p>
-<strong>LDAP in PAM. </strong><a href="http://www.tldp.org/HOWTO/LDAP-Implementation-HOWTO/pamnss.html#AEN110" target="_top">more information</a>
+<strong>LDAP in PAM. </strong><a href="http://www.tldp.org/HOWTO/archived/LDAP-Implementation-HOWTO/pamnss.html#AEN110" target="_top">more information</a>
 </p></li>
 </ul></div>
 </li><li>

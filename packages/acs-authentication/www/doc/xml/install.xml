@@ -22,7 +22,7 @@
             <para>OpenACS supports PAM support via the PAM AOLserver
         module.  PAM is system of modular support, and can provide
         local (unix password), RADIUS, LDAP (<ulink
-        url="http://www.tldp.org/HOWTO/LDAP-Implementation-HOWTO/pamnss.html">more
+        url="http://www.tldp.org/HOWTO/archived/LDAP-Implementation-HOWTO/pamnss.html">more
         information</ulink>), and other forms of
         authentication.  Note that due to security issues, the
         AOLserver PAM module cannot be used for local password
@@ -125,7 +125,7 @@ cp pam_radius_auth.so /lib/security/pam_radius_auth.so</action></screen>
                 <listitem>
                   <formalpara>
                     <title>LDAP in PAM</title>
-                    <para><ulink url="http://www.tldp.org/HOWTO/LDAP-Implementation-HOWTO/pamnss.html#AEN110">more information</ulink></para>
+                    <para><ulink url="http://www.tldp.org/HOWTO/archived/LDAP-Implementation-HOWTO/pamnss.html#AEN110">more information</ulink></para>
                   </formalpara>
                 </listitem>
               </itemizedlist>
