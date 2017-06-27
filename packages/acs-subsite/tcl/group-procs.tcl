@@ -638,11 +638,12 @@ ad_proc -public group::party_member_p {
     if { $group_id eq "" } {
         set result 0
     } else {
-        set result [db_string party_is_member {
+        set result [db_0or1row party_is_member {
             select 1 from group_approved_member_map
             where member_id = :party_id
             and group_id = :group_id
-        } -default 0]
+            limit 1
+        }]
     }
     return $result
 }
