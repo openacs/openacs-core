@@ -1073,67 +1073,68 @@ ad_proc -public subsite::get_url {
         }
 
         array set subsite_node [site_node::get -node_id $node_id]
+        util_driver_info -array driver_info
+        set main_host $driver_info(hostname)
 
-        set main_host [ns_config \
-            "ns/server/[ns_info server]/module/nssock" \
-            Hostname]
-
-        util_driver_info -array request
-
-        lassign [split [ns_set iget [ns_conn headers] host] :] request(vhost) provided_port
-
-        if {$provided_port ne "" } {
-            set request(port) $provided_port
+        lassign [split [ns_set iget [ns_conn headers] host] :] driver_info(vhost) host_provided_port
+        if {$host_provided_port ne "" } {
+            set driver_info(port) $host_provided_port
         }
 
-        set request_vhost_p [expr {$main_host ne $request(vhost) }]
+        set request_vhost_p [expr {$main_host ne $driver_info(vhost) }]
+        
+    } elseif {$node_id eq ""} {
+        error "You must supply node_id when not connected."
     } else {
-        if {$node_id eq ""} {
-            error "You must supply node_id when not connected."
-        } else {
-            array set subsite_node [site_node::get -node_id $node_id]
-        }
-
+        array set subsite_node [site_node::get -node_id $node_id]
         set request_vhost_p 0
+        #
+        # Provide fallback values from the first configured driver
+        #
+        set d [lindex [security::configured_driver_info] 0]
+        set driver_info(proto) [dict get $d proto]
+        set driver_info(port) [dict get $d port]
+        set driver_info(hostname) [dict get $d host]
     }
 
-    set default_port(http) 80
-    set default_port(https) 443
-
-    set force_host_p [expr {$force_host ne "" }]
-
-    set force_protocol_p [expr {$protocol ne "" }]
-    if {!$force_protocol_p} {
-        set protocol http
-    } 
-
-    set force_port_p [expr {$port ne "" }]
-    if {!$force_port_p} {
-        set port 80
+    #
+    # If the provided protocol is empty, get it from the driver_info.
+    #
+    if {$protocol eq ""} {
+        set protocol $driver_info(proto)
+    }
+    
+    #
+    # If the provided port is empty, get it from the driver_info.
+    #
+    if {$port eq ""} {
+        set port $driver_info(port)
+    }
+    
+    #
+    # If the provided host is not empty, get it from the host header
+    # field (when connected) or from the configured host name.
+    #
+    if {$force_host eq "any"} {
+        if {[info exists driver_info(vhost)]} {
+            set host $driver_info(vhost)
+        } else {
+            error "The option '-force_host any' is only valid when connected"
+        }
+    } elseif {$force_host ne ""} {
+        set host $force_host
+    } else {
+        set host $driver_info(hostname)
     }
 
+    
     set result ""
-
-    if {$request_vhost_p || 
-        $force_host_p} {
+    if { $request_vhost_p } {
         set root_p [string equal $subsite_node(parent_id) ""]
-        set search_vhost $force_host
-        set mapped_vhost ""
+        set search_vhost $host
 
-        set where_clause [db_map strict_search]
-
-        # Figure out which hostname to use
-        if {!$force_host_p} {
-            set search_vhost $request(vhost)
-        } elseif {$force_host eq "any"} {
-            if {$request_vhost_p} {
-                set search_vhost $request(vhost)
-                set where_clause [db_map orderby]
-            } else {
-                set where_clause [db_map simple_search]
-            }
-        } 
-
+        set where_clause [db_map orderby]
+        
         # TODO: This should be cached
         set site_node $subsite_node(node_id)
         set mapped_vhost [db_string get_vhost {} -default ""]
@@ -1142,56 +1143,29 @@ ad_proc -public subsite::get_url {
             if {$strict_p} {
                 error "$search_vhost is not mapped to this subsite or any of its parents."
             }
-
-            if {$search_vhost eq "any"} {
-                set mapped_vhost $main_host
-            } else {
-                set mapped_vhost $search_vhost
-            }
+            set mapped_vhost $search_vhost
         }
 
         if {$mapped_vhost eq ""} {
-            set result "[subsite::get_url \
-                -node_id $subsite_node(parent_id) \
-                -absolute_p $absolute_p \
-                -strict_p $strict_p \
-                -force_host $force_host]$subsite_node(name)/"
+            set result [subsite::get_url \
+                            -node_id $subsite_node(parent_id) \
+                            -absolute_p $absolute_p \
+                            -strict_p $strict_p \
+                            -force_host $host]
+            append result "$subsite_node(name)/"
         } else {
-            if {[ad_conn isconnected] &&
-                [string equal $mapped_vhost $request(vhost)]} {
-                if {!$force_protocol_p} {
-                    set protocol $request(proto)
-                }
-
-                if {!$force_port_p} {
-                    set port $request(port)
-                }
-            }
-
-            if {$absolute_p} {
-                set result "${protocol}://${mapped_vhost}"
-
-                if {$port ne $default_port($protocol) } {
-                    append result ":$port"
-                }
-
-                append result "/"
-            } else {
-                set result "/"
-            }
+            set host $mapped_vhost
         }
-    } else {
+
+    }
+    if {$result eq ""} {
         if {$absolute_p} {
-            set result "${protocol}://${main_host}"
-
-            if {$port ne $default_port($protocol) } {
-                append result ":$port"
-            }
-
-            append result "/"
+            set result [util::join_location \
+                            -proto $protocol \
+                            -hostname $host \
+                            -port $port]
         }
-
-        append result "$subsite_node(url)"
+        append result $subsite_node(url)
     }
 
     return $result
