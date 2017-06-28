@@ -830,6 +830,9 @@ ad_proc -public ad_get_login_url {
             set return_url [ad_return_url -qualified]
         }
     }
+    if {$host_node_id == 0} {
+        unset host_node_id
+    }
     set url [export_vars -base $url -no_empty {authority_id username return_url host_node_id}]
 
     ns_log $::security::log(login_url) "ad_get_login_url: final login_url <$url>"
