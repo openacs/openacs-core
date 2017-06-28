@@ -1337,7 +1337,7 @@ ad_proc -public ad_conn {args} {
 
     Returns a property about the connection. See the <a
     href="/doc/request-processor">request
-    processor documentation</a> for an (almost complete) list of allowable values.
+    processor documentation</a> for an (incomplete) list of allowable values.
 
     <p>
 
@@ -1345,9 +1345,37 @@ ad_proc -public ad_conn {args} {
 
     <p>
 
-    If the property has not been set directly by OpenACS it will be passed on to aolservers <code>ns_conn</code>: <a href="http://www.aolserver.com/docs/devel/tcl/api/conn.html#ns_conn">http://www.aolserver.com/docs/devel/tcl/api/conn.html#ns_conn</a>. If it is not a valid option for <code>ns_conn</code> either then it will throw an error.
-
-    Valid options for ad_conn are: request, sec_validated, browser_id, session_id, user_id, token, last_issue, deferred_dml, start_clicks, node_id, object_id, object_url, object_type, package_id, package_url, instance_name, package_key, extra_url, system_p, path_info, recursion_count.
+    If the property has not been set directly by OpenACS it will be passed on to AOLservers/NaviServers <code>ns_conn</code>: <a href="http://www.aolserver.com/docs/devel/tcl/api/conn.html#ns_conn">http://www.aolserver.com/docs/devel/tcl/api/conn.html#ns_conn</a>. If it is not a valid option for <code>ns_conn</code> either then it will throw an error.
+<p>
+    Valid options for ad_conn are:
+    ajax_p,
+    browser_id,
+    deferred_dml,
+    extra_url,
+    instance_name,
+    last_issue,
+    mobile_p,
+    node_id,
+    object_id,
+    object_type,
+    object_url,
+    package_id,
+    package_key,
+    package_url,
+    path_info,
+    peeraddr,
+    recursion_count,
+    request,
+    sec_validated,
+    session_id,
+    start_clicks,
+    subsite_id,
+    subsite_node_id,
+    subsite_url,
+    system_p,
+    token,
+    untrusted_user_id,
+    user_id.
     <p>
 
     Added recursion_count to properly deal with internalredirects.
@@ -1547,6 +1575,23 @@ ad_proc -public ad_conn {args} {
                             return $ad_conn(mobile_p)
                         }
 
+                        ajax_p {
+                            #
+                            # Check, if we are used from an ajax
+                            # client (providing the header field
+                            # "X-Requested-With: XMLHttpRequest")
+                            #
+                            set ad_conn(ajax_p) 0
+                            if {[ns_conn isconnected]} {
+                                set headers [ns_conn headers]
+                                set i [ns_set ifind $headers "X-Requested-With"]
+                                if {$i > -1 } {
+                                    set ad_conn(ajax_p) [expr {[ns_set value $headers $i] eq "XMLHttpRequest"}]
+                                }
+                            }
+                            return $ad_conn(ajax_p)
+                        }
+                        
                         default {
                             return [ns_conn $var]
                         }

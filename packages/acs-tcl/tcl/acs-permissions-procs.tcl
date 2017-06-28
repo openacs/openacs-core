@@ -180,7 +180,8 @@ ad_proc -public permission::require_permission {
     }
 
     if {![permission_p -party_id $party_id -object_id $object_id -privilege $privilege]} {
-        if {!${party_id}} {
+
+        if {!${party_id} && ![ad_conn ajax_p]} {
             auth::require_login
         } else {
             ns_log notice "permission::require_permission: $party_id doesn't have $privilege on object $object_id"
