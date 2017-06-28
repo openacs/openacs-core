@@ -638,6 +638,10 @@ ad_proc -public group::party_member_p {
     if { $group_id eq "" } {
         set result 0
     } else {
+        # Limiting to one row is required for those groups that define
+        # relational segments (e.g. subsites, as for admins, two rows
+        # will be there for both their roles of member and
+        # administrator.
         set result [db_0or1row party_is_member {
             select 1 from group_approved_member_map
             where member_id = :party_id
