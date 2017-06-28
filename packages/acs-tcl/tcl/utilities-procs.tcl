@@ -2750,13 +2750,11 @@ ad_proc -public util_current_location {} {
         set port  $default_port($proto)
     }
 
-    set headers [ns_conn headers]
-    if { [ns_config "ns/parameters" ReverseProxyMode false]
-         && [ns_set ifind $headers X-Forwarded-For] > -1} {
+    if { [ad_conn behind_proxy_p] } {
         #
         # We are running behind a proxy
         #
-        if {[ns_set iget $headers X-SSL-Request] == 1} {
+        if {[ad_conn behind_secure_proxy_p]} {
             #
             # We know, the request was an https request
             #

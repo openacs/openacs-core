@@ -1617,7 +1617,7 @@ ad_proc -private security::get_https_port {} {
 ad_proc -private security::get_qualified_url { url } {
     @return secure or insecure qualified url
 } {
-    if { [security::secure_conn_p] } {
+    if { [security::secure_conn_p] || [ad_conn behind_secure_proxy_p] } {
         set qualified_url [security::get_secure_qualified_url $url]
     } else {
         set qualified_url [security::get_insecure_qualified_url $url]

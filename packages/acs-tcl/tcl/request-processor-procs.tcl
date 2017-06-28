@@ -1349,6 +1349,8 @@ ad_proc -public ad_conn {args} {
 <p>
     Valid options for ad_conn are:
     ajax_p,
+    behind_proxy_p,
+    behind_secure_proxy_p,
     browser_id,
     deferred_dml,
     extra_url,
@@ -1590,6 +1592,36 @@ ad_proc -public ad_conn {args} {
                                 }
                             }
                             return $ad_conn(ajax_p)
+                        }
+
+                        behind_proxy_p {
+                            #
+                            # Check, if we are running behind a proxy: 
+                            # a) the parameter "ReverseProxyMode" has to be set
+                            # b) the header-field X-Forwarded-For must be present
+                            #
+                            set ad_conn(behind_proxy_p) 0
+                            if {[ns_conn isconnected]} {
+                                set headers [ns_conn headers]
+                                if { [ns_config "ns/parameters" ReverseProxyMode false]
+                                     && [ns_set ifind $headers X-Forwarded-For] > -1} {
+                                    set ad_conn(behind_proxy_p) 1
+                                }
+                            }
+                            return $ad_conn(behind_proxy_p)
+                        }
+
+                        behind_secure_proxy_p {
+                            #
+                            # Check, if we are running behind a secure proxy: 
+                            # a) [ad_conn behind_proxy_p] must be true
+                            # b) the header-field X-SSL-Request must be 1
+                            #
+                            set ad_conn(behind_secure_proxy_p) 0
+                            if {[ad_conn behind_proxy_p]} {
+                                set ad_conn(behind_secure_proxy_p) [ns_set iget [ns_conn headers] X-SSL-Request]
+                            }
+                            return $ad_conn(behind_secure_proxy_p)
                         }
                         
                         default {
