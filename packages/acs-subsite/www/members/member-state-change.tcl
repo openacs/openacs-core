@@ -71,25 +71,25 @@ if {$send_notification_mail} {
     membership_rel::change_state \
         -rel_id $rel_id \
         -state $member_state
-
-    # if {$member_state eq "approved"} {
-    #     #
-    #     # In the approved state, we offer the admin to write a
-    #     # notification mail.
-    #     #
-    #     set action [group::get_member_state_pretty -component action \
-    #                     -member_state $member_state \
-    #                     -user_name $user_info(username) \
-    #                     -locale $locale]
-    #     set doc(title) $action
-    #     set context [list [list "./" "Members"] "$action"]
-    #     set email_link [export_vars -base member-state-change {
-    #         member_state rel_id {send_notification_mail 1}
-    #     }]
-    # } else {
+    
+    if {$member_state eq "approved"} {
+        #
+        # In the approved state, we offer the admin to write a
+        # notification mail.
+        #
+        set action [group::get_member_state_pretty -component action \
+                        -member_state $member_state \
+                        -user_name $user_info(username) \
+                        -locale $locale]
+        set doc(title) $action
+        set context [list [list "./" "Members"] "$action"]
+        set email_link [export_vars -base member-state-change {
+            member_state rel_id {send_notification_mail 1}
+        }]
+    } else {
         ad_returnredirect $return_url
         ad_script_abort
-    #}
+    }
 }
 
 # Local variables:
