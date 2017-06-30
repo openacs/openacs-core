@@ -590,7 +590,8 @@ ad_proc -private rp_filter { why } {
         return filter_return
     }
     set ad_conn_url [ad_conn url]
-
+    ad_conn -set vhost_url $ad_conn_url
+    
     if {[string first [encoding convertto utf-8 \x00] $ad_conn_url] > -1} {
         ad_log warning "BAD CHAR in URL $ad_conn_url // rp_filter $why"
         # reset [ad_conn url], otherwise we might run into a problem when rendering the error page
@@ -670,6 +671,7 @@ ad_proc -private rp_filter { why } {
         # Normal case: Prepend the root to the URL.
         # 3. set the intended URL
         ad_conn -set url ${root}${ad_conn_url}
+        ad_conn -set vhost_url ${ad_conn_url}
         set ad_conn_url [ad_conn url]
 
         # 4. set urlv and urlc for consistency
@@ -736,7 +738,8 @@ ad_proc -private rp_filter { why } {
     } else {
 
         if {$node(url) eq "$ad_conn_url/"} {
-            ad_returnredirect $node(url)
+            #ad_returnredirect $node(url)
+            ad_returnredirect [ad_conn vhost_url]/
             rp_debug "rp_filter: returnredirect $node(url)"
             rp_debug "rp_filter: return filter_return"
             return filter_return
@@ -1377,7 +1380,10 @@ ad_proc -public ad_conn {args} {
     system_p,
     token,
     untrusted_user_id,
-    user_id.
+    user_id,
+    vhost_package_url,
+    vhost_subsite_url,
+    vhost_url.
     <p>
 
     Added recursion_count to properly deal with internalredirects.
