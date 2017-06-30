@@ -740,7 +740,7 @@ ad_proc doc_return {args} {
     of every non-templated user-viewable page. 
 
 } {
-    # Aolserver/Naviserver releases handles automatically since ages
+    # AOLserver/NaviServer releases handles automatically since ages
     #db_release_unused_handles
     ad_http_cache_control
     ns_return {*}$args

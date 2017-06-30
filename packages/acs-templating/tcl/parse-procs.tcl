@@ -655,7 +655,7 @@ ad_proc -public template::adp_variable_regexp_noi18n {} {
     return {(^|[^\\])@([a-zA-Z0-9_:]+);noi18n@}
 }
 
-# Naviserver requires for disambiguation of flags and values at the
+# NaviServer requires for disambiguation of flags and values at the
 # end of the argument processing a terminating "--" (like for other
 # commands). AOLserver does not allow the "--".
 if {[ns_info name] eq "NaviServer"} {
