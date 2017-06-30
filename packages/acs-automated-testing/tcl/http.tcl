@@ -1133,7 +1133,7 @@ proc http::mapReply {string} {
     # The spec says: "non-alphanumeric characters are replaced by '%HH'"
     # 1 leave alphanumerics characters alone
     # 2 Convert every other character to an array lookup
-    # 3 Escape constructs that are "special" to the tcl parser
+    # 3 Escape constructs that are "special" to the Tcl parser
     # 4 "subst" the result, doing all the array substitutions
 
     regsub -all \[^$alphanumeric\] $string {$formMap(&)} string
@@ -1164,7 +1164,7 @@ proc http::ProxyRequired {host} {
 
 # http::CharsetToEncoding --
 #
-# 	Tries to map a given IANA charset to a tcl encoding.
+# 	Tries to map a given IANA charset to a Tcl encoding.
 #	If no encoding can be found, returns binary.
 #
 

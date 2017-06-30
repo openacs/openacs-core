@@ -398,7 +398,7 @@ ad_proc -public aa_register_case {
         if { $library eq "tclwebtest" } {
 
             # kludge: until tclwebtest installs itself in the proper
-            # place following the tcl way, we use this absolute path
+            # place following the Tcl way, we use this absolute path
             # hack.
             set tclwebtest_absolute_path "/usr/local/tclwebtest/lib"
             if { ![info exists ::auto_path] || [lsearch $::auto_path $tclwebtest_absolute_path] == -1 } {

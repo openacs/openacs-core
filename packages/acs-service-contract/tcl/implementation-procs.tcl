@@ -88,7 +88,7 @@ ad_proc -public acs_sc::impl::new_from_spec {
       <li>owner: Owner of the implementation, use the package-key.
       <li>name: Name of your implementation.
       <li>name: Pretty name of your implementation. You'd typically use this when displaying the service contract implementation through a UI.
-      <li>aliases: Specification of the tcl procedures for each of the service contract's operations.
+      <li>aliases: Specification of the Tcl procedures for each of the service contract's operations.
     </ul>
 
     The aliases section is itself an array-list. The keys are the operation names 

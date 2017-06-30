@@ -12,7 +12,7 @@ foreach file [glob -nocomplain ${::acs::tcllib}/*.tcl.postload] {
 ns_log "Notice" "Done."
 
 # This should probably be moved to the end of bootstrap.tcl once all files are
-# weeded out of the tcl directory.
+# weeded out of the Tcl directory.
 ns_log "Notice" "Executing initialization code blocks..."
 foreach init_item [nsv_get ad_after_server_initialization .] {
     array set init $init_item

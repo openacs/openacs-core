@@ -84,7 +84,7 @@ ad_form -name new_test -method post -export {package_key return_url} \
     } \
     -new_data {
 	
-	# Open the automated tests tcl file 
+	# Open the automated tests Tcl file 
 	# of this package key and add the
 	# test code to the script, then
 	# do an eval to load the test proc.

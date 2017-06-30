@@ -442,7 +442,7 @@ ad_library {
 
  ad_proc -public ds_user_select_widget {} {
      Build a select widget for all users in the system, for quick user switching.  Very
-     expensive (returns a big file) for openacs instances with a large number of users,
+     expensive (returns a big file) for OpenACS instances with a large number of users,
      so perhaps best used on test instances.
  } {
      set user_id [ad_conn user_id]
@@ -610,7 +610,7 @@ ad_proc -private ds_replace_get_user_procs { enabled_p } {
 }
 
 ad_proc -private ds_watch_packages {} {
-    Watch tcl libraries and xql files for packages listed
+    Watch Tcl libraries and xql files for packages listed
     in the PackageWatchList parameter on server startup.
 
     @author Peter Marklund
