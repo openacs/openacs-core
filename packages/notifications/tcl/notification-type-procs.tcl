@@ -81,7 +81,7 @@ namespace eval notification::type {
         {-short_name:required}
         {-column_array:required}
     } {
-	select information about the notification type into the given tcl Array
+	select information about the notification type into the given Tcl Array
     } {
         # Select the data into the upvar'ed array
         upvar $column_array row
