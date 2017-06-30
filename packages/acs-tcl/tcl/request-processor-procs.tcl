@@ -567,7 +567,7 @@ ad_proc -private rp_filter { why } {
     if {[ns_info name] eq "NaviServer"} {
         # ns_conn id the internal counter by AOLserver 4.5 and
         # NaviServer. The semantics of the counter were different in
-        # Aolserver 4.0, when we require at least AolServer 4.5 the
+        # AOLserver 4.0, when we require at least AOLserver 4.5 the
         # server test could go away.
         ad_conn -set request [ns_conn id]
     } else {
@@ -638,7 +638,7 @@ ad_proc -private rp_filter { why } {
     # should be after the canonical check to avoid multiple redirects.
     #
     # ns_set get accepts a default value in 3rd argument only on
-    # Naviserver; so perform the check in two steps for AOLserver
+    # NaviServer; so perform the check in two steps for AOLserver
     # compatibility.
     set upgrade_insecure_requests_p [ns_set get [ns_conn headers] Upgrade-Insecure-Requests]                                     
     if {$upgrade_insecure_requests_p ne "" &&

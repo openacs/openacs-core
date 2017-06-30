@@ -1514,7 +1514,7 @@ ad_proc -private util::http::curl::request {
 } {
 
     Issue an HTTP request either GET or POST to the url specified.
-    This is the curl wrapper implementation, used on Aolserver and
+    This is the curl wrapper implementation, used on AOLserver and
     when ssl native capabilities are not available.
 
     @param headers specifies an ns_set of extra headers to send to the
