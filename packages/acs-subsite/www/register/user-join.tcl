@@ -171,8 +171,8 @@ if { $not_hidden == 0 || [template::form is_valid join] } {
 
     } on_error {
         ns_log Error "user-join: Error when adding user to group: $errmsg\n$::errorInfo"
-        
-        ad_return_error "Error Joining" "We experienced an error adding you to the group."
+
+        ad_return_error [_ acs-subsite.Error_joining] [_ acs-subsite.Error_joining_details]
         ad_script_abort
     }
     

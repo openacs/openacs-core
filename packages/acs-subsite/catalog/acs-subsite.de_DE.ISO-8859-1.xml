@@ -520,4 +520,8 @@ copy it as above to the new location, then select &lt;em&gt;unmount&lt;/em&gt; a
   <msg key="Your_Portrait">Ihr Bild</msg>
   <msg key="Your_system_alerts">Ihre Benachrichtigungen für %gc_system_name%</msg>
   <msg key="Youre_marked_as_back">Sie sind unter %site_link% als wieder anwesend gekennzeichnet.</msg>
+  <msg key="Request_group_submitted">Ihr Antrag auf Mitgliedschaft in der Gruppe %group_name% wurde gesendet.</msg>
+  <msg key="Joined_group">Sie sind der Gruppe %group_name% beigetreten.</msg>
+  <msg key="Error_joining">Fehler beim Hinzufügen</msg>
+  <msg key="Error_joining_details">Es gab einen Fehler beim Versuch, Sie zur Gruppe hinzuzufügen.</msg>
 </message_catalog>

@@ -620,5 +620,9 @@ copy it as above to the new location, then select &lt;em&gt;unmount&lt;/em&gt; a
   <msg key="Your_discussion_alerts">Your discussion forum alerts</msg>
   <msg key="Your_Portrait">Your Portrait</msg>
   <msg key="Your_system_alerts">Your %gc_system_name% alerts</msg>
-  <msg key="Youre_marked_as_back">You&#39;re marked as back from vacation at %site_link%.</msg>
+  <msg key="Youre_marked_as_back">You&#39;re marked as back fromvacation at %site_link%.</msg>
+  <msg key="Request_group_submitted">Your request to join group %group_name% has been submitted.</msg>
+  <msg key="Joined_group">You have joined the group %group_name%.</msg>
+  <msg key="Error_joining">Error Joining</msg>
+  <msg key="Error_joining_details">We experienced an error adding you to the group.</msg>
 </message_catalog>
