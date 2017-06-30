@@ -381,7 +381,7 @@ ad_proc -public auth::authenticate {
         } else {
             set cookie_domain ""
         }
-        ns_log notice "auth::authenticate recieves host_node_id $host_node_id domain <$cookie_domain>"
+        ns_log notice "auth::authenticate receives host_node_id $host_node_id domain <$cookie_domain>"
         auth::issue_login \
             -user_id $result(user_id) \
             -persistent=$persistent_p \
@@ -791,6 +791,20 @@ ad_proc -public auth::get_registration_form_elements {
 
     array set element_info [auth::get_registration_elements]
 
+    # provide default help texts, might be refined later.
+    array set help_text {
+        username {}
+        email {}
+        first_names {}
+        last_name {}
+        screen_name {}
+        url {}
+        password {}
+        password_confirm {}
+        secret_question {}
+        secret_answer {}
+    }
+
     if {"password" in $element_info(required)} {
         lappend element_info(required) password_confirm
     }
@@ -826,6 +840,9 @@ ad_proc -public auth::get_registration_form_elements {
             # HTML
             lappend form_element [list html $html($element)]
 
+            # Help Text
+            lappend form_element [list help_text $help_text($element)]
+            
             # The form element is finished - add it to the list
             lappend form_elements $form_element
         } else {
