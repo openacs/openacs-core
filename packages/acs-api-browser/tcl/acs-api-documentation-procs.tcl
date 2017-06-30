@@ -752,7 +752,7 @@ ad_proc -public api_describe_function {
 
 
 ad_proc -public api_get_body {proc_name} {
-    This function returns the body of a tcl proc or an xotcl method.
+    This function returns the body of a Tcl proc or an xotcl method.
     @param proc_name the name spec of the proc
     @return body of the specified prox
 } {
@@ -1469,7 +1469,7 @@ namespace eval ::apidoc {
 
     ad_proc -private xql_links_list { path } {
         
-        Returns list of xql files related to tcl script file
+        Returns list of xql files related to Tcl script file
         @param path path and filename from $::acs::rootdir
         
     } {
