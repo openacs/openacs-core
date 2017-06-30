@@ -2815,7 +2815,23 @@ ad_proc -public util_current_directory {} {
 } {
     set path [ad_conn url]
 
-    set lastchar [string index $path end]
+    #
+    # Check, if we are in a subsite
+    #
+    util::split_location [util_current_location] current_proto current_host current_port
+    set host_node_id [ad_get_node_id_from_host_node_map $current_host]
+    if {$host_node_id > 0} {
+        #
+        # yes, we are. strip the subsite-prefix from the location
+        #
+        set site_node_path [site_node::get_url -node_id $host_node_id]
+        if {[string length $path] > [string length $site_node_path]} {
+            set path [string range $path [string length $site_node_path]-1 end]
+            ns_log notice "util_current_directory reduced path <$path>"
+        }
+    }
+
+    set lastchar [string index $path end]/
     if {$lastchar eq "/" } {
         return $path
     } else { 
