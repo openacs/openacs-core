@@ -468,11 +468,19 @@ ad_proc -public group::get_member_state_pretty {
         }
         account_mail {
             if {$site_name eq ""} { error "site_name must be specified and must be non-empty" }
+            if {[string match "#*#" $site_name]} {
+                # site names can be localized
+                set site_name [lang::util::localize $site_name $locale]
+            }
             if {$url eq ""} { error "url must be specified and must be non-empty" }
             set message #acs-kernel.member_state_account_mail_$member_state#                            
         }
         community_mail {
             if {$community_name eq ""} { error "community_name must be specified and must be non-empty" }
+            if {[string match "#*#" $community_name]} {
+                # community_names can be localized
+                set community_name [lang::util::localize $community_name $locale]
+            }
             if {$url eq ""} { error "url must be specified and must be non-empty" }
             set message #acs-kernel.member_state_community_mail_$member_state#
         }
