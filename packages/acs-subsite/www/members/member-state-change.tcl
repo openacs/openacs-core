@@ -72,7 +72,7 @@ if {$send_notification_mail} {
         -rel_id $rel_id \
         -state $member_state
     
-    if {$member_state eq "approved"} {
+    if {$member_state in {approved rejected}} {
         #
         # In the approved state, we offer the admin to write a
         # notification mail.
