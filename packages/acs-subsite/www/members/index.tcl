@@ -57,11 +57,12 @@ if { $show_member_list_to != 0
 set user_id [ad_conn user_id]
 set admin_p [permission::permission_p -party_id $user_id -object_id $group_id -privilege "admin"]
 
+set approved_member_p [group::party_member_p -group_id $group_id -party_id $user_id]
 set show_member_list_p [expr {
                               $show_member_list_to == 0
                               || $admin_p
-                              || ($show_member_list_to == 1 && [group::member_p -group_id $group_id])
-                              || ($show_member_list_to == 3 && [group::member_p -group_id $group_id] &&
+                              || ($show_member_list_to == 1 && $approved_member_p)
+                              || ($show_member_list_to == 3 && $approved_member_p &&
                                   $group_id != [application_group::group_id_from_package_id -package_id [ad_conn subsite_id]])
                           }]
 
@@ -70,6 +71,9 @@ if {$show_member_list_p} {
     # In any case, the use should have read rights on the group
     #
     set show_member_list_p [permission::permission_p -party_id $user_id -object_id $group_id -privilege "read"]
+    if {!$show_member_list_p} {
+        ns_log notice "approved member $user_id of group $group_id has no read rights on the group; maybe update context_id of group"
+    }
 }
 
 if { !$show_member_list_p } {

@@ -1,18 +1,22 @@
-# expects:
-# object_id
-# return_url
-# privs:optional, defaults to 'read', 'write', 'admin'
-# user_add_url: URL to the page for adding users
+ad_include_contract {
+    Display a permission table for the provided object_id
+
+    @param object_id
+    @param return_url
+    @param privs
+    @param user_add_url URL for adding users
+} {
+    {object_id:integer}
+    {return_url:localurl}
+    {privs { read create write delete admin }}
+    {user_add_url:localurl ""}
+}
 
 set user_id [ad_conn user_id]
 set admin_p [permission::permission_p -object_id $object_id -privilege admin]
 
-if { (![info exists return_url] || $return_url eq "") } {
+if { $return_url eq "" } {
     set return_url [ad_return_url]
-}
-
-if { (![info exists privs] || $privs eq "") } {
-    set privs { read create write delete admin }
 }
 
 db_1row object_info {}
