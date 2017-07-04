@@ -586,7 +586,7 @@ ad_proc -public group::member_p {
     return [util_memoize [list group::member_p_not_cached -group_id $group_id -user_id $user_id -cascade_p $cascade_p]]
 }
 
-ad_proc -public group::member_p_not_cached {
+ad_proc -private group::member_p_not_cached {
     { -user_id "" }
     { -group_id "" }
     {-cascade_p ""}
