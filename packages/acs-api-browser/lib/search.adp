@@ -56,7 +56,7 @@
     <input type="submit" value="Go"><br>
     <if @::__csrf_token@ defined><input type="hidden" name="__csrf_token" value="@::__csrf_token;literal@"></if>
     (enter <em>exact</em> procedure name)<br>
-    <a href="@aolserver_tcl_api_root@">Browse AOLserver Tcl API</a>
+    <a href="@server_tcl_api_root@">Browse NaviServer Tcl API</a>
     </div>
      </form>
    </td>

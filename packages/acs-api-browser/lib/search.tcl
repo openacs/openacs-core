@@ -11,7 +11,10 @@ if { ![info exists query_string] } {
 }
 set package_url [apm_package_url_from_key "acs-api-browser"]
 
-set aolserver_tcl_api_root   "http://www.aolserver.com/docs/devel/tcl/api/"
+# AOLserver has dropped documentation, use NaviServer docs instead
+#set server_tcl_api_root     "http://www.aolserver.com/docs/devel/tcl/api/"
+set server_tcl_api_root      "https://naviserver.sourceforge.io/n/toc.html"
+
 set tcl_docs_root            "http://tcl.tk/man/tcl[info tclversion]/TclCmd/contents.htm"
 
 set openacs_search_url       "${package_url}proc-search"
