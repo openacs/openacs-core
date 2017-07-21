@@ -176,7 +176,14 @@ if {![string is list $jsSpecs]} {
 # page (that might require a list of the HTML IDs of all affected
 # textareas).
 #
-::template::util::richtext::render_widgets
+# We check whether render_widgets command exists, as during a release
+# upgrade this could be missing and would prevent any further action
+# on the system after installing new code
+if {[info proc ::template::util::richtext::render_widgets] ne ""} {
+    ::template::util::richtext::render_widgets
+} else {
+    ns_log warning "::template::util::richtext::render_widgets not defined. Richtext widgets won't work. Try restarting the server."
+}
 
 #
 # Get the basic content info like title and charset for the head of
