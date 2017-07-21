@@ -9,10 +9,10 @@
     select n.node_id
     from   site_nodes n,
            apm_packages p
-    	   left outer join lang_messages m
+    	   left join lang_messages m
 	     on m.locale = :locale and
 	        '#' || m.package_key || '.' || m.message_key || '#' = p.instance_name
-           left outer join lang_messages md
+           left join lang_messages md
 	     on m.locale = 'en_US' and
   	        '#' || md.package_key || '.' || md.message_key || '#' = p.instance_name,
            apm_package_types pt
