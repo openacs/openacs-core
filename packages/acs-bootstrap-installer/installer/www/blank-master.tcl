@@ -1,5 +1,5 @@
 ad_page_contract {
-  This is the top level master template.  It allows the basic parts of an XHTML 
+  This is the top level master template.  It allows the basic parts of an HTML 
   document to be set through convenient data structures without introducing 
   anything site specific.
 
