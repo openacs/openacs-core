@@ -1,5 +1,5 @@
 ad_page_contract {
-  This is the top level master template.  It allows the basic parts of an XHTML 
+  This is the top level master template.  It allows the basic parts of an HTML 
   document to be set through convenient data structures without introducing 
   anything site specific.
 
@@ -73,29 +73,6 @@ template::head::add_meta \
     -lang en \
     -content "OpenACS version [ad_acs_version]"
 
-#
-# Add the content security policy. Since this is the blank master, we
-# are defensive and check, if the system has already support for it
-# via the CSPEnabledP kernel parameter. Otherwise users would be
-# blocked out.
-#
-if {[parameter::get -parameter CSPEnabledP -package_id [ad_acs_kernel_id] -default 0]
-    && [info commands ::security::csp::render] ne ""
-} {
-    set csp [::security::csp::render]
-    if {$csp ne ""} {
-
-        set ua [ns_set iget [ns_conn headers] user-agent]
-        if {[regexp {Trident/.*rv:([0-9]{1,}[\.0-9]{0,})} $ua]} {
-            set field X-Content-Security-Policy
-        } else {
-            set field Content-Security-Policy
-        }
-
-        ns_set put [ns_conn outputheaders] $field $csp
-    }
-}
-
 # Add standard javascript
 #
 # Include core.js inclusion to the bottom of the body.
@@ -125,7 +102,7 @@ if {![string is list $cssList]} {
 
     foreach css $cssList {
 	set first [lindex $css 0]
-        if { [llength $css] == 2 && [llength $first] == 1 && [string range $first 0 0] ne "-"} {
+        if { [llength $css] == 2 && [llength $first] == 1 && [string index $first 0] ne "-"} {
             template::head::add_css -href $first -media [lindex $css 1]
         } elseif {[llength $first] == 2} {
 	    set params [list]
@@ -263,14 +240,45 @@ if {[info exists focus] && $focus ne ""} {
     }
 }
 
+#
 # Retrieve headers and footers
+#
 set header [template::get_header_html]
 set footer [template::get_footer_html]
-template::head::prepare_multirows
 
-# body event handlers are converted into body_scripts
+#
+# Body event handlers are converted into body_scripts
+#
 template::get_body_event_handlers
 
+#
+# Build multirows: this has to be done after get_body_event_handlers
+# to include these body_scripts as well.
+#
+template::head::prepare_multirows
+
+#
+# Add the content security policy. Since this is the blank master, we
+# are defensive and check, if the system has already support for it
+# via the CSPEnabledP kernel parameter. Otherwise users would be
+# blocked out.
+#
+if {[parameter::get -parameter CSPEnabledP -package_id [ad_acs_kernel_id] -default 0]
+    && [info commands ::security::csp::render] ne ""
+} {
+    set csp [::security::csp::render]
+    if {$csp ne ""} {
+
+        set ua [ns_set iget [ns_conn headers] user-agent]
+        if {[regexp {Trident/.*rv:([0-9]{1,}[\.0-9]{0,})} $ua]} {
+            set field X-Content-Security-Policy
+        } else {
+            set field Content-Security-Policy
+        }
+
+        ns_set put [ns_conn outputheaders] $field $csp
+    }
+}
 
 # Local variables:
 #    mode: tcl
