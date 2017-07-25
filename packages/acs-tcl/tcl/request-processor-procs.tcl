@@ -1912,6 +1912,11 @@ if {[ns_info name] eq "NaviServer"} {
     proc   rp_invoke_proc   { argv } "$cmd _ \$argv"
 }
 
+if {![info exists ::acs::kernel_id]} {
+    set ::acs::kernel_id [ad_acs_kernel_id_mem]
+    ns_log notice "reuqest-processor-procs: setting ::acs::kernel_id to $acs::kernel_id"
+}
+
 #
 # Local variables:
 #    mode: tcl
