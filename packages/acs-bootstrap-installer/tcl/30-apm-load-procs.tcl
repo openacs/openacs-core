@@ -610,6 +610,7 @@ ad_proc apm_bootstrap_upgrade {
     set source $::acs::rootdir/packages/acs-bootstrap-installer/installer/tcl
     foreach file [glob -nocomplain $source/*tcl] {
         file copy -force -- $file $::acs::rootdir/tcl/
+        source $::acs::rootdir/tcl/$file
     }
     set source $::acs::rootdir/packages/acs-bootstrap-installer/installer/www
     foreach file [glob -nocomplain $source/*tcl $source/*adp] {
