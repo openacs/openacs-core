@@ -648,8 +648,7 @@ ad_proc -private apm_load_apm_file {
         ns_log Error "Error loading APM file form url $url: Package $pretty_name $version_name is already installed"
     } else {
         
-        set install_path "[apm_workspace_install_dir]"
-        
+        set install_path [apm_workspace_install_dir]
         if { ![file isdirectory $install_path] } {
             file mkdir $install_path
         }
