@@ -610,7 +610,12 @@ ad_proc apm_bootstrap_upgrade {
     set source $::acs::rootdir/packages/acs-bootstrap-installer/installer/tcl
     foreach file [glob -nocomplain $source/*tcl] {
         file copy -force -- $file $::acs::rootdir/tcl/
-        source $::acs::rootdir/tcl/[file tail $file]
+        #
+        # It would be good to allow changes in the setup here, but for
+        # that, e.g. 0-acs-tcl has to be split up into two parts: (a)
+        # setup of variables, and (b) sourcing everything.
+        #
+        # source $::acs::rootdir/tcl/[file tail $file]
     }
     set source $::acs::rootdir/packages/acs-bootstrap-installer/installer/www
     foreach file [glob -nocomplain $source/*tcl $source/*adp] {
