@@ -16,7 +16,7 @@ set context [list $page_title]
 # option will be used.
 #
 if {[ns_info name] eq "NaviServer" &&
-    [parameter::get -parameter NsShutdownWithNonZeroExitCode -package_id $::acs::kernel_id -default 0]
+    [parameter::get -parameter NsShutdownWithNonZeroExitCode -package_id [ad_acs_kernel_id] -default 0]
 } {
     set cmd {ns_shutdown -restart}
 } else {
