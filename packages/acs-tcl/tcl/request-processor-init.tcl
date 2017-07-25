@@ -180,7 +180,10 @@ ad_after_server_initialization procs_register {
     }
 }
 
-
+if {![info exists ::acs::kernel_id]} {
+    set ::acs::kernel_id [ad_acs_kernel_id_mem]
+    ns_log notice "reuqest-processor-init: setting ::acs::kernel_id to $acs::kernel_id"
+}
 
 # Local variables:
 #    mode: tcl
