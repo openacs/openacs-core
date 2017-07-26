@@ -80,7 +80,7 @@
   <msg key="Children">Untergeordnete Objekte</msg>
   <msg key="choose_assessment">Wählen Sie einen der Registrationsfragebögen:</msg>
   <msg key="choose_assessment_help">Wählen sie die Umfrage aus, welche neuen Benutzern angezeigt wird.&lt;br&gt; Dies kann verwendet werden um automatisierte Aktionen (wie zb. Benutzer in bestimmte Gruppen hinzu zu fügen, bestimmte Personen über neue Anmeldungen zu informieren) auszuführen</msg>
-  <msg key="Choose_the_layout_and_navigation">Wählen Sie Layout und Darstellung für Ihre Unterseite.</msg>
+  <msg key="Choose_the_layout_and_navigation">Wählen Sie Layout und Darstellung für Ihre Subsite.</msg>
   <msg key="Close_account_explanation">&lt;p&gt; Bitte bestätigen Sie, dass Sie Ihr Benutzerkonto bei %system_name% deaktivieren wollen. &lt;/p&gt; &lt;p&gt; Wenn Ihr Benutzerkonto deaktiviert ist, erhalten Sie keine Benachrichtigungen mehr von dotLRN, und Ihr Name erscheint nicht mehr auf Teilnehmerlisten von Kursen oder Communities. Ihre inhaltlichen Beiträge werden jedoch nicht gelöscht, da sie Teil der gemeinschaftlichen Aktivitäten in dotLRN sind. &lt;/p&gt; &lt;p&gt; Hinweis: Sie können Ihr Benutzerkonto jederzeit wieder aktivieren, indem Sie sich einfach wieder anmelden. &lt;/p&gt;
 </msg>
   <msg key="Close_your_account">Benutzerkonto deaktivieren</msg>
@@ -95,7 +95,7 @@
   <msg key="confirmation_password_changed">Die Änderung Ihres Passworts war erfolgreich.</msg>
   <msg key="Continue">Fortsetzen</msg>
   <msg key="Continue_to_your_account">Weiter nach %pvt_home_name%</msg>
-  <msg key="Convert_to_descendent_subsite_type">In nachfolgenden Unterseiten-Typ umwandeln</msg>
+  <msg key="Convert_to_descendent_subsite_type">In nachfolgenden Subsite-Typ umwandeln</msg>
   <msg key="Core_Services">Zentrale Services</msg>
   <msg key="Country_Name">Land</msg>
   <msg key="create">Erstellen</msg>
@@ -330,8 +330,8 @@
   <msg key="New_Application">Neue Anwendung</msg>
   <msg key="new_application">neue Applikation</msg>
   <msg key="New_Password">Neues Passwort</msg>
-  <msg key="New_Subsite">Neue Unterseite</msg>
-  <msg key="New_subsite">Neue Unterseite</msg>
+  <msg key="New_Subsite">Neue Subsite</msg>
+  <msg key="New_subsite">Neue Subsite</msg>
   <msg key="No_applications">Keine Anwendungen vorhanden</msg>
   <msg key="no_assessment">Kein Assessment verfügbar</msg>
   <msg key="No_ISO_Codes">Keine ISO-Codes geladen</msg>
@@ -443,17 +443,17 @@
   <msg key="subcommunities">Subcommunities</msg>
   <msg key="subcommunity">Subcommunity</msg>
   <msg key="subsite">Subsite</msg>
-  <msg key="Subsite_Configuration">Konfiguration Unterseite</msg>
+  <msg key="Subsite_Configuration">Konfiguration Subsite</msg>
   <msg key="Subsite_Home">%subsite_name% Home</msg>
-  <msg key="Subsite_name">Name der Unterseite</msg>
-  <msg key="Subsite_Package">Paket der Unterseite</msg>
+  <msg key="Subsite_name">Name der Subsite</msg>
+  <msg key="Subsite_Package">Paket der Subsite</msg>
   <msg key="Subsites">Subsites</msg>
   <msg key="subsites">Subsites</msg>
   <msg key="Success_but_no_account_yet">Sie haben sich erfolgreich angemeldet, aber Sie haben noch kein Benutzerkonto bei %system_name%.</msg>
   <msg key="Supertype">Supertyp</msg>
   <msg key="Thank_you">Vielen Dank.</msg>
   <msg key="The_ISO_codes_were_not">Die ISO-Codes sind auf diesem Server nicht geladen.</msg>
-  <msg key="The_name_of_the_new_subsite_you_re_setting_up">Name der neuen Unterseite, die Sie einrichten</msg>
+  <msg key="The_name_of_the_new_subsite_you_re_setting_up">Name der neuen Subsite, die Sie einrichten</msg>
   <msg key="Theme">Thema/Darstellung</msg>
   <msg key="theme">thema/Darstellung</msg>
   <msg key="Themes">Themen/Darstellung</msg>
