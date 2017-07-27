@@ -114,7 +114,7 @@ foreach package_key $install_order {
         set spec_file $version(path)
         set package_path "$::acs::rootdir/packages/$package_key"
     }
-        
+
     set final_version_name $version(name)
 
     if { [apm_package_version_installed_p $version(package.key) $version(name)] } {
@@ -157,6 +157,14 @@ foreach package_key $install_order {
     
     # Install the package -- this actually copies the files into the
     # right place in the file system and backs up any old files
+    ns_log notice [list apm_package_install \
+                       -enable \
+                       -install_from_repository \
+                       -package_path $package_path \
+                       -load_data_model \
+                       -data_model_files $data_model_files \
+                       $spec_file]
+    
     set version_id [apm_package_install \
                         -enable \
                         -install_from_repository \
@@ -183,6 +191,39 @@ foreach package_key $install_order {
 # Done
 #
 #####
+if {$success_p} {
+    #
+    # The update has finished successfully. Since all the new files
+    # were sourced, the actual connection thread is already up to
+    # date.  In order to provide this code to the other threads, it is
+    # necessary to update the internal blueprint. This works slightly
+    # different in NaviServer and AOLserver.
+    #
+    if {[info commands ::nstrace::statescript] ne ""} {
+        #
+        # NaviServer:
+        #   - nstrace::statescript produces the blueprint
+        #   - "ns_ictl  save" updates it in the server
+        #
+        ns_ictl save [nstrace::statescript]
+        
+    } elseif {[info commands ::_ns_savenamespaces] ne ""} {
+        #
+        # AOLserver: _ns_savenamespaces produces the update
+        # script and updates the blueprint
+        #
+        _ns_savenamespaces
+    }
+} else {
+    #
+    # At least one update has failed. Since it is not clear whether or
+    # not library files were sourced, it is necessary to delete this
+    # thread asap to avoid potential confusion with already updated
+    # procs.
+    #
+    ns_ictl markfordelete
+
+}
 
 ad_progress_bar_end -url [export_vars -base install-4 { repository_url success_p }]
 
