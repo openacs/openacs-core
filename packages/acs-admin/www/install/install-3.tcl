@@ -191,6 +191,14 @@ foreach package_key $install_order {
 # Done
 #
 #####
+#
+# It seems, that after saving a blueprint in AOLserver, the ns_sets
+# are not available anymore, and that therefore export_vars runs into
+# problems when trying to access these variables. So, Compute the
+# continue_url before potential blueprint updates.
+#
+set continue_url [export_vars -base install-4 { repository_url success_p }]
+
 if {$success_p} {
     #
     # The update has finished successfully. Since all the new files
@@ -224,9 +232,7 @@ if {$success_p} {
     ns_ictl markfordelete
 
 }
-
-ad_progress_bar_end -url [export_vars -base install-4 { repository_url success_p }]
-
+ad_progress_bar_end -url $continue_url
 
 
 # Local variables:
