@@ -143,6 +143,7 @@
   <msg key="Edit_caption">Editar Leyenda</msg>
   <msg key="edit_comment">editar comentario</msg>
   <msg key="Edit_Options">Opciones</msg>
+  <msg key="Edit_this_theme">Editar este tema</msg>
   <msg key="Elements_not_editable">Algunos elementos no pueden ser editados ya que están siendo administrados por %authority_name%.</msg>
   <msg key="Email">Correo electrónico</msg>
   <msg key="Email_already_exists">Email ya existe</msg>
@@ -175,6 +176,8 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="Erase_Portrait">Borrar foto</msg>
   <msg key="erase_portrait">borrar foto</msg>
   <msg key="Error">Error</msg>
+  <msg key="Error_joining">Error al unirse</msg>
+  <msg key="Error_joining_details">Ha ocurrido un error al ser añadido al grupo.</msg>
   <msg key="Error_sending_mail">Error al enviar el correo</msg>
   <msg key="Error_sending_verification_mail">Ha habido un error al enviar el correo para la verificación por correo</msg>
   <msg key="Error_trying_to_register">Ha habido un error al intentar registrar una cuenta para usted.</msg>
@@ -194,6 +197,7 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="Grant">Otorgar</msg>
   <msg key="Grant_Permission">Autorizar</msg>
   <msg key="Group_administration">Administración de grupos</msg>
+  <msg key="Group_members">Miembros del grupo: %group_name%</msg>
   <msg key="Group_type">Tipo de grupo</msg>
   <msg key="Group_type_administration">Administración de tipos de grupos</msg>
   <msg key="Group_Types">Tipos de Grupo</msg>
@@ -224,6 +228,7 @@ Para cambiar su contraseña, visite %reset_password_url%</msg>
   <msg key="Join_subsite">Unirse al subsitio</msg>
   <msg key="Join_this_community">Unirse a esta comunidad</msg>
   <msg key="Join_this_subsite">Unirse a este subsitio</msg>
+  <msg key="Joined_group">Se ha unido al grupo %group_name%.</msg>
   <msg key="Key">Clave</msg>
   <msg key="Keyword">Palabra clave</msg>
   <msg key="Last_name">Apellidos</msg>
@@ -423,6 +428,8 @@ El equipo de %system_name%</msg>
   <msg key="Req_membership_comm">Solicitar pertenecer a esta comunidad</msg>
   <msg key="Req_membership_subs">Solicitar pertenecer a este subsitio</msg>
   <msg key="Request_Change_Password_token_email">Solicitud de cambio de contraseña: se le ha enviado un correo para cambiar su contraseña. Siga las instrucciones de dicho correo.</msg>
+  <msg key="Request_group_submitted">La petición para unirse al grupo &#39;%group_name%&#39; ha sido enviada.</msg>
+  <msg key="Request_join_submitted">La petición para unirse al grupo &#39;%group_name%&#39; ha sido enviada.</msg>
   <msg key="Request_membership">Solicitar la entrada</msg>
   <msg key="Reset_Password">Reiniciar contraseña</msg>
   <msg key="return_to_application">volver a la aplicación</msg>
@@ -532,6 +539,7 @@ El equipo de %system_name%</msg>
   <msg key="You_dont_have_a_portrait">Usted no tiene una foto. Puede añadirla si lo desea.</msg>
   <msg key="You_have_admin_rights_on">Tiene derechos de administración en los siguientes objetos:</msg>
   <msg key="You_have_no_email_alerts">No tiene avisos de correo activados.</msg>
+  <msg key="You_joined_group">Se ha unido al grupo %group_name%.</msg>
   <msg key="Your_Account">Su Cuenta</msg>
   <msg key="Your_discussion_alerts">Sus avisos en los foros</msg>
   <msg key="Your_Portrait">Su foto</msg>
