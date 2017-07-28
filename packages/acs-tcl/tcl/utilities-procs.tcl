@@ -5109,12 +5109,12 @@ ad_proc util::trim_leading_zeros {
     the leading zero; i.e. 0.231 -> .231 -- this is still fine
     for Tcl though...
 } {
-    set string [string trimleft $string 0]
-
-    if {$string eq ""} {
-        return 0
+    if {$string ne ""} {
+        set string [string trimleft $string 0]
+        if {$string eq ""} {
+            set string 0
+        }
     }
-
     return $string
 }
 
