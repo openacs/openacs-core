@@ -463,7 +463,7 @@ El equipo de %system_name%</msg>
   <msg key="subcommunity">subcomunidad</msg>
   <msg key="subsite">subsitio</msg>
   <msg key="Subsite_Configuration">Configuración del Subsitio</msg>
-  <msg key="Subsite_Home">Inico %subsite_name%</msg>
+  <msg key="Subsite_Home">Inicio %subsite_name%</msg>
   <msg key="Subsite_name">Nombre del subsitio</msg>
   <msg key="Subsite_Package">Paquete del subsitio</msg>
   <msg key="Subsites">Subsitios</msg>
