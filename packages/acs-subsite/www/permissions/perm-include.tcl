@@ -7,7 +7,7 @@ ad_include_contract {
     @param user_add_url URL for adding users
 } {
     {object_id:integer}
-    {return_url:localurl,optional}
+    {return_url:localurl ""}
     {privs { read create write delete admin }}
     {user_add_url:localurl ""}
 }
@@ -15,7 +15,7 @@ ad_include_contract {
 set user_id [ad_conn user_id]
 set admin_p [permission::permission_p -object_id $object_id -privilege admin]
 
-if { (![info exists return_url] || $return_url eq "") } {
+if { $return_url eq "" } {
     set return_url [ad_return_url]
 }
 
