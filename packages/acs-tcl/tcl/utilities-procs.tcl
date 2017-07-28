@@ -5185,7 +5185,20 @@ if {[info commands ns_parseurl] eq ""} {
     }
 }
 
-
+if {[info commands ns_md5] eq ""} {
+    #
+    # In case, we are not running under NaviServer, provide a proc
+    # compatible with NaviServer's built in ns_md5
+    #
+    ad_proc ns_md5 {value} {
+        Emulation of NaviServer's ns_md5
+        
+        @author Gustaf Neumann
+    } {
+        package require md5
+        return [md5::Hex [md5::md5 -- $value]]
+    }
+}
 
 
 # Local variables:
