@@ -873,7 +873,10 @@ ad_proc ad_parse_html_attributes_upvar {
         return {}
     }
 
-    # This proc might be used in order to improve some OpenACS
+    # This was created in order to pre-process some content to be fed
+    # to tDOM in ad_sanitize_html. In fact, even with its least picky
+    # behavior, tDOM cannot swallow whatever markup you give it. This
+    # proc might also be used in order to improve some OpenACS
     # routines, like util_close_html_tags. As it has some limitations,
     # this is left to future considerations.
     ad_proc ad_dom_fix_html {
