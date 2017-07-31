@@ -872,7 +872,10 @@ ad_proc ad_parse_html_attributes_upvar {
         }
         return {}
     }
-    
+
+    # This proc might be used in order to improve some OpenACS
+    # routines, like util_close_html_tags. As it has some limitations,
+    # this is left to future considerations.
     ad_proc ad_dom_fix_html {
         -html:required
         {-marker "root"}
@@ -1002,6 +1005,11 @@ ad_proc ad_parse_html_attributes_upvar {
         return [string trim $html]
     }
 
+    # Original purpose of this proc was to introduce a better way to
+    # enforce some HTML policy on the content submitted by the used
+    # (e.g. forbid some tag/attribute like <script> etc). It has some
+    # limitations that make non-trivial its introduction, therefore is
+    # currently not used around.
     ad_proc ad_dom_sanitize_html {
         -html:required
         -allowed_tags
