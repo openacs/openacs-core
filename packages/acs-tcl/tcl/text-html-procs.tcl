@@ -1006,7 +1006,7 @@ ad_proc ad_parse_html_attributes_upvar {
     }
 
     # Original purpose of this proc was to introduce a better way to
-    # enforce some HTML policy on the content submitted by the used
+    # enforce some HTML policies on the content submitted by the uses
     # (e.g. forbid some tag/attribute like <script> etc). It has some
     # limitations that make non-trivial its introduction, therefore is
     # currently not used around.
