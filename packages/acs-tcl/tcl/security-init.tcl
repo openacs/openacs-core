@@ -39,6 +39,10 @@ proc sec_login_timeout {} "
     return \"[parameter::get -package_id [ad_acs_kernel_id] -parameter LoginTimeout -default 28800]\"
 "
 
+#
+# If there is a re-init, make sure the global handler-variables are reset
+#
+sec_handler_reset
 
 # Local variables:
 #    mode: tcl

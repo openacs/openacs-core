@@ -20,7 +20,7 @@ namespace eval acs {
     # represented by a list consisting of the internal name, driver name, and
     # "pretty name" (used by the APM to list the available database engines that 
     # one's package can choose to support).  The driver name and "pretty name" happen
-    # to be the same for Postgres and Oracle but let's not depend on that being true
+    # to be the same for PostgreSQL and Oracle but let's not depend on that being true
     # in all cases...
     #
 

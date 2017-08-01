@@ -176,6 +176,7 @@ foreach package_key $install_order {
         ns_eval [subst {
             apm_load_libraries -procs -force_reload -packages $package_key
             apm_load_queries -packages $package_key
+            apm_load_queries -init -force_reload -packages $package_key
         }]
 	ns_write "... updated blueprint <br>\n"
     }
