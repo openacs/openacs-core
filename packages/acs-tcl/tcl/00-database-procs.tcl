@@ -252,6 +252,7 @@ ad_proc -public db_type {} {
     } else {
         set result [nsv_get ad_database_type .]
         ns_log Warning "db_type '$result' had to be obtained from the nsv 'ad_database_type'"
+        set ::acs::database_type $result
     }
     return $result
 }
