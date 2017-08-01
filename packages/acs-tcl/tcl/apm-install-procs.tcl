@@ -859,7 +859,7 @@ ad_proc -private apm_package_install {
         # Get the callbacks in an array, since we can't rely on the 
         # before-upgrade being in the db (since it might have changed)
         # and the before-install definitely won't be there since 
-        # it's not added til later here.
+        # it's not added until later here.
 
         array set callbacks $version(callbacks)
 
