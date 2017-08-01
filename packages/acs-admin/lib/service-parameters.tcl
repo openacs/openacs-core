@@ -39,8 +39,6 @@ db_multirow -extend { url admin_url param_url sitewide_admin_url} packages servi
     }
 }
 
-ns_log notice swadmin_p=$swadmin_p
-
 template::list::create \
     -name packages \
     -multirow packages \
