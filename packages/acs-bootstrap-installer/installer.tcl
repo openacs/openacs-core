@@ -414,6 +414,7 @@ ad_proc -private install_do_data_model_install {} {
     Done installing the OpenACS kernel data model.<p>
 
     "
+    ns_write "\n<script>window.scrollTo(0,document.body.scrollHeight);</script>\n"
 
     # Some APM procedures use util_memoize, so initialize the cache 
     # before starting APM install
@@ -435,7 +436,8 @@ ad_proc -private install_do_data_model_install {} {
     # Preload all the .info files so the next page is snappy.
     apm_dependency_check -initial_install [apm_scan_packages -new [file join $::acs::rootdir packages]]
 
-    ns_write "Done loading package .info files<p>"    
+    ns_write "Done loading package .info files<p>"
+    ns_write "\n<script>window.scrollTo(0,document.body.scrollHeight);</script>\n"
 }
 
 ad_proc -private install_do_packages_install {} {
@@ -496,6 +498,7 @@ ad_proc -private install_do_packages_install {} {
             ns_write "<li>[lindex $_pkg 0]: $_msg</li>"
             append deps "[lindex $_pkg 0]: $_msg\n"
         }
+        ns_write "\n<script>window.scrollTo(0,document.body.scrollHeight);</script>\n"
         
         ns_log Error "At least one core package has an unsatisifed dependency.\
               No packages have been installed missing: [lindex $dependency_results 2]. \
@@ -529,6 +532,7 @@ ad_proc -private install_do_packages_install {} {
     }
 
     ns_write "All Packages Installed."
+    ns_write "\n<script>window.scrollTo(0,document.body.scrollHeight);</script>\n"
 }
 
 # Register the install handler.
