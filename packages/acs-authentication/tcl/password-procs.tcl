@@ -530,6 +530,10 @@ ad_proc -private auth::password::email_password {
 
     # Set up variables for use in message key
     set reset_password_url [export_vars -base "[ad_url]/user/password-update" {user_id {old_password $password}}]
+    set forgotten_pwd_url [auth::password::get_forgotten_url \
+                               -authority_id $authority_id \
+                               -username $user(username) \
+                               -email $user(email)]
     set system_owner [ad_system_owner]
     set system_name [ad_system_name]
     set system_url [ad_url]
