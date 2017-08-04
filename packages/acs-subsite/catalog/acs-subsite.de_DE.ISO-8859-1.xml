@@ -428,7 +428,7 @@
   <msg key="Send_email_to_this_user">E-Mail an diesen Benutzer senden</msg>
   <msg key="Send_me_a_copy">Schicke eine Kopie an mich:</msg>
   <msg key="Services">Dienste</msg>
-  <msg key="set_reg_asm">#assessment.assessment# für die Registrierung auswählen</msg>
+  <msg key="set_reg_asm">Fragebogen für die Registrierung auswählen</msg>
   <msg key="Show">Anzeigen</msg>
   <msg key="Site_Map">Sitemap</msg>
   <msg key="Site_Map_Instructions">Anleitung Sitemap</msg>
