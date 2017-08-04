@@ -534,6 +534,12 @@ ad_proc -private auth::password::email_password {
                                     -authority_id $authority_id \
                                     -username $user(username) \
                                     -email $user(email)]
+    set subsite_info [security::get_register_subsite]
+    if {[dict get $subsite_info url] ne "/"} {
+        set forgotten_password_url [dict get $subsite_info url]$forgotten_password_url
+    }
+    set forgotten_password_url [security::get_qualified_url $forgotten_password_url]
+
     set system_owner [ad_system_owner]
     set system_name [ad_system_name]
     set system_url [ad_url]
