@@ -17,7 +17,7 @@ package</h2></div></div></div><div class="authorblurb">
 OpenACS docs are written by the named authors, and may be edited by
 OpenACS documentation staff.</div><div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="idp140688931106840" id="idp140688931106840"></a>Configuring an OpenACS package</h3></div></div></div><p>After you&#39;ve installed and mounted your package, you can
+<a name="idp140592104638184" id="idp140592104638184"></a>Configuring an OpenACS package</h3></div></div></div><p>After you&#39;ve installed and mounted your package, you can
 configure each instance to act as you would like.</p><p>This is done from the Applications page. Log in, go to the Admin
 or Control Panel, click on the subsite the application is in, and
 click on Applications. If you click on the 'Parameters'

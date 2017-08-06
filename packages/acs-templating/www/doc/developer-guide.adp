@@ -97,5 +97,5 @@ variable; typically it will stay undefined.
 <address><a href="mailto:christian\@arsdigita.com">Christian
 Brechbühler</a></address>
 <!-- Created: Mon Aug 14 11:53:07 EDT 2000 -->
-Last modified: $&zwnj;Id: developer-guide.html,v 1.4 2015/06/16 08:53:38
-gustafn Exp $
+Last modified: $&zwnj;Id: developer-guide.html,v 1.4.2.1 2017/04/22
+18:30:26 gustafn Exp $

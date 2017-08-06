@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-content-repository {Content Repository}} {}</property>
+<property name="context">{/doc/acs-content-repository {ACS Content Repository}} {}</property>
 <property name="doc(title)"></property>
 <master>
 <h2>To Do List for Content Management System</h2>

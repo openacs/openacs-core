@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-content-repository {Content Repository}} {Package: content_symlink}</property>
+<property name="context">{/doc/acs-content-repository {ACS Content Repository}} {Package: content_symlink}</property>
 <property name="doc(title)">Package: content_symlink</property>
 <master>
 <h2>content_symlink</h2>

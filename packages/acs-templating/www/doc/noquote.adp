@@ -133,8 +133,8 @@ uglier in its own subtle way. The trick is to remember that our
 templating still supports all the ADP features, including embedding
 Tcl code in the template. Thus instead of referring to the multirow
 variable with the \@forums.name\@ variable substitutions, we use
-&lt;%= [ns_quotehtml \@forums.name\@] %&gt;. This
-works correctly, but obviously breaks the abstraction barrier
+&lt;%= [ns_quotehtml \@forums.name\@] %&gt;.
+This works correctly, but obviously breaks the abstraction barrier
 between ADP and Tcl syntaxes. The practical result of breaking the
 abstraction is that every occurrence of Tcl code in an ADP template
 will have to be painstakingly reviewed and converted once ADPs

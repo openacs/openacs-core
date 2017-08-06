@@ -362,11 +362,11 @@ value.</p>
 <th><code>packages/acs-core-ui/www/pvt/alerts.tcl</code></th><th><code>packages/acs-core-ui/www/pvt/alerts.adp</code></th>
 </tr><tr>
 <td valign="top"><pre><font color="#999999">ad_page_contract {
-    \@cvs-id $&zwnj;Id: migration.html,v 1.3.2.1 2016/06/22 07:48:43 gustafn Exp $
+    \@cvs-id $&zwnj;Id: migration.html,v 1.3.2.2 2017/04/22 18:30:26 gustafn Exp $
 } {
 }</font></pre></td><td valign="top"><pre>
 <font color="#999999">ad_page_contract {
-    \@cvs-id $&zwnj;Id: migration.html,v 1.3.2.1 2016/06/22 07:48:43 gustafn Exp $
+    \@cvs-id $&zwnj;Id: migration.html,v 1.3.2.2 2017/04/22 18:30:26 gustafn Exp $
 } {
 } -properties {
     header:onevalue
@@ -571,5 +571,5 @@ Brechbühler</a>, <a href="mailto:iwashima\@mit.edu">Hiro
 Iwashima</a>
 </address>
 
-Last modified: $&zwnj;Id: migration.html,v 1.3.2.1 2016/06/22 07:48:43
+Last modified: $&zwnj;Id: migration.html,v 1.3.2.2 2017/04/22 18:30:26
 gustafn Exp $

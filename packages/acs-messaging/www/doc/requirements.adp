@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-messaging {Messaging}} {ACS Messaging Requirements}</property>
+<property name="context">{/doc/acs-messaging {ACS Messaging}} {ACS Messaging Requirements}</property>
 <property name="doc(title)">ACS Messaging Requirements</property>
 <master>
 <h1>ACS Messaging Requirements</h1>
@@ -156,5 +156,5 @@ bboard thread could be sent to a user as a digest.</p>
 <hr>
 <address><a href="mailto:kapoor\@maya.com"></a></address>
 
-Last modified: $&zwnj;Id: requirements.html,v 1.1.1.1 2001/03/13 22:59:26
-ben Exp $
+Last modified: $&zwnj;Id: requirements.html,v 1.1.1.1.30.1 2017/04/21
+16:14:09 gustafn Exp $

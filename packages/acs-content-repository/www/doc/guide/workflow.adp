@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-content-repository {Content Repository}} {Content Repository Developer Guide: Workflow}</property>
+<property name="context">{/doc/acs-content-repository {ACS Content Repository}} {Content Repository Developer Guide: Workflow}</property>
 <property name="doc(title)">Content Repository Developer Guide: Workflow</property>
 <master>
 <h2>Applying Workflow to Content Items</h2>

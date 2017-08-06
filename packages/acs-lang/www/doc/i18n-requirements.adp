@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-lang {Localization}} {ACS 4 Globalization Requirements}</property>
+<property name="context">{/doc/acs-lang {ACS Localization}} {ACS 4 Globalization Requirements}</property>
 <property name="doc(title)">ACS 4 Globalization Requirements</property>
 <master>
 <h2>ACS 4 Globalization Requirements</h2>
@@ -99,7 +99,7 @@ content and navigation in English, German, and Japanese.
 <p>The site would have an end-user visible UI to support these
 languages, and the content management system must allow articles to
 be posted in these languages. In some cases it may be necessary to
-make the modules' admin UI's operate in more than one
+make the modules' admin UI&#39;s operate in more than one
 supported language, while in other cases the backend admin
 interface can operate in a single language.</p>
 </li><li>A developer is writing a new module, and wants to make it easy

@@ -36,19 +36,16 @@ second is <kbd>label</kbd>, containing a corresponding label for
 the button.</p></li><li><p>The <kbd>formgroup</kbd> tag may emulate either the <a href="multiple"><kbd>multiple</kbd></a> or <a href="grid"><kbd>grid</kbd></a> tags in repeating the template
 section within the tag. By default it emulates the <a href="multiple"><kbd>multiple</kbd></a> tag. If the <kbd>cols</kbd>
 attribute is specified, the <kbd>formgroup</kbd> tag will emulate
-the <a href="grid"><kbd>grid</kbd></a> tag.</p></li>
-<li>
-  <p>
-    HTML attributes may be specified as attributes to
-    the <kbd>formgroup</kbd> tag. The system will include all such
-    attributes in the <kbd>input</kbd> tags of each radio button or
-    check box in the group.  Although possible, newer browser security
-    features such as CSP discourage the use of inline Javascript event
-    handlers.
-  </p>
-  <pre>&lt;formgroup id="services" style="background-color:white;"&gt;</pre>
-</li>
-<li><p>See the <a href="formtemplate"><kbd>formtemplate</kbd></a>
+the <a href="grid"><kbd>grid</kbd></a> tag.</p></li><li>
+<p>HTML attributes may be specified as attributes to the
+<kbd>formgroup</kbd> tag. The system will include all such
+attributes in the <kbd>input</kbd> tags of each radio button or
+check box in the group. Although possible, newer browser security
+features such as CSP discourage the use of inline Javascript event
+handlers.</p><pre>
+&lt;formgroup id="services" style="background-color:white;"&gt;
+</pre>
+</li><li><p>See the <a href="formtemplate"><kbd>formtemplate</kbd></a>
 and <a href="formwidget"><kbd>formwidget</kbd></a> tags for
 more information on writing the body of a dynamic form
 template.</p></li>

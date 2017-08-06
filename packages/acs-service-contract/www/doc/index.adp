@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-service-contract {Service Contracts}} {ACS Service Contract Documentation}</property>
+<property name="context">{/doc/acs-service-contract {ACS Service Contracts}} {ACS Service Contract Documentation}</property>
 <property name="doc(title)">ACS Service Contract Documentation</property>
 <master>
 <h1>ACS Service Contract Documentation</h1>

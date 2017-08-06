@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-content-repository {Content Repository}} {Content Repository: Object Model}</property>
+<property name="context">{/doc/acs-content-repository {ACS Content Repository}} {Content Repository: Object Model}</property>
 <property name="doc(title)">Content Repository: Object Model</property>
 <master>
 <h2>Object Model</h2>
@@ -30,5 +30,5 @@ necessary to create a custom subtype of Content Item itself.</p>
 <a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a>
 <br>
 
-Last revised: $&zwnj;Id: object-model.html,v 1.1.1.1.30.1 2016/06/22
-07:40:41 gustafn Exp $
+Last revised: $&zwnj;Id: object-model.html,v 1.1.1.1.30.2 2017/04/15
+11:00:21 gustafn Exp $

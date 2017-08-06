@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-content-repository {Content Repository}} {Content Repository Developer Guide: Search}</property>
+<property name="context">{/doc/acs-content-repository {ACS Content Repository}} {Content Repository Developer Guide: Search}</property>
 <property name="doc(title)">Content Repository Developer Guide: Search</property>
 <master>
 <h2>Search</h2>
@@ -113,5 +113,5 @@ method, which a dispatch method can call by reflection.</li>
 <a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a>
 <br>
 
-Last Modified: $&zwnj;Id: search.html,v 1.1.1.1.30.1 2016/06/22 07:40:41
+Last Modified: $&zwnj;Id: search.html,v 1.1.1.1.30.2 2017/04/21 14:53:08
 gustafn Exp $

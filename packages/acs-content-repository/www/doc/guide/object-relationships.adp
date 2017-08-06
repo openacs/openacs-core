@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-content-repository {Content Repository}} {Content Repository Developer Guide: Object
+<property name="context">{/doc/acs-content-repository {ACS Content Repository}} {Content Repository Developer Guide: Object
 Relationships}</property>
 <property name="doc(title)">Content Repository Developer Guide: Object
 Relationships</property>
@@ -111,5 +111,5 @@ types as you would for any other ACS object.</p>
 <a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a>
 <br>
 
-Last modified: <kbd>$&zwnj;Id: object-relationships.html,v 1.1.1.1.30.1
-2016/06/22 07:40:41 gustafn Exp $</kbd>
+Last modified: <kbd>$&zwnj;Id: object-relationships.html,v 1.1.1.1.30.3
+2017/04/21 14:53:08 gustafn Exp $</kbd>

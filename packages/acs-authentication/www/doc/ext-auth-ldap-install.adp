@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-authentication {Authentication}} {Using LDAP/Active Directory with OpenACS}</property>
+<property name="context">{/doc/acs-authentication {ACS Authentication}} {Using LDAP/Active Directory with OpenACS}</property>
 <property name="doc(title)">Using LDAP/Active Directory with OpenACS</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"
@@ -133,13 +133,13 @@ if {[ns_ldap bind $lh $fdn $password]} {
 </ol></div><p>
 <strong>Troubleshooting. </strong>If you&#39;re
 having trouble figuring out some the values for the ldapm, see this
-useful page on <a href="https://www.rhyous.com/2009/11/10/how-to-configure-bugzilla-to-authenticate-to-active-directory/" target="_top">setting up Active Directory integration with Bugzilla</a>.
-It explains how distinguished names are defined in Active
-Directory, and how to test that you have the correct values for
-connectivity and base DN using the OpenLDAP command-line utility
-ldapsearch.John had an issue where nsldap was not loading because
-AOLServer couldn&#39;t find the openldap client libraries, but he
-was able to fix it by adding the openldap libraries to his
+useful page on <a href="https://www.rhyous.com/2009/11/10/how-to-configure-bugzilla-to-authenticate-to-active-directory/" target="_top">setting up Active Directory integration with
+Bugzilla</a>. It explains how distinguished names are defined in
+Active Directory, and how to test that you have the correct values
+for connectivity and base DN using the OpenLDAP command-line
+utility ldapsearch.John had an issue where nsldap was not loading
+because AOLServer couldn&#39;t find the openldap client libraries,
+but he was able to fix it by adding the openldap libraries to his
 LD_LIBRARY_PATH (e.g. /usr/local/openldap/lib)</p><p>
 <strong>Credits. </strong>Thanks to Malte Sussdorf
 for his help and the <a href="http://www.lcs.mgh.harvard.edu/" target="_top">Laboratory of Computer Science at Massachusetts

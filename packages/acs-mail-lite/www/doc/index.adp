@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-mail-lite {Mail Services Lite}} {User Documentation for ACS Mail Lite}</property>
+<property name="context">{/doc/acs-mail-lite {ACS Mail Services Lite}} {User Documentation for ACS Mail Lite}</property>
 <property name="doc(title)">User Documentation for ACS Mail Lite</property>
 <master>
 <h1>User Documentation for ACS Mail Lite</h1>
@@ -19,8 +19,8 @@ follows:<br>
 The address starts with "bounce" (can be changed by a
 parameter) followed by the user_id, a hashkey and the package_id of
 the package instance that sent the email, separated by
-"-". The domain name of this address can be changed with a
-parameter.</p>
+"-". The domain name of this address can be changed with
+a parameter.</p>
 <p>The system checks every 2 minutes (configurable) in a certain
 maildirectory (configurable) for newly bounced emails, so the
 mailsystem will have to place every mail to an address beginning

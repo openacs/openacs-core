@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-content-repository {Content Repository}} {Package: content_folder}</property>
+<property name="context">{/doc/acs-content-repository {ACS Content Repository}} {Package: content_folder}</property>
 <property name="doc(title)">Package: content_folder</property>
 <master>
 <h2>content_folder</h2>

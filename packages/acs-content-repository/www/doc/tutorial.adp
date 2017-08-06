@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-content-repository {Content Repository}} {ACS Content Repository Tutorial}</property>
+<property name="context">{/doc/acs-content-repository {ACS Content Repository}} {ACS Content Repository Tutorial}</property>
 <property name="doc(title)">ACS Content Repository Tutorial</property>
 <master>
 <h2>How to use the content repository</h2>
@@ -28,7 +28,7 @@ hopefully it will be a skeleton that can be developed further into
 an excellent, helpful tutorial for people new to the content
 repository.
 <h3>Introduction</h3>
-<p>For the sake of an example, I'm going to use a Tasks
+<p>For the sake of an example, I&#39;m going to use a Tasks
 application. This application will keep track of all the tasks of
 an organization, deadlines for those tasks, and who needs to work
 on them.</p>
@@ -80,7 +80,7 @@ without versioned attributes.</p>
 <em>Convention:</em> often, developers will name the first table
 by what it is (in my case <strong>pm_tasks</strong>), and the
 second, versioned table by the same name, but with _revisions at
-the end. Thus, I'll name my second table
+the end. Thus, I&#39;ll name my second table
 <strong>pm_tasks_revisions</strong>.</p>
 
 This is actually very easy:
@@ -123,7 +123,7 @@ tables. For example, you can&#39;t call you key on the
 pm_tasks_revisions table <code>revision_id</code>. Why? There are
 some views that are automatically generated that combine these
 tables for you, but they won&#39;t be created if the names
-conflict. I'll describe what these views are later, but they
+conflict. I&#39;ll describe what these views are later, but they
 are useful. You were warned.</p>
 <p>Notice that each table uses as its primary key a reference to
 either the <code>cr_revisions</code> table or the
@@ -230,18 +230,18 @@ tables you create, and can do some intelligent things with
 them.</p>
 <p>A lot of the <em>intelligent things</em> you can do with this
 information is still being built. But imagine for example that you
-are using the project manager package I've written. You work at
+are using the project manager package I&#39;ve written. You work at
 an ice cream company, and every task that is done also has an
 associated ice cream flavor with it (yeah, this isn&#39;t a good
-example, but pay attention anyway). If I've written the project
+example, but pay attention anyway). If I&#39;ve written the project
 manager to take advantage of it, when you add in this extra
 attribute to the pm_tasks_revisions table, the UI aspects will be
 automatically taken care of. You&#39;ll be able to select a flavor
 when you edit a task, and it will be shown on the task view page.
 This is the direction OpenACS development is going, and it will be
 really really cool!</p>
-<p>First, I'm going to describe how to extend other content
-repository tables using the CR API. Then, I'll describe how to
+<p>First, I&#39;m going to describe how to extend other content
+repository tables using the CR API. Then, I&#39;ll describe how to
 set up your own tables as well:</p>
 <p>As you recall from earlier in this page, attributes are just
 another term for columns in a table. The Content Repository has a
@@ -343,8 +343,9 @@ moment).
 You can see the actual functions used in project manager via the
 <a href="https://github.com/openacs/project-manager/tree/master/sql/postgresql/">
 GitHub browser&#39;s entry for project-manager</a>
-. Note these are a
-little more expanded than what I've used in the examples above.
+. Note these are
+a little more expanded than what I&#39;ve used in the examples
+above.
 <blockquote><pre>
 select define_function_args('pm_task__new_task_item', 'task_id, project_id, title, description, end_date, percent_complete, estimated_hours_work, estimated_hours_work_min, estimated_hours_work_max, creation_date, creation_user, creation_ip, package_id');
 
@@ -578,7 +579,7 @@ The <code>parent_id</code>
 (<code>cr_items</code>
 ), or a subclass of a content_item (such as
 <code>cr_folders</code>
-). I'll explain more later about
+). I&#39;ll explain more later about
 <code>cr_folders</code>
 .
 <p>One thing that you might want to do for your application is to
@@ -655,7 +656,7 @@ $$ language plpgsql;
 </pre></blockquote>
 
 Note that this example is for projects rather than tasks. This is
-because for the application I'm writing, projects are what
+because for the application I&#39;m writing, projects are what
 tasks are stored inside of. A project has many component tasks. If
 you were writing another application, or if I wasn&#39;t doing
 anythign with projects, then this would be creating a folder for
@@ -818,7 +819,7 @@ select i.item_id, r.revision_id, r.title, i.content_type from cr_items i, cr_rev
 
 Really, however, what you need to do is make sure your __delete and
 drop scripts first go through and delete all children of those
-items. I'm not sure if you need to delete the items themselves
+items. I&#39;m not sure if you need to delete the items themselves
 -- I believe they may be dropped by themselves when the tables are
 dropped, because of the <code>cascade</code>
  portion of the SQL

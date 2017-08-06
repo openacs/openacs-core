@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-content-repository {Content Repository}} {Content Repository Developer Guide: HTML Conversion}</property>
+<property name="context">{/doc/acs-content-repository {ACS Content Repository}} {Content Repository Developer Guide: HTML Conversion}</property>
 <property name="doc(title)">Content Repository Developer Guide: HTML Conversion</property>
 <master>
 <h2>Converting Binary Documents to HTML</h2>

@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-authentication {Authentication}} {Installation}</property>
+<property name="context">{/doc/acs-authentication {ACS Authentication}} {Installation}</property>
 <property name="doc(title)">Installation</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

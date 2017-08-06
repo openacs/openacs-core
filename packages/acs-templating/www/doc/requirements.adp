@@ -230,5 +230,5 @@ HTML.</p>
 <hr>
 <address><a href="mailto:yon\@arsdigita.com">yon\@arsdigita.com</a></address>
 
-Last modified: $&zwnj;Id: requirements.html,v 1.2.2.1 2016/06/22 07:48:43
+Last modified: $&zwnj;Id: requirements.html,v 1.2.2.2 2017/04/21 16:50:30
 gustafn Exp $

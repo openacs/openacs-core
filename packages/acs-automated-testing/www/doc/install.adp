@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-automated-testing {Automated Testing}} {Installation}</property>
+<property name="context">{/doc/acs-automated-testing {ACS Automated Testing}} {Installation}</property>
 <property name="doc(title)">Installation</property>
 <master>
 <include src="/packages/acs-core-docs/lib/navheader"

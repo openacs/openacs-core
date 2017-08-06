@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-messaging {Messaging}} {ACS Messaging Documentation}</property>
+<property name="context">{/doc/acs-messaging {ACS Messaging}} {ACS Messaging Documentation}</property>
 <property name="doc(title)">ACS Messaging Documentation</property>
 <master>
 <h1>ACS Messaging Documentation</h1>

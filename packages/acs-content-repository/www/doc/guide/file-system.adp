@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-content-repository {Content Repository}} {Content Repository Developer Guide: Organizing Content
+<property name="context">{/doc/acs-content-repository {ACS Content Repository}} {Content Repository Developer Guide: Organizing Content
 Items}</property>
 <property name="doc(title)">Content Repository Developer Guide: Organizing Content
 Items</property>
@@ -117,5 +117,5 @@ resolved.</p>
 <a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a>
 <br>
 
-Last Modified: $&zwnj;Id: file-system.html,v 1.1.1.1.30.1 2016/06/22
-07:40:41 gustafn Exp $
+Last Modified: $&zwnj;Id: file-system.html,v 1.1.1.1.30.2 2017/04/21
+14:53:08 gustafn Exp $

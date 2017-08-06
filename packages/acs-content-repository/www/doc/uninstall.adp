@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-content-repository {Content Repository}} {Content Repository: Uninstalling}</property>
+<property name="context">{/doc/acs-content-repository {ACS Content Repository}} {Content Repository: Uninstalling}</property>
 <property name="doc(title)">Content Repository: Uninstalling</property>
 <master>
 <h2>Uninstalling the Content Repository</h2>

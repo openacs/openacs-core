@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-content-repository {Content Repository}} {Package: content_permission}</property>
+<property name="context">{/doc/acs-content-repository {ACS Content Repository}} {Package: content_permission}</property>
 <property name="doc(title)">Package: content_permission</property>
 <master>
 <h2>content_permission</h2>
@@ -266,5 +266,5 @@ holder, to ensure that the permission is not permanently lost</p><table cellpadd
 </ul>
 <p> </p>
 
-Last Modified: $&zwnj;Id: permission.html,v 1.1.1.1.30.2 2016/06/22
-07:40:41 gustafn Exp $
+Last Modified: $&zwnj;Id: permission.html,v 1.1.1.1.30.3 2017/04/21
+14:53:08 gustafn Exp $

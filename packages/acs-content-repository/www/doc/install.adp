@@ -1,5 +1,5 @@
 
-<property name="context">{/doc/acs-content-repository {Content Repository}} {Content Repository: Installation}</property>
+<property name="context">{/doc/acs-content-repository {ACS Content Repository}} {Content Repository: Installation}</property>
 <property name="doc(title)">Content Repository: Installation</property>
 <master>
 <h2>Installing the Content Repository</h2>
@@ -25,7 +25,7 @@ to load the content repository itself.</li>
 implements a limited set of key methods in Java. The XML import and
 export methods are dependent on Oracle&#39;s XML Parser for Java
 v2, available from the Oracle Technology Network:</p>
-<a href="http://technet.us.oracle.com/tech/xml/parser_java2/index.htm"><kbd>http://technet.us.oracle.com/tech/xml/parser_java2/index.htm</kbd></a>
+<a href="http://www.oracle.com/technetwork/database-features/xmldb/xdk-java-082884.html">http://www.oracle.com/technetwork/database-features/xmldb/xdk-java-082884.html</a>
 <p>To load the XML parser, download and untar the distribution.
 Load the class package <kbd>lib/xmlparserv2.jar</kbd> into Oracle
 from a shell prompt:</p>
@@ -81,5 +81,5 @@ content repository data model itself.</p>
 <a href="mailto:karlg\@arsdigita.com">karlg\@arsdigita.com</a>
 <br>
 
-Last revised: $&zwnj;Id: install.html,v 1.1.1.1.30.1 2016/06/22 07:40:41
+Last revised: $&zwnj;Id: install.html,v 1.1.1.1.30.2 2017/06/20 07:10:17
 gustafn Exp $
