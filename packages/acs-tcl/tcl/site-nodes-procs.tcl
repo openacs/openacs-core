@@ -1619,7 +1619,7 @@ if {$UseXotclSiteNodes} {
 
         # Flush all values for this node and its ancestors
         set ancestors [site_node::get_ancestors -node_id $node_id -element node_id]
-        foreachn $ancestors {
+        foreach n $ancestors {
             site_node::update_cache -sync_children -node_id $n
         }
 
