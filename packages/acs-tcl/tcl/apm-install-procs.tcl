@@ -85,12 +85,11 @@ ad_proc -public apm_dependency_provided_p {
     set old_version_p 0
     set found_p 0
     ns_log Debug "apm_dependency_provided_p: Scanning for $dependency_uri version $dependency_version"
-    foreach service_version [db_list get_service_versions {}] {
-        set version_p [expr {[apm_version_names_compare $service_version $dependency_version] >= 0}]
-        if { $version_p } {
+    db_foreach apm_dependency_check {} {
+        if { $version_p >= 0 } {
             ns_log Debug "apm_dependency_provided_p: Dependency satisfied by previously installed package"
             set found_p 1
-        } else {
+        } elseif { $version_p == -1 } {
             set old_version_p 1
         }
     }
@@ -106,8 +105,9 @@ ad_proc -public apm_dependency_provided_p {
             if {$dependency_uri eq [lindex $prov 0]} {
 
                 set provided_version [lindex $prov 1]
-                set provided_p [expr {[apm_version_names_compare $provided_version $dependency_version] >= 0}]
-                if { $provided_p } {
+                set provided_p [db_string version_greater_p {}]
+
+                if { $provided_p >= 0 } {
                     ns_log Debug "apm_dependency_provided_p: Dependency satisfied in list of provisions."
                     return 1
                 } else { 
