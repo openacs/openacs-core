@@ -151,8 +151,22 @@
   <msg key="email_as_image_admin">E-Mail-Adresse als Bild anzeigen</msg>
   <msg key="email_as_text">Meine E-Mail-Adresse als Text anzeigen</msg>
   <msg key="email_as_text_admin">E-Mail-Adresse als Text anzeigen</msg>
-  <msg key="email_body_Forgotten_password">Hier sind Ihre neuen Anmeldedaten: %account_id_label%: %account_id% %password_label%: %password%. Bitte ändern Sie Ihr Passwort unter folgendem Link: %reset_password_url%</msg>
-  <msg key="email_body_Registration_password">Vielen Dank für Ihre Registrierung bei %system_name%. Mit folgenden Daten können Sie sich bei %system_url% anmelden: %account_id_label%: %account_id% %password_label%: %password% Bitte ändern Sie Ihr Passwort unter folgendem Link: %reset_password_url%</msg>
+  <msg key="email_body_Forgotten_password">Hier sind Ihre neuen Anmeldedaten:
+  
+  %account_id_label%: %account_id%
+  %password_label%: %password%.
+
+Bitte ändern Sie Ihr Passwort unter folgendem Link:
+%reset_password_url%</msg>
+  <msg key="email_body_Registration_password">Vielen Dank für Ihre Registrierung bei %system_name%.
+
+  Mit folgenden Daten können Sie sich bei %system_url% anmelden:
+
+  %account_id_label%: %account_id%
+  %password_label%: %password%
+
+Bitte ändern Sie Ihr Passwort unter folgendem Link:
+%reset_password_url%</msg>
   <msg key="Email_Confirmation">E-Mail-Adresse bestätigen</msg>
   <msg key="email_dont_show">Meine E-Mail-Adresse nicht anzeigen</msg>
   <msg key="email_dont_show_admin">E-Mail-Adresse nicht anzeigen</msg>
